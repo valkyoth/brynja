@@ -1,0 +1,370 @@
+{
+  "schema": 1,
+  "date": "2026-10-14",
+  "status": "AUTHOR_ALL_ROUTE_REFRESH_PASS_INDEPENDENT_NATIVE_REVIEW_PENDING",
+  "source_commit": "4d557cb33a5165187f0024e231189ee60ea5afa5",
+  "source_archive_sha256": "edca07738dda586ad5cb706540eee11166f8ed5feb3ae63182f5c23b9d701682",
+  "source_description": "Clean git archive; fresh debug/release host binaries with current loader. Bounded-owner test uses only a recorded private cfg(test) image-digest substitution in a separate checkout.",
+  "source_files_bound": 5022,
+  "current_implementation_inputs_compared": 2323,
+  "current_implementation_closure_sha256": "c2023a7eb3e91e8991b531762f65f2e504b7ea9f8368b981e9a49b4a36f51784",
+  "platform": "Local QEMU/KVM Windows 11 x64 VBS development VM; hardware-assisted guest execution, not bare-metal",
+  "rust_toolchain": "1.98.1",
+  "host": {
+    "captured_at_utc": "2026-10-14T13:13:46.8304612Z",
+    "os": {
+      "Caption": "Microsoft Windows 11 Pro",
+      "Version": "10.0.26300",
+      "BuildNumber": "26300"
+    },
+    "cpu": [
+      {
+        "Name": "AMD Ryzen 9 9950X3D 16-Core Processor          ",
+        "NumberOfCores": 8,
+        "NumberOfLogicalProcessors": 8
+      }
+    ],
+    "device_guard": {
+      "VirtualizationBasedSecurityStatus": 2,
+      "SecurityServicesRunning": [
+        2
+      ]
+    },
+    "guest": {
+      "Manufacturer": "Brynja Local Lab",
+      "Model": "Windows VBS Development VM",
+      "HypervisorPresent": true
+    },
+    "scope": "Local QEMU/KVM Windows development guest; not bare-metal or production-signing qualification"
+  },
+  "routes": [
+    {
+      "label": "sha2",
+      "test": "windows_enclave::sha2::tests::native::development_sha2_streaming_campaign",
+      "image_sha256": "e060c83f0b639812a52a0738664c597860b398a1795f2b42a9c461cbe48c5f47",
+      "profiles": [
+        "debug",
+        "release"
+      ],
+      "expected_markers": [
+        "WINDOWS_ENCLAVE_SHA2: PASS; cases=631; retained_rehash=PASS; abandonment=PASS; development_only=true"
+      ]
+    },
+    {
+      "label": "sha2-sha-ni",
+      "test": "windows_enclave::sha2::tests::native_sha_ni::development_sha_ni_host_campaign",
+      "image_sha256": "94448908fa17ef369233a437d3e06364cae229dd01ae2d1efc00e9be78fdfe2d",
+      "profiles": [
+        "debug",
+        "release"
+      ],
+      "expected_markers": [
+        "WINDOWS_ENCLAVE_SHA_NI_HOST: PASS; cases=46; trust_rejections=PASS; image_mismatch=PASS; unsupported_identities=PASS; lifecycle=PASS; development_only=true"
+      ]
+    },
+    {
+      "label": "sha3",
+      "test": "windows_enclave::sha3::tests::native::development_sha3_streaming_campaign",
+      "image_sha256": "a4ab8ac1213b421f244f0196c28daf85f089cde01c4e80da536df08f4ea61288",
+      "profiles": [
+        "debug",
+        "release"
+      ],
+      "expected_markers": [
+        "WINDOWS_ENCLAVE_SHA3: PASS; cases=1028; route=SCALAR; streamed_setup=PASS; retained_rehash=PASS; abandonment=PASS; development_only=true"
+      ]
+    },
+    {
+      "label": "sha3-avx2",
+      "test": "windows_enclave::sha3::tests::native_avx2::development_avx2_host_campaign",
+      "image_sha256": "54789a69f8eab8462ae851869657612de743b872c910d8245bd5ce6f31d19f42",
+      "profiles": [
+        "debug",
+        "release"
+      ],
+      "expected_markers": [
+        "WINDOWS_ENCLAVE_SHA3: PASS; cases=1028; route=AVX2; streamed_setup=PASS; retained_rehash=PASS; abandonment=PASS; development_only=true",
+        "WINDOWS_ENCLAVE_SHA3_AVX2_HOST: PASS; trust_rejections=PASS; image_mismatch=PASS; wrong_route=PASS; transactional_output=PASS; development_only=true"
+      ]
+    },
+    {
+      "label": "kmac",
+      "test": "windows_enclave::kmac::tests::native::development_kmac_streaming_campaign",
+      "image_sha256": "4f16443c17ac50e4a076e1ff1a57b81e70814a3b0f44b4ca952685735bd0058a",
+      "profiles": [
+        "debug",
+        "release"
+      ],
+      "expected_markers": [
+        "WINDOWS_ENCLAVE_KMAC_PROGRESS: route=SCALAR; cases=104",
+        "WINDOWS_ENCLAVE_KMAC_PROGRESS: route=SCALAR; cases=208",
+        "WINDOWS_ENCLAVE_KMAC_PROGRESS: route=SCALAR; cases=312",
+        "WINDOWS_ENCLAVE_KMAC_PROGRESS: route=SCALAR; cases=416",
+        "WINDOWS_ENCLAVE_KMAC: PASS; route=SCALAR; cases=546; streamed_setup=PASS; retained_rekey=PASS; verification=PASS; abandonment=PASS; development_only=true"
+      ]
+    },
+    {
+      "label": "kmac-avx2",
+      "test": "windows_enclave::kmac::tests::native_avx2::development_avx2_host_campaign",
+      "image_sha256": "9a2d418cbb61b613cfaade6e7b49949dca3248ead787de1ef05ce3b939143711",
+      "profiles": [
+        "debug",
+        "release"
+      ],
+      "expected_markers": [
+        "WINDOWS_ENCLAVE_KMAC_PROGRESS: route=AVX2; cases=104",
+        "WINDOWS_ENCLAVE_KMAC_PROGRESS: route=AVX2; cases=208",
+        "WINDOWS_ENCLAVE_KMAC_PROGRESS: route=AVX2; cases=312",
+        "WINDOWS_ENCLAVE_KMAC_PROGRESS: route=AVX2; cases=416",
+        "WINDOWS_ENCLAVE_KMAC: PASS; route=AVX2; cases=546; streamed_setup=PASS; retained_rekey=PASS; verification=PASS; abandonment=PASS; development_only=true",
+        "WINDOWS_ENCLAVE_KMAC_AVX2_HOST: PASS; trust_rejections=PASS; image_mismatch=PASS; wrong_route=PASS; transactional_output=PASS; development_only=true"
+      ]
+    },
+    {
+      "label": "tuple",
+      "test": "windows_enclave::tuplehash::tests::native::development_tuplehash_streaming_campaign",
+      "image_sha256": "ac89b7d1355e36c0b7cde25931d8f50ebf2229d385cc64c3da22b6d157341dc3",
+      "profiles": [
+        "debug",
+        "release"
+      ],
+      "expected_markers": [
+        "WINDOWS_ENCLAVE_TUPLEHASH: route=SCALAR; cases=230; forgotten-item rejected; development-only"
+      ]
+    },
+    {
+      "label": "tuple-avx2",
+      "test": "windows_enclave::tuplehash::tests::native_avx2::development_avx2_host_campaign",
+      "image_sha256": "30ee7ab3157d57ebb9e34b85c6e6eaffeef1d76e4c4847dc51a62623d0a634f6",
+      "profiles": [
+        "debug",
+        "release"
+      ],
+      "expected_markers": [
+        "WINDOWS_ENCLAVE_TUPLEHASH: route=AVX2; cases=230; forgotten-item rejected; development-only",
+        "WINDOWS_ENCLAVE_TUPLEHASH_AVX2_HOST: PASS; trust_rejections=PASS; image_mismatch=PASS; wrong_route=PASS; transactional_output=PASS; development_only=true"
+      ]
+    },
+    {
+      "label": "sha2-batch",
+      "test": "windows_enclave::sha2_batch::tests::native::development_sha2_batch_campaign",
+      "image_sha256": "f45e9ce6da44e7039a7c58dd7fe0d16604096d4196d41e6cb23969e45316159b",
+      "profiles": [
+        "debug",
+        "release"
+      ],
+      "expected_markers": [
+        "WINDOWS_ENCLAVE_SHA2_BATCH: batches=355; digests=1822; cancellation/forgotten-item=PASS; scalar development-only"
+      ]
+    },
+    {
+      "label": "sha2-batch-sha-ni",
+      "test": "windows_enclave::sha2_batch::tests::native_sha_ni::development_sha_ni_batch_host_campaign",
+      "image_sha256": "9fa69c0d9b8423f083241bcc5fb0e48cb0b40e99e6b6bd11e088dbbf2c524b3a",
+      "profiles": [
+        "debug",
+        "release"
+      ],
+      "expected_markers": [
+        "WINDOWS_ENCLAVE_SHA2_BATCH_SHA_NI_HOST: batches=291; digests=1312; trust/wide/transactional_rejections=PASS; development_only=true"
+      ]
+    },
+    {
+      "label": "sha3-batch",
+      "test": "windows_enclave::sha3_batch::tests::native::development_sha3_batch_campaign",
+      "image_sha256": "1bbdcb84a178584e41c422aacf7d484079420c4d7412de9006dd873d5e28ebf3",
+      "profiles": [
+        "debug",
+        "release"
+      ],
+      "expected_markers": [
+        "WINDOWS_ENCLAVE_SHA3_BATCH: batches=323; digests=1344; cancellation/forgotten-item=PASS; route=scalar; development-only"
+      ]
+    },
+    {
+      "label": "sha3-batch-avx2",
+      "test": "windows_enclave::sha3_batch::tests::native_avx2::development_avx2_batch_host_campaign",
+      "image_sha256": "729a3292c8e0b32207750cce3521078c203e598709f6b2bdb773c30aaf768989",
+      "profiles": [
+        "debug",
+        "release"
+      ],
+      "expected_markers": [
+        "WINDOWS_ENCLAVE_SHA3_BATCH: batches=323; digests=1344; cancellation/forgotten-item=PASS; route=AVX2; development-only",
+        "WINDOWS_ENCLAVE_SHA3_BATCH_AVX2_HOST: PASS; trust_rejections=PASS; image_mismatch=PASS; wrong_route=PASS; transactional_output=PASS; development_only=true"
+      ]
+    },
+    {
+      "label": "parallel",
+      "test": "windows_enclave::parallelhash::tests::native::development_parallelhash_streaming_campaign",
+      "image_sha256": "59316420bd03361621e91b98dabb860797862556bfaacbfd0cf7825dd1dfadc9",
+      "profiles": [
+        "debug",
+        "release"
+      ],
+      "expected_markers": [
+        "WINDOWS_PARALLELHASH_ENCLAVE: PASS; direct=332; retained=256; route=scalar; development-only"
+      ]
+    },
+    {
+      "label": "parallel-avx2",
+      "test": "windows_enclave::parallelhash::tests::native_avx2::development_avx2_parallelhash_host_campaign",
+      "image_sha256": "d4dc0a1d42ab41e8dfffb5c3895bf27fc7ae03c62d48a45a6f03368f615ca821",
+      "profiles": [
+        "debug",
+        "release"
+      ],
+      "expected_markers": [
+        "WINDOWS_PARALLELHASH_ENCLAVE: PASS; direct=332; retained=256; route=AVX2; development-only",
+        "WINDOWS_ENCLAVE_PARALLELHASH_AVX2_HOST: PASS; trust_rejections=PASS; image_mismatch=PASS; wrong_route=PASS; transactional_output=PASS; development_only=true"
+      ]
+    },
+    {
+      "label": "sha256-simd",
+      "test": "windows_enclave::sha256_simd::tests::native::development_sha256_simd_host_campaign",
+      "image_sha256": "601f9a460ae118e080b34bba7514043b355f6fe7d7cd993ea2afbfb1b00d24d1",
+      "profiles": [
+        "debug",
+        "release"
+      ],
+      "expected_markers": [
+        "WINDOWS_ENCLAVE_SHA256_SIMD_HOST: batches=403; digests=3224; trust/cancel/forget/quarantine/transactional=PASS; development_only=true"
+      ]
+    },
+    {
+      "label": "sha512-simd",
+      "test": "windows_enclave::sha512_simd::tests::native::development_sha512_simd_host_campaign",
+      "image_sha256": "0cf773b4dd2b5b2d86f32967cd8373f7513cf3b5c01c22b406ee2819e395f78f",
+      "profiles": [
+        "debug",
+        "release"
+      ],
+      "expected_markers": [
+        "WINDOWS_ENCLAVE_SHA512_SIMD_HOST: batches=559; digests=2236; trust/cancel/forget/quarantine/transactional=PASS; development_only=true"
+      ]
+    },
+    {
+      "label": "keccak-simd",
+      "test": "windows_enclave::keccak_simd::tests::native::development_keccak_simd_host_campaign",
+      "image_sha256": "b7e32c9805a0abf6dd488f3f00afff01362bf706db647adaa99a14835c32f060",
+      "profiles": [
+        "debug",
+        "release"
+      ],
+      "expected_markers": [
+        "WINDOWS_ENCLAVE_KECCAK_SIMD_HOST: batches=521; digests=2084; trust/cancel/forget/quarantine/transactional=PASS; development_only=true"
+      ]
+    },
+    {
+      "label": "concurrent",
+      "test": "windows_enclave::parallel_concurrent::tests::native::development_parallel_concurrent_host_campaign",
+      "image_sha256": "285805852dd6d2f8b5dd91cc1515216e00d500475e3a51d73fa6657fd3fc66ee",
+      "profiles": [
+        "debug",
+        "release"
+      ],
+      "expected_markers": [
+        "PARALLEL_CONCURRENT_HOST: cases=68; public+noncanonical; production signature rejected; PASS"
+      ]
+    },
+    {
+      "label": "bounded",
+      "test": "windows_enclave::native::tests::native_development_owner_campaign",
+      "image_sha256": "3d08f2daebbda20ffbce2a417b46e873df84513d86a8aa27868131c384b99674",
+      "profiles": [
+        "debug",
+        "release"
+      ],
+      "expected_markers": [
+        "WINDOWS_ENCLAVE_OWNER: PASS; vectors=16; retained_rehash=5; caller_unwind=PASS; production_signature=REJECTED; development_only=true"
+      ]
+    }
+  ],
+  "route_count": 19,
+  "native_route_profile_runs": 38,
+  "all_route_loader_refresh": true,
+  "lifecycle": {
+    "debug": {
+      "passed": 66,
+      "failed": 0,
+      "native_tests_ignored_in_general_suite": 19,
+      "native_tests_executed_explicitly": 19
+    },
+    "release": {
+      "passed": 66,
+      "failed": 0,
+      "native_tests_ignored_in_general_suite": 19,
+      "native_tests_executed_explicitly": 19
+    }
+  },
+  "capture_commands": 46,
+  "images_reused": true,
+  "host_binaries_reused": false,
+  "reused_worker_source_differences": [
+    {
+      "after": "096f33751e71f33de16ff0b69138a61bf9a16891fa68a9bcbf7ec746edda8c67",
+      "before": "d9d43a4442192a60616a9f1e5bf63de724db14f7d85a5dfbb2b81cd21d1183b7",
+      "kind": "four rustdoc lines only",
+      "manifest": "release-reports/pentest-20261014/native-simd-068141db-results/keccak/keccak-simd-worker-results.json",
+      "path": "crates/brynja-hash-sha3/src/hardened/cshake/setup.rs"
+    },
+    {
+      "after": "096f33751e71f33de16ff0b69138a61bf9a16891fa68a9bcbf7ec746edda8c67",
+      "before": "d9d43a4442192a60616a9f1e5bf63de724db14f7d85a5dfbb2b81cd21d1183b7",
+      "kind": "four rustdoc lines only",
+      "manifest": "release-reports/windows-local-20261004/scheduler-register-nospill/parallel-scheduler-image-build.json",
+      "path": "crates/brynja-hash-sha3/src/hardened/cshake/setup.rs"
+    }
+  ],
+  "bounded_fixture_test_only": {
+    "changes": {
+      "crates/brynja-crypto-cpu-std/src/windows_enclave/native/tests.rs": {
+        "after": "b4b2da6e88b7546bc0bed938cad72316ff528f6c48bfb1622330500b2755396c",
+        "before": "e3a04457ff86555688a9f66b3236302b15a1f6ce576d7d76b6adc84b1da3ffb7"
+      }
+    },
+    "new_literal": "[61, 8, 242, 218, 235, 189, 162, 15, 251, 206, 42, 65, 123, 70, 232, 115, 223, 132, 81, 61, 134, 168, 170, 39, 134, 129, 49, 195, 132, 185, 150, 116]",
+    "old_literal": "[\n        236, 109, 173, 213, 89, 40, 183, 203, 231, 253, 14, 239, 116, 144, 9, 129, 228, 5, 66, 71,\n        71, 122, 212, 96, 128, 2, 64, 3, 99, 125, 84, 148,\n    ]",
+    "production_changes": false
+  },
+  "native_record_sha256": "618cbb8674cd7a5d72115562a866fd55dbc937862bdf829c2db0fbe6ab65f5a7",
+  "plan_sha256": "e263e85d82af20801082ed6ae65348e5813835b85971d655dd71ff02e44524a3",
+  "focused_observation": "assurance/windows-protection-observations/pentest-loader-retest-20261014.json",
+  "focused_observation_preserved": true,
+  "focused_raw_artifacts_preserved": 13,
+  "reviewer_bundle": {
+    "path": "release-reports/loader-all-routes-4d557cb3/windows-loader-review-4d557cb3.tar.gz",
+    "sha256": "4140414f374b544eb4e8d2d7fbf022e3cd642ac75089dc63279cb601d362712b",
+    "size_bytes": 126021029,
+    "raw_artifacts_included": true,
+    "local_only": true,
+    "verify": "Extract to an empty directory; run python3 verify.py, python3 test-run.py and python3 test-verify.py. See REVIEW.txt."
+  },
+  "local_artifact_sha256": {
+    "release-reports/loader-all-routes-4d557cb3/verify.py": "cce562de519d745166e9778e971cd29749ce2d715d7eb22ce0880b670af86c72",
+    "release-reports/loader-all-routes-4d557cb3/test-run.py": "0cc54485391b57833233bc4f2015a40425231deac8f851e0de96b8e6dd46181a",
+    "release-reports/loader-all-routes-4d557cb3/test-verify.py": "7dc3a07eda01acf9c1c39e360cfe7364bb125d0723523050bc9bd426b017aba9",
+    "release-reports/loader-all-routes-4d557cb3/prepare.py": "a24dc27be26c484e6680006275a370aece491dd330ce18cc10c2c657e2ff052a",
+    "release-reports/loader-all-routes-4d557cb3/run.py": "b805d36fcb062c3b1a8166e95103380300858114f5b8c65e8b8130d25da2109d",
+    "release-reports/loader-all-routes-4d557cb3/run.cmd": "aec77acbafcaea7bb4c0eeac787ca2f7681381bc08555c0d7e7e1d2404320e54",
+    "release-reports/loader-all-routes-4d557cb3/record.py": "518a5aef30289c79d8c04ddcc2a7923d726334102db8ff22e932924d7f2095e5",
+    "release-reports/loader-all-routes-4d557cb3/host.ps1": "e2327077d08a3de458fd7eef14deb0c343a30452a7921e39f33b442b39d3bbbc",
+    "release-reports/loader-all-routes-4d557cb3/host-details.json": "59e70b2832ab375325cb9bef86dff8f22ac2c5a8d6dd744685c9bcf60a00fbc8",
+    "release-reports/loader-all-routes-4d557cb3/REVIEW.txt": "e906d6e1ad9a0804a5680969981cc5e7393db3253e8041bf3265d0546817ba15",
+    "release-reports/loader-all-routes-4d557cb3/supplied-reviews.tar": "d814bbe3101dead93fd0301fa6df4aa120e1c032e739c56806afc961babc0a14",
+    "release-reports/loader-all-routes-4d557cb3/focused-loader-retest.tar": "65c5bbdafbbf56a45eeb1589c5140735bd6a81429d3bccee5576631229863d1d"
+  },
+  "production_signed": false,
+  "production_qualified": false,
+  "whole_image_qualified": false,
+  "physical_page_erasure_proven": false,
+  "independent_retest": false,
+  "release_gate_changed": false,
+  "limits": [
+    "Author-operated development-signing tests, not independent native review.",
+    "All 19 routes now execute through this loader; this does not newly qualify unchanged worker cleanup.",
+    "Trusted host/device-map context remains required.",
+    "Physical/fatal-path erasure, Windows ARM64 and production-signature success remain unqualified.",
+    "Raw local bundle must be supplied to reviewers; a hash alone is not review evidence."
+  ]
+}

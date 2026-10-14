@@ -13,6 +13,7 @@ pub(super) mod keccak_simd;
 #[cfg(feature = "strict-kmac")]
 pub(super) mod kmac;
 mod lifecycle;
+mod namespace;
 #[cfg(feature = "strict-sha3-acceleration")]
 pub(super) mod parallel_concurrent;
 #[cfg(feature = "strict-sha3")]

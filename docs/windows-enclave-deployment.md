@@ -70,7 +70,16 @@ The main image must be a local disk file with a bounded absolute
 `GLOBALROOT\Device\HarddiskVolume...` name obtainable from its handle. The
 loader pins that file and its ancestors without write/delete sharing and
 compares the complete volume/file identity. Drive-letter and per-logon
-volume-GUID aliases are not used for the final load. Filesystems that cannot
+volume-GUID aliases are not used for the final load. Neither is `GLOBALROOT`:
+direct NT calls can shadow that name even when `DefineDosDeviceW` refuses it.
+After acquiring and comparing the file guards, the loader exclusively creates
+a temporary NT symbolic link to the admitted native device/file path. Its handle
+stays owned by the image pin until retirement. An existing name rejects
+construction; it is never opened or adopted. The final loader path uses this
+held alias. The containing process and its device-map/impersonation context must
+remain trusted and stable; this is not protection against hostile in-process
+code or a privileged actor changing the OS namespace itself.
+Filesystems that cannot
 provide the required device path or full file identity fail closed; network,
 redirected and arbitrary device namespaces are not supported deployment paths.
 

@@ -106,6 +106,16 @@ OS_THREAD_ABI = '''unsafe extern "C" {
     fn pthread_join(thread: c_ulong, result: *mut *mut c_void) -> c_int;
 }'''
 OS_ENCLAVE_ADAPTER = Path('crates/brynja-crypto-cpu-std/src/windows_enclave/native/sys.rs')
+OS_ENCLAVE_NAMESPACE = Path('crates/brynja-crypto-cpu-std/src/windows_enclave/native/namespace.rs')
+OS_ENCLAVE_NAMESPACE_ABI = '''#[link(name = "ntdll")]
+unsafe extern "system" {
+    fn NtCreateSymbolicLinkObject(
+        handle: *mut Handle,
+        access: u32,
+        attributes: *const Attributes,
+        target: *const Unicode,
+    ) -> i32;
+}'''
 OS_ENCLAVE_CALLBACK = Path('crates/brynja-crypto-cpu-std/src/windows_enclave/native/callback.rs')
 OS_ENCLAVE_ENTRY = 'extern "system" fn callback(parameter: usize) -> usize {'
 OS_ENCLAVE_CONCURRENT_CALLBACK = Path('crates/brynja-crypto-cpu-std/src/windows_enclave/native/parallel_concurrent/callbacks.rs')
@@ -238,6 +248,10 @@ def validate(root: Path) -> None:
             text = path.read_text(encoding="utf-8")
             abi_text = text
             link_text = text
+            if relative == OS_ENCLAVE_NAMESPACE:
+                if text.count(OS_ENCLAVE_NAMESPACE_ABI) != 1:
+                    fail('OS enclave namespace ABI inventory changed')
+                abi_text = link_text = text.replace(OS_ENCLAVE_NAMESPACE_ABI, '', 1)
             if relative == OS_ENCLAVE_ADAPTER:
                 if text.count(OS_ENCLAVE_ABI) != 1:
                     fail('OS enclave ABI inventory changed')

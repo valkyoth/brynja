@@ -2,6 +2,18 @@
 
 ## Current completion checklist (2026-10-14)
 
+Latest follow-up: direct NT calls reproduced `GLOBALROOT` redirection despite
+the earlier Win32 refusal. The loader now retains an exclusively created
+temporary NT alias, with focused native regression and real KMAC/concurrent
+teardown tests passing. See the
+[finding and evidence scope](../security/pentest/v0.24.50.md#direct-nt-loader-binding-and-teardown-follow-up-2026-10-14).
+Independent retest remains required. The nineteen-route results below are
+historical captures, not new all-route execution of this changed loader.
+The fixture-relocation replay is repaired and passes against its archived
+pre-fix tree; it intentionally refuses to treat this production change as
+metadata-only evidence reuse. No full sweep, push or tag has been performed
+for this follow-up.
+
 The [clean-commit native teardown campaign](../assurance/windows-protection-observations/pentest-native-teardown-20261014.json)
 now passes ten real scalar KMAC lifecycle/fault cases in each of debug and
 release, including post-failure mapping destruction and image-lock release.
@@ -18,8 +30,8 @@ evidence without asserting whole-image erasure. The fresh 249-test replay passes
 and matches the earlier Linux/Windows reports; the affected KMAC checker also
 passes its 19-test replay with unchanged semantic results. Existing qualification
 flags remain false. **Package 9's candidate was pushed and GitHub passed.
-Package 10's host fixes have received two independent retests; the requested
-GLOBALROOT native regression passes. The representative clean-commit native
+Package 10's earlier host fixes received two independent retests; the subsequent
+direct-NT finding and new fix are described above. The representative clean-commit native
 post-failure destruction test now passes; evidence review remains pending.**
 This is not more isolation research or an automatic full
 sweep. The [finding dispositions](../security/pentest/v0.24.50.md#author-remediation-and-verification-2026-10-13)

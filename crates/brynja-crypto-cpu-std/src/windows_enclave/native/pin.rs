@@ -1,6 +1,6 @@
 use super::{
     super::{Error, ImagePolicy, image},
-    sys,
+    namespace, sys,
 };
 use std::path::{Path, PathBuf};
 use std::{
@@ -17,6 +17,7 @@ use std::{
 pub(super) struct Pin {
     files: Vec<File>,
     pub(super) location: Vec<u16>,
+    namespace: Option<namespace::ImageName>,
 }
 impl Pin {
     pub(super) fn open(location: &Path, policy: &ImagePolicy) -> Result<Self, Error> {
@@ -41,6 +42,7 @@ impl Pin {
         let mut pin = Self {
             files,
             location: wide,
+            namespace: None,
         };
         pin.directory(3)?;
         let length = pin.location.len();
@@ -78,8 +80,8 @@ impl Pin {
             image::admit_threads(&bytes, policy, threads)?;
         }
         // The loader accepts a name, not our handle. Bind that name to the
-        // admitted file on its NT device, independently of local DOS aliases.
-        // Keep the original guards alive until the canonical guards are held.
+        // admitted file on its NT device. GLOBALROOT is used only while acquiring
+        // and comparing guards; a private held NT link binds the final load name.
         let handle = file.as_raw_handle();
         let identity = sys::file_identity(handle)?;
         let location = sys::volume_path(handle)?;
@@ -89,7 +91,11 @@ impl Pin {
         }
         let mut files = Vec::new();
         files.try_reserve_exact(32).map_err(|_| Error::Platform)?;
-        let mut canonical = Self { files, location };
+        let mut canonical = Self {
+            files,
+            location,
+            namespace: None,
+        };
         canonical.directory(root_end)?;
         for i in root_end..canonical.location.len() {
             if canonical.location.get(i) == Some(&92) {
@@ -110,7 +116,14 @@ impl Pin {
         {
             return Err(Error::Image);
         }
-        canonical.location.push(0);
+        let namespace = namespace::ImageName::create(&canonical.location)?;
+        let mut location = Vec::new();
+        location
+            .try_reserve_exact(namespace.location().len())
+            .map_err(|_| Error::Platform)?;
+        location.extend_from_slice(namespace.location());
+        canonical.location = location;
+        canonical.namespace = Some(namespace);
         Ok(canonical)
     }
     fn directory(&mut self, end: usize) -> Result<(), Error> {

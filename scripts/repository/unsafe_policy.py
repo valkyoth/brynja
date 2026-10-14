@@ -7,8 +7,8 @@ import hashlib
 import re
 from pathlib import Path
 
-
 ALLOWED = {
+    Path("crates/brynja-crypto-cpu-std/src/windows_enclave/native/namespace.rs"): ("6dd6f0f96888a89e005988aba9c4035c7843c7334b5f9e86fe814f38c095ce59", 1, 0, 1),
     Path("crates/brynja-crypto-cpu-std/src/windows_enclave/native/sys.rs"): ("45ced53eb5777616e430178324fa3d6972343eb16786482fe9430e4c15c34d03", 18, 0, 18),
     Path("crates/brynja-crypto-cpu-std/src/windows_enclave/native/parallel_concurrent/callbacks.rs"): ("dfb7e29e4b5ad92bf9eb165e1e883ff1ed1e282d97fe33cbc29bc760594ea894", 0, 0, 0),
     Path("crates/brynja-crypto-cpu-std/src/windows_enclave/native/callback.rs"): ("89db81947dc7619675feec15fddb6e53d17cb9d8a131263730d64552d0e5564d", 0, 0, 0),

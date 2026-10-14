@@ -122,6 +122,14 @@ jobs:
       - name: Test native Windows enclave image path binding
         if: runner.os == 'Windows'
         run: python scripts/cryptography/test-windows-enclave-image-path.py
+      - name: Test direct NT loader-name binding
+        if: runner.os == 'Windows'
+        run: python scripts/cryptography/test-windows-enclave-nt-namespace.py
+      - name: Test Windows evidence fixture validators
+        run: |
+          python scripts/cryptography/test-windows-enclave-namespace-fixture.py
+          python scripts/cryptography/test-windows-enclave-concurrent-results.py
+          python scripts/cryptography/test-windows-enclave-teardown-results.py
       - name: Test frozen portable legacy consumer
         run: cargo test --locked --manifest-path assurance/legacy-hash-public-api/Cargo.toml
       - name: Final legacy hash public acceptance

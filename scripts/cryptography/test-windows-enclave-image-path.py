@@ -31,9 +31,11 @@ mod image {
     pub fn admit_threads(b: &[u8], p: &crate::ImagePolicy, _: u32) -> Result<(), crate::Error> { admit(b,p) }
 }
 mod native {
+    use crate::Error;
     use crate::protocol;
     mod pin;
     mod sys;
+    mod namespace;
     pub fn check() {
         use std::os::windows::ffi::OsStringExt;
         let alias = std::env::args().nth(1).unwrap();
@@ -41,11 +43,15 @@ mod native {
         let pin = pin::Pin::open(std::path::Path::new(&named), &crate::ImagePolicy).unwrap();
         assert_eq!(std::fs::read(&named).unwrap(), &[2; 512]); // redirected during admission
         let path = std::ffi::OsString::from_wide(&pin.location[..pin.location.len()-1]);
-        assert!(path.to_string_lossy().starts_with(r"\\?\GLOBALROOT\Device\HarddiskVolume"));
+        assert!(path.to_string_lossy().starts_with(r"\\?\BrynjaImage-"));
+        assert!(std::fs::File::open(&path).is_ok(), "loader alias retired before use");
         let args: Vec<_> = std::env::args().collect();
+        use std::os::windows::io::AsRawHandle;
+        let original = std::fs::File::open(&args[3]).unwrap();
+        let canonical = std::ffi::OsString::from_wide(&sys::volume_path(original.as_raw_handle()).unwrap());
         let globalroot = args[4].starts_with("globalroot");
         let shadow = if globalroot {
-            crate::shadow::Shadow::globalroot(&path, &args[2])
+            crate::shadow::Shadow::globalroot(&canonical, &args[2])
         } else {
             let shadow = crate::shadow::Shadow::new(&args[3], &args[2]);
             assert_eq!(std::fs::read(&shadow.path).unwrap(), b"guid-redirected");
@@ -55,7 +61,9 @@ mod native {
         if globalroot { println!("GLOBALROOT_CANONICAL_READ: original; write_guard=checked_below"); }
         assert!(std::fs::OpenOptions::new().write(true).open(&path).is_err());
         drop(pin);
-        assert!(std::fs::OpenOptions::new().write(true).open(&path).is_ok());
+        assert!(std::fs::read(&path).is_err()); // temporary alias retired
+        drop(original);
+        assert!(std::fs::OpenOptions::new().write(true).open(&args[3]).is_ok());
         drop(shadow);
     }
 }
@@ -131,18 +139,22 @@ def run():
         (root / 'replacement').mkdir()
         (root / 'original/worker.dll').write_bytes(bytes([1]) * 512)
         (root / 'replacement/worker.dll').write_bytes(bytes([2]) * 512)
-        for part in ('pin.rs', 'sys.rs'):
+        for part in ('pin.rs', 'sys.rs', 'namespace.rs'):
             shutil.copyfile(SOURCE / part, root / 'native' / part)
         shutil.copyfile(SOURCE.parent / 'protocol.rs', root / 'protocol.rs')
         (root / 'main.rs').write_text(FIXTURE + SHADOW)
         original = (root / 'native/pin.rs').read_text()
         for level in ('0', '2'):
-            for mutant in ('none', 'dos', 'guid', 'globalroot', 'globalroot-redirect'):
-                changed = original.replace('canonical.location.push(0);',
+            for mutant in ('none', 'dos', 'guid', 'globalroot', 'globalroot-redirect', 'early-alias-drop'):
+                changed = original.replace('canonical.location = location;',
                     'canonical.location = pin.location.clone(); canonical.location.push(0);')
                 if changed == original:
                     raise AssertionError('missing load-name mutant anchor')
-                (root / 'native/pin.rs').write_text(changed if mutant == 'dos' else original)
+                early = original.replace('canonical.namespace = Some(namespace);', 'drop(namespace);')
+                if early == original:
+                    raise AssertionError('missing namespace-lifetime mutant anchor')
+                (root / 'native/pin.rs').write_text(
+                    changed if mutant == 'dos' else early if mutant == 'early-alias-drop' else original)
                 # Model the old GUID load after all checks, then mutate that
                 # GUID alias in the same logon session before opening the name.
                 fixture = FIXTURE
@@ -160,10 +172,11 @@ def run():
                     result = subprocess.run([str(binary), alias, str(root / 'replacement'),
                                              str(root / 'original/worker.dll'), mutant],
                                             capture_output=True, text=True, timeout=30)
-                    negative = mutant in ('dos', 'guid', 'globalroot-redirect')
+                    negative = mutant in ('dos', 'guid', 'globalroot-redirect', 'early-alias-drop')
                     if result.returncode != (101 if negative else 0):
                         raise AssertionError(result.stdout + result.stderr)
-                    if negative and 'assertion' not in result.stderr:
+                    if negative and not any(token in result.stderr for token in (
+                            'assertion', 'loader alias retired before use')):
                         raise AssertionError('mutant did not fail an assertion: ' + result.stderr)
                     if mutant == 'globalroot':
                         if ('GLOBALROOT_SHADOW:' not in result.stdout or
@@ -172,7 +185,7 @@ def run():
                         print(result.stdout, end='', flush=True)
                 finally:
                     subprocess.run(['subst', alias, '/D'], check=True, timeout=10)
-    print('Native image binding: O0/O2 DOS, GUID and GLOBALROOT alias checks PASS; six mutants rejected')
+    print('Native image binding: O0/O2 DOS, GUID and GLOBALROOT alias checks PASS; eight mutants rejected')
 
 
 if __name__ == '__main__':

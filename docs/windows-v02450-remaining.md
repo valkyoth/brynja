@@ -1,12 +1,15 @@
 # v0.24.50 remaining work
 
-## Current completion checklist (2026-10-13)
+## Current completion checklist (2026-10-14)
 
-Before release, run the native lifecycle and fault-injection campaign from a
-clean committed checkout, including real post-failure enclave destruction.
-The compiled OS-mock fault tests are not that qualification. Explicitly assess
-the secure-kernel page-scrubbing assumption after `DeleteEnclave` described in
-the [deployment boundary](windows-enclave-deployment.md#responsibility-boundary).
+The [clean-commit native teardown campaign](../assurance/windows-protection-observations/pentest-native-teardown-20261014.json)
+now passes ten real scalar KMAC lifecycle/fault cases in each of debug and
+release, including post-failure mapping destruction and image-lock release.
+Three compiled mutants are rejected. Review this author-run evidence before
+release; it exercises the shared sequential destructor, not every image/route.
+The OS-mock failure tests remain separate. Virtual mapping release does not
+prove the secure-kernel page-scrubbing assumption after `DeleteEnclave` in the
+[deployment boundary](windows-enclave-deployment.md#responsibility-boundary).
 
 Packages 1–8 are complete at **conditional author-review** scope. Package 8's
 [bounded cleanup reconciliation](windows-enclave-whole-image-cleanup.md#bounded-cleanup-claim-and-evidence-map)
@@ -16,8 +19,8 @@ and matches the earlier Linux/Windows reports; the affected KMAC checker also
 passes its 19-test replay with unchanged semantic results. Existing qualification
 flags remain false. **Package 9's candidate was pushed and GitHub passed.
 Package 10's host fixes have received two independent retests; the requested
-GLOBALROOT native regression passes. Clean-commit native lifecycle/fault
-qualification, including real post-failure destruction, remains pending.**
+GLOBALROOT native regression passes. The representative clean-commit native
+post-failure destruction test now passes; evidence review remains pending.**
 This is not more isolation research or an automatic full
 sweep. The [finding dispositions](../security/pentest/v0.24.50.md#author-remediation-and-verification-2026-10-13)
 separate implemented fixes, already-enforced constraints and accepted limits.

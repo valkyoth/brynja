@@ -21,6 +21,29 @@ FIXTURE = Path('scripts/cryptography/windows_enclave_native_teardown.rs')
 TEST = 'windows_enclave::native::lifecycle::native_teardown::real_post_failure_teardown'
 
 
+def validate_result(label, code, output):
+    if 'running 1 test' not in output:
+        raise AssertionError('native test did not execute')
+    if label == 'normal':
+        expected = {
+            f'NATIVE_TEARDOWN: {case}; explicit={explicit}; mapping=free; pin=released'
+            for case in ('normal', 'bad-version', 'bad-sequence', 'bad-receipt', 'unwind')
+            for explicit in ('false', 'true')
+        }
+        expected.add('NATIVE_TEARDOWN: fresh-owner=PASS; cases=10; erasure=NOT_PROVEN')
+        # The first marker shares libtest's "test ..." line under --nocapture.
+        markers = [line[line.index('NATIVE_TEARDOWN: '):]
+                   for line in output.splitlines() if 'NATIVE_TEARDOWN: ' in line]
+        if code != 0 or len(markers) != len(expected) or set(markers) != expected:
+            raise AssertionError('native campaign failed or incomplete')
+    else:
+        reason = {'skip-destruction': 'enclave mapping retained',
+                  'fake-destruction': 'enclave mapping retained',
+                  'clear-quarantine': 'destruction must not clear quarantine'}[label]
+        if code != 101 or 'panicked at' not in output or reason not in output:
+            raise AssertionError('mutant was not rejected by its expected assertion')
+
+
 def run(args):
     if os.name != 'nt':
         raise RuntimeError('requires native Windows; refusing a skipped pass')
@@ -70,13 +93,7 @@ def run(args):
                                         text=True, timeout=1200)
                 output = result.stdout + result.stderr
                 print(output, flush=True)
-                if 'running 1 test' not in output:
-                    raise AssertionError('native test did not execute')
-                if label == 'normal':
-                    if result.returncode != 0 or output.count('NATIVE_TEARDOWN: ') != 11:
-                        raise AssertionError('native campaign failed or incomplete')
-                elif result.returncode != 101 or 'panicked at' not in output:
-                    raise AssertionError('mutant was not rejected by the running test')
+                validate_result(label, result.returncode, output)
                 records.append(dict(variant=label, profile=profile,
                                     exit_code=result.returncode, output=output))
     observation = dict(schema=1, image_sha256=digest, rust_toolchain=args.toolchain,

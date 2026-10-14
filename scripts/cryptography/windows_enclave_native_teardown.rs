@@ -1,5 +1,5 @@
 // Test-only child of the shipping lifecycle module in an isolated source copy.
-// No OS mocks, no production constructor bypass, and no erasure claim.
+// No OS mocks or production constructor changes, and no erasure claim.
 #![allow(unsafe_code)]
 use super::super::super::kmac_wire::Request;
 use super::super::{ImagePolicy, Protocol};

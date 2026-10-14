@@ -137,6 +137,18 @@ them rather than silently expanding its scope.
 
 ## Detached compiler identities
 
+Rust freshness requires the current stable release in the executable workspace
+compatibility matrix and both emitted-code matrices. Their version populations
+must agree with each other and the existing CI/codegen contracts. The default
+and target-evidence compiler remains pinned and must also be covered. Fetch,
+manifest, missing-version and execution-binding errors reject the freshness
+check; adding a version to documentation alone cannot satisfy it.
+
+This owner-approved distinction does not mark a matrix run successful or waive
+its approval/execution requirement. It also does not rebind old native captures
+to the latest compiler. Cargo-tool, action-pin and verifier freshness checks
+remain unchanged; future native compiler migrations still need their own review.
+
 Detached phase reuse checks the default compiler/Cargo identities, the compiler
 selected by understood direct Cargo or verifier launchers, and the actual
 verifier identity. An unused floating compiler installation does not invalidate

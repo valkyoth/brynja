@@ -38,3 +38,4 @@ fi
 
 echo "shell syntax validation respects each script interpreter"
 python3 scripts/repository/test-action-pins.py
+python3 scripts/repository/test-rust-freshness.py

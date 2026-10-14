@@ -3,16 +3,9 @@ set -eu
 
 ci_file=".github/workflows/ci.yml"
 tool_lock="scripts/ci/ci-tools.lock"
-manifest_url="${RUST_STABLE_MANIFEST_URL:-https://static.rust-lang.org/dist/channel-rust-stable.toml}"
-
-pinned_rust="$(sed -n 's/^channel = "\([0-9][0-9.]*\)"$/\1/p' rust-toolchain.toml | head -n 1)"
-latest_rust="$(curl -fsSL "$manifest_url" | sed -n '/^\[pkg\.rust\]$/,/^\[/ { s/^version = "\([0-9][0-9.]*\) .*/\1/p; }' | head -n 1)"
-test -n "$pinned_rust"
-test -n "$latest_rust"
-if [ "$pinned_rust" != "$latest_rust" ]; then
-    echo "Rust is stale: pinned ${pinned_rust}, latest ${latest_rust}" >&2
-    exit 1
-fi
+# Rust freshness follows required compatibility coverage. Native observations
+# retain their actual pinned compiler; this does not qualify them under latest.
+python3 scripts/repository/rust_freshness.py
 
 for tool in cargo-deny cargo-audit cargo-sbom; do
     pinned="$(sed -n "s/^${tool} \\([0-9][^ ]*\\) [0-9a-f]\\{64\\}$/\\1/p" "$tool_lock" | head -n 1)"

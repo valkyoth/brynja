@@ -258,7 +258,10 @@ MSRV is Rust `1.90.0`; the default full-check compiler is Rust `1.98.1`.
 Rust `1.99.0` is also covered by the compatibility and x86-64 emitted-code
 matrix. The pinned full-check/native-evidence compiler remains `1.98.1`;
 adding a compiler does not relabel earlier qualification artifacts.
-Release preflight checks tool freshness. Kani uses its separately pinned
+Release preflight requires the latest stable Rust in the executable compatibility
+and emitted-code matrices; those checks must still pass. It does not automatically
+advance the native-evidence compiler or relabel old results. Other tool freshness
+checks remain unchanged. Kani uses its separately pinned
 `cargo-kani 0.68.0` / Rust `1.90.0` launcher pairing, with Kani's bundled
 `nightly-2026-08-21` verifier compiler. It does not lower the production compiler
 or make a policy check a proof. See [Kani evidence](docs/KANI.md).

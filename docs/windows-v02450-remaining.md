@@ -31,9 +31,17 @@ tests per profile. Current host binaries also pass 68 concurrent ParallelHash
 cases per profile against its unchanged image. Twelve worker assembly listings
 are byte-identical; the two SHA-NI listings differ only in the exact source-path
 literal and its lengths. All fourteen fresh images bind the cleanup wrapper.
-The bounded SHA-256 owner and SHA-256/SHA-512/Keccak independent-message SIMD
-images remain to refresh. Final current-image reconciliation and review are
-still pending; historical observations retain their original bindings and
+The [four remaining image refreshes](../assurance/windows-protection-observations/pentest-four-image-refresh-20261014.json)
+now also pass debug/release campaigns: the bounded SHA-256 owner and
+SHA-256/SHA-512/Keccak independent-message SIMD routes. All nineteen routes
+therefore have current-host functional results. The three SIMD Rust archives
+are reused with explicit source/artifact checks; the rebuilt bounded worker's
+assembly is byte-identical. Current C wrappers are rebuilt, default fault controls
+are rejected, and all four fresh images bind the complete cleanup wrapper.
+The bounded native fixture changes only its test image pin in a separate checkout;
+production admission is unchanged. Final current-image cleanup evidence
+reconciliation and independent evidence review are still pending;
+historical observations retain their original bindings and
 production/whole-image qualification is not asserted. The full detached release
 sweep has not started.
 

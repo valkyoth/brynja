@@ -63,9 +63,13 @@ fn image() -> (PathBuf, ImagePolicy) {
 }
 fn request(owner: &mut Backend, request: Request, input: &[u8]) {
     let header = request.header(input).unwrap();
-    owner
-        .run_kmac(request.op, Some(&header), input.len(), None)
-        .unwrap();
+    assert_eq!(
+        owner.run_kmac(request.op, Some(&header), input.len(), None),
+        Ok(()),
+        "setup operation {} sequence {}",
+        request.op,
+        request.sequence
+    );
 }
 fn keyed_owner(path: &std::path::Path, policy: &ImagePolicy) -> Backend {
     let mut owner = Backend::open_protocol(
@@ -97,7 +101,7 @@ fn keyed_owner(path: &std::path::Path, policy: &ImagePolicy) -> Backend {
         &mut owner,
         Request {
             op: 42,
-            sequence: 1,
+            sequence: 2,
             ..Request::default()
         },
         &[],
@@ -106,7 +110,7 @@ fn keyed_owner(path: &std::path::Path, policy: &ImagePolicy) -> Backend {
         &mut owner,
         Request {
             op: 43,
-            sequence: 1,
+            sequence: 3,
             last: 8,
             ..Request::default()
         },
@@ -116,7 +120,7 @@ fn keyed_owner(path: &std::path::Path, policy: &ImagePolicy) -> Backend {
         &mut owner,
         Request {
             op: 44,
-            sequence: 1,
+            sequence: 4,
             ..Request::default()
         },
         &[],
@@ -125,7 +129,7 @@ fn keyed_owner(path: &std::path::Path, policy: &ImagePolicy) -> Backend {
         &mut owner,
         Request {
             op: 45,
-            sequence: 1,
+            sequence: 5,
             last: 8,
             ..Request::default()
         },
@@ -178,7 +182,7 @@ fn real_post_failure_teardown() {
                 } else {
                     let mut header = Request {
                         op: 45,
-                        sequence: 1,
+                        sequence: 6,
                         ..Request::default()
                     }
                     .header(&[])

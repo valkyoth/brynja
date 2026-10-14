@@ -14,6 +14,18 @@ REGIONS = {
         'chaining_state:64', 'partial_input:128', 'message_length:16', 'phase:2',
         'message_schedule:640', 'block_copy:128', 'padding_block:128', 'output_staging:64'],
 }
+NATIVE_GATE = '''python3 scripts/release/run-verification.py plan --check
+if python3 scripts/sha2/check-sha2-hardened-native-evidence.py; then
+    :
+else
+    python3 scripts/release/native_sha2_carry_forward.py
+fi
+verify() {'''
+
+
+def native_gate(text):
+    require(text.startswith('#!/usr/bin/env bash\nset -euo pipefail\n'), 'native gate fail-closed shell')
+    require(text.count(NATIVE_GATE) == 1, 'mandatory pre-tag native evidence')
 
 
 def read(root, path):
@@ -63,9 +75,7 @@ def validate(root=ROOT, write=False):
             read(root, 'scripts/zeroization/check-zeroization-sanitizer.sh'), 'native ASan gate')
     require("FLAGS = '-Zsanitizer=address -C target-feature=+sha,+sse2'" in
             read(root, 'scripts/sha2/hardened_native_host.py'), 'ASan actual kernel flags')
-    require('python3 scripts/release/run-verification.py plan --check\n'
-            'python3 scripts/sha2/check-sha2-hardened-native-evidence.py\nverify() {' in
-            read(root, 'scripts/tag_gate.sh'), 'mandatory pre-tag native evidence')
+    native_gate(read(root, 'scripts/tag_gate.sh'))
     require('python3 scripts/sha2/test-sha2-hardened-native.py' in driver, 'native gate regressions')
     paths = set()
     for directory in (CPU + '/src', HASH + '/src', 'assurance/sha2-hardened-execution/src'):
@@ -104,6 +114,12 @@ def validate(root=ROOT, write=False):
                  'scripts/sha2/check-sha2-hardened-native-evidence.py',
                  'scripts/sha2/capture-sha2-hardened-native.py', 'scripts/sha2/test-sha2-hardened-native.py'):
         paths.add(Path(name))
+    # The fallback is itself part of the reviewed gate, not an unchecked
+    # substitute for fresh native qualification.
+    for name in ('native_sha2_carry_forward.py', 'native_review_io.py',
+                 'native_review_scope.py', 'native_scope_tests.py',
+                 'test-native-metadata-carry-forward.py'):
+        paths.add(Path('scripts/release') / name)
     expected = {'version': '0.24.34', 'regions': REGIONS,
                 'residuals': ['registers', 'compiler-copies', 'spills', 'caches', 'swap', 'dumps', 'abort', 'forget', 'caller-copies'],
                 'sha256': {str(path).replace('\\', '/'): hashlib.sha256(read(root, path).encode()).hexdigest() for path in sorted(paths)}}

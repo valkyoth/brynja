@@ -13,6 +13,7 @@ for category in ('sha2', 'sha3', 'hash', 'sp800185', 'cryptography', 'md5', 'cpu
     sys.path.insert(0, str(ROOT / 'scripts' / category))
 
 import sha256_public_api
+import sha2_hardened_execution_policy
 import sha256_batch_policy
 import sha512_batch_policy
 import keccak_batch_policy
@@ -86,6 +87,9 @@ def check_api_metadata():
 def check_all():
     check_verifier_bindings()
     check_api_metadata()
+    # Include the real mandatory native-gate structure check; a stale policy
+    # assertion must fail this cheap preflight rather than only remote CI.
+    sha2_hardened_execution_policy.validate(ROOT)
     # Same metadata-only validator used in CI, including newly added native
     # source modules. This does not execute the hosted package/test campaigns.
     hosted_acceptance.validate()

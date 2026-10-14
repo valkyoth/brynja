@@ -80,6 +80,22 @@ def main():
             patch('subprocess.check_call', side_effect=AssertionError('unexpected process')):
         metadata.check_all()
         original_read = Path.read_text
+        tag = metadata.ROOT / 'scripts/tag_gate.sh'
+        original_gate = original_read(tag)
+        for before, after in (
+                ('python3 scripts/release/native_sha2_carry_forward.py', 'true'),
+                ('python3 scripts/sha2/check-sha2-hardened-native-evidence.py', 'true')):
+            changed = original_gate.replace(before, after)
+            assert changed != original_gate
+            def broken_gate(path, *args, **kwargs):
+                return changed if path == tag else original_read(path, *args, **kwargs)
+            with patch.object(Path, 'read_text', broken_gate):
+                try:
+                    metadata.check_all()
+                except ValueError as error:
+                    assert 'mandatory pre-tag native evidence' in str(error), str(error)
+                else:
+                    raise AssertionError('native gate bypass escaped metadata preflight')
         hosted = metadata.hosted_acceptance
         for missing in (False, True):
             record = json.loads(original_read(hosted.REVIEW))
@@ -278,6 +294,7 @@ def main():
     print('Final metadata rejects eight stale/missing MD5 package-helper bindings without crypto execution')
     print('Final metadata rejects the stale MD5 rustdoc acceleration pin and missing binding without crypto execution')
     print('Final metadata rejects stale/missing ParallelHash facade-fixture bindings without crypto execution')
+    print('Final metadata rejects strict/fallback native-gate bypasses without crypto execution')
 
 
 if __name__ == '__main__':

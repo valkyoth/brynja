@@ -16,7 +16,88 @@ import verification_carry_forward as carry
 from verification_carry_forward_tests import entry, plan
 
 
+def approval_context(delta=None, phase='miri', receipt='a' * 64):
+    return {'plan': delta or plan(), 'selected_phases': [phase], 'receipt': receipt}
+
+
 class PhaseReceiptTests(unittest.TestCase):
+    def test_new_matrix_receipt_resolves_only_its_own_completed_work(self):
+        old = {**plan(blocked=True), 'full_phases': ['matrix']}
+        current = {**plan(), 'full_phases': [], 'fingerprint': 'b' * 64}
+        contexts = [approval_context(old, 'repository'),
+                    approval_context({**old, 'fingerprint': 'c' * 64}, 'miri', 'b' * 64),
+                    approval_context(current, 'matrix', 'c' * 64)]
+        checks = [(entry('python3 policy.py'), 'run: current repository/tooling baseline'),
+                  (entry('miri fixture', 'miri'), 'reuse: unchanged implementation inputs'),
+                  (entry('cargo +1.99.1 check', 'matrix'), 'reuse: unchanged implementation inputs')]
+        combined = phases.authorization_plan(plan(), contexts, checks)
+        self.assertFalse(combined['approval_required'])
+        self.assertEqual(combined['remaining_commands'], 1)
+        phases.plans.authorize(combined, None)
+        # An old per-receipt token is never accepted as a collective approval.
+        with self.assertRaises(ValueError):
+            phases.plans.authorize(combined, old['fingerprint'])
+        contexts[-1]['plan'] = old
+        checks[-1] = (checks[-1][0], 'run: changed or unresolved implementation inputs')
+        combined = phases.authorization_plan(plan(), contexts, checks)
+        self.assertEqual(combined['full_phases'], ['matrix'])
+        with self.assertRaises(PermissionError):
+            phases.plans.authorize(combined, None)
+        phases.plans.authorize(combined, combined['fingerprint'])
+        approved = combined['fingerprint']
+        for change in ('receipt', 'command', 'environment', 'head', 'tool'):
+            altered, entries = copy.deepcopy(contexts), copy.deepcopy(checks)
+            release = plan()
+            if change == 'receipt':
+                altered[-1]['receipt'] = 'd' * 64
+            elif change == 'command':
+                entries[-1] = (entry('cargo +1.99.1 test', 'matrix'), entries[-1][1])
+            elif change == 'environment':
+                entries[-1][0]['environment']['RUSTFLAGS'] = '-C opt-level=3'
+            elif change == 'head':
+                release['head'] = 'd' * 40
+            else:
+                altered[-1]['tool_drift'] = {'matrix': 'different compiler'}
+            with self.subTest(change=change), self.assertRaises(ValueError):
+                phases.plans.authorize(phases.authorization_plan(release, altered, entries), approved)
+
+    def test_new_full_scope_and_tool_drift_still_need_approval(self):
+        check = (entry('miri fixture', 'miri'), 'run: changed')
+        for delta in (plan(blocked=True), {**plan(blocked=True), 'full_phases': ['miri']}):
+            combined = phases.authorization_plan(plan(), [approval_context(delta)], [check])
+            with self.assertRaises(PermissionError):
+                phases.plans.authorize(combined, None)
+        context = approval_context({**plan(), 'full_phases': []})
+        context['tool_drift'] = {'miri': 'verifier changed'}
+        with self.assertRaises(PermissionError):
+            phases.plans.authorize(phases.authorization_plan(plan(), [context], [check]), None)
+        for contexts, decisions in (([context, context], [check]),
+                                    ([context], [(entry('unknown', 'matrix'), 'run: changed')]),
+                                    ([context], [(check[0], 'success without validation')])):
+            with self.assertRaises(ValueError):
+                phases.authorization_plan(plan(), contexts, decisions)
+
+    def test_foreground_mixed_receipts_reuse_before_any_new_full_execution(self):
+        spec = importlib.util.spec_from_file_location('mixed_phase_runner', Path(__file__).with_name('run-verification.py'))
+        runner = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(runner)
+        old = {**plan(blocked=True), 'full_phases': ['matrix']}
+        contexts = [approval_context(old), approval_context(plan(), 'matrix', 'b' * 64)]
+        checks = [(entry('miri fixture', 'miri'), 'reuse: unchanged implementation inputs'),
+                  (entry('cargo +1.99.1 check', 'matrix'), 'reuse: unchanged implementation inputs')]
+        for pending in (False, True):
+            if pending:
+                contexts[-1]['plan'] = old
+                checks[-1] = (checks[-1][0], 'run: changed or unresolved implementation inputs')
+            with patch.object(sys, 'argv', ['runner', 'plan', '--check', '--detached-receipts', '/tmp/registry']), \
+                 patch.dict(os.environ, {}, clear=True), \
+                 patch.object(runner.plans, 'build', return_value=plan()), \
+                 patch.object(phases, 'prepare', return_value=(contexts, checks)), \
+                 patch.object(runner, 'execute') as execute, \
+                 contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+                self.assertEqual(runner.main(), 3 if pending else 0)
+                execute.assert_not_called()
+
     def test_registry_rejects_malformed_missing_duplicate_and_symlinked_inputs(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -115,7 +196,7 @@ class PhaseReceiptTests(unittest.TestCase):
         for flags, error, expected, executions in cases:
             with patch.object(sys, 'argv', base + flags), patch.dict(os.environ, {}, clear=True), \
                  patch.object(runner.plans, 'build', return_value=plan()), \
-                 patch.object(phases, 'prepare', return_value=([{'plan': plan()}], [(check, 'run: changed')]),
+                 patch.object(phases, 'prepare', return_value=([approval_context()], [(check, 'run: changed')]),
                               side_effect=error), patch.object(runner, 'execute') as execute, \
                  contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
                 self.assertEqual(runner.main(), expected)
@@ -127,7 +208,7 @@ class PhaseReceiptTests(unittest.TestCase):
             prepare.assert_not_called()
         with patch.object(sys, 'argv', base), patch.dict(os.environ, {}, clear=True), \
              patch.object(runner.plans, 'build', return_value=plan()), \
-             patch.object(phases, 'prepare', return_value=([{'plan': plan()}, {'plan': plan(blocked=True)}],
+             patch.object(phases, 'prepare', return_value=([approval_context(plan(blocked=True))],
                                                          [(check, 'run: changed')])), \
              patch.object(runner, 'execute') as execute, \
              contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):

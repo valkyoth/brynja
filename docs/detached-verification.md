@@ -281,7 +281,20 @@ of a different compiler, verifier or platform. Existing live collection and
 resume still use their stricter full-inventory equality checks.
 
 Current implementation/tool-policy deltas, command coverage, public checkpoints
-and approvals use the same carry-forward rules above, independently per receipt.
+and source-delta decisions use the same carry-forward rules above, independently
+per receipt. Approval is then bound once to the combined remaining work: current
+source/environment identity, selected receipts, phase routing and command
+decisions. Use the combined fingerprint printed by the requested foreground
+command if it requires approval. A token for an individual historical delta is
+not a combined approval.
+
+An old Miri receipt can observe a compiler-list change without owning the matrix
+phase. A newer validated matrix receipt resolves that phase; it does not authorize
+new Miri work or replace any other receipt. Only genuinely remaining full phases
+request approval. Changed compiler/verifier identities still require fresh work
+and approval; missing/corrupt receipts and ambiguous phase routing still fail
+closed before execution. This does not change test selection or grant approval
+to any pending run.
 Exact registered CPU-boundary review scripts and KMAC emitted-code checks are
 repository checks, not memory/proof execution inputs. Their current validators,
 regressions and KMAC compiler campaign always run, even when runtime verifier

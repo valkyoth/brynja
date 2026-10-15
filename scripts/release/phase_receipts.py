@@ -8,6 +8,7 @@ import detached_catalog as catalog
 import detached_history as history
 import detached_manifest as records
 import verification_carry_forward as carry
+import verification_plan as plans
 
 
 class ToolDrift(ValueError):
@@ -116,6 +117,8 @@ def prepare(path: Path, root: Path, plan: dict, phase: str, command: str | None 
             contexts[receipt] = carry.prepare(registry['jobs'][receipt], receipt, root, plan,
                                               historical_reader=reader)
         context = contexts[receipt]
+        context['receipt'] = receipt
+        context.setdefault('selected_phases', []).append(name)
         if name not in context['manifest']['phases']:
             raise ValueError('receipt does not cover requested phase')
         manifest = reader.cache[receipt][0]
@@ -129,3 +132,46 @@ def prepare(path: Path, root: Path, plan: dict, phase: str, command: str | None 
         entries = carry.required(context, 'command' if phase == 'command' else name, command)
         decisions.extend((entry, carry.disposition(entry, context)) for entry in entries)
     return list(contexts.values()), decisions
+
+
+def authorization_plan(release_plan: dict, contexts: list, decisions: list) -> dict:
+    """Bind one approval to actual remaining work across validated receipts.
+
+    An older Miri receipt may see a compiler-matrix change, but is not the
+    evidence selected for the matrix. Never authorize that unrelated phase
+    through it, and never let it invalidate a newer successful matrix receipt.
+    This function grants no approval and changes no reuse decision.
+    """
+    owners, bindings = {}, []
+    for context in contexts:
+        selected = context['selected_phases']
+        if (not selected or len(set(selected)) != len(selected)
+                or any(name not in catalog.PHASES or name in owners for name in selected)):
+            raise ValueError('ambiguous phase approval routing')
+        owners.update({name: context for name in selected})
+        bindings.append({'receipt': context['receipt'], 'phases': sorted(selected),
+                         'plan': plans.execution_identity(context['plan']),
+                         'tool_drift': context.get('tool_drift', {})})
+    remaining = set()
+    for entry, reason in decisions:
+        if entry['phase'] not in owners or not reason.startswith(('run:', 'reuse:')):
+            raise ValueError('unbound phase approval decision')
+        if reason.startswith('run:'):
+            remaining.add(entry['phase'])
+    pending = []
+    for name in sorted(remaining):
+        context = owners[name]
+        delta = context['plan']
+        if ((delta['approval_required'] and plans.requires_full(delta, name))
+                or name in context.get('tool_drift', {})):
+            pending.append(name)
+    combined = dict(release_plan)
+    combined.update(
+        fingerprint=records.digest({'release_plan': plans.execution_identity(release_plan),
+                                    'receipts': bindings, 'decisions': decisions}),
+        approval_required=bool(pending), full_phases=pending,
+        issues=['owner approval required for remaining full phase: ' + name for name in pending],
+        phase_receipts=[{'receipt': b['receipt'], 'phases': b['phases']} for b in bindings],
+        remaining_commands=sum(reason.startswith('run:') for _, reason in decisions),
+    )
+    return combined

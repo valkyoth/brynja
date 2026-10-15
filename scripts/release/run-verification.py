@@ -67,7 +67,9 @@ def main() -> int:
                 Path(registry), plans.ROOT, plan, args.phase, shlex.join(requested) if requested else None)
             for context in contexts:
                 print(plans.explain(context['plan']), flush=True)
-                plans.authorize(context['plan'], args.approve_full or os.environ.get('BRYNJA_FULL_VERIFICATION_APPROVAL') or None)
+            authorization = phase_receipts.authorization_plan(plan, contexts, decisions)
+            print(plans.explain(authorization), flush=True)
+            plans.authorize(authorization, args.approve_full or os.environ.get('BRYNJA_FULL_VERIFICATION_APPROVAL') or None)
             for entry, reason in decisions:
                 print(reason.upper() + ': ' + entry['command'], flush=True)
             if args.phase == 'plan' or args.check:

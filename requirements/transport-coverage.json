@@ -7949,10 +7949,10 @@
     "0.159.0",
     "0.160.0"
   ],
-  "policy_sha256": "ab1e7818128beba36f862873e7595c1ebbf70334e1cdc142d474ec35ed72040d",
+  "policy_sha256": "b022e9126a617d318be8265fa5f5d98ed4bb76660c126fa70f92e69e21c61c29",
   "requirement_count": 71,
   "schema": 2,
-  "surface_count": 485,
+  "surface_count": 487,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -8319,6 +8319,14 @@
       "disposition": "caller-owned",
       "domain": "quic",
       "id": "iana.quic.quic-frame-types.ping.1",
+      "owner": "0.138.0",
+      "requirement_id": "BRY-REQ-QUIC-0093"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "quic",
+      "id": "iana.quic.quic-frame-types.reset-stream-at.1",
       "owner": "0.138.0",
       "requirement_id": "BRY-REQ-QUIC-0093"
     },
@@ -8783,6 +8791,14 @@
       "disposition": "caller-owned",
       "domain": "quic",
       "id": "iana.quic.quic-transport.preferred-address.1",
+      "owner": "0.138.0",
+      "requirement_id": "BRY-REQ-QUIC-0093"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "quic",
+      "id": "iana.quic.quic-transport.reset-stream-at.1",
       "owner": "0.138.0",
       "requirement_id": "BRY-REQ-QUIC-0093"
     },

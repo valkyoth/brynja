@@ -1,6 +1,64 @@
 {
-  "observations": [],
-  "reviews": [],
+  "observations": [
+    {
+      "affected_evidence": [],
+      "affected_milestones": [
+        "0.24.12",
+        "0.24.13",
+        "0.24.14",
+        "0.24.15",
+        "0.24.16",
+        "0.24.17"
+      ],
+      "affected_requirements": [
+        "BRY-REQ-CRYPTO-0014",
+        "BRY-REQ-CRYPTO-0015",
+        "BRY-REQ-CRYPTO-0016",
+        "BRY-REQ-CRYPTO-0017"
+      ],
+      "affected_symbols": [
+        "crates/brynja-hash-parallel/src/lib.rs#PARALLEL_HASH_IMPLEMENTED",
+        "crates/brynja-hash-sha3/src/sp800_185.rs#Sp800185",
+        "crates/brynja-hash-tuple/src/lib.rs#TUPLE_HASH_IMPLEMENTED",
+        "crates/brynja-mac-kmac/src/lib.rs#KMAC_IMPLEMENTED"
+      ],
+      "authority": "nist:NIST.SP.800-185.pdf",
+      "detail": "landing sha256 3a7e478c233479f1582d5e3956890fb3c4a9f34e53f6f058af63cd3c6c54c30c",
+      "effective_brynja_state": "current",
+      "id": "c0a1aef411b802a83aae3601",
+      "requested_action": "human-review",
+      "state": "changed"
+    }
+  ],
+  "reviews": [
+    {
+      "affected_evidence": [],
+      "affected_requirements": [
+        "BRY-REQ-CRYPTO-0014",
+        "BRY-REQ-CRYPTO-0015",
+        "BRY-REQ-CRYPTO-0016",
+        "BRY-REQ-CRYPTO-0017"
+      ],
+      "affected_symbols": [
+        "crates/brynja-hash-parallel/src/lib.rs#PARALLEL_HASH_IMPLEMENTED",
+        "crates/brynja-hash-sha3/src/sp800_185.rs#Sp800185",
+        "crates/brynja-hash-tuple/src/lib.rs#TUPLE_HASH_IMPLEMENTED",
+        "crates/brynja-mac-kmac/src/lib.rs#KMAC_IMPLEMENTED"
+      ],
+      "authority": "nist:NIST.SP.800-185.pdf",
+      "corrective_milestone": null,
+      "disposition": "no-effect",
+      "evidence": [
+        "references/LOCAL_SHA256SUMS",
+        "security/pentest/v0.24.50.md",
+        "standards/snapshots/authority-landings.json"
+      ],
+      "observation_id": "c0a1aef411b802a83aae3601",
+      "pentest": "not-required",
+      "pentest_report": null,
+      "reviewed_impact": "Author review 2026-10-15: the publication landing page announces the October 8 SP 800-185 Revision 1 initial public draft. The 2016 final PDF is unchanged and remains the implemented authority. The draft is not adopted; no runtime behavior, API contract or final-standard authority changes. Existing update-planned status remains. The retest report records the publication links, scope and future reassessment obligation."
+    }
+  ],
   "schema": 2,
   "unresolved_observations": []
 }

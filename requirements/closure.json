@@ -25448,7 +25448,7 @@
       "version": "1.0.0"
     }
   ],
-  "provisional_surface_count": 99,
+  "provisional_surface_count": 101,
   "provisional_surfaces": [
     "algorithm.ecdhe-ml-kem",
     "iana.hpke.hpke-kdf-ids.0x0010.1",
@@ -25472,12 +25472,14 @@
     "iana.quic.quic-versions.0xef7dc0fd.1",
     "iana.smi-numbers.smi-numbers-1.3.101.reserved-for-id-eddsa25519-ph.1",
     "iana.smi-numbers.smi-numbers-1.3.101.reserved-for-id-eddsa448-ph.1",
+    "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.1.id-pe-mtccertificationauthority-sha256.1",
     "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.1.id-pe-signeddocumentbinding.1",
     "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.3.id-kp-brandindicatorformessageidentification.1",
     "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.3.id-kp-oauthstatussigning.1",
     "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.48.1.id-pkix-ocsp-stir-tn.1",
     "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.48.id-ad-communitydefinition-temporary-registered-2026-06-23-expires-2027-06-23.1",
     "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.6.id-alg-eccsi-with-sha256.1",
+    "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.6.id-alg-mtcproof.1",
     "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.6.id-mldsa44-ecdsa-p256-sha256.1",
     "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.6.id-mldsa44-ed25519-sha512.1",
     "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.6.id-mldsa44-rsa2048-pkcs15-sha256.1",
@@ -25591,6 +25593,7 @@
         "iana.tls-extensiontype-values.alpn-protocol-ids.0x6d-0x61-0x6e-0x61-0x67-0x65-0x73-0x69-0x65-0x76-0x65-managesieve.1",
         "iana.tls-extensiontype-values.alpn-protocol-ids.0x6d-0x71-0x74-0x74-mqtt.1",
         "iana.tls-extensiontype-values.alpn-protocol-ids.0x6e-0x2d-0x70-0x61-0x6d-0x70-0x2f-0x32-n-pamp-2.1",
+        "iana.tls-extensiontype-values.alpn-protocol-ids.0x6e-0x2d-0x70-0x61-0x6d-0x70-0x2f-0x33-n-pamp-3.1",
         "iana.tls-extensiontype-values.alpn-protocol-ids.0x6e-0x65-0x74-0x70-0x65-0x72-0x66-0x6d-0x65-0x74-0x65-0x72-0x2f-0x63-0x6f-0x6e-0x74-0x72-0x6f-0x6c-netperfmeter-control.1",
         "iana.tls-extensiontype-values.alpn-protocol-ids.0x6e-0x65-0x74-0x70-0x65-0x72-0x66-0x6d-0x65-0x74-0x65-0x72-0x2f-0x64-0x61-0x74-0x61-netperfmeter-data.1",
         "iana.tls-extensiontype-values.alpn-protocol-ids.0x6e-0x6e-0x73-0x70-nnsp.1",
@@ -28370,7 +28373,7 @@
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
       ],
-      "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c"
+      "sha256": "4249c75f8a2403676c9f671cc7d246ed37896883a25d470fd5f26e923a123f94"
     },
     {
       "id": "iana:hpke",
@@ -28399,7 +28402,7 @@
       "requirement_ids": [
         "BRY-REQ-QUICREG-0094"
       ],
-      "sha256": "8867dffa0213139187ea9bb358ab907b746f47918a6ed713c38a322580232536"
+      "sha256": "eeed8e306919bd2bd87e7a8aea59a9724f66570cd33f2e4e4fccfb9a2c5a54e7"
     },
     {
       "id": "iana:smi-numbers",
@@ -28412,7 +28415,7 @@
       "requirement_ids": [
         "BRY-REQ-PKIXREG-0053"
       ],
-      "sha256": "3f547c6dd36be45fbcdd1e484de3731a9b34bbecd5a2ad295826d060e86afd03"
+      "sha256": "c0891d31df242a6e6338c9aaff62903e30cedb72e44ddbe79118076d779c3275"
     },
     {
       "id": "iana:tls-ech-configuration-extensions",
@@ -28455,7 +28458,7 @@
         "BRY-REQ-TLS-0002",
         "BRY-REQ-TLS12EXT-0058"
       ],
-      "sha256": "5dd0adf92d924dabdd5d54de6ed143f849179661a6fee1be55ff87bd9b3e724d"
+      "sha256": "90df531dd7dc03dbff3490badde4b863f4bd927990dbb6062301e837df7a443d"
     },
     {
       "id": "iana:tls-parameters",
@@ -28473,7 +28476,7 @@
         "BRY-REQ-RRCTYPE-0111",
         "BRY-REQ-TLS-0001"
       ],
-      "sha256": "b4542c0b4446e961b5eb0e54dd903683f06ca1ba3fe539a2d30ab5a027ce19a3"
+      "sha256": "ac02c1bb19c16dc4ea99df79e11ceb6576bfa775b1a3eac6acfafd91671ea76c"
     },
     {
       "id": "iana:trans",
@@ -34590,6 +34593,12 @@
       ]
     },
     {
+      "id": "iana.quic.quic-frame-types.reset-stream-at.1",
+      "requirement_ids": [
+        "BRY-REQ-QUIC-0093"
+      ]
+    },
+    {
       "id": "iana.quic.quic-frame-types.reset-stream.1",
       "requirement_ids": [
         "BRY-REQ-QUIC-0093"
@@ -34933,6 +34942,12 @@
     },
     {
       "id": "iana.quic.quic-transport.preferred-address.1",
+      "requirement_ids": [
+        "BRY-REQ-QUIC-0093"
+      ]
+    },
+    {
+      "id": "iana.quic.quic-transport.reset-stream-at.1",
       "requirement_ids": [
         "BRY-REQ-QUIC-0093"
       ]
@@ -38364,6 +38379,12 @@
       ]
     },
     {
+      "id": "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.1.id-pe-mtccertificationauthority-sha256.1",
+      "requirement_ids": [
+        "BRY-REQ-PKIX-0004"
+      ]
+    },
+    {
       "id": "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.1.id-pe-mud-url.1",
       "requirement_ids": [
         "BRY-REQ-PKIX-0004"
@@ -39145,6 +39166,12 @@
     },
     {
       "id": "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.25.id-rdna-c509name.1",
+      "requirement_ids": [
+        "BRY-REQ-PKIX-0004"
+      ]
+    },
+    {
+      "id": "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.25.id-rdna-trustanchorid.1",
       "requirement_ids": [
         "BRY-REQ-PKIX-0004"
       ]
@@ -39979,6 +40006,12 @@
     },
     {
       "id": "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.6.id-alg-ecdhpop-static-sha512-hmac-sha512.1",
+      "requirement_ids": [
+        "BRY-REQ-PKIX-0004"
+      ]
+    },
+    {
+      "id": "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.6.id-alg-mtcproof.1",
       "requirement_ids": [
         "BRY-REQ-PKIX-0004"
       ]
@@ -48110,6 +48143,12 @@
     },
     {
       "id": "iana.tls-extensiontype-values.alpn-protocol-ids.0x6e-0x2d-0x70-0x61-0x6d-0x70-0x2f-0x32-n-pamp-2.1",
+      "requirement_ids": [
+        "BRY-REQ-APPLICATION-0130"
+      ]
+    },
+    {
+      "id": "iana.tls-extensiontype-values.alpn-protocol-ids.0x6e-0x2d-0x70-0x61-0x6d-0x70-0x2f-0x33-n-pamp-3.1",
       "requirement_ids": [
         "BRY-REQ-APPLICATION-0130"
       ]

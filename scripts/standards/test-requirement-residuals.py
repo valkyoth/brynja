@@ -116,13 +116,41 @@ def test_current_residual_repository() -> None:
     assert coverage["authority_count"] == 33
     assert coverage["normative_section_count"] == 182
     assert coverage["mapped_normative_section_count"] == 165
-    assert coverage["surface_count"] == 792
+    assert coverage["surface_count"] == 793
     requirement_map = {item["id"]: item for item in requirements}
     assert all(
         item["id"] in requirement_map[item["requirement_id"]]["decision_ids"]
         for item in coverage["surfaces"]
     )
     assert standards.json_bytes(coverage) == lib.RESIDUAL_COVERAGE.read_bytes()
+
+
+def test_october_registry_refresh_does_not_admit_provisional_protocols() -> None:
+    rows = {row['id']: row for row in lib.read_json(surfaces.REGISTER)['surfaces']}
+    expected = {
+        'iana.quic.quic-frame-types.reset-stream-at.1': ('caller-owned', '0.138.0', '0x24'),
+        'iana.quic.quic-transport.reset-stream-at.1': ('caller-owned', '0.138.0', '0x1d'),
+        'iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.1.id-pe-mtccertificationauthority-sha256.1': ('future-work', '0.94.0', '38'),
+        'iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.6.id-alg-mtcproof.1': ('future-work', '0.94.0', '67'),
+        'iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.25.id-rdna-trustanchorid.1': ('caller-owned', '0.94.0', '3'),
+        'iana.tls-extensiontype-values.alpn-protocol-ids.0x6e-0x2d-0x70-0x61-0x6d-0x70-0x2f-0x33-n-pamp-3.1': ('caller-owned', '0.178.0', 'N-PAMP, crypto generation 3'),
+    }
+    for name, (disposition, owner, value) in expected.items():
+        row = rows[name]
+        assert (row['disposition'], row['owner']) == (disposition, owner)
+        assert row['record']['fields']['value'] == value
+        assert row['record']['references'] and all(
+            reference['type'] == 'draft' for reference in row['record']['references'])
+
+
+def test_october_errata_statuses_keep_verified_held_and_rejected_distinct() -> None:
+    rows = {row['id']: row for row in lib.read_json(standards.ERRATA)['records']}
+    assert len(rows) == 302
+    for identifier in (4395, 8753, 9040):
+        assert (rows[identifier]['status'], rows[identifier]['disposition']) == ('Verified', 'apply')
+    assert (rows[8738]['status'], rows[8738]['disposition']) == ('Held for Document Update', 'track-not-applied')
+    for identifier in (9020, 9021):
+        assert (rows[identifier]['status'], rows[identifier]['disposition']) == ('Rejected', 'not-applicable')
 
 
 def test_current_bidirectional_closure() -> None:
@@ -150,7 +178,7 @@ def test_current_bidirectional_closure() -> None:
     for minor in (*range(378, 392), 470):
         for patch in range(last_patches.get(minor, 7) + 1):
             assert plans[f"0.{minor}.{patch}"]["boundary"]["class"] == "planned-authority-admission"
-    assert len(artifact["surfaces"]) == 4463
+    assert len(artifact["surfaces"]) == 4469
     assert len(artifact["requirements"]) == 175
     assert len(artifact["local_rights"]) == 18
     assert len(artifact["mutable_authorities"]) == 15

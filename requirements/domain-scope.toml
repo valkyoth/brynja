@@ -1,7 +1,7 @@
 schema = 1
 milestone = "0.3.3"
-source_ledger_sha256 = "c38f2acd86d1024262f6433e0b21278d6a7dcc7644f34cebe19f40cb12c6e263"
-surface_register_sha256 = "43ef9936b42fb47a1596668a6dfc6875aed981b1e431491ae2500a74b59f5d6b"
+source_ledger_sha256 = "9114e79ba3b41e70be711cfc350d91ff6b7ce4c774778a6722e99f2219f72b56"
+surface_register_sha256 = "418905c3032549732d83a7858df7b4b1ea29e8c9f1f3973971cc795b968608b5"
 source_domains = ["ct", "key-containers", "legacy-md5", "ocsp", "pkix", "public-key", "riscv-acceleration", "sha3-derived", "symmetric"]
 surface_domains = ["cryptography", "ct", "ocsp", "pki", "pkix"]
 

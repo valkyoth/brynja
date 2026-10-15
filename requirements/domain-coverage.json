@@ -5656,10 +5656,10 @@
   "excluded_normative_section_count": 12,
   "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "ab0bb782797aa2bd32892cfaf4fa9ecbe16b092e4499ffc95e34230787b62d73",
+  "policy_sha256": "8ed954ccc0f2ef693b876de726a418f86cc633744d8148991be4763ae45446d1",
   "requirement_count": 41,
   "schema": 1,
-  "surface_count": 3334,
+  "surface_count": 3337,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -10323,6 +10323,14 @@
       "coverage": "requirement",
       "disposition": "future-work",
       "domain": "pkix",
+      "id": "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.1.id-pe-mtccertificationauthority-sha256.1",
+      "owner": "0.94.0",
+      "requirement_id": "BRY-REQ-PKIX-0004"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "pkix",
       "id": "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.1.id-pe-mud-url.1",
       "owner": "0.94.0",
       "requirement_id": "BRY-REQ-PKIX-0004"
@@ -11364,6 +11372,14 @@
       "disposition": "caller-owned",
       "domain": "pkix",
       "id": "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.25.id-rdna-c509name.1",
+      "owner": "0.94.0",
+      "requirement_id": "BRY-REQ-PKIX-0004"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "pkix",
+      "id": "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.25.id-rdna-trustanchorid.1",
       "owner": "0.94.0",
       "requirement_id": "BRY-REQ-PKIX-0004"
     },
@@ -12476,6 +12492,14 @@
       "disposition": "future-work",
       "domain": "pkix",
       "id": "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.6.id-alg-ecdhpop-static-sha512-hmac-sha512.1",
+      "owner": "0.94.0",
+      "requirement_id": "BRY-REQ-PKIX-0004"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "pkix",
+      "id": "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.6.id-alg-mtcproof.1",
       "owner": "0.94.0",
       "requirement_id": "BRY-REQ-PKIX-0004"
     },

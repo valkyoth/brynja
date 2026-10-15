@@ -32,8 +32,8 @@
     },
     "https://csrc.nist.gov/pubs/sp/800/185/final": {
       "projection": "visible-text-v1",
-      "sha256": "b268d760c3e66a4376fbdad49a20552559def10b7d4c0d42e93feb12c39424a9",
-      "size": 2565
+      "sha256": "3a7e478c233479f1582d5e3956890fb3c4a9f34e53f6f058af63cd3c6c54c30c",
+      "size": 2592
     },
     "https://csrc.nist.gov/pubs/sp/800/186/final": {
       "projection": "visible-text-v1",

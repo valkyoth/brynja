@@ -17,7 +17,7 @@
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
       ],
-      "sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c"
+      "sha256": "4249c75f8a2403676c9f671cc7d246ed37896883a25d470fd5f26e923a123f94"
     },
     {
       "authority_role": "current",
@@ -59,7 +59,7 @@
       "requirement_ids": [
         "BRY-REQ-QUICREG-0094"
       ],
-      "sha256": "8867dffa0213139187ea9bb358ab907b746f47918a6ed713c38a322580232536"
+      "sha256": "eeed8e306919bd2bd87e7a8aea59a9724f66570cd33f2e4e4fccfb9a2c5a54e7"
     },
     {
       "authority_role": "current",
@@ -79,7 +79,7 @@
       "requirement_ids": [
         "BRY-REQ-PKIXREG-0053"
       ],
-      "sha256": "3f547c6dd36be45fbcdd1e484de3731a9b34bbecd5a2ad295826d060e86afd03"
+      "sha256": "c0891d31df242a6e6338c9aaff62903e30cedb72e44ddbe79118076d779c3275"
     },
     {
       "authority_role": "current",
@@ -133,7 +133,7 @@
         "BRY-REQ-RRCREG-0148",
         "BRY-REQ-TLS12EXT-0058"
       ],
-      "sha256": "5dd0adf92d924dabdd5d54de6ed143f849179661a6fee1be55ff87bd9b3e724d"
+      "sha256": "90df531dd7dc03dbff3490badde4b863f4bd927990dbb6062301e837df7a443d"
     },
     {
       "authority_role": "current",
@@ -160,7 +160,7 @@
         "BRY-REQ-RRCREG-0148",
         "BRY-REQ-RRCTYPE-0111"
       ],
-      "sha256": "b4542c0b4446e961b5eb0e54dd903683f06ca1ba3fe539a2d30ab5a027ce19a3"
+      "sha256": "ac02c1bb19c16dc4ea99df79e11ceb6576bfa775b1a3eac6acfafd91671ea76c"
     },
     {
       "authority_role": "current",
@@ -1095,12 +1095,12 @@
         {
           "disposition": "track-not-applied",
           "id": 8738,
-          "status": "Reported"
+          "status": "Held for Document Update"
         },
         {
-          "disposition": "track-not-applied",
+          "disposition": "apply",
           "id": 8753,
-          "status": "Reported"
+          "status": "Verified"
         }
       ],
       "id": "rfc:8879",
@@ -2485,14 +2485,14 @@
       ],
       "errata": [
         {
-          "disposition": "track-not-applied",
+          "disposition": "not-applicable",
           "id": 9020,
-          "status": "Reported"
+          "status": "Rejected"
         },
         {
-          "disposition": "track-not-applied",
+          "disposition": "not-applicable",
           "id": 9021,
-          "status": "Reported"
+          "status": "Rejected"
         }
       ],
       "id": "rfc:9935",
@@ -2625,10 +2625,10 @@
   "authority_count": 33,
   "mapped_normative_section_count": 165,
   "normative_section_count": 182,
-  "policy_sha256": "278e23428fd436f4d3cae63362cff1e31c97b99f434b5eeeb5f47caa214daf46",
+  "policy_sha256": "b7b3dfc6ef83a822ebe0f5380d19bcd1a1a10ad31a485dd37cff5fff9d1abbb9",
   "requirement_count": 51,
   "schema": 1,
-  "surface_count": 792,
+  "surface_count": 793,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -6907,6 +6907,14 @@
       "disposition": "caller-owned",
       "domain": "application",
       "id": "iana.tls-extensiontype-values.alpn-protocol-ids.0x6e-0x2d-0x70-0x61-0x6d-0x70-0x2f-0x32-n-pamp-2.1",
+      "owner": "0.178.0",
+      "requirement_id": "BRY-REQ-APPLICATION-0130"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "application",
+      "id": "iana.tls-extensiontype-values.alpn-protocol-ids.0x6e-0x2d-0x70-0x61-0x6d-0x70-0x2f-0x33-n-pamp-3.1",
       "owner": "0.178.0",
       "requirement_id": "BRY-REQ-APPLICATION-0130"
     },

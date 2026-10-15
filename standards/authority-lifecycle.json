@@ -15,7 +15,7 @@
         "boundary:dns.0.188.0"
       ],
       "brynja_state": "current",
-      "content_sha256": "dbddd85b4f05fe41f1a200ead5441d769041dc6f92d12561ea14ee996fa2a27c",
+      "content_sha256": "4249c75f8a2403676c9f671cc7d246ed37896883a25d470fd5f26e923a123f94",
       "content_url": "https://www.iana.org/assignments/dns-parameters/dns-parameters.xml",
       "edition": "Domain Name System (DNS) Parameters",
       "id": "iana:dns-parameters",
@@ -84,7 +84,7 @@
         "boundary:quic.0.138.0"
       ],
       "brynja_state": "current",
-      "content_sha256": "8867dffa0213139187ea9bb358ab907b746f47918a6ed713c38a322580232536",
+      "content_sha256": "eeed8e306919bd2bd87e7a8aea59a9724f66570cd33f2e4e4fccfb9a2c5a54e7",
       "content_url": "https://www.iana.org/assignments/quic/quic.xml",
       "edition": "QUIC",
       "id": "iana:quic",
@@ -93,7 +93,7 @@
       "last_successful_observation": "2026-08-31",
       "metadata": {
         "created": "2021-02-11",
-        "updated": "2026-05-04"
+        "updated": "2026-09-28"
       },
       "planning_notices": [],
       "publisher": "IANA",
@@ -117,7 +117,7 @@
         "boundary:pkix.0.94.0"
       ],
       "brynja_state": "current",
-      "content_sha256": "3f547c6dd36be45fbcdd1e484de3731a9b34bbecd5a2ad295826d060e86afd03",
+      "content_sha256": "c0891d31df242a6e6338c9aaff62903e30cedb72e44ddbe79118076d779c3275",
       "content_url": "https://www.iana.org/assignments/smi-numbers/smi-numbers.xml",
       "edition": "Structure of Management Information (SMI) Numbers (MIB Module Registrations)",
       "id": "iana:smi-numbers",
@@ -126,7 +126,7 @@
       "last_successful_observation": "2026-08-31",
       "metadata": {
         "created": "",
-        "updated": "2026-09-24"
+        "updated": "2026-09-28"
       },
       "planning_notices": [],
       "publisher": "IANA",
@@ -213,7 +213,7 @@
         "crates/brynja-tls13/src/ech.rs"
       ],
       "brynja_state": "current",
-      "content_sha256": "5dd0adf92d924dabdd5d54de6ed143f849179661a6fee1be55ff87bd9b3e724d",
+      "content_sha256": "90df531dd7dc03dbff3490badde4b863f4bd927990dbb6062301e837df7a443d",
       "content_url": "https://www.iana.org/assignments/tls-extensiontype-values/tls-extensiontype-values.xml",
       "edition": "Transport Layer Security (TLS) Extensions",
       "id": "iana:tls-extensiontype-values",
@@ -222,7 +222,7 @@
       "last_successful_observation": "2026-08-31",
       "metadata": {
         "created": "2005-11-15",
-        "updated": "2026-08-11"
+        "updated": "2026-10-08"
       },
       "planning_notices": [],
       "publisher": "IANA",
@@ -256,7 +256,7 @@
         "crates/brynja-tls13/src/cipher_suite.rs#TLS_AES_128_GCM_SHA256"
       ],
       "brynja_state": "current",
-      "content_sha256": "b4542c0b4446e961b5eb0e54dd903683f06ca1ba3fe539a2d30ab5a027ce19a3",
+      "content_sha256": "ac02c1bb19c16dc4ea99df79e11ceb6576bfa775b1a3eac6acfafd91671ea76c",
       "content_url": "https://www.iana.org/assignments/tls-parameters/tls-parameters.xml",
       "edition": "Transport Layer Security (TLS) Parameters",
       "id": "iana:tls-parameters",
@@ -679,8 +679,8 @@
       "last_successful_observation": "2026-08-31",
       "metadata": {
         "landing_projection": "visible-text-v1",
-        "landing_sha256": "b268d760c3e66a4376fbdad49a20552559def10b7d4c0d42e93feb12c39424a9",
-        "landing_size": 2565
+        "landing_sha256": "3a7e478c233479f1582d5e3956890fb3c4a9f34e53f6f058af63cd3c6c54c30c",
+        "landing_size": 2592
       },
       "planning_notices": [
         "https://csrc.nist.gov/pubs/sp/800/185/final"
@@ -2572,9 +2572,9 @@
         "current_status": "PROPOSED STANDARD",
         "errata": [
           {
-            "disposition": "track-not-applied",
+            "disposition": "apply",
             "id": 4395,
-            "status": "Reported"
+            "status": "Verified"
           }
         ],
         "updated_by": [
@@ -5450,12 +5450,12 @@
           {
             "disposition": "track-not-applied",
             "id": 8738,
-            "status": "Reported"
+            "status": "Held for Document Update"
           },
           {
-            "disposition": "track-not-applied",
+            "disposition": "apply",
             "id": 8753,
-            "status": "Reported"
+            "status": "Verified"
           }
         ],
         "updated_by": []
@@ -6875,9 +6875,9 @@
         "current_status": "PROPOSED STANDARD",
         "errata": [
           {
-            "disposition": "track-not-applied",
+            "disposition": "apply",
             "id": 9040,
-            "status": "Reported"
+            "status": "Verified"
           },
           {
             "disposition": "track-not-applied",
@@ -7330,14 +7330,14 @@
         "current_status": "PROPOSED STANDARD",
         "errata": [
           {
-            "disposition": "track-not-applied",
+            "disposition": "not-applicable",
             "id": 9020,
-            "status": "Reported"
+            "status": "Rejected"
           },
           {
-            "disposition": "track-not-applied",
+            "disposition": "not-applicable",
             "id": 9021,
-            "status": "Reported"
+            "status": "Rejected"
           }
         ],
         "updated_by": []
@@ -7549,7 +7549,7 @@
   ],
   "baseline_observed_at": "2026-08-31",
   "policy_sha256": "40fbbf9915be2b5202f3c1a8311a76e7c389345164753d1ef3dc0d9eadd42d80",
-  "reviews_sha256": "59b5427cc8e2ec8c25ea2fbc0a9e194620af66b9cf8160b6218b7827facf36c2",
+  "reviews_sha256": "9d18ebb5d2f61f377c7dd5b41ecd964628624f256c2b74ca855324cbc9168fcd",
   "schema": 1,
-  "source_ledger_sha256": "c38f2acd86d1024262f6433e0b21278d6a7dcc7644f34cebe19f40cb12c6e263"
+  "source_ledger_sha256": "9114e79ba3b41e70be711cfc350d91ff6b7ce4c774778a6722e99f2219f72b56"
 }

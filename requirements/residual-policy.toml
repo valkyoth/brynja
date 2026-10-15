@@ -1,11 +1,11 @@
 schema = 1
 milestone = "0.3.5"
-source_ledger_sha256 = "c38f2acd86d1024262f6433e0b21278d6a7dcc7644f34cebe19f40cb12c6e263"
-surface_register_sha256 = "43ef9936b42fb47a1596668a6dfc6875aed981b1e431491ae2500a74b59f5d6b"
+source_ledger_sha256 = "9114e79ba3b41e70be711cfc350d91ff6b7ce4c774778a6722e99f2219f72b56"
+surface_register_sha256 = "418905c3032549732d83a7858df7b4b1ea29e8c9f1f3973971cc795b968608b5"
 
 [[surface_group]]
 id = "BRY-REQ-APPLICATION-0130"
-revision = 5
+revision = 6
 domain = "application"
 owner = "0.178.0"
 disposition = "caller-owned"
@@ -38,6 +38,7 @@ surface_ids = [
   "iana.tls-extensiontype-values.alpn-protocol-ids.0x6d-0x61-0x6e-0x61-0x67-0x65-0x73-0x69-0x65-0x76-0x65-managesieve.1",
   "iana.tls-extensiontype-values.alpn-protocol-ids.0x6d-0x71-0x74-0x74-mqtt.1",
   "iana.tls-extensiontype-values.alpn-protocol-ids.0x6e-0x2d-0x70-0x61-0x6d-0x70-0x2f-0x32-n-pamp-2.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x6e-0x2d-0x70-0x61-0x6d-0x70-0x2f-0x33-n-pamp-3.1",
   "iana.tls-extensiontype-values.alpn-protocol-ids.0x6e-0x65-0x74-0x70-0x65-0x72-0x66-0x6d-0x65-0x74-0x65-0x72-0x2f-0x63-0x6f-0x6e-0x74-0x72-0x6f-0x6c-netperfmeter-control.1",
   "iana.tls-extensiontype-values.alpn-protocol-ids.0x6e-0x65-0x74-0x70-0x65-0x72-0x66-0x6d-0x65-0x74-0x65-0x72-0x2f-0x64-0x61-0x74-0x61-netperfmeter-data.1",
   "iana.tls-extensiontype-values.alpn-protocol-ids.0x6e-0x6e-0x73-0x70-nnsp.1",
@@ -73,7 +74,7 @@ surface_ids = [
 
 [[surface_group]]
 id = "BRY-REQ-CERTEXT-0146"
-revision = 4
+revision = 5
 domain = "tls"
 owner = "0.194.0"
 disposition = "future-work"
@@ -84,7 +85,7 @@ surface_ids = [
 
 [[surface_group]]
 id = "BRY-REQ-CERTREG-0146"
-revision = 4
+revision = 5
 domain = "tls"
 owner = "0.194.0"
 disposition = "future-work"
@@ -101,7 +102,7 @@ surface_ids = [
 
 [[surface_group]]
 id = "BRY-REQ-COMPOSE-0148"
-revision = 8
+revision = 9
 domain = "tls"
 owner = "0.196.0"
 disposition = "future-work"
@@ -207,7 +208,7 @@ id = "BRY-REQ-RFC6066X-0148"
 domain = "tls"
 owner = "0.108.0"
 disposition = "safely-ignored"
-revision = 5
+revision = 6
 sources = ["iana:tls-extensiontype-values"]
 surface_ids = [
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1",
@@ -221,7 +222,7 @@ id = "BRY-REQ-RFC6066CFG-0148"
 domain = "tls"
 owner = "0.196.4"
 disposition = "future-work"
-revision = 5
+revision = 6
 sources = ["iana:tls-extensiontype-values"]
 surface_ids = [
   "facility.rfc6066-unsupported-configuration",
@@ -232,7 +233,7 @@ id = "BRY-REQ-COMPOSEX-0148"
 domain = "tls"
 owner = "0.196.2"
 disposition = "future-work"
-revision = 6
+revision = 7
 sources = ["iana:tls-extensiontype-values"]
 surface_ids = [
   "iana.tls-extensiontype-values.cachedinformationtype",
@@ -248,7 +249,7 @@ id = "BRY-REQ-DNS-0140"
 domain = "dns"
 owner = "0.188.0"
 disposition = "caller-owned"
-revision = 8
+revision = 9
 sources = ["iana:dns-parameters", "rfc:9460"]
 surface_ids = [
   "iana.dns-parameters.contact-uri-schemes",
@@ -741,7 +742,7 @@ surface_ids = [
 
 [[surface_group]]
 id = "BRY-REQ-ECHEXT-0140"
-revision = 4
+revision = 5
 domain = "ech"
 owner = "0.188.0"
 disposition = "future-work"
@@ -1109,7 +1110,7 @@ surface_ids = [
 
 [[surface_group]]
 id = "BRY-REQ-OPTIONAL-0136"
-revision = 5
+revision = 6
 domain = "tls"
 owner = "0.184.0"
 disposition = "future-work"
@@ -1142,7 +1143,7 @@ surface_ids = [
 
 [[surface_group]]
 id = "BRY-REQ-OPTIONAL-0145"
-revision = 5
+revision = 6
 domain = "tls"
 owner = "0.193.0"
 disposition = "future-work"
@@ -1153,7 +1154,7 @@ surface_ids = [
 
 [[surface_group]]
 id = "BRY-REQ-OPTIONAL-0146"
-revision = 5
+revision = 6
 domain = "tls"
 owner = "0.194.0"
 disposition = "future-work"
@@ -1164,7 +1165,7 @@ surface_ids = [
 
 [[surface_group]]
 id = "BRY-REQ-OPTIONAL-1461"
-revision = 5
+revision = 6
 domain = "tls"
 owner = "0.194.1"
 disposition = "future-work"
@@ -1189,7 +1190,7 @@ id = "BRY-REQ-PQPKIX-0046"
 domain = "pkix"
 owner = "0.104.0"
 disposition = "future-work"
-revision = 5
+revision = 6
 sources = ["rfc:9935"]
 surface_ids = [
   "format.ml-kem-pkix-credentials",
@@ -1201,7 +1202,7 @@ domain = "dtls"
 owner = "0.155.1"
 disposition = "future-work"
 sources = ["iana:tls-extensiontype-values", "iana:tls-parameters"]
-revision = 8
+revision = 9
 surface_ids = [
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.rrc.1",
   "iana.tls-parameters.tls-rrc-message-types",
@@ -1218,7 +1219,7 @@ domain = "dtls"
 owner = "0.155.1"
 disposition = "future-work"
 sources = ["iana:tls-parameters"]
-revision = 5
+revision = 6
 surface_ids = [
   "iana.tls-parameters.tls-parameters-5.return-routability-check.1",
 ]
@@ -1238,7 +1239,7 @@ surface_ids = [
 
 [[surface_group]]
 id = "BRY-REQ-TLS12EXT-0058"
-revision = 5
+revision = 6
 domain = "tls12"
 owner = "0.196.2"
 disposition = "future-work"
@@ -1260,7 +1261,7 @@ surface_ids = [
 
 [[surface_group]]
 id = "BRY-REQ-LEGACYTLSFACREG-0148"
-revision = 4
+revision = 5
 domain = "tls"
 owner = "0.196.3"
 disposition = "future-work"
@@ -1292,7 +1293,7 @@ surface_ids = [
 
 [[registry_requirement]]
 id = "BRY-REQ-QUICREG-0094"
-revision = 2
+revision = 3
 source = "iana:quic"
 surface = "iana.quic.quic-transport"
 
@@ -1306,4 +1307,4 @@ surface = "iana.trans.trans-error-types"
 id = "BRY-REQ-PKIXREG-0053"
 source = "iana:smi-numbers"
 surface = "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7"
-revision = 4
+revision = 5

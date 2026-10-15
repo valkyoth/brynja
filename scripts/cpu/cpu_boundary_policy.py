@@ -8,6 +8,7 @@ import re
 import tomllib
 from pathlib import Path
 from cpu_boundary_backends import BACKENDS, STRICT_COMPILED_SOURCES
+from cpu_boundary_windows import WINDOWS_ENCLAVE_SOURCES
 
 
 POLICY = Path("security/cpu-acceleration-boundary.toml")
@@ -15,7 +16,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "fe0d30376a85018a9561608b8a5c75dcdc054e7adc0b3003fc89df0535ff58d2"
+EXPECTED_POLICY_SHA256 = "d67682e3759403d758a3c06d2b09264c3ae1e6b5c7fc8a8b3a647dd20e3c8e48"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -150,6 +151,7 @@ SOURCE_STATUS = {
     (DETECTOR, "src/strict_sha2/worker.rs"): "protected-sha2-scoped-worker",
     (DETECTOR, "src/strict_sha2/tests.rs"): "protected-sha2-integration-tests",
     **{(DETECTOR, path): status for path, status in STRICT_COMPILED_SOURCES.items()},
+    **{(DETECTOR, path): status for path, status in WINDOWS_ENCLAVE_SOURCES.items()},
     (DETECTOR, "src/strict_sha3/mod.rs"): "protected-scalar-sha3-session-development",
     (DETECTOR, "src/strict_sha3/types.rs"): "protected-sha3-public-identity-and-bounds",
     (DETECTOR, "src/strict_sha3/worker.rs"): "protected-sha3-scoped-worker",

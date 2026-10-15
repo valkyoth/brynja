@@ -27,6 +27,7 @@ import md5_cpu_policy
 import md5_execution_policy
 import md5_hardened_policy
 import acceleration_availability
+import cpu_boundary_policy
 import parallelhash_policy
 import keccak_hardened_policy
 import kmac_execution_policy
@@ -100,6 +101,7 @@ def check_all():
     # Same metadata-only validator used in CI, including newly added native
     # source modules. This does not execute the hosted package/test campaigns.
     hosted_acceptance.validate()
+    cpu_boundary_policy.validate(ROOT)
     # Reuse the exact host-CI validators, including their complete hash checks.
     # Do not call execute_acceptance/run_fixture/package_roots here.
     sha256_public_api.validate_repository(ROOT)

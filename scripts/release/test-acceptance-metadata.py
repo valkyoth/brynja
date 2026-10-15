@@ -3,6 +3,7 @@
 import importlib.util
 import copy
 import json
+import io
 import tempfile
 import tomllib
 from pathlib import Path
@@ -80,6 +81,28 @@ def main():
             patch('subprocess.check_call', side_effect=AssertionError('unexpected process')):
         metadata.check_all()
         original_read = Path.read_text
+        # The hosted review alone previously missed this separate CPU inventory.
+        # Reproduce stale pins using the real preflight, with processes forbidden.
+        boundary = metadata.cpu_boundary_policy
+        boundary_path = metadata.ROOT / boundary.POLICY
+        boundary_text = original_read(boundary_path)
+        original_open = Path.open
+        for source in ('src/lib.rs', 'src/windows_enclave/native/namespace.rs'):
+            records = tomllib.loads(boundary_text)['sources']
+            record = next(row for row in records if
+                          (row['package'], row['path']) == (boundary.DETECTOR, source))
+            changed = boundary_text.replace(record['sha256'], '0' * 64)
+
+            def stale_boundary(path, *args, **kwargs):
+                return io.BytesIO(changed.encode()) if path == boundary_path else original_open(path, *args, **kwargs)
+
+            with patch.object(Path, 'open', stale_boundary):
+                try:
+                    metadata.check_all()
+                except boundary.CpuBoundaryPolicyError as error:
+                    assert 'CPU source changed' in str(error), str(error)
+                else:
+                    raise AssertionError('stale CPU inventory escaped metadata preflight')
         # Reproduce the gate-only drift that interrupted remote KMAC ASan.
         # Exercise each real validator; no subprocess or Rust work is allowed.
         for policy in (metadata.keccak_hardened_policy, metadata.kmac_execution_policy,

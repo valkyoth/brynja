@@ -10,6 +10,7 @@ from unittest.mock import patch
 
 import cpu_boundary_policy as policy
 import cpu_boundary_backends
+from cpu_boundary_windows import WINDOWS_ENCLAVE_SOURCES
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -69,6 +70,38 @@ def test() -> None:
         fixture(root)
         policy.validate(root)
         document = root / policy.POLICY
+
+        # Windows sources are explicit, hash-bound development entries, not
+        # implicit directory admission or a claim of native qualification.
+        assert len(WINDOWS_ENCLAVE_SOURCES) == 120
+        relative = 'src/windows_enclave/native/namespace.rs'
+        source = root / 'crates' / policy.DETECTOR / relative
+        for mutation in ('changed', 'missing', 'added', 'symlink', 'status', 'duplicate'):
+            if mutation == 'changed':
+                source.write_bytes(source.read_bytes() + b'\n// drift\n')
+                expected = 'CPU source changed'
+            elif mutation == 'missing':
+                source.unlink()
+                expected = 'CPU source must be a regular file'
+            elif mutation == 'added':
+                source.with_name('unreviewed.rs').write_text('// unreviewed\n')
+                expected = 'unreviewed source entered CPU packages'
+            elif mutation == 'symlink':
+                source.unlink()
+                source.symlink_to(ROOT / 'crates' / policy.DETECTOR / relative)
+                expected = 'CPU source must be a regular file'
+            elif mutation == 'status':
+                replace(document, 'status = "windows-enclave-host-development"',
+                        'status = "native-qualified"')
+                expected = 'CPU source inventory or status drifted'
+            else:
+                first, second = tuple(WINDOWS_ENCLAVE_SOURCES)[:2]
+                replace(document, f'path = "{second}"', f'path = "{first}"')
+                expected = 'CPU source inventory or status drifted'
+            require_rejection(root, expected)
+            reset(root)
+        policy.validate(root)
+        print('Windows CPU inventory rejects six source, membership and qualification regressions')
 
         # The strict facade inherits this explicit default-off workspace edge.
         # Keep the whole entry exact: accepting the false flag must not relax

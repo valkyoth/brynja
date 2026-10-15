@@ -9,7 +9,7 @@ import sys
 import tomllib
 
 ROOT = Path(__file__).resolve().parents[2]
-for category in ('sha2', 'sha3', 'hash', 'sp800185', 'cryptography', 'md5', 'cpu', 'parallelhash'):
+for category in ('sha2', 'sha3', 'hash', 'sp800185', 'cryptography', 'md5', 'cpu', 'parallelhash', 'kmac', 'tuplehash'):
     sys.path.insert(0, str(ROOT / 'scripts' / category))
 
 import sha256_public_api
@@ -28,6 +28,9 @@ import md5_execution_policy
 import md5_hardened_policy
 import acceleration_availability
 import parallelhash_policy
+import keccak_hardened_policy
+import kmac_execution_policy
+import tuplehash_execution_policy
 
 _hosted_spec = importlib.util.spec_from_file_location(
     'hosted_acceptance', ROOT / 'scripts/cpu/check-hosted-execution.py')
@@ -90,6 +93,10 @@ def check_all():
     # Include the real mandatory native-gate structure check; a stale policy
     # assertion must fail this cheap preflight rather than only remote CI.
     sha2_hardened_execution_policy.validate(ROOT)
+    # These validators bind the entire shared gate, not only verifier scripts.
+    # Catch stale review pins here before starting a detached sanitizer phase.
+    for policy in (keccak_hardened_policy, kmac_execution_policy, tuplehash_execution_policy):
+        policy.validate(ROOT)
     # Same metadata-only validator used in CI, including newly added native
     # source modules. This does not execute the hosted package/test campaigns.
     hosted_acceptance.validate()

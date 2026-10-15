@@ -80,6 +80,29 @@ def main():
             patch('subprocess.check_call', side_effect=AssertionError('unexpected process')):
         metadata.check_all()
         original_read = Path.read_text
+        # Reproduce the gate-only drift that interrupted remote KMAC ASan.
+        # Exercise each real validator; no subprocess or Rust work is allowed.
+        for policy in (metadata.keccak_hardened_policy, metadata.kmac_execution_policy,
+                       metadata.tuplehash_execution_policy):
+            review = metadata.ROOT / policy.REVIEW
+            for missing in (False, True):
+                record = json.loads(original_read(review))
+                if missing:
+                    del record['sha256']['scripts/tag_gate.sh']
+                else:
+                    record['sha256']['scripts/tag_gate.sh'] = (
+                        '4119e62723bd444b91ca67c45adc7d436f6d88df23940c89e414e46c57d022cf')
+
+                def stale_gate_review(path, *args, **kwargs):
+                    return json.dumps(record) if path == review else original_read(path, *args, **kwargs)
+
+                with patch.object(Path, 'read_text', stale_gate_review):
+                    try:
+                        metadata.check_all()
+                    except ValueError as error:
+                        assert 'reopen review' in str(error), str(error)
+                    else:
+                        raise AssertionError('stale or missing shared-gate binding accepted: ' + str(review))
         tag = metadata.ROOT / 'scripts/tag_gate.sh'
         original_gate = original_read(tag)
         for before, after in (
@@ -295,6 +318,7 @@ def main():
     print('Final metadata rejects the stale MD5 rustdoc acceleration pin and missing binding without crypto execution')
     print('Final metadata rejects stale/missing ParallelHash facade-fixture bindings without crypto execution')
     print('Final metadata rejects strict/fallback native-gate bypasses without crypto execution')
+    print('Final metadata rejects six stale/missing Keccak, KMAC and TupleHash gate bindings without crypto execution')
 
 
 if __name__ == '__main__':

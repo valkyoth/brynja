@@ -8,6 +8,7 @@ import subprocess
 
 import native_review_io as io
 import native_review_scope as scope
+import native_tooling_review as tooling
 
 REVIEW = 'security/native-reuse/v0.24.50-setup-review.json'
 REVIEW_SHA256 = '8e8b480698d66dce1e869b6c496af8da73419ab841bef286e39383e64ab0c7c7'
@@ -137,7 +138,8 @@ def validate(root, family, original, adapter, current, captured, head):
     io.require(expected == approved, 'setup supplement source delta differs')
     scope.unchanged(root, SOURCE, head, current)
     for name, digest in current.items():
-        io.require(adapter.digest(name, io.historical(root, SOURCE, name)) == digest,
+        io.require(adapter.digest(name, io.historical(root, SOURCE, name)) == digest or
+                   tooling.equivalent(root, SOURCE, head, name),
                    'setup supplement current input changed: ' + name)
     inactive(root, family)
     checks(root, doc, head)

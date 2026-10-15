@@ -2,6 +2,7 @@
 import tomllib
 
 import native_review_io as io
+import native_tooling_review as tooling
 
 
 def selected(name, closure):
@@ -38,5 +39,6 @@ def unchanged(root, before, after, closure):
                    'nonregular family input: ' + name)
         if identity == current[name]:
             continue
-        io.require(name == 'Cargo.lock' and lock(root, before) == lock(root, after),
+        io.require((name == 'Cargo.lock' and lock(root, before) == lock(root, after)) or
+                   tooling.equivalent(root, before, after, name),
                    'family implementation/build input changed: ' + name)

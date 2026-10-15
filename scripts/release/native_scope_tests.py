@@ -10,11 +10,47 @@ from unittest.mock import patch
 
 import native_review_io as io
 import native_review_scope as scope
+import native_tooling_review as tooling
 import native_sha2_carry_forward as sha2
 from native_review_tests import NativeReviewTests, write, commit, CODE, TEST
 
 
 class ScopedNativeTests(NativeReviewTests):
+    def test_exact_compiler_review_rebinding_does_not_relabel_native_results(self):
+        old_checker, new_checker = b'old compiler inspector\n', b'new compiler inspector\n'
+        for name, value in (('OLD', io.sha(old_checker)), ('NEW', io.sha(new_checker))):
+            patcher = patch.object(tooling, name, value)
+            patcher.start()
+            self.addCleanup(patcher.stop)
+        original = ('REVIEWED_HASHES = {"' + tooling.CHECKER + '": "' + tooling.OLD +
+                    '", "crates/example/src/lib.rs": "' + '0'*64 + '"}\n').encode()
+        write(self.root, tooling.PATH, original.decode())
+        write(self.root, tooling.CHECKER, old_checker.decode())
+        before = commit(self.root)
+        revised = original.replace(tooling.OLD.encode(), tooling.NEW.encode())
+        write(self.root, tooling.PATH, revised.decode())
+        write(self.root, tooling.CHECKER, new_checker.decode())
+        after = commit(self.root)
+        closure = {CODE, TEST, tooling.PATH}
+        self.assertTrue(tooling.equivalent(self.root, before, after, tooling.PATH))
+        scope.unchanged(self.root, before, after, closure)
+        self.assertFalse(tooling.equivalent(self.root, before, after, CODE))
+        # The exemption does not apply if the checker itself is a capture input.
+        with self.assertRaises(ValueError):
+            scope.unchanged(self.root, before, after, closure | {tooling.CHECKER})
+        for name, raw in ((tooling.PATH, revised + b'print("changed")\n'),
+                          (tooling.PATH, revised.replace(b'crates/', b'other/', 1)),
+                          (tooling.PATH, revised.replace(tooling.NEW.encode(), b'0'*64)),
+                          (tooling.CHECKER, new_checker + b'\n# changed\n'),
+                          (CODE, b'pub fn changed_kernel() {}')):
+            path = self.root / name
+            saved = path.read_bytes()
+            write(self.root, name, raw.decode())
+            with self.subTest(name=name), self.assertRaises(ValueError):
+                scope.unchanged(self.root, before, commit(self.root), closure)
+            path.write_bytes(saved)
+            commit(self.root)
+
     def scoped(self, head):
         from native_review_carry_forward import check_protected
         check_protected(self.root, self.doc, head, {CODE, TEST})

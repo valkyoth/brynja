@@ -18,7 +18,7 @@ FILES = (
     'scripts/checks.sh', 'scripts/tag_gate.sh', 'scripts/zeroization/check-tag-miri.sh',
     'scripts/release/verification_plan.py', 'scripts/release/run-verification.py',
 )
-MANIFEST = b'manifest-version = "2"\n[pkg.rust]\nversion = "1.99.0 (abcd1234 2026-10-01)"\n'
+MANIFEST = b'manifest-version = "2"\n[pkg.rust]\nversion = "1.99.1 (abcd1234 2026-10-01)"\n'
 
 
 class FreshnessTests(unittest.TestCase):
@@ -39,8 +39,8 @@ class FreshnessTests(unittest.TestCase):
         return original
 
     def test_latest_compatibility_accepts_older_pinned_native_compiler(self):
-        self.assertEqual(policy.coverage(self.root, '1.99.0'), '1.98.1')
-        self.assertEqual(policy.latest(MANIFEST), '1.99.0')
+        self.assertEqual(policy.coverage(self.root, '1.99.1'), '1.98.1')
+        self.assertEqual(policy.latest(MANIFEST), '1.99.1')
 
     def test_latest_equal_to_pinned_is_still_valid(self):
         # No special exemption depends on the versions being different.
@@ -51,38 +51,38 @@ class FreshnessTests(unittest.TestCase):
             policy.coverage(self.root, '1.100.0')
 
     def test_default_newer_than_stable_and_floating_pin_reject(self):
-        for value in ('1.100.0', 'stable', 'nightly', '1.99', '01.99.0'):
+        for value in ('1.100.0', 'stable', 'nightly', '1.99', '01.99.1'):
             with self.subTest(value=value):
                 original = self.replace('rust-toolchain.toml', '1.98.1', value)
                 with self.assertRaises(ValueError):
-                    policy.coverage(self.root, '1.99.0')
+                    policy.coverage(self.root, '1.99.1')
                 (self.root / 'rust-toolchain.toml').write_text(original)
 
     def test_missing_duplicate_and_disagreeing_coverage_rejects(self):
-        cases = [(MATRIX, ' 1.99.0)', ')'), (MATRIX, ' 1.98.1 ', ' '),
-                 (MATRIX, ' 1.99.0)', ' 1.99.0 1.99.0)'),
+        cases = [(MATRIX, ' 1.99.1)', ')'), (MATRIX, ' 1.98.1 ', ' '),
+                 (MATRIX, ' 1.99.1)', ' 1.99.1 1.99.1)'),
                  (MATRIX, 'toolchains=(', '# toolchains=(')]
         for family in ('zeroization', 'constant-time'):
             path = f'assurance/{family}-matrix.toml'
-            cases.extend([(path, '  "1.99.0",\n', ''),
-                          (path, '  "1.99.0",\n', '  "1.99.0",\n  "1.99.0",\n'),
-                          (path, 'target_compiler = "1.98.1"', 'target_compiler = "1.99.0"')])
+            cases.extend([(path, '  "1.99.1",\n', ''),
+                          (path, '  "1.99.1",\n', '  "1.99.1",\n  "1.99.1",\n'),
+                          (path, 'target_compiler = "1.98.1"', 'target_compiler = "1.99.1"')])
         for name, old, new in cases:
             with self.subTest(name=name, new=new):
                 original = self.replace(name, old, new)
                 with self.assertRaises((ValueError, RuntimeError)):
-                    policy.coverage(self.root, '1.99.0')
+                    policy.coverage(self.root, '1.99.1')
                 (self.root / name).write_text(original)
 
     def test_declared_but_unexecuted_latest_compiler_rejects(self):
         original = self.replace(MATRIX, 'cargo "+$toolchain" check --workspace --all-features',
                                 'cargo "+1.98.1" check --workspace --all-features')
         with self.assertRaisesRegex(ValueError, 'not executable'):
-            policy.coverage(self.root, '1.99.0')
+            policy.coverage(self.root, '1.99.1')
         (self.root / MATRIX).write_text(original)
 
     def test_ci_codegen_and_tag_bindings_remain_required(self):
-        cases = [('.github/workflows/ci.yml', ', 1.99.0]', ']')]
+        cases = [('.github/workflows/ci.yml', ', 1.99.1]', ']')]
         for family in ('zeroization', 'constant-time'):
             cases.append(('.github/workflows/ci.yml',
                           f'scripts/{family}/check-{family}-codegen.sh', 'scripts/omitted.sh'))
@@ -92,14 +92,14 @@ class FreshnessTests(unittest.TestCase):
             with self.subTest(old=old):
                 original = self.replace(name, old, new)
                 with self.assertRaises((ValueError, RuntimeError)):
-                    policy.coverage(self.root, '1.99.0')
+                    policy.coverage(self.root, '1.99.1')
                 (self.root / name).write_text(original)
 
     def test_bad_empty_prerelease_duplicate_and_oversized_manifests_reject(self):
         for raw in (b'', b'<html>outage</html>', b'x' * (policy.LIMIT + 1),
                     MANIFEST.replace(b'"2"', b'"1"'),
-                    MANIFEST.replace(b'1.99.0', b'1.99.0-beta.1'),
-                    MANIFEST.replace(b'1.99.0', b'01.99.0'),
+                    MANIFEST.replace(b'1.99.1', b'1.99.1-beta.1'),
+                    MANIFEST.replace(b'1.99.1', b'01.99.1'),
                     MANIFEST + b'version = "1.98.1 (abcd 2026-09-01)"\n'):
             with self.subTest(prefix=raw[:50]):
                 with self.assertRaises((ValueError, KeyError)):
@@ -107,7 +107,7 @@ class FreshnessTests(unittest.TestCase):
 
     def test_fetch_is_bounded_and_network_failure_never_reuses_old_value(self):
         with patch.object(policy.urllib.request, 'urlopen', return_value=io.BytesIO(MANIFEST)) as opened:
-            self.assertEqual(policy.fetch(policy.URL), '1.99.0')
+            self.assertEqual(policy.fetch(policy.URL), '1.99.1')
             opened.assert_called_once_with(policy.URL, timeout=30)
         for error in (OSError('offline'), TimeoutError('timed out')):
             with patch.object(policy.urllib.request, 'urlopen', side_effect=error):

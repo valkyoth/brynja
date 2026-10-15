@@ -255,7 +255,7 @@ RISC-V instruction results based on QEMU are not native hardware qualification.
 ## Rust Version Support
 
 MSRV is Rust `1.90.0`; the default full-check compiler is Rust `1.98.1`.
-Rust `1.99.0` is also covered by the compatibility and x86-64 emitted-code
+Rust `1.99.0`–`1.99.1` is also required by the compatibility and x86-64 emitted-code
 matrix. The pinned full-check/native-evidence compiler remains `1.98.1`;
 adding a compiler does not relabel earlier qualification artifacts.
 Release preflight requires the latest stable Rust in the executable compatibility
@@ -270,7 +270,7 @@ or make a policy check a proof. See [Kani evidence](docs/KANI.md).
 | --- | --- |
 | `1.90.0`–`1.98.0` | Workspace all-feature compatibility check |
 | `1.98.1` | Full format, lint, test, platform, policy, docs, package, and security gate |
-| `1.99.0` | Workspace all-feature compatibility, public API acceptance, and x86-64 clearing/constant-time codegen checks |
+| `1.99.0`–`1.99.1` | Workspace all-feature compatibility, public API acceptance, and x86-64 clearing/constant-time codegen checks |
 
 The exact tested compiler versions, including selected patch releases, remain
 listed in [the Rust matrix](scripts/ci/check-rust-version-matrix.sh).

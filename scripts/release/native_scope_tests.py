@@ -18,7 +18,9 @@ from native_review_tests import NativeReviewTests, write, commit, CODE, TEST
 class ScopedNativeTests(NativeReviewTests):
     def test_exact_compiler_review_rebinding_does_not_relabel_native_results(self):
         old_checker, new_checker = b'old compiler inspector\n', b'new compiler inspector\n'
-        for name, value in (('OLD', io.sha(old_checker)), ('NEW', io.sha(new_checker))):
+        old_test, new_test = b'old regressions\n', b'new regressions\n'
+        for name, value in (('OLD', io.sha(old_checker)), ('NEW', io.sha(new_checker)),
+                            ('TEST_OLD', io.sha(old_test)), ('TEST_NEW', io.sha(new_test))):
             patcher = patch.object(tooling, name, value)
             patcher.start()
             self.addCleanup(patcher.stop)
@@ -26,12 +28,14 @@ class ScopedNativeTests(NativeReviewTests):
                     '", "crates/example/src/lib.rs": "' + '0'*64 + '"}\n').encode()
         write(self.root, tooling.PATH, original.decode())
         write(self.root, tooling.CHECKER, old_checker.decode())
+        write(self.root, tooling.TEST, old_test.decode())
         before = commit(self.root)
         revised = original.replace(tooling.OLD.encode(), tooling.NEW.encode())
         write(self.root, tooling.PATH, revised.decode())
         write(self.root, tooling.CHECKER, new_checker.decode())
+        write(self.root, tooling.TEST, new_test.decode())
         after = commit(self.root)
-        closure = {CODE, TEST, tooling.PATH}
+        closure = {CODE, TEST, tooling.PATH, tooling.TEST}
         self.assertTrue(tooling.equivalent(self.root, before, after, tooling.PATH))
         scope.unchanged(self.root, before, after, closure)
         self.assertFalse(tooling.equivalent(self.root, before, after, CODE))
@@ -42,6 +46,7 @@ class ScopedNativeTests(NativeReviewTests):
                           (tooling.PATH, revised.replace(b'crates/', b'other/', 1)),
                           (tooling.PATH, revised.replace(tooling.NEW.encode(), b'0'*64)),
                           (tooling.CHECKER, new_checker + b'\n# changed\n'),
+                          (tooling.TEST, new_test + b'\n# changed\n'),
                           (CODE, b'pub fn changed_kernel() {}')):
             path = self.root / name
             saved = path.read_bytes()

@@ -68,11 +68,11 @@ def test() -> None:
         require_rejection(root, "compiler matrix")
         copy_fixture(root)
 
-        replace(workflow, ", 1.99.0]", "]")
+        replace(workflow, ", 1.99.1]", "]")
         require_rejection(root, "compiler matrix")
         copy_fixture(root)
 
-        replace(matrix, '  "1.99.0",\n', "")
+        replace(matrix, '  "1.99.1",\n', "")
         require_rejection(root, "compiler or target coverage")
         copy_fixture(root)
 

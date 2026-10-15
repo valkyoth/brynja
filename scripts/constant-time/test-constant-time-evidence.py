@@ -58,11 +58,11 @@ def test() -> None:
         require_rejection(root, "compiler or target coverage")
         copy_fixture(root)
 
-        replace(matrix, '  "1.99.0",\n', "")
+        replace(matrix, '  "1.99.1",\n', "")
         require_rejection(root, "compiler or target coverage")
         copy_fixture(root)
 
-        replace(root / ".github/workflows/ci.yml", ", 1.99.0]", "]")
+        replace(root / ".github/workflows/ci.yml", ", 1.99.1]", "]")
         require_rejection(root, "compiler matrix")
         copy_fixture(root)
 

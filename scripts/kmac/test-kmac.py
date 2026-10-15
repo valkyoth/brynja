@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import shutil
+import subprocess
+import re
 import tempfile
 from pathlib import Path
 
@@ -11,6 +13,71 @@ import kmac_policy
 
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+def codegen_lookup_regressions() -> None:
+    """Exercise the real shell extractor and cSHAKE checks, without Cargo."""
+    script = (ROOT / 'scripts/kmac/check-kmac-codegen.sh').read_text()
+    prefix = script.split('for raw_toolchain in ', 1)[0]
+    body = script.split('    for mir in "${sha3_mir[@]}"; do\n', 1)[1]
+    body = body.split('\n    for artifact in ', 1)[0]
+    command = prefix + '\nsha3_mir=("$1")\nfor mir in "${sha3_mir[@]}"; do\n' + body
+
+    def function(method, identity, statements, extra=''):
+        return (f'fn hardened::cshake::<impl at test.rs:1:1: 1:2>::{method}'
+                f'(_1: &mut {identity}{extra}) -> () {{\n{statements}\n}}\n')
+
+    source = ''
+    for identity, rate in (('HardenedCshake128', 168), ('HardenedCshake256', 136)):
+        # This valid prefix-colliding owner appeared first in actual release MIR.
+        source += function('wipe_in_place', identity + 'Setup', '    Setup::wipe(move _1);')
+        source += function('finalize_xof_erasing_source', identity,
+                           f'    {identity}::enter_squeezing_in_place(copy _1);\n'
+                           f'    {identity}::take_reader_erasing_source(copy _1);')
+        source += function('enter_squeezing_in_place', identity,
+                           f'    {identity}::finish(copy _1);\n    CshakeLifecycle::Squeezing;',
+                           ', _2: Option<Fips202BitString>')
+        source += function('wipe_in_place', identity,
+                           f'    CshakeLifecycle::Vacated;\n    HardenedFips202Owner::<{rate}>::wipe(move _2);')
+        source += function('take_reader_erasing_source', identity,
+                           f'    _2 = &mut ((*_1).0: hardened::owner::HardenedFips202Owner<{rate}>);\n'
+                           f'    HardenedFips202Owner::<{rate}>::wipe(move _2);')
+    source += '// StateConsumed\n'
+    with tempfile.TemporaryDirectory(prefix='brynja-kmac-codegen-test-') as directory:
+        artifact = Path(directory) / 'fixture.mir'
+
+        def check(text, success):
+            artifact.write_text(text)
+            result = subprocess.run(['bash', '-c', command, 'codegen-test', str(artifact)],
+                                    capture_output=True, text=True, timeout=30)
+            assert (result.returncode == 0) == success, result.stderr
+
+        check(source, True)
+        for identity, rate in (('HardenedCshake128', 168), ('HardenedCshake256', 136)):
+            wipe = function('wipe_in_place', identity,
+                            f'    CshakeLifecycle::Vacated;\n    HardenedFips202Owner::<{rate}>::wipe(move _2);')
+            assert wipe in source
+            check(source.replace(wipe, ''), False)
+            check(source + wipe, False)
+            check(source.replace(wipe, '    // ' + wipe.replace('\n', ' ') + '\n'), False)
+            check(source.replace(wipe, wipe.rsplit('}', 1)[0]), False)
+            check(source.replace(wipe, wipe.replace('CshakeLifecycle::Vacated;', '')), False)
+            check(source.replace(wipe, wipe.replace('    CshakeLifecycle::Vacated;\n', '')
+                                 .replace('\n}', '\n    CshakeLifecycle::Vacated;\n}')), False)
+        for variable, method in (('fixed', 'finish_fixed'), ('xof', 'finish_xof'), ('cleanup', 'wipe')):
+            pattern, = re.findall(rf"{variable}=\"\$\(extract_function '([^']+)'", script)
+            extra = '' if method == 'wipe' else ', _2: bool'
+            wanted = function(method, 'KmacCore<S, RATE, STRENGTH>', '    expected_owner;', extra)
+            other = function(method, 'KmacCoreSetup<S, RATE, STRENGTH>', '    wrong_owner;', extra)
+            extract = prefix + '\nextract_function "$2" "$1"\n'
+            for text, success in ((other + wanted, True), (other, False), (wanted + wanted, False)):
+                artifact.write_text(text)
+                result = subprocess.run(['bash', '-c', extract, 'codegen-test', str(artifact), pattern],
+                                        capture_output=True, text=True, timeout=30)
+                assert (result.returncode == 0) == success, result.stderr
+                if success:
+                    assert result.stdout == wanted
+    print('KMAC codegen accepts exact owners alongside Setup names and rejects 18 lookup/cleanup regressions')
 
 
 def reject(label: str, path: Path, old: str, new: str) -> None:
@@ -37,6 +104,7 @@ def reject(label: str, path: Path, old: str, new: str) -> None:
 
 
 def main() -> int:
+    codegen_lookup_regressions()
     kmac_policy.validate(ROOT)
     streamed = Path("crates/brynja-mac-kmac/src/setup")
     reject("streamed-strength", streamed / "engine.rs", "key_bits < D::STRENGTH", "key_bits < 1")

@@ -15,9 +15,17 @@ extract_function() {
     local pattern="$1"
     local artifact="$2"
     awk -v pattern="$pattern" '
-        index($0, pattern) > 0 { active = 1 }
-        active { print }
-        active && /^}/ { exit }
+        /^fn / && active { malformed = 1 }
+        /^fn / && index($0, pattern) > 0 { active = 1; matches++ }
+        active { body = body $0 "\n" }
+        active && /^}/ { active = 0; complete++ }
+        END {
+            if (matches != 1 || complete != 1 || active || malformed) {
+                print "KMAC MIR function absent, ambiguous or incomplete: " pattern > "/dev/stderr"
+                exit 1
+            }
+            printf "%s", body
+        }
     ' "$artifact"
 }
 
@@ -68,9 +76,9 @@ for raw_toolchain in "${toolchains[@]}"; do
             echo "KMAC MIR moved inline secret state under ${toolchain#+}" >&2
             exit 1
         fi
-        fixed="$(extract_function '>::finish_fixed(' "$mir")"
-        xof="$(extract_function '>::finish_xof(' "$mir")"
-        cleanup="$(extract_function '>::wipe(_1: &mut KmacCore' "$mir")"
+        fixed="$(extract_function '>::finish_fixed(_1: &mut KmacCore<S, RATE, STRENGTH>,' "$mir")"
+        xof="$(extract_function '>::finish_xof(_1: &mut KmacCore<S, RATE, STRENGTH>,' "$mir")"
+        cleanup="$(extract_function '>::wipe(_1: &mut KmacCore<S, RATE, STRENGTH>)' "$mir")"
         grep -Fq '= &mut ((*_1).0: S);' <<<"$fixed"
         grep -q 'append_right_encode::<S>' <<<"$fixed"
         grep -Fq '= &mut ((*_1).0: S);' <<<"$xof"
@@ -93,16 +101,16 @@ for raw_toolchain in "${toolchains[@]}"; do
 
     for mir in "${sha3_mir[@]}"; do
         for identity in HardenedCshake128 HardenedCshake256; do
-            finalizer="$(extract_function ">::finalize_xof_erasing_source(_1: &mut ${identity}" "$mir")"
-            phase_change="$(extract_function ">::enter_squeezing_in_place(_1: &mut ${identity}" "$mir")"
-            wipe="$(extract_function ">::wipe_in_place(_1: &mut ${identity}" "$mir")"
+            finalizer="$(extract_function ">::finalize_xof_erasing_source(_1: &mut ${identity})" "$mir")"
+            phase_change="$(extract_function ">::enter_squeezing_in_place(_1: &mut ${identity}," "$mir")"
+            wipe="$(extract_function ">::wipe_in_place(_1: &mut ${identity})" "$mir")"
             require_order "$finalizer" "${identity}::enter_squeezing_in_place" "${identity}::take_reader_erasing_source"
             require_order "$phase_change" "${identity}::finish(copy _1" "CshakeLifecycle::Squeezing"
             require_order "$wipe" "CshakeLifecycle::Vacated" "HardenedFips202Owner::<"
             grep -q 'StateConsumed' "$mir"
         done
-        transition128="$(extract_function ">::take_reader_erasing_source(_1: &mut HardenedCshake128" "$mir")"
-        transition256="$(extract_function ">::take_reader_erasing_source(_1: &mut HardenedCshake256" "$mir")"
+        transition128="$(extract_function ">::take_reader_erasing_source(_1: &mut HardenedCshake128)" "$mir")"
+        transition256="$(extract_function ">::take_reader_erasing_source(_1: &mut HardenedCshake256)" "$mir")"
         for transition_and_rate in "168:$transition128" "136:$transition256"; do
             rate="${transition_and_rate%%:*}"
             transition="${transition_and_rate#*:}"

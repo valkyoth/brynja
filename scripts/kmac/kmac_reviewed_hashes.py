@@ -41,6 +41,6 @@ REVIEWED_HASHES = {
     "assurance/kmac-conformance-rejected/src/lib.rs": "fe4a3db89edf219e343df7e5b55bff94fcef99fdc582c17c05230e20606b5a5a",
     "assurance/kmac-conformance-rejected/Cargo.toml": "825eedc9799aba873adef3227538a3fb4458b8c84fd92c56d3c12dcc72fdfac0",
     "crates/brynja-hash-sha3/src/hardened/cshake.rs": "fd7be780e4f7887ff3400a4eedcc7983279668cce7976058faec549e56ccd975",
-    "scripts/kmac/check-kmac-codegen.sh": "d5ae2e96eaa9d59fdd6cca36ebdd96fa90566e9aa7f62f6a8f3f7d67e3961e1f",
+    "scripts/kmac/check-kmac-codegen.sh": "7befaee4af1c13b27a19da497b2919c2ca8baf4385fed8cbcdaceaad5b1cb66c",
     "scripts/kmac/check-kmac-differential.py": "b3bb8f84f7648c369e00bd7753b92cecab7dc0b19e6c2b5652bd874ee3f5c640",
 }

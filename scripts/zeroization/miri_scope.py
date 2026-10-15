@@ -9,6 +9,7 @@ import re
 import sys
 from pathlib import Path
 import scope_inputs
+import scope_review_metadata
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -196,6 +197,8 @@ def select_repository(
             'security/release-signers',
             'scripts/zeroization/miri_scope.py', 'scripts/zeroization/scope_inputs.py',
             'scripts/zeroization/test-miri-scope.py', 'scripts/zeroization/test-scope-inputs.py',
+            'scripts/zeroization/scope_review_metadata.py',
+            'scripts/zeroization/review_metadata_tests.py',
             'scripts/zeroization/check-tag-miri.sh', 'scripts/tag_gate.sh',
             'scripts/zeroization/check-zeroization-sanitizer.sh',
             # These inspect evidence configuration, not the executed memory
@@ -219,6 +222,8 @@ def select_repository(
             if path in readme_paths:
                 continue  # Entire data-only wrapper and graph validated above.
             before, after = scope_inputs.snapshot(root, base, path)
+            if scope_review_metadata.metadata_only(root, base, path, before, after):
+                continue
             if not include_miri_tasks and path in {
                 'scripts/zeroization/miri_tasks.py',
                 'scripts/zeroization/miri_cases.py',
@@ -241,6 +246,7 @@ def select_repository(
                     retained.append(path)
             elif path in {'scripts/sha2/sha256_public_api.py', 'scripts/sha2/sha2_reviewed_hashes.py',
                           'scripts/tuplehash/tuplehash_reviewed_hashes.py',
+                          'scripts/kmac/kmac_reviewed_hashes.py',
                           'scripts/parallelhash/parallelhash_reviewed_hashes.py'} and scope_inputs.python_bindings_only(before, after):
                 continue
             elif path.endswith('Cargo.lock'):

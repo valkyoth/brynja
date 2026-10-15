@@ -67,7 +67,16 @@ def selection_tests() -> None:
     for name in ('test-mir-cleanup-flow', 'test-secret-owner-compiler',
                  'check-secret-owner-compiler', 'check-api-profiles', 'test-api-profiles'):
         assert 'python3 scripts/cryptography/' + name + '.py' in commands.selected(catalog, [])
-    assert commands.owners("python3 scripts/kmac/check-kmac.py") == {"kmac"}
+    assert commands.owners("python3 scripts/kmac/check-kmac.py") == set()
+    from scope_review_metadata import BASE_COMMANDS as review_commands, SCRIPT_COMMANDS
+    for command in review_commands:
+        assert command in catalog
+        assert command in commands.selected(catalog, [])
+        assert commands.owners(command) == set()
+        with patch.object(commands, 'catalog', return_value=[c for c in catalog if c != command]):
+            rejects(commands.repository_commands)
+    for checks in SCRIPT_COMMANDS.values():
+        assert set(checks) <= review_commands
     # Never infer 'unchanged' from an unregistered script/package/command.
     for command in ("python3 scripts/new/new.py", "cargo test -p unknown",
                     "cargo run --manifest-path assurance/unknown/Cargo.toml", "unknown"):

@@ -282,6 +282,20 @@ resume still use their stricter full-inventory equality checks.
 
 Current implementation/tool-policy deltas, command coverage, public checkpoints
 and approvals use the same carry-forward rules above, independently per receipt.
+Exact registered CPU-boundary review scripts and KMAC emitted-code checks are
+repository checks, not memory/proof execution inputs. Their current validators,
+regressions and KMAC compiler campaign always run, even when runtime verifier
+results are reused. CPU inventory-only updates qualify only when admission,
+graph and limits remain identical, no existing entry/status is removed, and
+each added or rebound source is byte-identical in both snapshots with a matching
+current hash. A concurrent Rust, manifest, compiler or verifier change is still
+classified separately. No script-directory blanket exemption is used.
+
+The exact combined-acceptance digest map may repair an old malformed hex digest
+without treating the repair as an implementation change; its paths must stay
+identical and current digests must be well formed. The complete current
+acceptance validator still checks actual source hashes. This does not turn an
+old failed metadata check into a pass or replace missing execution evidence.
 Current repository baseline checks still run. CI cannot import the registry,
 and detached children remove all receipt environment variables so a new command
 executes instead of recursively claiming an old result. No tag/publication

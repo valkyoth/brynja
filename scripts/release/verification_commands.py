@@ -10,6 +10,7 @@ import re
 from pathlib import Path
 
 from verification_plan import ROOT, scope
+from scope_review_metadata import BASE_COMMANDS as REVIEW_COMMANDS
 
 ALL = set(scope.GROUPS)
 DIRECTORIES = {
@@ -22,6 +23,7 @@ DIRECTORIES = {
 }
 BASE_DIRECTORIES = {"repository", "release", "assurance", "ci", "standards", "pki", "protocols"}
 BASE_COMMANDS = {
+    *REVIEW_COMMANDS,
     "python3 scripts/cryptography/test-mir-cleanup-flow.py",
     "python3 scripts/cryptography/test-secret-owner-compiler.py",
     "python3 scripts/cryptography/check-secret-owner-compiler.py",
@@ -122,7 +124,10 @@ def selected(commands: list[str], groups: list[str], *, full: bool = False) -> l
 
 
 def repository_commands(root: Path = ROOT) -> list[str]:
-    return catalog(root / "scripts/checks.sh", "# BEGIN VERIFICATION CATALOG")
+    entries = catalog(root / "scripts/checks.sh", "# BEGIN VERIFICATION CATALOG")
+    if not REVIEW_COMMANDS <= set(entries):
+        raise ValueError('review-only scope lost a mandatory current repository check')
+    return entries
 
 
 def matrix_commands(root: Path = ROOT) -> list[tuple[str, str | None]]:

@@ -461,6 +461,8 @@ def compiler_matrix_tests():
 
 
 if __name__ == '__main__':
+    from review_metadata_tests import test_review_metadata
+    test_review_metadata()
     semantic_tests()
     git_tests()
     contract_tests()

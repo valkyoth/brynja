@@ -48,7 +48,7 @@ def test_current_repository() -> None:
     assert coverage["mapped_normative_section_count"] == 539
     assert coverage["excluded_normative_section_count"] == 11
     assert coverage["owner_milestone_count"] == 64
-    assert coverage["surface_count"] == 485
+    assert coverage["surface_count"] == 487
     failure_domain = next(
         item for item in requirements if item["id"] == "BRY-REQ-TLS-0005"
     )

@@ -57,8 +57,10 @@ neither reviewer executed the native Darwin paths. See the
 The required shared/legacy native records have been refreshed at `10d7566c`
 on Intel, Arm, Apple M2 Pro and AMD as required by each existing lane. The
 native Mac CI job is green. These author-operated results retain their actual
-compiler identities and bounded claims; final release verification remains
-pending.
+compiler identities and bounded claims. The owner explicitly chose to omit the
+additional planner-selected full verification sweep for this internal milestone.
+It is recorded as NOT RUN, not PASS; the existing automated tag gate is unchanged
+and does not treat this documented decision as completed verification.
 
 MSRV remains Rust 1.90.0; the default full-check and cross-target compiler is
 1.99.1. Historical observations keep their actual compiler/source identities.

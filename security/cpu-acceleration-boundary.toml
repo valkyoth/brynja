@@ -2013,13 +2013,13 @@ sha256 = "c4998e89869460b57b77d42a4e101bbc67e548e2c9edf1dff91c20614ca9d583"
 package = "brynja-crypto-cpu-std"
 path = "src/macos_resident/sha2/mod.rs"
 status = "macos-resident-scalar-sha2-development"
-sha256 = "9de97ee3d26ab3d6f7a9d20e69eddc6fbe13f94a1cc3bb8f28e4497a64c85a18"
+sha256 = "573dd5b8df6611ad065f56f6cf8704742fc250668b469360242eea50b98aad0a"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/macos_resident/sha2/types.rs"
 status = "macos-resident-scalar-sha2-api-types"
-sha256 = "0bec49b0778f9c8ff4766d63dd72949ddd85d369a882216d5c36557719a0f4ec"
+sha256 = "88fb0775effad4fb1f31ac2111ce55e77467d9fa2317a27ef194d4c711cb973c"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -2037,13 +2037,13 @@ sha256 = "e922221d978f18ce6416aad4d5a7d638c88e36f9fbe9d1be6bacd25db4461bee"
 package = "brynja-crypto-cpu-std"
 path = "src/macos_resident/sha3/mod.rs"
 status = "macos-resident-scalar-sha3-development"
-sha256 = "cf1bf27ef66f9495f235845e5e15c22f2db44721471d838b27778d1107588e75"
+sha256 = "70a24788250e3ae86acbfed7c2cb2900744a57ec0050374f6685aa4efb2db53a"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/macos_resident/sha3/types.rs"
 status = "macos-resident-scalar-sha3-api-types"
-sha256 = "03a309031a54a5fe1f1fd9157321525b65f87352ba90e3065f4924f14bf816c1"
+sha256 = "8d3381791865e228595be800e495de510b481d8b765620c7a02f6cfef001b1d1"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -2062,3 +2062,51 @@ package = "brynja-crypto-cpu-std"
 path = "src/macos_resident/sha3/tests/native.rs"
 status = "macos-resident-scalar-sha3-native-tests"
 sha256 = "30297b85e7ef59ae94abfba7068d117bee96508c74024d10549d5949ee313153"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/sha2/compiled.rs"
+status = "macos-resident-compiled-sha2-session-development"
+sha256 = "a52b8730d75771016273dc65c357b229ce3be53059fee980d55d1847174f9aaa"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/sha2/compiled/worker.rs"
+status = "macos-resident-compiled-sha2-worker"
+sha256 = "be7312833031745499d6c69276a2934686dcb39af36c792bcb55d2ef677530f1"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/sha2/compiled/tests.rs"
+status = "macos-resident-compiled-sha2-admission-tests"
+sha256 = "ae06c781527a98654265790f3855b48e0612d6e842e9cbbce3cc6662bf55fc35"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/sha2/compiled/tests/native.rs"
+status = "macos-resident-compiled-sha2-native-tests"
+sha256 = "77023362e646cfa2d079562a5547e192efafdda8eff997669c9a4a128b4b7567"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/sha3/compiled.rs"
+status = "macos-resident-compiled-sha3-session-development"
+sha256 = "db34ed13d1f2a0650f88b9d7a70b895c4fb75a572a8d95d9a1e5ba5aa9ca2bf3"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/sha3/compiled/worker.rs"
+status = "macos-resident-compiled-sha3-worker"
+sha256 = "602902110fdbcad9e953ce3a247646f4b41dcdb1eacfe5a5eaba86f1edb0c33b"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/sha3/compiled/tests.rs"
+status = "macos-resident-compiled-sha3-admission-tests"
+sha256 = "0aeea950cfbb0022be50331dfc105c0bfecd96d664583ffcaf41b05ea70020ea"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/sha3/compiled/tests/native.rs"
+status = "macos-resident-compiled-sha3-native-tests"
+sha256 = "6156f2fdb441ad3274b6ce62aadf229648d9a680826af617971b2657c89d3209"

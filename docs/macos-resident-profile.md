@@ -28,7 +28,7 @@ other Apple OSes and interpreter/model builds reject construction.
 | Worker lifetime | Private callback, caller-supplied stack, synchronous native join |
 | Owned-memory cleanup | Whole payload including page padding; stack after join, output on loan drop/reuse/error, mappings before release |
 | Core-dump exclusion | **Not guaranteed**; locked memory may be dumped |
-| Hardware/SIMD | Not selected by current scalar APIs; explicit Arm routes remain in package 02 |
+| Hardware/SIMD | Scalar sessions unchanged; explicit Arm SHA2/SHA512/Keccak via separate opt-in feature; SIMD batching pending |
 | Independent verification/certification | Not claimed |
 
 No process-wide dump policy is changed. Applications retain responsibility for
@@ -106,6 +106,37 @@ requires the existing public-output acknowledgement; an incorrect destination
 length preserves the destination and clears the secret loan. Zero-length XOF
 output reserves a resident placeholder byte, never exposed as output.
 
+## Explicit Arm acceleration
+
+Enable `macos-resident-acceleration` in addition to deploying on a compatible
+Apple Silicon CPU. `sha2::CompiledSession` accepts `Kernel::ArmSha256` for
+SHA-224/256 and `Kernel::ArmSha512` for all wide/general-t SHA-2 identities.
+`sha3::CompiledSession` accepts only `Kernel::ArmKeccak`. x86 routes and wrong
+algorithm/kernel pairs reject; no accelerated request silently becomes scalar.
+The general SHA-512/t IV derivation remains portable by design, and the request
+report checks that exact distinction.
+
+Build-wide `-C target-feature=+neon,+sha2,+sha3` enables all three routes. A Cargo
+feature alone does not enable CPU instructions. The application must establish
+compatible CPU/OS support for the entire deployment lifetime, before construction;
+static admission is not runtime detection, a scheduler lock or a migration
+monitor. Use the scalar `Session` instead when that cannot be established.
+
+Authority, startup KAT, scoped hash state and output staging are created inside
+the preacquired resident worker. Backend/invariant failure or recoverable worker
+panic irreversibly quarantines the wrapper; cancellation and invalid input allow
+reuse. The worker joins and both owned resources clear before errors return.
+These properties do not add dump exclusion or fatal-abort cleanup.
+
+Development checks cover native Arm execution, independent extracted-package
+oracles, fault injection, compiled mutations and ownership rejection. The focused
+Darwin compiler checker covers retained resource/start/join/clear calls, worker
+state placement and the exact three hardware-kernel register erase tails. Its
+call-order checks are not a complete LLVM control-flow or whole-image erasure
+proof; native lifecycle tests provide complementary conditional-path checks.
+It must run on artifacts emitted separately with panic=unwind and panic=abort.
+Independent review and final native release qualification remain pending.
+
 ## Finite implementation sequence
 
 1. Darwin mapping/thread foundation and scalar SHA-256 vertical slice.
@@ -116,8 +147,9 @@ output reserves a resident placeholder byte, never exposed as output.
    prepare the independent retest candidate using existing release gates.
 
 Each package includes its own failure, ownership and cleanup tests. Scalar
-SHA-2/general-t and SHA-3/SHAKE/cSHAKE are development-tested; package 02 is not
-complete until explicit Arm routes and the associated emitted-code review pass.
+SHA-2/general-t and SHA-3/SHAKE/cSHAKE scalar and explicit Arm routes are
+development-tested. Package 02 includes a bounded Darwin emitted-code review,
+not whole-image or dump-erasure qualification.
 KMAC, TupleHash, legacy adapters, batching and ParallelHash are not implied.
 No Intel Mac qualification or new isolation framework is scheduled here.
 

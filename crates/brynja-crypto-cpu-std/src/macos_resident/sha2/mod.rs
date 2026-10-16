@@ -1,7 +1,8 @@
-//! Scalar resident/clearing sessions on Apple Silicon; qualification pending.
+//! Resident/clearing sessions on Apple Silicon; qualification pending.
 //! No core-dump exclusion. Not exported by the strict facade.
 //! The parent module's caller-copy, OS/TLS, fatal-abort and deployment limits apply.
-//! No SIMD or hardware selection; every operation uses a fresh joined worker.
+//! Scalar sessions never select hardware. Optional explicit `CompiledSession`
+//! requires `macos-resident-acceleration`; every operation uses a fresh joined worker.
 //!
 //! ```no_run
 //! use brynja_crypto_cpu_std::macos_resident::sha2::{Algorithm, Error, Limits, Session};
@@ -15,6 +16,10 @@
 //! # Ok::<(), Error>(())
 //! ```
 use super::resource::Mapping;
+#[cfg(feature = "macos-resident-acceleration")]
+mod compiled;
+#[cfg(feature = "macos-resident-acceleration")]
+pub use compiled::{CompiledSession, Kernel};
 mod types;
 mod worker;
 pub use types::{Algorithm, Cancellation, Error, Limits, PublicDeclassification, Sha512TBits};

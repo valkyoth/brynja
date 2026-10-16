@@ -33,6 +33,17 @@ class ResidentPackageTests(unittest.TestCase):
                 output = b'' if columns[-1] == '-' else bytes.fromhex(columns[-1])
                 self.assertEqual(len(output), (int(columns[-2])+7)//8)
 
+    def test_accelerated_oracle_requires_each_arm_route(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root/'src').mkdir()
+            self.assertEqual(oracle.write_consumer(root, True), 662)
+            source = (root/'src/families.rs').read_text()
+            self.assertNotIn('::Session::new(', source)
+            for kernel in ('ArmSha256', 'ArmSha512', 'ArmKeccak'):
+                self.assertIn(kernel, source)
+            self.assertEqual(source.count('::CompiledSession::new('), 3)
+
     def test_wrong_host_never_reaches_packaging(self):
         with patch('subprocess.check_output', return_value='host: x86_64-unknown-linux-gnu\n'):
             with patch('subprocess.run', side_effect=AssertionError('unexpected subprocess')):

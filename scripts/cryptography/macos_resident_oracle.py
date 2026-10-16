@@ -6,7 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 
 
-def write_consumer(consumer):
+def write_consumer(consumer, accelerated=False):
     lines = []
     for algorithm in ('sha224', 'sha256', 'sha384', 'sha512', 'sha512_224',
                       'sha512_256', 'sha3_224', 'sha3_256', 'sha3_384', 'sha3_512',
@@ -38,7 +38,13 @@ def write_consumer(consumer):
     (consumer / 'src/cshake.txt').write_text('\n'.join(
         f'{a} {nb} {n.hex() or "-"} {sb} {s.hex() or "-"} {xb} {x.hex() or "-"} {ob} {out.hex() or "-"}'
         for a, n, nb, s, sb, x, xb, ob, out in cases) + '\n')
-    (consumer / 'src/families.rs').write_text(SOURCE)
+    source = SOURCE
+    if accelerated:
+        source = source.replace('sha2::Session::new(a,limits2())',
+            'sha2::CompiledSession::new(a,if matches!(a,sha2::Algorithm::Sha224|sha2::Algorithm::Sha256) {sha2::Kernel::ArmSha256} else {sha2::Kernel::ArmSha512},limits2())')
+        source = source.replace('sha3::Session::new(a,limits3())',
+            'sha3::CompiledSession::new(a,sha3::Kernel::ArmKeccak,limits3())')
+    (consumer / 'src/families.rs').write_text(source)
     return len(lines) + len(cases)
 
 

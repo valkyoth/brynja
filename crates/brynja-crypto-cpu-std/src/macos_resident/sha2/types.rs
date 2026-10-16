@@ -76,6 +76,12 @@ pub enum Error {
     OutputLength,
     /// An internal scoped-state or transfer invariant was violated.
     Invariant,
+    /// Explicit accelerated backend rejected or lost authority.
+    #[cfg(feature = "macos-resident-acceleration")]
+    Backend(brynja_crypto_cpu::static_execution::Error),
+    /// The accelerated wrapper cannot be reused after an integrity failure.
+    #[cfg(feature = "macos-resident-acceleration")]
+    Quarantined,
 }
 impl From<resident::Error> for Error {
     fn from(error: resident::Error) -> Self {
@@ -92,6 +98,10 @@ impl core::fmt::Display for Error {
             Self::InvalidBits => "resident SHA-2 tail is not canonical",
             Self::Cancelled => "resident SHA-2 cancelled",
             Self::OutputLength => "resident SHA-2 output length mismatch",
+            #[cfg(feature = "macos-resident-acceleration")]
+            Self::Backend(_) => "resident backend rejected",
+            #[cfg(feature = "macos-resident-acceleration")]
+            Self::Quarantined => "resident backend quarantined",
             Self::Invariant => "resident SHA-2 internal invariant failed",
         })
     }

@@ -25,9 +25,9 @@ def run(command, cwd, env):
     return result.stdout
 
 
-def mutations(cargo, hosted, env):
+def mutations(cargo, hosted, env, feature, accelerated=False):
     prefix = 'macos_resident::'
-    cases = (
+    cases = [
         ('src/macos_resident/resource/darwin.rs',
          'let _ = brynja_core::clear_owned_region(bytes);', 'core::hint::black_box(&mut *bytes);',
          prefix + 'resource::darwin::tests::worker_placement_join_and_whole_payload_clear'),
@@ -46,14 +46,22 @@ def mutations(cargo, hosted, env):
         ('src/macos_resident/sha3/worker.rs', 'Algorithm::Shake128(_) => xof!(scoped::Shake128Workspace::new()),',
          'Algorithm::Shake128(_) => xof!(scoped::Shake256Workspace::new()),',
          prefix + 'sha3::tests::native::all_identities_and_bit_tails_match_portable_across_rate_boundaries'),
-    )
+    ]
+    if accelerated:
+        for family, test in (
+                ('sha2', 'cancellation_preserves_health_but_revocation_and_unwind_are_terminal'),
+                ('sha3', 'cancellation_reuses_but_revocation_and_unwind_never_revive')):
+            cases.append((f'src/macos_resident/{family}/compiled.rs',
+                'Ok(()) | Err(Error::Cancelled | Error::InvalidBits)',
+                'Ok(()) | Err(Error::Cancelled | Error::InvalidBits | Error::Backend(_))',
+                prefix + family + '::compiled::tests::native::' + test))
     for name, old, new, test in cases:
         path = hosted / name
         original = path.read_text()
         if original.count(old) != 1:
             raise ValueError('resident mutation anchor changed: ' + name)
         command = [*cargo, 'test', '--locked', '--offline', '--release', '--no-default-features',
-                   '--features', 'macos-resident,strict-sha2', '--lib', test, '--', '--exact']
+                   '--features', feature + ',strict-sha2', '--lib', test, '--', '--exact']
         if 'test result: ok. 1 passed;' not in run(command, hosted, env):
             raise ValueError('mutation baseline did not execute')
         try:
@@ -69,7 +77,7 @@ def mutations(cargo, hosted, env):
     print(f'Resident locking/clearing/identity compiled mutants: {len(cases)} rejected', flush=True)
 
 
-def execute(toolchain, destination):
+def execute(toolchain, destination, accelerated=False):
     cargo = ['cargo', '+' + toolchain]
     identity = subprocess.check_output(['rustc', '+' + toolchain, '-vV'], text=True)
     if 'host: aarch64-apple-darwin' not in identity.splitlines():
@@ -78,6 +86,12 @@ def execute(toolchain, destination):
     env = dict(os.environ, RUSTUP_TOOLCHAIN=toolchain, CARGO_TARGET_DIR=str(destination / 'target'))
     for name in ('RUSTFLAGS', 'CARGO_ENCODED_RUSTFLAGS', 'RUSTDOCFLAGS', 'CARGO_BUILD_TARGET', 'CARGO_BUILD_BUILD_DIR'):
         env.pop(name, None)
+    feature = 'macos-resident-acceleration' if accelerated else 'macos-resident'
+    if accelerated:
+        for capability in ('SHA256', 'SHA512', 'SHA3'):
+            if subprocess.check_output(['/usr/sbin/sysctl', '-n', 'hw.optional.arm.FEAT_' + capability], text=True).strip() != '1':
+                raise ValueError('native Arm feature unavailable: ' + capability)
+        env['RUSTFLAGS'] = '-C target-feature=+neon,+sha2,+sha3'
     sys.path.insert(0, str(ROOT / 'scripts/sha3'))
     spec = importlib.util.spec_from_file_location('resident_packages', ROOT / 'scripts/sha3/check-sha3-execution.py')
     shared = importlib.util.module_from_spec(spec)
@@ -89,10 +103,10 @@ def execute(toolchain, destination):
     manifest = ('[package]\nname="resident-consumer"\nversion="0.0.0"\nedition="2024"\n'
                 '[workspace]\n[dependencies]\nbrynja-crypto-cpu-std = { path = ' +
                 json.dumps(str(roots['brynja-crypto-cpu-std'])) +
-                ', default-features=false, features=["macos-resident", "strict-sha2"] }\n'
+                ', default-features=false, features=["' + feature + '", "strict-sha2"] }\n'
                 '[patch.crates-io]\n' + patches + '\n')
     (consumer / 'Cargo.toml').write_text(manifest)
-    count = macos_resident_oracle.write_consumer(consumer)
+    count = macos_resident_oracle.write_consumer(consumer, accelerated)
     if count != 662:
         raise ValueError('resident family oracle population changed')
     source = ('mod families;\nuse brynja_crypto_cpu_std::macos_resident::{Sha256Session,Limits,Error};\n'
@@ -118,7 +132,7 @@ def execute(toolchain, destination):
             raise ValueError('dependency escaped extracted packages')
     for profile, panic in (([], 'unwind'), (['--release'], 'unwind'), (['--release'], 'abort')):
         output = run([*cargo, 'run', '--locked', '--offline', *profile], consumer,
-                     dict(env, RUSTFLAGS='-C panic=' + panic))
+                     dict(env, RUSTFLAGS=env.get('RUSTFLAGS', '') + ' -C panic=' + panic))
         if 'RESIDENT_PACKAGE_ORACLE: 17 passed; dump exclusion NOT claimed' not in output.splitlines():
             raise ValueError('oracle did not run')
         if 'RESIDENT_FAMILY_ORACLE: 662 passed' not in output.splitlines():
@@ -131,20 +145,28 @@ def execute(toolchain, destination):
     run([*cargo, 'generate-lockfile', '--offline'], hosted, env)
     for target in ('--lib', '--doc'):
         output = run([*cargo, 'test', '--locked', '--offline', '--no-default-features',
-                      '--features', 'macos-resident,strict-sha2', target, 'macos_resident'], hosted, env)
+                      '--features', feature + ',strict-sha2', target, 'macos_resident', '--', '--nocapture'], hosted, env)
         if '0 failed' not in output or 'test result: ok. 0 passed;' in output:
             raise ValueError('packaged resident tests did not execute')
-        expected = 'test result: ok. 31 passed; 0 failed; 0 ignored;' if target == '--lib' else 'test result: ok. 36 passed; 0 failed; 0 ignored;'
+        count = (43 if accelerated else 31) if target == '--lib' else (50 if accelerated else 36)
+        expected = f'test result: ok. {count} passed; 0 failed; 0 ignored;'
+        if accelerated and target == '--lib':
+            for token in ('MACOS_RESIDENT_SHA2_COMPILED: ArmSha256; differential_cases=224; actual_message_blocks_verified',
+                          'MACOS_RESIDENT_SHA2_COMPILED: ArmSha512; differential_cases=448; actual_message_blocks_verified',
+                          'MACOS_RESIDENT_SHA3_COMPILED: ArmKeccak; differential_cases=848'):
+                if token not in output.splitlines():
+                    raise ValueError('required native route did not execute: ' + token)
         if expected not in output:
             raise ValueError('packaged resident test population changed')
         print(output, flush=True)
-    mutations(cargo, hosted, env)
+    mutations(cargo, hosted, env, feature, accelerated)
     print('Packaged macOS resident profile: PASS; development evidence only', flush=True)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--toolchain', default='1.99.1')
+    parser.add_argument('--accelerated', action='store_true')
     args = parser.parse_args()
     with tempfile.TemporaryDirectory(prefix='brynja-macos-resident-') as directory:
-        execute(args.toolchain, Path(directory))
+        execute(args.toolchain, Path(directory), args.accelerated)

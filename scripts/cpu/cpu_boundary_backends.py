@@ -2,6 +2,14 @@
 
 # Distinct residency/clearing development profile, NOT strict admission.
 MACOS_RESIDENT_SOURCES = {
+    "src/macos_resident/sha2/compiled.rs": "macos-resident-compiled-sha2-session-development",
+    "src/macos_resident/sha2/compiled/worker.rs": "macos-resident-compiled-sha2-worker",
+    "src/macos_resident/sha2/compiled/tests.rs": "macos-resident-compiled-sha2-admission-tests",
+    "src/macos_resident/sha2/compiled/tests/native.rs": "macos-resident-compiled-sha2-native-tests",
+    "src/macos_resident/sha3/compiled.rs": "macos-resident-compiled-sha3-session-development",
+    "src/macos_resident/sha3/compiled/worker.rs": "macos-resident-compiled-sha3-worker",
+    "src/macos_resident/sha3/compiled/tests.rs": "macos-resident-compiled-sha3-admission-tests",
+    "src/macos_resident/sha3/compiled/tests/native.rs": "macos-resident-compiled-sha3-native-tests",
     "src/macos_resident/mod.rs": "macos-resident-contract-development",
     "src/macos_resident/resource.rs": "macos-resident-resource-admission-development",
     "src/macos_resident/resource/darwin.rs": "macos-resident-mapping-development",

@@ -33,6 +33,7 @@ def validate(write=False):
     if manifests[CPU].get('dependencies') != {'brynja-core': {'workspace': True, 'optional': True}} or manifests[HOST].get('features') != {
             'default': [],
             'macos-resident': ['dep:brynja-core', 'brynja-hash-sha2/general-sha512-t', 'dep:brynja-hash-sha3'],
+            'macos-resident-acceleration': ['macos-resident', 'brynja-hash-sha2/hardened-execution', 'brynja-hash-sha3/hardened-execution'],
             'protected-memory': ['dep:brynja-core'],
             'strict-sha2': ['protected-memory', 'brynja-hash-sha2/general-sha512-t'],
             'strict-sha2-acceleration': ['strict-sha2', 'brynja-hash-sha2/hardened-execution'],
@@ -68,6 +69,7 @@ def validate(write=False):
               ROOT / 'scripts/repository/darwin_resident_abi.py',
               ROOT / 'scripts/cryptography/check-macos-resident-package.py',
               ROOT / 'scripts/cryptography/macos_resident_oracle.py',
+              ROOT / 'scripts/cryptography/check-macos-resident-codegen.py',
               *(ROOT / name for name in memory)]
     for owner in (CPU, HOST):
         crate = ROOT / 'crates' / owner

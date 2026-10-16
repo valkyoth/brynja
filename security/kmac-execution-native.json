@@ -1,22 +1,22 @@
 {
   "schema": 1,
-  "capture_commit": "7a9e9cc6d309d2b0e447498f340fd26a095e2866",
+  "capture_commit": "10d7566ce906a626714e360de98c06c867dc35a0",
   "lanes": {
     "linux-x86_64": {
-      "artifact": "assurance/kmac-execution-native/linux-x86_64-v02449.json",
-      "sha256": "3ea24cf47037b9539bf8dd762bae62310e16bc38650e704fc50d263b092a1a51",
-      "cpu": "model name : AMD Ryzen 9 9950X3D 16-Core Processor",
+      "artifact": "assurance/kmac-execution-native/linux-x86_64-v0251.json",
+      "sha256": "a20d221531f716caefc4c1c3bc4b044ba35b0d07c504c1fce4672fd82daaefde",
+      "cpu": "model name : Intel(R) Xeon(R) 6975P-C",
       "reviewed": true
     },
     "linux-aarch64": {
-      "artifact": "assurance/kmac-execution-native/linux-aarch64-v02449.json",
-      "sha256": "72a2fd4f2252caf4777d82b839d10f74d3b3ca1cb3148315f25794f4eff55eb4",
+      "artifact": "assurance/kmac-execution-native/linux-aarch64-v0251.json",
+      "sha256": "b82fb805f1604eaec44243d8fbdf9071f03afeb85e43928d4c6ebfd4bff2107e",
       "cpu": "CPU architecture: 8; CPU implementer : 0x41; CPU part : 0xd4f; CPU revision : 1",
       "reviewed": true
     },
     "apple-aarch64": {
-      "artifact": "assurance/kmac-execution-native/apple-aarch64-v02449.json",
-      "sha256": "3f90054e0d6e4cfb3f69b761c1c9078da9a2e60a2a1fcc1a54d0428f712edc66",
+      "artifact": "assurance/kmac-execution-native/apple-aarch64-v0251.json",
+      "sha256": "e8f714af8e131174663fab47c117914426a3439a6bca9f7169369f1db01aa286",
       "cpu": "Apple M2 Pro",
       "reviewed": true
     }

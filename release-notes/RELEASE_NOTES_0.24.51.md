@@ -54,6 +54,12 @@ Two supplied retests of `f9868846` confirm the fixes with no new in-scope defect
 neither reviewer executed the native Darwin paths. See the
 [security review record](../security/pentest/v0.24.51.md) for scope and provenance.
 
+The required shared/legacy native records have been refreshed at `10d7566c`
+on Intel, Arm, Apple M2 Pro and AMD as required by each existing lane. The
+native Mac CI job is green. These author-operated results retain their actual
+compiler identities and bounded claims; final release verification remains
+pending.
+
 MSRV remains Rust 1.90.0; the default full-check and cross-target compiler is
 1.99.1. Historical observations keep their actual compiler/source identities.
 Support-crate versions, publication selection, existing gate policy and evidence

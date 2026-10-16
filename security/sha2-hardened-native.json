@@ -1,22 +1,22 @@
 {
   "schema": 1,
-  "capture_commit": "7a9e9cc6d309d2b0e447498f340fd26a095e2866",
+  "capture_commit": "10d7566ce906a626714e360de98c06c867dc35a0",
   "lanes": {
     "linux-x86_64": {
-      "artifact": "assurance/sha2-hardened-native/linux-x86_64-v02449.json",
-      "sha256": "410bf7b6528a5afaac70529be3c9016d057459093d1646effc7ff066bdb8b8bd",
-      "cpu": "AMD Ryzen 9 9950X3D 16-Core Processor",
+      "artifact": "assurance/sha2-hardened-native/linux-x86_64-v0251.json",
+      "sha256": "a651e2fb53f1d1d7824be89ba23c6b3a8e0a8c46b1abadc391cd62f30f754b28",
+      "cpu": "Intel(R) Xeon(R) 6975P-C",
       "reviewed": true
     },
     "linux-aarch64": {
-      "artifact": "assurance/sha2-hardened-native/linux-aarch64-v02449.json",
-      "sha256": "19a74e6635d0cdfcf439cc6c9a7006676fc1b8d3c0f509d6a08f4a3f1451cd7b",
+      "artifact": "assurance/sha2-hardened-native/linux-aarch64-v0251.json",
+      "sha256": "a2cc08d1c5c96f8263428197bbae809a0dfc1aabe1ced93d38d22018aebf47b0",
       "cpu": "CPU architecture: 8; CPU implementer : 0x41; CPU part : 0xd4f; CPU revision : 1",
       "reviewed": true
     },
     "apple-aarch64": {
-      "artifact": "assurance/sha2-hardened-native/apple-aarch64-v02449.json",
-      "sha256": "ba699f38b625b7ce73e60e84e1aecf66c29138e9684a9031e9213a40c4ff0914",
+      "artifact": "assurance/sha2-hardened-native/apple-aarch64-v0251.json",
+      "sha256": "c70866dd298b6d223374fbfea87ee7121c8707db09c75fe06c90e533bc5cf45c",
       "cpu": "Apple M2 Pro",
       "reviewed": true
     }

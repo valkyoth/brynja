@@ -1,22 +1,22 @@
 {
   "schema": 1,
-  "capture_commit": "7a9e9cc6d309d2b0e447498f340fd26a095e2866",
+  "capture_commit": "10d7566ce906a626714e360de98c06c867dc35a0",
   "lanes": {
     "linux-x86_64": {
-      "artifact": "assurance/parallelhash-execution-native/linux-x86_64-v02449.json",
-      "sha256": "e67267ae9de687e64d4f53be63b772b45560a3973ee7c0c00f31ecc5dec97a78",
-      "cpu": "model name : AMD Ryzen 9 9950X3D 16-Core Processor",
+      "artifact": "assurance/parallelhash-execution-native/linux-x86_64-v0251.json",
+      "sha256": "cb5fa3d0dd401d89e088b31b84c04260d476610f33d33a5c9ab3e37f3aa76588",
+      "cpu": "model name : Intel(R) Xeon(R) 6975P-C",
       "reviewed": true
     },
     "linux-aarch64": {
-      "artifact": "assurance/parallelhash-execution-native/linux-aarch64-v02449.json",
-      "sha256": "8349930c306adef54ba04347526b1bc18f48ae4b1c0271e1ee084b286b13150d",
+      "artifact": "assurance/parallelhash-execution-native/linux-aarch64-v0251.json",
+      "sha256": "34dc69f2e4d3ac25f2f0b117957612bb9648f243ad7641bd5eabd07b4febb269",
       "cpu": "CPU architecture: 8; CPU implementer : 0x41; CPU part : 0xd4f; CPU revision : 1",
       "reviewed": true
     },
     "apple-aarch64": {
-      "artifact": "assurance/parallelhash-execution-native/apple-aarch64-v02449.json",
-      "sha256": "066f043e551ab5b1daa04d5014157256e618027c7aa6caff25ea0a6186b54df5",
+      "artifact": "assurance/parallelhash-execution-native/apple-aarch64-v0251.json",
+      "sha256": "01a85ccbcfb011b2e1b93dcc68f5174ff0a54de566c2cc9a6e182fb696fa3eb8",
       "cpu": "Apple M2 Pro",
       "reviewed": true
     }

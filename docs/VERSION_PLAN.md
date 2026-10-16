@@ -13,7 +13,7 @@ validator rejects numbering, ordering, title, or scope drift.
 See the [ordering review](ROADMAP_ORDERING_AUDIT.md) for the future family
 splits and the [schedule register](../requirements/roadmap-schedule.json) for
 old-to-new identities and prerequisite edges. Milestones through v0.24.49 are
-preserved; Windows/macOS strict support occupies v0.24.50–v0.24.51 and shifts
+preserved; Windows strict and Apple Silicon resident support occupy v0.24.50–v0.24.51 and shift
 the five unstarted backfill stops to v0.24.52–v0.24.56 before HMAC.
 
 

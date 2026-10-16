@@ -211,10 +211,37 @@ def scoped_status_rows() -> None:
     print("Scoped/borrowed/protected status rows reject 228 omission, duplication, overclaim and stale-inventory regressions")
 
 
+def resident_status_rows() -> None:
+    root = SCRIPT.resolve().parents[2]
+    mutations = 0
+    rows_checked = 0
+    for name, rows in MODULE.CRATE_ROWS.items():
+        for row in rows:
+            if 'Apple Silicon resident' not in row:
+                continue
+            rows_checked += 1
+            assert 'qualification pending' in row and 'dump' in row
+            text = (root / name).read_text()
+            for changed in ('', row + '\n' + row,
+                            row.replace('qualification pending', 'qualified'),
+                            row.replace('❌ No', '✅ Independently verified').replace(
+                                '❌ Not independently verified', '✅ Independently verified')):
+                assert changed != row
+                try:
+                    MODULE.validate_crate_document(Path(name), text.replace(row, changed))
+                except MODULE.VerificationStatusError:
+                    mutations += 1
+                else:
+                    raise AssertionError('resident status overclaim or omission accepted: ' + name)
+    assert rows_checked == 6 and mutations == 24
+    print('Resident status rejects 24 omission, duplicate and qualification/independent-review overclaims')
+
+
 def main() -> int:
     crate_tables()
     scoped_status_rows()
     windows_simd_status_rows()
+    resident_status_rows()
     MODULE.validate_document(Path("fixture.md"), BASE, (ROW,))
     MODULE.validate_document(Path("README.md"), ROOT, (ROW,))
     must_fail(BASE.replace(MODULE.HEADING, "## Status"), "heading")

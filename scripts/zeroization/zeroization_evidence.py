@@ -76,7 +76,7 @@ def validate(root: Path) -> None:
     if (
         tuple(coverage.get("compilers", ())) != COMPILERS
         or coverage.get("compiler_target") != "x86_64-unknown-linux-gnu"
-        or coverage.get("target_compiler") != "1.98.1"
+        or coverage.get("target_compiler") != "1.99.1"
         or tuple(coverage.get("targets", ())) != TARGETS
     ):
         fail("zeroization compiler or target coverage drifted")
@@ -98,7 +98,7 @@ def validate(root: Path) -> None:
         "x86_64-unknown-linux-gnu"
     )
     target_step = (
-        'run: scripts/zeroization/check-zeroization-codegen.sh 1.98.1 "${{ matrix.target }}"'
+        'run: scripts/zeroization/check-zeroization-codegen.sh 1.99.1 "${{ matrix.target }}"'
     )
     if compiler_step not in workflow or target_step not in workflow:
         fail("CI does not execute both zeroization evidence dimensions")
@@ -122,7 +122,7 @@ def validate(root: Path) -> None:
 
     checks = (root / "scripts/checks.sh").read_text(encoding="utf-8")
     if (
-        "scripts/zeroization/check-zeroization-codegen.sh 1.98.1 "
+        "scripts/zeroization/check-zeroization-codegen.sh 1.99.1 "
         "x86_64-unknown-linux-gnu" not in checks
     ):
         fail("ordinary repository checks omit latest-host codegen evidence")

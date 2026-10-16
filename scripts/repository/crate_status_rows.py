@@ -160,7 +160,8 @@ ROWS = {
         "| Hardened multibuffer worker groups with clearing result transport | 🚧 Implemented; qualification pending | ❌ No |",
         "| Scoped multibuffer workers with guarded parent slots and scoped root | 🚧 Implemented; qualification pending | ❌ No |",
         "| Strict protected scalar root, concurrent leaf stacks, CVs and output | 🚧 Implemented; qualification pending | ❌ No |",
-        "| Strict protected accelerated root and single/SIMD leaf workers | 🚧 Implemented; qualification pending | ❌ No |"
+        "| Strict protected accelerated root and single/SIMD leaf workers | 🚧 Implemented; qualification pending | ❌ No |",
+        "| Apple Silicon resident scalar/Arm/NEON root and bounded concurrent leaf workers; no dump exclusion | 🚧 Implemented; qualification pending | ❌ No |"
     ],
     "crates/brynja-legacy-snp/README.md": [
         "| SNP controlled interoperability | ❌ Not implemented | ❌ No |"
@@ -183,6 +184,7 @@ ROWS = {
     "crates/brynja-crypto-cpu-std/README.md": [
         "| Apple Silicon resident SHA-2/SHA-3, KMAC/TupleHash | 🚧 Separate opt-in scalar/Arm resident/clearing APIs; no dump exclusion; qualification pending | ❌ No |",
         "| Apple Silicon resident SHA-2/general-t and SHA-3/SHAKE/cSHAKE | 🚧 Scalar or explicit Arm SHA2/SHA512/Keccak; bit-aware, bounded output/cancellation; no dump-exclusion guarantee; qualification pending | ❌ No |",
+        "| Apple Silicon resident SHA-2/Keccak independent-message batches | 🚧 Default-off resident workspace/output; explicit portable or required NEON, no fallback; no dump exclusion; qualification pending | ❌ No |",
         "| Windows x64 VBS retained SHA-256 owner/session | 🚧 Bounded scalar API; development-tested; production qualification pending | ❌ No |",
         "| Windows x64 VBS streaming SHA-2 and general SHA-512/t | 🚧 Scalar version-six worker; development-tested; qualification pending | ❌ No |",
         "| Windows x64 VBS SHA-224/256 SHA-NI sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |",

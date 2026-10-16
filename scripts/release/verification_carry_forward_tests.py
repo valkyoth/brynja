@@ -2,6 +2,7 @@
 import json
 import subprocess
 import tempfile
+import tomllib
 import types
 import unittest
 from pathlib import Path
@@ -146,6 +147,8 @@ class CarryForwardTests(unittest.TestCase):
             git('commit', '-qm', 'baseline')
             base = git('rev-parse', 'HEAD').decode().strip()
             def check(path, value, expected, blocked=False):
+                if path in originals:
+                    self.assertNotEqual(value, originals[path], 'mutation must change its input: ' + path)
                 (root / path).parent.mkdir(parents=True, exist_ok=True)
                 (root / path).write_bytes(value)
                 try:
@@ -181,7 +184,11 @@ class CarryForwardTests(unittest.TestCase):
             # Dependency feature changes affect the crate and its consumers.
             check('crates/brynja-hash-sha3/Cargo.toml', b'[features]\ndefault=["new"]\n',
                   ('sha3', 'kmac', 'tuplehash', 'parallelhash'))
-            check('rust-toolchain.toml', originals['rust-toolchain.toml'].replace(b'1.98.1', b'1.98.0'), plans.scope.GROUPS, True)
+            original_toolchain = originals['rust-toolchain.toml']
+            compiler = tomllib.loads(original_toolchain.decode())['toolchain']['channel']
+            replacement = b'1.90.0' if compiler != '1.90.0' else b'1.99.1'
+            check('rust-toolchain.toml', original_toolchain.replace(compiler.encode(), replacement),
+                  plans.scope.GROUPS, True)
             (root / 'scripts/assurance').mkdir(parents=True)
             driver = root / 'scripts/assurance/check-kani.sh'
             driver.write_text('changed driver\n')

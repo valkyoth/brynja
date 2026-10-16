@@ -1,6 +1,6 @@
 # Apple Silicon resident/clearing profile
 
-Status: implementation in progress; independent review and release qualification
+Status: implemented development candidate; independent review and release qualification
 pending. This is **not** the strict profile and **does not guarantee core-dump
 exclusion**. Applications that require that guarantee must not use it as fallback
 after strict construction fails.
@@ -257,11 +257,54 @@ worker/coordinator unwind, resident CV/output and full joined-stack clearing,
 Optimized Darwin abort/unwind checks inspect 15 worker entries, six join groups,
 affine cleanup and emitted opaque erase tails. These are bounded retained-call
 and kernel checks plus native lifecycle tests, not whole-image erasure proof.
-Package 04 is development-tested; final reconciliation and independent retest
-remain package 05.
+Packages 01–04 are development-tested. Package 05 reconciles those checks with
+the broader workspace, compiler, documentation and packaging checks below;
+independent retest and final release qualification remain separate requirements.
 No Intel Mac qualification or new isolation framework is scheduled here.
 
 Development baseline: Apple M2 Pro, macOS 27.0.1 (26A434), 16-KiB pages,
 Apple clang/SDK 21-generation tools and Rust 1.99.1. This is a tested development
 baseline, not a claim of compatibility with every earlier macOS release. Earlier
 receipts retain their actual compiler; final qualification remains pending.
+
+## Candidate reconciliation and review handoff
+
+The implementation through `ac35ea02` reuses existing first-party primitive
+kernels. The reconciliation changes release/toolchain metadata, documentation
+and policy regression tests, not production cryptographic Rust. The default
+compiler and nine-target zeroization/constant-time checks now use Rust 1.99.1;
+MSRV remains 1.90.0. Historical records keep their original identities.
+
+| Scope | Development evidence | Not established |
+| --- | --- | --- |
+| Scalar and Arm SHA-2/SHA-3, KMAC/TupleHash | Packaged independent byte/bit oracles, ownership negatives, compiled mutants, native resource/lifecycle tests | Independent cryptographic review |
+| NEON batching and ParallelHash groups | Required nonzero vector work, sparse/tail plans, independent packaged oracles, concurrent worker and partial-launch failure checks | All lanes always vectorized, arbitrary callback protection |
+| Legacy SHA-1/MD5 | Separate packaged scalar/Arm/NEON comparisons and cleanup/fault checks | Modern collision resistance or authentication suitability |
+| Darwin resources and compiler artifacts | Uninstrumented native mapping/stack checks; retained acquisition/join/clear calls and opaque kernel tails in optimized abort/unwind artifacts | Whole-image, OS/TLS, fatal-path or dump erasure |
+| Other targets | Linux workspace tests and all-feature Clippy; Windows MSVC and Apple target compile checks | New Windows runtime qualification or Intel Mac admission |
+
+The final broad local Linux test run passed 3,212 tests/doctests, with six
+pre-existing ignored tests (not counted as passes). The five-package native Mac
+all-feature run passed 874 tests/doctests; an optimized resident-only run passed
+135 tests. Focused Miri passed 29 metadata/bounds/unsupported-target tests;
+Darwin FFI is deliberately not executed under Miri and is not qualified by them.
+
+### Instrumented diagnostic limitation
+
+A native AddressSanitizer attempt using the pinned nightly completed the modern
+hosted test binary with **39 passed and 34 failed**. Each failed test reported
+the native mapping assertion requiring read/write protection, non-inheritance
+and nonzero wired pages. No AddressSanitizer memory-error diagnostic was emitted,
+but this is **not an ASan suite PASS**. Instrumentation does not establish the
+same resource contract as the uninstrumented native process. The failures and
+raw log are retained; assertions were not disabled, and dependent packages were
+not counted as executed after Cargo stopped. Further sanitizer evidence must
+remain distinct from native residency qualification.
+
+The current source-bound development artifacts and raw logs are retained locally
+outside Cargo target directories, including failed attempts. Reviewers should
+check the exact private Darwin ABI, lock/guard/stack admission, partial-start
+join ordering, affine output clearing, cancellation versus quarantine, and the
+separation from strict/default/legacy facades. The full planner-selected release
+campaign is not claimed complete by these focused development checks. No gate,
+approval requirement, evidence-reuse rule or publication selection was relaxed.

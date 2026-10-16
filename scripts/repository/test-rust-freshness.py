@@ -38,13 +38,17 @@ class FreshnessTests(unittest.TestCase):
         path.write_text(original.replace(old, new, 1))
         return original
 
-    def test_latest_compatibility_accepts_older_pinned_native_compiler(self):
-        self.assertEqual(policy.coverage(self.root, '1.99.1'), '1.98.1')
+    def test_current_pinned_compiler_has_complete_coverage(self):
+        self.assertEqual(policy.coverage(self.root, '1.99.1'), '1.99.1')
         self.assertEqual(policy.latest(MANIFEST), '1.99.1')
 
     def test_latest_equal_to_pinned_is_still_valid(self):
         # No special exemption depends on the versions being different.
-        self.assertEqual(policy.coverage(self.root, '1.98.1'), '1.98.1')
+        self.assertEqual(policy.coverage(self.root, '1.99.1'), '1.99.1')
+
+    def test_older_stable_cannot_satisfy_current_default(self):
+        with self.assertRaisesRegex(ValueError, 'newer than current stable'):
+            policy.coverage(self.root, '1.98.1')
 
     def test_future_stable_missing_from_matrix_rejects(self):
         with self.assertRaisesRegex(ValueError, 'must cover latest'):
@@ -53,7 +57,7 @@ class FreshnessTests(unittest.TestCase):
     def test_default_newer_than_stable_and_floating_pin_reject(self):
         for value in ('1.100.0', 'stable', 'nightly', '1.99', '01.99.1'):
             with self.subTest(value=value):
-                original = self.replace('rust-toolchain.toml', '1.98.1', value)
+                original = self.replace('rust-toolchain.toml', '1.99.1', value)
                 with self.assertRaises(ValueError):
                     policy.coverage(self.root, '1.99.1')
                 (self.root / 'rust-toolchain.toml').write_text(original)
@@ -66,7 +70,7 @@ class FreshnessTests(unittest.TestCase):
             path = f'assurance/{family}-matrix.toml'
             cases.extend([(path, '  "1.99.1",\n', ''),
                           (path, '  "1.99.1",\n', '  "1.99.1",\n  "1.99.1",\n'),
-                          (path, 'target_compiler = "1.98.1"', 'target_compiler = "1.99.1"')])
+                          (path, 'target_compiler = "1.99.1"', 'target_compiler = "1.98.1"')])
         for name, old, new in cases:
             with self.subTest(name=name, new=new):
                 original = self.replace(name, old, new)

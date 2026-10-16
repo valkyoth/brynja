@@ -1,9 +1,9 @@
 """Reviewed ParallelHash implementation, API tests and dependency hashes."""
 
 REVIEWED_HASHES = {
-    'scripts/cryptography/check-macos-resident-parallel-package.py': '9d62adae6c462833e278678de26937478b852b7b9599ea53f4f11546fcd3feb2',
+    'scripts/cryptography/check-macos-resident-parallel-package.py': '01d51d4a47b58abc662b20054f6bc19f0ae1b253b4d1433bfa7fe89bb907ceef',
     'scripts/cryptography/macos_resident_parallel_oracle.py': '97c5cc507e4cee59ee76eab8cdc948c79b319ff997db8cc83464a5f8f67265aa',
-    'scripts/cryptography/test-macos-resident-parallel-package.py': '803ad5a004a04a65592299072837c2c6f9cb2155a38a362e389254e7f324bbb9',
+    'scripts/cryptography/test-macos-resident-parallel-package.py': 'ac725bb47f239d24937d5f276216983aeab54ca4a3653739d02cd09864900ad4',
     'scripts/cryptography/check-macos-resident-parallel-codegen.py': '76c27bee48cce264b871af440582ce09db5e83c21d1208786ef888a1f89d92cc',
     'crates/brynja-hash-parallel-std/src/macos_resident/compiled.rs': '8a434e69a6e6e924cdc0918c6d42037aa92d68f0c00cb4fa175c5b9fade8649f',
     'crates/brynja-hash-parallel-std/src/macos_resident/compiled/tests.rs': '3eae09ccfa78a40618efad4fe6c1f78a99fd481bbe4adf9b315aebfb9f7e9e20',
@@ -129,7 +129,7 @@ REVIEWED_HASHES = {
     'crates/brynja-hash-parallel/tests/scoped_accelerated/scheduled_lifecycle.rs': 'c3a5af335843660a4f16fb62c15aa61fba745b6de2601bbb8cfba2c0b9b3427e',
     'crates/brynja-hash-parallel/Cargo.toml': '3626f6faf23e720e89d420fcb05cc75f6d47cd0520d9245e39a0579aa8a1a46e',
     'crates/brynja-hash-parallel-std/Cargo.toml': '673560328ed4bcc399a8df482f184ffb6d9f9bc361e904327ae0d0e62bcc2f26',
-    'assurance/parallelhash-public-api/Cargo.toml': 'aad939f3c1efbec72d362744b375af0a5ff8b3a5c6ed090ac1acb2b0cc762ee8',
+    'assurance/parallelhash-public-api/Cargo.toml': '7e692c0314d57018209bb596164d748a6fdade7410fddddf502b1e1adb77e4bd',
     'assurance/parallelhash-public-api/src/lib.rs': '0c2dc0f856053d372474a11ac4991f78048419db9362e162afe2a1f67ec76b9a',
     'assurance/parallelhash-std-public-api/Cargo.toml': '5870a95902b9baee0de39734977027ace8ca029641c9163b43106721445a9150',
     'assurance/parallelhash-std-public-api/src/lib.rs': 'f494e9016212f5b67148aca08846bc43c9a55ce8b7e2600c21ca5452e49fb53d',
@@ -139,7 +139,7 @@ REVIEWED_HASHES = {
     'assurance/parallelhash-differential/src/execution.rs': 'a0a709be2811d1c79b523ea2a517dacba110bcc45e53b8bf12ed557099acc7df',
     'assurance/parallelhash-differential/src/lib.rs': '39e34f9bb60cc8dc6392c3076038e0ef279eb785ec708038da9d3da9e5ce700d',
     'crates/brynja-hash-parallel/README.md': 'e5a1965ffc5e5ae0b99f42e0c7deb17b5246323326d9c5480bf2dcc943e0bf93',
-    'crates/brynja-hash-parallel-std/README.md': '688b77d35d2edebab0b260d3d625c0454e4da3cac2f937dbddaae1d0c7e6ecfb',
+    'crates/brynja-hash-parallel-std/README.md': '72f622c98b6c71aa0b2f34661fde562bd4cf331a305fbbf69ce66720bcf995f6',
     'scripts/parallelhash/check-parallelhash-execution-differential.py': '5ee4290c0727bac66653d50dee4fb1353b82957ccd6062e59e4a08c36ed4da36',
     'scripts/parallelhash/check-parallelhash-execution-package.py': '48c97623a78ff428b4d0dc3f719d313bf5571c7bc8bc6f2b9ed49a338066ccb8',
     'scripts/parallelhash/check-parallelhash-execution-codegen.py': '88f5e984807d161371c000f67ffcc19e22af15ef1ea850eef785e3797da4d145',

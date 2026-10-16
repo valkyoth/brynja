@@ -15,6 +15,16 @@ FEATURE = 'macos-resident-acceleration'
 PREFIX = 'macos_resident::'
 
 
+def readme_example(hosted, consumer):
+    text = (hosted / 'README.md').read_text()
+    example = text.split('```rust\n', 1)[1].split('```', 1)[0]
+    if 'use brynja_hash_parallel_std::macos_resident::{Algorithm, Limits, Session};' not in example:
+        raise ValueError('resident README example missing or reordered')
+    (consumer / 'ResidentReadme.md').write_text('```rust\n' + example + '```\n')
+    (consumer / 'src/lib.rs').write_text(
+        '#[doc = include_str!("../ResidentReadme.md")] pub struct ResidentReadme;\n')
+
+
 def run(command, cwd, env):
     result = subprocess.run(command, cwd=cwd, env=env, text=True,
                             capture_output=True, timeout=600)
@@ -86,10 +96,16 @@ def execute(toolchain, destination):
         for name in ('brynja-hash-parallel-std',))
     (consumer/'Cargo.toml').write_text(
         '[package]\nname="resident-parallel-consumer"\nversion="0.0.0"\nedition="2024"\n'
-        '[workspace]\n[dependencies]\n' + dependencies + '\n[patch.crates-io]\n' + patches + '\n')
+        '[workspace]\n[features]\ndefault=["macos-resident"]\nmacos-resident=[]\n'
+        '[dependencies]\n' + dependencies + '\n[patch.crates-io]\n' + patches + '\n')
     if oracle.write_consumer(consumer) != 274:
         raise ValueError('oracle population drift')
+    readme_example(roots['brynja-hash-parallel-std'], consumer)
     run([*cargo, 'generate-lockfile', '--offline'], consumer, env)
+    docs = run([*cargo, 'test', '--locked', '--offline', '--doc'], consumer, env)
+    if 'test result: ok. 1 passed; 0 failed; 0 ignored;' not in docs:
+        raise ValueError('resident README example did not execute: ' + docs)
+    print(docs, flush=True)
     metadata = json.loads(run([*cargo, 'metadata', '--locked', '--offline', '--format-version', '1'], consumer, env))
     expected = {'resident-parallel-consumer', 'brynja-core', 'brynja-hash-core', 'brynja-hash-parallel',
                 'brynja-hash-sha3', 'brynja-crypto-cpu', 'brynja-hash-parallel-std'}

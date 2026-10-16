@@ -475,7 +475,7 @@
     "crates/brynja-legacy-sha1/src/owner.rs": "50360bf20b114052132d8acfb1fac9890f2572c5c591947319f111eaa65d86b8",
     "crates/brynja-mac-kmac/Cargo.toml": "0c61718c30cc3e685172cddb558cb23d80f34de2c2fe2154caeb26b9fc3ca098",
     "docs/acceleration-availability.md": "58150d8507ca89ba4d85b55650266e6d5b91c5a20695b5232281762ca0c3b04d",
-    "scripts/checks.sh": "765bb78038b8f34cb27a866960ab7fc1d13c953dd34a230408b54628263e61af",
+    "scripts/checks.sh": "b6d0a01c71af36b5a185e82dc435e2248d8c0123d796b045570474993e88bd35",
     "scripts/cpu/acceleration_availability.py": "2434d6d6b5d6ba44f218f3adac0d0e46e2db0639342f0a6cb8bc7a5ebfcf7ace",
     "scripts/cpu/check-acceleration-availability.py": "46f1768f56a8aee402d7e7060d317a9f2e65bb7b1e66ff6f0449a2d35c967614",
     "scripts/cpu/test-acceleration-availability.py": "870209af7a9eed721fa233ff11b89d75596b544d58847d725117f685f4991f1a",

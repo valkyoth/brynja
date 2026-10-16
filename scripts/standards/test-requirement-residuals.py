@@ -164,7 +164,7 @@ def test_current_bidirectional_closure() -> None:
     # unstarted RISC-V, packaging, consumer, native and final-closure work.
     for patch, title in enumerate((
         "Windows Strict Protected Profiles",
-        "macOS Strict Protected Profiles",
+        "Apple Silicon Resident/Clearing Profiles",
         "RISC-V Explicit Experimental Execution",
         "Facade Features And Package Reachability",
         "Acceleration Public Consumer Acceptance",

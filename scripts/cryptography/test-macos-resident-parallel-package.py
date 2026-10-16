@@ -14,6 +14,22 @@ spec.loader.exec_module(package)
 
 
 class ParallelPackageTests(unittest.TestCase):
+    def test_readme_example_is_the_actual_feature_gated_consumer(self):
+        with tempfile.TemporaryDirectory() as directory:
+            consumer = Path(directory)
+            (consumer / 'src').mkdir()
+            hosted = package.ROOT / 'crates/brynja-hash-parallel-std'
+            package.readme_example(hosted, consumer)
+            text = (consumer / 'ResidentReadme.md').read_text()
+            self.assertIn('feature = "macos-resident"', text)
+            self.assertIn('let digest = session.hash(b"message", 1024, b"example")?;', text)
+            self.assertNotIn('no_run', text)
+            fake = consumer / 'hosted'
+            fake.mkdir()
+            (fake / 'README.md').write_text('```rust\n// different example\n```\n')
+            with self.assertRaisesRegex(ValueError, 'missing or reordered'):
+                package.readme_example(fake, consumer)
+
     def test_host_rejection_precedes_packaging(self):
         for host in ('x86_64-unknown-linux-gnu', 'x86_64-apple-darwin', 'aarch64-unknown-linux-gnu'):
             with patch('subprocess.check_output', return_value='host: ' + host + '\n'):

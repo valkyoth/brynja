@@ -4880,7 +4880,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Implement the owner-approved distinct Apple Silicon resident/clearing profile with guarded locked mappings and joined worker stacks. Core-dump exclusion is not claimed; existing strict APIs remain unsupported on macOS. Intel Mac is outside this milestone. See the [profile contract and finite five-package sequence](macos-resident-profile.md).
+Plan scope: Owner-approved distinct macOS AArch64 profile: guarded resident mappings, joined worker stacks and complete owned cleanup, without claiming core-dump exclusion. Preserve strict rejection and Linux/Windows guarantees; integrate scalar and explicit SIMD/hardware routes with native qualification. Intel Mac is outside this milestone.
 
 Goal: Make the supported resident/clearing scope usable on Apple Silicon without weakening `brynja-strict` or introducing another isolation-research project. This scope revision was explicitly approved on 2026-10-16 after inconclusive bounded dump probes; those probes are not protection evidence.
 

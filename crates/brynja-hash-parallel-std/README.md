@@ -62,8 +62,8 @@ Partial/ineligible SIMD leaf groups use declared resident scalar tails, never
 fallback after an authority failure. Sessions and output loans are affine;
 inputs and copies made via `expose()` remain the caller's responsibility.
 
-```rust,no_run
-# #[cfg(feature = "macos-resident")] {
+```rust
+# #[cfg(all(feature = "macos-resident", target_os = "macos", target_arch = "aarch64"))] {
 use brynja_hash_parallel_std::macos_resident::{Algorithm, Limits, Session};
 let mut session = Session::new(Algorithm::ParallelHash256(256), Limits {
     workers: 4, max_leaves: 128, max_block_bytes: 4096,

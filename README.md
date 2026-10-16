@@ -252,12 +252,19 @@ The project targets Linux, Windows, BSD, macOS, Android, iOS and bare-metal
 native execution and ISA qualification are separate evidence levels.
 RISC-V instruction results based on QEMU are not native hardware qualification.
 
+Apple Silicon macOS has separate, default-off resident/clearing session APIs
+for modern hashes, KMAC, TupleHash, batching and ParallelHash, with separately
+scoped legacy adapters. They require locked guarded storage and joined workers,
+but do **not** guarantee core-dump exclusion and are not a fallback for
+`brynja-strict`. Independent review and release qualification remain pending.
+See the [resident profile contract](docs/macos-resident-profile.md).
+
 ## Rust Version Support
 
-MSRV is Rust `1.90.0`; the default full-check compiler is Rust `1.98.1`.
-Rust `1.99.0`–`1.99.1` is also required by the compatibility and x86-64 emitted-code
-matrix. The pinned full-check/native-evidence compiler remains `1.98.1`;
-adding a compiler does not relabel earlier qualification artifacts.
+MSRV is Rust `1.90.0`; the default full-check compiler is Rust `1.99.1`.
+The Apple Silicon resident-profile development checks use `1.99.1` too.
+Historical qualification records retain their original compiler identities;
+updating the default does not relabel them or qualify new platform support.
 Release preflight requires the latest stable Rust in the executable compatibility
 and emitted-code matrices; those checks must still pass. It does not automatically
 advance the native-evidence compiler or relabel old results. Other tool freshness
@@ -268,9 +275,8 @@ or make a policy check a proof. See [Kani evidence](docs/KANI.md).
 
 | Rust toolchain | Required evidence |
 | --- | --- |
-| `1.90.0`–`1.98.0` | Workspace all-feature compatibility check |
-| `1.98.1` | Full format, lint, test, platform, policy, docs, package, and security gate |
-| `1.99.0`–`1.99.1` | Workspace all-feature compatibility, public API acceptance, and x86-64 clearing/constant-time codegen checks |
+| `1.90.0`–`1.99.0` | Workspace all-feature compatibility, public API acceptance, and x86-64 clearing/constant-time codegen checks |
+| `1.99.1` | Full format, lint, test, platform, policy, docs, package, and security gate |
 
 The exact tested compiler versions, including selected patch releases, remain
 listed in [the Rust matrix](scripts/ci/check-rust-version-matrix.sh).

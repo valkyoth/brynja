@@ -284,7 +284,7 @@
     "crates/brynja-mac-kmac/tests/execution.rs": "4faa31f49514275bb148d46756d22825a83a5725cec299612a798440d4152e0a",
     "crates/brynja-mac-kmac/tests/official_vectors.rs": "98cd80b52a2584446e71280d453435fb072ce2087671375a1a04ecf699edf276",
     "docs/kmac-accelerated-execution.md": "aed35dbb05a50a850daa77ec699fed8db4e65a9ee756ce25c5369eb15b89d831",
-    "scripts/checks.sh": "765bb78038b8f34cb27a866960ab7fc1d13c953dd34a230408b54628263e61af",
+    "scripts/checks.sh": "b6d0a01c71af36b5a185e82dc435e2248d8c0123d796b045570474993e88bd35",
     "scripts/cryptography/mir_cleanup_flow.py": "9b56316d6bf2a02c85cb4bcd75c2fab00a2442b49332bda1852f6d91012a2dc4",
     "scripts/kmac/capture-kmac-execution-native.py": "52fc32f61613e8cea016352f720767c5a580fd6faf978a3c4ede45650e3a76c0",
     "scripts/kmac/check-kmac-differential.py": "b3bb8f84f7648c369e00bd7753b92cecab7dc0b19e6c2b5652bd874ee3f5c640",

@@ -107,7 +107,7 @@ def test() -> None:
 
         replace(
             checks,
-            "scripts/zeroization/check-zeroization-codegen.sh 1.98.1 x86_64-unknown-linux-gnu",
+            "scripts/zeroization/check-zeroization-codegen.sh 1.99.1 x86_64-unknown-linux-gnu",
             "true",
         )
         require_rejection(root, "ordinary repository checks")

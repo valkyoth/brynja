@@ -12,6 +12,11 @@ at v0.24.50 and v0.24.51. Only the five unstarted v0.24.50–v0.24.54 stops move
 to v0.24.52–v0.24.56; released milestones, v0.24.49, HMAC at v0.25.0 and
 publication at v0.25.2 are unchanged.
 
+On 2026-10-16 the owner narrowed v0.24.51 to a distinct Apple Silicon
+resident/clearing profile, without core-dump exclusion or strict Mac admission.
+Intel Mac is outside that milestone. This changes its approved scope, not its
+identity, ordering or prerequisite graph; see [the contract](macos-resident-profile.md).
+
 Date: 2026-09-05. Baseline: `dbe6f4b`.
 This is a planning review, not an implementation or cryptographic assessment.
 

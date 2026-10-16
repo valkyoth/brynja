@@ -1352,9 +1352,9 @@
         "rationale": "The opt-in acceleration usability backfill is planned, not runtime activation or cryptographic approval. Before each implementation, bind its exact Rust intrinsic/target-feature and platform CPU/OS-state authorities, algorithm requirements, owned-secret lifecycle and public API profiles; existing algorithm vectors do not establish missing runtime dispatch, SIMD, native measurement or cleanup coverage."
       },
       "requirement_ids": [],
-      "scope": "Implement macOS AArch64 and x86_64 strict protected-memory and worker-stack profiles, preserving fail-closed construction, complete owned cleanup and explicit opt-in SIMD/hardware acceleration; qualify each supported OS/architecture natively before claiming support.",
+      "scope": "Owner-approved distinct macOS AArch64 profile: guarded resident mappings, joined worker stacks and complete owned cleanup, without claiming core-dump exclusion. Preserve strict rejection and Linux/Windows guarantees; integrate scalar and explicit SIMD/hardware routes with native qualification. Intel Mac is outside this milestone.",
       "source_ids": [],
-      "title": "macOS Strict Protected Profiles",
+      "title": "Apple Silicon Resident/Clearing Profiles",
       "version": "0.24.51"
     },
     {

@@ -219,7 +219,7 @@
     "docs/sha2-hardened-execution.md": "562c7293f492326cf84f2b8dc461a4ac57283748a2ad5fa8de330ec2df53c56f",
     "docs/x86-sha512-execution.md": "5d38f31ba53533a83a50496a5eea48d2b9f6501b560b396d62ce60e6e5a94d1d",
     "package-policy.toml": "3c98804ad84efdd7bf3feaaf56f37b6875d5fbf0d2759c039c139868549e811f",
-    "scripts/checks.sh": "765bb78038b8f34cb27a866960ab7fc1d13c953dd34a230408b54628263e61af",
+    "scripts/checks.sh": "b6d0a01c71af36b5a185e82dc435e2248d8c0123d796b045570474993e88bd35",
     "scripts/ci/install-sde.sh": "72f37ac72ae30b72f7155f09a51343ff9eecdb226c5898aad53eb3c0e0fa9c86",
     "scripts/release/native_review_io.py": "1655944d2521c1c8d7aad64881299a389a19f8d4ce27d54666bc845db22a26e9",
     "scripts/release/native_review_scope.py": "f5afed9df01288d7539448c580feb01e8a7b1540be76152106b97c57bd078f31",

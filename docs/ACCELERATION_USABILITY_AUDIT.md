@@ -138,7 +138,7 @@ contract for future work.
 
 The backfill now uses v0.24.30–v0.24.56: contracts and safe selection first, public
 family integration and missing kernels next, Windows strict profiles at .50,
-macOS strict profiles at .51, packaged acceptance at .54,
+Apple Silicon resident/clearing profiles (not strict admission) at .51, packaged acceptance at .54,
 native evidence at .55, final closure at .56 before HMAC. No new runtime route
 is enabled by this planning update, and .29 still needs its own retest/evidence.
 

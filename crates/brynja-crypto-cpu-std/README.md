@@ -97,7 +97,9 @@ deployment requirements, without fallback. Separate `macos-resident-kmac` and
 `macos-resident-tuplehash` features provide scalar fixed/XOF sessions; their
 `-acceleration` features add explicit Arm Keccak sessions. KMAC comparison runs
 on the resident worker; TupleHash preserves item boundaries across fragments.
-These APIs do not exclude dumps. SIMD batching is not implemented yet. See the [contract and API examples](../../docs/macos-resident-profile.md).
+These APIs do not exclude dumps. The separate `macos-resident-batch` feature
+adds bounded SHA-2 and Keccak SIMD sessions; see the batch section below and
+the [contract and API examples](../../docs/macos-resident-profile.md).
 
 `strict-sha2` also exposes `windows_enclave`, the separate retained-result Windows
 x64 VBS interface re-exported as `brynja_strict::enclave`. It uses a trusted static

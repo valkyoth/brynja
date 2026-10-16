@@ -2,14 +2,20 @@
 import ast
 from pathlib import Path
 import shutil
+import sys
 import tempfile
 import tomllib
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / 'scripts/repository'))
+from darwin_resident_abi import UNSAFE_MODULES as DARWIN_RESIDENT_MODULES
 
 DOCS = ('docs/unsafe-policy.md', 'docs/threat-model.md', 'docs/security-controls.md')
 MANIFEST = 'crates/brynja-crypto-cpu/Cargo.toml'
 LIBRARY = 'crates/brynja-crypto-cpu/src/lib.rs'
 INVENTORY = 'scripts/repository/unsafe_policy.py'
-FILES = (*DOCS, MANIFEST, LIBRARY, INVENTORY)
+DARWIN = 'scripts/repository/darwin_resident_abi.py'
+FILES = (*DOCS, MANIFEST, LIBRARY, INVENTORY, DARWIN)
 CLAIMS = (
     'default-off `static-execution` feature exposes six ordinary raw kernels:',
     'x86 SHA-256, x86 SHA-512, x86 AVX2 Keccak, Arm SHA-256, Arm SHA-512 and Arm SHA3 Keccak.',
@@ -56,7 +62,18 @@ def validate(root):
     words += ['seventy', 'seventy-one', 'seventy-two', 'seventy-three', 'seventy-four', 'seventy-five']
     words += ['seventy-six', 'seventy-seven', 'seventy-eight', 'seventy-nine', 'eighty']
     words += ['eighty-one', 'eighty-two', 'eighty-three', 'eighty-four', 'eighty-five', 'eighty-six', 'eighty-seven']
-    count = len(inventory[0].keys)
+    words += ['eighty-eight', 'eighty-nine', 'ninety', 'ninety-one', 'ninety-two',
+              'ninety-three', 'ninety-four', 'ninety-five', 'ninety-six',
+              'ninety-seven', 'ninety-eight', 'ninety-nine', 'one hundred']
+    # Dict unpacking is one AST entry, not one reviewed source module. Resolve
+    # only this exact trusted inventory; never execute a fixture's Python.
+    if texts[DARWIN] != (ROOT / DARWIN).read_text(encoding='utf-8'):
+        raise ValueError('Darwin documentation inventory differs from reviewed helper')
+    unpacked = [value for key, value in zip(inventory[0].keys, inventory[0].values)
+                if key is None]
+    if len(unpacked) != 1 or not isinstance(unpacked[0], ast.Name) or unpacked[0].id != 'DARWIN_RESIDENT_MODULES':
+        raise ValueError('unrecognized documentation inventory unpacking')
+    count = sum(key is not None for key in inventory[0].keys) + len(DARWIN_RESIDENT_MODULES)
     if count >= len(words):
         raise ValueError('extend the reviewed documentation count vocabulary')
     unsafe = ' '.join(texts[DOCS[0]].split())
@@ -73,12 +90,16 @@ def regressions(root):
     # Replace normalized text in disposable copies; source hashes are not used
     # here, so each test must fail for a semantic contract discrepancy.
     cases += [
-        (DOCS[0], 'Status: eighty-seven exact', 'Status: nine exact'),
-        (DOCS[0], 'Rust in only eighty-seven exact', 'Rust in only nine exact'),
+        (DOCS[0], 'Status: one hundred exact', 'Status: nine exact'),
+        (DOCS[0], 'Rust in only one hundred exact', 'Rust in only nine exact'),
         (DOCS[2], 'source-hash-bound module inventory', 'exactly nine modules'),
         (MANIFEST, 'default = []', 'default = ["static-execution"]'),
         (LIBRARY, 'pub mod static_execution;', 'mod static_execution;'),
         (INVENTORY, 'ALLOWED = {', 'ALLOWED = {"extra": (),'),
+        (INVENTORY, '**DARWIN_RESIDENT_MODULES,', ''),
+        (INVENTORY, '**DARWIN_RESIDENT_MODULES,', '**OTHER_MODULES,'),
+        (INVENTORY, '**DARWIN_RESIDENT_MODULES,', '**DARWIN_RESIDENT_MODULES, **DARWIN_RESIDENT_MODULES,'),
+        (DARWIN, 'UNSAFE_MODULES = {', 'UNSAFE_MODULES = {"unreviewed": (),'),
     ]
     for name in DOCS:
         cases.append((name, 'Default hash constructors remain portable.',

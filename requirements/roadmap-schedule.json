@@ -704,11 +704,11 @@
     {
       "id": "0.24.51",
       "version": "0.24.51",
-      "title": "macOS Strict Protected Profiles",
+      "title": "Apple Silicon Resident/Clearing Profiles",
       "requires": [
         "0.24.50"
       ],
-      "scope_sha256": "9fe4ae86132426e47741d683fd45ab137d77dd49a99b742098d22ec4b8eae3d6"
+      "scope_sha256": "db3a4a8ef62dd1fa7bfb002c6fbdaa0f81b0dbf5e5cfac4dec49a8be220ea943"
     },
     {
       "id": "0.24.52",

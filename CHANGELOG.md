@@ -1,6 +1,26 @@
 # Changelog
 
-## 0.24.50 candidate
+## 0.24.51 candidate
+
+- Add separate default-off Apple Silicon resident/clearing sessions for SHA-2,
+  SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, SIMD batching and bounded ParallelHash
+  workers, with explicit Arm/NEON acceleration and affine clearing output.
+- Add separately scoped legacy SHA-1 and MD5 resident adapters; neither gains
+  a modern or strict facade export. Existing primitive implementations are reused.
+- Require guarded locked mappings, non-inheritance and joined worker stacks;
+  resource or backend failures never authorize ordinary-memory fallback.
+  Core-dump exclusion, fatal-path and whole-image erasure are not claimed.
+  Existing strict APIs still reject macOS; Intel Mac is outside this milestone.
+- Use Rust 1.99.1 for default development and cross-target compiler checks,
+  retaining MSRV 1.90.0 and historical evidence identities. No crates.io
+  publication is selected. Independent pentest and release qualification are
+  pending; see [the candidate notes](release-notes/RELEASE_NOTES_0.24.51.md).
+
+## 0.24.50
+
+Released as an internal Windows x64 development milestone. The entries below
+describe its initial plan; the completed bounded scope and retained limitations
+are recorded in [the release notes](release-notes/RELEASE_NOTES_0.24.50.md).
 
 - Begin the Windows strict protected-profile milestone with an OS-contract
   review and native-probe plan. Windows remains unsupported by strict sessions

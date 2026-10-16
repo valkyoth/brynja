@@ -89,11 +89,12 @@
     "docs/security-controls.md": "43ee30cba7ab8f3c2eef178fa649f37fa6a855d2d981fe212acca13a02580b79",
     "docs/static-cpu-execution.md": "3356632f7af4fabf253bf664e8c1cf6d599e8085e434009ebc2fec48274d9e55",
     "docs/threat-model.md": "1ba408fb8b2c369319b933f787752450e03b2afe275171ffe42986bcf4145a9c",
-    "docs/unsafe-policy.md": "0b64cca938d9635e198d45b7aef14a34e20bb6cd230df5c47ebc0a3eede1ece5",
-    "scripts/checks.sh": "765bb78038b8f34cb27a866960ab7fc1d13c953dd34a230408b54628263e61af",
+    "docs/unsafe-policy.md": "c22f1acebece81c1204b2a5032345b9f4f5c7838e98eb2768d549c71a181838b",
+    "scripts/checks.sh": "b6d0a01c71af36b5a185e82dc435e2248d8c0123d796b045570474993e88bd35",
     "scripts/cpu/check-static-execution.py": "7cb4678bb69b5fddc4c8a722e2bcbdea70a01b61801010ea05a2ef1a4773ea7e",
-    "scripts/cpu/static_execution_docs.py": "a32ef21ce06326014721047dbdcdaceaf07ef0bf31042a6fd035e49ffdcde180",
-    "scripts/repository/unsafe_policy.py": "508277ed413cb903eb4af34ecdf1adc890a758fda056f6edf578ce2d607acc68",
+    "scripts/cpu/static_execution_docs.py": "39b98e559bb59646a9f93b429a4f137b96cd8a9bc1b9fa13eff66747e3f084a4",
+    "scripts/repository/darwin_resident_abi.py": "82bfa37c0d8c65d0be8919b2949b164b91545c3ea6243ce954f7ff2d7fc87bdc",
+    "scripts/repository/unsafe_policy.py": "a6f6a1626192d479837d97b48a3112ed2a861f76b7502510bb9f9b51ca5322a4",
     "scripts/zeroization/check-zeroization-miri.sh": "4aec4f31bb9d0b363c9a19c6d647a196379c3183b19850102bab52a16597dbc2",
     "scripts/zeroization/check-zeroization-sanitizer.sh": "333553482e6d6e0d5852457118e9f4ee430ef384b18df53c357aad51cb6487ab"
   }

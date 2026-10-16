@@ -4876,27 +4876,27 @@ Exit criteria:
 - Preserve the existing release gates and evidence-reuse rules; obtain the exceptional owner pentest PASS retest for the new platform/unsafe boundaries before tagging.
 - `v0.24.50 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.24.51 - macOS Strict Protected Profiles
+### v0.24.51 - Apple Silicon Resident/Clearing Profiles
 
 Status: planned
 
-Plan scope: Implement macOS AArch64 and x86_64 strict protected-memory and worker-stack profiles, preserving fail-closed construction, complete owned cleanup and explicit opt-in SIMD/hardware acceleration; qualify each supported OS/architecture natively before claiming support.
+Plan scope: Implement the owner-approved distinct Apple Silicon resident/clearing profile with guarded locked mappings and joined worker stacks. Core-dump exclusion is not claimed; existing strict APIs remain unsupported on macOS. Intel Mac is outside this milestone. See the [profile contract and finite five-package sequence](macos-resident-profile.md).
 
-Goal: Make the strict facade usable on macOS using shared interfaces but independently verified Darwin protections.
+Goal: Make the supported resident/clearing scope usable on Apple Silicon without weakening `brynja-strict` or introducing another isolation-research project. This scope revision was explicitly approved on 2026-10-16 after inconclusive bounded dump probes; those probes are not protection evidence.
 
 Deliverables:
 
 - Complete v0.24.50; review Darwin mapping, residency, dump exposure, thread-stack and ABI authorities against every current strict guarantee. Establish supported macOS/compiler baselines; do not assume Windows or Linux primitives have identical semantics.
 - Implement guarded protected mappings, verified residency and rollback, complete clearing before unlock/free, and protected worker stacks and intermediate results. Cover bounded ParallelHash threading without ordinary-memory or unprotected-stack fallback.
-- Integrate all strict SHA-2/general-t, SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, batch and ParallelHash APIs plus applicable isolated hardened SHA-1/MD5 adapters; keep the modern strict facade free of legacy exports.
-- Reuse existing portable, Apple Arm and Intel SIMD/hardware implementations with explicit opt-in authority. Inspect Darwin register preservation, stack and unwind behavior; retain caller-buffer, fatal-abort and privileged-snapshot limitations and avoid implicit process-wide policy changes.
+- Integrate distinct resident SHA-2/general-t, SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, batch and ParallelHash APIs plus applicable isolated hardened SHA-1/MD5 adapters; do not add these weaker-contract APIs or legacy exports to the strict facade.
+- Reuse existing scalar and Apple Arm SIMD/hardware implementations with explicit opt-in authority. Inspect Darwin register preservation, stack and unwind behavior; retain caller-buffer, dump-exposure, fatal-abort and privileged-snapshot limitations and avoid implicit process-wide policy changes.
 - Reuse platform-independent lifecycle tests and interfaces from Windows while keeping OS-specific implementations and qualification separate. Update downstream examples and status tables and preserve Linux/Windows behavior.
 
 Verification:
 
 - Test OS failures, lock/residency limits, guard boundaries, complete cleanup, worker creation/join failures, cancellation, unwind and quarantine; reject missing protections rather than weakening strict construction.
-- Run packaged strict-facade consumers, ownership/export negatives, portable/accelerated differential tests and optimized ABI/register/spill checks under both panic strategies; test every promised byte/bit, XOF, batch and threaded profile.
-- Collect native Apple Silicon and Intel Mac evidence before claiming those respective targets, exercising real protected workers and SIMD/hardware routes. Cross-compilation cannot substitute for native qualification; run affected Linux/Windows regressions and obtain the existing exceptional pentest/retest.
+- Run packaged resident-profile consumers and strict-rejection regressions, ownership/export negatives, portable/accelerated differential tests and optimized ABI/register/spill checks under both panic strategies; test every promised byte/bit, XOF, batch and threaded profile.
+- Collect native Apple Silicon evidence for the distinct resident profile, exercising real resident workers and SIMD/hardware routes. Intel strict remains unsupported; no Intel Mac evidence is required for this scoped milestone. Cross-compilation cannot substitute for native qualification; run affected Linux/Windows regressions and obtain the existing exceptional pentest/retest.
 
 Exit criteria:
 

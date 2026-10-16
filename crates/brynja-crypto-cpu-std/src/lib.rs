@@ -5,6 +5,9 @@
 //! acceleration modes. It is not used by the `brynja` facade, default feature
 //! graph, protocol engines, or future FIPS module.
 
+#[cfg(feature = "macos-resident")]
+pub mod macos_resident;
+
 #[cfg(feature = "protected-memory")]
 pub mod protected_memory;
 

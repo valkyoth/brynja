@@ -32,6 +32,7 @@ def validate(write=False):
         raise ValueError('CPU execution features changed')
     if manifests[CPU].get('dependencies') != {'brynja-core': {'workspace': True, 'optional': True}} or manifests[HOST].get('features') != {
             'default': [],
+            'macos-resident': ['dep:brynja-core'],
             'protected-memory': ['dep:brynja-core'],
             'strict-sha2': ['protected-memory', 'brynja-hash-sha2/general-sha512-t'],
             'strict-sha2-acceleration': ['strict-sha2', 'brynja-hash-sha2/hardened-execution'],
@@ -64,6 +65,7 @@ def validate(write=False):
                 raise ValueError('hosted authority dynamic analysis missing')
     inputs = [Path(__file__), ROOT / 'scripts/checks.sh',
               ROOT / 'docs/hosted-cpu-execution.md', ROOT / 'scripts/repository/unsafe_policy.py',
+              ROOT / 'scripts/repository/darwin_resident_abi.py',
               *(ROOT / name for name in memory)]
     for owner in (CPU, HOST):
         crate = ROOT / 'crates' / owner

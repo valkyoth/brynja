@@ -6,8 +6,9 @@ from __future__ import annotations
 import hashlib
 import re
 from pathlib import Path
-
+from darwin_resident_abi import UNSAFE_MODULES as DARWIN_RESIDENT_MODULES
 ALLOWED = {
+    **DARWIN_RESIDENT_MODULES,
     Path("crates/brynja-crypto-cpu-std/src/windows_enclave/native/namespace.rs"): ("2d0bcf8f51513bfbe8a0878fd3462acf08fce0f92f1dbdbfdddf5df4c5aa8e51", 2, 0, 2),
     Path("crates/brynja-crypto-cpu-std/src/windows_enclave/native/sys.rs"): ("e7602798e350bc00512dd7aa921319e2f43ddffd7dff66b9f49db0f48df5aff0", 18, 0, 18),
     Path("crates/brynja-crypto-cpu-std/src/windows_enclave/native/parallel_concurrent/callbacks.rs"): ("dfb7e29e4b5ad92bf9eb165e1e883ff1ed1e282d97fe33cbc29bc760594ea894", 0, 0, 0),
@@ -128,8 +129,6 @@ FORBIDDEN_IDENTIFIER = re.compile(
     r"\b(?:unsafe|unsafe_code|asm|global_asm|llvm_asm|naked_asm|include|path)\b"
 )
 FOREIGN_ABI = re.compile(r'\bextern\s*(?:/\*.*?\*/\s*)?"', re.DOTALL)
-
-
 class UnsafePolicyError(RuntimeError):
     """The unsafe inventory differs from the approved reviewed exceptions."""
 

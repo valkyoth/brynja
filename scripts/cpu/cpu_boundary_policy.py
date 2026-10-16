@@ -7,7 +7,7 @@ import hashlib
 import re
 import tomllib
 from pathlib import Path
-from cpu_boundary_backends import BACKENDS, STRICT_COMPILED_SOURCES
+from cpu_boundary_backends import BACKENDS, STRICT_COMPILED_SOURCES, MACOS_RESIDENT_SOURCES
 from cpu_boundary_windows import WINDOWS_ENCLAVE_SOURCES
 
 
@@ -16,7 +16,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "d67682e3759403d758a3c06d2b09264c3ae1e6b5c7fc8a8b3a647dd20e3c8e48"
+EXPECTED_POLICY_SHA256 = "7248506a242309804b8a693ec45f3ce5c81182c75ea5e96307fb7a578aa0a20b"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -28,6 +28,7 @@ FORBIDDEN_CONSUMERS = (
     "brynja-legacy",
 )
 SOURCE_STATUS = {
+    **{(DETECTOR, path): status for path, status in MACOS_RESIDENT_SOURCES.items()},
     (CPU, "src/keccak_hardened_batch/x86/secret.rs"): "hardened-keccak-batch-opaque-register-boundary",
     (CPU, "src/keccak_hardened_batch/arm/secret.rs"): "hardened-keccak-batch-opaque-register-boundary",
     (CPU, "src/sha512_hardened_batch/x86/secret.rs"): "hardened-sha512-batch-opaque-register-boundary",
@@ -273,6 +274,7 @@ def validate_packages(root: Path) -> None:
                 "brynja-core": {"workspace": True, "optional": True}}:
         fail("no_std CPU package permits only its opt-in first-party clearing dependency")
     if detector.get("features") != {"default": [],
+            "macos-resident": ["dep:brynja-core"],
             "protected-memory": ["dep:brynja-core"],
             "strict-sha2": ["protected-memory", "brynja-hash-sha2/general-sha512-t"],
             "strict-sha2-acceleration": ["strict-sha2", "brynja-hash-sha2/hardened-execution"],
@@ -485,8 +487,6 @@ def validate_backends(root: Path, policy: dict) -> None:
                 fail(f"candidate backend source binding drifted: {identifier}")
     if seen != set(BACKENDS):
         fail("CPU backend inventory is incomplete")
-
-
 def validate(root: Path) -> None:
     policy_path = root / POLICY
     policy = read_toml(policy_path)

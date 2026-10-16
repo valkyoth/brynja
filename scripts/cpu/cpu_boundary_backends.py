@@ -1,5 +1,17 @@
 """Canonical backend and protected compiled-source inventories."""
 
+# Distinct residency/clearing development profile, NOT strict admission.
+MACOS_RESIDENT_SOURCES = {
+    "src/macos_resident/mod.rs": "macos-resident-contract-development",
+    "src/macos_resident/resource.rs": "macos-resident-resource-admission-development",
+    "src/macos_resident/resource/darwin.rs": "macos-resident-mapping-development",
+    "src/macos_resident/resource/darwin/thread.rs": "macos-resident-worker-development",
+    "src/macos_resident/resource/darwin/observe.rs": "macos-resident-native-observation-tests",
+    "src/macos_resident/resource/darwin/tests.rs": "macos-resident-lifecycle-tests",
+    "src/macos_resident/sha256.rs": "macos-resident-scalar-sha256-development",
+    "src/macos_resident/sha256/tests.rs": "macos-resident-scalar-sha256-tests",
+}
+
 STRICT_COMPILED_SOURCES = {
     "src/strict_batch/mod.rs": "protected-modern-batch-session-development",
     "src/strict_batch/types.rs": "protected-modern-batch-api-types",

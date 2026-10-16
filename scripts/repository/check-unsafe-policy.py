@@ -8,7 +8,7 @@ import unsafe_policy
 
 def main() -> int:
     unsafe_policy.validate(Path(__file__).resolve().parents[2])
-    print("unsafe policy confines crypto/memory boundaries to 87 source-bound modules, including the Windows enclave OS ABI, namespace and callbacks")
+    print(f"unsafe policy confines crypto/memory boundaries to {len(unsafe_policy.ALLOWED)} source-bound modules, including Windows enclave and Darwin resident OS adapters")
     return 0
 
 

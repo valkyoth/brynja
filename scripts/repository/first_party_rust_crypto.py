@@ -6,6 +6,7 @@ from __future__ import annotations
 import re
 import tomllib
 from pathlib import Path
+from darwin_resident_abi import OS_ABIS as DARWIN_RESIDENT_ABIS
 
 
 PACKAGE_ROOTS = (Path("crates"), Path("integrations"))
@@ -252,6 +253,11 @@ def validate(root: Path) -> None:
             text = path.read_text(encoding="utf-8")
             abi_text = text
             link_text = text
+            if relative in DARWIN_RESIDENT_ABIS:
+                for signature in DARWIN_RESIDENT_ABIS[relative]:
+                    if abi_text.count(signature) != 1:
+                        fail('Darwin resident OS ABI inventory changed')
+                    abi_text = abi_text.replace(signature, '', 1)
             if relative == OS_ENCLAVE_NAMESPACE:
                 if text.count(OS_ENCLAVE_NAMESPACE_ABI) != 1:
                     fail('OS enclave namespace ABI inventory changed')

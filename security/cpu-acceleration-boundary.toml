@@ -496,7 +496,7 @@ sha256 = "c4ac153bcf66d98f015e796151aa4ea68d6abe2330f418fef84d2b1dc63ea56f"
 package = "brynja-crypto-cpu-std"
 path = "src/lib.rs"
 status = "boundary-only"
-sha256 = "a13b34f523a51917307cf2f4864af98d78748ae526879926a5bd874376bdfc74"
+sha256 = "5b17c21165b23594b03bcb1672e075bcd0286ae27c07f3326e96832f09f7ef33"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -1960,3 +1960,51 @@ package = "brynja-crypto-cpu-std"
 path = "src/windows_enclave/unsupported.rs"
 status = "windows-enclave-host-development"
 sha256 = "f71e2db60272e673ce83d9e2782f309dd984f0cc4fb162c10d9d57d13e5411e7"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/mod.rs"
+status = "macos-resident-contract-development"
+sha256 = "f607fa13aaea37b6082dcc691a9983a61b017ba10b78f15ca79c8361136468fd"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/resource.rs"
+status = "macos-resident-resource-admission-development"
+sha256 = "f55aedc8daafffc90bbf3f668d107cd6014820be32522e3708bdb073af8d1912"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/resource/darwin.rs"
+status = "macos-resident-mapping-development"
+sha256 = "4368b9459e3b70ccf6d10e7a032e19a02351759d06774b2309794d3702b49cb2"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/resource/darwin/thread.rs"
+status = "macos-resident-worker-development"
+sha256 = "64320b68afef88dfec1d1e267b563a3b93bca030050a14bc2b5042c95169adbf"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/resource/darwin/observe.rs"
+status = "macos-resident-native-observation-tests"
+sha256 = "31636114ce7f2450732513ff778c0f739ccb9df778928e68a8bf84bba0e1efb1"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/resource/darwin/tests.rs"
+status = "macos-resident-lifecycle-tests"
+sha256 = "0080fb1e2e01cdd06aba4c826f1118a92e6f778e06ee25ac332406cadd77fe51"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/sha256.rs"
+status = "macos-resident-scalar-sha256-development"
+sha256 = "4b229c99a8b81257cfb8756fbabc4f649e0c8337e7723548e4c4e71f9721e7e6"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/sha256/tests.rs"
+status = "macos-resident-scalar-sha256-tests"
+sha256 = "c4998e89869460b57b77d42a4e101bbc67e548e2c9edf1dff91c20614ca9d583"

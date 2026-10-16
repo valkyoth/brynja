@@ -1,6 +1,7 @@
 # v0.24.51 — Apple Silicon resident/clearing profiles
 
-Status: development candidate; independent pentest and release qualification
+Status: development candidate; two supplied source retests accepted for the
+bounded resident/clearing scope. Native review and release qualification remain
 pending. Internal milestone only; no crates.io packages selected.
 
 This release adds separate, default-off `macos_resident` APIs on native
@@ -48,13 +49,15 @@ this weaker, explicitly selected profile.
 The first review follow-up adds defensive creating-process binding to Darwin
 mappings, enforced vector work for non-final full ParallelHash NEON groups,
 stable native attribute storage and a dedicated accelerated Darwin CI job.
-Accepted dump-exclusion and conservative-quarantine limits are unchanged;
-independent retest remains pending.
+Accepted dump-exclusion and conservative-quarantine limits are unchanged.
+Two supplied retests of `f9868846` confirm the fixes with no new in-scope defect;
+neither reviewer executed the native Darwin paths. See the
+[security review record](../security/pentest/v0.24.51.md) for scope and provenance.
 
 MSRV remains Rust 1.90.0; the default full-check and cross-target compiler is
 1.99.1. Historical observations keep their actual compiler/source identities.
 Support-crate versions, publication selection, existing gate policy and evidence
-reuse rules are unchanged. This candidate still requires the exceptional
-independent pentest, applicable final verification, GitHub checks and explicit
-tag authorization. No independent cryptographic verification or certification
-is claimed.
+reuse rules are unchanged. The supplied source retests do not replace pending
+native review, applicable final verification, GitHub checks or explicit tag
+authorization. No independent cryptographic verification or certification is
+claimed.

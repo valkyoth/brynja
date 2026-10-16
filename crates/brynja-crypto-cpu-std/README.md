@@ -43,6 +43,7 @@ See the [compiled TupleHash API example](src/strict_tuplehash/compiled.rs).
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
 | Apple Silicon resident/clearing SHA-256 | 🚧 Separate default-off `macos-resident` profile; no dump-exclusion guarantee; qualification pending | ❌ No |
+| Apple Silicon resident SHA-2/general-t and SHA-3/SHAKE/cSHAKE | 🚧 Scalar, bit-aware, bounded output/cancellation; no dump-exclusion guarantee; qualification pending | ❌ No |
 | Windows x64 VBS retained SHA-256 owner/session | 🚧 Bounded scalar API; development-tested; production qualification pending | ❌ No |
 | Windows x64 VBS streaming SHA-2 and general SHA-512/t | 🚧 Scalar version-six worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-224/256 SHA-NI sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
@@ -86,8 +87,10 @@ The separate default-off `macos-resident` feature provides
 `macos_resident::Sha256Session` on Apple Silicon. It locks guarded output and
 worker-stack mappings and clears owned storage after use. It does **not** promise
 core-dump exclusion and is not exported by `brynja-strict`; strict macOS
-construction still rejects. The initial API is scalar, byte-oriented SHA-256,
-without hardware or SIMD selection. See the [contract and API example](../../docs/macos-resident-profile.md).
+construction still rejects. `macos_resident::sha2` and `macos_resident::sha3`
+extend this to all named/general-t SHA-2 and SHA-3/SHAKE/cSHAKE identities, bit
+inputs, bounded output and cancellation. These APIs are scalar, without hardware
+or SIMD selection. See the [contract and API examples](../../docs/macos-resident-profile.md).
 
 `strict-sha2` also exposes `windows_enclave`, the separate retained-result Windows
 x64 VBS interface re-exported as `brynja_strict::enclave`. It uses a trusted static

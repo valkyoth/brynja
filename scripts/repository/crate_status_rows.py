@@ -180,6 +180,8 @@ ROWS = {
         "| Scoped hardened execution workspace | 🚧 Portable/SHA-NI/Arm routes; residue qualification pending | ❌ Not independently verified |"
     ],
     "crates/brynja-crypto-cpu-std/README.md": [
+        "| Apple Silicon resident/clearing SHA-256 | 🚧 Separate default-off `macos-resident` profile; no dump-exclusion guarantee; qualification pending | ❌ No |",
+        "| Apple Silicon resident SHA-2/general-t and SHA-3/SHAKE/cSHAKE | 🚧 Scalar, bit-aware, bounded output/cancellation; no dump-exclusion guarantee; qualification pending | ❌ No |",
         "| Windows x64 VBS retained SHA-256 owner/session | 🚧 Bounded scalar API; development-tested; production qualification pending | ❌ No |",
         "| Windows x64 VBS streaming SHA-2 and general SHA-512/t | 🚧 Scalar version-six worker; development-tested; qualification pending | ❌ No |",
         "| Windows x64 VBS SHA-224/256 SHA-NI sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |",

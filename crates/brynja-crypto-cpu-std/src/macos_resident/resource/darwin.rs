@@ -108,6 +108,10 @@ impl Mapping {
     pub(in super::super) fn run<F: FnOnce() + Send>(&mut self, work: F) -> Result<(), Error> {
         thread::run(self, work)
     }
+    #[cfg(test)]
+    pub(in super::super) fn verify_native(&self) -> Result<(), Error> {
+        observe::verify(self)
+    }
 }
 impl Drop for Mapping {
     fn drop(&mut self) {

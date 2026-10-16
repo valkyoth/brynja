@@ -2,7 +2,7 @@
 from pathlib import Path
 
 UNSAFE_MODULES = {
-    Path("crates/brynja-crypto-cpu-std/src/macos_resident/resource/darwin.rs"): ("4368b9459e3b70ccf6d10e7a032e19a02351759d06774b2309794d3702b49cb2", 10, 0, 10),
+    Path("crates/brynja-crypto-cpu-std/src/macos_resident/resource/darwin.rs"): ("0b3c887d5002738f735fdadac5b9bb37bfdd3436e8f20da12d231ea131714c56", 10, 0, 10),
     Path("crates/brynja-crypto-cpu-std/src/macos_resident/resource/darwin/thread.rs"): ("64320b68afef88dfec1d1e267b563a3b93bca030050a14bc2b5042c95169adbf", 6, 0, 6),
     Path("crates/brynja-crypto-cpu-std/src/macos_resident/resource/darwin/observe.rs"): ("31636114ce7f2450732513ff778c0f739ccb9df778928e68a8bf84bba0e1efb1", 3, 0, 3),
 }

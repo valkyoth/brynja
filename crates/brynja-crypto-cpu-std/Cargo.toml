@@ -10,7 +10,7 @@ publish = ["crates-io"]
 
 [features]
 default = []
-macos-resident = ["dep:brynja-core"]
+macos-resident = ["dep:brynja-core", "brynja-hash-sha2/general-sha512-t", "dep:brynja-hash-sha3"]
 protected-memory = ["dep:brynja-core"]
 strict-batch = ["protected-memory", "sha256-hardened-batch", "sha512-hardened-batch", "keccak-hardened-batch", "brynja-hash-sha2/general-sha512-t"]
 strict-sha2 = ["protected-memory", "brynja-hash-sha2/general-sha512-t"]

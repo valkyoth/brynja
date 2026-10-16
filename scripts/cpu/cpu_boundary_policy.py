@@ -16,7 +16,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "7248506a242309804b8a693ec45f3ce5c81182c75ea5e96307fb7a578aa0a20b"
+EXPECTED_POLICY_SHA256 = "b0de6a46fcd3062231a527d2876186bb57fb39c240eaff35cbf4853d8dd41800"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -274,7 +274,7 @@ def validate_packages(root: Path) -> None:
                 "brynja-core": {"workspace": True, "optional": True}}:
         fail("no_std CPU package permits only its opt-in first-party clearing dependency")
     if detector.get("features") != {"default": [],
-            "macos-resident": ["dep:brynja-core"],
+            "macos-resident": ["dep:brynja-core", "brynja-hash-sha2/general-sha512-t", "dep:brynja-hash-sha3"],
             "protected-memory": ["dep:brynja-core"],
             "strict-sha2": ["protected-memory", "brynja-hash-sha2/general-sha512-t"],
             "strict-sha2-acceleration": ["strict-sha2", "brynja-hash-sha2/hardened-execution"],

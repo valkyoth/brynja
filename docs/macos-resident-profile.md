@@ -28,7 +28,7 @@ other Apple OSes and interpreter/model builds reject construction.
 | Worker lifetime | Private callback, caller-supplied stack, synchronous native join |
 | Owned-memory cleanup | Whole payload including page padding; stack after join, output on loan drop/reuse/error, mappings before release |
 | Core-dump exclusion | **Not guaranteed**; locked memory may be dumped |
-| Hardware/SIMD | Not selected by the initial scalar SHA-256 API |
+| Hardware/SIMD | Not selected by current scalar APIs; explicit Arm routes remain in package 02 |
 | Independent verification/certification | Not claimed |
 
 No process-wide dump policy is changed. Applications retain responsibility for
@@ -46,7 +46,7 @@ limits and release-on-unmap behavior are described in the
 Darwin pthread and Mach ABIs are taken from the installed Apple SDK; Linux ABI
 definitions are not reused merely because their sizes look similar.
 
-## Initial API
+## Scalar APIs
 
 Add the feature without copying a stale crate version into your manifest:
 
@@ -79,6 +79,33 @@ output owner; the next operation clears it before checking the request. Worker
 join failure aborts rather than returning while borrowed inputs could be live.
 Recoverable worker panic clears stack and output before returning an error.
 
+The `sha2::Session` API adds SHA-224/256/384/512, named SHA-512/224 and /256, and
+all valid general SHA-512/t parameters. Input tails are canonical MSB-first bits.
+The `sha3::Session` API adds SHA3-224/256/384/512, SHAKE128/256 and cSHAKE128/256;
+message/N/S tails and partial XOF output use the FIPS 202 LSB-first convention.
+Both hold one fixed public algorithm identity and create fresh state per call.
+They are distinct from persistent streaming sessions: callers submit borrowed
+chunk lists, not an updateable secret state. All populated state and staging are
+created inside the resident worker. Only borrowed addresses/public metadata cross
+the worker boundary; no digest is returned by value from the worker.
+
+See the compiled [SHA-2 example](../crates/brynja-crypto-cpu-std/src/macos_resident/sha2/mod.rs)
+and [SHA-3 example](../crates/brynja-crypto-cpu-std/src/macos_resident/sha3/mod.rs).
+`hash_chunks` supports raw bit tails and cooperative cancellation;
+`sha3::Session::hash_customized_chunks` additionally accepts raw N/S bits.
+Public-length budgets are checked before launch; secret byte canonicality is
+checked only on the worker. Cancellation is checked at most every 4096 message
+or output bytes, before/after bounded cSHAKE prefix construction, and before
+returning output. Prefix construction is not internally interruptible. A request
+arriving after the final check can still complete; cancellation is not forced
+thread termination. Cancellation and ordinary input rejection allow reuse.
+Recoverable panic joins and clears before returning; fatal abort cannot do so.
+
+Output remains a clearing, affine borrowed `Digest`. Explicit `declassify`
+requires the existing public-output acknowledgement; an incorrect destination
+length preserves the destination and clears the secret loan. Zero-length XOF
+output reserves a resident placeholder byte, never exposed as output.
+
 ## Finite implementation sequence
 
 1. Darwin mapping/thread foundation and scalar SHA-256 vertical slice.
@@ -88,9 +115,10 @@ Recoverable worker panic clears stack and output before returning an error.
 5. Reconcile route coverage, packaging, emitted-code cleanup and native evidence;
    prepare the independent retest candidate using existing release gates.
 
-Each package includes its own failure, ownership and cleanup tests. The first
-slice currently accepts byte-oriented SHA-256 only; remaining algorithms,
-arbitrary-bit interfaces, cancellation and acceleration are not implied.
+Each package includes its own failure, ownership and cleanup tests. Scalar
+SHA-2/general-t and SHA-3/SHAKE/cSHAKE are development-tested; package 02 is not
+complete until explicit Arm routes and the associated emitted-code review pass.
+KMAC, TupleHash, legacy adapters, batching and ParallelHash are not implied.
 No Intel Mac qualification or new isolation framework is scheduled here.
 
 Development baseline: Apple M2 Pro, macOS 27.0.1 (26A434), 16-KiB pages,

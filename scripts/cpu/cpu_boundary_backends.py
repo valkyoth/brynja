@@ -10,6 +10,15 @@ MACOS_RESIDENT_SOURCES = {
     "src/macos_resident/resource/darwin/tests.rs": "macos-resident-lifecycle-tests",
     "src/macos_resident/sha256.rs": "macos-resident-scalar-sha256-development",
     "src/macos_resident/sha256/tests.rs": "macos-resident-scalar-sha256-tests",
+    "src/macos_resident/sha2/mod.rs": "macos-resident-scalar-sha2-development",
+    "src/macos_resident/sha2/types.rs": "macos-resident-scalar-sha2-api-types",
+    "src/macos_resident/sha2/worker.rs": "macos-resident-scalar-sha2-worker",
+    "src/macos_resident/sha2/tests.rs": "macos-resident-scalar-sha2-tests",
+    "src/macos_resident/sha3/mod.rs": "macos-resident-scalar-sha3-development",
+    "src/macos_resident/sha3/types.rs": "macos-resident-scalar-sha3-api-types",
+    "src/macos_resident/sha3/worker.rs": "macos-resident-scalar-sha3-worker",
+    "src/macos_resident/sha3/tests.rs": "macos-resident-scalar-sha3-tests",
+    "src/macos_resident/sha3/tests/native.rs": "macos-resident-scalar-sha3-native-tests",
 }
 
 STRICT_COMPILED_SOURCES = {

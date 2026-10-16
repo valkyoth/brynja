@@ -16,7 +16,7 @@
 //! hibernation, snapshots, fatal abort and arbitrary register capture are outside
 //! this guarantee. Instrumented builds are diagnostic only: interposed locking
 //! and relocated stacks do not establish residency. No certification is claimed.
-//! Scalar SHA-256 only in this initial slice; no SIMD or hardware selection.
+//! Scalar SHA-2 and SHA-3/SHAKE/cSHAKE sessions; no SIMD or hardware selection.
 //!
 //! ```no_run
 //! use brynja_crypto_cpu_std::macos_resident::{Error, Limits, Sha256Session};
@@ -30,8 +30,24 @@
 //! ```
 
 mod resource;
+pub mod sha2;
 mod sha256;
+pub mod sha3;
 pub use sha256::{Digest, Sha256Session};
+
+fn require_native() -> Result<(), Error> {
+    if cfg!(all(
+        target_os = "macos",
+        target_arch = "aarch64",
+        target_endian = "little",
+        target_pointer_width = "64",
+        not(any(miri, kani))
+    )) {
+        Ok(())
+    } else {
+        Err(Error::Unsupported)
+    }
+}
 
 /// Public resource and work bounds, checked before OS acquisition/processing.
 #[derive(Clone, Copy, Debug)]

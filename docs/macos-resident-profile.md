@@ -137,6 +137,46 @@ proof; native lifecycle tests provide complementary conditional-path checks.
 It must run on artifacts emitted separately with panic=unwind and panic=abort.
 Independent review and final native release qualification remain pending.
 
+## KMAC and TupleHash
+
+The separate default-off `macos-resident-kmac` and `macos-resident-tuplehash`
+features add resident scalar `kmac::Session` and `tuplehash::Session` APIs.
+Their respective `-acceleration` features add explicit `CompiledSession`
+wrappers accepting only `Kernel::ArmKeccak`, with the same build-wide and
+deployment prerequisites above. These features do not activate strict Mac
+admission, and `macos-resident` alone does not activate either keyed family.
+
+KMAC128/256 and KMACXOF128/256 accept borrowed canonical LSB-first key,
+customization and message bits. Keys must meet the selected strength even if
+conformance features are unified elsewhere. Fixed tags and verification require
+full-strength output; XOF derivation may have empty output. Verification compares
+the complete canonical equal-width candidate on the resident worker, clears the
+computed tag and comparison accumulator, and releases only the authentication
+decision. It does not retain a key between calls. Key/prefix setup is bounded by
+explicit limits, not internally cancellable.
+
+TupleHash128/256 and TupleHashXOF128/256 preserve item identity: fragments within
+one `Item` are one element, not multiple elements; empty elements still count.
+Item lengths are checked and derived rather than trusted from the caller. Writers
+and partial-bit suffix handling remain inside the worker; incomplete or failed
+writers cannot produce output. Fixed and XOF domains remain distinct.
+
+Both families acquire separate stack, staging and output mappings before input
+processing. State, compiled authority and KMAC comparison storage live inside
+the worker; original input/candidate buffers and explicit output copies remain
+caller-owned. Output loans clear on drop/reuse; failure paths clear staging and
+output, and join precedes full stack clearing. These are resident/clearing APIs,
+not dump-excluded owners. See the compiled [KMAC examples](../crates/brynja-crypto-cpu-std/src/macos_resident/kmac/mod.rs)
+and [TupleHash examples](../crates/brynja-crypto-cpu-std/src/macos_resident/tuplehash/mod.rs).
+
+Focused native checks cover scalar and required Arm routes, partial keys/items,
+framing, multi-fragment output, candidate mismatch positions, cancellation,
+quarantine, unwinding and actual owned-mapping placement. The packaged oracle
+checks 512 independently composed cases on each route in debug/unwind,
+release/unwind and release/abort. Compiler review includes keyed coordinators,
+worker state, comparison and owner cleanup; it remains a bounded call/placement
+review, not whole-image erasure proof. Independent review is pending.
+
 ## Finite implementation sequence
 
 1. Darwin mapping/thread foundation and scalar SHA-256 vertical slice.
@@ -150,7 +190,9 @@ Each package includes its own failure, ownership and cleanup tests. Scalar
 SHA-2/general-t and SHA-3/SHAKE/cSHAKE scalar and explicit Arm routes are
 development-tested. Package 02 includes a bounded Darwin emitted-code review,
 not whole-image or dump-erasure qualification.
-KMAC, TupleHash, legacy adapters, batching and ParallelHash are not implied.
+KMAC and TupleHash scalar/Arm wrappers are also development-tested. Package 03
+remains incomplete until separate legacy adapters are integrated; batching and
+ParallelHash are not implied.
 No Intel Mac qualification or new isolation framework is scheduled here.
 
 Development baseline: Apple M2 Pro, macOS 27.0.1 (26A434), 16-KiB pages,

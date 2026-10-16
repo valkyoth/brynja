@@ -42,7 +42,7 @@ See the [compiled TupleHash API example](src/strict_tuplehash/compiled.rs).
 
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| Apple Silicon resident/clearing SHA-256 | 🚧 Separate default-off `macos-resident` profile; no dump-exclusion guarantee; qualification pending | ❌ No |
+| Apple Silicon resident SHA-2/SHA-3, KMAC/TupleHash | 🚧 Separate opt-in scalar/Arm resident/clearing APIs; no dump exclusion; qualification pending | ❌ No |
 | Apple Silicon resident SHA-2/general-t and SHA-3/SHAKE/cSHAKE | 🚧 Scalar or explicit Arm SHA2/SHA512/Keccak; bit-aware, bounded output/cancellation; no dump-exclusion guarantee; qualification pending | ❌ No |
 | Windows x64 VBS retained SHA-256 owner/session | 🚧 Bounded scalar API; development-tested; production qualification pending | ❌ No |
 | Windows x64 VBS streaming SHA-2 and general SHA-512/t | 🚧 Scalar version-six worker; development-tested; qualification pending | ❌ No |
@@ -92,7 +92,11 @@ extend this to all named/general-t SHA-2 and SHA-3/SHAKE/cSHAKE identities, bit
 inputs, bounded output and cancellation. Scalar `Session` never selects hardware.
 The additional default-off `macos-resident-acceleration` feature exposes explicit
 `CompiledSession` Arm SHA2/SHA512/Keccak routes with build-wide feature and
-deployment requirements, without fallback. SIMD batching is not implemented yet. See the [contract and API examples](../../docs/macos-resident-profile.md).
+deployment requirements, without fallback. Separate `macos-resident-kmac` and
+`macos-resident-tuplehash` features provide scalar fixed/XOF sessions; their
+`-acceleration` features add explicit Arm Keccak sessions. KMAC comparison runs
+on the resident worker; TupleHash preserves item boundaries across fragments.
+These APIs do not exclude dumps. SIMD batching is not implemented yet. See the [contract and API examples](../../docs/macos-resident-profile.md).
 
 `strict-sha2` also exposes `windows_enclave`, the separate retained-result Windows
 x64 VBS interface re-exported as `brynja_strict::enclave`. It uses a trusted static

@@ -6,6 +6,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 import macos_resident_oracle as oracle
+import macos_resident_keyed_oracle as keyed
 
 spec = importlib.util.spec_from_file_location('resident_package',
     Path(__file__).with_name('check-macos-resident-package.py'))
@@ -14,6 +15,32 @@ spec.loader.exec_module(package)
 
 
 class ResidentPackageTests(unittest.TestCase):
+    def test_keyed_population_strength_partial_bits_and_routes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root/'src').mkdir()
+            with patch('subprocess.run', side_effect=AssertionError('unexpected subprocess')):
+                self.assertEqual(keyed.write_consumer(root), 512)
+            for name in ('kmac', 'tuplehash'):
+                lines = (root/f'src/{name}.txt').read_text().splitlines()
+                self.assertEqual(len(lines), 256)
+                self.assertEqual(len({row.split()[0] for row in lines}), 4)
+            for row in (root/'src/kmac.txt').read_text().splitlines():
+                c = row.split()
+                self.assertGreaterEqual(int(c[1]), 256)
+                if 'xof' not in c[0]:
+                    self.assertGreaterEqual(int(c[7]), 256)
+                self.assertEqual(len(b'' if c[8]=='-' else bytes.fromhex(c[8])), (int(c[7])+7)//8)
+            source = (root/'src/keyed.rs').read_text()
+            for name in ('k', 't'):
+                self.assertIn(name+'::Session::new', source)
+                self.assertIn(name+'::CompiledSession::new', source)
+                self.assertIn(name+'::Kernel::ArmKeccak', source)
+
+    def test_keyed_cannot_silently_omit_accelerated_comparison(self):
+        with self.assertRaisesRegex(ValueError, 'requires --accelerated'):
+            package.execute('1.99.1', Path('/unused'), keyed=True)
+
     def test_exact_population_and_official_oracle_cross_checks(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

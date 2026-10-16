@@ -1965,7 +1965,7 @@ sha256 = "f71e2db60272e673ce83d9e2782f309dd984f0cc4fb162c10d9d57d13e5411e7"
 package = "brynja-crypto-cpu-std"
 path = "src/macos_resident/mod.rs"
 status = "macos-resident-contract-development"
-sha256 = "ffca16e16a9304d25b4c692ebca88546dc21d99387dfd722f3e8262930da2160"
+sha256 = "0ce6696c365552b6685035a92e3aab9d0e64ac7d30a39e2c8168c3ff0683a750"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -2110,3 +2110,117 @@ package = "brynja-crypto-cpu-std"
 path = "src/macos_resident/sha3/compiled/tests/native.rs"
 status = "macos-resident-compiled-sha3-native-tests"
 sha256 = "6156f2fdb441ad3274b6ce62aadf229648d9a680826af617971b2657c89d3209"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/kmac/mod.rs"
+status = "macos-resident-kmac-session-development"
+sha256 = "01490d0ccb9ae5174f94b17a079f65daaa0aece834b4f65f8f62370dcc39c19f"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/kmac/types.rs"
+status = "macos-resident-kmac-api-types"
+sha256 = "d1273fb2a0a585ab84ac844d47a5000667f3382555286cdcdd1e926cffd7dc2b"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/kmac/worker.rs"
+status = "macos-resident-kmac-worker"
+sha256 = "ff24302cf56848f0e9adc6c0fbc3456736ad95ad865b4ae3559c3ea547767bc3"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/kmac/tests.rs"
+status = "macos-resident-kmac-admission-tests"
+sha256 = "8201dc135598fbf1d8180601b53c69380aba2965b1f62895a7efbb73bf302a7f"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/kmac/tests/native.rs"
+status = "macos-resident-kmac-native-tests"
+sha256 = "6508828d92df720d54c0842514f198e099d16351032a9f153eef9c75393530e4"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/kmac/compiled.rs"
+status = "macos-resident-kmac-compiled-session-development"
+sha256 = "d9d51428cf5ef13757a4a54f6cf9584a8f0dbcce46911ba48fe7c28cfda97341"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/kmac/compiled/worker.rs"
+status = "macos-resident-kmac-compiled-worker"
+sha256 = "fc951753d9c12d42b80a4ef5c93b4fd9ee730fb589cda816e5278f3382994f92"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/kmac/compiled/tests.rs"
+status = "macos-resident-kmac-compiled-admission-tests"
+sha256 = "722af6ffe46cf53025a6afc5d7ee6fd5dfb48dd5beb7efff64a7b38e5eaaeef6"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/kmac/compiled/tests/native.rs"
+status = "macos-resident-kmac-compiled-native-tests"
+sha256 = "7814bf7c86c839a5004d4dc5014a13baf734d0b7c82e390e348a44f3780c7b88"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/tuplehash/mod.rs"
+status = "macos-resident-tuplehash-session-development"
+sha256 = "2f245ea59d8e8feba5ad596ee5e4e3084507795ecaee2daa03e8519051f65b24"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/tuplehash/types.rs"
+status = "macos-resident-tuplehash-api-types"
+sha256 = "7ea67dc83fa786189aad0bda43b223a8b631dfb81bd59706d88843939bb3e3a6"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/tuplehash/worker.rs"
+status = "macos-resident-tuplehash-worker"
+sha256 = "deedda86540a1bc1ef635ea7824fe8647f866d304c3e77ce24e2792849975527"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/tuplehash/tests.rs"
+status = "macos-resident-tuplehash-admission-tests"
+sha256 = "1758cc7f9e9576f5ef1170050e590de39333452ebfae1e1a8e41faffb38aa6fc"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/tuplehash/tests/native.rs"
+status = "macos-resident-tuplehash-native-tests"
+sha256 = "5859930e685bc9c99256f93b3f0f8b7e8ab7d1985caa79358884fe5b2b2a5732"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/tuplehash/compiled.rs"
+status = "macos-resident-tuplehash-compiled-session-development"
+sha256 = "8c24695c3f13d456e32a33e0c6703cb6bd1da40f4df409ce9e3b241da16494ad"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/tuplehash/compiled/worker.rs"
+status = "macos-resident-tuplehash-compiled-worker"
+sha256 = "4719635f44ab214fc9b8b090b93494cf974e86013a032ab02eb4ff2d5ae81b44"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/tuplehash/compiled/tests.rs"
+status = "macos-resident-tuplehash-compiled-admission-tests"
+sha256 = "43ce42b8ddfeaaa673c060f92d43245e047d4392af93912a8bda100c5303236c"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/tuplehash/compiled/tests/native.rs"
+status = "macos-resident-tuplehash-compiled-native-tests"
+sha256 = "2eaeeb904fc6fff365482c25770ed94fc555c3c407abe63609957a2048bc24e0"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/test_storage.rs"
+status = "macos-resident-native-storage-tests"
+sha256 = "264d6b8523d8377b351e8da3bc8e8547a8b07aa5e2c5ed6f71c34b7bceb07238"

@@ -7,7 +7,7 @@ import hashlib
 import re
 import tomllib
 from pathlib import Path
-from cpu_boundary_backends import BACKENDS, STRICT_COMPILED_SOURCES, MACOS_RESIDENT_SOURCES
+from cpu_boundary_backends import BACKENDS, STRICT_COMPILED_SOURCES, MACOS_RESIDENT_SOURCES, MACOS_RESIDENT_FEATURES
 from cpu_boundary_windows import WINDOWS_ENCLAVE_SOURCES
 
 
@@ -16,7 +16,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "2570c972ce3aa27ee16bf41dbfc53c5b6c51a652403e3e830ef433bae40dd7d2"
+EXPECTED_POLICY_SHA256 = "989124046ea04cd1e3a51689ea7b8365a565cb4c4348d204879bedeb1b8e776a"
 FORBIDDEN_CONSUMERS = (
     "brynja-crypto",
     "brynja-tls",
@@ -274,8 +274,7 @@ def validate_packages(root: Path) -> None:
                 "brynja-core": {"workspace": True, "optional": True}}:
         fail("no_std CPU package permits only its opt-in first-party clearing dependency")
     if detector.get("features") != {"default": [],
-            "macos-resident": ["dep:brynja-core", "brynja-hash-sha2/general-sha512-t", "dep:brynja-hash-sha3"],
-            "macos-resident-acceleration": ["macos-resident", "brynja-hash-sha2/hardened-execution", "brynja-hash-sha3/hardened-execution"],
+            **MACOS_RESIDENT_FEATURES,
             "protected-memory": ["dep:brynja-core"],
             "strict-sha2": ["protected-memory", "brynja-hash-sha2/general-sha512-t"],
             "strict-sha2-acceleration": ["strict-sha2", "brynja-hash-sha2/hardened-execution"],

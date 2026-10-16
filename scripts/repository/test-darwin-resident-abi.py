@@ -16,7 +16,7 @@ support = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(support)
 sys.path.insert(0, str(ROOT / 'scripts/cpu'))
 import cpu_boundary_policy as cpu
-from cpu_boundary_backends import MACOS_RESIDENT_SOURCES
+from cpu_boundary_backends import MACOS_RESIDENT_SOURCES, MACOS_RESIDENT_FEATURES
 cpu_spec = importlib.util.spec_from_file_location('cpu_tests', ROOT / 'scripts/cpu/test-cpu-boundary.py')
 cpu_support = importlib.util.module_from_spec(cpu_spec)
 cpu_spec.loader.exec_module(cpu_support)
@@ -34,7 +34,23 @@ class DarwinBoundaryTests(unittest.TestCase):
             with self.assertRaises(cpu.CpuBoundaryPolicyError):
                 cpu.validate_packages(root)
             manifest.write_text(original)
-            self.assertEqual(len(MACOS_RESIDENT_SOURCES), 25)
+            for feature in MACOS_RESIDENT_FEATURES:
+                manifest.write_text(original.replace('default = []', f'default = ["{feature}"]'))
+                with self.assertRaises(cpu.CpuBoundaryPolicyError):
+                    cpu.validate_packages(root)
+            for family, dependency in (('kmac', 'brynja-mac-kmac'), ('tuplehash', 'brynja-hash-tuple')):
+                for changed in (
+                    original.replace(f'"macos-resident-{family}", "{dependency}/hardened-execution"',
+                                     f'"macos-resident-{family}"'),
+                    original.replace(f'"macos-resident", "dep:{dependency}"',
+                                     f'"strict-{family}", "dep:{dependency}"'),
+                ):
+                    self.assertNotEqual(changed, original)
+                    manifest.write_text(changed)
+                    with self.assertRaises(cpu.CpuBoundaryPolicyError):
+                        cpu.validate_packages(root)
+            manifest.write_text(original)
+            self.assertEqual(len(MACOS_RESIDENT_SOURCES), 44)
             for relative in MACOS_RESIDENT_SOURCES:
                 path = manifest.parent / relative
                 original = path.read_text()

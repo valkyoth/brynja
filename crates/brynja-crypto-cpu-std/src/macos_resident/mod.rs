@@ -16,7 +16,8 @@
 //! hibernation, snapshots, fatal abort and arbitrary register capture are outside
 //! this guarantee. Instrumented builds are diagnostic only: interposed locking
 //! and relocated stacks do not establish residency. No certification is claimed.
-//! Scalar SHA-2 and SHA-3/SHAKE/cSHAKE sessions; no SIMD or hardware selection.
+//! Scalar sessions never select hardware; separate features enable explicit Arm
+//! routes. SIMD batching is not implemented yet.
 //!
 //! ```no_run
 //! use brynja_crypto_cpu_std::macos_resident::{Error, Limits, Sha256Session};
@@ -29,10 +30,19 @@
 //! # Ok::<(), Error>(())
 //! ```
 
+#[cfg(feature = "macos-resident-kmac")]
+pub mod kmac;
 mod resource;
 pub mod sha2;
 mod sha256;
 pub mod sha3;
+#[cfg(all(
+    test,
+    any(feature = "macos-resident-kmac", feature = "macos-resident-tuplehash")
+))]
+mod test_storage;
+#[cfg(feature = "macos-resident-tuplehash")]
+pub mod tuplehash;
 pub use sha256::{Digest, Sha256Session};
 
 fn require_native() -> Result<(), Error> {

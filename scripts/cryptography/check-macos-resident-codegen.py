@@ -31,7 +31,7 @@ def machine(assembly, symbol):
     return match[1]
 
 
-def inspect(llvm, assembly, kernels):
+def inspect(llvm, assembly, kernels, keyed=False):
     require('target triple = "arm64-apple-macosx' in llvm, 'Darwin Arm artifact')
     constructor = function(llvm, 'macos_resident', '7Mapping3new')
     for call in ('@mmap(', '@mach_vm_inherit(', '@mprotect(', '@mlock('):
@@ -55,6 +55,10 @@ def inspect(llvm, assembly, kernels):
              ('4sha3', '15CompiledSession22hash_customized_chunks'),
              ('4sha2', '15CompiledSession3new'),
              ('4sha3', '15CompiledSession3new'))
+    if keyed:
+        roots += (('4kmac', '7Session7execute'), ('9tuplehash', '7Session7compute'),
+                  ('4kmac', '15CompiledSession7execute'), ('9tuplehash', '15CompiledSession7compute'),
+                  ('4kmac', '15CompiledSession3new'), ('9tuplehash', '15CompiledSession3new'))
     for family, method in roots:
         root = function(llvm, 'define ', '@_RNvM', 'macos_resident', family, method)
         for callee in ('@pthread_attr_setstack(', '@pthread_create(', '@pthread_join('):
@@ -71,9 +75,24 @@ def inspect(llvm, assembly, kernels):
             require(re.search(r'\b(?:bl|b)\s+\S*' + callee, code), 'machine coordinator ' + callee)
         worker = function(llvm, 'macos_resident', 'thread5enter', family, method + '0')
         require('ret ptr null' in worker, 'worker returns no secret-bearing value')
-        require('Authority3new' in worker if 'CompiledSession' in method
-                else 'Workspace' in worker or 'HardenedSha256' in worker,
+        # TupleHash scalar is outlined rather than inlined by this compiler.
+        state_owner = worker
+        if family == '9tuplehash' and method == '7Session7compute' and 'Workspace' not in worker:
+            outlined = function(llvm, 'macos_resident', '9tuplehash6worker3run')
+            name = re.search(r'@([^ (]+)\(', outlined.splitlines()[0])[1]
+            require('@' + name + '(' in worker, 'worker calls exact TupleHash body')
+            state_owner = outlined
+        require('Authority3new' in state_owner if 'CompiledSession' in method
+                else 'Workspace' in state_owner or 'HardenedSha256' in state_owner,
                 'worker owns state or startup authority')
+    if keyed:
+        comparison = function(llvm, 'macos_resident', '4kmac6worker7compare')
+        for token in ('accumulate_secret_byte_difference', 'secret_difference_is_zero', 'clear_owned_region'):
+            require(token in comparison, 'retained KMAC fixed-work/clearing call: ' + token)
+        for family in ('4kmac', '9tuplehash'):
+            for owner in ('7Buffers', '6Output'):
+                drop = function(llvm, 'macos_resident', family, owner, '4Drop4drop')
+                require('clear_owned_region' in drop, 'keyed owner clearing retained')
     # Exact population and erase sets for the three admitted Arm hardware kernels.
     expected = (('aarch64_sha29secret2568compress', range(6), (4, 5, 6, 7, 9)),
                 ('aarch64_sha29secret5128compress', (*range(8), *range(16, 21)), (4, 5, 6, 7, 9)),
@@ -97,7 +116,7 @@ def inspect(llvm, assembly, kernels):
         require(re.search(r'^\s*ret\s*$', after, re.M), 'kernel normal return')
 
 
-def regressions(llvm, assembly, kernels):
+def regressions(llvm, assembly, kernels, keyed=False):
     cases = [(llvm.replace(old, new), assembly, kernels) for old, new in (
         ('@mlock(', '@removed_mlock('), ('@mach_vm_inherit(', '@removed_inherit('),
         ('@pthread_join(', '@removed_join('), ('clear_owned_region', 'removed_clear'),
@@ -106,10 +125,17 @@ def regressions(llvm, assembly, kernels):
     cases += [(llvm, assembly, kernels.replace(old, new, 1)) for old, new in (
         ('BRYNJA_REGISTER_ERASE', 'removed_erase'), ('movi.16b\tv0, #0', 'movi.16b\tv0, #1'),
         ('mov\tx5, xzr', 'mov\tx5, x4'), ('BRYNJA_SECRET_BEGIN', 'BRYNJA_SECRET_BEGIN\n\tstr x5, [sp]'))]
+    if keyed:
+        comparison = function(llvm, 'macos_resident', '4kmac6worker7compare')
+        for token in ('accumulate_secret_byte_difference', 'secret_difference_is_zero', 'clear_owned_region'):
+            cases.append((llvm.replace(comparison, comparison.replace(token, 'removed_call')), assembly, kernels))
+        for family in ('4kmac', '9tuplehash'):
+            drop = function(llvm, 'macos_resident', family, '7Buffers', '4Drop4drop')
+            cases.append((llvm.replace(drop, drop.replace('clear_owned_region', 'removed_clear')), assembly, kernels))
     for changed in cases:
         require(changed != (llvm, assembly, kernels), 'mutation must change artifact')
         try:
-            inspect(*changed)
+            inspect(*changed, keyed)
         except ValueError:
             continue
         raise ValueError('Darwin compiler mutation survived')
@@ -119,14 +145,15 @@ def regressions(llvm, assembly, kernels):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('artifacts', type=Path)
+    parser.add_argument('--keyed', action='store_true')
     args = parser.parse_args()
     texts = []
     for pattern in ('brynja_crypto_cpu_std-*.ll', 'brynja_crypto_cpu_std-*.s', 'brynja_crypto_cpu-*.s'):
         paths = list(args.artifacts.glob(pattern))
         require(len(paths) == 1, 'exact artifact: ' + pattern)
         texts.append(paths[0].read_text())
-    inspect(*texts)
-    count = regressions(*texts)
+    inspect(*texts, args.keyed)
+    count = regressions(*texts, args.keyed)
     print(f'Darwin resident resource/worker/kernel compiler review: PASS; rejected={count}; bounded scope only')
 
 

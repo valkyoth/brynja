@@ -14,7 +14,7 @@
     "crates/brynja-core/src/secret_memory.rs": "b3c23d66ac1b0528e0db4de8c804239733810df2070c67a342cfd39cfe1b11d5",
     "crates/brynja-core/src/secret_memory_volatile.rs": "44ee344e643429e45061dc8f3aacaf985789058c594ca7d54198077eaa8f756c",
     "crates/brynja-core/tests/secret_memory.rs": "a8bb64894f6876fb5902d601e02bb70950443bc74e1f45f6086ce08afb9365cb",
-    "crates/brynja-crypto-cpu-std/Cargo.toml": "2913f7a441f623f506e010b099cac216e8bb50977e37389ccbb494300810a234",
+    "crates/brynja-crypto-cpu-std/Cargo.toml": "f979b0a4c0cd201df0e38e4581376eed88d896e64174491354fedd60e3efd527",
     "crates/brynja-crypto-cpu/Cargo.toml": "88b0e163db8a2fb28465b5606eb0e9d4fcdc8c6623f11f826b533894e1f7ae28",
     "crates/brynja-crypto/Cargo.toml": "819ffea703f1a41c69d966364f74a840759cb570d686d7afc3b0c89bb5905dd0",
     "crates/brynja-dtls/Cargo.toml": "70da346549b471ffe2087236372f0728706e07e7e85268d2fcae77c92ef4daaa",

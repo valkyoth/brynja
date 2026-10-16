@@ -1,7 +1,35 @@
 """Canonical backend and protected compiled-source inventories."""
 
+MACOS_RESIDENT_FEATURES = {
+    "macos-resident": ["dep:brynja-core", "brynja-hash-sha2/general-sha512-t", "dep:brynja-hash-sha3"],
+    "macos-resident-acceleration": ["macos-resident", "brynja-hash-sha2/hardened-execution", "brynja-hash-sha3/hardened-execution"],
+    "macos-resident-kmac": ["macos-resident", "dep:brynja-mac-kmac"],
+    "macos-resident-kmac-acceleration": ["macos-resident-kmac", "brynja-mac-kmac/hardened-execution"],
+    "macos-resident-tuplehash": ["macos-resident", "dep:brynja-hash-tuple"],
+    "macos-resident-tuplehash-acceleration": ["macos-resident-tuplehash", "brynja-hash-tuple/hardened-execution"],
+}
+
 # Distinct residency/clearing development profile, NOT strict admission.
 MACOS_RESIDENT_SOURCES = {
+    "src/macos_resident/kmac/mod.rs": "macos-resident-kmac-session-development",
+    "src/macos_resident/kmac/types.rs": "macos-resident-kmac-api-types",
+    "src/macos_resident/kmac/worker.rs": "macos-resident-kmac-worker",
+    "src/macos_resident/kmac/tests.rs": "macos-resident-kmac-admission-tests",
+    "src/macos_resident/kmac/tests/native.rs": "macos-resident-kmac-native-tests",
+    "src/macos_resident/kmac/compiled.rs": "macos-resident-kmac-compiled-session-development",
+    "src/macos_resident/kmac/compiled/worker.rs": "macos-resident-kmac-compiled-worker",
+    "src/macos_resident/kmac/compiled/tests.rs": "macos-resident-kmac-compiled-admission-tests",
+    "src/macos_resident/kmac/compiled/tests/native.rs": "macos-resident-kmac-compiled-native-tests",
+    "src/macos_resident/tuplehash/mod.rs": "macos-resident-tuplehash-session-development",
+    "src/macos_resident/tuplehash/types.rs": "macos-resident-tuplehash-api-types",
+    "src/macos_resident/tuplehash/worker.rs": "macos-resident-tuplehash-worker",
+    "src/macos_resident/tuplehash/tests.rs": "macos-resident-tuplehash-admission-tests",
+    "src/macos_resident/tuplehash/tests/native.rs": "macos-resident-tuplehash-native-tests",
+    "src/macos_resident/tuplehash/compiled.rs": "macos-resident-tuplehash-compiled-session-development",
+    "src/macos_resident/tuplehash/compiled/worker.rs": "macos-resident-tuplehash-compiled-worker",
+    "src/macos_resident/tuplehash/compiled/tests.rs": "macos-resident-tuplehash-compiled-admission-tests",
+    "src/macos_resident/tuplehash/compiled/tests/native.rs": "macos-resident-tuplehash-compiled-native-tests",
+    "src/macos_resident/test_storage.rs": "macos-resident-native-storage-tests",
     "src/macos_resident/sha2/compiled.rs": "macos-resident-compiled-sha2-session-development",
     "src/macos_resident/sha2/compiled/worker.rs": "macos-resident-compiled-sha2-worker",
     "src/macos_resident/sha2/compiled/tests.rs": "macos-resident-compiled-sha2-admission-tests",

@@ -14,6 +14,7 @@ import subprocess
 import sys
 import tempfile
 import macos_resident_oracle
+import macos_resident_keyed_oracle
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -25,7 +26,7 @@ def run(command, cwd, env):
     return result.stdout
 
 
-def mutations(cargo, hosted, env, feature, accelerated=False):
+def mutations(cargo, hosted, env, feature, accelerated=False, keyed=False):
     prefix = 'macos_resident::'
     cases = [
         ('src/macos_resident/resource/darwin.rs',
@@ -55,6 +56,25 @@ def mutations(cargo, hosted, env, feature, accelerated=False):
                 'Ok(()) | Err(Error::Cancelled | Error::InvalidBits)',
                 'Ok(()) | Err(Error::Cancelled | Error::InvalidBits | Error::Backend(_))',
                 prefix + family + '::compiled::tests::native::' + test))
+    if keyed:
+        cases += [
+            ('src/macos_resident/kmac/mod.rs', 'if !self.keep_output {', 'if self.keep_output {',
+             prefix + 'kmac::tests::native::verification_is_exact_constant_work_and_clears_output'),
+            ('src/macos_resident/tuplehash/mod.rs', 'if !self.keep_output {', 'if self.keep_output {',
+             prefix + 'tuplehash::tests::native::cancellation_unwind_and_wrong_item_length_cannot_produce_output'),
+            ('src/macos_resident/kmac/worker.rs',
+             'brynja_core::accumulate_secret_byte_difference(&mut difference.0[0], left, right);',
+             'core::hint::black_box((left, right, &mut difference));',
+             prefix + 'kmac::tests::native::verification_is_exact_constant_work_and_clears_output'),
+            ('src/macos_resident/kmac/compiled.rs',
+             'Err(error @ (Error::Cancelled | Error::InvalidBits))',
+             'Err(error @ (Error::Cancelled | Error::InvalidBits | Error::Backend(_)))',
+             prefix + 'kmac::compiled::tests::native::cancellation_reuse_and_terminal_backend_unwind_at_all_boundaries'),
+            ('src/macos_resident/tuplehash/compiled.rs',
+             'Ok(()) | Err(Error::Cancelled | Error::InvalidBits)',
+             'Ok(()) | Err(Error::Cancelled | Error::InvalidBits | Error::Backend(_))',
+             prefix + 'tuplehash::compiled::tests::native::cancellation_revocation_writer_failure_and_unwind_are_transactional'),
+        ]
     for name, old, new, test in cases:
         path = hosted / name
         original = path.read_text()
@@ -77,7 +97,9 @@ def mutations(cargo, hosted, env, feature, accelerated=False):
     print(f'Resident locking/clearing/identity compiled mutants: {len(cases)} rejected', flush=True)
 
 
-def execute(toolchain, destination, accelerated=False):
+def execute(toolchain, destination, accelerated=False, keyed=False):
+    if keyed and not accelerated:
+        raise ValueError('keyed comparison requires --accelerated for both scalar and Arm routes')
     cargo = ['cargo', '+' + toolchain]
     identity = subprocess.check_output(['rustc', '+' + toolchain, '-vV'], text=True)
     if 'host: aarch64-apple-darwin' not in identity.splitlines():
@@ -87,6 +109,8 @@ def execute(toolchain, destination, accelerated=False):
     for name in ('RUSTFLAGS', 'CARGO_ENCODED_RUSTFLAGS', 'RUSTDOCFLAGS', 'CARGO_BUILD_TARGET', 'CARGO_BUILD_BUILD_DIR'):
         env.pop(name, None)
     feature = 'macos-resident-acceleration' if accelerated else 'macos-resident'
+    if keyed:
+        feature += ',macos-resident-kmac-acceleration,macos-resident-tuplehash-acceleration'
     if accelerated:
         for capability in ('SHA256', 'SHA512', 'SHA3'):
             if subprocess.check_output(['/usr/sbin/sysctl', '-n', 'hw.optional.arm.FEAT_' + capability], text=True).strip() != '1':
@@ -103,7 +127,7 @@ def execute(toolchain, destination, accelerated=False):
     manifest = ('[package]\nname="resident-consumer"\nversion="0.0.0"\nedition="2024"\n'
                 '[workspace]\n[dependencies]\nbrynja-crypto-cpu-std = { path = ' +
                 json.dumps(str(roots['brynja-crypto-cpu-std'])) +
-                ', default-features=false, features=["' + feature + '", "strict-sha2"] }\n'
+                ', default-features=false, features=' + json.dumps(feature.split(',') + ['strict-sha2']) + ' }\n'
                 '[patch.crates-io]\n' + patches + '\n')
     (consumer / 'Cargo.toml').write_text(manifest)
     count = macos_resident_oracle.write_consumer(consumer, accelerated)
@@ -119,11 +143,18 @@ def execute(toolchain, destination, accelerated=False):
         source += '{ let input: &[u8] = &' + repr(list(message)) + ';\n'
         source += 'assert_eq!(s.hash(input)?.expose(), &' + repr(list(hashlib.sha256(message).digest())) + '); }\n'
     source += 'families::run().map_err(|_|Error::Invariant)?;\n'
+    if keyed:
+        if macos_resident_keyed_oracle.write_consumer(consumer) != 512:
+            raise ValueError('keyed oracle population changed')
+        source = 'mod keyed;\n' + source
+        source += 'keyed::run().map_err(|_|Error::Invariant)?;\n'
     source += 'println!("RESIDENT_PACKAGE_ORACLE: 17 passed; dump exclusion NOT claimed"); Ok(()) }\n'
     (consumer / 'src/main.rs').write_text(source)
     run([*cargo, 'generate-lockfile', '--offline'], consumer, env)
     metadata = json.loads(run([*cargo, 'metadata', '--locked', '--offline', '--format-version', '1'], consumer, env))
     expected = {'resident-consumer', 'brynja-core', 'brynja-hash-core', 'brynja-hash-sha2', 'brynja-hash-sha3', 'brynja-crypto-cpu', 'brynja-crypto-cpu-std'}
+    if keyed:
+        expected.update(('brynja-mac-kmac', 'brynja-hash-tuple'))
     if {p['name'] for p in metadata['packages']} != expected:
         raise ValueError('packaged resident dependency closure changed')
     for package in metadata['packages']:
@@ -137,6 +168,8 @@ def execute(toolchain, destination, accelerated=False):
             raise ValueError('oracle did not run')
         if 'RESIDENT_FAMILY_ORACLE: 662 passed' not in output.splitlines():
             raise ValueError('family oracle did not run')
+        if keyed and 'RESIDENT_KEYED_ORACLE: 1024 passed; 512 scalar; 512 ArmKeccak' not in output.splitlines():
+            raise ValueError('keyed oracle did not run')
         print(f'Packaged consumer profile={profile or ["debug"]}; panic={panic}', flush=True)
         print(output.strip(), flush=True)
     hosted = roots['brynja-crypto-cpu-std']
@@ -149,6 +182,8 @@ def execute(toolchain, destination, accelerated=False):
         if '0 failed' not in output or 'test result: ok. 0 passed;' in output:
             raise ValueError('packaged resident tests did not execute')
         count = (43 if accelerated else 31) if target == '--lib' else (50 if accelerated else 36)
+        if keyed:
+            count += 24 if target == '--lib' else 38
         expected = f'test result: ok. {count} passed; 0 failed; 0 ignored;'
         if accelerated and target == '--lib':
             for token in ('MACOS_RESIDENT_SHA2_COMPILED: ArmSha256; differential_cases=224; actual_message_blocks_verified',
@@ -156,10 +191,15 @@ def execute(toolchain, destination, accelerated=False):
                           'MACOS_RESIDENT_SHA3_COMPILED: ArmKeccak; differential_cases=848'):
                 if token not in output.splitlines():
                     raise ValueError('required native route did not execute: ' + token)
+            if keyed:
+                for token in ('MACOS_RESIDENT_KMAC_COMPILED: ArmKeccak; differential_cases=576',
+                              'MACOS_RESIDENT_TUPLEHASH_COMPILED: ArmKeccak; differential=1120'):
+                    if token not in output.splitlines():
+                        raise ValueError('required keyed route did not execute: ' + token)
         if expected not in output:
             raise ValueError('packaged resident test population changed')
         print(output, flush=True)
-    mutations(cargo, hosted, env, feature, accelerated)
+    mutations(cargo, hosted, env, feature, accelerated, keyed)
     print('Packaged macOS resident profile: PASS; development evidence only', flush=True)
 
 
@@ -167,6 +207,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--toolchain', default='1.99.1')
     parser.add_argument('--accelerated', action='store_true')
+    parser.add_argument('--keyed', action='store_true', help='also compare scalar and Arm KMAC/TupleHash')
     args = parser.parse_args()
     with tempfile.TemporaryDirectory(prefix='brynja-macos-resident-') as directory:
-        execute(args.toolchain, Path(directory), args.accelerated)
+        execute(args.toolchain, Path(directory), args.accelerated, args.keyed)

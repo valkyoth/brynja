@@ -75,7 +75,8 @@ ROWS = {
         "| MD5 | ✅ Fully implemented | ❌ Not independently verified |",
         "| Ordinary hosted batch SIMD | 🚧 In progress; native qualification pending | ❌ No |",
         "| Hardened hosted batch SIMD | 🚧 In progress; retest and native evidence pending | ❌ No |",
-        "| Opt-in protected scalar MD5 session | 🚧 Implemented; qualification pending | ❌ No |"
+        "| Opt-in protected scalar MD5 session | 🚧 Implemented; qualification pending | ❌ No |",
+        "| Apple Silicon resident scalar/NEON MD5 sessions (no dump exclusion) | 🚧 Implemented; qualification pending | ❌ No |"
     ],
     "crates/brynja-tls13-handshake/README.md": [
         "| Shared TLS 1.3 handshake state machine | ❌ Not implemented | ❌ No |"
@@ -227,7 +228,8 @@ ROWS = {
         "| SHA-1 | ✅ Fully implemented | ❌ Not independently verified |",
         "| Opt-in hosted ordinary acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |",
         "| Opt-in hosted hardened acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |",
-        "| Protected scalar SHA-1 sessions (Linux GNU x86-64/little-endian AArch64) | 🚧 Implemented; qualification pending | ❌ Not independently verified |"
+        "| Protected scalar SHA-1 sessions (Linux GNU x86-64/little-endian AArch64) | 🚧 Implemented; qualification pending | ❌ Not independently verified |",
+        "| Apple Silicon resident scalar/Arm SHA-1 sessions (no dump exclusion) | 🚧 Implemented; qualification pending | ❌ Not independently verified |"
     ],
     "crates/brynja-dtls/README.md": [
         "| DTLS 1.2/1.3 engines | ❌ Not implemented | ❌ No |"

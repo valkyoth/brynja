@@ -18,6 +18,8 @@ use brynja_legacy_sha1::{BitString, Sha1, Sha1Backend, Sha1Error};
 pub mod execution;
 #[cfg(feature = "runtime-hardened-execution")]
 pub mod hardened_execution;
+#[cfg(feature = "macos-resident")]
+pub mod macos_resident;
 #[cfg(feature = "strict-execution")]
 pub mod strict_execution;
 

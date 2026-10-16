@@ -48,6 +48,7 @@ Kani, Miri, fuzzing or a pentest is not independent cryptographic verification.
 | Opt-in hosted ordinary acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |
 | Opt-in hosted hardened acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |
 | Protected scalar SHA-1 sessions (Linux GNU x86-64/little-endian AArch64) | 🚧 Implemented; qualification pending | ❌ Not independently verified |
+| Apple Silicon resident scalar/Arm SHA-1 sessions (no dump exclusion) | 🚧 Implemented; qualification pending | ❌ Not independently verified |
 
 ## Hardware and SIMD
 
@@ -64,6 +65,46 @@ lanes are not qualified by those observations. See the
 for selection, streaming, byte/bit hashing and ownership examples.
 
 ## Use
+
+Default-off `macos-resident` adds a separate Apple Silicon macOS
+`macos_resident::Session`. It acquires guarded, locked, fork-excluded output and
+a private joined worker stack; owned payloads clear on error, reuse and release.
+It does **not** exclude core dumps and is not a fallback for `strict-execution`.
+Caller input/copies, OS storage, fatal abort and privileged snapshots are outside
+this profile. SHA-1 remains collision-broken and unsuitable for authentication.
+
+`macos-resident-acceleration` additionally exposes `CompiledSession`, requiring
+build-wide `-C target-feature=+neon,+sha2` and lifetime-wide compatible deployment.
+The Cargo feature alone does not enable instructions. It requires the Arm route,
+never silently selecting scalar; authority and KAT stay on the resident worker.
+Unsupported targets reject. Native development tests are not independent review.
+
+```rust
+# #[cfg(feature = "macos-resident")] {
+# fn resident_example() -> Result<(), brynja_legacy_sha1_std::macos_resident::Error> {
+use brynja_legacy_sha1_std::macos_resident::{Session, Limits};
+let mut session = Session::new(Limits {
+    stack_bytes: 262144, max_stack_mapping_bytes: 1048576,
+    max_output_mapping_bytes: 65536, max_message_bits: 8192, max_chunks: 16,
+})?;
+let digest = session.hash(b"legacy compatibility input")?;
+assert_eq!(digest.expose().len(), 20);
+drop(digest); // clears the borrowed output
+# Ok(())
+# }
+# if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+#     resident_example()?;
+# } else {
+#     assert!(matches!(resident_example(), Err(brynja_legacy_sha1_std::macos_resident::Error::Resource(
+#         brynja_legacy_sha1_std::macos_resident::ResourceError::Unsupported))));
+# }
+# }
+# Ok::<(), Box<dyn std::error::Error>>(())
+```
+
+See the [resident scope](../../docs/macos-resident-profile.md) and the
+[byte/bit API](src/macos_resident/mod.rs). Neither feature imports legacy
+algorithms into the modern facade or enables strict Mac admission.
 
 The separate default-off `strict-execution` feature adds
 `strict_execution::Session`. Construct it with explicit protected stack/output

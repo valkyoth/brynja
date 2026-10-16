@@ -5,6 +5,7 @@ from pathlib import Path
 import tempfile
 import unittest
 import sys
+import shutil
 
 import darwin_resident_abi as abi
 import first_party_rust_crypto as first
@@ -23,6 +24,23 @@ cpu_spec.loader.exec_module(cpu_support)
 
 
 class DarwinBoundaryTests(unittest.TestCase):
+    def test_legacy_private_adapters_match_reviewed_backend(self):
+        abi.validate_private_copies(ROOT)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for relative in set(abi.PRIVATE_COPIES) | set(abi.PRIVATE_COPIES.values()):
+                target = root / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(ROOT / relative, target)
+            abi.validate_private_copies(root)
+            for relative in abi.PRIVATE_COPIES:
+                path = root / relative
+                original = path.read_text()
+                path.write_text(original + '\n// unreviewed divergence\n')
+                with self.assertRaisesRegex(ValueError, 'private Darwin adapter diverged'):
+                    abi.validate_private_copies(root)
+                path.write_text(original)
+
     def test_feature_stays_opt_in_and_sources_stay_development_bound(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -65,8 +83,9 @@ class DarwinBoundaryTests(unittest.TestCase):
                 root = Path(directory)
                 path = root / relative
                 path.parent.mkdir(parents=True)
-                (root / 'crates/brynja-crypto-cpu-std/Cargo.toml').write_text(
-                    '[package]\nname="brynja-crypto-cpu-std"\nversion="0.1.1"\n')
+                crate = relative.parts[1]
+                (root / 'crates' / crate / 'Cargo.toml').write_text(
+                    f'[package]\nname="{crate}"\nversion="0.1.1"\n')
                 original = (ROOT / relative).read_text()
                 path.write_text(original)
                 first.validate(root)

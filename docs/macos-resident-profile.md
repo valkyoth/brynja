@@ -179,6 +179,28 @@ review, not whole-image erasure proof. Independent review is pending.
 
 ## Finite implementation sequence
 
+The legacy hosted crates separately expose `macos-resident::Session` via their
+default-off `macos-resident` feature. Scalar SHA-1/MD5 accept canonical MSB-first
+bit tails and borrowed chunk lists. `macos-resident-acceleration` adds SHA-1
+`CompiledSession` requiring Arm SHA1/NEON, and MD5 `batch::Session` requiring
+NEON work across eligible lanes. These are compatibility-only algorithms with
+broken collision resistance, not authentication mechanisms. No legacy export
+is added to the modern or strict facade.
+
+Each legacy crate keeps its Darwin adapter private: no general-purpose worker
+callback is exported, and activating resident features does not pull in the
+modern hosted dependency. The private adapters match the reviewed shared
+Darwin implementation byte-for-byte (apart from the private error import), with
+source-hash and copy-parity regressions. They share the residency, cleanup and
+NO dump-exclusion contract above. See the [SHA-1 API](../crates/brynja-legacy-sha1-std/src/macos_resident/mod.rs)
+and [MD5 API](../crates/brynja-legacy-md5-std/src/macos_resident/mod.rs).
+
+Focused checks cover official vectors, independent packaged bit oracles,
+actual Arm/NEON work, cancellation, rejection/reuse versus quarantine, forgotten
+loans, mapped state/staging/output placement, join and clearing. Darwin compiler
+review covers six coordinator/worker roots and eight existing opaque scalar,
+hardware and transfer blocks in both panic modes; it is not whole-image erasure.
+
 1. Darwin mapping/thread foundation and scalar SHA-256 vertical slice.
 2. Remaining scalar SHA-2/general-t and SHA-3/SHAKE/cSHAKE; explicit Arm routes.
 3. KMAC/TupleHash and separately scoped legacy SHA-1/MD5 adapters.
@@ -190,9 +212,11 @@ Each package includes its own failure, ownership and cleanup tests. Scalar
 SHA-2/general-t and SHA-3/SHAKE/cSHAKE scalar and explicit Arm routes are
 development-tested. Package 02 includes a bounded Darwin emitted-code review,
 not whole-image or dump-erasure qualification.
-KMAC and TupleHash scalar/Arm wrappers are also development-tested. Package 03
-remains incomplete until separate legacy adapters are integrated; batching and
-ParallelHash are not implied.
+KMAC/TupleHash scalar/Arm wrappers and separate legacy SHA-1 scalar/Arm and MD5
+scalar/NEON adapters complete package 03 at this bounded development scope.
+The legacy packaged oracle covers 507 scalar/Arm comparisons and 712 NEON lanes
+per build profile, plus 43 ownership/lifetime negatives and 13 compiled mutants.
+Modern batching and ParallelHash are not implied by the legacy MD5 batch adapter.
 No Intel Mac qualification or new isolation framework is scheduled here.
 
 Development baseline: Apple M2 Pro, macOS 27.0.1 (26A434), 16-KiB pages,

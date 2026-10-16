@@ -10,6 +10,8 @@ publish = ["crates-io"]
 
 [features]
 default = []
+macos-resident = ["dep:brynja-core"]
+macos-resident-acceleration = ["macos-resident", "brynja-legacy-md5/hardened-execution"]
 strict-execution = ["dep:brynja-core", "dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/protected-memory"]
 strict-acceleration = ["strict-execution", "brynja-legacy-md5/hardened-execution"]
 runtime-execution = ["brynja-legacy-md5/execution"]

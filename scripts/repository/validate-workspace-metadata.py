@@ -9,6 +9,7 @@ import tomllib
 from pathlib import Path
 import parallelhash_workspace_policy as execution_policy
 import strict_workspace_policy as strict_policy
+import macos_workspace_policy as resident_policy
 
 ROOT = Path(__file__).resolve().parents[2]
 POLICY = ROOT / "package-policy.toml"
@@ -265,6 +266,7 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
     if name == "brynja-hash-parallel-std":
         expected.update({"runtime-execution": ["brynja-hash-parallel/runtime-execution", "dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/runtime-execution", "dep:brynja-crypto-cpu"], "strict-execution": ["dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/protected-memory"], "strict-acceleration": ["strict-execution", "brynja-hash-parallel/hardened-batch-execution", "dep:brynja-crypto-cpu", "brynja-crypto-cpu/keccak-hardened-batch"]})
         expected["runtime-batch-execution"] = ["runtime-execution", "brynja-hash-parallel/hardened-batch-execution", "brynja-crypto-cpu-std/keccak-hardened-batch", "brynja-crypto-cpu/keccak-hardened-batch"]
+    expected.update(resident_policy.FEATURES.get(name, {}))
     if package.get("features") != expected:
         raise ValueError(f"{name} feature policy differs from its package class")
 

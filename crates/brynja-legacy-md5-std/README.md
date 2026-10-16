@@ -51,6 +51,50 @@ Kani, Miri, fuzzing or a pentest is not independent cryptographic verification.
 | Ordinary hosted batch SIMD | 🚧 In progress; native qualification pending | ❌ No |
 | Hardened hosted batch SIMD | 🚧 In progress; retest and native evidence pending | ❌ No |
 | Opt-in protected scalar MD5 session | 🚧 Implemented; qualification pending | ❌ No |
+| Apple Silicon resident scalar/NEON MD5 sessions (no dump exclusion) | 🚧 Implemented; qualification pending | ❌ No |
+
+## Apple Silicon resident compatibility profile
+
+Default-off `macos-resident` adds a separate `macos_resident::Session` on native
+Apple Silicon macOS. Guarded, locked, fork-excluded output and a private joined
+worker stack are acquired before input. Owned payloads clear on error, reuse
+and release. This is **not core-dump exclusion** or a strict-profile fallback.
+Caller input/copies, OS storage, fatal abort and privileged snapshots are outside
+the profile. MD5 remains collision-broken and unsuitable for authentication.
+
+`macos-resident-acceleration` additionally exposes `macos_resident::batch`:
+eight ordered slots, required NEON vector work, clearing scalar tails/padding,
+explicit compression budget and cancellation. Build-wide `+neon` and compatible
+deployment throughout execution are required; a Cargo feature is not instruction
+admission. Ineligible workloads reject, not silently fall back. Batch shape and
+work reports remain public. Independent review/qualification remain pending.
+
+```rust
+# #[cfg(feature = "macos-resident")] {
+# fn resident_example() -> Result<(), brynja_legacy_md5_std::macos_resident::Error> {
+use brynja_legacy_md5_std::macos_resident::{Session, Limits};
+let mut session = Session::new(Limits {
+    stack_bytes: 262144, max_stack_mapping_bytes: 1048576,
+    max_output_mapping_bytes: 65536, max_message_bits: 8192, max_chunks: 16,
+})?;
+let digest = session.hash(b"legacy compatibility input")?;
+assert_eq!(digest.expose().len(), 16);
+drop(digest); // clears the borrowed output
+# Ok(())
+# }
+# if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+#     resident_example()?;
+# } else {
+#     assert!(matches!(resident_example(), Err(brynja_legacy_md5_std::macos_resident::Error::Resource(
+#         brynja_legacy_md5_std::macos_resident::ResourceError::Unsupported))));
+# }
+# }
+# Ok::<(), Box<dyn std::error::Error>>(())
+```
+
+See the [resident scope](../../docs/macos-resident-profile.md),
+[scalar API](src/macos_resident/mod.rs) and [NEON example](src/macos_resident/batch/mod.rs).
+Unsupported targets reject; existing strict APIs and the modern facade are unchanged.
 
 ## Protected scalar compatibility profile
 

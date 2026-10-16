@@ -167,6 +167,8 @@ def validate(root=ROOT, reviewed=True):
             raise ValueError('SHA-1 opaque boundary weakened')
     for file, features in ((LEAF, {'default': [], 'cpu': [], 'cpu-evidence': [], 'execution': ['cpu'], 'hardened-execution': ['cpu']}),
                            (ADAPTER, {'default': [], 'runtime-execution': ['brynja-legacy-sha1/execution'],
+                                      'macos-resident': ['dep:brynja-core'],
+                                      'macos-resident-acceleration': ['macos-resident', 'brynja-legacy-sha1/hardened-execution'],
                                       'strict-execution': ['dep:brynja-core', 'dep:brynja-crypto-cpu-std', 'brynja-crypto-cpu-std/protected-memory'],
                                       'strict-acceleration': ['strict-execution', 'brynja-legacy-sha1/hardened-execution'],
                                       'runtime-hardened-execution': ['runtime-execution', 'brynja-legacy-sha1/hardened-execution']})):

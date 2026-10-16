@@ -1,0 +1,95 @@
+use super::ResourceError;
+pub use brynja_legacy_sha1::PublicDeclassification;
+use std::sync::atomic::{AtomicBool, Ordering};
+
+/// Explicit public bounds. Mapping limits account for rounding and both guards.
+///
+/// Two mappings are acquired: one stack and one output. Their respective limits
+/// are per resource, not a process-wide quota. Use checked addition when applying
+/// an aggregate application budget. Input storage remains caller-owned.
+#[derive(Clone, Copy, Debug)]
+pub struct Limits {
+    /// Requested worker stack reservation, at least 64 KiB.
+    pub stack_bytes: usize,
+    /// Bound for stack reservation including guards and page rounding.
+    pub max_stack_mapping_bytes: usize,
+    /// Bound for the separately mapped digest including guards and rounding.
+    pub max_output_mapping_bytes: usize,
+    /// Maximum total input bits in one operation; zero permits only empty input.
+    pub max_message_bits: u128,
+    /// Bounds iteration even for an adversarial list of empty chunks.
+    pub max_chunks: usize,
+}
+
+/// Public outcome only; no hash state, message contents or private length.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[non_exhaustive]
+pub enum Error {
+    /// Required accelerated processing or admission failed.
+    #[cfg(feature = "macos-resident-acceleration")]
+    Execution(brynja_legacy_sha1::hardened_execution::Error),
+    /// This compiled wrapper permanently rejected further work.
+    #[cfg(feature = "macos-resident-acceleration")]
+    Quarantined,
+    /// Required platform/storage/thread protection could not be provided.
+    Resource(ResourceError),
+    /// Configuration cannot admit a chunk list.
+    InvalidLimits,
+    /// The request exceeds its public chunk or bit budget.
+    WorkLimit,
+    /// Total input does not fit the algorithm's encoded length domain.
+    MessageTooLong,
+    /// Invalid final-byte bit count or nonzero unused tail bits.
+    InvalidBits,
+    /// Cooperative cancellation was observed.
+    Cancelled,
+    /// A public declassification destination has the wrong width.
+    OutputLength,
+    /// An internal scoped-state or transfer invariant was violated.
+    Invariant,
+}
+impl From<ResourceError> for Error {
+    fn from(error: ResourceError) -> Self {
+        Self::Resource(error)
+    }
+}
+impl core::fmt::Display for Error {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.write_str(match self {
+            #[cfg(feature = "macos-resident-acceleration")]
+            Self::Execution(_) => "resident legacy SHA-1 execution failed",
+            #[cfg(feature = "macos-resident-acceleration")]
+            Self::Quarantined => "resident legacy SHA-1 quarantined",
+            Self::Resource(_) => "resident legacy SHA-1 protected resource failed",
+            Self::InvalidLimits => "resident legacy SHA-1 limits are invalid",
+            Self::WorkLimit => "resident legacy SHA-1 work limit exceeded",
+            Self::MessageTooLong => "resident legacy SHA-1 message domain exceeded",
+            Self::InvalidBits => "resident legacy SHA-1 tail is not canonical",
+            Self::Cancelled => "resident legacy SHA-1 cancelled",
+            Self::OutputLength => "resident legacy SHA-1 output length mismatch",
+            Self::Invariant => "resident legacy SHA-1 internal invariant failed",
+        })
+    }
+}
+impl std::error::Error for Error {}
+
+/// Cooperative cancellation; cannot forcibly stop a native worker.
+#[derive(Default)]
+pub struct Cancellation(AtomicBool);
+impl Cancellation {
+    /// Creates an unset cancellation flag. It cannot be reset after cancellation.
+    pub const fn new() -> Self {
+        Self(AtomicBool::new(false))
+    }
+    /// Requests cancellation at the next bounded processing boundary.
+    pub fn cancel(&self) {
+        self.0.store(true, Ordering::Release);
+    }
+    pub(super) fn check(&self) -> Result<(), Error> {
+        if self.0.load(Ordering::Acquire) {
+            Err(Error::Cancelled)
+        } else {
+            Ok(())
+        }
+    }
+}

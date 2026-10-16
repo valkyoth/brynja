@@ -64,3 +64,26 @@ OS_ABIS = {
     ),
 }
 
+# Rust has no cross-crate private visibility. Keep legacy workers private rather
+# than export a callback API or introduce legacy dependencies into modern crates.
+# These copies must remain byte-identical to the reviewed OS-only implementation.
+PRIVATE_COPIES = {}
+for family in ('sha1', 'md5'):
+    destination = Path(f'crates/brynja-legacy-{family}-std/src/macos_resident')
+    origin = Path('crates/brynja-crypto-cpu-std/src/macos_resident')
+    for relative in ('resource.rs', 'resource/darwin.rs', 'resource/darwin/thread.rs',
+                     'resource/darwin/observe.rs', 'resource/darwin/tests.rs'):
+        PRIVATE_COPIES[destination / relative] = origin / relative
+        if origin / relative in UNSAFE_MODULES:
+            UNSAFE_MODULES[destination / relative] = UNSAFE_MODULES[origin / relative]
+            OS_ABIS[destination / relative] = OS_ABIS[origin / relative]
+
+
+def validate_private_copies(root):
+    for copy, original in PRIVATE_COPIES.items():
+        expected = (root / original).read_text()
+        if copy.name == 'resource.rs':
+            expected = expected.replace('use super::Error;', 'use super::ResourceError as Error;', 1)
+        if (root / copy).is_symlink() or (root / copy).read_text() != expected:
+            raise ValueError('private Darwin adapter diverged: ' + str(copy))
+

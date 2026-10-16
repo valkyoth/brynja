@@ -44,6 +44,7 @@ See the [compiled TupleHash API example](src/strict_tuplehash/compiled.rs).
 | --- | --- | --- |
 | Apple Silicon resident SHA-2/SHA-3, KMAC/TupleHash | 🚧 Separate opt-in scalar/Arm resident/clearing APIs; no dump exclusion; qualification pending | ❌ No |
 | Apple Silicon resident SHA-2/general-t and SHA-3/SHAKE/cSHAKE | 🚧 Scalar or explicit Arm SHA2/SHA512/Keccak; bit-aware, bounded output/cancellation; no dump-exclusion guarantee; qualification pending | ❌ No |
+| Apple Silicon resident SHA-2/Keccak independent-message batches | 🚧 Default-off resident workspace/output; explicit portable or required NEON, no fallback; no dump exclusion; qualification pending | ❌ No |
 | Windows x64 VBS retained SHA-256 owner/session | 🚧 Bounded scalar API; development-tested; production qualification pending | ❌ No |
 | Windows x64 VBS streaming SHA-2 and general SHA-512/t | 🚧 Scalar version-six worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-224/256 SHA-NI sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
@@ -365,6 +366,15 @@ explicitly public byte/bit inputs and preserve transactional output. They are
 not secret-erasing owners.
 
 ## Hardware and SIMD
+
+On Apple Silicon macOS, the separate default-off `macos-resident-batch`
+feature exposes `macos_resident::batch::Session`. Select
+`Route::Sha256(None)`, `Route::Sha512(None)` or `Route::Keccak(None)` for
+explicit portable work; `Some(Neon)` requires a compatible deployment and
+actual SIMD work. Sparse lanes and scalar tails are supported. This is a
+resident/clearing profile, **not strict dump-excluded protection**.
+See the [complete batch API example](src/macos_resident/batch/mod.rs) and
+[resource limits and residuals](../../docs/macos-resident-profile.md).
 
 Windows enclave evidence covers [conditional Brynja-owned cleanup](../../docs/windows-enclave-whole-image-cleanup.md#bounded-cleanup-claim-and-evidence-map),
 not complete SDK/OS or whole-process erasure. Development signing does not

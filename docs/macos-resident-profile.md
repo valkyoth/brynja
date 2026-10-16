@@ -216,7 +216,19 @@ KMAC/TupleHash scalar/Arm wrappers and separate legacy SHA-1 scalar/Arm and MD5
 scalar/NEON adapters complete package 03 at this bounded development scope.
 The legacy packaged oracle covers 507 scalar/Arm comparisons and 712 NEON lanes
 per build profile, plus 43 ownership/lifetime negatives and 13 compiled mutants.
-Modern batching and ParallelHash are not implied by the legacy MD5 batch adapter.
+The separate modern batch adapter uses `macos-resident-batch`, not the legacy
+MD5 feature. `macos_resident::batch::Session` supports eight SHA-224/256 slots or
+four SHA-512-family/Keccak slots. `Route::*(None)` is explicitly portable;
+`Some(Neon)` requires actual vector work and rejects ineligible workloads.
+Incomplete groups and unequal tails are explicitly scalar work inside resident
+workers, not an all-lanes-SIMD claim. Workspaces, startup authority, scratch,
+staging and borrowed outputs use preacquired resident resources. Cancellation and
+ordinary request rejection allow reuse; backend/invariant failures and recoverable
+worker panic quarantine. All mapping padding and joined stacks are cleared.
+The four mappings have separate caller bounds, including two guards and real
+Darwin page rounding; no unlocked fallback is permitted. The profile still
+provides NO dump exclusion. Lengths, lane activity and work reports are public.
+Bounded threaded resident ParallelHash remains the unfinished part of package 04.
 No Intel Mac qualification or new isolation framework is scheduled here.
 
 Development baseline: Apple M2 Pro, macOS 27.0.1 (26A434), 16-KiB pages,

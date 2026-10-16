@@ -1,6 +1,7 @@
 """Canonical backend and protected compiled-source inventories."""
 
 MACOS_RESIDENT_FEATURES = {
+    "macos-resident-batch": ["macos-resident", "sha256-hardened-batch", "sha512-hardened-batch", "keccak-hardened-batch"],
     "macos-resident": ["dep:brynja-core", "brynja-hash-sha2/general-sha512-t", "dep:brynja-hash-sha3"],
     "macos-resident-acceleration": ["macos-resident", "brynja-hash-sha2/hardened-execution", "brynja-hash-sha3/hardened-execution"],
     "macos-resident-kmac": ["macos-resident", "dep:brynja-mac-kmac"],
@@ -11,6 +12,12 @@ MACOS_RESIDENT_FEATURES = {
 
 # Distinct residency/clearing development profile, NOT strict admission.
 MACOS_RESIDENT_SOURCES = {
+    "src/macos_resident/batch/mod.rs": "macos-resident-batch-session-development",
+    "src/macos_resident/batch/types.rs": "macos-resident-batch-api-types",
+    "src/macos_resident/batch/worker.rs": "macos-resident-batch-worker",
+    "src/macos_resident/batch/tests.rs": "macos-resident-batch-admission-tests",
+    "src/macos_resident/batch/tests/native.rs": "macos-resident-batch-native-sha2-tests",
+    "src/macos_resident/batch/tests/sponge.rs": "macos-resident-batch-native-sponge-tests",
     "src/macos_resident/kmac/mod.rs": "macos-resident-kmac-session-development",
     "src/macos_resident/kmac/types.rs": "macos-resident-kmac-api-types",
     "src/macos_resident/kmac/worker.rs": "macos-resident-kmac-worker",

@@ -17,7 +17,7 @@
 //! this guarantee. Instrumented builds are diagnostic only: interposed locking
 //! and relocated stacks do not establish residency. No certification is claimed.
 //! Scalar sessions never select hardware; separate features enable explicit Arm
-//! routes. SIMD batching is not implemented yet.
+//! routes. The separate batch feature enables explicit portable/NEON batching.
 //!
 //! ```no_run
 //! use brynja_crypto_cpu_std::macos_resident::{Error, Limits, Sha256Session};
@@ -30,6 +30,8 @@
 //! # Ok::<(), Error>(())
 //! ```
 
+#[cfg(feature = "macos-resident-batch")]
+pub mod batch;
 #[cfg(feature = "macos-resident-kmac")]
 pub mod kmac;
 mod resource;

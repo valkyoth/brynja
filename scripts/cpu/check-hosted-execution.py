@@ -72,6 +72,10 @@ def validate(write=False):
               ROOT / 'scripts/cryptography/macos_resident_keyed_oracle.py',
               ROOT / 'scripts/cpu/cpu_boundary_backends.py',
               ROOT / 'scripts/cryptography/check-macos-resident-codegen.py',
+              ROOT / 'scripts/cryptography/check-macos-resident-batch-package.py',
+              ROOT / 'scripts/cryptography/macos_resident_batch_oracle.py',
+              ROOT / 'scripts/cryptography/check-macos-resident-batch-codegen.py',
+              ROOT / 'scripts/cryptography/test-macos-resident-batch-package.py',
               *(ROOT / name for name in memory)]
     for owner in (CPU, HOST):
         crate = ROOT / 'crates' / owner

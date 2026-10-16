@@ -7,6 +7,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'cpu'))
 from cpu_boundary_backends import MACOS_RESIDENT_FEATURES
 
 FEATURES = {'brynja-crypto-cpu-std': MACOS_RESIDENT_FEATURES}
+FEATURES['brynja-hash-parallel-std'] = {
+    'macos-resident': [],
+    'macos-resident-acceleration': ['macos-resident', 'brynja-hash-parallel/hardened-batch-execution',
+                                   'dep:brynja-crypto-cpu', 'brynja-crypto-cpu/keccak-hardened-batch'],
+}
 for family in ('sha1', 'md5'):
     FEATURES[f'brynja-legacy-{family}-std'] = {
         'macos-resident': ['dep:brynja-core'],
@@ -18,7 +23,7 @@ def regressions(baseline, package, reject):
     count = 0
     for name, features in FEATURES.items():
         for feature in features:
-            for key, value in (('default', [feature]), (feature, []),
+            for key, value in (('default', [feature]), (feature, ['unreviewed-feature']),
                                (feature, ['protected-memory']), (feature, None)):
                 changed = copy.deepcopy(baseline)
                 target = package(changed, name)['features']

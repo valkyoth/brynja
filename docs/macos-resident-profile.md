@@ -28,7 +28,7 @@ other Apple OSes and interpreter/model builds reject construction.
 | Worker lifetime | Private callback, caller-supplied stack, synchronous native join |
 | Owned-memory cleanup | Whole payload including page padding; stack after join, output on loan drop/reuse/error, mappings before release |
 | Core-dump exclusion | **Not guaranteed**; locked memory may be dumped |
-| Hardware/SIMD | Scalar sessions unchanged; explicit Arm SHA2/SHA512/Keccak via separate opt-in feature; SIMD batching pending |
+| Hardware/SIMD | Separate scalar and explicit Arm SHA2/SHA512/Keccak sessions; opt-in NEON batching and bounded ParallelHash workers; qualification pending |
 | Independent verification/certification | Not claimed |
 
 No process-wide dump policy is changed. Applications retain responsibility for
@@ -228,7 +228,37 @@ worker panic quarantine. All mapping padding and joined stacks are cleared.
 The four mappings have separate caller bounds, including two guards and real
 Darwin page rounding; no unlocked fallback is permitted. The profile still
 provides NO dump exclusion. Lengths, lane activity and work reports are public.
-Bounded threaded resident ParallelHash remains the unfinished part of package 04.
+`brynja-hash-parallel-std` separately provides `macos-resident` scalar sessions
+and `macos-resident-acceleration` compiled Arm roots with single-Arm or NEON leaf
+groups. These do not import the strict resource implementation. Every root and
+leaf runs on preacquired resident stacks; CVs, staging and output have separate
+guarded mappings. The coordinator carries borrowed descriptors, exact-plan
+result loans, public shape and status, not populated cryptographic state.
+Workers are genuinely concurrent within bounded waves (one through 64 slots).
+All attributes and job capacity are prepared before launch. Partial launch or
+coordinator unwind joins every started thread, including TLS teardown, before
+clearing any stack or dropping its borrowed job. Join failure aborts rather than
+returning dangling borrows. No detached worker or silent serialized fallback.
+
+All four ParallelHash fixed/XOF identities preserve arbitrary input/customization
+bits and partial outputs, exact leaf order/provenance and empty input. One
+session request is complete rather than an unbounded streaming handle; existing
+scoped collectors retain their exact completion checks. SIMD groups have explicit
+resident scalar tails, not a claim that every leaf uses SIMD. Scalar sessions
+allow reuse after request/worker errors; compiled sessions latch quarantine on
+backend, resource, invariant or recoverable worker-panic failures. Neither mode
+claims dump exclusion or cleanup on fatal abort. Forgetting a result loan cannot
+prevent the next request or session destruction from clearing its mapping.
+
+The package-04 development checks include one-/three-worker independent Python
+oracle cases, explicit NEON execution, concurrent stack placement, partial launch,
+worker/coordinator unwind, resident CV/output and full joined-stack clearing,
+17 ownership/lifetime compile failures and five compiled negative mutations.
+Optimized Darwin abort/unwind checks inspect 15 worker entries, six join groups,
+affine cleanup and emitted opaque erase tails. These are bounded retained-call
+and kernel checks plus native lifecycle tests, not whole-image erasure proof.
+Package 04 is development-tested; final reconciliation and independent retest
+remain package 05.
 No Intel Mac qualification or new isolation framework is scheduled here.
 
 Development baseline: Apple M2 Pro, macOS 27.0.1 (26A434), 16-KiB pages,

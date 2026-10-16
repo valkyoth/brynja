@@ -348,7 +348,7 @@
     "scripts/cryptography/macos_resident_keyed_oracle.py": "309c1a4a6f09641642a1beb97ee799bd0a9580e97944ef0a582384e1833445a0",
     "scripts/cryptography/macos_resident_oracle.py": "53a1e788981de7a37307383fabec0f5ecb120d7e9524985df0393d66914a30d6",
     "scripts/cryptography/test-macos-resident-batch-package.py": "77ef591543bab197b0d45f4d0eedf34588e27f4e69dbd905f258b07333020ef0",
-    "scripts/repository/darwin_resident_abi.py": "d988dbe223aadb6803d28d3e406d4405f3ba3bdc57eb163d1ff5f57a1dfb55a8",
+    "scripts/repository/darwin_resident_abi.py": "82bfa37c0d8c65d0be8919b2949b164b91545c3ea6243ce954f7ff2d7fc87bdc",
     "scripts/repository/unsafe_policy.py": "a6f6a1626192d479837d97b48a3112ed2a861f76b7502510bb9f9b51ca5322a4",
     "scripts/zeroization/check-zeroization-miri.sh": "4aec4f31bb9d0b363c9a19c6d647a196379c3183b19850102bab52a16597dbc2",
     "scripts/zeroization/check-zeroization-sanitizer.sh": "333553482e6d6e0d5852457118e9f4ee430ef384b18df53c357aad51cb6487ab"

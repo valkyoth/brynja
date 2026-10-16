@@ -32,6 +32,25 @@ STD_SOURCES = tuple(STD / "src" / name for name in (
     "strict_execution/mod.rs", "strict_execution/types.rs", "strict_execution/worker.rs",
     "strict_execution/tests.rs", "strict_execution/tests/native.rs",
 ))
+RESIDENT_SOURCES = tuple(STD / "src/macos_resident" / name for name in (
+    "compiled.rs",
+    "compiled/tests.rs",
+    "compiled/tests/native.rs",
+    "compiled/worker.rs",
+    "mod.rs",
+    "resource.rs",
+    "resource/darwin.rs",
+    "resource/darwin/observe.rs",
+    "resource/darwin/tests.rs",
+    "resource/darwin/thread.rs",
+    "resource/darwin/thread/group.rs",
+    "resource/darwin/thread/group/tests.rs",
+    "resource_error.rs",
+    "tests.rs",
+    "tests/native.rs",
+    "types.rs",
+    "worker.rs",
+))
 EXECUTION = tuple(PORTABLE / "src/execution" / name for name in (
     "batch.rs", "batch/tests.rs", "collector/batch.rs",
     "batch/transfer.rs", "batch/transfer/tests.rs",
@@ -95,6 +114,10 @@ DIFFERENTIAL = (
     Path("assurance/parallelhash-differential/src/scoped_execution.rs"),
     Path("assurance/parallelhash-batch-oracle/src/scoped.rs"),
     Path("assurance/parallelhash-batch-oracle/src/main.rs"),
+    Path("scripts/cryptography/check-macos-resident-parallel-package.py"),
+    Path("scripts/cryptography/macos_resident_parallel_oracle.py"),
+    Path("scripts/cryptography/test-macos-resident-parallel-package.py"),
+    Path("scripts/cryptography/check-macos-resident-parallel-codegen.py"),
 )
 SUPPORT = (
     Path("crates/brynja-crypto/src/lib.rs"), Path("crates/brynja/src/lib.rs"),
@@ -104,8 +127,8 @@ SUPPORT = (
     Path("scripts/assurance/check-kani.sh"),
 )
 OWNER_INVENTORY = Path("docs/parallelhash-execution.md")
-FILES = (*SOURCES, *STD_SOURCES, *EXECUTION, *STD_EXECUTION, *TESTS, *MANIFESTS, *PUBLIC, *DIFFERENTIAL, *SUPPORT, OWNER_INVENTORY)
-HASHED = (*SOURCES, *STD_SOURCES, *EXECUTION, *STD_EXECUTION, *TESTS, *MANIFESTS, *PUBLIC, *DIFFERENTIAL)
+FILES = (*SOURCES, *STD_SOURCES, *RESIDENT_SOURCES, *EXECUTION, *STD_EXECUTION, *TESTS, *MANIFESTS, *PUBLIC, *DIFFERENTIAL, *SUPPORT, OWNER_INVENTORY)
+HASHED = (*SOURCES, *STD_SOURCES, *RESIDENT_SOURCES, *EXECUTION, *STD_EXECUTION, *TESTS, *MANIFESTS, *PUBLIC, *DIFFERENTIAL)
 HASHES = {Path(path): digest for path, digest in parallelhash_reviewed_hashes.REVIEWED_HASHES.items()}
 
 class ParallelHashPolicyError(RuntimeError):
@@ -147,7 +170,7 @@ def validate(root: Path) -> None:
     expected_sources = {root / path for path in (*SOURCES, *EXECUTION)}
     if set((root / PORTABLE / "src").rglob("*.rs")) != expected_sources:
         fail("portable ParallelHash source inventory changed")
-    expected_std_sources = {root / path for path in (*STD_SOURCES, *STD_EXECUTION)}
+    expected_std_sources = {root / path for path in (*STD_SOURCES, *STD_EXECUTION, *RESIDENT_SOURCES)}
     if set((root / STD / "src").rglob("*.rs")) != expected_std_sources:
         fail("std ParallelHash source inventory changed")
     loaded = {path: read(root, path) for path in FILES}
@@ -255,6 +278,8 @@ def validate(root: Path) -> None:
     std_manifest = tomllib.loads(loaded[MANIFESTS[1]])
     if std_manifest.get("features") != {
         "default": [],
+        "macos-resident": [],
+        "macos-resident-acceleration": ["macos-resident", "brynja-hash-parallel/hardened-batch-execution", "dep:brynja-crypto-cpu", "brynja-crypto-cpu/keccak-hardened-batch"],
         "runtime-execution": ["brynja-hash-parallel/runtime-execution", "dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/runtime-execution", "dep:brynja-crypto-cpu"],
         "runtime-batch-execution": ["runtime-execution", "brynja-hash-parallel/hardened-batch-execution", "brynja-crypto-cpu-std/keccak-hardened-batch", "brynja-crypto-cpu/keccak-hardened-batch"],
         "strict-execution": ["dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/protected-memory"],

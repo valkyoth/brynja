@@ -68,7 +68,7 @@ class DarwinBoundaryTests(unittest.TestCase):
                     with self.assertRaises(cpu.CpuBoundaryPolicyError):
                         cpu.validate_packages(root)
             manifest.write_text(original)
-            self.assertEqual(len(MACOS_RESIDENT_SOURCES), 44)
+            self.assertEqual(len(MACOS_RESIDENT_SOURCES), 50)
             for relative in MACOS_RESIDENT_SOURCES:
                 path = manifest.parent / relative
                 original = path.read_text()

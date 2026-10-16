@@ -41,12 +41,48 @@ package owns scheduling, resource admission and local worker selection.
 | Scoped multibuffer workers with guarded parent slots and scoped root | 🚧 Implemented; qualification pending | ❌ No |
 | Strict protected scalar root, concurrent leaf stacks, CVs and output | 🚧 Implemented; qualification pending | ❌ No |
 | Strict protected accelerated root and single/SIMD leaf workers | 🚧 Implemented; qualification pending | ❌ No |
+| Apple Silicon resident scalar/Arm/NEON root and bounded concurrent leaf workers; no dump exclusion | 🚧 Implemented; qualification pending | ❌ No |
 
 Brynja is not FIPS 140-3 validated. Threading and project tests do not constitute
 independent verification. This `std` package is absent from the modern facade's
 defaults, bare-metal builds and FIPS module boundaries.
 
 ## Use from a checkout
+
+On Apple Silicon macOS, the distinct default-off `macos-resident` feature adds
+`macos_resident::Session`. It uses preacquired guarded, wired, fork-excluded
+root/worker stacks, CV slots, staging and output; all started workers join before
+the complete stack payloads are cleared. **It does not exclude core dumps and is
+not the strict profile.** Unsupported targets fail rather than falling back.
+The independent `macos-resident-acceleration` feature adds `CompiledSession` with
+explicit Arm Keccak roots and single-Arm or NEON batch leaves. Build-wide
+`-C target-feature=+neon,+sha3` and a compatible lifetime-wide deployment are
+required; enabling the Cargo feature alone does not grant instruction support.
+Partial/ineligible SIMD leaf groups use declared resident scalar tails, never
+fallback after an authority failure. Sessions and output loans are affine;
+inputs and copies made via `expose()` remain the caller's responsibility.
+
+```rust,no_run
+# #[cfg(feature = "macos-resident")] {
+use brynja_hash_parallel_std::macos_resident::{Algorithm, Limits, Session};
+let mut session = Session::new(Algorithm::ParallelHash256(256), Limits {
+    workers: 4, max_leaves: 128, max_block_bytes: 4096,
+    max_customization_bytes: 1024, max_output_bits: 4096,
+    stack_bytes: 262144, max_stack_mapping_bytes: 1048576,
+    max_buffer_mapping_bytes: 1048576,
+})?;
+let digest = session.hash(b"message", 1024, b"example")?;
+assert_eq!(digest.expose().len(), 32);
+drop(digest); // clears the resident result before reuse
+# }
+# Ok::<(), Box<dyn std::error::Error>>(())
+```
+
+Native resource failure is an error, never a weaker allocation. Recoverable
+worker unwinding joins and clears owned memory, but panic hooks/OS TLS, fatal
+aborts, snapshots, dumps and arbitrary register capture are outside this
+contract. Do not fork, cancel native workers, or revoke admitted protections
+during use. Qualification and independent retest remain pending.
 
 The separate, default-off `strict-execution` feature provides
 `strict_execution::Session` for complete bounded requests. It preacquires

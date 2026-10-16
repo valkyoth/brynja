@@ -68,8 +68,8 @@ OS_ABIS = {
 # than export a callback API or introduce legacy dependencies into modern crates.
 # These copies must remain byte-identical to the reviewed OS-only implementation.
 PRIVATE_COPIES = {}
-for family in ('sha1', 'md5'):
-    destination = Path(f'crates/brynja-legacy-{family}-std/src/macos_resident')
+for family in ('sha1', 'md5', 'parallel'):
+    destination = Path(f'crates/brynja-legacy-{family}-std/src/macos_resident') if family != 'parallel' else Path('crates/brynja-hash-parallel-std/src/macos_resident')
     origin = Path('crates/brynja-crypto-cpu-std/src/macos_resident')
     for relative in ('resource.rs', 'resource/darwin.rs', 'resource/darwin/thread.rs',
                      'resource/darwin/observe.rs', 'resource/darwin/tests.rs'):
@@ -79,11 +79,28 @@ for family in ('sha1', 'md5'):
             OS_ABIS[destination / relative] = OS_ABIS[origin / relative]
 
 
+# Only ParallelHash adds scoped groups; canonical single-worker code stays exact.
+PARALLEL_ADDITIONS = {
+    "resource.rs": ("        pub(in super::super) fn run<", "        pub(in super::super) fn run_group<F: FnMut() + Send>(\n            _: &mut [Self],\n            _: &mut [F],\n        ) -> Result<(), Error> {\n            Err(Error::Unsupported)\n        }\n"),
+    "resource/darwin.rs": ("    #[cfg(test)]\n    pub(in super::super) fn verify_native", "    pub(in super::super) fn run_group<F: FnMut() + Send>(\n        mappings: &mut [Self],\n        work: &mut [F],\n    ) -> Result<(), Error> {\n        thread::run_group(mappings, work)\n    }\n"),
+    "resource/darwin/thread.rs": ("// Darwin _opaque", "mod group;\npub(super) use group::run as run_group;\n\n"),
+}
+UNSAFE_MODULES[Path("crates/brynja-hash-parallel-std/src/macos_resident/resource/darwin.rs")] = ("39aa50658b121ce67569b04e154f5a7f6afb5ae579e7ca517f670413b3a7025d", 10, 0, 10)
+UNSAFE_MODULES[Path("crates/brynja-hash-parallel-std/src/macos_resident/resource/darwin/thread.rs")] = ("857a4fbf64a729337a2005c5e1f47c362d4d050dd024eb9a1b606cfdc0ab773d", 6, 0, 6)
+UNSAFE_MODULES[Path("crates/brynja-hash-parallel-std/src/macos_resident/resource/darwin/thread/group.rs")] = ("78e5d0942858d6906b499988df42314ffbf811fb15a7f47257d5127e2b3f99e6", 3, 0, 3)
+
 def validate_private_copies(root):
     for copy, original in PRIVATE_COPIES.items():
         expected = (root / original).read_text()
         if copy.name == 'resource.rs':
             expected = expected.replace('use super::Error;', 'use super::ResourceError as Error;', 1)
+        if copy.parts[1] == 'brynja-hash-parallel-std':
+            relative = copy.relative_to(Path('crates/brynja-hash-parallel-std/src/macos_resident')).as_posix()
+            if relative in PARALLEL_ADDITIONS:
+                anchor, addition = PARALLEL_ADDITIONS[relative]
+                if expected.count(anchor) != 1:
+                    raise ValueError('private Darwin group anchor drift')
+                expected = expected.replace(anchor, addition + anchor, 1)
         if (root / copy).is_symlink() or (root / copy).read_text() != expected:
             raise ValueError('private Darwin adapter diverged: ' + str(copy))
 

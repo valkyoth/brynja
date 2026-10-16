@@ -19,6 +19,9 @@ mod in_place;
 mod scoped_worker;
 mod worker;
 
+#[cfg(feature = "macos-resident")]
+pub mod macos_resident;
+
 #[cfg(feature = "runtime-execution")]
 pub mod execution;
 

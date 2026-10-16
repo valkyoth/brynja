@@ -6,7 +6,7 @@ import roadmap_schedule
 
 
 FIRST = 30
-LAST = 56
+LAST = 55
 CONTRACT = (
     "Independent cryptographic review and FIPS validation are not prerequisites for ordinary opt-in acceleration.",
     "Cargo features select implementations, not proof of CPU support.",
@@ -17,6 +17,8 @@ CONTRACT = (
     "Freeze usable consumer tests before the final native sweep",
     "explicitly experimental static routes may carry QEMU-only correctness evidence with no native qualification.",
     "Validated-module restrictions remain certificate- and environment-specific.",
+    "RISC-V operational acceleration is postponed until qualifying native hardware is available.",
+    "Portable RISC-V support and existing candidate tests remain unchanged; QEMU alone does not end this deferral.",
 )
 PROFILES = {
     30: ("default-off", "Portable/Prefer/Require", "without evidence-only cfgs"),
@@ -45,11 +47,10 @@ PROFILES = {
          "joined worker stacks", "complete owned cleanup", "without claiming core-dump exclusion",
          "Preserve strict rejection", "explicit SIMD/hardware", "native qualification",
          "Intel Mac is outside this milestone"),
-    52: ("RV64 Zknh", "experimental", "QEMU", "no automatic runtime dispatch"),
-    53: ("facade features", "legacy crates", "independent publishing"),
-    54: ("package-external", "every operational", "before the final native sweep"),
-    55: ("exact-source", "AMD", "Intel", "AWS Arm", "Apple M2", "Intel Mac", "Windows", "QEMU"),
-    56: ("before HMAC", "public APIs", "separate", "FIPS status"),
+    52: ("facade features", "legacy crates", "independent publishing"),
+    53: ("package-external", "every operational", "before the final native sweep"),
+    54: ("exact-source", "AMD", "Intel", "AWS Arm", "Apple M2", "Intel Mac", "Windows", "QEMU"),
+    55: ("before HMAC", "public APIs", "separate", "FIPS status"),
 }
 
 
@@ -58,6 +59,8 @@ def validate(entries, release_text, version_text, schedule=None):
     schedule = roadmap_schedule.read() if schedule is None else schedule
     scopes = dict((v.removeprefix("v"), s) for v, _title, s in entries)
     records = {r["version"]: r for r in schedule["milestones"]}
+    if any(title == "RISC-V Explicit Experimental Execution" for _, title, _ in entries):
+        raise ValueError("deferred RISC-V execution must not remain a numbered prerequisite")
     for text in (release_text, version_text):
         normalized = " ".join(text.split())
         for rule in CONTRACT:

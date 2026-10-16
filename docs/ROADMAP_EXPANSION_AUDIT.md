@@ -11,8 +11,11 @@ adds 25 pre-HMAC stops, v0.24.30–v0.24.54. The subsequent
 15 new family/API contracts and strengthens two existing backend chains.
 The 2026-09-26 platform extension adds Windows and macOS strict profiles at
 v0.24.50 and v0.24.51, moving the five unstarted backfill stops to v0.24.52–v0.24.56.
-Current totals are **2160** milestones, **114** public checkpoints and
-**2046** development tags, with **141** expansion families. Historical stable
+The 2026-10-16 owner decision defers operational RISC-V acceleration until
+qualifying native hardware is available, removing that unstarted stop. The four
+remaining backfill stops move to v0.24.52–v0.24.55; HMAC remains at v0.25.0.
+Current totals are **2159** milestones, **114** public checkpoints and
+**2045** development tags, with **141** expansion families. Historical stable
 capability identities are preserved; only distant, unstarted versions move.
 
 All five groups from the gap review now have explicit owners in both

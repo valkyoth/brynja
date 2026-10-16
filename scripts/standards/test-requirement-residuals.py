@@ -156,16 +156,15 @@ def test_october_errata_statuses_keep_verified_held_and_rejected_distinct() -> N
 def test_current_bidirectional_closure() -> None:
     artifact = closure_build()
     assert len(artifact["sources"]) == 131
-    assert len(artifact["plans"]) == 2159
+    assert len(artifact["plans"]) == 2158
     plans = {plan["version"]: plan for plan in artifact["plans"]}
-    for patch in range(30, 57):
+    for patch in range(30, 56):
         assert plans[f"0.24.{patch}"]["boundary"]["class"] == "planned-authority-admission"
-    # The two platform stops extend the chain; they must not overwrite the
-    # unstarted RISC-V, packaging, consumer, native and final-closure work.
+    # Preserve released platform stops and all four remaining backfill tasks;
+    # RISC-V execution is deferred until qualifying native hardware exists.
     for patch, title in enumerate((
         "Windows Strict Protected Profiles",
         "Apple Silicon Resident/Clearing Profiles",
-        "RISC-V Explicit Experimental Execution",
         "Facade Features And Package Reachability",
         "Acceleration Public Consumer Acceptance",
         "Acceleration Native Evidence Sweep",

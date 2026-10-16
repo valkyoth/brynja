@@ -17,6 +17,14 @@ resident/clearing profile, without core-dump exclusion or strict Mac admission.
 Intel Mac is outside that milestone. This changes its approved scope, not its
 identity, ordering or prerequisite graph; see [the contract](macos-resident-profile.md).
 
+Later on 2026-10-16, the owner postponed operational RISC-V acceleration until
+qualifying native hardware is available. The unstarted RISC-V stop is removed;
+the former .53–.56 work moves to .52–.55: facade/package access, public consumer
+acceptance, native evidence and final closure. HMAC stays at v0.25.0 and the
+publication checkpoint at v0.25.2. Released milestones through v0.24.51,
+portable RISC-V support and existing candidate tests are unchanged. There is
+no replacement implementation date until the exact required ISA is available.
+
 Date: 2026-09-05. Baseline: `dbe6f4b`.
 This is a planning review, not an implementation or cryptographic assessment.
 

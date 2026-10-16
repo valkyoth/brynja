@@ -713,45 +713,36 @@
     {
       "id": "0.24.52",
       "version": "0.24.52",
-      "title": "RISC-V Explicit Experimental Execution",
-      "requires": [
-        "0.24.51"
-      ],
-      "scope_sha256": "399aca82f7baa4a1f6e328c0c689499025e60bd051f84444ecd0ff5dc18e06d9"
-    },
-    {
-      "id": "0.24.53",
-      "version": "0.24.53",
       "title": "Facade Features And Package Reachability",
       "requires": [
-        "0.24.52"
+        "0.24.51"
       ],
       "scope_sha256": "407f2ee925a0a1fe6c2f977985c042df09ba6c47b333ab02376bc33051421e57"
     },
     {
-      "id": "0.24.54",
-      "version": "0.24.54",
+      "id": "0.24.53",
+      "version": "0.24.53",
       "title": "Acceleration Public Consumer Acceptance",
       "requires": [
-        "0.24.53"
+        "0.24.52"
       ],
       "scope_sha256": "b94fd4c855014a96a70ed3c0014930a7fb6f64a5180cf586c566fa0414f0011b"
     },
     {
-      "id": "0.24.55",
-      "version": "0.24.55",
+      "id": "0.24.54",
+      "version": "0.24.54",
       "title": "Acceleration Native Evidence Sweep",
       "requires": [
-        "0.24.54"
+        "0.24.53"
       ],
       "scope_sha256": "11e9dbbf410daf825cbcc3cd2e090d97342559ff9b2369be8d73e8f4f00eaac8"
     },
     {
-      "id": "0.24.56",
-      "version": "0.24.56",
+      "id": "0.24.55",
+      "version": "0.24.55",
       "title": "Opt-In Acceleration Final Closure",
       "requires": [
-        "0.24.55"
+        "0.24.54"
       ],
       "scope_sha256": "78ebfbb7655f0b507e6508c20e2794e393dd6e9fc634078029a92ffab26f4de3"
     },
@@ -762,7 +753,7 @@
       "requires": [
         "0.24.11",
         "0.24.17",
-        "0.24.56"
+        "0.24.55"
       ],
       "scope_sha256": "711f3bd1c4a742f024490be45a37547ab105092c65ac22fb74bec3cced16961a"
     },
@@ -12627,7 +12618,7 @@
       "title": "Reusable crypto consumer boundaries - Authority And Complete Public API Contract",
       "requires": [
         "0.12.0",
-        "0.24.56",
+        "0.24.55",
         "0.351.6"
       ],
       "scope_sha256": "8a513aee7ae8a7c397cb414c7d0fe3aa5a2265cbb9062ece06f9447f4b4ff120"
@@ -13542,7 +13533,7 @@
       "title": "Original Keccak operational acceleration and reuse - Authority And Complete Public API Contract",
       "requires": [
         "0.352.5",
-        "0.24.56",
+        "0.24.55",
         "0.378.8"
       ],
       "scope_sha256": "d81d40e7e8da3093d56889ea2d89141b3d32c3bd56800a81cafa2ffa2413abde"
@@ -19895,5 +19886,5 @@
       "disposition": "Import/merge is the present operation; the family cannot claim bidirectional closure before explicit export acceptance."
     }
   ],
-  "audited_graph_sha256": "279300d37a852ae9fa6a25a75d5d8801e3cc3894fa1b2e02cc33500efc22bff5"
+  "audited_graph_sha256": "baa13d30fcfc45770a7d19c6b5583d6d2b23f6429a5ac7f088db76c08fe2f9b2"
 }

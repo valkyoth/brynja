@@ -70,18 +70,20 @@ cannot satisfy an operational acceleration promise.
   for lanes, temporaries, metadata, outputs and every lifecycle exit. Ordinary
   acceleration does not approve hardened execution. Unsupported hardened routes
   stay portable under Prefer or reject under Require; never degrade ownership.
-- RV64 Zknh currently has QEMU-only instruction evidence. v0.24.52 may define an
-  explicitly experimental ordinary static route, not qualified native support.
-  No hardened RV64 or RVV claim is scheduled by this inventory.
+- RV64 Zknh currently has QEMU-only instruction evidence. Operational RISC-V
+  acceleration is postponed until qualifying native hardware is available;
+  portable support and existing candidate tests remain unchanged. No new
+  experimental ordinary route, hardened RV64 or RVV claim is scheduled by the
+  remaining pre-HMAC milestones. QEMU alone does not end this deferral.
 
 The inventory names the current exact symbols, compiler features, existing leaf
 features and activation versions. Family dates do not promise every kernel:
 each route must also satisfy its kernel's activation and profile disposition,
-including RV64's later experimental-only stop. SHA-2 ordinary/hardened activation is
+including RV64's hardware-dependent deferral. SHA-2 ordinary/hardened activation is
 v0.24.33/.34; SHA-3/SHAKE, cSHAKE and hardened Keccak are .35/.36/.37;
 KMAC, TupleHash and ParallelHash integration is .38/.39/.40. Legacy SHA-1 uses
 .41/.42 and MD5 .43/.44. Missing multi-message kernels, x86 SHA-512, package
-reachability and final consumer/native closure remain .45–.54. Named SHA-2 and
+reachability and final consumer/native closure span .45–.55. Named SHA-2 and
 all 510 general t values, arbitrary-bit inputs, XOF outputs and all four
 fixed/XOF derived-function identities keep their existing complete API domains.
 

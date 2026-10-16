@@ -90,10 +90,16 @@ contracts before adding kernels. Absence of benefit can be a documented
 disposition; absence of implementation cannot be called support.
 
 The available RISC-V machine lacks the relevant SHA crypto instructions.
-Explicit RV64 Zknh target-specialized experimental use is planned with QEMU
-correctness evidence, while native qualification and community assistance may
-remain post-1.0. Generic RV64 does not imply Zknh or RVV. No untested native
-timing or migration guarantee is inferred from emulation.
+On 2026-10-16 the owner postponed RISC-V operational acceleration until
+qualifying native hardware is available and removed its standalone pre-HMAC
+milestone. Portable RISC-V support and existing candidate/QEMU tests remain;
+no new experimental API, automatic dispatch or hardened admission is promised
+by the remaining pre-HMAC milestones. Reassess the exact observed ISA, compiler,
+correctness, performance and cleanup requirements on a real qualifying host
+before assigning a new implementation milestone. The existing SHA-2 candidates
+need RV64 Zknh; generic RV64 or RVV alone does not establish that support.
+QEMU alone does not end the deferral or establish native timing/migration
+guarantees. The unavailable-hardware post-1.0 community campaign is retained.
 
 Executing unsupported target-feature code can be undefined behavior in Rust.
 Linux's Arm64 feature ABI is designed to expose a system-safe feature set,
@@ -136,11 +142,12 @@ contract for future work.
 
 ## Evidence and release flow
 
-The backfill now uses v0.24.30–v0.24.56: contracts and safe selection first, public
+The backfill now uses v0.24.30–v0.24.55: contracts and safe selection first, public
 family integration and missing kernels next, Windows strict profiles at .50,
-Apple Silicon resident/clearing profiles (not strict admission) at .51, packaged acceptance at .54,
-native evidence at .55, final closure at .56 before HMAC. No new runtime route
-is enabled by this planning update, and .29 still needs its own retest/evidence.
+Apple Silicon resident/clearing profiles (not strict admission) at .51,
+facade/package access at .52, packaged acceptance at .53, native evidence at .54,
+and final closure at .55 before HMAC. No new runtime route is enabled by this
+planning update; released milestones and their evidence remain unchanged.
 
 The 2026-09-26 platform extension reuses shared lifecycle interfaces and existing
 SIMD/hardware kernels but requires separate OS protection and native qualification.

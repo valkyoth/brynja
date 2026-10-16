@@ -20,6 +20,8 @@ def main():
     version = Path("docs/VERSION_PLAN.md").read_text(encoding="utf-8")
     schedule = roadmap_schedule.read()
     acceleration.validate(entries, release, version, schedule)
+    assert 'RISC-V deferral is an explicit exception requiring no placeholder version' in release
+    assert 'It does not block this closure or HMAC.' in release
     count = 0
 
     def reject(rows=entries, r=release, v=version, data=schedule):
@@ -48,9 +50,26 @@ def main():
         reject(data=changed)
     changed = copy.deepcopy(schedule)
     hmac = next(r for r in changed["milestones"] if r["version"] == "0.25.0")
-    hmac["requires"].remove("0.24.56")
+    hmac["requires"].remove("0.24.55")
     changed["audited_graph_sha256"] = roadmap_schedule.graph_hash(changed)
     reject(data=changed)
+    # Deferring RISC-V must not remove or rename any remaining backfill task.
+    assert [t for v, t, _ in entries if v in {f'v0.24.{p}' for p in range(52, 56)}] == [
+        'Facade Features And Package Reachability',
+        'Acceleration Public Consumer Acceptance',
+        'Acceleration Native Evidence Sweep',
+        'Opt-In Acceleration Final Closure',
+    ]
+    reject(rows=entries + [('v0.24.56', 'RISC-V Explicit Experimental Execution', 'QEMU')])
+    changed = copy.deepcopy(schedule)
+    next(r for r in changed['milestones'] if r['version'] == '0.25.0')['requires'].append('0.24.56')
+    changed['audited_graph_sha256'] = roadmap_schedule.graph_hash(changed)
+    try:
+        roadmap_schedule.validate_manifest(changed)
+    except ValueError:
+        count += 1
+    else:
+        raise AssertionError('obsolete RISC-V/final-closure prerequisite accepted')
     print(f"acceleration usability plan rejects {count} profile, claim and prerequisite regressions")
     return 0
 

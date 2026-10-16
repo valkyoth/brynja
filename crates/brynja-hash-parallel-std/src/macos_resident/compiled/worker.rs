@@ -2,6 +2,16 @@ use super::super::worker::Resources;
 use super::{Algorithm, Bits, Error, Kernel, LeafRoute, check};
 use brynja_crypto_cpu::static_execution::Authority;
 use brynja_hash_parallel::execution::{KeccakSession, batch};
+
+fn require_vector_work(index: u128, leaves: u128, calls: u64) -> Result<(), Error> {
+    let end = index.checked_add(4).ok_or(Error::Invariant)?;
+    // Every non-final group contains four full leaves. Only the final group
+    // may use the documented scalar tail; a required NEON route must do work.
+    if end < leaves && calls == 0 {
+        return Err(Error::Invariant);
+    }
+    Ok(())
+}
 fn authority(kernel: Kernel) -> Result<Authority, Error> {
     if !matches!(kernel, Kernel::X86Keccak | Kernel::ArmKeccak) {
         return Err(Error::Backend(
@@ -9,6 +19,21 @@ fn authority(kernel: Kernel) -> Result<Authority, Error> {
         ));
     }
     Authority::new(kernel).map_err(Error::Backend)
+}
+
+#[test]
+fn vector_requirement_distinguishes_nonfinal_groups_and_tails() {
+    for (index, leaves) in [(0, 5), (4, 9), (8, 13)] {
+        assert_eq!(require_vector_work(index, leaves, 0), Err(Error::Invariant));
+        assert_eq!(require_vector_work(index, leaves, 1), Ok(()));
+    }
+    for leaves in 0..=4 {
+        assert_eq!(require_vector_work(0, leaves, 0), Ok(()));
+    }
+    assert_eq!(
+        require_vector_work(u128::MAX, u128::MAX, 1),
+        Err(Error::Invariant)
+    );
 }
 pub(super) fn probe(root: Kernel, leaves: LeafRoute) -> Result<(), Error> {
     let root = authority(root)?;
@@ -157,6 +182,14 @@ pub(super) fn run(request: Request<'_>, resources: Resources<'_>) -> Result<(), 
                     &mut batch::Control::new(max_work, &mut cancelled),
                 )
                 .map_err(batch_error)?;
+            let vector_calls = result.report().vector_calls;
+            #[cfg(test)]
+            let vector_calls = if matches!(fault, super::tests::Fault::NoVector) {
+                0
+            } else {
+                vector_calls
+            };
+            require_vector_work($index, $plan.leaf_count(), vector_calls)?;
             #[cfg(test)]
             super::tests::observe_batch(result.report());
             #[cfg(test)]

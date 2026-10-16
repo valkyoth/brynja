@@ -17,7 +17,7 @@
     "crates/brynja-crypto-cpu/src/hardened_execution/scratch.rs": "1b5ab04d3cda6959c45cce194601b3dce9c4444862ae94239c80301878d71a1c",
     "crates/brynja-crypto-cpu/src/hardened_execution/tests.rs": "b8411e3f751aa585f47e54f45d47b68a8202cf04a11ff3311ed1e429ff7f0d37",
     "crates/brynja-crypto-cpu/src/keccak.rs": "57f019950ad5b38da3da620be36b3026e91d7aeee262bd1b5861ba7fe48c804a",
-    "crates/brynja-crypto-cpu/src/keccak_batch/arm.rs": "2191fb9338fcb49f7869c8f5243fd1c2f4bb1cafd8b9acd704b7dcaf04195b4d",
+    "crates/brynja-crypto-cpu/src/keccak_batch/arm.rs": "55e21fafdd904842332b46b65e0199469d36ed9376d5c6c93b13fac77a2f7223",
     "crates/brynja-crypto-cpu/src/keccak_batch/mod.rs": "54600f5bdac1984888225951992ece912eafc9be7355811941263871167ce863",
     "crates/brynja-crypto-cpu/src/keccak_batch/platform.rs": "e77387ad44d2470852b11262fc11784809fc9b8e09ac1a0bfe2751f5157ff7e9",
     "crates/brynja-crypto-cpu/src/keccak_batch/tests.rs": "7c90efab127b520dfcbfcae738723007069bf596c15cd98112770cc9f93f1c47",
@@ -90,11 +90,11 @@
     "docs/static-cpu-execution.md": "3356632f7af4fabf253bf664e8c1cf6d599e8085e434009ebc2fec48274d9e55",
     "docs/threat-model.md": "1ba408fb8b2c369319b933f787752450e03b2afe275171ffe42986bcf4145a9c",
     "docs/unsafe-policy.md": "c22f1acebece81c1204b2a5032345b9f4f5c7838e98eb2768d549c71a181838b",
-    "scripts/checks.sh": "b6d0a01c71af36b5a185e82dc435e2248d8c0123d796b045570474993e88bd35",
+    "scripts/checks.sh": "3f127c23d6f6ac67cf1e2d60b2ce73e41f60ba40d963f434e5f5b92fad43c57f",
     "scripts/cpu/check-static-execution.py": "7cb4678bb69b5fddc4c8a722e2bcbdea70a01b61801010ea05a2ef1a4773ea7e",
     "scripts/cpu/static_execution_docs.py": "39b98e559bb59646a9f93b429a4f137b96cd8a9bc1b9fa13eff66747e3f084a4",
-    "scripts/repository/darwin_resident_abi.py": "82bfa37c0d8c65d0be8919b2949b164b91545c3ea6243ce954f7ff2d7fc87bdc",
-    "scripts/repository/unsafe_policy.py": "a6f6a1626192d479837d97b48a3112ed2a861f76b7502510bb9f9b51ca5322a4",
+    "scripts/repository/darwin_resident_abi.py": "b6ec7a57b01f4d01d2cd62e8b3dde75eaf6c152b087554d6ada0b41db5475af4",
+    "scripts/repository/unsafe_policy.py": "23060b00850f848084eee4798f4664b4c7310a52e2d338115dcc52412779fad4",
     "scripts/zeroization/check-zeroization-miri.sh": "4aec4f31bb9d0b363c9a19c6d647a196379c3183b19850102bab52a16597dbc2",
     "scripts/zeroization/check-zeroization-sanitizer.sh": "333553482e6d6e0d5852457118e9f4ee430ef384b18df53c357aad51cb6487ab"
   }

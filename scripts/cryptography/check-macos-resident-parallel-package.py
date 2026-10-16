@@ -35,6 +35,8 @@ def run(command, cwd, env):
 
 def mutations(cargo, hosted, env):
     cases = [
+        ('resource/darwin/thread/group.rs', 'if mapping.foreign()', 'if false',
+         'resource::darwin::thread::group::tests::foreign_group_rejects_before_any_worker_or_clear'),
         ('mod.rs', 'if !self.keep {', 'if self.keep {',
          'tests::native::failures_after_leaf_root_and_output_clear_and_allow_reuse'),
         ('mod.rs', 'self.cvs.clear();', 'core::hint::black_box(&mut self.cvs);',
@@ -46,6 +48,8 @@ def mutations(cargo, hosted, env):
         ('resource/darwin/thread/group.rs', 'slot.mapping.clear();',
          'core::hint::black_box(&mut slot.mapping);',
          'resource::darwin::thread::group::tests::concurrent_workers_use_disjoint_resident_stacks_and_borrowed_outputs'),
+        ('compiled/worker.rs', 'if end < leaves && calls == 0 {', 'if end < leaves && calls == u64::MAX {',
+         'compiled::tests::native::nonfinal_group_without_vector_work_clears_and_quarantines'),
     ]
     for name, old, new, test in cases:
         path = hosted / 'src/macos_resident' / name
@@ -128,7 +132,7 @@ def execute(toolchain, destination):
     for profile in ([], ['--release']):
         output = run([*cargo, 'test', '--locked', '--offline', *profile, '--no-default-features',
                       '--features', FEATURE, '--lib', PREFIX, '--', '--nocapture'], hosted, env)
-        if 'test result: ok. 26 passed; 0 failed; 0 ignored;' not in output:
+        if 'test result: ok. 31 passed; 0 failed; 0 ignored;' not in output:
             raise ValueError('native batch population changed')
         for token in ('MACOS_RESIDENT_PARALLELHASH: Single(ArmKeccak); differential=288',
                       'MACOS_RESIDENT_PARALLELHASH: Batch(Neon); differential=288'):

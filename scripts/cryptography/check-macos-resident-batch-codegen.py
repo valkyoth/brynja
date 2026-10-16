@@ -45,7 +45,8 @@ def inspect(llvm, assembly, cpu, sha2, sha3):
             'clear precedes release textually; native tests cover paths')
     for method in ('7Session3new', '7Session6digest'):
         root = function(llvm, '@_RNvM', 'macos_resident', '5batch', method)
-        for call in ('@pthread_attr_setstack(', '@pthread_create(', '@pthread_join('):
+        shared.attribute_setup(llvm, assembly, root)
+        for call in ('@pthread_create(', '@pthread_join('):
             require(call in root, 'retained coordinator call: ' + call)
         require('clear_owned_region' in root[root.index('@pthread_join('):], 'post-join stack clear')
         calls = '\n'.join(line for line in root.splitlines() if not line.lstrip().startswith(';')
@@ -90,6 +91,7 @@ def inspect(llvm, assembly, cpu, sha2, sha3):
 def regressions(texts):
     cases = []
     for index, old, new in (
+            (0, '@pthread_attr_setstack(', '@removed_stack('),
             (0, '@mlock(', '@removed_lock('), (0, '@mach_vm_inherit(', '@removed_inherit('),
             (0, '@pthread_join(', '@removed_join('), (0, 'ret ptr null', 'ret ptr %secret'),
             (0, 'clear_owned_region', 'removed_clear'), (0, 'for_compiled_target', 'removed_admission'),

@@ -30,6 +30,12 @@ def mutations(cargo, hosted, env, feature, accelerated=False, keyed=False):
     prefix = 'macos_resident::'
     cases = [
         ('src/macos_resident/resource/darwin.rs',
+         '|| self.foreign()', '|| false',
+         prefix + 'resource::darwin::tests::foreign_owner_never_clears_unmaps_or_launches'),
+        ('src/macos_resident/resource/darwin/thread.rs',
+         'if mapping.foreign()', 'if false',
+         prefix + 'resource::darwin::tests::foreign_owner_never_clears_unmaps_or_launches'),
+        ('src/macos_resident/resource/darwin.rs',
          'let _ = brynja_core::clear_owned_region(bytes);', 'core::hint::black_box(&mut *bytes);',
          prefix + 'resource::darwin::tests::worker_placement_join_and_whole_payload_clear'),
         ('src/macos_resident/resource/darwin.rs',
@@ -181,7 +187,7 @@ def execute(toolchain, destination, accelerated=False, keyed=False):
                       '--features', feature + ',strict-sha2', target, 'macos_resident', '--', '--nocapture'], hosted, env)
         if '0 failed' not in output or 'test result: ok. 0 passed;' in output:
             raise ValueError('packaged resident tests did not execute')
-        count = (43 if accelerated else 31) if target == '--lib' else (50 if accelerated else 36)
+        count = (45 if accelerated else 33) if target == '--lib' else (50 if accelerated else 36)
         if keyed:
             count += 24 if target == '--lib' else 38
         expected = f'test result: ok. {count} passed; 0 failed; 0 ignored;'

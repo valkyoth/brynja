@@ -16,17 +16,19 @@ struct Attr {
 }
 const _: () = assert!(core::mem::size_of::<Attr>() == 64);
 const _: () = assert!(core::mem::align_of::<Attr>() == 8);
-struct Attributes(Attr);
+// Allocate public attribute metadata before initialization. Moving this owner
+// (including into a group Vec) never copies/moves an initialized pthread_attr_t.
+struct Attributes(Box<Attr>);
 impl Attributes {
     fn new(mapping: &Mapping) -> Result<Self, Error> {
-        let mut raw = Attr {
+        let mut raw = Box::new(Attr {
             signature: 0,
             opaque: [0; 56],
-        };
+        });
         fault(Step::Init, Error::ThreadAttributes)?;
         super::check(
             // SAFETY: exclusive correctly sized/aligned Darwin pthread attribute.
-            unsafe { pthread_attr_init(&mut raw) },
+            unsafe { pthread_attr_init(&mut *raw) },
             Error::ThreadAttributes,
         )?;
         let mut attr = Self(raw);
@@ -36,7 +38,7 @@ impl Attributes {
             // pthread uses the supplied payload; guard pages remain outside it.
             unsafe {
                 pthread_attr_setstack(
-                    &mut attr.0,
+                    &mut *attr.0,
                     mapping.data.as_ptr().cast(),
                     mapping.layout.payload,
                 )
@@ -52,7 +54,7 @@ impl Drop for Attributes {
             std::process::abort();
         }
         // SAFETY: initialized exclusive attribute; create copies its contents.
-        if unsafe { pthread_attr_destroy(&mut self.0) } != 0 {
+        if unsafe { pthread_attr_destroy(&mut *self.0) } != 0 {
             std::process::abort();
         }
     }
@@ -81,7 +83,11 @@ extern "C" fn enter<F: FnOnce() + Send>(argument: *mut c_void) -> *mut c_void {
     core::ptr::null_mut()
 }
 pub(super) fn run<F: FnOnce() + Send>(mapping: &mut Mapping, work: F) -> Result<(), Error> {
-    if !mapping.admitted || mapping.base.is_none() || mapping.layout.payload < 65536 {
+    if mapping.foreign()
+        || !mapping.admitted
+        || mapping.base.is_none()
+        || mapping.layout.payload < 65536
+    {
         return Err(Error::ThreadAttributes);
     }
     let attr = Attributes::new(mapping)?;
@@ -100,7 +106,7 @@ pub(super) fn run<F: FnOnce() + Send>(mapping: &mut Mapping, work: F) -> Result<
     let code = unsafe {
         pthread_create(
             &mut worker,
-            &attr.0,
+            &*attr.0,
             enter::<F>,
             core::ptr::from_mut(&mut job).cast(),
         )
@@ -142,4 +148,16 @@ unsafe extern "C" {
         arg: *mut c_void,
     ) -> i32;
     fn pthread_join(thread: *mut c_void, result: *mut *mut c_void) -> i32;
+}
+
+#[test]
+fn initialized_attribute_address_survives_owner_moves() -> Result<(), Error> {
+    let mapping = Mapping::new(262144, 1048576)?;
+    let attributes = Attributes::new(&mapping)?;
+    let address = core::ptr::from_ref(&*attributes.0);
+    let mut owners = Vec::new();
+    owners.push(attributes);
+    let moved = owners.pop().ok_or(Error::Invariant)?;
+    assert_eq!(address, core::ptr::from_ref(&*moved.0));
+    Ok(())
 }

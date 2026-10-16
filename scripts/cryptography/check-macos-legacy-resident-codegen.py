@@ -64,7 +64,8 @@ def inspect(llvm, assembly, kernels, family):
     for method, entry, owner in roots:
         tokens = ('7Session3new',) if method == '5batch' else ()
         root = function(llvm, '@_RNvM', 'macos_resident', method, *tokens)
-        for call in ('@pthread_attr_setstack(', '@pthread_create(', '@pthread_join('):
+        shared.attribute_setup(llvm, assembly, root)
+        for call in ('@pthread_create(', '@pthread_join('):
             require(call in root, 'coordinator retained ' + call)
         require('clear_owned_region' in root[root.index('@pthread_join('):], 'post-join stack clearing')
         calls = '\n'.join(line for line in root.splitlines()
@@ -86,6 +87,7 @@ def inspect(llvm, assembly, kernels, family):
 def regressions(texts, family):
     llvm, assembly, kernels = texts
     cases = [(llvm.replace(old, new), assembly, kernels) for old, new in (
+        ('@pthread_attr_setstack(', '@removed_stack('),
         ('@mlock(', '@removed_mlock('), ('@mach_vm_inherit(', '@removed_inherit('),
         ('@pthread_join(', '@removed_join('), ('clear_owned_region', 'removed_clear'),
         ('@munmap(', '@removed_unmap('), ('ret ptr null', 'ret ptr %secret'),

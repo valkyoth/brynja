@@ -60,6 +60,35 @@ fn cleared(mappings: &[Mapping]) {
 }
 
 #[test]
+fn foreign_group_rejects_before_any_worker_or_clear() -> Result<(), Error> {
+    let mut mappings = stacks(2)?;
+    for mapping in &mut mappings {
+        mapping.bytes_mut().fill(0x5a);
+        mapping.owner_pid = 0;
+    }
+    let ran = AtomicUsize::new(0);
+    let mut jobs: Vec<_> = (0..2)
+        .map(|_| {
+            || {
+                ran.fetch_add(1, Ordering::SeqCst);
+            }
+        })
+        .collect();
+    let result = Mapping::run_group(&mut mappings, &mut jobs);
+    for mapping in &mut mappings {
+        mapping.owner_pid = super::super::super::getpid();
+    }
+    assert_eq!(result, Err(Error::ThreadAttributes));
+    assert_eq!(ran.load(Ordering::SeqCst), 0);
+    assert!(
+        mappings
+            .iter()
+            .all(|m| m.bytes().iter().all(|b| *b == 0x5a))
+    );
+    Ok(())
+}
+
+#[test]
 fn concurrent_workers_use_disjoint_resident_stacks_and_borrowed_outputs() -> Result<(), Error> {
     for width in [1, 2, 4] {
         let mut mappings = stacks(width)?;

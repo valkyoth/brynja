@@ -43,6 +43,39 @@ fn events() -> Vec<Event> {
 }
 
 #[test]
+fn foreign_owner_never_clears_unmaps_or_launches() -> Result<(), Error> {
+    reset(None);
+    let mut owner = Mapping::new(262144, 1048576)?;
+    owner.bytes_mut().fill(0x5a);
+    // Model a child whose inherited metadata addresses a different live mapping.
+    // PID zero cannot be the current user process. The real owner retains it.
+    let mut foreign = Mapping {
+        base: owner.base,
+        data: owner.data,
+        layout: owner.layout,
+        used: owner.used,
+        admitted: true,
+        owner_pid: 0,
+    };
+    reset(None);
+    foreign.clear();
+    let mut ran = false;
+    assert_eq!(foreign.run(|| ran = true), Err(Error::ThreadAttributes));
+    assert!(!ran);
+    foreign.close()?;
+    assert!(foreign.base.is_none());
+    assert!(!foreign.admitted);
+    assert_eq!(foreign.used, 0);
+    drop(foreign);
+    assert!(events().is_empty());
+    assert!(owner.bytes().iter().all(|b| *b == 0x5a));
+    owner.verify_native()?;
+    owner.clear();
+    assert!(owner.bytes().iter().all(|b| *b == 0));
+    Ok(())
+}
+
+#[test]
 fn acquisition_faults_rollback_without_exposing_or_clearing() {
     for step in [Step::Map, Step::Fork, Step::Access, Step::Lock] {
         reset(Some(step));
@@ -135,6 +168,18 @@ fn fatal_lifecycle_failure_child() -> Result<(), Error> {
     };
     reset(None);
     let mut stack = Mapping::new(262144, 1048576)?;
+    if mode == "foreign-read" || mode == "foreign-write" {
+        stack.owner_pid = 0;
+        if mode == "foreign-read" {
+            core::hint::black_box(stack.bytes());
+        } else {
+            core::hint::black_box(stack.bytes_mut());
+        }
+        assert!(
+            std::hint::black_box(false),
+            "foreign mapping access returned"
+        );
+    }
     reset(Some(if mode == "join" {
         Step::Join
     } else {
@@ -150,7 +195,7 @@ fn fatal_lifecycle_failure_child() -> Result<(), Error> {
 #[test]
 fn join_and_attribute_destroy_failures_abort() -> Result<(), std::io::Error> {
     use std::os::unix::process::ExitStatusExt;
-    for mode in ["join", "destroy"] {
+    for mode in ["join", "destroy", "foreign-read", "foreign-write"] {
         let output = std::process::Command::new(std::env::current_exe()?)
             .args([
                 "--exact",

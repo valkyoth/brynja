@@ -34,6 +34,32 @@ fn clear(s: &CompiledSession) {
     }
 }
 #[test]
+fn nonfinal_group_without_vector_work_clears_and_quarantines() -> Result<(), Error> {
+    let _guard = guard();
+    for algorithm in identities(257) {
+        let mut s = CompiledSession::new(algorithm, root(), LeafRoute::Batch(batch()), limits())?;
+        s.fault = Fault::NoVector;
+        assert!(matches!(
+            s.hash(&[0x37; 161], 32, b""),
+            Err(Error::Invariant)
+        ));
+        clear(&s);
+        assert!(s.is_quarantined());
+        s.fault = Fault::None;
+        assert!(matches!(s.hash(b"abc", 32, b""), Err(Error::Quarantined)));
+        let mut tail =
+            CompiledSession::new(algorithm, root(), LeafRoute::Batch(batch()), limits())?;
+        tail.fault = Fault::NoVector;
+        assert_eq!(
+            tail.hash(b"abc", 32, b"")?.expose(),
+            reference(algorithm, Bits::bytes(b"abc"), 32, Bits::bytes(b""))?
+        );
+        assert!(!tail.is_quarantined());
+        clear(&tail);
+    }
+    Ok(())
+}
+#[test]
 fn actual_parallel_single_and_simd_waves_match_all_identities() -> Result<(), Error> {
     let _guard = guard();
     assert_eq!(root().check_compiled_target(), Ok(()));

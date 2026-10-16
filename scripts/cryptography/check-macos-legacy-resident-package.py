@@ -160,7 +160,7 @@ def execute(toolchain, destination):
         manifest = hosted/'Cargo.toml'
         manifest.write_text(manifest.read_text() + '\n[workspace]\n[patch.crates-io]\n' + patches + '\n')
         run([*cargo, 'generate-lockfile', '--offline'], hosted, env)
-        for target, count in (('--lib', 18), ('--doc', negatives)):
+        for target, count in (('--lib', 20), ('--doc', negatives)):
             output = run([*cargo, 'test', '--locked', '--offline', '--no-default-features',
                           '--features', FEATURE, target, 'macos_resident', '--', '--nocapture'], hosted, env)
             if f'test result: ok. {count} passed; 0 failed; 0 ignored;' not in output:

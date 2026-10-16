@@ -7,10 +7,7 @@ use super::*;
         target_arch = "aarch64",
         target_pointer_width = "64",
         not(any(miri, kani)),
-        any(
-            target_arch = "x86_64",
-            all(target_arch = "aarch64", target_endian = "little")
-        )
+        target_endian = "little"
     )),
     allow(dead_code)
 )]
@@ -109,9 +106,6 @@ fn public_request_domain_and_model_rejection() {
     target_arch = "aarch64",
     target_pointer_width = "64",
     not(any(miri, kani)),
-    any(
-        target_arch = "x86_64",
-        all(target_arch = "aarch64", target_endian = "little")
-    )
+    target_endian = "little"
 ))]
 mod native;

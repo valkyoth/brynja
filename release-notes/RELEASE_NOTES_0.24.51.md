@@ -45,6 +45,12 @@ this weaker, explicitly selected profile.
 
 ## Release controls
 
+The first review follow-up adds defensive creating-process binding to Darwin
+mappings, enforced vector work for non-final full ParallelHash NEON groups,
+stable native attribute storage and a dedicated accelerated Darwin CI job.
+Accepted dump-exclusion and conservative-quarantine limits are unchanged;
+independent retest remains pending.
+
 MSRV remains Rust 1.90.0; the default full-check and cross-target compiler is
 1.99.1. Historical observations keep their actual compiler/source identities.
 Support-crate versions, publication selection, existing gate policy and evidence

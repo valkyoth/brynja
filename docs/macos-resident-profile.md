@@ -269,6 +269,28 @@ receipts retain their actual compiler; final qualification remains pending.
 
 ## Candidate reconciliation and review handoff
 
+### Defensive lifecycle checks and continuous regression coverage
+
+Mappings are bound to the creating process ID. A foreign-process owner never
+clears or unmaps its saved address and cannot launch a worker there; infallible
+slice access aborts before constructing a reference. This is defensive cleanup
+for non-inherited mappings, **not support for fork while sessions or loans are
+live**. The existing deployment prohibition remains. Native tests exercise a
+foreign owner addressing another live mapping and verify that mapping survives.
+Initialized pthread attributes have stable heap addresses even when their
+owners move into worker groups; these attributes contain public metadata only.
+
+Required NEON ParallelHash leaf routes reject a non-final full group reporting
+zero vector calls, clear owned results and quarantine the session. Final partial
+groups retain their documented scalar-tail allowance. This is separate from the
+conservative, intentional quarantine on compiled-session resource failures.
+
+A dedicated Apple Silicon CI job checks actual CPU capabilities, runs accelerated
+debug/release tests and repository-policy Clippy, rebuilds the four focused
+compiler populations under both panic modes and runs all four extracted-package
+checkers. These are development regression checks, not strict admission,
+independent review, core-dump exclusion or release qualification.
+
 The implementation through `ac35ea02` reuses existing first-party primitive
 kernels. The reconciliation changes release/toolchain metadata, documentation
 and policy regression tests, not production cryptographic Rust. The default

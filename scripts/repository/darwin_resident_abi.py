@@ -2,14 +2,15 @@
 from pathlib import Path
 
 UNSAFE_MODULES = {
-    Path("crates/brynja-crypto-cpu-std/src/macos_resident/resource/darwin.rs"): ("0b3c887d5002738f735fdadac5b9bb37bfdd3436e8f20da12d231ea131714c56", 10, 0, 10),
-    Path("crates/brynja-crypto-cpu-std/src/macos_resident/resource/darwin/thread.rs"): ("64320b68afef88dfec1d1e267b563a3b93bca030050a14bc2b5042c95169adbf", 6, 0, 6),
+    Path("crates/brynja-crypto-cpu-std/src/macos_resident/resource/darwin.rs"): ("a32e1624f4e8bdcc4b129db19e26af37ae88096fb417caeeaac51c8d2aaa8d04", 10, 0, 10),
+    Path("crates/brynja-crypto-cpu-std/src/macos_resident/resource/darwin/thread.rs"): ("0a5d3e71e6938fa0a46e10b486e58e1f6b61229a4496bef1238c4b37a2d87a59", 6, 0, 6),
     Path("crates/brynja-crypto-cpu-std/src/macos_resident/resource/darwin/observe.rs"): ("31636114ce7f2450732513ff778c0f739ccb9df778928e68a8bf84bba0e1efb1", 3, 0, 3),
 }
 
 OS_ABIS = {
     Path("crates/brynja-crypto-cpu-std/src/macos_resident/resource/darwin.rs"): (
         '''unsafe extern "C" {
+    safe fn getpid() -> i32;
     safe fn getpagesize() -> i32;
     static mach_task_self_: u32;
     fn mmap(
@@ -85,9 +86,9 @@ PARALLEL_ADDITIONS = {
     "resource/darwin.rs": ("    #[cfg(test)]\n    pub(in super::super) fn verify_native", "    pub(in super::super) fn run_group<F: FnMut() + Send>(\n        mappings: &mut [Self],\n        work: &mut [F],\n    ) -> Result<(), Error> {\n        thread::run_group(mappings, work)\n    }\n"),
     "resource/darwin/thread.rs": ("// Darwin _opaque", "mod group;\npub(super) use group::run as run_group;\n\n"),
 }
-UNSAFE_MODULES[Path("crates/brynja-hash-parallel-std/src/macos_resident/resource/darwin.rs")] = ("39aa50658b121ce67569b04e154f5a7f6afb5ae579e7ca517f670413b3a7025d", 10, 0, 10)
-UNSAFE_MODULES[Path("crates/brynja-hash-parallel-std/src/macos_resident/resource/darwin/thread.rs")] = ("857a4fbf64a729337a2005c5e1f47c362d4d050dd024eb9a1b606cfdc0ab773d", 6, 0, 6)
-UNSAFE_MODULES[Path("crates/brynja-hash-parallel-std/src/macos_resident/resource/darwin/thread/group.rs")] = ("78e5d0942858d6906b499988df42314ffbf811fb15a7f47257d5127e2b3f99e6", 3, 0, 3)
+UNSAFE_MODULES[Path("crates/brynja-hash-parallel-std/src/macos_resident/resource/darwin.rs")] = ("204ccb1cc473e4fa5979c2cb84157ad7f8c375474a6af5a6abef9672ce622171", 10, 0, 10)
+UNSAFE_MODULES[Path("crates/brynja-hash-parallel-std/src/macos_resident/resource/darwin/thread.rs")] = ("deb11bb14add57d5ad39875c403486e513a2f8d79d857b074703ce52f06dc7f6", 6, 0, 6)
+UNSAFE_MODULES[Path("crates/brynja-hash-parallel-std/src/macos_resident/resource/darwin/thread/group.rs")] = ("c311fb76f05bc79fa47fd89f2c499b39e0172b9c6b96fcf6bb40cccaedfe1f39", 3, 0, 3)
 
 def validate_private_copies(root):
     for copy, original in PRIVATE_COPIES.items():

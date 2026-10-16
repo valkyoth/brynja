@@ -831,7 +831,7 @@ sha256 = "cef6c1433caf37131fc0afb6844985c2e9ee73ed375e31eab23ad1402148edba"
 package = "brynja-crypto-cpu"
 path = "src/keccak_batch/arm.rs"
 status = "ordinary-keccak-two-state-neon"
-sha256 = "2191fb9338fcb49f7869c8f5243fd1c2f4bb1cafd8b9acd704b7dcaf04195b4d"
+sha256 = "55e21fafdd904842332b46b65e0199469d36ed9376d5c6c93b13fac77a2f7223"
 
 [[sources]]
 package = "brynja-crypto-cpu"
@@ -1977,13 +1977,13 @@ sha256 = "f55aedc8daafffc90bbf3f668d107cd6014820be32522e3708bdb073af8d1912"
 package = "brynja-crypto-cpu-std"
 path = "src/macos_resident/resource/darwin.rs"
 status = "macos-resident-mapping-development"
-sha256 = "0b3c887d5002738f735fdadac5b9bb37bfdd3436e8f20da12d231ea131714c56"
+sha256 = "a32e1624f4e8bdcc4b129db19e26af37ae88096fb417caeeaac51c8d2aaa8d04"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/macos_resident/resource/darwin/thread.rs"
 status = "macos-resident-worker-development"
-sha256 = "64320b68afef88dfec1d1e267b563a3b93bca030050a14bc2b5042c95169adbf"
+sha256 = "0a5d3e71e6938fa0a46e10b486e58e1f6b61229a4496bef1238c4b37a2d87a59"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -1995,7 +1995,7 @@ sha256 = "31636114ce7f2450732513ff778c0f739ccb9df778928e68a8bf84bba0e1efb1"
 package = "brynja-crypto-cpu-std"
 path = "src/macos_resident/resource/darwin/tests.rs"
 status = "macos-resident-lifecycle-tests"
-sha256 = "0080fb1e2e01cdd06aba4c826f1118a92e6f778e06ee25ac332406cadd77fe51"
+sha256 = "8512997a5d6adc6dfdd10f51633f90223869e8b7dc5fbfb0657131bcf8eb4c87"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"

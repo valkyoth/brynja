@@ -12,6 +12,7 @@ cargo fetch --locked
 python3 scripts/repository/test-offline-bootstrap.py
 python3 scripts/repository/check-crate-readmes.py
 python3 scripts/repository/test-crate-readmes.py
+python3 scripts/repository/test-macos-resident-ci.py
 cargo test --locked --offline --manifest-path assurance/crate-readmes/Cargo.toml --doc
 python3 scripts/release/test-verification-plan.py
 python3 scripts/release/test-detached-verification.py

@@ -4,6 +4,7 @@ use super::*;
 pub(super) enum Fault {
     None,
     Reorder,
+    NoVector,
     Cancel(Point),
     Revoke(Point),
     Panic(Point),
@@ -50,6 +51,7 @@ fn limits() -> Limits {
 fn unsupported_model_missing_bundle_wrong_operation_reject() {
     let _ = [
         Fault::Reorder,
+        Fault::NoVector,
         Fault::Cancel(Point::Root),
         Fault::Revoke(Point::Root),
         Fault::Panic(Point::Root),

@@ -30,7 +30,10 @@ pub(super) unsafe fn permute(states: &mut [[u64; 25]; 4]) -> Result<(), Error> {
             ($a:expr, $n:expr) => {
                 vorrq_u64(
                     vshlq_u64($a, vdupq_n_s64(i64::from($n))),
-                    vshlq_u64($a, vdupq_n_s64(i64::from($n) - 64)),
+                    // A u32 widened to i64 has more than enough headroom.
+                    // Explicit wrapping spells this out without a lint bypass;
+                    // it is identical to subtraction for every possible u32.
+                    vshlq_u64($a, vdupq_n_s64(i64::from($n).wrapping_sub(64))),
                 )
             };
         }

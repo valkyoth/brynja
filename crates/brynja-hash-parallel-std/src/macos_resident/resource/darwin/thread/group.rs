@@ -66,7 +66,11 @@ pub(in super::super) fn run<F: FnMut() + Send>(
     // Complete all allocation/attribute setup before the first launch. No
     // reallocation is possible once addresses are handed to native workers.
     for (mapping, work) in mappings.iter_mut().zip(work) {
-        if !mapping.admitted || mapping.base.is_none() || mapping.layout.payload < 65536 {
+        if mapping.foreign()
+            || !mapping.admitted
+            || mapping.base.is_none()
+            || mapping.layout.payload < 65536
+        {
             return Err(Error::ThreadAttributes);
         }
         #[cfg(test)]
@@ -94,7 +98,7 @@ pub(in super::super) fn run<F: FnMut() + Send>(
         let code = unsafe {
             pthread_create(
                 &mut worker,
-                &slot.attributes.0,
+                &*slot.attributes.0,
                 enter::<&mut F>,
                 slot.job.get().cast(),
             )

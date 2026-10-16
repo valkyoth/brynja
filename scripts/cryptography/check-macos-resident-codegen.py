@@ -31,6 +31,26 @@ def machine(assembly, symbol):
     return match[1]
 
 
+def attribute_setup(llvm, assembly, root):
+    """Follow exactly one reviewed outlined constructor, not arbitrary callees."""
+    body = root
+    symbol = re.search(r'@([^ (]+)\(', root.splitlines()[0])[1]
+    code = machine(assembly, symbol)
+    if '@pthread_attr_setstack(' not in root:
+        body = function(llvm, 'macos_resident', '10Attributes3new')
+        helper = re.search(r'@([^ (]+)\(', body.splitlines()[0])[1]
+        require(re.search(r'\b(?:call|invoke)\b[^\n]*@' + re.escape(helper) + r'\(', root),
+                'coordinator calls exact attribute helper')
+        require(re.search(r'\b(?:bl|b)\s+_' + re.escape(helper) + r'(?:\s|$)', code),
+                'machine coordinator calls exact attribute helper')
+        code = machine(assembly, helper)
+    for call in ('pthread_attr_init', 'pthread_attr_setstack'):
+        require(re.search(r'\b(?:call|invoke)\b[^\n]*@' + call + r'\(', body),
+                'retained attribute call: ' + call)
+        require(re.search(r'\b(?:bl|b)\s+_' + call + r'(?:\s|$)', code),
+                'retained machine attribute call: ' + call)
+
+
 def inspect(llvm, assembly, kernels, keyed=False):
     require('target triple = "arm64-apple-macosx' in llvm, 'Darwin Arm artifact')
     constructor = function(llvm, 'macos_resident', '7Mapping3new')
@@ -61,7 +81,8 @@ def inspect(llvm, assembly, kernels, keyed=False):
                   ('4kmac', '15CompiledSession3new'), ('9tuplehash', '15CompiledSession3new'))
     for family, method in roots:
         root = function(llvm, 'define ', '@_RNvM', 'macos_resident', family, method)
-        for callee in ('@pthread_attr_setstack(', '@pthread_create(', '@pthread_join('):
+        attribute_setup(llvm, assembly, root)
+        for callee in ('@pthread_create(', '@pthread_join('):
             require(callee in root, 'coordinator retained ' + callee)
         require('clear_owned_region' in root[root.index('@pthread_join('):],
                 'post-join stack clear retained')
@@ -119,6 +140,7 @@ def inspect(llvm, assembly, kernels, keyed=False):
 def regressions(llvm, assembly, kernels, keyed=False):
     cases = [(llvm.replace(old, new), assembly, kernels) for old, new in (
         ('@mlock(', '@removed_mlock('), ('@mach_vm_inherit(', '@removed_inherit('),
+        ('@pthread_attr_setstack(', '@removed_stack('),
         ('@pthread_join(', '@removed_join('), ('clear_owned_region', 'removed_clear'),
         ('@munmap(', '@removed_unmap('), ('ret ptr null', 'ret ptr %secret'))]
     cases += [(llvm, assembly.replace('clear_owned_region', 'removed_clear'), kernels)]

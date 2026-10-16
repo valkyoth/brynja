@@ -97,6 +97,18 @@ jobs:
       - name: Require actual hardened MD5 SIMD execution
         run: python3 scripts/md5/check-md5-hardened-ci.py ${{ matrix.architecture }}
 
+  macos-resident:
+    name: Apple Silicon resident tests, packages and emitted code
+    runs-on: macos-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install Rust toolchain
+        run: scripts/ci/ci_install_rust.sh
+      - name: Native resident accelerated, package, lint and compiler regressions
+        run: python3 scripts/cryptography/check-macos-resident-ci.py --stage all
+
   host:
     name: Host tests (${{ matrix.os }})
     runs-on: ${{ matrix.os }}

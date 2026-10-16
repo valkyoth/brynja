@@ -14,9 +14,11 @@ pub(in super::super) struct Mapping {
     layout: Layout,
     used: usize,
     admitted: bool,
+    owner_pid: i32,
 }
 impl Mapping {
     pub(in super::super) fn new(bytes: usize, max: usize) -> Result<Self, Error> {
+        let owner_pid = getpid();
         let page = usize::try_from(getpagesize()).map_err(|_| Error::InvalidSize)?;
         let layout = Layout::new(bytes, max, page)?;
         fault(Step::Map, Error::Mapping)?;
@@ -39,6 +41,7 @@ impl Mapping {
             layout,
             used: bytes,
             admitted: false,
+            owner_pid,
         };
         fault(Step::Fork, Error::ForkExclusion)?;
         // SAFETY: current task port and entire live reservation, VM_INHERIT_NONE=2.
@@ -68,16 +71,18 @@ impl Mapping {
         Ok(owner)
     }
     pub(in super::super) fn bytes(&self) -> &[u8] {
+        self.require_owner();
         // SAFETY: only admitted live owners escape construction; zero-initialized
         // anonymous bytes, used <= payload <= isize::MAX, loan excludes release.
         unsafe { core::slice::from_raw_parts(self.data.as_ptr(), self.used) }
     }
     pub(in super::super) fn bytes_mut(&mut self) -> &mut [u8] {
+        self.require_owner();
         // SAFETY: exclusive owner loan of the live initialized used region.
         unsafe { core::slice::from_raw_parts_mut(self.data.as_ptr(), self.used) }
     }
     pub(in super::super) fn clear(&mut self) {
-        if self.base.is_none() || !self.admitted {
+        if self.base.is_none() || !self.admitted || self.foreign() {
             return;
         }
         // SAFETY: whole owned payload is RW and excludes both guards. No worker
@@ -92,6 +97,14 @@ impl Mapping {
         let Some(base) = self.base else {
             return Ok(());
         };
+        if self.foreign() {
+            // VM_INHERIT_NONE omitted this reservation from the fork child.
+            // Its address may now belong to somebody else: never clear/unmap it.
+            self.base = None;
+            self.admitted = false;
+            self.used = 0;
+            return Ok(());
+        }
         self.clear();
         fault(Step::Unmap, Error::Release)?;
         check(
@@ -107,6 +120,16 @@ impl Mapping {
     }
     pub(in super::super) fn run<F: FnOnce() + Send>(&mut self, work: F) -> Result<(), Error> {
         thread::run(self, work)
+    }
+    fn foreign(&self) -> bool {
+        getpid() != self.owner_pid
+    }
+    fn require_owner(&self) {
+        // Slice-returning APIs cannot return an error. Never construct a
+        // reference into a non-inherited or already released reservation.
+        if self.foreign() || self.base.is_none() || !self.admitted {
+            std::process::abort();
+        }
     }
     #[cfg(test)]
     pub(in super::super) fn verify_native(&self) -> Result<(), Error> {
@@ -146,6 +169,7 @@ fn fault(step: Step, error: Error) -> Result<(), Error> {
 }
 
 unsafe extern "C" {
+    safe fn getpid() -> i32;
     safe fn getpagesize() -> i32;
     static mach_task_self_: u32;
     fn mmap(

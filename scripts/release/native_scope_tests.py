@@ -12,7 +12,7 @@ import native_review_io as io
 import native_review_scope as scope
 import native_tooling_review as tooling
 import native_sha2_carry_forward as sha2
-from native_review_tests import NativeReviewTests, write, commit, CODE, TEST
+from native_review_tests import NativeReviewTests, write, commit, init_repository, CODE, TEST
 
 
 class ScopedNativeTests(NativeReviewTests):
@@ -102,9 +102,7 @@ class InactiveSha2Tests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory(prefix='brynja-inactive-sha2-')
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
-        for args in (('init', '-q'), ('config', 'user.name', 'Test'),
-                     ('config', 'user.email', 'test@example.invalid')):
-            io.git(self.root, *args)
+        init_repository(self.root)
         self.original = b'pub mod strict_tuplehash;\npub mod other;\n'
         write(self.root, sha2.LIB, self.original.decode())
         write(self.root, sha2.FIXTURE, '[package]\nname="fixture"\n')

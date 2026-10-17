@@ -29,14 +29,23 @@ def commit(root):
     return io.git(root, 'rev-parse', 'HEAD').decode().strip()
 
 
+def init_repository(root):
+    """Keep disposable Git fixtures synchronous; never alter user Git settings."""
+    io.git(root, 'init', '-q')
+    # A detached maintenance worker can outlive commit and race TemporaryDirectory
+    # cleanup. These tiny mutation repositories do not need automatic maintenance.
+    for name, value in (('maintenance.auto', 'false'), ('gc.auto', '0'),
+                        ('maintenance.autoDetach', 'false'), ('gc.autoDetach', 'false'),
+                        ('user.name', 'Test'), ('user.email', 'test@example.invalid')):
+        io.git(root, 'config', '--local', name, value)
+
+
 class NativeReviewTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix='brynja-native-review-test-')
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
-        io.git(self.root, 'init', '-q')
-        io.git(self.root, 'config', 'user.name', 'Test')
-        io.git(self.root, 'config', 'user.email', 'test@example.invalid')
+        init_repository(self.root)
         write(self.root, CODE, 'pub fn implementation() {}\n' + MARKER + '\n')
         write(self.root, TEST, '#[test] fn native_matrix() {}\n')
         write(self.root, 'Cargo.toml', '[workspace]\n')

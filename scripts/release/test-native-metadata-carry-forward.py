@@ -5,12 +5,13 @@ import copy
 import importlib.util
 import io
 import json
+import os
 from pathlib import Path
 import subprocess
 import tempfile
 import unittest
 from unittest.mock import patch
-from native_review_tests import NativeReviewTests
+from native_review_tests import NativeReviewTests, init_repository
 from native_scope_tests import ScopedNativeTests, InactiveSha2Tests
 from native_setup_tests import SetupReviewTests
 
@@ -53,9 +54,7 @@ class CarryForwardTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory(prefix='brynja-native-metadata-test-')
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
-        git(self.root, 'init', '-q')
-        git(self.root, 'config', 'user.name', 'Test')
-        git(self.root, 'config', 'user.email', 'test@example.invalid')
+        init_repository(self.root)
         old = '[dependencies]\nbrynja = { version = "=0.24.39", default-features = false }\n'
         write(self.root, review.FIXTURE, old)
         write(self.root, review.FACADE, '[package]\nversion = "0.24.39"\n')
@@ -195,6 +194,48 @@ class ParallelCarryForwardTests(CarryForwardTests):
         replacement.start()
         self.addCleanup(replacement.stop)
         super().setUp()
+
+
+class GitFixtureLifecycleTests(unittest.TestCase):
+    def test_all_fixture_setups_override_background_maintenance_and_clean_up(self):
+        # Use a private stand-in for user config: no global/system config is edited.
+        hostile = ('[maintenance]\n auto = true\n autoDetach = true\n'
+                   '[gc]\n auto = 1\n autoDetach = true\n')
+        with tempfile.TemporaryDirectory(prefix='brynja-git-config-test-') as directory:
+            config = Path(directory) / 'gitconfig'
+            config.write_text(hostile)
+            with patch.dict(os.environ, GIT_CONFIG_GLOBAL=str(config), GIT_CONFIG_NOSYSTEM='1'):
+                for kind in (NativeReviewTests, ScopedNativeTests, InactiveSha2Tests,
+                             SetupReviewTests, CarryForwardTests, ParallelCarryForwardTests):
+                    for fail in (False, True):
+                        with self.subTest(fixture=kind.__name__, failure=fail):
+                            fixture_case = kind()
+                            try:
+                                fixture_case.setUp()
+                                root = fixture_case.root
+                                for key, expected in (('maintenance.auto', b'false'),
+                                                      ('gc.auto', b'0'),
+                                                      ('maintenance.autoDetach', b'false'),
+                                                      ('gc.autoDetach', b'false')):
+                                    self.assertEqual(git(root, 'config', '--get', key).strip(), expected)
+                                    self.assertEqual(git(root, 'config', '--local', '--get', key).strip(), expected)
+                                # Exercise actual object-creating commands, then immediate
+                                # cleanup on both normal return and simulated assertion failure.
+                                def mutate():
+                                    for index in range(12):
+                                        write(root, 'maintenance-fixture.txt', str(index))
+                                        commit(root)
+                                    if fail:
+                                        raise AssertionError('simulated fixture failure')
+                                if fail:
+                                    with self.assertRaisesRegex(AssertionError, 'simulated fixture failure'):
+                                        mutate()
+                                else:
+                                    mutate()
+                            finally:
+                                self.assertTrue(fixture_case.doCleanups(), 'fixture cleanup failed')
+                            self.assertFalse(root.exists(), 'temporary repository survived cleanup')
+                            self.assertEqual(config.read_text(), hostile)
 
 
 if __name__ == '__main__':

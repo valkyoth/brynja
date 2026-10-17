@@ -15,6 +15,7 @@ import test_facade_parallelhash_execution
 import test_facade_sha3_execution
 import test_facade_sha2_execution
 import test_facade_kmac
+import test_facade_hardened_sha3
 
 spec = importlib.util.spec_from_file_location(
     'facade_package', Path(__file__).with_name('check-facade-package.py'))
@@ -157,6 +158,7 @@ def main():
         test_facade_sha3_execution.check()
         test_facade_sha2_execution.check()
         test_facade_kmac.check()
+        test_facade_hardened_sha3.check()
         ambient_config_regressions()
         archive_regressions()
         baseline = document({'facade-consumer': [], 'brynja': [], 'brynja-crypto': []})

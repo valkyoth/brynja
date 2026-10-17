@@ -417,3 +417,40 @@ cleanup mutant with both fixed and XOF tests, and a portable substitution in
 required/preferred modes. Source restoration and pristine reruns are required.
 Route observations are not independent instruction or private-frame witnesses.
 This adds functional acceptance, not native or independent qualification.
+
+## Hardened SHA-3/SHAKE/cSHAKE consumer acceptance
+
+Both extracted facades use `sha3-hardened-execution` and
+`sha3-runtime-execution`, plus the separate hosted adapter, without a direct
+hash-leaf dependency or conformance feature. Eight hardened identities run
+76 recorded NIST cases and 628 cSHAKE official/independent bit-oracle cases.
+Every case exercises owned and scoped APIs with secret and explicitly
+declassified public output. Input is fragmented, N/S and message tails retain
+arbitrary bits, and XOF reads cross rate boundaries with partial final output.
+Secret-output Drop and caller scratch clearing are checked after comparison.
+
+The copied leaf integration tests add fixed padding boundaries, mixed output,
+cancel/revocation behavior and a seeded 64-case, four-identity operation
+campaign. Those differential checks use the portable implementation as their
+reference; they are not a second independent oracle. Additional scoped tests
+exercise invalid widths, inadequate scratch, terminal output failures,
+forgotten readers, recoverable unwinding, reuse and quarantine. They inspect
+publicly observable output/reuse behavior, not private workspace bytes.
+
+Required static and hosted sessions must expose the expected kernel and healthy
+authority before processing. Each available route runs debug/release tests;
+an unavailable route runs only its exact admission-rejection test after the
+full suite compiles. It never counts an early-return kernel test as execution.
+The explicit native option requires the locally supported AVX2 or Arm bundle.
+
+Each facade rejects 158 compiled trait, ownership, scope-escape and output-
+classification violations, with positive type checks and expected diagnostics.
+Five native compiled mutants remove/change the permutation, fixed domain,
+scoped public-output commit, borrowed scratch clearing or scoped partial-bit
+mask. They must compile and then fail the named runtime test; compiler errors
+and unrelated process failures are not accepted as mutation evidence.
+Extracted sources restore on all exits and pristine tests repeat afterward.
+
+This is functional consumer acceptance, not native release qualification,
+independent instruction counting, private-frame cleanup proof or certification.
+Production code, original fixtures and historical captures remain unchanged.

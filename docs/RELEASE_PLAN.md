@@ -4977,6 +4977,11 @@ Production KMAC/KMACXOF consumers now reuse the independent oracle through
 both facades, with full-strength key/tag inputs, exact weak-input rejection,
 generic and scoped native lifecycle checks, ownership negatives and compiled
 algorithm, comparison, cleanup and portable-substitution mutations.
+Hardened single-state SHA-3/SHAKE/cSHAKE consumers now exercise owned and
+scoped fixed/XOF APIs against recorded NIST/independent vectors, with explicit
+required-route admission, lifecycle/property checks, ownership negatives and
+compiled domain/permutation/output/scratch/masking mutations. Unavailable
+routes are compiled and tested for rejection, not counted as kernel execution.
 Wider consumer acceptance and independent retest remain pending.
 
 Plan scope: Freeze runnable package-external acceptance for every operational ordinary/hardened, byte/bit, streaming, XOF and batch route across SHA-2, SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, ParallelHash, SHA-1 and MD5 before the final native sweep.

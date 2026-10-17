@@ -192,6 +192,28 @@ Native checks also reject scoped-scratch cleanup and portable substitution.
 These functional checks do not qualify private-frame cleanup or native
 platforms. Production implementations and release-gate rules are unchanged.
 
+## Packaged hardened SHA-3/SHAKE/cSHAKE consumers
+
+Both facades now run 76 recorded NIST bit vectors and 628 cSHAKE official/
+independent-oracle cases through owned and scoped hardened APIs, exercising
+all eight identities with secret and explicitly declassified public output.
+Fragmented input, arbitrary-bit prefixes/tails, empty output and rate-crossing
+reads retain exact expected results and observable destination/scratch cleanup.
+
+Copied leaf lifecycle tests and a deterministic 64-case/four-identity property
+campaign supplement the independent vectors. Scoped tests add invalid output,
+forgotten-reader reuse, recoverable unwind and terminal authority revocation.
+Each facade rejects 158 compiled ownership/classification/scope probes. Native
+checks also reject five compiled domain, permutation, scoped-copy, scratch-
+clearing and partial-output-mask mutations, then repeat pristine checks.
+
+Static and hosted required routes either execute in debug/release or reject
+the exact unavailable reason. Unavailable lanes compile the complete tests
+but run only admission checks; they are not accelerated execution evidence.
+These consumer checks do not inspect private storage/registers or establish
+independent instruction counts, native qualification or certification.
+No production implementation, dependency or release-gate policy is changed.
+
 ## Work remaining before retest and acceptance freeze
 
 - Obtain independent retest of the complete conformance separation before

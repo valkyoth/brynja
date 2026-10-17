@@ -305,6 +305,21 @@ not an OS-name assumption. This fixes a harness mismatch exposed by Apple's
 baseline SHA support without changing the library or treating skipped execution
 as a pass. Both generic and explicitly accelerated builds remain checked.
 
+## Strict modern scalar public consumer
+
+A new opt-in extracted-package consumer imports the strict-only facade with
+defaults disabled. Its exact feature graph prevents ordinary, resident,
+conformance or hidden acceleration substitution. Debug/release tests cover
+6,004 recorded/independent cases across named/general-t SHA-2, SHA-3, SHAKE,
+cSHAKE, KMAC/KMACXOF and TupleHash/XOF, including every valid general-t width.
+
+Public lifecycle checks exercise work/cancellation rejection, bit/weak-input
+validation, borrowed and explicit public output, wrong-size preservation,
+forgotten loans and caller-unwind reuse. Fifty-six compiled negatives and sixteen
+budget/cancellation/output mutations (both profiles) validate observable tests.
+No private-memory erasure, batch/accelerated execution or platform qualification
+is inferred. Production code, dependency manifests and release gates are unchanged.
+
 ## Work remaining before retest and acceptance freeze
 
 - Obtain independent retest of the complete conformance separation before

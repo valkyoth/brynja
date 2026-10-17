@@ -4989,8 +4989,12 @@ and independent corpora with exact enabled graphs, compiler endpoints, explicit
 static/hosted selection, ownership negatives and compiled behavioral mutations.
 Separate hardened SHA-1/MD5 consumers now cover owned/scoped outputs against
 the same corpora, observable cleanup/reuse/quarantine, authority/scope negatives
-and compiled output/guard/fallback mutations. Protected-platform consumer
-reconciliation remains separate and pending.
+and compiled output/guard/fallback mutations. Separate native GNU/Linux strict
+legacy consumers now cover protected scalar/compiled public APIs with exact
+archive graphs, independent bit corpora, lifetime/reuse checks and compiled
+mutations. Modern strict, macOS resident and Windows enclave consumer
+reconciliation remains separate and pending; public tests do not prove private
+memory/register erasure.
 Wider consumer acceptance and independent retest remain pending.
 
 Plan scope: Freeze runnable package-external acceptance for every operational ordinary/hardened, byte/bit, streaming, XOF and batch route across SHA-2, SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, ParallelHash, SHA-1 and MD5 before the final native sweep.

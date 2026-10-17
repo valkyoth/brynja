@@ -575,3 +575,47 @@ earlier error-returning vector test cannot mask the intended assertion.
 These are consumer-observable functional checks. Private storage, register,
 spill and platform protection qualification remain separate obligations; no
 strict/resident deployment or new native release qualification is implied.
+
+## Linux protected legacy consumer acceptance
+
+The strict legacy APIs have a separate, opt-in external-consumer command:
+
+```sh
+python3 scripts/repository/check-legacy-strict-package.py --toolchain 1.99.1 --native-simd
+```
+
+Run this only on supported native GNU/Linux x86-64 or little-endian AArch64
+with sufficient locked-memory allowance. Omit `--native-simd` to use the generic
+build. A generic x86 build tests accelerated admission rejection; baseline
+AArch64 NEON may already admit MD5 batching. The native option first checks the
+CPU feature bundle, then requires the compiled route and its complete test
+population. Resource or execution failure is an error, not a skipped success.
+This command does not change the portable facade command or release gates.
+
+Each family is built from extracted packages in its own private, config-free
+consumer. Its exact graph includes the chosen legacy leaf/host pair, core,
+hash-core and the existing protected-memory support chain through crypto-cpu-std,
+crypto-cpu and SHA-2. The modern support chain is required by protected memory;
+it is not evidence that a modern hash API was exercised by these legacy tests.
+Unexpected ordinary, resident, evidence or unrelated family features are rejected.
+
+Debug/release checks reuse the existing 169-message independent bit corpus for
+scalar SHA-1/MD5 and required SHA-1 execution, checking fragmented/byte input,
+protected output exposure and explicit declassification. MD5 SIMD checks 712
+ordered lanes with independently computed exact vector/scalar work counts.
+Public lifecycle tests cover malformed tails, cancellation, chunk/message/work
+limits, invalid resources, wrong-sized public output, forgotten output loans,
+caller-side recoverable unwind, session reuse and explicit quarantine. Caller
+unwind after a completed worker is not treated as an injected worker failure.
+
+The consumers reject 22 SHA-1 and 28 MD5 ownership, lifetime, overlapping-borrow,
+declassification and private-field probes with positive type controls. Compiled
+mutations target input absorption, output transfer, output-width validation,
+quarantine and premature poisoning of reusable sessions. Each mutant must
+compile, fail its selected runtime test and restore extracted source; pristine
+consumer tests repeat afterward.
+
+These are public functional and lifetime checks. They cannot inspect a dropped
+protected mapping, prove private stack/register erasure or replace the separate
+protected-memory, compiler, native and independent-review obligations. No Windows
+enclave, macOS resident or strict modern-facade qualification is inferred.

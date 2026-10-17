@@ -274,6 +274,24 @@ native mutations, verify observable output, guard, quarantine and route checks.
 Private-memory/register erasure and protected-platform qualification remain
 separate; no production, dependency, gate or historical-capture change.
 
+## Linux protected legacy consumers
+
+A separate opt-in package-external command now covers protected GNU/Linux
+SHA-1/MD5 consumers without folding platform requirements into portable checks.
+Exact archive/feature graphs retain the required protected-memory support chain
+and reject unrelated ordinary, resident or evidence features.
+
+The existing 169-message independent bit corpus covers scalar SHA-1/MD5 and
+required SHA-1; MD5 SIMD checks 712 ordered lanes and exact work reports.
+Debug/release checks include public declassification, request/resource failures,
+forgotten output, caller-unwind reuse and explicit quarantine. Twenty-two SHA-1
+and twenty-eight MD5 compiled negatives enforce public ownership/lifetime bounds.
+Compiled absorption/output/width/quarantine mutations validate the test paths.
+
+This is public functional acceptance, not private-memory erasure proof, a new
+native qualification or Windows/macOS coverage. Original protected-profile
+checks, production code, historical captures and release gates remain unchanged.
+
 ## Work remaining before retest and acceptance freeze
 
 - Obtain independent retest of the complete conformance separation before

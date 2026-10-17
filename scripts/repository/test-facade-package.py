@@ -75,9 +75,69 @@ def archive_regressions():
     print(f'Extracted archive binding rejects {len(mutants)} identity/path/target regressions')
 
 
+def ambient_config_regressions():
+    with patch.dict(os.environ, {'TMPDIR': '/untrusted/shared/tmp'}):
+        with acceptance.cargo_environment.private_directory(acceptance.ROOT) as directory:
+            root = Path(directory)
+            assert root.parent == acceptance.ROOT / 'target'
+            assert root.stat().st_mode & 0o777 == 0o700
+            consumer = root / 'nested/consumer'
+            consumer.mkdir(parents=True)
+            env = acceptance.clean_environment(root)
+            acceptance.cargo_environment.check(consumer, env)
+            for parent in (root, consumer):
+                config_dir = parent / '.cargo'
+                config_dir.mkdir()
+                for name in ('config', 'config.toml'):
+                    config = config_dir / name
+                    config.write_text('[build]\nrustflags=["--cfg", "brynja_cpu_evidence"]\n'
+                                      '[target.x86_64-unknown-linux-gnu]\nrunner="HIJACKED"\n')
+                    try:
+                        acceptance.run(['cargo', 'test'], consumer, env)
+                    except ValueError as error:
+                        assert 'ambient Cargo config' in str(error)
+                    else:
+                        raise AssertionError('ambient configuration reached subprocess')
+                    config.unlink()
+                config = config_dir / 'config.toml'
+                config.symlink_to(root / 'missing')
+                try:
+                    acceptance.cargo_environment.check(consumer, env)
+                except ValueError:
+                    pass
+                else:
+                    raise AssertionError('dangling config link was accepted')
+                config.unlink()
+            home = Path(env['CARGO_HOME'])
+            home.mkdir()
+            for name in ('config', 'config.toml'):
+                config = home / name
+                config.write_text('[build]\nrustflags=["--cfg", "brynja_cpu_evidence"]\n')
+                try:
+                    acceptance.run(['cargo', 'test'], consumer, env)
+                except ValueError as error:
+                    assert 'ambient Cargo home config' in str(error)
+                else:
+                    raise AssertionError('Cargo home configuration reached subprocess')
+                config.unlink()
+            sandbox = root / 'unsafe'
+            sandbox.mkdir()
+            (sandbox / 'target').mkdir(mode=0o777)
+            (sandbox / 'target').chmod(0o777)
+            try:
+                acceptance.cargo_environment.private_directory(sandbox)
+            except ValueError:
+                pass
+            else:
+                raise AssertionError('shared writable directory accepted')
+    assert not root.exists()
+    print('Private Cargo workspace rejects nine config/path hazards before subprocess launch')
+
+
 def main():
     count = 0
     with patch('subprocess.run', side_effect=AssertionError('unexpected compilation')):
+        ambient_config_regressions()
         archive_regressions()
         baseline = document({'facade-consumer': [], 'brynja': [], 'brynja-crypto': []})
         acceptance.graph(baseline, [])

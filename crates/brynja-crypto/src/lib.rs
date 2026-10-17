@@ -15,17 +15,17 @@
 /// its existing deployment, target-feature, health and classification contract.
 #[cfg(feature = "cpu")]
 pub use brynja_crypto_cpu as cpu;
+/// KMAC and KMACXOF leaf APIs; execution is a separate opt-in feature.
+pub mod kmac;
 /// ParallelHash leaf APIs; host threads remain in `brynja-hash-parallel-std`.
-pub use brynja_hash_parallel as parallelhash;
+pub mod parallelhash;
 /// SHA-2 leaf APIs, including explicitly enabled execution and general-t profiles.
 /// Existing flat portable names remain available and never select a backend.
-pub use brynja_hash_sha2 as sha2;
+pub mod sha2;
 /// SHA-3, SHAKE and cSHAKE leaf APIs with separate ordinary and hardened owners.
-pub use brynja_hash_sha3 as sha3;
+pub mod sha3;
 /// TupleHash leaf APIs, including item writers and explicitly enabled execution.
-pub use brynja_hash_tuple as tuplehash;
-/// KMAC and KMACXOF leaf APIs; execution is a separate opt-in feature.
-pub use brynja_mac_kmac as kmac;
+pub mod tuplehash;
 
 /// Whether this package provides its planned implementation.
 ///

@@ -1,6 +1,6 @@
 # v0.24.52 — Facade features and package reachability
 
-Status: implementation candidate prepared for independent pentest.
+Status: pentest remediation candidate; focused independent retest pending.
 No release qualification, independent cryptographic verification or publication
 is claimed. The next planned publication checkpoint remains v0.25.2.
 
@@ -58,3 +58,30 @@ v0.24.52 exception, and earlier evidence was not relabeled as current PASS.
 
 No cryptographic kernel, admission policy or release-gate policy changes in
 this initial forwarding implementation.
+
+## Pentest follow-up
+
+The supplied Codex Daybreak report found no serious exploitable issue. Claude
+identified namespace, ambient Cargo configuration and graph-check gaps now
+addressed for focused retest:
+
+- Curate all five family namespaces and gate optional exports on the facade's
+  own features. Do not forward free conformance helpers, in-place integration
+  modules or setup-only types. Seventeen compiled negatives per facade run
+  under deliberately unified leaf conformance; ordinary KMAC still rejects
+  empty keys. Existing reexported types retain their inherent methods, so this
+  is not a sandbox against deliberate test-feature or direct-leaf use.
+- Use private config-free Cargo work directories; sanitize packaging and
+  consumer environments. Nine path/configuration regressions fail before any
+  compiler or runner can be invoked.
+- Check six independent extracted protocol closures without removing graph
+  edges, then reject six actual direct/transitive CPU feature-activation mutants.
+
+The report's proposed support-crate version bump and new registry-identity gate
+are not applied: unpublished development versions and the publication checkpoint
+remain as established. Local archives/SBOMs are not claimed to equal registry
+artifacts by name/version alone. Full dispositions and original-report provenance
+are in the [security record](../security/pentest/v0.24.52.md). The earlier additive
+leaf-export observation above describes the pre-remediation candidate; optional
+facade exports now require the facade feature even when the leaf is enabled
+elsewhere. This follow-up does not change the existing native/release gates.

@@ -37,6 +37,9 @@ FEATURES = {
 def validate_isolation(modern, edges, names, packages, reachable):
     if {'brynja-crypto-cpu-std', 'brynja-hash-parallel-std'}.intersection(modern):
         raise ValueError('modern facade must remain independent of host adapter packages')
+    # This is a residual workspace-edge check, NOT proof of protocol isolation.
+    # check-facade-package.py independently resolves each extracted protocol in
+    # a fresh consumer, checks unmodified edges and rejects real feature mutants.
     # Workspace --all-features unifies the explicitly selected crypto opt-in
     # for protocol dependents too. Remove ONLY this reviewed optional edge when
     # checking protocol isolation. Manifest and resolved-edge validation above

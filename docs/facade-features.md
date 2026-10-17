@@ -128,10 +128,15 @@ Hardened APIs retain their bounded cleanup guarantees and documented residuals;
 facade reachability is not independent verification, FIPS approval or a stronger
 protection profile. Existing candidate backends retain their admission status.
 
-Cargo features are additive across dependents. A leaf feature selected elsewhere
-can appear through its facade namespace even without the matching facade flag.
-That is intentional namespace reexport behavior, not a secrecy boundary.
-Independent package tests must not rely on workspace-root feature unification.
+Cargo features are additive across dependents, but these namespaces now use
+explicit export lists and facade-owned feature gates. Enabling a leaf feature
+elsewhere does not automatically add its module/free-function exports here.
+Conformance-only free functions, in-place integration modules and setup-only
+types are not forwarded. Reexported types still retain their inherent methods,
+including pre-existing test-only methods when explicitly enabled on a leaf;
+curation is not provenance enforcement or a sandbox against direct leaf use.
+Independent package tests exercise this deliberate unification and must not
+rely on workspace-root feature activation.
 
 ## Focused verification
 
@@ -146,3 +151,18 @@ they do not stand in for native accelerated qualification or a full sweep.
 Each facade runs ten combined family/batch tests and three hosted/documentation
 tests per profile. The harness rejects missing or ignored runtime tests and
 compiles the Rust examples directly from this document.
+The consumer and packaging phases run in private directories under the checkout's
+`target`, rejecting inherited Cargo configuration before launching commands.
+Separate extracted TLS/DTLS/QUIC consumers check their actual dependency closures
+without removing CPU edges, including six real feature-activation mutants.
+
+## Unpublished checkout identities
+
+Internal tags retain support-crate development versions until the planned
+publication checkpoint. They are not claims that modified checkout contents
+match an already published crates.io archive of the same name/version. The
+examples require explicit checkout paths; acceptance uses extracted local
+archives and explicit patches. The repository SBOM describes that local graph,
+not a checksum attestation for registry archives. Use the reviewed commit and
+local archive provenance, not only name/version, to identify this candidate.
+No publication is selected by this internal milestone.

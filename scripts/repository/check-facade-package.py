@@ -12,13 +12,15 @@ import re
 from pathlib import Path
 import subprocess
 import sys
-import tempfile
 import tomllib
+from unittest.mock import patch
 
 import facade_package_cases as cases
 import facade_family_cases as families
 import facade_batch_cases as batches
 import facade_workspace_policy as policy
+import facade_cargo_environment as cargo_environment
+import facade_adversarial_cases as adversarial
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts/sha2'))
@@ -41,6 +43,7 @@ def clean_environment(root):
 
 
 def run(command, consumer, env, *, success=True):
+    cargo_environment.check(consumer, env)
     result = subprocess.run(command, cwd=consumer, env=env, text=True,
                             capture_output=True, timeout=240)
     require((result.returncode == 0) == success,
@@ -162,10 +165,14 @@ def ownership(consumer, package, cargo, env):
 
 def execute(root, toolchain, bare_target):
     require(set(cases.PROBES) == set(policy.CRYPTO), 'incomplete feature probe inventory')
-    roots = packaging.package_roots(root)
+    env = clean_environment(root)
+    cargo_environment.check(root / 'package-workspace', env)
+    # The shared package helper copies the environment; sanitize packaging too,
+    # not only the later extracted consumer compilation.
+    with patch.dict(os.environ, env, clear=True):
+        roots = packaging.package_roots(root)
     consumer = root / 'consumer'
     (consumer / 'src').mkdir(parents=True)
-    env = clean_environment(root)
     cargo = ['cargo', '+' + toolchain]
     for package in policy.FEATURES:
         for defaults in (False, True):
@@ -201,15 +208,19 @@ def execute(root, toolchain, bare_target):
         metadata = resolved_metadata(cargo, consumer, env, roots)
         graph(json.loads(metadata.stdout), features)
         ownership(consumer, package, cargo, env)
-        # Explicit downstream leaf opt-in unifies through the reexport. It is
-        # not evidence that the facade enabled that feature by default.
+        # An independent leaf opt-in unifies the leaf build, but must not
+        # expose exports gated on the facade's own feature selection.
         extra = ('leaf = { package="brynja-hash-sha2", version="=0.1.0", '
                  'default-features=false, features=["general-sha512-t"] }\n')
         manifest(consumer, roots, package, [], extra=extra)
-        source(consumer, package, 'pub use api::sha2::Sha512TBits;\n')
+        source(consumer, package, 'pub use leaf::Sha512TBits;\n')
         run(cargo + ['check', '--offline', '--target', bare_target], consumer, env)
         metadata = resolved_metadata(cargo, consumer, env, roots)
         graph(json.loads(metadata.stdout), ['general-sha512-t'])
+        source(consumer, package, 'pub use api::sha2::Sha512TBits;\n')
+        rejected = run(cargo + ['check', '--offline', '--message-format=json'],
+                       consumer, env, success=False)
+        require('E0432' in rejected.stdout, 'leaf opt-in leaked through curated facade')
         # Additive features must not rewrite the facade's actual feature set.
         identities = {p['id'] for p in json.loads(metadata.stdout)['packages']
                       if p['name'] == package}
@@ -225,6 +236,8 @@ def execute(root, toolchain, bare_target):
         metadata = resolved_metadata(cargo, consumer, env, roots)
         graph(json.loads(metadata.stdout), hosted_features, hosted=True)
         print(f'PASS: {package}: additive leaf features and separate hosted fallback/require', flush=True)
+        adversarial.namespace_negatives(sys.modules[__name__], consumer, roots, package, cargo, env)
+    adversarial.protocols(sys.modules[__name__], consumer, roots, cargo, env, bare_target)
     print('Facade package opt-in, default isolation, no_std, runtime and cleanup acceptance: PASS')
 
 
@@ -233,7 +246,7 @@ def main():
     parser.add_argument('--toolchain', default='1.99.1')
     parser.add_argument('--bare-target', default='x86_64-unknown-none')
     args = parser.parse_args()
-    with tempfile.TemporaryDirectory(prefix='brynja-facade-package-') as directory:
+    with cargo_environment.private_directory(ROOT) as directory:
         execute(Path(directory), args.toolchain, args.bare_target)
 
 

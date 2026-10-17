@@ -5045,6 +5045,12 @@ for internal v0.24.52 through v0.24.54. Earlier milestones still run focused
 changed-code tests, ordinary CI, required retests and non-sweep release checks;
 v0.24.54's native evidence work remains scheduled. This is an explicit owner
 decision, not a completed receipt or a new automated waiver mechanism.
+Also reconcile the owner-accepted v0.24.52 metadata-only native deferral:
+sanitization 2.1.1 changes the workspace manifest but not its Rust sources or
+the affected cryptographic implementations. Preserve the original capture
+commits; refresh or establish valid current bindings by this milestone, before
+v0.25.0. The v0.24.52 exception is not automatic native qualification or a
+general waiver for future implementation changes.
 
 Deliverables:
 

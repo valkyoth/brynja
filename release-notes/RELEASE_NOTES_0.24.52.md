@@ -122,11 +122,17 @@ v0.25.0. Those campaigns are NOT RUN, not passed; focused tests, ordinary CI,
 retests and non-sweep release checks remain required. The v0.24.54 native
 evidence milestone is unchanged. No automated gate behavior is changed.
 
-Existing native evidence validates (TupleHash/ParallelHash through the existing
-metadata-only reuse check), and bare-metal consumers, Rust/tool freshness,
-dependency audit/deny, SBOM, zero-publication selection and GitHub controls pass.
-Two live freshness blockers remain outside the sweep deferral: IANA's DNS
-registry has new registrations, and sanitization 2.1.1 requires admission
-review while this checkout remains pinned to 2.1.0. Neither is silently waived
-or repinned. See the security record for exact scope; no full-gate PASS,
-new native collection, tag or publication is claimed.
+At `bffc0ad9`, native evidence validated (TupleHash/ParallelHash through the
+existing metadata-only reuse check), and bare-metal consumers, Rust/tool
+freshness, dependency audit/deny, SBOM, zero-publication selection and GitHub
+controls passed. The two subsequent freshness blockers are now reviewed and
+updated as described above.
+
+The sanitization manifest-pin update makes the exact SHA-2, SHA-1, Keccak,
+KMAC, TupleHash and ParallelHash native checks reject their old bindings.
+The owner explicitly accepts a v0.24.52 metadata-only deferral until v0.24.55,
+retaining original captures and their source commits. The underlying Rust
+implementations are unchanged; this is not a new native run, a successful
+automated carry-forward check, or a general waiver for implementation changes.
+Gate code remains unchanged. No full automated gate PASS, tag or publication
+is claimed; this candidate still needs GitHub on its final commit.

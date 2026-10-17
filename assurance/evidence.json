@@ -76,7 +76,7 @@
     "scripts/release/test-native-metadata-carry-forward.py": "f9efea2b78aeb4fb09961776a9998392367f43b0b192ea0e926317066e4e5c70",
     "scripts/release/test-verification-plan.py": "e53ff12eb0daebd07c6ac425754c25a588bf76c0ecdbba0cfd56dd5b83bff09e",
     "scripts/release/verification_carry_forward.py": "bbcd4fe76e3acabfab97cfaed23a9834a189a9a4a79ded43fea7f30884052dc2",
-    "scripts/release/verification_carry_forward_tests.py": "ad0216247071b40dde7416a4e7665204c2e35d4a8874b7c3d5cafd87ddb8c21f",
+    "scripts/release/verification_carry_forward_tests.py": "2251ab79c939f49c49d8d3b40639628fa3d8b06ed67ac2eadd024ac3b2f13ac6",
     "scripts/release/verification_commands.py": "c4e3d61867c59e5320cb03081195409274288a90e7ff86a97d2e637c019a84dc",
     "scripts/release/verification_plan.py": "3e0e32d09a5110746b46c33a9927dd223599426d49ec3a35e55972cb2ebd27a9",
     "scripts/repository/check-unsafe-policy.py": "ee1cbcc12b0ed0e0185607a263c16e2ca7b44fe97ce734a1fd3c8a83002f33d1",

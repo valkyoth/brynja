@@ -5039,6 +5039,13 @@ Plan scope: Close the acceleration backfill before HMAC with operational public 
 
 Goal: Finish the pre-HMAC availability audit with no hidden candidate-only route represented as usable.
 
+Owner-directed sweep consolidation (2026-10-17): perform the full verification
+sweep here before proceeding to v0.25.0, collecting the long campaigns deferred
+for internal v0.24.52 through v0.24.54. Earlier milestones still run focused
+changed-code tests, ordinary CI, required retests and non-sweep release checks;
+v0.24.54's native evidence work remains scheduled. This is an explicit owner
+decision, not a completed receipt or a new automated waiver mechanism.
+
 Deliverables:
 
 - Complete v0.24.54 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
@@ -5050,6 +5057,7 @@ Deliverables:
 Verification:
 
 - Rerun frozen public acceptance after native dispositions and all changed-scope security checks; require a fresh owner pentest/retest for operational/unsafe/secret trust changes.
+- Complete the deferred full Miri/Kani/ASan and compiler-matrix/repository sweep under the existing planner and evidence-reuse rules on the final v0.24.55 implementation. Reconcile failed, skipped and incomplete work explicitly; do not enter v0.25.0 with this consolidation still deferred or claim that the earlier internal tags executed it.
 - Check the entire dependency-ordered plan, current feature graph, publish selection and documentation consistency; retain full gates at public checkpoints and impact-scoped expensive tests elsewhere.
 - Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
 

@@ -28,6 +28,14 @@ The pre-existing Low residual is accepted only for v0.24.52, not claimed fixed;
 v0.24.53's other acceptance work, subsequent versions and publication timing
 are unchanged.
 
+Owner-directed verification consolidation (2026-10-17): the additional long
+full verifier sweep for internal v0.24.52 through v0.24.54 is deferred to
+v0.24.55, before work proceeds to v0.25.0. Keep focused changed-code tests,
+pentest/retest obligations, ordinary CI and non-sweep release checks. The
+scheduled v0.24.54 native evidence work is not cancelled. Deferred campaigns
+are NOT RUN, never PASS; historical receipts retain their actual scope. This
+decision does not change automated gate code or silently waive new failures.
+
 
 The [five-part expansion review](ROADMAP_EXPANSION_AUDIT.md) and [scope register](ROADMAP_EXPANSION_REGISTER.json) assign the additional family/API and late-protocol work. Earlier implemented APIs retain their existing claims; backfills are new future work.
 

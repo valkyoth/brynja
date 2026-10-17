@@ -97,3 +97,20 @@ unpublished-version risk remains intentionally unchanged. This is not a blanket
 security or release-readiness PASS. At the owner's request, the automatic
 documentation line ceiling is removed instead of shortening the README.
 Warnings, examples, claim checks and code-size limits remain unchanged.
+
+## Final-check disposition
+
+GitHub is green at `bffc0ad9`. The owner explicitly defers the additional long
+full verifier sweep across internal v0.24.52–v0.24.54 to v0.24.55, before
+v0.25.0. Those campaigns are NOT RUN, not passed; focused tests, ordinary CI,
+retests and non-sweep release checks remain required. The v0.24.54 native
+evidence milestone is unchanged. No automated gate behavior is changed.
+
+Existing native evidence validates (TupleHash/ParallelHash through the existing
+metadata-only reuse check), and bare-metal consumers, Rust/tool freshness,
+dependency audit/deny, SBOM, zero-publication selection and GitHub controls pass.
+Two live freshness blockers remain outside the sweep deferral: IANA's DNS
+registry has new registrations, and sanitization 2.1.1 requires admission
+review while this checkout remains pinned to 2.1.0. Neither is silently waived
+or repinned. See the security record for exact scope; no full-gate PASS,
+new native collection, tag or publication is claimed.

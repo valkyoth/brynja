@@ -4958,6 +4958,11 @@ report and cleanup regressions in the opt-in SIMD campaign.
 TupleHash now reuses its independent execution corpus and public-API lifecycle
 tests through both facades, including scoped accelerated routes, compiled
 ownership negatives and framing/cleanup/fallback mutations.
+ParallelHash threaded batching now reuses its independent arbitrary-bit corpus
+through both facades and an explicitly opted-in packaged std adapter, with
+one/three-worker accounting, output/failure cleanup and compiled mutations.
+This slice keeps root hashing portable; distinct serial/accelerated-root and
+leaf-only scoped routes still require reconciliation.
 Wider consumer acceptance and independent retest remain pending.
 
 Plan scope: Freeze runnable package-external acceptance for every operational ordinary/hardened, byte/bit, streaming, XOF and batch route across SHA-2, SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, ParallelHash, SHA-1 and MD5 before the final native sweep.

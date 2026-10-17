@@ -262,3 +262,35 @@ TupleHash exposes route/health reports, not a public permutation counter.
 This consumer checks those reports and output/lifecycle behavior; it does not
 claim a new instruction-count observation, private-frame cleanup inspection,
 independent review or multi-platform native qualification.
+
+## ParallelHash threaded batch consumer acceptance
+
+The separate `brynja-hash-parallel-std` adapter is explicitly opted in by the
+consumer, not pulled into either facade's defaults. Its own archive is bound
+to the same isolated local-package graph. The consumer uses facade-exported
+ParallelHash identities and bit inputs with the adapter's public owned and
+scoped threaded batch executors; no workspace dependency or evidence cfg can
+satisfy a missing facade export.
+
+The existing threaded fixture runs 256 independent arbitrary-bit cases (64
+per fixed/XOF identity) with one and three workers, in debug and release.
+It checks public/secret equality, canaries, scratch and output Drop clearing,
+leaf/group/thread accounting and reported vector work. Portable and preferred
+selection use the complete corpus. Required selection uses 48 nonempty cases
+aligned to both supported SIMD widths, and separately rejects an incomplete
+group instead of silently using a scalar tail. Unavailable required authority
+must reject before any output. The explicit local SIMD option enables AVX2 or
+NEON only after a generic host probe. Root hashing stays portable here; this
+is not accelerated-root or private worker-frame qualification.
+
+Two additional lifecycle tests cover cancellation, zero work budget, leaf
+limits, invalid block/bit sizes, undersized scratch and executor reuse after
+failure across all four identities and both executor forms. Public errors
+preserve the destination, secret errors clear it and scratch clears only its
+supplied region. Twenty-five compiled trait negatives cover facade-exported
+collectors, readers, streams and workspaces. Compiled mutants verify secret
+error clearing, public copying and (with SIMD) worker vector accounting.
+
+The fixture's separate local/scoped-root executable imports deliberately
+hidden leaf-only APIs and is not redirected or silently claimed as covered.
+Further family/route reconciliation and independent retest remain pending.

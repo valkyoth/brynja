@@ -25,6 +25,7 @@ import facade_keccak_cases as keccak
 import facade_sha2_acceptance as sha2_batches
 import facade_keccak_acceptance as keccak_routes
 import facade_tuplehash_acceptance as tuplehash
+import facade_parallelhash_acceptance as parallelhash
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts/sha2'))
@@ -91,13 +92,19 @@ def source(consumer, package, body):
         f'#[allow(unused_imports)]\nuse {alias} as api;\n' + body)
 
 
-def graph(document, features, *, hosted=False):
+def graph(document, features, *, hosted=False, threaded=False):
     packages = {p['id']: p for p in document['packages']}
     active = {packages[node['id']]['name']: node['features']
               for node in document['resolve']['nodes']}
     require(all(p['source'] is None for p in packages.values()), 'registry/git dependency')
-    require({name for name in active if name.endswith('-std')} ==
-            ({'brynja-crypto-cpu-std'} if hosted else set()) and
+    require(not threaded or (hosted and 'parallelhash-hardened-batch' in features),
+            'threaded adapter requires explicit ParallelHash batch opt-in')
+    hosts = ({'brynja-crypto-cpu-std'} if hosted else set())
+    if threaded:
+        hosts.add('brynja-hash-parallel-std')
+        require('runtime-batch-execution' in active.get('brynja-hash-parallel-std', []),
+                'threaded batch feature missing')
+    require({name for name in active if name.endswith('-std')} == hosts and
             not any(name.startswith('brynja-legacy') for name in active),
             'host or legacy package reachable')
     require(not any('conformance-testing' in values for values in active.values()),
@@ -113,6 +120,7 @@ def graph(document, features, *, hosted=False):
 def archive_graph(document, roots, consumer):
     """Bind resolved identities and source targets to the actual extracted archives."""
     versions = {name: version for name, version, _ in packaging.PACKAGING_PACKAGES}
+    versions[parallelhash.ARCHIVE[0]] = parallelhash.ARCHIVE[1]
     versions['facade-consumer'] = '0.0.0'
     paths = {**roots, 'facade-consumer': consumer}
     packages = document['packages']
@@ -174,7 +182,7 @@ def execute(root, toolchain, bare_target, native_simd=False):
     # The shared package helper copies the environment; sanitize packaging too,
     # not only the later extracted consumer compilation.
     with patch.dict(os.environ, env, clear=True):
-        roots = packaging.package_roots(root)
+        roots = parallelhash.package_roots(packaging, root)
     consumer = root / 'consumer'
     (consumer / 'src').mkdir(parents=True)
     cargo = ['cargo', '+' + toolchain]
@@ -251,6 +259,7 @@ def execute(root, toolchain, bare_target, native_simd=False):
     sha2_batches.execute(sys.modules[__name__], root, roots, cargo, env, native_simd)
     keccak_routes.execute(sys.modules[__name__], root, roots, cargo, env, native_simd)
     tuplehash.execute(sys.modules[__name__], root, roots, cargo, env, native_simd)
+    parallelhash.execute(sys.modules[__name__], root, roots, cargo, env, native_simd)
     print('Facade package opt-in, default isolation, no_std, runtime and cleanup acceptance: PASS')
 
 
@@ -259,7 +268,7 @@ def main():
     parser.add_argument('--toolchain', default='1.99.1')
     parser.add_argument('--bare-target', default='x86_64-unknown-none')
     parser.add_argument('--native-simd', action='store_true',
-                        help='also run local SHA-2/Keccak/TupleHash accelerated checks; not native qualification')
+                        help='also run local SHA-2/Keccak/TupleHash/ParallelHash accelerated checks; not native qualification')
     args = parser.parse_args()
     with cargo_environment.private_directory(ROOT) as directory:
         execute(Path(directory), args.toolchain, args.bare_target, args.native_simd)

@@ -10,6 +10,7 @@ import test_facade_keccak
 import test_facade_sha2
 import test_facade_keccak_routes
 import test_facade_tuplehash
+import test_facade_parallelhash
 
 spec = importlib.util.spec_from_file_location(
     'facade_package', Path(__file__).with_name('check-facade-package.py'))
@@ -145,6 +146,8 @@ def main():
         test_facade_sha2.check()
         test_facade_keccak_routes.check()
         test_facade_tuplehash.check()
+        test_facade_parallelhash.check()
+        test_facade_parallelhash.graph_checks(acceptance, document)
         ambient_config_regressions()
         archive_regressions()
         baseline = document({'facade-consumer': [], 'brynja': [], 'brynja-crypto': []})

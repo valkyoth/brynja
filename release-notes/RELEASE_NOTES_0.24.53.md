@@ -2,6 +2,25 @@
 
 Status: development in progress; not release-qualified. No publication selected.
 
+## ParallelHash threaded consumer acceptance
+
+Both extracted facades now run the existing threaded ParallelHash batch fixture
+with a separately opted-in, archive-bound `brynja-hash-parallel-std` adapter.
+The 256 independent arbitrary-bit cases cover all four identities, public and
+secret outputs, owned and scoped executors, canaries, output/scratch clearing,
+leaf order and group/thread/vector accounting with one and three workers.
+Required SIMD uses 48 lane-aligned cases and rejects incomplete groups; generic
+unavailable authority fails before output. The local SIMD option is functional
+acceptance, not new native qualification, and the root remains portable.
+
+Additional downstream lifecycle tests cover cancellation, work/leaf limits,
+invalid block/bit sizes, scratch bounds and reuse after rejection. Twenty-five
+compiled ownership negatives per facade and compiled output-copy, cleanup and
+vector-report mutations check enforcement. The threaded adapter remains absent
+from default/no_std facade consumers; no production feature graph or release
+gate changes. Serial/accelerated-root and deliberately hidden leaf-only scoped
+route reconciliation, wider families and independent retest remain pending.
+
 ## KMAC conformance separation
 
 The four KMAC/KMACXOF identities' production states no longer acquire inherent

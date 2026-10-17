@@ -22,6 +22,7 @@ import facade_workspace_policy as policy
 import facade_cargo_environment as cargo_environment
 import facade_adversarial_cases as adversarial
 import facade_keccak_cases as keccak
+import facade_sha2_acceptance as sha2_batches
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts/sha2'))
@@ -43,10 +44,10 @@ def clean_environment(root):
     return env
 
 
-def run(command, consumer, env, *, success=True):
+def run(command, consumer, env, *, success=True, data=None):
     cargo_environment.check(consumer, env)
     result = subprocess.run(command, cwd=consumer, env=env, text=True,
-                            capture_output=True, timeout=240)
+                            capture_output=True, timeout=240, input=data)
     require((result.returncode == 0) == success,
             f'{command}: {result.stdout[-6000:]}\n{result.stderr[-6000:]}')
     return result
@@ -164,7 +165,7 @@ def ownership(consumer, package, cargo, env):
     print(f'PASS: {package}: 15 compiled ownership rejections', flush=True)
 
 
-def execute(root, toolchain, bare_target):
+def execute(root, toolchain, bare_target, native_simd=False):
     require(set(cases.PROBES) == set(policy.CRYPTO), 'incomplete feature probe inventory')
     env = clean_environment(root)
     cargo_environment.check(root / 'package-workspace', env)
@@ -245,6 +246,7 @@ def execute(root, toolchain, bare_target):
         print(f'PASS: {package}: additive leaf features and separate hosted fallback/require', flush=True)
         adversarial.namespace_negatives(sys.modules[__name__], consumer, roots, package, cargo, env)
     adversarial.protocols(sys.modules[__name__], consumer, roots, cargo, env, bare_target)
+    sha2_batches.execute(sys.modules[__name__], root, roots, cargo, env, native_simd)
     print('Facade package opt-in, default isolation, no_std, runtime and cleanup acceptance: PASS')
 
 
@@ -252,9 +254,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--toolchain', default='1.99.1')
     parser.add_argument('--bare-target', default='x86_64-unknown-none')
+    parser.add_argument('--native-simd', action='store_true',
+                        help='also run local SHA-2 AVX2/NEON functional checks; not native qualification')
     args = parser.parse_args()
     with cargo_environment.private_directory(ROOT) as directory:
-        execute(Path(directory), args.toolchain, args.bare_target)
+        execute(Path(directory), args.toolchain, args.bare_target, args.native_simd)
 
 
 if __name__ == '__main__':

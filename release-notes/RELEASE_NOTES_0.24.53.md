@@ -52,6 +52,27 @@ acceptance command; it adds no release gate, dependency or production change.
 These consumers force portable execution and do not establish native SIMD
 execution or inspection of private workspace memory.
 
+## Packaged SHA-2 batch consumers
+
+Both facades now run the existing ordinary and hardened SHA-2 batch fixtures
+against extracted archives, with a separately opted-in hosted adapter. The
+independent corpora cover 384 SHA-224/256 batches and 4,846 SHA-512-family
+batches, including every valid SHA-512/t width, sparse masks and bit/padding
+boundaries. Secret identity/width, explicit declassification, public output,
+Drop clearing, work accounting, cancellation, budget rejection and subsequent
+reuse are checked without copying a cryptographic implementation.
+
+Portable/preferred selection is exercised with the full corpus; required
+selection receives eligible full-width groups or must reject unavailability
+without output. Four additional lifecycle tests cover selection and quarantine.
+Twelve compiled output/algorithm/report/cleanup mutations and six opt-in SIMD
+no-op/scalar-substitution mutations prevent vacuous acceptance.
+
+`check-facade-package.py --native-simd` additionally requests a host-capability-
+checked AVX2/NEON build with positive vector counters. This is local functional
+acceptance, not refreshed native release qualification. The usual command,
+gate rules, historical evidence and full-sweep deferral remain unchanged.
+
 ## Work remaining before retest and acceptance freeze
 
 - Obtain independent retest of the complete conformance separation before

@@ -4949,6 +4949,9 @@ the related cSHAKE composition surface is reviewed and retained explicitly.
 Packaged Keccak batch consumers now reuse the independent bit oracle through
 both facades, including ordinary, secret and declassified public output paths,
 failure/cleanup checks and compiled behavioral mutations in portable mode.
+SHA-2 batch fixtures likewise run through both packaged facades, covering
+ordinary/hardened outputs, all general-t widths, route/lifecycle behavior and
+compiled mutations, with an explicit opt-in local SIMD functional campaign.
 Wider consumer acceptance and independent retest remain pending.
 
 Plan scope: Freeze runnable package-external acceptance for every operational ordinary/hardened, byte/bit, streaming, XOF and batch route across SHA-2, SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, ParallelHash, SHA-1 and MD5 before the final native sweep.

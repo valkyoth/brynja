@@ -163,8 +163,9 @@ to the extracted archives; checkout fallbacks, unknown local packages, native
 link declarations, build scripts and proc macros are rejected.
 Debug/release checks exercise portable output equivalence and clearing owners;
 they do not stand in for native accelerated qualification or a full sweep.
-Each facade runs ten combined family/batch tests and three hosted/documentation
-tests per profile. The harness rejects missing or ignored runtime tests and
+Each facade runs ten combined family/batch tests, three hosted/documentation
+tests, three Keccak oracle tests and four SHA-2 route/lifecycle tests per profile,
+alongside the separate conformance-isolation checks. The harness rejects missing or ignored runtime tests and
 compiles the Rust examples directly from this document.
 The consumer and packaging phases run in private directories under the checkout's
 `target`, rejecting inherited Cargo configuration before launching commands.
@@ -182,13 +183,7 @@ not a checksum attestation for registry archives. Use the reviewed commit and
 local archive provenance, not only name/version, to identify this candidate.
 No publication is selected by this internal milestone.
 
-## Package-external checks
-
-Run `python3 scripts/repository/check-facade-package.py` to compile isolated
-consumers against extracted local crate archives. It checks opt-in forwarding,
-bare-target compilation, graph isolation, ownership, conformance separation
-and runtime output/error behavior through both facade paths. Use `--toolchain`
-to select another installed supported compiler.
+## Batch consumer acceptance
 
 The Keccak batch cases reuse the independent bit-level oracle for all eight
 SHA-3/SHAKE/cSHAKE identities, including customized, partial-bit and zero-width
@@ -198,3 +193,24 @@ their separate contracts. Compiled mutations must reach and fail the intended
 runtime assertion, not merely fail to build. These checks select portable
 execution: native SIMD counters, private-workspace cleanup and platform
 qualification remain the responsibility of the dedicated family checks.
+
+SHA-2 consumers reuse the existing ordinary/hardened batch fixtures with only
+their imports redirected through each facade and a separate hosted adapter.
+They compare 384 SHA-224/256 batches and 4,846 SHA-512-family batches against
+independent expected outputs, including all valid general-t widths, sparse
+slots and bit/padding boundaries. Portable and preferred modes use the full
+corpus; required acceleration uses its eligible full-width subset or must
+reject unavailable selection before producing any output. Twelve compiled
+mutations check output, algorithm, work-accounting and clearing behavior.
+
+For a local SIMD functional check, run
+`python3 scripts/repository/check-facade-package.py --native-simd`.
+After checking CPU support in a generic executable, it builds a separate
+AVX2/NEON-specialized consumer, requires all four SHA-2 batch routes to be
+available and checks positive vector counts. Six compiled no-op/scalar-replacement
+mutations must fail the actual session-counter invariant. Run this only where
+the deployment preserves that ISA throughout execution; the initial CPU check
+is not a live-migration guarantee. This option is not native release
+qualification, independent review or a benchmark. The default command does
+not request a specialized build; on supported Arm hosts the hosted APIs may
+already select NEON in a generic build.

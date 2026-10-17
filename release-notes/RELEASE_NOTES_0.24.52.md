@@ -1,5 +1,21 @@
 # v0.24.52 — Facade features and package reachability
 
+## Final freshness maintenance
+
+The owner-approved final review advances the separately selected sanitization
+adapter to exact `2.1.1`, default features disabled. Both published archives
+were compared: every Rust source file is byte-identical to `2.1.0`; the selected
+dependency graph and cleanup contract are unchanged. Historical admissions
+remain preserved, and current pins, lockfiles, SBOM and admission tests are
+refreshed. This is a targeted dependency review, not a new full-sweep result.
+
+The IANA DNS snapshot now includes temporary DELEGPARAM (54) and DELEG (61440)
+registrations. They remain caller-owned future DNS scope; their draft reference
+is not admitted as final normative authority. Registry, requirement and
+API-profile bindings are refreshed without changing runtime code or gate rules.
+
+## Facade implementation
+
 Status: focused retest recorded with owner-accepted limitations; release qualification pending.
 No release qualification, independent cryptographic verification or publication
 is claimed. The next planned publication checkpoint remains v0.25.2.

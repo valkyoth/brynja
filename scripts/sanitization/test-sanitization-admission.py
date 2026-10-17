@@ -24,7 +24,7 @@ def copy_fixture(destination: Path) -> None:
         Path("assurance/sanitization-admission/Cargo.lock"),
         Path("assurance/sanitization-admission/src/lib.rs"),
         Path("docs/sanitization-admission-review.md"),
-        Path("security/dependency-admissions/sanitization-2.1.0.toml"),
+        Path("security/dependency-admissions/sanitization-2.1.1.toml"),
     ):
         target = destination / relative
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -58,12 +58,12 @@ def test() -> None:
         copy_fixture(root)
         sanitization_admission.validate(root)
 
-        record = root / "security/dependency-admissions/sanitization-2.1.0.toml"
-        replace(record, 'version = "2.1.0"', 'version = "2.1.1"')
+        record = root / "security/dependency-admissions/sanitization-2.1.1.toml"
+        replace(record, 'version = "2.1.1"', 'version = "2.1.2"')
         require_rejection(root, "package identity")
         copy_fixture(root)
 
-        record = root / "security/dependency-admissions/sanitization-2.1.0.toml"
+        record = root / "security/dependency-admissions/sanitization-2.1.1.toml"
         replace(
             record,
             "a159daa45728fa63e6a42a16bfb8bb5d099f7e6fd05338b7393f3f105fbf2491",
@@ -72,24 +72,41 @@ def test() -> None:
         require_rejection(root, "selected TCB hash inventory drift")
         copy_fixture(root)
 
-        record = root / "security/dependency-admissions/sanitization-2.1.0.toml"
-        replace(record, "previous_selected_feature_tcb_version = \"2.0.4\"",
-                "previous_selected_feature_tcb_version = \"2.1.0\"")
+        record = root / "security/dependency-admissions/sanitization-2.1.1.toml"
+        replace(record, "previous_selected_feature_tcb_version = \"2.1.0\"",
+                "previous_selected_feature_tcb_version = \"2.0.4\"")
         require_rejection(root, "comparison baseline drift")
         copy_fixture(root)
 
-        record = root / "security/dependency-admissions/sanitization-2.1.0.toml"
+        for current, stale in (
+            (sanitization_admission.PACKAGE_SHA256,
+             "0c395c5164295d69016c014a3c2dd69d28a84b7e89ba971c1e81b17acc41e411"),
+            (sanitization_admission.SOURCE_COMMIT,
+             "a3032977ebed2f704687da1a900f9921102351b4"),
+            (sanitization_admission.REVIEWED_COMMIT,
+             "2ab1c6fcadb5482bbfb223d92492daae0d9c607c"),
+        ):
+            replace(record, current, stale)
+            require_rejection(root, "package identity")
+            copy_fixture(root)
+
+        replace(root / "Cargo.lock", sanitization_admission.PACKAGE_SHA256,
+                "0c395c5164295d69016c014a3c2dd69d28a84b7e89ba971c1e81b17acc41e411")
+        require_rejection(root, "lock identity drift")
+        copy_fixture(root)
+
+        record = root / "security/dependency-admissions/sanitization-2.1.1.toml"
         replace(record, "default_features = false", "default_features = true")
         require_rejection(root, "default features")
         copy_fixture(root)
 
-        record = root / "security/dependency-admissions/sanitization-2.1.0.toml"
+        record = root / "security/dependency-admissions/sanitization-2.1.1.toml"
         replace(record, 'fips_boundary = "excluded"', 'fips_boundary = "included"')
         require_rejection(root, "outside FIPS")
         copy_fixture(root)
 
         manifest = root / "crates/brynja/Cargo.toml"
-        replace(manifest, "[dependencies]", "[dependencies]\nsanitization = \"=2.1.0\"")
+        replace(manifest, "[dependencies]", "[dependencies]\nsanitization = \"=2.1.1\"")
         require_rejection(root, "escaped adapter")
         copy_fixture(root)
 
@@ -134,4 +151,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     test()
-    print("sanitization admission rejects thirteen identity, graph, error-boundary, release-history, feature, FIPS, and drift regressions")
+    print("sanitization admission rejects seventeen identity, graph, error-boundary, release-history, feature, FIPS, and drift regressions")

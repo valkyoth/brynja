@@ -116,7 +116,7 @@ def test_current_residual_repository() -> None:
     assert coverage["authority_count"] == 33
     assert coverage["normative_section_count"] == 182
     assert coverage["mapped_normative_section_count"] == 165
-    assert coverage["surface_count"] == 793
+    assert coverage["surface_count"] == 795
     requirement_map = {item["id"]: item for item in requirements}
     assert all(
         item["id"] in requirement_map[item["requirement_id"]]["decision_ids"]
@@ -128,6 +128,8 @@ def test_current_residual_repository() -> None:
 def test_october_registry_refresh_does_not_admit_provisional_protocols() -> None:
     rows = {row['id']: row for row in lib.read_json(surfaces.REGISTER)['surfaces']}
     expected = {
+        'iana.dns-parameters.dns-parameters-4.extensible-delegation-indirection-temporary-registered-2026-10-16-expires-2027-10-16.1': ('caller-owned', '0.188.0', '54'),
+        'iana.dns-parameters.dns-parameters-4.extensible-delegation-temporary-registered-2026-10-16-expires-2027-10-16.1': ('caller-owned', '0.188.0', '61440'),
         'iana.quic.quic-frame-types.reset-stream-at.1': ('caller-owned', '0.138.0', '0x24'),
         'iana.quic.quic-transport.reset-stream-at.1': ('caller-owned', '0.138.0', '0x1d'),
         'iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.1.id-pe-mtccertificationauthority-sha256.1': ('future-work', '0.94.0', '38'),
@@ -177,7 +179,7 @@ def test_current_bidirectional_closure() -> None:
     for minor in (*range(378, 392), 470):
         for patch in range(last_patches.get(minor, 7) + 1):
             assert plans[f"0.{minor}.{patch}"]["boundary"]["class"] == "planned-authority-admission"
-    assert len(artifact["surfaces"]) == 4469
+    assert len(artifact["surfaces"]) == 4471
     assert len(artifact["requirements"]) == 175
     assert len(artifact["local_rights"]) == 18
     assert len(artifact["mutable_authorities"]) == 15

@@ -628,9 +628,9 @@
         "0.3.5",
         "0.188.0"
       ],
-      "sha256": "4249c75f8a2403676c9f671cc7d246ed37896883a25d470fd5f26e923a123f94",
+      "sha256": "8cf6389cfb7040b3a325f54975dcf7630bc5d749f251482056706520cd785093",
       "title": "Domain Name System (DNS) Parameters",
-      "updated": "2026-08-28",
+      "updated": "2026-10-16",
       "url": "https://www.iana.org/assignments/dns-parameters/dns-parameters.xml"
     }
   ],

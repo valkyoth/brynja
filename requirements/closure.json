@@ -26154,8 +26154,8 @@
         "iana.dns-parameters.dns-parameters-4.110-127.1",
         "iana.dns-parameters.dns-parameters-4.129-248.1",
         "iana.dns-parameters.dns-parameters-4.265-32767.1",
-        "iana.dns-parameters.dns-parameters-4.32770-65279.1",
-        "iana.dns-parameters.dns-parameters-4.54.1",
+        "iana.dns-parameters.dns-parameters-4.32770-61439.1",
+        "iana.dns-parameters.dns-parameters-4.61441-65279.1",
         "iana.dns-parameters.dns-parameters-4.65280-65534.1",
         "iana.dns-parameters.dns-parameters-4.65535.1",
         "iana.dns-parameters.dns-parameters-4.71-98.1",
@@ -26194,6 +26194,8 @@
         "iana.dns-parameters.dns-parameters-4.dnssec-trust-authorities.1",
         "iana.dns-parameters.dns-parameters-4.endpoint-discovery-for-delegation-synchronization.1",
         "iana.dns-parameters.dns-parameters-4.endpoint-identifier.1",
+        "iana.dns-parameters.dns-parameters-4.extensible-delegation-indirection-temporary-registered-2026-10-16-expires-2027-10-16.1",
+        "iana.dns-parameters.dns-parameters-4.extensible-delegation-temporary-registered-2026-10-16-expires-2027-10-16.1",
         "iana.dns-parameters.dns-parameters-4.for-afs-data-base-location.1",
         "iana.dns-parameters.dns-parameters-4.for-domain-name-pointer-nsap-style-deprecated.1",
         "iana.dns-parameters.dns-parameters-4.for-isdn-address.1",
@@ -28362,7 +28364,7 @@
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
       ],
-      "sha256": "4249c75f8a2403676c9f671cc7d246ed37896883a25d470fd5f26e923a123f94"
+      "sha256": "8cf6389cfb7040b3a325f54975dcf7630bc5d749f251482056706520cd785093"
     },
     {
       "id": "iana:hpke",
@@ -32248,13 +32250,13 @@
       ]
     },
     {
-      "id": "iana.dns-parameters.dns-parameters-4.32770-65279.1",
+      "id": "iana.dns-parameters.dns-parameters-4.32770-61439.1",
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
       ]
     },
     {
-      "id": "iana.dns-parameters.dns-parameters-4.54.1",
+      "id": "iana.dns-parameters.dns-parameters-4.61441-65279.1",
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
       ]
@@ -32483,6 +32485,18 @@
     },
     {
       "id": "iana.dns-parameters.dns-parameters-4.endpoint-identifier.1",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.dns-parameters-4.extensible-delegation-indirection-temporary-registered-2026-10-16-expires-2027-10-16.1",
+      "requirement_ids": [
+        "BRY-REQ-DNS-0140"
+      ]
+    },
+    {
+      "id": "iana.dns-parameters.dns-parameters-4.extensible-delegation-temporary-registered-2026-10-16-expires-2027-10-16.1",
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
       ]

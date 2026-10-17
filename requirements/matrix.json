@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "8a36299c9400afea4021dd0227285f05d3d35d58b35444f3ea2560a3d7cd2527",
-  "domain_policy_sha256": "8ed954ccc0f2ef693b876de726a418f86cc633744d8148991be4763ae45446d1",
-  "policy_sha256": "05bf645a70162e448850b191ec976ea37f70b1ca3d62b762bbef6835cbc63755",
+  "domain_policy_sha256": "4fd259c01ae6f3d8b97d1fe159b23558f58662c8841c8c41849ab890b86e6153",
+  "policy_sha256": "7fa43c169271ccc38228721b056aac61e2c15dd190dcf4bda211aa16fc68a94c",
   "requirements": [
     {
       "applicability": "delegate",
@@ -4275,8 +4275,8 @@
         "iana.dns-parameters.dns-parameters-4.110-127.1",
         "iana.dns-parameters.dns-parameters-4.129-248.1",
         "iana.dns-parameters.dns-parameters-4.265-32767.1",
-        "iana.dns-parameters.dns-parameters-4.32770-65279.1",
-        "iana.dns-parameters.dns-parameters-4.54.1",
+        "iana.dns-parameters.dns-parameters-4.32770-61439.1",
+        "iana.dns-parameters.dns-parameters-4.61441-65279.1",
         "iana.dns-parameters.dns-parameters-4.65280-65534.1",
         "iana.dns-parameters.dns-parameters-4.65535.1",
         "iana.dns-parameters.dns-parameters-4.71-98.1",
@@ -4315,6 +4315,8 @@
         "iana.dns-parameters.dns-parameters-4.dnssec-trust-authorities.1",
         "iana.dns-parameters.dns-parameters-4.endpoint-discovery-for-delegation-synchronization.1",
         "iana.dns-parameters.dns-parameters-4.endpoint-identifier.1",
+        "iana.dns-parameters.dns-parameters-4.extensible-delegation-indirection-temporary-registered-2026-10-16-expires-2027-10-16.1",
+        "iana.dns-parameters.dns-parameters-4.extensible-delegation-temporary-registered-2026-10-16-expires-2027-10-16.1",
         "iana.dns-parameters.dns-parameters-4.for-afs-data-base-location.1",
         "iana.dns-parameters.dns-parameters-4.for-domain-name-pointer-nsap-style-deprecated.1",
         "iana.dns-parameters.dns-parameters-4.for-isdn-address.1",
@@ -4610,7 +4612,7 @@
       "owner": "0.188.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 9,
+      "revision": 10,
       "scope": "protocol",
       "sources": [
         {
@@ -4627,7 +4629,7 @@
             "0.3.5",
             "0.188.0"
           ],
-          "sha256": "4249c75f8a2403676c9f671cc7d246ed37896883a25d470fd5f26e923a123f94"
+          "sha256": "8cf6389cfb7040b3a325f54975dcf7630bc5d749f251482056706520cd785093"
         },
         {
           "authority_role": "caller-owned",
@@ -30813,9 +30815,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "b7b3dfc6ef83a822ebe0f5380d19bcd1a1a10ad31a485dd37cff5fff9d1abbb9",
+  "residual_policy_sha256": "a659ccd349a4409e8895a4914539408f252c3c682df569d024c4158f745ae88a",
   "schema": 5,
-  "source_ledger_sha256": "9114e79ba3b41e70be711cfc350d91ff6b7ce4c774778a6722e99f2219f72b56",
-  "surface_register_sha256": "418905c3032549732d83a7858df7b4b1ea29e8c9f1f3973971cc795b968608b5",
-  "transport_policy_sha256": "b022e9126a617d318be8265fa5f5d98ed4bb76660c126fa70f92e69e21c61c29"
+  "source_ledger_sha256": "7723f01765e12dac7c4df15b305035f634fb2c3923714b584c22e95928070816",
+  "surface_register_sha256": "1fcad28078a4855df46677a522c6bff63b06e3f4cafe5f8d21a1268fdfc71aca",
+  "transport_policy_sha256": "9b76e5fac8612c646ae9e0d008061ef9acd2078efe6fffd989245167db4be7c2"
 }

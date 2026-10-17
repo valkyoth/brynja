@@ -194,7 +194,7 @@ TLS engines or X.509 validation. Brynja must not yet secure network traffic.
 - Modern, legacy and research packages remain isolated. Legacy algorithms do
   not become safe merely because their implementation is complete.
 - No unreviewed third-party dependency enters the core. The optional
-  `brynja-sanitization` adapter uses exact-pinned `sanitization 2.1.0`,
+  `brynja-sanitization` adapter uses exact-pinned `sanitization 2.1.1`,
   with default features disabled. Planned `base64-ng` admission is
   encoding-only; future rustls/Tokio adapters remain separately selected.
 - Source files stay below 500 lines. Hostile inputs, work limits, output

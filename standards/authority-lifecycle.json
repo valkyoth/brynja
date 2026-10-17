@@ -15,7 +15,7 @@
         "boundary:dns.0.188.0"
       ],
       "brynja_state": "current",
-      "content_sha256": "4249c75f8a2403676c9f671cc7d246ed37896883a25d470fd5f26e923a123f94",
+      "content_sha256": "8cf6389cfb7040b3a325f54975dcf7630bc5d749f251482056706520cd785093",
       "content_url": "https://www.iana.org/assignments/dns-parameters/dns-parameters.xml",
       "edition": "Domain Name System (DNS) Parameters",
       "id": "iana:dns-parameters",
@@ -24,7 +24,7 @@
       "last_successful_observation": "2026-08-31",
       "metadata": {
         "created": "",
-        "updated": "2026-08-28"
+        "updated": "2026-10-16"
       },
       "planning_notices": [],
       "publisher": "IANA",
@@ -7549,7 +7549,7 @@
   ],
   "baseline_observed_at": "2026-08-31",
   "policy_sha256": "40fbbf9915be2b5202f3c1a8311a76e7c389345164753d1ef3dc0d9eadd42d80",
-  "reviews_sha256": "9d18ebb5d2f61f377c7dd5b41ecd964628624f256c2b74ca855324cbc9168fcd",
+  "reviews_sha256": "47e2327e56be73e37fcbd935c7b97082a035cfb24aad02ef9dd937ae7eda1434",
   "schema": 1,
-  "source_ledger_sha256": "9114e79ba3b41e70be711cfc350d91ff6b7ce4c774778a6722e99f2219f72b56"
+  "source_ledger_sha256": "7723f01765e12dac7c4df15b305035f634fb2c3923714b584c22e95928070816"
 }

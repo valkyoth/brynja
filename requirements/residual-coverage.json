@@ -17,7 +17,7 @@
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
       ],
-      "sha256": "4249c75f8a2403676c9f671cc7d246ed37896883a25d470fd5f26e923a123f94"
+      "sha256": "8cf6389cfb7040b3a325f54975dcf7630bc5d749f251482056706520cd785093"
     },
     {
       "authority_role": "current",
@@ -2625,10 +2625,10 @@
   "authority_count": 33,
   "mapped_normative_section_count": 165,
   "normative_section_count": 182,
-  "policy_sha256": "b7b3dfc6ef83a822ebe0f5380d19bcd1a1a10ad31a485dd37cff5fff9d1abbb9",
+  "policy_sha256": "a659ccd349a4409e8895a4914539408f252c3c682df569d024c4158f745ae88a",
   "requirement_count": 51,
   "schema": 1,
-  "surface_count": 793,
+  "surface_count": 795,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -3666,7 +3666,7 @@
       "coverage": "requirement",
       "disposition": "caller-owned",
       "domain": "dns",
-      "id": "iana.dns-parameters.dns-parameters-4.32770-65279.1",
+      "id": "iana.dns-parameters.dns-parameters-4.32770-61439.1",
       "owner": "0.188.0",
       "requirement_id": "BRY-REQ-DNS-0140"
     },
@@ -3674,7 +3674,7 @@
       "coverage": "requirement",
       "disposition": "caller-owned",
       "domain": "dns",
-      "id": "iana.dns-parameters.dns-parameters-4.54.1",
+      "id": "iana.dns-parameters.dns-parameters-4.61441-65279.1",
       "owner": "0.188.0",
       "requirement_id": "BRY-REQ-DNS-0140"
     },
@@ -3979,6 +3979,22 @@
       "disposition": "caller-owned",
       "domain": "dns",
       "id": "iana.dns-parameters.dns-parameters-4.endpoint-identifier.1",
+      "owner": "0.188.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.dns-parameters-4.extensible-delegation-indirection-temporary-registered-2026-10-16-expires-2027-10-16.1",
+      "owner": "0.188.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.dns-parameters-4.extensible-delegation-temporary-registered-2026-10-16-expires-2027-10-16.1",
       "owner": "0.188.0",
       "requirement_id": "BRY-REQ-DNS-0140"
     },

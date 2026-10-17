@@ -28,6 +28,27 @@
       "id": "c0a1aef411b802a83aae3601",
       "requested_action": "human-review",
       "state": "changed"
+    },
+    {
+      "affected_evidence": [],
+      "affected_milestones": [
+        "0.188.0",
+        "0.3.0",
+        "0.3.1",
+        "0.3.5"
+      ],
+      "affected_requirements": [
+        "BRY-REQ-DNS-0140"
+      ],
+      "affected_symbols": [
+        "boundary:dns.0.188.0"
+      ],
+      "authority": "iana:dns-parameters",
+      "detail": "content sha256 8cf6389cfb7040b3a325f54975dcf7630bc5d749f251482056706520cd785093",
+      "effective_brynja_state": "current",
+      "id": "8cdf3f8b30862bc7eb645a9b",
+      "requested_action": "human-review",
+      "state": "changed"
     }
   ],
   "reviews": [
@@ -57,6 +78,26 @@
       "pentest": "not-required",
       "pentest_report": null,
       "reviewed_impact": "Author review 2026-10-15: the publication landing page announces the October 8 SP 800-185 Revision 1 initial public draft. The 2016 final PDF is unchanged and remains the implemented authority. The draft is not adopted; no runtime behavior, API contract or final-standard authority changes. Existing update-planned status remains. The retest report records the publication links, scope and future reassessment obligation."
+    },
+    {
+      "affected_evidence": [],
+      "affected_requirements": [
+        "BRY-REQ-DNS-0140"
+      ],
+      "affected_symbols": [
+        "boundary:dns.0.188.0"
+      ],
+      "authority": "iana:dns-parameters",
+      "corrective_milestone": null,
+      "disposition": "no-effect",
+      "evidence": [
+        "standards/snapshots/iana/dns-parameters.xml",
+        "standards/source-policy.toml"
+      ],
+      "observation_id": "8cdf3f8b30862bc7eb645a9b",
+      "pentest": "not-required",
+      "pentest_report": null,
+      "reviewed_impact": "Author review 2026-10-17: DNS Parameters adds temporary DELEGPARAM type 54 and DELEG type 61440 (expires 2027-10-16), referencing draft-ietf-deleg-12, and splits unassigned ranges. The complete byte diff changes no other registry semantics. Both allocations remain within the existing caller-owned DNS boundary at v0.188.0. No draft is admitted as final authority and no runtime implementation, cryptographic admission, or release-gate policy changes."
     }
   ],
   "schema": 2,

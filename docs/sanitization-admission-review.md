@@ -3,20 +3,28 @@
 Status: admitted only for conditional implementation of the separately selected
 `brynja-sanitization` package at v0.11.2; no Brynja production dependency graph
 edge outside that adapter is authorized. The exact dependency was re-reviewed
-and advanced at v0.24.22.
+and advanced at v0.24.22 and v0.24.52.
 
-Checked: 2026-09-07.
+Checked: 2026-10-17.
 
 ## Decision
 
-Brynja admits the crates.io release `sanitization 2.1.0` as the sole candidate
+Brynja admits the crates.io release `sanitization 2.1.1` as the sole candidate
 for a protocol-neutral downstream adapter. The future adapter must exact-pin
 that release, disable default features, select no features, and use
 adapter-owned wrapper types. One adapter will serve modern and legacy callers;
 `brynja-legacy-sanitization` is rejected because secret-memory destruction has
 no irreducible legacy-only semantics.
 
-The v0.24.22 re-review advances the adapter's exact dependency from 2.0.4
+The v0.24.52 maintenance review compared both published archives: every `src/`
+member is byte-identical between 2.1.0 and 2.1.1. Only README, Cargo manifests,
+Cargo.lock and VCS metadata differ. The normalized manifest retains the same
+features and dependency-free, default-off selected graph; its optional derive
+pin advances to 2.1.1 but remains disabled. The homepage removal and upstream
+development-lock updates change no selected Rust implementation. The previous
+2.1.0 admission record remains preserved, rather than rewritten.
+
+Historically, the v0.24.22 re-review advanced the adapter's exact dependency from 2.0.4
 to 2.1.0. Unlike the previous patch update, the admitted no-feature TCB files
 `src/owned.rs` and `src/wipe_backend.rs` are **not byte-identical**. The
 reviewed additions provide `str` sanitization and an exclusive mutable byte
@@ -37,21 +45,21 @@ verification of Brynja. This dependency delta requires the owner pentest.
 
 | Property | Reviewed value |
 | --- | --- |
-| Package | `sanitization 2.1.0` from crates.io |
-| Latest stable check | `2.1.0` on 2026-09-07 |
-| Release source commit | `a3032977ebed2f704687da1a900f9921102351b4` |
-| Externally reviewed code commit | `2ab1c6fcadb5482bbfb223d92492daae0d9c607c` |
-| Package SHA-256 | `0c395c5164295d69016c014a3c2dd69d28a84b7e89ba971c1e81b17acc41e411` |
+| Package | `sanitization 2.1.1` from crates.io |
+| Latest stable check | `2.1.1` on 2026-10-17 |
+| Release source commit | `69af1ce12ad03ca70b25e70d0173c9cdf7119ec6` |
+| Externally reviewed code commit | `60e1e97c362006ea64c8eec9b11015d5dfa63df9` |
+| Package SHA-256 | `0f6ebfd4675a15689bc97e4aa870d96c6aba71508b8b2b810e25d228eba04d8f` |
 | License | MIT OR Apache-2.0 |
 | Rust / edition | Rust 1.90, edition 2021 |
 | Runtime model | `no_std`, no allocator, no build script, no native link |
 | Selected Cargo features | none; default features disabled |
-| Activated runtime graph | only `sanitization 2.1.0`; no transitive package |
-| Advisory result | no RustSec advisory found on 2026-09-07 |
-| Upstream reported pentest | PASS, 2026-09-06, zero open findings; not a Brynja review |
+| Activated runtime graph | only `sanitization 2.1.1`; no transitive package |
+| Advisory result | no RustSec advisory found on 2026-10-17 |
+| Upstream reported pentest | PASS, 2026-10-16, zero open findings; not a Brynja review |
 
 The machine-readable authority for these values is
-`security/dependency-admissions/sanitization-2.1.0.toml`. The package hash is
+`security/dependency-admissions/sanitization-2.1.1.toml`. The package hash is
 both the crates.io index checksum and the SHA-256 of the downloaded `.crate`
 archive. Its `.cargo_vcs_info.json` binds the archive to the release source
 commit above.
@@ -61,7 +69,7 @@ commit above.
 The admitted manifest form is exactly:
 
 ```toml
-sanitization = { version = "=2.1.0", default-features = false }
+sanitization = { version = "=2.1.1", default-features = false }
 ```
 
 Cargo metadata and the isolated lockfile resolve one runtime package and no
@@ -159,8 +167,8 @@ failure.
 ## Compatibility And Target Evidence
 
 An isolated no-default-features candidate compiled with Rust 1.90.0, 1.91.0,
-1.92.0, 1.93.0, 1.94.0, 1.95.0, 1.96.0, 1.96.1, 1.97.0, 1.97.1, 1.98.0, and 1.98.1. Rust
-1.98.1 cross-checks passed for Linux, Windows MSVC, FreeBSD, macOS, Android,
+1.92.0, 1.93.0, 1.94.0, 1.95.0, 1.96.0, 1.96.1, 1.97.0, 1.97.1, 1.98.0, 1.98.1,
+1.99.0, and 1.99.1. Rust 1.99.1 cross-checks passed for Linux, Windows MSVC, FreeBSD, macOS, Android,
 iOS, embedded ARM, embedded RISC-V, and `x86_64-unknown-none`; WASM also
 compiled as an explicitly weaker compatibility target.
 

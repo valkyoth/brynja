@@ -1451,7 +1451,7 @@ carry machine-checked blocked lifecycles and exact blocker targets until source
 provenance and rights are authenticated. FIPS validation
 milestones remain blocked on a dated rights-reviewed mutable guidance baseline.
 
-`brynja-sanitization` now uses exact `sanitization 2.1.0` only under the frozen
+`brynja-sanitization` now uses exact `sanitization 2.1.1` only under the frozen
 adapter boundary. Any source, package, feature, dependency, unsafe, advisory,
 target, guarantee, ownership, engine, facade, or FIPS-boundary drift forces
 re-review and fail-closed withholding or removal.

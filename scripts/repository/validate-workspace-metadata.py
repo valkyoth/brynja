@@ -24,7 +24,7 @@ ADAPTER_CLASSES = frozenset({"security-adapter", "host-adapter"})
 ALL_CLASSES = MODERN_CLASSES | LEGACY_CLASSES | PRIVATE_CLASSES | ADAPTER_CLASSES
 EXTERNAL = {
     "sanitization": {
-        "version": "2.1.0",
+        "version": "2.1.1",
         "source": "registry+https://github.com/rust-lang/crates.io-index",
         "owner": "brynja-sanitization",
     }

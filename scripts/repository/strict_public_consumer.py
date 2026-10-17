@@ -64,14 +64,15 @@ def campaign(api, consumer, cargo, env):
         print(f'PASS: strict facade; {profile or ["debug"]}; 6004 recorded/independent scalar cases; four lifecycle tests', flush=True)
 
 
-def negatives(api, consumer, cargo, env):
+def negatives(api, consumer, cargo, env, compiled=False):
     path = consumer / 'src/lib.rs'
     original = path.read_text()
     count = 0
     try:
         for family in ('sha2', 'sha3', 'kmac', 'tuplehash'):
             output = 'Digest' if family in ('sha2', 'sha3') else 'Output'
-            for owner in ('Session', output + "<'static>"):
+            session = 'CompiledSession' if compiled else 'Session'
+            for owner in (session, output + "<'static>"):
                 name = f'brynja_strict::{family}::{owner}'
                 path.write_text(f'pub fn present(_:Option<{name}>){{}}')
                 api.run(cargo + ['check', '--locked', '--offline', '--lib'], consumer, env)
@@ -81,12 +82,14 @@ def negatives(api, consumer, cargo, env):
                                      consumer, env, success=False)
                     shared.require(diagnostic(result, 'E0277'), 'strict public ownership diagnostic')
                     count += 1
-            path.write_text(f'use brynja_strict::{family}::CompiledSession;')
-            result = api.run(cargo + ['check', '--locked', '--offline', '--lib', '--message-format=json'],
-                             consumer, env, success=False)
-            shared.require(diagnostic(result, 'E0432'), 'strict default acceleration exposure')
-            count += 1
-            imports = f'use brynja_strict::{family}::{{Session,{output},Error}};\n'
+            if not compiled:
+                path.write_text(f'use brynja_strict::{family}::CompiledSession;')
+                result = api.run(cargo + ['check', '--locked', '--offline', '--lib', '--message-format=json'],
+                                 consumer, env, success=False)
+                shared.require(diagnostic(result, 'E0432'), 'strict default acceleration exposure')
+                count += 1
+            imported = 'CompiledSession as Session' if compiled else 'Session'
+            imports = f'use brynja_strict::{family}::{{{imported},{output},Error}};\n'
             request = cases.request(family)
             positive = imports + f"fn loan(s:&mut Session)->Result<{output}<'_>,Error>{{s.{request}}}"
             path.write_text(positive)
@@ -104,8 +107,8 @@ def negatives(api, consumer, cargo, env):
                 count += 1
     finally:
         path.write_text(original)
-    shared.require(count == 56, 'strict scalar negative population')
-    print('PASS: strict facade; 56 ownership/lifetime/classification and default-acceleration negatives', flush=True)
+    shared.require(count == (52 if compiled else 56), 'strict consumer negative population')
+    print(f'PASS: strict facade; {count} ownership/lifetime/classification negatives; compiled={compiled}', flush=True)
 
 
 def mutation_result(result, test):

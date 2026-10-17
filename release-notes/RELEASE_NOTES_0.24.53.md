@@ -320,6 +320,21 @@ budget/cancellation/output mutations (both profiles) validate observable tests.
 No private-memory erasure, batch/accelerated execution or platform qualification
 is inferred. Production code, dependency manifests and release gates are unchanged.
 
+## Strict compiled public consumers
+
+Separate strict-facade consumers partition the recorded/independent corpus by
+narrow SHA-2, wide SHA-2 and Keccak-family routes. Exact dependency/features,
+compiler target bundles and CPU/OS probes prevent hidden feature unification
+or mistaken static admission. Unavailable routes are compiled and checked for
+specific rejection, explicitly not counted as corpus execution.
+
+Available routes check exact kernel identity, output/bit behavior, request
+rejection, healthy reuse and irreversible quarantine. Fifty-two compiled
+negatives cover ownership, lifetimes and explicit declassification. Worker
+absorption/transfer and quarantine mutations must fail selected runtime tests.
+Local SHA-NI/AVX2 execution passes; dedicated x86 SHA-512 and Arm execution by
+this new consumer remain pending. No production or gate behavior changed.
+
 ## Work remaining before retest and acceptance freeze
 
 - Obtain independent retest of the complete conformance separation before

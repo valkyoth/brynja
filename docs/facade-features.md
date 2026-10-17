@@ -696,3 +696,51 @@ This is scalar public functional acceptance. It does not inspect private storage
 prove worker-stack/register erasure or qualify platform protection. Accelerated,
 batch, ParallelHash, modern resident and Windows enclave consumer reconciliation
 remain separate work; existing platform checks and release gates are unchanged.
+
+## Strict compiled consumer acceptance
+
+Explicit compiled sessions have their own consumer command on supported native
+GNU/Linux. Use the native option only on a compatible deployment whose CPU/OS
+capabilities remain valid throughout execution:
+
+```sh
+python3 scripts/repository/check-strict-accelerated-consumer.py --toolchain 1.99.1 --native-simd
+```
+
+The consumer imports only `brynja-strict` with its explicit `acceleration`
+feature. Its exact archive/feature closure is separate from the default scalar
+consumer. Ambient build flags and Cargo runners/configuration are excluded.
+A generic executable probes actual CPU/OS support before the command adds the
+complete target bundles. The selected compiler's effective target features are
+checked independently; static authority is not treated as runtime detection or
+a migration guarantee.
+
+Three consumers partition the same 6,004 recorded/independent scalar cases:
+
+- Narrow SHA-2: 30 byte cases and 80 NIST bit cases for SHA-224/256.
+- Wide SHA-2: 60 byte cases, 160 named bit cases and 4,590 general-t cases.
+- Keccak: 572 SHA-3/SHAKE/cSHAKE cases and 512 KMAC/KMACXOF/TupleHash/XOF cases.
+
+Every route's corpus is compiled. In debug and release, admission tests require
+the exact selected kernel or `MissingTargetFeatures`, plus rejection of wrong
+architectures and wrong operations. Only available compiled routes execute
+their corpus and lifecycle tests; unavailable output explicitly says **corpus
+NOT executed**. There is no scalar fallback counted as accelerated acceptance.
+Local native checks cover SHA-NI and AVX2; dedicated x86 SHA-512 and Arm execution
+by this new consumer are still pending.
+
+Public lifecycle tests retain malformed-input/work/cancellation rejection,
+chunk equivalence, output/declassification, forgotten loans and caller-unwind
+reuse, adding exact kernel identity, healthy reuse and irreversible quarantine.
+Fifty-two compiled ownership/lifetime/classification negatives cover compiled
+sessions and their output loans. Mutation campaigns remove quarantine checks,
+poison successful sessions, omit worker absorption or omit output transfer.
+SHA-2 additionally rejects substitution of portable execution after compiled
+admission.
+Absorption/output mutations run against independent expected bytes, not merely
+against another potentially broken call. Every mutant must compile and fail its
+selected runtime test; extracted sources restore and pristine tests repeat.
+
+These are public functional checks, not private-memory/register erasure proof,
+new platform/native release qualification, protected batch/ParallelHash coverage
+or Windows/macOS coverage. Existing gates and evidence deferrals are unchanged.

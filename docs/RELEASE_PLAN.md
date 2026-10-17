@@ -4999,10 +4999,15 @@ is checked against the selected compiler's actual target features. The strict
 modern facade now has an extracted, default-feature-off scalar consumer for
 named/general-t SHA-2, SHA-3/SHAKE/cSHAKE, KMAC/KMACXOF and TupleHash/XOF,
 using independent/recorded bit corpora, public lifecycle checks, ownership
-negatives and compiled budget/cancellation/output mutations. Its accelerated,
-batch and ParallelHash routes, modern macOS resident and Windows enclave
-consumer reconciliation remain separate and pending; public tests do not prove
-private memory/register erasure.
+negatives and compiled budget/cancellation/output mutations. A separate strict
+accelerated consumer now partitions those corpora by narrow SHA-2, wide SHA-2
+and Keccak routes, requiring exact admission/identity, public lifecycle behavior
+and compiled worker/quarantine mutations. Local SHA-NI and AVX2 execution is
+checked; dedicated x86 SHA-512 and Arm execution remain unmeasured by this new
+consumer, not inferred from compiled rejection checks. Protected batch and
+ParallelHash routes, modern macOS resident and Windows enclave consumer
+reconciliation remain separate and pending; public tests do not prove private
+memory/register erasure.
 Wider consumer acceptance and independent retest remain pending.
 
 Plan scope: Freeze runnable package-external acceptance for every operational ordinary/hardened, byte/bit, streaming, XOF and batch route across SHA-2, SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, ParallelHash, SHA-1 and MD5 before the final native sweep.

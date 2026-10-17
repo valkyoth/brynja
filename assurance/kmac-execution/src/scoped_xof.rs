@@ -1,7 +1,7 @@
 use crate::{lifecycle::Case, selection::Selection};
 use brynja_mac_kmac::{
     Fips202BitString, KmacError, KmacPublicDeclassification,
-    execution::{Mode, in_place as api},
+    conformance::execution::in_place as api, execution::Mode,
 };
 use std::io;
 fn invalid(e: impl core::fmt::Debug) -> io::Error {

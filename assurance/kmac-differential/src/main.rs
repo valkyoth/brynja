@@ -102,7 +102,7 @@ fn scoped_fixed(
     output_bits: usize,
     expected: &[u8],
 ) -> Result<(), Box<dyn Error>> {
-    use brynja_mac_kmac::hardened_in_place::{Kmac128Workspace, Kmac256Workspace};
+    use brynja_mac_kmac::conformance::hardened_in_place::{Kmac128Workspace, Kmac256Workspace};
     macro_rules! check {
         ($workspace:ident) => {{
             let mut workspace = $workspace::new();
@@ -163,7 +163,9 @@ fn scoped_xof(
     output_bits: usize,
     expected: &[u8],
 ) -> Result<(), Box<dyn Error>> {
-    use brynja_mac_kmac::hardened_in_place::{KmacXof128Workspace, KmacXof256Workspace};
+    use brynja_mac_kmac::conformance::hardened_in_place::{
+        KmacXof128Workspace, KmacXof256Workspace,
+    };
     macro_rules! check {
         ($workspace:ident) => {{
             let mut workspace = $workspace::new();

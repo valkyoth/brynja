@@ -6,14 +6,14 @@ use crate::{
 use brynja_hash_sha3::hardened_in_place as cshake;
 
 macro_rules! xof {
-    ($workspace:ident, $state:ident, $reader:ident, $fixed:ident, $backend:ident, $backend_reader:ident) => {
+    ($profile:ident, $namespace:literal, $workspace:ident, $state:ident, $reader:ident, $fixed:ident, $backend:ident, $backend_reader:ident) => {
         /// Caller-owned portable KMACXOF storage. The workspace is borrowed
         /// before key absorption; outer guards also clear forgotten readers.
-        #[doc = concat!("```compile_fail\nfn bound<T: Copy>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($workspace), ">();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: Clone>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($workspace), ">();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: core::fmt::Debug>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($workspace), ">();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: Send>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($workspace), ">();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: Sync>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($workspace), ">();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Copy>() {}\nbound::<", $namespace, stringify!($workspace), ">();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Clone>() {}\nbound::<", $namespace, stringify!($workspace), ">();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: core::fmt::Debug>() {}\nbound::<", $namespace, stringify!($workspace), ">();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Send>() {}\nbound::<", $namespace, stringify!($workspace), ">();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Sync>() {}\nbound::<", $namespace, stringify!($workspace), ">();\n```")]
         pub struct $workspace {
             inner: fixed::$fixed,
         }
@@ -31,9 +31,9 @@ macro_rules! xof {
                 }
             }
             /// Runs a production byte-key scope; setup failure skips the callback.
-            #[doc = concat!("```compile_fail\nuse brynja_mac_kmac::hardened_in_place::", stringify!($workspace), ";\nlet mut w = ", stringify!($workspace), "::new();\nlet escaped = w.with(&[0;32], b\"\", |state| state);\n```")]
-            #[doc = concat!("```compile_fail\nuse brynja_mac_kmac::hardened_in_place::", stringify!($workspace), ";\nlet mut w = ", stringify!($workspace), "::new();\nlet escaped = w.with(&[0;32], b\"\", |state| state.finalize_xof());\n```")]
-            #[doc = concat!("```compile_fail\nuse brynja_mac_kmac::hardened_in_place::", stringify!($workspace), ";\nlet mut w = ", stringify!($workspace), "::new();\nlet _ = w.with(&[0;32], b\"\", |_| w.with(&[0;32], b\"\", |_| ()));\n```")]
+            #[doc = concat!("```compile_fail\nuse ", $namespace, stringify!($workspace), ";\nlet mut w = ", stringify!($workspace), "::new();\nlet escaped = w.with(&[0;32], b\"\", |state| state);\n```")]
+            #[doc = concat!("```compile_fail\nuse ", $namespace, stringify!($workspace), ";\nlet mut w = ", stringify!($workspace), "::new();\nlet escaped = w.with(&[0;32], b\"\", |state| state.finalize_xof());\n```")]
+            #[doc = concat!("```compile_fail\nuse ", $namespace, stringify!($workspace), ";\nlet mut w = ", stringify!($workspace), "::new();\nlet _ = w.with(&[0;32], b\"\", |_| w.with(&[0;32], b\"\", |_| ()));\n```")]
             pub fn with<R>(
                 &mut self,
                 key: &[u8],
@@ -55,6 +55,7 @@ macro_rules! xof {
                     operation($state { core: state.core })
                 })
             }
+            conformance_api! { $profile;
             /// Exact-conformance byte-key scope, including short/empty keys.
             #[cfg(feature = "conformance-testing")]
             pub fn with_conformance<R>(
@@ -67,6 +68,8 @@ macro_rules! xof {
                     operation($state { core: state.core })
                 })
             }
+            }
+            conformance_api! { $profile;
             /// Exact-conformance canonical-bit scope; production finalizers
             /// still reject weak keys.
             #[cfg(feature = "conformance-testing")]
@@ -81,19 +84,20 @@ macro_rules! xof {
                         operation($state { core: state.core })
                     })
             }
+            }
             #[cfg(test)]
-            pub(super) fn metadata_cleared(&self) -> bool {
+            pub(in crate::hardened_in_place) fn metadata_cleared(&self) -> bool {
                 self.inner.metadata_cleared()
             }
         }
         /// Exclusive absorbing handle. No secret owner moves on finalization.
         /// Errors clear and terminate; there are no accumulated-length queries.
         #[must_use = "finalize or cancel the scoped KMACXOF state"]
-        #[doc = concat!("```compile_fail\nfn bound<T: Copy>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($state), "<'static>>();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: Clone>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($state), "<'static>>();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: core::fmt::Debug>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($state), "<'static>>();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: Send>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($state), "<'static>>();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: Sync>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($state), "<'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Copy>() {}\nbound::<", $namespace, stringify!($state), "<'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Clone>() {}\nbound::<", $namespace, stringify!($state), "<'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: core::fmt::Debug>() {}\nbound::<", $namespace, stringify!($state), "<'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Send>() {}\nbound::<", $namespace, stringify!($state), "<'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Sync>() {}\nbound::<", $namespace, stringify!($state), "<'static>>();\n```")]
         pub struct $state<'scope> {
             core: Core<'scope, cshake::$backend<'scope>>,
         }
@@ -123,11 +127,14 @@ macro_rules! xof {
             ) -> Result<$reader<'scope>, KmacError> {
                 self.finish(Some(input), true)
             }
+            conformance_api! { $profile;
             /// Starts exact-conformance XOF output, including weak keys.
             #[cfg(feature = "conformance-testing")]
             pub fn finalize_xof_conformance(self) -> Result<$reader<'scope>, KmacError> {
                 self.finish(None, false)
             }
+            }
+            conformance_api! { $profile;
             /// Exact-conformance final message bits and XOF transition.
             #[cfg(feature = "conformance-testing")]
             pub fn finalize_bits_xof_conformance(
@@ -135,6 +142,7 @@ macro_rules! xof {
                 input: Fips202BitString<'_>,
             ) -> Result<$reader<'scope>, KmacError> {
                 self.finish(Some(input), false)
+            }
             }
             fn finish(
                 self,
@@ -154,11 +162,11 @@ macro_rules! xof {
         /// Public writes are transactional. Secret destinations clear on errors
         /// and when their returned typed output is dropped.
         #[must_use = "read or cancel the scoped KMACXOF reader"]
-        #[doc = concat!("```compile_fail\nfn bound<T: Copy>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($reader), "<'static>>();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: Clone>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($reader), "<'static>>();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: core::fmt::Debug>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($reader), "<'static>>();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: Send>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($reader), "<'static>>();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: Sync>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($reader), "<'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Copy>() {}\nbound::<", $namespace, stringify!($reader), "<'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Clone>() {}\nbound::<", $namespace, stringify!($reader), "<'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: core::fmt::Debug>() {}\nbound::<", $namespace, stringify!($reader), "<'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Send>() {}\nbound::<", $namespace, stringify!($reader), "<'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Sync>() {}\nbound::<", $namespace, stringify!($reader), "<'static>>();\n```")]
         pub struct $reader<'scope> {
             inner: Output<'scope, cshake::$backend_reader<'scope>>,
         }
@@ -209,6 +217,8 @@ macro_rules! xof {
     };
 }
 xof!(
+    production,
+    "brynja_mac_kmac::hardened_in_place::",
     KmacXof128Workspace,
     KmacXof128,
     KmacXof128Reader,
@@ -217,6 +227,8 @@ xof!(
     Cshake128Reader
 );
 xof!(
+    production,
+    "brynja_mac_kmac::hardened_in_place::",
     KmacXof256Workspace,
     KmacXof256,
     KmacXof256Reader,
@@ -224,6 +236,32 @@ xof!(
     Cshake256,
     Cshake256Reader
 );
+
+#[cfg(feature = "conformance-testing")]
+pub(crate) mod conformance {
+    use super::super::fixed::conformance as fixed;
+    use super::*;
+    xof!(
+        conformance,
+        "brynja_mac_kmac::conformance::hardened_in_place::",
+        KmacXof128Workspace,
+        KmacXof128,
+        KmacXof128Reader,
+        Kmac128Workspace,
+        Cshake128,
+        Cshake128Reader
+    );
+    xof!(
+        conformance,
+        "brynja_mac_kmac::conformance::hardened_in_place::",
+        KmacXof256Workspace,
+        KmacXof256,
+        KmacXof256Reader,
+        Kmac256Workspace,
+        Cshake256,
+        Cshake256Reader
+    );
+}
 
 #[cfg(test)]
 mod tests;

@@ -191,12 +191,13 @@ let mut derived = [0_u8; 64];
 assert_eq!(derived, [0; 64]);
 ```
 
-Production constructors require full-strength keys and fixed tags. Portable
+Production constructors require full-strength keys and fixed tags. KMAC
 conformance constructors live on distinct leaf-only test types under
 `brynja_mac_kmac::conformance`, require `conformance-testing`, and report weak
-parameters as non-approved. They do not appear on the portable production
-aliases even when that feature is unified. Execution/in-place separation remains
-under review. Brynja has no FIPS validation.
+parameters as non-approved. They do not appear on production aliases, including
+execution and scoped owners, even when that feature is unified. Hidden cSHAKE
+composition methods remain available on its reexported types; they are not
+KMAC constructors. Brynja has no FIPS validation.
 Callers must enforce their protocol's maximum candidate-tag length before KMAC verification.
 
 ## Workspace

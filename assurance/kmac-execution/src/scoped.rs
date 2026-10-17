@@ -1,8 +1,5 @@
 use crate::{lifecycle::Case, selection::Selection};
-use brynja_mac_kmac::{
-    KmacError,
-    execution::{Mode, in_place as api},
-};
+use brynja_mac_kmac::{KmacError, conformance::execution::in_place as api, execution::Mode};
 use std::io;
 
 fn invalid(e: impl core::fmt::Debug) -> io::Error {

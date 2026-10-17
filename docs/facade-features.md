@@ -131,15 +131,27 @@ protection profile. Existing candidate backends retain their admission status.
 Cargo features are additive across dependents, but these namespaces now use
 explicit export lists and facade-owned feature gates. Enabling a leaf feature
 elsewhere does not automatically add its module/free-function exports here.
-Conformance-only free functions, in-place integration modules and setup-only
-types are not forwarded. Portable KMAC production types no longer acquire
+Conformance-only free functions, standalone `hardened_in_place` modules and
+setup-only types are not forwarded at facade namespace roots. Production
+`in_place` APIs nested in opted-in execution modules remain available.
+KMAC production types no longer acquire
 conformance methods through feature unification: separate leaf-only types in
-`brynja_mac_kmac::conformance` own those methods. Execution/in-place KMAC and
-cSHAKE integration surfaces are still under review in v0.24.53. Reexported
-types otherwise retain their inherent methods; curation is not provenance
+`brynja_mac_kmac::conformance` own those methods, including execution and scoped
+workspaces/readers. Reexported types otherwise retain their inherent methods;
+curation is not provenance
 enforcement or a sandbox against direct leaf use.
 Independent package tests exercise this deliberate unification and must not
 rely on workspace-root feature activation.
+
+The hidden `HardenedCshake*` in-place methods remain intentionally reachable:
+cross-crate KMAC/TupleHash composition uses them to erase the exact embedded
+source allocation. cSHAKE has no KMAC minimum-key/tag policy; these methods
+neither construct a KMAC owner nor bypass its key/tag checks. They keep the
+absorbing/squeezing/vacated lifecycle, typed secret output and explicit public
+declassification. Finalization or wiping cannot reopen absorption. They are
+not conformance-only methods and hiding module exports cannot hide inherent
+methods. The packaged tests exercise both cSHAKE identities through each facade;
+internal source-allocation clearing tests remain separate.
 
 ## Focused verification
 

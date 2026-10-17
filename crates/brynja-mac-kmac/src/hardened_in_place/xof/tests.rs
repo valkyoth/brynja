@@ -121,6 +121,7 @@ fn scoped_xof_lifecycle_shapes_and_large_public_reads() -> Result<(), KmacError>
 #[cfg(feature = "conformance-testing")]
 #[test]
 fn scoped_xof_all_tails_streaming_and_mixed_reads() -> Result<(), KmacError> {
+    use crate::conformance::hardened_in_place::{KmacXof128Workspace, KmacXof256Workspace};
     macro_rules! check { ($workspace:ident,$reference:ident) => {{
         let mut workspace=$workspace::new();
         for length in [0usize,1,135,136,167,168,169,337] {

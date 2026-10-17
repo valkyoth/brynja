@@ -1,5 +1,7 @@
 """Real downstream conformance-unification and protocol-isolation regressions."""
 import json
+import facade_conformance_cases
+import facade_cshake_cases
 
 
 PROTOCOLS = ('brynja-tls', 'brynja-tls12', 'brynja-tls13',
@@ -68,14 +70,17 @@ fn direct_leaf_conformance_does_not_weaken_production_functions() {
     assert!(leaf::conformance::Kmac128::new_conformance(b"", b"").unwrap()
         .finalize_tag_conformance(&mut output).is_ok());
 }
-''')
-    api.test_run(cargo, consumer, env, 1)
+''' + facade_cshake_cases.CASES)
+    for profile in ((), ('--release',)):
+        api.test_run(cargo, consumer, env, 3, profile)
     # This deliberate negative fixture alone opts into leaf conformance. It is
     # not a production graph and does not relax graph()'s conformance rejection.
     api.resolved_metadata(cargo, consumer, env, roots)
     portable_conformance_negatives(api, consumer, package, cargo, env)
+    facade_conformance_cases.check(api, consumer, package, cargo, env)
     probes = ['kmac::' + name for name in CONFORMANCE]
     probes += ['conformance', 'kmac::conformance']
+    probes += ['kmac::execution::conformance', 'kmac::execution::in_place::conformance']
     probes += [name + '::hardened_in_place' for name in
                ('sha2', 'sha3', 'kmac', 'tuplehash', 'parallelhash')]
     probes += ['sha3::HardenedCshake128Setup', 'sha3::HardenedCshake256Setup',

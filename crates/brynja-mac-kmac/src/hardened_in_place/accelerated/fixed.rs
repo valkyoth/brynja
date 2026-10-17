@@ -2,14 +2,14 @@ use super::backend::Backend;
 use super::*;
 
 macro_rules! fixed {
-    ($workspace:ident, $state:ident, $storage:ident, $backend:ident, $rate:literal, $strength:literal) => {
+    ($profile:ident, $namespace:literal, $workspace:ident, $state:ident, $storage:ident, $backend:ident, $rate:literal, $strength:literal) => {
         /// Caller-owned accelerated KMAC sponge, scratch and erasing verification storage.
         /// No secrets are accepted until the workspace is exclusively borrowed.
-        #[doc = concat!("```compile_fail\nfn bound<T: Copy>() {}\nbound::<brynja_mac_kmac::execution::in_place::", stringify!($workspace), "<'static>>();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: Clone>() {}\nbound::<brynja_mac_kmac::execution::in_place::", stringify!($workspace), "<'static>>();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: core::fmt::Debug>() {}\nbound::<brynja_mac_kmac::execution::in_place::", stringify!($workspace), "<'static>>();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: Send>() {}\nbound::<brynja_mac_kmac::execution::in_place::", stringify!($workspace), "<'static>>();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: Sync>() {}\nbound::<brynja_mac_kmac::execution::in_place::", stringify!($workspace), "<'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Copy>() {}\nbound::<", $namespace, stringify!($workspace), "<'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Clone>() {}\nbound::<", $namespace, stringify!($workspace), "<'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: core::fmt::Debug>() {}\nbound::<", $namespace, stringify!($workspace), "<'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Send>() {}\nbound::<", $namespace, stringify!($workspace), "<'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Sync>() {}\nbound::<", $namespace, stringify!($workspace), "<'static>>();\n```")]
         pub struct $workspace<'authority> {
             sponge: cshake::$storage<'authority>,
             stage: [u8; 168],
@@ -24,8 +24,8 @@ macro_rules! fixed {
             #[must_use]
             pub fn report(&self) -> Report { self.sponge.report() }
             /// Production byte-key scope. Setup failure skips the callback.
-            #[doc = concat!("```compile_fail\nuse brynja_mac_kmac::execution::in_place::", stringify!($workspace), ";\nfn escape(w: &mut ", stringify!($workspace), "<'_>) { let state = w.with(&[0;32], b\"\", |state| state); }\n```")]
-            #[doc = concat!("```compile_fail\nuse brynja_mac_kmac::execution::in_place::", stringify!($workspace), ";\nfn overlap(w: &mut ", stringify!($workspace), "<'_>) { w.with(&[0;32], b\"\", |_| w.with(&[0;32], b\"\", |_| ())); }\n```")]
+            #[doc = concat!("```compile_fail\nuse ", $namespace, stringify!($workspace), ";\nfn escape(w: &mut ", stringify!($workspace), "<'_>) { let state = w.with(&[0;32], b\"\", |state| state); }\n```")]
+            #[doc = concat!("```compile_fail\nuse ", $namespace, stringify!($workspace), ";\nfn overlap(w: &mut ", stringify!($workspace), "<'_>) { w.with(&[0;32], b\"\", |_| w.with(&[0;32], b\"\", |_| ())); }\n```")]
             pub fn with<R>(
                 &mut self,
                 key: &[u8],
@@ -46,6 +46,7 @@ macro_rules! fixed {
                 }
                 self.scope(key, customization, operation)
             }
+            conformance_api! { $profile;
             /// Exact-conformance byte-key scope, including empty/short keys.
             #[cfg(feature = "conformance-testing")]
             pub fn with_conformance<R>(
@@ -56,6 +57,8 @@ macro_rules! fixed {
             ) -> Result<R, KmacError> {
                 self.with_bits_conformance(bytes(key)?, bytes(customization)?, operation)
             }
+            }
+            conformance_api! { $profile;
             /// Exact-conformance canonical-bit scope. Production finalizers still
             /// enforce key/tag strength; weak results require conformance methods.
             #[cfg(feature = "conformance-testing")]
@@ -66,6 +69,7 @@ macro_rules! fixed {
                 operation: impl for<'scope> FnOnce($state<'scope, 'authority>) -> R,
             ) -> Result<R, KmacError> {
                 self.scope(key, customization, operation)
+            }
             }
             /// Production scope with arbitrary-width public-tag staging.
             /// Scratch is entirely cleared on every exit, including short-key rejection.
@@ -79,10 +83,12 @@ macro_rules! fixed {
                 if key.bit_len() < $strength { return Err(KmacError::KeyTooShort); }
                 Self::run_scope(&mut self.sponge, &mut self.metadata, scratch.0, key, customization, operation)
             }
+            conformance_api! { $profile;
             /// Exact-conformance bit scope with arbitrary-width public staging.
             #[cfg(feature = "conformance-testing")]
             pub fn with_bits_and_scratch_conformance<R>(&mut self, key: Fips202BitString<'_>, customization: Fips202BitString<'_>, scratch: &mut [u8], operation: impl for<'scope> FnOnce($state<'scope, 'authority>) -> R) -> Result<R, KmacError> {
                 Self::run_scope(&mut self.sponge, &mut self.metadata, scratch, key, customization, operation)
+            }
             }
             fn scope<R>(
                 &mut self,
@@ -108,13 +114,13 @@ macro_rules! fixed {
         /// not the sponge owner. Update errors clear and terminate the computation.
         /// No message-length or preflight query is exposed.
         #[must_use = "finalize or cancel the scoped KMAC state"]
-        #[doc = concat!("```compile_fail\nfn bound<T: Copy>() {}\nbound::<brynja_mac_kmac::execution::in_place::", stringify!($state), "<'static, 'static>>();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: Clone>() {}\nbound::<brynja_mac_kmac::execution::in_place::", stringify!($state), "<'static, 'static>>();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: core::fmt::Debug>() {}\nbound::<brynja_mac_kmac::execution::in_place::", stringify!($state), "<'static, 'static>>();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: Send>() {}\nbound::<brynja_mac_kmac::execution::in_place::", stringify!($state), "<'static, 'static>>();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: Sync>() {}\nbound::<brynja_mac_kmac::execution::in_place::", stringify!($state), "<'static, 'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Copy>() {}\nbound::<", $namespace, stringify!($state), "<'static, 'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Clone>() {}\nbound::<", $namespace, stringify!($state), "<'static, 'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: core::fmt::Debug>() {}\nbound::<", $namespace, stringify!($state), "<'static, 'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Send>() {}\nbound::<", $namespace, stringify!($state), "<'static, 'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Sync>() {}\nbound::<", $namespace, stringify!($state), "<'static, 'static>>();\n```")]
         pub struct $state<'scope, 'authority> {
-            pub(super) core: Core<'scope, Backend<cshake::$backend<'scope, 'authority>, &'scope mut [u8]>>,
+            pub(in crate::hardened_in_place::accelerated) core: Core<'scope, Backend<cshake::$backend<'scope, 'authority>, &'scope mut [u8]>>,
         }
         impl $state<'_, '_> {
             /// Reports key-strength classification, not exact key length.
@@ -192,6 +198,7 @@ macro_rules! fixed {
                 self.core
                     .verify(Some(input), candidate, Some(expected_bits), $strength, true)
             }
+            conformance_api! { $profile;
             /// Produces a standards-valid public tag, even below production strength.
             #[cfg(feature = "conformance-testing")]
             pub fn finalize_tag_conformance<'out>(
@@ -201,6 +208,8 @@ macro_rules! fixed {
                 let valid = byte_valid(output.len());
                 self.core.tag(None, output, valid, $strength, false)
             }
+            }
+            conformance_api! { $profile;
             /// Exact-conformance canonical-bit public tag.
             #[cfg(feature = "conformance-testing")]
             pub fn finalize_tag_bits_conformance<'out>(
@@ -211,6 +220,8 @@ macro_rules! fixed {
             ) -> Result<KmacTag<'out>, KmacError> {
                 self.core.tag(Some(input), output, valid, $strength, false)
             }
+            }
+            conformance_api! { $profile;
             /// Exact-conformance byte secret output.
             #[cfg(feature = "conformance-testing")]
             pub fn finalize_secret_conformance<'out>(
@@ -220,6 +231,8 @@ macro_rules! fixed {
                 let valid = byte_valid(output.len());
                 self.core.secret(None, output, valid, $strength, false)
             }
+            }
+            conformance_api! { $profile;
             /// Exact-conformance canonical-bit secret output.
             #[cfg(feature = "conformance-testing")]
             pub fn finalize_secret_bits_conformance<'out>(
@@ -231,6 +244,8 @@ macro_rules! fixed {
                 self.core
                     .secret(Some(input), output, valid, $strength, false)
             }
+            }
+            conformance_api! { $profile;
             /// Exact-conformance byte verification, including weak tag lengths.
             #[cfg(feature = "conformance-testing")]
             pub fn verify_conformance(
@@ -240,6 +255,8 @@ macro_rules! fixed {
                 self.core
                     .verify(None, bytes(candidate)?, None, $strength, false)
             }
+            }
+            conformance_api! { $profile;
             /// Exact-conformance canonical-bit verification.
             #[cfg(feature = "conformance-testing")]
             pub fn verify_bits_conformance(
@@ -250,12 +267,15 @@ macro_rules! fixed {
                 self.core
                     .verify(Some(input), candidate, None, $strength, false)
             }
+            }
             /// Consumes and clears without producing output.
             pub fn cancel(self) {}
         }
     };
 }
 fixed!(
+    production,
+    "brynja_mac_kmac::execution::in_place::",
     Kmac128Workspace,
     Kmac128,
     Cshake128Workspace,
@@ -264,6 +284,8 @@ fixed!(
     128
 );
 fixed!(
+    production,
+    "brynja_mac_kmac::execution::in_place::",
     Kmac256Workspace,
     Kmac256,
     Cshake256Workspace,
@@ -271,3 +293,28 @@ fixed!(
     136,
     256
 );
+
+#[cfg(feature = "conformance-testing")]
+pub(crate) mod conformance {
+    use super::*;
+    fixed!(
+        conformance,
+        "brynja_mac_kmac::conformance::execution::in_place::",
+        Kmac128Workspace,
+        Kmac128,
+        Cshake128Workspace,
+        Cshake128,
+        168,
+        128
+    );
+    fixed!(
+        conformance,
+        "brynja_mac_kmac::conformance::execution::in_place::",
+        Kmac256Workspace,
+        Kmac256,
+        Cshake256Workspace,
+        Cshake256,
+        136,
+        256
+    );
+}

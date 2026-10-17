@@ -11,6 +11,10 @@ def main():
     cases = [(policy.SOURCE + name, token, 'REMOVED')
              for name, tokens in policy.TOKENS.items() for token in tokens]
     cases += [(policy.SOURCE + 'mod.rs', case, '') for case in policy.DOC_CASES]
+    cases += [(policy.CRATE + '/src/' + name, token, 'REMOVED')
+              for name in policy.CONFORMANCE_FILES for token in policy.CONFORMANCE_TOKENS]
+    cases += [(policy.CRATE + '/src/lib.rs', '(production; $($method:item)*) => {};',
+               '(production; $($method:item)*) => { $($method)* };')]
     cases += [(policy.CRATE + '/src/packer.rs', 'fn ' + test + '()', 'fn removed()')
               for test in policy.PACKER_TESTS]
     cases += [(policy.SOURCE + 'core_state.rs', 'clear_owned_region(&mut self.' + field + ')', 'Ok(())')

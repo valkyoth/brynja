@@ -48,8 +48,8 @@ use crate::{
 use brynja_hash_sha3::hardened_execution::{KeccakSession, Report, in_place as cshake};
 
 mod backend;
-mod fixed;
-mod xof;
+pub(crate) mod fixed;
+pub(crate) mod xof;
 pub use fixed::{Kmac128, Kmac128Workspace, Kmac256, Kmac256Workspace};
 pub use xof::{
     KmacXof128, KmacXof128Reader, KmacXof128Workspace, KmacXof256, KmacXof256Reader,

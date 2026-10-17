@@ -3,9 +3,9 @@
 //! All keyed state is built directly over Brynja's hardened cSHAKE owner. The
 //! crate is allocation-free, `no_std`, first-party Rust, and exposes separate
 //! fixed-output MAC and extendable-output PRF types. The opt-in
-//! `conformance-testing` feature exposes distinct portable test types covering
+//! `conformance-testing` feature exposes distinct test types covering
 //! every representable standards-valid key length. It never adds weak-parameter
-//! methods to the portable production types, which enforce the selected strength.
+//! methods to production types, which enforce the selected strength.
 
 #![no_std]
 
@@ -40,11 +40,13 @@ pub use policy::{KmacKeyPolicy, KmacServiceStatus, KmacTagPolicy};
 pub use setup::{Kmac128Setup, Kmac256Setup};
 pub use xof::{KmacXof128, KmacXof128Reader, KmacXof256, KmacXof256Reader};
 
-/// Exact-parameter portable test types; never reexported by production facades.
+/// Exact-parameter test types; never reexported by production facades.
 ///
 /// These affine owners share the production core and cleanup implementation,
 /// but cannot be converted into production KMAC states. Enabling this module
-/// does not add conformance methods to the crate-root production types.
+/// does not add conformance methods to production types, including execution
+/// and scoped in-place owners. Execution types additionally require
+/// `hardened-execution` and retain the same execution-authority checks.
 #[cfg(feature = "conformance-testing")]
 pub mod conformance {
     pub use crate::fixed::{ConformanceKmac128 as Kmac128, ConformanceKmac256 as Kmac256};
@@ -52,6 +54,35 @@ pub mod conformance {
         ConformanceKmacXof128 as KmacXof128, ConformanceKmacXof128Reader as KmacXof128Reader,
         ConformanceKmacXof256 as KmacXof256, ConformanceKmacXof256Reader as KmacXof256Reader,
     };
+
+    /// Exact-parameter tests over authorized execution, not production owners.
+    #[cfg(feature = "hardened-execution")]
+    pub mod execution {
+        pub use crate::execution::fixed::conformance::{Kmac128, Kmac256};
+        pub use crate::execution::xof::conformance::{KmacXof128, KmacXof256, Reader};
+
+        /// Test-only scoped owners retaining the supplied execution authority.
+        pub mod in_place {
+            pub use crate::hardened_in_place::accelerated::fixed::conformance::{
+                Kmac128, Kmac128Workspace, Kmac256, Kmac256Workspace,
+            };
+            pub use crate::hardened_in_place::accelerated::xof::conformance::{
+                KmacXof128, KmacXof128Reader, KmacXof128Workspace, KmacXof256, KmacXof256Reader,
+                KmacXof256Workspace,
+            };
+        }
+    }
+
+    /// Test-only portable scoped workspaces, handles and readers.
+    pub mod hardened_in_place {
+        pub use crate::hardened_in_place::fixed::conformance::{
+            Kmac128, Kmac128Workspace, Kmac256, Kmac256Workspace,
+        };
+        pub use crate::hardened_in_place::xof::conformance::{
+            KmacXof128, KmacXof128Reader, KmacXof128Workspace, KmacXof256, KmacXof256Reader,
+            KmacXof256Workspace,
+        };
+    }
 }
 
 /// Whether all four SP 800-185 KMAC identities are implemented.

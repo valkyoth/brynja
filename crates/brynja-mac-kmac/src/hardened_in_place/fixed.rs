@@ -6,14 +6,14 @@ use crate::{
 use brynja_hash_sha3::hardened_in_place as cshake;
 
 macro_rules! fixed {
-    ($workspace:ident, $state:ident, $storage:ident, $backend:ident, $rate:literal, $strength:literal) => {
+    ($profile:ident, $namespace:literal, $workspace:ident, $state:ident, $storage:ident, $backend:ident, $rate:literal, $strength:literal) => {
         /// Caller-owned portable KMAC sponge and erasing verification storage.
         /// No secrets are accepted until the workspace is exclusively borrowed.
-        #[doc = concat!("```compile_fail\nfn bound<T: Copy>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($workspace), ">();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: Clone>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($workspace), ">();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: core::fmt::Debug>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($workspace), ">();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: Send>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($workspace), ">();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: Sync>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($workspace), ">();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Copy>() {}\nbound::<", $namespace, stringify!($workspace), ">();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Clone>() {}\nbound::<", $namespace, stringify!($workspace), ">();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: core::fmt::Debug>() {}\nbound::<", $namespace, stringify!($workspace), ">();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Send>() {}\nbound::<", $namespace, stringify!($workspace), ">();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Sync>() {}\nbound::<", $namespace, stringify!($workspace), ">();\n```")]
         pub struct $workspace {
             sponge: cshake::$storage,
             metadata: Metadata,
@@ -25,7 +25,7 @@ macro_rules! fixed {
         }
         impl $workspace {
             #[cfg(test)]
-            pub(super) fn metadata_cleared(&self) -> bool { self.metadata.cleared() }
+            pub(in crate::hardened_in_place) fn metadata_cleared(&self) -> bool { self.metadata.cleared() }
             /// Constructs secret-free storage. No hardware route is selected.
             #[must_use]
             pub fn new() -> Self {
@@ -35,8 +35,8 @@ macro_rules! fixed {
                 }
             }
             /// Production byte-key scope. Setup failure skips the callback.
-            #[doc = concat!("```compile_fail\nuse brynja_mac_kmac::hardened_in_place::", stringify!($workspace), ";\nlet mut w = ", stringify!($workspace), "::new();\nlet state = w.with(&[0;32], b\"\", |state| state);\n```")]
-            #[doc = concat!("```compile_fail\nuse brynja_mac_kmac::hardened_in_place::", stringify!($workspace), ";\nlet mut w = ", stringify!($workspace), "::new();\nw.with(&[0;32], b\"\", |_state| w.with(&[0;32], b\"\", |_| ()));\n```")]
+            #[doc = concat!("```compile_fail\nuse ", $namespace, stringify!($workspace), ";\nlet mut w = ", stringify!($workspace), "::new();\nlet state = w.with(&[0;32], b\"\", |state| state);\n```")]
+            #[doc = concat!("```compile_fail\nuse ", $namespace, stringify!($workspace), ";\nlet mut w = ", stringify!($workspace), "::new();\nw.with(&[0;32], b\"\", |_state| w.with(&[0;32], b\"\", |_| ()));\n```")]
             pub fn with<R>(
                 &mut self,
                 key: &[u8],
@@ -57,6 +57,7 @@ macro_rules! fixed {
                 }
                 self.scope(key, customization, operation)
             }
+            conformance_api! { $profile;
             /// Exact-conformance byte-key scope, including empty/short keys.
             #[cfg(feature = "conformance-testing")]
             pub fn with_conformance<R>(
@@ -67,6 +68,8 @@ macro_rules! fixed {
             ) -> Result<R, KmacError> {
                 self.with_bits_conformance(bytes(key)?, bytes(customization)?, operation)
             }
+            }
+            conformance_api! { $profile;
             /// Exact-conformance canonical-bit scope. Production finalizers still
             /// enforce key/tag strength; weak results require conformance methods.
             #[cfg(feature = "conformance-testing")]
@@ -77,6 +80,7 @@ macro_rules! fixed {
                 operation: impl for<'scope> FnOnce($state<'scope>) -> R,
             ) -> Result<R, KmacError> {
                 self.scope(key, customization, operation)
+            }
             }
             fn scope<R>(
                 &mut self,
@@ -98,13 +102,13 @@ macro_rules! fixed {
         /// not the sponge owner. Update errors clear and terminate the computation.
         /// No message-length or preflight query is exposed.
         #[must_use = "finalize or cancel the scoped KMAC state"]
-        #[doc = concat!("```compile_fail\nfn bound<T: Copy>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($state), "<'static>>();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: Clone>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($state), "<'static>>();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: core::fmt::Debug>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($state), "<'static>>();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: Send>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($state), "<'static>>();\n```")]
-        #[doc = concat!("```compile_fail\nfn bound<T: Sync>() {}\nbound::<brynja_mac_kmac::hardened_in_place::", stringify!($state), "<'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Copy>() {}\nbound::<", $namespace, stringify!($state), "<'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Clone>() {}\nbound::<", $namespace, stringify!($state), "<'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: core::fmt::Debug>() {}\nbound::<", $namespace, stringify!($state), "<'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Send>() {}\nbound::<", $namespace, stringify!($state), "<'static>>();\n```")]
+        #[doc = concat!("```compile_fail\nfn bound<T: Sync>() {}\nbound::<", $namespace, stringify!($state), "<'static>>();\n```")]
         pub struct $state<'scope> {
-            pub(super) core: Core<'scope, cshake::$backend<'scope>>,
+            pub(in crate::hardened_in_place) core: Core<'scope, cshake::$backend<'scope>>,
         }
         impl $state<'_> {
             /// Reports key-strength classification, not exact key length.
@@ -181,6 +185,7 @@ macro_rules! fixed {
                 self.core
                     .verify(Some(input), candidate, Some(expected_bits), $strength, true)
             }
+            conformance_api! { $profile;
             /// Produces a standards-valid public tag, even below production strength.
             #[cfg(feature = "conformance-testing")]
             pub fn finalize_tag_conformance<'out>(
@@ -190,6 +195,8 @@ macro_rules! fixed {
                 let valid = byte_valid(output.len());
                 self.core.tag(None, output, valid, $strength, false)
             }
+            }
+            conformance_api! { $profile;
             /// Exact-conformance canonical-bit public tag.
             #[cfg(feature = "conformance-testing")]
             pub fn finalize_tag_bits_conformance<'out>(
@@ -200,6 +207,8 @@ macro_rules! fixed {
             ) -> Result<KmacTag<'out>, KmacError> {
                 self.core.tag(Some(input), output, valid, $strength, false)
             }
+            }
+            conformance_api! { $profile;
             /// Exact-conformance byte secret output.
             #[cfg(feature = "conformance-testing")]
             pub fn finalize_secret_conformance<'out>(
@@ -209,6 +218,8 @@ macro_rules! fixed {
                 let valid = byte_valid(output.len());
                 self.core.secret(None, output, valid, $strength, false)
             }
+            }
+            conformance_api! { $profile;
             /// Exact-conformance canonical-bit secret output.
             #[cfg(feature = "conformance-testing")]
             pub fn finalize_secret_bits_conformance<'out>(
@@ -220,6 +231,8 @@ macro_rules! fixed {
                 self.core
                     .secret(Some(input), output, valid, $strength, false)
             }
+            }
+            conformance_api! { $profile;
             /// Exact-conformance byte verification, including weak tag lengths.
             #[cfg(feature = "conformance-testing")]
             pub fn verify_conformance(
@@ -229,6 +242,8 @@ macro_rules! fixed {
                 self.core
                     .verify(None, bytes(candidate)?, None, $strength, false)
             }
+            }
+            conformance_api! { $profile;
             /// Exact-conformance canonical-bit verification.
             #[cfg(feature = "conformance-testing")]
             pub fn verify_bits_conformance(
@@ -239,12 +254,15 @@ macro_rules! fixed {
                 self.core
                     .verify(Some(input), candidate, None, $strength, false)
             }
+            }
             /// Consumes and clears without producing output.
             pub fn cancel(self) {}
         }
     };
 }
 fixed!(
+    production,
+    "brynja_mac_kmac::hardened_in_place::",
     Kmac128Workspace,
     Kmac128,
     Cshake128Workspace,
@@ -253,6 +271,8 @@ fixed!(
     128
 );
 fixed!(
+    production,
+    "brynja_mac_kmac::hardened_in_place::",
     Kmac256Workspace,
     Kmac256,
     Cshake256Workspace,
@@ -260,3 +280,28 @@ fixed!(
     136,
     256
 );
+
+#[cfg(feature = "conformance-testing")]
+pub(crate) mod conformance {
+    use super::*;
+    fixed!(
+        conformance,
+        "brynja_mac_kmac::conformance::hardened_in_place::",
+        Kmac128Workspace,
+        Kmac128,
+        Cshake128Workspace,
+        Cshake128,
+        168,
+        128
+    );
+    fixed!(
+        conformance,
+        "brynja_mac_kmac::conformance::hardened_in_place::",
+        Kmac256Workspace,
+        Kmac256,
+        Cshake256Workspace,
+        Cshake256,
+        136,
+        256
+    );
+}

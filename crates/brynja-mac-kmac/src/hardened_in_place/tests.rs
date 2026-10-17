@@ -48,6 +48,7 @@ pub(super) fn miri_complete(
 #[cfg(feature = "conformance-testing")]
 #[test]
 fn borrowed_verification_rejects_equal_mismatches_across_chunks() -> Result<(), KmacError> {
+    use crate::conformance::hardened_in_place::{Kmac128Workspace, Kmac256Workspace};
     macro_rules! check {
         ($name:ident, $workspace:ident) => {{
             let key = Fips202BitString::new(&[0x13], 5).map_err(|_| KmacError::InvalidBitString)?;
@@ -86,7 +87,7 @@ fn borrowed_verification_rejects_equal_mismatches_across_chunks() -> Result<(), 
                         assert!(workspace.metadata_cleared());
                         #[cfg(feature = "hardened-execution")]
                         assert_eq!(
-                            crate::execution::$name::new_bits_conformance(
+                            crate::conformance::execution::$name::new_bits_conformance(
                                 crate::execution::Mode::Portable,
                                 key,
                                 empty
@@ -192,6 +193,7 @@ fn scoped_lifecycle_strength_and_verification_failures() -> Result<(), KmacError
 #[cfg(feature = "conformance-testing")]
 #[test]
 fn scoped_all_bit_domains_match_existing_portable_api() -> Result<(), KmacError> {
+    use crate::conformance::hardened_in_place::{Kmac128Workspace, Kmac256Workspace};
     macro_rules! campaign {
         ($workspace:ident, $reference:ident) => {{
             let mut workspace = $workspace::new();

@@ -123,10 +123,18 @@ macro_rules! lifecycle {
         ));
         assert!(!called);
         assert_eq!(scratch, [0; 400]);
-        assert!(matches!(
-            workspace.with_conformance(&[1], b"", |state| state.finalize_xof().map(|_| ())),
-            Ok(Err(KmacError::KeyTooShort))
-        ));
+        {
+            let mut test_workspace =
+                brynja_mac_kmac::conformance::execution::in_place::$workspace::new(session(
+                    &authority,
+                )?)
+                .map_err(bad)?;
+            assert!(matches!(
+                test_workspace
+                    .with_conformance(&[1], b"", |state| state.finalize_xof().map(|_| ())),
+                Ok(Err(KmacError::KeyTooShort))
+            ));
+        }
         for mode in 0..3 {
             workspace
                 .with(&key, b"domain", |mut state| {

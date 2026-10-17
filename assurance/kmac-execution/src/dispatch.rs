@@ -1,5 +1,7 @@
 use crate::selection::Selection;
-use brynja_mac_kmac::{Fips202BitString, KmacPublicDeclassification, execution as api};
+use brynja_mac_kmac::{
+    Fips202BitString, KmacPublicDeclassification, conformance::execution as api,
+};
 use std::io;
 
 pub fn dispatch(

@@ -137,9 +137,9 @@
 
 mod backend;
 mod core_state;
-mod fixed;
+pub(crate) mod fixed;
 mod output;
-mod xof;
+pub(crate) mod xof;
 
 pub use crate::hardened_in_place::accelerated as in_place;
 

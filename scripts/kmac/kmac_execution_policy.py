@@ -26,7 +26,7 @@ TOKENS = {
     'fixed.rs': ('pub fn finalize_tag(mut self', 'pub fn finalize_secret(', 'mut self,',
                  'fn tag<', '&mut self,', 'fn secret<', 'let _ = clear_owned_region(bytes);',
                  'pub fn verify_exact(', '!= expected_bits', 'output::verify(&mut self.core, candidate)'),
-    'xof.rs': ("core: &'s mut Core<'a>", 'impl Drop for Reader', 'self.core.cancel();',
+    'xof.rs': ("core: &'s mut Core<'a>", 'impl Drop for $name', 'self.core.cancel();',
                'pub fn finalize_xof(&mut self)', 'core: &mut self.core', 'KmacPublicDeclassification'),
     'output.rs': ('clear_owned_region(&mut self.0)', 'clear_owned_region(self.0)',
                   'VerificationDifference::new()', 'difference.accumulate(actual, expected)',
@@ -39,6 +39,12 @@ DOC_CASES = tuple(f'//! ```compile_fail,E0277\n//! fn require<T: {bound}>() {{}}
                  f'//! require::<brynja_mac_kmac::execution::{name}>();\n//! ```'
                  for name in DOC_TYPES for bound in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'))
 PACKER_TESTS = ('large_final_chunks_keep_bulk_absorption', 'large_partial_keys_keep_bulk_absorption')
+CONFORMANCE_FILES = ('execution/fixed.rs', 'execution/xof.rs',
+                     'hardened_in_place/fixed.rs', 'hardened_in_place/xof.rs',
+                     'hardened_in_place/accelerated/fixed.rs',
+                     'hardened_in_place/accelerated/xof.rs')
+CONFORMANCE_TOKENS = ('conformance_api! { $profile;',
+                     '#[cfg(feature = "conformance-testing")]\npub(crate) mod conformance {')
 
 
 def require(value, label):
@@ -54,6 +60,11 @@ def read(root, name):
 
 
 def semantic(root):
+    require('(production; $($method:item)*) => {};' in read(root, CRATE + '/src/lib.rs'),
+            'production method-set isolation')
+    for name in CONFORMANCE_FILES:
+        for token in CONFORMANCE_TOKENS:
+            require(token in read(root, CRATE + '/src/' + name), 'distinct conformance types: ' + name)
     for case in DOC_CASES:
         require(case in read(root, SOURCE + 'mod.rs'), 'public owner rustdoc invariant')
     for test in PACKER_TESTS:

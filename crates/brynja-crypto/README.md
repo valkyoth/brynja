@@ -93,11 +93,15 @@ forgotten owners and terminated processes remain outside the guarantee.
 
 General SHA-512/t is an opt-in extension (`general-sha512-t`, under `sha2`),
 not a named SHA-2 identity. Namespaces use explicit export lists and facade
-feature gates, excluding conformance-only free functions and in-place integration
-modules. Cargo still unifies leaf features and reexported types retain their
-inherent methods. Portable KMAC conformance methods belong to distinct leaf-only
-test types, not these production aliases. Execution/in-place separation remains
-under review. This is not a sandbox; use dependency policy and the separate `brynja-strict`
+feature gates, excluding conformance-only free functions and standalone
+`hardened_in_place` modules from namespace roots. Production `in_place` APIs
+nested in execution modules remain available. Cargo still unifies leaf features
+and reexported types retain their
+inherent methods. KMAC conformance methods belong to distinct leaf-only test
+types, including execution and scoped owners, not these production aliases.
+Hidden cSHAKE composition methods remain available on the reexported types;
+they preserve their terminal lifecycle and output classification. This is not
+a sandbox; use dependency policy and the separate `brynja-strict`
 facade when ordinary-memory APIs must not be selected.
 Legacy SHA-1/MD5 and legacy protocols remain outside this modern composition
 graph. `brynja-crypto` is not a replacement TLS engine or certificate validator.

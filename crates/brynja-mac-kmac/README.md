@@ -82,19 +82,22 @@ not permission to weaken a protocol. Callers must reject candidate/tag lengths
 above their protocol's limit at ingestion: verification work depends on the
 public candidate length.
 
-Portable conformance states live under `brynja_mac_kmac::conformance`, enabled
+Conformance states live under `brynja_mac_kmac::conformance`, enabled
 by `conformance-testing`. They are distinct affine types sharing the same core,
-not wrappers convertible into production states. Migrate portable test calls
+not wrappers convertible into production states. Migrate test calls
 such as `Kmac128::new_conformance` to
 `conformance::Kmac128::new_conformance`. Feature unification no longer adds
-those inherent methods to root `Kmac128/256` or `KmacXof128/256` types, including
+those inherent methods to production `Kmac128/256` or `KmacXof128/256` types, including
 their facade reexports. The explicit leaf-only one-shot conformance functions
 remain available for vector testing. This is a pre-1.0 test-API change; normal
 production constructors and outputs are unchanged.
 
-The execution and scoped in-place conformance surfaces are being separated in
-the same development milestone. Do not treat this portable-only change as
-completion of that wider review or enable conformance features in production.
+Execution test states/readers are under `conformance::execution`; portable
+scoped states/workspaces/readers are under `conformance::hardened_in_place`;
+accelerated scoped types are under `conformance::execution::in_place`.
+Execution test types still require `hardened-execution` and valid execution
+authority. They cannot convert into production owners or satisfy the production
+execution `HardenedState` trait. Do not enable conformance features in production.
 
 ## Hardware and SIMD
 
@@ -120,8 +123,9 @@ An independent scope guard also clears forgotten handles and recoverable unwind.
 `KmacXof128Workspace` and `KmacXof256Workspace` extend that lifetime through an
 incremental reader, with typed secret output, explicit public declassification
 and consuming partial-bit reads. Reader errors are terminal, and secret
-destinations clear on failure. All four scopes are portable; accelerated scopes
-remain pending. See executable examples in the `hardened_in_place` module docs.
+destinations clear on failure. All four scopes have portable forms and separate
+accelerated forms under `execution::in_place`, using explicit hardened execution
+authority. See executable examples in the `hardened_in_place` module docs.
 
 Key-derived sponge, metadata, encodings and staging clear on success, errors,
 cancellation, recoverable unwind and Drop. Fixed tags are opaque, without

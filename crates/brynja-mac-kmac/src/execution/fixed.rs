@@ -10,7 +10,7 @@ use crate::{
 use brynja_core::clear_owned_region;
 
 macro_rules! fixed {
-    ($name:ident, $wide:literal) => {
+    ($profile:ident, $name:ident, $wide:literal) => {
         /// Affine keyed owner with explicit hardened execution selection.
         pub struct $name<'a> {
             core: Core<'a>,
@@ -18,7 +18,7 @@ macro_rules! fixed {
         impl<'a> $name<'a> {
             /// Selects a route before absorbing a full-strength key.
             pub fn new(mode: Mode<'a>, key: &[u8], customization: &[u8]) -> Result<Self, Error> {
-                Self::new_bits(mode, super::bits(key)?, super::bits(customization)?)
+                Self::new_bits(mode, crate::execution::bits(key)?, crate::execution::bits(customization)?)
             }
             /// Accepts canonical arbitrary-bit key and customization strings.
             pub fn new_bits(
@@ -30,6 +30,7 @@ macro_rules! fixed {
                     core: Core::new(mode, $wide, key, customization, false)?,
                 })
             }
+            conformance_api! { $profile;
             /// Exact standards conformance, including short/empty keys; non-approved.
             #[cfg(feature = "conformance-testing")]
             pub fn new_conformance(
@@ -37,8 +38,10 @@ macro_rules! fixed {
                 key: &[u8],
                 customization: &[u8],
             ) -> Result<Self, Error> {
-                Self::new_bits_conformance(mode, super::bits(key)?, super::bits(customization)?)
+                Self::new_bits_conformance(mode, crate::execution::bits(key)?, crate::execution::bits(customization)?)
             }
+            }
+            conformance_api! { $profile;
             /// Exact arbitrary-bit conformance; absent from production defaults.
             #[cfg(feature = "conformance-testing")]
             pub fn new_bits_conformance(
@@ -49,6 +52,7 @@ macro_rules! fixed {
                 Ok(Self {
                     core: Core::new(mode, $wide, key, customization, true)?,
                 })
+            }
             }
             /// Reports public route/health only; None means portable.
             pub fn report(&self) -> Option<Report> {
@@ -103,6 +107,7 @@ macro_rules! fixed {
             ) -> Result<KmacTag<'out>, Error> {
                 self.tag(Some(message), output, valid, scratch, false)
             }
+            conformance_api! { $profile;
             /// Exact-conformance byte tag; scratch must cover the entire destination.
             #[cfg(feature = "conformance-testing")]
             pub fn finalize_tag_conformance<'out>(
@@ -112,6 +117,8 @@ macro_rules! fixed {
             ) -> Result<KmacTag<'out>, Error> {
                 self.tag(None, output, output::valid(output.len()), scratch, true)
             }
+            }
+            conformance_api! { $profile;
             /// Exact-conformance final message/output bits.
             #[cfg(feature = "conformance-testing")]
             pub fn finalize_tag_bits_conformance<'out>(
@@ -122,6 +129,7 @@ macro_rules! fixed {
                 scratch: &mut [u8],
             ) -> Result<KmacTag<'out>, Error> {
                 self.tag(Some(message), output, valid, scratch, true)
+            }
             }
             /// Consuming secret result; every error clears the complete destination.
             pub fn finalize_secret(
@@ -139,6 +147,7 @@ macro_rules! fixed {
             ) -> Result<KmacSecretOutput<'out>, Error> {
                 self.secret(Some(message), bytes, valid, false)
             }
+            conformance_api! { $profile;
             /// Exact-conformance typed-secret byte output.
             #[cfg(feature = "conformance-testing")]
             pub fn finalize_secret_conformance(
@@ -147,6 +156,8 @@ macro_rules! fixed {
             ) -> Result<KmacSecretOutput<'_>, Error> {
                 self.secret(None, output, output::valid(output.len()), true)
             }
+            }
+            conformance_api! { $profile;
             /// Exact-conformance typed-secret arbitrary-bit output.
             #[cfg(feature = "conformance-testing")]
             pub fn finalize_secret_bits_conformance<'out>(
@@ -157,10 +168,11 @@ macro_rules! fixed {
             ) -> Result<KmacSecretOutput<'out>, Error> {
                 self.secret(Some(message), bytes, valid, true)
             }
+            }
             /// Constant-work verification for the public candidate length.
             /// Callers must bound that length and use verify_exact for a fixed protocol width.
             pub fn verify(mut self, candidate: &[u8]) -> Result<KmacVerification, Error> {
-                self.verification(None, super::bits(candidate)?, false)
+                self.verification(None, crate::execution::bits(candidate)?, false)
             }
             /// Rejects a protocol tag-width mismatch before hashing output.
             pub fn verify_exact(
@@ -183,14 +195,17 @@ macro_rules! fixed {
             ) -> Result<KmacVerification, Error> {
                 self.verification(Some(message), candidate, false)
             }
+            conformance_api! { $profile;
             /// Exact-conformance byte verification, including weak tag parameters.
             #[cfg(feature = "conformance-testing")]
             pub fn verify_conformance(
                 mut self,
                 candidate: &[u8],
             ) -> Result<KmacVerification, Error> {
-                self.verification(None, super::bits(candidate)?, true)
+                self.verification(None, crate::execution::bits(candidate)?, true)
             }
+            }
+            conformance_api! { $profile;
             /// Exact-conformance arbitrary-bit verification.
             #[cfg(feature = "conformance-testing")]
             pub fn verify_bits_conformance(
@@ -199,6 +214,7 @@ macro_rules! fixed {
                 candidate: Fips202BitString<'_>,
             ) -> Result<KmacVerification, Error> {
                 self.verification(Some(message), candidate, true)
+            }
             }
             fn tag<'out>(
                 &mut self,
@@ -240,5 +256,12 @@ macro_rules! fixed {
         }
     };
 }
-fixed!(Kmac128, false);
-fixed!(Kmac256, true);
+fixed!(production, Kmac128, false);
+fixed!(production, Kmac256, true);
+
+#[cfg(feature = "conformance-testing")]
+pub(crate) mod conformance {
+    use super::*;
+    fixed!(conformance, Kmac128, false);
+    fixed!(conformance, Kmac256, true);
+}

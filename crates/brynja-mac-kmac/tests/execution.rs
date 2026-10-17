@@ -3,6 +3,81 @@
 use brynja_mac_kmac::{Fips202BitString, KmacError, KmacPublicDeclassification, execution as cpu};
 
 #[test]
+#[cfg(feature = "conformance-testing")]
+fn separate_test_owners_do_not_weaken_production_transitions() -> Result<(), KmacError> {
+    use brynja_mac_kmac::{KmacKeyPolicy, conformance};
+    macro_rules! fixed {
+        ($name:ident, $oracle:ident, $strength:literal) => {{
+            let mut expected = [0; 4];
+            let _ = brynja_mac_kmac::$oracle(b"", b"", b"", &mut expected)?;
+            let mut output = [0xa5; 4];
+            let mut scratch = [0x5a; 4];
+            let test =
+                conformance::execution::$name::new_conformance(cpu::Mode::Portable, b"", b"")?;
+            assert_eq!(test.key_policy(), KmacKeyPolicy::ConformanceOnly);
+            assert_eq!(
+                test.finalize_tag_conformance(&mut output, &mut scratch)?
+                    .as_bytes(),
+                expected
+            );
+            assert_eq!(scratch, [0; 4]);
+            assert!(matches!(
+                cpu::$name::new(cpu::Mode::Portable, b"", b""),
+                Err(KmacError::KeyTooShort)
+            ));
+            let test =
+                conformance::execution::$name::new_conformance(cpu::Mode::Portable, b"", b"")?;
+            assert!(matches!(
+                test.finalize_secret(&mut output),
+                Err(KmacError::KeyTooShort)
+            ));
+            assert_eq!(output, [0; 4]);
+            output.fill(0xa5);
+            assert!(
+                cpu::$name::new(cpu::Mode::Portable, &[0x42; $strength], b"")?
+                    .finalize_tag(&mut output)
+                    .is_err()
+            );
+            assert_eq!(output, [0xa5; 4]);
+        }};
+    }
+    fixed!(Kmac128, kmac128_conformance, 16);
+    fixed!(Kmac256, kmac256_conformance, 32);
+    macro_rules! xof {
+        ($name:ident, $oracle:ident) => {{
+            let mut expected = [0; 4];
+            brynja_mac_kmac::$oracle(
+                b"",
+                b"",
+                b"",
+                &mut expected,
+                KmacPublicDeclassification::acknowledge(),
+            )?;
+            assert!(matches!(
+                cpu::$name::new(cpu::Mode::Portable, b"", b""),
+                Err(KmacError::KeyTooShort)
+            ));
+            let mut test =
+                conformance::execution::$name::new_conformance(cpu::Mode::Portable, b"", b"")?;
+            let mut output = [0xa5; 4];
+            {
+                let mut reader = test.finalize_xof_conformance()?;
+                let secret = reader.squeeze_secret(&mut output)?;
+                assert_eq!(secret.expose(), expected);
+            }
+            assert_eq!(output, [0; 4]);
+            assert!(test.update(b"").is_err());
+            let mut test =
+                conformance::execution::$name::new_conformance(cpu::Mode::Portable, b"", b"")?;
+            assert!(matches!(test.finalize_xof(), Err(KmacError::KeyTooShort)));
+        }};
+    }
+    xof!(KmacXof128, kmacxof128_public_conformance);
+    xof!(KmacXof256, kmacxof256_public_conformance);
+    Ok(())
+}
+
+#[test]
 fn portable_execution_tags_match_and_outputs_are_transactional() -> Result<(), KmacError> {
     let key = [0x42; 32];
     let mut expected = [0; 257];

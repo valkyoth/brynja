@@ -217,9 +217,9 @@ def validate(root: Path) -> None:
                   "self.inner.secret(output)", "self.inner.final_public(output, valid)",
                   "self.inner.final_secret(output, valid)", "with_bits_and_scratch_conformance"):
         require(accelerated_xof, token, "scoped accelerated XOF borrow/output")
-    if accelerated_xof.count('#[cfg(feature = "conformance-testing")]') != 5:
+    if accelerated_xof.count('#[cfg(feature = "conformance-testing")]') != 6:
         fail("scoped accelerated KMACXOF conformance feature gate changed")
-    if scoped_xof.count('#[cfg(feature = "conformance-testing")]') != 4:
+    if scoped_xof.count('#[cfg(feature = "conformance-testing")]') != 5:
         fail("scoped KMACXOF conformance feature gate changed")
     for token in (
         "pub fn finalize_xof_erasing_source(&mut self)",
@@ -295,7 +295,7 @@ def validate(root: Path) -> None:
         fail("fixed KMAC conformance feature gate changed")
     if loaded[CRATE / "src/xof.rs"].count('#[cfg(feature = "conformance-testing")]') != 8:
         fail("KMACXOF conformance feature gate changed")
-    if scoped_fixed.count('#[cfg(feature = "conformance-testing")]') != 8:
+    if scoped_fixed.count('#[cfg(feature = "conformance-testing")]') != 9:
         fail("scoped fixed KMAC conformance feature gate changed")
     differential_manifest = tomllib.loads(loaded[DIFFERENTIAL_MANIFEST])
     differential_dependency = differential_manifest["dependencies"]["brynja-mac-kmac"]

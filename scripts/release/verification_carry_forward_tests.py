@@ -180,7 +180,15 @@ class CarryForwardTests(unittest.TestCase):
             (root / path).unlink()
             self.assertEqual(plans.build(root=root, base=base, verified_base=True)['groups'], ['sha2'])
             (root / path).write_bytes(originals[path])
-            check('Cargo.lock', originals['Cargo.lock'].replace(b'version = "2.1.0"', b'version = "9.9.9"'), ('sanitization',))
+            packages = tomllib.loads(originals['Cargo.lock'].decode())['package']
+            selected = [item for item in packages if item['name'] == 'sanitization']
+            self.assertEqual(len(selected), 1)
+            version = selected[0]['version']
+            replacement = '9.9.9' if version != '9.9.9' else '9.9.8'
+            identity = f'name = "sanitization"\nversion = "{version}"'.encode()
+            self.assertEqual(originals['Cargo.lock'].count(identity), 1)
+            check('Cargo.lock', originals['Cargo.lock'].replace(identity,
+                  f'name = "sanitization"\nversion = "{replacement}"'.encode()), ('sanitization',))
             # Dependency feature changes affect the crate and its consumers.
             check('crates/brynja-hash-sha3/Cargo.toml', b'[features]\ndefault=["new"]\n',
                   ('sha3', 'kmac', 'tuplehash', 'parallelhash'))

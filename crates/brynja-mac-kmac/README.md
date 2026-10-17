@@ -82,6 +82,20 @@ not permission to weaken a protocol. Callers must reject candidate/tag lengths
 above their protocol's limit at ingestion: verification work depends on the
 public candidate length.
 
+Portable conformance states live under `brynja_mac_kmac::conformance`, enabled
+by `conformance-testing`. They are distinct affine types sharing the same core,
+not wrappers convertible into production states. Migrate portable test calls
+such as `Kmac128::new_conformance` to
+`conformance::Kmac128::new_conformance`. Feature unification no longer adds
+those inherent methods to root `Kmac128/256` or `KmacXof128/256` types, including
+their facade reexports. The explicit leaf-only one-shot conformance functions
+remain available for vector testing. This is a pre-1.0 test-API change; normal
+production constructors and outputs are unchanged.
+
+The execution and scoped in-place conformance surfaces are being separated in
+the same development milestone. Do not treat this portable-only change as
+completion of that wider review or enable conformance features in production.
+
 ## Hardware and SIMD
 
 Defaults remain portable. `hardened-execution` exposes the separate

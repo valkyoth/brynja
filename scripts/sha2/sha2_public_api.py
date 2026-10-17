@@ -53,8 +53,8 @@ FILES = (
     WORKFLOW,
 )
 EXPECTED_SHA256 = {
-    MANIFEST: "48b78b5b59ae28940b18ed42834679bc76778921de869d5f9e18be9f3bfa9077",
-    LOCK: "6e103bd3aa14ffecebc0515c29a0251e6f8ee35c8b637607c2e869ef4b629f9c",
+    MANIFEST: "a68911eb6089565d1fa55fce32115f6712a6d4c9380f4d18d2c40dfab1939eeb",
+    LOCK: "8f5487a8a6082766750e136f4fac8c18501c273741a1e79b0e04eb34e9eceacd",
     LIB: "436b9262248d811103f88fd88004bbee101cef72e56130d1c24b207b437ebbe7",
     ALGORITHMS: "f5c798334508de76015c92f2929dee7b51e7b76a61fe3bc353bf67e4677a1e63",
     BIT_INPUTS: "8f882911914e82ce7dfef7713296a696f5d3966ea9f55ee9d0cdda8dfb65812d",
@@ -76,7 +76,7 @@ EXPECTED_SHA256 = {
     DIGEST: "a861b334e041502bfb56b5de12a4c83468cbfa2440881288aca94c1aa6c08634",
     FACADE_LIB: "6c32a6d7853876de0797e08bff739f553465ecb17d461c736ac73e2bd6c43a4a",
     LEAF_README: "42e555119ce6fcfebdeba16b8436ac872a5a0929adf20864f67d25f24498ba73",
-    FACADE_README: "f1b1d6ee5d2321429ef3ef6acb33e38e9763cfee3b6141e6121595d339820b5a",
+    FACADE_README: "8827f32fb974aa9b8b2c8e46b12c4b94b461969867938ac5860ce26c154b87f7",
     CHECK_SCRIPT: "38306f0daa5d4b180b47bc6714bc66bc402afd2f29c820ca9f3db2cad9476778",
     TEST_SCRIPT: "6588778e5237d28f14c8ba146b113142418e644010b39113657bba8b723ba7fa",
     CHECKS: "8a6617632f3709e85e5d5c5a6edbb477f113a104f87e59280cddfe2ab6d824b8",
@@ -128,7 +128,7 @@ PACKAGES = (
     ("brynja-dtls", "0.1.8", ("src/lib.rs",)),
     ("brynja-platform", "0.1.8", ("src/lib.rs",)),
     ("brynja-quic-tls", "0.1.8", ("src/lib.rs",)),
-    ("brynja", "0.24.52", ("src/lib.rs",)),
+    ("brynja", "0.24.53", ("src/lib.rs",)),
 )
 
 
@@ -171,7 +171,7 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
     }:
         fail("acceptance package identity changed")
     expected_dependencies = {
-        "brynja": {"path": "../../crates/brynja", "version": "=0.24.52", "default-features": False},
+        "brynja": {"path": "../../crates/brynja", "version": "=0.24.53", "default-features": False},
         "brynja-hash-sha2": {
             "path": "../../crates/brynja-hash-sha2", "version": "=0.1.0",
             "default-features": False, "features": ["cpu"],

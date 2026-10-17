@@ -5,8 +5,8 @@ use std::{
 };
 
 use brynja_mac_kmac::{
-    Fips202BitString, Fips202Output, Kmac128, Kmac256, KmacPublicDeclassification, KmacXof128,
-    KmacXof256,
+    Fips202BitString, Fips202Output, KmacPublicDeclassification,
+    conformance::{Kmac128, Kmac256, KmacXof128, KmacXof256},
 };
 
 const MAX_CAMPAIGN_BYTES: u64 = 1024 * 1024;

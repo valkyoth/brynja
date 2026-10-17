@@ -131,7 +131,7 @@ fn scoped_xof_all_tails_streaming_and_mixed_reads() -> Result<(), KmacError> {
                 let key=Fips202BitString::new(&[0x13],5).map_err(|_|KmacError::InvalidBitString)?;
                 let custom=Fips202BitString::new(&[0x05],3).map_err(|_|KmacError::InvalidBitString)?;
                 let mut expected=[0;354];
-                let mut reference=crate::$reference::new_bits_conformance(key,custom)?.finalize_bits_xof_conformance(bits)?;
+                let mut reference=crate::conformance::$reference::new_bits_conformance(key,custom)?.finalize_bits_xof_conformance(bits)?;
                 for chunk in expected.chunks_mut(118) { reference.squeeze_public(chunk,KmacPublicDeclassification::acknowledge())?; }
                 if let Some(last)=expected.last_mut() { *last &= 0xff >> (8-valid); }
                 let mut output=[0xa5;354];

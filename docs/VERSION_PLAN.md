@@ -13,8 +13,8 @@ validator rejects numbering, ordering, title, or scope drift.
 See the [ordering review](ROADMAP_ORDERING_AUDIT.md) for the future family
 splits and the [schedule register](../requirements/roadmap-schedule.json) for
 old-to-new identities and prerequisite edges. Released milestones through
-v0.24.51 are preserved. The remaining four unstarted backfill stops occupy
-v0.24.52–v0.24.55 before HMAC.
+v0.24.52 are preserved. The remaining backfill stops occupy v0.24.53–v0.24.55
+before HMAC, with public consumer acceptance now in progress.
 RISC-V operational acceleration is postponed until qualifying native hardware
 is available; portable support and existing candidate tests remain unchanged.
 

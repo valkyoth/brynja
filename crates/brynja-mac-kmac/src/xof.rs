@@ -90,8 +90,21 @@ macro_rules! xof_reader {
 xof_reader!(KmacXof128Reader, HardenedCshake128Reader, "KMACXOF128");
 xof_reader!(KmacXof256Reader, HardenedCshake256Reader, "KMACXOF256");
 
+#[cfg(feature = "conformance-testing")]
+xof_reader!(
+    ConformanceKmacXof128Reader,
+    HardenedCshake128Reader,
+    "test-only KMACXOF128"
+);
+#[cfg(feature = "conformance-testing")]
+xof_reader!(
+    ConformanceKmacXof256Reader,
+    HardenedCshake256Reader,
+    "test-only KMACXOF256"
+);
+
 macro_rules! xof_state {
-    ($state:ident, $reader:ident, $backend:ty, $rate:literal, $strength:literal, $label:literal) => {
+    ($profile:ident, $state:ident, $reader:ident, $backend:ty, $rate:literal, $strength:literal, $label:literal) => {
         #[doc = concat!("Secret-bearing streaming ", $label, " state.")]
         pub struct $state {
             core: KmacCore<$backend, $rate, $strength>,
@@ -113,6 +126,7 @@ macro_rules! xof_state {
                 KmacCore::new_bits(key, customization, true).map(|core| Self { core })
             }
 
+            conformance_api! { $profile;
             /// Creates an exact-conformance state, including empty and short keys.
             #[cfg(feature = "conformance-testing")]
             pub fn new_conformance(key: &[u8], customization: &[u8]) -> Result<Self, KmacError> {
@@ -128,6 +142,7 @@ macro_rules! xof_state {
                 customization: Fips202BitString<'_>,
             ) -> Result<Self, KmacError> {
                 KmacCore::new_bits(key, customization, false).map(|core| Self { core })
+            }
             }
 
             /// Returns whether the supplied key reaches the selected strength.
@@ -165,12 +180,14 @@ macro_rules! xof_state {
                     .map(|inner| $reader { inner })
             }
 
+            conformance_api! { $profile;
             /// Finalizes an exact-conformance state into an incremental reader.
             #[cfg(feature = "conformance-testing")]
             pub fn finalize_xof_conformance(mut self) -> Result<$reader, KmacError> {
                 self.core
                     .finish_xof(None, false)
                     .map(|inner| $reader { inner })
+            }
             }
 
             /// Finalizes after one canonical arbitrary-bit message.
@@ -183,6 +200,7 @@ macro_rules! xof_state {
                     .map(|inner| $reader { inner })
             }
 
+            conformance_api! { $profile;
             /// Finalizes exact conformance after an arbitrary-bit message.
             #[cfg(feature = "conformance-testing")]
             pub fn finalize_bits_xof_conformance(
@@ -193,6 +211,7 @@ macro_rules! xof_state {
                     .finish_xof(Some(final_message), false)
                     .map(|inner| $reader { inner })
             }
+            }
 
             /// Consumes and clears this state without producing output.
             pub fn cancel(self) {}
@@ -201,6 +220,7 @@ macro_rules! xof_state {
 }
 
 xof_state!(
+    production,
     KmacXof128,
     KmacXof128Reader,
     HardenedCshake128,
@@ -209,12 +229,34 @@ xof_state!(
     "KMACXOF128"
 );
 xof_state!(
+    production,
     KmacXof256,
     KmacXof256Reader,
     HardenedCshake256,
     136,
     256,
     "KMACXOF256"
+);
+
+#[cfg(feature = "conformance-testing")]
+xof_state!(
+    conformance,
+    ConformanceKmacXof128,
+    ConformanceKmacXof128Reader,
+    HardenedCshake128,
+    168,
+    128,
+    "test-only KMACXOF128"
+);
+#[cfg(feature = "conformance-testing")]
+xof_state!(
+    conformance,
+    ConformanceKmacXof256,
+    ConformanceKmacXof256Reader,
+    HardenedCshake256,
+    136,
+    256,
+    "test-only KMACXOF256"
 );
 
 fn byte_string(input: &[u8]) -> Result<Fips202BitString<'_>, KmacError> {

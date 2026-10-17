@@ -132,9 +132,12 @@ Cargo features are additive across dependents, but these namespaces now use
 explicit export lists and facade-owned feature gates. Enabling a leaf feature
 elsewhere does not automatically add its module/free-function exports here.
 Conformance-only free functions, in-place integration modules and setup-only
-types are not forwarded. Reexported types still retain their inherent methods,
-including pre-existing test-only methods when explicitly enabled on a leaf;
-curation is not provenance enforcement or a sandbox against direct leaf use.
+types are not forwarded. Portable KMAC production types no longer acquire
+conformance methods through feature unification: separate leaf-only types in
+`brynja_mac_kmac::conformance` own those methods. Execution/in-place KMAC and
+cSHAKE integration surfaces are still under review in v0.24.53. Reexported
+types otherwise retain their inherent methods; curation is not provenance
+enforcement or a sandbox against direct leaf use.
 Independent package tests exercise this deliberate unification and must not
 rely on workspace-root feature activation.
 

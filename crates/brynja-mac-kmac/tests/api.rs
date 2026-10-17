@@ -29,7 +29,7 @@ fn production_and_conformance_parameter_domains_are_separate() {
         Kmac256::new(&[0; 31], b""),
         Err(KmacError::KeyTooShort)
     ));
-    let weak = require_some!(Kmac128::new_conformance(b"", b"").ok());
+    let weak = require_some!(brynja_mac_kmac::conformance::Kmac128::new_conformance(b"", b"").ok());
     assert_eq!(weak.key_policy(), KmacKeyPolicy::ConformanceOnly);
     let mut short = [0_u8; 3];
     let tag = require_some!(weak.finalize_tag_conformance(&mut short).ok());
@@ -41,6 +41,73 @@ fn production_and_conformance_parameter_domains_are_separate() {
         Err(KmacError::TagTooShort)
     ));
     assert_eq!(too_short, [0xA5; 15]);
+}
+
+#[test]
+#[cfg(feature = "conformance-testing")]
+fn distinct_conformance_types_retain_weak_vectors_and_production_checks() {
+    use brynja_mac_kmac::{KmacError, conformance};
+    macro_rules! fixed {
+        ($name:ident, $oracle:ident) => {{
+            let mut expected = [0; 4];
+            let mut actual = [0; 4];
+            assert!(brynja_mac_kmac::$oracle(b"", b"", b"", &mut expected).is_ok());
+            assert!(
+                conformance::$name::new_conformance(b"", b"")
+                    .and_then(|state| state.finalize_tag_conformance(&mut actual))
+                    .is_ok()
+            );
+            assert_eq!(actual, expected);
+            assert!(matches!(
+                conformance::$name::new_conformance(b"", b"")
+                    .and_then(|state| state.finalize_tag(&mut actual)),
+                Err(KmacError::KeyTooShort)
+            ));
+            assert!(matches!(
+                brynja_mac_kmac::$name::new(b"", b""),
+                Err(KmacError::KeyTooShort)
+            ));
+        }};
+    }
+    fixed!(Kmac128, kmac128_conformance);
+    fixed!(Kmac256, kmac256_conformance);
+    macro_rules! xof {
+        ($name:ident, $oracle:ident) => {{
+            let mut expected = [0; 4];
+            let mut actual = [0; 4];
+            assert!(
+                brynja_mac_kmac::$oracle(
+                    b"",
+                    b"",
+                    b"",
+                    &mut expected,
+                    KmacPublicDeclassification::acknowledge()
+                )
+                .is_ok()
+            );
+            let mut reader = require_some!(
+                conformance::$name::new_conformance(b"", b"")
+                    .and_then(conformance::$name::finalize_xof_conformance)
+                    .ok()
+            );
+            {
+                let secret = require_some!(reader.squeeze_secret(&mut actual).ok());
+                assert_eq!(secret.expose(), expected);
+            }
+            assert_eq!(actual, [0; 4]);
+            assert!(matches!(
+                conformance::$name::new_conformance(b"", b"")
+                    .and_then(conformance::$name::finalize_xof),
+                Err(KmacError::KeyTooShort)
+            ));
+            assert!(matches!(
+                brynja_mac_kmac::$name::new(b"", b""),
+                Err(KmacError::KeyTooShort)
+            ));
+        }};
+    }
+    xof!(KmacXof128, kmacxof128_public_conformance);
+    xof!(KmacXof256, kmacxof256_public_conformance);
 }
 
 #[test]

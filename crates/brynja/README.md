@@ -191,8 +191,12 @@ let mut derived = [0_u8; 64];
 assert_eq!(derived, [0; 64]);
 ```
 
-Production constructors require full-strength keys and fixed tags. Exact conformance constructors retain all standards-valid inputs but are absent from
-default builds, require the leaf crate's explicit `conformance-testing` feature, and report weak parameters as non-approved. Brynja has no FIPS validation.
+Production constructors require full-strength keys and fixed tags. Portable
+conformance constructors live on distinct leaf-only test types under
+`brynja_mac_kmac::conformance`, require `conformance-testing`, and report weak
+parameters as non-approved. They do not appear on the portable production
+aliases even when that feature is unified. Execution/in-place separation remains
+under review. Brynja has no FIPS validation.
 Callers must enforce their protocol's maximum candidate-tag length before KMAC verification.
 
 ## Workspace

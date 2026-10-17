@@ -8,6 +8,50 @@ CONFORMANCE = ('kmac128_conformance', 'kmac256_conformance',
                'kmac128_bits_conformance', 'kmac256_bits_conformance',
                'kmacxof128_public_conformance', 'kmacxof128_secret_conformance',
                'kmacxof256_public_conformance', 'kmacxof256_secret_conformance')
+FIXED_METHODS = ('new_conformance', 'new_bits_conformance', 'finalize_tag_conformance',
+                 'finalize_tag_bits_conformance', 'finalize_secret_bits_conformance',
+                 'verify_conformance', 'verify_bits_conformance')
+XOF_METHODS = ('new_conformance', 'new_bits_conformance', 'finalize_xof_conformance',
+               'finalize_bits_xof_conformance')
+
+
+def portable_conformance_negatives(api, consumer, package, cargo, env):
+    # Leaf conformance is already enabled by an independent dependency. Check
+    # inherent methods through all aliases, not only namespace free functions.
+    count = 0
+    for prefix in ('leaf', 'api', 'api::kmac'):
+        for name, methods in (('Kmac128', FIXED_METHODS), ('Kmac256', FIXED_METHODS),
+                              ('KmacXof128', XOF_METHODS), ('KmacXof256', XOF_METHODS)):
+            for method in methods:
+                path = f'{prefix}::{name}::{method}'
+                api.source(consumer, package, f'pub fn probe() {{ let _ = {path}; }}\n')
+                result = api.run(cargo + ['check', '--offline', '--message-format=json'],
+                                 consumer, env, success=False)
+                errors = [item['message'] for line in result.stdout.splitlines()
+                          if (item := json.loads(line)).get('reason') == 'compiler-message'
+                          and item['message']['level'] == 'error']
+                api.require(any((error.get('code') or {}).get('code') == 'E0599'
+                                and method in error['message'] for error in errors),
+                            'inherent rejection failed for wrong reason: ' + path)
+                count += 1
+    print(f'PASS: {package}: {count} portable inherent-method rejections under unification', flush=True)
+    for name in ('Kmac128', 'Kmac256', 'KmacXof128', 'KmacXof256',
+                 'KmacXof128Reader', 'KmacXof256Reader'):
+        probes = [f'pub fn probe(value: leaf::conformance::{name}) -> leaf::{name} '
+                  '{ value.into() }\n']
+        probes += [f'fn require<T: {bound}>() {{}}\n'
+                   f'pub fn probe() {{ require::<leaf::conformance::{name}>(); }}\n'
+                   for bound in ('Clone', 'Copy', 'core::fmt::Debug')]
+        for body in probes:
+            api.source(consumer, package, body)
+            result = api.run(cargo + ['check', '--offline', '--message-format=json'],
+                             consumer, env, success=False)
+            api.require(any(item.get('reason') == 'compiler-message' and
+                            (item['message'].get('code') or {}).get('code') == 'E0277'
+                            for line in result.stdout.splitlines()
+                            if (item := json.loads(line))),
+                        'conformance ownership/conversion failed for wrong reason: ' + name)
+    print(f'PASS: {package}: 24 conformance ownership/conversion rejections', flush=True)
 
 
 def namespace_negatives(api, consumer, roots, package, cargo, env):
@@ -21,13 +65,17 @@ fn direct_leaf_conformance_does_not_weaken_production_functions() {
     assert!(leaf::kmac128_conformance(b"", b"msg", b"", &mut output).is_ok());
     assert!(api::kmac::kmac128(b"", b"msg", b"", &mut output).is_err());
     assert!(api::kmac128(b"", b"msg", b"", &mut output).is_err());
+    assert!(leaf::conformance::Kmac128::new_conformance(b"", b"").unwrap()
+        .finalize_tag_conformance(&mut output).is_ok());
 }
 ''')
     api.test_run(cargo, consumer, env, 1)
     # This deliberate negative fixture alone opts into leaf conformance. It is
     # not a production graph and does not relax graph()'s conformance rejection.
     api.resolved_metadata(cargo, consumer, env, roots)
+    portable_conformance_negatives(api, consumer, package, cargo, env)
     probes = ['kmac::' + name for name in CONFORMANCE]
+    probes += ['conformance', 'kmac::conformance']
     probes += [name + '::hardened_in_place' for name in
                ('sha2', 'sha3', 'kmac', 'tuplehash', 'parallelhash')]
     probes += ['sha3::HardenedCshake128Setup', 'sha3::HardenedCshake256Setup',

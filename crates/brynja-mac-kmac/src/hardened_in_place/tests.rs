@@ -59,7 +59,7 @@ fn borrowed_verification_rejects_equal_mismatches_across_chunks() -> Result<(), 
                     let tag = storage
                         .get_mut(..length)
                         .ok_or(KmacError::InvalidBitString)?;
-                    let _ = crate::$name::new_bits_conformance(key, empty)?
+                    let _ = crate::conformance::$name::new_bits_conformance(key, empty)?
                         .finalize_tag_bits_conformance(empty, tag, valid)?;
                     for mismatch in [false, true] {
                         if mismatch {
@@ -71,7 +71,7 @@ fn borrowed_verification_rejects_equal_mismatches_across_chunks() -> Result<(), 
                         let candidate = Fips202BitString::new(tag, valid)
                             .map_err(|_| KmacError::InvalidBitString)?;
                         assert_eq!(
-                            crate::$name::new_bits_conformance(key, empty)?
+                            crate::conformance::$name::new_bits_conformance(key, empty)?
                                 .verify_bits_conformance(empty, candidate)?
                                 .expose_public(),
                             !mismatch
@@ -205,7 +205,7 @@ fn scoped_all_bit_domains_match_existing_portable_api() -> Result<(), KmacError>
                         let key = Fips202BitString::new(&[0x13], 5).map_err(|_| KmacError::InvalidBitString)?;
                         let custom = Fips202BitString::new(&[0x05], 3).map_err(|_| KmacError::InvalidBitString)?;
                         let mut expected = std::vec![0; output_len];
-                        let _ = crate::$reference::new_bits_conformance(key, custom)?.finalize_tag_bits_conformance(input, &mut expected, output_valid)?;
+                        let _ = crate::conformance::$reference::new_bits_conformance(key, custom)?.finalize_tag_bits_conformance(input, &mut expected, output_valid)?;
                         let mut output = std::vec![0xa5; output_len];
                         let secret = workspace.with_bits_conformance(key, custom, |state| state.finalize_secret_bits_conformance(input, &mut output, output_valid))??;
                         assert_eq!(secret.expose(), expected); drop(secret);

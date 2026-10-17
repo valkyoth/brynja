@@ -131,6 +131,11 @@ def main() -> int:
     reject("fragment-boundary", Path("crates/brynja-mac-kmac/src/packer.rs"), "brynja_core::xor_secret_byte_bits(pending, byte, position, take, used)", "Ok::<(), brynja_core::SecretBitRangeError>(())")
     reject("fragment-shape", Path("crates/brynja-mac-kmac/src/packer.rs"), "if valid > 8 || self.used() >= 8", "if valid > 9 || self.used() > 8")
     reject("conformance-feature", Path("crates/brynja-mac-kmac/src/lib.rs"), '#[cfg(feature = "conformance-testing")]\npub fn kmac128_conformance', "pub fn kmac128_conformance")
+    reject("production-conformance-methods", Path("crates/brynja-mac-kmac/src/lib.rs"),
+           '(production; $($method:item)*) => {};',
+           '(production; $($method:item)*) => { $($method)* };')
+    reject("conformance-namespace", Path("crates/brynja-mac-kmac/src/lib.rs"),
+           'pub mod conformance {', 'mod conformance {')
     reject("conformance-compile-gate", Path("scripts/checks.sh"), "scripts/kmac/check-kmac-conformance-gate.sh", "true # removed conformance gate")
     reject("constant-time", Path("crates/brynja-mac-kmac/src/output.rs"), "ct_eq", "ordinary_eq")
     reject("borrowed-comparison", Path("crates/brynja-mac-kmac/src/output.rs"), "accumulate_secret_byte_difference", "ordinary_difference")

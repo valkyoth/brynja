@@ -10,7 +10,7 @@ use crate::{
 };
 
 macro_rules! fixed_kmac {
-    ($state:ident, $backend:ty, $rate:literal, $strength:literal, $label:literal) => {
+    ($profile:ident, $state:ident, $backend:ty, $rate:literal, $strength:literal, $label:literal) => {
         #[doc = concat!("Secret-bearing streaming ", $label, " state.")]
         ///
         /// The state is affine and cannot be cloned or formatted. Construction
@@ -35,6 +35,7 @@ macro_rules! fixed_kmac {
                 KmacCore::new_bits(key, customization, true).map(|core| Self { core })
             }
 
+            conformance_api! { $profile;
             /// Creates an exact-conformance state, including empty and short keys.
             #[cfg(feature = "conformance-testing")]
             pub fn new_conformance(key: &[u8], customization: &[u8]) -> Result<Self, KmacError> {
@@ -50,6 +51,7 @@ macro_rules! fixed_kmac {
                 customization: Fips202BitString<'_>,
             ) -> Result<Self, KmacError> {
                 KmacCore::new_bits(key, customization, false).map(|core| Self { core })
+            }
             }
 
             /// Returns whether the supplied key reaches the selected strength.
@@ -88,6 +90,7 @@ macro_rules! fixed_kmac {
                 self.finish_tag(None, output, true)
             }
 
+            conformance_api! { $profile;
             /// Produces a standards-valid public tag and reports its length policy.
             #[cfg(feature = "conformance-testing")]
             pub fn finalize_tag_conformance<'output>(
@@ -95,6 +98,7 @@ macro_rules! fixed_kmac {
                 output: &'output mut [u8],
             ) -> Result<KmacTag<'output>, KmacError> {
                 self.finish_tag(None, output, false)
+            }
             }
 
             /// Produces a full-strength tag after one final arbitrary-bit message.
@@ -107,6 +111,7 @@ macro_rules! fixed_kmac {
                 self.finish_tag_bits(final_message, output, valid_output_bits, true)
             }
 
+            conformance_api! { $profile;
             /// Produces an exact-conformance arbitrary-bit tag.
             #[cfg(feature = "conformance-testing")]
             pub fn finalize_tag_bits_conformance<'output>(
@@ -116,6 +121,7 @@ macro_rules! fixed_kmac {
                 valid_output_bits: u8,
             ) -> Result<KmacTag<'output>, KmacError> {
                 self.finish_tag_bits(final_message, output, valid_output_bits, false)
+            }
             }
 
             /// Produces full-strength typed secret output.
@@ -145,6 +151,7 @@ macro_rules! fixed_kmac {
                     .map_err(KmacError::from)
             }
 
+            conformance_api! { $profile;
             /// Produces exact-conformance typed secret arbitrary-bit output.
             #[cfg(feature = "conformance-testing")]
             pub fn finalize_secret_bits_conformance<'output>(
@@ -159,6 +166,7 @@ macro_rules! fixed_kmac {
                     .map(KmacSecretOutput::new)
                     .map_err(KmacError::from)
             }
+            }
 
             /// Verifies one full-strength byte tag in constant work for its public length.
             pub fn verify(mut self, candidate: &[u8]) -> Result<KmacVerification, KmacError> {
@@ -166,6 +174,7 @@ macro_rules! fixed_kmac {
                 self.verify_inner(None, candidate, true)
             }
 
+            conformance_api! { $profile;
             /// Verifies any standards-valid byte tag, including short conformance values.
             #[cfg(feature = "conformance-testing")]
             pub fn verify_conformance(
@@ -174,6 +183,7 @@ macro_rules! fixed_kmac {
             ) -> Result<KmacVerification, KmacError> {
                 let candidate = byte_string(candidate)?;
                 self.verify_inner(None, candidate, false)
+            }
             }
 
             /// Verifies a full-strength arbitrary-bit tag after a final bit message.
@@ -185,6 +195,7 @@ macro_rules! fixed_kmac {
                 self.verify_inner(Some(final_message), candidate, true)
             }
 
+            conformance_api! { $profile;
             /// Verifies an exact-conformance arbitrary-bit tag.
             #[cfg(feature = "conformance-testing")]
             pub fn verify_bits_conformance(
@@ -193,6 +204,7 @@ macro_rules! fixed_kmac {
                 candidate: Fips202BitString<'_>,
             ) -> Result<KmacVerification, KmacError> {
                 self.verify_inner(Some(final_message), candidate, false)
+            }
             }
 
             /// Consumes and clears this state without producing output.
@@ -245,8 +257,26 @@ macro_rules! fixed_kmac {
     };
 }
 
-fixed_kmac!(Kmac128, HardenedCshake128, 168, 128, "KMAC128");
-fixed_kmac!(Kmac256, HardenedCshake256, 136, 256, "KMAC256");
+fixed_kmac!(production, Kmac128, HardenedCshake128, 168, 128, "KMAC128");
+fixed_kmac!(production, Kmac256, HardenedCshake256, 136, 256, "KMAC256");
+#[cfg(feature = "conformance-testing")]
+fixed_kmac!(
+    conformance,
+    ConformanceKmac128,
+    HardenedCshake128,
+    168,
+    128,
+    "test-only KMAC128"
+);
+#[cfg(feature = "conformance-testing")]
+fixed_kmac!(
+    conformance,
+    ConformanceKmac256,
+    HardenedCshake256,
+    136,
+    256,
+    "test-only KMAC256"
+);
 
 fn byte_string(input: &[u8]) -> Result<Fips202BitString<'_>, KmacError> {
     let valid = if input.is_empty() { 0 } else { 8 };

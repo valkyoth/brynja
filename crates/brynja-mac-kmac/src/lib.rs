@@ -3,11 +3,18 @@
 //! All keyed state is built directly over Brynja's hardened cSHAKE owner. The
 //! crate is allocation-free, `no_std`, first-party Rust, and exposes separate
 //! fixed-output MAC and extendable-output PRF types. The opt-in
-//! `conformance-testing` feature exposes constructors covering every
-//! representable standards-valid key length, while default production
-//! constructors enforce the selected 128- or 256-bit key strength.
+//! `conformance-testing` feature exposes distinct portable test types covering
+//! every representable standards-valid key length. It never adds weak-parameter
+//! methods to the portable production types, which enforce the selected strength.
 
 #![no_std]
+
+// Emit test-only methods only on distinct concrete types. Cargo feature
+// unification cannot change the method set of a production instantiation.
+macro_rules! conformance_api {
+    (production; $($method:item)*) => {};
+    (conformance; $($method:item)*) => { $($method)* };
+}
 
 mod backend;
 mod core_state;
@@ -33,6 +40,20 @@ pub use policy::{KmacKeyPolicy, KmacServiceStatus, KmacTagPolicy};
 pub use setup::{Kmac128Setup, Kmac256Setup};
 pub use xof::{KmacXof128, KmacXof128Reader, KmacXof256, KmacXof256Reader};
 
+/// Exact-parameter portable test types; never reexported by production facades.
+///
+/// These affine owners share the production core and cleanup implementation,
+/// but cannot be converted into production KMAC states. Enabling this module
+/// does not add conformance methods to the crate-root production types.
+#[cfg(feature = "conformance-testing")]
+pub mod conformance {
+    pub use crate::fixed::{ConformanceKmac128 as Kmac128, ConformanceKmac256 as Kmac256};
+    pub use crate::xof::{
+        ConformanceKmacXof128 as KmacXof128, ConformanceKmacXof128Reader as KmacXof128Reader,
+        ConformanceKmacXof256 as KmacXof256, ConformanceKmacXof256Reader as KmacXof256Reader,
+    };
+}
+
 /// Whether all four SP 800-185 KMAC identities are implemented.
 pub const KMAC_IMPLEMENTED: bool = true;
 
@@ -56,7 +77,7 @@ pub fn kmac128_conformance<'output>(
     customization: &[u8],
     output: &'output mut [u8],
 ) -> Result<KmacTag<'output>, KmacError> {
-    let mut state = Kmac128::new_conformance(key, customization)?;
+    let mut state = conformance::Kmac128::new_conformance(key, customization)?;
     state.update(message)?;
     state.finalize_tag_conformance(output)
 }
@@ -81,7 +102,7 @@ pub fn kmac256_conformance<'output>(
     customization: &[u8],
     output: &'output mut [u8],
 ) -> Result<KmacTag<'output>, KmacError> {
-    let mut state = Kmac256::new_conformance(key, customization)?;
+    let mut state = conformance::Kmac256::new_conformance(key, customization)?;
     state.update(message)?;
     state.finalize_tag_conformance(output)
 }
@@ -106,7 +127,7 @@ pub fn kmac128_bits_conformance<'output>(
     output: &'output mut [u8],
     valid_output_bits: u8,
 ) -> Result<KmacTag<'output>, KmacError> {
-    Kmac128::new_bits_conformance(key, customization)?.finalize_tag_bits_conformance(
+    conformance::Kmac128::new_bits_conformance(key, customization)?.finalize_tag_bits_conformance(
         message,
         output,
         valid_output_bits,
@@ -133,7 +154,7 @@ pub fn kmac256_bits_conformance<'output>(
     output: &'output mut [u8],
     valid_output_bits: u8,
 ) -> Result<KmacTag<'output>, KmacError> {
-    Kmac256::new_bits_conformance(key, customization)?.finalize_tag_bits_conformance(
+    conformance::Kmac256::new_bits_conformance(key, customization)?.finalize_tag_bits_conformance(
         message,
         output,
         valid_output_bits,
@@ -172,7 +193,7 @@ pub fn kmacxof128_secret_conformance<'output>(
     customization: &[u8],
     output: &'output mut [u8],
 ) -> Result<KmacSecretOutput<'output>, KmacError> {
-    let mut state = KmacXof128::new_conformance(key, customization)?;
+    let mut state = conformance::KmacXof128::new_conformance(key, customization)?;
     state.update(message)?;
     state.finalize_xof_conformance()?.squeeze_secret(output)
 }
@@ -185,7 +206,7 @@ pub fn kmacxof256_secret_conformance<'output>(
     customization: &[u8],
     output: &'output mut [u8],
 ) -> Result<KmacSecretOutput<'output>, KmacError> {
-    let mut state = KmacXof256::new_conformance(key, customization)?;
+    let mut state = conformance::KmacXof256::new_conformance(key, customization)?;
     state.update(message)?;
     state.finalize_xof_conformance()?.squeeze_secret(output)
 }
@@ -225,7 +246,7 @@ pub fn kmacxof128_public_conformance(
     output: &mut [u8],
     authority: KmacPublicDeclassification,
 ) -> Result<(), KmacError> {
-    let mut state = KmacXof128::new_conformance(key, customization)?;
+    let mut state = conformance::KmacXof128::new_conformance(key, customization)?;
     state.update(message)?;
     state
         .finalize_xof_conformance()?
@@ -241,7 +262,7 @@ pub fn kmacxof256_public_conformance(
     output: &mut [u8],
     authority: KmacPublicDeclassification,
 ) -> Result<(), KmacError> {
-    let mut state = KmacXof256::new_conformance(key, customization)?;
+    let mut state = conformance::KmacXof256::new_conformance(key, customization)?;
     state.update(message)?;
     state
         .finalize_xof_conformance()?

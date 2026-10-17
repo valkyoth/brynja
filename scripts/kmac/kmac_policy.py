@@ -284,11 +284,16 @@ def validate(root: Path) -> None:
         "secret_output_is_cleared_when_ownership_ends",
     ):
         require(api, token, "KMAC adversarial tests")
-    if loaded[CRATE / "src/lib.rs"].count('#[cfg(feature = "conformance-testing")]') != 8:
+    require(library, '(production; $($method:item)*) => {};', 'production method isolation')
+    require(library, 'pub mod conformance {', 'distinct portable conformance namespace')
+    for name in ('fixed.rs', 'xof.rs'):
+        require(loaded[CRATE / 'src' / name], 'conformance_api! { $profile;',
+                'portable conformance method separation')
+    if loaded[CRATE / "src/lib.rs"].count('#[cfg(feature = "conformance-testing")]') != 9:
         fail("KMAC one-shot conformance feature gate changed")
-    if loaded[CRATE / "src/fixed.rs"].count('#[cfg(feature = "conformance-testing")]') != 7:
+    if loaded[CRATE / "src/fixed.rs"].count('#[cfg(feature = "conformance-testing")]') != 9:
         fail("fixed KMAC conformance feature gate changed")
-    if loaded[CRATE / "src/xof.rs"].count('#[cfg(feature = "conformance-testing")]') != 4:
+    if loaded[CRATE / "src/xof.rs"].count('#[cfg(feature = "conformance-testing")]') != 8:
         fail("KMACXOF conformance feature gate changed")
     if scoped_fixed.count('#[cfg(feature = "conformance-testing")]') != 8:
         fail("scoped fixed KMAC conformance feature gate changed")

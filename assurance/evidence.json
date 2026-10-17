@@ -52,7 +52,7 @@
     "crates/brynja-tls13-handshake/Cargo.toml": "e00e85cbb9360031438af6ea04c48cf2896b86d75a804f456cf9bf4abbe5b4eb",
     "crates/brynja-tls13/Cargo.toml": "26bd902b572afcec1592f397d5a84e764b03161cea051b8047dfcbb1a3359c71",
     "crates/brynja-xtask/Cargo.toml": "d47051404a9ebc076f95068c90c6264c0f57ef9165b92c7dc0fe38decb9ed1ad",
-    "crates/brynja/Cargo.toml": "706b47c4eb1c152a701a90bfb1a4c38213cd46058a8c07b392bbb1ec96c890db",
+    "crates/brynja/Cargo.toml": "8edff29366004e9b3076b756b6c2162b1f591ea938a93b7dfca135b61bd3d2a4",
     "docs/KANI.md": "bdb44bf29a0c7989cec32dae5b924fd8ede82a17915b6e4377e907af7077d406",
     "docs/focused-assurance.md": "dd390d241bf504a4588d2ded381955e29cfe10a018d4be55425fbd57a9806d1c",
     "docs/unsafe-policy.md": "7309a3f3208955e5f68d29b5b9a002694abffe576f0fc78c31a7da5c0e3f5021",

@@ -1,9 +1,12 @@
 # Frozen from signed v0.24.16: source/input, not facade-version metadata.
+# v0.24.53 migration: kmac.rs explicitly selects the distinct conformance
+# type; vectors, parameter domains and assertions are unchanged. Its current
+# source hash below is not the historical v0.24.16 source hash.
 baseline = "v0.24.16"
 [files]
 "assurance/sp800185-public-api/src/cshake.rs" = "ea7e29ff15aa625055111042925f186da084cbec92204c7ccdfdd2a95d8985af"
 "assurance/sp800185-public-api/src/facades.rs" = "1b90a3e96bdc3675205bc0ef7f0d861487cbc23d34b81997646440db42490497"
-"assurance/sp800185-public-api/src/kmac.rs" = "11fbf69a842982289e9d8c77acdd32f054f25144760f3f49ac0b4f427403d154"
+"assurance/sp800185-public-api/src/kmac.rs" = "df07cf17cf6edfcbc44c3c5da06ec30e09c2827f5763280e05ca792fb7e0bae6"
 "assurance/sp800185-public-api/src/lib.rs" = "7215558709a8cc4870c0d2f491ccdcf3b3adbd862fb8bb1187d8a336eeaab3b6"
 "assurance/sp800185-public-api/src/main.rs" = "ca403f1456d94b207ed782baee4b84e579707c552376be1c2daed1a3a5b1cf8c"
 "assurance/sp800185-public-api/src/parallelhash.rs" = "ee69749b1bdb471f8fbad3bf3f69a27c555e9adaa6b972436ea239a74eef7fea"

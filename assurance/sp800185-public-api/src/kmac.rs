@@ -85,7 +85,7 @@ fn streaming_bits_and_conformance() -> Result<(), AcceptanceError> {
     if Kmac128::new(b"", b"").is_ok() || KmacXof256::new(b"", b"").is_ok() {
         return Err(AcceptanceError::Kmac);
     }
-    let mut conformance = Kmac128::new_conformance(b"", b"")
+    let mut conformance = brynja_mac_kmac::conformance::Kmac128::new_conformance(b"", b"")
         .map_err(|_| AcceptanceError::Kmac)?;
     conformance.update(b"").map_err(|_| AcceptanceError::Kmac)?;
     let mut one_byte = [0_u8; 1];

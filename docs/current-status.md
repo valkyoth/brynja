@@ -10,8 +10,9 @@ profiles occupy v0.24.50–v0.24.51. Operational RISC-V acceleration is postpone
 until qualifying native hardware is available; portable support and existing
 candidate tests remain unchanged. The four remaining backfill stops occupy
 v0.24.52–v0.24.55, with HMAC still at v0.25.0. The v0.24.52 facade/package
-candidate is implemented and undergoing focused review; release-gate policy
-is unchanged.
+milestone is tagged with its recorded owner-approved deferrals. Development
+of v0.24.53 consumer acceptance and leaf conformance separation is in progress;
+release-gate policy is unchanged.
 
 The [public-operation roadmap audit](ROADMAP_API_COMPLETENESS_AUDIT.md) adds
 explicit DER, format, key-role and prerequisite closure without changing any
@@ -25,7 +26,7 @@ Current generated planning coverage is 2158 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.51 tagged. The v0.24.48
+Status: v0.20.0 published; milestones through v0.24.52 tagged. The v0.24.48
 [hardened multibuffer ownership milestone](hardened-multibuffer-owners.md),
 including scheduled, streaming and threaded ParallelHash integration, passed its
 release checks and GitHub. The v0.24.49 [dedicated x86 SHA-512 work](x86-sha512-execution.md)

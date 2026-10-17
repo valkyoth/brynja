@@ -4992,9 +4992,12 @@ the same corpora, observable cleanup/reuse/quarantine, authority/scope negatives
 and compiled output/guard/fallback mutations. Separate native GNU/Linux strict
 legacy consumers now cover protected scalar/compiled public APIs with exact
 archive graphs, independent bit corpora, lifetime/reuse checks and compiled
-mutations. Modern strict, macOS resident and Windows enclave consumer
-reconciliation remains separate and pending; public tests do not prove private
-memory/register erasure.
+mutations. Separate Apple Silicon legacy resident consumers reuse the public
+corpora/lifetime tests with their own exact graphs, result markers and resident
+source mutations, retaining the no-dump-exclusion limit. Compiled availability
+is checked against the selected compiler's actual target features. Modern strict,
+modern macOS resident and Windows enclave consumer reconciliation remains
+separate and pending; public tests do not prove private memory/register erasure.
 Wider consumer acceptance and independent retest remain pending.
 
 Plan scope: Freeze runnable package-external acceptance for every operational ordinary/hardened, byte/bit, streaming, XOF and batch route across SHA-2, SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, ParallelHash, SHA-1 and MD5 before the final native sweep.

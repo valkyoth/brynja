@@ -9,8 +9,8 @@ import legacy_strict_package as strict
 from test_facade_keccak import rejected
 
 
-def document(family):
-    features = strict.expected_features(family)
+def document(family, resident=False):
+    features = strict.expected_features(family, resident)
     base = Path('/strict-legacy-test')
     roots = {name: base / name for name in features if name != 'facade-consumer'}
     consumer = base / 'consumer'
@@ -63,11 +63,11 @@ def runtime(family):
         for native in (False, True):
             compiled = native or (family == 'md5' and arch == 'aarch64')
             output = (marker if compiled else '') + summary
-            strict.runtime_check(SimpleNamespace(returncode=0, stdout=output), family, native, arch)
+            strict.runtime_check(SimpleNamespace(returncode=0, stdout=output), family, compiled)
             for bad in ('', output.replace('4 passed', '0 passed'), output.replace('0 ignored', '1 ignored'),
                         output + marker, output.replace('0 filtered out', '1 filtered out'),
                         ('' if compiled else marker) + summary, output + 'STRICT_LEGACY_NATIVE: bogus\n'):
-                rejected(lambda: strict.runtime_check(SimpleNamespace(returncode=0, stdout=bad), family, native, arch))
+                rejected(lambda: strict.runtime_check(SimpleNamespace(returncode=0, stdout=bad), family, compiled))
 
 
 def restoration():

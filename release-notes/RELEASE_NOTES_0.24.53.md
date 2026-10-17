@@ -292,6 +292,19 @@ This is public functional acceptance, not private-memory erasure proof, a new
 native qualification or Windows/macOS coverage. Original protected-profile
 checks, production code, historical captures and release gates remain unchanged.
 
+## Apple Silicon resident legacy consumers
+
+A separate native Mac command now tests the public resident SHA-1/MD5 APIs
+against the same independent bit corpus and lifetime/ownership cases. It requires
+the resident-only graph and markers, mutates only extracted resident sources and
+rejects cross-profile substitution. Linux strict dependencies and guarantees do
+not transfer to this profile; core-dump exclusion is explicitly not claimed.
+
+Compiled route expectations now use the selected compiler's effective features,
+not an OS-name assumption. This fixes a harness mismatch exposed by Apple's
+baseline SHA support without changing the library or treating skipped execution
+as a pass. Both generic and explicitly accelerated builds remain checked.
+
 ## Work remaining before retest and acceptance freeze
 
 - Obtain independent retest of the complete conformance separation before

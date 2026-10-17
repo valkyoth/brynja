@@ -20,6 +20,7 @@ import test_facade_scoped_sha2
 import test_legacy_execution_package
 import test_legacy_hardened_package
 import test_legacy_strict_package
+import test_legacy_resident_package
 
 spec = importlib.util.spec_from_file_location(
     'facade_package', Path(__file__).with_name('check-facade-package.py'))
@@ -167,6 +168,7 @@ def main():
         test_legacy_execution_package.check(acceptance)
         test_legacy_hardened_package.check(acceptance)
         test_legacy_strict_package.check(acceptance)
+        test_legacy_resident_package.check(acceptance)
         ambient_config_regressions()
         archive_regressions()
         baseline = document({'facade-consumer': [], 'brynja': [], 'brynja-crypto': []})

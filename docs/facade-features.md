@@ -619,3 +619,37 @@ These are public functional and lifetime checks. They cannot inspect a dropped
 protected mapping, prove private stack/register erasure or replace the separate
 protected-memory, compiler, native and independent-review obligations. No Windows
 enclave, macOS resident or strict modern-facade qualification is inferred.
+
+## Apple Silicon resident legacy consumer acceptance
+
+The separately selected macOS resident APIs use their own command and exact
+dependency graph; they do not acquire the Linux strict contract:
+
+```sh
+python3 scripts/repository/check-legacy-resident-package.py --toolchain 1.99.1 --native-simd
+```
+
+This requires native Apple Silicon macOS, not an Intel Mac or a cross-compiled
+Linux run. No administrator access, system configuration change or dump capture
+is used. The profile retains its existing **no core-dump exclusion** limitation.
+Only the selected legacy leaf/host pair, core and hash-core may be enabled;
+Linux protected-memory support and unrelated modern algorithms must remain out
+of this graph. Strict/resident graphs and result markers cannot substitute for
+one another.
+
+The external consumers reuse the independent corpus and public lifetime tests
+described above: 169 bit messages per scalar/required SHA-1 route, 712 MD5 SIMD
+lanes with exact work counts, 22 SHA-1 and 28 MD5 compiled negatives, and compiled
+absorption/output/width/quarantine mutations. Tests select the public resident
+namespace and mutate only the extracted resident implementation, never the
+Linux strict source or the working checkout.
+
+For both protected consumer commands, expected compiled availability comes from
+the selected compiler's effective target-feature configuration, including the
+explicit flags. A build without additional flags need not be scalar: Apple
+targets can already enable SHA-2/NEON. Available routes must execute their exact
+corpus; unavailable routes must return the specific admission error. The native
+option still probes actual CPU support and requires compiled acceleration.
+
+These checks establish public functional behavior, not private memory/register
+erasure, dump exclusion, independent review or fresh release qualification.

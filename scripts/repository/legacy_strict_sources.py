@@ -162,13 +162,15 @@ fn batch_limits()->api::batch::Limits {api::batch::Limits {stack_bytes:262144,
 '''
 
 
-def source(family):
+def source(family, resident=False):
     text = COMMON + (SHA1 if family == 'sha1' else MD5)
     for before, after in {'FAMILY': family, 'COLUMN': '2' if family == 'sha1' else '3',
                           'WIDTH': '20' if family == 'sha1' else '16',
                           'ABC': '"a9993e364706816aba3e25717850c26c9cd0d89d"' if family == 'sha1' else
                           '"900150983cd24fb0d6963f7d28e17f72"'}.items():
         text = text.replace(before, after)
+    if resident:
+        text = text.replace('strict_execution', 'macos_resident').replace('STRICT_LEGACY_NATIVE:', 'RESIDENT_LEGACY_NATIVE:')
     return text
 
 
@@ -177,8 +179,9 @@ def owners(family):
         'Session', "Digest<'static>", 'batch::Session', "batch::Output<'static>")
 
 
-def negatives(family):
-    prefix = f'use brynja_legacy_{family}_std::strict_execution as api;\n'
+def negatives(family, resident=False):
+    module = 'macos_resident' if resident else 'strict_execution'
+    prefix = f'use brynja_legacy_{family}_std::{module} as api;\n'
     cases = [
         ('fn escape(s:&mut api::Session)->api::Digest<\'static>{s.hash(b"abc").unwrap()}', None),
         ('fn overlap(s:&mut api::Session){let a=s.hash(b"abc").unwrap();let _=s.hash(b"x");let _=a.expose();}', 'E0499'),
@@ -200,7 +203,7 @@ def negatives(family):
     return [(prefix + text, code) for text, code in cases]
 
 
-def mutations(family, native):
+def mutations(family, native, resident=False):
     cases = [
         ('worker.rs', 'state.update(part)', 'state.update(&[])', 'scalar_corpus'),
         ('mod.rs', 'destination.copy_from_slice(self.output.as_bytes());', 'let _ = destination;', 'scalar_corpus'),
@@ -215,4 +218,7 @@ def mutations(family, native):
                   ('batch/mod.rs', 'destination.copy_from_slice(self.expose());', 'let _ = destination;', 'compiled_admission_and_corpus'),
                   ('batch/worker.rs', 'brynja_core::copy_secret_region(destination, secret.expose())',
                    'brynja_core::copy_secret_region(destination, &[0;128])', 'compiled_admission_and_corpus')]
+    if resident:
+        return [('macos_resident/' + name, before.replace('.as_bytes()', '.bytes()'), after, test)
+                for name, before, after, test in cases]
     return [('strict_execution/' + name, before, after, test) for name, before, after, test in cases]

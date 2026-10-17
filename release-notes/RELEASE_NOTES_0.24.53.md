@@ -233,6 +233,26 @@ checks also reject CPU no-ops and portable substitution. Private-memory and
 register-cleanup qualification remain separate; no production implementation,
 dependency, gate or historical evidence was changed.
 
+## Isolated ordinary legacy consumers
+
+Separate packaged SHA-1 and MD5 consumers retain legacy-only opt-in graphs;
+neither family is exported from the modern facades. Their archive-bound graphs
+reject unexpected feature activation, source paths and external dependencies.
+Fresh private Cargo environments prevent ambient configuration from selecting
+workspace sources instead of the extracted packages.
+
+Debug/release acceptance reuses existing public tests and independent oracles:
+529 SHA-1 NIST vectors, 1,135 SHA-1 bit messages, 2,048 MD5 mask/tail cases and
+384 independent MD5 batches. Exact test populations, required-route admission,
+hosted/compiled distinctions, revocation, transactional output and work counts
+are enforced. The optional native campaign requires the actual CPU bundle.
+
+The consumers reject 18 SHA-1 and 13 MD5 ownership/authority/classification
+misuses. Compiled mutations cover revocation, finalization, missing/partial
+output, incorrect work counts, native no-op and portable substitution. Existing
+legacy package/native helpers remain unchanged; hardened and protected legacy
+reconciliation is still pending. No production implementation or gate changes.
+
 ## Work remaining before retest and acceptance freeze
 
 - Obtain independent retest of the complete conformance separation before

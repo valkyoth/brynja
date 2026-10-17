@@ -495,3 +495,44 @@ restore on all exits and pristine corpus/lifecycle checks repeat afterward.
 Hidden leaf-only portable in-place APIs are not exported by these facades and
 are not claimed here. This adds public functional acceptance, not native
 release collection, independent instruction counts or new qualification.
+
+## Isolated ordinary legacy consumer acceptance
+
+SHA-1 and MD5 stay outside both modern facades. The packaged acceptance command
+also runs separate consumers of `brynja-legacy-sha1`/`brynja-legacy-sha1-std` and
+`brynja-legacy-md5`/`brynja-legacy-md5-std`, each with ordinary execution enabled
+explicitly. Their enabled graphs contain only the selected legacy pair, core
+and hash-core; optional manifest edges are resolved using real archives but
+must not activate modern cryptography, protected profiles or the other legacy
+family. Resolved identities and source targets must match the extracted archives.
+
+To run just this slice locally:
+
+```sh
+python3 scripts/repository/check-legacy-execution-package.py --toolchain 1.99.1
+python3 scripts/repository/check-legacy-execution-package.py --toolchain 1.99.1 --native-simd
+```
+
+Both commands use a private config-free Cargo environment. The native opt-in
+requires a detected SHA-NI/AVX2 or Arm SHA-1/NEON bundle before compiling for it;
+missing support fails rather than passing a skipped native campaign. This is
+ordinary public-data acceptance, not permission to use these collision-broken
+algorithms for new security protocols or confidential data.
+
+Debug/release checks reuse the archived public integration tests, the SHA-1
+529-vector NIST population and 1,135-message independent bit oracle, and MD5's
+2,048 mask/tail cases plus 384 independent eight-lane batches. The required MD5
+oracle subset contains 128 eligible batches on the tested AVX2 lane. Portable,
+preferred and required selection, hosted availability, streaming, revocation,
+transactional output and exact SIMD/scalar work counts are checked. SHA-1's
+x86 hosted route remains unavailable even in a SHA-NI-specialized binary;
+MD5 can use its compiled AVX2 bundle through the hosted adapter.
+
+Compile-fail probes reject 18 SHA-1 and 13 MD5 ownership, authority-entry and
+public-classification misuses. Two SHA-1 revocation/finalization mutations and
+four MD5 output/report mutations run in both profiles. Native runs additionally
+reject SHA-1 portable substitution and MD5 vector omission/scalar substitution.
+Each mutant must compile and fail a runtime assertion; sources restore on all
+exits and pristine public tests repeat. These checks do not claim hardened,
+strict or resident-owner coverage; those existing suites remain separate and
+their v0.24.53 reconciliation is pending.

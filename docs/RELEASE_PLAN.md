@@ -4984,6 +4984,10 @@ scoped fixed/XOF APIs against recorded NIST/independent vectors, with explicit
 required-route admission, lifecycle/property checks, ownership negatives and
 compiled domain/permutation/output/scratch/masking mutations. Unavailable
 routes are compiled and tested for rejection, not counted as kernel execution.
+Isolated ordinary SHA-1 and MD5 consumers now reuse their archived public tests
+and independent corpora with exact enabled graphs, compiler endpoints, explicit
+static/hosted selection, ownership negatives and compiled behavioral mutations.
+Legacy hardened/protected consumer reconciliation remains separate and pending.
 Wider consumer acceptance and independent retest remain pending.
 
 Plan scope: Freeze runnable package-external acceptance for every operational ordinary/hardened, byte/bit, streaming, XOF and batch route across SHA-2, SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, ParallelHash, SHA-1 and MD5 before the final native sweep.

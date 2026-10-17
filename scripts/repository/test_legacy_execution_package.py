@@ -91,7 +91,7 @@ def restoration():
                             raise ValueError('synthetic build failure')
                         if '--no-run' in command:
                             return None
-                        return SimpleNamespace(returncode=0 if failure == 'survived' else 101, stdout='unrelated failure')
+                        return SimpleNamespace(returncode=0 if failure == 'survived' else 101, stdout='unrelated failure', stderr='')
 
                     with patch.object(legacy.cases, 'mutations', return_value=[(filename, before, after)]):
                         rejected(lambda: legacy.mutants(SimpleNamespace(run=run), root,

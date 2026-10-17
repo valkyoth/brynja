@@ -250,8 +250,29 @@ are enforced. The optional native campaign requires the actual CPU bundle.
 The consumers reject 18 SHA-1 and 13 MD5 ownership/authority/classification
 misuses. Compiled mutations cover revocation, finalization, missing/partial
 output, incorrect work counts, native no-op and portable substitution. Existing
-legacy package/native helpers remain unchanged; hardened and protected legacy
-reconciliation is still pending. No production implementation or gate changes.
+legacy package/native helpers remain unchanged. Hardened consumers are covered
+below; protected-platform reconciliation is still pending. No production
+implementation or gate changes.
+
+## Isolated hardened legacy consumers
+
+Separate SHA-1 and MD5 hardened package consumers now reuse their public
+owned/scoped integration tests and independent corpora. Exact dependency and
+feature graphs prevent ordinary/evidence/protected profile substitution.
+Portable, compiled and hosted selection remain distinct, and native opt-in
+requires detected SHA-NI/AVX2 or the corresponding Arm feature bundle.
+
+Debug/release checks exercise secret/public outputs, bit/byte and streaming
+behavior, exact work, output Drop, cancellation, forgotten handles, reuse,
+recoverable unwind and quarantine. Scoped failure cases cover wrong-size SHA-1
+output and every insufficient MD5 compression budget, checking complete secret
+clearing, unchanged public output and healthy executor reuse after rejection.
+
+The profiles reject 34 SHA-1 and 31 MD5 compiled ownership/scope/classification
+misuses. Seven SHA-1 and eight MD5 generic mutations, plus one SHA-1 and two MD5
+native mutations, verify observable output, guard, quarantine and route checks.
+Private-memory/register erasure and protected-platform qualification remain
+separate; no production, dependency, gate or historical-capture change.
 
 ## Work remaining before retest and acceptance freeze
 

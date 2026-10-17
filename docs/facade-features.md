@@ -509,8 +509,8 @@ family. Resolved identities and source targets must match the extracted archives
 To run just this slice locally:
 
 ```sh
-python3 scripts/repository/check-legacy-execution-package.py --toolchain 1.99.1
-python3 scripts/repository/check-legacy-execution-package.py --toolchain 1.99.1 --native-simd
+python3 scripts/repository/check-legacy-execution-package.py --profile ordinary --toolchain 1.99.1
+python3 scripts/repository/check-legacy-execution-package.py --profile ordinary --toolchain 1.99.1 --native-simd
 ```
 
 Both commands use a private config-free Cargo environment. The native opt-in
@@ -534,5 +534,44 @@ four MD5 output/report mutations run in both profiles. Native runs additionally
 reject SHA-1 portable substitution and MD5 vector omission/scalar substitution.
 Each mutant must compile and fail a runtime assertion; sources restore on all
 exits and pristine public tests repeat. These checks do not claim hardened,
-strict or resident-owner coverage; those existing suites remain separate and
-their v0.24.53 reconciliation is pending.
+strict or resident-owner coverage; those existing suites remain separate.
+
+## Isolated hardened legacy consumer acceptance
+
+The same archive-bound harness separately enables `hardened-execution` and
+`runtime-hardened-execution` for each legacy pair. It rejects unexpected ordinary,
+evidence, strict or resident feature unification. The explicit ordinary leaf edge
+remains enabled solely to compile the ordinary-to-hardened authority rejection;
+it is not accepted as a substitute for hardened execution.
+
+```sh
+python3 scripts/repository/check-legacy-execution-package.py --profile hardened --toolchain 1.99.1 --native-simd
+```
+
+Omit `--native-simd` for a generic build. The default `--profile all` runs both
+ordinary and hardened consumers. The facade acceptance command includes both.
+Each profile uses separate consumers and build directories, and neither legacy
+family becomes reachable through a modern facade.
+
+Archived public hardened tests and the existing independent oracles exercise
+owned and scoped secret/public outputs: 529 NIST SHA-1 vectors, 1,135 SHA-1 bit
+messages, 2,048 MD5 mask/tail cases and the MD5 384-batch oracle. Secret output
+owners clear their complete destinations on Drop. Scope tests additionally check
+cancellation, dropped/forgotten handles, subsequent known-result reuse, unwind
+quarantine and callback rejection. Wrong-sized scoped SHA-1 destinations and
+all insufficient MD5 compression budgets check secret clearing versus public
+preservation. Expected request rejection must retain executor health.
+
+The hardened profiles reject 34 SHA-1 and 31 MD5 trait, scope/lifetime,
+declassification, ordinary-authority and metadata-query misuses. Seven SHA-1
+and eight MD5 compiled mutations cover revocation, secret/public output,
+scoped update/commit, premature quarantine and output-guard ordering. Native
+runs additionally reject SHA-1 portable substitution, MD5 scalar substitution
+and omitted SIMD compression. All run in debug/release, compile before their
+expected runtime assertion failure, restore on all exits and repeat pristine
+public tests. A scoped mutation targets its lifecycle test directly so an
+earlier error-returning vector test cannot mask the intended assertion.
+
+These are consumer-observable functional checks. Private storage, register,
+spill and platform protection qualification remain separate obligations; no
+strict/resident deployment or new native release qualification is implied.

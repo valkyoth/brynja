@@ -4987,7 +4987,10 @@ routes are compiled and tested for rejection, not counted as kernel execution.
 Isolated ordinary SHA-1 and MD5 consumers now reuse their archived public tests
 and independent corpora with exact enabled graphs, compiler endpoints, explicit
 static/hosted selection, ownership negatives and compiled behavioral mutations.
-Legacy hardened/protected consumer reconciliation remains separate and pending.
+Separate hardened SHA-1/MD5 consumers now cover owned/scoped outputs against
+the same corpora, observable cleanup/reuse/quarantine, authority/scope negatives
+and compiled output/guard/fallback mutations. Protected-platform consumer
+reconciliation remains separate and pending.
 Wider consumer acceptance and independent retest remain pending.
 
 Plan scope: Freeze runnable package-external acceptance for every operational ordinary/hardened, byte/bit, streaming, XOF and batch route across SHA-2, SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, ParallelHash, SHA-1 and MD5 before the final native sweep.

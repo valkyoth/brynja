@@ -28,7 +28,7 @@ def load(relative):
     return module
 
 
-def graph(api, document, roots, consumer, family):
+def graph(api, document, roots, consumer, family, hardened=False):
     with patch.object(api.packaging, 'PACKAGING_PACKAGES', (*api.packaging.PACKAGING_PACKAGES, *ARCHIVES)):
         api.archive_graph(document, roots, consumer)
     leaf = 'brynja-legacy-' + family
@@ -37,9 +37,15 @@ def graph(api, document, roots, consumer, family):
     require(set(features) == {'facade-consumer', 'brynja-core', 'brynja-hash-core', leaf, leaf + '-std'},
             'ordinary legacy enabled dependency closure')
     expected_leaf = {'default', 'cpu', 'execution'} | ({'batch'} if family == 'md5' else set())
-    require(features[leaf] == expected_leaf and features[leaf + '-std'] == {'runtime-execution'},
-            'ordinary legacy feature closure')
-    require(features['facade-consumer'] == {'execution', 'runtime-execution'} and
+    host_features = {'runtime-execution'}
+    consumer_features = {'execution', 'runtime-execution'}
+    if hardened:
+        expected_leaf.add('hardened-execution')
+        host_features = {'runtime-hardened-execution'} | ({'runtime-execution'} if family == 'sha1' else set())
+        consumer_features = {'hardened-execution', 'runtime-hardened-execution'}
+    require(features[leaf] == expected_leaf and features[leaf + '-std'] == host_features,
+            'legacy feature closure')
+    require(features['facade-consumer'] == consumer_features and
             features['brynja-core'] == {'default'} and features['brynja-hash-core'] == {'default'},
             'hidden feature unification: ' + repr(features))
 
@@ -84,10 +90,14 @@ def native_flags(output, family):
             ('aarch64', 'sha1'): '+neon,+sha2', ('aarch64', 'md5'): '+neon'}[arch, family]
 
 
-def campaign(api, consumer, cargo, env, family, native):
+def test_counts(family, hardened=False):
+    return [('execution', 4 if family == 'sha1' else 5 if hardened else 3), ('hosted', 1), ('selection', 1),
+            *([('oracle', 1)] if family == 'sha1' else []), *([('scope', 1)] if hardened else [])]
+
+
+def campaign(api, consumer, cargo, env, family, native, hardened=False):
     for profile in ([], ['--release']):
-        for test, count in [('execution', 4 if family == 'sha1' else 3), ('hosted', 1), ('selection', 1),
-                            *([('oracle', 1)] if family == 'sha1' else [])]:
+        for test, count in test_counts(family, hardened):
             result = api.run(cargo + ['test', '--offline', '--all-features', *profile, '--test', test, '--', '--nocapture'], consumer, env)
             population(result, count)
             if test == 'selection' and native:
@@ -108,7 +118,7 @@ def campaign(api, consumer, cargo, env, family, native):
             require(widths['portable'] == 0 and (not native or widths['prefer'] > 0), 'MD5 native route erased')
             if widths['prefer']:
                 oracle.campaign(binary, 'require', widths['prefer'])
-        print(f'PASS: isolated ordinary {family}: profile={"release" if profile else "debug"}; native_requested={native}', flush=True)
+        print(f'PASS: isolated {"hardened" if hardened else "ordinary"} {family}: profile={"release" if profile else "debug"}; native_requested={native}', flush=True)
 
 
 def negatives(api, consumer, cargo, env, family):
@@ -136,8 +146,10 @@ def negatives(api, consumer, cargo, env, family):
     print(f'PASS: isolated {family}: {count} ownership/authority/classification rejections with type controls', flush=True)
 
 
-def mutants(api, consumer, roots, cargo, env, family, native):
-    for filename, before, after in cases.mutations(family, native):
+def mutants(api, consumer, roots, cargo, env, family, native, hardened=False):
+    from legacy_hardened_cases import mutations as hardened_mutations
+    selected = hardened_mutations(family, native) if hardened else cases.mutations(family, native)
+    for filename, before, after in selected:
         path = roots['brynja-legacy-' + family] / 'src' / filename
         original = path.read_text()
         require(original.count(before) == 1, 'mutation anchor: ' + filename)
@@ -145,19 +157,27 @@ def mutants(api, consumer, roots, cargo, env, family, native):
             path.write_text(original.replace(before, after))
             for profile in ([], ['--release']):
                 command = cargo + ['test', '--offline', '--all-features', *profile, '--test', 'execution', '--test', 'selection']
+                if hardened:
+                    command += ['--test', 'scope']
+                    if before in ('scope.completed = true;', 'scope.complete = true;'):
+                        command = cargo + ['test', '--offline', '--all-features', *profile, '--test', 'scope']
                 api.run(command + ['--no-run'], consumer, env)
-                result = api.run(command, consumer, env, success=False)
+                try:
+                    result = api.run(command, consumer, env, success=False)
+                except ValueError as error:
+                    raise ValueError(f'legacy mutant {family}/{filename}: {before}\n{error}') from error
                 require(result.returncode == 101 and 'test result: FAILED.' in result.stdout and
-                        'panicked at' in result.stdout, 'mutant survived or unrelated failure')
+                        'panicked at' in result.stdout,
+                        f'mutant survived or unrelated failure: {filename}: {before}\n{result.stdout[-3000:]}\n{result.stderr[-1500:]}')
         finally:
             path.write_text(original)
     # Repeat both public test populations after restoration, not just a build.
-    for test, count in [('execution', 4 if family == 'sha1' else 3), ('selection', 1)]:
+    for test, count in test_counts(family, hardened):
         population(api.run(cargo + ['test', '--offline', '--all-features', '--release', '--test', test], consumer, env), count)
-    print(f'PASS: isolated {family}: {2 * len(cases.mutations(family, native))} compiled mutation runs rejected', flush=True)
+    print(f'PASS: isolated {family}: {2 * len(selected)} compiled mutation runs rejected; hardened={hardened}', flush=True)
 
 
-def execute(api, root, toolchain, native=False):
+def execute(api, root, toolchain, native=False, profile='all'):
     root.mkdir(parents=True, exist_ok=True)
     env = api.clean_environment(root)
     api.cargo_environment.check(root / 'package-workspace', env)
@@ -168,6 +188,11 @@ def execute(api, root, toolchain, native=False):
         roots = api.packaging.package_roots(root)
     cargo = ['cargo', '+' + toolchain]
     for family in ('sha1', 'md5'):
+        if profile != 'ordinary':
+            import legacy_hardened_package
+            legacy_hardened_package.execute(api, root, roots, cargo, env, family, native)
+        if profile == 'hardened':
+            continue
         consumer = root / (family + '-consumer')
         install(consumer, roots, family)
         generic = dict(env, CARGO_TARGET_DIR=str(root / (family + '-target')))
@@ -182,4 +207,4 @@ def execute(api, root, toolchain, native=False):
                                CARGO_TARGET_DIR=str(root / (family + '-native-target')))
             campaign(api, consumer, cargo, accelerated, family, True)
             mutants(api, consumer, roots, cargo, accelerated, family, True)
-    print('Isolated ordinary legacy package acceptance: PASS; not native qualification', flush=True)
+    print(f'Isolated legacy package acceptance: PASS; profile={profile}; not native qualification', flush=True)

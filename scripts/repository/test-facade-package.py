@@ -8,6 +8,7 @@ from types import SimpleNamespace
 from unittest.mock import patch
 import test_facade_keccak
 import test_facade_sha2
+import test_facade_keccak_routes
 
 spec = importlib.util.spec_from_file_location(
     'facade_package', Path(__file__).with_name('check-facade-package.py'))
@@ -141,6 +142,7 @@ def main():
     with patch('subprocess.run', side_effect=AssertionError('unexpected compilation')):
         test_facade_keccak.check()
         test_facade_sha2.check()
+        test_facade_keccak_routes.check()
         ambient_config_regressions()
         archive_regressions()
         baseline = document({'facade-consumer': [], 'brynja': [], 'brynja-crypto': []})

@@ -73,6 +73,22 @@ checked AVX2/NEON build with positive vector counters. This is local functional
 acceptance, not refreshed native release qualification. The usual command,
 gate rules, historical evidence and full-sweep deferral remain unchanged.
 
+## Packaged hosted/static Keccak consumers
+
+The packaged Keccak coverage now also exercises the existing ordinary/hardened
+CLI fixtures through both facades with portable, preferred and required hosted
+selection. Each profile compares 256 four-lane batches against 1,024 independent
+SHA-3/SHAKE/cSHAKE outputs; unavailability must reject before output. Preferred
+lifecycle tests preserve cancellation, budget, reuse, staging and public/secret
+failure checks, including sparse layouts. A public static-session witness
+checks actual backend-call counts against the executor report and verifies
+revocation. Six compiled SIMD/output/report/cleanup mutations include a scalar
+replacement that retains correct digests but fails the counter witness.
+
+`--native-simd` now requires both Keccak routes as well as all four SHA-2
+routes. This adds local functional acceptance, not new native qualification,
+production behavior or release-gate policy.
+
 ## Work remaining before retest and acceptance freeze
 
 - Obtain independent retest of the complete conformance separation before

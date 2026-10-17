@@ -164,7 +164,8 @@ link declarations, build scripts and proc macros are rejected.
 Debug/release checks exercise portable output equivalence and clearing owners;
 they do not stand in for native accelerated qualification or a full sweep.
 Each facade runs ten combined family/batch tests, three hosted/documentation
-tests, three Keccak oracle tests and four SHA-2 route/lifecycle tests per profile,
+tests, three portable Keccak oracle tests, four hosted/static Keccak tests and
+four SHA-2 route/lifecycle tests per profile,
 alongside the separate conformance-isolation checks. The harness rejects missing or ignored runtime tests and
 compiles the Rust examples directly from this document.
 The consumer and packaging phases run in private directories under the checkout's
@@ -190,9 +191,22 @@ SHA-3/SHAKE/cSHAKE identities, including customized, partial-bit and zero-width
 XOF cases. Ordinary output remains transactional; hardened secret destinations
 clear on Drop and rejection; explicit public output and sparse layouts retain
 their separate contracts. Compiled mutations must reach and fail the intended
-runtime assertion, not merely fail to build. These checks select portable
-execution: native SIMD counters, private-workspace cleanup and platform
-qualification remain the responsibility of the dedicated family checks.
+runtime assertion, not merely fail to build. This original suite selects
+portable execution. A separate hosted consumer now runs the same oracle and
+lifecycle cases with preferred selection, plus the existing ordinary/hardened
+CLI fixtures with portable, preferred and required selection. Required mode
+must reject unavailable authority before output. On an available route all
+256 mixed four-lane batches (1,024 independent outputs) execute through both
+facades in debug and release. The hardened fixture checks secret, declassified
+and public outputs, full staging clearing, output identity and canaries.
+
+The opt-in SIMD campaign also checks a public static-session counter against
+the ordinary executor report, then revokes the authority and confirms rejection
+without output or counter changes. Six compiled Keccak mutations cover omitted
+permutation, scalar replacement, incorrect vector reporting and omitted output
+clearing. Correct digests alone cannot satisfy the scalar-replacement test.
+These checks do not inspect private workspace/register erasure or establish
+platform qualification; dedicated family checks retain that responsibility.
 
 SHA-2 consumers reuse the existing ordinary/hardened batch fixtures with only
 their imports redirected through each facade and a separate hosted adapter.
@@ -206,9 +220,10 @@ mutations check output, algorithm, work-accounting and clearing behavior.
 For a local SIMD functional check, run
 `python3 scripts/repository/check-facade-package.py --native-simd`.
 After checking CPU support in a generic executable, it builds a separate
-AVX2/NEON-specialized consumer, requires all four SHA-2 batch routes to be
-available and checks positive vector counts. Six compiled no-op/scalar-replacement
-mutations must fail the actual session-counter invariant. Run this only where
+AVX2/NEON-specialized consumer, requires all four SHA-2 and both Keccak batch
+routes to be available and checks positive vector counts. The six SHA-2
+no-op/scalar-replacement mutations must fail the actual session-counter
+invariant; Keccak mutations must fail their named runtime tests. Run this only where
 the deployment preserves that ISA throughout execution; the initial CPU check
 is not a live-migration guarantee. This option is not native release
 qualification, independent review or a benchmark. The default command does

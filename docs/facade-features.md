@@ -294,3 +294,30 @@ error clearing, public copying and (with SIMD) worker vector accounting.
 The fixture's separate local/scoped-root executable imports deliberately
 hidden leaf-only APIs and is not redirected or silently claimed as covered.
 Further family/route reconciliation and independent retest remain pending.
+
+## ParallelHash execution and scoped-root consumer acceptance
+
+A separate extracted consumer redirects the existing scheduled, streaming and
+threaded execution drivers through both facades and explicitly opted-in hosted
+adapters. It checks the same 256 independent arbitrary-bit cases across all
+four fixed/XOF identities in debug and release. Thirteen requested modes cover
+portable, preferred, required and static selection; unsupported required modes
+must reject with the probed reason before output. Six malformed requests run
+alone and after a valid request to check transactional campaign output.
+
+Each profile runs nineteen execution/stream/threaded lifecycle tests. An
+available static route additionally runs twelve scoped accelerated tests and
+the fixture's scoped streaming/scheduled checks for every corpus case in each
+of its three static modes. These include accelerated roots, unlike the separate
+threaded batch campaign above. On generic x86 the hosted migration guarantee
+remains unavailable, including in an AVX2-specialized build.
+
+Two synthetic reference computations in the copied scoped tests use curated
+ordinary public APIs instead of deliberately hidden portable in-place helpers.
+The accelerated assertions are retained; this is not coverage of those hidden
+APIs or a claim that ordinary reference storage clears confidential data.
+Three framing/domain mutants, two cleanup mutants and an opt-in forced-scalar
+mutant must be caught after successful compilation. The scalar substitution
+must fail the root, stream and threaded route checks before output. Public
+route reports are not new instruction-count or private-frame observations.
+These remain local functional checks, not independent or native qualification.

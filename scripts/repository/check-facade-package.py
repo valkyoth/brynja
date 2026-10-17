@@ -26,6 +26,7 @@ import facade_sha2_acceptance as sha2_batches
 import facade_keccak_acceptance as keccak_routes
 import facade_tuplehash_acceptance as tuplehash
 import facade_parallelhash_acceptance as parallelhash
+import facade_parallelhash_execution as parallel_execution
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts/sha2'))
@@ -97,13 +98,13 @@ def graph(document, features, *, hosted=False, threaded=False):
     active = {packages[node['id']]['name']: node['features']
               for node in document['resolve']['nodes']}
     require(all(p['source'] is None for p in packages.values()), 'registry/git dependency')
-    require(not threaded or (hosted and 'parallelhash-hardened-batch' in features),
-            'threaded adapter requires explicit ParallelHash batch opt-in')
+    require(not threaded or (hosted and bool({'parallelhash-hardened-batch', 'parallelhash-runtime-execution'} & set(features))),
+            'threaded adapter requires explicit ParallelHash opt-in')
     hosts = ({'brynja-crypto-cpu-std'} if hosted else set())
     if threaded:
         hosts.add('brynja-hash-parallel-std')
-        require('runtime-batch-execution' in active.get('brynja-hash-parallel-std', []),
-                'threaded batch feature missing')
+        feature = 'runtime-batch-execution' if 'parallelhash-hardened-batch' in features else 'runtime-execution'
+        require(feature in active.get('brynja-hash-parallel-std', []), 'threaded feature missing')
     require({name for name in active if name.endswith('-std')} == hosts and
             not any(name.startswith('brynja-legacy') for name in active),
             'host or legacy package reachable')
@@ -260,6 +261,7 @@ def execute(root, toolchain, bare_target, native_simd=False):
     keccak_routes.execute(sys.modules[__name__], root, roots, cargo, env, native_simd)
     tuplehash.execute(sys.modules[__name__], root, roots, cargo, env, native_simd)
     parallelhash.execute(sys.modules[__name__], root, roots, cargo, env, native_simd)
+    parallel_execution.execute(sys.modules[__name__], root, roots, cargo, env, native_simd)
     print('Facade package opt-in, default isolation, no_std, runtime and cleanup acceptance: PASS')
 
 

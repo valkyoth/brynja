@@ -125,6 +125,23 @@ accelerated campaign additionally rejects a forced portable substitution in
 required and preferred modes. No production behavior or gate policy changes;
 route reports do not become instruction-count or native-qualification claims.
 
+## Packaged ParallelHash execution and scoped roots
+
+Both facades now run scheduled, streaming and threaded single-state execution
+against the 256-case independent arbitrary-bit corpus in debug and release.
+Thirteen requested modes either execute their expected route or reject exact
+unavailability before output. Nineteen lifecycle tests run per profile; an
+available static route adds twelve scoped tests and per-case accelerated
+streaming/scheduled-root checks. The separate threaded batch coverage retains
+its portable root; this new slice covers accelerated roots explicitly.
+
+Three framing/domain mutations, two cleanup mutations and an opt-in scalar
+substitution test the acceptance checks. Two synthetic portable references in
+the copied scoped tests are adapted to curated public APIs without exposing
+hidden leaf helpers or changing the accelerated assertions. This is functional
+acceptance only, not instruction-count, private-frame or native qualification.
+No production implementation, dependency or release-gate policy changes.
+
 ## Work remaining before retest and acceptance freeze
 
 - Obtain independent retest of the complete conformance separation before

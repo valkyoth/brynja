@@ -1,6 +1,6 @@
 # v0.24.52 — Facade features and package reachability
 
-Status: pentest remediation candidate; focused independent retest pending.
+Status: focused retest received; Low residual disposition and release qualification pending.
 No release qualification, independent cryptographic verification or publication
 is claimed. The next planned publication checkpoint remains v0.25.2.
 
@@ -49,7 +49,7 @@ with warnings denied pass in default and all-feature configurations.
 The full workspace all-feature unit/integration suite and doctests also pass;
 existing platform-specific ignored tests retain their explicit dispositions.
 
-Independent owner-supplied pentest and release qualification remain pending.
+Owner-supplied pentest and focused retest are recorded below; release qualification remains pending.
 The unchanged verification planner requests full-fallback approval because
 the changed facade package is outside its known family map; the plan-only
 check started no expensive campaign. No full verification sweep or native
@@ -63,7 +63,7 @@ this initial forwarding implementation.
 
 The supplied Codex Daybreak report found no serious exploitable issue. Claude
 identified namespace, ambient Cargo configuration and graph-check gaps now
-addressed for focused retest:
+addressed and confirmed by the supplied re-review of `65db5362`:
 
 - Curate all five family namespaces and gate optional exports on the facade's
   own features. Do not forward free conformance helpers, in-place integration
@@ -85,3 +85,12 @@ are in the [security record](../security/pentest/v0.24.52.md). The earlier addit
 leaf-export observation above describes the pre-remediation candidate; optional
 facade exports now require the facade feature even when the leaf is enabled
 elsewhere. This follow-up does not change the existing native/release gates.
+
+The re-review found no new vulnerability. F-3 and F-4 are fixed; F-1 is fixed
+for free functions but retains the explicitly reported pre-existing Low inherent
+conformance-method residual under additive leaf features. Its owner disposition
+remains pending; the namespace negatives do not test away that residual. F-2's
+unpublished-version risk remains intentionally unchanged. This is not a blanket
+security or release-readiness PASS. At the owner's request, the automatic
+documentation line ceiling is removed instead of shortening the README.
+Warnings, examples, claim checks and code-size limits remain unchanged.

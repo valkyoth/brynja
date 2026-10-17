@@ -300,9 +300,12 @@ def main() -> int:
         else:
             raise AssertionError(f"four-column status regression passed: {expected}")
     MODULE.validate_readme_split(b"full GitHub README\n", b"compact crate README\n")
+    # Do not force removal of warnings or examples just to meet a line budget.
+    for lines in (200, 201, 500, 501, 2000):
+        MODULE.validate_readme_split(b"full GitHub README\n", b"documentation\n" * lines)
     for root_readme, crate_readme, expected in (
         (b"same\n", b"same\n", "purpose-specific"),
-        (b"full\n", b"line\n" * 201, "200-line ceiling"),
+        (b"same\n" * 2000, b"same\n" * 2000, "purpose-specific"),
     ):
         try:
             MODULE.validate_readme_split(root_readme, crate_readme)

@@ -194,11 +194,8 @@ def validate_readme_split(root_readme: bytes, crate_readme: bytes) -> None:
         raise VerificationStatusError(
             "GitHub and crates.io READMEs must remain purpose-specific"
         )
-    crate_lines = len(crate_readme.splitlines())
-    if crate_lines > 200:
-        raise VerificationStatusError(
-            f"crates.io README exceeds compact 200-line ceiling: {crate_lines}"
-        )
+    # Documentation length is an editorial choice, not a security criterion.
+    # Claim accuracy, required warnings and purpose-specific content still apply.
 
 
 def validate_crate_document(path: Path, text: str) -> None:

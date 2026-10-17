@@ -4951,6 +4951,7 @@ Goal: Demonstrate actual consumer usability before expensive final evidence coll
 Deliverables:
 
 - Complete v0.24.52 and the applicable portable consumer acceptance before this step; preserve the [acceleration usability contract](ACCELERATION_USABILITY_AUDIT.md).
+- Complete the dedicated leaf conformance-isolation work package below before freezing consumer APIs; this closes the accepted v0.24.52 F-1 Low residual, not by relabeling it but by a reviewed leaf-level change.
 - Use official/independent expected outputs on representative real data; require actual instruction/vector counters in assurance observations without changing production outputs.
 - Exercise default portable, explicitly preferred and required routes plus unsupported/quarantined cases; mark experimental RISC-V and other unmeasured routes separately.
 - Freeze source, package and fixture identities; reject blanket skipping of every accelerated route on a capable qualifying test lane.
@@ -4960,12 +4961,48 @@ Verification:
 
 - Run compiled no-op, scalar-only, partial-write, wrong-report and cleanup mutants; require secret/public destination guarantees and all ownership-negative examples.
 - Repeat host and no_std consumers under supported compiler endpoints and applicable full matrix; validate every documented feature command.
+- Retest leaf conformance isolation independently after implementation; do not carry v0.24.52's accepted-risk disposition forward as proof that the residual is fixed.
 - Run affected unit, integration, public package and adversarial tests, applicable scoped Miri/Kani/sanitizers and generated-code checks; update exact evidence, API profiles, dependency/SBOM policy, README and release notes. A no-op, scalar-only or evidence-only implementation cannot satisfy a promised operational accelerated profile.
 
 Exit criteria:
 
 - Deliver the exact named capability with reproducible project-owned evidence and honest unsupported/experimental dispositions; independent cryptographic review and FIPS validation remain separate claims. For execution, unsafe, secret or trust-boundary changes, call for an exceptional owner pentest and obtain a PASS retest before tagging.
 - `v0.24.53 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+#### Required leaf conformance-isolation work package (v0.24.52 F-1)
+
+Owner-approved on 2026-10-17 for v0.24.53, before its package-external API freeze
+and the v0.24.54 native sweep. Preserve all other v0.24.53 acceptance work and
+the v0.25.2 publication checkpoint; this is not another release-gate mechanism.
+
+- Inventory free functions and inherent methods for all four KMAC/KMACXOF
+  identities, ordinary/hardened types and both flat and namespaced facades.
+  Review the related hidden cSHAKE in-place methods separately: preserve needed
+  hardened integration without exposing an unintended production bypass.
+- Select and implement a leaf-level separation that additive Cargo features
+  cannot attach weak-parameter conformance methods to production KMAC types.
+  Prefer distinct test-only conformance types/package boundaries; evaluate an
+  explicit non-Cargo cfg only with its build-wide implications documented.
+  Another facade feature gate, documentation-only restriction or type rename
+  without separation does not complete this work.
+- Preserve exact standards-valid conformance coverage, full-strength production
+  key/tag checks, typed outputs, cleanup and no_std support. Review pre-1.0 API
+  compatibility, migrate affected fixtures and document any deliberate breaking
+  change. Do not introduce default dependencies or duplicate cryptographic
+  implementations merely to isolate test entry points.
+- Compile package-external negative probes for the inherent methods as well as
+  free functions through direct leaf imports and both facade paths. Exercise
+  default/no-default, relevant all-feature and deliberately additive transitive
+  conformance graphs on supported compiler endpoints. A production type must
+  not gain weak-key/short-tag entry points when another dependency opts into
+  conformance support. Separately verify that intended conformance types still
+  execute official vectors and standards-valid boundary cases.
+- Run affected positive, rejection, ownership, output-clearing and mutation
+  regressions, packaged debug/release consumers and applicable existing verifier
+  checks. Obtain a focused independent pentest/retest covering the reported
+  empty-key/32-bit-tag proof of concept and surface-growth regressions before
+  declaring F-1 technically resolved. Record exact source and review provenance;
+  existing native/release rules determine any evidence refresh required.
 
 ### v0.24.54 - Acceleration Native Evidence Sweep
 

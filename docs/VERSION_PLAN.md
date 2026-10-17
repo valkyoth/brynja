@@ -18,6 +18,16 @@ v0.24.52–v0.24.55 before HMAC.
 RISC-V operational acceleration is postponed until qualifying native hardware
 is available; portable support and existing candidate tests remain unchanged.
 
+Owner-approved follow-up (2026-10-17): v0.24.53 includes a dedicated leaf
+conformance-isolation work package before freezing public consumer acceptance.
+It must implement and independently retest isolation of KMAC conformance
+inherent methods from production types under additive Cargo features, with a
+related cSHAKE integration-surface review. See the detailed work package in
+[RELEASE_PLAN.md](RELEASE_PLAN.md#required-leaf-conformance-isolation-work-package-v02452-f-1).
+The pre-existing Low residual is accepted only for v0.24.52, not claimed fixed;
+v0.24.53's other acceptance work, subsequent versions and publication timing
+are unchanged.
+
 
 The [five-part expansion review](ROADMAP_EXPANSION_AUDIT.md) and [scope register](ROADMAP_EXPANSION_REGISTER.json) assign the additional family/API and late-protocol work. Earlier implemented APIs retain their existing claims; backfills are new future work.
 

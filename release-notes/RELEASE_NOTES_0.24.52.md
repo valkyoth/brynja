@@ -1,6 +1,6 @@
 # v0.24.52 — Facade features and package reachability
 
-Status: focused retest received; Low residual disposition and release qualification pending.
+Status: focused retest recorded with owner-accepted limitations; release qualification pending.
 No release qualification, independent cryptographic verification or publication
 is claimed. The next planned publication checkpoint remains v0.25.2.
 
@@ -88,8 +88,11 @@ elsewhere. This follow-up does not change the existing native/release gates.
 
 The re-review found no new vulnerability. F-3 and F-4 are fixed; F-1 is fixed
 for free functions but retains the explicitly reported pre-existing Low inherent
-conformance-method residual under additive leaf features. Its owner disposition
-remains pending; the namespace negatives do not test away that residual. F-2's
+conformance-method residual under additive leaf features. The owner accepted it
+for v0.24.52 and scheduled leaf-level isolation and an independent retest as a
+required v0.24.53 work package before consumer API freeze. It is not technically
+fixed; the namespace negatives do not test away that residual. Production
+consumers must not enable `conformance-testing` in their dependency graph. F-2's
 unpublished-version risk remains intentionally unchanged. This is not a blanket
 security or release-readiness PASS. At the owner's request, the automatic
 documentation line ceiling is removed instead of shortening the README.

@@ -10,6 +10,7 @@ from pathlib import Path
 import parallelhash_workspace_policy as execution_policy
 import strict_workspace_policy as strict_policy
 import macos_workspace_policy as resident_policy
+import facade_workspace_policy as facade_policy
 
 ROOT = Path(__file__).resolve().parents[2]
 POLICY = ROOT / "package-policy.toml"
@@ -267,6 +268,7 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
         expected.update({"runtime-execution": ["brynja-hash-parallel/runtime-execution", "dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/runtime-execution", "dep:brynja-crypto-cpu"], "strict-execution": ["dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/protected-memory"], "strict-acceleration": ["strict-execution", "brynja-hash-parallel/hardened-batch-execution", "dep:brynja-crypto-cpu", "brynja-crypto-cpu/keccak-hardened-batch"]})
         expected["runtime-batch-execution"] = ["runtime-execution", "brynja-hash-parallel/hardened-batch-execution", "brynja-crypto-cpu-std/keccak-hardened-batch", "brynja-crypto-cpu/keccak-hardened-batch"]
     expected.update(resident_policy.FEATURES.get(name, {}))
+    expected.update(facade_policy.FEATURES.get(name, {}))
     if package.get("features") != expected:
         raise ValueError(f"{name} feature policy differs from its package class")
 
@@ -449,19 +451,8 @@ def validate_resolved_mode(
     expected_parallel_executor.update(("brynja-crypto-cpu", "brynja-crypto-cpu-std", "brynja-hash-sha2", "brynja-mac-kmac", "brynja-hash-tuple"))
     if parallel_executor != expected_parallel_executor:
         raise ValueError("ParallelHash std executor package graph drifted")
-    if {"brynja-crypto-cpu", "brynja-crypto-cpu-std", "brynja-hash-parallel-std"}.intersection(modern):
-        raise ValueError("modern facade must remain independent of host adapter packages")
-    for engine in (
-        "brynja-tls",
-        "brynja-tls12",
-        "brynja-tls13",
-        "brynja-tls13-handshake",
-        "brynja-dtls",
-        "brynja-quic-tls",
-    ):
-        reached = reachable_names(engine, names, packages_by_id, modern_edges)
-        if {"brynja-crypto-cpu", "brynja-crypto-cpu-std"}.intersection(reached):
-            raise ValueError(f"protocol engine reaches a CPU adapter: {engine}")
+    facade_policy.validate_isolation(modern, modern_edges, names,
+                                     packages_by_id, reachable_names)
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()

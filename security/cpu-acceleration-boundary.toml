@@ -19,7 +19,7 @@ runtime = "no_std"
 dependencies = []
 default_features = []
 publication = "deferred-crates-io"
-facade_feature = "none"
+facade_feature = "cpu"
 
 [packages.detector]
 name = "brynja-crypto-cpu-std"
@@ -34,7 +34,6 @@ facade_feature = "none"
 scalar_owners = ["brynja-hash-sha2", "brynja-hash-sha3"]
 facade = "brynja"
 forbidden_consumers = [
-  "brynja-crypto",
   "brynja-tls",
   "brynja-tls12",
   "brynja-tls13",

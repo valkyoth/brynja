@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.24.52 candidate
+
+- Add explicit per-family execution, general SHA-512/t and ordinary/hardened
+  batch feature forwarding through `brynja` and `brynja-crypto`.
+- Expose leaf namespaces while retaining existing flat portable APIs. Host
+  detection and protected profiles remain in separate companion packages;
+  legacy algorithms remain outside the modern facade.
+- Test extracted package consumers, absent-feature rejection, bare-metal
+  compilation, dependency isolation and clearing-output behavior. Review and
+  release qualification remain pending; no publication is selected.
+
 ## 0.24.51 candidate
 
 - Add separate default-off Apple Silicon resident/clearing sessions for SHA-2,

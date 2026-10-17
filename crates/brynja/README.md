@@ -97,7 +97,18 @@ cargo add brynja --path /path/to/brynja/crates/brynja --no-default-features
 
 ## Hardware and SIMD
 
-The facade stays portable. Optional algorithm-leaf execution supports x86-64 SHA/AVX2 and AArch64 SHA2/SHA-512/SHA3, depending on the family and platform authority. General SHA-512/t is a leaf-only feature; legacy candidates and RISC-V acceleration are not made reachable by the facade. ParallelHash accelerated scheduling is still undergoing qualification; portable family completion does not close that new work.
+The facade defaults to portable execution. Explicit per-family features forward
+existing execution and batch APIs through `crypto::sha2`, `crypto::sha3`,
+`crypto::kmac`, `crypto::tuplehash` and `crypto::parallelhash`. The separate
+`general-sha512-t` feature exposes general SHA-512/t. See the
+[feature and deployment guide](../../docs/facade-features.md).
+Optional execution supports x86-64 SHA/AVX2 and AArch64 SHA2/SHA-512/SHA3,
+depending on family and platform authority; dedicated x86 SHA-512 remains
+emulated qualification only. Cargo features do not establish CPU support.
+Host detection stays in separate companion crates. Legacy algorithms remain
+separate; existing unadmitted CPU candidates are not made operational by a
+facade feature. ParallelHash accelerated scheduling retains its qualification
+limits; portable family completion does not close that work.
 
 ## Examples
 

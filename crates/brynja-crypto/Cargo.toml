@@ -10,8 +10,30 @@ publish = ["crates-io"]
 
 [features]
 default = []
+cpu = ["dep:brynja-crypto-cpu"]
+general-sha512-t = ["brynja-hash-sha2/general-sha512-t"]
+sha2-static-execution = ["cpu", "brynja-hash-sha2/static-execution"]
+sha2-runtime-execution = ["cpu", "brynja-hash-sha2/runtime-execution"]
+sha2-hardened-execution = ["cpu", "brynja-hash-sha2/hardened-execution"]
+sha256-batch = ["cpu", "brynja-hash-sha2/batch-execution"]
+sha512-batch = ["cpu", "brynja-hash-sha2/batch512-execution"]
+sha256-hardened-batch = ["cpu", "brynja-hash-sha2/hardened-batch-execution"]
+sha512-hardened-batch = ["cpu", "brynja-hash-sha2/hardened-batch512-execution"]
+sha3-static-execution = ["cpu", "brynja-hash-sha3/static-execution"]
+sha3-runtime-execution = ["cpu", "brynja-hash-sha3/runtime-execution"]
+sha3-hardened-execution = ["cpu", "brynja-hash-sha3/hardened-execution"]
+keccak-batch = ["cpu", "brynja-hash-sha3/batch-execution"]
+keccak-hardened-batch = ["cpu", "brynja-hash-sha3/hardened-batch-execution"]
+kmac-hardened-execution = ["cpu", "brynja-mac-kmac/hardened-execution"]
+kmac-runtime-execution = ["cpu", "brynja-mac-kmac/runtime-execution"]
+tuplehash-hardened-execution = ["cpu", "brynja-hash-tuple/hardened-execution"]
+tuplehash-runtime-execution = ["cpu", "brynja-hash-tuple/runtime-execution"]
+parallelhash-hardened-execution = ["cpu", "brynja-hash-parallel/hardened-execution"]
+parallelhash-runtime-execution = ["cpu", "brynja-hash-parallel/runtime-execution"]
+parallelhash-hardened-batch = ["cpu", "brynja-hash-parallel/hardened-batch-execution"]
 
 [dependencies]
+brynja-crypto-cpu = { workspace = true, optional = true }
 brynja-hash-sha2 = { workspace = true }
 brynja-hash-sha3 = { workspace = true }
 brynja-hash-tuple = { workspace = true }

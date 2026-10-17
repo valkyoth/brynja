@@ -30,7 +30,12 @@
 //! values without schema-driven ASN.1 or X.509 semantics. This crate does not
 //! provide a TLS connection API, provider effect, or any cryptographic
 //! algorithm outside these six SHA-2, six FIPS 202, two cSHAKE, four KMAC, and
-//! four TupleHash, and four ParallelHash identities.
+//! four TupleHash, and four ParallelHash identities, plus the explicit
+//! `general-sha512-t` extension. Default-off family execution and batch features
+//! forward existing leaf APIs under [`crypto::sha2`], [`crypto::sha3`],
+//! [`crypto::kmac`], [`crypto::tuplehash`] and [`crypto::parallelhash`]. They do
+//! not enable hosted detection or change portable defaults. Cargo features do
+//! not establish CPU support, secret provenance or independent verification.
 
 #![no_std]
 

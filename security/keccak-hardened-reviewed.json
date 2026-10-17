@@ -262,7 +262,7 @@
     "crates/brynja-hash-sha3/tests/vectors/nist-bit-selected.txt": "fa7045fa83baa86021d95141f75197c9ca91907d16447c95502388a3bce04f20",
     "docs/hardened-in-place.md": "476cc1f53b6450c937f6869947d1979272a337f9a1583f9f7feb5652f3d707c4",
     "docs/hardened-keccak-execution.md": "d6a61c082045026d8d690b0cbcb8965276b5dfb5e7b089cc8914f78edc4fd7dd",
-    "scripts/checks.sh": "3f127c23d6f6ac67cf1e2d60b2ce73e41f60ba40d963f434e5f5b92fad43c57f",
+    "scripts/checks.sh": "8a6617632f3709e85e5d5c5a6edbb477f113a104f87e59280cddfe2ab6d824b8",
     "scripts/sha3/capture-keccak-hardened-native.py": "9fe3556c0afa7414fdb9ebda2d7126f599be6feaae393649b0d87ccbd6a81e9e",
     "scripts/sha3/check-keccak-hardened-asan.py": "dea0b642f2788de9473289d8608e6b7522ec526f3da570a4a503805d0c869963",
     "scripts/sha3/check-keccak-hardened-codegen.py": "307a2cb3d3544a4982f5e52cd70b437fde1b170a5e5f519d4bd15525ceb7b5a6",

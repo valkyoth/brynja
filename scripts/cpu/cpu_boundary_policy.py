@@ -16,9 +16,8 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "ec4bfcb4ba7d89c3636dc5afc7dafeb489890034e56efd12362bbff8eb9ba3b7"
+EXPECTED_POLICY_SHA256 = "820af900ad45e36a8397c96bde094157c65460fe73c6b4e052e9ebb0a089c72f"
 FORBIDDEN_CONSUMERS = (
-    "brynja-crypto",
     "brynja-tls",
     "brynja-tls12",
     "brynja-tls13",
@@ -222,7 +221,7 @@ def validate_policy_shape(policy: dict) -> None:
         "kernel": {
             "name": CPU, "version": "0.1.1", "runtime": "no_std",
             "dependencies": [], "default_features": [],
-            "publication": "deferred-crates-io", "facade_feature": "none",
+            "publication": "deferred-crates-io", "facade_feature": "cpu",
         },
         "detector": {
             "name": DETECTOR, "version": "0.1.1", "runtime": "std",
@@ -314,6 +313,8 @@ def validate_packages(root: Path) -> None:
     facade = manifest(root, "brynja")
     if CPU in facade.get("dependencies", {}) or DETECTOR in facade.get("dependencies", {}):
         fail("CPU packages entered the ordinary facade")
+    from cpu_facade_policy import validate as validate_facade
+    validate_facade(manifest(root, "brynja-crypto"), packages, fail)
     for consumer in FORBIDDEN_CONSUMERS:
         dependencies = manifest(root, consumer).get("dependencies", {})
         if CPU in dependencies or DETECTOR in dependencies:

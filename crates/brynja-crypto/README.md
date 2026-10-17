@@ -74,8 +74,12 @@ assert_eq!(output, [0; 32]);
 ## Hardware and SIMD
 
 This composition facade defaults to portable APIs and owns no ISA kernels.
-Select optional acceleration through the algorithm leaves and CPU authority
-crates. x86-64 SHA/AVX2 and AArch64 SHA2/SHA-512/SHA3 support is
+Select default-off per-family execution/batch features through this facade or
+the algorithm leaves. Namespaces `sha2`, `sha3`, `kmac`, `tuplehash` and
+`parallelhash` expose the corresponding leaf APIs; `cpu` is an explicit
+no_std CPU-authority opt-in, not a hosted detector. See the
+[feature and deployment guide](../../docs/facade-features.md).
+x86-64 SHA/AVX2 and AArch64 SHA2/SHA-512/SHA3 support is
 algorithm- and API-specific, not a global switch. Features do not authorize
 unsupported instructions or silently route secret state through ordinary kernels.
 
@@ -87,7 +91,11 @@ outputs as public or typed secret; callers retain responsibility for their
 buffers and copies. Registers, compiler copies/spills, caches, dumps, swap,
 forgotten owners and terminated processes remain outside the guarantee.
 
-General SHA-512/t is a leaf opt-in extension, not a named SHA-2 facade identity.
+General SHA-512/t is an opt-in extension (`general-sha512-t`, under `sha2`),
+not a named SHA-2 identity. Cargo features unify across dependencies: enabling
+a leaf feature elsewhere can expose it through these namespaces too. This is
+not a security boundary; use dependency policy and the separate `brynja-strict`
+facade when ordinary-memory APIs must not be selected.
 Legacy SHA-1/MD5 and legacy protocols remain outside this modern composition
 graph. `brynja-crypto` is not a replacement TLS engine or certificate validator.
 

@@ -282,6 +282,17 @@ def test() -> None:
         require_rejection(root, "forbidden CPU package consumer")
         reset(root)
 
+        for before, after in (
+            ('brynja-crypto-cpu = { workspace = true, optional = true }',
+             'brynja-crypto-cpu = { workspace = true }'),
+            ('default = []', 'default = ["cpu"]'),
+            ('cpu = ["dep:brynja-crypto-cpu"]', 'cpu = []'),
+            ('[dependencies]', '[dependencies]\nbrynja-crypto-cpu-std = { workspace = true }'),
+        ):
+            replace(root / 'crates/brynja-crypto/Cargo.toml', before, after)
+            require_rejection(root, 'facade CPU dependency')
+            reset(root)
+
         cpu_manifest = root / "crates/brynja-crypto-cpu/Cargo.toml"
         replace(cpu_manifest, "[package]", '[package]\nbuild = "build.rs"')
         require_rejection(root, "build or native linking")

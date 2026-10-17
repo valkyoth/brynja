@@ -1,9 +1,11 @@
 """Reject implicit, missing or cross-boundary workspace feature contracts."""
 import copy
 import macos_workspace_policy
+import facade_workspace_policy
 
 
 def check(baseline, package, reject):
+    facade_workspace_policy.regressions(baseline, package, reject)
     macos_workspace_policy.regressions(baseline, package, reject)
     for features in (
         {"default": ["static-execution"], "static-execution": []},

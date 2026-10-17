@@ -90,7 +90,7 @@
     "docs/static-cpu-execution.md": "3356632f7af4fabf253bf664e8c1cf6d599e8085e434009ebc2fec48274d9e55",
     "docs/threat-model.md": "1ba408fb8b2c369319b933f787752450e03b2afe275171ffe42986bcf4145a9c",
     "docs/unsafe-policy.md": "c22f1acebece81c1204b2a5032345b9f4f5c7838e98eb2768d549c71a181838b",
-    "scripts/checks.sh": "3f127c23d6f6ac67cf1e2d60b2ce73e41f60ba40d963f434e5f5b92fad43c57f",
+    "scripts/checks.sh": "8a6617632f3709e85e5d5c5a6edbb477f113a104f87e59280cddfe2ab6d824b8",
     "scripts/cpu/check-static-execution.py": "7cb4678bb69b5fddc4c8a722e2bcbdea70a01b61801010ea05a2ef1a4773ea7e",
     "scripts/cpu/static_execution_docs.py": "39b98e559bb59646a9f93b429a4f137b96cd8a9bc1b9fa13eff66747e3f084a4",
     "scripts/repository/darwin_resident_abi.py": "b6ec7a57b01f4d01d2cd62e8b3dde75eaf6c152b087554d6ada0b41db5475af4",

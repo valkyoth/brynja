@@ -1,6 +1,6 @@
 [package]
 name = "brynja"
-version = "0.24.51"
+version = "0.24.52"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
@@ -10,6 +10,27 @@ publish = ["crates-io"]
 
 [features]
 default = []
+cpu = ["brynja-crypto/cpu"]
+general-sha512-t = ["brynja-crypto/general-sha512-t"]
+sha2-static-execution = ["brynja-crypto/sha2-static-execution"]
+sha2-runtime-execution = ["brynja-crypto/sha2-runtime-execution"]
+sha2-hardened-execution = ["brynja-crypto/sha2-hardened-execution"]
+sha256-batch = ["brynja-crypto/sha256-batch"]
+sha512-batch = ["brynja-crypto/sha512-batch"]
+sha256-hardened-batch = ["brynja-crypto/sha256-hardened-batch"]
+sha512-hardened-batch = ["brynja-crypto/sha512-hardened-batch"]
+sha3-static-execution = ["brynja-crypto/sha3-static-execution"]
+sha3-runtime-execution = ["brynja-crypto/sha3-runtime-execution"]
+sha3-hardened-execution = ["brynja-crypto/sha3-hardened-execution"]
+keccak-batch = ["brynja-crypto/keccak-batch"]
+keccak-hardened-batch = ["brynja-crypto/keccak-hardened-batch"]
+kmac-hardened-execution = ["brynja-crypto/kmac-hardened-execution"]
+kmac-runtime-execution = ["brynja-crypto/kmac-runtime-execution"]
+tuplehash-hardened-execution = ["brynja-crypto/tuplehash-hardened-execution"]
+tuplehash-runtime-execution = ["brynja-crypto/tuplehash-runtime-execution"]
+parallelhash-hardened-execution = ["brynja-crypto/parallelhash-hardened-execution"]
+parallelhash-runtime-execution = ["brynja-crypto/parallelhash-runtime-execution"]
+parallelhash-hardened-batch = ["brynja-crypto/parallelhash-hardened-batch"]
 dtls = ["dep:brynja-dtls"]
 platform = ["dep:brynja-platform"]
 quic = ["dep:brynja-quic-tls"]

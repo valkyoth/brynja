@@ -240,6 +240,8 @@ python3 scripts/release/check-release-plan.py
 scripts/release/test-release-plan.sh
 scripts/repository/validate-workspace.sh
 python3 scripts/repository/test-workspace-metadata.py
+python3 scripts/repository/test-facade-package.py
+python3 scripts/repository/check-facade-package.py
 python3 scripts/release/test-github-release-controls.py
 scripts/release/validate-release-metadata.sh
 scripts/release/release_crates.py --check

@@ -355,3 +355,31 @@ CPU-instruction witness, nor proof against a scalar replacement that also
 forges its route report. Family code-generation/native checks retain that
 responsibility. This is local functional acceptance, not a hardened-owner
 review, new native qualification or independent cryptographic verification.
+
+## Single-state SHA-2 consumer acceptance
+
+Both extracted facades also run the existing ordinary and hardened SHA-2
+execution fixtures. The named corpus contains 240 NIST bit-vector cases; the
+independent general-t corpus contains 4,590 cases across all 510 valid widths.
+Vector files come from the extracted SHA-2 archive. The existing bounded
+general-t corpus visitor is reused without changing its parsing logic.
+
+Debug/release consumers exercise one-shot and fragmented updates, partial-bit
+finalization, work accounting and hardened secret/public output behavior.
+Portable, preferred, static and hosted requests include separate narrow-only
+selection, so unavailable SHA-512 instructions do not hide usable SHA-224/256
+execution. Exact availability errors are required before success output.
+Five copied ordinary lifecycle tests and two corpus-parser tests run per
+profile; hardened output clearing and quarantine checks remain in the
+existing hardened fixture. Scoped/in-place owners are not covered by this slice.
+
+Each facade rejects 50 ordinary and 52 hardened ownership/classification
+probes. Six ordinary and eight hardened compiled mutations cover compression,
+input, padding, IV, commit, accounting, output masking and error-path clearing.
+The opt-in native campaign also rejects omitted compression and reported
+portable substitution. It requires SHA-224/256 instructions and enables
+dedicated SHA-512 only when the CPU probe reports the complete feature bundle.
+On a host without that bundle, required SHA-512 rejects instead of being
+counted as accelerated coverage. Route/work reports are not independent
+instruction counters. These are functional acceptance tests, not new native,
+register-cleanup or independent cryptographic qualification.

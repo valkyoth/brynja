@@ -13,6 +13,7 @@ import test_facade_tuplehash
 import test_facade_parallelhash
 import test_facade_parallelhash_execution
 import test_facade_sha3_execution
+import test_facade_sha2_execution
 
 spec = importlib.util.spec_from_file_location(
     'facade_package', Path(__file__).with_name('check-facade-package.py'))
@@ -153,6 +154,7 @@ def main():
         test_facade_parallelhash_execution.check()
         test_facade_parallelhash_execution.graph_checks(acceptance, document)
         test_facade_sha3_execution.check()
+        test_facade_sha2_execution.check()
         ambient_config_regressions()
         archive_regressions()
         baseline = document({'facade-consumer': [], 'brynja': [], 'brynja-crypto': []})

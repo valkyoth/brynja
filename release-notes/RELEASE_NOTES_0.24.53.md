@@ -158,6 +158,23 @@ not independent instruction counters. These are public-only non-erasing
 owners, not hardened secret owners or new qualification. Production code,
 dependencies, historical evidence and release-gate policy are unchanged.
 
+## Packaged ordinary/hardened single-state SHA-2 consumers
+
+Both facades now reuse the existing execution fixtures with 240 NIST named
+bit-vector cases and 4,590 independent general-t cases across all valid widths.
+Debug/release profiles cover one-shot/fragmented updates, partial bits, work
+accounting and hardened public/secret output behavior. Six requested mode
+combinations require the expected narrow/wide route or exact unavailability.
+Five ordinary lifecycle tests and two parser tests also run per profile.
+
+Each facade rejects 50 ordinary and 52 hardened ownership/classification
+probes, six ordinary and eight hardened algorithm/output/accounting mutants,
+plus opt-in native no-op and portable-downgrade mutants. Dedicated SHA-512 is
+executed only on capable hosts; unavailable selection is not accelerated
+coverage. This slice does not cover scoped/in-place SHA-2 owners or provide
+independent instruction counts, cleanup qualification or native release
+evidence. Production code, dependencies and gate rules are unchanged.
+
 ## Work remaining before retest and acceptance freeze
 
 - Obtain independent retest of the complete conformance separation before

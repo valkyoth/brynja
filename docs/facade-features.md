@@ -229,3 +229,36 @@ is not a live-migration guarantee. This option is not native release
 qualification, independent review or a benchmark. The default command does
 not request a specialized build; on supported Arm hosts the hosted APIs may
 already select NEON in a generic build.
+
+## TupleHash consumer acceptance
+
+The same command now redirects the existing TupleHash execution fixture's
+imports through each extracted facade and the separate hosted adapter. It
+checks 268 independent cases: twelve official NIST examples and 256 generated
+arbitrary-bit cases, with 67 cases for each fixed/XOF identity. Ordinary and
+hardened outputs, fragmented items, mixed secret/public squeezing, scoped
+accelerated workspaces, scratch clearing and authority revocation are checked.
+Seven malformed inputs run both alone and after a valid request to ensure
+rejection does not print partial results.
+
+Portable and preferred-portable selection always run. Static required,
+static preferred and hosted required selection must either execute with the
+exact expected healthy route or fail with the probed unavailability reason.
+Generic x86 hosted execution intentionally remains unavailable: an AVX2 build
+does not supply a platform-wide migration guarantee. `--native-simd` also
+requires the compiled TupleHash route, using AVX2 on x86 or the complete
+NEON/SHA2/SHA3 bundle on Arm after a generic capability probe. More cores or
+an available batch NEON route alone do not establish that Arm bundle.
+
+Each profile runs six existing execution lifecycle tests and one compiled-
+authority rejection test; a supported static build additionally runs six
+scoped fixed/XOF tests. There are 128 compiled trait, ownership and
+classification rejections per facade. Four framing/domain/update mutants,
+one borrowed-scratch cleanup mutant and an opt-in scalar-fallback mutant
+test the checks themselves. The scalar-fallback mutant must reject in both
+required and preferred modes, despite retaining a working portable algorithm.
+
+TupleHash exposes route/health reports, not a public permutation counter.
+This consumer checks those reports and output/lifecycle behavior; it does not
+claim a new instruction-count observation, private-frame cleanup inspection,
+independent review or multi-platform native qualification.

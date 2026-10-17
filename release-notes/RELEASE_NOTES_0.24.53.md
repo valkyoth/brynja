@@ -89,6 +89,23 @@ replacement that retains correct digests but fails the counter witness.
 routes. This adds local functional acceptance, not new native qualification,
 production behavior or release-gate policy.
 
+## Packaged TupleHash consumers
+
+Both facade paths now reuse the existing TupleHash execution fixture and its
+268-case independent oracle (twelve official examples plus 256 generated
+arbitrary-bit cases). It exercises all four fixed/XOF identities through
+ordinary/hardened owners, fragmented item writers, mixed secret/public output,
+scoped accelerated workspaces and revocation. Static/preferred/hosted routes
+must execute as selected or reject exact unavailability before output. Seven
+malformed requests also follow a valid case to check atomic campaign output.
+
+The separate existing execution and scoped integration tests run from the
+extracted consumer. Both facades reject 128 compiled ownership/classification
+probes, four algorithm mutants and one scratch-clearing mutant. The opt-in
+accelerated campaign additionally rejects a forced portable substitution in
+required and preferred modes. No production behavior or gate policy changes;
+route reports do not become instruction-count or native-qualification claims.
+
 ## Work remaining before retest and acceptance freeze
 
 - Obtain independent retest of the complete conformance separation before

@@ -28,9 +28,57 @@ def rejects(doc, features, expected):
         raise AssertionError('accepted graph regression: ' + expected)
 
 
+def archive_regressions():
+    consumer = Path('/tmp/facade-archive-test/consumer')
+    roots = {'brynja-crypto': Path('/tmp/facade-archive-test/unpacked/brynja-crypto-0.1.2')}
+    baseline = document({'facade-consumer': [], 'brynja-crypto': []})
+    baseline['resolve']['root'] = 'facade-consumer'
+    for package, version, root in zip(baseline['packages'], ('0.0.0', '0.1.2'),
+                                      (consumer, roots['brynja-crypto'])):
+        package.update(version=version, manifest_path=str(root / 'Cargo.toml'),
+                       targets=[{'kind': ['lib'], 'src_path': str(root / 'src/lib.rs')}])
+    acceptance.archive_graph(baseline, roots, consumer)
+    changes = (
+        ('version', '0.1.3', 'archive version/source drift'),
+        ('source', 'registry+https://example.invalid', 'archive version/source drift'),
+        ('manifest_path', '/checkout/crates/brynja-crypto/Cargo.toml', 'dependency escaped'),
+        ('manifest_path', str(roots['brynja-crypto'] / '../outside/Cargo.toml'), 'dependency escaped'),
+        ('name', 'unregistered-local-crate', 'unregistered archive'),
+        ('name', 'facade-consumer', 'duplicate packaged identity'),
+        ('id', 'facade-consumer', 'duplicate packaged identity'),
+        ('targets', [], 'native/absent targets'),
+        ('links', 'native-library', 'native/absent targets'),
+        ('targets', [{'kind': ['custom-build'], 'src_path': '/tmp/build.rs'}], 'build script/proc macro'),
+        ('targets', [{'kind': ['proc-macro'], 'src_path': '/tmp/lib.rs'}], 'build script/proc macro'),
+        ('targets', [{'kind': ['lib'], 'src_path': '/checkout/src/lib.rs'}], 'source target escaped'),
+    )
+    mutants = []
+    for field, value, expected in changes:
+        changed = copy.deepcopy(baseline)
+        changed['packages'][1][field] = value
+        mutants.append((changed, expected))
+    for nodes in ([], baseline['resolve']['nodes'] * 2,
+                  baseline['resolve']['nodes'] + [{'id': 'unknown', 'features': []}]):
+        changed = copy.deepcopy(baseline)
+        changed['resolve']['nodes'] = nodes
+        mutants.append((changed, 'resolved package population'))
+    changed = copy.deepcopy(baseline)
+    changed['resolve']['root'] = 'brynja-crypto'
+    mutants.append((changed, 'unexpected downstream root'))
+    for changed, expected in mutants:
+        try:
+            acceptance.archive_graph(changed, roots, consumer)
+        except ValueError as error:
+            assert expected in str(error), error
+        else:
+            raise AssertionError('accepted archive provenance regression: ' + expected)
+    print(f'Extracted archive binding rejects {len(mutants)} identity/path/target regressions')
+
+
 def main():
     count = 0
     with patch('subprocess.run', side_effect=AssertionError('unexpected compilation')):
+        archive_regressions()
         baseline = document({'facade-consumer': [], 'brynja': [], 'brynja-crypto': []})
         acceptance.graph(baseline, [])
         for source in ('registry+https://example.invalid', 'git+https://example.invalid'):

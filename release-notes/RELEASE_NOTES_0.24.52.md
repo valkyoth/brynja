@@ -1,6 +1,6 @@
 # v0.24.52 — Facade features and package reachability
 
-Status: development candidate; implementation and acceptance work in progress.
+Status: implementation candidate prepared for independent pentest.
 No release qualification, independent cryptographic verification or publication
 is claimed. The next planned publication checkpoint remains v0.25.2.
 
@@ -40,8 +40,21 @@ alongside the separate hosted test: three tests per facade/profile. Runtime
 test populations are checked explicitly; six focused negative cases reject
 missing/ignored/failed tests and removed documentation examples.
 
-Final candidate review and independent owner-supplied pentest remain pending.
-No full verification sweep or native campaign was launched.
+Final author review additionally binds resolved package names, versions,
+manifests and source targets to the extracted archives. Sixteen mutations
+reject identity/path escapes, duplicate or missing nodes, native link
+declarations, build scripts and proc macros. Both endpoint compiler matrices
+pass with these assertions. Facade unit tests, strict scoped Clippy and rustdoc
+with warnings denied pass in default and all-feature configurations.
+The full workspace all-feature unit/integration suite and doctests also pass;
+existing platform-specific ignored tests retain their explicit dispositions.
+
+Independent owner-supplied pentest and release qualification remain pending.
+The unchanged verification planner requests full-fallback approval because
+the changed facade package is outside its known family map; the plan-only
+check started no expensive campaign. No full verification sweep or native
+collection was launched. The v0.24.51 owner exception does not authorize a
+v0.24.52 exception, and earlier evidence was not relabeled as current PASS.
 
 No cryptographic kernel, admission policy or release-gate policy changes in
 this initial forwarding implementation.

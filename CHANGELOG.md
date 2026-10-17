@@ -11,7 +11,14 @@
   compilation, dependency isolation and clearing-output behavior. Review and
   release qualification remain pending; no publication is selected.
 
-## 0.24.51 candidate
+## 0.24.51
+
+Tagged as an internal Apple Silicon resident/clearing milestone after accepted
+source retests, native collection and green GitHub. The owner explicitly omitted
+the additional planner-selected full sweep; it is NOT RUN, not PASS. Strict
+macOS admission, dump exclusion and independent native qualification are not
+claimed. The entries below preserve the initial implementation history; see
+[the release notes](release-notes/RELEASE_NOTES_0.24.51.md) for the bounded scope.
 
 - Add separate default-off Apple Silicon resident/clearing sessions for SHA-2,
   SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, SIMD batching and bounded ParallelHash

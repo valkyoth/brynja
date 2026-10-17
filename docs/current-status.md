@@ -8,9 +8,10 @@ The [ordering review](ROADMAP_ORDERING_AUDIT.md) splits oversized future
 families and records prerequisites. Windows strict and Apple Silicon resident
 profiles occupy v0.24.50–v0.24.51. Operational RISC-V acceleration is postponed
 until qualifying native hardware is available; portable support and existing
-candidate tests remain unchanged. The four remaining unstarted backfill stops
-occupy v0.24.52–v0.24.55, with HMAC still at v0.25.0. Current implementation and
-release-gate policy are unchanged.
+candidate tests remain unchanged. The four remaining backfill stops occupy
+v0.24.52–v0.24.55, with HMAC still at v0.25.0. The v0.24.52 facade/package
+candidate is implemented and undergoing focused review; release-gate policy
+is unchanged.
 
 The [public-operation roadmap audit](ROADMAP_API_COMPLETENESS_AUDIT.md) adds
 explicit DER, format, key-role and prerequisite closure without changing any
@@ -24,7 +25,7 @@ Current generated planning coverage is 2158 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.49 signed. The v0.24.48
+Status: v0.20.0 published; milestones through v0.24.51 tagged. The v0.24.48
 [hardened multibuffer ownership milestone](hardened-multibuffer-owners.md),
 including scheduled, streaming and threaded ParallelHash integration, passed its
 release checks and GitHub. The v0.24.49 [dedicated x86 SHA-512 work](x86-sha512-execution.md)
@@ -32,11 +33,26 @@ passed its retests, final verification and GitHub checks. Dedicated x86 SHA512
 execution remains emulator-qualified, not native-silicon-qualified. The current
 v0.24.50 [Windows enclave interfaces](windows-enclave-deployment.md) are implemented
 and development-tested across nineteen x64 routes, with conditional Brynja-owned
-cleanup author review complete. Independent retest, production-signed deployment
-qualification and final release verification remain pending. Existing host-slice
+cleanup author review complete. The completed source retests and internal release
+disposition are recorded in the [release notes](../release-notes/RELEASE_NOTES_0.24.50.md);
+production-signed deployment qualification is not claimed. Existing host-slice
 strict constructors still reject Windows; Windows ARM64 is unsupported/unqualified.
 Existing ordinary SIMD remains public-only and non-erasing. No new crates.io
 publication, independent verification or FIPS validation is claimed.
+
+The tagged v0.24.51 [Apple Silicon resident/clearing profiles](macos-resident-profile.md)
+have accepted source retests and author-operated native results. They do not
+provide dump exclusion or strict macOS admission. The owner explicitly omitted
+the additional planner-selected full sweep for that internal tag; it remains
+NOT RUN, not a full-gate PASS. This one-release decision does not change future
+release policy or establish independent native qualification.
+
+The v0.24.52 [facade feature guide](facade-features.md) documents explicit
+default-off forwarding to existing SHA-2, SHA-3/SHAKE/cSHAKE, KMAC, TupleHash
+and ParallelHash execution/batch APIs. Portable defaults and separate hosted,
+protected and legacy packages remain intact. Extracted consumers pass focused
+Rust 1.90.0/1.99.1 checks; independent pentest and release qualification are
+pending. This candidate adds no new cryptographic kernel.
 
 Existing [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
 byte/bit hashing APIs remain behind an explicit default-off leaf feature. General family

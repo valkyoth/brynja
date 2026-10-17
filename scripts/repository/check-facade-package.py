@@ -103,6 +103,44 @@ def graph(document, features, *, hosted=False):
             require(leaf in active[owner], 'missing resolved leaf feature: ' + feature)
 
 
+def archive_graph(document, roots, consumer):
+    """Bind resolved identities and source targets to the actual extracted archives."""
+    versions = {name: version for name, version, _ in packaging.PACKAGING_PACKAGES}
+    versions['facade-consumer'] = '0.0.0'
+    paths = {**roots, 'facade-consumer': consumer}
+    packages = document['packages']
+    identities = [package['id'] for package in packages]
+    names = [package['name'] for package in packages]
+    nodes = [node['id'] for node in document['resolve']['nodes']]
+    require(len(set(names)) == len(names) and len(set(identities)) == len(identities),
+            'duplicate packaged identity')
+    require(len(nodes) == len(set(nodes)) and set(nodes) == set(identities),
+            'resolved package population mismatch')
+    require(document['resolve']['root'] in identities and
+            packages[identities.index(document['resolve']['root'])]['name'] == 'facade-consumer',
+            'unexpected downstream root')
+    for package in packages:
+        name = package['name']
+        require(name in paths and name in versions, 'unregistered archive: ' + name)
+        root = paths[name].resolve()
+        require(package['version'] == versions[name] and package['source'] is None,
+                'archive version/source drift: ' + name)
+        require(Path(package['manifest_path']).resolve() == root / 'Cargo.toml',
+                'dependency escaped extracted archive: ' + name)
+        require(not package.get('links') and package['targets'], 'native/absent targets: ' + name)
+        for target in package['targets']:
+            require(not {'custom-build', 'proc-macro'}.intersection(target['kind']),
+                    'build script/proc macro in archive: ' + name)
+            require(Path(target['src_path']).resolve().is_relative_to(root),
+                    'source target escaped extracted archive: ' + name)
+
+
+def resolved_metadata(cargo, consumer, env, roots):
+    result = run(cargo + ['metadata', '--offline', '--format-version=1'], consumer, env)
+    archive_graph(json.loads(result.stdout), roots, consumer)
+    return result
+
+
 def ownership(consumer, package, cargo, env):
     for owner in ('sha2::hardened_execution::Sha256', 'kmac::execution::Kmac128',
                   'tuplehash::execution::TupleHash128'):
@@ -134,7 +172,7 @@ def execute(root, toolchain, bare_target):
             manifest(consumer, roots, package, [], defaults)
             source(consumer, package, cases.PORTABLE)
             test_run(cargo, consumer, env, 1)
-            metadata = run(cargo + ['metadata', '--offline', '--format-version=1'], consumer, env)
+            metadata = resolved_metadata(cargo, consumer, env, roots)
             graph(json.loads(metadata.stdout), [])
         # Each absent opt-in must fail for an unresolved public API, not a
         # linker, dependency-resolution or unrelated syntax failure.
@@ -149,7 +187,7 @@ def execute(root, toolchain, bare_target):
                         for item in errors), 'negative failed for wrong reason: ' + feature)
             manifest(consumer, roots, package, [feature])
             run(cargo + ['check', '--offline', '--target', bare_target], consumer, env)
-            metadata = run(cargo + ['metadata', '--offline', '--format-version=1'], consumer, env)
+            metadata = resolved_metadata(cargo, consumer, env, roots)
             graph(json.loads(metadata.stdout), [feature])
             print(f'PASS: {package}/{feature}: absent rejected, packaged no_std opt-in compiled', flush=True)
         features = list(cases.PROBES)
@@ -160,7 +198,7 @@ def execute(root, toolchain, bare_target):
         for profile in ([], ['--release']):
             test_run(cargo, consumer, env, 10, profile)
         run(cargo + ['check', '--offline', '--target', bare_target], consumer, env)
-        metadata = run(cargo + ['metadata', '--offline', '--format-version=1'], consumer, env)
+        metadata = resolved_metadata(cargo, consumer, env, roots)
         graph(json.loads(metadata.stdout), features)
         ownership(consumer, package, cargo, env)
         # Explicit downstream leaf opt-in unifies through the reexport. It is
@@ -170,7 +208,7 @@ def execute(root, toolchain, bare_target):
         manifest(consumer, roots, package, [], extra=extra)
         source(consumer, package, 'pub use api::sha2::Sha512TBits;\n')
         run(cargo + ['check', '--offline', '--target', bare_target], consumer, env)
-        metadata = run(cargo + ['metadata', '--offline', '--format-version=1'], consumer, env)
+        metadata = resolved_metadata(cargo, consumer, env, roots)
         graph(json.loads(metadata.stdout), ['general-sha512-t'])
         # Additive features must not rewrite the facade's actual feature set.
         identities = {p['id'] for p in json.loads(metadata.stdout)['packages']
@@ -184,7 +222,7 @@ def execute(root, toolchain, bare_target):
         source(consumer, package, cases.HOSTED + documentation())
         for profile in ([], ['--release']):
             test_run(cargo, consumer, env, 3, profile)
-        metadata = run(cargo + ['metadata', '--offline', '--format-version=1'], consumer, env)
+        metadata = resolved_metadata(cargo, consumer, env, roots)
         graph(json.loads(metadata.stdout), hosted_features, hosted=True)
         print(f'PASS: {package}: additive leaf features and separate hosted fallback/require', flush=True)
     print('Facade package opt-in, default isolation, no_std, runtime and cleanup acceptance: PASS')

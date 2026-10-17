@@ -41,7 +41,7 @@ previous_version = "0.1.2"
 version = "0.1.2"
 change = "code"
 publish = false
-reason = "Retain the published version while its internal source reexports all four complete ParallelHash/ParallelHashXOF constructions without publication."
+reason = "Retain the published version while internal source adds explicit default-off modern execution/general-t/batch forwarding and leaf namespaces; no publication is selected."
 
 [crates."brynja-hash-core"]
 previous_version = "unpublished"

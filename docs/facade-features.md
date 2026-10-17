@@ -138,6 +138,9 @@ Independent package tests must not rely on workspace-root feature unification.
 `python3 scripts/repository/check-facade-package.py` packages and extracts the
 modern closure, compiles isolated opt-ins for `x86_64-unknown-none`, checks
 default isolation and rejects absent APIs. `--toolchain 1.90.0` checks the MSRV.
+Every resolved package identity, version, manifest and source target is bound
+to the extracted archives; checkout fallbacks, unknown local packages, native
+link declarations, build scripts and proc macros are rejected.
 Debug/release checks exercise portable output equivalence and clearing owners;
 they do not stand in for native accelerated qualification or a full sweep.
 Each facade runs ten combined family/batch tests and three hosted/documentation

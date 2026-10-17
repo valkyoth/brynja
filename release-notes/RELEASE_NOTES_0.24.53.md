@@ -175,6 +175,23 @@ coverage. This slice does not cover scoped/in-place SHA-2 owners or provide
 independent instruction counts, cleanup qualification or native release
 evidence. Production code, dependencies and gate rules are unchanged.
 
+## Packaged production KMAC/KMACXOF consumers
+
+Both facades now run twelve official examples and 256 independent oracle cases
+through production execution APIs, with full-strength keys and fixed tags.
+The corpus retains partial-bit and rate-boundary cases; XOF output includes
+zero/short lengths. Exact source adaptations replace test-conformance calls
+without enabling the conformance feature or exporting its owners.
+
+Debug/release runs cover portable/preferred/required routes, seven lifecycle
+tests and seventeen malformed or weak-input rejections with atomic output.
+Native static builds add four scoped lifecycle tests and per-case scoped
+fixed/XOF checks. Each facade rejects 88 ownership/classification probes,
+four algorithm/comparison mutants and a borrowed-scratch cleanup mutant.
+Native checks also reject scoped-scratch cleanup and portable substitution.
+These functional checks do not qualify private-frame cleanup or native
+platforms. Production implementations and release-gate rules are unchanged.
+
 ## Work remaining before retest and acceptance freeze
 
 - Obtain independent retest of the complete conformance separation before

@@ -383,3 +383,37 @@ On a host without that bundle, required SHA-512 rejects instead of being
 counted as accelerated coverage. Route/work reports are not independent
 instruction counters. These are functional acceptance tests, not new native,
 register-cleanup or independent cryptographic qualification.
+
+## Production KMAC/KMACXOF consumer acceptance
+
+Both extracted facades run all four KMAC/KMACXOF identities against twelve
+official examples and 256 cases generated with the existing independent
+SP 800-185 oracle. The latter retain arbitrary-bit customization/messages and
+rate-boundary inputs, but use full-strength production keys and fixed tags;
+XOF outputs still include empty, short, partial-bit and rate-crossing cases.
+This is a production corpus, not a claim that the facade accepts every
+standards-valid weak-key conformance vector.
+
+The existing fixture is adapted by exact source anchors to call production
+constructors and finalizers. No conformance feature, test owner or direct leaf
+dependency is enabled. Seventeen malformed/weak-key/short-tag requests must
+reject with exact errors and no partial output, including after a valid case.
+Portable, preferred, required static and hosted selection are checked in debug
+and release. Hosted unavailability is not treated as accelerated coverage.
+
+Seven production lifecycle tests cover transactionality, secret-output Drop,
+terminal/forgotten readers, verification and recoverable unwinding. Available
+static builds add four scoped lifecycle tests and per-case fixed/XOF scoped
+checks, including caller scratch, mixed output and revocation. The separate
+test-owner integration test is deliberately omitted from these consumers;
+conformance isolation remains tested by the preceding facade checks. One
+scoped weak-key probe is adapted from a test owner to production rejection
+at scope entry. Hidden portable in-place helpers remain outside facade scope.
+
+Each facade rejects 88 compiled ownership/classification probes. Four compiled
+domain/update/suffix/comparison mutants and a borrowed-scratch cleanup mutant
+exercise the generic checks. Native runs additionally reject a scoped-scratch
+cleanup mutant with both fixed and XOF tests, and a portable substitution in
+required/preferred modes. Source restoration and pristine reruns are required.
+Route observations are not independent instruction or private-frame witnesses.
+This adds functional acceptance, not native or independent qualification.

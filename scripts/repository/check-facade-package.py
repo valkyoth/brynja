@@ -29,6 +29,7 @@ import facade_parallelhash_acceptance as parallelhash
 import facade_parallelhash_execution as parallel_execution
 import facade_sha3_execution as sha3_execution
 import facade_sha2_execution as sha2_execution
+import facade_kmac_acceptance as kmac
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts/sha2'))
@@ -266,6 +267,7 @@ def execute(root, toolchain, bare_target, native_simd=False):
     parallel_execution.execute(sys.modules[__name__], root, roots, cargo, env, native_simd)
     sha3_execution.execute(sys.modules[__name__], root, roots, cargo, env, native_simd)
     sha2_execution.execute(sys.modules[__name__], root, roots, cargo, env, native_simd)
+    kmac.execute(sys.modules[__name__], root, roots, cargo, env, native_simd)
     print('Facade package opt-in, default isolation, no_std, runtime and cleanup acceptance: PASS')
 
 
@@ -274,7 +276,7 @@ def main():
     parser.add_argument('--toolchain', default='1.99.1')
     parser.add_argument('--bare-target', default='x86_64-unknown-none')
     parser.add_argument('--native-simd', action='store_true',
-                        help='also run local SHA-2/Keccak/TupleHash/ParallelHash accelerated checks; not native qualification')
+                        help='also run local SHA-2/Keccak/KMAC/TupleHash/ParallelHash accelerated checks; not native qualification')
     args = parser.parse_args()
     with cargo_environment.private_directory(ROOT) as directory:
         execute(Path(directory), args.toolchain, args.bare_target, args.native_simd)

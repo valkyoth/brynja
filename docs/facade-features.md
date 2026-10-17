@@ -59,6 +59,10 @@ For leaf-only dependencies, select the leaf's corresponding feature and use
 its crate name directly: for example `brynja-hash-sha2/hardened-execution` and
 `brynja_hash_sha2::hardened_execution`. Reexports do not wrap or weaken owners.
 
+```sh
+cargo add brynja-hash-sha2 --path /path/to/brynja/crates/brynja-hash-sha2 --no-default-features --features hardened-execution
+```
+
 ## Hosted and protected profiles stay separate
 
 Use `brynja-crypto-cpu-std` for hosted CPU selection and operation-specific
@@ -70,11 +74,51 @@ Required acceleration must reject when unavailable; a backend failure never
 authorizes silent fallback. Static deployment must establish ISA support before
 constructing authority. A Cargo feature alone is not that guarantee.
 
+For example, enable `sha2-runtime-execution` on the facade and
+`runtime-execution` on the separate hosted adapter. This ordinary public-data
+example prefers Arm SHA-256 when available; only an explicit `None` session
+selects portable execution. Construction/session errors are not fallback:
+
+```sh
+cargo add brynja --path /path/to/brynja/crates/brynja --no-default-features --features sha2-runtime-execution
+cargo add brynja-crypto-cpu-std --path /path/to/brynja/crates/brynja-crypto-cpu-std --no-default-features --features runtime-execution
+```
+
+```rust
+use brynja_crypto_cpu_std::execution::{Authority, Kernel, Mode};
+use brynja::crypto::sha2::execution::{Execution, Sha256};
+let authority = Authority::new(Kernel::ArmSha256, Mode::Prefer).unwrap();
+let execution = match authority.session().unwrap() {
+    Some(session) => Execution::from_runtime(session),
+    None => Execution::portable(),
+};
+let result = Sha256::hash(execution, b"public input").unwrap();
+assert_eq!(result.digest, brynja::crypto::sha256(b"public input").unwrap());
+```
+
+Use `Mode::Require` instead of `Mode::Prefer` when acceleration is mandatory;
+treat a constructor/session error as operation failure, not permission to retry
+portably. Use `Mode::Portable` (or `Execution::portable()` without the hosted
+adapter) to force portable execution. These are per-operation selections, not
+a global default. Production callers should propagate errors instead of the
+examples' `unwrap()`.
+
 Protected/resident profiles have different guarantees and platform limits;
 they are not enabled by these execution features. For a protected-only API
 surface use [brynja-strict](../crates/brynja-strict/README.md) and enforce your
 application's dependency policy. Legacy SHA-1/MD5 must be selected from their
 separate leaf/hosted packages, never through the modern facade.
+
+For an explicit legacy-only dependency, for example:
+
+```sh
+cargo add brynja-legacy-sha1 --path /path/to/brynja/crates/brynja-legacy-sha1 --no-default-features --features hardened-execution
+```
+
+Use `brynja_legacy_sha1::hardened_execution` and its
+[leaf examples](../crates/brynja-legacy-sha1/README.md); host selection remains
+in [the separate legacy adapter](../crates/brynja-legacy-sha1-std/README.md).
+Hardened storage does not repair SHA-1's broken collision resistance.
 
 ## Security and Cargo unification
 
@@ -96,3 +140,6 @@ modern closure, compiles isolated opt-ins for `x86_64-unknown-none`, checks
 default isolation and rejects absent APIs. `--toolchain 1.90.0` checks the MSRV.
 Debug/release checks exercise portable output equivalence and clearing owners;
 they do not stand in for native accelerated qualification or a full sweep.
+Each facade runs ten combined family/batch tests and three hosted/documentation
+tests per profile. The harness rejects missing or ignored runtime tests and
+compiles the Rust examples directly from this document.

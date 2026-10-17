@@ -4,6 +4,7 @@ import copy
 import importlib.util
 import os
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 spec = importlib.util.spec_from_file_location(
@@ -63,7 +64,31 @@ def main():
             assert not any(k.startswith(('RUST', 'BRYNJA_')) for k in clean)
             assert set(k for k in clean if k.startswith('CARGO_')) == {
                 'CARGO_HOME', 'CARGO_TARGET_DIR'}
+        expected = 'test result: ok. 10 passed; 0 failed; 0 ignored;'
+        for summary in (expected, '', expected.replace('10 passed', '0 passed'),
+                        expected.replace('0 failed', '1 failed'),
+                        expected.replace('0 ignored', '1 ignored')):
+            with patch.object(acceptance, 'run', return_value=SimpleNamespace(stdout=summary)):
+                if summary == expected:
+                    acceptance.test_run(['cargo'], Path('.'), {}, 10)
+                else:
+                    try:
+                        acceptance.test_run(['cargo'], Path('.'), {}, 10)
+                    except ValueError as error:
+                        assert 'test population changed' in str(error)
+                    else:
+                        raise AssertionError('accepted incomplete runtime population')
+        assert acceptance.documentation().count('#[test]') == 2
+        for text in ('', '```rust\nlet removed = ();\n```'):
+            with patch.object(Path, 'read_text', return_value=text):
+                try:
+                    acceptance.documentation()
+                except ValueError as error:
+                    assert 'example population changed' in str(error)
+                else:
+                    raise AssertionError('accepted missing documentation examples')
     print(f'Facade package metadata rejects {count} graph regressions and hostile build environment')
+    print('Runtime population and documentation extraction reject six omissions/failures')
 
 
 if __name__ == '__main__':

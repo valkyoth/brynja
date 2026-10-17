@@ -25,8 +25,23 @@ compiler rejected 30 compiled Send/Sync/Copy/Clone/Debug probes across the two
 facades' SHA-2, KMAC and TupleHash execution owners. All 64 existing crate README
 examples, scoped Clippy, formatting, assurance metadata and release-policy tests
 pass. The publication plan selects zero packages.
-Remaining acceptance includes broader family/profile examples and final
-candidate review. No full verification sweep or native campaign was launched.
+Expanded downstream coverage also passed on both compiler endpoints. Each
+facade runs ten combined family/batch tests in debug and release: named SHA-2
+bit inputs and general-t boundaries; SHA-3 bit inputs, SHAKE/cSHAKE streaming
+and XOF tails; KMAC fixed/XOF output and key-length rejection; TupleHash item
+framing; ParallelHash serial/grouped leaves; and ordinary/hardened SHA-2 and
+Keccak batches. Public rejection preserves destinations, while secret output
+owners clear on drop and rejected work clears their supplied destinations.
+These are equivalence checks against existing portable implementations, not
+an independent cryptographic oracle or accelerated execution qualification.
+
+Both Rust examples are extracted from the facade guide and compiled/executed
+alongside the separate hosted test: three tests per facade/profile. Runtime
+test populations are checked explicitly; six focused negative cases reject
+missing/ignored/failed tests and removed documentation examples.
+
+Final candidate review and independent owner-supplied pentest remain pending.
+No full verification sweep or native campaign was launched.
 
 No cryptographic kernel, admission policy or release-gate policy changes in
 this initial forwarding implementation.

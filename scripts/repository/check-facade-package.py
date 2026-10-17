@@ -8,6 +8,7 @@ new cryptographic or native qualification.
 import argparse
 import json
 import os
+import re
 from pathlib import Path
 import subprocess
 import sys
@@ -15,6 +16,8 @@ import tempfile
 import tomllib
 
 import facade_package_cases as cases
+import facade_family_cases as families
+import facade_batch_cases as batches
 import facade_workspace_policy as policy
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -55,6 +58,22 @@ def manifest(consumer, roots, package, features, defaults=False, extra=''):
     text += ''.join(f'{name} = {{ path={json.dumps(str(path))} }}\n'
                     for name, path in roots.items())
     (consumer / 'Cargo.toml').write_text(text)
+
+
+def test_run(cargo, consumer, env, count, profile=()):
+    result = run(cargo + ['test', '--offline', *profile], consumer, env)
+    require(f'test result: ok. {count} passed; 0 failed; 0 ignored;' in result.stdout,
+            'runtime test population changed: ' + result.stdout[-4000:])
+
+
+def documentation():
+    blocks = re.findall(r'```rust\n(.*?)```',
+                        (ROOT / 'docs/facade-features.md').read_text(), re.S)
+    require(len(blocks) == 2, 'documentation example population changed')
+    return ''.join(f'#[test]\nfn documentation_{index}() {{\n' +
+                   block.replace('brynja::crypto', 'api').replace(
+                       'brynja_crypto_cpu_std', 'host') + '\n}\n'
+                   for index, block in enumerate(blocks))
 
 
 def source(consumer, package, body):
@@ -114,7 +133,7 @@ def execute(root, toolchain, bare_target):
         for defaults in (False, True):
             manifest(consumer, roots, package, [], defaults)
             source(consumer, package, cases.PORTABLE)
-            run(cargo + ['test', '--offline'], consumer, env)
+            test_run(cargo, consumer, env, 1)
             metadata = run(cargo + ['metadata', '--offline', '--format-version=1'], consumer, env)
             graph(json.loads(metadata.stdout), [])
         # Each absent opt-in must fail for an unresolved public API, not a
@@ -137,9 +156,9 @@ def execute(root, toolchain, bare_target):
         manifest(consumer, roots, package, features)
         probes = ''.join(f'pub use api::{path} as Probe{index};\n'
                          for index, path in enumerate(cases.PROBES.values()))
-        source(consumer, package, probes + cases.PORTABLE + cases.EXECUTION)
+        source(consumer, package, probes + cases.PORTABLE + cases.EXECUTION + families.RUST + batches.RUST)
         for profile in ([], ['--release']):
-            run(cargo + ['test', '--offline', *profile], consumer, env)
+            test_run(cargo, consumer, env, 10, profile)
         run(cargo + ['check', '--offline', '--target', bare_target], consumer, env)
         metadata = run(cargo + ['metadata', '--offline', '--format-version=1'], consumer, env)
         graph(json.loads(metadata.stdout), features)
@@ -160,12 +179,13 @@ def execute(root, toolchain, bare_target):
                     if n['id'] in identities), 'leaf unification enabled facade features')
         extra = ('host = { package="brynja-crypto-cpu-std", version="=0.1.1", '
                  'default-features=false, features=["runtime-execution"] }\n')
-        manifest(consumer, roots, package, ['sha2-runtime-execution'], extra=extra)
-        source(consumer, package, cases.HOSTED)
+        hosted_features = ['sha2-runtime-execution', 'sha2-hardened-execution']
+        manifest(consumer, roots, package, hosted_features, extra=extra)
+        source(consumer, package, cases.HOSTED + documentation())
         for profile in ([], ['--release']):
-            run(cargo + ['test', '--offline', *profile], consumer, env)
+            test_run(cargo, consumer, env, 3, profile)
         metadata = run(cargo + ['metadata', '--offline', '--format-version=1'], consumer, env)
-        graph(json.loads(metadata.stdout), ['sha2-runtime-execution'], hosted=True)
+        graph(json.loads(metadata.stdout), hosted_features, hosted=True)
         print(f'PASS: {package}: additive leaf features and separate hosted fallback/require', flush=True)
     print('Facade package opt-in, default isolation, no_std, runtime and cleanup acceptance: PASS')
 

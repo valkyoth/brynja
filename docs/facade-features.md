@@ -181,3 +181,20 @@ archives and explicit patches. The repository SBOM describes that local graph,
 not a checksum attestation for registry archives. Use the reviewed commit and
 local archive provenance, not only name/version, to identify this candidate.
 No publication is selected by this internal milestone.
+
+## Package-external checks
+
+Run `python3 scripts/repository/check-facade-package.py` to compile isolated
+consumers against extracted local crate archives. It checks opt-in forwarding,
+bare-target compilation, graph isolation, ownership, conformance separation
+and runtime output/error behavior through both facade paths. Use `--toolchain`
+to select another installed supported compiler.
+
+The Keccak batch cases reuse the independent bit-level oracle for all eight
+SHA-3/SHAKE/cSHAKE identities, including customized, partial-bit and zero-width
+XOF cases. Ordinary output remains transactional; hardened secret destinations
+clear on Drop and rejection; explicit public output and sparse layouts retain
+their separate contracts. Compiled mutations must reach and fail the intended
+runtime assertion, not merely fail to build. These checks select portable
+execution: native SIMD counters, private-workspace cleanup and platform
+qualification remain the responsibility of the dedicated family checks.

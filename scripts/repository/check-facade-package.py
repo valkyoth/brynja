@@ -21,6 +21,7 @@ import facade_batch_cases as batches
 import facade_workspace_policy as policy
 import facade_cargo_environment as cargo_environment
 import facade_adversarial_cases as adversarial
+import facade_keccak_cases as keccak
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts/sha2'))
@@ -174,6 +175,7 @@ def execute(root, toolchain, bare_target):
     consumer = root / 'consumer'
     (consumer / 'src').mkdir(parents=True)
     cargo = ['cargo', '+' + toolchain]
+    keccak.install(consumer, keccak.corpus())
     for package in policy.FEATURES:
         for defaults in (False, True):
             manifest(consumer, roots, package, [], defaults)
@@ -207,6 +209,11 @@ def execute(root, toolchain, bare_target):
         run(cargo + ['check', '--offline', '--target', bare_target], consumer, env)
         metadata = resolved_metadata(cargo, consumer, env, roots)
         graph(json.loads(metadata.stdout), features)
+        source(consumer, package, keccak.RUST)
+        for profile in ([], ['--release']):
+            test_run(cargo, consumer, env, 3, profile)
+        keccak.mutants(sys.modules[__name__], consumer, roots, cargo, env)
+        print(f'PASS: {package}: 1024 independent Keccak outputs, ordinary/secret profiles', flush=True)
         ownership(consumer, package, cargo, env)
         # An independent leaf opt-in unifies the leaf build, but must not
         # expose exports gated on the facade's own feature selection.

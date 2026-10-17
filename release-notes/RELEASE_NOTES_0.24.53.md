@@ -33,6 +33,25 @@ secret classification are checked through each packaged facade. This is not
 an assertion that facade curation can hide inherent methods or prevent callers
 from implementing their own protocol over lower-level cSHAKE.
 
+## Packaged Keccak batch consumers
+
+Both extracted facades now reuse the independent bit-level Keccak batch oracle:
+256 mixed four-lane batches, 1,024 expected outputs across all eight
+SHA-3/SHAKE/cSHAKE identities. Ordinary, hardened-secret and explicitly public
+hardened outputs cover partial bits, customization, zero-width XOF outputs and
+rate boundaries. Checks include sparse public layouts, exact identities and
+bit lengths, work accounting, cancellation/budget rejection, subsequent reuse,
+quarantine, explicit declassification, destination canaries and clearing of
+secret outputs and staging.
+
+Five compiled mutations verify detection of omitted/partial output commits,
+incorrect work reports, omitted secret-output clearing and omitted final-bit
+masking. Harness regressions reject missing populations and compiler failures
+masquerading as successful mutation rejection. This extends the existing
+acceptance command; it adds no release gate, dependency or production change.
+These consumers force portable execution and do not establish native SIMD
+execution or inspection of private workspace memory.
+
 ## Work remaining before retest and acceptance freeze
 
 - Obtain independent retest of the complete conformance separation before

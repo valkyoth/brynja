@@ -454,3 +454,44 @@ Extracted sources restore on all exits and pristine tests repeat afterward.
 This is functional consumer acceptance, not native release qualification,
 independent instruction counting, private-frame cleanup proof or certification.
 Production code, original fixtures and historical captures remain unchanged.
+
+## Scoped SHA-2 consumer acceptance
+
+The extracted facades also exercise `sha2::hardened_execution::in_place`:
+all six named hashes and every valid general SHA-512/t parameter. The named
+corpus retains 240 NIST bit-vector cases; the existing bounded general-t
+visitor supplies 4,590 independent expected-output cases. No second oracle
+or hash implementation is introduced. Portable, hosted preferred/required
+and static required modes use the same selection probe as single-state SHA-2.
+Narrow-only accelerated runs explicitly retain portable wide hashing; they
+do not count missing dedicated SHA-512 support as native execution.
+
+Debug/release runs compare secret and explicitly declassified public outputs,
+byte and bit finalization, fragmented updates and workspace reuse. Checks
+retain exact general-t parameter identity, final-bit masking, route, message
+and padding counts, and portable IV-derivation accounting. Secret outputs
+outlive the callback and clear their destinations on Drop.
+
+Lifecycle checks cover the six named workspaces and five representative
+general-t widths. Wrong secret-output sizes clear the supplied destination;
+wrong named public-output sizes preserve it. Each cancellation, dropped or
+forgotten handle and recoverable unwind is followed by a fresh known-result
+computation. Available accelerated owners additionally exercise revocation
+before update and finalization, terminal reuse, skipped callbacks after
+revocation and wrong-family admission. Revocation populations are checked
+against the actual narrow/wide routes. These observations do not expose or
+prove private workspace/register clearing; existing low-level checks remain
+separate obligations.
+
+Each facade rejects 102 compiled trait, lifetime, scope, output-classification
+and intermediate length/preflight-query probes. Six compiled mutants test
+named/general IV initialization, general output masking, scoped public-copy
+commit, per-scope work-counter reset and wrong-size secret-output clearing.
+Native checks additionally reject omitted CPU compression and portable
+substitution under required selection. Mutants must compile and produce the
+fixture's exact mismatch error; unrelated failures are not accepted. Sources
+restore on all exits and pristine corpus/lifecycle checks repeat afterward.
+
+Hidden leaf-only portable in-place APIs are not exported by these facades and
+are not claimed here. This adds public functional acceptance, not native
+release collection, independent instruction counts or new qualification.

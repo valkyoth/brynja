@@ -4972,7 +4972,9 @@ and compiled algorithm/output/accounting and native downgrade mutations.
 Ordinary and hardened single-state SHA-2 likewise reuse their NIST/general-t
 corpora through both facades, with narrow/wide availability, output/error
 behavior, ownership negatives and compiled compression/downgrade mutations.
-Scoped/in-place SHA-2 owners remain separate from this acceptance slice.
+Separate scoped SHA-2 consumers now reuse the same named/general-t corpora,
+including workspace reuse, secret/declassified output, work reports, terminal
+revocation, lifetime/metadata negatives and compiled observable mutations.
 Production KMAC/KMACXOF consumers now reuse the independent oracle through
 both facades, with full-strength key/tag inputs, exact weak-input rejection,
 generic and scoped native lifecycle checks, ownership negatives and compiled

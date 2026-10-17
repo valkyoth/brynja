@@ -31,6 +31,7 @@ import facade_sha3_execution as sha3_execution
 import facade_sha2_execution as sha2_execution
 import facade_kmac_acceptance as kmac
 import facade_hardened_sha3 as hardened_sha3
+import facade_scoped_sha2 as scoped_sha2
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts/sha2'))
@@ -270,6 +271,7 @@ def execute(root, toolchain, bare_target, native_simd=False):
     sha2_execution.execute(sys.modules[__name__], root, roots, cargo, env, native_simd)
     kmac.execute(sys.modules[__name__], root, roots, cargo, env, native_simd)
     hardened_sha3.execute(sys.modules[__name__], root, roots, cargo, env, native_simd)
+    scoped_sha2.execute(sys.modules[__name__], root, roots, cargo, env, native_simd)
     print('Facade package opt-in, default isolation, no_std, runtime and cleanup acceptance: PASS')
 
 

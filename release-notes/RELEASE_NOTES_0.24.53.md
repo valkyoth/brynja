@@ -214,6 +214,25 @@ These consumer checks do not inspect private storage/registers or establish
 independent instruction counts, native qualification or certification.
 No production implementation, dependency or release-gate policy is changed.
 
+## Packaged scoped SHA-2 consumers
+
+Both facades now exercise named and general-t scoped workspaces using the
+existing 240 NIST and 4,590 independent general-t cases. Secret/public outputs,
+parameter and route identity, work counts, arbitrary-bit tails, fragmented
+updates and reuse are checked in debug/release across the selected modes.
+
+Eleven lifecycle identities cover all six named workspaces and five general-t
+widths: wrong-size output, cancellation, Drop, forgotten handles, recoverable
+unwind and fresh known-result reuse. Available accelerated routes also test
+terminal revocation, destination guarantees, callback rejection and wrong
+kernel-family admission. Narrow-only runs explicitly use portable wide hashing.
+
+Each facade rejects 102 compiled ownership/scope/classification/metadata probes
+and six observable IV/masking/copy/accounting/output-clearing mutants. Native
+checks also reject CPU no-ops and portable substitution. Private-memory and
+register-cleanup qualification remain separate; no production implementation,
+dependency, gate or historical evidence was changed.
+
 ## Work remaining before retest and acceptance freeze
 
 - Obtain independent retest of the complete conformance separation before

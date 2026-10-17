@@ -142,6 +142,22 @@ hidden leaf helpers or changing the accelerated assertions. This is functional
 acceptance only, not instruction-count, private-frame or native qualification.
 No production implementation, dependency or release-gate policy changes.
 
+## Packaged ordinary SHA-3/SHAKE/cSHAKE consumers
+
+The existing single-state fixture now runs through both extracted facades and
+an explicitly selected hosted sponge adapter. Its 1,084 SHA-3/SHAKE cases
+comprise 76 NIST vectors and 1,008 portable-reference comparisons; its 628
+cSHAKE cases comprise four NIST examples and 624 independent bit-oracle cases.
+Debug/release profiles check byte/bit and streaming/XOF behavior, setup/work
+accounting, output atomicity, six lifecycle tests and exact static/hosted
+availability. Each facade rejects 125 classification/ownership misuse probes.
+
+Eleven compiled algorithm/output/state/accounting mutants and two native
+no-op/portable-downgrade mutants test the checks. Work/route observations are
+not independent instruction counters. These are public-only non-erasing
+owners, not hardened secret owners or new qualification. Production code,
+dependencies, historical evidence and release-gate policy are unchanged.
+
 ## Work remaining before retest and acceptance freeze
 
 - Obtain independent retest of the complete conformance separation before

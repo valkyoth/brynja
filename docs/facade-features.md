@@ -321,3 +321,37 @@ mutant must be caught after successful compilation. The scalar substitution
 must fail the root, stream and threaded route checks before output. Public
 route reports are not new instruction-count or private-frame observations.
 These remain local functional checks, not independent or native qualification.
+
+## Ordinary SHA-3/SHAKE/cSHAKE consumer acceptance
+
+The same command runs the existing single-state fixture through both extracted
+facades and a separately opted-in hosted `sponge-execution` adapter. All source
+modules and vector files used by the copied integration tests come from the
+extracted SHA-3 archive, not a workspace dependency. SHA-3/SHAKE uses 76 NIST
+vectors and 1,008 additional comparisons with the portable implementation;
+cSHAKE uses four NIST examples and 624 independent bit-oracle cases. The latter
+includes arbitrary-bit function names, customization and messages, empty N/S
+SHAKE equivalence, partial output and rate boundaries.
+
+Debug/release consumers check one-shot and fragmented streaming execution,
+setup/work accounting, short-scratch rejection and output atomicity. Portable,
+hosted preferred, hosted required and static required modes must match the
+probed route or reject exact unavailability before printing a success result.
+Six copied integration tests additionally exercise public byte entry points,
+wrong-operation rejection and quarantine. Their static-only branches run in
+the explicit native build; the generic build does not qualify those branches.
+
+Each facade compiles 48 raw-input rejections with explicit-public-marker
+controls, 70 trait rejections with positive type-existence controls and seven
+marker/ownership/authority bypass rejections. This enforces explicit caller
+classification, not data provenance. These ordinary owners do not promise
+secret-memory erasure and must not receive confidential data.
+
+Eleven compiled mutations cover permutation, domain separation, output/state
+commit, reported work and final-bit masking. Native checks additionally reject
+a skipped static permutation and a correct-output portable route downgrade.
+The work reports count execution-layer operations; they are not an independent
+CPU-instruction witness, nor proof against a scalar replacement that also
+forges its route report. Family code-generation/native checks retain that
+responsibility. This is local functional acceptance, not a hardened-owner
+review, new native qualification or independent cryptographic verification.

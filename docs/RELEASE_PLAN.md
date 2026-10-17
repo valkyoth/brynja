@@ -4965,6 +4965,10 @@ The batch slice keeps root hashing portable. Separate extracted consumers now
 cover scheduled, streaming and threaded single-state execution, including
 accelerated roots and curated scoped fixed/XOF owners. Hidden leaf-only
 portable in-place helpers remain outside facade coverage.
+Ordinary single-state SHA-3/SHAKE/cSHAKE now reuses its packaged vector and
+streaming corpus through both facades, with explicit hosted/static selection,
+public-input and ownership negatives, transactional output/quarantine checks,
+and compiled algorithm/output/accounting and native downgrade mutations.
 Wider consumer acceptance and independent retest remain pending.
 
 Plan scope: Freeze runnable package-external acceptance for every operational ordinary/hardened, byte/bit, streaming, XOF and batch route across SHA-2, SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, ParallelHash, SHA-1 and MD5 before the final native sweep.

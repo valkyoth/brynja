@@ -67,6 +67,24 @@ def cases() -> list[tuple[str, bytes, int, bytes, int, bytes, int, int, bytes]]:
     return selected
 
 
+def production_byte_cases():
+    """Extra portable byte-API coverage; preserve the shared native corpus."""
+    selected = []
+    for algorithm, rate, xof in (('kmac128', 168, False), ('kmac256', 136, False),
+                                 ('kmacxof128', 168, True), ('kmacxof256', 136, True)):
+        # Do not rely on coinciding modular cycles for full-strength coverage.
+        # Every identity gets ordinary byte APIs at both common tag sizes.
+        key = bytes(range(32))
+        custom = b'production byte oracle'
+        for output_bits in (256, 512):
+            for message in (b'', bytes(range(193))):
+                expected = kmac(rate, oracle.byte_bits(key), oracle.byte_bits(message),
+                                oracle.byte_bits(custom), output_bits, xof)
+                selected.append((algorithm, key, 256, custom, len(custom) * 8,
+                                 message, len(message) * 8, output_bits, expected))
+    return selected
+
+
 def run_fixture(request: str) -> subprocess.CompletedProcess[str]:
     environment = os.environ.copy()
     with tempfile.TemporaryDirectory(prefix="brynja-kmac-") as target:
@@ -92,6 +110,12 @@ def production_cases(selected):
 
 
 def production_population(stderr, selected):
+    full = production_cases(selected)
+    for algorithm in ('kmac128', 'kmac256', 'kmacxof128', 'kmacxof256'):
+        for bits in (256, 512):
+            if not any(c[0] == algorithm and c[7] == bits
+                       and all(c[index] % 8 == 0 for index in (2, 4, 6)) for c in full):
+                raise RuntimeError('missing byte-aligned production oracle coverage: ' + algorithm)
     expected = ['KMAC_PRODUCTION_ORACLE: ' + case[0] for case in production_cases(selected)]
     actual = [line for line in stderr.splitlines() if line.startswith('KMAC_PRODUCTION_ORACLE:')]
     if not expected or actual != expected:
@@ -112,7 +136,7 @@ def verify_oracle() -> None:
 
 def main() -> int:
     verify_oracle()
-    selected = cases()
+    selected = cases() + production_byte_cases()
     request = "\n".join(
         f"{algorithm} {key_bits} {key.hex() or '-'} {custom_bits} {custom.hex() or '-'} "
         f"{message_bits} {message.hex() or '-'} {output_bits}"

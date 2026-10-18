@@ -41,6 +41,8 @@ DIFFERENTIAL = Path("scripts/kmac/check-kmac-differential.py")
 DIFFERENTIAL_FIXTURE = Path("assurance/kmac-differential/src/main.rs")
 FOLLOWUP = tuple(map(Path, (
     "assurance/kmac-differential/src/profiles.rs",
+    "assurance/kmac-differential/src/production_bytes.rs",
+    "scripts/repository/facade_conformance_cases.py",
     "assurance/kmac-conformance-rejected/src/enabled.rs",
     "scripts/kmac/check-kmac-conformance-enabled.py",
     "scripts/kmac/kmac_production_oracle.py",
@@ -170,7 +172,11 @@ def validate(root: Path) -> None:
         text = loaded[source]
         if any(token in text for token in ('production: bool', 'conformance: bool', 'require_full_strength: bool')):
             fail("bare strength-policy boolean")
-    require(loaded[CRATE / "src/policy.rs"], "matches!(self, Self::Production)", "named strength admission")
+    require(loaded[CRATE / "src/policy.rs"],
+            'match self {\n            Self::Production => true,\n'
+            '            #[cfg(any(feature = "conformance-testing", test))]\n'
+            '            Self::Conformance => false,\n        }',
+            "exhaustive named strength admission")
     fixed = loaded[CRATE / "src/fixed.rs"]
     for token in (
         "finish_fixed(Some(final_message), bits, StrengthPolicy::Production)",
@@ -209,7 +215,7 @@ def validate(root: Path) -> None:
                   "Output::new(reader, cleanup)", "_authority: KmacPublicDeclassification",
                   "with_bits_conformance", "squeeze_final_bits_secret"):
         require(scoped_xof, token, "scoped XOF borrow/classification")
-    require(scoped, "self.finish(input, 0, 0, StrengthPolicy::Conformance)", "KMACXOF zero trailer")
+    require(scoped, "self.frame(input, 0)", "KMACXOF zero trailer")
     accelerated = loaded[CRATE / 'src/hardened_in_place/accelerated/fixed.rs']
     for token in ("sponge: cshake::$storage<'authority>", "stage: [u8; 168]",
                   "cshake::$storage::new(session)?", "let cleanup = Guard(metadata);",
@@ -337,6 +343,8 @@ def validate(root: Path) -> None:
         (DIFFERENTIAL_FIXTURE, "profiles::production::dispatch("),
         (DIFFERENTIAL_FIXTURE, "profiles::production::scoped_fixed("),
         (DIFFERENTIAL_FIXTURE, "profiles::production::scoped_xof("),
+        (DIFFERENTIAL_FIXTURE, "production_bytes::admission()?;"),
+        (DIFFERENTIAL_FIXTURE, "production_bytes::check("),
         (CONFORMANCE_FIXTURE, "Kmac128::new_conformance"),
         (CODEGEN, "Option<S>|state\\.take\\(\\)|take_state"),
         (CODEGEN, "take_reader_erasing_source"),

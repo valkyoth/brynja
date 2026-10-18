@@ -366,6 +366,17 @@ def main() -> int:
     expected = (f"fn owner::<impl at {source}:{line}:1: {line}:{end_column}>::"
                 "drop(_1: &mut HardenedSha2Owner) -> () {")
     assert compiler.contracts.REGISTERED_CALLER_MIR_HEADERS[compiler.contracts.SHA2_DROP] == [expected]
+    source = "crates/brynja-mac-kmac/src/core_state.rs"
+    declaration = "impl<S: CshakeState, const RATE: usize, const STRENGTH: u128> Drop for KmacCore<S, RATE, STRENGTH> {"
+    locations = [number for number, text in enumerate(
+        (compiler.ROOT / source).read_text().splitlines(), 1
+    ) if text == declaration]
+    assert len(locations) == 1
+    line = locations[0]
+    end_column = len(declaration.removesuffix(" {")) + 1
+    expected = (f"fn core_state::<impl at {source}:{line}:1: {line}:{end_column}>::"
+                "drop(_1: &mut KmacCore<S, RATE, STRENGTH>) -> () {")
+    assert compiler.contracts.REGISTERED_CALLER_MIR_HEADERS[compiler.contracts.KMAC_DROP] == [expected]
     print(
         "secret-owner MIR evidence rejects nineteen identity, target, data-flow, and dominance "
         "regressions plus twenty-two registered identity, namespace, and coverage bypasses"

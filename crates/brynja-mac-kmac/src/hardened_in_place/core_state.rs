@@ -102,7 +102,7 @@ impl<'scope, S: State> Core<'scope, S> {
         Ok(())
     }
     fn finish(
-        mut self,
+        self,
         input: Option<Fips202BitString<'_>>,
         bits: u128,
         strength: u128,
@@ -117,6 +117,15 @@ impl<'scope, S: State> Core<'scope, S> {
         if strength_policy.is_production() && bits < strength {
             return Err(KmacError::TagTooShort);
         }
+        self.frame(input, bits)
+    }
+    // Framing has no policy override. Its two callers enforce their distinct
+    // fixed-tag/XOF strength requirements before transferring the owner.
+    fn frame(
+        mut self,
+        input: Option<Fips202BitString<'_>>,
+        bits: u128,
+    ) -> Result<(S::Reader, Guard<'scope>), KmacError> {
         let reader = append_suffix(&mut self.state, input, bits, |state, tail| {
             state.0.take().ok_or(KmacError::StateConsumed)?.finish(tail)
         })?;
@@ -135,7 +144,7 @@ impl<'scope, S: State> Core<'scope, S> {
         }
         // KMACXOF frames right_encode(0), not the requested output length.
         // Key strength was checked above; fixed-tag minimums do not apply.
-        self.finish(input, 0, 0, StrengthPolicy::Conformance)
+        self.frame(input, 0)
     }
     pub(super) fn tag<'out>(
         self,

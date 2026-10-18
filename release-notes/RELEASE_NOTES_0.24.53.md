@@ -418,11 +418,20 @@ silently counted as physical execution or independent verification.
 Three Low findings are addressed for focused retest: full-strength oracle
 cases now also exercise production KMAC owners, a shared internal strength-policy
 enum replaces opposite boolean conventions, and the dedicated conformance gate
-rejects 52 production-method probes with test features enabled. Production-only
+rejects 100 production-method probes with test features enabled, derived from
+the facade's complete method inventory. Production-only
 compiled mutations and exact population/diagnostic regressions protect the new
 coverage. The CI Keccak layout test uses its installed AArch64 GNU target and
 requires pristine compilation before mutation rejection. See the
 [review record](../security/pentest/v0.24.53.md) for scope and results.
+
+The subsequent retest exposed two remaining coverage gaps, now addressed:
+verification/secret/bit methods are included in the dedicated gate, and explicit
+256-/512-bit full-strength cases exercise ordinary production byte APIs against
+the independent oracle. Real verifier-leak and policy-downgrade mutations test
+those guards. Internal policy matching is exhaustive; scoped XOF framing no
+longer uses a conformance policy label. The stale KMAC MIR source-line binding
+reported by CI is corrected and regression-tested. Focused retest remains pending.
 
 No production kernel, unsafe block, registry dependency, release-gate rule or historical
 capture is changed by the conformance separation. Independent verification

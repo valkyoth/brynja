@@ -3,12 +3,17 @@
 #[derive(Clone, Copy, Eq, PartialEq)]
 pub(crate) enum StrengthPolicy {
     Production,
+    #[cfg(any(feature = "conformance-testing", test))]
     Conformance,
 }
 
 impl StrengthPolicy {
     pub(crate) const fn is_production(self) -> bool {
-        matches!(self, Self::Production)
+        match self {
+            Self::Production => true,
+            #[cfg(any(feature = "conformance-testing", test))]
+            Self::Conformance => false,
+        }
     }
 }
 

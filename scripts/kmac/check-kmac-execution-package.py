@@ -136,7 +136,7 @@ def mutations(consumer, roots, env):
         ('../hardened_in_place/fixed.rs', 'key.bit_len() < $strength', 'key.bit_len() < 0', 'scoped_lifecycle_strength'),
         ('../hardened_in_place/fixed.rs', 'let cleanup = Guard(&mut self.metadata);', 'let mut cleanup = core::mem::ManuallyDrop::new(Guard(&mut self.metadata));', 'scoped_lifecycle_strength'),
         ('../hardened_in_place/fixed.rs', 'bytes(b"KMAC")?', 'bytes(b"WRONG")?', 'scoped_known_answer'),
-        ('../hardened_in_place/core_state.rs', 'self.finish(input, 0, 0, StrengthPolicy::Conformance)', 'self.finish(input, 8, 0, StrengthPolicy::Conformance)', 'scoped_xof_returned_secret'),
+        ('../hardened_in_place/core_state.rs', 'self.frame(input, 0)', 'self.frame(input, 8)', 'scoped_xof_returned_secret'),
         ('../hardened_in_place/core_state.rs', 'if strength_policy.is_production() && self.key_policy() != KmacKeyPolicy::FullStrength {\n            return Err(KmacError::KeyTooShort);\n        }\n        // KMACXOF', '// KMACXOF', 'xof_production_rejects_weak_keys'),
         ('../hardened_in_place/reader.rs', '*self.reader = None;', '', 'reader_failure_and_unwind'),
         ('../hardened_in_place/reader.rs', 'self.metadata.wipe();', '', 'reader_failure_and_unwind'),

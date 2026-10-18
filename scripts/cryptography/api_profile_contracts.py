@@ -316,7 +316,7 @@ REGISTERED_CALLER_MIR_HEADERS = {
         "drop(_1: &mut HardenedFips202Owner<RATE>) -> () {"
     ],
     KMAC_DROP: [
-        "fn core_state::<impl at crates/brynja-mac-kmac/src/core_state.rs:103:1: 103:99>::"
+        "fn core_state::<impl at crates/brynja-mac-kmac/src/core_state.rs:104:1: 104:99>::"
         "drop(_1: &mut KmacCore<S, RATE, STRENGTH>) -> () {"
     ],
     TUPLEHASH_DROP: [

@@ -1,3 +1,4 @@
+mod production_bytes;
 mod profiles;
 use profiles::conformance::{dispatch, scoped_fixed, scoped_xof};
 use std::{
@@ -14,6 +15,7 @@ const MAX_FIELD_BYTES: usize = 4_096;
 const MAX_OUTPUT_BITS: usize = 4_095;
 
 fn main() -> Result<(), Box<dyn Error>> {
+    production_bytes::admission()?;
     let mut request = String::new();
     io::stdin()
         .take(MAX_CAMPAIGN_BYTES.saturating_add(1))
@@ -115,6 +117,12 @@ fn evaluate(request: &str, line: usize, rendered: &mut String) -> Result<(), Box
             output_bits,
             &output,
         )?;
+        if [key_bits, custom_bits, message_bits, output_bits]
+            .iter()
+            .all(|bits| bits.is_multiple_of(8))
+        {
+            production_bytes::check(algorithm, &key, &custom, &message, &output)?;
+        }
         eprintln!("KMAC_PRODUCTION_ORACLE: {algorithm}");
     }
     output.fill(0);

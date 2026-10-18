@@ -4,10 +4,39 @@ import json
 from pathlib import Path
 import sys
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'repository'))
+from facade_conformance_cases import CONSTRUCT, FIXED, SCOPE, STATES, XOF
+
+
+def probes():
+    """Use the facade's exhaustive method inventory, not a sample or count."""
+    result = []
+    for prefix, scoped in (('brynja_mac_kmac', False),
+                           ('brynja_mac_kmac::execution', False),
+                           ('brynja_mac_kmac::hardened_in_place', True),
+                           ('scoped_execution', True)):
+        for name in STATES:
+            methods = XOF if 'Xof' in name else FIXED
+            if not scoped:
+                methods = CONSTRUCT + methods
+            result.extend(f'let _ = {prefix}::{name}::{method};' for method in methods)
+            if scoped:
+                scope = SCOPE + (('with_bits_and_scratch_conformance',)
+                                 if prefix == 'scoped_execution' else ())
+                result.extend(f'let _ = {prefix}::{name}Workspace::{method};' for method in scope)
+    return result
+
+
+def source_text():
+    return ('//! Production method-set negatives with leaf conformance enabled.\n\n'
+            'use brynja_mac_kmac::hardened_in_place::accelerated as scoped_execution;\n\n' +
+            '\n'.join(f'fn reject_{index}() {{\n    {probe}\n}}\n'
+                      for index, probe in enumerate(probes())))
+
 
 def validate(output, source):
-    expected = {line.strip() for line in source.splitlines() if line.strip().startswith('let _ = ')}
-    if len(expected) != 52:
+    expected = set(probes())
+    if source != source_text():
         raise ValueError('production conformance probe population changed')
     actual = set()
     for line in output.splitlines():
@@ -29,4 +58,4 @@ def validate(output, source):
 if __name__ == '__main__':
     validate(Path(sys.argv[1]).read_text(),
              Path('assurance/kmac-conformance-rejected/src/enabled.rs').read_text())
-    print('Enabled conformance feature rejects all 52 production method probes')
+    print(f'Enabled conformance feature rejects all {len(probes())} production method probes')

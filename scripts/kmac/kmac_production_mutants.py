@@ -40,7 +40,8 @@ def check(root, consumer, roots, env, native_env=None):
     for name in adapter.COUNTS:
         path = execution / 'src' / name
         path.write_text(adapter.production(name, path.read_text()))
-    cases = [c for c in oracle.production_cases(oracle.cases()) if c[7] >= 256]
+    cases = [c for c in oracle.production_cases(oracle.cases() + oracle.production_byte_cases())
+             if c[7] >= 256]
     request = '\n'.join(f'{a} {kb} {k.hex() or "-"} {cb} {c.hex() or "-"} '
         f'{mb} {m.hex() or "-"} {ob}' for a, k, kb, c, cb, m, mb, ob, _ in cases) + '\n'
     expected = [case[-1].hex() for case in cases]
@@ -77,6 +78,15 @@ def check(root, consumer, roots, env, native_env=None):
             (prefix + 'xof.rs', 'self.inner.with_bits(key, customization, |state| {',
              'self.inner.with_bits(key, key, |state| {', 1, profile),
         ]
+    # These preserve algorithm bytes for valid inputs. Only explicit rejection
+    # of weak keys/tags can catch a production-to-conformance policy downgrade.
+    for before in (
+        'KmacCore::new_bits(key, customization, StrengthPolicy::Production)',
+        'self.finish_tag(None, output, StrengthPolicy::Production)',
+        'self.verify_inner(None, candidate, StrengthPolicy::Production)',
+    ):
+        mutants.append(('fixed.rs', before, before.replace('::Production', '::Conformance'),
+                        1, profiles[0]))
     for name, before, after, count, (fixture, mode, environment) in mutants:
         path = roots['brynja-mac-kmac'] / 'src' / name
         original = path.read_text()
@@ -90,3 +100,63 @@ def check(root, consumer, roots, env, native_env=None):
         finally:
             path.write_text(original)
     print(f'Production-only KMAC oracle mutants: {len(mutants)} rejected; pristine sources restored', flush=True)
+    separation_mutants(root, consumer, roots, env)
+
+
+def separation_mutants(root, consumer, roots, env):
+    """Compile real verifier leaks and a future unclassified policy variant."""
+    gate = load(root / 'scripts/kmac/check-kmac-conformance-enabled.py', 'enabled_gate')
+    fixture = consumer.parent / 'conformance-negatives'
+    shutil.copytree(root / 'assurance/kmac-conformance-rejected', fixture,
+                    ignore=shutil.ignore_patterns('target'))
+    manifest = fixture / 'Cargo.toml'
+    manifest.write_text(manifest.read_text().replace('../../crates/brynja-mac-kmac',
+                        roots['brynja-mac-kmac'].as_posix()) +
+                        '\n[patch.crates-io]\n' + '\n'.join(
+                            f'{name}={{path="{path.as_posix()}"}}' for name, path in roots.items()))
+    command = ['cargo', 'check', '--offline', '--manifest-path', str(manifest),
+               '--features', 'enabled', '--message-format=json']
+
+    def run():
+        result = subprocess.run(command, cwd=root, env=env, text=True,
+                                capture_output=True, timeout=240)
+        if result.returncode != 101:
+            raise ValueError('conformance mutation did not produce compiler diagnostics')
+        return result
+
+    source = (fixture / 'src/enabled.rs').read_text()
+    gate.validate(run().stdout, source)
+    path = roots['brynja-mac-kmac'] / 'src/fixed.rs'
+    original = path.read_text()
+    for method in ('verify_conformance', 'verify_bits_conformance'):
+        start = original.rindex('            conformance_api! { $profile;',
+                                0, original.index('pub fn ' + method + '('))
+        stop = original.index('\n            }\n            }', start) + len('\n            }')
+        mutant = (original[:start] +
+                  original[start:stop].replace('            conformance_api! { $profile;\n', '', 1) +
+                  original[stop + len('\n            }'):])
+        try:
+            path.write_text(mutant)
+            try:
+                gate.validate(run().stdout, source)
+            except ValueError as error:
+                if str(error) != 'missing or unexpected production conformance rejection':
+                    raise
+            else:
+                raise ValueError('compiled verifier leak escaped the dedicated gate')
+        finally:
+            path.write_text(original)
+    policy = roots['brynja-mac-kmac'] / 'src/policy.rs'
+    original = policy.read_text()
+    try:
+        anchor = 'pub(crate) enum StrengthPolicy {\n'
+        if original.count(anchor) != 1:
+            raise ValueError('policy variant mutation anchor')
+        policy.write_text(original.replace(anchor, anchor + '    Unclassified,\n'))
+        result = run()
+        if 'E0004' not in result.stdout or 'Unclassified' not in result.stdout:
+            raise ValueError('new strength policy variant was not rejected exhaustively')
+    finally:
+        policy.write_text(original)
+    gate.validate(run().stdout, source)
+    print('Compiled conformance separation: two verifier leaks and unclassified policy rejected', flush=True)

@@ -9,8 +9,8 @@ COUNTS = {
                      'finalize_secret_bits_conformance': 1, 'verify_bits_conformance': 2,
                      'finalize_bits_xof_conformance': 1, 'finalize_xof_conformance': 1},
     'scoped.rs': {'conformance::execution': 1, 'with_bits_and_scratch_conformance': 1,
-                  'with_bits_conformance': 2, 'finalize_tag_bits_conformance': 1,
-                  'finalize_secret_bits_conformance': 1, 'verify_bits_conformance': 1},
+                  'with_bits_conformance': 3, 'finalize_tag_bits_conformance': 1,
+                  'finalize_secret_bits_conformance': 1, 'verify_bits_conformance': 2},
     'scoped_xof.rs': {'conformance::execution': 1, 'with_bits_and_scratch_conformance': 1,
                       'with_bits_conformance': 2, 'finalize_bits_xof_conformance': 3},
 }

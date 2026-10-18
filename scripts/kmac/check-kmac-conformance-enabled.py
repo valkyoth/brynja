@@ -17,6 +17,8 @@ def probes():
                            ('scoped_execution', True)):
         for name in STATES:
             methods = XOF if 'Xof' in name else FIXED
+            if prefix == 'brynja_mac_kmac':
+                methods = tuple(m for m in methods if m != 'finalize_secret_conformance')
             if not scoped:
                 methods = CONSTRUCT + methods
             result.extend(f'let _ = {prefix}::{name}::{method};' for method in methods)
@@ -32,6 +34,40 @@ def source_text():
             'use brynja_mac_kmac::hardened_in_place::accelerated as scoped_execution;\n\n' +
             '\n'.join(f'fn reject_{index}() {{\n    {probe}\n}}\n'
                       for index, probe in enumerate(probes())))
+
+
+def positive_source():
+    """Compile every matching test-owner method, supplying generic callbacks."""
+    functions = []
+    for index, probe in enumerate(probes()):
+        path = probe.removeprefix('let _ = ').removesuffix(';')
+        path = (path.replace('brynja_mac_kmac::hardened_in_place::', 'scoped::')
+                .replace('brynja_mac_kmac::execution::', 'execution::')
+                .replace('brynja_mac_kmac::', 'portable::'))
+        owner, method = path.rsplit('::', 1)
+        if 'Workspace' not in owner:
+            functions.append(f'fn control_{index}() {{\n    let _ = {path};\n}}\n')
+            continue
+        if method == 'with_conformance':
+            body = f'let _ = workspace.{method}(&[], &[], |_| ());'
+        else:
+            scratch = '&mut [], ' if method == 'with_bits_and_scratch_conformance' else ''
+            body = ('if let Ok(bits) = brynja_mac_kmac::Fips202BitString::new(&[], 0) {\n'
+                    f'        let _ = workspace.{method}(bits, bits, {scratch}|_| ());\n    }}')
+        functions.append(f'fn control_{index}(workspace: &mut {owner}) {{\n    {body}\n}}\n')
+    return ('//! Positive controls for every production method-set negative.\n'
+            '#![allow(dead_code)]\n\n'
+            'use brynja_mac_kmac::conformance as portable;\n'
+            'use execution::in_place as scoped_execution;\n'
+            'use portable::execution;\n'
+            'use portable::hardened_in_place as scoped;\n'
+            '\n'
+            + '\n'.join(functions))
+
+
+def validate_positive(source):
+    if source != positive_source():
+        raise ValueError('conformance positive control population changed')
 
 
 def validate(output, source):
@@ -56,6 +92,7 @@ def validate(output, source):
 
 
 if __name__ == '__main__':
+    validate_positive(Path('assurance/kmac-conformance-rejected/src/positive.rs').read_text())
     validate(Path(sys.argv[1]).read_text(),
              Path('assurance/kmac-conformance-rejected/src/enabled.rs').read_text())
     print(f'Enabled conformance feature rejects all {len(probes())} production method probes')

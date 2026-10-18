@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 from types import SimpleNamespace
 import kmac_production_mutants
+import kmac_admission_mutants
 
 
 def load(name):
@@ -31,6 +32,34 @@ def check():
         for line in probes]
     output = '\n'.join(records)
     gate.validate(output, source)
+    positive = (root / 'assurance/kmac-conformance-rejected/src/positive.rs').read_text()
+    gate.validate_positive(positive)
+    assert len(gate.probes()) == 98
+    assert positive.count('fn control_') == len(gate.probes())
+    for bad in ('', positive.replace('fn control_0()', 'fn removed()'),
+                positive.replace('::finalize_secret_bits_conformance', '::absent_method'),
+                positive.replace('|_| ()', 'untyped_callback')):
+        rejects(lambda: gate.validate_positive(bad))
+    # Each owner family needs executable policy mutations, not just tokens.
+    mutations = kmac_admission_mutants.cases(True)
+    assert len(mutations) == 18
+    assert {name for name, *_ in mutations} == {
+        'fixed.rs', 'xof.rs', 'execution/fixed.rs', 'execution/xof.rs',
+        'hardened_in_place/fixed.rs', 'hardened_in_place/xof.rs',
+        'hardened_in_place/accelerated/fixed.rs', 'hardened_in_place/accelerated/xof.rs'}
+    for success, code, status, summary in (
+        (True, 0, 'ok', 'ok. 1 passed; 0 failed; 0 ignored;'),
+        (False, 101, 'FAILED', 'FAILED. 0 passed; 1 failed; 0 ignored;'),
+    ):
+        output = f'test portable_policy ... {status}\ntest result: {summary}'
+        result = SimpleNamespace(returncode=code, stdout=output)
+        assert kmac_admission_mutants.verdict(result, 'portable_policy', success)
+        for bad_code, bad_output in ((0 if code else 101, output), (code, ''),
+                (code, output.replace('portable_policy', 'unrelated_test')),
+                (code, output.replace('0 ignored;', '1 ignored;'))):
+            bad = SimpleNamespace(returncode=bad_code, stdout=bad_output)
+            assert not kmac_admission_mutants.verdict(bad, 'portable_policy', success)
+    output = '\n'.join(records)
     for bad in ('', '\n'.join(records[:-1]), output.replace('E0599', 'E0433'),
                 output.replace('"is_primary": true', '"is_primary": false'),
                 output.replace(probes[0], probes[1])):
@@ -71,3 +100,4 @@ def check():
         assert kmac_production_mutants.rejected(result, ['aa']) == valid
     print('Retest guards reject six diagnostic, two verifier-leak and twelve production-population regressions')
     print('Production mutant verdict accepts wrong bytes/runtime mismatches; rejects six false failures')
+    print('Positive counterpart inventory and exact admission populations reject twelve false-pass cases')

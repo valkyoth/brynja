@@ -85,7 +85,7 @@ pub fn check(case: Case<'_>, selection: &Selection) -> Result<(), io::Error> {
                         .map_err(fail)?
                         .expose_public()
                     {
-                        return Err(fail("incorrect tag accepted"));
+                        return Err(fail("incorrect tag accepted: mismatch"));
                     }
                 }
                 bytes.fill(0);

@@ -112,11 +112,19 @@ def main() -> int:
     reject("core dependency", lambda root: replace(root, policy.CORE_MANIFEST, "[lints]", "[dependencies]\nbrynja-core = { workspace = true }\n\n[lints]"))
     reject("SHA dependency", lambda root: replace(root, policy.MANIFEST, "brynja-hash-core = { workspace = true }", "brynja-hash-core = { workspace = true }\nbrynja-unexpected = { workspace = true }"))
     reject("crypto ownership", lambda root: replace(root, policy.CRYPTO_MANIFEST, "brynja-hash-sha2 = { workspace = true }", "brynja-core = { workspace = true }"))
+    for label, before, after in (
+        ("missing CPU", 'brynja-crypto-cpu = { workspace = true, optional = true }', ''),
+        ("required CPU", 'workspace = true, optional = true', 'workspace = true'),
+        ("CPU defaults", 'default = []', 'default = ["cpu"]'),
+        ("CPU opt-in", 'cpu = ["dep:brynja-crypto-cpu"]', 'cpu = []'),
+        ("foreign owner", '[dependencies]', '[dependencies]\nforeign = "1"'),
+    ):
+        reject(label, lambda root, b=before, a=after: replace(root, policy.CRYPTO_MANIFEST, b, a))
     reject("package class", lambda root: replace(root, policy.PACKAGE_POLICY, '[packages.brynja-hash-sha2]\nclass = "modern-shared"', '[packages.brynja-hash-sha2]\nclass = "modern-engine"'))
     reject("consumer test", lambda root: replace(root, policy.TEST, "fn downstream_style_real_content_uses_only_public_api", "fn removed_consumer"))
     reject("oversized", lambda root: (root / policy.SHA256).write_text((root / policy.SHA256).read_text(encoding="utf-8") + "\n" * 501, encoding="utf-8"))
     reject("reviewed hash", lambda root: replace(root, policy.DIGEST, "One complete", "Complete"))
-    print("portable SHA-2 policy rejects seventy-three unsafe, native, allocation, identity, bit-domain, arithmetic, padding, dynamic-analysis, package, test, size, and hash regressions")
+    print("portable SHA-2 policy rejects seventy-eight unsafe, native, allocation, identity, bit-domain, arithmetic, padding, dynamic-analysis, package, test, size, and hash regressions")
     return 0
 
 

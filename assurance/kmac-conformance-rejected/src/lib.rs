@@ -1,7 +1,10 @@
 #![no_std]
 
-#[cfg(feature = "enabled")]
+#[cfg(all(feature = "enabled", not(feature = "positive")))]
 mod enabled;
+
+#[cfg(feature = "positive")]
+mod positive;
 
 #[cfg(not(feature = "enabled"))]
 pub fn forbidden_default_conformance_surface() {

@@ -414,6 +414,7 @@ def validate_packages(root: Path) -> None:
         fail("brynja-hash-sha2 dependency boundary changed")
     crypto = tomllib.loads((root / CRYPTO_MANIFEST).read_text(encoding="utf-8"))
     if set(crypto.get("dependencies", {})) != {
+        "brynja-crypto-cpu",
         "brynja-hash-sha2",
         "brynja-hash-sha3",
         "brynja-hash-parallel",
@@ -421,6 +422,10 @@ def validate_packages(root: Path) -> None:
         "brynja-mac-kmac",
     }:
         fail("brynja-crypto SHA-256 ownership changed")
+    if (crypto["dependencies"]["brynja-crypto-cpu"] != {"workspace": True, "optional": True}
+            or crypto.get("features", {}).get("cpu") != ["dep:brynja-crypto-cpu"]
+            or crypto.get("features", {}).get("default") != []):
+        fail("brynja-crypto CPU authority must remain explicit and default-off")
     if core.get("features") != {"default": []}:
         fail("hash core feature boundary changed")
     if manifest.get("features") != {

@@ -6,6 +6,7 @@ publish = false
 
 [features]
 enabled = ["brynja-mac-kmac/conformance-testing", "brynja-mac-kmac/hardened-execution"]
+positive = ["enabled"]
 
 [dependencies]
 brynja-mac-kmac = { path = "../../crates/brynja-mac-kmac" }

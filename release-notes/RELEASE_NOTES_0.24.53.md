@@ -385,7 +385,7 @@ and limitations are in [the consumer guide](../docs/facade-features.md).
 
 | Surface | Runnable coverage | Execution boundary |
 | --- | --- | --- |
-| Both modern facades | `check-facade-package.py`: 21 explicit opt-ins, default isolation, bare-metal compilation, additive features, protocol isolation | Hosted/threaded adapters remain separate dependencies |
+| Both modern facades | `check-facade-package.py`: 21 explicit opt-ins, default isolation, bare-metal `cargo check` only, additive features, protocol isolation | No bare-metal code-generation/execution claim; hosted/threaded adapters remain separate dependencies |
 | SHA-2 single-state and scoped | Ordinary/hardened, named/general-t, byte/bit, streaming, public/secret output, lifecycle and compiled mutants | SHA-NI measured locally; unavailable dedicated x86 SHA-512 rejects, not counted as execution |
 | SHA-3/SHAKE/cSHAKE | Ordinary/hardened owned/scoped fixed/XOF and customized bit corpora, lifecycle and compiled mutants | Local AVX2 measured; x86 hosted unavailability remains distinct from static execution |
 | SHA-2/Keccak batches | Independent mixed/sparse bit corpora, portable/preferred/required selection, accounting/output/cleanup mutants | SIMD requires complete CPU/OS and compiled feature bundles |
@@ -418,8 +418,9 @@ silently counted as physical execution or independent verification.
 Three Low findings are addressed for focused retest: full-strength oracle
 cases now also exercise production KMAC owners, a shared internal strength-policy
 enum replaces opposite boolean conventions, and the dedicated conformance gate
-rejects 100 production-method probes with test features enabled, derived from
-the facade's complete method inventory. Production-only
+rejects 98 production-method probes with test features enabled, each paired with
+a compiled positive control on its test-only counterpart. Two formerly vacuous
+portable probes were removed; execution and scoped equivalents remain. Production-only
 compiled mutations and exact population/diagnostic regressions protect the new
 coverage. The CI Keccak layout test uses its installed AArch64 GNU target and
 requires pristine compilation before mutation rejection. See the
@@ -432,6 +433,19 @@ the independent oracle. Real verifier-leak and policy-downgrade mutations test
 those guards. Internal policy matching is exhaustive; scoped XOF framing no
 longer uses a conformance policy label. The stale KMAC MIR source-line binding
 reported by CI is corrected and regression-tested. Focused retest remains pending.
+
+The next retest confirms those fixes. Its remaining harness gaps are addressed
+by paired positive compilation, production admission tests across all eight
+fixed/XOF owner families, and wrong-tag oracle checks with always-accept
+verification mutants. The SHA-256 ownership validator now recognizes the
+reviewed optional/default-off CPU facade dependency, with regressions rejecting
+missing, required, default-enabled, miswired and foreign dependencies.
+
+Bare-metal acceptance was `cargo check`, not `cargo build`, and is now labelled
+explicitly. A full default-flags `x86_64-unknown-none` KMAC hardened build fails
+on XMM register allocation in the CPU dependency; the reviewer reproduced this
+at v0.24.52 as well. This pre-existing code-generation limitation is not fixed
+or qualified by the present harness changes and needs a separate target review.
 
 No production kernel, unsafe block, registry dependency, release-gate rule or historical
 capture is changed by the conformance separation. Independent verification

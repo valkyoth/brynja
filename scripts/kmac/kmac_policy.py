@@ -44,9 +44,12 @@ FOLLOWUP = tuple(map(Path, (
     "assurance/kmac-differential/src/production_bytes.rs",
     "scripts/repository/facade_conformance_cases.py",
     "assurance/kmac-conformance-rejected/src/enabled.rs",
+    "assurance/kmac-conformance-rejected/src/positive.rs",
+    "assurance/kmac-execution/tests/production_admission.rs",
     "scripts/kmac/check-kmac-conformance-enabled.py",
     "scripts/kmac/kmac_production_oracle.py",
     "scripts/kmac/kmac_production_mutants.py",
+    "scripts/kmac/kmac_admission_mutants.py",
     "scripts/kmac/test_kmac_retest.py",
 )))
 DIFFERENTIAL_MANIFEST = Path("assurance/kmac-differential/Cargo.toml")
@@ -338,6 +341,7 @@ def validate(root: Path) -> None:
         (CONFORMANCE_GATE, "default KMAC build unexpectedly exposed conformance constructors"),
         (CONFORMANCE_GATE, "assurance/kmac-differential/Cargo.toml"),
         (CONFORMANCE_GATE, "--features enabled --message-format=json"),
+        (CONFORMANCE_GATE, "--features positive"),
         (CONFORMANCE_GATE, "python3 scripts/kmac/check-kmac-conformance-enabled.py"),
         (DIFFERENTIAL, "production_population(result.stderr, selected)"),
         (DIFFERENTIAL_FIXTURE, "profiles::production::dispatch("),

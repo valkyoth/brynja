@@ -12,6 +12,10 @@ if CARGO_TARGET_DIR="$evidence_dir/target" cargo check --locked --manifest-path 
 fi
 grep -q 'new_conformance' "$evidence_dir/stderr"
 
+# Every negative must have a real method on its test-only counterpart.
+CARGO_TARGET_DIR="$evidence_dir/target" cargo check --locked --manifest-path "$fixture" \
+    --features positive
+
 if CARGO_TARGET_DIR="$evidence_dir/target" cargo check --locked --manifest-path "$fixture" \
     --features enabled --message-format=json >"$evidence_dir/enabled.json" 2>"$evidence_dir/enabled.stderr"; then
     echo "enabled conformance feature unexpectedly changed production methods" >&2

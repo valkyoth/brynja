@@ -216,7 +216,7 @@ def execute(root, toolchain, bare_target, native_simd=False):
             run(cargo + ['check', '--offline', '--target', bare_target], consumer, env)
             metadata = resolved_metadata(cargo, consumer, env, roots)
             graph(json.loads(metadata.stdout), [feature])
-            print(f'PASS: {package}/{feature}: absent rejected, packaged no_std opt-in compiled', flush=True)
+            print(f'PASS: {package}/{feature}: absent rejected, packaged no_std opt-in cargo-check only (no code generation)', flush=True)
         features = list(cases.PROBES)
         manifest(consumer, roots, package, features)
         probes = ''.join(f'pub use api::{path} as Probe{index};\n'

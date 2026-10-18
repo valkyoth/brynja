@@ -1087,11 +1087,11 @@ sha256 = "7befaee4af1c13b27a19da497b2919c2ca8baf4385fed8cbcdaceaad5b1cb66c"
 
 [[reviewed-source]]
 path = "assurance/kmac-conformance-rejected/src/lib.rs"
-sha256 = "faac9aa547d3242265314cdb21a64465699588e2a523c6c974ef2dd6389d3da7"
+sha256 = "28e3e36a8b8b01bdd74ed3c3fe1852aa01c5bc308ff0afc41152c8aab2cae7f7"
 
 [[reviewed-source]]
 path = "scripts/kmac/check-kmac-conformance-gate.sh"
-sha256 = "8dd6f971ce532ba02128e431a990a5fba1ee3271b9f49ef7d18de2eae8bbf1b8"
+sha256 = "ee424ed61ecfa1f181f88258c6f6e29a0d053a811fa95854d824d4a1c6aedef9"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-tuple/src/backend.rs"

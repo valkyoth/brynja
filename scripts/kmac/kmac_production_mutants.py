@@ -2,6 +2,7 @@
 import importlib.util
 import shutil
 import subprocess
+import kmac_admission_mutants
 
 
 def load(path, name):
@@ -64,6 +65,19 @@ def check(root, consumer, roots, env, native_env=None):
         if result.returncode or result.stdout.splitlines() != expected:
             raise ValueError('production mutant positive control: ' + result.stderr)
     mutants = []
+    mutants.extend((
+        ('verify.rs', 'Ok(KmacVerification::new(difference.is_zero()))',
+         'Ok(KmacVerification::new(brynja_core::secret_difference_is_zero(&0)))', 1, profiles[0]),
+        ('execution/output.rs', 'Ok(KmacVerification::new(difference.is_zero()))',
+         'Ok(KmacVerification::new(brynja_core::secret_difference_is_zero(&0)))', 1, profiles[1]),
+        ('hardened_in_place/core_state.rs',
+         'brynja_core::secret_difference_is_zero(&cleanup.0.difference[0])',
+         'brynja_core::secret_difference_is_zero(&0)', 1, profiles[0]),
+    ))
+    if native_env is not None:
+        mutants.append(('hardened_in_place/core_state.rs',
+                        'brynja_core::secret_difference_is_zero(&cleanup.0.difference[0])',
+                        'brynja_core::secret_difference_is_zero(&0)', 1, profiles[2]))
     for name in ('fixed.rs', 'xof.rs'):
         mutants.append((name, 'KmacCore::new_bits(key, customization, StrengthPolicy::Production)',
                         'KmacCore::new_bits(key, key, StrengthPolicy::Production)', 1, profiles[0]))
@@ -101,6 +115,7 @@ def check(root, consumer, roots, env, native_env=None):
             path.write_text(original)
     print(f'Production-only KMAC oracle mutants: {len(mutants)} rejected; pristine sources restored', flush=True)
     separation_mutants(root, consumer, roots, env)
+    kmac_admission_mutants.check(root, consumer, roots, env, native_env)
 
 
 def separation_mutants(root, consumer, roots, env):
@@ -125,6 +140,14 @@ def separation_mutants(root, consumer, roots, env):
         return result
 
     source = (fixture / 'src/enabled.rs').read_text()
+    positive = command.copy()
+    positive[positive.index('enabled')] = 'positive'
+    def positive_control():
+        result = subprocess.run(positive, cwd=root, env=env, text=True,
+                                capture_output=True, timeout=240)
+        if result.returncode:
+            raise ValueError('conformance positive counterpart failed: ' + result.stderr)
+    positive_control()
     gate.validate(run().stdout, source)
     path = roots['brynja-mac-kmac'] / 'src/fixed.rs'
     original = path.read_text()
@@ -160,3 +183,4 @@ def separation_mutants(root, consumer, roots, env):
         policy.write_text(original)
     gate.validate(run().stdout, source)
     print('Compiled conformance separation: two verifier leaks and unclassified policy rejected', flush=True)
+    positive_control()

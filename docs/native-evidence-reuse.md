@@ -28,8 +28,10 @@ The direct native command-line validators and every fallback require
 approve its exact digest and provide `BRYNJA_NATIVE_REVIEW_SHA256` through trusted
 local or protected runner configuration. There is no computed default, latest-HEAD
 approval, repository-local environment loader or automatic acceptance. Never set
-this variable by hashing whatever manifest a candidate supplies. The current
-draft is pending and deliberately blocks release until reviewed.
+this variable by hashing whatever manifest a candidate supplies. The owner
+approved the current historical snapshot and exact validation-only delta on
+2026-10-18; validation still requires its fixed digest from a trusted invocation.
+Approval status in the repository alone cannot authorize evidence.
 
 The manifest identifies an ancestral, non-HEAD evidence snapshot and approved
 families. Every current index and referenced artifact must equal that snapshot,

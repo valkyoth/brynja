@@ -5092,13 +5092,14 @@ the v0.25.2 publication checkpoint; this is not another release-gate mechanism.
 
 ### v0.24.54 - Acceleration Native Evidence Sweep
 
-Status: in progress
+Status: awaiting green CI
 
 The subsequent High native-evidence substitution finding is closed by focused
 independent retest, owner approval and fixed-pin operational validation. The
-separate legacy MD5 dependency-closure reuse check still blocks release; see the
-current [security report](../security/pentest/v0.24.54.md). No cryptographic
-runtime code changed in the correction; no full sweep was started.
+separate legacy MD5 dependency-closure rejection is resolved by an author-tested
+exact command-profile proof, retaining the original captures and approval pin;
+see the current [security report](../security/pentest/v0.24.54.md). No
+cryptographic runtime code changed; no full sweep was started.
 
 Collection progress is recorded in the v0.24.54 release notes and
 [native observation review](native-evidence-v0.24.54.md): forty Linux/Apple

@@ -1,6 +1,7 @@
 # v0.24.54 - Acceleration Native Evidence Sweep
 
-Status: exceptional security retest passed; MD5 evidence reuse still blocks release.
+Status: exceptional security retest passed; MD5 evidence reuse corrected and author-tested;
+awaiting final-commit GitHub checks.
 Forty source-bound Linux/Apple captures and twelve
 current public-consumer campaigns completed; evidence integration and local
 non-sweep release checks passed. No independent qualification or crates.io
@@ -14,9 +15,13 @@ operator configuration, not computed from candidate contents. Earlier local
 checks below are historical results, not current release authorization. See
 [the finding and disposition](../security/pentest/v0.24.54.md).
 The real isolated replay now rejects the reported KMAC forgery on both paths.
-Legacy MD5 additionally needs its historical dependency-closure rejection
-resolved before tagging; no new runtime defect or full-sweep requirement is
-inferred from that rejection.
+The separate legacy MD5 dependency-closure rejection is resolved by an exact
+reviewed command profile: one inactive optional adapter edge is excluded from
+traversal, while original lock rows, active dependencies, source/build inputs and
+approval checks remain bound. Both real MD5 reuse validators pass with the
+unchanged external approval pin. Sixteen dependency-scope tests include Cargo's
+all-target feature-union cross-check and real-Git negative cases. This correction
+is author-verified, not a new independent retest or native collection.
 
 This milestone follows signed v0.24.53 public consumer acceptance. It collects
 exact-source native correctness, performance, timing and resource observations

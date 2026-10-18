@@ -1,5 +1,6 @@
 """No-compiler regressions for production KMAC packaged acceptance."""
 import json
+import shutil
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from types import SimpleNamespace
@@ -10,6 +11,8 @@ from test_facade_keccak import rejected
 
 
 def check():
+    installer_inventory()
+    comparison_diagnostic()
     sources = acceptance.sources
     fixture = acceptance.ROOT / 'assurance/kmac-execution'
     for name, replacements in sources.COUNTS.items():
@@ -65,6 +68,81 @@ def check():
             rejected(lambda: acceptance.check_failure(SimpleNamespace(**(vars(bad) | changed)), mode, 'X86Keccak', 'InvalidData', error))
     restoration()
     print('KMAC facade rejects source/conformance/corpus/route/population/error drift; compiled mutation and ownership sources restore on failures')
+
+
+def installer_inventory():
+    """Exercise the actual installer, not just the individual source adapters."""
+    with TemporaryDirectory(prefix='facade-kmac-inventory-') as directory:
+        root = Path(directory)
+        fixture = root / 'assurance/kmac-execution'
+        shutil.copytree(acceptance.ROOT / 'assurance/kmac-execution/src', fixture / 'src')
+        shutil.copytree(acceptance.ROOT / 'assurance/kmac-execution/tests', fixture / 'tests')
+        roots = {'brynja-mac-kmac': acceptance.ROOT / 'crates/brynja-mac-kmac'}
+        api = SimpleNamespace(manifest=lambda *a, **kw: None, source=lambda *a: None)
+        with patch.object(acceptance, 'ROOT', root):
+            for package in ('brynja', 'brynja-crypto'):
+                consumer = root / package
+                acceptance.install(api, consumer, roots, package)
+                copied = {p.relative_to(consumer / 'tests').as_posix()
+                          for p in (consumer / 'tests').rglob('*.rs')}
+                assert copied == {'scoped.rs', 'scoped/xof.rs', 'execution.rs'}
+                assert all('conformance' not in p.read_text()
+                           for p in consumer.rglob('*.rs'))
+                # Every classified fixture, including the leaf-only test, is
+                # mandatory. No unexplained new test can silently be skipped.
+                for name in ('scoped.rs', 'scoped/xof.rs', 'production_admission.rs'):
+                    path = fixture / 'tests' / name
+                    original = path.read_bytes()
+                    path.unlink()
+                    try:
+                        rejected(lambda: acceptance.install(api, consumer, roots, package))
+                    finally:
+                        path.write_bytes(original)
+                extra = fixture / 'tests/unclassified.rs'
+                extra.write_text('#[test] fn unclassified() {}')
+                try:
+                    rejected(lambda: acceptance.install(api, consumer, roots, package))
+                finally:
+                    extra.unlink()
+                with patch.object(acceptance, 'LEAF_ONLY_TESTS', {'scoped.rs', 'production_admission.rs'}):
+                    rejected(lambda: acceptance.install(api, consumer, roots, package))
+    print('KMAC installer: both facades exclude leaf-only conformance tests; ten inventory regressions rejected')
+
+
+def comparison_diagnostic():
+    probes = acceptance.probes
+    mutant = next(item for item in probes.ALGORITHM if item[0] == 'output.rs')
+    before = mutant[1]
+    with TemporaryDirectory(prefix='facade-kmac-comparison-') as directory:
+        root = Path(directory)
+        path = root / 'src/execution/output.rs'
+        path.parent.mkdir(parents=True)
+        path.write_text(before)
+        for message in ('incorrect tag accepted: mismatch', 'incorrect tag accepted',
+                        'unrelated lifecycle failure'):
+            def run(command, *args, **kwargs):
+                if 'build' in command:
+                    return None
+                if path.read_text() == before:
+                    return SimpleNamespace(returncode=0, stdout='expected\n' * 268,
+                                           stderr='KMAC_EXECUTION_ROUTE: Portable\n')
+                error = json.dumps('KMAC lifecycle: ' + json.dumps(message))
+                return SimpleNamespace(returncode=1, stdout='', stderr=
+                    'KMAC_EXECUTION_ROUTE: Portable\nError: Custom { kind: Other, error: ' + error + ' }\n')
+
+            def check():
+                probes.algorithm_mutants(SimpleNamespace(run=run, require=acceptance.require),
+                    root, {'brynja-mac-kmac': root}, [], {'CARGO_TARGET_DIR': str(root)},
+                    ('request', ['expected'] * 268), 'X86Keccak',
+                    acceptance.check_result, acceptance.check_failure)
+
+            with patch.object(probes, 'ALGORITHM', (mutant,)):
+                if message == 'incorrect tag accepted: mismatch':
+                    check()
+                else:
+                    rejected(check)
+            assert path.read_text() == before
+    print('KMAC comparison mutant requires the exact mismatch diagnostic, not stale/unrelated failure')
 
 
 def restoration():

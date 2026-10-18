@@ -72,7 +72,7 @@ def algorithm_mutants(api, consumer, roots, cargo, env, data, kernel, check_resu
                         for actual, expected in zip(values, data[1])) and
                     result.stderr.strip() == 'KMAC_EXECUTION_ROUTE: ' + route('portable', kernel), 'surviving/malformed algorithm mutant')
             else:
-                check_failure(result, 'portable', kernel, 'Other', 'KMAC lifecycle: "incorrect tag accepted"')
+                check_failure(result, 'portable', kernel, 'Other', 'KMAC lifecycle: "incorrect tag accepted: mismatch"')
         finally:
             path.write_text(original)
     api.run(cargo + ['build', '--offline', '--release', '--bin', 'facade-consumer'], consumer, env)

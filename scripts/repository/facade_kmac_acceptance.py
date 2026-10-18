@@ -10,6 +10,10 @@ ROOT = shared.ROOT
 FEATURES = ['kmac-runtime-execution']
 HOST = shared.HOST
 TESTS = {'scoped.rs', 'scoped/xof.rs'}
+# This fixture deliberately constructs leaf conformance owners to test their
+# production finalizers. It remains covered by the leaf package admission
+# campaign, but cannot be imported into a production-only facade consumer.
+LEAF_ONLY_TESTS = {'production_admission.rs'}
 
 
 def require(value, message):
@@ -29,7 +33,8 @@ def install(api, consumer, roots, package):
             text = '#![forbid(unsafe_code)]\n' + text
         (consumer / 'src' / name).write_text(sources.rewrite(text, package))
     (consumer / 'src/bin/route-probe.rs').write_text(sources.rewrite(shared.probes.PROBE, package))
-    require({p.relative_to(fixture / 'tests').as_posix() for p in (fixture / 'tests').rglob('*.rs')} == TESTS, 'scoped test inventory')
+    require(not TESTS & LEAF_ONLY_TESTS, 'overlapping test classification')
+    require({p.relative_to(fixture / 'tests').as_posix() for p in (fixture / 'tests').rglob('*.rs')} == TESTS | LEAF_ONLY_TESTS, 'scoped test inventory')
     for name in TESTS:
         path = consumer / 'tests' / name
         path.parent.mkdir(parents=True, exist_ok=True)

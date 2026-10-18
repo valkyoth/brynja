@@ -4942,7 +4942,9 @@ Exit criteria:
 
 ### v0.24.53 - Acceleration Public Consumer Acceptance
 
-Status: development milestone tagged with recorded verification deferrals
+Status: released
+
+Development milestone tagged with recorded verification deferrals.
 
 Supplied defect retests and owner-accepted informational follow-ups are recorded
 in the v0.24.53 report. The progress narrative below describes its successive

@@ -13,6 +13,13 @@ python3 scripts/release/test-expansion-plan.py
 python3 scripts/release/test-roadmap-schedule.py
 python3 scripts/release/test-acceleration-plan.py
 
+sed -i '/^### v0\.24\.53 - /,/^### v0\.24\.54 - /s/^Status: released$/Status: development milestone tagged with recorded verification deferrals/' "$release_tmp"
+if python3 scripts/release/check-release-plan.py "$release_tmp" "$version_tmp" >/dev/null 2>&1; then
+    echo "release plan validator accepted free-form prose as a milestone status" >&2
+    exit 1
+fi
+cp docs/RELEASE_PLAN.md "$release_tmp"
+
 sed -i '0,/Status: planned/{/Status: planned/d;}' "$release_tmp"
 if python3 scripts/release/check-release-plan.py "$release_tmp" "$version_tmp" >/dev/null 2>&1; then
     echo "release plan validator accepted a missing Status field" >&2

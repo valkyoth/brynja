@@ -31,7 +31,7 @@ def lock(root, revision):
     return value
 
 
-def unchanged(root, before, after, closure, reviewed_validation=frozenset()):
+def unchanged(root, before, after, closure, reviewed_validation=frozenset(), dependency_profile=None):
     previous = {n: v for n, v in io.tree(root, before).items() if selected(n, closure)}
     current = {n: v for n, v in io.tree(root, after).items() if selected(n, closure)}
     io.require(set(previous) == set(current), 'family implementation/build input addition/removal')
@@ -46,6 +46,6 @@ def unchanged(root, before, after, closure, reviewed_validation=frozenset()):
             continue
         io.require((name == 'Cargo.lock' and lock(root, before) == lock(root, after)) or
                    (name in {'Cargo.toml', 'Cargo.lock'} and
-                    dependencies.equivalent(root, before, after, closure)) or
+                    dependencies.equivalent(root, before, after, closure, dependency_profile)) or
                    tooling.equivalent(root, before, after, name),
                    'family implementation/build input changed: ' + name)

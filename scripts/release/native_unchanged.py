@@ -8,7 +8,8 @@ import native_review_io as io
 import native_review_scope as scope
 
 
-def validate_inputs(root, capture, head, current, captured, digest, validation_changes=None):
+def validate_inputs(root, capture, head, current, captured, digest, validation_changes=None,
+                    dependency_profile=None):
     io.require(set(current) == set(captured), 'native input population changed')
     changes = validation_changes or {}
     io.require(set(changes) <= set(captured), 'reviewed validation input absent from capture')
@@ -28,11 +29,12 @@ def validate_inputs(root, capture, head, current, captured, digest, validation_c
             io.require(name in metadata, 'native implementation/fixture/tool changed: ' + name)
             changed_metadata = True
     if changed_metadata:
-        io.require(dependencies.equivalent(root, capture, head, current),
+        io.require(dependencies.equivalent(root, capture, head, current, dependency_profile),
                    'native dependency/build inputs changed')
     # Include newly added/deleted source, build scripts and configuration, even
     # where an older collector enumerated only src/**/*.rs.
-    scope.unchanged(root, capture, head, current, reviewed_validation=set(changes))
+    scope.unchanged(root, capture, head, current, reviewed_validation=set(changes),
+                    dependency_profile=dependency_profile)
 
 
 def validate_family(adapter, head):
@@ -41,8 +43,12 @@ def validate_family(adapter, head):
     capture = review['capture_commit']
     captured, count = adapter.records(review, head)
     current = adapter.sources()
+    profile = None
+    if adapter.name in ('md5-execution', 'md5-hardened'):
+        from native_md5_dependency_profile import PROFILE
+        profile = PROFILE
     validate_inputs(adapter.root, capture, head, current, captured, adapter.digest,
-                    review['validation_changes'])
+                    review['validation_changes'], profile)
     io.clean(adapter.root)
     io.require(io.git(adapter.root, 'rev-parse', 'HEAD').decode().strip() == head and
                adapter.sources() == current, 'checkout changed during native reuse')

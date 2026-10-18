@@ -1,7 +1,8 @@
 """Project workspace metadata onto the dependencies of an existing capture.
 
-No Cargo execution, new receipts, or version-specific exemptions. All optional
-and dev edges are retained conservatively. Ambiguous graphs require review.
+No Cargo execution, new receipts, or version-specific exemptions. Optional/dev
+edges are conservative unless an exact reviewed command profile proves inactivity.
+Ambiguous graphs require review.
 """
 import copy
 import tomllib
@@ -55,7 +56,7 @@ def inherited_dependencies(value):
     return found
 
 
-def projection(root, revision, closure):
+def projection(root, revision, closure, profile=None):
     names = io.names(root, revision)
     roots = {'/'.join(name.split('/')[:2]) for name in closure
              if name.startswith('crates/') and len(name.split('/')) > 2}
@@ -71,7 +72,12 @@ def projection(root, revision, closure):
                      if name.removesuffix('/Cargo.toml') in roots}
     io.require(len(package_roots) == len(roots), 'missing capture package manifest')
     rows = graph(io.historical(root, revision, 'Cargo.lock'))
-    selected = reachable(rows, package_roots)
+    traversal = rows
+    if profile is not None:
+        import native_md5_dependency_profile as md5
+        io.require(profile == md5.PROFILE, 'unknown native dependency command profile')
+        traversal = md5.reachability_rows(root, revision, closure, rows)
+    selected = reachable(traversal, package_roots)
     inherited, local = set(), {}
     for package in selected:
         row = rows[package]
@@ -110,8 +116,8 @@ def projection(root, revision, closure):
             'manifests': local}
 
 
-def equivalent(root, before, after, closure):
+def equivalent(root, before, after, closure, profile=None):
     try:
-        return projection(root, before, closure) == projection(root, after, closure)
+        return projection(root, before, closure, profile) == projection(root, after, closure, profile)
     except (KeyError, TypeError, AttributeError) as error:
         raise ValueError('malformed native dependency metadata') from error

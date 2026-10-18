@@ -60,12 +60,36 @@ Externally managed runner signatures would be a separate stronger design.
 Workspace Cargo metadata is compared through the capture's dependency closure:
 unrelated packages and unused workspace dependency declarations do not invalidate
 it. All selected dependency versions, checksums, origins and edges remain bound;
-optional/dev edges are conservatively included. The inherited dependency keys
+optional/dev edges are conservatively included, except for the exact reviewed
+inactive MD5 edge described below. The inherited dependency keys
 used by participating manifests remain bound, including aliases and target/build/
 dev tables. Resolver, profiles, patches, workspace membership, package inheritance,
 compiler/configuration inputs, fixture manifests and capture scripts remain
 checked. Unknown/malformed or incomplete dependency graphs reject this reuse.
 No blanket test-file, documentation-comment or compiler-change exemption exists.
+
+### Bounded MD5 capture dependency profile
+
+The older MD5 collectors cover four implementation crates. The workspace lock
+also contains the hosted MD5 crate's optional strict-execution dependency on
+`brynja-crypto-cpu-std`, whose broader closure is not in those captures. Treating
+every lockfile edge as executed incorrectly pulls SHA-3/KMAC into ordinary and
+hardened MD5 execution even though neither capture enables strict execution.
+Cargo distinguishes [lockfile resolution from the features used for compilation](https://doc.rust-lang.org/cargo/reference/resolver.html#features).
+
+`native_md5_dependency_profile.py` binds exact hashes of all four manifests and
+seven capture/package/codegen command drivers in both the capture and candidate.
+For those reviewed bytes only, it removes just that inactive optional edge from
+graph traversal. It does not remove the edge from the original lock row being
+compared, infer exclusions from absent evidence, or exempt any runtime file.
+Any changed driver/manifest requires profile review; active dependencies, build
+configuration, source inventories and artifact approval remain mandatory. Other
+families retain the conservative graph. A mandatory regression also asks Cargo
+1.98.1 to resolve the union of these feature selections for all targets and
+checks the exact four-package/feature population, without compiling cryptography.
+
+This permits the original MD5 observations to retain their actual provenance;
+it is not evidence for strict MD5 or its optional protected-memory adapter.
 
 For example, adding HMAC as a new consumer of unchanged SHA-2 does not change
 SHA-2's implementation. HMAC needs its own vectors, lifecycle/misuse tests,

@@ -8,6 +8,7 @@ import native_dependency_scope as dependencies
 import native_review_io as io
 import native_review_tests as fixtures
 import native_unchanged as reuse
+from native_md5_scope_tests import Md5DependencyProfileTests
 
 WORKSPACE = '''[workspace]
 members = ["crates/*"]

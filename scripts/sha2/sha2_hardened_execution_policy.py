@@ -80,6 +80,8 @@ def validate(root=ROOT, write=False):
     require('python3 scripts/sha2/test-sha2-hardened-native.py' in driver, 'native gate regressions')
     require('python3 scripts/release/test-native-evidence-approval.py' in driver,
             'external native approval regressions')
+    require('python3 scripts/release/test-native-dependency-scope.py' in driver,
+            'native dependency profile regressions')
     paths = set()
     for directory in (CPU + '/src', HASH + '/src', 'assurance/sha2-hardened-execution/src'):
         for path in (root / directory).rglob('*.rs'):
@@ -123,6 +125,7 @@ def validate(root=ROOT, write=False):
                  'native_evidence_approval.py', 'test-native-evidence-approval.py',
                  'native_review_scope.py', 'native_scope_tests.py',
                  'native_dependency_scope.py', 'native_unchanged.py',
+                 'native_md5_dependency_profile.py', 'native_md5_scope_tests.py',
                  'test-native-dependency-scope.py',
                  'test-native-metadata-carry-forward.py'):
         paths.add(Path('scripts/release') / name)
@@ -153,6 +156,7 @@ def regressions():
                   (f'{HASH}/src/lib.rs', '#[cfg(feature = "hardened-execution")]', '#[cfg(feature = "cpu")]'),
                   ('scripts/checks.sh', 'python3 scripts/sha2/check-sha2-hardened-execution-codegen.py', '# removed')]
         cases += [('scripts/tag_gate.sh', 'python3 scripts/sha2/check-sha2-hardened-native-evidence.py', '# omitted'),
+                  ('scripts/checks.sh', 'python3 scripts/release/test-native-dependency-scope.py', '# omitted'),
                   ('scripts/zeroization/check-zeroization-sanitizer.sh', 'python3 scripts/sha2/check-sha2-hardened-asan.py', '# omitted'),
                   ('scripts/sha2/hardened_native_host.py', '+sha,+sse2', '+sse2')]
         for name, before, after in cases:

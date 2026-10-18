@@ -90,3 +90,7 @@ compiler cleanup matrix, Miri, Kani or sanitizer qualification is claimed here.
   independent qualification or a release-admission receipt.
 - The owner-directed full consolidation remains v0.24.55. Ordinary CI and final
   non-sweep release verification remain separate; this document is not a tag PASS.
+  Local release checks completed at `30c4d314`, with the sandbox-blocked audit
+  and remaining gate steps successfully resumed. All eight committed native
+  validators passed. See the release notes for the split-execution disposition;
+  final-commit GitHub approval and separate tag authorization remain outstanding.

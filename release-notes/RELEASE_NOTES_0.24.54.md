@@ -1,8 +1,9 @@
 # v0.24.54 - Acceleration Native Evidence Sweep
 
-Status: in progress. Forty source-bound Linux/Apple captures and twelve current
-public-consumer campaigns completed; evidence integration and final non-sweep
-checks are in progress. No independent qualification or crates.io publication.
+Status: awaiting green CI. Forty source-bound Linux/Apple captures and twelve
+current public-consumer campaigns completed; evidence integration and local
+non-sweep release checks passed. No independent qualification or crates.io
+publication.
 
 This milestone follows signed v0.24.53 public consumer acceptance. It collects
 exact-source native correctness, performance, timing and resource observations
@@ -79,7 +80,7 @@ collector update before collecting; never edit an existing record's compiler.
 
 Fresh records now cover the six families with exact-record mismatches at
 v0.24.53. Their public derivatives pass the existing per-record source/result
-validators; committed-index checks remain part of final verification. Original
+validators; all eight committed native-index validators passed. Original
 MD5 evidence is retained without an unnecessary refresh. See the
 [native review](../docs/native-evidence-v0.24.54.md) for raw/public hashes,
 successful retries, workload regressions and remaining platform limits.
@@ -94,3 +95,20 @@ introduced here. Focused regressions, ordinary CI and source-bound evidence
 checks remain required. Any necessary execution, unsafe, secret-owner or trust
 boundary change reopens exceptional review rather than inheriting v0.24.53's
 sign-off. Existing accepted platform limits are not reopened by collection alone.
+
+## Final local verification
+
+On 2026-10-18, the local release checks completed against
+`30c4d3141cb52218c742208e13c1e326367de0dc`. The tag-gate sequence passed through
+repository/package tests, bare-metal checks, source-bound native validation,
+standards freshness, toolchain policy, release controls and dependency bans.
+Cargo audit then stopped because the sandbox could not lock its advisory cache;
+the audit and every remaining gate step were rerun with the required access and
+passed, including SBOM and development-milestone validation. This is a completed
+split execution, not a claim that the initial invocation exited successfully.
+
+The planner selected no affected cryptographic verifier groups or full phases.
+ASan/Miri selection and Kani policy/reuse checks passed without launching a new
+full campaign. The subsequent handoff changes only documentation and its review
+hashes; focused checks validate that delta. GitHub must check the final pushed
+commit before a separately authorized tag. No crates are selected for publication.

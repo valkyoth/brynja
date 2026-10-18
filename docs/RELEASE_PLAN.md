@@ -5092,12 +5092,14 @@ the v0.25.2 publication checkpoint; this is not another release-gate mechanism.
 
 ### v0.24.54 - Acceleration Native Evidence Sweep
 
-Status: in progress
+Status: awaiting green CI
 
 Collection progress is recorded in the v0.24.54 release notes and
 [native observation review](native-evidence-v0.24.54.md): forty Linux/Apple
-captures and twelve public-consumer campaigns passed. Final non-sweep checks
-remain pending; Windows has no fresh execution in this collection. Functional
+captures and twelve public-consumer campaigns passed. Local non-sweep checks
+completed at `30c4d314` with the sandbox-blocked audit and remaining gate steps
+successfully resumed; final-commit GitHub checks remain pending.
+Windows has no fresh execution in this collection. Functional
 observations are not independent or side-channel qualification.
 
 Owner-directed scope simplification (2026-10-18): tune the existing evidence

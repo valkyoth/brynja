@@ -110,6 +110,20 @@ class WorkspaceScope(unittest.TestCase):
             with self.subTest(path=path):
                 self.assertFalse(plans.scope.scope_review_metadata.native_observation(path))
                 self.assertTrue(plans.scope.select([path])[0])
+
+    def test_approval_checkers_use_baseline_not_memory_campaigns(self):
+        metadata = plans.scope.scope_review_metadata
+        for path in metadata.NATIVE_APPROVAL_ENTRYPOINTS:
+            fixtures.write(self.root, path, 'old validator\n')
+        self.base = fixtures.commit(self.root)
+        for path in metadata.NATIVE_APPROVAL_ENTRYPOINTS:
+            fixtures.write(self.root, path, 'updated validation-only boundary\n')
+        self.assertEqual(self.selected(OLD), (False, ()))
+        self.assertIn('python3 scripts/release/test-native-evidence-approval.py', metadata.BASE_COMMANDS)
+        fixtures.write(self.root, 'scripts/kmac/capture-kmac-execution-native.py', 'changed collector\n')
+        self.assertEqual(self.selected(OLD), (False, ('kmac',)))
+        fixtures.write(self.root, 'crates/brynja-hash-sha3/src/lib.rs', 'changed shared code\n')
+        self.assertEqual(set(self.selected(OLD)[1]), {'sha3', 'kmac', 'tuplehash', 'parallelhash'})
         fixtures.write(self.root, 'security/sha1-hardened-native.json', '{}\n')
         fixtures.write(self.root, 'crates/brynja-hash-sha3/src/lib.rs', 'pub fn changed() {}\n')
         self.assertEqual(self.selected(OLD), (False, ('sha3', 'kmac', 'tuplehash', 'parallelhash')))

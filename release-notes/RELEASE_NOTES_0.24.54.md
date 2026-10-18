@@ -10,6 +10,10 @@ bypass. The approval boundary is corrected and regression-tested, but a focused
 independent retest and separate owner approval remain required. Earlier local
 checks below are historical results, not current release authorization. See
 [the finding and disposition](../security/pentest/v0.24.54.md).
+The real isolated replay now rejects the reported KMAC forgery on both paths.
+Legacy MD5 additionally needs its historical dependency-closure rejection
+resolved before tagging; no new runtime defect or full-sweep requirement is
+inferred from that rejection.
 
 This milestone follows signed v0.24.53 public consumer acceptance. It collects
 exact-source native correctness, performance, timing and resource observations

@@ -26,7 +26,21 @@ SHA2_POLICY_CHECKS = (
     'python3 scripts/sha2/check-sha2-hardened-execution.py --policy-only',
     'python3 scripts/sha2/test-sha2-hardened-execution.py',
 )
+NATIVE_APPROVAL_CHECKS = ('python3 scripts/release/test-native-evidence-approval.py',)
+NATIVE_APPROVAL_ENTRYPOINTS = (
+    'scripts/sha2/check-sha2-hardened-native-evidence.py',
+    'scripts/sha1/check-sha1-hardened-native.py',
+    'scripts/md5/check-md5-execution-native.py',
+    'scripts/md5/check-md5-hardened-native.py',
+    'scripts/sha3/check-keccak-hardened-native.py',
+    'scripts/kmac/check-kmac-execution-native.py',
+    'scripts/tuplehash/check-tuplehash-execution-native.py',
+    'scripts/parallelhash/check-parallelhash-execution-native.py',
+)
 SCRIPT_COMMANDS = {
+    # These parse/check existing observations; they do not execute cryptography.
+    # Approval and mutation regressions run in the current baseline instead.
+    **dict.fromkeys(NATIVE_APPROVAL_ENTRYPOINTS, NATIVE_APPROVAL_CHECKS),
     'scripts/cpu/cpu_boundary_policy.py': CPU_CHECKS,
     'scripts/cpu/cpu_boundary_windows.py': CPU_CHECKS,
     'scripts/cpu/test-cpu-boundary.py': CPU_CHECKS,
@@ -35,8 +49,9 @@ SCRIPT_COMMANDS = {
     # This module inspects source/hash/gate contracts; it never executes the
     # crypto fixture or selects Miri/Kani/ASan work. Its own regressions run now.
     'scripts/sha2/sha2_hardened_execution_policy.py': SHA2_POLICY_CHECKS,
+    'scripts/sha2/test-sha2-hardened-execution.py': SHA2_POLICY_CHECKS,
 }
-BASE_COMMANDS = frozenset((*CPU_CHECKS, *KMAC_CHECKS, *SHA2_POLICY_CHECKS,
+BASE_COMMANDS = frozenset((*CPU_CHECKS, *KMAC_CHECKS, *SHA2_POLICY_CHECKS, *NATIVE_APPROVAL_CHECKS,
     'python3 scripts/hash/check-final-acceptance.py'))
 
 

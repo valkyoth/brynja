@@ -166,6 +166,12 @@ class SetupReviewTests(unittest.TestCase):
     def test_entrypoint_keeps_original_records_receipt_and_supplement_mandatory(self):
         import native_review_carry_forward as entry
         import native_review_checks as checks
+        # This fixture models a changed setup implementation. It must use the
+        # explicit review path, not the new genuinely-unchanged input path.
+        unchanged = patch('native_unchanged.validate_family',
+                          side_effect=ValueError('setup implementation changed'))
+        unchanged.start()
+        self.addCleanup(unchanged.stop)
         write(self.root, entry.REVIEW, self.doc)
         self.head = commit(self.root)
         adapter = SimpleNamespace(sources=lambda: self.current,

@@ -337,7 +337,7 @@
     "crates/brynja-crypto-cpu/src/x86_sha512/secret.rs": "333d5588c1e3ff4f9a0ea5ab9584fa9f1342452ebb4b01ad17d9982df8c6c2a7",
     "crates/brynja-crypto-cpu/src/x86_sha512/words.rs": "f77a10d0138bb2c2855dbfb62b10195e0b0a302b452fc62b3f225adef4d8ee12",
     "docs/hosted-cpu-execution.md": "ee95ea12465819e9d071196d39497b7245b94589f3060b3c48e48af960fe978a",
-    "scripts/checks.sh": "8a6617632f3709e85e5d5c5a6edbb477f113a104f87e59280cddfe2ab6d824b8",
+    "scripts/checks.sh": "5c573c5cc79b47004397f65c980b30bf34b7d9d737d6af226a8b82f3143d684b",
     "scripts/cpu/check-hosted-execution.py": "05c40d7c72890f5e9904470c3233cca7e46aa0b1ed309819b2028d399e0d15e9",
     "scripts/cpu/cpu_boundary_backends.py": "d5d214aaf9da4130a8e0f0278861c8eb57a5b3f5253a2a3a527265735f8b9105",
     "scripts/cryptography/check-macos-resident-batch-codegen.py": "3ee0058ea1f14c4cfeb7508a32c23e7e178127a75ed10b01eacbf7f854284e9f",

@@ -96,7 +96,8 @@ def protected(name):
     return (name in ('Cargo.toml', 'Cargo.lock', 'rust-toolchain.toml', 'rust-toolchain') or
             name.startswith('.cargo/') or
             name.startswith(('crates/', 'assurance/')) and
-            name.endswith(('.rs', '/Cargo.toml', '/Cargo.lock')))
+            name.endswith(('.rs', '.c', '.cc', '.cpp', '.h', '.hpp', '.s', '.S', '.asm',
+                           '/Cargo.toml', '/Cargo.lock')))
 
 
 def clean(root):

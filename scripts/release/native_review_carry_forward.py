@@ -81,13 +81,21 @@ def check_closure(root, review, current, captured, digest):
 def validate(family, root=io.ROOT):
     io.clean(root)
     head = io.git(root, 'rev-parse', 'HEAD').decode().strip()
+    adapter = Family(family, root)
+    from native_unchanged import validate_family
+    try:
+        validate_family(adapter, head)
+        return
+    except (ValueError, KeyError, TypeError) as error:
+        # A real implementation/tool change still needs the existing explicit
+        # reviewed equivalence path or new captures. Never treat failure as PASS.
+        print('Unchanged-input native reuse unavailable: ' + str(error), file=sys.stderr)
     review_raw = io.committed(root, REVIEW, head)
     review = io.document(review_raw)
     schema(review)
     io.git(root, 'merge-base', '--is-ancestor', review['capture_commit'], review['reviewed_commit'])
     io.git(root, 'merge-base', '--is-ancestor', review['reviewed_commit'], head)
     check_changes(root, review)
-    adapter = Family(family, root)
     current = adapter.sources()
     captured, count = adapter.records(review, head)
     import native_setup_review as setup

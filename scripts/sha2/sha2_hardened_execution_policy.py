@@ -118,6 +118,8 @@ def validate(root=ROOT, write=False):
     # substitute for fresh native qualification.
     for name in ('native_sha2_carry_forward.py', 'native_review_io.py',
                  'native_review_scope.py', 'native_scope_tests.py',
+                 'native_dependency_scope.py', 'native_unchanged.py',
+                 'test-native-dependency-scope.py',
                  'test-native-metadata-carry-forward.py'):
         paths.add(Path('scripts/release') / name)
     expected = {'version': '0.24.34', 'regions': REGIONS,

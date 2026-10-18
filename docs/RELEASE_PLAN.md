@@ -4942,7 +4942,12 @@ Exit criteria:
 
 ### v0.24.53 - Acceleration Public Consumer Acceptance
 
-Status: in progress
+Status: development milestone tagged with recorded verification deferrals
+
+Supplied defect retests and owner-accepted informational follow-ups are recorded
+in the v0.24.53 report. The progress narrative below describes its successive
+implementation passes; earlier pending statements are superseded by that final
+disposition. Native refresh and the consolidated sweep remain separate work.
 
 KMAC portable, execution and scoped conformance separation is implemented;
 the related cSHAKE composition surface is reviewed and retained explicitly.
@@ -5085,7 +5090,20 @@ the v0.25.2 publication checkpoint; this is not another release-gate mechanism.
 
 ### v0.24.54 - Acceleration Native Evidence Sweep
 
-Status: planned
+Status: in progress
+
+Collection preparation is recorded in the v0.24.54 release notes. No new native
+qualification is claimed before exact-source captures and review complete.
+
+Owner-directed scope simplification (2026-10-18): tune the existing evidence
+planner and native reuse checks so routine releases verify their new capability
+and affected implementations, not every old family. Existing accepted captures
+keep their original commit/compiler/platform provenance. Unrelated workspace
+metadata must not force hardware recollection; changed shared implementations,
+selected dependencies, build settings and fixtures still invalidate affected
+claims. Register each new family's commands and downstream relationships as part
+of implementing it. Do not add another collection service or silently skip
+unclassified work. The full v0.24.55 consolidation remains required.
 
 Plan scope: Collect exact-source native correctness, performance, timing and resource observations after frozen consumer acceptance on available AMD, qualifying Intel, AWS Arm, Apple M2, Intel Mac and Windows machines for every claimed OS/architecture; keep QEMU and unavailable ISA claims separate.
 
@@ -5152,6 +5170,12 @@ Exit criteria:
 - `v0.24.55 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.25.0 - Complete Generic HMAC Construction
+
+Evidence scope: register HMAC as its own affected family and test its composition
+with the supported hashes. Reuse validated unchanged hash/backend evidence;
+do not recollect unrelated families merely because HMAC is a new consumer.
+Any actual change to a shared hash, authority or cleanup implementation retains
+the applicable downstream regression and evidence requirements.
 
 Status: planned
 

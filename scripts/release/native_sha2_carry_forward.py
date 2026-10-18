@@ -93,12 +93,18 @@ def validate(root=io.ROOT):
         io.require(row['cpu'] == record['cpu'], 'SHA-2 reviewed CPU mismatch')
         closures.append(captured)
     io.require(all(value == closures[0] for value in closures), 'inconsistent SHA-2 capture closures')
-    equivalent(root, capture, current, closures[0])
+    from native_unchanged import validate_inputs
+    try:
+        validate_inputs(root, capture, head, current, closures[0], evidence.source_digest)
+        disposition = 'captured implementation/build inputs unchanged'
+    except ValueError:
+        equivalent(root, capture, current, closures[0])
+        disposition = 'only exact feature-inactive enclave addition excluded'
     io.clean(root)
     io.require(io.git(root, 'rev-parse', 'HEAD').decode().strip() == head and
                evidence.sources(root) == current, 'SHA-2 inputs changed during validation')
     print('SHA-2 native reuse: PASS; original three-platform records retained; '
-          'only exact feature-inactive enclave addition excluded. No Windows qualification.')
+          + disposition + '. Original compiler/platform claims only. No Windows qualification.')
 
 
 if __name__ == '__main__':

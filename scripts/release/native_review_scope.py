@@ -3,6 +3,7 @@ import tomllib
 
 import native_review_io as io
 import native_tooling_review as tooling
+import native_dependency_scope as dependencies
 
 
 def selected(name, closure):
@@ -40,5 +41,7 @@ def unchanged(root, before, after, closure):
         if identity == current[name]:
             continue
         io.require((name == 'Cargo.lock' and lock(root, before) == lock(root, after)) or
+                   (name in {'Cargo.toml', 'Cargo.lock'} and
+                    dependencies.equivalent(root, before, after, closure)) or
                    tooling.equivalent(root, before, after, name),
                    'family implementation/build input changed: ' + name)

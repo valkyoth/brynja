@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 import scope_inputs
 import scope_review_metadata
+import scope_workspace
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -198,6 +199,7 @@ def select_repository(
             'scripts/zeroization/miri_scope.py', 'scripts/zeroization/scope_inputs.py',
             'scripts/zeroization/test-miri-scope.py', 'scripts/zeroization/test-scope-inputs.py',
             'scripts/zeroization/scope_review_metadata.py',
+            'scripts/zeroization/scope_workspace.py',
             'scripts/zeroization/review_metadata_tests.py',
             'scripts/zeroization/check-tag-miri.sh', 'scripts/tag_gate.sh',
             'scripts/zeroization/check-zeroization-sanitizer.sh',
@@ -288,6 +290,8 @@ def select_repository(
                     affected |= scope_inputs.lock_groups(before, after)
             elif path.endswith('Cargo.toml') and before is not None and after is not None and scope_inputs.version_only(before, after):
                 continue
+            elif path == 'Cargo.toml':
+                retained.extend(scope_workspace.consumer_paths(root, base, before, after))
             elif path == 'scripts/zeroization/check-zeroization-miri.sh':
                 affected |= scope_inputs.runner_groups(before, after)
             elif path == 'assurance/policy.toml' and scope_inputs.verifier_only(before, after):

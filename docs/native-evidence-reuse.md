@@ -4,7 +4,55 @@ Native execution observations retain their actual capture commit, compiler,
 platform, outputs and qualification limits. A later test refactor does not turn
 them into new hardware observations, nor does Git history alone approve reuse.
 
-The tag gate first runs each existing exact-source native validator. The existing
+## Routine releases: verify the changed capability, reuse unchanged evidence
+
+Owner-approved v0.24.54 direction: a release number is not an implementation
+change. Keep routine evidence scoped to the new capability and affected shared
+implementations, rather than repeating every historical hardware/verifier run.
+The v0.24.55 consolidation sweep remains explicitly scheduled.
+
+The tag gate first runs each existing exact-source native validator. Its existing
+fallback entry points now also accept genuinely unchanged captured inputs,
+without a new version-specific equivalence review. This path validates original
+accepted lane records, result populations, compiler/CPU identities, artifact
+hashes, ancestral capture commit and historical source hashes. It compares the
+current input population and participating implementation/build inventory.
+It does not rewrite an observation or qualify a new compiler/platform.
+
+Workspace Cargo metadata is compared through the capture's dependency closure:
+unrelated packages and unused workspace dependency declarations do not invalidate
+it. All selected dependency versions, checksums, origins and edges remain bound;
+optional/dev edges are conservatively included. The inherited dependency keys
+used by participating manifests remain bound, including aliases and target/build/
+dev tables. Resolver, profiles, patches, workspace membership, package inheritance,
+compiler/configuration inputs, fixture manifests and capture scripts remain
+checked. Unknown/malformed or incomplete dependency graphs reject this reuse.
+No blanket test-file, documentation-comment or compiler-change exemption exists.
+
+For example, adding HMAC as a new consumer of unchanged SHA-2 does not change
+SHA-2's implementation. HMAC needs its own vectors, lifecycle/misuse tests,
+composition tests and relevant native/verifier observations; a SHA-2 receipt is
+not evidence that HMAC was tested. A SHA-2 implementation change also affects
+its registered consumers. A release with only HMAC changes must not request
+unrelated MD5/SHA-1/SHA-3 hardware collections merely because it has a new tag.
+
+When implementing a new family, register its source/fixture ownership, downstream
+relationships and verifier commands in the existing planner, and regression-test
+both its narrow selection and shared-dependency invalidation. An unknown family
+still blocks automatic execution pending scope review; it is neither silently
+skipped nor assumed covered by another family's PASS. Existing conservative
+full-scope fallbacks remain for unresolved inputs; the operator must review the
+reason instead of routinely approving an unnecessary all-family campaign.
+
+Current repository/packaging/metadata checks still run. Existing detached receipts
+remain reusable by command and affected family, with original provenance; failed,
+incomplete, missing or incompatible evidence is not reusable. Public publication
+checkpoints retain their existing full-checkpoint rule. New full checkpoints
+should be deliberate milestones, not inferred from an internal version bump.
+
+## Earlier explicit equivalence reviews
+
+The existing
 TupleHash/ParallelHash facade-version-only fallback is retained. If those checks
 reject a source delta, the owner-approved test/tooling fallback can accept only
 the exact delta in [the review record](../security/native-reuse/v0.24.49-review.json).
@@ -50,8 +98,8 @@ The fallback requires all of the following:
   Every participating crate/fixture retains its Rust sources, build scripts and
   manifests; global Cargo configuration and toolchain inputs remain bound.
   Unrelated crate/fixture changes do not invalidate that family's evidence.
-  Only the top-level facade version, corroborated against its manifest, is
-  projected out of the workspace lock comparison; dependencies remain exact.
+  Workspace dependency metadata may use the dependency projection described
+  above; selected dependencies and all other build configuration remain exact.
 - Original index and artifact bytes equal to the reviewed commit, including
   original owner review, lanes, CPU identities and checksums. Each source hash is
   recomputed from the capture commit and each existing family result validator

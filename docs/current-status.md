@@ -8,11 +8,12 @@ The [ordering review](ROADMAP_ORDERING_AUDIT.md) splits oversized future
 families and records prerequisites. Windows strict and Apple Silicon resident
 profiles occupy v0.24.50–v0.24.51. Operational RISC-V acceleration is postponed
 until qualifying native hardware is available; portable support and existing
-candidate tests remain unchanged. The four remaining backfill stops occupy
-v0.24.52–v0.24.55, with HMAC still at v0.25.0. The v0.24.52 facade/package
-milestone is tagged with its recorded owner-approved deferrals. Development
-of v0.24.53 consumer acceptance and leaf conformance separation is in progress;
-release-gate policy is unchanged.
+candidate tests remain unchanged. The two remaining backfill stops occupy
+v0.24.54–v0.24.55, with HMAC still at v0.25.0. The v0.24.53 consumer acceptance
+and leaf conformance separation milestone is tagged with its recorded review
+dispositions and owner-approved verification deferrals. v0.24.54 native evidence
+collection is in progress; no fresh capture or qualification is claimed yet.
+The consolidated full sweep remains at v0.24.55; release-gate policy is unchanged.
 
 The [public-operation roadmap audit](ROADMAP_API_COMPLETENESS_AUDIT.md) adds
 explicit DER, format, key-role and prerequisite closure without changing any
@@ -26,7 +27,7 @@ Current generated planning coverage is 2158 non-RC rows
 surfaces and 175 requirements; numerical summaries in the historical v0.3.x
 implementation narrative below describe those earlier passes.
 
-Status: v0.20.0 published; milestones through v0.24.52 tagged. The v0.24.48
+Status: v0.20.0 published; milestones through v0.24.53 tagged. The v0.24.48
 [hardened multibuffer ownership milestone](hardened-multibuffer-owners.md),
 including scheduled, streaming and threaded ParallelHash integration, passed its
 release checks and GitHub. The v0.24.49 [dedicated x86 SHA-512 work](x86-sha512-execution.md)
@@ -52,8 +53,10 @@ The v0.24.52 [facade feature guide](facade-features.md) documents explicit
 default-off forwarding to existing SHA-2, SHA-3/SHAKE/cSHAKE, KMAC, TupleHash
 and ParallelHash execution/batch APIs. Portable defaults and separate hosted,
 protected and legacy packages remain intact. Extracted consumers pass focused
-Rust 1.90.0/1.99.1 checks; independent pentest and release qualification are
-pending. This candidate adds no new cryptographic kernel.
+Rust 1.90.0/1.99.1 checks. Its supplied reviews and accepted limitations remain
+recorded in the tagged release notes; the carried KMAC conformance issue was
+remediated and retested in v0.24.53. Native refresh and consolidated verification
+remain separate v0.24.54/v0.24.55 work. These facade changes add no new kernel.
 
 Existing [general SHA-512/t](sha512-t-contract.md) ordinary/hardened
 byte/bit hashing APIs remain behind an explicit default-off leaf feature. General family

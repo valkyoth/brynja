@@ -22,14 +22,21 @@ KMAC_CHECKS = (
     'python3 scripts/kmac/test-kmac.py',
     'scripts/kmac/check-kmac-codegen.sh',
 )
+SHA2_POLICY_CHECKS = (
+    'python3 scripts/sha2/check-sha2-hardened-execution.py --policy-only',
+    'python3 scripts/sha2/test-sha2-hardened-execution.py',
+)
 SCRIPT_COMMANDS = {
     'scripts/cpu/cpu_boundary_policy.py': CPU_CHECKS,
     'scripts/cpu/cpu_boundary_windows.py': CPU_CHECKS,
     'scripts/cpu/test-cpu-boundary.py': CPU_CHECKS,
     'scripts/kmac/check-kmac-codegen.sh': KMAC_CHECKS,
     'scripts/kmac/test-kmac.py': KMAC_CHECKS,
+    # This module inspects source/hash/gate contracts; it never executes the
+    # crypto fixture or selects Miri/Kani/ASan work. Its own regressions run now.
+    'scripts/sha2/sha2_hardened_execution_policy.py': SHA2_POLICY_CHECKS,
 }
-BASE_COMMANDS = frozenset((*CPU_CHECKS, *KMAC_CHECKS,
+BASE_COMMANDS = frozenset((*CPU_CHECKS, *KMAC_CHECKS, *SHA2_POLICY_CHECKS,
     'python3 scripts/hash/check-final-acceptance.py'))
 
 

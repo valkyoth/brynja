@@ -24,6 +24,14 @@ First inspect the existing plan:
 python3 scripts/release/run-verification.py plan --check
 ```
 
+Routine releases use affected implementation scope, not version-number freshness.
+Workspace dependency declaration changes select their consumers, while unrelated
+declarations do not force a campaign. New families must register their commands
+and downstream relationships; an unresolved scope is a reason to inspect the
+plan, not routinely approve all-family work. Native observations follow the
+[unchanged-input reuse rules](native-evidence-reuse.md). The owner-scheduled
+v0.24.55 full consolidation and public publication checkpoints remain separate.
+
 If this asks for full-run approval, review its explanation and obtain explicit
 owner approval. Detachment does not approve that fallback. Pass the exact
 approved fingerprint through `--approve-full` when starting the run.

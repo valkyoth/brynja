@@ -52,7 +52,7 @@
 "crates/brynja-hash-sha2/src/sha512_state.rs" = "621cda9793ff1f489533101cbdad23da26bd467a2909faa1e3c2fc334ebc0d10"
 "crates/brynja-hash-sha2/src/sha512_t.rs" = "1a87c5259498d2cff9951bb0b4a213a30dcf76182191ff3f6a421e5ba7c03916"
 "crates/brynja-hash-sha2/tests/execution.rs" = "e033d122f93deeed39f54b8cabf5838f9395ce4df2f5456ae2c56be521e7c2ba"
-"scripts/checks.sh" = "8a6617632f3709e85e5d5c5a6edbb477f113a104f87e59280cddfe2ab6d824b8"
+"scripts/checks.sh" = "5c573c5cc79b47004397f65c980b30bf34b7d9d737d6af226a8b82f3143d684b"
 "scripts/sha2/check-sha2-execution.py" = "375cb1ae007fd938a96a3c6517b04be1412dc3bdbc1e455991f50572766f087d"
 "scripts/zeroization/check-zeroization-miri.sh" = "4aec4f31bb9d0b363c9a19c6d647a196379c3183b19850102bab52a16597dbc2"
 "scripts/zeroization/check-zeroization-sanitizer.sh" = "333553482e6d6e0d5852457118e9f4ee430ef384b18df53c357aad51cb6487ab"

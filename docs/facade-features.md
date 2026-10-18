@@ -744,3 +744,66 @@ selected runtime test; extracted sources restore and pristine tests repeat.
 These are public functional checks, not private-memory/register erasure proof,
 new platform/native release qualification, protected batch/ParallelHash coverage
 or Windows/macOS coverage. Existing gates and evidence deferrals are unchanged.
+
+## Strict protected batch and ParallelHash consumers
+
+On a supported native GNU/Linux deployment, run the separate extracted-package
+consumer (omit `--native-simd` for its scalar-only campaign):
+
+```sh
+python3 scripts/repository/check-strict-group-consumer.py --toolchain 1.99.1 --native-simd
+```
+
+The consumer imports only `brynja-strict`, with an exact archive/feature graph.
+Compiler target bundles and CPU/OS capabilities are checked separately before
+native execution. The same deployment and migration obligations as the compiled
+consumer above apply. No implicit ordinary or resident profile is accepted.
+
+Six debug/release tests cover independent batch and ParallelHash oracles, bit
+inputs, mixed lanes and public lifecycle behavior. Batch coverage includes 662
+scalar cases and, in native mode, 616 SIMD cases plus 46 explicit ineligible
+rejections. Sparse scalar SHA-2 lanes exercise 240 named bit cases and 4,590
+general-t cases. Mixed-identity/length groups include every valid general-t width:
+522 groups per route, with 2,096 lanes per route. ParallelHash checks 274 cases
+with one and three workers: 548 comparisons per enabled scalar, compiled-single
+and compiled-SIMD-leaf route.
+
+Request rejection, cancellation, healthy reuse, explicit quarantine, borrowed
+output, failed/successful declassification, forgotten output and caller-side
+unwind are checked through public APIs. Thirty-four compiled negative probes
+cover ownership, lifetimes, overlapping loans and explicit declassification.
+Nine scalar and fourteen native source mutants must compile and fail their
+selected tests in both debug and release; restored-source campaigns repeat.
+
+Batch reports require vector work on SIMD runs. ParallelHash's public API does
+not expose a vector counter, so an additional extracted-crate instrumented
+companion checks actual SIMD work and rejects portable substitution in debug
+and release. That companion is explicitly separate from public API acceptance.
+Private storage/register erasure and platform protection remain separate
+qualification obligations. These checks do not change existing release gates
+or upgrade historical native records.
+
+## Apple Silicon resident package reconciliation
+
+The existing platform-specific extracted consumers are separate from the
+GNU/Linux strict facade. On the native Apple Silicon builder, run each command
+with both supported compiler endpoints, 1.90.0 and 1.99.1:
+
+```sh
+python3 scripts/cryptography/check-macos-resident-package.py --toolchain 1.99.1 --accelerated --keyed
+python3 scripts/cryptography/check-macos-resident-batch-package.py --toolchain 1.99.1
+python3 scripts/cryptography/check-macos-resident-parallel-package.py --toolchain 1.99.1
+```
+
+The modern consumer covers named/general-t SHA-2, SHA-3/SHAKE/cSHAKE and
+scalar/ArmKeccak keyed identities. Batch consumers check scalar/NEON results and
+explicit ineligible-workload rejections. ParallelHash checks scalar, ArmKeccak
+and NEON leaf paths with one and three workers. Independent public comparisons
+run in debug/unwind, release/unwind and release/abort configurations; separate
+internal lifecycle/ownership tests and compiled mutations supplement them.
+
+All six commands passed on the pinned v0.24.53 development snapshot. They retain
+their original platform-specific harness scope, rather than being presented as
+the new strict consumer's exact-feature or config-isolation checks. Resident
+locking/clearing does **not** claim macOS core-dump exclusion, strict-profile
+admission, independent verification or fresh native release qualification.

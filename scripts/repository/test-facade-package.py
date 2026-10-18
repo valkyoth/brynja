@@ -23,6 +23,7 @@ import test_legacy_strict_package
 import test_legacy_resident_package
 import test_strict_public_consumer
 import test_strict_accelerated_consumer
+import test_strict_group_consumer
 
 spec = importlib.util.spec_from_file_location(
     'facade_package', Path(__file__).with_name('check-facade-package.py'))
@@ -173,6 +174,7 @@ def main():
         test_legacy_resident_package.check(acceptance)
         test_strict_public_consumer.check(acceptance)
         test_strict_accelerated_consumer.check(acceptance)
+        test_strict_group_consumer.check(acceptance)
         ambient_config_regressions()
         archive_regressions()
         baseline = document({'facade-consumer': [], 'brynja': [], 'brynja-crypto': []})

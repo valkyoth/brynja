@@ -335,13 +335,41 @@ absorption/transfer and quarantine mutations must fail selected runtime tests.
 Local SHA-NI/AVX2 execution passes; dedicated x86 SHA-512 and Arm execution by
 this new consumer remain pending. No production or gate behavior changed.
 
+## Strict protected batch and ParallelHash consumers
+
+A separate extracted consumer now covers strict protected batch and ParallelHash
+public APIs, with exact archives/features and independent CPU/compiled-feature
+checks. Rust 1.90.0 and 1.99.1 pass scalar and native AVX2 debug/release campaigns.
+Independent corpora cover all supported batch identities, arbitrary bits,
+every valid SHA-512/t width, mixed lanes and one/three-worker ParallelHash.
+
+Public cancellation/error/output/lifetime/quarantine checks are backed by 34
+compiled negatives and 46 compiled behavioral mutation runs per compiler.
+An instrumented extracted ParallelHash companion independently verifies vector
+work and rejects two portable-substitution runs. Tests restore extracted sources
+on failure and repeat pristine consumers. No production implementation or gate
+changed; private-memory erasure and platform qualification remain separate.
+
+## Apple Silicon package reconciliation
+
+All six existing modern resident, batch and ParallelHash package commands pass
+on the native Apple Silicon builder with Rust 1.90.0 and 1.99.1. Public independent
+oracles execute in debug/unwind, release/unwind and release/abort configurations,
+with scalar, ArmKeccak and NEON routes where applicable. Internal lifecycle,
+ownership and compiled-mutation checks also pass. Logs are preserved separately
+from Cargo build output, with hashes recorded in the security report.
+
+This is functional consumer reconciliation. macOS resident APIs still make no
+core-dump-exclusion or strict-profile claim; native release qualification remains
+the separate planned milestone.
+
 ## Work remaining before retest and acceptance freeze
 
 - Obtain independent retest of the complete conformance separation before
   closing v0.24.52 F-1; author checks alone do not close it.
-- Complete package-external route/operation coverage across all planned modern
-  and isolated legacy families, including compiled behavioral mutants and
-  ownership/output/error guarantees.
+- Finish Windows extracted-consumer reconciliation and the final route/operation
+  inventory across modern and isolated legacy families. Existing Windows native
+  records remain bound to their original source/compiler, not relabeled current.
 - Reconcile affected source policies, compiler checks and current acceptance
   records, then obtain the required independent pentest/retest.
 - Run focused checks, ordinary CI and non-sweep release checks. The owner has

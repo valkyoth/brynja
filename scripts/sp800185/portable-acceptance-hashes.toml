@@ -20,7 +20,7 @@
 "assurance/tuplehash-public-api/src/lib.rs" = "49ce2027bcbda7941947c04d697c2d8efa7e50d5f5d23ed01b4f5aeb4be91484"
 "assurance/parallelhash-public-api/src/lib.rs" = "0c2dc0f856053d372474a11ac4991f78048419db9362e162afe2a1f67ec76b9a"
 "scripts/sha3/check-cshake-differential.py" = "0e936f96b8a8bb7295055694cf751353207c83d78f5fad95c7184e9148c16d39"
-"scripts/kmac/check-kmac-differential.py" = "b3bb8f84f7648c369e00bd7753b92cecab7dc0b19e6c2b5652bd874ee3f5c640"
+"scripts/kmac/check-kmac-differential.py" = "511e051dbd3dabb15b141bc0a5ba1c1de7e60d2b5f7dc6ec6fc27f5e762c9d66"
 "scripts/tuplehash/check-tuplehash-differential.py" = "6be3bfd93a3d7fb2dd9fc2a051d5de2d564a9ec99d1688255b950e6efe6db1ec"
 "scripts/parallelhash/check-parallelhash-differential.py" = "e31da4458878fe0eebabc96e244caf072f6a30f5760aed6b256e9a96af80e654"
 "scripts/sp800185/test-portable-acceptance.py" = "688cd1f625d3a767c4e3e16fa6c4255f290284be09bbd5a28cfe1dfa2d582f46"

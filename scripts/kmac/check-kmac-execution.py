@@ -8,6 +8,7 @@ import platform
 import re
 import subprocess
 import kmac_execution_policy as policy
+import kmac_production_oracle
 
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST = 'assurance/kmac-execution/Cargo.toml'
@@ -70,6 +71,7 @@ def campaign(mode, environment=None, target=None, toolchain='1.98.1'):
         'X86Keccak' if target is None and platform.machine() in ('x86_64', 'AMD64') else 'ArmKeccak')
     if 'KMAC_EXECUTION_ROUTE: ' not in result.stderr or route not in result.stderr:
         raise RuntimeError('missing KMAC execution route')
+    kmac_production_oracle.campaign(ROOT, oracle, cases, command, env, execute, route)
     for invalid in (
         'kmac128 1 80 0 - 0 - 8\n', 'kmacxof256 0 - 0 - 0 - 4096\n',
         'unknown 0 - 0 - 0 - 8\n', 'kmac128 0 - 0 - 0 - 8 trailing\n',

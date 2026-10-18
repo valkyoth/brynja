@@ -1,3 +1,17 @@
+/// Internal parameter admission, shared by portable, execution and scoped cores.
+/// A named mode prevents opposite boolean conventions at call boundaries.
+#[derive(Clone, Copy, Eq, PartialEq)]
+pub(crate) enum StrengthPolicy {
+    Production,
+    Conformance,
+}
+
+impl StrengthPolicy {
+    pub(crate) const fn is_production(self) -> bool {
+        matches!(self, Self::Production)
+    }
+}
+
 /// Key-strength classification retained by a KMAC state.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[non_exhaustive]

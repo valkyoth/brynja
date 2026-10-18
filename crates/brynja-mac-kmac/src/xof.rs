@@ -1,3 +1,4 @@
+use crate::policy::StrengthPolicy;
 use brynja_hash_sha3::{
     Fips202BitString, Fips202Output, HardenedCshake128, HardenedCshake128Reader, HardenedCshake256,
     HardenedCshake256Reader,
@@ -123,7 +124,7 @@ macro_rules! xof_state {
                 key: Fips202BitString<'_>,
                 customization: Fips202BitString<'_>,
             ) -> Result<Self, KmacError> {
-                KmacCore::new_bits(key, customization, true).map(|core| Self { core })
+                KmacCore::new_bits(key, customization, StrengthPolicy::Production).map(|core| Self { core })
             }
 
             conformance_api! { $profile;
@@ -141,7 +142,7 @@ macro_rules! xof_state {
                 key: Fips202BitString<'_>,
                 customization: Fips202BitString<'_>,
             ) -> Result<Self, KmacError> {
-                KmacCore::new_bits(key, customization, false).map(|core| Self { core })
+                KmacCore::new_bits(key, customization, StrengthPolicy::Conformance).map(|core| Self { core })
             }
             }
 
@@ -176,7 +177,7 @@ macro_rules! xof_state {
             /// Finalizes a full-strength production state into an incremental reader.
             pub fn finalize_xof(mut self) -> Result<$reader, KmacError> {
                 self.core
-                    .finish_xof(None, true)
+                    .finish_xof(None, StrengthPolicy::Production)
                     .map(|inner| $reader { inner })
             }
 
@@ -185,7 +186,7 @@ macro_rules! xof_state {
             #[cfg(feature = "conformance-testing")]
             pub fn finalize_xof_conformance(mut self) -> Result<$reader, KmacError> {
                 self.core
-                    .finish_xof(None, false)
+                    .finish_xof(None, StrengthPolicy::Conformance)
                     .map(|inner| $reader { inner })
             }
             }
@@ -196,7 +197,7 @@ macro_rules! xof_state {
                 final_message: Fips202BitString<'_>,
             ) -> Result<$reader, KmacError> {
                 self.core
-                    .finish_xof(Some(final_message), true)
+                    .finish_xof(Some(final_message), StrengthPolicy::Production)
                     .map(|inner| $reader { inner })
             }
 
@@ -208,7 +209,7 @@ macro_rules! xof_state {
                 final_message: Fips202BitString<'_>,
             ) -> Result<$reader, KmacError> {
                 self.core
-                    .finish_xof(Some(final_message), false)
+                    .finish_xof(Some(final_message), StrengthPolicy::Conformance)
                     .map(|inner| $reader { inner })
             }
             }

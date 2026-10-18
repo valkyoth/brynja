@@ -104,6 +104,8 @@ def reject(label: str, path: Path, old: str, new: str) -> None:
 
 
 def main() -> int:
+    import test_kmac_retest
+    test_kmac_retest.check()
     codegen_lookup_regressions()
     kmac_policy.validate(ROOT)
     streamed = Path("crates/brynja-mac-kmac/src/setup")
@@ -142,6 +144,14 @@ def main() -> int:
     reject("borrowed-decision", Path("crates/brynja-mac-kmac/src/output.rs"), "secret_difference_is_zero", "ordinary_zero_check")
     reject("official-vector", Path("crates/brynja-mac-kmac/tests/official_vectors.rs"), "E5780B0D3EA6F7D3", "F5780B0D3EA6F7D3")
     reject("differential", Path("scripts/checks.sh"), "python3 scripts/kmac/check-kmac-differential.py", "true")
+    reject("production-oracle", kmac_policy.DIFFERENTIAL_FIXTURE,
+           "profiles::production::dispatch(", "profiles::conformance::dispatch(")
+    reject("enabled-conformance-gate", kmac_policy.CONFORMANCE_GATE,
+           "--features enabled --message-format=json", "--message-format=json")
+    reject("named-strength-policy", kmac_policy.CRATE / "src/policy.rs",
+           "matches!(self, Self::Production)", "matches!(self, Self::Conformance)")
+    reject("bare-strength-policy", kmac_policy.CRATE / "src/core_state.rs",
+           "strength_policy: StrengthPolicy", "production: bool")
     reject("miri", Path("scripts/zeroization/check-zeroization-miri.sh"), "-p brynja-mac-kmac", "-p missing-kmac")
     reject(
         "sanitizer-targets",
@@ -157,7 +167,7 @@ def main() -> int:
     reject("scoped-terminal", scoped / "core_state.rs", "self.core.state.0 = None;", "")
     reject("scoped-output", scoped / "core_state.rs", "let _ = clear_owned_region(output);", "")
     reject("scoped-verify", scoped / "core_state.rs", "secret_difference_is_zero(&cleanup.0.difference[0])", "secret_difference_is_zero(&0)")
-    reject("scoped-xof-trailer", scoped / "core_state.rs", "self.finish(input, 0, 0, false)", "self.finish(input, 8, 0, false)")
+    reject("scoped-xof-trailer", scoped / "core_state.rs", "self.finish(input, 0, 0, StrengthPolicy::Conformance)", "self.finish(input, 8, 0, StrengthPolicy::Conformance)")
     reject("scoped-reader-terminal", scoped / "reader.rs", "*self.reader = None;", "")
     reject("scoped-reader-metadata", scoped / "reader.rs", "self.metadata.wipe();", "")
     reject("scoped-reader-secret", scoped / "reader.rs", "clear_owned_region(output)", "core::hint::black_box(output)")
@@ -168,7 +178,7 @@ def main() -> int:
     reject("scoped-accelerated-key", scoped / "accelerated/fixed.rs", "key.bit_len() < $strength", "false")
     reject("scoped-accelerated-feature", scoped.with_suffix('.rs'), '#[cfg(feature = "hardened-execution")]\npub mod accelerated;', 'pub mod accelerated;')
     for label, before, after in (
-        ('state', 'self.core.finish_xof(input, production)?', 'self.core.finish_xof(input, false)?'),
+        ('state', 'self.core.finish_xof(input, strength_policy)?', 'self.core.finish_xof(input, false)?'),
         ('borrow', "&'scope mut [u8]", "[u8; 168]"),
         ('public', '_authority: KmacPublicDeclassification', '_authority: ()'),
         ('output', 'self.inner.public(output)', 'Ok(())'),

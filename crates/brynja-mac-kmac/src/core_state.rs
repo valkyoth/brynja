@@ -1,3 +1,4 @@
+use crate::policy::StrengthPolicy;
 use brynja_core::clear_owned_region;
 use brynja_hash_sha3::Fips202BitString;
 
@@ -19,11 +20,11 @@ impl<S: CshakeState, const RATE: usize, const STRENGTH: u128> KmacCore<S, RATE, 
     pub(crate) fn new_bits(
         key: Fips202BitString<'_>,
         customization: Fips202BitString<'_>,
-        require_full_strength: bool,
+        strength_policy: StrengthPolicy,
     ) -> Result<Self, KmacError> {
         let key_bits = u128::try_from(key.bit_len()).map_err(|_| KmacError::MessageTooLong)?;
         let policy = key_policy(key_bits, STRENGTH);
-        if require_full_strength && policy != KmacKeyPolicy::FullStrength {
+        if strength_policy.is_production() && policy != KmacKeyPolicy::FullStrength {
             return Err(KmacError::KeyTooShort);
         }
         let mut state = S::new_kmac(customization).map_err(KmacError::from)?;
@@ -69,12 +70,12 @@ impl<S: CshakeState, const RATE: usize, const STRENGTH: u128> KmacCore<S, RATE, 
         &mut self,
         final_message: Option<Fips202BitString<'_>>,
         output_bits: u128,
-        require_full_strength: bool,
+        strength_policy: StrengthPolicy,
     ) -> Result<S::Reader, KmacError> {
-        if require_full_strength && self.key_policy() != KmacKeyPolicy::FullStrength {
+        if strength_policy.is_production() && self.key_policy() != KmacKeyPolicy::FullStrength {
             return Err(KmacError::KeyTooShort);
         }
-        if require_full_strength && output_bits < STRENGTH {
+        if strength_policy.is_production() && output_bits < STRENGTH {
             return Err(KmacError::TagTooShort);
         }
         append_right_encode(&mut self.state, final_message, output_bits)
@@ -83,9 +84,9 @@ impl<S: CshakeState, const RATE: usize, const STRENGTH: u128> KmacCore<S, RATE, 
     pub(crate) fn finish_xof(
         &mut self,
         final_message: Option<Fips202BitString<'_>>,
-        require_full_strength: bool,
+        strength_policy: StrengthPolicy,
     ) -> Result<S::Reader, KmacError> {
-        if require_full_strength && self.key_policy() != KmacKeyPolicy::FullStrength {
+        if strength_policy.is_production() && self.key_policy() != KmacKeyPolicy::FullStrength {
             return Err(KmacError::KeyTooShort);
         }
         append_right_encode(&mut self.state, final_message, 0)
@@ -160,7 +161,7 @@ impl<S: CshakeState, const RATE: usize, const STRENGTH: u128> KmacCore<S, RATE, 
 pub(crate) mod assurance_contract {
     use brynja_hash_sha3::{Fips202BitString, HardenedCshake128};
 
-    use super::KmacCore;
+    use super::{KmacCore, StrengthPolicy};
 
     #[test]
     fn registered_algorithm_kmac_owner_contract_is_compiler_checked() {
@@ -170,7 +171,8 @@ pub(crate) mod assurance_contract {
         let Ok(key) = key else {
             return;
         };
-        let owner = KmacCore::<HardenedCshake128, 168, 128>::new_bits(key, key, true);
+        let owner =
+            KmacCore::<HardenedCshake128, 168, 128>::new_bits(key, key, StrengthPolicy::Production);
         assert!(owner.is_ok());
         let Ok(mut owner) = owner else {
             return;

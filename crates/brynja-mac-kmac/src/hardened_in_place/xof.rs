@@ -1,4 +1,5 @@
 use super::{core_state::Core, fixed, reader::Output};
+use crate::policy::StrengthPolicy;
 use crate::{
     Fips202BitString, KmacError, KmacKeyPolicy, KmacPublicDeclassification, KmacSecretOutput,
     KmacServiceStatus,
@@ -118,20 +119,20 @@ macro_rules! xof {
             }
             /// Starts production XOF output with right_encode(0).
             pub fn finalize_xof(self) -> Result<$reader<'scope>, KmacError> {
-                self.finish(None, true)
+                self.finish(None, StrengthPolicy::Production)
             }
             /// Includes final canonical message bits and consumes the state.
             pub fn finalize_bits_xof(
                 self,
                 input: Fips202BitString<'_>,
             ) -> Result<$reader<'scope>, KmacError> {
-                self.finish(Some(input), true)
+                self.finish(Some(input), StrengthPolicy::Production)
             }
             conformance_api! { $profile;
             /// Starts exact-conformance XOF output, including weak keys.
             #[cfg(feature = "conformance-testing")]
             pub fn finalize_xof_conformance(self) -> Result<$reader<'scope>, KmacError> {
-                self.finish(None, false)
+                self.finish(None, StrengthPolicy::Conformance)
             }
             }
             conformance_api! { $profile;
@@ -141,15 +142,15 @@ macro_rules! xof {
                 self,
                 input: Fips202BitString<'_>,
             ) -> Result<$reader<'scope>, KmacError> {
-                self.finish(Some(input), false)
+                self.finish(Some(input), StrengthPolicy::Conformance)
             }
             }
             fn finish(
                 self,
                 input: Option<Fips202BitString<'_>>,
-                production: bool,
+                strength_policy: StrengthPolicy,
             ) -> Result<$reader<'scope>, KmacError> {
-                let (reader, cleanup) = self.core.finish_xof(input, production)?;
+                let (reader, cleanup) = self.core.finish_xof(input, strength_policy)?;
                 Ok($reader {
                     inner: Output::new(reader, cleanup),
                 })

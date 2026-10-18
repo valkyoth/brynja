@@ -19,7 +19,7 @@ TOKENS = {
                    'Self::Accelerated128(s) => s.cancel()', 'Self::Accelerated256(s) => s.cancel()', 'b"KMAC"'),
     'core_state.rs': ('state: State<', 'metadata: Metadata', 'Operation::new(self)', 'if !self.completed {',
                       'self.core.cancel();', 'self.state.wipe();', 'self.metadata.wipe();',
-                      'if !conformance && key_bits < strength', 'absorb_key(&mut core.state',
+                      'if strength_policy.is_production() && key_bits < strength', 'absorb_key(&mut core.state',
                       'if xof { 0 } else { bits }', '.checked_add(length)', '.checked_add(bits)',
                       'operation.core.phase(1)?;', 'operation.core.phase(2)?;',
                       'let _ = clear_owned_region(output);', 'Ok(KmacSecretOutput::new(result))'),
@@ -128,6 +128,7 @@ def validate(root=ROOT, write=False):
                   'scripts/zeroization/check-zeroization-sanitizer.sh', 'docs/kmac-accelerated-execution.md'))
     paths.update(('scripts/kmac/check-kmac-differential.py', 'scripts/sha3/check-cshake-differential.py',
                   'scripts/sha3/check-sha3-bit-differential.py', 'scripts/cryptography/mir_cleanup_flow.py'))
+    paths.update(('scripts/kmac/kmac_production_oracle.py', 'scripts/repository/facade_kmac_sources.py'))
     record = {'version': '0.24.38', 'status': 'implementation-review; native-qualification-pending',
         'regions': REGIONS, 'sha256': {p: hashlib.sha256(read(root, p).encode()).hexdigest() for p in sorted(paths)}}
     if write:

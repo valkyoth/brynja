@@ -1,4 +1,5 @@
 use super::*;
+use crate::policy::StrengthPolicy;
 use brynja_hash_sha3::HardenedSha3SecretOutput;
 use core::cell::Cell;
 extern crate std;
@@ -83,7 +84,7 @@ fn rejected_and_unwinding_updates_destroy_state_immediately() -> Result<(), Kmac
         assert_eq!(state.update(b""), Err(KmacError::StateConsumed));
         let mut output = [0xa5; 16];
         assert!(matches!(
-            state.secret(None, &mut output, 8, 128, true),
+            state.secret(None, &mut output, 8, 128, StrengthPolicy::Production),
             Err(KmacError::StateConsumed)
         ));
         assert_eq!(output, [0; 16]);
@@ -111,7 +112,7 @@ fn setup_and_finalization_failures_clear_owned_metadata() -> Result<(), KmacErro
                 168,
                 128,
             )?
-            .secret(None, &mut output, 8, 128, true)
+            .secret(None, &mut output, 8, 128, StrengthPolicy::Production)
             .map(|_| ())
         }));
         if mode_value == 2 {
@@ -142,7 +143,7 @@ fn outer_guard_clears_all_regions_even_after_forgotten_inner_guard() {
 
 #[test]
 fn xof_production_rejects_weak_keys_and_terminal_states() -> Result<(), KmacError> {
-    for production in [false, true] {
+    for strength_policy in [StrengthPolicy::Conformance, StrengthPolicy::Production] {
         let mut metadata = Metadata::new();
         let mode = Cell::new(0);
         let dropped = Cell::new(false);
@@ -156,12 +157,12 @@ fn xof_production_rejects_weak_keys_and_terminal_states() -> Result<(), KmacErro
             168,
             128,
         )?;
-        let expected = if production {
+        let expected = if strength_policy.is_production() {
             KmacError::KeyTooShort
         } else {
             KmacError::SecretMemory
         };
-        assert!(matches!(state.finish_xof(None, production), Err(error) if error == expected));
+        assert!(matches!(state.finish_xof(None, strength_policy), Err(error) if error == expected));
         assert!(dropped.get());
         assert!(metadata.cleared());
         let mut state = Core::new(
@@ -177,7 +178,7 @@ fn xof_production_rejects_weak_keys_and_terminal_states() -> Result<(), KmacErro
         mode.set(1);
         assert_eq!(state.update(b""), Err(KmacError::MessageTooLong));
         assert!(matches!(
-            state.finish_xof(None, production),
+            state.finish_xof(None, strength_policy),
             Err(KmacError::StateConsumed)
         ));
         assert!(metadata.cleared());

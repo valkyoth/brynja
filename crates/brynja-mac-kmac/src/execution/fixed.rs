@@ -3,6 +3,7 @@ use super::{
     core_state::Core,
     output::{self, BorrowedStage, Stage},
 };
+use crate::policy::StrengthPolicy;
 use crate::{
     Fips202BitString, KmacKeyPolicy, KmacSecretOutput, KmacServiceStatus, KmacTag,
     KmacVerification, policy::tag_policy,
@@ -27,7 +28,7 @@ macro_rules! fixed {
                 customization: Fips202BitString<'_>,
             ) -> Result<Self, Error> {
                 Ok(Self {
-                    core: Core::new(mode, $wide, key, customization, false)?,
+                    core: Core::new(mode, $wide, key, customization, StrengthPolicy::Production)?,
                 })
             }
             conformance_api! { $profile;
@@ -50,7 +51,7 @@ macro_rules! fixed {
                 customization: Fips202BitString<'_>,
             ) -> Result<Self, Error> {
                 Ok(Self {
-                    core: Core::new(mode, $wide, key, customization, true)?,
+                    core: Core::new(mode, $wide, key, customization, StrengthPolicy::Conformance)?,
                 })
             }
             }
@@ -85,8 +86,7 @@ macro_rules! fixed {
                     None,
                     output,
                     output::valid(output.len()),
-                    &mut scratch.0,
-                    false,
+                    &mut scratch.0, StrengthPolicy::Production,
                 )
             }
             /// Arbitrary-length transactional public tag using caller erasing scratch.
@@ -95,7 +95,7 @@ macro_rules! fixed {
                 output: &'out mut [u8],
                 scratch: &mut [u8],
             ) -> Result<KmacTag<'out>, Error> {
-                self.tag(None, output, output::valid(output.len()), scratch, false)
+                self.tag(None, output, output::valid(output.len()), scratch, StrengthPolicy::Production)
             }
             /// Canonical final message/output bits with caller erasing scratch.
             pub fn finalize_tag_bits<'out>(
@@ -105,7 +105,7 @@ macro_rules! fixed {
                 valid: u8,
                 scratch: &mut [u8],
             ) -> Result<KmacTag<'out>, Error> {
-                self.tag(Some(message), output, valid, scratch, false)
+                self.tag(Some(message), output, valid, scratch, StrengthPolicy::Production)
             }
             conformance_api! { $profile;
             /// Exact-conformance byte tag; scratch must cover the entire destination.
@@ -115,7 +115,7 @@ macro_rules! fixed {
                 output: &'out mut [u8],
                 scratch: &mut [u8],
             ) -> Result<KmacTag<'out>, Error> {
-                self.tag(None, output, output::valid(output.len()), scratch, true)
+                self.tag(None, output, output::valid(output.len()), scratch, StrengthPolicy::Conformance)
             }
             }
             conformance_api! { $profile;
@@ -128,7 +128,7 @@ macro_rules! fixed {
                 valid: u8,
                 scratch: &mut [u8],
             ) -> Result<KmacTag<'out>, Error> {
-                self.tag(Some(message), output, valid, scratch, true)
+                self.tag(Some(message), output, valid, scratch, StrengthPolicy::Conformance)
             }
             }
             /// Consuming secret result; every error clears the complete destination.
@@ -136,7 +136,7 @@ macro_rules! fixed {
                 mut self,
                 output: &mut [u8],
             ) -> Result<KmacSecretOutput<'_>, Error> {
-                self.secret(None, output, output::valid(output.len()), false)
+                self.secret(None, output, output::valid(output.len()), StrengthPolicy::Production)
             }
             /// Consuming arbitrary-bit secret result with complete error clearing.
             pub fn finalize_secret_bits<'out>(
@@ -145,7 +145,7 @@ macro_rules! fixed {
                 bytes: &'out mut [u8],
                 valid: u8,
             ) -> Result<KmacSecretOutput<'out>, Error> {
-                self.secret(Some(message), bytes, valid, false)
+                self.secret(Some(message), bytes, valid, StrengthPolicy::Production)
             }
             conformance_api! { $profile;
             /// Exact-conformance typed-secret byte output.
@@ -154,7 +154,7 @@ macro_rules! fixed {
                 mut self,
                 output: &mut [u8],
             ) -> Result<KmacSecretOutput<'_>, Error> {
-                self.secret(None, output, output::valid(output.len()), true)
+                self.secret(None, output, output::valid(output.len()), StrengthPolicy::Conformance)
             }
             }
             conformance_api! { $profile;
@@ -166,13 +166,13 @@ macro_rules! fixed {
                 bytes: &'out mut [u8],
                 valid: u8,
             ) -> Result<KmacSecretOutput<'out>, Error> {
-                self.secret(Some(message), bytes, valid, true)
+                self.secret(Some(message), bytes, valid, StrengthPolicy::Conformance)
             }
             }
             /// Constant-work verification for the public candidate length.
             /// Callers must bound that length and use verify_exact for a fixed protocol width.
             pub fn verify(mut self, candidate: &[u8]) -> Result<KmacVerification, Error> {
-                self.verification(None, crate::execution::bits(candidate)?, false)
+                self.verification(None, crate::execution::bits(candidate)?, StrengthPolicy::Production)
             }
             /// Rejects a protocol tag-width mismatch before hashing output.
             pub fn verify_exact(
@@ -185,7 +185,7 @@ macro_rules! fixed {
                 {
                     return Err(Error::InvalidBitString);
                 }
-                self.verification(None, candidate, false)
+                self.verification(None, candidate, StrengthPolicy::Production)
             }
             /// Consuming canonical arbitrary-bit message and tag verification.
             pub fn verify_bits(
@@ -193,7 +193,7 @@ macro_rules! fixed {
                 message: Fips202BitString<'_>,
                 candidate: Fips202BitString<'_>,
             ) -> Result<KmacVerification, Error> {
-                self.verification(Some(message), candidate, false)
+                self.verification(Some(message), candidate, StrengthPolicy::Production)
             }
             conformance_api! { $profile;
             /// Exact-conformance byte verification, including weak tag parameters.
@@ -202,7 +202,7 @@ macro_rules! fixed {
                 mut self,
                 candidate: &[u8],
             ) -> Result<KmacVerification, Error> {
-                self.verification(None, crate::execution::bits(candidate)?, true)
+                self.verification(None, crate::execution::bits(candidate)?, StrengthPolicy::Conformance)
             }
             }
             conformance_api! { $profile;
@@ -213,7 +213,7 @@ macro_rules! fixed {
                 message: Fips202BitString<'_>,
                 candidate: Fips202BitString<'_>,
             ) -> Result<KmacVerification, Error> {
-                self.verification(Some(message), candidate, true)
+                self.verification(Some(message), candidate, StrengthPolicy::Conformance)
             }
             }
             fn tag<'out>(
@@ -222,12 +222,12 @@ macro_rules! fixed {
                 bytes: &'out mut [u8],
                 valid: u8,
                 scratch: &mut [u8],
-                conformance: bool,
+                strength_policy: StrengthPolicy,
             ) -> Result<KmacTag<'out>, Error> {
                 let stage = BorrowedStage(scratch);
                 let bits = output::length_bits(bytes.len(), valid)?;
                 let policy = tag_policy(bits, self.core.strength());
-                self.core.finish(message, bits, false, conformance)?;
+                self.core.finish(message, bits, false, strength_policy)?;
                 self.core.public(bytes, valid, stage.0, true)?;
                 Ok(KmacTag::new(bytes, bits, policy))
             }
@@ -236,21 +236,21 @@ macro_rules! fixed {
                 message: Option<Fips202BitString<'_>>,
                 bytes: &'out mut [u8],
                 valid: u8,
-                conformance: bool,
+                strength_policy: StrengthPolicy,
             ) -> Result<KmacSecretOutput<'out>, Error> {
                 let _ = clear_owned_region(bytes);
                 let bits = output::length_bits(bytes.len(), valid)?;
-                self.core.finish(message, bits, false, conformance)?;
+                self.core.finish(message, bits, false, strength_policy)?;
                 self.core.secret(bytes, valid, true)
             }
             fn verification(
                 &mut self,
                 message: Option<Fips202BitString<'_>>,
                 candidate: Fips202BitString<'_>,
-                conformance: bool,
+                strength_policy: StrengthPolicy,
             ) -> Result<KmacVerification, Error> {
                 let bits = u128::try_from(candidate.bit_len()).map_err(|_| Error::OutputTooLong)?;
-                self.core.finish(message, bits, false, conformance)?;
+                self.core.finish(message, bits, false, strength_policy)?;
                 output::verify(&mut self.core, candidate)
             }
         }

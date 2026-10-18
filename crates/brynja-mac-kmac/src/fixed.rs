@@ -1,3 +1,4 @@
+use crate::policy::StrengthPolicy;
 use brynja_hash_sha3::{Fips202BitString, Fips202Output, HardenedCshake128, HardenedCshake256};
 
 use crate::{
@@ -32,7 +33,7 @@ macro_rules! fixed_kmac {
                 key: Fips202BitString<'_>,
                 customization: Fips202BitString<'_>,
             ) -> Result<Self, KmacError> {
-                KmacCore::new_bits(key, customization, true).map(|core| Self { core })
+                KmacCore::new_bits(key, customization, StrengthPolicy::Production).map(|core| Self { core })
             }
 
             conformance_api! { $profile;
@@ -50,7 +51,7 @@ macro_rules! fixed_kmac {
                 key: Fips202BitString<'_>,
                 customization: Fips202BitString<'_>,
             ) -> Result<Self, KmacError> {
-                KmacCore::new_bits(key, customization, false).map(|core| Self { core })
+                KmacCore::new_bits(key, customization, StrengthPolicy::Conformance).map(|core| Self { core })
             }
             }
 
@@ -87,7 +88,7 @@ macro_rules! fixed_kmac {
                 mut self,
                 output: &'output mut [u8],
             ) -> Result<KmacTag<'output>, KmacError> {
-                self.finish_tag(None, output, true)
+                self.finish_tag(None, output, StrengthPolicy::Production)
             }
 
             conformance_api! { $profile;
@@ -97,7 +98,7 @@ macro_rules! fixed_kmac {
                 mut self,
                 output: &'output mut [u8],
             ) -> Result<KmacTag<'output>, KmacError> {
-                self.finish_tag(None, output, false)
+                self.finish_tag(None, output, StrengthPolicy::Conformance)
             }
             }
 
@@ -108,7 +109,7 @@ macro_rules! fixed_kmac {
                 output: &'output mut [u8],
                 valid_output_bits: u8,
             ) -> Result<KmacTag<'output>, KmacError> {
-                self.finish_tag_bits(final_message, output, valid_output_bits, true)
+                self.finish_tag_bits(final_message, output, valid_output_bits, StrengthPolicy::Production)
             }
 
             conformance_api! { $profile;
@@ -120,7 +121,7 @@ macro_rules! fixed_kmac {
                 output: &'output mut [u8],
                 valid_output_bits: u8,
             ) -> Result<KmacTag<'output>, KmacError> {
-                self.finish_tag_bits(final_message, output, valid_output_bits, false)
+                self.finish_tag_bits(final_message, output, valid_output_bits, StrengthPolicy::Conformance)
             }
             }
 
@@ -130,7 +131,7 @@ macro_rules! fixed_kmac {
                 output: &'output mut [u8],
             ) -> Result<KmacSecretOutput<'output>, KmacError> {
                 let bits = byte_output_bits(output.len())?;
-                let mut reader = self.core.finish_fixed(None, bits, true)?;
+                let mut reader = self.core.finish_fixed(None, bits, StrengthPolicy::Production)?;
                 reader
                     .squeeze_secret(output)
                     .map(KmacSecretOutput::new)
@@ -145,7 +146,7 @@ macro_rules! fixed_kmac {
             ) -> Result<KmacSecretOutput<'output>, KmacError> {
                 let bits =
                     u128::try_from(output.bit_len()).map_err(|_| KmacError::OutputTooLong)?;
-                let reader = self.core.finish_fixed(Some(final_message), bits, true)?;
+                let reader = self.core.finish_fixed(Some(final_message), bits, StrengthPolicy::Production)?;
                 CshakeReader::squeeze_final_bits_secret(reader, output)
                     .map(KmacSecretOutput::new)
                     .map_err(KmacError::from)
@@ -161,7 +162,7 @@ macro_rules! fixed_kmac {
             ) -> Result<KmacSecretOutput<'output>, KmacError> {
                 let bits =
                     u128::try_from(output.bit_len()).map_err(|_| KmacError::OutputTooLong)?;
-                let reader = self.core.finish_fixed(Some(final_message), bits, false)?;
+                let reader = self.core.finish_fixed(Some(final_message), bits, StrengthPolicy::Conformance)?;
                 CshakeReader::squeeze_final_bits_secret(reader, output)
                     .map(KmacSecretOutput::new)
                     .map_err(KmacError::from)
@@ -171,7 +172,7 @@ macro_rules! fixed_kmac {
             /// Verifies one full-strength byte tag in constant work for its public length.
             pub fn verify(mut self, candidate: &[u8]) -> Result<KmacVerification, KmacError> {
                 let candidate = byte_string(candidate)?;
-                self.verify_inner(None, candidate, true)
+                self.verify_inner(None, candidate, StrengthPolicy::Production)
             }
 
             conformance_api! { $profile;
@@ -182,7 +183,7 @@ macro_rules! fixed_kmac {
                 candidate: &[u8],
             ) -> Result<KmacVerification, KmacError> {
                 let candidate = byte_string(candidate)?;
-                self.verify_inner(None, candidate, false)
+                self.verify_inner(None, candidate, StrengthPolicy::Conformance)
             }
             }
 
@@ -192,7 +193,7 @@ macro_rules! fixed_kmac {
                 final_message: Fips202BitString<'_>,
                 candidate: Fips202BitString<'_>,
             ) -> Result<KmacVerification, KmacError> {
-                self.verify_inner(Some(final_message), candidate, true)
+                self.verify_inner(Some(final_message), candidate, StrengthPolicy::Production)
             }
 
             conformance_api! { $profile;
@@ -203,7 +204,7 @@ macro_rules! fixed_kmac {
                 final_message: Fips202BitString<'_>,
                 candidate: Fips202BitString<'_>,
             ) -> Result<KmacVerification, KmacError> {
-                self.verify_inner(Some(final_message), candidate, false)
+                self.verify_inner(Some(final_message), candidate, StrengthPolicy::Conformance)
             }
             }
 
@@ -214,11 +215,11 @@ macro_rules! fixed_kmac {
                 &mut self,
                 final_message: Option<Fips202BitString<'_>>,
                 output: &'output mut [u8],
-                production: bool,
+                strength_policy: StrengthPolicy,
             ) -> Result<KmacTag<'output>, KmacError> {
                 let bits = byte_output_bits(output.len())?;
                 let policy = tag_policy(bits, $strength);
-                let mut reader = self.core.finish_fixed(final_message, bits, production)?;
+                let mut reader = self.core.finish_fixed(final_message, bits, strength_policy)?;
                 CshakeReader::squeeze_public(&mut reader, output).map_err(KmacError::from)?;
                 Ok(KmacTag::new(output, bits, policy))
             }
@@ -228,13 +229,13 @@ macro_rules! fixed_kmac {
                 final_message: Fips202BitString<'_>,
                 output: &'output mut [u8],
                 valid_output_bits: u8,
-                production: bool,
+                strength_policy: StrengthPolicy,
             ) -> Result<KmacTag<'output>, KmacError> {
                 let bits = exact_output_bits(output.len(), valid_output_bits)?;
                 let policy = tag_policy(bits, $strength);
                 let reader = self
                     .core
-                    .finish_fixed(Some(final_message), bits, production)?;
+                    .finish_fixed(Some(final_message), bits, strength_policy)?;
                 let destination = Fips202Output::new(&mut *output, valid_output_bits)
                     .map_err(|_| KmacError::InvalidBitString)?;
                 CshakeReader::squeeze_final_bits_public(reader, destination)
@@ -246,11 +247,11 @@ macro_rules! fixed_kmac {
                 &mut self,
                 final_message: Option<Fips202BitString<'_>>,
                 candidate: Fips202BitString<'_>,
-                production: bool,
+                strength_policy: StrengthPolicy,
             ) -> Result<KmacVerification, KmacError> {
                 let bits =
                     u128::try_from(candidate.bit_len()).map_err(|_| KmacError::OutputTooLong)?;
-                let reader = self.core.finish_fixed(final_message, bits, production)?;
+                let reader = self.core.finish_fixed(final_message, bits, strength_policy)?;
                 verify_reader(reader, candidate)
             }
         }

@@ -389,7 +389,7 @@ and limitations are in [the consumer guide](../docs/facade-features.md).
 | SHA-2 single-state and scoped | Ordinary/hardened, named/general-t, byte/bit, streaming, public/secret output, lifecycle and compiled mutants | SHA-NI measured locally; unavailable dedicated x86 SHA-512 rejects, not counted as execution |
 | SHA-3/SHAKE/cSHAKE | Ordinary/hardened owned/scoped fixed/XOF and customized bit corpora, lifecycle and compiled mutants | Local AVX2 measured; x86 hosted unavailability remains distinct from static execution |
 | SHA-2/Keccak batches | Independent mixed/sparse bit corpora, portable/preferred/required selection, accounting/output/cleanup mutants | SIMD requires complete CPU/OS and compiled feature bundles |
-| KMAC/KMACXOF | Production/conformance separation, owned/scoped fixed/XOF, comparison and lifecycle probes | Test-only types are not production owners; independent retest of separation remains pending |
+| KMAC/KMACXOF | Production/conformance separation, owned/scoped fixed/XOF, comparison and lifecycle probes | Test-only types are not production owners; original separation retested, Low follow-ups pending retest |
 | TupleHash/ParallelHash | Item/leaf framing, serial/scoped/scheduled/grouped execution, one/three-worker adapters, oracle/mutation/ownership checks | Deliberately hidden leaf-only APIs are not claimed as facade exports |
 | SHA-1/MD5 | `check-legacy-execution-package.py`: separate ordinary/hardened archived consumers; `check-legacy-strict-package.py` and `check-legacy-resident-package.py`: distinct platform owners | Never exported by modern facades; hardening does not repair algorithm weaknesses |
 | Strict modern owners | `check-strict-public-consumer.py`, `check-strict-accelerated-consumer.py`, `check-strict-group-consumer.py` | GNU/Linux functional tests; private-memory/register qualification separate |
@@ -405,15 +405,25 @@ silently counted as physical execution or independent verification.
 
 ## Remaining handoff and release work
 
-- Obtain independent retest of the complete conformance separation before
-  closing v0.24.52 F-1; author checks alone do not close it.
-- Obtain the required independent pentest/retest of this consumer-acceptance
-  candidate; accepted platform limitations retain their existing dispositions.
+- Both supplied reviews confirmed the conformance split at `2785c3f4`, closing
+  the carried v0.24.52 F-1. Obtain focused retest of the three new Low follow-ups
+  described below; accepted platform limitations retain their dispositions.
 - Run focused checks, ordinary CI and non-sweep release checks. The owner has
   deferred the additional full sweep to v0.24.55; this does not qualify changed
   implementations using historical native records. Native collection remains
   scheduled for v0.24.54 with the final reconciliation at v0.24.55.
 
-No production kernel, unsafe block, dependency, release-gate rule or historical
+## Retest follow-up
+
+Three Low findings are addressed for focused retest: full-strength oracle
+cases now also exercise production KMAC owners, a shared internal strength-policy
+enum replaces opposite boolean conventions, and the dedicated conformance gate
+rejects 52 production-method probes with test features enabled. Production-only
+compiled mutations and exact population/diagnostic regressions protect the new
+coverage. The CI Keccak layout test uses its installed AArch64 GNU target and
+requires pristine compilation before mutation rejection. See the
+[review record](../security/pentest/v0.24.53.md) for scope and results.
+
+No production kernel, unsafe block, registry dependency, release-gate rule or historical
 capture is changed by the conformance separation. Independent verification
 and FIPS validation remain separate, unclaimed qualifications.

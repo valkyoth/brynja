@@ -1,3 +1,4 @@
+use crate::policy::StrengthPolicy;
 extern crate std;
 use super::*;
 
@@ -7,7 +8,7 @@ fn owner() -> Result<Core<'static>, Error> {
         false,
         crate::execution::bits(&[0x42; 32])?,
         crate::execution::bits(b"domain")?,
-        false,
+        StrengthPolicy::Production,
     )
 }
 
@@ -43,7 +44,7 @@ fn overflow_clears_owner_and_secret_output_without_public_mutation() -> Result<(
     assert_eq!(core.update(b"x"), Err(Error::MessageTooLong));
     cleared(&core);
     let mut core = owner()?;
-    core.finish(None, 0, true, false)?;
+    core.finish(None, 0, true, StrengthPolicy::Production)?;
     core.metadata.output_bits = u128::MAX.to_le_bytes();
     let mut output = [0xa5; 1];
     let mut scratch = [0x5a; 5];
@@ -55,7 +56,7 @@ fn overflow_clears_owner_and_secret_output_without_public_mutation() -> Result<(
     assert_eq!(scratch, [0; 5]);
     cleared(&core);
     let mut core = owner()?;
-    core.finish(None, 0, true, false)?;
+    core.finish(None, 0, true, StrengthPolicy::Production)?;
     core.metadata.output_bits = u128::MAX.to_le_bytes();
     assert!(matches!(
         core.secret(&mut output, 8, false),
@@ -70,7 +71,7 @@ fn overflow_clears_owner_and_secret_output_without_public_mutation() -> Result<(
 fn invalid_tail_width_clears_all_scratch_and_terminates() -> Result<(), Error> {
     for width in [0, 9, u8::MAX] {
         let mut core = owner()?;
-        core.finish(None, 0, true, false)?;
+        core.finish(None, 0, true, StrengthPolicy::Production)?;
         let mut output = [0xa5; 8];
         let mut scratch = [0x5a; 9];
         assert_eq!(

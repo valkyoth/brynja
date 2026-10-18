@@ -39,6 +39,14 @@ PACKAGE_POLICY = Path("package-policy.toml")
 CHECKS = Path("scripts/checks.sh")
 DIFFERENTIAL = Path("scripts/kmac/check-kmac-differential.py")
 DIFFERENTIAL_FIXTURE = Path("assurance/kmac-differential/src/main.rs")
+FOLLOWUP = tuple(map(Path, (
+    "assurance/kmac-differential/src/profiles.rs",
+    "assurance/kmac-conformance-rejected/src/enabled.rs",
+    "scripts/kmac/check-kmac-conformance-enabled.py",
+    "scripts/kmac/kmac_production_oracle.py",
+    "scripts/kmac/kmac_production_mutants.py",
+    "scripts/kmac/test_kmac_retest.py",
+)))
 DIFFERENTIAL_MANIFEST = Path("assurance/kmac-differential/Cargo.toml")
 PUBLIC_FIXTURE = Path("assurance/kmac-public-api/src/lib.rs")
 CONFORMANCE_GATE = Path("scripts/kmac/check-kmac-conformance-gate.sh")
@@ -49,7 +57,7 @@ TIMING = Path("scripts/kmac/check-kmac-timing.sh")
 TAG_GATE = Path("scripts/tag_gate.sh")
 MIRI = Path("scripts/zeroization/check-zeroization-miri.sh")
 SANITIZER = Path("scripts/zeroization/check-zeroization-sanitizer.sh")
-FILES = (*SOURCES, *TESTS, MANIFEST, README, CRYPTO, MAIN, PACKAGE_POLICY,
+FILES = (*SOURCES, *TESTS, *FOLLOWUP, MANIFEST, README, CRYPTO, MAIN, PACKAGE_POLICY,
          CHECKS, DIFFERENTIAL, DIFFERENTIAL_FIXTURE, DIFFERENTIAL_MANIFEST,
          PUBLIC_FIXTURE, CONFORMANCE_GATE, CONFORMANCE_FIXTURE,
          CONFORMANCE_MANIFEST, HARDENED_CSHAKE, CODEGEN, TIMING, TAG_GATE,
@@ -94,7 +102,7 @@ def validate(root: Path) -> None:
     if actual != expected:
         fail("KMAC production source inventory changed")
     loaded = {path: read(root, path) for path in FILES}
-    if set(HASHES) != set((*SOURCES, *TESTS, PUBLIC_FIXTURE,
+    if set(HASHES) != set((*SOURCES, *TESTS, *FOLLOWUP, PUBLIC_FIXTURE,
                            DIFFERENTIAL_FIXTURE, DIFFERENTIAL_MANIFEST,
                            CONFORMANCE_GATE, CONFORMANCE_FIXTURE,
                            CONFORMANCE_MANIFEST, HARDENED_CSHAKE, CODEGEN,
@@ -158,10 +166,15 @@ def validate(root: Path) -> None:
                       "fn finish_bits(self)", "fn finish_bytepad(mut self"):
         if forbidden in packer:
             fail("KMAC framing reintroduced a by-value secret transfer")
+    for source in SOURCES:
+        text = loaded[source]
+        if any(token in text for token in ('production: bool', 'conformance: bool', 'require_full_strength: bool')):
+            fail("bare strength-policy boolean")
+    require(loaded[CRATE / "src/policy.rs"], "matches!(self, Self::Production)", "named strength admission")
     fixed = loaded[CRATE / "src/fixed.rs"]
     for token in (
-        "finish_fixed(Some(final_message), bits, true)",
-        "finish_fixed(Some(final_message), bits, false)",
+        "finish_fixed(Some(final_message), bits, StrengthPolicy::Production)",
+        "finish_fixed(Some(final_message), bits, StrengthPolicy::Conformance)",
         "verify_reader(reader, candidate)",
     ):
         require(fixed, token, "fixed KMAC API")
@@ -192,11 +205,11 @@ def validate(root: Path) -> None:
                   "operation.complete = true;", "clear_owned_region(output)"):
         require(scoped_reader, token, "scoped XOF reader cleanup")
     scoped_xof = loaded[CRATE / "src/hardened_in_place/xof.rs"]
-    for token in ("inner: fixed::$fixed", "core.finish_xof(input, production)?",
+    for token in ("inner: fixed::$fixed", "core.finish_xof(input, strength_policy)?",
                   "Output::new(reader, cleanup)", "_authority: KmacPublicDeclassification",
                   "with_bits_conformance", "squeeze_final_bits_secret"):
         require(scoped_xof, token, "scoped XOF borrow/classification")
-    require(scoped, "self.finish(input, 0, 0, false)", "KMACXOF zero trailer")
+    require(scoped, "self.finish(input, 0, 0, StrengthPolicy::Conformance)", "KMACXOF zero trailer")
     accelerated = loaded[CRATE / 'src/hardened_in_place/accelerated/fixed.rs']
     for token in ("sponge: cshake::$storage<'authority>", "stage: [u8; 168]",
                   "cshake::$storage::new(session)?", "let cleanup = Guard(metadata);",
@@ -212,7 +225,7 @@ def validate(root: Path) -> None:
     accelerated_xof = loaded[CRATE / 'src/hardened_in_place/accelerated/xof.rs']
     for token in ("inner: fixed::$fixed<'authority>", "fixed::$fixed::new(session)?",
                   "Backend<cshake::$backend_reader<'scope, 'authority>, &'scope mut [u8]>",
-                  "self.core.finish_xof(input, production)?", "Output::new(reader, cleanup)",
+                  "self.core.finish_xof(input, strength_policy)?", "Output::new(reader, cleanup)",
                   "_authority: KmacPublicDeclassification", "self.inner.public(output)",
                   "self.inner.secret(output)", "self.inner.final_public(output, valid)",
                   "self.inner.final_secret(output, valid)", "with_bits_and_scratch_conformance"):
@@ -318,6 +331,12 @@ def validate(root: Path) -> None:
         (CHECKS, "scripts/kmac/check-kmac-codegen.sh"),
         (CONFORMANCE_GATE, "default KMAC build unexpectedly exposed conformance constructors"),
         (CONFORMANCE_GATE, "assurance/kmac-differential/Cargo.toml"),
+        (CONFORMANCE_GATE, "--features enabled --message-format=json"),
+        (CONFORMANCE_GATE, "python3 scripts/kmac/check-kmac-conformance-enabled.py"),
+        (DIFFERENTIAL, "production_population(result.stderr, selected)"),
+        (DIFFERENTIAL_FIXTURE, "profiles::production::dispatch("),
+        (DIFFERENTIAL_FIXTURE, "profiles::production::scoped_fixed("),
+        (DIFFERENTIAL_FIXTURE, "profiles::production::scoped_xof("),
         (CONFORMANCE_FIXTURE, "Kmac128::new_conformance"),
         (CODEGEN, "Option<S>|state\\.take\\(\\)|take_state"),
         (CODEGEN, "take_reader_erasing_source"),

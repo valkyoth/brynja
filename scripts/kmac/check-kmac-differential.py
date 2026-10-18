@@ -84,6 +84,20 @@ def run_fixture(request: str) -> subprocess.CompletedProcess[str]:
         )
 
 
+def production_cases(selected):
+    return [case for case in selected
+            if case[2] >= (128 if case[0].endswith('128') else 256)
+            and (case[0].startswith('kmacxof') or
+                 case[7] >= (128 if case[0].endswith('128') else 256))]
+
+
+def production_population(stderr, selected):
+    expected = ['KMAC_PRODUCTION_ORACLE: ' + case[0] for case in production_cases(selected)]
+    actual = [line for line in stderr.splitlines() if line.startswith('KMAC_PRODUCTION_ORACLE:')]
+    if not expected or actual != expected:
+        raise RuntimeError('production KMAC oracle population mismatch')
+
+
 def verify_oracle() -> None:
     key = bytes(range(0x40, 0x60))
     actual = kmac(168, oracle.byte_bits(key), oracle.byte_bits(bytes(range(4))), [], 256, False)
@@ -109,6 +123,7 @@ def main() -> int:
         raise RuntimeError(f"KMAC differential fixture failed:\n{result.stderr}")
     if result.stdout.splitlines() != [expected.hex() for *_, expected in selected]:
         raise RuntimeError("KMAC arbitrary-bit differential mismatch")
+    production_population(result.stderr, selected)
     for invalid in (
         "kmac128 1 80 0 - 0 - 8\n",
         "kmacxof256 0 - 0 - 0 - 4096\n",

@@ -1,5 +1,6 @@
 use super::backend::Backend;
 use super::*;
+use crate::policy::StrengthPolicy;
 
 macro_rules! fixed {
     ($profile:ident, $namespace:literal, $workspace:ident, $state:ident, $storage:ident, $backend:ident, $rate:literal, $strength:literal) => {
@@ -144,7 +145,7 @@ macro_rules! fixed {
                 output: &'out mut [u8],
             ) -> Result<KmacTag<'out>, KmacError> {
                 let valid = byte_valid(output.len());
-                self.core.tag(None, output, valid, $strength, true)
+                self.core.tag(None, output, valid, $strength, StrengthPolicy::Production)
             }
             /// Produces a full-strength canonical-bit public tag.
             pub fn finalize_tag_bits<'out>(
@@ -153,7 +154,7 @@ macro_rules! fixed {
                 output: &'out mut [u8],
                 valid: u8,
             ) -> Result<KmacTag<'out>, KmacError> {
-                self.core.tag(Some(input), output, valid, $strength, true)
+                self.core.tag(Some(input), output, valid, $strength, StrengthPolicy::Production)
             }
             /// Full-strength secret output; every failure clears the destination.
             pub fn finalize_secret<'out>(
@@ -161,7 +162,7 @@ macro_rules! fixed {
                 output: &'out mut [u8],
             ) -> Result<KmacSecretOutput<'out>, KmacError> {
                 let valid = byte_valid(output.len());
-                self.core.secret(None, output, valid, $strength, true)
+                self.core.secret(None, output, valid, $strength, StrengthPolicy::Production)
             }
             /// Full-strength canonical-bit secret output, never implicitly public.
             pub fn finalize_secret_bits<'out>(
@@ -171,13 +172,13 @@ macro_rules! fixed {
                 valid: u8,
             ) -> Result<KmacSecretOutput<'out>, KmacError> {
                 self.core
-                    .secret(Some(input), output, valid, $strength, true)
+                    .secret(Some(input), output, valid, $strength, StrengthPolicy::Production)
             }
             /// Verifies at the candidate's public length. Use verify_exact when
             /// the application mandates one exact tag length.
             pub fn verify(self, candidate: &[u8]) -> Result<KmacVerification, KmacError> {
                 self.core
-                    .verify(None, bytes(candidate)?, None, $strength, true)
+                    .verify(None, bytes(candidate)?, None, $strength, StrengthPolicy::Production)
             }
             /// Verifies a canonical-bit tag after final message bits.
             pub fn verify_bits(
@@ -186,7 +187,7 @@ macro_rules! fixed {
                 candidate: Fips202BitString<'_>,
             ) -> Result<KmacVerification, KmacError> {
                 self.core
-                    .verify(Some(input), candidate, None, $strength, true)
+                    .verify(Some(input), candidate, None, $strength, StrengthPolicy::Production)
             }
             /// Binds verification to an application-specified public bit length.
             pub fn verify_exact(
@@ -196,7 +197,7 @@ macro_rules! fixed {
                 expected_bits: u128,
             ) -> Result<KmacVerification, KmacError> {
                 self.core
-                    .verify(Some(input), candidate, Some(expected_bits), $strength, true)
+                    .verify(Some(input), candidate, Some(expected_bits), $strength, StrengthPolicy::Production)
             }
             conformance_api! { $profile;
             /// Produces a standards-valid public tag, even below production strength.
@@ -206,7 +207,7 @@ macro_rules! fixed {
                 output: &'out mut [u8],
             ) -> Result<KmacTag<'out>, KmacError> {
                 let valid = byte_valid(output.len());
-                self.core.tag(None, output, valid, $strength, false)
+                self.core.tag(None, output, valid, $strength, StrengthPolicy::Conformance)
             }
             }
             conformance_api! { $profile;
@@ -218,7 +219,7 @@ macro_rules! fixed {
                 output: &'out mut [u8],
                 valid: u8,
             ) -> Result<KmacTag<'out>, KmacError> {
-                self.core.tag(Some(input), output, valid, $strength, false)
+                self.core.tag(Some(input), output, valid, $strength, StrengthPolicy::Conformance)
             }
             }
             conformance_api! { $profile;
@@ -229,7 +230,7 @@ macro_rules! fixed {
                 output: &'out mut [u8],
             ) -> Result<KmacSecretOutput<'out>, KmacError> {
                 let valid = byte_valid(output.len());
-                self.core.secret(None, output, valid, $strength, false)
+                self.core.secret(None, output, valid, $strength, StrengthPolicy::Conformance)
             }
             }
             conformance_api! { $profile;
@@ -242,7 +243,7 @@ macro_rules! fixed {
                 valid: u8,
             ) -> Result<KmacSecretOutput<'out>, KmacError> {
                 self.core
-                    .secret(Some(input), output, valid, $strength, false)
+                    .secret(Some(input), output, valid, $strength, StrengthPolicy::Conformance)
             }
             }
             conformance_api! { $profile;
@@ -253,7 +254,7 @@ macro_rules! fixed {
                 candidate: &[u8],
             ) -> Result<KmacVerification, KmacError> {
                 self.core
-                    .verify(None, bytes(candidate)?, None, $strength, false)
+                    .verify(None, bytes(candidate)?, None, $strength, StrengthPolicy::Conformance)
             }
             }
             conformance_api! { $profile;
@@ -265,7 +266,7 @@ macro_rules! fixed {
                 candidate: Fips202BitString<'_>,
             ) -> Result<KmacVerification, KmacError> {
                 self.core
-                    .verify(Some(input), candidate, None, $strength, false)
+                    .verify(Some(input), candidate, None, $strength, StrengthPolicy::Conformance)
             }
             }
             /// Consumes and clears without producing output.

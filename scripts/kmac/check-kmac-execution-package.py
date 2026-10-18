@@ -130,14 +130,14 @@ def mutations(consumer, roots, env):
         ('../hardened_in_place/core_state.rs', 'self.core.state.0 = None;', '', 'rejected_and_unwinding_updates_destroy_state'),
         ('../hardened_in_place/core_state.rs', 'self.core.cleanup.0.wipe();', '', 'rejected_and_unwinding_updates_destroy_state'),
         ('../hardened_in_place/core_state.rs', 'let _ = clear_owned_region(output);', '', 'scoped_lifecycle_strength'),
-        ('../hardened_in_place/core_state.rs', 'production && bits < strength', 'production && bits < 0', 'scoped_lifecycle_strength'),
+        ('../hardened_in_place/core_state.rs', 'strength_policy.is_production() && bits < strength', 'strength_policy.is_production() && bits < 0', 'scoped_lifecycle_strength'),
         ('../hardened_in_place/core_state.rs', 'append_suffix(&mut self.state, input, bits,', 'append_suffix(&mut self.state, input, 0,', 'scoped_known_answer'),
         ('../hardened_in_place/core_state.rs', 'brynja_core::secret_difference_is_zero(&cleanup.0.difference[0])', 'brynja_core::secret_difference_is_zero(&0)', 'scoped_lifecycle_strength'),
         ('../hardened_in_place/fixed.rs', 'key.bit_len() < $strength', 'key.bit_len() < 0', 'scoped_lifecycle_strength'),
         ('../hardened_in_place/fixed.rs', 'let cleanup = Guard(&mut self.metadata);', 'let mut cleanup = core::mem::ManuallyDrop::new(Guard(&mut self.metadata));', 'scoped_lifecycle_strength'),
         ('../hardened_in_place/fixed.rs', 'bytes(b"KMAC")?', 'bytes(b"WRONG")?', 'scoped_known_answer'),
-        ('../hardened_in_place/core_state.rs', 'self.finish(input, 0, 0, false)', 'self.finish(input, 8, 0, false)', 'scoped_xof_returned_secret'),
-        ('../hardened_in_place/core_state.rs', 'if production && self.key_policy() != KmacKeyPolicy::FullStrength {\n            return Err(KmacError::KeyTooShort);\n        }\n        // KMACXOF', '// KMACXOF', 'xof_production_rejects_weak_keys'),
+        ('../hardened_in_place/core_state.rs', 'self.finish(input, 0, 0, StrengthPolicy::Conformance)', 'self.finish(input, 8, 0, StrengthPolicy::Conformance)', 'scoped_xof_returned_secret'),
+        ('../hardened_in_place/core_state.rs', 'if strength_policy.is_production() && self.key_policy() != KmacKeyPolicy::FullStrength {\n            return Err(KmacError::KeyTooShort);\n        }\n        // KMACXOF', '// KMACXOF', 'xof_production_rejects_weak_keys'),
         ('../hardened_in_place/reader.rs', '*self.reader = None;', '', 'reader_failure_and_unwind'),
         ('../hardened_in_place/reader.rs', 'self.metadata.wipe();', '', 'reader_failure_and_unwind'),
         ('../hardened_in_place/reader.rs', 'operation.complete = true;\n        Ok(())', 'Ok(())', 'scoped_xof_all_tails'),
@@ -210,8 +210,8 @@ def native_xof_mutations(consumer, roots, env):
     path = roots['brynja-mac-kmac'] / 'src/hardened_in_place/accelerated/xof.rs'
     original = path.read_text()
     cases = (
-        ('self.finish(None, true)', 'self.finish(None, false)'),
-        ('self.finish(Some(input), true)', 'self.finish(None, true)'),
+        ('self.finish(None, StrengthPolicy::Production)', 'self.finish(None, StrengthPolicy::Conformance)'),
+        ('self.finish(Some(input), StrengthPolicy::Production)', 'self.finish(None, StrengthPolicy::Production)'),
         ('self.inner.public(output)', 'Ok(())'),
         ('self.inner.secret(output)', 'Err(KmacError::SecretMemory)'),
         ('self.inner.final_public(output, valid)', 'self.inner.final_public(output, 8)'),
@@ -266,6 +266,9 @@ def main():
         if native_env is not None:
             selected = dict(native_env, CARGO_TARGET_DIR=env['CARGO_TARGET_DIR'])
             native_xof_mutations(consumer, roots, selected)
+        import kmac_production_mutants
+        kmac_production_mutants.check(ROOT, consumer, roots, env,
+            dict(native_env, CARGO_TARGET_DIR=env['CARGO_TARGET_DIR']) if native_env is not None else None)
     print('Packaged KMAC hardened execution public API: PASS')
 
 

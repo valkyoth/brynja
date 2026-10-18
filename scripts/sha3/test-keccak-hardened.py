@@ -107,19 +107,24 @@ def compiled():
         # uses fixed exact offsets; prove the replacement layout assertions are
         # active for each architecture, without executing cross-target binaries.
         for module, target in (('x86_avx2_keccak', 'x86_64-unknown-linux-gnu'),
-                               ('aarch64_sha3_keccak', 'aarch64-unknown-linux-musl')):
+                               ('aarch64_sha3_keccak', 'aarch64-unknown-linux-gnu')):
             path = root / 'src' / (module + '.rs')
             original = path.read_text()
+            # Match the retained compiler targets installed by CI. Prove the
+            # pristine crate builds before attributing a failure to a mutant.
+            command = ['cargo', 'check', '--offline', '--manifest-path',
+                       str(root / 'Cargo.toml'), '--target', target,
+                       '--features', 'hardened-execution']
+            for profile in ([], ['--release']):
+                acceptance.ordinary.run(command + profile, root, env)
             for before, after in (('== 576', '== 575'), ('== 280', '== 281')):
                 policy.require(original.count(before) == 1, 'exact layout mutant')
                 try:
                     path.write_text(original.replace(before, after))
                     for profile in ([], ['--release']):
-                        result = acceptance.ordinary.run(['cargo', 'check', '--offline',
-                            '--manifest-path', str(root / 'Cargo.toml'), '--target', target,
-                            '--features', 'hardened-execution', *profile], root, env, success=False)
+                        result = acceptance.ordinary.run(command + profile, root, env, success=False)
                         policy.require('error[E0080]' in result.stderr,
-                                       'compile-time scratch layout rejection')
+                                       'compile-time scratch layout rejection: ' + result.stderr[-4000:])
                 finally:
                     path.write_text(original)
     print('Hardened Keccak rejects 22 compiled debug/release region-removal mutants')

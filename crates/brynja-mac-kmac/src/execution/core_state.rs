@@ -3,6 +3,7 @@ use super::{
     backend::State,
     output::{BorrowedStage, length_bits},
 };
+use crate::policy::StrengthPolicy;
 use crate::{
     Fips202BitString, KmacKeyPolicy, KmacSecretOutput,
     packer::{Absorb, absorb_key, append_suffix},
@@ -43,11 +44,11 @@ impl<'a> Core<'a> {
         wide: bool,
         key: Fips202BitString<'_>,
         customization: Fips202BitString<'_>,
-        conformance: bool,
+        strength_policy: StrengthPolicy,
     ) -> Result<Self, Error> {
         let strength = if wide { 256 } else { 128 };
         let key_bits = u128::try_from(key.bit_len()).map_err(|_| Error::MessageTooLong)?;
-        if !conformance && key_bits < strength {
+        if strength_policy.is_production() && key_bits < strength {
             return Err(Error::KeyTooShort);
         }
         let mut core = Self {
@@ -116,14 +117,16 @@ impl<'a> Core<'a> {
         message: Option<Fips202BitString<'_>>,
         bits: u128,
         xof: bool,
-        conformance: bool,
+        strength_policy: StrengthPolicy,
     ) -> Result<(), Error> {
         let mut operation = Operation::new(self);
         operation.core.phase(1)?;
-        if !conformance && operation.core.key_policy() != KmacKeyPolicy::FullStrength {
+        if strength_policy.is_production()
+            && operation.core.key_policy() != KmacKeyPolicy::FullStrength
+        {
             return Err(Error::KeyTooShort);
         }
-        if !xof && !conformance && bits < operation.core.strength {
+        if !xof && strength_policy.is_production() && bits < operation.core.strength {
             return Err(Error::TagTooShort);
         }
         append_suffix(

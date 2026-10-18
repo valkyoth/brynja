@@ -1,4 +1,5 @@
 use super::backend::{Borrowed, Reader, State};
+use crate::policy::StrengthPolicy;
 use crate::{
     Fips202BitString, Fips202Output, KmacError, KmacKeyPolicy, KmacSecretOutput, KmacTag,
     KmacVerification,
@@ -105,15 +106,15 @@ impl<'scope, S: State> Core<'scope, S> {
         input: Option<Fips202BitString<'_>>,
         bits: u128,
         strength: u128,
-        production: bool,
+        strength_policy: StrengthPolicy,
     ) -> Result<(S::Reader, Guard<'scope>), KmacError> {
         if self.state.0.is_none() {
             return Err(KmacError::StateConsumed);
         }
-        if production && self.key_policy() != KmacKeyPolicy::FullStrength {
+        if strength_policy.is_production() && self.key_policy() != KmacKeyPolicy::FullStrength {
             return Err(KmacError::KeyTooShort);
         }
-        if production && bits < strength {
+        if strength_policy.is_production() && bits < strength {
             return Err(KmacError::TagTooShort);
         }
         let reader = append_suffix(&mut self.state, input, bits, |state, tail| {
@@ -124,17 +125,17 @@ impl<'scope, S: State> Core<'scope, S> {
     pub(super) fn finish_xof(
         self,
         input: Option<Fips202BitString<'_>>,
-        production: bool,
+        strength_policy: StrengthPolicy,
     ) -> Result<(S::Reader, Guard<'scope>), KmacError> {
         if self.state.0.is_none() {
             return Err(KmacError::StateConsumed);
         }
-        if production && self.key_policy() != KmacKeyPolicy::FullStrength {
+        if strength_policy.is_production() && self.key_policy() != KmacKeyPolicy::FullStrength {
             return Err(KmacError::KeyTooShort);
         }
         // KMACXOF frames right_encode(0), not the requested output length.
         // Key strength was checked above; fixed-tag minimums do not apply.
-        self.finish(input, 0, 0, false)
+        self.finish(input, 0, 0, StrengthPolicy::Conformance)
     }
     pub(super) fn tag<'out>(
         self,
@@ -142,10 +143,10 @@ impl<'scope, S: State> Core<'scope, S> {
         output: &'out mut [u8],
         valid: u8,
         strength: u128,
-        production: bool,
+        strength_policy: StrengthPolicy,
     ) -> Result<KmacTag<'out>, KmacError> {
         let bits = output_bits(output.len(), valid)?;
-        let (reader, _cleanup) = self.finish(input, bits, strength, production)?;
+        let (reader, _cleanup) = self.finish(input, bits, strength, strength_policy)?;
         reader.final_public(
             Fips202Output::new(output, valid).map_err(|_| KmacError::InvalidBitString)?,
         )?;
@@ -157,12 +158,12 @@ impl<'scope, S: State> Core<'scope, S> {
         output: &'out mut [u8],
         valid: u8,
         strength: u128,
-        production: bool,
+        strength_policy: StrengthPolicy,
     ) -> Result<KmacSecretOutput<'out>, KmacError> {
         // Establish whole-destination clearing before shape/strength/finalization.
         let _ = clear_owned_region(output);
         let bits = output_bits(output.len(), valid)?;
-        let (reader, _cleanup) = self.finish(input, bits, strength, production)?;
+        let (reader, _cleanup) = self.finish(input, bits, strength, strength_policy)?;
         reader
             .final_secret(output, valid)
             .map(KmacSecretOutput::new)
@@ -173,13 +174,13 @@ impl<'scope, S: State> Core<'scope, S> {
         candidate: Fips202BitString<'_>,
         expected: Option<u128>,
         strength: u128,
-        production: bool,
+        strength_policy: StrengthPolicy,
     ) -> Result<KmacVerification, KmacError> {
         let bits = u128::try_from(candidate.bit_len()).map_err(|_| KmacError::OutputTooLong)?;
         if expected.is_some_and(|expected| bits != expected) {
             return Err(KmacError::InvalidBitString);
         }
-        let (mut reader, cleanup) = self.finish(input, bits, strength, production)?;
+        let (mut reader, cleanup) = self.finish(input, bits, strength, strength_policy)?;
         let length = candidate.as_bytes().len();
         let split = if candidate.is_byte_aligned() {
             length

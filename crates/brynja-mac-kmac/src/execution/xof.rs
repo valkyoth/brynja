@@ -3,6 +3,7 @@ use super::{
     core_state::Core,
     output::{self, Stage},
 };
+use crate::policy::StrengthPolicy;
 use crate::{
     Fips202BitString, KmacKeyPolicy, KmacPublicDeclassification, KmacSecretOutput,
     KmacServiceStatus,
@@ -105,7 +106,7 @@ macro_rules! xof {
                 customization: Fips202BitString<'_>,
             ) -> Result<Self, Error> {
                 Ok(Self {
-                    core: Core::new(mode, $wide, key, customization, false)?,
+                    core: Core::new(mode, $wide, key, customization, StrengthPolicy::Production)?,
                 })
             }
             conformance_api! { $profile;
@@ -128,7 +129,7 @@ macro_rules! xof {
                 customization: Fips202BitString<'_>,
             ) -> Result<Self, Error> {
                 Ok(Self {
-                    core: Core::new(mode, $wide, key, customization, true)?,
+                    core: Core::new(mode, $wide, key, customization, StrengthPolicy::Conformance)?,
                 })
             }
             }
@@ -154,7 +155,7 @@ macro_rules! xof {
             }
             /// Borrows this exact source into a single reader; no state is exported.
             pub fn finalize_xof(&mut self) -> Result<$reader<'_, 'a>, Error> {
-                self.core.finish(None, 0, true, false)?;
+                self.core.finish(None, 0, true, StrengthPolicy::Production)?;
                 Ok($reader {
                     core: &mut self.core,
                 })
@@ -164,7 +165,7 @@ macro_rules! xof {
                 &mut self,
                 message: Fips202BitString<'_>,
             ) -> Result<$reader<'_, 'a>, Error> {
-                self.core.finish(Some(message), 0, true, false)?;
+                self.core.finish(Some(message), 0, true, StrengthPolicy::Production)?;
                 Ok($reader {
                     core: &mut self.core,
                 })
@@ -173,7 +174,7 @@ macro_rules! xof {
             /// Exact-conformance reader transition.
             #[cfg(feature = "conformance-testing")]
             pub fn finalize_xof_conformance(&mut self) -> Result<$reader<'_, 'a>, Error> {
-                self.core.finish(None, 0, true, true)?;
+                self.core.finish(None, 0, true, StrengthPolicy::Conformance)?;
                 Ok($reader {
                     core: &mut self.core,
                 })
@@ -186,7 +187,7 @@ macro_rules! xof {
                 &mut self,
                 message: Fips202BitString<'_>,
             ) -> Result<$reader<'_, 'a>, Error> {
-                self.core.finish(Some(message), 0, true, true)?;
+                self.core.finish(Some(message), 0, true, StrengthPolicy::Conformance)?;
                 Ok($reader {
                     core: &mut self.core,
                 })

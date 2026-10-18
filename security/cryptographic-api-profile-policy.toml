@@ -1067,7 +1067,7 @@ sha256 = "6b83f70078bec568e180a486c15425ddd2d3dcc23bb6ab0d07deb57404f8a6c6"
 
 [[reviewed-source]]
 path = "crates/brynja-mac-kmac/src/core_state.rs"
-sha256 = "40d724df9a1ecf421935df9f48340d0ef8940764515544d5461c0da85cbc1aed"
+sha256 = "4158adf52d1739682281b6b8ccfa7107b8cd63823cd265b21b694b7c9272cbed"
 
 [[reviewed-source]]
 path = "crates/brynja-mac-kmac/src/output.rs"
@@ -1087,11 +1087,11 @@ sha256 = "7befaee4af1c13b27a19da497b2919c2ca8baf4385fed8cbcdaceaad5b1cb66c"
 
 [[reviewed-source]]
 path = "assurance/kmac-conformance-rejected/src/lib.rs"
-sha256 = "fe4a3db89edf219e343df7e5b55bff94fcef99fdc582c17c05230e20606b5a5a"
+sha256 = "faac9aa547d3242265314cdb21a64465699588e2a523c6c974ef2dd6389d3da7"
 
 [[reviewed-source]]
 path = "scripts/kmac/check-kmac-conformance-gate.sh"
-sha256 = "e54887e6fdc558b52e8327a01c8f401469dce94ebe495d8a33a61c1e15e1bffa"
+sha256 = "8dd6f971ce532ba02128e431a990a5fba1ee3271b9f49ef7d18de2eae8bbf1b8"
 
 [[reviewed-source]]
 path = "crates/brynja-hash-tuple/src/backend.rs"

@@ -82,18 +82,20 @@ pub fn check(case: Case<'_>, selection: &Selection) -> Result<(), io::Error> {
                 return Err(invalid("verification mismatch"));
             }
             if !case.expected.is_empty() {
-                let mut bad = case.expected.to_vec();
-                bad[0] ^= 1;
-                let candidate =
-                    brynja_mac_kmac::Fips202BitString::new(&bad, case.valid).map_err(invalid)?;
-                let verified = workspace
-                    .with_bits_conformance(case.key, case.custom, |state| {
-                        state.verify_bits_conformance(case.message, candidate)
-                    })
-                    .map_err(invalid)?
-                    .map_err(invalid)?;
-                if verified.expose_public() {
-                    return Err(invalid("wrong-tag verification mismatch"));
+                for position in [0, case.expected.len() - 1] {
+                    let mut bad = case.expected.to_vec();
+                    bad[position] ^= 1;
+                    let candidate = brynja_mac_kmac::Fips202BitString::new(&bad, case.valid)
+                        .map_err(invalid)?;
+                    let verified = workspace
+                        .with_bits_conformance(case.key, case.custom, |state| {
+                            state.verify_bits_conformance(case.message, candidate)
+                        })
+                        .map_err(invalid)?
+                        .map_err(invalid)?;
+                    if verified.expose_public() {
+                        return Err(invalid("wrong-tag verification mismatch"));
+                    }
                 }
             }
         }};

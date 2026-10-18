@@ -65,6 +65,15 @@ def check(root, consumer, roots, env, native_env=None):
         if result.returncode or result.stdout.splitlines() != expected:
             raise ValueError('production mutant positive control: ' + result.stderr)
     mutants = []
+    for name, before, profile in (
+        ('verify.rs', 'secret.expose().iter().zip(expected.iter())', profiles[0]),
+        ('execution/output.rs', 'secret.expose().iter().zip(expected)', profiles[1]),
+        ('hardened_in_place/core_state.rs', 'secret.expose().iter().zip(expected)', profiles[0]),
+    ):
+        mutants.append((name, before, before + '.take(1)', 1, profile))
+    if native_env is not None:
+        before = 'secret.expose().iter().zip(expected)'
+        mutants.append(('hardened_in_place/core_state.rs', before, before + '.take(1)', 1, profiles[2]))
     mutants.extend((
         ('verify.rs', 'Ok(KmacVerification::new(difference.is_zero()))',
          'Ok(KmacVerification::new(brynja_core::secret_difference_is_zero(&0)))', 1, profiles[0]),

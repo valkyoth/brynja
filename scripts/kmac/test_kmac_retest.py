@@ -32,6 +32,30 @@ def check():
         for line in probes]
     output = '\n'.join(records)
     gate.validate(output, source)
+    inventory = gate.kmac_conformance_inventory
+    inventory.validate(root, gate.probes())
+    source_root = root / 'crates/brynja-mac-kmac/src'
+    read = lambda name: (source_root / name).read_text()
+    for prefix in inventory.FAMILIES:
+        for leaf in ('fixed.rs', 'xof.rs'):
+            name = prefix + leaf
+            original = read(name)
+            anchor = 'conformance_api! { $profile;'
+            assert anchor in original
+            changed = original.replace(anchor, anchor + '\npub fn future_conformance() {}', 1)
+            actual = inventory.inventory(lambda n: changed if n == name else read(n))
+            assert actual != set(gate.probes())
+            # Leaking any public conformance method outside the guard fails even
+            # if someone adds the missing name to the hand-maintained probes.
+            changed = original.replace(anchor, 'not_conformance_api! { $profile;', 1)
+            rejects(lambda: inventory.inventory(lambda n: changed if n == name else read(n)))
+    original = read('fixed.rs')
+    changed = original + '\nimpl Kmac128 { pub fn outside_conformance() {} }\n'
+    rejects(lambda: inventory.inventory(lambda n: changed if n == 'fixed.rs' else read(n)))
+    changed = original.replace('production, Kmac128,', 'production, Kmac512,', 1)
+    assert inventory.inventory(lambda n: changed if n == 'fixed.rs' else read(n)) != set(gate.probes())
+    changed = original + '\n/* pub fn fake_conformance() {} */\n'
+    assert inventory.inventory(lambda n: changed if n == 'fixed.rs' else read(n)) == set(gate.probes())
     positive = (root / 'assurance/kmac-conformance-rejected/src/positive.rs').read_text()
     gate.validate_positive(positive)
     assert len(gate.probes()) == 98
@@ -42,7 +66,7 @@ def check():
         rejects(lambda: gate.validate_positive(bad))
     # Each owner family needs executable policy mutations, not just tokens.
     mutations = kmac_admission_mutants.cases(True)
-    assert len(mutations) == 18
+    assert len(mutations) == 19
     assert {name for name, *_ in mutations} == {
         'fixed.rs', 'xof.rs', 'execution/fixed.rs', 'execution/xof.rs',
         'hardened_in_place/fixed.rs', 'hardened_in_place/xof.rs',
@@ -101,3 +125,4 @@ def check():
     print('Retest guards reject six diagnostic, two verifier-leak and twelve production-population regressions')
     print('Production mutant verdict accepts wrong bytes/runtime mismatches; rejects six false failures')
     print('Positive counterpart inventory and exact admission populations reject twelve false-pass cases')
+    print('Source-derived conformance inventory rejects new methods, missing guards and changed owners across eight macro families')

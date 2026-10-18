@@ -63,18 +63,22 @@ macro_rules! profile {
                             );
                         }
                         if !expected.is_empty() {
-                            let mut bad = expected.to_vec();
-                            bad[0] ^= 1;
-                            let candidate = Fips202BitString::new(&bad, valid)
-                                .map_err(|_| io::Error::other("scoped candidate shape"))?;
-                            let verified = workspace
-                                .$with_bits_conformance(key, custom, |state| {
-                                    state.$verify_bits_conformance(message, candidate)
-                                })
-                                .and_then(core::convert::identity)
-                                .map_err(|_| io::Error::other("scoped verification failed"))?;
-                            if verified.expose_public() {
-                                return Err(io::Error::other("scoped wrong-tag mismatch").into());
+                            for position in [0, expected.len() - 1] {
+                                let mut bad = expected.to_vec();
+                                bad[position] ^= 1;
+                                let candidate = Fips202BitString::new(&bad, valid)
+                                    .map_err(|_| io::Error::other("scoped candidate shape"))?;
+                                let verified = workspace
+                                    .$with_bits_conformance(key, custom, |state| {
+                                        state.$verify_bits_conformance(message, candidate)
+                                    })
+                                    .and_then(core::convert::identity)
+                                    .map_err(|_| io::Error::other("scoped verification failed"))?;
+                                if verified.expose_public() {
+                                    return Err(
+                                        io::Error::other("scoped wrong-tag mismatch").into()
+                                    );
+                                }
                             }
                         }
                     }};

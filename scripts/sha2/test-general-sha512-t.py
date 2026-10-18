@@ -16,6 +16,39 @@ import general_sha512_t_work as work
 
 
 class GeneralTests(unittest.TestCase):
+    def test_facade_export_boundary_ignores_docs_not_real_exports(self):
+        policy.facade_boundary(policy.ROOT)
+        original = policy.read
+        for crate in ('brynja', 'brynja-crypto'):
+            library = f'crates/{crate}/src/lib.rs'
+            with patch.object(policy, 'read', lambda root, name: original(root, name) +
+                    ('\n// Sha512TBits general-sha512-t\n' if name == library else '')):
+                policy.facade_boundary(policy.ROOT)
+        mutations = [
+            ('crates/brynja-crypto/src/sha2.rs', '#[cfg(feature = "general-sha512-t")]', ''),
+            ('crates/brynja-crypto/src/sha2.rs', 'Sha512TBits,', ''),
+            ('crates/brynja-crypto/src/sha2.rs', '//! Curated',
+             'pub use brynja_hash_sha2::Sha512TBits as Hidden;\n//! Curated'),
+        ]
+        for crate, dep in (('brynja', 'brynja-crypto'), ('brynja-crypto', 'brynja-hash-sha2')):
+            mutations += [
+                (f'crates/{crate}/src/lib.rs', '#![no_std]',
+                 '#![no_std]\npub use brynja_hash_sha2::Sha512TBits;'),
+                (f'crates/{crate}/Cargo.toml', 'default = []', 'default = ["general-sha512-t"]'),
+                (f'crates/{crate}/Cargo.toml', f'general-sha512-t = ["{dep}/general-sha512-t"]',
+                 'general-sha512-t = []'),
+            ]
+        for target, before, after in mutations:
+            def changed(root, name):
+                value = original(root, name)
+                if name == target:
+                    self.assertEqual(value.count(before), 1)
+                    value = value.replace(before, after)
+                return value
+            with self.subTest(target=target, before=before), patch.object(policy, 'read', changed):
+                with self.assertRaises(ValueError):
+                    policy.facade_boundary(policy.ROOT)
+
     def test_work_model_selection_is_explicit_and_complete(self):
         condition = "not(any(miri, kani))"
         for expected in (1, 4):
@@ -252,7 +285,7 @@ class GeneralTests(unittest.TestCase):
             ("crates/brynja-hash-sha2/Cargo.toml", "default = []", 'default = ["general-sha512-t"]'),
             ("crates/brynja-hash-sha2/Cargo.toml", "general-sha512-t = []", 'general-sha512-t = ["cpu"]'),
             ("crates/brynja-hash-sha2/src/lib.rs", '#[cfg(feature = "general-sha512-t")]', ""),
-            ("crates/brynja-crypto/src/lib.rs", "#![no_std]", "#![no_std]\n// Sha512TBits"),
+            ("crates/brynja-crypto/src/lib.rs", "#![no_std]", "#![no_std]\npub use brynja_hash_sha2::Sha512TBits;"),
         ]
         for path in ("scripts/zeroization/check-zeroization-miri.sh", "scripts/zeroization/check-zeroization-sanitizer.sh"):
             cases.append((path, "--features general-sha512-t --test general", "--test sha256"))

@@ -2,10 +2,14 @@
 from __future__ import annotations
 
 import hashlib
+import re
+import sys
 import tomllib
 from pathlib import Path
 
 import sha512_t_contract as contract
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'cryptography'))
+from rust_source_contract import scrub
 
 ROOT = contract.ROOT
 REVIEW = "scripts/sha2/general-sha512-t-reviewed.toml"
@@ -67,6 +71,29 @@ def read(root: Path, name: str) -> str:
     return contract.read(root, name).decode("utf-8")
 
 
+def facade_boundary(root: Path) -> None:
+    names = r'\b(?:(?:Hardened)?Sha512T\w*|(?:hardened_)?sha512_t\w*)\b'
+    for crate, dependency in (('brynja-crypto', 'brynja-hash-sha2'), ('brynja', 'brynja-crypto')):
+        library = scrub(read(root, f'crates/{crate}/src/lib.rs'))
+        if re.search(names, library):
+            raise ValueError('general capability was implicitly reexported')
+        manifest = tomllib.loads(read(root, f'crates/{crate}/Cargo.toml'))
+        features = manifest.get('features', {})
+        if (features.get('default') != [] or
+                features.get('general-sha512-t') != [dependency + '/general-sha512-t']):
+            raise ValueError('general facade opt-in/default boundary changed')
+    # The reviewed namespaced export is intentional; flat/default exports are not.
+    source = read(root, 'crates/brynja-crypto/src/sha2.rs')
+    block = '''#[cfg(feature = "general-sha512-t")]
+pub use brynja_hash_sha2::{
+    HardenedSha512T, Sha512T, Sha512TBits, Sha512TDigest, Sha512TError, Sha512TSecretDigest,
+    hardened_sha512_t_bits_public, hardened_sha512_t_bits_secret, hardened_sha512_t_public,
+    hardened_sha512_t_secret, sha512_t, sha512_t_bits,
+};'''
+    if source.count(block) != 1 or re.search(names, scrub(source.replace(block, ''))):
+        raise ValueError('general facade exports escaped explicit namespace gate')
+
+
 def validate(root: Path = ROOT, *, hashes: bool = True) -> None:
     sources = {name: read(root, name) for name in PRODUCTION}
     actual = {str(p.relative_to(root)) for p in (root / PREFIX).rglob("*.rs")}
@@ -108,9 +135,7 @@ def validate(root: Path = ROOT, *, hashes: bool = True) -> None:
                   '#[cfg(feature = "general-sha512-t")]\npub use general::{Sha512TBits, Sha512TDigest, Sha512TError};'):
         if token not in library:
             raise ValueError("general exports escaped feature gate")
-    for path in ("crates/brynja-crypto/src/lib.rs", "crates/brynja/src/lib.rs"):
-        if "Sha512TBits" in read(root, path) or "general-sha512-t" in read(root, path):
-            raise ValueError("general capability was implicitly reexported")
+    facade_boundary(root)
     gates = read(root, "scripts/checks.sh").splitlines()
     for path, token in (
         ("scripts/sha2/check-general-sha512-t.py", "    final.run()"),

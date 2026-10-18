@@ -3,6 +3,7 @@
 import json
 from pathlib import Path
 import sys
+import kmac_conformance_inventory
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'repository'))
 from facade_conformance_cases import CONSTRUCT, FIXED, SCOPE, STATES, XOF
@@ -92,6 +93,7 @@ def validate(output, source):
 
 
 if __name__ == '__main__':
+    kmac_conformance_inventory.validate(Path(__file__).resolve().parents[2], probes())
     validate_positive(Path('assurance/kmac-conformance-rejected/src/positive.rs').read_text())
     validate(Path(sys.argv[1]).read_text(),
              Path('assurance/kmac-conformance-rejected/src/enabled.rs').read_text())

@@ -42,6 +42,10 @@ def cases(native):
         ):
             flip(prefix + 'fixed.rs', anchor, test)
         flip(prefix + 'xof.rs', 'self.finish(None, StrengthPolicy::Production)', test)
+    if native:
+        result.append(('hardened_in_place/accelerated/fixed.rs',
+            'if key.bit_len() < $strength { return Err(KmacError::KeyTooShort); }',
+            'if false { return Err(KmacError::KeyTooShort); }', 'accelerated_policy'))
     return result
 
 
@@ -66,7 +70,7 @@ def check(root, consumer, roots, env, native_env=None):
     for name, before, after, test in mutations:
         path = roots['brynja-mac-kmac'] / 'src' / name
         original = path.read_text()
-        count = 2 if name == 'hardened_in_place/accelerated/fixed.rs' and before.startswith('if ') else 1
+        count = 2 if name == 'hardened_in_place/accelerated/fixed.rs' and before == 'if key.bit_len() < $strength {' else 1
         if original.count(before) != count:
             raise ValueError('admission mutation anchor changed: ' + name + ': ' + before)
         try:

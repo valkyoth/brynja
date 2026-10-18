@@ -186,6 +186,25 @@ fn accelerated_policy() -> Result<(), KmacError> {
     let authority = raw::Authority::new(kernel).map_err(|_| KmacError::AccelerationUnavailable)?;
     let session =
         || KeccakSession::from_static(&authority).map_err(|_| KmacError::AccelerationUnavailable);
+    macro_rules! scratch_rejection {
+        ($name:ident) => {{
+            let mut workspace = scoped::$name::new(session()?)?;
+            let empty = brynja_mac_kmac::Fips202BitString::new(&[], 0)
+                .map_err(|_| KmacError::InvalidBitString)?;
+            let mut scratch = [0xa5; 168];
+            let mut called = false;
+            assert!(matches!(
+                workspace.with_bits_and_scratch(empty, empty, &mut scratch, |_| called = true),
+                Err(KmacError::KeyTooShort)
+            ));
+            assert!(!called);
+            assert_eq!(scratch, [0; 168]);
+        }};
+    }
+    scratch_rejection!(Kmac128Workspace);
+    scratch_rejection!(Kmac256Workspace);
+    scratch_rejection!(KmacXof128Workspace);
+    scratch_rejection!(KmacXof256Workspace);
     execution_policy(|| Ok(Mode::Require(Some(session()?))))?;
     scoped_fixed!(
         scoped::Kmac128Workspace::new(session()?)?,

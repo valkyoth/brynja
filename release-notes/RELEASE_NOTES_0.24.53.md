@@ -447,6 +447,15 @@ on XMM register allocation in the CPU dependency; the reviewer reproduced this
 at v0.24.52 as well. This pre-existing code-generation limitation is not fixed
 or qualified by the present harness changes and needs a separate target review.
 
+The review of `6fa75404` accepts the three preceding fixes. Further informational
+coverage adds a source-derived owner/method inventory for the 98 conformance
+probes, separate first/last-byte oracle negatives, first-byte-only comparison
+mutants, and an explicit native scratch-setup admission mutant. The accepted
+empty-tag behavior remains confined to test-only conformance owners and is
+prominently tracked. The stale general SHA-512/t facade check now distinguishes
+documentation from code and checks the reviewed explicit opt-in; regression
+tests reject ungated/default exports. No production crate code changes.
+
 No production kernel, unsafe block, registry dependency, release-gate rule or historical
 capture is changed by the conformance separation. Independent verification
 and FIPS validation remain separate, unclaimed qualifications.

@@ -61,16 +61,18 @@ pub(crate) fn check(
             {
                 return Err(failure());
             }
-            let mut bad = expected.to_vec();
-            *bad.first_mut().ok_or_else(failure)? ^= 1;
-            let mut verifier = $state::new(key, custom).map_err(|_| failure())?;
-            verifier.update(message).map_err(|_| failure())?;
-            if verifier
-                .verify(&bad)
-                .map_err(|_| failure())?
-                .expose_public()
-            {
-                return Err(failure());
+            for position in [0, expected.len().checked_sub(1).ok_or_else(failure)?] {
+                let mut bad = expected.to_vec();
+                *bad.get_mut(position).ok_or_else(failure)? ^= 1;
+                let mut verifier = $state::new(key, custom).map_err(|_| failure())?;
+                verifier.update(message).map_err(|_| failure())?;
+                if verifier
+                    .verify(&bad)
+                    .map_err(|_| failure())?
+                    .expose_public()
+                {
+                    return Err(failure());
+                }
             }
             let mut workspace = brynja_mac_kmac::hardened_in_place::$workspace::new();
             actual.fill(0xa5);
@@ -94,15 +96,19 @@ pub(crate) fn check(
             if !verified.expose_public() {
                 return Err(failure());
             }
-            let rejected = workspace
-                .with(key, custom, |mut state| {
-                    state.update(message)?;
-                    state.verify(&bad)
-                })
-                .and_then(core::convert::identity)
-                .map_err(|_| failure())?;
-            if rejected.expose_public() {
-                return Err(failure());
+            for position in [0, expected.len().checked_sub(1).ok_or_else(failure)?] {
+                let mut bad = expected.to_vec();
+                *bad.get_mut(position).ok_or_else(failure)? ^= 1;
+                let rejected = workspace
+                    .with(key, custom, |mut state| {
+                        state.update(message)?;
+                        state.verify(&bad)
+                    })
+                    .and_then(core::convert::identity)
+                    .map_err(|_| failure())?;
+                if rejected.expose_public() {
+                    return Err(failure());
+                }
             }
         }};
     }

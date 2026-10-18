@@ -50,6 +50,8 @@ FOLLOWUP = tuple(map(Path, (
     "scripts/kmac/kmac_production_oracle.py",
     "scripts/kmac/kmac_production_mutants.py",
     "scripts/kmac/kmac_admission_mutants.py",
+    "scripts/kmac/kmac_conformance_inventory.py",
+    "scripts/cryptography/rust_source_contract.py",
     "scripts/kmac/test_kmac_retest.py",
 )))
 DIFFERENTIAL_MANIFEST = Path("assurance/kmac-differential/Cargo.toml")

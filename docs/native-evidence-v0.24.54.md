@@ -7,9 +7,11 @@ observations, not independent review, side-channel approval or FIPS validation.
 
 The later evidence-substitution security finding supersedes the earlier local
 release-readiness result. These original observations are preserved, but current
-release approval is pending focused retest and an externally pinned owner review;
-see [F1](../security/pentest/v0.24.54.md). Adjacent hashes and expected output
-markers alone are not evidence authentication.
+the focused independent retest and externally pinned owner review now close
+[F1](../security/pentest/v0.24.54.md). All eight snapshot approvals pass, but
+the separate legacy MD5 dependency-closure reuse check still blocks the final
+release gate. Adjacent hashes and expected output markers alone are not evidence
+authentication. No full-sweep or tag authorization follows from this disposition.
 
 The [artifact manifest](../assurance/native-observations/v0.24.54/manifest.json)
 binds every public artifact, original raw SHA-256 and path-redaction count.

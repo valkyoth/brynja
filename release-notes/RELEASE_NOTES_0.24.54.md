@@ -1,13 +1,16 @@
 # v0.24.54 - Acceleration Native Evidence Sweep
 
-Status: exceptional retest pending; release blocked. Forty source-bound Linux/Apple captures and twelve
+Status: exceptional security retest passed; MD5 evidence reuse still blocks release.
+Forty source-bound Linux/Apple captures and twelve
 current public-consumer campaigns completed; evidence integration and local
 non-sweep release checks passed. No independent qualification or crates.io
 publication.
 
 The subsequent security review confirmed a High native-evidence substitution
-bypass. The approval boundary is corrected and regression-tested, but a focused
-independent retest and separate owner approval remain required. Earlier local
+bypass. The approval boundary passed focused independent retest; the owner
+approved its historical snapshot and exact validation-only changes. All eight
+snapshot approvals pass with the fixed digest supplied from private local
+operator configuration, not computed from candidate contents. Earlier local
 checks below are historical results, not current release authorization. See
 [the finding and disposition](../security/pentest/v0.24.54.md).
 The real isolated replay now rejects the reported KMAC forgery on both paths.

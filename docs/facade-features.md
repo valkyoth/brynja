@@ -293,7 +293,8 @@ error clearing, public copying and (with SIMD) worker vector accounting.
 
 The fixture's separate local/scoped-root executable imports deliberately
 hidden leaf-only APIs and is not redirected or silently claimed as covered.
-Further family/route reconciliation and independent retest remain pending.
+The following execution/scoped-root section covers the distinct public root
+APIs; the hidden leaf-only executable is not claimed by either facade.
 
 ## ParallelHash execution and scoped-root consumer acceptance
 
@@ -694,8 +695,8 @@ regressions reject graph/population drift and unrelated failures.
 
 This is scalar public functional acceptance. It does not inspect private storage,
 prove worker-stack/register erasure or qualify platform protection. Accelerated,
-batch, ParallelHash, modern resident and Windows enclave consumer reconciliation
-remain separate work; existing platform checks and release gates are unchanged.
+batch, ParallelHash, resident and Windows consumers have separate commands
+below; existing platform checks and release gates are unchanged.
 
 ## Strict compiled consumer acceptance
 
@@ -807,3 +808,32 @@ their original platform-specific harness scope, rather than being presented as
 the new strict consumer's exact-feature or config-isolation checks. Resident
 locking/clearing does **not** claim macOS core-dump exclusion, strict-profile
 admission, independent verification or fresh native release qualification.
+
+## Windows extracted public-surface reconciliation
+
+On a supported GNU/Linux host with the `x86_64-pc-windows-msvc` Rust standard
+library installed, run this command at both compiler endpoints:
+
+```sh
+python3 scripts/repository/check-strict-windows-consumer.py --toolchain 1.99.1
+```
+
+This reuses the existing strict-facade package examples and negative probes,
+but requires a private config-free Cargo environment, real extracted archives
+and exact default/acceleration feature graphs. The sole direct crypto dependency
+is `brynja-strict`; no checkout or registry replacement may supply its API.
+
+The public Windows SHA-2/SHA-3, KMAC, TupleHash, batching, SIMD and concurrent
+ParallelHash examples are type-checked for Windows in debug/release with the
+facade's acceleration feature off and on. All 497 ownership/private-export/
+missing-opt-in probes are also checked against the Windows target, with specific
+expected compiler diagnostics; unsupported-host stubs cannot satisfy them.
+Compiler termination or unrelated errors do not count as a rejected API misuse.
+A separate one-test GNU/Linux protected-reuse smoke test runs in each of the
+four configurations; it is **not** Windows execution.
+
+`cargo check` does not link or load an enclave image. This command neither runs
+native Windows cryptography nor establishes loader, signing, platform protection
+or whole-image erasure. The historical 19-route/38-execution Windows bundle
+retains its original source/compiler binding and development-only scope; it is
+not promoted to current-source native qualification by these checks.

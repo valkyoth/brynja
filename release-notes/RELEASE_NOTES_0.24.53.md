@@ -1,6 +1,7 @@
 # v0.24.53 - Acceleration Public Consumer Acceptance
 
-Status: development in progress; not release-qualified. No publication selected.
+Status: consumer acceptance implemented; independent retest pending. Not
+release-qualified. No publication selected.
 
 ## ParallelHash threaded consumer acceptance
 
@@ -18,8 +19,8 @@ invalid block/bit sizes, scratch bounds and reuse after rejection. Twenty-five
 compiled ownership negatives per facade and compiled output-copy, cleanup and
 vector-report mutations check enforcement. The threaded adapter remains absent
 from default/no_std facade consumers; no production feature graph or release
-gate changes. Serial/accelerated-root and deliberately hidden leaf-only scoped
-route reconciliation, wider families and independent retest remain pending.
+gate changes. Serial/accelerated-root coverage is described separately below;
+deliberately hidden leaf-only APIs are not claimed through the facades.
 
 ## KMAC conformance separation
 
@@ -250,8 +251,8 @@ are enforced. The optional native campaign requires the actual CPU bundle.
 The consumers reject 18 SHA-1 and 13 MD5 ownership/authority/classification
 misuses. Compiled mutations cover revocation, finalization, missing/partial
 output, incorrect work counts, native no-op and portable substitution. Existing
-legacy package/native helpers remain unchanged. Hardened consumers are covered
-below; protected-platform reconciliation is still pending. No production
+legacy package/native helpers remain unchanged. Hardened and protected-platform
+consumers are covered separately below. No production
 implementation or gate changes.
 
 ## Isolated hardened legacy consumers
@@ -363,15 +364,51 @@ This is functional consumer reconciliation. macOS resident APIs still make no
 core-dump-exclusion or strict-profile claim; native release qualification remains
 the separate planned milestone.
 
-## Work remaining before retest and acceptance freeze
+## Windows extracted public-surface reconciliation
+
+A focused consumer now reuses the existing strict Windows examples and negative
+probes against exact local package archives, with default/acceleration feature
+graphs and private Cargo configuration checks. Both compiler endpoints check
+the examples in debug/release and reject 497 ownership/private-export/missing-
+opt-in probes against `x86_64-pc-windows-msvc`. The four host smoke runs remain
+explicitly GNU/Linux protected-reuse tests, not Windows enclave execution.
+
+These are `cargo check` results, not image linkage/loading, native execution,
+production signing or new qualification. The preserved Windows development
+bundle remains bound to its original commit and compiler.
+
+## Consumer acceptance inventory
+
+The following is the implemented public-consumer scope, not a blanket claim
+that every backend has fresh native release qualification. The detailed commands
+and limitations are in [the consumer guide](../docs/facade-features.md).
+
+| Surface | Runnable coverage | Execution boundary |
+| --- | --- | --- |
+| Both modern facades | `check-facade-package.py`: 21 explicit opt-ins, default isolation, bare-metal compilation, additive features, protocol isolation | Hosted/threaded adapters remain separate dependencies |
+| SHA-2 single-state and scoped | Ordinary/hardened, named/general-t, byte/bit, streaming, public/secret output, lifecycle and compiled mutants | SHA-NI measured locally; unavailable dedicated x86 SHA-512 rejects, not counted as execution |
+| SHA-3/SHAKE/cSHAKE | Ordinary/hardened owned/scoped fixed/XOF and customized bit corpora, lifecycle and compiled mutants | Local AVX2 measured; x86 hosted unavailability remains distinct from static execution |
+| SHA-2/Keccak batches | Independent mixed/sparse bit corpora, portable/preferred/required selection, accounting/output/cleanup mutants | SIMD requires complete CPU/OS and compiled feature bundles |
+| KMAC/KMACXOF | Production/conformance separation, owned/scoped fixed/XOF, comparison and lifecycle probes | Test-only types are not production owners; independent retest of separation remains pending |
+| TupleHash/ParallelHash | Item/leaf framing, serial/scoped/scheduled/grouped execution, one/three-worker adapters, oracle/mutation/ownership checks | Deliberately hidden leaf-only APIs are not claimed as facade exports |
+| SHA-1/MD5 | `check-legacy-execution-package.py`: separate ordinary/hardened archived consumers; `check-legacy-strict-package.py` and `check-legacy-resident-package.py`: distinct platform owners | Never exported by modern facades; hardening does not repair algorithm weaknesses |
+| Strict modern owners | `check-strict-public-consumer.py`, `check-strict-accelerated-consumer.py`, `check-strict-group-consumer.py` | GNU/Linux functional tests; private-memory/register qualification separate |
+| Apple resident modern owners | Three `check-macos-resident-*-package.py` commands described above, including the base resident command | Native Apple Silicon functional checks; no dump-exclusion/strict claim |
+| Windows enclave facade | `check-strict-windows-consumer.py`: exact archives, examples and 497 Windows-target negatives | Current compile-only acceptance; original development native records retained separately |
+
+Compiler endpoints are Rust 1.90.0 and 1.99.1. Current compiler campaigns and
+the preceding recorded consumer campaigns are author-operated checks. Additional
+native lanes, including dedicated x86 SHA-512 and Arm execution not measured by
+the new strict consumers, remain explicitly unclaimed here and belong to the
+planned native collection milestone. No QEMU/SDE or compilation result is
+silently counted as physical execution or independent verification.
+
+## Remaining handoff and release work
 
 - Obtain independent retest of the complete conformance separation before
   closing v0.24.52 F-1; author checks alone do not close it.
-- Finish Windows extracted-consumer reconciliation and the final route/operation
-  inventory across modern and isolated legacy families. Existing Windows native
-  records remain bound to their original source/compiler, not relabeled current.
-- Reconcile affected source policies, compiler checks and current acceptance
-  records, then obtain the required independent pentest/retest.
+- Obtain the required independent pentest/retest of this consumer-acceptance
+  candidate; accepted platform limitations retain their existing dispositions.
 - Run focused checks, ordinary CI and non-sweep release checks. The owner has
   deferred the additional full sweep to v0.24.55; this does not qualify changed
   implementations using historical native records. Native collection remains

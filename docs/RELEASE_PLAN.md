@@ -5013,10 +5013,15 @@ and rejects portable substitution; it is separate from public API acceptance.
 Existing extracted modern macOS resident, batch and ParallelHash package checks
 pass on Apple Silicon at both compiler endpoints, including independent public
 oracles, lifecycle/ownership checks and compiled mutations. Their resident-only
-scope and no-dump-exclusion limit remain explicit. Windows enclave consumer
-reconciliation remains pending; public tests do not prove private memory/register
-erasure.
-Wider consumer acceptance and independent retest remain pending.
+scope and no-dump-exclusion limit remain explicit. Windows enclave public
+examples now use exact extracted archive/feature graphs and Windows-target
+debug/release checks, with 497 ownership/private-export/opt-in rejections on
+both compiler endpoints. This is compile-only reconciliation, not new native
+Windows execution; its historical development records retain their original
+source/compiler identity. The consumer inventory is reconciled in the release
+notes and the implementation is ready for independent retest. Public tests do
+not prove private memory/register erasure; independent retest, ordinary CI and
+release authorization remain pending.
 
 Plan scope: Freeze runnable package-external acceptance for every operational ordinary/hardened, byte/bit, streaming, XOF and batch route across SHA-2, SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, ParallelHash, SHA-1 and MD5 before the final native sweep.
 

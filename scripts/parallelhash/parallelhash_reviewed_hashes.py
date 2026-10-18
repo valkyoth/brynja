@@ -146,7 +146,7 @@ REVIEWED_HASHES = {
     'scripts/parallelhash/parallelhash_cleanup.py': 'eb4ed35344a26379b34805413fdd34ebb2e02b2ccc5b2ae59788efa23bb9b0eb',
     'scripts/parallelhash/parallelhash_execution_native.py': 'e2fa76eb4018691b5b75f4ae7831e5fce6d09ab2e6eb6b1830d1cec0ffe54407',
     'scripts/parallelhash/capture-parallelhash-execution-native.py': 'e5f196ce2b2ecd7ccc8dc632c386b25e48a0a4a62215db319c6c0672ccdefb64',
-    'scripts/parallelhash/check-parallelhash-execution-native.py': 'aacd7df71e1326a6b4eacc27ca337c729c2cce4efa4d0d39c0c76866eff770a0',
+    'scripts/parallelhash/check-parallelhash-execution-native.py': 'dccf09271f8e710c24791ab13ece79bcbe579bc58f072a5179d83331496111c6',
     'scripts/parallelhash/test-parallelhash-execution-native.py': 'bd1f12d07c94028f7ecb86fe9ff828275c221957474061807af51bd9bee98ea5',
     'scripts/parallelhash/test-parallelhash-batch.py': '3b33acdf49501eb64fd77ef277150f0e99df6cddc1b62f1bd0899b5923e3d9d3',
     'assurance/parallelhash-differential/src/scoped.rs': 'b90d107a92581bd3dc48a72f3f84b485f4d752f134abfc84fee2ba353427e4ff',

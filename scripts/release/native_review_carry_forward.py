@@ -81,6 +81,9 @@ def check_closure(root, review, current, captured, digest):
 def validate(family, root=io.ROOT):
     io.clean(root)
     head = io.git(root, 'rev-parse', 'HEAD').decode().strip()
+    # Approval failure is terminal: it must not enter any equivalence fallback.
+    from native_evidence_approval import validate as approve
+    approve(family, root, head)
     adapter = Family(family, root)
     from native_unchanged import validate_family
     try:

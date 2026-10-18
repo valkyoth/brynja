@@ -18,6 +18,7 @@ python3 scripts/release/test-verification-plan.py
 python3 scripts/release/test-detached-verification.py
 python3 scripts/release/test-native-metadata-carry-forward.py
 python3 scripts/release/test-native-dependency-scope.py
+python3 scripts/release/test-native-evidence-approval.py
 python3 scripts/release/test-evidence-scope.py
 
 cargo fmt --all --check

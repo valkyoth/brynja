@@ -5092,7 +5092,13 @@ the v0.25.2 publication checkpoint; this is not another release-gate mechanism.
 
 ### v0.24.54 - Acceleration Native Evidence Sweep
 
-Status: awaiting green CI
+Status: awaiting pentest
+
+The subsequent High native-evidence substitution finding requires an exceptional
+focused retest and separate owner-pinned evidence approval before release.
+Earlier local/CI success is not a disposition of that finding; see the current
+[security report](../security/pentest/v0.24.54.md). No cryptographic runtime code
+changed in the correction.
 
 Collection progress is recorded in the v0.24.54 release notes and
 [native observation review](native-evidence-v0.24.54.md): forty Linux/Apple

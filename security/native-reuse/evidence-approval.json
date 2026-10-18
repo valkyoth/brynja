@@ -1,0 +1,82 @@
+{
+  "schema": 1,
+  "purpose": "native-observation-integrity",
+  "status": "pending-owner-review",
+  "reviewed_commit": "af67fa67bba469d691d5bf993419fbd285fadd2c",
+  "validation_changes": {
+    "sha2-hardened": {
+      "scripts/sha2/check-sha2-hardened-native-evidence.py": {
+        "after": "63430dda377f73a74bddf01fb9b9aa4a0cbc71d7ac91fd197b09409aad3d3979",
+        "before": "a6b10e31865dbf4b0f3e318512fe0c8400a1e7baf3e8a3cf5892bfbe4fc1b493"
+      }
+    },
+    "sha1-hardened": {
+      "scripts/sha1/check-sha1-hardened-native.py": {
+        "after": "be392a38f1b5c6ac618c7e9016d220b8abb5df2a01a18d68da4cc9673aab7b10",
+        "before": "269efd86a10057140720a144a6de604647774033ccc4113eecd97d14f57250fc"
+      }
+    },
+    "md5-execution": {
+      "scripts/md5/check-md5-execution-native.py": {
+        "after": "8a241ce569c597b45632ef4abffa55ce2dbe31128cbf764f7285d8a7ad7f94df",
+        "before": "f469ae1ab4356dc1eea577ee415448f4c3fe9401de0c717aede21dd6cde3e10c"
+      }
+    },
+    "md5-hardened": {
+      "scripts/md5/check-md5-execution-native.py": {
+        "after": "8a241ce569c597b45632ef4abffa55ce2dbe31128cbf764f7285d8a7ad7f94df",
+        "before": "f469ae1ab4356dc1eea577ee415448f4c3fe9401de0c717aede21dd6cde3e10c"
+      },
+      "scripts/md5/check-md5-hardened-native.py": {
+        "after": "73d396f5f0d69cd51c324f4ac618849bf9cf28a2783ba3db717c9394d0796eab",
+        "before": "cf27f602c225446567ee649e689e8d06b730c581761e6f53aaa429cc2353b21e"
+      }
+    },
+    "keccak-hardened": {
+      "scripts/sha3/check-keccak-hardened-native.py": {
+        "after": "759f0f1c6facb406a1d7e7350084632e1af24c94389a03c030a25463b656a9e4",
+        "before": "477e2a210724daa0747fabd33259b8388fc5b7fb345340eeec49baeec362b05e"
+      }
+    },
+    "kmac-execution": {
+      "scripts/kmac/check-kmac-execution-native.py": {
+        "after": "1684221d1f3a38a87351028b9ed3f9dd9e9d43502a69a88e75adec7b6e14de4b",
+        "before": "7f18bed806fbbc3f8b60e96e40c117f5796c0af2d086a92c1bfb5f0b762b10f1"
+      },
+      "scripts/sha3/check-keccak-hardened-native.py": {
+        "after": "759f0f1c6facb406a1d7e7350084632e1af24c94389a03c030a25463b656a9e4",
+        "before": "477e2a210724daa0747fabd33259b8388fc5b7fb345340eeec49baeec362b05e"
+      }
+    },
+    "tuplehash-execution": {
+      "scripts/sha3/check-keccak-hardened-native.py": {
+        "after": "759f0f1c6facb406a1d7e7350084632e1af24c94389a03c030a25463b656a9e4",
+        "before": "477e2a210724daa0747fabd33259b8388fc5b7fb345340eeec49baeec362b05e"
+      },
+      "scripts/tuplehash/check-tuplehash-execution-native.py": {
+        "after": "fc842dc44af326e71452453caec10caab992d30f4bb7bdf09b78576c59b55d79",
+        "before": "d6d7bec5c2b181ab4c5529a783c43b63b97f79a50914eab2b2b69eabba6e3ec2"
+      }
+    },
+    "parallelhash-execution": {
+      "scripts/parallelhash/check-parallelhash-execution-native.py": {
+        "after": "dccf09271f8e710c24791ab13ece79bcbe579bc58f072a5179d83331496111c6",
+        "before": "aacd7df71e1326a6b4eacc27ca337c729c2cce4efa4d0d39c0c76866eff770a0"
+      },
+      "scripts/parallelhash/parallelhash_reviewed_hashes.py": {
+        "after": "c7719bacde9b19c046031454962c011dbc8ae1e134c7379f5c7cb637fc64bc93",
+        "before": "7df03aa280b435def1e742ae8bd20a673286ab3d818ea4713ceac0f829e97149"
+      }
+    }
+  },
+  "families": [
+    "sha2-hardened",
+    "sha1-hardened",
+    "md5-execution",
+    "md5-hardened",
+    "keccak-hardened",
+    "kmac-execution",
+    "tuplehash-execution",
+    "parallelhash-execution"
+  ]
+}

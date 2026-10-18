@@ -71,6 +71,8 @@ def equivalent(root, capture, current, captured):
 def validate(root=io.ROOT):
     io.clean(root)
     head = io.git(root, 'rev-parse', 'HEAD').decode().strip()
+    from native_evidence_approval import validate as approve
+    approval = approve('sha2-hardened', root, head)
     index = io.document(io.committed(root, evidence.INDEX, head))
     io.require(set(index) == {'schema', 'capture_commit', 'lanes'} and
                type(index['schema']) is int and index['schema'] == 1, 'SHA-2 index schema')
@@ -95,8 +97,10 @@ def validate(root=io.ROOT):
     io.require(all(value == closures[0] for value in closures), 'inconsistent SHA-2 capture closures')
     from native_unchanged import validate_inputs
     try:
-        validate_inputs(root, capture, head, current, closures[0], evidence.source_digest)
-        disposition = 'captured implementation/build inputs unchanged'
+        validate_inputs(root, capture, head, current, closures[0], evidence.source_digest,
+                        approval['validation_changes'])
+        disposition = ('implementation/build inputs unchanged; '
+                       f'{len(approval["validation_changes"])} exact validation-only changes approved')
     except ValueError:
         equivalent(root, capture, current, closures[0])
         disposition = 'only exact feature-inactive enclave addition excluded'

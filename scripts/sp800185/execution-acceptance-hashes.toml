@@ -12,7 +12,7 @@
 "scripts/sp800185/test-execution-acceptance.py" = "36d8c5864f204c27338d8585cc5bb32cf3a4ab46ab7089e99da0d623f98ca22f"
 "scripts/sp800185/capture-sp800185-native.py" = "6c2efb98ac13769850e3c9aea1579f0864bb1023f12dce266f1ddbb2b06b35fd"
 "scripts/sp800185/native_capture.py" = "9a6ef190395dae77480e61084db1d0a3f8081c2dfb316ab9ea9198b1e64d7091"
-"scripts/checks.sh" = "5c573c5cc79b47004397f65c980b30bf34b7d9d737d6af226a8b82f3143d684b"
+"scripts/checks.sh" = "d1bc624210a95d8a4d45d6119dc7df229c38e1d5be6385ec013c3235a02f2508"
 "scripts/ci/check-rust-version-matrix.sh" = "bb52bf3b88b86794b353880e6c5d8b2af8351de9a5f3118f925a9055ef04c1e7"
 ".github/workflows/ci.yml" = "5d354908d1a491546014ffdd831be1209734780ab2b445df1342284437e5f134"
 "docs/sp800185-final-acceptance.md" = "fe893759262addf574dc3924786fa1ae2b0bd5f595b28b701098b8e64803ba8b"

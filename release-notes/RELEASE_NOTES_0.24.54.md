@@ -1,9 +1,15 @@
 # v0.24.54 - Acceleration Native Evidence Sweep
 
-Status: awaiting green CI. Forty source-bound Linux/Apple captures and twelve
+Status: exceptional retest pending; release blocked. Forty source-bound Linux/Apple captures and twelve
 current public-consumer campaigns completed; evidence integration and local
 non-sweep release checks passed. No independent qualification or crates.io
 publication.
+
+The subsequent security review confirmed a High native-evidence substitution
+bypass. The approval boundary is corrected and regression-tested, but a focused
+independent retest and separate owner approval remain required. Earlier local
+checks below are historical results, not current release authorization. See
+[the finding and disposition](../security/pentest/v0.24.54.md).
 
 This milestone follows signed v0.24.53 public consumer acceptance. It collects
 exact-source native correctness, performance, timing and resource observations

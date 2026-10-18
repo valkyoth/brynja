@@ -504,7 +504,7 @@
     "docs/sha256-batch-execution.md": "41e9efd18560ec86eafdcfe663e11822593c0cf1af2272b7627776161b54299b",
     "rust-toolchain.toml": "c979a7d4d66b770a4d59d6d56e3c078aeab1993af658480bfd1f89f90220457d",
     "scripts/assurance/check-kani.sh": "5434cd931e7604b2dc4d8674b83060894f74d232d0d665f8f846e62a83d923ab",
-    "scripts/checks.sh": "5c573c5cc79b47004397f65c980b30bf34b7d9d737d6af226a8b82f3143d684b",
+    "scripts/checks.sh": "d1bc624210a95d8a4d45d6119dc7df229c38e1d5be6385ec013c3235a02f2508",
     "scripts/sha2/capture-sha256-batch-native.py": "8afca7dbde8dfa49d5cd470a86a1575f87014a4bd3acae03fb3ef1cb0997c3a5",
     "scripts/sha2/check-sha2-bit-differential.py": "263990644d6176b5817893f1f0008b355c5aeef9f22e7e10be72ed92b9a2fcfc",
     "scripts/sha2/check-sha2-execution.py": "375cb1ae007fd938a96a3c6517b04be1412dc3bdbc1e455991f50572766f087d",

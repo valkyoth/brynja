@@ -11,6 +11,7 @@ fi
 
 # No expensive work starts until scope is understood or explicitly approved.
 python3 scripts/release/run-verification.py plan --check
+python3 scripts/release/native_evidence_approval.py
 if python3 scripts/sha2/check-sha2-hardened-native-evidence.py; then
     :
 else

@@ -192,7 +192,10 @@ class InactiveSha2Tests(unittest.TestCase):
             write(self.root, sha2.evidence.INDEX, json.dumps(value))
             commit(self.root)
             with patch.object(sha2.evidence, 'sources', return_value=current), \
-                 patch.object(sha2, 'inactive'):
+                 patch.object(sha2, 'inactive'), \
+                 patch('native_evidence_approval.validate', return_value={'validation_changes': {}}):
+                # Isolate original lane semantics; approval is covered with
+                # real Git snapshots and forged indexes in its own suite.
                 sha2.validate(self.root)
         run(index)
         for lane in index['lanes']:

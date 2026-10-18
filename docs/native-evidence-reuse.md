@@ -11,13 +11,49 @@ change. Keep routine evidence scoped to the new capability and affected shared
 implementations, rather than repeating every historical hardware/verifier run.
 The v0.24.55 consolidation sweep remains explicitly scheduled.
 
-The tag gate first runs each existing exact-source native validator. Its existing
+The tag gate first requires the owner-approved evidence identity described below,
+then runs each existing exact-source native validator. Its existing
 fallback entry points now also accept genuinely unchanged captured inputs,
 without a new version-specific equivalence review. This path validates original
 accepted lane records, result populations, compiler/CPU identities, artifact
 hashes, ancestral capture commit and historical source hashes. It compares the
 current input population and participating implementation/build inventory.
-It does not rewrite an observation or qualify a new compiler/platform.
+It does not rewrite an observation or qualify a new compiler/platform. A record's
+own capture identity, adjacent digest or `reviewed: true` cannot approve it.
+
+## Separate evidence approval (v0.24.54 security correction)
+
+The direct native command-line validators and every fallback require
+`security/native-reuse/evidence-approval.json`. The operator must separately
+approve its exact digest and provide `BRYNJA_NATIVE_REVIEW_SHA256` through trusted
+local or protected runner configuration. There is no computed default, latest-HEAD
+approval, repository-local environment loader or automatic acceptance. Never set
+this variable by hashing whatever manifest a candidate supplies. The current
+draft is pending and deliberately blocks release until reviewed.
+
+The manifest identifies an ancestral, non-HEAD evidence snapshot and approved
+families. Every current index and referenced artifact must equal that snapshot,
+including full output, CPU identity and capture identity. Existing schema,
+result population, source, dependency and compiler checks remain necessary.
+Replacing an artifact and rehashing its index cannot update the independent pin.
+Imported record-check helpers validate consistency only; they are not standalone
+release approval entrypoints.
+
+For reviewed validator corrections, `validation_changes` may name exact old/new
+hashes per family. Only validation scripts/review metadata are eligible, never
+Rust, assembly, dependency manifests or build inputs. Both versions must match
+the capture and current checkout; additions/removals remain rejected. The owner
+must review the actual diff, including whether any collector/oracle command
+changed, before authorizing this list. This is not permission to skip a changed
+runtime test. Pure documentation/unrelated dependency changes do not require a
+new approval when the original approved evidence and applicable inputs remain
+unchanged. An evidence replacement does require a new explicit approval.
+
+This is an owner-approved integrity anchor, not signed runner attestation. It
+does not prove the honesty of the original operator or resist a compromised
+trusted verifier. Keep protected approval configuration out of unreviewed
+candidate jobs, and review validator/workflow changes before release execution.
+Externally managed runner signatures would be a separate stronger design.
 
 Workspace Cargo metadata is compared through the capture's dependency closure:
 unrelated packages and unused workspace dependency declarations do not invalidate

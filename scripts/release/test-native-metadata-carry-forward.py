@@ -16,6 +16,7 @@ from native_scope_tests import ScopedNativeTests, InactiveSha2Tests
 from native_setup_tests import SetupReviewTests
 
 import native_metadata_carry_forward as review
+import native_evidence_approval as approval
 
 spec = importlib.util.spec_from_file_location('native_fixture', review.ROOT /
     'scripts/tuplehash/test-tuplehash-execution-native.py')
@@ -78,7 +79,16 @@ class CarryForwardTests(unittest.TestCase):
         write(self.root, review.FACADE, '[package]\nversion = "0.24.40"\n')
         write(self.root, review.REVIEW, (self.root / review.REVIEW).read_text().replace(
             h, review.evidence.hashlib.sha256(new.encode()).hexdigest()))
+        anchor = commit(self.root)
+        write(self.root, approval.REVIEW, {
+            'schema': 1, 'purpose': 'native-observation-integrity',
+            'status': 'owner-approved', 'reviewed_commit': anchor,
+            'families': [self.family + '-execution'], 'validation_changes': {}})
         commit(self.root)
+        pin = review.evidence.hashlib.sha256((self.root / approval.REVIEW).read_bytes()).hexdigest()
+        environment = patch.dict(os.environ, {approval.ENVIRONMENT: pin})
+        environment.start()
+        self.addCleanup(environment.stop)
 
     def validate(self):
         with patch.object(review.evidence, 'sources', side_effect=sources), contextlib.redirect_stdout(io.StringIO()):

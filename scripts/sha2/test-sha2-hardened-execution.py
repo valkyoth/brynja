@@ -54,6 +54,7 @@ def native_gate_regressions():
         fake = '''python3() {
     case "$*" in
         *'plan --check') echo PLAN; return "$PLAN" ;;
+        *native_evidence_approval.py) echo APPROVAL; return "$APPROVAL" ;;
         *check-sha2-hardened-native-evidence.py) echo EXACT; return "$EXACT" ;;
         *native_sha2_carry_forward.py) echo REUSE; return "$REUSE" ;;
         *) return 99 ;;
@@ -62,12 +63,13 @@ def native_gate_regressions():
 set -euo pipefail
 '''
         for values, expected, code in (
-                ((0, 0, 7), ['PLAN', 'EXACT', 'REACHED'], 0),
-                ((0, 7, 0), ['PLAN', 'EXACT', 'REUSE', 'REACHED'], 0),
-                ((0, 7, 9), ['PLAN', 'EXACT', 'REUSE'], 9),
-                ((8, 0, 0), ['PLAN'], 8)):
+                ((0, 0, 0, 7), ['PLAN', 'APPROVAL', 'EXACT', 'REACHED'], 0),
+                ((0, 0, 7, 0), ['PLAN', 'APPROVAL', 'EXACT', 'REUSE', 'REACHED'], 0),
+                ((0, 0, 7, 9), ['PLAN', 'APPROVAL', 'EXACT', 'REUSE'], 9),
+                ((8, 0, 0, 0), ['PLAN'], 8),
+                ((0, 6, 0, 0), ['PLAN', 'APPROVAL'], 6)):
             result = subprocess.run([bash, '-c', fake + gate + 'echo REACHED\n'],
-                env={**os.environ, **dict(zip(('PLAN', 'EXACT', 'REUSE'), map(str, values)))},
+                env={**os.environ, **dict(zip(('PLAN', 'APPROVAL', 'EXACT', 'REUSE'), map(str, values)))},
                 capture_output=True, text=True, timeout=10)
             assert result.returncode == code, result.stderr
             assert result.stdout.splitlines() == expected, result.stdout

@@ -4,6 +4,7 @@ import hashlib
 import json
 import re
 import subprocess
+import sys
 from pathlib import Path
 import hardened_native as native
 
@@ -54,4 +55,8 @@ def validate(root=ROOT):
     print('Hardened SHA-1 native qualification: reviewed correctness with explicit residual limits')
 
 
-if __name__ == '__main__': validate()
+if __name__ == '__main__':
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'release'))
+    from native_evidence_approval import validate as approve
+    approve('sha1-hardened')
+    validate()

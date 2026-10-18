@@ -31,7 +31,7 @@ def lock(root, revision):
     return value
 
 
-def unchanged(root, before, after, closure):
+def unchanged(root, before, after, closure, reviewed_validation=frozenset()):
     previous = {n: v for n, v in io.tree(root, before).items() if selected(n, closure)}
     current = {n: v for n, v in io.tree(root, after).items() if selected(n, closure)}
     io.require(set(previous) == set(current), 'family implementation/build input addition/removal')
@@ -39,6 +39,10 @@ def unchanged(root, before, after, closure):
         io.require(current[name].startswith(('100644 blob ', '100755 blob ')),
                    'nonregular family input: ' + name)
         if identity == current[name]:
+            continue
+        # The caller has already checked both raw digests against the externally
+        # pinned review. Population/type checks above still apply to these paths.
+        if name in reviewed_validation:
             continue
         io.require((name == 'Cargo.lock' and lock(root, before) == lock(root, after)) or
                    (name in {'Cargo.toml', 'Cargo.lock'} and

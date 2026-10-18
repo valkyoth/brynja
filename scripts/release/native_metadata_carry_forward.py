@@ -51,6 +51,8 @@ def validate(root=ROOT, family='tuplehash'):
     digest = evidence.shared.source_digest if family == 'tuplehash' else evidence.digest
     shared, require = evidence.shared, evidence.require
     head = shared.git(root, 'rev-parse', 'HEAD').decode().strip()
+    from native_evidence_approval import validate as approve
+    approve(family + '-execution', root, head)
     require(not shared.git(root, 'status', '--porcelain', '--untracked-files=all').strip(),
             'clean carry-forward checkout required')
 

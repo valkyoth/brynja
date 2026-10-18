@@ -15,6 +15,7 @@ REGIONS = {
         'message_schedule:640', 'block_copy:128', 'padding_block:128', 'output_staging:64'],
 }
 NATIVE_GATE = '''python3 scripts/release/run-verification.py plan --check
+python3 scripts/release/native_evidence_approval.py
 if python3 scripts/sha2/check-sha2-hardened-native-evidence.py; then
     :
 else
@@ -77,6 +78,8 @@ def validate(root=ROOT, write=False):
             read(root, 'scripts/sha2/hardened_native_host.py'), 'ASan actual kernel flags')
     native_gate(read(root, 'scripts/tag_gate.sh'))
     require('python3 scripts/sha2/test-sha2-hardened-native.py' in driver, 'native gate regressions')
+    require('python3 scripts/release/test-native-evidence-approval.py' in driver,
+            'external native approval regressions')
     paths = set()
     for directory in (CPU + '/src', HASH + '/src', 'assurance/sha2-hardened-execution/src'):
         for path in (root / directory).rglob('*.rs'):
@@ -117,6 +120,7 @@ def validate(root=ROOT, write=False):
     # The fallback is itself part of the reviewed gate, not an unchecked
     # substitute for fresh native qualification.
     for name in ('native_sha2_carry_forward.py', 'native_review_io.py',
+                 'native_evidence_approval.py', 'test-native-evidence-approval.py',
                  'native_review_scope.py', 'native_scope_tests.py',
                  'native_dependency_scope.py', 'native_unchanged.py',
                  'test-native-dependency-scope.py',

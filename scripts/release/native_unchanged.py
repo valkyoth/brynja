@@ -8,8 +8,14 @@ import native_review_io as io
 import native_review_scope as scope
 
 
-def validate_inputs(root, capture, head, current, captured, digest):
+def validate_inputs(root, capture, head, current, captured, digest, validation_changes=None):
     io.require(set(current) == set(captured), 'native input population changed')
+    changes = validation_changes or {}
+    io.require(set(changes) <= set(captured), 'reviewed validation input absent from capture')
+    for name, row in changes.items():
+        io.require(io.sha(io.historical(root, capture, name)) == row['before'] and
+                   io.sha(io.committed(root, name, head)) == row['after'],
+                   'reviewed validation bytes changed: ' + name)
     io.git(root, 'merge-base', '--is-ancestor', capture, head)
     metadata = {'Cargo.toml', 'Cargo.lock'}
     changed_metadata = False
@@ -17,6 +23,8 @@ def validate_inputs(root, capture, head, current, captured, digest):
         io.require(digest(name, io.historical(root, capture, name)) == expected,
                    'original native source binding changed: ' + name)
         if current[name] != expected:
+            if name in changes:
+                continue
             io.require(name in metadata, 'native implementation/fixture/tool changed: ' + name)
             changed_metadata = True
     if changed_metadata:
@@ -24,28 +32,21 @@ def validate_inputs(root, capture, head, current, captured, digest):
                    'native dependency/build inputs changed')
     # Include newly added/deleted source, build scripts and configuration, even
     # where an older collector enumerated only src/**/*.rs.
-    scope.unchanged(root, capture, head, current)
+    scope.unchanged(root, capture, head, current, reviewed_validation=set(changes))
 
 
 def validate_family(adapter, head):
-    index = io.document(io.committed(adapter.root, adapter.module.INDEX, head))
-    sha1 = adapter.name == 'sha1-hardened'
-    rows = index['captures' if sha1 else 'lanes']
-    commits = set()
-    for row in rows.values():
-        record = io.document(io.committed(adapter.root, row['path' if sha1 else 'artifact'], head))
-        commits.add(io.revision(record['commit']))
-    io.require(len(commits) == 1, 'missing/inconsistent original capture commits')
-    capture = commits.pop()
-    # The existing adapter checks acceptance, hashes, CPU/lane identities and
-    # actual result populations. Passing HEAD as the index reference does not
-    # change the capture commit or any raw record.
-    captured, count = adapter.records({'capture_commit': capture, 'reviewed_commit': head}, head)
+    from native_evidence_approval import validate
+    review = validate(adapter.name, adapter.root, head)
+    capture = review['capture_commit']
+    captured, count = adapter.records(review, head)
     current = adapter.sources()
-    validate_inputs(adapter.root, capture, head, current, captured, adapter.digest)
+    validate_inputs(adapter.root, capture, head, current, captured, adapter.digest,
+                    review['validation_changes'])
     io.clean(adapter.root)
     io.require(io.git(adapter.root, 'rev-parse', 'HEAD').decode().strip() == head and
                adapter.sources() == current, 'checkout changed during native reuse')
     print(f'{adapter.name} native evidence: REUSED; {count} accepted records at {capture}; '
-          'captured implementation/build inputs unchanged. Original compiler and platform '
+          f'implementation/build inputs unchanged; {len(review["validation_changes"])} '
+          'exact validation-only changes approved. Original compiler and platform '
           'claims only; not a fresh capture, independent review or certification.')

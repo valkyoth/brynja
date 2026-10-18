@@ -172,6 +172,11 @@ class SetupReviewTests(unittest.TestCase):
                           side_effect=ValueError('setup implementation changed'))
         unchanged.start()
         self.addCleanup(unchanged.stop)
+        # This unit isolates the legacy receipt/supplement path. Real approved
+        # and forged snapshots exercise the entry boundary in the approval suite.
+        approval = patch('native_evidence_approval.validate')
+        approval.start()
+        self.addCleanup(approval.stop)
         write(self.root, entry.REVIEW, self.doc)
         self.head = commit(self.root)
         adapter = SimpleNamespace(sources=lambda: self.current,

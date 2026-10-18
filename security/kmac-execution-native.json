@@ -1,22 +1,22 @@
 {
   "schema": 1,
-  "capture_commit": "10d7566ce906a626714e360de98c06c867dc35a0",
+  "capture_commit": "1f8f4e1527f9e91b1b1d26b61b8cfc95339ca835",
   "lanes": {
     "linux-x86_64": {
-      "artifact": "assurance/kmac-execution-native/linux-x86_64-v0251.json",
-      "sha256": "a20d221531f716caefc4c1c3bc4b044ba35b0d07c504c1fce4672fd82daaefde",
+      "artifact": "assurance/kmac-execution-native/linux-x86_64-v0254.json",
+      "sha256": "f48484b76f6a0e5a8e68678c0b8dc5dcb5bbf014c980a71a713dc1e304291859",
       "cpu": "model name : Intel(R) Xeon(R) 6975P-C",
       "reviewed": true
     },
     "linux-aarch64": {
-      "artifact": "assurance/kmac-execution-native/linux-aarch64-v0251.json",
-      "sha256": "b82fb805f1604eaec44243d8fbdf9071f03afeb85e43928d4c6ebfd4bff2107e",
+      "artifact": "assurance/kmac-execution-native/linux-aarch64-v0254.json",
+      "sha256": "6ff9743400ce99f3f515634a7d3252f6045ccf520ad678a5c3c10b570f9a0e16",
       "cpu": "CPU architecture: 8; CPU implementer : 0x41; CPU part : 0xd4f; CPU revision : 1",
       "reviewed": true
     },
     "apple-aarch64": {
-      "artifact": "assurance/kmac-execution-native/apple-aarch64-v0251.json",
-      "sha256": "e8f714af8e131174663fab47c117914426a3439a6bca9f7169369f1db01aa286",
+      "artifact": "assurance/kmac-execution-native/apple-aarch64-v0254.json",
+      "sha256": "888d2b423beed448b0ed8e7791baa7ab1896989142cf3d4a037b6aa71b3ac75d",
       "cpu": "Apple M2 Pro",
       "reviewed": true
     }

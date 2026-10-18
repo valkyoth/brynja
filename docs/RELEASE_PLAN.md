@@ -5092,8 +5092,11 @@ the v0.25.2 publication checkpoint; this is not another release-gate mechanism.
 
 Status: in progress
 
-Collection preparation is recorded in the v0.24.54 release notes. No new native
-qualification is claimed before exact-source captures and review complete.
+Collection progress is recorded in the v0.24.54 release notes and
+[native observation review](native-evidence-v0.24.54.md): forty Linux/Apple
+captures and twelve public-consumer campaigns passed. Final non-sweep checks
+remain pending; Windows has no fresh execution in this collection. Functional
+observations are not independent or side-channel qualification.
 
 Owner-directed scope simplification (2026-10-18): tune the existing evidence
 planner and native reuse checks so routine releases verify their new capability

@@ -1,0 +1,137 @@
+Sun Oct 18 15:38:02 UTC 2026
+1f8f4e1527f9e91b1b1d26b61b8cfc95339ca835
+rustc 1.99.1 (58cf8f9c3 2026-10-13)
+binary: rustc
+commit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67
+commit-date: 2026-10-13
+host: x86_64-unknown-linux-gnu
+release: 1.99.1
+LLVM version: 23.1.1
+Private Cargo directory preflight: PASS
+START: check-strict-public-consumer
+PASS: strict facade; ['debug']; 6004 recorded/independent scalar cases; four lifecycle tests
+PASS: strict facade; ['--release']; 6004 recorded/independent scalar cases; four lifecycle tests
+PASS: strict facade; 56 ownership/lifetime/classification negatives; compiled=False
+PASS: strict facade; ['debug']; 6004 recorded/independent scalar cases; four lifecycle tests
+PASS: strict facade; ['--release']; 6004 recorded/independent scalar cases; four lifecycle tests
+PASS: strict facade; 32 compiled budget/cancellation/output mutant runs rejected; restored source rerun
+Strict facade scalar public consumer: PASS; acceleration/batching and platform qualification separate
+	Command being timed: "python3 scripts/repository/check-strict-public-consumer.py --toolchain 1.99.1"
+	User time (seconds): 192.91
+	System time (seconds): 13.18
+	Percent of CPU this job got: 146%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 2:20.37
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 310952
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 2047
+	Minor (reclaiming a frame) page faults: 6492862
+	Voluntary context switches: 135255
+	Involuntary context switches: 22244
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 3142600
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+FINISHED: check-strict-public-consumer
+START: check-strict-accelerated-consumer
+PASS: strict compiled narrow; ['debug']; MissingTargetFeatures rejection only; corpus NOT executed
+PASS: strict compiled narrow; ['--release']; MissingTargetFeatures rejection only; corpus NOT executed
+PASS: strict compiled narrow; ['debug']; corpus/lifecycle executed
+PASS: strict compiled narrow; ['--release']; corpus/lifecycle executed
+PASS: strict compiled narrow; 10 worker/quarantine mutation runs rejected
+PASS: strict compiled narrow; ['debug']; corpus/lifecycle executed
+PASS: strict compiled narrow; ['--release']; corpus/lifecycle executed
+PASS: strict facade; 52 ownership/lifetime/classification negatives; compiled=True
+PASS: strict compiled wide; ['debug']; MissingTargetFeatures rejection only; corpus NOT executed
+PASS: strict compiled wide; ['--release']; MissingTargetFeatures rejection only; corpus NOT executed
+PASS: strict compiled wide; ['debug']; MissingTargetFeatures rejection only; corpus NOT executed
+PASS: strict compiled wide; ['--release']; MissingTargetFeatures rejection only; corpus NOT executed
+PASS: strict compiled keccak; ['debug']; MissingTargetFeatures rejection only; corpus NOT executed
+PASS: strict compiled keccak; ['--release']; MissingTargetFeatures rejection only; corpus NOT executed
+PASS: strict compiled keccak; ['debug']; corpus/lifecycle executed
+PASS: strict compiled keccak; ['--release']; corpus/lifecycle executed
+PASS: strict compiled keccak; 24 worker/quarantine mutation runs rejected
+PASS: strict compiled keccak; ['debug']; corpus/lifecycle executed
+PASS: strict compiled keccak; ['--release']; corpus/lifecycle executed
+Strict accelerated public consumer checks: PASS; unavailable routes and platform qualification remain separate
+	Command being timed: "python3 scripts/repository/check-strict-accelerated-consumer.py --toolchain 1.99.1 --native-simd"
+	User time (seconds): 229.80
+	System time (seconds): 16.82
+	Percent of CPU this job got: 215%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:54.32
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 350412
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 6052
+	Minor (reclaiming a frame) page faults: 8340112
+	Voluntary context switches: 114861
+	Involuntary context switches: 38147
+	Swaps: 0
+	File system inputs: 8
+	File system outputs: 5679160
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+FINISHED: check-strict-accelerated-consumer
+START: check-strict-group-consumer
+PASS: strict groups; ['debug']; native=False; six corpus/lifecycle tests
+PASS: strict groups; ['--release']; native=False; six corpus/lifecycle tests
+PASS: strict groups; 34 ownership/lifetime/classification negatives
+PASS: strict groups; native=False; 18 public behavioral mutations rejected
+PASS: strict groups; ['debug']; native=False; six corpus/lifecycle tests
+PASS: strict groups; ['--release']; native=False; six corpus/lifecycle tests
+PASS: strict groups; ['debug']; native=True; six corpus/lifecycle tests
+PASS: strict groups; ['--release']; native=True; six corpus/lifecycle tests
+PASS: strict groups; native=True; 28 public behavioral mutations rejected
+PASS: strict groups; ['debug']; native=True; six corpus/lifecycle tests
+PASS: strict groups; ['--release']; native=True; six corpus/lifecycle tests
+PASS: strict parallel companion: debug/release vector observations; two portable-substitution mutants rejected
+Strict protected batch/ParallelHash public consumers: PASS; private erasure/platform qualification separate
+	Command being timed: "python3 scripts/repository/check-strict-group-consumer.py --toolchain 1.99.1 --native-simd"
+	User time (seconds): 602.88
+	System time (seconds): 37.07
+	Percent of CPU this job got: 133%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 7:57.63
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 351256
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 6107
+	Minor (reclaiming a frame) page faults: 14830440
+	Voluntary context switches: 293020
+	Involuntary context switches: 46904
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 6351368
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+FINISHED: check-strict-group-consumer
+release-reports/v0.24.54/native-intel-x86_64-1f8f4e15/hardened-batch.json: OK
+release-reports/v0.24.54/native-intel-x86_64-1f8f4e15/keccak-batch.json: OK
+release-reports/v0.24.54/native-intel-x86_64-1f8f4e15/keccak-hardened.json: OK
+release-reports/v0.24.54/native-intel-x86_64-1f8f4e15/kmac.json: OK
+release-reports/v0.24.54/native-intel-x86_64-1f8f4e15/parallelhash.json: OK
+release-reports/v0.24.54/native-intel-x86_64-1f8f4e15/sha1-hardened.json: OK
+release-reports/v0.24.54/native-intel-x86_64-1f8f4e15/sha2-hardened.json: OK
+release-reports/v0.24.54/native-intel-x86_64-1f8f4e15/sha256-batch.json: OK
+release-reports/v0.24.54/native-intel-x86_64-1f8f4e15/sha512-batch.json: OK
+release-reports/v0.24.54/native-intel-x86_64-1f8f4e15/tuplehash.json: OK
+Sun Oct 18 15:50:15 UTC 2026
+AWS_CONSUMER_RESUME: PASS; original captures unchanged; qualification pending review

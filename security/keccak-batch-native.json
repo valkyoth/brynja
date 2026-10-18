@@ -1,25 +1,25 @@
 {
   "schema": 1,
   "version": "0.24.47",
-  "capture_commit": "e7beb698792eb21d96283204431fe0ded12fa242",
-  "review_status": "project-reviewed correctness; shared refresh complete; performance limitations recorded; final release checks pending",
+  "capture_commit": "1f8f4e1527f9e91b1b1d26b61b8cfc95339ca835",
+  "review_status": "author-reviewed correctness; workload-specific performance; no independent qualification",
   "lanes": {
     "amd-x86_64": {
-      "artifact": "assurance/keccak-batch-observations/v0.24.47/amd-x86_64.json",
-      "sha256": "dc64044a2bddab89cb5713d780391fc2e794a80b4b604791b45e79e892648dcc"
+      "artifact": "assurance/keccak-batch-observations/v0.24.54/amd-x86_64.json",
+      "sha256": "96a776b46641b8da9288db17761dc7d72210eb064e59d93141e4a26967f43837"
     },
     "intel-x86_64": {
-      "artifact": "assurance/keccak-batch-observations/v0.24.47/intel-x86_64.json",
-      "sha256": "a85168fd5b96b452e3a382900617ddd9fd5daf55d1cb31c42d1d510766f33436"
+      "artifact": "assurance/keccak-batch-observations/v0.24.54/intel-x86_64.json",
+      "sha256": "3ce0004642bcbefbcfeb95c03855769e410aaf53e513806c29f1bb3fdc7d6e64"
     },
     "aws-aarch64": {
-      "artifact": "assurance/keccak-batch-observations/v0.24.47/aws-aarch64.json",
-      "sha256": "dce26808694889ea8eea0bdb735cff54d51bc01c3284ebcb08a88c27e561eadd"
+      "artifact": "assurance/keccak-batch-observations/v0.24.54/aws-aarch64.json",
+      "sha256": "0ba6f00a60fedc8692855285216d935a95f9bf51ef073118f6000949a2e50646"
     },
     "apple-m2-aarch64": {
-      "artifact": "assurance/keccak-batch-observations/v0.24.47/apple-m2-aarch64.json",
-      "sha256": "111dfdc2f5e16b14d439d547ed4dcd85821e024bfda516e94a93372a326be947"
+      "artifact": "assurance/keccak-batch-observations/v0.24.54/apple-m2-aarch64.json",
+      "sha256": "80817096058f82fe531863e98110ee43275500911465965f25b563004f72f4b3"
     }
   },
-  "review": "docs/keccak-batch-native-evidence.md"
+  "review": "docs/native-evidence-v0.24.54.md"
 }

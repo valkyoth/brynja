@@ -102,7 +102,28 @@ def final_hash_map_only(before, after):
             and all(isinstance(v, str) and re.fullmatch('[0-9a-f]{64}', v) for v in right.values()))
 
 
+def native_observation(path):
+    """Collected output is not verifier input; evidence validators still apply.
+
+    Exact output namespaces only, never fixture vectors, collector code,
+    admission policy or executable inputs. This grants no native acceptance.
+    """
+    families = ('sha2-hardened', 'keccak-hardened', 'kmac-execution',
+                'tuplehash-execution', 'parallelhash-execution', 'sha1-hardened',
+                'md5-execution', 'md5-hardened', 'sha256-batch', 'sha512-batch',
+                'keccak-batch')
+    if path in {f'security/{family}-native.json' for family in families}:
+        return True
+    directories = tuple(f'assurance/{family}-{kind}/' for family in families
+                        for kind in ('native', 'observations')) + (
+                            'assurance/hardened-batch-observations/',
+                            'assurance/native-observations/')
+    return path.startswith(directories) and path.endswith(('.json', '.txt'))
+
+
 def metadata_only(root, base, path, before, after):
+    if native_observation(path):
+        return True
     if path in SCRIPT_COMMANDS:
         # Removed/empty drivers do not qualify. The new explicit Windows
         # inventory helper is allowed only alongside its mandatory validator.

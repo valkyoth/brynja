@@ -1,5 +1,9 @@
 # SHA-512-family multibuffer native observations
 
+Historical v0.24.46 review below. The current index now selects the
+[v0.24.54 observations](native-evidence-v0.24.54.md); the counts and timings
+below describe the original capture, not that refresh.
+
 Capture commit: `49ca105c335e4179705ced2fb77ca99c2c5444cf`.
 Status: all four ordinary batch captures and fifteen shared native refresh
 records reviewed; final release checks remain pending.

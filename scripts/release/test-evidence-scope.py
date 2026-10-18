@@ -78,6 +78,42 @@ class WorkspaceScope(unittest.TestCase):
         self.assertFalse(full)
         self.assertEqual(set(groups), {'sha3', 'kmac', 'tuplehash', 'parallelhash'})
 
+    def test_native_results_are_metadata_not_an_execution_change(self):
+        for path in ('security/sha1-hardened-native.json',
+                     'security/kmac-execution-native.json',
+                     'assurance/kmac-execution-native/linux-x86_64-v0254.json',
+                     'assurance/tuplehash-execution-native/linux-aarch64-v0254.json',
+                     'assurance/sha256-batch-observations/v0.24.54/amd-x86_64.json',
+                     'assurance/native-observations/v0.24.54/amd-x86_64/consumers.txt'):
+            with self.subTest(path=path):
+                fixtures.write(self.root, path, '{}\n')
+                self.assertTrue(plans.scope.scope_review_metadata.native_observation(path))
+        # This only selects verifier work; the evidence validators still reject
+        # invalid/forged records. It does not grant any acceptance or native claim.
+        self.assertEqual(self.selected(OLD), (False, ()))
+        fixtures.write(self.root, 'crates/brynja-mac-kmac/src/lib.rs', 'pub fn changed() {}\n')
+        self.assertEqual(self.selected(OLD), (False, ('kmac',)))
+
+    def test_observation_names_cannot_hide_code_vectors_or_collectors(self):
+        for path in ('assurance/kmac-execution-native/new.rs',
+                     'assurance/kmac-execution-native/new.json.rs',
+                     'assurance/kmac-execution-native/Cargo.toml',
+                     'assurance/kmac-public-api/vectors.json',
+                     'scripts/kmac/capture-kmac-execution-native.py'):
+            with self.subTest(path=path):
+                self.assertFalse(plans.scope.scope_review_metadata.native_observation(path))
+                self.assertEqual(plans.scope.select([path]), (False, ('kmac',)))
+        for path in ('assurance/native-observations/new.rs',
+                     'assurance/native-observations/build.py',
+                     'assurance/native-observations/new.c',
+                     'assurance/native-observations/new.asm'):
+            with self.subTest(path=path):
+                self.assertFalse(plans.scope.scope_review_metadata.native_observation(path))
+                self.assertTrue(plans.scope.select([path])[0])
+        fixtures.write(self.root, 'security/sha1-hardened-native.json', '{}\n')
+        fixtures.write(self.root, 'crates/brynja-hash-sha3/src/lib.rs', 'pub fn changed() {}\n')
+        self.assertEqual(self.selected(OLD), (False, ('sha3', 'kmac', 'tuplehash', 'parallelhash')))
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,7 +1,8 @@
 # v0.24.54 - Acceleration Native Evidence Sweep
 
-Status: in progress. Collection/planner preparation only; no new native evidence or
-qualification is claimed. No crates.io packages are selected.
+Status: in progress. Forty source-bound Linux/Apple captures and twelve current
+public-consumer campaigns completed; evidence integration and final non-sweep
+checks are in progress. No independent qualification or crates.io publication.
 
 This milestone follows signed v0.24.53 public consumer acceptance. It collects
 exact-source native correctness, performance, timing and resource observations
@@ -25,6 +26,11 @@ approved simplifying evidence selection/reuse for routine releases.
   not constitute HMAC implementation or new native evidence.
 - The full consolidation checkpoint remains v0.24.55. No old failed or deferred
   observation is made valid merely by introducing the new selection logic.
+- Importing result JSON/transcripts in known native-observation directories
+  selects metadata validation, not another cryptographic verifier campaign.
+  Focused regressions retain selection for implementation, vector fixture,
+  collector and build changes alongside those observations. This classification
+  does not accept invalid evidence or bypass its existing source/result checks.
 
 See [native evidence reuse](../docs/native-evidence-reuse.md) for the operating
 rule and remaining conservative cases. No new collection service is introduced.
@@ -52,15 +58,15 @@ The current metadata/planner-only delta selects no Miri/Kani/ASan campaign.
    observations separately from correctness, refresh only supported claims,
    and finish ordinary CI and non-sweep release checks.
 
-## Planned host coverage
+## Collected host coverage
 
 | Host | Intended observations | Availability/limits |
 | --- | --- | --- |
-| Local AMD Linux | Portable, SHA-NI, AVX2, strict Linux and threaded consumers where supported | Recheck actual feature bundles; no dedicated SHA512 claim from AVX-512 alone |
-| Intel Linux | Independently measured x86 hardware routes and public/strict consumers | New AWS address needed; inspect features before selecting routes |
-| AWS Arm Linux | Arm SHA-2/Keccak, NEON, strict Linux and threaded consumers | New AWS address needed; require reported features and actual route markers |
-| Apple M2 | Arm instruction/NEON and Apple resident/clearing consumers | Use macosbuilder; resident protection is not strict dump exclusion |
-| Windows x64 VBS development guest | Enclave public APIs, supported accelerated/batch/worker routes | Confirm guest availability; development signing is not production signing qualification |
+| Local AMD Linux | Ten captures and three strict consumer campaigns passed | Ryzen 9 9950X3D; no dedicated x86 SHA512 |
+| Intel Linux | Ten captures and three strict consumer campaigns passed | Xeon 6975P-C; no dedicated x86 SHA512 |
+| AWS Arm Linux | Ten captures and three strict consumer campaigns passed | Neoverse-V2; Arm instruction/NEON execution |
+| Apple M2 | Ten captures and three resident consumer campaigns passed | M2 Pro; resident protection is not strict dump exclusion |
+| Windows x64 VBS development guest | Original development bundle retained; .53 consumer checks compile-only | No fresh native execution; no production signing qualification |
 | Intel Mac, Windows ARM64, native RISC-V | No new qualification | Unavailable/unqualified; do not replace native requirements with QEMU |
 | Dedicated x86 SHA512 | Native only if the exact ISA is exposed | Existing SDE development evidence stays explicitly emulated |
 
@@ -71,8 +77,13 @@ collector update before collecting; never edit an existing record's compiler.
 
 ## Evidence and verification boundaries
 
-The six exact native-record mismatches documented at v0.24.53 remain pending
-fresh collection/reconciliation. A successful functional capture alone does
+Fresh records now cover the six families with exact-record mismatches at
+v0.24.53. Their public derivatives pass the existing per-record source/result
+validators; committed-index checks remain part of final verification. Original
+MD5 evidence is retained without an unnecessary refresh. See the
+[native review](../docs/native-evidence-v0.24.54.md) for raw/public hashes,
+successful retries, workload regressions and remaining platform limits.
+A successful functional capture alone does
 not establish timing resistance, performance benefit, register/stack erasure,
 independent cryptographic review or FIPS validation. Measure each claimed
 property or give it an explicit unavailable/pending disposition.

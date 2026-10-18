@@ -1,5 +1,9 @@
 # Keccak multibuffer native observations
 
+Historical v0.24.47 review below. The current index now selects the
+[v0.24.54 observations](native-evidence-v0.24.54.md); the counts and timings
+below describe the original capture, not that refresh.
+
 Capture commit: `e7beb698792eb21d96283204431fe0ded12fa242`.
 Collection and project review completed on 2026-09-15; final release checks and
 GitHub approval remain pending. The [index](../security/keccak-batch-native.json)

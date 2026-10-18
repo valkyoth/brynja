@@ -1,5 +1,9 @@
 # SHA-224/256 multibuffer native observations
 
+Historical v0.24.45 review below. The current index now selects the
+[v0.24.54 observations](native-evidence-v0.24.54.md); the counts, timings and
+supplemental diagnostic below describe the original capture, not that refresh.
+
 Capture commit: `fe89ab576c465dd2005a31ca1585b881be8e8921`.
 Status: all four ordinary batch captures and fifteen shared native refresh
 records reviewed; final release verification remains pending.

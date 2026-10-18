@@ -91,7 +91,7 @@
     "scripts/zeroization/miri_scope.py": "473fd731db65296b71fe583342b2d345c141dc37acb86ad06138a4c25b8c83ac",
     "scripts/zeroization/review_metadata_tests.py": "b7777cbda1271eeb1d9e880a1295866dc4f3e18ab9b0b3b810a3a5fa4803fde3",
     "scripts/zeroization/scope_inputs.py": "b8f4fe783a1029472356ff4a0cb337f088d36457b591ced79302e2d116be97f1",
-    "scripts/zeroization/scope_review_metadata.py": "21eb94c4b701b41c2b3b8f1dacc0902eb3fecaaf85b115b05815b0534478057b",
+    "scripts/zeroization/scope_review_metadata.py": "c541006df477273beb0aade9a35e0af6ef26dc74b362909d3a75e61848072bf1",
     "scripts/zeroization/test-miri-scope.py": "1082ceabad94ecc564af263dcfa6d4df0674c9ee15211196aeb854e98f451892",
     "scripts/zeroization/test-scope-inputs.py": "2b832b08c80db7be01622e110f7d6167ac5e3b4e44bf7964def5d890321f68c7",
     "scripts/zeroization/test-zeroization-evidence.py": "7885fd74bc067f98e4e80e2256762311d8f2cedbce969119f20ca27b593b87ee",

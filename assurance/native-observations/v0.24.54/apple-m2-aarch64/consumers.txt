@@ -1,0 +1,483 @@
+Sun Oct 18 15:22:19 UTC 2026
+rustc 1.99.1 (58cf8f9c3 2026-10-13)
+binary: rustc
+commit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67
+commit-date: 2026-10-13
+host: aarch64-apple-darwin
+release: 1.99.1
+LLVM version: 23.1.1
+START: check-macos-resident-package
+rustc 1.99.1 (58cf8f9c3 2026-10-13)
+binary: rustc
+commit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67
+commit-date: 2026-10-13
+host: aarch64-apple-darwin
+release: 1.99.1
+LLVM version: 23.1.1
+
+Packaged consumer profile=['debug']; panic=unwind
+RESIDENT_FAMILY_ORACLE: 662 passed
+RESIDENT_KEYED_ORACLE: 1024 passed; 512 scalar; 512 ArmKeccak
+RESIDENT_PACKAGE_ORACLE: 17 passed; dump exclusion NOT claimed
+Packaged consumer profile=['--release']; panic=unwind
+RESIDENT_FAMILY_ORACLE: 662 passed
+RESIDENT_KEYED_ORACLE: 1024 passed; 512 scalar; 512 ArmKeccak
+RESIDENT_PACKAGE_ORACLE: 17 passed; dump exclusion NOT claimed
+Packaged consumer profile=['--release']; panic=abort
+RESIDENT_FAMILY_ORACLE: 662 passed
+RESIDENT_KEYED_ORACLE: 1024 passed; 512 scalar; 512 ArmKeccak
+RESIDENT_PACKAGE_ORACLE: 17 passed; dump exclusion NOT claimed
+
+running 69 tests
+test macos_resident::kmac::tests::metadata_and_model_admission_are_fail_closed ... ok
+test macos_resident::kmac::compiled::tests::wrong_operation_missing_features_and_unsupported_models_reject ... ok
+test macos_resident::kmac::tests::native::actual_protection_and_explicit_public_release ... ok
+test macos_resident::kmac::tests::native::invalid_requests_clear_previous_forgotten_loans_and_allow_reuse ... ok
+test macos_resident::resource::darwin::tests::acquisition_faults_rollback_without_exposing_or_clearing ... ok
+test macos_resident::resource::darwin::tests::fatal_lifecycle_failure_child ... ok
+test macos_resident::kmac::tests::native::production_key_strength_is_not_weakened_by_conformance_features ... ok
+test macos_resident::resource::darwin::tests::foreign_owner_never_clears_unmaps_or_launches ... ok
+test macos_resident::resource::darwin::tests::release_failure_retains_cleared_owner_for_retry ... ok
+test macos_resident::resource::darwin::tests::worker_placement_join_and_whole_payload_clear ... ok
+test macos_resident::resource::darwin::tests::worker_setup_rejections_leave_reusable_owner ... ok
+test macos_resident::resource::darwin::tests::worker_unwind_is_joined_and_cleared ... ok
+test macos_resident::resource::darwin::thread::initialized_attribute_address_survives_owner_moves ... ok
+test macos_resident::resource::tests::geometry_is_checked_before_allocation ... ok
+test macos_resident::sha256::tests::native::forgotten_loan_and_rejection_clear_and_allow_reuse ... ok
+test macos_resident::resource::darwin::tests::join_and_attribute_destroy_failures_abort ... ok
+test macos_resident::sha256::tests::native::post_write_error_clears_both_resources_and_allows_reuse ... ok
+test macos_resident::sha256::tests::native::post_write_unwind_clears_both_resources_and_allows_reuse ... ok
+test macos_resident::sha256::tests::native::strict_profile_still_rejects_mac ... ok
+test macos_resident::sha256::tests::rejects_invalid_configuration ... ok
+test macos_resident::sha256::tests::request_bounds_reject_even_empty_chunk_abuse ... ok
+test macos_resident::sha2::compiled::tests::identity_compatibility_rejects_keccak_and_wrong_width ... ok
+test macos_resident::sha2::compiled::tests::missing_static_features_and_unsupported_platforms_never_fall_back ... ok
+test macos_resident::sha256::tests::native::known_answer_and_differential_boundaries ... ok
+test macos_resident::kmac::tests::native::verification_is_exact_constant_work_and_clears_output ... ok
+test macos_resident::kmac::tests::native::cancellation_unwind_and_verification_cleanup_cover_all_fragments ... ok
+test macos_resident::kmac::compiled::tests::native::strength_canonicality_bounds_empty_output_and_forgotten_loans ... ok
+test macos_resident::sha2::compiled::tests::x86_routes_are_not_mac_resident_routes ... ok
+test macos_resident::sha2::tests::metadata_and_request_arithmetic_are_bounded_without_touching_input ... ok
+test macos_resident::kmac::compiled::tests::native::verification_full_width_first_middle_last_mismatches_and_cleanup ... ok
+test macos_resident::kmac::tests::native::bit_keys_prefixes_and_multifragment_outputs_match_portable ... ok
+test macos_resident::sha2::tests::native::cancellation_after_output_commit_clears_before_return ... ok
+test macos_resident::sha2::tests::native::cancellation_at_each_boundary_and_post_write_panic_clear_output ... ok
+test macos_resident::sha2::tests::native::failures_clear_forgotten_outputs_and_resources_remain_reusable ... ok
+test macos_resident::sha2::tests::native::public_release_is_explicit_exact_width_and_clears_secret ... ok
+test macos_resident::sha2::tests::native::real_output_stack_and_fail_closed_limits ... ok
+test macos_resident::kmac::compiled::tests::native::cancellation_reuse_and_terminal_backend_unwind_at_all_boundaries ... ok
+test macos_resident::kmac::tests::native::all_identities_rate_boundaries_and_bit_inputs_match_portable ... ok
+test macos_resident::sha3::compiled::tests::native::cancellation_reuses_but_revocation_and_unwind_never_revive ... ok
+test macos_resident::sha3::compiled::tests::wrong_operation_missing_features_and_unsupported_models_reject ... ok
+test macos_resident::sha3::compiled::tests::x86_routes_are_not_mac_resident_routes ... ok
+test macos_resident::sha3::tests::metadata_is_bounded_without_inspecting_secret_bytes ... ok
+test macos_resident::sha2::tests::native::all_named_identities_match_padding_chunks_and_bit_tails ... ok
+test macos_resident::sha3::tests::native::cancel_and_post_write_unwind_clear_every_output_fragment ... ok
+test macos_resident::sha3::tests::native::errors_clear_forgotten_output_and_allow_reuse ... ok
+test macos_resident::sha3::tests::native::prefix_padding_boundaries_match_portable ... ok
+test macos_resident::sha2::tests::native::all_510_general_parameters_keep_exact_identity_and_masking ... ok
+test macos_resident::sha3::tests::native::real_protected_storage_exact_release_and_fail_closed_construction ... ok
+test macos_resident::sha3::tests::unsupported_and_model_targets_reject_before_resources ... ok
+test macos_resident::tuplehash::compiled::tests::compiled_admission_rejects_wrong_operation_target_and_model ... ok
+test macos_resident::tuplehash::compiled::tests::native::cancellation_revocation_writer_failure_and_unwind_are_transactional ... ok
+test macos_resident::tuplehash::compiled::tests::native::invalid_contents_limits_forgotten_output_and_quarantine ... ok
+MACOS_RESIDENT_KMAC_COMPILED: ArmKeccak; differential_cases=576
+test macos_resident::kmac::compiled::tests::native::native_all_identities_partial_keys_messages_outputs_and_long_xof ... ok
+test macos_resident::tuplehash::tests::metadata_bounds_and_unsupported_admission_are_fail_closed ... ok
+test macos_resident::sha3::tests::native::xof_widths_and_customized_bit_prefixes_match_portable ... ok
+test macos_resident::tuplehash::tests::native::cancellation_unwind_and_wrong_item_length_cannot_produce_output ... ok
+test macos_resident::tuplehash::tests::native::all_identities_bits_rates_and_streamed_items_match_portable ... ok
+test macos_resident::tuplehash::tests::native::rejection_clears_forgotten_output_and_does_not_poison_session ... ok
+test macos_resident::tuplehash::tests::native::resources_are_protected_and_public_release_is_explicit ... ok
+test macos_resident::tuplehash::tests::native::tuple_boundaries_are_distinct_while_item_chunking_is_equivalent ... ok
+test macos_resident::sha3::tests::native::all_identities_and_bit_tails_match_portable_across_rate_boundaries ... ok
+test macos_resident::tuplehash::tests::native::custom_bits_and_empty_partial_multifragment_output_match_portable ... ok
+test macos_resident::sha2::compiled::tests::native::all_general_t_parameters_keep_exact_identity_on_wide_kernels ... ok
+test macos_resident::sha2::compiled::tests::native::cancellation_preserves_health_but_revocation_and_unwind_are_terminal ... ok
+test macos_resident::sha2::compiled::tests::native::request_rejection_forgotten_loan_and_explicit_quarantine ... ok
+MACOS_RESIDENT_SHA2_COMPILED: ArmSha256; differential_cases=224; actual_message_blocks_verified
+MACOS_RESIDENT_SHA2_COMPILED: ArmSha512; differential_cases=448; actual_message_blocks_verified
+test macos_resident::sha2::compiled::tests::native::required_kernels_match_scalar_bits_chunks_padding_and_real_blocks ... ok
+MACOS_RESIDENT_TUPLEHASH_COMPILED: ArmKeccak; differential=1120
+test macos_resident::tuplehash::compiled::tests::native::native_tuple_boundaries_bits_item_identity_and_protected_storage ... ok
+MACOS_RESIDENT_SHA3_COMPILED: ArmKeccak; differential_cases=848
+test macos_resident::sha3::compiled::tests::native::native_all_identities_bits_prefixes_rates_and_multichunk_output ... ok
+test macos_resident::sha3::compiled::tests::native::preflight_canonicality_empty_output_and_forgotten_loans ... ok
+
+test result: ok. 69 passed; 0 failed; 0 ignored; 0 measured; 35 filtered out; finished in 11.99s
+
+
+
+running 9 tests
+test src/macos_resident/kmac/compiled.rs - macos_resident::kmac::compiled::CompiledSession (line 24) - compile ... ok
+test src/macos_resident/kmac/mod.rs - macos_resident::kmac (line 11) - compile ... ok
+test src/macos_resident/mod.rs - macos_resident (line 22) - compile ... ok
+test src/macos_resident/sha2/compiled.rs - macos_resident::sha2::compiled::CompiledSession (line 26) - compile ... ok
+test src/macos_resident/sha2/mod.rs - macos_resident::sha2 (line 7) - compile ... ok
+test src/macos_resident/sha3/compiled.rs - macos_resident::sha3::compiled::CompiledSession (line 24) - compile ... ok
+test src/macos_resident/sha3/mod.rs - macos_resident::sha3 (line 7) - compile ... ok
+test src/macos_resident/tuplehash/compiled.rs - macos_resident::tuplehash::compiled::CompiledSession (line 45) - compile ... ok
+test src/macos_resident/tuplehash/mod.rs - macos_resident::tuplehash (line 11) - compile ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+
+running 88 tests
+test src/macos_resident/kmac/compiled.rs - macos_resident::kmac::compiled::CompiledSession (line 52) - compile fail ... ok
+test src/macos_resident/kmac/mod.rs - macos_resident::kmac::Output (line 231) - compile fail ... ok
+test src/macos_resident/kmac/mod.rs - macos_resident::kmac::Output (line 239) - compile fail ... ok
+test src/macos_resident/kmac/compiled.rs - macos_resident::kmac::compiled::CompiledSession (line 43) - compile fail ... ok
+test src/macos_resident/kmac/compiled.rs - macos_resident::kmac::compiled::CompiledSession (line 37) - compile fail ... ok
+test src/macos_resident/kmac/compiled.rs - macos_resident::kmac::compiled::CompiledSession (line 49) - compile fail ... ok
+test src/macos_resident/kmac/mod.rs - macos_resident::kmac::Output (line 235) - compile fail ... ok
+test src/macos_resident/kmac/compiled.rs - macos_resident::kmac::compiled::CompiledSession (line 46) - compile fail ... ok
+test src/macos_resident/kmac/compiled.rs - macos_resident::kmac::compiled::CompiledSession (line 40) - compile fail ... ok
+test src/macos_resident/kmac/compiled.rs - macos_resident::kmac::compiled::CompiledSession (line 56) - compile fail ... ok
+test src/macos_resident/kmac/mod.rs - macos_resident::kmac::Session (line 35) - compile fail ... ok
+test src/macos_resident/kmac/mod.rs - macos_resident::kmac::Output (line 243) - compile fail ... ok
+test src/macos_resident/kmac/mod.rs - macos_resident::kmac::Session (line 55) - compile fail ... ok
+test src/macos_resident/kmac/mod.rs - macos_resident::kmac::Session (line 39) - compile fail ... ok
+test src/macos_resident/kmac/mod.rs - macos_resident::kmac::Session (line 43) - compile fail ... ok
+test src/macos_resident/kmac/mod.rs - macos_resident::kmac::Output (line 247) - compile fail ... ok
+test src/macos_resident/kmac/mod.rs - macos_resident::kmac::Session (line 61) - compile fail ... ok
+test src/macos_resident/kmac/mod.rs - macos_resident::kmac::Session (line 51) - compile fail ... ok
+test src/macos_resident/kmac/mod.rs - macos_resident::kmac::Session (line 47) - compile fail ... ok
+test src/macos_resident/sha2/compiled.rs - macos_resident::sha2::compiled::CompiledSession (line 38) - compile fail ... ok
+test src/macos_resident/sha2/compiled.rs - macos_resident::sha2::compiled::CompiledSession (line 44) - compile fail ... ok
+test src/macos_resident/sha2/compiled.rs - macos_resident::sha2::compiled::CompiledSession (line 53) - compile fail ... ok
+test src/macos_resident/sha2/compiled.rs - macos_resident::sha2::compiled::CompiledSession (line 47) - compile fail ... ok
+test src/macos_resident/sha2/compiled.rs - macos_resident::sha2::compiled::CompiledSession (line 41) - compile fail ... ok
+test src/macos_resident/sha2/compiled.rs - macos_resident::sha2::compiled::CompiledSession (line 50) - compile fail ... ok
+test src/macos_resident/sha2/compiled.rs - macos_resident::sha2::compiled::CompiledSession (line 57) - compile fail ... ok
+test src/macos_resident/sha2/mod.rs - macos_resident::sha2::Digest (line 172) - compile fail ... ok
+test src/macos_resident/sha2/mod.rs - macos_resident::sha2::Digest (line 168) - compile fail ... ok
+test src/macos_resident/sha2/mod.rs - macos_resident::sha2::Digest (line 176) - compile fail ... ok
+test src/macos_resident/sha2/mod.rs - macos_resident::sha2::Digest (line 180) - compile fail ... ok
+test src/macos_resident/sha2/mod.rs - macos_resident::sha2::Session (line 54) - compile fail ... ok
+test src/macos_resident/sha2/mod.rs - macos_resident::sha2::Digest (line 184) - compile fail ... ok
+test src/macos_resident/sha2/mod.rs - macos_resident::sha2::Session (line 33) - compile fail ... ok
+test src/macos_resident/sha2/mod.rs - macos_resident::sha2::Session (line 49) - compile fail ... ok
+test src/macos_resident/sha2/mod.rs - macos_resident::sha2::Session (line 37) - compile fail ... ok
+test src/macos_resident/sha2/mod.rs - macos_resident::sha2::Session (line 45) - compile fail ... ok
+test src/macos_resident/sha2/mod.rs - macos_resident::sha2::Session (line 59) - compile fail ... ok
+test src/macos_resident/sha256.rs - macos_resident::sha256::Digest (line 132) - compile fail ... ok
+test src/macos_resident/sha2/mod.rs - macos_resident::sha2::Session (line 41) - compile fail ... ok
+test src/macos_resident/sha256.rs - macos_resident::sha256::Digest (line 136) - compile fail ... ok
+test src/macos_resident/sha256.rs - macos_resident::sha256::Digest (line 152) - compile fail ... ok
+test src/macos_resident/sha256.rs - macos_resident::sha256::Digest (line 140) - compile fail ... ok
+test src/macos_resident/sha256.rs - macos_resident::sha256::Digest (line 148) - compile fail ... ok
+test src/macos_resident/sha256.rs - macos_resident::sha256::Digest (line 144) - compile fail ... ok
+test src/macos_resident/sha256.rs - macos_resident::sha256::Digest (line 156) - compile fail ... ok
+test src/macos_resident/sha256.rs - macos_resident::sha256::Sha256Session (line 15) - compile fail ... ok
+test src/macos_resident/sha256.rs - macos_resident::sha256::Sha256Session (line 11) - compile fail ... ok
+test src/macos_resident/sha256.rs - macos_resident::sha256::Sha256Session (line 19) - compile fail ... ok
+test src/macos_resident/sha256.rs - macos_resident::sha256::Sha256Session (line 23) - compile fail ... ok
+test src/macos_resident/sha256.rs - macos_resident::sha256::Sha256Session (line 27) - compile fail ... ok
+test src/macos_resident/sha3/compiled.rs - macos_resident::sha3::compiled::CompiledSession (line 40) - compile fail ... ok
+test src/macos_resident/sha3/compiled.rs - macos_resident::sha3::compiled::CompiledSession (line 37) - compile fail ... ok
+test src/macos_resident/sha3/compiled.rs - macos_resident::sha3::compiled::CompiledSession (line 43) - compile fail ... ok
+test src/macos_resident/sha3/compiled.rs - macos_resident::sha3::compiled::CompiledSession (line 46) - compile fail ... ok
+test src/macos_resident/sha3/compiled.rs - macos_resident::sha3::compiled::CompiledSession (line 49) - compile fail ... ok
+test src/macos_resident/sha3/compiled.rs - macos_resident::sha3::compiled::CompiledSession (line 52) - compile fail ... ok
+test src/macos_resident/sha3/mod.rs - macos_resident::sha3::Digest (line 199) - compile fail ... ok
+test src/macos_resident/sha3/compiled.rs - macos_resident::sha3::compiled::CompiledSession (line 56) - compile fail ... ok
+test src/macos_resident/sha3/mod.rs - macos_resident::sha3::Digest (line 195) - compile fail ... ok
+test src/macos_resident/sha3/mod.rs - macos_resident::sha3::Digest (line 203) - compile fail ... ok
+test src/macos_resident/sha3/mod.rs - macos_resident::sha3::Digest (line 207) - compile fail ... ok
+test src/macos_resident/sha3/mod.rs - macos_resident::sha3::Session (line 32) - compile fail ... ok
+test src/macos_resident/sha3/mod.rs - macos_resident::sha3::Session (line 36) - compile fail ... ok
+test src/macos_resident/sha3/mod.rs - macos_resident::sha3::Session (line 40) - compile fail ... ok
+test src/macos_resident/sha3/mod.rs - macos_resident::sha3::Session (line 44) - compile fail ... ok
+test src/macos_resident/sha3/mod.rs - macos_resident::sha3::Digest (line 211) - compile fail ... ok
+test src/macos_resident/sha3/mod.rs - macos_resident::sha3::Session (line 48) - compile fail ... ok
+test src/macos_resident/sha3/mod.rs - macos_resident::sha3::Session (line 52) - compile fail ... ok
+test src/macos_resident/sha3/mod.rs - macos_resident::sha3::Session (line 56) - compile fail ... ok
+test src/macos_resident/tuplehash/compiled.rs - macos_resident::tuplehash::compiled::CompiledSession (line 20) - compile fail ... ok
+test src/macos_resident/tuplehash/compiled.rs - macos_resident::tuplehash::compiled::CompiledSession (line 35) - compile fail ... ok
+test src/macos_resident/tuplehash/compiled.rs - macos_resident::tuplehash::compiled::CompiledSession (line 26) - compile fail ... ok
+test src/macos_resident/tuplehash/compiled.rs - macos_resident::tuplehash::compiled::CompiledSession (line 39) - compile fail ... ok
+test src/macos_resident/tuplehash/compiled.rs - macos_resident::tuplehash::compiled::CompiledSession (line 23) - compile fail ... ok
+test src/macos_resident/tuplehash/compiled.rs - macos_resident::tuplehash::compiled::CompiledSession (line 32) - compile fail ... ok
+test src/macos_resident/tuplehash/compiled.rs - macos_resident::tuplehash::compiled::CompiledSession (line 29) - compile fail ... ok
+test src/macos_resident/tuplehash/mod.rs - macos_resident::tuplehash::Output (line 195) - compile fail ... ok
+test src/macos_resident/tuplehash/mod.rs - macos_resident::tuplehash::Output (line 191) - compile fail ... ok
+test src/macos_resident/tuplehash/mod.rs - macos_resident::tuplehash::Output (line 199) - compile fail ... ok
+test src/macos_resident/tuplehash/mod.rs - macos_resident::tuplehash::Output (line 203) - compile fail ... ok
+test src/macos_resident/tuplehash/mod.rs - macos_resident::tuplehash::Session (line 56) - compile fail ... ok
+test src/macos_resident/tuplehash/mod.rs - macos_resident::tuplehash::Session (line 36) - compile fail ... ok
+test src/macos_resident/tuplehash/mod.rs - macos_resident::tuplehash::Output (line 207) - compile fail ... ok
+test src/macos_resident/tuplehash/mod.rs - macos_resident::tuplehash::Session (line 44) - compile fail ... ok
+test src/macos_resident/tuplehash/mod.rs - macos_resident::tuplehash::Session (line 40) - compile fail ... ok
+test src/macos_resident/tuplehash/mod.rs - macos_resident::tuplehash::Session (line 48) - compile fail ... ok
+test src/macos_resident/tuplehash/mod.rs - macos_resident::tuplehash::Session (line 52) - compile fail ... ok
+test src/macos_resident/tuplehash/mod.rs - macos_resident::tuplehash::Session (line 60) - compile fail ... ok
+
+test result: ok. 88 passed; 0 failed; 0 ignored; 0 measured; 57 filtered out; finished in 0.64s
+
+all doctests ran in 1.07s; merged doctests compilation took 0.23s
+
+Resident locking/clearing/identity compiled mutants: 16 rejected
+Packaged macOS resident profile: PASS; development evidence only
+      124.78 real       308.80 user        15.20 sys
+           420741120  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+             2994403  page reclaims
+                5888  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                 141  signals received
+                2299  voluntary context switches
+              251646  involuntary context switches
+         44107694407  instructions retired
+         10761287910  cycles elapsed
+            30327336  peak memory footprint
+FINISHED: check-macos-resident-package
+START: check-macos-resident-batch-package
+rustc 1.99.1 (58cf8f9c3 2026-10-13)
+binary: rustc
+commit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67
+commit-date: 2026-10-13
+host: aarch64-apple-darwin
+release: 1.99.1
+LLVM version: 23.1.1
+
+['debug']; panic=unwind: RESIDENT_BATCH_ORACLE: scalar=662; NEON=616; ineligible=46
+['--release']; panic=unwind: RESIDENT_BATCH_ORACLE: scalar=662; NEON=616; ineligible=46
+['--release']; panic=abort: RESIDENT_BATCH_ORACLE: scalar=662; NEON=616; ineligible=46
+
+running 6 tests
+test macos_resident::batch::tests::shapes_and_unsupported_platform_models_fail_closed ... ok
+test macos_resident::batch::tests::native::sparse_outputs_invalid_bits_and_declassification_are_transactional ... ok
+test macos_resident::batch::tests::native::distinct_sparse_lanes_short_tails_and_required_work_are_preserved ... ok
+MACOS_RESIDENT_BATCH: Sha256(None); named_differential=512
+test macos_resident::batch::tests::native::failures_and_forgotten_outputs_preserve_only_ordinary_reuse ... ok
+MACOS_RESIDENT_KECCAK_BATCH: Keccak(None); differential=1024
+MACOS_RESIDENT_BATCH: Sha512(None); named_differential=256
+MACOS_RESIDENT_BATCH: Sha256(Some(Neon)); named_differential=512
+MACOS_RESIDENT_KECCAK_BATCH: Keccak(Some(Neon)); differential=1024
+test macos_resident::batch::tests::sponge::all_sponge_identities_canonical_bits_and_long_outputs ... ok
+MACOS_RESIDENT_BATCH: Sha512(Some(Neon)); named_differential=256
+test macos_resident::batch::tests::native::native_batch_routes_bits_boundaries_and_general_parameters ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 43 filtered out; finished in 7.19s
+
+
+
+running 6 tests
+test macos_resident::batch::tests::shapes_and_unsupported_platform_models_fail_closed ... ok
+test macos_resident::batch::tests::native::sparse_outputs_invalid_bits_and_declassification_are_transactional ... ok
+test macos_resident::batch::tests::native::distinct_sparse_lanes_short_tails_and_required_work_are_preserved ... ok
+MACOS_RESIDENT_BATCH: Sha256(None); named_differential=512
+test macos_resident::batch::tests::native::failures_and_forgotten_outputs_preserve_only_ordinary_reuse ... ok
+MACOS_RESIDENT_KECCAK_BATCH: Keccak(None); differential=1024
+MACOS_RESIDENT_BATCH: Sha512(None); named_differential=256
+MACOS_RESIDENT_KECCAK_BATCH: Keccak(Some(Neon)); differential=1024
+test macos_resident::batch::tests::sponge::all_sponge_identities_canonical_bits_and_long_outputs ... ok
+MACOS_RESIDENT_BATCH: Sha256(Some(Neon)); named_differential=512
+MACOS_RESIDENT_BATCH: Sha512(Some(Neon)); named_differential=256
+test macos_resident::batch::tests::native::native_batch_routes_bits_boundaries_and_general_parameters ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 43 filtered out; finished in 0.57s
+
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+
+running 12 tests
+test src/macos_resident/batch/mod.rs - macos_resident::batch::Output (line 275) - compile fail ... ok
+test src/macos_resident/batch/mod.rs - macos_resident::batch::Output (line 269) - compile fail ... ok
+test src/macos_resident/batch/mod.rs - macos_resident::batch::Output (line 257) - compile fail ... ok
+test src/macos_resident/batch/mod.rs - macos_resident::batch::Output (line 260) - compile fail ... ok
+test src/macos_resident/batch/mod.rs - macos_resident::batch::Session (line 48) - compile fail ... ok
+test src/macos_resident/batch/mod.rs - macos_resident::batch::Output (line 266) - compile fail ... ok
+test src/macos_resident/batch/mod.rs - macos_resident::batch::Session (line 45) - compile fail ... ok
+test src/macos_resident/batch/mod.rs - macos_resident::batch::Output (line 263) - compile fail ... ok
+test src/macos_resident/batch/mod.rs - macos_resident::batch::Session (line 51) - compile fail ... ok
+test src/macos_resident/batch/mod.rs - macos_resident::batch::Output (line 254) - compile fail ... ok
+test src/macos_resident/batch/mod.rs - macos_resident::batch::Session (line 54) - compile fail ... ok
+test src/macos_resident/batch/mod.rs - macos_resident::batch::Session (line 57) - compile fail ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 54 filtered out; finished in 0.17s
+
+all doctests ran in 0.64s; merged doctests compilation took 0.26s
+
+Resident batch compiled mutants: 5 rejected
+Packaged resident batches: PASS; development evidence only
+       55.17 real        72.15 user         6.02 sys
+           275873792  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+             1044400  page reclaims
+                1865  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                  59  signals received
+                1379  voluntary context switches
+               85740  involuntary context switches
+         18211104661  instructions retired
+          5169060991  cycles elapsed
+            29360680  peak memory footprint
+FINISHED: check-macos-resident-batch-package
+START: check-macos-resident-parallel-package
+rustc 1.99.1 (58cf8f9c3 2026-10-13)
+binary: rustc
+commit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67
+commit-date: 2026-10-13
+host: aarch64-apple-darwin
+release: 1.99.1
+LLVM version: 23.1.1
+
+
+running 1 test
+test src/../ResidentReadme.md - ResidentReadme (line 1) ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+all doctests ran in 0.46s; merged doctests compilation took 0.22s
+
+['debug']; panic=unwind: RESIDENT_PARALLELHASH_ORACLE: scalar=548; Arm=548; NEON=548; workers=1,3
+['--release']; panic=unwind: RESIDENT_PARALLELHASH_ORACLE: scalar=548; Arm=548; NEON=548; workers=1,3
+['--release']; panic=abort: RESIDENT_PARALLELHASH_ORACLE: scalar=548; Arm=548; NEON=548; workers=1,3
+
+running 31 tests
+test macos_resident::compiled::tests::batch_cancellation_does_not_mask_backend_or_invariant_failure ... ok
+test macos_resident::resource::darwin::tests::fatal_lifecycle_failure_child ... ok
+test macos_resident::compiled::worker::vector_requirement_distinguishes_nonfinal_groups_and_tails ... ok
+test macos_resident::resource::darwin::tests::acquisition_faults_rollback_without_exposing_or_clearing ... ok
+test macos_resident::resource::darwin::tests::release_failure_retains_cleared_owner_for_retry ... ok
+test macos_resident::resource::darwin::tests::worker_placement_join_and_whole_payload_clear ... ok
+test macos_resident::resource::darwin::tests::foreign_owner_never_clears_unmaps_or_launches ... ok
+test macos_resident::resource::darwin::tests::worker_unwind_is_joined_and_cleared ... ok
+test macos_resident::resource::darwin::tests::worker_setup_rejections_leave_reusable_owner ... ok
+test macos_resident::resource::darwin::thread::group::tests::foreign_group_rejects_before_any_worker_or_clear ... ok
+test macos_resident::resource::darwin::tests::join_and_attribute_destroy_failures_abort ... ok
+test macos_resident::resource::darwin::thread::group::tests::join_failure_child ... ok
+test macos_resident::resource::darwin::thread::group::tests::invalid_shapes_and_unusable_stack_are_rejected ... ok
+test macos_resident::resource::darwin::thread::initialized_attribute_address_survives_owner_moves ... ok
+test macos_resident::resource::tests::geometry_is_checked_before_allocation ... ok
+test macos_resident::compiled::tests::unsupported_model_missing_bundle_wrong_operation_reject ... ok
+test macos_resident::resource::darwin::thread::group::tests::join_failure_aborts_instead_of_returning_live_borrows ... ok
+test macos_resident::resource::darwin::thread::group::tests::concurrent_workers_use_disjoint_resident_stacks_and_borrowed_outputs ... ok
+test macos_resident::compiled::tests::native::nonfinal_group_without_vector_work_clears_and_quarantines ... ok
+test macos_resident::resource::darwin::thread::group::tests::each_partial_launch_or_setup_failure_joins_tls_and_allows_reuse ... ok
+test macos_resident::resource::darwin::thread::group::tests::worker_and_coordinator_unwind_join_before_clearing_and_reuse ... ok
+test macos_resident::tests::shape_limits_fail_before_launch ... ok
+test macos_resident::compiled::tests::native::worker_root_faults_join_clear_and_classify_reuse ... ok
+test macos_resident::compiled::tests::native::invalid_bits_limits_and_forgotten_outputs ... ok
+MACOS_RESIDENT_PARALLELHASH: Single(ArmKeccak); differential=288
+MACOS_RESIDENT_PARALLELHASH: Batch(Neon); differential=288
+test macos_resident::compiled::tests::native::actual_parallel_single_and_simd_waves_match_all_identities ... ok
+test macos_resident::tests::native::all_identities_bits_and_multiple_waves_match_portable ... ok
+test macos_resident::tests::native::failures_after_leaf_root_and_output_clear_and_allow_reuse ... ok
+test macos_resident::tests::native::malformed_budget_cancelled_and_forgotten_outputs_clear ... ok
+test macos_resident::tests::native::reordered_leaf_loans_fail_closed_for_every_identity ... ok
+test macos_resident::tests::native::whole_owned_capacity_clears_even_before_admission ... ok
+test macos_resident::tests::native::zero_partial_and_large_xof_output ... ok
+
+test result: ok. 31 passed; 0 failed; 0 ignored; 0 measured; 11 filtered out; finished in 43.59s
+
+
+
+running 31 tests
+test macos_resident::compiled::tests::batch_cancellation_does_not_mask_backend_or_invariant_failure ... ok
+test macos_resident::compiled::worker::vector_requirement_distinguishes_nonfinal_groups_and_tails ... ok
+test macos_resident::resource::darwin::tests::fatal_lifecycle_failure_child ... ok
+test macos_resident::resource::darwin::tests::acquisition_faults_rollback_without_exposing_or_clearing ... ok
+test macos_resident::resource::darwin::tests::release_failure_retains_cleared_owner_for_retry ... ok
+test macos_resident::resource::darwin::tests::foreign_owner_never_clears_unmaps_or_launches ... ok
+test macos_resident::resource::darwin::tests::worker_placement_join_and_whole_payload_clear ... ok
+test macos_resident::resource::darwin::tests::worker_setup_rejections_leave_reusable_owner ... ok
+test macos_resident::resource::darwin::tests::worker_unwind_is_joined_and_cleared ... ok
+test macos_resident::resource::darwin::thread::group::tests::foreign_group_rejects_before_any_worker_or_clear ... ok
+test macos_resident::resource::darwin::thread::group::tests::invalid_shapes_and_unusable_stack_are_rejected ... ok
+test macos_resident::resource::darwin::thread::group::tests::join_failure_child ... ok
+test macos_resident::compiled::tests::unsupported_model_missing_bundle_wrong_operation_reject ... ok
+test macos_resident::resource::darwin::thread::initialized_attribute_address_survives_owner_moves ... ok
+test macos_resident::resource::tests::geometry_is_checked_before_allocation ... ok
+test macos_resident::resource::darwin::thread::group::tests::each_partial_launch_or_setup_failure_joins_tls_and_allows_reuse ... ok
+test macos_resident::resource::darwin::thread::group::tests::concurrent_workers_use_disjoint_resident_stacks_and_borrowed_outputs ... ok
+test macos_resident::resource::darwin::thread::group::tests::worker_and_coordinator_unwind_join_before_clearing_and_reuse ... ok
+test macos_resident::resource::darwin::thread::group::tests::join_failure_aborts_instead_of_returning_live_borrows ... ok
+test macos_resident::resource::darwin::tests::join_and_attribute_destroy_failures_abort ... ok
+MACOS_RESIDENT_PARALLELHASH: Single(ArmKeccak); differential=288
+MACOS_RESIDENT_PARALLELHASH: Batch(Neon); differential=288
+test macos_resident::compiled::tests::native::actual_parallel_single_and_simd_waves_match_all_identities ... ok
+test macos_resident::tests::shape_limits_fail_before_launch ... ok
+test macos_resident::compiled::tests::native::invalid_bits_limits_and_forgotten_outputs ... ok
+test macos_resident::compiled::tests::native::nonfinal_group_without_vector_work_clears_and_quarantines ... ok
+test macos_resident::compiled::tests::native::worker_root_faults_join_clear_and_classify_reuse ... ok
+test macos_resident::tests::native::all_identities_bits_and_multiple_waves_match_portable ... ok
+test macos_resident::tests::native::failures_after_leaf_root_and_output_clear_and_allow_reuse ... ok
+test macos_resident::tests::native::malformed_budget_cancelled_and_forgotten_outputs_clear ... ok
+test macos_resident::tests::native::reordered_leaf_loans_fail_closed_for_every_identity ... ok
+test macos_resident::tests::native::whole_owned_capacity_clears_even_before_admission ... ok
+test macos_resident::tests::native::zero_partial_and_large_xof_output ... ok
+
+test result: ok. 31 passed; 0 failed; 0 ignored; 0 measured; 11 filtered out; finished in 2.84s
+
+
+
+running 1 test
+test src/macos_resident/compiled.rs - macos_resident::compiled::CompiledSession (line 46) - compile ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+
+running 17 tests
+test src/macos_resident/mod.rs - macos_resident::Output (line 240) - compile fail ... ok
+test src/macos_resident/mod.rs - macos_resident::Output (line 228) - compile fail ... ok
+test src/macos_resident/mod.rs - macos_resident::Output (line 231) - compile fail ... ok
+test src/macos_resident/compiled.rs - macos_resident::compiled::CompiledSession (line 31) - compile fail ... ok
+test src/macos_resident/mod.rs - macos_resident::Output (line 234) - compile fail ... ok
+test src/macos_resident/mod.rs - macos_resident::Output (line 237) - compile fail ... ok
+test src/macos_resident/compiled.rs - macos_resident::compiled::CompiledSession (line 37) - compile fail ... ok
+test src/macos_resident/compiled.rs - macos_resident::compiled::CompiledSession (line 34) - compile fail ... ok
+test src/macos_resident/compiled.rs - macos_resident::compiled::CompiledSession (line 40) - compile fail ... ok
+test src/macos_resident/compiled.rs - macos_resident::compiled::CompiledSession (line 43) - compile fail ... ok
+test src/macos_resident/mod.rs - macos_resident::Session (line 57) - compile fail ... ok
+test src/macos_resident/mod.rs - macos_resident::Session (line 42) - compile fail ... ok
+test src/macos_resident/mod.rs - macos_resident::Session (line 48) - compile fail ... ok
+test src/macos_resident/mod.rs - macos_resident::Session (line 51) - compile fail ... ok
+test src/macos_resident/mod.rs - macos_resident::Session (line 45) - compile fail ... ok
+test src/macos_resident/mod.rs - macos_resident::Session (line 54) - compile fail ... ok
+test src/macos_resident/mod.rs - macos_resident::Session (line 61) - compile fail ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.16s
+
+all doctests ran in 0.77s; merged doctests compilation took 0.41s
+
+Resident ParallelHash compiled mutants: 7 rejected
+Packaged resident ParallelHash: PASS; development evidence only
+      149.22 real       184.54 user        10.43 sys
+           303546368  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+             1594932  page reclaims
+                2514  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                  78  signals received
+                 572  voluntary context switches
+              202637  involuntary context switches
+         36900572557  instructions retired
+         10547252847  cycles elapsed
+            30458408  peak memory footprint
+FINISHED: check-macos-resident-parallel-package
+Sun Oct 18 15:27:48 UTC 2026
+MAC_RESIDENT_CONSUMERS: PASS; resident is not strict dump exclusion

@@ -1,0 +1,378 @@
+{
+  "schema": 1,
+  "capture_commit": "1f8f4e1527f9e91b1b1d26b61b8cfc95339ca835",
+  "review": "author-operated functional observations; not independent qualification",
+  "redaction": "Only absolute checkout prefixes replaced with <checkout>; raw SHA-256 preserved per artifact. Original downloads retained locally outside Cargo target.",
+  "artifacts": [
+    {
+      "host": "amd-x86_64",
+      "family": "hardened-batch",
+      "artifact": "assurance/hardened-batch-observations/v0.24.54/amd-x86_64.json",
+      "sha256": "b7ec367bd41473c288fd2ca221e26a71c7ff5431537a4a3bee1c646a5ef7cceb",
+      "raw_sha256": "51422521996213d21030e0a05e5e4c29486f75373b4c9d0cdfad4a393ad9d660",
+      "checkout_prefix_replacements": 20
+    },
+    {
+      "host": "amd-x86_64",
+      "family": "keccak-batch",
+      "artifact": "assurance/keccak-batch-observations/v0.24.54/amd-x86_64.json",
+      "sha256": "96a776b46641b8da9288db17761dc7d72210eb064e59d93141e4a26967f43837",
+      "raw_sha256": "96a776b46641b8da9288db17761dc7d72210eb064e59d93141e4a26967f43837",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "amd-x86_64",
+      "family": "keccak-hardened",
+      "artifact": "assurance/keccak-hardened-native/amd-x86_64-v0254.json",
+      "sha256": "dcfc8b9a1b7ffd55e3fb6294cfc96b4c4a6aea6c78e0b172f445baea5f5679db",
+      "raw_sha256": "dcfc8b9a1b7ffd55e3fb6294cfc96b4c4a6aea6c78e0b172f445baea5f5679db",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "amd-x86_64",
+      "family": "kmac",
+      "artifact": "assurance/kmac-execution-native/amd-x86_64-v0254.json",
+      "sha256": "47fceb2f675c80e9bd6eb16d9ad79ca238f35dffbae86b9883fd3c589fe553f1",
+      "raw_sha256": "47fceb2f675c80e9bd6eb16d9ad79ca238f35dffbae86b9883fd3c589fe553f1",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "amd-x86_64",
+      "family": "parallelhash",
+      "artifact": "assurance/parallelhash-execution-native/amd-x86_64-v0254.json",
+      "sha256": "5ef0bdd8ba156eae1bcbce986bdf55895e426851ec9256c93528717530f9e4d6",
+      "raw_sha256": "5ef0bdd8ba156eae1bcbce986bdf55895e426851ec9256c93528717530f9e4d6",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "amd-x86_64",
+      "family": "sha1-hardened",
+      "artifact": "assurance/sha1-hardened-observations/v0.24.54/amd-x86_64.json",
+      "sha256": "466a5dc7d5728ccc7e1e5d4de6bab3e100bbe52407b64c9bcb08a9191d0fd74c",
+      "raw_sha256": "466a5dc7d5728ccc7e1e5d4de6bab3e100bbe52407b64c9bcb08a9191d0fd74c",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "amd-x86_64",
+      "family": "sha2-hardened",
+      "artifact": "assurance/sha2-hardened-native/amd-x86_64-v0254.json",
+      "sha256": "cf954f4035d37a80eeb61431d7ff606789b2c6d21b65be1de1d606d24cf50957",
+      "raw_sha256": "1670af0767592e8f5f336c69d6e1380b773d8fa33e684640f9d43c9a2505938c",
+      "checkout_prefix_replacements": 15
+    },
+    {
+      "host": "amd-x86_64",
+      "family": "sha256-batch",
+      "artifact": "assurance/sha256-batch-observations/v0.24.54/amd-x86_64.json",
+      "sha256": "846ecaac06f7b43fc1708e05d8ee27a937b53795c0f45b69c58bd033152d55f6",
+      "raw_sha256": "846ecaac06f7b43fc1708e05d8ee27a937b53795c0f45b69c58bd033152d55f6",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "amd-x86_64",
+      "family": "sha512-batch",
+      "artifact": "assurance/sha512-batch-observations/v0.24.54/amd-x86_64.json",
+      "sha256": "fb60d1c7b94f0c276e2b70a73e34acab778adb031ef14a1e26f9e81267839a63",
+      "raw_sha256": "fb60d1c7b94f0c276e2b70a73e34acab778adb031ef14a1e26f9e81267839a63",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "amd-x86_64",
+      "family": "tuplehash",
+      "artifact": "assurance/tuplehash-execution-native/amd-x86_64-v0254.json",
+      "sha256": "4f67739b390436c34ca2ab44f41e12ef044f457c7029bf57ba9210fe8f09b0db",
+      "raw_sha256": "4f67739b390436c34ca2ab44f41e12ef044f457c7029bf57ba9210fe8f09b0db",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "intel-x86_64",
+      "family": "hardened-batch",
+      "artifact": "assurance/hardened-batch-observations/v0.24.54/intel-x86_64.json",
+      "sha256": "44ab30624ea79e78b5e691f61487d479fcf8b6ef5d4cbccbf0a20d4a77174133",
+      "raw_sha256": "df77b6f49123e5d0c1eab4975c88dd162f3a3c86109f31743c788094b0b8f506",
+      "checkout_prefix_replacements": 20
+    },
+    {
+      "host": "intel-x86_64",
+      "family": "keccak-batch",
+      "artifact": "assurance/keccak-batch-observations/v0.24.54/intel-x86_64.json",
+      "sha256": "3ce0004642bcbefbcfeb95c03855769e410aaf53e513806c29f1bb3fdc7d6e64",
+      "raw_sha256": "3ce0004642bcbefbcfeb95c03855769e410aaf53e513806c29f1bb3fdc7d6e64",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "intel-x86_64",
+      "family": "keccak-hardened",
+      "artifact": "assurance/keccak-hardened-native/linux-x86_64-v0254.json",
+      "sha256": "01c046bc35dee77685dbfebc32d7e1ba558ee60652e6062b589227d0a33277ca",
+      "raw_sha256": "01c046bc35dee77685dbfebc32d7e1ba558ee60652e6062b589227d0a33277ca",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "intel-x86_64",
+      "family": "kmac",
+      "artifact": "assurance/kmac-execution-native/linux-x86_64-v0254.json",
+      "sha256": "f48484b76f6a0e5a8e68678c0b8dc5dcb5bbf014c980a71a713dc1e304291859",
+      "raw_sha256": "f48484b76f6a0e5a8e68678c0b8dc5dcb5bbf014c980a71a713dc1e304291859",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "intel-x86_64",
+      "family": "parallelhash",
+      "artifact": "assurance/parallelhash-execution-native/linux-x86_64-v0254.json",
+      "sha256": "2277fa3aaf8488092e121436a2339eb77ed09d0130443f719c86e6e6f5b09380",
+      "raw_sha256": "2277fa3aaf8488092e121436a2339eb77ed09d0130443f719c86e6e6f5b09380",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "intel-x86_64",
+      "family": "sha1-hardened",
+      "artifact": "assurance/sha1-hardened-observations/v0.24.54/intel-x86_64.json",
+      "sha256": "ba76a9dece2658faa8f1e8a1cde8dc7fd6bf0d9e06ae2072fa9f9e782f0ac04c",
+      "raw_sha256": "ba76a9dece2658faa8f1e8a1cde8dc7fd6bf0d9e06ae2072fa9f9e782f0ac04c",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "intel-x86_64",
+      "family": "sha2-hardened",
+      "artifact": "assurance/sha2-hardened-native/linux-x86_64-v0254.json",
+      "sha256": "98ff6ea530b4d63eb1412378e50af79c98ddf2b061244461e2dc4b6da8f6c6e9",
+      "raw_sha256": "54c3b869d364ba361e2e6de4cef1ceaceed24d3c494944e2d24843794fc2c7a1",
+      "checkout_prefix_replacements": 16
+    },
+    {
+      "host": "intel-x86_64",
+      "family": "sha256-batch",
+      "artifact": "assurance/sha256-batch-observations/v0.24.54/intel-x86_64.json",
+      "sha256": "25f1e101e3302d9411f7f05b6a625d3edf564a570b6dc2dc5388dfce22d4cfba",
+      "raw_sha256": "25f1e101e3302d9411f7f05b6a625d3edf564a570b6dc2dc5388dfce22d4cfba",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "intel-x86_64",
+      "family": "sha512-batch",
+      "artifact": "assurance/sha512-batch-observations/v0.24.54/intel-x86_64.json",
+      "sha256": "0e656de368df874214c552843157ff7b3aed6825c7fbe640f6de3c171262f95b",
+      "raw_sha256": "0e656de368df874214c552843157ff7b3aed6825c7fbe640f6de3c171262f95b",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "intel-x86_64",
+      "family": "tuplehash",
+      "artifact": "assurance/tuplehash-execution-native/linux-x86_64-v0254.json",
+      "sha256": "6b923956fd0c1b2ba34eb213f062154d3030f02c8ae715aa01ed09355ca81af4",
+      "raw_sha256": "6b923956fd0c1b2ba34eb213f062154d3030f02c8ae715aa01ed09355ca81af4",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "aws-aarch64",
+      "family": "hardened-batch",
+      "artifact": "assurance/hardened-batch-observations/v0.24.54/aws-aarch64.json",
+      "sha256": "cc75273259d72df5c3062a8303947802d0a43e1ca608f90973ca5e1919fbc7fa",
+      "raw_sha256": "1a40cdfd9a415b77922fe7fd79990473a0054244b787029de5261d7e9aa1fb38",
+      "checkout_prefix_replacements": 20
+    },
+    {
+      "host": "aws-aarch64",
+      "family": "keccak-batch",
+      "artifact": "assurance/keccak-batch-observations/v0.24.54/aws-aarch64.json",
+      "sha256": "0ba6f00a60fedc8692855285216d935a95f9bf51ef073118f6000949a2e50646",
+      "raw_sha256": "0ba6f00a60fedc8692855285216d935a95f9bf51ef073118f6000949a2e50646",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "aws-aarch64",
+      "family": "keccak-hardened",
+      "artifact": "assurance/keccak-hardened-native/linux-aarch64-v0254.json",
+      "sha256": "043c3116df23e4a12c9c700ff6bc8a25dd73bf742736de0a3958db8485064181",
+      "raw_sha256": "043c3116df23e4a12c9c700ff6bc8a25dd73bf742736de0a3958db8485064181",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "aws-aarch64",
+      "family": "kmac",
+      "artifact": "assurance/kmac-execution-native/linux-aarch64-v0254.json",
+      "sha256": "6ff9743400ce99f3f515634a7d3252f6045ccf520ad678a5c3c10b570f9a0e16",
+      "raw_sha256": "6ff9743400ce99f3f515634a7d3252f6045ccf520ad678a5c3c10b570f9a0e16",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "aws-aarch64",
+      "family": "parallelhash",
+      "artifact": "assurance/parallelhash-execution-native/linux-aarch64-v0254.json",
+      "sha256": "dfaca2d0e9bb51a25b2c7c96cc449e9f3abb145be143ef57bc02623fcc5ce6ec",
+      "raw_sha256": "dfaca2d0e9bb51a25b2c7c96cc449e9f3abb145be143ef57bc02623fcc5ce6ec",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "aws-aarch64",
+      "family": "sha1-hardened",
+      "artifact": "assurance/sha1-hardened-observations/v0.24.54/aws-aarch64.json",
+      "sha256": "a754fd60486697024fb16c8f3bcc1c95ee52d8ac92eb607d64f255bf43eea021",
+      "raw_sha256": "a754fd60486697024fb16c8f3bcc1c95ee52d8ac92eb607d64f255bf43eea021",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "aws-aarch64",
+      "family": "sha2-hardened",
+      "artifact": "assurance/sha2-hardened-native/linux-aarch64-v0254.json",
+      "sha256": "8553973337ecf6f0ed79d20a68c60579a5b0b2cf329053392512f06ed304e283",
+      "raw_sha256": "9b43a3d004251748efa659cb84990696b229ca4bbb75a02857b51f3bdf6f5a8e",
+      "checkout_prefix_replacements": 16
+    },
+    {
+      "host": "aws-aarch64",
+      "family": "sha256-batch",
+      "artifact": "assurance/sha256-batch-observations/v0.24.54/aws-aarch64.json",
+      "sha256": "c38fb37da49fb0b8afe754620c14eb57a2c2c1fccfdc9916491ca552b7f865b6",
+      "raw_sha256": "c38fb37da49fb0b8afe754620c14eb57a2c2c1fccfdc9916491ca552b7f865b6",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "aws-aarch64",
+      "family": "sha512-batch",
+      "artifact": "assurance/sha512-batch-observations/v0.24.54/aws-aarch64.json",
+      "sha256": "eb85a7fd607f1691cee2b1f2c707a319dc5e5ea06b6240f0bc6aaa7678a6b1fc",
+      "raw_sha256": "eb85a7fd607f1691cee2b1f2c707a319dc5e5ea06b6240f0bc6aaa7678a6b1fc",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "aws-aarch64",
+      "family": "tuplehash",
+      "artifact": "assurance/tuplehash-execution-native/linux-aarch64-v0254.json",
+      "sha256": "22af2772bb01aab4937a44f7cc92cdbd3db21a6bbc18aca06b430a4a106a38f7",
+      "raw_sha256": "22af2772bb01aab4937a44f7cc92cdbd3db21a6bbc18aca06b430a4a106a38f7",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "apple-m2-aarch64",
+      "family": "hardened-batch",
+      "artifact": "assurance/hardened-batch-observations/v0.24.54/apple-m2-aarch64.json",
+      "sha256": "56c14479d89cdb878a8206e198bfca612b1c2a473a7e4170bd090cfad38f08f7",
+      "raw_sha256": "7363e9656407ea0954f9a82edbc24c65a0b49ddacd15fbc88187d7e033e8467d",
+      "checkout_prefix_replacements": 20
+    },
+    {
+      "host": "apple-m2-aarch64",
+      "family": "keccak-batch",
+      "artifact": "assurance/keccak-batch-observations/v0.24.54/apple-m2-aarch64.json",
+      "sha256": "80817096058f82fe531863e98110ee43275500911465965f25b563004f72f4b3",
+      "raw_sha256": "80817096058f82fe531863e98110ee43275500911465965f25b563004f72f4b3",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "apple-m2-aarch64",
+      "family": "keccak-hardened",
+      "artifact": "assurance/keccak-hardened-native/apple-aarch64-v0254.json",
+      "sha256": "825acde321986266422abcce6814d7d37a345111281a56438c5332eb252120ae",
+      "raw_sha256": "825acde321986266422abcce6814d7d37a345111281a56438c5332eb252120ae",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "apple-m2-aarch64",
+      "family": "kmac",
+      "artifact": "assurance/kmac-execution-native/apple-aarch64-v0254.json",
+      "sha256": "888d2b423beed448b0ed8e7791baa7ab1896989142cf3d4a037b6aa71b3ac75d",
+      "raw_sha256": "888d2b423beed448b0ed8e7791baa7ab1896989142cf3d4a037b6aa71b3ac75d",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "apple-m2-aarch64",
+      "family": "parallelhash",
+      "artifact": "assurance/parallelhash-execution-native/apple-aarch64-v0254.json",
+      "sha256": "7e8c1462b8ed5f4e5087308b0e9c2213473e6cc69cbb73a6961fd23fe02364e8",
+      "raw_sha256": "7e8c1462b8ed5f4e5087308b0e9c2213473e6cc69cbb73a6961fd23fe02364e8",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "apple-m2-aarch64",
+      "family": "sha1-hardened",
+      "artifact": "assurance/sha1-hardened-observations/v0.24.54/apple-m2-aarch64.json",
+      "sha256": "e9a3c8e856e00cf8e112f6fca8f4efe44d128b859543dc84f098b38044de1ee6",
+      "raw_sha256": "e9a3c8e856e00cf8e112f6fca8f4efe44d128b859543dc84f098b38044de1ee6",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "apple-m2-aarch64",
+      "family": "sha2-hardened",
+      "artifact": "assurance/sha2-hardened-native/apple-aarch64-v0254.json",
+      "sha256": "6e9cbf65d87f3d7a2fe6512bae904bfb60ab11f6de3918b30dcb3543aaa5bc4f",
+      "raw_sha256": "ad5ac13b8a4a3c8cd1936c39690eb3e899ced293a37a188bad4abff3b9630906",
+      "checkout_prefix_replacements": 16
+    },
+    {
+      "host": "apple-m2-aarch64",
+      "family": "sha256-batch",
+      "artifact": "assurance/sha256-batch-observations/v0.24.54/apple-m2-aarch64.json",
+      "sha256": "1f0198e5e6adcd60568c273a4498730ff38079c366b40d96f1751deb51beb2f6",
+      "raw_sha256": "1f0198e5e6adcd60568c273a4498730ff38079c366b40d96f1751deb51beb2f6",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "apple-m2-aarch64",
+      "family": "sha512-batch",
+      "artifact": "assurance/sha512-batch-observations/v0.24.54/apple-m2-aarch64.json",
+      "sha256": "379c474f16c37c8f02d8d5847219ba966e4bca9ab58df242b4687a55d53958d2",
+      "raw_sha256": "379c474f16c37c8f02d8d5847219ba966e4bca9ab58df242b4687a55d53958d2",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "apple-m2-aarch64",
+      "family": "tuplehash",
+      "artifact": "assurance/tuplehash-execution-native/apple-aarch64-v0254.json",
+      "sha256": "9c14657224b6e6497d48f5e99b1de6b5e59b86bb2fc3981dbcece9ece6c99491",
+      "raw_sha256": "9c14657224b6e6497d48f5e99b1de6b5e59b86bb2fc3981dbcece9ece6c99491",
+      "checkout_prefix_replacements": 0
+    }
+  ],
+  "consumer_logs": [
+    {
+      "host": "amd-x86_64",
+      "status": "passed",
+      "artifact": "assurance/native-observations/v0.24.54/amd-x86_64/consumers.txt",
+      "sha256": "129afc5c96b7fc903c3e370912d68dcaedae79cf6d46fe07223ff95c7ad837cb",
+      "raw_sha256": "129afc5c96b7fc903c3e370912d68dcaedae79cf6d46fe07223ff95c7ad837cb",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "intel-x86_64",
+      "status": "passed",
+      "artifact": "assurance/native-observations/v0.24.54/intel-x86_64/consumers.txt",
+      "sha256": "dac069816cff3a4dc82559a31c93b3b3e9dbf4b236c63fa0b98d793e3ec9c23b",
+      "raw_sha256": "dac069816cff3a4dc82559a31c93b3b3e9dbf4b236c63fa0b98d793e3ec9c23b",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "intel-x86_64",
+      "status": "failed-before-tests",
+      "artifact": "assurance/native-observations/v0.24.54/intel-x86_64/initial-preflight-failure.txt",
+      "sha256": "cf041418861587124ef5ae140f02e7fd6df4e0fc3f4e419b51ddd33c41f6d005",
+      "raw_sha256": "535d20b441f2b4fd11943a7015492b695e63943875e0c33b165e7dfa65449bca",
+      "checkout_prefix_replacements": 4
+    },
+    {
+      "host": "aws-aarch64",
+      "status": "passed",
+      "artifact": "assurance/native-observations/v0.24.54/aws-aarch64/consumers.txt",
+      "sha256": "2fdc9c649201bc8cbbb074bc0a41d48f08593bf3e63fcbf3a8ecdb3fbc968273",
+      "raw_sha256": "2fdc9c649201bc8cbbb074bc0a41d48f08593bf3e63fcbf3a8ecdb3fbc968273",
+      "checkout_prefix_replacements": 0
+    },
+    {
+      "host": "aws-aarch64",
+      "status": "failed-before-tests",
+      "artifact": "assurance/native-observations/v0.24.54/aws-aarch64/initial-preflight-failure.txt",
+      "sha256": "f37a9d8472f6c1165e4a58e24f11cc85521294a0785cde118cdfcfcf676d85e3",
+      "raw_sha256": "a50bbe1fd21633739582b88a3888b38b7dae5751fd40b2791db2545163f7602b",
+      "checkout_prefix_replacements": 4
+    },
+    {
+      "host": "apple-m2-aarch64",
+      "status": "passed",
+      "artifact": "assurance/native-observations/v0.24.54/apple-m2-aarch64/consumers.txt",
+      "sha256": "681457751b031211a1c302d161269931cd81e7730a5e05b0e6349ddadba719d9",
+      "raw_sha256": "681457751b031211a1c302d161269931cd81e7730a5e05b0e6349ddadba719d9",
+      "checkout_prefix_replacements": 0
+    }
+  ]
+}

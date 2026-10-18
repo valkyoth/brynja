@@ -1,5 +1,6 @@
 """Real-Git mutations of the bounded MD5 dependency proof; no native claims."""
 import copy
+import os
 import subprocess
 import tempfile
 import unittest
@@ -19,10 +20,19 @@ class Md5DependencyProfileTests(unittest.TestCase):
         features = ('brynja-legacy-md5/execution,brynja-legacy-md5/hardened-execution,'
                     'brynja-legacy-md5-std/runtime-execution,'
                     'brynja-legacy-md5-std/runtime-hardened-execution')
-        result = subprocess.run(['cargo', '+1.98.1', 'tree', '--locked', '--offline',
-            '--target', 'all', '-p', 'brynja-legacy-md5', '-p', profile.HOST,
-            '--features', features, '--prefix', 'none', '--format', '{p}|{f}'],
-            cwd=io.ROOT, capture_output=True, text=True, timeout=60, check=True)
+        # CI forces colour globally. Keep machine-readable output independent
+        # of that setting; do not weaken the exact identity/feature comparisons.
+        for colour in ('auto', 'always', 'never'):
+            with self.subTest(ambient_colour=colour):
+                result = subprocess.run(['cargo', '+1.98.1', 'tree', '--locked', '--offline',
+                    '--color', 'never', '--target', 'all', '-p', 'brynja-legacy-md5',
+                    '-p', profile.HOST, '--features', features, '--prefix', 'none',
+                    '--format', '{p}|{f}'], cwd=io.ROOT, capture_output=True, text=True,
+                    timeout=60, check=True, env=dict(os.environ, CARGO_TERM_COLOR=colour))
+                self.assertNotIn('\x1b', result.stdout)
+                self.assert_feature_union(result.stdout)
+
+    def assert_feature_union(self, output):
         expected = {
             'brynja-core': ('0.9.0', 'default'),
             'brynja-hash-core': ('0.1.0', 'default'),
@@ -30,7 +40,7 @@ class Md5DependencyProfileTests(unittest.TestCase):
             profile.HOST: ('0.1.0', 'default,runtime-execution,runtime-hardened-execution'),
         }
         population = set()
-        for line in result.stdout.splitlines():
+        for line in output.splitlines():
             if not line:
                 continue
             identity, enabled = line.removesuffix(' (*)').split('|')

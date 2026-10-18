@@ -1,7 +1,8 @@
 # v0.24.53 - Acceleration Public Consumer Acceptance
 
-Status: consumer acceptance implemented; independent retest pending. Not
-release-qualified. No publication selected.
+Status: consumer acceptance implemented; supplied defect retests complete,
+informational follow-ups author-verified and owner-accepted. Native refresh and
+the consolidated sweep remain deferred; no full release-gate PASS or publication.
 
 ## ParallelHash threaded consumer acceptance
 
@@ -389,7 +390,7 @@ and limitations are in [the consumer guide](../docs/facade-features.md).
 | SHA-2 single-state and scoped | Ordinary/hardened, named/general-t, byte/bit, streaming, public/secret output, lifecycle and compiled mutants | SHA-NI measured locally; unavailable dedicated x86 SHA-512 rejects, not counted as execution |
 | SHA-3/SHAKE/cSHAKE | Ordinary/hardened owned/scoped fixed/XOF and customized bit corpora, lifecycle and compiled mutants | Local AVX2 measured; x86 hosted unavailability remains distinct from static execution |
 | SHA-2/Keccak batches | Independent mixed/sparse bit corpora, portable/preferred/required selection, accounting/output/cleanup mutants | SIMD requires complete CPU/OS and compiled feature bundles |
-| KMAC/KMACXOF | Production/conformance separation, owned/scoped fixed/XOF, comparison and lifecycle probes | Test-only types are not production owners; original separation retested, Low follow-ups pending retest |
+| KMAC/KMACXOF | Production/conformance separation, owned/scoped fixed/XOF, comparison and lifecycle probes | Test-only types are not production owners; defect retests complete, informational follow-ups author-verified and owner-accepted |
 | TupleHash/ParallelHash | Item/leaf framing, serial/scoped/scheduled/grouped execution, one/three-worker adapters, oracle/mutation/ownership checks | Deliberately hidden leaf-only APIs are not claimed as facade exports |
 | SHA-1/MD5 | `check-legacy-execution-package.py`: separate ordinary/hardened archived consumers; `check-legacy-strict-package.py` and `check-legacy-resident-package.py`: distinct platform owners | Never exported by modern facades; hardening does not repair algorithm weaknesses |
 | Strict modern owners | `check-strict-public-consumer.py`, `check-strict-accelerated-consumer.py`, `check-strict-group-consumer.py` | GNU/Linux functional tests; private-memory/register qualification separate |
@@ -406,14 +407,20 @@ silently counted as physical execution or independent verification.
 ## Remaining handoff and release work
 
 - Both supplied reviews confirmed the conformance split at `2785c3f4`, closing
-  the carried v0.24.52 F-1. Obtain focused retest of the three new Low follow-ups
-  described below; accepted platform limitations retain their dispositions.
+  the carried v0.24.52 F-1; later supplied retests close the Low follow-ups.
+  The owner accepted the final three informational coverage suggestions as
+  implemented and author-verified on 2026-10-18, without a new independent
+  retest of those harness edits. Accepted platform limitations remain unchanged.
 - Run focused checks, ordinary CI and non-sweep release checks. The owner has
   deferred the additional full sweep to v0.24.55; this does not qualify changed
   implementations using historical native records. Native collection remains
   scheduled for v0.24.54 with the final reconciliation at v0.24.55.
 
 ## Retest follow-up
+
+The following paragraphs preserve the successive review/remediation history;
+earlier pending statements are superseded by the final disposition above and
+the current security report. They are not new outstanding requests for retest.
 
 Three Low findings are addressed for focused retest: full-strength oracle
 cases now also exercise production KMAC owners, a shared internal strength-policy
@@ -459,3 +466,19 @@ tests reject ungated/default exports. No production crate code changes.
 No production kernel, unsafe block, registry dependency, release-gate rule or historical
 capture is changed by the conformance separation. Independent verification
 and FIPS validation remain separate, unclaimed qualifications.
+
+## Final development-milestone disposition
+
+The owner accepted the three implemented, author-verified informational coverage
+items on 2026-10-18; no new independent review of those harness edits is claimed.
+Rust CI and code scanning passed on `bb6e0915`, and the SDE retry passed on
+`be95c717`. Release metadata, zero-crate publication selection, SBOM, dependency
+audit, tool freshness, standards freshness and bounded bare-metal type checks
+pass. The current report records the exact scope and remaining limitations.
+
+Native collection is still deferred to v0.24.54 and the consolidated sweep to
+v0.24.55. Six historical native checks reject source mismatches; those records
+were not relabelled or replaced. A compiler-matrix invocation was stopped and
+is incomplete. There is no automated full tag-gate PASS or crates.io publication.
+This documentation reconciliation requires green GitHub before an owner-authorized
+development tag; it introduces no production code or gate-policy change.

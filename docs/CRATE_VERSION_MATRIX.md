@@ -1,9 +1,9 @@
 # Crate Version Matrix
 
-Status: v0.20.0 published; milestones through v0.24.53 signed with their recorded review dispositions and verification deferrals. v0.24.54 native evidence collection is in progress; fresh qualification remains pending. No publication is selected.
+Status: v0.20.0 published; milestones through v0.24.54 signed with their recorded review dispositions and verification deferrals. v0.24.55 final closure is in progress; its consolidated verification is not yet complete. No publication is selected.
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
-advances to internal `0.24.54`. General SHA-512/t has callable ordinary/hardened
+advances to internal `0.24.55`. General SHA-512/t has callable ordinary/hardened
 byte/bit hashing behind an explicit leaf feature; all support crate
 versions remain unchanged.
 `brynja-hash-core 0.1.0`,

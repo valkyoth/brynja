@@ -8,12 +8,15 @@ The [ordering review](ROADMAP_ORDERING_AUDIT.md) splits oversized future
 families and records prerequisites. Windows strict and Apple Silicon resident
 profiles occupy v0.24.50–v0.24.51. Operational RISC-V acceleration is postponed
 until qualifying native hardware is available; portable support and existing
-candidate tests remain unchanged. The two remaining backfill stops occupy
-v0.24.54–v0.24.55, with HMAC still at v0.25.0. The v0.24.53 consumer acceptance
-and leaf conformance separation milestone is tagged with its recorded review
-dispositions and owner-approved verification deferrals. v0.24.54 native evidence
-collection is in progress; no fresh capture or qualification is claimed yet.
-The consolidated full sweep remains at v0.24.55; release-gate policy is unchanged.
+candidate tests remain unchanged. The final backfill stop is v0.24.55, with
+HMAC still at v0.25.0. v0.24.54 is signed at `91c79415` after green Rust CI
+and CodeQL: forty Linux/Apple captures and twelve public-consumer campaigns
+are recorded, with independently retested evidence-substitution remediation
+and owner-approved snapshot bindings. These are not independent native or
+side-channel qualification. Its consolidated full sweep was explicitly deferred
+to v0.24.55 and remains incomplete. The current final-closure work audits
+availability and documentation before freezing the sweep candidate; see the
+[v0.24.55 work packages](../release-notes/RELEASE_NOTES_0.24.55.md).
 
 The [public-operation roadmap audit](ROADMAP_API_COMPLETENESS_AUDIT.md) adds
 explicit DER, format, key-role and prerequisite closure without changing any

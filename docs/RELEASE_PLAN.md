@@ -5092,7 +5092,11 @@ the v0.25.2 publication checkpoint; this is not another release-gate mechanism.
 
 ### v0.24.54 - Acceleration Native Evidence Sweep
 
-Status: awaiting green CI
+Status: released
+
+Signed tag `v0.24.54` targets `91c79415`; Rust CI and CodeQL passed on that
+exact commit. No crates.io package was published. The full consolidation sweep
+remains deferred to v0.24.55; this is not an automated full tag-gate PASS.
 
 The subsequent High native-evidence substitution finding is closed by focused
 independent retest, owner approval and fixed-pin operational validation. The
@@ -5105,7 +5109,7 @@ Collection progress is recorded in the v0.24.54 release notes and
 [native observation review](native-evidence-v0.24.54.md): forty Linux/Apple
 captures and twelve public-consumer campaigns passed. Local non-sweep checks
 completed at `30c4d314` with the sandbox-blocked audit and remaining gate steps
-successfully resumed; final-commit GitHub checks remain pending.
+successfully resumed; final-commit GitHub checks subsequently passed.
 Windows has no fresh execution in this collection. Functional
 observations are not independent or side-channel qualification.
 
@@ -5144,7 +5148,14 @@ Exit criteria:
 
 ### v0.24.55 - Opt-In Acceleration Final Closure
 
-Status: planned
+Status: in progress
+
+Execution is split into three bounded work packages: inventory/claim closure,
+frozen-candidate consolidated verification, then result reconciliation and
+release handoff. See [the release work list](../release-notes/RELEASE_NOTES_0.24.55.md).
+Starting the milestone does not mark any deferred campaign complete. Preserve
+the v0.24.54 owner-approved evidence snapshot and external digest; do not
+recollect unchanged native routes or manufacture a new self-approved snapshot.
 
 Plan scope: Close the acceleration backfill before HMAC with operational public APIs, complete profile and evidence dispositions, default-portable examples and separate implementation, acceleration, independent-review and FIPS status.
 

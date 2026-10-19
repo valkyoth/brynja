@@ -13,8 +13,10 @@ validator rejects numbering, ordering, title, or scope drift.
 See the [ordering review](ROADMAP_ORDERING_AUDIT.md) for the future family
 splits and the [schedule register](../requirements/roadmap-schedule.json) for
 old-to-new identities and prerequisite edges. Released milestones through
-v0.24.54 are preserved. The final backfill stop is v0.24.55 before HMAC,
-with the availability audit and consolidated verification now being prepared.
+v0.24.55 are preserved. The final backfill stop v0.24.55 is tagged, with the
+availability audit and consolidated verification completed. Modern HMAC starts
+at v0.25.0; the v0.25.2 publication checkpoint also audits source-only crate
+archives, retaining assurance evidence in GitHub rather than crates.io.
 RISC-V operational acceleration is postponed until qualifying native hardware
 is available; portable support and existing candidate tests remain unchanged.
 

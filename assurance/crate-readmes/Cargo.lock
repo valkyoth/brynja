@@ -4,7 +4,7 @@ version = 4
 
 [[package]]
 name = "brynja"
-version = "0.24.55"
+version = "0.25.0"
 dependencies = [
  "brynja-core",
  "brynja-crypto",
@@ -46,6 +46,7 @@ dependencies = [
  "brynja-legacy-tls10",
  "brynja-legacy-tls11",
  "brynja-legacy-wtls",
+ "brynja-mac-hmac",
  "brynja-mac-kmac",
  "brynja-pki",
  "brynja-platform",
@@ -216,6 +217,15 @@ version = "0.1.0"
 [[package]]
 name = "brynja-legacy-wtls"
 version = "0.1.0"
+
+[[package]]
+name = "brynja-mac-hmac"
+version = "0.1.0"
+dependencies = [
+ "brynja-core",
+ "brynja-hash-sha2",
+ "brynja-hash-sha3",
+]
 
 [[package]]
 name = "brynja-mac-kmac"

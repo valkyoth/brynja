@@ -38,6 +38,7 @@ brynja-legacy-tls11 = { path = "../../crates/brynja-legacy-tls11", default-featu
 brynja-legacy-wtls = { path = "../../crates/brynja-legacy-wtls", default-features = false }
 brynja-legacy = { path = "../../crates/brynja-legacy", default-features = false }
 brynja-mac-kmac = { path = "../../crates/brynja-mac-kmac", default-features = false }
+brynja-mac-hmac = { path = "../../crates/brynja-mac-hmac", default-features = false }
 brynja-pki = { path = "../../crates/brynja-pki", default-features = false }
 brynja-platform = { path = "../../crates/brynja-platform", default-features = false }
 brynja-proofs = { path = "../../crates/brynja-proofs", default-features = false }

@@ -438,10 +438,20 @@ def test_package_roots_exclude_new_internal_dependencies() -> None:
     )
 
 
+def test_hmac_follows_hash_owners_before_consumers() -> None:
+    order = policy.PUBLISH_ORDER
+    position = order.index("brynja-mac-hmac")
+    for dependency in ("brynja-core", "brynja-hash-sha2", "brynja-hash-sha3"):
+        assert order.index(dependency) < position
+    for consumer in ("brynja-crypto", "brynja-strict", "brynja"):
+        assert position < order.index(consumer)
+
+
 def run_tests() -> None:
     tests = (
         checkpoint_tests.run_tests,
         test_current_repository_plan,
+        test_hmac_follows_hash_owners_before_consumers,
         test_facade_always_publishes_at_release_version,
         train_tests.test_internal_facade_advances_without_publication,
         train_tests.test_new_publishable_adapter_can_be_held_for_checkpoint,

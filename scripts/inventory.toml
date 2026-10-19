@@ -42,6 +42,10 @@ purpose = "Isolated legacy MD5 conformance, cleanup, downstream and source-polic
 extensions = [".py", ".sh"]
 purpose = "KMAC and KMACXOF implementation, package acceptance, and differential evidence"
 
+[category.hmac]
+extensions = [".py", ".sh"]
+purpose = "HMAC construction, source-only package acceptance, and scoped differential evidence"
+
 [category.pki]
 extensions = [".py"]
 purpose = "DER and canonical ASN.1 policy and tests"

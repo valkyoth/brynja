@@ -73,6 +73,9 @@ pub struct BrynjaLegacyWtls;
 #[doc = include_str!("../../../crates/brynja-legacy/README.md")]
 pub struct BrynjaLegacy;
 
+#[doc = include_str!("../../../crates/brynja-mac-hmac/README.md")]
+pub struct BrynjaMacHmac;
+
 #[doc = include_str!("../../../crates/brynja-mac-kmac/README.md")]
 pub struct BrynjaMacKmac;
 

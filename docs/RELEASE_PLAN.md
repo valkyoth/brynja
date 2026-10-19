@@ -5148,7 +5148,7 @@ Exit criteria:
 
 ### v0.24.55 - Opt-In Acceleration Final Closure
 
-Status: in progress
+Status: released
 
 Execution is split into three bounded work packages: inventory/claim closure,
 frozen-candidate consolidated verification, then result reconciliation and
@@ -5202,7 +5202,10 @@ do not recollect unrelated families merely because HMAC is a new consumer.
 Any actual change to a shared hash, authority or cleanup implementation retains
 the applicable downstream regression and evidence requirements.
 
-Status: planned
+Status: in progress
+
+The initial portable leaf and tests are implemented; full scope and qualification
+remain pending. See the [release work list](../release-notes/RELEASE_NOTES_0.25.0.md).
 
 Plan scope: Freeze a reusable no_std `brynja-mac-hmac` boundary over the admitted fixed-output hash interface, then implement the complete HMAC construction with long-key normalization, empty and block-boundary keys, arbitrary message partitioning, exact and policy-bounded truncation, constant-time verification, affine finalization, and hardened destruction; expose typed HMAC instantiations for every modern pre-1.0 fixed-output SHA-2 and SHA-3 digest without confusing MAC tags with unkeyed digests.
 
@@ -5273,6 +5276,15 @@ Plan scope: Close the HMAC chain with downstream fixtures for every modern SHA-2
 
 Goal: prove complete modern and isolated legacy HMAC use through ordinary public
 artifacts before HKDF or protocol integration.
+
+Owner-directed package footprint (2026-10-19): audit every selected publication
+crate and its first-party dependency closure. Ship runtime sources, required
+build inputs, README, licences and Cargo metadata; keep native captures,
+assurance evidence, test fixtures and audit/tool output in GitHub, outside
+crates.io archives. Establish explicit content allowlists where practical,
+measure archive contents/sizes, and regression-test extracted downstream builds
+including any source-include or build-script inputs. Do not delete repository
+evidence or weaken acceptance tests to reduce package size.
 
 Deliverables:
 

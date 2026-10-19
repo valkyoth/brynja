@@ -1,5 +1,14 @@
 # Current Status
 
+v0.24.55 is signed at `c0c2e069` after the completed 1,166-task consolidated
+checkpoint, final tag gate and green GitHub/CodeQL. No crates.io publication
+occurred. Modern HMAC development is now in progress for v0.25.0: the new
+`brynja-mac-hmac` leaf has an initial portable implementation for ten named
+SHA-2/SHA-3 profiles and focused author tests, but is not yet facade-integrated,
+independently reviewed or release-qualified. Remaining profile, acceleration,
+cleanup and evidence work is tracked in the
+[v0.25.0 work list](../release-notes/RELEASE_NOTES_0.25.0.md).
+
 The [five-part expansion](ROADMAP_EXPANSION_AUDIT.md) adds modern, legacy,
 research and reusable API owners, with larger protocols last. This is planned
 work, not a change in current implementation or verification status.
@@ -14,8 +23,8 @@ and CodeQL: forty Linux/Apple captures and twelve public-consumer campaigns
 are recorded, with independently retested evidence-substitution remediation
 and owner-approved snapshot bindings. These are not independent native or
 side-channel qualification. Its consolidated full sweep was explicitly deferred
-to v0.24.55 and remains incomplete. The current final-closure work audits
-availability and documentation before freezing the sweep candidate; see the
+to v0.24.55 and is now complete. The final-closure record reconciles
+availability and documentation with the completed checkpoint; see the
 [v0.24.55 work packages](../release-notes/RELEASE_NOTES_0.24.55.md).
 The [current acceleration inventory](acceleration-final-closure.md) reconciles
 the original eleven kernel and nine family rows with the later batch and

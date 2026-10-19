@@ -3,6 +3,14 @@ use crate::Error;
 pub(crate) mod sealed {
     use crate::Error;
 
+    /// Internal composition contract, not a downstream extension point.
+    ///
+    /// States own their secret cleanup. Rejected updates must not partially
+    /// absorb input; a length rejection leaves the stream reusable. Finalizing
+    /// consumes the state on every path. `finish` may call `consume` only once,
+    /// after hashing succeeds, and must return that callback's result directly:
+    /// no fallible work may follow public output commit. Its temporary digest
+    /// remains owned and clears on both callback return and recoverable unwind.
     pub trait Hash {
         type State;
         fn start() -> Self::State;

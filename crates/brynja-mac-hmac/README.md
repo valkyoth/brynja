@@ -101,9 +101,19 @@ in the Git repository; no captures or evidence archives belong in the crate.
 ```sh
 cargo test -p brynja-mac-hmac --locked --offline
 python3 scripts/hmac/check-hmac-differential.py
+python3 scripts/hmac/check-hmac-package.py --no-std-target x86_64-unknown-none
 ```
 
 The external-oracle test is intentionally ignored by ordinary Cargo runs and
 executed explicitly by the second command; it must not be counted as a pass
 when ignored. RFC vectors are from [RFC 4231](https://www.rfc-editor.org/rfc/rfc4231.html);
 construction and key guidance follow [RFC 2104](https://www.rfc-editor.org/rfc/rfc2104.html).
+
+Package acceptance executes all seven RFC cases in debug and release, rejects
+67 API/ownership probes and seven compiled algorithm/comparison mutations, and
+builds all ten algorithm consumers for the requested installed `no_std` target.
+The private synthetic-hash fixture injects 132 errors/unwinds across construction,
+update and finalization, checks owner destruction and in-lifetime scratch
+clearing, and rejects four compiled lifecycle/policy mutations. Its synthetic
+hash is never exported or shipped. These are composition tests, not evidence of
+register erasure, hash-kernel cleanup, timing resistance or independent review.

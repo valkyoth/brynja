@@ -1,0 +1,98 @@
+"""Compile public boundary probes and execute mutations of actual HMAC archives."""
+import json
+
+from hmac_faults import accepted, rejected, replace_once, result
+
+ALGORITHMS = ("Sha224", "Sha256", "Sha384", "Sha512", "Sha512_224", "Sha512_256",
+              "Sha3_224", "Sha3_256", "Sha3_384", "Sha3_512")
+
+
+def diagnostic_rejection(run, expected):
+    codes = []
+    for line in run.stdout.splitlines():
+        try:
+            row = json.loads(line)
+        except ValueError:
+            continue
+        if row.get("reason") == "compiler-message" and row["message"].get("level") == "error":
+            codes.append((row["message"].get("code") or {}).get("code"))
+    if run.returncode != 101 or not codes or set(codes) != {expected}:
+        raise ValueError(f"HMAC negative did not fail with {expected}: {codes}\n" + run.stderr[-3000:])
+
+
+def negative_cases():
+    for algorithm in ALGORITHMS:
+        for bound in ("Send", "Sync", "Copy", "Clone", "core::fmt::Debug"):
+            yield (f"{algorithm}/{bound}",
+                   f'fn bound<T: {bound}>() {{}} pub fn probe() {{bound::<Hmac<{algorithm}>>();}}', "E0277")
+    for owner in ("Tag<'static, Sha256>", "SecretTag<'static, Sha256>"):
+        for bound in ("Copy", "Clone", "core::fmt::Debug"):
+            yield (f"{owner}/{bound}", f'fn bound<T: {bound}>() {{}} pub fn probe() {{bound::<{owner}>();}}', "E0277")
+    yield ("sealed algorithm", 'pub struct External; impl Algorithm for External {const BLOCK_BYTES:usize=64; const TAG_BYTES:usize=32;}', "E0277")
+    for method in ("reset", "clone", "check_additional_bits", "check_additional_bytes", "export_key"):
+        yield (method, f'pub fn probe(mut mac: Hmac<Sha256>) {{mac.{method}();}}', "E0599")
+    yield ("consumed stream", 'pub fn probe(mut mac: Hmac<Sha256>) {mac.cancel(); let _ = mac.update(b"late");}', "E0382")
+    yield ("algorithm tag substitution", 'pub fn probe(tag: Tag<Sha224>) -> Tag<Sha256> {tag}', "E0308")
+    yield ("secret tag substitution", 'pub fn probe(tag: SecretTag<Sha224>) -> SecretTag<Sha256> {tag}', "E0308")
+    yield ("secret/public substitution", 'pub fn probe(tag: SecretTag<Sha256>) -> Tag<Sha256> {tag}', "E0308")
+    yield ("secret borrow escape", 'pub fn probe(tag: SecretTag<Sha256>) -> &[u8] {tag.expose()}', "E0515")
+
+
+def negatives(consumer, environment, no_std_target=None):
+    source = consumer / "src/lib.rs"
+    original = source.read_text()
+    command = ["cargo", "check", "--offline", "--locked", "--lib", "--message-format=json"]
+    prefix = '#![no_std]\n#![forbid(unsafe_code)]\nuse brynja_mac_hmac::*;\n'
+    # A positive probe for EVERY admitted identity ensures negative failures
+    # cannot be explained by unavailable imports, dependencies or Rust syntax.
+    positive = prefix + '\n'.join(
+        f'pub fn positive_{index}(key: &[u8], message: &[u8], tag: &[u8]) -> Result<bool, Error> {{'
+        f'let mut mac = Hmac::<{algorithm}>::new(key)?; mac.update(message)?; Ok(mac.verify(tag)?.expose_public())}}'
+        for index, algorithm in enumerate(ALGORITHMS))
+    try:
+        source.write_text(positive)
+        baseline = result(command, consumer, environment)
+        if baseline.returncode:
+            raise ValueError("HMAC positive API probe failed: " + baseline.stderr)
+        if no_std_target:
+            build = result(["cargo", "build", "--offline", "--locked", "--release",
+                            "--lib", "--target", no_std_target], consumer, environment)
+            if build.returncode:
+                raise ValueError("HMAC extracted no_std consumer failed: " + build.stderr)
+            print(f"HMAC extracted no_std consumer: {no_std_target}; 10 algorithm instantiations PASS")
+        count = 0
+        for name, code, diagnostic in negative_cases():
+            source.write_text(prefix + code)
+            try:
+                diagnostic_rejection(result(command, consumer, environment), diagnostic)
+            except ValueError as error:
+                raise ValueError(name + ": " + str(error)) from error
+            count += 1
+    finally:
+        source.write_text(original)
+    print(f"HMAC packaged API/ownership negatives: {count} rejected")
+
+
+def mutants(roots, consumer, environment):
+    path = roots["brynja-mac-hmac"] / "src/engine.rs"
+    original = path.read_text()
+    cases = (
+        ('mask_pad(pad, 0x36)?;', 'mask_pad(pad, 0x37)?;', "vectors", "rfc4231_case1"),
+        ('mask_pad(pad, 0x36 ^ 0x5c)?;', 'mask_pad(pad, 0x36 ^ 0x5d)?;', "vectors", "rfc4231_case1"),
+        ('if key.len() > A::BLOCK_BYTES {', 'if false {', "vectors", "rfc4231_case6_long_key_normalization"),
+        ('A::update(&mut outer, digest)', 'A::update(&mut outer, &[])', "vectors", "rfc4231_case1"),
+        ('digest.get(..self.tag_bytes)', 'digest.get(A::TAG_BYTES - self.tag_bytes..)', "vectors", "rfc4231_case5_explicit_truncation"),
+        ('for (expected, actual) in tag.iter().zip(candidate) {',
+         'for (expected, actual) in tag.iter().zip(candidate).take(1) {', "lifecycle", "sha256"),
+        ('&difference.0[0],\n        )))', '&0,\n        )))', "lifecycle", "sha256"),
+    )
+    for before, after, target, test in cases:
+        command = ["cargo", "test", "--offline", "--locked", "--release", "--test", target, test, "--", "--exact"]
+        accepted(result(command, consumer, environment), 1)
+        try:
+            path.write_text(replace_once(original, before, after))
+            rejected(result(command, consumer, environment))
+        finally:
+            path.write_text(original)
+        accepted(result(command, consumer, environment), 1)
+    print(f"HMAC packaged algorithm/comparison compiled mutants: {len(cases)} rejected")

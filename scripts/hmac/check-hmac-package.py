@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Test real HMAC archives downstream; retain test/evidence files only in Git."""
+import argparse
 import json
 import os
 from pathlib import Path
@@ -10,6 +11,8 @@ import tomllib
 from unittest.mock import patch
 
 from hmac_package import validate_members
+import hmac_faults
+import hmac_acceptance
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.append(str(ROOT / "scripts/repository"))
@@ -29,6 +32,9 @@ def run(command, directory, environment):
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--no-std-target", help="also build the extracted consumer for an installed bare-metal target")
+    args = parser.parse_args()
     specifications = tuple((name, tomllib.loads(
         (ROOT / "crates" / name / "Cargo.toml").read_text())["package"]["version"],
         ("src/lib.rs",)) for name in NAMES)
@@ -71,7 +77,7 @@ def main():
             if package["source"] is not None or Path(package["manifest_path"]).resolve() != location / "Cargo.toml":
                 raise ValueError("HMAC dependency escaped extracted archives")
         for profile in ([], ["--release"]):
-            for test, count in (("vectors", 3), ("lifecycle", 11)):
+            for test, count in (("vectors", 7), ("lifecycle", 11)):
                 output = run(["cargo", "test", "--offline", "--locked", *profile, "--test", test], consumer, environment)
                 if f"test result: ok. {count} passed; 0 failed; 0 ignored;" not in output:
                     raise ValueError("HMAC packaged test population changed")
@@ -79,6 +85,9 @@ def main():
             if "test result: ok. 1 passed; 0 failed; 0 ignored;" not in output:
                 raise ValueError("HMAC README example did not execute")
         print("HMAC extracted archive: debug/release vectors, lifecycle and README PASS")
+        hmac_acceptance.negatives(consumer, environment, args.no_std_target)
+        hmac_acceptance.mutants(roots, consumer, environment)
+        hmac_faults.check(roots, directory, environment)
 
 
 if __name__ == "__main__":

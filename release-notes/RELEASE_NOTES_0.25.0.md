@@ -10,11 +10,27 @@ Status: in development; no tag, publication or qualification claim.
 - Implemented byte streaming, full-length one-shot tags, long-key normalization,
   exact protocol-selected byte truncation, consuming verification and typed
   secret/public outputs. Empty keys are mathematically supported, not secure.
-- Added RFC 4231 cases 1, 5 and 6, lifecycle/output tests, negative ownership
+- Added all seven RFC 4231 cases, lifecycle/output tests, negative ownership
   rustdoc cases, and an explicit 1,100-case Python/OpenSSL differential campaign.
   These are author tests, not an independent review or full qualification.
 - Started source-only packaging with an explicit HMAC include list. Evidence,
   standalone tests and oracle tooling remain in GitHub, not the crate archive.
+
+## Portable acceptance follow-up
+
+- The real extracted archive now rejects 67 public API/ownership misuse probes
+  with checked Rust diagnostics, including all ten algorithm owners, consumed
+  streams, cross-algorithm/secret-public tag substitution and secret borrow escape.
+- Seven compiled algorithm/comparison mutations are rejected by executing the
+  relevant RFC or lifecycle test; compiler errors are not counted as successes.
+- A private copied-source fixture injects 132 synthetic hash errors/unwinds and
+  verifies owner release, transactional public output, clearing secret output and
+  scratch destruction while storage is alive. Five debug/release tests and four
+  compiled lifecycle/policy mutants cover this contract. This fixture never
+  adds a public fault-injection feature or enters the published archive.
+- Extracted `no_std` consumers instantiate all ten algorithms. HMAC-specific
+  compiler erasure, real hash exhaustion, timing and verifier-family registration
+  remain pending; synthetic adapter faults do not establish those properties.
 
 ## Remaining work before completion
 

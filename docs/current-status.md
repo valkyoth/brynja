@@ -17,6 +17,10 @@ side-channel qualification. Its consolidated full sweep was explicitly deferred
 to v0.24.55 and remains incomplete. The current final-closure work audits
 availability and documentation before freezing the sweep candidate; see the
 [v0.24.55 work packages](../release-notes/RELEASE_NOTES_0.24.55.md).
+The [current acceleration inventory](acceleration-final-closure.md) reconciles
+the original eleven kernel and nine family rows with the later batch and
+protected profiles; it does not promote pending qualification or legacy
+candidate admission flags.
 
 The [public-operation roadmap audit](ROADMAP_API_COMPLETENESS_AUDIT.md) adds
 explicit DER, format, key-role and prerequisite closure without changing any

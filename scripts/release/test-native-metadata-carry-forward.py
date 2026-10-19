@@ -23,6 +23,7 @@ spec = importlib.util.spec_from_file_location('native_fixture', review.ROOT /
 fixture = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(fixture)
 CODE = 'crates/brynja-hash-tuple/src/test-only.rs'
+VALIDATOR = 'scripts/native-test-driver.py'
 
 
 def git(root, *args):
@@ -44,7 +45,7 @@ def commit(root):
 
 def sources(root):
     return {name: review.evidence.shared.source_digest(name, (root / name).read_bytes())
-            for name in (CODE, review.REVIEW)}
+            for name in (CODE, review.REVIEW, VALIDATOR)}
 
 
 class CarryForwardTests(unittest.TestCase):
@@ -60,6 +61,7 @@ class CarryForwardTests(unittest.TestCase):
         write(self.root, review.FIXTURE, old)
         write(self.root, review.FACADE, '[package]\nversion = "0.24.39"\n')
         write(self.root, CODE, 'test-only unchanged native input')
+        write(self.root, VALIDATOR, '# original validator\n')
         h = review.evidence.hashlib.sha256(old.encode()).hexdigest()
         q = self.quote
         write(self.root, review.REVIEW, 'REVIEWED_HASHES = {' + q + review.FIXTURE + q + ': ' + q + h + q + '}\n')
@@ -96,6 +98,96 @@ class CarryForwardTests(unittest.TestCase):
 
     def test_exact_version_change_preserves_original_records(self):
         self.validate()
+
+    def approve_and_bump(self, *, overlapping_pin=False):
+        # Synthetic owner approval only; never modifies real native evidence.
+        index = json.loads((self.root / review.evidence.INDEX).read_text())
+        capture = index['capture_commit']
+        write(self.root, VALIDATOR, '# independently reviewed validator change\n')
+        paths = [VALIDATOR]
+        if overlapping_pin:
+            path = self.root / review.REVIEW
+            path.write_text(path.read_text() + '# independently reviewed pin-module change\n')
+            paths.append(review.REVIEW)
+        anchor = commit(self.root)
+        document = json.loads((self.root / approval.REVIEW).read_text())
+        document['reviewed_commit'] = anchor
+        document['validation_changes'] = {self.family + '-execution': {
+            name: {'before': approval.io.sha(git(self.root, 'show', capture + ':' + name)),
+                   'after': approval.io.sha((self.root / name).read_bytes())}
+            for name in paths}}
+        self.set_approval(document)
+        before = (self.root / review.FIXTURE).read_bytes()
+        after = before.replace(b'0.24.40', b'0.24.41')
+        (self.root / review.FIXTURE).write_bytes(after)
+        write(self.root, review.FACADE, '[package]\nversion = "0.24.41"\n')
+        path = self.root / review.REVIEW
+        path.write_text(path.read_text().replace(approval.io.sha(before), approval.io.sha(after)))
+        commit(self.root)
+        return document
+
+    def set_approval(self, document):
+        write(self.root, approval.REVIEW, document)
+        commit(self.root)
+        os.environ[approval.ENVIRONMENT] = approval.io.sha((self.root / approval.REVIEW).read_bytes())
+
+    def test_approved_validator_and_version_pin_compose(self):
+        self.approve_and_bump()
+        self.validate()
+
+    def test_approved_pin_module_and_version_pin_compose(self):
+        self.approve_and_bump(overlapping_pin=True)
+        self.validate()
+
+    def test_composition_rejects_unapproved_executable_and_other_pin_changes(self):
+        self.approve_and_bump(overlapping_pin=True)
+        self.validate()
+        for name in (VALIDATOR, review.REVIEW, CODE):
+            with self.subTest(path=name):
+                path = self.root / name
+                original = path.read_bytes()
+                path.write_bytes(original + b'\n# unapproved candidate change\n')
+                commit(self.root)
+                with self.assertRaises(ValueError):
+                    self.validate()
+                path.write_bytes(original)
+                commit(self.root)
+        self.validate()
+
+    def test_composition_checks_both_approved_digest_pairs(self):
+        original = self.approve_and_bump(overlapping_pin=True)
+        for name in (VALIDATOR, review.REVIEW):
+            for side in ('before', 'after'):
+                with self.subTest(path=name, side=side):
+                    document = copy.deepcopy(original)
+                    document['validation_changes'][self.family + '-execution'][name][side] = '0' * 64
+                    self.set_approval(document)
+                    with self.assertRaisesRegex(ValueError, 'approved validation bytes changed'):
+                        self.validate()
+        self.set_approval(original)
+        self.validate()
+
+    def test_composition_does_not_permit_fixture_features(self):
+        self.approve_and_bump(overlapping_pin=True)
+        self.test_other_fixture_settings_rejected_even_with_matching_review_pin()
+
+    def test_composition_does_not_permit_rehashed_forged_artifacts(self):
+        self.approve_and_bump(overlapping_pin=True)
+        self.test_artifact_rehash_cannot_forge_results_or_compiler()
+
+    def test_composition_rejects_new_orphan_source(self):
+        self.approve_and_bump(overlapping_pin=True)
+        name = str(Path(CODE).with_name('new-orphan.rs'))
+        write(self.root, name, '// new source not present in original native closure\n')
+        commit(self.root)
+        with self.assertRaisesRegex(ValueError, 'family implementation/build input addition/removal'):
+            self.validate()
+
+    def test_composition_requires_external_pin(self):
+        self.approve_and_bump(overlapping_pin=True)
+        with patch.dict(os.environ, {approval.ENVIRONMENT: '0' * 64}):
+            with self.assertRaisesRegex(ValueError, 'approval digest mismatch'):
+                self.validate()
 
     def test_code_capture_fixture_and_artifact_mutations_fail(self):
         paths = (CODE, review.REVIEW, review.FIXTURE, review.FACADE,

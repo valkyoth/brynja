@@ -7,6 +7,8 @@ from pathlib import Path
 import sys
 import tomllib
 import argparse
+import native_review_io as io
+import native_review_scope as scope
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts/tuplehash'))
@@ -52,14 +54,12 @@ def validate(root=ROOT, family='tuplehash'):
     shared, require = evidence.shared, evidence.require
     head = shared.git(root, 'rev-parse', 'HEAD').decode().strip()
     from native_evidence_approval import validate as approve
-    approve(family + '-execution', root, head)
+    approval = approve(family + '-execution', root, head)
     require(not shared.git(root, 'status', '--porcelain', '--untracked-files=all').strip(),
             'clean carry-forward checkout required')
 
     def historical(commit, name):
-        require(int(shared.git(root, 'cat-file', '-s', commit + ':' + name)) <= shared.LIMIT,
-                'carry-forward object bound')
-        return shared.git(root, 'show', commit + ':' + name).replace(b'\r\n', b'\n')
+        return io.historical(root, commit, name)
 
     def current(name):
         raw = shared.bounded(root, name).replace(b'\r\n', b'\n')
@@ -72,18 +72,35 @@ def validate(root=ROOT, family='tuplehash'):
     capture = index['capture_commit']
     require(isinstance(capture, str) and evidence.re.fullmatch('[a-f0-9]{40}', capture),
             'carry-forward capture commit')
+    require(capture == approval['capture_commit'], 'approved capture identity')
     shared.git(root, 'merge-base', '--is-ancestor', capture, head)
     require(set(index['lanes']) == set(evidence.LANES), 'all carry-forward native lanes required')
     expected = evidence.sources(root)
     captured = {name: digest(name, historical(capture, name)) for name in expected}
     changed = {name for name in expected if expected[name] != captured[name]}
-    require(changed == {review}, 'carry-forward rejects any other native-input change')
-    old_fixture, new_fixture = historical(capture, fixture), current(fixture)
-    old_version = tomllib.loads(historical(capture, FACADE).decode())['package']['version']
+    approved = approval['validation_changes']
+    require(set(approved) <= set(expected), 'approved validation input absent from capture')
+    require(review in changed and changed <= set(approved) | {review},
+            'carry-forward rejects any other native-input change')
+    # Compose two independent proofs, never approve candidate bytes as their
+    # own historical review. Other validation changes must still match the
+    # external digest exactly. Only this one pin may advance beyond that review.
+    for name, pair in approved.items():
+        after = (historical(approval['reviewed_commit'], name)
+                 if name == review else current(name))
+        require(io.sha(historical(capture, name)) == pair['before'] and
+                io.sha(after) == pair['after'], 'approved validation bytes changed: ' + name)
+    pin_base = approval['reviewed_commit'] if review in approved else capture
+    old_fixture, new_fixture = historical(pin_base, fixture), current(fixture)
+    old_version = tomllib.loads(historical(pin_base, FACADE).decode())['package']['version']
     new_version = tomllib.loads(current(FACADE).decode())['package']['version']
     version_only(old_fixture, new_fixture, old_version, new_version)
-    reviewed_pin_only(historical(capture, review), current(review), old_fixture, new_fixture,
+    reviewed_pin_only(historical(pin_base, review), current(review), old_fixture, new_fixture,
                       fixture, '"' if family == 'tuplehash' else "'")
+    # Raw approved pairs and the single structural pin replacement were checked
+    # above. Retain additions/removals/build checks for the entire family closure.
+    scope.unchanged(root, capture, head, expected,
+                    reviewed_validation=set(approved) | {review})
     for lane, row in index['lanes'].items():
         require(set(row) == {'artifact', 'sha256', 'cpu', 'reviewed'} and row['reviewed'] is True,
                 'carry-forward owner review required')
@@ -96,8 +113,12 @@ def validate(root=ROOT, family='tuplehash'):
         record = shared.document(raw)
         evidence.record_check(record, lane, capture, captured)
         require(record['cpu'] == row['cpu'], 'carry-forward reviewed CPU identity')
-    print(f'{family} native evidence: PASS via verified facade-version-only carry-forward; '
-          'original capture and raw artifacts retained')
+    io.clean(root)
+    require(shared.git(root, 'rev-parse', 'HEAD').decode().strip() == head and
+            evidence.sources(root) == expected, 'checkout changed during native reuse')
+    print(f'{family} native evidence: PASS via verified facade-version-only carry-forward '
+          f'with {len(approved)} externally approved validation changes; '
+          'original capture and raw artifacts retained; no new native qualification')
 
 
 if __name__ == '__main__':

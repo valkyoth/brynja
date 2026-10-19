@@ -57,7 +57,9 @@ defaults and cryptographic implementations are unchanged by preparation.
 
 - Release identity and public acceptance fixture pins: updated for preparation.
 - Current status: v0.24.54 tagging and green CI recorded accurately.
-- Availability inventory and frozen public acceptance: pending reconciliation.
+- Source/API availability inventory: reviewed in the
+  [closure inventory](../docs/acceleration-final-closure.md); frozen public
+  acceptance and final evidence dispositions still pending.
 - Consolidated detached sweep: not started; final task list and host allocation
   remain to be established before launch.
 - Final release verification, GitHub and tagging: pending.
@@ -78,3 +80,12 @@ separate extended profile has 4,094. The planned internal checkpoint uses the
 complete routine catalog, as in the earlier two-host campaign, with its profile
 explicit in receipts; it is not an extended-profile qualification. Final counts
 and the approval fingerprint must be rechecked after inventory closure.
+
+The author-tested TupleHash/ParallelHash metadata correction composes the
+existing exact fixture-version/pin proof with externally approved validator
+changes. Approved original/intermediate bytes, source/build populations and
+artifact identity remain checked; the approval digest is unchanged. All 78
+historical-reuse regressions pass, including 16 added composition cases; four
+in-memory mutations removing either structural predicate are rejected. This
+verification-path change requires an exceptional retest before release, recorded
+as pending in [the security report](../security/pentest/v0.24.55.md).

@@ -232,7 +232,7 @@
     "scripts/release/native_unchanged.py": "2bdeb2a253a27f56f8f2f746272e05aef4f47a621ad02f2e7cbf1925748dd32e",
     "scripts/release/test-native-dependency-scope.py": "3b84e09d21360a95893998d8b91466ade74fdd70146fdea1aaea1abf333eccc5",
     "scripts/release/test-native-evidence-approval.py": "b4b5a67a27e114332d2372f199a1f14865e17818a885ec72d6054016899b0276",
-    "scripts/release/test-native-metadata-carry-forward.py": "b986a158fa941111e7e5903fa0265788dd33a94f9fb91bb5a5b7b8d1392a91ed",
+    "scripts/release/test-native-metadata-carry-forward.py": "4d7a2de3011050d7f289afb45e83aee29bfc0c94de4b58f94cf92c6437d2e2cf",
     "scripts/sha2/capture-sha2-hardened-native.py": "50cd60bc595fa44c85c8424863757aa61dd7cb6d930eb127f7bad4fc9f013ad4",
     "scripts/sha2/check-sha2-execution.py": "375cb1ae007fd938a96a3c6517b04be1412dc3bdbc1e455991f50572766f087d",
     "scripts/sha2/check-sha2-hardened-asan.py": "c3f92262a67b1229230c6b4b0099137a387011dbc1b5cdadded39c5d32584dc2",

@@ -4,7 +4,9 @@ Status: planned remediation; runtime behavior is unchanged by this audit.
 Basis: v0.24.29 candidate `236b0d12`, reviewed 2026-09-08.
 
 This table preserves the original audit, not current implementation status.
-See [current status](current-status.md) for completed closures. The v0.24.45
+See the [current closure inventory](acceleration-final-closure.md) and
+[current status](current-status.md) for implemented routes and remaining
+qualification limits. The v0.24.45
 signed milestone adds [ordinary SHA-224/256 multibuffer SIMD](sha256-batch-execution.md)
 with completed retest and native qualification. The v0.24.46 candidate adds
 [SHA-512-family multibuffer SIMD](sha512-batch-execution.md); its exceptional

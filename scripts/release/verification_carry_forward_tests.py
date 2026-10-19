@@ -165,12 +165,12 @@ class CarryForwardTests(unittest.TestCase):
                 check(path, b'changed\n', ())
             check(review, originals[review].replace(b'a' * 128, b'b' * 128), ())
             check(review, originals[review].replace(b'"src"', b'"other"'),
-                  ('sha3', 'kmac', 'tuplehash', 'parallelhash'))
+                  ('sha3', 'kmac', 'tuplehash', 'parallelhash', 'hmac'))
             for path, groups in (
-                ('crates/brynja-hash-sha2/src/lib.rs', ('sha2',)),
+                ('crates/brynja-hash-sha2/src/lib.rs', ('sha2', 'hmac')),
                 ('crates/brynja-legacy-md5/src/lib.rs', ('md5', 'legacy')),
-                ('scripts/sha2/driver.py', ('sha2',)),
-                ('crates/brynja-hash-sha3/src/lib.rs', ('sha3', 'kmac', 'tuplehash', 'parallelhash')),
+                ('scripts/sha2/driver.py', ('sha2', 'hmac')),
+                ('crates/brynja-hash-sha3/src/lib.rs', ('sha3', 'kmac', 'tuplehash', 'parallelhash', 'hmac')),
             ):
                 check(path, b'changed\n', groups)
             check('crates/brynja-core/src/lib.rs', b'changed\n', plans.scope.closure({'core'}))
@@ -178,7 +178,7 @@ class CarryForwardTests(unittest.TestCase):
             # Deletions are changes too, not absent inputs to be silently reused.
             path = 'crates/brynja-hash-sha2/src/lib.rs'
             (root / path).unlink()
-            self.assertEqual(plans.build(root=root, base=base, verified_base=True)['groups'], ['sha2'])
+            self.assertEqual(plans.build(root=root, base=base, verified_base=True)['groups'], ['sha2', 'hmac'])
             (root / path).write_bytes(originals[path])
             packages = tomllib.loads(originals['Cargo.lock'].decode())['package']
             selected = [item for item in packages if item['name'] == 'sanitization']
@@ -191,7 +191,7 @@ class CarryForwardTests(unittest.TestCase):
                   f'name = "sanitization"\nversion = "{replacement}"'.encode()), ('sanitization',))
             # Dependency feature changes affect the crate and its consumers.
             check('crates/brynja-hash-sha3/Cargo.toml', b'[features]\ndefault=["new"]\n',
-                  ('sha3', 'kmac', 'tuplehash', 'parallelhash'))
+                  ('sha3', 'kmac', 'tuplehash', 'parallelhash', 'hmac'))
             original_toolchain = originals['rust-toolchain.toml']
             compiler = tomllib.loads(original_toolchain.decode())['toolchain']['channel']
             replacement = b'1.90.0' if compiler != '1.90.0' else b'1.99.1'

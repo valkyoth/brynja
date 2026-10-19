@@ -5,6 +5,7 @@ import shlex
 
 import verification_commands as commands
 import verification_plan as plans
+from detached_manifest import MAX_COMMANDS
 
 PHASES = ("repository", "matrix", "asan", "miri", "kani")
 
@@ -39,13 +40,14 @@ def selected(plan: dict, phases: list[str], approval: str | None, shards: int = 
             if phase == "miri" and selected_groups and miri_tasks:
                 from miri_tasks import commands as task_commands
                 chosen = [(shlex.join(argv), None) for argv in task_commands(root, selected_groups, miri_profile)]
+            elif phase == 'kani':
+                partitions = [selected_groups] if shards == 1 or not selected_groups else [[group] for group in selected_groups]
+                chosen = [(command, None) for partition in partitions for command in commands.kani_commands(partition)]
             elif selected_groups:
                 prefix = ("scripts/zeroization/check-zeroization-miri.sh --selected " if phase == "miri"
                           else "scripts/assurance/check-kani.sh --required-groups ")
                 partitions = [selected_groups] if shards == 1 else [[group] for group in selected_groups]
                 chosen = [(prefix + " ".join(partition), None) for partition in partitions]
-            elif phase == "kani":
-                chosen = [("scripts/assurance/check-kani.sh --policy-only", None)]
         for command, source in chosen:
             argv = shlex.split(command)
             environment = {}
@@ -53,6 +55,6 @@ def selected(plan: dict, phases: list[str], approval: str | None, shards: int = 
                 environment["RUSTFLAGS"] = argv.pop(0).split("=", 1)[1]
             result.append({"phase": phase, "command": command, "argv": argv,
                            "stdin": source, "environment": environment})
-    if len(result) > 4096:
+    if len(result) > MAX_COMMANDS:
         raise ValueError("too many detached commands")
     return result

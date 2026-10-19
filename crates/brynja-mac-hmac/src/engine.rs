@@ -14,7 +14,7 @@ pub(crate) struct Engine<A: Algorithm> {
 
 impl<A: Algorithm> Engine<A> {
     pub(crate) fn new(key: &[u8], tag_bytes: usize) -> Result<Self, Error> {
-        if !(16..=A::TAG_BYTES).contains(&tag_bytes) {
+        if !crate::policy::valid_tag_length(A::TAG_BYTES, tag_bytes) {
             return Err(Error::TagLength);
         }
         let mut pad = Scratch::<144>::new();
@@ -63,7 +63,7 @@ impl<A: Algorithm> Engine<A> {
     }
 
     pub(crate) fn public(self, destination: &mut [u8]) -> Result<Tag<'_, A>, Error> {
-        if destination.len() != self.tag_bytes {
+        if !crate::policy::exact_output(self.tag_bytes, destination.len()) {
             return Err(Error::TagLength);
         }
         self.finish(|tag| copy_secret_region(destination, tag).map_err(Error::from))?;
@@ -76,7 +76,7 @@ impl<A: Algorithm> Engine<A> {
             return Err(Error::TagLength);
         }
         let mut initialization = SecretRegionInitialization::begin(destination)?;
-        if length != self.tag_bytes {
+        if !crate::policy::exact_output(self.tag_bytes, length) {
             return Err(Error::TagLength);
         }
         self.finish(|tag| initialization.write(tag).map_err(Error::from))?;
@@ -84,7 +84,7 @@ impl<A: Algorithm> Engine<A> {
     }
 
     pub(crate) fn verify(self, candidate: &[u8]) -> Result<Verification, Error> {
-        if candidate.len() != self.tag_bytes {
+        if !crate::policy::exact_output(self.tag_bytes, candidate.len()) {
             return Err(Error::TagLength);
         }
         let mut difference = Scratch::<1>::new();

@@ -39,7 +39,7 @@ class MiriCaseTests(unittest.TestCase):
         self.assertEqual(catalog.selected(plan, ['matrix'], plan['fingerprint']), [])
         miri = catalog.selected(plan, ['miri'], plan['fingerprint'], miri_tasks=True,
                                 miri_profile='routine')
-        self.assertEqual(len(miri), 562)
+        self.assertEqual(len(miri), 573)
         old = {'phase': 'asan', 'command': 'cargo test -p brynja-hash-sha2',
                'argv': ['cargo', 'test', '-p', 'brynja-hash-sha2'], 'stdin': None,
                'environment': {}}
@@ -56,11 +56,11 @@ class MiriCaseTests(unittest.TestCase):
         self.assertTrue(plans.requires_full({**plan, 'full_phases': ['repository']}, 'command'))
 
     def test_profile_task_sets_are_unique_and_fit_detached_bound(self):
-        for profile, count in (('existing-full', 83), ('routine', 562), ('extended', 4094)):
+        for profile, count in (('existing-full', 94), ('routine', 573), ('extended', 4105)):
             commands = miri_tasks.commands(plans.ROOT, list(plans.scope.GROUPS), profile)
             self.assertEqual(len(commands), count)
             self.assertEqual(len({tuple(command) for command in commands}), count)
-            self.assertLessEqual(count, 4096)
+            self.assertLessEqual(count, catalog.MAX_COMMANDS)
 
     def test_routine_staging_covers_every_dimension_without_cartesian_product(self):
         matrix = miri_cases.matrices('tuplehash')[0]
@@ -78,11 +78,12 @@ class MiriCaseTests(unittest.TestCase):
         plan = {'stage': 'internal', 'approval_required': False, 'groups': groups,
                 'full_phases': list(catalog.PHASES),
                 'verifiers': {phase: groups for phase in ('miri', 'asan', 'kani')}}
-        commands = catalog.selected(plan, list(catalog.PHASES), None,
-                                    miri_tasks=True, miri_profile='routine')
-        self.assertEqual({command['phase'] for command in commands}, set(catalog.PHASES))
-        self.assertGreater(len(commands), 562)
-        self.assertLessEqual(len(commands), 4096)
+        for profile, minimum in (('routine', 573), ('extended', 4105)):
+            commands = catalog.selected(plan, list(catalog.PHASES), None,
+                                        miri_tasks=True, miri_profile=profile)
+            self.assertEqual({command['phase'] for command in commands}, set(catalog.PHASES))
+            self.assertGreater(len(commands), minimum)
+            self.assertLessEqual(len(commands), catalog.MAX_COMMANDS)
 
     def test_routine_parallel_covers_widths_blocks_and_each_lifecycle_case_zero(self):
         self.assertEqual(len(miri_cases.matrices('parallelhash')), 21)

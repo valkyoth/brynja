@@ -117,3 +117,11 @@ update and finalization, checks owner destruction and in-lifetime scratch
 clearing, and rejects four compiled lifecycle/policy mutations. Its synthetic
 hash is never exported or shipped. These are composition tests, not evidence of
 register erasure, hash-kernel cleanup, timing resistance or independent review.
+
+The incremental verifier selects HMAC independently from unchanged hash families.
+Eleven bounded Miri tasks cover the ten adapters and consumer unwinding; native
+matrices retain their full coverage. The HMAC ASan runner forces leak detection
+and fatal errors. Two Kani proofs cover only the actual public-length policy
+predicates, not the cryptographic construction. These checks remain author-run
+assurance, not independent qualification, and do not establish hardware or
+protected-memory support.

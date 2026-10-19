@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+python3 scripts/hmac/check-hmac-asan.py
+
 # Verified native SHA-NI host; missing hardware is a blocker, never a skip/PASS.
 python3 scripts/sha2/check-sha2-hardened-asan.py
 python3 scripts/sha2/check-sha256-batch-asan.py

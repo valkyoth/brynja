@@ -320,6 +320,17 @@ class LifecycleTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             jobs.load(self.job, self.receipt)
 
+    def test_command_capacity_is_bounded_without_dropping_tasks(self):
+        value = records.read(self.job / "manifest.json")
+        value["commands"] *= records.MAX_COMMANDS
+        records.atomic(self.job / "manifest.json", value)
+        loaded = jobs.load(self.job, records.digest(value))
+        self.assertEqual(len(loaded["commands"]), records.MAX_COMMANDS)
+        value["commands"].append(value["commands"][0])
+        records.atomic(self.job / "manifest.json", value)
+        with self.assertRaises(ValueError):
+            jobs.load(self.job, records.digest(value))
+
     def test_tool_drift_fails_before_running_commands(self):
         with patch.object(jobs, "validate_source"), patch.object(records, "tool_identity", return_value={"rustc": "drift"}):
             self.assertEqual(jobs.worker(self.job, self.receipt), 1)

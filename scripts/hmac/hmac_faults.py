@@ -61,11 +61,11 @@ def check(roots, directory, environment):
         ("scratch.rs", anchor, 'let _ = &self.0;', "scratch_clears_populated_regions"),
         ("lib.rs", 'pub fn cancel(self) {}', 'pub fn cancel(self) { core::mem::forget(self); }',
          "every_hash_boundary_releases_owners"),
-        ("engine.rs", 'let mut initialization = SecretRegionInitialization::begin(destination)?;\n        if length != self.tag_bytes {\n            return Err(Error::TagLength);\n        }',
-         'if length != self.tag_bytes { return Err(Error::TagLength); }\n        let mut initialization = SecretRegionInitialization::begin(destination)?;',
+        ("engine.rs", 'let mut initialization = SecretRegionInitialization::begin(destination)?;\n        if !crate::policy::exact_output(self.tag_bytes, length) {\n            return Err(Error::TagLength);\n        }',
+         'if !crate::policy::exact_output(self.tag_bytes, length) { return Err(Error::TagLength); }\n        let mut initialization = SecretRegionInitialization::begin(destination)?;',
          "invalid_destinations_reject_before_hash_finalization"),
-        ("engine.rs", 'if !(16..=A::TAG_BYTES).contains(&tag_bytes)',
-         'if !(1..=A::TAG_BYTES).contains(&tag_bytes)', "invalid_tag_policy_constructs_no_hash_owners"),
+        ("policy.rs", 'selected >= 16 && selected <= full',
+         'selected >= 1 && selected <= full', "invalid_tag_policy_constructs_no_hash_owners"),
     )
     for filename, before, after, test in mutants:
         path = fixture / "src" / filename

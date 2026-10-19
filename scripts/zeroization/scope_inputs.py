@@ -14,6 +14,8 @@ LIMIT = 4 * 1024 * 1024
 GENERATED_REGISTER_LIMIT = 8 * 1024 * 1024
 GENERATED_REGISTERS = frozenset({'standards/protocol-surfaces.json'})
 PACKAGES = {
+    'brynja-mac-hmac': 'hmac',
+    'brynja-hmac-policy-fixture': 'hmac',
     'brynja-keccak-batch-fixture': 'sha3',
     'brynja-sha512-batch-fixture': 'sha2',
     'brynja-general-sha512-t-consumer': 'sha2',

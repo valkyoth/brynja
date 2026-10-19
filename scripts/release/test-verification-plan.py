@@ -97,7 +97,7 @@ def selection_tests() -> None:
         assert any('general-sha512-t' in c for c in per_version)
     assert any("general-sha512-t" in c for c in selected_matrix)
     assert not any("legacy-md5" in c or "sha3-public-api" in c for c in selected_matrix)
-    assert plans.scope.closure({"sha3"}) == ("sha3", "kmac", "tuplehash", "parallelhash")
+    assert plans.scope.closure({"sha3"}) == ("sha3", "kmac", "tuplehash", "parallelhash", "hmac")
     assert "sha2" in plans.scope.closure({"static_cpu"})
     assert "md5" not in plans.scope.closure({"sha2"})
     assert "md5" in plans.scope.select(["security/md5-cpu-admissions.toml"])[1]
@@ -115,7 +115,7 @@ def selection_tests() -> None:
         assert 'python3 scripts/constant-time/' + name in commands.selected(catalog, [])
     for command in ('python3 scripts/cryptography/check-windows-enclave-lifecycle.py',
                     'cargo test -p brynja-strict'):
-        assert commands.owners(command) == set(plans.scope.closure({'static_cpu'}))
+        assert commands.owners(command) == {'static_cpu', 'sha2', 'sha3', 'kmac', 'tuplehash', 'parallelhash'}
 
 
 def miri_dependency_tests():
@@ -134,8 +134,8 @@ def miri_dependency_tests():
         portable = record.replace(b' "brynja-crypto-cpu",\n', b'').replace(b' "brynja-crypto-cpu-std",\n', b'')
         raw = raw[:start] + portable + raw[end:]
     edges = miri_dependencies.graph(raw, raw)
-    assert plans.scope.closure({'static_cpu'}, downstream=edges) == ('sha2', 'static_cpu')
-    assert plans.scope.closure({'sha3'}, downstream=edges) == ('sha3', 'kmac', 'tuplehash', 'parallelhash')
+    assert plans.scope.closure({'static_cpu'}, downstream=edges) == ('sha2', 'static_cpu', 'hmac')
+    assert plans.scope.closure({'sha3'}, downstream=edges) == ('sha3', 'kmac', 'tuplehash', 'parallelhash', 'hmac')
     assert 'sha3' in plans.scope.closure({'core'}, downstream=edges)
     import tomllib
     data = tomllib.loads(raw.decode())
@@ -212,7 +212,7 @@ def runner_tests() -> None:
     assert run('kani', miri_only, '--approve-full', 'a' * 64) == 0
     assert executed == [('scripts/assurance/check-kani.sh --policy-only',)]
     assert run('miri', miri_only, '--approve-full', 'a' * 64) == 0
-    assert len(executed) == 562
+    assert len(executed) == 573
     assert run("repository", sample(public=True)) == 0
     assert any("md5-differential" in c[0] for c in executed)
     with patch.object(commands, "matrix_commands", side_effect=ValueError("unknown matrix")):
@@ -400,7 +400,7 @@ def additive_review_scope_tests():
              patch.object(plans.inputs, 'snapshot', side_effect=lambda r,b,p:
                           (old,raw) if p == path else (None,None)):
             return plans.scope.select_repository('v0.24.49')
-    assert selected(new) == (False, ('sha3', 'kmac', 'tuplehash', 'parallelhash'))
+    assert selected(new) == (False, ('sha3', 'kmac', 'tuplehash', 'parallelhash', 'hmac'))
     assert selected(new.replace(name.encode(), b'crates/unknown/src/lib.rs'))[0]
     assert 'core' in selected(new.replace(b'X = 1', b'X = 2'))[1]
 

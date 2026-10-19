@@ -29,8 +29,27 @@ Status: in development; no tag, publication or qualification claim.
   compiled lifecycle/policy mutants cover this contract. This fixture never
   adds a public fault-injection feature or enters the published archive.
 - Extracted `no_std` consumers instantiate all ten algorithms. HMAC-specific
-  compiler erasure, real hash exhaustion, timing and verifier-family registration
-  remain pending; synthetic adapter faults do not establish those properties.
+  compiler erasure, real hash exhaustion and timing remain pending;
+  synthetic adapter faults do not establish those properties.
+
+## Scoped verifier registration
+
+- HMAC is now an independent change-impact family. Its source, tests, scripts
+  and isolated fixtures select HMAC, not a full old-family fallback. Changes to
+  shared SHA-2, SHA-3 or core implementations still select affected HMAC work.
+- Command ownership is separate from downstream change propagation: an HMAC
+  change cannot accidentally select upstream sanitizer or compiler campaigns.
+  Foreground and detached Kani selection agree; an old hash-family receipt does
+  not cover the new HMAC proofs.
+- Eleven bounded, independently resumable Miri tasks cover all ten named
+  adapters and consumer unwinding. Full native matrices remain intact. ASan
+  enforces fatal leak detection even under hostile ambient settings. Two Kani
+  proofs compile the actual runtime public-length predicates; they are not
+  proofs of HMAC cryptographic security or the hash implementations.
+- The bounded detached catalog now accommodates the extended Miri population
+  plus new-family tasks. No prior task is removed, and over-capacity records
+  still fail closed. Focused regressions cover selection, verifier identity,
+  missing test populations and the command-capacity boundary.
 
 ## Remaining work before completion
 
@@ -39,9 +58,10 @@ Status: in development; no tag, publication or qualification claim.
 2. Assess and implement applicable existing accelerated hash routes and
    protected/resident HMAC composition without weakening host-memory boundaries;
    finish facade integration and required API/profile/requirement inventories.
-3. Register HMAC-specific evidence planning and bounded Miri/Kani/ASan/codegen
-   campaigns. Reuse unchanged hash evidence; changes to shared implementations
-   still require their affected consumer checks. No long sweep is launched here.
+3. Extend the registered HMAC verifier tasks for the completed profiles and
+   finish HMAC-specific compiler cleanup and timing campaigns. Reuse unchanged
+   hash evidence; changes to shared implementations still require their affected
+   consumer checks. No long whole-repository sweep is launched here.
 4. Finish package/downstream, mutant, timing and cleanup qualification, then
    exceptional independent pentest/retest and final release checks.
 

@@ -151,7 +151,7 @@ def load(job: Path, receipt: str) -> dict:
         raise ValueError("detached launch receipt mismatch")
     bounds(manifest["seconds"], manifest["log_bytes"])
     shards.bounds(manifest["shards"], manifest["workers"])
-    if len(manifest["commands"]) > 4096:
+    if len(manifest["commands"]) > records.MAX_COMMANDS:
         raise ValueError("detached command bound exceeded")
     checkpoints.indices(manifest)
     if manifest["schema"] == 2:

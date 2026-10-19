@@ -77,14 +77,14 @@ def main():
             if package["source"] is not None or Path(package["manifest_path"]).resolve() != location / "Cargo.toml":
                 raise ValueError("HMAC dependency escaped extracted archives")
         for profile in ([], ["--release"]):
-            for test, count in (("vectors", 7), ("lifecycle", 11)):
+            for test, count in (("vectors", 7), ("lifecycle", 11), ("bounded", 11)):
                 output = run(["cargo", "test", "--offline", "--locked", *profile, "--test", test], consumer, environment)
                 if f"test result: ok. {count} passed; 0 failed; 0 ignored;" not in output:
                     raise ValueError("HMAC packaged test population changed")
             output = run(["cargo", "test", "--offline", "--locked", *profile, "--doc"], consumer, environment)
             if "test result: ok. 1 passed; 0 failed; 0 ignored;" not in output:
                 raise ValueError("HMAC README example did not execute")
-        print("HMAC extracted archive: debug/release vectors, lifecycle and README PASS")
+        print("HMAC extracted archive: debug/release vectors, lifecycle, bounded tests and README PASS")
         hmac_acceptance.negatives(consumer, environment, args.no_std_target)
         hmac_acceptance.mutants(roots, consumer, environment)
         hmac_faults.check(roots, directory, environment)

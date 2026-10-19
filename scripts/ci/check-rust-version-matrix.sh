@@ -14,6 +14,7 @@ for toolchain in "${toolchains[@]}"; do
     fi
     # BEGIN MATRIX CATALOG
     cargo "+$toolchain" check --workspace --all-features
+    cargo "+$toolchain" test --locked --offline -p brynja-mac-hmac --all-features
     cargo "+$toolchain" test --locked --offline --manifest-path assurance/hosted-cpu-execution/Cargo.toml
     cargo "+$toolchain" run --locked --offline --manifest-path assurance/general-sha512-t/Cargo.toml \
         < crates/brynja-hash-sha2/tests/vectors/general-sha512-t-digest.txt

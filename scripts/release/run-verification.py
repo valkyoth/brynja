@@ -164,10 +164,9 @@ def main() -> int:
                 print("REUSE: all unchanged Miri groups; native repository smoke checks remain")
         else:
             groups = list(plans.scope.GROUPS) if full else plan["verifiers"]["kani"]
-            if groups:
-                execute("scripts/assurance/check-kani.sh --required-groups " + " ".join(groups))
-            else:
-                execute("scripts/assurance/check-kani.sh --policy-only")
+            for command in commands.kani_commands(groups):
+                execute(command)
+            if not groups:
                 print("REUSE: unchanged Kani harnesses and dependencies")
         return 0
     except PermissionError as error:

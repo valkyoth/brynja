@@ -217,7 +217,17 @@ full_static_cpu() {
     run_miri --manifest-path assurance/static-cpu-execution/Cargo.toml --lib
 }
 
-all_groups=(core sanitization md5 sha1 sha2 sha3 kmac tuplehash parallelhash legacy acceleration static_cpu)
+quick_hmac() {
+    run_miri -p brynja-mac-hmac --test bounded sha256 -- --exact
+}
+
+full_hmac() {
+    for identity in sha224 sha256 sha384 sha512 sha512_224 sha512_256 sha3_224 sha3_256 sha3_384 sha3_512 output_clears_during_consumer_unwind; do
+        run_miri -p brynja-mac-hmac --test bounded $identity -- --exact
+    done
+}
+
+all_groups=(core sanitization md5 sha1 sha2 sha3 kmac tuplehash parallelhash legacy acceleration static_cpu hmac)
 mode="${1:---full}"
 shift || true
 

@@ -13,7 +13,12 @@ from verification_plan import ROOT, scope
 from scope_review_metadata import BASE_COMMANDS as REVIEW_COMMANDS
 
 ALL = set(scope.GROUPS)
+# Existing CPU/hosted/strict fixtures also exercise these integrations. Keep
+# their prior coverage explicit, rather than assigning every future consumer
+# to them. Add HMAC only when those fixtures actually gain HMAC integration.
+CPU_INTEGRATIONS = {"static_cpu", "sha2", "sha3", "kmac", "tuplehash", "parallelhash"}
 DIRECTORIES = {
+    "hmac": {"hmac"},
     "md5": {"md5"}, "sha1": {"sha1"}, "sha2": {"sha2"}, "sha3": {"sha3"},
     "kmac": {"kmac"}, "tuplehash": {"tuplehash"}, "parallelhash": {"parallelhash"},
     "legacy-hash": {"legacy"}, "hash": {"sha2", "sha3"},
@@ -42,6 +47,16 @@ BASE_COMMANDS = {
     "cargo clippy --locked --offline --manifest-path assurance/acceleration-contract/Cargo.toml --all-targets -- -D warnings",
     "cargo test --locked --offline --manifest-path assurance/crate-readmes/Cargo.toml --doc",
 }
+
+
+def direct_owners(path: str) -> tuple[bool, tuple[str, ...]]:
+    # A changed implementation selects its consumers in the planner. A test
+    # command belongs to the implementation it tests, not to those consumers:
+    # otherwise a leaf-only change selects every upstream family in reverse.
+    full, groups = scope.select([path], downstream={group: set() for group in scope.GROUPS})
+    if not full and "static_cpu" in groups:
+        return False, tuple(group for group in scope.GROUPS if group in CPU_INTEGRATIONS)
+    return full, groups
 
 
 def catalog(path: Path, marker: str | None = None) -> list[str]:
@@ -82,7 +97,7 @@ def owners(command: str) -> set[str]:
             return set()  # Broad but cheap build/lint/native compatibility baseline.
         if "--manifest-path" in argv:
             path = argv[argv.index("--manifest-path") + 1]
-            full, groups = scope.select([path])
+            full, groups = direct_owners(path)
             if full or not groups:
                 raise ValueError(f"unclassified fixture command: {command}")
             return set(groups)
@@ -90,7 +105,7 @@ def owners(command: str) -> set[str]:
         if packages:
             found = set()
             for package in packages:
-                full, groups = scope.select([f"crates/{package}/src/lib.rs"])
+                full, groups = direct_owners(f"crates/{package}/src/lib.rs")
                 if full or not groups:
                     raise ValueError(f"unclassified package command: {command}")
                 found.update(groups)
@@ -102,7 +117,7 @@ def owners(command: str) -> set[str]:
         raise ValueError(f"unclassified script command: {command}")
     directory = parts[1]
     if scope.windows_or_facade_driver(path):
-        return set(scope.closure({'static_cpu'}))
+        return CPU_INTEGRATIONS.copy()
     if directory in BASE_DIRECTORIES:
         return set()
     if directory == "zeroization":
@@ -121,6 +136,17 @@ def selected(commands: list[str], groups: list[str], *, full: bool = False) -> l
         if full or not group or group.intersection(groups):
             result.append(command)
     return result
+
+
+def kani_commands(groups: list[str]) -> list[str]:
+    if len(groups) != len(set(groups)) or not set(groups) <= ALL:
+        raise ValueError("unknown or duplicate Kani family")
+    legacy = [group for group in groups if group != 'hmac']
+    result = (["scripts/assurance/check-kani.sh --required-groups " + " ".join(legacy)]
+              if legacy else [])
+    if 'hmac' in groups:
+        result.append("python3 scripts/hmac/check-hmac-kani.py")
+    return result or ["scripts/assurance/check-kani.sh --policy-only"]
 
 
 def repository_commands(root: Path = ROOT) -> list[str]:

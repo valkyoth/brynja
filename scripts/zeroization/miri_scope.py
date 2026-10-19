@@ -14,7 +14,7 @@ import scope_workspace
 
 
 ROOT = Path(__file__).resolve().parents[2]
-GROUPS = ("core", "sanitization", "md5", "sha1", "sha2", "sha3", "kmac", "tuplehash", "parallelhash", "legacy", "acceleration", "static_cpu")
+GROUPS = ("core", "sanitization", "md5", "sha1", "sha2", "sha3", "kmac", "tuplehash", "parallelhash", "legacy", "acceleration", "static_cpu", "hmac")
 FULL_EXACT = {
     "Cargo.lock",
     "Cargo.toml",
@@ -27,6 +27,7 @@ FULL_PREFIXES = ("scripts/zeroization/", ".cargo/")
 BASE_SCRIPT_PREFIXES = tuple("scripts/" + category + "/" for category in (
     "repository", "release", "assurance", "ci", "standards", "pki", "protocols"))
 GROUP_PREFIXES = {
+    "hmac": ("crates/brynja-mac-hmac/", "scripts/hmac/", "assurance/hmac-"),
     "static_cpu": ("assurance/static-cpu-execution/", "assurance/hosted-cpu-execution/",
                    "assurance/cpu-admission-fixture/", "scripts/cpu/",
                    "security/cpu-", "security/acceleration-availability.toml",
@@ -90,8 +91,9 @@ DOWNSTREAM = {
     "md5": {"legacy"},
     "sha1": {"legacy"},
     "legacy": set(),
-    "sha2": set(),
-    "sha3": {"kmac", "tuplehash", "parallelhash"},
+    "sha2": {"hmac"},
+    "sha3": {"kmac", "tuplehash", "parallelhash", "hmac"},
+    "hmac": set(),
     "kmac": set(),
     "tuplehash": set(),
     "parallelhash": set(),

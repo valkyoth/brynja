@@ -19,6 +19,9 @@ MAX_RECORD = 16 * 1024 * 1024
 MAX_SOURCE = 64 * 1024 * 1024
 MAX_FILES = 20000
 MAX_TOTAL = 1024 * 1024 * 1024
+# Extended pre-HMAC Miri already occupied 4094 slots. Keep a bounded catalog
+# with room for independently resumable new-family tasks and baseline phases.
+MAX_COMMANDS = 8192
 
 
 def canonical(value: object) -> bytes:
@@ -140,7 +143,8 @@ def verifier_commands(root: Path, selected: list[dict]) -> dict:
         if (argv[0] == "scripts/zeroization/check-zeroization-miri.sh"
                 or argv[:2] == ["python3", "scripts/zeroization/run-miri-task.py"]):
             names.add("miri")
-        if argv[0] == "scripts/assurance/check-kani.sh" and "--policy-only" not in argv:
+        if (argv[0] == "scripts/assurance/check-kani.sh"
+                or argv[:2] == ["python3", "scripts/hmac/check-hmac-kani.py"]) and "--policy-only" not in argv:
             names.add("kani")
     if not names:
         return {}

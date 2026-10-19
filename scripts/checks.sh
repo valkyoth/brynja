@@ -271,6 +271,13 @@ python3 scripts/standards/test-requirement-residuals.py
 python3 scripts/assurance/check-assurance.py
 python3 scripts/assurance/test-assurance.py
 scripts/assurance/check-kani.sh --policy-only
+python3 scripts/hmac/check-hmac-kani.py --policy-only
+python3 scripts/hmac/test-hmac-package.py
+python3 scripts/hmac/test-hmac-acceptance.py
+python3 scripts/hmac/test-hmac-verification.py
+python3 scripts/hmac/check-hmac-package.py
+python3 scripts/hmac/check-hmac-differential.py
+cargo test --locked --offline --manifest-path assurance/hmac-policy/Cargo.toml
 cargo check --workspace --all-features
 cargo check --workspace --no-default-features
 cargo clippy --workspace --all-targets --all-features -- \

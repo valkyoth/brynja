@@ -94,5 +94,5 @@ def test_review_metadata():
                     rebound.replace(b'b' * 64, b'z' * 64)):
         assert selected({path: (binding, altered)})[1]
     assert selected({path: (binding, rebound), 'crates/brynja-hash-sha2/src/lib.rs':
-                     (b'old', b'new')}) == (False, ('sha2',))
+                     (b'old', b'new')}) == (False, ('sha2', 'hmac'))
     print('Review-only scope retains runtime/build/verifier changes and rejects malformed, removed and broadened inventories')

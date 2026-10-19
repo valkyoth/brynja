@@ -125,8 +125,9 @@ profile pins now compare raw committed bytes, retaining their existing expected
 digests. The dependency suite passes 17 tests; a normalized-reader mutant fails
 all 22 CRLF rejection cases. All eight real native-reuse paths pass on that clean
 commit. This last cleanup is author-verified, not claimed as part of the earlier
-independent retest. Final review disposition and the consolidated checkpoint
-remain pending; a clean tooling retest is not a completed release sweep.
+independent retest. The owner accepted that author-tested cleanup on 2026-10-19;
+the pentest record is now PASS with zero open findings. The consolidated
+checkpoint remains pending; a clean tooling retest is not a completed release sweep.
 
 ## Local public-consumer acceptance
 

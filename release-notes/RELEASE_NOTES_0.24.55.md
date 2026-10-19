@@ -1,8 +1,8 @@
 # v0.24.55 - Opt-In Acceleration Final Closure
 
-Status: consolidated verification incomplete; the first checkpoint stopped on
-legacy review metadata, now corrected and focused-tested. No tag, crates.io
-publication or new independent qualification.
+Status: consolidated verification completed and reconciled on `8a93f40d`;
+final release-gate and exact-candidate GitHub checks remain pending. No tag,
+crates.io publication or new independent qualification.
 
 Baseline: signed `v0.24.54` at `91c794158099d0c06226c5bfbc23e4d6b1dfcdbd`.
 Only the facade release identity advances. Support-crate versions, portable
@@ -60,9 +60,10 @@ defaults and cryptographic implementations are unchanged by preparation.
 - Current status: v0.24.54 tagging and green CI recorded accurately.
 - Source/API availability inventory: reviewed in the
   [closure inventory](../docs/acceleration-final-closure.md); local packaged
-  public acceptance passed on `9695e91f`. Final evidence reconciliation pending.
-- Consolidated detached sweep: first two-host attempt stopped during repository
-  checks; corrected restart pending. Failed receipts are retained.
+  public acceptance passed on `9695e91f`. Original native records pass all eight
+  approved reuse paths on `8a93f40d` without changing the external approval.
+- Consolidated detached sweep: completed on `8a93f40d`, including every one of
+  the 1,166 selected tasks. Both earlier failed attempts remain preserved.
 - Final release verification, GitHub and tagging: pending.
 
 Preparation checks passed: release metadata and all 2,159 ordered roadmap
@@ -88,8 +89,8 @@ changes. Approved original/intermediate bytes, source/build populations and
 artifact identity remain checked; the approval digest is unchanged. All 82
 historical-reuse regressions pass, including 20 added composition cases; four
 in-memory mutations removing either structural predicate are rejected. This
-verification-path change requires an exceptional retest before release, recorded
-as pending in [the security report](../security/pentest/v0.24.55.md).
+verification-path change required the exceptional retests recorded below and in
+[the security report](../security/pentest/v0.24.55.md).
 
 All eight real native-reuse paths now pass, retaining their original observations
 and the unchanged external approval digest. The two corrected paths passed on
@@ -105,7 +106,7 @@ Git bytes. The author suites now pass 88 reuse tests, 15 approval tests and 21
 hardened gate-policy mutations. No cryptographic code or external approval pin
 changed. The [review record](../security/pentest/v0.24.55.md) retains the findings
 and the distinction between local drift pins and independent verifier approval;
-the corrective retest and consolidated sweep remain pending.
+the corrective retest and consolidated sweep were still pending at that stage.
 
 The next retest identified the same import-shadowing pattern in the generic
 fallback and additional helper-pin/raw-hash gaps. The follow-up preloads the
@@ -128,7 +129,8 @@ all 22 CRLF rejection cases. All eight real native-reuse paths pass on that clea
 commit. This last cleanup is author-verified, not claimed as part of the earlier
 independent retest. The owner accepted that author-tested cleanup on 2026-10-19;
 the pentest record is now PASS with zero open findings. The consolidated
-checkpoint remains pending; a clean tooling retest is not a completed release sweep.
+checkpoint subsequently completed as recorded below; the tooling retest alone
+was not treated as a completed release sweep.
 
 ## Local public-consumer acceptance
 
@@ -158,7 +160,7 @@ checkpoint receipts. The approved original native records and their external
 digest remain unchanged. Reinspection of the `v0.24.51` consolidation baseline
 still selects 263 repository commands, 280 matrix commands, 49 sanitizer commands,
 twelve Kani groups and 562 routine Miri tasks. The initial checkpoint and its
-correction are recorded below; no completed checkpoint is claimed.
+correction and the subsequently completed checkpoint are recorded below.
 
 ## Legacy inventory correction after checkpoint launch
 
@@ -182,3 +184,57 @@ compiled debug/release batch mutants, downstream fixture tests, release executio
 and strict Clippy. The shared metadata preflight now invokes the complete legacy
 validator, so later source-inventory drift is rejected before a long launch.
 This is an author-tested checkpoint repair, not a new independent pentest.
+
+## Completed consolidated checkpoint
+
+On 2026-10-19, the corrected candidate
+`8a93f40dcd33b1a4328d107233ead5b5d7933eef` completed the explicitly approved
+`v0.24.51`-baseline checkpoint on two Ubuntu x86-64 Intel Xeon 6975P-C hosts.
+The approved plan fingerprint was
+`8f0e071add5913cb092157896d19007fd2bbbdbe73f800beafa4237900b44aa9`.
+The existing four-shard/two-worker configuration assigned 583 tasks to each host.
+
+| Phase | Successful commands/tasks |
+| --- | ---: |
+| Repository and assurance checks | 263 |
+| Compiler matrix | 280 |
+| AddressSanitizer | 49 |
+| Routine-profile Miri | 562 |
+| Kani groups | 12 |
+| Total | 1,166 |
+
+Both partitions completed within their original eight-hour bounds (approximately
+6h32m and 2h57m). The long KMAC task passed 22 tests in approximately 3h48m.
+The separate 4,094-task extended Miri profile was not selected or qualified.
+The matrix retains its recorded compiler identities; this is not a fresh native
+capture for every compiler or platform.
+
+The first metadata failure and the following private-directory failure remain
+failed evidence. The latter was caused by the SSH session's `umask 0002`, which
+created group-writable snapshot/target directories. The corrected operational
+launcher used `umask 0077` and private owned directories; the two rejected facade
+checks passed before restart. No gate, production code or acceptance condition
+was relaxed, and no failed parent was reused as successful evidence.
+
+The two successful immutable partition receipts are:
+
+- `7e87def6143d620df514f12652820d203714538ee87361a60e08787a8d3a32de`
+- `75e3bfa7a62713c9b6bdf1c17af77f0133f472507cb925df9e720efee4601500`
+
+The ordinary detached resume/collection path combined all 1,166 disjoint passes
+without executing another test. Combined receipt:
+`ce90d2b1380d317758d6ab07d8f1f8c0dac42837271eec4e7a5ab1c92fb7e232`.
+Combined result SHA-256:
+`916eeace5a383ebd4e882d062fdfaa3c2b066b74b7f4331d207f624f95150bd1`.
+Combined archive SHA-256:
+`a6d409b78b0b16464d0790027064b19be939979a06e4b34e2530b913d33e03e1`.
+
+Remote live collection and local historical collection both passed. Both parent
+archives, the combined archive, full logs, source snapshots and local phase
+registry are preserved outside `target/`. Checks validate exact source/tool
+seals, command coverage, exit statuses, log hashes, ancestry and resource bounds;
+they are owner-operated integrity checks, not signed independent runner attestations.
+The local planner accepts the combined receipt without a new full sweep, while
+retaining current repository/tooling checks for the final gate. GitHub Rust CI,
+CodeQL and the standards monitor passed on `8a93f40d`; this documentation update
+still requires its own final checks. No tag or publication is authorized here.

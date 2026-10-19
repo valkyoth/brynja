@@ -2,8 +2,8 @@
 
 Status: author inventory review for v0.24.55; prior tooling findings confirmed
 closed by the supplied retest; the optional author-tested cleanup is owner-accepted.
-Final verification remains pending. This inventory grants no execution authority
-or qualification.
+The consolidated checkpoint has completed; final release-gate checks remain
+pending. This inventory grants no execution authority or qualification.
 
 The [original usability audit](ACCELERATION_USABILITY_AUDIT.md) and
 [v0.24.30 contract](../security/acceleration-availability.toml) are historical
@@ -14,7 +14,7 @@ Do not flip those flags to report completion of these different APIs.
 “Implemented opt-in” below means source and a normal public API exist under
 their documented target/profile contract. It does not mean every host supports
 that API, that a native timing/cleanup claim has been independently qualified,
-or that the pending consolidation passed. Every row retains **no independent
+or independent qualification from the consolidation. Every row retains **no independent
 cryptographic verification and no FIPS module validation**.
 
 ## Original eleven kernel rows
@@ -128,14 +128,17 @@ Local packaged public acceptance passed against the implementation and fixtures
 at `9695e91f`: both facades, available static x86 acceleration, isolated legacy
 packages, strict scalar consumers and all 64 README examples. Exact commands and
 scope are recorded in the [release notes](../release-notes/RELEASE_NOTES_0.24.55.md).
-This does not replace historical platform observations or the deferred checkpoint.
+This does not replace historical platform observations.
 
-Before closure, run the deferred all-family repository/compiler/Miri/Kani/ASan
-checkpoint, reconcile every failed
-or unavailable task, and update the README
-status inventory without promoting pending qualification. No new cryptographic
-implementation gap was identified in this source/API inventory pass; that is
-not a clean independent pentest or a completed verification sweep.
+The deferred all-family repository/compiler/Miri/Kani/ASan checkpoint completed
+on `8a93f40d`: all 1,166 selected commands/tasks passed, with disjoint partition
+coverage and original execution seals validated after transfer. The release
+notes retain the two earlier failed attempts, complete receipt identities and
+the routine Miri profile's limits. No pending independent/native qualification
+warning is promoted by this owner-operated sweep. Final release-gate and
+exact-candidate GitHub checks remain required before tagging. No new
+cryptographic implementation gap was identified in this source/API inventory
+pass; that inventory is not itself an independent pentest.
 
 Future families, starting with HMAC at v0.25.0, register their own affected
 commands and dependency relationships. Reuse unchanged hash/kernel observations;

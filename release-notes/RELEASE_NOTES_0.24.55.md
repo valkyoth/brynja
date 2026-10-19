@@ -84,8 +84,8 @@ and the approval fingerprint must be rechecked after inventory closure.
 The author-tested TupleHash/ParallelHash metadata correction composes the
 existing exact fixture-version/pin proof with externally approved validator
 changes. Approved original/intermediate bytes, source/build populations and
-artifact identity remain checked; the approval digest is unchanged. All 78
-historical-reuse regressions pass, including 16 added composition cases; four
+artifact identity remain checked; the approval digest is unchanged. All 82
+historical-reuse regressions pass, including 20 added composition cases; four
 in-memory mutations removing either structural predicate are rejected. This
 verification-path change requires an exceptional retest before release, recorded
 as pending in [the security report](../security/pentest/v0.24.55.md).

@@ -36,13 +36,18 @@ def version_only(previous, current, old_version, new_version):
             'carry-forward only permits the fixture facade version')
 
 
-def reviewed_pin_only(previous, current, old_fixture, new_fixture, fixture=FIXTURE, quote='"'):
+def replace_pin(previous, old_fixture, new_fixture, fixture=FIXTURE, quote='"'):
     before = evidence.hashlib.sha256(old_fixture).hexdigest().encode()
     after = evidence.hashlib.sha256(new_fixture).hexdigest().encode()
     old_entry = (quote + fixture + quote + ': ' + quote).encode() + before + quote.encode()
     new_entry = (quote + fixture + quote + ': ' + quote).encode() + after + quote.encode()
-    evidence.require(previous.count(old_entry) == 1 and
-                     previous.replace(old_entry, new_entry, 1) == current,
+    evidence.require(previous.count(old_entry) == 1,
+                     'carry-forward requires exactly one fixture pin')
+    return previous.replace(old_entry, new_entry, 1)
+
+
+def reviewed_pin_only(previous, current, old_fixture, new_fixture, fixture=FIXTURE, quote='"'):
+    evidence.require(replace_pin(previous, old_fixture, new_fixture, fixture, quote) == current,
                      'carry-forward cannot change executable review policy or other pins')
 
 
@@ -82,21 +87,24 @@ def validate(root=ROOT, family='tuplehash'):
     require(set(approved) <= set(expected), 'approved validation input absent from capture')
     require(review in changed and changed <= set(approved) | {review},
             'carry-forward rejects any other native-input change')
-    # Compose two independent proofs, never approve candidate bytes as their
-    # own historical review. Other validation changes must still match the
-    # external digest exactly. Only this one pin may advance beyond that review.
-    for name, pair in approved.items():
-        after = (historical(approval['reviewed_commit'], name)
-                 if name == review else current(name))
-        require(io.sha(historical(capture, name)) == pair['before'] and
-                io.sha(after) == pair['after'], 'approved validation bytes changed: ' + name)
-    pin_base = approval['reviewed_commit'] if review in approved else capture
-    old_fixture, new_fixture = historical(pin_base, fixture), current(fixture)
-    old_version = tomllib.loads(historical(pin_base, FACADE).decode())['package']['version']
+    old_fixture, new_fixture = historical(capture, fixture), current(fixture)
+    old_version = tomllib.loads(historical(capture, FACADE).decode())['package']['version']
     new_version = tomllib.loads(current(FACADE).decode())['package']['version']
     version_only(old_fixture, new_fixture, old_version, new_version)
-    reviewed_pin_only(historical(pin_base, review), current(review), old_fixture, new_fixture,
-                      fixture, '"' if family == 'tuplehash' else "'")
+    quote = '"' if family == 'tuplehash' else "'"
+    intermediate = historical(capture, review)
+    if review in approved:
+        # The evidence snapshot may predate the separately approved validator
+        # edits. Undo ONLY the proven fixture pin and authenticate the resulting
+        # complete module against the externally pinned after digest below.
+        intermediate = replace_pin(current(review), new_fixture, old_fixture, fixture, quote)
+    # This is not candidate self-approval: every intermediate byte must match
+    # the independently supplied digest, including executable logic/other pins.
+    for name, pair in approved.items():
+        after = intermediate if name == review else current(name)
+        require(io.sha(historical(capture, name)) == pair['before'] and
+                io.sha(after) == pair['after'], 'approved validation bytes changed: ' + name)
+    reviewed_pin_only(intermediate, current(review), old_fixture, new_fixture, fixture, quote)
     # Raw approved pairs and the single structural pin replacement were checked
     # above. Retain additions/removals/build checks for the entire family closure.
     scope.unchanged(root, capture, head, expected,

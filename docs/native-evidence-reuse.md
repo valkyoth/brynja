@@ -94,9 +94,10 @@ it is not evidence for strict MD5 or its optional protected-memory adapter.
 TupleHash/ParallelHash facade fixture version updates use the existing exact
 byte-replacement proof. That proof can coexist with the externally approved
 validation changes: every approved before/after digest is checked, and an
-overlapping pin module must first match its approved historical bytes. Only
-then may its single facade-fixture digest advance, with the fixture itself
-differing solely in the corresponding facade version. Other pins, executable
+overlapping pin module is authenticated against the externally approved after
+digest after reversing only its single facade-fixture pin update. The evidence
+snapshot need not contain later approved validator edits. The fixture itself
+must differ solely in the corresponding facade version. Other pins, executable
 logic, feature settings, native source/build population and approved artifact
 bytes cannot change through this route. This is a structural equivalence proof,
 not a new owner approval or a new native run. The original approval manifest

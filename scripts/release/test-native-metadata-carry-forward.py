@@ -99,7 +99,7 @@ class CarryForwardTests(unittest.TestCase):
     def test_exact_version_change_preserves_original_records(self):
         self.validate()
 
-    def approve_and_bump(self, *, overlapping_pin=False):
+    def approve_and_bump(self, *, overlapping_pin=False, earlier_snapshot=False):
         # Synthetic owner approval only; never modifies real native evidence.
         index = json.loads((self.root / review.evidence.INDEX).read_text())
         capture = index['capture_commit']
@@ -107,11 +107,15 @@ class CarryForwardTests(unittest.TestCase):
         paths = [VALIDATOR]
         if overlapping_pin:
             path = self.root / review.REVIEW
-            path.write_text(path.read_text() + '# independently reviewed pin-module change\n')
+            # Validation approval does not approve fixture/build changes. Its
+            # after digest retains the original capture's fixture pin.
+            path.write_bytes(git(self.root, 'show', capture + ':' + review.REVIEW) +
+                             b'# independently reviewed pin-module change\n')
             paths.append(review.REVIEW)
         anchor = commit(self.root)
         document = json.loads((self.root / approval.REVIEW).read_text())
-        document['reviewed_commit'] = anchor
+        if not earlier_snapshot:
+            document['reviewed_commit'] = anchor
         document['validation_changes'] = {self.family + '-execution': {
             name: {'before': approval.io.sha(git(self.root, 'show', capture + ':' + name)),
                    'after': approval.io.sha((self.root / name).read_bytes())}
@@ -122,7 +126,8 @@ class CarryForwardTests(unittest.TestCase):
         (self.root / review.FIXTURE).write_bytes(after)
         write(self.root, review.FACADE, '[package]\nversion = "0.24.41"\n')
         path = self.root / review.REVIEW
-        path.write_text(path.read_text().replace(approval.io.sha(before), approval.io.sha(after)))
+        pinned = git(self.root, 'show', capture + ':' + review.FIXTURE) if overlapping_pin else before
+        path.write_text(path.read_text().replace(approval.io.sha(pinned), approval.io.sha(after)))
         commit(self.root)
         return document
 
@@ -137,6 +142,25 @@ class CarryForwardTests(unittest.TestCase):
 
     def test_approved_pin_module_and_version_pin_compose(self):
         self.approve_and_bump(overlapping_pin=True)
+        self.validate()
+
+    def test_evidence_snapshot_can_predate_approved_validation_changes(self):
+        self.approve_and_bump(overlapping_pin=True, earlier_snapshot=True)
+        self.validate()
+
+    def test_composition_rejects_missing_duplicate_or_wrong_fixture_pin(self):
+        self.approve_and_bump(overlapping_pin=True, earlier_snapshot=True)
+        path = self.root / review.REVIEW
+        original = path.read_bytes()
+        pin = approval.io.sha((self.root / review.FIXTURE).read_bytes()).encode()
+        for changed in (original.replace(pin, b'0' * 64), original + original,
+                        original.replace(review.FIXTURE.encode(), b'unrelated/Cargo.toml')):
+            path.write_bytes(changed)
+            commit(self.root)
+            with self.assertRaises(ValueError):
+                self.validate()
+        path.write_bytes(original)
+        commit(self.root)
         self.validate()
 
     def test_composition_rejects_unapproved_executable_and_other_pin_changes(self):

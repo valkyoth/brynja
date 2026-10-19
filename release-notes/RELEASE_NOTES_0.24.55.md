@@ -1,7 +1,8 @@
 # v0.24.55 - Opt-In Acceleration Final Closure
 
-Status: preparation in progress; consolidated verification NOT RUN for this
-candidate. No tag, crates.io publication or new independent qualification.
+Status: consolidated verification incomplete; the first checkpoint stopped on
+legacy review metadata, now corrected and focused-tested. No tag, crates.io
+publication or new independent qualification.
 
 Baseline: signed `v0.24.54` at `91c794158099d0c06226c5bfbc23e4d6b1dfcdbd`.
 Only the facade release identity advances. Support-crate versions, portable
@@ -60,8 +61,8 @@ defaults and cryptographic implementations are unchanged by preparation.
 - Source/API availability inventory: reviewed in the
   [closure inventory](../docs/acceleration-final-closure.md); local packaged
   public acceptance passed on `9695e91f`. Final evidence reconciliation pending.
-- Consolidated detached sweep: not started; final task list and host allocation
-  remain to be established before launch.
+- Consolidated detached sweep: first two-host attempt stopped during repository
+  checks; corrected restart pending. Failed receipts are retained.
 - Final release verification, GitHub and tagging: pending.
 
 Preparation checks passed: release metadata and all 2,159 ordered roadmap
@@ -156,4 +157,28 @@ checks, not independent qualification, new cross-platform captures or detached
 checkpoint receipts. The approved original native records and their external
 digest remain unchanged. Reinspection of the `v0.24.51` consolidation baseline
 still selects 263 repository commands, 280 matrix commands, 49 sanitizer commands,
-twelve Kani groups and 562 routine Miri tasks. No consolidated job has launched.
+twelve Kani groups and 562 routine Miri tasks. The initial checkpoint and its
+correction are recorded below; no completed checkpoint is claimed.
+
+## Legacy inventory correction after checkpoint launch
+
+The owner-approved two-host checkpoint on `04472feb` stopped during repository
+checks: 29 commands passed on partition 0 and 47 on partition 1 before the legacy
+final checker/test rejected the same stale source inventory. Neither partition
+reached its matrix, Miri, Kani or ASan phase. Original failed receipts remain
+preserved; no failure is relabelled as success.
+
+The checker omitted 32 Apple resident source files first introduced in v0.24.51,
+and four existing hosted manifest/module pins still described the pre-Apple
+surface. The correction explicitly binds those files in the current operational
+deltas and enclosing review. The four existing-file changes consist only of
+gated macOS feature declarations and module exports. Historical native snapshots
+and captures, their approval manifest/digest, production Rust and dependencies
+are unchanged. This metadata correction does not grant Apple native qualification.
+
+Author checks pass: 110 Apple inventory/source regressions, 22 cheap-preflight
+regressions (with subprocess execution forbidden), existing legacy mutations,
+compiled debug/release batch mutants, downstream fixture tests, release execution
+and strict Clippy. The shared metadata preflight now invokes the complete legacy
+validator, so later source-inventory drift is rejected before a long launch.
+This is an author-tested checkpoint repair, not a new independent pentest.

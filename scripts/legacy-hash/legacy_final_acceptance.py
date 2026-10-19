@@ -22,6 +22,21 @@ SHARED_CHANGED = tuple('crates/brynja-core/' + name for name in (
     'src/secret_memory_xor.rs', 'src/secret_memory_xor_tests.rs', 'tests/secret_predicate.rs')) + tuple(
     'crates/brynja-hash-core/' + name for name in (
         'Cargo.toml', 'src/bit_string.rs', 'src/lib.rs', 'src/secret_memory_predicate.rs'))
+# Apple resident owners first shipped in v0.24.51. Bind their complete current
+# source population as operational deltas, never as historical native evidence.
+# Keep this explicit: discovering new files must not silently approve them.
+MACOS_RESIDENT_COMMON = (
+    'mod.rs', 'resource.rs', 'resource/darwin.rs', 'resource/darwin/observe.rs',
+    'resource/darwin/tests.rs', 'resource/darwin/thread.rs', 'resource_error.rs',
+    'test_storage.rs', 'tests.rs', 'tests/native.rs', 'types.rs', 'worker.rs')
+MACOS_RESIDENT = {
+    'sha1': tuple('crates/brynja-legacy-sha1-std/src/macos_resident/' + name
+                  for name in (*MACOS_RESIDENT_COMMON, 'compiled.rs', 'compiled/worker.rs',
+                               'compiled/tests.rs', 'compiled/tests/native.rs')),
+    'md5': tuple('crates/brynja-legacy-md5-std/src/macos_resident/' + name
+                 for name in (*MACOS_RESIDENT_COMMON, 'batch/mod.rs', 'batch/worker.rs',
+                              'batch/tests.rs', 'batch/tests/native.rs')),
+}
 MD5_CHANGED = tuple('crates/brynja-legacy-md5/' + name for name in (
     'src/batch/owner.rs', 'src/batch/tests.rs', 'src/engine.rs', 'src/output.rs', 'tests/api.rs',
     'src/hardened_in_place.rs', 'src/hardened_in_place/tests.rs',
@@ -40,7 +55,7 @@ MD5_CHANGED = tuple('crates/brynja-legacy-md5/' + name for name in (
         'src/strict_execution/mod.rs', 'src/strict_execution/types.rs', 'src/strict_execution/worker.rs',
         'src/strict_execution/tests.rs', 'src/strict_execution/tests/native.rs',
         'src/strict_execution/batch/mod.rs', 'src/strict_execution/batch/worker.rs',
-        'src/strict_execution/batch/tests.rs', 'src/strict_execution/batch/tests/native.rs')) + SHARED_CHANGED
+        'src/strict_execution/batch/tests.rs', 'src/strict_execution/batch/tests/native.rs')) + SHARED_CHANGED + MACOS_RESIDENT['md5']
 SHA1_CHANGED = tuple('crates/brynja-legacy-sha1/' + name for name in (
     'src/engine.rs', 'src/output.rs', 'tests/api.rs',
     'src/hardened_in_place.rs', 'src/hardened_in_place/tests.rs',
@@ -60,7 +75,7 @@ SHA1_CHANGED = tuple('crates/brynja-legacy-sha1/' + name for name in (
         'src/strict_execution/mod.rs', 'src/strict_execution/types.rs', 'src/strict_execution/worker.rs',
         'src/strict_execution/tests.rs', 'src/strict_execution/tests/native.rs',
         'src/strict_execution/compiled.rs', 'src/strict_execution/compiled/worker.rs',
-        'src/strict_execution/compiled/tests.rs', 'src/strict_execution/compiled/tests/native.rs')) + SHARED_CHANGED
+        'src/strict_execution/compiled/tests.rs', 'src/strict_execution/compiled/tests/native.rs')) + SHARED_CHANGED + MACOS_RESIDENT['sha1']
 HASHES = 'scripts/legacy-hash/final-reviewed.toml'
 CLAIMS = FIXTURE + '/claims.toml'
 PACKAGES = ('brynja-core', 'brynja-hash-core', 'brynja-legacy-sha1',
@@ -175,7 +190,9 @@ def validate_native(root):
         paths.update(p.relative_to(root).as_posix() for p in (root / f'assurance/{family}-cpu-public-api/src').rglob('*.rs'))
         paths.update(f'assurance/{family}-cpu-public-api/{name}' for name in ('Cargo.toml', 'Cargo.lock'))
         if paths != set(expected):
-            raise ValueError('historical source closure inventory changed')
+            raise ValueError(f'{family} source closure inventory changed: '
+                             f'unreviewed={sorted(paths - set(expected))}; '
+                             f'missing={sorted(set(expected) - paths)}')
         for path, digest in expected.items():
             if sha(read(root, path)) != digest:
                 raise ValueError('historical source closure changed; reopen evidence: ' + path)

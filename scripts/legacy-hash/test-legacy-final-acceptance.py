@@ -89,6 +89,62 @@ def batch_test_delta_regressions(root):
     print('MD5 batch test delta rejects omission, stale pin and source drift; historical snapshot unchanged')
 
 
+def macos_inventory_regressions(root):
+    """Every Apple source is a current delta, not an old capture qualification."""
+    import tomllib
+    snapshot = policy.read(root, policy.SNAPSHOT)
+    captures = {lane: policy.read(root, f'assurance/md5-observations/v0.24.22/{lane}.json')
+                for lane in policy.MD5_CAPTURES}
+    count = 0
+    for family, delta in (('sha1', policy.SHA1_DELTA), ('md5', policy.MD5_DELTA)):
+        record = root / delta
+        original = record.read_text()
+        hashes = tomllib.loads(original)['files']
+        paths = (*policy.MACOS_RESIDENT[family],
+                 f'crates/brynja-legacy-{family}-std/Cargo.toml',
+                 f'crates/brynja-legacy-{family}-std/src/lib.rs')
+        assert len(paths) == len(set(paths)) == 18
+        for path in paths:
+            source = root / path
+            content = source.read_text()
+            line = f'"{path}" = "{hashes[path]}"'
+            assert original.count(line) == 1
+            for mode in ('omitted', 'stale', 'source'):
+                try:
+                    if mode == 'source':
+                        source.write_text(content + '\n')
+                    else:
+                        replacement = '' if mode == 'omitted' else f'"{path}" = "' + '0' * 64 + '"'
+                        record.write_text(original.replace(line, replacement))
+                    try:
+                        policy.validate_native(root)
+                    except ValueError:
+                        count += 1
+                    else:
+                        raise AssertionError(f'accepted {mode} Apple closure: {path}')
+                finally:
+                    source.write_text(content)
+                    record.write_text(original)
+            policy.validate_native(root)
+        unexpected = root / f'crates/brynja-legacy-{family}-std/src/macos_resident/unreviewed.rs'
+        try:
+            unexpected.write_text('// not reviewed\n')
+            try:
+                policy.validate_native(root)
+            except ValueError as error:
+                assert 'source closure inventory changed' in str(error)
+                count += 1
+            else:
+                raise AssertionError('accepted unreviewed Apple source')
+        finally:
+            unexpected.unlink()
+        policy.validate_native(root)
+    assert policy.read(root, policy.SNAPSHOT) == snapshot
+    for lane, original in captures.items():
+        assert policy.read(root, f'assurance/md5-observations/v0.24.22/{lane}.json') == original
+    print(f'Apple legacy closure rejects {count} regressions; historical snapshot/captures unchanged')
+
+
 def delta_review_binding_regressions(root):
     """The enclosing review must bind both current operational-delta records."""
     import tomllib
@@ -169,6 +225,7 @@ def main():
             shutil.copyfile(policy.ROOT / path, destination)
         policy.validate(root)
         strict_inventory_regressions(root)
+        macos_inventory_regressions(root)
         batch_test_delta_regressions(root)
         delta_review_binding_regressions(root)
         # Simulate growth after the path's size check, without huge allocation.

@@ -9,7 +9,7 @@ import sys
 import tomllib
 
 ROOT = Path(__file__).resolve().parents[2]
-for category in ('sha2', 'sha3', 'hash', 'sp800185', 'cryptography', 'md5', 'cpu', 'parallelhash', 'kmac', 'tuplehash'):
+for category in ('sha2', 'sha3', 'hash', 'sp800185', 'cryptography', 'md5', 'cpu', 'parallelhash', 'kmac', 'tuplehash', 'legacy-hash'):
     sys.path.insert(0, str(ROOT / 'scripts' / category))
 
 import sha256_public_api
@@ -32,6 +32,7 @@ import parallelhash_policy
 import keccak_hardened_policy
 import kmac_execution_policy
 import tuplehash_execution_policy
+import legacy_final_acceptance
 
 _hosted_spec = importlib.util.spec_from_file_location(
     'hosted_acceptance', ROOT / 'scripts/cpu/check-hosted-execution.py')
@@ -90,6 +91,9 @@ def check_api_metadata():
 
 def check_all():
     check_verifier_bindings()
+    # Validate the complete legacy source/delta inventory, not just its two
+    # shared verifier pins. This is metadata only; never run its Cargo driver.
+    legacy_final_acceptance.validate(ROOT)
     check_api_metadata()
     # Include the real mandatory native-gate structure check; a stale policy
     # assertion must fail this cheap preflight rather than only remote CI.

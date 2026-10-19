@@ -74,12 +74,65 @@ def hosted_package_optional_closure():
     print('Hosted package inventory retains optional dependencies and rejects both omission regressions')
 
 
+def legacy_metadata_regressions():
+    """The real cheap preflight must catch deltas and enclosing-review drift."""
+    policy = metadata.legacy_final_acceptance
+    original_read = policy.read
+    count = 0
+    for family, delta in (('sha1', policy.SHA1_DELTA), ('md5', policy.MD5_DELTA)):
+        paths = (policy.MACOS_RESIDENT[family][0],
+                 f'crates/brynja-legacy-{family}-std/Cargo.toml',
+                 f'crates/brynja-legacy-{family}-std/src/lib.rs')
+        original = original_read(metadata.ROOT, delta)
+        hashes = tomllib.loads(original)['files']
+        for path in paths:
+            line = f'"{path}" = "{hashes[path]}"'
+            assert original.count(line) == 1
+            for mode in ('omitted', 'stale', 'source'):
+                def changed_read(root, name):
+                    value = original_read(root, name)
+                    if name == path and mode == 'source':
+                        return value + '\n'
+                    if name == delta and mode != 'source':
+                        replacement = '' if mode == 'omitted' else f'"{path}" = "' + '0' * 64 + '"'
+                        return value.replace(line, replacement)
+                    return value
+                with patch.object(policy, 'read', side_effect=changed_read):
+                    try:
+                        metadata.check_all()
+                    except ValueError as error:
+                        assert ('operational review' in str(error)
+                                or 'historical source closure changed' in str(error)), str(error)
+                        count += 1
+                    else:
+                        raise AssertionError(f'legacy {mode} escaped cheap preflight: {path}')
+        review = original_read(metadata.ROOT, policy.HASHES)
+        source = policy.MACOS_RESIDENT[family][0]
+        line = f'"{source}" = "{tomllib.loads(review)["files"][source]}"'
+        assert review.count(line) == 1
+        for replacement in ('', f'"{source}" = "' + '0' * 64 + '"'):
+            def changed_review(root, name):
+                value = original_read(root, name)
+                return value.replace(line, replacement) if name == policy.HASHES else value
+            with patch.object(policy, 'read', side_effect=changed_review):
+                try:
+                    metadata.check_all()
+                except ValueError as error:
+                    assert 'final acceptance review binding changed' in str(error), str(error)
+                    count += 1
+                else:
+                    raise AssertionError('legacy enclosing review escaped cheap preflight')
+    metadata.check_all()
+    print(f'Legacy metadata preflight rejects {count} delta/source/enclosing-review regressions without subprocesses')
+
+
 def main():
     package_optional_closure()
     hosted_package_optional_closure()
     with patch('subprocess.run', side_effect=AssertionError('unexpected process')), \
             patch('subprocess.check_call', side_effect=AssertionError('unexpected process')):
         metadata.check_all()
+        legacy_metadata_regressions()
         original_read = Path.read_text
         # The hosted review alone previously missed this separate CPU inventory.
         # Reproduce stale pins using the real preflight, with processes forbidden.

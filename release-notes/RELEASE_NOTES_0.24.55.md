@@ -89,3 +89,10 @@ historical-reuse regressions pass, including 20 added composition cases; four
 in-memory mutations removing either structural predicate are rejected. This
 verification-path change requires an exceptional retest before release, recorded
 as pending in [the security report](../security/pentest/v0.24.55.md).
+
+All eight real native-reuse paths now pass, retaining their original observations
+and the unchanged external approval digest. The two corrected paths passed on
+clean commit `7f51eee2`. Focused facade-harness, approval, release-planning,
+family-inventory, metadata/hash, documentation and script checks also pass.
+No production cryptographic implementation changed. This is not completion of
+the frozen public-consumer acceptance or the consolidated verification sweep.

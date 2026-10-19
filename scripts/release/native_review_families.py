@@ -24,7 +24,7 @@ class Family:
     def __init__(self, name, root):
         self.name, self.root = name, root
         directory, module = FAMILIES[name]
-        sys.path.insert(0, str(root / 'scripts' / directory))
+        sys.path.append(str(root / 'scripts' / directory))
         spec = importlib.util.spec_from_file_location('native_review_family',
             root / 'scripts' / directory / (module + '.py'))
         self.module = importlib.util.module_from_spec(spec)

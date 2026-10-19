@@ -8,6 +8,7 @@ import copy
 import tomllib
 
 import native_review_io as io
+import native_md5_dependency_profile as md5
 
 
 def graph(raw):
@@ -74,7 +75,6 @@ def projection(root, revision, closure, profile=None):
     rows = graph(io.historical(root, revision, 'Cargo.lock'))
     traversal = rows
     if profile is not None:
-        import native_md5_dependency_profile as md5
         io.require(profile == md5.PROFILE, 'unknown native dependency command profile')
         traversal = md5.reachability_rows(root, revision, closure, rows)
     selected = reachable(traversal, package_roots)

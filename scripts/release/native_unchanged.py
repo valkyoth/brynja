@@ -6,6 +6,8 @@ platform claim. Historical result validators still validate every original lane.
 import native_dependency_scope as dependencies
 import native_review_io as io
 import native_review_scope as scope
+import native_evidence_approval as approval_module
+import native_md5_dependency_profile as md5
 
 
 def validate_inputs(root, capture, head, current, captured, digest, validation_changes=None,
@@ -39,15 +41,13 @@ def validate_inputs(root, capture, head, current, captured, digest, validation_c
 
 
 def validate_family(adapter, head):
-    from native_evidence_approval import validate
-    review = validate(adapter.name, adapter.root, head)
+    review = approval_module.validate(adapter.name, adapter.root, head)
     capture = review['capture_commit']
     captured, count = adapter.records(review, head)
     current = adapter.sources()
     profile = None
     if adapter.name in ('md5-execution', 'md5-hardened'):
-        from native_md5_dependency_profile import PROFILE
-        profile = PROFILE
+        profile = md5.PROFILE
     validate_inputs(adapter.root, capture, head, current, captured, adapter.digest,
                     review['validation_changes'], profile)
     io.clean(adapter.root)

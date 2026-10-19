@@ -72,6 +72,24 @@ class NativeReviewTests(unittest.TestCase):
         write(self.root, 'docs/note.md', 'metadata-only follow-up')
         self.validate(commit(self.root))
 
+    def test_legacy_change_pairs_bind_raw_before_and_after_bytes(self):
+        io.git(self.root, 'config', 'core.autocrlf', 'false')
+        path = self.root / TEST
+        for side in ('before', 'after'):
+            old, new = b'old tests\n', b'new tests\n'
+            path.write_bytes(old.replace(b'\n', b'\r\n') if side == 'before' else old)
+            capture = commit(self.root)
+            path.write_bytes(new.replace(b'\n', b'\r\n') if side == 'after' else new)
+            reviewed = commit(self.root)
+            doc = {**self.doc, 'capture_commit': capture, 'reviewed_commit': reviewed,
+                   'changes': {TEST: {'before': io.sha(old), 'after': io.sha(new),
+                                     'disposition': 'test-only', 'production_prefix': None}}}
+            with self.assertRaisesRegex(ValueError, 'reviewed bytes'):
+                review.check_changes(self.root, doc)
+            doc['changes'][TEST][side] = io.sha(io.raw_blob(
+                self.root, capture if side == 'before' else reviewed, TEST))
+            review.check_changes(self.root, doc)  # Explicit raw CRLF approval passes.
+
     def test_production_build_guards_and_new_orphan_sources_fail(self):
         for name in (CODE, TEST, 'Cargo.toml', 'Cargo.lock', 'rust-toolchain.toml',
                      '.cargo/config.toml', 'crates/example/build.rs',

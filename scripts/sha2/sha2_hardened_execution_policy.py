@@ -124,6 +124,9 @@ def validate(root=ROOT, write=False):
     for name in ('native_sha2_carry_forward.py', 'native_review_io.py',
                  'native_metadata_carry_forward.py', 'native_review_carry_forward.py',
                  'native_tooling_review.py',
+                 'native_review_families.py', 'native_review_checks.py',
+                 'native_setup_review.py', 'native_import_tests.py',
+                 'native_review_tests.py', 'native_setup_tests.py',
                  'native_evidence_approval.py', 'test-native-evidence-approval.py',
                  'native_review_scope.py', 'native_scope_tests.py',
                  'native_dependency_scope.py', 'native_unchanged.py',
@@ -165,7 +168,9 @@ def regressions():
         # Every native fallback implementation must reject a byte-level edit.
         cases += [(f'scripts/release/{name}', '"""', '# changed review implementation\n"""')
                   for name in ('native_metadata_carry_forward.py',
-                               'native_review_carry_forward.py', 'native_tooling_review.py')]
+                               'native_review_carry_forward.py', 'native_tooling_review.py',
+                               'native_review_families.py', 'native_review_checks.py',
+                               'native_setup_review.py')]
         for name, before, after in cases:
             path = root / name
             original = path.read_text()

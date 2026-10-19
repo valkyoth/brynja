@@ -105,3 +105,14 @@ hardened gate-policy mutations. No cryptographic code or external approval pin
 changed. The [review record](../security/pentest/v0.24.55.md) retains the findings
 and the distinction between local drift pins and independent verifier approval;
 the corrective retest and consolidated sweep remain pending.
+
+The next retest identified the same import-shadowing pattern in the generic
+fallback and additional helper-pin/raw-hash gaps. The follow-up preloads the
+entire fallback checker chain, checks module identities and extends raw-byte
+hash checks to historical reviews/setup/tooling substitutions. All 217 existing
+historical digest values match without any review/receipt rewrite. The suites
+now pass 92 reuse tests, 15 approval tests and 24 gate-policy mutations, including
+42 planted-checker cases across all seven generic fallback families. The Medium
+finding remains recorded pending independent confirmation; it is not dismissed
+as an intentional limitation. No cryptographic implementation or external
+approval digest changes.

@@ -1,10 +1,27 @@
 #!/usr/bin/env python3
 """Exact owner-reviewed test/tooling delta; never a filename-based exemption."""
 import argparse
+from pathlib import Path
 import subprocess
 import sys
 
 import native_review_io as io
+import native_evidence_approval as approval_module
+import native_unchanged
+import native_setup_review as setup
+import native_review_checks as checks
+import native_review_scope as scope
+import native_review_families as families
+import native_tooling_review as tooling
+import native_dependency_scope as dependencies
+import native_md5_dependency_profile as md5
+
+for module in (approval_module, native_unchanged, setup, checks, scope, families,
+               tooling, dependencies, md5):
+    io.require(Path(module.__file__).resolve() ==
+               io.ROOT / 'scripts/release' / (module.__name__ + '.py'),
+               'trusted review module identity: ' + module.__name__)
+
 from native_review_families import FAMILIES, Family
 
 REVIEW = 'security/native-reuse/v0.24.49-review.json'
@@ -36,8 +53,8 @@ def schema(review):
 def check_changes(root, review):
     old_names = io.names(root, review['capture_commit'])
     for name, row in review['changes'].items():
-        before = (io.historical(root, review['capture_commit'], name) if name in old_names else None)
-        after = io.historical(root, review['reviewed_commit'], name)
+        before = (io.raw_blob(root, review['capture_commit'], name) if name in old_names else None)
+        after = io.raw_blob(root, review['reviewed_commit'], name)
         io.require((None if before is None else io.sha(before)) == row['before'] and
                    io.sha(after) == row['after'] and before != after, 'reviewed bytes: ' + name)
         marker = row['production_prefix']
@@ -56,8 +73,7 @@ def check_protected(root, review, head, closure=None):
     if closure is None:
         io.require(current == reviewed, 'unreviewed implementation/build input change')
     else:
-        from native_review_scope import unchanged
-        unchanged(root, review['reviewed_commit'], head, closure)
+        scope.unchanged(root, review['reviewed_commit'], head, closure)
     io.require(set(old) <= set(reviewed), 'unreviewed implementation/build input removal')
     for name, expected in reviewed.items():
         io.require(expected.startswith(('100644 blob ', '100755 blob ')), 'nonregular protected input')
@@ -79,15 +95,18 @@ def check_closure(root, review, current, captured, digest):
 
 
 def validate(family, root=io.ROOT):
+    # Receipt/setup helpers refer back to this module. When invoked as a CLI,
+    # bind the canonical name before any family import can change sys.path.
+    import native_review_carry_forward as canonical
+    io.require(Path(canonical.__file__).resolve() == Path(__file__).resolve(),
+               'trusted review module identity: native_review_carry_forward')
     io.clean(root)
     head = io.git(root, 'rev-parse', 'HEAD').decode().strip()
     # Approval failure is terminal: it must not enter any equivalence fallback.
-    from native_evidence_approval import validate as approve
-    approve(family, root, head)
+    approval_module.validate(family, root, head)
     adapter = Family(family, root)
-    from native_unchanged import validate_family
     try:
-        validate_family(adapter, head)
+        native_unchanged.validate_family(adapter, head)
         return
     except (ValueError, KeyError, TypeError) as error:
         # A real implementation/tool change still needs the existing explicit
@@ -101,15 +120,13 @@ def validate(family, root=io.ROOT):
     check_changes(root, review)
     current = adapter.sources()
     captured, count = adapter.records(review, head)
-    import native_setup_review as setup
     supplemented = family in setup.FAMILIES and setup.REVIEW in io.names(root, head)
     if supplemented:
         setup.validate(root, family, review, adapter, current, captured, head)
     else:
         check_protected(root, review, head, current)
         check_closure(root, review, current, captured, adapter.digest)
-    from native_review_checks import validate_receipt
-    validate_receipt(root, review, review_raw, head, historical=True)
+    checks.validate_receipt(root, review, review_raw, head, historical=True)
     io.clean(root)
     io.require(io.git(root, 'rev-parse', 'HEAD').decode().strip() == head,
                'checkout changed during native validation')

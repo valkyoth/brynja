@@ -58,10 +58,15 @@ trusted verifier. Keep protected approval configuration out of unreviewed
 candidate jobs, and review validator/workflow changes before release execution.
 Externally managed runner signatures would be a separate stronger design.
 The metadata and SHA-2 carry-forward entrypoints bind the approval module before
-loading family modules and check its file identity. The three fallback/review
-modules are also included in the SHA-2 source-review closure. These repository
-pins detect drift; they do not independently authorize a changed verifier. A
-pending exceptional pentest still blocks release under the existing gate.
+loading family modules and check its file identity. The generic fallback also
+preloads and identity-checks its unchanged-input, setup, receipt, family and
+scope/dependency helpers; family paths cannot choose a later trusted checker.
+The CLI binds its canonical module name before family loading for the receipt
+and setup back references. All these helpers and their regression modules are
+included in the SHA-2 source-review closure. Legacy review pairs, setup changes
+and exact tooling substitutions use raw Git bytes too. These repository pins
+detect drift; they do not independently authorize a changed verifier. A pending
+exceptional pentest still blocks release under the existing gate.
 
 Workspace Cargo metadata is compared through the capture's dependency closure:
 unrelated packages and unused workspace dependency declarations do not invalidate

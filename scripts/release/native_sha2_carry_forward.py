@@ -14,9 +14,12 @@ import sys
 import native_review_io as io
 import native_review_scope as scope
 import native_evidence_approval as approval_module
+import native_unchanged
 
 io.require(Path(approval_module.__file__).resolve() ==
            io.ROOT / 'scripts/release/native_evidence_approval.py', 'approval module identity')
+io.require(Path(native_unchanged.__file__).resolve() ==
+           io.ROOT / 'scripts/release/native_unchanged.py', 'trusted review module identity')
 sys.path.append(str(io.ROOT / 'scripts/sha2'))
 import hardened_native_evidence as evidence
 
@@ -97,9 +100,8 @@ def validate(root=io.ROOT):
         io.require(row['cpu'] == record['cpu'], 'SHA-2 reviewed CPU mismatch')
         closures.append(captured)
     io.require(all(value == closures[0] for value in closures), 'inconsistent SHA-2 capture closures')
-    from native_unchanged import validate_inputs
     try:
-        validate_inputs(root, capture, head, current, closures[0], evidence.source_digest,
+        native_unchanged.validate_inputs(root, capture, head, current, closures[0], evidence.source_digest,
                         approval['validation_changes'])
         disposition = ('implementation/build inputs unchanged; '
                        f'{len(approval["validation_changes"])} exact validation-only changes approved')

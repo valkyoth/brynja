@@ -19,14 +19,14 @@ TEST_NEW = '3d44060aaec01b2d5d6a3af00fef2a7328fa65571439bbe9e962ff21f3c8bcd3'
 def equivalent(root, before, after, name):
     if name not in (PATH, TEST):
         return False
-    if (io.sha(io.historical(root, before, CHECKER)) != OLD or
-            io.sha(io.historical(root, after, CHECKER)) != NEW):
+    if (io.sha(io.raw_blob(root, before, CHECKER)) != OLD or
+            io.sha(io.raw_blob(root, after, CHECKER)) != NEW):
         return False
     if name == TEST:
-        return (io.sha(io.historical(root, before, TEST)) == TEST_OLD and
-                io.sha(io.historical(root, after, TEST)) == TEST_NEW)
-    old = io.historical(root, before, PATH)
-    new = io.historical(root, after, PATH)
+        return (io.sha(io.raw_blob(root, before, TEST)) == TEST_OLD and
+                io.sha(io.raw_blob(root, after, TEST)) == TEST_NEW)
+    old = io.raw_blob(root, before, PATH)
+    new = io.raw_blob(root, after, PATH)
     old_entry = f'"{CHECKER}": "{OLD}"'.encode()
     new_entry = f'"{CHECKER}": "{NEW}"'.encode()
     return (old.count(old_entry) == 1 and

@@ -65,6 +65,16 @@ class SetupReviewTests(unittest.TestCase):
         self.head = commit(self.root)
         self.validate()
 
+    def test_setup_change_hashes_preserve_committed_line_endings(self):
+        io.git(self.root, 'config', 'core.autocrlf', 'false')
+        path = self.root / ADDED
+        raw = path.read_bytes().replace(b'\n', b'\r\n')
+        path.write_bytes(raw)
+        source = commit(self.root)
+        changes = setup.changes(self.root, self.base, source, self.current)
+        self.assertEqual(changes[ADDED]['after'], io.sha(raw))
+        self.assertNotEqual(changes[ADDED]['after'], io.sha(io.normalized(raw)))
+
     def test_old_or_new_code_and_orphan_build_changes_reject(self):
         for name in (CODE, TEST, ADDED, 'crates/example/src/orphan.rs',
                      'crates/example/build.rs', 'crates/example/Cargo.toml',

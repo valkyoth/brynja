@@ -7,15 +7,14 @@ import io
 import json
 import os
 from pathlib import Path
-import shutil
 import subprocess
-import sys
 import tempfile
 import unittest
 from unittest.mock import patch
 from native_review_tests import NativeReviewTests, init_repository
 from native_scope_tests import ScopedNativeTests, InactiveSha2Tests
 from native_setup_tests import SetupReviewTests
+from native_import_tests import ImportIsolationTests
 
 import native_metadata_carry_forward as review
 import native_evidence_approval as approval
@@ -351,54 +350,6 @@ class ParallelCarryForwardTests(CarryForwardTests):
         replacement.start()
         self.addCleanup(replacement.stop)
         super().setUp()
-
-
-class ImportIsolationTests(unittest.TestCase):
-    def test_family_file_and_package_cannot_shadow_approval(self):
-        with tempfile.TemporaryDirectory(prefix='brynja-native-import-') as directory:
-            root = Path(directory)
-            for family in ('release', 'tuplehash', 'parallelhash', 'sha2'):
-                shutil.copytree(review.ROOT / 'scripts' / family, root / 'scripts' / family,
-                                ignore=shutil.ignore_patterns('__pycache__'))
-            init_repository(root)
-            commit(root)
-            env = dict(os.environ)
-            env.pop(approval.ENVIRONMENT, None)
-            env.pop('PYTHONPATH', None)
-            env['PYTHONDONTWRITEBYTECODE'] = '1'
-            script = root / 'scripts/release/native_metadata_carry_forward.py'
-            for directory in ('tuplehash', 'parallelhash', 'sha2'):
-                for suffix in ('.py', '/__init__.py'):
-                    name = f'scripts/{directory}/native_evidence_approval{suffix}'
-                    write(root, name, 'raise RuntimeError("FORGED_APPROVAL_LOADED")\n')
-                    commit(root)
-                    commands = [[sys.executable, str(script), '--family', family]
-                                for family in ('tuplehash', 'parallelhash')]
-                    commands.append([sys.executable, str(script.with_name('native_sha2_carry_forward.py'))])
-                    for command in commands:
-                        result = subprocess.run(command,
-                            cwd=root, env=env, capture_output=True, text=True, timeout=30)
-                        self.assertNotEqual(result.returncode, 0)
-                        self.assertIn('native evidence approval missing', result.stderr)
-                        self.assertNotIn('FORGED_APPROVAL_LOADED', result.stderr)
-                    (root / name).unlink()
-                    if suffix.startswith('/'):
-                        (root / name).parent.rmdir()
-                    commit(root)
-
-    def test_foreign_preloaded_approval_module_rejects_before_family_imports(self):
-        code = ('import runpy, sys, types\n'
-                'fake = types.ModuleType("native_evidence_approval")\n'
-                'fake.__file__ = "/tmp/not-the-review-module.py"\n'
-                'sys.modules[fake.__name__] = fake\n'
-                'sys.path.insert(0, sys.argv[1])\n'
-                'runpy.run_path(sys.argv[2])\n')
-        directory = review.ROOT / 'scripts/release'
-        for name in ('native_metadata_carry_forward.py', 'native_sha2_carry_forward.py'):
-            result = subprocess.run([sys.executable, '-c', code, str(directory), str(directory / name)],
-                                    capture_output=True, text=True, timeout=30)
-            self.assertNotEqual(result.returncode, 0)
-            self.assertIn('approval module identity', result.stderr)
 
 
 class GitFixtureLifecycleTests(unittest.TestCase):

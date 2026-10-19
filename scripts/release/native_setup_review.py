@@ -78,8 +78,8 @@ def changes(root, base, source, closure):
                        'reviewed dependency graph changed')
             continue
         result[name] = {
-            'before': io.sha(io.historical(root, base, name)) if name in old else None,
-            'after': io.sha(io.historical(root, source, name)),
+            'before': io.sha(io.raw_blob(root, base, name)) if name in old else None,
+            'after': io.sha(io.raw_blob(root, source, name)),
         }
     return result
 

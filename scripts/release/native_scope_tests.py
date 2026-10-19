@@ -43,6 +43,9 @@ class ScopedNativeTests(NativeReviewTests):
         with self.assertRaises(ValueError):
             scope.unchanged(self.root, before, after, closure | {tooling.CHECKER})
         for name, raw in ((tooling.PATH, revised + b'print("changed")\n'),
+                          (tooling.PATH, revised.replace(b'\n', b'\r\n')),
+                          (tooling.CHECKER, new_checker.replace(b'\n', b'\r\n')),
+                          (tooling.TEST, new_test.replace(b'\n', b'\r\n')),
                           (tooling.PATH, revised.replace(b'crates/', b'other/', 1)),
                           (tooling.PATH, revised.replace(tooling.NEW.encode(), b'0'*64)),
                           (tooling.CHECKER, new_checker + b'\n# changed\n'),

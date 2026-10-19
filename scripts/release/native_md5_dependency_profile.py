@@ -20,7 +20,7 @@ ROOTS = frozenset('crates/' + name for name in (
     'brynja-core', 'brynja-hash-core', 'brynja-legacy-md5', 'brynja-legacy-md5-std'))
 HOST = 'brynja-legacy-md5-std'
 INACTIVE = 'brynja-crypto-cpu-std'
-# Reviewed raw LF-normalized bytes, not regenerated from candidate files.
+# Reviewed raw committed bytes, not regenerated from candidate files.
 # No release number or capture commit exemption: both snapshots must match.
 REVIEWED = {
     'crates/brynja-core/Cargo.toml': 'e98247de69314a5ce1f6ecde69c081e03237cb663645483e4b9aed3a04929c5d',
@@ -42,7 +42,7 @@ def reachability_rows(root, revision, closure, rows):
              if name.startswith('crates/') and len(name.split('/')) > 2}
     io.require(roots == ROOTS, 'MD5 command profile requires its exact capture roots')
     for name, expected in REVIEWED.items():
-        io.require(io.sha(io.historical(root, revision, name)) == expected,
+        io.require(io.sha(io.raw_blob(root, revision, name)) == expected,
                    'MD5 dependency command/manifest review changed: ' + name)
     # Preserve the original rows for output/projection comparison. Only the
     # traversal copy loses one reviewed inactive optional edge. No dev, build,

@@ -119,6 +119,26 @@ class Md5DependencyProfileTests(unittest.TestCase):
             fixtures.write(self.root, name, original.decode())
             fixtures.commit(self.root)
 
+    def test_all_reviewed_pins_reject_crlf_in_either_snapshot(self):
+        io.git(self.root, 'config', 'core.autocrlf', 'false')
+        for name, expected in profile.REVIEWED.items():
+            path = self.root / name
+            original = path.read_bytes()
+            self.assertEqual(io.sha(original), expected)
+            changed_bytes = original.replace(b'\n', b'\r\n')
+            self.assertNotEqual(original, changed_bytes)
+            path.write_bytes(changed_bytes)
+            changed = fixtures.commit(self.root)
+            self.assertEqual(io.raw_blob(self.root, changed, name), changed_bytes)
+            for before, after in ((self.capture, changed), (changed, self.capture)):
+                with self.subTest(name=name, before=before), self.assertRaisesRegex(
+                        ValueError, 'command/manifest review changed'):
+                    dependencies.equivalent(self.root, before, after, self.closure, profile.PROFILE)
+            path.write_bytes(original)
+            restored = fixtures.commit(self.root)
+            self.assertTrue(dependencies.equivalent(
+                self.root, self.capture, restored, self.closure, profile.PROFILE))
+
     def test_activating_strict_defaults_or_collecting_all_features_rejects(self):
         host = 'crates/brynja-legacy-md5-std/Cargo.toml'
         collector = 'scripts/md5/capture-md5-execution-native.py'

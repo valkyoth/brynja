@@ -13,8 +13,11 @@ import sys
 
 import native_review_io as io
 import native_review_scope as scope
+import native_evidence_approval as approval_module
 
-sys.path.insert(0, str(io.ROOT / 'scripts/sha2'))
+io.require(Path(approval_module.__file__).resolve() ==
+           io.ROOT / 'scripts/release/native_evidence_approval.py', 'approval module identity')
+sys.path.append(str(io.ROOT / 'scripts/sha2'))
 import hardened_native_evidence as evidence
 
 LIB = 'crates/brynja-crypto-cpu-std/src/lib.rs'
@@ -71,8 +74,7 @@ def equivalent(root, capture, current, captured):
 def validate(root=io.ROOT):
     io.clean(root)
     head = io.git(root, 'rev-parse', 'HEAD').decode().strip()
-    from native_evidence_approval import validate as approve
-    approval = approve('sha2-hardened', root, head)
+    approval = approval_module.validate('sha2-hardened', root, head)
     index = io.document(io.committed(root, evidence.INDEX, head))
     io.require(set(index) == {'schema', 'capture_commit', 'lanes'} and
                type(index['schema']) is int and index['schema'] == 1, 'SHA-2 index schema')

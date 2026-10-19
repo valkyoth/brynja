@@ -188,6 +188,38 @@ class ApprovalTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     self.validate()
 
+    def test_validation_pairs_bind_raw_committed_line_endings(self):
+        name = 'scripts/check-result.py'
+        io.git(self.root, 'config', 'core.autocrlf', 'false')
+        for before_crlf in (False, True):
+            old = b'print("old validator")\n'
+            new = b'print("reviewed validator")\n'
+            path = self.root / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(old.replace(b'\n', b'\r\n') if before_crlf else old)
+            capture = fixtures.commit(self.root)
+            path.write_bytes(new if before_crlf else new.replace(b'\n', b'\r\n'))
+            head = fixtures.commit(self.root)
+            captured, current = {name: io.sha(old)}, {name: io.sha(new)}
+            digest = lambda name, raw: io.sha(io.normalized(raw))
+            changes = {name: {'before': io.sha(old), 'after': io.sha(new)}}
+            with self.assertRaisesRegex(ValueError, 'reviewed validation bytes changed'):
+                native_unchanged.validate_inputs(self.root, capture, head, current, captured, digest, changes)
+            changes[name] = {key: io.sha(io.raw_blob(self.root, rev, name))
+                             for key, rev in (('before', capture), ('after', head))}
+            native_unchanged.validate_inputs(self.root, capture, head, current, captured, digest, changes)
+
+    def test_raw_blob_reports_missing_and_rejects_nonregular_or_oversized_inputs(self):
+        with self.assertRaisesRegex(ValueError, 'missing/nonregular Git input: missing.py'):
+            io.raw_blob(self.root, self.capture, 'missing.py')
+        with patch.object(io, 'LIMIT', 1):
+            with self.assertRaisesRegex(ValueError, 'oversized Git object'):
+                io.raw_blob(self.root, self.capture, self.source)
+        (self.root / 'symlink.py').symlink_to(self.source)
+        head = fixtures.commit(self.root)
+        with self.assertRaisesRegex(ValueError, 'missing/nonregular Git input'):
+            io.raw_blob(self.root, head, 'symlink.py')
+
 
 ENTRYPOINTS = {
     'sha2/check-sha2-hardened-native-evidence.py': ('hardened_native_evidence', 'sha2-hardened'),

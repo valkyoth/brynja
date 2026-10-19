@@ -9,11 +9,14 @@ import tomllib
 import argparse
 import native_review_io as io
 import native_review_scope as scope
+import native_evidence_approval as approval_module
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / 'scripts/tuplehash'))
+io.require(Path(approval_module.__file__).resolve() ==
+           ROOT / 'scripts/release/native_evidence_approval.py', 'approval module identity')
+sys.path.append(str(ROOT / 'scripts/tuplehash'))
 import tuplehash_execution_native as evidence
-sys.path.insert(0, str(ROOT / 'scripts/parallelhash'))
+sys.path.append(str(ROOT / 'scripts/parallelhash'))
 import parallelhash_execution_native as parallel_evidence
 
 REVIEW = 'scripts/tuplehash/tuplehash_reviewed_hashes.py'
@@ -58,8 +61,7 @@ def validate(root=ROOT, family='tuplehash'):
     digest = evidence.shared.source_digest if family == 'tuplehash' else evidence.digest
     shared, require = evidence.shared, evidence.require
     head = shared.git(root, 'rev-parse', 'HEAD').decode().strip()
-    from native_evidence_approval import validate as approve
-    approval = approve(family + '-execution', root, head)
+    approval = approval_module.validate(family + '-execution', root, head)
     require(not shared.git(root, 'status', '--porcelain', '--untracked-files=all').strip(),
             'clean carry-forward checkout required')
 
@@ -81,10 +83,13 @@ def validate(root=ROOT, family='tuplehash'):
     shared.git(root, 'merge-base', '--is-ancestor', capture, head)
     require(set(index['lanes']) == set(evidence.LANES), 'all carry-forward native lanes required')
     expected = evidence.sources(root)
+    approved = approval['validation_changes']
+    captured_names = io.names(root, capture)
+    require(set(approved) <= set(expected) & captured_names,
+            'approved validation input absent from capture or current closure')
+    require(set(expected) <= captured_names, 'native input absent from capture')
     captured = {name: digest(name, historical(capture, name)) for name in expected}
     changed = {name for name in expected if expected[name] != captured[name]}
-    approved = approval['validation_changes']
-    require(set(approved) <= set(expected), 'approved validation input absent from capture')
     require(review in changed and changed <= set(approved) | {review},
             'carry-forward rejects any other native-input change')
     old_fixture, new_fixture = historical(capture, fixture), current(fixture)
@@ -92,19 +97,20 @@ def validate(root=ROOT, family='tuplehash'):
     new_version = tomllib.loads(current(FACADE).decode())['package']['version']
     version_only(old_fixture, new_fixture, old_version, new_version)
     quote = '"' if family == 'tuplehash' else "'"
-    intermediate = historical(capture, review)
+    current_review = io.raw_blob(root, head, review)
+    intermediate = io.raw_blob(root, capture, review)
     if review in approved:
         # The evidence snapshot may predate the separately approved validator
         # edits. Undo ONLY the proven fixture pin and authenticate the resulting
         # complete module against the externally pinned after digest below.
-        intermediate = replace_pin(current(review), new_fixture, old_fixture, fixture, quote)
+        intermediate = replace_pin(current_review, new_fixture, old_fixture, fixture, quote)
     # This is not candidate self-approval: every intermediate byte must match
     # the independently supplied digest, including executable logic/other pins.
     for name, pair in approved.items():
-        after = intermediate if name == review else current(name)
-        require(io.sha(historical(capture, name)) == pair['before'] and
+        after = intermediate if name == review else io.raw_blob(root, head, name)
+        require(io.sha(io.raw_blob(root, capture, name)) == pair['before'] and
                 io.sha(after) == pair['after'], 'approved validation bytes changed: ' + name)
-    reviewed_pin_only(intermediate, current(review), old_fixture, new_fixture, fixture, quote)
+    reviewed_pin_only(intermediate, current_review, old_fixture, new_fixture, fixture, quote)
     # Raw approved pairs and the single structural pin replacement were checked
     # above. Retain additions/removals/build checks for the entire family closure.
     scope.unchanged(root, capture, head, expected,

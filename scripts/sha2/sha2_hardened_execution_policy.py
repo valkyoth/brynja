@@ -122,6 +122,8 @@ def validate(root=ROOT, write=False):
     # The fallback is itself part of the reviewed gate, not an unchecked
     # substitute for fresh native qualification.
     for name in ('native_sha2_carry_forward.py', 'native_review_io.py',
+                 'native_metadata_carry_forward.py', 'native_review_carry_forward.py',
+                 'native_tooling_review.py',
                  'native_evidence_approval.py', 'test-native-evidence-approval.py',
                  'native_review_scope.py', 'native_scope_tests.py',
                  'native_dependency_scope.py', 'native_unchanged.py',
@@ -159,6 +161,11 @@ def regressions():
                   ('scripts/checks.sh', 'python3 scripts/release/test-native-dependency-scope.py', '# omitted'),
                   ('scripts/zeroization/check-zeroization-sanitizer.sh', 'python3 scripts/sha2/check-sha2-hardened-asan.py', '# omitted'),
                   ('scripts/sha2/hardened_native_host.py', '+sha,+sse2', '+sse2')]
+        # Review bindings are local drift checks, not external authorization.
+        # Every native fallback implementation must reject a byte-level edit.
+        cases += [(f'scripts/release/{name}', '"""', '# changed review implementation\n"""')
+                  for name in ('native_metadata_carry_forward.py',
+                               'native_review_carry_forward.py', 'native_tooling_review.py')]
         for name, before, after in cases:
             path = root / name
             original = path.read_text()

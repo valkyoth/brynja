@@ -7,7 +7,9 @@ import io
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -213,6 +215,35 @@ class CarryForwardTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'approval digest mismatch'):
                 self.validate()
 
+    def test_approved_input_missing_from_capture_or_current_closure(self):
+        document = self.approve_and_bump(overlapping_pin=True)
+        name = 'scripts/new-validator.py'
+        write(self.root, name, '# absent from capture\n')
+        document['validation_changes'][self.family + '-execution'][name] = {
+            'before': '0' * 64, 'after': '1' * 64}
+        self.set_approval(document)
+        for include in (False, True):
+            current = sources(self.root)
+            if include:
+                current[name] = approval.io.sha((self.root / name).read_bytes())
+            with patch.object(review.evidence, 'sources', return_value=current):
+                with self.assertRaisesRegex(ValueError, 'absent from capture or current closure'):
+                    review.validate(self.root, self.family)
+
+    def test_approved_validator_crlf_changes_reject(self):
+        self.approve_and_bump(overlapping_pin=True)
+        git(self.root, 'config', 'core.autocrlf', 'false')
+        for name in (VALIDATOR, review.REVIEW):
+            path = self.root / name
+            original = path.read_bytes()
+            path.write_bytes(original.replace(b'\n', b'\r\n'))
+            commit(self.root)
+            with self.assertRaisesRegex(ValueError, 'approved validation bytes changed'):
+                self.validate()
+            path.write_bytes(original)
+            commit(self.root)
+        self.validate()
+
     def test_code_capture_fixture_and_artifact_mutations_fail(self):
         paths = (CODE, review.REVIEW, review.FIXTURE, review.FACADE,
                  f'assurance/{self.family}-execution-native/linux-x86_64.json')
@@ -320,6 +351,54 @@ class ParallelCarryForwardTests(CarryForwardTests):
         replacement.start()
         self.addCleanup(replacement.stop)
         super().setUp()
+
+
+class ImportIsolationTests(unittest.TestCase):
+    def test_family_file_and_package_cannot_shadow_approval(self):
+        with tempfile.TemporaryDirectory(prefix='brynja-native-import-') as directory:
+            root = Path(directory)
+            for family in ('release', 'tuplehash', 'parallelhash', 'sha2'):
+                shutil.copytree(review.ROOT / 'scripts' / family, root / 'scripts' / family,
+                                ignore=shutil.ignore_patterns('__pycache__'))
+            init_repository(root)
+            commit(root)
+            env = dict(os.environ)
+            env.pop(approval.ENVIRONMENT, None)
+            env.pop('PYTHONPATH', None)
+            env['PYTHONDONTWRITEBYTECODE'] = '1'
+            script = root / 'scripts/release/native_metadata_carry_forward.py'
+            for directory in ('tuplehash', 'parallelhash', 'sha2'):
+                for suffix in ('.py', '/__init__.py'):
+                    name = f'scripts/{directory}/native_evidence_approval{suffix}'
+                    write(root, name, 'raise RuntimeError("FORGED_APPROVAL_LOADED")\n')
+                    commit(root)
+                    commands = [[sys.executable, str(script), '--family', family]
+                                for family in ('tuplehash', 'parallelhash')]
+                    commands.append([sys.executable, str(script.with_name('native_sha2_carry_forward.py'))])
+                    for command in commands:
+                        result = subprocess.run(command,
+                            cwd=root, env=env, capture_output=True, text=True, timeout=30)
+                        self.assertNotEqual(result.returncode, 0)
+                        self.assertIn('native evidence approval missing', result.stderr)
+                        self.assertNotIn('FORGED_APPROVAL_LOADED', result.stderr)
+                    (root / name).unlink()
+                    if suffix.startswith('/'):
+                        (root / name).parent.rmdir()
+                    commit(root)
+
+    def test_foreign_preloaded_approval_module_rejects_before_family_imports(self):
+        code = ('import runpy, sys, types\n'
+                'fake = types.ModuleType("native_evidence_approval")\n'
+                'fake.__file__ = "/tmp/not-the-review-module.py"\n'
+                'sys.modules[fake.__name__] = fake\n'
+                'sys.path.insert(0, sys.argv[1])\n'
+                'runpy.run_path(sys.argv[2])\n')
+        directory = review.ROOT / 'scripts/release'
+        for name in ('native_metadata_carry_forward.py', 'native_sha2_carry_forward.py'):
+            result = subprocess.run([sys.executable, '-c', code, str(directory), str(directory / name)],
+                                    capture_output=True, text=True, timeout=30)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn('approval module identity', result.stderr)
 
 
 class GitFixtureLifecycleTests(unittest.TestCase):

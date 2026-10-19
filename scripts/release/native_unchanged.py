@@ -14,8 +14,9 @@ def validate_inputs(root, capture, head, current, captured, digest, validation_c
     changes = validation_changes or {}
     io.require(set(changes) <= set(captured), 'reviewed validation input absent from capture')
     for name, row in changes.items():
-        io.require(io.sha(io.historical(root, capture, name)) == row['before'] and
-                   io.sha(io.committed(root, name, head)) == row['after'],
+        io.committed(root, name, head)
+        io.require(io.sha(io.raw_blob(root, capture, name)) == row['before'] and
+                   io.sha(io.raw_blob(root, head, name)) == row['after'],
                    'reviewed validation bytes changed: ' + name)
     io.git(root, 'merge-base', '--is-ancestor', capture, head)
     metadata = {'Cargo.toml', 'Cargo.lock'}

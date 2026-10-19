@@ -96,3 +96,12 @@ clean commit `7f51eee2`. Focused facade-harness, approval, release-planning,
 family-inventory, metadata/hash, documentation and script checks also pass.
 No production cryptographic implementation changed. This is not completion of
 the frozen public-consumer acceptance or the consolidated verification sweep.
+
+The supplied dual review of `d70b83bd` prompted focused tooling corrections:
+bind approval imports before family loading, register all three missing fallback
+review modules, diagnose missing capture inputs, and bind approval pairs to raw
+Git bytes. The author suites now pass 88 reuse tests, 15 approval tests and 21
+hardened gate-policy mutations. No cryptographic code or external approval pin
+changed. The [review record](../security/pentest/v0.24.55.md) retains the findings
+and the distinction between local drift pins and independent verifier approval;
+the corrective retest and consolidated sweep remain pending.

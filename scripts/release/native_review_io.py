@@ -68,12 +68,17 @@ def read(root, name):
 
 
 @lru_cache(maxsize=8192)
-def historical(root, commit, name):
+def raw_blob(root, commit, name):
+    """Bounded, regular committed bytes; no checkout line-ending normalization."""
     object_name = revision(commit) + ':' + relative(name)
-    require(int(git(root, 'cat-file', '-s', object_name)) <= LIMIT, 'oversized Git object')
     entry = git(root, 'ls-tree', commit, '--', name).split(b' ', 1)[0]
-    require(entry in (b'100644', b'100755'), 'nonregular Git input')
-    return normalized(git(root, 'show', object_name))
+    require(entry in (b'100644', b'100755'), 'missing/nonregular Git input: ' + name)
+    require(int(git(root, 'cat-file', '-s', object_name)) <= LIMIT, 'oversized Git object')
+    return git(root, 'cat-file', 'blob', object_name)
+
+
+def historical(root, commit, name):
+    return normalized(raw_blob(root, commit, name))
 
 
 @lru_cache(maxsize=16)

@@ -44,7 +44,8 @@ release approval entrypoints.
 For reviewed validator corrections, `validation_changes` may name exact old/new
 hashes per family. Only validation scripts/review metadata are eligible, never
 Rust, assembly, dependency manifests or build inputs. Both versions must match
-the capture and current checkout; additions/removals remain rejected. The owner
+the raw committed Git blobs in the capture and candidate, without line-ending
+normalization of these approval pairs; additions/removals remain rejected. The owner
 must review the actual diff, including whether any collector/oracle command
 changed, before authorizing this list. This is not permission to skip a changed
 runtime test. Pure documentation/unrelated dependency changes do not require a
@@ -56,6 +57,11 @@ does not prove the honesty of the original operator or resist a compromised
 trusted verifier. Keep protected approval configuration out of unreviewed
 candidate jobs, and review validator/workflow changes before release execution.
 Externally managed runner signatures would be a separate stronger design.
+The metadata and SHA-2 carry-forward entrypoints bind the approval module before
+loading family modules and check its file identity. The three fallback/review
+modules are also included in the SHA-2 source-review closure. These repository
+pins detect drift; they do not independently authorize a changed verifier. A
+pending exceptional pentest still blocks release under the existing gate.
 
 Workspace Cargo metadata is compared through the capture's dependency closure:
 unrelated packages and unused workspace dependency declarations do not invalidate

@@ -58,8 +58,8 @@ defaults and cryptographic implementations are unchanged by preparation.
 - Release identity and public acceptance fixture pins: updated for preparation.
 - Current status: v0.24.54 tagging and green CI recorded accurately.
 - Source/API availability inventory: reviewed in the
-  [closure inventory](../docs/acceleration-final-closure.md); frozen public
-  acceptance and final evidence dispositions still pending.
+  [closure inventory](../docs/acceleration-final-closure.md); local packaged
+  public acceptance passed on `9695e91f`. Final evidence reconciliation pending.
 - Consolidated detached sweep: not started; final task list and host allocation
   remain to be established before launch.
 - Final release verification, GitHub and tagging: pending.
@@ -113,6 +113,46 @@ hash checks to historical reviews/setup/tooling substitutions. All 217 existing
 historical digest values match without any review/receipt rewrite. The suites
 now pass 92 reuse tests, 15 approval tests and 24 gate-policy mutations, including
 42 planted-checker cases across all seven generic fallback families. The Medium
-finding remains recorded pending independent confirmation; it is not dismissed
-as an intentional limitation. No cryptographic implementation or external
-approval digest changes.
+finding was kept open at that stage, not dismissed as an intentional limitation.
+The supplied retest of `7d7dfdbf` subsequently confirmed those corrections and
+reported no new problems, including 112 planted helper/standard-library module
+probes. The [security report](../security/pentest/v0.24.55.md) now records zero
+outstanding confirmed findings. No cryptographic implementation or external
+approval digest changed.
+
+The optional MD5 digest cleanup was completed in `9695e91f`: all eleven command
+profile pins now compare raw committed bytes, retaining their existing expected
+digests. The dependency suite passes 17 tests; a normalized-reader mutant fails
+all 22 CRLF rejection cases. All eight real native-reuse paths pass on that clean
+commit. This last cleanup is author-verified, not claimed as part of the earlier
+independent retest. Final review disposition and the consolidated checkpoint
+remain pending; a clean tooling retest is not a completed release sweep.
+
+## Local public-consumer acceptance
+
+Author-operated checks completed on 2026-10-19 with Rust 1.99.1, Linux x86-64,
+AMD Ryzen 9 9950X3D. Implementation, tests, fixtures and package inputs match
+`9695e91f`; only release-note/inventory documentation changed during the run.
+
+- `python3 scripts/repository/check-facade-package.py --toolchain 1.99.1 --native-simd`
+  passed in approximately eleven minutes. Both extracted facade packages passed
+  feature/default isolation, no_std checking, debug/release execution, ownership
+  negatives and compiled algorithm/output/cleanup mutations. Coverage includes
+  SHA-2, SHA-3/SHAKE/cSHAKE, KMAC, TupleHash, ParallelHash, batching/threading and
+  separate ordinary/hardened legacy SHA-1/MD5 packages. Available static x86
+  routes executed; unsupported dedicated SHA512 and generic hosted migration
+  routes remain explicitly unavailable, not counted as kernel execution.
+- `python3 scripts/repository/check-strict-public-consumer.py --toolchain 1.99.1`
+  passed: 6,004 scalar cases per debug/release campaign, 56 compiled
+  ownership/lifetime/classification negatives and 32 compiled mutation runs,
+  followed by successful restored-source campaigns.
+- The README fixture passed all 64 doctests with zero failures or ignored tests.
+  Facade/strict harness regressions, the 17 family-completeness tests, verification
+  status, release metadata, script layout and documentation links also passed.
+
+Logs are retained locally outside `target/`. These are public-consumer acceptance
+checks, not independent qualification, new cross-platform captures or detached
+checkpoint receipts. The approved original native records and their external
+digest remain unchanged. Reinspection of the `v0.24.51` consolidation baseline
+still selects 263 repository commands, 280 matrix commands, 49 sanitizer commands,
+twelve Kani groups and 562 routine Miri tasks. No consolidated job has launched.

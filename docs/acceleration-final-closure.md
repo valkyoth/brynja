@@ -1,7 +1,8 @@
 # Opt-in acceleration closure inventory
 
-Status: author inventory review for v0.24.55; final verification and exceptional
-retest pending. This inventory grants no execution authority or qualification.
+Status: author inventory review for v0.24.55; prior tooling findings confirmed
+closed by the supplied retest. Final candidate review disposition and verification
+remain pending. This inventory grants no execution authority or qualification.
 
 The [original usability audit](ACCELERATION_USABILITY_AUDIT.md) and
 [v0.24.30 contract](../security/acceleration-availability.toml) are historical
@@ -122,9 +123,15 @@ these dimensions; it is not a substitute for tests or independent review.
 Native speedups and crossover decisions remain workload-specific. No blanket
 “SIMD is faster” or complete caller/OS erasure claim is introduced.
 
-Before closure, finish the exceptional metadata-proof retest, run frozen public
-acceptance and the deferred all-family repository/compiler/Miri/Kani/ASan
-checkpoint, reconcile every failed or unavailable task, and update the README
+Local packaged public acceptance passed against the implementation and fixtures
+at `9695e91f`: both facades, available static x86 acceleration, isolated legacy
+packages, strict scalar consumers and all 64 README examples. Exact commands and
+scope are recorded in the [release notes](../release-notes/RELEASE_NOTES_0.24.55.md).
+This does not replace historical platform observations or the deferred checkpoint.
+
+Before closure, finalize the exceptional review disposition, run the deferred
+all-family repository/compiler/Miri/Kani/ASan checkpoint, reconcile every failed
+or unavailable task, and update the README
 status inventory without promoting pending qualification. No new cryptographic
 implementation gap was identified in this source/API inventory pass; that is
 not a clean independent pentest or a completed verification sweep.

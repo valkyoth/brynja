@@ -80,13 +80,13 @@ Links identify executable checks, not proof that a current run passed.
 - Curated facade feature and package contracts: [check](../scripts/hmac/check-hmac-facade.py).
 - Bounded verifier scope and population: [check](../scripts/hmac/test-hmac-verification.py).
 - Five scratch probes, optimized normal/error/unwind clearing only: [check](../scripts/hmac/check-hmac-cleanup.py).
-- 24 cancellation/update and 84 byte/bit scratch consumers, clear dispatch only: [check](../scripts/hmac/check-hmac-engine-cleanup.py).
+- 24 cancellation/update, 84 scratch and 72 finalizer owner graphs; dispatch only: [check](../scripts/hmac/check-hmac-engine-cleanup.py).
 - Real portable and explicitly selected native adapter handoffs: [check](../assurance/hmac-faults/adapter_tests.rs).
 - Portable paired timing screen, not a constant-time proof: [check](../scripts/hmac/check-hmac-timing.py).
 
 ## Still pending
 
-- HMAC-specific optimized caller/scratch cleanup and stack qualification.
+- Constructor owner transfer and accelerated/hosted caller qualification; portable finalizer dispatch is checked, not whole-frame erasure.
 - Accelerated/hosted timing and cache/branch qualification; the portable timing screen is not a timing proof.
 - Remaining native route qualification, including dedicated x86 SHA-512.
 - Independent pentest and final source-bound release evidence.

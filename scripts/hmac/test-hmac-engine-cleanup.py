@@ -222,6 +222,124 @@ class EngineTests(unittest.TestCase):
                        "unknown_panic_in_cleanup"):
             self.assertFalse(codegen.panic_cleanup(symbol))
 
+    def test_finalizer_owner_paths_and_copy_bounds(self):
+        for identity in codegen.IDENTITIES:
+            for operation in driver.final.OPERATIONS:
+                body = self.functions[identity, operation]
+                width = driver.final.geometry(identity)[0]
+                copy = next(line for line in body.splitlines()
+                            if "@llvm.memcpy." in line and f"i64 {width}, i1 false" in line)
+                mutations = (
+                    body.replace(copy, copy.replace(f"i64 {width}, i1 false",
+                                                  f"i64 {width - 1}, i1 false"), 1),
+                    body.replace(copy, "", 1),
+                    body.replace("start:", "start:\n  ret void\nunused:", 1),
+                    re.sub(r"unwind label %[-\w.]+", "unwind label %escape", body, count=1)
+                    + "\nescape:\n  resume { ptr, i32 } zeroinitializer\n",
+                )
+                for mutated in mutations:
+                    with self.subTest(identity=identity, operation=operation):
+                        self.assertNotEqual(body, mutated)
+                        with self.assertRaises(ValueError):
+                            driver.final.check(mutated, identity, self.definitions, self.aliases)
+
+    def test_finalizer_call_identity_and_duplicate_consumption(self):
+        for identity in codegen.IDENTITIES:
+            body = self.functions[identity, "public"]
+            line = next(line for line in body.splitlines()
+                        if (parsed := driver.final.call(line))
+                        and driver.final.hash_finalizer(parsed[0], identity))
+            symbol, args = driver.final.call(line)
+            owner = driver.final.operand(args[1])
+            replacements = (line.replace(symbol, symbol + "_fake"),
+                            line.replace(owner + ",", "%wrong_owner,"),
+                            "call void @unknown(ptr " + owner + ")")
+            for replacement in replacements:
+                with self.subTest(identity=identity), self.assertRaises(ValueError):
+                    driver.final.check(body.replace(line, replacement, 1), identity,
+                                       self.definitions, self.aliases)
+            drop = next(line for line in body.splitlines()
+                        if (parsed := driver.final.call(line))
+                        and codegen.owner_drop(parsed[0], identity) and "call void" in line)
+            with self.assertRaisesRegex(ValueError, "duplicate finalizer consumption"):
+                driver.final.check(body.replace(drop, drop + "\n" + drop, 1), identity,
+                                   self.definitions, self.aliases)
+
+    def test_outer_closure_body_cannot_be_trusted_by_symbol(self):
+        for identity in codegen.IDENTITIES:
+            body = self.functions[identity, "public"]
+            symbol = next(parsed[0] for line in body.splitlines()
+                          if (parsed := driver.final.call(line))
+                          and driver.final.finish_closure(parsed[0]))
+            arguments, actual = codegen.resolve(symbol, self.definitions, self.aliases)
+            mutations = ("start:\n  ret i8 0\n",
+                         actual.replace("start:", "start:\n  ret i8 0\nunused:", 1),
+                         re.sub(r"unwind label %[-\w.]+", "unwind label %escaped", actual,
+                                count=1) + "\nescaped:\n  resume { ptr, i32 } zeroinitializer\n")
+            for mutated in mutations:
+                with self.subTest(identity=identity), self.assertRaises(ValueError):
+                    driver.final.check(body, identity,
+                                       {**self.definitions, symbol: (arguments, mutated)},
+                                       self.aliases)
+            with self.assertRaises(ValueError):
+                driver.final.check(body, identity, self.definitions,
+                                   {**self.aliases, symbol: symbol})
+
+    def test_finalizer_pointer_and_write_parser_rejections(self):
+        body = self.functions["sha256", "public"]
+        for instruction in (
+                "store i8 1, ptr %self_owner",
+                "call void @llvm.memset.p0.i64(ptr %self_owner, i8 0, i64 1170, i1 false)",
+                "call void %unknown(ptr %self_owner)",
+                "call void @unknown(ptr %self_owner)",
+                "%dynamic = getelementptr i8, ptr %self, i64 %index",
+                "%alias = select i1 %condition, ptr %self_owner, ptr %self",
+                "store ptr %self_owner, ptr %outside"):
+            mutant = body.replace("start:", "start:\n"
+                                  "%self_owner = getelementptr inbounds i8, ptr %self, i64 8\n"
+                                  + instruction, 1)
+            with self.assertRaises(ValueError):
+                driver.final.check(mutant, "sha256", self.definitions, self.aliases)
+        self.assertEqual(driver.final.parameters("ptr captures(address, read_provenance) %x, i64 1"),
+                         ["ptr captures(address, read_provenance) %x", "i64 1"])
+        for malformed in ("ptr captures(address %x", "ptr %x)"):
+            with self.assertRaises(ValueError):
+                driver.final.parameters(malformed)
+
+    def test_reused_branch_facts_do_not_exempt_cleanup(self):
+        body = self.functions["sha256", "cancel"]
+        symbol = next(parsed[0] for line in body.splitlines()
+                      if (parsed := driver.final.call(line))
+                      and codegen.owner_drop(parsed[0], "sha256"))
+        inner = "call void @" + symbol + "(ptr %inner)"
+        outer = "call void @" + symbol + "(ptr %outer)"
+        graph = f"""start:
+%inner = getelementptr i8, ptr %self, i64 8
+%outer = getelementptr i8, ptr %self, i64 1178
+br i1 %flag, label %left, label %right
+left:
+{inner}
+br label %join
+right:
+{outer}
+br label %join
+join:
+br i1 %flag, label %last_outer, label %last_inner
+last_outer:
+{outer}
+ret void
+last_inner:
+{inner}
+ret void
+"""
+        driver.final.check(graph, "sha256", self.definitions, self.aliases)
+        for changed in (graph.replace("join:\nbr i1 %flag", "join:\nbr i1 %different"),
+                        graph.replace("last_outer:\n" + outer, "last_outer:"),
+                        graph.replace("last_inner:\n" + inner, "last_inner:"),
+                        graph.replace("join:", "join:\n%flag = icmp eq i64 %a, %b")):
+            with self.assertRaises(ValueError):
+                driver.final.check(changed, "sha256", self.definitions, self.aliases)
+
     def test_compiled_owner_and_scratch_mutants(self):
         work = self.root / "mutant"
         leaf = work / "leaf"
@@ -260,6 +378,36 @@ class EngineTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 driver.validate(mutant[1])
             source.write_text(original)
+            restored = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu",
+                                   "unwind", fixture / "Cargo.toml")
+            driver.validate(restored[1])
+        source = leaf / "src/engine.rs"
+        original = source.read_text()
+        for anchor, replacement in (
+            ("""if !crate::policy::exact_output(self.tag_bytes, destination.len()) {
+            return Err(Error::TagLength);""",
+             """if !crate::policy::exact_output(self.tag_bytes, destination.len()) {
+            core::mem::forget(self);
+            return Err(Error::TagLength);"""),
+            ("""let absorb_inner = |digest: &[u8]| {
+            A::finish_outer(self.outer,""",
+             """let outer = core::mem::ManuallyDrop::new(self.outer);
+        let absorb_inner = |digest: &[u8]| {
+            A::finish_outer(core::mem::ManuallyDrop::into_inner(outer),"""),
+        ):
+            self.assertEqual(original.count(anchor), 1)
+            try:
+                source.write_text(original.replace(anchor, replacement))
+                mutant = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu",
+                                     "unwind", fixture / "Cargo.toml")
+                functions = codegen.emitted(mutant[1])
+                definitions, aliases = codegen.definitions_and_aliases(mutant[1])
+                body = driver.scratch.consumer(functions["sha256", "public"], "public",
+                                               definitions, aliases)
+                with self.assertRaisesRegex(ValueError, "undispatched hash owner"):
+                    driver.final.check(body, "sha256", definitions, aliases)
+            finally:
+                source.write_text(original)
             restored = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu",
                                    "unwind", fixture / "Cargo.toml")
             driver.validate(restored[1])

@@ -228,6 +228,7 @@ full_hmac() {
     run_miri -p brynja-mac-hmac --features hardened-execution --lib execution::tests
     run_miri -p brynja-crypto-cpu-std --features hmac-execution --test hmac
     run_miri -p brynja-crypto-cpu-std --features strict-hmac-acceleration --lib strict_hmac
+    run_miri -p brynja-crypto-cpu-std --features macos-resident-hmac-acceleration --lib macos_resident::hmac
 }
 
 all_groups=(core sanitization md5 sha1 sha2 sha3 kmac tuplehash parallelhash legacy acceleration static_cpu hmac)

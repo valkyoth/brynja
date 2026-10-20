@@ -39,7 +39,8 @@ class ScopeTests(unittest.TestCase):
                      "assurance/hmac-policy/Cargo.lock", "assurance/hmac-faults/fault_tests.rs",
                      "crates/brynja-crypto-cpu-std/src/execution/hmac.rs",
                      "crates/brynja-crypto-cpu-std/tests/hmac.rs",
-                     "crates/brynja-crypto-cpu-std/src/strict_hmac/worker.rs"):
+                     "crates/brynja-crypto-cpu-std/src/strict_hmac/worker.rs",
+                     "crates/brynja-crypto-cpu-std/src/macos_resident/hmac/compiled/worker.rs"):
             with self.subTest(path=path):
                 full, groups = commands.scope.select([path])
                 self.assertFalse(full)
@@ -56,11 +57,12 @@ class ScopeTests(unittest.TestCase):
                     "sha3_224", "sha3_256", "sha3_384", "sha3_512",
                     "output_clears_during_consumer_unwind", "general_129", "general_511"}
         tasks = miri_tasks.inventory(ROOT, "hmac")
-        self.assertEqual(len(tasks), len(expected) + 3)
+        self.assertEqual(len(tasks), len(expected) + 4)
         hosted = [argv for argv in tasks if "brynja-crypto-cpu-std" in argv]
-        self.assertEqual(len(hosted), 2)
+        self.assertEqual(len(hosted), 3)
         self.assertEqual(hosted[0][-4:], ["--features", "hmac-execution", "--test", "hmac"])
         self.assertEqual(hosted[1][-4:], ["--features", "strict-hmac-acceleration", "--lib", "strict_hmac"])
+        self.assertEqual(hosted[2][-4:], ["--features", "macos-resident-hmac-acceleration", "--lib", "macos_resident::hmac"])
         bounded = [argv for argv in tasks if "--test" in argv and argv not in hosted]
         self.assertEqual({argv[argv.index("--test") + 2] for argv in bounded}, expected)
         lifecycle = [argv for argv in tasks if "--lib" in argv and argv not in hosted]
@@ -73,7 +75,7 @@ class ScopeTests(unittest.TestCase):
             self.assertIn("--exact", argv)
             self.assertNotIn("--skip", argv)
         for profile in ("routine", "extended", "existing-full"):
-            self.assertEqual(len(miri_tasks.task_inventory(ROOT, "hmac", profile)), 16)
+            self.assertEqual(len(miri_tasks.task_inventory(ROOT, "hmac", profile)), 17)
 
     def test_sanitizer_and_matrix_ownership(self):
         sanitizer = commands.catalog(ROOT / "scripts/zeroization/check-zeroization-sanitizer.sh")
@@ -84,10 +86,12 @@ class ScopeTests(unittest.TestCase):
         self.assertTrue(matrix)
         self.assertTrue(all("-p brynja-mac-hmac " in command or
                             "-p brynja-crypto-cpu-std --features hmac-execution --test hmac" in command or
-                            "-p brynja-crypto-cpu-std --features strict-hmac-acceleration --lib strict_hmac" in command
+                            "-p brynja-crypto-cpu-std --features strict-hmac-acceleration --lib strict_hmac" in command or
+                            "-p brynja-crypto-cpu-std --features macos-resident-hmac-acceleration --lib macos_resident::hmac" in command
                             for command in matrix))
         self.assertTrue(any("--test hmac" in command for command in matrix))
         self.assertTrue(any("--lib strict_hmac" in command for command in matrix))
+        self.assertTrue(any("--lib macos_resident::hmac" in command for command in matrix))
         self.assertEqual(commands.owners(
             "cargo test -p brynja-crypto-cpu-std --features hmac-execution --test hmac"), {"hmac"})
         self.assertIn("static_cpu", commands.owners(
@@ -121,7 +125,7 @@ class ScopeTests(unittest.TestCase):
             for shards in (1, 2, 8):
                 rows = catalog.selected(plan, ["kani", "asan", "miri"], None, shards,
                                         miri_tasks=True, miri_profile="routine")
-                self.assertEqual(len(rows), 18)
+                self.assertEqual(len(rows), 19)
                 self.assertEqual([row["command"] for row in rows if row["phase"] == "kani"],
                                  commands.kani_commands(["hmac"]))
 
@@ -140,7 +144,8 @@ class VerifierTests(unittest.TestCase):
         populations = {"bounded": 13, "vectors": 7, "lifecycle": 11, "bits": 12,
                        "general": 5, "execution::tests": 4, "hmac": 2,
                        "strict_hmac::tests::metadata_admission_and_exact_tag_policy": 1,
-                       "strict_hmac::compiled::tests::typed_kernel_admission_never_substitutes_a_backend": 1}
+                       "strict_hmac::compiled::tests::typed_kernel_admission_never_substitutes_a_backend": 1,
+                       "macos_resident::hmac": 4}
         for missing in (None, *populations):
             calls = []
 

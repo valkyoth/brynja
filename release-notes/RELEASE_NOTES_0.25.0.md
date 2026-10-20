@@ -218,6 +218,40 @@ Legacy HMAC-SHA-1/MD5 remains v0.25.1; cumulative public/package acceptance and
 the publication checkpoint remain v0.25.2. Nothing is selected for publication
 in this development milestone.
 
+## Apple Silicon resident HMAC development slice
+
+Default-off `macos-resident-hmac` now provides typed complete-request scalar
+sessions, bounded work, exact tag policy, worker-side verification and clearing
+secret-output loans. `macos-resident-hmac-acceleration` adds explicit Arm SHA-256,
+SHA-512 and Keccak selection, using existing hardened owners and static authority
+constructed on the joined worker. Backend/invariant/worker failures quarantine
+the compiled session; ordinary rejection and cancellation preserve reuse.
+
+This is the existing macOS guarded/locked residency profile, **not core-dump
+exclusion or strict admission**. Caller buffers, register/interruption state,
+privileged diagnostics and fatal termination retain the documented exclusions.
+No OS primitive, unsafe block, hash kernel or strict-facade default is changed.
+Generic and unsupported builds fail closed; scalar sessions remain scalar.
+
+The focused acceptance driver explicitly distinguishes Linux protection from
+Apple Silicon residency, shares downstream test bodies without changing their
+assertions, and rejects an incompatible host/profile before running them.
+HMAC-scoped Miri/matrix/sanitizer entries cover the new public-policy and
+unsupported-model cases; those checks do not establish native Mac residency.
+Native/extracted-package and regression results are author checks, not an
+independent pentest, timing/cleanup qualification or release receipt.
+
+On the M2 Pro, six scalar tests and three extracted-consumer tests pass in
+debug/release; the scalar suite also passes Rust 1.90.0. Each of the three
+compiled routes passes its explicit native test and extracted consumer in both
+profiles, plus four executed behavioral mutants. The package rejects 25 scalar
+and 15 compiled ownership/API probes and compiles twelve typed constructors.
+Native tests observe guarded, wired mappings and check that authority/state and
+output storage lie inside owned ranges. Final resource-budget regressions,
+generic rejection tests, Mac/Linux Clippy and documentation examples pass.
+The new four-case public-policy/model Miri task passes; Linux ASan/LSan passes
+60 tests with mandatory leak detection, without claiming native Mac coverage.
+
 ## Owner-directed package footprint
 
 Before v0.25.2 publication, audit every selected package and its first-party

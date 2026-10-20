@@ -1970,7 +1970,7 @@ sha256 = "f71e2db60272e673ce83d9e2782f309dd984f0cc4fb162c10d9d57d13e5411e7"
 package = "brynja-crypto-cpu-std"
 path = "src/macos_resident/mod.rs"
 status = "macos-resident-contract-development"
-sha256 = "b770f1d3b8f19dbd3c5a9fb5942148b213afd31346601fbc87953b724bfd98f8"
+sha256 = "86d462ec6cdd8e97a1ebe6347b4c0802364270348fc5e98698fb27f49e612b8e"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -2319,3 +2319,57 @@ package = "brynja-crypto-cpu-std"
 path = "src/strict_hmac/compiled/tests/native.rs"
 status = "protected-compiled-hmac-native-tests"
 sha256 = "91889b512049fe1bbce0b6474132f869cbdbf342200a3c089f31b2635bd3e202"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/hmac/mod.rs"
+status = "macos-resident-hmac-session-development"
+sha256 = "94f61f906769c40110ac8d94777342c5cd1cb557cc7a5f314427287e3267d194"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/hmac/types.rs"
+status = "macos-resident-hmac-api-types"
+sha256 = "03d46ab9b942c9c5c5e9bf5e6da5199975b9b90a4b401af72732d08e8178328a"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/hmac/worker.rs"
+status = "macos-resident-hmac-worker"
+sha256 = "2e48e3594afd47fbee35f97b71cfc67939133a5ccae3a4385c8778f745a76b92"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/hmac/tests.rs"
+status = "macos-resident-hmac-admission-tests"
+sha256 = "9236224d878d9aa0925df9963386df83ad21c220ed734831df17de89297e5509"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/hmac/tests/native.rs"
+status = "macos-resident-hmac-native-tests"
+sha256 = "236712097691de98229495186806250a0b033e2ab78839801807f8dbb9c45544"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/hmac/compiled.rs"
+status = "macos-resident-hmac-compiled-session-development"
+sha256 = "20c586320cc866e5581553263cfa393de7b0f65d104e22416688f4f8f0a9e925"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/hmac/compiled/worker.rs"
+status = "macos-resident-hmac-compiled-worker"
+sha256 = "de1da4bcea976d3a51601aee7a3fe49730f052cf1c8541b9bcaf60600f15a349"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/hmac/compiled/tests.rs"
+status = "macos-resident-hmac-compiled-admission-tests"
+sha256 = "4781f7985ae8bea77339a54609ae311985bc7ec0c524905de01b6b0984f499fa"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/hmac/compiled/tests/native.rs"
+status = "macos-resident-hmac-compiled-native-tests"
+sha256 = "51a0d588e49b1a0f08189da72d499173d3bb7bcd4683a45a2f9bdd6f90a9bb5f"

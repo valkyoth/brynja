@@ -45,6 +45,13 @@ def main():
                 raise ValueError("protected HMAC sanitizer metadata population changed")
             print(output)
         print("Protected HMAC public-policy ASan: PASS; protected native execution not inferred")
+        output = verifier.run(["cargo", "+" + pin["execution_toolchain"], "test", "--locked", "--offline",
+                               "-p", "brynja-crypto-cpu-std", "--features", "macos-resident-hmac-acceleration",
+                               "--lib", "macos_resident::hmac", "--target", "x86_64-unknown-linux-gnu"], env)
+        if "test result: ok. 4 passed; 0 failed; 0 ignored;" not in output:
+            raise ValueError("Mac resident HMAC sanitizer public-policy population changed")
+        print(output)
+        print("Mac resident HMAC public-policy ASan: PASS; no Mac execution/residency inferred")
 
 
 if __name__ == "__main__":

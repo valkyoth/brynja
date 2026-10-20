@@ -32,6 +32,8 @@
 
 #[cfg(feature = "macos-resident-batch")]
 pub mod batch;
+#[cfg(feature = "macos-resident-hmac")]
+pub mod hmac;
 #[cfg(feature = "macos-resident-kmac")]
 pub mod kmac;
 mod resource;
@@ -40,7 +42,11 @@ mod sha256;
 pub mod sha3;
 #[cfg(all(
     test,
-    any(feature = "macos-resident-kmac", feature = "macos-resident-tuplehash")
+    any(
+        feature = "macos-resident-kmac",
+        feature = "macos-resident-tuplehash",
+        feature = "macos-resident-hmac"
+    )
 ))]
 mod test_storage;
 #[cfg(feature = "macos-resident-tuplehash")]

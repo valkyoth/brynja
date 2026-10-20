@@ -102,7 +102,8 @@ def owners(command: str) -> set[str]:
                 raise ValueError(f"unclassified fixture command: {command}")
             return set(groups)
         packages = [argv[i + 1] for i, a in enumerate(argv[:-1]) if a == "-p"]
-        if packages == ["brynja-crypto-cpu-std"] and "--lib" in argv and "strict_hmac" in argv:
+        if packages == ["brynja-crypto-cpu-std"] and "--lib" in argv and any(
+                module in argv for module in ("strict_hmac", "macos_resident::hmac")):
             return {"hmac"}
         if (packages == ["brynja-crypto-cpu-std"] and "--test" in argv
                 and argv[argv.index("--test") + 1] == "hmac"):

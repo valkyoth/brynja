@@ -129,7 +129,8 @@ def select(paths: list[str], *, downstream=None) -> tuple[bool, tuple[str, ...]]
             return True, GROUPS
         if path in FULL_EXACT or path.startswith(FULL_PREFIXES):
             return True, GROUPS
-        if path.startswith("crates/brynja-crypto-cpu-std/src/strict_hmac/") or path in {"crates/brynja-crypto-cpu-std/src/execution/hmac.rs",
+        if path.startswith(("crates/brynja-crypto-cpu-std/src/strict_hmac/",
+                            "crates/brynja-crypto-cpu-std/src/macos_resident/hmac/")) or path in {"crates/brynja-crypto-cpu-std/src/execution/hmac.rs",
                     "crates/brynja-crypto-cpu-std/tests/hmac.rs"}:
             selected.add("hmac")
             continue

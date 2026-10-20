@@ -45,6 +45,7 @@ See the [compiled TupleHash API example](src/strict_tuplehash/compiled.rs).
 | Hosted hardened HMAC over SHA-2/SHA-3 | 🚧 Default-off `hmac-execution`; native M2 author tests; qualification pending | ❌ No |
 | Protected compiled HMAC over SHA-2/SHA-3 | 🚧 Default-off `strict-hmac-acceleration`; GNU/Linux, explicit target features, no fallback; qualification pending | ❌ No |
 | Protected scalar HMAC (supported GNU/Linux targets) | 🚧 Default-off `strict-hmac`; typed bounded requests and worker-side verification; qualification pending | ❌ No |
+| Apple Silicon resident HMAC over SHA-2/SHA-3 | 🚧 Default-off scalar or explicit Arm SHA2/SHA512/Keccak; no dump exclusion; qualification pending | ❌ No |
 | Apple Silicon resident SHA-2/SHA-3, KMAC/TupleHash | 🚧 Separate opt-in scalar/Arm resident/clearing APIs; no dump exclusion; qualification pending | ❌ No |
 | Apple Silicon resident SHA-2/general-t and SHA-3/SHAKE/cSHAKE | 🚧 Scalar or explicit Arm SHA2/SHA512/Keccak; bit-aware, bounded output/cancellation; no dump-exclusion guarantee; qualification pending | ❌ No |
 | Apple Silicon resident SHA-2/Keccak independent-message batches | 🚧 Default-off resident workspace/output; explicit portable or required NEON, no fallback; no dump exclusion; qualification pending | ❌ No |
@@ -106,6 +107,17 @@ Authority is created on the protected worker, never passed in from the caller.
 Backend, invariant and worker failures permanently quarantine this session;
 ordinary request rejection and cancellation permit reuse. No error selects a
 scalar fallback. See the [compiled-session contract](src/strict_hmac/compiled.rs).
+
+On Apple Silicon macOS, the separate `macos-resident-hmac` feature exposes
+`macos_resident::hmac::Session<A>`. It uses the same bounded complete-request
+shape, exact tag policy, worker-side comparison and clearing output loans, but
+its guarded/locked mappings **do not guarantee core-dump exclusion**.
+It is not strict admission and is not exported by `brynja-strict`.
+`macos-resident-hmac-acceleration` additionally exposes `CompiledSession<A>`
+with explicit Arm SHA-256, SHA-512 or Keccak selection and matching build-wide
+features; generic builds reject acceleration rather than silently substituting
+a scalar route. Scalar `Session` stays scalar under feature unification.
+See the [resident HMAC example and limits](src/macos_resident/hmac/mod.rs).
 
 The separate default-off `macos-resident` feature provides
 `macos_resident::Sha256Session` on Apple Silicon. It locks guarded output and

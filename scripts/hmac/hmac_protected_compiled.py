@@ -1,19 +1,19 @@
 """Compiled protected HMAC probes; native execution is explicitly selected."""
 import platform
-import shutil
 from hmac_acceptance import ALGORITHMS, diagnostic_rejection
+from hmac_owner_profile import PROTECTED, RESIDENT
 
 
-def negatives(host, consumer, env):
+def negatives(host, consumer, env, owner=PROTECTED):
     manifest = consumer / "Cargo.toml"
     original = manifest.read_text()
     enabled = original.replace('brynja-crypto-cpu-std = {',
-                               'brynja-crypto-cpu-std = {features=["strict-hmac-acceleration"], ')
+                               f'brynja-crypto-cpu-std = {{features=["{owner.feature}-acceleration"], ')
     if enabled == original:
         raise ValueError("compiled HMAC package dependency missing")
     manifest.write_text(enabled)
     source = consumer / "src/lib.rs"
-    prefix = "use brynja_crypto_cpu_std::strict_hmac::*;\n"
+    prefix = f"use brynja_crypto_cpu_std::{owner.module}::*;\n"
     command = ["cargo", "check", "--offline", "--lib", "--message-format=json"]
     positive = '''pub fn p(s: &mut CompiledSession<Sha256>) -> Result<Output<'_, Sha256>, Error> {
     s.authenticate(b"key", b"message")
@@ -41,16 +41,20 @@ def negatives(host, consumer, env):
         source.write_text(prefix + code)
         diagnostic_rejection(host.run(command, consumer, env, success=False), diagnostic)
     manifest.write_text(original.replace('brynja-crypto-cpu-std = {',
-                                        'brynja-crypto-cpu-std = {features=["strict-hmac"], '))
-    source.write_text("use brynja_crypto_cpu_std::strict_hmac::{CompiledSession, Sha256, Output, Error};\n" + positive)
+                                        f'brynja-crypto-cpu-std = {{features=["{owner.feature}"], '))
+    source.write_text(f"use brynja_crypto_cpu_std::{owner.module}::" +
+                     "{CompiledSession, Sha256, Output, Error};\n" + positive)
     diagnostic_rejection(host.run(command, consumer, env, success=False), "E0432")
     manifest.write_text(original)
     source.write_text("")
-    print(f"Protected compiled HMAC package: 12 positive identities, {len(cases) + 1} rejected probes")
+    print(f"{owner.label} compiled HMAC package: 12 positive identities, {len(cases) + 1} rejected probes")
 
 
-def native_environment(env, kernel):
+def native_environment(env, kernel, owner=PROTECTED):
+    owner.require_host()
     arch = platform.machine()
+    if owner == RESIDENT:
+        arch = "aarch64"
     features = {
         "x86_64": {"sha256": "+sha,+sse2", "sha512": "+sha512,+avx2,+avx", "keccak": "+avx2"},
         "aarch64": {"sha256": "+neon,+sha2", "sha512": "+neon,+sha3", "keccak": "+neon,+sha3"},
@@ -63,26 +67,27 @@ def native_environment(env, kernel):
     return result
 
 
-def native(host, root, workspace, consumer, env, kernel, population):
-    env = native_environment(env, kernel)
+def native(host, root, workspace, consumer, env, kernel, population, owner=PROTECTED):
+    env = native_environment(env, kernel, owner)
     command = ["cargo", "test", "--offline", "-p", host.HOST,
-               "--features", "strict-hmac-acceleration", "--lib",
-               "strict_hmac::compiled::tests::native::" + kernel + "_route"]
+               "--features", owner.feature + "-acceleration", "--lib",
+               owner.module + "::compiled::tests::native::" + kernel + "_route"]
     for profile in ([], ["--release"]):
         population(host.run([*command, *profile, "--", "--ignored", "--exact"], workspace, env), 1)
     manifest = consumer / "Cargo.toml"
     manifest.write_text(manifest.read_text().replace(
-        'brynja-crypto-cpu-std = {', 'brynja-crypto-cpu-std = {features=["strict-hmac-acceleration"], '))
-    shutil.copyfile(root / "assurance/hmac-protected/compiled.rs", consumer / "tests/compiled.rs")
+        'brynja-crypto-cpu-std = {', f'brynja-crypto-cpu-std = {{features=["{owner.feature}-acceleration"], '))
+    (consumer / "tests/compiled.rs").write_text(owner.source(
+        (root / "assurance/hmac-protected/compiled.rs").read_text()))
     for profile in ([], ["--release"]):
         population(host.run(["cargo", "test", "--offline", "--test", "compiled", *profile],
                             consumer, env), 1)
-    mutants(host, workspace, env, command)
-    print(f"Protected compiled HMAC native/package/mutation acceptance: PASS; {kernel}; author testing only")
+    mutants(host, workspace, env, command, owner)
+    print(f"{owner.label} compiled HMAC native/package/mutation acceptance: PASS; {kernel}; author testing only")
 
 
-def mutants(host, workspace, env, command):
-    directory = workspace / "crates/brynja-crypto-cpu-std/src/strict_hmac"
+def mutants(host, workspace, env, command, owner=PROTECTED):
+    directory = workspace / "crates/brynja-crypto-cpu-std/src" / owner.directory
     cases = [
         ("compiled.rs", "self.quarantined = true;", "self.quarantined = false;"),
         ("compiled/worker.rs", "state.update(part).map_err(Error::Mac)?;", "let _ = part;"),

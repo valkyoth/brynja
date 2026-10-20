@@ -6,6 +6,7 @@ from pathlib import Path
 import re
 import shutil
 import unittest
+from hmac_execution_scratch_tests import ScratchTests
 
 spec = importlib.util.spec_from_file_location(
     "hmac_execution_cleanup", Path(__file__).with_name("check-hmac-execution-cleanup.py"))
@@ -13,7 +14,9 @@ driver = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(driver)
 
 
-class ExecutionTests(unittest.TestCase):
+class ExecutionTests(ScratchTests, unittest.TestCase):
+    driver = driver
+
     @classmethod
     def setUpClass(cls):
         cls.directory = driver.verifier.cargo_environment.private_directory(driver.ROOT)
@@ -63,9 +66,19 @@ class ExecutionTests(unittest.TestCase):
                 self.rejects(changed, identity, operation)
 
     def test_actual_helper_bodies_not_names(self):
-        for symbol, (arguments, body) in self.definitions.items():
-            if "drop_glue" not in symbol:
-                continue
+        # Only the cancellation/update helper graphs have owner obligations.
+        # Constructor iterator destruction remains a separate typed premise.
+        queue = list(self.functions.values())
+        helpers = {}
+        while queue:
+            for name in re.findall(r'@("[^"]+"|\w+)\(', queue.pop()):
+                symbol = name.strip('"')
+                if "drop_glue" in symbol and symbol not in helpers:
+                    arguments, body = driver.common.resolve(symbol, self.definitions, self.aliases)
+                    helpers[symbol] = (arguments, body)
+                    queue.append(body)
+        self.assertTrue(helpers)
+        for symbol, (arguments, body) in helpers.items():
             replacements = ("start:\n  ret void\n", body.replace(
                 "start:", "start:\n  ret void\nunused:", 1))
             for replacement in replacements:
@@ -179,7 +192,7 @@ class ExecutionTests(unittest.TestCase):
                                fixture / "Cargo.toml")[1]
 
         driver.validate(emitted())
-        mutants = (
+        mutants = [
             (leaf / "src/execution/mod.rs", "pub fn cancel(self) {}",
              "pub fn cancel(self) { core::mem::forget(self); }"),
             (leaf / "src/execution/retained.rs", "let _ = self.slot.take();",
@@ -189,7 +202,13 @@ class ExecutionTests(unittest.TestCase):
             (fixture / "src/lib.rs", "observer();\n                state.cancel();",
              "let state = core::mem::ManuallyDrop::new(state);\n"
              "observer();\n core::mem::ManuallyDrop::into_inner(state).cancel();"),
-        )
+        ]
+        for role, size in (("pad", 144), ("normalized", 64), ("inner_digest", 64),
+                           ("tag", 64), ("difference", 1)):
+            anchor = f"let mut {role} = Scratch::<{size}>::new();"
+            replacement = (f"let mut {role} = core::mem::ManuallyDrop::new("
+                           f"Scratch::<{size}>::new());")
+            mutants.append((leaf / "src/engine.rs", anchor, replacement))
         for path, anchor, replacement in mutants:
             original = path.read_text()
             self.assertEqual(original.count(anchor), 1)
@@ -201,7 +220,7 @@ class ExecutionTests(unittest.TestCase):
             finally:
                 path.write_text(original)
             driver.validate(emitted())
-        print("Accelerated HMAC compiler mutants: 4 compiled/rejected; restored baselines PASS",
+        print("Accelerated HMAC compiler mutants: 9 compiled/rejected; restored baselines PASS",
               flush=True)
 
 

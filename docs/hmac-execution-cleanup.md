@@ -1,11 +1,11 @@
-# Accelerated HMAC caller destruction checks
+# Accelerated HMAC caller destruction and scratch checks
 
 Development evidence, not independent review or release qualification.
 
 `assurance/hmac-execution-cleanup` instantiates real public accelerated HMAC
 consumers for ten named SHA-2/SHA-3 algorithms and general SHA-512/t at 129 and
 511 bits. It enables `runtime-execution`, which also enables static execution.
-The fixture does not create CPU authority or execute an instruction kernel.
+The fixture borrows authority; it does not create authority or execute an instruction kernel.
 The static-only feature configuration is not qualified by this fixture.
 
 ```sh
@@ -22,7 +22,7 @@ can be cross-compiled; inspection is not native execution or CPU qualification.
 
 ## Checked boundary
 
-There are 24 consumers: cancellation and consuming update-then-cancel for each
+There are 120 consumers. Twenty-four cover cancellation and consuming update-then-cancel for each
 of the twelve identities. The latter inserts an opaque observer after successful
 update, exercising a caller's recoverable unwind.
 
@@ -53,18 +53,59 @@ not the independent promise that a borrowed HMAC becomes immediately terminal
 after an error. The [execution fault campaign](hmac-execution-checks.md) checks
 that promise and atomic length-error reuse separately.
 
+## Constructor and finalizer scratch
+
+The other 96 consumers cover both static/runtime constructors and six consuming
+finalizers for every identity: public output, secret output and verification,
+each with byte-only or typed final-bit input. Each constructor wrapper must
+forward its actual authority, key pointer/length and static/runtime selector
+to the emitted `Hmac::create` body. Finalizers resolve their actual emitted
+`Engine` method, not an unrelated function with matching cleanup text.
+
+The optimized graphs check the local 144-byte key pad, 64-byte normalized key,
+64-byte inner digest, 64-byte full tag and one-byte comparison accumulator,
+where applicable. Every live scratch region must dispatch its exact full-size
+clear before lifetime end, ordinary/error return or recoverable unwind.
+Unknown calls and writes conservatively invalidate a previous clear. A fatal
+cleanup terminal is permitted only on an unwind path, not ordinary entry.
+
+Construction drops its separate iterator of admitted hash owners after clearing
+the pad. The checker recognizes only the typed three-element
+`Flatten<IntoIter<Option<accelerated hash>>>` destructor, with an emitted
+definition and one pointer to its distinct local `states` allocation of the
+matching extent. Safe-Rust non-aliasing and that typed destructor's inability
+to reach the independent pad/normalized allocation are premises. This
+exception is **not** a proof of the iterator's hash-owner destruction.
+
+This completes the local scratch checks for these consumers, not the complete
+accelerated constructor/finalizer owner-transfer review. Admission sequencing,
+hash states transferred through adapters/closures, and public-wrapper terminal
+states retain their separate behavioral checks; their remaining compiler
+qualification must not be inferred from scratch checks. Arbitrary truncation
+widths and all 383 general SHA-512/t identities are not covered by this fixture.
+
 ## Regression controls
 
 The tests mutate emitted copy extents, sources, field offsets, enum values,
 helper bodies, cleanup paths, lifetimes, input pointers and fatal terminals.
 They also check the ARM switch/result relationship.
 
-Four source mutants must compile successfully and then fail inspection:
+Nine source mutants must compile successfully and then fail inspection:
 
 1. Forget the accelerated HMAC on cancellation.
 2. Take but forget the retained engine in guard destruction.
 3. Forget the consuming HMAC after an update error.
 4. Suppress destruction during the observer's unwind with `ManuallyDrop`.
+5. Suppress key-pad destruction with `ManuallyDrop`.
+6. Suppress normalized-key destruction.
+7. Suppress inner-digest destruction.
+8. Suppress full-tag destruction.
+9. Suppress comparison-accumulator destruction.
+
+Emitted-code mutations also exercise all scratch roles, exact pointers/extents,
+live-scratch unwind bypasses, post-clear writes, method/alias substitution,
+constructor forwarding and the independent-iterator exception. Each rejection
+is paired with a passing baseline at the same inspection boundary.
 
 Each private mutant is restored and its baseline rebuilt and checked. A compiler
 error is not successful mutation detection. Runtime crate source and packaging
@@ -81,12 +122,12 @@ not accepted on ordinary entry.
 
 CPU update bodies retain their separately reviewed mutation/layout contracts.
 These checks do not prove update arithmetic, kernel correctness, constructor
-admission, consuming-finalizer scratch cleanup, or protected/resident worker
+admission/owner transfer, consuming-finalizer owner transfer, or protected/resident worker
 placement. They do not erase compiler-created copies, caller registers/spills,
 interrupt state, dumps, snapshots or fatal-abort state. Those accepted limits
 are not reopened here.
 
-Accelerated construction/finalization and hosted worker compiler qualification
+Remaining accelerated construction/finalization owner and hosted worker compiler qualification
 remain pending, alongside timing/native qualification and independent review.
 No strict-facade admission or global qualification status is promoted by this
 bounded check.

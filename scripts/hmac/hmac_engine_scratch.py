@@ -61,23 +61,23 @@ def allocations(body, operation):
     return result
 
 
-def check(body, operation):
+def check(body, operation, independent_cleanup=None):
     owners = allocations(body, operation)
     names = tuple(owners)
     graph = blocks(body)
     # Inactive, live-needing-clear, and live-cleared.
-    queue = [(next(iter(graph)), (-1,) * len(names))]
+    queue = [(next(iter(graph)), (-1,) * len(names), False)]
     trails = {queue[0]: ()}
     visited = set()
     started = set()
     cleared = set()
     exits = 0
     while queue:
-        label, state = queue.pop()
-        if (label, state) in visited:
+        label, state, unwinding = queue.pop()
+        if (label, state, unwinding) in visited:
             continue
-        visited.add((label, state))
-        trail = (*trails[label, state], label)
+        visited.add((label, state, unwinding))
+        trail = (*trails[label, state, unwinding], label)
         require(len(visited) < 20000, "scratch state graph exceeded bound")
         require(label in graph, "unknown scratch branch")
         values = list(state)
@@ -111,6 +111,10 @@ def check(body, operation):
                     cleared.add(name)
             elif output_guard_drop(line, body):
                 pass
+            elif independent_cleanup is not None and independent_cleanup(line):
+                # Caller must establish a distinct allocation and a reviewed
+                # typed destructor which cannot reach these scratch owners.
+                pass
             elif re.search(r"\b(call|invoke|store|atomicrmw|cmpxchg)\b", line):
                 require(all(values[names.index(name)] != -1 for name in selected),
                         "operation references inactive scratch")
@@ -124,7 +128,7 @@ def check(body, operation):
                 require(edges, "unparsed scratch invoke edges")
                 # Both edges establish dispatch, not successful callee erasure.
                 # The core clear's non-panicking contract is a separate premise.
-                children = [(edges[1], tuple(values)), (edges[2], tuple(values))]
+                children = [(edges[1], tuple(values), unwinding), (edges[2], tuple(values), True)]
                 for child in children:
                     trails.setdefault(child, trail)
                 queue += children
@@ -133,7 +137,7 @@ def check(body, operation):
             if line.startswith("br "):
                 edges = re.findall("label %" + LABEL, line)
                 require(len(edges) in (1, 2), "unparsed scratch branch")
-                children = [(edge, tuple(values)) for edge in edges]
+                children = [(edge, tuple(values), unwinding) for edge in edges]
                 for child in children:
                     trails.setdefault(child, trail)
                 queue += children
@@ -144,7 +148,7 @@ def check(body, operation):
                 require("]" in rest, "unterminated scratch switch")
                 edges = re.findall("label %" + LABEL, rest.split("]", 1)[0])
                 require(edges, "empty scratch switch")
-                children = [(edge, tuple(values)) for edge in edges]
+                children = [(edge, tuple(values), unwinding) for edge in edges]
                 for child in children:
                     trails.setdefault(child, trail)
                 queue += children
@@ -157,7 +161,7 @@ def check(body, operation):
                 terminal = True
                 break
             if line == "unreachable":
-                require(fatal_cleanup_block(lines), "unreviewed scratch terminal")
+                require(unwinding and fatal_cleanup_block(lines), "unreviewed scratch terminal")
                 terminal = True
                 break
         require(terminal, "unparsed scratch terminator")

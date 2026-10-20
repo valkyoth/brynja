@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Inspect accelerated cancellation/update owners; not whole-frame erasure."""
+"""Inspect accelerated cancellation/update owners and construction/final scratch."""
 import argparse
 from pathlib import Path
 import re
@@ -7,6 +7,7 @@ import re
 import hmac_engine_codegen as common
 import hmac_execution_drop as cleanup
 import hmac_execution_update as update
+import hmac_execution_scratch as scratch
 import hmac_verifiers as verifier
 
 ROOT = verifier.ROOT
@@ -28,11 +29,11 @@ def emit(directory, compiler, target, panic, fixture=FIXTURE):
     return result
 
 
-def emitted(llvm):
+def emitted(llvm, operations=("cancel", "update_cancel")):
     definitions, aliases = common.definitions_and_aliases(llvm)
     functions = {}
     for identity in common.IDENTITIES:
-        for operation in ("cancel", "update_cancel"):
+        for operation in operations:
             suffix = ("29brynja_hmac_execution_cleanup" + str(len(identity)) + identity
                       + str(len(operation)) + operation)
             names = [name for name in (*definitions, *aliases)
@@ -50,6 +51,9 @@ def validate(llvm, compiler="1.99.1", panic="unwind"):
         cleanup.cancellation(functions[identity, "cancel"], identity, definitions, aliases, compiler, panic)
         update.check(functions[identity, "update_cancel"], identity, definitions, aliases,
                      compiler, panic)
+    functions, definitions, aliases = emitted(llvm, scratch.OPERATIONS)
+    for (_, operation), body in functions.items():
+        scratch.check(body, operation, definitions, aliases)
 
 
 def collect(directory, compiler, target, panic):
@@ -59,6 +63,8 @@ def collect(directory, compiler, target, panic):
           f"panic={panic}; 12 cancellation and 12 update/error/unwind consumers, "
           "static/runtime and retained/empty; "
           "actual hash-core and CPU-scratch helper graphs; not whole-frame erasure", flush=True)
+    print("Accelerated HMAC scratch dispatch: PASS; 24 static/runtime constructors and "
+          "72 consuming finalizers; local pad/digest/tag/comparison storage only", flush=True)
     return artifacts
 
 

@@ -7,6 +7,7 @@ import re
 import shutil
 import unittest
 from hmac_execution_scratch_tests import ScratchTests
+from hmac_execution_final_tests import FinalTests
 
 spec = importlib.util.spec_from_file_location(
     "hmac_execution_cleanup", Path(__file__).with_name("check-hmac-execution-cleanup.py"))
@@ -14,7 +15,7 @@ driver = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(driver)
 
 
-class ExecutionTests(ScratchTests, unittest.TestCase):
+class ExecutionTests(ScratchTests, FinalTests, unittest.TestCase):
     driver = driver
 
     @classmethod
@@ -83,24 +84,24 @@ class ExecutionTests(ScratchTests, unittest.TestCase):
                 "start:", "start:\n  ret void\nunused:", 1))
             for replacement in replacements:
                 with self.subTest(helper=symbol), self.assertRaises(ValueError):
-                    driver.validate(self.llvm.replace(body, replacement, 1))
+                    driver.validate_retained(self.llvm.replace(body, replacement, 1))
             for line in body.splitlines():
                 if "getelementptr" in line:
                     replacement = re.sub(r"i64 \d+", "i64 99999", line)
                     with self.subTest(pointer=line), self.assertRaises(ValueError):
-                        driver.validate(self.llvm.replace(line, replacement))
+                        driver.validate_retained(self.llvm.replace(line, replacement))
             mutant = re.sub(r"to label %[-\w.]+", "to label %escaped", body, count=1)
             self.assertNotEqual(mutant, body)
             mutant += "\nescaped:\n  ret void\n"
             with self.subTest(normal_helper=symbol), self.assertRaises(ValueError):
-                driver.validate(self.llvm.replace(body, mutant, 1))
+                driver.validate_retained(self.llvm.replace(body, mutant, 1))
             if "6Option" in symbol:
                 # These helpers run before unwinding. Hash-only helpers run
                 # during existing cleanup; a second throw is fatal and excluded.
                 mutant = re.sub(r"unwind label %[-\w.]+", "unwind label %escaped", body, count=1)
                 mutant += "\nescaped:\n  resume { ptr, i32 } zeroinitializer\n"
                 with self.subTest(unwind_helper=symbol), self.assertRaises(ValueError):
-                    driver.validate(self.llvm.replace(body, mutant, 1))
+                    driver.validate_retained(self.llvm.replace(body, mutant, 1))
 
     def test_leaf_identity_and_discriminators(self):
         symbols = set()
@@ -111,14 +112,14 @@ class ExecutionTests(ScratchTests, unittest.TestCase):
         self.assertEqual(len(symbols), 4)
         for symbol in symbols:
             with self.subTest(symbol=symbol), self.assertRaises(ValueError):
-                driver.validate(self.llvm.replace(symbol, symbol + "_fake"))
+                driver.validate_retained(self.llvm.replace(symbol, symbol + "_fake"))
         for old, new in (("icmp eq i64 %1, -1", "icmp eq i64 %1, 0"),
                          ("icmp eq i64 %1, 2", "icmp eq i64 %1, 1"),
                          ("store i64 -1,", "store i64 0,"),
                          ("store i64 2,", "store i64 0,")):
             self.assertIn(old, self.llvm)
             with self.assertRaises(ValueError):
-                driver.validate(self.llvm.replace(old, new))
+                driver.validate_retained(self.llvm.replace(old, new))
 
     def test_update_arguments_lifetimes_and_unwind(self):
         for identity in driver.common.IDENTITIES:
@@ -146,7 +147,7 @@ class ExecutionTests(ScratchTests, unittest.TestCase):
             body = f"start:\n call void @{symbol}()\n unreachable\n"
             self.rejects(body, operation=operation)
         with self.assertRaises(ValueError):
-            driver.validate(self.llvm.replace(symbol, symbol + "_fake"))
+            driver.validate_retained(self.llvm.replace(symbol, symbol + "_fake"))
 
     def test_shared_arm_switch_facts_do_not_hide_missing_cleanup(self):
         llvm = driver.collect(self.root / "arm", "1.90.0",
@@ -209,18 +210,29 @@ class ExecutionTests(ScratchTests, unittest.TestCase):
             replacement = (f"let mut {role} = core::mem::ManuallyDrop::new("
                            f"Scratch::<{size}>::new());")
             mutants.append((leaf / "src/engine.rs", anchor, replacement))
+        mutants.extend(self.final_mutants(leaf))
         for path, anchor, replacement in mutants:
             original = path.read_text()
             self.assertEqual(original.count(anchor), 1)
             try:
                 path.write_text(original.replace(anchor, replacement))
                 llvm = emitted()  # Compilation errors never count as rejection.
-                with self.subTest(path=path, anchor=anchor), self.assertRaises(ValueError):
-                    driver.validate(llvm)
+                with self.subTest(path=path, anchor=anchor):
+                    if path.name == "backends.rs":
+                        # These four are specifically owner-transfer mutants,
+                        # not just missing-scratch or malformed-symbol tests.
+                        functions, definitions, aliases = driver.emitted(
+                            llvm, driver.final.syntax.OPERATIONS)
+                        raw = functions["sha256", "public"]
+                        body = driver.scratch.consumer(raw, "public", definitions, aliases)
+                        with self.assertRaises(ValueError):
+                            driver.final.check(body, "sha256", definitions, aliases)
+                    with self.assertRaises(ValueError):
+                        driver.validate(llvm)
             finally:
                 path.write_text(original)
             driver.validate(emitted())
-        print("Accelerated HMAC compiler mutants: 9 compiled/rejected; restored baselines PASS",
+        print("Accelerated HMAC compiler mutants: 13 compiled/rejected; restored baselines PASS",
               flush=True)
 
 

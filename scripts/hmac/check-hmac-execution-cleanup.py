@@ -8,6 +8,7 @@ import hmac_engine_codegen as common
 import hmac_execution_drop as cleanup
 import hmac_execution_update as update
 import hmac_execution_scratch as scratch
+import hmac_execution_final as final
 import hmac_verifiers as verifier
 
 ROOT = verifier.ROOT
@@ -43,7 +44,7 @@ def emitted(llvm, operations=("cancel", "update_cancel")):
     return functions, definitions, aliases
 
 
-def validate(llvm, compiler="1.99.1", panic="unwind"):
+def validate_retained(llvm, compiler="1.99.1", panic="unwind"):
     common.require(compiler in ("1.90.0", "1.99.1") and panic in ("abort", "unwind"),
                    "unreviewed accelerated compiler/panic profile")
     functions, definitions, aliases = emitted(llvm)
@@ -51,9 +52,21 @@ def validate(llvm, compiler="1.99.1", panic="unwind"):
         cleanup.cancellation(functions[identity, "cancel"], identity, definitions, aliases, compiler, panic)
         update.check(functions[identity, "update_cancel"], identity, definitions, aliases,
                      compiler, panic)
+
+
+def validate(llvm, compiler="1.99.1", panic="unwind"):
+    validate_retained(llvm, compiler, panic)
     functions, definitions, aliases = emitted(llvm, scratch.OPERATIONS)
-    for (_, operation), body in functions.items():
-        scratch.check(body, operation, definitions, aliases)
+    checked_finalizers = set()
+    for (identity, operation), body in functions.items():
+        resolved = scratch.check(body, operation, definitions, aliases)
+        key = identity, resolved
+        if operation in final.syntax.OPERATIONS and key not in checked_finalizers:
+            for route in (0, 1):
+                final.check(resolved, identity, definitions, aliases, panic, route=route)
+            # Byte/final-bit wrappers often call the same actual Engine body.
+            # Reuse only within this artifact after both routes passed.
+            checked_finalizers.add(key)
 
 
 def collect(directory, compiler, target, panic):
@@ -65,6 +78,9 @@ def collect(directory, compiler, target, panic):
           "actual hash-core and CPU-scratch helper graphs; not whole-frame erasure", flush=True)
     print("Accelerated HMAC scratch dispatch: PASS; 24 static/runtime constructors and "
           "72 consuming finalizers; local pad/digest/tag/comparison storage only", flush=True)
+    print("Accelerated HMAC finalizer owner dispatch: PASS; 72 Engine consumers; "
+          "actual adapter/closure bodies and core/CPU-scratch destruction; "
+          "hash finalizers remain separate callee contracts", flush=True)
     return artifacts
 
 

@@ -78,11 +78,46 @@ to reach the independent pad/normalized allocation are premises. This
 exception is **not** a proof of the iterator's hash-owner destruction.
 
 This completes the local scratch checks for these consumers, not the complete
-accelerated constructor/finalizer owner-transfer review. Admission sequencing,
-hash states transferred through adapters/closures, and public-wrapper terminal
-states retain their separate behavioral checks; their remaining compiler
-qualification must not be inferred from scratch checks. Arbitrary truncation
+accelerated constructor/public-wrapper owner-transfer review. Admission
+sequencing and public-wrapper terminal states retain their separate behavioral
+checks; their remaining compiler qualification must not be inferred from
+scratch checks. Arbitrary truncation
 widths and all 383 general SHA-512/t identities are not covered by this fixture.
+
+## Consuming Engine owner transfers
+
+For the 72 finalizer consumers, the checker additionally starts at the actual
+called `Engine::public`, `Engine::secret` or `Engine::verify` definition with a
+valid inner and outer accelerated hash owner. It follows full-owner copies,
+actual emitted `Backend::finish_cpu` and closure bodies, and actual outlined
+drop helpers. A function name alone does not establish consumption.
+
+The model keeps separate obligations for each hash's core and CPU scratch.
+Each normal/error return and recoverable unwind must discharge both owners,
+by exact hash-finalizer dispatch or both core and CPU-scratch destruction.
+It checks both static/runtime discriminants, early output rejection, inner
+finalizer failure, outer update error/unwind, callback error/unwind and helper
+unwind. The outer callback's state and the inner hash's state retain distinct
+provenance. Partial/out-of-bounds copies, duplicate consumption, wrong leaf
+identities, unsupported owner aliases/escapes, post-consumption reads, and
+normal-entry fatal exemptions reject.
+
+The hash finalizers themselves remain separately reviewed consuming-callee
+contracts; this is not another transitive proof of their implementations.
+Likewise, safe-Rust input validity and non-aliasing are premises. Logical moves
+do not establish erasure of the compiler's physical source copies.
+
+Byte-only and final-bit public wrappers often share one emitted Engine body.
+Within one artifact, after both authority routes pass, an identical body for
+the same identity can reuse that result. Recursive adapter checks likewise
+reuse only completed identical body/owner bindings within one inspection.
+There is no persistent cache, cross-artifact reuse or release-evidence waiver.
+
+This check begins **after** the public wrapper has extracted a valid Engine.
+Constructor admission/iterator ownership, the wrapper's `Retained::take`
+transfer, the separate static-only feature layout and protected/resident worker
+placement are not established by this model. Their behavioral tests and any
+remaining compiler qualification stay distinct.
 
 ## Regression controls
 
@@ -90,7 +125,7 @@ The tests mutate emitted copy extents, sources, field offsets, enum values,
 helper bodies, cleanup paths, lifetimes, input pointers and fatal terminals.
 They also check the ARM switch/result relationship.
 
-Nine source mutants must compile successfully and then fail inspection:
+Thirteen source mutants must compile successfully and then fail inspection:
 
 1. Forget the accelerated HMAC on cancellation.
 2. Take but forget the retained engine in guard destruction.
@@ -101,11 +136,22 @@ Nine source mutants must compile successfully and then fail inspection:
 7. Suppress inner-digest destruction.
 8. Suppress full-tag destruction.
 9. Suppress comparison-accumulator destruction.
+10. Forget the captured outer owner instead of invoking the successful inner callback.
+11. Forget that callback on inner hash-finalization failure.
+12. Forget the outer owner on outer-update error.
+13. Suppress outer-owner destruction during update unwinding with `ManuallyDrop`,
+    restoring ownership on ordinary return.
 
 Emitted-code mutations also exercise all scratch roles, exact pointers/extents,
 live-scratch unwind bypasses, post-clear writes, method/alias substitution,
 constructor forwarding and the independent-iterator exception. Each rejection
 is paired with a passing baseline at the same inspection boundary.
+The four finalizer mutants must also fail the new Engine owner checker directly,
+not merely an earlier scratch or cancellation check. Emitted-code regressions
+cover the real outer-owner copy, inner/outer argument substitutions, helper and
+adapter bodies, inner-error/outer-unwind exits, both cleanup components and
+unsupported pointer escape. Cancellation-only mutations run the cancellation
+checker; full compiled mutants still run the combined checker.
 
 Each private mutant is restored and its baseline rebuilt and checked. A compiler
 error is not successful mutation detection. Runtime crate source and packaging
@@ -122,12 +168,12 @@ not accepted on ordinary entry.
 
 CPU update bodies retain their separately reviewed mutation/layout contracts.
 These checks do not prove update arithmetic, kernel correctness, constructor
-admission/owner transfer, consuming-finalizer owner transfer, or protected/resident worker
+admission/owner transfer, public-wrapper owner transfer, or protected/resident worker
 placement. They do not erase compiler-created copies, caller registers/spills,
 interrupt state, dumps, snapshots or fatal-abort state. Those accepted limits
 are not reopened here.
 
-Remaining accelerated construction/finalization owner and hosted worker compiler qualification
+Remaining accelerated constructor/public-wrapper owner and hosted worker compiler qualification
 remain pending, alongside timing/native qualification and independent review.
 No strict-facade admission or global qualification status is promoted by this
 bounded check.

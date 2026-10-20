@@ -78,10 +78,10 @@ to reach the independent pad/normalized allocation are premises. This
 exception is **not** a proof of the iterator's hash-owner destruction.
 
 This completes the local scratch checks for these consumers, not the complete
-accelerated constructor/public-wrapper owner-transfer review. Admission
-sequencing and public-wrapper terminal states retain their separate behavioral
-checks; their remaining compiler qualification must not be inferred from
-scratch checks. Arbitrary truncation
+accelerated constructor owner-transfer review. Admission sequencing and
+public-wrapper terminal states retain their separate behavioral checks;
+the wrapper compiler check below is additional to scratch inspection.
+Arbitrary truncation
 widths and all 383 general SHA-512/t identities are not covered by this fixture.
 
 ## Consuming Engine owner transfers
@@ -113,11 +113,36 @@ the same identity can reuse that result. Recursive adapter checks likewise
 reuse only completed identical body/owner bindings within one inspection.
 There is no persistent cache, cross-artifact reuse or release-evidence waiver.
 
-This check begins **after** the public wrapper has extracted a valid Engine.
-Constructor admission/iterator ownership, the wrapper's `Retained::take`
-transfer, the separate static-only feature layout and protected/resident worker
-placement are not established by this model. Their behavioral tests and any
-remaining compiler qualification stay distinct.
+This Engine check begins **after** extraction of a valid Engine. The following
+wrapper check joins that boundary to the real public consumer.
+
+## Public wrapper handoff
+
+All 72 public finalizer consumers additionally undergo byte-range provenance
+tracking from their consumed HMAC state (which borrows CPU authority) to the exact
+called Engine method. The compiler splits `Retained::take` into two memory
+copies plus scalar loads/stores on the reviewed configurations. The checker
+requires complete, ordered Engine bytes, including the tag-length metadata;
+it does not infer a complete owner from a matching pointer or one large copy.
+
+Both static/runtime retained variants and the already-empty variant are
+explored. Missing, shortened, overlapping or out-of-bounds copy fragments,
+forged scalar pieces, unsupported aliases or scalar escapes, duplicate dispatch
+and reads after consumption reject. Empty variants may read the option niche,
+not an absent Engine payload, and must not dispatch a finalizer. Secret-output
+rejection must call `clear_owned_region` with the original whole destination.
+The original output/candidate pointer and length, typed final-bit pointer, or
+byte-only `None` input are bound to the Engine call.
+
+The combined driver checks that actual Engine body and its adapter/cleanup
+graphs as described above. The wrapper model does not independently prove the
+returned Tag/SecretTag destructor, result values, cryptographic correctness or
+erasure of physical source copies. The fixture's empty output-observer assembly
+is allowed only without an Engine-derived pointer. Unknown owner operations
+fail closed; compiler assumptions do not prune obligations.
+
+Constructor admission/iterator ownership, the separate static-only feature
+layout and protected/resident worker placement remain separate work.
 
 ## Regression controls
 
@@ -125,7 +150,7 @@ The tests mutate emitted copy extents, sources, field offsets, enum values,
 helper bodies, cleanup paths, lifetimes, input pointers and fatal terminals.
 They also check the ARM switch/result relationship.
 
-Thirteen source mutants must compile successfully and then fail inspection:
+Fifteen source mutants must compile successfully and then fail inspection:
 
 1. Forget the accelerated HMAC on cancellation.
 2. Take but forget the retained engine in guard destruction.
@@ -141,6 +166,8 @@ Thirteen source mutants must compile successfully and then fail inspection:
 12. Forget the outer owner on outer-update error.
 13. Suppress outer-owner destruction during update unwinding with `ManuallyDrop`,
     restoring ownership on ordinary return.
+14. Forget a taken Engine and return a terminal error instead of transferring it.
+15. Omit whole-destination clearing on both empty-state secret finalizers.
 
 Emitted-code mutations also exercise all scratch roles, exact pointers/extents,
 live-scratch unwind bypasses, post-clear writes, method/alias substitution,
@@ -152,6 +179,10 @@ cover the real outer-owner copy, inner/outer argument substitutions, helper and
 adapter bodies, inner-error/outer-unwind exits, both cleanup components and
 unsupported pointer escape. Cancellation-only mutations run the cancellation
 checker; full compiled mutants still run the combined checker.
+The last two mutants must fail the public-wrapper check directly. All-identity
+wrapper mutations also remove each scalar/copy fragment, change source offsets
+and input/output arguments, corrupt the option niche, bypass empty-output
+clearing and attempt duplicate dispatch or pointer escape.
 
 Each private mutant is restored and its baseline rebuilt and checked. A compiler
 error is not successful mutation detection. Runtime crate source and packaging
@@ -168,12 +199,12 @@ not accepted on ordinary entry.
 
 CPU update bodies retain their separately reviewed mutation/layout contracts.
 These checks do not prove update arithmetic, kernel correctness, constructor
-admission/owner transfer, public-wrapper owner transfer, or protected/resident worker
+admission/owner transfer, or protected/resident worker
 placement. They do not erase compiler-created copies, caller registers/spills,
 interrupt state, dumps, snapshots or fatal-abort state. Those accepted limits
 are not reopened here.
 
-Remaining accelerated constructor/public-wrapper owner and hosted worker compiler qualification
+Remaining accelerated constructor owner and hosted worker compiler qualification
 remain pending, alongside timing/native qualification and independent review.
 No strict-facade admission or global qualification status is promoted by this
 bounded check.

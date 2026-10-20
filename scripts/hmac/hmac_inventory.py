@@ -84,7 +84,7 @@ EVIDENCE = (
     ("Portable paired timing screen, not a constant-time proof", "scripts/hmac/check-hmac-timing.py"),
 )
 PENDING = (
-    "Remaining accelerated constructor/public-wrapper owner transfer and hosted worker qualification; Engine finalizers, local scratch and cancellation/update dispatch are checked, not whole-frame erasure.",
+    "Remaining accelerated constructor owner transfer and hosted worker qualification; public-wrapper handoffs, Engine finalizers, local scratch and cancellation/update dispatch are checked, not whole-frame erasure.",
     "Accelerated/hosted timing and cache/branch qualification; the portable timing screen is not a timing proof.",
     "Remaining native route qualification, including dedicated x86 SHA-512.",
     "Independent pentest and final source-bound release evidence.",

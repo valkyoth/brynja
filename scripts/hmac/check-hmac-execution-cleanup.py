@@ -9,6 +9,7 @@ import hmac_execution_drop as cleanup
 import hmac_execution_update as update
 import hmac_execution_scratch as scratch
 import hmac_execution_final as final
+import hmac_execution_wrapper as wrapper
 import hmac_verifiers as verifier
 
 ROOT = verifier.ROOT
@@ -60,6 +61,10 @@ def validate(llvm, compiler="1.99.1", panic="unwind"):
     checked_finalizers = set()
     for (identity, operation), body in functions.items():
         resolved = scratch.check(body, operation, definitions, aliases)
+        if operation in final.syntax.OPERATIONS:
+            for route, present in ((0, True), (1, True), (0, False)):
+                wrapper.check(body, identity, operation, definitions, aliases,
+                              compiler, route, present)
         key = identity, resolved
         if operation in final.syntax.OPERATIONS and key not in checked_finalizers:
             for route in (0, 1):
@@ -81,6 +86,8 @@ def collect(directory, compiler, target, panic):
     print("Accelerated HMAC finalizer owner dispatch: PASS; 72 Engine consumers; "
           "actual adapter/closure bodies and core/CPU-scratch destruction; "
           "hash finalizers remain separate callee contracts", flush=True)
+    print("Accelerated HMAC public wrapper handoff: PASS; 72 consumers; "
+          "split-copy/scalar Engine provenance and empty-state secret rejection", flush=True)
     return artifacts
 
 

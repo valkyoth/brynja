@@ -8,6 +8,7 @@ import shutil
 import unittest
 from hmac_execution_scratch_tests import ScratchTests
 from hmac_execution_final_tests import FinalTests
+from hmac_execution_wrapper_tests import WrapperTests
 
 spec = importlib.util.spec_from_file_location(
     "hmac_execution_cleanup", Path(__file__).with_name("check-hmac-execution-cleanup.py"))
@@ -15,7 +16,7 @@ driver = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(driver)
 
 
-class ExecutionTests(ScratchTests, FinalTests, unittest.TestCase):
+class ExecutionTests(ScratchTests, FinalTests, WrapperTests, unittest.TestCase):
     driver = driver
 
     @classmethod
@@ -211,13 +212,24 @@ class ExecutionTests(ScratchTests, FinalTests, unittest.TestCase):
                            f"Scratch::<{size}>::new());")
             mutants.append((leaf / "src/engine.rs", anchor, replacement))
         mutants.extend(self.final_mutants(leaf))
+        wrapper_mutants = self.wrapper_mutants(leaf)
+        mutants.extend(wrapper_mutants)
         for path, anchor, replacement in mutants:
             original = path.read_text()
-            self.assertEqual(original.count(anchor), 1)
+            self.assertEqual(original.count(anchor), 2 if "clear_owned_region(output)" in anchor else 1)
             try:
                 path.write_text(original.replace(anchor, replacement))
                 llvm = emitted()  # Compilation errors never count as rejection.
                 with self.subTest(path=path, anchor=anchor):
+                    if (path, anchor, replacement) in wrapper_mutants:
+                        functions, definitions, aliases = driver.emitted(
+                            llvm, driver.final.syntax.OPERATIONS)
+                        probes = ((("public", True),) if path.name == "retained.rs"
+                                  else (("secret", False), ("secret_bits", False)))
+                        for operation, present in probes:
+                            with self.assertRaises(ValueError):
+                                driver.wrapper.check(functions["sha256", operation], "sha256",
+                                                     operation, definitions, aliases, present=present)
                     if path.name == "backends.rs":
                         # These four are specifically owner-transfer mutants,
                         # not just missing-scratch or malformed-symbol tests.
@@ -232,7 +244,7 @@ class ExecutionTests(ScratchTests, FinalTests, unittest.TestCase):
             finally:
                 path.write_text(original)
             driver.validate(emitted())
-        print("Accelerated HMAC compiler mutants: 13 compiled/rejected; restored baselines PASS",
+        print("Accelerated HMAC compiler mutants: 15 compiled/rejected; restored baselines PASS",
               flush=True)
 
 

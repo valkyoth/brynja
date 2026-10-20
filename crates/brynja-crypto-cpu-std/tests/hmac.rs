@@ -31,10 +31,22 @@ fn unsupported_host_never_mints_runtime_authority() {
     let owner = Authority::new(wrong, Mode::Prefer);
     assert!(matches!(owner, Ok(ref value) if value.report().route != Route::Accelerated));
     assert!(Authority::new(wrong, Mode::Require).is_err());
+    if cfg!(target_arch = "x86_64") {
+        // Current-core features do not establish the hosted migration contract.
+        for kernel in [Kernel::X86Sha256, Kernel::X86Sha512, Kernel::X86Keccak] {
+            assert!(matches!(Authority::new(kernel, Mode::Prefer),
+                Ok(ref owner) if matches!(owner.report().route, Route::PortableFallback(_))
+                    && matches!(owner.hmac::<mac::Sha256>(b"key"), Ok(None))));
+            assert!(matches!(
+                Authority::new(kernel, Mode::Require),
+                Err(brynja_crypto_cpu_std::execution::Error::Unavailable(_))
+            ));
+        }
+    }
 }
 
-fn compare<A: for<'a> Algorithm<'a>>(kernel: Kernel) -> Result<(), HmacError> {
-    let owner = Authority::new(kernel, Mode::Require).map_err(HmacError::Hosted)?;
+fn compare<A: for<'a> Algorithm<'a>>(kernel: Kernel, mode: Mode) -> Result<(), HmacError> {
+    let owner = Authority::new(kernel, mode).map_err(HmacError::Hosted)?;
     assert_eq!(owner.report().route, Route::Accelerated);
     let key = [0x5a; 257];
     let mut expected = vec![0; A::TAG_BYTES];
@@ -62,6 +74,46 @@ fn compare<A: for<'a> Algorithm<'a>>(kernel: Kernel) -> Result<(), HmacError> {
             .map_err(HmacError::Mac)?
             .expose_public()
     );
+    let Some(mut reject) = owner.hmac_with_tag_length::<A>(&key, 16)? else {
+        return Err(HmacError::Mac(mac::Error::ExecutionFailed));
+    };
+    reject.update(b"hosted message").map_err(HmacError::Mac)?;
+    let mut changed = candidate.to_vec();
+    let first = changed
+        .first_mut()
+        .ok_or(HmacError::Mac(mac::Error::TagLength))?;
+    *first ^= 1;
+    assert!(
+        !reject
+            .verify(&changed)
+            .map_err(HmacError::Mac)?
+            .expose_public()
+    );
+    // Invalid policy is an error on an admitted route, even under Prefer.
+    assert!(matches!(
+        owner.hmac_with_tag_length::<A>(&key, 1),
+        Err(HmacError::Mac(mac::Error::TagLength))
+    ));
+    for secret in [false, true] {
+        let Some(stream) = owner.hmac::<A>(&key)? else {
+            return Err(HmacError::Mac(mac::Error::ExecutionFailed));
+        };
+        let wrong_length = A::TAG_BYTES
+            .checked_add(1)
+            .ok_or(HmacError::Mac(mac::Error::ExecutionFailed))?;
+        let mut wrong = vec![0x77; wrong_length];
+        let result = if secret {
+            stream.finalize_secret(&mut wrong).map(|_| ())
+        } else {
+            stream.finalize_tag(&mut wrong).map(|_| ())
+        };
+        assert_eq!(result, Err(mac::Error::TagLength));
+        assert!(
+            wrong
+                .iter()
+                .all(|byte| *byte == if secret { 0 } else { 0x77 })
+        );
+    }
     let Some(mut live) = owner.hmac::<A>(&key)? else {
         return Err(HmacError::Mac(mac::Error::ExecutionFailed));
     };
@@ -79,33 +131,55 @@ fn compare<A: for<'a> Algorithm<'a>>(kernel: Kernel) -> Result<(), HmacError> {
 }
 
 #[test]
-#[ignore = "requires a reviewed native AArch64 host with SHA2/SHA3/SHA512 availability"]
+#[ignore = "requires explicit native route selection; run scripts/hmac/check-hmac-hosted-native.py"]
 fn native_hosted_all_identities() -> Result<(), HmacError> {
-    compare::<mac::Sha224>(Kernel::ArmSha256)?;
-    compare::<mac::Sha256>(Kernel::ArmSha256)?;
-    compare::<mac::Sha384>(Kernel::ArmSha512)?;
-    compare::<mac::Sha512>(Kernel::ArmSha512)?;
-    compare::<mac::Sha512_224>(Kernel::ArmSha512)?;
-    compare::<mac::Sha512_256>(Kernel::ArmSha512)?;
-    compare::<mac::Sha512T<129>>(Kernel::ArmSha512)?;
-    compare::<mac::Sha512T<511>>(Kernel::ArmSha512)?;
-    compare::<mac::Sha3_224>(Kernel::ArmKeccak)?;
-    compare::<mac::Sha3_256>(Kernel::ArmKeccak)?;
-    compare::<mac::Sha3_384>(Kernel::ArmKeccak)?;
-    compare::<mac::Sha3_512>(Kernel::ArmKeccak)?;
-    let owner = Authority::new(Kernel::ArmSha256, Mode::Prefer).map_err(HmacError::Hosted)?;
-    assert!(matches!(
-        owner.hmac::<mac::Sha3_256>(b"key"),
-        Err(HmacError::Mac(_))
-    ));
-    assert!(matches!(
-        owner.hmac_with_tag_length::<mac::Sha256>(b"key", 1),
-        Err(HmacError::Mac(mac::Error::TagLength))
-    ));
-    owner.quarantine();
-    assert!(matches!(
-        owner.hmac::<mac::Sha256>(b"key"),
-        Err(HmacError::Hosted(_))
-    ));
+    let route = std::env::var("BRYNJA_HMAC_HOSTED_KERNEL")
+        .map_err(|_| HmacError::Mac(mac::Error::ExecutionFailed))?;
+    // Generic x86 hosted authority deliberately cannot establish migration.
+    if !cfg!(target_arch = "aarch64") {
+        return Err(HmacError::Mac(mac::Error::ExecutionFailed));
+    }
+    let (kernel, count) = match route.as_str() {
+        "sha256" => (Kernel::ArmSha256, 2),
+        "sha512" => (Kernel::ArmSha512, 6),
+        "keccak" => (Kernel::ArmKeccak, 4),
+        _ => return Err(HmacError::Mac(mac::Error::ExecutionFailed)),
+    };
+    for mode in [Mode::Require, Mode::Prefer] {
+        match route.as_str() {
+            "sha256" => {
+                compare::<mac::Sha224>(kernel, mode)?;
+                compare::<mac::Sha256>(kernel, mode)?;
+            }
+            "sha512" => {
+                compare::<mac::Sha384>(kernel, mode)?;
+                compare::<mac::Sha512>(kernel, mode)?;
+                compare::<mac::Sha512_224>(kernel, mode)?;
+                compare::<mac::Sha512_256>(kernel, mode)?;
+                compare::<mac::Sha512T<129>>(kernel, mode)?;
+                compare::<mac::Sha512T<511>>(kernel, mode)?;
+            }
+            "keccak" => {
+                compare::<mac::Sha3_224>(kernel, mode)?;
+                compare::<mac::Sha3_256>(kernel, mode)?;
+                compare::<mac::Sha3_384>(kernel, mode)?;
+                compare::<mac::Sha3_512>(kernel, mode)?;
+            }
+            _ => return Err(HmacError::Mac(mac::Error::ExecutionFailed)),
+        }
+        let owner = Authority::new(kernel, mode).map_err(HmacError::Hosted)?;
+        if route == "keccak" {
+            assert!(matches!(
+                owner.hmac::<mac::Sha256>(b"key"),
+                Err(HmacError::Mac(_))
+            ));
+        } else {
+            assert!(matches!(
+                owner.hmac::<mac::Sha3_256>(b"key"),
+                Err(HmacError::Mac(_))
+            ));
+        }
+    }
+    println!("HMAC_NATIVE_HOSTED: {route} {count} identities; Require and Prefer");
     Ok(())
 }

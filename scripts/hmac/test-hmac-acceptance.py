@@ -12,6 +12,7 @@ from unittest.mock import patch
 from hmac_acceptance import ALGORITHMS, diagnostic_rejection, negative_cases
 from hmac_faults import accepted, rejected, replace_once
 import hmac_adapter_native as native
+from hmac_execution_fault_tests import FaultTests
 
 
 def output(code=0, stdout="", stderr=""):

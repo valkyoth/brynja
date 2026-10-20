@@ -2,6 +2,7 @@
 import json
 from pathlib import Path
 import shutil
+import hmac_execution_faults
 from hmac_acceptance import ALGORITHMS, diagnostic_rejection
 from hmac_faults import result, accepted, rejected, replace_once
 
@@ -60,6 +61,7 @@ pub fn unsafe_policy_probe() -> u8 { unsafe { core::ptr::read(&1) } }
             path.write_text(original)
         accepted(result(command, fixture, environment), 1)
     print("HMAC retained execution: 4 debug/release lifecycle tests; 4 compiled mutants rejected")
+    hmac_execution_faults.check(fixture, directory, environment)
 
 
 def check(consumer, environment, roots, *, runtime=False):

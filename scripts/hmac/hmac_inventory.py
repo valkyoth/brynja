@@ -78,6 +78,8 @@ EVIDENCE = (
     ("Five scratch probes, optimized normal/error/unwind clearing only", "scripts/hmac/check-hmac-cleanup.py"),
     ("24 cancellation/update, 84 scratch, 72 finalizer and 12 constructor graphs; dispatch only", "scripts/hmac/check-hmac-engine-cleanup.py"),
     ("Real portable and explicitly selected native adapter handoffs", "assurance/hmac-faults/adapter_tests.rs"),
+    ("Private accelerated composition admission/error/unwind witnesses", "assurance/hmac-faults/execution_cases.rs"),
+    ("Explicit AArch64 hosted native selection and fallback mutations", "scripts/hmac/check-hmac-hosted-native.py"),
     ("Portable paired timing screen, not a constant-time proof", "scripts/hmac/check-hmac-timing.py"),
 )
 PENDING = (

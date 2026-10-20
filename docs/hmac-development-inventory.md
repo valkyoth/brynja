@@ -82,6 +82,8 @@ Links identify executable checks, not proof that a current run passed.
 - Five scratch probes, optimized normal/error/unwind clearing only: [check](../scripts/hmac/check-hmac-cleanup.py).
 - 24 cancellation/update, 84 scratch, 72 finalizer and 12 constructor graphs; dispatch only: [check](../scripts/hmac/check-hmac-engine-cleanup.py).
 - Real portable and explicitly selected native adapter handoffs: [check](../assurance/hmac-faults/adapter_tests.rs).
+- Private accelerated composition admission/error/unwind witnesses: [check](../assurance/hmac-faults/execution_cases.rs).
+- Explicit AArch64 hosted native selection and fallback mutations: [check](../scripts/hmac/check-hmac-hosted-native.py).
 - Portable paired timing screen, not a constant-time proof: [check](../scripts/hmac/check-hmac-timing.py).
 
 ## Still pending

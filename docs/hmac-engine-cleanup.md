@@ -93,6 +93,9 @@ failures and recoverable-unwind paths are included. Abort is still excluded.
   Constructor scratch and owner transfer are checked. The
   [development inventory](hmac-development-inventory.md) retains
   these limits and does not promote the global assurance register.
+  Separate [execution composition checks](hmac-execution-checks.md) exercise
+  accelerated admission/lifecycle and hosted native fallback behavior; those
+  tests do not substitute for emitted-code inspection.
 
 MIR and assembly are emitted alongside LLVM for review. The graph obligations
 above are LLVM obligations; they are not separate assembly control-flow proofs.

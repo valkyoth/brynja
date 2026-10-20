@@ -44,6 +44,10 @@ class ScopeTests(unittest.TestCase):
                      "assurance/hmac-timing/src/main.rs", "assurance/hmac-timing/Cargo.lock",
                      "assurance/hmac-faults/adapter_tests.rs",
                      "assurance/hmac-faults/native_adapter_tests.rs",
+                     "assurance/hmac-faults/execution_model.rs",
+                     "assurance/hmac-faults/execution_cases.rs",
+                     "scripts/hmac/hmac_execution_faults.py",
+                     "scripts/hmac/check-hmac-hosted-native.py",
                      "crates/brynja-crypto-cpu-std/src/execution/hmac.rs",
                      "crates/brynja-crypto-cpu-std/tests/hmac.rs",
                      "crates/brynja-crypto-cpu-std/src/strict_hmac/worker.rs",
@@ -106,6 +110,8 @@ class ScopeTests(unittest.TestCase):
         self.assertIn("hmac", commands.owners("python3 scripts/cpu/check-hosted-execution.py"))
         self.assertEqual(commands.owners("python3 scripts/hmac/check-hmac-cleanup.py"), {"hmac"})
         self.assertEqual(commands.owners("python3 scripts/hmac/check-hmac-engine-cleanup.py"), {"hmac"})
+        self.assertEqual(commands.owners(
+            "python3 scripts/hmac/check-hmac-hosted-native.py --kernel sha256"), {"hmac"})
         for family in ("sha2", "sha3", "core", "static_cpu"):
             affected = list(commands.scope.closure({family}))
             self.assertIn("python3 scripts/hmac/check-hmac-asan.py", commands.selected(sanitizer, affected))

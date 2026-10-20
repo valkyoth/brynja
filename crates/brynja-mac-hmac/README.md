@@ -37,7 +37,8 @@ reviewed.** This leaf is not yet exposed through the modern or strict facades.
 | HMAC-SHA3-224/256/384/512 | Portable initial implementation | No |
 | Streaming, long-key normalization, explicit byte truncation, verification | Initial implementation with author tests | No |
 | Typed public/secret tags; owned-memory destruction | Implemented; HMAC-specific compiler qualification pending | No |
-| Hardware/SIMD selection and protected/resident sessions | Not implemented by this HMAC API | No |
+| Explicit static SHA-2/Keccak accelerated composition | Implemented behind `hardened-execution`; HMAC-specific qualification pending | No |
+| Hosted detection, SIMD batching and protected/resident sessions | Not implemented by this HMAC API | No |
 | Canonical final-bit messages for the ten named algorithms | Implemented with author differential and lifecycle tests | No |
 | General SHA-512/t, t ≥ 128 and t < 512 except 384; exact full-bit tags | Portable implementation with author tests across 383 parameters | No |
 | General SHA-512/t below 128 bits | Rejected by HMAC's minimum-tag policy | Not an enabled profile |
@@ -50,11 +51,27 @@ for arbitrary digests or XOFs.
 
 ## Hardware and SIMD
 
-This initial HMAC API is portable only. It does not select dedicated SHA
-instructions or SIMD batches, even when another dependency enables a leaf's
-acceleration features. Existing accelerated hashes are not automatically HMAC
-qualification. Explicit accelerated and protected/resident HMAC composition
-remains development work; no speedup or strict-memory claim is made here.
+The default `Hmac` remains portable even when another dependency enables hash
+acceleration. The opt-in `execution::Hmac` borrows an explicit static CPU
+`execution::Authority`: use `from_static(&authority, key)` or
+`from_static_with_tag_length(&authority, key, bytes)`. It supports the same ten
+named identities and general SHA-512/t, and returns the same typed tags.
+All normalization/inner/outer states use hardened hash execution, never ordinary
+public-data hash owners. No error authorizes fallback.
+
+The `hardened-execution` Cargo feature alone does not enable instructions.
+Build-wide target features must match the selected kernel; the deployment must
+guarantee both CPU instructions and OS register-state support throughout the
+authority's lifetime. This static API does not detect features, pin threads or
+make VM migration safe. Use portable HMAC when that guarantee cannot be made.
+Backend failure or recoverable unwinding drops both HMAC hash owners and makes
+the stream terminal. Only atomic SHA-2 length rejection preserves a stream;
+SHA-3 overflow is terminal because its hash owner has already been cleared.
+
+Author tests have exercised x86 SHA-224/256 and AVX2 Keccak composition locally.
+Dedicated SHA-512 and Arm execution remain pending; cross-compilation alone is
+not native qualification. Hosted detection, SIMD batching and protected/resident
+HMAC remain development work. No performance or protected-memory claim is made.
 
 ## API examples
 
@@ -140,7 +157,7 @@ RFC vectors are from [RFC 4231](https://www.rfc-editor.org/rfc/rfc4231.html);
 construction and key guidance follow [RFC 2104](https://www.rfc-editor.org/rfc/rfc2104.html).
 
 Package acceptance executes all seven RFC cases in debug and release, rejects
-118 API/ownership probes and eleven compiled algorithm/comparison mutations, and
+118 portable API/ownership probes and eleven compiled algorithm/comparison mutations, and
 builds twelve algorithm consumers (ten named plus two general bit widths) for
 the requested installed `no_std` target.
 The private synthetic-hash fixture injects 328 errors/unwinds across construction,
@@ -148,10 +165,29 @@ update and finalization, checks owner destruction and in-lifetime scratch
 clearing, and rejects four compiled lifecycle/policy mutations. Its synthetic
 hash is never exported or shipped. These are composition tests, not evidence of
 register erasure, hash-kernel cleanup, timing resistance or independent review.
+The extracted accelerated API additionally compiles twelve positive identities
+and rejects 66 ownership, authority-lifetime and API misuse probes. Four retained
+owner lifecycle tests and four compiled mutations cover backend failure,
+unwinding, atomic length rejection and SHA-3's terminal overflow mapping.
+These generic lifecycle tests do not execute CPU instructions.
+
+Native route tests are explicitly ignored in generic runs. On a deployment
+known to support SHA-NI, SSE2, AVX and AVX2, execute the narrow SHA-2 and Keccak
+routes with:
+
+```sh
+RUSTFLAGS='-C target-feature=+sha,+sse2,+avx,+avx2' cargo test -p brynja-mac-hmac \
+  --features hardened-execution --test execution --release -- --ignored --skip native_sha512
+```
+
+The separate `native_sha512` case requires dedicated SHA-512 instructions
+(or explicitly identified emulation), not merely AVX-512 support. Do not run it
+on unsupported hardware. Arm routes require their matching complete target
+features and a separate native run.
 
 The incremental verifier selects HMAC independently from unchanged hash families.
-Thirteen bounded Miri tasks cover the ten named adapters, two general widths
-and consumer unwinding; native
+Fourteen bounded Miri tasks cover the ten named adapters, two general widths,
+consumer unwinding and the instruction-free execution-owner lifecycle; native
 matrices retain their full coverage. The HMAC ASan runner forces leak detection
 and fatal errors. Two Kani proofs cover only the actual public-length policy
 predicates, not the cryptographic construction. These checks remain author-run

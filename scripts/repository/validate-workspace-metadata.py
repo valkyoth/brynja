@@ -214,6 +214,8 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
     expected.update({feature: [] for feature in entry.get("features", [])})
     if name == "brynja-strict":
         expected = strict_policy.FEATURES
+    if name == "brynja-mac-hmac":
+        expected["hardened-execution"] = ["dep:brynja-crypto-cpu", "brynja-crypto-cpu/hardened-execution", "brynja-hash-sha2/hardened-execution", "brynja-hash-sha3/hardened-execution"]
     if name == "brynja-crypto-cpu":
         expected["sha256-hardened-batch"] = ["dep:brynja-core"]
         expected["sha512-hardened-batch"] = ["dep:brynja-core"]

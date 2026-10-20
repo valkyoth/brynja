@@ -13,6 +13,7 @@ from unittest.mock import patch
 from hmac_package import validate_members
 import hmac_faults
 import hmac_acceptance
+import hmac_execution_acceptance
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.append(str(ROOT / "scripts/repository"))
@@ -88,6 +89,8 @@ def main():
         hmac_acceptance.negatives(consumer, environment, args.no_std_target)
         hmac_acceptance.mutants(roots, consumer, environment)
         hmac_faults.check(roots, directory, environment)
+        hmac_execution_acceptance.check(consumer, environment, roots)
+        hmac_execution_acceptance.lifecycle(roots, directory, environment)
 
 
 if __name__ == "__main__":

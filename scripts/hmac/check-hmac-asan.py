@@ -23,6 +23,12 @@ def main():
             if f"test result: ok. {count} passed; 0 failed; 0 ignored;" not in output:
                 raise ValueError("HMAC sanitizer test population changed: " + target)
             print(output)
+        output = verifier.run(["cargo", "+" + pin["execution_toolchain"], "test", "--locked", "--offline",
+                               "-p", "brynja-mac-hmac", "--features", "hardened-execution",
+                               "--lib", "execution::tests", "--target", "x86_64-unknown-linux-gnu"], env)
+        if "test result: ok. 4 passed; 0 failed; 0 ignored;" not in output:
+            raise ValueError("HMAC sanitizer execution lifecycle population changed")
+        print(output)
         print("Portable HMAC ASan/LSan: PASS; leak detection forced; no hardware qualification claim")
 
 

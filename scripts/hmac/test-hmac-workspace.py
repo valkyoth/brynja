@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Only the exact HMAC general-hash feature edge is admitted."""
+"""Only exact general-hash and opt-in hardened-execution edges are admitted."""
 import copy
 import json
 from pathlib import Path
@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[2]
 VALIDATOR = ROOT / "scripts/repository/validate-workspace-metadata.py"
 
 
-def validate(document, mode, valid):
+def validate(document, mode, valid, diagnostic="directly enables features on brynja-hash-sha2"):
     with tempfile.TemporaryDirectory(prefix="brynja-hmac-graph-") as directory:
         path = Path(directory) / "metadata.json"
         path.write_text(json.dumps(document))
@@ -20,7 +20,7 @@ def validate(document, mode, valid):
             if result.returncode:
                 raise ValueError(result.stderr)
         elif (not result.returncode
-              or "directly enables features on brynja-hash-sha2" not in result.stderr):
+              or diagnostic not in result.stderr):
             raise ValueError("HMAC feature mutation escaped its exact feature check")
 
 
@@ -37,7 +37,18 @@ def main():
             edge = next(d for d in package["dependencies"] if d["name"] == "brynja-hash-sha2")
             edge["features"] = features
             validate(changed, mode, False)
-    print("HMAC workspace feature closure: 2 baselines and 8 rejected mutations PASS")
+        package = next(p for p in document["packages"] if p["name"] == "brynja-mac-hmac")
+        edges = package["features"]["hardened-execution"]
+        for index in range(len(edges)):
+            changed = copy.deepcopy(document)
+            candidate = next(p for p in changed["packages"] if p["name"] == "brynja-mac-hmac")
+            candidate["features"]["hardened-execution"] = edges[:index] + edges[index + 1:]
+            validate(changed, mode, False, "feature policy differs")
+        changed = copy.deepcopy(document)
+        candidate = next(p for p in changed["packages"] if p["name"] == "brynja-mac-hmac")
+        candidate["features"]["default"] = ["hardened-execution"]
+        validate(changed, mode, False, "feature policy differs")
+    print("HMAC workspace feature closure: 2 baselines and 18 rejected mutations PASS")
 
 
 if __name__ == "__main__":

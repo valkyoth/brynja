@@ -49,15 +49,20 @@ class ScopeTests(unittest.TestCase):
                     "sha3_224", "sha3_256", "sha3_384", "sha3_512",
                     "output_clears_during_consumer_unwind", "general_129", "general_511"}
         tasks = miri_tasks.inventory(ROOT, "hmac")
-        self.assertEqual(len(tasks), len(expected))
-        self.assertEqual({argv[argv.index("--test") + 2] for argv in tasks}, expected)
-        for argv in tasks:
+        self.assertEqual(len(tasks), len(expected) + 1)
+        bounded = [argv for argv in tasks if "--test" in argv]
+        self.assertEqual({argv[argv.index("--test") + 2] for argv in bounded}, expected)
+        lifecycle = [argv for argv in tasks if "--lib" in argv]
+        self.assertEqual(len(lifecycle), 1)
+        self.assertEqual(lifecycle[0][-1], "execution::tests")
+        self.assertIn("hardened-execution", lifecycle[0])
+        for argv in bounded:
             self.assertEqual(argv[argv.index("-p") + 1], "brynja-mac-hmac")
             self.assertEqual(argv[argv.index("--test") + 1], "bounded")
             self.assertIn("--exact", argv)
             self.assertNotIn("--skip", argv)
         for profile in ("routine", "extended", "existing-full"):
-            self.assertEqual(len(miri_tasks.task_inventory(ROOT, "hmac", profile)), 13)
+            self.assertEqual(len(miri_tasks.task_inventory(ROOT, "hmac", profile)), 14)
 
     def test_sanitizer_and_matrix_ownership(self):
         sanitizer = commands.catalog(ROOT / "scripts/zeroization/check-zeroization-sanitizer.sh")
@@ -95,7 +100,7 @@ class ScopeTests(unittest.TestCase):
             for shards in (1, 2, 8):
                 rows = catalog.selected(plan, ["kani", "asan", "miri"], None, shards,
                                         miri_tasks=True, miri_profile="routine")
-                self.assertEqual(len(rows), 15)
+                self.assertEqual(len(rows), 16)
                 self.assertEqual([row["command"] for row in rows if row["phase"] == "kani"],
                                  commands.kani_commands(["hmac"]))
 
@@ -119,9 +124,9 @@ class VerifierTests(unittest.TestCase):
                 self.assertEqual(env["LSAN_OPTIONS"], "exitcode=23")
                 self.assertEqual(env["RUSTFLAGS"], "-Zsanitizer=address")
                 self.assertNotIn("CARGO_BUILD_BUILD_DIR", env)
-                target = argv[argv.index("--test") + 1]
+                target = argv[argv.index("--test") + 1] if "--test" in argv else "execution::tests"
                 calls.append(target)
-                count = {"bounded": 13, "vectors": 7, "lifecycle": 11, "bits": 12, "general": 5}[target] if population else 0
+                count = {"bounded": 13, "vectors": 7, "lifecycle": 11, "bits": 12, "general": 5, "execution::tests": 4}[target] if population else 0
                 return f"test result: ok. {count} passed; 0 failed; 0 ignored;"
 
             with patch.dict(os.environ, hostile), patch.object(asan.sys, "platform", "linux"), \
@@ -131,7 +136,7 @@ class VerifierTests(unittest.TestCase):
                     redirect_stdout(io.StringIO()):
                 if population:
                     asan.main()
-                    self.assertEqual(calls, ["bounded", "vectors", "lifecycle", "bits", "general"])
+                    self.assertEqual(calls, ["bounded", "vectors", "lifecycle", "bits", "general", "execution::tests"])
                 else:
                     with self.assertRaisesRegex(ValueError, "population"):
                         asan.main()

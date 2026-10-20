@@ -91,10 +91,34 @@ Status: in development; no tag, publication or qualification claim.
 
 ## Remaining work before completion
 
+### Explicit static execution slice
+
+- Added `execution::Hmac` behind an optional `hardened-execution` feature.
+  It borrows static CPU authority across normalization, inner and outer hashing,
+  using only the existing hardened SHA-2/Keccak owners. Default constructors
+  remain portable, and output tag identities are unchanged.
+- All required empty owners are admitted before reading key bytes. Backend
+  failure and recoverable unwinding release both retained hash states and make
+  the stream terminal; atomic SHA-2 length rejection preserves it. SHA-3 overflow
+  is terminal because the leaf's operation guard has already cleared its owner.
+- Real local SHA-NI narrow SHA-2 and AVX2 Keccak comparisons cover byte/bit
+  messages, long keys, truncation, output errors and revocation. Dedicated
+  SHA-512 and Arm execution remain pending, not inferred from compilation.
+- Extracted-package checks add twelve positive accelerated identities and 66
+  diagnostic-checked misuse probes. Four instruction-free lifecycle tests and
+  four compiled behavioral mutants exercise retained-state failure handling.
+  A fourteenth bounded Miri task and sanitizer coverage select these tests
+  without executing instructions under the interpreter.
+- No existing hash/backend implementation changed. Hosted detection, batching,
+  protected/resident HMAC, compiler cleanup and timing qualification remain work,
+  and none of these author tests substitutes for independent review.
+
+### Still required
+
 1. Close remaining modern profile and precise bit/key/tag policies, plus the
    error/fault and no_std consumer contracts. General SHA-512/t now has a
    portable implementation under the existing 128-bit HMAC minimum.
-2. Assess and implement applicable existing accelerated hash routes and
+2. Finish qualification and hosted selection for accelerated hash routes and
    protected/resident HMAC composition without weakening host-memory boundaries;
    finish facade integration and required API/profile/requirement inventories.
 3. Extend the registered HMAC verifier tasks for the completed profiles and

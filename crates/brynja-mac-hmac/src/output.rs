@@ -12,6 +12,10 @@ pub struct Tag<'a, A: Algorithm> {
 }
 
 impl<'a, A: Algorithm> Tag<'a, A> {
+    #[cfg(feature = "hardened-execution")]
+    pub(crate) fn rebind<B: Algorithm>(self) -> Tag<'a, B> {
+        Tag::new(self.bytes)
+    }
     pub(crate) const fn new(bytes: &'a [u8]) -> Self {
         Self {
             bytes,
@@ -38,6 +42,10 @@ pub struct SecretTag<'a, A: Algorithm> {
 }
 
 impl<'a, A: Algorithm> SecretTag<'a, A> {
+    #[cfg(feature = "hardened-execution")]
+    pub(crate) fn rebind<B: Algorithm>(self) -> SecretTag<'a, B> {
+        SecretTag::new(self.region)
+    }
     pub(crate) const fn new(region: OwnedSecretRegion<'a>) -> Self {
         Self {
             region,

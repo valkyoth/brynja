@@ -195,6 +195,7 @@ name = "brynja-mac-hmac"
 version = "0.1.0"
 dependencies = [
  "brynja-core",
+ "brynja-crypto-cpu",
  "brynja-hash-sha2",
  "brynja-hash-sha3",
 ]

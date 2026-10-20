@@ -1,6 +1,6 @@
 //! HMAC over a sealed set of modern, secret-bearing hash implementations.
 //!
-//! This initial portable implementation is under development and has not yet
+//! This implementation and its opt-in static execution path are under development and have not yet
 //! completed HMAC-specific security review or compiler/native qualification.
 //! Hash owners are reused, but their evidence is not evidence of this new
 //! composition. No FIPS validation or independent cryptographic review is claimed.
@@ -17,6 +17,8 @@
 mod algorithms;
 mod bits;
 mod engine;
+#[cfg(feature = "hardened-execution")]
+pub mod execution;
 mod general;
 mod output;
 mod policy;
@@ -41,6 +43,12 @@ pub enum Error {
     TagLength,
     /// The hash parameter is invalid or below the 128-bit HMAC policy minimum.
     AlgorithmParameter,
+    /// The selected CPU authority failed; never authorizes portable fallback.
+    #[cfg(feature = "hardened-execution")]
+    Backend(brynja_crypto_cpu::static_execution::Error),
+    /// An execution stream is terminal after a backend error or unwind.
+    #[cfg(feature = "hardened-execution")]
+    ExecutionFailed,
     /// A secret storage or internal composition invariant failed.
     SecretMemory,
 }

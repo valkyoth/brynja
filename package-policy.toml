@@ -91,7 +91,7 @@ features = ["conformance-testing", "hardened-execution", "runtime-execution"]
 class = "modern-shared"
 publish = "crates-io"
 required = ["brynja-core", "brynja-hash-sha2", "brynja-hash-sha3"]
-optional = {}
+optional = { hardened-execution = "brynja-crypto-cpu" }
 
 [packages.brynja-crypto-cpu]
 class = "cpu-backend"

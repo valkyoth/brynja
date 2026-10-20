@@ -286,6 +286,29 @@ compiler erasure or independent execution proofs; the global HMAC capability
 remains pending until its compiler-owner contract and qualification are closed.
 The leaf README now accurately records modern facade and Mac resident support.
 
+## Focused scratch compiler follow-up
+
+An unpublished fixture compiles the actual HMAC `Scratch<N>` source for the
+1-byte comparison accumulator, 64-byte digest scratch and 144-byte key pad.
+Five fixed probes cover borrowed observation, callback unwind and pad masking.
+On Rust 1.90.0 and 1.99.1, x86-64 Linux and cross-compiled AArch64 Linux pass
+under both `panic=abort` and `panic=unwind`.
+
+The LLVM control-flow checker requires clearing the exact owned allocation and
+length before every reachable normal/error return or recoverable unwind resume,
+and before its lifetime ends. MIR destructor and assembly-symbol checks
+corroborate the calls; this is not a separate assembly control-flow proof.
+Double-panic termination remains outside recoverable cleanup. Regression cases
+remove paths, redirect pointers, shorten clears, bypass unwind cleanup and write
+after clearing. Two actual source mutants compile successfully but fail the
+checker: erased destructor clearing and half-length clearing.
+
+This establishes the stated five scratch probes only. It does not establish
+cleanup of every monomorphized `Engine` caller, transitive hash implementation,
+register/spill copy, hosted worker or instrumented build. HMAC-wide cleanup,
+timing, native and independent-review qualification remain pending. The fixture
+and emitted-artifact tooling stay in GitHub, outside the runtime crate archive.
+
 ## Owner-directed package footprint
 
 Before v0.25.2 publication, audit every selected package and its first-party

@@ -1,0 +1,12 @@
+[package]
+name = "brynja-hmac-cleanup"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[workspace]
+
+[dependencies]
+brynja-core = { path = "../../crates/brynja-core", default-features = false }
+brynja-mac-hmac = { path = "../../crates/brynja-mac-hmac", default-features = false }

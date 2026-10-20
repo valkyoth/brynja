@@ -278,6 +278,9 @@ python3 scripts/hmac/test-hmac-verification.py
 python3 scripts/hmac/test-hmac-workspace.py
 python3 scripts/hmac/check-hmac-inventory.py
 python3 scripts/hmac/test-hmac-inventory.py
+python3 scripts/hmac/check-hmac-cleanup.py
+python3 scripts/hmac/check-hmac-cleanup.py --target aarch64-unknown-linux-gnu
+python3 scripts/hmac/test-hmac-cleanup.py
 python3 scripts/hmac/check-hmac-package.py
 python3 scripts/hmac/test-hmac-facade.py
 python3 scripts/hmac/check-hmac-facade.py

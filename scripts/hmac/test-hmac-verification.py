@@ -38,6 +38,7 @@ class ScopeTests(unittest.TestCase):
         for path in ("crates/brynja-mac-hmac/src/engine.rs", "scripts/hmac/check-hmac-asan.py",
                      "assurance/hmac-policy/Cargo.lock", "assurance/hmac-faults/fault_tests.rs",
                      "assurance/hmac-facade/acceptance.rs", "scripts/hmac/check-hmac-facade.py",
+                     "assurance/hmac-cleanup/Cargo.lock", "assurance/hmac-cleanup/src/lib.rs",
                      "crates/brynja-crypto-cpu-std/src/execution/hmac.rs",
                      "crates/brynja-crypto-cpu-std/tests/hmac.rs",
                      "crates/brynja-crypto-cpu-std/src/strict_hmac/worker.rs",
@@ -98,6 +99,7 @@ class ScopeTests(unittest.TestCase):
         self.assertIn("static_cpu", commands.owners(
             "cargo test -p brynja-crypto-cpu-std --features hmac-execution"))
         self.assertIn("hmac", commands.owners("python3 scripts/cpu/check-hosted-execution.py"))
+        self.assertEqual(commands.owners("python3 scripts/hmac/check-hmac-cleanup.py"), {"hmac"})
         for family in ("sha2", "sha3", "core", "static_cpu"):
             affected = list(commands.scope.closure({family}))
             self.assertIn("python3 scripts/hmac/check-hmac-asan.py", commands.selected(sanitizer, affected))

@@ -8,8 +8,9 @@ impl<A: Algorithm> Hmac<A> {
     /// These types are not interchangeable. Constructors reject noncanonical
     /// unused bits; that validation is observable and does not clear the input.
     ///
-    /// The returned tag is the complete byte-aligned digest. This does not add
-    /// fractional key or tag lengths, nor expose the accumulated message length.
+    /// The returned tag is the complete digest; `bit_len` reports its exact
+    /// width (general SHA-512/t may end in a partial byte). This does not add
+    /// fractional keys, arbitrary bit truncation or a message-length preflight.
     ///
     /// ```
     /// use brynja_mac_hmac::{Hmac, Sha256, Sha2BitString};

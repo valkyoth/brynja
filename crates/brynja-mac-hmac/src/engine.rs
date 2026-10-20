@@ -14,6 +14,7 @@ pub(crate) struct Engine<A: Algorithm> {
 
 impl<A: Algorithm> Engine<A> {
     pub(crate) fn new(key: &[u8], tag_bytes: usize) -> Result<Self, Error> {
+        A::validate()?;
         if !crate::policy::valid_tag_length(A::TAG_BYTES, tag_bytes) {
             return Err(Error::TagLength);
         }
@@ -21,7 +22,7 @@ impl<A: Algorithm> Engine<A> {
         let pad = pad.prefix(A::BLOCK_BYTES)?;
         if key.len() > A::BLOCK_BYTES {
             let mut normalized = Scratch::<64>::new();
-            let mut hash = A::start();
+            let mut hash = A::start()?;
             A::update(&mut hash, key)?;
             A::finish(hash, normalized.prefix(A::TAG_BYTES)?, |digest| {
                 let destination = pad.get_mut(..digest.len()).ok_or(Error::SecretMemory)?;
@@ -33,8 +34,8 @@ impl<A: Algorithm> Engine<A> {
                 copy_secret_region(destination, key)?;
             }
         }
-        let mut inner = A::start();
-        let mut outer = A::start();
+        let mut inner = A::start()?;
+        let mut outer = A::start()?;
         mask_pad(pad, 0x36)?;
         A::update(&mut inner, pad)?;
         mask_pad(pad, 0x36 ^ 0x5c)?;
@@ -57,16 +58,16 @@ impl<A: Algorithm> Engine<A> {
     ) -> Result<(), Error> {
         let mut inner_digest = Scratch::<64>::new();
         let mut tag = Scratch::<64>::new();
-        let mut outer = self.outer;
         let destination = inner_digest.prefix(A::TAG_BYTES)?;
-        let absorb_inner = |digest: &[u8]| A::update(&mut outer, digest);
+        let absorb_inner = |digest: &[u8]| {
+            A::finish_outer(self.outer, digest, tag.prefix(A::TAG_BYTES)?, |digest| {
+                consume(digest.get(..self.tag_bytes).ok_or(Error::SecretMemory)?)
+            })
+        };
         match input {
-            Some(input) => A::finish_bits(self.inner, input, destination, absorb_inner)?,
-            None => A::finish(self.inner, destination, absorb_inner)?,
+            Some(input) => A::finish_bits(self.inner, input, destination, absorb_inner),
+            None => A::finish(self.inner, destination, absorb_inner),
         }
-        A::finish(outer, tag.prefix(A::TAG_BYTES)?, |digest| {
-            consume(digest.get(..self.tag_bytes).ok_or(Error::SecretMemory)?)
-        })
     }
 
     pub(crate) fn public<'out>(

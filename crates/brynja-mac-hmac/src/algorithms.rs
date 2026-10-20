@@ -14,7 +14,10 @@ pub(crate) mod sealed {
     pub trait Hash {
         type State;
         type FinalInput<'a>: Copy;
-        fn start() -> Self::State;
+        fn validate() -> Result<(), Error> {
+            Ok(())
+        }
+        fn start() -> Result<Self::State, Error>;
         fn update(state: &mut Self::State, input: &[u8]) -> Result<(), Error>;
         fn finish(
             state: Self::State,
@@ -29,6 +32,17 @@ pub(crate) mod sealed {
             output: &mut [u8],
             consume: impl FnOnce(&[u8]) -> Result<(), Error>,
         ) -> Result<(), Error>;
+        /// Consumes the outer owner with the exact inner digest. Named hashes
+        /// have byte-aligned digests; non-byte digests must override this.
+        fn finish_outer(
+            mut state: Self::State,
+            digest: &[u8],
+            output: &mut [u8],
+            consume: impl FnOnce(&[u8]) -> Result<(), Error>,
+        ) -> Result<(), Error> {
+            Self::update(&mut state, digest)?;
+            Self::finish(state, output, consume)
+        }
     }
 }
 
@@ -50,6 +64,8 @@ pub trait Algorithm: sealed::Hash {
     const BLOCK_BYTES: usize;
     /// Full fixed digest width in bytes.
     const TAG_BYTES: usize;
+    /// Exact full digest width; storage rounds up to `TAG_BYTES`.
+    const TAG_BITS: usize = Self::TAG_BYTES * 8;
 }
 
 macro_rules! algorithm {
@@ -66,8 +82,8 @@ macro_rules! algorithm {
             type State = $state;
             type FinalInput<'a> = $bits<'a>;
 
-            fn start() -> Self::State {
-                <$state>::new()
+            fn start() -> Result<Self::State, Error> {
+                Ok(<$state>::new())
             }
 
             fn update(state: &mut Self::State, input: &[u8]) -> Result<(), Error> {

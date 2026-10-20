@@ -39,7 +39,9 @@ reviewed.** This leaf is not yet exposed through the modern or strict facades.
 | Typed public/secret tags; owned-memory destruction | Implemented; HMAC-specific compiler qualification pending | No |
 | Hardware/SIMD selection and protected/resident sessions | Not implemented by this HMAC API | No |
 | Canonical final-bit messages for the ten named algorithms | Implemented with author differential and lifecycle tests | No |
-| General SHA-512/t, fractional keys and fractional tags | Not implemented by this HMAC API | No |
+| General SHA-512/t, t ≥ 128 and t < 512 except 384; exact full-bit tags | Portable implementation with author tests across 383 parameters | No |
+| General SHA-512/t below 128 bits | Rejected by HMAC's minimum-tag policy | Not an enabled profile |
+| Fractional keys and arbitrary bit-level truncation | Not implemented by this HMAC API | No |
 
 No FIPS approval or certification is claimed. Ordinary hash state is never
 used for keys or intermediate digests. Existing hash evidence does not qualify
@@ -93,7 +95,16 @@ byte-streaming prefix with `finalize_bits_tag`, `finalize_bits_secret` or
 `Fips202BitString` (valid low bits). Their constructors reject nonzero unused
 bits, and the types cannot be interchanged. Finalization consumes the stream.
 Keys and tag-length selection remain byte-based; this is not fractional-key or
-fractional-tag support.
+arbitrary bit-level truncation support.
+
+`Hmac::<Sha512T<129>>::new(key)` selects a full 129-bit tag stored in 17 bytes.
+Both tag owners expose `bit_len()`; unused low bits of the last byte are zero
+and verification compares them rather than accepting noncanonical encodings.
+`with_tag_length(key, 16)` selects its 128-bit prefix, but 17-byte truncation
+is rejected because it exceeds 129 bits. General parameters below 128, 384,
+zero and values at least 512 are rejected. The general /224 and /256 identities
+are distinct Rust types from the named variants, with matching mathematical
+outputs. General parameter support is not FIPS approval.
 
 All key lengths, including zero, are mathematically accepted. Empty or
 predictable keys are insecure; the API cannot measure entropy. Applications must
@@ -111,29 +122,36 @@ in the Git repository; no captures or evidence archives belong in the crate.
 cargo test -p brynja-mac-hmac --locked --offline
 python3 scripts/hmac/check-hmac-differential.py
 python3 scripts/hmac/check-hmac-bit-differential.py
+python3 scripts/hmac/check-hmac-general-differential.py
 python3 scripts/hmac/check-hmac-package.py --no-std-target x86_64-unknown-none
 ```
 
-The two external-oracle tests are intentionally ignored by ordinary Cargo runs
+The three external-oracle tests are intentionally ignored by ordinary Cargo runs
 and executed explicitly by their corresponding scripts; ignored tests must not
 be counted as passes. The byte campaign has 1,100 Python/OpenSSL cases; the
 bit campaign has 1,040 cases using the separate repository Python SHA-2/SHA-3
 models, with byte-aligned controls checked against Python/OpenSSL. These are
 author-generated differential cases, not official bit vectors or independent
-qualification. RFC vectors are from [RFC 4231](https://www.rfc-editor.org/rfc/rfc4231.html);
+qualification. The general SHA-512/t campaign adds 6,128 cases across all 383
+admitted parameters, preserving the exact inner digest bit length at the outer
+hash boundary. Its Python model derives its SHA-512 constants independently,
+with named /224 and /256 OpenSSL controls.
+RFC vectors are from [RFC 4231](https://www.rfc-editor.org/rfc/rfc4231.html);
 construction and key guidance follow [RFC 2104](https://www.rfc-editor.org/rfc/rfc2104.html).
 
 Package acceptance executes all seven RFC cases in debug and release, rejects
-100 API/ownership probes and nine compiled algorithm/comparison mutations, and
-builds all ten algorithm consumers for the requested installed `no_std` target.
-The private synthetic-hash fixture injects 258 errors/unwinds across construction,
+118 API/ownership probes and eleven compiled algorithm/comparison mutations, and
+builds twelve algorithm consumers (ten named plus two general bit widths) for
+the requested installed `no_std` target.
+The private synthetic-hash fixture injects 328 errors/unwinds across construction,
 update and finalization, checks owner destruction and in-lifetime scratch
 clearing, and rejects four compiled lifecycle/policy mutations. Its synthetic
 hash is never exported or shipped. These are composition tests, not evidence of
 register erasure, hash-kernel cleanup, timing resistance or independent review.
 
 The incremental verifier selects HMAC independently from unchanged hash families.
-Eleven bounded Miri tasks cover the ten adapters and consumer unwinding; native
+Thirteen bounded Miri tasks cover the ten named adapters, two general widths
+and consumer unwinding; native
 matrices retain their full coverage. The HMAC ASan runner forces leak detection
 and fatal errors. Two Kani proofs cover only the actual public-length policy
 predicates, not the cryptographic construction. These checks remain author-run

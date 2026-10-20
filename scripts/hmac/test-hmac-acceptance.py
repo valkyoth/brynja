@@ -20,8 +20,8 @@ def error(code):
 class AcceptanceTests(unittest.TestCase):
     def test_complete_negative_population(self):
         cases = list(negative_cases())
-        self.assertEqual(len(cases), 100)
-        self.assertEqual(len({name for name, _, _ in cases}), 100)
+        self.assertEqual(len(cases), 118)
+        self.assertEqual(len({name for name, _, _ in cases}), 118)
         for algorithm in ALGORITHMS:
             for bound in ("Send", "Sync", "Copy", "Clone", "core::fmt::Debug"):
                 self.assertIn(f"{algorithm}/{bound}", [name for name, _, _ in cases])

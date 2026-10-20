@@ -110,13 +110,14 @@ impl sealed::Hash for Synthetic {
     type State = State;
     type FinalInput<'a> = crate::Sha2BitString<'a>;
 
-    fn start() -> State {
+    fn start() -> Result<State, Error> {
+        checkpoint()?;
         TRACE.with(|trace| {
             let mut trace = trace.borrow_mut();
             trace.live += 1;
             trace.created += 1;
         });
-        State([0xa5; 32])
+        Ok(State([0xa5; 32]))
     }
 
     fn update(state: &mut State, input: &[u8]) -> Result<(), Error> {
@@ -232,7 +233,7 @@ fn every_hash_boundary_releases_owners() {
                         Mode::Secret | Mode::BitSecret => {
                             // Constructor/update errors precede destination
                             // admission; only finalization owns the output.
-                            let construction_and_update = if key.len() > 64 { 6 } else { 3 };
+                            let construction_and_update = if key.len() > 64 { 9 } else { 5 };
                             let expected = if fail_at > construction_and_update {
                                 0
                             } else {
@@ -246,7 +247,7 @@ fn every_hash_boundary_releases_owners() {
             }
         }
     }
-    assert_eq!(injected, 258, "fault population changed");
+    assert_eq!(injected, 328, "fault population changed");
 }
 
 #[test]

@@ -190,6 +190,8 @@ def validate_dependencies(
         admitted = execution_policy.direct_features(name, dependency_name)
         if name == "brynja-strict":
             admitted = strict_policy.DIRECT.get(dependency_name)
+        if (name, dependency_name) == ("brynja-mac-hmac", "brynja-hash-sha2"):
+            admitted = ["general-sha512-t"]
         if admitted is not None:
             allowed_features = admitted
         if dependency.get("features") != allowed_features:

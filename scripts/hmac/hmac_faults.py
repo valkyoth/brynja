@@ -40,7 +40,8 @@ def check(roots, directory, environment):
     shutil.copytree(roots["brynja-mac-hmac"] / "src", fixture / "src")
     manifest = '[workspace]\n[package]\nname="hmac-faults"\nversion="0.0.0"\nedition="2024"\n[dependencies]\n'
     for name in ("brynja-core", "brynja-hash-sha2", "brynja-hash-sha3"):
-        manifest += f'{name}={{path={json.dumps(str(roots[name]))}, default-features=false}}\n'
+        features = ', features=["general-sha512-t"]' if name == "brynja-hash-sha2" else ''
+        manifest += f'{name}={{path={json.dumps(str(roots[name]))}, default-features=false{features}}}\n'
     manifest += '[patch.crates-io]\n'
     manifest += ''.join(f'{name}={{path={json.dumps(str(path))}}}\n' for name, path in roots.items())
     (fixture / "Cargo.toml").write_text(manifest)

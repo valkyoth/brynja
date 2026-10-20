@@ -3,7 +3,7 @@ from pathlib import PurePosixPath
 
 REQUIRED = frozenset({
     "Cargo.toml", "Cargo.toml.orig", "LICENSE-APACHE", "LICENSE-MIT", "README.md",
-    "src/lib.rs", "src/algorithms.rs", "src/bits.rs", "src/engine.rs", "src/output.rs", "src/scratch.rs", "src/policy.rs",
+    "src/lib.rs", "src/algorithms.rs", "src/bits.rs", "src/engine.rs", "src/general.rs", "src/output.rs", "src/scratch.rs", "src/policy.rs",
 })
 OPTIONAL = frozenset({"Cargo.lock", ".cargo_vcs_info.json"})
 

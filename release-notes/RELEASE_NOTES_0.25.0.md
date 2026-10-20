@@ -18,17 +18,18 @@ Status: in development; no tag, publication or qualification claim.
 
 ## Portable acceptance follow-up
 
-- The real extracted archive now rejects 100 public API/ownership misuse probes
+- The real extracted archive now rejects 118 public API/ownership misuse probes
   with checked Rust diagnostics, including all ten algorithm owners, consumed
   streams, cross-algorithm/secret-public tag substitution and secret borrow escape.
-- Nine compiled algorithm/comparison mutations are rejected by executing the
+- Eleven compiled algorithm/comparison mutations are rejected by executing the
   relevant RFC, bit-answer or lifecycle test; compiler errors are not counted as successes.
-- A private copied-source fixture injects 258 synthetic hash errors/unwinds and
+- A private copied-source fixture injects 328 synthetic hash errors/unwinds and
   verifies owner release, transactional public output, clearing secret output and
   scratch destruction while storage is alive. Five debug/release tests and four
   compiled lifecycle/policy mutants cover this contract. This fixture never
   adds a public fault-injection feature or enters the published archive.
-- Extracted `no_std` consumers instantiate all ten algorithms. HMAC-specific
+- Extracted `no_std` consumers instantiate all ten named algorithms and two
+  general SHA-512/t widths. HMAC-specific
   compiler erasure, real hash exhaustion and timing remain pending;
   synthetic adapter faults do not establish those properties.
 
@@ -58,8 +59,8 @@ Status: in development; no tag, publication or qualification claim.
   change cannot accidentally select upstream sanitizer or compiler campaigns.
   Foreground and detached Kani selection agree; an old hash-family receipt does
   not cover the new HMAC proofs.
-- Eleven bounded, independently resumable Miri tasks cover all ten named
-  adapters and consumer unwinding. Full native matrices remain intact. ASan
+- Thirteen bounded, independently resumable Miri tasks cover all ten named
+  adapters, two general widths and consumer unwinding. Full native matrices remain intact. ASan
   enforces fatal leak detection even under hostile ambient settings. Two Kani
   proofs compile the actual runtime public-length predicates; they are not
   proofs of HMAC cryptographic security or the hash implementations.
@@ -68,10 +69,31 @@ Status: in development; no tag, publication or qualification claim.
   still fail closed. Focused regressions cover selection, verifier identity,
   missing test populations and the command-capacity boundary.
 
+## General SHA-512/t composition
+
+- Added the distinct `Sha512T<T>` HMAC identity using the existing hardened
+  general hash owner. The public constructor retains the HMAC minimum of
+  128 tag bits: 383 parameters (128..=511 except 384) are admitted; smaller
+  mathematical hash parameters remain rejected, not hidden behind a feature.
+- Full tags preserve exactly t bits with canonical unused low bits, while
+  explicit truncation selects a complete-byte prefix. Both output owners report
+  the exact tag width; general and named identities cannot substitute tag types.
+- Inner digests enter the outer hash at their exact bit length. Long-key
+  normalization zero-extends the canonical digest into the block-sized key pad.
+  A 6,128-case author differential campaign covers every admitted parameter,
+  byte/bit messages and four key sizes against a separate Python model.
+- Constructor failure is now part of the sealed adapter contract. Synthetic
+  fault tests cover 328 error/unwind sites. Dedicated compiled mutations reject
+  rounding the inner digest to bytes and weakening the minimum-tag policy.
+- General /224 and /256 controls match the named algorithms. Extracted-package
+  tests, MSRV checks and focused Miri tasks exercise the new composition; none
+  establish FIPS approval or independent cryptographic qualification.
+
 ## Remaining work before completion
 
-1. Close modern profile coverage, general SHA-512/t and precise bit/key/tag
-   policies, plus the error/fault and no_std consumer contracts.
+1. Close remaining modern profile and precise bit/key/tag policies, plus the
+   error/fault and no_std consumer contracts. General SHA-512/t now has a
+   portable implementation under the existing 128-bit HMAC minimum.
 2. Assess and implement applicable existing accelerated hash routes and
    protected/resident HMAC composition without weakening host-memory boundaries;
    finish facade integration and required API/profile/requirement inventories.

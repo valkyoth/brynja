@@ -17,6 +17,7 @@
 mod algorithms;
 mod bits;
 mod engine;
+mod general;
 mod output;
 mod policy;
 mod scratch;
@@ -27,6 +28,7 @@ pub use algorithms::{
 };
 pub use brynja_hash_sha2::{BitString as Sha2BitString, BitStringError as Sha2BitsError};
 pub use brynja_hash_sha3::{Fips202BitString, Fips202BitsError};
+pub use general::Sha512T;
 pub use output::{SecretTag, Tag, Verification};
 
 /// Value-free failure from an HMAC operation.
@@ -37,6 +39,8 @@ pub enum Error {
     MessageTooLong,
     /// The explicit tag length or destination length is invalid.
     TagLength,
+    /// The hash parameter is invalid or below the 128-bit HMAC policy minimum.
+    AlgorithmParameter,
     /// A secret storage or internal composition invariant failed.
     SecretMemory,
 }
@@ -124,16 +128,25 @@ impl<A: Algorithm> Hmac<A> {
 
     /// Creates a state requiring the complete digest-sized authentication tag.
     pub fn new(key: &[u8]) -> Result<Self, Error> {
-        Self::with_tag_length(key, A::TAG_BYTES)
+        Ok(Self {
+            engine: engine::Engine::new(key, A::TAG_BYTES)?,
+            _local: core::marker::PhantomData,
+        })
     }
 
     /// Selects an exact byte-aligned tag length before processing the message.
+    ///
+    /// For non-byte-aligned general SHA-512/t, use `new` for the full t-bit tag;
+    /// this method only selects complete bytes no longer than floor(t/8).
     ///
     /// This initial policy accepts 16 through the full digest length in bytes.
     /// The caller must choose this from its protocol, not from an untrusted
     /// candidate tag. Shorter tags reduce guessing resistance; no per-key usage
     /// or failed-verification budget is enforced by this construction.
     pub fn with_tag_length(key: &[u8], tag_bytes: usize) -> Result<Self, Error> {
+        if tag_bytes.checked_mul(8).ok_or(Error::TagLength)? > A::TAG_BITS {
+            return Err(Error::TagLength);
+        }
         Ok(Self {
             engine: engine::Engine::new(key, tag_bytes)?,
             _local: core::marker::PhantomData,

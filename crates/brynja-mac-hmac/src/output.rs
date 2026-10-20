@@ -23,6 +23,11 @@ impl<'a, A: Algorithm> Tag<'a, A> {
     pub const fn as_bytes(&self) -> &[u8] {
         self.bytes
     }
+
+    /// Exact public tag width; unused low bits in a final partial byte are zero.
+    pub fn bit_len(&self) -> usize {
+        self.bytes.len().saturating_mul(8).min(A::TAG_BITS)
+    }
 }
 
 /// Clearing ownership of a tag retained as secret derived material.
@@ -43,6 +48,15 @@ impl<'a, A: Algorithm> SecretTag<'a, A> {
     /// Borrows secret bytes; application copies need their own cleanup policy.
     pub fn expose(&self) -> &[u8] {
         self.region.expose()
+    }
+
+    /// Exact public tag width, not secret-derived message-length metadata.
+    pub fn bit_len(&self) -> usize {
+        self.region
+            .expose()
+            .len()
+            .saturating_mul(8)
+            .min(A::TAG_BITS)
     }
 }
 

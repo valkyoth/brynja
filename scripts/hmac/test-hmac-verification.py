@@ -47,7 +47,7 @@ class ScopeTests(unittest.TestCase):
     def test_miri_keeps_all_algorithms_and_unwind_independently_schedulable(self):
         expected = {"sha224", "sha256", "sha384", "sha512", "sha512_224", "sha512_256",
                     "sha3_224", "sha3_256", "sha3_384", "sha3_512",
-                    "output_clears_during_consumer_unwind"}
+                    "output_clears_during_consumer_unwind", "general_129", "general_511"}
         tasks = miri_tasks.inventory(ROOT, "hmac")
         self.assertEqual(len(tasks), len(expected))
         self.assertEqual({argv[argv.index("--test") + 2] for argv in tasks}, expected)
@@ -57,7 +57,7 @@ class ScopeTests(unittest.TestCase):
             self.assertIn("--exact", argv)
             self.assertNotIn("--skip", argv)
         for profile in ("routine", "extended", "existing-full"):
-            self.assertEqual(len(miri_tasks.task_inventory(ROOT, "hmac", profile)), 11)
+            self.assertEqual(len(miri_tasks.task_inventory(ROOT, "hmac", profile)), 13)
 
     def test_sanitizer_and_matrix_ownership(self):
         sanitizer = commands.catalog(ROOT / "scripts/zeroization/check-zeroization-sanitizer.sh")
@@ -95,7 +95,7 @@ class ScopeTests(unittest.TestCase):
             for shards in (1, 2, 8):
                 rows = catalog.selected(plan, ["kani", "asan", "miri"], None, shards,
                                         miri_tasks=True, miri_profile="routine")
-                self.assertEqual(len(rows), 13)
+                self.assertEqual(len(rows), 15)
                 self.assertEqual([row["command"] for row in rows if row["phase"] == "kani"],
                                  commands.kani_commands(["hmac"]))
 
@@ -121,7 +121,7 @@ class VerifierTests(unittest.TestCase):
                 self.assertNotIn("CARGO_BUILD_BUILD_DIR", env)
                 target = argv[argv.index("--test") + 1]
                 calls.append(target)
-                count = {"bounded": 11, "vectors": 7, "lifecycle": 11, "bits": 12}[target] if population else 0
+                count = {"bounded": 13, "vectors": 7, "lifecycle": 11, "bits": 12, "general": 5}[target] if population else 0
                 return f"test result: ok. {count} passed; 0 failed; 0 ignored;"
 
             with patch.dict(os.environ, hostile), patch.object(asan.sys, "platform", "linux"), \
@@ -131,7 +131,7 @@ class VerifierTests(unittest.TestCase):
                     redirect_stdout(io.StringIO()):
                 if population:
                     asan.main()
-                    self.assertEqual(calls, ["bounded", "vectors", "lifecycle", "bits"])
+                    self.assertEqual(calls, ["bounded", "vectors", "lifecycle", "bits", "general"])
                 else:
                     with self.assertRaisesRegex(ValueError, "population"):
                         asan.main()

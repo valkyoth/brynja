@@ -54,7 +54,8 @@ macro_rules! cases {
 
 cases!(sha224: Sha224, sha256: Sha256, sha384: Sha384, sha512: Sha512,
        sha512_224: Sha512_224, sha512_256: Sha512_256, sha3_224: Sha3_224,
-       sha3_256: Sha3_256, sha3_384: Sha3_384, sha3_512: Sha3_512);
+       sha3_256: Sha3_256, sha3_384: Sha3_384, sha3_512: Sha3_512,
+       general_129: Sha512T<129>, general_511: Sha512T<511>);
 
 #[test]
 fn output_clears_during_consumer_unwind() {

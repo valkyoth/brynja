@@ -5,6 +5,13 @@ pub trait BitCase: Algorithm {
     fn input(bytes: &[u8], valid: u8) -> Option<Self::FinalInput<'_>>;
 }
 
+impl<const T: u16> BitCase for Sha512T<T> {
+    const LOW_BITS: bool = false;
+    fn input(bytes: &[u8], valid: u8) -> Option<Self::FinalInput<'_>> {
+        Sha2BitString::new(bytes, valid).ok()
+    }
+}
+
 macro_rules! cases {
     ($input:ident, $low:literal, $($algorithm:ty),*) => {$(
         impl BitCase for $algorithm {

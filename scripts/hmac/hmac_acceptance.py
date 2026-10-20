@@ -4,7 +4,7 @@ import json
 from hmac_faults import accepted, rejected, replace_once, result
 
 ALGORITHMS = ("Sha224", "Sha256", "Sha384", "Sha512", "Sha512_224", "Sha512_256",
-              "Sha3_224", "Sha3_256", "Sha3_384", "Sha3_512")
+              "Sha3_224", "Sha3_256", "Sha3_384", "Sha3_512", "Sha512T<129>", "Sha512T<511>")
 
 
 def diagnostic_rejection(run, expected):
@@ -36,6 +36,9 @@ def negative_cases():
     yield ("secret tag substitution", 'pub fn probe(tag: SecretTag<Sha224>) -> SecretTag<Sha256> {tag}', "E0308")
     yield ("secret/public substitution", 'pub fn probe(tag: SecretTag<Sha256>) -> Tag<Sha256> {tag}', "E0308")
     yield ("secret borrow escape", 'pub fn probe(tag: SecretTag<Sha256>) -> &[u8] {tag.expose()}', "E0515")
+    for owner in ("Tag", "SecretTag"):
+        yield (f"{owner}/general parameter substitution",
+               f'pub fn probe(tag: {owner}<Sha512T<129>>) -> {owner}<Sha512T<130>> {{tag}}', "E0308")
     for algorithm in ALGORITHMS:
         wrong = "Sha2BitString" if algorithm.startswith("Sha3_") else "Fips202BitString"
         for method in ("finalize_bits_tag", "finalize_bits_secret", "verify_bits"):
@@ -77,7 +80,7 @@ def negatives(consumer, environment, no_std_target=None):
                             "--lib", "--target", no_std_target], consumer, environment)
             if build.returncode:
                 raise ValueError("HMAC extracted no_std consumer failed: " + build.stderr)
-            print(f"HMAC extracted no_std consumer: {no_std_target}; 10 algorithm instantiations PASS")
+            print(f"HMAC extracted no_std consumer: {no_std_target}; {len(ALGORITHMS)} algorithm instantiations PASS")
         count = 0
         for name, code, diagnostic in negative_cases():
             source.write_text(prefix + code)
@@ -98,13 +101,13 @@ def mutants(roots, consumer, environment):
         ('mask_pad(pad, 0x36)?;', 'mask_pad(pad, 0x37)?;', "vectors", "rfc4231_case1"),
         ('mask_pad(pad, 0x36 ^ 0x5c)?;', 'mask_pad(pad, 0x36 ^ 0x5d)?;', "vectors", "rfc4231_case1"),
         ('if key.len() > A::BLOCK_BYTES {', 'if false {', "vectors", "rfc4231_case6_long_key_normalization"),
-        ('A::update(&mut outer, digest)', 'A::update(&mut outer, &[])', "vectors", "rfc4231_case1"),
+        ('A::finish_outer(self.outer, digest,', 'A::finish_outer(self.outer, &[],', "vectors", "rfc4231_case1"),
         ('digest.get(..self.tag_bytes)', 'digest.get(A::TAG_BYTES - self.tag_bytes..)', "vectors", "rfc4231_case5_explicit_truncation"),
         ('for (expected, actual) in tag.iter().zip(candidate) {',
          'for (expected, actual) in tag.iter().zip(candidate).take(1) {', "lifecycle", "sha256"),
         ('&difference.0[0],\n        )))', '&0,\n        )))', "lifecycle", "sha256"),
-        ('Some(input) => A::finish_bits(self.inner, input, destination, absorb_inner)?',
-         'Some(_input) => A::finish(self.inner, destination, absorb_inner)?', "bits", "known_bit_answers"),
+        ('Some(input) => A::finish_bits(self.inner, input, destination, absorb_inner)',
+         'Some(_input) => A::finish(self.inner, destination, absorb_inner)', "bits", "known_bit_answers"),
     )
     for before, after, target, test in cases:
         command = ["cargo", "test", "--offline", "--locked", "--release", "--test", target, test, "--", "--exact"]
@@ -131,3 +134,21 @@ def mutants(roots, consumer, environment):
         path.write_text(original)
     accepted(result(command, consumer, environment), 1)
     print("HMAC packaged bit-rounding adapter mutant: 1 rejected")
+    path = roots["brynja-mac-hmac"] / "src/general.rs"
+    original = path.read_text()
+    cases = (
+        ("Self::finish_bits(state, input, output, consume)",
+         "let mut state = state; Self::update(&mut state, input.as_bytes())?; Self::finish(state, output, consume)",
+         "exact_inner_bit_answers"),
+        ("if T < 128 {", "if T < 1 {", "parameter_and_truncation_policy"),
+    )
+    for before, after, test in cases:
+        command = ["cargo", "test", "--offline", "--locked", "--release", "--test", "general", test, "--", "--exact"]
+        accepted(result(command, consumer, environment), 1)
+        try:
+            path.write_text(replace_once(original, before, after))
+            rejected(result(command, consumer, environment))
+        finally:
+            path.write_text(original)
+        accepted(result(command, consumer, environment), 1)
+    print("HMAC packaged general exact-bit/policy mutants: 2 rejected")

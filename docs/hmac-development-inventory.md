@@ -80,6 +80,7 @@ Links identify executable checks, not proof that a current run passed.
 - Curated facade feature and package contracts: [check](../scripts/hmac/check-hmac-facade.py).
 - Bounded verifier scope and population: [check](../scripts/hmac/test-hmac-verification.py).
 - Five scratch probes, optimized normal/error/unwind clearing only: [check](../scripts/hmac/check-hmac-cleanup.py).
+- Twelve real cancel consumers, inner/outer cleanup dispatch only: [check](../scripts/hmac/check-hmac-engine-cleanup.py).
 
 ## Still pending
 

@@ -309,6 +309,33 @@ register/spill copy, hosted worker or instrumented build. HMAC-wide cleanup,
 timing, native and independent-review qualification remain pending. The fixture
 and emitted-artifact tooling stay in GitHub, outside the runtime crate archive.
 
+## Real-consumer cancellation compiler follow-up
+
+An unpublished fixture emits 72 real public HMAC consumers: six operations for
+each named identity and general SHA-512/129 and /511. The bounded checker
+currently checks only the twelve cancellation consumers. Rust 1.90.0 and
+1.99.1 pass on x86-64 Linux and cross-compiled AArch64 Linux, under abort and
+unwind profiles. Compiler aliases are resolved, not counted as distinct bodies.
+
+The LLVM graph binds the inner and outer cleanup calls to their actual owner
+offsets, before every normal return, recoverable unwind resume and owned-slot
+lifetime end. It checks dispatch to the existing hash destructors/wipe methods,
+not their transitive implementation: a throwing destructor is counted as an
+attempt, and double-panic termination is outside the claim. Other operations
+are emitted for subsequent inspection, not marked qualified.
+
+Focused regressions reject missing/duplicate probes, cyclic/external aliases,
+wrong owner offsets/copy extents, early returns, unwind bypass, premature
+lifetime end, duplicate cleanup and post-cleanup writes/calls. A real leaf
+`cancel` mutant using `mem::forget` must compile and then fail the checker,
+between passing original/restored baselines.
+
+The compiler moves by-value state into an owning slot; these checks do not
+establish erasure of moved-from caller bytes or other compiler-created copies.
+No whole-frame, register, assembly-flow or complete HMAC cleanup qualification
+is claimed. Construction, finalization, verification and update/error caller
+paths remain pending. Runtime sources and release-gate policy are unchanged.
+
 ## Owner-directed package footprint
 
 Before v0.25.2 publication, audit every selected package and its first-party

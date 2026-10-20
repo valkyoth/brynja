@@ -76,6 +76,7 @@ EVIDENCE = (
     ("Curated facade feature and package contracts", "scripts/hmac/check-hmac-facade.py"),
     ("Bounded verifier scope and population", "scripts/hmac/test-hmac-verification.py"),
     ("Five scratch probes, optimized normal/error/unwind clearing only", "scripts/hmac/check-hmac-cleanup.py"),
+    ("Twelve real cancel consumers, inner/outer cleanup dispatch only", "scripts/hmac/check-hmac-engine-cleanup.py"),
 )
 PENDING = (
     "HMAC-specific optimized caller/scratch cleanup and stack qualification.",

@@ -44,7 +44,7 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
     require(counts == {"hash": 3, "session": 3 if identity.startswith("general") else 0},
             "admission factory population changed")
     queue = [(next(iter(graph)), 0, None, State(), False, frozenset())]
-    visited, handoffs, failures, seen = set(), 0, 0, set()
+    visited, handoffs, failures, seen = set(), [], 0, set()
 
     def address(name):
         return ptrs.get(name, (name, 0))
@@ -145,7 +145,7 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
                     require(syntax.operand(args[0]) == "%pad.i" and args[1:3] == ["i8 0", "i64 144"],
                             "unreviewed admission memory initialization")
                     contracts.pool_handoff(state, identity, compiler, long_key)
-                    handoffs += 1
+                    handoffs.append((label, index + 1, predecessor, state.clone()))
                     terminal = True
                     break
                 elif symbol.startswith("llvm.lifetime."):
@@ -276,3 +276,4 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
     if identity.startswith("general"):
         expected_births |= {token + 3 for token in expected_births}
     require(handoffs and failures and seen == expected_births, "vacuous admission population")
+    return handoffs

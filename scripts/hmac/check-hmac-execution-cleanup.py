@@ -11,6 +11,7 @@ import hmac_execution_scratch as scratch
 import hmac_execution_final as final
 import hmac_execution_wrapper as wrapper
 import hmac_execution_admission as admission
+import hmac_execution_construct as construct
 import hmac_verifiers as verifier
 
 ROOT = verifier.ROOT
@@ -66,8 +67,8 @@ def validate(llvm, compiler="1.99.1", panic="unwind"):
         if operation.startswith("construct_") and (identity, resolved) not in checked_admissions:
             for route in (0, 1):
                 for long_key in (False, True):
-                    admission.check(resolved, identity, definitions, aliases, compiler,
-                                    panic, route, long_key)
+                    construct.check(resolved, identity, definitions, aliases, compiler,
+                                    panic, route, long_key, construct.iterator.array_types(llvm))
             checked_admissions.add((identity, resolved))
         if operation in final.syntax.OPERATIONS:
             for route, present in ((0, True), (1, True), (0, False)):
@@ -98,7 +99,10 @@ def collect(directory, compiler, target, panic):
           "split-copy/scalar Engine provenance and empty-state secret rejection", flush=True)
     print("Accelerated HMAC constructor admission: PASS; 24 constructor consumers; "
           "pre-key state-pool handoff and earlier-owner failure cleanup; "
-          "iterator consumption remains separate", flush=True)
+          "typed factory callee contracts", flush=True)
+    print("Accelerated HMAC constructor transfers: PASS; iterator consumption, "
+          "normalization/inner/outer ownership, actual iterator destruction and "
+          "returned HMAC fields; source-bound non-unwinding clear premise", flush=True)
     return artifacts
 
 

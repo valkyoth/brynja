@@ -141,8 +141,8 @@ erasure of physical source copies. The fixture's empty output-observer assembly
 is allowed only without an Engine-derived pointer. Unknown owner operations
 fail closed; compiler assumptions do not prune obligations.
 
-Constructor iterator consumption, the separate static-only feature layout and
-protected/resident worker placement remain separate work.
+The constructor checks below are separate from this finalizer model. The
+static-only feature layout and protected/resident worker placement remain pending.
 
 ## Constructor admission and state-pool handoff
 
@@ -178,12 +178,57 @@ two-lane integer vector; neither form is ignored. The model rejects unknown
 callees, key-pointer use before this handoff, partial/overwritten owner bytes,
 wrong authority/session/algorithm parameters, and missing cleanup.
 
-This completes **admission to the pool**, not the iterator's subsequent
-normalization/inner/outer transfers, its final destruction, or the returned
-HMAC-field handoff. Existing scratch checks and behavioral fault campaigns do
-not substitute for that remaining compiler work. Reuse of an identical checked
+The admission model supplies its actual successful graph states to the
+post-admission model below, rather than manufacturing an unrelated passing
+initial state. Reuse of an identical checked
 constructor body is limited to the same identity within one artifact, after all
 four route/key-class combinations pass.
+
+## Iterator consumption and returned owners
+
+The post-admission model follows the same emitted constructor through inlined
+iterator operations, normalization, pad updates, cleanup and return. Concrete
+public cursor arithmetic, option discriminants, pointer/scalar phis and array
+strides identify exactly which admitted owner moves into each role. Short keys
+use owners 0/1 for inner/outer; long keys consume owner 0 for normalization and
+return owners 1/2. Partial copies and scalar fragments must preserve each
+complete ordered owner; a lost fragment, wrong role, duplicated consumption or
+owner passed to an unrelated callee rejects.
+
+General SHA-512/t's outlined borrowed-update adapter is resolved and checked to
+forward its original state and input once, without additional pointer effects.
+Its normalization adapter uses the existing consuming-finalizer checker.
+Hash update/finalization internals remain separate callee premises.
+
+The iterator destructor is no longer accepted solely by name in this ownership
+check. Its actual emitted body and nested helpers are interpreted with concrete
+cursor/option metadata. Remaining array entries must dispatch both core and
+CPU-scratch destruction; already extracted entries must not be destroyed again.
+Both cached option entries must remain empty. Regressions additionally exercise
+every cursor from 0 through 3, short/long populations, both authority variants
+and ordinary/already-unwinding entry. LLVM named array types are accepted only
+with parsed homogeneous-i64 layouts; unknown layout and unbounded cycles reject.
+Split metadata updates retain only the unmodified bytes of earlier packed stores.
+
+On success the complete inner/outer owners must occupy the returned HMAC fields
+in the expected order, with the full tag width used by these consumers. On
+failure or recoverable unwind all admitted logical owners must have dispatched
+destruction/consuming finalization. Kernel-report metadata and exact error-code
+translation are not proved here. Custom tag-length constructors are covered by
+behavioral tests, not by these full-length compiler consumers.
+
+There is one explicit non-unwinding premise:
+`brynja_core::clear_owned_region` currently performs an empty-slice check, volatile
+slice clearing and a compiler fence, with no allocation, callbacks, indexing or
+panic path. The constructor checker pins that source file,
+`secret_memory_volatile.rs` and their `lib.rs` module binding by raw-byte SHA-256;
+drift rejects pending
+review. LLVM can retain a conservative invoke edge to that external function
+after the returned Engine has been assembled. The model does not treat that
+infeasible unwind edge as a real caller obligation. This is a source-reviewed
+callee premise, not an independently proved whole-program no-unwind property.
+The pins detect drift, not authorization; reviewer control remains necessary.
+Other modeled recoverable invoke edges are retained.
 
 ## Regression controls
 
@@ -191,7 +236,7 @@ The tests mutate emitted copy extents, sources, field offsets, enum values,
 helper bodies, cleanup paths, lifetimes, input pointers and fatal terminals.
 They also check the ARM switch/result relationship.
 
-Eighteen source mutants must compile successfully and then fail inspection:
+Twenty-two source mutants must compile successfully and then fail inspection:
 
 1. Forget the accelerated HMAC on cancellation.
 2. Take but forget the retained engine in guard destruction.
@@ -212,6 +257,10 @@ Eighteen source mutants must compile successfully and then fail inspection:
 16. Forget the first admitted owner when second admission returns an error.
 17. Forget both earlier owners when third admission returns an error.
 18. Read a key byte before the first admission.
+19. Skip an admitted iterator entry instead of taking the next one.
+20. Forget the remaining iterator on Engine-construction failure.
+21. Swap the returned inner and outer owners.
+22. Forget the inner owner when outer-pad update fails.
 
 Emitted-code mutations also exercise all scratch roles, exact pointers/extents,
 live-scratch unwind bypasses, post-clear writes, method/alias substitution,
@@ -232,6 +281,10 @@ as the combined checker. Emitted admission mutations cover factory identity,
 authority/session/result pointers, general `t`, scalar/copy fragments, key-length
 partitioning, iterator metadata (including actual Arm vector stores), earlier-owner
 error/unwind cleanup, real helper bodies and normal-entry fatal exemptions.
+The four post-admission mutants must also fail the constructor-transfer checker
+directly. Its emitted-code tests corrupt return copies/tag metadata, cursor
+stores, array indices, destructor bodies/aliases/cleanup calls and the general
+borrowed-update adapter. Changing any non-unwinding premise source rejects.
 
 Each private mutant is restored and its baseline rebuilt and checked. A compiler
 error is not successful mutation detection. Runtime crate source and packaging
@@ -248,12 +301,12 @@ not accepted on ordinary entry.
 
 CPU update bodies retain their separately reviewed mutation/layout contracts.
 These checks do not prove update arithmetic, kernel correctness, factory
-internals, post-admission iterator/returned-owner transfer, or protected/resident worker
+internals or protected/resident worker
 placement. They do not erase compiler-created copies, caller registers/spills,
 interrupt state, dumps, snapshots or fatal-abort state. Those accepted limits
 are not reopened here.
 
-Remaining accelerated constructor iterator/returned-owner and hosted worker compiler qualification
+The separate static-only feature layout and hosted worker compiler qualification
 remain pending, alongside timing/native qualification and independent review.
 No strict-facade admission or global qualification status is promoted by this
 bounded check.

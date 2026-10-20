@@ -19,8 +19,9 @@ not be described as 383 distinct emitted-code inspections.
 | 12 update consumers | Update/error and observer-unwind paths dispatch both owners; outlined drop helpers are inspected. |
 | 84 construction/finalization scratch consumers | Exact pad, normalization, inner-digest, tag and comparison scratch ranges receive clearing dispatch before their live lifetime ends or the function exits. |
 | 72 byte/bit finalizer consumers | Each logical inner/outer hash owner reaches its consuming hash finalizer or destruction on every feasible normal/error/recoverable-unwind exit. |
+| 12 constructor consumers | Long-key normalization is consumed; successful construction returns the exact live inner/outer fields; error and recoverable-unwind exits dispatch every state successfully created on that path. |
 
-The last population includes public output, secret output and verification,
+The finalizer population includes public output, secret output and verification,
 each with byte and typed-bit finalization. A compiler can share their actual
 Engine method: the checker resolves the emitted call/alias and inspects that
 definition. Counts describe public consumers, not necessarily unique bodies.
@@ -46,6 +47,34 @@ matrix. It is not a general LLVM verifier, arbitrary pointer-alias analysis,
 or proof of cryptographic framing. Unknown relevant forms fail the check and
 need review; a compiler upgrade is not automatically accepted.
 
+### Constructors
+
+These twelve consumers instantiate the full-tag `Hmac::new` constructor.
+They are not separate emitted-code inspections of every admitted truncation
+width; tag-policy variants remain covered by runtime and package tests.
+
+The [constructor checker](../scripts/hmac/hmac_engine_construct.py) models
+three emitted creation forms separately: fallible named SHA-2 adapter results,
+direct general SHA-512/t construction, and inline zero-initialized SHA-3
+owners. A fallible call splits into successful creation, error without a
+state, and (when emitted) unwind before ownership reaches the caller.
+The constructor's result loads and branches must agree with that distinction.
+The general constructor's parameter is checked, not inferred from its label.
+
+The compiler can move a state using a one-byte load/store plus a copy of the
+remaining bytes. The [range model](../scripts/hmac/hmac_constructor_state.py)
+tracks these fragments back to one creation. Before update, finalization,
+destruction or successful return, it requires a complete, ordered state
+without missing or overlapping fragments. Both returned owner fields must
+match their roles, and the return discriminant must declare success. Returning
+an error does not excuse a previously created owner from cleanup.
+
+Creation and hash-method semantics remain callee premises; this does not
+re-prove SHA-2/SHA-3 internals. The check detects caller ownership regressions,
+not all possible functional defects or arbitrary LLVM aliasing. Short-key
+construction, long-key normalization, partial construction, pad/update
+failures and recoverable-unwind paths are included. Abort is still excluded.
+
 ## Premises and limits
 
 - Safe Rust's borrowing/non-aliasing rules and the compiled input's validity
@@ -61,8 +90,8 @@ need review; a compiler upgrade is not automatically accepted.
   caller frames, registers and spills are **not** claimed erased by this
   provenance check. No whole-frame/whole-image erasure claim is made.
 - This portable fixture does not qualify accelerated or hosted HMAC callers.
-  Constructor scratch is checked, but constructor hash-owner transfer remains
-  pending. The [development inventory](hmac-development-inventory.md) retains
+  Constructor scratch and owner transfer are checked. The
+  [development inventory](hmac-development-inventory.md) retains
   these limits and does not promote the global assurance register.
 
 MIR and assembly are emitted alongside LLVM for review. The graph obligations
@@ -88,3 +117,10 @@ rejection forgetting the whole HMAC, and a `ManuallyDrop` outer state lost
 when inner finalization fails. Each compiled mutant is bounded by passing
 original/restored builds. Compilation failure is not counted as detection.
 Production source and runtime crate archives are not modified by these tests.
+
+Constructor regressions additionally corrupt creation/result branches, first-byte
+and bulk-copy provenance, returned fields/status, normalization pointers and
+unwind cleanup. Three more private source mutants deliberately forget the
+normalization state after update failure, the inner state after outer creation
+failure, and the outer state after its update failure. All must compile before
+the checker rejects the lost owner; original/restored builds must pass.

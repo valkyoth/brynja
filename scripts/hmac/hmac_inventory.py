@@ -76,12 +76,12 @@ EVIDENCE = (
     ("Curated facade feature and package contracts", "scripts/hmac/check-hmac-facade.py"),
     ("Bounded verifier scope and population", "scripts/hmac/test-hmac-verification.py"),
     ("Five scratch probes, optimized normal/error/unwind clearing only", "scripts/hmac/check-hmac-cleanup.py"),
-    ("24 cancellation/update, 84 scratch and 72 finalizer owner graphs; dispatch only", "scripts/hmac/check-hmac-engine-cleanup.py"),
+    ("24 cancellation/update, 84 scratch, 72 finalizer and 12 constructor graphs; dispatch only", "scripts/hmac/check-hmac-engine-cleanup.py"),
     ("Real portable and explicitly selected native adapter handoffs", "assurance/hmac-faults/adapter_tests.rs"),
     ("Portable paired timing screen, not a constant-time proof", "scripts/hmac/check-hmac-timing.py"),
 )
 PENDING = (
-    "Constructor owner transfer and accelerated/hosted caller qualification; portable finalizer dispatch is checked, not whole-frame erasure.",
+    "Accelerated/hosted caller qualification; portable constructor/finalizer dispatch is checked, not whole-frame erasure.",
     "Accelerated/hosted timing and cache/branch qualification; the portable timing screen is not a timing proof.",
     "Remaining native route qualification, including dedicated x86 SHA-512.",
     "Independent pentest and final source-bound release evidence.",

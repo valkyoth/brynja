@@ -4,6 +4,7 @@ import argparse
 from pathlib import Path
 
 import hmac_engine_codegen as codegen
+import hmac_engine_construct as construct
 import hmac_engine_final as final
 import hmac_engine_scratch as scratch
 import hmac_engine_update as update
@@ -36,7 +37,9 @@ def validate(llvm, panic="unwind"):
         for operation in scratch.SCRATCH:
             body = scratch.consumer(functions[identity, operation], operation, definitions, aliases)
             scratch.check(body, operation)
-            if operation in final.OPERATIONS:
+            if operation == "construct":
+                construct.check(body, identity, panic)
+            elif operation in final.OPERATIONS:
                 final.check(body, identity, definitions, aliases, panic)
 
 
@@ -45,8 +48,8 @@ def collect(directory, compiler, target, panic):
     validate(artifacts[1], panic)
     print(f"HMAC caller cleanup dispatch: PASS; {compiler}; {target}; panic={panic}; "
           "12 cancellations, 12 update/error consumers, 84 byte/bit scratch consumers, "
-          "72 consuming-finalizer owner graphs; "
-          "constructor/accelerated/hosted qualification pending; no whole-frame erasure claim",
+          "72 consuming-finalizer owner graphs, 12 constructor owner graphs; "
+          "accelerated/hosted qualification pending; no whole-frame erasure claim",
           flush=True)
     return artifacts
 

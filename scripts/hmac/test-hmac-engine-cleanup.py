@@ -7,6 +7,8 @@ import re
 import shutil
 import unittest
 
+from hmac_constructor_tests import ConstructorTests
+
 spec = importlib.util.spec_from_file_location(
     "hmac_engine_driver", Path(__file__).with_name("check-hmac-engine-cleanup.py"))
 driver = importlib.util.module_from_spec(spec)
@@ -14,7 +16,10 @@ spec.loader.exec_module(driver)
 codegen = driver.codegen
 
 
-class EngineTests(unittest.TestCase):
+class EngineTests(ConstructorTests, unittest.TestCase):
+    driver = driver
+    identities = codegen.IDENTITIES
+
     @classmethod
     def setUpClass(cls):
         cls.directory = driver.verifier.cargo_environment.private_directory(driver.ROOT)

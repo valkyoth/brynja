@@ -27,7 +27,8 @@
 
 First-party, allocation-free `no_std` HMAC over sealed, secret-bearing SHA-2 and
 SHA-3 owners. **Under development; not release-qualified or independently
-reviewed.** This leaf is not yet exposed through the modern or strict facades.
+reviewed.** The modern facades expose a curated `hmac` namespace; the strict
+facade does not expose HMAC before protected qualification.
 
 ## Cryptography Verification Status
 
@@ -41,7 +42,8 @@ reviewed.** This leaf is not yet exposed through the modern or strict facades.
 | Hosted CPU selection | Opt-in `brynja-crypto-cpu-std` HMAC bridge; native M2 author tests | No |
 | Protected scalar HMAC | Opt-in `brynja-crypto-cpu-std/strict-hmac` on supported GNU/Linux; author tests, qualification pending | No |
 | Protected compiled HMAC | Opt-in `brynja-crypto-cpu-std/strict-hmac-acceleration`; explicit SHA-2/Keccak kernel, authority constructed on protected worker | No |
-| SIMD batching and Mac resident sessions | Not implemented by this HMAC API | No |
+| Mac scalar/compiled resident sessions | Opt-in hosted Apple Silicon profile; guarded/locked worker, no dump-exclusion claim; qualification pending | No |
+| SIMD batching and Windows enclave HMAC | Not implemented by this HMAC API | No |
 | Canonical final-bit messages for the ten named algorithms | Implemented with author differential and lifecycle tests | No |
 | General SHA-512/t, t ≥ 128 and t < 512 except 384; exact full-bit tags | Portable implementation with author tests across 383 parameters | No |
 | General SHA-512/t below 128 bits | Rejected by HMAC's minimum-tag policy | Not an enabled profile |

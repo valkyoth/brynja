@@ -275,6 +275,17 @@ The HMAC leaf remains runtime-source-only. These are author-operated facade
 tests, not new native qualification, timing/cleanup evidence or an independent
 review. Hash kernels, protected storage and release approval records are unchanged.
 
+## HMAC development inventory
+
+The [composition inventory](../docs/hmac-development-inventory.md) records
+15 declared owner/output/guard types, scratch lifetimes, eight execution
+profiles and requirement-to-check links. Focused regressions reject untracked
+fields, missing operations/adapters, scratch-size/clearing drift and accidental
+promotion to global completion. These are source-level inventory checks, not
+compiler erasure or independent execution proofs; the global HMAC capability
+remains pending until its compiler-owner contract and qualification are closed.
+The leaf README now accurately records modern facade and Mac resident support.
+
 ## Owner-directed package footprint
 
 Before v0.25.2 publication, audit every selected package and its first-party

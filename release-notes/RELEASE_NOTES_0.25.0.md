@@ -366,6 +366,40 @@ compiler-copy erasure, bit-finalization variants, accelerated/hosted worker
 paths or timing behavior. Those remaining qualification tasks are not marked
 complete. No production implementation, native approval or gate policy changed.
 
+## Bit-finalization and update/error caller follow-up
+
+The unpublished fixture now emits 108 public consumers. In addition to twelve
+cancellations, twelve update/error consumers track cleanup of both inner/outer
+owners through success, rejected updates and callback unwinding. The checker
+follows ownership into the actual moved slot, binds field offsets and copy
+extents, and inspects emitted drop-helper definitions rather than trusting their
+names. Unwind-profile update and callback calls must have explicit cleanup edges.
+Abort termination and a throwing destructor's completed erasure remain outside
+this dispatch claim.
+
+The other 84 consumers cover construction plus byte and typed-bit public/secret
+finalization and verification for the twelve identities. Adding bit consumers
+causes LLVM to share some out-of-line `Engine` methods. The checker resolves
+the exact emitted method call and checks its complete scratch graph; missing,
+cyclic or wrong-method resolutions fail. Shared bodies are not independent
+implementations or independent reviews.
+
+Both compiler versions, both Linux targets and both panic profiles pass.
+The focused suite rejects wrong owner pointers, changed copy ranges, bypassed
+unwind cleanup, altered helper bodies/signatures, false panic identities and
+576 scratch-population/range/pointer mutations. Five compiled mutants are
+rejected between passing original/restored baselines: forgotten cancellation,
+missing/partial scratch clearing, forgotten state on update error, and a
+`ManuallyDrop` wrapper that omits callback-unwind cleanup. The latter two must
+fail for their specific missing-cleanup diagnostics, not merely a compile error
+or unsupported layout.
+
+These remain bounded caller-side dispatch checks. They do not establish full
+construction/finalization hash-owner cleanup, transitive leaf/kernel erasure,
+compiler-copy erasure, accelerated/hosted worker coverage or timing qualification.
+Production cryptography, runtime package contents, native approvals and
+release-gate policy are unchanged.
+
 ## Owner-directed package footprint
 
 Before v0.25.2 publication, audit every selected package and its first-party

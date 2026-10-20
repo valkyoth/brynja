@@ -5,6 +5,7 @@ from pathlib import Path
 
 import hmac_engine_codegen as codegen
 import hmac_engine_scratch as scratch
+import hmac_engine_update as update
 import hmac_verifiers as verifier
 
 ROOT = verifier.ROOT
@@ -26,18 +27,22 @@ def emit(directory, compiler, target, panic, fixture=FIXTURE):
     return outputs
 
 
-def validate(llvm):
+def validate(llvm, panic="unwind"):
     functions = codegen.check(llvm)
+    definitions, aliases = codegen.definitions_and_aliases(llvm)
     for identity in codegen.IDENTITIES:
+        update.check(functions[identity, "update_cancel"], identity, definitions, aliases, panic)
         for operation in scratch.SCRATCH:
-            scratch.check(functions[identity, operation], operation)
+            body = scratch.consumer(functions[identity, operation], operation, definitions, aliases)
+            scratch.check(body, operation)
 
 
 def collect(directory, compiler, target, panic):
     artifacts = emit(directory, compiler, target, panic)
-    validate(artifacts[1])
+    validate(artifacts[1], panic)
     print(f"HMAC caller cleanup dispatch: PASS; {compiler}; {target}; panic={panic}; "
-          "12 cancellations, 48 scratch consumers; full owner/frame qualification pending", flush=True)
+          "12 cancellations, 12 update/error consumers, 84 byte/bit scratch consumers; "
+          "full owner/frame qualification pending", flush=True)
     return artifacts
 
 

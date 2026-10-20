@@ -1,15 +1,38 @@
 """Local scratch clear-dispatch obligations, not callee or frame-erasure proofs."""
 import re
 
-from hmac_engine_codegen import LABEL, blocks, require
+from hmac_engine_codegen import LABEL, blocks, fatal_cleanup_block, require, resolve
 
 SCRATCH = {
     "construct": {"pad": 144, "normalized": 64},
     "public": {"inner_digest": 64, "tag": 64},
     "secret": {"inner_digest": 64, "tag": 64},
     "verify": {"inner_digest": 64, "tag": 64, "difference": 1},
+    "public_bits": {"inner_digest": 64, "tag": 64},
+    "secret_bits": {"inner_digest": 64, "tag": 64},
+    "verify_bits": {"inner_digest": 64, "tag": 64, "difference": 1},
 }
 CLEAR = r"@(?:_RN\w*|_ZN\w*)11brynja_core13secret_memory18clear_owned_region\w*\("
+
+
+def consumer(body, operation, definitions, aliases):
+    """Resolve the exact emitted shared Engine method when LLVM outlines it."""
+    if any(re.search(r"%" + role + r"(?:\.[-\w]+)* = alloca", body)
+           for role in SCRATCH[operation]):
+        return body
+    method = operation.removesuffix("_bits")
+    calls = re.findall(r'\b(?:call|invoke)\b[^\n]*@("[^"]+"|\w+)\(', body)
+    calls = [symbol.strip('"') for symbol in calls if "15brynja_mac_hmac6engine" in symbol]
+    require(len(calls) == 1, "missing/ambiguous outlined HMAC method")
+    symbol = calls[0]
+    require(re.search(str(len(method)) + method
+                      + r"(?:17h[0-9a-f]+E|B\w+_|Cs\w+_26brynja_hmac_engine_cleanup)?$", symbol),
+            "unexpected outlined HMAC method")
+    outlined = resolve(symbol, definitions, aliases)[1]
+    # No recursive marker search: the actual called definition must own all
+    # expected scratch; its complete graph is checked by the same checker.
+    allocations(outlined, operation)
+    return outlined
 
 
 def output_guard_drop(line, body):
@@ -134,7 +157,7 @@ def check(body, operation):
                 terminal = True
                 break
             if line == "unreachable":
-                require(any("panic_in_cleanup" in item for item in lines), "unreviewed scratch terminal")
+                require(fatal_cleanup_block(lines), "unreviewed scratch terminal")
                 terminal = True
                 break
         require(terminal, "unparsed scratch terminator")

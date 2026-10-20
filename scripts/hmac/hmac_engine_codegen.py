@@ -9,6 +9,20 @@ def require(condition, message):
         raise ValueError("HMAC cancellation dispatch evidence: " + message)
 
 
+def panic_cleanup(symbol):
+    return bool(re.fullmatch(
+        r"(?:_ZN4core9panicking16panic_in_cleanup17h[0-9a-f]+E|"
+        r"_RNvNtCs\w+_4core9panicking16panic_in_cleanup)", symbol))
+
+
+def fatal_cleanup_block(lines):
+    for line in lines:
+        call = re.search(r'\bcall\b.*@("[^"]+"|[-\w.$]+)\(', line)
+        if call and panic_cleanup(call[1].strip('"')):
+            return True
+    return False
+
+
 def blocks(body):
     graph = {}
     current = None
@@ -29,19 +43,39 @@ def blocks(body):
 
 IDENTITIES = ("sha224", "sha256", "sha384", "sha512", "sha512_224", "sha512_256",
               "sha3_224", "sha3_256", "sha3_384", "sha3_512", "general129", "general511")
-OPERATIONS = ("cancel", "construct", "public", "secret", "verify", "update_cancel")
+OPERATIONS = ("cancel", "construct", "public", "secret", "verify", "update_cancel",
+              "public_bits", "secret_bits", "verify_bits")
+
+
+def definitions_and_aliases(llvm):
+    definitions = {}
+    for match in re.finditer(r'^define [^\n]*@("[^"]+"|\w+)\(([^\n]*)\)[^{]*\{\n(.*?)^\}',
+                             llvm, re.M | re.S):
+        name, arguments, body = match.groups()
+        name = name.strip('"')
+        require(name not in definitions, "duplicate engine definition")
+        definitions[name] = arguments, body
+    aliases = {}
+    for match in re.finditer(r'^@("[^"]+"|\w+) = [^\n]*\balias\b[^\n]*, ptr @("[^"]+"|\w+)$',
+                             llvm, re.M):
+        name, target = (item.strip('"') for item in match.groups())
+        require(name not in aliases and name not in definitions, "duplicate engine alias")
+        aliases[name] = target
+    return definitions, aliases
+
+
+def resolve(name, definitions, aliases):
+    seen = set()
+    while name in aliases:
+        require(name not in seen, "cyclic engine alias")
+        seen.add(name)
+        name = aliases[name]
+    require(name in definitions, "external/unresolved engine alias")
+    return definitions[name]
 
 
 def emitted(llvm):
-    definitions = {}
-    for match in re.finditer(r"^define [^\n]*@(\w+)\([^\n]*\{\n(.*?)^\}", llvm, re.M | re.S):
-        name, body = match.groups()
-        require(name not in definitions, "duplicate engine definition")
-        definitions[name] = body
-    aliases = {}
-    for match in re.finditer(r"^@(\w+) = [^\n]*\balias\b[^\n]*, ptr @(\w+)$", llvm, re.M):
-        require(match[1] not in aliases and match[1] not in definitions, "duplicate engine alias")
-        aliases[match[1]] = match[2]
+    definitions, aliases = definitions_and_aliases(llvm)
     result = {}
     for identity in IDENTITIES:
         for operation in OPERATIONS:
@@ -50,21 +84,36 @@ def emitted(llvm):
             names = [name for name in (*definitions, *aliases)
                      if re.search(suffix + r"(?:17h\w+E)?$", name)]
             require(len(names) == 1, "missing/ambiguous engine probe " + identity + "::" + operation)
-            name = names[0]
-            seen = set()
-            while name in aliases:
-                require(name not in seen, "cyclic engine alias")
-                seen.add(name)
-                name = aliases[name]
-            require(name in definitions, "external/unresolved engine alias")
-            result[identity, operation] = definitions[name]
+            result[identity, operation] = resolve(names[0], definitions, aliases)[1]
     return result
 
 
-def cancellation(body, identity):
+def layout(identity):
+    if identity.startswith("sha3_"):
+        return 2088, {0, 1040}
+    return 2352, {10, 1182} if identity.startswith("general") else {8, 1178}
+
+
+def owner_drop(symbol, identity):
     sha3 = identity.startswith("sha3_")
-    size = 2088 if sha3 else 2352
-    offsets = {0, 1040} if sha3 else ({10, 1182} if identity.startswith("general") else {8, 1178})
+    if symbol.startswith("_R"):
+        pattern = (
+            r"_RNvMNtNtCs\w+_16brynja_hash_sha38hardened5owner"
+            r"INtB\w+_20HardenedFips202OwnerKj[0-9a-f]+_E4wipeB\w+_" if sha3 else
+            r"_RNvXs_NtNtCs\w+_16brynja_hash_sha28hardened5owner"
+            r"NtB\w+_17HardenedSha2OwnerNtNtNtCs\w+_4core3ops4drop4Drop4drop")
+    else:
+        pattern = (
+            r"_ZN16brynja_hash_sha38hardened5owner29HardenedFips202Owner"
+            r"\$LT\$_\$GT\$4wipe17h[0-9a-f]+E" if sha3 else
+            r"_ZN94_\$LT\$brynja_hash_sha2\.\.hardened\.\.owner\.\."
+            r"HardenedSha2Owner\$u20\$as\$u20\$core\.\.ops\.\.drop\.\."
+            r"Drop\$GT\$4drop17h[0-9a-f]+E")
+    return bool(re.fullmatch(pattern, symbol))
+
+
+def cancellation(body, identity):
+    size, offsets = layout(identity)
     allocations = re.findall(r"(%[-\w.]+) = alloca \[" + str(size) + r" x i8\],", body)
     require(len(allocations) <= 1, "ambiguous engine owner allocation")
     owner = allocations[0] if allocations else "%state"
@@ -95,23 +144,10 @@ def cancellation(body, identity):
             call = re.search(r'\b(?:call|invoke)\b.*@("[^"]+"|[-\w.$]+)\(', line)
             if call:
                 symbol = call[1].strip('"')
-                is_drop = (
-                    re.fullmatch(r"_ZN16brynja_hash_sha38hardened5owner29HardenedFips202Owner"
-                                 r"\$LT\$_\$GT\$4wipe17h[0-9a-f]+E", symbol) if sha3 else
-                    re.fullmatch(r"_ZN94_\$LT\$brynja_hash_sha2\.\.hardened\.\.owner\.\."
-                                 r"HardenedSha2Owner\$u20\$as\$u20\$core\.\.ops\.\.drop\.\."
-                                 r"Drop\$GT\$4drop17h[0-9a-f]+E", symbol))
-                if symbol.startswith("_R"):
-                    is_drop = (
-                        re.fullmatch(r"_RNvMNtNtCs\w+_16brynja_hash_sha38hardened5owner"
-                                     r"INtB\w+_20HardenedFips202OwnerKj[0-9a-f]+_E4wipeB\w+_",
-                                     symbol) if sha3 else
-                        re.fullmatch(r"_RNvXs_NtNtCs\w+_16brynja_hash_sha28hardened5owner"
-                                     r"NtB\w+_17HardenedSha2OwnerNtNtNtCs\w+_4core3ops4drop4Drop4drop",
-                                     symbol))
+                is_drop = owner_drop(symbol, identity)
                 intrinsic = symbol in ("llvm.lifetime.start.p0", "llvm.lifetime.end.p0",
                                        "llvm.memcpy.p0.p0.i64")
-                require(is_drop or intrinsic or "panic_in_cleanup" in symbol,
+                require(is_drop or intrinsic or panic_cleanup(symbol),
                         "unexpected cancellation call")
                 require(not attempted or symbol != "llvm.memcpy.p0.p0.i64",
                         "owner copy after cleanup")
@@ -151,7 +187,7 @@ def cancellation(body, identity):
                 terminated = True
                 break
             if line == "unreachable":
-                require(any("panic_in_cleanup" in item for item in lines),
+                require(fatal_cleanup_block(lines),
                         "unreviewed cancellation terminal")
                 terminated = True
                 break

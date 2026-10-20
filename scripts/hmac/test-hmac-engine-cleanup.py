@@ -23,13 +23,19 @@ class EngineTests(unittest.TestCase):
         cls.llvm = driver.collect(cls.root / "baseline", "1.99.1",
                                   "x86_64-unknown-linux-gnu", "unwind")[1]
         cls.functions = codegen.emitted(cls.llvm)
+        cls.definitions, cls.aliases = codegen.definitions_and_aliases(cls.llvm)
+        cls.raw_functions = dict(cls.functions)
+        for (identity, operation), body in cls.functions.items():
+            if operation in driver.scratch.SCRATCH:
+                cls.functions[identity, operation] = driver.scratch.consumer(
+                    body, operation, cls.definitions, cls.aliases)
 
     def rejects(self, body, identity="sha256"):
         with self.assertRaises(ValueError):
             codegen.cancellation(body, identity)
 
     def test_population_and_aliases(self):
-        self.assertEqual(len(self.functions), 72)
+        self.assertEqual(len(self.functions), 108)
         for mutant in (self.llvm + self.llvm, self.llvm.replace("6sha2566cancel", "6sha2566absent")):
             with self.assertRaises(ValueError):
                 codegen.emitted(mutant)
@@ -125,9 +131,11 @@ class EngineTests(unittest.TestCase):
 
     def test_output_guard_exception_is_bound_to_separate_storage(self):
         body = self.functions["sha256", "secret"]
-        for mutant in (body.replace("%initialization.i", "%tag.i.i"),
-                       body.replace("%initialization.i = alloca [24 x i8]",
-                                    "%initialization.i = alloca [16 x i8]"),
+        guard = re.search(r"(%initialization(?:\.[-\w]+)*) = alloca \[24 x i8\]", body)[1]
+        owner = next(iter(driver.scratch.allocations(body, "secret")))
+        for mutant in (body.replace(guard, owner),
+                       body.replace(guard + " = alloca [24 x i8]",
+                                    guard + " = alloca [16 x i8]"),
                        body.replace("26SecretRegionInitialization", "26UnknownRegionInitialization")):
             self.assertNotEqual(body, mutant)
             with self.assertRaises(ValueError):
@@ -146,6 +154,73 @@ class EngineTests(unittest.TestCase):
         for mutant in mutants:
             with self.assertRaises(ValueError):
                 driver.scratch.check(mutant, "construct")
+
+    def test_outlined_scratch_is_bound_to_actual_callee(self):
+        operation = "public_bits"
+        body = self.raw_functions["sha256", operation]
+        calls = re.findall(r'@("[^"]+"|\w+)\(', body)
+        symbol = next(name.strip('"') for name in calls if "15brynja_mac_hmac6engine" in name)
+        for mutant in (body.replace(symbol, symbol.replace("6public", "6secret")),
+                       body.replace(symbol, "absent"),
+                       body + "\n  call void @" + symbol + "()"):
+            with self.assertRaises(ValueError):
+                driver.scratch.consumer(mutant, operation, self.definitions, self.aliases)
+        with self.assertRaises(ValueError):
+            driver.scratch.consumer(body, operation, self.definitions,
+                                    {**self.aliases, symbol: symbol})
+        arguments, actual = codegen.resolve(symbol, self.definitions, self.aliases)
+        damaged = actual.replace("18clear_owned_region", "18other_owned_region")
+        definitions = {**self.definitions, symbol: (arguments, damaged)}
+        checked = driver.scratch.consumer(body, operation, definitions, self.aliases)
+        with self.assertRaises(ValueError):
+            driver.scratch.check(checked, operation)
+
+    def test_update_all_identities_reject_bypasses_and_wrong_owners(self):
+        for identity in codegen.IDENTITIES:
+            body = self.functions[identity, "update_cancel"]
+            mutants = (
+                body.replace("start:", "start:\n  ret i8 0\nunused:", 1),
+                re.sub(r"(getelementptr inbounds(?: nuw)? i8, ptr %[-\w.]+, i64 )\d+",
+                       r"\g<1>9999", body, count=1),
+                re.sub(r"(i64 )(2088|2352)(, i1 false)", r"\g<1>1\3", body),
+                body.replace("ret i8", "call void %observer()\n  ret i8"),
+            )
+            for mutant in mutants:
+                self.assertNotEqual(mutant, body)
+                with self.subTest(identity=identity), self.assertRaises(ValueError):
+                    driver.update.check(mutant, identity, self.definitions, self.aliases)
+
+    def test_update_unwind_helper_is_checked_not_just_named(self):
+        identity = "sha256"
+        body = self.functions[identity, "update_cancel"]
+        symbol = next(name.strip('"') for name in re.findall(r'@("[^"]+"|\w+)\(', body)
+                      if "drop_glue" in name or "drop_in_place" in name)
+        arguments, actual = codegen.resolve(symbol, self.definitions, self.aliases)
+        damaged = actual.replace("i64 1178", "i64 8")
+        self.assertNotEqual(actual, damaged)
+        with self.assertRaises(ValueError):
+            driver.update.check(body, identity,
+                                {**self.definitions, symbol: (arguments, damaged)}, self.aliases)
+        with self.assertRaises(ValueError):
+            driver.update.check(body, identity, self.definitions,
+                                {**self.aliases, symbol: symbol})
+        with self.assertRaises(ValueError):
+            driver.update.check(body, identity,
+                                {**self.definitions, symbol: ("ptr %other, ptr %extra", actual)},
+                                self.aliases)
+        bypass = re.sub(r"unwind label %[-\w.]+", "unwind label %escaped", body, count=1)
+        with self.assertRaises(ValueError):
+            driver.update.check(bypass + "\nescaped:\n  resume { ptr, i32 } zeroinitializer\n",
+                                identity, self.definitions, self.aliases)
+
+    def test_fatal_path_requires_actual_core_panic_identity(self):
+        mutant = self.llvm.replace("16panic_in_cleanup(", "16panic_in_cleanup_fake(")
+        self.assertNotEqual(self.llvm, mutant)
+        with self.assertRaises(ValueError):
+            driver.validate(mutant)
+        for symbol in ("_RNvNtCsABC_4core9panicking16panic_in_cleanup_fake",
+                       "unknown_panic_in_cleanup"):
+            self.assertFalse(codegen.panic_cleanup(symbol))
 
     def test_compiled_owner_and_scratch_mutants(self):
         work = self.root / "mutant"
@@ -183,6 +258,31 @@ class EngineTests(unittest.TestCase):
                                  "unwind", fixture / "Cargo.toml")
             # Compilation must succeed; a compiler error does not kill this mutant.
             with self.assertRaises(ValueError):
+                driver.validate(mutant[1])
+            source.write_text(original)
+            restored = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu",
+                                   "unwind", fixture / "Cargo.toml")
+            driver.validate(restored[1])
+        source = fixture / "src/lib.rs"
+        original = source.read_text()
+        for anchor, replacement, reason in (
+            ("state.update(input)?;", """
+                if let Err(error) = state.update(input) {
+                    core::mem::forget(state);
+                    return Err(error);
+                }
+            """, "update exits without both cleanup dispatches"),
+            ("observer();\n                state.cancel();", """
+                let state = core::mem::ManuallyDrop::new(state);
+                observer();
+                core::mem::ManuallyDrop::into_inner(state).cancel();
+            """, "unwind-capable callback lacks cleanup edge"),
+        ):
+            self.assertEqual(original.count(anchor), 1)
+            source.write_text(original.replace(anchor, replacement))
+            mutant = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu",
+                                 "unwind", fixture / "Cargo.toml")
+            with self.assertRaisesRegex(ValueError, reason):
                 driver.validate(mutant[1])
             source.write_text(original)
             restored = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu",

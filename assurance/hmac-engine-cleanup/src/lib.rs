@@ -6,6 +6,9 @@ use brynja_mac_hmac::*;
 
 macro_rules! probes {
     ($module:ident, $algorithm:ty) => {
+        probes!($module, $algorithm, Sha2BitString);
+    };
+    ($module:ident, $algorithm:ty, $bits:ident) => {
         pub mod $module {
             use super::*;
 
@@ -40,6 +43,38 @@ macro_rules! probes {
             }
 
             #[inline(never)]
+            pub fn public_bits(
+                state: Hmac<$algorithm>,
+                input: $bits<'_>,
+                output: &mut [u8],
+            ) -> Result<(), Error> {
+                let tag = state.finalize_bits_tag(input, output)?;
+                core::hint::black_box(tag.as_bytes());
+                Ok(())
+            }
+
+            #[inline(never)]
+            pub fn secret_bits(
+                state: Hmac<$algorithm>,
+                input: $bits<'_>,
+                output: &mut [u8],
+            ) -> Result<(), Error> {
+                let tag = state.finalize_bits_secret(input, output)?;
+                core::hint::black_box(tag.expose());
+                drop(tag);
+                Ok(())
+            }
+
+            #[inline(never)]
+            pub fn verify_bits(
+                state: Hmac<$algorithm>,
+                input: $bits<'_>,
+                candidate: &[u8],
+            ) -> Result<bool, Error> {
+                Ok(state.verify_bits(input, candidate)?.expose_public())
+            }
+
+            #[inline(never)]
             pub fn update_cancel(
                 mut state: Hmac<$algorithm>,
                 input: &[u8],
@@ -60,9 +95,9 @@ probes!(sha384, Sha384);
 probes!(sha512, Sha512);
 probes!(sha512_224, Sha512_224);
 probes!(sha512_256, Sha512_256);
-probes!(sha3_224, Sha3_224);
-probes!(sha3_256, Sha3_256);
-probes!(sha3_384, Sha3_384);
-probes!(sha3_512, Sha3_512);
+probes!(sha3_224, Sha3_224, Fips202BitString);
+probes!(sha3_256, Sha3_256, Fips202BitString);
+probes!(sha3_384, Sha3_384, Fips202BitString);
+probes!(sha3_512, Sha3_512, Fips202BitString);
 probes!(general129, Sha512T<129>);
 probes!(general511, Sha512T<511>);

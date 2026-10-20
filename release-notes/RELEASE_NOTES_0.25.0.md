@@ -334,7 +334,37 @@ The compiler moves by-value state into an owning slot; these checks do not
 establish erasure of moved-from caller bytes or other compiler-created copies.
 No whole-frame, register, assembly-flow or complete HMAC cleanup qualification
 is claimed. Construction, finalization, verification and update/error caller
-paths remain pending. Runtime sources and release-gate policy are unchanged.
+paths remained pending at this stage. Runtime sources and release-gate policy
+are unchanged.
+
+## Real construction/finalization scratch follow-up
+
+The real-consumer checker now also tracks the local scratch lifetimes of
+48 construction, public/secret finalization and verification consumers. It
+requires each started key pad, normalized key digest, inner digest, tag and
+comparison accumulator to reach its exact full-range clear dispatch before
+lifetime end, return or recoverable unwind resume. It explores branches and
+switches, resolves compiler aliases, and treats other calls/writes as potentially
+dirtying all live scratch, including pointers captured in closures. The separate
+caller-output initialization guard has an explicit, storage-bound exception:
+safe Rust excludes that guard aliasing the local scratch allocations.
+
+All eight Rust 1.90.0/1.99.1, x86-64/AArch64 Linux, abort/unwind configurations
+pass. AArch64 remains cross-compiled evidence, not native execution. Regressions
+exercise all twelve identities and reject missing scratch, shortened/wrong
+clears, early exits, unwind bypass, stale/unknown edges, premature lifetime end,
+post-clear operations and writes after lifetime end. Three copied-source
+mutants compile but are rejected: forgotten cancellation, absent scratch
+clearing and half-range scratch clearing. Each is followed by a passing restored
+baseline.
+
+This is caller-side **clear-dispatch** evidence. A clear invocation on an unwind
+edge is an attempted call, not proof that a throwing callee erased memory;
+the core clear's separately reviewed non-panicking contract remains a premise.
+The check does not establish transitive hash-owner cleanup, complete frame or
+compiler-copy erasure, bit-finalization variants, accelerated/hosted worker
+paths or timing behavior. Those remaining qualification tasks are not marked
+complete. No production implementation, native approval or gate policy changed.
 
 ## Owner-directed package footprint
 

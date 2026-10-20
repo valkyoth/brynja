@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Emit 72 real HMAC consumers; qualify only their 12 cancellation dispatches."""
+"""Check cancellation and local scratch clear dispatch, not full HMAC erasure."""
 import argparse
 from pathlib import Path
 
 import hmac_engine_codegen as codegen
+import hmac_engine_scratch as scratch
 import hmac_verifiers as verifier
 
 ROOT = verifier.ROOT
@@ -25,11 +26,18 @@ def emit(directory, compiler, target, panic, fixture=FIXTURE):
     return outputs
 
 
+def validate(llvm):
+    functions = codegen.check(llvm)
+    for identity in codegen.IDENTITIES:
+        for operation in scratch.SCRATCH:
+            scratch.check(functions[identity, operation], operation)
+
+
 def collect(directory, compiler, target, panic):
     artifacts = emit(directory, compiler, target, panic)
-    codegen.check(artifacts[1])
-    print(f"HMAC engine cancellation dispatch: PASS; {compiler}; {target}; panic={panic}; "
-          "12 identities; other 60 consumers emitted, NOT qualified", flush=True)
+    validate(artifacts[1])
+    print(f"HMAC caller cleanup dispatch: PASS; {compiler}; {target}; panic={panic}; "
+          "12 cancellations, 48 scratch consumers; full owner/frame qualification pending", flush=True)
     return artifacts
 
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Real emitted cancellation graphs and a compiled forgotten-owner mutant."""
+"""Real caller cleanup graphs and compiled owner/scratch regression mutants."""
 import importlib.util
 import json
 from pathlib import Path
@@ -82,7 +82,72 @@ class EngineTests(unittest.TestCase):
         self.rejects(moved + "\nunvisited:\n" + copy + "\n  ret void\n")
         self.rejects(moved.replace("ret void", copy + "\n  ret void"))
 
-    def test_compiled_real_cancel_mutant(self):
+    def test_real_scratch_population_ranges_and_missing_clears(self):
+        for identity in codegen.IDENTITIES:
+            for operation in driver.scratch.SCRATCH:
+                body = self.functions[identity, operation]
+                owners = driver.scratch.allocations(body, operation)
+                for owner, size in owners.items():
+                    with self.subTest(identity=identity, operation=operation, owner=owner):
+                        mutants = [body.replace(owner + " = alloca", owner + "_lost = alloca")]
+                        for replacement in ("%wrong_scratch", owner):
+                            lines = []
+                            for line in body.splitlines():
+                                if "clear_owned_region" in line and owner + "," in line:
+                                    if replacement == owner:
+                                        line = line.replace(f"i64 noundef {size})",
+                                                            f"i64 noundef {size - 1})")
+                                    else:
+                                        line = line.replace(owner + ",", replacement + ",")
+                                lines.append(line)
+                            mutants.append("\n".join(lines))
+                        for mutant in mutants:
+                            self.assertNotEqual(mutant.strip(), body.strip())
+                            with self.assertRaises(ValueError):
+                                driver.scratch.check(mutant, operation)
+
+    def test_real_scratch_paths_and_post_clear_writes(self):
+        for operation in driver.scratch.SCRATCH:
+            body = self.functions["sha256", operation]
+            owner = next(iter(driver.scratch.allocations(body, operation)))
+            start = next(line for line in body.splitlines()
+                         if "llvm.lifetime.start" in line and owner + ")" in line)
+            early = body.replace(start, start + "\n  ret void\nbypassed:", 1)
+            lifetime = next(line for line in body.splitlines()
+                            if "llvm.lifetime.end" in line and owner + ")" in line)
+            for mutant in (
+                    early,
+                    body.replace(lifetime, "  store i8 42, ptr " + owner + "\n" + lifetime),
+                    body.replace(lifetime, "  call void @unknown()\n" + lifetime),
+                    body.replace(lifetime, lifetime + "\n  store i8 42, ptr " + owner)):
+                with self.subTest(operation=operation), self.assertRaises(ValueError):
+                    driver.scratch.check(mutant, operation)
+
+    def test_output_guard_exception_is_bound_to_separate_storage(self):
+        body = self.functions["sha256", "secret"]
+        for mutant in (body.replace("%initialization.i", "%tag.i.i"),
+                       body.replace("%initialization.i = alloca [24 x i8]",
+                                    "%initialization.i = alloca [16 x i8]"),
+                       body.replace("26SecretRegionInitialization", "26UnknownRegionInitialization")):
+            self.assertNotEqual(body, mutant)
+            with self.assertRaises(ValueError):
+                driver.scratch.check(mutant, "secret")
+
+    def test_scratch_unwind_edges_and_clear_identity(self):
+        body = self.functions["sha256", "construct"]
+        bypass = re.sub(r"unwind label %[-\w.]+", "unwind label %escaped", body, count=1)
+        self.assertNotEqual(body, bypass)
+        mutants = (
+            bypass + "\nescaped:\n  resume { ptr, i32 } zeroinitializer\n",
+            bypass,
+            body.replace("18clear_owned_region", "18other_owned_region"),
+            body.replace("ret void", "unreachable"),
+        )
+        for mutant in mutants:
+            with self.assertRaises(ValueError):
+                driver.scratch.check(mutant, "construct")
+
+    def test_compiled_owner_and_scratch_mutants(self):
         work = self.root / "mutant"
         leaf = work / "leaf"
         shutil.copytree(driver.ROOT / "crates/brynja-mac-hmac/src", leaf / "src")
@@ -102,22 +167,27 @@ class EngineTests(unittest.TestCase):
                              "--manifest-path", str(fixture / "Cargo.toml")], env)
         baseline = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu",
                                "unwind", fixture / "Cargo.toml")
-        codegen.check(baseline[1])
-        source = leaf / "src/lib.rs"
-        original = source.read_text()
-        anchor = "pub fn cancel(self) {}"
-        self.assertEqual(original.count(anchor), 1)
-        source.write_text(original.replace(anchor,
-                          "pub fn cancel(self) { core::mem::forget(self); }"))
-        mutant = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu",
-                             "unwind", fixture / "Cargo.toml")
-        # Compilation must succeed; a compiler error does not kill this mutant.
-        with self.assertRaises(ValueError):
-            codegen.check(mutant[1])
-        source.write_text(original)
-        restored = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu",
-                               "unwind", fixture / "Cargo.toml")
-        codegen.check(restored[1])
+        driver.validate(baseline[1])
+        for filename, anchor, replacement in (
+                ("lib.rs", "pub fn cancel(self) {}",
+                 "pub fn cancel(self) { core::mem::forget(self); }"),
+                ("scratch.rs", "let _ = clear_owned_region(&mut self.0);",
+                 "let _ = &mut self.0;"),
+                ("scratch.rs", "let _ = clear_owned_region(&mut self.0);",
+                 "let _ = clear_owned_region(&mut self.0[..N / 2]);")):
+            source = leaf / "src" / filename
+            original = source.read_text()
+            self.assertEqual(original.count(anchor), 1)
+            source.write_text(original.replace(anchor, replacement))
+            mutant = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu",
+                                 "unwind", fixture / "Cargo.toml")
+            # Compilation must succeed; a compiler error does not kill this mutant.
+            with self.assertRaises(ValueError):
+                driver.validate(mutant[1])
+            source.write_text(original)
+            restored = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu",
+                                   "unwind", fixture / "Cargo.toml")
+            driver.validate(restored[1])
 
 
 if __name__ == "__main__":

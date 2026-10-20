@@ -41,6 +41,10 @@ class ScopeTests(unittest.TestCase):
                      "assurance/hmac-cleanup/Cargo.lock", "assurance/hmac-cleanup/src/lib.rs",
                      "assurance/hmac-engine-cleanup/Cargo.lock",
                      "assurance/hmac-engine-cleanup/src/lib.rs",
+                     "assurance/hmac-execution-cleanup/Cargo.lock",
+                     "assurance/hmac-execution-cleanup/src/lib.rs",
+                     "scripts/hmac/hmac_execution_drop.py",
+                     "scripts/hmac/hmac_execution_update.py",
                      "assurance/hmac-timing/src/main.rs", "assurance/hmac-timing/Cargo.lock",
                      "assurance/hmac-faults/adapter_tests.rs",
                      "assurance/hmac-faults/native_adapter_tests.rs",
@@ -110,6 +114,7 @@ class ScopeTests(unittest.TestCase):
         self.assertIn("hmac", commands.owners("python3 scripts/cpu/check-hosted-execution.py"))
         self.assertEqual(commands.owners("python3 scripts/hmac/check-hmac-cleanup.py"), {"hmac"})
         self.assertEqual(commands.owners("python3 scripts/hmac/check-hmac-engine-cleanup.py"), {"hmac"})
+        self.assertEqual(commands.owners("python3 scripts/hmac/check-hmac-execution-cleanup.py"), {"hmac"})
         self.assertEqual(commands.owners(
             "python3 scripts/hmac/check-hmac-hosted-native.py --kernel sha256"), {"hmac"})
         for family in ("sha2", "sha3", "core", "static_cpu"):

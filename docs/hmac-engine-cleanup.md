@@ -6,6 +6,10 @@ real public HMAC consumers from the
 It checks optimized LLVM control flow, not source comments or PASS markers.
 It is author-operated development verification, not independent qualification.
 
+Accelerated cancellation/update consumers have a separate
+[owner-dispatch check](hmac-execution-cleanup.md). Neither fixture establishes
+whole-frame erasure or protected/resident worker qualification.
+
 The twelve identities are the ten named SHA-2/SHA-3 adapters and general
 SHA-512/t at 129 and 511 bits. The general-parameter differential campaign
 covers all 383 admitted parameters; these twelve compiler identities must

@@ -1,9 +1,11 @@
 //! Small per-identity memory/lifecycle tasks; full native matrices remain intact.
 #[macro_use]
 mod support;
+mod bit_support;
+use bit_support::BitCase;
 use brynja_mac_hmac::*;
 
-fn exercise<A: Algorithm>() {
+fn exercise<A: BitCase>() {
     // One long key crosses the normalizer boundary; one streamed message
     // crosses the selected hash's block/rate without a Cartesian matrix.
     let key = vec![0x42; require_some!(A::BLOCK_BYTES.checked_add(1))];
@@ -31,6 +33,16 @@ fn exercise<A: Algorithm>() {
     ));
     assert_eq!(rejected, [0]);
     require_ok!(Hmac::<A>::new(&[])).cancel();
+    // The same bounded per-identity task also exercises the distinct terminal
+    // bit adapter. Full key/length/partition matrices stay native.
+    let tail = [if A::LOW_BITS { 1 } else { 0x80 }];
+    let input = require_some!(A::input(&tail, 1));
+    let mac = require_ok!(Hmac::<A>::new(b"key"));
+    {
+        let secret = require_ok!(mac.finalize_bits_secret(input, &mut output));
+        assert_eq!(secret.expose().len(), A::TAG_BYTES);
+    }
+    assert!(output.iter().all(|byte| *byte == 0));
 }
 
 macro_rules! cases {

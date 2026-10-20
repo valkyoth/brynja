@@ -1,4 +1,4 @@
-use crate::Error;
+use crate::{Error, Fips202BitString, Sha2BitString};
 
 pub(crate) mod sealed {
     use crate::Error;
@@ -13,10 +13,19 @@ pub(crate) mod sealed {
     /// remains owned and clears on both callback return and recoverable unwind.
     pub trait Hash {
         type State;
+        type FinalInput<'a>: Copy;
         fn start() -> Self::State;
         fn update(state: &mut Self::State, input: &[u8]) -> Result<(), Error>;
         fn finish(
             state: Self::State,
+            output: &mut [u8],
+            consume: impl FnOnce(&[u8]) -> Result<(), Error>,
+        ) -> Result<(), Error>;
+        /// Same consuming/callback contract as `finish`, with a typed final
+        /// bit string. The adapter must not round its bit length to bytes.
+        fn finish_bits(
+            state: Self::State,
+            input: Self::FinalInput<'_>,
             output: &mut [u8],
             consume: impl FnOnce(&[u8]) -> Result<(), Error>,
         ) -> Result<(), Error>;
@@ -44,7 +53,7 @@ pub trait Algorithm: sealed::Hash {
 }
 
 macro_rules! algorithm {
-    ($marker:ident, $state:path, $block:literal, $tag:literal, $map:ident) => {
+    ($marker:ident, $state:path, $block:literal, $tag:literal, $map:ident, $bits:ident) => {
         #[doc = concat!("HMAC identity using the hardened `", stringify!($marker), "` hash owner.")]
         pub enum $marker {}
 
@@ -55,6 +64,7 @@ macro_rules! algorithm {
 
         impl sealed::Hash for $marker {
             type State = $state;
+            type FinalInput<'a> = $bits<'a>;
 
             fn start() -> Self::State {
                 <$state>::new()
@@ -70,6 +80,16 @@ macro_rules! algorithm {
                 consume: impl FnOnce(&[u8]) -> Result<(), Error>,
             ) -> Result<(), Error> {
                 let secret = state.finalize_secret(output).map_err($map)?;
+                consume(secret.expose())
+            }
+
+            fn finish_bits(
+                state: Self::State,
+                input: Self::FinalInput<'_>,
+                output: &mut [u8],
+                consume: impl FnOnce(&[u8]) -> Result<(), Error>,
+            ) -> Result<(), Error> {
+                let secret = state.finalize_bits_secret(input, output).map_err($map)?;
                 consume(secret.expose())
             }
         }
@@ -90,61 +110,83 @@ fn sha3_error(error: brynja_hash_sha3::HardenedSha3Error) -> Error {
     }
 }
 
-algorithm!(Sha224, brynja_hash_sha2::HardenedSha224, 64, 28, sha2_error);
-algorithm!(Sha256, brynja_hash_sha2::HardenedSha256, 64, 32, sha2_error);
+algorithm!(
+    Sha224,
+    brynja_hash_sha2::HardenedSha224,
+    64,
+    28,
+    sha2_error,
+    Sha2BitString
+);
+algorithm!(
+    Sha256,
+    brynja_hash_sha2::HardenedSha256,
+    64,
+    32,
+    sha2_error,
+    Sha2BitString
+);
 algorithm!(
     Sha384,
     brynja_hash_sha2::HardenedSha384,
     128,
     48,
-    sha2_error
+    sha2_error,
+    Sha2BitString
 );
 algorithm!(
     Sha512,
     brynja_hash_sha2::HardenedSha512,
     128,
     64,
-    sha2_error
+    sha2_error,
+    Sha2BitString
 );
 algorithm!(
     Sha512_224,
     brynja_hash_sha2::HardenedSha512_224,
     128,
     28,
-    sha2_error
+    sha2_error,
+    Sha2BitString
 );
 algorithm!(
     Sha512_256,
     brynja_hash_sha2::HardenedSha512_256,
     128,
     32,
-    sha2_error
+    sha2_error,
+    Sha2BitString
 );
 algorithm!(
     Sha3_224,
     brynja_hash_sha3::HardenedSha3_224,
     144,
     28,
-    sha3_error
+    sha3_error,
+    Fips202BitString
 );
 algorithm!(
     Sha3_256,
     brynja_hash_sha3::HardenedSha3_256,
     136,
     32,
-    sha3_error
+    sha3_error,
+    Fips202BitString
 );
 algorithm!(
     Sha3_384,
     brynja_hash_sha3::HardenedSha3_384,
     104,
     48,
-    sha3_error
+    sha3_error,
+    Fips202BitString
 );
 algorithm!(
     Sha3_512,
     brynja_hash_sha3::HardenedSha3_512,
     72,
     64,
-    sha3_error
+    sha3_error,
+    Fips202BitString
 );

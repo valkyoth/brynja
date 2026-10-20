@@ -18,12 +18,12 @@ Status: in development; no tag, publication or qualification claim.
 
 ## Portable acceptance follow-up
 
-- The real extracted archive now rejects 67 public API/ownership misuse probes
+- The real extracted archive now rejects 100 public API/ownership misuse probes
   with checked Rust diagnostics, including all ten algorithm owners, consumed
   streams, cross-algorithm/secret-public tag substitution and secret borrow escape.
-- Seven compiled algorithm/comparison mutations are rejected by executing the
-  relevant RFC or lifecycle test; compiler errors are not counted as successes.
-- A private copied-source fixture injects 132 synthetic hash errors/unwinds and
+- Nine compiled algorithm/comparison mutations are rejected by executing the
+  relevant RFC, bit-answer or lifecycle test; compiler errors are not counted as successes.
+- A private copied-source fixture injects 258 synthetic hash errors/unwinds and
   verifies owner release, transactional public output, clearing secret output and
   scratch destruction while storage is alive. Five debug/release tests and four
   compiled lifecycle/policy mutants cover this contract. This fixture never
@@ -31,6 +31,23 @@ Status: in development; no tag, publication or qualification claim.
 - Extracted `no_std` consumers instantiate all ten algorithms. HMAC-specific
   compiler erasure, real hash exhaustion and timing remain pending;
   synthetic adapter faults do not establish those properties.
+
+## Canonical final-bit messages
+
+- The ten named algorithms accept partial final messages through distinct
+  SHA-2 high-bit and FIPS 202 low-bit input types. Streaming prefixes remain
+  byte-based; public output, clearing secret output and verification all consume
+  the state. Keys and tag truncation remain byte-based.
+- Added a 1,040-case differential campaign against separate repository Python
+  hash models, including padding/rate boundaries and byte-aligned OpenSSL
+  controls. These are author-generated cases, not independent qualification.
+- Extracted-package negatives reject the wrong bit-order type and reused
+  consumed states. Executed mutants reject dropping final bits and rounding
+  them to bytes. Error/unwind injection covers all three bit-finalization paths.
+- The focused SHA-256 and SHA3-256 Miri tasks passed with the new bit path.
+  ASan/LSan passed all 41 native tests, including forced leak detection under
+  hostile parent settings. Rust 1.90.0 and 1.99.1 tests passed. This is not a
+  refreshed full Miri campaign or HMAC compiler/timing qualification.
 
 ## Scoped verifier registration
 

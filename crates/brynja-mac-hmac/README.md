@@ -38,7 +38,8 @@ reviewed.** This leaf is not yet exposed through the modern or strict facades.
 | Streaming, long-key normalization, explicit byte truncation, verification | Initial implementation with author tests | No |
 | Typed public/secret tags; owned-memory destruction | Implemented; HMAC-specific compiler qualification pending | No |
 | Hardware/SIMD selection and protected/resident sessions | Not implemented by this HMAC API | No |
-| General SHA-512/t and arbitrary-bit profiles | Not implemented by this HMAC API | No |
+| Canonical final-bit messages for the ten named algorithms | Implemented with author differential and lifecycle tests | No |
+| General SHA-512/t, fractional keys and fractional tags | Not implemented by this HMAC API | No |
 
 No FIPS approval or certification is claimed. Ordinary hash state is never
 used for keys or intermediate digests. Existing hash evidence does not qualify
@@ -86,6 +87,14 @@ clears the caller destination on drop. Public tag errors leave the destination
 unchanged; secret-output errors clear it. States have no cloning, reset,
 formatting or cross-thread transfer API.
 
+For a message ending in a partial byte, use `authenticate_bits`, or finish a
+byte-streaming prefix with `finalize_bits_tag`, `finalize_bits_secret` or
+`verify_bits`. SHA-2 takes `Sha2BitString` (valid high bits); SHA-3 takes
+`Fips202BitString` (valid low bits). Their constructors reject nonzero unused
+bits, and the types cannot be interchanged. Finalization consumes the stream.
+Keys and tag-length selection remain byte-based; this is not fractional-key or
+fractional-tag support.
+
 All key lengths, including zero, are mathematically accepted. Empty or
 predictable keys are insecure; the API cannot measure entropy. Applications must
 supply suitable independently generated keys. Caller-owned buffers and copies,
@@ -101,18 +110,23 @@ in the Git repository; no captures or evidence archives belong in the crate.
 ```sh
 cargo test -p brynja-mac-hmac --locked --offline
 python3 scripts/hmac/check-hmac-differential.py
+python3 scripts/hmac/check-hmac-bit-differential.py
 python3 scripts/hmac/check-hmac-package.py --no-std-target x86_64-unknown-none
 ```
 
-The external-oracle test is intentionally ignored by ordinary Cargo runs and
-executed explicitly by the second command; it must not be counted as a pass
-when ignored. RFC vectors are from [RFC 4231](https://www.rfc-editor.org/rfc/rfc4231.html);
+The two external-oracle tests are intentionally ignored by ordinary Cargo runs
+and executed explicitly by their corresponding scripts; ignored tests must not
+be counted as passes. The byte campaign has 1,100 Python/OpenSSL cases; the
+bit campaign has 1,040 cases using the separate repository Python SHA-2/SHA-3
+models, with byte-aligned controls checked against Python/OpenSSL. These are
+author-generated differential cases, not official bit vectors or independent
+qualification. RFC vectors are from [RFC 4231](https://www.rfc-editor.org/rfc/rfc4231.html);
 construction and key guidance follow [RFC 2104](https://www.rfc-editor.org/rfc/rfc2104.html).
 
 Package acceptance executes all seven RFC cases in debug and release, rejects
-67 API/ownership probes and seven compiled algorithm/comparison mutations, and
+100 API/ownership probes and nine compiled algorithm/comparison mutations, and
 builds all ten algorithm consumers for the requested installed `no_std` target.
-The private synthetic-hash fixture injects 132 errors/unwinds across construction,
+The private synthetic-hash fixture injects 258 errors/unwinds across construction,
 update and finalization, checks owner destruction and in-lifetime scratch
 clearing, and rejects four compiled lifecycle/policy mutations. Its synthetic
 hash is never exported or shipped. These are composition tests, not evidence of

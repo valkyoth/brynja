@@ -20,11 +20,13 @@ def error(code):
 class AcceptanceTests(unittest.TestCase):
     def test_complete_negative_population(self):
         cases = list(negative_cases())
-        self.assertEqual(len(cases), 67)
-        self.assertEqual(len({name for name, _, _ in cases}), 67)
+        self.assertEqual(len(cases), 100)
+        self.assertEqual(len({name for name, _, _ in cases}), 100)
         for algorithm in ALGORITHMS:
             for bound in ("Send", "Sync", "Copy", "Clone", "core::fmt::Debug"):
                 self.assertIn(f"{algorithm}/{bound}", [name for name, _, _ in cases])
+            for method in ("finalize_bits_tag", "finalize_bits_secret", "verify_bits"):
+                self.assertIn(f"{algorithm}/{method}/bit-order", [name for name, _, _ in cases])
 
     def test_diagnostic_only(self):
         diagnostic_rejection(output(101, error("E0277")), "E0277")

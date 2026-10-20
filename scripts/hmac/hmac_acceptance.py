@@ -36,6 +36,16 @@ def negative_cases():
     yield ("secret tag substitution", 'pub fn probe(tag: SecretTag<Sha224>) -> SecretTag<Sha256> {tag}', "E0308")
     yield ("secret/public substitution", 'pub fn probe(tag: SecretTag<Sha256>) -> Tag<Sha256> {tag}', "E0308")
     yield ("secret borrow escape", 'pub fn probe(tag: SecretTag<Sha256>) -> &[u8] {tag.expose()}', "E0515")
+    for algorithm in ALGORITHMS:
+        wrong = "Sha2BitString" if algorithm.startswith("Sha3_") else "Fips202BitString"
+        for method in ("finalize_bits_tag", "finalize_bits_secret", "verify_bits"):
+            yield (f"{algorithm}/{method}/bit-order", f'pub fn probe(mac: Hmac<{algorithm}>, output: &mut [u8]) {{'
+                   f'let Ok(input) = {wrong}::new(&[], 0) else {{return}};'
+                   f'let _ = mac.{method}(input, output);}}', "E0308")
+    for method in ("finalize_bits_tag", "finalize_bits_secret", "verify_bits"):
+        yield (f"{method}/consumed", f'pub fn probe(mut mac: Hmac<Sha256>, output: &mut [u8]) {{'
+               f'let Ok(input) = Sha2BitString::new(&[], 0) else {{return}};'
+               f'let _ = mac.{method}(input, output); let _ = mac.update(b"reopened");}}', "E0382")
 
 
 def negatives(consumer, environment, no_std_target=None):
@@ -48,6 +58,14 @@ def negatives(consumer, environment, no_std_target=None):
     positive = prefix + '\n'.join(
         f'pub fn positive_{index}(key: &[u8], message: &[u8], tag: &[u8]) -> Result<bool, Error> {{'
         f'let mut mac = Hmac::<{algorithm}>::new(key)?; mac.update(message)?; Ok(mac.verify(tag)?.expose_public())}}'
+        for index, algorithm in enumerate(ALGORITHMS))
+    positive += '\n'.join(
+        f'pub fn bits_{index}(key: &[u8], output: &mut [u8]) -> Result<(), Error> {{'
+        f'let input = {"Fips202BitString" if algorithm.startswith("Sha3_") else "Sha2BitString"}'
+        f'::new(&[], 0).map_err(|_| Error::SecretMemory)?;'
+        f'let _ = Hmac::<{algorithm}>::authenticate_bits(key, input, output)?;'
+        f'let _ = Hmac::<{algorithm}>::new(key)?.finalize_bits_secret(input, output)?;'
+        f'let _ = Hmac::<{algorithm}>::new(key)?.verify_bits(input, output)?; Ok(())}}'
         for index, algorithm in enumerate(ALGORITHMS))
     try:
         source.write_text(positive)
@@ -85,6 +103,8 @@ def mutants(roots, consumer, environment):
         ('for (expected, actual) in tag.iter().zip(candidate) {',
          'for (expected, actual) in tag.iter().zip(candidate).take(1) {', "lifecycle", "sha256"),
         ('&difference.0[0],\n        )))', '&0,\n        )))', "lifecycle", "sha256"),
+        ('Some(input) => A::finish_bits(self.inner, input, destination, absorb_inner)?',
+         'Some(_input) => A::finish(self.inner, destination, absorb_inner)?', "bits", "known_bit_answers"),
     )
     for before, after, target, test in cases:
         command = ["cargo", "test", "--offline", "--locked", "--release", "--test", target, test, "--", "--exact"]
@@ -96,3 +116,18 @@ def mutants(roots, consumer, environment):
             path.write_text(original)
         accepted(result(command, consumer, environment), 1)
     print(f"HMAC packaged algorithm/comparison compiled mutants: {len(cases)} rejected")
+    path = roots["brynja-mac-hmac"] / "src/algorithms.rs"
+    original = path.read_text()
+    before = "let secret = state.finalize_bits_secret(input, output).map_err($map)?;"
+    after = ("let mut state = state; state.update(input.as_bytes()).map_err($map)?;"
+             "let secret = state.finalize_secret(output).map_err($map)?;")
+    command = ["cargo", "test", "--offline", "--locked", "--release", "--test", "bits",
+               "known_bit_answers", "--", "--exact"]
+    accepted(result(command, consumer, environment), 1)
+    try:
+        path.write_text(replace_once(original, before, after))
+        rejected(result(command, consumer, environment))
+    finally:
+        path.write_text(original)
+    accepted(result(command, consumer, environment), 1)
+    print("HMAC packaged bit-rounding adapter mutant: 1 rejected")

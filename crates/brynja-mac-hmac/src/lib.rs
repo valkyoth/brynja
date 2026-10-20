@@ -15,6 +15,7 @@
 #![forbid(unsafe_code)]
 
 mod algorithms;
+mod bits;
 mod engine;
 mod output;
 mod policy;
@@ -24,6 +25,8 @@ pub use algorithms::{
     Algorithm, Sha3_224, Sha3_256, Sha3_384, Sha3_512, Sha224, Sha256, Sha384, Sha512, Sha512_224,
     Sha512_256,
 };
+pub use brynja_hash_sha2::{BitString as Sha2BitString, BitStringError as Sha2BitsError};
+pub use brynja_hash_sha3::{Fips202BitString, Fips202BitsError};
 pub use output::{SecretTag, Tag, Verification};
 
 /// Value-free failure from an HMAC operation.
@@ -147,7 +150,7 @@ impl<A: Algorithm> Hmac<A> {
     /// The destination must match the selected length. Every error leaves the
     /// public destination unchanged. Use `finalize_secret` for derived secrets.
     pub fn finalize_tag(self, destination: &mut [u8]) -> Result<Tag<'_, A>, Error> {
-        self.engine.public(destination)
+        self.engine.public(None, destination)
     }
 
     /// Consumes the state and returns clearing ownership of the secret tag.
@@ -155,7 +158,7 @@ impl<A: Algorithm> Hmac<A> {
     /// Every failure clears the entire destination; dropping the returned owner
     /// clears it too. The owner cannot prevent application-created copies.
     pub fn finalize_secret(self, destination: &mut [u8]) -> Result<SecretTag<'_, A>, Error> {
-        self.engine.secret(destination)
+        self.engine.secret(None, destination)
     }
 
     /// Consumes the state and compares exactly the selected tag length.
@@ -163,7 +166,7 @@ impl<A: Algorithm> Hmac<A> {
     /// Length rejection depends only on public policy. Equal-length comparison
     /// accumulates all differences without a content-dependent early exit.
     pub fn verify(self, candidate: &[u8]) -> Result<Verification, Error> {
-        self.engine.verify(candidate)
+        self.engine.verify(None, candidate)
     }
 
     /// Consumes and clears this owner without producing an output.

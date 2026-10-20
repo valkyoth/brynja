@@ -50,27 +50,44 @@ impl<A: Algorithm> Engine<A> {
         A::update(&mut self.inner, input)
     }
 
-    fn finish(self, consume: impl FnOnce(&[u8]) -> Result<(), Error>) -> Result<(), Error> {
+    fn finish(
+        self,
+        input: Option<A::FinalInput<'_>>,
+        consume: impl FnOnce(&[u8]) -> Result<(), Error>,
+    ) -> Result<(), Error> {
         let mut inner_digest = Scratch::<64>::new();
         let mut tag = Scratch::<64>::new();
         let mut outer = self.outer;
-        A::finish(self.inner, inner_digest.prefix(A::TAG_BYTES)?, |digest| {
-            A::update(&mut outer, digest)
-        })?;
+        let destination = inner_digest.prefix(A::TAG_BYTES)?;
+        let absorb_inner = |digest: &[u8]| A::update(&mut outer, digest);
+        match input {
+            Some(input) => A::finish_bits(self.inner, input, destination, absorb_inner)?,
+            None => A::finish(self.inner, destination, absorb_inner)?,
+        }
         A::finish(outer, tag.prefix(A::TAG_BYTES)?, |digest| {
             consume(digest.get(..self.tag_bytes).ok_or(Error::SecretMemory)?)
         })
     }
 
-    pub(crate) fn public(self, destination: &mut [u8]) -> Result<Tag<'_, A>, Error> {
+    pub(crate) fn public<'out>(
+        self,
+        input: Option<A::FinalInput<'_>>,
+        destination: &'out mut [u8],
+    ) -> Result<Tag<'out, A>, Error> {
         if !crate::policy::exact_output(self.tag_bytes, destination.len()) {
             return Err(Error::TagLength);
         }
-        self.finish(|tag| copy_secret_region(destination, tag).map_err(Error::from))?;
+        self.finish(input, |tag| {
+            copy_secret_region(destination, tag).map_err(Error::from)
+        })?;
         Ok(Tag::new(destination))
     }
 
-    pub(crate) fn secret(self, destination: &mut [u8]) -> Result<SecretTag<'_, A>, Error> {
+    pub(crate) fn secret<'out>(
+        self,
+        input: Option<A::FinalInput<'_>>,
+        destination: &'out mut [u8],
+    ) -> Result<SecretTag<'out, A>, Error> {
         let length = destination.len();
         if length == 0 {
             return Err(Error::TagLength);
@@ -79,16 +96,20 @@ impl<A: Algorithm> Engine<A> {
         if !crate::policy::exact_output(self.tag_bytes, length) {
             return Err(Error::TagLength);
         }
-        self.finish(|tag| initialization.write(tag).map_err(Error::from))?;
+        self.finish(input, |tag| initialization.write(tag).map_err(Error::from))?;
         Ok(SecretTag::new(initialization.finish()?))
     }
 
-    pub(crate) fn verify(self, candidate: &[u8]) -> Result<Verification, Error> {
+    pub(crate) fn verify(
+        self,
+        input: Option<A::FinalInput<'_>>,
+        candidate: &[u8],
+    ) -> Result<Verification, Error> {
         if !crate::policy::exact_output(self.tag_bytes, candidate.len()) {
             return Err(Error::TagLength);
         }
         let mut difference = Scratch::<1>::new();
-        self.finish(|tag| {
+        self.finish(input, |tag| {
             for (expected, actual) in tag.iter().zip(candidate) {
                 brynja_core::accumulate_secret_byte_difference(
                     &mut difference.0[0],

@@ -108,6 +108,7 @@ impl Algorithm for Synthetic {
 
 impl sealed::Hash for Synthetic {
     type State = State;
+    type FinalInput<'a> = crate::Sha2BitString<'a>;
 
     fn start() -> State {
         TRACE.with(|trace| {
@@ -142,6 +143,16 @@ impl sealed::Hash for Synthetic {
         checkpoint()?;
         consume(output)
     }
+
+    fn finish_bits(
+        mut state: State,
+        input: Self::FinalInput<'_>,
+        output: &mut [u8],
+        consume: impl FnOnce(&[u8]) -> Result<(), Error>,
+    ) -> Result<(), Error> {
+        Self::update(&mut state, input.as_bytes())?;
+        Self::finish(state, output, consume)
+    }
 }
 
 #[derive(Clone, Copy)]
@@ -150,11 +161,15 @@ enum Mode {
     Secret,
     Verify,
     Cancel,
+    BitPublic,
+    BitSecret,
+    BitVerify,
 }
 
 fn operation(key: &[u8], mode: Mode, output: &mut [u8; 32]) -> Result<(), Error> {
     let mut mac = Hmac::<Synthetic>::new(key)?;
     mac.update(b"message")?;
+    let bits = crate::Sha2BitString::new(&[0x80], 1).map_err(|_| Error::SecretMemory)?;
     match mode {
         Mode::Public => {
             let _ = mac.finalize_tag(output)?;
@@ -167,6 +182,16 @@ fn operation(key: &[u8], mode: Mode, output: &mut [u8; 32]) -> Result<(), Error>
             let _ = mac.verify(output)?;
         }
         Mode::Cancel => mac.cancel(),
+        Mode::BitPublic => {
+            let _ = mac.finalize_bits_tag(bits, output)?;
+        }
+        Mode::BitSecret => {
+            let tag = mac.finalize_bits_secret(bits, output)?;
+            drop(tag);
+        }
+        Mode::BitVerify => {
+            let _ = mac.verify_bits(bits, output)?;
+        }
     }
     Ok(())
 }
@@ -175,7 +200,15 @@ fn operation(key: &[u8], mode: Mode, output: &mut [u8; 32]) -> Result<(), Error>
 fn every_hash_boundary_releases_owners() {
     let mut injected = 0;
     for key in [&b"short"[..], &[0x5a; 65][..]] {
-        for mode in [Mode::Public, Mode::Secret, Mode::Verify, Mode::Cancel] {
+        for mode in [
+            Mode::Public,
+            Mode::Secret,
+            Mode::Verify,
+            Mode::Cancel,
+            Mode::BitPublic,
+            Mode::BitSecret,
+            Mode::BitVerify,
+        ] {
             reset(0, Fault::None);
             let mut output = [0x77; 32];
             assert!(operation(key, mode, &mut output).is_ok());
@@ -196,7 +229,7 @@ fn every_hash_boundary_releases_owners() {
                     }
                     closed();
                     match mode {
-                        Mode::Secret => {
+                        Mode::Secret | Mode::BitSecret => {
                             // Constructor/update errors precede destination
                             // admission; only finalization owns the output.
                             let construction_and_update = if key.len() > 64 { 6 } else { 3 };
@@ -213,7 +246,7 @@ fn every_hash_boundary_releases_owners() {
             }
         }
     }
-    assert_eq!(injected, 132, "fault population changed");
+    assert_eq!(injected, 258, "fault population changed");
 }
 
 #[test]
@@ -235,31 +268,70 @@ fn length_rejection_preserves_stream() {
     assert!(mac.finalize_tag(&mut actual).is_ok());
     assert_eq!(actual, expected);
     closed();
-}
-
-#[test]
-fn invalid_destinations_reject_before_hash_finalization() {
+    // A real adapter's terminal length rejection must still preserve public
+    // output or clear secret output. Unlike update, finalization consumes.
     for secret in [false, true] {
         reset(0, Fault::None);
         let Ok(mac) = Hmac::<Synthetic>::new(b"key") else {
             unreachable!()
         };
-        let before = TRACE.with(|trace| trace.borrow().step);
-        let mut output = [0x77; 31];
+        let Ok(input) = crate::Sha2BitString::new(b"length rejection", 8) else {
+            unreachable!()
+        };
+        let mut output = [0x77; 32];
         if secret {
             assert!(matches!(
-                mac.finalize_secret(&mut output),
-                Err(Error::TagLength)
+                mac.finalize_bits_secret(input, &mut output),
+                Err(Error::MessageTooLong)
             ));
-            assert_eq!(output, [0; 31]);
+            assert_eq!(output, [0; 32]);
         } else {
             assert!(matches!(
-                mac.finalize_tag(&mut output),
-                Err(Error::TagLength)
+                mac.finalize_bits_tag(input, &mut output),
+                Err(Error::MessageTooLong)
             ));
-            assert_eq!(output, [0x77; 31]);
+            assert_eq!(output, [0x77; 32]);
         }
-        assert_eq!(closed(), before);
+        closed();
+    }
+}
+
+#[test]
+fn invalid_destinations_reject_before_hash_finalization() {
+    for bit_mode in [false, true] {
+        for secret in [false, true] {
+            reset(0, Fault::None);
+            let Ok(mac) = Hmac::<Synthetic>::new(b"key") else {
+                unreachable!()
+            };
+            let before = TRACE.with(|trace| trace.borrow().step);
+            let mut output = [0x77; 31];
+            let Ok(bits) = crate::Sha2BitString::new(&[0x80], 1) else {
+                unreachable!()
+            };
+            if secret {
+                assert!(matches!(
+                    if bit_mode {
+                        mac.finalize_bits_secret(bits, &mut output)
+                    } else {
+                        mac.finalize_secret(&mut output)
+                    },
+                    Err(Error::TagLength)
+                ));
+                assert_eq!(output, [0; 31]);
+            } else {
+                assert!(matches!(
+                    if bit_mode {
+                        mac.finalize_bits_tag(bits, &mut output)
+                    } else {
+                        mac.finalize_tag(&mut output)
+                    },
+                    Err(Error::TagLength)
+                ));
+                assert_eq!(output, [0x77; 31]);
+            }
+            assert_eq!(closed(), before);
+        }
     }
 }
 

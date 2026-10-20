@@ -121,7 +121,7 @@ class VerifierTests(unittest.TestCase):
                 self.assertNotIn("CARGO_BUILD_BUILD_DIR", env)
                 target = argv[argv.index("--test") + 1]
                 calls.append(target)
-                count = {"bounded": 11, "vectors": 7, "lifecycle": 11}[target] if population else 0
+                count = {"bounded": 11, "vectors": 7, "lifecycle": 11, "bits": 12}[target] if population else 0
                 return f"test result: ok. {count} passed; 0 failed; 0 ignored;"
 
             with patch.dict(os.environ, hostile), patch.object(asan.sys, "platform", "linux"), \
@@ -131,7 +131,7 @@ class VerifierTests(unittest.TestCase):
                     redirect_stdout(io.StringIO()):
                 if population:
                     asan.main()
-                    self.assertEqual(calls, ["bounded", "vectors", "lifecycle"])
+                    self.assertEqual(calls, ["bounded", "vectors", "lifecycle", "bits"])
                 else:
                     with self.assertRaisesRegex(ValueError, "population"):
                         asan.main()

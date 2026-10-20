@@ -10,6 +10,7 @@ import hmac_execution_update as update
 import hmac_execution_scratch as scratch
 import hmac_execution_final as final
 import hmac_execution_wrapper as wrapper
+import hmac_execution_admission as admission
 import hmac_verifiers as verifier
 
 ROOT = verifier.ROOT
@@ -59,8 +60,15 @@ def validate(llvm, compiler="1.99.1", panic="unwind"):
     validate_retained(llvm, compiler, panic)
     functions, definitions, aliases = emitted(llvm, scratch.OPERATIONS)
     checked_finalizers = set()
+    checked_admissions = set()
     for (identity, operation), body in functions.items():
         resolved = scratch.check(body, operation, definitions, aliases)
+        if operation.startswith("construct_") and (identity, resolved) not in checked_admissions:
+            for route in (0, 1):
+                for long_key in (False, True):
+                    admission.check(resolved, identity, definitions, aliases, compiler,
+                                    panic, route, long_key)
+            checked_admissions.add((identity, resolved))
         if operation in final.syntax.OPERATIONS:
             for route, present in ((0, True), (1, True), (0, False)):
                 wrapper.check(body, identity, operation, definitions, aliases,
@@ -88,6 +96,9 @@ def collect(directory, compiler, target, panic):
           "hash finalizers remain separate callee contracts", flush=True)
     print("Accelerated HMAC public wrapper handoff: PASS; 72 consumers; "
           "split-copy/scalar Engine provenance and empty-state secret rejection", flush=True)
+    print("Accelerated HMAC constructor admission: PASS; 24 constructor consumers; "
+          "pre-key state-pool handoff and earlier-owner failure cleanup; "
+          "iterator consumption remains separate", flush=True)
     return artifacts
 
 

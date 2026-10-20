@@ -141,8 +141,49 @@ erasure of physical source copies. The fixture's empty output-observer assembly
 is allowed only without an Engine-derived pointer. Unknown owner operations
 fail closed; compiler assumptions do not prune obligations.
 
-Constructor admission/iterator ownership, the separate static-only feature
-layout and protected/resident worker placement remain separate work.
+Constructor iterator consumption, the separate static-only feature layout and
+protected/resident worker placement remain separate work.
+
+## Constructor admission and state-pool handoff
+
+The 24 constructor consumers additionally check the actual emitted `create`
+graph up to initialization of the local key pad, before key bytes are accessed.
+The static/runtime public wrappers bind their authority and route as described
+above. The resolved constructor's formal result, authority, route and key-slice
+arguments must also match the model; unbound pointer names are rejected.
+The admission model explores both authority variants and the short/long
+key partition defined by the algorithm's exact block size. It requires that exact
+length comparison; it does not sample a few key lengths and extrapolate.
+
+Each successful named factory call creates one logical empty hash owner. General
+SHA-512/t first creates a 752-byte CPU session, then passes that exact session and
+the selected `t` to its hash constructor. Session/hash factories remain typed
+callee contracts: failed construction or unwinding does not return a live
+owner, and the general hash constructor consumes its session on both edges.
+This caller check does not independently prove factory internals or CPU admission.
+
+The caller graph tracks complete ordered bytes across split memory copies and
+scalar moves. A later admission error or recoverable unwind must dispatch both
+hash-core and CPU-scratch destruction for every earlier owner. Actual outlined
+cleanup bodies are inspected, and implicit helper unwind cannot abandon a
+remaining owner. Fatal double-panic terminals are accepted only while already
+unwinding. A normal error return must have the failure discriminant, not an
+uninitialized/success result; exact error-code translation is not proved here.
+
+At the pre-key boundary, the state pool must contain the first and second
+admitted owners in order, plus the third owner only for long keys. The iterator's
+active range must be `0..3`, both cached optional states empty, and the short-key
+third entry empty. Metadata can be emitted as scalar stores or an exact constant
+two-lane integer vector; neither form is ignored. The model rejects unknown
+callees, key-pointer use before this handoff, partial/overwritten owner bytes,
+wrong authority/session/algorithm parameters, and missing cleanup.
+
+This completes **admission to the pool**, not the iterator's subsequent
+normalization/inner/outer transfers, its final destruction, or the returned
+HMAC-field handoff. Existing scratch checks and behavioral fault campaigns do
+not substitute for that remaining compiler work. Reuse of an identical checked
+constructor body is limited to the same identity within one artifact, after all
+four route/key-class combinations pass.
 
 ## Regression controls
 
@@ -150,7 +191,7 @@ The tests mutate emitted copy extents, sources, field offsets, enum values,
 helper bodies, cleanup paths, lifetimes, input pointers and fatal terminals.
 They also check the ARM switch/result relationship.
 
-Fifteen source mutants must compile successfully and then fail inspection:
+Eighteen source mutants must compile successfully and then fail inspection:
 
 1. Forget the accelerated HMAC on cancellation.
 2. Take but forget the retained engine in guard destruction.
@@ -168,6 +209,9 @@ Fifteen source mutants must compile successfully and then fail inspection:
     restoring ownership on ordinary return.
 14. Forget a taken Engine and return a terminal error instead of transferring it.
 15. Omit whole-destination clearing on both empty-state secret finalizers.
+16. Forget the first admitted owner when second admission returns an error.
+17. Forget both earlier owners when third admission returns an error.
+18. Read a key byte before the first admission.
 
 Emitted-code mutations also exercise all scratch roles, exact pointers/extents,
 live-scratch unwind bypasses, post-clear writes, method/alias substitution,
@@ -179,10 +223,15 @@ cover the real outer-owner copy, inner/outer argument substitutions, helper and
 adapter bodies, inner-error/outer-unwind exits, both cleanup components and
 unsupported pointer escape. Cancellation-only mutations run the cancellation
 checker; full compiled mutants still run the combined checker.
-The last two mutants must fail the public-wrapper check directly. All-identity
+The two wrapper mutants must fail the public-wrapper check directly. All-identity
 wrapper mutations also remove each scalar/copy fragment, change source offsets
 and input/output arguments, corrupt the option niche, bypass empty-output
 clearing and attempt duplicate dispatch or pointer escape.
+The three admission mutants must fail the admission checker directly as well
+as the combined checker. Emitted admission mutations cover factory identity,
+authority/session/result pointers, general `t`, scalar/copy fragments, key-length
+partitioning, iterator metadata (including actual Arm vector stores), earlier-owner
+error/unwind cleanup, real helper bodies and normal-entry fatal exemptions.
 
 Each private mutant is restored and its baseline rebuilt and checked. A compiler
 error is not successful mutation detection. Runtime crate source and packaging
@@ -198,13 +247,13 @@ fatal and outside the recoverable-return guarantee; its exact core terminal is
 not accepted on ordinary entry.
 
 CPU update bodies retain their separately reviewed mutation/layout contracts.
-These checks do not prove update arithmetic, kernel correctness, constructor
-admission/owner transfer, or protected/resident worker
+These checks do not prove update arithmetic, kernel correctness, factory
+internals, post-admission iterator/returned-owner transfer, or protected/resident worker
 placement. They do not erase compiler-created copies, caller registers/spills,
 interrupt state, dumps, snapshots or fatal-abort state. Those accepted limits
 are not reopened here.
 
-Remaining accelerated constructor owner and hosted worker compiler qualification
+Remaining accelerated constructor iterator/returned-owner and hosted worker compiler qualification
 remain pending, alongside timing/native qualification and independent review.
 No strict-facade admission or global qualification status is promoted by this
 bounded check.

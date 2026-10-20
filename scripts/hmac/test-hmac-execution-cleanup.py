@@ -9,6 +9,7 @@ import unittest
 from hmac_execution_scratch_tests import ScratchTests
 from hmac_execution_final_tests import FinalTests
 from hmac_execution_wrapper_tests import WrapperTests
+from hmac_execution_admission_tests import AdmissionTests
 
 spec = importlib.util.spec_from_file_location(
     "hmac_execution_cleanup", Path(__file__).with_name("check-hmac-execution-cleanup.py"))
@@ -16,7 +17,7 @@ driver = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(driver)
 
 
-class ExecutionTests(ScratchTests, FinalTests, WrapperTests, unittest.TestCase):
+class ExecutionTests(ScratchTests, FinalTests, WrapperTests, AdmissionTests, unittest.TestCase):
     driver = driver
 
     @classmethod
@@ -214,6 +215,8 @@ class ExecutionTests(ScratchTests, FinalTests, WrapperTests, unittest.TestCase):
         mutants.extend(self.final_mutants(leaf))
         wrapper_mutants = self.wrapper_mutants(leaf)
         mutants.extend(wrapper_mutants)
+        admission_mutants = self.admission_mutants(leaf)
+        mutants.extend(admission_mutants)
         for path, anchor, replacement in mutants:
             original = path.read_text()
             self.assertEqual(original.count(anchor), 2 if "clear_owned_region(output)" in anchor else 1)
@@ -221,6 +224,12 @@ class ExecutionTests(ScratchTests, FinalTests, WrapperTests, unittest.TestCase):
                 path.write_text(original.replace(anchor, replacement))
                 llvm = emitted()  # Compilation errors never count as rejection.
                 with self.subTest(path=path, anchor=anchor):
+                    if (path, anchor, replacement) in admission_mutants:
+                        functions, definitions, aliases = driver.emitted(llvm, ("construct_static",))
+                        body = driver.scratch.consumer(functions["sha256", "construct_static"],
+                                                       "construct_static", definitions, aliases)
+                        with self.assertRaises(ValueError):
+                            driver.admission.check(body, "sha256", definitions, aliases, long_key=True)
                     if (path, anchor, replacement) in wrapper_mutants:
                         functions, definitions, aliases = driver.emitted(
                             llvm, driver.final.syntax.OPERATIONS)
@@ -244,7 +253,7 @@ class ExecutionTests(ScratchTests, FinalTests, WrapperTests, unittest.TestCase):
             finally:
                 path.write_text(original)
             driver.validate(emitted())
-        print("Accelerated HMAC compiler mutants: 15 compiled/rejected; restored baselines PASS",
+        print("Accelerated HMAC compiler mutants: 18 compiled/rejected; restored baselines PASS",
               flush=True)
 
 

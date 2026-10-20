@@ -89,7 +89,7 @@ Links identify executable checks, not proof that a current run passed.
 
 ## Still pending
 
-- Remaining accelerated constructor owner transfer and hosted worker qualification; public-wrapper handoffs, Engine finalizers, local scratch and cancellation/update dispatch are checked, not whole-frame erasure.
+- Remaining accelerated constructor iterator/returned-owner transfer and hosted worker qualification; pre-key admission, public-wrapper handoffs, Engine finalizers, local scratch and cancellation/update dispatch are checked, not whole-frame erasure.
 - Accelerated/hosted timing and cache/branch qualification; the portable timing screen is not a timing proof.
 - Remaining native route qualification, including dedicated x86 SHA-512.
 - Independent pentest and final source-bound release evidence.

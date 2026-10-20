@@ -58,7 +58,15 @@ def consumer(body, operation, definitions, aliases):
                                 + r"(?:17h[0-9a-f]+E|Cs\w+_"
                                 r"29brynja_hmac_execution_cleanup)", symbol),
                    "unexpected accelerated scratch method identity")
-    outlined = common.resolve(symbol, definitions, aliases)[1]
+    arguments, outlined = common.resolve(symbol, definitions, aliases)
+    if kind == "construct":
+        formals = parameters(arguments)
+        expected = (("ptr", "%_0"), ("i64", "%0"), ("ptr", "%1"),
+                    ("ptr", "%key.0"), ("i64", "%key.1"))
+        common.require(len(formals) == len(expected) and all(
+            re.fullmatch(typ + r" [^%]*" + re.escape(name), formal)
+            for formal, (typ, name) in zip(formals, expected)),
+            "constructor formal authority/key binding changed")
     scratch.allocations(outlined, kind)
     return outlined
 

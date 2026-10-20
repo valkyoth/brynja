@@ -28,9 +28,17 @@ for explicit no_std authority construction; `general-sha512-t` alone does not.
 | `sha3-hardened-execution` | `sha3::hardened_execution` | Hardened SHA-3/SHAKE/cSHAKE owners |
 | `keccak-batch`, `keccak-hardened-batch` | `sha3::batch`, `sha3::hardened_batch` | Distinct ordinary/clearing independent-state SIMD |
 | `kmac-hardened-execution`, `kmac-runtime-execution` | `kmac::execution` | Hardened KMAC/KMACXOF |
+| `hmac-hardened-execution`, `hmac-runtime-execution` | `hmac::execution` | Modern HMAC with borrowed static/runtime authority; qualification pending |
 | `tuplehash-hardened-execution`, `tuplehash-runtime-execution` | `tuplehash::execution` | Hardened TupleHash/TupleHashXOF |
 | `parallelhash-hardened-execution`, `parallelhash-runtime-execution` | `parallelhash::execution` | Hardened serial/caller-scheduled ParallelHash/ParallelHashXOF |
 | `parallelhash-hardened-batch` | `parallelhash::execution::batch` | Hardened grouped leaves; threading remains a hosted concern |
+
+Portable `hmac::Hmac<A>` and its sealed modern SHA-2/SHA-3 adapter identities are
+available without features. These are not ordinary hash types, legacy HMAC, or
+protected-memory sessions. Full tags preserve the selected digest's bit width;
+explicit truncation is a preselected whole-byte prefix of at least 128 bits.
+Keys remain caller-owned; empty keys are mathematically accepted, not secure.
+The strict facade does not yet expose HMAC while its qualification is pending.
 
 Byte/bit input, streaming, fixed/XOF output and general-t types retain the leaf
 API contracts. A runtime feature permits importing a runtime authority; it

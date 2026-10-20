@@ -4,6 +4,8 @@ import copy
 # Reviewed independently of Cargo metadata: never learn the expected graph
 # from the manifest being tested.
 LEAVES = {
+    'hmac-hardened-execution': ('brynja-mac-hmac', 'hardened-execution'),
+    'hmac-runtime-execution': ('brynja-mac-hmac', 'runtime-execution'),
     'general-sha512-t': ('brynja-hash-sha2', 'general-sha512-t'),
     'sha2-static-execution': ('brynja-hash-sha2', 'static-execution'),
     'sha2-runtime-execution': ('brynja-hash-sha2', 'runtime-execution'),
@@ -41,11 +43,14 @@ def validate_isolation(modern, edges, names, packages, reachable):
     # check-facade-package.py independently resolves each extracted protocol in
     # a fresh consumer, checks unmodified edges and rejects real feature mutants.
     # Workspace --all-features unifies the explicitly selected crypto opt-in
-    # for protocol dependents too. Remove ONLY this reviewed optional edge when
+    # for protocol dependents too. Remove ONLY these reviewed optional edges when
     # checking protocol isolation. Manifest and resolved-edge validation above
     # still rejects direct or unregistered engine/facade CPU dependencies.
     protocol_edges = {identity: set(deps) for identity, deps in edges.items()}
     protocol_edges[names['brynja-crypto']].discard(names['brynja-crypto-cpu'])
+    # HMAC owns an additional direct, default-off CPU edge. The independent
+    # extracted protocol consumer checks below never remove either edge.
+    protocol_edges[names['brynja-mac-hmac']].discard(names['brynja-crypto-cpu'])
     for engine in ('brynja-tls', 'brynja-tls12', 'brynja-tls13',
                    'brynja-tls13-handshake', 'brynja-dtls', 'brynja-quic-tls'):
         reached = reachable(engine, names, packages, protocol_edges)

@@ -55,6 +55,7 @@ SHA-2 covers SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256; S
 | Construction family | Implementation status | Owning crate | Independent verification |
 | --- | --- | --- | --- |
 | KMAC/KMACXOF | ✅ Fully implemented | `brynja-mac-kmac` | ❌ Not independently verified |
+| HMAC over modern SHA-2/SHA-3 | 🚧 Development APIs; qualification pending | `brynja-mac-hmac` | ❌ Not independently verified |
 
 ### Legacy Hash Functions
 

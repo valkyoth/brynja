@@ -35,6 +35,7 @@ their APIs without making each leaf depend on the entire crypto or TLS graph.
 | --- | --- | --- |
 | All six named SHA-2 and all six SHA-3/SHAKE functions | ✅ Fully implemented, reexported | ❌ No |
 | cSHAKE, KMAC/KMACXOF, TupleHash and ParallelHash families | ✅ Fully implemented, reexported | ❌ No |
+| Modern HMAC over SHA-2/SHA-3 | 🚧 Portable and explicit execution APIs; qualification pending | ❌ No |
 | AEAD, KDF, RSA, ECC and executable provider effects | ❌ Not implemented | ❌ No |
 
 Named hashes and SP 800-185 constructions are usable; the broader planned
@@ -71,11 +72,30 @@ let mut output = [0; 32];
 assert_eq!(output, [0; 32]);
 ```
 
+Modern HMAC is exposed as `brynja_crypto::hmac`, not as ordinary hash aliases:
+
+```rust
+use brynja_crypto::hmac::{Hmac, Sha256};
+let key = [0x42; 32]; // Example only: generate real unpredictable keys securely.
+let mut bytes = [0; 32];
+let tag = Hmac::<Sha256>::authenticate(&key, b"message", &mut bytes).unwrap();
+let mut verifier = Hmac::<Sha256>::new(&key).unwrap();
+verifier.update(b"message").unwrap();
+assert!(verifier.verify(tag.as_bytes()).unwrap().expose_public());
+```
+
+`hmac-hardened-execution` and `hmac-runtime-execution` expose borrowed-authority
+execution explicitly; neither enables automatic detection or fallback. Portable
+HMAC stays portable when other dependencies enable CPU features. Tag truncation
+is preselected, byte-based and at least 128 bits; full general SHA-512/t tags
+retain their exact bit width. Use `finalize_secret` for clearing secret output.
+These APIs do not promise protected memory; qualification remains pending.
+
 ## Hardware and SIMD
 
 This composition facade defaults to portable APIs and owns no ISA kernels.
 Select default-off per-family execution/batch features through this facade or
-the algorithm leaves. Namespaces `sha2`, `sha3`, `kmac`, `tuplehash` and
+the algorithm leaves. Namespaces `sha2`, `sha3`, `hmac`, `kmac`, `tuplehash` and
 `parallelhash` expose the corresponding leaf APIs; `cpu` is an explicit
 no_std CPU-authority opt-in, not a hosted detector. See the
 [feature and deployment guide](../../docs/facade-features.md).

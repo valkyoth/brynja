@@ -96,6 +96,7 @@ KMACXOF128, and KMACXOF256.
 | Construction family | Implementation status | Owning crate | Independent verification |
 | --- | --- | --- | --- |
 | KMAC/KMACXOF | ✅ Fully implemented | `brynja-mac-kmac` | ❌ Not independently verified |
+| HMAC over modern SHA-2/SHA-3 | 🚧 Development APIs; qualification pending | `brynja-mac-hmac` | ❌ Not independently verified |
 
 ### Legacy Hash Functions
 

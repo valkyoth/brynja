@@ -205,7 +205,8 @@ historical acceptance bindings remain to be reconciled before release.
    portable implementation under the existing 128-bit HMAC minimum.
 2. Finish qualification for accelerated hash routes and
    protected/resident HMAC composition without weakening host-memory boundaries;
-   finish facade integration and required API/profile/requirement inventories.
+   finish required API/profile/requirement inventories. The modern no_std
+   facade integration is implemented below; strict-facade admission is pending.
 3. Extend the registered HMAC verifier tasks for the completed profiles and
    finish HMAC-specific compiler cleanup and timing campaigns. Reuse unchanged
    hash evidence; changes to shared implementations still require their affected
@@ -251,6 +252,28 @@ output storage lie inside owned ranges. Final resource-budget regressions,
 generic rejection tests, Mac/Linux Clippy and documentation examples pass.
 The new four-case public-policy/model Miri task passes; Linux ASan/LSan passes
 60 tests with mandatory leak detection, without claiming native Mac coverage.
+
+## Modern HMAC facade development slice
+
+`brynja::crypto::hmac` and `brynja_crypto::hmac` now expose a curated portable
+HMAC namespace, including all ten named algorithms and general SHA-512/t.
+Default-off `hmac-hardened-execution` and `hmac-runtime-execution` forward the
+required leaf features and expose borrowed CPU-authority execution. Enabling
+the leaf through another dependency does not expose a facade execution namespace.
+No HMAC export is added to `brynja-strict` before protected qualification.
+
+Focused acceptance builds actual current-version archives without changing the
+historical hash-package catalog. Each facade passes four downstream tests in
+debug/release with defaults on/off and rejects 118 diagnostic-checked API and
+ownership probes. Portable consumers build for `x86_64-unknown-none`; explicit
+execution opt-ins are type-checked there and compiled for the native generic
+target. The bare target uses a soft-float ABI and is not claimed as a working
+accelerated code-generation target. Six independently resolved protocol
+consumers retain CPU-free closures, including six rejected activation mutants.
+
+The HMAC leaf remains runtime-source-only. These are author-operated facade
+tests, not new native qualification, timing/cleanup evidence or an independent
+review. Hash kernels, protected storage and release approval records are unchanged.
 
 ## Owner-directed package footprint
 

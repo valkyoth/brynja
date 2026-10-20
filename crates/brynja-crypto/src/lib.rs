@@ -15,6 +15,10 @@
 /// its existing deployment, target-feature, health and classification contract.
 #[cfg(feature = "cpu")]
 pub use brynja_crypto_cpu as cpu;
+/// Modern sealed HMAC construction; development implementation, qualification pending.
+/// Portable by default; neither this namespace nor its execution opt-ins promise
+/// protected host memory. No legacy HMAC, arbitrary digest plug-ins or key export.
+pub mod hmac;
 /// KMAC and KMACXOF leaf APIs; execution is a separate opt-in feature.
 pub mod kmac;
 /// ParallelHash leaf APIs; host threads remain in `brynja-hash-parallel-std`.

@@ -37,6 +37,7 @@ class ScopeTests(unittest.TestCase):
     def test_hmac_changes_do_not_select_upstream_implementations(self):
         for path in ("crates/brynja-mac-hmac/src/engine.rs", "scripts/hmac/check-hmac-asan.py",
                      "assurance/hmac-policy/Cargo.lock", "assurance/hmac-faults/fault_tests.rs",
+                     "assurance/hmac-facade/acceptance.rs", "scripts/hmac/check-hmac-facade.py",
                      "crates/brynja-crypto-cpu-std/src/execution/hmac.rs",
                      "crates/brynja-crypto-cpu-std/tests/hmac.rs",
                      "crates/brynja-crypto-cpu-std/src/strict_hmac/worker.rs",

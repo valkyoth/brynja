@@ -1,6 +1,8 @@
 """Public paths used by isolated consumers; no evidence-only API access."""
 
 PROBES = {
+    'hmac-hardened-execution': 'hmac::execution::Hmac',
+    'hmac-runtime-execution': 'hmac::execution::Algorithm',
     'cpu': 'cpu::Sha256Backend',
     'general-sha512-t': 'sha2::Sha512TBits',
     'sha2-static-execution': 'sha2::execution::StaticSelection',

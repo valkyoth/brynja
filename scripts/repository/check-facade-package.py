@@ -19,6 +19,7 @@ import facade_package_cases as cases
 import facade_family_cases as families
 import facade_batch_cases as batches
 import facade_workspace_policy as policy
+import facade_archive_catalog as archives
 import facade_cargo_environment as cargo_environment
 import facade_adversarial_cases as adversarial
 import facade_keccak_cases as keccak
@@ -126,7 +127,7 @@ def graph(document, features, *, hosted=False, threaded=False):
 
 def archive_graph(document, roots, consumer):
     """Bind resolved identities and source targets to the actual extracted archives."""
-    versions = {name: version for name, version, _ in packaging.PACKAGING_PACKAGES}
+    versions = {name: version for name, version, _ in archives.specifications(packaging)}
     versions[parallelhash.ARCHIVE[0]] = parallelhash.ARCHIVE[1]
     versions['facade-consumer'] = '0.0.0'
     paths = {**roots, 'facade-consumer': consumer}
@@ -188,7 +189,8 @@ def execute(root, toolchain, bare_target, native_simd=False):
     cargo_environment.check(root / 'package-workspace', env)
     # The shared package helper copies the environment; sanitize packaging too,
     # not only the later extracted consumer compilation.
-    with patch.dict(os.environ, env, clear=True):
+    with patch.dict(os.environ, env, clear=True), \
+            patch.object(packaging, 'PACKAGING_PACKAGES', archives.specifications(packaging)):
         roots = parallelhash.package_roots(packaging, root)
     consumer = root / 'consumer'
     (consumer / 'src').mkdir(parents=True)

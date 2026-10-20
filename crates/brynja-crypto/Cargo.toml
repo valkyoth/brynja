@@ -10,6 +10,8 @@ publish = ["crates-io"]
 
 [features]
 default = []
+hmac-hardened-execution = ["cpu", "brynja-mac-hmac/hardened-execution"]
+hmac-runtime-execution = ["cpu", "brynja-mac-hmac/runtime-execution"]
 cpu = ["dep:brynja-crypto-cpu"]
 general-sha512-t = ["brynja-hash-sha2/general-sha512-t"]
 sha2-static-execution = ["cpu", "brynja-hash-sha2/static-execution"]
@@ -39,6 +41,7 @@ brynja-hash-sha3 = { workspace = true }
 brynja-hash-tuple = { workspace = true }
 brynja-hash-parallel = { workspace = true }
 brynja-mac-kmac = { workspace = true }
+brynja-mac-hmac = { workspace = true }
 
 [lints]
 workspace = true

@@ -14,6 +14,7 @@ from hmac_package import validate_members
 import hmac_faults
 import hmac_acceptance
 import hmac_execution_acceptance
+import hmac_adapter_native
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.append(str(ROOT / "scripts/repository"))
@@ -35,7 +36,11 @@ def run(command, directory, environment):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--no-std-target", help="also build the extracted consumer for an installed bare-metal target")
+    parser.add_argument("--adapter-kernel", choices=("sha256", "sha512", "keccak"), action="append",
+                        help="explicit real native adapter handoffs; refuses unsupported host instructions")
     args = parser.parse_args()
+    if args.adapter_kernel and len(args.adapter_kernel) != len(set(args.adapter_kernel)):
+        parser.error("duplicate adapter kernel")
     specifications = tuple((name, tomllib.loads(
         (ROOT / "crates" / name / "Cargo.toml").read_text())["package"]["version"],
         ("src/lib.rs",)) for name in NAMES)
@@ -92,6 +97,8 @@ def main():
         hmac_execution_acceptance.check(consumer, environment, roots)
         hmac_execution_acceptance.check(consumer, environment, roots, runtime=True)
         hmac_execution_acceptance.lifecycle(roots, directory, environment)
+        for kernel in args.adapter_kernel or []:
+            hmac_adapter_native.check(roots, directory, environment, kernel)
 
 
 if __name__ == "__main__":

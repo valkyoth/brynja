@@ -17,7 +17,8 @@ class PackageTests(unittest.TestCase):
 
     def test_evidence_and_standalone_tests_stay_in_git(self):
         for name in ("evidence.json", "assurance/result.json", "native-capture.tar.gz",
-                     "tests/vectors.rs", "src/execution/tests.rs",
+                     "tests/vectors.rs", "src/execution/tests.rs", "src/adapter_tests.rs",
+                     "src/execution/native_adapter_tests.rs", "assurance/hmac-timing/src/main.rs",
                      "scripts/check.py", "security/review.toml",
                      "src/tests/huge-fixture.json", "src/unreviewed.rs", "target/output",
                      "../outside", "/absolute", "src/../README.md", "src\\lib.rs"):

@@ -274,6 +274,8 @@ scripts/assurance/check-kani.sh --policy-only
 python3 scripts/hmac/check-hmac-kani.py --policy-only
 python3 scripts/hmac/test-hmac-package.py
 python3 scripts/hmac/test-hmac-acceptance.py
+python3 scripts/hmac/test-hmac-timing.py
+cargo clippy --locked --offline --manifest-path assurance/hmac-timing/Cargo.toml --all-targets -- -D warnings
 python3 scripts/hmac/test-hmac-verification.py
 python3 scripts/hmac/test-hmac-workspace.py
 python3 scripts/hmac/check-hmac-inventory.py

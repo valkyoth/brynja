@@ -410,3 +410,31 @@ needed by build scripts or source includes, and prove the extracted packages
 build as downstream consumers rather than relying only on a filename filter.
 Record actual archive inventories and sizes in repository verification output,
 without putting that evidence back into the published packages.
+
+## Real adapter handoffs and bounded timing observations
+
+- Private extracted-source tests now cover 144 real portable adapter handoffs:
+  twelve identities, byte/bit/outer finalization, successful callbacks,
+  callback errors, recoverable unwind and rejected output lengths. Digest
+  storage must clear while its caller-owned allocation remains alive, callback
+  errors propagate unchanged, and out-of-range output bytes stay untouched.
+  Together with the existing 328 synthetic faults, six debug/release tests
+  reject twelve compiled lifecycle/policy/adapter mutants. No public test hook
+  or runtime implementation changes were needed.
+- Explicit native handoff checks cover SHA-256, SHA-512 and Keccak routes.
+  Required host instructions are probed by a separately compiled generic
+  executable before feature-enabled builds. Multiple routes share archive
+  preparation but receive independent private fixture copies. Success requires
+  exact test and handoff populations; compile failures/crashes cannot count as
+  executed mutant rejections.
+- A portable timing screen records 96 ordered campaigns with 512 measured
+  pairs each, covering equal-length first/last invalid tags and different key
+  contents. Raw observations are retained locally, not in crate archives.
+  Deterministic analyser controls reject missing/malformed populations and
+  detect both signal directions, including zero-variance differences.
+  See [method and limits](../docs/hmac-timing-observations.md). A quiet screen is
+  not constant-time proof, cache analysis or accelerated-worker qualification.
+- These close executable adapter-output handoff and initial portable timing
+  tasks, not the remaining full constructor/finalizer owner-dispatch,
+  accelerated/hosted caller compiler contracts or global inventory admission.
+  Final source-bound qualification and independent review remain pending.

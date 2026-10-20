@@ -77,10 +77,12 @@ EVIDENCE = (
     ("Bounded verifier scope and population", "scripts/hmac/test-hmac-verification.py"),
     ("Five scratch probes, optimized normal/error/unwind clearing only", "scripts/hmac/check-hmac-cleanup.py"),
     ("24 cancellation/update and 84 byte/bit scratch consumers, clear dispatch only", "scripts/hmac/check-hmac-engine-cleanup.py"),
+    ("Real portable and explicitly selected native adapter handoffs", "assurance/hmac-faults/adapter_tests.rs"),
+    ("Portable paired timing screen, not a constant-time proof", "scripts/hmac/check-hmac-timing.py"),
 )
 PENDING = (
     "HMAC-specific optimized caller/scratch cleanup and stack qualification.",
-    "HMAC-specific timing campaigns; equal-length comparison structure alone is not a timing proof.",
+    "Accelerated/hosted timing and cache/branch qualification; the portable timing screen is not a timing proof.",
     "Remaining native route qualification, including dedicated x86 SHA-512.",
     "Independent pentest and final source-bound release evidence.",
     "Promote the global API/requirement register only after its compiler-owner contract is satisfied.",

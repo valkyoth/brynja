@@ -141,7 +141,42 @@ Status: in development; no tag, publication or qualification claim.
   Rust 1.90.0/1.99.1 tests and scoped Clippy passed. No full old-family sweep or
   HMAC-wide Miri campaign was repeated.
 
+### Protected scalar HMAC follow-up
+
+The protected scalar slice now adds default-off `strict-hmac` to the hosted
+crate: typed reusable resources, exact preselected tag policy, bounded requests,
+worker-side verification and clearing output loans. Secret state is first
+constructed on the existing protected worker stack; launch captures contain
+borrows/public metadata, not keyed HMAC values. It does not alter resource
+syscalls, native thread ownership or hash/kernel implementations.
+
+The Linux author tests cover all named identities and two general widths,
+long/empty keys, byte/bit messages, truncation, canonical partial tags, mapped
+state/output residency, cancellation and recoverable unwind before/after writes.
+Faults during verification cannot release a decision after cancellation.
+Protected acceleration, Mac residency, Windows HMAC, compiler cleanup/stack
+qualification and independent review are not established by these tests.
+No strict-facade export is added before this profile's qualification.
+
+The extracted-package debug/release checks pass three downstream tests and
+reject 25 ownership/API probes with compiler diagnostics. Four compiled mutants
+demonstrate that failed-output clearing, message absorption, comparison and
+message budgets are enforced; compilation failures do not count as killed
+mutants. The six in-crate native tests pass in debug/release and under Rust
+1.90.0. On the M2 Pro, two public-policy/unsupported-target tests pass in both
+profiles: this verifies rejection, not Mac protected execution.
+
+A sixteenth HMAC Miri task checks metadata and unsupported model admission.
+ASan adds one public-policy test; it does not claim native protected-worker
+qualification under instrumentation. The new source/commands remain HMAC-scoped,
+while changes to shared resource implementations retain their wider consumers.
+
 ### Still required
+
+The repository-wide unsafe-source policy currently rejects tokens in the new
+HMAC leaf (`algorithms.rs` is its first reported file). This integration check
+has not passed; focused HMAC test results do not replace it. Existing historical
+acceptance bindings also remain to be reconciled before a release candidate.
 
 1. Close remaining modern profile and precise bit/key/tag policies, plus the
    error/fault and no_std consumer contracts. General SHA-512/t now has a

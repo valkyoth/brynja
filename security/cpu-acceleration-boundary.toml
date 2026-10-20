@@ -501,7 +501,7 @@ sha256 = "c4ac153bcf66d98f015e796151aa4ea68d6abe2330f418fef84d2b1dc63ea56f"
 package = "brynja-crypto-cpu-std"
 path = "src/lib.rs"
 status = "boundary-only"
-sha256 = "5b17c21165b23594b03bcb1672e075bcd0286ae27c07f3326e96832f09f7ef33"
+sha256 = "bf49ce9a1c7420df5be6fcae6a93ff16d1d6631e436e2f2982df16b8dccfc26e"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -2265,3 +2265,33 @@ package = "brynja-crypto-cpu-std"
 path = "src/macos_resident/batch/tests/sponge.rs"
 status = "macos-resident-batch-native-sponge-tests"
 sha256 = "b07235619595480d11f125a949cdeae95e96ee72f9bd43754e0328e679b28f7c"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_hmac/mod.rs"
+status = "protected-scalar-hmac-session-development"
+sha256 = "adb0c0de41b8de3eedf8a287049220f4ce4828a609c8fff16720a39b634b5ae6"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_hmac/types.rs"
+status = "protected-hmac-policy-and-bounds"
+sha256 = "a72541c73c82af1f16f5392f20aac9098bc1dc721b2fc2fcf12ab3a07e342fe5"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_hmac/worker.rs"
+status = "protected-hmac-worker-and-verification"
+sha256 = "2e48e3594afd47fbee35f97b71cfc67939133a5ccae3a4385c8778f745a76b92"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_hmac/tests.rs"
+status = "protected-hmac-model-and-fault-tests"
+sha256 = "1a54cdf67a41c6b7d6ce121fc16ff2f111ca9628ea4f64b6ce44fdbc01c6d5a8"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_hmac/tests/native.rs"
+status = "protected-hmac-native-tests"
+sha256 = "2d76c1bdb735825862725285c1b8431fac1f580f4d33bb28bd887d67f518699c"

@@ -277,6 +277,8 @@ python3 scripts/hmac/test-hmac-acceptance.py
 python3 scripts/hmac/test-hmac-verification.py
 python3 scripts/hmac/test-hmac-workspace.py
 python3 scripts/hmac/check-hmac-package.py
+python3 scripts/hmac/test-hmac-protected.py
+python3 scripts/hmac/check-hmac-protected.py
 python3 scripts/hmac/check-hmac-differential.py
 python3 scripts/hmac/check-hmac-bit-differential.py
 python3 scripts/hmac/check-hmac-general-differential.py

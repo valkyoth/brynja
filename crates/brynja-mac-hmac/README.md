@@ -39,7 +39,8 @@ reviewed.** This leaf is not yet exposed through the modern or strict facades.
 | Typed public/secret tags; owned-memory destruction | Implemented; HMAC-specific compiler qualification pending | No |
 | Explicit static SHA-2/Keccak accelerated composition | Implemented behind `hardened-execution`; HMAC-specific qualification pending | No |
 | Hosted CPU selection | Opt-in `brynja-crypto-cpu-std` HMAC bridge; native M2 author tests | No |
-| SIMD batching and protected/resident sessions | Not implemented by this HMAC API | No |
+| Protected scalar HMAC | Opt-in `brynja-crypto-cpu-std/strict-hmac` on supported GNU/Linux; author tests, qualification pending | No |
+| SIMD batching and Mac resident sessions | Not implemented by this HMAC API | No |
 | Canonical final-bit messages for the ten named algorithms | Implemented with author differential and lifecycle tests | No |
 | General SHA-512/t, t ≥ 128 and t < 512 except 384; exact full-bit tags | Portable implementation with author tests across 383 parameters | No |
 | General SHA-512/t below 128 bits | Rejected by HMAC's minimum-tag policy | Not an enabled profile |
@@ -85,8 +86,19 @@ The hosted detector retains its existing system-wide CPU/OS trust limits;
 generic x86 remains unavailable when migration safety cannot be established.
 No new feature detector or unsafe platform entry was added.
 
-SIMD batching and protected/resident HMAC remain development work.
-No performance or protected-memory claim is made.
+The separate `brynja-crypto-cpu-std/strict-hmac` feature provides typed scalar
+`strict_hmac::Session<A>` on native GNU/Linux x86-64 and little-endian AArch64.
+It acquires a guarded, locked, dump-excluded worker stack plus staging/output
+mappings before accepting input. Key setup, hashing and verification happen on
+that joined worker. `TagPolicy` selects the exact protocol width at construction;
+resource/work limits bound keys, message bits and chunks. A result remains a
+secret loan until explicit declassification. Unsupported platforms reject;
+there is no ordinary-stack or accelerated fallback. This is a development
+profile, not independent qualification; caller inputs, copies and the documented
+OS/register/fatal-termination residuals remain outside its guarantees.
+
+Protected acceleration, SIMD batching and Mac resident HMAC remain development
+work. No performance or whole-process protection claim is made.
 
 ## API examples
 

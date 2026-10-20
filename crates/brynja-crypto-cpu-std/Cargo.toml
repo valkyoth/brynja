@@ -24,6 +24,7 @@ strict-sha2-acceleration = ["strict-sha2", "brynja-hash-sha2/hardened-execution"
 strict-sha3 = ["protected-memory", "dep:brynja-hash-sha3"]
 strict-sha3-acceleration = ["strict-sha3", "brynja-hash-sha3/hardened-execution"]
 strict-kmac = ["protected-memory", "dep:brynja-mac-kmac"]
+strict-hmac = ["protected-memory", "dep:brynja-mac-hmac"]
 strict-kmac-acceleration = ["strict-kmac", "brynja-mac-kmac/hardened-execution"]
 strict-tuplehash = ["protected-memory", "dep:brynja-hash-tuple"]
 strict-tuplehash-acceleration = ["strict-tuplehash", "brynja-hash-tuple/hardened-execution"]

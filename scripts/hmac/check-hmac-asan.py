@@ -36,6 +36,14 @@ def main():
             raise ValueError("HMAC sanitizer hosted selection population changed")
         print(output)
         print("Portable HMAC ASan/LSan: PASS; leak detection forced; no hardware qualification claim")
+        output = verifier.run(["cargo", "+" + pin["execution_toolchain"], "test", "--locked", "--offline",
+                               "-p", "brynja-crypto-cpu-std", "--features", "strict-hmac",
+                               "--lib", "strict_hmac::tests::metadata_admission_and_exact_tag_policy",
+                               "--target", "x86_64-unknown-linux-gnu"], env)
+        if "test result: ok. 1 passed; 0 failed; 0 ignored;" not in output:
+            raise ValueError("protected HMAC sanitizer metadata population changed")
+        print(output)
+        print("Protected HMAC public-policy ASan: PASS; protected native execution not inferred")
 
 
 if __name__ == "__main__":

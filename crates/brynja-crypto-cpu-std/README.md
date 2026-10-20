@@ -43,6 +43,7 @@ See the [compiled TupleHash API example](src/strict_tuplehash/compiled.rs).
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
 | Hosted hardened HMAC over SHA-2/SHA-3 | 🚧 Default-off `hmac-execution`; native M2 author tests; qualification pending | ❌ No |
+| Protected scalar HMAC (supported GNU/Linux targets) | 🚧 Default-off `strict-hmac`; typed bounded requests and worker-side verification; qualification pending | ❌ No |
 | Apple Silicon resident SHA-2/SHA-3, KMAC/TupleHash | 🚧 Separate opt-in scalar/Arm resident/clearing APIs; no dump exclusion; qualification pending | ❌ No |
 | Apple Silicon resident SHA-2/general-t and SHA-3/SHAKE/cSHAKE | 🚧 Scalar or explicit Arm SHA2/SHA512/Keccak; bit-aware, bounded output/cancellation; no dump-exclusion guarantee; qualification pending | ❌ No |
 | Apple Silicon resident SHA-2/Keccak independent-message batches | 🚧 Default-off resident workspace/output; explicit portable or required NEON, no fallback; no dump exclusion; qualification pending | ❌ No |
@@ -84,6 +85,17 @@ See the [compiled TupleHash API example](src/strict_tuplehash/compiled.rs).
 No named independent cryptographic review or FIPS 140-3 validation is claimed.
 
 ## Use
+
+The default-off `strict-hmac` feature adds `strict_hmac::Session<A>` on supported
+native GNU/Linux targets. It uses scalar hardened HMAC on a joined protected
+worker, with separately protected staging and output. `TagPolicy::Full` preserves
+general SHA-512/t's exact bit width; `TagPolicy::Bytes(n)` preselects a whole-byte
+prefix. `Limits` bounds resources and request work. `compute` accepts borrowed
+chunks and a canonical final-bit tail, while `verify` compares on the worker.
+Secret output loans require explicit declassification and clear on drop.
+Keys are not retained between calls. Unsupported platforms fail rather than
+fall back. This feature does not enable runtime detection or accelerated HMAC;
+compiler/platform qualification and strict-facade integration remain pending.
 
 The separate default-off `macos-resident` feature provides
 `macos_resident::Sha256Session` on Apple Silicon. It locks guarded output and

@@ -12,7 +12,7 @@ import subprocess
 import tarfile
 import tempfile
 import tomllib
-from cpu_boundary_backends import MACOS_RESIDENT_FEATURES
+from cpu_boundary_backends import MACOS_RESIDENT_FEATURES, HMAC_FEATURES
 
 ROOT = Path(__file__).resolve().parents[2]
 CPU = 'brynja-crypto-cpu'
@@ -33,7 +33,7 @@ def validate(write=False):
         raise ValueError('CPU execution features changed')
     if manifests[CPU].get('dependencies') != {'brynja-core': {'workspace': True, 'optional': True}} or manifests[HOST].get('features') != {
             'default': [],
-            'hmac-execution': ['runtime-execution', 'dep:brynja-mac-hmac', 'brynja-mac-hmac/runtime-execution'],
+            **HMAC_FEATURES,
             **MACOS_RESIDENT_FEATURES,
             'protected-memory': ['dep:brynja-core'],
             'strict-sha2': ['protected-memory', 'brynja-hash-sha2/general-sha512-t'],

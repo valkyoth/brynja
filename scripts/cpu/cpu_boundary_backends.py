@@ -64,6 +64,19 @@ MACOS_RESIDENT_SOURCES = {
     "src/macos_resident/sha3/tests/native.rs": "macos-resident-scalar-sha3-native-tests",
 }
 
+HMAC_FEATURES = {
+    "hmac-execution": ["runtime-execution", "dep:brynja-mac-hmac", "brynja-mac-hmac/runtime-execution"],
+    "strict-hmac": ["protected-memory", "dep:brynja-mac-hmac"],
+}
+HMAC_SOURCES = {
+    "src/execution/hmac.rs": "opt-in-hardened-hmac-adapter",
+    "src/strict_hmac/mod.rs": "protected-scalar-hmac-session-development",
+    "src/strict_hmac/types.rs": "protected-hmac-policy-and-bounds",
+    "src/strict_hmac/worker.rs": "protected-hmac-worker-and-verification",
+    "src/strict_hmac/tests.rs": "protected-hmac-model-and-fault-tests",
+    "src/strict_hmac/tests/native.rs": "protected-hmac-native-tests",
+}
+
 STRICT_COMPILED_SOURCES = {
     "src/strict_batch/mod.rs": "protected-modern-batch-session-development",
     "src/strict_batch/types.rs": "protected-modern-batch-api-types",

@@ -14,6 +14,8 @@ pub mod protected_memory;
 #[cfg(feature = "strict-batch")]
 pub mod strict_batch;
 
+#[cfg(feature = "strict-hmac")]
+pub mod strict_hmac;
 #[cfg(feature = "strict-kmac")]
 pub mod strict_kmac;
 #[cfg(feature = "strict-sha2")]

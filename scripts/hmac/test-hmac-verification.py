@@ -38,7 +38,8 @@ class ScopeTests(unittest.TestCase):
         for path in ("crates/brynja-mac-hmac/src/engine.rs", "scripts/hmac/check-hmac-asan.py",
                      "assurance/hmac-policy/Cargo.lock", "assurance/hmac-faults/fault_tests.rs",
                      "crates/brynja-crypto-cpu-std/src/execution/hmac.rs",
-                     "crates/brynja-crypto-cpu-std/tests/hmac.rs"):
+                     "crates/brynja-crypto-cpu-std/tests/hmac.rs",
+                     "crates/brynja-crypto-cpu-std/src/strict_hmac/worker.rs"):
             with self.subTest(path=path):
                 full, groups = commands.scope.select([path])
                 self.assertFalse(full)
@@ -55,13 +56,14 @@ class ScopeTests(unittest.TestCase):
                     "sha3_224", "sha3_256", "sha3_384", "sha3_512",
                     "output_clears_during_consumer_unwind", "general_129", "general_511"}
         tasks = miri_tasks.inventory(ROOT, "hmac")
-        self.assertEqual(len(tasks), len(expected) + 2)
+        self.assertEqual(len(tasks), len(expected) + 3)
         hosted = [argv for argv in tasks if "brynja-crypto-cpu-std" in argv]
-        self.assertEqual(len(hosted), 1)
+        self.assertEqual(len(hosted), 2)
         self.assertEqual(hosted[0][-4:], ["--features", "hmac-execution", "--test", "hmac"])
+        self.assertEqual(hosted[1][-4:], ["--features", "strict-hmac", "--lib", "strict_hmac::tests"])
         bounded = [argv for argv in tasks if "--test" in argv and argv not in hosted]
         self.assertEqual({argv[argv.index("--test") + 2] for argv in bounded}, expected)
-        lifecycle = [argv for argv in tasks if "--lib" in argv]
+        lifecycle = [argv for argv in tasks if "--lib" in argv and argv not in hosted]
         self.assertEqual(len(lifecycle), 1)
         self.assertEqual(lifecycle[0][-1], "execution::tests")
         self.assertIn("hardened-execution", lifecycle[0])
@@ -71,7 +73,7 @@ class ScopeTests(unittest.TestCase):
             self.assertIn("--exact", argv)
             self.assertNotIn("--skip", argv)
         for profile in ("routine", "extended", "existing-full"):
-            self.assertEqual(len(miri_tasks.task_inventory(ROOT, "hmac", profile)), 15)
+            self.assertEqual(len(miri_tasks.task_inventory(ROOT, "hmac", profile)), 16)
 
     def test_sanitizer_and_matrix_ownership(self):
         sanitizer = commands.catalog(ROOT / "scripts/zeroization/check-zeroization-sanitizer.sh")
@@ -81,9 +83,11 @@ class ScopeTests(unittest.TestCase):
                   if commands.selected([command], ["hmac"]) and commands.owners(command)]
         self.assertTrue(matrix)
         self.assertTrue(all("-p brynja-mac-hmac " in command or
-                            "-p brynja-crypto-cpu-std --features hmac-execution --test hmac" in command
+                            "-p brynja-crypto-cpu-std --features hmac-execution --test hmac" in command or
+                            "-p brynja-crypto-cpu-std --features strict-hmac --lib strict_hmac" in command
                             for command in matrix))
         self.assertTrue(any("--test hmac" in command for command in matrix))
+        self.assertTrue(any("--lib strict_hmac" in command for command in matrix))
         self.assertEqual(commands.owners(
             "cargo test -p brynja-crypto-cpu-std --features hmac-execution --test hmac"), {"hmac"})
         self.assertIn("static_cpu", commands.owners(
@@ -117,7 +121,7 @@ class ScopeTests(unittest.TestCase):
             for shards in (1, 2, 8):
                 rows = catalog.selected(plan, ["kani", "asan", "miri"], None, shards,
                                         miri_tasks=True, miri_profile="routine")
-                self.assertEqual(len(rows), 17)
+                self.assertEqual(len(rows), 18)
                 self.assertEqual([row["command"] for row in rows if row["phase"] == "kani"],
                                  commands.kani_commands(["hmac"]))
 
@@ -134,7 +138,8 @@ class VerifierTests(unittest.TestCase):
         hostile = {"ASAN_OPTIONS": "detect_leaks=0", "LSAN_OPTIONS": "exitcode=0",
                    "RUSTFLAGS": "-Copt-level=0", "CARGO_BUILD_BUILD_DIR": "/bad/cache"}
         populations = {"bounded": 13, "vectors": 7, "lifecycle": 11, "bits": 12,
-                       "general": 5, "execution::tests": 4, "hmac": 2}
+                       "general": 5, "execution::tests": 4, "hmac": 2,
+                       "strict_hmac::tests::metadata_admission_and_exact_tag_policy": 1}
         for missing in (None, *populations):
             calls = []
 
@@ -143,7 +148,7 @@ class VerifierTests(unittest.TestCase):
                 self.assertEqual(env["LSAN_OPTIONS"], "exitcode=23")
                 self.assertEqual(env["RUSTFLAGS"], "-Zsanitizer=address")
                 self.assertNotIn("CARGO_BUILD_BUILD_DIR", env)
-                target = argv[argv.index("--test") + 1] if "--test" in argv else "execution::tests"
+                target = argv[argv.index("--test") + 1] if "--test" in argv else argv[argv.index("--lib") + 1]
                 calls.append(target)
                 count = populations[target] if target != missing else 0
                 ignored = 1 if target == "hmac" else 0
@@ -156,7 +161,7 @@ class VerifierTests(unittest.TestCase):
                     redirect_stdout(io.StringIO()):
                 if missing is None:
                     asan.main()
-                    self.assertEqual(calls, ["bounded", "vectors", "lifecycle", "bits", "general", "execution::tests", "hmac"])
+                    self.assertEqual(calls, list(populations))
                 else:
                     with self.assertRaisesRegex(ValueError, "population"):
                         asan.main()

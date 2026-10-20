@@ -7,7 +7,7 @@ license.workspace = true
 repository.workspace = true
 description = "First-party no_std HMAC construction over Brynja hardened hash owners"
 publish = ["crates-io"]
-include = ["Cargo.toml", "LICENSE-APACHE", "LICENSE-MIT", "README.md", "src/**/*.rs"]
+include = ["Cargo.toml", "LICENSE-APACHE", "LICENSE-MIT", "README.md", "src/*.rs", "src/execution/mod.rs", "src/execution/adapter.rs", "src/execution/backends.rs", "src/execution/retained.rs"]
 
 [features]
 default = []

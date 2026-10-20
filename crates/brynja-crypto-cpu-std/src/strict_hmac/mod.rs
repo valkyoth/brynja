@@ -27,6 +27,8 @@
 //! ```
 use crate::protected_memory::{ProtectedBytes, ProtectedStack};
 use core::marker::PhantomData;
+#[cfg(feature = "strict-hmac-acceleration")]
+mod compiled;
 #[cfg(test)]
 mod tests;
 mod types;
@@ -35,6 +37,8 @@ pub use brynja_mac_hmac::{
     Sha3_224, Sha3_256, Sha3_384, Sha3_512, Sha224, Sha256, Sha384, Sha512, Sha512_224, Sha512_256,
     Sha512T,
 };
+#[cfg(feature = "strict-hmac-acceleration")]
+pub use compiled::{CompiledSession, Kernel};
 pub use types::{Bits, Cancellation, Error, Limits, PublicDeclassification, Request, TagPolicy};
 
 /// Sealed modern HMAC identity, not a downstream digest implementation hook.

@@ -67,6 +67,7 @@ MACOS_RESIDENT_SOURCES = {
 HMAC_FEATURES = {
     "hmac-execution": ["runtime-execution", "dep:brynja-mac-hmac", "brynja-mac-hmac/runtime-execution"],
     "strict-hmac": ["protected-memory", "dep:brynja-mac-hmac"],
+    "strict-hmac-acceleration": ["strict-hmac", "brynja-mac-hmac/hardened-execution"],
 }
 HMAC_SOURCES = {
     "src/execution/hmac.rs": "opt-in-hardened-hmac-adapter",
@@ -75,6 +76,10 @@ HMAC_SOURCES = {
     "src/strict_hmac/worker.rs": "protected-hmac-worker-and-verification",
     "src/strict_hmac/tests.rs": "protected-hmac-model-and-fault-tests",
     "src/strict_hmac/tests/native.rs": "protected-hmac-native-tests",
+    "src/strict_hmac/compiled.rs": "protected-compiled-hmac-session-development",
+    "src/strict_hmac/compiled/worker.rs": "protected-compiled-hmac-worker",
+    "src/strict_hmac/compiled/tests.rs": "protected-compiled-hmac-admission-tests",
+    "src/strict_hmac/compiled/tests/native.rs": "protected-compiled-hmac-native-tests",
 }
 
 STRICT_COMPILED_SOURCES = {

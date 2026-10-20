@@ -12,10 +12,8 @@ def lifecycle(roots, directory, environment):
     """Compile real retained-owner logic and kill behavioral cleanup mutants."""
     fixture = directory / "execution-faults"
     shutil.copytree(roots["brynja-mac-hmac"], fixture)
-    tests = fixture / "tests/execution"
-    tests.mkdir(parents=True)
-    shutil.copyfile(ROOT / "crates/brynja-mac-hmac/tests/execution/lifecycle.rs",
-                    tests / "lifecycle.rs")
+    shutil.copyfile(ROOT / "crates/brynja-mac-hmac/src/execution/tests.rs",
+                    fixture / "src/execution/tests.rs")
     manifest = fixture / "Cargo.toml"
     manifest.write_text(manifest.read_text() + "\n[workspace]\n[patch.crates-io]\n"
                         + "".join(f"{name}={{path={json.dumps(str(path))}}}\n"
@@ -26,6 +24,19 @@ def lifecycle(roots, directory, environment):
     base = ["cargo", "test", "--offline", "--locked", "--features", "hardened-execution", "--lib"]
     for profile in ([], ["--release"]):
         accepted(result([*base, *profile, "execution::tests"], fixture, environment), 4)
+    # Cargo's normalized archive must retain the inherited workspace prohibition.
+    library = fixture / "src/lib.rs"
+    original_library = library.read_text()
+    try:
+        library.write_text(original_library + """
+/// Deliberate extracted-archive lint rejection probe.
+pub fn unsafe_policy_probe() -> u8 { unsafe { core::ptr::read(&1) } }
+""")
+        diagnostic_rejection(result(
+            ["cargo", "check", "--offline", "--locked", "--lib", "--message-format=json"],
+            fixture, environment), "unsafe_code")
+    finally:
+        library.write_text(original_library)
     cases = [
         ("retained.rs", "guard.preserve = matches!(result, Ok(()) | Err(Error::MessageTooLong));",
          "guard.preserve = true;", "failure_drops_both_owners_and_is_terminal"),

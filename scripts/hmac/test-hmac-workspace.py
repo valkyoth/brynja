@@ -50,7 +50,8 @@ def main():
         validate(changed, mode, False, "feature policy differs")
         for name, feature in (("brynja-mac-hmac", "runtime-execution"),
                               ("brynja-crypto-cpu-std", "hmac-execution"),
-                              ("brynja-crypto-cpu-std", "strict-hmac")):
+                              ("brynja-crypto-cpu-std", "strict-hmac"),
+                              ("brynja-crypto-cpu-std", "strict-hmac-acceleration")):
             edges = next(p for p in document["packages"] if p["name"] == name)["features"][feature]
             for index in range(len(edges)):
                 changed = copy.deepcopy(document)
@@ -61,7 +62,7 @@ def main():
         candidate = next(p for p in changed["packages"] if p["name"] == "brynja-crypto-cpu-std")
         candidate["features"]["default"] = ["hmac-execution"]
         validate(changed, mode, False, "feature policy differs")
-    print("HMAC workspace feature closure: 2 baselines and 38 rejected mutations PASS")
+    print("HMAC workspace feature closure: 2 baselines and 42 rejected mutations PASS")
 
 
 if __name__ == "__main__":

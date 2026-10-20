@@ -1,6 +1,6 @@
 //! HMAC over a sealed set of modern, secret-bearing hash implementations.
 //!
-//! This implementation and its opt-in static execution path are under development and have not yet
+//! This implementation and its opt-in static execution route are under development and have not yet
 //! completed HMAC-specific security review or compiler/native qualification.
 //! Hash owners are reused, but their evidence is not evidence of this new
 //! composition. No FIPS validation or independent cryptographic review is claimed.
@@ -12,7 +12,6 @@
 //! Use neither this API nor ordinary hash APIs as a protected-memory promise.
 
 #![no_std]
-#![forbid(unsafe_code)]
 
 mod algorithms;
 mod bits;

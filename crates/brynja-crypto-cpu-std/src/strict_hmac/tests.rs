@@ -8,6 +8,8 @@ pub(super) enum Fault {
     Cancel(usize),
     Panic(usize),
     AfterWrite,
+    #[cfg(feature = "strict-hmac-acceleration")]
+    Revoke(usize),
 }
 thread_local! {
     static FAULT: std::cell::Cell<Fault> = const { std::cell::Cell::new(Fault::None) };
@@ -34,6 +36,13 @@ pub(super) fn after_write() {
         !matches!(FAULT.with(|f| f.get()), Fault::AfterWrite),
         "intentional protected HMAC post-write unwind"
     );
+}
+#[cfg(feature = "strict-hmac-acceleration")]
+pub(super) fn revoke(owner: &brynja_crypto_cpu::static_execution::Authority) {
+    let point = COUNT.with(|c| c.get().saturating_sub(1));
+    if matches!(FAULT.with(|f| f.get()), Fault::Revoke(at) if at == point) {
+        owner.quarantine();
+    }
 }
 pub(super) fn observe<T>(state: &T, staging: &[u8], output: &[u8]) {
     if !matches!(FAULT.with(|f| f.get()), Fault::Observe) {

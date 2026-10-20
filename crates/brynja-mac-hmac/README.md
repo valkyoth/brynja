@@ -40,6 +40,7 @@ reviewed.** This leaf is not yet exposed through the modern or strict facades.
 | Explicit static SHA-2/Keccak accelerated composition | Implemented behind `hardened-execution`; HMAC-specific qualification pending | No |
 | Hosted CPU selection | Opt-in `brynja-crypto-cpu-std` HMAC bridge; native M2 author tests | No |
 | Protected scalar HMAC | Opt-in `brynja-crypto-cpu-std/strict-hmac` on supported GNU/Linux; author tests, qualification pending | No |
+| Protected compiled HMAC | Opt-in `brynja-crypto-cpu-std/strict-hmac-acceleration`; explicit SHA-2/Keccak kernel, authority constructed on protected worker | No |
 | SIMD batching and Mac resident sessions | Not implemented by this HMAC API | No |
 | Canonical final-bit messages for the ten named algorithms | Implemented with author differential and lifecycle tests | No |
 | General SHA-512/t, t ≥ 128 and t < 512 except 384; exact full-bit tags | Portable implementation with author tests across 383 parameters | No |
@@ -97,8 +98,12 @@ there is no ordinary-stack or accelerated fallback. This is a development
 profile, not independent qualification; caller inputs, copies and the documented
 OS/register/fatal-termination residuals remain outside its guarantees.
 
-Protected acceleration, SIMD batching and Mac resident HMAC remain development
-work. No performance or whole-process protection claim is made.
+The additional `strict-hmac-acceleration` feature exposes
+`strict_hmac::CompiledSession<A>` with explicit kernel selection and worker-local
+authority. Backend or worker failure permanently quarantines it, without scalar
+fallback. Its compiler/native qualification remains pending. SIMD batching and
+Mac resident HMAC are not implemented yet. No performance or whole-process
+protection claim is made.
 
 ## API examples
 

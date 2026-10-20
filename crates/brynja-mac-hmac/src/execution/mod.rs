@@ -18,7 +18,6 @@ mod adapter;
 mod backends;
 mod retained;
 #[cfg(test)]
-#[path = "../../tests/execution/lifecycle.rs"]
 mod tests;
 
 use crate::{Error, SecretTag, Tag, Verification, engine::Engine};
@@ -35,7 +34,7 @@ impl<'a, A: crate::Algorithm + backends::Backend<'a>> Algorithm<'a> for A {}
 
 /// Affine HMAC bound to one authority for normalization, inner and outer hashes.
 ///
-/// Default HMAC constructors never select this path. Route observations cannot
+/// Default HMAC constructors never select this route. Route observations cannot
 /// create authority. Backend failure or recoverable unwinding clears both hash
 /// owners, not just the inner stream. Expected length rejection preserves it.
 ///

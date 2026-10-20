@@ -17,7 +17,8 @@ class PackageTests(unittest.TestCase):
 
     def test_evidence_and_standalone_tests_stay_in_git(self):
         for name in ("evidence.json", "assurance/result.json", "native-capture.tar.gz",
-                     "tests/vectors.rs", "scripts/check.py", "security/review.toml",
+                     "tests/vectors.rs", "src/execution/tests.rs",
+                     "scripts/check.py", "security/review.toml",
                      "src/tests/huge-fixture.json", "src/unreviewed.rs", "target/output",
                      "../outside", "/absolute", "src/../README.md", "src\\lib.rs"):
             with self.subTest(name=name), self.assertRaises(ValueError):

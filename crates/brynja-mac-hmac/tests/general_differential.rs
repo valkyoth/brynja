@@ -45,8 +45,8 @@ fn check<const T: u16>(key: &[u8], message: &[u8], bits: usize, expected: &[u8])
 #[test]
 #[ignore = "run scripts/hmac/check-hmac-general-differential.py"]
 fn external_general_oracle() {
-    let path = require_ok!(std::env::var("BRYNJA_HMAC_GENERAL_ORACLE"));
-    let text = require_ok!(std::fs::read_to_string(path));
+    let file = require_ok!(std::env::var("BRYNJA_HMAC_GENERAL_ORACLE"));
+    let text = require_ok!(std::fs::read_to_string(file));
     let mut counts = [0_usize; 512];
     for row in text.lines() {
         let fields: Vec<_> = row.split(':').collect();

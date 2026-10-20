@@ -60,7 +60,7 @@ class ScopeTests(unittest.TestCase):
         hosted = [argv for argv in tasks if "brynja-crypto-cpu-std" in argv]
         self.assertEqual(len(hosted), 2)
         self.assertEqual(hosted[0][-4:], ["--features", "hmac-execution", "--test", "hmac"])
-        self.assertEqual(hosted[1][-4:], ["--features", "strict-hmac", "--lib", "strict_hmac::tests"])
+        self.assertEqual(hosted[1][-4:], ["--features", "strict-hmac-acceleration", "--lib", "strict_hmac"])
         bounded = [argv for argv in tasks if "--test" in argv and argv not in hosted]
         self.assertEqual({argv[argv.index("--test") + 2] for argv in bounded}, expected)
         lifecycle = [argv for argv in tasks if "--lib" in argv and argv not in hosted]
@@ -84,7 +84,7 @@ class ScopeTests(unittest.TestCase):
         self.assertTrue(matrix)
         self.assertTrue(all("-p brynja-mac-hmac " in command or
                             "-p brynja-crypto-cpu-std --features hmac-execution --test hmac" in command or
-                            "-p brynja-crypto-cpu-std --features strict-hmac --lib strict_hmac" in command
+                            "-p brynja-crypto-cpu-std --features strict-hmac-acceleration --lib strict_hmac" in command
                             for command in matrix))
         self.assertTrue(any("--test hmac" in command for command in matrix))
         self.assertTrue(any("--lib strict_hmac" in command for command in matrix))
@@ -139,7 +139,8 @@ class VerifierTests(unittest.TestCase):
                    "RUSTFLAGS": "-Copt-level=0", "CARGO_BUILD_BUILD_DIR": "/bad/cache"}
         populations = {"bounded": 13, "vectors": 7, "lifecycle": 11, "bits": 12,
                        "general": 5, "execution::tests": 4, "hmac": 2,
-                       "strict_hmac::tests::metadata_admission_and_exact_tag_policy": 1}
+                       "strict_hmac::tests::metadata_admission_and_exact_tag_policy": 1,
+                       "strict_hmac::compiled::tests::typed_kernel_admission_never_substitutes_a_backend": 1}
         for missing in (None, *populations):
             calls = []
 

@@ -171,12 +171,34 @@ ASan adds one public-policy test; it does not claim native protected-worker
 qualification under instrumentation. The new source/commands remain HMAC-scoped,
 while changes to shared resource implementations retain their wider consumers.
 
-### Still required
+### Protected compiled HMAC follow-up
 
-The repository-wide unsafe-source policy currently rejects tokens in the new
-HMAC leaf (`algorithms.rs` is its first reported file). This integration check
-has not passed; focused HMAC test results do not replace it. Existing historical
-acceptance bindings also remain to be reconciled before a release candidate.
+Default-off `strict-hmac-acceleration` adds a distinct `CompiledSession<A>`:
+explicit typed kernel selection, protected-worker authority construction and
+permanent quarantine after backend, invariant or worker failures. Cancellation,
+invalid requests and ordinary mismatches preserve reuse. The scalar `Session`
+does not change algorithms with feature unification. Static target features still
+require a matching CPU/OS deployment guarantee; no detection or migration
+guarantee is inferred.
+
+Local SHA-NI SHA-224/256 and AVX2 SHA-3 routes pass debug/release author tests and
+actual extracted-consumer execution. Long/empty keys, exact final bits, explicit
+truncation, comparison, protected state/authority mappings, cancellation,
+revocation, unwind, clearing and forgotten loans are covered. Four compiled
+behavioral mutants per executed route reject broken quarantine, absorption,
+comparison and output clearing. Twelve typed package constructors compile and
+15 compiled-profile API/ownership rejection probes supplement the 25 scalar
+probes. Dedicated SHA-512 and native Linux Arm execution remain pending; cross
+compilation is not execution evidence.
+
+The repository unsafe-source policy now passes without widening exceptions:
+HMAC uses normal test-module resolution, type macro fragments and the existing
+workspace lint. Its archive still omits tests, and an injected unsafe block is
+rejected by the extracted crate's inherited lint. The Mac's unsupported-platform
+tests verify fail-closed behavior, not protected Mac computation. Existing
+historical acceptance bindings remain to be reconciled before release.
+
+### Still required
 
 1. Close remaining modern profile and precise bit/key/tag policies, plus the
    error/fault and no_std consumer contracts. General SHA-512/t now has a

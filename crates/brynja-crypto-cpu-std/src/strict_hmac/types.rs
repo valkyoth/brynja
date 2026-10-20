@@ -119,6 +119,12 @@ pub enum Error {
     Cancelled,
     /// Hardened HMAC construction/execution failure.
     Mac(brynja_mac_hmac::Error),
+    /// Explicit accelerated session permanently rejected further requests.
+    #[cfg(feature = "strict-hmac-acceleration")]
+    Quarantined,
+    /// Required compiled backend could not be admitted; no scalar fallback.
+    #[cfg(feature = "strict-hmac-acceleration")]
+    Backend(brynja_crypto_cpu::static_execution::Error),
     /// Internal transfer/result invariant failed.
     Invariant,
 }

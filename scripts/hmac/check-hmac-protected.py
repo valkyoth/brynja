@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Linux protected HMAC: real extracted consumers and executed cleanup mutants."""
+import argparse
 import importlib.util
 from pathlib import Path
 import shutil
@@ -7,6 +8,7 @@ import sys
 
 import hmac_verifiers as verifier
 from hmac_acceptance import diagnostic_rejection
+import hmac_protected_compiled as compiled
 
 ROOT = verifier.ROOT
 spec = importlib.util.spec_from_file_location(
@@ -91,6 +93,9 @@ def mutants(workspace, env):
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--native-kernel", choices=("sha256", "sha512", "keccak"))
+    args = parser.parse_args()
     if sys.platform != "linux":
         raise ValueError("protected HMAC native acceptance requires supported GNU/Linux")
     with verifier.cargo_environment.private_directory(ROOT) as raw:
@@ -115,7 +120,10 @@ def main():
             population(host.run(["cargo", "test", "--offline", "--test", "protected", *profile],
                                 consumer, env), 3)
         negatives(consumer, env)
+        compiled.negatives(host, consumer, env)
         mutants(workspace, env)
+        if args.native_kernel:
+            compiled.native(host, ROOT, workspace, consumer, env, args.native_kernel, population)
     print("Protected scalar HMAC packaged acceptance: PASS; author tests, qualification pending")
 
 

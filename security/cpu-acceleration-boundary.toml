@@ -2270,13 +2270,13 @@ sha256 = "b07235619595480d11f125a949cdeae95e96ee72f9bd43754e0328e679b28f7c"
 package = "brynja-crypto-cpu-std"
 path = "src/strict_hmac/mod.rs"
 status = "protected-scalar-hmac-session-development"
-sha256 = "adb0c0de41b8de3eedf8a287049220f4ce4828a609c8fff16720a39b634b5ae6"
+sha256 = "d2ca4d70c17781c4169d4179c8b430afb456c11b36de4a44089ea9b3b0fa5cc7"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/strict_hmac/types.rs"
 status = "protected-hmac-policy-and-bounds"
-sha256 = "a72541c73c82af1f16f5392f20aac9098bc1dc721b2fc2fcf12ab3a07e342fe5"
+sha256 = "cbdd73c60d86d2d1afbec1d72b0ab290f3eabcbe88ef2a43b76bded37644dc83"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -2288,10 +2288,34 @@ sha256 = "2e48e3594afd47fbee35f97b71cfc67939133a5ccae3a4385c8778f745a76b92"
 package = "brynja-crypto-cpu-std"
 path = "src/strict_hmac/tests.rs"
 status = "protected-hmac-model-and-fault-tests"
-sha256 = "1a54cdf67a41c6b7d6ce121fc16ff2f111ca9628ea4f64b6ce44fdbc01c6d5a8"
+sha256 = "223334e330a5743969b89de29216ec52c40444db85f7b026f2845b7fdbfcb0ac"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/strict_hmac/tests/native.rs"
 status = "protected-hmac-native-tests"
 sha256 = "2d76c1bdb735825862725285c1b8431fac1f580f4d33bb28bd887d67f518699c"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_hmac/compiled.rs"
+status = "protected-compiled-hmac-session-development"
+sha256 = "d5a9af24838a59efd73a7dd5ca785a760610fd274e4b2707a9636319369b97f5"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_hmac/compiled/worker.rs"
+status = "protected-compiled-hmac-worker"
+sha256 = "4d7ea61fe281b31fa486395c01a080e4ac5a89aacf9c5641274685fccad218ac"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_hmac/compiled/tests.rs"
+status = "protected-compiled-hmac-admission-tests"
+sha256 = "505150a6dac446f93691c8d127343df34ddcf00a2f193a7d38b932289fcca4a2"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/strict_hmac/compiled/tests/native.rs"
+status = "protected-compiled-hmac-native-tests"
+sha256 = "91889b512049fe1bbce0b6474132f869cbdbf342200a3c089f31b2635bd3e202"

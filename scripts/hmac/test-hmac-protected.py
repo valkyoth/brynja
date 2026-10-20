@@ -54,6 +54,49 @@ class ProtectedAcceptanceTests(unittest.TestCase):
                 for path, original in before.items():
                     self.assertEqual(path.read_bytes(), original)
 
+    def test_compiled_mutants_require_executed_behavioral_failure(self):
+        for mode in ("compile-error", "crash", "ignored", "behavioral"):
+            with tempfile.TemporaryDirectory() as raw:
+                root = Path(raw)
+                destination = root / "crates/brynja-crypto-cpu-std/src/strict_hmac"
+                shutil.copytree(checks.ROOT / "crates/brynja-crypto-cpu-std/src/strict_hmac", destination)
+                before = {path: path.read_bytes() for path in destination.rglob("*.rs")}
+                calls = []
+                def run(command, *_args, **kwargs):
+                    calls.append(command)
+                    if "--no-run" in command:
+                        if mode == "compile-error":
+                            raise RuntimeError("compile error")
+                        return subprocess.CompletedProcess(command, 0, "", "")
+                    self.assertFalse(kwargs["success"])
+                    self.assertEqual(command[-3:], ["--", "--ignored", "--exact"])
+                    output = ("test result: FAILED. 0 passed; 1 failed; 0 ignored;"
+                              if mode == "behavioral" else "test result: ok. 0 passed; 0 failed; 1 ignored;"
+                              if mode == "ignored" else "signal")
+                    return subprocess.CompletedProcess(command, 101, output, "")
+                with patch.object(checks.host, "run", side_effect=run):
+                    if mode == "behavioral":
+                        checks.compiled.mutants(checks.host, root, {}, ["cargo", "test"])
+                        self.assertEqual(len(calls), 8)
+                    else:
+                        with self.assertRaises((ValueError, RuntimeError)):
+                            checks.compiled.mutants(checks.host, root, {}, ["cargo", "test"])
+                for path, original in before.items():
+                    self.assertEqual(path.read_bytes(), original)
+
+    def test_native_selection_is_explicit_and_complete(self):
+        for arch, expected in (("x86_64", "+sha512,+avx2,+avx"),
+                               ("aarch64", "+neon,+sha3")):
+            with patch.object(checks.compiled.platform, "machine", return_value=arch):
+                env = checks.compiled.native_environment({"RUSTFLAGS": "-C target-cpu=native"}, "sha512")
+                self.assertEqual(env["RUSTFLAGS"], "-C target-feature=" + expected)
+                self.assertEqual(env["BRYNJA_HMAC_PROTECTED_KERNEL"], "sha512")
+                with self.assertRaises(ValueError):
+                    checks.compiled.native_environment({}, "portable")
+        with patch.object(checks.compiled.platform, "machine", return_value="riscv64"):
+            with self.assertRaises(ValueError):
+                checks.compiled.native_environment({}, "sha256")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -92,6 +92,7 @@ class = "modern-shared"
 publish = "crates-io"
 required = ["brynja-core", "brynja-hash-sha2", "brynja-hash-sha3"]
 optional = { hardened-execution = "brynja-crypto-cpu" }
+features = ["runtime-execution"]
 
 [packages.brynja-crypto-cpu]
 class = "cpu-backend"
@@ -104,7 +105,7 @@ features = ["static-execution", "runtime-execution", "sha256-batch"]
 class = "host-adapter"
 publish = "crates-io"
 required = ["brynja-crypto-cpu", "brynja-hash-sha2"]
-optional = { sponge-execution = "brynja-hash-sha3", protected-memory = "brynja-core", strict-kmac = "brynja-mac-kmac", strict-tuplehash = "brynja-hash-tuple" }
+optional = { sponge-execution = "brynja-hash-sha3", protected-memory = "brynja-core", strict-kmac = "brynja-mac-kmac", strict-tuplehash = "brynja-hash-tuple", hmac-execution = "brynja-mac-hmac" }
 features = ["runtime-execution", "sha256-batch"]
 
 [packages.brynja-pki]

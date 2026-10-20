@@ -12,6 +12,7 @@ include = ["Cargo.toml", "LICENSE-APACHE", "LICENSE-MIT", "README.md", "src/**/*
 [features]
 default = []
 hardened-execution = ["dep:brynja-crypto-cpu", "brynja-crypto-cpu/hardened-execution", "brynja-hash-sha2/hardened-execution", "brynja-hash-sha3/hardened-execution"]
+runtime-execution = ["hardened-execution", "brynja-crypto-cpu/runtime-execution", "brynja-hash-sha2/runtime-execution", "brynja-hash-sha3/runtime-execution"]
 
 [dependencies]
 brynja-core.workspace = true

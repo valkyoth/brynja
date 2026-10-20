@@ -1,10 +1,12 @@
-//! Explicit static-CPU HMAC over hardened, erasing hash owners only.
+//! Explicit CPU-authorized HMAC over hardened, erasing hash owners only.
 //!
-//! Enable `hardened-execution` and the complete build-wide target features.
-//! Deployment must ensure those instructions and OS register state remain
-//! available for the owner's lifetime. This API does not detect CPU features,
-//! pin threads or guarantee safe VM migration. Use the portable `crate::Hmac`
-//! when that deployment guarantee cannot be established.
+//! Static constructors require `hardened-execution` and the complete build-wide
+//! target features. Runtime constructors require `runtime-execution` and an
+//! existing platform authority; they do not require globally enabled target
+//! features. Both require CPU instructions and OS register state to remain
+//! available for the owner's lifetime. This leaf does not detect features,
+//! pin threads or guarantee safe VM migration. Use portable `crate::Hmac`
+//! when the applicable deployment guarantee cannot be established.
 //!
 //! No preferred-route or failure-driven fallback, ordinary hash import, generic
 //! callback, state export or accumulated-message-length query is provided.
@@ -21,10 +23,13 @@ mod tests;
 
 use crate::{Error, SecretTag, Tag, Verification, engine::Engine};
 use adapter::Adapter;
+use backends::Source;
+#[cfg(feature = "runtime-execution")]
+pub use brynja_crypto_cpu::runtime_execution::Authority as RuntimeAuthority;
 pub use brynja_crypto_cpu::static_execution::{Authority, Kernel};
 use retained::Retained;
 
-/// Sealed supported identity for borrowed static CPU execution.
+/// Sealed supported identity for borrowed static or runtime CPU execution.
 pub trait Algorithm<'a>: crate::Algorithm + backends::Backend<'a> {}
 impl<'a, A: crate::Algorithm + backends::Backend<'a>> Algorithm<'a> for A {}
 
@@ -52,7 +57,7 @@ impl<'a, A: Algorithm<'a>> Hmac<'a, A> {
     /// Requires this authority; every required hash owner is admitted before
     /// reading key bytes. No error causes portable fallback.
     pub fn from_static(owner: &'a Authority, key: &[u8]) -> Result<Self, Error> {
-        Self::create(owner, key, A::TAG_BYTES)
+        Self::create(Source::Static(owner), key, A::TAG_BYTES)
     }
 
     /// Selects an exact whole-byte tag prefix before accepting a key.
@@ -64,10 +69,34 @@ impl<'a, A: Algorithm<'a>> Hmac<'a, A> {
         if tag_bytes.checked_mul(8).ok_or(Error::TagLength)? > A::TAG_BITS {
             return Err(Error::TagLength);
         }
-        Self::create(owner, key, tag_bytes)
+        Self::create(Source::Static(owner), key, tag_bytes)
     }
 
-    fn create(owner: &'a Authority, key: &[u8], tag_bytes: usize) -> Result<Self, Error> {
+    /// Borrows already established platform-wide authority, not a copied report.
+    /// Prefer the safe hosted adapter; creating low-level runtime authority
+    /// requires the provider to uphold its CPU/OS migration contract.
+    #[cfg(feature = "runtime-execution")]
+    pub fn from_runtime(
+        owner: &'a brynja_crypto_cpu::runtime_execution::Authority,
+        key: &[u8],
+    ) -> Result<Self, Error> {
+        Self::create(Source::Runtime(owner), key, A::TAG_BYTES)
+    }
+
+    /// Runtime authority with an exact, preselected whole-byte tag prefix.
+    #[cfg(feature = "runtime-execution")]
+    pub fn from_runtime_with_tag_length(
+        owner: &'a brynja_crypto_cpu::runtime_execution::Authority,
+        key: &[u8],
+        tag_bytes: usize,
+    ) -> Result<Self, Error> {
+        if tag_bytes.checked_mul(8).ok_or(Error::TagLength)? > A::TAG_BITS {
+            return Err(Error::TagLength);
+        }
+        Self::create(Source::Runtime(owner), key, tag_bytes)
+    }
+
+    fn create(owner: Source<'a>, key: &[u8], tag_bytes: usize) -> Result<Self, Error> {
         A::validate()?;
         if !crate::policy::valid_tag_length(A::TAG_BYTES, tag_bytes) {
             return Err(Error::TagLength);
@@ -85,7 +114,7 @@ impl<'a, A: Algorithm<'a>> Hmac<'a, A> {
         let engine = Engine::new_with(key, tag_bytes, || states.next().ok_or(Error::SecretMemory))?;
         Ok(Self {
             engine: Retained::new(engine),
-            kernel: owner.report().kernel,
+            kernel: owner.kernel(),
             _local: core::marker::PhantomData,
         })
     }

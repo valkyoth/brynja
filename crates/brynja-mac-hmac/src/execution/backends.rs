@@ -3,10 +3,48 @@ use crate::{Error, Fips202BitString, Sha2BitString};
 use brynja_hash_sha2::hardened_execution as sha2;
 use brynja_hash_sha3::hardened_execution as sha3;
 
+/// Internal borrowed source; never creates authority from reports or flags.
+#[derive(Clone, Copy)]
+pub enum Source<'a> {
+    Static(&'a Authority),
+    #[cfg(feature = "runtime-execution")]
+    Runtime(&'a brynja_crypto_cpu::runtime_execution::Authority),
+}
+
+impl<'a> Source<'a> {
+    pub(super) fn kernel(self) -> super::Kernel {
+        match self {
+            Self::Static(owner) => owner.report().kernel,
+            #[cfg(feature = "runtime-execution")]
+            Self::Runtime(owner) => owner.report().kernel,
+        }
+    }
+    fn sha2(self) -> Result<sha2::Execution<'a>, Error> {
+        match self {
+            Self::Static(owner) => sha2::Execution::from_static(owner).map_err(sha2_error),
+            #[cfg(feature = "runtime-execution")]
+            Self::Runtime(owner) => {
+                sha2::Execution::from_runtime(owner.session().map_err(Error::Backend)?)
+                    .map_err(sha2_error)
+            }
+        }
+    }
+    fn sha3(self) -> Result<sha3::KeccakSession<'a>, Error> {
+        match self {
+            Self::Static(owner) => sha3::KeccakSession::from_static(owner).map_err(Error::Backend),
+            #[cfg(feature = "runtime-execution")]
+            Self::Runtime(owner) => {
+                sha3::KeccakSession::from_runtime(owner.session().map_err(Error::Backend)?)
+                    .map_err(Error::Backend)
+            }
+        }
+    }
+}
+
 // Kept in a private module: downstream code cannot substitute a hash owner.
 pub trait Backend<'a>: crate::Algorithm {
     type CpuState;
-    fn create(owner: &'a Authority) -> Result<Self::CpuState, Error>;
+    fn create(owner: Source<'a>) -> Result<Self::CpuState, Error>;
     fn update_cpu(state: &mut Self::CpuState, input: &[u8]) -> Result<(), Error>;
     fn finish_cpu(
         state: Self::CpuState,
@@ -54,7 +92,7 @@ macro_rules! backend {
     ($name:ident, $module:ident, $bits:ident, $create:expr, $error:ident, $digest:expr) => {
         impl<'a> Backend<'a> for crate::$name {
             type CpuState = $module::$name<'a>;
-            fn create(owner: &'a Authority) -> Result<Self::CpuState, Error> {
+            fn create(owner: Source<'a>) -> Result<Self::CpuState, Error> {
                 ($create)(owner)
             }
             fn update_cpu(state: &mut Self::CpuState, input: &[u8]) -> Result<(), Error> {
@@ -83,8 +121,7 @@ macro_rules! sha2_backend {
             $name,
             sha2,
             Sha2BitString,
-            |owner| sha2::$name::new(sha2::Execution::from_static(owner).map_err(sha2_error)?)
-                .map_err(sha2_error),
+            |owner: Source<'a>| sha2::$name::new(owner.sha2()?).map_err(sha2_error),
             sha2_error,
             sha2_digest
         );
@@ -97,10 +134,7 @@ macro_rules! sha3_backend {
             $name,
             sha3,
             Fips202BitString,
-            |owner| sha3::$name::new(
-                sha3::KeccakSession::from_static(owner).map_err(Error::Backend)?
-            )
-            .map_err(sha3_error),
+            |owner: Source<'a>| sha3::$name::new(owner.sha3()?).map_err(sha3_error),
             sha3_error,
             sha3_digest
         );
@@ -120,14 +154,10 @@ sha3_backend!(Sha3_512);
 
 impl<'a, const T: u16> Backend<'a> for crate::Sha512T<T> {
     type CpuState = sha2::Sha512T<'a>;
-    fn create(owner: &'a Authority) -> Result<Self::CpuState, Error> {
+    fn create(owner: Source<'a>) -> Result<Self::CpuState, Error> {
         let parameter =
             brynja_hash_sha2::Sha512TBits::new(T).map_err(|_| Error::AlgorithmParameter)?;
-        sha2::Sha512T::new(
-            parameter,
-            sha2::Execution::from_static(owner).map_err(sha2_error)?,
-        )
-        .map_err(sha2_error)
+        sha2::Sha512T::new(parameter, owner.sha2()?).map_err(sha2_error)
     }
     fn update_cpu(state: &mut Self::CpuState, input: &[u8]) -> Result<(), Error> {
         state.update(input).map_err(sha2_error)

@@ -9,14 +9,12 @@ import tomllib
 from pathlib import Path
 from cpu_boundary_backends import BACKENDS, STRICT_COMPILED_SOURCES, MACOS_RESIDENT_SOURCES, MACOS_RESIDENT_FEATURES
 from cpu_boundary_windows import WINDOWS_ENCLAVE_SOURCES
-
-
 POLICY = Path("security/cpu-acceleration-boundary.toml")
 CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "820af900ad45e36a8397c96bde094157c65460fe73c6b4e052e9ebb0a089c72f"
+EXPECTED_POLICY_SHA256 = "e6084b4ee271f5ac1bd9beca58cab6896d161f2710bada1e5bd250e620eedddb"
 FORBIDDEN_CONSUMERS = (
     "brynja-tls",
     "brynja-tls12",
@@ -111,6 +109,7 @@ SOURCE_STATUS = {
     (CPU, "src/runtime_execution/operations.rs"): "runtime-kat-and-operation-routing",
     (CPU, "src/runtime_execution/tests.rs"): "runtime-authority-tests",
     (DETECTOR, "src/execution/mod.rs"): "hosted-execution-selection",
+    (DETECTOR, "src/execution/hmac.rs"): "opt-in-hardened-hmac-adapter",
     (DETECTOR, "src/execution/features.rs"): "complete-hosted-feature-bundles",
     (DETECTOR, "src/execution/platform.rs"): "system-feature-proof-boundary",
     (DETECTOR, "src/execution/tests.rs"): "hosted-execution-tests",
@@ -273,6 +272,7 @@ def validate_packages(root: Path) -> None:
                 "brynja-core": {"workspace": True, "optional": True}}:
         fail("no_std CPU package permits only its opt-in first-party clearing dependency")
     if detector.get("features") != {"default": [],
+            "hmac-execution": ["runtime-execution", "dep:brynja-mac-hmac", "brynja-mac-hmac/runtime-execution"],
             **MACOS_RESIDENT_FEATURES,
             "protected-memory": ["dep:brynja-core"],
             "strict-sha2": ["protected-memory", "brynja-hash-sha2/general-sha512-t"],
@@ -290,7 +290,7 @@ def validate_packages(root: Path) -> None:
             "keccak-batch": ["brynja-crypto-cpu/keccak-batch", "dep:brynja-hash-sha3", "brynja-hash-sha3/batch-execution"], "runtime-execution": ["brynja-crypto-cpu/runtime-execution"],
             "sponge-execution": ["runtime-execution", "dep:brynja-hash-sha3", "brynja-hash-sha3/runtime-execution"], "sha256-batch": ["brynja-crypto-cpu/sha256-batch", "brynja-hash-sha2/batch-execution"], "sha512-batch": ["brynja-crypto-cpu/sha512-batch", "brynja-hash-sha2/batch512-execution"]}:
         fail("host detector default feature set drifted")
-    if set(detector.get("dependencies", {})) != {CPU, SHA2, SHA3, "brynja-core", "brynja-mac-kmac", "brynja-hash-tuple"} or any(detector['dependencies'][name] != {'workspace': True, 'optional': True} for name in (SHA3, 'brynja-core', 'brynja-mac-kmac', 'brynja-hash-tuple')):
+    if set(detector.get("dependencies", {})) != {CPU, SHA2, SHA3, "brynja-core", "brynja-mac-kmac", "brynja-hash-tuple", "brynja-mac-hmac"} or any(detector['dependencies'][name] != {'workspace': True, 'optional': True} for name in (SHA3, 'brynja-core', 'brynja-mac-kmac', 'brynja-hash-tuple', 'brynja-mac-hmac')):
         fail("host detector dependency boundary drifted")
     if sha2.get("features") != {
         "default": [], "cpu": ["dep:brynja-crypto-cpu"], "general-sha512-t": [],

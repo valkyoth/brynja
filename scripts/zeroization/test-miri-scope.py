@@ -180,7 +180,7 @@ def main() -> int:
     status, selected_commands = run_profile("--selected")
     assert status == 2 and not selected_commands
     status, commands = run_profile("--full")
-    assert status == 0 and len(commands) == 97
+    assert status == 0 and len(commands) == 98
     for suffix in ('--lib cpu::scratch::tests', '--lib cpu::secret::tests',
                    '--test hardened_execution bounded_portable_cleanup_smoke'):
         assert sum('brynja-legacy-md5 --features hardened-execution ' + suffix in c for c in commands) == 1

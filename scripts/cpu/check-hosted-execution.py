@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[2]
 CPU = 'brynja-crypto-cpu'
 HOST = 'brynja-crypto-cpu-std'
 PACKAGES = ('brynja-core', 'brynja-hash-core', 'brynja-hash-sha2', 'brynja-hash-sha3',
-            'brynja-mac-kmac', 'brynja-hash-tuple', CPU, HOST)
+            'brynja-mac-kmac', 'brynja-hash-tuple', 'brynja-mac-hmac', CPU, HOST)
 FIXTURE = 'assurance/hosted-cpu-execution'
 REVIEW = ROOT / 'security/hosted-cpu-execution-reviewed.json'
 COMMAND = 'python3 scripts/cpu/check-hosted-execution.py'
@@ -33,6 +33,7 @@ def validate(write=False):
         raise ValueError('CPU execution features changed')
     if manifests[CPU].get('dependencies') != {'brynja-core': {'workspace': True, 'optional': True}} or manifests[HOST].get('features') != {
             'default': [],
+            'hmac-execution': ['runtime-execution', 'dep:brynja-mac-hmac', 'brynja-mac-hmac/runtime-execution'],
             **MACOS_RESIDENT_FEATURES,
             'protected-memory': ['dep:brynja-core'],
             'strict-sha2': ['protected-memory', 'brynja-hash-sha2/general-sha512-t'],
@@ -260,6 +261,58 @@ pub fn classification_probe(session: &Session<'_>) {{ let _ = {call}; }}
     print('Ten packaged raw-state/block classification bypasses rejected')
 
 
+def hmac_consumer(consumer, env, extra):
+    """Exercise the optional adapter using extracted archives, not source paths."""
+    manifest = consumer / 'Cargo.toml'
+    library = consumer / 'src/lib.rs'
+    test = consumer / 'tests/hmac.rs'
+    original, source = manifest.read_text(), library.read_text()
+    test.parent.mkdir(exist_ok=True)
+    if test.exists():
+        raise ValueError('unexpected hosted HMAC fixture collision')
+    version = tomllib.loads((ROOT / 'crates/brynja-mac-hmac/Cargo.toml').read_text())['package']['version']
+    try:
+        manifest.write_text(original.replace(
+            'features = ["runtime-execution"]', 'features = ["hmac-execution"]').replace(
+            '[dependencies]\n',
+            f'[dependencies]\nbrynja-mac-hmac = {{ version = "={version}", default-features = false, features = ["runtime-execution"] }}\n'))
+        # This fixture is external to the crate archive by design.
+        test.write_text((ROOT / 'crates' / HOST / 'tests/hmac.rs').read_text().replace(
+            '#![cfg(feature = "hmac-execution")]\n', ''))
+        for profile in ([], ['--release']):
+            result = run(['cargo', 'test', '--offline', '--test', 'hmac', *profile, *extra],
+                         consumer, env)
+            if 'test result: ok. 2 passed; 0 failed; 1 ignored;' not in result.stdout:
+                raise ValueError('packaged hosted HMAC population changed')
+        probe = '''use brynja_crypto_cpu_std::execution::Authority;
+use brynja_mac_hmac::{Sha256, execution::Hmac};
+pub fn borrow(owner: &Authority) -> Option<Hmac<'_, Sha256>> {
+    owner.hmac::<Sha256>(b"key").unwrap()
+}
+'''
+        library.write_text(probe)
+        run(['cargo', 'check', '--lib', '--offline', *extra], consumer, env)
+        library.write_text(probe.replace(
+            "owner: &Authority) -> Option<Hmac<'_, Sha256>>",
+            "owner: Authority) -> Option<Hmac<'static, Sha256>>"))
+        result = run(['cargo', 'check', '--lib', '--offline', *extra], consumer, env,
+                     success=False)
+        if 'error[E0515]' not in result.stderr:
+            raise ValueError('hosted owner escape rejected for an unrelated reason')
+        library.write_text(probe)
+        manifest.write_text(manifest.read_text().replace(
+            'features = ["hmac-execution"]', 'features = ["runtime-execution"]'))
+        result = run(['cargo', 'check', '--lib', '--offline', *extra], consumer, env,
+                     success=False)
+        if 'error[E0599]' not in result.stderr or 'hmac' not in result.stderr:
+            raise ValueError('hosted HMAC feature absence rejected for an unrelated reason')
+    finally:
+        manifest.write_text(original)
+        library.write_text(source)
+        test.unlink()
+    print('Packaged hosted HMAC: debug/release selection passed; owner escape and feature absence rejected')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--write-review', action='store_true')
@@ -294,6 +347,7 @@ def main():
         run(['cargo', 'clippy', '--offline', '--all-targets', *extra, '--',
              '-A', 'clippy::chunks_exact_to_as_chunks', '-D', 'warnings'], consumer, env)
         classification_negatives(consumer, env, extra)
+        hmac_consumer(consumer, env, extra)
         if not args.qemu:
             compiled_mutations(workspace, env)
         else:

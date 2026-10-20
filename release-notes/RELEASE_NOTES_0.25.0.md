@@ -103,7 +103,8 @@ Status: in development; no tag, publication or qualification claim.
   is terminal because the leaf's operation guard has already cleared its owner.
 - Real local SHA-NI narrow SHA-2 and AVX2 Keccak comparisons cover byte/bit
   messages, long keys, truncation, output errors and revocation. Dedicated
-  SHA-512 and Arm execution remain pending, not inferred from compilation.
+  SHA-512 and Arm execution were initially pending; the M2 Pro follow-up below
+  supplies author-operated Arm execution, not independent qualification.
 - Extracted-package checks add twelve positive accelerated identities and 66
   diagnostic-checked misuse probes. Four instruction-free lifecycle tests and
   four compiled behavioral mutants exercise retained-state failure handling.
@@ -113,12 +114,39 @@ Status: in development; no tag, publication or qualification claim.
   protected/resident HMAC, compiler cleanup and timing qualification remain work,
   and none of these author tests substitutes for independent review.
 
+### Hosted HMAC execution follow-up
+
+- Added default-off `runtime-execution` to the HMAC leaf and `hmac-execution`
+  to the hosted CPU adapter. The new `Authority::hmac` factories borrow existing
+  platform authority and use the same hardened hash owners as the static path;
+  no detector, raw kernel, ordinary hash or cleanup implementation changed.
+- `Ok(None)` reports portable selection before key processing. Once an
+  accelerated owner is selected, wrong-operation, tag-policy, startup or
+  revocation failures remain errors, including under `Prefer`; they never
+  become a request to fall back. The existing platform migration limits apply.
+- On an Apple M2 Pro, all three static hash routes passed debug/release tests.
+  Hosted generic builds (without global target features) also passed all ten
+  named algorithms and general /129 and /511, including truncation, retained
+  revocation and clearing output after failure. These were author-operated
+  development tests; dedicated x86 SHA-512 and independent qualification remain
+  pending. The Mac log is retained locally, not used as a release receipt.
+- Extracted HMAC packages reject 66 static and 68 runtime API/lifetime probes.
+  Extracted hosted packages exercise portable/unavailable behavior in debug
+  and release and reject authority escape and access without the hosted feature.
+  The new optional dependency remains exact, first-party and default-off;
+  workspace tests reject 34 feature-graph mutations.
+- The fifteenth HMAC Miri task covers hosted portable/unavailable selection and
+  passed. ASan/LSan passed 54 tests with mandatory fatal leak detection; the
+  hardware-only hosted test is explicitly ignored there and executed on the Mac.
+  Rust 1.90.0/1.99.1 tests and scoped Clippy passed. No full old-family sweep or
+  HMAC-wide Miri campaign was repeated.
+
 ### Still required
 
 1. Close remaining modern profile and precise bit/key/tag policies, plus the
    error/fault and no_std consumer contracts. General SHA-512/t now has a
    portable implementation under the existing 128-bit HMAC minimum.
-2. Finish qualification and hosted selection for accelerated hash routes and
+2. Finish qualification for accelerated hash routes and
    protected/resident HMAC composition without weakening host-memory boundaries;
    finish facade integration and required API/profile/requirement inventories.
 3. Extend the registered HMAC verifier tasks for the completed profiles and

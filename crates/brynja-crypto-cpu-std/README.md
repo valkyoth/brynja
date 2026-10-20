@@ -42,6 +42,7 @@ See the [compiled TupleHash API example](src/strict_tuplehash/compiled.rs).
 
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
+| Hosted hardened HMAC over SHA-2/SHA-3 | 🚧 Default-off `hmac-execution`; native M2 author tests; qualification pending | ❌ No |
 | Apple Silicon resident SHA-2/SHA-3, KMAC/TupleHash | 🚧 Separate opt-in scalar/Arm resident/clearing APIs; no dump exclusion; qualification pending | ❌ No |
 | Apple Silicon resident SHA-2/general-t and SHA-3/SHAKE/cSHAKE | 🚧 Scalar or explicit Arm SHA2/SHA512/Keccak; bit-aware, bounded output/cancellation; no dump-exclusion guarantee; qualification pending | ❌ No |
 | Apple Silicon resident SHA-2/Keccak independent-message batches | 🚧 Default-off resident workspace/output; explicit portable or required NEON, no fallback; no dump exclusion; qualification pending | ❌ No |

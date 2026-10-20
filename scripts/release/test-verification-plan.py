@@ -212,7 +212,7 @@ def runner_tests() -> None:
     assert run('kani', miri_only, '--approve-full', 'a' * 64) == 0
     assert executed == [('scripts/assurance/check-kani.sh --policy-only',)]
     assert run('miri', miri_only, '--approve-full', 'a' * 64) == 0
-    assert len(executed) == 576
+    assert len(executed) == 577
     assert run("repository", sample(public=True)) == 0
     assert any("md5-differential" in c[0] for c in executed)
     with patch.object(commands, "matrix_commands", side_effect=ValueError("unknown matrix")):

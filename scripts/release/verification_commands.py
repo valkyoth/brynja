@@ -102,6 +102,10 @@ def owners(command: str) -> set[str]:
                 raise ValueError(f"unclassified fixture command: {command}")
             return set(groups)
         packages = [argv[i + 1] for i, a in enumerate(argv[:-1]) if a == "-p"]
+        if (packages == ["brynja-crypto-cpu-std"] and "--test" in argv
+                and argv[argv.index("--test") + 1] == "hmac"):
+            # This integration belongs to HMAC; broad CPU tests retain all owners.
+            return {"hmac"}
         if packages:
             found = set()
             for package in packages:
@@ -112,6 +116,8 @@ def owners(command: str) -> set[str]:
             return found
         raise ValueError(f"unclassified Cargo command: {command}")
     path = argv[1] if argv[0] == "python3" else argv[0]
+    if path == "scripts/cpu/check-hosted-execution.py":
+        return CPU_INTEGRATIONS | {"hmac"}
     parts = Path(path).parts
     if len(parts) != 3 or parts[0] != "scripts":
         raise ValueError(f"unclassified script command: {command}")

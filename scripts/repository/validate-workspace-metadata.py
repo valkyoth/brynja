@@ -216,6 +216,7 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
         expected = strict_policy.FEATURES
     if name == "brynja-mac-hmac":
         expected["hardened-execution"] = ["dep:brynja-crypto-cpu", "brynja-crypto-cpu/hardened-execution", "brynja-hash-sha2/hardened-execution", "brynja-hash-sha3/hardened-execution"]
+        expected["runtime-execution"] = ["hardened-execution", "brynja-crypto-cpu/runtime-execution", "brynja-hash-sha2/runtime-execution", "brynja-hash-sha3/runtime-execution"]
     if name == "brynja-crypto-cpu":
         expected["sha256-hardened-batch"] = ["dep:brynja-core"]
         expected["sha512-hardened-batch"] = ["dep:brynja-core"]
@@ -226,6 +227,7 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
         expected["runtime-execution"] = ["static-execution"]
         expected["hardened-execution"] = ["static-execution", "dep:brynja-core"]
     if name == "brynja-crypto-cpu-std":
+        expected["hmac-execution"] = ["runtime-execution", "dep:brynja-mac-hmac", "brynja-mac-hmac/runtime-execution"]
         expected.update({"strict-sha2": ["protected-memory", "brynja-hash-sha2/general-sha512-t"], "strict-sha2-acceleration": ["strict-sha2", "brynja-hash-sha2/hardened-execution"], "strict-sha3": ["protected-memory", "dep:brynja-hash-sha3"], "strict-sha3-acceleration": ["strict-sha3", "brynja-hash-sha3/hardened-execution"], "strict-kmac": ["protected-memory", "dep:brynja-mac-kmac"], "strict-kmac-acceleration": ["strict-kmac", "brynja-mac-kmac/hardened-execution"], "strict-tuplehash": ["protected-memory", "dep:brynja-hash-tuple"], "strict-tuplehash-acceleration": ["strict-tuplehash", "brynja-hash-tuple/hardened-execution"]})
         expected.update({"strict-batch": ["protected-memory", "sha256-hardened-batch", "sha512-hardened-batch", "keccak-hardened-batch", "brynja-hash-sha2/general-sha512-t"], "sha256-hardened-batch": ["brynja-crypto-cpu/sha256-hardened-batch", "brynja-hash-sha2/hardened-batch-execution"]})
         expected["sha512-hardened-batch"] = ["brynja-crypto-cpu/sha512-hardened-batch", "brynja-hash-sha2/hardened-batch512-execution"]
@@ -440,6 +442,7 @@ def validate_resolved_mode(
         "brynja-hash-sha2",
     }
     expected_detector.update(("brynja-hash-sha3", "brynja-mac-kmac", "brynja-hash-tuple"))
+    if mode == "all-features": expected_detector.add("brynja-mac-hmac")
     if detector != expected_detector:
         raise ValueError("host CPU detector package graph drifted")
     parallel_executor = reachable_names(
@@ -453,6 +456,7 @@ def validate_resolved_mode(
         "brynja-hash-sha3",
     }
     expected_parallel_executor.update(("brynja-crypto-cpu", "brynja-crypto-cpu-std", "brynja-hash-sha2", "brynja-mac-kmac", "brynja-hash-tuple"))
+    if mode == "all-features": expected_parallel_executor.add("brynja-mac-hmac")
     if parallel_executor != expected_parallel_executor:
         raise ValueError("ParallelHash std executor package graph drifted")
     facade_policy.validate_isolation(modern, modern_edges, names,

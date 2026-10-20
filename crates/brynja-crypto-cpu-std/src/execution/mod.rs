@@ -1,4 +1,4 @@
-//! Explicit hosted selection for ordinary raw kernels, not complete hashes.
+//! Explicit hosted selection for raw kernels and opt-in hardened HMAC.
 //!
 //! Default hash constructors and the facade remain portable. Only documented
 //! system-wide AArch64 feature APIs authorize this hosted route. Generic x86,
@@ -13,7 +13,11 @@ pub use brynja_crypto_cpu::runtime_execution::{
 
 #[cfg(any(target_arch = "x86_64", target_arch = "aarch64", test))]
 mod features;
+#[cfg(feature = "hmac-execution")]
+mod hmac;
 mod platform;
+#[cfg(feature = "hmac-execution")]
+pub use hmac::HmacError;
 
 /// Explicit caller preference; no automatic process-global installation.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]

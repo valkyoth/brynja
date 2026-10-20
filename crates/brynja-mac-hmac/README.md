@@ -38,7 +38,8 @@ reviewed.** This leaf is not yet exposed through the modern or strict facades.
 | Streaming, long-key normalization, explicit byte truncation, verification | Initial implementation with author tests | No |
 | Typed public/secret tags; owned-memory destruction | Implemented; HMAC-specific compiler qualification pending | No |
 | Explicit static SHA-2/Keccak accelerated composition | Implemented behind `hardened-execution`; HMAC-specific qualification pending | No |
-| Hosted detection, SIMD batching and protected/resident sessions | Not implemented by this HMAC API | No |
+| Hosted CPU selection | Opt-in `brynja-crypto-cpu-std` HMAC bridge; native M2 author tests | No |
+| SIMD batching and protected/resident sessions | Not implemented by this HMAC API | No |
 | Canonical final-bit messages for the ten named algorithms | Implemented with author differential and lifecycle tests | No |
 | General SHA-512/t, t ≥ 128 and t < 512 except 384; exact full-bit tags | Portable implementation with author tests across 383 parameters | No |
 | General SHA-512/t below 128 bits | Rejected by HMAC's minimum-tag policy | Not an enabled profile |
@@ -68,10 +69,24 @@ Backend failure or recoverable unwinding drops both HMAC hash owners and makes
 the stream terminal. Only atomic SHA-2 length rejection preserves a stream;
 SHA-3 overflow is terminal because its hash owner has already been cleared.
 
-Author tests have exercised x86 SHA-224/256 and AVX2 Keccak composition locally.
-Dedicated SHA-512 and Arm execution remain pending; cross-compilation alone is
-not native qualification. Hosted detection, SIMD batching and protected/resident
-HMAC remain development work. No performance or protected-memory claim is made.
+Author tests have exercised x86 SHA-224/256 and AVX2 Keccak locally, and all
+three Arm routes on an M2 Pro (including wide SHA-2 and two general t widths).
+Dedicated x86 SHA-512 execution remains pending; AVX-512 alone is not SHA512.
+These runs do not constitute independent native qualification.
+
+The leaf's `runtime-execution` feature accepts an already established
+`execution::RuntimeAuthority`. Prefer the safe hosted bridge: enable
+`brynja-crypto-cpu-std/hmac-execution`, select its `execution::Authority`, then
+call `owner.hmac::<Sha256>(key)` or `owner.hmac_with_tag_length::<Sha256>(key, 16)`.
+`Ok(Some(stream))` is accelerated; `Ok(None)` means the owner explicitly selected
+portable execution before processing any key. Only `None` permits constructing
+portable HMAC. An error must never be treated as fallback, even in `Mode::Prefer`.
+The hosted detector retains its existing system-wide CPU/OS trust limits;
+generic x86 remains unavailable when migration safety cannot be established.
+No new feature detector or unsafe platform entry was added.
+
+SIMD batching and protected/resident HMAC remain development work.
+No performance or protected-memory claim is made.
 
 ## API examples
 
@@ -170,6 +185,8 @@ and rejects 66 ownership, authority-lifetime and API misuse probes. Four retaine
 owner lifecycle tests and four compiled mutations cover backend failure,
 unwinding, atomic length rejection and SHA-3's terminal overflow mapping.
 These generic lifecycle tests do not execute CPU instructions.
+The runtime-enabled extracted API also rejects 68 misuse probes, including
+escaping runtime authority and substituting static authority at runtime entry.
 
 Native route tests are explicitly ignored in generic runs. On a deployment
 known to support SHA-NI, SSE2, AVX and AVX2, execute the narrow SHA-2 and Keccak

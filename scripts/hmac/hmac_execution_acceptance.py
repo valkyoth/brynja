@@ -51,13 +51,14 @@ def lifecycle(roots, directory, environment):
     print("HMAC retained execution: 4 debug/release lifecycle tests; 4 compiled mutants rejected")
 
 
-def check(consumer, environment, roots):
+def check(consumer, environment, roots, *, runtime=False):
     source = consumer / "src/lib.rs"
     manifest = consumer / "Cargo.toml"
     original_source, original_manifest = source.read_text(), manifest.read_text()
+    feature = "runtime-execution" if runtime else "hardened-execution"
     enabled = original_manifest.replace(
         'brynja-mac-hmac={version="=0.1.0", default-features=false}',
-        'brynja-mac-hmac={version="=0.1.0", default-features=false, features=["hardened-execution"]}')
+        'brynja-mac-hmac={version="=0.1.0", default-features=false, features=["' + feature + '"]}')
     if enabled == original_manifest:
         raise ValueError("missing extracted HMAC dependency")
     prefix = '#![no_std]\nuse brynja_mac_hmac::{*, execution::{Hmac as CpuHmac, Authority}};\n'
@@ -83,6 +84,11 @@ def check(consumer, environment, roots):
             "{CpuHmac::from_static(owner, key)}"
             for index, a in enumerate(ALGORITHMS))
         positive += "\npub fn tag<'o>(mac: CpuHmac<Sha256>, out: &'o mut [u8]) -> Result<Tag<'o, Sha256>, Error> {mac.finalize_tag(out)}"
+        if runtime:
+            positive += "\n".join(
+                f"pub fn r{index}<'a>(owner: &'a execution::RuntimeAuthority, key: &[u8]) -> Result<CpuHmac<'a, {a}>, Error> "
+                "{CpuHmac::from_runtime(owner, key)}"
+                for index, a in enumerate(ALGORITHMS))
         source.write_text(prefix + positive)
         run = result(command, consumer, environment)
         if run.returncode:
@@ -99,10 +105,15 @@ def check(consumer, environment, roots):
             ("pub fn p() {let _ = CpuHmac::<Sha256>::new(b\"key\");}", "E0599"),
             ("pub fn p<'a>(mac: CpuHmac<Sha256>, out: &'a mut [u8]) -> Result<Tag<'a, Sha224>, Error> {mac.finalize_tag(out)}", "E0308"),
         ])
+        if runtime:
+            cases.extend([
+                ("pub fn p(owner: execution::RuntimeAuthority) -> Result<CpuHmac<'static, Sha256>, Error> {CpuHmac::from_runtime(&owner, b\"key\")}", "E0515"),
+                ("pub fn p(owner: Authority) {let _ = CpuHmac::<Sha256>::from_runtime(&owner, b\"key\");}", "E0308"),
+            ])
         for code, diagnostic in cases:
             source.write_text(prefix + code)
             diagnostic_rejection(result(command, consumer, environment), diagnostic)
     finally:
         source.write_text(original_source)
         manifest.write_text(original_manifest)
-    print(f"HMAC packaged static-execution API: {len(ALGORITHMS)} positive identities; {len(cases)} rejected probes")
+    print(f"HMAC packaged {feature} API: {len(ALGORITHMS)} positive identities; {len(cases)} rejected probes")

@@ -5,9 +5,10 @@
     "assurance/hosted-cpu-execution/Cargo.toml": "9b3148af5e1776b115747a54321ede5f713c6184292508e8844f1bd0d367e146",
     "assurance/hosted-cpu-execution/src/lib.rs": "8944103431e0109fd526b49c38c9cbc947fc0b3cbfa843b3b635d4bb5b5bb2bf",
     "assurance/hosted-cpu-execution/src/main.rs": "bf344a7676e336018385fbe5a57180820ece196b6822c2a9fa9e5f377f26055d",
-    "crates/brynja-crypto-cpu-std/Cargo.toml": "40be259fd0e0d9fee475bcd770e76b2f1adf4e85ecc27174478f42110e4e846d",
+    "crates/brynja-crypto-cpu-std/Cargo.toml": "0e499353ddca6283cb1ab3e163416bf2ebc8601d0af658d44633c61eba8d52b9",
     "crates/brynja-crypto-cpu-std/src/execution/features.rs": "5d83a02cbd214df33d5088c173c8ef05bbbddcf30dcd14a72cad79bb6806b01a",
-    "crates/brynja-crypto-cpu-std/src/execution/mod.rs": "012d2edce7498f2293129c504daefdacc0f255f255354d47a531525cae58b983",
+    "crates/brynja-crypto-cpu-std/src/execution/hmac.rs": "12b48544a944875cadfd23c868abfcbc46d3197c7263903ccf7681f26fdbbd8d",
+    "crates/brynja-crypto-cpu-std/src/execution/mod.rs": "8a2a576672fb4aedaaca7361bea6a0b7f1a72b5f1ede3d7a485b3a6d740de85d",
     "crates/brynja-crypto-cpu-std/src/execution/platform.rs": "777c14162432b633fc9ce13e4bd8ef397eb6258c9abf2d38a9cf0a04e44e2b19",
     "crates/brynja-crypto-cpu-std/src/execution/tests.rs": "3ad2aff3118163b8ce6f71d5c48caaf76a1116bdc8e04112edea27382ee57269",
     "crates/brynja-crypto-cpu-std/src/keccak_batch/mod.rs": "0f8824a6322ec67e09e4c238c9b8749944adab513ffacd6c58afcbd9b0ab0b0d",
@@ -337,8 +338,8 @@
     "crates/brynja-crypto-cpu/src/x86_sha512/secret.rs": "333d5588c1e3ff4f9a0ea5ab9584fa9f1342452ebb4b01ad17d9982df8c6c2a7",
     "crates/brynja-crypto-cpu/src/x86_sha512/words.rs": "f77a10d0138bb2c2855dbfb62b10195e0b0a302b452fc62b3f225adef4d8ee12",
     "docs/hosted-cpu-execution.md": "ee95ea12465819e9d071196d39497b7245b94589f3060b3c48e48af960fe978a",
-    "scripts/checks.sh": "d1bc624210a95d8a4d45d6119dc7df229c38e1d5be6385ec013c3235a02f2508",
-    "scripts/cpu/check-hosted-execution.py": "05c40d7c72890f5e9904470c3233cca7e46aa0b1ed309819b2028d399e0d15e9",
+    "scripts/checks.sh": "f819403dbeafa57746dc23870e1f923c04864a4e5f4e34d53369dae1dcce27d7",
+    "scripts/cpu/check-hosted-execution.py": "0557a21da87c8bfc34ae8b7ae8f68e8905add49efdc34db07f71fcfcd5179c3d",
     "scripts/cpu/cpu_boundary_backends.py": "d5d214aaf9da4130a8e0f0278861c8eb57a5b3f5253a2a3a527265735f8b9105",
     "scripts/cryptography/check-macos-resident-batch-codegen.py": "3ee0058ea1f14c4cfeb7508a32c23e7e178127a75ed10b01eacbf7f854284e9f",
     "scripts/cryptography/check-macos-resident-batch-package.py": "f489af7d3999396acf6a39986e4a8542b22776fcb4865bc6e1772623a73639c9",
@@ -350,7 +351,7 @@
     "scripts/cryptography/test-macos-resident-batch-package.py": "77ef591543bab197b0d45f4d0eedf34588e27f4e69dbd905f258b07333020ef0",
     "scripts/repository/darwin_resident_abi.py": "b6ec7a57b01f4d01d2cd62e8b3dde75eaf6c152b087554d6ada0b41db5475af4",
     "scripts/repository/unsafe_policy.py": "23060b00850f848084eee4798f4664b4c7310a52e2d338115dcc52412779fad4",
-    "scripts/zeroization/check-zeroization-miri.sh": "4aec4f31bb9d0b363c9a19c6d647a196379c3183b19850102bab52a16597dbc2",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "333553482e6d6e0d5852457118e9f4ee430ef384b18df53c357aad51cb6487ab"
+    "scripts/zeroization/check-zeroization-miri.sh": "9197769ae08f4de9182fade12090c30539a57d6a1a3478dd2bc666bfbcb58484",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "94814f2d552295d2161fdedb4b6b0ee1bd23457073236dc4a3b0494d436508f2"
   }
 }

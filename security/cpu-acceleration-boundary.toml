@@ -405,7 +405,13 @@ sha256 = "b1a323cc7cc5a1d97e71d0b59ad9497aa8e31931989d2feab982f591a632bfba"
 package = "brynja-crypto-cpu-std"
 path = "src/execution/mod.rs"
 status = "hosted-execution-selection"
-sha256 = "012d2edce7498f2293129c504daefdacc0f255f255354d47a531525cae58b983"
+sha256 = "8a2a576672fb4aedaaca7361bea6a0b7f1a72b5f1ede3d7a485b3a6d740de85d"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/execution/hmac.rs"
+status = "opt-in-hardened-hmac-adapter"
+sha256 = "12b48544a944875cadfd23c868abfcbc46d3197c7263903ccf7681f26fdbbd8d"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"

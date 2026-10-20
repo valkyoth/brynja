@@ -90,6 +90,7 @@ def main():
         hmac_acceptance.mutants(roots, consumer, environment)
         hmac_faults.check(roots, directory, environment)
         hmac_execution_acceptance.check(consumer, environment, roots)
+        hmac_execution_acceptance.check(consumer, environment, roots, runtime=True)
         hmac_execution_acceptance.lifecycle(roots, directory, environment)
 
 

@@ -21,7 +21,15 @@ class Layout:
     scratch_kind: str
 
 
-def layout(identity):
+def layout(identity, profile="runtime"):
+    require(profile in ("runtime", "static"), "unknown accelerated feature layout")
+    if profile == "static":
+        if identity.startswith("sha3_"):
+            return Layout(1792, 1760, 864, 1723, 2, 624, "memory", "keccak")
+        general = identity.startswith("general")
+        return Layout(4032 if general else 4000, 4016 if general else 3984,
+                      2000 if general else 1984, 3971 if general else 3955,
+                      2, 800, "sha2", "scratch")
     if identity.startswith("sha3_"):
         return Layout(1792, 1760, 864, 1440, 2, 624, "memory", "keccak")
     general = identity.startswith("general")
@@ -53,9 +61,31 @@ def leaf(symbol):
     return None
 
 
-def initial(identity, route, present, compiler="1.99.1"):
-    shape = layout(identity)
+def initial(identity, route, present, compiler="1.99.1", profile="runtime"):
+    shape = layout(identity, profile)
     require(compiler in ("1.90.0", "1.99.1"), "unreviewed compiler layout")
+    if profile == "static":
+        require(route in range(16), "invalid static owner population")
+        # Two independent boolean niches and two independent SHA-2
+        # Portable/Cpu pointer niches. Explore this conservative superset even
+        # though HMAC static admission requires Cpu; this is not a fallback
+        # claim. SHA-3 owns scratch unconditionally. These pointer values are
+        # metadata only, never interpreted as usable addresses.
+        memory, events = {}, set()
+        for index, base in enumerate((0, shape.stride)):
+            health = (route >> index) & 1
+            memory[base + (859 if shape.core_kind == "memory" else 1971)] = ("i8", health)
+            events.add((shape.core_kind, base + shape.core))
+            if shape.core_kind == "sha2":
+                active = (route >> (index + 2)) & 1
+                memory[base + 64] = ("ptr", bool(active))
+                if active:
+                    events.add((shape.scratch_kind, base + 80))
+            else:
+                events.add((shape.scratch_kind, base))
+        if not present:
+            memory = {shape.discriminator: ("i8", 2)}
+        return memory, frozenset(events) if present else frozenset()
     empty = 3 if compiler == "1.90.0" and shape.core_kind == "sha2" else shape.empty
     memory = {shape.discriminator: route if present else empty}
     if not identity.startswith("sha3_"):
@@ -67,6 +97,16 @@ def initial(identity, route, present, compiler="1.99.1"):
                              (shape.scratch_kind, base))
     ) if present else frozenset()
     return memory, expected
+
+
+def metadata(memory, offset, kind):
+    require(offset in memory, "unexpected cleanup discriminator load")
+    value = memory[offset]
+    if isinstance(value, tuple):
+        require(value[0] == kind, "cleanup metadata load width/type changed")
+        return ("nonnull", value[1]) if kind == "ptr" else value[1]
+    require(kind == "i64", "runtime discriminator width changed")
+    return value
 
 
 def helper(symbol, definitions, aliases):
@@ -102,8 +142,8 @@ def walk(body, parameter, base, memory, attempted, definitions, aliases, depth=0
             allocation = re.fullmatch(rf"({SSA}) = alloca \[(\d+) x i8\], align \d+", line)
             gep = re.fullmatch(
                 rf"({SSA}) = getelementptr inbounds(?: nuw)? i8, ptr ({SSA}), i64 (\d+)", line)
-            load = re.match(rf"({SSA}) = load i64, ptr ({SSA}),", line)
-            compare = re.fullmatch(rf"({SSA}) = icmp (eq|ne) i64 ({SSA}), (-?\d+)", line)
+            load = re.match(rf"({SSA}) = load (i8|i64|ptr), ptr ({SSA}),", line)
+            compare = re.fullmatch(rf"({SSA}) = icmp (eq|ne) (i8|i64|ptr) ({SSA}), (-?\d+|null)", line)
             call = re.search(rf"\b(call|invoke)\b.*@{SYMBOL}\(", line)
             if allocation:
                 require(size and int(allocation[2]) == size and allocation[1] not in values,
@@ -113,13 +153,20 @@ def walk(body, parameter, base, memory, attempted, definitions, aliases, depth=0
                 require(values.get(gep[2], (None,))[0] == "ptr", "unknown cleanup pointer base")
                 values[gep[1]] = ("ptr", values[gep[2]][1] + int(gep[3]))
             elif load:
-                pointer = values.get(load[2])
-                require(pointer and pointer[0] == "ptr" and pointer[1] in memory,
+                pointer = values.get(load[3])
+                require(pointer and pointer[0] == "ptr",
                         "unexpected cleanup discriminator load")
-                values[load[1]] = memory[pointer[1]]
+                values[load[1]] = metadata(memory, pointer[1], load[2])
             elif compare:
-                require(isinstance(values.get(compare[3]), int), "unknown cleanup condition")
-                equal = values[compare[3]] == int(compare[4])
+                value = values.get(compare[4])
+                if compare[3] == "ptr":
+                    require(isinstance(value, tuple) and value[0] == "nonnull"
+                            and compare[5] == "null", "unknown cleanup pointer condition")
+                    equal = not value[1]
+                else:
+                    require(isinstance(value, int) and compare[5] != "null",
+                            "unknown cleanup condition")
+                    equal = value == int(compare[5])
                 values[compare[1]] = equal if compare[2] == "eq" else not equal
             elif call:
                 symbol = call[2].strip('"')
@@ -210,11 +257,12 @@ def walk(body, parameter, base, memory, attempted, definitions, aliases, depth=0
     return results
 
 
-def cancellation(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind"):
-    shape = layout(identity)
-    for route in (0, 1):
+def cancellation(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind",
+                 profile="runtime"):
+    shape = layout(identity, profile)
+    for route in ((0, 1) if profile == "runtime" else range(16)):
         for present in (False, True):
-            memory, expected = initial(identity, route, present, compiler)
+            memory, expected = initial(identity, route, present, compiler, profile)
             for _, done in walk(body, "%state", 0, memory, frozenset(), definitions, aliases,
                                 expected=expected, size=shape.size, panic=panic):
                 require(done == expected, "missing/wrong accelerated core or CPU scratch cleanup")

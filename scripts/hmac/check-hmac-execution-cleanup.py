@@ -12,18 +12,22 @@ import hmac_execution_final as final
 import hmac_execution_wrapper as wrapper
 import hmac_execution_admission as admission
 import hmac_execution_construct as construct
+import hmac_execution_profiles as profiles
 import hmac_verifiers as verifier
 
 ROOT = verifier.ROOT
 FIXTURE = ROOT / "assurance/hmac-execution-cleanup/Cargo.toml"
 
 
-def emit(directory, compiler, target, panic, fixture=FIXTURE):
+def emit(directory, compiler, target, panic, fixture=FIXTURE, profile="runtime"):
+    common.require(profile in ("runtime", "static"), "unknown compiler feature profile")
+    profiles.validate(verifier, fixture, directory, compiler, target, profile)
     env = verifier.environment(directory)
     env["CARGO_PROFILE_RELEASE_PANIC"] = panic
+    features = [] if profile == "runtime" else ["--no-default-features"]
     verifier.run(["cargo", "+" + compiler, "rustc", "--manifest-path", str(fixture),
                   "--locked", "--offline", "--release", "--lib", "--target", target,
-                  "--", "--emit=mir,llvm-ir,asm"], env)
+                  *features, "--", "--emit=mir,llvm-ir,asm"], env)
     result = []
     for suffix in ("mir", "ll", "s"):
         files = list((directory / "target" / target / "release/deps").glob(
@@ -47,14 +51,15 @@ def emitted(llvm, operations=("cancel", "update_cancel")):
     return functions, definitions, aliases
 
 
-def validate_retained(llvm, compiler="1.99.1", panic="unwind"):
+def validate_retained(llvm, compiler="1.99.1", panic="unwind", profile="runtime"):
     common.require(compiler in ("1.90.0", "1.99.1") and panic in ("abort", "unwind"),
                    "unreviewed accelerated compiler/panic profile")
     functions, definitions, aliases = emitted(llvm)
     for identity in common.IDENTITIES:
-        cleanup.cancellation(functions[identity, "cancel"], identity, definitions, aliases, compiler, panic)
+        cleanup.cancellation(functions[identity, "cancel"], identity, definitions, aliases,
+                             compiler, panic, profile)
         update.check(functions[identity, "update_cancel"], identity, definitions, aliases,
-                     compiler, panic)
+                     compiler, panic, profile)
 
 
 def validate(llvm, compiler="1.99.1", panic="unwind"):

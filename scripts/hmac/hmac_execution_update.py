@@ -30,15 +30,15 @@ def update_symbol(symbol, identity):
     return any(re.fullmatch(pattern, symbol) for pattern in patterns)
 
 
-def check(body, identity, definitions, aliases, compiler, panic):
-    shape = cleanup.layout(identity)
+def check(body, identity, definitions, aliases, compiler, panic, profile="runtime"):
+    shape = cleanup.layout(identity, profile)
     graph = common.blocks(body)
     allocations = dict((name, int(width)) for name, width in re.findall(
         rf"({SSA}) = alloca \[(\d+) x i8\], align \d+", body))
     total_updates = total_observers = exits = 0
-    for route in (0, 1):
+    for route in ((0, 1) if profile == "runtime" else range(16)):
         for present in (False, True):
-            memory, expected = cleanup.initial(identity, route, present, compiler)
+            memory, expected = cleanup.initial(identity, route, present, compiler, profile)
             # Allocations carry independent discriminants, but copies transfer
             # the same logical inner/outer obligations, not new logical owners.
             queue = [(next(iter(graph)), 0, {"%state": ("state", 0)},
@@ -68,9 +68,10 @@ def check(body, identity, definitions, aliases, compiler, panic):
                     allocation = re.fullmatch(rf"({SSA}) = alloca \[(\d+) x i8\], align \d+", line)
                     gep = re.fullmatch(
                         rf"({SSA}) = getelementptr inbounds(?: nuw)? i8, ptr ({SSA}), i64 (\d+)", line)
-                    load = re.match(rf"({SSA}) = load i64, ptr ({SSA}),", line)
+                    load = re.match(rf"({SSA}) = load (i8|i64|ptr), ptr ({SSA}),", line)
+                    pointer_compare = re.fullmatch(rf"({SSA}) = icmp (eq|ne) ptr ({SSA}), null", line)
                     compare = re.fullmatch(rf"({SSA}) = icmp (?:samesign )?(eq|ne|ugt) i(8|64) ({SSA}), (-?\d+)", line)
-                    store = re.match(rf"store i64 (-?\d+), ptr ({SSA}),", line)
+                    store = re.match(rf"store (i8|i64) (-?\d+), ptr ({SSA}),", line)
                     call = re.search(rf"\b(call|invoke)\b.*(@{SYMBOL}|%observer)\(", line)
                     if allocation:
                         require(int(allocation[2]) in (shape.engine, shape.size)
@@ -81,9 +82,13 @@ def check(body, identity, definitions, aliases, compiler, panic):
                         root, offset = pointer(gep[2])
                         values[gep[1]] = (root, offset + int(gep[3]))
                     elif load:
-                        root, offset = pointer(load[2])
-                        require(offset in storage[root], "unreviewed update discriminator load")
-                        values[load[1]] = storage[root][offset]
+                        root, offset = pointer(load[3])
+                        values[load[1]] = cleanup.metadata(storage[root], offset, load[2])
+                    elif pointer_compare:
+                        value = values.get(pointer_compare[3])
+                        require(isinstance(value, tuple) and value[0] == "nonnull",
+                                "unknown update pointer condition")
+                        values[pointer_compare[1]] = not value[1] if pointer_compare[2] == "eq" else value[1]
                     elif compare:
                         value = values.get(compare[4])
                         require(value is not None, "undefined update comparison operand")
@@ -96,12 +101,12 @@ def check(body, identity, definitions, aliases, compiler, panic):
                         else:
                             require(False, "unreviewed concrete comparison")
                     elif store:
-                        root, offset = pointer(store[2])
-                        empty_memory, _ = cleanup.initial(identity, route, False, compiler)
+                        root, offset = pointer(store[3])
+                        empty_memory, _ = cleanup.initial(identity, route, False, compiler, profile)
                         require(root == "state" and offset == shape.discriminator
-                                and int(store[1]) == empty_memory[offset],
+                                and int(store[2]) == cleanup.metadata(empty_memory, offset, store[1]),
                                 "unexpected accelerated owner/discriminator write")
-                        storage[root][offset] = int(store[1])
+                        storage[root][offset] = empty_memory[offset]
                     elif call:
                         symbol = call[2][1:].strip('"') if call[2].startswith("@") else "%observer"
                         if symbol == "llvm.memcpy.p0.p0.i64":

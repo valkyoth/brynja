@@ -4,15 +4,20 @@ Development evidence, not independent review or release qualification.
 
 `assurance/hmac-execution-cleanup` instantiates real public accelerated HMAC
 consumers for ten named SHA-2/SHA-3 algorithms and general SHA-512/t at 129 and
-511 bits. It enables `runtime-execution`, which also enables static execution.
+511 bits. By default it enables `runtime-execution`, which also enables static execution.
 The fixture borrows authority; it does not create authority or execute an instruction kernel.
-The static-only feature configuration is not qualified by this fixture.
+The separate static-only build uses `--no-default-features`; its narrower checked
+scope is described below. Neither configuration is release qualification.
 
 ```sh
 python3 scripts/hmac/check-hmac-execution-cleanup.py
 python3 scripts/hmac/check-hmac-execution-cleanup.py --target aarch64-unknown-linux-gnu
 python3 scripts/hmac/check-hmac-execution-cleanup.py --target aarch64-apple-darwin
 python3 scripts/hmac/test-hmac-execution-cleanup.py
+python3 scripts/hmac/check-hmac-static-cleanup.py
+python3 scripts/hmac/check-hmac-static-cleanup.py --target aarch64-unknown-linux-gnu
+python3 scripts/hmac/check-hmac-static-cleanup.py --target aarch64-apple-darwin
+python3 scripts/hmac/test-hmac-static-cleanup.py
 ```
 
 The checker emits MIR, LLVM IR and assembly under Rust 1.90.0 and 1.99.1,
@@ -20,9 +25,54 @@ with `panic=abort` and `panic=unwind`. The graph inspection is of optimized
 LLVM IR, not a second independent MIR/assembly proof. Both AArch64 targets
 can be cross-compiled; inspection is not native execution or CPU qualification.
 
+## Separate static-only build
+
+Both drivers inspect Cargo's actual resolved feature graph before compilation.
+The static driver requires `hardened-execution` and rejects `runtime-execution`
+in the fixture or any dependency. The runtime driver requires both features in
+each of the four accelerated owner crates. Missing, duplicate or registry owner
+identities reject. This prevents feature unification from silently substituting
+the already-reviewed runtime layout for a static-only build.
+
+The static fixture has 108 consumers (no runtime constructor). Its checker
+currently covers 96: 24 cancellation/update consumers, plus scratch and complete
+Engine handoffs in the 72 public finalizer wrappers. It checks actual outlined
+destructors, retained/empty states, normal/error and recoverable unwind paths,
+full copy extents, split scalar moves, original input/output arguments and
+whole-destination clearing on empty secret-output rejection.
+
+Static-only layout differs materially: one-byte boolean niches identify empty
+retained engines, and SHA-2's underlying portable/CPU enum uses a nullable pointer
+niche. Each inner/outer boolean and pointer-niche combination is explored
+independently. This is a conservative superset of static HMAC admission, **not**
+permission to fall back or evidence of a portable runtime execution. A present
+CPU variant must dispatch its scratch destructor; the absent CPU variant must
+not invent a scratch owner. Both hash cores remain obligations. SHA-3 scratch
+is unconditional. Metadata loads require the reviewed exact type and offset;
+pointer values are only nullness facts, never addresses available for dereference.
+Borrowed hash update implementations remain callee contracts, including
+preservation of the selected execution variant; this is not a transitive
+re-proof of hash updates. The opaque observer has no state reference under the
+safe-Rust non-aliasing premise.
+
+The shared walkers keep feature layouts explicit; no global layout override or
+rewriting of emitted IR is used. Regression tests reject wrong-width metadata,
+altered helper bodies/leaf identities, missing/short copies, forged scalar
+fragments, diverted observer unwind, missing empty-output clearing and feature
+contamination. Seven private-source mutants must compile and then reject:
+forgotten cancellation, retained error leakage, skipped update-error cleanup,
+observer unwind leakage and suppressed inner-digest/tag/comparison clearing.
+Each restored baseline must pass.
+
+**Still pending in the static-only build:** constructor admission/iterator and
+returned-owner transfers, and the consuming Engine/adapter owner graph after
+the checked public-wrapper handoff. Runtime-enabled coverage of those graphs
+below must not be reported as static-only coverage. Hosted protected/resident
+worker placement remains a separate pending boundary.
+
 ## Checked boundary
 
-There are 120 consumers. Twenty-four cover cancellation and consuming update-then-cancel for each
+The runtime-enabled build has 120 consumers. Twenty-four cover cancellation and consuming update-then-cancel for each
 of the twelve identities. The latter inserts an opaque observer after successful
 update, exercising a caller's recoverable unwind.
 
@@ -141,8 +191,9 @@ erasure of physical source copies. The fixture's empty output-observer assembly
 is allowed only without an Engine-derived pointer. Unknown owner operations
 fail closed; compiler assumptions do not prune obligations.
 
-The constructor checks below are separate from this finalizer model. The
-static-only feature layout and protected/resident worker placement remain pending.
+The constructor checks below are separate from this finalizer model and apply
+to the runtime-enabled layout. The remaining static-only checks and
+protected/resident worker placement remain pending.
 
 ## Constructor admission and state-pool handoff
 

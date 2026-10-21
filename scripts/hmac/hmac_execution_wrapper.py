@@ -16,12 +16,13 @@ VALUE = syntax.VALUE
 
 
 def check(body, identity, operation, definitions, aliases, compiler="1.99.1", route=0,
-          present=True):
+          present=True, profile="runtime"):
     require(identity in common.IDENTITIES and operation in syntax.OPERATIONS and route in (0, 1)
             and compiler in ("1.90.0", "1.99.1"), "invalid wrapper profile")
-    shape = cleanup.layout(identity)
-    # Resolve the actual implementation; the driver checks its owner/cleanup
-    # graph separately, for the same identity and both authority variants.
+    shape = cleanup.layout(identity, profile)
+    metadata_size = 1 if profile == "static" else 8
+    # Resolve the actual implementation. The runtime driver also checks its
+    # owner/cleanup graph; the static driver currently claims this handoff only.
     engine = scratch.consumer(body, operation, definitions, aliases)
     calls = [syntax.call(line.strip()) for line in body.splitlines()
              if re.search(r"\b(?:call|invoke)\b.*@", line) and not line.lstrip().startswith(";")]
@@ -38,8 +39,9 @@ def check(body, identity, operation, definitions, aliases, compiler="1.99.1", ro
     if present:
         initial.birth(("%state", 0), shape.engine, 0)
     else:
-        initial.constants[("%state", shape.discriminator, 8)] = (
-            2 if identity.startswith("sha3_") else 3 if compiler == "1.90.0" else -1)
+        initial.constants[("%state", shape.discriminator, metadata_size)] = (
+            2 if profile == "static" or identity.startswith("sha3_")
+            else 3 if compiler == "1.90.0" else -1)
     queue = [(next(iter(graph)), None, initial, False, frozenset())]
     visited, exits, dispatched = set(), 0, False
 
@@ -61,7 +63,7 @@ def check(body, identity, operation, definitions, aliases, compiler="1.99.1", ro
         require(state.done == state.born, "wrapper exits with undispatched Engine")
 
     def numerical(state, value):
-        if value == (0, shape.discriminator, 8):
+        if value == (0, shape.discriminator, metadata_size):
             require(0 not in state.done, "wrapper discriminator read after consumption")
             return route
         return value if isinstance(value, int) else None
@@ -85,7 +87,8 @@ def check(body, identity, operation, definitions, aliases, compiler="1.99.1", ro
             if load and owner(state, load[3]):
                 require(load[2], "wrapper owner pointer load/escape")
             if load and not present and address(load[3])[0] == "%state":
-                require(load[2] == "64" and address(load[3])[1] == shape.discriminator,
+                require(load[2] == str(8 * metadata_size)
+                        and address(load[3])[1] == shape.discriminator,
                         "empty wrapper reads absent Engine payload")
             provenance.evaluate(line, state, address, predecessor)
             compare = re.match("(" + VALUE + r") = icmp(?: samesign)? (eq|ne) i\d+ ("

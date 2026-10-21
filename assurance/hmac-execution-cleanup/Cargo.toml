@@ -7,5 +7,9 @@ publish = false
 
 [workspace]
 
+[features]
+default = ["runtime-execution"]
+runtime-execution = ["brynja-mac-hmac/runtime-execution"]
+
 [dependencies]
-brynja-mac-hmac = { path = "../../crates/brynja-mac-hmac", default-features = false, features = ["runtime-execution"] }
+brynja-mac-hmac = { path = "../../crates/brynja-mac-hmac", default-features = false, features = ["hardened-execution"] }

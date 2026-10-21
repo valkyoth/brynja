@@ -115,6 +115,7 @@ class ScopeTests(unittest.TestCase):
         self.assertEqual(commands.owners("python3 scripts/hmac/check-hmac-cleanup.py"), {"hmac"})
         self.assertEqual(commands.owners("python3 scripts/hmac/check-hmac-engine-cleanup.py"), {"hmac"})
         self.assertEqual(commands.owners("python3 scripts/hmac/check-hmac-execution-cleanup.py"), {"hmac"})
+        self.assertEqual(commands.owners("python3 scripts/hmac/check-hmac-static-cleanup.py"), {"hmac"})
         self.assertEqual(commands.owners(
             "python3 scripts/hmac/check-hmac-hosted-native.py --kernel sha256"), {"hmac"})
         for family in ("sha2", "sha3", "core", "static_cpu"):

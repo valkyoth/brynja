@@ -20,6 +20,7 @@ macro_rules! probes {
                 Hmac::from_static(owner, key)
             }
 
+            #[cfg(feature = "runtime-execution")]
             #[inline(never)]
             pub fn construct_runtime<'a>(
                 owner: &'a execution::RuntimeAuthority,

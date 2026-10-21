@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "5a91c7b61f63b712e1e1765acb0a0962af2d4aaaa8607569f731816aca4c8ff1",
+  "policy_sha256": "5a7e0868b1b272c2c5629118481e7b11f3aee2ae61c3872797b27dca58b56fc9",
   "schema": 2,
   "source_ledger_sha256": "7723f01765e12dac7c4df15b305035f634fb2c3923714b584c22e95928070816",
   "surfaces": [
@@ -127,8 +127,8 @@
       "test_target": "tests/surface/primitives.rs#hkdf"
     },
     {
-      "code_target": "crates/brynja-crypto/src/hmac.rs",
-      "disposition": "future-work",
+      "code_target": "crates/brynja-mac-hmac/src/lib.rs#Hmac",
+      "disposition": "implemented",
       "domain": "cryptography",
       "id": "algorithm.hmac",
       "kind": "semantic",
@@ -137,8 +137,8 @@
         "rfc:4231"
       ],
       "owner": "0.25.0",
-      "rationale": "HMAC-SHA-256 and HMAC-SHA-384 remain future first-party constant-time constructions.",
-      "test_target": "tests/surface/primitives.rs#hmac"
+      "rationale": "Sealed SHA-2/SHA-3 HMAC with byte/final-bit input, typed secret output and bounded composed-owner checks is implemented. Linux protected and Apple Silicon resident profiles are distinct. Independent review and native release reconciliation remain pending; this is not a constant-time proof or Windows enclave/legacy-HMAC claim.",
+      "test_target": "crates/brynja-mac-hmac/tests/vectors.rs#rfc4231_case1"
     },
     {
       "code_target": "crates/brynja-mac-kmac/src/lib.rs#KMAC_IMPLEMENTED",

@@ -273,8 +273,9 @@ The [composition inventory](../docs/hmac-development-inventory.md) records
 profiles and requirement-to-check links. Focused regressions reject untracked
 fields, missing operations/adapters, scratch-size/clearing drift and accidental
 promotion to global completion. These are source-level inventory checks, not
-compiler erasure or independent execution proofs; the global HMAC capability
-remains pending until its compiler-owner contract and qualification are closed.
+compiler erasure or independent execution proofs. Global owner registration
+was pending at this stage; the composed-owner reconciliation below records
+its later implementation without promoting release qualification.
 The leaf README now accurately records modern facade and Mac resident support.
 
 ## Focused scratch compiler follow-up
@@ -501,11 +502,25 @@ scope. The HMAC archive remains runtime-source-only. Capability tables now
 include the previously missing HMAC development rows without promoting their
 pending independent-review status.
 
+## Composed-owner registration
+
+The global API/secret-owner inventory now records HMAC as an implemented
+construction with two owned inner/outer hash states, consuming finalization
+handoffs and separate clearing scratch/output storage. It delegates to the
+registered SHA-2/SHA-3 owners and binds the existing eleven compiler-pipeline
+commands, including protected/resident hosted checks. It does **not** invent
+an `Engine::drop`/`wipe` method or register scratch as the complete HMAC owner.
+The original direct-destructor MIR checks retain their scope and behavior.
+
+Raw-byte review pins cover the HMAC implementation, composition fixtures and
+checker modules, including new files. Focused mutations reject altered field
+ownership, unsealed admission, missing delegated owners, dropped compiler
+commands, fake scratch/facade owners and qualification overclaims. These pins
+detect drift, not authenticity; registration is not a new execution receipt.
+No runtime, hash, kernel, dependency or cleanup implementation changed.
+
 ## Remaining qualification work
 
-- Reconcile HMAC's transitive inner/outer ownership with the global register's
-  direct-destructor contract, using the completed bounded compiler checks. Do
-  not add a synthetic wipe or describe scratch as the whole HMAC owner.
 - Reconcile final source-bound qualification and native route coverage,
   including the dedicated x86 SHA-512 limitation. The 17 retained timing
   observations cover 768 campaigns; no alarm is not a constant-time proof.

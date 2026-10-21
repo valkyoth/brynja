@@ -102,10 +102,27 @@ storage = "caller-owned-borrowed-and-transitive-fixed"
 output_classification = "typed-secret-owned"
 partial_failure_policy = "clear-complete-secret-destination"
 
+[[registered-secret-owner]]
+id = "registered.algorithm.hmac"
+capability = "algorithm.hmac"
+symbol = "crates/brynja-mac-hmac/src/engine.rs#Engine"
+fields = ["inner:owned-secret-hash-state", "outer:owned-secret-hash-state", "tag_bytes:public-preselected-policy"]
+temporaries = ["pad:Scratch<144>", "normalized:Scratch<64>", "inner_digest:Scratch<64>", "tag:Scratch<64>", "difference:Scratch<1>", "borrowed-input:caller-owned-copy-risk"]
+cleanup_model = "transitive-owned-fields-and-consuming-handoffs"
+delegated_owners = ["registered.algorithm.sha2", "registered.algorithm.sha512-t", "registered.algorithm.sha3-shake"]
+cleanup_bindings = ["crates/brynja-mac-hmac/src/engine.rs#Engine::finish", "crates/brynja-mac-hmac/src/algorithms.rs#Hash", "crates/brynja-mac-hmac/src/general.rs#Sha512T", "crates/brynja-mac-hmac/src/execution/adapter.rs#Adapter", "crates/brynja-mac-hmac/src/scratch.rs#Scratch::drop", "crates/brynja-core/src/secret_memory.rs#OwnedSecretRegion"]
+compiler_checks = ["python3 scripts/hmac/check-hmac-cleanup.py", "python3 scripts/hmac/check-hmac-cleanup.py --target aarch64-unknown-linux-gnu", "python3 scripts/hmac/check-hmac-engine-cleanup.py", "python3 scripts/hmac/check-hmac-engine-cleanup.py --target aarch64-unknown-linux-gnu", "python3 scripts/hmac/check-hmac-execution-cleanup.py", "python3 scripts/hmac/check-hmac-execution-cleanup.py --target aarch64-unknown-linux-gnu", "python3 scripts/hmac/check-hmac-static-cleanup.py", "python3 scripts/hmac/check-hmac-static-cleanup.py --target aarch64-unknown-linux-gnu", "python3 scripts/hmac/check-hmac-hosted-cleanup.py", "python3 scripts/hmac/check-hmac-hosted-cleanup.py --target aarch64-unknown-linux-gnu", "python3 scripts/hmac/check-hmac-hosted-cleanup.py --target aarch64-apple-darwin"]
+compiler_scope = "bounded-owned-storage-and-dispatch-not-whole-frame-erasure"
+qualification = "native-release-reconciliation-and-independent-review-pending"
+evidence = ["crates/brynja-mac-hmac/tests/vectors.rs", "crates/brynja-mac-hmac/tests/lifecycle.rs", "scripts/hmac/check-hmac-package.py", "scripts/hmac/check-hmac-protected.py", "scripts/hmac/check-hmac-strict.py", "scripts/hmac/check-hmac-inventory.py", "scripts/hmac/test-hmac-owner-contract.py", "scripts/hmac/check-hmac-cleanup.py", "scripts/hmac/check-hmac-engine-cleanup.py", "scripts/hmac/check-hmac-execution-cleanup.py", "scripts/hmac/check-hmac-static-cleanup.py", "scripts/hmac/check-hmac-hosted-cleanup.py"]
+storage = "transitive-fixed-owners-with-separate-protected-or-resident-hosted-profiles"
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+
 [schema]
 version = 1
 milestone = "0.24.15"
-surface_register_sha256 = "1fcad28078a4855df46677a522c6bff63b06e3f4cafe5f8d21a1268fdfc71aca"
+surface_register_sha256 = "a9c277fd46da16baa60d94b333c9896e4997d45fe653ee83f4816241b3a66543"
 
 [api]
 dimensions = [
@@ -1139,7 +1156,7 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "8165165b23333692721d35542cab0119c27c99d24ac028bd3bd363d5ac5197ff"
+sha256 = "f95e8561f66f7b0c72a28c3720f09b05f474a5bd24364b89e7809da62a0384a2"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_operations.py"
@@ -1147,7 +1164,7 @@ sha256 = "7138ad8b49633b9aee89d4d722ff4402ec4562b719e2262361c20afcee15ef9b"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"
-sha256 = "c8d2b235478c797e1e7b8fd41bdd3e1e2da71e17e14ee30517342ef4418bb704"
+sha256 = "06ae88cd8e7573f3b3e9bb657724f4625a1285ecbbcb8048300d779ff6f6480b"
 
 [[reviewed-source]]
 path = "scripts/cryptography/check-secret-owner-compiler.py"
@@ -1167,7 +1184,7 @@ sha256 = "107bfea74f0dacc422e930332485ac3279a70a087fc74a30d3628196c676779d"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-api-profiles.py"
-sha256 = "1d112d1682c09a484f75dffcf30fe813c7150c0917e9407814a960acf648827a"
+sha256 = "e6e52771b5fc7baf955064b1982c5ddda1b49e5667ce1e7e6c061e666f7d11e8"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-mir-cleanup-flow.py"
@@ -1452,3 +1469,691 @@ sha256 = "036dc52cce7799735231c14490f88bd51056b225c45d340259193990cdd9c68f"
 [[reviewed-source]]
 path = "crates/brynja-mac-kmac/src/setup.rs"
 sha256 = "2753458ba00729f09991515926061de544a4ab3b21c0f03bf3c9d0f412c18bc5"
+
+[[reviewed-source]]
+path = "assurance/hmac-cleanup/Cargo.lock"
+sha256 = "bdd89368818cdf143cc8a27bdec7f86ab8ec781b19e1c38454019e41018af96d"
+
+[[reviewed-source]]
+path = "assurance/hmac-cleanup/Cargo.toml"
+sha256 = "56f2fac1946a7ca64cabfbc8f6879faea79ef5366884c38371b1ef7c8dfc62e9"
+
+[[reviewed-source]]
+path = "assurance/hmac-cleanup/src/lib.rs"
+sha256 = "abf2fc321571098f5489ddf45c9c71ac887b16022001472da41e010a0f544648"
+
+[[reviewed-source]]
+path = "assurance/hmac-engine-cleanup/Cargo.lock"
+sha256 = "3f62a76d83ee26cbe10ffd88b971c7324d1778ef60851de0f73d0639fe2dace7"
+
+[[reviewed-source]]
+path = "assurance/hmac-engine-cleanup/Cargo.toml"
+sha256 = "0fd8e1fcf51afb83f49140e956ff1368597ee27cfbb07bde6d77394111d24509"
+
+[[reviewed-source]]
+path = "assurance/hmac-engine-cleanup/src/lib.rs"
+sha256 = "b684774814a533dfa3d59ccfae6243b32812e805d0ce7b869f15e6c951b73990"
+
+[[reviewed-source]]
+path = "assurance/hmac-execution-cleanup/Cargo.lock"
+sha256 = "e2095da70cc9bf5732f6b28cb547366bb9766beca0aa0b7795cad53ac5c964e5"
+
+[[reviewed-source]]
+path = "assurance/hmac-execution-cleanup/Cargo.toml"
+sha256 = "52f1a99d40582adc306fea073f34b87279e3b0b8fb289bd205523823b63632b0"
+
+[[reviewed-source]]
+path = "assurance/hmac-execution-cleanup/src/lib.rs"
+sha256 = "2e688d5844c0bc35d8b5246a18a547bc93def2bb06cbdac27e43f03b04195241"
+
+[[reviewed-source]]
+path = "assurance/hmac-hosted-cleanup/Cargo.lock"
+sha256 = "1a218c16613a66a2277260b8ef751b50066387c094c4ff640677d591a5c2815b"
+
+[[reviewed-source]]
+path = "assurance/hmac-hosted-cleanup/Cargo.toml"
+sha256 = "ef2b0761468eb931ac28f0c277f7af815bedb4aad63beb3f56926381ac9aeb54"
+
+[[reviewed-source]]
+path = "assurance/hmac-hosted-cleanup/src/lib.rs"
+sha256 = "8962551cfff3589e503b9858b0c15b3700abf986006f65ae8ffdaf86328167ca"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto-cpu-std/src/execution/hmac.rs"
+sha256 = "12b48544a944875cadfd23c868abfcbc46d3197c7263903ccf7681f26fdbbd8d"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto-cpu-std/src/macos_resident/hmac/compiled.rs"
+sha256 = "20c586320cc866e5581553263cfa393de7b0f65d104e22416688f4f8f0a9e925"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto-cpu-std/src/macos_resident/hmac/compiled/tests.rs"
+sha256 = "4781f7985ae8bea77339a54609ae311985bc7ec0c524905de01b6b0984f499fa"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto-cpu-std/src/macos_resident/hmac/compiled/tests/native.rs"
+sha256 = "51a0d588e49b1a0f08189da72d499173d3bb7bcd4683a45a2f9bdd6f90a9bb5f"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto-cpu-std/src/macos_resident/hmac/compiled/worker.rs"
+sha256 = "de1da4bcea976d3a51601aee7a3fe49730f052cf1c8541b9bcaf60600f15a349"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto-cpu-std/src/macos_resident/hmac/mod.rs"
+sha256 = "94f61f906769c40110ac8d94777342c5cd1cb557cc7a5f314427287e3267d194"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto-cpu-std/src/macos_resident/hmac/tests.rs"
+sha256 = "9236224d878d9aa0925df9963386df83ad21c220ed734831df17de89297e5509"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto-cpu-std/src/macos_resident/hmac/tests/native.rs"
+sha256 = "236712097691de98229495186806250a0b033e2ab78839801807f8dbb9c45544"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto-cpu-std/src/macos_resident/hmac/types.rs"
+sha256 = "03d46ab9b942c9c5c5e9bf5e6da5199975b9b90a4b401af72732d08e8178328a"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto-cpu-std/src/macos_resident/hmac/worker.rs"
+sha256 = "2e48e3594afd47fbee35f97b71cfc67939133a5ccae3a4385c8778f745a76b92"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto-cpu-std/src/strict_hmac/compiled.rs"
+sha256 = "d5a9af24838a59efd73a7dd5ca785a760610fd274e4b2707a9636319369b97f5"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto-cpu-std/src/strict_hmac/compiled/tests.rs"
+sha256 = "505150a6dac446f93691c8d127343df34ddcf00a2f193a7d38b932289fcca4a2"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto-cpu-std/src/strict_hmac/compiled/tests/native.rs"
+sha256 = "91889b512049fe1bbce0b6474132f869cbdbf342200a3c089f31b2635bd3e202"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto-cpu-std/src/strict_hmac/compiled/worker.rs"
+sha256 = "4d7ea61fe281b31fa486395c01a080e4ac5a89aacf9c5641274685fccad218ac"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto-cpu-std/src/strict_hmac/mod.rs"
+sha256 = "d2ca4d70c17781c4169d4179c8b430afb456c11b36de4a44089ea9b3b0fa5cc7"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto-cpu-std/src/strict_hmac/tests.rs"
+sha256 = "223334e330a5743969b89de29216ec52c40444db85f7b026f2845b7fdbfcb0ac"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto-cpu-std/src/strict_hmac/tests/native.rs"
+sha256 = "2d76c1bdb735825862725285c1b8431fac1f580f4d33bb28bd887d67f518699c"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto-cpu-std/src/strict_hmac/types.rs"
+sha256 = "cbdd73c60d86d2d1afbec1d72b0ab290f3eabcbe88ef2a43b76bded37644dc83"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto-cpu-std/src/strict_hmac/worker.rs"
+sha256 = "2e48e3594afd47fbee35f97b71cfc67939133a5ccae3a4385c8778f745a76b92"
+
+[[reviewed-source]]
+path = "crates/brynja-mac-hmac/Cargo.toml"
+sha256 = "f54c324ef1774750ac8d68c6ea364d421b5d446ee718b43c7b5303a4d31ac040"
+
+[[reviewed-source]]
+path = "crates/brynja-mac-hmac/src/algorithms.rs"
+sha256 = "6d16628290a222ed0122e237565e7f489eae280943f4560c8bf1d0bdd3b8f782"
+
+[[reviewed-source]]
+path = "crates/brynja-mac-hmac/src/bits.rs"
+sha256 = "81d08e0474355a282df5983489a09d7996d7e6dd562080e45d30dc53a42cc342"
+
+[[reviewed-source]]
+path = "crates/brynja-mac-hmac/src/engine.rs"
+sha256 = "0eb6160dc1c9bf6bfcab6b4b97763e64253141d21023989983124e538400ab4e"
+
+[[reviewed-source]]
+path = "crates/brynja-mac-hmac/src/execution/adapter.rs"
+sha256 = "ae745dcf7f0749d9075a20b73e21a3a791dac409112b1945ea999e784be75bec"
+
+[[reviewed-source]]
+path = "crates/brynja-mac-hmac/src/execution/backends.rs"
+sha256 = "e2162cdc1dfdcbab2aa53a9bb427755437d353d86a71ea4010abfa0c47d215d8"
+
+[[reviewed-source]]
+path = "crates/brynja-mac-hmac/src/execution/mod.rs"
+sha256 = "b3cc250a71d6e76a2015664097eeb7e95170b910555dcd7d78adea6129937d9a"
+
+[[reviewed-source]]
+path = "crates/brynja-mac-hmac/src/execution/retained.rs"
+sha256 = "1286a911b62dec57c193136a5f61b88de5798ec97b244702fac7207f91d1c02e"
+
+[[reviewed-source]]
+path = "crates/brynja-mac-hmac/src/execution/tests.rs"
+sha256 = "549c1ce0e8f1f7d31eaba96e5dc94ad0328b7676413cfd4eff5e7b2a37f2b871"
+
+[[reviewed-source]]
+path = "crates/brynja-mac-hmac/src/general.rs"
+sha256 = "d07fafb7c3e5dfa9b89899bd84e6c3dbd3611d88ba46610f19b7759b9f19f3e6"
+
+[[reviewed-source]]
+path = "crates/brynja-mac-hmac/src/lib.rs"
+sha256 = "f2bff7440a9f087185e1afce3976c835ed0848de41483969024428bd04d44f6d"
+
+[[reviewed-source]]
+path = "crates/brynja-mac-hmac/src/output.rs"
+sha256 = "11d006b76f4ddcfd5b2374eb3244db930db6e54f065daf6417f324c4f6d8f4e4"
+
+[[reviewed-source]]
+path = "crates/brynja-mac-hmac/src/policy.rs"
+sha256 = "7189a43149860b2ede0ad2fd125ddcb600cf44098607baf85620f4c51298c99f"
+
+[[reviewed-source]]
+path = "crates/brynja-mac-hmac/src/scratch.rs"
+sha256 = "8912b2a06e6fab308eadc51aaadde95fff11db190580c510eaeec691e994e0f3"
+
+[[reviewed-source]]
+path = "crates/brynja-mac-hmac/tests/lifecycle.rs"
+sha256 = "78476cbbdb5566c1f9eb0e4c220e1ae6a5ad15011eb5247db39c38ea36ffacb1"
+
+[[reviewed-source]]
+path = "crates/brynja-mac-hmac/tests/vectors.rs"
+sha256 = "3675a288af2a84007cdd20685f53e61c5b32b32bdf4735e4d285bbba4389ab12"
+
+[[reviewed-source]]
+path = "scripts/cryptography/api_profile_render.py"
+sha256 = "55115b077c28947a30cabc699024146d0d57f6caf2a6b084f410d38fd816ec34"
+
+[[reviewed-source]]
+path = "scripts/cryptography/hmac_owner_contract.py"
+sha256 = "f9da1d8027c998da242468e9dd760cac0728d3e10226c8c2bfee3f6844fa1f45"
+
+[[reviewed-source]]
+path = "scripts/hmac/check-hmac-asan.py"
+sha256 = "d410a57262dc5e3b5f595064d51cd99cdfd5492d1149381ce9bb16dd47908b41"
+
+[[reviewed-source]]
+path = "scripts/hmac/check-hmac-bit-differential.py"
+sha256 = "fe20d7689809607916af37b987ce1a66d0c57734f5b617ff3bb76d97ddeea409"
+
+[[reviewed-source]]
+path = "scripts/hmac/check-hmac-cleanup.py"
+sha256 = "e860f9d381bb2df7411e11ae6a9a4690cc9626c13fea0c8de749b10328c18f9e"
+
+[[reviewed-source]]
+path = "scripts/hmac/check-hmac-differential.py"
+sha256 = "dc3368ce269a8146b7a6350aca38d330168d978c8a17cc2f9b04fd99ce17458f"
+
+[[reviewed-source]]
+path = "scripts/hmac/check-hmac-engine-cleanup.py"
+sha256 = "73948e72bed79ebd9a518c281d4c11a7330dbdec6ef7037737176edfa291828d"
+
+[[reviewed-source]]
+path = "scripts/hmac/check-hmac-execution-cleanup.py"
+sha256 = "96147048320d9968b6c810a15719be735df39a85a314060d22e5de6dd7d668e2"
+
+[[reviewed-source]]
+path = "scripts/hmac/check-hmac-facade.py"
+sha256 = "aea206f6eb2bcd4fffd879e90eaaecab5215062c816a90392a5fed9568578336"
+
+[[reviewed-source]]
+path = "scripts/hmac/check-hmac-general-differential.py"
+sha256 = "3ccc40913cc3985cf90ff261fa7fc36002e527c35d1046502c006f1cfa987409"
+
+[[reviewed-source]]
+path = "scripts/hmac/check-hmac-hosted-cleanup.py"
+sha256 = "1c0260f2ea67d532591b8c2028d5e92fa5cea1f80b98d281101b2fa171df1181"
+
+[[reviewed-source]]
+path = "scripts/hmac/check-hmac-hosted-native.py"
+sha256 = "73c48cb00e799e698b574d7615ffb6f40932df50ce2bb32327900b1d5ea669a1"
+
+[[reviewed-source]]
+path = "scripts/hmac/check-hmac-inventory.py"
+sha256 = "871e235a6fcde988ea623d29717e914ae9541a2b6baf84fd62bbb8e24f669fd2"
+
+[[reviewed-source]]
+path = "scripts/hmac/check-hmac-kani.py"
+sha256 = "1093f1edc2757bb5963d4f1fd5ab1b12e99a666d7c1f676a069c65158df63ad1"
+
+[[reviewed-source]]
+path = "scripts/hmac/check-hmac-package.py"
+sha256 = "1818bfa158eaa636ee058725560f50130aa5641e2cd818499f6708f0c6ba9470"
+
+[[reviewed-source]]
+path = "scripts/hmac/check-hmac-protected.py"
+sha256 = "ccf9d1f363ac433bbc1d878e10595f5e5efda12c144080dbb55445cb042fe861"
+
+[[reviewed-source]]
+path = "scripts/hmac/check-hmac-static-cleanup.py"
+sha256 = "54a891ee4f71a1c7f33d59611b4c99aa7d982efe2556b64970284c5f93f0b918"
+
+[[reviewed-source]]
+path = "scripts/hmac/check-hmac-strict.py"
+sha256 = "a73e29a6bf41e19331614738f98a1b9e9ac61cee21e595d232c813a12ca6cda2"
+
+[[reviewed-source]]
+path = "scripts/hmac/check-hmac-timing.py"
+sha256 = "c6635215b7e086d400340c9d7d6bc29d4f109a63be7e1b6083a338edbec533d6"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_acceptance.py"
+sha256 = "b27f8a3d44a974c477c938f64855a6143c58ba7da259fbe43e62ec456daf4a3f"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_adapter_native.py"
+sha256 = "69593a86afec7fafbda2c20e7fa693455fb4dfbc98c382a09fb7b3478c74a343"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_callee_identity.py"
+sha256 = "7cd0b562709d07f6c77ec043ef537d570601d6eedfa81423a9fde43e48ad9293"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_cleanup_codegen.py"
+sha256 = "72e1f2523518f1e553a968cb30994977df11e3e140fa38b401e09e858646f3dc"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_constructor_state.py"
+sha256 = "f4810aee4842e55a01f41e235898d399121a7c806f258b8473a6cd6464fa1610"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_constructor_tests.py"
+sha256 = "dfee766f0995175a20de81368ad5f101c29715055a9fcd6f4d0af8863120cd39"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_engine_codegen.py"
+sha256 = "7f9c49e6e73ef191e875b2008a871c112232cd5372bfbe0dd4a75505fc6f8b50"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_engine_construct.py"
+sha256 = "0aacb43c51818c41c9ded372ff782b6f7350ab5163295d16db249d284e3c11cf"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_engine_construct_state.py"
+sha256 = "e459a035dd4772b0ef1a94a9f7499cc3f530eeb33016d49d0d1b01658f9c41d2"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_engine_final.py"
+sha256 = "db346063c30aa4bab07a635b67f93729ac0edf37ce4015027ac8bac9282b33c7"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_engine_scratch.py"
+sha256 = "9fc33de31181b28f13179d9f0b5878935664b67f2f878a1c7985e3b4ebb05fc5"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_engine_update.py"
+sha256 = "a0c7947f77eff713feecc424129d302cc1f04b5d25132c908418cd923b0dd82f"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_execution_acceptance.py"
+sha256 = "e6974bf30ba8b2491a93b4e0ccedbb8a1a7cd440de14a512bd0ff789533b9b5c"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_execution_admission.py"
+sha256 = "a525d27f1b01e0bd5d41a66d71e11bb15b7295e9039055840d379d9a08115341"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_execution_admission_contracts.py"
+sha256 = "932fe3ee3a1bc19a58d0b5ce6ab35b813a6b5ad9cb3729fbe5eb943056b69e3a"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_execution_admission_tests.py"
+sha256 = "97c44419ab42c6414f484ff60e5d5579149b0bd0fdc62af6ecf1c4f2d000ca5a"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_execution_construct.py"
+sha256 = "3aaf629367a528d5bf77b1c2ba089f71e1c0030bc2e3c6d1696de962ee73be5d"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_execution_construct_contracts.py"
+sha256 = "3a7c07d96312fa26d800052860180e537963f0a6e96ba7bef2f730d5da690f11"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_execution_construct_state.py"
+sha256 = "4830727dbebcd10526ce814f8b60e889f4f7d58bfc48f75de82388f944ff20e7"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_execution_construct_tests.py"
+sha256 = "1147f7acf94b26a930397b2b2b31e9bb8d8b558cecc18fcfa57ea0bb69e30141"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_execution_drop.py"
+sha256 = "5703fc3b775c22657ea1a98f0cef43e7f4ac98d0b5a7025fa24df29131d3e873"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_execution_fault_tests.py"
+sha256 = "e1257691f023c7fd9c3d763ca62cda054707374cdee61e80d901a9fd2d911f47"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_execution_faults.py"
+sha256 = "05f0299cbc9eeba558cba41a084637cb68becdcf4ba42747aca47a571d28b735"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_execution_final.py"
+sha256 = "8c0aac03648df329db1c88c15e85d2b99a090545e424fddb5dc4d8c0d6f78629"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_execution_final_contracts.py"
+sha256 = "de4d17f7fbcdf96916665ba150d567a3d822f0d80394b8aedc635e1a90506302"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_execution_final_tests.py"
+sha256 = "62daf22398ab0af33eb1dc716a5e0c58f35ef2e5e0f8e7fed770ec6602a8926c"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_execution_iterator.py"
+sha256 = "17dbc2ba1649d013fe7703bb0bb365e836e44e052d527f2de4fec9dd60dac165"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_execution_profiles.py"
+sha256 = "e153b531047cd156f9689b37d210a0868fd48779890f31cb5530c1d4d21f03dd"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_execution_scratch.py"
+sha256 = "61f983bfbf326459f2299a18d364dca9c9ebf02b8d4bcda1886352b82b13348a"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_execution_scratch_tests.py"
+sha256 = "9667c28b810ef5e5dd8d91939cc8170086371fd545e34c05ce42589df0e2b575"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_execution_update.py"
+sha256 = "4b5e670b4e2e6a8f3319487383d9c23f3ea593c3953824b12dfd94c37b4cc66d"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_execution_wrapper.py"
+sha256 = "ac4226054cd3f8495ead6351c5dcde5f413c1f4a665002d0ebad987ac64954cd"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_execution_wrapper_tests.py"
+sha256 = "4c22a715a7ca619fa7b351e51ebf5de35f5709de0940be1b7f5fefe713039a81"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_faults.py"
+sha256 = "4baa45c2f31cbc5c060fb1b52f056b2a554ea245f2a1918b54fb17d0f7e3720c"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_authority.py"
+sha256 = "f87606d2a5320fa2d65570a71bd33212636413b1f89320beb2b4e599dad8ea0b"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_authority_tests.py"
+sha256 = "8a95ed7cd86d1414d2d328a4e007725360e9f9fab47b15a274e4b3a177c2caf3"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_buffers.py"
+sha256 = "b1b0a700482732f62c30b18a161e561684289ebcfc13a0716f00f3b03a4d386b"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_callee_admission.py"
+sha256 = "120f28817dbf225bc572ff48ed9ab3300b80b9662411cdeaa8df966869203bfa"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_capture.py"
+sha256 = "b40acef192229c39fe884c0326cd0fcb3085030e77f550cb756fa11ba6303248"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_capture_tests.py"
+sha256 = "1341ce0ac5b23d4d008ca2a634065f91c21a2d5470b5bbb435f6fb0277c3b4f7"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_capture_types.py"
+sha256 = "8724e1f757973efc6313a2bdc3bd56ece4c2f453b6d9ac4a072d06d57cd6ce4b"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_checkpoint_callees.py"
+sha256 = "c086b90efb08e82f50dd917fe2e3e04524cdc53fbf17e8138b38ac983c1adcd0"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_checkpoint_results.py"
+sha256 = "880d2ef4f2069e81709fd77c9fbe87e015547f6d15f968c0e3cfc57c0dfc0e09"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_checkpoint_tests.py"
+sha256 = "f1cc1481244bce8b33fcba9b2bff0849023c87b77f36a3e253be77149682acd9"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_checkpoints.py"
+sha256 = "2405964e003790536045b29af610bcc62596f9904b5f6da533193e87ddd18896"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_compiled.py"
+sha256 = "78a919309682eaea08fb38319dc4835419c6f796039649248d1f231eb896b9c5"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_compiled_callee_tests.py"
+sha256 = "5eb27c646087eca9574ac8cef2728d8dc926cc7ceffeb5c23e3900f5b8a5a509"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_constructor.py"
+sha256 = "f8925945e2dc5765fba3d325a59285b7a54e83527d37a31a7319c8ab04ea0f22"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_constructor_tests.py"
+sha256 = "518acaa6a8b90450d53b7f2b7d260791f393df57f8bfc4f7a5eb01b30a28c6be"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_consumer_prefix.py"
+sha256 = "790a23eacc04d7d37a83bc87e493e016d9416723a34c87442f46bf76e07fc85f"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_consumers.py"
+sha256 = "92b2f58d0b8f621b0d78e689cb3748286bcea559e08817b48cc9dfb453ea0a1c"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_contracts.py"
+sha256 = "455b4e0b6edf3591f8c2ed414a5f0d18cb691919a0d7bc5e1bfca1037462a14e"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_guard_paths.py"
+sha256 = "013cca5927d0a5f165089ff42add6a9ccc701e7c5b77c0f68ce221ffc480fb66"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_input.py"
+sha256 = "3c6bb00dd86eb014ff7d361aabcff59a13901fa847718ee9920f7bd6e4d70c0e"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_input_tests.py"
+sha256 = "8a23dab1a50c982feb22a6fab22d37eb4fc48d5713faaf3802d2c465ebbcd78e"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_keyed.py"
+sha256 = "4bc4fca05dc896cd14bdc80ad69f93795932c1d5750d34e9d761c2a68be9a1f5"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_keyed_tests.py"
+sha256 = "18dfe6d4888377c6c82b66733fc844b565fbfad9b968c9fe950803315631ab21"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_lifecycle.py"
+sha256 = "c040ce04ca2bdb47f14debb4cd3c3325c678b5b71a0637baf0a56a93e9dae8d2"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_loan_creation.py"
+sha256 = "11f0fe095cb680ff718f9c3c1831ce4dc970a57095f7c6d002ac0979b786ab0b"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_loan_flow.py"
+sha256 = "71da4f0a27e92227476a3e3f96058d805a07b191ca13907474c56a41b31b60e2"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_loan_resources.py"
+sha256 = "d347a1eefc1671d1c3a94fa22533fb1f7e94340b7fb3d7cb681ebb63fb92041f"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_loan_tests.py"
+sha256 = "c1691032c5d58e082e23414472e4ccdf6317cbb021b07223c32abbb46cce0179"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_loans.py"
+sha256 = "28099db699720d4b3bbc051ba5d443c1e65f7d1f59687608720f07b78d51f839"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_output.py"
+sha256 = "6d5480b1f65e3aa023c73ea33f2a548048150bd1e619963e55f10a8f047bd187"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_output_paths.py"
+sha256 = "d5420e6a9ba29d2ef1c293748db44f3f71b505f202fcf9da1ad6a306f08f8594"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_output_tests.py"
+sha256 = "e52229e68d32da752c2cdb11ffd5e29978a4d5918230bfedfeeb764eb5228d6d"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_placement.py"
+sha256 = "6659dfd36b86113bfe55084221063a862bd9287886b1f91ffd37c044ec75ec6d"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_retained_tests.py"
+sha256 = "de2b4571c13cd5839d7d56c96fcebafe738b4b9dc9d1fe52da77065cf912228b"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_scalar.py"
+sha256 = "b3eab90952df75064caede6cc075c9fc6e5a6eb77f641b123ae46d7c96134692"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_scalar_callee_tests.py"
+sha256 = "88acf516114c36e80d1ac4d2c167f63368a4ee7e1579f5d996dfc7266bc52b98"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_storage.py"
+sha256 = "b9f4b1c2dfa19d1fe36f837f866c983c51390022a143fa13e455fe5ae075641e"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_tail.py"
+sha256 = "b6365424c4d3bb6592a0ba7f4323c2be78128f777189d8d1e22c448a827953d8"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_tail_transfer.py"
+sha256 = "98e1a81cd5a4832ae043045f4230034a62e8bd73b71fcd39d53e24d52aff9cad"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_transaction.py"
+sha256 = "193c774f8151b18981664b8d342df57e15e13f95cd32acef65f1a6eaf342b405"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_transaction_tests.py"
+sha256 = "baae7df495e3185165ad736f58bd24c90b6858172e7c2dce0a8aac6777ee65fe"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_transaction_values.py"
+sha256 = "a62046b2c7df60a163425b02ee01d0331e5e6df1a1c9e474007ffb1034165b22"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_verify.py"
+sha256 = "5fa3af87e3c71423d27c10b6be74d03c472684d903a2d693f0339202edff4abf"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_hosted_verify_tests.py"
+sha256 = "f9e144bbe077673ce1bad748c1cc4e085563be3bac20b8d30c70affccbe61edd"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_inventory.py"
+sha256 = "a9fe29d6b6b664a96f815e697b40d70a304f646304d0fef2dd0040d2c7fef856"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_owner_profile.py"
+sha256 = "598d72fcdd00eab70fda2dff0c79f07577e143a5cf379e0585ef7828c5baf499"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_package.py"
+sha256 = "6dd827fa6561174974fee12a390db4ecac20651bbbecdf3d8b8b5db46620b239"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_protected_compiled.py"
+sha256 = "8067a696970ad7e8131ab599e44c7822c6b4d48567a7c8281155e6d82b35653f"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_static_construct.py"
+sha256 = "fccb9e9609d27bce7a31137e2c67319f304a7c0619265aa29bfdaa14b3d740a4"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_static_construct_tests.py"
+sha256 = "b641c7fec4bdb75e03cf1521d7f8f6276ca462bb5b49983b3bd4b1b37e1144c4"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_static_final_tests.py"
+sha256 = "78b41263aad792cf8753ee63d52ccf07e27f590694b7ed32190262aa3060051b"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_strict_cases.py"
+sha256 = "408a8e98212d74a27f53744ecb39a01fdf423258a8b09432b4419433009963f6"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_timing.py"
+sha256 = "436837518e212709cb1cd0065013c27d5e11013c8162a07d1168036e49fab726"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_timing_fixture_tests.py"
+sha256 = "81a173baa0868e41ed119ded5bcbdc5a6a5f6b190af51326e91c112d1f86c72f"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_timing_routes.py"
+sha256 = "d91d2640e7dc0267fe7562a64f77488c20b2fb5701a94ad73a32d148a0d3363f"
+
+[[reviewed-source]]
+path = "scripts/hmac/hmac_verifiers.py"
+sha256 = "f3e7c2c9f7adb0eb8299b749a24858197a5a4cc1699543eb6c4e7c0acba73d9e"
+
+[[reviewed-source]]
+path = "scripts/hmac/test-hmac-acceptance.py"
+sha256 = "6882626d852a960f357f7060e7af9fbd0ca056a14d6d06738df6126113f15196"
+
+[[reviewed-source]]
+path = "scripts/hmac/test-hmac-cleanup.py"
+sha256 = "3c1b6ddb9337cd0387a3f349c8635f130de00ef8f47b752f9ec18daa1e2bb9e5"
+
+[[reviewed-source]]
+path = "scripts/hmac/test-hmac-engine-cleanup.py"
+sha256 = "1f4593e757948b79beaed68256b2b090214885b8f009105c06ad2c2331113450"
+
+[[reviewed-source]]
+path = "scripts/hmac/test-hmac-execution-cleanup.py"
+sha256 = "bb75df580675cfd005b52ba9d428420b521ece2a83604a27583f37c203e09f18"
+
+[[reviewed-source]]
+path = "scripts/hmac/test-hmac-facade.py"
+sha256 = "416742c293e76bbcfebf623b707df17a9836989ff91181bfd7ef8160952ef62b"
+
+[[reviewed-source]]
+path = "scripts/hmac/test-hmac-hosted-cleanup.py"
+sha256 = "51f0c111095ee331ee344e30853186149ae4f2cc553a78c32acebcc0b79d27d8"
+
+[[reviewed-source]]
+path = "scripts/hmac/test-hmac-inventory.py"
+sha256 = "3fa4863acce873db56fde90a0fb9f9cef6954ea964c92c026041f67fa4a31c0b"
+
+[[reviewed-source]]
+path = "scripts/hmac/test-hmac-owner-contract.py"
+sha256 = "849789f51d7a12a3ef22cff4d33bfcd8dc7ed17f36d9af28cf5407adddfdf19c"
+
+[[reviewed-source]]
+path = "scripts/hmac/test-hmac-package.py"
+sha256 = "2e9a33a5ed2ce6ee8291a1b90b47a5dfa66c70d01b9e6cc035c42f7b8ccdebd7"
+
+[[reviewed-source]]
+path = "scripts/hmac/test-hmac-protected.py"
+sha256 = "e53b902b57c2c6f7e596e6129135033ec4b0ecf48c721c37ea12fe829bd94599"
+
+[[reviewed-source]]
+path = "scripts/hmac/test-hmac-static-cleanup.py"
+sha256 = "d1728ee71564bf4ab1d29cb99bf62be4aac6290e42c13ff69f505ac746a39daa"
+
+[[reviewed-source]]
+path = "scripts/hmac/test-hmac-strict.py"
+sha256 = "1d1b97dcab1cdd631eb60e1cdeae1b013d4e3be9977ab6ecfe839e955e06ad0c"
+
+[[reviewed-source]]
+path = "scripts/hmac/test-hmac-timing.py"
+sha256 = "38c2c6cd744fd32e1f3c9404154fb5e9f123f30e4ebaf4d3152de3e56f885714"
+
+[[reviewed-source]]
+path = "scripts/hmac/test-hmac-verification.py"
+sha256 = "a039a61a828b591f41223febe66ea5ec18e65612ff1419af51a403db93c2013b"
+
+[[reviewed-source]]
+path = "scripts/hmac/test-hmac-workspace.py"
+sha256 = "3ee4fd5a16addd93df3ba2bf3f6c6de725297c14d445f889413919042d161c4b"
+
+[[reviewed-source]]
+path = "scripts/repository/facade_cargo_environment.py"
+sha256 = "08caf76b25592759ca465cd44abec2a2627ccd9b41aa613b69fd69e8cf49a888"

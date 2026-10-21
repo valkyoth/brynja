@@ -25804,7 +25804,7 @@
         "algorithm.hmac"
       ],
       "id": "BRY-REQ-CRYPTO-0003",
-      "lifecycle": "planned",
+      "lifecycle": "implemented",
       "owner": "0.25.0",
       "source_ids": [
         "rfc:2104",

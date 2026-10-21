@@ -71,7 +71,16 @@ def test_review_metadata():
         assert selected({path: (b'# before', b'# after')}) == (False, ())
         assert selected({path: (b'# before', None)})[1]
         assert selected({path: (b'# before', b'')})[1]
-    assert selected({'scripts/cpu/cpu_boundary_windows.py': (None, b'# inventory')}) == (False, ())
+    for path in review.NEW_METADATA:
+        assert selected({path: (None, b'# inventory')}) == (False, ())
+    # Metadata cannot hide a concurrent hash/engine/fixture/compiler edit.
+    for parser in review.API_METADATA:
+        for source in ('crates/brynja-mac-hmac/src/engine.rs',
+                       'crates/brynja-hash-sha2/src/hardened/owner.rs',
+                       'scripts/hmac/check-hmac-engine-cleanup.py',
+                       'scripts/cryptography/secret_owner_compiler.py',
+                       'assurance/hmac-engine-cleanup/src/lib.rs'):
+            assert selected({parser: (b'# old', b'# new'), source: (b'old', b'new')})[1]
     for path in ('scripts/cpu/new_checker.py', 'scripts/kmac/new_driver.py',
                  'scripts/kmac/check-kmac-codegen.sh.rs',
                  'scripts/cpu/cpu_boundary_windows.py.rs'):

@@ -10,6 +10,7 @@ import tomllib
 from pathlib import Path
 
 import api_profile_contracts as contracts
+from api_profile_render import render_coverage
 import rust_source_contract as rust_contract
 ROOT = Path(__file__).resolve().parents[2]
 POLICY = ROOT / "security/cryptographic-api-profile-policy.toml"
@@ -343,7 +344,14 @@ def validate_secret_policy(
     if len(capabilities) != len(set(capabilities)):
         fail("registered secret-owner capability coverage is duplicated")
     for owner in registered:
-        exact_keys(owner, {"capability", "id", "symbol", "fields", "temporaries", "sanitization_symbol", "cleanup_callers", "evidence", "storage", "output_classification", "partial_failure_policy"}, f"registered secret owner {owner.get('id')}")
+        composed = contracts.COMPOSED_OWNER_CONTRACTS.get(owner.get("id"))
+        if composed is not None:
+            try:
+                contracts.hmac_owner_contract.validate(root, owner, registered)
+            except (ValueError, rust_contract.RustContractError) as error:
+                fail(str(error))
+        else:
+            exact_keys(owner, {"capability", "id", "symbol", "fields", "temporaries", "sanitization_symbol", "cleanup_callers", "evidence", "storage", "output_classification", "partial_failure_policy"}, f"registered secret owner {owner.get('id')}")
         if not owner["fields"] or not owner["temporaries"] or not owner["evidence"]:
             fail(f"registered secret owner {owner['id']} is incomplete")
         capability = owner["capability"]
@@ -359,13 +367,17 @@ def validate_secret_policy(
             or owner["partial_failure_policy"] != "clear-complete-secret-destination"
         ):
             fail(f"registered secret owner {owner['id']} information flow drifted")
-        contract = contracts.REGISTERED_OWNER_CONTRACTS.get(owner["id"])
+        contract = composed or contracts.REGISTERED_OWNER_CONTRACTS.get(owner["id"])
         if contract is None:
             fail(f"registered owner lacks compiler contract: {owner['id']}")
         if owner != {"id": owner["id"], **contract["record"]}:
             fail(f"registered owner differs from compiler contract: {owner['id']}")
         for evidence in owner["evidence"]:
             validate_target(root, evidence, f"registered secret owner {owner['id']} evidence")
+        for target in owner.get("cleanup_bindings", []):
+            validate_target(root, target, f"registered secret owner {owner['id']} binding")
+    if not set(contracts.COMPOSED_OWNER_CONTRACTS) <= {row.get("id") for row in registered}:
+        fail("composed secret-owner inventory is incomplete")
     reviews = policy["reviewed-source"]
     paths = [review.get("path") for review in reviews]
     if set(paths) != contracts.REVIEWED_SOURCE_PATHS or len(paths) != len(set(paths)):
@@ -469,32 +481,3 @@ def build_register(policy: dict, surfaces: dict, root: Path = ROOT) -> dict:
         "schema": 1,
         "surface_register_sha256": policy["schema"]["surface_register_sha256"],
     }
-
-
-def render_coverage(register: dict) -> bytes:
-    profiles: dict[str, int] = {}
-    dispositions: dict[str, int] = {}
-    for capability in register["capabilities"]:
-        profiles[capability["profile"]] = profiles.get(capability["profile"], 0) + 1
-        dispositions[capability["disposition"]] = dispositions.get(capability["disposition"], 0) + 1
-    lines = [
-        "# Cryptographic API Profile And Secret-State Register", "",
-        "Generated from the reviewed policy and semantic standards surfaces. Do not edit by hand.", "",
-        f"- Capabilities: **{len(register['capabilities'])}**",
-        f"- API dimensions per capability: **{len(register['api_dimensions'])}**",
-        f"- Current secret owners: **{len(register['current_secret_owners'])}**",
-        f"- Registered capability owners: **{len(register['registered_secret_owners'])}**",
-        f"- Planned secret owners: **{len(register['planned_secret_owners'])}**", "",
-        "## Profile Coverage", "", "| Profile | Capabilities |", "| --- | ---: |",
-    ]
-    lines.extend(f"| `{name}` | {count} |" for name, count in sorted(profiles.items()))
-    lines.extend(["", "## Implementation Dispositions", "", "| Disposition | Capabilities |", "| --- | ---: |"])
-    lines.extend(f"| `{name}` | {count} |" for name, count in sorted(dispositions.items()))
-    lines.extend([
-        "", "Every capability classifies every API dimension and binds an owner milestone.",
-        "Secret owners enumerate exact fields, temporaries, lifecycle edges, cleanup symbols,",
-        "output handling, evidence, and residual risks. Ordinary state never implies hardened",
-        "ownership. The optional sanitization adapter cannot replace mandatory core cleanup or",
-        "enter the FIPS graph.", "",
-    ])
-    return "\n".join(lines).encode()

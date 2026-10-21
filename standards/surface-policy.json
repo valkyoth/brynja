@@ -1007,13 +1007,13 @@
     },
     {
       "decision": {
-        "code_target": "crates/brynja-crypto/src/hmac.rs",
-        "disposition": "future-work",
+        "code_target": "crates/brynja-mac-hmac/src/lib.rs#Hmac",
+        "disposition": "implemented",
         "domain": "cryptography",
         "owner": "0.25.0",
-        "rationale": "HMAC-SHA-256 and HMAC-SHA-384 remain future first-party constant-time constructions.",
+        "rationale": "Sealed SHA-2/SHA-3 HMAC with byte/final-bit input, typed secret output and bounded composed-owner checks is implemented. Linux protected and Apple Silicon resident profiles are distinct. Independent review and native release reconciliation remain pending; this is not a constant-time proof or Windows enclave/legacy-HMAC claim.",
         "sources": ["rfc:2104", "rfc:4231"],
-        "test_target": "tests/surface/primitives.rs#hmac"
+        "test_target": "crates/brynja-mac-hmac/tests/vectors.rs#rfc4231_case1"
       },
       "id": "algorithm.hmac"
     },

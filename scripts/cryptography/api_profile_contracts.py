@@ -2,7 +2,12 @@
 """Canonical owner identities and operation-flow contracts."""
 
 import legacy_md5_owner_contract, legacy_sha1_owner_contract
+import hmac_owner_contract
 from api_profile_operations import OPERATION_CONTRACTS
+
+# The direct-destructor MIR checker intentionally handles only the original
+# map. Composed owners bind their distinct emitted-code pipeline explicitly.
+COMPOSED_OWNER_CONTRACTS = {hmac_owner_contract.ID: {"record": hmac_owner_contract.RECORD}}
 
 CURRENT_OWNER_SYMBOLS = {
     "adapter.sanitized-secret": "crates/brynja-sanitization/src/lib.rs#SanitizedSecret",
@@ -446,6 +451,7 @@ REVIEWED_SOURCE_PATHS = {
     "scripts/cryptography/api_profile_contracts.py",
     "scripts/cryptography/api_profile_operations.py",
     "scripts/cryptography/api_profile_model.py",
+    "scripts/cryptography/api_profile_render.py",
     "scripts/cryptography/check-api-profile-contract.sh",
     "scripts/cryptography/check-secret-owner-compiler.py",
     "scripts/cryptography/mir_cleanup_flow.py",
@@ -467,3 +473,5 @@ REVIEWED_SOURCE_PATHS = {
 for legacy_contract in (legacy_md5_owner_contract, legacy_sha1_owner_contract):
     legacy_contract.register(REGISTERED_OWNER_CONTRACTS, REGISTERED_OWNER_COMPILER_TESTS,
         REGISTERED_CALLER_MIR_HEADERS, REGISTERED_SANITIZER_MIR_IDENTITIES, REVIEWED_SOURCE_PATHS)
+
+REVIEWED_SOURCE_PATHS.update(hmac_owner_contract.reviewed_paths())

@@ -116,6 +116,7 @@ def manifest_tests():
 
 
 def source_tests():
+    composition_tests()
     for path, replacements in hmac.SOURCES.items():
         current = (scope.ROOT / path).read_bytes()
         original = current
@@ -137,6 +138,26 @@ def source_tests():
         assert scope.select(['crates/brynja-strict/src/' + path]) == (False, ('hmac',))
     for name in ('hmac.rs_extra.rs', 'kmac.rs', 'lib.rs', 'unknown.rs'):
         assert scope.select(['crates/brynja-crypto/src/' + name])[0]
+
+
+def composition_tests():
+    path, replacements = next(iter(hmac.COMPOSITION.items()))
+    current = (scope.ROOT / path).read_bytes()
+    original = current
+    for old, new in replacements:
+        assert original.count(new) == 1
+        original = original.replace(new, old)
+    assert hmac.source_only(path, original, current)
+    assert hmac.source_only(path, current, original)
+    for mutant in (current + b'execute()\n', current.replace(b'OwnedSecretRegion', b'WrongOwner', 1),
+                   current.replace(b'::drop', b'::wipe', 1), current.replace(b'\n', b'\r\n'),
+                   current + replacements[0][1],
+                   current.replace(b'hmac_owner_contract.ID', b'"registered.algorithm.sha2"')):
+        assert mutant != current
+        assert not hmac.source_only(path, original, mutant)
+    from review_metadata_tests import selected
+    assert selected({path: (original, current)}) == (False, ('hmac',))
+    assert 'core' in selected({path: (original, current.replace(b'::drop', b'::wipe', 1))})[1]
 
 
 def fixture_tests():

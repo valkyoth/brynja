@@ -93,7 +93,6 @@ PENDING = (
     "Final native qualification and assessment of remaining cache/branch limits; the completed explicit-route paired screens are not constant-time proofs.",
     "Remaining native route qualification, including dedicated x86 SHA-512.",
     "Independent pentest and final source-bound release evidence.",
-    "Reconcile HMAC's transitive Engine inner/outer ownership with the global register's direct-destructor model before promoting that register; do not add a synthetic wipe or register scratch as the whole owner.",
 )
 
 
@@ -144,12 +143,16 @@ def validate(root=ROOT):
         require(feature is None or feature in manifest["features"], "profile feature absent")
     for _, name in EVIDENCE:
         require((root / name).is_file() and not (root / name).is_symlink(), "missing check " + name)
-    # This register deliberately does not promote the global assurance state.
+    # Implementation registration is not qualification or independent review.
     surfaces = json.loads((root / "standards/protocol-surfaces.json").read_text())
     rows = [row for row in surfaces["surfaces"] if row["id"] == "algorithm.hmac"]
     require(len(rows) == 1 and rows[0]["owner"] == "0.25.0"
-            and rows[0]["disposition"] == "future-work",
-            "global HMAC completion requires separate qualification review")
+            and rows[0]["disposition"] == "implemented",
+            "global HMAC implementation inventory drifted")
+    policy = tomllib.loads((root / "security/cryptographic-api-profile-policy.toml").read_text())
+    from hmac_owner_contract import ID, RECORD
+    owners = [row for row in policy["registered-secret-owner"] if row["id"] == ID]
+    require(owners == [{"id": ID, **RECORD}], "global composed-owner registration drifted")
     require(set(rows[0]["normative_sources"]) == {"rfc:2104", "rfc:4231"},
             "HMAC requirement sources changed")
 
@@ -216,8 +219,11 @@ def render():
               "The strict facade forwards these existing protected implementations; it",
               "does not add a new worker or change the cryptographic implementation.",
               "Its separate package tests cover the consumer surface and feature graph.",
-              "Neither facade availability nor this reconciliation promotes the global",
-              "compiler-owner register or substitutes for the pending independent retest."]
+              "The global owner inventory now registers the transitive Engine inner/outer",
+              "fields and consuming handoffs, rather than a synthetic direct-destructor model.",
+              "Its compiler-check links bind the existing eleven pipeline commands. This",
+              "registration is neither an execution receipt nor independent qualification;",
+              "the original emitted-code checks and source-bound evidence remain necessary."]
     lines += ["", "## Still pending", ""]
     lines += ["- " + pending for pending in PENDING]
     return "\n".join(lines) + "\n"

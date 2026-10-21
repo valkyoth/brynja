@@ -5,8 +5,8 @@ Generated from the reviewed policy and semantic standards surfaces. Do not edit 
 - Capabilities: **135**
 - API dimensions per capability: **22**
 - Current secret owners: **8**
-- Registered capability owners: **8**
-- Planned secret owners: **73**
+- Registered capability owners: **9**
+- Planned secret owners: **72**
 
 ## Profile Coverage
 
@@ -31,14 +31,17 @@ Generated from the reviewed policy and semantic standards surfaces. Do not edit 
 
 | Disposition | Capabilities |
 | --- | ---: |
-| `future-work` | 117 |
-| `implemented` | 13 |
+| `future-work` | 116 |
+| `implemented` | 14 |
 | `intentionally-rejected` | 1 |
 | `legacy-only` | 3 |
 | `safely-ignored` | 1 |
 
 Every capability classifies every API dimension and binds an owner milestone.
-Secret owners enumerate exact fields, temporaries, lifecycle edges, cleanup symbols,
+Secret owners enumerate fields, temporaries, lifecycle edges, cleanup contracts,
 output handling, evidence, and residual risks. Ordinary state never implies hardened
 ownership. The optional sanitization adapter cannot replace mandatory core cleanup or
-enter the FIPS graph.
+enter the FIPS graph. HMAC registers transitive inner/outer hash ownership and
+consuming handoffs, not an invented Engine destructor. Its existing emitted-code
+checks remain separate from the direct-destructor MIR checks. Registration is
+not native release qualification, independent review or whole-frame erasure.

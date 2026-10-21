@@ -271,8 +271,8 @@ def main() -> int:
     assert len(first["capabilities"]) == 135
     assert len(first["api_dimensions"]) == 22
     assert len(first["current_secret_owners"]) == 8
-    assert len(first["registered_secret_owners"]) == 8
-    assert len(first["planned_secret_owners"]) == 73
+    assert len(first["registered_secret_owners"]) == 9
+    assert len(first["planned_secret_owners"]) == 72
     assert all(len(row["api"]) == 22 for row in first["capabilities"])
     assert all(row["consumer_links"] for row in first["capabilities"])
     assert all(row["explicit_rejections"] == list(model.REJECTIONS) for row in first["capabilities"])
@@ -281,6 +281,7 @@ def main() -> int:
     assert all(row["state"] == "planned" for row in first["planned_secret_owners"])
     assert all("symbol" not in row and "sanitization_symbol" not in row for row in first["planned_secret_owners"])
     assert [owner["id"] for owner in first["registered_secret_owners"]] == [
+        "registered.algorithm.hmac",
         "registered.algorithm.kmac",
         "registered.algorithm.md5",
         "registered.algorithm.parallelhash",

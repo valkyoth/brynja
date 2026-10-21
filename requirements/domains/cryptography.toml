@@ -54,18 +54,18 @@ mapping_rationale = "The SHA-3 and SHAKE semantic surface directly records the c
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0003"
-revision = 2
+revision = 3
 owner = "0.25.0"
-lifecycle = "planned"
+lifecycle = "implemented"
 decision_ids = ["algorithm.hmac"]
 sources = [{ id = "rfc:2104", authority_role = "current" }, { id = "rfc:4231", authority_role = "evidence" }]
-statement = "HMAC uses the admitted SHA-2 hashes, preserves key preprocessing rules, and verifies tags without secret-dependent comparison."
+statement = "HMAC uses sealed hardened SHA-2/SHA-3 adapters, preserves key preprocessing and exact digest-bit rules, and verifies fixed-policy tags without a secret-dependent early-return comparison."
 invariants = ["constant-time", "key-lifecycle", "resource-bound", "work-bound"]
-target = "crates/brynja-crypto/src/hmac.rs#Hmac"
-positive_test = "tests/requirements/crypto_hmac.rs#rfc4231_vectors"
-negative_test = "tests/requirements/crypto_hmac.rs#tag_and_key_misuse"
+target = "crates/brynja-mac-hmac/src/lib.rs#Hmac"
+positive_test = "crates/brynja-mac-hmac/tests/vectors.rs#rfc4231_case1"
+negative_test = "crates/brynja-mac-hmac/tests/lifecycle.rs#exercise"
 work_bound = "HMAC performs a bounded constant number of hash initializations plus work linear in the supplied message length."
-evidence_gap = "RFC 4231 vectors, misuse tests, differential evidence, and constant-time verification remain unresolved until v0.25.0."
+evidence_gap = "Author tests cover RFC 4231, differential byte/final-bit/general-width cases, misuse, packaged consumers, scoped verifiers, paired timing screens and bounded composed-owner compiler graphs. Global registration binds real inner/outer ownership and consuming handoffs, not a synthetic destructor. Independent review and final source-bound native/release reconciliation remain pending. No whole-frame erasure, universal constant-time proof, native dedicated x86 SHA-512 execution or Windows enclave HMAC is claimed."
 residual = "RFC 4231 is evidence rather than current normative authority and cannot independently admit a hash or truncate tags."
 mapping_rationale = "The HMAC semantic surface is directly sourced by the current RFC 2104 construction and its evidence-only RFC 4231 vector set."
 

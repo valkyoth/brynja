@@ -20,6 +20,7 @@ class InventoryTests(unittest.TestCase):
         paths |= {"crates/" + package + "/Cargo.toml" for _, package, _, _ in inventory.PROFILES}
         paths |= {name for _, name in inventory.EVIDENCE}
         paths.add("standards/protocol-surfaces.json")
+        paths.add("security/cryptographic-api-profile-policy.toml")
         for name in paths:
             target = self.root / name
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -107,15 +108,20 @@ class InventoryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "missing check"):
             inventory.validate(self.root)
 
-    def test_no_premature_global_promotion(self):
+    def test_global_registration_is_not_silently_dropped(self):
         path = self.root / "standards/protocol-surfaces.json"
         document = json.loads(path.read_text())
         for row in document["surfaces"]:
             if row["id"] == "algorithm.hmac":
-                row["disposition"] = "implemented"
+                row["disposition"] = "future-work"
         path.write_text(json.dumps(document))
-        with self.assertRaisesRegex(ValueError, "separate qualification"):
+        with self.assertRaisesRegex(ValueError, "implementation inventory"):
             inventory.validate(self.root)
+
+    def test_global_registration_cannot_claim_qualification(self):
+        self.mutate("security/cryptographic-api-profile-policy.toml",
+                    'qualification = "native-release-reconciliation-and-independent-review-pending"',
+                    'qualification = "fully-qualified"')
 
     def test_comments_cannot_supply_a_missing_method(self):
         self.mutate(inventory.LEAF + "lib.rs", "pub fn cancel(self) {}",

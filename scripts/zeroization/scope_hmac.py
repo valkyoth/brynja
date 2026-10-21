@@ -51,6 +51,17 @@ PACKAGING = {
         (b"        'brynja-strict')\n",
          b"        'brynja-mac-hmac', 'brynja-strict')\n"),),
 }
+COMPOSITION = {
+    # Add only the HMAC composition registration and metadata renderer pin.
+    # Every existing direct owner, MIR identity and compiler test is unchanged.
+    'scripts/cryptography/api_profile_contracts.py': (
+        (b'', b'import hmac_owner_contract\n'),
+        (b'', b'# The direct-destructor MIR checker intentionally handles only the original\n'
+         b'# map. Composed owners bind their distinct emitted-code pipeline explicitly.\n'
+         b'COMPOSED_OWNER_CONTRACTS = {hmac_owner_contract.ID: {"record": hmac_owner_contract.RECORD}}\n\n'),
+        (b'', b'    "scripts/cryptography/api_profile_render.py",\n'),
+        (b'', b'\nREVIEWED_SOURCE_PATHS.update(hmac_owner_contract.reviewed_paths())\n')),
+}
 
 
 def strict_manifest(before, after):
@@ -107,7 +118,7 @@ def manifest_only(path, before, after):
 
 
 def source_only(path, before, after):
-    replacements = {**SOURCES, **PACKAGING}.get(path)
+    replacements = {**SOURCES, **PACKAGING, **COMPOSITION}.get(path)
     if replacements is None or before is None or after is None:
         return False
     values = []

@@ -1565,12 +1565,12 @@
           "owner": "0.25.0"
         }
       },
-      "code_target": "crates/brynja-crypto/src/hmac.rs",
+      "code_target": "crates/brynja-mac-hmac/src/lib.rs#Hmac",
       "consumer_links": [
         "consumer:protocol",
         "consumer:provider"
       ],
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "cryptography",
       "explicit_rejections": [
         "copy-secret-state",
@@ -1614,7 +1614,7 @@
       "ordinary_hardened_separation": "required",
       "owner": "0.25.0",
       "profile": "keyed-construction",
-      "test_target": "tests/surface/primitives.rs#hmac"
+      "test_target": "crates/brynja-mac-hmac/tests/vectors.rs#rfc4231_case1"
     },
     {
       "api": {
@@ -19946,74 +19946,6 @@
       ]
     },
     {
-      "capability": "algorithm.hmac",
-      "evidence": [
-        "tests/surface/primitives.rs#hmac",
-        "scripts/zeroization/check-zeroization-codegen.sh"
-      ],
-      "fields": [
-        "key",
-        "inner-state",
-        "outer-state",
-        "partial-input",
-        "phase"
-      ],
-      "id": "planned.algorithm.hmac",
-      "lifecycle_edges": [
-        "creation",
-        "success",
-        "error",
-        "cancellation",
-        "replacement",
-        "rekey",
-        "failed-construction",
-        "recoverable-unwind",
-        "drop"
-      ],
-      "operations": {
-        "derive-secret": {
-          "output_classification": "typed-secret-owned",
-          "partial_failure_policy": "clear-complete-secret-destination",
-          "verification": "not-applicable"
-        },
-        "generate-authenticator": {
-          "output_classification": "explicit-public-declassification",
-          "partial_failure_policy": "unchanged-destination",
-          "verification": "not-applicable"
-        },
-        "verify-authenticator": {
-          "output_classification": "no-output",
-          "partial_failure_policy": "not-applicable",
-          "verification": "before-output-release"
-        }
-      },
-      "owner": "0.25.0",
-      "planned_cleanup_contract": "mandatory-core-or-separately-reviewed-equivalent",
-      "planned_implementation_target": "crates/brynja-crypto/src/hmac.rs",
-      "residual_risks": [
-        "mem-forget",
-        "process-abort",
-        "forced-termination",
-        "power-loss",
-        "register-copies",
-        "cpu-caches",
-        "compiler-created-copies",
-        "crash-dumps",
-        "suspend-images",
-        "os-swap-and-paging",
-        "dma-visible-copies",
-        "physical-memory-remanence"
-      ],
-      "state": "planned",
-      "temporaries": [
-        "normalized-key",
-        "derived-key",
-        "message-schedule",
-        "block-copy",
-        "output-staging"
-      ]
-    },
-    {
       "capability": "algorithm.legacy-pkcs1-client-signature",
       "evidence": [
         "tests/surface/signatures.rs#legacy_client_pkcs1_rejected",
@@ -24257,8 +24189,98 @@
       ]
     }
   ],
-  "policy_sha256": "8d0f24231d8f8e84398554f9bde93521be5d6eb0e91966eae4ad12e6401c5c2b",
+  "policy_sha256": "e2b8b05e6b454a19d0500eb841f6f61713dc8ede188b8ba2912f157bb5d2233b",
   "registered_secret_owners": [
+    {
+      "capability": "algorithm.hmac",
+      "cleanup_bindings": [
+        "crates/brynja-mac-hmac/src/engine.rs#Engine::finish",
+        "crates/brynja-mac-hmac/src/algorithms.rs#Hash",
+        "crates/brynja-mac-hmac/src/general.rs#Sha512T",
+        "crates/brynja-mac-hmac/src/execution/adapter.rs#Adapter",
+        "crates/brynja-mac-hmac/src/scratch.rs#Scratch::drop",
+        "crates/brynja-core/src/secret_memory.rs#OwnedSecretRegion"
+      ],
+      "cleanup_model": "transitive-owned-fields-and-consuming-handoffs",
+      "compiler_checks": [
+        "python3 scripts/hmac/check-hmac-cleanup.py",
+        "python3 scripts/hmac/check-hmac-cleanup.py --target aarch64-unknown-linux-gnu",
+        "python3 scripts/hmac/check-hmac-engine-cleanup.py",
+        "python3 scripts/hmac/check-hmac-engine-cleanup.py --target aarch64-unknown-linux-gnu",
+        "python3 scripts/hmac/check-hmac-execution-cleanup.py",
+        "python3 scripts/hmac/check-hmac-execution-cleanup.py --target aarch64-unknown-linux-gnu",
+        "python3 scripts/hmac/check-hmac-static-cleanup.py",
+        "python3 scripts/hmac/check-hmac-static-cleanup.py --target aarch64-unknown-linux-gnu",
+        "python3 scripts/hmac/check-hmac-hosted-cleanup.py",
+        "python3 scripts/hmac/check-hmac-hosted-cleanup.py --target aarch64-unknown-linux-gnu",
+        "python3 scripts/hmac/check-hmac-hosted-cleanup.py --target aarch64-apple-darwin"
+      ],
+      "compiler_scope": "bounded-owned-storage-and-dispatch-not-whole-frame-erasure",
+      "delegated_owners": [
+        "registered.algorithm.sha2",
+        "registered.algorithm.sha512-t",
+        "registered.algorithm.sha3-shake"
+      ],
+      "evidence": [
+        "crates/brynja-mac-hmac/tests/vectors.rs",
+        "crates/brynja-mac-hmac/tests/lifecycle.rs",
+        "scripts/hmac/check-hmac-package.py",
+        "scripts/hmac/check-hmac-protected.py",
+        "scripts/hmac/check-hmac-strict.py",
+        "scripts/hmac/check-hmac-inventory.py",
+        "scripts/hmac/test-hmac-owner-contract.py",
+        "scripts/hmac/check-hmac-cleanup.py",
+        "scripts/hmac/check-hmac-engine-cleanup.py",
+        "scripts/hmac/check-hmac-execution-cleanup.py",
+        "scripts/hmac/check-hmac-static-cleanup.py",
+        "scripts/hmac/check-hmac-hosted-cleanup.py"
+      ],
+      "fields": [
+        "inner:owned-secret-hash-state",
+        "outer:owned-secret-hash-state",
+        "tag_bytes:public-preselected-policy"
+      ],
+      "id": "registered.algorithm.hmac",
+      "lifecycle_edges": [
+        "creation",
+        "success",
+        "error",
+        "cancellation",
+        "replacement",
+        "rekey",
+        "failed-construction",
+        "recoverable-unwind",
+        "drop"
+      ],
+      "output_classification": "typed-secret-owned",
+      "partial_failure_policy": "clear-complete-secret-destination",
+      "qualification": "native-release-reconciliation-and-independent-review-pending",
+      "residual_risks": [
+        "mem-forget",
+        "process-abort",
+        "forced-termination",
+        "power-loss",
+        "register-copies",
+        "cpu-caches",
+        "compiler-created-copies",
+        "crash-dumps",
+        "suspend-images",
+        "os-swap-and-paging",
+        "dma-visible-copies",
+        "physical-memory-remanence"
+      ],
+      "state": "registered",
+      "storage": "transitive-fixed-owners-with-separate-protected-or-resident-hosted-profiles",
+      "symbol": "crates/brynja-mac-hmac/src/engine.rs#Engine",
+      "temporaries": [
+        "pad:Scratch<144>",
+        "normalized:Scratch<64>",
+        "inner_digest:Scratch<64>",
+        "tag:Scratch<64>",
+        "difference:Scratch<1>",
+        "borrowed-input:caller-owned-copy-risk"
+      ]
+    },
     {
       "capability": "algorithm.kmac",
       "cleanup_callers": [
@@ -24760,5 +24782,5 @@
     "physical-memory-remanence"
   ],
   "schema": 1,
-  "surface_register_sha256": "1fcad28078a4855df46677a522c6bff63b06e3f4cafe5f8d21a1268fdfc71aca"
+  "surface_register_sha256": "a9c277fd46da16baa60d94b333c9896e4997d45fe653ee83f4816241b3a66543"
 }

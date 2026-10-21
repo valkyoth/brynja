@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "8a36299c9400afea4021dd0227285f05d3d35d58b35444f3ea2560a3d7cd2527",
-  "domain_policy_sha256": "4fd259c01ae6f3d8b97d1fe159b23558f58662c8841c8c41849ab890b86e6153",
-  "policy_sha256": "7fa43c169271ccc38228721b056aac61e2c15dd190dcf4bda211aa16fc68a94c",
+  "domain_policy_sha256": "5fc226584046d2965e6365355c81e0170d110826036ab7fb82d24612d32a7053",
+  "policy_sha256": "2af5113eb3eeea9b2ce0d5ec1ddd21a1cc5bbecbc30cac906bcda98f07355af1",
   "requirements": [
     {
       "applicability": "delegate",
@@ -964,7 +964,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "RFC 4231 vectors, misuse tests, differential evidence, and constant-time verification remain unresolved until v0.25.0.",
+      "evidence_gap": "Author tests cover RFC 4231, differential byte/final-bit/general-width cases, misuse, packaged consumers, scoped verifiers, paired timing screens and bounded composed-owner compiler graphs. Global registration binds real inner/outer ownership and consuming handoffs, not a synthetic destructor. Independent review and final source-bound native/release reconciliation remain pending. No whole-frame erasure, universal constant-time proof, native dedicated x86 SHA-512 execution or Windows enclave HMAC is claimed.",
       "id": "BRY-REQ-CRYPTO-0003",
       "invariants": [
         "constant-time",
@@ -972,13 +972,13 @@
         "resource-bound",
         "work-bound"
       ],
-      "lifecycle": "planned",
+      "lifecycle": "implemented",
       "mapping_rationale": "The HMAC semantic surface is directly sourced by the current RFC 2104 construction and its evidence-only RFC 4231 vector set.",
       "mapping_scope": "reviewed-domain",
       "owner": "0.25.0",
       "profile": "crypto-encoding-pkix",
       "residual": "RFC 4231 is evidence rather than current normative authority and cannot independently admit a hash or truncate tags.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -1082,24 +1082,24 @@
           "status": "PROPOSED STANDARD"
         }
       ],
-      "statement": "HMAC uses the admitted SHA-2 hashes, preserves key preprocessing rules, and verifies tags without secret-dependent comparison.",
+      "statement": "HMAC uses sealed hardened SHA-2/SHA-3 adapters, preserves key preprocessing and exact digest-bit rules, and verifies fixed-policy tags without a secret-dependent early-return comparison.",
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "planned-symbol",
-          "target": "crates/brynja-crypto/src/hmac.rs#Hmac"
+          "kind": "actual-symbol",
+          "target": "crates/brynja-mac-hmac/src/lib.rs#Hmac"
         }
       ],
       "tests": [
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "tests/requirements/crypto_hmac.rs#rfc4231_vectors"
+          "target": "crates/brynja-mac-hmac/tests/vectors.rs#rfc4231_case1"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "tests/requirements/crypto_hmac.rs#tag_and_key_misuse"
+          "target": "crates/brynja-mac-hmac/tests/lifecycle.rs#exercise"
         }
       ],
       "work_bound": "HMAC performs a bounded constant number of hash initializations plus work linear in the supplied message length."
@@ -30815,9 +30815,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "a659ccd349a4409e8895a4914539408f252c3c682df569d024c4158f745ae88a",
+  "residual_policy_sha256": "683630ec05a54b67ebfca627866045693294b7dfe0584f2b1f9f171f95ffe549",
   "schema": 5,
   "source_ledger_sha256": "7723f01765e12dac7c4df15b305035f634fb2c3923714b584c22e95928070816",
-  "surface_register_sha256": "1fcad28078a4855df46677a522c6bff63b06e3f4cafe5f8d21a1268fdfc71aca",
-  "transport_policy_sha256": "9b76e5fac8612c646ae9e0d008061ef9acd2078efe6fffd989245167db4be7c2"
+  "surface_register_sha256": "a9c277fd46da16baa60d94b333c9896e4997d45fe653ee83f4816241b3a66543",
+  "transport_policy_sha256": "f0fc9e8f4608a4733d34727e269ff6dee82010f5e48bb6f8b03df6a5dddbbee7"
 }

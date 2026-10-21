@@ -433,11 +433,11 @@
         "rfc:4231"
       ],
       "targets": [
-        "planned-symbol:crates/brynja-crypto/src/hmac.rs#Hmac"
+        "actual-symbol:crates/brynja-mac-hmac/src/lib.rs#Hmac"
       ],
       "tests": [
-        "planned:positive:tests/requirements/crypto_hmac.rs#rfc4231_vectors",
-        "planned:negative:tests/requirements/crypto_hmac.rs#tag_and_key_misuse"
+        "planned:positive:crates/brynja-mac-hmac/tests/vectors.rs#rfc4231_case1",
+        "planned:negative:crates/brynja-mac-hmac/tests/lifecycle.rs#exercise"
       ]
     },
     "BRY-REQ-CRYPTO-0004": {
@@ -11213,6 +11213,9 @@
       "actual-symbol:crates/brynja-legacy-sha1/src/lib.rs#Sha1": [
         "BRY-REQ-CRYPTO-0018"
       ],
+      "actual-symbol:crates/brynja-mac-hmac/src/lib.rs#Hmac": [
+        "BRY-REQ-CRYPTO-0003"
+      ],
       "actual-symbol:crates/brynja-mac-kmac/src/lib.rs#KMAC_IMPLEMENTED": [
         "BRY-REQ-CRYPTO-0015"
       ],
@@ -11313,9 +11316,6 @@
       ],
       "planned-symbol:crates/brynja-crypto/src/hkdf.rs#Hkdf": [
         "BRY-REQ-CRYPTO-0004"
-      ],
-      "planned-symbol:crates/brynja-crypto/src/hmac.rs#Hmac": [
-        "BRY-REQ-CRYPTO-0003"
       ],
       "planned-symbol:crates/brynja-crypto/src/hpke.rs": [
         "BRY-REQ-HPKE-0138",
@@ -11711,6 +11711,9 @@
       "planned:negative:crates/brynja-core/tests/entropy.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-ENTROPY-0014"
       ],
+      "planned:negative:crates/brynja-mac-hmac/tests/lifecycle.rs#exercise": [
+        "BRY-REQ-CRYPTO-0003"
+      ],
       "planned:negative:crates/brynja-pki/tests/asn1.rs#exhaustive_boolean_bit_padding_and_two_octet_oid_corpora": [
         "BRY-REQ-ENC-0002"
       ],
@@ -11796,9 +11799,6 @@
       ],
       "planned:negative:tests/requirements/crypto_hkdf.rs#counter_and_label_exhaustion": [
         "BRY-REQ-CRYPTO-0004"
-      ],
-      "planned:negative:tests/requirements/crypto_hmac.rs#tag_and_key_misuse": [
-        "BRY-REQ-CRYPTO-0003"
       ],
       "planned:negative:tests/requirements/crypto_rsa.rs#ambiguous_parameters_and_padding": [
         "BRY-REQ-CRYPTO-0011"
@@ -12135,6 +12135,9 @@
       "planned:positive:crates/brynja-core/tests/entropy.rs#contract": [
         "BRY-REQ-ENTROPY-0014"
       ],
+      "planned:positive:crates/brynja-mac-hmac/tests/vectors.rs#rfc4231_case1": [
+        "BRY-REQ-CRYPTO-0003"
+      ],
       "planned:positive:crates/brynja-pki/tests/asn1.rs#sequence_set_and_set_of_are_distinct_canonical_boundaries": [
         "BRY-REQ-ENC-0002"
       ],
@@ -12222,9 +12225,6 @@
       ],
       "planned:positive:tests/requirements/crypto_hkdf.rs#rfc5869_vectors": [
         "BRY-REQ-CRYPTO-0004"
-      ],
-      "planned:positive:tests/requirements/crypto_hmac.rs#rfc4231_vectors": [
-        "BRY-REQ-CRYPTO-0003"
       ],
       "planned:positive:tests/requirements/crypto_rsa.rs#pss_and_pkcs1_vectors": [
         "BRY-REQ-CRYPTO-0011"

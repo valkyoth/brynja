@@ -116,8 +116,11 @@ proof. Dedicated x86 SHA-512 was not executed on native silicon.
 The strict facade forwards these existing protected implementations; it
 does not add a new worker or change the cryptographic implementation.
 Its separate package tests cover the consumer surface and feature graph.
-Neither facade availability nor this reconciliation promotes the global
-compiler-owner register or substitutes for the pending independent retest.
+The global owner inventory now registers the transitive Engine inner/outer
+fields and consuming handoffs, rather than a synthetic direct-destructor model.
+Its compiler-check links bind the existing eleven pipeline commands. This
+registration is neither an execution receipt nor independent qualification;
+the original emitted-code checks and source-bound evidence remain necessary.
 
 ## Still pending
 
@@ -125,4 +128,3 @@ compiler-owner register or substitutes for the pending independent retest.
 - Final native qualification and assessment of remaining cache/branch limits; the completed explicit-route paired screens are not constant-time proofs.
 - Remaining native route qualification, including dedicated x86 SHA-512.
 - Independent pentest and final source-bound release evidence.
-- Reconcile HMAC's transitive Engine inner/outer ownership with the global register's direct-destructor model before promoting that register; do not add a synthetic wipe or register scratch as the whole owner.

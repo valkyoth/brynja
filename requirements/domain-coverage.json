@@ -5656,7 +5656,7 @@
   "excluded_normative_section_count": 12,
   "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "4fd259c01ae6f3d8b97d1fe159b23558f58662c8841c8c41849ab890b86e6153",
+  "policy_sha256": "5fc226584046d2965e6365355c81e0170d110826036ab7fb82d24612d32a7053",
   "requirement_count": 41,
   "schema": 1,
   "surface_count": 3337,
@@ -5727,7 +5727,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "cryptography",
       "id": "algorithm.hmac",
       "owner": "0.25.0",

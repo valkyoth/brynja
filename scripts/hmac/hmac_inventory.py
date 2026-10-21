@@ -94,7 +94,7 @@ PENDING = (
     "Independent assessment of the bounded portable/static/runtime and hosted compiler checks; completed graph linkage is not whole-frame erasure or independent qualification.",
     "Final native receipt reconciliation and assessment of remaining cache/branch limits; the completed explicit-route paired screens are not constant-time proofs.",
     "Dedicated x86 SHA-512 has explicit HMAC SDE functional coverage, not native-silicon or timing qualification.",
-    "Independent pentest and final affected release checks; see docs/hmac-review-handoff.md for current coverage rather than restarting completed compiler slices.",
+    "Final affected release checks after the supplied pentest/retest; see docs/hmac-review-handoff.md for exact reviewer scope rather than restarting completed compiler slices.",
 )
 
 

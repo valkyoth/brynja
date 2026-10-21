@@ -16,7 +16,14 @@ Status: in development; no tag, publication or qualification claim.
   responsibility. Neither is relabelled as a standardized or certified guarantee.
 - Repaired stale acceptance fixtures, version/lock bindings and optional HMAC
   package closures behind CI failures. No release-gate relaxation or new
-  third-party dependency is involved. Independent remediation retest is pending.
+  third-party dependency is involved.
+- The owner-supplied Claude retest of `64bf5718` confirms both behavioral fixes
+  without regressions or new security-relevant issues. Fractional SHA-512/t is
+  retained as an accepted, ungated interoperability limitation. Duplicate
+  tag-policy validation and an unreachable invalid-mapping rejection are
+  recorded as informational, with no product change required. The tester ran
+  Linux SHA-NI, not the Mac variant. This pentest PASS is not final release or
+  native qualification; the separate author checks retain their original scope.
 
 The [current review handoff](../docs/hmac-review-handoff.md) reconciles the
 completed slices below. Earlier pending-work paragraphs describe their stage
@@ -561,7 +568,7 @@ qualification. No runtime Rust, dependency or release-gate behavior changed.
   are retained, not relabelled as independent review or an approved receipt.
 - Retain the dedicated x86 SHA-512 native-silicon limitation. The 17 retained
   timing observations cover 768 campaigns; no alarm is not a constant-time proof.
-- Complete independent pentest/retest and affected final release checks.
+- The supplied pentest/retest is recorded above; complete affected final release checks.
   Reuse unchanged implementation evidence; no old-family full sweep is implied
   by this facade integration or documentation reconciliation.
 

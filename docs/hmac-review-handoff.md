@@ -1,12 +1,14 @@
 # Modern HMAC review handoff
 
-This describes the v0.25.0 development candidate, **not a pentest PASS, approved
-native receipt, release-gate PASS or publication authorization**. The supplied
-two-tester review covers `v0.24.55..66e585f8`; the current remediation changes
-hosted portable selection and pre-entry compiled-worker failure handling.
-The [pentest ledger](../security/pentest/v0.25.0.md) separates those new fixes
-and author regressions from the supplied review. A focused independent retest
-of the remediation is pending. No hash kernel or cleanup primitive is changed.
+This describes the v0.25.0 development candidate, **not an approved native
+receipt, release-gate PASS or publication authorization**. The supplied
+two-tester review covers `v0.24.55..66e585f8`; the subsequent Claude retest of
+`64bf5718` confirms the hosted portable-policy and pre-entry worker fixes without
+new security findings. Fractional SHA-512/t remains an accepted, ungated
+interoperability limitation. The [pentest ledger](../security/pentest/v0.25.0.md)
+records the PASS disposition, both new informational notes and their exact
+scope. The tester ran Linux SHA-NI, not macOS; author-operated Mac results
+remain separate. No hash kernel or cleanup primitive is changed.
 
 ## Implemented scope
 
@@ -92,7 +94,8 @@ inputs; new HMAC work does not imply recollecting unrelated unchanged hashes.
   all equal-length tag-byte differences before declassification; different
   public lengths reject. Public message/key lengths and routing are observable.
   This source assessment and the paired screen do not prove microarchitectural
-  noninterference or bound every leak; the remediation's independent retest is pending.
+  noninterference or bound every leak; the supplied remediation retest does not
+  certify those properties.
 - Compiler checks establish the specifically documented owned-storage and
   clear-dispatch relationships. They retain typed-callee and non-panicking
   cleanup premises; they do not establish arbitrary compiler-copy or full-frame
@@ -121,9 +124,9 @@ python3 scripts/hmac/check-hmac-x86-sha512.py --sde /path/to/sde64 --output targ
 python3 scripts/hmac/test-hmac-x86-sha512.py
 ```
 
-The supplied independent reviews and author remediation are recorded separately.
-Obtain the focused retest, then run the affected final
-release checks. Then obtain exact-candidate GitHub results and explicit tag
+The supplied reviews, focused Claude retest and author checks are recorded
+separately. Run the affected final release checks, then obtain
+exact-candidate GitHub results and explicit tag
 authorization. The v0.25.1 legacy implementation and v0.25.2 family/package
 publication checkpoint retain their existing scope. No tag or publication has
 occurred for this candidate.

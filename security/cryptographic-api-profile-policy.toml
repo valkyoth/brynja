@@ -2048,7 +2048,7 @@ sha256 = "f9e144bbe077673ce1bad748c1cc4e085563be3bac20b8d30c70affccbe61edd"
 
 [[reviewed-source]]
 path = "scripts/hmac/hmac_inventory.py"
-sha256 = "902f04da171d7d641b0edb989fd3e40f1ecc832a573eba0b656e75bc1de3ccb0"
+sha256 = "e0d6bea5e6b7a0ffdb6bcd4820a0061322227ec9c18eafbb72e1e5e8b45487cf"
 
 [[reviewed-source]]
 path = "scripts/hmac/hmac_owner_profile.py"

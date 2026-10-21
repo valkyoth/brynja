@@ -289,6 +289,9 @@ python3 scripts/hmac/test-hmac-engine-cleanup.py
 python3 scripts/hmac/check-hmac-execution-cleanup.py
 python3 scripts/hmac/check-hmac-execution-cleanup.py --target aarch64-unknown-linux-gnu
 python3 scripts/hmac/test-hmac-execution-cleanup.py
+python3 scripts/hmac/check-hmac-static-cleanup.py
+python3 scripts/hmac/check-hmac-static-cleanup.py --target aarch64-unknown-linux-gnu
+python3 scripts/hmac/test-hmac-static-cleanup.py
 python3 scripts/hmac/check-hmac-package.py
 python3 scripts/hmac/test-hmac-facade.py
 python3 scripts/hmac/check-hmac-facade.py

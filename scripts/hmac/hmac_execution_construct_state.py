@@ -43,12 +43,10 @@ class State(admission.State):
         super().store(address, size, value)
         self.constants.update(fragments)
 
-    def number(self, value, discriminator, route):
-        if isinstance(value, tuple) and value[1:] == (discriminator, 8):
-            return route
-        return value if isinstance(value, int) else None
+    def number(self, value, discriminator, route, profile="runtime"):
+        return contracts.owner_value(value, discriminator, route, profile)
 
-    def evaluate(self, line, predecessor, discriminator, route, types):
+    def evaluate(self, line, predecessor, discriminator, route, types, profile="runtime"):
         definition = re.match("(" + VALUE + r") = (.*)", line)
         if not definition:
             return False
@@ -70,6 +68,18 @@ class State(admission.State):
                     or selected[0] == "inttoptr (i64 1 to ptr)"), "unbound constructor pointer phi")
             self.pointers[name] = self.address(selected[0])
             return True
+        pointer_load = re.match(r"load ptr, ptr (" + VALUE + "),", expression)
+        pointer_compare = re.fullmatch(r"icmp (eq|ne) ptr (" + VALUE + r"), null", expression)
+        if pointer_load and self.rooted(pointer_load[1]):
+            value = self.load(self.address(pointer_load[1]), 8)
+            require(profile == "static" and isinstance(value, tuple)
+                    and value[0] < 3 and value[1:] == (64, 8), "unknown constructor pointer metadata")
+            self.assign(name, ("nonnull", True))
+            return True
+        if pointer_compare and self.value(pointer_compare[2]) is not None:
+            require(self.value(pointer_compare[2]) == ("nonnull", True), "unbound constructor pointer condition")
+            self.assign(name, int(pointer_compare[1] == "ne"))
+            return True
         provenance.evaluate(line, self, self.address, predecessor)
         arithmetic = re.fullmatch(r"(add|sub)(?: nuw)?(?: nsw)? i(\d+) ("
                                   + VALUE + r"|-?\d+), (" + VALUE + r"|-?\d+)", expression)
@@ -79,9 +89,10 @@ class State(admission.State):
         if match:
             operands = [self.value(operand) for operand in match.group(3, 4)]
             require(all(not isinstance(value, tuple) or comparison
-                        and value[1:] == (discriminator, 8) for value in operands),
+                        and value[1:] == (discriminator, contracts.metadata_size(profile))
+                        for value in operands),
                     "constructor arithmetic on owner bytes")
-            left, right = (self.number(self.value(operand), discriminator, route)
+            left, right = (self.number(self.value(operand), discriminator, route, profile)
                            for operand in match.group(3, 4))
             if left is not None and right is not None:
                 if arithmetic:
@@ -95,13 +106,14 @@ class State(admission.State):
         return bool(gep or phi or match or re.match(r"(?:load i\d+|phi i\d+|trunc)", expression))
 
 
-def iterator_cursor(state, identity, compiler):
-    shape, discriminator, absent, cached, start = contracts.geometry(identity, compiler)
+def iterator_cursor(state, identity, compiler, profile="runtime", pool_name="%states"):
+    shape, discriminator, absent, cached, start = contracts.geometry(identity, compiler, profile)
+    size = contracts.metadata_size(profile)
     offset = 32 if identity.startswith("sha3_") else 16
-    cursor = contracts.constant(state, ("%states", offset), 8)
-    require(cursor in range(4) and contracts.constant(state, ("%states", offset + 8), 8) == 3
-            and contracts.constant(state, ("%states", 0), 1) == 1, "invalid remaining iterator range")
+    cursor = contracts.constant(state, (pool_name, offset), 8)
+    require(cursor in range(4) and contracts.constant(state, (pool_name, offset + 8), 8) == 3
+            and contracts.constant(state, (pool_name, 0), 1) == 1, "invalid remaining iterator range")
     for index in (3, 4):
-        require(contracts.constant(state, ("%states", start + index * shape.stride + discriminator), 8)
-                == cached % (1 << 64), "nonempty constructor iterator cache")
+        require(contracts.constant(state, (pool_name, start + index * shape.stride + discriminator), size)
+                == cached % (1 << (8 * size)), "nonempty constructor iterator cache")
     return cursor

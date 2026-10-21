@@ -35,8 +35,8 @@ identities reject. This prevents feature unification from silently substituting
 the already-reviewed runtime layout for a static-only build.
 
 The static fixture has 108 consumers (no runtime constructor). Its checker
-currently covers 96: 24 cancellation/update consumers, plus scratch, complete
-Engine handoffs and consuming Engine/adapter graphs for the 72 finalizers.
+covers 24 cancellation/update consumers, scratch, complete Engine handoffs and
+consuming Engine/adapter graphs for 72 finalizers, and 12 constructors.
 It checks actual outlined destructors, retained/empty states, normal/error and
 recoverable unwind paths,
 full copy extents, split scalar moves, original input/output arguments and
@@ -69,17 +69,47 @@ The shared walkers keep feature layouts explicit; no global layout override or
 rewriting of emitted IR is used. Regression tests reject wrong-width metadata,
 altered helper bodies/leaf identities, missing/short copies, forged scalar
 fragments, diverted observer unwind, missing empty-output clearing and feature
-contamination. Eleven private-source mutants must compile and then reject:
+contamination. Eighteen private-source mutants must compile and then reject:
 forgotten cancellation, retained error leakage, skipped update-error cleanup,
 observer unwind leakage, suppressed inner-digest/tag/comparison clearing,
 forgotten success/error consume callbacks, a forgotten outer owner on update
-error and an outer owner hidden from recoverable-unwind destruction.
-Each restored baseline must pass.
+error and an outer owner hidden from recoverable-unwind destruction. Seven
+constructor mutants additionally test leaked earlier admissions, key access
+before admission, skipped iterator entries, forgotten remaining iterator
+owners, swapped returned owners and an inner owner forgotten on outer-pad error.
+Each restored focused baseline must pass; the unmodified artifact also runs
+the complete static checker. A compiled mutant is never accepted as rejected
+merely because it fails to compile.
 
-**Still pending in the static-only build:** constructor admission/iterator and
-returned-owner transfers. Runtime-enabled coverage of those constructor graphs
-below must not be reported as static-only coverage. Hosted protected/resident
-worker placement remains a separate pending boundary.
+### Static-only constructors
+
+The static entry has four bound parameters (result, authority and key slice),
+with `create` inlined into the actual fixture body. A new outline edge is not
+accepted implicitly. Scratch allocations and clearing are checked separately
+from logical hash ownership. Exact role allocations are resolved without
+rewriting the compiler's instructions or variable names.
+
+Admission explores failures and recoverable unwinding before key access, then
+checks the ordered state pool. The post-admission model follows iterator
+cursors, normalization, both pad updates and complete returned inner/outer
+owners. Actual iterator and cleanup helper bodies are inspected, including
+every remaining suffix and both normal/already-unwinding destruction. Static
+boolean niches use byte loads; homogeneous byte structs in the older compiler
+are handled explicitly, not mistaken for the runtime layout's i64 structs.
+Rust 1.90 and 1.99 use different cached-option/result error values; each is
+checked against its own layout.
+
+Eight independent hash-health populations cover the three admitted owners.
+Successful static factory calls are typed callee contracts requiring CPU
+sessions; nullable-pointer metadata therefore means present CPU scratch here,
+unlike the conservative retained-owner population above. Session backend kind
+is opaque: its metadata may only select the Result error/non-error edge, not a
+backend-dependent branch. General SHA-512/t's temporary session is tracked
+through complete scalar/aggregate moves into the consuming hash constructor.
+Factory internals and borrowed updates remain separate callee premises. The
+same source-bound non-unwinding clearing premise described below applies.
+
+Hosted protected/resident worker placement remains a separate pending boundary.
 
 ## Checked boundary
 
@@ -202,9 +232,9 @@ erasure of physical source copies. The fixture's empty output-observer assembly
 is allowed only without an Engine-derived pointer. Unknown owner operations
 fail closed; compiler assumptions do not prune obligations.
 
-The constructor checks below are separate from this finalizer model and apply
-to the runtime-enabled layout. The remaining static-only checks and
-protected/resident worker placement remain pending.
+The constructor checks below describe the runtime-enabled layout. The
+static-only variant is covered separately above; protected/resident worker
+placement remains pending.
 
 ## Constructor admission and state-pool handoff
 
@@ -368,7 +398,7 @@ placement. They do not erase compiler-created copies, caller registers/spills,
 interrupt state, dumps, snapshots or fatal-abort state. Those accepted limits
 are not reopened here.
 
-Static-only constructor and hosted worker compiler qualification
-remain pending, alongside timing/native qualification and independent review.
+Hosted worker compiler qualification remains pending, alongside timing/native
+qualification and independent review.
 No strict-facade admission or global qualification status is promoted by this
 bounded check.

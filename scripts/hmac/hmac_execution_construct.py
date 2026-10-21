@@ -17,13 +17,15 @@ require, VALUE = common.require, syntax.VALUE
 
 
 def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind",
-          route=0, long_key=False, types=None):
-    seeds = admission.check(body, identity, definitions, aliases, compiler, panic, route, long_key)
+          route=0, long_key=False, types=None, profile="runtime"):
+    seeds = admission.check(body, identity, definitions, aliases, compiler, panic, route, long_key, profile)
     contracts.validate()
-    shape, discriminator, _, returned_error, pool = layout.geometry(identity, compiler)
+    shape, discriminator, _, returned_error, pool = layout.geometry(identity, compiler, profile)
+    roles = layout.roles(body, profile)
+    metadata_size = layout.metadata_size(profile)
     allocs = {name: int(size) for name, size in re.findall(
         "(" + VALUE + r") = alloca \[(\d+) x i8\],", body)}
-    ptrs = syntax.pointers(body, (*allocs, "%_0", "%key.0", "%1"))
+    ptrs = syntax.pointers(body, (*allocs, "%_0", "%key.0", roles["authority"]))
     graph = common.blocks(body)
     queue = [(label, index, pred, model.State(seed, ptrs), False, ())
              for label, index, pred, seed in seeds]
@@ -60,7 +62,7 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
         while index < len(lines):
             line = lines[index]
             no_unwind = False
-            evaluated = state.evaluate(line, predecessor, discriminator, route, types or {})
+            evaluated = state.evaluate(line, predecessor, discriminator, route, types or {}, profile)
             invocation = syntax.call(line)
             if invocation:
                 symbol, args = invocation
@@ -94,7 +96,9 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
                         formals = syntax.parameters(arguments)
                         require(len(formals) == len(args), "normalization adapter arity changed")
                         final.check(nested, identity, definitions, aliases, panic,
-                                    ((syntax.operand(formals[1]), 0, token),), route=route)
+                                    ((syntax.operand(formals[1]), 0, token),),
+                                    route=(12 | (route & 3)) if profile == "static" else route,
+                                    profile=profile)
                     state.done.add(token)
                     state.normalized = True
                     normalized.add(token)
@@ -105,13 +109,14 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
                         contracts.borrowed_update(symbol, identity, definitions, aliases)
                     name = syntax.operand(args[0])
                     token = state.complete(state.address(name), shape.stride)
-                    roles = {"%hash.i": 0, "%inner.i": expected_pair[0], "%outer.i": expected_pair[1]}
-                    require(name in roles and token == roles[name], "constructor updates wrong owner role")
+                    owners = {roles["hash"]: 0, roles["inner"]: expected_pair[0],
+                              roles["outer"]: expected_pair[1]}
+                    require(name in owners and token == owners[name], "constructor updates wrong owner role")
                     sequence = (0, 1, 2) if long_key else (0, 1)
                     require(len(state.updates) < len(sequence) and token == sequence[len(state.updates)],
                             "constructor update order changed")
                     normalizing = long_key and not state.updates
-                    input_pointer = "%key.0" if normalizing else "%pad.i"
+                    input_pointer = "%key.0" if normalizing else roles["pad"]
                     input_size = r"%key\.1" if normalizing else str(layout.block_bytes(identity))
                     require(len(args) == 3 and syntax.operand(args[1]) == input_pointer
                             and re.fullmatch(r"i64 [^%]*" + input_size, args[2]),
@@ -122,7 +127,9 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
                 elif cleanup.leaf(symbol):
                     kind = cleanup.leaf(symbol)
                     root, offset = state.address(syntax.operand(args[0]))
-                    token = state.complete((root, offset - (shape.core if kind == shape.core_kind else 0)),
+                    relative = shape.core if kind == shape.core_kind else (
+                        80 if profile == "static" and shape.core_kind == "sha2" else 0)
+                    token = state.complete((root, offset - relative),
                                            shape.stride)
                     destroy(state, token, kind)
                     if panic == "unwind" and not re.search(r"\binvoke\b", line):
@@ -131,20 +138,20 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
                     if "Flatten" in symbol:
                         require(scratch.independent_iterator(body, line, definitions, aliases),
                                 "unknown constructor iterator destruction")
-                        require(syntax.operand(args[0]) == "%states", "iterator storage changed")
-                        cursor = model.iterator_cursor(state, identity, compiler)
+                        require(syntax.operand(args[0]) == roles["states"], "iterator storage changed")
+                        cursor = model.iterator_cursor(state, identity, compiler, profile, roles["states"])
                         outcomes = iterator.check(symbol, identity, definitions, aliases, compiler, panic,
-                                                  cursor, long_key, route, unwinding, types)
+                                                  cursor, long_key, route, unwinding, types, profile)
                         for token in range(cursor, 3 if long_key else 2):
-                            require(state.complete(("%states", pool + token * shape.stride),
+                            require(state.complete((roles["states"], pool + token * shape.stride),
                                                    shape.stride) == token, "remaining iterator owner changed")
                             destroy(state, token, shape.core_kind)
                             destroy(state, token, shape.scratch_kind)
                     else:
                         parameter, nested = cleanup.helper(symbol, definitions, aliases)
                         token = state.complete(state.address(syntax.operand(args[0])), shape.stride)
-                        expected = frozenset(((shape.core_kind, shape.core), (shape.scratch_kind, 0)))
-                        outcomes = cleanup.walk(nested, parameter, 0, {discriminator: route},
+                        metadata, expected = layout.owner_cleanup(identity, compiler, profile, route, token)
+                        outcomes = cleanup.walk(nested, parameter, 0, metadata,
                                                 frozenset(), definitions, aliases, expected=expected,
                                                 size=shape.stride, unwinding=unwinding, panic=panic)
                         require(all(events == expected for _, events in outcomes), "incomplete constructor drop")
@@ -211,7 +218,7 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
                 cases = [re.fullmatch(r"i\d+ (-?\d+), label %" + common.LABEL, item)
                          for item in lines[index + 1:end]]
                 require(all(cases), "invalid constructor switch case")
-                value = state.number(state.value(header[2]), discriminator, route)
+                value = state.number(state.value(header[2]), discriminator, route, profile)
                 modulus = 1 << int(header[1])
                 for case in cases:
                     if value is None or value % modulus == int(case[1]) % modulus:
@@ -227,7 +234,8 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
                 if line.startswith("resume "):
                     all_done(state)
                     failures += 1
-                elif layout.constant(state, ("%_0", shape.discriminator), 8) == returned_error % (1 << 64):
+                elif layout.constant(state, ("%_0", shape.discriminator), metadata_size) == returned_error % (
+                        1 << (8 * metadata_size)):
                     all_done(state)
                     failures += 1
                 else:

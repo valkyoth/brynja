@@ -21,16 +21,21 @@ def integer(text, values):
     return value
 
 
-def array_types(llvm):
-    """Only homogeneous i64 structs: no unmodelled ABI padding."""
+def array_types(llvm, profile="runtime"):
+    """Homogeneous i64 or static-only i8 structs: no ABI padding."""
+    require(profile in ("runtime", "static"), "unknown iterator type profile")
     result = {}
     for name, fields in re.findall(r'^(%"[^"]+") = type \{ ([^}\n]+) \}$', llvm, re.M):
         if not name.startswith(('%"core::mem::maybe_uninit::', '%"core::option::Option<')):
             continue
         parts = fields.split(", ")
-        require(all(re.fullmatch(r"(?:\[\d+ x i64\]|i64)", part) for part in parts),
+        width = 1 if profile == "static" and all(
+            re.fullmatch(r"(?:\[\d+ x i8\]|i8)", part) for part in parts) else 8
+        require(all(re.fullmatch(r"(?:\[\d+ x i" + str(width * 8) + r"\]|i"
+                                 + str(width * 8) + ")", part) for part in parts),
                 "unknown iterator array type layout")
-        result[name] = sum(8 if part == "i64" else int(part[1:].split()[0]) * 8 for part in parts)
+        result[name] = sum(width if not part.startswith("[") else int(part[1:].split()[0]) * width
+                           for part in parts)
     return result
 
 
@@ -42,7 +47,8 @@ def metadata(line, values, memory, predecessor, types):
     name, expression = definition.groups()
     gep = re.fullmatch(r'getelementptr(?: inbounds)?(?: nuw)? (i8|\[(\d+) x i8\]|%"[^"]+"), ptr ('
                        + VALUE + r"), i64 (" + VALUE + r"|-?\d+)", expression)
-    load = re.match(r"load i(\d+), ptr (" + VALUE + "),", expression)
+    load = re.match(r"load (i\d+|ptr), ptr (" + VALUE + "),", expression)
+    pointer_compare = re.fullmatch(r"icmp (eq|ne) ptr (" + VALUE + r"), null", expression)
     arithmetic = re.fullmatch(r"(add|sub)(?: nuw)?(?: nsw)? i(\d+) ("
                               + VALUE + r"|-?\d+), (" + VALUE + r"|-?\d+)", expression)
     comparison = re.fullmatch(r"icmp(?: samesign)? (eq|ne|ult|ugt|ule|uge) i(\d+) ("
@@ -58,9 +64,12 @@ def metadata(line, values, memory, predecessor, types):
     elif load:
         pointer = values.get(load[2])
         require(pointer and pointer[0] == "ptr", "unknown iterator load pointer")
-        key = pointer[1], int(load[1]) // 8
+        key = pointer[1], "ptr" if load[1] == "ptr" else int(load[1][1:]) // 8
         require(key in memory, "iterator reads unbound metadata")
         values[name] = memory[key]
+    elif pointer_compare:
+        require(values.get(pointer_compare[2]) == ("nonnull", True), "unknown iterator CPU pointer niche")
+        values[name] = int(pointer_compare[1] == "ne")
     elif arithmetic or comparison:
         match = arithmetic or comparison
         bits = int(match[2])
@@ -180,23 +189,30 @@ def walk(body, parameter, base, memory, definitions, aliases, panic, unwinding=F
 
 
 def check(symbol, identity, definitions, aliases, compiler, panic, cursor, long_key, route,
-          unwinding=False, types=None):
+          unwinding=False, types=None, profile="runtime"):
     """Empty caches plus the exact unconsumed suffix of the three-entry array."""
-    require(cursor in range(4) and route in (0, 1) and identity in common.IDENTITIES
+    require(cursor in range(4) and route in ((0, 1) if profile == "runtime" else range(8))
+            and identity in common.IDENTITIES
             and compiler in ("1.90.0", "1.99.1") and panic in ("abort", "unwind"),
             "invalid iterator metadata profile")
-    shape, discriminator, absent, cached, start = admission.geometry(identity, compiler)
+    shape, discriminator, absent, cached, start = admission.geometry(identity, compiler, profile)
+    size = admission.metadata_size(profile)
     offset = 32 if identity.startswith("sha3_") else 16
     memory = {(0, 1 if identity.startswith("sha3_") else 16): 1,
               (offset, 8): cursor, (offset + 8, 8): 3}
     expected = set()
     for token in range(5):
         present = token < (3 if long_key else 2)
-        memory[start + token * shape.stride + discriminator, 8] = (
+        base = start + token * shape.stride
+        memory[base + discriminator, size] = (
+            ((route >> token) & 1) if present and profile == "static" else
             route if present else absent if token == 2 else cached)
+        if profile == "static" and shape.core_kind == "sha2" and present:
+            memory[base + 64, "ptr"] = ("nonnull", True)
         if cursor <= token < 3 and present:
             expected |= {(shape.core_kind, start + token * shape.stride + shape.core),
-                         (shape.scratch_kind, start + token * shape.stride)}
+                         (shape.scratch_kind, base + (80 if profile == "static"
+                                                     and shape.core_kind == "sha2" else 0))}
     parameter, body = cleanup.helper(symbol, definitions, aliases)
     outcomes = walk(body, parameter, 0, memory, definitions, aliases, panic, unwinding, types=types)
     require(all(events == expected for _, events in outcomes),

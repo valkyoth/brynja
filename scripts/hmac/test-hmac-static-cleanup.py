@@ -10,6 +10,9 @@ import unittest
 from unittest import mock
 from hmac_static_final_tests import StaticFinalTests
 from hmac_execution_final_tests import FinalTests
+from hmac_execution_admission_tests import AdmissionTests
+from hmac_execution_construct_tests import ConstructTests
+from hmac_static_construct_tests import StaticConstructorTests
 
 spec = importlib.util.spec_from_file_location(
     "hmac_static_cleanup", Path(__file__).with_name("check-hmac-static-cleanup.py"))
@@ -18,7 +21,7 @@ spec.loader.exec_module(static)
 driver = static.driver
 
 
-class StaticTests(StaticFinalTests, unittest.TestCase):
+class StaticTests(StaticFinalTests, StaticConstructorTests, unittest.TestCase):
     driver = driver
     @classmethod
     def setUpClass(cls):
@@ -224,7 +227,7 @@ class StaticTests(StaticFinalTests, unittest.TestCase):
             return driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu", "unwind",
                                fixture / "Cargo.toml", profile="static")[1]
 
-        static.validate(emitted())
+        static.validate_owners(emitted())
         mutants = [
             (leaf / "src/execution/mod.rs", "pub fn cancel(self) {}",
              "pub fn cancel(self) { core::mem::forget(self); }"),
@@ -242,6 +245,8 @@ class StaticTests(StaticFinalTests, unittest.TestCase):
                             f"let mut {role} = core::mem::ManuallyDrop::new(Scratch::<{size}>::new());"))
         final_mutants = FinalTests.final_mutants(leaf)
         mutants.extend(final_mutants)
+        constructor_mutants = AdmissionTests.admission_mutants(leaf) + ConstructTests.construct_mutants(leaf)
+        mutants.extend(constructor_mutants)
         for path, anchor, replacement in mutants:
             original = path.read_text()
             self.assertEqual(original.count(anchor), 1)
@@ -253,12 +258,20 @@ class StaticTests(StaticFinalTests, unittest.TestCase):
                     body = driver.scratch.consumer(functions["sha256", "public"], "public", definitions, aliases)
                     with self.assertRaises(ValueError):
                         driver.final.check(body, "sha256", definitions, aliases, profile="static", route=15)
-                with self.subTest(anchor=anchor), self.assertRaises(ValueError):
-                    static.validate(llvm)
+                if (path, anchor, replacement) in constructor_mutants:
+                    with self.subTest(anchor=anchor), self.assertRaises(ValueError):
+                        self.check_static_constructor(llvm)
+                else:
+                    with self.subTest(anchor=anchor), self.assertRaises(ValueError):
+                        static.validate_owners(llvm)
             finally:
                 path.write_text(original)
-            static.validate(emitted())
-        print("Static-only HMAC mutants: 11 compiled/rejected; restored baselines PASS", flush=True)
+            restored = emitted()
+            if (path, anchor, replacement) in constructor_mutants:
+                self.check_static_constructor(restored)
+            else:
+                static.validate_owners(restored)
+        print("Static-only HMAC mutants: 18 compiled/rejected; restored focused baselines PASS", flush=True)
 
 
 if __name__ == "__main__":

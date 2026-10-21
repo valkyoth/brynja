@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Static-only retained/finalizer owner graphs and handoffs; not constructors."""
+"""Static-only retained/finalizer and constructor ownership/cleanup dispatch."""
 import argparse
 import importlib.util
 from pathlib import Path
+import hmac_static_construct as construct
 
 spec = importlib.util.spec_from_file_location(
     "hmac_execution_cleanup", Path(__file__).with_name("check-hmac-execution-cleanup.py"))
@@ -10,7 +11,7 @@ driver = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(driver)
 
 
-def validate(llvm, compiler="1.99.1", panic="unwind"):
+def validate_owners(llvm, compiler="1.99.1", panic="unwind"):
     driver.validate_retained(llvm, compiler, panic, profile="static")
     functions, definitions, aliases = driver.emitted(llvm, driver.final.syntax.OPERATIONS)
     checked = set()
@@ -35,12 +36,18 @@ def validate(llvm, compiler="1.99.1", panic="unwind"):
             checked.add(key)
 
 
+def validate(llvm, compiler="1.99.1", panic="unwind"):
+    validate_owners(llvm, compiler, panic)
+    definitions, aliases = driver.common.definitions_and_aliases(llvm)
+    construct.validate(llvm, definitions, aliases, compiler, panic)
+
+
 def collect(directory, compiler, target, panic):
     artifacts = driver.emit(directory, compiler, target, panic, profile="static")
     validate(artifacts[1], compiler, panic)
     print(f"HMAC static-only retained/wrapper cleanup: PASS; {compiler}; {target}; "
           f"panic={panic}; 24 cancellation/update and 72 finalizer scratch/handoff consumers; "
-          "consuming Engine/adapter ownership checked; constructors pending; "
+          "consuming Engine/adapter and 12 constructor owner graphs checked; "
           "not whole-frame erasure", flush=True)
     return artifacts
 

@@ -24,13 +24,17 @@ class State(provenance.State):
 
 
 def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind",
-          route=0, long_key=False):
+          route=0, long_key=False, profile="runtime"):
     require(identity in common.IDENTITIES and compiler in ("1.90.0", "1.99.1")
-            and panic in ("abort", "unwind") and route in (0, 1), "invalid admission profile")
-    shape, discriminator, error, returned_error, pool = contracts.geometry(identity, compiler)
+            and panic in ("abort", "unwind")
+            and route in ((0, 1) if profile == "runtime" else range(8)), "invalid admission profile")
+    shape, discriminator, error, returned_error, pool = contracts.geometry(identity, compiler, profile)
+    roles = contracts.roles(body, profile)
+    metadata_size = contracts.metadata_size(profile)
+    session_size = 736 if profile == "static" else 752
     allocs = {name: int(size) for name, size in re.findall(
         "(" + VALUE + r") = alloca \[(\d+) x i8\],", body)}
-    ptrs = syntax.pointers(body, (*allocs, "%_0", "%key.0", "%1"))
+    ptrs = syntax.pointers(body, (*allocs, "%_0", "%key.0", roles["authority"]))
     graph = common.blocks(body)
     births, counts = {}, {"hash": 0, "session": 0}
     for label, lines in graph.items():
@@ -50,7 +54,7 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
         return ptrs.get(name, (name, 0))
 
     def width(token):
-        return 752 if token >= 3 else shape.stride
+        return session_size if token >= 3 else shape.stride
 
     def rooted(state, name):
         return any(row[0] == address(name)[0] for row in state.memory)
@@ -61,9 +65,7 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
                 "admission owner copy outside private allocation")
 
     def number(value):
-        if isinstance(value, tuple) and value[1:] == (discriminator, 8):
-            return route
-        return value if isinstance(value, int) else None
+        return contracts.owner_value(value, discriminator, route, profile)
 
     def event(state, token, kind):
         require(token < 3 and kind in (shape.core_kind, shape.scratch_kind),
@@ -93,12 +95,28 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
                 require(derived[1] in ptrs, "unresolved admission owner pointer")
             load = re.match("(" + VALUE + r") = load (?:i(\d+)|ptr), ptr (" + VALUE + ")", line)
             if load and rooted(state, load[3]):
-                require(load[2], "admission owner pointer escape")
+                if not load[2]:
+                    value = state.load(address(load[3]), 8)
+                    require(profile == "static" and isinstance(value, tuple)
+                            and value[0] < 3 and value[1:] == (64, 8)
+                            and shape.core_kind == "sha2", "admission owner pointer escape")
             provenance.evaluate(line, state, address, predecessor)
+            if load and not load[2] and rooted(state, load[3]):
+                state.assign(load[1], ("nonnull", True))
+            pointer_test = re.fullmatch("(" + VALUE + r") = icmp (eq|ne) ptr ("
+                                        + VALUE + r"), null", line)
+            if pointer_test and state.value(pointer_test[3]) is not None:
+                require(state.value(pointer_test[3]) == ("nonnull", True),
+                        "unknown admission pointer metadata")
+                state.assign(pointer_test[1], int(pointer_test[2] == "ne"))
             compare = re.match("(" + VALUE + r") = icmp(?: samesign)? (eq|ne) i\d+ ("
                                + VALUE + r"), (-?\d+)", line)
             if compare:
-                value = number(state.value(compare[3]))
+                source = state.value(compare[3])
+                if profile == "static" and isinstance(source, tuple) and len(source) == 3 and source[0] >= 3:
+                    require(source[1:] == (720, 1) and int(compare[4]) == contracts.session_error(compiler),
+                            "unreviewed static session-kind condition")
+                value = number(source)
                 if value is not None:
                     state.assign(compare[1], int((value == int(compare[4])) == (compare[2] == "eq")))
             key_test = re.fullmatch("(" + VALUE + r") = icmp(?: samesign)? ugt i64 %key\.1, (\d+)",
@@ -115,15 +133,17 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
                     kind, token = births[label, index]
                     destination = syntax.operand(args[0])
                     bounded(destination, width(token))
-                    require(len(args) == 3, "admission factory arity changed")
                     if kind == "session" or not identity.startswith("general"):
-                        require(re.fullmatch(r"i64 [^%]*%0", args[1])
-                                and syntax.operand(args[2]) == "%1",
+                        require(len(args) == (2 if profile == "static" else 3),
+                                "admission factory arity changed")
+                        require((profile == "static" or re.fullmatch(r"i64 [^%]*%0", args[1]))
+                                and syntax.operand(args[-1]) == roles["authority"],
                                 "admission authority/route changed")
                     else:
+                        require(len(args) == 3, "general admission factory arity changed")
                         require(args[1] == "i16 noundef " + identity.removeprefix("general"),
                                 "general admission parameter changed")
-                        session = state.complete(address(syntax.operand(args[2])), 752)
+                        session = state.complete(address(syntax.operand(args[2])), session_size)
                         require(session == token + 3, "general admission session provenance changed")
                         state.done.add(session)  # Sha512T::new consumes it on both edges.
                     require(panic == "abort" or re.search(r"\binvoke\b", line)
@@ -132,7 +152,10 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
                     success, failure = state.clone(), state.clone()
                     success.birth(address(destination), width(token), token)
                     root, offset = address(destination)
-                    failure.constants[(root, offset + discriminator, 8)] = error
+                    fail_offset = 720 if profile == "static" and kind == "session" else discriminator
+                    fail_value = contracts.session_error(compiler) if (
+                        profile == "static" and kind == "session") else error
+                    failure.constants[(root, offset + fail_offset, metadata_size)] = fail_value
                     normal = [success, failure]
                     seen.add(token)
                 elif symbol == "llvm.memcpy.p0.p0.i64":
@@ -142,9 +165,9 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
                     bounded(destination, int(size[1]))
                     state.transfer(address(destination), address(source), int(size[1]))
                 elif symbol == "llvm.memset.p0.i64":
-                    require(syntax.operand(args[0]) == "%pad.i" and args[1:3] == ["i8 0", "i64 144"],
+                    require(syntax.operand(args[0]) == roles["pad"] and args[1:3] == ["i8 0", "i64 144"],
                             "unreviewed admission memory initialization")
-                    contracts.pool_handoff(state, identity, compiler, long_key)
+                    contracts.pool_handoff(state, identity, compiler, long_key, profile, roles["states"])
                     handoffs.append((label, index + 1, predecessor, state.clone()))
                     terminal = True
                     break
@@ -160,7 +183,8 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
                 elif cleanup.leaf(symbol):
                     kind = cleanup.leaf(symbol)
                     root, offset = address(syntax.operand(args[0]))
-                    base = offset - (shape.core if kind == shape.core_kind else 0)
+                    base = offset - (shape.core if kind == shape.core_kind else
+                                     80 if profile == "static" and shape.core_kind == "sha2" else 0)
                     token = state.complete((root, base), shape.stride)
                     event(state, token, kind)
                     require(panic == "abort" or unwinding or re.search(r"\binvoke\b", line)
@@ -170,8 +194,8 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
                     parameter, helper = cleanup.helper(symbol, definitions, aliases)
                     require(len(args) == 1, "admission cleanup helper arity")
                     token = state.complete(address(syntax.operand(args[0])), shape.stride)
-                    expected = frozenset(((shape.core_kind, shape.core), (shape.scratch_kind, 0)))
-                    outcomes = cleanup.walk(helper, parameter, 0, {discriminator: route},
+                    metadata, expected = contracts.owner_cleanup(identity, compiler, profile, route, token)
+                    outcomes = cleanup.walk(helper, parameter, 0, metadata,
                                             frozenset(), definitions, aliases, expected=expected,
                                             size=shape.stride, unwinding=unwinding, panic=panic)
                     require(outcomes and all(events == expected for _, events in outcomes),
@@ -214,7 +238,7 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
                 require(not any(rooted(state, name) for name in references),
                         "unknown admission owner-pointer operation")
                 scalar_refs = [name for name in references if isinstance(state.value(name), tuple)]
-                require(not scalar_refs or compare or " = phi i" in line,
+                require(not scalar_refs or compare or pointer_test or " = phi i" in line,
                         "unknown admission owner-scalar operation")
             if re.search(r"\binvoke\b", line):
                 edges = re.fullmatch("to label %" + common.LABEL + " unwind label %"
@@ -264,8 +288,8 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
             if line.startswith(("ret ", "resume ")):
                 require(state.born == state.done, "admission failure leaks previous owner")
                 if line.startswith("ret "):
-                    require(contracts.constant(state, ("%_0", shape.discriminator), 8)
-                            == returned_error % (1 << 64), "admission returns unexpected success")
+                    require(contracts.constant(state, ("%_0", shape.discriminator), metadata_size)
+                            == returned_error % (1 << (8 * metadata_size)), "admission returns unexpected success")
                 failures += 1
                 terminal = True
                 break

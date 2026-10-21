@@ -80,7 +80,7 @@ class AuthorityTests:
         count = 0
         for target in driver.TARGETS:
             llvm = driver.emit(self.root / ('authority-msrv-' + target), '1.90.0', target, 'abort')[1]
-            definitions, aliases, names, checked = driver.validate(llvm, target, '1.90.0')
+            definitions, aliases, names, checked = driver.validate(llvm, target, '1.90.0', 'abort')
             for symbol in checked:
                 if 'CompiledSession<' not in names[symbol]:
                     continue

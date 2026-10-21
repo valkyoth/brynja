@@ -102,7 +102,7 @@ class KeyedTests:
         count = 0
         for target in driver.TARGETS:
             llvm = driver.emit(self.root / ('keyed-msrv-' + target), '1.90.0', target, 'abort')[1]
-            definitions, aliases, names, checked = driver.validate(llvm, target, '1.90.0')
+            definitions, aliases, names, checked = driver.validate(llvm, target, '1.90.0', 'abort')
             for body, identity, compiled in self.keyed_workers(definitions, aliases, names, checked, target):
                 if not compiled:
                     continue

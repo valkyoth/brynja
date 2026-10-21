@@ -506,9 +506,47 @@ state with an unrelated key (scalar and accelerated on Linux and Darwin).
 The keyed checker itself must reject the emitted mutant; the restored baseline
 must pass. Compilation failure is not counted as a successful rejection.
 
-This is **host lifecycle and selected capture/factory evidence**, not complete
-worker-payload qualification. Inner cleanup, post-admission retained-owner/authority-reference lifetimes
-and all worker error/unwind paths remain separate pending checks.
+### Retained storage and worker cleanup dispatch
+
+The post-admission storage check follows the retained allocation and its actual
+consumer/cleanup transfers. Access extents must fit distinct local allocations;
+the lifetime start and initialization must dominate uses. An ended allocation
+cannot be used again without its lifetime restarting. This includes older
+compiler output that reuses a cleanup temporary in a loop. Unknown pointer
+aliases, escapes, overlapping/interior transfers and changed extents reject.
+Lifetime intrinsics are storage-use evidence, not evidence of physical erasure.
+
+The scalar worker graph tracks the inner and outer logical owners from admission
+through update, cancellation, error, verification and secret-output handoffs.
+The accelerated graph additionally tracks retained-present/empty discriminants,
+transfers into cleanup slots, and core/scratch destruction. A moved representation
+is not counted as an additional logical owner. Updates must borrow the exact
+algorithm's live state. Every normal or recoverable-unwind exit must dispatch
+both scalar owners or the expected accelerated core/scratch owners, or reach the
+separately checked consuming finalizer. Missing, duplicate and wrong-owner
+cleanup rejects. Empty accelerated slots cannot be used as live engines.
+
+Actual outlined helper bodies are inspected, including nested helpers and all
+sixteen static metadata populations. When cleanup is inlined in a worker, the
+caller graph explores those same populations. Byte comparisons and switches
+retain constraints across branches, so an error cannot later become a successful
+update merely because the checker forgot its discriminator. Loop definitions
+do not retain the previous iteration's branch facts. This is deliberately a
+conservative metadata model, not execution of secret inputs or a proof of hash
+arithmetic. Unknown cleanup shapes fail closed.
+
+Tests mutate retained lifetimes and transfer extents, live cleanup sites and
+their actual helper bodies, including Rust 1.90's inlined destruction. Four
+additional safe-Rust mutants forget the retained state on cancellation
+(scalar/accelerated, Linux/Darwin). They must compile and pass the prior keyed
+admission and storage checks, then fail this cleanup-dispatch check; restored
+baselines must pass. Changes to unreachable cleanup code are not counted as
+live-path regression detection.
+
+This is **host lifecycle, admission, retained storage and cleanup-dispatch
+evidence**, not complete worker-payload qualification. Full update-input/loop
+provenance, authority references inside borrowed callees, secret-output
+transaction reconciliation and final cross-checking remain pending.
 Host error handling, valid Rust inputs, the reviewed
 resource allocation/attribute implementation and OS pthread semantics remain
 premises. It does not claim whole-frame erasure, fatal cleanup, native platform

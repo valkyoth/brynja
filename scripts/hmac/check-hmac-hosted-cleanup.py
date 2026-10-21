@@ -12,6 +12,9 @@ import hmac_hosted_capture_types as capture_types
 import hmac_hosted_placement as placement
 import hmac_hosted_authority as authority
 import hmac_hosted_keyed as keyed
+import hmac_hosted_storage as storage
+import hmac_hosted_scalar as scalar
+import hmac_hosted_compiled as compiled_worker
 import hmac_engine_codegen as common
 import hmac_engine_final as syntax
 import hmac_verifiers as verifier
@@ -43,7 +46,7 @@ def graph(metadata):
                    'runtime feature contaminates hosted static fixture')
 
 
-def validate(llvm, target, compiler='1.99.1'):
+def validate(llvm, target, compiler='1.99.1', panic='unwind'):
     common.require(compiler in ('1.90.0', '1.99.1')
                    and re.findall(r'!"rustc version ([\d.]+) ', llvm) == [compiler],
                    'hosted emitted compiler identity changed')
@@ -81,8 +84,13 @@ def validate(llvm, target, compiler='1.99.1'):
                                 operation.startswith('compiled_'))
                 if operation.startswith('compiled_'):
                     authority.check(common.resolve(worker, definitions, aliases)[1], names, compiler)
-                keyed.check(common.resolve(worker, definitions, aliases)[1], names, compiler,
-                            identity, operation.startswith('compiled_'))
+                model = keyed.check(common.resolve(worker, definitions, aliases)[1], names, compiler,
+                                    identity, operation.startswith('compiled_'))
+                storage.check(model, identity)
+                if not operation.startswith('compiled_'):
+                    scalar.check(model, identity, definitions, aliases, panic)
+                else:
+                    compiled_worker.check(model, identity, definitions, aliases, compiler, panic)
                 workers.add(worker)
                 checked.add(executor)
     common.require(len(checked) == len(workers) == 24, 'hosted scalar/compiled graph collapsed or incomplete')
@@ -120,9 +128,9 @@ def main():
             contracts.validate()
             with verifier.cargo_environment.private_directory(ROOT) as directory:
                 _, llvm, _ = emit(Path(directory), compiler, args.target, panic)
-                validate(llvm, args.target, compiler)
-            print(f'HMAC hosted capture/factory/authority/keyed-admission/lifecycle: PASS; {compiler}; {args.target}; panic={panic}; '
-                  '48 consumers, 24 executors; complete worker cleanup not qualified', flush=True)
+                validate(llvm, args.target, compiler, panic)
+            print(f'HMAC hosted capture/admission/storage/cleanup-dispatch: PASS; {compiler}; {args.target}; panic={panic}; '
+                  '48 consumers, 24 executors; full hosted qualification pending', flush=True)
 
 
 if __name__ == '__main__':

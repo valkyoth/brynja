@@ -25,6 +25,8 @@ import hmac_hosted_buffers as buffers
 import hmac_hosted_callee_admission as callee_admission
 import hmac_hosted_constructor as constructor
 import hmac_hosted_consumers as consumers
+import hmac_hosted_loans as loans
+import hmac_hosted_loan_creation as loan_creation
 import hmac_engine_codegen as common
 import hmac_engine_final as syntax
 import hmac_verifiers as verifier
@@ -117,6 +119,8 @@ def validate(llvm, target, compiler='1.99.1', panic='unwind'):
                 workers.add(worker)
                 checked.add(executor)
     common.require(len(checked) == len(workers) == 24, 'hosted scalar/compiled graph collapsed or incomplete')
+    loan_creation.validate(definitions, aliases, names, target, compiler)
+    loans.validate(definitions, aliases, names, target, compiler, panic)
     return definitions, aliases, names, checked
 
 
@@ -146,6 +150,7 @@ def emit(directory, compiler, target, panic, fixture=FIXTURE):
     callee_llvm = emit_callees(directory, compiler, target, panic, fixture)
     checkpoint_callees.validate(callee_llvm, target, compiler)
     buffers.validate(callee_llvm, target)
+    loans.resources.validate(callee_llvm, target)
     verifier.run(['cargo', '+' + compiler, 'rustc', '--manifest-path', str(fixture), '--locked', '--offline',
         '--release', '--lib', '--target', target, '--', '--emit=mir,llvm-ir,asm'], env)
     artifacts = []
@@ -169,7 +174,7 @@ def main():
                 _, llvm, _ = emit(Path(directory), compiler, args.target, panic)
                 validate(llvm, args.target, compiler, panic)
             print(f'HMAC hosted capture/admission/storage/input/output/checkpoints/transaction/cleanup-dispatch: PASS; {compiler}; {args.target}; panic={panic}; '
-                  '48 consumers, 24 executors; full hosted qualification pending', flush=True)
+                  '48 host consumers, 48 loan probes, 24 executors; full hosted qualification pending', flush=True)
 
 
 if __name__ == '__main__':

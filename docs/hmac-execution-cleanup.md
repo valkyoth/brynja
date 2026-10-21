@@ -384,7 +384,7 @@ are unchanged by these tests.
 
 ## Hosted captures, factory placement, join and reclamation
 
-`assurance/hmac-hosted-cleanup` emits 48 real consumers: compute and verify,
+`assurance/hmac-hosted-cleanup` emits 48 real host consumers: compute and verify,
 scalar and explicitly accelerated, for the same twelve identities. It resolves
 24 distinct executor bodies and 24 concrete worker callbacks. It does not
 enable `runtime-execution`; Cargo metadata rejects missing/duplicate owners,
@@ -826,14 +826,59 @@ destruction or forget the outer owner on one branch while retaining the real
 outer finalizer on the other. The lost-owner case must report an outstanding
 cleanup obligation, and restored sources must pass.
 
+### Public output loan construction, access and declassification
+
+The same fixture additionally emits 48 concrete public-loan probes:
+`bit_len`, `expose`, consuming `declassify`, and Drop for each identity.
+Equivalent bodies may be LLVM aliases; every named entry must still exist and
+resolve unambiguously. No mutable access, ordinary-buffer replacement or new
+production API is introduced by the fixture.
+
+Both scalar and accelerated compute wrappers are checked through their actual
+Result construction. Exactly one correctly typed executor receives the original
+session, request and cancellation inputs, with no verification candidate.
+Only its successful compute result may return a loan to the session's retained
+output mapping. The selected width must be preserved as an opaque value, not
+replaced with a constant. Error categories and meaningful nested payloads are
+preserved; unknown padding cannot justify successful admission.
+
+The loan probes require the exact borrowed pointer and used-byte span, or the
+selected width field. Declassification permits one exact copy to the caller's
+public destination only when its length matches. Rejection preserves that
+destination. Both outcomes dispatch clearing of the original retained mapping;
+Drop does the same without copying. Reads/calls after clear, writes outside the
+Result, wrong source/destination extents and early/missing clearing reject.
+Representative nonempty used lengths and shorter/equal/longer destinations are
+interpreted; this is a bounded emitted-code check, not a universal arithmetic
+proof. Input validity and exclusive safe-Rust borrowing remain premises.
+
+The dependency emission is also checked for the actual Linux `ProtectedBytes`
+clear and Darwin `Mapping` clear/access helpers. Their present/admitted flags,
+Darwin owner-PID relation, used span and full-payload clearing extent are
+interpreted separately. Invalid Darwin access must abort before exposing a
+payload; foreign/invalid mapping cleanup must not touch payload memory. These
+checks retain the source-bound non-unwinding OS/core-clear premises. For Darwin
+unwind emissions, conservative unwind edges at either mapping-access call are
+also checked for cleanup before resumption; the reviewed access helper itself
+does not Rust-unwind. No fatal-path clearing guarantee is inferred.
+
+Regressions alter actual loan and compute instructions, mapping metadata,
+copy/clear calls, aliases and formal bindings on both compilers and all targets.
+Compiling host-source mutants change returned widths, expose empty storage,
+invert length admission, suppress copying or Drop clearing, and return staging
+storage instead of output storage. Restored sources must pass. Explicit
+declassification releases a caller-owned copy; neither this check nor dropping
+the loan erases that copy.
+
 This is **host lifecycle, admission, retained storage, input/output provenance,
 checkpoint caller/callee, joined host transaction and cleanup-dispatch
 evidence**, not complete worker-payload qualification. Compiled constructor admission,
 post-admission owner transfers and explicit scratch are now linked to the
 actual hosted callees, as are scalar constructor transfers and both scalar and
-compiled consuming callees. Public `Output` loan/declassification
-linkage and final cross-check remain pending. The joined-host check is not a
-proof of request-validation internals or the entire public-output API.
+compiled consuming callees. Public `Output` loan construction, access,
+declassification and clearing are linked as described above. Final hosted
+cross-check remains pending. These checks are not a proof of request-validation
+internals or the entire resource implementation.
 Valid Rust inputs, the reviewed
 resource allocation/attribute implementation and OS pthread semantics remain
 premises. It does not claim whole-frame erasure, fatal cleanup, native platform

@@ -48,6 +48,30 @@ macro_rules! probes {
             ) -> Result<bool, Error> {
                 session.verify(request, candidate, cancel)
             }
+
+            #[inline(never)]
+            pub fn output_bits(output: &Output<'_, $algorithm>) -> usize {
+                output.bit_len()
+            }
+
+            #[inline(never)]
+            pub fn output_expose<'a>(output: &'a Output<'_, $algorithm>) -> &'a [u8] {
+                output.expose()
+            }
+
+            #[inline(never)]
+            pub fn output_declassify(
+                output: Output<'_, $algorithm>,
+                destination: &mut [u8],
+                authority: PublicDeclassification,
+            ) -> Result<(), Error> {
+                output.declassify(destination, authority)
+            }
+
+            #[inline(never)]
+            pub fn output_clear(output: Output<'_, $algorithm>) {
+                drop(output);
+            }
         }
     };
 }

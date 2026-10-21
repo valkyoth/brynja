@@ -109,7 +109,8 @@ through complete scalar/aggregate moves into the consuming hash constructor.
 Factory internals and borrowed updates remain separate callee premises. The
 same source-bound non-unwinding clearing premise described below applies.
 
-Hosted protected/resident worker placement remains a separate pending boundary.
+Hosted protected/resident worker placement is checked separately in the hosted
+section below; it is not inferred from this static-only fixture.
 
 ## Checked boundary
 
@@ -234,7 +235,7 @@ fail closed; compiler assumptions do not prune obligations.
 
 The constructor checks below describe the runtime-enabled layout. The
 static-only variant is covered separately above; protected/resident worker
-placement remains pending.
+placement is checked separately in the hosted section below.
 
 ## Constructor admission and state-pool handoff
 
@@ -876,13 +877,51 @@ evidence**, not complete worker-payload qualification. Compiled constructor admi
 post-admission owner transfers and explicit scratch are now linked to the
 actual hosted callees, as are scalar constructor transfers and both scalar and
 compiled consuming callees. Public `Output` loan construction, access,
-declassification and clearing are linked as described above. Final hosted
-cross-check remains pending. These checks are not a proof of request-validation
-internals or the entire resource implementation.
+declassification and clearing are linked as described above. These checks are
+not a proof of request-validation internals or the entire resource implementation.
 Valid Rust inputs, the reviewed
 resource allocation/attribute implementation and OS pthread semantics remain
 premises. It does not claim whole-frame erasure, fatal cleanup, native platform
 execution or Mac dump exclusion, and does not admit HMAC to the strict facade.
+
+### Final hosted graph reconciliation
+
+The public scalar/accelerated `verify` wrappers are checked as well as `compute`.
+Each must forward the original session, request, candidate pointer and length,
+and cancellation token to its exact typed executor once. Both verification
+decisions must survive unchanged; an unexpected `Ok(None)` becomes
+`Error::Invariant`, never a successful boolean. All eleven error categories
+and meaningful nested payloads are preserved. The check enumerates all 256
+padding-byte values for each unit error; padding cannot select acceptance.
+This exhausts that small Result domain, not the message or cryptographic domain.
+Unknown calls, direct candidate reads/writes and missing/duplicate execution
+are rejected. Compiling source mutants substitute an empty candidate, force
+successful comparisons, or turn the impossible missing decision into `false`.
+A control which disables only the decision-preservation check admits the same
+bit-flip mutant rejected by the intact checker.
+
+The combined driver checks these boundaries on the same fixture emission:
+
+| Boundary | Required population per compiler/target/panic profile |
+| --- | --- |
+| Public compute and verify forwarding/results | 24 compute, 24 verify |
+| Exact session executors and concrete worker callbacks | 24 of each |
+| Scalar and compiled constructors/consuming callees | Twelve identities per mode |
+| Retained storage, input/output, checkpoints and host transaction | All 24 executor/worker paths |
+| Public loan access, declassification and Drop | 48 probes |
+| Outlined checkpoint, buffer and mapping helpers | Three dependency validators |
+
+A composition regression wraps the real checks, preserves their execution,
+and verifies all twenty host/worker/callee/output check populations. The three
+outlined-dependency validators must also run during emission. LLVM target and
+compiler metadata must match the requested profile; missing, duplicated or
+substituted target declarations fail. Apple emissions explicitly use deployment
+target 11.0 instead of inheriting an ambient override. These are compiler
+artifact bindings, not authenticated runner attestations or native runs.
+
+This closes the bounded hosted compiler-linkage cross-check. It does not promote
+the global qualification register: timing/native qualification, source-bound
+release reconciliation and independent review remain separate requirements.
 
 ## Premises and remaining work
 
@@ -894,13 +933,14 @@ fatal and outside the recoverable-return guarantee; its exact core terminal is
 not accepted on ordinary entry.
 
 CPU update bodies retain their separately reviewed mutation/layout contracts.
-These checks do not prove update arithmetic, kernel correctness, factory
-internals or protected/resident worker
-placement. They do not erase compiler-created copies, caller registers/spills,
+These checks do not prove update arithmetic, kernel correctness, underlying
+hash-factory internals or OS resource guarantees. The hosted section separately
+checks emitted worker placement and HMAC factory/consumer transfers. They do
+not erase compiler-created copies, caller registers/spills,
 interrupt state, dumps, snapshots or fatal-abort state. Those accepted limits
 are not reopened here.
 
-Hosted worker compiler qualification remains pending, alongside timing/native
-qualification and independent review.
+The bounded hosted compiler linkage is checked; final source-bound qualification
+reconciliation, timing/native qualification and independent review remain pending.
 No strict-facade admission or global qualification status is promoted by this
 bounded check.

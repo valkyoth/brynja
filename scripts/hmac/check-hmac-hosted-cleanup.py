@@ -27,6 +27,7 @@ import hmac_hosted_constructor as constructor
 import hmac_hosted_consumers as consumers
 import hmac_hosted_loans as loans
 import hmac_hosted_loan_creation as loan_creation
+import hmac_hosted_verify as public_verify
 import hmac_engine_codegen as common
 import hmac_engine_final as syntax
 import hmac_verifiers as verifier
@@ -58,10 +59,18 @@ def graph(metadata):
                    'runtime feature contaminates hosted static fixture')
 
 
-def validate(llvm, target, compiler='1.99.1', panic='unwind'):
+def artifact_profile(llvm, target, compiler):
     common.require(compiler in ('1.90.0', '1.99.1')
                    and re.findall(r'!"rustc version ([\d.]+) ', llvm) == [compiler],
                    'hosted emitted compiler identity changed')
+    expected = ('arm64-apple-macosx11.0.0' if target == 'aarch64-apple-darwin' else target)
+    common.require(target in TARGETS and re.findall(r'^target triple = "([^"]+)"$', llvm, re.M) == [expected],
+                   'hosted emitted target identity changed')
+
+
+def validate(llvm, target, compiler='1.99.1', panic='unwind'):
+    artifact_profile(llvm, target, compiler)
+    common.require(panic in ('abort', 'unwind'), 'unreviewed hosted panic profile')
     contracts.validate()
     capture_types.validate()
     definitions, aliases = common.definitions_and_aliases(llvm)
@@ -121,24 +130,31 @@ def validate(llvm, target, compiler='1.99.1', panic='unwind'):
     common.require(len(checked) == len(workers) == 24, 'hosted scalar/compiled graph collapsed or incomplete')
     loan_creation.validate(definitions, aliases, names, target, compiler)
     loans.validate(definitions, aliases, names, target, compiler, panic)
+    public_verify.validate(definitions, aliases, names, target, compiler)
     return definitions, aliases, names, checked
 
 
 def emit_callees(directory, compiler, target, panic, fixture=FIXTURE):
     env = verifier.environment(directory)
+    if target == 'aarch64-apple-darwin':
+        env['MACOSX_DEPLOYMENT_TARGET'] = '11.0'
     env['CARGO_PROFILE_RELEASE_PANIC'] = panic
     env['RUSTFLAGS'] = '-C symbol-mangling-version=v0 -C target-feature=' + FEATURES[target]
     verifier.run(['cargo', '+' + compiler, 'rustc', '--manifest-path', str(fixture), '--locked', '--offline',
         '--release', '--lib', '--target', target, '-p', 'brynja-crypto-cpu-std', '--', '--emit=llvm-ir'], env)
     paths = list((directory / 'target' / target / 'release/deps').glob('brynja_crypto_cpu_std-*.ll'))
     common.require(len(paths) == 1, 'missing/ambiguous hosted checkpoint callee artifact')
-    return paths[0].read_text()
+    llvm = paths[0].read_text()
+    artifact_profile(llvm, target, compiler)
+    return llvm
 
 
 def emit(directory, compiler, target, panic, fixture=FIXTURE):
     common.require(compiler in ('1.90.0', '1.99.1') and target in TARGETS
                    and panic in ('abort', 'unwind'), 'unreviewed hosted compiler profile')
     env = verifier.environment(directory)
+    if target == 'aarch64-apple-darwin':
+        env['MACOSX_DEPLOYMENT_TARGET'] = '11.0'
     env['CARGO_PROFILE_RELEASE_PANIC'] = panic
     # Stable v0 retains concrete generic identities on both reviewed compilers.
     env['RUSTFLAGS'] = '-C symbol-mangling-version=v0 -C target-feature=' + FEATURES[target]

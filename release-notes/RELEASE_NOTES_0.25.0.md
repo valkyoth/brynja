@@ -438,3 +438,22 @@ without putting that evidence back into the published packages.
   tasks, not the remaining full constructor/finalizer owner-dispatch,
   accelerated/hosted caller compiler contracts or global inventory admission.
   Final source-bound qualification and independent review remain pending.
+
+## Hosted compiler-linkage reconciliation
+
+The bounded hosted compiler checks now connect public compute/verify wrappers,
+typed executors, protected/resident worker captures, scalar/accelerated HMAC
+constructors, retained owners, input iteration, checkpoints, consuming callees,
+joined output transactions and public Output loans. The public verification
+bridge preserves decisions and errors instead of merely requiring a named
+executor call. Its finite Result-domain check includes every unit-error padding
+byte. Emitted target/compiler identity and the complete composed checker
+population are enforced and regression-tested.
+
+These are HMAC-specific verification and documentation changes, not new
+cryptographic or resource-management implementations. See the
+[precise checked boundaries and premises](../docs/hmac-execution-cleanup.md).
+They do not establish compiler-copy/whole-frame erasure, fatal-path cleanup,
+Mac dump exclusion, native/timing qualification or independent review. Final
+source-bound qualification reconciliation and strict-facade admission remain
+pending; no global qualification or publication status is promoted.

@@ -69,7 +69,7 @@ Mac residency must not be described as Linux dump exclusion.
 RFC identifiers below are traceability, not a claim of a fresh standards review.
 Links identify executable checks, not proof that a current run passed.
 
-- 48 host consumers and 48 public-loan probes; actual scalar/compiled constructors and consuming callees, retained storage, input/output provenance, checkpoints, joined transactions, loan construction/declassification and mapping/buffer clearing; full qualification pending: [check](../scripts/hmac/check-hmac-hosted-cleanup.py).
+- 48 host consumers and 48 public-loan probes; reconciled scalar/compiled constructors and consuming callees, retained storage, input/output provenance, checkpoints, joined transactions, public verification results, loan construction/declassification and mapping/buffer clearing; full qualification pending: [check](../scripts/hmac/check-hmac-hosted-cleanup.py).
 - RFC 2104 construction and RFC 4231 known answers: [check](../crates/brynja-mac-hmac/tests/vectors.rs).
 - Byte differential controls: [check](../scripts/hmac/check-hmac-differential.py).
 - Canonical final-bit messages: [check](../scripts/hmac/check-hmac-bit-differential.py).
@@ -91,7 +91,7 @@ Links identify executable checks, not proof that a current run passed.
 
 ## Still pending
 
-- Hosted protected/resident worker qualification; portable, static-only and runtime-enabled admission/iterator/returned-owner transfers, retained/finalizer owners and scratch are checked, not whole-frame erasure.
+- Final source-bound compiler qualification reconciliation; bounded portable/static/runtime and hosted protected/resident graph linkage is checked, not whole-frame erasure or independent qualification.
 - Accelerated/hosted timing and cache/branch qualification; the portable timing screen is not a timing proof.
 - Remaining native route qualification, including dedicated x86 SHA-512.
 - Independent pentest and final source-bound release evidence.

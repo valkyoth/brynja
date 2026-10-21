@@ -86,6 +86,8 @@ class ScopeTests(unittest.TestCase):
                      "scripts/hmac/hmac_hosted_loan_creation.py",
                      "scripts/hmac/hmac_hosted_loans.py",
                      "scripts/hmac/hmac_hosted_loan_tests.py",
+                     "scripts/hmac/hmac_hosted_verify.py",
+                     "scripts/hmac/hmac_hosted_verify_tests.py",
                      "scripts/hmac/hmac_engine_construct.py",
                      "scripts/hmac/hmac_engine_construct_state.py",
                      "scripts/hmac/hmac_callee_identity.py",

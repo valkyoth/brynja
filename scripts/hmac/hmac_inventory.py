@@ -65,7 +65,7 @@ PROFILES = (
     ("Mac compiled", "brynja-crypto-cpu-std", "macos-resident-hmac-acceleration", "Explicit Arm kernel, resident worker."),
 )
 EVIDENCE = (
-    ("48 host consumers and 48 public-loan probes; actual scalar/compiled constructors and consuming callees, retained storage, input/output provenance, checkpoints, joined transactions, loan construction/declassification and mapping/buffer clearing; full qualification pending", "scripts/hmac/check-hmac-hosted-cleanup.py"),
+    ("48 host consumers and 48 public-loan probes; reconciled scalar/compiled constructors and consuming callees, retained storage, input/output provenance, checkpoints, joined transactions, public verification results, loan construction/declassification and mapping/buffer clearing; full qualification pending", "scripts/hmac/check-hmac-hosted-cleanup.py"),
     ("RFC 2104 construction and RFC 4231 known answers", "crates/brynja-mac-hmac/tests/vectors.rs"),
     ("Byte differential controls", "scripts/hmac/check-hmac-differential.py"),
     ("Canonical final-bit messages", "scripts/hmac/check-hmac-bit-differential.py"),
@@ -86,7 +86,7 @@ EVIDENCE = (
     ("Portable paired timing screen, not a constant-time proof", "scripts/hmac/check-hmac-timing.py"),
 )
 PENDING = (
-    "Hosted protected/resident worker qualification; portable, static-only and runtime-enabled admission/iterator/returned-owner transfers, retained/finalizer owners and scratch are checked, not whole-frame erasure.",
+    "Final source-bound compiler qualification reconciliation; bounded portable/static/runtime and hosted protected/resident graph linkage is checked, not whole-frame erasure or independent qualification.",
     "Accelerated/hosted timing and cache/branch qualification; the portable timing screen is not a timing proof.",
     "Remaining native route qualification, including dedicated x86 SHA-512.",
     "Independent pentest and final source-bound release evidence.",

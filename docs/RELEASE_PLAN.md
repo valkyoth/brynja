@@ -5204,8 +5204,12 @@ the applicable downstream regression and evidence requirements.
 
 Status: in progress
 
-The initial portable leaf and tests are implemented; full scope and qualification
-remain pending. See the [release work list](../release-notes/RELEASE_NOTES_0.25.0.md).
+The modern leaf, typed final bits, general SHA-512/t, accelerated composition,
+protected/resident sessions and curated facade integrations are implemented.
+Author verification and bounded cleanup checks are recorded; independent review
+and final release qualification remain pending. See the
+[review handoff](hmac-review-handoff.md) and
+[release work list](../release-notes/RELEASE_NOTES_0.25.0.md).
 
 Plan scope: Freeze a reusable no_std `brynja-mac-hmac` boundary over the admitted fixed-output hash interface, then implement the complete HMAC construction with long-key normalization, empty and block-boundary keys, arbitrary message partitioning, exact and policy-bounded truncation, constant-time verification, affine finalization, and hardened destruction; expose typed HMAC instantiations for every modern pre-1.0 fixed-output SHA-2 and SHA-3 digest without confusing MAC tags with unkeyed digests.
 

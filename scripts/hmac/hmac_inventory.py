@@ -86,13 +86,14 @@ EVIDENCE = (
     ("Real portable and explicitly selected native adapter handoffs", "assurance/hmac-faults/adapter_tests.rs"),
     ("Private accelerated composition admission/error/unwind witnesses", "assurance/hmac-faults/execution_cases.rs"),
     ("Explicit AArch64 hosted native selection and fallback mutations", "scripts/hmac/check-hmac-hosted-native.py"),
+    ("Dedicated x86 SHA-512 composition under explicit SDE; emulated, never native or timing qualification", "scripts/hmac/check-hmac-x86-sha512.py"),
     ("Explicit portable/static/runtime and protected/resident scalar/compiled paired timing screens; compiled preflight controls, not a constant-time proof", "scripts/hmac/check-hmac-timing.py"),
 )
 PENDING = (
-    "Final source-bound compiler qualification reconciliation; bounded portable/static/runtime and hosted protected/resident graph linkage is checked, not whole-frame erasure or independent qualification.",
-    "Final native qualification and assessment of remaining cache/branch limits; the completed explicit-route paired screens are not constant-time proofs.",
-    "Remaining native route qualification, including dedicated x86 SHA-512.",
-    "Independent pentest and final source-bound release evidence.",
+    "Independent assessment of the bounded portable/static/runtime and hosted compiler checks; completed graph linkage is not whole-frame erasure or independent qualification.",
+    "Final native receipt reconciliation and assessment of remaining cache/branch limits; the completed explicit-route paired screens are not constant-time proofs.",
+    "Dedicated x86 SHA-512 has explicit HMAC SDE functional coverage, not native-silicon or timing qualification.",
+    "Independent pentest and final affected release checks; see docs/hmac-review-handoff.md for current coverage rather than restarting completed compiler slices.",
 )
 
 

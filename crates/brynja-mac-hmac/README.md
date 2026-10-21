@@ -75,9 +75,13 @@ the stream terminal. Only atomic SHA-2 length rejection preserves a stream;
 SHA-3 overflow is terminal because its hash owner has already been cleared.
 
 Author tests have exercised x86 SHA-224/256 and AVX2 Keccak locally, and all
-three Arm routes on an M2 Pro (including wide SHA-2 and two general t widths).
-Dedicated x86 SHA-512 execution remains pending; AVX-512 alone is not SHA512.
-These runs do not constitute independent native qualification.
+three Arm routes on an M2 Pro and GNU/Linux Neoverse-V2 (including wide SHA-2
+and two general t widths). Linux Arm also passes protected-session, strict-facade
+and extracted-adapter checks.
+Dedicated x86 SHA-512 composition passes explicit Intel SDE emulation in both
+the leaf and protected-session APIs; native-silicon qualification remains
+pending. AVX-512 alone is not SHA512. These runs do not constitute independent
+native qualification.
 
 The leaf's `runtime-execution` feature accepts an already established
 `execution::RuntimeAuthority`. Prefer the safe hosted bridge: enable
@@ -104,8 +108,10 @@ OS/register/fatal-termination residuals remain outside its guarantees.
 The additional `strict-hmac-acceleration` feature exposes
 `strict_hmac::CompiledSession<A>` with explicit kernel selection and worker-local
 authority. Backend or worker failure permanently quarantines it, without scalar
-fallback. Its compiler/native qualification remains pending. SIMD batching and
-Mac resident HMAC are not implemented yet. No performance or whole-process
+fallback. Its independent compiler/native qualification remains pending. The
+separate hosted `macos-resident-hmac` and `macos-resident-hmac-acceleration`
+features provide Apple Silicon resident sessions, not dump exclusion or strict
+fallback. SIMD HMAC batching is not implemented. No performance or whole-process
 protection claim is made.
 
 ## API examples
@@ -223,9 +229,10 @@ on unsupported hardware. Arm routes require their matching complete target
 features and a separate native run.
 
 The incremental verifier selects HMAC independently from unchanged hash families.
-Fourteen bounded Miri tasks cover the ten named adapters, two general widths,
-consumer unwinding and the instruction-free execution-owner lifecycle; native
-matrices retain their full coverage. The HMAC ASan runner forces leak detection
+Seventeen bounded Miri tasks cover the ten named adapters, two general widths,
+consumer unwinding, the instruction-free execution-owner lifecycle and three
+hosted API/rejection groups; these do not execute protected/native workers under
+Miri. Native matrices retain their full coverage. The HMAC ASan runner forces leak detection
 and fatal errors. Two Kani proofs cover only the actual public-length policy
 predicates, not the cryptographic construction. These checks remain author-run
 assurance, not independent qualification, and do not establish hardware or

@@ -1,0 +1,368 @@
+{
+  "schema": 1,
+  "kind": "author-development-observation-index-not-approval",
+  "version": "0.25.0",
+  "runtime_snapshot": "7d9ee73c26b112a1445075804172b4bdd8cb4fbb",
+  "review_status": "independent-review-and-final-release-checks-pending",
+  "limits": [
+    "Local artifact hashes identify bytes, not authenticated execution or runner attestation.",
+    "No release gate, approval manifest, receipt, or native qualification is created.",
+    "Compiler callers are bounded checks; caller/OS/fatal limits remain.",
+    "Mac residency is not dump exclusion. Dedicated x86 SHA512 is SDE-only, not native.",
+    "Raw artifacts stay in the local release-report archive, not crates.io."
+  ],
+  "unchanged_runtime_inputs": [
+    {
+      "basis": "Completed composed compiler checks",
+      "from_commit": "cba6ffa11f10c13d67afee6dc6c8b1995afd9ac9",
+      "through_commit": "7d9ee73c26b112a1445075804172b4bdd8cb4fbb",
+      "paths": [
+        "crates/brynja-core/src",
+        "crates/brynja-core/Cargo.toml",
+        "crates/brynja-hash-core/src",
+        "crates/brynja-hash-core/Cargo.toml",
+        "crates/brynja-crypto-cpu/src",
+        "crates/brynja-crypto-cpu/Cargo.toml",
+        "crates/brynja-hash-sha2/src",
+        "crates/brynja-hash-sha2/Cargo.toml",
+        "crates/brynja-hash-sha3/src",
+        "crates/brynja-hash-sha3/Cargo.toml",
+        "crates/brynja-mac-hmac/src",
+        "crates/brynja-mac-hmac/Cargo.toml",
+        "crates/brynja-crypto-cpu-std/src",
+        "crates/brynja-crypto-cpu-std/Cargo.toml",
+        "Cargo.toml",
+        "Cargo.lock",
+        "rust-toolchain.toml"
+      ],
+      "changed_paths": [],
+      "files": 593,
+      "snapshot_sha256": "4dd55b2b2ead959b96f6455f8bb9aa87d74b3dd7a837b5583bac8130a7d8f72b"
+    },
+    {
+      "basis": "Final explicit-route timing fixture",
+      "from_commit": "f7affddf0e116e0d0264476b12f517b7c483f33c",
+      "through_commit": "7d9ee73c26b112a1445075804172b4bdd8cb4fbb",
+      "paths": [
+        "crates/brynja-core/src",
+        "crates/brynja-core/Cargo.toml",
+        "crates/brynja-hash-core/src",
+        "crates/brynja-hash-core/Cargo.toml",
+        "crates/brynja-crypto-cpu/src",
+        "crates/brynja-crypto-cpu/Cargo.toml",
+        "crates/brynja-hash-sha2/src",
+        "crates/brynja-hash-sha2/Cargo.toml",
+        "crates/brynja-hash-sha3/src",
+        "crates/brynja-hash-sha3/Cargo.toml",
+        "crates/brynja-mac-hmac/src",
+        "crates/brynja-mac-hmac/Cargo.toml",
+        "crates/brynja-crypto-cpu-std/src",
+        "crates/brynja-crypto-cpu-std/Cargo.toml",
+        "Cargo.toml",
+        "Cargo.lock",
+        "rust-toolchain.toml"
+      ],
+      "changed_paths": [],
+      "files": 593,
+      "snapshot_sha256": "4dd55b2b2ead959b96f6455f8bb9aa87d74b3dd7a837b5583bac8130a7d8f72b"
+    }
+  ],
+  "compiler_and_package_logs": [
+    {
+      "kind": "hosted_final_crosscheck",
+      "path": "release-reports/v0.25.0/hmac-hosted-final-bridge-tests.log",
+      "sha256": "a56e0f15edcae8654714dc2463fe6653ff186a39c7c9f2e84a8acf66aef669f5"
+    },
+    {
+      "kind": "hosted_final_crosscheck",
+      "path": "release-reports/v0.25.0/hmac-hosted-final-x86.log",
+      "sha256": "61048c5b43de6ebcafd522d69f768147ef2c24378608e27db9941571141d31c7"
+    },
+    {
+      "kind": "hosted_final_crosscheck",
+      "path": "release-reports/v0.25.0/hmac-hosted-final-arm.log",
+      "sha256": "dd1c765afb73e4525bca2c927ecf99f7bb0d3f06064b76eaf8b15baf6f1f625e"
+    },
+    {
+      "kind": "hosted_final_crosscheck",
+      "path": "release-reports/v0.25.0/hmac-hosted-final-apple.log",
+      "sha256": "160a2195f5069c0be0f08e529d6b939829680dcb90ef9d4c18387a114d0c1ba3"
+    },
+    {
+      "kind": "hosted_final_crosscheck",
+      "path": "release-reports/v0.25.0/hmac-hosted-final-composition-tests.log",
+      "sha256": "7c34148947cb43bef7b05c85e6b95470f1d2148a1b0e9c683115e3d0645b5646"
+    },
+    {
+      "kind": "hosted_final_crosscheck",
+      "path": "release-reports/v0.25.0/hmac-hosted-final-plan-tests.log",
+      "sha256": "2f8640a3eba264c81a34756cdd16cf6eafb0154b28a3e792de925513f8b8118b"
+    },
+    {
+      "kind": "strict_facade_pass",
+      "path": "release-reports/v0.25.0/hmac-strict-package-linux-final2.log",
+      "sha256": "e36caad2aff338d5bc6698c401b76e7f26ba7c535bc234236fac2e43838c90ec"
+    },
+    {
+      "kind": "strict_facade_pass",
+      "path": "release-reports/v0.25.0/hmac-strict-package-mac-final.log",
+      "sha256": "0d03b41e605aba832a1abb820dba0b8a7a5712fac1256cba9bd90d6c939de9c6"
+    },
+    {
+      "kind": "strict_facade_pass",
+      "path": "release-reports/v0.25.0/hmac-strict-final-checks.log",
+      "sha256": "2cc782bd0d1acb65f49a997f633ef0ebf5d623e9cb213e6971b884a3f56aa19b"
+    },
+    {
+      "kind": "strict_facade_pass",
+      "path": "release-reports/v0.25.0/hmac-strict-cross-checks.log",
+      "sha256": "31b02b1b16405c89d2f2cabbe451e52dbdae3dff7fda96225ee60f94e43ef973"
+    },
+    {
+      "kind": "strict_facade_pass",
+      "path": "release-reports/v0.25.0/hmac-strict-scope-tests.log",
+      "sha256": "5d8048d383bcf3ff8b7968226a7e6659e345512f5e43faf334e567d4922d0c3b"
+    },
+    {
+      "kind": "strict_facade_pass",
+      "path": "release-reports/v0.25.0/hmac-strict-plan-tests.log",
+      "sha256": "2f8640a3eba264c81a34756cdd16cf6eafb0154b28a3e792de925513f8b8118b"
+    },
+    {
+      "kind": "strict_facade_pass",
+      "path": "release-reports/v0.25.0/hmac-strict-msrv-tests.log",
+      "sha256": "c033c0cfdc913387f2762d2ad85c4a3b01f6dbbef7aa8f3fe035d12e1e99ccce"
+    },
+    {
+      "kind": "strict_facade_pass",
+      "path": "release-reports/v0.25.0/hmac-strict-current-tests.log",
+      "sha256": "6658dd7a33a0f7f068b7c110425b46c3c26ba00f2d09d708d637c045cf71e94e"
+    },
+    {
+      "kind": "strict_facade_pass",
+      "path": "release-reports/v0.25.0/hmac-strict-leaf-regressions.log",
+      "sha256": "82b17def628d68b6165a7fd78804f3f49f600e4afe45856ad5303d60b49c70db"
+    },
+    {
+      "kind": "native-adapter-output-handoff",
+      "path": "release-reports/v0.25.0/hmac-native-adapters-final.log",
+      "sha256": "6301f7f97fb35ed811da7e2ebc26b06dded0a6cd5874d6bdc64d7adce0150d5b"
+    },
+    {
+      "kind": "native-adapter-output-handoff",
+      "path": "release-reports/v0.25.0/hmac-native-adapters-mac-final.log",
+      "sha256": "8acab164151d59246d56ccb8558c3509b33e2520c76fbda66f37cd884d5d132a"
+    }
+  ],
+  "timing": {
+    "observations": 17,
+    "campaigns": 768,
+    "signals": 0,
+    "raw_parser_and_statistics_rechecked": true,
+    "fixture_and_harness_hashes_match_current": true,
+    "records": [
+      {
+        "path": "release-reports/v0.25.0/hmac-timing-portable-final-20261021.json",
+        "sha256": "2e0ffb102d55d51d6e561c0926725e7982490250b01e900e94108f3f0b6608f1",
+        "route": "portable",
+        "family": "all",
+        "campaigns": 96,
+        "signals": 0,
+        "provenance": "final dirty development inputs; not clean-commit capture"
+      },
+      {
+        "path": "release-reports/v0.25.0/hmac-timing-static-sha256-final-20261021.json",
+        "sha256": "9b1944f197a17102a97693df2b3ee1924b9447d2c9ed0de1ce695a66157ba0ed",
+        "route": "static",
+        "family": "sha256",
+        "campaigns": 16,
+        "signals": 0,
+        "provenance": "final dirty development inputs; not clean-commit capture"
+      },
+      {
+        "path": "release-reports/v0.25.0/hmac-timing-static-keccak-final-20261021.json",
+        "sha256": "5f8e574e498d76dd484882d86dba97b9d7615508ff02fdfea4135cbb514d18e9",
+        "route": "static",
+        "family": "keccak",
+        "campaigns": 32,
+        "signals": 0,
+        "provenance": "final dirty development inputs; not clean-commit capture"
+      },
+      {
+        "path": "release-reports/v0.25.0/hmac-timing-linux-protected-final-20261021.json",
+        "sha256": "c10910d51c0e769bda5c4f96b39657dff54f2c4e35b36daddb3f185466759f06",
+        "route": "linux-protected",
+        "family": "all",
+        "campaigns": 96,
+        "signals": 0,
+        "provenance": "final dirty development inputs; not clean-commit capture"
+      },
+      {
+        "path": "release-reports/v0.25.0/hmac-timing-linux-compiled-sha256-final-20261021.json",
+        "sha256": "271c428666f79f4db7a287cb0331a12084775b5a01ac856bc14d7139cfbcf0fd",
+        "route": "linux-compiled",
+        "family": "sha256",
+        "campaigns": 16,
+        "signals": 0,
+        "provenance": "final dirty development inputs; not clean-commit capture"
+      },
+      {
+        "path": "release-reports/v0.25.0/hmac-timing-linux-compiled-keccak-final-20261021.json",
+        "sha256": "c98e84047df85991b589abe6d3de2f0d8632da8b5fd96c8d7d16ff6dbc117db3",
+        "route": "linux-compiled",
+        "family": "keccak",
+        "campaigns": 32,
+        "signals": 0,
+        "provenance": "final dirty development inputs; not clean-commit capture"
+      },
+      {
+        "path": "release-reports/v0.25.0/hmac-timing-mac-f7affddf/macos-compiled-keccak.json",
+        "sha256": "cb10dfba236c7a7abf5766e6202bff31fc5ef635b6b6f1e8a6cce7b823c4a2f6",
+        "route": "macos-compiled",
+        "family": "keccak",
+        "campaigns": 32,
+        "signals": 0,
+        "provenance": "clean f7affddf"
+      },
+      {
+        "path": "release-reports/v0.25.0/hmac-timing-mac-f7affddf/macos-compiled-sha256.json",
+        "sha256": "ed57f0e492358982aefd19360e50091a4730de9f1f1cdb7c4074481afb10fc8b",
+        "route": "macos-compiled",
+        "family": "sha256",
+        "campaigns": 16,
+        "signals": 0,
+        "provenance": "clean f7affddf"
+      },
+      {
+        "path": "release-reports/v0.25.0/hmac-timing-mac-f7affddf/macos-compiled-sha512.json",
+        "sha256": "d1d3507a8aa2ff1edce53ae532dc0005638a741d1ab22347710a7005a5a2f617",
+        "route": "macos-compiled",
+        "family": "sha512",
+        "campaigns": 48,
+        "signals": 0,
+        "provenance": "clean f7affddf"
+      },
+      {
+        "path": "release-reports/v0.25.0/hmac-timing-mac-f7affddf/macos-resident-all.json",
+        "sha256": "c5291227e481e03e63ff30d7214d2741da9bbcc62cc8473c39b65cac1ea2479c",
+        "route": "macos-resident",
+        "family": "all",
+        "campaigns": 96,
+        "signals": 0,
+        "provenance": "clean f7affddf"
+      },
+      {
+        "path": "release-reports/v0.25.0/hmac-timing-mac-f7affddf/portable-all.json",
+        "sha256": "ea9fb1afecbfb165aff6acc06d2783d914aedf1867faaad7352f63f79a616679",
+        "route": "portable",
+        "family": "all",
+        "campaigns": 96,
+        "signals": 0,
+        "provenance": "clean f7affddf"
+      },
+      {
+        "path": "release-reports/v0.25.0/hmac-timing-mac-f7affddf/runtime-keccak.json",
+        "sha256": "cea4c91451b778fe469b445315f1b58a3cfe88584c0933151ba1e608490bcadc",
+        "route": "runtime",
+        "family": "keccak",
+        "campaigns": 32,
+        "signals": 0,
+        "provenance": "clean f7affddf"
+      },
+      {
+        "path": "release-reports/v0.25.0/hmac-timing-mac-f7affddf/runtime-sha256.json",
+        "sha256": "08803a6bbc5b79ccfccb4dd9521e05456d11809fdd408a8630e4fe54183052f0",
+        "route": "runtime",
+        "family": "sha256",
+        "campaigns": 16,
+        "signals": 0,
+        "provenance": "clean f7affddf"
+      },
+      {
+        "path": "release-reports/v0.25.0/hmac-timing-mac-f7affddf/runtime-sha512.json",
+        "sha256": "a0b748810dcedc66225451274954c8a0735e31f02a90eb5ed7388226ad05ef09",
+        "route": "runtime",
+        "family": "sha512",
+        "campaigns": 48,
+        "signals": 0,
+        "provenance": "clean f7affddf"
+      },
+      {
+        "path": "release-reports/v0.25.0/hmac-timing-mac-f7affddf/static-keccak.json",
+        "sha256": "9addb769d3790de5b6eb63b3e4488925080917cca387e60f0ec3a419bf5790de",
+        "route": "static",
+        "family": "keccak",
+        "campaigns": 32,
+        "signals": 0,
+        "provenance": "clean f7affddf"
+      },
+      {
+        "path": "release-reports/v0.25.0/hmac-timing-mac-f7affddf/static-sha256.json",
+        "sha256": "cc63165f75d414e98c86e0c1bd86a98e16e32e3688a197d6a365000f97f52fd4",
+        "route": "static",
+        "family": "sha256",
+        "campaigns": 16,
+        "signals": 0,
+        "provenance": "clean f7affddf"
+      },
+      {
+        "path": "release-reports/v0.25.0/hmac-timing-mac-f7affddf/static-sha512.json",
+        "sha256": "44ee60a31fc4f97f0b38e5b967a404c2c28181bad1bbcd3b5c4c7f6e4da78ded",
+        "route": "static",
+        "family": "sha512",
+        "campaigns": 48,
+        "signals": 0,
+        "provenance": "clean f7affddf"
+      }
+    ]
+  },
+  "x86_sha512": {
+    "path": "release-reports/v0.25.0/hmac-sde-sha512-20261021-final.json",
+    "sha256": "14f935dc721a1b66d2c5f9291c4ad3ea503ce1630269a9367e76d4bc1eafaf07",
+    "execution": "Intel SDE 10.13.1, Arrow Lake emulation, not native",
+    "profiles": 8,
+    "algorithm_identities_per_profile": 6,
+    "toolchains": [
+      "1.90.0",
+      "1.99.1"
+    ],
+    "apis": [
+      "leaf static",
+      "GNU/Linux protected compiled"
+    ],
+    "provenance": "Final dirty tooling-only development inputs; exact source inventory checked; not a clean-commit or approved receipt"
+  },
+  "linux_arm": {
+    "status": "pass; author-operated native development, not independent qualification",
+    "source_commit": "7d9ee73c26b112a1445075804172b4bdd8cb4fbb",
+    "source_archive_sha256": "493278e30670db4b366971b4594114ea79a09b57ef3447c6f7b591297446d87e",
+    "path": "release-reports/v0.25.0/hmac-arm-7d9ee73c-final/observation.json",
+    "sha256": "3c2ad53decb376124bb00097bda40a8e5ed9cbb790ef5fb1d1210dc9ef068c5a",
+    "cpu": "ARM Neoverse-V2 r0p1; 4 vCPUs; little-endian aarch64",
+    "kernels": ["sha256", "sha512", "keccak"],
+    "leaf_profiles": 12,
+    "toolchains": ["1.90.0", "1.99.1"],
+    "additional_checks": [
+      "Generic feature probes before accelerated compilation",
+      "Hosted debug/release selection and fallback-policy mutants, all three kernels",
+      "Protected scalar/compiled package consumers and mutants, all three kernels",
+      "Strict facade debug/release consumers and exposure mutants, all three kernels",
+      "Extracted archive and native output-owner handoffs, all three kernels"
+    ],
+    "steps": 21,
+    "log_digests_and_required_populations_rechecked": true,
+    "sources_reconciled_against_archive": 1231,
+    "captured_files_changed_since_run": ["scripts/hmac/hmac_inventory.py"],
+    "change_disposition": "Documentation inventory only, not imported or executed by this campaign. Runtime sources, manifests, fixtures and executed helpers are unchanged. The new x86-only SDE driver is separate.",
+    "master_log": {
+      "path": "release-reports/v0.25.0/hmac-arm-run-r2.log",
+      "sha256": "a2cb1faebf294f85c86634dbdd415fe46e345e1286d03bdf9bd6a2ff86781010"
+    },
+    "preserved_failed_attempt": {
+      "path": "release-reports/v0.25.0/hmac-arm-7d9ee73c-first-attempt/observation.json",
+      "sha256": "c6170ab8237a9ce6175389916d8a564a27941a17d0098b8703f7d29eb7944be5",
+      "disposition": "Cargo directory policy rejected the group-writable target before tests. Scoped permissions changed to 0700 with umask 077; policy unchanged. Failed observation retained separately."
+    },
+    "provenance": "Author-operated pinned git archive on Ubuntu Arm, not a clean-clone release receipt; complete results downloaded and verified locally."
+  }
+}

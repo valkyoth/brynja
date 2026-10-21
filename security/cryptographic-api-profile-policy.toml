@@ -2048,7 +2048,7 @@ sha256 = "f9e144bbe077673ce1bad748c1cc4e085563be3bac20b8d30c70affccbe61edd"
 
 [[reviewed-source]]
 path = "scripts/hmac/hmac_inventory.py"
-sha256 = "a9fe29d6b6b664a96f815e697b40d70a304f646304d0fef2dd0040d2c7fef856"
+sha256 = "20cf7b87504e789635ff6b00d541a4df6ca31a1fe19c3b6900d209b4bac3d89f"
 
 [[reviewed-source]]
 path = "scripts/hmac/hmac_owner_profile.py"
@@ -2157,3 +2157,11 @@ sha256 = "3ee4fd5a16addd93df3ba2bf3f6c6de725297c14d445f889413919042d161c4b"
 [[reviewed-source]]
 path = "scripts/repository/facade_cargo_environment.py"
 sha256 = "08caf76b25592759ca465cd44abec2a2627ccd9b41aa613b69fd69e8cf49a888"
+
+[[reviewed-source]]
+path = "scripts/hmac/check-hmac-x86-sha512.py"
+sha256 = "223860d92fb55ba73e150ab8476fcbf4e9267acb20bb9923bdd8a5f442b0ca26"
+
+[[reviewed-source]]
+path = "scripts/hmac/test-hmac-x86-sha512.py"
+sha256 = "9a92e3996162cc47a6fae0548abe7ec5f1712e4431790c24a22249a406cb0c16"

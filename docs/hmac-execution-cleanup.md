@@ -940,7 +940,8 @@ not erase compiler-created copies, caller registers/spills,
 interrupt state, dumps, snapshots or fatal-abort state. Those accepted limits
 are not reopened here.
 
-The bounded hosted compiler linkage is checked; final source-bound qualification
-reconciliation, timing/native qualification and independent review remain pending.
-No strict-facade admission or global qualification status is promoted by this
-bounded check.
+The bounded hosted compiler linkage is checked. Later explicit-route timing,
+native development observations and separate strict-facade package checks are
+reconciled in the [review handoff](hmac-review-handoff.md); independent review
+and final release qualification remain pending. This bounded check alone does
+not promote strict-facade admission or global qualification status.

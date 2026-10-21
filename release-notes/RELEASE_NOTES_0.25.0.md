@@ -2,6 +2,10 @@
 
 Status: in development; no tag, publication or qualification claim.
 
+The [current review handoff](../docs/hmac-review-handoff.md) reconciles the
+completed slices below. Earlier pending-work paragraphs describe their stage
+at the time, not unfinished implementations after the later follow-ups.
+
 ## Initial implementation
 
 - Added the unpublished `brynja-mac-hmac` leaf with sealed adapters over the
@@ -521,9 +525,26 @@ No runtime, hash, kernel, dependency or cleanup implementation changed.
 
 ## Remaining qualification work
 
-- Reconcile final source-bound qualification and native route coverage,
-  including the dedicated x86 SHA-512 limitation. The 17 retained timing
-  observations cover 768 campaigns; no alarm is not a constant-time proof.
+The dedicated x86 SHA-512 HMAC caller now passes explicit SDE Arrow Lake
+execution for six identities in both the leaf and protected-session APIs:
+Rust 1.90.0/1.99.1, debug/release, eight exact test executions. A separate
+generic probe runs under SDE before feature-enabled artifacts; compile-only,
+skipped, failed, duplicate or wrong tests cannot count as a pass. Failure
+observations are retained and existing output files cannot be overwritten.
+This is **emulated functional evidence**, not native, timing or platform-resource
+qualification. No runtime Rust, dependency or release-gate behavior changed.
+
+- Native development results are reconciled: GNU/Linux Neoverse-V2 passes all
+  three SHA-256/SHA-512/Keccak routes, twelve leaf compiler/profile cases, hosted
+  selection, protected workers, strict-facade consumers and extracted-adapter
+  handoffs. All 21 command/log records and 1,231 captured source hashes match the
+  pinned source archive. The only subsequent captured-file change is the unused
+  documentation inventory renderer; runtime and executed helpers are unchanged.
+  The initial run rejected a group-writable build directory before testing;
+  tightening its permissions allowed the separate successful run. Both records
+  are retained, not relabelled as independent review or an approved receipt.
+- Retain the dedicated x86 SHA-512 native-silicon limitation. The 17 retained
+  timing observations cover 768 campaigns; no alarm is not a constant-time proof.
 - Complete independent pentest/retest and affected final release checks.
   Reuse unchanged implementation evidence; no old-family full sweep is implied
   by this facade integration or documentation reconciliation.

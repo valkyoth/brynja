@@ -2,11 +2,12 @@
 
 v0.24.55 is signed at `c0c2e069` after the completed 1,166-task consolidated
 checkpoint, final tag gate and green GitHub/CodeQL. No crates.io publication
-occurred. Modern HMAC development is now in progress for v0.25.0: the new
-`brynja-mac-hmac` leaf has an initial portable implementation for ten named
-SHA-2/SHA-3 profiles and focused author tests, but is not yet facade-integrated,
-independently reviewed or release-qualified. Remaining profile, acceleration,
-cleanup and evidence work is tracked in the
+occurred. Modern HMAC development for v0.25.0 now includes ten named SHA-2/SHA-3
+profiles, general SHA-512/t, static/runtime acceleration, Linux protected and
+Apple Silicon resident sessions, and curated modern/strict facade exports.
+Bounded compiler ownership checks, extracted-package tests and explicit-route
+timing observations are author-tested, not independent or release qualification.
+See the [review handoff and remaining work](hmac-review-handoff.md) and
 [v0.25.0 work list](../release-notes/RELEASE_NOTES_0.25.0.md).
 
 The [five-part expansion](ROADMAP_EXPANSION_AUDIT.md) adds modern, legacy,

@@ -436,10 +436,31 @@ destination must fit an actual worker-local allocation. Accelerated authority
 construction must also target worker-local storage and use the captured kernel;
 the authority borrowed by Hmac construction must be worker-local. Optimizers
 can merge the Full/Bytes constructor sites, so one or two calls are inspected.
-This does **not** yet prove authority-value transfer, post-construction retained
-owner lifetime, complete factory control flow, or inner worker cleanup. Indirect
+This does **not** yet prove post-construction retained keyed-owner lifetime,
+complete factory control flow, or inner worker cleanup. Indirect
 panic-payload destruction is outside this selected-call check. Constructor
 internals retain their separate qualification and valid-Rust premises.
+
+For the twelve accelerated callbacks, a separate authority-transfer check
+requires the complete 16-byte constructor result to reach the one worker-local
+authority borrowed by HMAC. Byte order, split scalar stores and copies, extent,
+uniqueness and dominance are checked, not merely allocation size. The constructor's
+normal return must precede reads; its error branch cannot reach a checkpoint,
+authority read or HMAC construction. Rust 1.90.0 and 1.99.1 use different error
+niches, bound to the requested compiler and emitted compiler identity rather
+than accepting either discriminator indiscriminately.
+
+Only the named checkpoints, HMAC constructors and inspected copies/lifetime
+intrinsics may receive authority pointers. Unrecognized aliases, pointer
+escapes, constructor-result overwrites and later authority writes reject.
+Lifetime ends cannot precede subsequent result reads, authority uses or direct
+HMAC consumer calls, including along error/unwind edges. Constructor and
+checkpoint semantics remain reviewed-callee premises; authority metadata and
+padding are not asserted to be secret or zeroized. This does not yet trace the
+authority reference through every retained HMAC field or certify all indirect
+worker destruction. The check is admission/transfer/lifetime evidence, not
+whole-worker erasure. It binds the initial value and storage identity, not
+immutability after a borrowed callee legitimately changes health/generation.
 
 Regressions alter every emitted executor on all three targets: the existing
 792 lifecycle mutations plus 2,700 launch-field and 648 worker-factory mutations.
@@ -447,9 +468,12 @@ Source-declaration and dependency drift are rejected. Four real Rust mutants
 remove join/stack clearing; ten more swap staging/output, replace captured
 policy, or substitute tail bytes for the key on Linux and Darwin. Each must
 compile before rejection is credited, and restored baselines must pass again.
+Authority-specific regressions additionally mutate every accelerated callback
+and compile a real premature-quarantine change on Linux and Darwin; the new
+checker itself must reject it, independently of source pins.
 
 This is **host lifecycle and selected capture/factory evidence**, not complete
-worker-payload qualification. Inner cleanup, retained owner/authority transfers
+worker-payload qualification. Inner cleanup, retained keyed-owner/authority-reference transfers
 and all worker error/unwind paths remain separate pending checks.
 Host error handling, valid Rust inputs, the reviewed
 resource allocation/attribute implementation and OS pthread semantics remain

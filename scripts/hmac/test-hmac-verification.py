@@ -50,6 +50,8 @@ class ScopeTests(unittest.TestCase):
                      "scripts/hmac/hmac_hosted_capture_types.py",
                      "scripts/hmac/hmac_hosted_capture_tests.py",
                      "scripts/hmac/hmac_hosted_placement.py",
+                     "scripts/hmac/hmac_hosted_authority.py",
+                     "scripts/hmac/hmac_hosted_authority_tests.py",
                      "scripts/hmac/hmac_execution_drop.py",
                      "scripts/hmac/hmac_execution_update.py",
                      "assurance/hmac-timing/src/main.rs", "assurance/hmac-timing/Cargo.lock",

@@ -7,6 +7,7 @@ from hmac_engine_codegen import require
 import hmac_engine_codegen as common
 import hmac_engine_final as syntax
 import hmac_execution_update as update
+from hmac_callee_identity import CONTEXT
 
 ROOT = Path(__file__).resolve().parents[2]
 # clear_owned_region: empty-slice error or volatile clearing then value-only Ok.
@@ -38,7 +39,7 @@ def non_unwinding(symbol):
 def update_adapter(symbol):
     return bool(re.fullmatch(
         r"_RNvXs_NtNtCs\w+_15brynja_mac_hmac9execution7adapterI\w+6sealed4Hash6updateCs\w+_"
-        r"29brynja_hmac_execution_cleanup|"
+        + CONTEXT + r"|"
         r"_ZN115_\$LT\$brynja_mac_hmac\.\.execution\.\.adapter\.\.Adapter\$LT\$A\$GT\$"
         r"\$u20\$as\$u20\$brynja_mac_hmac\.\.algorithms\.\.sealed\.\.Hash\$GT\$"
         r"6update17h[0-9a-f]+E", symbol))

@@ -4,6 +4,7 @@ import re
 import hmac_engine_final as syntax
 import hmac_execution_drop as cleanup
 from hmac_engine_codegen import require
+from hmac_callee_identity import CONTEXT
 
 
 def hash_finalizer(symbol, identity):
@@ -21,7 +22,7 @@ def hash_finalizer(symbol, identity):
 def adapter(symbol):
     return bool(re.fullmatch(
         r"_RINvXs\w*_NtNtCs\w+_15brynja_mac_hmac9execution8backends\w+7Backend10finish_cpu"
-        r"\w+ECs\w+_29brynja_hmac_execution_cleanup"
+        r"\w+ECs\w+_" + CONTEXT +
         r"|_ZN\d+_\$LT\$brynja_mac_hmac\.\.(?:algorithms|general).*"
         r"\$u20\$as\$u20\$brynja_mac_hmac\.\.execution\.\.backends\.\.Backend\$GT\$10finish_cpu17h[0-9a-f]+E",
         symbol)) or syntax.finish_closure(symbol)

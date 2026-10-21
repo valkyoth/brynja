@@ -23,6 +23,7 @@ import hmac_hosted_transaction as transaction
 import hmac_hosted_guard_paths as guard_paths
 import hmac_hosted_buffers as buffers
 import hmac_hosted_callee_admission as callee_admission
+import hmac_hosted_constructor as constructor
 import hmac_engine_codegen as common
 import hmac_engine_final as syntax
 import hmac_verifiers as verifier
@@ -61,6 +62,7 @@ def validate(llvm, target, compiler='1.99.1', panic='unwind'):
     contracts.validate()
     capture_types.validate()
     definitions, aliases = common.definitions_and_aliases(llvm)
+    types = constructor.construct.iterator.array_types(llvm, 'static')
     symbols = {name.strip('"') for name in re.findall(r'@("[^"]+"|[-\w.$]+)', llvm)}
     names = lifecycle.demangle(symbols)
     owner, resource = lifecycle.profile(target)
@@ -97,7 +99,7 @@ def validate(llvm, target, compiler='1.99.1', panic='unwind'):
                 model = keyed.check(common.resolve(worker, definitions, aliases)[1], names, compiler,
                                     identity, operation.startswith('compiled_'))
                 if operation.startswith('compiled_'):
-                    callee_admission.check(model, identity, definitions, aliases, compiler, panic)
+                    constructor.check(model, identity, definitions, aliases, compiler, panic, types)
                 checkpoints.preflight(model, common.resolve(worker, definitions, aliases)[0], target, compiler)
                 storage.check(model, identity)
                 if not operation.startswith('compiled_'):

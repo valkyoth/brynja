@@ -3,6 +3,7 @@ import re
 
 import hmac_engine_codegen as common
 import hmac_engine_scratch as scratch
+from hmac_callee_identity import CONTEXT
 from hmac_engine_final import call as parsed_call, operand, parameters
 
 OPERATIONS = ("construct_static", "construct_runtime", "public", "secret", "verify",
@@ -84,12 +85,12 @@ def independent_iterator(body, line, definitions, aliases):
     symbol = call[1].strip('"')
     if not ("Flatten" in symbol and "IntoIter" in symbol and "drop_" in symbol):
         return False
-    v0 = (r"_RINvNtCs\w+_4core3ptr9drop_glueINtNtNtNtB\w+_4iter8adapters7flatten7Flatten"
+    v0 = (r"_RINvNtCs\w+_4core3ptr(?:9drop_glue|13drop_in_place)INtNtNtNtB\w+_4iter8adapters7flatten7Flatten"
           r"INtNtNtB\w+_5array4iter8IntoIterINtNtB\w+_6option6Option"
           r"(?:NtNtNtCs\w+_16brynja_hash_sha218hardened_execution"
           r"(?:5named(?:6Sha224|6Sha256|6Sha384|6Sha512|10Sha512_224|10Sha512_256)|7general7Sha512T)"
           r"|NtNtNtNtCs\w+_16brynja_hash_sha38hardened11accelerated5fixed8Sha3_(?:224|256|384|512))"
-          r"EKj3_EEECs\w+_29brynja_hmac_execution_cleanup")
+          r"EKj3_EEECs\w+_" + CONTEXT)
     legacy = (r"_ZN4core3ptr\d+drop_in_place\$LT\$core\.\.iter\.\.adapters\.\.flatten\.\.Flatten"
               r"\$LT\$core\.\.array\.\.iter\.\.IntoIter\$LT\$core\.\.option\.\.Option\$LT\$"
               r"(?:brynja_hash_sha2\.\.hardened_execution\.\.(?:named\.\.Sha(?:224|256|384|512|512_224|512_256)"

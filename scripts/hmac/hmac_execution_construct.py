@@ -17,7 +17,9 @@ require, VALUE = common.require, syntax.VALUE
 
 
 def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind",
-          route=0, long_key=False, types=None, profile="runtime"):
+          route=0, long_key=False, types=None, profile="runtime", dynamic_tag=False):
+    require(type(dynamic_tag) is bool and (not dynamic_tag or profile == "static"),
+            "unreviewed dynamic constructor tag profile")
     seeds = admission.check(body, identity, definitions, aliases, compiler, panic, route, long_key, profile)
     contracts.validate()
     shape, discriminator, _, returned_error, pool = layout.geometry(identity, compiler, profile)
@@ -61,6 +63,9 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
         lines, terminal = graph[label], False
         while index < len(lines):
             line = lines[index]
+            if dynamic_tag and "%tag_bytes" in re.findall(VALUE, line):
+                require(re.fullmatch(r"store i64 %tag_bytes, ptr " + VALUE + r", align \d+", line),
+                        "hosted post-admission tag parameter changed")
             no_unwind = False
             evaluated = state.evaluate(line, predecessor, discriminator, route, types or {}, profile)
             invocation = syntax.call(line)
@@ -84,6 +89,7 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
                     else:
                         require(not state.rooted(root), "constructor restarts live owner")
                 elif symbol == "llvm.memset.p0.i64":
+                    state.forget_tags(state.address(syntax.operand(args[0])), int(args[2].split()[-1]))
                     require(not state.overlap(state.address(syntax.operand(args[0])),
                                               int(args[2].split()[-1])), "constructor overwrites owner")
                 elif final.contracts.hash_finalizer(symbol, identity) or final.contracts.adapter(symbol):
@@ -170,6 +176,8 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
                     for arg in args:
                         if arg.startswith("ptr ") and re.search(VALUE + "$", arg):
                             require(not state.rooted(syntax.operand(arg)), "constructor owner escapes to auxiliary")
+                            require(not state.tagged(syntax.operand(arg)),
+                                    "constructor tag field escapes to auxiliary")
                     no_unwind = contracts.non_unwinding(symbol)
             elif line.startswith("store "):
                 store = re.match(r"store (?:i(\d+)|ptr) (.*?), ptr (" + VALUE + "),", line)
@@ -177,14 +185,19 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
                 size = (int(store[1]) + 7) // 8 if store[1] else 8
                 if not store[1]:
                     require(not state.rooted(store[2]), "constructor pointer escape")
+                    require(not state.tagged(store[2]), "constructor tag pointer escape")
                 value = state.value(store[2])
                 if isinstance(value, tuple):
                     bound(state, store[3], size)
                 state.store(state.address(store[3]), size, value)
+                if dynamic_tag and store[2] == "%tag_bytes":
+                    require(size == 8, "hosted tag store width changed")
+                    state.tag_fields.add(state.address(store[3]))
             elif not evaluated and not line.startswith(("br ", "switch ")):
                 definition = re.match("(" + VALUE + r") =", line)
                 refs = re.findall(VALUE, line)[1:] if definition else re.findall(VALUE, line)
                 require(not any(state.rooted(name) for name in refs), "unknown constructor owner pointer operation")
+                require(not any(state.tagged(name) for name in refs), "unknown constructor tag pointer operation")
                 require(not any(isinstance(state.value(name), tuple) for name in refs),
                         "unknown constructor owner scalar operation")
             if re.search(r"\binvoke\b", line):
@@ -247,7 +260,8 @@ def check(body, identity, definitions, aliases, compiler="1.99.1", panic="unwind
                             and state.normalized == long_key, "constructor success omits initialization")
                     bits = int(identity.removeprefix("general")) if identity.startswith("general") else (
                         int(identity.split("_")[-1]) if "_" in identity else int(identity[3:]))
-                    require(layout.constant(state, ("%_0", 2 * shape.stride), 8) == (bits + 7) // 8,
+                    require((("%_0", 2 * shape.stride) in state.tag_fields) if dynamic_tag else
+                            layout.constant(state, ("%_0", 2 * shape.stride), 8) == (bits + 7) // 8,
                             "constructor returned tag width changed")
                     successes += 1
                 terminal = True

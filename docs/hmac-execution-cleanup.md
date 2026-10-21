@@ -712,6 +712,45 @@ must borrow that constructor's exact authority before accessing key bytes.
 This covers eight backend-owner populations and both key-length classes;
 it does not duplicate or extend the hash kernel correctness claim.
 
+### Actual hosted constructor transfer and scratch linkage
+
+The hosted driver now continues that admission proof through the actual
+constructor body referenced by each compiled worker. It does not substitute
+the similarly named standalone fixture body or rewrite its emitted IR.
+All twelve typed constructors are checked under both compilers, both panic
+profiles and all three targets. The eight backend-owner populations and
+short/long-key classes retain separate paths.
+
+The existing post-admission interpreter binds the iterator cursor and remaining
+owners, optional long-key normalization, inner/outer update order, exact owner
+copies, error/unwind destruction and returned owner fields. Actual iterator
+and normalization-adapter definitions are resolved and inspected. Local pad
+and digest scratch also use the existing explicit-cleanup check. Typed hash
+factory, update and finalizer internals remain their separately reviewed
+callee contracts; this is not a new kernel correctness proof.
+
+Unlike the fixed-width standalone probes, these hosted constructors accept a
+dynamic public tag width. The interpreter tracks the exact `%tag_bytes` store
+into the returned width field on every successful path. It does not substitute
+a sampled numeric tag value: altered, absent, redirected or partially
+overwritten fields reject, as do intervening copies or fills that overwrite
+the field. The tag-bearing root cannot escape to an auxiliary call even before
+either returned cryptographic owner has reached that root. A mutation moves
+the tag store ahead of the owner copies and inserts an actual clearing call;
+it rejects, while disabling only the new tag-escape guard admits the mutant.
+Public width validation before keyed construction remains a separate
+API premise; this check proves preservation, not all parameter-admission rules.
+
+The generic helper identity checks accept only the two explicitly named
+instantiating crates (standalone execution and hosted cleanup), including the
+two reviewed compilers' distinct v0 drop spellings. Concrete types, helper
+definitions, formal parameters, actual arguments and storage extents still
+must match. Unknown contexts do not become trusted merely by providing an
+otherwise plausible body. Regression mutations cover returned widths, owner
+copy extents, inner/outer bindings, iterator bodies, aliases and helper contexts.
+Private source mutants must compile before their emitted constructors are
+rejected; restored source copies must pass again.
+
 Regressions mutate real host/destructor emissions on both compilers and all
 three targets. Additional compiling safe-Rust mutants remove or invert the
 keep decision, shape admission, late cancellation, quarantine classification
@@ -722,8 +761,10 @@ direct evaluator regressions.
 
 This is **host lifecycle, admission, retained storage, input/output provenance,
 checkpoint caller/callee, joined host transaction and cleanup-dispatch
-evidence**, not complete worker-payload qualification. The remaining borrowed
-cryptographic-callee reconciliation, public `Output` loan/declassification
+evidence**, not complete worker-payload qualification. Compiled constructor admission,
+post-admission owner transfers and explicit scratch are now linked to the
+actual hosted callees. Scalar constructor and remaining consuming/update callee reconciliation,
+public `Output` loan/declassification
 linkage and final cross-check remain pending. The joined-host check is not a
 proof of request-validation internals or the entire public-output API.
 Valid Rust inputs, the reviewed

@@ -16,9 +16,23 @@ class State(admission.State):
         self.pointers = dict(pointers)
         self.updates = ()
         self.normalized = False
+        self.tag_fields = set()
 
     def key(self):
-        return super().key(), tuple(sorted(self.pointers.items())), self.updates, self.normalized
+        return (super().key(), tuple(sorted(self.pointers.items())), self.updates,
+                self.normalized, frozenset(self.tag_fields))
+
+    def forget_tags(self, address, size):
+        require(type(size) is int and 0 <= size < (1 << 64), "unreviewed constructor write extent")
+        root, offset = address
+        self.tag_fields = {(base, start) for base, start in self.tag_fields
+                           if base != root or start >= offset + size or start + 8 <= offset}
+
+    def transfer(self, destination, source, size):
+        # Dynamic hosted tag fields are stored directly, not carried by an
+        # owner memcpy. A new representation requires an explicit review.
+        self.forget_tags(destination, size)
+        super().transfer(destination, source, size)
 
     def address(self, name):
         return self.pointers.get(name, (name, 0))
@@ -26,7 +40,11 @@ class State(admission.State):
     def rooted(self, name):
         return any(row[0] == self.address(name)[0] for row in self.memory)
 
+    def tagged(self, name):
+        return any(root == self.address(name)[0] for root, _ in self.tag_fields)
+
     def store(self, address, size, value):
+        self.forget_tags(address, size)
         # Arm may pack cursor/end into one constant i128/vector store.
         # Updating its cursor must not discard the still-live end field.
         fragments = {}

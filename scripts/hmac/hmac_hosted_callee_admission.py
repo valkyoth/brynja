@@ -6,7 +6,7 @@ import hmac_engine_codegen as common
 import hmac_execution_admission as admission
 
 
-def check(model, identity, definitions, aliases, compiler, panic):
+def resolve(model, identity, definitions, aliases):
     common.require(model.compiled, 'callee authority admission requires a compiled worker')
     algorithm = ('brynja_mac_hmac::general::Sha512T<' + identity[7:] + '>' if identity.startswith('general')
                  else 'brynja_mac_hmac::algorithms::Sha' + identity[3:])
@@ -21,6 +21,11 @@ def check(model, identity, definitions, aliases, compiler, panic):
     common.require(len(formals) == len(expected_formals) and all(
         re.fullmatch(kind + r' [^%]*' + re.escape(name), formal)
         for formal, (kind, name) in zip(formals, expected_formals)), 'hosted constructor formal binding changed')
+    return symbol, body
+
+
+def check(model, identity, definitions, aliases, compiler, panic):
+    symbol, body = resolve(model, identity, definitions, aliases)
     # This is the existing static pre-key admission proof, now applied to the
     # exact function referenced by this worker. It binds all three hash factories
     # (and three Source::sha2 sessions for general SHA-512/t) to %owner, with

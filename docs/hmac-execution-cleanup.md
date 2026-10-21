@@ -663,13 +663,70 @@ atomic/order/error handling. These use private copied source trees, restore
 the original files, and require restored emitted baselines to pass. They do
 not execute deliberately broken cryptography on a native host.
 
+### Joined host output transaction and buffer destruction
+
+The host checker binds the initial output and staging clears to the two actual
+session mappings and the buffer guard's output, staging and keep fields. Both
+initial clears must dominate launch and every normal/recoverable-unwind exit.
+The guard starts with `keep = false`; only one later commit store is allowed,
+after the joined worker's stack clear. Host writes cannot overwrite the worker's
+Result. A separate lifecycle walk requires one guard destruction before each
+exit from an initialized guard, including recoverable unwinding. Fatal aborts
+remain excluded, not interpreted as successful cleanup.
+
+Starting at that joined-and-cleared boundary, a bounded emitted-IR interpreter
+checks 180 cases per executor: compute/verify requests, complete/panic flags,
+both final cancellation outcomes, all eleven host error categories, all ten
+valid nested HMAC error discriminants, every current resource/backend error
+payload, and all three `Option<bool>` values. Unit-error padding remains
+symbolically unknown and cannot justify a branch or admission.
+The host cannot inspect a worker Result before successful completion/panic
+admission. It must reject a result shape inconsistent with compute/verify,
+preserve the comparison decision, propagate error categories and meaningful
+worker-error payloads, and retain destination bytes only for an uncancelled
+successful compute. The scalar and compiled APIs' deliberately different
+shape-check/cancellation order is checked explicitly. Unknown SSA values,
+instructions, extra calls, loops, writes or undefined admission bits reject.
+
+For compiled sessions, quarantine must be armed before launch. It is released
+only after a valid successful worker result, cancellation, invalid bits or the
+specific nested `MessageTooLong` outcome. Worker panic/incompletion, backend
+failure, unexpected result shape and other internal failures retain quarantine.
+Late host cancellation after a valid result clears the output while preserving
+executor reuse, as the API intends.
+
+The fresh dependency artifact also supplies the actual `Buffers::drop` body.
+Its interpreter follows the emitted mapping/PID/lock conditions, requires the
+exact staging region and extent to be cleared regardless of keep, and permits
+retaining the output region only when keep is set. Distinct synthetic extents
+prevent swapped-region checks from passing accidentally. Null/unlocked mapping
+states and Darwin foreign-PID states retain the existing resource semantics;
+this does not assert that foreign-process storage is writable or erased.
+The volatile clearing leaf and valid resource construction remain their
+separately source-bound contracts.
+
+The actual compiled HMAC constructor referenced by each worker is now resolved
+and checked with the existing static pre-key admission proof. All three hash
+factories, and the three additional session factories for general SHA-512/t,
+must borrow that constructor's exact authority before accessing key bytes.
+This covers eight backend-owner populations and both key-length classes;
+it does not duplicate or extend the hash kernel correctness claim.
+
+Regressions mutate real host/destructor emissions on both compilers and all
+three targets. Additional compiling safe-Rust mutants remove or invert the
+keep decision, shape admission, late cancellation, quarantine classification
+or destructor clears. An error-category remapping mutant must also fail. The
+private source copies are restored and their baseline emissions must pass.
+Undefined integer bits and zero extension of the `i8 -1` Result sentinel have
+direct evaluator regressions.
+
 This is **host lifecycle, admission, retained storage, input/output provenance,
-checkpoint caller/callee and cleanup-dispatch evidence**, not complete
-worker-payload qualification. Authority references inside the remaining
-borrowed cryptographic callees, final host/output transaction reconciliation
-and the final cross-check remain pending. In particular, these worker graphs
-do not prove the whole public-output transaction.
-Host error handling, valid Rust inputs, the reviewed
+checkpoint caller/callee, joined host transaction and cleanup-dispatch
+evidence**, not complete worker-payload qualification. The remaining borrowed
+cryptographic-callee reconciliation, public `Output` loan/declassification
+linkage and final cross-check remain pending. The joined-host check is not a
+proof of request-validation internals or the entire public-output API.
+Valid Rust inputs, the reviewed
 resource allocation/attribute implementation and OS pthread semantics remain
 premises. It does not claim whole-frame erasure, fatal cleanup, native platform
 execution or Mac dump exclusion, and does not admit HMAC to the strict facade.

@@ -19,6 +19,10 @@ import hmac_hosted_output as output
 import hmac_hosted_input as input_flow
 import hmac_hosted_checkpoints as checkpoints
 import hmac_hosted_checkpoint_callees as checkpoint_callees
+import hmac_hosted_transaction as transaction
+import hmac_hosted_guard_paths as guard_paths
+import hmac_hosted_buffers as buffers
+import hmac_hosted_callee_admission as callee_admission
 import hmac_engine_codegen as common
 import hmac_engine_final as syntax
 import hmac_verifiers as verifier
@@ -77,8 +81,10 @@ def validate(llvm, target, compiler='1.99.1', panic='unwind'):
             executor = selected[0]
             if executor not in checked:
                 arguments, host = common.resolve(executor, definitions, aliases)
-                capture.check(arguments, host, names, target, operation.startswith('compiled_'))
+                record = capture.check(arguments, host, names, target, operation.startswith('compiled_'))
                 worker = lifecycle.check_host(host, names, definitions, target)
+                host_result = transaction.check(record, operation.startswith('compiled_'), compiler)
+                guard_paths.check(host_result)
                 # Bind the exact closure type, not merely any thread::enter symbol.
                 closure = expected + '::{closure#0}'
                 common.require(names[worker] in (resource + '::thread::enter::<' + closure + '>',
@@ -90,6 +96,8 @@ def validate(llvm, target, compiler='1.99.1', panic='unwind'):
                     authority.check(common.resolve(worker, definitions, aliases)[1], names, compiler)
                 model = keyed.check(common.resolve(worker, definitions, aliases)[1], names, compiler,
                                     identity, operation.startswith('compiled_'))
+                if operation.startswith('compiled_'):
+                    callee_admission.check(model, identity, definitions, aliases, compiler, panic)
                 checkpoints.preflight(model, common.resolve(worker, definitions, aliases)[0], target, compiler)
                 storage.check(model, identity)
                 if not operation.startswith('compiled_'):
@@ -128,7 +136,9 @@ def emit(directory, compiler, target, panic, fixture=FIXTURE):
     graph(metadata)
     # These non-generic callees are outlined into the dependency rather than
     # the fixture. Inspect their actual emitted bodies, including aliases.
-    checkpoint_callees.validate(emit_callees(directory, compiler, target, panic, fixture), target, compiler)
+    callee_llvm = emit_callees(directory, compiler, target, panic, fixture)
+    checkpoint_callees.validate(callee_llvm, target, compiler)
+    buffers.validate(callee_llvm, target)
     verifier.run(['cargo', '+' + compiler, 'rustc', '--manifest-path', str(fixture), '--locked', '--offline',
         '--release', '--lib', '--target', target, '--', '--emit=mir,llvm-ir,asm'], env)
     artifacts = []
@@ -151,7 +161,7 @@ def main():
             with verifier.cargo_environment.private_directory(ROOT) as directory:
                 _, llvm, _ = emit(Path(directory), compiler, args.target, panic)
                 validate(llvm, args.target, compiler, panic)
-            print(f'HMAC hosted capture/admission/storage/input/output/checkpoints/cleanup-dispatch: PASS; {compiler}; {args.target}; panic={panic}; '
+            print(f'HMAC hosted capture/admission/storage/input/output/checkpoints/transaction/cleanup-dispatch: PASS; {compiler}; {args.target}; panic={panic}; '
                   '48 consumers, 24 executors; full hosted qualification pending', flush=True)
 
 

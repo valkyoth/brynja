@@ -6,6 +6,7 @@ import hmac_engine_final as syntax
 import hmac_hosted_capture as capture
 import hmac_hosted_lifecycle as lifecycle
 import hmac_hosted_transaction_values as values
+import hmac_hosted_preentry as preentry
 
 require, V, L = values.require, values.V, values.L
 
@@ -39,6 +40,7 @@ class Transaction:
         require(len(clears) == 1, 'joined stack clear does not dominate both flags')
         self.start = clears[0]
         self.flags = dict(zip(flags, ('complete', 'panicked')))
+        self.covered_writes = set()
         self.check_writes()
 
     def guard_contract(self):
@@ -78,8 +80,7 @@ class Transaction:
         for mode, point, dest, extent, source, kind in r.writes:
             root, offset = r.destination(dest)
             if root == self.guard and offset == 16 and not r.before(point, r.create[0]):
-                require(mode == 'store' and kind == 'i8' and r.before(self.start, point),
-                        'output commit before joined clear')
+                require(mode == 'store' and kind == 'i8', 'untyped output commit')
                 self.keep.append(point)
             if root == '%result':
                 require(mode == 'store' and offset == 0 and kind == 'i8' and source == '10'
@@ -93,14 +94,16 @@ class Transaction:
         armed = [point for point, source in self.quarantine if source == '1']
         require(len(armed) == int(self.compiled) and all(r.before(point, r.create[0]) for point in armed),
                 'executor quarantine not armed before worker')
-        require(all(source == '1' or r.before(self.start, point) for point, source in self.quarantine),
-                'executor quarantine cleared before worker completion')
+        # Attribute errors and joined results can share an emitted switch;
+        # syntactic dominance no longer proves this. The joined and pre-entry
+        # campaigns below must cover every keep/reset store with exact outcomes.
 
-    def run(self, verifying, complete, panicked, result, cancelled):
+    def run(self, verifying, complete, panicked, result, cancelled, pre=None):
         r = self.r
         env, visited = {}, set()
         keep, quarantine, drops, cancellation = 0, int(self.compiled), 0, 0
-        block, index = self.start
+        start = pre['start'] if pre else self.start
+        block, index = start
         predecessor = None
         # Begin immediately after the source-bound non-unwinding stack clear.
         if 'invoke ' in r.graph[block][index]:
@@ -109,6 +112,8 @@ class Transaction:
             index = 0
         else:
             index += 1
+        if pre:
+            env.update(pre.get('env', {}))
         candidate = next(name for name, value in r.formals.items() if value == capture.pointer('candidate-input'))
 
         def value(token):
@@ -126,7 +131,7 @@ class Transaction:
                 return env[token]
             require(token in r.defs, 'unbound host transaction SSA: ' + token)
             rhs, definition = r.defs[token]
-            require(r.before(definition, self.start), 'transaction use before definition')
+            require(r.before(definition, start), 'transaction use before definition')
             # Only the pre-launch candidate presence comparison may enter the
             # post-join integer computation. Pointer operands are resolved separately.
             compare = re.fullmatch(r'icmp (eq|ne) ptr (' + V + '), null', rhs)
@@ -157,6 +162,9 @@ class Transaction:
                     elif callee == self.drop:
                         require(syntax.operand(args[0]) == self.guard and drops == 0, 'wrong/repeated host guard drop')
                         drops += 1
+                    elif pre and callee == '<' + self.resource + '::Mapping>::clear':
+                        require(r.destination(syntax.operand(args[0])) == ('self', 80),
+                                'pre-entry clear targets wrong stack')
                     elif callee.startswith('llvm.lifetime.') or callee == 'llvm.experimental.noalias.scope.decl':
                         pass
                     elif callee == 'llvm.assume':
@@ -172,10 +180,13 @@ class Transaction:
                         break
                 elif load:
                     address = r.destination(load[2])
-                    if address[0] == self.job and address[1] in self.flags:
+                    if pre and address in pre.get('memory', {}):
+                        env[name] = pre['memory'][address]
+                    elif address[0] == self.job and address[1] in self.flags:
+                        require(not pre, 'pre-entry path reads worker completion')
                         env[name] = int(complete if self.flags[address[1]] == 'complete' else panicked)
                     elif address[0] == '%result' and address[1] in (0, 1):
-                        require(complete and not panicked, 'worker Result read before completion/panic admission')
+                        require(not pre and complete and not panicked, 'worker Result read before completion/panic admission')
                         env[name] = result[address[1]]
                     else:
                         require(load[1] == 'ptr' and address[0] in ('%attr.i', '%attributes.i') and address[1] == 0,
@@ -183,6 +194,7 @@ class Transaction:
                         env[name] = 'attribute-allocation'
                 elif store:
                     number = values.integer(value(store[1]), 8)
+                    self.covered_writes.add(point)
                     if r.destination(store[2]) == (self.guard, 16):
                         require(point in self.keep and drops == 0, 'late/unreviewed output keep store')
                         keep = number
@@ -213,6 +225,12 @@ class Transaction:
                 elif rhs.startswith('ret i16 '):
                     returned = value(rhs.removeprefix('ret i16 '))
                     category = values.integer(returned, 8)
+                    if pre:
+                        require(category == 0 and values.integer(returned, 16) >> 8 == pre['error']
+                                and keep == 0 and quarantine == 0 and drops == 1 and cancellation == 0,
+                                'pre-entry failure result/cleanup/reuse changed: '
+                                + repr((r.target, pre, returned, keep, quarantine, drops, cancellation)))
+                        return visited
                     success = complete and not panicked and result[0] == self.ok
                     shape = (result[1] != 2) == verifying
                     admitted = success and shape and not cancelled
@@ -244,6 +262,7 @@ class Transaction:
                 require(False, 'unterminated host transaction')
 
     def check(self):
+        self.covered_writes.clear()
         results = [(self.ok, value) for value in range(3)]
         # Every current meaningful error payload, not just endpoint samples.
         # Resource has thirteen Linux/fourteen Darwin variants, CPU has seven,
@@ -260,6 +279,10 @@ class Transaction:
             for complete, panicked in ((False, False), (False, True), (True, True)):
                 self.run(verifying, complete, panicked, (self.ok, 2), cancelled)
                 count += 1
+        if self.compiled:
+            preentry.check(self)
+        required = set(self.keep) | {point for point, source in self.quarantine if source == '0'}
+        require(required <= self.covered_writes, 'uncovered output/quarantine write')
         return count
 
 

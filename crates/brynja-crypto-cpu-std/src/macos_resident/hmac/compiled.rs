@@ -17,7 +17,8 @@ mod worker;
 /// only on the resident worker; no authority is moved from the caller stack.
 ///
 /// Backend, internal and worker failures permanently quarantine this wrapper.
-/// Invalid requests, cancellation and tag mismatch preserve reuse. Scalar
+/// Pre-entry thread setup failures, invalid requests, cancellation and tag
+/// mismatch preserve reuse. A setup error does not authorize fallback. Scalar
 /// [`Session`] remains scalar, including with feature unification. Caller copies,
 /// registers, OS diagnostic storage, interruption and fatal abort remain outside
 /// the owned-storage guarantee. Compiler/native qualification is pending.
@@ -142,7 +143,7 @@ impl<A: Algorithm + for<'a> brynja_mac_hmac::execution::Algorithm<'a>> CompiledS
         let ranges =
             super::super::test_storage::ranges_for_worker(&self.inner.stack, staging, destination);
         let mut result = Err(Error::Invariant);
-        self.inner.stack.run(|| {
+        let launch = self.inner.stack.run(|| {
             #[cfg(test)]
             super::super::test_storage::configure(ranges);
             #[cfg(test)]
@@ -156,7 +157,19 @@ impl<A: Algorithm + for<'a> brynja_mac_hmac::execution::Algorithm<'a>> CompiledS
                 staging,
                 destination,
             );
-        })?;
+        });
+        if let Err(error) = launch {
+            // These resource errors occur before pthread_create succeeds: the
+            // worker never entered. Panic/protocol errors remain terminal.
+            if matches!(
+                error,
+                crate::macos_resident::Error::ThreadStart
+                    | crate::macos_resident::Error::ThreadAttributes
+            ) {
+                self.quarantined = false;
+            }
+            return Err(error.into());
+        }
         match result {
             Ok(value) => {
                 if value.is_some() != verifying {

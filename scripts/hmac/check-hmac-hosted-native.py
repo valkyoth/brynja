@@ -17,15 +17,22 @@ host = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(host)
 
 MUTANTS = (
-    ("None => Ok(None),", "None => Err(HmacError::Mac(brynja_mac_hmac::Error::ExecutionFailed)),",
+    ("None => Ok(HmacSelection::Portable(PortableHmac::new(tag_bytes)?)),",
+     "None => Err(HmacError::Mac(brynja_mac_hmac::Error::ExecutionFailed)),",
      "portable_selection_does_not_process_keys"),
     ("let _ = owner\n                    .session()\n                    .map_err(|error| HmacError::Hosted(Error::Kernel(error)))?;",
-     "if owner.session().is_err() { return Ok(None); }", "native_hosted_all_identities"),
-    (".map_err(HmacError::Mac)?;", ".ok();\n                if mac.is_none() { return Ok(None); }\n"
+     "if owner.session().is_err() { return Ok(HmacSelection::Portable(PortableHmac::new(tag_bytes)?)); }", "native_hosted_all_identities"),
+    ("                .map_err(HmacError::Mac)?;", ".ok();\n                if mac.is_none() { return Ok(HmacSelection::Portable(PortableHmac::new(tag_bytes)?)); }\n"
      "                let mac = mac.unwrap();", "native_hosted_all_identities"),
-    ("Ok(Some(mac))", "let _: Hmac<'a, A> = mac; Ok(None)", "native_hosted_all_identities"),
+    ("Ok(HmacSelection::Accelerated(mac))", "let _: Hmac<'a, A> = mac; Ok(HmacSelection::Portable(PortableHmac::new(tag_bytes)?))", "native_hosted_all_identities"),
     ("Some(length) => Hmac::from_runtime_with_tag_length(owner, key, length),",
      "Some(_) => Hmac::from_runtime(owner, key),", "native_hosted_all_identities"),
+    ("A::validate().map_err(HmacError::Mac)?;", "// omitted algorithm admission",
+     "portable_selection_does_not_process_keys"),
+    ("tag_bytes,\n            _algorithm: PhantomData", "tag_bytes: None,\n            _algorithm: PhantomData",
+     "portable_selection_does_not_process_keys"),
+    ("Some(length) => brynja_mac_hmac::Hmac::with_tag_length(key, length),",
+     "Some(_) => brynja_mac_hmac::Hmac::new(key),", "portable_selection_does_not_process_keys"),
 )
 
 
@@ -64,7 +71,7 @@ def check(workspace, env, kernel):
             path.write_text(original)
         run(test, ["--release"])
     print(f"HMAC hosted native: {kernel}; debug/release; both selection modes; "
-          "5 compiled fallback/policy mutants rejected; not independent qualification", flush=True)
+          "8 compiled fallback/policy mutants rejected; not independent qualification", flush=True)
 
 
 def main():

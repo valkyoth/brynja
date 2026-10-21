@@ -15,6 +15,10 @@ spec = importlib.util.spec_from_file_location(
     "hmac_hosted_native_tests", Path(__file__).with_name("check-hmac-hosted-native.py"))
 native = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(native)
+spec = importlib.util.spec_from_file_location(
+    "hmac_launch_tests", Path(__file__).with_name("check-hmac-launch.py"))
+launch = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(launch)
 
 
 def output(code, passed=1, failed=0, ignored=0, marker=""):
@@ -24,6 +28,48 @@ def output(code, passed=1, failed=0, ignored=0, marker=""):
 
 
 class FaultTests(unittest.TestCase):
+    def test_preentry_runner_requires_executed_failure_and_restores(self):
+        for machine, system, module in (('x86_64', 'linux', 'strict_hmac'),
+                                        ('aarch64', 'linux', 'strict_hmac'),
+                                        ('arm64', 'darwin', 'macos_resident/hmac')):
+            for failure in (None, 'baseline', 'compile', 'crash', 'survived', 'ignored'):
+                with self.subTest(machine=machine, failure=failure), tempfile.TemporaryDirectory() as raw:
+                    workspace = Path(raw)
+                    name = 'crates/brynja-crypto-cpu-std/src/' + module + '/compiled.rs'
+                    path = workspace / name
+                    path.parent.mkdir(parents=True)
+                    original = (faults.ROOT / name).read_text()
+                    path.write_text(original)
+                    calls = []
+
+                    def run(argv, cwd, env):
+                        self.assertEqual(cwd, workspace)
+                        self.assertIn('--exact', argv)
+                        self.assertIn('--ignored', argv)
+                        self.assertIn('target-feature=', env['RUSTFLAGS'])
+                        mutated = path.read_text() != original
+                        calls.append(mutated)
+                        if mutated:
+                            if failure == 'compile':
+                                return SimpleNamespace(returncode=101, stdout='', stderr='compiler error')
+                            if failure == 'crash':
+                                return output(-6, 0, 1)
+                            if failure == 'survived':
+                                return output(0)
+                            return output(101, 0, 1, int(failure == 'ignored'))
+                        return output(0, int(failure != 'baseline'))
+
+                    with patch.object(launch.platform, 'machine', return_value=machine), \
+                            patch.object(launch.sys, 'platform', system), \
+                            patch.object(launch, 'result', side_effect=run), redirect_stdout(io.StringIO()):
+                        if failure is None:
+                            launch.check(workspace, {})
+                            self.assertEqual(calls, [False, True, False] * 2)
+                        else:
+                            with self.assertRaises(ValueError):
+                                launch.check(workspace, {})
+                    self.assertEqual(path.read_text(), original)
+
     def test_test_hooks_are_private_and_leave_composition_unchanged(self):
         with tempfile.TemporaryDirectory() as raw:
             base = Path(raw)
@@ -127,8 +173,8 @@ class FaultTests(unittest.TestCase):
                         patch.object(native, "result", side_effect=run), redirect_stdout(io.StringIO()):
                     if failure is None:
                         native.check(workspace, {}, "sha256")
-                        self.assertEqual(len(calls), 19)
-                        self.assertEqual(sum(calls), 5)
+                        self.assertEqual(len(calls), 28)
+                        self.assertEqual(sum(calls), 8)
                     else:
                         with self.assertRaises(ValueError):
                             native.check(workspace, {}, "sha256")

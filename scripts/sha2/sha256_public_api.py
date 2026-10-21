@@ -44,7 +44,7 @@ FILES = (
 )
 EXPECTED_SHA256 = {
     MANIFEST: "e5324f6ad25053620f470217e0332aa6dc2955384cd5e5d157599efe5658e247",
-    LOCK: "11d9d4f91f017fd1dabc73dce1c86a0dbf9821524035cb3ce4572be7fe54f98a",
+    LOCK: "f691f765ce2b5052b2572a292722cac5f42e1458ed01054382e4793d95350aba",
     LIB: "096ef101b31b38ededc2aeda9e3b0546757f57fc2875419f920876ce883f64ff",
     MAIN: "5147536fd2bdc395ceed7fb023c9a06971347a8d531c66c0cfde7b78fc878522",
     CONTENT: "a8f34a54459e9655229bb554c15ebb87f89a0bfbc600da8eb56999422fc0487f",
@@ -52,14 +52,15 @@ EXPECTED_SHA256 = {
     SHA256_TEST: "c3eebf6ae0202321f72ddc131691720c94709e5281f905a5bd7d0fe4a603a3d1",
     CHECK_SCRIPT: "d424a02dcfc778f83ccf8004fc23c9456bd71a759ece3235bdb56f1f0f02ad9d",
     TEST_SCRIPT: "0c56798dc24c229a2bfbd80364931c3c04d26c5c8d277bcd6ed1e82bcab11a6b",
-    CHECKS: "d1bc624210a95d8a4d45d6119dc7df229c38e1d5be6385ec013c3235a02f2508",
-    RUST_MATRIX: "bb52bf3b88b86794b353880e6c5d8b2af8351de9a5f3118f925a9055ef04c1e7",
+    CHECKS: "67fe478a334e5d92d54ed7cd9c7631fbcd486b166e6b25729280ee973b923921",
+    RUST_MATRIX: "4e88816386831821db5b73a3afe27e2b768e8218b355d5c3f62f174bb2443b29",
     BARE_METAL: "f2903e49017f442fc92bb6b85b2d709bb66c4274a8042dd065b59462d8dfed1a",
     WORKFLOW: "5d354908d1a491546014ffdd831be1209734780ab2b445df1342284437e5f134",
 }
 PACKAGES = (
     ("brynja-core", "0.9.0", ("src/lib.rs",)),
     ("brynja-hash-core", "0.1.0", ("src/lib.rs",)),
+    ("brynja-mac-hmac", "0.1.0", ("src/lib.rs",)),
     (
         "brynja-crypto-cpu",
         "0.1.1",
@@ -359,6 +360,7 @@ brynja-hash-sha3 = { path = "crates/brynja-hash-sha3", version = "=0.1.0" }
 brynja-hash-parallel = { path = "crates/brynja-hash-parallel", version = "=0.1.0" }
 brynja-hash-tuple = { path = "crates/brynja-hash-tuple", version = "=0.1.0" }
 brynja-mac-kmac = { path = "crates/brynja-mac-kmac", version = "=0.1.0" }
+brynja-mac-hmac = { path = "crates/brynja-mac-hmac", version = "=0.1.0" }
 brynja-crypto-cpu = { path = "crates/brynja-crypto-cpu", version = "=0.1.1" }
 brynja-crypto-cpu-std = { path = "crates/brynja-crypto-cpu-std", version = "=0.1.1" }
 """

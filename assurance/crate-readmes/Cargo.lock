@@ -92,6 +92,7 @@ dependencies = [
  "brynja-hash-sha2",
  "brynja-hash-sha3",
  "brynja-hash-tuple",
+ "brynja-mac-hmac",
  "brynja-mac-kmac",
 ]
 

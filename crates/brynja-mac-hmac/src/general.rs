@@ -7,6 +7,11 @@ use crate::{Algorithm, Error, Sha2BitString, algorithms::sealed};
 /// Construction accepts 128..=511 except 384. Smaller mathematical parameters
 /// are rejected by the HMAC tag-strength policy, even though the hash supports
 /// them. This is not a claim that arbitrary t is FIPS-approved.
+/// Fractional T is a project-defined interoperability profile: the outer hash
+/// consumes exactly T inner-digest bits, not ceil(T/8) zero-padded bytes.
+/// Peers must explicitly agree on this convention. Prefer a named identity
+/// for standard protocol interoperability; the project Python model is not
+/// independent standardization or certification of fractional parameters.
 ///
 /// Full tags contain exactly T bits in ceil(T/8) bytes, with unused low bits
 /// zero. Verification rejects noncanonical unused bits by comparing them too.

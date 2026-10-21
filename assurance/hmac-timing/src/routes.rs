@@ -111,8 +111,10 @@ impl<A: Algorithm> Route<A> {
                 black_box(checked(state.finalize_tag(out))?.as_bytes());
             }
             Self::Runtime(owner) => {
-                let mut state = checked(owner.hmac_with_tag_length::<A>(key, out.len()))?
-                    .ok_or("required runtime authority selected portable")?;
+                let brynja_crypto_cpu_std::execution::HmacSelection::Accelerated(mut state) =
+                    checked(owner.hmac_with_tag_length::<A>(key, out.len()))? else {
+                        return Err("required runtime authority selected portable".into());
+                    };
                 checked(state.update(message))?;
                 if let Some(candidate) = candidate {
                     return Ok(checked(state.verify(black_box(candidate)))?.expose_public());

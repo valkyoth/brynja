@@ -2,6 +2,22 @@
 
 Status: in development; no tag, publication or qualification claim.
 
+## Pentest remediation
+
+- Compiled Linux protected and Apple resident HMAC sessions remain reusable
+  after attribute/setup or thread-create errors that occur before worker entry.
+  Entered-worker panic, protocol failure and backend revocation remain terminal.
+- Hosted HMAC selection returns a typed portable policy retaining the algorithm
+  and full/byte-prefix tag choice. Invalid algorithms and widths reject before
+  portable selection; callers no longer reconstruct policy from `None`.
+- Fractional SHA-512/t remains a distinct, project-defined exact-bit profile,
+  with explicit interoperability guidance and a regression distinguishing it
+  from rounded-byte inner-digest framing. Verification quotas remain a protocol
+  responsibility. Neither is relabelled as a standardized or certified guarantee.
+- Repaired stale acceptance fixtures, version/lock bindings and optional HMAC
+  package closures behind CI failures. No release-gate relaxation or new
+  third-party dependency is involved. Independent remediation retest is pending.
+
 The [current review handoff](../docs/hmac-review-handoff.md) reconciles the
 completed slices below. Earlier pending-work paragraphs describe their stage
 at the time, not unfinished implementations after the later follow-ups.

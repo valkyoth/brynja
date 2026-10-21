@@ -27,13 +27,21 @@ class FacadeTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "silently enabled"):
                 checks.facade_isolation(doc)
 
-    def test_current_archive_population_keeps_historical_catalog_unchanged(self):
-        old = api.packaging.PACKAGING_PACKAGES
+    def test_current_archive_population_adds_hmac_once_without_mutating_catalog(self):
+        declared = api.packaging.PACKAGING_PACKAGES
+        without_hmac = tuple(row for row in declared if row[0] != api.archives.HMAC[0])
+        # Older catalogs omit HMAC; current isolated package workspaces need it
+        # even when disabled. Both inputs must resolve to the same exact set.
         current = api.archives.specifications(api.packaging)
-        self.assertEqual(len(current), len(old) + 1)
-        self.assertEqual(len({name for name, *_ in current}), len(current))
-        self.assertIn(api.archives.HMAC, current)
-        self.assertEqual(api.packaging.PACKAGING_PACKAGES, old)
+        for seed in (without_hmac, declared):
+            fake = SimpleNamespace(PACKAGING_PACKAGES=seed)
+            resolved = api.archives.specifications(fake)
+            self.assertEqual(set(resolved), set(current))
+            self.assertEqual(len(resolved), len(without_hmac) + 1)
+            self.assertEqual(len({name for name, *_ in resolved}), len(resolved))
+            self.assertIn(api.archives.HMAC, resolved)
+            self.assertEqual(fake.PACKAGING_PACKAGES, seed)
+        self.assertEqual(api.packaging.PACKAGING_PACKAGES, declared)
         manifest = api.tomllib.loads((checks.ROOT / "crates/brynja/Cargo.toml").read_text())
         self.assertEqual(dict((name, version) for name, version, _ in current)["brynja"],
                          manifest["package"]["version"])

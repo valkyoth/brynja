@@ -92,6 +92,7 @@ Links identify executable checks, not proof that a current run passed.
 - Real portable and explicitly selected native adapter handoffs: [check](../assurance/hmac-faults/adapter_tests.rs).
 - Private accelerated composition admission/error/unwind witnesses: [check](../assurance/hmac-faults/execution_cases.rs).
 - Explicit AArch64 hosted native selection and fallback mutations: [check](../scripts/hmac/check-hmac-hosted-native.py).
+- Explicit native SHA-256 worker-start recovery and compiled regressions: [check](../scripts/hmac/check-hmac-launch.py).
 - Dedicated x86 SHA-512 composition under explicit SDE; emulated, never native or timing qualification: [check](../scripts/hmac/check-hmac-x86-sha512.py).
 - Explicit portable/static/runtime and protected/resident scalar/compiled paired timing screens; compiled preflight controls, not a constant-time proof: [check](../scripts/hmac/check-hmac-timing.py).
 

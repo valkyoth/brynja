@@ -6,6 +6,12 @@ fn cleared<A: Algorithm + for<'a> mac::execution::Algorithm<'a>>(s: &CompiledSes
     assert!(s.inner.staging.as_bytes().iter().all(|b| *b == 0));
     assert!(s.inner.output.as_bytes().iter().all(|b| *b == 0));
 }
+impl CompiledSession<Sha256> {
+    // Test-only observation for the resource layer's pre-entry fault injection.
+    pub(crate) fn assert_preentry_cleared(&self) {
+        cleared(self);
+    }
+}
 fn compare<A: Algorithm + for<'a> mac::execution::Algorithm<'a>>(
     kernel: Kernel,
     last: u8,

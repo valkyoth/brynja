@@ -31,7 +31,9 @@ def evaluate(rhs, value, predecessor=None):
         require(phi[1] == ', '.join('[ ' + item + ', %' + label + ' ]' for item, label in pairs),
                 'unparsed transaction phi')
         selected = [item for item, label in pairs if label == predecessor]
-        require(len(selected) == 1, 'transaction phi predecessor')
+        # LLVM may repeat an identical incoming pair for two switch edges from
+        # one predecessor. Conflicting values are never a proof.
+        require(selected and len(set(selected)) == 1, 'transaction phi predecessor')
         return value(selected[0])
     cast = re.fullmatch(r'(zext|trunc)(?: nuw)? i(\d+) (' + TOKEN + r') to i(\d+)', rhs)
     if cast:

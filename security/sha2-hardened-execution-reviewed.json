@@ -218,8 +218,8 @@
     "docs/hardened-in-place.md": "476cc1f53b6450c937f6869947d1979272a337f9a1583f9f7feb5652f3d707c4",
     "docs/sha2-hardened-execution.md": "562c7293f492326cf84f2b8dc461a4ac57283748a2ad5fa8de330ec2df53c56f",
     "docs/x86-sha512-execution.md": "5d38f31ba53533a83a50496a5eea48d2b9f6501b560b396d62ce60e6e5a94d1d",
-    "package-policy.toml": "acae634f6a370761f395c1bae27963526ccffe11089f84726c2b9cf0bdf8a98f",
-    "scripts/checks.sh": "d1bc624210a95d8a4d45d6119dc7df229c38e1d5be6385ec013c3235a02f2508",
+    "package-policy.toml": "b3b866e8a41ef1d9df6d421eeb48ed378c2a8b312c6d1e9723c35f0fd4baa0d7",
+    "scripts/checks.sh": "67fe478a334e5d92d54ed7cd9c7631fbcd486b166e6b25729280ee973b923921",
     "scripts/ci/install-sde.sh": "72f37ac72ae30b72f7155f09a51343ff9eecdb226c5898aad53eb3c0e0fa9c86",
     "scripts/release/native_dependency_scope.py": "443a5db772bee5a1b56929731b11016db81f59d425f77f801ef0afc877024189",
     "scripts/release/native_evidence_approval.py": "07131a732ae71264f5bca5750437f19905ff4d65e8b489e46b348f066e73e1a4",
@@ -243,7 +243,7 @@
     "scripts/release/test-native-evidence-approval.py": "d486000adbd19deca3834edc483bbd03d4cd308a9a5e16a664a061c9ae33a1ce",
     "scripts/release/test-native-metadata-carry-forward.py": "fb316d5a330ce522b61c87c3e003f7391d8d5fe8a19a1b96de9dceeb59c9f361",
     "scripts/sha2/capture-sha2-hardened-native.py": "50cd60bc595fa44c85c8424863757aa61dd7cb6d930eb127f7bad4fc9f013ad4",
-    "scripts/sha2/check-sha2-execution.py": "375cb1ae007fd938a96a3c6517b04be1412dc3bdbc1e455991f50572766f087d",
+    "scripts/sha2/check-sha2-execution.py": "be6ccead08bcbf7651a005f788cda71e300f218b6eb5d55884f132634e7696b4",
     "scripts/sha2/check-sha2-hardened-asan.py": "c3f92262a67b1229230c6b4b0099137a387011dbc1b5cdadded39c5d32584dc2",
     "scripts/sha2/check-sha2-hardened-execution-codegen.py": "36a1705dae3c05fe54c15dbdde51e46cd553f0c5bcbbf5247a7d1cedcf290c38",
     "scripts/sha2/check-sha2-hardened-execution.py": "2d314cb548fdf38cf39fdd101346507171c24d25f3fdd2f7dc0632a320f91427",
@@ -260,8 +260,8 @@
     "scripts/sha2/x86_sha512_package.py": "9aaedd8512a1345cf289aff28b1edeb4576f4373b732831d8d713b96d6bfc4b9",
     "scripts/sha2/x86_sha512_regressions.py": "16b237051d74ab6eb17da6e7e3cb45e99a765c170a50e7325debc68c8f7b1cc1",
     "scripts/tag_gate.sh": "35d3634edb876be2fee01cc8313187c0339fb6884ccd5999eaf6f378b8480a6e",
-    "scripts/zeroization/check-zeroization-miri.sh": "4aec4f31bb9d0b363c9a19c6d647a196379c3183b19850102bab52a16597dbc2",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "333553482e6d6e0d5852457118e9f4ee430ef384b18df53c357aad51cb6487ab"
+    "scripts/zeroization/check-zeroization-miri.sh": "edab9b708f7c012c6a67bd9420dd157c07e5f7c6e1d14506c73060d53d53e99e",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "94814f2d552295d2161fdedb4b6b0ee1bd23457073236dc4a3b0494d436508f2"
   },
   "version": "0.24.34"
 }

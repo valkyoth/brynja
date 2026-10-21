@@ -86,6 +86,7 @@ EVIDENCE = (
     ("Real portable and explicitly selected native adapter handoffs", "assurance/hmac-faults/adapter_tests.rs"),
     ("Private accelerated composition admission/error/unwind witnesses", "assurance/hmac-faults/execution_cases.rs"),
     ("Explicit AArch64 hosted native selection and fallback mutations", "scripts/hmac/check-hmac-hosted-native.py"),
+    ("Explicit native SHA-256 worker-start recovery and compiled regressions", "scripts/hmac/check-hmac-launch.py"),
     ("Dedicated x86 SHA-512 composition under explicit SDE; emulated, never native or timing qualification", "scripts/hmac/check-hmac-x86-sha512.py"),
     ("Explicit portable/static/runtime and protected/resident scalar/compiled paired timing screens; compiled preflight controls, not a constant-time proof", "scripts/hmac/check-hmac-timing.py"),
 )

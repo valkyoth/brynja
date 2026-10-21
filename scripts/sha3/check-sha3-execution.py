@@ -56,7 +56,8 @@ def package(destination, env):
     # Cargo resolves even disabled optional path dependencies. Keep those
     # first-party manifests present, without activating their features. Family
     # callers may already name them; copy/extract every archive only once.
-    packages = tuple(dict.fromkeys((*PACKAGES, 'brynja-mac-kmac', 'brynja-hash-tuple')))
+    packages = tuple(dict.fromkeys((*PACKAGES, 'brynja-mac-kmac', 'brynja-hash-tuple',
+                                   'brynja-mac-hmac')))
     workspace = destination / 'workspace'
     workspace.mkdir()
     shutil.copyfile(ROOT / 'rust-toolchain.toml', destination / 'rust-toolchain.toml')

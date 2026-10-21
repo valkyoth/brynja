@@ -284,21 +284,32 @@ def hmac_consumer(consumer, env, extra):
                          consumer, env)
             if 'test result: ok. 2 passed; 0 failed; 1 ignored;' not in result.stdout:
                 raise ValueError('packaged hosted HMAC population changed')
-        probe = '''use brynja_crypto_cpu_std::execution::Authority;
-use brynja_mac_hmac::{Sha256, execution::Hmac};
-pub fn borrow(owner: &Authority) -> Option<Hmac<'_, Sha256>> {
+        probe = '''use brynja_crypto_cpu_std::execution::{Authority, HmacSelection};
+use brynja_mac_hmac::Sha256;
+pub fn borrow(owner: &Authority) -> HmacSelection<'_, Sha256> {
     owner.hmac::<Sha256>(b"key").unwrap()
 }
 '''
         library.write_text(probe)
         run(['cargo', 'check', '--lib', '--offline', *extra], consumer, env)
         library.write_text(probe.replace(
-            "owner: &Authority) -> Option<Hmac<'_, Sha256>>",
-            "owner: Authority) -> Option<Hmac<'static, Sha256>>"))
+            "owner: &Authority) -> HmacSelection<'_, Sha256>",
+            "owner: Authority) -> HmacSelection<'static, Sha256>"))
         result = run(['cargo', 'check', '--lib', '--offline', *extra], consumer, env,
                      success=False)
         if 'error[E0515]' not in result.stderr:
             raise ValueError('hosted owner escape rejected for an unrelated reason')
+        for body, diagnostic in (
+            ('pub fn forge() -> brynja_crypto_cpu_std::execution::PortableHmac<Sha256> { '
+             'brynja_crypto_cpu_std::execution::PortableHmac { tag_bytes: Some(1), '
+             '_algorithm: core::marker::PhantomData } }', 'E0451'),
+            ('pub fn change(p: brynja_crypto_cpu_std::execution::PortableHmac<Sha256>) '
+             '-> brynja_mac_hmac::Hmac<brynja_mac_hmac::Sha512> { p.start(b"key").unwrap() }', 'E0308'),
+        ):
+            library.write_text(probe + body)
+            result = run(['cargo', 'check', '--lib', '--offline', *extra], consumer, env, success=False)
+            if f'error[{diagnostic}]' not in result.stderr:
+                raise ValueError('portable policy binding rejected for an unrelated reason')
         library.write_text(probe)
         manifest.write_text(manifest.read_text().replace(
             'features = ["hmac-execution"]', 'features = ["runtime-execution"]'))
@@ -310,7 +321,7 @@ pub fn borrow(owner: &Authority) -> Option<Hmac<'_, Sha256>> {
         manifest.write_text(original)
         library.write_text(source)
         test.unlink()
-    print('Packaged hosted HMAC: debug/release selection passed; owner escape and feature absence rejected')
+    print('Packaged hosted HMAC: debug/release selection passed; owner escape, policy forgery/substitution and feature absence rejected')
 
 
 def main():

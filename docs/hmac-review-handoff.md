@@ -1,10 +1,12 @@
 # Modern HMAC review handoff
 
 This describes the v0.25.0 development candidate, **not a pentest PASS, approved
-native receipt, release-gate PASS or publication authorization**. Runtime scope
-is based on `7d9ee73c26b112a1445075804172b4bdd8cb4fbb`; the follow-up adds focused
-emulation checks and reconciles author observations, without changing runtime
-Rust, manifests, dependencies, cleanup primitives or release-gate policy.
+native receipt, release-gate PASS or publication authorization**. The supplied
+two-tester review covers `v0.24.55..66e585f8`; the current remediation changes
+hosted portable selection and pre-entry compiled-worker failure handling.
+The [pentest ledger](../security/pentest/v0.25.0.md) separates those new fixes
+and author regressions from the supplied review. A focused independent retest
+of the remediation is pending. No hash kernel or cleanup primitive is changed.
 
 ## Implemented scope
 
@@ -15,6 +17,11 @@ typed SHA-2/FIPS 202 bits. Full tags preserve exact digest bits. Truncation is
 an explicit, preselected whole-byte policy of at least 128 bits. There is no
 fractional-key API or arbitrary bit-truncation policy. Empty keys are supported
 mathematically, not recommended as secure keys.
+
+Fractional `Sha512T<T>` HMAC is an explicit project-defined interoperability
+profile: its outer hash consumes exactly T inner-digest bits, not the rounded
+byte length. The distinct type is not a standardized-HMAC claim. Peers must
+agree on that convention; prefer the named identities for standard protocols.
 
 Portable, static and runtime owners have consuming finalization and separate
 public tags, clearing secret tags and explicit verification decisions. Long-key
@@ -60,12 +67,14 @@ already planned v0.25.2 follow-up, so the family report remains
 
 ## Why completed checks are not being restarted
 
-The finalized timing fixture/harness bytes still match all seventeen saved
-observations. The hash, HMAC engine, execution adapters and protected/resident
-worker implementations have not changed since the completed compiler/timing
-checks. The subsequent strict facade adds curated exports and feature forwarding;
-its extracted-package and platform-rejection checks were run separately.
-Source comparisons and log digests are recorded in the observation index.
+The seventeen saved timing observations and earlier native/compiler results
+remain historical records for their recorded sources. The remediation does
+not change hash kernels or HMAC mathematics, but it does change the hosted
+selection API, compiled-session pre-entry control flow, and the timing consumer's
+selection match. Those affected bytes must not be represented as identical to
+the original captures. Focused native recovery, fallback-policy, lifecycle,
+package and emitted-compiler regressions are run for the remediation; this is
+not a freshly completed timing campaign or full release sweep.
 
 This is an author reconciliation, not a replacement for the existing planner's
 receipt validation. A report, a hash beside a log, or a passing source-policy
@@ -83,7 +92,7 @@ inputs; new HMAC work does not imply recollecting unrelated unchanged hashes.
   all equal-length tag-byte differences before declassification; different
   public lengths reject. Public message/key lengths and routing are observable.
   This source assessment and the paired screen do not prove microarchitectural
-  noninterference or bound every leak; independent review remains pending.
+  noninterference or bound every leak; the remediation's independent retest is pending.
 - Compiler checks establish the specifically documented owned-storage and
   clear-dispatch relationships. They retain typed-callee and non-panicking
   cleanup premises; they do not establish arbitrary compiler-copy or full-frame
@@ -112,8 +121,8 @@ python3 scripts/hmac/check-hmac-x86-sha512.py --sde /path/to/sde64 --output targ
 python3 scripts/hmac/test-hmac-x86-sha512.py
 ```
 
-Native development result reconciliation is complete. Obtain the independent HMAC review,
-address any genuine findings with regressions, and run the affected final
+The supplied independent reviews and author remediation are recorded separately.
+Obtain the focused retest, then run the affected final
 release checks. Then obtain exact-candidate GitHub results and explicit tag
 authorization. The v0.25.1 legacy implementation and v0.25.2 family/package
 publication checkpoint retain their existing scope. No tag or publication has

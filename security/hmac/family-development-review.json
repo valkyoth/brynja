@@ -3,11 +3,11 @@
   "version": "0.25.0",
   "closing_version": "0.25.2",
   "implementation": {
-    "sha256": "82c3efb70a55762aaa8ef5467f9d4ea5393425b2412dfad4d962b7c2baae35b5",
+    "sha256": "20cb941286d541c3dd7e4229b33b9008c1bacf6f88317c77f659c9ce8ba72ece",
     "files": 1101
   },
-  "reviewer": "Implementation author, 2026-10-21; independent HMAC pentest pending",
-  "scope": "Modern HMAC SHA-2/general SHA-512/t/SHA-3, portable/static/runtime and hosted GNU/Linux protected / Apple Silicon resident APIs, curated facades. Review statuses record bounded development dispositions, not independent security, native or release qualification. Existing v0.25.1 legacy and v0.25.2 publication/acceptance scope remains unfinished.",
+  "reviewer": "Implementation author, 2026-10-21; owner-supplied reviews of 66e585f8 recorded; remediation independent retest pending",
+  "scope": "Modern HMAC SHA-2/general SHA-512/t/SHA-3, portable/static/runtime and hosted GNU/Linux protected / Apple Silicon resident APIs, curated facades. Review statuses record bounded development dispositions, not independent security, native or release qualification. Existing v0.25.1 legacy and v0.25.2 publication/acceptance scope remains unfinished. Current author update covers typed portable tag-policy selection and recoverable pre-entry worker failures. Historical observation bytes remain unchanged and do not qualify modified hosted code.",
   "roadmap": {
     "0.25.0": "cb06b49566e1658f81c2ec6668e0a5bacc387223d5e7b818300123b0046ceb9c",
     "0.25.2": "582390ea6bc9a10cfa60a64d91df7e3ee623c124d7485e934092df63b1c66fb3"
@@ -17,7 +17,7 @@
       "status": "reviewed",
       "reason": "Modern construction implements ten named SHA-2/SHA-3 identities and all 383 admitted general SHA-512/t parameters, streaming byte prefixes, canonical final message bits, exact/full tags, preselected whole-byte truncation, secret/public outputs and consuming verification. Fractional keys, arbitrary bit truncation, XOF hashes and legacy identities are not advertised. This is author review, not independent qualification.",
       "evidence": {
-        "crates/brynja-mac-hmac/README.md": "6eb1443d8d0f929028826a52f88123af1f627273558ad2ef7e21f7885238d42b",
+        "crates/brynja-mac-hmac/README.md": "3b77d574d7726d89a6f4cd0c590eeebcc84713d139b9ad1158650163b2c8a45c",
         "crates/brynja-mac-hmac/src/lib.rs": "f2bff7440a9f087185e1afce3976c835ed0848de41483969024428bd04d44f6d",
         "security/hmac/development-observations.json": "215a9c72cc3219a2095a0fb5ddec745c1ff9f95acc862291f62dbe430c428ffc"
       },
@@ -27,7 +27,7 @@
       "status": "reviewed",
       "reason": "Author RFC, byte/bit/general-width differential and lifecycle campaigns cover admitted identities and bounds. Separate models are author oracles; no independent cryptographic review is inferred. No new primitive implementation is introduced by the HMAC composition.",
       "evidence": {
-        "docs/hmac-review-handoff.md": "d32f5d591e37e21512badd93b0931046cacfebc0cf5692bf23aa642b7124e44a",
+        "docs/hmac-review-handoff.md": "4fe80c5168241a404296ac275dcef438deafc9ec4df2f375994531929b7f4471",
         "security/hmac/development-observations.json": "215a9c72cc3219a2095a0fb5ddec745c1ff9f95acc862291f62dbe430c428ffc",
         "crates/brynja-mac-hmac/src/engine.rs": "0eb6160dc1c9bf6bfcab6b4b97763e64253141d21023989983124e538400ab4e"
       },
@@ -38,7 +38,7 @@
       "reason": "HMAC owns two secret-bearing inner/outer hash states plus separate clearing scratch/output owners. Typed consuming finalization and hosted output loans prevent ordinary hash substitution and unintended sharing. Global composed-owner registration, bounded emitted-code checks and negative consumers cover these contracts; caller copies and whole-process erasure remain outside scope.",
       "evidence": {
         "docs/hmac-engine-cleanup.md": "38696d644e3aa1100b63ee98d95d0565056e3d2e489d3b628a812c45921bf7ba",
-        "docs/hmac-execution-cleanup.md": "ec061825da94baca785dae95c5344fdd210f3563bbe144fc65bbd10cf260b725",
+        "docs/hmac-execution-cleanup.md": "d39d6621a223c57f40ff42f17e9348665c1c87b70cec0577698f20240971e918",
         "security/hmac/development-observations.json": "215a9c72cc3219a2095a0fb5ddec745c1ff9f95acc862291f62dbe430c428ffc"
       },
       "follow_up": null
@@ -47,9 +47,9 @@
       "status": "inherited",
       "reason": "Existing SHA-2/Keccak kernels are reused unchanged; HMAC adds no new secret assembly kernel. Their previously bounded normal-return working-register/ABI claims are inherited, not extended to arbitrary compiler moves, caller spills, interruptions or fatal paths. HMAC caller and scratch cleanup is assessed separately.",
       "evidence": {
-        "docs/hmac-review-handoff.md": "d32f5d591e37e21512badd93b0931046cacfebc0cf5692bf23aa642b7124e44a",
+        "docs/hmac-review-handoff.md": "4fe80c5168241a404296ac275dcef438deafc9ec4df2f375994531929b7f4471",
         "docs/hmac-engine-cleanup.md": "38696d644e3aa1100b63ee98d95d0565056e3d2e489d3b628a812c45921bf7ba",
-        "docs/hmac-execution-cleanup.md": "ec061825da94baca785dae95c5344fdd210f3563bbe144fc65bbd10cf260b725",
+        "docs/hmac-execution-cleanup.md": "d39d6621a223c57f40ff42f17e9348665c1c87b70cec0577698f20240971e918",
         "security/hmac/development-observations.json": "215a9c72cc3219a2095a0fb5ddec745c1ff9f95acc862291f62dbe430c428ffc"
       },
       "follow_up": null
@@ -59,16 +59,16 @@
       "reason": "Completed bounded portable/static/runtime and hosted compiler graphs link normalization, input/suffix, consuming inner/outer outputs, comparisons, clearing loans and error/unwind paths. Twelve hosted compiler/target/panic configurations and live native adapter handoff mutants are recorded. Typed-callee and cleanup premises remain explicit, not an all-frame erasure claim.",
       "evidence": {
         "docs/hmac-engine-cleanup.md": "38696d644e3aa1100b63ee98d95d0565056e3d2e489d3b628a812c45921bf7ba",
-        "docs/hmac-execution-cleanup.md": "ec061825da94baca785dae95c5344fdd210f3563bbe144fc65bbd10cf260b725",
+        "docs/hmac-execution-cleanup.md": "d39d6621a223c57f40ff42f17e9348665c1c87b70cec0577698f20240971e918",
         "security/hmac/development-observations.json": "215a9c72cc3219a2095a0fb5ddec745c1ff9f95acc862291f62dbe430c428ffc"
       },
       "follow_up": null
     },
     "lifecycle": {
       "status": "reviewed",
-      "reason": "Consuming finalization, cancellation, request errors, revocation/quarantine, output clearing and recoverable unwind are tested through synthetic faults and real adapter/package consumers. Backend failures cannot silently fall back; accepted atomic SHA-2 length rejection differs from SHA-3 terminal overflow. Drop cannot protect fatal abort or OS snapshots.",
+      "reason": "Consuming finalization, cancellation, request errors, revocation/quarantine, output clearing and recoverable unwind are tested through synthetic faults and real adapter/package consumers. Backend failures cannot silently fall back; accepted atomic SHA-2 length rejection differs from SHA-3 terminal overflow. Drop cannot protect fatal abort or OS snapshots. Pre-entry attribute/create failure is now recoverable; actual worker failure remains terminal, covered by native fault/mutation tests.",
       "evidence": {
-        "docs/hmac-review-handoff.md": "d32f5d591e37e21512badd93b0931046cacfebc0cf5692bf23aa642b7124e44a",
+        "docs/hmac-review-handoff.md": "4fe80c5168241a404296ac275dcef438deafc9ec4df2f375994531929b7f4471",
         "crates/brynja-mac-hmac/src/execution/mod.rs": "b3cc250a71d6e76a2015664097eeb7e95170b910555dcd7d78adea6129937d9a",
         "security/hmac/development-observations.json": "215a9c72cc3219a2095a0fb5ddec745c1ff9f95acc862291f62dbe430c428ffc"
       },
@@ -76,9 +76,9 @@
     },
     "side-channels": {
       "status": "reviewed",
-      "reason": "Framing/control depends on public algorithm, lengths, policy and resource status; equal-length verification accumulates all byte differences before decision release. Seventeen author timing observations cover 768 campaigns with no alarm. Neither source review nor paired screening proves constant time or bounds cache/branch leakage; independent assessment remains pending.",
+      "reason": "Framing/control depends on public algorithm, lengths, policy and resource status; equal-length verification accumulates all byte differences before decision release. Seventeen author timing observations cover 768 campaigns with no alarm. Neither source review nor paired screening proves constant time or bounds cache/branch leakage; supplied review is recorded in the pentest ledger; remediation retest remains pending.",
       "evidence": {
-        "docs/hmac-review-handoff.md": "d32f5d591e37e21512badd93b0931046cacfebc0cf5692bf23aa642b7124e44a",
+        "docs/hmac-review-handoff.md": "4fe80c5168241a404296ac275dcef438deafc9ec4df2f375994531929b7f4471",
         "docs/hmac-timing-observations.md": "3509423618ff8940340edc6622c7b0705c748a03ff1fb00b66a837e63065383a",
         "security/hmac/development-observations.json": "215a9c72cc3219a2095a0fb5ddec745c1ff9f95acc862291f62dbe430c428ffc"
       },
@@ -88,7 +88,7 @@
       "status": "reviewed",
       "reason": "SHA-NI SHA-224/256 and AVX2 Keccak composition run natively on Linux AMD. Dedicated x86 SHA512 composition passes eight explicit leaf/protected-session executions under SDE Arrow Lake on Rust 1.90.0/1.99.1 debug/release. SDE is not native silicon, timing or memory-isolation qualification; AVX-512 alone does not establish SHA512 support.",
       "evidence": {
-        "docs/hmac-review-handoff.md": "d32f5d591e37e21512badd93b0931046cacfebc0cf5692bf23aa642b7124e44a",
+        "docs/hmac-review-handoff.md": "4fe80c5168241a404296ac275dcef438deafc9ec4df2f375994531929b7f4471",
         "scripts/hmac/check-hmac-x86-sha512.py": "223860d92fb55ba73e150ab8476fcbf4e9267acb20bb9923bdd8a5f442b0ca26",
         "security/hmac/development-observations.json": "215a9c72cc3219a2095a0fb5ddec745c1ff9f95acc862291f62dbe430c428ffc"
       },
@@ -98,8 +98,8 @@
       "status": "reviewed",
       "reason": "All three explicit SHA-256, SHA-512 and Keccak routes execute on Apple Silicon and Linux Neoverse-V2 after generic feature preflight. Linux includes twelve leaf compiler/profile cases, hosted selection, protected workers, strict-facade consumers and real adapter handoffs. Complete feature/deployment authority remains required.",
       "evidence": {
-        "docs/hmac-review-handoff.md": "d32f5d591e37e21512badd93b0931046cacfebc0cf5692bf23aa642b7124e44a",
-        "scripts/hmac/check-hmac-hosted-native.py": "73c48cb00e799e698b574d7615ffb6f40932df50ce2bb32327900b1d5ea669a1",
+        "docs/hmac-review-handoff.md": "4fe80c5168241a404296ac275dcef438deafc9ec4df2f375994531929b7f4471",
+        "scripts/hmac/check-hmac-hosted-native.py": "dd94e4411aa49dd5e502a6dff2119b39844e059517ad799f6689e800a2267ba6",
         "security/hmac/development-observations.json": "215a9c72cc3219a2095a0fb5ddec745c1ff9f95acc862291f62dbe430c428ffc"
       },
       "follow_up": null
@@ -108,8 +108,8 @@
       "status": "reviewed",
       "reason": "Portable no_std and cross-build support is distinct from platform protection. Protected sessions fail on unsupported targets; Apple resident sessions are explicitly weaker than dump-excluded Linux sessions. No Windows enclave HMAC or native RISC-V qualification is provided. Cross-compilation and SDE are never labelled native execution.",
       "evidence": {
-        "docs/hmac-review-handoff.md": "d32f5d591e37e21512badd93b0931046cacfebc0cf5692bf23aa642b7124e44a",
-        "crates/brynja-mac-hmac/README.md": "6eb1443d8d0f929028826a52f88123af1f627273558ad2ef7e21f7885238d42b"
+        "docs/hmac-review-handoff.md": "4fe80c5168241a404296ac275dcef438deafc9ec4df2f375994531929b7f4471",
+        "crates/brynja-mac-hmac/README.md": "3b77d574d7726d89a6f4cd0c590eeebcc84713d139b9ad1158650163b2c8a45c"
       },
       "follow_up": null
     },
@@ -117,8 +117,8 @@
       "status": "reviewed",
       "reason": "The construction reuses available single-state hash acceleration, including x86 AVX2 Keccak and Arm SHA/Keccak instruction routes. HMAC inner then outer hashing is sequential; no HMAC-specific vector kernel or throughput improvement is asserted merely from using vector instructions.",
       "evidence": {
-        "docs/hmac-review-handoff.md": "d32f5d591e37e21512badd93b0931046cacfebc0cf5692bf23aa642b7124e44a",
-        "crates/brynja-mac-hmac/README.md": "6eb1443d8d0f929028826a52f88123af1f627273558ad2ef7e21f7885238d42b",
+        "docs/hmac-review-handoff.md": "4fe80c5168241a404296ac275dcef438deafc9ec4df2f375994531929b7f4471",
+        "crates/brynja-mac-hmac/README.md": "3b77d574d7726d89a6f4cd0c590eeebcc84713d139b9ad1158650163b2c8a45c",
         "security/hmac/development-observations.json": "215a9c72cc3219a2095a0fb5ddec745c1ff9f95acc862291f62dbe430c428ffc"
       },
       "follow_up": null
@@ -127,8 +127,8 @@
       "status": "reviewed",
       "reason": "Independent-message HMAC batching is possible but not implemented or advertised by this single-stream generic-construction milestone. Existing public/hardened hash batch APIs are not silently reused for keyed HMAC states. Any future HMAC batch API requires its own keyed owners, lane/tail/error lifecycle review and measurements; this disposition is not a batching PASS.",
       "evidence": {
-        "docs/hmac-review-handoff.md": "d32f5d591e37e21512badd93b0931046cacfebc0cf5692bf23aa642b7124e44a",
-        "crates/brynja-mac-hmac/README.md": "6eb1443d8d0f929028826a52f88123af1f627273558ad2ef7e21f7885238d42b",
+        "docs/hmac-review-handoff.md": "4fe80c5168241a404296ac275dcef438deafc9ec4df2f375994531929b7f4471",
+        "crates/brynja-mac-hmac/README.md": "3b77d574d7726d89a6f4cd0c590eeebcc84713d139b9ad1158650163b2c8a45c",
         "docs/RELEASE_PLAN.md": "7309f59784bc21bfcefc36090aa7c04bc4b208134c392c26ba6fc7f0b90373bc"
       },
       "follow_up": null
@@ -137,8 +137,8 @@
       "status": "reviewed",
       "reason": "Protected/resident complete requests use bounded joined workers with protected/resident storage, typed result provenance and cleanup. They are an isolation mechanism, not a multi-request pool or throughput-parallel HMAC implementation. No multicore scaling claim is made.",
       "evidence": {
-        "docs/hmac-review-handoff.md": "d32f5d591e37e21512badd93b0931046cacfebc0cf5692bf23aa642b7124e44a",
-        "docs/hmac-execution-cleanup.md": "ec061825da94baca785dae95c5344fdd210f3563bbe144fc65bbd10cf260b725",
+        "docs/hmac-review-handoff.md": "4fe80c5168241a404296ac275dcef438deafc9ec4df2f375994531929b7f4471",
+        "docs/hmac-execution-cleanup.md": "d39d6621a223c57f40ff42f17e9348665c1c87b70cec0577698f20240971e918",
         "security/hmac/development-observations.json": "215a9c72cc3219a2095a0fb5ddec745c1ff9f95acc862291f62dbe430c428ffc"
       },
       "follow_up": null
@@ -147,9 +147,9 @@
       "status": "reviewed",
       "reason": "Default portable execution and explicit feature/authority admission remain distinct. Prefer may select portable only before reading a key; selected-route failures and quarantine never authorize fallback. Generic/disabled builds and successfully compiled fallback mutants are checked. Revalidation is not a scheduler lock or migration guarantee.",
       "evidence": {
-        "docs/hmac-review-handoff.md": "d32f5d591e37e21512badd93b0931046cacfebc0cf5692bf23aa642b7124e44a",
+        "docs/hmac-review-handoff.md": "4fe80c5168241a404296ac275dcef438deafc9ec4df2f375994531929b7f4471",
         "crates/brynja-mac-hmac/src/execution/mod.rs": "b3cc250a71d6e76a2015664097eeb7e95170b910555dcd7d78adea6129937d9a",
-        "scripts/hmac/check-hmac-hosted-native.py": "73c48cb00e799e698b574d7615ffb6f40932df50ce2bb32327900b1d5ea669a1",
+        "scripts/hmac/check-hmac-hosted-native.py": "dd94e4411aa49dd5e502a6dff2119b39844e059517ad799f6689e800a2267ba6",
         "security/hmac/development-observations.json": "215a9c72cc3219a2095a0fb5ddec745c1ff9f95acc862291f62dbe430c428ffc"
       },
       "follow_up": null
@@ -169,7 +169,7 @@
       "status": "reviewed",
       "reason": "Author native AMD Linux, Arm Linux and Apple Silicon observations are reconciled separately from cross-compiled compiler graphs and x86 SHA512 SDE execution. The index preserves provenance and the failed Arm setup attempt. It is not authenticated runner evidence, an independently approved native receipt or release approval.",
       "evidence": {
-        "docs/hmac-review-handoff.md": "d32f5d591e37e21512badd93b0931046cacfebc0cf5692bf23aa642b7124e44a",
+        "docs/hmac-review-handoff.md": "4fe80c5168241a404296ac275dcef438deafc9ec4df2f375994531929b7f4471",
         "security/hmac/development-observations.json": "215a9c72cc3219a2095a0fb5ddec745c1ff9f95acc862291f62dbe430c428ffc"
       },
       "follow_up": null
@@ -178,9 +178,9 @@
       "status": "reviewed",
       "reason": "No throughput, crossover, batching or multicore speedup claim is made. Paired timing screens compare secret classes for functional routes, not scalar-versus-accelerated performance. Hosted worker overhead is not evidence of speedup. Future performance claims require representative workload benchmarks; this is an explicit scope limitation, not benchmark qualification.",
       "evidence": {
-        "docs/hmac-review-handoff.md": "d32f5d591e37e21512badd93b0931046cacfebc0cf5692bf23aa642b7124e44a",
+        "docs/hmac-review-handoff.md": "4fe80c5168241a404296ac275dcef438deafc9ec4df2f375994531929b7f4471",
         "docs/hmac-timing-observations.md": "3509423618ff8940340edc6622c7b0705c748a03ff1fb00b66a837e63065383a",
-        "crates/brynja-mac-hmac/README.md": "6eb1443d8d0f929028826a52f88123af1f627273558ad2ef7e21f7885238d42b"
+        "crates/brynja-mac-hmac/README.md": "3b77d574d7726d89a6f4cd0c590eeebcc84713d139b9ad1158650163b2c8a45c"
       },
       "follow_up": null
     }

@@ -87,9 +87,10 @@ The leaf's `runtime-execution` feature accepts an already established
 `execution::RuntimeAuthority`. Prefer the safe hosted bridge: enable
 `brynja-crypto-cpu-std/hmac-execution`, select its `execution::Authority`, then
 call `owner.hmac::<Sha256>(key)` or `owner.hmac_with_tag_length::<Sha256>(key, 16)`.
-`Ok(Some(stream))` is accelerated; `Ok(None)` means the owner explicitly selected
-portable execution before processing any key. Only `None` permits constructing
-portable HMAC. An error must never be treated as fallback, even in `Mode::Prefer`.
+`HmacSelection::Accelerated(stream)` is accelerated; `HmacSelection::Portable(policy)`
+means the owner explicitly selected portable execution before processing any key.
+Call `policy.start(key)` to preserve the validated algorithm and tag width on
+that route. An error must never be treated as fallback, even in `Mode::Prefer`.
 The hosted detector retains its existing system-wide CPU/OS trust limits;
 generic x86 remains unavailable when migration safety cannot be established.
 No new feature detector or unsafe platform entry was added.
@@ -107,8 +108,10 @@ OS/register/fatal-termination residuals remain outside its guarantees.
 
 The additional `strict-hmac-acceleration` feature exposes
 `strict_hmac::CompiledSession<A>` with explicit kernel selection and worker-local
-authority. Backend or worker failure permanently quarantines it, without scalar
-fallback. Its independent compiler/native qualification remains pending. The
+authority. Backend or entered-worker failure permanently quarantines it, without
+scalar fallback. An attribute/setup or thread-create failure before worker entry
+returns a resource error but leaves the session reusable; no key was processed.
+Its independent compiler/native qualification remains pending. The
 separate hosted `macos-resident-hmac` and `macos-resident-hmac-acceleration`
 features provide Apple Silicon resident sessions, not dump exclusion or strict
 fallback. SIMD HMAC batching is not implemented. No performance or whole-process
@@ -193,7 +196,12 @@ author-generated differential cases, not official bit vectors or independent
 qualification. The general SHA-512/t campaign adds 6,128 cases across all 383
 admitted parameters, preserving the exact inner digest bit length at the outer
 hash boundary. Its Python model derives its SHA-512 constants independently,
-with named /224 and /256 OpenSSL controls.
+with named /224 and /256 OpenSSL controls. Fractional SHA-512/t is a
+project-defined interoperability profile, not a standardized HMAC variant:
+the outer hash consumes exactly t inner-digest bits, not ceil(t/8) padded bytes.
+Peers must explicitly agree on that convention. Prefer the named identities
+for standard protocols. The author-written model is not independent
+standardization or certification of fractional parameters.
 RFC vectors are from [RFC 4231](https://www.rfc-editor.org/rfc/rfc4231.html);
 construction and key guidance follow [RFC 2104](https://www.rfc-editor.org/rfc/rfc2104.html).
 

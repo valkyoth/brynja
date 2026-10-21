@@ -208,3 +208,55 @@ fn join_and_attribute_destroy_failures_abort() -> Result<(), std::io::Error> {
     }
     Ok(())
 }
+#[cfg(feature = "macos-resident-hmac-acceleration")]
+#[test]
+#[ignore = "requires native compiled SHA-256 features; explicit HMAC startup regression"]
+fn hmac_preentry_failures_preserve_session() -> Result<(), crate::macos_resident::hmac::Error> {
+    use crate::macos_resident::hmac::Error as HmacError;
+    use crate::macos_resident::hmac::{
+        Bits, Cancellation, CompiledSession, Limits, Request, Sha256, TagPolicy,
+    };
+    use brynja_crypto_cpu::static_execution::Kernel;
+    reset(None);
+    let limits = Limits {
+        stack_bytes: 262144,
+        max_stack_mapping_bytes: 1048576,
+        max_buffer_mapping_bytes: 65536,
+        max_key_bytes: 8192,
+        max_message_bits: 200000,
+        max_chunks: 16,
+    };
+    let mut session = CompiledSession::<Sha256>::new(TagPolicy::Full, Kernel::ArmSha256, limits)?;
+    let request = || Request {
+        key: b"key",
+        chunks: &[b"message"],
+        tail: Bits::empty(),
+    };
+    let expected = session.authenticate(b"key", b"message")?.expose().to_vec();
+    for step in [Step::Init, Step::Stack, Step::Create] {
+        for verifying in [false, true] {
+            // The failure must also clear a forgotten prior output loan.
+            core::mem::forget(session.authenticate(b"key", b"message")?);
+            reset(Some(step));
+            let result = if verifying {
+                session
+                    .verify(request(), &expected, &Cancellation::new())
+                    .map(|_| ())
+            } else {
+                session.authenticate(b"key", b"message").map(|_| ())
+            };
+            let error = if step == Step::Create {
+                Error::ThreadStart
+            } else {
+                Error::ThreadAttributes
+            };
+            assert_eq!(result, Err(HmacError::Resource(error)));
+            assert!(!events().contains(&Event::Call(Step::Join)));
+            assert!(!session.is_quarantined());
+            session.assert_preentry_cleared();
+            assert_eq!(session.authenticate(b"key", b"message")?.expose(), expected);
+            assert!(session.verify(request(), &expected, &Cancellation::new())?);
+        }
+    }
+    Ok(())
+}

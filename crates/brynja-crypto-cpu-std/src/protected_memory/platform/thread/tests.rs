@@ -254,3 +254,64 @@ fn expect_abort(test: &str) -> Result<(), Error> {
     );
     Ok(())
 }
+#[cfg(feature = "strict-hmac-acceleration")]
+#[test]
+#[ignore = "requires native compiled SHA-256 features; explicit HMAC startup regression"]
+fn hmac_preentry_failures_preserve_session() -> Result<(), crate::strict_hmac::Error> {
+    use crate::strict_hmac::Error as HmacError;
+    use crate::strict_hmac::{
+        Bits, Cancellation, CompiledSession, Limits, Request, Sha256, TagPolicy,
+    };
+    use brynja_crypto_cpu::static_execution::Kernel;
+    let _resources = crate::protected_memory::test_resource_guard();
+    let limits = Limits {
+        stack_bytes: 262144,
+        max_stack_mapping_bytes: 1048576,
+        max_buffer_mapping_bytes: 65536,
+        max_key_bytes: 8192,
+        max_message_bits: 200000,
+        max_chunks: 16,
+    };
+    let mut session = CompiledSession::<Sha256>::new(
+        TagPolicy::Full,
+        if cfg!(target_arch = "x86_64") {
+            Kernel::X86Sha256
+        } else {
+            Kernel::ArmSha256
+        },
+        limits,
+    )?;
+    let request = || Request {
+        key: b"key",
+        chunks: &[b"message"],
+        tail: Bits::empty(),
+    };
+    let expected = session.authenticate(b"key", b"message")?.expose().to_vec();
+    for step in [Step::Init, Step::Stack, Step::Create] {
+        for verifying in [false, true] {
+            // The failure must also clear a forgotten prior output loan.
+            core::mem::forget(session.authenticate(b"key", b"message")?);
+            FAILURE.with(|slot| slot.set(Some(step)));
+            JOINS.with(|n| n.set(0));
+            let result = if verifying {
+                session
+                    .verify(request(), &expected, &Cancellation::new())
+                    .map(|_| ())
+            } else {
+                session.authenticate(b"key", b"message").map(|_| ())
+            };
+            let error = if step == Step::Create {
+                Error::ThreadStart
+            } else {
+                Error::ThreadAttributes
+            };
+            assert_eq!(result, Err(HmacError::Resource(error)));
+            assert_eq!(JOINS.with(Cell::get), 0);
+            assert!(!session.is_quarantined());
+            session.assert_preentry_cleared();
+            assert_eq!(session.authenticate(b"key", b"message")?.expose(), expected);
+            assert!(session.verify(request(), &expected, &Cancellation::new())?);
+        }
+    }
+    Ok(())
+}

@@ -35,7 +35,7 @@ def package_optional_closure():
             else:
                 raise AssertionError('package inventory did not reach compilation boundary')
         assert len(copied) == len(set(copied)), copied
-        assert {'brynja-mac-kmac', 'brynja-hash-tuple'} <= set(copied)
+        assert {'brynja-mac-kmac', 'brynja-hash-tuple', 'brynja-mac-hmac'} <= set(copied)
         for name in copied:
             manifest = tomllib.loads((metadata.ROOT / 'crates' / name / 'Cargo.toml').read_text())
             for dependency in manifest.get('dependencies', {}):
@@ -64,14 +64,51 @@ def hosted_package_optional_closure():
                 assert dependency in copied, (name, dependency)
 
     check_inventory(module.PACKAGES)
-    for missing in ('brynja-mac-kmac', 'brynja-hash-tuple'):
+    for missing in ('brynja-mac-kmac', 'brynja-hash-tuple', 'brynja-mac-hmac'):
         try:
             check_inventory(tuple(name for name in module.PACKAGES if name != missing))
         except AssertionError as error:
             assert error.args == ((module.HOST, missing),), error.args
         else:
             raise AssertionError('missing optional hosted dependency escaped: ' + missing)
-    print('Hosted package inventory retains optional dependencies and rejects both omission regressions')
+    print('Hosted package inventory retains optional dependencies and rejects three omission regressions')
+
+
+def sha2_package_optional_closure():
+    spec = importlib.util.spec_from_file_location('packaged_sha2', metadata.ROOT / 'scripts/sha2/check-sha2-execution.py')
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    def check(packages):
+        for name in packages:
+            manifest = tomllib.loads((metadata.ROOT / 'crates' / name / 'Cargo.toml').read_text())
+            for dependency in manifest.get('dependencies', {}):
+                assert dependency in packages, (name, dependency)
+    check(module.PACKAGES)
+    try:
+        check(tuple(name for name in module.PACKAGES if name != 'brynja-mac-hmac'))
+    except AssertionError as error:
+        assert error.args == (('brynja-crypto-cpu-std', 'brynja-mac-hmac'),)
+    else:
+        raise AssertionError('missing optional HMAC dependency escaped SHA-2 package check')
+
+
+def public_acceptance_package_closure():
+    for module in (metadata.sha256_public_api, metadata.sha2_public_api,
+                   metadata.sha3_public_api):
+        def check(packages):
+            names = {name for name, _version, _required in packages}
+            for name in names:
+                manifest = tomllib.loads((metadata.ROOT / 'crates' / name / 'Cargo.toml').read_text())
+                for dependency in manifest.get('dependencies', {}):
+                    assert dependency in names, (name, dependency)
+        check(module.PACKAGING_PACKAGES)
+        try:
+            check(tuple(row for row in module.PACKAGING_PACKAGES if row[0] != 'brynja-mac-hmac'))
+        except AssertionError as error:
+            assert error.args[0][1] == 'brynja-mac-hmac', error.args
+        else:
+            raise AssertionError('missing HMAC escaped public acceptance inventory')
+    print('Three public package inventories retain optional HMAC and reject its omission')
 
 
 def legacy_metadata_regressions():
@@ -128,6 +165,8 @@ def legacy_metadata_regressions():
 
 def main():
     package_optional_closure()
+    sha2_package_optional_closure()
+    public_acceptance_package_closure()
     hosted_package_optional_closure()
     with patch('subprocess.run', side_effect=AssertionError('unexpected process')), \
             patch('subprocess.check_call', side_effect=AssertionError('unexpected process')):

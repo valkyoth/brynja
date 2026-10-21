@@ -283,7 +283,7 @@
     "crates/brynja-hash-tuple/tests/execution.rs": "a1293109b6ced0e7b648fc6d00f243eec9d44d6ba535895d086ead8a382fcf69",
     "crates/brynja-hash-tuple/tests/official_vectors.rs": "dc10909aaa0bd29950f98916e5afa46eb2c19157b572c4c1f01c22b2178cbbeb",
     "docs/tuplehash-accelerated-execution.md": "90bb61fc927eda892c5e2e704af03004f36b7d6e2eb926b9ea79ed5fa8641b49",
-    "scripts/checks.sh": "d1bc624210a95d8a4d45d6119dc7df229c38e1d5be6385ec013c3235a02f2508",
+    "scripts/checks.sh": "67fe478a334e5d92d54ed7cd9c7631fbcd486b166e6b25729280ee973b923921",
     "scripts/cryptography/mir_cleanup_flow.py": "9b56316d6bf2a02c85cb4bcd75c2fab00a2442b49332bda1852f6d91012a2dc4",
     "scripts/sha3/check-cshake-differential.py": "0e936f96b8a8bb7295055694cf751353207c83d78f5fad95c7184e9148c16d39",
     "scripts/sha3/check-sha3-bit-differential.py": "c796b542560131229a7ea933c94de944d687856fc84be678ef7e4238c2fb07da",
@@ -298,8 +298,8 @@
     "scripts/tuplehash/test-tuplehash-execution-policy.py": "a184759f818bb29d240e7b3899e4683e46d22c70a9993d2b02338351a51384d9",
     "scripts/tuplehash/tuplehash_execution_native.py": "0ca9e45a262d61f5f1e696613015f8eaf53ef691135caf715255e5890a0a5649",
     "scripts/tuplehash/tuplehash_execution_policy.py": "c1998f1f2f7f98505041e4fbb1e208bef6e3932afdd63716642147de46e7682b",
-    "scripts/zeroization/check-zeroization-miri.sh": "4aec4f31bb9d0b363c9a19c6d647a196379c3183b19850102bab52a16597dbc2",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "333553482e6d6e0d5852457118e9f4ee430ef384b18df53c357aad51cb6487ab"
+    "scripts/zeroization/check-zeroization-miri.sh": "edab9b708f7c012c6a67bd9420dd157c07e5f7c6e1d14506c73060d53d53e99e",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "94814f2d552295d2161fdedb4b6b0ee1bd23457073236dc4a3b0494d436508f2"
   },
   "status": "implementation-review; native-qualification-pending",
   "version": "0.24.39"

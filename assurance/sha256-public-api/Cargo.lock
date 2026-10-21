@@ -14,6 +14,7 @@ dependencies = [
  "brynja-hash-sha2",
  "brynja-hash-sha3",
  "brynja-hash-tuple",
+ "brynja-mac-hmac",
  "brynja-mac-kmac",
 ]
 
@@ -55,6 +56,15 @@ name = "brynja-hash-tuple"
 version = "0.1.0"
 dependencies = [
  "brynja-core",
+ "brynja-hash-sha3",
+]
+
+[[package]]
+name = "brynja-mac-hmac"
+version = "0.1.0"
+dependencies = [
+ "brynja-core",
+ "brynja-hash-sha2",
  "brynja-hash-sha3",
 ]
 

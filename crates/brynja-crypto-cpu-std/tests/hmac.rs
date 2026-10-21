@@ -1,6 +1,6 @@
 //! Hosted HMAC selection is explicit; accelerated failures cannot become fallback.
 #![cfg(feature = "hmac-execution")]
-use brynja_crypto_cpu_std::execution::{Authority, HmacError, Kernel, Mode, Route};
+use brynja_crypto_cpu_std::execution::{Authority, HmacError, HmacSelection, Kernel, Mode, Route};
 use brynja_mac_hmac::{self as mac, execution::Algorithm};
 
 #[test]
@@ -8,15 +8,66 @@ fn portable_selection_does_not_process_keys() -> Result<(), HmacError> {
     for kernel in [Kernel::ArmSha256, Kernel::ArmSha512, Kernel::ArmKeccak] {
         let owner = Authority::new(kernel, Mode::Portable).map_err(HmacError::Hosted)?;
         assert_eq!(owner.report().route, Route::PortableRequested);
-        assert!(owner.hmac::<mac::Sha256>(b"key")?.is_none());
-        // No key/tag admission is claimed until the caller constructs portable HMAC.
-        assert!(
-            owner
-                .hmac_with_tag_length::<mac::Sha512T<0>>(b"", 0)?
-                .is_none()
+        assert!(matches!(
+            owner.hmac::<mac::Sha256>(b"key")?,
+            HmacSelection::Portable(_)
+        ));
+        assert!(matches!(
+            owner.hmac_with_tag_length::<mac::Sha512T<0>>(b"", 0),
+            Err(HmacError::Mac(mac::Error::AlgorithmParameter))
+        ));
+        for width in [0, 1, 15, 33, usize::MAX] {
+            assert!(matches!(
+                owner.hmac_with_tag_length::<mac::Sha256>(b"", width),
+                Err(HmacError::Mac(mac::Error::TagLength))
+            ));
+        }
+        assert!(matches!(
+            owner.hmac_with_tag_length::<mac::Sha512T<129>>(b"", 17),
+            Err(HmacError::Mac(mac::Error::TagLength))
+        ));
+        for width in [None, Some(16), Some(17), Some(32)] {
+            let selected = match width {
+                None => owner.hmac::<mac::Sha256>(b"unprocessed selection key")?,
+                Some(n) => {
+                    owner.hmac_with_tag_length::<mac::Sha256>(b"unprocessed selection key", n)?
+                }
+            };
+            let HmacSelection::Portable(policy) = selected else {
+                return Err(HmacError::Mac(mac::Error::ExecutionFailed));
+            };
+            let mut actual = vec![0; width.unwrap_or(32)];
+            let mut expected = actual.clone();
+            let stream = policy.start(b"actual key").map_err(HmacError::Mac)?;
+            let reference = match width {
+                None => mac::Hmac::<mac::Sha256>::new(b"actual key"),
+                Some(n) => mac::Hmac::<mac::Sha256>::with_tag_length(b"actual key", n),
+            }
+            .map_err(HmacError::Mac)?;
+            let _ = stream.finalize_tag(&mut actual).map_err(HmacError::Mac)?;
+            let _ = reference
+                .finalize_tag(&mut expected)
+                .map_err(HmacError::Mac)?;
+            assert_eq!(actual, expected);
+        }
+        let HmacSelection::Portable(policy) = owner.hmac::<mac::Sha512T<129>>(b"")? else {
+            return Err(HmacError::Mac(mac::Error::ExecutionFailed));
+        };
+        let mut partial = [0; 17];
+        assert_eq!(
+            policy
+                .start(b"key")
+                .map_err(HmacError::Mac)?
+                .finalize_tag(&mut partial)
+                .map_err(HmacError::Mac)?
+                .bit_len(),
+            129
         );
         owner.quarantine();
-        assert!(owner.hmac::<mac::Sha3_256>(b"key")?.is_none());
+        assert!(matches!(
+            owner.hmac::<mac::Sha3_256>(b"key")?,
+            HmacSelection::Portable(_)
+        ));
     }
     Ok(())
 }
@@ -36,7 +87,7 @@ fn unsupported_host_never_mints_runtime_authority() {
         for kernel in [Kernel::X86Sha256, Kernel::X86Sha512, Kernel::X86Keccak] {
             assert!(matches!(Authority::new(kernel, Mode::Prefer),
                 Ok(ref owner) if matches!(owner.report().route, Route::PortableFallback(_))
-                    && matches!(owner.hmac::<mac::Sha256>(b"key"), Ok(None))));
+                    && matches!(owner.hmac::<mac::Sha256>(b"key"), Ok(HmacSelection::Portable(_)))));
             assert!(matches!(
                 Authority::new(kernel, Mode::Require),
                 Err(brynja_crypto_cpu_std::execution::Error::Unavailable(_))
@@ -52,7 +103,7 @@ fn compare<A: for<'a> Algorithm<'a>>(kernel: Kernel, mode: Mode) -> Result<(), H
     let mut expected = vec![0; A::TAG_BYTES];
     let _ = mac::Hmac::<A>::authenticate(&key, b"hosted message", &mut expected)
         .map_err(HmacError::Mac)?;
-    let Some(mut stream) = owner.hmac::<A>(&key)? else {
+    let HmacSelection::Accelerated(mut stream) = owner.hmac::<A>(&key)? else {
         return Err(HmacError::Mac(mac::Error::ExecutionFailed));
     };
     stream.update(b"hosted ").map_err(HmacError::Mac)?;
@@ -61,7 +112,7 @@ fn compare<A: for<'a> Algorithm<'a>>(kernel: Kernel, mode: Mode) -> Result<(), H
     let tag = stream.finalize_tag(&mut actual).map_err(HmacError::Mac)?;
     assert_eq!(tag.as_bytes(), expected);
     assert_eq!(tag.bit_len(), A::TAG_BITS);
-    let Some(mut verify) = owner.hmac_with_tag_length::<A>(&key, 16)? else {
+    let HmacSelection::Accelerated(mut verify) = owner.hmac_with_tag_length::<A>(&key, 16)? else {
         return Err(HmacError::Mac(mac::Error::ExecutionFailed));
     };
     verify.update(b"hosted message").map_err(HmacError::Mac)?;
@@ -74,7 +125,7 @@ fn compare<A: for<'a> Algorithm<'a>>(kernel: Kernel, mode: Mode) -> Result<(), H
             .map_err(HmacError::Mac)?
             .expose_public()
     );
-    let Some(mut reject) = owner.hmac_with_tag_length::<A>(&key, 16)? else {
+    let HmacSelection::Accelerated(mut reject) = owner.hmac_with_tag_length::<A>(&key, 16)? else {
         return Err(HmacError::Mac(mac::Error::ExecutionFailed));
     };
     reject.update(b"hosted message").map_err(HmacError::Mac)?;
@@ -95,7 +146,7 @@ fn compare<A: for<'a> Algorithm<'a>>(kernel: Kernel, mode: Mode) -> Result<(), H
         Err(HmacError::Mac(mac::Error::TagLength))
     ));
     for secret in [false, true] {
-        let Some(stream) = owner.hmac::<A>(&key)? else {
+        let HmacSelection::Accelerated(stream) = owner.hmac::<A>(&key)? else {
             return Err(HmacError::Mac(mac::Error::ExecutionFailed));
         };
         let wrong_length = A::TAG_BYTES
@@ -114,7 +165,7 @@ fn compare<A: for<'a> Algorithm<'a>>(kernel: Kernel, mode: Mode) -> Result<(), H
                 .all(|byte| *byte == if secret { 0 } else { 0x77 })
         );
     }
-    let Some(mut live) = owner.hmac::<A>(&key)? else {
+    let HmacSelection::Accelerated(mut live) = owner.hmac::<A>(&key)? else {
         return Err(HmacError::Mac(mac::Error::ExecutionFailed));
     };
     owner.quarantine();

@@ -175,6 +175,40 @@ fn exact_inner_bit_answers() {
 }
 
 #[test]
+fn fractional_profile_never_rounds_inner_digest_to_bytes() {
+    // A construction regression, not an independent oracle or official vector.
+    // Both public hash compositions below use only this synthetic public key.
+    use brynja_hash_sha2::{Sha512T as Hash, Sha512TBits};
+    let parameter = require_ok!(Sha512TBits::new(129));
+    let mut ipad = [0x36; 128];
+    let mut opad = [0x5c; 128];
+    for ((i, o), k) in ipad.iter_mut().zip(opad.iter_mut()).zip(b"key") {
+        *i ^= k;
+        *o ^= k;
+    }
+    let mut inner = Hash::new(parameter);
+    require_ok!(inner.update(&ipad));
+    require_ok!(inner.update(b"abc"));
+    let digest = require_ok!(inner.finalize());
+    let mut exact = Hash::new(parameter);
+    require_ok!(exact.update(&opad));
+    let expected =
+        require_ok!(exact.finalize_bits(require_ok!(Sha2BitString::new(digest.as_bytes(), 1))));
+    let mut rounded = Hash::new(parameter);
+    require_ok!(rounded.update(&opad));
+    require_ok!(rounded.update(digest.as_bytes()));
+    let wrong = require_ok!(rounded.finalize());
+    let mut actual = [0; 17];
+    let tag = require_ok!(Hmac::<Sha512T<129>>::authenticate(
+        b"key",
+        b"abc",
+        &mut actual
+    ));
+    assert_eq!(tag.as_bytes(), expected.as_bytes());
+    assert_ne!(tag.as_bytes(), wrong.as_bytes());
+}
+
+#[test]
 fn canonical_verification_and_unwind() {
     let mut output = [0; 17];
     let _ = require_ok!(Hmac::<Sha512T<129>>::authenticate(b"key", b"", &mut output));

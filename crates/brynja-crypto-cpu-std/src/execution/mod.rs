@@ -17,7 +17,7 @@ mod features;
 mod hmac;
 mod platform;
 #[cfg(feature = "hmac-execution")]
-pub use hmac::HmacError;
+pub use hmac::{HmacError, HmacSelection, PortableHmac};
 
 /// Explicit caller preference; no automatic process-global installation.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]

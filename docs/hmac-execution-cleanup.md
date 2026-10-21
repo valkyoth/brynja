@@ -690,11 +690,24 @@ shape-check/cancellation order is checked explicitly. Unknown SSA values,
 instructions, extra calls, loops, writes or undefined admission bits reject.
 
 For compiled sessions, quarantine must be armed before launch. It is released
-only after a valid successful worker result, cancellation, invalid bits or the
+after a valid successful worker result, cancellation, invalid bits or the
 specific nested `MessageTooLong` outcome. Worker panic/incompletion, backend
 failure, unexpected result shape and other internal failures retain quarantine.
 Late host cancellation after a valid result clears the output while preserving
 executor reuse, as the API intends.
+
+Pre-entry `ThreadAttributes` and `ThreadStart` failures also preserve reuse.
+The platform source contract establishes that neither can occur after a worker
+has started. The emitted transaction checker separately explores attribute
+failure, unsuccessful `pthread_create`, and mapping admission/size/foreign-process
+rejections before those calls. It requires the exact resource error, a cleared
+quarantine flag, no output commit, no worker-result/completion read and one guard
+destruction. Joined and pre-entry campaigns must cover every reset/keep store;
+an unexamined reset path is not accepted merely because its value is zero.
+The model retains the separately checked non-unwinding resource-call premises;
+it does not model arbitrary OS internals. Native fault injection reproduces
+init/stack-attribute/create failures on Linux and Apple Silicon, then requires
+the same compiled session to complete both compute and verification requests.
 
 The fresh dependency artifact also supplies the actual `Buffers::drop` body.
 Its interpreter follows the emitted mapping/PID/lock conditions, requires the

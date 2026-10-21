@@ -24,6 +24,7 @@ import hmac_hosted_guard_paths as guard_paths
 import hmac_hosted_buffers as buffers
 import hmac_hosted_callee_admission as callee_admission
 import hmac_hosted_constructor as constructor
+import hmac_hosted_consumers as consumers
 import hmac_engine_codegen as common
 import hmac_engine_final as syntax
 import hmac_verifiers as verifier
@@ -100,10 +101,13 @@ def validate(llvm, target, compiler='1.99.1', panic='unwind'):
                                     identity, operation.startswith('compiled_'))
                 if operation.startswith('compiled_'):
                     constructor.check(model, identity, definitions, aliases, compiler, panic, types)
+                else:
+                    constructor.scalar(model, identity, definitions, aliases, panic)
                 checkpoints.preflight(model, common.resolve(worker, definitions, aliases)[0], target, compiler)
                 storage.check(model, identity)
                 if not operation.startswith('compiled_'):
                     scalar.check(model, identity, definitions, aliases, panic)
+                    consumers.scalar(model, identity, definitions, aliases, panic)
                 else:
                     compiled_worker.check(model, identity, definitions, aliases, compiler, panic)
                 output_model = output.check(model, common.resolve(worker, definitions, aliases)[0], panic)

@@ -759,11 +759,47 @@ private source copies are restored and their baseline emissions must pass.
 Undefined integer bits and zero extension of the `i8 -1` Result sentinel have
 direct evaluator regressions.
 
+### Actual scalar hosted constructor and consuming callees
+
+The scalar worker's exact typed `Engine::new_with::<Hash::start>` definition is
+now checked in the same artifact as that worker. Its key and tag-width formals
+must match; a similarly named standalone body is not substituted. The shared
+constructor interpreter checks normalization, owner creation, returned
+inner/outer provenance and cleanup dispatch on error and recoverable unwind.
+The dynamic tag-width field must retain the input parameter on every successful
+return. Missing, shortened, redirected or overwritten fields reject. This is
+preservation of the admitted public width, not a new parameter-policy proof.
+
+Hosted SHA-3 initialization can consist of a 1,039-byte zero fill followed by
+the leading zero byte. Both are required before the model creates a logical
+owner. Partial initialization cannot be copied, escaped to a helper or treated
+as a complete owner. Repeated initialization, a nonzero leading byte, a short
+fill and intervening writes reject. The original whole-owner zero fill remains
+supported for the separately checked standalone emission.
+
+Both actual scalar terminal callees (`Engine::secret` and `Engine::verify`) are
+resolved from the worker's already checked by-value handoffs. Their exact
+algorithm, formals and population must match. The existing consuming-owner and
+scratch-clear interpreters run on those definitions and their actual outlined
+helpers, not independent fixture substitutes. This connects the worker's
+cleanup obligation to inner/outer consumption and pad/digest/tag/comparison
+scratch dispatch under both panic profiles. Typed hash updates, factories,
+finalizers and core clearing retain their source-bound callee premises.
+
+Regressions alter actual emitted owner copies, split initialization, returned
+tag widths, scratch clears, formal bindings, aliases and typed identities on
+both compilers and all three targets. Private safe-Rust source mutants change
+the returned width, swap inner/outer fields, or suppress digest/comparison
+scratch destruction. Each must compile before rejection; restored copies
+must pass. This is logical ownership and explicit cleanup dispatch, not
+compiler-created copy or whole-frame erasure.
+
 This is **host lifecycle, admission, retained storage, input/output provenance,
 checkpoint caller/callee, joined host transaction and cleanup-dispatch
 evidence**, not complete worker-payload qualification. Compiled constructor admission,
 post-admission owner transfers and explicit scratch are now linked to the
-actual hosted callees. Scalar constructor and remaining consuming/update callee reconciliation,
+actual hosted callees, as are scalar constructor transfers and both scalar
+consuming callees. Compiled consuming-callee reconciliation,
 public `Output` loan/declassification
 linkage and final cross-check remain pending. The joined-host check is not a
 proof of request-validation internals or the entire public-output API.

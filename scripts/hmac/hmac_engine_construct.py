@@ -7,7 +7,8 @@ import re
 
 import hmac_engine_codegen as codegen
 import hmac_engine_final as final
-from hmac_constructor_state import State, evaluate
+from hmac_constructor_state import evaluate
+from hmac_engine_construct_state import State
 from hmac_engine_codegen import LABEL, require
 from hmac_engine_final import VALUE
 
@@ -37,9 +38,10 @@ def is_update(symbol):
         symbol))
 
 
-def check(body, identity, panic="unwind"):
+def check(body, identity, panic="unwind", dynamic_tag=False):
     require(identity in codegen.IDENTITIES and panic in ("abort", "unwind"),
             "unknown constructor identity/panic profile")
+    require(type(dynamic_tag) is bool, "unknown scalar tag profile")
     width, core_offset, fields = final.geometry(identity)
     allocs = {name: int(size) for name, size in re.findall(
         "(" + VALUE + r") = alloca \[(\d+) x i8\],", body)}
@@ -66,7 +68,9 @@ def check(body, identity, panic="unwind"):
         return ptrs.get(name, (name, 0))
 
     def no_owner(state, name):
-        require(not any(row[0] == address(name)[0] for row in state.memory),
+        root = address(name)[0]
+        require(root not in state.initializing and not any(row[0] == root for row in state.memory)
+                and not any(base == root for base, _ in state.tag_fields),
                 "constructor owner storage passed to auxiliary")
 
     def location(name, size):
@@ -88,7 +92,9 @@ def check(body, identity, panic="unwind"):
             line = lines[index]
             evaluate(line, state, address, predecessor)
             derived = re.match("(" + VALUE + r") = getelementptr.*?, ptr (" + VALUE + ")", line)
-            if derived and any(row[0] == address(derived[2])[0] for row in state.memory):
+            if derived and (address(derived[2])[0] in state.initializing
+                            or any(row[0] == address(derived[2])[0] for row in state.memory)
+                            or any(root == address(derived[2])[0] for root, _ in state.tag_fields)):
                 require(derived[1] in ptrs, "unresolved constructor owner arithmetic")
             if re.search(r"= (?:phi ptr|select .* ptr|ptrtoint|inttoptr|bitcast)", line):
                 for name in re.findall(VALUE, line)[1:]:
@@ -129,11 +135,25 @@ def check(body, identity, panic="unwind"):
                     extent = re.fullmatch(r"i64 (\d+)", args[2])
                     require(extent, "variable constructor memset")
                     size = int(extent[1])
+                    state.forget_tags(address(dest), size)
+                    require(address(dest)[0] not in state.initializing,
+                            "overwrite of partially initialized scalar owner")
                     if dest in roles:
                         require(identity.startswith("sha3_") and size == width and args[1] == "i8 0",
                                 "unknown inline constructor initialization")
                         state.birth(address(dest), width, roles[dest])
                         seen_births.add(roles[dest])
+                    elif (identity.startswith("sha3_") and address(dest)[0] in roles
+                          and address(dest)[1] == 1):
+                        # Hosted LLVM can split the all-zero FIPS202 owner into
+                        # its tail plus the leading state byte. Neither half
+                        # alone creates an owner; all uses still need complete().
+                        root = address(dest)[0]
+                        require(size == width - 1 and args[1] == "i8 0"
+                                and root not in state.initializing
+                                and roles[root] not in state.born,
+                                "incomplete/duplicate inline constructor initialization")
+                        state.initializing.add(root)
                     else:
                         require(not state.overlap(address(dest), size), "constructor memset overwrites owner")
                 elif symbol.startswith("llvm.lifetime."):
@@ -144,7 +164,8 @@ def check(body, identity, panic="unwind"):
                     if symbol == "llvm.lifetime.end.p0":
                         state.end(root)
                     else:
-                        require(not any(row[0] == root for row in state.memory),
+                        require(root not in state.initializing
+                                and not any(row[0] == root for row in state.memory),
                                 "constructor restarts live storage")
                 elif codegen.owner_drop(symbol, identity) or final.hash_finalizer(symbol, identity):
                     is_drop = codegen.owner_drop(symbol, identity)
@@ -176,6 +197,15 @@ def check(body, identity, panic="unwind"):
                 if isinstance(value, tuple):
                     location(store[4], size)
                 state.store(address(store[4]), size, value)
+                if dynamic_tag and store[3] == '%tag_bytes':
+                    require(store[1] == 'i64', 'scalar constructor tag width changed')
+                    state.tag_fields.add(address(store[4]))
+                if address(store[4])[0] in state.initializing:
+                    require(size == 1 and value == 0, "inline constructor leading byte changed")
+                    root = address(store[4])[0]
+                    state.initializing.remove(root)
+                    state.birth(address(store[4]), width, roles[root])
+                    seen_births.add(roles[root])
             elif re.search(r"\b(?:atomicrmw|cmpxchg)\b", line):
                 require(False, "unexpected constructor atomic write")
             if re.search(r"\binvoke\b", line):
@@ -231,6 +261,10 @@ def check(body, identity, panic="unwind"):
                             and state.complete(("%_0", fields[1] + 8), width) == 2,
                             "constructor returned field provenance changed")
                     require(state.born - state.done == {1, 2}, "constructor leaked normalization owner")
+                    if dynamic_tag:
+                        tag_offset = 2088 if identity.startswith('sha3_') else 8
+                        require(('%_0', tag_offset) in state.tag_fields,
+                                'scalar constructor lost returned tag provenance')
                     successes += 1
                 else:
                     require(line.startswith("resume ") or returned == 1, "unknown constructor return status")

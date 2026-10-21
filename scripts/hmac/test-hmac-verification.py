@@ -38,6 +38,8 @@ class ScopeTests(unittest.TestCase):
         for path in ("crates/brynja-mac-hmac/src/engine.rs", "scripts/hmac/check-hmac-asan.py",
                      "assurance/hmac-policy/Cargo.lock", "assurance/hmac-faults/fault_tests.rs",
                      "assurance/hmac-facade/acceptance.rs", "scripts/hmac/check-hmac-facade.py",
+                     "assurance/hmac-strict/compiled.rs", "scripts/hmac/check-hmac-strict.py",
+                     "crates/brynja-strict/src/hmac.rs", "crates/brynja-strict/src/hmac_tests.rs",
                      "assurance/hmac-cleanup/Cargo.lock", "assurance/hmac-cleanup/src/lib.rs",
                      "assurance/hmac-engine-cleanup/Cargo.lock",
                      "assurance/hmac-engine-cleanup/src/lib.rs",
@@ -173,6 +175,11 @@ class ScopeTests(unittest.TestCase):
         self.assertEqual(commands.owners("python3 scripts/hmac/check-hmac-execution-cleanup.py"), {"hmac"})
         self.assertEqual(commands.owners("python3 scripts/hmac/check-hmac-static-cleanup.py"), {"hmac"})
         checks = commands.catalog(ROOT / "scripts/checks.sh", "# BEGIN VERIFICATION CATALOG")
+        for command in ('python3 scripts/hmac/check-hmac-strict.py', 'python3 scripts/hmac/test-hmac-strict.py'):
+            self.assertEqual(checks.count(command), 1)
+            self.assertEqual(commands.owners(command), {'hmac'})
+            self.assertIn(command, commands.selected(checks, ['hmac']))
+            self.assertNotIn(command, commands.selected(checks, ['md5']))
         for command in ("python3 scripts/hmac/check-hmac-static-cleanup.py",
                         "python3 scripts/hmac/check-hmac-static-cleanup.py --target aarch64-unknown-linux-gnu",
                         "python3 scripts/hmac/test-hmac-static-cleanup.py"):

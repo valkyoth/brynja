@@ -101,8 +101,7 @@ def execute(api, root, toolchain):
     scalar.legacy_strict_package.require_host(False)
     env = api.clean_environment(root)
     api.cargo_environment.check(root / 'package-workspace', env)
-    names = set(scalar.expected_features()) - {'facade-consumer', 'brynja-strict', 'brynja-hash-parallel-std'}
-    packages = tuple(p for p in api.packaging.PACKAGING_PACKAGES if p[0] in names) + scalar.EXTRA
+    packages = scalar.specifications(api)
     with patch.dict(api.os.environ, env, clear=True), patch.object(api.packaging, 'PACKAGING_PACKAGES', packages):
         roots = api.packaging.package_roots(root)
     runner = Runner(api, roots, ['cargo', '+' + toolchain])

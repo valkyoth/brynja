@@ -22,6 +22,9 @@ FEATURES = {
     },
 }
 SOURCES = {
+    'crates/brynja-strict/src/lib.rs': (
+        (b'', b'pub mod hmac;\n\n'),
+        (b'', b'\n#[cfg(test)]\nmod hmac_tests;\n')),
     'crates/brynja-crypto/src/lib.rs': ((b'',
         b'/// Modern sealed HMAC construction; development implementation, qualification pending.\n'
         b'/// Portable by default; neither this namespace nor its execution opt-ins promise\n'
@@ -41,9 +44,43 @@ SOURCES = {
          b'        feature = "macos-resident-tuplehash",\n'
          b'        feature = "macos-resident-hmac"\n    )\n')),
 }
+PACKAGING = {
+    # Adding the new dependency archive changes resolution, not any of the
+    # historical worker tests. Every other byte remains part of shared scope.
+    'scripts/cryptography/check-strict-profile-package.py': (
+        (b"        'brynja-strict')\n",
+         b"        'brynja-mac-hmac', 'brynja-strict')\n"),),
+}
+
+
+def strict_manifest(before, after):
+    """Only two HMAC forwarding additions; every other strict option is retained."""
+    values = []
+    for raw in (before, after):
+        if raw is None:
+            return False
+        value = tomllib.loads(raw.decode())
+        if value.get('package', {}).get('name') != 'brynja-strict':
+            return False
+        value['package'].pop('version', None)
+        try:
+            direct = value['dependencies']['brynja-crypto-cpu-std']['features']
+            accelerated = value['features']['acceleration']
+            for features, entry in ((direct, 'strict-hmac'),
+                                   (accelerated, 'brynja-crypto-cpu-std/strict-hmac-acceleration')):
+                if not isinstance(features, list) or len(features) != len(set(features)):
+                    return False
+                if entry in features:
+                    features.remove(entry)
+        except (KeyError, TypeError):
+            return False
+        values.append(value)
+    return values[0] == values[1]
 
 
 def manifest_only(path, before, after):
+    if path == 'crates/brynja-strict/Cargo.toml':
+        return strict_manifest(before, after)
     names = {f'crates/{name}/Cargo.toml': name for name in FEATURES}
     if path not in names or before is None or after is None:
         return False
@@ -70,11 +107,12 @@ def manifest_only(path, before, after):
 
 
 def source_only(path, before, after):
-    if path not in SOURCES or before is None or after is None:
+    replacements = {**SOURCES, **PACKAGING}.get(path)
+    if replacements is None or before is None or after is None:
         return False
     values = []
     for raw in (before, after):
-        for old, new in SOURCES[path]:
+        for old, new in replacements:
             if raw.count(new) > 1:
                 return False
             if old and raw.count(old) + raw.count(new) != 1:

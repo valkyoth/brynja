@@ -71,7 +71,7 @@ def execute(args, destination):
     spec.loader.exec_module(shared)
     shared.PACKAGES = (*shared.PACKAGES, 'brynja-hash-parallel', 'brynja-hash-parallel-std',
         'brynja-legacy-sha1', 'brynja-legacy-sha1-std', 'brynja-legacy-md5', 'brynja-legacy-md5-std',
-        'brynja-strict')
+        'brynja-mac-hmac', 'brynja-strict')
     env = dict(os.environ, RUSTUP_TOOLCHAIN=args.toolchain, CARGO_TARGET_DIR=str(destination / 'target'))
     for key in tuple(env):
         if key in ('RUSTFLAGS', 'RUSTDOCFLAGS', 'CARGO_ENCODED_RUSTFLAGS', 'CARGO_BUILD_TARGET') or key.startswith('BRYNJA_REQUIRE_'):

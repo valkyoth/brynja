@@ -71,6 +71,8 @@
 //! ```
 #![no_std]
 
+pub mod hmac;
+
 pub use brynja_crypto_cpu_std::strict_batch as batch;
 pub use brynja_crypto_cpu_std::strict_kmac as kmac;
 pub use brynja_crypto_cpu_std::strict_sha2 as sha2;
@@ -81,3 +83,6 @@ pub use brynja_hash_parallel_std::strict_execution as parallelhash;
 
 #[cfg(test)]
 mod tests;
+
+#[cfg(test)]
+mod hmac_tests;

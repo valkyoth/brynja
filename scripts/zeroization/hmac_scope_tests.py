@@ -66,6 +66,20 @@ def graph_tests():
 
 
 def manifest_tests():
+    path = 'crates/brynja-strict/Cargo.toml'
+    after = (scope.ROOT / path).read_bytes()
+    before = after.replace(b', "brynja-crypto-cpu-std/strict-hmac-acceleration"', b'').replace(b', "strict-hmac"', b'')
+    assert before != after
+    assert hmac.manifest_only(path, before, after)
+    assert hmac.manifest_only(path, after, before)
+    for changed in (after.replace(b'"strict-hmac"', b'"hmac-execution"'),
+                    after.replace(b'"strict-hmac"', b'"strict-hmac", "strict-hmac"'),
+                    after.replace(b'strict-hmac-acceleration', b'macos-resident-hmac-acceleration'),
+                    after.replace(b'default = []', b'default = ["acceleration"]'),
+                    after.replace(b'default-features = false', b'default-features = true'),
+                    after.replace(b'"strict-sha2", ', b'')):
+        assert changed != after
+        assert not hmac.manifest_only(path, before, changed)
     for name, features in hmac.FEATURES.items():
         path = f'crates/{name}/Cargo.toml'
         old = f'[package]\nname="{name}"\nversion="0.1.0"\n[features]\ndefault=[]\n'
@@ -119,6 +133,8 @@ def source_tests():
         assert not hmac.source_only(path, None, current)
         assert not hmac.source_only(path, original, None)
     assert scope.select(['crates/brynja-crypto/src/hmac.rs']) == (False, ('hmac',))
+    for path in ('hmac.rs', 'hmac_tests.rs'):
+        assert scope.select(['crates/brynja-strict/src/' + path]) == (False, ('hmac',))
     for name in ('hmac.rs_extra.rs', 'kmac.rs', 'lib.rs', 'unknown.rs'):
         assert scope.select(['crates/brynja-crypto/src/' + name])[0]
 
@@ -133,6 +149,43 @@ def fixture_tests():
         rejected(lambda: inputs.fixture_lock(data, workspace, manifest.replace(name.encode(), b'hmac-unknown')))
         rejected(lambda: inputs.fixture_lock(data.replace(b'name = "brynja-core"',
             b'name = "brynja-core"\nchecksum="bad"'), workspace, manifest))
+
+
+def packaging_tests():
+    path, replacements = next(iter(hmac.PACKAGING.items()))
+    current = (scope.ROOT / path).read_bytes()
+    old, new = replacements[0]
+    assert current.count(new) == 1
+    original = current.replace(new, old)
+    assert hmac.source_only(path, original, current)
+    assert hmac.source_only(path, current, original)
+    for mutant in (current + b'pass\n', current.replace(b'timeout=600', b'timeout=0'),
+                   current.replace(b'brynja-mac-hmac', b'brynja-mac-kmac'),
+                   current.replace(b'\n', b'\r\n'), current + new):
+        assert mutant != current
+        assert not hmac.source_only(path, original, mutant)
+    assert not hmac.source_only(path, None, current)
+    assert not hmac.source_only(path, original, None)
+    with tempfile.TemporaryDirectory(prefix='brynja-hmac-package-scope-') as temporary:
+        root = Path(temporary)
+        def git(*args):
+            return subprocess.check_output(['git', *args], cwd=root, stderr=subprocess.DEVNULL)
+        git('init', '-q')
+        git('config', 'user.name', 'Scope test')
+        git('config', 'user.email', 'scope@example.invalid')
+        git('config', 'commit.gpgsign', 'false')
+        target = root / path
+        target.parent.mkdir(parents=True)
+        target.write_bytes(original)
+        git('add', '.')
+        git('commit', '-qm', 'baseline')
+        base = git('rev-parse', 'HEAD').decode().strip()
+        target.write_bytes(current)
+        assert scope.select_repository(base, root, verified_base=True) == (False, ('hmac',))
+        target.write_bytes(current.replace(b'timeout=600', b'timeout=0'))
+        # This change to the actual shared runner retains all original owners.
+        assert scope.select_repository(base, root, verified_base=True) == scope.select([path])
+        assert 'core' in scope.select([path])[1]
 
 
 def repository_tests():
@@ -184,5 +237,6 @@ def test_hmac_scope():
     manifest_tests()
     source_tests()
     fixture_tests()
+    packaging_tests()
     repository_tests()
     print('HMAC scope: exact facade/hosted additions, both lock graphs, fixture identities and dirty Git regressions PASS')

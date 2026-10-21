@@ -38,7 +38,15 @@ available without features. These are not ordinary hash types, legacy HMAC, or
 protected-memory sessions. Full tags preserve the selected digest's bit width;
 explicit truncation is a preselected whole-byte prefix of at least 128 bits.
 Keys remain caller-owned; empty keys are mathematically accepted, not secure.
-The strict facade does not yet expose HMAC while its qualification is pending.
+The separate `brynja_strict::hmac` namespace exposes protected complete-request
+sessions, with optional compiled routes under that facade's own `acceleration`
+feature. It does not export portable keyed states or the low-level hash trait.
+Strict constructors reject on macOS and Windows; Mac residency is a different
+lower-level profile, not a fallback. Qualification remains pending. Its focused
+archive/feature/ownership checks run with
+`python3 scripts/hmac/check-hmac-strict.py`; explicit `--native-kernel sha256`,
+`--native-kernel sha512` and `--native-kernel keccak` require their actual host
+instruction bundles. See the [strict API](../crates/brynja-strict/README.md#hmac).
 
 Byte/bit input, streaming, fixed/XOF output and general-t types retain the leaf
 API contracts. A runtime feature permits importing a runtime authority; it

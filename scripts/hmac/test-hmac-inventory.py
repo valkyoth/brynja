@@ -40,9 +40,10 @@ class InventoryTests(unittest.TestCase):
         inventory.validate(self.root)
         text = inventory.render()
         self.assertEqual(len(inventory.OWNERS), 15)
-        self.assertEqual(len(inventory.PROFILES), 8)
+        self.assertEqual(len(inventory.PROFILES), 10)
         for phrase in ("not compiler-qualified", "not dump exclusion",
-                       "does not yet expose HMAC", "383 parameters"):
+                       "strict::hmac", "383 parameters", "direct-destructor model",
+                       "768 campaigns", "not constant-time"):
             self.assertIn(phrase, text)
         for pending in inventory.PENDING:
             self.assertIn(pending, text)

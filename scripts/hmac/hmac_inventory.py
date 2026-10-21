@@ -59,10 +59,12 @@ PROFILES = (
     ("Static", "brynja-mac-hmac", "hardened-execution", "Borrowed explicit CPU authority."),
     ("Runtime", "brynja-mac-hmac", "runtime-execution", "Borrowed runtime authority, never implicit fallback."),
     ("Hosted", "brynja-crypto-cpu-std", "hmac-execution", "Portable selection occurs before reading keys."),
-    ("Linux scalar", "brynja-crypto-cpu-std", "strict-hmac", "Protected complete requests; not the strict facade."),
+    ("Linux scalar", "brynja-crypto-cpu-std", "strict-hmac", "Protected complete requests; also curated by the strict facade."),
     ("Linux compiled", "brynja-crypto-cpu-std", "strict-hmac-acceleration", "Explicit kernel, protected worker."),
     ("Mac scalar", "brynja-crypto-cpu-std", "macos-resident-hmac", "Residency only, not dump exclusion."),
     ("Mac compiled", "brynja-crypto-cpu-std", "macos-resident-hmac-acceleration", "Explicit Arm kernel, resident worker."),
+    ("Strict facade scalar", "brynja-strict", None, "Mandatory protected HMAC; unsupported platforms reject."),
+    ("Strict facade compiled", "brynja-strict", "acceleration", "Facade-owned opt-in, explicit kernel; no portable/resident fallback."),
 )
 EVIDENCE = (
     ("48 host consumers and 48 public-loan probes; reconciled scalar/compiled constructors and consuming callees, retained storage, input/output provenance, checkpoints, joined transactions, public verification results, loan construction/declassification and mapping/buffer clearing; full qualification pending", "scripts/hmac/check-hmac-hosted-cleanup.py"),
@@ -75,6 +77,7 @@ EVIDENCE = (
     ("Real extracted archives, negative probes and mutants", "scripts/hmac/check-hmac-package.py"),
     ("Protected/resident consumer tests and mutants", "scripts/hmac/check-hmac-protected.py"),
     ("Curated facade feature and package contracts", "scripts/hmac/check-hmac-facade.py"),
+    ("Strict facade archives, default-off acceleration and ownership/trait isolation", "scripts/hmac/check-hmac-strict.py"),
     ("Bounded verifier scope and population", "scripts/hmac/test-hmac-verification.py"),
     ("Five scratch probes, optimized normal/error/unwind clearing only", "scripts/hmac/check-hmac-cleanup.py"),
     ("24 cancellation/update, 84 scratch, 72 finalizer and 12 constructor graphs; dispatch only", "scripts/hmac/check-hmac-engine-cleanup.py"),
@@ -87,10 +90,10 @@ EVIDENCE = (
 )
 PENDING = (
     "Final source-bound compiler qualification reconciliation; bounded portable/static/runtime and hosted protected/resident graph linkage is checked, not whole-frame erasure or independent qualification.",
-    "Complete source-bound native timing observations and assess remaining cache/branch limits; explicit-route paired screens are not constant-time proofs.",
+    "Final native qualification and assessment of remaining cache/branch limits; the completed explicit-route paired screens are not constant-time proofs.",
     "Remaining native route qualification, including dedicated x86 SHA-512.",
     "Independent pentest and final source-bound release evidence.",
-    "Promote the global API/requirement register only after its compiler-owner contract is satisfied.",
+    "Reconcile HMAC's transitive Engine inner/outer ownership with the global register's direct-destructor model before promoting that register; do not add a synthetic wipe or register scratch as the whole owner.",
 )
 
 
@@ -163,7 +166,9 @@ def render():
     ]
     for name, package, feature, boundary in PROFILES:
         lines.append(f"| {name} | `{package}` / `{feature or 'none'}` | {boundary} |")
-    lines += ["", "Modern facades expose curated HMAC types; `brynja-strict` does not yet expose HMAC.",
+    lines += ["", "Modern facades expose curated HMAC types; `brynja-strict::hmac` exposes protected sessions.",
+              "The strict namespace excludes portable keyed states and the low-level hash trait;",
+              "its acceleration exports require the facade's own opt-in even under feature unification.",
               "No HMAC Windows enclave or independent-message SIMD batch API is implemented.", "",
               "## Owners and outputs", "", "| Source type | Exact declared fields | Lifetime |",
               "| --- | --- | --- |"]
@@ -192,6 +197,27 @@ def render():
               "RFC identifiers below are traceability, not a claim of a fresh standards review.",
               "Links identify executable checks, not proof that a current run passed.", ""]
     lines += [f"- {requirement}: [check](../{path})." for requirement, path in EVIDENCE]
+    lines += ["", "## Reconciled development work", "",
+              "The portable/static/runtime constructor, retained-state, suffix/comparison and",
+              "error/unwind graphs are implemented and checked. Hosted graph linkage also",
+              "covers constructors, workers, consuming callees, checkpoints, joined result",
+              "transactions and public output loans. The hosted cross-check at `cba6ffa1`",
+              "covered Rust 1.90.0/1.99.1, Linux x86/Arm and Apple Arm, abort/unwind:",
+              "twelve compiler profiles, 48 consumers, 48 loan probes and 24 executors.",
+              "These are bounded emitted-code checks with the documented hash/core/OS",
+              "premises, not whole-frame erasure or an independent security review.", "",
+              "The timing work at `f7affddf` reconciled 17 retained native observations:",
+              "six Linux/AMD and eleven Apple Silicon records, 768 campaigns, no alarm",
+              "at the configured threshold. Mac captures used that clean commit; local",
+              "captures used its final pre-commit source bytes and were hash-reconciled,",
+              "not labelled clean-commit captures. The raw samples remain outside crate",
+              "archives. No-alarm is not constant-time, cache/branch or runner-attestation",
+              "proof. Dedicated x86 SHA-512 was not executed on native silicon.", "",
+              "The strict facade forwards these existing protected implementations; it",
+              "does not add a new worker or change the cryptographic implementation.",
+              "Its separate package tests cover the consumer surface and feature graph.",
+              "Neither facade availability nor this reconciliation promotes the global",
+              "compiler-owner register or substitutes for the pending independent retest."]
     lines += ["", "## Still pending", ""]
     lines += ["- " + pending for pending in PENDING]
     return "\n".join(lines) + "\n"

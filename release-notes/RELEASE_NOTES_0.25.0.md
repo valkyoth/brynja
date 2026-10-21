@@ -89,7 +89,7 @@ Status: in development; no tag, publication or qualification claim.
   tests, MSRV checks and focused Miri tasks exercise the new composition; none
   establish FIPS approval or independent cryptographic qualification.
 
-## Remaining work before completion
+## Development profile follow-ups
 
 ### Explicit static execution slice
 
@@ -156,7 +156,8 @@ state/output residency, cancellation and recoverable unwind before/after writes.
 Faults during verification cannot release a decision after cancellation.
 Protected acceleration, Mac residency, Windows HMAC, compiler cleanup/stack
 qualification and independent review are not established by these tests.
-No strict-facade export is added before this profile's qualification.
+The strict facade was not exported at this stage; the focused facade integration
+below now exposes the same protected implementation with qualification pending.
 
 The extracted-package debug/release checks pass three downstream tests and
 reject 25 ownership/API probes with compiler diagnostics. Four compiled mutants
@@ -198,21 +199,10 @@ rejected by the extracted crate's inherited lint. The Mac's unsupported-platform
 tests verify fail-closed behavior, not protected Mac computation. Existing
 historical acceptance bindings remain to be reconciled before release.
 
-### Still required
+### Release scope
 
-1. Close remaining modern profile and precise bit/key/tag policies, plus the
-   error/fault and no_std consumer contracts. General SHA-512/t now has a
-   portable implementation under the existing 128-bit HMAC minimum.
-2. Finish qualification for accelerated hash routes and
-   protected/resident HMAC composition without weakening host-memory boundaries;
-   finish required API/profile/requirement inventories. The modern no_std
-   facade integration is implemented below; strict-facade admission is pending.
-3. Extend the registered HMAC verifier tasks for the completed profiles and
-   finish HMAC-specific compiler cleanup and timing campaigns. Reuse unchanged
-   hash evidence; changes to shared implementations still require their affected
-   consumer checks. No long whole-repository sweep is launched here.
-4. Finish package/downstream, mutant, timing and cleanup qualification, then
-   exceptional independent pentest/retest and final release checks.
+The later sections record completed facade, compiler-linkage and timing work;
+the current remaining qualification work is listed at the end of these notes.
 
 The completed v0.24.55 consolidation is the baseline, not deferred work.
 Legacy HMAC-SHA-1/MD5 remains v0.25.1; cumulative public/package acceptance and
@@ -260,7 +250,8 @@ HMAC namespace, including all ten named algorithms and general SHA-512/t.
 Default-off `hmac-hardened-execution` and `hmac-runtime-execution` forward the
 required leaf features and expose borrowed CPU-authority execution. Enabling
 the leaf through another dependency does not expose a facade execution namespace.
-No HMAC export is added to `brynja-strict` before protected qualification.
+Strict-facade integration was still pending at this stage; its separate
+development integration is recorded below, without a qualification claim.
 
 Focused acceptance builds actual current-version archives without changing the
 historical hash-package catalog. Each facade passes four downstream tests in
@@ -278,7 +269,7 @@ review. Hash kernels, protected storage and release approval records are unchang
 ## HMAC development inventory
 
 The [composition inventory](../docs/hmac-development-inventory.md) records
-15 declared owner/output/guard types, scratch lifetimes, eight execution
+15 declared owner/output/guard types, scratch lifetimes, ten execution/facade
 profiles and requirement-to-check links. Focused regressions reject untracked
 fields, missing operations/adapters, scratch-size/clearing drift and accidental
 promotion to global completion. These are source-level inventory checks, not
@@ -455,8 +446,9 @@ cryptographic or resource-management implementations. See the
 [precise checked boundaries and premises](../docs/hmac-execution-cleanup.md).
 They do not establish compiler-copy/whole-frame erasure, fatal-path cleanup,
 Mac dump exclusion, native/timing qualification or independent review. Final
-source-bound qualification reconciliation and strict-facade admission remain
-pending; no global qualification or publication status is promoted.
+source-bound qualification reconciliation remains pending; strict-facade
+development integration is recorded below. No global qualification or
+publication status is promoted.
 
 ## Explicit-route timing observations
 
@@ -475,3 +467,52 @@ cache/branch or release qualification, and Mac residency still does not exclude
 dumps. See [timing methods and limits](../docs/hmac-timing-observations.md).
 These changes affect assurance tooling only, not shipping cryptographic code or
 release-gate policy. Raw observations stay local and outside crate archives.
+
+## Strict HMAC facade and package acceptance
+
+`brynja_strict::hmac` now exports the existing protected scalar sessions,
+typed output loans, exact tag policies and explicit declassification. Its own
+`acceleration` feature exposes compiled sessions and kernel selection; lower
+dependency feature unification cannot expose those names through this facade.
+The curated namespace omits ordinary keyed HMAC states, the low-level hash
+construction trait, CPU authority and resident/resource internals. No worker,
+hash implementation, raw kernel or dependency version changed in this slice.
+
+The real twelve-package extracted closure passes debug/release checks for all
+twelve sampled algorithm identities; the actual README example also compiles. The scalar API
+rejects 140 diagnostic-checked ownership/export/lifetime probes; the compiled
+API rejects 138. Three intentionally broadened facade mutants must first
+compile and then be caught by the negative checks, with restored baselines.
+Generic targets are inspected for their actual compiled instruction bundles;
+separate feature-disabled controls verify rejection even when an Apple target
+enables SHA instructions by default.
+
+Linux author tests execute scalar, SHA-NI SHA-224/256 and AVX2 Keccak routes,
+including RFC 4231, retained outputs, verification, canonical partial tags,
+cancellation/reuse and terminal explicit quarantine. The Apple Silicon run
+verifies that strict construction rejects for all three compiled routes and
+never falls back to Mac-resident storage. It is **not** strict Mac execution.
+Rust 1.90.0 tests/doctests and scoped Clippy pass. These development runs do not
+establish independent review or release qualification.
+
+Exact facade forwarding and new HMAC files are assigned to HMAC verification;
+other strict dependency or shared implementation changes retain their wider
+scope. The HMAC archive remains runtime-source-only. Capability tables now
+include the previously missing HMAC development rows without promoting their
+pending independent-review status.
+
+## Remaining qualification work
+
+- Reconcile HMAC's transitive inner/outer ownership with the global register's
+  direct-destructor contract, using the completed bounded compiler checks. Do
+  not add a synthetic wipe or describe scratch as the whole HMAC owner.
+- Reconcile final source-bound qualification and native route coverage,
+  including the dedicated x86 SHA-512 limitation. The 17 retained timing
+  observations cover 768 campaigns; no alarm is not a constant-time proof.
+- Complete independent pentest/retest and affected final release checks.
+  Reuse unchanged implementation evidence; no old-family full sweep is implied
+  by this facade integration or documentation reconciliation.
+
+Accepted caller-copy/register, OS/fatal-path and Mac dump-exclusion limits
+remain unchanged. Windows enclave HMAC is not implemented. No tag or crates.io
+publication is authorized by these development results.

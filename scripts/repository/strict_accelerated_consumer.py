@@ -16,11 +16,11 @@ def expected_features():
     result['brynja-strict'].add('acceleration')
     for name in ('brynja-crypto-cpu', 'brynja-hash-sha2', 'brynja-hash-sha3'):
         result[name].update(('static-execution', 'hardened-execution'))
-    for name in ('brynja-mac-kmac', 'brynja-hash-tuple', 'brynja-hash-parallel'):
+    for name in ('brynja-mac-kmac', 'brynja-mac-hmac', 'brynja-hash-tuple', 'brynja-hash-parallel'):
         result[name].add('hardened-execution')
     result['brynja-hash-parallel'].add('hardened-batch-execution')
     result['brynja-hash-parallel-std'].add('strict-acceleration')
-    result['brynja-crypto-cpu-std'].update('strict-' + name + '-acceleration' for name in ('sha2', 'sha3', 'kmac', 'tuplehash'))
+    result['brynja-crypto-cpu-std'].update('strict-' + name + '-acceleration' for name in ('sha2', 'sha3', 'kmac', 'tuplehash', 'hmac'))
     return result
 
 
@@ -92,8 +92,7 @@ def execute(api, root, toolchain, native):
     scalar.legacy_strict_package.require_host(False)
     env = api.clean_environment(root)
     api.cargo_environment.check(root / 'package-workspace', env)
-    names = set(scalar.expected_features()) - {'facade-consumer', 'brynja-strict', 'brynja-hash-parallel-std'}
-    packages = tuple(p for p in api.packaging.PACKAGING_PACKAGES if p[0] in names) + scalar.EXTRA
+    packages = scalar.specifications(api)
     with patch.dict(api.os.environ, env, clear=True), patch.object(api.packaging, 'PACKAGING_PACKAGES', packages):
         roots = api.packaging.package_roots(root)
     cargo = ['cargo', '+' + toolchain]

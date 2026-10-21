@@ -443,7 +443,7 @@ def validate_resolved_mode(
         "brynja-hash-sha2",
     }
     expected_detector.update(("brynja-hash-sha3", "brynja-mac-kmac", "brynja-hash-tuple"))
-    if mode == "all-features": expected_detector.add("brynja-mac-hmac")
+    expected_detector.add("brynja-mac-hmac")  # Mandatory strict facade root unifies this edge.
     if detector != expected_detector:
         raise ValueError("host CPU detector package graph drifted")
     parallel_executor = reachable_names(
@@ -457,7 +457,7 @@ def validate_resolved_mode(
         "brynja-hash-sha3",
     }
     expected_parallel_executor.update(("brynja-crypto-cpu", "brynja-crypto-cpu-std", "brynja-hash-sha2", "brynja-mac-kmac", "brynja-hash-tuple"))
-    if mode == "all-features": expected_parallel_executor.add("brynja-mac-hmac")
+    expected_parallel_executor.add("brynja-mac-hmac")
     if parallel_executor != expected_parallel_executor:
         raise ValueError("ParallelHash std executor package graph drifted")
     facade_policy.validate_isolation(modern, modern_edges, names,

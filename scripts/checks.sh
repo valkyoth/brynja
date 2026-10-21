@@ -299,6 +299,8 @@ python3 scripts/hmac/test-hmac-hosted-cleanup.py
 python3 scripts/hmac/check-hmac-package.py
 python3 scripts/hmac/test-hmac-facade.py
 python3 scripts/hmac/check-hmac-facade.py
+python3 scripts/hmac/test-hmac-strict.py
+python3 scripts/hmac/check-hmac-strict.py
 python3 scripts/hmac/test-hmac-protected.py
 python3 scripts/hmac/check-hmac-protected.py
 python3 scripts/hmac/check-hmac-differential.py

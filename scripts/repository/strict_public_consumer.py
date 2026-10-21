@@ -24,11 +24,22 @@ def expected_features():
         'brynja-hash-sha2': {'default', 'cpu', 'general-sha512-t', 'hardened-batch-execution', 'hardened-batch512-execution'},
         'brynja-hash-sha3': {'default', 'cpu', 'hardened-batch-execution'},
         'brynja-mac-kmac': {'default'}, 'brynja-hash-tuple': {'default'},
+        'brynja-mac-hmac': {'default'},
         'brynja-hash-parallel': {'default'}, 'brynja-hash-parallel-std': {'strict-execution'},
         'brynja-crypto-cpu-std': {'default', 'protected-memory', 'strict-sha2', 'strict-sha3',
-            'strict-kmac', 'strict-tuplehash', 'strict-batch', 'sha256-hardened-batch',
+            'strict-kmac', 'strict-tuplehash', 'strict-hmac', 'strict-batch', 'sha256-hardened-batch',
             'sha512-hardened-batch', 'keccak-hardened-batch'},
     }
+
+
+def specifications(api):
+    """Current strict closure without editing historical acceptance catalogs."""
+    names = set(expected_features()) - {'facade-consumer', *(name for name, *_ in EXTRA)}
+    packages = tuple(p for p in api.archives.specifications(api.packaging) if p[0] in names) + EXTRA
+    shared.require({name for name, *_ in packages} == set(expected_features()) - {'facade-consumer'}
+                   and len(packages) == len(expected_features()) - 1,
+                   'strict archive closure missing/duplicate identity')
+    return packages
 
 
 def graph(api, document, roots, consumer):
@@ -141,8 +152,7 @@ def execute(api, root, toolchain):
     legacy_strict_package.require_host(False)
     env = api.clean_environment(root)
     api.cargo_environment.check(root / 'package-workspace', env)
-    names = set(expected_features()) - {'facade-consumer', 'brynja-strict', 'brynja-hash-parallel-std'}
-    packages = tuple(p for p in api.packaging.PACKAGING_PACKAGES if p[0] in names) + EXTRA
+    packages = specifications(api)
     with patch.dict(api.os.environ, env, clear=True), patch.object(api.packaging, 'PACKAGING_PACKAGES', packages):
         roots = api.packaging.package_roots(root)
     consumer = root / 'strict-consumer'

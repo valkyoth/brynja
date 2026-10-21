@@ -133,7 +133,8 @@ def select(paths: list[str], *, downstream=None) -> tuple[bool, tuple[str, ...]]
         if path.startswith(("crates/brynja-crypto-cpu-std/src/strict_hmac/",
                             "crates/brynja-crypto-cpu-std/src/macos_resident/hmac/")) or path in {"crates/brynja-crypto-cpu-std/src/execution/hmac.rs",
                     "crates/brynja-crypto-cpu-std/tests/hmac.rs",
-                    "crates/brynja-crypto/src/hmac.rs"}:
+                    "crates/brynja-crypto/src/hmac.rs", "crates/brynja-strict/src/hmac.rs",
+                    "crates/brynja-strict/src/hmac_tests.rs"}:
             selected.add("hmac")
             continue
         if windows_or_facade_driver(path):

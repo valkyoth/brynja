@@ -123,7 +123,32 @@ def crate_tables() -> None:
                 assert "inventory" in str(error), error
             else:
                 raise AssertionError(f"missing crate status inventory accepted: {removed}")
-    print(f"Crate status tables reject {mutations} claim/table and 38 inventory regressions")
+    print(f"Crate status tables reject {mutations} claim/table and {len(MODULE.CRATE_ROWS)} inventory regressions")
+
+
+def hmac_status_rows() -> None:
+    """Every new HMAC surface remains inventoried without implying review."""
+    root = SCRIPT.resolve().parents[2]
+    counts = {'brynja-mac-hmac': 14, 'brynja-strict': 1,
+              'brynja-crypto-cpu-std': 4, 'brynja-crypto': 1}
+    mutations = 0
+    for crate, count in counts.items():
+        path = Path('crates') / crate / 'README.md'
+        text = (root / path).read_text()
+        rows = [row for row in MODULE.CRATE_ROWS[path.as_posix()]
+                if crate == 'brynja-mac-hmac' or 'HMAC' in row]
+        assert len(rows) == count
+        for row in rows:
+            for changed in (text.replace(row, ''), text.replace(row, row + '\n' + row),
+                            text.replace(row, row.rsplit('|', 2)[0] + '| ✅ Independently verified |')):
+                try:
+                    MODULE.validate_crate_document(path, changed)
+                except MODULE.VerificationStatusError:
+                    mutations += 1
+                else:
+                    raise AssertionError(f'HMAC capability/review drift accepted: {path}')
+    assert mutations == 60
+    print('HMAC capability rows reject 60 omissions, duplicates and review promotions')
 
 
 def windows_simd_status_rows() -> None:
@@ -173,7 +198,7 @@ def scoped_status_rows() -> None:
         "brynja-mac-kmac": 1, "brynja-hash-tuple": 3,
         "brynja-hash-parallel": 5, "brynja-hash-parallel-std": 5,
         "brynja-legacy-sha1": 2, "brynja-legacy-md5": 2,
-        "brynja-crypto-cpu-std": 11, "brynja-legacy-sha1-std": 2, "brynja-legacy-md5-std": 2,
+        "brynja-crypto-cpu-std": 13, "brynja-legacy-sha1-std": 2, "brynja-legacy-md5-std": 2,
     }
     mutations = 0
     for crate, count in counts.items():
@@ -207,8 +232,8 @@ def scoped_status_rows() -> None:
                     mutations += 1
                 else:
                     raise AssertionError(f"stale scoped inventory accepted: {path}: {row}")
-    assert sum(counts.values()) == 38 and mutations == 228
-    print("Scoped/borrowed/protected status rows reject 228 omission, duplication, overclaim and stale-inventory regressions")
+    assert sum(counts.values()) == 40 and mutations == 240
+    print("Scoped/borrowed/protected status rows reject 240 omission, duplication, overclaim and stale-inventory regressions")
 
 
 def resident_status_rows() -> None:
@@ -233,12 +258,13 @@ def resident_status_rows() -> None:
                     mutations += 1
                 else:
                     raise AssertionError('resident status overclaim or omission accepted: ' + name)
-    assert rows_checked == 6 and mutations == 24
-    print('Resident status rejects 24 omission, duplicate and qualification/independent-review overclaims')
+    assert rows_checked == 7 and mutations == 28
+    print('Resident status rejects 28 omission, duplicate and qualification/independent-review overclaims')
 
 
 def main() -> int:
     crate_tables()
+    hmac_status_rows()
     scoped_status_rows()
     windows_simd_status_rows()
     resident_status_rows()

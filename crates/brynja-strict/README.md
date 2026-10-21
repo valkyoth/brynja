@@ -34,6 +34,7 @@ choice, not certification or proof that all application code uses this profile.
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
 | Strict-only modern protected sessions | 🚧 Implemented; qualification pending | ❌ No |
+| Protected HMAC SHA-2/general SHA-512/t/SHA-3 sessions | 🚧 Scalar and explicit compiled routes; qualification pending | ❌ No |
 | Windows x64 VBS retained SHA-256 owner/session | 🚧 Bounded scalar API; development-tested; production qualification pending | ❌ No |
 | Windows x64 VBS streaming SHA-2 and general SHA-512/t | 🚧 Scalar version-six worker; development-tested; qualification pending | ❌ No |
 | Windows x64 VBS SHA-224/256 SHA-NI sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
@@ -52,7 +53,7 @@ choice, not certification or proof that all application code uses this profile.
 | Windows x64 VBS concurrent ParallelHash/ParallelHashXOF | 🚧 Opt-in four-worker AVX2; public output only; qualification pending | ❌ No |
 | Explicit compiled hardware/SIMD selection | 🚧 Implemented; qualification pending | ❌ No |
 
-Exports: `sha2`, `sha3` (SHAKE/cSHAKE), `kmac`, `tuplehash`, `parallelhash`
+Exports: `sha2`, `sha3` (SHAKE/cSHAKE), `hmac`, `kmac`, `tuplehash`, `parallelhash`
 and independent-message `batch`, plus the separate Windows `enclave` interface.
 Windows `enclave::sha2_batch` supports eight declared SHA-2 slots with retained
 all-plan output; see the [batch API example](../../docs/windows-enclave-sha2-batch.md).
@@ -149,6 +150,52 @@ See the [compiled session-pool example](src/lib.rs) for successful hashing on a
 supported deployment. Construct a bounded pool at startup, use exclusive session
 loans, drop each output before reuse and retire quarantined compiled sessions.
 Do not allocate an unbounded new session per incoming request.
+
+### HMAC
+
+`hmac::Session<A>` accepts a complete bounded request and retains its tag in
+protected storage. It supports the ten named SHA-2/SHA-3 identities and general
+`Sha512T<T>` for 128..=511 except 384. Select the full or truncated tag policy
+before accepting a candidate; truncation is whole-byte and at least 128 bits.
+Empty or predictable keys are insecure even though the mathematical operation
+accepts them. Callers remain responsible for key entropy and input storage.
+
+This cross-platform example deliberately gives an invalid stack budget and
+checks fail-closed construction. The [module example](src/hmac.rs) shows a
+successful complete request on a supported deployment.
+
+```rust
+use brynja_strict::hmac::{Error, Limits, Session, Sha256, TagPolicy};
+let session = Session::<Sha256>::new(TagPolicy::Full, Limits {
+    stack_bytes: 0, max_stack_mapping_bytes: 1048576,
+    max_buffer_mapping_bytes: 65536, max_key_bytes: 4096,
+    max_message_bits: 65536, max_chunks: 16,
+});
+assert!(session.is_err()); // no weaker memory fallback
+# Ok::<(), Error>(())
+```
+
+Use `compute(Request { key, chunks, tail }, &cancellation)` for chunks/final bits,
+or `verify` to release only a boolean decision. `Output::declassify` requires an
+explicit `PublicDeclassification` acknowledgement. Original inputs and copies
+made through `Output::expose` are not protected by the session.
+
+The scalar HMAC session stays scalar. With this facade's `acceleration` feature,
+`hmac::CompiledSession<A>` additionally requires an explicit `Kernel` and its
+complete build-wide features: x86 SHA/SSE2 for SHA-224/256, dedicated
+SHA512/AVX/AVX2 for the wide family, or AVX/AVX2 for Keccak; Arm requires
+NEON/SHA2 for SHA-224/256 or NEON/SHA3 for the wide/Keccak families. Deployment
+support must be established before construction. Missing features reject;
+backend failure latches quarantine. There is no independent-message HMAC SIMD
+batch API. This namespace does not export the low-level hash trait or portable
+HMAC owner; enabling lower-level acceleration elsewhere cannot publish its
+`CompiledSession` or `Kernel` without the facade's own feature.
+
+Strict HMAC constructors reject on macOS and Windows. The separately named
+lower-level Mac resident HMAC API is not dump-excluded and is not re-exported
+here. Windows enclave HMAC is not implemented. The bounded compiler/native
+development checks are not independent review or release qualification; see the
+[HMAC composition inventory](../../docs/hmac-development-inventory.md).
 
 ## Platform and memory limits
 

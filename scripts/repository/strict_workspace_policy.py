@@ -4,7 +4,7 @@ from pathlib import Path
 import tomllib
 
 DIRECT = {
-    'brynja-crypto-cpu-std': ['strict-sha2', 'strict-sha3', 'strict-kmac', 'strict-tuplehash', 'strict-batch'],
+    'brynja-crypto-cpu-std': ['strict-sha2', 'strict-sha3', 'strict-kmac', 'strict-tuplehash', 'strict-hmac', 'strict-batch'],
     'brynja-hash-parallel-std': ['strict-execution'],
 }
 FEATURES = {'default': [], 'acceleration': [
@@ -12,6 +12,7 @@ FEATURES = {'default': [], 'acceleration': [
     'brynja-crypto-cpu-std/strict-sha3-acceleration',
     'brynja-crypto-cpu-std/strict-kmac-acceleration',
     'brynja-crypto-cpu-std/strict-tuplehash-acceleration',
+    'brynja-crypto-cpu-std/strict-hmac-acceleration',
     'brynja-hash-parallel-std/strict-acceleration',
 ]}
 # Cargo resolves every workspace root together, including the mandatory strict
@@ -20,13 +21,13 @@ FEATURES = {'default': [], 'acceleration': [
 UNIFIED = {
     'brynja-crypto-cpu': ['keccak-hardened-batch', 'sha256-hardened-batch', 'sha512-hardened-batch'],
     'brynja-crypto-cpu-std': ['keccak-hardened-batch', 'protected-memory', 'sha256-hardened-batch',
-        'sha512-hardened-batch', 'strict-batch', 'strict-kmac', 'strict-sha2', 'strict-sha3', 'strict-tuplehash'],
+        'sha512-hardened-batch', 'strict-batch', 'strict-hmac', 'strict-kmac', 'strict-sha2', 'strict-sha3', 'strict-tuplehash'],
     'brynja-hash-parallel-std': ['strict-execution'],
     'brynja-hash-sha2': ['general-sha512-t', 'hardened-batch-execution', 'hardened-batch512-execution'],
     'brynja-hash-sha3': ['cpu', 'hardened-batch-execution'],
 }
 EDGES = {
-    'brynja-crypto-cpu-std': ['brynja-core', 'brynja-hash-sha3', 'brynja-mac-kmac', 'brynja-hash-tuple'],
+    'brynja-crypto-cpu-std': ['brynja-core', 'brynja-hash-sha3', 'brynja-mac-kmac', 'brynja-hash-tuple', 'brynja-mac-hmac'],
     'brynja-hash-parallel-std': ['brynja-crypto-cpu-std'],
     'brynja-hash-sha3': ['brynja-crypto-cpu'],
 }

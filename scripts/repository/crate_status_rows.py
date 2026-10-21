@@ -5,8 +5,25 @@ Independent review/FIPS status must never be inferred from internal test results
 """
 
 ROWS = {
+    "crates/brynja-mac-hmac/README.md": [
+        "| HMAC-SHA-224/256/384/512 and SHA-512/224, SHA-512/256 | Portable initial implementation | ❌ No |",
+        "| HMAC-SHA3-224/256/384/512 | Portable initial implementation | ❌ No |",
+        "| Streaming, long-key normalization, explicit byte truncation, verification | Initial implementation with author tests | ❌ No |",
+        "| Typed public/secret tags; owned-memory destruction | Implemented; HMAC-specific compiler qualification pending | ❌ No |",
+        "| Explicit static SHA-2/Keccak accelerated composition | Implemented behind `hardened-execution`; HMAC-specific qualification pending | ❌ No |",
+        "| Hosted CPU selection | Opt-in `brynja-crypto-cpu-std` HMAC bridge; native M2 author tests | ❌ No |",
+        "| Protected scalar HMAC | Opt-in `brynja-crypto-cpu-std/strict-hmac` on supported GNU/Linux; author tests, qualification pending | ❌ No |",
+        "| Protected compiled HMAC | Opt-in `brynja-crypto-cpu-std/strict-hmac-acceleration`; explicit SHA-2/Keccak kernel, authority constructed on protected worker | ❌ No |",
+        "| Mac scalar/compiled resident sessions | Opt-in hosted Apple Silicon profile; guarded/locked worker, no dump-exclusion claim; qualification pending | ❌ No |",
+        "| SIMD batching and Windows enclave HMAC | Not implemented by this HMAC API | ❌ No |",
+        "| Canonical final-bit messages for the ten named algorithms | Implemented with author differential and lifecycle tests | ❌ No |",
+        "| General SHA-512/t, t ≥ 128 and t < 512 except 384; exact full-bit tags | Portable implementation with author tests across 383 parameters | ❌ No |",
+        "| General SHA-512/t below 128 bits | Rejected by HMAC's minimum-tag policy | Not applicable |",
+        "| Fractional keys and arbitrary bit-level truncation | Not implemented by this HMAC API | ❌ No |",
+    ],
     "crates/brynja-strict/README.md": [
         "| Strict-only modern protected sessions | 🚧 Implemented; qualification pending | ❌ No |",
+        "| Protected HMAC SHA-2/general SHA-512/t/SHA-3 sessions | 🚧 Scalar and explicit compiled routes; qualification pending | ❌ No |",
         "| Windows x64 VBS retained SHA-256 owner/session | 🚧 Bounded scalar API; development-tested; production qualification pending | ❌ No |",
         "| Windows x64 VBS streaming SHA-2 and general SHA-512/t | 🚧 Scalar version-six worker; development-tested; qualification pending | ❌ No |",
         "| Windows x64 VBS SHA-224/256 SHA-NI sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |",
@@ -182,6 +199,10 @@ ROWS = {
         "| Scoped hardened execution workspace | 🚧 Portable/SHA-NI/Arm routes; residue qualification pending | ❌ Not independently verified |"
     ],
     "crates/brynja-crypto-cpu-std/README.md": [
+        "| Hosted hardened HMAC over SHA-2/SHA-3 | 🚧 Default-off `hmac-execution`; native M2 author tests; qualification pending | ❌ No |",
+        "| Protected compiled HMAC over SHA-2/SHA-3 | 🚧 Default-off `strict-hmac-acceleration`; GNU/Linux, explicit target features, no fallback; qualification pending | ❌ No |",
+        "| Protected scalar HMAC (supported GNU/Linux targets) | 🚧 Default-off `strict-hmac`; typed bounded requests and worker-side verification; qualification pending | ❌ No |",
+        "| Apple Silicon resident HMAC over SHA-2/SHA-3 | 🚧 Default-off scalar or explicit Arm SHA2/SHA512/Keccak; no dump exclusion; qualification pending | ❌ No |",
         "| Apple Silicon resident SHA-2/SHA-3, KMAC/TupleHash | 🚧 Separate opt-in scalar/Arm resident/clearing APIs; no dump exclusion; qualification pending | ❌ No |",
         "| Apple Silicon resident SHA-2/general-t and SHA-3/SHAKE/cSHAKE | 🚧 Scalar or explicit Arm SHA2/SHA512/Keccak; bit-aware, bounded output/cancellation; no dump-exclusion guarantee; qualification pending | ❌ No |",
         "| Apple Silicon resident SHA-2/Keccak independent-message batches | 🚧 Default-off resident workspace/output; explicit portable or required NEON, no fallback; no dump exclusion; qualification pending | ❌ No |",
@@ -242,6 +263,7 @@ ROWS = {
     "crates/brynja-crypto/README.md": [
         "| All six named SHA-2 and all six SHA-3/SHAKE functions | ✅ Fully implemented, reexported | ❌ No |",
         "| cSHAKE, KMAC/KMACXOF, TupleHash and ParallelHash families | ✅ Fully implemented, reexported | ❌ No |",
+        "| Modern HMAC over SHA-2/SHA-3 | 🚧 Portable and explicit execution APIs; qualification pending | ❌ No |",
         "| AEAD, KDF, RSA, ECC and executable provider effects | ❌ Not implemented | ❌ No |"
     ],
     "crates/brynja-core/README.md": [

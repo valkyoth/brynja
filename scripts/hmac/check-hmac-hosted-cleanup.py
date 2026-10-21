@@ -110,6 +110,7 @@ def validate(llvm, target, compiler='1.99.1', panic='unwind'):
                     consumers.scalar(model, identity, definitions, aliases, panic)
                 else:
                     compiled_worker.check(model, identity, definitions, aliases, compiler, panic)
+                    consumers.compiled(model, identity, definitions, aliases, compiler, panic)
                 output_model = output.check(model, common.resolve(worker, definitions, aliases)[0], panic)
                 flow = input_flow.check(model, common.resolve(worker, definitions, aliases)[0], compiler)
                 checkpoints.check(model, flow, output_model, target, compiler)

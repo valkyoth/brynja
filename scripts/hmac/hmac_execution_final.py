@@ -19,7 +19,8 @@ def check(body, identity, definitions, aliases, panic="unwind", seed=None, depth
     return _check(body, identity, definitions, aliases, panic, seed, depth, route, set(), profile)
 
 
-def _check(body, identity, definitions, aliases, panic, seed, depth, route, checked, profile):
+def _check(body, identity, definitions, aliases, panic, seed, depth, route, checked, profile,
+           continuation=None):
     require(depth < 4 and route in ((0, 1) if profile == "runtime" else range(16))
             and identity in common.IDENTITIES
             and panic in ("abort", "unwind"), "recursive/invalid accelerated finalizer")
@@ -28,7 +29,7 @@ def _check(body, identity, definitions, aliases, panic, seed, depth, route, chec
 
     if seed is None:
         seed = (("%self", 0, 0), ("%self", width, 1))
-    key = body, tuple(seed)
+    key = body, tuple(seed), continuation
     if key in checked:
         return
     tokens = frozenset(row[2] for row in seed)
@@ -42,9 +43,14 @@ def _check(body, identity, definitions, aliases, panic, seed, depth, route, chec
     expected = frozenset(event for token in tokens for event in obligations(token))
     allocs = {name: int(size) for name, size in re.findall(
         "(" + VALUE + r") = alloca \[(\d+) x i8\],", body)}
-    ptrs = syntax.pointers(body, (*allocs, *(row[0] for row in seed)))
+    excluded_roots, excluded_values = continuation[2:] if continuation else ((), ())
+    ptrs = syntax.pointers(body, (*allocs, *(row[0] for row in seed), *excluded_roots))
     graph = common.blocks(body)
-    queue = [(next(iter(graph)), frozenset(seed), frozenset(), (), False)]
+    entry = continuation[0] if continuation else (next(iter(graph)), 0)
+    facts = continuation[1] if continuation else ()
+    require(entry[0] in graph and 0 <= entry[1] < len(graph[entry[0]]),
+            "invalid consuming continuation")
+    queue = [(entry[0], entry[1], frozenset(seed), frozenset(), facts, False)]
     visited, exits = set(), 0
 
     def address(name):
@@ -63,16 +69,20 @@ def _check(body, identity, definitions, aliases, panic, seed, depth, route, chec
                 + repr((done, expected)))
 
     while queue:
-        label, memory, done, known, unwinding = queue.pop()
-        state = label, memory, done, known, unwinding
+        label, start_index, memory, done, known, unwinding = queue.pop()
+        state = label, start_index, memory, done, known, unwinding
         if state in visited:
             continue
         visited.add(state)
         require(label in graph and len(visited) < 30000, "invalid accelerated finalizer graph")
         values = dict(known)
         lines, terminal, outcomes = graph[label], False, None
-        for index, line in enumerate(lines):
+        for index in range(start_index, len(lines)):
+            line = lines[index]
             definition = re.match("(" + VALUE + r") =", line)
+            references = re.findall(VALUE, line)[1:] if definition else re.findall(VALUE, line)
+            require(not any(address(name)[0] in excluded_roots or name in excluded_values
+                            for name in references), "consuming body reuses moved wrapper storage/value")
             if definition:
                 values.pop(definition[1], None)
             derived = re.match("(" + VALUE + r") = getelementptr.*?, ptr (" + VALUE + ")", line)
@@ -239,7 +249,7 @@ def _check(body, identity, definitions, aliases, panic, seed, depth, route, chec
                                      + common.LABEL + r"(?:, ![-\w.]+ !\d+)*", lines[index + 1])
                 require(edges, "unparsed accelerated finalizer invoke")
                 outcomes = outcomes or [("ret", done), ("resume", done)]
-                queue.extend((edges[1 if outcome == "ret" else 2], memory, events,
+                queue.extend((edges[1 if outcome == "ret" else 2], 0, memory, events,
                               tuple(sorted(values.items())), unwinding or outcome == "resume")
                              for outcome, events in outcomes)
                 terminal = True
@@ -270,7 +280,7 @@ def _check(body, identity, definitions, aliases, panic, seed, depth, route, chec
                         child_values[condition[1]] = value
                     else:
                         require(not line.startswith("br i1"), "unknown accelerated branch condition")
-                    queue.append((edge, memory, done, tuple(sorted(child_values.items())), unwinding))
+                    queue.append((edge, 0, memory, done, tuple(sorted(child_values.items())), unwinding))
                 terminal = True
                 break
             if line.startswith(("ret ", "resume ")):

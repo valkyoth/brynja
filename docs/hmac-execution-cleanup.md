@@ -794,13 +794,44 @@ scratch destruction. Each must compile before rejection; restored copies
 must pass. This is logical ownership and explicit cleanup dispatch, not
 compiler-created copy or whole-frame erasure.
 
+### Actual accelerated hosted consuming callees
+
+Both accelerated terminal calls are resolved to the exact typed
+`Hmac::finalize_bits_secret` and `Hmac::verify_bits` definitions emitted with the
+hosted worker. These definitions inline their Engine consumption. A bounded
+prefix interpreter follows each partial copy and scalar move from the consumed
+wrapper into the first complete private Engine allocation. Every byte must
+arrive in order, within that allocation, before its two logical hash owners
+can be handed to the consuming-owner interpreter.
+
+The interpreter resumes at that exact instruction in the original body, not a
+rewritten or substitute fixture. Moved wrapper storage and opaque scalar
+fragments cannot be reused after the handoff. All sixteen inner/outer health
+and portable/CPU metadata populations are checked. Empty wrappers cannot read
+absent payload or create a live owner, and secret finalization must dispatch
+destination clearing before returning. This checks clearing, not the exact
+error payload. The actual scratch and consuming graphs retain the existing
+source-bound hash finalizer, update and non-panicking core-clear premises.
+Message/tag correctness and comparison semantics remain covered by the
+separate implementation review, vectors and differential tests; this layer
+does not substitute an ownership check for those checks.
+
+Regressions change actual emitted copy extents/sources, scalar fragments,
+scratch clears, formal bindings and typed identities on both compilers and
+all three targets. Empty-state tests inject payload reads, source writes,
+pointer escapes and missing destination clearing. A moved-source escape must
+fail specifically at the continuation guard; bypassing only that guard admits
+the same mutant. Compiling source mutants suppress digest/comparison scratch
+destruction or forget the outer owner on one branch while retaining the real
+outer finalizer on the other. The lost-owner case must report an outstanding
+cleanup obligation, and restored sources must pass.
+
 This is **host lifecycle, admission, retained storage, input/output provenance,
 checkpoint caller/callee, joined host transaction and cleanup-dispatch
 evidence**, not complete worker-payload qualification. Compiled constructor admission,
 post-admission owner transfers and explicit scratch are now linked to the
-actual hosted callees, as are scalar constructor transfers and both scalar
-consuming callees. Compiled consuming-callee reconciliation,
-public `Output` loan/declassification
+actual hosted callees, as are scalar constructor transfers and both scalar and
+compiled consuming callees. Public `Output` loan/declassification
 linkage and final cross-check remain pending. The joined-host check is not a
 proof of request-validation internals or the entire public-output API.
 Valid Rust inputs, the reviewed

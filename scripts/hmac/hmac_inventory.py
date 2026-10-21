@@ -78,14 +78,14 @@ EVIDENCE = (
     ("Five scratch probes, optimized normal/error/unwind clearing only", "scripts/hmac/check-hmac-cleanup.py"),
     ("24 cancellation/update, 84 scratch, 72 finalizer and 12 constructor graphs; dispatch only", "scripts/hmac/check-hmac-engine-cleanup.py"),
     ("24 accelerated owner, 96 scratch, 72 finalizer and 24 constructor consumers; dispatch only", "scripts/hmac/check-hmac-execution-cleanup.py"),
-    ("Static-only feature graph, 24 retained owners and 72 finalizer scratch/handoff consumers", "scripts/hmac/check-hmac-static-cleanup.py"),
+    ("Static-only feature graph, 24 retained owners and 72 finalizer scratch/handoff/Engine consumers", "scripts/hmac/check-hmac-static-cleanup.py"),
     ("Real portable and explicitly selected native adapter handoffs", "assurance/hmac-faults/adapter_tests.rs"),
     ("Private accelerated composition admission/error/unwind witnesses", "assurance/hmac-faults/execution_cases.rs"),
     ("Explicit AArch64 hosted native selection and fallback mutations", "scripts/hmac/check-hmac-hosted-native.py"),
     ("Portable paired timing screen, not a constant-time proof", "scripts/hmac/check-hmac-timing.py"),
 )
 PENDING = (
-    "Static-only constructor and consuming Engine transfers, plus hosted worker qualification; static retained owners/public handoffs and runtime-enabled admission/iterator/returned-owner transfers, Engine finalizers and scratch are checked, not whole-frame erasure.",
+    "Static-only constructor transfers and hosted worker qualification; static retained/finalizer owners/public handoffs and runtime-enabled admission/iterator/returned-owner transfers, Engine finalizers and scratch are checked, not whole-frame erasure.",
     "Accelerated/hosted timing and cache/branch qualification; the portable timing screen is not a timing proof.",
     "Remaining native route qualification, including dedicated x86 SHA-512.",
     "Independent pentest and final source-bound release evidence.",

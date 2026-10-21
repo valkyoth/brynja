@@ -14,22 +14,32 @@ require = common.require
 VALUE = syntax.VALUE
 
 
-def check(body, identity, definitions, aliases, panic="unwind", seed=None, depth=0, route=0):
-    return _check(body, identity, definitions, aliases, panic, seed, depth, route, set())
+def check(body, identity, definitions, aliases, panic="unwind", seed=None, depth=0, route=0,
+          profile="runtime"):
+    return _check(body, identity, definitions, aliases, panic, seed, depth, route, set(), profile)
 
 
-def _check(body, identity, definitions, aliases, panic, seed, depth, route, checked):
-    require(depth < 4 and route in (0, 1) and identity in common.IDENTITIES
+def _check(body, identity, definitions, aliases, panic, seed, depth, route, checked, profile):
+    require(depth < 4 and route in ((0, 1) if profile == "runtime" else range(16))
+            and identity in common.IDENTITIES
             and panic in ("abort", "unwind"), "recursive/invalid accelerated finalizer")
-    shape = cleanup.layout(identity)
+    shape = cleanup.layout(identity, profile)
     width = shape.stride
+
     if seed is None:
         seed = (("%self", 0, 0), ("%self", width, 1))
     key = body, tuple(seed)
     if key in checked:
         return
     tokens = frozenset(row[2] for row in seed)
-    expected = frozenset(event for token in tokens for event in contracts.events(identity, token))
+    obligation_table = {token: contracts.events(identity, token, profile, route) for token in tokens}
+    metadata_table = {token: contracts.owner_metadata(identity, token, profile, route) for token in tokens}
+
+    def obligations(token):
+        require(token in obligation_table, "unknown finalizer obligation token")
+        return obligation_table[token]
+
+    expected = frozenset(event for token in tokens for event in obligations(token))
     allocs = {name: int(size) for name, size in re.findall(
         "(" + VALUE + r") = alloca \[(\d+) x i8\],", body)}
     ptrs = syntax.pointers(body, (*allocs, *(row[0] for row in seed)))
@@ -46,7 +56,7 @@ def _check(body, identity, definitions, aliases, panic, seed, depth, route, chec
                 and offset < row[1] + width and row[1] < offset + extent}
 
     def select(memory, name, kind=None):
-        return contracts.select(memory, address(name), kind, shape)
+        return contracts.select(memory, address(name), kind, shape, profile)
 
     def complete(done):
         require(done == expected, "accelerated finalizer exits with live/wrong owner: "
@@ -72,23 +82,36 @@ def _check(body, identity, definitions, aliases, panic, seed, depth, route, chec
                 referenced = re.findall(VALUE, line)[1:]
                 require(not any(address(name)[0] == row[0] for row in memory for name in referenced),
                         "unsupported accelerated owner alias")
-            load = re.match("(" + VALUE + r") = load i64, ptr (" + VALUE + "),", line)
+            load = re.match("(" + VALUE + r") = load (i8|i64|ptr), ptr (" + VALUE + "),", line)
             any_load = re.match("(" + VALUE + r") = load [^,]+, ptr (" + VALUE + "),", line)
             if any_load and intersect(memory, any_load[2]):
                 root, offset = address(any_load[2])
                 rows = [row for row in memory if row[0] == root and row[1] <= offset < row[1] + width]
-                require(load and len(rows) == 1 and offset == rows[0][1] + shape.discriminator,
+                require(load and len(rows) == 1,
                         "unreviewed load from accelerated owner")
-                require(not contracts.events(identity, rows[0][2]) <= done,
+                token = rows[0][2]
+                metadata = cleanup.metadata(metadata_table[token],
+                                            offset - rows[0][1], load[2])
+                # Static Portable/Cpu cleanup reads the null niche after core
+                # destruction. This is still live enclosing metadata, not a
+                # read after a consuming finalizer/adapter returned.
+                require(not values.get("consumed:" + str(token))
+                        and (not obligations(token) <= done or
+                             profile == "static" and metadata == ("nonnull", False)),
                         "read after accelerated owner consumption")
-            if load:
-                root, offset = address(load[2])
-                if any(base == root and start + shape.discriminator == offset
-                       for base, start, _ in memory):
-                    values[load[1]] = route
-            compare = re.match("(" + VALUE + r") = icmp (eq|ne) i64 (" + VALUE + r"), (-?\d+)", line)
-            if compare and compare[3] in values:
-                equal = values[compare[3]] == int(compare[4])
+                values[load[1]] = metadata
+            compare = re.match("(" + VALUE + r") = icmp (eq|ne) (i8|i64|ptr) ("
+                               + VALUE + r"), (-?\d+|null)", line)
+            if compare and compare[4] in values:
+                value = values[compare[4]]
+                if compare[3] == "ptr":
+                    require(isinstance(value, tuple) and value[0] == "nonnull"
+                            and compare[5] == "null", "unknown finalizer pointer condition")
+                    equal = not value[1]
+                else:
+                    require(isinstance(value, int) and compare[5] != "null",
+                            "unknown finalizer metadata condition")
+                    equal = value == int(compare[5])
                 values[compare[1]] = equal if compare[2] == "eq" else not equal
             invocation = syntax.call(line)
             outcomes = None
@@ -107,7 +130,7 @@ def _check(body, identity, definitions, aliases, panic, seed, depth, route, chec
                     for _, start, token in rows:
                         require(src_offset <= start and start + width <= src_offset + size,
                                 "partial accelerated owner copy")
-                        require(not (contracts.events(identity, token) & done),
+                        require(not (obligations(token) & done),
                                 "copy after accelerated consumption")
                         additions.add((dst_root, dst_offset + start - src_offset, token))
                     if additions:
@@ -124,27 +147,29 @@ def _check(body, identity, definitions, aliases, panic, seed, depth, route, chec
                         require(not rows, "restart live accelerated owner")
                     else:
                         memory = memory - rows
-                        require(all(contracts.events(identity, token) <= done
+                        require(all(obligations(token) <= done
                                     or any(row[2] == token for row in memory)
                                     for _, _, token in rows), "last accelerated owner lost")
                 elif contracts.hash_finalizer(symbol, identity):
                     token = select(memory, syntax.operand(args[1]))
-                    consumed = contracts.events(identity, token)
+                    consumed = obligations(token)
                     require(not consumed & done, "duplicate accelerated finalizer")
                     done |= consumed
+                    values["consumed:" + str(token)] = True
                     outcomes = [("ret", done), ("resume", done)]
                 elif cleanup.leaf(symbol):
                     kind = cleanup.leaf(symbol)
                     token = select(memory, syntax.operand(args[0]), kind)
                     require(kind in (shape.core_kind, shape.scratch_kind), "wrong cleanup owner kind")
-                    event = (kind, token * width + (shape.core if kind == shape.core_kind else 0))
-                    require(event not in done, "duplicate accelerated destruction")
+                    event = (kind, token * width + (shape.core if kind == shape.core_kind else
+                                                   contracts.scratch_offset(shape, profile)))
+                    require(event in expected and event not in done, "wrong/duplicate accelerated destruction")
                     done |= {event}
                     outcomes = [("ret", done), ("resume", done)]
                 elif "drop_glue" in symbol or "drop_in_place" in symbol:
                     outcomes = contracts.destruction(
                         symbol, address(syntax.operand(args[0])), memory, done, identity,
-                        definitions, aliases, route, panic, unwinding)
+                        definitions, aliases, route, panic, unwinding, profile)
                 elif contracts.adapter(symbol):
                     formals, nested = common.resolve(symbol, definitions, aliases)
                     formals = syntax.parameters(formals)
@@ -159,7 +184,7 @@ def _check(body, identity, definitions, aliases, panic, seed, depth, route, chec
                         require(not rows or extent, "adapter owner lacks bounded parameter")
                         for base, start, token in memory:
                             if base == root and start < offset + int(extent[1]) and offset < start + width:
-                                require(start >= offset and not contracts.events(identity, token) & done,
+                                require(start >= offset and not obligations(token) & done,
                                         "wrong/consumed adapter owner")
                                 require(start + width <= offset + int(extent[1]),
                                         "partial adapter owner parameter")
@@ -167,13 +192,15 @@ def _check(body, identity, definitions, aliases, panic, seed, depth, route, chec
                     require(nested_seed and len({row[2] for row in nested_seed}) == len(nested_seed),
                             "missing/duplicate accelerated adapter owners")
                     _check(nested, identity, definitions, aliases, panic, tuple(nested_seed),
-                           depth + 1, route, checked)
+                           depth + 1, route, checked, profile)
                     done |= frozenset(event for _, _, token in nested_seed
-                                      for event in contracts.events(identity, token))
+                                      for event in obligations(token))
+                    for _, _, token in nested_seed:
+                        values["consumed:" + str(token)] = True
                     outcomes = [("ret", done), ("resume", done)]
                 elif contracts.update(symbol):
                     token = select(memory, syntax.operand(args[0]))
-                    require(token == 1 and not contracts.events(identity, token) & done,
+                    require(token == 1 and not obligations(token) & done,
                             "wrong/consumed outer hash update")
                     require(panic == "abort" or re.search(r"\binvoke\b", line),
                             "outer update missing recoverable unwind cleanup")

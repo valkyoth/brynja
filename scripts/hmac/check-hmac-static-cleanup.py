@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Static-only retained owners and public finalizer handoffs; not constructors."""
+"""Static-only retained/finalizer owner graphs and handoffs; not constructors."""
 import argparse
 import importlib.util
 from pathlib import Path
@@ -13,6 +13,7 @@ spec.loader.exec_module(driver)
 def validate(llvm, compiler="1.99.1", panic="unwind"):
     driver.validate_retained(llvm, compiler, panic, profile="static")
     functions, definitions, aliases = driver.emitted(llvm, driver.final.syntax.OPERATIONS)
+    checked = set()
     # Reject a runtime-enabled fixture even if a future coincidental layout
     # permits its retained checks. The real resolved graph is also checked.
     for identity in driver.common.IDENTITIES:
@@ -20,10 +21,18 @@ def validate(llvm, compiler="1.99.1", panic="unwind"):
         driver.common.require(not any(suffix in name for name in (*definitions, *aliases)),
                               "runtime constructor in static-only artifact")
     for (identity, operation), body in functions.items():
-        driver.scratch.check(body, operation, definitions, aliases)
+        resolved = driver.scratch.check(body, operation, definitions, aliases)
         for health, present in ((0, True), (1, True), (0, False)):
             driver.wrapper.check(body, identity, operation, definitions, aliases,
                                  compiler, health, present, profile="static")
+        key = identity, resolved
+        if key not in checked:
+            for population in range(16):
+                driver.final.check(resolved, identity, definitions, aliases, panic,
+                                   route=population, profile="static")
+            # Reuse only an identical body for this identity in this artifact,
+            # after every independent metadata population passed.
+            checked.add(key)
 
 
 def collect(directory, compiler, target, panic):
@@ -31,7 +40,8 @@ def collect(directory, compiler, target, panic):
     validate(artifacts[1], compiler, panic)
     print(f"HMAC static-only retained/wrapper cleanup: PASS; {compiler}; {target}; "
           f"panic={panic}; 24 cancellation/update and 72 finalizer scratch/handoff consumers; "
-          "constructors and consuming Engine transfers pending; not whole-frame erasure", flush=True)
+          "consuming Engine/adapter ownership checked; constructors pending; "
+          "not whole-frame erasure", flush=True)
     return artifacts
 
 

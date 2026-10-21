@@ -8,6 +8,8 @@ import re
 import shutil
 import unittest
 from unittest import mock
+from hmac_static_final_tests import StaticFinalTests
+from hmac_execution_final_tests import FinalTests
 
 spec = importlib.util.spec_from_file_location(
     "hmac_static_cleanup", Path(__file__).with_name("check-hmac-static-cleanup.py"))
@@ -16,7 +18,8 @@ spec.loader.exec_module(static)
 driver = static.driver
 
 
-class StaticTests(unittest.TestCase):
+class StaticTests(StaticFinalTests, unittest.TestCase):
+    driver = driver
     @classmethod
     def setUpClass(cls):
         cls.directory = driver.verifier.cargo_environment.private_directory(driver.ROOT)
@@ -237,18 +240,25 @@ class StaticTests(unittest.TestCase):
             anchor = f"let mut {role} = Scratch::<{size}>::new();"
             mutants.append((leaf / "src/engine.rs", anchor,
                             f"let mut {role} = core::mem::ManuallyDrop::new(Scratch::<{size}>::new());"))
+        final_mutants = FinalTests.final_mutants(leaf)
+        mutants.extend(final_mutants)
         for path, anchor, replacement in mutants:
             original = path.read_text()
             self.assertEqual(original.count(anchor), 1)
             try:
                 path.write_text(original.replace(anchor, replacement))
                 llvm = emitted()  # Compiler failure is not a rejection result.
+                if (path, anchor, replacement) in final_mutants:
+                    functions, definitions, aliases = driver.emitted(llvm, ("public",))
+                    body = driver.scratch.consumer(functions["sha256", "public"], "public", definitions, aliases)
+                    with self.assertRaises(ValueError):
+                        driver.final.check(body, "sha256", definitions, aliases, profile="static", route=15)
                 with self.subTest(anchor=anchor), self.assertRaises(ValueError):
                     static.validate(llvm)
             finally:
                 path.write_text(original)
             static.validate(emitted())
-        print("Static-only HMAC mutants: 7 compiled/rejected; restored baselines PASS", flush=True)
+        print("Static-only HMAC mutants: 11 compiled/rejected; restored baselines PASS", flush=True)
 
 
 if __name__ == "__main__":

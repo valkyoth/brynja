@@ -21,8 +21,8 @@ def check(body, identity, operation, definitions, aliases, compiler="1.99.1", ro
             and compiler in ("1.90.0", "1.99.1"), "invalid wrapper profile")
     shape = cleanup.layout(identity, profile)
     metadata_size = 1 if profile == "static" else 8
-    # Resolve the actual implementation. The runtime driver also checks its
-    # owner/cleanup graph; the static driver currently claims this handoff only.
+    # Resolve the actual implementation. Both drivers separately check its
+    # consuming owner/cleanup graph beyond this wrapper handoff.
     engine = scratch.consumer(body, operation, definitions, aliases)
     calls = [syntax.call(line.strip()) for line in body.splitlines()
              if re.search(r"\b(?:call|invoke)\b.*@", line) and not line.lstrip().startswith(";")]

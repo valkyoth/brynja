@@ -35,9 +35,10 @@ identities reject. This prevents feature unification from silently substituting
 the already-reviewed runtime layout for a static-only build.
 
 The static fixture has 108 consumers (no runtime constructor). Its checker
-currently covers 96: 24 cancellation/update consumers, plus scratch and complete
-Engine handoffs in the 72 public finalizer wrappers. It checks actual outlined
-destructors, retained/empty states, normal/error and recoverable unwind paths,
+currently covers 96: 24 cancellation/update consumers, plus scratch, complete
+Engine handoffs and consuming Engine/adapter graphs for the 72 finalizers.
+It checks actual outlined destructors, retained/empty states, normal/error and
+recoverable unwind paths,
 full copy extents, split scalar moves, original input/output arguments and
 whole-destination clearing on empty secret-output rejection.
 
@@ -55,18 +56,28 @@ preservation of the selected execution variant; this is not a transitive
 re-proof of hash updates. The opaque observer has no state reference under the
 safe-Rust non-aliasing premise.
 
+The consuming model follows inner/outer owner moves through the actual emitted
+adapter bodies, including error and recoverable-unwind cleanup. Typed hash
+finalizers remain consuming callee contracts, not transitive proofs of their
+implementations. A null CPU-niche read after core destruction is allowed only
+as enclosing cleanup metadata; a read after a consuming finalizer or adapter
+is rejected. Completed body/seed reuse stays within the same artifact and
+metadata population; the driver only reuses an identical consumer body after
+all sixteen populations pass.
+
 The shared walkers keep feature layouts explicit; no global layout override or
 rewriting of emitted IR is used. Regression tests reject wrong-width metadata,
 altered helper bodies/leaf identities, missing/short copies, forged scalar
 fragments, diverted observer unwind, missing empty-output clearing and feature
-contamination. Seven private-source mutants must compile and then reject:
+contamination. Eleven private-source mutants must compile and then reject:
 forgotten cancellation, retained error leakage, skipped update-error cleanup,
-observer unwind leakage and suppressed inner-digest/tag/comparison clearing.
+observer unwind leakage, suppressed inner-digest/tag/comparison clearing,
+forgotten success/error consume callbacks, a forgotten outer owner on update
+error and an outer owner hidden from recoverable-unwind destruction.
 Each restored baseline must pass.
 
 **Still pending in the static-only build:** constructor admission/iterator and
-returned-owner transfers, and the consuming Engine/adapter owner graph after
-the checked public-wrapper handoff. Runtime-enabled coverage of those graphs
+returned-owner transfers. Runtime-enabled coverage of those constructor graphs
 below must not be reported as static-only coverage. Hosted protected/resident
 worker placement remains a separate pending boundary.
 
@@ -357,7 +368,7 @@ placement. They do not erase compiler-created copies, caller registers/spills,
 interrupt state, dumps, snapshots or fatal-abort state. Those accepted limits
 are not reopened here.
 
-The separate static-only feature layout and hosted worker compiler qualification
+Static-only constructor and hosted worker compiler qualification
 remain pending, alongside timing/native qualification and independent review.
 No strict-facade admission or global qualification status is promoted by this
 bounded check.

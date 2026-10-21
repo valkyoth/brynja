@@ -8,6 +8,7 @@ import re
 import shutil
 import unittest
 from unittest import mock
+from hmac_hosted_capture_tests import CaptureTests
 
 spec = importlib.util.spec_from_file_location(
     'hosted', Path(__file__).with_name('check-hmac-hosted-cleanup.py'))
@@ -15,7 +16,9 @@ driver = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(driver)
 
 
-class HostedTests(unittest.TestCase):
+class HostedTests(CaptureTests, unittest.TestCase):
+    driver = driver
+
     @classmethod
     def setUpClass(cls):
         cls.directory = driver.verifier.cargo_environment.private_directory(driver.ROOT)
@@ -152,7 +155,7 @@ class HostedTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     driver.validate(llvm, target)
 
-    def test_real_compiled_resource_mutants(self):
+    def test_real_compiled_resource_and_capture_mutants(self):
         # Private copied host owner; upstream cryptographic implementations stay
         # untouched. Mutants must compile before the emitted lifecycle check fails.
         work = self.root / 'compiled-mutants'
@@ -181,6 +184,7 @@ class HostedTests(unittest.TestCase):
             def emit():
                 return driver.emit(work / target, '1.99.1', target, 'unwind', fixture / 'Cargo.toml')[1]
             driver.validate(emit(), target)
+
             anchor = 'mapping.clear();'
             # Only single-worker run, not the separately reviewed group path.
             start = original.index('pub(super) fn run<')
@@ -198,6 +202,8 @@ class HostedTests(unittest.TestCase):
                 finally:
                     path.write_text(original)
             driver.validate(emit(), target)
+
+        self.check_compiled_capture_mutants(host, fixture, work)
 
 
 if __name__ == '__main__':

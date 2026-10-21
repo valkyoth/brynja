@@ -382,7 +382,7 @@ Each private mutant is restored and its baseline rebuilt and checked. A compiler
 error is not successful mutation detection. Runtime crate source and packaging
 are unchanged by these tests.
 
-## Hosted launch, join and reclamation
+## Hosted captures, factory placement, join and reclamation
 
 `assurance/hmac-hosted-cleanup` emits 48 real consumers: compute and verify,
 scalar and explicitly accelerated, for the same twelve identities. It resolves
@@ -420,14 +420,38 @@ does not invent recoverable unwinds from them. The shared core volatile-clear
 premise is reused. Raw-byte changes, including CRLF, reopen the premise review.
 Pins detect drift; they do not authenticate a reviewer or prove OS behavior.
 
-Regressions alter every emitted executor on all three targets (792 mutations),
-check source and dependency binding, and compile four real Rust mutants:
-missing join and missing stack clearing for Linux and Darwin. Compiler failures
-are not credited as killed mutants; restored baselines must pass again.
+The launch-record check traces every meaningful initialized byte back to its
+source. It requires the original request descriptor, candidate slice descriptor,
+cancellation reference, result slot, public policy and (for compiled sessions)
+kernel selector. Staging and output pointers/lengths must come from their
+distinct session mappings. Local declarations remain borrowed descriptors and
+resource owners, not embedded keyed state. Missing, overlapping, non-dominating,
+late, extra or unrecognized initialization rejects. A captured local's lifetime
+must not end on a path leading to launch. Padding in the copied
+request descriptor is not classified as a secret owner or claimed erased.
 
-This is **host lifecycle dispatch evidence**, not worker-payload qualification.
-Worker capture provenance, keyed-state placement and inner cleanup remain
-separate pending checks. Host error handling, valid Rust inputs, the reviewed
+The selected worker-factory check follows the captured key pointer and length
+to the exact instantiated scalar Engine or accelerated Hmac constructor. Its
+destination must fit an actual worker-local allocation. Accelerated authority
+construction must also target worker-local storage and use the captured kernel;
+the authority borrowed by Hmac construction must be worker-local. Optimizers
+can merge the Full/Bytes constructor sites, so one or two calls are inspected.
+This does **not** yet prove authority-value transfer, post-construction retained
+owner lifetime, complete factory control flow, or inner worker cleanup. Indirect
+panic-payload destruction is outside this selected-call check. Constructor
+internals retain their separate qualification and valid-Rust premises.
+
+Regressions alter every emitted executor on all three targets: the existing
+792 lifecycle mutations plus 2,700 launch-field and 648 worker-factory mutations.
+Source-declaration and dependency drift are rejected. Four real Rust mutants
+remove join/stack clearing; ten more swap staging/output, replace captured
+policy, or substitute tail bytes for the key on Linux and Darwin. Each must
+compile before rejection is credited, and restored baselines must pass again.
+
+This is **host lifecycle and selected capture/factory evidence**, not complete
+worker-payload qualification. Inner cleanup, retained owner/authority transfers
+and all worker error/unwind paths remain separate pending checks.
+Host error handling, valid Rust inputs, the reviewed
 resource allocation/attribute implementation and OS pthread semantics remain
 premises. It does not claim whole-frame erasure, fatal cleanup, native platform
 execution or Mac dump exclusion, and does not admit HMAC to the strict facade.

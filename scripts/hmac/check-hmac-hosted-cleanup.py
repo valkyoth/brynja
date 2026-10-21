@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Inspect concrete hosted HMAC launch/join/reclaim edges, not whole-worker erasure."""
+"""Inspect hosted HMAC capture/factory placement and lifecycle, not whole-worker erasure."""
 import argparse
 import json
 from pathlib import Path
@@ -7,6 +7,9 @@ import re
 
 import hmac_hosted_lifecycle as lifecycle
 import hmac_hosted_contracts as contracts
+import hmac_hosted_capture as capture
+import hmac_hosted_capture_types as capture_types
+import hmac_hosted_placement as placement
 import hmac_engine_codegen as common
 import hmac_engine_final as syntax
 import hmac_verifiers as verifier
@@ -40,6 +43,7 @@ def graph(metadata):
 
 def validate(llvm, target):
     contracts.validate()
+    capture_types.validate()
     definitions, aliases = common.definitions_and_aliases(llvm)
     symbols = {name.strip('"') for name in re.findall(r'@("[^"]+"|[-\w.$]+)', llvm)}
     names = lifecycle.demangle(symbols)
@@ -60,13 +64,16 @@ def validate(llvm, target):
             common.require(len(selected) == 1, 'host consumer does not call exact typed executor: ' + entry)
             executor = selected[0]
             if executor not in checked:
-                _, host = common.resolve(executor, definitions, aliases)
+                arguments, host = common.resolve(executor, definitions, aliases)
+                capture.check(arguments, host, names, target, operation.startswith('compiled_'))
                 worker = lifecycle.check_host(host, names, definitions, target)
                 # Bind the exact closure type, not merely any thread::enter symbol.
                 closure = expected + '::{closure#0}'
                 common.require(names[worker] in (resource + '::thread::enter::<' + closure + '>',
                                                 resource + '::thread::enter<' + closure + '>'),
                                'host callback belongs to another session')
+                placement.check(*common.resolve(worker, definitions, aliases), names, algorithm,
+                                operation.startswith('compiled_'))
                 workers.add(worker)
                 checked.add(executor)
     common.require(len(checked) == len(workers) == 24, 'hosted scalar/compiled graph collapsed or incomplete')
@@ -105,8 +112,8 @@ def main():
             with verifier.cargo_environment.private_directory(ROOT) as directory:
                 _, llvm, _ = emit(Path(directory), compiler, args.target, panic)
                 validate(llvm, args.target)
-            print(f'HMAC hosted launch/join/reclaim: PASS; {compiler}; {args.target}; panic={panic}; '
-                  '48 consumers, 24 executors; worker payload/whole-frame cleanup not qualified', flush=True)
+            print(f'HMAC hosted launch/capture/factory/join/reclaim: PASS; {compiler}; {args.target}; panic={panic}; '
+                  '48 consumers, 24 executors; complete worker cleanup not qualified', flush=True)
 
 
 if __name__ == '__main__':

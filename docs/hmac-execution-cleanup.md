@@ -436,8 +436,8 @@ destination must fit an actual worker-local allocation. Accelerated authority
 construction must also target worker-local storage and use the captured kernel;
 the authority borrowed by Hmac construction must be worker-local. Optimizers
 can merge the Full/Bytes constructor sites, so one or two calls are inspected.
-This does **not** yet prove post-construction retained keyed-owner lifetime,
-complete factory control flow, or inner worker cleanup. Indirect
+This selected-call check does **not** prove post-construction retained keyed-owner lifetime
+or inner worker cleanup. Indirect
 panic-payload destruction is outside this selected-call check. Constructor
 internals retain their separate qualification and valid-Rust premises.
 
@@ -462,6 +462,34 @@ worker destruction. The check is admission/transfer/lifetime evidence, not
 whole-worker erasure. It binds the initial value and storage identity, not
 immutability after a borrowed callee legitimately changes health/generation.
 
+The keyed-state admission check follows the constructor Result representation
+through every intermediate copy into the retained allocation shared by the
+verify and secret-finalization consumers. Scalar Results have a separate tag
+and payload; accelerated Results use compiler-specific error niches. The
+bounded control-flow exploration models successful and failed construction,
+normal returns and unwind edges, split copies, scalar loads/stores and storage
+lifetime ends. Every path that reaches the completed retained representation
+must carry one complete, ordered constructor payload; unknown bytes, mixed
+constructors, premature reads, pointer escapes and changed copy extents reject.
+Every selected factory must have a successful path to that completion point.
+Retained-state reads and calls must follow it. No compiler-local variable name
+is used to identify the retained owner: it is traced backwards from the actual
+verify and secret-finalization arguments.
+The two subsequent by-value handoffs must use full-size copies of that retained
+allocation into distinct, live local storage, followed by the exact algorithm's
+consumer. Additional writes, unreviewed uses, pointer escapes or a lifetime end
+before consumption reject. This binds the call boundary, not erasure inside
+the consumer or destruction of the source representation after a move.
+
+Constructor behavior is a separately checked callee premise. Representation
+provenance includes padding without claiming that padding is initialized secret
+data. Successful accelerated values are modeled as distinct from the error
+niche, not as one assumed live-engine variant. Other branch conditions are
+conservatively explored. The control-flow provenance model stops at admission;
+the separate terminal-handoff checks bind the consumer arguments. Neither
+establishes subsequent updates, complete cleanup of every error/unwind path,
+or clearing of compiler-created temporary copies.
+
 Regressions alter every emitted executor on all three targets: the existing
 792 lifecycle mutations plus 2,700 launch-field and 648 worker-factory mutations.
 Source-declaration and dependency drift are rejected. Four real Rust mutants
@@ -471,9 +499,15 @@ compile before rejection is credited, and restored baselines must pass again.
 Authority-specific regressions additionally mutate every accelerated callback
 and compile a real premature-quarantine change on Linux and Darwin; the new
 checker itself must reject it, independently of source pins.
+Keyed-state regressions alter copy chains, constructor admission and lifetimes
+in all 24 callbacks on each target, including the older compiler's distinct
+error niche. Four additional compiled safe-Rust mutants replace the constructed
+state with an unrelated key (scalar and accelerated on Linux and Darwin).
+The keyed checker itself must reject the emitted mutant; the restored baseline
+must pass. Compilation failure is not counted as a successful rejection.
 
 This is **host lifecycle and selected capture/factory evidence**, not complete
-worker-payload qualification. Inner cleanup, retained keyed-owner/authority-reference transfers
+worker-payload qualification. Inner cleanup, post-admission retained-owner/authority-reference lifetimes
 and all worker error/unwind paths remain separate pending checks.
 Host error handling, valid Rust inputs, the reviewed
 resource allocation/attribute implementation and OS pthread semantics remain

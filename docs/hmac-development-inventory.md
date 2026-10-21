@@ -69,7 +69,7 @@ Mac residency must not be described as Linux dump exclusion.
 RFC identifiers below are traceability, not a claim of a fresh standards review.
 Links identify executable checks, not proof that a current run passed.
 
-- 48 hosted consumers, capture/factory/lifecycle and authority transfers; inner cleanup pending: [check](../scripts/hmac/check-hmac-hosted-cleanup.py).
+- 48 hosted consumers, capture/lifecycle and authority/keyed-state admission transfers; inner cleanup pending: [check](../scripts/hmac/check-hmac-hosted-cleanup.py).
 - RFC 2104 construction and RFC 4231 known answers: [check](../crates/brynja-mac-hmac/tests/vectors.rs).
 - Byte differential controls: [check](../scripts/hmac/check-hmac-differential.py).
 - Canonical final-bit messages: [check](../scripts/hmac/check-hmac-bit-differential.py).

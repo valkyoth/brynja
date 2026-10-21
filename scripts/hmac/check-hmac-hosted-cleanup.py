@@ -11,6 +11,7 @@ import hmac_hosted_capture as capture
 import hmac_hosted_capture_types as capture_types
 import hmac_hosted_placement as placement
 import hmac_hosted_authority as authority
+import hmac_hosted_keyed as keyed
 import hmac_engine_codegen as common
 import hmac_engine_final as syntax
 import hmac_verifiers as verifier
@@ -80,6 +81,8 @@ def validate(llvm, target, compiler='1.99.1'):
                                 operation.startswith('compiled_'))
                 if operation.startswith('compiled_'):
                     authority.check(common.resolve(worker, definitions, aliases)[1], names, compiler)
+                keyed.check(common.resolve(worker, definitions, aliases)[1], names, compiler,
+                            identity, operation.startswith('compiled_'))
                 workers.add(worker)
                 checked.add(executor)
     common.require(len(checked) == len(workers) == 24, 'hosted scalar/compiled graph collapsed or incomplete')
@@ -118,7 +121,7 @@ def main():
             with verifier.cargo_environment.private_directory(ROOT) as directory:
                 _, llvm, _ = emit(Path(directory), compiler, args.target, panic)
                 validate(llvm, args.target, compiler)
-            print(f'HMAC hosted capture/factory/authority/lifecycle: PASS; {compiler}; {args.target}; panic={panic}; '
+            print(f'HMAC hosted capture/factory/authority/keyed-admission/lifecycle: PASS; {compiler}; {args.target}; panic={panic}; '
                   '48 consumers, 24 executors; complete worker cleanup not qualified', flush=True)
 
 

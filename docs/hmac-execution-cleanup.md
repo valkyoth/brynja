@@ -454,10 +454,11 @@ Only the named checkpoints, HMAC constructors and inspected copies/lifetime
 intrinsics may receive authority pointers. Unrecognized aliases, pointer
 escapes, constructor-result overwrites and later authority writes reject.
 Lifetime ends cannot precede subsequent result reads, authority uses or direct
-HMAC consumer calls, including along error/unwind edges. Constructor and
-checkpoint semantics remain reviewed-callee premises; authority metadata and
-padding are not asserted to be secret or zeroized. This does not yet trace the
-authority reference through every retained HMAC field or certify all indirect
+HMAC consumer calls, including along error/unwind edges. Constructor semantics
+and the underlying CPU authority checks remain reviewed-callee premises; the
+checkpoint caller and helper checks below bind their ordering and results.
+Authority metadata and padding are not asserted to be secret or zeroized. This
+does not yet trace the authority reference through every retained HMAC field or certify all indirect
 worker destruction. The check is admission/transfer/lifetime evidence, not
 whole-worker erasure. It binds the initial value and storage identity, not
 immutability after a borrowed callee legitimately changes health/generation.
@@ -617,12 +618,57 @@ partial bit count; another repeats updates according to the supplied bit count.
 Each mutant must compile, retain the prior keyed-admission
 check, and be rejected by the input checker; restored baselines must pass.
 
-This is **host lifecycle, admission, retained storage, input/output provenance and
-cleanup-dispatch evidence**, not complete worker-payload qualification.
-Authority references inside borrowed callees, final host/output transaction
-reconciliation, checkpoint semantics and cross-checking remain
-pending. In particular, the output slice does not yet qualify every checkpoint
-or prove the whole public-output transaction solely from these worker graphs.
+### Worker checkpoint admission and error transport
+
+The hosted fixture now binds all six scalar checkpoints and all seven compiled
+checks (including cancellation before authority construction) to the captured
+cancellation reference. Compiled checkpoints must borrow the same exact local
+authority as HMAC construction. Each call must return the reviewed two-byte
+Result ABI and admit its actual success discriminator before continuation.
+
+Placement follows emitted iterator and output landmarks: initial admission,
+each selected chunk including empty chunks, each nonempty part of at most
+4096 bytes, input exhaustion before either finalizer, successful secret
+finalization before copying, and the final post-copy/post-comparison check.
+The loop-local checks cannot be hoisted out of repeated iterations. Failed
+checks cannot reach another checkpoint, input validation, state construction,
+update, finalizer or output copy. A separate byte-flow walk follows their
+normally returned error categories through actual PHIs and result stores;
+an error cannot become success or a different error category. The final
+checkpoint's successful continuation must store success. This walk covers
+the one captured Result pointer and rejects additional loads, aliases, escapes
+or overwrites of that result. It checks the discriminator, not every variant's
+payload, and does not count a cleanup
+unwind as a normal Result return; the separate panic flag and existing cleanup
+walkers retain their distinct scope.
+
+The fresh-build driver also emits the hosted dependency itself. It resolves
+the scalar checkpoint and cancellation aliases and interprets the actual
+checkpoint helper bodies for both cancellation states and both authority
+outcomes. Cancellation must read the exact atomic reference with acquire
+ordering. The compiled helper must call `Authority::session` with its exact
+borrowed owner first, inspect the initialized Result while its slot is live,
+and return a backend failure with its original payload without reading
+cancellation. Only successful authority admission permits the cancellation
+read. Unknown instructions, extra calls, unreviewed paths, loops and malformed
+result construction reject. `Authority::session`'s own health/generation and
+platform checks remain the existing CPU implementation premise; this is not
+a new proof of that implementation or scheduler/VM migration behavior.
+
+Regressions mutate emitted checkpoint arguments, success/error branches,
+result categories, atomic ordering and backend-error payloads on all three
+targets and both compilers. Forty additional safe-Rust mutants must compile:
+thirty remove or ignore worker checkpoints, and ten weaken the helper's
+atomic/order/error handling. These use private copied source trees, restore
+the original files, and require restored emitted baselines to pass. They do
+not execute deliberately broken cryptography on a native host.
+
+This is **host lifecycle, admission, retained storage, input/output provenance,
+checkpoint caller/callee and cleanup-dispatch evidence**, not complete
+worker-payload qualification. Authority references inside the remaining
+borrowed cryptographic callees, final host/output transaction reconciliation
+and the final cross-check remain pending. In particular, these worker graphs
+do not prove the whole public-output transaction.
 Host error handling, valid Rust inputs, the reviewed
 resource allocation/attribute implementation and OS pthread semantics remain
 premises. It does not claim whole-frame erasure, fatal cleanup, native platform

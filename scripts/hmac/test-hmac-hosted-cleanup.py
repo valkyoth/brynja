@@ -14,6 +14,7 @@ from hmac_hosted_keyed_tests import KeyedTests
 from hmac_hosted_retained_tests import RetainedTests
 from hmac_hosted_output_tests import OutputTests
 from hmac_hosted_input_tests import InputTests
+from hmac_hosted_checkpoint_tests import CheckpointTests
 
 spec = importlib.util.spec_from_file_location(
     'hosted', Path(__file__).with_name('check-hmac-hosted-cleanup.py'))
@@ -21,7 +22,8 @@ driver = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(driver)
 
 
-class HostedTests(CaptureTests, AuthorityTests, KeyedTests, RetainedTests, OutputTests, InputTests, unittest.TestCase):
+class HostedTests(CaptureTests, AuthorityTests, KeyedTests, RetainedTests, OutputTests, InputTests,
+                  CheckpointTests, unittest.TestCase):
     driver = driver
 
     @classmethod

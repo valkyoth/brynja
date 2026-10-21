@@ -65,7 +65,7 @@ PROFILES = (
     ("Mac compiled", "brynja-crypto-cpu-std", "macos-resident-hmac-acceleration", "Explicit Arm kernel, resident worker."),
 )
 EVIDENCE = (
-    ("48 hosted consumers, admission/retained storage, input/tail and returned-output provenance, worker cleanup dispatch; full qualification pending", "scripts/hmac/check-hmac-hosted-cleanup.py"),
+    ("48 hosted consumers, admission/retained storage, input/output provenance, checkpoint callers/callees and worker cleanup dispatch; full qualification pending", "scripts/hmac/check-hmac-hosted-cleanup.py"),
     ("RFC 2104 construction and RFC 4231 known answers", "crates/brynja-mac-hmac/tests/vectors.rs"),
     ("Byte differential controls", "scripts/hmac/check-hmac-differential.py"),
     ("Canonical final-bit messages", "scripts/hmac/check-hmac-bit-differential.py"),

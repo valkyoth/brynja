@@ -100,6 +100,8 @@ class ScopeTests(unittest.TestCase):
                      "scripts/hmac/hmac_execution_drop.py",
                      "scripts/hmac/hmac_execution_update.py",
                      "assurance/hmac-timing/src/main.rs", "assurance/hmac-timing/Cargo.lock",
+                     "assurance/hmac-timing/src/routes.rs", "scripts/hmac/hmac_timing_routes.py",
+                     "scripts/hmac/hmac_timing_fixture_tests.py",
                      "assurance/hmac-faults/adapter_tests.rs",
                      "assurance/hmac-faults/native_adapter_tests.rs",
                      "assurance/hmac-faults/execution_model.rs",

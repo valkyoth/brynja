@@ -457,3 +457,21 @@ They do not establish compiler-copy/whole-frame erasure, fatal-path cleanup,
 Mac dump exclusion, native/timing qualification or independent review. Final
 source-bound qualification reconciliation and strict-facade admission remain
 pending; no global qualification or publication status is promoted.
+
+## Explicit-route timing observations
+
+The timing fixture now selects portable, required static/runtime, Linux
+protected scalar/compiled or Apple Silicon resident scalar/compiled APIs.
+Accelerated families have exact populations and generic-host instruction
+preflights; missing resources/features fail without fallback. Runtime authority
+stays in a generic build. A separate preflight checks actual tags and positive
+and negative verification decisions before samples; four compiling fixture
+mutants prove those checks reject vacuous output/key/decision behavior.
+
+Observations preserve route, flags, binary/fixture provenance and raw ordered
+samples. Resource acquisition is excluded; complete hosted requests include
+worker and cleanup overhead. A quiet end-to-end screen is not constant-time,
+cache/branch or release qualification, and Mac residency still does not exclude
+dumps. See [timing methods and limits](../docs/hmac-timing-observations.md).
+These changes affect assurance tooling only, not shipping cryptographic code or
+release-gate policy. Raw observations stay local and outside crate archives.

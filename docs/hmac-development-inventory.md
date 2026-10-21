@@ -87,12 +87,12 @@ Links identify executable checks, not proof that a current run passed.
 - Real portable and explicitly selected native adapter handoffs: [check](../assurance/hmac-faults/adapter_tests.rs).
 - Private accelerated composition admission/error/unwind witnesses: [check](../assurance/hmac-faults/execution_cases.rs).
 - Explicit AArch64 hosted native selection and fallback mutations: [check](../scripts/hmac/check-hmac-hosted-native.py).
-- Portable paired timing screen, not a constant-time proof: [check](../scripts/hmac/check-hmac-timing.py).
+- Explicit portable/static/runtime and protected/resident scalar/compiled paired timing screens; compiled preflight controls, not a constant-time proof: [check](../scripts/hmac/check-hmac-timing.py).
 
 ## Still pending
 
 - Final source-bound compiler qualification reconciliation; bounded portable/static/runtime and hosted protected/resident graph linkage is checked, not whole-frame erasure or independent qualification.
-- Accelerated/hosted timing and cache/branch qualification; the portable timing screen is not a timing proof.
+- Complete source-bound native timing observations and assess remaining cache/branch limits; explicit-route paired screens are not constant-time proofs.
 - Remaining native route qualification, including dedicated x86 SHA-512.
 - Independent pentest and final source-bound release evidence.
 - Promote the global API/requirement register only after its compiler-owner contract is satisfied.

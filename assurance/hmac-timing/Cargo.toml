@@ -8,4 +8,5 @@ publish = false
 [workspace]
 
 [dependencies]
-brynja-mac-hmac = { path = "../../crates/brynja-mac-hmac", default-features = false }
+brynja-mac-hmac = { path = "../../crates/brynja-mac-hmac", default-features = false, features = ["hardened-execution"] }
+brynja-crypto-cpu-std = { path = "../../crates/brynja-crypto-cpu-std", default-features = false, features = ["hmac-execution", "strict-hmac-acceleration", "macos-resident-hmac-acceleration"] }

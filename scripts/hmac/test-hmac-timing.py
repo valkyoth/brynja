@@ -11,29 +11,84 @@ import unittest
 from unittest.mock import patch
 
 import hmac_timing as timing
+from hmac_timing_fixture_tests import FixtureTests
 
 spec = importlib.util.spec_from_file_location("hmac_timing_driver", Path(__file__).with_name("check-hmac-timing.py"))
 driver = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(driver)
 
 
-def fixture():
+def fixture(route="portable", family="all"):
     lines = []
-    for identity, width in timing.WIDTHS.items():
+    for identity, width in timing.population(route, family).items():
         for size in (16, width):
             for key in (32, 200):
                 for mode in ("verify", "key"):
                     lines.extend(f"SAMPLE {identity} {mode} {key} {size} {i} "
                                  f"{1000 + i % 2} {1001 - i % 2}"
                                  for i in range(timing.SAMPLES))
-    return "\n".join([*lines, timing.MARKER]) + "\n"
+    return "\n".join([*lines, timing.marker(route, family)]) + "\n"
 
 
-class TimingTests(unittest.TestCase):
+class TimingTests(FixtureTests, unittest.TestCase):
     def test_complete_population_and_quiet_control(self):
         rows = timing.parse(fixture())
         self.assertEqual(len(rows), 96)
         self.assertFalse(any(row["signal"] for row in rows))
+
+    def test_explicit_route_population_cannot_be_relabelled(self):
+        for route in timing.ROUTES:
+            for family, count in (("sha256", 16), ("sha512", 48), ("keccak", 32)):
+                source = fixture(route, family)
+                self.assertEqual(len(timing.parse(source, route, family)), count)
+                with self.assertRaises(ValueError):
+                    timing.parse(source, "portable" if route != "portable" else "static", family)
+                with self.assertRaises(ValueError):
+                    timing.parse(source, route, "sha256" if family != "sha256" else "keccak")
+                with self.assertRaises(ValueError):
+                    timing.parse(f"HMAC_TIMING_SMOKE {count // 8} {route} {family}\n", route, family)
+        for route, family in (("other", "all"), ("portable", "other"), ("static", "all"),
+                              ("runtime", "all"), ("linux-compiled", "all"), ("macos-compiled", "all")):
+            with self.assertRaises(ValueError):
+                timing.population(route, family)
+
+    def test_generic_probe_precedes_feature_enablement_and_rejects_failures(self):
+        routes = driver.routes
+        for arch in ("x86_64", "arm64"):
+            for family in ("sha256", "sha512", "keccak"):
+                calls = []
+                def run(command, env):
+                    calls.append((command, dict(env)))
+                    return "" if command[0] == "rustc" else "HMAC_HOST_FEATURES: " + family + "\n"
+                with patch.object(routes.platform, "machine", return_value=arch), \
+                        patch.object(routes.verifier, "run", side_effect=run):
+                    env, probe = routes.prepare("static", family, Path("/unused"), {"SENTINEL": "kept"})
+                self.assertEqual(len(calls), 2)
+                self.assertTrue(all("RUSTFLAGS" not in env for _, env in calls))
+                self.assertIn("target-cpu=generic", calls[0][0])
+                self.assertEqual(calls[1][0][-1], family)
+                self.assertTrue(env["RUSTFLAGS"].startswith("-C target-feature="))
+                self.assertEqual(env["SENTINEL"], "kept")
+                self.assertEqual(probe["command"], calls[1][0])
+        with patch.object(routes.sys, "platform", "darwin"), \
+                patch.object(routes.platform, "machine", return_value="arm64"), \
+                patch.object(routes.verifier, "run", side_effect=["", "HMAC_HOST_FEATURES: sha512\n"]):
+            env, _ = routes.prepare("runtime", "sha512", Path("/unused"), {})
+            self.assertNotIn("RUSTFLAGS", env, "runtime must remain a generic build")
+        for failure in ("", "HMAC_HOST_FEATURES: other\n", "HMAC_HOST_FEATURES: sha256\nextra", RuntimeError("unavailable")):
+            with patch.object(routes.platform, "machine", return_value="x86_64"), \
+                    patch.object(routes.verifier, "run", side_effect=["", failure]), \
+                    self.assertRaises((ValueError, RuntimeError)):
+                routes.prepare("static", "sha256", Path("/unused"), {})
+        for system, arch, route in (("linux", "x86_64", "macos-resident"),
+                                    ("darwin", "arm64", "linux-protected"),
+                                    ("darwin", "x86_64", "macos-compiled"),
+                                    ("linux", "x86_64", "runtime")):
+            with patch.object(routes.sys, "platform", system), \
+                    patch.object(routes.platform, "machine", return_value=arch), \
+                    patch.object(routes.verifier, "run", side_effect=AssertionError("must not run")), \
+                    self.assertRaises(ValueError):
+                routes.prepare(route, "sha256", Path("/unused"), {})
 
     def test_both_signal_directions_and_zero_variance(self):
         for pairs in ([(100, 200)] * 512, [(200, 100)] * 512,

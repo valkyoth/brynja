@@ -7,9 +7,29 @@ WIDTHS = dict(zip(
      "sha3_224", "sha3_256", "sha3_384", "sha3_512", "general129", "general511"),
     (28, 32, 48, 64, 28, 32, 28, 32, 48, 64, 16, 63), strict=True))
 SAMPLES = 512
-MARKER = "HMAC_TIMING_COMPLETE 12 96 512 4 portable"
+ROUTES = ("portable", "static", "runtime", "linux-protected", "linux-compiled", "macos-resident", "macos-compiled")
+FAMILIES = ("all", "sha256", "sha512", "keccak")
+COMPILED = ("static", "linux-compiled", "macos-compiled")
+ACCELERATED = (*COMPILED, "runtime")
 # A coarse diagnostic alarm, not a release security threshold or a waiver.
 LIMIT = 10.0
+
+
+def population(route="portable", family="all"):
+    if route not in ROUTES or family not in FAMILIES or (route in ACCELERATED and family == "all"):
+        raise ValueError("invalid timing route/family")
+    return {name: width for name, width in WIDTHS.items() if family == "all" or
+            (family == "sha256" and name in ("sha224", "sha256")) or
+            (family == "keccak" and name.startswith("sha3_")) or
+            (family == "sha512" and name not in ("sha224", "sha256") and not name.startswith("sha3_"))}
+
+
+def marker(route="portable", family="all"):
+    count = len(population(route, family))
+    return f"HMAC_TIMING_COMPLETE {count} {count * 8} 512 4 {route} {family}"
+
+
+MARKER = marker()
 
 
 def screen(pairs):
@@ -26,15 +46,16 @@ def screen(pairs):
             "signal": score >= LIMIT}
 
 
-def parse(text):
+def parse(text, route="portable", family="all"):
+    expected_marker = marker(route, family)
     lines = text.splitlines()
-    if not lines or lines[-1] != MARKER or lines.count(MARKER) != 1:
+    if not lines or lines[-1] != expected_marker or lines.count(expected_marker) != 1:
         raise ValueError("missing/duplicate timing completion marker")
     cursor = 0
     results = []
     # Ordered occurrences matter: general129's 16-byte profiles intentionally
     # repeat, giving a second campaign rather than silently deduplicating it.
-    for identity, width in WIDTHS.items():
+    for identity, width in population(route, family).items():
         for tag_bytes in (16, width):
             for key_bytes in (32, 200):
                 for mode in ("verify", "key"):

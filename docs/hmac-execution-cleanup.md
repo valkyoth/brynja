@@ -382,6 +382,56 @@ Each private mutant is restored and its baseline rebuilt and checked. A compiler
 error is not successful mutation detection. Runtime crate source and packaging
 are unchanged by these tests.
 
+## Hosted launch, join and reclamation
+
+`assurance/hmac-hosted-cleanup` emits 48 real consumers: compute and verify,
+scalar and explicitly accelerated, for the same twelve identities. It resolves
+24 distinct executor bodies and 24 concrete worker callbacks. It does not
+enable `runtime-execution`; Cargo metadata rejects missing/duplicate owners,
+registry dependencies and runtime-feature contamination before compilation.
+
+```sh
+python3 scripts/hmac/check-hmac-hosted-cleanup.py
+python3 scripts/hmac/check-hmac-hosted-cleanup.py --target aarch64-unknown-linux-gnu
+python3 scripts/hmac/check-hmac-hosted-cleanup.py --target aarch64-apple-darwin
+python3 scripts/hmac/test-hmac-hosted-cleanup.py
+```
+
+This bounded compiler check covers Rust 1.90.0 and 1.99.1, both panic modes,
+Linux x86-64/Arm and Apple Arm. Stable v0 symbol mangling retains concrete
+generic identities. `llvm-cxxfilt`, or GNU `c++filt --format=rust --no-verbose`,
+decodes those identities; an unsupported demangler fails the population check.
+Explicit x86 SHA/SHA512/AVX2 and Arm NEON/SHA2/SHA3/AES build features prevent
+unavailable-only accelerated stubs from being mistaken for exercised graphs.
+No instruction kernel is executed by this compiler check.
+
+The emitted host CFG must join the handle loaded from the actual created-worker
+slot. Failed creation and successful join must clear the same stack mapping
+used for native attributes before job/handle lifetime end or host return.
+No write, other call, or return is accepted between creation and join, and a
+failed join must terminate rather than reclaim a still-live worker. Other
+status branches are explored conservatively. Each callback must resolve and
+belong to its exact instantiated executor type.
+
+Source-bound premises in `hmac_hosted_contracts.py` cover native join, attribute
+destruction, mapping clear and module routing. These non-unwinding C-ABI or
+value-only Rust paths can have conservative LLVM `invoke` edges; the checker
+does not invent recoverable unwinds from them. The shared core volatile-clear
+premise is reused. Raw-byte changes, including CRLF, reopen the premise review.
+Pins detect drift; they do not authenticate a reviewer or prove OS behavior.
+
+Regressions alter every emitted executor on all three targets (792 mutations),
+check source and dependency binding, and compile four real Rust mutants:
+missing join and missing stack clearing for Linux and Darwin. Compiler failures
+are not credited as killed mutants; restored baselines must pass again.
+
+This is **host lifecycle dispatch evidence**, not worker-payload qualification.
+Worker capture provenance, keyed-state placement and inner cleanup remain
+separate pending checks. Host error handling, valid Rust inputs, the reviewed
+resource allocation/attribute implementation and OS pthread semantics remain
+premises. It does not claim whole-frame erasure, fatal cleanup, native platform
+execution or Mac dump exclusion, and does not admit HMAC to the strict facade.
+
 ## Premises and remaining work
 
 This is **dispatch evidence**, not a proof that a throwing cleanup callee erased

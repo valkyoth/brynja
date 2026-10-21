@@ -43,6 +43,9 @@ class ScopeTests(unittest.TestCase):
                      "assurance/hmac-engine-cleanup/src/lib.rs",
                      "assurance/hmac-execution-cleanup/Cargo.lock",
                      "assurance/hmac-execution-cleanup/src/lib.rs",
+                     "assurance/hmac-hosted-cleanup/Cargo.lock",
+                     "assurance/hmac-hosted-cleanup/src/lib.rs",
+                     "scripts/hmac/check-hmac-hosted-cleanup.py",
                      "scripts/hmac/hmac_execution_drop.py",
                      "scripts/hmac/hmac_execution_update.py",
                      "assurance/hmac-timing/src/main.rs", "assurance/hmac-timing/Cargo.lock",
@@ -123,6 +126,11 @@ class ScopeTests(unittest.TestCase):
             self.assertEqual(checks.count(command), 1)
             self.assertIn(command, commands.selected(checks, ["hmac"]))
             self.assertNotIn(command, commands.selected(checks, ["md5"]))
+        for target in ("", " --target aarch64-unknown-linux-gnu", " --target aarch64-apple-darwin"):
+            command = "python3 scripts/hmac/check-hmac-hosted-cleanup.py" + target
+            self.assertEqual(checks.count(command), 1)
+            self.assertEqual(commands.owners(command), {"hmac"})
+        self.assertEqual(checks.count("python3 scripts/hmac/test-hmac-hosted-cleanup.py"), 1)
         self.assertEqual(commands.owners(
             "python3 scripts/hmac/check-hmac-hosted-native.py --kernel sha256"), {"hmac"})
         for family in ("sha2", "sha3", "core", "static_cpu"):

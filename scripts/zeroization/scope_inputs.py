@@ -20,6 +20,7 @@ PACKAGES = {
     'brynja-hmac-cleanup': 'hmac',
     'brynja-hmac-engine-cleanup': 'hmac',
     'brynja-hmac-execution-cleanup': 'hmac',
+    'brynja-hmac-hosted-cleanup-fixture': 'hmac',
     'brynja-hmac-timing': 'hmac',
     'brynja-keccak-batch-fixture': 'sha3',
     'brynja-sha512-batch-fixture': 'sha2',

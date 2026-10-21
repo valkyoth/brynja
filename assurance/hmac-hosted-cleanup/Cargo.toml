@@ -1,0 +1,11 @@
+[package]
+name = "brynja-hmac-hosted-cleanup-fixture"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[workspace]
+
+[dependencies]
+brynja-crypto-cpu-std = { path = "../../crates/brynja-crypto-cpu-std", default-features = false, features = ["strict-hmac-acceleration", "macos-resident-hmac-acceleration"] }

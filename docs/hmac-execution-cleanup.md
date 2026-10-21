@@ -577,10 +577,50 @@ slice (scalar/accelerated, Linux/Darwin). They must compile and pass prior
 keyed admission, then fail the output checker itself. Restored baselines must
 pass; compile errors are not counted as successful rejection.
 
-This is **host lifecycle, admission, retained storage, output provenance and
+### Hosted input iteration and fractional-tail handoff
+
+The emitted input check follows the captured slice-of-slices pointer and count,
+the complete-byte prefix of the final bit string, and both nested iterators.
+Pointer/length phis must have matching actual predecessors. The descriptor
+cursor advances by one 16-byte slice descriptor; the final prefix is consumed
+once. Each nonempty part passes its original pointer and
+`min(remaining, 4096)` length to the selected update call, advances both by that
+same amount, and reenters the loop only on the compiler-specific successful
+Result discriminant. The nonempty-part path rejects a second update before
+advancement. Update error edges cannot restart iteration or finalize.
+For Rust 1.90's rotated Arm loops, entry and backedge emptiness guards must
+agree, and byte-discriminant constraints distinguish genuine error exits from
+unreachable success edges left behind merged cleanup.
+Finalizers must be dominated by exhaustion of the outer iterator.
+
+The complete/partial split is checked symbolically for empty versus arbitrary
+positive length and eight versus non-eight valid bits. It must retain all bytes
+for a whole-byte tail and exclude exactly the final byte for a nonempty
+fractional tail. This is not a sample of a few message lengths. Both branch/phi
+and compiler-generated select, signed-boolean and saturating-subtraction forms
+are checked against that partition. Whole-tail validation uses the captured
+pointer, length and bit count. The second constructor receives the advanced
+pointer, only the unabsorbed fractional byte, and zero bits for an empty tail.
+
+The constructor Result must be admitted before state construction and use.
+Both finalizers must receive the exact 32-byte typed-tail representation from
+that admitted partial-tail result, including any intermediate scalar loads or
+copies. Missing, duplicate, reordered, conditional or overwritten transfers
+reject. Raw descriptor padding is not treated as semantic input. These are
+caller dataflow checks; the separately reviewed bit-string constructors and
+hash arithmetic remain premises.
+
+Regression tests mutate actual worker emissions on all three targets and both
+reviewed compilers. Additional safe-Rust mutants change the part bound, absorb
+the entire fractional tail twice, alter the split predicate, or substitute the
+partial bit count; another repeats updates according to the supplied bit count.
+Each mutant must compile, retain the prior keyed-admission
+check, and be rejected by the input checker; restored baselines must pass.
+
+This is **host lifecycle, admission, retained storage, input/output provenance and
 cleanup-dispatch evidence**, not complete worker-payload qualification.
-Full update-input/loop provenance, authority references inside borrowed
-callees, final host/output transaction reconciliation and cross-checking remain
+Authority references inside borrowed callees, final host/output transaction
+reconciliation, checkpoint semantics and cross-checking remain
 pending. In particular, the output slice does not yet qualify every checkpoint
 or prove the whole public-output transaction solely from these worker graphs.
 Host error handling, valid Rust inputs, the reviewed

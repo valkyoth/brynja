@@ -13,6 +13,7 @@ from hmac_hosted_authority_tests import AuthorityTests
 from hmac_hosted_keyed_tests import KeyedTests
 from hmac_hosted_retained_tests import RetainedTests
 from hmac_hosted_output_tests import OutputTests
+from hmac_hosted_input_tests import InputTests
 
 spec = importlib.util.spec_from_file_location(
     'hosted', Path(__file__).with_name('check-hmac-hosted-cleanup.py'))
@@ -20,7 +21,7 @@ driver = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(driver)
 
 
-class HostedTests(CaptureTests, AuthorityTests, KeyedTests, RetainedTests, OutputTests, unittest.TestCase):
+class HostedTests(CaptureTests, AuthorityTests, KeyedTests, RetainedTests, OutputTests, InputTests, unittest.TestCase):
     driver = driver
 
     @classmethod
@@ -159,10 +160,8 @@ class HostedTests(CaptureTests, AuthorityTests, KeyedTests, RetainedTests, Outpu
                 with self.assertRaises(ValueError):
                     driver.validate(llvm, target)
 
-    def test_real_compiled_resource_and_capture_mutants(self):
-        # Private copied host owner; upstream cryptographic implementations stay
-        # untouched. Mutants must compile before the emitted lifecycle check fails.
-        work = self.root / 'compiled-mutants'
+    def compiled_fixture(self, work):
+        # Private copied host owner; upstream cryptographic implementations stay untouched.
         host, fixture = work / 'host', work / 'consumer'
         original_host = driver.ROOT / 'crates/brynja-crypto-cpu-std'
         shutil.copytree(original_host / 'src', host / 'src')
@@ -179,6 +178,12 @@ class HostedTests(CaptureTests, AuthorityTests, KeyedTests, RetainedTests, Outpu
             '../../crates/brynja-crypto-cpu-std', str(host)))
         driver.verifier.run(['cargo', '+1.99.1', 'generate-lockfile', '--offline',
                             '--manifest-path', str(fixture / 'Cargo.toml')], driver.verifier.environment(work))
+        return host, fixture
+
+    def test_real_compiled_resource_and_capture_mutants(self):
+        # Mutants must compile before the emitted lifecycle check fails.
+        work = self.root / 'compiled-mutants'
+        host, fixture = self.compiled_fixture(work)
         for target, relative, join in (
                 (driver.TARGETS[0], 'protected_memory/platform/thread.rs', 'if join(worker) != 0 {'),
                 (driver.TARGETS[2], 'macos_resident/resource/darwin/thread.rs',

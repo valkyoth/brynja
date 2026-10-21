@@ -12,6 +12,7 @@ from hmac_hosted_capture_tests import CaptureTests
 from hmac_hosted_authority_tests import AuthorityTests
 from hmac_hosted_keyed_tests import KeyedTests
 from hmac_hosted_retained_tests import RetainedTests
+from hmac_hosted_output_tests import OutputTests
 
 spec = importlib.util.spec_from_file_location(
     'hosted', Path(__file__).with_name('check-hmac-hosted-cleanup.py'))
@@ -19,7 +20,7 @@ driver = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(driver)
 
 
-class HostedTests(CaptureTests, AuthorityTests, KeyedTests, RetainedTests, unittest.TestCase):
+class HostedTests(CaptureTests, AuthorityTests, KeyedTests, RetainedTests, OutputTests, unittest.TestCase):
     driver = driver
 
     @classmethod
@@ -210,6 +211,7 @@ class HostedTests(CaptureTests, AuthorityTests, KeyedTests, RetainedTests, unitt
         self.check_compiled_authority_mutants(host, fixture, work)
         self.check_compiled_keyed_mutants(host, fixture, work)
         self.check_compiled_retained_mutants(host, fixture, work)
+        self.check_compiled_output_mutants(host, fixture, work)
 
 
 if __name__ == '__main__':

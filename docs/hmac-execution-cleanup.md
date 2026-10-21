@@ -543,10 +543,46 @@ admission and storage checks, then fail this cleanup-dispatch check; restored
 baselines must pass. Changes to unreachable cleanup code are not counted as
 live-path regression detection.
 
-This is **host lifecycle, admission, retained storage and cleanup-dispatch
-evidence**, not complete worker-payload qualification. Full update-input/loop
-provenance, authority references inside borrowed callees, secret-output
-transaction reconciliation and final cross-checking remain pending.
+### Returned secret output and destination provenance
+
+The output check follows the actual worker arguments from the captured job:
+comparison uses its candidate pointer/length; secret finalization uses the
+staging mapping; copying uses the separate destination mapping. Substituted
+fields, truncated lengths, unrecognized aliases and descriptor escapes reject.
+The returned secret descriptor must initialize one distinct local owner with
+the original pointer and length. Its storage and Result allocation must be
+live and large enough for every observed access.
+
+The successful Result branch must dominate owner construction, copying and
+destruction. Some Rust 1.90 x86 emissions speculate descriptor loads before
+that branch. The checker permits those loads and pure null normalization, not
+admission: their values may only feed the guarded owner and output copy, never
+escape through an error path. Empty exposure must pair the dangling pointer
+with zero length under the same returned-pointer condition. It cannot combine
+the empty pointer with the nonempty length or use another source buffer.
+
+From completed owner construction, the emitted graph must dispatch destruction
+on every normal and recoverable-unwind exit, including cancellation and copy
+failure. Missing or duplicate dispatch, early lifetime end, late reads/copies,
+and calls lacking a recoverable unwind edge while the owner is live reject.
+As elsewhere, destruction is counted as attempted on both invoke edges; fatal
+double-panic cleanup and erasure by a throwing callee are not proved.
+
+Regressions mutate all 24 workers on each target, including the captured
+pointer/length paths, Result admission, exposure pairs, owner lifetimes and
+each cleanup site. Older-compiler regressions inject error-path escapes of
+speculatively loaded descriptor values. Eight additional safe-Rust mutants
+forget the returned owner on cancellation or truncate the finalizer's staging
+slice (scalar/accelerated, Linux/Darwin). They must compile and pass prior
+keyed admission, then fail the output checker itself. Restored baselines must
+pass; compile errors are not counted as successful rejection.
+
+This is **host lifecycle, admission, retained storage, output provenance and
+cleanup-dispatch evidence**, not complete worker-payload qualification.
+Full update-input/loop provenance, authority references inside borrowed
+callees, final host/output transaction reconciliation and cross-checking remain
+pending. In particular, the output slice does not yet qualify every checkpoint
+or prove the whole public-output transaction solely from these worker graphs.
 Host error handling, valid Rust inputs, the reviewed
 resource allocation/attribute implementation and OS pthread semantics remain
 premises. It does not claim whole-frame erasure, fatal cleanup, native platform

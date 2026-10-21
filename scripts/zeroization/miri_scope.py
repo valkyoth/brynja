@@ -11,6 +11,7 @@ from pathlib import Path
 import scope_inputs
 import scope_review_metadata
 import scope_workspace
+import scope_hmac
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -131,7 +132,8 @@ def select(paths: list[str], *, downstream=None) -> tuple[bool, tuple[str, ...]]
             return True, GROUPS
         if path.startswith(("crates/brynja-crypto-cpu-std/src/strict_hmac/",
                             "crates/brynja-crypto-cpu-std/src/macos_resident/hmac/")) or path in {"crates/brynja-crypto-cpu-std/src/execution/hmac.rs",
-                    "crates/brynja-crypto-cpu-std/tests/hmac.rs"}:
+                    "crates/brynja-crypto-cpu-std/tests/hmac.rs",
+                    "crates/brynja-crypto/src/hmac.rs"}:
             selected.add("hmac")
             continue
         if windows_or_facade_driver(path):
@@ -207,6 +209,8 @@ def select_repository(
             'scripts/zeroization/test-miri-scope.py', 'scripts/zeroization/test-scope-inputs.py',
             'scripts/zeroization/scope_review_metadata.py',
             'scripts/zeroization/scope_workspace.py',
+            'scripts/zeroization/scope_hmac.py',
+            'scripts/zeroization/hmac_scope_tests.py',
             'scripts/zeroization/review_metadata_tests.py',
             'scripts/zeroization/check-tag-miri.sh', 'scripts/tag_gate.sh',
             'scripts/zeroization/check-zeroization-sanitizer.sh',
@@ -242,7 +246,9 @@ def select_repository(
                 # release planner retains the conservative full fallback.
                 # Never exempt the directory, shared driver, or Rust tests.
                 continue
-            if path == 'scripts/cryptography/api_profile_contracts.py':
+            if scope_hmac.integration_only(path, before, after):
+                affected.add('hmac')
+            elif path == 'scripts/cryptography/api_profile_contracts.py':
                 if scope_inputs.mir_spans_only(before, after):
                     continue
                 added = scope_inputs.added_review_sources(before, after)
@@ -298,7 +304,13 @@ def select_repository(
             elif path.endswith('Cargo.toml') and before is not None and after is not None and scope_inputs.version_only(before, after):
                 continue
             elif path == 'Cargo.toml':
-                retained.extend(scope_workspace.consumer_paths(root, base, before, after))
+                for consumer in scope_workspace.consumer_paths(root, base, before, after):
+                    left, right = scope_inputs.snapshot(root, base, consumer)
+                    if (scope_hmac.workspace_only(before, after)
+                            and scope_hmac.manifest_only(consumer, left, right)):
+                        affected.add('hmac')
+                    else:
+                        retained.append(consumer)
             elif path == 'scripts/zeroization/check-zeroization-miri.sh':
                 affected |= scope_inputs.runner_groups(before, after)
             elif path == 'assurance/policy.toml' and scope_inputs.verifier_only(before, after):

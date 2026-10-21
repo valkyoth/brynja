@@ -7,6 +7,7 @@ This is project-owned testing, not independent cryptographic verification.
 
 | Change | Expensive verification |
 | --- | --- |
+| HMAC source, fixture, or exact HMAC-only facade/hosted registration | HMAC; independent shared changes retain their own scope |
 | SHA-2 source or its consumer fixture | SHA-2 and affected integrations |
 | MD5 or SHA-1 source | Changed primitive and legacy consumer |
 | Shared Keccak/SHA-3 source | SHA-3, KMAC, TupleHash and ParallelHash |
@@ -15,6 +16,20 @@ This is project-owned testing, not independent cryptographic verification.
 | Verifier change | Explain the affected verifier evidence; require approval for unexpected broad renewal |
 | Public crates.io checkpoint | Complete registered suite, automatically |
 | Unclassified, malformed or unauthenticated scope | Stop before expensive execution; release verification is incomplete |
+
+The HMAC integration classifier recognizes only the registered dependency edge,
+exact opt-in feature lists and exact module-registration edits. It compares the
+rest of each manifest/source unchanged and traverses both lock graphs. Adding or
+removing the HMAC edge in a facade does not itself change another primitive;
+changing a hash, CPU authority, shared feature, build setting or other dependency
+still selects its affected consumers. New HMAC compiler/timing fixture locks must
+be unpublished and match the corresponding workspace dependency identities and
+edge subsets. Unknown fixtures and malformed graphs still fail closed.
+
+This classification is not an evidence PASS or permission to discard shared
+testing. In particular, the v0.25.0 shared CPU verification-driver changes retain
+their broader consumer selection. Pure HMAC changes select HMAC; the complete
+release plan is the union of all independently classified changes.
 
 ## Inspect before running
 

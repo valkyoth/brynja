@@ -392,6 +392,8 @@ def build_evidence(policy: dict | None = None) -> dict:
             "verification_carry_forward.py", "verification_carry_forward_tests.py",
             "native_metadata_carry_forward.py", "test-native-metadata-carry-forward.py")),
         ROOT / "scripts/zeroization/scope_inputs.py",
+        ROOT / "scripts/zeroization/scope_hmac.py",
+        ROOT / "scripts/zeroization/hmac_scope_tests.py",
         ROOT / "scripts/zeroization/scope_review_metadata.py",
         ROOT / "scripts/zeroization/review_metadata_tests.py",
         ROOT / "scripts/zeroization/test-scope-inputs.py",

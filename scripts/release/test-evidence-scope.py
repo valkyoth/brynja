@@ -65,18 +65,17 @@ class WorkspaceScope(unittest.TestCase):
                       OLD + '\n[patch.crates-io]\nexternal={path="vendor/external"}\n'):
             with self.subTest(value=value):
                 self.assertTrue(self.selected(value)[0])
-        fixtures.write(self.root, 'crates/brynja-mac-hmac/Cargo.toml',
-                       '[package]\nname="brynja-mac-hmac"\nversion="0.1.0"\n'
+        fixtures.write(self.root, 'crates/brynja-mac-unregistered/Cargo.toml',
+                       '[package]\nname="brynja-mac-unregistered"\nversion="0.1.0"\n'
                        '[dependencies]\nexternal.workspace=true\n')
         self.assertTrue(self.selected(OLD)[0])
-        # HMAC must register its own verifier commands when implemented. It
-        # cannot borrow a KMAC or SHA-2 PASS by adding a workspace declaration.
+        # Unknown implementations cannot borrow another family's evidence.
 
     def test_workspace_table_change_cannot_hide_shared_source_change(self):
         fixtures.write(self.root, 'crates/brynja-hash-sha3/src/lib.rs', 'pub fn changed() {}\n')
         full, groups = self.selected(OLD + 'unused={version="=1.0.0"}\n')
         self.assertFalse(full)
-        self.assertEqual(set(groups), {'sha3', 'kmac', 'tuplehash', 'parallelhash'})
+        self.assertEqual(set(groups), {'sha3', 'kmac', 'tuplehash', 'parallelhash', 'hmac'})
 
     def test_native_results_are_metadata_not_an_execution_change(self):
         for path in ('security/sha1-hardened-native.json',
@@ -123,10 +122,10 @@ class WorkspaceScope(unittest.TestCase):
         fixtures.write(self.root, 'scripts/kmac/capture-kmac-execution-native.py', 'changed collector\n')
         self.assertEqual(self.selected(OLD), (False, ('kmac',)))
         fixtures.write(self.root, 'crates/brynja-hash-sha3/src/lib.rs', 'changed shared code\n')
-        self.assertEqual(set(self.selected(OLD)[1]), {'sha3', 'kmac', 'tuplehash', 'parallelhash'})
+        self.assertEqual(set(self.selected(OLD)[1]), {'sha3', 'kmac', 'tuplehash', 'parallelhash', 'hmac'})
         fixtures.write(self.root, 'security/sha1-hardened-native.json', '{}\n')
         fixtures.write(self.root, 'crates/brynja-hash-sha3/src/lib.rs', 'pub fn changed() {}\n')
-        self.assertEqual(self.selected(OLD), (False, ('sha3', 'kmac', 'tuplehash', 'parallelhash')))
+        self.assertEqual(self.selected(OLD), (False, ('sha3', 'kmac', 'tuplehash', 'parallelhash', 'hmac')))
 
 
 if __name__ == '__main__':

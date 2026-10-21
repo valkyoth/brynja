@@ -6,6 +6,7 @@ import tomllib
 import re
 import ast
 from pathlib import Path
+import scope_hmac
 
 LIMIT = 4 * 1024 * 1024
 # This generated registry already exceeds the source/TOML cap. It is metadata,
@@ -16,6 +17,10 @@ GENERATED_REGISTERS = frozenset({'standards/protocol-surfaces.json'})
 PACKAGES = {
     'brynja-mac-hmac': 'hmac',
     'brynja-hmac-policy-fixture': 'hmac',
+    'brynja-hmac-cleanup': 'hmac',
+    'brynja-hmac-engine-cleanup': 'hmac',
+    'brynja-hmac-execution-cleanup': 'hmac',
+    'brynja-hmac-timing': 'hmac',
     'brynja-keccak-batch-fixture': 'sha3',
     'brynja-sha512-batch-fixture': 'sha2',
     'brynja-general-sha512-t-consumer': 'sha2',
@@ -128,18 +133,18 @@ def lock_groups(before: bytes | None, after: bytes | None) -> set[str]:
         graphs.append(graph)
     old, new = graphs
     changed = {name for name in old.keys() | new.keys() if old.get(name) != new.get(name)}
+    hmac_edges = {name for name in changed if scope_hmac.lock_edge_only(name, old.get(name), new.get(name))}
     # Traverse BOTH graphs so removing an edge cannot hide an affected consumer.
-    affected = set(changed)
+    affected = (changed - hmac_edges) | ({scope_hmac.LEAF} if hmac_edges else set())
     while True:
-        extra = {name for graph in graphs for name, p in graph.items()
-                 if affected.intersection(p.get('dependencies', []))}
+        extra = set().union(*(scope_hmac.consumers(graph, affected) for graph in graphs))
         if extra <= affected:
             break
         affected |= extra
     known = set(PACKAGES) | {'brynja-hash-core'}
     for name in changed:
         raw = new.get(name, old.get(name, {}))
-        if 'source' not in raw and name not in known:
+        if 'source' not in raw and name not in known and name not in hmac_edges:
             raise ValueError('unknown changed local package')
         if 'source' in raw:
             reached = {name}
@@ -350,7 +355,9 @@ def fixture_lock(data: bytes, workspace: bytes, manifest: bytes,
     if set(parsed) != {'version', 'package'} or parsed['version'] != 4:
         raise ValueError('unknown fixture lock schema')
     package = document(manifest)['package']
-    registered_consumer = package['name'] == 'brynja-general-sha512-t-consumer'
+    registered_consumer = package['name'] in {
+        'brynja-general-sha512-t-consumer', 'brynja-hmac-cleanup',
+        'brynja-hmac-engine-cleanup', 'brynja-hmac-execution-cleanup', 'brynja-hmac-timing'}
     if package.get('publish') is not False or not (package['name'].endswith('-fixture') or registered_consumer):
         raise ValueError('not an unpublished assurance fixture')
     packages = document(workspace)['package']

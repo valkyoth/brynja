@@ -39,6 +39,11 @@ _hosted_spec = importlib.util.spec_from_file_location(
 hosted_acceptance = importlib.util.module_from_spec(_hosted_spec)
 _hosted_spec.loader.exec_module(hosted_acceptance)
 
+_static_spec = importlib.util.spec_from_file_location(
+    'static_acceptance', ROOT / 'scripts/cpu/check-static-execution.py')
+static_acceptance = importlib.util.module_from_spec(_static_spec)
+_static_spec.loader.exec_module(static_acceptance)
+
 
 VERIFIER_REVIEWS = (
     ('scripts/sha2/sha2_reviewed_hashes.py', 'TEST_HASHES'),
@@ -90,6 +95,9 @@ def check_api_metadata():
 
 
 def check_all():
+    # This independent closure also binds the shared check/Miri/sanitizer
+    # drivers. Reuse its exact CI validator, never its Cargo/package campaign.
+    static_acceptance.validate()
     check_verifier_bindings()
     # Validate the complete legacy source/delta inventory, not just its two
     # shared verifier pins. This is metadata only; never run its Cargo driver.
@@ -131,4 +139,4 @@ def check_all():
 
 if __name__ == '__main__':
     check_all()
-    print('Shared verifier bindings, API-profile, five acceptance, four MD5, acceleration and ParallelHash metadata/hash closures: PASS (no crypto rerun)')
+    print('Shared verifier bindings, static CPU, API-profile, five acceptance, four MD5, acceleration and ParallelHash metadata/hash closures: PASS (no crypto rerun)')

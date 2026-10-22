@@ -258,7 +258,7 @@
     "scripts/sha2/x86_sha512_ci.py": "793c40b2558eeb013583d30bd7d265eb7a7e390d93c3d68d10b8a75415ffac53",
     "scripts/sha2/x86_sha512_faults.py": "3560d7554b9b99ce44913628b6843992fbb95a77bd8bf62ea5303f3dbeedffb3",
     "scripts/sha2/x86_sha512_package.py": "9aaedd8512a1345cf289aff28b1edeb4576f4373b732831d8d713b96d6bfc4b9",
-    "scripts/sha2/x86_sha512_regressions.py": "3503fc1cf5258bd5e751b38936cf2546b3094a5ff7defd0c66ef9e1563825ae4",
+    "scripts/sha2/x86_sha512_regressions.py": "0578ea68015eaf5857dfd818e5d8035665344b81dca1c2c3a1334d00cf702035",
     "scripts/tag_gate.sh": "35d3634edb876be2fee01cc8313187c0339fb6884ccd5999eaf6f378b8480a6e",
     "scripts/zeroization/check-zeroization-miri.sh": "edab9b708f7c012c6a67bd9420dd157c07e5f7c6e1d14506c73060d53d53e99e",
     "scripts/zeroization/check-zeroization-sanitizer.sh": "94814f2d552295d2161fdedb4b6b0ee1bd23457073236dc4a3b0494d436508f2"

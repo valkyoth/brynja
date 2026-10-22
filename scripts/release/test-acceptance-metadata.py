@@ -163,6 +163,39 @@ def legacy_metadata_regressions():
     print(f'Legacy metadata preflight rejects {count} delta/source/enclosing-review regressions without subprocesses')
 
 
+def static_metadata_regressions():
+    """Shared driver edits must invalidate the real static CPU preflight."""
+    policy = metadata.static_acceptance
+    read_text, read_bytes = Path.read_text, Path.read_bytes
+    original = json.loads(read_text(policy.REVIEW))
+    count = 0
+    for source in ('scripts/checks.sh', *metadata.VERIFIERS):
+        for mode in ('missing', 'stale', 'source'):
+            record = copy.deepcopy(original)
+            if mode == 'missing':
+                del record['sha256'][source]
+            elif mode == 'stale':
+                record['sha256'][source] = '0' * 64
+
+            def changed_text(path, *args, **kwargs):
+                return json.dumps(record) if path == policy.REVIEW else read_text(path, *args, **kwargs)
+
+            def changed_bytes(path):
+                value = read_bytes(path)
+                return value + b'\n' if mode == 'source' and path == metadata.ROOT / source else value
+
+            with patch.object(Path, 'read_text', changed_text), patch.object(Path, 'read_bytes', changed_bytes):
+                try:
+                    metadata.check_all()
+                except RuntimeError as error:
+                    assert str(error) == 'static execution source changed; reopen review', str(error)
+                    count += 1
+                else:
+                    raise AssertionError(f'static CPU {mode} escaped metadata preflight: {source}')
+    metadata.check_all()
+    print(f'Static CPU metadata rejects {count} shared-driver source/pin regressions without subprocesses')
+
+
 def main():
     package_optional_closure()
     sha2_package_optional_closure()
@@ -171,6 +204,7 @@ def main():
     with patch('subprocess.run', side_effect=AssertionError('unexpected process')), \
             patch('subprocess.check_call', side_effect=AssertionError('unexpected process')):
         metadata.check_all()
+        static_metadata_regressions()
         legacy_metadata_regressions()
         original_read = Path.read_text
         # The hosted review alone previously missed this separate CPU inventory.

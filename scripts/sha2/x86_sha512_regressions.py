@@ -103,12 +103,16 @@ def regressions():
                 else:
                     assert (code, output) == (0, positive) and actual == positive
                 assert execute.call_args.kwargs['timeout'] == 600
-        for output in (None, b'compiler progress\xff', 'running sanitizer'):
+        # A libtest PASS is printed before LSan/Pin shutdown. It must never
+        # substitute for process completion, even with every required marker.
+        shutdown = '\n'.join(driver.HARDENED_MARKERS) + '\n'
+        for output in (None, b'compiler progress\xff', 'running sanitizer',
+                       shutdown, shutdown.encode()):
             log = io.StringIO()
             with contextlib.redirect_stdout(log), patch.object(driver.subprocess, 'run',
                     side_effect=subprocess.TimeoutExpired(['probe'], 600, output=output)):
                 try:
-                    driver.run(['probe'], {}, markers)
+                    driver.run(['probe'], {}, driver.HARDENED_MARKERS)
                 except subprocess.TimeoutExpired:
                     pass
                 else:
@@ -132,7 +136,7 @@ def regressions():
                 if 'hardened_execution::tests' in command:
                     assert expected == [driver.HARDENED_MARKERS]
         assert hostile['LSAN_OPTIONS'] == 'exitcode=0'
-    print('Dedicated SHA512 driver rejects seven exit/coverage/route regressions and timeout')
+    print('Dedicated SHA512 driver rejects seven exit/coverage/route regressions and five timeouts, including post-PASS shutdown')
     print('Dedicated SHA512 sanitizer overrides hostile ambient disable/exit settings')
     print('Dedicated SHA512 packager rejects both missing optional dependency manifests')
 

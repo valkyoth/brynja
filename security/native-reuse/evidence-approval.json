@@ -11,18 +11,30 @@
       }
     },
     "sha1-hardened": {
+      "scripts/sha1/check-sha1-package.py": {
+        "after": "3223d08e8f55c4549ac3ce2da8e48914990f3de686a09baaa8cb189d44695ec8",
+        "before": "5e39a4ac01bcefca775c3c96cb385371c71c16b620ac0cf16bebeaf4b4c4cde3"
+      },
       "scripts/sha1/check-sha1-hardened-native.py": {
         "after": "be392a38f1b5c6ac618c7e9016d220b8abb5df2a01a18d68da4cc9673aab7b10",
         "before": "269efd86a10057140720a144a6de604647774033ccc4113eecd97d14f57250fc"
       }
     },
     "md5-execution": {
+      "scripts/md5/check-md5-package.py": {
+        "after": "9c67ddf684c3c5df3afb4c2946363f2bb50d1f002c68714ef8ea6daff62e06e8",
+        "before": "4517fcf5027fb03b9c6510b141b6ed0b3fe286dca578632d18b0f9f1afedb2ed"
+      },
       "scripts/md5/check-md5-execution-native.py": {
         "after": "8a241ce569c597b45632ef4abffa55ce2dbe31128cbf764f7285d8a7ad7f94df",
         "before": "f469ae1ab4356dc1eea577ee415448f4c3fe9401de0c717aede21dd6cde3e10c"
       }
     },
     "md5-hardened": {
+      "scripts/md5/check-md5-package.py": {
+        "after": "9c67ddf684c3c5df3afb4c2946363f2bb50d1f002c68714ef8ea6daff62e06e8",
+        "before": "4517fcf5027fb03b9c6510b141b6ed0b3fe286dca578632d18b0f9f1afedb2ed"
+      },
       "scripts/md5/check-md5-execution-native.py": {
         "after": "8a241ce569c597b45632ef4abffa55ce2dbe31128cbf764f7285d8a7ad7f94df",
         "before": "f469ae1ab4356dc1eea577ee415448f4c3fe9401de0c717aede21dd6cde3e10c"
@@ -33,12 +45,20 @@
       }
     },
     "keccak-hardened": {
+      "scripts/sha3/check-sha3-execution.py": {
+        "after": "c8fdd1b99400267f73f02e16afe45c7fd59ed505f9ce03962b63762a307b3581",
+        "before": "91b66206447de90e441463460fa75c4bafff9b5b275f9fbadc83b5791c7b9585"
+      },
       "scripts/sha3/check-keccak-hardened-native.py": {
         "after": "759f0f1c6facb406a1d7e7350084632e1af24c94389a03c030a25463b656a9e4",
         "before": "477e2a210724daa0747fabd33259b8388fc5b7fb345340eeec49baeec362b05e"
       }
     },
     "kmac-execution": {
+      "scripts/sha3/check-sha3-execution.py": {
+        "after": "c8fdd1b99400267f73f02e16afe45c7fd59ed505f9ce03962b63762a307b3581",
+        "before": "91b66206447de90e441463460fa75c4bafff9b5b275f9fbadc83b5791c7b9585"
+      },
       "scripts/kmac/check-kmac-execution-native.py": {
         "after": "1684221d1f3a38a87351028b9ed3f9dd9e9d43502a69a88e75adec7b6e14de4b",
         "before": "7f18bed806fbbc3f8b60e96e40c117f5796c0af2d086a92c1bfb5f0b762b10f1"
@@ -49,6 +69,10 @@
       }
     },
     "tuplehash-execution": {
+      "scripts/sha3/check-sha3-execution.py": {
+        "after": "c8fdd1b99400267f73f02e16afe45c7fd59ed505f9ce03962b63762a307b3581",
+        "before": "91b66206447de90e441463460fa75c4bafff9b5b275f9fbadc83b5791c7b9585"
+      },
       "scripts/sha3/check-keccak-hardened-native.py": {
         "after": "759f0f1c6facb406a1d7e7350084632e1af24c94389a03c030a25463b656a9e4",
         "before": "477e2a210724daa0747fabd33259b8388fc5b7fb345340eeec49baeec362b05e"

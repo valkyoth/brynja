@@ -9,6 +9,7 @@ import tomllib
 
 import native_review_io as io
 import native_md5_dependency_profile as md5
+import native_sha1_dependency_profile as sha1
 
 
 def graph(raw):
@@ -75,8 +76,9 @@ def projection(root, revision, closure, profile=None):
     rows = graph(io.historical(root, revision, 'Cargo.lock'))
     traversal = rows
     if profile is not None:
-        io.require(profile == md5.PROFILE, 'unknown native dependency command profile')
-        traversal = md5.reachability_rows(root, revision, closure, rows)
+        profiles = {md5.PROFILE: md5, sha1.PROFILE: sha1}
+        io.require(profile in profiles, 'unknown native dependency command profile')
+        traversal = profiles[profile].reachability_rows(root, revision, closure, rows)
     selected = reachable(traversal, package_roots)
     inherited, local = set(), {}
     for package in selected:

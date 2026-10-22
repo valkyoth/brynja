@@ -5,6 +5,9 @@ runtime-execution/runtime-hardened-execution on the hosted crate. Packaged
 consumers select the same union; their --all-features checks select consumer
 features, NOT every feature of the dependency. Cleanup codegen selects the leaf.
 None selects the hosted strict-execution edge into brynja-crypto-cpu-std.
+The exact optional HMAC archive addition preserves that feature argument. It
+does NOT approve changed capture inputs: the caller must still authenticate
+the complete packaging helper through the external validation review.
 
 Only that optional edge may be omitted from reachability. Original lock rows,
 captured source hashes, build inventory and external evidence approval are still
@@ -36,13 +39,28 @@ REVIEWED = {
     'scripts/md5/check-md5-hardened-codegen.py': '7d7545dd109dd4c3d1a1c07b23fce055c4c115f30357a18ec9481a930ab001a6',
 }
 
+PACKAGE = 'scripts/md5/check-md5-package.py'
+OLD_ARCHIVES = b"'brynja-mac-kmac', 'brynja-hash-tuple')"
+HMAC_ARCHIVES = b"'brynja-mac-kmac', 'brynja-hash-tuple', 'brynja-mac-hmac')"
+
+
+def reviewed_bytes(name, raw):
+    """Normalize one archive-list addition, never a command/feature change.
+
+    This is only a proof of the inactive dependency edge, not evidence approval.
+    Every other byte, including line endings, must match the original pin.
+    """
+    if name == PACKAGE and raw.count(HMAC_ARCHIVES) == 1 and OLD_ARCHIVES not in raw:
+        return raw.replace(HMAC_ARCHIVES, OLD_ARCHIVES, 1)
+    return raw
+
 
 def reachability_rows(root, revision, closure, rows):
     roots = {'/'.join(name.split('/')[:2]) for name in closure
              if name.startswith('crates/') and len(name.split('/')) > 2}
     io.require(roots == ROOTS, 'MD5 command profile requires its exact capture roots')
     for name, expected in REVIEWED.items():
-        io.require(io.sha(io.raw_blob(root, revision, name)) == expected,
+        io.require(io.sha(reviewed_bytes(name, io.raw_blob(root, revision, name))) == expected,
                    'MD5 dependency command/manifest review changed: ' + name)
     # Preserve the original rows for output/projection comparison. Only the
     # traversal copy loses one reviewed inactive optional edge. No dev, build,

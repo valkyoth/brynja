@@ -55,7 +55,7 @@
     "crates/brynja-xtask/Cargo.toml": "d47051404a9ebc076f95068c90c6264c0f57ef9165b92c7dc0fe38decb9ed1ad",
     "crates/brynja/Cargo.toml": "fd499007a7688cac4ba7970077e6d54265363651ecb220ea3196e016555b5722",
     "docs/KANI.md": "bdb44bf29a0c7989cec32dae5b924fd8ede82a17915b6e4377e907af7077d406",
-    "docs/focused-assurance.md": "3fb6c03c999c641cb3ce038913c04d671af29331c647f0298ed222125e91d3e3",
+    "docs/focused-assurance.md": "037dc016b2afbbec81e20b9888ae3015523d886783b8d3ff73a850a1ca481aa2",
     "docs/unsafe-policy.md": "7309a3f3208955e5f68d29b5b9a002694abffe576f0fc78c31a7da5c0e3f5021",
     "rust-toolchain.toml": "c979a7d4d66b770a4d59d6d56e3c078aeab1993af658480bfd1f89f90220457d",
     "scripts/assurance/assurance-fixture-adapter.py": "84c6fd76d5d4be111696a314f792c4ee2c4898a97f5cc4125b16e8eb9f8a0dda",

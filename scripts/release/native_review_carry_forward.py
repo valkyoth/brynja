@@ -15,9 +15,12 @@ import native_review_families as families
 import native_tooling_review as tooling
 import native_dependency_scope as dependencies
 import native_md5_dependency_profile as md5
+import native_sha1_dependency_profile as sha1
+import native_hmac_reuse as hmac_reuse
+import native_hmac_profile as hmac_profile
 
 for module in (approval_module, native_unchanged, setup, checks, scope, families,
-               tooling, dependencies, md5):
+               tooling, dependencies, md5, sha1, hmac_reuse, hmac_profile):
     io.require(Path(module.__file__).resolve() ==
                io.ROOT / 'scripts/release' / (module.__name__ + '.py'),
                'trusted review module identity: ' + module.__name__)

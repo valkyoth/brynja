@@ -92,7 +92,10 @@ class ImportIsolationTests(unittest.TestCase):
                  ('native_metadata_carry_forward.py', 'native_sha2_carry_forward.py')]
         cases += [('native_review_carry_forward.py', name) for name in
                   ('native_evidence_approval', 'native_unchanged', 'native_setup_review',
-                   'native_review_checks', 'native_review_families')]
+                   'native_review_checks', 'native_review_families',
+                   'native_hmac_profile', 'native_hmac_reuse', 'native_sha1_dependency_profile')]
+        cases += [('native_sha2_carry_forward.py', name) for name in
+                  ('native_hmac_profile', 'native_hmac_reuse')]
         for entry, module in cases:
             result = subprocess.run([sys.executable, '-c', code, str(directory), str(directory / entry), module],
                                     capture_output=True, text=True, timeout=30)
@@ -136,7 +139,8 @@ class ImportIsolationTests(unittest.TestCase):
                       'def validate_receipt(*a, **kw): pass\n'
                       f'FAMILIES = {setup.FAMILIES!r}\nREVIEW = {setup.REVIEW!r}\n')
             for family, (directory, _) in carry.FAMILIES.items():
-                for module in ('native_unchanged', 'native_setup_review', 'native_review_checks'):
+                for module in ('native_unchanged', 'native_setup_review', 'native_review_checks',
+                               'native_hmac_profile', 'native_hmac_reuse', 'native_sha1_dependency_profile'):
                     for suffix in ('.py', '/__init__.py'):
                         with self.subTest(family=family, module=module, suffix=suffix):
                             name = f'scripts/{directory}/{module}{suffix}'

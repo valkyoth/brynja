@@ -101,7 +101,7 @@ class Md5DependencyProfileTests(unittest.TestCase):
                 if name in profile.REVIEWED:
                     self.assertEqual(io.sha(raw), profile.REVIEWED[name])
 
-    def test_added_hmac_package_does_not_reapprove_historical_profile(self):
+    def test_added_hmac_archive_preserves_profile_but_requires_external_review(self):
         # Replay the packaging edit that exposed this fixture bug. The current
         # helper is legitimate, but it is not the historically approved command.
         name = 'scripts/md5/check-md5-package.py'
@@ -114,9 +114,38 @@ class Md5DependencyProfileTests(unittest.TestCase):
         (self.root / name).write_bytes(changed)
         head = fixtures.commit(self.root)
         for before, after in ((self.capture, head), (head, self.capture), (head, head)):
-            with self.subTest(before=before, after=after), self.assertRaisesRegex(
-                    ValueError, r'review changed: scripts/md5/check-md5-package\.py$'):
-                dependencies.equivalent(self.root, before, after, self.closure, profile.PROFILE)
+            with self.subTest(before=before, after=after):
+                self.assertTrue(dependencies.equivalent(
+                    self.root, before, after, self.closure, profile.PROFILE))
+        # Structural inactivity is not permission to change captured tooling.
+        # The real gate supplies these pairs only after external digest approval.
+        def check(changes=None):
+            reuse.validate_inputs(self.root, self.capture, head, self.sources(),
+                self.captured, lambda name, raw: io.sha(raw), changes, profile.PROFILE)
+        with self.assertRaisesRegex(ValueError, 'native implementation/fixture/tool changed'):
+            check()
+        pairs = {name: {'before': io.sha(original), 'after': io.sha(changed)}}
+        check(pairs)
+        for field in ('before', 'after'):
+            forged = copy.deepcopy(pairs)
+            forged[name][field] = '0' * 64
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, 'reviewed validation bytes'):
+                check(forged)
+
+    def test_hmac_archive_normalization_never_changes_commands_features_or_other_bytes(self):
+        original = io.raw_blob(self.root, self.capture, profile.PACKAGE)
+        changed = original.replace(profile.OLD_ARCHIVES, profile.HMAC_ARCHIVES)
+        self.assertEqual(profile.reviewed_bytes(profile.PACKAGE, changed), original)
+        self.assertEqual(profile.reviewed_bytes('scripts/other.py', changed), changed)
+        for mutant in (changed + b'\n', changed.replace(b'\n', b'\r\n'),
+                       changed.replace(b"'--no-verify'", b"'--all-features'"),
+                       changed.replace(b'features=["runtime-execution"]',
+                                       b'features=["strict-execution"]'),
+                       changed + profile.HMAC_ARCHIVES,
+                       changed + profile.OLD_ARCHIVES):
+            self.assertNotEqual(mutant, changed)
+            self.assertNotEqual(io.sha(profile.reviewed_bytes(profile.PACKAGE, mutant)),
+                                profile.REVIEWED[profile.PACKAGE])
 
     def validate(self, selected=profile.PROFILE):
         head = fixtures.commit(self.root)

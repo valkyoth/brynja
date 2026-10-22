@@ -9,6 +9,8 @@ import native_review_io as io
 import native_review_tests as fixtures
 import native_unchanged as reuse
 from native_md5_scope_tests import Md5DependencyProfileTests
+from native_hmac_tests import InactiveHmacTests, HmacFeatureGraphTests
+from native_sha1_scope_tests import Sha1DependencyProfileTests
 
 WORKSPACE = '''[workspace]
 members = ["crates/*"]

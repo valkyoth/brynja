@@ -15,11 +15,17 @@ import native_review_io as io
 import native_review_scope as scope
 import native_evidence_approval as approval_module
 import native_unchanged
+import native_hmac_reuse
+import native_hmac_profile
 
 io.require(Path(approval_module.__file__).resolve() ==
            io.ROOT / 'scripts/release/native_evidence_approval.py', 'approval module identity')
 io.require(Path(native_unchanged.__file__).resolve() ==
            io.ROOT / 'scripts/release/native_unchanged.py', 'trusted review module identity')
+for module in (native_hmac_reuse, native_hmac_profile):
+    io.require(Path(module.__file__).resolve() ==
+               io.ROOT / 'scripts/release' / (module.__name__ + '.py'),
+               'trusted review module identity: ' + module.__name__)
 sys.path.append(str(io.ROOT / 'scripts/sha2'))
 import hardened_native_evidence as evidence
 
@@ -101,9 +107,11 @@ def validate(root=io.ROOT):
         closures.append(captured)
     io.require(all(value == closures[0] for value in closures), 'inconsistent SHA-2 capture closures')
     try:
-        native_unchanged.validate_inputs(root, capture, head, current, closures[0], evidence.source_digest,
-                        approval['validation_changes'])
-        disposition = ('implementation/build inputs unchanged; '
+        mode = native_unchanged.validate_inputs(root, capture, head, current, closures[0], evidence.source_digest,
+                        approval['validation_changes'], family='sha2-hardened')
+        disposition = (('implementation/build inputs unchanged; ' if mode == 'unchanged' else
+                        'original active inputs unchanged; exact inactive HMAC additions excluded; '
+                        'NO HMAC qualification; ') +
                        f'{len(approval["validation_changes"])} exact validation-only changes approved')
     except ValueError:
         equivalent(root, capture, current, closures[0])

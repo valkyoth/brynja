@@ -180,6 +180,34 @@ campaign. It does not turn old observations into a new capture, authorize a
 backend. Detached verification has its separate implementation-delta
 carry-forward rules; neither mechanism rewrites a historical capture.
 
+## Inactive HMAC additions in older native inventories
+
+The SHA-2, Keccak, KMAC, TupleHash and ParallelHash inventories include the
+whole hosted CPU crate. Their pre-HMAC command profiles do not enable HMAC.
+The bounded HMAC projection checks those commands against an immutable reviewed
+snapshot, retains the old fixture manifests and rejects any changed feature
+selection. Cargo metadata regressions independently check the resolved feature
+unions without compiling or running cryptography.
+
+Reuse permits only the exact guarded module declarations, optional dependency
+and feature definitions, known inactive source additions and two byte-pinned,
+feature-gated appended tests. Existing source prefixes, kernels, dependency
+versions, configuration, build scripts and other feature definitions remain
+unchanged. Unknown additions, removed guards, symlinks and changed commands
+reject reuse. The facade fixture's version-only pin adjustment composes with
+this proof; it does not authorize other review-pin changes.
+
+The optional HMAC archive additions in the legacy packaging helpers similarly
+leave their reviewed feature selection unchanged. MD5 and SHA-1 have separate
+source-bound command profiles: their historical collectors do not enable the
+optional strict-host dependency. Unknown profiles remain conservative; changing
+defaults, the optional edge or any command invalidates that dependency proof.
+**Neither structural proof approves
+changed validation tooling.** Such changes still require exact before/after
+digests in the externally approved native-review manifest. Original artifacts,
+CPU/compiler identities and capture commits remain authenticated separately.
+No historical hash result qualifies HMAC, a new compiler or a new platform.
+
 ## Evidence boundaries
 
 Selection compares staged, unstaged, deleted, renamed and nonignored untracked

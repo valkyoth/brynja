@@ -8,10 +8,28 @@ import native_review_io as io
 import native_review_scope as scope
 import native_evidence_approval as approval_module
 import native_md5_dependency_profile as md5
+import native_sha1_dependency_profile as sha1
+import native_hmac_reuse as hmac_reuse
+import native_hmac_profile as hmac_profile
 
 
 def validate_inputs(root, capture, head, current, captured, digest, validation_changes=None,
-                    dependency_profile=None):
+                    dependency_profile=None, family=None):
+    try:
+        unchanged_inputs(root, capture, head, current, captured, digest,
+                         validation_changes, dependency_profile)
+        return 'unchanged'
+    except ValueError:
+        if (family not in hmac_profile.FIXTURES or
+                hmac_profile.PREFIX + 'Cargo.toml' not in captured):
+            raise
+        hmac_reuse.validate_inputs(root, capture, head, current, captured, digest,
+                                  validation_changes or {}, family)
+        return 'inactive-hmac'
+
+
+def unchanged_inputs(root, capture, head, current, captured, digest, validation_changes=None,
+                     dependency_profile=None):
     io.require(set(current) == set(captured), 'native input population changed')
     changes = validation_changes or {}
     io.require(set(changes) <= set(captured), 'reviewed validation input absent from capture')
@@ -48,12 +66,17 @@ def validate_family(adapter, head):
     profile = None
     if adapter.name in ('md5-execution', 'md5-hardened'):
         profile = md5.PROFILE
-    validate_inputs(adapter.root, capture, head, current, captured, adapter.digest,
-                    review['validation_changes'], profile)
+    elif adapter.name == 'sha1-hardened':
+        profile = sha1.PROFILE
+    mode = validate_inputs(adapter.root, capture, head, current, captured, adapter.digest,
+                           review['validation_changes'], profile, adapter.name)
     io.clean(adapter.root)
     io.require(io.git(adapter.root, 'rev-parse', 'HEAD').decode().strip() == head and
                adapter.sources() == current, 'checkout changed during native reuse')
+    disposition = ('implementation/build inputs unchanged' if mode == 'unchanged' else
+                   'original active inputs unchanged; exact inactive HMAC additions excluded; '
+                   'NO HMAC qualification')
     print(f'{adapter.name} native evidence: REUSED; {count} accepted records at {capture}; '
-          f'implementation/build inputs unchanged; {len(review["validation_changes"])} '
+          f'{disposition}; {len(review["validation_changes"])} '
           'exact validation-only changes approved. Original compiler and platform '
           'claims only; not a fresh capture, independent review or certification.')

@@ -63,7 +63,8 @@ class HistoryTests(unittest.TestCase):
         before = records.read(job[0] / 'result.json')
         with self.offline() as source:
             result = history.History({job[1]: job[0]}).collect(job[1])
-            source.assert_called_once_with(records.read(job[0] / 'manifest.json'), job[0] / 'source')
+            source.assert_called_once_with(records.read(job[0] / 'manifest.json'), job[0] / 'source',
+                                           historical=True)
         self.assertEqual(result['commands'], 2)
         self.assertFalse(result['release_authorized'])
         self.assertEqual(before, records.read(job[0] / 'result.json'))

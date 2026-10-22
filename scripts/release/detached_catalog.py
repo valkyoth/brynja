@@ -12,13 +12,21 @@ PHASES = ("repository", "matrix", "asan", "miri", "kani")
 
 def selected(plan: dict, phases: list[str], approval: str | None, shards: int = 1,
              *, root=plans.ROOT, miri_tasks: bool = False,
-             miri_profile: str = "existing-full") -> list[dict]:
+             miri_profile: str = "existing-full", historical: bool = False) -> list[dict]:
+    available = plans.scope.GROUPS
+    if historical:
+        import historical_groups
+        available = historical_groups.inventory(root)
     if type(shards) is not int or not 1 <= shards <= 8:
         raise ValueError("detached shards must be 1..8")
     plans.authorize(plan, approval)
     if not phases or len(phases) != len(set(phases)) or any(p not in PHASES for p in phases):
         raise ValueError("choose unique registered verification phases")
-    repository = commands.repository_commands(root)
+    # Historical coverage cannot include checks first added after execution.
+    # Its exact frozen catalog is still parsed, classified and compared with
+    # the sealed commands. The current repository baseline remains mandatory.
+    repository = (commands.catalog(root / 'scripts/checks.sh', '# BEGIN VERIFICATION CATALOG')
+                  if historical else commands.repository_commands(root))
     sanitizer = commands.catalog(root / "scripts/zeroization/check-zeroization-sanitizer.sh")
     matrix = commands.matrix_commands(root)
     # Validate even commands outside the selected phase, just as foreground does.
@@ -27,7 +35,7 @@ def selected(plan: dict, phases: list[str], approval: str | None, shards: int = 
     result = []
     for phase in phases:
         full = plans.requires_full(plan, phase)
-        groups = list(plans.scope.GROUPS) if full else plan["groups"]
+        groups = list(available) if full else plan["groups"]
         chosen = []
         if phase == "repository":
             chosen = [(c, None) for c in commands.selected(repository, groups, full=full)]
@@ -36,7 +44,7 @@ def selected(plan: dict, phases: list[str], approval: str | None, shards: int = 
         elif phase == "asan":
             chosen = [(c, None) for c in commands.selected(sanitizer, plan["verifiers"][phase], full=full)]
         elif phase in ("miri", "kani"):
-            selected_groups = list(plans.scope.GROUPS) if full else plan["verifiers"][phase]
+            selected_groups = list(available) if full else plan["verifiers"][phase]
             if phase == "miri" and selected_groups and miri_tasks:
                 from miri_tasks import commands as task_commands
                 chosen = [(shlex.join(argv), None) for argv in task_commands(root, selected_groups, miri_profile)]

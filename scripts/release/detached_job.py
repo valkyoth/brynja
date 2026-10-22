@@ -188,10 +188,13 @@ def status(job: Path, receipt: str) -> dict:
     return {**state, "progress": observations, "progress_is_not_success": True}
 
 
-def validate_source(manifest: dict, root: Path) -> None:
+def validate_source(manifest: dict, root: Path, *, historical: bool = False) -> None:
     if records.sources(root) != manifest["sources"]:
         raise ValueError("detached source closure changed")
     plan = dict(plans.build(root=root, base=manifest["plan"]["base"]))
+    if historical:
+        import historical_groups
+        plan = historical_groups.project(plan, historical_groups.inventory(root))
     if manifest['schema'] == 1 and 'full_phases' not in manifest['plan']:
         # Legacy completed receipts used one conservative fallback for every
         # phase. Preserve that command interpretation; do not rewrite evidence.
@@ -200,7 +203,8 @@ def validate_source(manifest: dict, root: Path) -> None:
         raise ValueError("detached plan or approval changed")
     if catalog.selected(plan, manifest["phases"], manifest["approval"], manifest["shards"],
                         root=root, miri_tasks=manifest["schema"] == 2,
-                        miri_profile=manifest.get("miri_profile", "existing-full")) != manifest["commands"]:
+                        miri_profile=manifest.get("miri_profile", "existing-full"),
+                        historical=historical) != manifest["commands"]:
         raise ValueError("detached command coverage changed")
 
 

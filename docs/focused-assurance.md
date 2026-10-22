@@ -41,6 +41,13 @@ the current baseline plus affected or uncovered checks. A documentation/tooling
 commit is not a reason to repeat unchanged Miri/Kani/ASan campaigns. See
 [carry-forward](detached-verification.md#carry-forward-verified-implementation-checks).
 
+Historical receipt reconstruction reads the frozen snapshot's registered group
+tuple and corroborates it against that snapshot's shell inventory, without
+executing archived Python. A family introduced later cannot be retroactively
+required of the old campaign or credited as covered by it. Frozen source,
+command, result, log and tool checks still apply. Today's mandatory repository
+checks and new-family verification remain separate requirements.
+
 Run this read-only command to see the selected groups, uncertainty reasons and
 exact plan fingerprint:
 

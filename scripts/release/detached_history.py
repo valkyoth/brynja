@@ -75,7 +75,7 @@ class History:
         # tooling. Never import or execute a validator from the archived tree.
         for root in {job / 'source', *(shards.source(job, i, manifest['shards'])
                                       for i in range(manifest['shards']))}:
-            jobs.validate_source(manifest, root)
+            jobs.validate_source(manifest, root, historical=True)
             if records.git(root, 'status', '--porcelain', '--untracked-files=all').strip():
                 raise ValueError('historical source is not a clean committed snapshot')
         tool_record(manifest, job / 'source')

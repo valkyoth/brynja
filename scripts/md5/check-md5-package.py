@@ -25,7 +25,7 @@ def main():
         closure['brynja-legacy-md5-std'] = '0.1.0'
         # Resolve optional manifest edges using real packaged first-party sources.
         closure.update({name: '0.1.0' for name in ('brynja-hash-sha2', 'brynja-hash-sha3',
-                        'brynja-mac-kmac', 'brynja-hash-tuple')})
+                        'brynja-mac-kmac', 'brynja-hash-tuple', 'brynja-mac-hmac')})
         closure.update({'brynja-crypto-cpu': '0.1.1', 'brynja-crypto-cpu-std': '0.1.1'})
     with tempfile.TemporaryDirectory(prefix='brynja-md5-package-') as temporary:
         root = Path(temporary)

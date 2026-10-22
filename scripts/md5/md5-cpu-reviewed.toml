@@ -41,7 +41,7 @@
 "scripts/md5/md5_cpu_policy.py" = "7be50cdcd7aa618dfd15480d3f67886c3e0604162a1f9001149d605e8f06a490"
 "scripts/md5/check-md5-cpu.py" = "bd84dae4566052d25aee3e0cd0a0f21571b7bc75c038e01190b5a1deb7a30098"
 "scripts/md5/test-md5-cpu.py" = "1c5ed8630d0285b370cbcccf7ce58af8911a7af25d7754acfbb10ebac01545b5"
-"scripts/md5/check-md5-package.py" = "4517fcf5027fb03b9c6510b141b6ed0b3fe286dca578632d18b0f9f1afedb2ed"
+"scripts/md5/check-md5-package.py" = "9c67ddf684c3c5df3afb4c2946363f2bb50d1f002c68714ef8ea6daff62e06e8"
 "scripts/md5/test-md5-evidence-builds.py" = "1fbad06bd7b546438385c8ce56ea0fcde163354d8eb284f700683ab0fe27a074"
 "scripts/md5/check-md5-cpu-codegen.sh" = "8a3626bb3874a59dd7afbf2810bc0d53df73586a69c51a9fd78aba8dd27b7cd5"
 "scripts/md5/check-md5-cpu-qemu.sh" = "91a26684be3e102eb819b1fe011ef1aeaac3bb866913c719ad803fa8dba8aa04"

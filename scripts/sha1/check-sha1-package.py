@@ -26,7 +26,7 @@ def main():
         # Cargo resolves optional manifest edges even when this consumer does
         # not enable them. Patch real packaged first-party sources, not stubs.
         closure.update({name: '0.1.0' for name in ('brynja-hash-sha2', 'brynja-hash-sha3',
-                        'brynja-mac-kmac', 'brynja-hash-tuple')})
+                        'brynja-mac-kmac', 'brynja-hash-tuple', 'brynja-mac-hmac')})
         closure.update({'brynja-crypto-cpu': '0.1.1', 'brynja-crypto-cpu-std': '0.1.1'})
     with tempfile.TemporaryDirectory(prefix='brynja-sha1-package-') as temporary:
         root = Path(temporary)

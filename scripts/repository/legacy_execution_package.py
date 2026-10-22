@@ -13,7 +13,8 @@ ROOT = Path(__file__).resolve().parents[2]
 ARCHIVES = tuple((f'brynja-legacy-{family}{suffix}', '0.1.0', ('src/lib.rs',))
                  for family in ('sha1', 'md5') for suffix in ('', '-std'))
 SUPPORT = {'brynja-core', 'brynja-hash-core', 'brynja-crypto-cpu', 'brynja-crypto-cpu-std',
-           'brynja-hash-sha2', 'brynja-hash-sha3', 'brynja-mac-kmac', 'brynja-hash-tuple'}
+           'brynja-hash-sha2', 'brynja-hash-sha3', 'brynja-mac-kmac', 'brynja-hash-tuple',
+           'brynja-mac-hmac'}
 
 
 def require(value, message):

@@ -8,6 +8,7 @@ import tempfile
 import tomllib
 from pathlib import Path
 from unittest.mock import Mock, patch
+import legacy_package_inventory_tests as legacy_packages
 
 spec = importlib.util.spec_from_file_location(
     'acceptance_metadata', Path(__file__).with_name('check-acceptance-metadata.py'))
@@ -201,6 +202,8 @@ def main():
     sha2_package_optional_closure()
     public_acceptance_package_closure()
     hosted_package_optional_closure()
+    legacy_packages.check()
+    legacy_packages.facade_check(metadata.sha2_public_api)
     with patch('subprocess.run', side_effect=AssertionError('unexpected process')), \
             patch('subprocess.check_call', side_effect=AssertionError('unexpected process')):
         metadata.check_all()

@@ -7,10 +7,10 @@
     "files": 1101
   },
   "reviewer": "Implementation author, 2026-10-21; owner-supplied reviews of 66e585f8 and Claude retest of 64bf5718 recorded separately",
-  "scope": "Modern HMAC SHA-2/general SHA-512/t/SHA-3, portable/static/runtime and hosted GNU/Linux protected / Apple Silicon resident APIs, curated facades. Review statuses record bounded development dispositions, not independent security, native or release qualification. Existing v0.25.1 legacy and v0.25.2 publication/acceptance scope remains unfinished. Current author update covers typed portable tag-policy selection and recoverable pre-entry worker failures. Historical observation bytes remain unchanged and do not qualify modified hosted code.",
+  "scope": "Modern HMAC SHA-2/general SHA-512/t/SHA-3, portable/static/runtime and hosted GNU/Linux protected / Apple Silicon resident APIs, curated facades. Review statuses record bounded development dispositions, not independent security, native or release qualification. Existing v0.25.1 legacy and v0.25.2 publication/acceptance scope remains unfinished. Current author update covers typed portable tag-policy selection and recoverable pre-entry worker failures. Historical observation bytes remain unchanged and do not qualify modified hosted code. Owner-requested roadmap follow-ups recorded 2026-10-22; no new execution evidence.",
   "roadmap": {
     "0.25.0": "cb06b49566e1658f81c2ec6668e0a5bacc387223d5e7b818300123b0046ceb9c",
-    "0.25.2": "582390ea6bc9a10cfa60a64d91df7e3ee623c124d7485e934092df63b1c66fb3"
+    "0.25.2": "5d2033325c0b99c8480153a1020f95a0b5cc39a782a4e3b1661057b1a35adc90"
   },
   "decisions": {
     "public-api": {
@@ -129,7 +129,7 @@
       "evidence": {
         "docs/hmac-review-handoff.md": "748b659817c8b1b04d589e6b00968350e433efce0c655896d96b60e7369049fe",
         "crates/brynja-mac-hmac/README.md": "3b77d574d7726d89a6f4cd0c590eeebcc84713d139b9ad1158650163b2c8a45c",
-        "docs/RELEASE_PLAN.md": "7309f59784bc21bfcefc36090aa7c04bc4b208134c392c26ba6fc7f0b90373bc"
+        "docs/RELEASE_PLAN.md": "46b61294884394ede99323a42f0ca6dfd121bd42df8a554e5155055ec84d4011"
       },
       "follow_up": null
     },
@@ -156,9 +156,9 @@
     },
     "package-api": {
       "status": "planned",
-      "reason": "Modern extracted archives, no_std/feature consumers, strict facade, negative probes, behavioral mutants and source-only leaf contents pass. The existing v0.25.2 checkpoint still must cover the separately implemented legacy adapters and audit all selected publication/support-crate archive footprints. It is not completed by this modern development pass.",
+      "reason": "Modern extracted archives, no_std/feature consumers, strict facade, negative probes, behavioral mutants and source-only leaf contents pass. The existing v0.25.2 checkpoint still must cover the separately implemented legacy adapters and audit all selected publication/support-crate archive footprints. It is not completed by this modern development pass. Owner-requested shared tag-policy consolidation and agreement regressions are also scheduled for that acceptance checkpoint, not claimed implemented.",
       "evidence": {
-        "docs/RELEASE_PLAN.md": "7309f59784bc21bfcefc36090aa7c04bc4b208134c392c26ba6fc7f0b90373bc",
+        "docs/RELEASE_PLAN.md": "46b61294884394ede99323a42f0ca6dfd121bd42df8a554e5155055ec84d4011",
         "scripts/hmac/check-hmac-package.py": "1818bfa158eaa636ee058725560f50130aa5641e2cd818499f6708f0c6ba9470",
         "scripts/hmac/check-hmac-strict.py": "a73e29a6bf41e19331614738f98a1b9e9ac61cee21e595d232c813a12ca6cda2",
         "security/hmac/development-observations.json": "215a9c72cc3219a2095a0fb5ddec745c1ff9f95acc862291f62dbe430c428ffc"

@@ -5294,12 +5294,22 @@ Deliverables:
 
 - add package-external modern and legacy fixtures and documented commands;
 - enumerate every admitted hash instantiation and tag policy in generated docs;
+- consolidate the duplicated HMAC tag-policy validation identified in the
+  v0.25.0 retest: provide one reviewed, key-independent rule shared by the
+  leaf construction and hosted portable selection token, and reconcile every
+  affected execution/protected/resident caller without weakening tag limits
+  or exposing conformance-only operations;
 - make verification results authoritative typed outcomes, never equality hints.
 
 Verification:
 
 - exercise public one-shot and streaming APIs against authoritative vectors for
   every instantiation, key class and admitted tag size;
+- regression-test agreement between direct construction and hosted selection
+  for invalid algorithms, the 128-bit minimum, full versus byte-prefix tags,
+  fractional SHA-512/t boundaries and length overflow; require mutations of
+  either caller's policy handling to fail, preserve the consuming policy token
+  and reject fallback after a selected backend fails;
 - force invalid, truncated, cross-algorithm and digest-as-tag misuse failures;
 - package, no_std-test and inspect cleanup for normal and legacy graphs.
 
@@ -15833,6 +15843,12 @@ Plan scope: Implement an optional `brynja-platform-security-std` Linux/Android p
 Goal: provide an auditable Linux and Android realization of the portable
 contract while keeping every operating-system limitation visible to callers.
 
+Shared-worker follow-up from the v0.25.0 retest: implement the error
+classification cleanup below at this provider milestone, or earlier if the
+shared worker error/recovery layer is changed first. Invalid mapping states
+are currently excluded by session construction; this is a planned robustness
+improvement, not a reopened HMAC release-blocking defect.
+
 Deliverables:
 
 - isolate all reviewed OS ABI and unsafe code in platform-named modules under
@@ -15845,6 +15861,12 @@ Deliverables:
 - distinguish kernel capability, configured process policy and administrator-
   owned host posture; never infer encrypted swap, disabled hibernation,
   IOMMU/DMA isolation or physical security from successful memory locking;
+- distinguish shared-worker mapping/invariant failures (unadmitted region,
+  missing base or insufficient stack storage) from recoverable pre-entry
+  thread-attribute/create failures; audit affected consumers and the existing
+  Linux protected/macOS resident adapters so only proven recoverable outcomes
+  preserve session reuse, while invariant, worker panic/protocol and backend
+  failures remain terminal with no portable fallback;
 - fail closed under resource limits, denied capabilities, unsupported advice,
   container/seccomp restrictions, fork races, partial ranges and teardown
   failure, with no silent unlocked fallback.
@@ -15854,6 +15876,12 @@ Verification:
 - run native Linux and available Android tests for mapping, alignment, lock
   quotas, dump inspection, fork inheritance, concurrent teardown, cancellation
   and injected failure at every OS effect;
+- inject invalid mappings through private shared-worker tests and verify
+  terminal classification, quarantine and output/staging cleanup; retain real
+  attribute/create-failure recovery tests on affected Linux/macOS consumers,
+  foreign-process rejection and entered-worker panic/protocol/backend cases;
+  treat partially started worker groups separately, joining every started
+  worker before cleanup rather than assuming no worker entered;
 - inspect `/proc` or documented platform evidence only where authoritative,
   test containers and restricted accounts, and prove reports cannot outlive
   their mapping, process, boot or policy generation;

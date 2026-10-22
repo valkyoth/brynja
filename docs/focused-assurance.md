@@ -67,12 +67,48 @@ approval because complete verification is the scheduled policy.
 
 Ordinary push/PR CI runs `plan --check --ci` and `scripts/checks.sh --ci`.
 It neither reads the Actions approval variable nor consumes or grants release
-approval. A stale repository variable cannot block those checks. Known scope
-runs the affected repository checks plus the shared build/test/lint/policy
-baseline. Uncertain scope emits a warning and runs only that shared baseline;
-specialized campaigns are explicitly **deferred**, not represented as reused
-or passed. Unknown command syntax and actual check failures still fail CI.
-The existing host and compiler compatibility jobs continue independently.
+approval. A stale repository variable cannot block those checks. The explicit
+`scripts/ci/push-catalog.toml` partitions every repository command into bounded
+baseline, bounded affected checks, or release qualification. Missing, duplicate
+or newly unclassified commands fail planning. This does not remove commands from
+the full release catalog or change its evidence-reuse rules.
+
+For affected checks, CI searches up to 300 successful main-branch push runs of
+this workflow. It accepts only a completed successful run whose commit is a
+strict ancestor and whose workflow, catalog and selection contract match the
+current checkout. The diff starts at that ancestor, including intervening failed,
+cancelled or untested commits. PR/fork runs and caller-supplied `--base` values
+cannot establish this baseline. A dirty checkout, unavailable API, changed CI
+contract, absent compatible success or unknown scope runs **all bounded checks**;
+it does not launch a deep campaign. Manifest/lock/shared-driver changes likewise
+select all bounded checks. Shared policy/build/lint/tests always run.
+
+Each bounded command logs elapsed time and has a five-minute limit. A timeout or
+test failure fails CI and stops its child process group; it is never a PASS or
+reused result. The repository job has a 25-minute overall budget. The independent
+audit job runs dependency policy, RustSec, SBOM and release-control checks even
+if repository diagnostics fail. Existing native host, no_std, compiler-smoke,
+CodeQL and SDE jobs remain independent.
+
+Public-API host jobs execute the source fixtures directly. Exhaustive isolated
+package/negative/mutation checks and cleanup compiler campaigns belong to release
+qualification, not every push. Apple Silicon still executes native resident
+debug/release tests and lint on pushes (`--stage tests`); its complete codegen
+and package checks remain available through the existing `--stage all` command
+and native qualification workflows. Successful CI is **not** a release receipt,
+packaged-consumer qualification or compiler-erasure qualification.
+
+Before pushing, run the same complete bounded preflight locally on Linux:
+
+```sh
+python3 scripts/release/run-verification.py plan --check --ci
+scripts/checks.sh --ci
+```
+
+Without a GitHub Actions environment this always runs all bounded groups. It
+also validates current acceptance/review pins before compiling. It does not
+contact Actions or consume detached receipts. Passing it reduces avoidable CI
+failures but does not replace GitHub's independent checks or the release gate.
 
 `--ci` is accepted only for plan/repository diagnostics, never for Miri, ASan,
 Kani, compiler-matrix or arbitrary command execution. It produces no release
@@ -83,7 +119,8 @@ not prerequisites for ordinary code checks or GitHub CodeQL scanning.
 
 ## Execution
 
-- `scripts/checks.sh`: selected repository checks, plus the cheap shared baseline.
+- `scripts/checks.sh`: selected **release** repository checks; may be expensive.
+- `scripts/checks.sh --ci`: bounded push diagnostics/local pre-push preflight.
 - `scripts/tag_gate.sh vX.Y.Z`: approve scope first, then repository, selected
   native/QEMU, compiler-matrix, sanitizer, Miri and Kani checks, online authority
   and dependency checks, SBOM, committed report and release readiness.

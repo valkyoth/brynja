@@ -71,6 +71,15 @@ def test() -> None:
         policy.validate(root)
         document = root / policy.POLICY
 
+        # Push CI installs current cross targets once; older compiler matrices
+        # remain release qualification. A target name in a comment is not setup.
+        for target in ('aarch64-unknown-linux-gnu', 'riscv64gc-unknown-linux-gnu'):
+            workflow = root / '.github/workflows/ci.yml'
+            original = workflow.read_text()
+            workflow.write_text(original.replace(target, 'removed') + '\n# run: rustup target add ' + target)
+            require_rejection(root, 'CI lost CPU compiler-target installation')
+            workflow.write_text(original)
+
         # Windows sources are explicit, hash-bound development entries, not
         # implicit directory admission or a claim of native qualification.
         assert len(WINDOWS_ENCLAVE_SOURCES) == 120

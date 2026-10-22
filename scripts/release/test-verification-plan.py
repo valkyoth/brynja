@@ -217,24 +217,25 @@ def runner_tests() -> None:
     assert any("md5-differential" in c[0] for c in executed)
     with patch.object(commands, "matrix_commands", side_effect=ValueError("unknown matrix")):
         assert run("repository", sample()) == 1 and not executed
-        assert run("repository", sample(), "--ci") == 1 and not executed
     with patch.object(commands, "catalog", side_effect=ValueError("unknown sanitizer")):
         assert run("repository", sample()) == 1 and not executed
-        assert run("repository", sample(), "--ci") == 1 and not executed
     # CI must ignore stale repository variables, never grant release approval,
     # and never turn unresolved scope into an automatic full campaign.
     stale = {"BRYNJA_FULL_VERIFICATION_APPROVAL": "b" * 64}
-    assert run("plan", sample(groups=("sha2",)), "--check", "--ci", environment=stale) == 0
-    assert not executed
-    assert run("repository", sample(groups=("sha2",)), "--ci", environment=stale) == 0
-    assert any("sha2-execution" in c[0] for c in executed)
-    assert not any("md5-differential" in c[0] for c in executed)
-    for public in (False, True):
-        assert run("repository", sample(blocked=True, public=public, groups=plans.scope.GROUPS),
-                   "--ci", environment=stale) == 0
-        assert [c[0] for c in executed] == commands.selected(commands.repository_commands(), [])
-        assert any("cargo test --workspace --all-features" == c[0] for c in executed)
-        assert not any("check-zeroization-miri.sh" in c[0] or "--required-groups" in c[0] for c in executed)
+    with patch.object(runner.push_ci, 'run', return_value=0) as diagnostics:
+        assert run('plan', sample(), '--check', '--ci', environment=stale) == 0
+        diagnostics.assert_called_once_with(check=True)
+        diagnostics.reset_mock()
+        assert run('repository', sample(blocked=True), '--ci', environment=stale) == 0
+        diagnostics.assert_called_once_with(check=False)
+        assert not executed  # Never fall through to the release catalog.
+        diagnostics.reset_mock()
+        assert run('repository', sample(), '--ci', '--base', 'a' * 40) == 1
+        diagnostics.assert_not_called()
+        for environment in ({'BRYNJA_DETACHED_JOB': '/old', 'BRYNJA_DETACHED_RECEIPT': 'hash'},
+                            {'BRYNJA_DETACHED_RECEIPTS': '/registry'}):
+            assert run('repository', sample(), '--ci', environment=environment) == 1
+            diagnostics.assert_not_called()
     # A CI invocation cannot leak authorization into later release execution.
     assert run("repository", sample(blocked=True), environment=stale) == 1 and not executed
     assert run("repository", sample(blocked=True)) == 3 and not executed
@@ -246,7 +247,7 @@ def runner_tests() -> None:
             assert error.code == 2 and not executed
         else:
             raise AssertionError("CI option admitted a release-only operation")
-    with patch.object(runner, "execute", side_effect=subprocess.CalledProcessError(1, "test")):
+    with patch.object(runner.push_ci, "run", side_effect=subprocess.CalledProcessError(1, "test")):
         # The run helper mocks execution; check real main separately so failed
         # tests remain failures, not diagnostic success or evidence reuse.
         with (patch.object(runner.plans, "build", return_value=sample()),
@@ -380,6 +381,12 @@ def main() -> None:
     kani_dispatch_tests()
     compiler_matrix_scope_tests()
     additive_review_scope_tests()
+    # Keep push-selection regressions in qualification too, without duplicating
+    # the expensive release catalog in push CI.
+    spec = importlib.util.spec_from_file_location('push_ci_tests', plans.ROOT / 'scripts/release/test-push-ci.py')
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    module.main()
     print("Incremental verification: ownership, checkpoint, nested-fixture, approval and no-launch regressions PASS")
 
 

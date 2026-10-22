@@ -63,9 +63,19 @@ class StrictTests(unittest.TestCase):
         self.assertEqual(len({name for name, *_ in packages}), 12)
         self.assertEqual(sum(name == 'brynja-mac-hmac' for name, *_ in packages), 1)
         self.assertEqual(checks.api.packaging.PACKAGING_PACKAGES, old)
-        with patch.object(checks.api.archives, 'specifications', return_value=old):
-            with self.assertRaisesRegex(ValueError, 'closure missing'):
-                checks.scalar.specifications(checks.api)
+        # The shared catalog now includes HMAC. Construct real omissions and
+        # duplicates instead of assuming an older catalog is still incomplete.
+        current = checks.api.archives.specifications(checks.api.packaging)
+        extra = {name for name, *_ in checks.scalar.EXTRA}
+        for name, *_ in packages:
+            if name in extra:
+                continue
+            entry = next(p for p in current if p[0] == name)
+            for broken in (tuple(p for p in current if p[0] != name), (*current, entry)):
+                with self.subTest(name=name, count=len(broken)), \
+                     patch.object(checks.api.archives, 'specifications', return_value=broken):
+                    with self.assertRaisesRegex(ValueError, 'closure missing/duplicate'):
+                        checks.scalar.specifications(checks.api)
 
     def test_unification_is_not_facade_acceleration(self):
         document, roots, consumer = fixtures.document()

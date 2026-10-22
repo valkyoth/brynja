@@ -452,7 +452,7 @@ def validate_evidence(root: Path, policy: dict) -> None:
         fail("ordinary checks lost SHA-3 CPU codegen evidence")
     workflow = (root / ".github/workflows/ci.yml").read_text(encoding="utf-8")
     for target in ("aarch64-unknown-linux-gnu", "riscv64gc-unknown-linux-gnu"):
-        if workflow.count(target) < 2:
+        if not re.search(r'(?m)^[ \t]+run: rustup target add [^\n]*\b' + target + r'\b', workflow):
             fail(f"CI lost CPU compiler-target installation: {target}")
 
 

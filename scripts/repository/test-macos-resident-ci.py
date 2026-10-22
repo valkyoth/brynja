@@ -41,7 +41,7 @@ class ResidentCiTests(unittest.TestCase):
         workflow = (ROOT / '.github/workflows/ci.yml').read_text()
         job = workflow.split('  macos-resident:\n', 1)[1].split('\n  host:', 1)[0]
         self.assertIn('runs-on: macos-latest', job)
-        self.assertIn('run: python3 scripts/cryptography/check-macos-resident-ci.py --stage all\n', job)
+        self.assertIn('run: python3 scripts/cryptography/check-macos-resident-ci.py --stage tests\n', job)
         self.assertNotIn('continue-on-error', job)
         self.assertIn('python3 scripts/repository/test-macos-resident-ci.py',
                       (ROOT / 'scripts/checks.sh').read_text())
@@ -61,6 +61,21 @@ class ResidentCiTests(unittest.TestCase):
                  patch.object(ci.subprocess, 'check_output', side_effect=values):
                 with self.assertRaises(ValueError):
                     ci.require_host()
+
+    def test_push_stage_keeps_native_debug_release_and_lint(self):
+        with tempfile.TemporaryDirectory() as directory, \
+             patch.object(ci, 'require_host'), patch.object(ci, 'run') as run:
+            ci.execute('tests', Path(directory))
+        commands = [call.args[0] for call in run.call_args_list]
+        self.assertEqual(len(commands), 4)
+        tests = [command for command in commands if 'test' in command]
+        self.assertEqual(len(tests), 2)
+        self.assertEqual(sum('--release' in command for command in tests), 1)
+        for command in tests:
+            self.assertIn('--all-features', command)
+            self.assertIn('brynja-crypto-cpu-std', command)
+            self.assertIn('brynja-hash-parallel-std', command)
+        self.assertEqual(sum('clippy' in command for command in commands), 1)
 
     def test_complete_matrix_and_clean_environment(self):
         with tempfile.TemporaryDirectory() as directory, \

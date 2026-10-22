@@ -11,6 +11,7 @@ from pathlib import Path
 
 import verification_commands as commands
 import verification_plan as plans
+import push_ci
 
 
 def execute(command: str, stdin: str | None = None) -> None:
@@ -59,6 +60,10 @@ def main() -> int:
             raise ValueError("detached reuse requires both a job directory and its launch receipt")
         if args.ci and (job or receipt or registry):
             raise ValueError("CI diagnostics cannot consume local detached release evidence")
+        if args.ci:
+            if args.base:
+                raise ValueError('CI baseline must come from successful Actions ancestry, not --base')
+            return push_ci.run(check=args.check or args.phase == 'plan')
         plan = plans.build(base=args.base)
         if registry:
             import phase_receipts
@@ -110,23 +115,16 @@ def main() -> int:
         sanitizer_catalog = commands.catalog(plans.ROOT / "scripts/zeroization/check-zeroization-sanitizer.sh")
         commands.selected(sanitizer_catalog, list(plans.scope.GROUPS), full=True)
         matrix_catalog = commands.matrix_commands()
-        if args.ci:
-            print("CI diagnostics only: release approval is not consumed or granted.", flush=True)
-            if plan["approval_required"]:
-                print("::warning::Release scope requires owner review; CI runs the shared repository baseline only. Specialized verification is deferred, not passed.", flush=True)
-        else:
-            plans.authorize(plan, args.approve_full or os.environ.get("BRYNJA_FULL_VERIFICATION_APPROVAL") or None)
+        plans.authorize(plan, args.approve_full or os.environ.get("BRYNJA_FULL_VERIFICATION_APPROVAL") or None)
         if args.phase == "plan" or args.check:
             return 0
-        full = not args.ci and plans.requires_full(plan, args.phase)
-        groups = ([] if args.ci and plan["approval_required"] else
-                  list(plans.scope.GROUPS) if full else plan["groups"])
+        full = plans.requires_full(plan, args.phase)
+        groups = list(plans.scope.GROUPS) if full else plan["groups"]
         if args.phase == "repository":
             chosen = commands.selected(catalog, groups, full=full)
             for command in catalog:
                 if command not in chosen:
-                    label = "DEFERRED (release scope unresolved)" if args.ci and plan["approval_required"] else "REUSE (unchanged input closure)"
-                    print(label + ": " + command, flush=True)
+                    print("REUSE (unchanged input closure): " + command, flush=True)
             for command in chosen:
                 execute(command)
         elif args.phase == "command":

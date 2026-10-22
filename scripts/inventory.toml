@@ -11,8 +11,8 @@ extensions = [".py", ".toml"]
 purpose = "Frozen legacy SHA-1/MD5 portable consumer, package and isolation acceptance"
 
 [category.ci]
-extensions = [".lock", ".sh"]
-purpose = "Pinned CI tools and Rust-version matrix checks"
+extensions = [".lock", ".sh", ".toml"]
+purpose = "Pinned CI tools, bounded push catalog and Rust-version matrix checks"
 
 [category.constant-time]
 extensions = [".py", ".sh"]

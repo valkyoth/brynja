@@ -2140,7 +2140,7 @@ sha256 = "d1728ee71564bf4ab1d29cb99bf62be4aac6290e42c13ff69f505ac746a39daa"
 
 [[reviewed-source]]
 path = "scripts/hmac/test-hmac-strict.py"
-sha256 = "1d1b97dcab1cdd631eb60e1cdeae1b013d4e3be9977ab6ecfe839e955e06ad0c"
+sha256 = "8ff1852293a45c5d384b708a8a708f1c14283f551c7eac77ba461c4b62b426aa"
 
 [[reviewed-source]]
 path = "scripts/hmac/test-hmac-timing.py"

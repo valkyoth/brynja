@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 env:
   CARGO_TERM_COLOR: always
@@ -16,34 +17,42 @@ jobs:
   checks:
     name: Format lint test policy and audit
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 25
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
       - name: Explain verification scope before expensive checks
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: python3 scripts/release/run-verification.py plan --check --ci
       - name: Install Rust toolchain
         run: rustup show
       - name: Install OS-less Rust targets
         run: rustup target add riscv32imac-unknown-none-elf thumbv7em-none-eabi x86_64-unknown-none
-      - name: Install SHA CPU codegen targets
+      - name: Install CPU cross-check targets
         run: rustup target add aarch64-unknown-linux-gnu riscv64gc-unknown-linux-gnu
-      - name: Install SHA CPU MSRV codegen toolchain
-        run: >
-          rustup toolchain install 1.90.0 --profile minimal
-          --target aarch64-unknown-linux-gnu,riscv64gc-unknown-linux-gnu
-      - name: Install retained compiler-specific evidence targets
-        run: >
-          rustup toolchain install 1.98.1 --profile minimal
-          --target aarch64-unknown-linux-gnu,riscv64gc-unknown-linux-gnu
-      - name: Install security and SBOM tools
-        run: scripts/ci/install-ci-tools.sh
       - name: Run repository CI checks
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: scripts/checks.sh --ci
       - name: Test enclave diagnostic profile separation
         run: python3 scripts/cryptography/test-windows-enclave-guard-profile.py
+
+  audit:
+    name: Dependency audit and release controls
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Install Rust toolchain
+        run: rustup show
+      - name: Install security and SBOM tools
+        run: scripts/ci/install-ci-tools.sh
       - name: Validate protected release controls
         env:
           GH_TOKEN: ${{ github.token }}
@@ -98,16 +107,16 @@ jobs:
         run: python3 scripts/md5/check-md5-hardened-ci.py ${{ matrix.architecture }}
 
   macos-resident:
-    name: Apple Silicon resident tests, packages and emitted code
+    name: Apple Silicon resident native tests and lint
     runs-on: macos-latest
-    timeout-minutes: 60
+    timeout-minutes: 20
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Install Rust toolchain
         run: scripts/ci/ci_install_rust.sh
-      - name: Native resident accelerated, package, lint and compiler regressions
-        run: python3 scripts/cryptography/check-macos-resident-ci.py --stage all
+      - name: Native resident accelerated tests and lint
+        run: python3 scripts/cryptography/check-macos-resident-ci.py --stage tests
 
   host:
     name: Host tests (${{ matrix.os }})
@@ -160,13 +169,13 @@ jobs:
           RUSTFLAGS: --cfg brynja_cpu_evidence
         run: cargo test -p brynja-crypto-cpu-std
       - name: Run SHA-256 public API acceptance
-        run: python scripts/sha2/check-sha256-public-api.py
+        run: cargo run --locked --manifest-path assurance/sha256-public-api/Cargo.toml
       - name: Run complete SHA-2 public API acceptance
-        run: python scripts/sha2/check-sha2-public-api.py
+        run: cargo run --locked --manifest-path assurance/sha2-public-api/Cargo.toml
       - name: Run SHA-2 arbitrary-bit differential oracle
         run: python scripts/sha2/check-sha2-bit-differential.py
       - name: Run complete SHA-3/SHAKE portable public API acceptance
-        run: python scripts/sha3/check-sha3-public-api.py
+        run: cargo run --locked --manifest-path assurance/sha3-public-api/Cargo.toml
       - name: Run complete cSHAKE public API acceptance
         run: cargo test --locked --manifest-path assurance/cshake-public-api/Cargo.toml
       - name: Run combined hash final acceptance

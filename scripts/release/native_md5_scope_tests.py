@@ -12,6 +12,10 @@ import native_review_io as io
 import native_review_tests as fixtures
 import native_unchanged as reuse
 
+# Immutable v0.24.55 fixture input, not approval of a current capture. The
+# historical command profile remains pinned independently in profile.REVIEWED.
+FIXTURE_COMMIT = 'c0c2e069a988f41cfed010dd81c66f14b9a6578f'
+
 
 class Md5DependencyProfileTests(unittest.TestCase):
     def test_real_cargo_feature_union_stays_inside_reviewed_roots(self):
@@ -57,12 +61,21 @@ class Md5DependencyProfileTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
         fixtures.init_repository(self.root)
-        # Real reviewed command/manifests, not mocked digest acceptance.
-        for name in ('Cargo.toml', 'Cargo.lock', *profile.REVIEWED):
-            fixtures.write(self.root, name, io.read(io.ROOT, name).decode())
-        for path in (io.ROOT / 'crates').glob('*/Cargo.toml'):
-            name = path.relative_to(io.ROOT).as_posix()
-            fixtures.write(self.root, name, io.read(io.ROOT, name).decode())
+        io.git(self.root, 'config', 'core.autocrlf', 'false')
+        # Keep the reviewed commands and their dependency graph from the same
+        # immutable snapshot. Current helpers may legitimately change without
+        # reapproving this historical profile. CI already fetches full history.
+        names = {'Cargo.toml', 'Cargo.lock', *profile.REVIEWED}
+        names.update(name for name in io.names(io.ROOT, FIXTURE_COMMIT)
+                     if name.startswith('crates/') and name.count('/') == 2
+                     and name.endswith('/Cargo.toml'))
+        for name in sorted(names):
+            raw = io.raw_blob(io.ROOT, FIXTURE_COMMIT, name)
+            if name in profile.REVIEWED:
+                self.assertEqual(io.sha(raw), profile.REVIEWED[name], name)
+            path = self.root / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(raw)
         self.closure = set(profile.REVIEWED)
         for base in profile.ROOTS:
             name = base + '/src/lib.rs'
@@ -73,6 +86,37 @@ class Md5DependencyProfileTests(unittest.TestCase):
 
     def sources(self):
         return {name: io.sha(io.read(self.root, name)) for name in self.closure}
+
+    def test_fixture_preserves_raw_historical_profile_and_dependency_graph(self):
+        names = {'Cargo.toml', 'Cargo.lock', *profile.REVIEWED}
+        names.update(name for name in io.names(io.ROOT, FIXTURE_COMMIT)
+                     if name.startswith('crates/') and name.count('/') == 2
+                     and name.endswith('/Cargo.toml'))
+        self.assertEqual(io.names(self.root, self.capture),
+                         names | {base + '/src/lib.rs' for base in profile.ROOTS})
+        for name in sorted(names):
+            with self.subTest(name=name):
+                raw = io.raw_blob(self.root, self.capture, name)
+                self.assertEqual(raw, io.raw_blob(io.ROOT, FIXTURE_COMMIT, name))
+                if name in profile.REVIEWED:
+                    self.assertEqual(io.sha(raw), profile.REVIEWED[name])
+
+    def test_added_hmac_package_does_not_reapprove_historical_profile(self):
+        # Replay the packaging edit that exposed this fixture bug. The current
+        # helper is legitimate, but it is not the historically approved command.
+        name = 'scripts/md5/check-md5-package.py'
+        original = io.raw_blob(self.root, self.capture, name)
+        needle = b"'brynja-mac-kmac', 'brynja-hash-tuple')"
+        self.assertEqual(original.count(needle), 1)
+        changed = original.replace(needle,
+            b"'brynja-mac-kmac', 'brynja-hash-tuple', 'brynja-mac-hmac')")
+        self.assertNotEqual(io.sha(changed), profile.REVIEWED[name])
+        (self.root / name).write_bytes(changed)
+        head = fixtures.commit(self.root)
+        for before, after in ((self.capture, head), (head, self.capture), (head, head)):
+            with self.subTest(before=before, after=after), self.assertRaisesRegex(
+                    ValueError, r'review changed: scripts/md5/check-md5-package\.py$'):
+                dependencies.equivalent(self.root, before, after, self.closure, profile.PROFILE)
 
     def validate(self, selected=profile.PROFILE):
         head = fixtures.commit(self.root)

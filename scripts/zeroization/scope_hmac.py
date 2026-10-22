@@ -4,6 +4,11 @@ import tomllib
 
 LEAF = 'brynja-mac-hmac'
 CONSUMERS = frozenset({'brynja-crypto', 'brynja-crypto-cpu-std'})
+HOSTED_EXPORT_PATH = 'crates/brynja-crypto-cpu-std/src/execution/mod.rs'
+HOSTED_EXPORTS = (
+    b'#[cfg(feature = "hmac-execution")]\npub use hmac::HmacError;\n',
+    b'#[cfg(feature = "hmac-execution")]\npub use hmac::{HmacError, HmacSelection, PortableHmac};\n',
+)
 FEATURES = {
     'brynja': {
         'hmac-hardened-execution': ['brynja-crypto/hmac-hardened-execution'],
@@ -32,11 +37,11 @@ SOURCES = {
         b'pub mod hmac;\n'),),
     'crates/brynja-crypto-cpu-std/src/lib.rs': (
         (b'', b'#[cfg(feature = "strict-hmac")]\npub mod strict_hmac;\n'),),
-    'crates/brynja-crypto-cpu-std/src/execution/mod.rs': (
+    HOSTED_EXPORT_PATH: (
         (b'//! Explicit hosted selection for ordinary raw kernels, not complete hashes.\n',
          b'//! Explicit hosted selection for raw kernels and opt-in hardened HMAC.\n'),
         (b'', b'#[cfg(feature = "hmac-execution")]\nmod hmac;\n'),
-        (b'', b'#[cfg(feature = "hmac-execution")]\npub use hmac::HmacError;\n')),
+        (b'', HOSTED_EXPORTS[1])),
     'crates/brynja-crypto-cpu-std/src/macos_resident/mod.rs': (
         (b'', b'#[cfg(feature = "macos-resident-hmac")]\npub mod hmac;\n'),
         (b'    any(feature = "macos-resident-kmac", feature = "macos-resident-tuplehash")\n',
@@ -123,6 +128,12 @@ def source_only(path, before, after):
         return False
     values = []
     for raw in (before, after):
+        if path == HOSTED_EXPORT_PATH:
+            # Only the two reviewed HMAC export shapes are equivalent for
+            # family selection; duplicates and every unrelated byte still fail.
+            if sum(raw.count(export) for export in HOSTED_EXPORTS) > 1:
+                return False
+            raw = raw.replace(HOSTED_EXPORTS[0], HOSTED_EXPORTS[1])
         for old, new in replacements:
             if raw.count(new) > 1:
                 return False

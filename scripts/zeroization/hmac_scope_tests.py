@@ -117,6 +117,7 @@ def manifest_tests():
 
 def source_tests():
     composition_tests()
+    hosted_export_tests()
     for path, replacements in hmac.SOURCES.items():
         current = (scope.ROOT / path).read_bytes()
         original = current
@@ -138,6 +139,34 @@ def source_tests():
         assert scope.select(['crates/brynja-strict/src/' + path]) == (False, ('hmac',))
     for name in ('hmac.rs_extra.rs', 'kmac.rs', 'lib.rs', 'unknown.rs'):
         assert scope.select(['crates/brynja-crypto/src/' + name])[0]
+
+
+def hosted_export_tests():
+    from review_metadata_tests import selected
+    path = 'crates/brynja-crypto-cpu-std/src/execution/mod.rs'
+    current = (scope.ROOT / path).read_bytes()
+    exports = b'#[cfg(feature = "hmac-execution")]\npub use hmac::{HmacError, HmacSelection, PortableHmac};\n'
+    legacy = b'#[cfg(feature = "hmac-execution")]\npub use hmac::HmacError;\n'
+    assert current.count(exports) == 1
+    previous = current.replace(exports, legacy)
+    original = current
+    for old, new in hmac.SOURCES[path]:
+        original = original.replace(new, old)
+    for before, after in ((original, current), (previous, current), (original, previous)):
+        for left, right in ((before, after), (after, before)):
+            assert hmac.source_only(path, left, right)
+            assert selected({path: (left, right)}) == (False, ('hmac',))
+    for mutant in (current + exports, current + legacy, previous + legacy,
+                   current.replace(exports, exports.replace(b'hmac-execution', b'runtime-execution')),
+                   current.replace(exports, exports.replace(b'pub use', b'pub(crate) use')),
+                   current.replace(exports, exports.replace(b'{HmacError, HmacSelection, PortableHmac}', b'*')),
+                   current.replace(exports, exports.replace(b'PortableHmac}', b'PortableHmac, Unknown}')),
+                   current + b'pub fn unrelated() {}\n', current.replace(b'\n', b'\r\n')):
+        assert mutant != current
+        for left, right in ((original, mutant), (mutant, original)):
+            assert not hmac.source_only(path, left, right)
+            full, groups = selected({path: (left, right)})
+            assert full or set(groups) - {'hmac'}, (full, groups)
 
 
 def composition_tests():

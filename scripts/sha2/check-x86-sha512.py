@@ -11,6 +11,15 @@ import x86_sha512_package
 ROOT = Path(__file__).resolve().parents[2]
 TARGET = 'x86_64-unknown-linux-gnu'
 FEATURES = 'static-execution,runtime-execution,hardened-execution'
+# Parallel libtest output can split a test name from its trailing `ok`.
+# Keep both identities and require the complete, non-ignored passing population
+# together with the actual dedicated-kernel marker and successful process exit.
+HARDENED_MARKERS = (
+    'test hardened_execution::tests::scratch_regions_clear_on_explicit_wipe_and_unwind ...',
+    'test hardened_execution::tests::hardened_kernel_matches_ordinary_and_clears_every_operation ...',
+    'HARDENED_KERNEL_EXECUTION: X86Sha512; blocks=512',
+    'test result: ok. 2 passed; 0 failed; 0 ignored;',
+)
 
 
 def run(command, environment, markers=()):
@@ -46,8 +55,7 @@ def sanitizer(environment):
         ('DEDICATED_X86_SHA512: blocks=1024; quarantine=PASS',
          'DEDICATED_X86_SHA512_RUNTIME: KAT; exact identity; revocation=PASS'))
     run(base + ['hardened_execution::tests', '--', '--nocapture'], env,
-        ('HARDENED_KERNEL_EXECUTION: X86Sha512; blocks=512',
-         'scratch_regions_clear_on_explicit_wipe_and_unwind ... ok'))
+        HARDENED_MARKERS)
     print('Dedicated SHA512 ASan/LSan: PASS (SDE emulated; leak checking forced)')
 
 
@@ -88,8 +96,7 @@ def main():
                     ('DEDICATED_X86_SHA512: blocks=1024; quarantine=PASS',
                      'DEDICATED_X86_SHA512_RUNTIME: KAT; exact identity; revocation=PASS'))
                 run(base + profile + ['hardened_execution::tests', '--', '--nocapture'], env,
-                    ('HARDENED_KERNEL_EXECUTION: X86Sha512; blocks=512',
-                     'scratch_regions_clear_on_explicit_wipe_and_unwind ... ok'))
+                    HARDENED_MARKERS)
             run(cargo + ['rustc', '--locked', '--offline', '--release', '--target', TARGET,
                           '-p', 'brynja-crypto-cpu', '--features', FEATURES, '--lib', '--',
                           '--emit=asm,llvm-ir,mir'], env)

@@ -6,6 +6,7 @@ import io
 from pathlib import Path
 import tarfile
 import tempfile
+import tomllib
 import unittest
 from unittest.mock import patch
 import macos_legacy_resident_oracle as oracle
@@ -17,6 +18,31 @@ spec.loader.exec_module(package)
 
 
 class LegacyPackageTests(unittest.TestCase):
+    def test_package_inventory_retains_optional_manifest_closure(self):
+        inherited = tomllib.loads((package.ROOT/'Cargo.toml').read_text())['workspace']['dependencies']
+
+        def check(names):
+            self.assertEqual(len(names), len(set(names)))
+            for name in names:
+                manifest = tomllib.loads((package.ROOT/'crates'/name/'Cargo.toml').read_text())
+                tables = [manifest, *manifest.get('target', {}).values()]
+                for table in tables:
+                    for key in ('dependencies', 'dev-dependencies', 'build-dependencies'):
+                        for alias, dependency in table.get(key, {}).items():
+                            if not isinstance(dependency, dict):
+                                continue
+                            if dependency.get('workspace'):
+                                dependency = inherited[alias]
+                            if 'path' in dependency:
+                                self.assertIn(dependency.get('package', alias), names)
+
+        check(package.PACKAGES)
+        for missing in ('brynja-mac-hmac', 'brynja-mac-kmac', 'brynja-hash-tuple'):
+            with self.subTest(missing=missing), self.assertRaisesRegex(AssertionError, missing):
+                check(tuple(name for name in package.PACKAGES if name != missing))
+        with self.assertRaises(AssertionError):
+            check((*package.PACKAGES, 'brynja-mac-hmac'))
+
     def test_oracle_population_canonical_bits_and_routes(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -53,9 +79,10 @@ class LegacyPackageTests(unittest.TestCase):
                                  for name, path in entries]}
         package.validate_graph(metadata, consumer, roots)
         changes = []
-        changed = copy.deepcopy(metadata)
-        changed['packages'].append(dict(name='brynja-crypto-cpu-std', source=None, manifest_path='/bad'))
-        changes.append(changed)
+        for extra in ('brynja-crypto-cpu-std', 'brynja-mac-hmac'):
+            changed = copy.deepcopy(metadata)
+            changed['packages'].append(dict(name=extra, source=None, manifest_path='/bad'))
+            changes.append(changed)
         for key, value in (('source', 'registry'), ('manifest_path', '/workspace/Cargo.toml')):
             changed = copy.deepcopy(metadata)
             changed['packages'][1][key] = value

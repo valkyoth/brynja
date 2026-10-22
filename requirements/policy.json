@@ -273,7 +273,7 @@
       "mapping_scope": "exact-source",
       "owner": "0.111.0",
       "residual": "The registry assignment is necessary but does not replace cipher-suite, key-schedule, AEAD, transcript, or interoperability evidence.",
-      "revision": 7,
+      "revision": 8,
       "scope": "protocol",
       "source": {
         "kind": "iana",
@@ -444,6 +444,6 @@
     }
   ],
   "schema": 1,
-  "source_ledger_sha256": "7723f01765e12dac7c4df15b305035f634fb2c3923714b584c22e95928070816",
-  "surface_register_sha256": "a9c277fd46da16baa60d94b333c9896e4997d45fe653ee83f4816241b3a66543"
+  "source_ledger_sha256": "bbaa0c44ba3679741ac1dfd47caccd95a2216f58ca118c0225fdedbb70c5d594",
+  "surface_register_sha256": "0b04f107c23a7e64cb5aac51e632e352ac315213eb82bcbe2606608e66ddcbc5"
 }

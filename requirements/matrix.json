@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "8a36299c9400afea4021dd0227285f05d3d35d58b35444f3ea2560a3d7cd2527",
-  "domain_policy_sha256": "5fc226584046d2965e6365355c81e0170d110826036ab7fb82d24612d32a7053",
-  "policy_sha256": "2af5113eb3eeea9b2ce0d5ec1ddd21a1cc5bbecbc30cac906bcda98f07355af1",
+  "domain_policy_sha256": "eccca67e243c3c604dbfba850c5262555b5b179a5ac6f192c8294b09708295ef",
+  "policy_sha256": "4b6a168bc7828512186259a459b81c81c58e7caaf1538a27b8c56da4b79189e8",
   "requirements": [
     {
       "applicability": "delegate",
@@ -11341,7 +11341,7 @@
       "owner": "0.10.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 7,
+      "revision": 8,
       "scope": "protocol",
       "sources": [
         {
@@ -11362,7 +11362,7 @@
             "0.3.4",
             "0.164.0"
           ],
-          "sha256": "ac02c1bb19c16dc4ea99df79e11ceb6576bfa775b1a3eac6acfafd91671ea76c"
+          "sha256": "77b317e498599ab18e46fad031852fb4d96ee7e07d34b492b600730a6c25efc0"
         },
         {
           "authority_role": "exclusion",
@@ -12197,7 +12197,7 @@
       "owner": "0.240.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 10,
+      "revision": 11,
       "scope": "protocol",
       "sources": [
         {
@@ -12218,7 +12218,7 @@
             "0.3.4",
             "0.164.0"
           ],
-          "sha256": "ac02c1bb19c16dc4ea99df79e11ceb6576bfa775b1a3eac6acfafd91671ea76c"
+          "sha256": "77b317e498599ab18e46fad031852fb4d96ee7e07d34b492b600730a6c25efc0"
         },
         {
           "authority_role": "legacy",
@@ -12431,7 +12431,7 @@
       "owner": "0.196.3",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 5,
+      "revision": 6,
       "scope": "protocol",
       "sources": [
         {
@@ -12452,7 +12452,7 @@
             "0.3.4",
             "0.164.0"
           ],
-          "sha256": "ac02c1bb19c16dc4ea99df79e11ceb6576bfa775b1a3eac6acfafd91671ea76c"
+          "sha256": "77b317e498599ab18e46fad031852fb4d96ee7e07d34b492b600730a6c25efc0"
         }
       ],
       "statement": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
@@ -14544,7 +14544,7 @@
       "owner": "0.92.0",
       "profile": "crypto-encoding-pkix",
       "residual": "Unicode mapping and presentation remain caller-owned; Brynja accepts only policy-bounded input forms and never falls back across identifier types.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -14994,7 +14994,13 @@
           "domains": [
             "pkix"
           ],
-          "errata": [],
+          "errata": [
+            {
+              "disposition": "track-not-applied",
+              "id": 9230,
+              "status": "Reported"
+            }
+          ],
           "id": "rfc:9549",
           "kind": "rfc",
           "milestones": [
@@ -15943,7 +15949,7 @@
       "owner": "0.95.0",
       "profile": "crypto-encoding-pkix",
       "residual": "Unsupported name forms and caller Unicode presentation cannot silently bypass a critical nameConstraints extension.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -16121,7 +16127,13 @@
           "domains": [
             "pkix"
           ],
-          "errata": [],
+          "errata": [
+            {
+              "disposition": "track-not-applied",
+              "id": 9230,
+              "status": "Reported"
+            }
+          ],
           "id": "rfc:9549",
           "kind": "rfc",
           "milestones": [
@@ -17318,7 +17330,7 @@
       "owner": "0.94.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 5,
+      "revision": 6,
       "scope": "protocol",
       "sources": [
         {
@@ -17336,7 +17348,7 @@
             "0.3.3",
             "0.89.0"
           ],
-          "sha256": "c0891d31df242a6e6338c9aaff62903e30cedb72e44ddbe79118076d779c3275"
+          "sha256": "05d997b70a1047295685d54999e7461b49f1b86cffde562f68b7cf70bc080684"
         }
       ],
       "statement": "Unselected SMI namespaces are preserved as caller-owned identifiers and do not gain implicit PKIX semantics.",
@@ -18465,7 +18477,7 @@
       "owner": "0.138.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -18587,6 +18599,11 @@
               "disposition": "not-applicable",
               "id": 7785,
               "status": "Rejected"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9231,
+              "status": "Reported"
             }
           ],
           "id": "rfc:9001",
@@ -18787,7 +18804,7 @@
       "owner": "0.139.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -18800,6 +18817,11 @@
               "disposition": "not-applicable",
               "id": 7785,
               "status": "Rejected"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9231,
+              "status": "Reported"
             }
           ],
           "id": "rfc:9001",
@@ -18906,7 +18928,7 @@
       "owner": "0.140.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -18919,6 +18941,11 @@
               "disposition": "not-applicable",
               "id": 7785,
               "status": "Rejected"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9231,
+              "status": "Reported"
             }
           ],
           "id": "rfc:9001",
@@ -19072,7 +19099,7 @@
       "owner": "0.141.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -19179,6 +19206,11 @@
               "disposition": "not-applicable",
               "id": 7785,
               "status": "Rejected"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9231,
+              "status": "Reported"
             }
           ],
           "id": "rfc:9001",
@@ -19249,7 +19281,7 @@
       "owner": "0.142.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -19262,6 +19294,11 @@
               "disposition": "not-applicable",
               "id": 7785,
               "status": "Rejected"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9231,
+              "status": "Reported"
             }
           ],
           "id": "rfc:9001",
@@ -19347,7 +19384,7 @@
       "owner": "0.143.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -19439,6 +19476,11 @@
               "disposition": "not-applicable",
               "id": 7785,
               "status": "Rejected"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9231,
+              "status": "Reported"
             }
           ],
           "id": "rfc:9001",
@@ -19534,7 +19576,7 @@
       "owner": "0.144.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -19631,6 +19673,11 @@
               "disposition": "not-applicable",
               "id": 7785,
               "status": "Rejected"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9231,
+              "status": "Reported"
             }
           ],
           "id": "rfc:9001",
@@ -19706,7 +19753,7 @@
       "owner": "0.145.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -19838,6 +19885,11 @@
               "disposition": "not-applicable",
               "id": 7785,
               "status": "Rejected"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9231,
+              "status": "Reported"
             }
           ],
           "id": "rfc:9001",
@@ -20160,7 +20212,7 @@
       "owner": "0.143.1",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -20173,6 +20225,11 @@
               "disposition": "not-applicable",
               "id": 7785,
               "status": "Rejected"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9231,
+              "status": "Reported"
             }
           ],
           "id": "rfc:9001",
@@ -20467,7 +20524,7 @@
       "owner": "0.155.1",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 9,
+      "revision": 10,
       "scope": "protocol",
       "sources": [
         {
@@ -20507,7 +20564,7 @@
             "0.3.4",
             "0.164.0"
           ],
-          "sha256": "ac02c1bb19c16dc4ea99df79e11ceb6576bfa775b1a3eac6acfafd91671ea76c"
+          "sha256": "77b317e498599ab18e46fad031852fb4d96ee7e07d34b492b600730a6c25efc0"
         }
       ],
       "statement": "The DTLS-only RRC extension is parsed and negotiated exclusively inside the DTLS return-routability engine.",
@@ -20555,7 +20612,7 @@
       "owner": "0.155.1",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 6,
+      "revision": 7,
       "scope": "protocol",
       "sources": [
         {
@@ -20576,7 +20633,7 @@
             "0.3.4",
             "0.164.0"
           ],
-          "sha256": "ac02c1bb19c16dc4ea99df79e11ceb6576bfa775b1a3eac6acfafd91671ea76c"
+          "sha256": "77b317e498599ab18e46fad031852fb4d96ee7e07d34b492b600730a6c25efc0"
         }
       ],
       "statement": "ContentType 27 is recognized and admitted only by the negotiated DTLS RRC facility; every stream-TLS context rejects it.",
@@ -21062,7 +21119,7 @@
       "mapping_scope": "exact-source",
       "owner": "0.111.0",
       "residual": "The registry assignment is necessary but does not replace cipher-suite, key-schedule, AEAD, transcript, or interoperability evidence.",
-      "revision": 7,
+      "revision": 8,
       "scope": "protocol",
       "source": {
         "collection": "tls-parameters",
@@ -21070,7 +21127,7 @@
         "kind": "iana",
         "record_sha256": "02ae68b04d095bc13817c02fc9f27d4d3e3f90b6dff7bd86b8544060b0e031b0",
         "registry": "tls-parameters-4",
-        "snapshot_sha256": "ac02c1bb19c16dc4ea99df79e11ceb6576bfa775b1a3eac6acfafd91671ea76c",
+        "snapshot_sha256": "77b317e498599ab18e46fad031852fb4d96ee7e07d34b492b600730a6c25efc0",
         "surface_id": "iana.tls-parameters.tls-parameters-4.tls-aes-128-gcm-sha256.1"
       },
       "statement": "TLS_AES_128_GCM_SHA256 remains an explicitly planned TLS 1.3 cipher suite with exact registry identity.",
@@ -30815,9 +30872,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "683630ec05a54b67ebfca627866045693294b7dfe0584f2b1f9f171f95ffe549",
+  "residual_policy_sha256": "eca54b490cf6b49d3fc28789854634ef9291dceff196d48a5b87e78aca08be97",
   "schema": 5,
-  "source_ledger_sha256": "7723f01765e12dac7c4df15b305035f634fb2c3923714b584c22e95928070816",
-  "surface_register_sha256": "a9c277fd46da16baa60d94b333c9896e4997d45fe653ee83f4816241b3a66543",
-  "transport_policy_sha256": "f0fc9e8f4608a4733d34727e269ff6dee82010f5e48bb6f8b03df6a5dddbbee7"
+  "source_ledger_sha256": "bbaa0c44ba3679741ac1dfd47caccd95a2216f58ca118c0225fdedbb70c5d594",
+  "surface_register_sha256": "0b04f107c23a7e64cb5aac51e632e352ac315213eb82bcbe2606608e66ddcbc5",
+  "transport_policy_sha256": "328ee6cefeb9fc9b96d3891f8c83b4440cecdbdc1770aadccc6bf684da38360a"
 }

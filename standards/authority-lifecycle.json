@@ -117,7 +117,7 @@
         "boundary:pkix.0.94.0"
       ],
       "brynja_state": "current",
-      "content_sha256": "c0891d31df242a6e6338c9aaff62903e30cedb72e44ddbe79118076d779c3275",
+      "content_sha256": "05d997b70a1047295685d54999e7461b49f1b86cffde562f68b7cf70bc080684",
       "content_url": "https://www.iana.org/assignments/smi-numbers/smi-numbers.xml",
       "edition": "Structure of Management Information (SMI) Numbers (MIB Module Registrations)",
       "id": "iana:smi-numbers",
@@ -126,7 +126,7 @@
       "last_successful_observation": "2026-08-31",
       "metadata": {
         "created": "",
-        "updated": "2026-09-28"
+        "updated": "2026-10-20"
       },
       "planning_notices": [],
       "publisher": "IANA",
@@ -256,7 +256,7 @@
         "crates/brynja-tls13/src/cipher_suite.rs#TLS_AES_128_GCM_SHA256"
       ],
       "brynja_state": "current",
-      "content_sha256": "ac02c1bb19c16dc4ea99df79e11ceb6576bfa775b1a3eac6acfafd91671ea76c",
+      "content_sha256": "77b317e498599ab18e46fad031852fb4d96ee7e07d34b492b600730a6c25efc0",
       "content_url": "https://www.iana.org/assignments/tls-parameters/tls-parameters.xml",
       "edition": "Transport Layer Security (TLS) Parameters",
       "id": "iana:tls-parameters",
@@ -265,7 +265,7 @@
       "last_successful_observation": "2026-08-31",
       "metadata": {
         "created": "2005-08-23",
-        "updated": "2026-09-18"
+        "updated": "2026-10-21"
       },
       "planning_notices": [],
       "publisher": "IANA",
@@ -5705,6 +5705,11 @@
             "disposition": "not-applicable",
             "id": 7785,
             "status": "Rejected"
+          },
+          {
+            "disposition": "track-not-applied",
+            "id": 9231,
+            "status": "Reported"
           }
         ],
         "updated_by": []
@@ -6583,7 +6588,13 @@
       "last_successful_observation": "2026-08-31",
       "metadata": {
         "current_status": "PROPOSED STANDARD",
-        "errata": [],
+        "errata": [
+          {
+            "disposition": "track-not-applied",
+            "id": 9230,
+            "status": "Reported"
+          }
+        ],
         "updated_by": []
       },
       "planning_notices": [],
@@ -7551,5 +7562,5 @@
   "policy_sha256": "40fbbf9915be2b5202f3c1a8311a76e7c389345164753d1ef3dc0d9eadd42d80",
   "reviews_sha256": "47e2327e56be73e37fcbd935c7b97082a035cfb24aad02ef9dd937ae7eda1434",
   "schema": 1,
-  "source_ledger_sha256": "7723f01765e12dac7c4df15b305035f634fb2c3923714b584c22e95928070816"
+  "source_ledger_sha256": "bbaa0c44ba3679741ac1dfd47caccd95a2216f58ca118c0225fdedbb70c5d594"
 }

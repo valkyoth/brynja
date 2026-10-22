@@ -20,7 +20,7 @@
 "crates/brynja-hash-sha3/tests/execution.rs" = "8fe5cee602bdd2f5bce147c283137fd568a5900b38d4771062657789f6e13cde"
 "crates/brynja-hash-sha3/tests/execution_cases/mod.rs" = "960804c3cca92a616ecb9afb7e5e16c6a3634b6f2faca91a4db60156d4a152fc"
 "crates/brynja-hash-sha3/tests/vectors/cshake-execution.txt" = "b5f34958563e142793fad730b776c741baba8b73be2f2cb8c120629d6bcb9361"
-"scripts/checks.sh" = "67fe478a334e5d92d54ed7cd9c7631fbcd486b166e6b25729280ee973b923921"
+"scripts/checks.sh" = "7f8f37959496401456e46ed565a793b9944014bf9a9e714847a44774d45a7a35"
 "scripts/sha3/check-sha3-execution.py" = "c8fdd1b99400267f73f02e16afe45c7fd59ed505f9ce03962b63762a307b3581"
 "scripts/sha3/cshake_execution_regressions.py" = "49618ad293e423eb0948904bc14cf689815c1c4d06516db068e915d647b0acb6"
 "scripts/sha3/cshake_execution_vectors.py" = "4570dc3f407eea2702cdd100cc0047333be29e8328a3744be7e84ab92d419d99"

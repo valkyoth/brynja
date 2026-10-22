@@ -182,6 +182,15 @@ carry-forward rules; neither mechanism rewrites a historical capture.
 
 ## Inactive HMAC additions in older native inventories
 
+Detached selection separately recognizes the exact optional HMAC archive
+addition in the Mac legacy package helper. Its companion test-only change is
+bound to two reviewed raw-byte hashes, not exempted by filename or directory.
+The current package regression command remains a mandatory baseline check in
+both local release verification and bounded push CI. Changed command selection,
+features, graph validation, tests or unrelated shared code retain their ordinary
+affected scope. This classification does not approve native tooling or supply
+missing HMAC verification results.
+
 The SHA-2, Keccak, KMAC, TupleHash and ParallelHash inventories include the
 whole hosted CPU crate. Their pre-HMAC command profiles do not enable HMAC.
 The bounded HMAC projection checks those commands against an immutable reviewed

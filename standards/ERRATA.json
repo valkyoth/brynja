@@ -3473,6 +3473,19 @@
       "url": "https://errata.rfc-editor.org/eid7785/"
     },
     {
+      "date_reported": "2026-10-20",
+      "disposition": "track-not-applied",
+      "id": 9231,
+      "implementation": "planned:v0.138.0",
+      "rationale": "Unverified or held erratum is tracked but cannot alter requirements.",
+      "rfc": 9001,
+      "section": "A.2.",
+      "security": "Do not let this unverified technical report alter normative behavior; track it against planned:v0.138.0 and recheck official status before dependent implementation and release.",
+      "status": "Reported",
+      "type": "Technical",
+      "url": "https://errata.rfc-editor.org/eid9231/"
+    },
+    {
       "date_reported": "2023-06-07",
       "disposition": "apply",
       "id": 7539,
@@ -3809,6 +3822,19 @@
       "status": "Held for Document Update",
       "type": "Editorial",
       "url": "https://errata.rfc-editor.org/eid8173/"
+    },
+    {
+      "date_reported": "2026-10-16",
+      "disposition": "track-not-applied",
+      "id": 9230,
+      "implementation": "planned:v0.91.0",
+      "rationale": "Unverified or held erratum is tracked but cannot alter requirements.",
+      "rfc": 9549,
+      "section": "1",
+      "security": "Do not let this unverified technical report alter normative behavior; track it against planned:v0.91.0 and recheck official status before dependent implementation and release.",
+      "status": "Reported",
+      "type": "Technical",
+      "url": "https://errata.rfc-editor.org/eid9230/"
     },
     {
       "date_reported": "2024-07-01",

@@ -50,6 +50,31 @@ def test_september_registry_refresh_does_not_admit_draft_authority() -> None:
     assert entry["normative_sources"] == ["iana:smi-numbers", "rfc:5280"]
 
 
+def test_october_registry_refresh_retains_unimplemented_draft_boundaries() -> None:
+    surfaces = {item['id']: item for item in current_surfaces()}
+    for name, value in (('tls-aegis-256-sha512', '0x13,0x06'),
+                        ('tls-aegis-128l-sha256', '0x13,0x07')):
+        row = surfaces[f'iana.tls-parameters.tls-parameters-4.{name}.1']
+        assert (row['disposition'], row['owner']) == ('future-work', '0.51.0')
+        assert row['record']['fields']['value'] == value
+        assert row['record']['fields']['rec'] == 'N'
+        assert row['record']['references'] == [{'type': 'draft', 'data': 'draft-denis-tls-aegis-07'}]
+        assert row['normative_sources'] == ['iana:tls-parameters', 'rfc:9846']
+    row = surfaces['iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.0.id-mod-composite-mlkem-2025.1']
+    assert (row['disposition'], row['owner']) == ('caller-owned', '0.94.0')
+    assert row['record']['fields']['value'] == '129'
+    assert row['record']['references'] == [{'type': 'draft', 'data': 'RFC-ietf-lamps-pq-composite-kem-23'}]
+    assert row['normative_sources'] == ['iana:smi-numbers', 'rfc:5280']
+    algorithms = [r for r in surfaces.values()
+                  if r['id'].startswith('iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.6.')
+                  and r.get('record', {}).get('fields', {}).get('value') in {str(n) for n in range(55, 67)}]
+    assert len(algorithms) == 12
+    for row in algorithms:
+        assert row['disposition'] == 'future-work'
+        assert row['record']['references'] == [{'type': 'draft', 'data': 'RFC-ietf-lamps-pq-composite-kem-23'}]
+        assert not any('RFC-ietf-' in source for source in row['normative_sources'])
+
+
 def test_dtls_rrc_boundary_drift_fails() -> None:
     broken = copy.deepcopy(current_surfaces())
     surface = next(

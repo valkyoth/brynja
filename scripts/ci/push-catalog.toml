@@ -9,6 +9,7 @@ baseline = [
   "python3 scripts/repository/check-crate-readmes.py",
   "python3 scripts/repository/test-crate-readmes.py",
   "python3 scripts/repository/test-macos-resident-ci.py",
+  "python3 scripts/cryptography/test-macos-legacy-resident-package.py",
   "cargo test --locked --offline --manifest-path assurance/crate-readmes/Cargo.toml --doc",
   "python3 scripts/release/test-verification-plan.py",
   "python3 scripts/release/test-detached-verification.py",

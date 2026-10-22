@@ -147,12 +147,17 @@ def test_october_registry_refresh_does_not_admit_provisional_protocols() -> None
 
 def test_october_errata_statuses_keep_verified_held_and_rejected_distinct() -> None:
     rows = {row['id']: row for row in lib.read_json(standards.ERRATA)['records']}
-    assert len(rows) == 302
+    assert len(rows) == 304
     for identifier in (4395, 8753, 9040):
         assert (rows[identifier]['status'], rows[identifier]['disposition']) == ('Verified', 'apply')
     assert (rows[8738]['status'], rows[8738]['disposition']) == ('Held for Document Update', 'track-not-applied')
     for identifier in (9020, 9021):
         assert (rows[identifier]['status'], rows[identifier]['disposition']) == ('Rejected', 'not-applicable')
+    for identifier, rfc in ((9230, 9549), (9231, 9001)):
+        row = rows[identifier]
+        assert row['rfc'] == rfc
+        assert (row['status'], row['disposition']) == ('Reported', 'track-not-applied')
+        assert 'unverified' in row['security']
 
 
 def test_current_bidirectional_closure() -> None:
@@ -179,7 +184,7 @@ def test_current_bidirectional_closure() -> None:
     for minor in (*range(378, 392), 470):
         for patch in range(last_patches.get(minor, 7) + 1):
             assert plans[f"0.{minor}.{patch}"]["boundary"]["class"] == "planned-authority-admission"
-    assert len(artifact["surfaces"]) == 4471
+    assert len(artifact["surfaces"]) == 4472
     assert len(artifact["requirements"]) == 175
     assert len(artifact["local_rights"]) == 18
     assert len(artifact["mutable_authorities"]) == 15

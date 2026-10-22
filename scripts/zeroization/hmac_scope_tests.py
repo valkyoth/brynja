@@ -202,6 +202,7 @@ def fixture_tests():
 
 
 def packaging_tests():
+    macos_packaging_tests()
     path, replacements = next(iter(hmac.PACKAGING.items()))
     current = (scope.ROOT / path).read_bytes()
     old, new = replacements[0]
@@ -236,6 +237,65 @@ def packaging_tests():
         # This change to the actual shared runner retains all original owners.
         assert scope.select_repository(base, root, verified_base=True) == scope.select([path])
         assert 'core' in scope.select([path])[1]
+
+
+def macos_packaging_tests():
+    from review_metadata_tests import selected
+    import scope_review_metadata as review
+    path = 'scripts/cryptography/check-macos-legacy-resident-package.py'
+    current = (scope.ROOT / path).read_bytes()
+    addition = b"            'brynja-mac-hmac',\n"
+    assert current.count(addition) == 1
+    original = current.replace(addition, b'')
+    test_path = hmac.PACKAGING_TEST
+    test_current = (scope.ROOT / test_path).read_bytes()
+    test_original = inputs.git(scope.ROOT, 'show',
+        '8a93f40dcd33b1a4328d107233ead5b5d7933eef:' + test_path)
+    assert test_current != test_original
+    assert 'python3 ' + test_path in review.BASE_COMMANDS
+    changes = {path: (original, current), test_path: (test_original, test_current)}
+    for pairs in (changes, {p: (b, a) for p, (a, b) in changes.items()}):
+        assert selected(pairs) == (False, ('hmac',))
+        # This exception must never swallow unrelated shared implementation work.
+        shared = 'crates/brynja-core/src/secret.rs'
+        assert 'core' in selected({**pairs, shared: (b'old', b'new')})[1]
+    for name, before, after, mutants in (
+        (path, original, current, (current + addition,
+            current.replace(addition, b"            'brynja-mac-kmac',\n"),
+            current.replace(b"FEATURE = 'macos-resident-acceleration'",
+                            b"FEATURE = 'macos-resident-hmac-acceleration'"),
+            current.replace(b'validate_graph(', b'changed_graph(', 1))),
+        (test_path, test_original, test_current, (test_current + b'pass\n',
+            test_current.replace(b'self.assertIn(', b'self.assertNotIn(', 1),
+            test_current.replace(b'check(package.PACKAGES)', b'pass'),
+            test_original + b'\n')),
+    ):
+        for mutant in (*mutants, after.replace(b'\n', b'\r\n'), b'', None):
+            assert mutant != after
+            for left, right in ((before, mutant), (mutant, before)):
+                assert not hmac.source_only(name, left, right)
+                assert 'core' in selected({name: (left, right)})[1]
+    # Exercise both actual dirty files together through real Git enumeration.
+    with tempfile.TemporaryDirectory(prefix='brynja-macos-package-scope-') as temporary:
+        root = Path(temporary)
+        def git(*args):
+            return subprocess.check_output(['git', *args], cwd=root, stderr=subprocess.DEVNULL)
+        git('init', '-q')
+        git('config', 'user.name', 'Scope test')
+        git('config', 'user.email', 'scope@example.invalid')
+        git('config', 'commit.gpgsign', 'false')
+        for name, (before, _) in changes.items():
+            target = root / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(before)
+        git('add', '.')
+        git('commit', '-qm', 'baseline')
+        base = git('rev-parse', 'HEAD').decode().strip()
+        for name, (_, after) in changes.items():
+            (root / name).write_bytes(after)
+        assert scope.select_repository(base, root, verified_base=True) == (False, ('hmac',))
+        (root / path).write_bytes(current + b'run_changed_command()\n')
+        assert 'core' in scope.select_repository(base, root, verified_base=True)[1]
 
 
 def repository_tests():

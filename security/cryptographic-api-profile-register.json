@@ -24189,7 +24189,7 @@
       ]
     }
   ],
-  "policy_sha256": "f0193825320bd2d082f1e75f91ddcb6b38fc1a0f12b4c7b3b12e8b1e9cf324e3",
+  "policy_sha256": "7bf08005c16d3002bd4cdabe9a5d876826f37171502e91c295de4ad3ddb22f56",
   "registered_secret_owners": [
     {
       "capability": "algorithm.hmac",
@@ -24782,5 +24782,5 @@
     "physical-memory-remanence"
   ],
   "schema": 1,
-  "surface_register_sha256": "a9c277fd46da16baa60d94b333c9896e4997d45fe653ee83f4816241b3a66543"
+  "surface_register_sha256": "0b04f107c23a7e64cb5aac51e632e352ac315213eb82bcbe2606608e66ddcbc5"
 }

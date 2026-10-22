@@ -1,5 +1,6 @@
 """Narrow HMAC integration deltas; never exempt a shared facade or CPU crate."""
 import copy
+import hashlib
 import tomllib
 
 LEAF = 'brynja-mac-hmac'
@@ -55,7 +56,16 @@ PACKAGING = {
     'scripts/cryptography/check-strict-profile-package.py': (
         (b"        'brynja-strict')\n",
          b"        'brynja-mac-hmac', 'brynja-strict')\n"),),
+    'scripts/cryptography/check-macos-legacy-resident-package.py': (
+        (b'', b"            'brynja-mac-hmac',\n"),),
 }
+# Exact reviewed test-only addition: optional archive closure/graph regressions.
+# Its command stays mandatory; any later edit retains broad shared scope.
+PACKAGING_TEST = 'scripts/cryptography/test-macos-legacy-resident-package.py'
+PACKAGING_TEST_HASHES = frozenset({
+    'f71826a32760bd920caa55714205ced223c7c911328f93beb8e871e035a3a18c',
+    '5dd8870dd0f0ed3b8d4d5611397aa70e171e826b4cdd9f9bb53362c0530c22ad',
+})
 COMPOSITION = {
     # Add only the HMAC composition registration and metadata renderer pin.
     # Every existing direct owner, MIR identity and compiler test is unchanged.
@@ -123,6 +133,9 @@ def manifest_only(path, before, after):
 
 
 def source_only(path, before, after):
+    if path == PACKAGING_TEST:
+        return all(raw is not None and hashlib.sha256(raw).hexdigest() in
+                   PACKAGING_TEST_HASHES for raw in (before, after))
     replacements = {**SOURCES, **PACKAGING, **COMPOSITION}.get(path)
     if replacements is None or before is None or after is None:
         return False

@@ -24,7 +24,7 @@
 "scripts/tuplehash/check-tuplehash-differential.py" = "6be3bfd93a3d7fb2dd9fc2a051d5de2d564a9ec99d1688255b950e6efe6db1ec"
 "scripts/parallelhash/check-parallelhash-differential.py" = "e31da4458878fe0eebabc96e244caf072f6a30f5760aed6b256e9a96af80e654"
 "scripts/sp800185/test-portable-acceptance.py" = "688cd1f625d3a767c4e3e16fa6c4255f290284be09bbd5a28cfe1dfa2d582f46"
-"scripts/checks.sh" = "67fe478a334e5d92d54ed7cd9c7631fbcd486b166e6b25729280ee973b923921"
+"scripts/checks.sh" = "7f8f37959496401456e46ed565a793b9944014bf9a9e714847a44774d45a7a35"
 "scripts/ci/check-rust-version-matrix.sh" = "4e88816386831821db5b73a3afe27e2b768e8218b355d5c3f62f174bb2443b29"
 "scripts/assurance/check-bare-metal.sh" = "f2903e49017f442fc92bb6b85b2d709bb66c4274a8042dd065b59462d8dfed1a"
 ".github/workflows/ci.yml" = "fa91bc3e051467a70686496c62c98715a920f319a718327999c23f2b2e8f4dac"

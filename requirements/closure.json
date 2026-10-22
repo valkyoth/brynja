@@ -28406,7 +28406,7 @@
       "requirement_ids": [
         "BRY-REQ-PKIXREG-0053"
       ],
-      "sha256": "c0891d31df242a6e6338c9aaff62903e30cedb72e44ddbe79118076d779c3275"
+      "sha256": "05d997b70a1047295685d54999e7461b49f1b86cffde562f68b7cf70bc080684"
     },
     {
       "id": "iana:tls-ech-configuration-extensions",
@@ -28467,7 +28467,7 @@
         "BRY-REQ-RRCTYPE-0111",
         "BRY-REQ-TLS-0001"
       ],
-      "sha256": "ac02c1bb19c16dc4ea99df79e11ceb6576bfa775b1a3eac6acfafd91671ea76c"
+      "sha256": "77b317e498599ab18e46fad031852fb4d96ee7e07d34b492b600730a6c25efc0"
     },
     {
       "id": "iana:trans",
@@ -37639,6 +37639,12 @@
     },
     {
       "id": "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.0.id-mod-composite-mldsa-2025.1",
+      "requirement_ids": [
+        "BRY-REQ-PKIX-0004"
+      ]
+    },
+    {
+      "id": "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.0.id-mod-composite-mlkem-2025.1",
       "requirement_ids": [
         "BRY-REQ-PKIX-0004"
       ]

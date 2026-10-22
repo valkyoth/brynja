@@ -67,6 +67,7 @@ SCRIPT_COMMANDS = {
     'scripts/sha2/test-sha2-hardened-execution.py': SHA2_POLICY_CHECKS,
 }
 BASE_COMMANDS = frozenset((*CPU_CHECKS, *KMAC_CHECKS, *SHA2_POLICY_CHECKS, *NATIVE_APPROVAL_CHECKS, *API_CHECKS,
+    'python3 scripts/cryptography/test-macos-legacy-resident-package.py',
     'python3 scripts/hash/check-final-acceptance.py'))
 
 

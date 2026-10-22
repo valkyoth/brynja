@@ -4,10 +4,13 @@
 from __future__ import annotations
 
 import copy
+import importlib.util
 import json
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
+from unittest.mock import patch
 
 import lifecycle_model as model
 import lifecycle_network as network
@@ -105,10 +108,44 @@ def test_missing_historical_blob() -> None:
     )
 
 
+def test_generated_mapping(register: dict) -> None:
+    """A self-consistent freshness hash cannot hide stale requirement links."""
+    assert model.REGISTER.read_bytes() == standards.json_bytes(register)
+    spec = importlib.util.spec_from_file_location(
+        'lifecycle_checker', Path(__file__).with_name('check-authority-lifecycle.py'))
+    checker = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(checker)
+    freshness = model.load_json(model.FRESHNESS)
+    with tempfile.TemporaryDirectory(prefix='brynja-lifecycle-mapping-') as directory:
+        artifact = Path(directory) / 'register.json'
+        receipt = Path(directory) / 'freshness.json'
+        artifact.write_bytes(standards.json_bytes(register))
+        receipt.write_bytes(standards.json_bytes(freshness))
+        with patch.object(model, 'REGISTER', artifact), \
+                patch.object(model, 'FRESHNESS', receipt), \
+                patch.object(sys, 'argv', ['check-authority-lifecycle.py']):
+            assert checker.main() == 0
+            for identity in ('rfc:2104', 'rfc:4231'):
+                broken = copy.deepcopy(register)
+                row = next(row for row in broken['authorities'] if row['id'] == identity)
+                stale = ['crates/brynja-crypto/src/hmac.rs#Hmac']
+                assert row['affected_symbols'] != stale
+                row['affected_symbols'] = stale
+                artifact.write_bytes(standards.json_bytes(broken))
+                receipt.write_bytes(standards.json_bytes(dict(
+                    freshness, register_sha256=standards.sha256(artifact.read_bytes()))))
+                rejects(checker.main, 'authority lifecycle register changed')
+            artifact.write_bytes(standards.json_bytes(register))
+            receipt.write_bytes(standards.json_bytes(freshness))
+            assert checker.main() == 0
+    print('Authority lifecycle rejects both stale HMAC links even with matching freshness hashes')
+
+
 def test() -> None:
     test_missing_historical_blob()
     policy = model.read_policy()
     register = model.build_register(policy)
+    test_generated_mapping(register)
     model.validate_register(register, policy)
     reviews_policy.validate_reviews(model.load_json(model.REVIEWS))
     assert len(register["authorities"]) == 131

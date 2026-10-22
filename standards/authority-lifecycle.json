@@ -1204,7 +1204,7 @@
         "BRY-REQ-CRYPTO-0003"
       ],
       "affected_symbols": [
-        "crates/brynja-crypto/src/hmac.rs#Hmac"
+        "crates/brynja-mac-hmac/src/lib.rs#Hmac"
       ],
       "brynja_state": "current",
       "content_sha256": "64d5245a9101929025336e470e3737f118704001249d503c85a86e19fe9fbb01",
@@ -1772,7 +1772,7 @@
         "BRY-REQ-CRYPTO-0003"
       ],
       "affected_symbols": [
-        "crates/brynja-crypto/src/hmac.rs#Hmac"
+        "crates/brynja-mac-hmac/src/lib.rs#Hmac"
       ],
       "brynja_state": "rejected",
       "content_sha256": "72178527ce93500e730bc8eb182b857e583096d652b64ece0879c52ba1df973b",

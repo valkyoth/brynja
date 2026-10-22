@@ -36,6 +36,8 @@ def reject(label: str, mutation) -> None:
             destination = root / relative
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(ROOT / relative, destination)
+        # An unrelated baseline failure must never count as mutant rejection.
+        policy.validate(root)
         mutation(root)
         try:
             policy.validate(root)
@@ -45,6 +47,7 @@ def reject(label: str, mutation) -> None:
 
 
 def main() -> int:
+    policy.validate(ROOT)
     reject("unsafe", lambda root: replace(root, policy.SHA256, "pub struct Sha256", "pub unsafe struct Sha256"))
     reject("ffi", lambda root: replace(root, policy.ERROR, "pub enum", 'extern "C" {}\npub enum'))
     reject("std", lambda root: replace(root, policy.ERROR, "pub enum", "use std::vec::Vec;\npub enum"))
@@ -117,6 +120,7 @@ def main() -> int:
         ("required CPU", 'workspace = true, optional = true', 'workspace = true'),
         ("CPU defaults", 'default = []', 'default = ["cpu"]'),
         ("CPU opt-in", 'cpu = ["dep:brynja-crypto-cpu"]', 'cpu = []'),
+        ("missing HMAC", 'brynja-mac-hmac = { workspace = true }\n', ''),
         ("foreign owner", '[dependencies]', '[dependencies]\nforeign = "1"'),
     ):
         reject(label, lambda root, b=before, a=after: replace(root, policy.CRYPTO_MANIFEST, b, a))
@@ -124,7 +128,7 @@ def main() -> int:
     reject("consumer test", lambda root: replace(root, policy.TEST, "fn downstream_style_real_content_uses_only_public_api", "fn removed_consumer"))
     reject("oversized", lambda root: (root / policy.SHA256).write_text((root / policy.SHA256).read_text(encoding="utf-8") + "\n" * 501, encoding="utf-8"))
     reject("reviewed hash", lambda root: replace(root, policy.DIGEST, "One complete", "Complete"))
-    print("portable SHA-2 policy rejects seventy-eight unsafe, native, allocation, identity, bit-domain, arithmetic, padding, dynamic-analysis, package, test, size, and hash regressions")
+    print("portable SHA-2 policy validates every fixture baseline and rejects unsafe, native, allocation, identity, bit-domain, arithmetic, padding, dynamic-analysis, SHA-2/HMAC ownership, package, test, size, and hash regressions")
     return 0
 
 

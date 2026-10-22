@@ -13,6 +13,7 @@ for category in ('sha2', 'sha3', 'hash', 'sp800185', 'cryptography', 'md5', 'cpu
     sys.path.insert(0, str(ROOT / 'scripts' / category))
 
 import sha256_public_api
+import sha256_policy
 import sha2_hardened_execution_policy
 import sha256_batch_policy
 import sha512_batch_policy
@@ -21,6 +22,7 @@ import sha2_public_api
 import sha3_public_api
 import final_acceptance
 import portable_acceptance
+import execution_acceptance
 import api_profile_model
 import md5_policy
 import md5_cpu_policy
@@ -99,6 +101,9 @@ def check_all():
     # drivers. Reuse its exact CI validator, never its Cargo/package campaign.
     static_acceptance.validate()
     check_verifier_bindings()
+    # The public-API review does not include this separate portable facade
+    # dependency inventory. Run the exact source/manifest validator used by CI.
+    sha256_policy.validate(ROOT)
     # Validate the complete legacy source/delta inventory, not just its two
     # shared verifier pins. This is metadata only; never run its Cargo driver.
     legacy_final_acceptance.validate(ROOT)
@@ -124,6 +129,7 @@ def check_all():
     sha3_public_api.validate_repository(ROOT)
     final_acceptance.validate(ROOT)
     portable_acceptance.validate(ROOT)
+    execution_acceptance.validate(ROOT)
     # These share packaging helpers. Recheck all four review closures after
     # final packaging/docs edits, without invoking their Rust test drivers.
     md5_policy.validate(ROOT)
@@ -139,4 +145,4 @@ def check_all():
 
 if __name__ == '__main__':
     check_all()
-    print('Shared verifier bindings, static CPU, API-profile, five acceptance, four MD5, acceleration and ParallelHash metadata/hash closures: PASS (no crypto rerun)')
+    print('Shared verifier bindings, static CPU, API-profile, six acceptance, four MD5, acceleration and ParallelHash metadata/hash closures: PASS (no crypto rerun)')

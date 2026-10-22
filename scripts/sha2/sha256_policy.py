@@ -420,6 +420,7 @@ def validate_packages(root: Path) -> None:
         "brynja-hash-parallel",
         "brynja-hash-tuple",
         "brynja-mac-kmac",
+        "brynja-mac-hmac",
     }:
         fail("brynja-crypto SHA-256 ownership changed")
     if (crypto["dependencies"]["brynja-crypto-cpu"] != {"workspace": True, "optional": True}

@@ -191,6 +191,21 @@ features, graph validation, tests or unrelated shared code retain their ordinary
 affected scope. This classification does not approve native tooling or supply
 missing HMAC verification results.
 
+The remaining shared HMAC integration is also classified separately: exact
+guarded worker-test suffixes, optional archive/patch additions, and reviewed
+HMAC-only hosted-validator changes select HMAC. CPU and batch review inventories
+may add only registered HMAC source rows with matching current digests; existing
+paths and non-digest policy fields cannot disappear or change. The actual source
+diff is classified independently, so an inventory update never hides a kernel
+or worker change. Current CPU, SHA-2 and batch policy regressions remain mandatory.
+
+The separately byte-bound SDE output-parser correction does not change the
+implementation scope of Miri/Kani/ASan. It does not establish successful SDE
+execution: a changed command driver still reruns, and its tests still reject
+timeouts after printed PASS output, missing populations and disabled leak checks.
+Exact before/after tooling identities are reviewed scope limits, not signatures
+or runtime attestations. Unknown edits retain conservative selection.
+
 The SHA-2, Keccak, KMAC, TupleHash and ParallelHash inventories include the
 whole hosted CPU crate. Their pre-HMAC command profiles do not enable HMAC.
 The bounded HMAC projection checks those commands against an immutable reviewed

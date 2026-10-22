@@ -81,6 +81,24 @@ class CarryForwardTests(unittest.TestCase):
         context['plan']['evidence'] = {'changed_paths': ['scripts/sha2/check-sha2-execution.py']}
         self.assertTrue(carry.disposition(check, context).startswith('run:'))
 
+    def test_hmac_only_scope_keeps_changed_drivers_and_current_policies(self):
+        from scope_review_metadata import BASE_COMMANDS
+        paths = ('scripts/cpu/check-hosted-execution.py', 'scripts/sha2/check-x86-sha512.py',
+                 'scripts/sha1/check-sha1-package.py', 'scripts/md5/check-md5-package.py',
+                 'scripts/sha2/check-sha2-execution.py', 'scripts/sha3/check-sha3-execution.py')
+        for path in paths:
+            check = entry('python3 ' + path)
+            context = self.context([check], ['hmac'])
+            context['plan']['evidence'] = {'changed_paths': [path]}
+            self.assertEqual(carry.disposition(check, context), 'run: changed command driver or input')
+        for command in BASE_COMMANDS:
+            check = entry(command)
+            self.assertTrue(carry.disposition(check, self.context([check], ['hmac'])).startswith('run:'))
+        old = entry('scripts/assurance/check-kani.sh --required-groups sha2', 'kani')
+        self.assertTrue(carry.disposition(old, self.context([old], ['hmac'])).startswith('reuse:'))
+        hmac = entry('python3 scripts/hmac/check-hmac-kani.py', 'kani')
+        self.assertTrue(carry.disposition(hmac, self.context([old], ['hmac'])).startswith('run:'))
+
     def test_only_explanatory_text_is_excluded_from_execution_identity(self):
         original = plan(['sha2'])
         self.assertEqual(plans.execution_identity(original), plans.execution_identity(

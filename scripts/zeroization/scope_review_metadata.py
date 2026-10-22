@@ -5,10 +5,12 @@ Production sources, build inputs and memory/proof drivers are independently
 classified, and their old receipts still require unchanged execution identities.
 """
 import hashlib
+import json
 import re
 from pathlib import PurePosixPath
 
 import scope_inputs as inputs
+import scope_hmac as hmac
 
 
 CPU_CHECKS = (
@@ -67,15 +69,34 @@ SCRIPT_COMMANDS = {
     'scripts/sha2/test-sha2-hardened-execution.py': SHA2_POLICY_CHECKS,
 }
 BASE_COMMANDS = frozenset((*CPU_CHECKS, *KMAC_CHECKS, *SHA2_POLICY_CHECKS, *NATIVE_APPROVAL_CHECKS, *API_CHECKS,
+    'python3 scripts/sha2/check-sha256.py', 'python3 scripts/sha2/test-sha256.py',
+    'python3 scripts/sha2/test-sha256-batch.py', 'python3 scripts/sha2/test-sha512-batch.py',
+    'python3 scripts/sha3/test-keccak-batch-policy.py',
     'python3 scripts/cryptography/test-macos-legacy-resident-package.py',
     'python3 scripts/hash/check-final-acceptance.py'))
+
+# Reviewed output-parser/diagnostic regressions only. The actual SDE driver
+# remains a changed command, never a reused execution result; its mandatory
+# policy/regression checks are in SHA2_POLICY_CHECKS. No timeout/LSan waiver.
+DIAGNOSTIC_PAIRS = {
+    'scripts/sha2/check-x86-sha512.py': (
+        '8629ef3d6c14afa34eb55b7667720a2d7ca1a5d8b18724f6ff8a4e69dc2601be',
+        '279646a8f63118d6a4259533eca732b21573f4add90b6f1f8f293f82e2d0b102'),
+    'scripts/sha2/x86_sha512_regressions.py': (
+        '16b237051d74ab6eb17da6e7e3cb45e99a765c170a50e7325debc68c8f7b1cc1',
+        '0578ea68015eaf5857dfd818e5d8035665344b81dca1c2c3a1334d00cf702035'),
+}
+BATCH_INVENTORIES = {'scripts/sha2/sha256-batch-reviewed.json': 64,
+                     'scripts/sha2/sha512-batch-reviewed.json': 128,
+                     'scripts/sha3/keccak-batch-reviewed.json': 128}
 
 
 def cpu_inventory_only(root, base, before, after):
     """Add/rebind inventory only; never change admission, graph or limits.
 
-    Every added or rebound source must exist unchanged in both snapshots and
-    its current digest must match. Existing status/path entries cannot vanish.
+    Rebound sources stay unchanged or have an exact HMAC-only projection.
+    New HMAC rows use fixed path/status pairs; their real source deltas still
+    select HMAC independently. Current digests match; old entries cannot vanish.
     """
     left, right = inputs.document(before), inputs.document(after)
     rows = []
@@ -110,10 +131,51 @@ def cpu_inventory_only(root, base, before, after):
             continue
         source = 'crates/' + key[0] + '/' + key[1]
         original, current = inputs.snapshot(root, base, source)
-        if (current is None or original != current
-                or hashlib.sha256(current).hexdigest() != row['sha256']):
+        if current is None or hashlib.sha256(current).hexdigest() != row['sha256']:
+            return False
+        hmac_addition = (previous is None and original is None and key[0] == 'brynja-crypto-cpu-std'
+                         and hmac.HOSTED_SOURCES.get(key[1]) == row['status'])
+        if original != current and not hmac_addition and not hmac.source_only(source, original, current):
             return False
     return True
+
+
+def batch_inventory_only(root, base, path, before, after):
+    """Only add registered HMAC rows; old paths and non-digest fields stay exact.
+
+    Every new row is bound to a real source independently selected by Git.
+    Current batch/acceptance policies still verify the complete inventory.
+    """
+    if before is None or after is None:
+        return False
+    def unique(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError('duplicate batch review key')
+            result[key] = value
+        return result
+    old, new = [json.loads(raw, object_pairs_hook=unique) for raw in (before, after)]
+    if set(old) != {'files', 'schema', 'version'} or set(new) != set(old):
+        return False
+    left, right = old['files'], new['files']
+    if not isinstance(left, dict) or not isinstance(right, dict) or not left.keys() <= right.keys():
+        return False
+    size = BATCH_INVENTORIES[path]
+    if any(not isinstance(v, str) or not re.fullmatch('[0-9a-f]{' + str(size) + '}', v)
+           for rows in (left, right) for v in rows.values()):
+        return False
+    allowed = {'crates/brynja-crypto-cpu-std/' + p for p in hmac.HOSTED_SOURCES}
+    for name in list(right.keys() - left.keys()):
+        if name not in allowed:
+            return False
+        original, current = inputs.snapshot(root, base, name)
+        if original is not None or current is None:
+            return False
+        digest = hashlib.sha256 if size == 64 else hashlib.sha512
+        if digest(current).hexdigest() != right.pop(name):
+            return False
+    return inputs.json_hash_binding_only(json.dumps(old).encode(), json.dumps(new).encode())
 
 
 def final_hash_map_only(before, after):
@@ -153,6 +215,11 @@ def native_observation(path):
 
 
 def metadata_only(root, base, path, before, after):
+    if path in DIAGNOSTIC_PAIRS:
+        return all(raw is not None and hashlib.sha256(raw).hexdigest() in DIAGNOSTIC_PAIRS[path]
+                   for raw in (before, after))
+    if path in BATCH_INVENTORIES:
+        return batch_inventory_only(root, base, path, before, after)
     if native_observation(path):
         return True
     if path in SCRIPT_COMMANDS:

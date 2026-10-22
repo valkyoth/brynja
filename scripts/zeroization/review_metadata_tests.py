@@ -26,6 +26,7 @@ def selected(changes, sources=None):
 
 
 def test_review_metadata():
+    test_hmac_review_metadata()
     boundary = 'security/cpu-acceleration-boundary.toml'
     source = 'crates/brynja-crypto-cpu-std/src/lib.rs'
     added = 'crates/brynja-crypto-cpu-std/src/windows_enclave/mod.rs'
@@ -105,3 +106,78 @@ def test_review_metadata():
     assert selected({path: (binding, rebound), 'crates/brynja-hash-sha2/src/lib.rs':
                      (b'old', b'new')}) == (False, ('sha2', 'hmac'))
     print('Review-only scope retains runtime/build/verifier changes and rejects malformed, removed and broadened inventories')
+
+
+def test_hmac_review_metadata():
+    import copy
+    base = '8a93f40dcd33b1a4328d107233ead5b5d7933eef'
+    for path in review.DIAGNOSTIC_PAIRS:
+        before, after = inputs.snapshot(scope.ROOT, base, path)
+        for left, right in ((before, after), (after, before)):
+            assert selected({path: (left, right)}) == (False, ())
+        for mutant in (None, b'', after + b'\n', after.replace(b'\n', b'\r\n'),
+                       after.replace(b'600', b'601'), after.replace(b'detect_leaks=1', b'detect_leaks=0')):
+            if mutant != after:
+                assert selected({path: (before, mutant)})[1]
+        kernel = 'crates/brynja-crypto-cpu/src/x86_sha512/secret.rs'
+        assert selected({path: (before, after), kernel: (b'old', b'new')})[1]
+
+    source_names = {'crates/brynja-crypto-cpu-std/' + p for p in review.hmac.HOSTED_SOURCES}
+    source_names |= set(review.hmac.SOURCES) | set(review.hmac.TEST_SUFFIXES)
+    sources = {p: inputs.snapshot(scope.ROOT, base, p) for p in source_names}
+    boundary = 'security/cpu-acceleration-boundary.toml'
+    before, after = inputs.snapshot(scope.ROOT, base, boundary)
+    assert selected({boundary: (before, after)}, sources) == (False, ())
+    for old, new in ((b'protected-scalar-hmac-session-development', b'admitted'),
+                     (b'src/strict_hmac/mod.rs', b'src/strict_hmac/unknown.rs'),
+                     (b'active_backend_count = 0', b'active_backend_count = 1')):
+        mutant = after.replace(old, new)
+        assert mutant != after
+        assert selected({boundary: (before, mutant)}, sources)[1]
+    for path in source_names:
+        if path in review.hmac.TOOL_PAIRS:
+            continue
+        left, right = sources[path]
+        if right is None:
+            continue
+        changed = {**sources, path: (left, right + b'changed()\n')}
+        # A real source edit cannot be hidden behind unchanged metadata.
+        assert selected({boundary: (before, after), path: changed[path]}, changed)[1]
+
+    for path, size in review.BATCH_INVENTORIES.items():
+        before, after = inputs.snapshot(scope.ROOT, base, path)
+        a, b = json.loads(before), json.loads(after)
+        added = sorted(b['files'].keys() - a['files'].keys())
+        assert len(added) == 19
+        assert selected({path: (before, after)}, sources) == (False, ())
+        def rejects(mutant, overrides=None):
+            assert selected({path: (before, json.dumps(mutant).encode())},
+                            {**sources, **(overrides or {})})[1]
+        for field in ('schema', 'version'):
+            mutant = copy.deepcopy(b)
+            mutant[field] = 'changed'
+            rejects(mutant)
+        mutant = copy.deepcopy(b)
+        mutant['files'].pop(next(iter(a['files'])))
+        rejects(mutant)
+        for name, digest in ((added[0], '0' * size), (added[0], 'z' * size),
+                             (added[0], '0' * (size // 2)),
+                             ('crates/brynja-crypto-cpu-std/src/unrelated.rs', '0' * size)):
+            mutant = copy.deepcopy(b)
+            mutant['files'][name] = digest
+            rejects(mutant)
+        for pair in ((None, None), (b'existing source', sources[added[0]][1]),
+                     (None, sources[added[0]][1] + b'changed()')):
+            rejects(b, {added[0]: pair})
+        duplicate = after.replace(b'"files": {', b'"files": {}, "files": {', 1)
+        assert selected({path: (before, duplicate)}, sources)[1]
+        # A legitimate changed HMAC source is still selected even when the
+        # inventory correctly follows its new digest; no old HMAC PASS implied.
+        current = sources[added[0]][1] + b'changed()\n'
+        mutant = copy.deepcopy(b)
+        digest = hashlib.sha256 if size == 64 else hashlib.sha512
+        mutant['files'][added[0]] = digest(current).hexdigest()
+        pair = (None, current)
+        assert selected({path: (before, json.dumps(mutant).encode()), added[0]: pair},
+                        {**sources, added[0]: pair}) == (False, ('hmac',))
+    print('HMAC review inventories: source-bound additions, parser changes and concurrent implementation mutations PASS')

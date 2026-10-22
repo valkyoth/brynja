@@ -348,5 +348,85 @@ def test_hmac_scope():
     source_tests()
     fixture_tests()
     packaging_tests()
+    shared_tooling_tests()
     repository_tests()
     print('HMAC scope: exact facade/hosted additions, both lock graphs, fixture identities and dirty Git regressions PASS')
+
+
+def shared_tooling_tests():
+    from review_metadata_tests import selected
+    base = '8a93f40dcd33b1a4328d107233ead5b5d7933eef'
+    public = ('scripts/sha2/sha256_public_api.py', 'scripts/sha2/sha2_public_api.py',
+              'scripts/sha3/sha3_public_api.py')
+    paths = {*hmac.TEST_SUFFIXES, *hmac.TOOL_PAIRS, *hmac.PACKAGING, *public}
+    for path in sorted(paths):
+        before, after = inputs.snapshot(scope.ROOT, base, path)
+        assert before != after
+        for left, right in ((before, after), (after, before)):
+            assert hmac.source_only(path, left, right), path
+            assert selected({path: (left, right)}) == (False, ('hmac',)), path
+        # Prefix edits, extra operations and missing files cannot borrow an
+        # exact additive projection. Unknown paths never qualify either.
+        for mutant in (b'changed_prefix()\n' + after, after + b'changed_command()\n', b'', None):
+            assert not hmac.source_only(path, before, mutant), path
+            assert set(selected({path: (before, mutant)})[1]) - {'hmac'}, path
+        assert not hmac.source_only(path + '.other', before, after)
+        shared = 'crates/brynja-core/src/secret.rs'
+        assert 'core' in selected({path: (before, after), shared: (b'old', b'new')})[1]
+        if path in hmac.TEST_SUFFIXES:
+            suffix = after[len(before):]
+            for mutant in (before + suffix.replace(b'#[cfg(feature', b'#[cfg(not_feature', 1),
+                           before + suffix + suffix, after.replace(b'\n', b'\r\n')):
+                assert not hmac.source_only(path, before, mutant)
+        if path in hmac.TOOL_PAIRS:
+            assert not hmac.source_only(path, before, after.replace(b'\n', b'\r\n'))
+        if path in public:
+            addition = b'    ("brynja-mac-hmac", "0.1.0", ("src/lib.rs",)),\n'
+            for mutant in (after + addition, after.replace(addition, addition.replace(b'0.1.0', b'0.1.1')),
+                           after.replace(b'PACKAGES =', b'PACKAGES_CHANGED =', 1),
+                           after.replace(b'"brynja-core", "0.9.0"', b'"brynja-core", "0.9.1"')):
+                assert mutant != after
+                assert not hmac.source_only(path, before, mutant), path
+            if not path.endswith('sha256_public_api.py'):
+                for table in (b'None', b'{}', b'((),)', b'(("brynja", 1, ()),)', b'(1,)'):
+                    mutant = after + b'\nPACKAGES = ' + table + b'\n'
+                    mutant = mutant.replace(b'PACKAGES =', b'OLD_PACKAGES =', 1)
+                    assert not hmac.source_only(path, before, mutant), path
+    # Real staged/unstaged/untracked enumeration of the combined integration,
+    # including source-bound CPU and batch inventories, not just mocked paths.
+    import scope_review_metadata as review
+    paths |= set(hmac.SOURCES) | set(review.BATCH_INVENTORIES) | {'security/cpu-acceleration-boundary.toml'}
+    paths |= {'crates/brynja-crypto-cpu-std/' + p for p in hmac.HOSTED_SOURCES}
+    changes = {p: inputs.snapshot(scope.ROOT, base, p) for p in paths}
+    with tempfile.TemporaryDirectory(prefix='brynja-shared-hmac-scope-') as temporary:
+        root = Path(temporary)
+        def git(*args):
+            return subprocess.check_output(['git', *args], cwd=root, stderr=subprocess.DEVNULL)
+        def write(name, raw):
+            if raw is not None:
+                target = root / name
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(raw)
+        git('init', '-q')
+        git('config', 'user.name', 'Scope test')
+        git('config', 'user.email', 'scope@example.invalid')
+        git('config', 'commit.gpgsign', 'false')
+        for path, (before, _) in changes.items():
+            write(path, before)
+        git('add', '.')
+        git('commit', '-qm', 'baseline')
+        baseline = git('rev-parse', 'HEAD').decode().strip()
+        for path, (_, after) in changes.items():
+            write(path, after)
+        def chosen():
+            return scope.select_repository(baseline, root, verified_base=True)
+        assert chosen() == (False, ('hmac',))
+        git('add', 'scripts', 'security')
+        assert chosen() == (False, ('hmac',))
+        shared = next(iter(hmac.TEST_SUFFIXES))
+        write(shared, b'changed_shared_worker();\n' + changes[shared][1])
+        assert 'static_cpu' in chosen()[1]
+        write(shared, changes[shared][1])
+        write('crates/brynja-hash-sha3/src/sponge.rs', b'changed_kernel();\n')
+        assert 'sha3' in chosen()[1]
+    print('Shared HMAC tooling: exact additions retain old tests/features/commands and unrelated implementation scope')

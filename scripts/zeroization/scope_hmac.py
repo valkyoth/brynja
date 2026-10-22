@@ -58,6 +58,56 @@ PACKAGING = {
          b"        'brynja-mac-hmac', 'brynja-strict')\n"),),
     'scripts/cryptography/check-macos-legacy-resident-package.py': (
         (b'', b"            'brynja-mac-hmac',\n"),),
+    **dict.fromkeys(('scripts/md5/check-md5-package.py',
+                     'scripts/sha1/check-sha1-package.py'), (
+        (b"'brynja-mac-kmac', 'brynja-hash-tuple')})",
+         b"'brynja-mac-kmac', 'brynja-hash-tuple', 'brynja-mac-hmac')})"),)),
+    'scripts/sha2/check-sha2-execution.py': (
+        (b"'brynja-hash-tuple', 'brynja-crypto-cpu-std')",
+         b"'brynja-hash-tuple', 'brynja-mac-hmac', 'brynja-crypto-cpu-std')"),),
+    'scripts/sha3/check-sha3-execution.py': (
+        (b"packages = tuple(dict.fromkeys((*PACKAGES, 'brynja-mac-kmac', 'brynja-hash-tuple')))",
+         b"packages = tuple(dict.fromkeys((*PACKAGES, 'brynja-mac-kmac', 'brynja-hash-tuple',\n"
+         b"                                   'brynja-mac-hmac')))"),),
+    'scripts/sha2/sha256_policy.py': (
+        (b'', b'        "brynja-mac-hmac",\n'),),
+}
+# Existing prefixes remain byte-identical; only these reviewed gated test
+# suffixes belong to HMAC. Editing any older worker test selects its consumers.
+TEST_SUFFIXES = {
+    'crates/brynja-crypto-cpu-std/src/protected_memory/platform/thread/tests.rs':
+        'd19d2744657bd2b8d8a05b175304db2cc741d43fa85dcbf88b9170f72248da42',
+    'crates/brynja-crypto-cpu-std/src/macos_resident/resource/darwin/tests.rs':
+        '875ce1f721f6ecad339188a3b95e6e4c199d7eaadaca4a518cdeb8d5a46937d8',
+}
+HOSTED_SOURCES = {'src/execution/hmac.rs': 'opt-in-hardened-hmac-adapter'}
+for directory, prefix, scalar, policy, tests in (
+    ('strict_hmac', 'protected', 'scalar-', 'policy-and-bounds', 'model-and-fault-tests'),
+    ('macos_resident/hmac', 'macos-resident', '', 'api-types', 'admission-tests'),
+):
+    HOSTED_SOURCES.update({f'src/{directory}/{name}': f'{prefix}-{status}' for name, status in {
+        'mod.rs': scalar + 'hmac-session-development', 'types.rs': 'hmac-' + policy,
+        'worker.rs': 'hmac-worker' + ('-and-verification' if directory == 'strict_hmac' else ''),
+        'tests.rs': 'hmac-' + tests,
+        'tests/native.rs': 'hmac-native-tests',
+        'compiled.rs': ('compiled-hmac' if directory == 'strict_hmac' else 'hmac-compiled') + '-session-development',
+        'compiled/worker.rs': ('compiled-hmac' if directory == 'strict_hmac' else 'hmac-compiled') + '-worker',
+        'compiled/tests.rs': ('compiled-hmac' if directory == 'strict_hmac' else 'hmac-compiled') + '-admission-tests',
+        'compiled/tests/native.rs': ('compiled-hmac' if directory == 'strict_hmac' else 'hmac-compiled') + '-native-tests',
+    }.items()})
+# Whole-file reviewed HMAC-only tooling additions. These are scope identities,
+# not authorizations or successful execution receipts. Changed command drivers
+# still run, and current CPU/SHA-2 policy checks remain mandatory.
+TOOL_PAIRS = {
+    'scripts/cpu/check-hosted-execution.py': (
+        '05c40d7c72890f5e9904470c3233cca7e46aa0b1ed309819b2028d399e0d15e9',
+        '462e9e8dda87ebc404f046a601ac1245081e4769388314a24c8ce17f1c297f1d'),
+    'scripts/cpu/cpu_boundary_backends.py': (
+        'd5d214aaf9da4130a8e0f0278861c8eb57a5b3f5253a2a3a527265735f8b9105',
+        '9e5afb5958db04d837d9f952c068c861016d3d4c7913e54b89636f9e38aea2bf'),
+    'scripts/sha2/test-sha256.py': (
+        'f74fa4de3a5c70cc4b32e925bf6bb053f6b63f52e754eb59ba2e67cadc39dd9e',
+        '4802718f2754dc3c8faafa866c058e7960a55398f41dc179bc14b99fcc7f5c75'),
 }
 # Exact reviewed test-only addition: optional archive closure/graph regressions.
 # Its command stays mandatory; any later edit retains broad shared scope.
@@ -133,6 +183,14 @@ def manifest_only(path, before, after):
 
 
 def source_only(path, before, after):
+    if path in TEST_SUFFIXES and before is not None and after is not None:
+        return any(b.startswith(a) and hashlib.sha256(b[len(a):]).hexdigest() == TEST_SUFFIXES[path]
+                   for a, b in ((before, after), (after, before)))
+    if path in TOOL_PAIRS:
+        return all(raw is not None and hashlib.sha256(raw).hexdigest() in TOOL_PAIRS[path]
+                   for raw in (before, after))
+    if public_archive_only(path, before, after):
+        return True
     if path == PACKAGING_TEST:
         return all(raw is not None and hashlib.sha256(raw).hexdigest() in
                    PACKAGING_TEST_HASHES for raw in (before, after))
@@ -155,6 +213,47 @@ def source_only(path, before, after):
             raw = raw.replace(new, old)
         values.append(raw)
     return values[0] == values[1]
+
+
+def public_archive_only(path, before, after):
+    """Only add the HMAC package/patch plus existing version/digest rebinding."""
+    if path not in {'scripts/sha2/sha256_public_api.py', 'scripts/sha2/sha2_public_api.py',
+                    'scripts/sha3/sha3_public_api.py'} or before is None or after is None:
+        return False
+    import ast
+    import scope_inputs as inputs
+    values, versions = [], []
+    additions = [b'    ("brynja-mac-hmac", "0.1.0", ("src/lib.rs",)),\n']
+    if path.endswith('sha256_public_api.py'):
+        additions.append(b'brynja-mac-hmac = { path = "crates/brynja-mac-hmac", version = "=0.1.0" }\n')
+    for raw in (before, after):
+        for addition in additions:
+            if raw.count(addition) > 1:
+                return False
+            raw = raw.replace(addition, b'')
+        if path.endswith('sha256_public_api.py'):
+            values.append(raw)
+            continue
+        # Extract only the literal facade version from PACKAGES. Its exact
+        # replacement is still checked against all other executable bytes/AST.
+        tree = ast.parse(raw)
+        tables = [n.value for n in tree.body if isinstance(n, ast.Assign)
+                  and any(isinstance(t, ast.Name) and t.id == 'PACKAGES' for t in n.targets)]
+        if len(tables) != 1:
+            return False
+        entries = ast.literal_eval(tables[0])
+        if (not isinstance(entries, (tuple, list))
+                or any(not isinstance(entry, (tuple, list)) or len(entry) != 3
+                       or not isinstance(entry[0], str) or not isinstance(entry[1], str)
+                       for entry in entries)):
+            return False
+        pins = [entry[1] for entry in entries if entry[0] == 'brynja']
+        if len(pins) != 1:
+            return False
+        versions.append(pins[0])
+        values.append(raw)
+    return (inputs.facade_pin_only(*values, *versions) if versions
+            else inputs.python_bindings_only(*values))
 
 
 def integration_only(path, before, after):

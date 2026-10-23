@@ -5263,8 +5263,15 @@ native SHA-NI byte/bit comparisons and extracted-package negatives pass in autho
 checks. Three bounded Miri liveness tests cover both-owner destruction on error
 and recoverable unwind; this is not a full HMAC Miri or compiler qualification.
 
-Remaining: MD5 SIMD composition and applicable protected/resident owner
-assessment; error/unwind cleanup, compiler and timing evidence; capability and
+The default-off MD5 SIMD composition now has borrowed-prefix inner/outer passes,
+explicit full-group selection, shared work budgets, clearing intermediate/output
+storage and aggregate verification. Native AVX2 author tests cover all masks,
+truncations, byte/bit differentials and cancellation/revocation/unwind boundaries.
+The existing secret kernels are unchanged; shared MD5 batch prefix/length handling
+has changed and requires its affected downstream checks.
+
+Remaining: applicable protected/resident owner assessment; compiler and timing
+qualification, complete error/unwind cleanup evidence; capability and
 affected-family scope registration; independent retest and scoped release checks.
 Native Arm SHA-1 execution and complete downstream composition qualification
 remain pending; Apple Silicon cross-compilation is not execution evidence.

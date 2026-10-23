@@ -52,7 +52,10 @@ class Acceptance(unittest.TestCase):
         workspace.validate_features(name, packages[name], entry)
         for field, replacement in (("default", ["sha1-execution"]), ("sha1-execution", []),
                                    ("sha1-execution", ["brynja-legacy-sha1/execution"]),
-                                   ("sha1-execution", ["brynja-legacy-sha1/cpu-evidence"])):
+                                   ("sha1-execution", ["brynja-legacy-sha1/cpu-evidence"]),
+                                   ("default", ["md5-batch"]), ("md5-batch", []),
+                                   ("md5-batch", ["brynja-legacy-md5/execution"]),
+                                   ("md5-batch", ["brynja-legacy-md5/cpu-evidence"])):
             package = copy.deepcopy(packages[name])
             package["features"][field] = replacement
             with self.subTest(feature=field, replacement=replacement), self.assertRaises(ValueError):

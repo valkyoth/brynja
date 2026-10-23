@@ -52,13 +52,20 @@ CHECKS = {
         'if self.executor.required && work.vector_blocks == 0',
         'vector::execute(&mut self.owner, inputs, control, a)?',
         'self.owner.commit_public(output);', 'self.executor.quarantine();',
-        'let result = self.run_inner(inputs, control);',
+        'let result = self.run_inner(inputs, prefixes, control);',
         'guard.complete = matches!(result, Ok(_) | Err(Error::IneligibleWorkload) | Err(Error::Batch(Md5BatchError::WorkLimit | Md5BatchError::Cancelled | Md5BatchError::MessageTooLong)));'),
     LEAF+'src/batch/hardened_execution/vector.rs': ('let mut scratch = Scratch::new();',
+        'crate::engine::admit_bytes(lane.bits(), prefix)',
         'i.map_or(0, |b| b.bit_len() / 512)',
         'authority.compress(&mut scratch)', 'finish_lane(lane, *input, prefix, control, &mut report)?;',
         'control.charge(width)?;', 'report.vector_blocks.checked_add(width)',
         'transfer::pack_state(', 'transfer::pack_block(', 'transfer::advance(', 'transfer::commit_state('),
+    LEAF+'src/batch/hardened_execution/prefixed.rs': (
+        'matches!(width, 4 | 8)', 'group.iter().all(Option::is_some)',
+        'control.charge(width)?;', 'let mut scratch = Scratch::new();',
+        'authority.compress(&mut scratch)', 'transfer::advance(&mut scratch);',
+        'engine::admit_bytes(lane.bits(), 64)', 'engine::update(lane, block)',
+        'transfer::pack_state(', 'transfer::pack_block(', 'transfer::commit_state('),
     HOST+'src/hardened_execution/platform.rs': ('target_feature = "avx2"',
         'std::arch::is_aarch64_feature_detected!("neon")', 'Authority::from_platform(backend, revalidate)',
         'backend == Md5Backend::Aarch64Neon && availability() == Ok(backend)',
@@ -104,6 +111,7 @@ def paths(root=ROOT):
     names.update('assurance/register-cleanup/md5-scalar/'+name for name in
                  ('Cargo.toml', 'Cargo.lock', 'src/lib.rs', 'src/tests.rs', 'src/tests/reference.rs'))
     names.update((LEAF+'tests/hardened_execution.rs',HOST+'tests/hardened_execution.rs',
+        LEAF+'tests/prefixed_execution.rs',
         'docs/legacy-md5-hardened-execution.md'))
     names.update('assurance/md5-hardened-execution/'+n for n in ('Cargo.toml','Cargo.lock','src/main.rs'))
     names.update('scripts/md5/'+n for n in ('md5_hardened_policy.py','check-md5-hardened.py',

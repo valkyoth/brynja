@@ -37,7 +37,7 @@ absent from modern facades, defaults, protocol negotiation and approved services
 | Streaming, long keys, explicit byte truncation and verification | Initial implementation with author tests | ❌ No |
 | Public tags and clearing secret tags | Implemented; composition cleanup qualification pending | ❌ No |
 | Explicit hardened SHA-1 execution | Opt-in `sha1-execution`; x86 author tests, qualification pending | ❌ No |
-| MD5 SIMD HMAC | Not yet implemented | ❌ No |
+| MD5 SIMD HMAC | Opt-in `md5-batch`; AVX2 author tests, qualification pending | ❌ No |
 
 No independent qualification or FIPS approval is claimed. Existing hash
 qualification does not qualify this new keyed composition. Caller copies,
@@ -60,8 +60,17 @@ the Cargo feature alone does not enable instructions. Static selection needs
 the complete build target features. A hosted legacy SHA-1 adapter may instead
 supply its hardened executor, subject to its platform restrictions. Neither a
 route report nor cached feature detection proves safe CPU/VM migration.
-MD5 SIMD composition remains unimplemented. No underlying hash qualification
-automatically qualifies either HMAC composition.
+The separate `md5-batch` feature exposes `md5_batch::Md5Batch`, borrowing a
+hardened `Md5Executor`. It requires at least one complete active group: eight
+AVX2 lanes or four NEON lanes. Its ipad and opad passes perform actual SIMD work;
+unequal suffixes and padding remain scalar. Long-key normalization selects SIMD
+for eligible full groups, otherwise a portable hardened owner, before processing
+keys. This is not failure-driven fallback. Both public and secret output paths
+are transactional, and verification compares all active tags before returning
+one aggregate decision. A shared `Md5BatchControl` bounds compression work
+across normalization and both HMAC passes. Cancellation and budget rejection
+preserve executor reuse; backend failures and recoverable unwind quarantine it.
+No underlying hash qualification automatically qualifies either HMAC composition.
 
 ## Use
 
@@ -93,3 +102,36 @@ leave the destination unchanged; secret-output errors clear the destination.
 Typed `BitString` finalization accepts canonical high-order final message bits.
 Keys and truncation are byte-aligned. There is no reset, key export, snapshot,
 public preflight length oracle, or ordinary/modern digest conversion.
+
+For batch compatibility, enable `md5-batch` explicitly. Supply an admitted
+hardened executor; the Cargo feature alone does not establish CPU support.
+The following function handles eight independent messages, not one split message:
+
+```rust
+# #[cfg(feature = "md5-batch")]
+fn legacy_batch(
+    executor: &brynja_legacy_hmac::md5_batch::Md5Executor,
+    key: &[u8], message: &[u8],
+) -> Result<(), brynja_legacy_hmac::Error> {
+    use brynja_legacy_hmac::{BitString, Error, LegacyUse};
+    use brynja_legacy_hmac::md5_batch::{Input, Md5Batch, Md5BatchControl};
+    let message = BitString::new(message, if message.is_empty() { 0 } else { 8 })
+        .map_err(|_| Error::MessageTooLong)?;
+    let inputs = core::array::from_fn(|_| Some(Input::new(key, message)));
+    let mut output = [[0; 16]; 8];
+    let (tags, report) = Md5Batch::new(LegacyUse::acknowledge(), executor)?
+        .authenticate_secret(&inputs, &mut output, &mut Md5BatchControl::new(1024))?;
+    assert!(report.inner.vector_blocks > 0 && report.outer.vector_blocks > 0);
+    let _first_secret = tags.expose(0);
+    drop(tags);
+    assert_eq!(output, [[0; 16]; 8]);
+    Ok(())
+}
+```
+
+The batch's active slots, lengths, work and route metadata are public. `None`
+means inactive; `Some(Input::new(key, empty_bits))` authenticates an empty
+message. Successful inactive slots and truncated suffix bytes are zero. Public
+outputs stay unchanged on failure; secret outputs clear every slot. Prefix
+blocks and all input buffers remain caller-owned. No protected/resident owner
+or caller-frame/register erasure is promised by this composition.

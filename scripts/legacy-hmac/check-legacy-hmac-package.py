@@ -15,6 +15,7 @@ from unittest.mock import patch
 from legacy_hmac_acceptance import NAMES, isolation, members, packaged_graph, require
 import legacy_hmac_bits
 import legacy_hmac_native
+import legacy_hmac_md5_native
 import legacy_hmac_negatives
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -51,8 +52,10 @@ def oracle(output):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sha1-native", action="store_true", help="also require actual native SHA1 execution from extracted archives")
+    parser.add_argument("--md5-native", action="store_true", help="also require actual native MD5 SIMD HMAC from extracted archives")
     args = parser.parse_args()
     selected = legacy_hmac_native.features() if args.sha1_native else None
+    md5_selected = legacy_hmac_md5_native.features() if args.md5_native else None
     specifications = tuple((name, tomllib.loads(
         (ROOT / "crates" / name / "Cargo.toml").read_text())["package"]["version"],
         ("src/lib.rs",)) for name in NAMES)
@@ -73,6 +76,7 @@ def main():
         (consumer / "src").mkdir(parents=True)
         manifest = ('[workspace]\n[package]\nname="legacy-hmac-external"\nversion="0.0.0"\n'
                     'edition="2024"\n[features]\ndefault=[]\nsha1-execution=["brynja-legacy-hmac/sha1-execution"]\n'
+                    'md5-batch=["brynja-legacy-hmac/md5-batch"]\n'
                     '[dependencies]\nbrynja-legacy-hmac={version="=0.1.0",default-features=false}\n'
                     '[patch.crates-io]\n')
         manifest += "".join(f'{name}={{path={json.dumps(str(path))}}}\n' for name, path in roots.items())
@@ -92,8 +96,8 @@ def main():
                 output = run(["cargo", "test", "--offline", "--locked", *profile, "--test", test], consumer, environment)
                 require(f"test result: ok. {count} passed; 0 failed; 0 ignored;" in output,
                         "packaged runtime population: " + test)
-            output = run(["cargo", "test", "--offline", "--locked", *profile, "--doc"], consumer, environment)
-            require("test result: ok. 1 passed; 0 failed; 0 ignored;" in output, "README execution")
+            output = run(["cargo", "test", "--offline", "--locked", *profile, "--all-features", "--doc"], consumer, environment)
+            require("test result: ok. 2 passed; 0 failed; 0 ignored;" in output, "README execution")
             output = run(["cargo", "test", "--offline", "--locked", *profile, "--test", "oracle", "--", "--nocapture"], consumer, environment)
             require("test result: ok. 1 passed; 0 failed; 0 ignored;" in output, "oracle execution")
             prefix = "LEGACY_HMAC_ORACLE:"
@@ -102,6 +106,14 @@ def main():
             legacy_hmac_bits.validate("\n".join(line.removeprefix(prefix) for line in output.splitlines() if line.startswith(prefix)))
             output = run(["cargo", "test", "--offline", "--locked", *profile, "--features", "sha1-execution", "--test", "sha1_execution"], consumer, environment)
             require("test result: ok. 1 passed; 0 failed; 2 ignored;" in output, "generic accelerated rejection population")
+            output = run(["cargo", "test", "--offline", "--locked", *profile, "--features", "md5-batch", "--test", "md5_batch"], consumer, environment)
+            require("test result: ok. 1 passed; 0 failed; 3 ignored;" in output, "generic MD5 rejection population")
+            if md5_selected is not None:
+                native_environment = dict(environment, RUSTFLAGS="-C target-feature=" + md5_selected)
+                output = run(["cargo", "test", "--offline", "--locked", *profile, "--features", "md5-batch",
+                              "--test", "md5_batch", "--", "--ignored", "--nocapture", "--test-threads=1"], consumer, native_environment)
+                legacy_hmac_md5_native.validate_output(output)
+                print("Extracted legacy HMAC-MD5 native PASS:", "release" if profile else "debug", md5_selected)
             if selected is not None:
                 native_environment = dict(environment, RUSTFLAGS="-C target-feature=" + selected)
                 output = run(["cargo", "test", "--offline", "--locked", *profile, "--features", "sha1-execution",

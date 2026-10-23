@@ -20,6 +20,9 @@ mod scratch;
 #[cfg(feature = "sha1-execution")]
 pub mod execution;
 
+#[cfg(feature = "md5-batch")]
+pub mod md5_batch;
+
 pub use algorithms::{Algorithm, Md5, Sha1};
 pub use brynja_legacy_sha1::{BitString, BitStringError};
 pub use output::{SecretTag, Tag, Verification};
@@ -34,10 +37,16 @@ pub enum Error {
     TagLength,
     /// Secret storage or a private composition invariant failed.
     SecretMemory,
-    /// No accelerated SHA-1 executor was selected before accepting the key.
+    /// No accelerated executor was selected before accepting the key.
     ExecutionUnavailable,
     /// Backend revocation, failure, or a previously destroyed execution owner.
     ExecutionFailed,
+    /// The selected batch has no complete active SIMD group.
+    IneligibleWorkload,
+    /// The caller's compression-work budget was exhausted.
+    WorkLimit,
+    /// The caller cancelled this operation.
+    Cancelled,
 }
 
 impl From<brynja_core::SecretMemoryError> for Error {

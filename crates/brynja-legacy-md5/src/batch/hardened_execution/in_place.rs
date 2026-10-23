@@ -141,21 +141,54 @@ impl Batch<'_, '_> {
         output: &'out mut [[u8; 16]; 8],
         control: &mut Md5BatchControl<'_>,
     ) -> Result<(OwnedSecretRegion<'out>, Report), Error> {
+        self.digest_parts(None, inputs, output, control)
+    }
+    /// Clears all lanes without digest output or executor revocation.
+    ///
+    /// A prefix supplied to `digest_prefixed_secret` remains caller-owned too.
+    pub fn cancel(self) {}
+
+    /// Hashes one borrowed 64-byte prefix followed by each active message.
+    ///
+    /// The prefix is part of the hashed length, not an imported chaining state.
+    /// Inactive lanes ignore their prefix. Full active groups can vectorize the
+    /// prefix even for empty tails; unequal suffixes and padding remain scalar.
+    /// No full-message concatenation or secret-derived public output occurs.
+    /// Errors/unwind clear every destination slot. Prefix/input lengths, lane
+    /// activity and work accounting are public. This API does not itself define
+    /// a MAC or authorize legacy algorithms in modern protocols.
+    pub fn digest_prefixed_secret<'out>(
+        self,
+        prefixes: &[[u8; 64]; 8],
+        inputs: &[Option<BitString<'_>>; 8],
+        output: &'out mut [[u8; 16]; 8],
+        control: &mut Md5BatchControl<'_>,
+    ) -> Result<(OwnedSecretRegion<'out>, Report), Error> {
+        self.digest_parts(Some(prefixes), inputs, output, control)
+    }
+
+    fn digest_parts<'out>(
+        self,
+        prefixes: Option<&[[u8; 64]; 8]>,
+        inputs: &[Option<BitString<'_>>; 8],
+        output: &'out mut [[u8; 16]; 8],
+        control: &mut Md5BatchControl<'_>,
+    ) -> Result<(OwnedSecretRegion<'out>, Report), Error> {
         let mut initialization = SecretRegionInitialization::begin(output.as_flattened_mut())
             .map_err(|_| Md5BatchError::SecretMemory)?;
-        let report = self.batch.run(inputs, control)?;
+        let report = self.batch.run_parts(inputs, prefixes, control)?;
         for lane in &self.batch.owner.lanes {
             initialization
                 .write(&lane.output_staging)
                 .map_err(|_| Md5BatchError::SecretMemory)?;
         }
-        let output = initialization
-            .finish()
-            .map_err(|_| Md5BatchError::SecretMemory)?;
-        Ok((output, report))
+        Ok((
+            initialization
+                .finish()
+                .map_err(|_| Md5BatchError::SecretMemory)?,
+            report,
+        ))
     }
-    /// Clears all lanes without digest output or executor revocation.
-    pub fn cancel(self) {}
 }
 impl Drop for Batch<'_, '_> {
     fn drop(&mut self) {

@@ -4,7 +4,8 @@ import subprocess
 from legacy_hmac_acceptance import require
 
 PRELUDE = ('#![no_std]\nuse brynja_legacy_hmac::{Error, Hmac, LegacyUse, Md5, Sha1, Tag};\n'
-           'use brynja_legacy_hmac::execution::{Sha1Executor, Sha1Hmac};\n')
+           'use brynja_legacy_hmac::execution::{Sha1Executor, Sha1Hmac};\n'
+           'use brynja_legacy_hmac::md5_batch::{Md5Batch, Md5Executor, SecretTags};\n')
 POSITIVE = ('pub fn probe(owner: &Sha1Executor) -> Result<(), Error> {\n'
             'let mut state = Sha1Hmac::new(LegacyUse::acknowledge(), owner, b"key")?;\n'
             'state.update(b"message")?; let mut output = [0; 20];\n'
@@ -23,12 +24,20 @@ NEGATIVES = {
 }
 for bound in ("Send", "Sync", "Copy", "Clone", "core::fmt::Debug"):
     NEGATIVES["owner-" + bound] = (f"pub fn probe() {{ fn require<T: {bound}>() {{}} require::<Sha1Hmac<'static>>(); }}", "E0277")
+    for identity in ("Md5Batch", "SecretTags"):
+        NEGATIVES[identity + bound] = (f"pub fn probe() {{ fn require<T: {bound}>() {{}} require::<{identity}<'static>>(); }}", "E0277")
+NEGATIVES.update({
+    "md5-authority-lifetime": ('pub fn probe(owner: Md5Executor) -> Result<(), Error> { let batch = Md5Batch::new(LegacyUse::acknowledge(), &owner)?; drop(owner); drop(batch); Ok(()) }', "E0505"),
+    "md5-consuming": ('pub fn probe(batch: Md5Batch) { drop(batch); drop(batch); }', "E0382"),
+    "md5-missing-acknowledgement": ('pub fn probe(owner: &Md5Executor) { let _ = Md5Batch::new(owner); }', "E0061"),
+    "md5-raw-authority": ('use brynja_legacy_hmac::md5_batch::Authority;', "E0432"),
+})
 
 
 def check(consumer, environment, run, cargo_environment):
     source = consumer / "src/lib.rs"
     original = source.read_bytes()
-    command = ["cargo", "check", "--offline", "--locked", "--features", "sha1-execution", "--lib"]
+    command = ["cargo", "check", "--offline", "--locked", "--features", "sha1-execution,md5-batch", "--lib"]
     try:
         source.write_text(PRELUDE + POSITIVE)
         run(command, consumer, environment)

@@ -66,7 +66,7 @@ pub(super) fn execute(
                 if prefix != 0 {
                     transfer::commit_state(&scratch, &mut lane.chaining_state, slot)
                         .map_err(|_| Md5BatchError::Backend)?;
-                    lane.message_length = crate::engine::admit_bytes(0, prefix)
+                    lane.message_length = crate::engine::admit_bytes(lane.bits(), prefix)
                         .map_err(|_| Md5BatchError::MessageTooLong)?
                         .to_be_bytes();
                 }

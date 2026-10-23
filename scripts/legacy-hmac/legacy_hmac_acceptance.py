@@ -5,7 +5,8 @@ NAMES = ("brynja-core", "brynja-hash-core", "brynja-legacy-sha1",
          "brynja-legacy-md5", "brynja-legacy-hmac")
 REQUIRED = frozenset({"Cargo.toml", "Cargo.toml.orig", "LICENSE-APACHE", "LICENSE-MIT", "README.md",
                       "src/lib.rs", "src/algorithms.rs", "src/engine.rs", "src/output.rs", "src/scratch.rs",
-                      "src/execution/mod.rs", "src/execution/adapter.rs", "src/execution/retained.rs"})
+                      "src/execution/mod.rs", "src/execution/adapter.rs", "src/execution/retained.rs",
+                      "src/md5_batch/mod.rs", "src/md5_batch/engine.rs", "src/md5_batch/output.rs"})
 OPTIONAL = frozenset({"Cargo.lock", ".cargo_vcs_info.json"})
 
 

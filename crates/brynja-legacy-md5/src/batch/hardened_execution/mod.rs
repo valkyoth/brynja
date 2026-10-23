@@ -7,6 +7,7 @@
 //! abort, termination and mem::forget remain explicit residual risks. This is
 //! neither independent cryptographic verification nor FIPS/military approval.
 pub mod in_place;
+mod prefixed;
 mod vector;
 use super::{Md5BatchControl, Md5BatchError, Md5BatchReport, owner::BatchOwner};
 pub use crate::cpu::secret::Authority;
@@ -237,11 +238,19 @@ impl Batch<'_> {
         inputs: &[Option<BitString<'_>>; 8],
         control: &mut Md5BatchControl<'_>,
     ) -> Result<Report, Error> {
+        self.run_parts(inputs, None, control)
+    }
+    fn run_parts(
+        &mut self,
+        inputs: &[Option<BitString<'_>>; 8],
+        prefixes: Option<&[[u8; 64]; 8]>,
+        control: &mut Md5BatchControl<'_>,
+    ) -> Result<Report, Error> {
         let mut guard = Operation {
             executor: self.executor,
             complete: false,
         };
-        let result = self.run_inner(inputs, control);
+        let result = self.run_inner(inputs, prefixes, control);
         // A consumed request is not a failed CPU authority. Only explicitly
         // classified request failures preserve reuse; unknown failures and
         // unwinding leave the guard armed and quarantine the executor.
@@ -260,21 +269,35 @@ impl Batch<'_> {
     fn run_inner(
         &mut self,
         inputs: &[Option<BitString<'_>>; 8],
+        prefixes: Option<&[[u8; 64]; 8]>,
         control: &mut Md5BatchControl<'_>,
     ) -> Result<Report, Error> {
         self.executor.ready()?;
-        let authority = self
-            .executor
-            .authority
-            .as_ref()
-            .filter(|a| eligible(inputs, a.backend().lane_width()));
+        let authority = self.executor.authority.as_ref().filter(|a| match prefixes {
+            Some(_) => prefixed::eligible(inputs, a.backend().lane_width()),
+            None => eligible(inputs, a.backend().lane_width()),
+        });
         if self.executor.required && authority.is_none() {
             return Err(Error::IneligibleWorkload);
         }
-        let work = match authority {
+        let prefix_work = match prefixes {
+            Some(prefixes) => {
+                prefixed::absorb(&mut self.owner, prefixes, inputs, control, authority)?
+            }
+            None => Md5BatchReport::default(),
+        };
+        let mut work = match authority {
             Some(a) => vector::execute(&mut self.owner, inputs, control, a)?,
             None => self.owner.portable(inputs, control)?,
         };
+        work.scalar_blocks = work
+            .scalar_blocks
+            .checked_add(prefix_work.scalar_blocks)
+            .ok_or(Md5BatchError::Backend)?;
+        work.vector_blocks = work
+            .vector_blocks
+            .checked_add(prefix_work.vector_blocks)
+            .ok_or(Md5BatchError::Backend)?;
         self.executor.ready()?;
         if self.executor.required && work.vector_blocks == 0 {
             return Err(Error::IneligibleWorkload);

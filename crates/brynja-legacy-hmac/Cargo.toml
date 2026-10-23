@@ -12,6 +12,7 @@ include = ["Cargo.toml", "LICENSE-APACHE", "LICENSE-MIT", "README.md", "src/**/*
 [features]
 default = []
 sha1-execution = ["brynja-legacy-sha1/hardened-execution"]
+md5-batch = ["brynja-legacy-md5/hardened-execution"]
 
 [dependencies]
 brynja-core.workspace = true

@@ -12,6 +12,7 @@ default = ["batch"]
 batch = []
 
 [dependencies]
+brynja-legacy-hmac = { path = "../../crates/brynja-legacy-hmac", default-features = false }
 brynja-strict = { path = "../../crates/brynja-strict", default-features = false }
 brynja-core = { path = "../../crates/brynja-core", default-features = false }
 brynja-crypto-cpu-std = { path = "../../crates/brynja-crypto-cpu-std", default-features = false, features = ["runtime-execution", "sha256-batch", "sha512-batch"] }

@@ -482,7 +482,7 @@ def main() -> int:
     test_resolved_isolation(all_features, no_default)
     test_keylog_isolation(all_features)
     for modern in ("brynja", "brynja-crypto", "brynja-pki", "brynja-core"):
-        for legacy in ("brynja-legacy-sha1", "brynja-legacy-md5"):
+        for legacy in ("brynja-legacy-sha1", "brynja-legacy-md5", "brynja-legacy-hmac"):
             smuggled = copy.deepcopy(all_features)
             node(smuggled, modern)["deps"].append(
                 graph_dependency(smuggled, modern, legacy)

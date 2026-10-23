@@ -4,7 +4,7 @@ version = 4
 
 [[package]]
 name = "brynja"
-version = "0.25.0"
+version = "0.25.1"
 dependencies = [
  "brynja-core",
  "brynja-crypto",
@@ -128,6 +128,15 @@ dependencies = [
  "brynja-legacy-tls10",
  "brynja-legacy-tls11",
  "brynja-legacy-wtls",
+]
+
+[[package]]
+name = "brynja-legacy-hmac"
+version = "0.1.0"
+dependencies = [
+ "brynja-core",
+ "brynja-legacy-md5",
+ "brynja-legacy-sha1",
 ]
 
 [[package]]

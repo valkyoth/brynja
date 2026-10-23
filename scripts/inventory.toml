@@ -97,3 +97,7 @@ purpose = "Standards authorities, protocol surfaces, and normative requirements"
 [category.zeroization]
 extensions = [".py", ".sh"]
 purpose = "Zeroization source and compiler-artifact assurance"
+
+[category.legacy-hmac]
+extensions = [".py"]
+purpose = "Isolated legacy HMAC package acceptance, byte/bit differentials and dependency isolation"

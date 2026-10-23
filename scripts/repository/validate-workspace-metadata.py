@@ -11,7 +11,6 @@ import parallelhash_workspace_policy as execution_policy
 import strict_workspace_policy as strict_policy
 import macos_workspace_policy as resident_policy
 import facade_workspace_policy as facade_policy
-
 ROOT = Path(__file__).resolve().parents[2]
 POLICY = ROOT / "package-policy.toml"
 MODERN_CLASSES = frozenset({
@@ -196,7 +195,8 @@ def validate_dependencies(
             allowed_features = admitted
         if dependency.get("features") != allowed_features:
             raise ValueError(f"{name} directly enables features on {dependency_name}")
-        if dependency.get("uses_default_features") is not (not external and name != "brynja-strict"):
+        legacy_hash = name == "brynja-legacy-hmac" and dependency_name in {"brynja-legacy-sha1", "brynja-legacy-md5"}
+        if dependency.get("uses_default_features") is not (not external and name != "brynja-strict" and not legacy_hash):
             raise ValueError(f"{name} default-feature policy drifted for {dependency_name}")
         version = EXTERNAL[dependency_name]["version"] if external else packages[dependency_name]["version"]
         expected_req = f"={version}"

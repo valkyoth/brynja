@@ -5,6 +5,12 @@ Independent review/FIPS status must never be inferred from internal test results
 """
 
 ROWS = {
+    "crates/brynja-legacy-hmac/README.md": [
+        "| HMAC-SHA-1 and HMAC-MD5 | Portable initial implementation | ❌ No |",
+        "| Streaming, long keys, explicit byte truncation and verification | Initial implementation with author tests | ❌ No |",
+        "| Public tags and clearing secret tags | Implemented; composition cleanup qualification pending | ❌ No |",
+        "| Hardware acceleration and SIMD HMAC | Not yet implemented | ❌ No |",
+    ],
     "crates/brynja-mac-hmac/README.md": [
         "| HMAC-SHA-224/256/384/512 and SHA-512/224, SHA-512/256 | Portable initial implementation | ❌ No |",
         "| HMAC-SHA3-224/256/384/512 | Portable initial implementation | ❌ No |",

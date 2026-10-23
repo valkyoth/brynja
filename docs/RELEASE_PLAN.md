@@ -5202,12 +5202,13 @@ do not recollect unrelated families merely because HMAC is a new consumer.
 Any actual change to a shared hash, authority or cleanup implementation retains
 the applicable downstream regression and evidence requirements.
 
-Status: in progress
+Status: released
 
+Released as signed tag `v0.25.0` at `143fc953fbc31a8affb3507dd8273a132c7d9f54`.
 The modern leaf, typed final bits, general SHA-512/t, accelerated composition,
 protected/resident sessions and curated facade integrations are implemented.
-Author verification and bounded cleanup checks are recorded; independent review
-and final release qualification remain pending. See the
+The release-specific retest, scoped AWS verification, final tag gate and GitHub
+checks completed; this is not independent certification of every capability. See the
 [review handoff](hmac-review-handoff.md) and
 [release work list](../release-notes/RELEASE_NOTES_0.25.0.md).
 
@@ -5245,7 +5246,22 @@ Exit criteria:
 
 ### v0.25.1 - Isolated HMAC-SHA-1 And HMAC-MD5 Compatibility
 
-Status: planned
+Status: in progress
+
+Initial implementation: a distinct `brynja-legacy-hmac` package binds the generic
+construction privately to hardened SHA-1/MD5 owners. The modern HMAC sealed
+algorithm contract is not opened or extended. Explicit legacy acknowledgement,
+byte streaming, long-key normalization, 80-bit-minimum legacy truncation,
+consuming public/secret finalization and constant-time comparison are present.
+RFC 2202, independent byte/bit differentials, extracted-package acceptance and
+boundary/transaction tests are author checks, not qualification.
+
+Remaining: complete downstream type-isolation probes; accelerated SHA-1 / SIMD
+MD5 composition and applicable protected/resident owner
+assessment; error/unwind cleanup, compiler and timing evidence; capability and
+affected-family scope registration; independent retest and scoped release checks.
+No unrelated native recollection or full sweep is requested merely for this new
+consumer. Changed shared implementations, if any, retain downstream checks.
 
 Plan scope: Implement explicit legacy-only HMAC-SHA-1 and HMAC-MD5 adapters over the exact v0.24 implementations, with RFC vectors, truncation policy, constant-time verification, secret-state cleanup, and hard type and package isolation; keep them absent from modern defaults, TLS, PKIX, OpenPGP modern profiles, FIPS approved services, and generic algorithm negotiation.
 

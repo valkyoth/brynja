@@ -5282,10 +5282,13 @@ The separately named macOS scalar resident owners now reuse safe wrappers over
 the existing Darwin memory/worker adapter, with no dump-exclusion claim and no
 new low-level code. Native Apple Silicon author tests and extracted debug/release
 cleanup mutations pass. Linux strict and Mac resident types cannot substitute
-for one another. Hosted accelerated routes still require implementation;
-portable composition is not an error-driven fallback for them.
+for one another. Separate default-off SHA-1 compiled sessions now construct their
+authority and keyed state on the corresponding protected/resident worker, require
+the exact preselected backend on each request and quarantine integrity failures.
+Scalar sessions remain scalar under feature unification. Hosted MD5 SIMD still
+requires implementation; portable composition is not an error-driven fallback.
 
-Remaining: complete those hosted routes; compiler and timing
+Remaining: complete hosted MD5 SIMD; compiler and timing
 qualification, complete error/unwind cleanup evidence; capability and
 affected-family scope registration; independent retest and scoped release checks.
 Focused native Arm SHA-1 and NEON HMAC/MD5 regressions now pass in debug/release

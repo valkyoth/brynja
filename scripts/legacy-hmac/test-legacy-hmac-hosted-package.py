@@ -17,8 +17,8 @@ workspace = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(workspace)
 
 
-def graph(resident=False):
-    features = policy.features(resident)
+def graph(resident=False, accelerated=False):
+    features = policy.features(resident, accelerated)
     roots = {name: Path("/archives") / name for name in features if name != "legacy-hosted-external"}
     consumer = Path("/consumer")
     packages = [{"id": name, "name": name, "source": None,
@@ -29,6 +29,24 @@ def graph(resident=False):
 
 
 class HostedAcceptance(unittest.TestCase):
+    def test_accelerated_closure_is_explicit_and_preserves_profile(self):
+        for resident in (False, True):
+            original, roots, consumer = graph(resident, True)
+            policy.graph(original, roots, consumer, resident, True)
+            for selected_resident, accelerated in ((resident, False), (not resident, True)):
+                with self.assertRaises(ValueError):
+                    policy.graph(original, roots, consumer, selected_resident, accelerated)
+            for index, node in enumerate(original["resolve"]["nodes"]):
+                for feature in node["features"]:
+                    changed = copy.deepcopy(original)
+                    changed["resolve"]["nodes"][index]["features"].remove(feature)
+                    with self.subTest(resident=resident, node=node["id"], feature=feature), self.assertRaises(ValueError):
+                        policy.graph(changed, roots, consumer, resident, True)
+        policy.runtime("test result: ok. 10 passed; 0 failed; 0 ignored;", 10)
+        for value in ("6 passed; 0 failed; 0 ignored;", "10 passed; 0 failed; 1 ignored;"):
+            with self.assertRaises(ValueError):
+                policy.runtime("test result: ok. " + value, 10)
+
     def test_archive_population(self):
         policy.members(policy.FILES)
         for name in policy.FILES:
@@ -110,6 +128,12 @@ class HostedAcceptance(unittest.TestCase):
                 selected[field] = value
                 with self.subTest(dependency=dependency, field=field), self.assertRaises(ValueError):
                     workspace.validate_dependencies(name, package, entry, packages)
+        for feature in ("strict-sha1-acceleration", "macos-resident-sha1-acceleration"):
+            for replacement in ([], ["brynja-legacy-hmac/sha1-execution"], ["brynja-legacy-hmac/md5-batch"]):
+                package = copy.deepcopy(packages[name])
+                package["features"][feature] = replacement
+                with self.subTest(feature=feature, replacement=replacement), self.assertRaises(ValueError):
+                    workspace.validate_features(name, package, entry)
 
 
 if __name__ == "__main__":

@@ -15,10 +15,14 @@
 use brynja_crypto_cpu_std::protected_memory::{ProtectedBytes, ProtectedStack};
 pub use brynja_legacy_hmac::{Algorithm, LegacyUse, Md5, Sha1};
 use core::marker::PhantomData;
+#[cfg(feature = "strict-sha1-acceleration")]
+mod sha1_compiled;
 #[cfg(test)]
 mod tests;
 mod types;
 mod worker;
+#[cfg(feature = "strict-sha1-acceleration")]
+pub use sha1_compiled::{Sha1Backend, Sha1CompiledSession};
 pub use types::{Bits, Cancellation, Error, Limits, PublicDeclassification, Request, TagPolicy};
 
 /// Reusable protected resources, never retained keyed state. A forgotten output

@@ -1,7 +1,7 @@
 use super::{Algorithm, Cancellation, Error, Request};
 use brynja_legacy_hmac::{BitString, Hmac, LegacyUse};
 
-fn checkpoint(cancel: &Cancellation) -> Result<(), Error> {
+pub(super) fn checkpoint(cancel: &Cancellation) -> Result<(), Error> {
     #[cfg(test)]
     super::tests::checkpoint(cancel);
     cancel.check()

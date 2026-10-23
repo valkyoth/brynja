@@ -5,8 +5,9 @@
 //! there is no ordinary-memory fallback. Caller input buffers remain caller-owned.
 //! This is an initial development implementation, not independent qualification.
 //! The separate `macos-resident` profile has no core-dump exclusion guarantee.
-//! Hosted accelerated owners remain pending; unrelated hash CPU features never
-//! change either scalar route implemented here.
+//! Separate opt-in SHA-1 compiled sessions require matching deployment features;
+//! unrelated hash CPU features never change either scalar route implemented here.
+//! Hosted MD5 SIMD owners remain pending.
 
 #[cfg(feature = "strict-execution")]
 pub mod strict_execution;

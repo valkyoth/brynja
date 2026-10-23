@@ -152,13 +152,52 @@ ownership compile-fail examples. The nine added/changed Rust resource/session
 files were reconciled byte-for-byte between the tested Mac copy and local
 candidate. Linux extracted tests still pass; opposite-platform constructors
 reject, and four bounded Miri metadata/model-rejection tests pass. Native Mac
-hosted acceleration, full composition qualification and independent review remain
-pending. Source-drift inventories were refreshed, not native evidence approvals.
+hosted acceleration was still pending at that scalar checkpoint. Full composition
+qualification and independent review remain pending. Source-drift inventories
+were refreshed, not native evidence approvals.
+
+Subsequent SHA-1 hosted acceleration: the separate default-off
+`strict-sha1-acceleration` and `macos-resident-sha1-acceleration` features now
+expose distinct `Sha1CompiledSession` owners. Required static authority is
+constructed/probed only on the corresponding worker before keys are accepted;
+every request reconstructs the same backend there. HMAC normalization, inner and
+outer processing use the existing hardened SHA-1 composition. No kernel,
+low-level resource adapter, modern facade, dependency version or release gate
+changed. Generic scalar sessions stay scalar under feature unification.
+
+The wrapper arms quarantine before thread launch. Backend revocation, wrong
+backend/result shape and worker unwind remain terminal; public admission errors,
+canonical-bit rejection, cancellation and mismatch allow reuse. Only the two
+existing pre-entry thread-setup error variants restore reuse after launch fails.
+Native tests inject revocation, cancellation and unwind at every seven
+authentication/six verification checkpoints, plus post-output failures, forgotten
+loans, malformed shapes and explicit quarantine. Linux also inspects the actual
+worker state and staging/output mapping flags. No register/whole-image erasure
+or macOS core-dump-exclusion guarantee is inferred.
+
+Author-operated GNU/Linux SHA-NI and Apple Silicon SHA-1 extracted-package
+checks each pass ten runtime tests in debug/release, 39 compiled
+ownership/lifetime/profile-isolation negatives, ten scalar cleanup/admission
+mutations and fourteen compiled authority/cleanup mutations. The independent
+byte/bit oracle for the underlying leaf remains the earlier composition check;
+the new hosted differential compares against the portable leaf, not a new
+independent cryptographic review. All eighteen profile implementation/test Rust
+files were reconciled byte-for-byte between local and tested Mac copies; only
+the crate-root documentation was subsequently updated.
+
+Focused validation also passes MSRV 1.90 compilation; scoped native Clippy on
+Linux/Mac; eight Miri metadata/unsupported-model tests; and the native hardware
+failure-boundary test under ASan with forced LeakSanitizer/fatal exits. The
+sanitizer run is diagnostic, not a protected-stack placement claim. Generic
+all-feature builds reject missing native features/platforms without fallback;
+the three README examples and twelve ownership compile-fail doctests pass.
+Workspace/README/unsafe policy regressions remain intact. No full sweep or
+native evidence approval was performed in this implementation pass.
 
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions, including MD5 prefix handling; finish
-  protected/resident acceleration without silently
+  protected/resident MD5 SIMD owners without silently
   downgrading their guarantees.
 - Complete composition error/unwind, cleanup-codegen and timing checks.
 - Register API/capability owners and a separately scoped evidence family.

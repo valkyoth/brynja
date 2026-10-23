@@ -12,6 +12,8 @@ FEATURE_SETS = {
         "default": [],
         "strict-execution": ["dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/protected-memory"],
         "macos-resident": ["dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/macos-resident"],
+        "strict-sha1-acceleration": ["strict-execution", "brynja-legacy-hmac/sha1-execution"],
+        "macos-resident-sha1-acceleration": ["macos-resident", "brynja-legacy-hmac/sha1-execution"],
     },
 }
 

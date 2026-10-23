@@ -36,15 +36,22 @@ once published; until then use the reviewed workspace path.
 | --- | --- | --- |
 | Protected scalar SHA-1/MD5 HMAC | Linux-only `strict-execution`; byte/chunk/bit and tag-policy author tests pass | ❌ No |
 | Protected output loans and worker clearing | Native mapping/fault checks and extracted debug/release mutation tests pass | ❌ No |
-| Protected accelerated SHA-1/MD5 batches | Pending | ❌ No |
+| Hosted SHA-1 hardware sessions | Explicit protected/resident owners, worker-local authority and terminal quarantine | ❌ No |
+| Protected/resident MD5 SIMD batches | Pending | ❌ No |
 | Apple Silicon resident profile | Scalar SHA-1/MD5 sessions; native lifecycle/bit tests; no dump exclusion | ❌ No |
 
 ## Hardware and SIMD
 
-These sessions use portable hardened hashes on the selected protected/resident
-workers. Dependency feature unification never enables acceleration here.
-Separate hosted accelerated sessions remain pending.
-The distinct macOS scalar resident profile never
+The generic `Session<A>` always uses portable hardened hashes on the selected
+protected/resident worker, even when Cargo unifies acceleration features.
+Separate `Sha1CompiledSession` owners require `strict-sha1-acceleration` on
+Linux or `macos-resident-sha1-acceleration` on Apple Silicon. They use SHA-NI
+on x86-64 or SHA-1 instructions on AArch64, not multibuffer SIMD. The Cargo
+feature alone is insufficient: build-wide `+sha,+sse2` or `+neon,+sha2`
+must match CPU/OS support throughout deployment. There is no runtime detection,
+scheduler lock or live-migration guarantee. Establish that contract before
+construction; unsupported configurations return errors, not scalar fallback.
+Hosted MD5 SIMD owners remain pending. The distinct macOS resident profile never
 substitutes for Linux strict execution. No register-erasure or whole-process
 protection claim is made.
 
@@ -108,4 +115,33 @@ privileged inspection and fatal termination are outside the protection boundary.
 Deployment must prohibit fork, native thread cancellation and external protection
 revocation while resources are live. Stack sizes are not stack-depth proofs.
 This package is not independently qualified, FIPS approved or certified.
+
+## Explicit SHA-1 hardware owner
+
+Enable the separate acceleration feature and deploy a matching build as above.
+The constructor probes the selected authority on the protected/resident stack
+before accepting any key. Every request reconstructs that exact backend there.
+
+```rust
+# #[cfg(feature = "strict-sha1-acceleration")]
+fn hardware_request(
+    limits: brynja_legacy_hmac_std::strict_execution::Limits,
+) -> Result<(), brynja_legacy_hmac_std::strict_execution::Error> {
+    use brynja_legacy_hmac_std::strict_execution::*;
+    let mut session = Sha1CompiledSession::new(
+        LegacyUse::acknowledge(), TagPolicy::Full, limits,
+    )?;
+    let tag = session.authenticate(&[0x42; 32], b"legacy message")?;
+    assert_eq!(tag.expose().len(), 20);
+    drop(tag);
+    Ok(())
+}
+```
+
+The resident module exposes the same method names on distinct types; it does
+not acquire Linux dump-exclusion guarantees. Backend/invariant failures and
+recoverable worker unwinds permanently quarantine either compiled session.
+Cancellation, tag mismatch, malformed requests and pre-entry thread-setup errors
+preserve reuse. No error authorizes switching to the scalar session. Quarantine
+also clears retained output, including a forgotten loan.
 

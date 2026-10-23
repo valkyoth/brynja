@@ -20,16 +20,23 @@ FILES = frozenset({"Cargo.toml", "Cargo.toml.orig", "LICENSE-APACHE", "LICENSE-M
     "src/strict_execution/worker.rs", "src/strict_execution/tests.rs",
     "src/strict_execution/tests/native.rs",
     "src/macos_resident/mod.rs", "src/macos_resident/types.rs", "src/macos_resident/worker.rs",
-    "src/macos_resident/tests.rs", "src/macos_resident/tests/native.rs"})
+    "src/macos_resident/tests.rs", "src/macos_resident/tests/native.rs",
+    *(f"src/{profile}/{name}" for profile in ("strict_execution", "macos_resident")
+      for name in ("sha1_compiled.rs", "sha1_compiled/worker.rs",
+                   "sha1_compiled/tests.rs", "sha1_compiled/tests/native.rs"))})
 
 
-def features(resident=False):
+def features(resident=False, accelerated=False):
     result = {name: set(values) for name, values in FEATURES.items()}
     if resident:
         result[HOST] = {"macos-resident"}
         result["brynja-crypto-cpu-std"] = {"macos-resident"}
         result["brynja-hash-sha2"].add("general-sha512-t")
         result["brynja-hash-sha3"] = {"default"}
+    if accelerated:
+        result[HOST].add("macos-resident-sha1-acceleration" if resident else "strict-sha1-acceleration")
+        result["brynja-legacy-hmac"].add("sha1-execution")
+        result["brynja-legacy-sha1"].update(("cpu", "hardened-execution"))
     return result
 
 
@@ -41,8 +48,8 @@ def members(names):
         leaf_members(names)
 
 
-def graph(document, roots, consumer, resident=False):
-    expected = features(resident)
+def graph(document, roots, consumer, resident=False, accelerated=False):
+    expected = features(resident, accelerated)
     packages = document["packages"]
     require(len(packages) == len(expected) and {p["name"] for p in packages} == set(expected),
             "hosted packaged dependency closure")

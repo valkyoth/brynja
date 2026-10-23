@@ -115,6 +115,8 @@ pub enum Error {
     Mac(brynja_legacy_hmac::Error),
     /// Private worker transfer/result invariant failed.
     Invariant,
+    /// An accelerated session was permanently revoked; no fallback is permitted.
+    Quarantined,
 }
 impl From<macos_resident::Error> for Error {
     fn from(e: macos_resident::Error) -> Self {

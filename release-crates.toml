@@ -22,6 +22,13 @@ change = "code"
 publish = false
 reason = "Implement a separate legacy-only HMAC-SHA-1/MD5 owner; accelerated composition and independent qualification remain pending."
 
+[crates."brynja-legacy-hmac-std"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "code"
+publish = false
+reason = "Add isolated hosted protected/resident legacy HMAC owners; accelerated hosted routes, macOS implementation and independent qualification remain pending."
+
 [crates."brynja-mac-hmac"]
 previous_version = "unpublished"
 version = "0.1.0"

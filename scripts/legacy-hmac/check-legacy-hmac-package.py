@@ -88,6 +88,8 @@ def main():
         # the archive, without adding a public test hook to the production API.
         (consumer / "src/execution").mkdir()
         shutil.copyfile(leaf / "src/execution/retained.rs", consumer / "src/execution/retained.rs")
+        shutil.copyfile(leaf / "src/execution/retained/tests.rs", consumer / "src/execution/tests.rs")
+        (consumer / "tests/retained.rs").write_text('use brynja_legacy_hmac::Error;\n#[path="../src/execution/retained.rs"] mod retained;\n')
         run(["cargo", "generate-lockfile", "--offline"], consumer, environment)
         graph = json.loads(run(["cargo", "metadata", "--offline", "--locked", "--format-version", "1"], consumer, environment))
         packaged_graph(graph, roots, consumer)

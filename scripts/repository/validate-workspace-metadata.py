@@ -193,7 +193,7 @@ def validate_dependencies(
             allowed_features = admitted
         if dependency.get("features") != allowed_features:
             raise ValueError(f"{name} directly enables features on {dependency_name}")
-        legacy_hash = name == "brynja-legacy-hmac" and dependency_name in {"brynja-legacy-sha1", "brynja-legacy-md5"}
+        legacy_hash = legacy_hmac_policy.no_defaults(name, dependency_name)
         if dependency.get("uses_default_features") is not (not external and name != "brynja-strict" and not legacy_hash):
             raise ValueError(f"{name} default-feature policy drifted for {dependency_name}")
         version = EXTERNAL[dependency_name]["version"] if external else packages[dependency_name]["version"]
@@ -212,8 +212,8 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
     expected.update({feature: [] for feature in entry.get("features", [])})
     if name == "brynja-strict":
         expected = strict_policy.FEATURES
-    if name == "brynja-legacy-hmac":
-        expected = legacy_hmac_policy.FEATURES
+    if name in legacy_hmac_policy.FEATURE_SETS:
+        expected = legacy_hmac_policy.FEATURE_SETS[name]
     if name == "brynja-mac-hmac":
         expected["hardened-execution"] = ["dep:brynja-crypto-cpu", "brynja-crypto-cpu/hardened-execution", "brynja-hash-sha2/hardened-execution", "brynja-hash-sha3/hardened-execution"]
         expected["runtime-execution"] = ["hardened-execution", "brynja-crypto-cpu/runtime-execution", "brynja-hash-sha2/runtime-execution", "brynja-hash-sha3/runtime-execution"]

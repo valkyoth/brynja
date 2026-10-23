@@ -1,5 +1,8 @@
 use crate::Error;
 
+#[cfg(test)]
+mod tests;
+
 // Both HMAC hash owners share one liveness slot. On fatal update or unwind,
 // remove the entire engine, not just the inner stream that noticed the failure.
 pub(super) struct Retained<T>(Option<T>);

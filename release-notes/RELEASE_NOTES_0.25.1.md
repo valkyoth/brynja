@@ -104,10 +104,33 @@ native-admission records. Existing approvals were not replaced.
 
 ## Work remaining before completion
 
+The owner approved including protected/resident APIs in this version. Initial
+`brynja-legacy-hmac-std` Linux scalar sessions now preacquire guarded, locked,
+dump/fork-excluded workers and separate buffers for SHA-1/MD5 HMAC. Keys and
+intermediates are processed on the joined worker; no arbitrary callback or
+ordinary-memory fallback is exposed. Native author checks cover real mapping
+flags, long keys, bit tails, truncated tags, all mismatch positions, cancellation,
+worker/consumer unwind, forgotten output loans and reuse after rejected work.
+Extracted debug/release archives pass 26 ownership/classification negatives and
+ten compiled cleanup/admission mutation runs. The new source-only archive is
+about 16 KiB; evidence stays in the repository. This is not independent/native
+qualification, register-erasure proof or a modern/strict facade export.
+
+The bounded Miri checks pass two hosted metadata/unsupported-model cases and
+the three relocated private retained-owner tests. Native ASan with enforced
+LeakSanitizer and fatal sanitizer exits passes five hosted lifecycle/bit tests;
+the real-residency observation test is excluded from instrumentation because
+sanitizer-managed stacks do not establish the native mapping guarantee. These
+diagnostic checks do not replace compiler/timing or native platform qualification.
+Rust 1.90 and 1.99.1 builds, strict scoped Clippy, and Apple/Arm cross-compilation
+also pass. The earlier test-source inclusion was moved into its actual private
+module so the existing no-code-inclusion policy remains unchanged.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
-- Qualify both accelerated compositions, including MD5 prefix handling; assess protected
-  and resident owners without silently downgrading their guarantees.
+- Qualify both accelerated compositions, including MD5 prefix handling; finish
+  protected acceleration and distinct macOS resident owners without silently
+  downgrading their guarantees.
 - Complete composition error/unwind, cleanup-codegen and timing checks.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.

@@ -5270,7 +5270,18 @@ truncations, byte/bit differentials and cancellation/revocation/unwind boundarie
 The existing secret kernels are unchanged; shared MD5 batch prefix/length handling
 has changed and requires its affected downstream checks.
 
-Remaining: applicable protected/resident owner assessment; compiler and timing
+Owner-approved expansion: include separate protected/resident legacy owners in
+this milestone, not a later release. The new `brynja-legacy-hmac-std` package has
+default-off Linux scalar protected sessions for both identities, with preacquired
+worker/staging/output mappings, typed output loans, bounded chunks/bit tails and
+worker-side verification. Native author tests check actual locked/dump/fork-
+excluded storage and error/unwind clearing; extracted debug/release consumers,
+26 compiled ownership/classification negatives and ten cleanup/admission mutation
+runs pass. The modern and strict facades remain unchanged and legacy-free.
+Hosted accelerated routes and the separately named, weaker macOS resident owners
+still require implementation; portable composition is not a fallback for either.
+
+Remaining: complete those hosted routes; compiler and timing
 qualification, complete error/unwind cleanup evidence; capability and
 affected-family scope registration; independent retest and scoped release checks.
 Focused native Arm SHA-1 and NEON HMAC/MD5 regressions now pass in debug/release

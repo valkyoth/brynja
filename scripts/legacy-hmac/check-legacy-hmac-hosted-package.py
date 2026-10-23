@@ -1,0 +1,142 @@
+#!/usr/bin/env python3
+"""Bounded GNU/Linux extracted protected legacy HMAC acceptance; no full sweep."""
+import importlib.util
+import json
+import os
+from pathlib import Path
+import platform
+import subprocess
+import tomllib
+from unittest.mock import patch
+
+import legacy_hmac_hosted_acceptance as policy
+from legacy_hmac_acceptance import NAMES, require
+
+spec = importlib.util.spec_from_file_location("legacy_package", Path(__file__).with_name("check-legacy-hmac-package.py"))
+api = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(api)
+ARCHIVES = (*NAMES, policy.HOST, "brynja-crypto-cpu", "brynja-crypto-cpu-std",
+            "brynja-hash-sha2", "brynja-hash-sha3", "brynja-mac-kmac",
+            "brynja-mac-hmac", "brynja-hash-tuple")
+PRELUDE = 'use brynja_legacy_hmac_std::strict_execution::*;\n'
+POSITIVE = 'pub fn check(s: &mut Session<Sha1>) -> Result<(), Error> { drop(s.authenticate(b"key",b"message")?); Ok(()) }'
+
+
+def package_workspace(destination):
+    workspace = ORIGINAL_WORKSPACE(destination)
+    path = workspace / "Cargo.toml"
+    text = path.read_text()
+    before = 'brynja-crypto-cpu-std = { path = "crates/brynja-crypto-cpu-std", version = "=0.1.1" }'
+    require(text.count(before) == 1, "host provider workspace default binding")
+    path.write_text(text.replace(before, before[:-2] + ', default-features = false }'))
+    return workspace
+
+
+ORIGINAL_WORKSPACE = api.packaging.isolated_package_workspace
+
+
+def negatives(consumer, env):
+    source = consumer / "src/lib.rs"
+    command = ["cargo", "check", "--offline", "--locked", "--lib"]
+    cases = []
+    for identity in ("Sha1", "Md5"):
+        for owner in (f"Session<{identity}>", f"Output<'static, {identity}>"):
+            for bound in ("Send", "Sync", "Copy", "Clone", "core::fmt::Debug"):
+                cases.append((f'fn bound<T:{bound}>(){{}} fn probe(){{bound::<{owner}>();}}', "E0277"))
+    cases.extend([
+        ('fn probe(o:Output<Sha1>)->Output<Md5>{o}', "E0308"),
+        ('fn probe(s:&mut Session<Sha1>)->Result<(),Error>{let a=s.authenticate(b"k",b"a")?; let b=s.authenticate(b"k",b"b")?; let _=(a.expose(),b.expose());Ok(())}', "E0499"),
+        ('fn probe(l:Limits){let _=Session::<Sha1>::new(TagPolicy::Full,l);}', "E0061"),
+        ('use brynja_legacy_hmac_std::strict_execution::ProtectedStack;', "E0603"),
+        ('use brynja_legacy_hmac_std::strict_execution::Sha256;', "E0432"),
+        ('fn probe(o:Output<Sha1>, b:&mut[u8]){let _=o.declassify(b);}', "E0061"),
+    ])
+    try:
+        source.write_text(PRELUDE + POSITIVE)
+        api.run(command, consumer, env)
+        for body, code in cases:
+            source.write_text(PRELUDE + body)
+            api.cargo_environment.check(consumer, env)
+            result = subprocess.run(command, cwd=consumer, env=env, capture_output=True, text=True, timeout=90, check=False)
+            require(result.returncode == 101 and f"error[{code}]" in result.stderr,
+                    "hosted compiled negative: " + code + "\n" + result.stderr[-1800:])
+    finally:
+        source.write_text(PRELUDE + POSITIVE)
+    api.run(command, consumer, env)
+    print(f"Protected legacy HMAC ownership/classification negatives: {len(cases)} rejected", flush=True)
+
+
+def mutations(roots, env):
+    root = roots[policy.HOST]
+    path = root / "src/strict_execution/mod.rs"
+    original = path.read_text()
+    test = "strict_execution::tests::native::"
+    cases = [
+        ("self.output.clear();", "", "output_loan_forget_errors_and_explicit_release"),
+        ("self.staging.clear();", "", "output_loan_forget_errors_and_explicit_release"),
+        ("self.storage.clear();", "", "output_loan_forget_errors_and_explicit_release"),
+        ("if !self.keep {", "if false {", "every_worker_checkpoint_and_post_write_failure_clear_and_reuse"),
+        ("types::validate(self.limits, &request, candidate, self.bytes)?;", "", "output_loan_forget_errors_and_explicit_release"),
+    ]
+    for before, after, selected in cases:
+        require(before in original, "hosted mutation anchor")
+        try:
+            path.write_text(original.replace(before, after))
+            for profile in ([], ["--release"]):
+                command = ["cargo", "test", "--offline", "--features", "strict-execution", *profile, "--lib", test + selected]
+                api.run(command + ["--no-run"], root, env)
+                api.cargo_environment.check(root, env)
+                result = subprocess.run(command + ["--", "--exact"], cwd=root, env=env,
+                                        text=True, capture_output=True, timeout=180, check=False)
+                require(result.returncode == 101 and "test result: FAILED. 0 passed; 1 failed;" in result.stdout,
+                        "hosted mutant must fail its assertion, not compilation: " + before + "\n" + result.stdout[-1500:] + result.stderr[-1000:])
+        finally:
+            path.write_text(original)
+    print(f"Protected legacy HMAC compiled cleanup mutants: {len(cases)*2} rejected", flush=True)
+
+
+def main():
+    require(platform.system() == "Linux" and platform.machine() in ("x86_64", "aarch64")
+            and platform.libc_ver()[0] == "glibc", "requires native protected GNU/Linux host")
+    specifications = tuple((name, tomllib.loads((api.ROOT / "crates" / name / "Cargo.toml").read_text())["package"]["version"],
+                            ("src/lib.rs",)) for name in ARCHIVES)
+    with api.cargo_environment.private_directory(api.ROOT) as temporary:
+        directory = Path(temporary)
+        env = {k: v for k, v in os.environ.items() if not k.startswith(("CARGO_", "RUST", "BRYNJA_"))}
+        env.update(CARGO_HOME=str(directory / "cargo-home"), CARGO_TARGET_DIR=str(directory / "consumer-target"))
+        api.cargo_environment.check(api.ROOT, env)
+        with patch.object(api.packaging, "PACKAGING_PACKAGES", specifications), \
+             patch.object(api.packaging, "isolated_package_workspace", package_workspace), patch.dict(os.environ, env, clear=True):
+            roots = api.packaging.package_roots(directory)
+        root = roots[policy.HOST]
+        policy.members(str(p.relative_to(root)) for p in root.rglob("*") if p.is_file())
+        size = (directory / "target/package/brynja-legacy-hmac-std-0.1.0.crate").stat().st_size
+        print(f"Protected legacy HMAC source-only archive: {size} bytes", flush=True)
+        consumer = directory / "consumer"
+        (consumer / "src").mkdir(parents=True)
+        patches = ''.join(f'{name}={{path={json.dumps(str(path))}}}\n' for name, path in roots.items())
+        manifest = ('[workspace]\n[package]\nname="legacy-hosted-external"\nversion="0.0.0"\nedition="2024"\n'
+                    '[dependencies]\nbrynja-legacy-hmac-std={version="=0.1.0",default-features=false,features=["strict-execution"]}\n'
+                    '[patch.crates-io]\n' + patches)
+        (consumer / "Cargo.toml").write_text(manifest)
+        (consumer / "src/lib.rs").write_text(PRELUDE + POSITIVE)
+        api.run(["cargo", "generate-lockfile", "--offline"], consumer, env)
+        graph = json.loads(api.run(["cargo", "metadata", "--offline", "--locked", "--format-version=1"], consumer, env))
+        policy.graph(graph, roots, consumer)
+        # Test the actual archived private implementation and its native fault
+        # hooks too; patch only its external dependency resolution, never code.
+        for path in roots.values():
+            manifest = path / "Cargo.toml"
+            manifest.write_text(manifest.read_text() + "\n[workspace]\n[patch.crates-io]\n" + patches)
+        for profile in ([], ["--release"]):
+            result = api.run(["cargo", "test", "--offline", "--features", "strict-execution", *profile, "--lib"], root, env)
+            policy.runtime(result, 6)
+            api.run(["cargo", "test", "--offline", "--features", "strict-execution", *profile, "--doc"], root, env)
+        negatives(consumer, env)
+        mutations(roots, env)
+        policy.runtime(api.run(["cargo", "test", "--offline", "--features", "strict-execution", "--lib"], root, env), 6)
+    print("Protected legacy HMAC extracted-package acceptance: PASS; author checks, qualification pending", flush=True)
+
+
+if __name__ == "__main__":
+    main()

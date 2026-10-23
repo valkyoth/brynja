@@ -1,9 +1,8 @@
-//! Compile the exact private liveness-slot source; no privileged test API.
-use brynja_legacy_hmac::Error;
-#[path = "../src/execution/retained.rs"]
-mod retained;
+//! Synthetic owner-lifetime checks inside the real private implementation.
+extern crate std;
+use super::{Error, Retained};
 use core::cell::Cell;
-use retained::Retained;
+use std::boxed::Box;
 
 struct Owner<'a>(&'a Cell<bool>);
 impl Drop for Owner<'_> {

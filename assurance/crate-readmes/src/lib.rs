@@ -37,6 +37,9 @@ pub struct BrynjaHashTuple;
 #[doc = include_str!("../../../crates/brynja-interop/README.md")]
 pub struct BrynjaInterop;
 
+#[doc = include_str!("../../../crates/brynja-legacy-hmac-std/README.md")]
+pub struct BrynjaLegacyHmacStd;
+
 #[doc = include_str!("../../../crates/brynja-legacy-hmac/README.md")]
 pub struct BrynjaLegacyHmac;
 

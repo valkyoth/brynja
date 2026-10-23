@@ -1,0 +1,22 @@
+[package]
+name = "brynja-legacy-hmac-std"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Explicit hosted protected-memory owners for legacy HMAC compatibility"
+publish = ["crates-io"]
+include = ["Cargo.toml", "LICENSE-APACHE", "LICENSE-MIT", "README.md", "src/**/*.rs"]
+
+[features]
+default = []
+strict-execution = ["dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/protected-memory"]
+
+[dependencies]
+brynja-core.workspace = true
+brynja-legacy-hmac = { path = "../brynja-legacy-hmac", version = "=0.1.0", default-features = false }
+brynja-crypto-cpu-std = { workspace = true, optional = true }
+
+[lints]
+workspace = true

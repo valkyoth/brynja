@@ -39,6 +39,12 @@ publish = "crates-io"
 required = ["brynja-core", "brynja-legacy-sha1", "brynja-legacy-md5"]
 optional = {}
 
+[packages.brynja-legacy-hmac-std]
+class = "legacy-engine"
+publish = "crates-io"
+required = ["brynja-core", "brynja-legacy-hmac"]
+optional = { strict-execution = "brynja-crypto-cpu-std" }
+
 [packages.brynja-crypto]
 class = "modern-shared"
 publish = "crates-io"

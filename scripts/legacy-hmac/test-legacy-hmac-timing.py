@@ -107,15 +107,21 @@ class TimingTests(unittest.TestCase):
                      patch.object(runner, "digest", return_value="hash"), \
                      patch.object(runner, "run", return_value="/synthetic"), \
                      patch.object(runner, "architecture", return_value="x86_64"), \
+                     patch.object(runner.platform, "platform", return_value="synthetic-test-host"), \
                      patch.object(runner.subprocess, "run",
                                   side_effect=subprocess.TimeoutExpired([], 300, output=b"partial") if code == 124 else None,
-                                  return_value=subprocess.CompletedProcess([], code, stdout, stderr)):
+                                  return_value=subprocess.CompletedProcess([], code, stdout, stderr)) as child:
                     if error:
                         with self.assertRaisesRegex(RuntimeError, error):
                             runner.observe("portable", "sha1", destination)
                     else:
                         runner.observe("portable", "sha1", destination)
+                    # macOS platform.platform() may itself spawn `file`.
+                    # The mock belongs exclusively to the measured child.
+                    self.assertEqual(child.call_count, 1)
+                    self.assertTrue(child.call_args.kwargs["text"])
                 document = json.loads(destination.read_text())
+                self.assertEqual(document["host"], "synthetic-test-host")
                 self.assertEqual(document["raw_output"], stdout)
                 self.assertEqual(document["raw_stderr"], stderr)
                 self.assertEqual(document["exit_status"], code)

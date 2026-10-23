@@ -239,11 +239,66 @@ sixteen compile-fail doctests pass. No unsafe code, cryptographic kernel,
 low-level platform adapter, external dependency version or release gate changed.
 This implementation pass does not approve native evidence or start a full sweep.
 
+### Bounded timing and scratch-compiler diagnostics
+
+The isolated `assurance/legacy-hmac-timing` fixture covers explicit portable,
+static SHA-1/MD5, protected Linux scalar/compiled and resident Apple
+scalar/compiled selections. A generic host probe must succeed before the runner
+enables static instruction features. Required MD5 routes check the full native
+lane width and actual inner/outer SIMD work; no failure selects a portable route.
+Before collecting samples, both key classes must produce the expected tags and
+accept correct candidates; first/last mismatch classes must both reject. Four
+source-compiled mutations (no-op output, fixed key, always accept, always reject)
+are rejected for each algorithm. Generic builds reject unavailable acceleration;
+baseline AArch64 NEON is not incorrectly treated as unavailable.
+
+Each route/family measures eight fixed-public-shape campaigns: 10-byte/full tags,
+32-/200-byte keys, mismatch position and key content. It retains 512 interleaved
+pairs after warm-up, with four operations per measurement. The paired diagnostic
+threshold is 10, not a release security threshold. Hosted measurements include
+worker start/join and per-request compiled-authority reconstruction; they do not
+measure session construction. Scheduling noise can obscure a leak. These are
+synthetic data tests, not proof of constant time, cache isolation, protected
+output-copy behavior or independent qualification.
+
+On the local AMD x86-64 host, all eight route/family combinations completed:
+portable, required static, Linux protected scalar and Linux protected compiled,
+each for SHA-1 and MD5. All 64 campaigns had zero diagnostic alarms. Raw final
+observations are retained locally outside `target/` in
+`release-reports/v0.25.1-timing/`, with compiler/binary/source hashes, exact commands
+and complete output. An earlier development run was also quiet; the final run
+followed timeout-preservation tooling changes, not an attempt to hide a signal.
+The runner refuses overwrites and preserves failed/malformed/signalling output,
+including partial output from a deadline failure. Parser/failure/probe regressions
+and the compiled fixture controls pass. Mac timing remains pending because the
+builder was unreachable; previous native functional checks are not timing data.
+
+The separate `assurance/legacy-hmac-cleanup` fixture imports the actual runtime
+`Scratch` source. Five fixed probes cover the 1-byte comparison accumulator,
+20-byte digest staging, 64-byte pad, mask transform and an unwinding observer.
+The existing fail-closed LLVM path checker is loaded by exact path, with a
+separate exact legacy probe population. It requires clearing of the same complete
+allocation before every reachable normal/error/recoverable-unwind exit and before
+lifetime end; another branch's clearing cannot satisfy the obligation. MIR
+destructor identity and emitted assembly symbols are also checked. Removed and
+half-range destructor clears are rejected after successful compilation; emitted
+artifact mutations test clear identity, pointers, extents, early return, unwind
+bypass, post-clear writes and missing/duplicate probes.
+
+All twelve compiler/profile/target combinations pass: Rust 1.90.0 and 1.99.1,
+`panic=abort` and `panic=unwind`, targeting GNU/Linux x86-64, GNU/Linux AArch64 and
+Apple AArch64. The two Arm lanes are cross-compiled inspection, not native runs.
+Fatal abort does not run destructors. This establishes only these fixed Scratch
+probes; it does not complete HMAC caller, MD5 row-owner or hosted-worker cleanup
+qualification, nor assert whole-frame/register erasure. Both fixtures pass scoped
+Clippy and formatting. No production implementation or release gate changed.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
   including MD5 prefix handling, without silently downgrading their guarantees.
-- Complete composition error/unwind, cleanup-codegen and timing checks.
+- Complete composition caller/MD5-row/worker cleanup-codegen qualification and
+  Apple native timing; fixed Scratch probes and Linux timing screens now pass.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.
 

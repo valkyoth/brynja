@@ -1,0 +1,12 @@
+[package]
+name = "brynja-legacy-hmac-timing"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[workspace]
+
+[dependencies]
+brynja-legacy-hmac = { path = "../../crates/brynja-legacy-hmac", default-features = false, features = ["sha1-execution", "md5-batch"] }
+brynja-legacy-hmac-std = { path = "../../crates/brynja-legacy-hmac-std", default-features = false, features = ["strict-sha1-acceleration", "strict-md5-batch", "macos-resident-sha1-acceleration", "macos-resident-md5-batch"] }

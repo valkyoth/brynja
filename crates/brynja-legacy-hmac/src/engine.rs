@@ -15,13 +15,21 @@ pub(crate) struct Engine<A: Algorithm> {
 
 impl<A: Algorithm> Engine<A> {
     pub(crate) fn new(key: &[u8], tag_bytes: usize) -> Result<Self, Error> {
+        Self::new_with(key, tag_bytes, A::start)
+    }
+
+    pub(crate) fn new_with(
+        key: &[u8],
+        tag_bytes: usize,
+        mut start: impl FnMut() -> Result<A::State, Error>,
+    ) -> Result<Self, Error> {
         if !(10..=A::TAG_BYTES).contains(&tag_bytes) {
             return Err(Error::TagLength);
         }
         let mut pad = Scratch::<64>::new();
         if key.len() > 64 {
             let mut digest = Scratch::<20>::new();
-            let mut state = A::start();
+            let mut state = start()?;
             A::update(&mut state, key)?;
             A::finish(state, None, digest.prefix(A::TAG_BYTES)?, |bytes| {
                 copy_secret_region(pad.prefix(bytes.len())?, bytes).map_err(Error::from)
@@ -29,8 +37,8 @@ impl<A: Algorithm> Engine<A> {
         } else if !key.is_empty() {
             copy_secret_region(pad.prefix(key.len())?, key)?;
         }
-        let mut inner = A::start();
-        let mut outer = A::start();
+        let mut inner = start()?;
+        let mut outer = start()?;
         mask(&mut pad.0, 0x36)?;
         A::update(&mut inner, &pad.0)?;
         mask(&mut pad.0, 0x36 ^ 0x5c)?;

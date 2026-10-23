@@ -11,6 +11,7 @@ import parallelhash_workspace_policy as execution_policy
 import strict_workspace_policy as strict_policy
 import macos_workspace_policy as resident_policy
 import facade_workspace_policy as facade_policy
+import legacy_hmac_workspace_policy as legacy_hmac_policy
 ROOT = Path(__file__).resolve().parents[2]
 POLICY = ROOT / "package-policy.toml"
 MODERN_CLASSES = frozenset({
@@ -30,10 +31,7 @@ EXTERNAL = {
 }
 AMBIGUOUS_LEGACY_NAMES = frozenset(
     {
-        "brynja-pct",
-        "brynja-snp",
-        "brynja-ssl1-research",
-        "brynja-ssl2",
+        "brynja-pct", "brynja-snp", "brynja-ssl1-research", "brynja-ssl2",
         "brynja-ssl3",
         "brynja-tls10",
         "brynja-tls11",
@@ -214,6 +212,8 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
     expected.update({feature: [] for feature in entry.get("features", [])})
     if name == "brynja-strict":
         expected = strict_policy.FEATURES
+    if name == "brynja-legacy-hmac":
+        expected = legacy_hmac_policy.FEATURES
     if name == "brynja-mac-hmac":
         expected["hardened-execution"] = ["dep:brynja-crypto-cpu", "brynja-crypto-cpu/hardened-execution", "brynja-hash-sha2/hardened-execution", "brynja-hash-sha3/hardened-execution"]
         expected["runtime-execution"] = ["hardened-execution", "brynja-crypto-cpu/runtime-execution", "brynja-hash-sha2/runtime-execution", "brynja-hash-sha3/runtime-execution"]

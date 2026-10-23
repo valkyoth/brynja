@@ -6,7 +6,9 @@
 //! Existing hardened hash owners clear their owned storage, but this new
 //! composition still needs its own compiler, timing and independent review.
 //! No register, spill, caller-buffer, paging, dump or fatal-abort guarantee is
-//! inferred from destruction. No protected-memory or acceleration is promised.
+//! inferred from destruction. No protected-memory guarantee is promised.
+//! Default constructors remain portable. Separate opt-in SHA-1 execution
+//! requires borrowed hardened authority and its own composition qualification.
 
 #![no_std]
 
@@ -14,6 +16,9 @@ mod algorithms;
 mod engine;
 mod output;
 mod scratch;
+
+#[cfg(feature = "sha1-execution")]
+pub mod execution;
 
 pub use algorithms::{Algorithm, Md5, Sha1};
 pub use brynja_legacy_sha1::{BitString, BitStringError};
@@ -29,6 +34,10 @@ pub enum Error {
     TagLength,
     /// Secret storage or a private composition invariant failed.
     SecretMemory,
+    /// No accelerated SHA-1 executor was selected before accepting the key.
+    ExecutionUnavailable,
+    /// Backend revocation, failure, or a previously destroyed execution owner.
+    ExecutionFailed,
 }
 
 impl From<brynja_core::SecretMemoryError> for Error {

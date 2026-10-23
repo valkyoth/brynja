@@ -49,6 +49,14 @@ class Acceptance(unittest.TestCase):
         name = "brynja-legacy-hmac"
         entry = workspace.load_policy()[name]
         workspace.validate_dependencies(name, packages[name], entry, packages)
+        workspace.validate_features(name, packages[name], entry)
+        for field, replacement in (("default", ["sha1-execution"]), ("sha1-execution", []),
+                                   ("sha1-execution", ["brynja-legacy-sha1/execution"]),
+                                   ("sha1-execution", ["brynja-legacy-sha1/cpu-evidence"])):
+            package = copy.deepcopy(packages[name])
+            package["features"][field] = replacement
+            with self.subTest(feature=field, replacement=replacement), self.assertRaises(ValueError):
+                workspace.validate_features(name, package, entry)
         for digest in ("brynja-legacy-sha1", "brynja-legacy-md5"):
             for field, replacement in (("uses_default_features", True), ("features", ["cpu"]), ("optional", True)):
                 package = copy.deepcopy(packages[name])

@@ -7,10 +7,11 @@ license.workspace = true
 repository.workspace = true
 description = "Explicit legacy-only HMAC-SHA-1 and HMAC-MD5 compatibility"
 publish = ["crates-io"]
-include = ["Cargo.toml", "LICENSE-APACHE", "LICENSE-MIT", "README.md", "src/*.rs"]
+include = ["Cargo.toml", "LICENSE-APACHE", "LICENSE-MIT", "README.md", "src/**/*.rs"]
 
 [features]
 default = []
+sha1-execution = ["brynja-legacy-sha1/hardened-execution"]
 
 [dependencies]
 brynja-core.workspace = true

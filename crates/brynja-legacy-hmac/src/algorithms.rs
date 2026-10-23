@@ -8,7 +8,7 @@ pub(crate) mod sealed {
     // digest while invoking the callback, and performs no fallible work after it.
     pub trait Hash {
         type State;
-        fn start() -> Self::State;
+        fn start() -> Result<Self::State, Error>;
         fn update(state: &mut Self::State, input: &[u8]) -> Result<(), Error>;
         fn finish(
             state: Self::State,
@@ -39,8 +39,8 @@ macro_rules! algorithm {
         }
         impl sealed::Hash for $name {
             type State = $state;
-            fn start() -> Self::State {
-                <$state>::new()
+            fn start() -> Result<Self::State, Error> {
+                Ok(<$state>::new())
             }
             fn update(state: &mut Self::State, input: &[u8]) -> Result<(), Error> {
                 state.update(input).map_err(|error| match error {

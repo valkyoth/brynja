@@ -5256,10 +5256,18 @@ consuming public/secret finalization and constant-time comparison are present.
 RFC 2202, independent byte/bit differentials, extracted-package acceptance and
 boundary/transaction tests are author checks, not qualification.
 
-Remaining: complete downstream type-isolation probes; accelerated SHA-1 / SIMD
-MD5 composition and applicable protected/resident owner
+The default-off `sha1-execution` path now borrows one hardened executor for
+normalization, inner and outer streams, admitting them before key absorption.
+Portable executor rejection, terminal revocation, public/secret output behavior,
+native SHA-NI byte/bit comparisons and extracted-package negatives pass in author
+checks. Three bounded Miri liveness tests cover both-owner destruction on error
+and recoverable unwind; this is not a full HMAC Miri or compiler qualification.
+
+Remaining: MD5 SIMD composition and applicable protected/resident owner
 assessment; error/unwind cleanup, compiler and timing evidence; capability and
 affected-family scope registration; independent retest and scoped release checks.
+Native Arm SHA-1 execution and complete downstream composition qualification
+remain pending; Apple Silicon cross-compilation is not execution evidence.
 No unrelated native recollection or full sweep is requested merely for this new
 consumer. Changed shared implementations, if any, retain downstream checks.
 

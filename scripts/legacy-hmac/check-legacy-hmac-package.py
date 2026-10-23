@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Run real source-only legacy HMAC archives, graph isolation and independent vectors."""
+import argparse
 import hashlib
 import hmac
 import json
@@ -13,6 +14,8 @@ from unittest.mock import patch
 
 from legacy_hmac_acceptance import NAMES, isolation, members, packaged_graph, require
 import legacy_hmac_bits
+import legacy_hmac_native
+import legacy_hmac_negatives
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.append(str(ROOT / "scripts/repository"))
@@ -46,6 +49,10 @@ def oracle(output):
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--sha1-native", action="store_true", help="also require actual native SHA1 execution from extracted archives")
+    args = parser.parse_args()
+    selected = legacy_hmac_native.features() if args.sha1_native else None
     specifications = tuple((name, tomllib.loads(
         (ROOT / "crates" / name / "Cargo.toml").read_text())["package"]["version"],
         ("src/lib.rs",)) for name in NAMES)
@@ -65,18 +72,23 @@ def main():
         consumer = directory / "consumer"
         (consumer / "src").mkdir(parents=True)
         manifest = ('[workspace]\n[package]\nname="legacy-hmac-external"\nversion="0.0.0"\n'
-                    'edition="2024"\n[dependencies]\nbrynja-legacy-hmac={version="=0.1.0",default-features=false}\n'
+                    'edition="2024"\n[features]\ndefault=[]\nsha1-execution=["brynja-legacy-hmac/sha1-execution"]\n'
+                    '[dependencies]\nbrynja-legacy-hmac={version="=0.1.0",default-features=false}\n'
                     '[patch.crates-io]\n')
         manifest += "".join(f'{name}={{path={json.dumps(str(path))}}}\n' for name, path in roots.items())
         (consumer / "Cargo.toml").write_text(manifest)
         shutil.copyfile(leaf / "README.md", consumer / "README.md")
         (consumer / "src/lib.rs").write_text('#![no_std]\n#![doc=include_str!("../README.md")]\n')
         shutil.copytree(ROOT / "crates/brynja-legacy-hmac/tests", consumer / "tests")
+        # Synthetic liveness/drop probes compile the exact private source from
+        # the archive, without adding a public test hook to the production API.
+        (consumer / "src/execution").mkdir()
+        shutil.copyfile(leaf / "src/execution/retained.rs", consumer / "src/execution/retained.rs")
         run(["cargo", "generate-lockfile", "--offline"], consumer, environment)
         graph = json.loads(run(["cargo", "metadata", "--offline", "--locked", "--format-version", "1"], consumer, environment))
         packaged_graph(graph, roots, consumer)
         for profile in ([], ["--release"]):
-            for test, count in (("contracts", 5), ("rfc2202", 2)):
+            for test, count in (("contracts", 5), ("rfc2202", 2), ("retained", 3)):
                 output = run(["cargo", "test", "--offline", "--locked", *profile, "--test", test], consumer, environment)
                 require(f"test result: ok. {count} passed; 0 failed; 0 ignored;" in output,
                         "packaged runtime population: " + test)
@@ -88,6 +100,15 @@ def main():
             oracle("\n".join(line.removeprefix(prefix) for line in output.splitlines() if line.startswith(prefix)))
             prefix = "LEGACY_HMAC_BITS:"
             legacy_hmac_bits.validate("\n".join(line.removeprefix(prefix) for line in output.splitlines() if line.startswith(prefix)))
+            output = run(["cargo", "test", "--offline", "--locked", *profile, "--features", "sha1-execution", "--test", "sha1_execution"], consumer, environment)
+            require("test result: ok. 1 passed; 0 failed; 2 ignored;" in output, "generic accelerated rejection population")
+            if selected is not None:
+                native_environment = dict(environment, RUSTFLAGS="-C target-feature=" + selected)
+                output = run(["cargo", "test", "--offline", "--locked", *profile, "--features", "sha1-execution",
+                              "--test", "sha1_execution", "--", "--ignored", "--nocapture", "--test-threads=1"], consumer, native_environment)
+                legacy_hmac_native.validate_output(output)
+                print("Extracted legacy HMAC-SHA1 native PASS:", "release" if profile else "debug", selected)
+        legacy_hmac_negatives.check(consumer, environment, run, cargo_environment)
         # Workspace-only resolution needs its existing registry cache. The real
         # extracted consumer above deliberately has an empty Cargo home. Keep
         # config rejection on this read-only graph invocation as well.

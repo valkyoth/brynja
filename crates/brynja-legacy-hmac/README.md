@@ -36,7 +36,8 @@ absent from modern facades, defaults, protocol negotiation and approved services
 | HMAC-SHA-1 and HMAC-MD5 | Portable initial implementation | ❌ No |
 | Streaming, long keys, explicit byte truncation and verification | Initial implementation with author tests | ❌ No |
 | Public tags and clearing secret tags | Implemented; composition cleanup qualification pending | ❌ No |
-| Hardware acceleration and SIMD HMAC | Not yet implemented | ❌ No |
+| Explicit hardened SHA-1 execution | Opt-in `sha1-execution`; x86 author tests, qualification pending | ❌ No |
+| MD5 SIMD HMAC | Not yet implemented | ❌ No |
 
 No independent qualification or FIPS approval is claimed. Existing hash
 qualification does not qualify this new keyed composition. Caller copies,
@@ -45,10 +46,22 @@ owned-memory destruction. No protected-memory promise is made.
 
 ## Hardware and SIMD
 
-This initial API always uses the portable hardened legacy hash owners, even if
-another dependency enables their CPU features. Explicit SHA-1 accelerated and
-MD5 SIMD composition needs separate implementation and qualification; do not
-infer support from the underlying hash crates.
+`Hmac<Sha1>` and `Hmac<Md5>` always use portable hardened legacy hash owners,
+even if another dependency enables their CPU features. The separate
+`sha1-execution` feature exposes `execution::Sha1Hmac`, borrowing an already
+accelerated `execution::Sha1Executor` for normalization, inner and outer hashing.
+It rejects portable executors, admits all empty streams before key absorption,
+and never falls back after failure. Source-owned inner and outer state are both
+dropped on fatal update or recoverable unwind; atomic length rejection preserves
+them. This does not promise whole-frame or fatal-abort erasure.
+
+The caller establishes the executor's complete lifetime-wide CPU/OS contract;
+the Cargo feature alone does not enable instructions. Static selection needs
+the complete build target features. A hosted legacy SHA-1 adapter may instead
+supply its hardened executor, subject to its platform restrictions. Neither a
+route report nor cached feature detection proves safe CPU/VM migration.
+MD5 SIMD composition remains unimplemented. No underlying hash qualification
+automatically qualifies either HMAC composition.
 
 ## Use
 

@@ -19,6 +19,10 @@ impl<'a, A: Algorithm> Tag<'a, A> {
     pub const fn as_bytes(&self) -> &[u8] {
         self.bytes
     }
+    #[cfg(feature = "sha1-execution")]
+    pub(crate) fn rebind<B: Algorithm>(self) -> Tag<'a, B> {
+        Tag::new(self.bytes)
+    }
 }
 
 /// Local clearing ownership of a secret legacy authenticator.
@@ -58,6 +62,10 @@ impl<'a, A: Algorithm> SecretTag<'a, A> {
     /// Borrows secret bytes; caller-created copies require their own cleanup.
     pub fn expose(&self) -> &[u8] {
         self.region.expose()
+    }
+    #[cfg(feature = "sha1-execution")]
+    pub(crate) fn rebind<B: Algorithm>(self) -> SecretTag<'a, B> {
+        SecretTag::new(self.region)
     }
 }
 

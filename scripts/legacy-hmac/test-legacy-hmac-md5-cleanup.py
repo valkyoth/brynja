@@ -197,6 +197,7 @@ class Md5CleanupTests(unittest.TestCase):
         shutil.copytree(fixture / "src", work / "src")
         manifest = (fixture / "Cargo.toml").read_text().replace("../../crates/brynja-legacy-hmac", str(leaf))
         manifest = manifest.replace("../../crates/brynja-legacy-md5", str(driver.ROOT / "crates/brynja-legacy-md5"))
+        manifest = manifest.replace("../../crates/brynja-core", str(driver.ROOT / "crates/brynja-core"))
         (work / "Cargo.toml").write_text(manifest)
         shutil.copyfile(fixture / "Cargo.lock", work / "Cargo.lock")
         path = leaf / "src/md5_batch/engine.rs"

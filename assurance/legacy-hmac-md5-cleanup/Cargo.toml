@@ -8,5 +8,6 @@ publish = false
 [workspace]
 
 [dependencies]
+brynja-core = { path = "../../crates/brynja-core", default-features = false }
 brynja-legacy-hmac = { path = "../../crates/brynja-legacy-hmac", default-features = false, features = ["md5-batch"] }
 brynja-legacy-md5 = { path = "../../crates/brynja-legacy-md5", default-features = false, features = ["hardened-execution"] }

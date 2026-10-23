@@ -702,6 +702,42 @@ only, with zero runtime tests; Apple/Arm code generation is not native execution
 No production Rust, release gate or approval changed. Local compiler logs are
 `release-reports/v0.25.1-md5-phases-{generic,simd}.log`.
 
+### MD5 inner error propagation
+
+The three actual emitted MD5 callers now also exclude inner readiness errors,
+inner digest errors, and their unwind paths from outer hashing. The readiness
+call must use the workspace's executor and dominate both hashing dispatches;
+none of its four error discriminants may enter either dispatch. Cutting the
+inner call must also make outer dispatch unreachable after readiness success.
+Error payloads
+remain unknown, covering all payload values conservatively rather than choosing
+a convenient representative. The inner digest's error discriminator is derived
+from a separate compiled `Result<(OwnedSecretRegion, Report), Error>` probe,
+not guessed from the caller's own branch. Both SIMD backend success niches must
+retain a possible outer-dispatch path, preventing vacuous rejection of all work.
+
+The bounded reachability check follows byte/bool values through predecessor-
+specific, simultaneous phi nodes, comparisons, branches and switches. Unknown
+predicates explore every possible edge. Unknown calls, potentially aliasing
+writes, atomic/value-producing effects and result-storage lifetime changes
+invalidate modeled memory. Already loaded SSA values remain distinct from that
+memory. Unparsed control flow and exhaustion of the analysis state bound fail
+closed. This establishes error exclusion, not exact returned error mapping,
+report validity, full output ownership, quarantine classification, per-lane
+prefix contents or whole-caller erasure.
+
+Ten new regression groups include actual artifacts from both Rust 1.90.0 and
+1.99.1, plus conservative-analysis tests for unknown values, effects, cycles,
+parallel phi assignments and unsupported control flow. Existing composed row,
+readiness/handoff and phase suites pass, including all nine compiled source
+mutants. All sixteen compiler/target/panic configurations pass; native AVX2
+debug/release tests also pass. Fixture fmt/Clippy and script-layout checks pass.
+The compile-only fixture now directly names its already-transitive first-party
+core dependency for the actual result type; there are no new external packages
+or production changes. It still has zero runtime tests. Local compiler logs are
+`release-reports/v0.25.1-md5-results-{generic,simd}.log`. Cross-compilation is not
+native Apple/Arm qualification, and no release gate or approval changed.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -716,8 +752,8 @@ No production Rust, release gate or approval changed. Local compiler logs are
   pre-workspace tag/authority admission now pass. The final readiness helper
   and success-edge ordering into all three consumers also pass. Phase pointer
   arguments and the outer closure transport now pass. Three-profile
-  native failure coverage passes; per-lane prefix/input contents, inner-result
-  success propagation, full output-owner
+  native failure coverage and inner readiness/digest error-path exclusion pass;
+  per-lane prefix/input contents, full output-owner
   and return binding, quarantine classification and hosted-worker compiler
   obligations remain open.
 - Register API/capability owners and a separately scoped evidence family.

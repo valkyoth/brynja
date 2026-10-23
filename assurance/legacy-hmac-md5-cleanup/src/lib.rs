@@ -39,6 +39,19 @@ pub fn readiness_ok() -> Result<(), brynja_legacy_md5::hardened_execution::Error
 }
 
 #[inline(never)]
+pub fn digest_rejection(
+    error: brynja_legacy_md5::hardened_execution::Error,
+) -> Result<
+    (
+        brynja_core::OwnedSecretRegion<'static>,
+        brynja_legacy_md5::hardened_execution::Report,
+    ),
+    brynja_legacy_md5::hardened_execution::Error,
+> {
+    Err(error)
+}
+
+#[inline(never)]
 pub fn public(
     selection: Md5Batch<'_>,
     inputs: &[Option<Input<'_>>; 8],

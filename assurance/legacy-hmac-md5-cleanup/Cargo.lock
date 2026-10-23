@@ -23,6 +23,7 @@ dependencies = [
 name = "brynja-legacy-hmac-md5-cleanup"
 version = "0.0.0"
 dependencies = [
+ "brynja-core",
  "brynja-legacy-hmac",
  "brynja-legacy-md5",
 ]

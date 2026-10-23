@@ -633,6 +633,41 @@ local native logs record its archive digests. These are author-operated focused
 tests, not independent review or release qualification. All-feature leaf tests,
 doctests and focused Clippy pass; no production Rust changed.
 
+### MD5 final-readiness and consumer ordering
+
+The actual final `Workspace::with` cancellation helper is now inspected before
+accepting its use as the output fence. For each of four error discriminants
+and success, all 256 byte payloads are modeled (1,280 normal outcomes), plus
+readiness/cancellation unwind in unwind builds. The helper must use its
+workspace's authority, initialize the scope and eight public IV slots, cancel
+only after successful readiness, destroy the scope with the right completion
+flag, and preserve the readiness result. Primitive readiness and non-panicking
+clear/quarantine behavior remain separately reviewed callee premises. The
+scope and quarantine sources are hash-bound for drift detection, not external
+review authentication or a new transitive machine-code proof.
+
+All three emitted callers must dispatch that inspected helper with their
+912-byte workspace and check the returned success discriminant before handing
+off their 128-byte truncated rows. Cutting that success edge must make the
+consumer unreachable; neither error nor unwind edges may reach it. The success
+block permits no intervening callback or computation. Public output is bound
+to the original destination and full extent; verification uses the original
+candidate pointer and selected tag width. Secret output permits only the
+24-byte initialization-capture move before its actual consumer closure.
+This does not yet prove that capture's entire earlier ownership history, all
+other output writes, the preceding HMAC phases or the final returned report.
+
+Five new regression groups reject altered helper authority, completion flags,
+IV copies, result/error propagation, missing scope cleanup, swallowed unwind,
+caller edge bypasses, late callbacks and substituted row/consumer inputs.
+The composed ten-group suite now also compiles and rejects removal of the
+final fence and moving it after consumption (seven compiled source mutants
+in total). All sixteen compiler/target/panic configurations pass; the focused
+native AVX2 debug/release checks still pass. No production Rust, root manifest,
+release gate or native approval changed. The compile-only fixture adds a direct
+first-party MD5 dependency solely for its independent readiness-result type
+probe. Local logs are `release-reports/v0.25.1-md5-handoff-{generic,simd}.log`.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -644,8 +679,11 @@ doctests and focused Clippy pass; no production Rust changed.
   handoffs. SHA-1 pre-key admission, constructor scratch, post-admission stream
   ownership and the outlined/inlined iterator cleanup paths now pass. MD5 row
   cleanup, normalization/comparison scratch, workspace lane-drop dispatch and
-  pre-workspace tag/authority admission now pass. Three-profile native failure
-  coverage also passes; broader MD5 caller compiler obligations remain open.
+  pre-workspace tag/authority admission now pass. The final readiness helper
+  and success-edge ordering into all three consumers also pass. Three-profile
+  native failure coverage passes; prefix/input provenance, full output-owner
+  and return binding, quarantine classification and hosted-worker compiler
+  obligations remain open.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.
 

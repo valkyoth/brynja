@@ -6,6 +6,7 @@ import re
 
 import legacy_hmac_md5_rows as rows
 import legacy_hmac_md5_admission as admission
+import legacy_hmac_md5_handoff as handoff
 import legacy_hmac_timing_runner as runner
 
 ROOT = runner.ROOT
@@ -58,6 +59,7 @@ def consumers(fixture, llvm):
 def validate(artifacts, panic):
     consumers(artifacts[0][1], artifacts[1][1])
     admission.validate(artifacts[0][1], artifacts[1][1])
+    handoff.validate(artifacts[0][1], artifacts[1][1], panic)
     return rows.validate(artifacts[1][1], panic)
 
 
@@ -65,7 +67,7 @@ def collect(directory, compiler, target, panic, simd=False):
     artifacts = emit(directory, compiler, target, panic, simd)
     population = validate(artifacts, panic)
     print(f"Legacy HMAC-MD5 row cleanup: PASS; {compiler}; {target}; panic={panic}; simd={simd}; "
-          f"{population} actual row/normalization/comparison bodies; pre-workspace tag/authority admission; workspace helper lane dispatch; "
+          f"{population} actual row/normalization/comparison bodies; pre-workspace tag/authority admission; workspace helper lane dispatch; final readiness/handoff; "
           "no whole-caller, output/quarantine, kernel or register-erasure qualification", flush=True)
     return artifacts
 

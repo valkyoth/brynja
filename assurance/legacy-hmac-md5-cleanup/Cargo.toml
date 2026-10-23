@@ -9,3 +9,4 @@ publish = false
 
 [dependencies]
 brynja-legacy-hmac = { path = "../../crates/brynja-legacy-hmac", default-features = false, features = ["md5-batch"] }
+brynja-legacy-md5 = { path = "../../crates/brynja-legacy-md5", default-features = false, features = ["hardened-execution"] }

@@ -34,6 +34,11 @@ pub fn backend(executor: &Md5Executor) -> Option<Md5Backend> {
 }
 
 #[inline(never)]
+pub fn readiness_ok() -> Result<(), brynja_legacy_md5::hardened_execution::Error> {
+    Ok(())
+}
+
+#[inline(never)]
 pub fn public(
     selection: Md5Batch<'_>,
     inputs: &[Option<Input<'_>>; 8],

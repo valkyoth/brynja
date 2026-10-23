@@ -196,6 +196,7 @@ class Md5CleanupTests(unittest.TestCase):
         fixture = driver.FIXTURE.parent
         shutil.copytree(fixture / "src", work / "src")
         manifest = (fixture / "Cargo.toml").read_text().replace("../../crates/brynja-legacy-hmac", str(leaf))
+        manifest = manifest.replace("../../crates/brynja-legacy-md5", str(driver.ROOT / "crates/brynja-legacy-md5"))
         (work / "Cargo.toml").write_text(manifest)
         shutil.copyfile(fixture / "Cargo.lock", work / "Cargo.lock")
         path = leaf / "src/md5_batch/engine.rs"
@@ -216,6 +217,20 @@ class Md5CleanupTests(unittest.TestCase):
         for before, after in (("10..=16", "9..=16"), ("10..=16", "10..=17")):
             self.assertIn(before, original_selection)
             selection.write_text(original_selection.replace(before, after))
+            artifacts = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu", "unwind", True, work / "Cargo.toml")
+            with self.assertRaises(ValueError):
+                driver.validate(artifacts, "unwind")
+        selection.write_text(original_selection)
+        frontier = '''    // No cancellation callback or secret computation follows this final check.
+    workspace
+        .with(|batch| batch.cancel())
+        .map_err(execution_error)?;
+    let result = consume(truncated.0.as_flattened())?;'''
+        self.assertIn(frontier, original)
+        for changed in ("    let result = consume(truncated.0.as_flattened())?;",
+                        '''    let result = consume(truncated.0.as_flattened())?;
+    workspace.with(|batch| batch.cancel()).map_err(execution_error)?;'''):
+            path.write_text(original.replace(frontier, changed, 1))
             artifacts = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu", "unwind", True, work / "Cargo.toml")
             with self.assertRaises(ValueError):
                 driver.validate(artifacts, "unwind")

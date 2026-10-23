@@ -212,6 +212,19 @@ class Md5CleanupTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 driver.validate(artifacts, "unwind")
         path.write_text(original)
+        for replacements in (
+                (("&outer_inputs, &mut final_tags.0", "&messages, &mut final_tags.0"),),
+                (("let mut inner = Rows::<16>::new();", "let mut inner = Rows::<16>::new();\n    let mut wrong_inner = Rows::<16>::new();"),
+                 ("&messages, &mut inner.0", "&messages, &mut wrong_inner.0"))):
+            mutated = original
+            for before, after in replacements:
+                self.assertIn(before, mutated)
+                mutated = mutated.replace(before, after, 1)
+            path.write_text(mutated)
+            artifacts = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu", "unwind", True, work / "Cargo.toml")
+            with self.assertRaises(ValueError):
+                driver.phases.validate(artifacts[1][1])
+        path.write_text(original)
         selection = leaf / "src/md5_batch/mod.rs"
         original_selection = selection.read_text()
         for before, after in (("10..=16", "9..=16"), ("10..=16", "10..=17")):

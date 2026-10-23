@@ -668,6 +668,40 @@ release gate or native approval changed. The compile-only fixture adds a direct
 first-party MD5 dependency solely for its independent readiness-result type
 probe. Local logs are `release-reports/v0.25.1-md5-handoff-{generic,simd}.log`.
 
+### MD5 phase argument and closure transport
+
+The emitted public, secret-output and verification callers now bind workspace
+construction to the original selection's executor. Normalization must use the
+original input/control arguments and selected backend, and the same 512-byte
+pad and 912-byte workspace used by the hashing phases. The inner call must
+receive the 256-byte message descriptors and 128-byte inner rows. The outer
+call must receive a distinct 256-byte outer descriptor array and 128-byte final
+rows, transported with the pad/control pointers through the actual 32-byte
+closure record. All four capture fields and the actual outlined helper's loads
+and forwarding are inspected. Partial/repeated writes, aliases, escapes, wrong
+offsets, premature lifetime ends and intervening effects are rejected.
+
+Construction must dominate normalization; normalization must dominate each hash
+dispatch; outer dispatch must dominate the final readiness fence. This is not
+yet a proof of inner-result success propagation into the outer phase: older
+compilers merge readiness errors and digest results through phi/switch nodes,
+so simple CFG dominance alone cannot establish that property. Per-lane
+descriptor contents, key normalization/pad transformation, full output-owner
+history, returned reports and quarantine classification also remain separate
+unfinished obligations. Pointer transport is not a whole-composition claim.
+
+Eight new artifact-regression groups cover phase arguments/callees, selection
+fields, allocation extents, capture fields/lifetimes/escapes, outlined helper
+forwarding and control-flow bypasses. The ten-group composed suite additionally
+compiles and rejects substituting original messages for outer descriptors and
+substituting a different inner-output buffer (nine compiled source mutants in
+total). All sixteen compiler/target/panic configurations pass, together with
+the five readiness/handoff regression groups, native AVX2 debug/release tests,
+fixture formatting/Clippy and script-layout checks. The fixture remains compile
+only, with zero runtime tests; Apple/Arm code generation is not native execution.
+No production Rust, release gate or approval changed. Local compiler logs are
+`release-reports/v0.25.1-md5-phases-{generic,simd}.log`.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -680,8 +714,10 @@ probe. Local logs are `release-reports/v0.25.1-md5-handoff-{generic,simd}.log`.
   ownership and the outlined/inlined iterator cleanup paths now pass. MD5 row
   cleanup, normalization/comparison scratch, workspace lane-drop dispatch and
   pre-workspace tag/authority admission now pass. The final readiness helper
-  and success-edge ordering into all three consumers also pass. Three-profile
-  native failure coverage passes; prefix/input provenance, full output-owner
+  and success-edge ordering into all three consumers also pass. Phase pointer
+  arguments and the outer closure transport now pass. Three-profile
+  native failure coverage passes; per-lane prefix/input contents, inner-result
+  success propagation, full output-owner
   and return binding, quarantine classification and hosted-worker compiler
   obligations remain open.
 - Register API/capability owners and a separately scoped evidence family.

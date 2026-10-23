@@ -5273,8 +5273,9 @@ has changed and requires its affected downstream checks.
 Remaining: applicable protected/resident owner assessment; compiler and timing
 qualification, complete error/unwind cleanup evidence; capability and
 affected-family scope registration; independent retest and scoped release checks.
-Native Arm SHA-1 execution and complete downstream composition qualification
-remain pending; Apple Silicon cross-compilation is not execution evidence.
+Focused native Arm SHA-1 and NEON HMAC/MD5 regressions now pass in debug/release
+on the M2 Pro builder. These author-operated checks do not establish independent
+downstream composition or compiler-cleanup qualification, which remain pending.
 No unrelated native recollection or full sweep is requested merely for this new
 consumer. Changed shared implementations, if any, retain downstream checks.
 

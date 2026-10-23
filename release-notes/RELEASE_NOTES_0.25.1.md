@@ -79,9 +79,33 @@ dependency feature unification. The separate SHA-1 execution API is explicit.
 No modern, FIPS, protocol negotiation,
 protected-memory, register-erasure or fatal-path guarantee is inferred.
 
+### Apple Silicon author check
+
+Commit `6c3f34b3` was exported into a fresh directory on the Apple M2 Pro builder
+(macOS 27.0.1, Rust 1.99.1). The source archive's SHA-256 was
+`6dfa89b45230ad6988bfe80b4947bdd8ddb009a3a525cc584a60c93d6d961c6e`,
+reconciled locally and remotely before extraction. No GitHub push was required.
+
+- `python3 scripts/legacy-hmac/legacy_hmac_native.py`: two explicit SHA-1
+  native tests per profile, debug and release, with `+neon,+sha2`; exact marker
+  populations and 70 byte / 88 bit outputs checked independently by Python.
+- `python3 scripts/legacy-hmac/legacy_hmac_md5_native.py`: three explicit NEON
+  HMAC tests per profile, debug and release, with `+neon`; all 256 slot masks,
+  70 byte / 88 bit cases and lifecycle/failure tests passed. The four-lane route
+  exercises partial eight-slot batches that cannot be eligible on AVX2.
+- `cargo test -p brynja-legacy-md5 --features hardened-execution
+  --test hardened_execution --test prefixed_execution`, debug and release,
+  with `RUSTFLAGS='-C target-feature=+neon'` and
+  `BRYNJA_REQUIRE_HARDENED_MD5=1`: all nine tests passed per profile, none ignored.
+
+These are source-bound author-operated functional checks, not signed runner
+attestations, independent review, complete cleanup qualification or release
+native-admission records. Existing approvals were not replaced.
+
 ## Work remaining before completion
 
-- Complete failure-injection and native Arm execution checks.
+- Complete the remaining qualification-specific failure-injection checks;
+  focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions, including MD5 prefix handling; assess protected
   and resident owners without silently downgrading their guarantees.
 - Complete composition error/unwind, cleanup-codegen and timing checks.

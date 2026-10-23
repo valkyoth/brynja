@@ -293,12 +293,55 @@ probes; it does not complete HMAC caller, MD5 row-owner or hosted-worker cleanup
 qualification, nor assert whole-frame/register erasure. Both fixtures pass scoped
 Clippy and formatting. No production implementation or release gate changed.
 
+### Portable caller ownership qualification
+
+`assurance/legacy-hmac-engine-cleanup` now emits eighteen real public consumers:
+construction, cancellation, update followed by an unwinding observer, and
+public/secret/verification finalization with byte or bit tails, for both legacy
+identities. The bounded LLVM checks cover two cancellation graphs, two
+update/error/unwind graphs, fourteen constructor/finalizer scratch graphs,
+twelve consuming-finalizer owner graphs and two constructor owner graphs.
+
+The constructor checker tracks complete inline initialization before use,
+normalization-owner consumption, owner-copy provenance, cleanup on rejection or
+recoverable unwind, and transfer of the inner/outer owners to their exact result
+fields. Success requires both transfers and the correct Result discriminant;
+failure cannot export an owner. Returned ownership remains tracked so a later
+store cannot silently overwrite it. Finalizer checks follow the actual inner and
+outer hash states through moves and consuming hash-finalizer/destructor calls.
+Outlined Engine routines are resolved from the actual consumer call, whose
+owner argument must be bound to the complete input-state copy; all caller exits
+must follow that dispatch. Wrong algorithms, partial copies, missing cleanup,
+unknown pointer aliases and unreviewed calls fail closed.
+
+The shared, existing LLVM interpreters are loaded by exact repository path with
+origin checks. Legacy-specific identities, layouts and scratch populations use
+private module instances; modern HMAC's configuration is unchanged. Regressions
+exercise graph populations, import origins, cleanup pointers/extents, unwind
+bypasses, incomplete initialization, wrong returned fields/discriminants,
+post-export overwrites and wrong outlined-call input pointers. Three additional
+source-compiled mutations forget a cancelled owner, forget an owner on update
+error, or remove the observer path; each compiles successfully and is rejected
+by the checker. These tests validate the checker, not a new production fix.
+
+All twelve compiler/profile/target combinations pass: Rust 1.90.0 and 1.99.1,
+abort/unwind, GNU/Linux x86-64, GNU/Linux AArch64 and Apple AArch64. Arm results
+are cross-compiled inspection, not native execution. Hash destruction and core
+clearing retain their separately reviewed non-panicking callee contracts;
+safe-Rust non-aliasing remains a premise. This is caller ownership/cleanup
+dispatch qualification, not proof of erasing every compiler-created copy,
+register, spill, caller input, OS snapshot or fatal-abort path. It does not
+qualify the distinct accelerated SHA-1, MD5 batch-row or hosted worker paths.
+No production source, dependency version, native approval or release gate was
+changed. Mac timing is still pending because SSH remains unreachable.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
   including MD5 prefix handling, without silently downgrading their guarantees.
-- Complete composition caller/MD5-row/worker cleanup-codegen qualification and
-  Apple native timing; fixed Scratch probes and Linux timing screens now pass.
+- Complete accelerated SHA-1, MD5-row/batch and hosted-worker cleanup-codegen
+  qualification and Apple native timing; portable caller ownership, fixed
+  Scratch probes and Linux timing screens now pass.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.
 

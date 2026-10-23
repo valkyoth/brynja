@@ -14,6 +14,8 @@ MACOS_RESIDENT_FEATURES = {
 
 # Distinct residency/clearing development profile, NOT strict admission.
 MACOS_RESIDENT_SOURCES = {
+    "src/macos_resident/memory.rs": "macos-resident-resource-api-development",
+    "src/macos_resident/memory/tests.rs": "macos-resident-resource-api-tests",
     "src/macos_resident/hmac/mod.rs": "macos-resident-hmac-session-development",
     "src/macos_resident/hmac/types.rs": "macos-resident-hmac-api-types",
     "src/macos_resident/hmac/worker.rs": "macos-resident-hmac-worker",

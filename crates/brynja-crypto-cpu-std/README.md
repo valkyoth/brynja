@@ -42,6 +42,7 @@ See the [compiled TupleHash API example](src/strict_tuplehash/compiled.rs).
 
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
+| Apple Silicon resident byte/worker resources | Default-off `macos_resident::memory`; guarded, locked, fork-excluded, clearing; no dump exclusion or automatic cryptographic admission | ❌ No |
 | Hosted hardened HMAC over SHA-2/SHA-3 | 🚧 Default-off `hmac-execution`; native M2 author tests; qualification pending | ❌ No |
 | Protected compiled HMAC over SHA-2/SHA-3 | 🚧 Default-off `strict-hmac-acceleration`; GNU/Linux, explicit target features, no fallback; qualification pending | ❌ No |
 | Protected scalar HMAC (supported GNU/Linux targets) | 🚧 Default-off `strict-hmac`; typed bounded requests and worker-side verification; qualification pending | ❌ No |

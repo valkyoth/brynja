@@ -18,7 +18,19 @@ FEATURES = {
 FILES = frozenset({"Cargo.toml", "Cargo.toml.orig", "LICENSE-APACHE", "LICENSE-MIT", "README.md",
     "src/lib.rs", "src/strict_execution/mod.rs", "src/strict_execution/types.rs",
     "src/strict_execution/worker.rs", "src/strict_execution/tests.rs",
-    "src/strict_execution/tests/native.rs"})
+    "src/strict_execution/tests/native.rs",
+    "src/macos_resident/mod.rs", "src/macos_resident/types.rs", "src/macos_resident/worker.rs",
+    "src/macos_resident/tests.rs", "src/macos_resident/tests/native.rs"})
+
+
+def features(resident=False):
+    result = {name: set(values) for name, values in FEATURES.items()}
+    if resident:
+        result[HOST] = {"macos-resident"}
+        result["brynja-crypto-cpu-std"] = {"macos-resident"}
+        result["brynja-hash-sha2"].add("general-sha512-t")
+        result["brynja-hash-sha3"] = {"default"}
+    return result
 
 
 def members(names):
@@ -29,9 +41,10 @@ def members(names):
         leaf_members(names)
 
 
-def graph(document, roots, consumer):
+def graph(document, roots, consumer, resident=False):
+    expected = features(resident)
     packages = document["packages"]
-    require(len(packages) == len(FEATURES) and {p["name"] for p in packages} == set(FEATURES),
+    require(len(packages) == len(expected) and {p["name"] for p in packages} == set(expected),
             "hosted packaged dependency closure")
     identities = {p["id"]: p["name"] for p in packages}
     require(len(identities) == len(packages), "duplicate hosted package identity")
@@ -40,9 +53,9 @@ def graph(document, roots, consumer):
         require(package["source"] is None and Path(package["manifest_path"]).resolve() == path.resolve() / "Cargo.toml",
                 "hosted dependency escaped archive")
     nodes = document["resolve"]["nodes"]
-    require(len(nodes) == len(FEATURES) and {n["id"] for n in nodes} == set(identities), "hosted resolve population")
+    require(len(nodes) == len(expected) and {n["id"] for n in nodes} == set(identities), "hosted resolve population")
     actual = {identities[n["id"]]: set(n["features"]) for n in nodes}
-    require(actual == FEATURES, "hosted feature closure: " + repr(actual))
+    require(actual == expected, "hosted feature closure: " + repr(actual))
 
 
 def runtime(output, count):

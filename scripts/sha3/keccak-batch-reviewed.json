@@ -1,6 +1,6 @@
 {
   "files": {
-    "Cargo.lock": "7b40891a34432212d9f54ddee9e498f695e2741b366f2debd770966dc5406b7e7a8d855611c782a23b6973305238e256801aa03054a6a0ec269bd292f8e6f431",
+    "Cargo.lock": "59a21be31cf69ce37f6179304bca1920afcea8d4f30446b26c00b41ca6e6628d6106660b17fb7167ab13b6f7a4ec7e963b517a046aa5fa3a19e2508a941025f3",
     "Cargo.toml": "c0f7c90524840f4514405f904ce44dd568c59b62207d9af7a83492a6d030a99c5f2f5f747cec5febfda0442fc0addb5a0826b70951c88a5947e96ae94b8a03be",
     "assurance/keccak-batch/Cargo.lock": "8934ba11ea547eb9055e94c9430abc7b6e53f896c3b3cff10b88ec1758e22f284015d1c5cd9b42d0f482f05633387b6c7e478c76bcc4e540e896857b87982093",
     "assurance/keccak-batch/Cargo.toml": "c097ec6521917156e71f6787271d141a6b37036c2e433b06aa230aacae0b3cf2f01bbc04bfc6b2919abc0b93c964a3af8d3b4cde1f3eda4082b41a81c8e84f75",
@@ -80,7 +80,7 @@
     "crates/brynja-core/src/workspace.rs": "630588435be41e361ebbc17fcba68eafddaefcedf22b55e80fca399bdbc11ab6c63ef1cc27485829865e4ba5e875cebe9860e18b8ee57bd76b3cd3882d3ccad4",
     "crates/brynja-core/src/write.rs": "971815431653f89ec4aac600e195fb97a735dbb0ee01be9dc00739ec65c3b8a68de069086184c5acd9a4215e471a7426253415b4f25aa71efe2e55fee40496ed",
     "crates/brynja-crypto-cpu-std/Cargo.toml": "7be3fafe6b27c3d0fdc09ba90f5bc2dc077f15796fef1e7c186da614485f1b070188e4e08a9b0e13452b7dcfb4c78ef42671a9ab86a8abc58eb2cb385b12f5f0",
-    "crates/brynja-crypto-cpu-std/README.md": "d791cb351ec1934c6380b2c3e417915567eae86c05722817568723fa9fb621b0688429dce08f555ec946b5b4e2da1e1be6e6e69eec2ed328accd1fe697697cd9",
+    "crates/brynja-crypto-cpu-std/README.md": "b797aac62a352299b6f0bdbfa8f13cdc11ff7323a08dd828d2dce72e8a0039765481b345067b465f806e15cad2adf71d5ad2c616809fc62374b617480c853866",
     "crates/brynja-crypto-cpu-std/src/execution/features.rs": "efa1af8059d71c302ed9787578297b23690b7fa99337e92e9349c4fdb164ea1b7a382de67ec58de4f03b5d26fd4205ec001384a3df1509478757ec6d8f167fbc",
     "crates/brynja-crypto-cpu-std/src/execution/hmac.rs": "bb682daf2487573283d25fd3a13ffa0747123a3466779e5d88ca73f10f4fde4bafd5f6aec8c9cf0aeb75abd0141e1e9c97d82bb69744bb729df89f709a2459ed",
     "crates/brynja-crypto-cpu-std/src/execution/mod.rs": "31cae8754bf63d7b399f897b8f3525140666ef9b9ce4e7e9918d73adae7cc3ed444d6bdd299669c162de4086cf3d66bf89828bdec006d665e84f5bbbd3cdb0ba",
@@ -117,7 +117,9 @@
     "crates/brynja-crypto-cpu-std/src/macos_resident/kmac/tests/native.rs": "a8113241d5ccd1a40a355d16637c6a466143a6f3a6092da6e0a49f8cadec58a2f2e64a4f390028b52bae8f34d1eec94eaf8ef7b9ab6b733d522e049f810d9be8",
     "crates/brynja-crypto-cpu-std/src/macos_resident/kmac/types.rs": "e7d0ce1745c538f67b33b1a59d29642f3d26e4f22e1cfa1ce37759a439e316b6eca20b6f783d76862401b80951cb8721e18827bb2c9f210d03263828411d73d3",
     "crates/brynja-crypto-cpu-std/src/macos_resident/kmac/worker.rs": "5e809808a0764fb3ea5572492c971779c631ef535b4ff9e990b326746c53c427eebeb93e0a7c7827648bd7fd99ee471a7d9dcb6a05ab1d9720981637e1202daf",
-    "crates/brynja-crypto-cpu-std/src/macos_resident/mod.rs": "10ed4c04d1881456ac5467c9a717fe9cf42cdd932c308ac8884f2a9103996426c0a982fe5a1e8e94536eab2660e4a5ac047b46745f05355fd3a625547adcb9d7",
+    "crates/brynja-crypto-cpu-std/src/macos_resident/memory.rs": "337f32bcd546833f660d206602ee55e352e59fe73666ff19c230c32b1499c03f5ed9876e4e2c1d4fa4069f4fa97bb8a4c49be0d95a6e149937be836c6b22d588",
+    "crates/brynja-crypto-cpu-std/src/macos_resident/memory/tests.rs": "77358af8181f25424b21e2eef88b32b7a2259aa44ffc14c5c70f2294c842542acb3ef063fc18987673f488e8b5f09a05c5127da905dd4811ec052e2619e0cdf0",
+    "crates/brynja-crypto-cpu-std/src/macos_resident/mod.rs": "714cc00af6f0cc64e06656a8021cc0999913746dba696c8b9ea56b18c9b2fa5e8aa7a4787e0eaeb71feffd4b0678583f04e3f130df7eb75899cbc75c5162bd69",
     "crates/brynja-crypto-cpu-std/src/macos_resident/resource.rs": "c54ebe4c30db4a56d01ec48ed30f4a160c5ed9da644af775c87841159b21e8d76849bbc4f70eba75c50efd14a32db92cf2f35b2babcec8631743ea8a1a308b76",
     "crates/brynja-crypto-cpu-std/src/macos_resident/resource/darwin.rs": "d8b9da647cd432b408bdbcabf263fca61538b5da15ff90d8cd3be976c5ff15bb697eb68b56b5640be2eae75a74a4f7f6b396b1e11d40497b53f6eb94043d9550",
     "crates/brynja-crypto-cpu-std/src/macos_resident/resource/darwin/observe.rs": "f7c96c61fcc75c97d91b3cd9aaca4c51a06bf01ef5c48191fdcb62d9c9aefabee2d9b1c6c3db0b5c5d2913c92e94959de7f6fdb80056d3153a273a5c1aa0f1d4",

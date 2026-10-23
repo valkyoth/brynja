@@ -1970,7 +1970,19 @@ sha256 = "f71e2db60272e673ce83d9e2782f309dd984f0cc4fb162c10d9d57d13e5411e7"
 package = "brynja-crypto-cpu-std"
 path = "src/macos_resident/mod.rs"
 status = "macos-resident-contract-development"
-sha256 = "86d462ec6cdd8e97a1ebe6347b4c0802364270348fc5e98698fb27f49e612b8e"
+sha256 = "ede8bee6c35de32fcd6c7e97b472c61382c36ed527d1fb329e0391f7123c7508"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/memory.rs"
+status = "macos-resident-resource-api-development"
+sha256 = "c79f810ea45d43ce73319a033a9b3bd64853d98eac0c90bee45ac0ca765eabc8"
+
+[[sources]]
+package = "brynja-crypto-cpu-std"
+path = "src/macos_resident/memory/tests.rs"
+status = "macos-resident-resource-api-tests"
+sha256 = "4041c077008a5a79e5f0422a83d631d4c62064f6cc4a34e52a959f3fe70e8002"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"

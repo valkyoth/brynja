@@ -17,13 +17,14 @@ workspace = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(workspace)
 
 
-def graph():
-    roots = {name: Path("/archives") / name for name in policy.FEATURES if name != "legacy-hosted-external"}
+def graph(resident=False):
+    features = policy.features(resident)
+    roots = {name: Path("/archives") / name for name in features if name != "legacy-hosted-external"}
     consumer = Path("/consumer")
     packages = [{"id": name, "name": name, "source": None,
                  "manifest_path": str((consumer if name == "legacy-hosted-external" else roots[name]) / "Cargo.toml")}
-                for name in policy.FEATURES]
-    nodes = [{"id": name, "features": sorted(features)} for name, features in policy.FEATURES.items()]
+                for name in features]
+    nodes = [{"id": name, "features": sorted(values)} for name, values in features.items()]
     return {"packages": packages, "resolve": {"nodes": nodes}}, roots, consumer
 
 
@@ -68,6 +69,19 @@ class HostedAcceptance(unittest.TestCase):
             with self.subTest(output=changed), self.assertRaises(ValueError):
                 policy.runtime(changed, 6)
 
+    def test_resident_graph_cannot_substitute_strict_or_enable_acceleration(self):
+        original, roots, consumer = graph(True)
+        policy.graph(original, roots, consumer, True)
+        with self.assertRaises(ValueError):
+            policy.graph(original, roots, consumer, False)
+        for name in (policy.HOST, "brynja-crypto-cpu-std"):
+            for feature in ("protected-memory", "macos-resident-acceleration", "strict-execution"):
+                changed = copy.deepcopy(original)
+                node = next(n for n in changed["resolve"]["nodes"] if n["id"] == name)
+                node["features"] = [feature]
+                with self.subTest(name=name, feature=feature), self.assertRaises(ValueError):
+                    policy.graph(changed, roots, consumer, True)
+
     def test_real_workspace_hosted_features_and_defaults(self):
         graph = json.loads(subprocess.check_output(["cargo", "metadata", "--offline", "--locked", "--all-features", "--format-version=1"], cwd=ROOT, text=True))
         packages = {p["name"]: p for p in graph["packages"]}
@@ -84,6 +98,11 @@ class HostedAcceptance(unittest.TestCase):
         package["features"]["default"] = ["strict-execution"]
         with self.assertRaises(ValueError):
             workspace.validate_features(name, package, entry)
+        for replacement in ([], ["brynja-crypto-cpu-std/protected-memory"], ["brynja-crypto-cpu-std/macos-resident-acceleration"]):
+            package = copy.deepcopy(packages[name])
+            package["features"]["macos-resident"] = replacement
+            with self.subTest(resident=replacement), self.assertRaises(ValueError):
+                workspace.validate_features(name, package, entry)
         for dependency in ("brynja-legacy-hmac", "brynja-crypto-cpu-std"):
             for field, value in (("uses_default_features", True), ("features", ["hmac-execution"]), ("req", "*")):
                 package = copy.deepcopy(packages[name])

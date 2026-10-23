@@ -37,14 +37,16 @@ once published; until then use the reviewed workspace path.
 | Protected scalar SHA-1/MD5 HMAC | Linux-only `strict-execution`; byte/chunk/bit and tag-policy author tests pass | ❌ No |
 | Protected output loans and worker clearing | Native mapping/fault checks and extracted debug/release mutation tests pass | ❌ No |
 | Protected accelerated SHA-1/MD5 batches | Pending | ❌ No |
-| Apple Silicon resident profile | Pending; not a Linux strict fallback | ❌ No |
+| Apple Silicon resident profile | Scalar SHA-1/MD5 sessions; native lifecycle/bit tests; no dump exclusion | ❌ No |
 
 ## Hardware and SIMD
 
-These sessions use portable hardened hash implementations on protected workers.
-Dependency feature unification never enables acceleration here. Separate
-accelerated sessions and the explicitly weaker macOS resident profile remain
-pending. No register-erasure or whole-process protection claim is made.
+These sessions use portable hardened hashes on the selected protected/resident
+workers. Dependency feature unification never enables acceleration here.
+Separate hosted accelerated sessions remain pending.
+The distinct macOS scalar resident profile never
+substitutes for Linux strict execution. No register-erasure or whole-process
+protection claim is made.
 
 ## API use
 
@@ -73,6 +75,27 @@ fn legacy_request() -> Result<(), brynja_legacy_hmac_std::strict_execution::Erro
 releases only a boolean. Select tag width before processing; byte truncations
 range from ten bytes to the full digest width. Candidate lengths never select
 policy. Empty or predictable keys are mathematically accepted but insecure.
+
+For Apple Silicon, select `macos-resident` explicitly instead. Its session and
+output types are distinct from `strict_execution`, even if both features are
+enabled. The profile has guarded, locked, fork-excluded memory but **no core-dump
+exclusion**. Applications requiring dump exclusion must not substitute it.
+
+```rust
+# #[cfg(feature = "macos-resident")]
+fn resident_legacy_request() -> Result<(), brynja_legacy_hmac_std::macos_resident::Error> {
+    use brynja_legacy_hmac_std::macos_resident::*;
+    let mut session = Session::<Md5>::new(LegacyUse::acknowledge(), TagPolicy::Bytes(12), Limits {
+        stack_bytes: 262144, max_stack_mapping_bytes: 1048576,
+        max_buffer_mapping_bytes: 65536, max_key_bytes: 4096,
+        max_message_bits: 65536, max_chunks: 16,
+    })?;
+    let tag = session.authenticate(&[0x42; 32], b"legacy message")?;
+    assert_eq!(tag.expose().len(), 12);
+    drop(tag);
+    Ok(())
+}
+```
 
 All keyed state is created and consumed on the joined worker. No application
 callback or secret-bearing thread return is exposed. Output errors clear staging

@@ -5278,8 +5278,12 @@ worker-side verification. Native author tests check actual locked/dump/fork-
 excluded storage and error/unwind clearing; extracted debug/release consumers,
 26 compiled ownership/classification negatives and ten cleanup/admission mutation
 runs pass. The modern and strict facades remain unchanged and legacy-free.
-Hosted accelerated routes and the separately named, weaker macOS resident owners
-still require implementation; portable composition is not a fallback for either.
+The separately named macOS scalar resident owners now reuse safe wrappers over
+the existing Darwin memory/worker adapter, with no dump-exclusion claim and no
+new low-level code. Native Apple Silicon author tests and extracted debug/release
+cleanup mutations pass. Linux strict and Mac resident types cannot substitute
+for one another. Hosted accelerated routes still require implementation;
+portable composition is not an error-driven fallback for them.
 
 Remaining: complete those hosted routes; compiler and timing
 qualification, complete error/unwind cleanup evidence; capability and

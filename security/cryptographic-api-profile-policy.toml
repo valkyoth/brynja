@@ -1940,7 +1940,7 @@ sha256 = "92b2f58d0b8f621b0d78e689cb3748286bcea559e08817b48cc9dfb453ea0a1c"
 
 [[reviewed-source]]
 path = "scripts/hmac/hmac_hosted_contracts.py"
-sha256 = "455b4e0b6edf3591f8c2ed414a5f0d18cb691919a0d7bc5e1bfca1037462a14e"
+sha256 = "4b3e6c3ec5402f145495663becd5bba53a0bf78edbb6bf27c3d525aed61d3d35"
 
 [[reviewed-source]]
 path = "scripts/hmac/hmac_hosted_guard_paths.py"

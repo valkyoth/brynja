@@ -27,7 +27,7 @@ previous_version = "unpublished"
 version = "0.1.0"
 change = "code"
 publish = false
-reason = "Add isolated hosted protected/resident legacy HMAC owners; accelerated hosted routes, macOS implementation and independent qualification remain pending."
+reason = "Add isolated hosted protected/resident legacy HMAC owners; accelerated hosted routes and independent qualification remain pending."
 
 [crates."brynja-mac-hmac"]
 previous_version = "unpublished"

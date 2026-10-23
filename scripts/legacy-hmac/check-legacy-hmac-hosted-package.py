@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Bounded GNU/Linux extracted protected legacy HMAC acceptance; no full sweep."""
+"""Bounded extracted Linux protected / Apple resident legacy HMAC acceptance."""
+import argparse
 import importlib.util
 import json
 import os
@@ -35,9 +36,11 @@ def package_workspace(destination):
 ORIGINAL_WORKSPACE = api.packaging.isolated_package_workspace
 
 
-def negatives(consumer, env):
+def negatives(consumer, env, resident=False):
+    prelude = PRELUDE.replace("strict_execution", "macos_resident") if resident else PRELUDE
     source = consumer / "src/lib.rs"
-    command = ["cargo", "check", "--offline", "--locked", "--lib"]
+    command = ["cargo", "check", "--offline", "--locked", "--lib", "--features",
+               "brynja-legacy-hmac-std/strict-execution,brynja-legacy-hmac-std/macos-resident"]
     cases = []
     for identity in ("Sha1", "Md5"):
         for owner in (f"Session<{identity}>", f"Output<'static, {identity}>"):
@@ -51,26 +54,34 @@ def negatives(consumer, env):
         ('use brynja_legacy_hmac_std::strict_execution::Sha256;', "E0432"),
         ('fn probe(o:Output<Sha1>, b:&mut[u8]){let _=o.declassify(b);}', "E0061"),
     ])
+    # Compile both profiles together: rejection must survive Cargo feature unification.
+    for origin, target in (("strict_execution", "macos_resident"), ("macos_resident", "strict_execution")):
+        cases.append((f'fn convert(s:brynja_legacy_hmac_std::{origin}::Session<Sha1>) -> '
+                      f'brynja_legacy_hmac_std::{target}::Session<Sha1>{{s}}', "E0308"))
     try:
-        source.write_text(PRELUDE + POSITIVE)
+        source.write_text(prelude + POSITIVE)
         api.run(command, consumer, env)
         for body, code in cases:
-            source.write_text(PRELUDE + body)
+            if resident and not body.startswith("fn convert("):
+                body = body.replace("strict_execution", "macos_resident").replace("ProtectedStack", "ResidentStack")
+            source.write_text(prelude + body)
             api.cargo_environment.check(consumer, env)
             result = subprocess.run(command, cwd=consumer, env=env, capture_output=True, text=True, timeout=90, check=False)
             require(result.returncode == 101 and f"error[{code}]" in result.stderr,
                     "hosted compiled negative: " + code + "\n" + result.stderr[-1800:])
     finally:
-        source.write_text(PRELUDE + POSITIVE)
+        source.write_text(prelude + POSITIVE)
     api.run(command, consumer, env)
-    print(f"Protected legacy HMAC ownership/classification negatives: {len(cases)} rejected", flush=True)
+    print(f"Hosted legacy HMAC ownership/classification negatives: {len(cases)} rejected", flush=True)
 
 
-def mutations(roots, env):
+def mutations(roots, env, resident=False):
+    module = "macos_resident" if resident else "strict_execution"
+    feature = "macos-resident" if resident else "strict-execution"
     root = roots[policy.HOST]
-    path = root / "src/strict_execution/mod.rs"
+    path = root / f"src/{module}/mod.rs"
     original = path.read_text()
-    test = "strict_execution::tests::native::"
+    test = module + "::tests::native::"
     cases = [
         ("self.output.clear();", "", "output_loan_forget_errors_and_explicit_release"),
         ("self.staging.clear();", "", "output_loan_forget_errors_and_explicit_release"),
@@ -83,7 +94,7 @@ def mutations(roots, env):
         try:
             path.write_text(original.replace(before, after))
             for profile in ([], ["--release"]):
-                command = ["cargo", "test", "--offline", "--features", "strict-execution", *profile, "--lib", test + selected]
+                command = ["cargo", "test", "--offline", "--features", feature, *profile, "--lib", test + selected]
                 api.run(command + ["--no-run"], root, env)
                 api.cargo_environment.check(root, env)
                 result = subprocess.run(command + ["--", "--exact"], cwd=root, env=env,
@@ -92,12 +103,19 @@ def mutations(roots, env):
                         "hosted mutant must fail its assertion, not compilation: " + before + "\n" + result.stdout[-1500:] + result.stderr[-1000:])
         finally:
             path.write_text(original)
-    print(f"Protected legacy HMAC compiled cleanup mutants: {len(cases)*2} rejected", flush=True)
+    print(f"Hosted legacy HMAC compiled cleanup mutants: {len(cases)*2} rejected", flush=True)
 
 
 def main():
-    require(platform.system() == "Linux" and platform.machine() in ("x86_64", "aarch64")
-            and platform.libc_ver()[0] == "glibc", "requires native protected GNU/Linux host")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--resident", action="store_true", help="explicit native macOS resident profile, NOT dump exclusion")
+    resident = parser.parse_args().resident
+    if resident:
+        require(platform.system() == "Darwin" and platform.machine() == "arm64", "requires native Apple Silicon")
+    else:
+        require(platform.system() == "Linux" and platform.machine() in ("x86_64", "aarch64")
+                and platform.libc_ver()[0] == "glibc", "requires native protected GNU/Linux host")
+    feature = "macos-resident" if resident else "strict-execution"
     specifications = tuple((name, tomllib.loads((api.ROOT / "crates" / name / "Cargo.toml").read_text())["package"]["version"],
                             ("src/lib.rs",)) for name in ARCHIVES)
     with api.cargo_environment.private_directory(api.ROOT) as temporary:
@@ -111,31 +129,31 @@ def main():
         root = roots[policy.HOST]
         policy.members(str(p.relative_to(root)) for p in root.rglob("*") if p.is_file())
         size = (directory / "target/package/brynja-legacy-hmac-std-0.1.0.crate").stat().st_size
-        print(f"Protected legacy HMAC source-only archive: {size} bytes", flush=True)
+        print(f"Hosted legacy HMAC source-only archive: {size} bytes", flush=True)
         consumer = directory / "consumer"
         (consumer / "src").mkdir(parents=True)
         patches = ''.join(f'{name}={{path={json.dumps(str(path))}}}\n' for name, path in roots.items())
         manifest = ('[workspace]\n[package]\nname="legacy-hosted-external"\nversion="0.0.0"\nedition="2024"\n'
-                    '[dependencies]\nbrynja-legacy-hmac-std={version="=0.1.0",default-features=false,features=["strict-execution"]}\n'
+                    '[dependencies]\nbrynja-legacy-hmac-std={version="=0.1.0",default-features=false,features=["' + feature + '"]}\n'
                     '[patch.crates-io]\n' + patches)
         (consumer / "Cargo.toml").write_text(manifest)
-        (consumer / "src/lib.rs").write_text(PRELUDE + POSITIVE)
+        (consumer / "src/lib.rs").write_text((PRELUDE.replace("strict_execution", "macos_resident") if resident else PRELUDE) + POSITIVE)
         api.run(["cargo", "generate-lockfile", "--offline"], consumer, env)
         graph = json.loads(api.run(["cargo", "metadata", "--offline", "--locked", "--format-version=1"], consumer, env))
-        policy.graph(graph, roots, consumer)
+        policy.graph(graph, roots, consumer, resident)
         # Test the actual archived private implementation and its native fault
         # hooks too; patch only its external dependency resolution, never code.
         for path in roots.values():
             manifest = path / "Cargo.toml"
             manifest.write_text(manifest.read_text() + "\n[workspace]\n[patch.crates-io]\n" + patches)
         for profile in ([], ["--release"]):
-            result = api.run(["cargo", "test", "--offline", "--features", "strict-execution", *profile, "--lib"], root, env)
+            result = api.run(["cargo", "test", "--offline", "--features", feature, *profile, "--lib"], root, env)
             policy.runtime(result, 6)
-            api.run(["cargo", "test", "--offline", "--features", "strict-execution", *profile, "--doc"], root, env)
-        negatives(consumer, env)
-        mutations(roots, env)
-        policy.runtime(api.run(["cargo", "test", "--offline", "--features", "strict-execution", "--lib"], root, env), 6)
-    print("Protected legacy HMAC extracted-package acceptance: PASS; author checks, qualification pending", flush=True)
+            api.run(["cargo", "test", "--offline", "--features", feature, *profile, "--doc"], root, env)
+        negatives(consumer, env, resident)
+        mutations(roots, env, resident)
+        policy.runtime(api.run(["cargo", "test", "--offline", "--features", feature, "--lib"], root, env), 6)
+    print(f"Legacy HMAC {feature} extracted-package acceptance: PASS; author checks, qualification pending", flush=True)
 
 
 if __name__ == "__main__":

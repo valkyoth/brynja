@@ -134,10 +134,31 @@ debug and release on `macosbuilder` with Rust 1.99.1. Linux strict construction
 rejects there instead of silently becoming resident-only. This is author-operated
 rejection evidence, not an implemented or qualified macOS legacy HMAC session.
 
+Subsequent macOS implementation: default-off `macos-resident` now supplies
+separate scalar SHA-1/MD5 sessions, bounded requests, typed output loans and
+worker-side verification. It uses safe `ResidentBytes`/`ResidentStack` wrappers
+over the existing Darwin adapter; no low-level implementation or cryptographic
+kernel changed. These resources are guarded, locked and fork-excluded, but not
+dump-excluded. The generic resource callback API documents ordinary host closure
+captures and caller-created copies; HMAC exposes no arbitrary callback and
+creates keyed state only on its joined worker.
+
+Author-operated Apple Silicon checks passed six resident tests in extracted
+debug/release archives, 28 compiled ownership/algorithm/profile-separation
+negatives with both Cargo features enabled, and ten cleanup/admission mutation
+runs. The existing ten Darwin resource tests also passed, plus the new native
+resource placement/clearing/reuse test in debug/release and five resource
+ownership compile-fail examples. The nine added/changed Rust resource/session
+files were reconciled byte-for-byte between the tested Mac copy and local
+candidate. Linux extracted tests still pass; opposite-platform constructors
+reject, and four bounded Miri metadata/model-rejection tests pass. Native Mac
+hosted acceleration, full composition qualification and independent review remain
+pending. Source-drift inventories were refreshed, not native evidence approvals.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions, including MD5 prefix handling; finish
-  protected acceleration and distinct macOS resident owners without silently
+  protected/resident acceleration without silently
   downgrading their guarantees.
 - Complete composition error/unwind, cleanup-codegen and timing checks.
 - Register API/capability owners and a separately scoped evidence family.

@@ -36,6 +36,7 @@ pub mod batch;
 pub mod hmac;
 #[cfg(feature = "macos-resident-kmac")]
 pub mod kmac;
+pub mod memory;
 mod resource;
 pub mod sha2;
 mod sha256;

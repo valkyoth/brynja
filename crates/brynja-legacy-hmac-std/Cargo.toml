@@ -12,6 +12,7 @@ include = ["Cargo.toml", "LICENSE-APACHE", "LICENSE-MIT", "README.md", "src/**/*
 [features]
 default = []
 strict-execution = ["dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/protected-memory"]
+macos-resident = ["dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/macos-resident"]
 
 [dependencies]
 brynja-core.workspace = true

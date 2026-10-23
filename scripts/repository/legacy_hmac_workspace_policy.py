@@ -11,6 +11,7 @@ FEATURE_SETS = {
     "brynja-legacy-hmac-std": {
         "default": [],
         "strict-execution": ["dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/protected-memory"],
+        "macos-resident": ["dep:brynja-crypto-cpu-std", "brynja-crypto-cpu-std/macos-resident"],
     },
 }
 

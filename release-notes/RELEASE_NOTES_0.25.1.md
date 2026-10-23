@@ -194,11 +194,55 @@ the three README examples and twelve ownership compile-fail doctests pass.
 Workspace/README/unsafe policy regressions remain intact. No full sweep or
 native evidence approval was performed in this implementation pass.
 
+Subsequent hosted MD5 SIMD implementation: separate default-off
+`strict-md5-batch` and `macos-resident-md5-batch` features now expose
+`Md5BatchSession`, bounded borrowed lane descriptors and clearing
+`Md5BatchOutput` loans. All eight output slots and staging bytes live in
+preacquired profile-specific mappings. Required AVX2/NEON authority and every
+key-derived intermediate are constructed on the joined worker, never moved from
+the host stack. The leaf's full-group requirement, scalar suffix/padding and
+preselected scalar normalization for ineligible long-key groups are preserved;
+errors never select an alternative HMAC implementation.
+
+One configured compression budget is shared across all phases of each request.
+Public lane/key/message/bit/candidate admission occurs before worker execution;
+canonical secret tail contents are checked on the worker. Returned backend,
+width, active population and actual inner/outer SIMD work are checked before
+releasing output or a verification decision. Post-error health revalidation
+ensures revocation cannot masquerade as ordinary cancellation/budget exhaustion.
+Backend, malformed-result and unwind failures quarantine the wrapper; ordinary
+request errors preserve reuse. No raw authority or arbitrary worker callback is
+exported. Linux strict and Apple resident types remain non-interchangeable;
+Apple memory still has no core-dump exclusion.
+
+Author-operated Linux AVX2 and Apple Silicon NEON package checks each pass eleven
+runtime tests in debug/release, 47 compiled ownership/lifetime/algorithm/profile
+negatives, ten scalar cleanup mutations and 22 MD5 authority/cleanup/verification
+mutations. The matrix covers all 256 slot masks, all canonical final bit widths,
+key and message block/padding boundaries, every byte of all supported truncated
+tags, scalar/SIMD normalization and every observed control/post-write failure
+point. These differentials compare the hosted route against the portable legacy
+leaf; they do not replace the earlier independent leaf oracle or a fresh review.
+Forgotten loans, early cancellation, malformed inputs, resource limits, wrong
+backend/reports and explicit quarantine are exercised. Linux checks actual worker
+and buffer mapping flags. The source-only hosted archive is about 45.5 KB and
+contains no evidence bundle.
+All 29 hosted Rust implementation/test files were reconciled byte-for-byte with
+the final tested Mac copy. Combined native all-feature builds pass 21 tests on
+each platform, including the opposite profile's unsupported-target rejection.
+
+Focused checks also pass MSRV 1.90 compilation, native scoped Clippy, twelve
+Miri metadata/unsupported-model tests, and the complete MD5 control-failure test
+under ASan with forced LeakSanitizer/fatal exits. Instrumented execution is
+diagnostic only, not residency qualification. The four README examples and
+sixteen compile-fail doctests pass. No unsafe code, cryptographic kernel,
+low-level platform adapter, external dependency version or release gate changed.
+This implementation pass does not approve native evidence or start a full sweep.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
-- Qualify both accelerated compositions, including MD5 prefix handling; finish
-  protected/resident MD5 SIMD owners without silently
-  downgrading their guarantees.
+- Qualify both accelerated compositions and their protected/resident owners,
+  including MD5 prefix handling, without silently downgrading their guarantees.
 - Complete composition error/unwind, cleanup-codegen and timing checks.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.

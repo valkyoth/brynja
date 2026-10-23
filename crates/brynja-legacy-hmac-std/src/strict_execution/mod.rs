@@ -15,6 +15,12 @@
 use brynja_crypto_cpu_std::protected_memory::{ProtectedBytes, ProtectedStack};
 pub use brynja_legacy_hmac::{Algorithm, LegacyUse, Md5, Sha1};
 use core::marker::PhantomData;
+#[cfg(feature = "strict-md5-batch")]
+mod md5_compiled;
+#[cfg(feature = "strict-md5-batch")]
+pub use md5_compiled::{
+    Md5Backend, Md5BatchInput, Md5BatchLimits, Md5BatchOutput, Md5BatchSession,
+};
 #[cfg(feature = "strict-sha1-acceleration")]
 mod sha1_compiled;
 #[cfg(test)]

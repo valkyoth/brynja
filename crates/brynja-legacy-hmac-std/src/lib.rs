@@ -7,7 +7,7 @@
 //! The separate `macos-resident` profile has no core-dump exclusion guarantee.
 //! Separate opt-in SHA-1 compiled sessions require matching deployment features;
 //! unrelated hash CPU features never change either scalar route implemented here.
-//! Hosted MD5 SIMD owners remain pending.
+//! Separate opt-in MD5 batch owners require a complete AVX2/NEON lane group.
 
 #[cfg(feature = "strict-execution")]
 pub mod strict_execution;

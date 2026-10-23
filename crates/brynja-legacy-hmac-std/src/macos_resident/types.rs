@@ -46,7 +46,7 @@ impl<'a> Bits<'a> {
             valid_bits: if bytes.is_empty() { 0 } else { 8 },
         }
     }
-    fn bit_len(self) -> Result<u128, Error> {
+    pub(super) fn bit_len(self) -> Result<u128, Error> {
         if self.bytes.is_empty() {
             return if self.valid_bits == 0 {
                 Ok(0)

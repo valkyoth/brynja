@@ -17,8 +17,8 @@ workspace = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(workspace)
 
 
-def graph(resident=False, accelerated=False):
-    features = policy.features(resident, accelerated)
+def graph(resident=False, accelerated=False, md5=False):
+    features = policy.features(resident, accelerated, md5)
     roots = {name: Path("/archives") / name for name in features if name != "legacy-hosted-external"}
     consumer = Path("/consumer")
     packages = [{"id": name, "name": name, "source": None,
@@ -29,6 +29,24 @@ def graph(resident=False, accelerated=False):
 
 
 class HostedAcceptance(unittest.TestCase):
+    def test_md5_closure_remains_explicit_and_algorithm_specific(self):
+        for resident in (False, True):
+            original, roots, consumer = graph(resident, False, True)
+            policy.graph(original, roots, consumer, resident, False, True)
+            for chosen, sha1, md5 in ((resident, False, False), (resident, True, False), (not resident, False, True)):
+                with self.assertRaises(ValueError):
+                    policy.graph(original, roots, consumer, chosen, sha1, md5)
+            for index, node in enumerate(original["resolve"]["nodes"]):
+                for feature in node["features"]:
+                    changed = copy.deepcopy(original)
+                    changed["resolve"]["nodes"][index]["features"].remove(feature)
+                    with self.subTest(resident=resident, package=node["id"], feature=feature), self.assertRaises(ValueError):
+                        policy.graph(changed, roots, consumer, resident, False, True)
+        policy.runtime("test result: ok. 11 passed; 0 failed; 0 ignored;", 11)
+        for value in ("10 passed; 0 failed; 0 ignored;", "11 passed; 0 failed; 1 ignored;"):
+            with self.assertRaises(ValueError):
+                policy.runtime("test result: ok. " + value, 11)
+
     def test_accelerated_closure_is_explicit_and_preserves_profile(self):
         for resident in (False, True):
             original, roots, consumer = graph(resident, True)
@@ -128,7 +146,7 @@ class HostedAcceptance(unittest.TestCase):
                 selected[field] = value
                 with self.subTest(dependency=dependency, field=field), self.assertRaises(ValueError):
                     workspace.validate_dependencies(name, package, entry, packages)
-        for feature in ("strict-sha1-acceleration", "macos-resident-sha1-acceleration"):
+        for feature in ("strict-sha1-acceleration", "macos-resident-sha1-acceleration", "strict-md5-batch", "macos-resident-md5-batch"):
             for replacement in ([], ["brynja-legacy-hmac/sha1-execution"], ["brynja-legacy-hmac/md5-batch"]):
                 package = copy.deepcopy(packages[name])
                 package["features"][feature] = replacement

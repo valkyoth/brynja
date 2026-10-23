@@ -15,6 +15,12 @@
 use brynja_crypto_cpu_std::macos_resident::memory::{ResidentBytes, ResidentStack};
 pub use brynja_legacy_hmac::{Algorithm, LegacyUse, Md5, Sha1};
 use core::marker::PhantomData;
+#[cfg(feature = "macos-resident-md5-batch")]
+mod md5_compiled;
+#[cfg(feature = "macos-resident-md5-batch")]
+pub use md5_compiled::{
+    Md5Backend, Md5BatchInput, Md5BatchLimits, Md5BatchOutput, Md5BatchSession,
+};
 #[cfg(feature = "macos-resident-sha1-acceleration")]
 mod sha1_compiled;
 #[cfg(test)]

@@ -12,6 +12,7 @@ from unittest.mock import patch
 
 import legacy_hmac_hosted_acceptance as policy
 import legacy_hmac_hosted_sha1 as compiled
+import legacy_hmac_hosted_md5 as batch
 from legacy_hmac_acceptance import NAMES, require
 
 spec = importlib.util.spec_from_file_location("legacy_package", Path(__file__).with_name("check-legacy-hmac-package.py"))
@@ -37,7 +38,7 @@ def package_workspace(destination):
 ORIGINAL_WORKSPACE = api.packaging.isolated_package_workspace
 
 
-def negatives(consumer, env, resident=False, accelerated=False):
+def negatives(consumer, env, resident=False, accelerated=False, md5=False):
     prelude = PRELUDE.replace("strict_execution", "macos_resident") if resident else PRELUDE
     source = consumer / "src/lib.rs"
     command = ["cargo", "check", "--offline", "--locked", "--lib", "--features",
@@ -62,6 +63,9 @@ def negatives(consumer, env, resident=False, accelerated=False):
     if accelerated:
         command[-1] += ",brynja-legacy-hmac-std/strict-sha1-acceleration,brynja-legacy-hmac-std/macos-resident-sha1-acceleration"
         cases.extend(compiled.negatives())
+    if md5:
+        command[-1] += ",brynja-legacy-hmac-std/strict-md5-batch,brynja-legacy-hmac-std/macos-resident-md5-batch"
+        cases.extend(batch.negatives())
     try:
         source.write_text(prelude + POSITIVE)
         api.run(command, consumer, env)
@@ -114,9 +118,12 @@ def mutations(roots, env, resident=False):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--resident", action="store_true", help="explicit native macOS resident profile, NOT dump exclusion")
-    parser.add_argument("--sha1-native", action="store_true", help="explicit compiled SHA-1; requires real native hardware")
+    selection = parser.add_mutually_exclusive_group()
+    selection.add_argument("--sha1-native", action="store_true", help="explicit compiled SHA-1; requires real native hardware")
+    selection.add_argument("--md5-native", action="store_true", help="explicit MD5 SIMD; requires real native hardware")
     args = parser.parse_args()
     resident, accelerated = args.resident, args.sha1_native
+    md5 = args.md5_native
     if resident:
         require(platform.system() == "Darwin" and platform.machine() == "arm64", "requires native Apple Silicon")
     else:
@@ -127,13 +134,18 @@ def main():
         feature = "macos-resident-sha1-acceleration" if resident else "strict-sha1-acceleration"
         import legacy_hmac_native
         target_features = legacy_hmac_native.features()
+    if md5:
+        feature = "macos-resident-md5-batch" if resident else "strict-md5-batch"
+        import legacy_hmac_md5_native
+        target_features = legacy_hmac_md5_native.features()
+    population = 11 if md5 else (10 if accelerated else 6)
     specifications = tuple((name, tomllib.loads((api.ROOT / "crates" / name / "Cargo.toml").read_text())["package"]["version"],
                             ("src/lib.rs",)) for name in ARCHIVES)
     with api.cargo_environment.private_directory(api.ROOT) as temporary:
         directory = Path(temporary)
         env = {k: v for k, v in os.environ.items() if not k.startswith(("CARGO_", "RUST", "BRYNJA_"))}
         env.update(CARGO_HOME=str(directory / "cargo-home"), CARGO_TARGET_DIR=str(directory / "consumer-target"))
-        if accelerated:
+        if accelerated or md5:
             env["RUSTFLAGS"] = "-C target-feature=" + target_features
         api.cargo_environment.check(api.ROOT, env)
         with patch.object(api.packaging, "PACKAGING_PACKAGES", specifications), \
@@ -153,7 +165,7 @@ def main():
         (consumer / "src/lib.rs").write_text((PRELUDE.replace("strict_execution", "macos_resident") if resident else PRELUDE) + POSITIVE)
         api.run(["cargo", "generate-lockfile", "--offline"], consumer, env)
         graph = json.loads(api.run(["cargo", "metadata", "--offline", "--locked", "--format-version=1"], consumer, env))
-        policy.graph(graph, roots, consumer, resident, accelerated)
+        policy.graph(graph, roots, consumer, resident, accelerated, md5)
         # Test the actual archived private implementation and its native fault
         # hooks too; patch only its external dependency resolution, never code.
         for path in roots.values():
@@ -161,13 +173,15 @@ def main():
             manifest.write_text(manifest.read_text() + "\n[workspace]\n[patch.crates-io]\n" + patches)
         for profile in ([], ["--release"]):
             result = api.run(["cargo", "test", "--offline", "--features", feature, *profile, "--lib"], root, env)
-            policy.runtime(result, 10 if accelerated else 6)
+            policy.runtime(result, population)
             api.run(["cargo", "test", "--offline", "--features", feature, *profile, "--doc"], root, env)
-        negatives(consumer, env, resident, accelerated)
+        negatives(consumer, env, resident, accelerated, md5)
         mutations(roots, env, resident)
         if accelerated:
             compiled.mutations(api, roots[policy.HOST], env, resident)
-        policy.runtime(api.run(["cargo", "test", "--offline", "--features", feature, "--lib"], root, env), 10 if accelerated else 6)
+        if md5:
+            batch.mutations(api, roots[policy.HOST], env, resident)
+        policy.runtime(api.run(["cargo", "test", "--offline", "--features", feature, "--lib"], root, env), population)
     print(f"Legacy HMAC {feature} extracted-package acceptance: PASS; author checks, qualification pending", flush=True)
 
 

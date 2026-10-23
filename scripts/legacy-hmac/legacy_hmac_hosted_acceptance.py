@@ -23,10 +23,12 @@ FILES = frozenset({"Cargo.toml", "Cargo.toml.orig", "LICENSE-APACHE", "LICENSE-M
     "src/macos_resident/tests.rs", "src/macos_resident/tests/native.rs",
     *(f"src/{profile}/{name}" for profile in ("strict_execution", "macos_resident")
       for name in ("sha1_compiled.rs", "sha1_compiled/worker.rs",
-                   "sha1_compiled/tests.rs", "sha1_compiled/tests/native.rs"))})
+                   "sha1_compiled/tests.rs", "sha1_compiled/tests/native.rs",
+                   "md5_compiled.rs", "md5_compiled/types.rs", "md5_compiled/worker.rs",
+                   "md5_compiled/tests.rs", "md5_compiled/tests/native.rs"))})
 
 
-def features(resident=False, accelerated=False):
+def features(resident=False, accelerated=False, md5=False):
     result = {name: set(values) for name, values in FEATURES.items()}
     if resident:
         result[HOST] = {"macos-resident"}
@@ -37,6 +39,10 @@ def features(resident=False, accelerated=False):
         result[HOST].add("macos-resident-sha1-acceleration" if resident else "strict-sha1-acceleration")
         result["brynja-legacy-hmac"].add("sha1-execution")
         result["brynja-legacy-sha1"].update(("cpu", "hardened-execution"))
+    if md5:
+        result[HOST].add("macos-resident-md5-batch" if resident else "strict-md5-batch")
+        result["brynja-legacy-hmac"].add("md5-batch")
+        result["brynja-legacy-md5"].update(("batch", "cpu", "hardened-execution"))
     return result
 
 
@@ -48,8 +54,8 @@ def members(names):
         leaf_members(names)
 
 
-def graph(document, roots, consumer, resident=False, accelerated=False):
-    expected = features(resident, accelerated)
+def graph(document, roots, consumer, resident=False, accelerated=False, md5=False):
+    expected = features(resident, accelerated, md5)
     packages = document["packages"]
     require(len(packages) == len(expected) and {p["name"] for p in packages} == set(expected),
             "hosted packaged dependency closure")

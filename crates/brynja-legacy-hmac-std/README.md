@@ -37,7 +37,7 @@ once published; until then use the reviewed workspace path.
 | Protected scalar SHA-1/MD5 HMAC | Linux-only `strict-execution`; byte/chunk/bit and tag-policy author tests pass | ❌ No |
 | Protected output loans and worker clearing | Native mapping/fault checks and extracted debug/release mutation tests pass | ❌ No |
 | Hosted SHA-1 hardware sessions | Explicit protected/resident owners, worker-local authority and terminal quarantine | ❌ No |
-| Protected/resident MD5 SIMD batches | Pending | ❌ No |
+| Protected/resident MD5 SIMD batches | Explicit bounded owners; full groups, aggregate verification and clearing output loans | ❌ No |
 | Apple Silicon resident profile | Scalar SHA-1/MD5 sessions; native lifecycle/bit tests; no dump exclusion | ❌ No |
 
 ## Hardware and SIMD
@@ -51,7 +51,11 @@ feature alone is insufficient: build-wide `+sha,+sse2` or `+neon,+sha2`
 must match CPU/OS support throughout deployment. There is no runtime detection,
 scheduler lock or live-migration guarantee. Establish that contract before
 construction; unsupported configurations return errors, not scalar fallback.
-Hosted MD5 SIMD owners remain pending. The distinct macOS resident profile never
+Separate `Md5BatchSession` owners require `strict-md5-batch` on Linux or
+`macos-resident-md5-batch` on Apple Silicon. Their build-wide features are
+`+avx2` (including OS YMM support) or `+neon`, under the same explicit
+deployment contract. These are independent-message SIMD kernels, not dedicated
+MD5 instructions. The distinct macOS resident profile never
 substitutes for Linux strict execution. No register-erasure or whole-process
 protection claim is made.
 
@@ -144,4 +148,45 @@ recoverable worker unwinds permanently quarantine either compiled session.
 Cancellation, tag mismatch, malformed requests and pre-entry thread-setup errors
 preserve reuse. No error authorizes switching to the scalar session. Quarantine
 also clears retained output, including a forgotten loan.
+
+## Explicit MD5 SIMD batch owner
+
+Select the separate MD5 feature above and a tag policy before providing keys.
+A batch needs at least one complete aligned group: all eight slots for AVX2,
+or slots 0–3 or 4–7 for NEON. No dummy lanes are inserted. Ineligible batches
+reject without falling back. Key/message lengths, active slots and compression
+budgets are public; externally pad them if those dimensions are confidential.
+
+```rust
+# #[cfg(feature = "strict-md5-batch")]
+fn legacy_batch(
+    limits: brynja_legacy_hmac_std::strict_execution::Md5BatchLimits,
+) -> Result<(), brynja_legacy_hmac_std::strict_execution::Error> {
+    use brynja_legacy_hmac_std::strict_execution::*;
+    let mut session = Md5BatchSession::new(
+        LegacyUse::acknowledge(), TagPolicy::Bytes(12), limits,
+    )?;
+    let inputs = core::array::from_fn(|_| Some(Md5BatchInput {
+        key: b"example-only key, replace in applications",
+        message: Bits::bytes(b"legacy message"),
+    }));
+    let tags = session.compute(&inputs, &Cancellation::new())?;
+    assert_eq!(tags.expose(0).map(<[u8]>::len), Some(12));
+    drop(tags); // clears all 128 output bytes, not just active tag prefixes
+    Ok(())
+}
+```
+
+Each request receives one shared `max_compressions` budget across long-key,
+inner and outer processing, including padding and all active lanes. Work limits
+and cancellation preserve reuse; authority, internal and unwind failures
+quarantine. `verify` requires exact active-slot/width agreement and releases
+only one aggregate decision. Empty messages remain active when wrapped in
+`Some`; `None` is inactive.
+
+The existing hardened leaf selects scalar normalization for long keys without
+a full SIMD group and scalar processing for unequal suffixes/padding. This is
+public-shape selection before work, not an error fallback. Both ipad and opad
+passes must report actual full-width SIMD work. All these paths run on the
+protected/resident worker. The resident variant still has **no dump exclusion**.
 

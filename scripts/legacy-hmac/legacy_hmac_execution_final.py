@@ -1,7 +1,7 @@
 """Accelerated finalizer cores and scratch; outer retained moves are separate.
 
-Resolve the actual cores called by the public byte/bit methods. This does not
-yet qualify transfer from the optional retained engine into those callees.
+Resolve the actual cores called by the public byte/bit methods. Transfer from
+the optional retained engine is checked separately by execution_handoff.
 """
 from functools import lru_cache
 import re

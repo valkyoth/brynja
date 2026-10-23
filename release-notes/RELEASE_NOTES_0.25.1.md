@@ -431,15 +431,55 @@ constructor's admission/normalization ownership still require their own checks;
 these core/scratch results do not close those obligations. No production code
 or release gate changed in this follow-up.
 
+### Accelerated SHA-1 retained finalizer handoffs
+
+The subsequent `legacy_hmac_execution_handoff.py` check closes the retained
+transfer obligation left open above. It follows both 448-byte stream owners
+from the optional engine through LLVM's split byte copies and scalar moves
+into the actual public/verification Engine cores or the inlined secret-output
+graph. Empty and both live niche values are explored separately. Live owners
+must be consumed exactly once on every modeled normal-return or recoverable
+unwind exit; absent state must not dispatch to a primitive, and empty-state
+secret finalization must clear the exact supplied destination and length.
+
+The secret closure's captured pointer is tracked through its private storage,
+copies and loads. Only its public tag-width prefix read is admitted, while a
+stream-byte pointer, incomplete capture copy, overwritten pointer, dead source
+or owner-aliasing auxiliary argument is rejected. The six actual downstream
+byte/bit consumers must forward their own owner and original output/candidate
+and tail arguments. Byte-secret forwarding requires a live, path-dominating
+`None` tail initialization rather than merely finding a store somewhere in
+the function text.
+
+Eight new regression groups mutate real emitted graphs, including partial
+owner moves, missing scalar pieces, wrong owner/output/tail pointers, capture
+redirection and lifetime errors, unwind bypasses, missing empty-output clearing,
+missing/repeated consumer dispatch and non-dominating tail stores. Three
+downstream source mutants also compile successfully before being rejected:
+forgotten finalization, dropped bit-tail processing and changed candidate length.
+The existing twelve retained/core regression groups continue to pass. The full
+twelve-combination Rust 1.90.0/1.99.1, abort/unwind, GNU/Linux x86-64/AArch64 and
+Apple AArch64 inspection matrix passes with the checks composed together.
+
+This remains bounded logical ownership/cleanup-dispatch qualification under
+safe Rust non-aliasing and the separately checked primitive/core/destructor
+contracts. It is not proof of erasing compiler-created copies, register/spill
+contents, caller buffers, OS state or fatal-abort paths. Cross-compiled Arm
+inspection is not native execution. No production code, timing capture,
+native approval or release-gate policy changed. Accelerated constructor
+admission/normalization, MD5 row/batch and hosted-worker qualification remain
+unfinished and are not covered by this result.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
   including MD5 prefix handling, without silently downgrading their guarantees.
-- Complete accelerated SHA-1 constructor/retained-finalizer transfer,
+- Complete accelerated SHA-1 constructor admission/normalization,
   MD5-row/batch and hosted-worker cleanup-codegen qualification; portable caller ownership, fixed
   Scratch probes, accelerated SHA-1 retained update/cancellation and Linux
   and Apple timing screens now pass, as do the public/verification finalizer
-  core owner graphs and the three finalizer scratch graphs.
+  core owner graphs, three finalizer scratch graphs and retained-finalizer
+  handoffs.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.
 

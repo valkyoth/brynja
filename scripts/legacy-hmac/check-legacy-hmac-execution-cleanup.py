@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Qualify retained SHA-1 update/cancel and selected finalizer core/scratch graphs."""
+"""Qualify retained SHA-1 update/cancel, finalizer handoffs and core/scratch graphs."""
 import argparse
 from pathlib import Path
 
 import legacy_hmac_execution_graph as graph
 import legacy_hmac_execution_final as final
+import legacy_hmac_execution_handoff as handoff
 import legacy_hmac_timing_runner as runner
 
 ROOT = runner.ROOT
@@ -32,6 +33,7 @@ def emit(directory, compiler, target, panic, fixture=FIXTURE):
 def validate(artifacts, compiler, panic):
     graph.Graph(artifacts[0][1], artifacts[1][1], compiler, panic).check()
     final.check(artifacts[1][1], panic)
+    handoff.validate(artifacts[1][1], panic, artifacts[0][1])
 
 
 def collect(directory, compiler, target, panic):
@@ -40,7 +42,8 @@ def collect(directory, compiler, target, panic):
     print(f"Legacy SHA-1 HMAC retained caller graphs: PASS; {compiler}; {target}; panic={panic}; "
           "cancellation, atomic rejection, fatal update, unwind and caller observer; "
           "three finalizer scratch graphs and two finalizer-core owner graphs; "
-          "constructor/retained-finalizer-transfer/MD5/hosted qualification separate", flush=True)
+          "six public finalizer handoffs and secret-owner graph; "
+          "constructor/MD5/hosted qualification separate", flush=True)
     return artifacts
 
 

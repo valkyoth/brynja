@@ -1668,7 +1668,7 @@ sha256 = "f9da1d8027c998da242468e9dd760cac0728d3e10226c8c2bfee3f6844fa1f45"
 
 [[reviewed-source]]
 path = "scripts/hmac/check-hmac-asan.py"
-sha256 = "d410a57262dc5e3b5f595064d51cd99cdfd5492d1149381ce9bb16dd47908b41"
+sha256 = "d663ce903ceffd548efca1462d22af9a7df78e5b5830a8d516dfec3d2cb6a43f"
 
 [[reviewed-source]]
 path = "scripts/hmac/check-hmac-bit-differential.py"
@@ -1716,7 +1716,7 @@ sha256 = "1093f1edc2757bb5963d4f1fd5ab1b12e99a666d7c1f676a069c65158df63ad1"
 
 [[reviewed-source]]
 path = "scripts/hmac/check-hmac-package.py"
-sha256 = "1818bfa158eaa636ee058725560f50130aa5641e2cd818499f6708f0c6ba9470"
+sha256 = "f9a2b583ad89764535d2c24309d231c193bbd9910980e44ba34c06acfc3c5904"
 
 [[reviewed-source]]
 path = "scripts/hmac/check-hmac-protected.py"
@@ -2128,7 +2128,7 @@ sha256 = "849789f51d7a12a3ef22cff4d33bfcd8dc7ed17f36d9af28cf5407adddfdf19c"
 
 [[reviewed-source]]
 path = "scripts/hmac/test-hmac-package.py"
-sha256 = "2e9a33a5ed2ce6ee8291a1b90b47a5dfa66c70d01b9e6cc035c42f7b8ccdebd7"
+sha256 = "a4dc5bf0c2569601abea255aa73a7f92f8be151647b2a65b3051496d632abd62"
 
 [[reviewed-source]]
 path = "scripts/hmac/test-hmac-protected.py"
@@ -2148,7 +2148,7 @@ sha256 = "38c2c6cd744fd32e1f3c9404154fb5e9f123f30e4ebaf4d3152de3e56f885714"
 
 [[reviewed-source]]
 path = "scripts/hmac/test-hmac-verification.py"
-sha256 = "a039a61a828b591f41223febe66ea5ec18e65612ff1419af51a403db93c2013b"
+sha256 = "ec90bda1936da07652a24fba8da9542c77f4ca206ce34248d4380d0c4c32a13e"
 
 [[reviewed-source]]
 path = "scripts/hmac/test-hmac-workspace.py"

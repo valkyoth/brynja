@@ -159,7 +159,7 @@
       "reason": "Modern extracted archives, no_std/feature consumers, strict facade, negative probes, behavioral mutants and source-only leaf contents pass. The existing v0.25.2 checkpoint still must cover the separately implemented legacy adapters and audit all selected publication/support-crate archive footprints. It is not completed by this modern development pass. Owner-requested shared tag-policy consolidation and agreement regressions are also scheduled for that acceptance checkpoint, not claimed implemented.",
       "evidence": {
         "docs/RELEASE_PLAN.md": "46b61294884394ede99323a42f0ca6dfd121bd42df8a554e5155055ec84d4011",
-        "scripts/hmac/check-hmac-package.py": "1818bfa158eaa636ee058725560f50130aa5641e2cd818499f6708f0c6ba9470",
+        "scripts/hmac/check-hmac-package.py": "f9a2b583ad89764535d2c24309d231c193bbd9910980e44ba34c06acfc3c5904",
         "scripts/hmac/check-hmac-strict.py": "a73e29a6bf41e19331614738f98a1b9e9ac61cee21e595d232c813a12ca6cda2",
         "security/hmac/development-observations.json": "215a9c72cc3219a2095a0fb5ddec745c1ff9f95acc862291f62dbe430c428ffc"
       },

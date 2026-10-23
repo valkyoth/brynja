@@ -238,11 +238,11 @@ class VerifierTests(unittest.TestCase):
         hostile = {"ASAN_OPTIONS": "detect_leaks=0", "LSAN_OPTIONS": "exitcode=0",
                    "RUSTFLAGS": "-Copt-level=0", "CARGO_BUILD_BUILD_DIR": "/bad/cache"}
         populations = {"bounded": 13, "vectors": 7, "lifecycle": 11, "bits": 12,
-                       "general": 5, "execution::tests": 4, "hmac": 2,
+                       "general": 6, "execution::tests": 4, "hmac": 2,
                        "strict_hmac::tests::metadata_admission_and_exact_tag_policy": 1,
                        "strict_hmac::compiled::tests::typed_kernel_admission_never_substitutes_a_backend": 1,
                        "macos_resident::hmac": 4}
-        for missing in (None, *populations):
+        for missing in (None, *populations, "old-general", "ignored-general", "failed-general"):
             calls = []
 
             def run(argv, env):
@@ -254,7 +254,15 @@ class VerifierTests(unittest.TestCase):
                 calls.append(target)
                 count = populations[target] if target != missing else 0
                 ignored = 1 if target == "hmac" else 0
-                return f"test result: ok. {count} passed; 0 failed; {ignored} ignored;"
+                failed = 0
+                if target == "general":
+                    if missing in ("old-general", "ignored-general"):
+                        count = 5
+                    if missing == "ignored-general":
+                        ignored = 1
+                    if missing == "failed-general":
+                        failed = 1
+                return f"test result: ok. {count} passed; {failed} failed; {ignored} ignored;"
 
             with patch.dict(os.environ, hostile), patch.object(asan.sys, "platform", "linux"), \
                     patch.object(asan.platform, "machine", return_value="x86_64"), \

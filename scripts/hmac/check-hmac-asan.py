@@ -16,12 +16,12 @@ def main():
         env["RUSTFLAGS"] = "-Zsanitizer=address"
         env["ASAN_OPTIONS"] = "detect_leaks=1:halt_on_error=1:exitcode=1"
         env["LSAN_OPTIONS"] = "exitcode=23"
-        for target, count in (("bounded", 13), ("vectors", 7), ("lifecycle", 11), ("bits", 12), ("general", 5)):
+        for target, count in (("bounded", 13), ("vectors", 7), ("lifecycle", 11), ("bits", 12), ("general", 6)):
             output = verifier.run(["cargo", "+" + pin["execution_toolchain"], "test", "--locked", "--offline",
                                    "-p", "brynja-mac-hmac", "--test", target,
                                    "--target", "x86_64-unknown-linux-gnu"], env)
             if f"test result: ok. {count} passed; 0 failed; 0 ignored;" not in output:
-                raise ValueError("HMAC sanitizer test population changed: " + target)
+                raise ValueError("HMAC sanitizer test population changed: " + target + "\n" + output[-6000:])
             print(output)
         output = verifier.run(["cargo", "+" + pin["execution_toolchain"], "test", "--locked", "--offline",
                                "-p", "brynja-mac-hmac", "--features", "hardened-execution",

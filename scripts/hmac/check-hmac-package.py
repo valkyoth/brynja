@@ -28,9 +28,35 @@ NAMES = ("brynja-core", "brynja-hash-core", "brynja-crypto-cpu",
 
 def run(command, directory, environment):
     cargo_environment.check(directory, environment)
-    result = subprocess.run(command, cwd=directory, env=environment, check=True,
+    result = subprocess.run(command, cwd=directory, env=environment, check=False,
                             text=True, capture_output=True, timeout=300)
+    if result.returncode:
+        raise RuntimeError(f"HMAC package command failed ({result.returncode}): {command}\n"
+                           + result.stdout[-6000:] + result.stderr[-6000:])
     return result.stdout
+
+
+def consumer_manifest(roots):
+    # The fractional-profile regression composes the public SHA-2 hash directly.
+    # This is a test-only edge to the same extracted, already transitive archive.
+    manifest = ('[workspace]\n[package]\nname="hmac-external"\nversion="0.0.0"\n'
+                'edition="2024"\n[dependencies]\n'
+                'brynja-mac-hmac={version="=0.1.0", default-features=false}\n'
+                '[dev-dependencies]\n'
+                'brynja-hash-sha2={version="=0.1.0", default-features=false}\n'
+                '[patch.crates-io]\n')
+    return manifest + "".join(f'{name}={{path={json.dumps(str(path))}}}\n' for name, path in roots.items())
+
+
+def test_profiles(consumer, environment):
+    for profile in ([], ["--release"]):
+        for test, count in (("vectors", 7), ("lifecycle", 11), ("bounded", 13), ("bits", 12), ("general", 6)):
+            output = run(["cargo", "test", "--offline", "--locked", *profile, "--test", test], consumer, environment)
+            if f"test result: ok. {count} passed; 0 failed; 0 ignored;" not in output:
+                raise ValueError("HMAC packaged test population changed: " + test + "\n" + output[-6000:])
+        output = run(["cargo", "test", "--offline", "--locked", *profile, "--doc"], consumer, environment)
+        if "test result: ok. 1 passed; 0 failed; 0 ignored;" not in output:
+            raise ValueError("HMAC README example did not execute")
 
 
 def main():
@@ -63,12 +89,7 @@ def main():
         print(f"HMAC runtime-only archive: {len(members)} files; {archive.stat().st_size} compressed bytes")
         consumer = directory / "consumer"
         (consumer / "src").mkdir(parents=True)
-        manifest = ('[workspace]\n[package]\nname="hmac-external"\nversion="0.0.0"\n'
-                    'edition="2024"\n[dependencies]\n'
-                    'brynja-mac-hmac={version="=0.1.0", default-features=false}\n'
-                    '[patch.crates-io]\n')
-        manifest += "".join(f'{name}={{path={json.dumps(str(path))}}}\n' for name, path in roots.items())
-        (consumer / "Cargo.toml").write_text(manifest)
+        (consumer / "Cargo.toml").write_text(consumer_manifest(roots))
         shutil.copyfile(leaf / "README.md", consumer / "README.md")
         (consumer / "src/lib.rs").write_text('#![no_std]\n#![doc=include_str!("../README.md")]\n')
         # Acceptance tests deliberately live outside the runtime archive.
@@ -82,14 +103,7 @@ def main():
             location = consumer if package["name"] == "hmac-external" else roots[package["name"]]
             if package["source"] is not None or Path(package["manifest_path"]).resolve() != location / "Cargo.toml":
                 raise ValueError("HMAC dependency escaped extracted archives")
-        for profile in ([], ["--release"]):
-            for test, count in (("vectors", 7), ("lifecycle", 11), ("bounded", 13), ("bits", 12), ("general", 5)):
-                output = run(["cargo", "test", "--offline", "--locked", *profile, "--test", test], consumer, environment)
-                if f"test result: ok. {count} passed; 0 failed; 0 ignored;" not in output:
-                    raise ValueError("HMAC packaged test population changed")
-            output = run(["cargo", "test", "--offline", "--locked", *profile, "--doc"], consumer, environment)
-            if "test result: ok. 1 passed; 0 failed; 0 ignored;" not in output:
-                raise ValueError("HMAC README example did not execute")
+        test_profiles(consumer, environment)
         print("HMAC extracted archive: debug/release vectors, lifecycle, bounded, bits, general and README PASS")
         hmac_acceptance.negatives(consumer, environment, args.no_std_target)
         hmac_acceptance.mutants(roots, consumer, environment)

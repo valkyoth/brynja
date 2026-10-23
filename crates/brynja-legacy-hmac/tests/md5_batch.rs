@@ -5,6 +5,9 @@ use brynja_legacy_hmac::md5_batch::{
 };
 use brynja_legacy_hmac::{BitString, Error, Hmac, LegacyUse, Md5};
 
+#[path = "support/md5_batch_failures.rs"]
+mod failures;
+
 fn executor() -> Result<Md5Executor, Error> {
     Md5Executor::for_compiled_target(Md5Mode::Require).map_err(|_| Error::ExecutionUnavailable)
 }
@@ -197,6 +200,7 @@ fn check_case(
 fn native_md5_verification_and_lifecycle() -> Result<(), Error> {
     println!();
     let executor = executor()?;
+    failures::preflight(&executor)?;
     let bytes = [0x39; 129];
     let key = [0xa7; 80];
     let message = BitString::new(&bytes, 8).map_err(|_| Error::MessageTooLong)?;
@@ -229,6 +233,11 @@ fn native_md5_verification_and_lifecycle() -> Result<(), Error> {
     ));
     for budget in 0..work(report)? {
         let mut output = [[0xa5; 16]; 8];
+        let candidates = expected.each_ref().map(|row| Some(row.as_slice()));
+        assert!(matches!(
+            select(&executor, 16)?.verify(&inputs, &candidates, &mut Md5BatchControl::new(budget)),
+            Err(Error::WorkLimit)
+        ));
         assert!(matches!(
             select(&executor, 16)?.authenticate(
                 &inputs,
@@ -255,8 +264,20 @@ fn native_md5_verification_and_lifecycle() -> Result<(), Error> {
         assert_eq!(output, expected);
     }
     let token = select(&executor, 16)?;
+    let public = select(&executor, 16)?;
+    let verify = select(&executor, 16)?;
     executor.quarantine();
     let mut output = [[0xa5; 16]; 8];
+    assert!(matches!(
+        public.authenticate(&inputs, &mut output, &mut Md5BatchControl::new(1000)),
+        Err(Error::ExecutionFailed)
+    ));
+    assert_eq!(output, [[0xa5; 16]; 8]);
+    let candidates = expected.each_ref().map(|row| Some(row.as_slice()));
+    assert!(matches!(
+        verify.verify(&inputs, &candidates, &mut Md5BatchControl::new(1000)),
+        Err(Error::ExecutionFailed)
+    ));
     assert!(matches!(
         token.authenticate_secret(&inputs, &mut output, &mut Md5BatchControl::new(1000)),
         Err(Error::ExecutionFailed)
@@ -264,7 +285,7 @@ fn native_md5_verification_and_lifecycle() -> Result<(), Error> {
     assert_eq!(output, [[0; 16]; 8]);
     assert!(matches!(select(&executor, 16), Err(Error::ExecutionFailed)));
     println!(
-        "LEGACY_MD5_BATCH_LIFECYCLE: all tag bytes checked; budgets reusable; revocation terminal"
+        "LEGACY_MD5_BATCH_LIFECYCLE: all tag bytes checked; preflight before work; three profiles budget/revocation"
     );
     Ok(())
 }
@@ -273,93 +294,9 @@ fn native_md5_verification_and_lifecycle() -> Result<(), Error> {
 #[ignore = "requires actual AVX2 / NEON instructions with complete target features"]
 fn native_md5_cancel_revoke_unwind_each_boundary() -> Result<(), Error> {
     println!();
-    // Both portable normalization (one long key) and SIMD normalization (all long).
-    for all_long in [false, true] {
-        let key = [0x42; 80];
-        let message = BitString::new(&[0x39; 129], 8).map_err(|_| Error::MessageTooLong)?;
-        let inputs = core::array::from_fn(|lane| {
-            Some(Input::new(
-                if lane == 0 || all_long {
-                    &key
-                } else {
-                    b"short"
-                },
-                message,
-            ))
-        });
-        let reference = executor()?;
-        let mut count = 0;
-        let mut callback = || {
-            count += 1;
-            false
-        };
-        let mut output = [[0; 16]; 8];
-        let _ = select(&reference, 16)?.authenticate(
-            &inputs,
-            &mut output,
-            &mut Md5BatchControl::with_cancellation(1000, &mut callback),
-        )?;
-        for boundary in 1..=count {
-            for mode in 0..3 {
-                for secret in [false, true] {
-                    let executor = executor()?;
-                    let mut output = [[0xa5; 16]; 8];
-                    let mut calls = 0;
-                    let mut callback = || {
-                        calls += 1;
-                        if calls != boundary {
-                            return false;
-                        }
-                        match mode {
-                            0 => true,
-                            1 => {
-                                executor.quarantine();
-                                false
-                            }
-                            _ => std::panic::resume_unwind(Box::new("HMAC MD5 unwind")),
-                        }
-                    };
-                    let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-                        let token = select(&executor, 16)?;
-                        let mut control = Md5BatchControl::with_cancellation(1000, &mut callback);
-                        if secret {
-                            token
-                                .authenticate_secret(&inputs, &mut output, &mut control)
-                                .map(|(tag, _)| drop(tag))
-                        } else {
-                            token
-                                .authenticate(&inputs, &mut output, &mut control)
-                                .map(|_| ())
-                        }
-                    }));
-                    match mode {
-                        0 => assert!(matches!(result, Ok(Err(Error::Cancelled)))),
-                        1 => assert!(matches!(result, Ok(Err(Error::ExecutionFailed)))),
-                        _ => assert!(result.is_err()),
-                    }
-                    assert_eq!(
-                        output,
-                        if secret {
-                            [[0; 16]; 8]
-                        } else {
-                            [[0xa5; 16]; 8]
-                        }
-                    );
-                    if mode == 0 {
-                        let _ = select(&executor, 16)?.authenticate(
-                            &inputs,
-                            &mut output,
-                            &mut Md5BatchControl::new(1000),
-                        )?;
-                    } else {
-                        assert!(matches!(select(&executor, 16), Err(Error::ExecutionFailed)));
-                    }
-                }
-            }
-        }
-    }
+    failures::check()?;
     println!(
-        "LEGACY_MD5_BATCH_FAILURES: scalar/SIMD normalization; every cancel/revoke/unwind boundary"
+        "LEGACY_MD5_BATCH_FAILURES: scalar/SIMD normalization; public/secret/verify; every cancel/revoke/unwind boundary"
     );
     Ok(())
 }

@@ -138,7 +138,7 @@ class Md5CleanupTests(unittest.TestCase):
     def test_downstream_consumer_binding(self):
         definitions, aliases = rows.flow.definitions_and_aliases(self.fixture)
         for name, (_, body) in definitions.items():
-            if "30brynja_legacy_hmac_md5_cleanup" not in name or name.endswith("6select"):
+            if "30brynja_legacy_hmac_md5_cleanup" not in name or not name.endswith(("6public", "6secret", "6verify")):
                 continue
             calls = [line for line in body.splitlines() if "8Md5Batch" in line and re.search(r"\bcall\b", line)]
             self.assertEqual(len(calls), 1)
@@ -147,6 +147,38 @@ class Md5CleanupTests(unittest.TestCase):
                 mutated = self.fixture.replace(body, body.replace(line, line.replace(argument, "%wrong"), 1), 1)
                 with self.assertRaises(ValueError):
                     driver.consumers(mutated, self.llvm)
+
+    def test_constructor_admission_predicates_and_effects(self):
+        signature, body = rows.method(self.definitions, self.aliases, "with_tag_length")[1]
+        tag = rows.syntax.parameters(signature)[2].split()[-1]
+        mutations = ((f"add i64 {tag}, -10", f"add i64 {tag}, -9"),
+                     (", 7\n", ", 8\n"), ("icmp ult i64", "icmp ugt i64"),
+                     ("icmp eq i8", "icmp ne i8"),
+                     ("ptr %executor, i64 9", "ptr %executor, i64 8"),
+                     ("store i8 1, ptr %_0", "store i8 3, ptr %_0"),
+                     ("store i8 3, ptr %_0", "store i8 1, ptr %_0"),
+                     ("start:", "start:\n  call void @unreviewed_callback()"),
+                     ("start:", "start:\n  store i8 1, ptr %executor, align 1"))
+        for before, after in mutations:
+            self.assertIn(before, body)
+            with self.subTest(before=before), self.assertRaises(ValueError):
+                driver.admission.validate(self.fixture, self.llvm.replace(body, body.replace(before, after, 1), 1))
+        call = next(line for line in body.splitlines() if "9Workspace3new(" in line)
+        for changed in (call.replace("%executor", "%_0"), call.replace("9Workspace3new", "9Workspace7fake_new")):
+            with self.assertRaises(ValueError):
+                driver.admission.validate(self.fixture, self.llvm.replace(body, body.replace(call, changed, 1), 1))
+
+    def test_admission_probes_are_not_assumed(self):
+        definitions, aliases = rows.flow.definitions_and_aliases(self.fixture)
+        for name, before, after in (("tag_rejection", "store i8 1", "store i8 3"),
+                                    ("authority_rejection", "store i8 3", "store i8 1"),
+                                    ("portable_backend", "ret i8 2", "ret i8 1"),
+                                    ("backend", "i64 9", "i64 8"),
+                                    ("select", "%bytes)", "%wrong)")):
+            body = driver.admission.probe(definitions, aliases, name)
+            self.assertIn(before, body)
+            with self.subTest(name=name), self.assertRaises(ValueError):
+                driver.admission.validate(self.fixture.replace(body, body.replace(before, after, 1), 1), self.llvm)
 
     def test_compiled_rows_drop_mutants(self):
         work, leaf = self.root / "fixture", self.root / "leaf"
@@ -175,6 +207,15 @@ class Md5CleanupTests(unittest.TestCase):
                               ("let result = consume(truncated.0.as_flattened())?;", "let result = consume(truncated.0.as_flattened())?; core::mem::forget(truncated);")):
             self.assertIn(before, original)
             path.write_text(original.replace(before, after, 1))
+            artifacts = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu", "unwind", True, work / "Cargo.toml")
+            with self.assertRaises(ValueError):
+                driver.validate(artifacts, "unwind")
+        path.write_text(original)
+        selection = leaf / "src/md5_batch/mod.rs"
+        original_selection = selection.read_text()
+        for before, after in (("10..=16", "9..=16"), ("10..=16", "10..=17")):
+            self.assertIn(before, original_selection)
+            selection.write_text(original_selection.replace(before, after))
             artifacts = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu", "unwind", True, work / "Cargo.toml")
             with self.assertRaises(ValueError):
                 driver.validate(artifacts, "unwind")

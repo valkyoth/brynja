@@ -13,8 +13,8 @@ import legacy_hmac_bits
 ROOT = Path(__file__).resolve().parents[2]
 MARKERS = (
     "LEGACY_MD5_BATCH: 256 masks, 70 byte cases, 88 bit cases; no fallback",
-    "LEGACY_MD5_BATCH_LIFECYCLE: all tag bytes checked; budgets reusable; revocation terminal",
-    "LEGACY_MD5_BATCH_FAILURES: scalar/SIMD normalization; every cancel/revoke/unwind boundary",
+    "LEGACY_MD5_BATCH_LIFECYCLE: all tag bytes checked; preflight before work; three profiles budget/revocation",
+    "LEGACY_MD5_BATCH_FAILURES: scalar/SIMD normalization; public/secret/verify; every cancel/revoke/unwind boundary",
 )
 
 

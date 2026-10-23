@@ -598,6 +598,41 @@ It does not establish register/spill erasure, fatal-abort cleanup, primitive
 correctness or release approval. No production implementation or release-gate
 policy changed.
 
+### MD5 pre-workspace admission and three-profile native failures
+
+The emitted constructor is now inspected up to its first `Workspace::new`
+call. Its exact unsigned tag-range predicate must admit only 10..=16 bytes;
+invalid tags return before reading authority, and portable authority returns
+the distinct unavailable error. Accepted paths must pass the original executor
+and a separate 912-byte destination to the real workspace constructor. No
+unexpected call, external write or early successful return is accepted before
+that boundary. Downstream type probes independently bind the error layouts,
+backend observation/niche and constructor forwarding. This checkpoint stops
+before workspace initialization/readiness and does not claim those later
+caller operations are qualified.
+
+The composed cleanup/admission suite passes ten regression groups, including
+predicate, authority, rejection identity, side-effect and probe substitutions.
+Its five real compiled source mutants include two widened tag ranges alongside
+the three row-cleanup mutants. All sixteen generic/AVX2/NEON compiler/target/
+panic configurations still pass. Logs are local under
+`release-reports/v0.25.1-md5-admission-{generic,simd}.log`.
+
+Native failure injection now measures and tests callback boundaries separately
+for public output, secret output and verification, with both scalar and SIMD
+long-key normalization. Cancellation preserves reuse; revocation and unwind
+are terminal. Revocation during scalar normalization is observed at the next
+executor readiness check, not necessarily immediately on callback return.
+Malformed candidates cover every lane and admitted tag width, including
+active/inactive mismatches, and must reject before spending work or invoking a
+callback. Verification now also covers every insufficient work budget and
+retained-token revocation. Native AVX2 and Apple NEON runs pass all three
+explicit tests in debug and release, with updated required population markers.
+The Mac used a private source snapshot of `7c29e8ba` plus the test-only overlay;
+local native logs record its archive digests. These are author-operated focused
+tests, not independent review or release qualification. All-feature leaf tests,
+doctests and focused Clippy pass; no production Rust changed.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -608,8 +643,9 @@ policy changed.
   core owner graphs, three finalizer scratch graphs and retained-finalizer
   handoffs. SHA-1 pre-key admission, constructor scratch, post-admission stream
   ownership and the outlined/inlined iterator cleanup paths now pass. MD5 row
-  cleanup, normalization/comparison scratch and workspace lane-drop dispatch
-  now pass; the broader MD5 caller obligations remain open as listed above.
+  cleanup, normalization/comparison scratch, workspace lane-drop dispatch and
+  pre-workspace tag/authority admission now pass. Three-profile native failure
+  coverage also passes; broader MD5 caller compiler obligations remain open.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.
 

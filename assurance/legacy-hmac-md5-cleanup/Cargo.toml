@@ -1,0 +1,11 @@
+[package]
+name = "brynja-legacy-hmac-md5-cleanup"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[workspace]
+
+[dependencies]
+brynja-legacy-hmac = { path = "../../crates/brynja-legacy-hmac", default-features = false, features = ["md5-batch"] }

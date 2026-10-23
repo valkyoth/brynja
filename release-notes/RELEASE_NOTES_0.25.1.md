@@ -560,16 +560,56 @@ are retained locally under `release-reports/`. Cross-built Arm artifacts are
 inspection only. No production Rust, native observation,
 dependency or release-gate policy is changed by this checkpoint.
 
+### Accelerated MD5 batch row cleanup
+
+A separate compile-only consumer now binds public output, secret output and
+verification to the actual MD5 batch methods, preserving their selection,
+input, destination/candidate and control arguments. The emitted LLVM control
+flow is inspected for the 512-byte pad and three 128-byte row owners, the
+actual normalization helper's 128-byte owner, and the actual comparison
+closure's one-byte accumulator. Every modeled normal return and recoverable
+unwind must dispatch full-width clearing before ending a live row's lifetime.
+Unknown calls conservatively invalidate prior clearing; pointer-root analysis
+exempts only provably disjoint stores. Exact source-bound clearing destructors
+are non-refilling premises, not substitutes for explicit row clearing.
+
+The actual workspace destructor is separately followed through all eight
+113-byte lane owners, including unwind paths. Caller binding requires its
+distinct 912-byte workspace allocation. These source-integrity pins and
+compiled-artifact checks are author checks, not independent approval.
+
+Eight regression groups reject missing/short/substituted clears, late writes,
+indirect callbacks, damaged workspace lane dispatch, source-premise drift,
+captured/unknown pointer aliases and changed downstream arguments. Three real
+leaf-source mutations compile before rejection: clearing only the first row,
+replacing clearing with `black_box`, and forgetting a populated row owner.
+All sixteen configurations pass: Rust 1.90.0/1.99.1 with abort/unwind, generic
+x86-64 plus AVX2 x86-64 and NEON Linux/Apple AArch64 inspection. Local matrix
+logs are retained in `release-reports/v0.25.1-md5-row-{generic,simd}.log`.
+The fixture itself is compile-only and contains no runtime tests. Separately,
+the existing native AVX2 lifecycle/byte/bit-oracle checks pass all three
+explicit tests in both debug and release, and the three native-validator
+regressions pass. No new native Arm execution is claimed by this checkpoint.
+
+This closes the row-storage cleanup checkpoint, not whole-caller qualification:
+MD5 admission, prefix handling, output transactions and quarantine binding,
+and the protected/resident worker paths still require their remaining checks.
+It does not establish register/spill erasure, fatal-abort cleanup, primitive
+correctness or release approval. No production implementation or release-gate
+policy changed.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
   including MD5 prefix handling, without silently downgrading their guarantees.
-- Complete MD5-row/batch and hosted-worker cleanup-codegen qualification; portable caller ownership, fixed
+- Complete MD5 batch caller and hosted-worker cleanup-codegen qualification; portable caller ownership, fixed
   Scratch probes, accelerated SHA-1 retained update/cancellation and Linux
   and Apple timing screens now pass, as do the public/verification finalizer
   core owner graphs, three finalizer scratch graphs and retained-finalizer
   handoffs. SHA-1 pre-key admission, constructor scratch, post-admission stream
-  ownership and the outlined/inlined iterator cleanup paths now pass.
+  ownership and the outlined/inlined iterator cleanup paths now pass. MD5 row
+  cleanup, normalization/comparison scratch and workspace lane-drop dispatch
+  now pass; the broader MD5 caller obligations remain open as listed above.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.
 

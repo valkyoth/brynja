@@ -1,0 +1,184 @@
+#!/usr/bin/env python3
+"""Real artifact mutations, source mutants and pointer-root regressions."""
+import importlib.util
+from pathlib import Path
+import re
+import shutil
+import tomllib
+import unittest
+
+spec = importlib.util.spec_from_file_location("md5_driver", Path(__file__).with_name("check-legacy-hmac-md5-cleanup.py"))
+driver = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(driver)
+rows = driver.rows
+
+
+class Md5CleanupTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.directory = driver.runner.cargo_environment.private_directory(driver.ROOT)
+        cls.addClassCleanup(cls.directory.cleanup)
+        cls.root = Path(cls.directory.name)
+        cls.artifacts = driver.emit(cls.root / "baseline", "1.99.1", "x86_64-unknown-linux-gnu", "unwind", True)
+        cls.fixture, cls.llvm = cls.artifacts[0][1], cls.artifacts[1][1]
+        cls.definitions, cls.aliases = rows.flow.definitions_and_aliases(cls.llvm)
+        driver.validate(cls.artifacts, "unwind")
+
+    def rejects(self, body, before, after):
+        self.assertIn(before, body)
+        self.assertNotEqual(before, after)
+        with self.subTest(before=before, after=after), self.assertRaises(ValueError):
+            rows.validate(self.llvm.replace(body, body.replace(before, after, 1), 1), "unwind")
+
+    def selected(self):
+        for method in ("authenticate", "authenticate_secret", "verify"):
+            _, (signature, body) = rows.method(self.definitions, self.aliases, method)
+            yield signature, body, "rows"
+        for name, (signature, body) in self.definitions.items():
+            if name.endswith("4pads"):
+                yield signature, body, "normalization"
+            elif name.startswith("_RNCNv") and "Md5Batch6verify" in name:
+                yield signature, body, "comparison"
+
+    def test_each_actual_clear_is_required_and_full_width(self):
+        count = 0
+        for _, body, operation in self.selected():
+            owners = rows.scratch.allocations(body, operation)
+            lines = [line for line in body.splitlines() if "18clear_owned_region" in line]
+            for owner, width in owners.items():
+                clears = [line for line in lines if re.search(re.escape(owner) + r",", line)]
+                self.assertTrue(clears)
+                for line in clears:
+                    self.rejects(body, line, line.replace("i64 noundef " + str(width) + ")",
+                                                         "i64 noundef " + str(width - 1) + ")"))
+                    # Removing an invoke requires preserving its normal edge;
+                    # this tests absent clearing, not malformed control flow.
+                    if "invoke " in line:
+                        following = body[body.index(line) + len(line):].splitlines()[1]
+                        normal = re.search(r"to label (%[-\w.]+)", following)[1]
+                        self.rejects(body, line + "\n" + following, "  br label " + normal)
+                    else:
+                        self.rejects(body, line, "")
+                    count += 1
+        self.assertGreaterEqual(count, 30)
+
+    def test_clear_pointer_identity_and_allocation_extent(self):
+        _, body = rows.method(self.definitions, self.aliases, "authenticate")[1]
+        for name, width in rows.scratch.allocations(body, "rows").items():
+            clear = next(line for line in body.splitlines() if "18clear_owned_region" in line
+                         and re.search(re.escape(name) + r",", line))
+            self.rejects(body, clear, clear.replace(name, "%different_buffer"))
+            call = rows.syntax.call(clear)
+            self.rejects(body, clear, clear.replace(call[0], call[0] + "_fake"))
+            self.rejects(body, name + f" = alloca [{width} x i8]", name + f" = alloca [{width + 1} x i8]")
+
+    def test_writes_after_clear_through_derived_pointer_are_rejected(self):
+        _, body = rows.method(self.definitions, self.aliases, "authenticate")[1]
+        graph = rows.flow.blocks(body)
+        owner = next(name for name in rows.scratch.allocations(body, "rows") if name.startswith("%pad."))
+        line = next(line for line in body.splitlines() if "18clear_owned_region" in line and owner + "," in line)
+        edge = body[body.index(line) + len(line):].splitlines()[1]
+        normal = re.search(r"to label %([-\w.]+)", edge)[1]
+        self.assertIn(normal, graph)
+        anchor = normal + ":"
+        for write in (f"  store i8 91, ptr {owner}, align 1",
+                      f"  %late_row = getelementptr inbounds i8, ptr {owner}, i64 1\n  store i8 91, ptr %late_row, align 1",
+                      "  call void %unexpected_callback()"):
+            self.rejects(body, anchor, anchor + "\n" + write)
+
+    def test_workspace_all_eight_lanes_and_helper_binding(self):
+        helpers = [(name, body) for name, (_, body) in self.definitions.items()
+                   if rows.contracts.workspace_drop(name)]
+        self.assertEqual(len(helpers), 1)
+        name, body = helpers[0]
+        for before, after in (("i64 799", "i64 798"), ("i64 121", "i64 122"),
+                              ("start:", "start:\n  ret void\nunused:")):
+            self.rejects(body, before, after)
+        _, caller = rows.method(self.definitions, self.aliases, "authenticate")[1]
+        call = next(line for line in caller.splitlines() if name in line and "invoke " in line)
+        self.rejects(caller, call, call.replace("%workspace.i.i", "%pad.i.i"))
+        self.rejects(caller, call, call.replace(name, "unreviewed_workspace_drop"))
+
+    def test_non_refilling_source_premises_are_load_bearing(self):
+        root = self.root / "pinned"
+        for name in rows.contracts.PINS:
+            destination = root / name
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(driver.ROOT / name, destination)
+        rows.contracts.validate(root)
+        for name in rows.contracts.PINS:
+            path = root / name
+            original = path.read_bytes()
+            path.write_bytes(original + b"\n// source drift\n")
+            with self.assertRaises(ValueError):
+                rows.contracts.validate(root)
+            path.write_bytes(original)
+
+    def test_pointer_captures_and_unknown_loads_remain_conservative(self):
+        signature = "ptr %external"
+        prefix = "start:\n  %row = alloca [128 x i8], align 1\n  %capture = alloca [8 x i8], align 8\n"
+        cases = (
+            ("  %p = getelementptr i8, ptr %row, i64 1", "%p", False),
+            ("  store ptr %row, ptr %capture, align 8\n  %p = load ptr, ptr %capture, align 8", "%p", False),
+            ("  %p = load ptr, ptr %capture, align 8", "%p", False),
+            ("  %p = load ptr, ptr %external, align 8", "%p", True),
+            ("  store ptr %row, ptr %external, align 8\n  %p = load ptr, ptr %external, align 8", "%p", False),
+            ("  %p = inttoptr i64 17 to ptr", "%p", False),
+            ("  %p = select i1 %condition, ptr %row, ptr %external", "%p", False),
+        )
+        for text, pointer, disjoint in cases:
+            with self.subTest(text=text):
+                origins = rows.Origins(signature, prefix + text, {"%row": 128})
+                self.assertEqual(origins.disjoint_store(f"store i8 0, ptr {pointer}, align 1"), disjoint)
+        body = prefix + "  %copy = alloca [8 x i8], align 8\n  store ptr %row, ptr %capture, align 8\n" + \
+            "  call void @llvm.memcpy.p0.p0.i64(ptr %copy, ptr %capture, i64 8, i1 false)\n" + \
+            "  %p = load ptr, ptr %copy, align 8"
+        self.assertFalse(rows.Origins(signature, body, {"%row": 128}).disjoint_store("store i8 0, ptr %p, align 1"))
+
+    def test_downstream_consumer_binding(self):
+        definitions, aliases = rows.flow.definitions_and_aliases(self.fixture)
+        for name, (_, body) in definitions.items():
+            if "30brynja_legacy_hmac_md5_cleanup" not in name or name.endswith("6select"):
+                continue
+            calls = [line for line in body.splitlines() if "8Md5Batch" in line and re.search(r"\bcall\b", line)]
+            self.assertEqual(len(calls), 1)
+            line = calls[0]
+            for argument in ("%selection", "%inputs", "%control"):
+                mutated = self.fixture.replace(body, body.replace(line, line.replace(argument, "%wrong"), 1), 1)
+                with self.assertRaises(ValueError):
+                    driver.consumers(mutated, self.llvm)
+
+    def test_compiled_rows_drop_mutants(self):
+        work, leaf = self.root / "fixture", self.root / "leaf"
+        source = driver.ROOT / "crates/brynja-legacy-hmac"
+        shutil.copytree(source / "src", leaf / "src")
+        shutil.copyfile(source / "README.md", leaf / "README.md")
+        manifest = (source / "Cargo.toml").read_text()
+        workspace = tomllib.loads((driver.ROOT / "Cargo.toml").read_text())["workspace"]
+        for field in ("edition", "rust-version", "license", "repository"):
+            manifest = manifest.replace(field + ".workspace = true", field + ' = "' + workspace["package"][field] + '"')
+        manifest = manifest.replace("brynja-core.workspace = true", 'brynja-core = { path = "'
+                                    + str(driver.ROOT / "crates/brynja-core") + '", default-features = false }')
+        manifest = manifest.replace('path = "../', 'path = "' + str(driver.ROOT / "crates") + "/")
+        (leaf / "Cargo.toml").write_text(manifest.replace("[lints]\nworkspace = true", "") + "\n[workspace]\n")
+        fixture = driver.FIXTURE.parent
+        shutil.copytree(fixture / "src", work / "src")
+        manifest = (fixture / "Cargo.toml").read_text().replace("../../crates/brynja-legacy-hmac", str(leaf))
+        (work / "Cargo.toml").write_text(manifest)
+        shutil.copyfile(fixture / "Cargo.lock", work / "Cargo.lock")
+        path = leaf / "src/md5_batch/engine.rs"
+        original = path.read_text()
+        baseline = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu", "unwind", True, work / "Cargo.toml")
+        driver.validate(baseline, "unwind")
+        for before, after in (("clear_owned_region(self.0.as_flattened_mut())", "clear_owned_region(&mut self.0[0])"),
+                              ("let _ = brynja_core::clear_owned_region(self.0.as_flattened_mut());", "core::hint::black_box(&mut self.0);"),
+                              ("let result = consume(truncated.0.as_flattened())?;", "let result = consume(truncated.0.as_flattened())?; core::mem::forget(truncated);")):
+            self.assertIn(before, original)
+            path.write_text(original.replace(before, after, 1))
+            artifacts = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu", "unwind", True, work / "Cargo.toml")
+            with self.assertRaises(ValueError):
+                driver.validate(artifacts, "unwind")
+
+
+if __name__ == "__main__":
+    unittest.main()

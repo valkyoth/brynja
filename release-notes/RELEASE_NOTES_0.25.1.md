@@ -126,6 +126,14 @@ Rust 1.90 and 1.99.1 builds, strict scoped Clippy, and Apple/Arm cross-compilati
 also pass. The earlier test-source inclusion was moved into its actual private
 module so the existing no-code-inclusion policy remains unchanged.
 
+Focused Apple Silicon rejection check: the committed source subset
+`b23578e1` (archive SHA-256
+`620800325b691a8ddb353f6b4783d9a0c124723d4bd57352422ac7b1d3363641`)
+passed both metadata/unsupported-profile tests and five documentation checks in
+debug and release on `macosbuilder` with Rust 1.99.1. Linux strict construction
+rejects there instead of silently becoming resident-only. This is author-operated
+rejection evidence, not an implemented or qualified macOS legacy HMAC session.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions, including MD5 prefix handling; finish

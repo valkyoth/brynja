@@ -1,7 +1,7 @@
 """Exact legacy SHA-1 iterator destruction and distinct constructor scratch.
 
 The independent helper population covers each cursor and optional third stream.
-Binding post-admission caller metadata to these helper inputs is still separate.
+The separate execution_construct walker binds post-admission caller metadata.
 """
 import itertools
 import re
@@ -56,7 +56,7 @@ def check(body, llvm, definitions, aliases, panic, cache_niche):
         require(panic == "abort", "missing unwind iterator helper")
         # LLVM inlines the abort-profile iterator cleanup into the constructor.
         # Scratch remains checked, but the inlined owner paths are NOT qualified
-        # by this isolated-helper model. The post-admission walker must do that.
+        # by this isolated-helper model. execution_construct checks those paths.
         scratch.flow.check(body, "construct")
         return 0
     symbol, (parameter, nested) = selected(body, definitions, aliases)

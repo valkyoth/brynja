@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Qualify retained SHA-1 callers, finalizers and pre-key constructor admission."""
+"""Qualify retained SHA-1 callers, finalizers and constructor owner transfers."""
 import argparse
 from pathlib import Path
 
@@ -8,6 +8,7 @@ import legacy_hmac_execution_final as final
 import legacy_hmac_execution_handoff as handoff
 import legacy_hmac_execution_admission as admission
 import legacy_hmac_execution_iterator as iterator
+import legacy_hmac_execution_construct as construct
 import legacy_hmac_timing_runner as runner
 
 ROOT = runner.ROOT
@@ -37,10 +38,7 @@ def validate(artifacts, compiler, panic):
     final.check(artifacts[1][1], panic)
     handoff.validate(artifacts[1][1], panic, artifacts[0][1])
     admission.validate(artifacts[1][1], artifacts[0][1], panic)
-    definitions, aliases = graph.flow.definitions_and_aliases(artifacts[1][1])
-    target, (_, body) = final.method(definitions, aliases, "with_tag_length")
-    return iterator.check(body, artifacts[1][1], definitions, aliases, panic,
-                          admission.contracts.validate(artifacts[0][1], target))
+    return construct.validate(artifacts[1][1], artifacts[0][1], panic)
 
 
 def collect(directory, compiler, target, panic):
@@ -50,8 +48,8 @@ def collect(directory, compiler, target, panic):
           "cancellation, atomic rejection, fatal update, unwind and caller observer; "
           "three finalizer scratch graphs and two finalizer-core owner graphs; "
           "six public finalizer handoffs and secret-owner graph; "
-          f"pre-key admission and constructor scratch; outlined_iterator={outlined}; "
-          "post-admission normalization/return/inlined iterator, MD5 and hosted qualification separate", flush=True)
+          f"constructor admission, scratch, normalization/returned stream ownership and iterator paths; outlined_iterator={outlined}; "
+          "MD5 and hosted qualification separate; no compiler-copy/register-erasure claim", flush=True)
     return artifacts
 
 

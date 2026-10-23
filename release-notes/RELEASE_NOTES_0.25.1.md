@@ -518,18 +518,58 @@ policy changed; source-owned logical cleanup is not register/spill erasure.
 All sixteen existing Linux/Mac timing source closures were recomputed and
 remain unchanged; no timing campaign was repeated for these assurance edits.
 
+### Accelerated SHA-1 post-admission constructor ownership
+
+The next composed check closes the post-admission **stream-ownership** obligation
+left open by the preceding checkpoint. It starts from the pre-key admission
+states, follows the actual iterator cursor and each complete 448-byte stream
+through split copies/scalar moves, and requires the long-key stream to be
+updated and consumed by normalization before the inner/outer pair is returned.
+Both pad-update calls must use the correct ordered owner and 64-byte pad;
+normalization must receive the original key and a 20-byte digest destination.
+Successful returns preserve the selected backend and tag width, with the
+correct inner/outer stream pair and no additional live logical owner. Modeled
+errors and recoverable unwinds must consume every admitted stream.
+
+For outlined cleanup, the current caller cursor, optional third slot and empty
+caches are bound to the independently inspected iterator helper. Its actual
+normal/unwind outcomes are used, rather than assuming helper calls cannot
+unwind. For panic=abort, the same post-admission walker follows the inlined
+iterator pointer arithmetic and destruction paths directly. The separately
+reviewed, source-bound non-unwinding `clear_owned_region` contract applies to
+the return-temporary scratch clear; it is not inferred from a symbol substring.
+
+Seven regression groups cover all three update roles, normalization handoff,
+split returned owners, tag/backend metadata, remaining-iterator cleanup,
+unwind leaks and unexpected indirect calls. Four real source mutations must
+compile before rejection: swapped returned owners, updating inner instead of
+outer, ignoring the long key, and replacing the requested tag width. The
+inlined abort cleanup mutation removes the reachable array-owner destruction,
+not merely the unreachable empty-cache calls. Earlier checkpoints' scratch,
+retained/finalizer and pre-key checks remain composed with this analysis.
+
+This is bounded ownership and initialization-dispatch inspection, under safe
+Rust and the existing primitive/Drop contracts; it does not independently prove
+pad contents, primitive cryptographic correctness, register/spill erasure or
+cleanup after fatal abort. All twelve Rust 1.90.0/1.99.1, abort/unwind and
+GNU/Linux x86-64/AArch64/Apple AArch64 combinations pass. The seven new groups,
+existing twelve retained/core, nine admission and eight handoff groups pass,
+as do the legacy HMAC Rust tests/doctests; their five explicit native-only
+tests remain ignored in that generic run, not newly qualified. Matrix logs
+are retained locally under `release-reports/`. Cross-built Arm artifacts are
+inspection only. No production Rust, native observation,
+dependency or release-gate policy is changed by this checkpoint.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
   including MD5 prefix handling, without silently downgrading their guarantees.
-- Complete accelerated SHA-1 post-admission normalization/returned-owner
-  tracking and inlined iterator ownership,
-  MD5-row/batch and hosted-worker cleanup-codegen qualification; portable caller ownership, fixed
+- Complete MD5-row/batch and hosted-worker cleanup-codegen qualification; portable caller ownership, fixed
   Scratch probes, accelerated SHA-1 retained update/cancellation and Linux
   and Apple timing screens now pass, as do the public/verification finalizer
   core owner graphs, three finalizer scratch graphs and retained-finalizer
-  handoffs. Pre-key admission, constructor scratch and the independently
-  inspected outlined iterator helper now pass.
+  handoffs. SHA-1 pre-key admission, constructor scratch, post-admission stream
+  ownership and the outlined/inlined iterator cleanup paths now pass.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.
 

@@ -335,13 +335,61 @@ qualify the distinct accelerated SHA-1, MD5 batch-row or hosted worker paths.
 No production source, dependency version, native approval or release gate was
 changed. Mac timing is still pending because SSH remains unreachable.
 
+### Accelerated SHA-1 retained-owner qualification
+
+The new `assurance/legacy-hmac-execution-cleanup` fixture contains real public
+consumers. Its first qualified subset is cancellation, borrowed update and
+consuming update/cancellation with an unwinding observer. The checker emits and
+inspects both the downstream fixture **and the actual legacy-HMAC library**:
+these non-generic public calls are otherwise opaque in the downstream artifact.
+Module identities remain separate, so a fixture cannot substitute its own
+definition for the leaf implementation. Constructor/finalizer consumers are
+present for subsequent work but are not counted as qualified by this check.
+
+The bounded interpreter follows the real retention guard and its outlined
+cleanup helper. It checks the exact inner-stream/input binding, complete owner
+moves, allocation bounds, liveness discriminant, both SHA-1 owner destruction
+dispatches, and result classification. Successful updates and atomic length
+rejections retain the engine; fatal errors and recoverable unwind destroy both
+owners and empty the retention slot. Empty-state operations never dispatch to
+the primitive. Consuming callers must clean up on both update rejection and
+observer unwind. Unknown instructions, callees, aliases, result encodings and
+unresolved cross-module calls fail closed.
+
+Independent constant-result probes bind the compiler's actual Result ABI and
+public owner size. The interpreter explores empty and both live boolean-niche
+values, every signed byte payload for each public stream-result variant,
+including the unused success payload, and the update/observer unwind paths.
+The payload population deliberately includes a conservative superset of
+inhabited errors. No secret input values are modeled.
+
+Regressions include wrong/partial owner moves, wrong cleanup pointers/extents,
+missing fatal-slot transitions, incorrect preservation/result classification,
+unwind bypasses, unknown pointer aliases and fixture/leaf substitution. Three
+downstream source mutants forget cancellation, forget update-error cleanup or
+remove the observer; three real retention-guard source mutants preserve every
+failure, destroy state on atomic length rejection or forget the removed engine.
+Mutants must compile successfully; compilation failures do not count as
+successful detection. The unmodified extracted fixture/library is validated
+before applying these changes.
+
+All twelve compiler/profile/target combinations pass: Rust 1.90.0 and 1.99.1,
+abort/unwind, GNU/Linux x86-64, GNU/Linux AArch64 and Apple AArch64. Arm artifacts
+are cross-compiled inspection, not native execution. This check retains the
+separately reviewed, non-panicking primitive-destructor contract; it establishes
+logical ownership and cleanup dispatch, not erasure of compiler-created copies,
+registers, spills, caller buffers, OS storage or fatal-abort paths. No production
+source or release-gate behavior changed. Accelerated constructor/finalizer,
+MD5-row/batch and hosted-worker qualification remain separate unfinished work.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
   including MD5 prefix handling, without silently downgrading their guarantees.
-- Complete accelerated SHA-1, MD5-row/batch and hosted-worker cleanup-codegen
+- Complete accelerated SHA-1 constructor/finalizer, MD5-row/batch and hosted-worker cleanup-codegen
   qualification and Apple native timing; portable caller ownership, fixed
-  Scratch probes and Linux timing screens now pass.
+  Scratch probes, accelerated SHA-1 retained update/cancellation and Linux
+  timing screens now pass.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.
 

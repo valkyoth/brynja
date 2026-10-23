@@ -1,0 +1,12 @@
+[package]
+name = "brynja-legacy-hmac-execution-cleanup"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[workspace]
+
+[dependencies]
+brynja-legacy-hmac = { path = "../../crates/brynja-legacy-hmac", default-features = false, features = ["sha1-execution"] }
+brynja-legacy-sha1 = { path = "../../crates/brynja-legacy-sha1", default-features = false, features = ["hardened-execution"] }

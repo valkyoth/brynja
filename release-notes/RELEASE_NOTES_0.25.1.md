@@ -270,8 +270,9 @@ and complete output. An earlier development run was also quiet; the final run
 followed timeout-preservation tooling changes, not an attempt to hide a signal.
 The runner refuses overwrites and preserves failed/malformed/signalling output,
 including partial output from a deadline failure. Parser/failure/probe regressions
-and the compiled fixture controls pass. Mac timing remains pending because the
-builder was unreachable; previous native functional checks are not timing data.
+and the compiled fixture controls pass. At that checkpoint Mac timing remained
+pending because the builder was unreachable; the Apple follow-up below supplies
+separate timing data, not an inference from native functional tests.
 
 The separate `assurance/legacy-hmac-cleanup` fixture imports the actual runtime
 `Scratch` source. Five fixed probes cover the 1-byte comparison accumulator,
@@ -333,7 +334,7 @@ dispatch qualification, not proof of erasing every compiler-created copy,
 register, spill, caller input, OS snapshot or fatal-abort path. It does not
 qualify the distinct accelerated SHA-1, MD5 batch-row or hosted worker paths.
 No production source, dependency version, native approval or release gate was
-changed. Mac timing is still pending because SSH remains unreachable.
+changed. Mac timing was still pending at this checkpoint; see the follow-up below.
 
 ### Accelerated SHA-1 retained-owner qualification
 
@@ -382,14 +383,63 @@ registers, spills, caller buffers, OS storage or fatal-abort paths. No productio
 source or release-gate behavior changed. Accelerated constructor/finalizer,
 MD5-row/batch and hosted-worker qualification remain separate unfinished work.
 
+### Apple timing follow-up and accelerated finalizer cores
+
+The Apple M2 Pro builder returned online with macOS 27.0.1 (26A434) and Rust
+1.99.1. Its timing preflight exposed a test-only portability issue: mocking
+`subprocess.run` also intercepted the subprocess used by Python's macOS
+`platform.platform()` implementation. Commit `a6fad4a5` isolates platform
+identification in that synthetic test and asserts exactly one mocked measured
+child call. All eight preflight tests, including compiled no-op/key/decision
+negative controls, pass on both Linux and macOS. Production code, measurement
+logic, populations and thresholds are unchanged.
+
+A clean Mac checkout at `a6fad4a54521b8db462382677ca8c4fee5ea6358`
+completed eight route/family combinations: portable, required static hardware,
+resident scalar and resident compiled hardware, each with SHA-1 and MD5.
+All 64 campaigns completed with zero diagnostic alarms; the largest absolute
+paired statistic was approximately 2.47, below the unchanged threshold of 10.
+The compiled routes passed the generic CPU-feature preflight before instruction
+entry; compiled MD5 used complete four-lane NEON groups. Resident scalar and
+portable records retained generic build flags. This is a coarse diagnostic
+screen, not a constant-time proof, independent review or release approval.
+
+All eight JSON observations were downloaded outside `target/` to
+`release-reports/v0.25.1-timing/mac-a6fad4a5/observations/` and reconciled against
+the remote file SHA-256 values. Each record's complete raw output was parsed
+again, its output digest and all eight campaign statistics recomputed, and all
+701 source SHA-256 bindings recomputed against the local source files.
+The remote checkout remained clean. No failed or signalling timing capture was
+discarded or rerun; the failed preflight above was synthetic, before collection.
+
+The accelerated SHA-1 compiler checker now additionally checks the real public
+tag and verification Engine cores called by both byte and bit finalizers.
+It follows both 448-byte stream owners through complete moves and exact
+consuming stream-finalizer/SHA-1 owner-destruction dispatches, including outer
+updates and recoverable unwind. Three full scratch graphs cover public tags,
+secret tags and verification, including inner digest, tag and comparison
+accumulator storage. The secret scratch check includes its actual retained
+wrapper, but does **not** establish that wrapper's stream-owner transfers.
+The shared interpreter uses a private accelerated configuration; portable and
+modern HMAC configurations remain unchanged.
+
+Regressions reject wrong finalizer identities, partial stream copies, wrong
+owner pointers, missing/misdirected/short scratch clearing, early exits and
+byte/bit methods redirected to a different core. The twelve compiler/target/
+panic combinations pass again. The outer retained-engine transfer and the
+constructor's admission/normalization ownership still require their own checks;
+these core/scratch results do not close those obligations. No production code
+or release gate changed in this follow-up.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
   including MD5 prefix handling, without silently downgrading their guarantees.
-- Complete accelerated SHA-1 constructor/finalizer, MD5-row/batch and hosted-worker cleanup-codegen
-  qualification and Apple native timing; portable caller ownership, fixed
+- Complete accelerated SHA-1 constructor/retained-finalizer transfer,
+  MD5-row/batch and hosted-worker cleanup-codegen qualification; portable caller ownership, fixed
   Scratch probes, accelerated SHA-1 retained update/cancellation and Linux
-  timing screens now pass.
+  and Apple timing screens now pass, as do the public/verification finalizer
+  core owner graphs and the three finalizer scratch graphs.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.
 

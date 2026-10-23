@@ -23,13 +23,18 @@ class ExecutionTests(unittest.TestCase):
         cls.artifacts = driver.collect(cls.root / "baseline", "1.99.1", "x86_64-unknown-linux-gnu", "unwind")
         cls.graph = driver.graph.Graph(cls.artifacts[0][1], cls.artifacts[1][1], "1.99.1", "unwind")
 
-    def rejects(self, module, before, after):
+    def rejects(self, module, before, after, *, final_only=False):
         self.assertNotEqual(before, after)
         self.assertIn(before, self.artifacts[module][1])
         artifacts = copy.deepcopy(self.artifacts)
         artifacts[module][1] = artifacts[module][1].replace(before, after, 1)
         with self.assertRaises(ValueError):
-            driver.validate(artifacts, "1.99.1", "unwind")
+            if final_only:
+                # The composed baseline already checked retention. A mutation
+                # of a finalizer must fail its own checker, not another stage.
+                driver.final.check(artifacts[1][1], "unwind")
+            else:
+                driver.validate(artifacts, "1.99.1", "unwind")
 
     def leaf(self, operation):
         names = [name for name in self.graph.modules[1][0] if model.method(name, operation)]
@@ -178,6 +183,52 @@ class ExecutionTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 driver.validate(artifacts, "1.99.1", "unwind")
         path.write_text(original)
+
+    def test_finalizer_scratch_identity_extent_and_exit(self):
+        selected, _, _ = driver.final.bodies(self.artifacts[1][1])
+        for operation, body in selected.items():
+            owners = driver.final.scratch.flow.allocations(body, operation)
+            self.rejects(1, body, body.replace("start:", "start:\n  ret void\nunused:", 1), final_only=True)
+            count = 0
+            for owner, width in owners.items():
+                calls = [line for line in body.splitlines()
+                         if re.search(driver.final.scratch.flow.CLEAR, line)
+                         and re.search(re.escape(owner) + r", i64(?: noundef)? " + str(width) + r"\)", line)]
+                self.assertTrue(calls)
+                for replacement in (owner + ", i64 " + str(width - 1) + ")",
+                                    "%wrong_scratch, i64 " + str(width) + ")"):
+                    changed = body
+                    for line in calls:
+                        changed = changed.replace(line, re.sub(re.escape(owner) + r", i64(?: noundef)? "
+                                                  + str(width) + r"\)", replacement, line))
+                    self.rejects(1, body, changed, final_only=True)
+                    count += 1
+            self.assertEqual(count, 6 if operation == "verify" else 4)
+
+    def test_finalizer_core_owner_copies_and_consumption(self):
+        selected, _, _ = driver.final.bodies(self.artifacts[1][1])
+        for operation in ("public", "verify"):
+            body = selected[operation]
+            self.rejects(1, body, body.replace("i64 448, i1 false", "i64 447, i1 false", 1), final_only=True)
+            calls = [invocation for line in body.splitlines() if (invocation := model.final.call(line))
+                     and driver.final.stream_finalizer(invocation[0], "sha1")]
+            self.assertTrue(calls)
+            for symbol, args in calls:
+                self.rejects(1, body, body.replace(symbol, "wrong_stream_finalizer"), final_only=True)
+                owner = model.final.operand(args[1])
+                self.rejects(1, body, body.replace(owner + ",", "%wrong_owner,", 1), final_only=True)
+        self.assertEqual(driver.final.interpreter("unwind").geometry("sha1"), (448, 8, (8, 456)))
+        import legacy_hmac_engine_final as portable
+        self.assertEqual(portable.interpreter("sha1").geometry("sha1"), (433, 0, (8, 441)))
+
+    def test_finalizer_core_selection_is_bound_to_actual_calls(self):
+        definitions, aliases = self.graph.modules[1]
+        for operation in ("finalize_bits_tag", "verify_bits", "finalize_bits_secret"):
+            _, (_, body) = driver.final.method(definitions, aliases, operation)
+            calls = [invocation[0] for line in body.splitlines() if (invocation := model.final.call(line))
+                     and ("6engine" in invocation[0] or model.method(invocation[0], "secret"))]
+            self.assertEqual(len(calls), 1)
+            self.rejects(1, body, body.replace(calls[0], "wrong_core"), final_only=True)
 
 
 if __name__ == "__main__":

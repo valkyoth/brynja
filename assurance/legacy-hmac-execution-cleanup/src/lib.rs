@@ -37,6 +37,38 @@ pub fn owner_size() -> usize {
 }
 
 #[inline(never)]
+pub fn stream_size() -> usize {
+    core::mem::size_of::<brynja_legacy_sha1::hardened_execution::Stream<'static>>()
+}
+#[inline(never)]
+pub fn start_rejection() -> Result<
+    brynja_legacy_sha1::hardened_execution::Stream<'static>,
+    brynja_legacy_sha1::hardened_execution::Error,
+> {
+    Err(brynja_legacy_sha1::hardened_execution::Error::Quarantined)
+}
+#[inline(never)]
+pub fn constructor_tag_rejection() -> Result<Sha1Hmac<'static>, Error> {
+    Err(Error::TagLength)
+}
+#[inline(never)]
+pub fn constructor_authority_rejection() -> Result<Sha1Hmac<'static>, Error> {
+    Err(Error::ExecutionUnavailable)
+}
+#[inline(never)]
+pub fn portable_report() -> brynja_legacy_sha1::hardened_execution::Report {
+    brynja_legacy_sha1::hardened_execution::Report {
+        backend: None,
+        health: brynja_legacy_sha1::Sha1BackendHealth::Healthy,
+    }
+}
+#[inline(never)]
+pub fn empty_iterator_cache()
+-> Option<Option<brynja_legacy_sha1::hardened_execution::Stream<'static>>> {
+    None
+}
+
+#[inline(never)]
 pub fn construct<'a>(
     executor: &'a Sha1Executor,
     key: &[u8],

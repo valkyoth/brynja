@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""Qualify retained SHA-1 update/cancel, finalizer handoffs and core/scratch graphs."""
+"""Qualify retained SHA-1 callers, finalizers and pre-key constructor admission."""
 import argparse
 from pathlib import Path
 
 import legacy_hmac_execution_graph as graph
 import legacy_hmac_execution_final as final
 import legacy_hmac_execution_handoff as handoff
+import legacy_hmac_execution_admission as admission
+import legacy_hmac_execution_iterator as iterator
 import legacy_hmac_timing_runner as runner
 
 ROOT = runner.ROOT
@@ -34,16 +36,22 @@ def validate(artifacts, compiler, panic):
     graph.Graph(artifacts[0][1], artifacts[1][1], compiler, panic).check()
     final.check(artifacts[1][1], panic)
     handoff.validate(artifacts[1][1], panic, artifacts[0][1])
+    admission.validate(artifacts[1][1], artifacts[0][1], panic)
+    definitions, aliases = graph.flow.definitions_and_aliases(artifacts[1][1])
+    target, (_, body) = final.method(definitions, aliases, "with_tag_length")
+    return iterator.check(body, artifacts[1][1], definitions, aliases, panic,
+                          admission.contracts.validate(artifacts[0][1], target))
 
 
 def collect(directory, compiler, target, panic):
     artifacts = emit(directory, compiler, target, panic)
-    validate(artifacts, compiler, panic)
+    outlined = validate(artifacts, compiler, panic)
     print(f"Legacy SHA-1 HMAC retained caller graphs: PASS; {compiler}; {target}; panic={panic}; "
           "cancellation, atomic rejection, fatal update, unwind and caller observer; "
           "three finalizer scratch graphs and two finalizer-core owner graphs; "
           "six public finalizer handoffs and secret-owner graph; "
-          "constructor/MD5/hosted qualification separate", flush=True)
+          f"pre-key admission and constructor scratch; outlined_iterator={outlined}; "
+          "post-admission normalization/return/inlined iterator, MD5 and hosted qualification separate", flush=True)
     return artifacts
 
 

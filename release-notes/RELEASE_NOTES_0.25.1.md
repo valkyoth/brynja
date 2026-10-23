@@ -470,16 +470,66 @@ native approval or release-gate policy changed. Accelerated constructor
 admission/normalization, MD5 row/batch and hosted-worker qualification remain
 unfinished and are not covered by this result.
 
+### Accelerated SHA-1 pre-key constructor admission
+
+The constructor checker now follows the actual emitted entry graph up to, but
+not beyond, the first pad lifetime. It requires the 10–20-byte tag predicate,
+a non-portable report and two successful starts (three for keys longer than
+64 bytes), all through the original executor, before that frontier. Every
+modeled start failure and recoverable unwind must destroy already acquired
+owners. No pre-frontier instruction may read or escape the key pointer.
+Complete byte provenance binds the admitted streams to the ordered iterator
+slots, with its cursor, end, optional third slot and empty caches checked.
+Invalid tags and portable authority return their own rejection identities.
+
+Six additional constant/type probes bind stream size, start-result and
+constructor-error niches, portable-report identity and the nested-option
+iterator-cache encoding independently of the implementation under inspection.
+The downstream constructor preserves the original executor, key and tag width;
+the actual default constructor forwards to the same body with a 20-byte tag.
+These are cross-compiled ABI probes, not execution of hardware instructions.
+
+The constructor's complete pad/digest scratch graph is now checked, including
+normal-return and recoverable-unwind clearing. In unwind builds, the actual
+outlined iterator destructor is additionally inspected across 2,048 bounded
+metadata inputs: two/three initial streams, four cursors, independent boolean
+niches for all five slots, both cache occupancy bits and normal/unwinding
+entry. Its actual remaining-owner destruction events must match exactly.
+This helper population is deliberately a conservative superset of constructor
+states. It does not bind the later caller's evolving metadata to those inputs.
+
+Under panic=abort LLVM instead inlines the iterator destruction into the
+constructor. The diagnostic explicitly reports no outlined helper there:
+the scratch and pre-key admission checks pass, but the inlined iterator owner
+paths remain part of the unfinished post-admission obligation. No helper-name
+search or scratch-only success is called complete constructor qualification.
+
+Nine new regression groups reject changed admission predicates, executor/key
+substitution, partial stream copies, missing earlier-owner cleanup, unwind
+bypasses, corrupted iterator metadata/destruction, short scratch clearing and
+ABI/forwarding drift. Four real leaf-source mutants compile before rejection:
+changed long-key threshold, weakened tag minimum, portable-report substitution
+and key-pointer exposure before admission. Existing retained/finalizer tests
+continue to pass. The composed twelve compiler/target/panic combinations pass
+on Rust 1.90.0/1.99.1 and GNU/Linux x86-64/AArch64 and Apple AArch64.
+Arm results are cross-compiled inspection, not new native observations.
+No production implementation, timing capture, native approval or release-gate
+policy changed; source-owned logical cleanup is not register/spill erasure.
+All sixteen existing Linux/Mac timing source closures were recomputed and
+remain unchanged; no timing campaign was repeated for these assurance edits.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
   including MD5 prefix handling, without silently downgrading their guarantees.
-- Complete accelerated SHA-1 constructor admission/normalization,
+- Complete accelerated SHA-1 post-admission normalization/returned-owner
+  tracking and inlined iterator ownership,
   MD5-row/batch and hosted-worker cleanup-codegen qualification; portable caller ownership, fixed
   Scratch probes, accelerated SHA-1 retained update/cancellation and Linux
   and Apple timing screens now pass, as do the public/verification finalizer
   core owner graphs, three finalizer scratch graphs and retained-finalizer
-  handoffs.
+  handoffs. Pre-key admission, constructor scratch and the independently
+  inspected outlined iterator helper now pass.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.
 

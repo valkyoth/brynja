@@ -7,6 +7,7 @@ from pathlib import Path
 import re
 import shutil
 import unittest
+from legacy_hmac_hosted_capture_tests import CaptureTests
 
 spec = importlib.util.spec_from_file_location('driver', Path(__file__).with_name('check-legacy-hmac-hosted-cleanup.py'))
 driver = importlib.util.module_from_spec(spec)
@@ -14,7 +15,8 @@ spec.loader.exec_module(driver)
 h = driver.hosted
 
 
-class Hosted(unittest.TestCase):
+class Hosted(CaptureTests, unittest.TestCase):
+    driver = driver
     @classmethod
     def setUpClass(cls):
         cls.directory = driver.runner.cargo_environment.private_directory(driver.ROOT)
@@ -150,6 +152,15 @@ class Hosted(unittest.TestCase):
                             self.rejects(case, body, line, line.replace(arg, arg.rsplit(' ', 1)[0] + ' %unbound', 1))
 
     def test_graph_identity_features_paths_and_edges(self):
+        alternative = copy.deepcopy(self.metadata)
+        package = next(p for p in alternative['packages'] if p['name'] == 'brynja-legacy-hmac-std')
+        explicit = Path(self.directory.name) / 'explicit-host-copy/Cargo.toml'
+        package['manifest_path'] = str(explicit)
+        with self.assertRaises(ValueError):
+            h.graph(alternative, driver.FIXTURE)
+        h.graph(alternative, driver.FIXTURE, explicit)
+        with self.assertRaises(ValueError):
+            h.graph(alternative, driver.FIXTURE, explicit.with_name('wrong.toml'))
         h.graph(self.metadata, driver.FIXTURE)
         mutations = []
         for field, value in (('source', 'registry+forged'), ('manifest_path', '/tmp/other/Cargo.toml')):

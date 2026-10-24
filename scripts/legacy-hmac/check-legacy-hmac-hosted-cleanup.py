@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Inspect real legacy host launch/reclaim boundaries, not whole-worker erasure."""
+"""Inspect legacy host capture/launch/reclaim and worker envelopes, not whole-worker erasure."""
 import argparse
 import json
 from pathlib import Path
@@ -15,7 +15,7 @@ FEATURES = {'x86_64-unknown-linux-gnu': '+sha,+sse2,+avx2',
             'aarch64-unknown-linux-gnu': '+neon,+sha2', 'aarch64-apple-darwin': '+neon,+sha2'}
 
 
-def emit(directory, compiler, target, panic, simd=True, fixture=FIXTURE):
+def emit(directory, compiler, target, panic, simd=True, fixture=FIXTURE, hosted_manifest=None):
     hosted.require(compiler in ('1.90.0', '1.99.1') and target in TARGETS
                    and panic in ('abort', 'unwind'), 'unreviewed legacy hosted compiler profile')
     env = runner.environment(directory)
@@ -25,7 +25,7 @@ def emit(directory, compiler, target, panic, simd=True, fixture=FIXTURE):
         env['MACOSX_DEPLOYMENT_TARGET'] = '11.0'
     metadata = json.loads(runner.run(['cargo', '+' + compiler, 'metadata', '--manifest-path', str(fixture),
         '--locked', '--offline', '--format-version', '1', '--filter-platform', target], env))
-    hosted.graph(metadata, fixture)
+    hosted.graph(metadata, fixture, hosted_manifest)
     artifacts = {}
     for package in ('brynja-legacy-hmac-std', 'brynja-legacy-hmac-hosted-cleanup'):
         runner.run(['cargo', '+' + compiler, 'rustc', '--manifest-path', str(fixture), '--locked', '--offline',
@@ -52,8 +52,9 @@ def main():
             with runner.cargo_environment.private_directory(ROOT) as directory:
                 artifacts = emit(Path(directory), compiler, args.target, panic, not args.generic)
                 hosted.validate(artifacts, args.target)
-            print(f'Legacy HMAC host launch/reclaim: PASS; {compiler}; {args.target}; panic={panic}; '
-                  f'simd={not args.generic}; no worker-payload or native qualification', flush=True)
+            print(f'Legacy HMAC host capture/launch/reclaim, worker envelope and buffer destructor: PASS; '
+                  f'{compiler}; {args.target}; panic={panic}; simd={not args.generic}; '
+                  'no keyed-worker or native qualification', flush=True)
 
 
 if __name__ == '__main__':

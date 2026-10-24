@@ -1488,6 +1488,59 @@ remain separate hosted-worker obligations. This is compiler inspection, not
 native execution, independent review or whole-worker erasure qualification; no
 release-gate change or broad verification sweep is included.
 
+### Hosted captures, worker completion envelope and buffer destructor
+
+The host checker now traces the actual launch-record bytes for all four legacy
+executor types. It binds scalar Request descriptors, candidate descriptors,
+cancellation, preselected width/backend, MD5 input slots and compression budget,
+staging/output pointers and extents, the result destination and initial completion
+flags to their exact caller/session origins. Borrowed locals must retain their
+reviewed geometry and lifetime through launch; the preceding create/join checker
+rejects intervening effects while the worker is live. Additional, late,
+conditional, overlapping or escaping capture writes reject. Descriptor source
+declarations are checked separately, so these are borrowed input descriptors and
+public policy metadata, not host-created keyed owners. Padding is not a secret
+owner or an erasure claim. This remains a current-layout projection, not a public
+ABI guarantee.
+
+A worker-side envelope check binds direct accesses to the same Job field layout.
+Capture reads precede the Option take; subsequent direct Job writes are limited
+to that take and the completion/panic flags. The result pointer cannot escape and
+its status writes stay within the two-byte result. The result discriminant is
+written before completion, with no result rewrites afterward. A caught-panic flag
+requires the actual runtime catch cleanup and cannot overlap the completed path.
+These checks do **not** interpret the keyed computation or authenticate its result
+value; they do not establish full worker success/error-path qualification.
+
+The actual outlined Buffers destructor is also interpreted for both keep states:
+staging must clear exactly once, followed by output exactly once only when keep
+is false. Wrong owner, changed order, repeated/missing calls, additional effects
+or an unreviewed branch reject. This uses the existing pinned resource-clearing
+premises and a new reviewed pin for the thin ResidentBytes wrappers. Pins detect
+drift, not independently authorize source changes. Admission of the host keep
+decision and complete output/quarantine transactions remain separate obligations.
+
+The expanded suite covers twenty regression groups, including 744 missing or
+substituted capture-field writes, lifetime/escape/conditional-write cases,
+descriptor-declaration drift, worker take/result/completion/panic mutations and
+buffer-destructor mutations. Sixteen additional compiled safe-Rust defects are
+tested across Linux and Apple: changed tag width or budget, scalar/accelerated
+staging-output swaps and skipped/reversed clearing. The previous five compiled
+consumer-provenance defects remain in the same suite. Mutants must compile;
+compilation failure is not counted as rejection by the checker. Restored private
+source copies are revalidated, without editing production files.
+
+The complete hosted driver is refreshed across all sixteen configurations:
+Rust 1.90.0/1.99.1 GNU/Linux x86-64 and Rust 1.99.1 GNU/Linux/Apple AArch64,
+each generic/SIMD and abort/unwind. Fixture formatting and strict Clippy cover
+both compilers. All sixteen configurations and twenty regression groups pass;
+the final overlapping-write and explicit-mutant-path cases also pass a two-group
+focused refresh. Script-layout, acceptance-metadata and assurance checks pass.
+Logs use the `release-reports/v0.25.1-hosted-capture-` prefix.
+This checkpoint does not change production Rust, the shared modern-HMAC checker,
+release policy, dependencies or publication state. It is compiler inspection and
+author testing, not native qualification or an independent pentest.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -1519,10 +1572,12 @@ release-gate change or broad verification sweep is included.
   Caller-side initialization creation/moves/early-failure cleanup and symbolic
   candidate shape/length admission now have dedicated checks. Returned-owner
   success teardown and returned-error-bound quarantine classification now have
-  dedicated projections. Hosted public dispatch, native launch storage and
-  create/join/stack-reclaim ordering now have dedicated checks. Final MD5
-  composition review and the remaining hosted-worker capture, computation,
-  output and quarantine compiler obligations remain open.
+  dedicated projections. Hosted public dispatch, native launch storage,
+  create/join/stack-reclaim ordering, launch capture provenance, worker envelope
+  result/completion ordering and buffer destructor dispatch now have dedicated
+  checks. Final MD5 composition review and the remaining hosted-worker keyed
+  computation, complete output transactions and quarantine compiler obligations
+  remain open.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.
 

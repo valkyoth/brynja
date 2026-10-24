@@ -1,8 +1,9 @@
 """Bind legacy host routes to the shared, source-reviewed thread lifecycle.
 
 Only presentation names of the exact MD5 validator and resident buffer clear/
-borrow helpers are normalized for the existing lifecycle walker. No function body, native status or pointer is
-rewritten. This does not qualify capture contents or keyed worker computation.
+borrow helpers are normalized for the existing lifecycle walker. No function body,
+native status or pointer is rewritten. Separate capture, envelope and destructor
+projections compose here; keyed worker computation remains unqualified.
 """
 import re
 import sys
@@ -13,6 +14,11 @@ import legacy_hmac_timing_runner as runner
 import legacy_hmac_hosted_launch as launch
 
 sys.path.append(str(shared.SHARED))
+import legacy_hmac_hosted_capture as capture
+import legacy_hmac_hosted_buffers as buffers
+import legacy_hmac_hosted_types as capture_types
+import legacy_hmac_hosted_envelope as envelope
+
 model = shared.load('hmac_hosted_lifecycle', 'legacy_hosted_lifecycle_model')
 contracts = shared.load('hmac_hosted_contracts')
 flow, syntax, require = model.common, model.syntax, model.require
@@ -47,7 +53,7 @@ def lifecycle_call(line):
 model.syntax = SimpleNamespace(call=lifecycle_call, operand=syntax.operand)
 
 
-def graph(metadata, fixture):
+def graph(metadata, fixture, hosted_manifest=None):
     edges = {
         'brynja-core': set(), 'brynja-hash-core': set(), 'brynja-crypto-cpu': set(),
         'brynja-crypto-cpu-std': {'brynja-core', 'brynja-crypto-cpu', 'brynja-hash-sha2', 'brynja-hash-sha3'},
@@ -69,6 +75,8 @@ def graph(metadata, fixture):
     for package in packages:
         path = fixture if package['name'] == 'brynja-legacy-hmac-hosted-cleanup' else (
             runner.ROOT / 'crates' / package['name'] / 'Cargo.toml')
+        if hosted_manifest is not None and package['name'] == 'brynja-legacy-hmac-std':
+            path = hosted_manifest  # Explicit private compiled-mutant source only; no CLI override.
         require(package['manifest_path'] == str(path.resolve()), 'legacy hosted dependency path substitution')
         require(not any('custom-build' in target['kind'] for target in package['targets']),
                 'legacy hosted build-script contamination')
@@ -111,6 +119,7 @@ def dispatch(signature, body, names, expected, identity, operation, direct=False
 
 def validate(artifacts, target):
     contracts.validate()
+    capture_types.validate()
     owner, resource = profile(target)
     populations = {}
     for package, llvm in artifacts.items():
@@ -120,6 +129,10 @@ def validate(artifacts, target):
         populations[package] = definitions, aliases, names
     fixture = populations['brynja-legacy-hmac-hosted-cleanup']
     leaf = populations['brynja-legacy-hmac-std']
+    destructor = '<' + owner + '::Buffers as core::ops::drop::Drop>::drop'
+    selected = [symbol for symbol in (*leaf[0], *leaf[1]) if leaf[2][symbol] == destructor]
+    require(len(selected) == 1, 'missing/ambiguous legacy buffer destructor')
+    buffers.check(*flow.resolve(selected[0], *leaf[:2]), leaf[2], target)
     expected = {
         'sha1': '<' + owner + '::Session<brynja_legacy_hmac::algorithms::Sha1>>::execute',
         'md5': '<' + owner + '::Session<brynja_legacy_hmac::algorithms::Md5>>::execute',
@@ -147,6 +160,7 @@ def validate(artifacts, target):
             definitions, aliases, names = population
             signature, host = flow.resolve(selected, definitions, aliases)
             launch.Launch(signature, host, names, target, identity, resource)
+            capture.check(signature, host, names, target, identity)
             normalized = dict(names)
             for symbol, name in names.items():
                 if identity == 'md5_compiled' and name == owner + '::md5_compiled::types::validate':
@@ -160,6 +174,7 @@ def validate(artifacts, target):
             require(names[worker] in (resource + '::thread::enter::<' + closure + '>',
                                       resource + '::thread::enter<' + closure + '>'),
                     'legacy executor launches another closure')
+            envelope.check(*flow.resolve(worker, definitions, aliases), names, identity)
             checked[identity] = selected, worker, population, host
     require(len(checked) == 4 and len({item[1] for item in checked.values()}) == 4,
             'legacy host/worker population collapsed')

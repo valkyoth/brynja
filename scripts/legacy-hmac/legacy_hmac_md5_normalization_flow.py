@@ -61,6 +61,10 @@ class State:
         compare = re.fullmatch(rf"icmp(?: samesign)? (eq|ne|uge|ugt|ule|ult) (i\d+) ({ATOM}), ({ATOM})", expression)
         select = re.fullmatch(rf"select i1 ({ATOM}), ({TYPE}) ({ATOM}), \2 ({ATOM})", expression)
         extract = re.fullmatch(rf"extractelement <2 x i64> ({ATOM}), i64 ([01])", expression)
+        freeze = re.fullmatch(rf"freeze (i64|ptr) ({ATOM})", expression)
+        if freeze:
+            # Known provenance is unchanged; unknown/poison bits stay unknown.
+            return self.value(freeze[2], freeze[1])
         if gep:
             base = self.value(gep[1], "ptr")
             require(isinstance(base, Pointer), "unbound normalization GEP")
@@ -123,7 +127,8 @@ def walk(check, site, result_bytes, expected, selection, *, seeds=None, on_entry
     start, unwind = results.continuation(check.graph, site)
     memory = Memory({**check.allocs, check.workspace: 912})
     memory.store(Pointer(syntax.operand(site[3][0])), result_bytes)
-    memory.store(Pointer(check.scope), Pointer(check.workspace))
+    if check.scope is not None:
+        memory.store(Pointer(check.scope), Pointer(check.workspace))
     first = state_type(check, start, memory)
     if seeds is not None:
         first.values.update(seeds)

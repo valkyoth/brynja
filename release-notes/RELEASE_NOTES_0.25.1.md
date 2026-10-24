@@ -1118,6 +1118,58 @@ The seven new regression groups, 30 existing owner/normalization/report groups,
 and the ten-group cleanup suite including all 27 compiled source mutants pass.
 Acceptance-metadata, assurance and script-layout checks also pass.
 
+### MD5 outer-result, truncation and counter-return qualification
+
+This larger author-verification checkpoint connects three additional sections of
+each public, secret-output and verification caller:
+
+- Independent compiled constructors bind the nested outer digest result's owner,
+  report and two distinct error niches. Outer admission checks the actual
+  selected backend, lane width, activity and vector-work threshold while retaining
+  the returned owner pointer/length. Neither nested error nor unwind may enter
+  truncation. Each caller exercises 1,136 report scenarios and ten error cases.
+- The real truncation loop is evaluated for every activity mask and every selected
+  tag length from 10 through 16 bytes. Every active row must receive its own outer
+  digest prefix exactly once; inactive rows and truncated tails remain zero.
+  Copy errors in all eight lanes and copy unwinding cannot reach final readiness.
+  This is 1,848 scenarios per caller, conditional on the source-bound digest's
+  valid returned region and the separately checked owner handoff.
+- Independent report/result constructor probes bind the locations of inner and
+  outer work counters in all three returned object layouts. Phase-specific symbolic
+  scalar/vector values retain their bits through emitted SSA to the actual field
+  stores, including separate AArch64 stores and packed x86 stores. All activity
+  masks and both backend selections are exercised. Cross-phase substitutions,
+  constants, overlapping writes and escaping result aliases reject.
+
+Some compiler configurations reuse a value from the accepted inner report when
+checking the outer report. That value is taken from the actual earlier accepted
+state, with dominance checks; it is not seeded as an arbitrary successful fact.
+Regression tests corrupt/remove that state to confirm the binding is required.
+The copy, owner and cleanup semantic premises remain source-hash-bound.
+
+Nine new artifact-regression groups cover two x86 compiler versions, AArch64,
+and the generic abort configuration that performs this reuse. Five additional
+compiled Rust mutations swap whole inner/outer reports, substitute only the
+outer scalar count, shift the copied digest slice, invert truncation activity,
+and contaminate a zero tail. The source-mutant suite now has 32 mutations.
+Logs use `release-reports/v0.25.1-md5-output-path-`.
+
+These are bounded compiler/byte-provenance checks, not native execution or an
+independent retest. Report field-write provenance is conditional on reaching
+those writes: complete return-object success-discriminant/every-return coverage,
+normalization report copying, final consumer ownership and quarantine remain
+separate obligations. No production Rust, dependency, release gate or native
+approval record is changed by this checkpoint.
+
+All sixteen focused compiler/target/panic configurations pass: Rust 1.90.0 and
+1.99.1 on GNU/Linux x86-64, plus 1.99.1 on GNU/Linux and Apple AArch64,
+generic/SIMD and abort/unwind. A targeted generic-build refresh also passes with
+the final phase-specific counter tokens. The nine new regression groups, 44
+shared owner/normalization/report/outer groups, and ten-group cleanup suite with
+all 32 compiled Rust mutants pass. Fixture fmt/Clippy on both compilers,
+acceptance metadata, assurance and script-layout checks pass. No all-family
+Miri/Kani/ASan sweep or native collection was started for this tooling checkpoint.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -1138,9 +1190,10 @@ Acceptance-metadata, assurance and script-layout checks also pass.
   input/route/no-long-key scenarios now pass. Normalization setup/readiness and
   bounded report guard/transport composition now pass. Conditional outer
   prefix/descriptor construction and inner-result owner transport now pass.
-  Conditional inner report acceptance now passes. Inner report return transport,
-  full output-owner
-  and return binding, quarantine classification and hosted-worker compiler
+  Conditional inner/outer report acceptance, outer owner transport, truncation
+  through final readiness and inner/outer counter field-write provenance now pass.
+  Full output-owner and return-object binding (including normalization metadata
+  and success-discriminant/every-return coverage), quarantine classification and hosted-worker compiler
   obligations remain open.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.

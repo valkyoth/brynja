@@ -180,6 +180,77 @@ pub fn execution_report(
     }
 }
 
+type DigestResult<'a> = Result<
+    (
+        brynja_core::OwnedSecretRegion<'a>,
+        brynja_legacy_md5::hardened_execution::Report,
+    ),
+    brynja_legacy_md5::hardened_execution::Error,
+>;
+
+#[inline(never)]
+pub fn hmac_report(
+    backend: Md5Backend,
+    width: usize,
+    normalization: brynja_legacy_md5::Md5BatchReport,
+    inner: brynja_legacy_md5::Md5BatchReport,
+    outer: brynja_legacy_md5::Md5BatchReport,
+) -> Report {
+    Report {
+        backend,
+        vector_width: width,
+        normalization,
+        inner,
+        outer,
+    }
+}
+
+#[inline(never)]
+pub fn public_success(
+    tags: brynja_legacy_hmac::md5_batch::Tags<'_>,
+    report: Report,
+) -> Result<(brynja_legacy_hmac::md5_batch::Tags<'_>, Report), Error> {
+    Ok((tags, report))
+}
+
+#[inline(never)]
+pub fn secret_success(
+    tags: brynja_legacy_hmac::md5_batch::SecretTags<'_>,
+    report: Report,
+) -> Result<(brynja_legacy_hmac::md5_batch::SecretTags<'_>, Report), Error> {
+    Ok((tags, report))
+}
+
+#[inline(never)]
+pub fn verify_success(
+    decision: brynja_legacy_hmac::Verification,
+    report: Report,
+) -> Result<(brynja_legacy_hmac::Verification, Report), Error> {
+    Ok((decision, report))
+}
+
+#[inline(never)]
+pub fn outer_success(
+    region: brynja_core::OwnedSecretRegion<'_>,
+    report: brynja_legacy_md5::hardened_execution::Report,
+) -> Result<DigestResult<'_>, brynja_legacy_md5::hardened_execution::Error> {
+    Ok(Ok((region, report)))
+}
+
+#[inline(never)]
+pub fn outer_inner_error(
+    error: brynja_legacy_md5::hardened_execution::Error,
+) -> Result<DigestResult<'static>, brynja_legacy_md5::hardened_execution::Error> {
+    Ok(Err(error))
+}
+
+#[inline(never)]
+pub fn outer_scope_error(
+    error: brynja_legacy_md5::hardened_execution::Error,
+) -> Result<DigestResult<'static>, brynja_legacy_md5::hardened_execution::Error> {
+    Err(error)
+}
+
 #[inline(never)]
 pub fn digest_rejection(
     error: brynja_legacy_md5::hardened_execution::Error,

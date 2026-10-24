@@ -304,6 +304,20 @@ class Md5CleanupTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 driver.inner_report.validate(artifacts[0][1], artifacts[1][1])
         path.write_text(original)
+        for before, after, validator in (
+                ("            inner,\n            outer,", "            inner: outer,\n            outer: inner,", driver.report_return.validate),
+                ("            outer,", "            outer: Md5BatchReport { scalar_blocks: inner.scalar_blocks, ..outer },", driver.report_return.validate),
+                ("tag.get(..selection.tag_bytes)", "tag.get(1..selection.tag_bytes)", driver.truncation.validate),
+                ("        if input.is_some() {\n            copy_secret_region(",
+                 "        if input.is_none() {\n            copy_secret_region(", driver.truncation.validate),
+                ("let mut truncated = Rows::<16>::new();",
+                 "let mut truncated = Rows::<16>::new(); truncated.0[0][15] = 1;", driver.truncation.validate)):
+            self.assertIn(before, original)
+            path.write_text(original.replace(before, after, 1))
+            artifacts = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu", "unwind", True, work / "Cargo.toml")
+            with self.assertRaises(ValueError):
+                validator(artifacts[0][1], artifacts[1][1])
+        path.write_text(original)
         frontier = '''    // No cancellation callback or secret computation follows this final check.
     workspace
         .with(|batch| batch.cancel())

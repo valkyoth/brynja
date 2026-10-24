@@ -122,7 +122,7 @@ class Check(owner.Check):
         self.backend_offset = selection_layout(llvm)
         self.predecessors, self.scenarios = set(), 0
 
-    def run_report(self, mask, backend, *, width=None, active=None, vector=None, reported_backend=None):
+    def run_report(self, mask, backend, *, width=None, active=None, vector=None, reported_backend=None, on_entry=None):
         self.mask, self.selected_backend = mask, backend
         lane_width = 8 if backend == 0 else 4
         width = lane_width if width is None else width
@@ -132,13 +132,16 @@ class Check(owner.Check):
         memory = Memory({"result": 56})
         for offset, value in ((0, Pointer("returned-owner")), (8, Bits.token("returned-length")),
                               (16, Bits.integer(width, 64)), (24, Bits.integer(active, 64)),
-                              (32, Bits.token("scalar-blocks")), (40, Bits.integer(vector, 64)),
+                              (32, Bits.token("scalar-blocks")), (40, vector if isinstance(vector, Bits) else Bits.integer(vector, 64)),
                               (48, Bits.integer(reported_backend, 8))):
             memory.store(Pointer("result", offset), value)
         payload = Bits(tuple(bit for byte in range(56) for bit in memory.cells.get(("result", byte), (None,) * 8)))
-        expected = width == lane_width and active == mask.bit_count() and vector >= lane_width and reported_backend == backend
+        expected = width == lane_width and active == mask.bit_count() and (isinstance(vector, Bits) or vector >= lane_width) and reported_backend == backend
         self.scenarios += 1
-        return n.transport.walk(self, self.site, payload, expected, None, optional_owner=False, state_type=State)
+        return n.transport.walk(self, self.site, payload, expected, None, optional_owner=False, state_type=self.state_type,
+                                on_entry=on_entry)
+
+    state_type = State
 
 
 def validate(fixture, llvm):

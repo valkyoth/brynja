@@ -1330,6 +1330,59 @@ both compilers, metadata, assurance and script-layout checks pass. Logs are unde
 `release-reports/v0.25.1-md5-consumer-internal-`; no full-family verification or
 native collection was started.
 
+### MD5 caller initialization and candidate admission
+
+Two further author-operated compiler projections now inspect the actual public
+MD5 batch callers, without changing production Rust or release-gate policy.
+
+The initialization projection binds `SecretRegionInitialization::begin` to the
+exclusive 128-byte caller destination at function entry. Independent emitted
+constructor probes establish its Result representation. Every affine copy from
+that result through the final consumer capture must retain all 24 owner bytes;
+Rust 1.90's intermediate 30-byte allocation is tracked at its actual offset.
+The walker follows normal and exceptional control-flow edges, resolving public
+drop flags and predecessor-specific phi values, including the older compiler's
+reuse of a switched result discriminant. Early failures and recoverable unwinds
+must dispose of the initialization exactly once; the final consumer must instead
+receive it exactly once. Unknown alias uses, partial copies, expired storage,
+early effects and bypassed admission are rejected. The already source-bound
+core begin/Drop semantics and separately checked final consumer remain premises.
+This does not establish the lifetime of the *returned* OwnedSecretRegion through
+all subsequent caller teardown, nor erasure after fatal termination.
+
+The verification projection symbolically derives the complete pre-executor
+acceptance predicate using reduced ordered decision diagrams. All 24 independent
+booleans—input presence, candidate presence and selected-length equality for each
+of eight lanes—must give exactly the intended eight-lane predicate. The rejected
+population must be its complement and return the independently probed TagLength
+variant. Before admission only the required metadata reads, stack declarations,
+alias annotations and rejection writes are allowed; payload reads and callbacks
+fail the check. The model permits speculative absent-Option length loads, but
+acceptance cannot depend on their value. It permits only equality with the
+selected width, not arbitrary length arithmetic. Candidate Option/slice layout
+is bound by a separate emitted probe. Constructor/selection, input layout and
+post-admission comparison checks remain separate composed obligations.
+
+The final caller projections pass sixteen configurations: Rust 1.90/1.99.1
+x86-64 GNU/Linux and Rust 1.99.1 GNU/Linux/Apple AArch64, each generic/SIMD and
+abort/unwind. Ten new regression groups pass across six representative
+configurations, with independent Boolean truth tables and emitted-code mutations
+covering every candidate lane, every owner move, normal/unwind destruction,
+drop-flag reversal, pre-admission payload/callback use and ABI drift. Logs are
+under `release-reports/v0.25.1-md5-caller-`. These are scoped author checks, not
+native qualification, independent review or a release-readiness claim.
+
+The ten-group cleanup regression suite also passes all 54 compiled Rust
+mutations. Its six new cases delay initialization until the final consumer,
+forget that consumer on early workload rejection, accept oversized candidates,
+accept extra candidates in inactive lanes, skip the eighth admission check, or
+reverse candidate order. Each must compile before its emitted behavior is
+rejected. Twenty prior return/metadata regression groups, fixture fmt/Clippy on
+both compilers, script-layout, acceptance-metadata and assurance checks pass.
+The combined cleanup driver also passes all sixteen configurations with the new
+checks integrated; the final versions of both new caller projections were
+additionally refreshed across the same sixteen configurations.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -1358,8 +1411,9 @@ native collection was started.
   verification decision transport and returned tag metadata/view checks now
   pass their focused projections. Secret consumer write/finish/error/unwind
   handling and complete comparison traces/cleanup now have dedicated checks.
-  Caller-side initialization creation/moves/early-failure cleanup, candidate
-  shape/length admission, quarantine classification and hosted-worker compiler
+  Caller-side initialization creation/moves/early-failure cleanup and symbolic
+  candidate shape/length admission now have dedicated checks. Returned-owner
+  teardown composition, quarantine classification and hosted-worker compiler
   obligations remain open.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.

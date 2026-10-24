@@ -249,6 +249,16 @@ pub fn verify_error(error: Error) -> Result<(brynja_legacy_hmac::Verification, R
 }
 
 #[inline(never)]
+pub fn verify_tag_error() -> Result<(brynja_legacy_hmac::Verification, Report), Error> {
+    Err(Error::TagLength)
+}
+
+#[inline(never)]
+pub fn candidate_pair(value: &[u8]) -> [Option<&[u8]>; 2] {
+    [Some(value), None]
+}
+
+#[inline(never)]
 pub fn region_success(
     region: brynja_core::OwnedSecretRegion<'_>,
 ) -> Result<brynja_core::OwnedSecretRegion<'_>, Error> {
@@ -265,6 +275,20 @@ pub fn core_region_success(
     region: brynja_core::OwnedSecretRegion<'_>,
 ) -> Result<brynja_core::OwnedSecretRegion<'_>, brynja_core::SecretMemoryError> {
     Ok(region)
+}
+
+#[inline(never)]
+pub fn initialization_success(
+    initialization: brynja_core::SecretRegionInitialization<'_>,
+) -> Result<brynja_core::SecretRegionInitialization<'_>, brynja_core::SecretMemoryError> {
+    Ok(initialization)
+}
+
+#[inline(never)]
+pub fn initialization_error(
+    error: brynja_core::SecretMemoryError,
+) -> Result<brynja_core::SecretRegionInitialization<'static>, brynja_core::SecretMemoryError> {
+    Err(error)
 }
 
 #[inline(never)]

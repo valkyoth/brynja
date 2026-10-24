@@ -347,6 +347,36 @@ class Md5CleanupTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 driver.consumer_return.validate(artifacts[0][1], artifacts[1][1])
         selection.write_text(original_selection)
+
+        # Caller-side defects must compile; rejection is by emitted ownership or
+        # admission semantics, not by a broken Rust mutation.
+        begin = "let mut initialization = SecretRegionInitialization::begin(output.as_flattened_mut())?;"
+        moved = original_selection.replace(begin, "", 1).replace(
+            "initialization.write(bytes)?;", begin + "\n            initialization.write(bytes)?;", 1)
+        self.assertIn(begin, original_selection)
+        selection.write_text(moved)
+        artifacts = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu", "unwind", True, work / "Cargo.toml")
+        with self.assertRaises(ValueError):
+            driver.initialization.validate(artifacts[0][1], artifacts[1][1])
+        selection.write_text(original_selection)
+        before = "return Err(Error::IneligibleWorkload);"
+        self.assertIn(before, original)
+        path.write_text(original.replace(before, "core::mem::forget(consume); " + before, 1))
+        artifacts = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu", "unwind", True, work / "Cargo.toml")
+        with self.assertRaises(ValueError):
+            driver.initialization.validate(artifacts[0][1], artifacts[1][1])
+        path.write_text(original)
+        for before, after in (
+                ("bytes.len() == self.tag_bytes", "bytes.len() >= self.tag_bytes"),
+                ("(None, None) => ()", "(None, _) => ()"),
+                ("inputs.iter().zip(candidates)", "inputs.iter().zip(candidates).take(7)"),
+                ("inputs.iter().zip(candidates)", "inputs.iter().zip(candidates.iter().rev())")):
+            self.assertIn(before, original_selection)
+            selection.write_text(original_selection.replace(before, after, 1))
+            artifacts = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu", "unwind", True, work / "Cargo.toml")
+            with self.subTest(before=before, after=after), self.assertRaises(ValueError):
+                driver.candidates.validate(artifacts[0][1], artifacts[1][1])
+        selection.write_text(original_selection)
         output_path = leaf / "src/md5_batch/output.rs"
         output_original = output_path.read_text()
         for before, after in (("self.bytes.get(lane)?", "self.bytes.get(0)?"),

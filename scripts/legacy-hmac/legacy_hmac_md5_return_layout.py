@@ -25,7 +25,7 @@ def probe(fixture, name, extent, regions, values):
     require(lines[-1] == 'ret void', 'return ABI probe lacks return')
     for line in lines[:-1]:
         definition = re.fullmatch(rf'({VALUE}) = (.*)', line)
-        store = re.fullmatch(rf'store (ptr|i8|i64) ({VALUE}|\d+), ptr ({VALUE}), align \d+', line)
+        store = re.fullmatch(rf'store (ptr|i8|i64) ({VALUE}|\d+|null), ptr ({VALUE}), align \d+', line)
         call = syntax.call(line)
         if definition and ' = alloca ' in line:
             require(definition[1] in allocs, 'unparsed return probe allocation')
@@ -53,6 +53,7 @@ def probe(fixture, name, extent, regions, values):
         elif definition:
             state.values[definition[1]] = state.expression(definition[2])
         elif store:
+            require(store[2] != 'null' or store[1] == 'ptr', 'null is not an integer ABI probe value')
             dest = state.address(store[3])
             require(dest.root in live - regions.keys(), 'ABI probe overwrites input/expired storage')
             memory.store(dest, state.value(store[2], store[1]))

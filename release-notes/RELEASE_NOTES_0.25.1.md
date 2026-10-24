@@ -1441,6 +1441,53 @@ Local logs use the `release-reports/v0.25.1-md5-teardown-` prefix. No broad
 verification sweep, native collection, release-gate change or publication was
 performed for this checkpoint.
 
+### Hosted launch storage and stack reclamation
+
+A separate downstream fixture now emits eight real consumers: compute and
+verify for scalar SHA-1, scalar MD5, compiled SHA-1 and compiled MD5 batching.
+The compiler checker binds their incoming arguments through the outlined public
+adapters where present, then requires four distinct typed executors and their
+exact native worker callbacks. It does not infer qualification from unused
+helper probes or from the presence of a symbol alone.
+
+Before native launch, the attribute constructor must receive the current
+reviewed session stack field, its error branch must not reach `pthread_create`,
+and its success must dominate launch. Linux attribute bytes are traced through
+complete, bounded, nonvolatile copies, including Rust 1.90's intermediate copy;
+Apple's boxed attribute pointer must come from the constructor's success result.
+Local constructor/transfer storage cannot be overwritten or passed to unrelated
+helpers; the native attribute implementation and Apple's heap pointee remain
+resource-contract premises. Handle,
+Job and attribute-transfer allocations must have the expected geometry and live
+lifetimes at use. These checks bind the current emitted layout; they are not a
+new public ABI guarantee or an independent proof of the native constructor.
+
+An isolated adapter reuses the existing modern-HMAC host lifecycle checker and
+its source-pinned, non-unwinding resource premises without changing that shared
+checker. Create/join results control the path; join must use the created handle.
+The selected worker stack can be cleared only after failed creation or successful
+join, before Job/handle storage ends. Failed join must terminate rather than
+return or reclaim a potentially live worker. Unknown calls and effects while a
+worker remains unjoined reject. Only exact resident-buffer helper names and two
+pure integer intrinsics are adapted; native status and control flow are not
+rewritten.
+
+The focused matrix covers sixteen configurations: Rust 1.90.0/1.99.1 GNU/Linux
+x86-64 and Rust 1.99.1 GNU/Linux/Apple AArch64, each generic/SIMD and abort/unwind.
+Thirteen regression groups pass. They mutate real emitted artifacts and compile five safe-Rust
+consumer defects covering algorithm substitution, cancellation substitution,
+candidate truncation, key-input substitution and batch-candidate substitution.
+Fixture formatting and strict Clippy checks pass on both compiler versions,
+as do script-layout, acceptance-metadata and assurance checks.
+Local logs use the `release-reports/v0.25.1-hosted-lifecycle-` prefix.
+
+This checkpoint changes only assurance fixtures, checkers, tests and notes. It
+does **not** yet qualify Job capture contents, keyed worker computation, complete
+output transactions, public return conversion or session quarantine. Those
+remain separate hosted-worker obligations. This is compiler inspection, not
+native execution, independent review or whole-worker erasure qualification; no
+release-gate change or broad verification sweep is included.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -1472,8 +1519,10 @@ performed for this checkpoint.
   Caller-side initialization creation/moves/early-failure cleanup and symbolic
   candidate shape/length admission now have dedicated checks. Returned-owner
   success teardown and returned-error-bound quarantine classification now have
-  dedicated projections. Final composition review and hosted-worker compiler
-  obligations remain open.
+  dedicated projections. Hosted public dispatch, native launch storage and
+  create/join/stack-reclaim ordering now have dedicated checks. Final MD5
+  composition review and the remaining hosted-worker capture, computation,
+  output and quarantine compiler obligations remain open.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.
 

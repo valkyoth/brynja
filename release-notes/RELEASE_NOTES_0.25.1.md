@@ -1694,6 +1694,58 @@ configurations. Fixture formatting and strict Clippy pass under both Rust
 1.90.0 and 1.99.1; script-layout, acceptance-metadata and assurance checks pass.
 Cross-target compiler inspection is not reported as native execution.
 
+### Hosted inline scalar constructor ownership checkpoint
+
+The scalar SHA-1/MD5 projection now starts at the actual worker entry, following
+the emitted control-flow graph through the existing retained-state handoff.
+It does not replace the constructor with a synthetic proof function. Constructor
+roles are inferred from typed finalizer/retained transfers and storage geometry,
+not compiler-generated local names. Complete public-byte initialization must
+precede owner birth; complete moves preserve logical ownership, and partial,
+overlapping, escaped or prematurely ended storage is rejected.
+
+The normalization hash update and short-key pad copy are bound to the launch
+capture's key pointer and length. Inner/outer updates require the same 64-byte
+pad and the ordered XOR masks 54 then 106. Update/mask and short-copy error
+edges cannot reach retained state. The normalization hash owner must be
+consumed; both live inner/outer owners must arrive in their correct retained
+fields. The actual pad and normalization scratch require full typed clears on
+normal and recoverable-failure paths. Before handing an exception to the checked
+catch envelope, all logical owners must be discharged and scratch cleared;
+the reachable catch suffix cannot reuse constructor storage.
+
+The checked scope is ownership/scratch and the stated input/phase bindings,
+not complete constructor cryptographic provenance. Public initialization does
+not independently prove the primitive's IV constants. Normalization-result
+discriminants/descriptors and the normalized-result-to-pad copy still need
+their own provenance checks. Primitive consuming finalizers, non-panicking
+owner destructors and core clearing remain reviewed callee premises. Compiler
+copies/register residue, fatal cleanup abort and whole-worker erasure are not
+claimed covered.
+
+The regressions mutate actual compiler emissions: initialization, full-width
+moves, key operands, pad widths/masks, result guards, owner cleanup, raw reads,
+scratch extents, aliases and catch-boundary reuse. Positive local-name renaming
+is accepted. The private compiled-host set grows from thirty-four to thirty-six:
+Linux and Apple scalar constructors using the message tail instead of the key
+must compile, then fail specifically on constructor-input provenance. No prior
+regression group is removed. Logs use the
+`release-reports/v0.25.1-hosted-construct-` prefix.
+
+The new constructor groups reject 390 initialization/transfer defects, 570
+key/pad/status/cleanup defects and 282 scratch/escape/catch defects across the
+twelve representative scalar emissions. The complete driver passes all sixteen
+compiler/target/panic/SIMD configurations. The complete hosted regression suite
+passes all thirty-eight groups in 450.447 seconds, including all thirty-six
+compiled host defects and the five existing compiled consumer defects.
+Fixture formatting and strict Clippy
+pass under Rust 1.90.0 and 1.99.1; script-layout, acceptance-metadata and assurance
+checks pass. Cross-target inspection does not establish native execution.
+
+This is author-operated compiler inspection, not independent review or new
+native execution. No production Rust, dependency, shared modern-HMAC checker,
+release gate or approval record changes in this checkpoint.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -1734,7 +1786,9 @@ Cross-target compiler inspection is not reported as native execution.
   and MD5 selector borrow boundaries now have dedicated projections. Scalar
   retained-state field/terminal transfers, storage lifetimes and both hash-owner
   cleanup dispatches now have dedicated checks. Inlined scalar constructor
-  provenance, scratch and pre-retention failure paths remain open. Final
+  initialization/ownership, key operands, pad phases, scratch and pre-retention
+  cleanup paths now have dedicated checks; normalization-result/descriptor
+  provenance and its result-to-pad copy remain open. Final
   MD5 composition review and the remaining hosted-worker keyed
   computation, complete output transactions and quarantine compiler obligations
   remain open.

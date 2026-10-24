@@ -1,7 +1,7 @@
-"""Scalar retained-state geometry/lifetime and post-initialization cleanup.
+"""Scalar constructor ownership and retained-state lifetime/cleanup composition.
 
-The inlined constructor's internal key processing is a separate obligation.
-Distinct source slots are not, by themselves, proof of initialization or key origin.
+Constructor ownership/scratch is checked before retained-state dispatch. Full
+normalization-result provenance remains separate; this is not worker qualification.
 """
 from functools import lru_cache
 import re
@@ -12,6 +12,7 @@ import legacy_hmac_engine_final as final
 import legacy_hmac_hosted_keyed as keyed
 import legacy_hmac_hosted_constructor as constructor
 import legacy_hmac_hosted_storage as storage
+import legacy_hmac_hosted_construct as construct
 
 require, syntax, V = keyed.require, keyed.syntax, keyed.V
 
@@ -20,6 +21,7 @@ class Retained(keyed.model.Admission):
     def __init__(self, body, names, compiler, identity, envelope):
         keyed.authority.model.Transfer.__init__(self, body, names, compiler)
         self.identity, self.compiled = identity, False
+        self.compiler = compiler
         self.size, offsets = legacy.layout(identity)
         width, _, fields = final.geometry(identity)
         algorithm = 'Sha1' if identity == 'sha1' else 'Md5'
@@ -107,6 +109,7 @@ def interpreter(identity, panic):
 
 def check(body, names, compiler, identity, envelope, definitions, aliases, panic):
     model = Retained(body, names, compiler, identity, envelope)
+    construct.check(model, envelope, panic)
     storage.check(model)
     for rhs, point in model.defs.values():
         loaded = re.match(r'load [^,]+, ptr (' + V + '),', rhs)

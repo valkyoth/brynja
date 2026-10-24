@@ -206,6 +206,8 @@ class CaptureTests:
                     ('worker.rs', '    {\n        checkpoint(cancel)?;\n        for part',
                      '    {\n        if let Err(error) = checkpoint(cancel) {\n'
                      '            core::mem::forget(state); return Err(error);\n        }\n        for part'),
+                    ('worker.rs', 'LegacyUse::acknowledge(), request.key, bytes)',
+                     'LegacyUse::acknowledge(), request.tail.bytes, bytes)'),
                     *[(kind + '_compiled/worker.rs',
                        mode + '::Require)\n        .map_err(|_| Error::Mac(brynja_legacy_hmac::Error::ExecutionFailed))?',
                        mode + '::Prefer)\n        .map_err(|_| Error::Mac(brynja_legacy_hmac::Error::ExecutionFailed))?')
@@ -219,11 +221,14 @@ class CaptureTests:
                     rejection = (self.assertRaisesRegex(ValueError, 'without keyed cleanup/consumption|without consumption|'
                                                         'without both cleanup/consumption|with unconsumed owner')
                                  if 'core::mem::forget(state)' in after else self.assertRaises(ValueError))
+                    if file == 'worker.rs' and 'request.tail.bytes' in after:
+                        rejection = self.assertRaisesRegex(ValueError, 'scalar constructor key capture|'
+                                                           'scalar short-key pad copy|scalar normalization key')
                     with self.subTest(target=target, file=file, before=before), rejection:
                         h.validate(artifacts, target, 'unwind')
                 finally:
                     path.write_text(original)
                 count += 1
             h.validate(emit(), target, 'unwind')
-        self.assertEqual(count, 34)
-        print('Legacy hosted capture/destructor/authority/selection/retained: 34 compiled Rust defects rejected', flush=True)
+        self.assertEqual(count, 36)
+        print('Legacy hosted capture/destructor/authority/selection/retained: 36 compiled Rust defects rejected', flush=True)

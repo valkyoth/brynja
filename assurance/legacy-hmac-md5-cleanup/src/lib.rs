@@ -155,6 +155,32 @@ pub fn normalized_simd_success(
 }
 
 #[inline(never)]
+pub fn work_report(
+    active: usize,
+    scalar: usize,
+    vector: usize,
+) -> brynja_legacy_md5::Md5BatchReport {
+    brynja_legacy_md5::Md5BatchReport {
+        active_lanes: active,
+        scalar_blocks: scalar,
+        vector_blocks: vector,
+    }
+}
+
+#[inline(never)]
+pub fn execution_report(
+    backend: Option<Md5Backend>,
+    width: usize,
+    work: brynja_legacy_md5::Md5BatchReport,
+) -> brynja_legacy_md5::hardened_execution::Report {
+    brynja_legacy_md5::hardened_execution::Report {
+        backend,
+        vector_width: width,
+        work,
+    }
+}
+
+#[inline(never)]
 pub fn digest_rejection(
     error: brynja_legacy_md5::hardened_execution::Error,
 ) -> Result<

@@ -110,19 +110,22 @@ class State:
             return
         if results.fence.identity(symbol, "drop"):
             require(len(args) == 1 and self.address(syntax.operand(args[0])) == Pointer(self.check.scope)
-                    and self.memory.load(Pointer(self.check.scope), "ptr") == Pointer(self.check.workspace),
+                    and self.memory.load(Pointer(self.check.scope), "ptr") == Pointer(self.check.workspace)
+                    and self.memory.load(Pointer(self.check.scope, 8), "i8") == Bits.integer(1, 8),
                     "normalization Scope destructor rebound")
             return  # source-bound Scope only clears its workspace, not output
         require(False, "unreviewed effect during normalization owner handoff: " + symbol)
 
 
-def walk(check, site, result_bytes, expected, selection):
+def walk(check, site, result_bytes, expected, selection, *, seeds=None, on_entry=None):
     """All reachable pad-entry paths preserve owner bits, or errors never enter."""
     start, unwind = results.continuation(check.graph, site)
     memory = Memory({**check.allocs, check.workspace: 912})
     memory.store(Pointer(syntax.operand(site[3][0])), result_bytes)
     memory.store(Pointer(check.scope), Pointer(check.workspace))
     first = State(check, start, memory)
+    if seeds is not None:
+        first.values.update(seeds)
     first.values[check.selection] = Bits.integer(selection, 8)
     pending = [(start[0], start[1], site[0], first, frozenset())]
     relevant = errors.ancestors(check.graph, {check.stop})
@@ -143,6 +146,8 @@ def walk(check, site, result_bytes, expected, selection):
                     and state.memory.load(Pointer(check.owner, 16), "i64") == Bits.token("returned-length"),
                     "normalized owner substituted/truncated/expired before pad entry")
             witnesses += 1
+            if on_entry is not None:
+                on_entry(state)
             continue
         lines = check.graph[label]
         phis = {}

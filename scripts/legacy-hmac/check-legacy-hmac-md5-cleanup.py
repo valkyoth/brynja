@@ -13,6 +13,8 @@ import legacy_hmac_md5_descriptors as descriptors
 import legacy_hmac_md5_pads as pads
 import legacy_hmac_md5_normalization as normalization
 import legacy_hmac_md5_keys as keys
+import legacy_hmac_md5_setup as setup
+import legacy_hmac_md5_reports as reports
 import legacy_hmac_timing_runner as runner
 
 ROOT = runner.ROOT
@@ -72,6 +74,8 @@ def validate(artifacts, panic):
     pads.validate(artifacts[0][1], artifacts[1][1])
     normalization.validate(artifacts[0][1], artifacts[1][1])
     keys.validate(artifacts[0][1], artifacts[1][1])
+    setup.validate(artifacts[0][1], artifacts[1][1], panic)
+    reports.validate(artifacts[0][1], artifacts[1][1])
     return rows.validate(artifacts[1][1], panic)
 
 
@@ -81,7 +85,8 @@ def collect(directory, compiler, target, panic, simd=False):
     print(f"Legacy HMAC-MD5 row cleanup: PASS; {compiler}; {target}; panic={panic}; simd={simd}; "
           f"{population} actual row/normalization/comparison bodies; pre-workspace tag/authority admission; workspace helper lane dispatch; phase argument transport; final readiness/handoff; "
           "inner error-path exclusion; 256-mask inner descriptor provenance; conditional ipad construction; normalization-result owner transport; "
-          "key descriptor/shape-route scenarios; no whole-caller, output/quarantine, kernel or register-erasure qualification", flush=True)
+          "key descriptor/shape-route scenarios; normalization initialization/readiness and report guard/transport scenarios; "
+          "no whole-caller, output/quarantine, kernel or register-erasure qualification", flush=True)
     return artifacts
 
 

@@ -930,6 +930,43 @@ fixture fmt/Clippy and script-layout checks pass. Logs use
 gate or approval changed, and no native execution/review is claimed by this
 compiler-only checkpoint.
 
+### MD5 normalization initialization, readiness and reports
+
+The composed caller check now follows normalization setup after the source-bound
+workspace clear. All eight 16-byte MD5 IV copies must target the distinct expected
+lane offsets. Scope initialization, its workspace pointer and incomplete flag,
+and the executor pointer supplied to readiness are checked before digest entry.
+Every readiness error and setup unwind edge must exclude scalar/SIMD digest and
+pad work; readiness success must reach SIMD without switching to scalar. Scalar
+initialization must lead directly to its digest without intervening effects.
+The normal-return Scope destructor also requires the completed flag.
+
+Independent compiled probes bind the work-report and execution-report fields.
+The actual key-descriptor/shape model supplies pre-dispatch facts to the result
+transport model. Each configuration checks 662 scenarios: all long-key masks for
+both backend widths, valid and malformed report widths/active counts, vector-work
+boundaries and backend mismatches. Scalar report fields and SIMD work counters
+retain symbolic bit identities through the pad-loop preheader into the eventual
+success stores. The no-long-key path must return a zero report. Report SSA must
+be defined before the loop; result-pointer uses after the success frontier are
+reconciled to reject overwrite, escape or substitution. This remains conditional
+on the separately checked pad loop and source-bound digest contracts, not a
+whole-caller or arbitrary-input formal proof.
+
+Focused emitted-code mutations exercise IV bytes/placement/copy extent,
+readiness guards and unwinds, authority binding, completion flags, report ABI,
+guard comparisons and report provenance/late writes. Two additional compiled
+Rust mutations remove the normalization report check and discard the scalar
+report; the composed source-mutant suite now contains twenty mutations. All
+sixteen compiler configurations pass. Eleven new focused regression groups,
+the previous 65 handoff/phase/result/descriptor/pad/normalization/key regression
+groups, the ten-group source/artifact suite, fixture fmt/Clippy on both compilers,
+and script-layout checks pass. The new tests also cover AArch64's separate
+scalar report stores rather than assuming x86's vectorized store form.
+Logs use `release-reports/v0.25.1-md5-reports-` and
+`release-reports/v0.25.1-md5-setup-reports-tests.log`. No production implementation,
+dependency, release gate or approval record changes in this checkpoint.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -947,8 +984,8 @@ compiler-only checkpoint.
   native failure coverage and inner readiness/digest error-path exclusion pass;
   compiler-level inner message descriptor provenance and conditional ipad
   construction, normalization result-owner transport and bounded normalization
-  input/route/no-long-key scenarios now pass. Complete normalization
-  setup/readiness/report composition, outer
+  input/route/no-long-key scenarios now pass. Normalization setup/readiness and
+  bounded report guard/transport composition now pass. Outer
   prefix/descriptor provenance, full output-owner
   and return binding, quarantine classification and hosted-worker compiler
   obligations remain open.

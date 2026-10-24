@@ -406,6 +406,25 @@ class Md5CleanupTests(unittest.TestCase):
                     driver.comparison.validate(artifacts[1][1], "unwind")
         selection.write_text(original_selection)
 
+        # Compile semantic teardown/quarantine defects in the private leaf.
+        # Source pins still describe the real dependencies; rejection must come
+        # from the changed caller's emitted behavior, not a source-text check.
+        consumed = "let result = consume(truncated.0.as_flattened())?;"
+        for before, after, kind in (
+                (consumed, consumed + " core::mem::forget(tags);", "teardown"),
+                (consumed, consumed + " core::mem::forget(inner_owner);", "teardown"),
+                (consumed, consumed + " core::mem::forget(workspace);", "teardown"),
+                (consumed, consumed + " core::hint::black_box(&result);", "teardown"),
+                ("| Error::TagLength)", "| Error::TagLength | Error::ExecutionFailed)", "quarantine"),
+                ("| Error::Cancelled", "", "quarantine"),
+                ("self.executor.quarantine();", "core::hint::black_box(self.executor);", "quarantine")):
+            self.assertIn(before, original)
+            path.write_text(original.replace(before, after, 1))
+            artifacts = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu", "unwind", True, work / "Cargo.toml")
+            with self.subTest(kind=kind, before=before, after=after), self.assertRaises(ValueError):
+                getattr(driver, kind).validate(artifacts[0][1], artifacts[1][1], "unwind")
+        path.write_text(original)
+
 
 if __name__ == "__main__":
     unittest.main()

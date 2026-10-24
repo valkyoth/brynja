@@ -1383,6 +1383,64 @@ The combined cleanup driver also passes all sixteen configurations with the new
 checks integrated; the final versions of both new caller projections were
 additionally refreshed across the same sixteen configurations.
 
+### MD5 returned-owner teardown and quarantine outcomes
+
+Two further projections inspect the emitted authenticate, authenticate-secret
+and verify callers, composing with the existing initialization, consumer and
+row-cleanup checks. No production Rust implementation changed in this checkpoint.
+
+The successful post-consumer suffix must be a closed cleanup-and-return path:
+four exact row clears, both internal region destructors and the complete
+eight-lane workspace destructor. Each occurs once before return, while its
+storage is live. Only independently bound return-field stores, report copies,
+metadata narrowing/width selection and lifetime endings are permitted. New
+callbacks, writes elsewhere, omitted/repeated destructors or expired storage
+reject. The returned secret region's pointer and extent can flow only into their
+return slots; they cannot escape to another call or be destroyed during teardown.
+
+This suffix uses explicit, source-pinned nonthrowing premises for core clearing,
+valid region destruction and MD5 owner destruction. Workspace destructor dispatch
+is separately checked in emitted code. Only those particular cleanup invokes'
+normal continuations are followed; arbitrary destructors are not assumed
+nonthrowing. This is not an erasure guarantee for fatal termination, instrumentation,
+caller frames, CPU registers or platform diagnostic storage.
+
+Independent emitted probes bind all eight error discriminants and the executor's
+actual revocation layout. The final classifier is evaluated for every error and
+all three authority-tag states: routine length/policy/work-limit/cancellation
+errors preserve the executor, whereas memory and execution integrity failures
+revoke it. Low-byte provenance through casts and predecessor-matched phi trees
+binds the classified error to the returned error, including verification's
+prewritten error storage. Every escaping unwind after workspace entry must pass
+through revocation. Unknown suffix effects and success after revocation reject.
+The Rust 1.90 abort layout's inlined destruction is restricted to the eight exact
+live workspace lanes. This does not independently re-prove every earlier
+primitive's error mapping or the underlying CPU authority implementation.
+The current source enum population must also remain exactly the modeled eight
+variants; adding a variant, payload or explicit discriminant requires review
+instead of silently extending this finite model.
+
+Regression coverage includes mutations of actual compiler artifacts and seven
+additional compiled Rust defects: forgetting either internal region or the
+workspace, adding an effect after consumption, preserving ExecutionFailed,
+quarantining Cancelled, or removing the operation's revocation. These are scoped
+author checks, not native qualification or an independent security retest.
+
+The cleanup suite passes all 61 compiled Rust mutations, and the 20 existing
+return/metadata regression groups pass. Thirteen new regression groups pass
+across six representative compiler configurations, including direct unwind
+bypass, inlined lane-cleanup lifetime and error-domain expansion mutations.
+The final versions of both new projections pass all sixteen configurations:
+Rust 1.90.0/1.99.1 GNU/Linux x86-64 and Rust 1.99.1 GNU/Linux/Apple AArch64,
+each generic/SIMD and abort/unwind. Fixture formatting and Clippy pass on
+both Rust versions, as do script-layout, assurance and acceptance-metadata checks.
+The combined cleanup driver also passes all sixteen configurations with the new
+checks integrated; the final new-projection refresh additionally covers the
+inlined-workspace lifetime and error-domain guards on that same matrix.
+Local logs use the `release-reports/v0.25.1-md5-teardown-` prefix. No broad
+verification sweep, native collection, release-gate change or publication was
+performed for this checkpoint.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -1413,7 +1471,8 @@ additionally refreshed across the same sixteen configurations.
   handling and complete comparison traces/cleanup now have dedicated checks.
   Caller-side initialization creation/moves/early-failure cleanup and symbolic
   candidate shape/length admission now have dedicated checks. Returned-owner
-  teardown composition, quarantine classification and hosted-worker compiler
+  success teardown and returned-error-bound quarantine classification now have
+  dedicated projections. Final composition review and hosted-worker compiler
   obligations remain open.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.

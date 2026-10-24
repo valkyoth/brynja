@@ -34,6 +34,25 @@ pub fn backend(executor: &Md5Executor) -> Option<Md5Backend> {
 }
 
 #[inline(never)]
+pub fn revoke(executor: &Md5Executor) {
+    executor.quarantine();
+}
+
+#[inline(never)]
+pub fn error_order() -> [Error; 8] {
+    [
+        Error::MessageTooLong,
+        Error::TagLength,
+        Error::SecretMemory,
+        Error::ExecutionUnavailable,
+        Error::ExecutionFailed,
+        Error::IneligibleWorkload,
+        Error::WorkLimit,
+        Error::Cancelled,
+    ]
+}
+
+#[inline(never)]
 pub fn readiness_ok() -> Result<(), brynja_legacy_md5::hardened_execution::Error> {
     Ok(())
 }

@@ -30,6 +30,8 @@ import legacy_hmac_md5_secret_consumer as secret_consumer
 import legacy_hmac_md5_comparison as comparison
 import legacy_hmac_md5_initialization as initialization
 import legacy_hmac_md5_candidates as candidates
+import legacy_hmac_md5_teardown as teardown
+import legacy_hmac_md5_quarantine as quarantine
 import legacy_hmac_timing_runner as runner
 
 ROOT = runner.ROOT
@@ -106,6 +108,8 @@ def validate(artifacts, panic):
     comparison.validate(artifacts[1][1], panic)
     initialization.validate(artifacts[0][1], artifacts[1][1])
     candidates.validate(artifacts[0][1], artifacts[1][1])
+    teardown.validate(artifacts[0][1], artifacts[1][1], panic)
+    quarantine.validate(artifacts[0][1], artifacts[1][1], panic)
     return rows.validate(artifacts[1][1], panic)
 
 
@@ -124,7 +128,8 @@ def collect(directory, compiler, target, panic, simd=False):
           "consumer result gating/transport; public destination isolation; tag-view and returned metadata scenarios; "
           "secret consumer write/finish/error/unwind ownership; complete lane-byte comparison traces and scratch clearing; "
           "caller initialization creation/moves/early-exit ownership; symbolic eight-lane candidate presence/length admission; "
-          "no whole-caller, output/quarantine, kernel or register-erasure qualification", flush=True)
+          "closed nonthrowing success teardown; returned-error-bound classification and escaping-unwind quarantine; "
+          "no whole-caller, hosted-worker, kernel or register-erasure qualification", flush=True)
     return artifacts
 
 

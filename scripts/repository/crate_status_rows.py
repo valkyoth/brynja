@@ -9,8 +9,15 @@ ROWS = {
         "| HMAC-SHA-1 and HMAC-MD5 | Portable initial implementation | ❌ No |",
         "| Streaming, long keys, explicit byte truncation and verification | Initial implementation with author tests | ❌ No |",
         "| Public tags and clearing secret tags | Implemented; composition cleanup qualification pending | ❌ No |",
-        "| Explicit hardened SHA-1 execution | Opt-in `sha1-execution`; x86 author tests, qualification pending | ❌ No |",
-        "| MD5 SIMD HMAC | Not yet implemented | ❌ No |",
+        "| Explicit hardened SHA-1 execution | Opt-in `sha1-execution`; x86/Arm author tests, qualification pending | ❌ No |",
+        "| MD5 SIMD HMAC | Opt-in `md5-batch`; AVX2/NEON author tests, qualification pending | ❌ No |",
+    ],
+    "crates/brynja-legacy-hmac-std/README.md": [
+        "| Protected scalar SHA-1/MD5 HMAC | Linux-only `strict-execution`; byte/chunk/bit and tag-policy author tests pass | ❌ No |",
+        "| Protected output loans and worker clearing | Native mapping/fault checks and extracted debug/release mutation tests pass | ❌ No |",
+        "| Hosted SHA-1 hardware sessions | Explicit protected/resident owners, worker-local authority and terminal quarantine | ❌ No |",
+        "| Protected/resident MD5 SIMD batches | Explicit bounded owners; full groups, aggregate verification and clearing output loans | ❌ No |",
+        "| Apple Silicon resident profile | Scalar SHA-1/MD5 sessions; native lifecycle/bit tests; no dump exclusion | ❌ No |",
     ],
     "crates/brynja-mac-hmac/README.md": [
         "| HMAC-SHA-224/256/384/512 and SHA-512/224, SHA-512/256 | Portable initial implementation | ❌ No |",
@@ -206,6 +213,7 @@ ROWS = {
         "| Scoped hardened execution workspace | 🚧 Portable/SHA-NI/Arm routes; residue qualification pending | ❌ Not independently verified |"
     ],
     "crates/brynja-crypto-cpu-std/README.md": [
+        "| Apple Silicon resident byte/worker resources | Default-off `macos_resident::memory`; guarded, locked, fork-excluded, clearing; no dump exclusion or automatic cryptographic admission | ❌ No |",
         "| Hosted hardened HMAC over SHA-2/SHA-3 | 🚧 Default-off `hmac-execution`; native M2 author tests; qualification pending | ❌ No |",
         "| Protected compiled HMAC over SHA-2/SHA-3 | 🚧 Default-off `strict-hmac-acceleration`; GNU/Linux, explicit target features, no fallback; qualification pending | ❌ No |",
         "| Protected scalar HMAC (supported GNU/Linux targets) | 🚧 Default-off `strict-hmac`; typed bounded requests and worker-side verification; qualification pending | ❌ No |",

@@ -131,7 +131,8 @@ def mutations(family, native):
             ('in_place.rs', 'initialization\n                .write(&lane.output_staging)', 'initialization\n                .write(&[0;16])'),
             ('in_place.rs', 'scope.complete = true;', 'scope.complete = false;'),
         ]
-        for filename, run in (('mod.rs', 'self.run(inputs, control)?'), ('in_place.rs', 'self.batch.run(inputs, control)?')):
+        for filename, run in (('mod.rs', 'self.run(inputs, control)?'),
+                              ('in_place.rs', 'self.batch.run_parts(inputs, prefixes, control)?')):
             initialization = ('let mut initialization = SecretRegionInitialization::begin(output.as_flattened_mut())\n'
                               '            .map_err(|_| Md5BatchError::SecretMemory)?;')
             result.append((filename, initialization + '\n        let report = ' + run + ';',

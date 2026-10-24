@@ -343,12 +343,14 @@ def test_strict_facade_and_legacy_protected_adapters_follow_dependencies() -> No
     for owner, names in (
         ('brynja-legacy-sha1-std', ('brynja-crypto-cpu-std',)),
         ('brynja-legacy-md5-std', ('brynja-crypto-cpu-std',)),
+        ('brynja-legacy-hmac-std', ('brynja-core', 'brynja-legacy-hmac', 'brynja-crypto-cpu-std')),
         ('brynja-strict', ('brynja-crypto-cpu-std', 'brynja-hash-parallel-std')),
     ):
         fixture[owner]['dependencies'] = [
             {'name': name, 'req': '=0.3.0'} for name in names]
     policy.verify_repository(fixture, plan)
-    for owner in ('brynja-legacy-sha1-std', 'brynja-legacy-md5-std', 'brynja-strict'):
+    for owner in ('brynja-legacy-sha1-std', 'brynja-legacy-md5-std',
+                  'brynja-legacy-hmac-std', 'brynja-strict'):
         order = list(policy.PUBLISH_ORDER)
         order.remove(owner)
         order.insert(0, owner)

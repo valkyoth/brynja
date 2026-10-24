@@ -245,10 +245,15 @@ def resident_status_rows() -> None:
             if 'Apple Silicon resident' not in row:
                 continue
             rows_checked += 1
-            assert 'qualification pending' in row and 'dump' in row
+            warning = 'qualification pending'
+            if row.startswith('| Apple Silicon resident byte/worker resources |'):
+                warning = 'no dump exclusion or automatic cryptographic admission'
+            elif name == 'crates/brynja-legacy-hmac-std/README.md':
+                warning = 'no dump exclusion'
+            assert warning in row and 'dump' in row
             text = (root / name).read_text()
             for changed in ('', row + '\n' + row,
-                            row.replace('qualification pending', 'qualified'),
+                            row.replace(warning, 'qualified'),
                             row.replace('❌ No', '✅ Independently verified').replace(
                                 '❌ Not independently verified', '✅ Independently verified')):
                 assert changed != row
@@ -258,8 +263,8 @@ def resident_status_rows() -> None:
                     mutations += 1
                 else:
                     raise AssertionError('resident status overclaim or omission accepted: ' + name)
-    assert rows_checked == 7 and mutations == 28
-    print('Resident status rejects 28 omission, duplicate and qualification/independent-review overclaims')
+    assert rows_checked == 9 and mutations == 36
+    print('Resident status rejects 36 omission, duplicate and qualification/independent-review overclaims')
 
 
 def main() -> int:

@@ -31,6 +31,7 @@ import md5_hardened_policy
 import acceleration_availability
 import cpu_boundary_policy
 import parallelhash_policy
+import tuplehash_policy
 import keccak_hardened_policy
 import kmac_execution_policy
 import tuplehash_execution_policy
@@ -101,11 +102,13 @@ def check_current_fixture_versions():
     version = tomllib.loads((ROOT / 'crates/brynja/Cargo.toml').read_text())['package']['version']
     for fixture in ('sha2-public-api', 'sha3-public-api', 'cshake-public-api',
                     'sp800185-public-api', 'tuplehash-public-api', 'parallelhash-public-api',
-                    'hash-final-acceptance'):
+                    'hash-final-acceptance', 'sp800185-final', 'kmac-public-api'):
         base = ROOT / 'assurance' / fixture
         dependency = tomllib.loads((base / 'Cargo.toml').read_text())['dependencies'].get('brynja')
-        expected = (None if fixture == 'hash-final-acceptance' else
+        expected = (None if fixture in ('hash-final-acceptance', 'sp800185-final') else
                     {'path': '../../crates/brynja', 'version': '=' + version, 'default-features': False})
+        if fixture == 'kmac-public-api':
+            expected = {'path': '../../crates/brynja'}
         locked = [package for package in tomllib.loads((base / 'Cargo.lock').read_text())['package']
                   if package['name'] == 'brynja']
         if (dependency != expected
@@ -159,6 +162,7 @@ def check_all():
     acceleration_availability.validate(ROOT)
     # Its facade fixture pin participates in historical native carry-forward.
     parallelhash_policy.validate(ROOT)
+    tuplehash_policy.validate(ROOT)
 
 
 if __name__ == '__main__':

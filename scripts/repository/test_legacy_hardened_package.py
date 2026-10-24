@@ -38,7 +38,8 @@ def check(api):
         assert len(cases.mutations(family, False)) == (7 if family == 'sha1' else 8)
         assert len(cases.mutations(family, True)) == (8 if family == 'sha1' else 10)
         for filename, before, _ in cases.mutations(family, True):
-            assert (shared.ROOT / f'crates/brynja-legacy-{family}/src' / filename).read_text().count(before) == 1
+            source = shared.ROOT / f'crates/brynja-legacy-{family}/src' / filename
+            assert source.read_text().count(before) == 1, (family, filename, before)
     restoration()
     print('Hardened legacy rejects ordinary/protected/evidence feature drift; pins lifecycle/negative/mutation populations and restores every mutation/probe after failures')
 

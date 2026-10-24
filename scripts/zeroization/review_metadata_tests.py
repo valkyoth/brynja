@@ -111,8 +111,14 @@ def test_review_metadata():
 def test_hmac_review_metadata():
     import copy
     base = '8a93f40dcd33b1a4328d107233ead5b5d7933eef'
+    completed = '143fc953fbc31a8affb3507dd8273a132c7d9f54'  # v0.25.0
+
+    def historical(path):
+        return (inputs.snapshot(scope.ROOT, base, path)[0],
+                inputs.snapshot(scope.ROOT, completed, path)[0])
+
     for path in review.DIAGNOSTIC_PAIRS:
-        before, after = inputs.snapshot(scope.ROOT, base, path)
+        before, after = historical(path)
         for left, right in ((before, after), (after, before)):
             assert selected({path: (left, right)}) == (False, ())
         for mutant in (None, b'', after + b'\n', after.replace(b'\n', b'\r\n'),
@@ -124,9 +130,9 @@ def test_hmac_review_metadata():
 
     source_names = {'crates/brynja-crypto-cpu-std/' + p for p in review.hmac.HOSTED_SOURCES}
     source_names |= set(review.hmac.SOURCES) | set(review.hmac.TEST_SUFFIXES)
-    sources = {p: inputs.snapshot(scope.ROOT, base, p) for p in source_names}
+    sources = {p: historical(p) for p in source_names}
     boundary = 'security/cpu-acceleration-boundary.toml'
-    before, after = inputs.snapshot(scope.ROOT, base, boundary)
+    before, after = historical(boundary)
     assert selected({boundary: (before, after)}, sources) == (False, ())
     for old, new in ((b'protected-scalar-hmac-session-development', b'admitted'),
                      (b'src/strict_hmac/mod.rs', b'src/strict_hmac/unknown.rs'),
@@ -145,7 +151,7 @@ def test_hmac_review_metadata():
         assert selected({boundary: (before, after), path: changed[path]}, changed)[1]
 
     for path, size in review.BATCH_INVENTORIES.items():
-        before, after = inputs.snapshot(scope.ROOT, base, path)
+        before, after = historical(path)
         a, b = json.loads(before), json.loads(after)
         added = sorted(b['files'].keys() - a['files'].keys())
         assert len(added) == 19

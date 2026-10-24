@@ -40,6 +40,32 @@ rejects accidentally retaining the hosted adapter or omitting the portable leaf.
 These integration checks do not qualify the pending HMAC compiler/worker paths,
 grant independent review, or alter the release gate or native approval records.
 
+A subsequent CI run exposed the remaining KMAC and final SP 800-185 fixture
+locks and the pre-legacy-HMAC SBOM. These now describe the current checkout;
+the fixture preflight rejects 55 version/source/default-feature mutations across
+the nine public-API facade fixtures. Modern-HMAC scope regression data is bound to its
+actual v0.25.0 endpoint instead of assuming every later HEAD edit is HMAC-only.
+A current shared-memory inventory change must still select the wider CPU scope.
+The scope classifier and evidence-reuse rules themselves are unchanged.
+The TupleHash facade-fixture review pin is refreshed for the version-only change;
+the cheap metadata preflight now runs its ordinary validator too, with missing
+and stale fixture-pin regressions. Historical native evidence remains untouched.
+The README-status inventory now includes the hosted legacy HMAC crate and the
+existing leaf execution rows, retaining all independent-review and pending
+qualification limits; claim/table and inventory mutation tests cover both.
+The shared Apple resident-resource row is likewise inventoried without a dump
+exclusion or cryptographic-admission claim. The extracted MD5 initialization-order
+mutation now targets the current `run_parts` call; it compiles and is rejected
+in debug/release, and restored test populations pass. This is a test-anchor
+correction, not a production lifecycle change.
+The release dependency-order inventory also includes the hosted legacy HMAC
+adapter after its dependencies; regression tests reject moving it ahead of them.
+The internal milestone still authorizes no publication.
+All 181 bounded push-CI commands passed across the initial run and corrected
+suffixes, including workspace all-feature tests, both Clippy profiles and
+documentation. The current SBOM and assurance metadata checks also pass.
+These are author checks, not a full release-qualification sweep.
+
 The initial author tests exercise all fourteen RFC 2202 examples, all admitted
 byte truncations, key/message boundaries, streaming partitions, malformed tag
 lengths, public destination preservation and secret destination clearing.

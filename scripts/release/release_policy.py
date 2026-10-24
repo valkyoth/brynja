@@ -46,6 +46,7 @@ PUBLISH_ORDER = (
     "brynja-crypto-cpu-std",
     "brynja-legacy-sha1-std",
     "brynja-legacy-md5-std",
+    "brynja-legacy-hmac-std",
     "brynja-hash-parallel",
     "brynja-crypto",
     "brynja-hash-parallel-std",

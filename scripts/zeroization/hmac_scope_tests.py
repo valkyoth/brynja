@@ -356,11 +356,18 @@ def test_hmac_scope():
 def shared_tooling_tests():
     from review_metadata_tests import selected
     base = '8a93f40dcd33b1a4328d107233ead5b5d7933eef'
+    # This is the exact modern-HMAC addition, not every future edit to HEAD.
+    completed = '143fc953fbc31a8affb3507dd8273a132c7d9f54'  # v0.25.0
+
+    def historical(path):
+        return (inputs.snapshot(scope.ROOT, base, path)[0],
+                inputs.snapshot(scope.ROOT, completed, path)[0])
+
     public = ('scripts/sha2/sha256_public_api.py', 'scripts/sha2/sha2_public_api.py',
               'scripts/sha3/sha3_public_api.py')
     paths = {*hmac.TEST_SUFFIXES, *hmac.TOOL_PAIRS, *hmac.PACKAGING, *public}
     for path in sorted(paths):
-        before, after = inputs.snapshot(scope.ROOT, base, path)
+        before, after = historical(path)
         assert before != after
         for left, right in ((before, after), (after, before)):
             assert hmac.source_only(path, left, right), path
@@ -397,7 +404,14 @@ def shared_tooling_tests():
     import scope_review_metadata as review
     paths |= set(hmac.SOURCES) | set(review.BATCH_INVENTORIES) | {'security/cpu-acceleration-boundary.toml'}
     paths |= {'crates/brynja-crypto-cpu-std/' + p for p in hmac.HOSTED_SOURCES}
-    changes = {p: inputs.snapshot(scope.ROOT, base, p) for p in paths}
+    changes = {p: historical(p) for p in paths}
+    # The new shared resident-memory API is not the old HMAC-only addition.
+    # Its current source must still select the broader CPU family.
+    path = 'scripts/cpu/cpu_boundary_backends.py'
+    before, current = inputs.snapshot(scope.ROOT, base, path)
+    assert current != historical(path)[1]
+    assert not hmac.source_only(path, before, current)
+    assert 'static_cpu' in selected({path: (before, current)})[1]
     with tempfile.TemporaryDirectory(prefix='brynja-shared-hmac-scope-') as temporary:
         root = Path(temporary)
         def git(*args):

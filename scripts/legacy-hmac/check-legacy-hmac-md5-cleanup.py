@@ -24,6 +24,8 @@ import legacy_hmac_md5_report_return as report_return
 import legacy_hmac_md5_normalization_return as normalization_return
 import legacy_hmac_md5_return_header as return_header
 import legacy_hmac_md5_return_paths as return_paths
+import legacy_hmac_md5_output_views as output_views
+import legacy_hmac_md5_consumer_return as consumer_return
 import legacy_hmac_timing_runner as runner
 
 ROOT = runner.ROOT
@@ -94,6 +96,8 @@ def validate(artifacts, panic):
     normalization_return.validate(artifacts[0][1], artifacts[1][1])
     return_header.validate(artifacts[0][1], artifacts[1][1])
     return_paths.validate(artifacts[0][1], artifacts[1][1])
+    output_views.validate(artifacts[0][1], artifacts[1][1])
+    consumer_return.validate(artifacts[0][1], artifacts[1][1])
     return rows.validate(artifacts[1][1], panic)
 
 
@@ -109,6 +113,7 @@ def collect(directory, compiler, target, panic, simd=False):
           "inner report admission against selection and activity; "
           "outer nested-result owner/admission; lane truncation to final readiness; accepted inner/outer return counters; "
           "normalization return-copy lifetimes; selected return-report backend/width; every-normal-success report coverage; "
+          "consumer result gating/transport; public destination isolation; tag-view and returned metadata scenarios; "
           "no whole-caller, output/quarantine, kernel or register-erasure qualification", flush=True)
     return artifacts
 

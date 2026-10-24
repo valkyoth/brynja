@@ -1215,6 +1215,63 @@ script-layout and diff-whitespace checks pass. Logs are under
 `release-reports/v0.25.1-md5-return-metadata-`. These are author-operated compiler
 checks, not native collection, independent review or a full release sweep.
 
+### MD5 final-consumer transport checkpoint
+
+The next connected assurance block follows the final consumer's result into the
+returned output object, without changing production Rust or release gates:
+
+- The public copy's actual success value must select the successful output
+  construction. Its error branch and the consumer unwind edges cannot reach
+  those field stores. Every use of the exclusive public destination is accounted
+  for: only the final checked copy and the returned pointer are allowed.
+- Independent region success/error probes bind the secret consumer's result
+  representation. The caller must check that result before constructing success;
+  its returned pointer and extent must come from the actual consumer result.
+  Every derived result address, load and lifetime marker is checked, including
+  older-compiler speculative field loads. Overwrites, escapes, wrong offsets and
+  reads after storage expiry reject.
+- The verification decision must be the exact final consumer return value,
+  rather than a constant or replacement. Public and secret tag metadata must
+  retain the selected width and all eight actual activity bytes, checked across
+  both backends and all 256 lane masks.
+- Emitted public and secret tag accessors independently bind field meanings,
+  row addressing and lane visibility. The focused scenarios cover every activity
+  mask, lanes 0 through 9 and every supported tag length, plus zero, short,
+  oversized and maximum-length boundaries. These are bounded model checks of
+  the emitted accessors, not a general LLVM proof or native execution.
+- Result layout is obtained from the current emitted probes, not assumed from
+  a compiler version. Adding the accessor instantiations changes a nested Result
+  niche in some configurations. Negative tests target the resolved function
+  identity, including aliases, rather than the first identical body in a module.
+
+This closes caller-side consumer gating and result/metadata transport only.
+Secret-region initialization, the consumer's own failure/unwind cleanup,
+verification comparison semantics, quarantine classification and hosted-worker
+compiler qualification remain separate unfinished obligations. In particular,
+transporting a returned region does not prove how that region was initialized
+or cleared. No independent retest, native qualification or release approval is
+claimed by this checkpoint.
+
+All sixteen combined compiler configurations pass: Rust 1.90.0 and 1.99.1 on
+GNU/Linux x86-64, and Rust 1.99.1 on GNU/Linux and Apple AArch64, with
+generic/SIMD and abort/unwind builds. The consumer/view-only projections also
+pass all sixteen configurations. Eight new artifact-regression groups and
+26 adjacent return-metadata/output-path/handoff groups pass, as do five native
+output-parser regression groups. The ten-group cleanup suite passes with 42
+compiled Rust mutations: the six added cases invert returned activity, replace
+selected width, discard copy failure, replace verification with a constant,
+substitute a tag lane and invert accessor activity. Each mutant must compile
+before the checker is required to reject it. Fixture fmt/Clippy on both compilers and
+acceptance-metadata, assurance, script-layout and whitespace checks pass.
+Logs are under `release-reports/v0.25.1-md5-consumer-`.
+
+CodeQL alerts #10, #11 and #12 were inspected at `336200d5` and dismissed with
+owner approval as false positives. Their hex formatters emit only reproducible
+public synthetic HMAC test tags: fixed `0xa7` keys and `0x39` byte messages, or
+masked `0xa5` bit messages. The output feeds differential oracle checks; no
+application secret reaches these sinks. These test files are excluded from the
+crate archive. Neither production logging nor the security rule was changed.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -1239,7 +1296,10 @@ checks, not native collection, independent review or a full release sweep.
   through final readiness and inner/outer counter field-write provenance now pass.
   Normalization return-copy lifetimes, selected report metadata and report
   completeness on every normal success return now have dedicated checks.
-  Full output-owner and consumer-result binding, quarantine classification and hosted-worker compiler
+  Final consumer gating, public destination isolation, secret result transport,
+  verification decision transport and returned tag metadata/view checks now
+  pass their focused projections. Consumer-internal output-owner cleanup and
+  comparison semantics, quarantine classification and hosted-worker compiler
   obligations remain open.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.

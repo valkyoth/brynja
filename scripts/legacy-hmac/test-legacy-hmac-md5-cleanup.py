@@ -335,6 +335,28 @@ class Md5CleanupTests(unittest.TestCase):
             artifacts = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu", "unwind", True, work / "Cargo.toml")
             with self.assertRaises(ValueError):
                 driver.validate(artifacts, "unwind")
+        path.write_text(original)
+        for before, after in (
+                ("inputs.each_ref().map(Option::is_some)", "inputs.each_ref().map(Option::is_none)"),
+                ("let tag_bytes = self.tag_bytes;", "let tag_bytes = 10;"),
+                ("copy_secret_region(output.as_flattened_mut(), bytes)?;", "let _ = copy_secret_region(output.as_flattened_mut(), bytes);"),
+                ("        })\n    }\n\n    fn run<R>", "        }).map(|(_, report)| (Verification::new(brynja_core::Choice::FALSE), report))\n    }\n\n    fn run<R>")):
+            self.assertIn(before, original_selection)
+            selection.write_text(original_selection.replace(before, after, 1))
+            artifacts = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu", "unwind", True, work / "Cargo.toml")
+            with self.assertRaises(ValueError):
+                driver.consumer_return.validate(artifacts[0][1], artifacts[1][1])
+        selection.write_text(original_selection)
+        output_path = leaf / "src/md5_batch/output.rs"
+        output_original = output_path.read_text()
+        for before, after in (("self.bytes.get(lane)?", "self.bytes.get(0)?"),
+                              ("if !self.active.get(lane)", "if self.active.get(lane)")):
+            self.assertIn(before, output_original)
+            output_path.write_text(output_original.replace(before, after, 1))
+            artifacts = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu", "unwind", True, work / "Cargo.toml")
+            with self.assertRaises(ValueError):
+                driver.output_views.validate(artifacts[0][1], artifacts[1][1])
+        output_path.write_text(output_original)
 
 
 if __name__ == "__main__":

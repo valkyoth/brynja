@@ -109,7 +109,7 @@ def main():
             output = run(["cargo", "test", "--offline", "--locked", *profile, "--features", "sha1-execution", "--test", "sha1_execution"], consumer, environment)
             require("test result: ok. 1 passed; 0 failed; 2 ignored;" in output, "generic accelerated rejection population")
             output = run(["cargo", "test", "--offline", "--locked", *profile, "--features", "md5-batch", "--test", "md5_batch"], consumer, environment)
-            require("test result: ok. 1 passed; 0 failed; 3 ignored;" in output, "generic MD5 rejection population")
+            require("test result: ok. 1 passed; 0 failed; 4 ignored;" in output, "generic MD5 rejection population")
             if md5_selected is not None:
                 native_environment = dict(environment, RUSTFLAGS="-C target-feature=" + md5_selected)
                 output = run(["cargo", "test", "--offline", "--locked", *profile, "--features", "md5-batch",

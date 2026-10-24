@@ -738,6 +738,42 @@ or production changes. It still has zero runtime tests. Local compiler logs are
 `release-reports/v0.25.1-md5-results-{generic,simd}.log`. Cross-compilation is not
 native Apple/Arm qualification, and no release gate or approval changed.
 
+### MD5 distinct-lane native controls
+
+The prior independent byte/bit checks repeated one key and message across all
+eight lanes. The mixed-shape activity test used the project's portable HMAC as
+its reference. A new explicit native test closes that functional coverage gap
+with 96 batches and 768 individually checked per-lane records: four key layouts,
+three message layouts and eight independently rotated key/message placements.
+Equal-length inputs carry different bytes; boundary and fractional-bit inputs
+exercise distinct descriptor lengths and final-bit counts. Key layouts cover
+64-, 65- and 129-byte keys plus mixed empty/short/long keys through 1,024 bytes.
+Assertions require the actual scalar or SIMD normalization route implied by each
+group's public shape on eight-lane AVX2 and four-lane NEON.
+
+Every batch exercises public output, secret output (including clearing on drop)
+and verification at all seven tag widths. Replacing each lane's candidate with
+its neighbor's tag must reject. Reports must retain the selected width and
+active-lane count. All 768 full tags are checked by the separate Python bit
+model; its 576 byte-aligned cases are additionally controlled against Python's
+standard-library HMAC/MD5. Fractional-bit checks are a separate project model,
+not an external certification or independent standardization claim. Acceptance
+rejects missing, duplicated, substituted and rotated records. Generic test
+runs now require one passed/four ignored; native runs require four passed/zero
+ignored, and the extracted-package population was updated accordingly.
+
+Native AVX2 and Apple M2 NEON debug/release runs pass, as do extracted Linux
+debug/release native tests, leaf all-feature tests/doctests, focused strict
+Clippy, five native-driver regression groups, fourteen package regressions and
+script-layout checks. The Mac used a private snapshot of `6f044e0e` with the
+test/driver overlay (archive SHA-256
+`14715f9d69cd7f6c5589459894aaf1ead5bcbdc62c8e1f82a2d7b96f598edf5d`).
+Local logs are `release-reports/v0.25.1-md5-lanes-native-{linux,macos}.log` and
+`release-reports/v0.25.1-md5-lanes-package-linux.log`. Production Rust and gates
+are unchanged; these are author-operated functional checks. Per-lane compiler
+provenance/cleanup qualification remains unfinished, not inferred from passing
+test vectors.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -753,7 +789,7 @@ native Apple/Arm qualification, and no release gate or approval changed.
   and success-edge ordering into all three consumers also pass. Phase pointer
   arguments and the outer closure transport now pass. Three-profile
   native failure coverage and inner readiness/digest error-path exclusion pass;
-  per-lane prefix/input contents, full output-owner
+  compiler-level per-lane prefix/input provenance, full output-owner
   and return binding, quarantine classification and hosted-worker compiler
   obligations remain open.
 - Register API/capability owners and a separately scoped evidence family.

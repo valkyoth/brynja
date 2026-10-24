@@ -8,6 +8,16 @@ use brynja_legacy_hmac::{BitString, Error, Hmac, LegacyUse, Md5};
 #[path = "support/md5_batch_failures.rs"]
 mod failures;
 
+#[path = "support/md5_batch_lanes.rs"]
+mod lanes;
+
+#[test]
+#[ignore = "requires actual AVX2 / NEON instructions with complete target features"]
+fn native_md5_distinct_lane_prefixes() -> Result<(), Error> {
+    println!();
+    lanes::run(&executor()?)
+}
+
 fn executor() -> Result<Md5Executor, Error> {
     Md5Executor::for_compiled_target(Md5Mode::Require).map_err(|_| Error::ExecutionUnavailable)
 }

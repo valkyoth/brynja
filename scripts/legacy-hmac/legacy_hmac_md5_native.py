@@ -9,12 +9,14 @@ import subprocess
 
 from legacy_hmac_acceptance import require
 import legacy_hmac_bits
+import legacy_hmac_md5_lanes
 
 ROOT = Path(__file__).resolve().parents[2]
 MARKERS = (
     "LEGACY_MD5_BATCH: 256 masks, 70 byte cases, 88 bit cases; no fallback",
     "LEGACY_MD5_BATCH_LIFECYCLE: all tag bytes checked; preflight before work; three profiles budget/revocation",
     "LEGACY_MD5_BATCH_FAILURES: scalar/SIMD normalization; public/secret/verify; every cancel/revoke/unwind boundary",
+    "LEGACY_MD5_BATCH_LANES: 96 batches, 768 distinct-lane records; 7 tag widths; public/secret/verify",
 )
 
 
@@ -39,14 +41,15 @@ def features():
 
 
 def validate_output(output):
-    require("test result: ok. 3 passed; 0 failed; 0 ignored;" in output, "MD5 native population")
+    require("test result: ok. 4 passed; 0 failed; 0 ignored;" in output, "MD5 native population")
     for marker in MARKERS:
         require(output.splitlines().count(marker) == 1, "MD5 native marker missing/duplicated")
     byte_expected = {f"{key}:{length}": hmac.new(bytes([0xa7]) * key, bytes([0x39]) * length, hashlib.md5).hexdigest()
                      for key in (0, 1, 63, 64, 65, 80, 1024)
                      for length in (0, 1, 55, 56, 63, 64, 65, 127, 128, 4096)}
     bit_expected = {key.removeprefix("md5:"): value for key, value in legacy_hmac_bits.expected().items() if key.startswith("md5:")}
-    for prefix, expected in (("LEGACY_MD5_BATCH_BYTE:", byte_expected), ("LEGACY_MD5_BATCH_BITS:", bit_expected)):
+    for prefix, expected in (("LEGACY_MD5_BATCH_BYTE:", byte_expected), ("LEGACY_MD5_BATCH_BITS:", bit_expected),
+                             ("LEGACY_MD5_BATCH_LANE:", legacy_hmac_md5_lanes.expected())):
         actual = {}
         for line in output.splitlines():
             if line.startswith(prefix):

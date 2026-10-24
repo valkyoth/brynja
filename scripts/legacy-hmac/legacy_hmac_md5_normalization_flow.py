@@ -117,7 +117,7 @@ class State:
         require(False, "unreviewed effect during normalization owner handoff: " + symbol)
 
 
-def walk(check, site, result_bytes, expected, selection, *, seeds=None, on_entry=None):
+def walk(check, site, result_bytes, expected, selection, *, seeds=None, on_entry=None, optional_owner=True):
     """All reachable pad-entry paths preserve owner bits, or errors never enter."""
     start, unwind = results.continuation(check.graph, site)
     memory = Memory({**check.allocs, check.workspace: 912})
@@ -126,7 +126,8 @@ def walk(check, site, result_bytes, expected, selection, *, seeds=None, on_entry
     first = State(check, start, memory)
     if seeds is not None:
         first.values.update(seeds)
-    first.values[check.selection] = Bits.integer(selection, 8)
+    if selection is not None:
+        first.values[check.selection] = Bits.integer(selection, 8)
     pending = [(start[0], start[1], site[0], first, frozenset())]
     relevant = errors.ancestors(check.graph, {check.stop})
     witnesses, count = 0, 0
@@ -140,10 +141,11 @@ def walk(check, site, result_bytes, expected, selection, *, seeds=None, on_entry
         require(count < 2000, "normalization handoff state bound exceeded")
         if label == check.stop:
             require(expected, "normalization digest failure reaches pad entry")
+            offset = 8 if optional_owner else 0
             require(state.output_live and check.owner not in state.dead
-                    and state.memory.load(Pointer(check.owner), "i64") == Bits.integer(1, 64)
-                    and state.memory.load(Pointer(check.owner, 8), "ptr") == Pointer("returned-owner")
-                    and state.memory.load(Pointer(check.owner, 16), "i64") == Bits.token("returned-length"),
+                    and (not optional_owner or state.memory.load(Pointer(check.owner), "i64") == Bits.integer(1, 64))
+                    and state.memory.load(Pointer(check.owner, offset), "ptr") == Pointer("returned-owner")
+                    and state.memory.load(Pointer(check.owner, offset + 8), "i64") == Bits.token("returned-length"),
                     "normalized owner substituted/truncated/expired before pad entry")
             witnesses += 1
             if on_entry is not None:

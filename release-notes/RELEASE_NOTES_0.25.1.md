@@ -1050,6 +1050,33 @@ pad/key/normalization/report regression groups and script-layout checks also
 pass. These are author-operated compiler checks, not fresh native qualification
 or independent pentest results.
 
+### MD5 inner-result owner handoff (author compiler checks)
+
+The three actual HMAC callers now trace the inner digest's returned pointer and
+length through split loads, bit reconstruction, phi nodes, scoped-workspace
+cleanup and report branches to outer-input construction. Independent emitted
+Result-layout probes bind the source offsets. Pointer and length remain symbolic
+provenance, not convenient constants; unknown report predicates explore both
+edges. Error results, absent backends and unwind must not reach that construction.
+Only the matched Scope and inner owner may be written during the handoff, and
+expiry or reinitialization of the inner destination prevents acceptance.
+
+The digest primitive's valid returned region and the Scope destructor's
+non-refilling behavior remain source-bound premises. This is owner transport,
+not proof of report acceptance/transport, complete output ownership, quarantine,
+native qualification or independent review. Six artifact-mutation groups cover
+pointer/length replacement, split reconstruction, phi substitution, Scope
+completion/identity, expiry/clobber/unknown effects/cycles and unwind bypasses.
+Logs use `release-reports/v0.25.1-md5-inner-owner-`.
+
+All sixteen focused compiler/target/panic configurations pass: Rust 1.90.0 and
+1.99.1 on x86-64 GNU/Linux, plus 1.99.1 on GNU/Linux and Apple AArch64, with
+generic/SIMD and abort/unwind builds. The six new regression groups and all
+24 existing normalization/setup/report groups pass. The existing ten-group
+cleanup suite, including its 23 compiled source mutations, also passes.
+Cross-compilation is not native platform execution. Production Rust,
+dependencies, release gates and native approval records are unchanged.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -1069,7 +1096,8 @@ or independent pentest results.
   construction, normalization result-owner transport and bounded normalization
   input/route/no-long-key scenarios now pass. Normalization setup/readiness and
   bounded report guard/transport composition now pass. Conditional outer
-  prefix/descriptor construction now passes. Inner-result owner/report binding,
+  prefix/descriptor construction and inner-result owner transport now pass.
+  Inner report acceptance/transport,
   full output-owner
   and return binding, quarantine classification and hosted-worker compiler
   obligations remain open.

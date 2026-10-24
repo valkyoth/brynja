@@ -305,6 +305,10 @@ class Md5CleanupTests(unittest.TestCase):
                 driver.inner_report.validate(artifacts[0][1], artifacts[1][1])
         path.write_text(original)
         for before, after, validator in (
+                ("            normalization,", "            normalization: inner,", driver.normalization_return.validate),
+                ("            normalization,", "            normalization: Md5BatchReport { scalar_blocks: 0, ..normalization },", driver.normalization_return.validate),
+                ("vector_width: selection.backend.lane_width(),", "vector_width: selection.backend.lane_width() + 1,", driver.return_header.validate),
+                ("backend: selection.backend,", "backend: brynja_legacy_md5::Md5Backend::Aarch64Neon,", driver.return_header.validate),
                 ("            inner,\n            outer,", "            inner: outer,\n            outer: inner,", driver.report_return.validate),
                 ("            outer,", "            outer: Md5BatchReport { scalar_blocks: inner.scalar_blocks, ..outer },", driver.report_return.validate),
                 ("tag.get(..selection.tag_bytes)", "tag.get(1..selection.tag_bytes)", driver.truncation.validate),

@@ -1170,6 +1170,51 @@ all 32 compiled Rust mutants pass. Fixture fmt/Clippy on both compilers,
 acceptance metadata, assurance and script-layout checks pass. No all-family
 Miri/Kani/ASan sweep or native collection was started for this tooling checkpoint.
 
+### MD5 returned-report composition checkpoint
+
+The next connected compiler-assurance block binds the remaining report metadata
+and normal-return population, without changing production Rust or release gates:
+
+- Normalization's 24 report bytes are traced from the independently checked
+  `pads` result through every emitted temporary and into the returned report.
+  This includes Rust 1.90's packed 30-byte temporary and its four-copy chain,
+  as well as the newer compiler's direct and two-copy paths. Every derived
+  address use is accounted for; overwrites, unexpected calls, alias escapes,
+  overlapping return writes and expired source/destination storage reject.
+  Normalization rejection and unwind cannot reach any accepted report copy.
+- Returned backend and vector width are bound to the actual immutable selection,
+  for both backend values and all 256 activity masks. Late pure casts/selects
+  must dominate their stores and use already bound operands. Split width stores
+  and their upper zero bytes are checked, not treated as arbitrary padding.
+- Independent error constructor probes bind each compiler's `Result` niche.
+  Rust 1.90 uses the first activity byte for public/secret outputs, whereas the
+  newer compiler uses the backend field. The verification result uses its backend
+  field. Success niches must retain the selected backend or actual first-lane
+  activity; an error write cannot count as a successful report field.
+- A finite control-flow traversal includes both ordinary and exceptional edges,
+  without assuming branch conditions true. Every normal return must have a bound
+  variant; every success return must have all 81 semantic report bytes written.
+  Report padding is excluded. Missing fields, early returns, missing error tags
+  and fabricated activity niches reject. Return writes must stay within the
+  ABI-bound object, and narrowing must not wrap or produce poison. This composes with the separately
+  checked normalization, inner/outer counter and header provenance.
+
+This is report/variant transport, not a proof that a consumer returned the right
+success/error, nor full output-owner lifetime or quarantine classification.
+Those obligations, and hosted-worker compiler qualification, remain open.
+The test suite adds twelve artifact-regression groups and four compiled Rust
+mutations (normalization substitution, scalar-count replacement, wrong width and
+wrong backend), increasing the cleanup suite to 36 compiled mutations.
+All sixteen combined configurations pass: Rust 1.90.0 and 1.99.1 GNU/Linux
+x86-64, and Rust 1.99.1 GNU/Linux/Apple AArch64, generic/SIMD and abort/unwind.
+A final return-only refresh also passes all sixteen configurations with the
+last narrowing/bounds checks. All twelve new regression groups, 53 shared
+groups and the ten-group cleanup suite including 36 compiled Rust mutants pass.
+Fixture fmt/Clippy on both compilers, acceptance metadata, assurance,
+script-layout and diff-whitespace checks pass. Logs are under
+`release-reports/v0.25.1-md5-return-metadata-`. These are author-operated compiler
+checks, not native collection, independent review or a full release sweep.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -1192,8 +1237,9 @@ Miri/Kani/ASan sweep or native collection was started for this tooling checkpoin
   prefix/descriptor construction and inner-result owner transport now pass.
   Conditional inner/outer report acceptance, outer owner transport, truncation
   through final readiness and inner/outer counter field-write provenance now pass.
-  Full output-owner and return-object binding (including normalization metadata
-  and success-discriminant/every-return coverage), quarantine classification and hosted-worker compiler
+  Normalization return-copy lifetimes, selected report metadata and report
+  completeness on every normal success return now have dedicated checks.
+  Full output-owner and consumer-result binding, quarantine classification and hosted-worker compiler
   obligations remain open.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.

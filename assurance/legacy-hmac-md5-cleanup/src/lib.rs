@@ -230,6 +230,25 @@ pub fn verify_success(
 }
 
 #[inline(never)]
+pub fn public_error(
+    error: Error,
+) -> Result<(brynja_legacy_hmac::md5_batch::Tags<'static>, Report), Error> {
+    Err(error)
+}
+
+#[inline(never)]
+pub fn secret_error(
+    error: Error,
+) -> Result<(brynja_legacy_hmac::md5_batch::SecretTags<'static>, Report), Error> {
+    Err(error)
+}
+
+#[inline(never)]
+pub fn verify_error(error: Error) -> Result<(brynja_legacy_hmac::Verification, Report), Error> {
+    Err(error)
+}
+
+#[inline(never)]
 pub fn outer_success(
     region: brynja_core::OwnedSecretRegion<'_>,
     report: brynja_legacy_md5::hardened_execution::Report,

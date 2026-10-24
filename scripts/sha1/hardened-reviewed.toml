@@ -2,7 +2,7 @@ schema = 1
 regions = 7
 
 [files]
-"Cargo.toml" = "609bd9fc5b7a8cdf2007018d58fbfd7297551cabdcf02fbf0dcebc8c85da63a0"
+"Cargo.toml" = "851f5460dbc44b2af73ea7a14486271cb30a953a6bbfcb33a951384209cf90af"
 "assurance/register-cleanup/check.py" = "14b71abf1257a029c4074d06793e7154b8f85508f75b17a99d627a5f9498cdbe"
 "assurance/register-cleanup/check_sha1.py" = "ddb1735feef8f3fd46533654e468973a29a7a528ae8172a43310aed32897c52e"
 "assurance/register-cleanup/check_sha1_scalar.py" = "67ea0f0adbcb2627bfa8c59b562663675b06fe02b3c4024b08ceef5b22e7ab42"
@@ -87,7 +87,7 @@ regions = 7
 "crates/brynja-hash-core/src/bit_string.rs" = "5380273f4bffdf50eb69520c874e1cc330dbb1cff3c4f8b47596d01e2c0e634a"
 "crates/brynja-hash-core/src/lib.rs" = "3fc26b83af9b7bcdbba00b181cc6dde1dfd8e02747b33190a1cb15e13ce3be80"
 "crates/brynja-hash-core/src/secret_memory_predicate.rs" = "d5f7b5de2140ce78d09563a2664c10bdaddfc81e9b218dfc56e4fdc4e89ed04c"
-"crates/brynja-legacy-sha1-std/Cargo.toml" = "d5523574a1a120431f151878da3dba9d64b15569622f943a1ff4d42c5c0313d6"
+"crates/brynja-legacy-sha1-std/Cargo.toml" = "c876e1d9b2eb3fdfa1241eb3e2ccff5aae5afdec28dcad9e1440480004e98f2d"
 "crates/brynja-legacy-sha1-std/src/execution/mod.rs" = "2b11441a3672196ddb7e5c62da548f306435f431799328b91f503deceb2c2a9d"
 "crates/brynja-legacy-sha1-std/src/execution/platform.rs" = "229f0b76150b65dffcea7e51f4e98d085622ee8356f8cd79d54ca51e18c2eea3"
 "crates/brynja-legacy-sha1-std/src/hardened_execution.rs" = "a3f7776a458accf24d5ff038f4058ff4b11a82e2a6f163478e9e0666e676b346"

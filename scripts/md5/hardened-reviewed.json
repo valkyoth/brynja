@@ -97,7 +97,7 @@
     "crates/brynja-hash-core/src/bit_string.rs": "5380273f4bffdf50eb69520c874e1cc330dbb1cff3c4f8b47596d01e2c0e634a",
     "crates/brynja-hash-core/src/lib.rs": "3fc26b83af9b7bcdbba00b181cc6dde1dfd8e02747b33190a1cb15e13ce3be80",
     "crates/brynja-hash-core/src/secret_memory_predicate.rs": "d5f7b5de2140ce78d09563a2664c10bdaddfc81e9b218dfc56e4fdc4e89ed04c",
-    "crates/brynja-legacy-md5-std/Cargo.toml": "dc5de956df5a893f93e84300d9a1bf602e0337bc9e2fea05bc28e7b5bbd6bf1b",
+    "crates/brynja-legacy-md5-std/Cargo.toml": "8873b69a554f09b392469aa37ac8124895e28b78bc3822eb6483057e6a8e89c5",
     "crates/brynja-legacy-md5-std/README.md": "a5a96a7e05fd0b0c968a41238ab3b848098822607012cdb7f6527582403a8539",
     "crates/brynja-legacy-md5-std/src/execution/mod.rs": "ddc8d25b2fe5c5892ab931304e8d0280f92872826c1b15975e650e6866b7befe",
     "crates/brynja-legacy-md5-std/src/execution/platform.rs": "351571ad239d08b806f9e966aac9633cdc785407526afe66433d08bb1e327b55",

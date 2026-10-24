@@ -218,7 +218,7 @@
     "docs/hardened-in-place.md": "476cc1f53b6450c937f6869947d1979272a337f9a1583f9f7feb5652f3d707c4",
     "docs/sha2-hardened-execution.md": "562c7293f492326cf84f2b8dc461a4ac57283748a2ad5fa8de330ec2df53c56f",
     "docs/x86-sha512-execution.md": "5d38f31ba53533a83a50496a5eea48d2b9f6501b560b396d62ce60e6e5a94d1d",
-    "package-policy.toml": "b3b866e8a41ef1d9df6d421eeb48ed378c2a8b312c6d1e9723c35f0fd4baa0d7",
+    "package-policy.toml": "8cd1cbca4020dcc65a7d4dac15ad582d8967d772e7fb80c19a0f1d8a2c23f84c",
     "scripts/checks.sh": "7f8f37959496401456e46ed565a793b9944014bf9a9e714847a44774d45a7a35",
     "scripts/ci/install-sde.sh": "72f37ac72ae30b72f7155f09a51343ff9eecdb226c5898aad53eb3c0e0fa9c86",
     "scripts/release/native_dependency_scope.py": "5a94f433ef5acd7bc0abd0175e57746cca78d7d3470fcd98c50d8014b4ced5c5",

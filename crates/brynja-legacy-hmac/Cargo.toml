@@ -16,8 +16,8 @@ md5-batch = ["brynja-legacy-md5/hardened-execution"]
 
 [dependencies]
 brynja-core.workspace = true
-brynja-legacy-sha1 = { path = "../brynja-legacy-sha1", version = "=0.1.0", default-features = false }
-brynja-legacy-md5 = { path = "../brynja-legacy-md5", version = "=0.1.0", default-features = false }
+brynja-legacy-sha1 = { workspace = true, default-features = false }
+brynja-legacy-md5 = { workspace = true, default-features = false }
 
 [lints]
 workspace = true

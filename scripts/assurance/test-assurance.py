@@ -167,8 +167,9 @@ def test_bare_metal_ci_cannot_compile_std_packages() -> None:
     ci_command = next(line.strip().removeprefix("run: ") for line in workflow.splitlines()
                       if line.strip().startswith("run: cargo check --workspace "))
     assert local_command.split() == ci_command.replace('${{ matrix.target }}', '"$target"').split()
+    assert '--exclude brynja-legacy-hmac ' not in ci_command
     for package in ("brynja-strict", "brynja-crypto-cpu-std", "brynja-hash-parallel-std",
-                    "brynja-legacy-sha1-std", "brynja-legacy-md5-std"):
+                    "brynja-legacy-sha1-std", "brynja-legacy-md5-std", "brynja-legacy-hmac-std"):
         broken = workflow.replace(f"--exclude {package} ", "")
         with fails_with("CI bare-metal target command drifted"):
             assurance.validate_workflow(broken)

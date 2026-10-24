@@ -96,7 +96,25 @@ def check_api_metadata():
             api_profile_model.fail(f'API-profile metadata is stale: {path.name}')
 
 
+def check_current_fixture_versions():
+    """Current facade consumers must resolve the checkout, not the previous tag."""
+    version = tomllib.loads((ROOT / 'crates/brynja/Cargo.toml').read_text())['package']['version']
+    for fixture in ('sha2-public-api', 'sha3-public-api', 'cshake-public-api',
+                    'sp800185-public-api', 'tuplehash-public-api', 'parallelhash-public-api',
+                    'hash-final-acceptance'):
+        base = ROOT / 'assurance' / fixture
+        dependency = tomllib.loads((base / 'Cargo.toml').read_text())['dependencies'].get('brynja')
+        expected = (None if fixture == 'hash-final-acceptance' else
+                    {'path': '../../crates/brynja', 'version': '=' + version, 'default-features': False})
+        locked = [package for package in tomllib.loads((base / 'Cargo.lock').read_text())['package']
+                  if package['name'] == 'brynja']
+        if (dependency != expected
+                or len(locked) != 1 or locked[0]['version'] != version or 'source' in locked[0]):
+            raise ValueError('current facade fixture version/source mismatch: ' + fixture)
+
+
 def check_all():
+    check_current_fixture_versions()
     # This independent closure also binds the shared check/Miri/sanitizer
     # drivers. Reuse its exact CI validator, never its Cargo/package campaign.
     static_acceptance.validate()

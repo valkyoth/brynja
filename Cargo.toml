@@ -46,6 +46,8 @@ brynja-hash-tuple = { path = "crates/brynja-hash-tuple", version = "=0.1.0" }
 brynja-hash-parallel = { path = "crates/brynja-hash-parallel", version = "=0.1.0" }
 brynja-mac-kmac = { path = "crates/brynja-mac-kmac", version = "=0.1.0" }
 brynja-mac-hmac = { path = "crates/brynja-mac-hmac", version = "=0.1.0" }
+brynja-legacy-sha1 = { path = "crates/brynja-legacy-sha1", version = "=0.1.0", default-features = false }
+brynja-legacy-md5 = { path = "crates/brynja-legacy-md5", version = "=0.1.0", default-features = false }
 brynja-crypto-cpu = { path = "crates/brynja-crypto-cpu", version = "=0.1.1" }
 brynja-crypto-cpu-std = { path = "crates/brynja-crypto-cpu-std", version = "=0.1.1", default-features = false }
 brynja-pki = { path = "crates/brynja-pki", version = "=0.2.0" }

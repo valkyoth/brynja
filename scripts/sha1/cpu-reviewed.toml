@@ -21,7 +21,7 @@
 "scripts/sha1/test-sha1-execution-capture.py" = "39b4e1cd9897d128f27a180a7a6da3bb0edd64d1ccf3eebc075d4dc441d211a0"
 "crates/brynja-legacy-sha1/Cargo.toml" = "10d8582f9b077924556e92e809bac3510cb2cd2ebedeb73e70d553cc1e16220b"
 "crates/brynja-legacy-sha1/tests/cpu.rs" = "7f4cf901b207aa2d08dcb42c5d5f4f3c397be076949d490e927a93a70dc64338"
-"crates/brynja-legacy-sha1-std/Cargo.toml" = "d5523574a1a120431f151878da3dba9d64b15569622f943a1ff4d42c5c0313d6"
+"crates/brynja-legacy-sha1-std/Cargo.toml" = "c876e1d9b2eb3fdfa1241eb3e2ccff5aae5afdec28dcad9e1440480004e98f2d"
 "crates/brynja-legacy-sha1-std/src/lib.rs" = "7a8b4abe2625379ff97754341ea328903da064f6b84afb95cf77ea2900399f05"
 "crates/brynja-legacy-sha1-std/README.md" = "c0693ab74432722b8ed40c5425edbee582aee3d5ffd64f16450b4275595b2d7c"
 "assurance/sha1-cpu-public-api/Cargo.toml" = "ccc78d086a871035f4801cecb7b0458579ee3d8e44e832b21513e05914756e53"

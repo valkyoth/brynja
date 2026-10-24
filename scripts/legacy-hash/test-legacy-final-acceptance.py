@@ -145,6 +145,45 @@ def macos_inventory_regressions(root):
     print(f'Apple legacy closure rejects {count} regressions; historical snapshot/captures unchanged')
 
 
+def prefixed_inventory_regressions(root):
+    """Prefixed MD5 is a current delta, never a historical qualification."""
+    import tomllib
+    record = root / policy.MD5_DELTA
+    original = record.read_text()
+    hashes = tomllib.loads(original)['files']
+    preserved = {path: (root / path).read_bytes() for path in (
+        policy.SNAPSHOT, *(f'assurance/md5-observations/v0.24.22/{lane}.json'
+                           for lane in policy.MD5_CAPTURES))}
+    paths = [f'crates/brynja-legacy-md5/src/batch/hardened_execution/{name}.rs'
+             for name in ('in_place', 'mod', 'vector', 'prefixed')]
+    paths.append('crates/brynja-legacy-md5/tests/prefixed_execution.rs')
+    for path in paths:
+        assert path in policy.MD5_CHANGED
+        source = root / path
+        content = source.read_bytes()
+        line = f'"{path}" = "{hashes[path]}"'
+        assert original.count(line) == 1
+        for mode in ('omitted', 'stale', 'source'):
+            try:
+                if mode == 'source':
+                    source.write_bytes(content + b'\n')
+                else:
+                    replacement = '' if mode == 'omitted' else f'"{path}" = "' + '0' * 64 + '"'
+                    record.write_text(original.replace(line, replacement))
+                try:
+                    policy.validate_native(root)
+                except ValueError:
+                    pass
+                else:
+                    raise AssertionError(f'accepted {mode} prefixed MD5 input: {path}')
+            finally:
+                record.write_text(original)
+                source.write_bytes(content)
+    policy.validate_native(root)
+    assert all((root / path).read_bytes() == data for path, data in preserved.items())
+    print('Prefixed MD5 rejects 15 delta regressions; historical captures/snapshot unchanged')
+
+
 def delta_review_binding_regressions(root):
     """The enclosing review must bind both current operational-delta records."""
     import tomllib
@@ -227,6 +266,7 @@ def main():
         strict_inventory_regressions(root)
         macos_inventory_regressions(root)
         batch_test_delta_regressions(root)
+        prefixed_inventory_regressions(root)
         delta_review_binding_regressions(root)
         # Simulate growth after the path's size check, without huge allocation.
         (root / 'read-bound.txt').write_bytes(b'old')

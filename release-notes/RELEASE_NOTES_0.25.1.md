@@ -24,6 +24,22 @@ Status: in progress; not release-ready or published.
 
 ## Verification and limits
 
+The CI integration follow-up repairs stale current-facade fixture identities
+(six direct consumers and the combined hash fixture), excludes only the new
+hosted legacy HMAC adapter from OS-less workspace builds, and moves the legacy
+SHA-1/MD5 dependencies into shared workspace declarations without changing
+their default-feature behavior. Standalone mutation/package consumers retain
+the same disabled-default dependency contract. MD5 integration-test helpers use
+standard module layout instead of forbidden module-path attributes; their bodies
+are unchanged. No production Rust implementation changed.
+The current MD5 operational-delta inventory now includes the prefixed path and
+its tests, with explicit current pins rather than changes to historical captures.
+Regression coverage rejects 46 facade identity/source/default-feature mutations
+and 15 prefixed-MD5 inventory mutations; the existing bare-metal regression also
+rejects accidentally retaining the hosted adapter or omitting the portable leaf.
+These integration checks do not qualify the pending HMAC compiler/worker paths,
+grant independent review, or alter the release gate or native approval records.
+
 The initial author tests exercise all fourteen RFC 2202 examples, all admitted
 byte truncations, key/message boundaries, streaming partitions, malformed tag
 lengths, public destination preservation and secret destination clearing.

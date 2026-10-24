@@ -166,8 +166,11 @@ class AdmissionTests(unittest.TestCase):
         workspace = tomllib.loads((driver.ROOT / "Cargo.toml").read_text())["workspace"]
         for field in ("edition", "rust-version", "license", "repository"):
             manifest = manifest.replace(field + ".workspace = true", field + ' = "' + workspace["package"][field] + '"')
-        manifest = manifest.replace("brynja-core.workspace = true", 'brynja-core = { path = "'
-                                    + str(driver.ROOT / "crates/brynja-core") + '", default-features = false }')
+        for dependency in ("brynja-core", "brynja-legacy-sha1", "brynja-legacy-md5"):
+            inherited = (dependency + ".workspace = true" if dependency == "brynja-core" else
+                         dependency + " = { workspace = true, default-features = false }")
+            manifest = manifest.replace(inherited, dependency + ' = { path = "'
+                                        + str(driver.ROOT / "crates" / dependency) + '", default-features = false }')
         manifest = manifest.replace('path = "../', 'path = "' + str(driver.ROOT / "crates") + "/")
         (leaf / "Cargo.toml").write_text(manifest.replace("[lints]\nworkspace = true", "") + "\n[workspace]\n")
         fixture = driver.FIXTURE.parent

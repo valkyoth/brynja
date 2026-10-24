@@ -5,10 +5,8 @@ use brynja_legacy_hmac::md5_batch::{
 };
 use brynja_legacy_hmac::{BitString, Error, Hmac, LegacyUse, Md5};
 
-#[path = "support/md5_batch_failures.rs"]
 mod failures;
 
-#[path = "support/md5_batch_lanes.rs"]
 mod lanes;
 
 #[test]

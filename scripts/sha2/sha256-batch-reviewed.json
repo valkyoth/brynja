@@ -1,7 +1,7 @@
 {
   "files": {
     "Cargo.lock": "b05f41c04614fc7e2a924af50555a6a7633a2f23a35afb8dedd0ce2fec848951",
-    "Cargo.toml": "609bd9fc5b7a8cdf2007018d58fbfd7297551cabdcf02fbf0dcebc8c85da63a0",
+    "Cargo.toml": "851f5460dbc44b2af73ea7a14486271cb30a953a6bbfcb33a951384209cf90af",
     "assurance/sha256-batch/Cargo.lock": "463f7b67e1ecb277e0626e7f02bd74f9db2bcc6a4b84a93ff302cbd4ccd47834",
     "assurance/sha256-batch/Cargo.toml": "25e2ca0def458eebe40c4b5278db557136d17ffbfbb5b7f52c94ecec58afcf48",
     "assurance/sha256-batch/src/benchmark.rs": "7726340e3b6787ab03e278fd017707c199f0dfdf6a355da0143bb2ffba0b91fa",

@@ -10,6 +10,7 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 import legacy_package_inventory_tests as legacy_packages
 import acceptance_scope_tests as scopes
+import acceptance_fixture_tests as fixtures
 
 spec = importlib.util.spec_from_file_location(
     'acceptance_metadata', Path(__file__).with_name('check-acceptance-metadata.py'))
@@ -211,6 +212,7 @@ def main():
         static_metadata_regressions()
         legacy_metadata_regressions()
         scopes.check(metadata)
+        fixtures.check(metadata)
         original_read = Path.read_text
         # The hosted review alone previously missed this separate CPU inventory.
         # Reproduce stale pins using the real preflight, with processes forbidden.

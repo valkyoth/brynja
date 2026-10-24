@@ -64,6 +64,38 @@ pub fn absent_message() -> Option<brynja_legacy_hmac::BitString<'static>> {
 }
 
 #[inline(never)]
+pub fn copy_success() -> Result<(), brynja_core::SecretMemoryError> {
+    Ok(())
+}
+
+#[inline(never)]
+pub fn xor_success() -> Result<(), brynja_core::SecretBitRangeError> {
+    Ok(())
+}
+
+#[inline(never)]
+pub fn pad_success() -> Result<brynja_legacy_hmac::md5_batch::Md5BatchReport, Error> {
+    Ok(brynja_legacy_hmac::md5_batch::Md5BatchReport::default())
+}
+
+#[inline(never)]
+pub fn pad_rejection() -> Result<brynja_legacy_hmac::md5_batch::Md5BatchReport, Error> {
+    Err(Error::SecretMemory)
+}
+
+#[inline(never)]
+pub fn normalized_present(
+    region: brynja_core::OwnedSecretRegion<'_>,
+) -> Option<brynja_core::OwnedSecretRegion<'_>> {
+    Some(region)
+}
+
+#[inline(never)]
+pub fn normalized_absent() -> Option<brynja_core::OwnedSecretRegion<'static>> {
+    None
+}
+
+#[inline(never)]
 pub fn digest_rejection(
     error: brynja_legacy_md5::hardened_execution::Error,
 ) -> Result<

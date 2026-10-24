@@ -810,6 +810,41 @@ No production Rust, dependencies, release gates or approval records changed.
 These are author-operated compiler checks, not fresh native execution or
 independent qualification; the prior native functional results are separate.
 
+### MD5 conditional inner-prefix construction
+
+The emitted-code checks now inspect the actual post-normalization `pads` loop.
+All three callers must supply the same freshly zeroed 512-byte pad owner, with
+no intervening overwrite or escape. Separate compiled ABI probes bind the
+optional normalized-region fields and copy/XOR/result discriminants. The loop
+evaluator tracks public cursors and distinct symbolic source bytes: short keys
+must reach their own lane, long keys must select that lane's 16-byte normalized
+digest, tails must remain zero before XOR, and every active row must receive
+exactly 64 byte operations with `0x36`. Inactive rows remain zero.
+
+This is a **conditional, case-based compiler check**. It starts after
+normalization with a supplied normalized-owner state; it does not establish
+that the preceding scalar/SIMD normalization actually returned that owner or
+the correct digest. Copy/XOR behavior is a separately source-bound primitive
+premise, not a new proof of those kernels. No outer `0x5c` conversion, report
+return, final output ownership, quarantine or whole-caller erasure claim follows.
+
+Each of the sixteen compiler/target/panic configurations passes 393 scenarios:
+every short-key length 0–64 in every lane, all 256 activity masks with distinct
+key shapes, missing/null/short/exact normalized-region boundaries, and selected
+primitive failures. A ten-group focused mutation suite additionally checks
+every one of the eight copy and 512 byte-XOR failure positions on both Rust
+versions. Primitive failures must reach the error frontier without further
+copy/XOR work; emitted unwind edges cannot re-enter construction or its success
+frontier. Unknown instructions, unbound values, out-of-bounds/overlapping access,
+analysis-bound exhaustion and untraced pad-address uses fail closed.
+
+Two new compiled source mutations change the ipad constant and select a
+neighboring normalized key; both reject. The composed cleanup suite now rejects
+thirteen compiled source mutations. Existing descriptor, error-path, phase and
+handoff suites, fixture fmt/Clippy and script-layout checks pass. Logs use
+`release-reports/v0.25.1-md5-pads-`. Production code, dependencies, gates and
+approvals are unchanged; cross-compilation is not a fresh native run.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -825,8 +860,9 @@ independent qualification; the prior native functional results are separate.
   and success-edge ordering into all three consumers also pass. Phase pointer
   arguments and the outer closure transport now pass. Three-profile
   native failure coverage and inner readiness/digest error-path exclusion pass;
-  compiler-level inner message descriptor provenance now passes. Per-lane
-  key/prefix and outer descriptor provenance, full output-owner
+  compiler-level inner message descriptor provenance and conditional ipad
+  construction now pass. The normalization input/result-owner binding, outer
+  prefix/descriptor provenance, full output-owner
   and return binding, quarantine classification and hosted-worker compiler
   obligations remain open.
 - Register API/capability owners and a separately scoped evidence family.

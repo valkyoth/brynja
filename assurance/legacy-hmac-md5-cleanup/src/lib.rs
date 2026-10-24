@@ -96,6 +96,47 @@ pub fn normalized_absent() -> Option<brynja_core::OwnedSecretRegion<'static>> {
 }
 
 #[inline(never)]
+pub fn normalized_scalar_success(
+    region: brynja_core::OwnedSecretRegion<'_>,
+    report: brynja_legacy_md5::Md5BatchReport,
+) -> Result<
+    (
+        brynja_core::OwnedSecretRegion<'_>,
+        brynja_legacy_md5::Md5BatchReport,
+    ),
+    brynja_legacy_md5::Md5BatchError,
+> {
+    Ok((region, report))
+}
+
+#[inline(never)]
+pub fn normalized_scalar_error(
+    error: brynja_legacy_md5::Md5BatchError,
+) -> Result<
+    (
+        brynja_core::OwnedSecretRegion<'static>,
+        brynja_legacy_md5::Md5BatchReport,
+    ),
+    brynja_legacy_md5::Md5BatchError,
+> {
+    Err(error)
+}
+
+#[inline(never)]
+pub fn normalized_simd_success(
+    region: brynja_core::OwnedSecretRegion<'_>,
+    report: brynja_legacy_md5::hardened_execution::Report,
+) -> Result<
+    (
+        brynja_core::OwnedSecretRegion<'_>,
+        brynja_legacy_md5::hardened_execution::Report,
+    ),
+    brynja_legacy_md5::hardened_execution::Error,
+> {
+    Ok((region, report))
+}
+
+#[inline(never)]
 pub fn digest_rejection(
     error: brynja_legacy_md5::hardened_execution::Error,
 ) -> Result<

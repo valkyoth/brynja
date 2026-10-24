@@ -243,6 +243,19 @@ class Md5CleanupTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 driver.pads.validate(artifacts[0][1], artifacts[1][1])
         path.write_text(original)
+        for before, after in (("let mut normalized = Rows::<16>::new();",
+                               "let mut normalized = Rows::<16>::new();\n    let mut wrong_normalized = Rows::<16>::new();"),
+                              ("Some(secret)", "{ core::mem::forget(secret); None }")):
+            self.assertIn(before, original)
+            mutant = original.replace(before, after, 1)
+            if "wrong_normalized" in after:
+                mutant = mutant.replace("digest_secret(&keys, &mut normalized.0, control)",
+                                        "digest_secret(&keys, &mut wrong_normalized.0, control)", 1)
+            path.write_text(mutant)
+            artifacts = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu", "unwind", True, work / "Cargo.toml")
+            with self.assertRaises(ValueError):
+                driver.normalization.validate(artifacts[0][1], artifacts[1][1])
+        path.write_text(original)
         selection = leaf / "src/md5_batch/mod.rs"
         original_selection = selection.read_text()
         for before, after in (("10..=16", "9..=16"), ("10..=16", "10..=17")):

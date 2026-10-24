@@ -845,6 +845,45 @@ handoff suites, fixture fmt/Clippy and script-layout checks pass. Logs use
 `release-reports/v0.25.1-md5-pads-`. Production code, dependencies, gates and
 approvals are unchanged; cross-compilation is not a fresh native run.
 
+### MD5 normalization-result owner transport
+
+The emitted-code inspection now covers the missing handoff from scalar and
+SIMD normalization results into the optional owner used by the ipad loop.
+Three independent compiled probes bind the scalar success/error and SIMD
+success layouts, alongside the existing SIMD error probe. The actual digest
+calls must receive the expected key-array, separate 128-byte destination,
+workspace/scalar-owner and control arguments. The SIMD Scope's setup and
+non-escaping address uses are checked before dispatch; its workspace-only
+destructor behavior remains an explicitly source-bound premise.
+
+Returned pointer and length bits retain distinct symbolic identities. This
+includes the optimized SIMD pointer split across two bytes and a 48-bit field,
+then shifted, merged and converted back to a pointer. All modeled paths that
+reach the pad-loop entry must preserve the original owner, length and Some
+discriminant, with live storage. Result errors, backend mismatches and digest
+or cleanup unwind edges cannot enter that loop. Unknown report fields explore
+both branch outcomes rather than inventing successful values; every modeled
+successful backend also requires a non-vacuous entry witness. Unrecognized
+effects, out-of-bounds access, lifetime misuse and cycles reject.
+
+Thirteen focused regression groups use real LLVM from both Rust versions and
+exercise bit reconstruction, ABI layouts, owner substitution, incorrect lengths,
+error guards, predecessor-specific phi values, Scope setup/drop, late writes,
+expired/repopulated storage, unknown effects and unwind redirection. Two more
+compiled Rust mutations reroute the digest destination and discard its returned
+owner; both reject. The composed cleanup suite now rejects fifteen compiled
+source mutations. All sixteen compiler configurations pass, as do existing
+handoff/phase/result/descriptor/pad regressions, fixture fmt/Clippy and script
+layout checks. Local logs use `release-reports/v0.25.1-md5-normalization-`.
+
+This is owner transport, not a new proof of the digest primitives or full
+normalization. Key-descriptor construction, route selection, the no-long-key
+branch and complete report validation remain separate obligations. Outer pad
+conversion, output/return ownership, quarantine and hosted-worker qualification
+remain open. Production code, dependencies, gates and approval records are
+unchanged; these are author-operated compiler checks, not native execution or
+independent review.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -861,7 +900,8 @@ approvals are unchanged; cross-compilation is not a fresh native run.
   arguments and the outer closure transport now pass. Three-profile
   native failure coverage and inner readiness/digest error-path exclusion pass;
   compiler-level inner message descriptor provenance and conditional ipad
-  construction now pass. The normalization input/result-owner binding, outer
+  construction and normalization result-owner transport now pass. The
+  normalization input/route/no-long-key checks, outer
   prefix/descriptor provenance, full output-owner
   and return binding, quarantine classification and hosted-worker compiler
   obligations remain open.

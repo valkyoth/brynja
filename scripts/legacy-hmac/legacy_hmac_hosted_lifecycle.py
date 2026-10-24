@@ -3,8 +3,9 @@
 Only presentation names of the exact MD5 validator and resident buffer clear/
 borrow helpers are normalized for the existing lifecycle walker. No function body,
 native status or pointer is rewritten. Capture, envelope, destructor, authority
-and selection-input projections compose here; the remaining keyed-worker
-lifecycle and complete output/quarantine transaction remain unqualified.
+and selection-input projections compose here with compiled keyed admission,
+storage and retained dispatch. Scalar worker internals, full input/output and
+quarantine transactions still require their separate qualification.
 """
 import re
 import sys
@@ -23,6 +24,9 @@ import legacy_hmac_hosted_authority as authority
 import legacy_hmac_hosted_constructor as constructor
 import legacy_hmac_hosted_unavailable as unavailable
 import legacy_hmac_hosted_backend as backend
+import legacy_hmac_hosted_keyed as keyed
+import legacy_hmac_hosted_storage as storage
+import legacy_hmac_hosted_retained as retained
 
 model = shared.load('hmac_hosted_lifecycle', 'legacy_hosted_lifecycle_model')
 contracts = shared.load('hmac_hosted_contracts')
@@ -122,7 +126,8 @@ def dispatch(signature, body, names, expected, identity, operation, direct=False
     return symbol
 
 
-def validate(artifacts, target):
+def validate(artifacts, target, panic):
+    require(panic in ('abort', 'unwind'), 'explicit legacy hosted panic profile required')
     contracts.validate()
     capture_types.validate()
     authority.modes(runner.ROOT)
@@ -194,6 +199,10 @@ def validate(artifacts, target):
                     transfer = authority.check(worker_body, names, compiler, identity)
                     constructor.check(transfer, envelope_result)
                     backend.check(transfer, envelope_result)
+                    keyed_state = keyed.check(worker_body, names, compiler, identity)
+                    # retained.check includes storage validation for both
+                    # identities; do not repeat the same graph traversal.
+                    retained.check(keyed_state, definitions, aliases, panic)
                 else:
                     unavailable.check(worker_body, envelope_result, identity)
             checked[identity] = selected, worker, population, host

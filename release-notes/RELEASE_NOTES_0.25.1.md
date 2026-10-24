@@ -1588,6 +1588,61 @@ pentest. No production Rust, dependency, shared modern-HMAC checker or release
 gate is changed. The worker keyed-owner lifecycle, complete output transactions,
 quarantine and final MD5 composition review are still separate open obligations.
 
+### Hosted compiled keyed admission and retained-dispatch checkpoint
+
+The compiler checker now follows compiled SHA-1's 912-byte constructor Result
+through admission into retained state and both by-value terminal handoffs. The
+MD5 batch selector receives its own 24-byte Result/borrow model; it is not
+misclassified as a key owner or consuming finalizer. The existing shared
+byte-provenance interpreter is reused without changing its modern-HMAC behavior.
+Constructor success and error outcomes, normal and exceptional returns, copy
+extent/order, live storage and consumer identity/arguments are checked. Missing
+or unrelated representations cannot become admitted state. Storage checks cover
+constructor temporaries, retained state and terminal copies, including scalar
+accesses, actual memcpy extents, aliases and lifetime boundaries.
+
+A separate compiled SHA-1 caller walk requires the retained object to reach
+either the actual destructor or one of the two consuming finalizers on every
+normal/recoverable-unwind exit. The actual emitted outlined destructor is
+interpreted for both populated retained niches and the empty niche; both
+Sha1Owner cleanup obligations must be discharged when populated. The primitive
+Sha1Owner destructor's non-panicking behavior and the leaf update/finalizer
+implementations remain explicit separately qualified callee premises. A failed
+update may already have cleared the engine, but the caller must still discharge
+its affine object instead of silently forgetting it. Unknown owner borrows,
+late writes/reads, second consumption and lost update/finalizer unwind edges
+are rejected. MD5's admitted selector allows only its two consumer borrows and
+lifetime completion; no post-admission overwrite or escape is accepted.
+
+The driver now supplies the panic profile explicitly. It is not inferred from
+the presence of an exception personality: optimized standard-library catch
+machinery can occur in a module even for a panic-abort consumer build. The
+source/release gate policy is unchanged.
+
+Focused mutations cover constructor bytes/error guards, terminal transfers,
+storage lifetimes, retained caller exits and the actual destructor owner offsets.
+The private compiled Rust host mutation set grows to thirty-two, adding Linux
+and Apple forget-on-cancellation defects. Those two cases must be rejected by
+the retained cleanup obligation, not an unrelated source pin. The earlier five
+compiled consumer-provenance defects remain in the suite. Logs use the
+`release-reports/v0.25.1-hosted-keyed-` prefix.
+
+Validation passes all thirty-two regression groups (270.554 seconds), including
+261 constructor-admission, 94 terminal-handoff, 227 storage-lifetime and 83
+retained-cleanup/selector mutations. The final driver passes all sixteen
+compiler/target/panic/SIMD configurations: Rust 1.90.0 and 1.99.1 on x86 Linux,
+and Rust 1.99.1 on Linux AArch64 and Apple AArch64, each with generic/SIMD and
+abort/unwind profiles. Both compiler fixture formatting and strict Clippy checks
+pass, together with script-layout, acceptance-metadata, assurance and diff checks.
+The matrix is compiler inspection, not native execution on the cross targets.
+
+This is an author-operated compiler checkpoint, not independent review or native
+execution. No production Rust, dependencies, release gates or shared modern-HMAC
+checker changed. Compiler copies/register residue and fatal abort are not
+claimed erased. Scalar worker internals, complete input/tail/lane provenance,
+checkpoint/callee composition, output/loan/quarantine transactions and final
+MD5 composition reconciliation remain open before release qualification.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -1623,7 +1678,9 @@ quarantine and final MD5 composition review are still separate open obligations.
   create/join/stack-reclaim ordering, launch capture provenance, worker envelope
   result/completion ordering and buffer destructor dispatch now have dedicated
   checks. Accelerated worker-local authority transfer/admission, backend matching
-  and captured constructor-input provenance now have composing checks. Final
+  and captured constructor-input provenance now have composing checks. The
+  compiled keyed admission/storage, SHA-1 retained destructor/consumer dispatch
+  and MD5 selector borrow boundaries now have dedicated projections. Final
   MD5 composition review and the remaining hosted-worker keyed
   computation, complete output transactions and quarantine compiler obligations
   remain open.

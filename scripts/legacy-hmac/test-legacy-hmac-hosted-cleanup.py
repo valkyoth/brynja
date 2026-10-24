@@ -9,6 +9,7 @@ import shutil
 import unittest
 from legacy_hmac_hosted_capture_tests import CaptureTests
 from legacy_hmac_hosted_authority_tests import AuthorityTests
+from legacy_hmac_hosted_keyed_tests import KeyedTests
 
 spec = importlib.util.spec_from_file_location('driver', Path(__file__).with_name('check-legacy-hmac-hosted-cleanup.py'))
 driver = importlib.util.module_from_spec(spec)
@@ -16,7 +17,7 @@ spec.loader.exec_module(driver)
 h = driver.hosted
 
 
-class Hosted(CaptureTests, AuthorityTests, unittest.TestCase):
+class Hosted(CaptureTests, AuthorityTests, KeyedTests, unittest.TestCase):
     driver = driver
     @classmethod
     def setUpClass(cls):
@@ -31,13 +32,13 @@ class Hosted(CaptureTests, AuthorityTests, unittest.TestCase):
                 ('1.99.1', driver.TARGETS[2], 'abort', False),
                 ('1.99.1', driver.TARGETS[2], 'unwind', True)):
             artifacts = driver.emit(Path(cls.directory.name) / (compiler + target + panic), compiler, target, panic, simd)
-            cls.cases.append((artifacts, target, h.validate(artifacts, target)))
+            cls.cases.append((artifacts, target, h.validate(artifacts, target, panic), panic))
         env = driver.runner.environment(Path(cls.directory.name))
         cls.metadata = json.loads(driver.runner.run(['cargo', '+1.99.1', 'metadata', '--manifest-path', str(driver.FIXTURE),
             '--locked', '--offline', '--format-version', '1', '--filter-platform', driver.TARGETS[0]], env))
 
     def rejects(self, case, body, before, after):
-        artifacts, target, _ = case
+        artifacts, target, _, panic = case
         self.assertIn(before, body)
         self.assertNotEqual(before, after)
         packages = [key for key, llvm in artifacts.items() if body in llvm]
@@ -45,7 +46,7 @@ class Hosted(CaptureTests, AuthorityTests, unittest.TestCase):
         changed = dict(artifacts)
         changed[packages[0]] = changed[packages[0]].replace(body, body.replace(before, after, 1), 1)
         with self.subTest(target=target, before=before, after=after), self.assertRaises(ValueError):
-            h.validate(changed, target)
+            h.validate(changed, target, panic)
 
     def calls(self, body, names):
         return [(line, symbol, args, names.get(symbol, symbol)) for line in body.splitlines()
@@ -260,9 +261,9 @@ class Hosted(CaptureTests, AuthorityTests, unittest.TestCase):
             # defects, not malformed Rust or artificial missing symbols.
             artifacts = driver.emit(work, '1.99.1', driver.TARGETS[0], 'unwind', True, work / 'Cargo.toml')
             with self.subTest(before=before, after=after), self.assertRaises(ValueError):
-                h.validate(artifacts, driver.TARGETS[0])
+                h.validate(artifacts, driver.TARGETS[0], 'unwind')
         path.write_text(original)
-        h.validate(driver.emit(work, '1.99.1', driver.TARGETS[0], 'unwind', True, work / 'Cargo.toml'), driver.TARGETS[0])
+        h.validate(driver.emit(work, '1.99.1', driver.TARGETS[0], 'unwind', True, work / 'Cargo.toml'), driver.TARGETS[0], 'unwind')
 
 
 if __name__ == '__main__':

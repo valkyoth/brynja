@@ -168,15 +168,15 @@ class AuthorityTests:
 
     def test_authority_compiler_identity_is_not_inferred_from_niche(self):
         h = self.driver.hosted
-        for artifacts, target, _ in self.cases:
+        for artifacts, target, _, panic in self.cases:
             changed = {key: re.sub(r'!"rustc version [\d.]+ ', '!"rustc version 9.99.0 ', value)
                        for key, value in artifacts.items()}
             with self.assertRaises(ValueError):
-                h.validate(changed, target)
+                h.validate(changed, target, panic)
             changed = dict(artifacts)
             first = next(iter(changed))
             old = re.findall(r'!"rustc version ([\d.]+) ', changed[first])[0]
             changed[first] = changed[first].replace('rustc version ' + old,
                                                     'rustc version ' + ('1.90.0' if old == '1.99.1' else '1.99.1'))
             with self.assertRaises(ValueError):
-                h.validate(changed, target)
+                h.validate(changed, target, panic)

@@ -134,7 +134,7 @@ class CaptureTests:
 
     def test_buffer_destructor_identity_order_and_keep(self):
         h, count = self.driver.hosted, 0
-        for artifacts, target, _ in self.cases:
+        for artifacts, target, _, _ in self.cases:
             defs, aliases = h.flow.definitions_and_aliases(artifacts['brynja-legacy-hmac-std'])
             names = h.model.demangle({name.strip('"') for name in re.findall(r'@("[^"]+"|[-\w.$]+)',
                                                                           artifacts['brynja-legacy-hmac-std'])})
@@ -185,7 +185,7 @@ class CaptureTests:
             def emit():
                 return d.emit(work / target, '1.99.1', target, 'unwind', True,
                               fixture / 'Cargo.toml', leaf / 'Cargo.toml')
-            h.validate(emit(), target)
+            h.validate(emit(), target, 'unwind')
             for file, before, after in (
                     ('mod.rs', 'let bytes = self.bytes;', 'let bytes = 10;'),
                     ('mod.rs', 'cancel, staging, destination);', 'cancel, destination, staging);'),
@@ -200,6 +200,9 @@ class CaptureTests:
                     ('md5_compiled/worker.rs', '&owner, parameters.bytes)', '&owner, 8)'),
                     ('sha1_compiled/worker.rs', 'owner.report().backend != Some(backend)', 'owner.report().backend == Some(backend)'),
                     ('md5_compiled/worker.rs', 'owner.backend() != Some(parameters.backend)', 'owner.backend() == Some(parameters.backend)'),
+                    ('sha1_compiled/worker.rs', '    {\n        checkpoint(&owner, cancel)?;\n        for part',
+                     '    {\n        if let Err(error) = checkpoint(&owner, cancel) {\n'
+                     '            core::mem::forget(state); return Err(error);\n        }\n        for part'),
                     *[(kind + '_compiled/worker.rs',
                        mode + '::Require)\n        .map_err(|_| Error::Mac(brynja_legacy_hmac::Error::ExecutionFailed))?',
                        mode + '::Prefer)\n        .map_err(|_| Error::Mac(brynja_legacy_hmac::Error::ExecutionFailed))?')
@@ -210,11 +213,13 @@ class CaptureTests:
                 try:
                     path.write_text(original.replace(before, after, 1))
                     artifacts = emit()  # Malformed/uncompilable mutants are test failures.
-                    with self.subTest(target=target, file=file, before=before), self.assertRaises(ValueError):
-                        h.validate(artifacts, target)
+                    rejection = (self.assertRaisesRegex(ValueError, 'without keyed cleanup/consumption|without consumption')
+                                 if 'core::mem::forget(state)' in after else self.assertRaises(ValueError))
+                    with self.subTest(target=target, file=file, before=before), rejection:
+                        h.validate(artifacts, target, 'unwind')
                 finally:
                     path.write_text(original)
                 count += 1
-            h.validate(emit(), target)
-        self.assertEqual(count, 30)
-        print('Legacy hosted capture/destructor/authority/selection: 30 compiled Rust defects rejected', flush=True)
+            h.validate(emit(), target, 'unwind')
+        self.assertEqual(count, 32)
+        print('Legacy hosted capture/destructor/authority/selection/retained: 32 compiled Rust defects rejected', flush=True)

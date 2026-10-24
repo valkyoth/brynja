@@ -967,6 +967,47 @@ Logs use `release-reports/v0.25.1-md5-reports-` and
 `release-reports/v0.25.1-md5-setup-reports-tests.log`. No production implementation,
 dependency, release gate or approval record changes in this checkpoint.
 
+### Conditional MD5 outer-prefix and descriptor construction
+
+The emitted-code inspector now follows the public, secret-output and verification
+callers from outer-descriptor initialization to the actual outer dispatch. Given
+the earlier inner-pad bytes and a valid, distinct 128-byte inner-result owner,
+every active lane must XOR each of its 64 prefix bytes exactly once with
+`0x36 ^ 0x5c`; inactive prefixes remain unchanged. The inner owner's pointer and
+length premises are attached to its actual stores, not arbitrary loop operands.
+This does **not** yet establish that owner's complete binding to the preceding
+digest result, or the inner report checks.
+
+Each active outer descriptor must use its own 16-byte inner digest and eight
+valid bits. Constructor payloads keep lane-specific byte provenance through
+temporary storage and partial copies. Inactive descriptors retain the null
+niche; the final destination must be freshly zeroed. The actual closure capture
+must carry those prefixes, descriptors, final destination and control into the
+outer helper. Unknown effects, cross-owner copies, overlapping transfers,
+expired storage, malformed geometry and construction after a primitive failure
+reject. Constructor and XOR unwind paths cannot reach outer dispatch.
+
+Each caller/configuration checks 280 scenarios: all 256 activity masks, XOR
+failures at both ends of every lane, and constructor failure in each lane.
+These include conditional shapes that earlier admission would reject; they are
+construction coverage, not claims that such workloads execute through the API.
+Constructor and XOR semantics remain tied to unchanged source hashes. Fatal
+abort cleanup, full output ownership and general LLVM correctness are not claimed.
+
+Focused regressions mutate real LLVM from Rust 1.90.0 and 1.99.1 on x86-64 and
+1.99.1 on AArch64, across all three callers. Three compiled Rust mutations change
+the outer XOR mask, shorten the inner digest, and invert lane activity; the
+source-mutant suite now contains twenty-three mutations. Logs use
+`release-reports/v0.25.1-md5-outer-`. Production crypto, dependencies, release
+gates and approval records are unchanged.
+
+All sixteen compiler/target/panic configurations pass, with 840 conditional
+scenarios per configuration across the three callers. Seven new regression
+groups and the existing ten-group source/artifact suite pass; the 45 shared
+pad/key/normalization/report regression groups and script-layout checks also
+pass. These are author-operated compiler checks, not fresh native qualification
+or independent pentest results.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -985,8 +1026,9 @@ dependency, release gate or approval record changes in this checkpoint.
   compiler-level inner message descriptor provenance and conditional ipad
   construction, normalization result-owner transport and bounded normalization
   input/route/no-long-key scenarios now pass. Normalization setup/readiness and
-  bounded report guard/transport composition now pass. Outer
-  prefix/descriptor provenance, full output-owner
+  bounded report guard/transport composition now pass. Conditional outer
+  prefix/descriptor construction now passes. Inner-result owner/report binding,
+  full output-owner
   and return binding, quarantine classification and hosted-worker compiler
   obligations remain open.
 - Register API/capability owners and a separately scoped evidence family.

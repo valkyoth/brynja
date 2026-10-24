@@ -884,6 +884,52 @@ remain open. Production code, dependencies, gates and approval records are
 unchanged; these are author-operated compiler checks, not native execution or
 independent review.
 
+### MD5 normalization key descriptors and shape routing
+
+The next emitted-LLVM check starts at the actual `pads` helper entry and follows
+the eight key slots to scalar/SIMD setup or the no-normalization pad-loop entry.
+Each active long key must call the exact bit-string constructor with its own
+pointer, unchanged length and eight valid bits. Its returned descriptor retains
+lane-specific byte provenance through the temporary payload copies; short and
+inactive slots keep the null niche. Reads of inactive input payloads, expired
+temporaries, overlapping copies and unknown effects reject. Independent compiled
+success/failure probes bind descriptor/result layouts; the unchanged bit-string
+constructor's semantics remain a source-hash-bound premise, not a new proof of
+that primitive.
+
+For both four- and eight-lane selections, the observed route must agree with the
+long-key pattern: no normalization for zero long keys, SIMD only when a complete
+group exists, otherwise preselected scalar normalization. The no-long-key path
+must retain an absent normalized owner. The separate 128-byte destination must
+be freshly zeroed at setup. Constructor failures must report message-length
+failure before later construction, backend setup, digest or pad work. Address
+uses are reconciled beyond the setup frontiers to reject later key-array writes
+and escapes before digest consumption.
+
+This is **bounded scenario-based inspection**, not exhaustive verification over
+all possible lengths or a whole-normalization proof. Each compiler configuration
+runs 1,152 scenarios: all 256 long-key masks with remaining slots either occupied
+by short keys or absent, both backend widths, per-lane empty/short/64/65-byte and
+bit-length overflow boundaries, and constructor-failure injection in every lane.
+The source-bound full-byte constructor performs no partial-tail inspection.
+LLVM's unvisited AArch64 remainder prologue is allowed only pure address/read
+operations before setup, not hidden writes or escapes; focused mutations check
+that distinction. Backend setup/readiness internals and full report validation
+are not inferred from these route checks.
+
+Eleven regression groups cover emitted x86-64 code from both compilers and
+AArch64 from Rust 1.99.1, including vector and scalar activity counters, pointer
+and length substitutions, threshold/niche changes, payload copies, error-path
+re-entry, lifetime/escape faults, signed/unsigned arithmetic and exact shifts.
+Three compiled source mutations change the long-key threshold, route on message
+occupancy instead of long-key occupancy, and bypass one-key normalization; all
+reject. The composed source-mutant suite now contains eighteen mutations.
+All sixteen compiler configurations and the existing focused suites pass;
+fixture fmt/Clippy and script-layout checks pass. Logs use
+`release-reports/v0.25.1-md5-keys-`. No production implementation, dependency,
+gate or approval changed, and no native execution/review is claimed by this
+compiler-only checkpoint.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -900,8 +946,9 @@ independent review.
   arguments and the outer closure transport now pass. Three-profile
   native failure coverage and inner readiness/digest error-path exclusion pass;
   compiler-level inner message descriptor provenance and conditional ipad
-  construction and normalization result-owner transport now pass. The
-  normalization input/route/no-long-key checks, outer
+  construction, normalization result-owner transport and bounded normalization
+  input/route/no-long-key scenarios now pass. Complete normalization
+  setup/readiness/report composition, outer
   prefix/descriptor provenance, full output-owner
   and return binding, quarantine classification and hosted-worker compiler
   obligations remain open.

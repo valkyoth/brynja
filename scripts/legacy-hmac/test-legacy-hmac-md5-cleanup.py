@@ -256,6 +256,15 @@ class Md5CleanupTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 driver.normalization.validate(artifacts[0][1], artifacts[1][1])
         path.write_text(original)
+        for before, after in (("input.key.len() > 64", "input.key.len() >= 64"),
+                              ("eligible(&keys, selection.backend.lane_width())", "eligible(inputs, selection.backend.lane_width())"),
+                              ("if active == 0 {", "if active <= 1 {")):
+            self.assertIn(before, original)
+            path.write_text(original.replace(before, after, 1))
+            artifacts = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu", "unwind", True, work / "Cargo.toml")
+            with self.assertRaises(ValueError):
+                driver.keys.validate(artifacts[0][1], artifacts[1][1])
+        path.write_text(original)
         selection = leaf / "src/md5_batch/mod.rs"
         original_selection = selection.read_text()
         for before, after in (("10..=16", "9..=16"), ("10..=16", "10..=17")):

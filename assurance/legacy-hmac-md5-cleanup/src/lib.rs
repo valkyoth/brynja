@@ -64,6 +64,24 @@ pub fn absent_message() -> Option<brynja_legacy_hmac::BitString<'static>> {
 }
 
 #[inline(never)]
+pub fn key_descriptor_success(
+    message: brynja_legacy_hmac::BitString<'_>,
+) -> Result<brynja_legacy_hmac::BitString<'_>, brynja_legacy_hmac::BitStringError> {
+    Ok(message)
+}
+
+#[inline(never)]
+pub fn key_descriptor_failure()
+-> Result<brynja_legacy_hmac::BitString<'static>, brynja_legacy_hmac::BitStringError> {
+    Err(brynja_legacy_hmac::BitStringError::LengthOverflow)
+}
+
+#[inline(never)]
+pub fn key_length_rejection() -> Result<brynja_legacy_hmac::md5_batch::Md5BatchReport, Error> {
+    Err(Error::MessageTooLong)
+}
+
+#[inline(never)]
 pub fn copy_success() -> Result<(), brynja_core::SecretMemoryError> {
     Ok(())
 }

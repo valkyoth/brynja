@@ -17,6 +17,7 @@ import legacy_hmac_md5_setup as setup
 import legacy_hmac_md5_reports as reports
 import legacy_hmac_md5_outer as outer
 import legacy_hmac_md5_inner_owner as inner_owner
+import legacy_hmac_md5_inner_report as inner_report
 import legacy_hmac_timing_runner as runner
 
 ROOT = runner.ROOT
@@ -80,6 +81,7 @@ def validate(artifacts, panic):
     reports.validate(artifacts[0][1], artifacts[1][1])
     outer.validate(artifacts[0][1], artifacts[1][1])
     inner_owner.validate(artifacts[0][1], artifacts[1][1])
+    inner_report.validate(artifacts[0][1], artifacts[1][1])
     return rows.validate(artifacts[1][1], panic)
 
 
@@ -92,6 +94,7 @@ def collect(directory, compiler, target, panic, simd=False):
           "key descriptor/shape-route scenarios; normalization initialization/readiness and report guard/transport scenarios; "
           "conditional outer-pad conversion and lane-descriptor scenarios; "
           "inner-result pointer/length transport and failure exclusion; "
+          "inner report admission against selection and activity; "
           "no whole-caller, output/quarantine, kernel or register-erasure qualification", flush=True)
     return artifacts
 

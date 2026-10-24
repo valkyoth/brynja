@@ -294,6 +294,16 @@ class Md5CleanupTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 driver.validate(artifacts, "unwind")
         selection.write_text(original_selection)
+        for predicate in ("report.backend != Some(selection.backend)",
+                          "report.vector_width != selection.backend.lane_width()",
+                          "report.work.vector_blocks < selection.backend.lane_width()",
+                          "report.work.active_lanes != active"):
+            self.assertIn(predicate, original)
+            path.write_text(original.replace(predicate, "false", 1))
+            artifacts = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu", "unwind", True, work / "Cargo.toml")
+            with self.assertRaises(ValueError):
+                driver.inner_report.validate(artifacts[0][1], artifacts[1][1])
+        path.write_text(original)
         frontier = '''    // No cancellation callback or secret computation follows this final check.
     workspace
         .with(|batch| batch.cancel())

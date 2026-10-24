@@ -117,13 +117,14 @@ class State:
         require(False, "unreviewed effect during normalization owner handoff: " + symbol)
 
 
-def walk(check, site, result_bytes, expected, selection, *, seeds=None, on_entry=None, optional_owner=True):
+def walk(check, site, result_bytes, expected, selection, *, seeds=None, on_entry=None,
+         optional_owner=True, state_type=State):
     """All reachable pad-entry paths preserve owner bits, or errors never enter."""
     start, unwind = results.continuation(check.graph, site)
     memory = Memory({**check.allocs, check.workspace: 912})
     memory.store(Pointer(syntax.operand(site[3][0])), result_bytes)
     memory.store(Pointer(check.scope), Pointer(check.workspace))
-    first = State(check, start, memory)
+    first = state_type(check, start, memory)
     if seeds is not None:
         first.values.update(seeds)
     if selection is not None:

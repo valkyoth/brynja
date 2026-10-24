@@ -1077,6 +1077,47 @@ cleanup suite, including its 23 compiled source mutations, also passes.
 Cross-compilation is not native platform execution. Production Rust,
 dependencies, release gates and native approval records are unchanged.
 
+### Conditional MD5 inner-report admission
+
+The emitted-code checker now evaluates inner-report admission in the public,
+secret-output and verification callers against their actual immutable selection
+and input loads. The selected backend byte is bound to its store in the real
+constructor. Each of the eight input-presence niches supplies its own activity
+bit; the verifier follows the emitted checked-width activity sum and backend
+width selection instead of inventing either value from a successful comparison.
+Both LLVM's branch/phi and select-based width calculations are covered.
+Conflicting constructor output writes, overlapping writes and escaping output
+aliases reject even when the expected backend store is also present.
+
+Each caller checks 1,136 scenarios: all 256 activity masks for both backend
+selections, mismatched active counts, and representative width, backend and
+vector-work boundary values, including `u64::MAX`. A valid report must reach
+outer-input construction with the original inner owner; invalid reports must
+not reach it. These are conditional handoff scenarios, including shapes that
+earlier workload admission rejects, not new claims about executable workloads.
+Scalar-work provenance and complete report return transport remain separate.
+
+Seven regression groups mutate actual emitted artifacts from both x86 compiler
+versions and AArch64. They cover predicates/branches, activity loads and sums,
+width/backend selection, report offsets, the selection constructor, predecessor
+effects/cycles/overflow/borrow assumptions, and independent ABI probes. Four
+additional compiled Rust mutants remove the backend, width, vector-work and
+active-count guards individually; the source-mutant suite now contains 27
+mutations. Logs use `release-reports/v0.25.1-md5-inner-report-`.
+
+These are author-operated, bounded compiler checks. They do not qualify whole
+callers, final output ownership, quarantine, native execution or independent
+review. Production Rust, dependencies, release gates and native approval records
+are unchanged.
+
+All sixteen compiler/target/panic configurations pass, including a final rerun
+of the strengthened constructor binding: Rust 1.90.0 and 1.99.1 on GNU/Linux
+x86-64 and 1.99.1 on GNU/Linux and Apple AArch64, generic/SIMD, abort/unwind.
+Each configuration checks 3,408 conditional scenarios across the three callers.
+The seven new regression groups, 30 existing owner/normalization/report groups,
+and the ten-group cleanup suite including all 27 compiled source mutants pass.
+Acceptance-metadata, assurance and script-layout checks also pass.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -1097,7 +1138,7 @@ dependencies, release gates and native approval records are unchanged.
   input/route/no-long-key scenarios now pass. Normalization setup/readiness and
   bounded report guard/transport composition now pass. Conditional outer
   prefix/descriptor construction and inner-result owner transport now pass.
-  Inner report acceptance/transport,
+  Conditional inner report acceptance now passes. Inner report return transport,
   full output-owner
   and return binding, quarantine classification and hosted-worker compiler
   obligations remain open.

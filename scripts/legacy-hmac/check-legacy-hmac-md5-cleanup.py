@@ -26,6 +26,8 @@ import legacy_hmac_md5_return_header as return_header
 import legacy_hmac_md5_return_paths as return_paths
 import legacy_hmac_md5_output_views as output_views
 import legacy_hmac_md5_consumer_return as consumer_return
+import legacy_hmac_md5_secret_consumer as secret_consumer
+import legacy_hmac_md5_comparison as comparison
 import legacy_hmac_timing_runner as runner
 
 ROOT = runner.ROOT
@@ -98,6 +100,8 @@ def validate(artifacts, panic):
     return_paths.validate(artifacts[0][1], artifacts[1][1])
     output_views.validate(artifacts[0][1], artifacts[1][1])
     consumer_return.validate(artifacts[0][1], artifacts[1][1])
+    secret_consumer.validate(artifacts[0][1], artifacts[1][1], panic)
+    comparison.validate(artifacts[1][1], panic)
     return rows.validate(artifacts[1][1], panic)
 
 
@@ -114,6 +118,7 @@ def collect(directory, compiler, target, panic, simd=False):
           "outer nested-result owner/admission; lane truncation to final readiness; accepted inner/outer return counters; "
           "normalization return-copy lifetimes; selected return-report backend/width; every-normal-success report coverage; "
           "consumer result gating/transport; public destination isolation; tag-view and returned metadata scenarios; "
+          "secret consumer write/finish/error/unwind ownership; complete lane-byte comparison traces and scratch clearing; "
           "no whole-caller, output/quarantine, kernel or register-erasure qualification", flush=True)
     return artifacts
 

@@ -261,6 +261,27 @@ pub fn region_error(error: Error) -> Result<brynja_core::OwnedSecretRegion<'stat
 }
 
 #[inline(never)]
+pub fn core_region_success(
+    region: brynja_core::OwnedSecretRegion<'_>,
+) -> Result<brynja_core::OwnedSecretRegion<'_>, brynja_core::SecretMemoryError> {
+    Ok(region)
+}
+
+#[inline(never)]
+pub fn core_region_error(
+    error: brynja_core::SecretMemoryError,
+) -> Result<brynja_core::OwnedSecretRegion<'static>, brynja_core::SecretMemoryError> {
+    Err(error)
+}
+
+#[inline(never)]
+pub fn region_memory_error(
+    error: brynja_core::SecretMemoryError,
+) -> Result<brynja_core::OwnedSecretRegion<'static>, Error> {
+    Err(error.into())
+}
+
+#[inline(never)]
 pub fn public_view<'a>(
     tags: &'a brynja_legacy_hmac::md5_batch::Tags<'_>,
     lane: usize,

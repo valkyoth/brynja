@@ -1272,6 +1272,64 @@ masked `0xa5` bit messages. The output feeds differential oracle checks; no
 application secret reaches these sinks. These test files are excluded from the
 crate archive. Neither production logging nor the security rule was changed.
 
+### MD5 final-consumer internal checkpoint
+
+The final secret-output and verification closure bodies now have connected,
+bounded compiler checks. This changes assurance code and downstream probes,
+not the production HMAC implementation or release gates:
+
+- Independent downstream constructors bind the core region-result ABI and the
+  conversion from every core memory error to the value-free HMAC error. The
+  secret consumer must write the complete 128-byte row buffer through the
+  incoming initialization, check the write result, move the same initialization
+  record into `finish`, and return that primitive's pointer and extent. Short
+  writes, discarded failure, substituted captures/results, invalid lifetimes
+  and unknown effects reject.
+- All four write-error values, a failed `finish`, and recoverable write unwind
+  are modeled. The initialization must be consumed by `finish` or dropped on
+  error/unwind; a successful result cannot be fabricated from failure. Core
+  write/finish/Drop behavior is an explicit source-pinned premise. Fatal abort
+  and a second panic during cleanup are not erasure guarantees.
+- Verification is evaluated for all 256 activity masks and tag widths 10–16.
+  Every active lane must compare exactly the selected row bytes with the same
+  candidate lane/byte, in order, with no omitted or repeated comparisons. The
+  accumulator starts at zero, cannot be reset, and is cleared before normal
+  return or recoverable unwinding. Every comparison and final-decision unwind
+  boundary is exercised for full batches at each supported width.
+- Secret byte values are not interpreted as public control-flow values. The
+  final primitive produces an opaque decision bound to the complete comparison
+  trace; it must survive return unchanged. Inspecting that decision to choose
+  a branch, replacing it with a constant, introducing an unknown effect, or
+  deriving an address outside the bound allocation rejects. Primitive XOR/OR,
+  predicate and clearing semantics remain source-pinned premises, not freshly
+  re-proved assembly. This is not a general constant-time proof.
+- Linux Arm's four-byte alignment for the one-byte scratch allocation is
+  supported without widening its extent. Public-width `freeze` is accepted only
+  for an already known value, never as a source of invented metadata. The
+  regression population includes that generic abort configuration as well as
+  both Rust versions and Apple Arm.
+
+These checks start at the final closure boundary. The secret initialization's
+caller-side creation/moves/early-failure cleanup and verification candidate
+shape/length admission remain separate obligations, as do quarantine and hosted
+worker qualification. The caller must supply an exclusive 128-byte destination
+initialization owner and matching candidate metadata; these are not inferred
+from a passing closure model. No native or independent-review claim is added.
+
+All sixteen combined configurations pass: Rust 1.90.0/1.99.1 GNU/Linux x86-64
+and Rust 1.99.1 GNU/Linux/Apple AArch64, generic/SIMD and abort/unwind. A final
+consumer-only refresh with the address-bound checks also passes all sixteen.
+Ten new regression groups pass across six representative
+configurations, including the generic Linux Arm abort build; twenty earlier
+consumer-return/report-layout groups also pass. The ten-group cleanup suite
+passes all 48 compiled Rust mutants. The six added mutants discard a write
+failure, shorten the write, forget initialization on error, skip a comparison
+byte, reverse candidate traversal or initialize the difference to a nonzero
+value. Every mutant must compile before rejection counts. Fixture fmt/Clippy on
+both compilers, metadata, assurance and script-layout checks pass. Logs are under
+`release-reports/v0.25.1-md5-consumer-internal-`; no full-family verification or
+native collection was started.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -1298,8 +1356,10 @@ crate archive. Neither production logging nor the security rule was changed.
   completeness on every normal success return now have dedicated checks.
   Final consumer gating, public destination isolation, secret result transport,
   verification decision transport and returned tag metadata/view checks now
-  pass their focused projections. Consumer-internal output-owner cleanup and
-  comparison semantics, quarantine classification and hosted-worker compiler
+  pass their focused projections. Secret consumer write/finish/error/unwind
+  handling and complete comparison traces/cleanup now have dedicated checks.
+  Caller-side initialization creation/moves/early-failure cleanup, candidate
+  shape/length admission, quarantine classification and hosted-worker compiler
   obligations remain open.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.

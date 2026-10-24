@@ -357,6 +357,24 @@ class Md5CleanupTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 driver.output_views.validate(artifacts[0][1], artifacts[1][1])
         output_path.write_text(output_original)
+        for before, after, kind in (
+                ("initialization.write(bytes)?;", "let _ = initialization.write(bytes);", "secret"),
+                ("initialization.write(bytes)?;", "initialization.write(&bytes[..127])?;", "secret"),
+                ("initialization.write(bytes)?;",
+                 "if let Err(error) = initialization.write(bytes) { core::mem::forget(initialization); return Err(error.into()); }", "secret"),
+                ("row.iter().take(tag_bytes)", "row.iter().take(tag_bytes.saturating_sub(1))", "comparison"),
+                (".zip(*candidate)", ".zip(candidate.iter().rev())", "comparison"),
+                ("let mut difference = crate::scratch::Scratch::<1>::new();",
+                 "let mut difference = crate::scratch::Scratch::<1>::new(); difference.0[0] = 1;", "comparison")):
+            self.assertIn(before, original_selection)
+            selection.write_text(original_selection.replace(before, after, 1))
+            artifacts = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu", "unwind", True, work / "Cargo.toml")
+            with self.subTest(kind=kind, before=before), self.assertRaises(ValueError):
+                if kind == "secret":
+                    driver.secret_consumer.validate(artifacts[0][1], artifacts[1][1], "unwind")
+                else:
+                    driver.comparison.validate(artifacts[1][1], "unwind")
+        selection.write_text(original_selection)
 
 
 if __name__ == "__main__":

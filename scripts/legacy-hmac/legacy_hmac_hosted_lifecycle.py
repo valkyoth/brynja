@@ -2,8 +2,9 @@
 
 Only presentation names of the exact MD5 validator and resident buffer clear/
 borrow helpers are normalized for the existing lifecycle walker. No function body,
-native status or pointer is rewritten. Separate capture, envelope and destructor
-projections compose here; keyed worker computation remains unqualified.
+native status or pointer is rewritten. Capture, envelope, destructor, authority
+and selection-input projections compose here; the remaining keyed-worker
+lifecycle and complete output/quarantine transaction remain unqualified.
 """
 import re
 import sys
@@ -18,6 +19,10 @@ import legacy_hmac_hosted_capture as capture
 import legacy_hmac_hosted_buffers as buffers
 import legacy_hmac_hosted_types as capture_types
 import legacy_hmac_hosted_envelope as envelope
+import legacy_hmac_hosted_authority as authority
+import legacy_hmac_hosted_constructor as constructor
+import legacy_hmac_hosted_unavailable as unavailable
+import legacy_hmac_hosted_backend as backend
 
 model = shared.load('hmac_hosted_lifecycle', 'legacy_hosted_lifecycle_model')
 contracts = shared.load('hmac_hosted_contracts')
@@ -120,13 +125,20 @@ def dispatch(signature, body, names, expected, identity, operation, direct=False
 def validate(artifacts, target):
     contracts.validate()
     capture_types.validate()
+    authority.modes(runner.ROOT)
     owner, resource = profile(target)
     populations = {}
+    compilers = set()
     for package, llvm in artifacts.items():
+        versions = re.findall(r'!"rustc version ([\d.]+) ', llvm)
+        require(len(versions) == 1 and versions[0] in ('1.90.0', '1.99.1'), 'unreviewed legacy hosted compiler')
+        compilers.add(versions[0])
         definitions, aliases = flow.definitions_and_aliases(llvm)
         symbols = {name.strip('"') for name in re.findall(r'@("[^"]+"|[-\w.$]+)', llvm)}
         names = model.demangle(symbols)
         populations[package] = definitions, aliases, names
+    require(len(compilers) == 1, 'mixed legacy hosted compilers')
+    compiler = compilers.pop()
     fixture = populations['brynja-legacy-hmac-hosted-cleanup']
     leaf = populations['brynja-legacy-hmac-std']
     destructor = '<' + owner + '::Buffers as core::ops::drop::Drop>::drop'
@@ -174,7 +186,16 @@ def validate(artifacts, target):
             require(names[worker] in (resource + '::thread::enter::<' + closure + '>',
                                       resource + '::thread::enter<' + closure + '>'),
                     'legacy executor launches another closure')
-            envelope.check(*flow.resolve(worker, definitions, aliases), names, identity)
+            envelope_result = envelope.check(*flow.resolve(worker, definitions, aliases), names, identity)
+            if identity.endswith('_compiled'):
+                worker_body = flow.resolve(worker, definitions, aliases)[1]
+                if any('::for_compiled_target' in names.get(call[0], '') for line in worker_body.splitlines()
+                       if (call := syntax.call(line))):
+                    transfer = authority.check(worker_body, names, compiler, identity)
+                    constructor.check(transfer, envelope_result)
+                    backend.check(transfer, envelope_result)
+                else:
+                    unavailable.check(worker_body, envelope_result, identity)
             checked[identity] = selected, worker, population, host
     require(len(checked) == 4 and len({item[1] for item in checked.values()}) == 4,
             'legacy host/worker population collapsed')

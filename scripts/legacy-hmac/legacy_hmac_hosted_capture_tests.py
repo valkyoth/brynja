@@ -194,7 +194,16 @@ class CaptureTests:
                     ('md5_compiled.rs', 'budget: self.limits.max_compressions,', 'budget: 1,'),
                     ('md5_compiled.rs', 'cancel, staging, output);', 'cancel, output, staging);'),
                     ('mod.rs', '        self.staging.clear();\n        if !self.keep', '        if !self.keep'),
-                    ('mod.rs', 'if !self.keep {', 'if self.keep {')):
+                    ('mod.rs', 'if !self.keep {', 'if self.keep {'),
+                    ('sha1_compiled/worker.rs', '&owner, request.key, bytes)', '&owner, request.tail.bytes, bytes)'),
+                    ('sha1_compiled/worker.rs', '&owner, request.key, bytes)', '&owner, request.key, 8)'),
+                    ('md5_compiled/worker.rs', '&owner, parameters.bytes)', '&owner, 8)'),
+                    ('sha1_compiled/worker.rs', 'owner.report().backend != Some(backend)', 'owner.report().backend == Some(backend)'),
+                    ('md5_compiled/worker.rs', 'owner.backend() != Some(parameters.backend)', 'owner.backend() == Some(parameters.backend)'),
+                    *[(kind + '_compiled/worker.rs',
+                       mode + '::Require)\n        .map_err(|_| Error::Mac(brynja_legacy_hmac::Error::ExecutionFailed))?',
+                       mode + '::Prefer)\n        .map_err(|_| Error::Mac(brynja_legacy_hmac::Error::ExecutionFailed))?')
+                      for kind, mode in (('sha1', 'Sha1Mode'), ('md5', 'Md5Mode'))]):
                 path = leaf / 'src' / directory / file
                 original = path.read_text()
                 self.assertIn(before, original)
@@ -207,5 +216,5 @@ class CaptureTests:
                     path.write_text(original)
                 count += 1
             h.validate(emit(), target)
-        self.assertEqual(count, 16)
-        print('Legacy hosted capture/destructor: 16 compiled Rust defects rejected', flush=True)
+        self.assertEqual(count, 30)
+        print('Legacy hosted capture/destructor/authority/selection: 30 compiled Rust defects rejected', flush=True)

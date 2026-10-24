@@ -130,4 +130,5 @@ def check(arguments, body, names, identity):
         phases.dominates(graph, catches[0], panicked)
         require(not paths.path(graph, panicked, done) and not paths.path(graph, done, panicked),
                 'worker completion and caught panic overlap')
-    return {'take': take, 'completed': done, 'panic': by_offset[completed + 1], 'loads': loads, 'result': tags[0]}
+    return {'take': take, 'completed': done, 'panic': by_offset[completed + 1], 'loads': loads,
+            'result': tags[0], 'result_stores': result_stores}

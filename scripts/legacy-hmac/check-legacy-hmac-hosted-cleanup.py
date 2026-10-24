@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Inspect legacy host capture/launch/reclaim and worker envelopes, not whole-worker erasure."""
+"""Inspect legacy host lifecycle and worker authority/selection, not whole-worker erasure."""
 import argparse
 import json
 from pathlib import Path
@@ -52,7 +52,7 @@ def main():
             with runner.cargo_environment.private_directory(ROOT) as directory:
                 artifacts = emit(Path(directory), compiler, args.target, panic, not args.generic)
                 hosted.validate(artifacts, args.target)
-            print(f'Legacy HMAC host capture/launch/reclaim, worker envelope and buffer destructor: PASS; '
+            print(f'Legacy HMAC host lifecycle, worker envelope, authority and selection: PASS; '
                   f'{compiler}; {args.target}; panic={panic}; simd={not args.generic}; '
                   'no keyed-worker or native qualification', flush=True)
 

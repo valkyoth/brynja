@@ -1541,6 +1541,53 @@ This checkpoint does not change production Rust, the shared modern-HMAC checker,
 release policy, dependencies or publication state. It is compiler inspection and
 author testing, not native qualification or an independent pentest.
 
+### Hosted accelerated authority and selection-input checkpoint
+
+The hosted compiler driver now composes worker-local authority checks for
+compiled SHA-1 and MD5 batching with the existing launch/envelope projections.
+It binds the exact required-mode constructor, all 24 result-to-owner bytes,
+constructor-error exclusion, permitted borrows and live storage through the
+worker's HMAC calls. Partial/reordered/overlapping copies, hidden aliases,
+overwrites and lifetime endings before reads or consumers fail closed. The
+required-mode discriminant is tied to the reviewed enum declarations and the
+compiler identity is checked rather than inferred from a convenient error niche.
+
+The SHA-1 constructor key pointer/length and tag width, and the MD5 selection tag
+width, are bound to the verified launch captures. Captured scalar references
+cannot gain writes or escaping aliases. Backend predicates are evaluated for
+both valid captured backend values and all three owner Option values, including
+None; only a matching backend may reach keyed selection. This checks the
+worker's emitted comparison, not OS/CPU suitability or the implementation of a
+called authority primitive. Those remain separate review/qualification premises.
+
+Compiled-out workers are checked separately as rejection-only bodies: no crypto
+calls, extra input reads or writes outside the status envelope, and no successful
+result. They are not counted as successful accelerated authority execution.
+The generic Arm targets can still contain baseline NEON routes; those receive
+the full authority checks when actually emitted.
+
+Regression coverage includes every authority-transfer write, mode/factory and
+consumer identity, error-branch polarity, early lifetime endings, unknown
+pointer uses, hidden extra arguments, captured inputs, backend mismatch/None
+exclusion, compiler identity and rejection-only workers. The compiled private
+host-source mutation set grows from sixteen to thirty: the additional fourteen
+cover changed constructor modes, key/tag-width substitution and reversed
+backend comparisons on Linux and Apple. The earlier five compiled consumer
+mutations remain. No malformed/uncompilable Rust mutant counts as a detected
+defect. Logs use the `release-reports/v0.25.1-hosted-authority-` prefix.
+
+All sixteen compiler/target/generic/SIMD/panic configurations pass, as do all
+twenty-eight regression groups (258.850 seconds), including 135 authority-copy
+and 744 capture-field mutations. Both compiler fixture formatting/Clippy checks,
+script-layout, acceptance-metadata, assurance and diff checks pass. The final
+suite targets backend mutations at the actual Executor report, rather than an
+unrelated later verification-result extraction of the same LLVM aggregate shape.
+
+This remains author compiler inspection, not native evidence or an independent
+pentest. No production Rust, dependency, shared modern-HMAC checker or release
+gate is changed. The worker keyed-owner lifecycle, complete output transactions,
+quarantine and final MD5 composition review are still separate open obligations.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -1575,7 +1622,9 @@ author testing, not native qualification or an independent pentest.
   dedicated projections. Hosted public dispatch, native launch storage,
   create/join/stack-reclaim ordering, launch capture provenance, worker envelope
   result/completion ordering and buffer destructor dispatch now have dedicated
-  checks. Final MD5 composition review and the remaining hosted-worker keyed
+  checks. Accelerated worker-local authority transfer/admission, backend matching
+  and captured constructor-input provenance now have composing checks. Final
+  MD5 composition review and the remaining hosted-worker keyed
   computation, complete output transactions and quarantine compiler obligations
   remain open.
 - Register API/capability owners and a separately scoped evidence family.

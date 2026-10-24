@@ -4,8 +4,9 @@ Only presentation names of the exact MD5 validator and resident buffer clear/
 borrow helpers are normalized for the existing lifecycle walker. No function body,
 native status or pointer is rewritten. Capture, envelope, destructor, authority
 and selection-input projections compose here with compiled keyed admission,
-storage and retained dispatch. Scalar worker internals, full input/output and
-quarantine transactions still require their separate qualification.
+storage and retained dispatch, including scalar post-initialization owners.
+Inlined scalar construction, full input/output and quarantine transactions still
+require their separate qualification.
 """
 import re
 import sys
@@ -27,6 +28,7 @@ import legacy_hmac_hosted_backend as backend
 import legacy_hmac_hosted_keyed as keyed
 import legacy_hmac_hosted_storage as storage
 import legacy_hmac_hosted_retained as retained
+import legacy_hmac_hosted_scalar as scalar
 
 model = shared.load('hmac_hosted_lifecycle', 'legacy_hosted_lifecycle_model')
 contracts = shared.load('hmac_hosted_contracts')
@@ -205,6 +207,9 @@ def validate(artifacts, target, panic):
                     retained.check(keyed_state, definitions, aliases, panic)
                 else:
                     unavailable.check(worker_body, envelope_result, identity)
+            else:
+                scalar.check(flow.resolve(worker, definitions, aliases)[1], names, compiler,
+                             identity, envelope_result, definitions, aliases, panic)
             checked[identity] = selected, worker, population, host
     require(len(checked) == 4 and len({item[1] for item in checked.values()}) == 4,
             'legacy host/worker population collapsed')

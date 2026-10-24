@@ -16,14 +16,15 @@ def check(model):
         if not source or source[0] != model.owner:
             continue
         destination = model.pointer(dest, site)
-        allowed = {912, 904} if model.identity == 'sha1_compiled' else set()
+        allowed = ({912, 904} if model.identity == 'sha1_compiled' else set()
+                   if model.identity == 'md5_compiled' else {model.size})
         require(source == (model.owner, 0) and args[2] in {'i64 ' + str(n) for n in allowed}
                 and args[3] == 'i1 false' and destination and destination[1] == 0
                 and destination[0] not in roots and model.allocs[destination[0]] == int(args[2].split()[-1]),
                 'legacy retained transfer geometry changed')
         copies[destination[0]] = site
         roots.add(destination[0])
-    require(len(copies) >= 2 if model.identity == 'sha1_compiled' else not copies,
+    require(not copies if model.identity == 'md5_compiled' else len(copies) >= 2,
             'legacy retained terminal transfer population changed')
     aliases = {name for name in model.defs if (p := model.pointer(name)) and p[0] in roots}
     uses, starts, ends = ({root: set() for root in roots}, {root: [] for root in roots},

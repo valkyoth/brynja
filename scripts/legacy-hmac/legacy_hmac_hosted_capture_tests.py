@@ -203,6 +203,9 @@ class CaptureTests:
                     ('sha1_compiled/worker.rs', '    {\n        checkpoint(&owner, cancel)?;\n        for part',
                      '    {\n        if let Err(error) = checkpoint(&owner, cancel) {\n'
                      '            core::mem::forget(state); return Err(error);\n        }\n        for part'),
+                    ('worker.rs', '    {\n        checkpoint(cancel)?;\n        for part',
+                     '    {\n        if let Err(error) = checkpoint(cancel) {\n'
+                     '            core::mem::forget(state); return Err(error);\n        }\n        for part'),
                     *[(kind + '_compiled/worker.rs',
                        mode + '::Require)\n        .map_err(|_| Error::Mac(brynja_legacy_hmac::Error::ExecutionFailed))?',
                        mode + '::Prefer)\n        .map_err(|_| Error::Mac(brynja_legacy_hmac::Error::ExecutionFailed))?')
@@ -213,7 +216,8 @@ class CaptureTests:
                 try:
                     path.write_text(original.replace(before, after, 1))
                     artifacts = emit()  # Malformed/uncompilable mutants are test failures.
-                    rejection = (self.assertRaisesRegex(ValueError, 'without keyed cleanup/consumption|without consumption')
+                    rejection = (self.assertRaisesRegex(ValueError, 'without keyed cleanup/consumption|without consumption|'
+                                                        'without both cleanup/consumption|with unconsumed owner')
                                  if 'core::mem::forget(state)' in after else self.assertRaises(ValueError))
                     with self.subTest(target=target, file=file, before=before), rejection:
                         h.validate(artifacts, target, 'unwind')
@@ -221,5 +225,5 @@ class CaptureTests:
                     path.write_text(original)
                 count += 1
             h.validate(emit(), target, 'unwind')
-        self.assertEqual(count, 32)
-        print('Legacy hosted capture/destructor/authority/selection/retained: 32 compiled Rust defects rejected', flush=True)
+        self.assertEqual(count, 34)
+        print('Legacy hosted capture/destructor/authority/selection/retained: 34 compiled Rust defects rejected', flush=True)

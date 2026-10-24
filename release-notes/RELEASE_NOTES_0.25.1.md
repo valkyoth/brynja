@@ -1643,6 +1643,57 @@ claimed erased. Scalar worker internals, complete input/tail/lane provenance,
 checkpoint/callee composition, output/loan/quarantine transactions and final
 MD5 composition reconciliation remain open before release qualification.
 
+### Hosted scalar retained-state and cleanup checkpoint
+
+The actual scalar SHA-1 and MD5 worker emissions now have a separate retained
+state projection. It binds the 880-byte/240-byte engine, its two non-overlapping
+hash-owner fields, the tag-width value loaded from the verified launch capture,
+and both consuming terminal moves. Partial, duplicated or overlapping field
+transfers, substituted tag widths, wrong terminal identities/arguments and
+escaped storage are rejected. Rust 1.90's optional six-byte trailing padding
+copy is bounded separately: padding does not acquire a logical cleanup token,
+and removing that copy alone is a passing regression case.
+
+The existing scalar owner interpreter is reused in an isolated legacy binding;
+modern-HMAC modules are not modified. Only the exact legacy update name is
+adapted for its typed-call comparison. The walk tracks both logical hash owners
+through message updates, cancellation, normal returns, recoverable unwinding,
+inlined primitive destructor calls, actual outlined destructor bodies and
+consuming finalizers. It rejects missing/repeated cleanup, updates of the wrong
+owner, lost update/finalizer unwind edges, early lifetime endings and caller
+reads after consumption. Primitive non-panicking destructor and consuming
+finalizer behavior remain separately reviewed callee premises, not newly
+established leaf-body guarantees.
+
+The scalar constructor is inlined, unlike the accelerated constructors. This
+checkpoint deliberately starts its cleanup obligations at the completed
+retained-field transfer. Source-slot geometry and distinctness are checked,
+but do not establish their prior initialization or key provenance. The inlined
+constructor's key normalization, scratch cleanup and error-path composition
+remain explicit work, as do complete message/tail provenance and output/loan/
+quarantine transactions. Compiler-created copies, register residue, fatal abort
+and whole-worker erasure are not claimed covered.
+
+Regression coverage uses real compiler emissions for both scalar algorithms,
+including positive SSA renaming, initialization/terminal corruptions, storage
+lifetime/escape mutations and actual destructor-body mutations. The private
+compiled host set grows from thirty-two to thirty-four defects: Linux and
+Apple scalar forget-on-cancellation changes must compile, then fail specifically
+on an unconsumed-owner obligation. This is author-operated compiler inspection,
+not new native evidence or independent review. Logs use the
+`release-reports/v0.25.1-hosted-scalar-` prefix. No production Rust, dependency,
+shared modern-HMAC checker or release gate is changed.
+
+Focused checks reject 330 initialization/terminal defects, 302 storage defects,
+258 caller cleanup/read-boundary defects and 18 actual destructor-body defects.
+The final complete hosted regression suite passes all thirty-five groups in
+372.491 seconds, including all thirty-four compiled host defects and the five
+existing compiled consumer-provenance defects; no prior group was dropped.
+The final driver passes all sixteen existing compiler/target/panic/SIMD
+configurations. Fixture formatting and strict Clippy pass under both Rust
+1.90.0 and 1.99.1; script-layout, acceptance-metadata and assurance checks pass.
+Cross-target compiler inspection is not reported as native execution.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -1680,7 +1731,10 @@ MD5 composition reconciliation remain open before release qualification.
   checks. Accelerated worker-local authority transfer/admission, backend matching
   and captured constructor-input provenance now have composing checks. The
   compiled keyed admission/storage, SHA-1 retained destructor/consumer dispatch
-  and MD5 selector borrow boundaries now have dedicated projections. Final
+  and MD5 selector borrow boundaries now have dedicated projections. Scalar
+  retained-state field/terminal transfers, storage lifetimes and both hash-owner
+  cleanup dispatches now have dedicated checks. Inlined scalar constructor
+  provenance, scratch and pre-retention failure paths remain open. Final
   MD5 composition review and the remaining hosted-worker keyed
   computation, complete output transactions and quarantine compiler obligations
   remain open.

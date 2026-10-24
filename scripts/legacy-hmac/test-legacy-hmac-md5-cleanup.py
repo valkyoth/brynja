@@ -226,6 +226,15 @@ class Md5CleanupTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 driver.phases.validate(artifacts[1][1])
         path.write_text(original)
+        descriptor = "let messages = inputs.each_ref().map(|i| i.as_ref().map(|i| i.message));"
+        self.assertIn(descriptor, original)
+        for mutation in ("messages.swap(0, 7);", "messages.rotate_left(1);"):
+            replacement = descriptor.replace("let messages", "let mut messages") + "\n    " + mutation
+            path.write_text(original.replace(descriptor, replacement, 1))
+            artifacts = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu", "unwind", True, work / "Cargo.toml")
+            with self.assertRaises(ValueError):
+                driver.descriptors.validate(artifacts[0][1], artifacts[1][1])
+        path.write_text(original)
         selection = leaf / "src/md5_batch/mod.rs"
         original_selection = selection.read_text()
         for before, after in (("10..=16", "9..=16"), ("10..=16", "10..=17")):

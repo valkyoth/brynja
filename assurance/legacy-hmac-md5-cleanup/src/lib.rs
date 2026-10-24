@@ -39,6 +39,31 @@ pub fn readiness_ok() -> Result<(), brynja_legacy_md5::hardened_execution::Error
 }
 
 #[inline(never)]
+pub fn input_descriptor<'a>(
+    key: &'a [u8],
+    message: brynja_legacy_hmac::BitString<'a>,
+) -> Option<Input<'a>> {
+    Some(Input::new(key, message))
+}
+
+#[inline(never)]
+pub fn message_descriptor(
+    message: brynja_legacy_hmac::BitString<'_>,
+) -> Option<brynja_legacy_hmac::BitString<'_>> {
+    Some(message)
+}
+
+#[inline(never)]
+pub fn absent_input() -> Option<Input<'static>> {
+    None
+}
+
+#[inline(never)]
+pub fn absent_message() -> Option<brynja_legacy_hmac::BitString<'static>> {
+    None
+}
+
+#[inline(never)]
 pub fn digest_rejection(
     error: brynja_legacy_md5::hardened_execution::Error,
 ) -> Result<

@@ -774,6 +774,42 @@ are unchanged; these are author-operated functional checks. Per-lane compiler
 provenance/cleanup qualification remains unfinished, not inferred from passing
 test vectors.
 
+### MD5 inner message descriptor provenance
+
+A separate emitted-LLVM check now follows message descriptors from the original
+eight-slot immutable input borrow into the inner hash in `authenticate`,
+`authenticate_secret` and `verify`. Independent compiled Some/None probes bind
+the input/message layouts and null niches. For every one of the 256 activity
+masks, conditional on reaching descriptor construction, the check tracks byte
+origins through fixed address offsets, pointer loads/stores, temporary buffers,
+memcpy and predecessor-specific simultaneous phi nodes. Each active lane must
+retain all 32 bytes of its own message descriptor; each inactive lane must
+retain the null niche. Inactive payload bytes are deliberately not treated as
+initialized or meaningful.
+
+Temporary lifetime changes invalidate their modeled contents. Bounds,
+non-overlapping memcpy regions, address-definition dominance and read-only input
+ownership are checked. Unsupported effects, unknown branch predicates, cycles
+and descriptor escapes reject. The constructed array must remain intact and
+live until its correctly bound inner-hash argument is used. This is a
+descriptor-transport result, not qualification of key normalization, ipad/opad
+contents, outer descriptors, returned output/report ownership or quarantine.
+
+Eight focused regression groups use real LLVM from both compiler versions and
+reject lane-offset, activity, phi-source, copy-width, temporary-lifetime,
+late-write/escape, probe-layout and unsupported-flow mutations. The existing
+compiled source-mutant suite now additionally rejects swapping lanes 0/7 and
+rotating the descriptor array: eleven compiled source mutations in total.
+The sixteen existing compiler configurations pass (Rust 1.90.0/1.99.1, abort
+and unwind, generic x86-64 plus AVX2 and Linux/Apple AArch64 NEON). Existing row,
+handoff, phase and error-path regression suites, fixture fmt/Clippy and script
+layout checks pass. Local logs use the prefix
+`release-reports/v0.25.1-md5-descriptors-`.
+
+No production Rust, dependencies, release gates or approval records changed.
+These are author-operated compiler checks, not fresh native execution or
+independent qualification; the prior native functional results are separate.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -789,7 +825,8 @@ test vectors.
   and success-edge ordering into all three consumers also pass. Phase pointer
   arguments and the outer closure transport now pass. Three-profile
   native failure coverage and inner readiness/digest error-path exclusion pass;
-  compiler-level per-lane prefix/input provenance, full output-owner
+  compiler-level inner message descriptor provenance now passes. Per-lane
+  key/prefix and outer descriptor provenance, full output-owner
   and return binding, quarantine classification and hosted-worker compiler
   obligations remain open.
 - Register API/capability owners and a separately scoped evidence family.

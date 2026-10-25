@@ -1915,6 +1915,49 @@ and public output-loan transactions. Final MD5 composition reconciliation also
 remains separate. No production cryptography, dependency, shared modern-HMAC
 checker, release gate or approval record changes.
 
+### Hosted MD5 health and checkpoint composition
+
+The actual outlined MD5 checkpoint and all three inlined health probes now
+have compiler-data-flow checks. These bind each short-lived, 24-byte borrowed
+selector to the admitted executor, check its discriminant and error payload,
+and reject storage aliases, escapes, shifted fields, missing lifetime boundaries
+and reordered health/cancellation checks. Rust 1.90's extra nonnull-pointer
+reconstruction is checked explicitly rather than ignored. `Md5Batch::new`'s
+authority-revalidation semantics remain a separately reviewed callee premise;
+this selector is not a secret owner and has no destructor obligation.
+
+Both batch-consumer continuations must revalidate before proceeding, including
+when the consumer returns an error. The initial, pre-copy and final checkpoints
+are bound to the captured cancellation pointer and to the real keyed-consumer,
+report and output-copy landmarks. Rejected paths cannot resume those operations.
+A symbolic bit-level Result model preserves both the error classification and
+every error-payload bit through the actual cleanup branches and final worker
+store; it rejects cycles, skipped stores, forged payloads and tag substitution.
+Existing envelope and retained-owner checks supply the separate unwind,
+completion ordering and selector-borrow obligations.
+
+The final focused suite passes four groups in 77.032 seconds: 111 outlined
+callee defects, 403 inlined health/admission/result/lifetime defects and 30 real
+compiled Rust defects are rejected, with restored baselines passing. Symbolic
+payload tests also reject overlap/carries, unknown payloads and cyclic
+continuations. The 16-profile matrix passes on Rust 1.90.0/1.99.1 Linux x86-64
+and Rust 1.99.1 Linux/Apple AArch64, with generic/SIMD and abort/unwind builds.
+
+The complete hosted regression suite passes all 57 groups in 776.803 seconds.
+It began before the final rejected-health-to-report/output exclusion was added;
+the four-group focused run and full 16-profile matrix above include that final
+check. This is combined validation, not a claim that the earlier process
+reloaded later Python changes. Formatting, Python syntax, script layout,
+acceptance metadata, assurance, documentation links and diff checks pass.
+Local logs use `release-reports/v0251-hosted-md5-` and are not shipped artifacts.
+
+The post-consumer marshalling prefix is checked for mandatory revalidation
+ordering only: lane/report/output byte provenance, control/cancellation callback
+transport, complete host output-loan/quarantine transactions and final MD5
+composition reconciliation remain open. No whole-worker/register-erasure or
+fresh native-qualification claim is made by these compiler checks. Production
+Rust, dependencies, shared modern-HMAC checkers and release gates are unchanged.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -1962,7 +2005,9 @@ checker, release gate or approval record changes.
   provenance, returned output ownership/cleanup and scalar checkpoint/callee
   result handling now have composing checks. Accelerated hosted SHA-1's real
   checkpoint callee, inlined temporary Stream ownership, all six checkpoint
-  positions and worker Result status transport now also have composing checks. Final
+  positions and worker Result status transport now also have composing checks.
+  MD5's health-selector lifetimes, three checkpoints, post-consumer revalidation
+  and rejected Result payload transport now also have composing checks. Final
   MD5 composition review and the remaining hosted-worker keyed
   computation, complete output transactions and quarantine compiler obligations
   remain open.

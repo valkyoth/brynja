@@ -18,6 +18,8 @@ from legacy_hmac_hosted_stream_tests import StreamTests
 from legacy_hmac_hosted_stream_compiled_tests import StreamCompiledTests
 from legacy_hmac_hosted_checkpoint_tests import AcceleratedCheckpointTests
 from legacy_hmac_hosted_checkpoint_compiled_tests import CheckpointCompiledTests
+from legacy_hmac_hosted_md5_checkpoint_tests import Md5CheckpointTests
+from legacy_hmac_hosted_md5_compiled_tests import Md5CompiledTests
 
 spec = importlib.util.spec_from_file_location('driver', Path(__file__).with_name('check-legacy-hmac-hosted-cleanup.py'))
 driver = importlib.util.module_from_spec(spec)
@@ -25,7 +27,8 @@ spec.loader.exec_module(driver)
 h = driver.hosted
 
 
-class Hosted(AcceleratedCheckpointTests, CheckpointCompiledTests, CaptureTests, AuthorityTests, KeyedTests,
+class Hosted(Md5CheckpointTests, Md5CompiledTests, AcceleratedCheckpointTests, CheckpointCompiledTests,
+             CaptureTests, AuthorityTests, KeyedTests,
              ScalarTests, ConstructTests, NormalizationTests,
              NormalizationCompiledTests, StreamTests, StreamCompiledTests, unittest.TestCase):
     driver = driver

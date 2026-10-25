@@ -6,8 +6,9 @@ selectors). No function body, native status or pointer is rewritten. Capture, en
 and selection-input projections compose here with compiled keyed admission,
 scalar construction and retained dispatch. Streaming input/tail and output-owner
 provenance compose here with scalar and accelerated SHA-1 checkpoints/callees,
-including inlined temporary streams and worker Result status transport.
-MD5 lane/checkpoint transport and complete host output/loan/quarantine
+including inlined temporary streams and worker Result status transport. MD5's
+borrowed health selectors, three checkpoint positions and rejection payload
+transport also compose here. MD5 lane/report/output transport and complete host output/loan/quarantine
 transactions still require their separate qualification.
 """
 import re
@@ -37,6 +38,9 @@ import legacy_hmac_hosted_checkpoints as checkpoints
 import legacy_hmac_hosted_checkpoint_flow as checkpoint_flow
 import legacy_hmac_hosted_checkpoint_inline as checkpoint_inline
 import legacy_hmac_hosted_checkpoint_boundaries as checkpoint_boundaries
+import legacy_hmac_hosted_md5_checkpoint as md5_checkpoint
+import legacy_hmac_hosted_md5_health as md5_health
+import legacy_hmac_hosted_md5_boundaries as md5_boundaries
 
 model = shared.load('hmac_hosted_lifecycle', 'legacy_hosted_lifecycle_model')
 contracts = shared.load('hmac_hosted_contracts')
@@ -230,6 +234,13 @@ def validate(artifacts, target, panic):
                         records, _ = checkpoint_inline.check(keyed_state, incoming, transfer, target)
                         checkpoint_boundaries.Boundaries(keyed_state, incoming, outgoing, transfer,
                                                          records, target, compiler).check()
+                    else:
+                        callee = owner + '::md5_compiled::worker::checkpoint'
+                        selected_callees = [s for s in (*leaf[0], *leaf[1]) if leaf[2].get(s) == callee]
+                        require(len(selected_callees) == 1, 'MD5 checkpoint callee missing/ambiguous')
+                        md5_checkpoint.validate(*flow.resolve(selected_callees[0], *leaf[:2]), leaf[2], compiler)
+                        health_result = md5_health.check(keyed_state, transfer, envelope_result, compiler)
+                        md5_boundaries.check(keyed_state, transfer, envelope_result, compiler, target, health_result)
                 else:
                     unavailable.check(worker_body, envelope_result, identity)
             else:

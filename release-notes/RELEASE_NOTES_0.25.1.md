@@ -2108,6 +2108,41 @@ compiler validation, not a fresh native capture or full-family sweep. The
 combined regression log is retained locally at
 `release-reports/v0251-hosted-md5-control-final-regressions.log`.
 
+### Hosted MD5 candidate mode and public decision transport
+
+Typed downstream probes now bind the borrowed candidate `Option` slot, the
+verification Result's decision projection, its public nonzero conversion and
+all three host success encodings (`Some(false)`, `Some(true)`, `None`) on both
+reviewed compilers. The worker must read the candidate array pointer exactly
+once from the captured Option slot, select verification only on its non-null
+branch and pass the original 128-byte array to the existing leaf verifier.
+Authentication must instead use the originally captured staging buffer.
+Unreviewed uses of either the candidate slot or its loaded array pointer fail
+the check, apart from precisely parsed reference-validity assumptions.
+
+The previously checked consumer Result transfer now exposes the proven
+verification byte to a separate public-decision checker. It must be converted
+only on the accepted report branch, merged with authentication's `None` value,
+and passed through the final checkpoint. The symbolic Result continuation
+checks all three payloads through the actual worker Result store, retaining
+the compiler-specific success tag. Inverted/constant decisions, confused
+compute/verify modes, substituted candidate or staging arrays, and altered
+success payloads are rejected. This does not re-prove the leaf comparison
+algorithm, qualify the tag-to-output copies or complete host transactions.
+Production cryptographic code, dependencies and release gates are unchanged.
+
+Validation: the composed eight-group decision/report/health/control/graph run
+passes in 124.424 seconds. New tests reject 72 typed candidate/layout/Boolean/
+status substitutions, 106 emitted mode/operand/payload defects and 16 compiled
+Rust defects; restoring both Linux and Apple source baselines passes. Earlier
+54 typed Result, 635 Result-transport, 403 health and 280 control/callback
+mutations also pass. All 16 selected compiler/target/panic/SIMD profiles pass,
+as do fixture Clippy under Rust 1.90.0/1.99.1, workspace/fixture formatting,
+metadata, script inventory, assurance policy and documentation links. This is
+focused author-operated compiler validation, not native capture or a full-family
+sweep. The combined regression log is retained locally at
+`release-reports/v0251-hosted-md5-decision-final-regressions.log`.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -2162,8 +2197,9 @@ combined regression log is retained locally at
   dedicated checks, as do typed Result-to-report byte transfers and success/error
   admission. Typed lane payloads, the complete eight-slot chain and invalid-bit
   rejection now have dedicated checks. Budget/cancellation control transport and
-  both actual callback targets now have dedicated checks. Output transport remains
-  open. Final
+  both actual callback targets now have dedicated checks. Original candidate and
+  staging operands, compute/verify selection and public decision transport through
+  final Result storage now have dedicated checks. Tag-to-output copies remain open. Final
   MD5 composition review and the remaining hosted-worker keyed
   computation, complete output transactions and quarantine compiler obligations
   remain open.

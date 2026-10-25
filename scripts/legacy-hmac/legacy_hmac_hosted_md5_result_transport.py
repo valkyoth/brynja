@@ -63,13 +63,16 @@ class Transport:
         cursor.jump(common)
         cursor = self.cursor((common, 0))
         # The map_err pair's order differs between compilers, not its meaning.
-        phis = []
+        phis = {}
         for _ in range(2):
-            _, pairs = cursor.take('(' + V + ') = phi i8 (.*)')
-            phis.append(pairs)
+            value, pairs = cursor.take('(' + V + ') = phi i8 (.*)')
+            phis[pairs] = value
         require(set(phis) == {f'[ {first}, %{success} ], [ 7, %{entry} ]',
                                f'[ {second}, %{success} ], [ {first}, %{entry} ]'},
                 'MD5 verification map_err transport changed')
+        # The success projection's first byte is the typed Verification value;
+        # expose it for the separate public decision/status transport checker.
+        self.decision = phis[f'[ {first}, %{success} ], [ 7, %{entry} ]']
         cursor = self.join(common, cursor.index)
         bad, good = cursor.branch(rejected)
         require(not self.m.can_precede((bad, -1), self.report), 'failed MD5 verification reaches report')

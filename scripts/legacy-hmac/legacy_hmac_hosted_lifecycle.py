@@ -13,7 +13,8 @@ eight-slot active count and report rejection transport are checked separately.
 Typed consumer Result projections also bind report-byte transfers and admission.
 Typed lane layouts bind the eight input/key/BitString transfers and slot chain.
 The shared control binds budget, callback context and both actual vtable targets.
-MD5 output transport and complete host output/loan/quarantine
+Candidate mode and the typed public decision bind through final Result storage.
+MD5 tag-output copies and complete host output/loan/quarantine
 transactions still require their separate qualification.
 """
 import re
@@ -54,6 +55,7 @@ import legacy_hmac_hosted_md5_result_transport as md5_result_transport
 import legacy_hmac_hosted_md5_lane_layout as md5_lane_layout
 import legacy_hmac_hosted_md5_lanes as md5_lanes
 import legacy_hmac_hosted_md5_control as md5_control
+import legacy_hmac_hosted_md5_decision as md5_decision
 
 model = shared.load('hmac_hosted_lifecycle', 'legacy_hosted_lifecycle_model')
 contracts = shared.load('hmac_hosted_contracts')
@@ -181,6 +183,7 @@ def validate(artifacts, target, panic):
     md5_result_layout.validate(fixture)
     md5_lane_layout.validate(fixture)
     md5_control.typed(fixture)
+    md5_decision.typed(fixture, compiler)
     leaf = populations['brynja-legacy-hmac-std']
     checkpoints.validate_callees(leaf, target, compiler)
     destructor = '<' + owner + '::Buffers as core::ops::drop::Drop>::drop'
@@ -257,15 +260,16 @@ def validate(artifacts, target, panic):
                         require(len(selected_callees) == 1, 'MD5 checkpoint callee missing/ambiguous')
                         md5_checkpoint.validate(*flow.resolve(selected_callees[0], *leaf[:2]), leaf[2], compiler)
                         health_result = md5_health.check(keyed_state, transfer, envelope_result, compiler)
-                        md5_boundaries.check(keyed_state, transfer, envelope_result, compiler, target, health_result)
+                        boundaries = md5_boundaries.check(keyed_state, transfer, envelope_result, compiler, target, health_result)
                         report = owner + '::md5_compiled::worker::report'
                         selected_reports = [s for s in (*leaf[0], *leaf[1]) if leaf[2].get(s) == report]
                         require(len(selected_reports) == 1, 'MD5 report callee missing/ambiguous')
                         md5_report_logic.validate(*flow.resolve(selected_reports[0], *leaf[:2]), compiler)
                         md5_report_caller.check(keyed_state, transfer, envelope_result, compiler, target)
-                        md5_result_transport.check(keyed_state, health_result, target)
+                        transports = md5_result_transport.check(keyed_state, health_result, target)
                         md5_lanes.check(keyed_state, transfer, envelope_result, health_result)
                         md5_control.check(keyed_state, envelope_result, artifacts['brynja-legacy-hmac-std'], leaf, target)
+                        md5_decision.check(keyed_state, envelope_result, boundaries, transports, compiler)
                 else:
                     unavailable.check(worker_body, envelope_result, identity)
             else:

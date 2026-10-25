@@ -3,6 +3,7 @@
 
 pub mod checkpoint;
 pub mod control;
+pub mod decision;
 pub mod lane;
 pub mod normalization;
 pub mod report;

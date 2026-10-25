@@ -20,8 +20,9 @@ Pending Result ownership and post-transfer normal/unwind destruction/lifetime
 paths compose with the source-bound nonthrowing core clearing premise. Joined
 host output/decision/quarantine transactions and armed pre-entry rejections now
 compose too. Ordinary output loan construction/exposure/declassification/drop
-now compose with those transactions. Batch loans, full pre-arm request paths
-and final reconciliation remain separate.
+now compose with those transactions. MD5 batch loan factories, active-lane
+views, declassification and consuming moves/clearing also compose. Full pre-arm
+request paths and final reconciliation remain separate.
 """
 import re
 import sys
@@ -67,6 +68,8 @@ import legacy_hmac_hosted_md5_tag_cleanup as md5_tag_cleanup
 import legacy_hmac_hosted_md5_result_cleanup as md5_result_cleanup
 import legacy_hmac_hosted_transaction as transaction
 import legacy_hmac_hosted_loans as loans
+import legacy_hmac_hosted_batch_loans as batch_loans
+import legacy_hmac_hosted_batch_creation as batch_creation
 
 model = shared.load('hmac_hosted_lifecycle', 'legacy_hosted_lifecycle_model')
 contracts = shared.load('hmac_hosted_contracts')
@@ -198,6 +201,7 @@ def validate(artifacts, target, panic):
     md5_decision.typed(fixture, compiler)
     md5_tag_copy.typed(fixture, compiler)
     leaf = populations['brynja-legacy-hmac-std']
+    batch_loans.validate(fixture, leaf, target, compiler, panic)
     checkpoints.validate_callees(leaf, target, compiler)
     destructor = '<' + owner + '::Buffers as core::ops::drop::Drop>::drop'
     selected = [symbol for symbol in (*leaf[0], *leaf[1]) if leaf[2][symbol] == destructor]
@@ -226,6 +230,8 @@ def validate(artifacts, target, panic):
             if operation == 'compute' and identity != 'md5_compiled':
                 loans.creation(signature, body, leaf[2] if identity.endswith('_compiled') else fixture[2],
                                target, compiler, identity, executor_name)
+            if operation == 'compute' and identity == 'md5_compiled':
+                batch_creation.creation(signature, body, leaf[2], target, compiler, executor_name)
             if identity in checked:
                 require(checked[identity][0] == selected, 'compute/verify select different executors')
                 continue

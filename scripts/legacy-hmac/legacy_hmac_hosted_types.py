@@ -31,6 +31,8 @@ def declarations(apple):
         ('types.rs', 'Error', 'enum'): f'''Resource({resource}::Error), InvalidLimits, InvalidTagPolicy, WorkLimit,
             InvalidBits, OutputLength, Cancelled, Mac(brynja_legacy_hmac::Error), Invariant, Quarantined,''',
         ('md5_compiled/types.rs', 'Md5BatchInput', 'struct'): "pub key:&'a[u8], pub message:Bits<'a>,",
+        ('md5_compiled/types.rs', 'Md5BatchOutput', 'struct'):
+            f"pub(super) storage:&'a mut {buffer}, pub(super) active:[bool;8], pub(super) bytes:usize,",
         ('md5_compiled/worker.rs', 'Parameters', 'struct'): 'pub backend:Md5Backend, pub bytes:usize, pub budget:usize,',
     }
 

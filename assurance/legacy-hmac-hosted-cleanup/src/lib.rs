@@ -97,6 +97,24 @@ pub mod md5_compiled {
     use super::host::*;
 
     #[inline(never)]
+    pub fn output_expose<'a>(output: &'a Md5BatchOutput<'_>, lane: usize) -> Option<&'a [u8]> {
+        output.expose(lane)
+    }
+
+    #[inline(never)]
+    pub fn output_declassify(
+        output: Md5BatchOutput<'_>,
+        destination: &mut [[u8; 16]; 8],
+    ) -> Result<(), Error> {
+        output.declassify(destination, PublicDeclassification::acknowledge())
+    }
+
+    #[inline(never)]
+    pub fn output_clear(output: Md5BatchOutput<'_>) {
+        drop(output);
+    }
+
+    #[inline(never)]
     pub fn compute<'a>(
         session: &'a mut Md5BatchSession,
         inputs: &[Option<Md5BatchInput<'_>>; 8],

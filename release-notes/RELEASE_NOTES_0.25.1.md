@@ -2328,6 +2328,57 @@ independent retest. Local logs are
 `release-reports/v0251-hosted-loans-matrix.log` and
 `release-reports/v0251-hosted-loans-crate-tests.log`.
 
+### Hosted MD5 batch output-loan follow-up
+
+The distinct batch loan now has composing emitted-code checks. Its public
+factory must call the matching joined executor, retain the original cancellation
+context, and propagate every modeled error category/payload without constructing
+a loan. Successful construction binds the output storage and selected tag width
+to the original session and each Boolean activity byte to its corresponding
+input slot. All 256 masks and seven admitted widths (10 through 16 bytes) run.
+
+Exposure checks exercise those masks and widths across all eight lanes, the
+first invalid lane and larger invalid indices. Only an active lane's matching
+16-byte-stride span may escape. Additional malformed-width/storage diagnostics
+check overflow and bounds rejection; these are not publicly admitted states.
+The `None` representation's undefined length is deliberately not inspected.
+Declassification binds the complete 128-byte source/destination copy, every
+typed copy result, error mapping, and exactly-once storage clearing on normal
+and recoverable unwind paths. The consuming move must copy the complete
+24-byte loan into a live local owner and destroy that same owner before ending
+its lifetime. Exact outlined adapters are checked as well as inlined methods.
+
+These checks use the existing typed input/copy-status and resource premises.
+Exclusive safe-Rust borrowing, valid caller destinations and the source-bound
+nonthrowing clearing callees remain premises. They do not claim caller-copy,
+fatal-abort or whole-process erasure, nor independent/native qualification.
+The extra Rust 1.90 Apple experiment reaches an MD5 checkpoint-parser limit
+outside the selected matrix; it is not counted as a passing full profile.
+Full pre-arm request validation and final cross-projection reconciliation
+remain open. Production Rust, dependencies and release-gate policy are unchanged.
+
+The focused batch campaign passes 18 method profiles with 118,774 outcomes and
+six factory profiles with 10,928 outcomes. It rejects 154 method mutations,
+184 factory mutations, 100 forwarding/move mutations, missing/duplicate probes
+and 12 independently compiled defects; restored Linux and Apple baselines pass.
+Arithmetic/unknown-value boundaries also pass. Bounded in-process reuse of
+successful projections binds the exact body, signature, complete resolved-symbol
+table and platform (plus compiler/executor for factories). Ten changed-key
+regressions force fresh validation. Failures are not cached, and source/callee
+premises still run at each outer entry; this is not persistent release evidence.
+
+The final composed 13-group run passes in 231.629 seconds, retaining ordinary
+loans, host transactions, source declarations, buffer destruction, public dispatch
+and graph checks. All 16 selected compiler/target/panic/SIMD profiles pass again.
+The hosted crate passes 20 unit/integration tests and 16 doctests. Formatting,
+acceptance metadata, script inventory, assurance policy and doc links pass.
+Local logs are `release-reports/v0251-batch-loans-composed.log`,
+`release-reports/v0251-batch-loans-final-matrix.log`,
+`release-reports/v0251-batch-loans-crate-tests.log` and
+`release-reports/v0251-batch-loans-final-metadata.log`. The earlier redundant
+composition attempt was interrupted, preserved separately and is not counted
+as passing evidence; the completed rerun above stands on its own.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -2392,8 +2443,9 @@ independent retest. Local logs are
   output admission, result transport, quarantine classification and armed
   pre-entry rejections now have composing host checks. Ordinary output-loan
   creation, exposure, explicit declassification and consuming clearing now also
-  have dedicated projections. Batch output loans, full pre-arm request paths
-  and final cross-projection reconciliation remain open.
+  have dedicated projections. Batch loan construction, active-lane exposure,
+  declassification and consuming clearing now also have dedicated projections.
+  Full pre-arm request paths and final cross-projection reconciliation remain open.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.
 

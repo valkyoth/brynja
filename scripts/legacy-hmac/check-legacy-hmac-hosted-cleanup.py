@@ -54,7 +54,7 @@ def main():
                 hosted.validate(artifacts, args.target, panic)
             print(f'Legacy HMAC lifecycle/owners, streaming I/O, checkpoints, MD5 health/report/lane/control/decision/tag-copy/returned-owner provenance: PASS; '
                   f'{compiler}; {args.target}; panic={panic}; simd={not args.generic}; '
-                  'batch loans, pre-arm paths and final reconciliation pending; '
+                  'ordinary/batch output loans checked; pre-arm paths and final reconciliation pending; '
                   'not native qualification', flush=True)
 
 

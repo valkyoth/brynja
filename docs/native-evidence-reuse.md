@@ -72,7 +72,7 @@ Workspace Cargo metadata is compared through the capture's dependency closure:
 unrelated packages and unused workspace dependency declarations do not invalidate
 it. All selected dependency versions, checksums, origins and edges remain bound;
 optional/dev edges are conservatively included, except for the exact reviewed
-inactive MD5 edge described below. The inherited dependency keys
+inactive MD5/SHA-1 edges described below. The inherited dependency keys
 used by participating manifests remain bound, including aliases and target/build/
 dev tables. Resolver, profiles, patches, workspace membership, package inheritance,
 compiler/configuration inputs, fixture manifests and capture scripts remain
@@ -101,6 +101,34 @@ checks the exact four-package/feature population, without compiling cryptography
 
 This permits the original MD5 observations to retain their actual provenance;
 it is not evidence for strict MD5 or its optional protected-memory adapter.
+
+### Exact inactive HMAC and SHA-1 metadata projection
+
+The SHA-2, Keccak, KMAC, TupleHash and ParallelHash historical commands select
+hosted `runtime-execution` (and, where required, `sponge-execution`), not HMAC or
+`macos-resident`. The HMAC projection binds those command/fixture bytes to their
+immutable review and preserves every existing active source byte. It permits
+only enumerated guarded module additions, exact feature/dependency declarations,
+the two unreachable legacy-HMAC lock rows, and the new resident memory wrappers
+inside the unchanged, disabled `macos-resident` module. Locked/offline Cargo
+metadata regressions check every historical fixture's selected feature union.
+An active feature, changed command, unregistered source, custom build script,
+dependency identity/edge change or altered original source still rejects reuse.
+The added HMAC/resident APIs receive **no qualification** from these captures.
+
+The SHA-1 profile separately binds its exact four-crate command closure. Its
+hosted leaf dependency can change from the reviewed direct declaration to the
+exact workspace declaration only when the path/version remain identical and
+the child explicitly retains `default-features = true` and `features = ["cpu"]`.
+The workspace's `default-features = false` is checked too; omitting the explicit
+child override rejects reuse. All other manifest bytes, original lock rows,
+source files and capture commands remain checked. This is not a blanket
+Cargo-manifest exemption or qualification of the inactive strict adapter.
+
+Both projections run after external evidence approval and historical record
+validation. They cannot approve substituted artifacts or replace an original
+capture's compiler/platform claim. Changed MD5 implementation code in v0.25.1
+is outside these projections and requires fresh native MD5 observations.
 
 TupleHash/ParallelHash facade fixture version updates use the existing exact
 byte-replacement proof. That proof can coexist with the externally approved

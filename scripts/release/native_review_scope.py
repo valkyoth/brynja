@@ -47,5 +47,7 @@ def unchanged(root, before, after, closure, reviewed_validation=frozenset(), dep
         io.require((name == 'Cargo.lock' and lock(root, before) == lock(root, after)) or
                    (name in {'Cargo.toml', 'Cargo.lock'} and
                     dependencies.equivalent(root, before, after, closure, dependency_profile)) or
+                   (dependencies.manifest_equivalent(root, before, after, name, dependency_profile) and
+                    dependencies.equivalent(root, before, after, closure, dependency_profile)) or
                    tooling.equivalent(root, before, after, name),
                    'family implementation/build input changed: ' + name)

@@ -51,6 +51,58 @@ class Sha1DependencyProfileTests(unittest.TestCase):
         projected[profile.HOST]['dependencies'] = rows[profile.HOST]['dependencies']
         self.assertEqual(projected, rows)
 
+    def inherit_leaf(self):
+        path = self.root / profile.MANIFEST
+        raw = path.read_bytes()
+        self.assertEqual(raw.count(profile.DIRECT), 1)
+        path.write_bytes(raw.replace(profile.DIRECT, profile.INHERITED))
+        workspace = self.root / 'Cargo.toml'
+        raw = workspace.read_bytes()
+        entry = (b'brynja-legacy-sha1 = { path = "crates/brynja-legacy-sha1", '
+                 b'version = "=0.1.0", default-features = false }\n')
+        workspace.write_bytes(raw.replace(b'[workspace.dependencies]\n',
+                                         b'[workspace.dependencies]\n' + entry))
+
+    def test_exact_inheritance_preserves_default_features_and_original_bytes(self):
+        self.inherit_leaf()
+        head = fixtures.commit(self.root)
+        self.assertTrue(self.equivalent(head))
+        reuse.validate_inputs(self.root, self.capture, head, self.sources(), self.captured,
+                              lambda name, raw: io.sha(raw), dependency_profile=profile.PROFILE)
+        self.assertFalse(dependencies.manifest_equivalent(
+            self.root, self.capture, head, profile.MANIFEST))
+        self.assertFalse(dependencies.manifest_equivalent(
+            self.root, self.capture, head, 'crates/brynja-core/Cargo.toml', profile.PROFILE))
+
+    def test_inheritance_rejects_origin_version_features_and_unrelated_bytes(self):
+        self.inherit_leaf()
+        for name, old, new in (
+            ('Cargo.toml', b'path = "crates/brynja-legacy-sha1"', b'path = "crates/other"'),
+            ('Cargo.toml', b'version = "=0.1.0", default-features = false',
+             b'version = "=0.1.1", default-features = false'),
+            ('Cargo.toml', b'default-features = false', b'default-features = true'),
+            ('Cargo.toml', b'path = "crates/brynja-legacy-sha1"',
+             b'path = "crates/brynja-legacy-sha1", features = ["cpu"]'),
+            (profile.MANIFEST, b'default-features = true, features = ["cpu"]', b'features = ["cpu"]'),
+            (profile.MANIFEST, b'default-features = true, features = ["cpu"]',
+             b'default-features = false, features = ["cpu"]'),
+            (profile.MANIFEST, b'features = ["cpu"]', b'features = ["strict-execution"]'),
+            (profile.MANIFEST, b'default = []', b'default = ["strict-execution"]')):
+            path = self.root / name
+            original = path.read_bytes()
+            self.assertIn(old, original)
+            path.write_bytes(original.replace(old, new))
+            head = fixtures.commit(self.root)
+            with self.subTest(name=name, new=new), self.assertRaises(ValueError):
+                reuse.validate_inputs(self.root, self.capture, head, self.sources(), self.captured,
+                    lambda name, raw: io.sha(raw), dependency_profile=profile.PROFILE)
+            path.write_bytes(original)
+            fixtures.commit(self.root)
+        path = self.root / profile.MANIFEST
+        path.write_bytes(path.read_bytes().replace(b'\n', b'\r\n'))
+        with self.assertRaises(ValueError):
+            self.equivalent(fixtures.commit(self.root))
+
     def test_hmac_archive_needs_separate_validation_approval(self):
         path = self.root / profile.PACKAGE
         old = path.read_bytes()

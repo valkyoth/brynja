@@ -13,6 +13,7 @@ import native_dependency_scope as dependencies
 
 HOST = 'brynja-crypto-cpu-std'
 LEAF = 'brynja-mac-hmac'
+LEGACY = {'brynja-legacy-hmac', 'brynja-legacy-hmac-std'}
 PREFIX = 'crates/' + HOST + '/'
 # Immutable command review, not an evidence snapshot or approval substitute.
 COMMAND_REVIEW = '1f8f4e1527f9e91b1b1d26b61b8cfc95339ca835'
@@ -60,6 +61,11 @@ ADDED = {PREFIX + 'src/execution/hmac.rs', PREFIX + 'tests/hmac.rs'} | {
     for directory in ('strict_hmac', 'macos_resident/hmac')
     for name in ('mod.rs', 'types.rs', 'worker.rs', 'tests.rs', 'tests/native.rs',
                  'compiled.rs', 'compiled/worker.rs', 'compiled/tests.rs', 'compiled/tests/native.rs')}
+# The enclosing macos_resident module is disabled in every frozen command
+# profile. These new public wrappers receive no qualification from old captures.
+RESIDENT_ADDED = {PREFIX + 'src/macos_resident/memory.rs',
+                  PREFIX + 'src/macos_resident/memory/tests.rs'}
+ADDED |= RESIDENT_ADDED
 # Exact appended, feature-gated test items; no Rust parser or substring-based
 # "test-only" exemption. Old contents must remain an identical byte prefix.
 TEST_SUFFIXES = {
@@ -83,6 +89,12 @@ def replacements(before, after, edits):
 
 
 def source_only(name, before, after):
+    if name == PREFIX + 'src/macos_resident/mod.rs':
+        declaration = b'pub mod memory;\n'
+        if declaration in after:
+            if declaration in before or after.count(declaration) != 1:
+                return False
+            after = after.replace(declaration, b'', 1)
     if name in MODULES:
         return replacements(before, after, MODULES[name])
     if name in TEST_SUFFIXES:
@@ -110,6 +122,11 @@ def workspace(before, after):
     old, new = (tomllib.loads(raw.decode()) for raw in (before, after))
     if LEAF in old['workspace']['dependencies']:
         return False
+    for name in ('brynja-legacy-sha1', 'brynja-legacy-md5'):
+        if name in new['workspace']['dependencies']:
+            if name in old['workspace']['dependencies'] or new['workspace']['dependencies'].pop(name) != {
+                    'path': 'crates/' + name, 'version': '=0.1.0', 'default-features': False}:
+                return False
     return (new['workspace']['dependencies'].pop(LEAF, None) ==
             {'path': 'crates/' + LEAF, 'version': '=0.1.0'} and old == new)
 
@@ -117,6 +134,13 @@ def workspace(before, after):
 def lock(root, before, after):
     old, new = (dependencies.graph(io.raw_blob(root, revision, 'Cargo.lock'))
                 for revision in (before, after))
+    if LEGACY & new.keys():
+        for name, edges in (
+                ('brynja-legacy-hmac', ['brynja-core', 'brynja-legacy-md5', 'brynja-legacy-sha1']),
+                ('brynja-legacy-hmac-std', ['brynja-core', HOST, 'brynja-legacy-hmac'])):
+            if name in old or new.pop(name, None) != {
+                    'name': name, 'version': '0.1.0', 'dependencies': edges}:
+                return False
     if LEAF in old or new.pop(LEAF, None) != {
             'name': LEAF, 'version': '0.1.0',
             'dependencies': ['brynja-core', 'brynja-crypto-cpu', 'brynja-hash-sha2', 'brynja-hash-sha3']}:
@@ -161,7 +185,8 @@ def feature_graph(root, graph):
     hosted = []
     for node in nodes:
         package = packages[node['id']]
-        io.require(package['name'] != LEAF, 'HMAC reachable in historical native feature union')
+        io.require(package['name'] not in LEGACY | {LEAF},
+                   'HMAC reachable in historical native feature union')
         if package['name'] == HOST:
             hosted.append(node)
             io.require(package['manifest_path'] == str(root / PREFIX / 'Cargo.toml') and

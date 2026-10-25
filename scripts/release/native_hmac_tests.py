@@ -14,15 +14,18 @@ import native_unchanged as reuse
 # Keep regression inputs independent of future native collection and changes to
 # the active approval manifest. Updating fixtures is an explicit review action.
 POST_HMAC = '5d707623cf6c8d1898bea1f16f62caf4c66a2360'
+POST_LEGACY = '542d7268c48d792c9ff784cae6d81a3dfaf5de30'
 
 
 class InactiveHmacTests(unittest.TestCase):
+    revision = POST_HMAC
+
     @classmethod
     def setUpClass(cls):
         cls.capture = profile.COMMAND_REVIEW
-        cls.head = POST_HMAC
-        index = io.document(io.raw_blob(io.ROOT, POST_HMAC, 'security/sha2-hardened-native.json'))
-        record = io.document(io.raw_blob(io.ROOT, POST_HMAC, next(iter(index['lanes'].values()))['artifact']))
+        cls.head = cls.revision
+        index = io.document(io.raw_blob(io.ROOT, cls.head, 'security/sha2-hardened-native.json'))
+        record = io.document(io.raw_blob(io.ROOT, cls.head, next(iter(index['lanes'].values()))['artifact']))
         if record['capture_commit'] != cls.capture:
             raise AssertionError('update immutable pre-HMAC fixture explicitly')
         cls.names = set(record['sources'])
@@ -167,12 +170,65 @@ class InactiveHmacTests(unittest.TestCase):
             self.validate()
 
 
+class LegacyInactiveHmacTests(InactiveHmacTests):
+    revision = POST_LEGACY
+
+    def test_resident_additions_require_enclosing_guard_and_exact_declaration(self):
+        name = profile.PREFIX + 'src/macos_resident/mod.rs'
+        old = self.data[self.head][name]
+        for replacement in (b'pub mod memory;\npub mod memory;', b'pub use memory::*;',
+                            b'#[cfg(any())]\npub mod memory;'):
+            self.data[self.head][name] = old.replace(b'pub mod memory;', replacement)
+            with self.subTest(replacement=replacement), self.assertRaises(ValueError):
+                self.validate()
+        self.data[self.head][name] = old
+        name = profile.PREFIX + 'src/lib.rs'
+        self.assertIn(b'#[cfg(feature = "macos-resident")]', self.data[self.head][name])
+        self.data[self.head][name] = self.data[self.head][name].replace(
+            b'#[cfg(feature = "macos-resident")]', b'#[cfg(any())]')
+        with self.assertRaises(ValueError):
+            self.validate()
+
+    def test_legacy_dependency_identity_edges_and_resident_activation_reject(self):
+        name = 'Cargo.toml'
+        old = self.data[self.head][name]
+        entry = b'brynja-legacy-sha1 = { path = "crates/brynja-legacy-sha1", version = "=0.1.0", default-features = false }'
+        self.assertIn(entry, old)
+        for replacement in (entry.replace(b'false', b'true'),
+                            entry.replace(b'=0.1.0', b'=0.1.1'),
+                            entry.replace(b'crates/brynja-legacy-sha1', b'other'),
+                            entry[:-2] + b', features = ["cpu"] }'):
+            self.data[self.head][name] = old.replace(entry, replacement)
+            with self.subTest(replacement=replacement), self.assertRaises(ValueError):
+                self.validate()
+        self.data[self.head][name] = old
+        name = 'Cargo.lock'
+        old = self.data[self.head][name]
+        row = b'name = "brynja-legacy-hmac"\nversion = "0.1.0"\ndependencies = [\n "brynja-core",'
+        self.assertIn(row, old)
+        for replacement in (row.replace(b'0.1.0', b'0.1.1'), row.replace(b'brynja-core', b'brynja-crypto-cpu'),
+                            row.replace(b'dependencies', b'source = "registry+forged"\ndependencies')):
+            self.data[self.head][name] = old.replace(row, replacement)
+            with self.subTest(replacement=replacement), self.assertRaises(ValueError):
+                self.validate()
+        self.data[self.head][name] = old
+        name = profile.PREFIX + 'Cargo.toml'
+        self.data[self.head][name] = self.data[self.head][name].replace(
+            b'default = []', b'default = ["macos-resident"]')
+        with self.assertRaises(ValueError):
+            self.validate()
+
+
 class HmacFeatureGraphTests(unittest.TestCase):
     def test_each_real_family_input_delta_with_synthetic_tool_review(self):
+        for head in (POST_HMAC, POST_LEGACY):
+            with self.subTest(head=head):
+                self.check_real_families(head)
+
+    def check_real_families(self, head):
         # Exercise all actual source populations. These are structural tests,
         # not owner approval and not a native execution claim. Gate entry points
         # still require the externally pinned manifest before reaching this.
-        head = POST_HMAC
         manifest = io.document(io.raw_blob(io.ROOT, head, 'security/native-reuse/evidence-approval.json'))
         for family in profile.FIXTURES:
             index = io.document(io.raw_blob(io.ROOT, head, 'security/' + family + '-native.json'))
@@ -204,9 +260,18 @@ class HmacFeatureGraphTests(unittest.TestCase):
                 profile.feature_graph(io.ROOT, graph)
                 node = next(n for n in graph['resolve']['nodes'] if any(
                     p['id'] == n['id'] and p['name'] == profile.HOST for p in graph['packages']))
-                node['features'].append('hmac-execution')
-                with self.assertRaises(ValueError):
-                    profile.feature_graph(io.ROOT, graph)
+                for feature in ('hmac-execution', 'macos-resident', 'strict-hmac'):
+                    mutant = copy.deepcopy(graph)
+                    selected = next(n for n in mutant['resolve']['nodes'] if n['id'] == node['id'])
+                    selected['features'].append(feature)
+                    with self.assertRaises(ValueError):
+                        profile.feature_graph(io.ROOT, mutant)
+                for package in profile.LEGACY | {profile.LEAF}:
+                    mutant = copy.deepcopy(graph)
+                    mutant['packages'].append({'id': package, 'name': package})
+                    mutant['resolve']['nodes'].append({'id': package, 'features': []})
+                    with self.assertRaises(ValueError):
+                        profile.feature_graph(io.ROOT, mutant)
 
 
 if __name__ == '__main__':

@@ -58,6 +58,13 @@ def inherited_dependencies(value):
     return found
 
 
+def manifest_equivalent(root, before, after, name, profile=None):
+    if profile != sha1.PROFILE or name != sha1.MANIFEST:
+        return False
+    return (sha1.manifest_bytes(root, before, io.raw_blob(root, before, name)) ==
+            sha1.manifest_bytes(root, after, io.raw_blob(root, after, name)))
+
+
 def projection(root, revision, closure, profile=None):
     names = io.names(root, revision)
     roots = {'/'.join(name.split('/')[:2]) for name in closure
@@ -66,7 +73,10 @@ def projection(root, revision, closure, profile=None):
     manifests = {}
     for name in sorted(names):
         if name.startswith('crates/') and name.count('/') == 2 and name.endswith('/Cargo.toml'):
-            manifest = tomllib.loads(io.historical(root, revision, name).decode())
+            raw = io.raw_blob(root, revision, name)
+            if profile == sha1.PROFILE and name == sha1.MANIFEST:
+                raw = sha1.manifest_bytes(root, revision, raw)
+            manifest = tomllib.loads(raw.decode())
             package = manifest['package']['name']
             io.require(package not in manifests, 'duplicate local package identity')
             manifests[package] = (name, manifest)

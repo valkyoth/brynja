@@ -47,7 +47,9 @@ def unchanged_inputs(root, capture, head, current, captured, digest, validation_
         if current[name] != expected:
             if name in changes:
                 continue
-            io.require(name in metadata, 'native implementation/fixture/tool changed: ' + name)
+            io.require(name in metadata or dependencies.manifest_equivalent(
+                root, capture, head, name, dependency_profile),
+                'native implementation/fixture/tool changed: ' + name)
             changed_metadata = True
     if changed_metadata:
         io.require(dependencies.equivalent(root, capture, head, current, dependency_profile),

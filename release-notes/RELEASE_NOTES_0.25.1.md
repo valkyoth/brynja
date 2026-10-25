@@ -2379,6 +2379,60 @@ Local logs are `release-reports/v0251-batch-loans-composed.log`,
 composition attempt was interrupted, preserved separately and is not counted
 as passing evidence; the completed rerun above stands on its own.
 
+### Hosted pre-worker request-admission follow-up
+
+The four real hosted executor prefixes now have a bounded public-metadata
+projection. It executes actual outlined validation/cancellation bodies or their
+inlined compiler output until the first worker-storage access. An independent
+request-policy model checks key/chunk limits, bit-string shape and arithmetic,
+selected tag width, MD5 aligned-group eligibility and each lane's candidate
+presence/length. Every shape boundary runs in both compute and verification
+mode, including compiler-duplicated validation loops. Cancellation, rejection
+precedence and already-quarantined compiled sessions are included.
+
+The prefix must clear previous output and staging before inspecting the request,
+reject without arming quarantine, and clear both buffers on ordinary rejection.
+Valid requests must check the exact cancellation context with Acquire ordering;
+compiled owners then arm quarantine before reaching worker storage. Local guard
+fields and Limits copies have extent/lifetime checks. Overlapping differently
+typed stores invalidate earlier values instead of retaining stale guard bytes.
+Public typed getters independently bind request/limit fields and selected tag
+width. Hoisted worker-capture fields compose with the existing independent
+capture-provenance checks; admission alone does not qualify their later use.
+
+Regression mutations target exact block/instruction locations, not an identical
+earlier cleanup call. The interpreter uses simultaneous loop-phi snapshots,
+checked arithmetic/poison boundaries and a bounded traversal. Missing/duplicate
+or differently typed getters, altered projection-cache identities and compiled
+Linux/Apple validation/cancellation/cleanup defects have focused regressions.
+Successful in-process reuse binds the exact host signature/body, resolved names,
+outlined callee signatures/bodies, compiler, target and executor identity.
+
+This is a finite boundary campaign, not a proof for arbitrary loop trip counts
+or native buffers of the modeled extreme lengths. Safe caller descriptors,
+valid constructed sessions/resources and source-reviewed nonthrowing clearing
+remain premises. It does not add native qualification, independent review,
+fatal-path erasure or caller-memory protection. No production code, dependency
+or release-gate policy changed. Final cross-projection reconciliation remains
+open before the hosted qualification can be called complete.
+
+The request campaign passes 24 emitted profiles and 37,656 metadata outcomes.
+It rejects 1,884 artifact defects, including six caught at the composed capture
+boundary, and 198 missing/duplicate/load-width probe mutations. Loop-phi,
+overlapping-store, poison/arithmetic and seven cache-identity regressions pass.
+All 24 independently compiled validation/cancellation/cleanup defects are
+rejected; restored Linux and Apple baselines pass.
+All 16 selected compiler/target/panic/SIMD profiles pass after the final edits.
+The hosted crate passes 20 unit/integration tests and 16 doctests. These are
+author-operated compiler and test results, not independent/native qualification.
+The composed 13-group run passes in 630.967 seconds, retaining transaction,
+source-contract, buffer, public dispatch, graph and ordinary/batch loan checks.
+Formatting, Python warning checks, metadata, script inventory, assurance policy,
+documentation links and whitespace checks pass.
+Local logs are `release-reports/v0251-prearm-composed.log`,
+`release-reports/v0251-prearm-final-matrix.log` and
+`release-reports/v0251-prearm-crate-tests.log`.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -2445,7 +2499,8 @@ as passing evidence; the completed rerun above stands on its own.
   creation, exposure, explicit declassification and consuming clearing now also
   have dedicated projections. Batch loan construction, active-lane exposure,
   declassification and consuming clearing now also have dedicated projections.
-  Full pre-arm request paths and final cross-projection reconciliation remain open.
+  Bounded pre-worker request admission now also has composing checks. Final
+  cross-projection reconciliation remains open.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.
 

@@ -1,6 +1,7 @@
 //! Real legacy host consumers; compiler emission is not native qualification.
 #![forbid(unsafe_code)]
 
+pub mod admission;
 pub mod checkpoint;
 pub mod control;
 pub mod decision;

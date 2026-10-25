@@ -28,9 +28,13 @@ def declarations(apple):
             backend:Md5Backend, bytes:usize, limits:Md5BatchLimits, quarantined:bool, #[cfg(test)] fault:tests::Fault,''',
         ('types.rs', 'Request', 'struct'): "pub key:&'a[u8], pub chunks:&'a[&'a[u8]], pub tail:Bits<'a>,",
         ('types.rs', 'Bits', 'struct'): "pub bytes:&'a[u8], pub valid_bits:u8,",
+        ('types.rs', 'Limits', 'struct'): '''pub stack_bytes:usize, pub max_stack_mapping_bytes:usize,
+            pub max_buffer_mapping_bytes:usize, pub max_key_bytes:usize, pub max_message_bits:u128, pub max_chunks:usize,''',
         ('types.rs', 'Error', 'enum'): f'''Resource({resource}::Error), InvalidLimits, InvalidTagPolicy, WorkLimit,
             InvalidBits, OutputLength, Cancelled, Mac(brynja_legacy_hmac::Error), Invariant, Quarantined,''',
         ('md5_compiled/types.rs', 'Md5BatchInput', 'struct'): "pub key:&'a[u8], pub message:Bits<'a>,",
+        ('md5_compiled/types.rs', 'Md5BatchLimits', 'struct'): '''pub stack_bytes:usize, pub max_stack_mapping_bytes:usize,
+            pub max_buffer_mapping_bytes:usize, pub max_key_bytes:usize, pub max_message_bits:u128, pub max_compressions:usize,''',
         ('md5_compiled/types.rs', 'Md5BatchOutput', 'struct'):
             f"pub(super) storage:&'a mut {buffer}, pub(super) active:[bool;8], pub(super) bytes:usize,",
         ('md5_compiled/worker.rs', 'Parameters', 'struct'): 'pub backend:Md5Backend, pub bytes:usize, pub budget:usize,',

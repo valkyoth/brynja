@@ -21,8 +21,10 @@ paths compose with the source-bound nonthrowing core clearing premise. Joined
 host output/decision/quarantine transactions and armed pre-entry rejections now
 compose too. Ordinary output loan construction/exposure/declassification/drop
 now compose with those transactions. MD5 batch loan factories, active-lane
-views, declassification and consuming moves/clearing also compose. Full pre-arm
-request paths and final reconciliation remain separate.
+views, declassification and consuming moves/clearing also compose. Bounded
+public-request admission executes actual inlined/outlined validation before
+worker-storage access, including cancellation, clearing and quarantine order.
+Final cross-projection reconciliation remains separate.
 """
 import re
 import sys
@@ -70,6 +72,8 @@ import legacy_hmac_hosted_transaction as transaction
 import legacy_hmac_hosted_loans as loans
 import legacy_hmac_hosted_batch_loans as batch_loans
 import legacy_hmac_hosted_batch_creation as batch_creation
+import legacy_hmac_hosted_prearm as prearm
+import legacy_hmac_hosted_prearm_layout as prearm_layout
 
 model = shared.load('hmac_hosted_lifecycle', 'legacy_hosted_lifecycle_model')
 contracts = shared.load('hmac_hosted_contracts')
@@ -192,6 +196,7 @@ def validate(artifacts, target, panic):
     compiler = compilers.pop()
     fixture = populations['brynja-legacy-hmac-hosted-cleanup']
     loans.validate(fixture, target, compiler, panic)
+    prearm_layout.validate(fixture)
     initials = scalar.normalization.contracts.validate(fixture)
     checkpoint_flow.probes(fixture)
     md5_report_layout.validate(fixture)
@@ -238,6 +243,7 @@ def validate(artifacts, target, panic):
             population = fixture if selected in fixture[0] or selected in fixture[1] else leaf
             definitions, aliases, names = population
             signature, host = flow.resolve(selected, definitions, aliases)
+            prearm.check(signature, host, names, leaf, target, identity, compiler)
             launch.Launch(signature, host, names, target, identity, resource)
             captured = capture.check(signature, host, names, target, identity)
             transaction.check(captured, compiler, owner, resource)

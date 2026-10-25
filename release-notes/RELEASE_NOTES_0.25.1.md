@@ -2553,78 +2553,44 @@ No production Rust or cryptographic implementation changed. Review hashes bind
 the changed catalogs and new test sources without asserting external approval.
 Independent retest, native-evidence reconciliation and release checks remain.
 
-- Complete the remaining qualification-specific failure-injection checks;
-  focused native x86/Arm functional execution now passes.
-- Qualify both accelerated compositions and their protected/resident owners,
-  including MD5 prefix handling, without silently downgrading their guarantees.
-- Complete MD5 batch caller and hosted-worker cleanup-codegen qualification; portable caller ownership, fixed
-  Scratch probes, accelerated SHA-1 retained update/cancellation and Linux
-  and Apple timing screens now pass, as do the public/verification finalizer
-  core owner graphs, three finalizer scratch graphs and retained-finalizer
-  handoffs. SHA-1 pre-key admission, constructor scratch, post-admission stream
-  ownership and the outlined/inlined iterator cleanup paths now pass. MD5 row
-  cleanup, normalization/comparison scratch, workspace lane-drop dispatch and
-  pre-workspace tag/authority admission now pass. The final readiness helper
-  and success-edge ordering into all three consumers also pass. Phase pointer
-  arguments and the outer closure transport now pass. Three-profile
-  native failure coverage and inner readiness/digest error-path exclusion pass;
-  compiler-level inner message descriptor provenance and conditional ipad
-  construction, normalization result-owner transport and bounded normalization
-  input/route/no-long-key scenarios now pass. Normalization setup/readiness and
-  bounded report guard/transport composition now pass. Conditional outer
-  prefix/descriptor construction and inner-result owner transport now pass.
-  Conditional inner/outer report acceptance, outer owner transport, truncation
-  through final readiness and inner/outer counter field-write provenance now pass.
-  Normalization return-copy lifetimes, selected report metadata and report
-  completeness on every normal success return now have dedicated checks.
-  Final consumer gating, public destination isolation, secret result transport,
-  verification decision transport and returned tag metadata/view checks now
-  pass their focused projections. Secret consumer write/finish/error/unwind
-  handling and complete comparison traces/cleanup now have dedicated checks.
-  Caller-side initialization creation/moves/early-failure cleanup and symbolic
-  candidate shape/length admission now have dedicated checks. Returned-owner
-  success teardown and returned-error-bound quarantine classification now have
-  dedicated projections. Hosted public dispatch, native launch storage,
-  create/join/stack-reclaim ordering, launch capture provenance, worker envelope
-  result/completion ordering and buffer destructor dispatch now have dedicated
-  checks. Accelerated worker-local authority transfer/admission, backend matching
-  and captured constructor-input provenance now have composing checks. The
-  compiled keyed admission/storage, SHA-1 retained destructor/consumer dispatch
-  and MD5 selector borrow boundaries now have dedicated projections. Scalar
-  retained-state field/terminal transfers, storage lifetimes and both hash-owner
-  cleanup dispatches now have dedicated checks. Inlined scalar constructor
-  initialization/ownership, key operands, pad phases, scratch and pre-retention
-  cleanup paths now have dedicated checks. Normalization-result/descriptor
-  provenance, its result-to-pad copy, empty/short/long-key routing and independent
-  typed initial-owner/Result layout binding now also pass. Streaming chunk/tail
-  provenance, returned output ownership/cleanup and scalar checkpoint/callee
-  result handling now have composing checks. Accelerated hosted SHA-1's real
-  checkpoint callee, inlined temporary Stream ownership, all six checkpoint
-  positions and worker Result status transport now also have composing checks.
-  MD5's health-selector lifetimes, three checkpoints, post-consumer revalidation
-  and rejected Result payload transport now also have composing checks. Typed
-  report predicates, backend/count operands and rejected report status now have
-  dedicated checks, as do typed Result-to-report byte transfers and success/error
-  admission. Typed lane payloads, the complete eight-slot chain and invalid-bit
-  rejection now have dedicated checks. Budget/cancellation control transport and
-  both actual callback targets now have dedicated checks. Original candidate and
-  staging operands, compute/verify selection and public decision transport through
-  final Result storage now have dedicated checks. Tag-to-output copies and their
-  normal-return copy-error continuations now have dedicated checks. Post-transfer
-  tag destruction/lifetime paths now cover normal and recoverable unwind exits.
-  Pending Result ownership, its health-failure/unwind destruction and the
-  moved Result's final lifetime now have dedicated composing checks. Post-join
-  output admission, result transport, quarantine classification and armed
-  pre-entry rejections now have composing host checks. Ordinary output-loan
-  creation, exposure, explicit declassification and consuming clearing now also
-  have dedicated projections. Batch loan construction, active-lane exposure,
-  declassification and consuming clearing now also have dedicated projections.
-  Bounded pre-worker request admission and final cross-projection reconciliation
-  now also pass their author-operated compiler checks, including ordinary setup
-  failures, borrowed-local lifetimes and the public verification result. Native,
-  independent and release qualification remain separate and pending.
-- API/capability owners and the separate legacy-HMAC verification family are
-  registered; reconcile their execution records before release.
-- Obtain independent retest and run the affected release checks and GitHub.
+### Saved timing-observation reconciliation
+
+All sixteen saved author timing observations have been rechecked: eight Linux
+x86-64 and eight Apple Silicon records, covering portable/static and the respective
+protected/resident scalar and compiled routes for both hashes. Each contains eight
+campaigns; recomputation confirms all 128 campaigns have zero reported signals.
+This coarse screen is not a constant-time proof.
+
+All 701 recorded input hashes in each observation match source snapshot
+`a6fad4a54521b8db462382677ca8c4fee5ea6358`. The current measured implementation,
+fixture, lockfiles and measurement driver are byte-identical. The two changed
+manifests only move the exact legacy hash dependencies into workspace declarations;
+paths, versions, disabled defaults and all other manifest semantics are checked.
+
+The Linux captures still record `236f6474` as HEAD: eight timing fixture/driver
+files were not yet committed at collection. Their hashes match the later snapshot,
+but this does not make the original checkout clean or change its capture HEAD.
+The Apple captures record `a6fad4a5` and have no source/HEAD mismatch. Original
+observations remain untouched. Their raw hashes and this distinction are retained
+in the local reconciliation report, not relabeled as new native runs.
+
+The new reviewer is diagnostic only and is not imported by any release gate. It
+cannot approve evidence or authenticate a runner. Seven regression groups cover all
+sixteen route identities, statistics and signals, missing/rehashed source files,
+manifest changes, command/host identities, duplicate/nonfinite JSON, dirty
+candidate rejection and missing/extra host records. The existing timing suite now
+passes fourteen groups. No production implementation, timing fixture, release approval or native capture was
+changed, and no new timing campaign was launched.
+
+## Outstanding before release
+
+- Reconcile native functional/package and compiler observations with the candidate,
+  retaining the documented Linux protected versus macOS resident guarantees.
+- Finish the pre-pentest review of qualification/failure-path coverage; the bounded
+  scalar, accelerated MD5/SHA-1 and hosted compiler checks above are implemented
+  and author-tested, not independently qualified.
+- Obtain independent pentest/retest of the complete legacy-HMAC scope.
+- Run the affected release checks using the existing reuse rules, then GitHub and
+  separately authorized tagging. Development runs are not detached receipts.
 
 No crates.io publication or release tag is authorized by this work-in-progress.

@@ -11,6 +11,7 @@ from unittest.mock import patch
 
 import legacy_hmac_timing as timing
 import legacy_hmac_timing_runner as runner
+from legacy_hmac_timing_review_tests import ReviewTests
 
 
 def output(route="portable", family="sha1", arch="x86_64", signal=False):

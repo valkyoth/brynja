@@ -2548,7 +2548,7 @@ sha256 = "5783db638dd246a3e77404ead38fa2a9deebd5926542c57b2771e66e43b1072b"
 
 [[reviewed-source]]
 path = "docs/legacy-hmac-hosted-qualification.md"
-sha256 = "098eb71f145883e309051f5d5818c99f6606fa6f7b5e44591f3871ae17cbc40e"
+sha256 = "5f7690518209f2fc688183689e4e8da43dd20161a7ee78dc6aaa8e43aecc5afe"
 
 [[reviewed-source]]
 path = "scripts/cryptography/legacy_hmac_owner_contract.py"
@@ -3308,7 +3308,7 @@ sha256 = "f1173571a951700b1733e4b4c2bb4e42a411566416aade8dcd99d97292214946"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/test-legacy-hmac-timing.py"
-sha256 = "7bf1a15310cba75469abc96c83e011dd3fae14f6929e912c0cb408f7c8834e1b"
+sha256 = "21e30ed9fdc40b3721c19330d26732cd3911d6a3947e0401d43ee7bd7a0765d4"
 
 [[reviewed-source]]
 path = "assurance/legacy-hmac-policy/Cargo.lock"
@@ -3341,3 +3341,15 @@ sha256 = "499885564fff26ca51015cb1341ace55cd72beaa81607c2dac004bcab5431bd8"
 [[reviewed-source]]
 path = "scripts/legacy-hmac/test-legacy-hmac-verification.py"
 sha256 = "9ee7b9f89e8b59441572d1396e278856988a6eaa967cbc88fa210530e7e0924f"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_timing_review.py"
+sha256 = "716f72a8d146819849135e2b76d2d84aef4b9ec8eb3be964668552e40cd9ff0d"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_timing_review_tests.py"
+sha256 = "3b9e7699b30635de1565b49d7882316d2e8ad8b0aa7771218871d5ad8d9de53c"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/review-legacy-hmac-timing.py"
+sha256 = "96cc46fdb68f55f0944026b6d0ac451bc62d625164a049ead8f4a87c67f38852"

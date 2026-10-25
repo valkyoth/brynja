@@ -101,5 +101,24 @@ An older hash-family or modern-HMAC receipt does not cover these new commands.
 Local focused development runs are not detached release receipts or independent
 review. Scheduling a check does not claim it has run on every target.
 
+## Saved timing observations
+
+`scripts/legacy-hmac/review-legacy-hmac-timing.py` reconciles the existing eight
+Linux x86-64 and eight Apple Silicon observations without rerunning measurements.
+It requires both complete host populations, recomputes statistics from raw samples,
+rejects signals/failures and binds all recorded source hashes to an explicitly
+selected committed snapshot. The only recognized manifest difference is the
+exact SHA-1/MD5 direct-to-workspace dependency declaration move; versions, paths,
+default features, lockfiles and all other source bytes must remain unchanged.
+
+This is an author diagnostic, **not approval or authenticated evidence**. Adjacent
+hashes do not establish who ran a command. The output preserves original capture
+HEADs and lists any source mismatches at those HEADs. Recorded compiler/executable
+digests are not reauthenticated: the original binaries are not supplied. A later
+snapshot matching recorded bytes does not rewrite the capture's history or make a dirty capture
+clean. The release gate does not consume this report as a receipt. No timing
+signal may be discarded by this tool, and its report cannot replace independent
+review, native functional qualification or constant-time analysis.
+
 The author-run regression results and local log locations are recorded in the
 [v0.25.1 development notes](../release-notes/RELEASE_NOTES_0.25.1.md).

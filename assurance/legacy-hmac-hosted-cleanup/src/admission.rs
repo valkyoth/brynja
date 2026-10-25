@@ -1,5 +1,7 @@
 //! Typed public metadata projections, independent of the host walker.
-use super::host::{Limits, Md5, Md5BatchLimits, Request, Session, Sha1CompiledSession};
+use super::host::{
+    Limits, Md5, Md5BatchLimits, Md5BatchSession, Request, Session, Sha1CompiledSession,
+};
 
 #[inline(never)]
 pub fn scalar_key_limit(value: &Limits) -> usize {
@@ -43,5 +45,10 @@ pub fn scalar_width(value: &Session<Md5>) -> usize {
 }
 #[inline(never)]
 pub fn compiled_width(value: &Sha1CompiledSession) -> usize {
+    value.tag_bytes()
+}
+
+#[inline(never)]
+pub fn batch_width(value: &Md5BatchSession) -> usize {
     value.tag_bytes()
 }

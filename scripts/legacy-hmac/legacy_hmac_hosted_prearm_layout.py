@@ -10,6 +10,7 @@ FIELDS = {
     'key_length': (56, 8, 'i64'), 'chunk_count': (56, 24, 'i64'),
     'tail_length': (56, 40, 'i64'), 'tail_bits': (56, 48, 'i8'),
     'scalar_width': (240, 64, 'i64'), 'compiled_width': (256, 64, 'i64'),
+    'batch_width': (256, 64, 'i64'),
 }
 
 

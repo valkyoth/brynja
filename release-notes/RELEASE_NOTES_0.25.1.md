@@ -2433,6 +2433,59 @@ Local logs are `release-reports/v0251-prearm-composed.log`,
 `release-reports/v0251-prearm-final-matrix.log` and
 `release-reports/v0251-prearm-crate-tests.log`.
 
+### Hosted compiler-chain reconciliation
+
+The bounded author-operated hosted-worker compiler chain is now connected
+across all four ordinary/compiled SHA-1/MD5 routes. Request admission, native
+launch, capture, callback envelope and joined transaction must describe the
+same executor artifacts, compiler and target. Initial clearing and compiled
+arming precede the checked admission boundary, which must dominate launch.
+The actual callback, captured fields, two-byte result slot and initially false
+completion flags agree across the host/worker boundary. Borrowed locals remain
+live through join and every subsequent host memory access. Unmarked allocas
+retain invocation lifetime; an orphan lifetime end cannot acquire that premise.
+The optional diagnostic summary is populated only after all four chains pass.
+
+Two remaining assurance gaps are closed without production changes. Ordinary
+scalar attribute, mapping-admission and failed-create errors now explicitly
+exercise the transaction cleanup/error model, like compiled owners already did.
+Public verification now checks the actual Boolean/error conversion as well as
+dispatch: false and true are preserved, an absent decision becomes Invariant,
+and meaningful resource/MAC errors survive both the wrapper and compiled
+consumer forwarding. All unit-error padding-byte values are enumerated so
+padding cannot select a public decision/category. This is a finite conversion
+test, not a general LLVM undefined-behavior proof. Independent typed fixtures
+bind that public Result representation and the MD5 batch tag-width getter.
+
+Focused regressions reject 636 crossed/missing projection mutations across 24
+profiles and 240 borrowed-lifetime defects, including 72 post-join use cases;
+24 unmarked frame-lifetime baselines remain accepted. Ordinary setup checks
+cover 12 profiles and 88 outcomes, rejecting 24 cleanup/status mutations.
+Public verification covers 36 profiles and 74,592 outcomes, rejecting 244
+result/dispatch and 36 typed-probe mutations, plus padding-dependent success.
+Ten independently compiled Rust defects are rejected: two forgotten setup
+cleanup guards, two corrupted batch-width probes and six forced-true verifier
+conversions. Restored Linux and Apple baselines pass.
+
+All 16 selected compiler/target/panic/SIMD profiles pass with the final
+reconciliation enabled. The hosted crate passes 20 unit/integration tests and
+16 doctests. The final composed 13-group regression run passes in 415.073
+seconds, including 216 request-layout probe mutations, cache/walker,
+source-contract and buffer-destructor regressions. Formatting, Python warning
+checks, metadata, script inventory, assurance policy, documentation links and
+whitespace checks pass. Local logs are
+`release-reports/v0251-reconcile-composed.log`,
+`release-reports/v0251-reconcile-final-matrix.log`,
+`release-reports/v0251-reconcile-crate-tests.log`,
+`release-reports/v0251-reconcile-setup-tests.log` and
+`release-reports/v0251-reconcile-public-tests.log`.
+
+The [hosted qualification scope](../docs/legacy-hmac-hosted-qualification.md)
+records the compiler matrix, source premises and exclusions. These checks do
+not establish native execution, independent qualification, arbitrary register
+or whole-worker erasure, or release readiness. No production Rust, primitive,
+dependency or release-gate policy changed in this follow-up.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -2499,8 +2552,10 @@ Local logs are `release-reports/v0251-prearm-composed.log`,
   creation, exposure, explicit declassification and consuming clearing now also
   have dedicated projections. Batch loan construction, active-lane exposure,
   declassification and consuming clearing now also have dedicated projections.
-  Bounded pre-worker request admission now also has composing checks. Final
-  cross-projection reconciliation remains open.
+  Bounded pre-worker request admission and final cross-projection reconciliation
+  now also pass their author-operated compiler checks, including ordinary setup
+  failures, borrowed-local lifetimes and the public verification result. Native,
+  independent and release qualification remain separate and pending.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.
 

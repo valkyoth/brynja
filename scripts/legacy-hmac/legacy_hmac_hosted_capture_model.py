@@ -12,6 +12,7 @@ WIDTH = {**base.WIDTH, 'i16': 2, 'i32': 4, 'i128': 16}
 
 class Record(base.Record):
     def __init__(self, arguments, body, names, target, identity):
+        self.signature, self.body = arguments, body
         self.graph = flow.blocks(body)
         self.dom = base.dominates(self.graph)
         self.names, self.target, self.identity = names, target, identity

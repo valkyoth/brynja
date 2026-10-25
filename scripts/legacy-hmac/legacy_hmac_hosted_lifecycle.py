@@ -24,7 +24,10 @@ now compose with those transactions. MD5 batch loan factories, active-lane
 views, declassification and consuming moves/clearing also compose. Bounded
 public-request admission executes actual inlined/outlined validation before
 worker-storage access, including cancellation, clearing and quarantine order.
-Final cross-projection reconciliation remains separate.
+Reconciliation binds these artifacts through the exact callback, result slot,
+completion flags and borrowed-local lifetimes. Ordinary setup-error returns and
+public verification decision/error conversion also compose. This is a bounded
+compiler projection chain, not whole-worker erasure or native qualification.
 """
 import re
 import sys
@@ -74,6 +77,8 @@ import legacy_hmac_hosted_batch_loans as batch_loans
 import legacy_hmac_hosted_batch_creation as batch_creation
 import legacy_hmac_hosted_prearm as prearm
 import legacy_hmac_hosted_prearm_layout as prearm_layout
+import legacy_hmac_hosted_reconcile as reconcile
+import legacy_hmac_hosted_verify as verification
 
 model = shared.load('hmac_hosted_lifecycle', 'legacy_hosted_lifecycle_model')
 contracts = shared.load('hmac_hosted_contracts')
@@ -176,7 +181,9 @@ def dispatch(signature, body, names, expected, identity, operation, direct=False
     return symbol
 
 
-def validate(artifacts, target, panic):
+def validate(artifacts, target, panic, reconciled=None):
+    require(reconciled is None or isinstance(reconciled, dict) and not reconciled,
+            'reconciliation output must be a fresh empty dictionary')
     require(panic in ('abort', 'unwind'), 'explicit legacy hosted panic profile required')
     contracts.validate()
     capture_types.validate()
@@ -197,6 +204,7 @@ def validate(artifacts, target, panic):
     fixture = populations['brynja-legacy-hmac-hosted-cleanup']
     loans.validate(fixture, target, compiler, panic)
     prearm_layout.validate(fixture)
+    verification.typed(fixture, compiler)
     initials = scalar.normalization.contracts.validate(fixture)
     checkpoint_flow.probes(fixture)
     md5_report_layout.validate(fixture)
@@ -218,7 +226,7 @@ def validate(artifacts, target, panic):
         'sha1_compiled': '<' + owner + '::sha1_compiled::Sha1CompiledSession>::execute',
         'md5_compiled': '<' + owner + '::md5_compiled::Md5BatchSession>::execute',
     }
-    checked = {}
+    checked, summaries = {}, {}
     for identity, executor_name in expected.items():
         for operation in ('compute', 'verify'):
             entry = 'brynja_legacy_hmac_hosted_cleanup::' + identity + '::' + operation
@@ -228,10 +236,15 @@ def validate(artifacts, target, panic):
             if identity.endswith('_compiled'):
                 public_name = executor_name.removesuffix('execute') + operation
                 public = dispatch(signature, body, fixture[2], public_name, identity, operation, direct=True)
+                if operation == 'verify':
+                    verification.check(signature, body, fixture[2], target, compiler, identity, public_name, forwarding=True)
                 signature, body = flow.resolve(public, *leaf[:2])
                 selected = dispatch(signature, body, leaf[2], executor_name, identity, operation)
             else:
                 selected = dispatch(signature, body, fixture[2], executor_name, identity, operation)
+            if operation == 'verify':
+                verification.check(signature, body, leaf[2] if identity.endswith('_compiled') else fixture[2],
+                                   target, compiler, identity, executor_name)
             if operation == 'compute' and identity != 'md5_compiled':
                 loans.creation(signature, body, leaf[2] if identity.endswith('_compiled') else fixture[2],
                                target, compiler, identity, executor_name)
@@ -243,10 +256,10 @@ def validate(artifacts, target, panic):
             population = fixture if selected in fixture[0] or selected in fixture[1] else leaf
             definitions, aliases, names = population
             signature, host = flow.resolve(selected, definitions, aliases)
-            prearm.check(signature, host, names, leaf, target, identity, compiler)
-            launch.Launch(signature, host, names, target, identity, resource)
+            prefix = prearm.check(signature, host, names, leaf, target, identity, compiler)
+            native = launch.Launch(signature, host, names, target, identity, resource)
             captured = capture.check(signature, host, names, target, identity)
-            transaction.check(captured, compiler, owner, resource)
+            joined = transaction.check(captured, compiler, owner, resource)
             normalized = dict(names)
             for symbol, name in names.items():
                 if identity == 'md5_compiled' and name == owner + '::md5_compiled::types::validate':
@@ -260,7 +273,10 @@ def validate(artifacts, target, panic):
             require(names[worker] in (resource + '::thread::enter::<' + closure + '>',
                                       resource + '::thread::enter<' + closure + '>'),
                     'legacy executor launches another closure')
-            envelope_result = envelope.check(*flow.resolve(worker, definitions, aliases), names, identity)
+            worker_signature, worker_body = flow.resolve(worker, definitions, aliases)
+            envelope_result = envelope.check(worker_signature, worker_body, names, identity)
+            summary = reconcile.check(prefix, native, captured, joined, worker, worker_signature,
+                                      worker_body, envelope_result)
             if identity.endswith('_compiled'):
                 worker_body = flow.resolve(worker, definitions, aliases)[1]
                 if any('::for_compiled_target' in names.get(call[0], '') for line in worker_body.splitlines()
@@ -312,6 +328,9 @@ def validate(artifacts, target, panic):
                 outgoing = output.check(state, arguments, panic)
                 checkpoints.Checkpoints(incoming, outgoing, target, compiler).check()
             checked[identity] = selected, worker, population, host
+            summaries[identity] = summary
     require(len(checked) == 4 and len({item[1] for item in checked.values()}) == 4,
             'legacy host/worker population collapsed')
+    if reconciled is not None:
+        reconciled.update(summaries)
     return checked

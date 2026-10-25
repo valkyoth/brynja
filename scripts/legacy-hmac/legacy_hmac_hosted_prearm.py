@@ -7,12 +7,25 @@ do not prove arbitrary loop trip counts, native protection or fatal-path erasure
 """
 import re
 from functools import lru_cache
+from typing import NamedTuple
 
 import legacy_hmac_hosted_prearm_flow as flow
 import legacy_hmac_hosted_prearm_cases as cases
 import legacy_hmac_hosted_loans as loans
 
 require, syntax, V = flow.require, flow.syntax, flow.V
+
+
+class Evidence(NamedTuple):
+    signature: str
+    body: str
+    target: str
+    identity: str
+    compiler: str
+    points: frozenset
+    callee_points: frozenset
+    scenarios: int
+    boundaries: frozenset
 
 
 class Admission:
@@ -35,6 +48,7 @@ class Admission:
         self.managed = {'local:' + syntax.operand(c[1][-1]) for line in body.splitlines()
                         if (c := syntax.call(line)) and c[0] == 'llvm.lifetime.start.p0'}
         self.points, self.callee_points = set(), set()
+        self.boundaries = set()
 
     def run(self, request):
         self.request, self.events, self.memory, self.live = request, [], {}, set()
@@ -196,6 +210,7 @@ class Admission:
                 require(len(call[1]) == 1 and argument(call[1][0]) in (('self', 128), ('self', 184)),
                         'pre-arm selected storage changed')
             require(self.request.error() is None and self.cancel_reads == 1, 'worker storage reached before valid request/cancellation')
+            self.boundaries.add(point)
             return True
         return False
 
@@ -220,4 +235,5 @@ def _check(signature, body, names, callees, target, identity, compiler):
     population = cases.batch() if identity == 'md5_compiled' else cases.scalar(identity)
     for request in population:
         model.run(request)
-    return frozenset(model.points), frozenset(model.callee_points), len(population)
+    return Evidence(signature, body, target, identity, compiler, frozenset(model.points),
+                    frozenset(model.callee_points), len(population), frozenset(model.boundaries))

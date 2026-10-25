@@ -3,7 +3,8 @@
 Starts after the independently checked join and stack clear; the shared
 pre-entry campaign also covers armed resource/attribute/create rejections.
 Worker Result transport and nonthrowing resource/clear internals are composing
-premises. Full pre-arm request validation and output loan factories are separate.
+premises. Request admission, ordinary setup errors and output loan factories
+compose through the outer lifecycle/reconciliation checks.
 """
 import itertools
 import re

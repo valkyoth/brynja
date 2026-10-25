@@ -15,6 +15,8 @@ flow, syntax, require, V = phases.flow, phases.syntax, phases.require, phases.VA
 
 class Launch:
     def __init__(self, signature, body, names, target, identity, resource):
+        self.signature, self.target, self.identity = signature, target, identity
+        self.names = dict(names)
         self.body, self.graph = body, flow.blocks(body)
         self.allocs = phases.allocations(body)
         self.owner = syntax.operand(syntax.parameters(signature)[0])

@@ -152,8 +152,25 @@ impl<'a> Md5Batch<'a> {
 
     /// Checks every active tag without a mismatch-dependent early exit. Exact
     /// candidate lengths and active-slot agreement are checked before key use.
-    /// Only the aggregate decision is returned, not per-lane secret metadata.
+    /// `Ok(report)` means every active tag matched. A mismatch is
+    /// `VerificationError::Mismatch(report)`, preserving only public work
+    /// metadata for caller validation, never per-lane match information.
+    #[inline(always)]
     pub fn verify(
+        self,
+        inputs: &[Option<Input<'_>>; 8],
+        candidates: &[Option<&[u8]>; 8],
+        control: &mut Md5BatchControl<'_>,
+    ) -> Result<Report, crate::VerificationError<Report>> {
+        let (decision, report) = self.verify_inner(inputs, candidates, control)?;
+        if decision.expose_public() {
+            Ok(report)
+        } else {
+            Err(crate::VerificationError::Mismatch(report))
+        }
+    }
+
+    fn verify_inner(
         self,
         inputs: &[Option<Input<'_>>; 8],
         candidates: &[Option<&[u8]>; 8],

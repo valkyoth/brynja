@@ -18,6 +18,35 @@ VALUE = model.SSA
 WIDTH, FIELDS = 448, (8, 456)
 
 
+def error_range_assumption(graph, label, index, args, target):
+    """Only the compiler's eight-variant Error range after Engine::verify.
+
+    This is not authority to assume a comparison matched or a stream cleared.
+    The caller separately requires both stream owners already consumed.
+    """
+    rows = graph[label]
+    if index != 1 or len(args) != 1:
+        return False
+    compare = re.fullmatch(rf'({VALUE}) = icmp ult i8 ({VALUE}), 8', rows[0])
+    if not compare or args != ['i1 ' + compare[1]]:
+        return False
+    for parent, lines in graph.items():
+        for n, line in enumerate(lines):
+            call = syntax.call(line)
+            result = re.match(rf'({VALUE}) = (?:call|invoke) ', line)
+            if not call or call[0] != target or not result:
+                continue
+            flag = [m[1] for row in lines[n + 1:]
+                    if (m := re.fullmatch(rf'({VALUE}) = extractvalue \{{ i1, i8 \}} '
+                                          + re.escape(result[1]) + ', 0', row))]
+            payload = f'{compare[2]} = extractvalue {{ i1, i8 }} {result[1]}, 1'
+            if len(flag) == 1 and payload in lines[n + 1:] and re.fullmatch(
+                    'br i1 ' + re.escape(flag[0]) + ', label %' + re.escape(label)
+                    + r', label %[-\w.$]+', lines[-1]):
+                return True
+    return False
+
+
 class State(provenance.State):
     def __init__(self):
         super().__init__()
@@ -159,6 +188,10 @@ def check(body, operation, definitions, aliases, panic, target=None):
                             state.references = {key: value for key, value in state.references.items() if key[0] != root}
                             require(all(token in state.done or any(row[3] == token for row in state.memory)
                                         for token in state.born), "last stream copy lost")
+                    elif symbol == "llvm.assume":
+                        require(base == "verify" and state.done == state.born == {0, 1}
+                                and error_range_assumption(graph, label, index, args, target),
+                                "unbound verification Error range assumption")
                     elif symbol == target:
                         position = 0 if base == "verify" else 1
                         require(len(args) == position + 4, "changed Engine finalizer arity")

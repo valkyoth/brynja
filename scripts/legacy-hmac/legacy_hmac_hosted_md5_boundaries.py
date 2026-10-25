@@ -71,7 +71,7 @@ def check(model, transfer, envelope, compiler, target, health_result):
     post, = set(guards) - {pre}
     consumer_calls = {p: model.names[s] for s, _, p in model.calls if p in after}
     auth = [p for p, name in consumer_calls.items() if name.endswith('::authenticate_secret')]
-    verify = [p for p, name in consumer_calls.items() if name.endswith('::verify')]
+    verify = [p for p, name in consumer_calls.items() if name.endswith('::verify_inner')]
     require(len(auth) == len(verify) == 1, 'MD5 consumer landmark identity changed')
     require(model.before((after[auth[0]][1][0], -1), pre)
             and any(model.before(p, pre) for p in reports), 'MD5 pre-copy admission precedes health/report')

@@ -30,11 +30,10 @@ fn boundaries<A: Algorithm>() -> Result<(), Error> {
                     if let Some(byte) = wrong.get_mut(position) {
                         *byte ^= 1;
                     }
-                    assert!(
-                        !state::<A>(&key, &message, width)?
-                            .verify(&wrong)?
-                            .expose_public()
-                    );
+                    assert!(matches!(
+                        state::<A>(&key, &message, width)?.verify(&wrong),
+                        Err(brynja_legacy_hmac::VerificationError::Mismatch(_))
+                    ));
                 }
             }
         }
@@ -66,7 +65,9 @@ fn transactions<A: Algorithm>() -> Result<(), Error> {
         assert!(output.iter().all(|byte| *byte == 0));
         assert!(matches!(
             state::<A>(b"key", b"message", A::TAG_BYTES)?.verify(&output),
-            Err(Error::TagLength)
+            Err(brynja_legacy_hmac::VerificationError::Operation(
+                Error::TagLength
+            ))
         ));
     }
     state::<A>(b"key", b"cancel", A::TAG_BYTES)?.cancel();
@@ -89,10 +90,9 @@ fn byte_tail<A: Algorithm>() -> Result<(), Error> {
             .as_bytes(),
         expected
     );
-    assert!(
-        state::<A>(b"key", b"prefix", A::TAG_BYTES)?
-            .verify_bits(tail, &expected)?
-            .expose_public()
+    assert_eq!(
+        state::<A>(b"key", b"prefix", A::TAG_BYTES)?.verify_bits(tail, &expected),
+        Ok(())
     );
     {
         let tag =
@@ -123,4 +123,59 @@ fn sha1_output_transactions() -> Result<(), Error> {
 fn byte_aligned_tails_match_byte_updates() -> Result<(), Error> {
     byte_tail::<Md5>()?;
     byte_tail::<Sha1>()
+}
+
+#[test]
+fn mismatch_is_error_for_is_ok_and_question_mark() -> Result<(), Error> {
+    use brynja_legacy_hmac::VerificationError;
+    assert_eq!(
+        VerificationError::Mismatch(17_u64).without_report(),
+        VerificationError::Mismatch(())
+    );
+    assert_eq!(
+        VerificationError::<u64>::Operation(Error::TagLength).without_report(),
+        VerificationError::Operation(Error::TagLength)
+    );
+    fn authorize<T, E>(result: Result<T, E>) -> Result<bool, E> {
+        let _ = result?;
+        Ok(true)
+    }
+    fn check<A: Algorithm>() -> Result<(), Error> {
+        for width in 10..=A::TAG_BYTES {
+            for bits in [false, true] {
+                let tail = BitString::new(&[0xa0], 3).map_err(|_| Error::SecretMemory)?;
+                let mut correct = vec![0; width];
+                let owner = state::<A>(b"nonuniform key", b"message", width)?;
+                if bits {
+                    let _ = owner.finalize_bits_tag(tail, &mut correct)?;
+                } else {
+                    let _ = owner.finalize_tag(&mut correct)?;
+                }
+                for matches in [true, false] {
+                    let mut candidate = correct.clone();
+                    if !matches {
+                        *candidate.first_mut().ok_or(Error::TagLength)? ^= 1;
+                    }
+                    let owner = state::<A>(b"nonuniform key", b"message", width)?;
+                    let result = if bits {
+                        owner.verify_bits(tail, &candidate)
+                    } else {
+                        owner.verify(&candidate)
+                    };
+                    assert_eq!(result.is_ok(), matches);
+                    assert_eq!(
+                        authorize(result),
+                        if matches {
+                            Ok(true)
+                        } else {
+                            Err(brynja_legacy_hmac::VerificationError::Mismatch(()))
+                        }
+                    );
+                }
+            }
+        }
+        Ok(())
+    }
+    check::<Md5>()?;
+    check::<Sha1>()
 }

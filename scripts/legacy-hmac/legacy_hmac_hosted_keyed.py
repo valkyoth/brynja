@@ -29,7 +29,7 @@ class Admission(model.Admission):
                     'legacy keyed Result geometry changed')
         self.results = {pointer[0] for pointer in self.factories.values()}
         operations = ({'verify_bits': (0, 4), 'finalize_bits_secret': (1, 5)} if identity == 'sha1_compiled'
-                      else {'verify': (1, 5), 'authenticate_secret': (1, 5)})
+                      else {'verify_inner': (1, 5), 'authenticate_secret': (1, 5)})
         self.consumers = []
         for operation, (argument, arity) in operations.items():
             selected = [(args, site) for symbol, args, site in self.calls

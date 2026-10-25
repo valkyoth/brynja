@@ -40,7 +40,7 @@ def mutations(api, root, env, resident=False):
         ("md5_compiled/worker.rs", "healthy(&owner)?;", "", boundary),
         ("md5_compiled/worker.rs", "report.inner.vector_blocks < parameters.backend.lane_width()", "false", boundary),
         ("md5_compiled/worker.rs", "if owner.backend() != Some(parameters.backend) {", "if false {", loans),
-        ("md5_compiled/worker.rs", "Some(decision.expose_public())", "Some(true)", "every_active_tag_byte_is_compared_and_shapes_reject"),
+        ("md5_compiled/worker.rs", "Some(decision)", "Some(true)", "every_active_tag_byte_is_compared_and_shapes_reject"),
     ]
     for name, before, after, selected in cases:
         path = root / f"src/{module}/{name}"

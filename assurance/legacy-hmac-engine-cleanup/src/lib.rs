@@ -30,8 +30,11 @@ macro_rules! probes {
                 Ok(())
             }
             #[inline(never)]
-            pub fn verify(state: Hmac<$algorithm>, candidate: &[u8]) -> Result<bool, Error> {
-                Ok(state.verify(candidate)?.expose_public())
+            pub fn verify(
+                state: Hmac<$algorithm>,
+                candidate: &[u8],
+            ) -> Result<(), brynja_legacy_hmac::VerificationError> {
+                state.verify(candidate)
             }
             #[inline(never)]
             pub fn public_bits(
@@ -59,8 +62,8 @@ macro_rules! probes {
                 state: Hmac<$algorithm>,
                 input: BitString<'_>,
                 candidate: &[u8],
-            ) -> Result<bool, Error> {
-                Ok(state.verify_bits(input, candidate)?.expose_public())
+            ) -> Result<(), brynja_legacy_hmac::VerificationError> {
+                state.verify_bits(input, candidate)
             }
             #[inline(never)]
             pub fn update_cancel(

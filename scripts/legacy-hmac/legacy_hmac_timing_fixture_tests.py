@@ -46,9 +46,9 @@ class FixtureTests(unittest.TestCase):
             path = fixture / "src/routes.rs"
             original = path.read_text()
             mutants = (
-                ('return Ok(checked(state.verify(black_box(&candidate[0][..bytes])))?.expose_public());',
+                ('return leaf_authentication(state.verify(black_box(&candidate[0][..bytes])));',
                  'let _ = (state, candidate); return Ok(false);'),
-                ('return Ok(checked(state.verify(black_box(&candidate[0][..bytes])))?.expose_public());',
+                ('return leaf_authentication(state.verify(black_box(&candidate[0][..bytes])));',
                  'let _ = (state, candidate); return Ok(true);'),
                 ('black_box(checked(state.finalize_tag(&mut out[0][..bytes]))?.as_bytes());',
                  'let _ = state; out[0].fill(0);'),

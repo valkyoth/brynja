@@ -407,6 +407,9 @@ pub fn verify(
     candidates: &[Option<&[u8]>; 8],
     control: &mut Md5BatchControl<'_>,
 ) -> Result<(bool, Report), Error> {
-    let (decision, report) = selection.verify(inputs, candidates, control)?;
-    Ok((decision.expose_public(), report))
+    match selection.verify(inputs, candidates, control) {
+        Ok(report) => Ok((true, report)),
+        Err(brynja_legacy_hmac::VerificationError::Mismatch(report)) => Ok((false, report)),
+        Err(brynja_legacy_hmac::VerificationError::Operation(error)) => Err(error),
+    }
 }

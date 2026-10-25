@@ -87,6 +87,37 @@ post-report reads/cleanup are deliberately outside this report-only check.
         require(len(starts) == 1 and ends, 'MD5 report storage lifetime absent/duplicated')
         require(not any(a != b and model.can_precede(a, b) for a in ends for b in ends),
                 'MD5 report storage lifetime ended twice on one path')
+        if root not in partial:
+            # Split verification results now end on several success/error
+            # edges. One surviving end is not evidence for every other edge.
+            # LLVM may omit lifetime.end when unwinding destroys the frame;
+            # secret destruction on unwind is a separate cleanup obligation.
+            pending = [(starts[0][0], starts[0][1] + 1)]
+            visited = set()
+            while pending:
+                block, offset = pending.pop()
+                if (block, offset) in visited:
+                    continue
+                visited.add((block, offset))
+                for index in range(offset, len(model.graph[block])):
+                    if (block, index) in ends:
+                        break
+                    line = model.graph[block][index]
+                    require(not line.startswith('ret '),
+                            'MD5 report storage escapes an exit without lifetime end: '
+                            + root + ' at ' + block)
+                    targets = re.findall('label %' + L, line)
+                    if 'invoke ' in line:
+                        if not targets and index + 1 < len(model.graph[block]):
+                            continuation = model.graph[block][index + 1].split(', !', 1)[0]
+                            require(re.fullmatch('to label %' + L + ' unwind label %' + L,
+                                                 continuation), 'MD5 lifetime invoke continuation changed: ' + continuation)
+                            targets = re.findall('label %' + L, continuation)
+                        require(len(targets) == 2, 'MD5 lifetime invoke edges changed')
+                        targets = targets[:1]
+                    if targets:
+                        pending.extend((target, 0) for target in targets)
+                        break
         for point in tuple(points):
             line = model.graph[point[0]][point[1]]
             if 'llvm.lifetime.' in line:

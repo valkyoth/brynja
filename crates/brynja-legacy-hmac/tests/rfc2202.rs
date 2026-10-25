@@ -37,7 +37,7 @@ fn check<A: Algorithm>(key: &[u8], message: &[u8], hex: &str) -> Result<(), Erro
 
             let mut verify = Hmac::<A>::with_tag_length(LegacyUse::acknowledge(), key, width)?;
             verify.update(message)?;
-            assert!(verify.verify(prefix)?.expose_public());
+            assert_eq!(verify.verify(prefix), Ok(()));
         }
     }
     Ok(())

@@ -86,8 +86,8 @@ let mut bytes = [0; 20];
 let tag = state.finalize_tag(&mut bytes)?;
 let mut verifier = Hmac::<Sha1>::new(LegacyUse::acknowledge(), &key)?;
 verifier.update(b"legacy message")?;
-assert!(verifier.verify(tag.as_bytes())?.expose_public());
-# Ok::<(), brynja_legacy_hmac::Error>(())
+verifier.verify(tag.as_bytes())?; // A mismatched tag is an error, never Ok(false).
+# Ok::<(), brynja_legacy_hmac::VerificationError>(())
 ```
 
 `LegacyUse` is a caller acknowledgement, not runtime provenance enforcement.
@@ -96,6 +96,15 @@ the full digest width before message processing, including the historical
 12-byte (96-bit) profile. Modern HMAC's minimum is unchanged. Never select the
 width from an untrusted incoming tag. Applications enforce work limits and
 failed-verification quotas.
+
+All portable and accelerated SHA-1 `verify`/`verify_bits` APIs return `Ok(())`
+only for a matching tag. MD5 batch `verify` returns `Ok(Report)` only if every
+active tag matches. Mismatch is `VerificationError::Mismatch`, carrying `()`
+for scalar verification or the completed public `Report` for MD5 batching;
+operational failures are `VerificationError::Operation(Error)`. Neither
+`.is_ok()` nor propagation with `?` accepts a mismatched tag. Batch mismatch
+metadata allows hosted owners to validate work provenance on both outcomes;
+it contains no tag bytes or per-lane match decisions.
 
 `finalize_secret` returns an affine clearing output owner. Public-output errors
 leave the destination unchanged; secret-output errors clear the destination.

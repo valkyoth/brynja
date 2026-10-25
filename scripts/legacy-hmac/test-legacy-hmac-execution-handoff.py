@@ -78,6 +78,26 @@ class HandoffTests(unittest.TestCase):
                                     f"call void @llvm.memcpy.p0.p0.i64(ptr {pointer}, ptr %tail, i64 8, i1 false)"):
                     self.reject(operation, store, store + "\n  " + instruction)
 
+    def test_verification_range_assumption_is_not_authentication(self):
+        for operation in ("verify", "verify_bits"):
+            body = self.leaf(operation)
+            assumptions = [line for line in body.splitlines()
+                           if (call := handoff.syntax.call(line)) and call[0] == 'llvm.assume']
+            self.assertEqual(len(assumptions), 1)
+            assume = assumptions[0]
+            _, args = handoff.syntax.call(assume)
+            predicate = args[0].split()[-1]
+            compare = next(line for line in body.splitlines()
+                           if line.strip().startswith(predicate + ' = icmp ult i8 '))
+            for edit in (compare.replace(', 8', ', 9'),
+                         compare.replace('icmp ult', 'icmp eq'),
+                         re.sub(r'icmp ult i8 %[-\w.]+', 'icmp ult i8 %unbound', compare)):
+                self.reject(operation, compare, edit)
+            for value in ('true', 'false', '%unbound'):
+                self.reject(operation, assume, assume.replace(predicate, value))
+            self.reject(operation, assume, assume + '\n' + assume)
+            self.reject(operation, 'start:', 'start:\n  call void @llvm.assume(i1 true)')
+
     def test_secret_consumption_and_unwind(self):
         body = self.leaf("secret")
         calls = [line for line in body.splitlines() if (item := handoff.syntax.call(line))
@@ -180,7 +200,7 @@ class HandoffTests(unittest.TestCase):
         handoff.validate(baseline[1][1], "unwind", baseline[0][1])
         for before, after in (("core::hint::black_box(state.finalize_tag(output)?.as_bytes());", "core::mem::forget(state);"),
                               ("state.finalize_bits_tag(input, output)?", "state.finalize_tag(output)?"),
-                              ("state.verify(candidate)?", "state.verify(&candidate[..0])?")):
+                              ("state.verify(candidate)", "state.verify(&candidate[..0])")):
             self.assertIn(before, original)
             path.write_text(original.replace(before, after, 1))
             emitted = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu", "unwind", work / "Cargo.toml")

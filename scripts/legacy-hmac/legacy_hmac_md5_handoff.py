@@ -12,6 +12,7 @@ rows, flow, syntax, require, VALUE = fence.rows, fence.flow, fence.syntax, fence
 
 
 def closure(symbol, method):
+    method = "verify_inner" if method == "verify" else method
     return bool(re.fullmatch(
         r"_RNCNvMs_NtCs\w+_18brynja_legacy_hmac9md5_batchNtB\w+_8Md5Batch" + str(len(method)) + method + r"0B\w+_|"
         r"_ZN18brynja_legacy_hmac9md5_batch8Md5Batch" + str(len(method)) + method

@@ -104,8 +104,11 @@ pub fn secret(state: Sha1Hmac<'_>, output: &mut [u8]) -> Result<(), Error> {
     Ok(())
 }
 #[inline(never)]
-pub fn verify(state: Sha1Hmac<'_>, candidate: &[u8]) -> Result<bool, Error> {
-    Ok(state.verify(candidate)?.expose_public())
+pub fn verify(
+    state: Sha1Hmac<'_>,
+    candidate: &[u8],
+) -> Result<(), brynja_legacy_hmac::VerificationError> {
+    state.verify(candidate)
 }
 #[inline(never)]
 pub fn public_bits(
@@ -132,6 +135,6 @@ pub fn verify_bits(
     state: Sha1Hmac<'_>,
     input: BitString<'_>,
     candidate: &[u8],
-) -> Result<bool, Error> {
-    Ok(state.verify_bits(input, candidate)?.expose_public())
+) -> Result<(), brynja_legacy_hmac::VerificationError> {
+    state.verify_bits(input, candidate)
 }

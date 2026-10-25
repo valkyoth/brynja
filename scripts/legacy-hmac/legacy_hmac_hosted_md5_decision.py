@@ -117,8 +117,16 @@ class Decision:
         good, _, _ = boundary.branch(m, block, offset, report_value[1], self.ok, self.points)
         require(self.parents(good) == {block}, 'MD5 decision exposure bypasses report admission')
         cursor = self.cursor((good, 0))
-        public, = cursor.take('(' + V + ') = icmp ne i8 ' + re.escape(self.verify.decision) + ', 0')
-        byte, = cursor.take('(' + V + ') = zext i1 ' + re.escape(public) + ' to i8')
+        if hasattr(self.verify, 'decision_cleanup'):
+            if hasattr(self.verify, 'decision_byte'):
+                byte = self.verify.decision_byte
+            else:
+                byte, = cursor.take('(' + V + ') = zext i1 ' + re.escape(self.verify.decision_bool) + ' to i8')
+            for root in self.verify.decision_cleanup:
+                cursor.lifetime('end', root)
+        else:
+            public, = cursor.take('(' + V + ') = icmp ne i8 ' + re.escape(self.verify.decision) + ', 0')
+            byte, = cursor.take('(' + V + ') = zext i1 ' + re.escape(public) + ' to i8')
         merged, = cursor.take('br label %' + L)
         cursor.end()
         cursor = self.cursor((merged, 0))

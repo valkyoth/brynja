@@ -51,6 +51,8 @@ class Transport:
         cursor = self.start(96)
         entry = cursor.block
         discriminator = cursor.load(cursor.gep(self.source, 88))
+        if ' = icmp ne i8 ' in cursor.rows[cursor.index]:
+            return self.verification_adapter(cursor, discriminator)
         rejected = cursor.compare(discriminator)
         first = cursor.load(self.source)
         common, success = cursor.branch(rejected)
@@ -87,6 +89,72 @@ class Transport:
             cursor.copy(tail, 7, cursor.gep(self.destination, 81))
         cursor.stop(self.report)
         self.points.add(self.report)
+        t.audit(self.m, self.roots, self.points, self.consumer, self.report)
+
+    def verification_adapter(self, cursor, discriminator):
+        """Inlined mismatch-as-error adapter, including the mismatch report.
+
+        An operational error cannot take the report edge. Both comparison
+        outcomes must take it with the same completed report bytes. The
+        decision's Boolean conversion is bound here, before final admission;
+        it is not released to the host until the separate status walk passes.
+        """
+        accepted, = cursor.take('(' + V + ') = icmp ne i8 ' + re.escape(discriminator) + ', 2')
+        first = cursor.load(self.source)
+        success, error = cursor.branch(accepted)
+        cursor = self.cursor((error, 0))
+        cursor.lifetime('end', self.source)
+        common, = cursor.take('br label %' + t.L)
+        cursor.end()
+        cursor = self.cursor((success, 0))
+        backend = cursor.load(cursor.gep(self.source, 8))
+        middle = cursor.copy(cursor.gep(self.source, 9), 79)
+        tail = cursor.copy(cursor.gep(self.source, 89), 7)
+        self.root(middle, 79)
+        self.root(tail, 7)
+        cursor.lifetime('end', self.source)
+        matched, = cursor.take('(' + V + ') = icmp ne i8 ' + re.escape(first) + ', 0')
+        cursor.jump(common)
+        cursor = self.cursor((common, 0))
+        phis = {}
+        for _ in range(2):
+            value, kind, pairs = cursor.take('(' + V + ') = phi (i1|i8) (.*)')
+            require(kind not in phis, 'duplicate verification adapter phi kind')
+            phis[kind] = (value, pairs)
+        require(set(phis) == {'i1', 'i8'}
+                and phis['i1'][1] == f'[ false, %{error} ], [ {matched}, %{success} ]'
+                and phis['i8'][1] == f'[ {first}, %{error} ], [ {backend}, %{success} ]',
+                'verification adapter decision/report phi provenance changed')
+        decision, payload = phis['i1'][0], phis['i8'][0]
+        health_call = self.health[0]
+        health_root = syntax.operand(self.calls[health_call][1][0])
+        cursor.lifetime('start', health_root)
+        cursor.stop(health_call)
+        cursor = self.cursor(self.health[1])
+        admitted, = cursor.take('(' + V + ') = or i1 ' + re.escape(accepted) + ', ' + re.escape(decision))
+        if ' = zext i1 ' in cursor.rows[cursor.index]:
+            self.decision_byte, = cursor.take('(' + V + ') = zext i1 ' + re.escape(decision) + ' to i8')
+        else:
+            # MSRV converts the same Boolean only after report admission.
+            self.decision_bool = decision
+        good, bad = cursor.branch(admitted)
+        require(not self.m.can_precede((bad, -1), self.report), 'failed verification reaches report')
+        cursor = self.cursor((good, 0))
+        self.root(self.destination, 88)
+        copies_first = not cursor.rows[cursor.index].startswith('store i8 ')
+        if copies_first:
+            cursor.copy(middle, 79, cursor.gep(self.destination, 1))
+            cursor.copy(tail, 7, cursor.gep(self.destination, 81))
+        cursor.store(payload, self.destination)
+        if not copies_first:
+            cursor.copy(middle, 79, cursor.gep(self.destination, 1))
+        cursor.store(discriminator, cursor.gep(self.destination, 80))
+        if not copies_first:
+            cursor.copy(tail, 7, cursor.gep(self.destination, 81))
+        cursor.stop(self.report)
+        self.points.add(self.report)
+        self.decision = first
+        self.decision_cleanup = (middle, tail)
         t.audit(self.m, self.roots, self.points, self.consumer, self.report)
 
     def authentication(self):
@@ -154,7 +222,7 @@ def check(model, health_result, target):
         require(len(matches) == 1, 'MD5 consumer/report association changed')
         result = Transport(model, consumer, matches[0], health_result[2][consumer])
         name = model.names[result.calls[consumer][0]]
-        if name.endswith('::verify'):
+        if name.endswith('::verify_inner'):
             result.verification()
         else:
             require(name.endswith('::authenticate_secret'), 'unreviewed MD5 consumer')

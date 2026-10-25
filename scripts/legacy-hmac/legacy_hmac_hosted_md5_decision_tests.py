@@ -52,7 +52,9 @@ class Md5DecisionTests:
 
             model, decision = validate(body)
             mutants = []
-            for block, index in sorted(decision.points):
+            # The public mismatch adapter can convert the Boolean before report
+            # admission. Mutate that transport too, not just the final suffix.
+            for block, index in sorted(decision.points | decision.verify.points):
                 line = model.graph[block][index]
                 if ' = icmp ' in line:
                     mutants.append(body.replace(line, line.replace('icmp eq', 'icmp ne') if 'icmp eq' in line
@@ -114,10 +116,10 @@ class Md5DecisionTests:
             original = path.read_text()
             edits = (
                 ('.verify(&lanes, candidates, &mut control)', '.verify(&lanes, &[None; 8], &mut control)'),
-                ('Some(decision.expose_public())', 'Some(true)'),
-                ('Some(decision.expose_public())', 'Some(false)'),
-                ('Some(decision.expose_public())', 'Some(!decision.expose_public())'),
-                ('Some(decision.expose_public())', 'None'),
+                ('Some(decision)', 'Some(true)'),
+                ('Some(decision)', 'Some(false)'),
+                ('Some(decision)', 'Some(!decision)'),
+                ('Some(decision)', 'None'),
                 ('        None\n    };', '        Some(true)\n    };'),
                 ('let result = if let Some(candidates) = candidates {',
                  'let result = if let Some(candidates) = candidates.filter(|_| false) {'),

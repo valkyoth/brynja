@@ -158,13 +158,12 @@ fn case(
         drop(secret);
         assert_eq!(output, [[0; 16]; 8]);
         let candidates = full.each_ref().map(|row| row.get(..length));
-        let (decision, report) = select(executor, length)?.verify(
+        let verified = select(executor, length)?.verify(
             &inputs,
             &candidates,
             &mut Md5BatchControl::new(10000),
-        )?;
-        assert!(decision.expose_public());
-        assert_eq!(report, expected_report);
+        );
+        assert_eq!(verified, Ok(expected_report));
         for lane in 0..8 {
             let mut wrong = candidates;
             let other = candidates
@@ -173,12 +172,11 @@ fn case(
                 .ok_or(Error::SecretMemory)?;
             assert_ne!(candidates.get(lane), Some(&other));
             *wrong.get_mut(lane).ok_or(Error::SecretMemory)? = other;
-            assert!(
-                !select(executor, length)?
-                    .verify(&inputs, &wrong, &mut Md5BatchControl::new(10000),)?
-                    .0
-                    .expose_public()
-            );
+            assert!(matches!(
+                select(executor, length)?
+                    .verify(&inputs, &wrong, &mut Md5BatchControl::new(10000),),
+                Err(brynja_legacy_hmac::VerificationError::Mismatch(_))
+            ));
         }
     }
     for (lane, tag) in full.iter().enumerate() {

@@ -35,10 +35,8 @@ pub(super) fn run<A: Algorithm>(
     checkpoint(cancel)?;
     let result = if let Some(candidate) = candidate {
         Some(
-            state
-                .verify_bits(tail, candidate)
-                .map_err(Error::Mac)?
-                .expose_public(),
+            crate::common::verification_decision(state.verify_bits(tail, candidate))
+                .map_err(Error::Mac)?,
         )
     } else {
         let secret = state

@@ -49,6 +49,45 @@ def oracle(output):
     require(actual == expected, "independent hashlib/hmac differential mismatch or missing population")
 
 
+def verification_mutants(leaf, consumer, environment, sha1, md5):
+    """Real compiled API bypasses must fail tests, not merely fail to compile."""
+    cases = [("src/output.rs", "if self.expose_public() {", "contracts",
+              "mismatch_is_error_for_is_ok_and_question_mark", None, None)]
+    if sha1:
+        cases.append(("src/output.rs", "if self.expose_public() {", "sha1_execution",
+                      "native_sha1_byte_and_bit_composition", "sha1-execution", sha1))
+    if md5:
+        cases.append(("src/md5_batch/mod.rs", "if decision.expose_public() {", "md5_batch",
+                      "native_md5_verification_and_lifecycle", "md5-batch", md5))
+    count = 0
+    for name, anchor, test, selected, feature, flags in cases:
+        path = leaf / name
+        original = path.read_text()
+        require(original.count(anchor) == 1, "verification mutation anchor")
+        env = dict(environment)
+        if flags:
+            env['RUSTFLAGS'] = '-C target-feature=' + flags
+        for profile in ([], ['--release']):
+            command = ['cargo', 'test', '--offline', '--locked', *profile, '--test', test]
+            if feature:
+                command += ['--features', feature]
+            invocation = command + [selected, '--', '--exact'] + (['--ignored'] if feature else [])
+            try:
+                path.write_text(original.replace(anchor, 'if true {'))
+                run(command + ['--no-run'], consumer, env)
+                cargo_environment.check(consumer, env)
+                result = subprocess.run(invocation, cwd=consumer, env=env, capture_output=True,
+                                        text=True, timeout=180, check=False)
+                require(result.returncode == 101 and 'test result: FAILED. 0 passed; 1 failed;' in result.stdout,
+                        'compiled mismatched-tag acceptance escaped: ' + test)
+                count += 1
+            finally:
+                path.write_text(original)
+            require('test result: ok. 1 passed; 0 failed; 0 ignored;' in run(invocation, consumer, env),
+                    'restored verification baseline failed')
+    print(f'Legacy verification: {count} compiled mismatch-acceptance mutants rejected')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sha1-native", action="store_true", help="also require actual native SHA1 execution from extracted archives")
@@ -94,7 +133,7 @@ def main():
         graph = json.loads(run(["cargo", "metadata", "--offline", "--locked", "--format-version", "1"], consumer, environment))
         packaged_graph(graph, roots, consumer)
         for profile in ([], ["--release"]):
-            for test, count in (("contracts", 5), ("rfc2202", 2), ("retained", 3)):
+            for test, count in (("contracts", 6), ("rfc2202", 2), ("retained", 3)):
                 output = run(["cargo", "test", "--offline", "--locked", *profile, "--test", test], consumer, environment)
                 require(f"test result: ok. {count} passed; 0 failed; 0 ignored;" in output,
                         "packaged runtime population: " + test)
@@ -130,6 +169,7 @@ def main():
         workspace_environment["CARGO_HOME"] = os.environ.get("CARGO_HOME", str(Path.home() / ".cargo"))
         graph = json.loads(run(["cargo", "metadata", "--offline", "--locked", "--all-features", "--format-version", "1"], ROOT, workspace_environment))
         isolation(graph)
+        verification_mutants(leaf, consumer, environment, selected, md5_selected)
         print("Legacy HMAC: extracted debug/release RFC vectors, contracts, README, 140 byte / 176 bit differentials per profile and normal-edge isolation PASS")
 
 

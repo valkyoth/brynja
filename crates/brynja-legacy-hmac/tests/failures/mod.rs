@@ -31,9 +31,15 @@ fn run(
             .map(|(tags, _)| drop(tags)),
         Route::Verify => {
             let candidates = expected.each_ref().map(|row| Some(row.as_slice()));
-            let (decision, _) = token.verify(inputs, &candidates, control)?;
-            assert!(decision.expose_public());
-            Ok(())
+            match token.verify(inputs, &candidates, control) {
+                Ok(_) => Ok(()),
+                Err(brynja_legacy_hmac::VerificationError::Operation(error)) => Err(error),
+                Err(brynja_legacy_hmac::VerificationError::Mismatch(_)) => {
+                    // Never mistake a bad fixture tag for the injected unwind.
+                    eprintln!("matching fixture tags must authenticate");
+                    std::process::abort()
+                }
+            }
         }
     }
 }
@@ -196,7 +202,9 @@ fn rejects_before_work(
     let mut control = Md5BatchControl::with_cancellation(777, &mut callback);
     assert!(matches!(
         select(executor, width)?.verify(inputs, candidates, &mut control),
-        Err(Error::TagLength)
+        Err(brynja_legacy_hmac::VerificationError::Operation(
+            Error::TagLength
+        ))
     ));
     assert_eq!(control.remaining(), 777);
     assert_eq!(calls, 0);

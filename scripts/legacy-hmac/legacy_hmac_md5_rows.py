@@ -19,6 +19,9 @@ scratch.output_guard_drop = lambda line, body: False
 
 
 def method(definitions, aliases, operation):
+    # The comparison/cleanup body is private. Public verify converts its final
+    # decision to mismatch-as-error; native API regressions cover that adapter.
+    operation = "verify_inner" if operation == "verify" else operation
     prefix = (r"_RNvMs_NtCs\w+_18brynja_legacy_hmac9md5_batchNtB\w+_8Md5Batch|"
               r"_ZN18brynja_legacy_hmac9md5_batch8Md5Batch")
     matches = [name for name in (*definitions, *aliases)
@@ -79,8 +82,8 @@ def validate(llvm, panic):
                     r"_ZN18brynja_legacy_hmac9md5_batch6engine4pads17h[0-9a-f]+E", invocation[0]):
                 pads.add(invocation[0])
             if invocation and re.fullmatch(
-                    r"_RNCNvMs_NtCs\w+_18brynja_legacy_hmac9md5_batchNtB\w+_8Md5Batch6verify0B\w+_|"
-                    r"_ZN18brynja_legacy_hmac9md5_batch8Md5Batch6verify28_\$u7b\$\$u7b\$closure\$u7d\$\$u7d\$17h[0-9a-f]+E",
+                    r"_RNCNvMs_NtCs\w+_18brynja_legacy_hmac9md5_batchNtB\w+_8Md5Batch12verify_inner0B\w+_|"
+                    r"_ZN18brynja_legacy_hmac9md5_batch8Md5Batch12verify_inner28_\$u7b\$\$u7b\$closure\$u7d\$\$u7d\$17h[0-9a-f]+E",
                     invocation[0]) and operation == "verify":
                 comparisons.add(invocation[0])
     require(len(pads) == 1, "missing/ambiguous actual normalization call")

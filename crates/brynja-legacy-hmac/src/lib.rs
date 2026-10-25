@@ -16,6 +16,7 @@ mod algorithms;
 mod engine;
 mod output;
 mod scratch;
+mod verification;
 
 #[cfg(feature = "sha1-execution")]
 pub mod execution;
@@ -26,6 +27,7 @@ pub mod md5_batch;
 pub use algorithms::{Algorithm, Md5, Sha1};
 pub use brynja_legacy_sha1::{BitString, BitStringError};
 pub use output::{SecretTag, Tag, Verification};
+pub use verification::VerificationError;
 
 /// Value-free failure from a legacy HMAC operation.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -170,13 +172,20 @@ impl<A: Algorithm> Hmac<A> {
 
     /// Consumes this state and compares exactly the preselected tag length.
     /// Equal-length comparison accumulates every byte difference.
-    pub fn verify(self, candidate: &[u8]) -> Result<Verification, Error> {
-        self.engine.verify(None, candidate)
+    /// Only a matching tag returns `Ok(())`; `.is_ok()` and `?` reject mismatch.
+    #[inline(always)]
+    pub fn verify(self, candidate: &[u8]) -> Result<(), VerificationError> {
+        self.engine.verify(None, candidate)?.require_match()
     }
 
     /// Consumes a canonical high-bit-order final message and verifies its tag.
-    pub fn verify_bits(self, tail: BitString<'_>, candidate: &[u8]) -> Result<Verification, Error> {
-        self.engine.verify(Some(tail), candidate)
+    #[inline(always)]
+    pub fn verify_bits(
+        self,
+        tail: BitString<'_>,
+        candidate: &[u8],
+    ) -> Result<(), VerificationError> {
+        self.engine.verify(Some(tail), candidate)?.require_match()
     }
 
     /// Consumes and clears this state without producing an authenticator.

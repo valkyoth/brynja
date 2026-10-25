@@ -68,10 +68,9 @@ fn emit_bits<A: Algorithm>(name: &str) -> Result<(), Error> {
                 assert!(output.iter().all(|byte| *byte == 0));
                 let mut verify = Hmac::<A>::with_tag_length(LegacyUse::acknowledge(), &key, 10)?;
                 verify.update(prefix)?;
-                assert!(
-                    verify
-                        .verify_bits(suffix, expected.get(..10).ok_or(Error::TagLength)?)?
-                        .expose_public()
+                assert_eq!(
+                    verify.verify_bits(suffix, expected.get(..10).ok_or(Error::TagLength)?),
+                    Ok(())
                 );
             }
             print!("LEGACY_HMAC_BITS:{name}:{key_length}:{bits}:");

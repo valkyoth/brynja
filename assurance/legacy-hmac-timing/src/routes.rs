@@ -130,9 +130,7 @@ impl Route {
                 ))?;
                 checked(state.update(message))?;
                 if let Some(candidate) = candidate {
-                    return Ok(
-                        checked(state.verify(black_box(&candidate[0][..bytes])))?.expose_public()
-                    );
+                    return leaf_authentication(state.verify(black_box(&candidate[0][..bytes])));
                 }
                 black_box(checked(state.finalize_tag(&mut out[0][..bytes]))?.as_bytes());
                 Ok(false)
@@ -156,9 +154,17 @@ impl Route {
                         (lane < lanes).then_some(&candidate[lane][..bytes])
                     });
                     let (decision, report) =
-                        checked(selection.verify(&inputs, black_box(&candidates), &mut control))?;
+                        match selection.verify(&inputs, black_box(&candidates), &mut control) {
+                            Ok(report) => (true, report),
+                            Err(brynja_legacy_hmac::VerificationError::Mismatch(report)) => {
+                                (false, report)
+                            }
+                            Err(brynja_legacy_hmac::VerificationError::Operation(error)) => {
+                                return Err(format!("{error:?}"));
+                            }
+                        };
                     actual_md5(report, lanes)?;
-                    return Ok(decision.expose_public());
+                    return Ok(decision);
                 }
                 let mut rows = [[0; 16]; 8];
                 let (tags, report) =
@@ -230,7 +236,7 @@ fn portable<A: Algorithm>(
     ))?;
     checked(state.update(message))?;
     if let Some(candidate) = candidate {
-        return Ok(checked(state.verify(black_box(&candidate[0][..bytes])))?.expose_public());
+        return leaf_authentication(state.verify(black_box(&candidate[0][..bytes])));
     }
     black_box(checked(state.finalize_tag(&mut out[0][..bytes]))?.as_bytes());
     Ok(false)
@@ -277,5 +283,16 @@ fn authentication(
         Err(brynja_legacy_hmac_std::VerificationError::Operation(error)) => {
             Err(format!("{error:?}"))
         }
+    }
+}
+
+// Diagnostic fixture only: a mismatch is a measured class, not authorization.
+fn leaf_authentication(
+    value: std::result::Result<(), brynja_legacy_hmac::VerificationError>,
+) -> Result<bool> {
+    match value {
+        Ok(()) => Ok(true),
+        Err(brynja_legacy_hmac::VerificationError::Mismatch(())) => Ok(false),
+        Err(brynja_legacy_hmac::VerificationError::Operation(error)) => Err(format!("{error:?}")),
     }
 }

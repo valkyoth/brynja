@@ -54,6 +54,14 @@ class Md5ResultTests:
                     mutants.append(body.replace(line, re.sub(r'\[ %[-\w.]+,', '[ 0,', line, count=1), 1))
                 elif ' = icmp eq i8 ' in line:
                     mutants.append(body.replace(line, line.replace('icmp eq', 'icmp ne'), 1))
+                elif ' = icmp ne i8 ' in line:
+                    mutants.append(body.replace(line, line.replace('icmp ne', 'icmp eq'), 1))
+                elif ' = phi i1 ' in line:
+                    mutants.append(body.replace(line, line.replace('[ false,', '[ true,'), 1))
+                elif ' = or i1 ' in line:
+                    mutants.append(body.replace(line, line.replace('or i1', 'and i1'), 1))
+                elif ' = zext i1 ' in line:
+                    mutants.append(body.replace(line, re.sub(r'zext i1 %[-\w.]+', 'zext i1 true', line), 1))
                 elif line.startswith('br i1 '):
                     _, good = re.findall('label %' + h.flow.LABEL, line)
                     mutants.append(body.replace(line, 'br label %' + good, 1))

@@ -182,13 +182,12 @@ fn check_case(
             );
         }
         let candidates = output.each_ref().map(|row| row.get(..length));
-        let (verified, actual) = select(executor, length)?.verify(
+        let verified = select(executor, length)?.verify(
             &inputs,
             &candidates,
             &mut Md5BatchControl::new(work(report)?),
-        )?;
-        assert!(verified.expose_public());
-        assert_eq!(actual, report);
+        );
+        assert_eq!(verified, Ok(report));
         let (secret, actual) = select(executor, length)?.authenticate_secret(
             &inputs,
             &mut output,
@@ -221,6 +220,7 @@ fn native_md5_verification_and_lifecycle() -> Result<(), Error> {
         &mut expected,
         &mut Md5BatchControl::new(1000),
     )?;
+    let initial_health = executor.health();
     for lane in 0..8 {
         for byte in 0..16 {
             let mut wrong = expected;
@@ -229,24 +229,37 @@ fn native_md5_verification_and_lifecycle() -> Result<(), Error> {
                 .and_then(|row| row.get_mut(byte))
                 .ok_or(Error::SecretMemory)? ^= 1;
             let candidates = wrong.each_ref().map(|row| Some(row.as_slice()));
-            assert!(
-                !select(&executor, 16)?
-                    .verify(&inputs, &candidates, &mut Md5BatchControl::new(1000))?
-                    .0
-                    .expose_public()
+            let rejected = select(&executor, 16)?.verify(
+                &inputs,
+                &candidates,
+                &mut Md5BatchControl::new(1000),
             );
+            fn authorize<T, E>(result: Result<T, E>) -> Result<bool, E> {
+                let _ = result?;
+                Ok(true)
+            }
+            assert!(!rejected.is_ok());
+            assert_eq!(
+                authorize(rejected),
+                Err(brynja_legacy_hmac::VerificationError::Mismatch(report))
+            );
+            assert_eq!(executor.health(), initial_health);
         }
     }
     assert!(matches!(
         select(&executor, 16)?.verify(&inputs, &[None; 8], &mut Md5BatchControl::new(0)),
-        Err(Error::TagLength)
+        Err(brynja_legacy_hmac::VerificationError::Operation(
+            Error::TagLength
+        ))
     ));
     for budget in 0..work(report)? {
         let mut output = [[0xa5; 16]; 8];
         let candidates = expected.each_ref().map(|row| Some(row.as_slice()));
         assert!(matches!(
             select(&executor, 16)?.verify(&inputs, &candidates, &mut Md5BatchControl::new(budget)),
-            Err(Error::WorkLimit)
+            Err(brynja_legacy_hmac::VerificationError::Operation(
+                Error::WorkLimit
+            ))
         ));
         assert!(matches!(
             select(&executor, 16)?.authenticate(
@@ -286,7 +299,9 @@ fn native_md5_verification_and_lifecycle() -> Result<(), Error> {
     let candidates = expected.each_ref().map(|row| Some(row.as_slice()));
     assert!(matches!(
         verify.verify(&inputs, &candidates, &mut Md5BatchControl::new(1000)),
-        Err(Error::ExecutionFailed)
+        Err(brynja_legacy_hmac::VerificationError::Operation(
+            Error::ExecutionFailed
+        ))
     ));
     assert!(matches!(
         token.authenticate_secret(&inputs, &mut output, &mut Md5BatchControl::new(1000)),

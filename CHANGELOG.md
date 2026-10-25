@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.25.1 candidate
+
+- Add explicit legacy-only HMAC-SHA-1 and HMAC-MD5 owners, hardware/SIMD
+  execution and separate Linux protected / Apple Silicon resident sessions.
+  These are not modern algorithm providers or military/FIPS certification.
+- Make every legacy verification entry point reject tag mismatch as an error,
+  including portable, accelerated, batch and hosted APIs. The unreleased
+  earlier boolean/opaque-decision success contracts are replaced; `.is_ok()`
+  and `?` cannot authorize a mismatched tag.
+- Keep post-admission MD5 integrity failures quarantined, while preserving
+  reuse after ordinary cancellation or work/length rejection. Document the
+  scope of required SIMD, caller-owned memory and fatal-termination limits.
+- Independent retest and release qualification remain pending.
+
 ## 0.24.52 candidate
 
 - Add explicit per-family execution, general SHA-512/t and ordinary/hardened

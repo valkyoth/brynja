@@ -14,7 +14,7 @@
 mod adapter;
 mod retained;
 
-use crate::{BitString, Error, LegacyUse, SecretTag, Sha1, Tag, Verification, engine::Engine};
+use crate::{BitString, Error, LegacyUse, SecretTag, Sha1, Tag, VerificationError, engine::Engine};
 use adapter::Sha1Adapter;
 pub use brynja_legacy_sha1::hardened_execution::Mode as Sha1Mode;
 pub use brynja_legacy_sha1::{Sha1Backend, hardened_execution::Executor as Sha1Executor};
@@ -146,13 +146,21 @@ impl<'a> Sha1Hmac<'a> {
     }
 
     /// Consumes and compares every equal-length candidate byte without fallback.
-    pub fn verify(self, candidate: &[u8]) -> Result<Verification, Error> {
-        self.engine.take()?.verify(None, candidate)
+    /// Only a matching tag returns `Ok(())`; mismatch is an error.
+    pub fn verify(self, candidate: &[u8]) -> Result<(), VerificationError> {
+        self.engine.take()?.verify(None, candidate)?.require_match()
     }
 
     /// Consumes final bits and verifies the preselected tag width.
-    pub fn verify_bits(self, tail: BitString<'_>, candidate: &[u8]) -> Result<Verification, Error> {
-        self.engine.take()?.verify(Some(tail), candidate)
+    pub fn verify_bits(
+        self,
+        tail: BitString<'_>,
+        candidate: &[u8],
+    ) -> Result<(), VerificationError> {
+        self.engine
+            .take()?
+            .verify(Some(tail), candidate)?
+            .require_match()
     }
 
     /// Consumes all key-derived state without producing a tag.

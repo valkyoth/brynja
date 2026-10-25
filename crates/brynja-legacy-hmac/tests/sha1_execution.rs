@@ -53,7 +53,7 @@ fn native_sha1_byte_and_bit_composition() -> Result<(), Error> {
                 let mut verifier =
                     Sha1Hmac::with_tag_length(LegacyUse::acknowledge(), &owner, &key, width)?;
                 verifier.update(&message)?;
-                assert!(verifier.verify(&output)?.expose_public());
+                assert_eq!(verifier.verify(&output), Ok(()));
                 // Every byte position must contribute to the decision.
                 for index in 0..width {
                     let mut wrong = output.clone();
@@ -61,7 +61,10 @@ fn native_sha1_byte_and_bit_composition() -> Result<(), Error> {
                     let mut reject =
                         Sha1Hmac::with_tag_length(LegacyUse::acknowledge(), &owner, &key, width)?;
                     reject.update(&message)?;
-                    assert!(!reject.verify(&wrong)?.expose_public());
+                    assert!(matches!(
+                        reject.verify(&wrong),
+                        Err(brynja_legacy_hmac::VerificationError::Mismatch(_))
+                    ));
                 }
             }
             print!("LEGACY_SHA1_BYTE:{key_length}:{length}:");
@@ -122,10 +125,26 @@ fn native_sha1_byte_and_bit_composition() -> Result<(), Error> {
                 let mut verifier =
                     Sha1Hmac::with_tag_length(LegacyUse::acknowledge(), &owner, &key, 10)?;
                 verifier.update(prefix)?;
-                assert!(
-                    verifier
-                        .verify_bits(suffix, expected.get(..10).ok_or(Error::TagLength)?)?
-                        .expose_public()
+                assert_eq!(
+                    verifier.verify_bits(suffix, expected.get(..10).ok_or(Error::TagLength)?),
+                    Ok(())
+                );
+                let mut wrong = expected.get(..10).ok_or(Error::TagLength)?.to_vec();
+                *wrong.first_mut().ok_or(Error::TagLength)? ^= 1;
+                let mut reject =
+                    Sha1Hmac::with_tag_length(LegacyUse::acknowledge(), &owner, &key, 10)?;
+                reject.update(prefix)?;
+                let rejected = reject.verify_bits(suffix, &wrong);
+                fn authorize(
+                    result: Result<(), brynja_legacy_hmac::VerificationError>,
+                ) -> Result<bool, brynja_legacy_hmac::VerificationError> {
+                    result?;
+                    Ok(true)
+                }
+                assert!(!rejected.is_ok());
+                assert_eq!(
+                    authorize(rejected),
+                    Err(brynja_legacy_hmac::VerificationError::Mismatch(()))
                 );
             }
             print!("LEGACY_SHA1_BITS:{key_length}:{bits}:");
@@ -164,7 +183,9 @@ fn native_sha1_revocation_and_output_transactions() -> Result<(), Error> {
         assert!(output.iter().all(|byte| *byte == 0));
         assert!(matches!(
             Sha1Hmac::new(LegacyUse::acknowledge(), &owner, b"key")?.verify(&output),
-            Err(Error::TagLength)
+            Err(brynja_legacy_hmac::VerificationError::Operation(
+                Error::TagLength
+            ))
         ));
         Sha1Hmac::new(LegacyUse::acknowledge(), &owner, b"key")?.cancel();
     }
@@ -204,7 +225,12 @@ fn native_sha1_revocation_and_output_transactions() -> Result<(), Error> {
                     ));
                     assert_eq!(output, [0; 20]);
                 }
-                _ => assert!(matches!(state.verify(&output), Err(Error::ExecutionFailed))),
+                _ => assert!(matches!(
+                    state.verify(&output),
+                    Err(brynja_legacy_hmac::VerificationError::Operation(
+                        Error::ExecutionFailed
+                    ))
+                )),
             }
             if operation < 2 {
                 assert_eq!(output, [0xa5; 20]);

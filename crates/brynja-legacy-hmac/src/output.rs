@@ -80,4 +80,12 @@ impl Verification {
     pub const fn expose_public(self) -> bool {
         self.0.expose_public()
     }
+    #[inline(always)]
+    pub(crate) fn require_match(self) -> Result<(), crate::VerificationError> {
+        if self.expose_public() {
+            Ok(())
+        } else {
+            Err(crate::VerificationError::Mismatch(()))
+        }
+    }
 }

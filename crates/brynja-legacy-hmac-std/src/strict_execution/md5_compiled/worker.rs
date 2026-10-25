@@ -79,13 +79,17 @@ pub(super) fn run(
     let mut control = Md5BatchControl::with_cancellation(parameters.budget, &mut cancelled);
     let active = inputs.iter().filter(|v| v.is_some()).count();
     let result = if let Some(candidates) = candidates {
-        let result = selection
-            .verify(&lanes, candidates, &mut control)
-            .map_err(Error::Mac);
+        let result = selection.verify(&lanes, candidates, &mut control);
         healthy(&owner)?;
-        let (decision, actual) = result?;
+        let (decision, actual) = match result {
+            Ok(actual) => (true, actual),
+            Err(brynja_legacy_hmac::VerificationError::Mismatch(actual)) => (false, actual),
+            Err(brynja_legacy_hmac::VerificationError::Operation(error)) => {
+                return Err(Error::Mac(error));
+            }
+        };
         report(actual, &parameters, active)?;
-        Some(decision.expose_public())
+        Some(decision)
     } else {
         let (rows, remainder) = staging.as_chunks_mut::<16>();
         if !remainder.is_empty() {

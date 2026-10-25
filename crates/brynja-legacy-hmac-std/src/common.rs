@@ -34,6 +34,19 @@ macro_rules! split_tail {
 }
 pub(crate) use split_tail;
 
+// Private worker transport only. Public hosted verification converts a false
+// decision back to Err(Mismatch); no public verification returns Ok(false).
+#[inline(always)]
+pub(crate) fn verification_decision(
+    result: Result<(), brynja_legacy_hmac::VerificationError>,
+) -> Result<bool, brynja_legacy_hmac::Error> {
+    match result {
+        Ok(()) => Ok(true),
+        Err(brynja_legacy_hmac::VerificationError::Mismatch(())) => Ok(false),
+        Err(brynja_legacy_hmac::VerificationError::Operation(error)) => Err(error),
+    }
+}
+
 #[cfg(any(feature = "strict-md5-batch", feature = "macos-resident-md5-batch"))]
 pub(crate) const fn recoverable_md5(error: brynja_legacy_hmac::Error) -> bool {
     matches!(

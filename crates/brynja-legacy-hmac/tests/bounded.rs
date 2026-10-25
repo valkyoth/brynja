@@ -11,10 +11,13 @@ fn state<A: Algorithm>(key: &[u8]) -> Result<Hmac<A>, Error> {
 fn lifecycle<A: Algorithm>(key: &[u8]) -> Result<(), Error> {
     let mut expected = [0u8; 10];
     let _ = state::<A>(key)?.finalize_tag(&mut expected)?;
-    assert!(state::<A>(key)?.verify(&expected)?.expose_public());
+    assert_eq!(state::<A>(key)?.verify(&expected), Ok(()));
     let mut wrong = expected;
     wrong[9] ^= 1;
-    assert!(!state::<A>(key)?.verify(&wrong)?.expose_public());
+    assert!(matches!(
+        state::<A>(key)?.verify(&wrong),
+        Err(brynja_legacy_hmac::VerificationError::Mismatch(_))
+    ));
     let mut secret = [0xa5; 10];
     {
         let tag = state::<A>(key)?.finalize_secret(&mut secret)?;
@@ -34,11 +37,7 @@ fn lifecycle<A: Algorithm>(key: &[u8]) -> Result<(), Error> {
     assert_eq!(rejected, [0; 9]);
     let tail = BitString::new(&[0xa0], 3).map_err(|_| Error::SecretMemory)?;
     let _ = state::<A>(key)?.finalize_bits_tag(tail, &mut expected)?;
-    assert!(
-        state::<A>(key)?
-            .verify_bits(tail, &expected)?
-            .expose_public()
-    );
+    assert_eq!(state::<A>(key)?.verify_bits(tail, &expected), Ok(()));
     state::<A>(key)?.cancel();
     Ok(())
 }

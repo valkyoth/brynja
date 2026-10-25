@@ -1859,6 +1859,62 @@ composition, full worker-result/host quarantine transactions and public loan
 composition remain. The separate final MD5 composition reconciliation also
 remains required.
 
+### Accelerated hosted SHA-1 checkpoint composition
+
+The hosted checker now follows the actual accelerated SHA-1 checkpoint callee
+and its inlined temporary streams. Independent typed downstream probes bind
+the 448-byte Stream/Result representation, its rejection niche and the 433-byte
+primitive owner destructor. A bounded interpreter follows both admitted Stream
+niches, rejected construction and every cancellation-byte value. It requires
+exact executor provenance, live/nonoverlapping storage, unchanged transfers,
+one logical-owner Drop before the acquire cancellation load, and the correct
+Ok/Cancelled/failed-authority result. Unknown effects fail closed. SSA/allocation
+renaming remains accepted; source spelling alone is not the proof.
+
+Inlining is handled in the original worker CFG, without manufacturing a
+replacement function or assuming a fixed number of outlined calls. The model
+tracks all inlined temporary Stream transfers and rejects escaped, overwritten,
+consumed or prematurely ended storage. All six checkpoint sites are bound to
+initial admission, chunk selection, each nonempty update part, finalization,
+pre-copy and post-output/comparison. Both authority and cancellation rejection
+must exclude further cryptographic work. Each narrow success/error status is
+followed through the actual worker Result write; this is not a claim about
+arbitrary error-payload bytes or the later host quarantine transaction.
+
+Focused regressions reject 224 outlined-callee mutations, 434 mutations across
+nine inlined temporary streams (including lifetime hoisting out of the loop),
+128 placement/result mutations and 18 typed
+layout-probe mutations. Thirty-eight actual private Rust defects compile and
+are rejected on Linux x86-64 and Apple AArch64: forgotten streams, altered
+authority-error mapping, ignored cancellation, reversed/duplicated health
+checks, delayed cleanup, and each individually removed/ignored checkpoint.
+Restored compiler baselines pass. Private fixtures use the existing exact-path
+test-only overrides; no repository production source is changed by these tests.
+
+The complete hosted suite passes all 53 groups in 727.591 seconds. That run
+started before the final same-block lifetime-start tightening; it is not
+misrepresented as a fresh full-suite run of the later tree. The final tightening
+passes all eight checkpoint-related groups in 118.613 seconds, the separate
+434-mutation inline/hoisting test in 13.553 seconds, and the complete 16-profile
+compiler matrix. This is combined validation. The matrix covers Rust 1.90.0
+and 1.99.1 on Linux x86-64, plus 1.99.1 on Linux/Apple AArch64, each with generic
+and SIMD compilation and abort/unwind profiles. Both fixture Clippy versions,
+formatting, Python syntax, script-layout, acceptance-metadata, assurance and
+diff checks pass. Local logs use `release-reports/v0251-hosted-checkpoint-`.
+
+Executor-start semantics and primitive-owner clearing remain separately
+reviewed callee premises. The primitive destructor is assumed nonpanicking;
+constructor unwind before returning a Stream owns no admitted temporary.
+This establishes logical-object transfer/cleanup, not erasure of compiler
+copies, padding, registers, fatal-abort state or an entire worker image. The
+cross-built Apple/Arm artifacts are compiler inspection, not fresh native runs.
+
+The hosted block remains open for MD5's checkpoint/health/selector composition,
+eight-lane input/report/output transport, full worker-result/host quarantine
+and public output-loan transactions. Final MD5 composition reconciliation also
+remains separate. No production cryptography, dependency, shared modern-HMAC
+checker, release gate or approval record changes.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -1904,7 +1960,9 @@ remains required.
   provenance, its result-to-pad copy, empty/short/long-key routing and independent
   typed initial-owner/Result layout binding now also pass. Streaming chunk/tail
   provenance, returned output ownership/cleanup and scalar checkpoint/callee
-  result handling now have composing checks. Final
+  result handling now have composing checks. Accelerated hosted SHA-1's real
+  checkpoint callee, inlined temporary Stream ownership, all six checkpoint
+  positions and worker Result status transport now also have composing checks. Final
   MD5 composition review and the remaining hosted-worker keyed
   computation, complete output transactions and quarantine compiler obligations
   remain open.

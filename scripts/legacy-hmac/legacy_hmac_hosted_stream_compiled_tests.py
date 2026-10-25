@@ -1,33 +1,14 @@
 """Compile private worker defects, keeping repository production files untouched."""
 from pathlib import Path
 import re
-import shutil
-import tomllib
+from legacy_hmac_hosted_compiled_fixture import prepare
 
 
 class StreamCompiledTests:
     def test_compiled_stream_input_output_and_checkpoints(self):
         d, h = self.driver, self.driver.hosted
         work = Path(self.directory.name) / 'stream-mutants'
-        leaf, fixture = work / 'host', work / 'fixture'
-        source = d.ROOT / 'crates/brynja-legacy-hmac-std'
-        shutil.copytree(source / 'src', leaf / 'src')
-        shutil.copyfile(source / 'README.md', leaf / 'README.md')
-        manifest = (source / 'Cargo.toml').read_text()
-        workspace = tomllib.loads((d.ROOT / 'Cargo.toml').read_text())['workspace']
-        for field in ('edition', 'rust-version', 'license', 'repository'):
-            manifest = manifest.replace(field + '.workspace = true', field + ' = "' + workspace['package'][field] + '"')
-        for dependency in ('brynja-core', 'brynja-crypto-cpu-std'):
-            before = dependency + ('.workspace = true' if dependency == 'brynja-core' else ' = { workspace = true, optional = true }')
-            manifest = manifest.replace(before, dependency + ' = { path = "' + str(d.ROOT / 'crates' / dependency)
-                                        + '", default-features = false' + (', optional = true' if dependency.endswith('-std') else '') + ' }')
-        manifest = manifest.replace('path = "../', 'path = "' + str(d.ROOT / 'crates') + '/')
-        (leaf / 'Cargo.toml').write_text(manifest.replace('[lints]\nworkspace = true', '') + '\n[workspace]\n')
-        shutil.copytree(d.FIXTURE.parent / 'src', fixture / 'src')
-        shutil.copyfile(d.FIXTURE.parent / 'Cargo.lock', fixture / 'Cargo.lock')
-        (fixture / 'Cargo.toml').write_text(d.FIXTURE.read_text()
-            .replace('../../crates/brynja-legacy-hmac-std', str(leaf))
-            .replace('../../crates/', str(d.ROOT / 'crates') + '/'))
+        leaf, fixture = prepare(d, work)
         count = 0
         for target, directory in ((d.TARGETS[0], 'strict_execution'), (d.TARGETS[2], 'macos_resident')):
             def emit():

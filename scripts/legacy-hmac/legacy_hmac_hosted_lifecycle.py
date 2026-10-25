@@ -5,9 +5,10 @@ selection (the MD5 validator, resident helpers and streaming terminal/update
 selectors). No function body, native status or pointer is rewritten. Capture, envelope, destructor, authority
 and selection-input projections compose here with compiled keyed admission,
 scalar construction and retained dispatch. Streaming input/tail and output-owner
-provenance now compose here, along with scalar cancellation checkpoints/callees.
-MD5 lane transport, accelerated checkpoint/callee composition and complete host
-output/loan/quarantine transactions still require their separate qualification.
+provenance compose here with scalar and accelerated SHA-1 checkpoints/callees,
+including inlined temporary streams and worker Result status transport.
+MD5 lane/checkpoint transport and complete host output/loan/quarantine
+transactions still require their separate qualification.
 """
 import re
 import sys
@@ -33,6 +34,9 @@ import legacy_hmac_hosted_scalar as scalar
 import legacy_hmac_hosted_input as input_flow
 import legacy_hmac_hosted_output as output
 import legacy_hmac_hosted_checkpoints as checkpoints
+import legacy_hmac_hosted_checkpoint_flow as checkpoint_flow
+import legacy_hmac_hosted_checkpoint_inline as checkpoint_inline
+import legacy_hmac_hosted_checkpoint_boundaries as checkpoint_boundaries
 
 model = shared.load('hmac_hosted_lifecycle', 'legacy_hosted_lifecycle_model')
 contracts = shared.load('hmac_hosted_contracts')
@@ -155,6 +159,7 @@ def validate(artifacts, target, panic):
     compiler = compilers.pop()
     fixture = populations['brynja-legacy-hmac-hosted-cleanup']
     initials = scalar.normalization.contracts.validate(fixture)
+    checkpoint_flow.probes(fixture)
     leaf = populations['brynja-legacy-hmac-std']
     checkpoints.validate_callees(leaf, target, compiler)
     destructor = '<' + owner + '::Buffers as core::ops::drop::Drop>::drop'
@@ -215,9 +220,16 @@ def validate(artifacts, target, panic):
                     # identities; do not repeat the same graph traversal.
                     retained.check(keyed_state, definitions, aliases, panic)
                     if identity == 'sha1_compiled':
+                        callee = owner + '::sha1_compiled::worker::checkpoint'
+                        selected_callees = [s for s in (*leaf[0], *leaf[1]) if leaf[2].get(s) == callee]
+                        require(len(selected_callees) == 1, 'accelerated SHA-1 checkpoint callee missing/ambiguous')
+                        checkpoint_flow.validate(*flow.resolve(selected_callees[0], *leaf[:2]), leaf[2], compiler)
                         arguments = flow.resolve(worker, definitions, aliases)[0]
-                        input_flow.check(keyed_state, arguments, envelope_result, panic, compiler)
-                        output.check(keyed_state, arguments, panic)
+                        incoming = input_flow.check(keyed_state, arguments, envelope_result, panic, compiler)
+                        outgoing = output.check(keyed_state, arguments, panic)
+                        records, _ = checkpoint_inline.check(keyed_state, incoming, transfer, target)
+                        checkpoint_boundaries.Boundaries(keyed_state, incoming, outgoing, transfer,
+                                                         records, target, compiler).check()
                 else:
                     unavailable.check(worker_body, envelope_result, identity)
             else:

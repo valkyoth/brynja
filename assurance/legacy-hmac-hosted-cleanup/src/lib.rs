@@ -1,6 +1,7 @@
 //! Real legacy host consumers; compiler emission is not native qualification.
 #![forbid(unsafe_code)]
 
+pub mod checkpoint;
 pub mod normalization;
 
 #[cfg(target_os = "macos")]

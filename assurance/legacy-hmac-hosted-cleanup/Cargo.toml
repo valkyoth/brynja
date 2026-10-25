@@ -11,4 +11,5 @@ publish = false
 brynja-core = { path = "../../crates/brynja-core", default-features = false }
 brynja-legacy-sha1 = { path = "../../crates/brynja-legacy-sha1", default-features = false }
 brynja-legacy-md5 = { path = "../../crates/brynja-legacy-md5", default-features = false }
+brynja-legacy-hmac = { path = "../../crates/brynja-legacy-hmac", default-features = false }
 brynja-legacy-hmac-std = { path = "../../crates/brynja-legacy-hmac-std", default-features = false, features = ["strict-sha1-acceleration", "macos-resident-sha1-acceleration", "strict-md5-batch", "macos-resident-md5-batch"] }

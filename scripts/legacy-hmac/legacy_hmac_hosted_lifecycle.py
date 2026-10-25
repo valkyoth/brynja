@@ -8,7 +8,9 @@ scalar construction and retained dispatch. Streaming input/tail and output-owner
 provenance compose here with scalar and accelerated SHA-1 checkpoints/callees,
 including inlined temporary streams and worker Result status transport. MD5's
 borrowed health selectors, three checkpoint positions and rejection payload
-transport also compose here. MD5 lane/report/output transport and complete host output/loan/quarantine
+transport also compose here. Typed MD5 report predicates, captured backend,
+eight-slot active count and report rejection transport are checked separately.
+MD5 lane/report-byte/output transport and complete host output/loan/quarantine
 transactions still require their separate qualification.
 """
 import re
@@ -41,6 +43,9 @@ import legacy_hmac_hosted_checkpoint_boundaries as checkpoint_boundaries
 import legacy_hmac_hosted_md5_checkpoint as md5_checkpoint
 import legacy_hmac_hosted_md5_health as md5_health
 import legacy_hmac_hosted_md5_boundaries as md5_boundaries
+import legacy_hmac_hosted_md5_report_layout as md5_report_layout
+import legacy_hmac_hosted_md5_report_logic as md5_report_logic
+import legacy_hmac_hosted_md5_report_caller as md5_report_caller
 
 model = shared.load('hmac_hosted_lifecycle', 'legacy_hosted_lifecycle_model')
 contracts = shared.load('hmac_hosted_contracts')
@@ -87,7 +92,7 @@ def graph(metadata, fixture, hosted_manifest=None, legacy_manifest=None):
         'brynja-legacy-hmac': {'brynja-core', 'brynja-legacy-sha1', 'brynja-legacy-md5'},
         'brynja-legacy-hmac-std': {'brynja-core', 'brynja-crypto-cpu-std', 'brynja-legacy-hmac'},
         'brynja-legacy-hmac-hosted-cleanup': {'brynja-legacy-hmac-std', 'brynja-core',
-                                            'brynja-legacy-sha1', 'brynja-legacy-md5'},
+                                            'brynja-legacy-sha1', 'brynja-legacy-md5', 'brynja-legacy-hmac'},
     }
     expected = set(edges)
     packages, nodes = metadata['packages'], metadata['resolve']['nodes']
@@ -164,6 +169,7 @@ def validate(artifacts, target, panic):
     fixture = populations['brynja-legacy-hmac-hosted-cleanup']
     initials = scalar.normalization.contracts.validate(fixture)
     checkpoint_flow.probes(fixture)
+    md5_report_layout.validate(fixture)
     leaf = populations['brynja-legacy-hmac-std']
     checkpoints.validate_callees(leaf, target, compiler)
     destructor = '<' + owner + '::Buffers as core::ops::drop::Drop>::drop'
@@ -241,6 +247,11 @@ def validate(artifacts, target, panic):
                         md5_checkpoint.validate(*flow.resolve(selected_callees[0], *leaf[:2]), leaf[2], compiler)
                         health_result = md5_health.check(keyed_state, transfer, envelope_result, compiler)
                         md5_boundaries.check(keyed_state, transfer, envelope_result, compiler, target, health_result)
+                        report = owner + '::md5_compiled::worker::report'
+                        selected_reports = [s for s in (*leaf[0], *leaf[1]) if leaf[2].get(s) == report]
+                        require(len(selected_reports) == 1, 'MD5 report callee missing/ambiguous')
+                        md5_report_logic.validate(*flow.resolve(selected_reports[0], *leaf[:2]), compiler)
+                        md5_report_caller.check(keyed_state, transfer, envelope_result, compiler, target)
                 else:
                     unavailable.check(worker_body, envelope_result, identity)
             else:

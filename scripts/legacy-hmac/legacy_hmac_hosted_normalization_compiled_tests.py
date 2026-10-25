@@ -28,6 +28,7 @@ class NormalizationCompiledTests:
         shutil.copytree(d.FIXTURE.parent / 'src', fixture / 'src')
         shutil.copyfile(d.FIXTURE.parent / 'Cargo.lock', fixture / 'Cargo.lock')
         manifest = d.FIXTURE.read_text().replace('../../crates/brynja-legacy-hmac-std', str(paths['brynja-legacy-hmac-std']))
+        manifest = manifest.replace('"../../crates/brynja-legacy-hmac"', '"' + str(paths['brynja-legacy-hmac']) + '"')
         (fixture / 'Cargo.toml').write_text(manifest.replace('../../crates/', str(d.ROOT / 'crates') + '/'))
         engine = paths['brynja-legacy-hmac'] / 'src/engine.rs'
         original = engine.read_text()

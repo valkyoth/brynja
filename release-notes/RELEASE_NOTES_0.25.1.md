@@ -1958,6 +1958,48 @@ composition reconciliation remain open. No whole-worker/register-erasure or
 fresh native-qualification claim is made by these compiler checks. Production
 Rust, dependencies, shared modern-HMAC checkers and release gates are unchanged.
 
+### Hosted MD5 report admission and active-count provenance
+
+Independent downstream Rust probes now bind six report fields, backend lane
+widths and all eight input-presence niches to their emitted layouts. The private
+fixture adds a direct edge to the already present first-party legacy-HMAC crate;
+no package/version or production dependency changes. The exact fixture graph
+check and the private constructor-mutation fixture follow that explicit edge.
+
+The actual optimized report helper is interpreted over six independent
+Boolean predicates for each backend: backend identity, vector width, inner and
+outer active counts, and inner and outer unsigned minimum-vector thresholds.
+All 128 abstract combinations must return success exactly when all six hold,
+otherwise `Invariant`. This is not sampling selected numeric counter values:
+only the exact typed equality/unsigned-threshold predicates are accepted;
+unknown arithmetic, loads, effects, cycles, SSA redefinitions and unvisited
+instructions fail closed. The immutable validation result is memoized only by
+the full signature/body/compiler bytes within the process; changed bytes or
+an unreviewed compiler cannot reuse a prior result.
+
+Both real report call sites must use the captured backend and a sum of all
+eight distinct input-presence bits, with dominating pointer reads and the typed
+slot geometry. Duplicate, omitted, substituted or inverted slots are rejected.
+The report rejection branch must preserve `Invariant` through the worker Result
+and cannot resume keyed work, another report, output copying or a checkpoint.
+This does not yet prove transport of the report bytes from the batch-consumer
+Results, input key/message lane payloads, control callback transport or complete
+host output-loan/quarantine transactions. These remain separate composing
+obligations, together with final MD5 reconciliation.
+
+Focused regressions reject 90 typed-layout substitutions, 150 report-decision
+mutations and 245 count/backend/rejection mutations. Thirty actual Rust worker
+defects are separately compiled and rejected on Linux x86-64 and Apple AArch64;
+restored baselines pass. The existing 12 private scalar-constructor mutations
+and graph-identity suite also pass with the updated fixture edge. Both compiler
+Clippy runs and the 16 generic/SIMD, abort/unwind compiler profiles pass. These
+checks are reconciled by a complete 61-group hosted regression run on the final
+checker/test sources (849.371 seconds, all passing). These
+are author-operated compiler checks, not fresh native execution or independent
+qualification. Production Rust, shared modern-HMAC checkers, release gates and
+approval records are unchanged. Local logs use
+`release-reports/v0251-hosted-md5-reports-`.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -2007,7 +2049,9 @@ Rust, dependencies, shared modern-HMAC checkers and release gates are unchanged.
   checkpoint callee, inlined temporary Stream ownership, all six checkpoint
   positions and worker Result status transport now also have composing checks.
   MD5's health-selector lifetimes, three checkpoints, post-consumer revalidation
-  and rejected Result payload transport now also have composing checks. Final
+  and rejected Result payload transport now also have composing checks. Typed
+  report predicates, backend/count operands and rejected report status now have
+  dedicated checks; report-byte and full lane-payload transport remain open. Final
   MD5 composition review and the remaining hosted-worker keyed
   computation, complete output transactions and quarantine compiler obligations
   remain open.

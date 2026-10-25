@@ -35,8 +35,7 @@ impl<'a> Operation<'a> {
                 | Err(Error::WorkLimit
                     | Error::Cancelled
                     | Error::MessageTooLong
-                    | Error::IneligibleWorkload
-                    | Error::TagLength)
+                    | Error::IneligibleWorkload)
         );
     }
 }
@@ -60,8 +59,47 @@ fn batch_error(error: Md5BatchError) -> Error {
 pub(super) fn execution_error(error: execution::Error) -> Error {
     match error {
         execution::Error::Batch(e) => batch_error(e),
-        execution::Error::IneligibleWorkload => Error::IneligibleWorkload,
+        // After HMAC shape admission, a backend rejection is an integrity failure.
+        execution::Error::IneligibleWorkload => Error::ExecutionFailed,
         _ => Error::ExecutionFailed,
+    }
+}
+
+#[cfg(test)]
+#[test]
+fn post_admission_rejections_are_terminal() {
+    assert_eq!(
+        execution_error(execution::Error::IneligibleWorkload),
+        Error::ExecutionFailed
+    );
+    for error in [
+        Error::ExecutionFailed,
+        Error::TagLength,
+        Error::SecretMemory,
+    ] {
+        let executor = Md5Executor::portable();
+        let mut guard = Operation::new(&executor);
+        guard.complete(&Err::<(), _>(error));
+        drop(guard);
+        assert_eq!(
+            executor.health(),
+            brynja_legacy_md5::Md5BackendHealth::Quarantined
+        );
+    }
+    for error in [
+        Error::IneligibleWorkload,
+        Error::Cancelled,
+        Error::WorkLimit,
+        Error::MessageTooLong,
+    ] {
+        let executor = Md5Executor::portable();
+        let mut guard = Operation::new(&executor);
+        guard.complete(&Err::<(), _>(error));
+        drop(guard);
+        assert_eq!(
+            executor.health(),
+            brynja_legacy_md5::Md5BackendHealth::Healthy
+        );
     }
 }
 

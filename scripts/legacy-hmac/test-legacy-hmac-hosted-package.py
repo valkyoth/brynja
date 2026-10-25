@@ -7,6 +7,7 @@ from pathlib import Path
 import subprocess
 import sys
 import unittest
+from unittest.mock import patch
 
 import legacy_hmac_hosted_acceptance as policy
 
@@ -29,6 +30,19 @@ def graph(resident=False, accelerated=False, md5=False):
 
 
 class HostedAcceptance(unittest.TestCase):
+    def test_protected_resident_algorithm_parity(self):
+        source = ROOT / 'crates/brynja-legacy-hmac-std/src'
+        policy.wrapper_parity(source)
+        original = Path.read_text
+        for profile in ('strict_execution', 'macos_resident'):
+            for name in policy.PARITY_FILES:
+                changed = source / profile / name
+                def read(path, *args, **kwargs):
+                    text = original(path, *args, **kwargs)
+                    return text + '\nfn one_sided_semantic_change() {}\n' if path == changed else text
+                with self.subTest(profile=profile, file=name), patch.object(Path, 'read_text', read), self.assertRaises(ValueError):
+                    policy.wrapper_parity(source)
+
     def test_md5_closure_remains_explicit_and_algorithm_specific(self):
         for resident in (False, True):
             original, roots, consumer = graph(resident, False, True)

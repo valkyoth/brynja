@@ -49,11 +49,17 @@ fn compare<A: Algorithm>() -> Result<(), Error> {
                     chunks: &[],
                     tail: Bits::bytes(&message),
                 };
-                assert!(owner.verify(request(), &expected, &Cancellation::new())?);
+                assert_eq!(
+                    owner.verify(request(), &expected, &Cancellation::new()),
+                    Ok(())
+                );
                 for index in 0..expected.len() {
                     let mut wrong = expected.clone();
                     *wrong.get_mut(index).ok_or(Error::Invariant)? ^= 1;
-                    assert!(!owner.verify(request(), &wrong, &Cancellation::new())?);
+                    assert_eq!(
+                        owner.verify(request(), &wrong, &Cancellation::new()),
+                        Err(crate::VerificationError::Mismatch)
+                    );
                 }
                 cleared(&owner);
             }
@@ -87,7 +93,10 @@ fn tails<A: Algorithm>() -> Result<(), Error> {
                 owner.compute(request(), &Cancellation::new())?.expose(),
                 expected
             );
-            assert!(owner.verify(request(), &expected, &Cancellation::new())?);
+            assert_eq!(
+                owner.verify(request(), &expected, &Cancellation::new()),
+                Ok(())
+            );
             cleared(&owner);
         }
     }
@@ -128,7 +137,10 @@ fn fault_case<A: Algorithm>() -> Result<(), Error> {
                 let result = if verifying {
                     owner
                         .verify(request, &expected, &Cancellation::new())
-                        .map(|_| ())
+                        .map_err(|e| match e {
+                            crate::VerificationError::Operation(error) => error,
+                            crate::VerificationError::Mismatch => Error::Invariant,
+                        })
                 } else {
                     owner.compute(request, &Cancellation::new()).map(drop)
                 };
@@ -153,7 +165,10 @@ fn fault_case<A: Algorithm>() -> Result<(), Error> {
             tail: Bits::empty(),
         };
         if verifying {
-            assert!(owner.verify(request, &expected, &Cancellation::new())?);
+            assert_eq!(
+                owner.verify(request, &expected, &Cancellation::new()),
+                Ok(())
+            );
         } else {
             drop(owner.compute(request, &Cancellation::new())?);
         }

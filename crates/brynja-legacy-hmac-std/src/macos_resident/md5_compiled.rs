@@ -33,6 +33,9 @@ pub use types::{Md5BatchInput, Md5BatchLimits, Md5BatchOutput};
 /// fn bound<T: Send>() {}
 /// bound::<brynja_legacy_hmac_std::macos_resident::Md5BatchSession>();
 /// ```
+/// Requiring SIMD applies to ipad/opad passes, not every key compression.
+/// Sparse long keys are normalized by a separate hardened portable batch before
+/// those passes; this is public-shape selection, never fallback after failure.
 pub struct Md5BatchSession {
     stack: ResidentStack,
     staging: ResidentBytes,
@@ -105,14 +108,19 @@ impl Md5BatchSession {
     /// Checks every active candidate without mismatch-dependent early exit.
     /// Candidate presence/width must exactly match the input slots and tag policy.
     /// Releases only the aggregate decision, never per-lane match information.
+    /// `Ok(())` means every tag matched; otherwise authentication fails. A
+    /// mismatch returns [`crate::VerificationError::Mismatch`].
     pub fn verify(
         &mut self,
         inputs: &[Option<Md5BatchInput<'_>>; 8],
         candidates: &[Option<&[u8]>; 8],
         cancel: &Cancellation,
-    ) -> Result<bool, Error> {
-        self.execute(inputs, Some(candidates), cancel)?
-            .ok_or(Error::Invariant)
+    ) -> Result<(), crate::VerificationError<Error>> {
+        crate::verification::finish(
+            self.execute(inputs, Some(candidates), cancel)
+                .map_err(crate::VerificationError::Operation)?,
+            Error::Invariant,
+        )
     }
     fn execute(
         &mut self,
@@ -176,19 +184,13 @@ impl Md5BatchSession {
                 guard.keep = candidates.is_none();
                 Ok(value)
             }
-            Err(
-                error @ (Error::Cancelled
-                | Error::InvalidBits
-                | Error::Mac(
-                    brynja_legacy_hmac::Error::Cancelled
-                    | brynja_legacy_hmac::Error::WorkLimit
-                    | brynja_legacy_hmac::Error::MessageTooLong
-                    | brynja_legacy_hmac::Error::IneligibleWorkload
-                    | brynja_legacy_hmac::Error::TagLength,
-                )),
-            ) => {
+            Err(error @ (Error::Cancelled | Error::InvalidBits)) => {
                 self.quarantined = false;
                 Err(error)
+            }
+            Err(Error::Mac(error)) if crate::common::recoverable_md5(error) => {
+                self.quarantined = false;
+                Err(Error::Mac(error))
             }
             Err(error) => Err(error),
         }

@@ -9,6 +9,11 @@
 //! unrelated hash CPU features never change either scalar route implemented here.
 //! Separate opt-in MD5 batch owners require a complete AVX2/NEON lane group.
 
+mod verification;
+pub use verification::VerificationError;
+#[cfg(any(feature = "strict-execution", feature = "macos-resident"))]
+mod common;
+
 #[cfg(feature = "strict-execution")]
 pub mod strict_execution;
 

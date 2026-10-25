@@ -16,7 +16,7 @@ def valid_output():
             "LEGACY_SHA1_LIFECYCLE: malformed outputs preserve executor; revocation is terminal"]
     for key in (0, 1, 63, 64, 65, 80, 1024):
         for length in (0, 1, 55, 56, 63, 64, 65, 127, 128, 4096):
-            digest = hmac.new(bytes([0xa7]) * key, bytes([0x39]) * length, hashlib.sha1).hexdigest()
+            digest = hmac.new(bytes(((i * 0x9d) ^ 0x5a) & 255 for i in range(key)), bytes(((i * 0x3b) ^ 0xc1) & 255 for i in range(length)), hashlib.sha1).hexdigest()
             rows.append(f"LEGACY_SHA1_BYTE:{key}:{length}:{digest}")
     rows.extend("LEGACY_SHA1_BITS:" + identity.removeprefix("sha1:") + ":" + digest
                 for identity, digest in native.legacy_hmac_bits.expected().items() if identity.startswith("sha1:"))

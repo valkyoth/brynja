@@ -155,13 +155,34 @@ class Acceptance(unittest.TestCase):
         for name in ("md5", "sha1"):
             for key in (0, 1, 63, 64, 65, 80, 1024):
                 for length in (0, 1, 55, 56, 63, 64, 65, 127, 128, 4096):
-                    digest = capture.hmac.new(bytes([0xa7]) * key, bytes([0x39]) * length,
+                    digest = capture.hmac.new(bytes(((i * 0x9d) ^ 0x5a) & 255 for i in range(key)), bytes(((i * 0x3b) ^ 0xc1) & 255 for i in range(length)),
                                               getattr(capture.hashlib, name)).hexdigest()
                     rows.append(f"{name}:{key}:{length}:{digest}")
         capture.oracle("\n".join(rows))
         for mutant in ([], rows[:-1], rows + rows[:1], rows[:-1] + ["sha1:1024:4096:00"]):
             with self.subTest(count=len(mutant)), self.assertRaises(ValueError):
                 capture.oracle("\n".join(mutant))
+
+    def test_oracle_rejects_byte_reordering_and_old_uniform_vectors(self):
+        for corruption in ('uniform', 'reverse-key', 'reverse-message', 'rotate-message'):
+            rows = []
+            for name in ('md5', 'sha1'):
+                for key_length in (0, 1, 63, 64, 65, 80, 1024):
+                    for length in (0, 1, 55, 56, 63, 64, 65, 127, 128, 4096):
+                        key = bytes(((i * 0x9d) ^ 0x5a) & 255 for i in range(key_length))
+                        message = bytes(((i * 0x3b) ^ 0xc1) & 255 for i in range(length))
+                        if corruption == 'uniform':
+                            key, message = bytes([0xa7]) * key_length, bytes([0x39]) * length
+                        elif corruption == 'reverse-key':
+                            key = key[::-1]
+                        elif corruption == 'reverse-message':
+                            message = message[::-1]
+                        else:
+                            message = message[1:] + message[:1]
+                        digest = capture.hmac.new(key, message, getattr(capture.hashlib, name)).hexdigest()
+                        rows.append(f'{name}:{key_length}:{length}:{digest}')
+            with self.subTest(corruption=corruption), self.assertRaises(ValueError):
+                capture.oracle('\n'.join(rows))
 
 
 if __name__ == "__main__":

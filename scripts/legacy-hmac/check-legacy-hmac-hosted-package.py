@@ -116,6 +116,7 @@ def mutations(roots, env, resident=False):
 
 
 def main():
+    policy.wrapper_parity(api.ROOT / 'crates/brynja-legacy-hmac-std/src')
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--resident", action="store_true", help="explicit native macOS resident profile, NOT dump exclusion")
     selection = parser.add_mutually_exclusive_group()
@@ -138,7 +139,8 @@ def main():
         feature = "macos-resident-md5-batch" if resident else "strict-md5-batch"
         import legacy_hmac_md5_native
         target_features = legacy_hmac_md5_native.features()
-    population = 11 if md5 else (10 if accelerated else 6)
+    # Two shared regressions: tail splitting and mismatch-safe verification.
+    population = 13 if md5 else (12 if accelerated else 8)
     specifications = tuple((name, tomllib.loads((api.ROOT / "crates" / name / "Cargo.toml").read_text())["package"]["version"],
                             ("src/lib.rs",)) for name in ARCHIVES)
     with api.cargo_environment.private_directory(api.ROOT) as temporary:

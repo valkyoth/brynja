@@ -61,7 +61,7 @@ macro_rules! scalar {
                 request: Request<'_>,
                 candidate: &[u8],
                 cancel: &Cancellation,
-            ) -> Result<bool, Error> {
+            ) -> Result<(), brynja_legacy_hmac_std::VerificationError<Error>> {
                 session.verify(request, candidate, cancel)
             }
         }
@@ -90,7 +90,7 @@ pub mod sha1_compiled {
         request: Request<'_>,
         candidate: &[u8],
         cancel: &Cancellation,
-    ) -> Result<bool, Error> {
+    ) -> Result<(), brynja_legacy_hmac_std::VerificationError<Error>> {
         session.verify(request, candidate, cancel)
     }
 }
@@ -131,7 +131,7 @@ pub mod md5_compiled {
         inputs: &[Option<Md5BatchInput<'_>>; 8],
         candidates: &[Option<&[u8]>; 8],
         cancel: &Cancellation,
-    ) -> Result<bool, Error> {
+    ) -> Result<(), brynja_legacy_hmac_std::VerificationError<Error>> {
         session.verify(inputs, candidates, cancel)
     }
 }

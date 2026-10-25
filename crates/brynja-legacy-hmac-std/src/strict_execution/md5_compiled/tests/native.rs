@@ -76,7 +76,7 @@ fn compare(s: &mut Md5BatchSession, inputs: &[Option<Md5BatchInput<'_>>; 8]) -> 
             None
         }
     });
-    assert!(s.verify(inputs, &candidates, &Cancellation::new())?);
+    assert_eq!(s.verify(inputs, &candidates, &Cancellation::new()), Ok(()));
     cleared(s);
     Ok(())
 }
@@ -150,12 +150,15 @@ fn every_active_tag_byte_is_compared_and_shapes_reject() -> Result<(), Error> {
                     .and_then(|row| row.get_mut(byte))
                     .ok_or(Error::Invariant)? ^= 1;
                 let candidates = wrong.each_ref().map(|row| row.get(..bytes));
-                assert!(!s.verify(&inputs, &candidates, &Cancellation::new())?);
+                assert_eq!(
+                    s.verify(&inputs, &candidates, &Cancellation::new()),
+                    Err(crate::VerificationError::Mismatch)
+                );
             }
         }
         assert_eq!(
             s.verify(&inputs, &[None; 8], &Cancellation::new()),
-            Err(Error::OutputLength)
+            Err(crate::VerificationError::Operation(Error::OutputLength))
         );
         cleared(&s);
         reusable(&mut s)?;
@@ -211,6 +214,15 @@ fn all_control_failures_preserve_or_quarantine_correctly() -> Result<(), Error> 
                 terminal(&mut s);
                 s = session(16)?;
             }
+            for error in [
+                brynja_legacy_hmac::Error::IneligibleWorkload,
+                brynja_legacy_hmac::Error::TagLength,
+            ] {
+                s.fault = Fault::WorkerError(error);
+                assert_eq!(invoke(&mut s, &Cancellation::new()), Err(Error::Mac(error)));
+                terminal(&mut s);
+                s = session(16)?;
+            }
             let mut rejected = false;
             let mut completed = false;
             for budget in 0..=64 {
@@ -239,7 +251,7 @@ fn loans_admission_and_explicit_quarantine_clear_all_slots() -> Result<(), Error
     s.staging.as_bytes_mut().fill(0xa7);
     assert_eq!(
         s.verify(&inputs(), &[Some(&[0; 15]); 8], &Cancellation::new()),
-        Err(Error::OutputLength)
+        Err(crate::VerificationError::Operation(Error::OutputLength))
     );
     cleared(&s);
     let mut bad = inputs();

@@ -14,7 +14,7 @@ PINS = {
     "crates/brynja-legacy-md5/src/batch/hardened_execution/in_place.rs":
         "64fc49bae729fcdaadbffe82ff5d36f206835828f115255539dff5dcf7a13d95",
     "crates/brynja-legacy-md5/src/batch/hardened_execution/mod.rs":
-        "aaa00977c44f48c3c7c62d0f3f12d1a2c3095ec0b88f005090dfd5fc69e0f282",
+        "0922be1fe27fa60460b814384c04eb766f17a346ec3140cef79e92bba8ff1224",
     "crates/brynja-legacy-md5/src/cpu/secret.rs":
         "1fd19b0d4167991ae1cb93ec209807350e334a3a85b3204124f013f05afbddb8",
 }

@@ -18,8 +18,13 @@ mod output;
 
 use crate::{BitString, Error, LegacyUse, Verification};
 use brynja_core::{SecretRegionInitialization, copy_secret_region};
+pub use brynja_legacy_md5::hardened_execution::Executor as Md5Executor;
+/// `Require` requires SIMD in both HMAC ipad/opad passes, not every compression.
+/// Sparse long keys lacking a full SIMD group are normalized by a separate
+/// hardened portable batch; unequal suffixes and padding may also be scalar.
+/// This public-shape selection precedes processing and is not error fallback.
+pub use brynja_legacy_md5::hardened_execution::Mode as Md5Mode;
 use brynja_legacy_md5::hardened_execution::in_place::Workspace;
-pub use brynja_legacy_md5::hardened_execution::{Executor as Md5Executor, Mode as Md5Mode};
 pub use brynja_legacy_md5::{Md5Backend, Md5BatchControl, Md5BatchReport};
 pub use output::{SecretTags, Tags};
 
@@ -58,6 +63,9 @@ pub struct Report {
 /// portable HMAC implementation. Ordinary budget/cancellation/shape rejection
 /// preserves executor reuse; backend/invariant failure or unwind quarantines it.
 /// Under `panic = "abort"`, destructors cannot clear storage or quarantine.
+/// `Md5Mode::Require` requires SIMD in ipad/opad passes. Sparse long keys use
+/// a separate hardened portable batch for normalization; unequal suffixes and
+/// padding may be scalar. This public-shape choice is never error fallback.
 ///
 /// ```compile_fail
 /// fn send<T: Send>() {}

@@ -1,5 +1,6 @@
 """Exact protected legacy consumer graph and source-only package boundary."""
 from pathlib import Path
+import re
 from legacy_hmac_acceptance import require, members as leaf_members
 
 HOST = "brynja-legacy-hmac-std"
@@ -16,7 +17,7 @@ FEATURES = {
     "brynja-crypto-cpu-std": {"protected-memory"},
 }
 FILES = frozenset({"Cargo.toml", "Cargo.toml.orig", "LICENSE-APACHE", "LICENSE-MIT", "README.md",
-    "src/lib.rs", "src/strict_execution/mod.rs", "src/strict_execution/types.rs",
+    "src/lib.rs", "src/common.rs", "src/verification.rs", "src/strict_execution/mod.rs", "src/strict_execution/types.rs",
     "src/strict_execution/worker.rs", "src/strict_execution/tests.rs",
     "src/strict_execution/tests/native.rs",
     "src/macos_resident/mod.rs", "src/macos_resident/types.rs", "src/macos_resident/worker.rs",
@@ -74,3 +75,37 @@ def graph(document, roots, consumer, resident=False, accelerated=False, md5=Fals
 def runtime(output, count):
     require(f"test result: ok. {count} passed; 0 failed; 0 ignored;" in output,
             "hosted runtime population")
+
+
+PARITY_FILES = ('mod.rs', 'types.rs', 'worker.rs', 'sha1_compiled.rs',
+                'sha1_compiled/worker.rs', 'md5_compiled.rs',
+                'md5_compiled/types.rs', 'md5_compiled/worker.rs')
+
+
+def normalized_wrapper(text):
+    # A drift tripwire, not a Rust parser or proof of cleanup. Resource types
+    # deliberately remain distinct; compiler/native qualification checks each.
+    text = re.sub(r'(?m)^\s*//.*\n', '', text)
+    # Linux-only resource-residency observation hooks have no production effect.
+    text = re.sub(r'#\[cfg\(test\)\]\s*super::(?:super::)?tests::observe\(&state, staging, (?:destination|output)\);', '', text)
+    for before, after in (('strict_execution', 'PROFILE'), ('macos_resident', 'PROFILE'),
+                          ('Protected', 'Resource'), ('Resident', 'Resource'),
+                          ('protected_memory', 'PROFILE'), ('strict-execution', 'PROFILE'),
+                          ('macos-resident', 'PROFILE'),
+                          ('strict-sha1-acceleration', 'PROFILE-sha1-acceleration'),
+                          ('strict-md5-batch', 'PROFILE-md5-batch'), ('protected', 'resident')):
+        text = text.replace(before, after)
+    text = text.replace('::PROFILE::memory::', '::PROFILE::')
+    text = re.sub(r'\s+', '', text)
+    text = text.replace('::PROFILE::{self,memory::{ResourceBytes,ResourceStack},}',
+                        '::PROFILE::{self,ResourceBytes,ResourceStack}')
+    text = text.replace('Bits,Error,PublicDeclassification,ResourceBytes',
+                        'Bits,Error,ResourceBytes,PublicDeclassification')
+    return text
+
+
+def wrapper_parity(source):
+    for name in PARITY_FILES:
+        left = normalized_wrapper((source / 'strict_execution' / name).read_text())
+        right = normalized_wrapper((source / 'macos_resident' / name).read_text())
+        require(left == right, 'legacy protected/resident wrapper drift: ' + name)

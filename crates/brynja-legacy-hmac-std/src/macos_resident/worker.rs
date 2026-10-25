@@ -1,5 +1,5 @@
 use super::{Algorithm, Cancellation, Error, Request};
-use brynja_legacy_hmac::{BitString, Hmac, LegacyUse};
+use brynja_legacy_hmac::{Hmac, LegacyUse};
 
 pub(super) fn checkpoint(cancel: &Cancellation) -> Result<(), Error> {
     #[cfg(test)]
@@ -17,32 +17,7 @@ pub(super) fn run<A: Algorithm>(
 ) -> Result<Option<bool>, Error> {
     checkpoint(cancel)?;
     // Inspect canonical secret contents only on the resident worker.
-    let _ = BitString::new(request.tail.bytes, request.tail.valid_bits)
-        .map_err(|_| Error::InvalidBits)?;
-    let split = if request.tail.valid_bits == 8 || request.tail.bytes.is_empty() {
-        request.tail.bytes.len()
-    } else {
-        request
-            .tail
-            .bytes
-            .len()
-            .checked_sub(1)
-            .ok_or(Error::InvalidBits)?
-    };
-    let (complete, partial) = request
-        .tail
-        .bytes
-        .split_at_checked(split)
-        .ok_or(Error::Invariant)?;
-    let tail = BitString::new(
-        partial,
-        if partial.is_empty() {
-            0
-        } else {
-            request.tail.valid_bits
-        },
-    )
-    .map_err(|_| Error::InvalidBits)?;
+    crate::common::split_tail!(request, complete, tail, Error);
     let mut state = Hmac::<A>::with_tag_length(LegacyUse::acknowledge(), request.key, bytes)
         .map_err(Error::Mac)?;
     for chunk in request

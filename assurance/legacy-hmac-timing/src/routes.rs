@@ -174,7 +174,7 @@ impl Route {
             Self::HostedMd5(session) => hosted(session, key, message, candidate, out, bytes),
             Self::CompiledSha1(session) => {
                 if let Some(candidate) = candidate {
-                    return checked(session.verify(
+                    return authentication(session.verify(
                         host::Request {
                             key,
                             chunks: &[message],
@@ -199,7 +199,7 @@ impl Route {
                     let candidates = core::array::from_fn(|lane| {
                         (lane < lanes).then_some(&candidate[lane][..bytes])
                     });
-                    return checked(session.verify(
+                    return authentication(session.verify(
                         &inputs,
                         black_box(&candidates),
                         &host::Cancellation::new(),
@@ -244,7 +244,7 @@ fn hosted<A: Algorithm>(
     bytes: usize,
 ) -> Result<bool> {
     if let Some(candidate) = candidate {
-        return checked(session.verify(
+        return authentication(session.verify(
             host::Request {
                 key,
                 chunks: &[message],
@@ -266,4 +266,16 @@ fn actual_md5(report: md5_batch::Report, lanes: usize) -> Result<()> {
         return Err("required actual SIMD work absent".into());
     }
     Ok(())
+}
+
+fn authentication(
+    value: std::result::Result<(), brynja_legacy_hmac_std::VerificationError<host::Error>>,
+) -> Result<bool> {
+    match value {
+        Ok(()) => Ok(true),
+        Err(brynja_legacy_hmac_std::VerificationError::Mismatch) => Ok(false),
+        Err(brynja_legacy_hmac_std::VerificationError::Operation(error)) => {
+            Err(format!("{error:?}"))
+        }
+    }
 }

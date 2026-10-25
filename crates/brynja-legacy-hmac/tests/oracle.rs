@@ -1,11 +1,13 @@
 //! Public synthetic test vectors only; excluded from the published archive.
 use brynja_legacy_hmac::{Algorithm, BitString, Error, Hmac, LegacyUse, Md5, Sha1};
 
+mod support;
+
 fn emit<A: Algorithm>(name: &str) -> Result<(), Error> {
     for key_length in [0, 1, 63, 64, 65, 80, 1024] {
-        let key = vec![0xa7; key_length];
+        let key = support::key(key_length);
         for message_length in [0, 1, 55, 56, 63, 64, 65, 127, 128, 4096] {
-            let message = vec![0x39; message_length];
+            let message = support::message(message_length);
             let mut output = vec![0; A::TAG_BYTES];
             let tag =
                 Hmac::<A>::authenticate(LegacyUse::acknowledge(), &key, &message, &mut output)?;

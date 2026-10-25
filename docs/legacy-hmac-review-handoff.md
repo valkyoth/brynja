@@ -43,9 +43,14 @@ are not a whole-stack/register-erasure proof. Review real production callees
 as well as the checker: same-repository pins detect drift, not independent
 authorization or correctness of the model itself.
 
-## Development results at c5f50477
+## Pre-remediation development results at c5f50477
 
-The current functional/package refresh uses
+The following records precede the pentest fixes. They are historical, not
+qualification of the updated verification API or quarantine classification.
+See the [v0.25.1 remediation ledger](../security/pentest/v0.25.1.md) for the
+current author-tested changes and pending independent retest.
+
+The pre-remediation functional/package refresh uses
 `c5f504771c3ab8e9f1c4f8bc4c9974e658df58aa`. The exact source archive sent to
 the isolated Mac workspace has SHA-256
 `f5f6895283de1db2066047743c33c0d23756505f8d112d07d174add75a65bd54`.

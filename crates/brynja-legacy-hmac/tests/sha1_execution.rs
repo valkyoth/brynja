@@ -3,6 +3,8 @@
 use brynja_legacy_hmac::execution::{Sha1Executor, Sha1Hmac, Sha1Mode};
 use brynja_legacy_hmac::{BitString, Error, Hmac, LegacyUse, Sha1};
 
+mod support;
+
 #[test]
 fn portable_executor_is_not_accelerated_authority() {
     let owner = Sha1Executor::portable();
@@ -25,9 +27,9 @@ fn native_sha1_byte_and_bit_composition() -> Result<(), Error> {
     let owner = Sha1Executor::for_compiled_target(Sha1Mode::Require)
         .map_err(|_| Error::ExecutionUnavailable)?;
     for key_length in [0, 1, 63, 64, 65, 80, 1024] {
-        let key = vec![0xa7; key_length];
+        let key = support::key(key_length);
         for length in [0, 1, 55, 56, 63, 64, 65, 127, 128, 4096] {
-            let message = vec![0x39; length];
+            let message = support::message(length);
             let mut expected = [0; 20];
             let _ = Hmac::<Sha1>::authenticate(
                 LegacyUse::acknowledge(),

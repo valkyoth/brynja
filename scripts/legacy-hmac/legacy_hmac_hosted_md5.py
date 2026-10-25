@@ -28,6 +28,8 @@ def mutations(api, root, env, resident=False):
     loans = "loans_admission_and_explicit_quarantine_clear_all_slots"
     matrix = "all_slot_masks_and_canonical_bits_match_portable"
     cases = [
+        ("../common.rs", "brynja_legacy_hmac::Error::Cancelled",
+         "brynja_legacy_hmac::Error::IneligibleWorkload | brynja_legacy_hmac::Error::TagLength | brynja_legacy_hmac::Error::Cancelled", boundary),
         ("md5_compiled.rs", "self.quarantined = true;\n        let parameters", "self.quarantined = false;\n        let parameters", boundary),
         ("md5_compiled.rs", "if self.quarantined {", "if false {", loans),
         ("md5_compiled.rs", "if value.is_some() != candidates.is_some() {", "if false {", boundary),

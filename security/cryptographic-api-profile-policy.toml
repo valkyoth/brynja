@@ -2292,7 +2292,7 @@ sha256 = "f572269937b8f52372e645b573b85cc3ac921d6c1ae445b47ce734fd4528d80b"
 
 [[reviewed-source]]
 path = "assurance/legacy-hmac-hosted-cleanup/src/lib.rs"
-sha256 = "4b9d26aa247bd3a1f3ad8bc356d43854b7ed4aa88ba847a9d1a404167235a9ec"
+sha256 = "5459ffb6e060864e829063ef2381702209a6fd77ed139331bc74aa5b3ce3f007"
 
 [[reviewed-source]]
 path = "assurance/legacy-hmac-hosted-cleanup/src/normalization.rs"
@@ -2312,7 +2312,7 @@ sha256 = "9f0ec284bed078df6fd8e89e0d77a8be7b16bb3440b8befd3b2dc2a5588d6c0e"
 
 [[reviewed-source]]
 path = "assurance/legacy-hmac-hosted-cleanup/src/verification.rs"
-sha256 = "41f1fde86503ed8dfb44959cefcfc5f08401c06e21d0d7aee075b022c398c414"
+sha256 = "6964bc3ed26fdd3adbb12756d6c010196dcacb189b2f526dbc86bdfd33cb1b2c"
 
 [[reviewed-source]]
 path = "assurance/legacy-hmac-md5-cleanup/Cargo.lock"
@@ -2344,7 +2344,7 @@ sha256 = "cd6365b816e99ef06a97d30a6422d4ed5b567ad3cecb8a74c4a7e3742bb62584"
 
 [[reviewed-source]]
 path = "assurance/legacy-hmac-timing/src/routes.rs"
-sha256 = "3f5db93ffa4e6fcc9a31f534f1fca06426f098f4be3c39f4ff31f0a2b67d0e41"
+sha256 = "44bd67ac21122b6249fb724ade0e8cf14ff77b52830f7b2ac7faf78b863d0d3d"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/Cargo.toml"
@@ -2352,19 +2352,19 @@ sha256 = "80dfaf794733969c798b623e0d97903c72f5fb5d179046e28883ba0c4b5243a3"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/lib.rs"
-sha256 = "02d119ef11af61b4410be42ba4d12cc51d9a24b32bc32597d792e83fed8639f0"
+sha256 = "c9847dfd8f22903a35d0159701e8cc70f40969833863a0e80270a0ad37ce0a40"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/macos_resident/md5_compiled.rs"
-sha256 = "014a082e037971663acd4185bed9ec5f912111971d46858cc20bfdc789c0c9d1"
+sha256 = "569d28e93832f4ff5aaaf6a51e9c168349dc82db378a8186f96d9410f41d6a5b"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/macos_resident/md5_compiled/tests.rs"
-sha256 = "09c7f1dee86ca8279078336220e1e6741be76c51d5e3927f58519c1b6e221876"
+sha256 = "5ce97c1049e603378d61f1ee196387fe2f31505fcf2fa012c79e1c51a46da118"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/macos_resident/md5_compiled/tests/native.rs"
-sha256 = "af462861e87ca67ec5b5ff55f4852b29df035cb3c0bbfe546e6a2633a20860d3"
+sha256 = "d07c7ea7b3f966d101df2f2926a8f52d6971c24ac8422253760dff267f5d8651"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/macos_resident/md5_compiled/types.rs"
@@ -2376,11 +2376,11 @@ sha256 = "62d324b91de3a17f28380e679f238ab06e7eb2fec5cabd200887895c147e7e64"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/macos_resident/mod.rs"
-sha256 = "f60a264b9833f0e4772dd06e5f166aae1aea2fe7c80daddf83696c2163d85dee"
+sha256 = "7b4c0c9474fdbd00b88fd27959946baf40bca6278202787ad43aad98005fbbf0"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/macos_resident/sha1_compiled.rs"
-sha256 = "4c467a257d67fa895bb745726ed5312cb8b5e2b837263772289b71b3e514d0f7"
+sha256 = "95b1403ba2062c64f14501f20de598dae56086d1b5bb0bc27544e511f013ed42"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/macos_resident/sha1_compiled/tests.rs"
@@ -2388,11 +2388,11 @@ sha256 = "a977235004fe63275979d6000f444b594713e7859ef9ebd633b48ebd3dc4ea0c"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/macos_resident/sha1_compiled/tests/native.rs"
-sha256 = "92f721402d9c7bda06388703102e28f7604193826eaef2583800babe03e86295"
+sha256 = "c2ac5133705ecf15d8bfc00c5b69953f2450e9857d9c4b57bb6fca9aefbcea8f"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/macos_resident/sha1_compiled/worker.rs"
-sha256 = "a5ac389794079cca821d545dff368c901bb7a3cc36082a45d9072afb156d0ab8"
+sha256 = "06fa4f9fd4019091c71e250d522477eed25ed8ef78f70efac181371ce86070f8"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/macos_resident/tests.rs"
@@ -2400,7 +2400,7 @@ sha256 = "ec4c23367956e27020646d1877136b88f6e7d3a3dc766e82e937e0e911e9571b"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/macos_resident/tests/native.rs"
-sha256 = "1cb0212dd223498b7484a4341eb787e9ed83ec8471fb4da1b97dfac56ac57cc5"
+sha256 = "b917303ac3f088fa1f712f9edf82b8e1ac0899a861dd91b11206d2ea7110828d"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/macos_resident/types.rs"
@@ -2408,19 +2408,19 @@ sha256 = "783ff2c8d26b917608e5d1a5b2075bed3946b2c467041b1fbaefc825424b721a"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/macos_resident/worker.rs"
-sha256 = "34d6576b871537be88ec31ba5b3a53b88d9f4afebf1340d873718eea0aaafef1"
+sha256 = "fcfe989b1a9530f46ed081c783d236f37c99f7c91c57c1086d4331bc63782b3b"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/strict_execution/md5_compiled.rs"
-sha256 = "021206e3f17bb9498133fdd8df565f8f0e2152395bf8e093194fada343c7a245"
+sha256 = "50f6872f2f1252ed01adb58d92da7f89cedbb59912491495f76e292c5b828135"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/strict_execution/md5_compiled/tests.rs"
-sha256 = "365beed84b39e38a67f1d1d08f367ee86e60ca960e25e7e4b77a7c5ffb17037e"
+sha256 = "7e58c4d1b9fca0025de69e0991ada97c24b8f89f695092b4bba020c18a97330f"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/strict_execution/md5_compiled/tests/native.rs"
-sha256 = "bafa9e508e19d2a321f5185dbc23b356a00bd77f4c4acb0b8f57478b8bf97fbc"
+sha256 = "14ed0fee3a0567bd284e40ce6be62b62a775dbc32b19d7bd399247a3098ed85f"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/strict_execution/md5_compiled/types.rs"
@@ -2432,11 +2432,11 @@ sha256 = "62d324b91de3a17f28380e679f238ab06e7eb2fec5cabd200887895c147e7e64"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/strict_execution/mod.rs"
-sha256 = "9e40e1383c693066df1586274cc3868e8b48b419f0b066bde4187bb03cc6e1d9"
+sha256 = "6951e1bb4b1539d671485dab4af297a1ef7c7ff03c587528d73846f689dc6e7e"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/strict_execution/sha1_compiled.rs"
-sha256 = "796a6956ef0db4ee4cc4a88be7654e5f0ffd0b9bada22a3d61eef48b56f86f95"
+sha256 = "152d5e8479ddbc957a19109a59842cbe9641de9b363a1dfd4fa32a742659c022"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/strict_execution/sha1_compiled/tests.rs"
@@ -2444,11 +2444,11 @@ sha256 = "d3787b2bb03b2a0c89236380ee045253e4367b4eac1ade3d346ccd69d832ca0c"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/strict_execution/sha1_compiled/tests/native.rs"
-sha256 = "881ca5cd27dfc4ae9498f3af944c669a6c3d78b760d8ed7a7835ed8c7859eebd"
+sha256 = "17113bd35ce8c404a09abade5426307bcd18f8d259d4c1ef2a979f41912a8c57"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/strict_execution/sha1_compiled/worker.rs"
-sha256 = "4e95d346e1186e2c59b4d7ecca2719eaab3301f7e9fb3dcf73d74009f9f1c230"
+sha256 = "2a1a1b380ca0a19ef31b0efcce673be8955f56e6e07470e225519f7b7b8f0bfc"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/strict_execution/tests.rs"
@@ -2456,7 +2456,7 @@ sha256 = "d361377639159e789c6ab20cec62b46058af71f7f4f8fa0626a1029ed7760c11"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/strict_execution/tests/native.rs"
-sha256 = "5895af1f2bbe07fd1a1fa3c9bb8c09284b51aa6a3d41e19e3e877a514cc3d147"
+sha256 = "5b3f4e268682fd7ad4866f5cc9b9cd0627e9b43e6abf62afb4888c97e8af5fe0"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/strict_execution/types.rs"
@@ -2464,7 +2464,7 @@ sha256 = "990ba2e534eda893cf8c4f0a69772af17aac057b5c40699ed0925d2b6b454608"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/strict_execution/worker.rs"
-sha256 = "919f775d7ff4d7d596b1b5a2df8fc8e15af3c599d2ee54d4d081994a262ae60d"
+sha256 = "be3b662445dff51b8dcc7b71dabcb9f7161e781333aa5e0814e23a11fd0f185b"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac/Cargo.toml"
@@ -2500,11 +2500,11 @@ sha256 = "b4f26bd28a6b8937c38e96d26ad98d7bd2a659f8c21e29d0e404c39bf7dcfcb8"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac/src/md5_batch/engine.rs"
-sha256 = "dbc70233c60278183a86afdc245b67ed433bd871c70ee205b069c4c2646b532d"
+sha256 = "d4702fae355f3dd3e07142ce157acd67be8a2a76c35ade3c375649281dfbbdcd"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac/src/md5_batch/mod.rs"
-sha256 = "24b46a6c0367d1b7265ba1e1b992ca63138c3f18607de4448c970561eef4f64c"
+sha256 = "ca2848b85661e19a973a614754df5811f2e9ea3bbdc88b0eb46785629937986a"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac/src/md5_batch/output.rs"
@@ -2532,11 +2532,11 @@ sha256 = "1183b9c2ba2aabc419852cfaf2b24c59239964019572680e0e8c8fa06a8b1ba3"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac/tests/md5_batch.rs"
-sha256 = "784f809e4298f1c9fa0680eee3f17b5ace6c54fb74b00c2b7713cc5993ea2fc9"
+sha256 = "1df470a0c941ccd950a1328ed386b79e8b3d9f93aa932a4c71f748d8bb916de5"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac/tests/oracle.rs"
-sha256 = "a0c9c7841e94c54e9e7af121bcde79f5ec51da3c30b2600603b57349473e8144"
+sha256 = "8acc44cb25d6d57c8afee85fc571bfde07a2894adbc64d37ce1bc4deca901e9c"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac/tests/rfc2202.rs"
@@ -2544,7 +2544,7 @@ sha256 = "6b1882ef638e4598bda2a2fbe258ca3e41fb2575a03db86bfae7631508a9da5a"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac/tests/sha1_execution.rs"
-sha256 = "5783db638dd246a3e77404ead38fa2a9deebd5926542c57b2771e66e43b1072b"
+sha256 = "a2b78220ed8231936a19893a4c4059d3a96a120ae28d8ea30f179cb7880d7b74"
 
 [[reviewed-source]]
 path = "docs/legacy-hmac-hosted-qualification.md"
@@ -2576,7 +2576,7 @@ sha256 = "b6fbd9ac83855244620e8086f9a9828f780dbdbfa7fffa767be867865e139d0d"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/check-legacy-hmac-hosted-package.py"
-sha256 = "98bcc5d3a8a016656ff91fadf2136900a0cba34c7d34db80b13dca029277991d"
+sha256 = "df0a7338e6a146b2d07e2206f6946595d50dcbf4529d67ecc7924da5dac6dc65"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/check-legacy-hmac-md5-cleanup.py"
@@ -2584,7 +2584,7 @@ sha256 = "4b6d1ee81b3053fad3976a3d06941488b736283fe19f78240545a3f926ca2501"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/check-legacy-hmac-package.py"
-sha256 = "489d3870306b5159d1514e4ec0a43cf26f43dfd90def4c5c57146e9e6cb46a20"
+sha256 = "0226fb09c9f3337e0e5246e1fdf2d38f6fd4cfb831b9a4f768b9e2b662d05651"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/check-legacy-hmac-sha1-native.py"
@@ -2660,7 +2660,7 @@ sha256 = "d210c4eda7f00bf9f117abc6b58d641cecab06fbd39b4e0b71adcdc63a9e1b84"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/legacy_hmac_hosted_acceptance.py"
-sha256 = "15b60f69db43122caa871032ae54e3920b939f15983704cae606d3faf47edb1c"
+sha256 = "1c21283076ea6bbc63cf61d6d2a0c9ac1895ffa3026e7608d0462d1fe1629fe6"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/legacy_hmac_hosted_authority.py"
@@ -2788,7 +2788,7 @@ sha256 = "78dae15c5c01003503896ba8df9d7f45bcb2559313e85d31ce086bf08add32e0"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/legacy_hmac_hosted_md5.py"
-sha256 = "07a0366a52dcfa3ae48157b4a4d52f78433979dc9a9a5882888cbd7943153252"
+sha256 = "ff69de428f859501c12d02c7e4e8bbcc0573be373f72df40458e9bf486df2525"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_boundaries.py"
@@ -2984,7 +2984,7 @@ sha256 = "90df73ced8e11819129bcbcc5da1cb49c1b97dfb31aff33aa606e262ba1d1387"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/legacy_hmac_hosted_transaction.py"
-sha256 = "f661dfaccc2cfbcfacc25ae79e63b8f14fb5f98d742d672d9dc5109607031e31"
+sha256 = "bbd3c1f7219ade6c328367d9fa7b76d364497893326d43a5fecd6d186d018584"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/legacy_hmac_hosted_transaction_tests.py"
@@ -3000,11 +3000,11 @@ sha256 = "6f3172f9872832443ce3552b7299b590c996933ed71da99217725b24b8d733cf"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/legacy_hmac_hosted_verify.py"
-sha256 = "7b0e725ad979f0feb1a0f5ceaf574538830eb27811e0917d2668d4cd82cf1144"
+sha256 = "c2c4a4e75db6ef9a1fcd01ddea013ac2f68f77ea35113545b39461b55861edff"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/legacy_hmac_hosted_verify_tests.py"
-sha256 = "13426b68d479ea9efa3f5b59cdc7bf8736d08c6bf2c48d91816fddd84fd8fb1b"
+sha256 = "c56eaad6fb476cfd7d7638d5e8b9a469fd7ac99d24ce4532f715fb215f24e989"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/legacy_hmac_md5_admission.py"
@@ -3032,7 +3032,7 @@ sha256 = "a2116beb55136a8ac2a8f01ed89d6d624bfe3c4fcad3807a26d1229ea894dce1"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/legacy_hmac_md5_fence.py"
-sha256 = "523ea9b4d653895df3cba6ee48192a86cec5707b77b1426f622973928cc5ecad"
+sha256 = "0dcb056d7811c89d2ee00f3f54831d7c58a9088c7c7caf7238ac20d00a22633f"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/legacy_hmac_md5_handoff.py"
@@ -3064,7 +3064,7 @@ sha256 = "e70926a16ba3ae2e3c30efceebd6f861cc5439921b79e0c8cb4b0a435c10932c"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/legacy_hmac_md5_native.py"
-sha256 = "17e0eb598cc50a2cda89d6fd294a05323329b455aaf1a94bb4a86c93371b4023"
+sha256 = "c50a92827f245d76823f3c3df6056e9c90b9e956ec2659caaf413080465d9fc2"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/legacy_hmac_md5_normalization.py"
@@ -3112,7 +3112,7 @@ sha256 = "07d8a14657d5e5602588c05641af9d1b97514e04b2e1cf2422a04457bb6b6d6a"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/legacy_hmac_md5_quarantine.py"
-sha256 = "6791f767a0098b6214d8fe3e55cff485a6b4b45ac3b6219044f7c995bf0188c3"
+sha256 = "c78402b5dc7fe187f347413a7aa78cc0a55e97ce7d73fcb22e2d770a6edcbd98"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/legacy_hmac_md5_report_return.py"
@@ -3172,7 +3172,7 @@ sha256 = "dab4474cff460d235e1a46586e82a8af2baf88e4fff4725286d30ea08823f3ec"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/legacy_hmac_native.py"
-sha256 = "ec9fc19592c850a8773a9aa0e639481d6c30f30a68089986c2bb9323365b7929"
+sha256 = "a0b520a321102df39358aa9c2098be6dd6192ef0908b6571afd37b8117bfdbaf"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/legacy_hmac_negatives.py"
@@ -3220,7 +3220,7 @@ sha256 = "4614f81ceb8974e98c1141473fcf175c5fb904f57a5f3f7b435691b64e9c0806"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/test-legacy-hmac-hosted-package.py"
-sha256 = "cdb9ff18d67a2dd82f9af83c7a86e5163ddf4a84eb74db13d2416df019c157c5"
+sha256 = "79a7f682db9fffaa6de7940bf09ec3e0986baa76d359bedab177539a3e269c4f"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/test-legacy-hmac-md5-caller.py"
@@ -3260,7 +3260,7 @@ sha256 = "1d039f86ef29b2b4b20719664a7653cc283f00ee9a4c0f2b62c230a51371ced5"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/test-legacy-hmac-md5-native.py"
-sha256 = "e046598eb5ba774c75f8054f2fc70dc56787a96a4b1a1e026402eede15a22886"
+sha256 = "34fbd1b8dd70046036a9357978f4dffb00e6fc9305a199a5c59d746b27400f82"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/test-legacy-hmac-md5-normalization.py"
@@ -3300,11 +3300,11 @@ sha256 = "e1e1e7432f65877a1ac9c395b008d839303f1e746e6919fed87e9df40706d87a"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/test-legacy-hmac-native.py"
-sha256 = "fa4ce430e97ab13cd4c99f8271f9ab31f2b8bd0b3fc7b2efad1739de25fa4755"
+sha256 = "0a5cbf61ff7d55aa36c507ce53f2f69dd7e659231594f3ef2f9f9fba8738e8fe"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/test-legacy-hmac-package.py"
-sha256 = "f1173571a951700b1733e4b4c2bb4e42a411566416aade8dcd99d97292214946"
+sha256 = "8999df140de021751c699dcd407f17e4803a51c1c81c91e2a8f318eceb9fb55e"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/test-legacy-hmac-timing.py"
@@ -3353,3 +3353,15 @@ sha256 = "3b9e7699b30635de1565b49d7882316d2e8ad8b0aa7771218871d5ad8d9de53c"
 [[reviewed-source]]
 path = "scripts/legacy-hmac/review-legacy-hmac-timing.py"
 sha256 = "96cc46fdb68f55f0944026b6d0ac451bc62d625164a049ead8f4a87c67f38852"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/common.rs"
+sha256 = "797bc197cf21e197e6efae81f04244d1b8a0c6296496b85aa6e63b2e30472000"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/verification.rs"
+sha256 = "f959147331c36dcfa4dc88402f2dba6ad99b14acae32632ca31aff9eda7695c3"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac/tests/support/mod.rs"
+sha256 = "eab8d808f2f1d657088bc46d23cb69cca0c9f40c969f436e7c71f7b4aa41ced0"

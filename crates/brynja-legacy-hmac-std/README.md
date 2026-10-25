@@ -83,7 +83,10 @@ fn legacy_request() -> Result<(), brynja_legacy_hmac_std::strict_execution::Erro
 ```
 
 `compute` accepts ordered chunks and a canonical MSB-first bit tail. `verify`
-releases only a boolean. Select tag width before processing; byte truncations
+returns `Ok(())` only for a matching tag, `VerificationError::Mismatch` for
+authentication failure, or `VerificationError::Operation(error)` for an
+operational failure. Both `is_ok()` and propagation with `?` reject a mismatch.
+Select tag width before processing; byte truncations
 range from ten bytes to the full digest width. Candidate lengths never select
 policy. Empty or predictable keys are mathematically accepted but insecure.
 
@@ -181,7 +184,8 @@ Each request receives one shared `max_compressions` budget across long-key,
 inner and outer processing, including padding and all active lanes. Work limits
 and cancellation preserve reuse; authority, internal and unwind failures
 quarantine. `verify` requires exact active-slot/width agreement and releases
-only one aggregate decision. Empty messages remain active when wrapped in
+only one aggregate decision: `Ok(())` means every active tag matched;
+`VerificationError::Mismatch` means at least one did not. Empty messages remain active when wrapped in
 `Some`; `None` is inactive.
 
 The existing hardened leaf selects scalar normalization for long keys without

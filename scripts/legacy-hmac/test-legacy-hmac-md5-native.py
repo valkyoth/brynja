@@ -13,7 +13,7 @@ def valid_output():
     rows = ["test result: ok. 4 passed; 0 failed; 0 ignored;", *native.MARKERS]
     for key in (0, 1, 63, 64, 65, 80, 1024):
         for size in (0, 1, 55, 56, 63, 64, 65, 127, 128, 4096):
-            digest = hmac.new(bytes([0xa7]) * key, bytes([0x39]) * size, hashlib.md5).hexdigest()
+            digest = hmac.new(bytes(((i * 0x9d) ^ 0x5a) & 255 for i in range(key)), bytes(((i * 0x3b) ^ 0xc1) & 255 for i in range(size)), hashlib.md5).hexdigest()
             rows.append(f"LEGACY_MD5_BATCH_BYTE:{key}:{size}:{digest}")
     rows.extend("LEGACY_MD5_BATCH_BITS:" + key.removeprefix("md5:") + ":" + value
                 for key, value in native.legacy_hmac_bits.expected().items() if key.startswith("md5:"))

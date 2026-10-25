@@ -39,7 +39,7 @@ def oracle(output):
         for key_length in (0, 1, 63, 64, 65, 80, 1024):
             for length in (0, 1, 55, 56, 63, 64, 65, 127, 128, 4096):
                 expected[f"{name}:{key_length}:{length}"] = hmac.new(
-                    bytes([0xa7]) * key_length, bytes([0x39]) * length,
+                    bytes(((i * 0x9d) ^ 0x5a) & 255 for i in range(key_length)), bytes(((i * 0x3b) ^ 0xc1) & 255 for i in range(length)),
                     getattr(hashlib, name)).hexdigest()
     actual = {}
     for line in output.splitlines():

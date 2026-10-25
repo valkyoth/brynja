@@ -98,15 +98,19 @@ impl Sha1CompiledSession {
             identity: PhantomData,
         })
     }
-    /// Compares the selected tag on the worker and releases only the decision.
+    /// Compares the selected tag on the worker. Only a match returns `Ok(())`;
+    /// mismatch returns [`crate::VerificationError::Mismatch`].
     pub fn verify(
         &mut self,
         request: Request<'_>,
         candidate: &[u8],
         cancel: &Cancellation,
-    ) -> Result<bool, Error> {
-        self.execute(request, Some(candidate), cancel)?
-            .ok_or(Error::Invariant)
+    ) -> Result<(), crate::VerificationError<Error>> {
+        crate::verification::finish(
+            self.execute(request, Some(candidate), cancel)
+                .map_err(crate::VerificationError::Operation)?,
+            Error::Invariant,
+        )
     }
     fn execute(
         &mut self,

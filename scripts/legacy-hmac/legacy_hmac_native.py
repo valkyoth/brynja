@@ -42,7 +42,7 @@ def validate_output(output):
     expected = {}
     for length in (0, 1, 63, 64, 65, 80, 1024):
         for size in (0, 1, 55, 56, 63, 64, 65, 127, 128, 4096):
-            expected[f"{length}:{size}"] = hmac.new(bytes([0xa7]) * length, bytes([0x39]) * size, hashlib.sha1).hexdigest()
+            expected[f"{length}:{size}"] = hmac.new(bytes(((i * 0x9d) ^ 0x5a) & 255 for i in range(length)), bytes(((i * 0x3b) ^ 0xc1) & 255 for i in range(size)), hashlib.sha1).hexdigest()
     bit_expected = {identity.removeprefix("sha1:"): digest for identity, digest in legacy_hmac_bits.expected().items()
                     if identity.startswith("sha1:")}
     for prefix, wanted in (("LEGACY_SHA1_BYTE:", expected), ("LEGACY_SHA1_BITS:", bit_expected)):

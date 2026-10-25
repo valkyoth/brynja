@@ -86,11 +86,17 @@ fn sha1_hardware_bytes_bits_truncation_and_verification() -> Result<(), Error> {
                         owner.compute(request(), &Cancellation::new())?.expose(),
                         expected
                     );
-                    assert!(owner.verify(request(), &expected, &Cancellation::new())?);
+                    assert_eq!(
+                        owner.verify(request(), &expected, &Cancellation::new()),
+                        Ok(())
+                    );
                     for index in 0..width {
                         let mut wrong = expected.clone();
                         *wrong.get_mut(index).ok_or(Error::Invariant)? ^= 1;
-                        assert!(!owner.verify(request(), &wrong, &Cancellation::new())?);
+                        assert_eq!(
+                            owner.verify(request(), &wrong, &Cancellation::new()),
+                            Err(crate::VerificationError::Mismatch)
+                        );
                     }
                     cleared(&owner);
                 }
@@ -180,7 +186,7 @@ fn hardware_request_rejection_output_loans_and_explicit_quarantine() -> Result<(
     s.inner.staging.as_bytes_mut().fill(0x5a);
     assert_eq!(
         s.verify(request(), &[0; 19], &Cancellation::new()),
-        Err(Error::OutputLength)
+        Err(crate::VerificationError::Operation(Error::OutputLength))
     );
     cleared(&s);
     reusable(&mut s)?;

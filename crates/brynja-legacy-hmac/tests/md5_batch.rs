@@ -9,6 +9,8 @@ mod failures;
 
 mod lanes;
 
+mod support;
+
 #[test]
 #[ignore = "requires actual AVX2 / NEON instructions with complete target features"]
 fn native_md5_distinct_lane_prefixes() -> Result<(), Error> {
@@ -54,8 +56,8 @@ fn native_md5_differential_shapes_bits_and_truncations() -> Result<(), Error> {
         .ok_or(Error::ExecutionUnavailable)?
         .lane_width();
     for mask in 0..=255u16 {
-        let keys = [0, 1, 63, 64, 65, 80, 129, 1024].map(|length| vec![0xa7; length]);
-        let messages = [0, 55, 56, 63, 64, 65, 128, 193].map(|length| vec![0x39; length]);
+        let keys = [0, 1, 63, 64, 65, 80, 129, 1024].map(support::key);
+        let messages = [0, 55, 56, 63, 64, 65, 128, 193].map(support::message);
         let mut inputs = core::array::from_fn(|_| None);
         let mut expected = [[0; 16]; 8];
         for (lane, ((key, bytes), input)) in keys.iter().zip(&messages).zip(&mut inputs).enumerate()
@@ -102,9 +104,9 @@ fn native_md5_differential_shapes_bits_and_truncations() -> Result<(), Error> {
     }
     println!();
     for length in [0, 1, 63, 64, 65, 80, 1024] {
-        let key = vec![0xa7; length];
+        let key = support::key(length);
         for size in [0, 1, 55, 56, 63, 64, 65, 127, 128, 4096] {
-            let bytes = vec![0x39; size];
+            let bytes = support::message(size);
             let message = BitString::new(&bytes, if size == 0 { 0 } else { 8 })
                 .map_err(|_| Error::MessageTooLong)?;
             let actual = check_case(&executor, &key, message)?;

@@ -12,6 +12,7 @@ pub(super) enum Fault {
     Panic(usize),
     WrongReport,
     WrongShape,
+    WorkerError(brynja_legacy_hmac::Error),
 }
 thread_local! {
     static FAULT: std::cell::Cell<Fault> = const { std::cell::Cell::new(Fault::None) };
@@ -50,6 +51,10 @@ pub(super) fn report(mut value: Report) -> Report {
     value
 }
 pub(super) fn result(value: &mut Result<Option<bool>, Error>) {
+    if let Fault::WorkerError(error) = FAULT.with(|f| f.get()) {
+        *value = Err(Error::Mac(error));
+        return;
+    }
     if matches!(FAULT.with(|f| f.get()), Fault::WrongShape) {
         *value = match value {
             Ok(Some(_)) => Ok(None),

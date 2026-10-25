@@ -44,7 +44,7 @@ def validate_output(output):
     require("test result: ok. 4 passed; 0 failed; 0 ignored;" in output, "MD5 native population")
     for marker in MARKERS:
         require(output.splitlines().count(marker) == 1, "MD5 native marker missing/duplicated")
-    byte_expected = {f"{key}:{length}": hmac.new(bytes([0xa7]) * key, bytes([0x39]) * length, hashlib.md5).hexdigest()
+    byte_expected = {f"{key}:{length}": hmac.new(bytes(((i * 0x9d) ^ 0x5a) & 255 for i in range(key)), bytes(((i * 0x3b) ^ 0xc1) & 255 for i in range(length)), hashlib.md5).hexdigest()
                      for key in (0, 1, 63, 64, 65, 80, 1024)
                      for length in (0, 1, 55, 56, 63, 64, 65, 127, 128, 4096)}
     bit_expected = {key.removeprefix("md5:"): value for key, value in legacy_hmac_bits.expected().items() if key.startswith("md5:")}

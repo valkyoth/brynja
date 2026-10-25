@@ -299,8 +299,11 @@ impl Batch<'_> {
             .checked_add(prefix_work.vector_blocks)
             .ok_or(Md5BatchError::Backend)?;
         self.executor.ready()?;
+        report_test_hook(&mut work);
         if self.executor.required && work.vector_blocks == 0 {
-            return Err(Error::IneligibleWorkload);
+            // Eligibility was checked before processing. A missing SIMD report
+            // now means an internal failure, not an ordinary request rejection.
+            return Err(Md5BatchError::Backend.into());
         }
         let backend = authority
             .filter(|_| work.vector_blocks != 0)
@@ -328,3 +331,17 @@ impl Drop for Operation<'_> {
         }
     }
 }
+
+// Keep test-only injection outside production item bodies so the source-policy
+// production-prefix check still sees every integrity check and destructor.
+#[cfg(not(test))]
+#[inline(always)]
+fn report_test_hook(_: &mut Md5BatchReport) {}
+
+#[cfg(test)]
+fn report_test_hook(work: &mut Md5BatchReport) {
+    tests::alter_report(work);
+}
+
+#[cfg(test)]
+mod tests;

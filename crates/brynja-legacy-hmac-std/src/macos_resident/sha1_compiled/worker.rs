@@ -1,8 +1,5 @@
 use super::{Cancellation, Error, LegacyUse, Request, Sha1Backend};
-use brynja_legacy_hmac::{
-    BitString,
-    execution::{Sha1Executor, Sha1Hmac, Sha1Mode},
-};
+use brynja_legacy_hmac::execution::{Sha1Executor, Sha1Hmac, Sha1Mode};
 
 pub(super) fn probe() -> Result<Sha1Backend, Error> {
     let owner = Sha1Executor::for_compiled_target(Sha1Mode::Require)
@@ -38,32 +35,7 @@ pub(super) fn run(
         return Err(Error::Invariant);
     }
     checkpoint(&owner, cancel)?;
-    let _ = BitString::new(request.tail.bytes, request.tail.valid_bits)
-        .map_err(|_| Error::InvalidBits)?;
-    let split = if request.tail.valid_bits == 8 || request.tail.bytes.is_empty() {
-        request.tail.bytes.len()
-    } else {
-        request
-            .tail
-            .bytes
-            .len()
-            .checked_sub(1)
-            .ok_or(Error::InvalidBits)?
-    };
-    let (complete, partial) = request
-        .tail
-        .bytes
-        .split_at_checked(split)
-        .ok_or(Error::Invariant)?;
-    let tail = BitString::new(
-        partial,
-        if partial.is_empty() {
-            0
-        } else {
-            request.tail.valid_bits
-        },
-    )
-    .map_err(|_| Error::InvalidBits)?;
+    crate::common::split_tail!(request, complete, tail, Error);
     let mut state = Sha1Hmac::with_tag_length(LegacyUse::acknowledge(), &owner, request.key, bytes)
         .map_err(Error::Mac)?;
     for chunk in request

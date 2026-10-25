@@ -243,7 +243,7 @@ class Check:
     def run(self):
         for error in range(8):
             for backend in range(3):
-                evaluate(self.graph, self.entry, self.ptrs, self.executor, backend, error in (2, 3, 4),
+                evaluate(self.graph, self.entry, self.ptrs, self.executor, backend, error in (1, 2, 3, 4),
                          body=self.body, seed=self.seed, error=error, output=self.output, payload=self.payload, niche=self.niche,
                          prewritten=self.prewritten, workspace=r.phases.owner(self.allocs, 'workspace', 912))
         for site in self.unwind:

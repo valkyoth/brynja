@@ -249,7 +249,7 @@ class Transaction:
                         require(values.integer(returned, 16) >> 8 == resource + int(not panicked),
                                 'legacy worker panic/protocol failure payload changed')
                     if self.compiled:
-                        benign_mac = (0, 1, 5, 6, 7) if self.batch else (0,)
+                        benign_mac = (0, 6, 7) if self.batch else (0,)
                         reusable = complete and not panicked and (success and shape or result[0] in (4, 6)
                                     or result[0] == 7 and result[1] in benign_mac)
                         require(quarantine == int(not reusable), 'legacy quarantine classification changed')

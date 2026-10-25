@@ -32,8 +32,9 @@ class VerifyTests:
             for block, lines in h.flow.blocks(body).items():
                 for index, line in enumerate(lines):
                     changes = []
-                    if line.startswith('ret i16 '):
-                        changes += ['ret i16 0', 'ret i16 511', 'ret i16 8']
+                    if line.startswith('ret { i8, i8 } '):
+                        changes += ['ret { i8, i8 } { i8 ' + str(tag) + ', i8 undef }'
+                                    for tag in (0, 8, 10, 11, 254, 255)]
                     if 'icmp eq ' in line:
                         changes.append(line.replace('icmp eq ', 'icmp ne '))
                     if 'icmp ne ' in line:
@@ -68,7 +69,8 @@ class VerifyTests:
                 root = symbol
                 while root in aliases:
                     root = aliases[root]
-                changed = re.sub(r'ret i16 \d+', 'ret i16 9', body)
+                changed = re.sub(r'ret \{ i8, i8 \} \{ i8 -?\d+, i8 undef \}',
+                                 'ret { i8, i8 } { i8 9, i8 undef }', body)
                 with self.assertRaises(ValueError):
                     h.verification.typed(({**definitions, root: (args, changed)}, aliases, names), compiler)
                 rejected += 2
@@ -76,11 +78,16 @@ class VerifyTests:
         symbol = next(s for s, name in names.items() if name == executor)
         parameters = h.syntax.parameters(args)
         operands = ', '.join(arg.split()[0] + ' ' + arg.split()[-1] for arg in parameters)
-        good = f'entry:\n %provided = call i16 @{symbol}({operands})\n ret i16 %provided'
+        good = f'entry:\n %provided = call {{ i8, i8 }} @{symbol}({operands})\n ret {{ i8, i8 }} %provided'
         h.verification.check(args, good, names, case[1], compiler, identity, executor, True)
-        ok = 255 if compiler == '1.99.1' else 10
-        bad = good.replace('ret i16 %provided', f'%bad = icmp eq i16 %provided, {3 | (255 << 8)}\n'
-                           f' %answer = select i1 %bad, i16 {ok | 256}, i16 %provided\n ret i16 %answer')
+        ok = 254 if compiler == '1.99.1' else 11
+        bad = good.replace('ret { i8, i8 } %provided',
+                           '%tag = extractvalue { i8, i8 } %provided, 0\n'
+                           ' %padding = extractvalue { i8, i8 } %provided, 1\n'
+                           ' %bad = icmp eq i8 %padding, 255\n'
+                           f' %answer = select i1 %bad, i8 {ok}, i8 %tag\n'
+                           ' %result = insertvalue { i8, i8 } %provided, i8 %answer, 0\n'
+                           ' ret { i8, i8 } %result')
         with self.assertRaises(ValueError):
             h.verification.check(args, bad, names, case[1], compiler, identity, executor, True)
         print(f'Public verification ABI: {rejected} typed-probe mutations and unit-padding decision corruption rejected', flush=True)
@@ -97,10 +104,10 @@ class VerifyTests:
             for file in ('mod.rs', 'sha1_compiled.rs', 'md5_compiled.rs'):
                 path = leaf / 'src' / directory / file
                 original = path.read_text()
-                before = '.ok_or(Error::Invariant)'
+                before = '.map_err(crate::VerificationError::Operation)?'
                 self.assertIn(before, original)
                 try:
-                    path.write_text(original.replace(before, '.map(|_| true).ok_or(Error::Invariant)', 1))
+                    path.write_text(original.replace(before, '.map(|_| Some(true))' + before, 1))
                     artifacts = emit()
                     with self.assertRaises(ValueError):
                         h.validate(artifacts, target, 'unwind')

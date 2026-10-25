@@ -2,16 +2,18 @@
 use super::host::Error;
 
 #[inline(never)]
-pub fn rejected_tag() -> Result<bool, Error> {
-    Ok(false)
+pub fn rejected_tag() -> Result<(), brynja_legacy_hmac_std::VerificationError<Error>> {
+    Err(brynja_legacy_hmac_std::VerificationError::Mismatch)
 }
 
 #[inline(never)]
-pub fn accepted_tag() -> Result<bool, Error> {
-    Ok(true)
+pub fn accepted_tag() -> Result<(), brynja_legacy_hmac_std::VerificationError<Error>> {
+    Ok(())
 }
 
 #[inline(never)]
-pub fn invalid_result() -> Result<bool, Error> {
-    Err(Error::Invariant)
+pub fn invalid_result() -> Result<(), brynja_legacy_hmac_std::VerificationError<Error>> {
+    Err(brynja_legacy_hmac_std::VerificationError::Operation(
+        Error::Invariant,
+    ))
 }

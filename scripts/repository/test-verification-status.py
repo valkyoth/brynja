@@ -70,6 +70,25 @@ def must_fail(text: str, expected: str) -> None:
         raise AssertionError(f"fixture unexpectedly passed: {expected}")
 
 
+def legacy_root_rows() -> None:
+    root = SCRIPT.resolve().parents[2]
+    rows = [row for row in MODULE.ROOT_ROWS if '`brynja-legacy-hmac' in row]
+    assert len(rows) == 2
+    for path in MODULE.ROOT_READMES:
+        text = (root / path).read_text()
+        MODULE.validate_document(path, text, MODULE.ROOT_ROWS)
+        for row in rows:
+            for replacement in ('', row.replace('qualification pending', 'fully qualified'),
+                                row.replace('❌ Not independently verified', '✅ Verified')):
+                try:
+                    MODULE.validate_document(path, text.replace(row, replacement), MODULE.ROOT_ROWS)
+                except MODULE.VerificationStatusError:
+                    pass
+                else:
+                    raise AssertionError('legacy HMAC omission/overclaim accepted')
+    print('Legacy HMAC root tables reject 12 omission/qualification/review regressions')
+
+
 def crate_tables() -> None:
     root = SCRIPT.resolve().parents[2]
     mutations = 0
@@ -268,6 +287,7 @@ def resident_status_rows() -> None:
 
 
 def main() -> int:
+    legacy_root_rows()
     crate_tables()
     hmac_status_rows()
     scoped_status_rows()

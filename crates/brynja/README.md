@@ -64,6 +64,17 @@ SHA-2 covers SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256; S
 | SHA-1 | ✅ Fully implemented | `brynja-legacy-sha1` | ❌ Not independently verified |
 | MD5 | ✅ Fully implemented | `brynja-legacy-md5` | ❌ Not independently verified |
 
+### Legacy Message Authentication
+
+These compatibility APIs require separate legacy dependencies and are not
+exported by this modern facade. The v0.25.1 security retest passed; final release
+qualification remains pending, without independent cryptographic certification.
+
+| Construction family | Implementation status | Owning crate | Independent verification |
+| --- | --- | --- | --- |
+| HMAC over legacy MD5/SHA-1 | 🚧 Development APIs; qualification pending | `brynja-legacy-hmac` | ❌ Not independently verified |
+| Hosted legacy HMAC | 🚧 Linux protected / Apple Silicon resident owners; qualification pending | `brynja-legacy-hmac-std` | ❌ Not independently verified |
+
 ### Protocol And PKI Building Blocks
 
 | Capability | Implementation status | Owning crate | Independent verification |

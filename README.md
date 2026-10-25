@@ -108,6 +108,17 @@ legacy crate dependency even after implementation.
 | SHA-1 | ✅ Fully implemented | `brynja-legacy-sha1` | ❌ Not independently verified |
 | MD5 | ✅ Fully implemented | `brynja-legacy-md5` | ❌ Not independently verified |
 
+### Legacy Message Authentication
+
+Legacy HMAC is explicitly selected for compatibility, outside the modern facade.
+The [v0.25.1 security retest](security/pentest/v0.25.1.md) passed; final release
+qualification remains pending. This is not independent cryptographic certification.
+
+| Construction family | Implementation status | Owning crate | Independent verification |
+| --- | --- | --- | --- |
+| HMAC over legacy MD5/SHA-1 | 🚧 Development APIs; qualification pending | `brynja-legacy-hmac` | ❌ Not independently verified |
+| Hosted legacy HMAC | 🚧 Linux protected / Apple Silicon resident owners; qualification pending | `brynja-legacy-hmac-std` | ❌ Not independently verified |
+
 ### Protocol And PKI Building Blocks
 
 | Capability | Implementation status | Owning crate | Independent verification |

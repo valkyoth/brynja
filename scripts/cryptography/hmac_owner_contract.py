@@ -7,6 +7,7 @@ from pathlib import Path
 import re
 
 import rust_source_contract as rust
+import legacy_hmac_owner_contract as compatibility
 
 ROOT = Path(__file__).resolve().parents[2]
 ID = "registered.algorithm.hmac"
@@ -50,6 +51,7 @@ RECORD = {
     "storage": "transitive-fixed-owners-with-separate-protected-or-resident-hosted-profiles",
     "output_classification": "typed-secret-owned",
     "partial_failure_policy": "clear-complete-secret-destination",
+    "compatibility_profiles": [compatibility.RECORD],
 }
 
 # Enumerate current files, not just known filenames, so an added implementation
@@ -75,7 +77,7 @@ def reviewed_paths(root=ROOT):
         paths.update(str(path.relative_to(root)) for path in (root / tree).rglob("*")
                      if path.is_file() and path.suffix in {".rs", ".py", ".toml", ".lock"}
                      and "target" not in path.relative_to(root / tree).parts)
-    return paths
+    return paths | compatibility.reviewed_paths(root)
 
 
 def validate(root, owner, registered):

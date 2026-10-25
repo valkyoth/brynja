@@ -24189,7 +24189,7 @@
       ]
     }
   ],
-  "policy_sha256": "baa19df616690df98c95f3d70eb669d2b53fc78f10cd2f125f85e90ada0f4a32",
+  "policy_sha256": "a534ffcac422e9f5a5684b45975429bd5b5115da84b1250a2918128c13d750ba",
   "registered_secret_owners": [
     {
       "capability": "algorithm.hmac",
@@ -24202,6 +24202,125 @@
         "crates/brynja-core/src/secret_memory.rs#OwnedSecretRegion"
       ],
       "cleanup_model": "transitive-owned-fields-and-consuming-handoffs",
+      "compatibility_profiles": [
+        {
+          "admission": "explicit-LegacyUse-not-policy-approval",
+          "cleanup_bindings": [
+            "crates/brynja-legacy-hmac/src/engine.rs#Engine::finish",
+            "crates/brynja-legacy-hmac/src/scratch.rs#Scratch::drop",
+            "crates/brynja-legacy-hmac/src/execution/adapter.rs#Sha1Adapter",
+            "crates/brynja-legacy-hmac/src/execution/retained.rs#Retained",
+            "crates/brynja-legacy-hmac/src/md5_batch/engine.rs#Rows::drop",
+            "crates/brynja-legacy-hmac/src/md5_batch/engine.rs#Operation::drop",
+            "crates/brynja-legacy-hmac/src/output.rs#SecretTag",
+            "crates/brynja-legacy-hmac/src/md5_batch/output.rs#SecretTags"
+          ],
+          "cleanup_model": "transitive-owned-fields-and-consuming-handoffs",
+          "compiler_checks": [
+            "python3 scripts/legacy-hmac/check-legacy-hmac-cleanup.py",
+            "python3 scripts/legacy-hmac/check-legacy-hmac-engine-cleanup.py",
+            "python3 scripts/legacy-hmac/check-legacy-hmac-execution-cleanup.py",
+            "python3 scripts/legacy-hmac/check-legacy-hmac-md5-cleanup.py",
+            "python3 scripts/legacy-hmac/check-legacy-hmac-hosted-cleanup.py"
+          ],
+          "compiler_scope": "bounded-owned-storage-and-dispatch-not-whole-frame-erasure",
+          "delegated_owners": [
+            "registered.algorithm.sha1",
+            "registered.algorithm.md5"
+          ],
+          "evidence": [
+            "docs/legacy-hmac-hosted-qualification.md",
+            "crates/brynja-legacy-hmac/tests/contracts.rs",
+            "crates/brynja-legacy-hmac/tests/rfc2202.rs",
+            "crates/brynja-legacy-hmac/tests/md5_batch.rs",
+            "scripts/legacy-hmac/check-legacy-hmac-package.py",
+            "scripts/legacy-hmac/check-legacy-hmac-hosted-package.py",
+            "scripts/cryptography/legacy_hmac_owner_tests.py",
+            "scripts/legacy-hmac/check-legacy-hmac-cleanup.py",
+            "scripts/legacy-hmac/check-legacy-hmac-engine-cleanup.py",
+            "scripts/legacy-hmac/check-legacy-hmac-execution-cleanup.py",
+            "scripts/legacy-hmac/check-legacy-hmac-md5-cleanup.py",
+            "scripts/legacy-hmac/check-legacy-hmac-hosted-cleanup.py"
+          ],
+          "fields": [
+            "inner:owned-secret-hash-state",
+            "outer:owned-secret-hash-state",
+            "tag_bytes:public-preselected-policy"
+          ],
+          "id": "legacy-sha1-md5",
+          "limitations": [
+            "legacy-only-not-new-protocol-or-FIPS-approval",
+            "public-lengths-batch-shape-and-work",
+            "caller-copies-registers-OS-state-and-fatal-termination-outside-guarantee",
+            "build-wide-CPU-feature-and-deployment-authority-required-for-acceleration"
+          ],
+          "milestone": "0.25.1",
+          "output_classification": "typed-secret-owned-or-explicit-public-declassification",
+          "partial_failure_policy": "clear-complete-secret-destination",
+          "qualification": "scoped-release-reconciliation-and-independent-review-pending",
+          "routes": [
+            {
+              "id": "portable",
+              "selection": "default",
+              "storage": "transitive-fixed-owned-memory-not-residency",
+              "symbol": "crates/brynja-legacy-hmac/src/lib.rs#Hmac"
+            },
+            {
+              "id": "sha1-execution",
+              "selection": "pre-admitted-authority-no-failure-fallback",
+              "storage": "borrowed-hardened-workspace",
+              "symbol": "crates/brynja-legacy-hmac/src/execution/mod.rs#Sha1Hmac"
+            },
+            {
+              "id": "md5-batch",
+              "selection": "full-AVX2-or-NEON-group-no-failure-fallback",
+              "storage": "borrowed-hardened-workspace-and-owned-rows",
+              "symbol": "crates/brynja-legacy-hmac/src/md5_batch/mod.rs#Md5Batch"
+            },
+            {
+              "cleanup_bindings": [
+                "crates/brynja-legacy-hmac-std/src/strict_execution/mod.rs#Buffers::drop",
+                "crates/brynja-legacy-hmac-std/src/strict_execution/mod.rs#Output::drop",
+                "crates/brynja-legacy-hmac-std/src/strict_execution/md5_compiled/types.rs#Md5BatchOutput"
+              ],
+              "compiled_owners": [
+                "crates/brynja-legacy-hmac-std/src/strict_execution/sha1_compiled.rs#Sha1CompiledSession",
+                "crates/brynja-legacy-hmac-std/src/strict_execution/md5_compiled.rs#Md5BatchSession"
+              ],
+              "id": "strict_execution",
+              "selection": "explicit-feature-unsupported-target-errors",
+              "storage": "Linux-protected-mappings-and-worker-stack",
+              "symbol": "crates/brynja-legacy-hmac-std/src/strict_execution/mod.rs#Session"
+            },
+            {
+              "cleanup_bindings": [
+                "crates/brynja-legacy-hmac-std/src/macos_resident/mod.rs#Buffers::drop",
+                "crates/brynja-legacy-hmac-std/src/macos_resident/mod.rs#Output::drop",
+                "crates/brynja-legacy-hmac-std/src/macos_resident/md5_compiled/types.rs#Md5BatchOutput"
+              ],
+              "compiled_owners": [
+                "crates/brynja-legacy-hmac-std/src/macos_resident/sha1_compiled.rs#Sha1CompiledSession",
+                "crates/brynja-legacy-hmac-std/src/macos_resident/md5_compiled.rs#Md5BatchSession"
+              ],
+              "id": "macos_resident",
+              "selection": "explicit-feature-unsupported-target-errors",
+              "storage": "Apple-Silicon-resident-mappings-and-worker-stack-not-dump-exclusion",
+              "symbol": "crates/brynja-legacy-hmac-std/src/macos_resident/mod.rs#Session"
+            }
+          ],
+          "symbol": "crates/brynja-legacy-hmac/src/engine.rs#Engine",
+          "temporaries": [
+            "pad:Scratch<64>",
+            "normalized:Scratch<20>",
+            "inner_digest:Scratch<20>",
+            "tag:Scratch<20>",
+            "difference:Scratch<1>",
+            "batch-pads:Rows<64>",
+            "batch-digests:Rows<16>",
+            "caller-input-and-lengths:outside-owned-storage"
+          ]
+        }
+      ],
       "compiler_checks": [
         "python3 scripts/hmac/check-hmac-cleanup.py",
         "python3 scripts/hmac/check-hmac-cleanup.py --target aarch64-unknown-linux-gnu",

@@ -29,5 +29,17 @@ def render_coverage(register: dict) -> bytes:
         "consuming handoffs, not an invented Engine destructor. Its existing emitted-code",
         "checks remain separate from the direct-destructor MIR checks. Registration is",
         "not native release qualification, independent review or whole-frame erasure.", "",
+        "## Explicit Compatibility Profiles", "",
+        "These profiles are separate owners of an existing capability, not modern",
+        "algorithm admission or an extension of the strict facade. Compiler-driver",
+        "registration is not an execution receipt or independent qualification.", "",
+        "| Capability | Profile | Route | Storage | Qualification |",
+        "| --- | --- | --- | --- | --- |",
     ])
+    for owner in register["registered_secret_owners"]:
+        for profile in owner.get("compatibility_profiles", []):
+            for route in profile["routes"]:
+                lines.append(f"| `{owner['capability']}` | `{profile['id']}` | `{route['id']}` | "
+                             f"{route['storage']} | {profile['qualification']} |")
+    lines.append("")
     return "\n".join(lines).encode()

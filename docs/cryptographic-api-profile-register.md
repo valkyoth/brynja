@@ -45,3 +45,17 @@ enter the FIPS graph. HMAC registers transitive inner/outer hash ownership and
 consuming handoffs, not an invented Engine destructor. Its existing emitted-code
 checks remain separate from the direct-destructor MIR checks. Registration is
 not native release qualification, independent review or whole-frame erasure.
+
+## Explicit Compatibility Profiles
+
+These profiles are separate owners of an existing capability, not modern
+algorithm admission or an extension of the strict facade. Compiler-driver
+registration is not an execution receipt or independent qualification.
+
+| Capability | Profile | Route | Storage | Qualification |
+| --- | --- | --- | --- | --- |
+| `algorithm.hmac` | `legacy-sha1-md5` | `portable` | transitive-fixed-owned-memory-not-residency | scoped-release-reconciliation-and-independent-review-pending |
+| `algorithm.hmac` | `legacy-sha1-md5` | `sha1-execution` | borrowed-hardened-workspace | scoped-release-reconciliation-and-independent-review-pending |
+| `algorithm.hmac` | `legacy-sha1-md5` | `md5-batch` | borrowed-hardened-workspace-and-owned-rows | scoped-release-reconciliation-and-independent-review-pending |
+| `algorithm.hmac` | `legacy-sha1-md5` | `strict_execution` | Linux-protected-mappings-and-worker-stack | scoped-release-reconciliation-and-independent-review-pending |
+| `algorithm.hmac` | `legacy-sha1-md5` | `macos_resident` | Apple-Silicon-resident-mappings-and-worker-stack-not-dump-exclusion | scoped-release-reconciliation-and-independent-review-pending |

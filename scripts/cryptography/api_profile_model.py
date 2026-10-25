@@ -348,6 +348,7 @@ def validate_secret_policy(
         if composed is not None:
             try:
                 contracts.hmac_owner_contract.validate(root, owner, registered)
+                contracts.hmac_owner_contract.compatibility.validate(root, owner["compatibility_profiles"], registered)
             except (ValueError, rust_contract.RustContractError) as error:
                 fail(str(error))
         else:

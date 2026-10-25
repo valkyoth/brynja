@@ -29,5 +29,5 @@
 "release-notes/RELEASE_NOTES_0.24.11.md" = "79eeaca356c2a7fbf800cefc63b833842a02fecac745099133020d3c1c637289"
 "requirements/domains/cryptography.toml" = "5130062ebe851cae58d9a250ea5b1d09b473a9957bd489525e23d41eac21d2dd"
 "standards/surface-policy.json" = "05f7b7f3b16b6412390ef23550779788e2d4065b23e3292bea2948ac95b65082"
-"security/cryptographic-api-profile-policy.toml" = "baa19df616690df98c95f3d70eb669d2b53fc78f10cd2f125f85e90ada0f4a32"
+"security/cryptographic-api-profile-policy.toml" = "a534ffcac422e9f5a5684b45975429bd5b5115da84b1250a2918128c13d750ba"
 "crates/brynja-crypto-cpu/src/lib.rs" = "6911d7af928ebe798a8b8a795bdfe97e50cf579d4ff60c01f9aeca6b2c9f0e29"

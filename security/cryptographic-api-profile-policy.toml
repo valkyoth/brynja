@@ -119,6 +119,58 @@ storage = "transitive-fixed-owners-with-separate-protected-or-resident-hosted-pr
 output_classification = "typed-secret-owned"
 partial_failure_policy = "clear-complete-secret-destination"
 
+[[registered-secret-owner.compatibility_profiles]]
+id = "legacy-sha1-md5"
+milestone = "0.25.1"
+admission = "explicit-LegacyUse-not-policy-approval"
+symbol = "crates/brynja-legacy-hmac/src/engine.rs#Engine"
+fields = ["inner:owned-secret-hash-state", "outer:owned-secret-hash-state", "tag_bytes:public-preselected-policy"]
+temporaries = ["pad:Scratch<64>", "normalized:Scratch<20>", "inner_digest:Scratch<20>", "tag:Scratch<20>", "difference:Scratch<1>", "batch-pads:Rows<64>", "batch-digests:Rows<16>", "caller-input-and-lengths:outside-owned-storage"]
+delegated_owners = ["registered.algorithm.sha1", "registered.algorithm.md5"]
+cleanup_model = "transitive-owned-fields-and-consuming-handoffs"
+cleanup_bindings = ["crates/brynja-legacy-hmac/src/engine.rs#Engine::finish", "crates/brynja-legacy-hmac/src/scratch.rs#Scratch::drop", "crates/brynja-legacy-hmac/src/execution/adapter.rs#Sha1Adapter", "crates/brynja-legacy-hmac/src/execution/retained.rs#Retained", "crates/brynja-legacy-hmac/src/md5_batch/engine.rs#Rows::drop", "crates/brynja-legacy-hmac/src/md5_batch/engine.rs#Operation::drop", "crates/brynja-legacy-hmac/src/output.rs#SecretTag", "crates/brynja-legacy-hmac/src/md5_batch/output.rs#SecretTags"]
+compiler_checks = ["python3 scripts/legacy-hmac/check-legacy-hmac-cleanup.py", "python3 scripts/legacy-hmac/check-legacy-hmac-engine-cleanup.py", "python3 scripts/legacy-hmac/check-legacy-hmac-execution-cleanup.py", "python3 scripts/legacy-hmac/check-legacy-hmac-md5-cleanup.py", "python3 scripts/legacy-hmac/check-legacy-hmac-hosted-cleanup.py"]
+compiler_scope = "bounded-owned-storage-and-dispatch-not-whole-frame-erasure"
+qualification = "scoped-release-reconciliation-and-independent-review-pending"
+output_classification = "typed-secret-owned-or-explicit-public-declassification"
+partial_failure_policy = "clear-complete-secret-destination"
+limitations = ["legacy-only-not-new-protocol-or-FIPS-approval", "public-lengths-batch-shape-and-work", "caller-copies-registers-OS-state-and-fatal-termination-outside-guarantee", "build-wide-CPU-feature-and-deployment-authority-required-for-acceleration"]
+evidence = ["docs/legacy-hmac-hosted-qualification.md", "crates/brynja-legacy-hmac/tests/contracts.rs", "crates/brynja-legacy-hmac/tests/rfc2202.rs", "crates/brynja-legacy-hmac/tests/md5_batch.rs", "scripts/legacy-hmac/check-legacy-hmac-package.py", "scripts/legacy-hmac/check-legacy-hmac-hosted-package.py", "scripts/cryptography/legacy_hmac_owner_tests.py", "scripts/legacy-hmac/check-legacy-hmac-cleanup.py", "scripts/legacy-hmac/check-legacy-hmac-engine-cleanup.py", "scripts/legacy-hmac/check-legacy-hmac-execution-cleanup.py", "scripts/legacy-hmac/check-legacy-hmac-md5-cleanup.py", "scripts/legacy-hmac/check-legacy-hmac-hosted-cleanup.py"]
+
+[[registered-secret-owner.compatibility_profiles.routes]]
+id = "portable"
+symbol = "crates/brynja-legacy-hmac/src/lib.rs#Hmac"
+storage = "transitive-fixed-owned-memory-not-residency"
+selection = "default"
+
+[[registered-secret-owner.compatibility_profiles.routes]]
+id = "sha1-execution"
+symbol = "crates/brynja-legacy-hmac/src/execution/mod.rs#Sha1Hmac"
+storage = "borrowed-hardened-workspace"
+selection = "pre-admitted-authority-no-failure-fallback"
+
+[[registered-secret-owner.compatibility_profiles.routes]]
+id = "md5-batch"
+symbol = "crates/brynja-legacy-hmac/src/md5_batch/mod.rs#Md5Batch"
+storage = "borrowed-hardened-workspace-and-owned-rows"
+selection = "full-AVX2-or-NEON-group-no-failure-fallback"
+
+[[registered-secret-owner.compatibility_profiles.routes]]
+id = "strict_execution"
+symbol = "crates/brynja-legacy-hmac-std/src/strict_execution/mod.rs#Session"
+storage = "Linux-protected-mappings-and-worker-stack"
+selection = "explicit-feature-unsupported-target-errors"
+compiled_owners = ["crates/brynja-legacy-hmac-std/src/strict_execution/sha1_compiled.rs#Sha1CompiledSession", "crates/brynja-legacy-hmac-std/src/strict_execution/md5_compiled.rs#Md5BatchSession"]
+cleanup_bindings = ["crates/brynja-legacy-hmac-std/src/strict_execution/mod.rs#Buffers::drop", "crates/brynja-legacy-hmac-std/src/strict_execution/mod.rs#Output::drop", "crates/brynja-legacy-hmac-std/src/strict_execution/md5_compiled/types.rs#Md5BatchOutput"]
+
+[[registered-secret-owner.compatibility_profiles.routes]]
+id = "macos_resident"
+symbol = "crates/brynja-legacy-hmac-std/src/macos_resident/mod.rs#Session"
+storage = "Apple-Silicon-resident-mappings-and-worker-stack-not-dump-exclusion"
+selection = "explicit-feature-unsupported-target-errors"
+compiled_owners = ["crates/brynja-legacy-hmac-std/src/macos_resident/sha1_compiled.rs#Sha1CompiledSession", "crates/brynja-legacy-hmac-std/src/macos_resident/md5_compiled.rs#Md5BatchSession"]
+cleanup_bindings = ["crates/brynja-legacy-hmac-std/src/macos_resident/mod.rs#Buffers::drop", "crates/brynja-legacy-hmac-std/src/macos_resident/mod.rs#Output::drop", "crates/brynja-legacy-hmac-std/src/macos_resident/md5_compiled/types.rs#Md5BatchOutput"]
+
 [schema]
 version = 1
 milestone = "0.24.15"
@@ -1164,7 +1216,7 @@ sha256 = "7138ad8b49633b9aee89d4d722ff4402ec4562b719e2262361c20afcee15ef9b"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"
-sha256 = "06ae88cd8e7573f3b3e9bb657724f4625a1285ecbbcb8048300d779ff6f6480b"
+sha256 = "2cd825d47c3aedba19995ea6c112cb6902fe106ec3f92f335d3436b7c65e73c5"
 
 [[reviewed-source]]
 path = "scripts/cryptography/check-secret-owner-compiler.py"
@@ -1660,11 +1712,11 @@ sha256 = "3675a288af2a84007cdd20685f53e61c5b32b32bdf4735e4d285bbba4389ab12"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_render.py"
-sha256 = "55115b077c28947a30cabc699024146d0d57f6caf2a6b084f410d38fd816ec34"
+sha256 = "c7eb30f4d6ae7ece1f6a86e591ee48f649529b25e994c8fcb5c31c89970d5502"
 
 [[reviewed-source]]
 path = "scripts/cryptography/hmac_owner_contract.py"
-sha256 = "f9da1d8027c998da242468e9dd760cac0728d3e10226c8c2bfee3f6844fa1f45"
+sha256 = "e08b9974bd2944ba13c9848015e896f5a1d7d156918df5b6d44a62c18fe0622c"
 
 [[reviewed-source]]
 path = "scripts/hmac/check-hmac-asan.py"
@@ -2124,7 +2176,7 @@ sha256 = "3fa4863acce873db56fde90a0fb9f9cef6954ea964c92c026041f67fa4a31c0b"
 
 [[reviewed-source]]
 path = "scripts/hmac/test-hmac-owner-contract.py"
-sha256 = "849789f51d7a12a3ef22cff4d33bfcd8dc7ed17f36d9af28cf5407adddfdf19c"
+sha256 = "8085bba7712eee2bc8c8a3ffea9204333b7bbf9a11db9670a53c00d94b170a70"
 
 [[reviewed-source]]
 path = "scripts/hmac/test-hmac-package.py"
@@ -2173,3 +2225,1087 @@ sha256 = "93cc97d997d8e737de74caa7825620a4f60f6518d945a5f3e31e9f0f62c64752"
 [[reviewed-source]]
 path = "scripts/hmac/hmac_hosted_preentry.py"
 sha256 = "2955dc7106473ac7d2bb1fb71b3d3c2aeaefd218be8c95cfadacdd5347caf65f"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-cleanup/Cargo.lock"
+sha256 = "b5abe3aeb4802f22939ae25371cafa11da9be797dbe18e96b14ee43e0f7ae9aa"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-cleanup/Cargo.toml"
+sha256 = "d7a60d72d31714e31287195a8f8fc478b5f54ba5fbab64f5fafb74430894d55f"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-cleanup/src/lib.rs"
+sha256 = "7926a05d01795419cca0e5fb67fd2b2e25b770109d8a337bc4523719dc500b0f"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-engine-cleanup/Cargo.lock"
+sha256 = "8dc5c8e58d826a07ba6c182033d26a9f204d71fc27e11a2dd5eb1507af67599b"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-engine-cleanup/Cargo.toml"
+sha256 = "8f7613f84dbec1548b9eb04ed80a4e1dfe7fac94931b4d663d175a11aafab2d1"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-engine-cleanup/src/lib.rs"
+sha256 = "6e2288ed4ae85e498cb92ffecfdae42ae7510ea0350a2a9f67ae8e983c639da0"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-execution-cleanup/Cargo.lock"
+sha256 = "4599ffa33ae0a832adb2d4baf7365c333aabfb8ce93cfcc91ac99187fd65622f"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-execution-cleanup/Cargo.toml"
+sha256 = "2560caff02e4a28f342a3c919a463d51146236cddc8552a0db5c5216627088a8"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-execution-cleanup/src/lib.rs"
+sha256 = "9a86a4211f0f299c3217a3754c60cd5555f0face6e7e771509f2ef61600bacae"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-hosted-cleanup/Cargo.lock"
+sha256 = "59454de392c9cc63b7ad1fca33282ad353ac51b701283360e4ceb9c0dcc157bc"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-hosted-cleanup/Cargo.toml"
+sha256 = "22224d2c262e0d17de0b0a58a72d86fe4515541d65306a64332a74239ef52f06"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-hosted-cleanup/src/admission.rs"
+sha256 = "fe6e1810894cf50eeedf0b4bb74a8f4addf14554180b072f255cf85efd694e1d"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-hosted-cleanup/src/checkpoint.rs"
+sha256 = "b60fca06f4e8fb7abbd1fc91434d02cc6c27170b8eb30aabc25bb3493621ef13"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-hosted-cleanup/src/control.rs"
+sha256 = "a4a266b189ff9224edef5de0aa60c7365d122a6a9d3a702f6b3f8f9e18b09f97"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-hosted-cleanup/src/decision.rs"
+sha256 = "c05b66adb161161781f5cb4017fc2ef563db16362f95823329392624b65521ed"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-hosted-cleanup/src/lane.rs"
+sha256 = "f572269937b8f52372e645b573b85cc3ac921d6c1ae445b47ce734fd4528d80b"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-hosted-cleanup/src/lib.rs"
+sha256 = "4b9d26aa247bd3a1f3ad8bc356d43854b7ed4aa88ba847a9d1a404167235a9ec"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-hosted-cleanup/src/normalization.rs"
+sha256 = "6bceb7f5f851e0e0a89c22d77f513a9fc2e1493ff1af68dd4e77f42571f1a013"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-hosted-cleanup/src/report.rs"
+sha256 = "f8ce932a695dd1616e9e61acd35e2f638c3f8aaec42daf34d73943fba1508b18"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-hosted-cleanup/src/report_result.rs"
+sha256 = "36b8043d8b515c3e265746b9c64efa53e37864ec6295b86e645a71d2a098b6c2"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-hosted-cleanup/src/tag_copy.rs"
+sha256 = "9f0ec284bed078df6fd8e89e0d77a8be7b16bb3440b8befd3b2dc2a5588d6c0e"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-hosted-cleanup/src/verification.rs"
+sha256 = "41f1fde86503ed8dfb44959cefcfc5f08401c06e21d0d7aee075b022c398c414"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-md5-cleanup/Cargo.lock"
+sha256 = "10a714a2f3ed3de5764e30da8f20dc61dea8207e9dd5bc206b21bba1f14218da"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-md5-cleanup/Cargo.toml"
+sha256 = "c17336757c4081772de04f1153319dda72e12d776efff34d401a3ea9ed008ec3"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-md5-cleanup/src/lib.rs"
+sha256 = "62a9537170a3e6715a0c65c18c7c0dc542113672f0983d838febd76efbf2d04d"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-timing/Cargo.lock"
+sha256 = "cc888881272ca2bbf76771784f0579e3b17ef23c55b71ad664984b02ca9f0541"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-timing/Cargo.toml"
+sha256 = "39b041744a396c1c2451b6b64067326e54f2e99d49d7f5d4c598093348bf58c1"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-timing/host_probe.rs"
+sha256 = "6cbf58174af20b9bf961d963538667fb3b4d2b8d478a18f86199776ab6bb54c8"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-timing/src/main.rs"
+sha256 = "cd6365b816e99ef06a97d30a6422d4ed5b567ad3cecb8a74c4a7e3742bb62584"
+
+[[reviewed-source]]
+path = "assurance/legacy-hmac-timing/src/routes.rs"
+sha256 = "3f5db93ffa4e6fcc9a31f534f1fca06426f098f4be3c39f4ff31f0a2b67d0e41"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/Cargo.toml"
+sha256 = "80dfaf794733969c798b623e0d97903c72f5fb5d179046e28883ba0c4b5243a3"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/lib.rs"
+sha256 = "02d119ef11af61b4410be42ba4d12cc51d9a24b32bc32597d792e83fed8639f0"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/macos_resident/md5_compiled.rs"
+sha256 = "014a082e037971663acd4185bed9ec5f912111971d46858cc20bfdc789c0c9d1"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/macos_resident/md5_compiled/tests.rs"
+sha256 = "09c7f1dee86ca8279078336220e1e6741be76c51d5e3927f58519c1b6e221876"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/macos_resident/md5_compiled/tests/native.rs"
+sha256 = "af462861e87ca67ec5b5ff55f4852b29df035cb3c0bbfe546e6a2633a20860d3"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/macos_resident/md5_compiled/types.rs"
+sha256 = "2f958111201879ae10259e448a589fd512121fbfc09a846e901867f416befd4f"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/macos_resident/md5_compiled/worker.rs"
+sha256 = "62d324b91de3a17f28380e679f238ab06e7eb2fec5cabd200887895c147e7e64"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/macos_resident/mod.rs"
+sha256 = "f60a264b9833f0e4772dd06e5f166aae1aea2fe7c80daddf83696c2163d85dee"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/macos_resident/sha1_compiled.rs"
+sha256 = "4c467a257d67fa895bb745726ed5312cb8b5e2b837263772289b71b3e514d0f7"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/macos_resident/sha1_compiled/tests.rs"
+sha256 = "a977235004fe63275979d6000f444b594713e7859ef9ebd633b48ebd3dc4ea0c"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/macos_resident/sha1_compiled/tests/native.rs"
+sha256 = "92f721402d9c7bda06388703102e28f7604193826eaef2583800babe03e86295"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/macos_resident/sha1_compiled/worker.rs"
+sha256 = "a5ac389794079cca821d545dff368c901bb7a3cc36082a45d9072afb156d0ab8"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/macos_resident/tests.rs"
+sha256 = "ec4c23367956e27020646d1877136b88f6e7d3a3dc766e82e937e0e911e9571b"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/macos_resident/tests/native.rs"
+sha256 = "1cb0212dd223498b7484a4341eb787e9ed83ec8471fb4da1b97dfac56ac57cc5"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/macos_resident/types.rs"
+sha256 = "783ff2c8d26b917608e5d1a5b2075bed3946b2c467041b1fbaefc825424b721a"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/macos_resident/worker.rs"
+sha256 = "34d6576b871537be88ec31ba5b3a53b88d9f4afebf1340d873718eea0aaafef1"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/strict_execution/md5_compiled.rs"
+sha256 = "021206e3f17bb9498133fdd8df565f8f0e2152395bf8e093194fada343c7a245"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/strict_execution/md5_compiled/tests.rs"
+sha256 = "365beed84b39e38a67f1d1d08f367ee86e60ca960e25e7e4b77a7c5ffb17037e"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/strict_execution/md5_compiled/tests/native.rs"
+sha256 = "bafa9e508e19d2a321f5185dbc23b356a00bd77f4c4acb0b8f57478b8bf97fbc"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/strict_execution/md5_compiled/types.rs"
+sha256 = "e2c14144b4542ba14f4a8b084abff756e11b4dd8e2f64490ac83946ece7fafbc"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/strict_execution/md5_compiled/worker.rs"
+sha256 = "62d324b91de3a17f28380e679f238ab06e7eb2fec5cabd200887895c147e7e64"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/strict_execution/mod.rs"
+sha256 = "9e40e1383c693066df1586274cc3868e8b48b419f0b066bde4187bb03cc6e1d9"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/strict_execution/sha1_compiled.rs"
+sha256 = "796a6956ef0db4ee4cc4a88be7654e5f0ffd0b9bada22a3d61eef48b56f86f95"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/strict_execution/sha1_compiled/tests.rs"
+sha256 = "d3787b2bb03b2a0c89236380ee045253e4367b4eac1ade3d346ccd69d832ca0c"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/strict_execution/sha1_compiled/tests/native.rs"
+sha256 = "881ca5cd27dfc4ae9498f3af944c669a6c3d78b760d8ed7a7835ed8c7859eebd"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/strict_execution/sha1_compiled/worker.rs"
+sha256 = "4e95d346e1186e2c59b4d7ecca2719eaab3301f7e9fb3dcf73d74009f9f1c230"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/strict_execution/tests.rs"
+sha256 = "d361377639159e789c6ab20cec62b46058af71f7f4f8fa0626a1029ed7760c11"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/strict_execution/tests/native.rs"
+sha256 = "5895af1f2bbe07fd1a1fa3c9bb8c09284b51aa6a3d41e19e3e877a514cc3d147"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/strict_execution/types.rs"
+sha256 = "990ba2e534eda893cf8c4f0a69772af17aac057b5c40699ed0925d2b6b454608"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac-std/src/strict_execution/worker.rs"
+sha256 = "919f775d7ff4d7d596b1b5a2df8fc8e15af3c599d2ee54d4d081994a262ae60d"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac/Cargo.toml"
+sha256 = "694834edb6f73e5c76afcae3a109e8c71f62c9a071894ab7ab804aef6e075b57"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac/src/algorithms.rs"
+sha256 = "76f28971dcbce3cc23c3f31571e62d22c29c76278ae97aeb5af7c68b8ee3c1c4"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac/src/engine.rs"
+sha256 = "7ff7370646042e79e94eeac8d12226598e3f69c42f7e1166497bab7ddee4463e"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac/src/execution/adapter.rs"
+sha256 = "6306f780207c5ff46cf6255d9a58aee70cf2f6c17333c51266934b5fecd9c183"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac/src/execution/mod.rs"
+sha256 = "e4c8d730cd4049594acd831ba65cfe4a7b3738f021bcd7c4c2040b4315dd04fb"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac/src/execution/retained.rs"
+sha256 = "01bedab72388d1740a237702af1b3dbfdbbabcd5fd0cc2b849b4a6ee5a3fc02d"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac/src/execution/retained/tests.rs"
+sha256 = "e1141ba031ad8e9adecef708c6617599725bb8beccf191d2c22fd3284629d144"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac/src/lib.rs"
+sha256 = "b4f26bd28a6b8937c38e96d26ad98d7bd2a659f8c21e29d0e404c39bf7dcfcb8"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac/src/md5_batch/engine.rs"
+sha256 = "dbc70233c60278183a86afdc245b67ed433bd871c70ee205b069c4c2646b532d"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac/src/md5_batch/mod.rs"
+sha256 = "24b46a6c0367d1b7265ba1e1b992ca63138c3f18607de4448c970561eef4f64c"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac/src/md5_batch/output.rs"
+sha256 = "61d1be9e806db61ffaf15b2b10a1d85f9258cafedf6e0e89bc9bb5797fe93604"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac/src/output.rs"
+sha256 = "7eb22a47ffe0cfb56672de61549ad136edd1da28e2e6fb7d46c48ee11583b413"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac/src/scratch.rs"
+sha256 = "daefbf5f5d20ddd996cd23e2e02e88d3ecf7d90c0d5c61bb1a10c7089d2adb43"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac/tests/contracts.rs"
+sha256 = "84caa71f4137bb7d63c51594595b766241985acb9569d2f6d468197a61235145"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac/tests/failures/mod.rs"
+sha256 = "b23d199b4959e1896445880e29093b09e5d604a882e418a049f2903cf6638057"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac/tests/lanes/mod.rs"
+sha256 = "1183b9c2ba2aabc419852cfaf2b24c59239964019572680e0e8c8fa06a8b1ba3"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac/tests/md5_batch.rs"
+sha256 = "784f809e4298f1c9fa0680eee3f17b5ace6c54fb74b00c2b7713cc5993ea2fc9"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac/tests/oracle.rs"
+sha256 = "a0c9c7841e94c54e9e7af121bcde79f5ec51da3c30b2600603b57349473e8144"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac/tests/rfc2202.rs"
+sha256 = "6b1882ef638e4598bda2a2fbe258ca3e41fb2575a03db86bfae7631508a9da5a"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hmac/tests/sha1_execution.rs"
+sha256 = "5783db638dd246a3e77404ead38fa2a9deebd5926542c57b2771e66e43b1072b"
+
+[[reviewed-source]]
+path = "docs/legacy-hmac-hosted-qualification.md"
+sha256 = "0917162f23d14fd1281cda1e21426cad22e0f3ff2604748bf06fc161096a0cc7"
+
+[[reviewed-source]]
+path = "scripts/cryptography/legacy_hmac_owner_contract.py"
+sha256 = "211a9d301839db30fbae95a436d9b06b7f17047d017552a154df722798a5bd2a"
+
+[[reviewed-source]]
+path = "scripts/cryptography/legacy_hmac_owner_tests.py"
+sha256 = "c7aa73a62d3bc56fedd9c64ebe7fcbf4d1839b835c6d0dae0ccb01eaf00c8e71"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/check-legacy-hmac-cleanup.py"
+sha256 = "bf8d4916d28509f6d6c7ce2ee7703b426f4152680b5719281d2249c91c1d7c57"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/check-legacy-hmac-engine-cleanup.py"
+sha256 = "305826285120f0ef2689f22de92aba7eba262738d58c5ef83a3c2c92866d0391"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/check-legacy-hmac-execution-cleanup.py"
+sha256 = "2df3ed997381dbbf6657a59354711fb14334dee7ac441a9797ab42f3c9bd3f7a"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/check-legacy-hmac-hosted-cleanup.py"
+sha256 = "b6fbd9ac83855244620e8086f9a9828f780dbdbfa7fffa767be867865e139d0d"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/check-legacy-hmac-hosted-package.py"
+sha256 = "98bcc5d3a8a016656ff91fadf2136900a0cba34c7d34db80b13dca029277991d"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/check-legacy-hmac-md5-cleanup.py"
+sha256 = "4b6d1ee81b3053fad3976a3d06941488b736283fe19f78240545a3f926ca2501"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/check-legacy-hmac-package.py"
+sha256 = "489d3870306b5159d1514e4ec0a43cf26f43dfd90def4c5c57146e9e6cb46a20"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/check-legacy-hmac-sha1-native.py"
+sha256 = "3d8a8f42dc7c98d2e52ff855152edb5c36bc6800f3611eecb6f2fb93815484a5"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/check-legacy-hmac-timing.py"
+sha256 = "4840108c0a9054671571ff321cbc2e02be35a92a1172c858ffe3c1828544df4e"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_acceptance.py"
+sha256 = "2bcbed59b7340d66234e5c50e34eb06a4709b7002c339034be58f3b47b2d4ffb"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_bits.py"
+sha256 = "2816d1b5e99df3704fd98a1092a9ab27db4e0e5d0be8f7eab94d5919be9fbda9"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_cleanup_codegen.py"
+sha256 = "00da3f3a0cc10fb987f4208b64b8cdfe11a3674fd66b16a131bf4ef1ea9748d8"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_engine_codegen.py"
+sha256 = "49efe6f8a8ebd5acd28e6d3a5ce23508b11de48c3912d955520dddff586c50d9"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_engine_construct.py"
+sha256 = "c450f89e0bf42cf89e335222ed1cc48f21e635b15fa6a8894d2907fb4b5ea5b1"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_engine_final.py"
+sha256 = "832e8b6eb5dc2be9103689c97ec53c2456a6fed2f57a13e1c3c2a43457a66799"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_engine_scratch.py"
+sha256 = "4d648cb2f56cb729d917ce53487de1a189916836f7342a79aa26a677198b00d9"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_execution_admission.py"
+sha256 = "281fc2746c9cdd13b9b7169d235b874c71be4b808854294b61cf7511a469e430"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_execution_admission_contracts.py"
+sha256 = "779162c2356273283caf3bc1f5225dfd59f4c6150e2bd113a9bfaa5d2e992d1c"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_execution_construct.py"
+sha256 = "56e22206fb9be09ced77824c2b04233a562c3a8a452b3b01ef4a5cffba106855"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_execution_construct_state.py"
+sha256 = "8fdbd0e4f41476fb2072bdb2911375446a5d1fb3dd31b7b6ee51aa13735da1e3"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_execution_final.py"
+sha256 = "acdbd68d9083bfda9e645d9e26a723da561ff11e783da6877f340bd5c3c49b00"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_execution_graph.py"
+sha256 = "0c2d517f18c8925da56561aa302a58d61536633bfe77343eced81bf55c66bda6"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_execution_handoff.py"
+sha256 = "8274f7c3b9523dc7b14f5e214e258b17566b010c844d2d4317d118dbbd9b2398"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_execution_iterator.py"
+sha256 = "7b42f713b0442ed9d2ce3ec54c4a96b395d7062ef325d6be7ff35fde74d56717"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_execution_state.py"
+sha256 = "d210c4eda7f00bf9f117abc6b58d641cecab06fbd39b4e0b71adcdc63a9e1b84"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_acceptance.py"
+sha256 = "15b60f69db43122caa871032ae54e3920b939f15983704cae606d3faf47edb1c"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_authority.py"
+sha256 = "b89d47e6bae96fb191ecc8af2f58f9815116234614d3460b483646c703af0cb6"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_authority_tests.py"
+sha256 = "f47fa05d44398875d77fa09220877d62138d4ffae09a0ef5824b884acf126471"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_backend.py"
+sha256 = "90fdff251feb92d2fed46f64dfd285b57c2983e6718289e189c28513c2d47ca8"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_batch_creation.py"
+sha256 = "8e81bfb125d13755871664a2c4e410153abf648fbbeb7cea960525026a407128"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_batch_flow.py"
+sha256 = "5a75581a733372c4ec332d567c3792e87e50ded118f7deaf67b4fb3905c4132f"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_batch_loan_tests.py"
+sha256 = "4598210c956d27efb85f8d18dbfc25821624f6f9915ed24b8112f6fcbe8db1e3"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_batch_loans.py"
+sha256 = "a66cfb29aa6f2233c1710eb60865ba96df9467b1e75711e8a9e479a524caeba3"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_buffers.py"
+sha256 = "8387e960ac8b9d35aefac7748c5d7e55a08ae0e62986e6e2c65e96fff039d88a"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_capture.py"
+sha256 = "2926176bc6633c13a14b94cc9242eddba3d2b427b2c525d3f461aae81df0ca42"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_capture_model.py"
+sha256 = "4769631ed770bf4e6155ca2783be498f7bb9152b65269b8e8c3ad93df9b60c35"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_capture_tests.py"
+sha256 = "e93aa6f7fae532f97f92d79a77e1633f33f121e607d936f1834fcc29b07ae97a"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_checkpoint_boundaries.py"
+sha256 = "8562a93d72393a4699b0e9eb6c114719f484d5b55f9f3cf3e60322fc753dce01"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_checkpoint_compiled_tests.py"
+sha256 = "df11637dad49da277f718b25082a9b45b65f98f919082da0906c24fcb5ed2c99"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_checkpoint_flow.py"
+sha256 = "94bc3d7606f806d00e4ce2cd00bcb0708d9bd9e688eb3259e0edfdfd179adee6"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_checkpoint_inline.py"
+sha256 = "f5d405e790d3cb61d664c531f23eb1f25c0604bf9fbc025c9c53506d6818970b"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_checkpoint_results.py"
+sha256 = "d8a757a497aab940c1b9e9740fdcc55572623550a88c054c847961cf628c1015"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_checkpoint_tests.py"
+sha256 = "407df6d47aaa0bc4dd8b6c1251087dde2eb4712cc3e31d398e1a5ab1f1964d21"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_checkpoints.py"
+sha256 = "2816605aca84c6e4d18e060734552d6b44d08bdcb08360a27d4c5a07921f8f98"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_compiled_fixture.py"
+sha256 = "805940733721d22cc2863e63ef8059c7832c594d3a83b35b6bdc0d18cab387df"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_construct.py"
+sha256 = "69700fb3e3088bc86679ad38192a3546f4b3909f93f2d777d5ec83411e7adb10"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_construct_model.py"
+sha256 = "0d8b7eecc4c59ae56c3a9a4ebc5084fb2bd752064334ff142c5fa33c21b89b92"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_construct_tests.py"
+sha256 = "61baac458446817e4ea883444b6ded9e9a0ee81a9f3c12b0cf0082f01c2de822"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_constructor.py"
+sha256 = "b8e1982bd64fa27f09c12ed6d0398f92fef9af6b758c9f840f0101d453832ed4"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_envelope.py"
+sha256 = "c4b20013729517b171ffbf38e8ee11436e5b19e7102b1f9abe8993ec26f6758e"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_input.py"
+sha256 = "41e41018c79d8a4fed04ecd8d3c9896667cf073334877fc6d0cf65c7a6d18c6c"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_keyed.py"
+sha256 = "805320701d7e47dff9d0d596e2ff95b63378fd4d84b68bd4717c941866c5cebd"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_keyed_tests.py"
+sha256 = "026719dd86add28a8c6bd5576c71a7456091bca7914aa300c942b0043875703a"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_launch.py"
+sha256 = "4331ace021b9136a7056ae02b788bb2ef79b045da2a2625d53a06e4a7437b304"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_lifecycle.py"
+sha256 = "7d206c2637c9720c038cca2f0ba351383975e90762a4076715010110f78af142"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_loan_tests.py"
+sha256 = "179d0bcad7b8896b9d0e341cd9c100db189a0b90e20fab3c932d6a35bcfcdaa3"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_loans.py"
+sha256 = "78dae15c5c01003503896ba8df9d7f45bcb2559313e85d31ce086bf08add32e0"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5.py"
+sha256 = "07a0366a52dcfa3ae48157b4a4d52f78433979dc9a9a5882888cbd7943153252"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_boundaries.py"
+sha256 = "5ee33bc286b2ff2449803e90f17c415d4698d6ca4800f9292de9fd8ce16b10b1"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_checkpoint.py"
+sha256 = "0112dbd9e0fe9267de1e771c96f824f58617580c5a511cee7bfad2e7d8ae52d0"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_checkpoint_tests.py"
+sha256 = "32751e948d4151ee2e1589804036613cc37d46dce39805d80481ed24d126c0ed"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_compiled_tests.py"
+sha256 = "7942a2002ab53482e9df0445017d2c2572e7571360ad18db9ecc56b6e7775969"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_control.py"
+sha256 = "4a2ca33c300c2e69507c4c325e2d9a2e98a8ce30ad6f7d6cc69033aa6d06cdc4"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_control_tests.py"
+sha256 = "e4a199b135ff6f5d636e6586fb93df8c665a86c2e10128b3142c61b90559a5bc"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_decision.py"
+sha256 = "f0e4859379cd22ef40072c6f58267dc140d89fef08b9be554d6863a812a21534"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_decision_tests.py"
+sha256 = "87d9a44dc244e37733b8d8611b4d3ed3254d8cca1222290bb2a23887dffc5277"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_health.py"
+sha256 = "40be7731305f137172dbd0d85a76c7b4f6a5a987334638c5405406eb2d1e6f82"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_lane_layout.py"
+sha256 = "466aa6280f5d0c416bd3741294cca6019fb6b995e7760147c280261f750cae72"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_lane_tests.py"
+sha256 = "c181effd3b59feecc4926a063a4fb15c9c143d8ebce457d91bb3123e7538e31a"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_lanes.py"
+sha256 = "fa9b566baed7dd3b83f7a9d3eaa4beecc9ea57aaac8994b4798c781ca8702cba"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_report_caller.py"
+sha256 = "056bcdd9e7a920330f7f4f83857d529d2de2155bb9edfaa1844fbeecaead540d"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_report_compiled_tests.py"
+sha256 = "95e282c7887efb15fa910f6a087d92dc4da70d67046c05b24de6679b56121423"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_report_layout.py"
+sha256 = "4fc6d4d7a9e50c20b7e94389fc1cb7b799467eead14dde88e31012596b906385"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_report_logic.py"
+sha256 = "755bf6a51aeae359c3a9b1c13747cdc775768bce43bfc229514dd47737a60c05"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_report_tests.py"
+sha256 = "191832c733d5726f4c948a76ed91e1c4147eddc252bd823ed5fa1fb1ecba40f8"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_result_cleanup.py"
+sha256 = "e1b9d3b612c45a20e0df1c060e30e64cec9273deb76f47ba950c120032af33f8"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_result_cleanup_tests.py"
+sha256 = "e7b3d5b3086e2c1f32c4b1a68999fd677ebcd47ef0b96c1e63cc0c9641c48b4f"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_result_layout.py"
+sha256 = "e48136e5f7aaa270b86583c7b93c82f7bde6823ca2f110b4fd15fde335287077"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_result_tests.py"
+sha256 = "eade337dc55dbd1cc512260039f8c3f06cdbb48b76b3187b2ce9efef526d2a77"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_result_tools.py"
+sha256 = "c82cb870a1a8319313aa662c2fb56506698e534f57094839fac7b2b6eb918467"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_result_transport.py"
+sha256 = "02824a3f8671be565c4633cbc5a866b98f151000ee5254300c8e31df6fd2ff00"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_status.py"
+sha256 = "c6c26054a6dd0a296fc02fa4f219eb0928f01d379268b602bd98a92eb1e3a057"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_tag_cleanup.py"
+sha256 = "daf6759d66dfd4da539a86acc0a120d7accf649e1c1e72b6a4a4d7c60efd9b33"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_tag_cleanup_tests.py"
+sha256 = "3b754cfa870f673d31a81ebfc22f1d5d0d575b0a5cd0bd0641e02f1706a2d91c"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_tag_copy.py"
+sha256 = "b5a78484962c5cbe8494c41060b5dc00e2e6e674df6dbc8f663fe57948cb7eba"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_md5_tag_copy_tests.py"
+sha256 = "ef4f84bef818337d90afca268ddd2e57bd362001811a60e17e8432314b13ceb1"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_normalization.py"
+sha256 = "44cfbea50b5aa17d3879e064584d30ef8af980a7cb512b9b22062e1142c32ca6"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_normalization_compiled_tests.py"
+sha256 = "b7e43a765b789dfd09ef0fc4db30c0dedd25b59456db9a4bfdfe0ffb7e014e79"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_normalization_contracts.py"
+sha256 = "4f6ef842929b8d3cfacea9dfd598e622739e92c98e44efe343797a665d4c672d"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_normalization_tests.py"
+sha256 = "974a26ec43f2dd55869ea09e511ba54178d3062e453ffa0d1157683053a79132"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_output.py"
+sha256 = "43d08b8669e6090a84f181a1a0545d78a1f415a00232216d546a14195ff1fad2"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_prearm.py"
+sha256 = "6a6b3319f70dc03ccc1a710e512ae50c243b725da2cbe46bff981254f480fcb6"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_prearm_cases.py"
+sha256 = "c526e606e68dd47e5421bdaec5a3b973ca5dd68d43600098c610a4306cb07ef5"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_prearm_flow.py"
+sha256 = "6a5c1d8d01746bfc8e6ffb0b38e385580d40b83477e7b7669b223b8a3000ef60"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_prearm_layout.py"
+sha256 = "8b7bf77a9e16e4d0df8b434dd3d033350efc589a1e402b66478db8c89aec7692"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_prearm_tests.py"
+sha256 = "06889ebd51ac6dcc072e47ac8bdb05e4b4d97078f14b5d92a446ece303f2b607"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_preentry.py"
+sha256 = "9422d2f5c5f1534134a1febaa2fa7b9f8f026355478fab5d08fe509ebe362743"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_reconcile.py"
+sha256 = "0741a1f9c7fa0d8b6bd1877e93a6e005154ef30c62717a8fd9070a7410b9b3fe"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_reconcile_tests.py"
+sha256 = "edf0fa9c3b17d29e94c80329447c3036e499581a3779e89a0ce1e0621c0a0004"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_retained.py"
+sha256 = "83bf46cb5a3a48aa12256f5d48f6a989f4c995089274f5fdd656db94fc4e7439"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_scalar.py"
+sha256 = "1a19173cea7715692d8b10aa54aaa2f8c0adc7e21ef6116200367a7dfb3d5cb4"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_scalar_tests.py"
+sha256 = "4e1bcc8b92ff34c01c8d00f95fe8b7dc5f1c76e7e046ff6ac26594f029bb11d0"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_sha1.py"
+sha256 = "5940d3cc3c72a2c041ac541410f5d1865b5029ee3012c0fcb5880282b98509b8"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_storage.py"
+sha256 = "26b6f443306e464780e3c8a0b59b0e3db8323e4441418fd33d380f8f254b2e6e"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_stream_compiled_tests.py"
+sha256 = "24c3415686e111f5f7076d77266658a1f2f0a662adb1f9b9edd4535e66f0a357"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_stream_tests.py"
+sha256 = "90df73ced8e11819129bcbcc5da1cb49c1b97dfb31aff33aa606e262ba1d1387"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_transaction.py"
+sha256 = "f661dfaccc2cfbcfacc25ae79e63b8f14fb5f98d742d672d9dc5109607031e31"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_transaction_tests.py"
+sha256 = "230fa118269eefe90979f580e60ab02a606271d884da3de64eef9a2edac5e3ac"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_types.py"
+sha256 = "30a097e44d3794c39ebc6fd90450c0ef8a9a3e6f874074caa92549abb53f8dba"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_unavailable.py"
+sha256 = "6f3172f9872832443ce3552b7299b590c996933ed71da99217725b24b8d733cf"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_verify.py"
+sha256 = "7b0e725ad979f0feb1a0f5ceaf574538830eb27811e0917d2668d4cd82cf1144"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_hosted_verify_tests.py"
+sha256 = "13426b68d479ea9efa3f5b59cdc7bf8736d08c6bf2c48d91816fddd84fd8fb1b"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_admission.py"
+sha256 = "783723ce31d754a96d51d513e358a2b3833e2252489666ba9c572c59d3ecbdba"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_candidates.py"
+sha256 = "82cee5f15143d2f7b0e21e1dae7e6678128dde58db32e0f8dc3815825824aa3d"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_comparison.py"
+sha256 = "54734f9ab46fc44203405e16d9e46e8d772c5e1185b0c4296f19aab5659fc2e0"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_consumer_return.py"
+sha256 = "ca540e118a60e48dcd8ecf7fb530d00df1c99ea40aa4859d38fb4e9e57f37cfc"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_descriptors.py"
+sha256 = "e89612f4cf7f5449f4e8c9798af8b93ca6f279d12421a184b47291eed9ecceb8"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_error_flow.py"
+sha256 = "a2116beb55136a8ac2a8f01ed89d6d624bfe3c4fcad3807a26d1229ea894dce1"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_fence.py"
+sha256 = "523ea9b4d653895df3cba6ee48192a86cec5707b77b1426f622973928cc5ecad"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_handoff.py"
+sha256 = "c3f9f528a04c2642dc612f9eeb2e14f49037f1c4e56b63159d0ad668d2a019b9"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_initialization.py"
+sha256 = "d8320b605db32196f07d876d6b6718bbe135d543b9c8cc3c971baff830aded52"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_inner_owner.py"
+sha256 = "04cb7ee674087b5d94329abe560a388280a6fa3c5128a9b142cab8da2f95b9dd"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_inner_report.py"
+sha256 = "42b69cfd0494b6ea052a50762ddc4aaab779722b37d6a65b4528d877af29e533"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_key_model.py"
+sha256 = "11aade95e9b88b5bb9b72fb64684646ffd94b543126453b284cbf0e1b5a58c21"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_keys.py"
+sha256 = "3e92cbc4ccdcbe489ac8c9592ab4162108b06052a0de9e647312b46f2ec2ff99"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_lanes.py"
+sha256 = "e70926a16ba3ae2e3c30efceebd6f861cc5439921b79e0c8cb4b0a435c10932c"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_native.py"
+sha256 = "17e0eb598cc50a2cda89d6fd294a05323329b455aaf1a94bb4a86c93371b4023"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_normalization.py"
+sha256 = "cf428cff6d39ed30cf3448dfd7cd3938a3fec8fc274f702e1c9e3b10da032687"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_normalization_bits.py"
+sha256 = "7a4d58250993a471c50042b4ffe21d6ffbd8ab824bc0841eaec4715a288fe629"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_normalization_flow.py"
+sha256 = "fbbe1eb9b03b87918e70a44d15f773dade08bdca500b0013605b2f25135ab422"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_normalization_return.py"
+sha256 = "79606599bf78b96c21ebb464195af37f0016543b84e625fb732de890d7354393"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_outer.py"
+sha256 = "70a3d913f22112369399bbb5fd7e18f8eef4c36b170fb3c50151b6730ed3cad8"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_outer_model.py"
+sha256 = "6a6ff5de077e1544a526e8788e0902b1a97125ad1bb268277a608053ad602cf3"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_outer_result.py"
+sha256 = "e45e3e83ff3d5977c5b23dd379bb212d91c43b1c6920664702f1834a3d09e0f9"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_output_views.py"
+sha256 = "687198d1a9ac1141649791ce2dff7723a3713a9814db48e86f35d2d0ecbf88c2"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_pad_model.py"
+sha256 = "4357d9fb8dbb6c40d172035bf87d10ddb8879fb37411550d7c8a8196aa574b0e"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_pads.py"
+sha256 = "eb02394ef07a2fb5eb1d548a5032fb64456e675a0299825f1c25e4eac6d72a73"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_phases.py"
+sha256 = "07d8a14657d5e5602588c05641af9d1b97514e04b2e1cf2422a04457bb6b6d6a"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_quarantine.py"
+sha256 = "6791f767a0098b6214d8fe3e55cff485a6b4b45ac3b6219044f7c995bf0188c3"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_report_return.py"
+sha256 = "f149a3ab0784247b82cc17ed3335d76e15a97f88e7521ed8f110136b764b30bb"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_reports.py"
+sha256 = "dba86567751453d73d38a19dae99a9f8decfcc19a546fb5adf4b57791087d6bd"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_results.py"
+sha256 = "8ada2ecb92440ed70a2a4a1dc02c19a26f1178ea890000ce5d203260a8a3a742"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_return_header.py"
+sha256 = "ca168f44859ec24e4e8c6440b43d5e16671cabd3a778d099029c14f5455ac768"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_return_layout.py"
+sha256 = "583566a5f09ee4c856aa75f424c46fe287ca2a500a8fe2f0ab52746cebf9c800"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_return_paths.py"
+sha256 = "6c4c7b6dd7c3368e77f965b45d749da085dba9836b1b489841f7b7f766d6ba3d"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_return_writes.py"
+sha256 = "ff1fb6a6009ebd11b402651c5d3b6dca17c5f453422136b61c1fa55f72edd24b"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_row_contracts.py"
+sha256 = "fe3c21a6e118671c1b9d6c87c7f248f9f0c09f5d15e303bcd6ba6e0e44d861d0"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_row_origins.py"
+sha256 = "e8131875b5d8d74bc0ee86ca03a41a7460a5b97d9a837ead3cbaa7734d55a693"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_rows.py"
+sha256 = "11278c3b57c488571bedc7577ef079cf7a10b820d78cd07d563a227766bcb7ba"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_secret_consumer.py"
+sha256 = "6ef9deb2b4d3b74ded2c8a4dcca7bbb893986bbc7d89a4b197edb0994ff31ceb"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_setup.py"
+sha256 = "8cd9e60213ecea04d7e9ebc7c7b811867013e758e37720b4409b91177d066715"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_teardown.py"
+sha256 = "e86e4a7bd1d440bab6bf06af7f2343b251e887545b70fd52f12aa25f87e2b9b4"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_md5_truncation.py"
+sha256 = "dab4474cff460d235e1a46586e82a8af2baf88e4fff4725286d30ea08823f3ec"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_native.py"
+sha256 = "ec9fc19592c850a8773a9aa0e639481d6c30f30a68089986c2bb9323365b7929"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_negatives.py"
+sha256 = "c5e178d303661f0b71afe9dfa084807a18601cf3901e04e5fa201f33a6c7ed33"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_timing.py"
+sha256 = "c5c24afebb87c638b12f6737efd92d19f24042280e60c89ff79557ad107f6045"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_timing_fixture_tests.py"
+sha256 = "3dfb557ab1f931e70fc93b64f262877c78135e00e43445240463371d6415f987"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/legacy_hmac_timing_runner.py"
+sha256 = "2f78d604ffe769e62ff2045e1d1b943488bda947cc8807801662801488faaef2"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-cleanup.py"
+sha256 = "910603f8886695f369c68443088b65e0abf0f492ccb5235403ed44849ae10e32"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-engine-cleanup.py"
+sha256 = "716f81d5d2d9d69c2c5ab4dbe5d36b49de17260715a461c273ce213cd7b9e5a1"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-execution-admission.py"
+sha256 = "4fc6d1bcbee08117a52c6b82b20781d942994511530da9a53ad7b15ca92e5c06"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-execution-cleanup.py"
+sha256 = "db507a38126f73c587524bd2fda8e6ddfcd129dfb376d17fe0ae09b4bada41fa"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-execution-construct.py"
+sha256 = "c0ad0a7c549ed57cc94baa3b3e644b945fad0a7919b3be86128acc25882bf27d"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-execution-handoff.py"
+sha256 = "01cfbaf4bc8405220bf032294156d423169e641ebad074b148af9059d0abfabb"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py"
+sha256 = "4614f81ceb8974e98c1141473fcf175c5fb904f57a5f3f7b435691b64e9c0806"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-hosted-package.py"
+sha256 = "cdb9ff18d67a2dd82f9af83c7a86e5163ddf4a84eb74db13d2416df019c157c5"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-md5-caller.py"
+sha256 = "33b6979d8d182643d5d7a146bb0d0516af4a97481d9d12c16480ced062df7e7e"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-md5-cleanup.py"
+sha256 = "a1905cd045d0f0c28ec06dd5b6f2a3d2a2450fa04123039853818042798ae338"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-md5-consumer-internal.py"
+sha256 = "f3914ea3a7ee8c890327d3203ca6c04f1d07b46304a8e8d5fade78d9fe752a7b"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-md5-consumer-return.py"
+sha256 = "49c40249726043dba614443e28e7fcbef58a65d9f41c1e0bc33ce99555112b59"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-md5-descriptors.py"
+sha256 = "b50f2d4a4a35bf1add8186dd2d3e8e7c09e63bd00897f0a8b8159ddf9789612e"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-md5-handoff.py"
+sha256 = "831028422f80396e9e2dd555ea3ae418e6ccdabc002a163dd5893067657b2c84"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-md5-inner-owner.py"
+sha256 = "e48110ff3bbed9eb6f96b5504aa0a539a22e74f69f37fc7026da800d3cd8e3a7"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-md5-inner-report.py"
+sha256 = "1ac8adb9b15d00df3a557692a149cbed18d14a423a8473d985aa2862f9b8a776"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-md5-keys.py"
+sha256 = "1d039f86ef29b2b4b20719664a7653cc283f00ee9a4c0f2b62c230a51371ced5"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-md5-native.py"
+sha256 = "e046598eb5ba774c75f8054f2fc70dc56787a96a4b1a1e026402eede15a22886"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-md5-normalization.py"
+sha256 = "f52c7358d177ee7867c19ae74f38d40741404b732208496367feb1b8faeae4d8"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-md5-outer.py"
+sha256 = "ef7a3be99cfc2cfcde0b9ea98603389f2cc30ec1847a042ab566961c4e2eeb3a"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-md5-output-path.py"
+sha256 = "c9da830709d78d0e5083d383df6dccaa290934ddb80862d3faf9648066cc33f3"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-md5-pads.py"
+sha256 = "028640ba3e512da7344cad1465473ba8db770dccbc09b1173032043dc11db35e"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-md5-phases.py"
+sha256 = "01cb9ec5ca825a5474ea4881e3a3fc2947a1b953c3589756ae446380b8fe93b0"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-md5-results.py"
+sha256 = "464abd1b32e53875da1c5476265e9dd4d61b040978fe55b48d8a83e62ab0bde7"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-md5-return-metadata.py"
+sha256 = "537067d045b06e6755f8614d496c4e51583ee3c925aa7e0077695680c2eed364"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-md5-setup-reports.py"
+sha256 = "752c36392e13d7f2874384fbb00dd75ee8c35b043cee79926f7fbe4fd17157ee"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-md5-teardown.py"
+sha256 = "e1e1e7432f65877a1ac9c395b008d839303f1e746e6919fed87e9df40706d87a"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-native.py"
+sha256 = "fa4ce430e97ab13cd4c99f8271f9ab31f2b8bd0b3fc7b2efad1739de25fa4755"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-package.py"
+sha256 = "f1173571a951700b1733e4b4c2bb4e42a411566416aade8dcd99d97292214946"
+
+[[reviewed-source]]
+path = "scripts/legacy-hmac/test-legacy-hmac-timing.py"
+sha256 = "7bf1a15310cba75469abc96c83e011dd3fae14f6929e912c0cb408f7c8834e1b"

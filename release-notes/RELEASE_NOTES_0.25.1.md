@@ -2486,6 +2486,45 @@ not establish native execution, independent qualification, arbitrary register
 or whole-worker erasure, or release readiness. No production Rust, primitive,
 dependency or release-gate policy changed in this follow-up.
 
+### Explicit legacy capability and owner registration
+
+The existing HMAC capability now contains a separately named
+`legacy-sha1-md5` compatibility profile. It does not replace the modern HMAC
+Engine, add a new semantic algorithm or admit legacy algorithms to the modern
+or strict facades. The capability population remains 135 with nine registered
+capability owners; this profile records a distinct composition under HMAC.
+
+The profile binds the legacy inner/outer Engine, delegated SHA-1/MD5 owners,
+fixed scratch and batch rows, retained SHA-1 state, public/secret tag handling,
+and all five portable/accelerated/hosted route classes. Linux protected mappings
+and worker stacks remain distinct from Apple Silicon resident storage, which
+does not claim dump exclusion. Static CPU/deployment authority, public metadata,
+caller-copy and fatal-path limitations remain explicit. No fictitious direct
+Engine destructor or whole-frame erasure guarantee is introduced.
+
+All legacy implementation, fixture and verifier source trees join the existing
+raw-byte review inventory: 271 additional paths, including the new registration
+contract and its tests. Existing composed-owner validation checks the nested
+profile, both delegated owners, sealed owned-state fields, named cleanup targets
+and evidence availability. The generated API register displays the separate
+routes and their pending release/independent qualification state. Same-repository
+pins detect drift; they are not external approval or runner attestation.
+
+The owner test command now runs six compatibility groups alongside its ten
+modern-HMAC groups: all 16 pass. They reject 36 missing, altered or overclaimed
+profile records, missing/aliased owner/evidence files, missing delegates,
+unsealed or non-owning Engine changes and raw-byte line-ending drift, and detect
+new source paths for review. The API-profile suite retains its 25 structural and
+23 output-downgrade regressions. Metadata preflight and its regressions, script
+inventory, assurance metadata, documentation links and whitespace checks pass.
+All ten push-catalog regressions pass; no expensive campaign was added to push CI.
+The combined hash-acceptance pin was refreshed only for the changed API policy.
+
+This registers the existing compiler drivers; it does not assert they were
+scheduled or create a new execution receipt. Separately scoped legacy-HMAC
+planner/command registration and release-evidence reconciliation remain next.
+No production Rust, dependency, package payload or release-gate policy changed.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -2556,7 +2595,8 @@ dependency or release-gate policy changed in this follow-up.
   now also pass their author-operated compiler checks, including ordinary setup
   failures, borrowed-local lifetimes and the public verification result. Native,
   independent and release qualification remain separate and pending.
-- Register API/capability owners and a separately scoped evidence family.
+- API/capability owners are registered as an explicit HMAC compatibility profile;
+  finish the separately scoped legacy-HMAC evidence family and command scheduling.
 - Obtain independent retest and run the affected release checks and GitHub.
 
 No crates.io publication or release tag is authorized by this work-in-progress.

@@ -13,6 +13,7 @@ sys.path.append(str(ROOT / "scripts/cryptography"))
 import api_profile_model as model
 import hmac_owner_contract as contract
 import secret_owner_compiler as direct
+from legacy_hmac_owner_tests import LegacyOwnerTests
 
 
 class OwnerTests(unittest.TestCase):

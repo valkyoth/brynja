@@ -2070,6 +2070,44 @@ gate changed. This is focused author-operated compiler validation, not a native
 capture or full-family sweep. The final regression log is retained locally at
 `release-reports/v0251-hosted-md5-lanes-final-regressions.log`.
 
+### Hosted MD5 budget and cancellation transport
+
+Independent typed constructor and remaining-budget probes now bind the
+24-byte `Md5BatchControl` representation: callback context at offset zero,
+vtable at eight and budget at sixteen. Both actual worker consumers must
+borrow that same fully initialized control. Its budget must come from the
+captured `Parameters::budget`, not the tag size or a substituted allowance;
+its eight-byte callback context must hold the captured cancellation pointer.
+The checker rejects hidden reads/writes/escapes and early or duplicate lifetime
+ends, and requires initialization to dominate both consumer calls.
+
+The emitted constant vtable is followed to both actual call targets. Its
+reviewed 64-bit layout must have no destructor, an eight-byte context and the
+matching worker's `FnOnce` shim and `FnMut` closure. Each emitted target must
+load the original flag pointer from its context, acquire-load the flag and
+return precisely whether it is nonzero, with no extra effects. This rejects
+stale snapshots, inverted or constant decisions, an unrelated cancellation
+flag, weakened atomic ordering and a disabled observer. Consistent SSA storage
+renaming still passes; acceptance is not tied to compiler-local variable names.
+
+These checks bind public work-control metadata and callback dispatch, not the
+reviewed leaf consumer's charging semantics or a guarantee about scheduling.
+Post-consumer cleanup completeness, candidate/decision transport, output copies
+and complete host output-loan/quarantine transactions remain separate
+obligations. No production implementation, dependency or release gate changes.
+
+Validation: the combined seven-group control/lane/report/health/graph run passes
+in 246.939 seconds. New cases reject 66 typed constructor/budget mutations,
+190 transport/lifetime mutations, 90 vtable/callback mutations and 18 compiled
+Rust defects; restored Linux and Apple baselines pass. The existing 2,222 lane,
+635 Result-transport and 403 health/admission mutations also pass. All 16
+selected compiler/target/panic/SIMD profiles pass, as do fixture Clippy on Rust
+1.90.0 and 1.99.1, workspace/fixture formatting, metadata, script inventory,
+assurance policy and documentation links. This is focused author-operated
+compiler validation, not a fresh native capture or full-family sweep. The
+combined regression log is retained locally at
+`release-reports/v0251-hosted-md5-control-final-regressions.log`.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -2123,7 +2161,9 @@ capture or full-family sweep. The final regression log is retained locally at
   report predicates, backend/count operands and rejected report status now have
   dedicated checks, as do typed Result-to-report byte transfers and success/error
   admission. Typed lane payloads, the complete eight-slot chain and invalid-bit
-  rejection now have dedicated checks. Control/output transport remains open. Final
+  rejection now have dedicated checks. Budget/cancellation control transport and
+  both actual callback targets now have dedicated checks. Output transport remains
+  open. Final
   MD5 composition review and the remaining hosted-worker keyed
   computation, complete output transactions and quarantine compiler obligations
   remain open.

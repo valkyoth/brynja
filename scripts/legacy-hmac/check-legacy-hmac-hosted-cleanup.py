@@ -52,9 +52,9 @@ def main():
             with runner.cargo_environment.private_directory(ROOT) as directory:
                 artifacts = emit(Path(directory), compiler, args.target, panic, not args.generic)
                 hosted.validate(artifacts, args.target, panic)
-            print(f'Legacy HMAC lifecycle/owners, streaming I/O, checkpoints, MD5 health/report/lane provenance: PASS; '
+            print(f'Legacy HMAC lifecycle/owners, streaming I/O, checkpoints, MD5 health/report/lane/control provenance: PASS; '
                   f'{compiler}; {args.target}; panic={panic}; simd={not args.generic}; '
-                  'MD5 control/output transport and host transactions pending; '
+                  'MD5 output transport and host transactions pending; '
                   'not native qualification', flush=True)
 
 

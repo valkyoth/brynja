@@ -2034,6 +2034,42 @@ focused author-operated compiler validation, not a new full-family sweep or
 native capture. Logs are retained locally under
 `release-reports/v0251-hosted-md5-result-`.
 
+### Hosted MD5 lane-payload provenance
+
+Typed downstream probes now bind the five captured input fields, the 40-byte
+input-slot layout, the 48-byte private batch `Input` constructor, its inactive
+niche, the 384-byte eight-lane array and the successful 32-byte `BitString`
+Result projection. The actual emitted worker must initialize all slots inactive
+and visit slots zero through seven exactly once. Each slot's presence test
+reads its captured key pointer; only its active branch may validate that slot's
+message pointer, length and valid-bit count, then transfer that returned
+descriptor together with the same slot's key pointer and length. The split
+descriptor loads and 22-byte scratch copy must preserve all 32 descriptor
+bytes. Both consumers must borrow the same completed eight-lane array.
+
+The checker verifies the complete predecessor/continuation chain, rather than
+sampling activity masks: skipped slots stay inactive, successful active slots
+continue to the next slot, and invalid bit messages end both temporary lifetimes
+and return `InvalidBits` without reaching another constructor or keyed consumer.
+Hidden lane/scratch reads, writes and escapes, early array lifetime ends,
+duplicate end markers and extra bypass/reentry edges are rejected. Constructor
+and descriptor validation semantics remain separately reviewed callee premises;
+this does not claim caller-input erasure or native execution. Post-consumer array
+end completeness, control/cancellation callback transport, output copying and
+full host output-loan/quarantine transactions remain separate obligations.
+
+Validation: the composed seven-group lane/report/health/graph run passes in
+248.648 seconds. New cases reject 102 typed-layout substitutions, 2,222 emitted
+slot/payload/lifetime/admission defects and 16 compiled Rust lane defects;
+restored Linux and Apple baselines pass. The existing 245 report-count, 635
+Result-transport and 403 health/admission mutations also pass. All 16 selected
+compiler/target/panic/SIMD profiles pass, together with Rust 1.90.0/1.99.1
+fixture Clippy, workspace/fixture formatting, metadata, script inventory and
+documentation-link checks. No production implementation, dependency or release
+gate changed. This is focused author-operated compiler validation, not a native
+capture or full-family sweep. The final regression log is retained locally at
+`release-reports/v0251-hosted-md5-lanes-final-regressions.log`.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -2086,7 +2122,8 @@ native capture. Logs are retained locally under
   and rejected Result payload transport now also have composing checks. Typed
   report predicates, backend/count operands and rejected report status now have
   dedicated checks, as do typed Result-to-report byte transfers and success/error
-  admission. Full lane-payload and output transport remain open. Final
+  admission. Typed lane payloads, the complete eight-slot chain and invalid-bit
+  rejection now have dedicated checks. Control/output transport remains open. Final
   MD5 composition review and the remaining hosted-worker keyed
   computation, complete output transactions and quarantine compiler obligations
   remain open.

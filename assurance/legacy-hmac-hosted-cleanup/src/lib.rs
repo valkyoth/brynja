@@ -2,6 +2,7 @@
 #![forbid(unsafe_code)]
 
 pub mod checkpoint;
+pub mod lane;
 pub mod normalization;
 pub mod report;
 pub mod report_result;

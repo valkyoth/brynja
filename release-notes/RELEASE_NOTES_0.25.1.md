@@ -1809,6 +1809,56 @@ No production cryptography, published API, release gate, native approval or
 shared modern-HMAC checker changes. Cross-built artifacts remain compiler
 inspection, not native execution or independent review.
 
+### Hosted streaming input/output and scalar checkpoint qualification
+
+The real hosted-worker emissions now compose the earlier constructor/owner
+checks with complete-byte chunk iteration and partial-bit-tail provenance for
+scalar SHA-1, scalar MD5 and compiled SHA-1. Paired pointer/length PHIs, captured
+slice boundaries, the exactly-once tail prefix, 4096-byte update steps, successful
+update admission and failure exclusion are checked in the actual worker CFG.
+The full and partial `BitString` constructors are bound to captured arguments,
+and their admitted descriptor bytes must reach both finalizers unchanged.
+Constructor hash updates remain in their separate, already checked prefix:
+the input projection does not rewrite or replace any LLVM instruction.
+
+These three streaming routes also bind verification candidates, staging and
+destination buffers, returned secret-owner fields and the destination copy.
+Success admission, descriptor lifetimes, escape rejection and owner destruction
+on normal/error/recoverable-unwind paths are checked. Constructor-only copies
+and destructors are excluded from output selection only when unreachable from
+the retained-state handoff; their instructions remain in the original graph.
+Ending a consumed Result descriptor before copying its separate live owner is
+legitimate and is not misreported as an owner-lifetime defect.
+
+Scalar workers additionally bind all six cancellation checkpoints to initial
+admission, chunk selection, each nonempty update part, finalization, pre-copy
+and final result handling. Failed checkpoint bytes must survive transport to
+the worker Result. The emitted cancellation callees must perform the exact
+acquire load and return Cancelled/Ok; source names alone do not establish this.
+Compiled SHA-1/MD5 checkpoints have different backend-session construction and
+cleanup, so this scalar callee result is not credited to them.
+
+Focused validation: all 16 existing compiler/target/panic/build configurations
+pass. Across 16 available streaming workers in six representative emissions,
+1,208 input/tail defects and 777 output-provenance/cleanup defects are rejected;
+nine repeated-update loops are rejected by the path interpreter itself. Scalar
+checkpoint tests reject 504 boundary/result-transport defects and 72 callee
+mutations. All 42 private Rust worker defects compile and are rejected on Linux
+x86-64 and Apple AArch64, with restored baselines passing. This is cross-built
+compiler inspection, not fresh native execution or an independent retest.
+
+The final complete hosted regression invocation passes all 48 groups in
+633.025 seconds, including the existing compiled capture/constructor defects
+and all new streaming/checkpoint cases. Script-layout, acceptance-metadata,
+assurance, Python syntax, Rust formatting and diff checks pass.
+
+No production Rust, dependencies, shared modern-HMAC checker, release gate or
+approval record changes. The hosted qualification block is not yet closed:
+eight-lane MD5 input/report/output transport, accelerated checkpoint/callee
+composition, full worker-result/host quarantine transactions and public loan
+composition remain. The separate final MD5 composition reconciliation also
+remains required.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -1852,7 +1902,9 @@ inspection, not native execution or independent review.
   initialization/ownership, key operands, pad phases, scratch and pre-retention
   cleanup paths now have dedicated checks. Normalization-result/descriptor
   provenance, its result-to-pad copy, empty/short/long-key routing and independent
-  typed initial-owner/Result layout binding now also pass. Final
+  typed initial-owner/Result layout binding now also pass. Streaming chunk/tail
+  provenance, returned output ownership/cleanup and scalar checkpoint/callee
+  result handling now have composing checks. Final
   MD5 composition review and the remaining hosted-worker keyed
   computation, complete output transactions and quarantine compiler obligations
   remain open.

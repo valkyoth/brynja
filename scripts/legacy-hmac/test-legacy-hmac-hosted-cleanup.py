@@ -14,6 +14,8 @@ from legacy_hmac_hosted_scalar_tests import ScalarTests
 from legacy_hmac_hosted_construct_tests import ConstructTests
 from legacy_hmac_hosted_normalization_tests import NormalizationTests
 from legacy_hmac_hosted_normalization_compiled_tests import NormalizationCompiledTests
+from legacy_hmac_hosted_stream_tests import StreamTests
+from legacy_hmac_hosted_stream_compiled_tests import StreamCompiledTests
 
 spec = importlib.util.spec_from_file_location('driver', Path(__file__).with_name('check-legacy-hmac-hosted-cleanup.py'))
 driver = importlib.util.module_from_spec(spec)
@@ -22,7 +24,7 @@ h = driver.hosted
 
 
 class Hosted(CaptureTests, AuthorityTests, KeyedTests, ScalarTests, ConstructTests, NormalizationTests,
-             NormalizationCompiledTests, unittest.TestCase):
+             NormalizationCompiledTests, StreamTests, StreamCompiledTests, unittest.TestCase):
     driver = driver
     @classmethod
     def setUpClass(cls):

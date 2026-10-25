@@ -1,12 +1,13 @@
 """Bind legacy host routes to the shared, source-reviewed thread lifecycle.
 
-Only presentation names of the exact MD5 validator and resident buffer clear/
-borrow helpers are normalized for the existing lifecycle walker. No function body,
-native status or pointer is rewritten. Capture, envelope, destructor, authority
+Presentation names of exact reviewed callees are adapted only for shared walker
+selection (the MD5 validator, resident helpers and streaming terminal/update
+selectors). No function body, native status or pointer is rewritten. Capture, envelope, destructor, authority
 and selection-input projections compose here with compiled keyed admission,
-storage and retained dispatch, including scalar post-initialization owners.
-Inlined scalar construction, full input/output and quarantine transactions still
-require their separate qualification.
+scalar construction and retained dispatch. Streaming input/tail and output-owner
+provenance now compose here, along with scalar cancellation checkpoints/callees.
+MD5 lane transport, accelerated checkpoint/callee composition and complete host
+output/loan/quarantine transactions still require their separate qualification.
 """
 import re
 import sys
@@ -29,6 +30,9 @@ import legacy_hmac_hosted_keyed as keyed
 import legacy_hmac_hosted_storage as storage
 import legacy_hmac_hosted_retained as retained
 import legacy_hmac_hosted_scalar as scalar
+import legacy_hmac_hosted_input as input_flow
+import legacy_hmac_hosted_output as output
+import legacy_hmac_hosted_checkpoints as checkpoints
 
 model = shared.load('hmac_hosted_lifecycle', 'legacy_hosted_lifecycle_model')
 contracts = shared.load('hmac_hosted_contracts')
@@ -152,6 +156,7 @@ def validate(artifacts, target, panic):
     fixture = populations['brynja-legacy-hmac-hosted-cleanup']
     initials = scalar.normalization.contracts.validate(fixture)
     leaf = populations['brynja-legacy-hmac-std']
+    checkpoints.validate_callees(leaf, target, compiler)
     destructor = '<' + owner + '::Buffers as core::ops::drop::Drop>::drop'
     selected = [symbol for symbol in (*leaf[0], *leaf[1]) if leaf[2][symbol] == destructor]
     require(len(selected) == 1, 'missing/ambiguous legacy buffer destructor')
@@ -209,11 +214,19 @@ def validate(artifacts, target, panic):
                     # retained.check includes storage validation for both
                     # identities; do not repeat the same graph traversal.
                     retained.check(keyed_state, definitions, aliases, panic)
+                    if identity == 'sha1_compiled':
+                        arguments = flow.resolve(worker, definitions, aliases)[0]
+                        input_flow.check(keyed_state, arguments, envelope_result, panic, compiler)
+                        output.check(keyed_state, arguments, panic)
                 else:
                     unavailable.check(worker_body, envelope_result, identity)
             else:
-                scalar.check(flow.resolve(worker, definitions, aliases)[1], names, compiler,
-                             identity, envelope_result, definitions, aliases, panic, initials[identity])
+                arguments, worker_body = flow.resolve(worker, definitions, aliases)
+                state, _ = scalar.check(worker_body, names, compiler, identity, envelope_result,
+                                        definitions, aliases, panic, initials[identity])
+                incoming = input_flow.check(state, arguments, envelope_result, panic, compiler)
+                outgoing = output.check(state, arguments, panic)
+                checkpoints.Checkpoints(incoming, outgoing, target, compiler).check()
             checked[identity] = selected, worker, population, host
     require(len(checked) == 4 and len({item[1] for item in checked.values()}) == 4,
             'legacy host/worker population collapsed')

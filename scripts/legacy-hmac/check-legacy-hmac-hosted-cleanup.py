@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Inspect legacy host lifecycle, keyed handoffs and retained dispatch, not whole-worker erasure."""
+"""Inspect legacy lifecycle, owners and streaming I/O, not whole-worker erasure."""
 import argparse
 import json
 from pathlib import Path
@@ -52,9 +52,10 @@ def main():
             with runner.cargo_environment.private_directory(ROOT) as directory:
                 artifacts = emit(Path(directory), compiler, args.target, panic, not args.generic)
                 hosted.validate(artifacts, args.target, panic)
-            print(f'Legacy HMAC host lifecycle, authority, keyed admission/storage and retained dispatch: PASS; '
+            print(f'Legacy HMAC lifecycle/owners, streaming input/output and scalar checkpoints: PASS; '
                   f'{compiler}; {args.target}; panic={panic}; simd={not args.generic}; '
-                  'no complete worker/output or native qualification', flush=True)
+                  'MD5 lanes, accelerated checkpoint composition and host transactions pending; '
+                  'not native qualification', flush=True)
 
 
 if __name__ == '__main__':

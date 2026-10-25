@@ -27,6 +27,7 @@ from legacy_hmac_hosted_md5_lane_tests import Md5LaneTests
 from legacy_hmac_hosted_md5_control_tests import Md5ControlTests
 from legacy_hmac_hosted_md5_decision_tests import Md5DecisionTests
 from legacy_hmac_hosted_md5_tag_copy_tests import Md5TagCopyTests
+from legacy_hmac_hosted_md5_tag_cleanup_tests import Md5TagCleanupTests
 
 spec = importlib.util.spec_from_file_location('driver', Path(__file__).with_name('check-legacy-hmac-hosted-cleanup.py'))
 driver = importlib.util.module_from_spec(spec)
@@ -34,7 +35,7 @@ spec.loader.exec_module(driver)
 h = driver.hosted
 
 
-class Hosted(Md5TagCopyTests, Md5DecisionTests, Md5ControlTests, Md5LaneTests, Md5ResultTests, Md5ReportTests, Md5ReportCompiledTests, Md5CheckpointTests, Md5CompiledTests,
+class Hosted(Md5TagCleanupTests, Md5TagCopyTests, Md5DecisionTests, Md5ControlTests, Md5LaneTests, Md5ResultTests, Md5ReportTests, Md5ReportCompiledTests, Md5CheckpointTests, Md5CompiledTests,
              AcceleratedCheckpointTests, CheckpointCompiledTests,
              CaptureTests, AuthorityTests, KeyedTests,
              ScalarTests, ConstructTests, NormalizationTests,

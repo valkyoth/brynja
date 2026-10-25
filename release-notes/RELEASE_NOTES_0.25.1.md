@@ -2180,6 +2180,38 @@ compiler checks, not native capture or a full-family sweep. Local logs:
 `release-reports/v0251-hosted-md5-tag-copy-renaming.log` and
 `release-reports/v0251-hosted-md5-tag-copy-matrix.log`.
 
+### Hosted MD5 returned-tag destruction paths
+
+A separate checker now follows all normal and recoverable-unwind continuations
+from the qualified authentication report call, where the returned `SecretTags`
+owner is fully initialized. It requires exactly one destruction of that owner's
+embedded region before normal result storage or runtime panic handoff. Normal
+completion also requires the 32-byte owner's lifetime end. Copying, exposing,
+reading, writing or escaping tag storage after destruction, premature/repeated
+lifetime ends, unreviewed calls or writes, missing unwind edges and cyclic or
+unbounded cleanup paths fail the check.
+
+The `OwnedSecretRegion` destructor's clearing and nonthrowing behavior for valid
+regions remain the existing source-bound core premise. Only its normal return
+edge is used; this is not a claim of fatal-abort, instrumentation, caller-frame
+or whole-process erasure. The check stops at the separately checked worker
+Result store or the exception-pointer runtime handoff. Ownership before the
+Result-to-`SecretTags` transfer, and complete hosted output-loan/quarantine
+transactions, remain separate obligations. No production code, dependencies or
+release-gate policy changes.
+
+Validation: the composed seven-group run passes in 164.092 seconds. It rejects
+197 cleanup dispatch/lifetime/escape/edge mutations, three unwind-only defects
+that pass the earlier copy checker, and ten compiled Rust defects; restored
+Linux and Apple baselines pass. The existing tag-copy scenarios and 30 typed,
+106 decision, 635 Result-transport and 403 health mutations still pass. All 16
+selected compiler/target/panic/SIMD profiles pass, as do formatting, metadata,
+script inventory, assurance policy and documentation links. These are focused
+author-operated compiler checks, not native capture or a full-family sweep.
+Logs remain local at
+`release-reports/v0251-hosted-md5-tag-cleanup-composed.log` and
+`release-reports/v0251-hosted-md5-tag-cleanup-matrix.log`.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -2237,8 +2269,9 @@ compiler checks, not native capture or a full-family sweep. Local logs:
   both actual callback targets now have dedicated checks. Original candidate and
   staging operands, compute/verify selection and public decision transport through
   final Result storage now have dedicated checks. Tag-to-output copies and their
-  normal-return copy-error continuations now have dedicated checks. Post-copy
-  cleanup and unwind completeness remain open. Final
+  normal-return copy-error continuations now have dedicated checks. Post-transfer
+  tag destruction/lifetime paths now cover normal and recoverable unwind exits.
+  Pre-transfer Result cleanup remains open. Final
   MD5 composition review and the remaining hosted-worker keyed
   computation, complete output transactions and quarantine compiler obligations
   remain open.

@@ -16,8 +16,9 @@ The shared control binds budget, callback context and both actual vtable targets
 Candidate mode and the typed public decision bind through final Result storage.
 MD5 tag-output copies bind each active source lane to its matching output row
 through normal-return copy-error handling and owned-region Drop admission.
-Post-copy cleanup and complete host output/loan/quarantine transactions still
-require their separate qualification.
+Post-transfer normal/unwind destruction and lifetime paths now compose with
+the source-bound nonthrowing core clearing premise. Pre-transfer Result cleanup
+and complete host output/loan/quarantine transactions remain separate.
 """
 import re
 import sys
@@ -59,6 +60,7 @@ import legacy_hmac_hosted_md5_lanes as md5_lanes
 import legacy_hmac_hosted_md5_control as md5_control
 import legacy_hmac_hosted_md5_decision as md5_decision
 import legacy_hmac_hosted_md5_tag_copy as md5_tag_copy
+import legacy_hmac_hosted_md5_tag_cleanup as md5_tag_cleanup
 
 model = shared.load('hmac_hosted_lifecycle', 'legacy_hosted_lifecycle_model')
 contracts = shared.load('hmac_hosted_contracts')
@@ -274,7 +276,8 @@ def validate(artifacts, target, panic):
                         md5_lanes.check(keyed_state, transfer, envelope_result, health_result)
                         md5_control.check(keyed_state, envelope_result, artifacts['brynja-legacy-hmac-std'], leaf, target)
                         md5_decision.check(keyed_state, envelope_result, boundaries, transports, compiler)
-                        md5_tag_copy.check(keyed_state, envelope_result, boundaries, transports, compiler)
+                        copies = md5_tag_copy.check(keyed_state, envelope_result, boundaries, transports, compiler)
+                        md5_tag_cleanup.check(copies, panic)
                 else:
                     unavailable.check(worker_body, envelope_result, identity)
             else:

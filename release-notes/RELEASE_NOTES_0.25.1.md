@@ -2582,15 +2582,45 @@ candidate rejection and missing/extra host records. The existing timing suite no
 passes fourteen groups. No production implementation, timing fixture, release approval or native capture was
 changed, and no new timing campaign was launched.
 
+### Current-candidate package refresh and review handoff
+
+All eight focused package lanes pass at
+`c5f504771c3ab8e9f1c4f8bc4c9974e658df58aa` with Rust 1.99.1: leaf, scalar
+hosted, SHA-1 hardware and MD5 SIMD on Linux x86-64 and native Apple Silicon.
+Fresh extracted archives run debug/release RFC/contract/oracle tests, independent
+byte/bit comparisons, exact hosted populations, compiled ownership negatives and
+cleanup/authority mutations. Linux protected and Apple resident storage remain
+distinct; these results add no Apple dump-exclusion guarantee.
+
+The source archive transferred to the Mac has SHA-256
+`f5f6895283de1db2066047743c33c0d23756505f8d112d07d174add75a65bd54`.
+All 5,889 archived files still match after the run. Commands, compiler/host
+identities, exit statuses and checker summaries were downloaded into
+`release-reports/v0251-package-refresh-c5f50477-apple/`; local results use the
+corresponding `-linux/` directory. No original observation or approved receipt
+was changed. These summaries are author records, not complete underlying Cargo
+transcripts, authenticated attestations or detached release receipts.
+
+The saved hosted compiler matrix still has all sixteen exact expected profiles.
+All 1,310 selected existing source, manifest, compiler-fixture and helper inputs
+match the completed `7b7e8ffd` checkpoint. That historical author result is
+retained without a new compiler run. Linux Arm cross-compilation is not native
+Linux Arm qualification. The existing sixteen timing observations likewise
+retain their original capture identities and limitations.
+
+Focused archive/graph, hosted-population, verifier-scope, timing and owner-contract
+regressions pass, as do acceptance metadata, API inventory, assurance, script
+layout and documentation links. No production code, test population or release
+gate changed. The [review handoff](../docs/legacy-hmac-review-handoff.md) now maps
+the implemented scope, failure-path checks and existing limitations for review.
+
 ## Outstanding before release
 
-- Reconcile native functional/package and compiler observations with the candidate,
-  retaining the documented Linux protected versus macOS resident guarantees.
-- Finish the pre-pentest review of qualification/failure-path coverage; the bounded
-  scalar, accelerated MD5/SHA-1 and hosted compiler checks above are implemented
-  and author-tested, not independently qualified.
-- Obtain independent pentest/retest of the complete legacy-HMAC scope.
+- Complete the independent review disposition for the legacy-HMAC scope; the
+  implementation and bounded author-check handoff are ready for review, not
+  independently qualified.
 - Run the affected release checks using the existing reuse rules, then GitHub and
-  separately authorized tagging. Development runs are not detached receipts.
+  separately authorized tagging. This includes any required remaining native
+  lane/receipt collection; development runs are not detached receipts.
 
 No crates.io publication or release tag is authorized by this work-in-progress.

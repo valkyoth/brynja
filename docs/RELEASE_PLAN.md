@@ -5290,9 +5290,15 @@ resident MD5 SIMD batch owners now provide bounded eight-slot requests, aligned
 full-group admission, aggregate verification and clearing output loans. Static
 authority is created only on the worker, with no error-driven portable fallback.
 
-Remaining: compiler and timing
-qualification, complete error/unwind cleanup evidence; capability and
-affected-family scope registration; independent retest and scoped release checks.
+The bounded compiler/error/unwind author checks, timing reconciliation,
+capability registration and dedicated affected-family scheduling are now
+implemented and tested. A current-candidate extracted-package refresh passes
+for leaf, scalar hosted, SHA-1 hardware and MD5 SIMD owners on Linux x86-64 and
+Apple Silicon. The [review handoff](legacy-hmac-review-handoff.md) separates
+these development results from independent review and release qualification.
+Remaining: independent review disposition and scoped release verification,
+including any required native lanes and approved receipts. Author results do
+not satisfy these steps automatically.
 Focused native Arm SHA-1 and NEON HMAC/MD5 regressions now pass in debug/release
 on the M2 Pro builder. These author-operated checks do not establish independent
 downstream composition or compiler-cleanup qualification, which remain pending.

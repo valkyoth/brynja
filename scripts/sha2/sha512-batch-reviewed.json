@@ -526,7 +526,7 @@
     "docs/sha512-batch-execution.md": "c788fa6467d860ffe1b769af7f52fdf4d3cf9c01b25f40287e685b5dacbb06217ec0d32539f51ade5c0abc5218b4eba7278adef6cb549a2acdbcf04eb03dc1d7",
     "rust-toolchain.toml": "2f30e26567a1311b5da9845c651177ab9ab71f6d5ee1d3b48bf704b69b673ff37548cebf4464d87342ecdb5bc4b813f320c39e7c0e4a77628c281729802cedaf",
     "scripts/assurance/check-kani.sh": "5ec8cd411e979973da6952a3c33509908dab03bea2f344546e18fc63dcb95bd4272a51fa7a4558fb45ad633a07dc243d24fa55acc34fec674ca8103d3323d49d",
-    "scripts/checks.sh": "52a19525da30dccf2ba9990862c734f2d3349c50f1ac45254f6881441d46626bc7c0448dada65eebdc352d3d8b608d6afc9232be9c028f9fa1f7472e3b07f8ff",
+    "scripts/checks.sh": "4b19261c04b7047bbeda69bbf2f9b1614cc0f5b829e8dae91b88cfece65ebf7c1b6bfa04bc20f84e5478c8a9b91f93d47a46bcebf489593439dbad1b553d0ac8",
     "scripts/sha2/capture-sha512-batch-native.py": "640077cc712be4cb91298dac0e6e0f5849c21d904a5d0c99a5e197f394b90f6c3f640989a35b0978698ae0fcd7a78dbca790c2dca520614f6b9dc05bb75ba8a9",
     "scripts/sha2/check-sha2-bit-differential.py": "9b7e4a4bdd4ae608481b332211dc2d5bce404832a978e4aee00a8c26f3ae8010fa9ae3cef56815aba095732537ab0965f12f82a8a3c84e3810dea213f10cb07b",
     "scripts/sha2/check-sha2-execution.py": "f2a458a865543d3d13d454cd38a6397d164046b605b102fbf7083b6311ddb6e86d6402457f7f4987345a5caa9d78b15f48771ec7bd42d93a428c44a3fc49e15c",
@@ -539,8 +539,8 @@
     "scripts/sha2/sha512_t_digest_oracle.py": "8ae309986d83af15a69f531018157b7a00f006ec82eb83e588084a58c10e31f14c7697234f82b08d2297cd2001996298d3b858330e0684dd85e2bb0ba0f87721",
     "scripts/sha2/sha512_t_iv_oracle.py": "47b62f6fdf6a08ed7b03d759d91e9f8ca3cdaecd6a34ee819d6b0eb0e7481fe8701c7110835e0f44d2a7d4382157ab005cf8c6f06a5d5e93767bcf959c2b9d96",
     "scripts/sha2/test-sha512-batch.py": "050e6ec10666dfca06872761e04f13d32ccd9302bc4b8a814ecd1d4a64d80ff8e302a5a7e0bd4e05624d6560e967fca99cb481512c64d8114113d6dd1753af02",
-    "scripts/zeroization/check-zeroization-miri.sh": "0e9afa459fd6f96307a43d81f16713010169a998b2eec1a7d10b5f9f3285bc2a1f6b1772edb8c38a6fbd1b841a55f3ab0e51583ce5afadf8f7c0824fb48522d6",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "7c36bf4e5a295728c658ad5813b4e376ff6051bb9e2c0b2daad145b6f0ca55bf0217300115b6bf00612ee9576609691bc3bb71ed91a538490ac8f7a2f35d0cb2"
+    "scripts/zeroization/check-zeroization-miri.sh": "ba00fa4fcdf0a095a9a56b989d89fbac3ccb77d8eb06f0677c0ebbcac7514875ca9ca96ae8273a9c79d5b9566098096a534b33204167f65b09b9c9ea6795ebf8",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "0bbcbecba986e8e18867ea8e766e6322bc83bb718595554a126b7dcbc6a33a60af25c2906736dc0df3faa67724519b0fee0fea7deaacc0eed54a823e657ee3f2"
   },
   "schema": 1,
   "version": "0.24.46"

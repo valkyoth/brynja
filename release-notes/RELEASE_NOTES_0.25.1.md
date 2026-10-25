@@ -2525,6 +2525,34 @@ scheduled or create a new execution receipt. Separately scoped legacy-HMAC
 planner/command registration and release-evidence reconciliation remain next.
 No production Rust, dependency, package payload or release-gate policy changed.
 
+### Dedicated legacy-HMAC verification-family wiring
+
+The planner now registers `legacy_hmac` separately from modern HMAC and the
+underlying legacy hash owners. Leaf-only changes retain this narrow scope;
+SHA-1/MD5, shared protected resources and shared verifier/compiler helpers retain
+their consumer checks. All seven legacy fixtures have registered package/lock
+identities. Unknown code and malformed graphs still fail closed.
+
+The repository catalog now schedules all five compiler-driver families and
+their existing regression entry points, including generic/SIMD hosted profiles
+on Linux x86-64 and Linux/Apple AArch64. Expensive artifact/mutation and packaging
+checks stay outside routine push CI. Both crates are included in compiler
+compatibility testing. This registration is not a new native qualification.
+
+Focused author checks pass: all eleven new bounded Miri tasks, both real Kani
+invalid-width harnesses, portable/public-metadata ASan with LeakSanitizer forced
+on, the five bounded Rust lifecycle tests and strict Clippy. Nine verifier/scope
+regression groups cover dependency drift, additive task inventories, receipt
+non-substitution, command partitioning, hostile sanitizer variables, missing
+populations and proof/tool identity. Kani covers invalid public tag widths with
+one-byte keys only; Miri and this sanitizer lane do not execute protected workers
+or accelerated instructions. These are development runs, not a completed
+detached release campaign. Focused logs use `release-reports/v0251-scope-`.
+
+No production Rust or cryptographic implementation changed. Review hashes bind
+the changed catalogs and new test sources without asserting external approval.
+Independent retest, native-evidence reconciliation and release checks remain.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -2595,8 +2623,8 @@ No production Rust, dependency, package payload or release-gate policy changed.
   now also pass their author-operated compiler checks, including ordinary setup
   failures, borrowed-local lifetimes and the public verification result. Native,
   independent and release qualification remain separate and pending.
-- API/capability owners are registered as an explicit HMAC compatibility profile;
-  finish the separately scoped legacy-HMAC evidence family and command scheduling.
+- API/capability owners and the separate legacy-HMAC verification family are
+  registered; reconcile their execution records before release.
 - Obtain independent retest and run the affected release checks and GitHub.
 
 No crates.io publication or release tag is authorized by this work-in-progress.

@@ -18,6 +18,7 @@ ALL = set(scope.GROUPS)
 # to them. Add HMAC only when those fixtures actually gain HMAC integration.
 CPU_INTEGRATIONS = {"static_cpu", "sha2", "sha3", "kmac", "tuplehash", "parallelhash"}
 DIRECTORIES = {
+    "legacy-hmac": {"legacy_hmac"},
     "hmac": {"hmac"},
     "md5": {"md5"}, "sha1": {"sha1"}, "sha2": {"sha2"}, "sha3": {"sha3"},
     "kmac": {"kmac"}, "tuplehash": {"tuplehash"}, "parallelhash": {"parallelhash"},
@@ -150,11 +151,13 @@ def selected(commands: list[str], groups: list[str], *, full: bool = False) -> l
 def kani_commands(groups: list[str]) -> list[str]:
     if len(groups) != len(set(groups)) or not set(groups) <= ALL:
         raise ValueError("unknown or duplicate Kani family")
-    legacy = [group for group in groups if group != 'hmac']
+    legacy = [group for group in groups if group not in {'hmac', 'legacy_hmac'}]
     result = (["scripts/assurance/check-kani.sh --required-groups " + " ".join(legacy)]
               if legacy else [])
     if 'hmac' in groups:
         result.append("python3 scripts/hmac/check-hmac-kani.py")
+    if 'legacy_hmac' in groups:
+        result.append("python3 scripts/legacy-hmac/check-legacy-hmac-kani.py")
     return result or ["scripts/assurance/check-kani.sh --policy-only"]
 
 

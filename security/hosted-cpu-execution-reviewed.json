@@ -358,7 +358,7 @@
     "crates/brynja-crypto-cpu/src/x86_sha512/secret.rs": "333d5588c1e3ff4f9a0ea5ab9584fa9f1342452ebb4b01ad17d9982df8c6c2a7",
     "crates/brynja-crypto-cpu/src/x86_sha512/words.rs": "f77a10d0138bb2c2855dbfb62b10195e0b0a302b452fc62b3f225adef4d8ee12",
     "docs/hosted-cpu-execution.md": "ee95ea12465819e9d071196d39497b7245b94589f3060b3c48e48af960fe978a",
-    "scripts/checks.sh": "7f8f37959496401456e46ed565a793b9944014bf9a9e714847a44774d45a7a35",
+    "scripts/checks.sh": "61ca5886d2fcafeef07ab380ac6edd75748b5271d9a34c2f54ea24470deff5d9",
     "scripts/cpu/check-hosted-execution.py": "462e9e8dda87ebc404f046a601ac1245081e4769388314a24c8ce17f1c297f1d",
     "scripts/cpu/cpu_boundary_backends.py": "3b09edec29020a3f2a7b4624384da972b62ca0fbeafbc4c567a87bb6f192b71d",
     "scripts/cryptography/check-macos-resident-batch-codegen.py": "3ee0058ea1f14c4cfeb7508a32c23e7e178127a75ed10b01eacbf7f854284e9f",
@@ -371,7 +371,7 @@
     "scripts/cryptography/test-macos-resident-batch-package.py": "77ef591543bab197b0d45f4d0eedf34588e27f4e69dbd905f258b07333020ef0",
     "scripts/repository/darwin_resident_abi.py": "b6ec7a57b01f4d01d2cd62e8b3dde75eaf6c152b087554d6ada0b41db5475af4",
     "scripts/repository/unsafe_policy.py": "23060b00850f848084eee4798f4664b4c7310a52e2d338115dcc52412779fad4",
-    "scripts/zeroization/check-zeroization-miri.sh": "edab9b708f7c012c6a67bd9420dd157c07e5f7c6e1d14506c73060d53d53e99e",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "94814f2d552295d2161fdedb4b6b0ee1bd23457073236dc4a3b0494d436508f2"
+    "scripts/zeroization/check-zeroization-miri.sh": "5d220cd4ed57a0eb6d9dc5d771039d6df91152e1d5502919507b66a4ec84f40d",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "83b05d7162729f78d6a206e0beb1e81c5e2770911edc808d10475423e1d958b7"
   }
 }

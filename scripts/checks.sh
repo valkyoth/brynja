@@ -318,3 +318,61 @@ cargo clippy --workspace --all-targets --no-default-features -- \
   -A clippy::chunks_exact_to_as_chunks -D warnings
 cargo test --workspace --all-features
 cargo doc --workspace --all-features --no-deps
+
+# Dedicated legacy compatibility owner; not modern/strict HMAC selection.
+python3 scripts/legacy-hmac/check-legacy-hmac-kani.py --policy-only
+python3 scripts/legacy-hmac/test-legacy-hmac-verification.py
+cargo test --locked --offline --manifest-path assurance/legacy-hmac-policy/Cargo.toml
+python3 scripts/legacy-hmac/check-legacy-hmac-cleanup.py
+python3 scripts/legacy-hmac/check-legacy-hmac-cleanup.py --target aarch64-unknown-linux-gnu --toolchain 1.99.1
+python3 scripts/legacy-hmac/check-legacy-hmac-cleanup.py --target aarch64-apple-darwin --toolchain 1.99.1
+python3 scripts/legacy-hmac/check-legacy-hmac-engine-cleanup.py
+python3 scripts/legacy-hmac/check-legacy-hmac-engine-cleanup.py --target aarch64-unknown-linux-gnu --toolchain 1.99.1
+python3 scripts/legacy-hmac/check-legacy-hmac-engine-cleanup.py --target aarch64-apple-darwin --toolchain 1.99.1
+python3 scripts/legacy-hmac/check-legacy-hmac-execution-cleanup.py
+python3 scripts/legacy-hmac/check-legacy-hmac-execution-cleanup.py --target aarch64-unknown-linux-gnu --toolchain 1.99.1
+python3 scripts/legacy-hmac/check-legacy-hmac-execution-cleanup.py --target aarch64-apple-darwin --toolchain 1.99.1
+python3 scripts/legacy-hmac/check-legacy-hmac-md5-cleanup.py
+python3 scripts/legacy-hmac/check-legacy-hmac-md5-cleanup.py --simd
+python3 scripts/legacy-hmac/check-legacy-hmac-md5-cleanup.py --target aarch64-unknown-linux-gnu --toolchain 1.99.1
+python3 scripts/legacy-hmac/check-legacy-hmac-md5-cleanup.py --target aarch64-unknown-linux-gnu --toolchain 1.99.1 --simd
+python3 scripts/legacy-hmac/check-legacy-hmac-md5-cleanup.py --target aarch64-apple-darwin --toolchain 1.99.1
+python3 scripts/legacy-hmac/check-legacy-hmac-md5-cleanup.py --target aarch64-apple-darwin --toolchain 1.99.1 --simd
+python3 scripts/legacy-hmac/check-legacy-hmac-hosted-cleanup.py
+python3 scripts/legacy-hmac/check-legacy-hmac-hosted-cleanup.py --generic
+python3 scripts/legacy-hmac/check-legacy-hmac-hosted-cleanup.py --target aarch64-unknown-linux-gnu --toolchain 1.99.1
+python3 scripts/legacy-hmac/check-legacy-hmac-hosted-cleanup.py --target aarch64-unknown-linux-gnu --toolchain 1.99.1 --generic
+python3 scripts/legacy-hmac/check-legacy-hmac-hosted-cleanup.py --target aarch64-apple-darwin --toolchain 1.99.1
+python3 scripts/legacy-hmac/check-legacy-hmac-hosted-cleanup.py --target aarch64-apple-darwin --toolchain 1.99.1 --generic
+python3 scripts/legacy-hmac/test-legacy-hmac-cleanup.py
+python3 scripts/legacy-hmac/test-legacy-hmac-engine-cleanup.py
+python3 scripts/legacy-hmac/test-legacy-hmac-execution-admission.py
+python3 scripts/legacy-hmac/test-legacy-hmac-execution-cleanup.py
+python3 scripts/legacy-hmac/test-legacy-hmac-execution-construct.py
+python3 scripts/legacy-hmac/test-legacy-hmac-execution-handoff.py
+python3 scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py
+python3 scripts/legacy-hmac/test-legacy-hmac-hosted-package.py
+python3 scripts/legacy-hmac/test-legacy-hmac-md5-caller.py
+python3 scripts/legacy-hmac/test-legacy-hmac-md5-cleanup.py
+python3 scripts/legacy-hmac/test-legacy-hmac-md5-consumer-internal.py
+python3 scripts/legacy-hmac/test-legacy-hmac-md5-consumer-return.py
+python3 scripts/legacy-hmac/test-legacy-hmac-md5-descriptors.py
+python3 scripts/legacy-hmac/test-legacy-hmac-md5-handoff.py
+python3 scripts/legacy-hmac/test-legacy-hmac-md5-inner-owner.py
+python3 scripts/legacy-hmac/test-legacy-hmac-md5-inner-report.py
+python3 scripts/legacy-hmac/test-legacy-hmac-md5-keys.py
+python3 scripts/legacy-hmac/test-legacy-hmac-md5-native.py
+python3 scripts/legacy-hmac/test-legacy-hmac-md5-normalization.py
+python3 scripts/legacy-hmac/test-legacy-hmac-md5-outer.py
+python3 scripts/legacy-hmac/test-legacy-hmac-md5-output-path.py
+python3 scripts/legacy-hmac/test-legacy-hmac-md5-pads.py
+python3 scripts/legacy-hmac/test-legacy-hmac-md5-phases.py
+python3 scripts/legacy-hmac/test-legacy-hmac-md5-results.py
+python3 scripts/legacy-hmac/test-legacy-hmac-md5-return-metadata.py
+python3 scripts/legacy-hmac/test-legacy-hmac-md5-setup-reports.py
+python3 scripts/legacy-hmac/test-legacy-hmac-md5-teardown.py
+python3 scripts/legacy-hmac/test-legacy-hmac-native.py
+python3 scripts/legacy-hmac/test-legacy-hmac-package.py
+python3 scripts/legacy-hmac/test-legacy-hmac-timing.py
+python3 scripts/legacy-hmac/check-legacy-hmac-package.py
+python3 scripts/legacy-hmac/check-legacy-hmac-hosted-package.py

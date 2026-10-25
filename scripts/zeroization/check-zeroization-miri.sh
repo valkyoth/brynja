@@ -231,7 +231,25 @@ full_hmac() {
     run_miri -p brynja-crypto-cpu-std --features macos-resident-hmac-acceleration --lib macos_resident::hmac
 }
 
-all_groups=(core sanitization md5 sha1 sha2 sha3 kmac tuplehash parallelhash legacy acceleration static_cpu hmac)
+quick_legacy_hmac() {
+    run_miri -p brynja-legacy-hmac --test bounded md5_short -- --exact
+}
+
+full_legacy_hmac() {
+    # Lifecycle sampling, not a repeat of the full native vector/shape matrices.
+    for identity in md5_short sha1_short md5_long sha1_long output_unwind; do
+        run_miri -p brynja-legacy-hmac --test bounded $identity -- --exact
+    done
+    run_miri -p brynja-legacy-hmac --features sha1-execution --lib execution::retained::tests
+    # These are public metadata/model rejection tests, not native protected workers.
+    run_miri -p brynja-legacy-hmac-std --all-features --lib metadata_and_preselected_tag_policy
+    run_miri -p brynja-legacy-hmac-std --all-features --lib batch_metadata_and_public_admission
+    run_miri -p brynja-legacy-hmac-std --all-features --lib only_pre_entry_thread_errors_are_reusable
+    run_miri -p brynja-legacy-hmac-std --all-features --lib missing_native
+    run_miri -p brynja-legacy-hmac-std --all-features --lib unsupported_target_or_model_never_falls_back
+}
+
+all_groups=(core sanitization md5 sha1 sha2 sha3 kmac tuplehash parallelhash legacy acceleration static_cpu hmac legacy_hmac)
 mode="${1:---full}"
 shift || true
 

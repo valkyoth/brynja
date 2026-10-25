@@ -2,7 +2,7 @@
 
 HMAC keeps one semantic capability. This separate composition belongs to its
 explicit legacy profile, never to the modern or strict facade's algorithm set.
-The listed compiler drivers still need scoped release scheduling/reconciliation.
+Scoped scheduling is registered; execution records still need release reconciliation.
 """
 from pathlib import Path
 import re
@@ -70,7 +70,7 @@ RECORD = {
                  *[command.split()[1] for command in CHECKS]],
 }
 SOURCE_TREES = (LEAF.rstrip('/'), HOST.rstrip('/'), "scripts/legacy-hmac",
-                *("assurance/legacy-hmac-" + name for name in (*FIXTURES, "timing")))
+                *("assurance/legacy-hmac-" + name for name in (*FIXTURES, "timing", "policy")))
 
 
 def reviewed_paths(root=ROOT):

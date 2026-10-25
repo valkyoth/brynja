@@ -73,5 +73,33 @@ conversion test, not a general proof about LLVM undefined behavior.
   release qualification are separate requirements. Passing this compiler
   checker alone does not make the release ready.
 
+## Verification scheduling
+
+The `legacy_hmac` release family owns both compatibility crates and their
+fixtures. Its own implementation changes do not select modern HMAC or unrelated
+hash families. Shared SHA-1/MD5 implementations, protected-resource code and
+shared HMAC verifier/compiler helpers still select the consuming family.
+
+The release catalog includes the five compiler-check drivers, their mutation
+suites and both extracted-package consumers. Expensive compiler/mutation checks
+remain qualification work, not routine push CI. The hosted driver is scheduled
+for the 16 profiles above. Compatibility tests cover both crates; native
+hardware and residency observations remain separately collected evidence.
+
+Dynamic-analysis coverage has deliberately bounded, explicit meanings:
+
+- Eleven individually schedulable Miri tasks cover short/long-key portable
+  lifecycles, output unwinding, retained-owner state transitions and public
+  hosted metadata/rejection models. They do not execute native protected workers.
+- ASan/LeakSanitizer covers portable vectors/contracts and public hosted metadata,
+  with leak detection and fatal sanitizer exits forced in the child environment.
+- Two Kani harnesses prove invalid tag-width rejection through the real public
+  MD5/SHA-1 HMAC constructors for symbolic widths and one-byte keys. This is not
+  a proof of HMAC cryptographic correctness, all key lengths or valid construction.
+
+An older hash-family or modern-HMAC receipt does not cover these new commands.
+Local focused development runs are not detached release receipts or independent
+review. Scheduling a check does not claim it has run on every target.
+
 The author-run regression results and local log locations are recorded in the
 [v0.25.1 development notes](../release-notes/RELEASE_NOTES_0.25.1.md).

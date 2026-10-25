@@ -15,7 +15,7 @@ import scope_hmac
 
 
 ROOT = Path(__file__).resolve().parents[2]
-GROUPS = ("core", "sanitization", "md5", "sha1", "sha2", "sha3", "kmac", "tuplehash", "parallelhash", "legacy", "acceleration", "static_cpu", "hmac")
+GROUPS = ("core", "sanitization", "md5", "sha1", "sha2", "sha3", "kmac", "tuplehash", "parallelhash", "legacy", "acceleration", "static_cpu", "hmac", "legacy_hmac")
 FULL_EXACT = {
     "Cargo.lock",
     "Cargo.toml",
@@ -28,6 +28,8 @@ FULL_PREFIXES = ("scripts/zeroization/", ".cargo/")
 BASE_SCRIPT_PREFIXES = tuple("scripts/" + category + "/" for category in (
     "repository", "release", "assurance", "ci", "standards", "pki", "protocols"))
 GROUP_PREFIXES = {
+    "legacy_hmac": ("crates/brynja-legacy-hmac/", "crates/brynja-legacy-hmac-std/",
+                    "scripts/legacy-hmac/", "assurance/legacy-hmac-", "security/legacy-hmac/"),
     "hmac": ("crates/brynja-mac-hmac/", "scripts/hmac/", "assurance/hmac-"),
     "static_cpu": ("assurance/static-cpu-execution/", "assurance/hosted-cpu-execution/",
                    "assurance/cpu-admission-fixture/", "scripts/cpu/",
@@ -85,16 +87,17 @@ GROUP_PREFIXES = {
 DOWNSTREAM = {
     # SHA-2 now consumes operational CPU authorities. Recheck both sides of
     # this integration; SHA-3 still only has its separately tested candidates.
-    "static_cpu": {"sha2", "sha3"},
+    "static_cpu": {"sha2", "sha3", "legacy_hmac"},
     "acceleration": set(),
     "core": {"sanitization", "md5", "sha1", "sha2", "sha3", "kmac", "tuplehash", "parallelhash", "legacy"},
     "sanitization": set(),
-    "md5": {"legacy"},
-    "sha1": {"legacy"},
+    "md5": {"legacy", "legacy_hmac"},
+    "sha1": {"legacy", "legacy_hmac"},
     "legacy": set(),
     "sha2": {"hmac"},
     "sha3": {"kmac", "tuplehash", "parallelhash", "hmac"},
     "hmac": set(),
+    "legacy_hmac": set(),
     "kmac": set(),
     "tuplehash": set(),
     "parallelhash": set(),
@@ -130,6 +133,14 @@ def select(paths: list[str], *, downstream=None) -> tuple[bool, tuple[str, ...]]
             return True, GROUPS
         if path in FULL_EXACT or path.startswith(FULL_PREFIXES):
             return True, GROUPS
+        if path.startswith('scripts/hmac/hmac_'):
+            # Legacy compiler checkers import the modern HMAC proof helpers.
+            # This is a verifier dependency, NOT a modern-algorithm dependency.
+            selected.add('legacy_hmac')
+        if path in {'scripts/cryptography/legacy_hmac_owner_contract.py',
+                    'scripts/cryptography/legacy_hmac_owner_tests.py'}:
+            selected.add('legacy_hmac')
+            continue
         if path.startswith(("crates/brynja-crypto-cpu-std/src/strict_hmac/",
                             "crates/brynja-crypto-cpu-std/src/macos_resident/hmac/")) or path in {"crates/brynja-crypto-cpu-std/src/execution/hmac.rs",
                     "crates/brynja-crypto-cpu-std/tests/hmac.rs",

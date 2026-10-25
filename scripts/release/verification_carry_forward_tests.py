@@ -186,7 +186,7 @@ class CarryForwardTests(unittest.TestCase):
                   ('sha3', 'kmac', 'tuplehash', 'parallelhash', 'hmac'))
             for path, groups in (
                 ('crates/brynja-hash-sha2/src/lib.rs', ('sha2', 'hmac')),
-                ('crates/brynja-legacy-md5/src/lib.rs', ('md5', 'legacy')),
+                ('crates/brynja-legacy-md5/src/lib.rs', ('md5', 'legacy', 'legacy_hmac')),
                 ('scripts/sha2/driver.py', ('sha2', 'hmac')),
                 ('crates/brynja-hash-sha3/src/lib.rs', ('sha3', 'kmac', 'tuplehash', 'parallelhash', 'hmac')),
             ):

@@ -594,7 +594,7 @@
     "docs/keccak-batch-execution.md": "b648b922c1a87bce28a4ca8d2655ba3b32b3d609ca2ef070794f9f48aa9dd418f4047af2c0052a81628ae7b81c06b519c6a5b8add3345530639f94e465c2560c",
     "rust-toolchain.toml": "2f30e26567a1311b5da9845c651177ab9ab71f6d5ee1d3b48bf704b69b673ff37548cebf4464d87342ecdb5bc4b813f320c39e7c0e4a77628c281729802cedaf",
     "scripts/assurance/check-kani.sh": "5ec8cd411e979973da6952a3c33509908dab03bea2f344546e18fc63dcb95bd4272a51fa7a4558fb45ad633a07dc243d24fa55acc34fec674ca8103d3323d49d",
-    "scripts/checks.sh": "52a19525da30dccf2ba9990862c734f2d3349c50f1ac45254f6881441d46626bc7c0448dada65eebdc352d3d8b608d6afc9232be9c028f9fa1f7472e3b07f8ff",
+    "scripts/checks.sh": "4b19261c04b7047bbeda69bbf2f9b1614cc0f5b829e8dae91b88cfece65ebf7c1b6bfa04bc20f84e5478c8a9b91f93d47a46bcebf489593439dbad1b553d0ac8",
     "scripts/sha2/check-sha2-execution.py": "f2a458a865543d3d13d454cd38a6397d164046b605b102fbf7083b6311ddb6e86d6402457f7f4987345a5caa9d78b15f48771ec7bd42d93a428c44a3fc49e15c",
     "scripts/sha2/sha2_execution_faults.py": "f3ef0996938749470ab2f1407bbcd9ac62d6e5646df6abbda033a032453a09e43a36d255de7999840961bedcc8ef30afde4c3efcdcd46231c2431f8a2838e717",
     "scripts/sha3/capture-keccak-batch-native.py": "155a7dae2f29f4e41fbcad4991fde601ffa1abab14d64c3e2c937a9043b3a90d5ef679b484e357b116a19e38efaf70d8de146677500e979342d1de1853aaa61b",
@@ -612,9 +612,9 @@
     "scripts/sha3/test-keccak-batch-package.py": "d331a110bf694cf12a4a18578acbe066f6ae6989ce164aa45da5de34abcf0db2a895bf8d7a168d58cb0cb4f49d659b3628175d3f8ca93e91f456ba6af0e9b020",
     "scripts/sha3/test-keccak-batch-policy.py": "785eba0ee66f37fe9b71233d6e9864d178030663439c04ddf4e19dfcb302f834cd7b22a2cb8930d300227cc5ab98b57890d94a58b1fac55b3333edfefddbc132",
     "scripts/sha3/test-keccak-hardened-batch.py": "b95f8e595cd14e9b2cc669a60dd26ce8f60b9a1b43d90d716da08cd03fa7be68aca61f49aef4150a445432b6495ca06642cc15dfc46f4d4b620575ee4598cace",
-    "scripts/zeroization/check-zeroization-miri.sh": "0e9afa459fd6f96307a43d81f16713010169a998b2eec1a7d10b5f9f3285bc2a1f6b1772edb8c38a6fbd1b841a55f3ab0e51583ce5afadf8f7c0824fb48522d6",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "7c36bf4e5a295728c658ad5813b4e376ff6051bb9e2c0b2daad145b6f0ca55bf0217300115b6bf00612ee9576609691bc3bb71ed91a538490ac8f7a2f35d0cb2",
-    "scripts/zeroization/miri_scope.py": "f9735ed689b6eae94ce821320b78e15b717b6285a075ab716ebbd3cced9dd1e7667f8df94598d3befb509de853d0f0d6aa15e9ba5b2bea2f666ffc5ba7398013"
+    "scripts/zeroization/check-zeroization-miri.sh": "ba00fa4fcdf0a095a9a56b989d89fbac3ccb77d8eb06f0677c0ebbcac7514875ca9ca96ae8273a9c79d5b9566098096a534b33204167f65b09b9c9ea6795ebf8",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "0bbcbecba986e8e18867ea8e766e6322bc83bb718595554a126b7dcbc6a33a60af25c2906736dc0df3faa67724519b0fee0fea7deaacc0eed54a823e657ee3f2",
+    "scripts/zeroization/miri_scope.py": "89d76134a4a8957df1aace77f2212c94a63783d1180d8ebaa6e7ef72a28274ab30df6e1fa6fa650ec842335e755bb1e7d05565f3560270a219d3fc07f4b218c4"
   },
   "schema": 1,
   "version": "0.24.47"

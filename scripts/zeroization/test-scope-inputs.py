@@ -77,7 +77,7 @@ def semantic_tests():
     # Adding the registered model leaves all existing full campaign bodies intact.
     start = runner.index(b'quick_acceleration() {')
     end = runner.index(b'quick_static_cpu()', start)
-    previous = (runner[:start] + runner[end:]).replace(b'legacy acceleration static_cpu hmac)', b'legacy static_cpu hmac)')
+    previous = (runner[:start] + runner[end:]).replace(b'legacy acceleration static_cpu hmac legacy_hmac)', b'legacy static_cpu hmac legacy_hmac)')
     assert inputs.runner_groups(previous, runner) == {'acceleration'}
     rejected(lambda: inputs.runner_groups(runner, previous))
     rejected(lambda: inputs.runner_groups(runner, runner.replace(b'run_miri() {', b'run_miri() {\n    false')))
@@ -215,9 +215,9 @@ def git_tests():
             reviewed.write_text(digest.replace('a' * 64, 'b' * 64))
             assert scope.select_repository('v0.24.19', root) == (False, ())
             reviewed.write_text(digest.replace('README.md', 'src/lib.rs'))
-            assert scope.select_repository('v0.24.19', root) == (False, ('sha1', 'legacy'))
+            assert scope.select_repository('v0.24.19', root) == (False, ('sha1', 'legacy', 'legacy_hmac'))
             reviewed.write_text(digest.replace('a' * 64, 'a' * 63))
-            assert scope.select_repository('v0.24.19', root) == (False, ('sha1', 'legacy'))
+            assert scope.select_repository('v0.24.19', root) == (False, ('sha1', 'legacy', 'legacy_hmac'))
             reviewed.write_text(digest)
             (root / 'Cargo.lock').write_bytes(b'package="bad"\nversion=4')
             assert scope.select_repository('v0.24.19', root)[0]
@@ -422,7 +422,7 @@ def oracle_lock_tests():
             return scope.select_repository('v0.24.39')
     assert select() == (False, ('parallelhash',))
     assert select(extra=('crates/brynja-crypto-cpu/src/lib.rs',)) == (
-        False, ('sha2', 'sha3', 'kmac', 'tuplehash', 'parallelhash', 'static_cpu', 'hmac'))
+        False, ('sha2', 'sha3', 'kmac', 'tuplehash', 'parallelhash', 'static_cpu', 'hmac', 'legacy_hmac'))
     # Both additions and removals of a valid fixture remain its owner scope.
     assert select({path: (new, old)}) == (False, ('parallelhash',))
     for bad in (None, new.replace(b'0.1.0', b'9.9.9'),
@@ -454,7 +454,7 @@ def compiler_matrix_tests():
                 side_effect=lambda r, b, p: (old, data) if p == matrix else (None, None)):
             return scope.select_repository('v0.24.49')
     assert select(new) == (False, ())
-    assert select(new, ('crates/brynja-legacy-md5/src/lib.rs',)) == (False, ('md5', 'legacy'))
+    assert select(new, ('crates/brynja-legacy-md5/src/lib.rs',)) == (False, ('md5', 'legacy', 'legacy_hmac'))
     assert select(new.replace(b'"pinned"', b'"changed"'))[0]
     assert select(new.replace(b'["1.98.1","1.99.0"]', b'[]'))[0]
     print('Compiler list changes retain matrix ownership; targets, verifiers and malformed lists reject narrowing')

@@ -219,7 +219,7 @@
     "docs/sha2-hardened-execution.md": "562c7293f492326cf84f2b8dc461a4ac57283748a2ad5fa8de330ec2df53c56f",
     "docs/x86-sha512-execution.md": "5d38f31ba53533a83a50496a5eea48d2b9f6501b560b396d62ce60e6e5a94d1d",
     "package-policy.toml": "8cd1cbca4020dcc65a7d4dac15ad582d8967d772e7fb80c19a0f1d8a2c23f84c",
-    "scripts/checks.sh": "7f8f37959496401456e46ed565a793b9944014bf9a9e714847a44774d45a7a35",
+    "scripts/checks.sh": "61ca5886d2fcafeef07ab380ac6edd75748b5271d9a34c2f54ea24470deff5d9",
     "scripts/ci/install-sde.sh": "72f37ac72ae30b72f7155f09a51343ff9eecdb226c5898aad53eb3c0e0fa9c86",
     "scripts/release/native_dependency_scope.py": "5a94f433ef5acd7bc0abd0175e57746cca78d7d3470fcd98c50d8014b4ced5c5",
     "scripts/release/native_evidence_approval.py": "07131a732ae71264f5bca5750437f19905ff4d65e8b489e46b348f066e73e1a4",
@@ -265,8 +265,8 @@
     "scripts/sha2/x86_sha512_package.py": "9aaedd8512a1345cf289aff28b1edeb4576f4373b732831d8d713b96d6bfc4b9",
     "scripts/sha2/x86_sha512_regressions.py": "0578ea68015eaf5857dfd818e5d8035665344b81dca1c2c3a1334d00cf702035",
     "scripts/tag_gate.sh": "35d3634edb876be2fee01cc8313187c0339fb6884ccd5999eaf6f378b8480a6e",
-    "scripts/zeroization/check-zeroization-miri.sh": "edab9b708f7c012c6a67bd9420dd157c07e5f7c6e1d14506c73060d53d53e99e",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "94814f2d552295d2161fdedb4b6b0ee1bd23457073236dc4a3b0494d436508f2"
+    "scripts/zeroization/check-zeroization-miri.sh": "5d220cd4ed57a0eb6d9dc5d771039d6df91152e1d5502919507b66a4ec84f40d",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "83b05d7162729f78d6a206e0beb1e81c5e2770911edc808d10475423e1d958b7"
   },
   "version": "0.24.34"
 }

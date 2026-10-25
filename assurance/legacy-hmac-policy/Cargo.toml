@@ -1,0 +1,14 @@
+[package]
+name = "brynja-legacy-hmac-policy-fixture"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[workspace]
+
+[dependencies]
+brynja-legacy-hmac = { path = "../../crates/brynja-legacy-hmac", version = "=0.1.0", default-features = false }
+
+[lints.rust]
+unexpected_cfgs = { level = "deny", check-cfg = ['cfg(kani)'] }

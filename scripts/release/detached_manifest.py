@@ -144,7 +144,8 @@ def verifier_commands(root: Path, selected: list[dict]) -> dict:
                 or argv[:2] == ["python3", "scripts/zeroization/run-miri-task.py"]):
             names.add("miri")
         if (argv[0] == "scripts/assurance/check-kani.sh"
-                or argv[:2] == ["python3", "scripts/hmac/check-hmac-kani.py"]) and "--policy-only" not in argv:
+                or argv[:2] in (["python3", "scripts/hmac/check-hmac-kani.py"],
+                                ["python3", "scripts/legacy-hmac/check-legacy-hmac-kani.py"])) and "--policy-only" not in argv:
             names.add("kani")
     if not names:
         return {}

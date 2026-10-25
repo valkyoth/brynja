@@ -134,7 +134,7 @@ def miri_dependency_tests():
         portable = record.replace(b' "brynja-crypto-cpu",\n', b'').replace(b' "brynja-crypto-cpu-std",\n', b'')
         raw = raw[:start] + portable + raw[end:]
     edges = miri_dependencies.graph(raw, raw)
-    assert plans.scope.closure({'static_cpu'}, downstream=edges) == ('sha2', 'static_cpu', 'hmac')
+    assert plans.scope.closure({'static_cpu'}, downstream=edges) == ('sha2', 'static_cpu', 'hmac', 'legacy_hmac')
     assert plans.scope.closure({'sha3'}, downstream=edges) == ('sha3', 'kmac', 'tuplehash', 'parallelhash', 'hmac')
     assert 'sha3' in plans.scope.closure({'core'}, downstream=edges)
     import tomllib
@@ -212,7 +212,7 @@ def runner_tests() -> None:
     assert run('kani', miri_only, '--approve-full', 'a' * 64) == 0
     assert executed == [('scripts/assurance/check-kani.sh --policy-only',)]
     assert run('miri', miri_only, '--approve-full', 'a' * 64) == 0
-    assert len(executed) == 579
+    assert len(executed) == 590
     assert run("repository", sample(public=True)) == 0
     assert any("md5-differential" in c[0] for c in executed)
     with patch.object(commands, "matrix_commands", side_effect=ValueError("unknown matrix")):

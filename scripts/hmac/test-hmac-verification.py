@@ -117,7 +117,9 @@ class ScopeTests(unittest.TestCase):
             with self.subTest(path=path):
                 full, groups = commands.scope.select([path])
                 self.assertFalse(full)
-                self.assertEqual(groups, ("hmac",))
+                # Shared compiler/verifier helpers are also consumed by legacy HMAC.
+                expected = ("hmac", "legacy_hmac") if path.startswith("scripts/hmac/hmac_") else ("hmac",)
+                self.assertEqual(groups, expected)
         for family in ("sha2", "sha3", "core", "static_cpu"):
             self.assertIn("hmac", commands.scope.closure({family}))
         for path in ("crates/brynja-crypto-cpu-std/src/execution/mod.rs",

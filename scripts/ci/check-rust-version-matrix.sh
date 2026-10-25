@@ -15,6 +15,8 @@ for toolchain in "${toolchains[@]}"; do
     # BEGIN MATRIX CATALOG
     cargo "+$toolchain" check --workspace --all-features
     cargo "+$toolchain" test --locked --offline -p brynja-mac-hmac --all-features
+    cargo "+$toolchain" test --locked --offline -p brynja-legacy-hmac --all-features
+    cargo "+$toolchain" test --locked --offline -p brynja-legacy-hmac-std --all-features
     cargo "+$toolchain" test --locked --offline -p brynja-crypto-cpu-std --features hmac-execution --test hmac
     cargo "+$toolchain" test --locked --offline -p brynja-crypto-cpu-std --features strict-hmac-acceleration --lib strict_hmac
     cargo "+$toolchain" test --locked --offline -p brynja-crypto-cpu-std --features macos-resident-hmac-acceleration --lib macos_resident::hmac

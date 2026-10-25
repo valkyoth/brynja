@@ -39,7 +39,7 @@ class MiriCaseTests(unittest.TestCase):
         self.assertEqual(catalog.selected(plan, ['matrix'], plan['fingerprint']), [])
         miri = catalog.selected(plan, ['miri'], plan['fingerprint'], miri_tasks=True,
                                 miri_profile='routine')
-        self.assertEqual(len(miri), 579)
+        self.assertEqual(len(miri), 590)
         old = {'phase': 'asan', 'command': 'cargo test -p brynja-hash-sha2',
                'argv': ['cargo', 'test', '-p', 'brynja-hash-sha2'], 'stdin': None,
                'environment': {}}
@@ -56,7 +56,7 @@ class MiriCaseTests(unittest.TestCase):
         self.assertTrue(plans.requires_full({**plan, 'full_phases': ['repository']}, 'command'))
 
     def test_profile_task_sets_are_unique_and_fit_detached_bound(self):
-        for profile, count in (('existing-full', 100), ('routine', 579), ('extended', 4111)):
+        for profile, count in (('existing-full', 111), ('routine', 590), ('extended', 4122)):
             commands = miri_tasks.commands(plans.ROOT, list(plans.scope.GROUPS), profile)
             self.assertEqual(len(commands), count)
             self.assertEqual(len({tuple(command) for command in commands}), count)
@@ -78,7 +78,7 @@ class MiriCaseTests(unittest.TestCase):
         plan = {'stage': 'internal', 'approval_required': False, 'groups': groups,
                 'full_phases': list(catalog.PHASES),
                 'verifiers': {phase: groups for phase in ('miri', 'asan', 'kani')}}
-        for profile, minimum in (('routine', 579), ('extended', 4111)):
+        for profile, minimum in (('routine', 590), ('extended', 4122)):
             commands = catalog.selected(plan, list(catalog.PHASES), None,
                                         miri_tasks=True, miri_profile=profile)
             self.assertEqual({command['phase'] for command in commands}, set(catalog.PHASES))

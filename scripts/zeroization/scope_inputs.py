@@ -15,6 +15,15 @@ LIMIT = 4 * 1024 * 1024
 GENERATED_REGISTER_LIMIT = 8 * 1024 * 1024
 GENERATED_REGISTERS = frozenset({'standards/protocol-surfaces.json'})
 PACKAGES = {
+    'brynja-legacy-hmac': 'legacy_hmac',
+    'brynja-legacy-hmac-std': 'legacy_hmac',
+    'brynja-legacy-hmac-cleanup': 'legacy_hmac',
+    'brynja-legacy-hmac-engine-cleanup': 'legacy_hmac',
+    'brynja-legacy-hmac-execution-cleanup': 'legacy_hmac',
+    'brynja-legacy-hmac-md5-cleanup': 'legacy_hmac',
+    'brynja-legacy-hmac-hosted-cleanup': 'legacy_hmac',
+    'brynja-legacy-hmac-timing': 'legacy_hmac',
+    'brynja-legacy-hmac-policy-fixture': 'legacy_hmac',
     'brynja-mac-hmac': 'hmac',
     'brynja-hmac-policy-fixture': 'hmac',
     'brynja-hmac-cleanup': 'hmac',
@@ -357,6 +366,9 @@ def fixture_lock(data: bytes, workspace: bytes, manifest: bytes,
         raise ValueError('unknown fixture lock schema')
     package = document(manifest)['package']
     registered_consumer = package['name'] in {
+        'brynja-legacy-hmac-cleanup', 'brynja-legacy-hmac-engine-cleanup',
+        'brynja-legacy-hmac-execution-cleanup', 'brynja-legacy-hmac-md5-cleanup',
+        'brynja-legacy-hmac-hosted-cleanup', 'brynja-legacy-hmac-timing',
         'brynja-general-sha512-t-consumer', 'brynja-hmac-cleanup',
         'brynja-hmac-engine-cleanup', 'brynja-hmac-execution-cleanup', 'brynja-hmac-timing'}
     if package.get('publish') is not False or not (package['name'].endswith('-fixture') or registered_consumer):

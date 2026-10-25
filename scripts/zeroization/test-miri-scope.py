@@ -76,7 +76,7 @@ def main() -> int:
     expect(
         ["crates/brynja-hash-core/src/lib.rs"],
         full=False,
-        groups=("md5", "sha1", "sha2", "sha3", "kmac", "tuplehash", "parallelhash", "legacy", "hmac"),
+        groups=("md5", "sha1", "sha2", "sha3", "kmac", "tuplehash", "parallelhash", "legacy", "hmac", "legacy_hmac"),
     )
     expect(
         ["crates/brynja-core/src/secret_memory.rs"],
@@ -88,12 +88,12 @@ def main() -> int:
         full=False,
         groups=("sanitization",),
     )
-    expect(["crates/brynja-legacy-sha1/src/lib.rs"], full=False, groups=("sha1", "legacy"))
-    expect(["crates/brynja-legacy-md5/src/lib.rs"], full=False, groups=("md5", "legacy"))
+    expect(["crates/brynja-legacy-sha1/src/lib.rs"], full=False, groups=("sha1", "legacy", "legacy_hmac"))
+    expect(["crates/brynja-legacy-md5/src/lib.rs"], full=False, groups=("md5", "legacy", "legacy_hmac"))
     expect(["assurance/legacy-hash-public-api/src/lib.rs"], full=False, groups=("legacy",))
     expect(["assurance/legacy-hash-final/src/lib.rs"], full=False, groups=("legacy",))
     expect(["assurance/acceleration-contract/src/lib.rs"], full=False, groups=("acceleration",))
-    cpu_groups = ("sha2", "sha3", "kmac", "tuplehash", "parallelhash", "static_cpu", "hmac")
+    cpu_groups = ("sha2", "sha3", "kmac", "tuplehash", "parallelhash", "static_cpu", "hmac", "legacy_hmac")
     for path in ('assurance/windows-enclave-probe/worker.c',
                  'assurance/windows-enclave-probe/window_x64.asm',
                  'assurance/windows-enclave-probe/new_worker.rs',
@@ -118,10 +118,10 @@ def main() -> int:
     expect(["../escape"], full=True, groups=miri_scope.GROUPS)
 
     status, commands = run_profile("--focused")
-    assert status == 0 and len(commands) == 13
+    assert status == 0 and len(commands) == 14
     assert sum('public_model_never_activates_current_kernels' in c for c in commands) == 1
     status, focused = run_profile("--focused", "acceleration")
-    assert status == 0 and len(focused) == 13
+    assert status == 0 and len(focused) == 14
     assert sum(c.endswith('assurance/acceleration-contract/Cargo.toml --lib') for c in focused) == 1
     assert not any('public_model_never_activates_current_kernels' in c for c in focused)
     assert [c for c in commands if 'acceleration-contract' not in c] == [
@@ -131,7 +131,7 @@ def main() -> int:
     status, commands = run_profile(
         "--focused", "sha3", "kmac", "tuplehash", "parallelhash"
     )
-    assert status == 0 and len(commands) == 38
+    assert status == 0 and len(commands) == 39
     assert sum('batch::tests::bounded_batch_lifecycle' in c for c in commands) == 1
     assert sum('batch::tests::shape_staging_empty_and_scalar_tail_boundaries' in c for c in commands) == 1
     assert not any('batch::tests::request_failures_are_atomic_and_reusable' in c for c in commands)
@@ -180,7 +180,7 @@ def main() -> int:
     status, selected_commands = run_profile("--selected")
     assert status == 2 and not selected_commands
     status, commands = run_profile("--full")
-    assert status == 0 and len(commands) == 100
+    assert status == 0 and len(commands) == 111
     for suffix in ('--lib cpu::scratch::tests', '--lib cpu::secret::tests',
                    '--test hardened_execution bounded_portable_cleanup_smoke'):
         assert sum('brynja-legacy-md5 --features hardened-execution ' + suffix in c for c in commands) == 1

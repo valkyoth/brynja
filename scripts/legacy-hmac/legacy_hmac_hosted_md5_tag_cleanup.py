@@ -14,6 +14,13 @@ import legacy_hmac_md5_row_contracts as contracts
 require, syntax, V, L = copy.require, copy.syntax, copy.V, copy.L
 
 
+def exception_pointer(model, args, point):
+    require(len(args) == 1, 'MD5 panic handoff ABI changed')
+    definition = model.defs.get(syntax.operand(args[0]))
+    require(definition and re.fullmatch(r'extractvalue \{ ptr, i32 \} ' + V + ', 0', definition[0])
+            and model.before(definition[1], point), 'MD5 panic handoff is not an exception pointer')
+
+
 class Cleanup:
     def __init__(self, copies, panic):
         self.c, self.m, self.panic = copies, copies.m, panic
@@ -28,13 +35,14 @@ class Cleanup:
                             if self.m.names.get(s, '').endswith('::md5_compiled::worker::checkpoint')
                             or self.m.names.get(s) == copy.EXPOSE)
         self.owner = copies.tags
+        self.result_owner = copies.auth.mapped
 
     def address(self, value):
         pointer = self.m.pointer(value)
         return pointer if pointer and pointer[0] == self.owner else None
 
-    def walk(self, label, offset, dropped=False, ended=False, unwinding=False):
-        state = label, offset, dropped, ended, unwinding
+    def walk(self, label, offset, dropped=False, ended=False, unwinding=False, result_ended=False):
+        state = label, offset, dropped, ended, unwinding, result_ended
         require(state not in self.active, 'MD5 tag cleanup cycle')
         if state in self.visited:
             return
@@ -45,17 +53,15 @@ class Cleanup:
         for index in range(offset, len(rows)):
             point, line = (label, index), rows[index].split(', !', 1)[0]
             self.points.add(point)
+            result_use = any((address := self.m.pointer(v)) and address[0] == self.result_owner
+                             for v in re.findall(V, line))
             call = self.calls.get(point)
             if call:
                 symbol, args = call
                 name = self.m.names.get(symbol, symbol)
                 if name == 'std::panicking::catch_unwind::cleanup':
                     require(unwinding and dropped, 'MD5 panic handoff precedes tag destruction')
-                    require(len(args) == 1, 'MD5 panic handoff ABI changed')
-                    value = syntax.operand(args[0])
-                    definition = self.m.defs.get(value)
-                    require(definition and re.fullmatch(r'extractvalue \{ ptr, i32 \} ' + V + ', 0', definition[0])
-                            and self.m.before(definition[1], point), 'MD5 panic handoff is not an exception pointer')
+                    exception_pointer(self.m, args, point)
                     self.handoffs.add(('unwind', point))
                     break
                 if name == copy.DROP:
@@ -66,6 +72,12 @@ class Cleanup:
                     self.drops.add(point)
                     self.routes.setdefault(point, set()).add(unwinding)
                 elif symbol == 'llvm.lifetime.end.p0':
+                    result_address = self.m.pointer(syntax.operand(args[-1]))
+                    if result_address and result_address[0] == self.result_owner:
+                        require(result_address[1] == 0 and not result_ended and dropped and
+                                (len(args) == 1 or args == ['i64 120', args[-1]]),
+                                'MD5 moved Result expires early or repeatedly')
+                        result_ended = True
                     address = self.address(syntax.operand(args[-1]))
                     if address:
                         require(address[1] == 0 and dropped and not ended and
@@ -86,23 +98,27 @@ class Cleanup:
                     # live-owner calls must preserve an explicit unwind edge.
                     require(self.panic == 'abort' or dropped or point == self.c.auth.report
                             or 'invoke ' in line, 'MD5 live tag call lost unwind cleanup')
+                require(not result_use or (point == self.c.auth.report and not result_ended)
+                        or symbol == 'llvm.lifetime.end.p0', 'MD5 moved Result reused or escapes')
                 if 'invoke ' in line:
                     require(index + 1 < len(rows), 'MD5 tag cleanup invoke lost continuation')
                     edge = rows[index + 1].split(', !', 1)[0]
                     match = re.fullmatch('to label %' + L + ' unwind label %' + L, edge)
                     require(match, 'MD5 tag cleanup invoke edges changed')
                     self.points.add((label, index + 1))
-                    self.walk(match[1], 0, dropped, ended, unwinding)
+                    self.walk(match[1], 0, dropped, ended, unwinding, result_ended)
                     if name != copy.DROP:
-                        self.walk(match[2], 0, dropped, ended, True)
+                        self.walk(match[2], 0, dropped, ended, True, result_ended)
                     break
             elif point == self.c.env['result']:
-                require(dropped and ended and not unwinding, 'MD5 result committed before tag cleanup/lifetime end')
+                require(dropped and ended and result_ended and not unwinding,
+                        'MD5 result committed before tag cleanup/Result lifetime end')
                 self.handoffs.add(('normal', point))
                 break
             elif re.search(r'\b(?:call|invoke)\b', line):
                 require(False, 'MD5 tag cleanup gained an indirect call')
             else:
+                require(not result_use, 'MD5 moved Result read, modified or aliased')
                 require(not line.startswith(('store ', 'fence ')) and not re.search(r'\b(?:atomicrmw|cmpxchg)\b', line),
                         'MD5 tag cleanup gained an unreviewed write')
                 if re.search(r'\bload\b', line):
@@ -122,7 +138,7 @@ class Cleanup:
                 require(branch, 'MD5 tag cleanup branch changed')
                 for target in branch.groups():
                     if target is not None:
-                        self.walk(target, 0, dropped, ended, unwinding)
+                        self.walk(target, 0, dropped, ended, unwinding, result_ended)
                 break
             require(not line.startswith(('ret ', 'resume ', 'switch ')) and line != 'unreachable',
                     'MD5 tag cleanup bypasses reviewed completion')

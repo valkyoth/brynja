@@ -2212,6 +2212,43 @@ Logs remain local at
 `release-reports/v0251-hosted-md5-tag-cleanup-composed.log` and
 `release-reports/v0251-hosted-md5-tag-cleanup-matrix.log`.
 
+### Hosted MD5 pending-Result ownership and lifetime completion
+
+The mapped authentication Result now has its own ownership-path check across
+all three discriminant encodings: the two successful active-lane Boolean
+values carry an owner, while the error encoding carries none. Each is followed
+through both successful health-selector encodings, health rejection and, for
+unwind builds, health-call unwinding. The actual discriminator loads and
+branches must transfer the successful owner only after health admission, or
+destroy its embedded region exactly once before rejection/panic handoff.
+An error Result must never dispatch that destructor.
+
+The preceding source-to-mapped-Result move and tag-byte transfers retain their
+independent typed transport checks. Normal error completion must end the
+120-byte mapped Result lifetime; after transfer, the returned-tag checker now
+also requires that lifetime to end exactly once after tag destruction and
+before worker Result storage. Reuse, interior lifetime ends, wrong-owner Drop,
+missing cleanup and unreviewed effects are rejected. No production Rust,
+dependencies or release-gate policy changed.
+
+This composes existing source-bound nonthrowing core Drop and reviewed leaf
+consumer cleanup premises. It does not add a fatal-abort or whole-process
+erasure claim, nor qualify complete host output-loan/quarantine transactions.
+Final cross-projection reconciliation and those host transactions remain open.
+
+The focused pending-Result regressions cover 54 ownership/health outcomes and
+reject 183 emitted-artifact mutations, including eight missing-drop defects
+that pass the preceding projections. Six compiled Rust defects are rejected;
+restored Linux and Apple compiler baselines pass. All 16 selected
+compiler/target/panic/SIMD profiles pass. The composed nine-group regression
+run passes in 226.945 seconds, retaining the prior returned-tag, tag-copy,
+decision, Result-transport, health and dependency-graph checks. Formatting,
+metadata, script inventory, assurance policy and documentation links also pass.
+These are author-operated compiler
+checks, not native capture or a full-family sweep. Logs remain local at
+`release-reports/v0251-hosted-md5-result-cleanup-final-composed.log` and
+`release-reports/v0251-hosted-md5-result-cleanup-matrix.log`.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -2271,7 +2308,8 @@ Logs remain local at
   final Result storage now have dedicated checks. Tag-to-output copies and their
   normal-return copy-error continuations now have dedicated checks. Post-transfer
   tag destruction/lifetime paths now cover normal and recoverable unwind exits.
-  Pre-transfer Result cleanup remains open. Final
+  Pending Result ownership, its health-failure/unwind destruction and the
+  moved Result's final lifetime now have dedicated composing checks. Final
   MD5 composition review and the remaining hosted-worker keyed
   computation, complete output transactions and quarantine compiler obligations
   remain open.

@@ -96,6 +96,7 @@ class Transport:
         error, success = cursor.branch(rejected)
         cursor = self.cursor((success, 0))
         mapped = cursor.copy(self.source, 120)
+        self.mapped = mapped
         self.root(mapped, 120)
         common, = cursor.take('br label %' + t.L)
         cursor.end()

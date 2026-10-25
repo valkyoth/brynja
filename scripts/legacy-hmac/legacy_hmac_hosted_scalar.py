@@ -1,7 +1,7 @@
 """Scalar constructor ownership and retained-state lifetime/cleanup composition.
 
-Constructor ownership/scratch is checked before retained-state dispatch. Full
-normalization-result provenance remains separate; this is not worker qualification.
+Constructor ownership/scratch and normalization-result provenance are checked
+before retained-state dispatch. This is not complete worker qualification.
 """
 from functools import lru_cache
 import re
@@ -13,6 +13,7 @@ import legacy_hmac_hosted_keyed as keyed
 import legacy_hmac_hosted_constructor as constructor
 import legacy_hmac_hosted_storage as storage
 import legacy_hmac_hosted_construct as construct
+import legacy_hmac_hosted_normalization as normalization
 
 require, syntax, V = keyed.require, keyed.syntax, keyed.V
 
@@ -107,9 +108,12 @@ def interpreter(identity, panic):
     return walker
 
 
-def check(body, names, compiler, identity, envelope, definitions, aliases, panic):
+def check(body, names, compiler, identity, envelope, definitions, aliases, panic, initial=None):
     model = Retained(body, names, compiler, identity, envelope)
-    construct.check(model, envelope, panic)
+    prefix = construct.check(model, envelope, panic)
+    if initial is None:
+        initial = normalization.contracts.validate((definitions, aliases, names))[identity]
+    normalization.check(prefix, initial)
     storage.check(model)
     for rhs, point in model.defs.values():
         loaded = re.match(r'load [^,]+, ptr (' + V + '),', rhs)

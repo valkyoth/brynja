@@ -1746,6 +1746,69 @@ This is author-operated compiler inspection, not independent review or new
 native execution. No production Rust, dependency, shared modern-HMAC checker,
 release gate or approval record changes in this checkpoint.
 
+### Hosted scalar constructor provenance completion
+
+The remaining scalar constructor provenance projection now composes with the
+ownership/scratch interpreter and retained-state checks. It follows the actual
+worker graph from pad initialization to the first keyed pad phase, and follows
+live normalization-region ownership through recoverable failure/unwind cleanup.
+It partitions the full captured key-length domain into empty, 1–64-byte and
+long-key routes rather than checking just a few concrete key lengths. Changed
+thresholds or routes, skipped normalization/copies and nonzero/overwritten pads
+are rejected.
+
+Independent typed probes in the downstream fixture establish each primitive's
+initial-owner bytes and the success/error `Result<OwnedSecretRegion, _>` layout.
+All three inlined hash initializations must match the independently emitted
+`HardenedSha1::new` / `HardenedMd5::new` probe. This replaces the previous
+public-byte-only initialization premise; primitive cryptographic correctness
+remains separately qualified. The fixture adds direct dependencies on three
+already-resolved local packages, with no additional package or third-party
+dependency in its eleven-package closure.
+
+The normalized digest's result discriminant and pointer/length fields are
+bound to the actual typed finalizer. The region move must retain that provenance
+through its lifetime, borrow for the pad copy and exactly one logical Drop.
+Error results cannot supply payloads or reach the pad phase. The copy must use
+the normalized 20-byte SHA-1 or 16-byte MD5 result, not the original key or an
+unrelated buffer. Its success discriminator is independently pinned; all error
+encodings share the checked failure path. The region is consumed and scratch
+cleared before successful retained-state construction. Raw metadata escapes,
+substituted fields, premature lifetime endings, descriptor reuse and omitted
+normal/error/unwind cleanup are rejected. The existing typed finalizer and core
+region-destructor bodies remain callee premises; compiler copies/registers,
+fatal abort and whole-worker erasure are not covered by this projection.
+
+Focused regressions reject 198 route/copy/error defects, 288 descriptor/lifetime/
+Drop defects and 132 typed-layout/initialization defects. Positive SSA renaming
+is accepted. Twelve additional private Rust constructor mutations compile on
+Linux x86-64 and Apple AArch64 and are then rejected on constructor provenance:
+wrong key-length thresholds, inverted empty-key handling, raw-key substitution,
+digest truncation and discarded copy failure. Private source overrides remain
+exact-path test parameters, not command-line release-validator options, with
+their default rejection and explicit-path checks tested. No repository runtime
+source is mutated by these tests. Logs use the
+`release-reports/v0.25.1-normalization-` prefix.
+
+Final validation passes all sixteen compiler/target/panic/SIMD configurations,
+plus fixture formatting and strict Clippy on Rust 1.90.0 and 1.99.1. The full
+forty-two-group regression invocation completed in 467.736 seconds with
+forty-one passes and one harness error: the older consumer-mutation enumerator
+mistook a new layout probe for a host API consumer. Its corrected enumeration
+requires all eight exact application entry points, including alias resolution;
+the new probes retain their separate tests. That corrected group and the
+fixture dependency/path group both pass on rerun in 61.203 seconds. Thus every
+group has a passing result, but this is explicitly a combined validation, not
+a claim that the original full invocation passed. Script-layout,
+acceptance-metadata, assurance and diff checks pass.
+
+This completes the scalar constructor provenance block under those stated
+callee premises. It does not complete message/tail/lane provenance, hosted
+output/loan/quarantine transactions or final MD5 composition reconciliation.
+No production cryptography, published API, release gate, native approval or
+shared modern-HMAC checker changes. Cross-built artifacts remain compiler
+inspection, not native execution or independent review.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -1787,8 +1850,9 @@ release gate or approval record changes in this checkpoint.
   retained-state field/terminal transfers, storage lifetimes and both hash-owner
   cleanup dispatches now have dedicated checks. Inlined scalar constructor
   initialization/ownership, key operands, pad phases, scratch and pre-retention
-  cleanup paths now have dedicated checks; normalization-result/descriptor
-  provenance and its result-to-pad copy remain open. Final
+  cleanup paths now have dedicated checks. Normalization-result/descriptor
+  provenance, its result-to-pad copy, empty/short/long-key routing and independent
+  typed initial-owner/Result layout binding now also pass. Final
   MD5 composition review and the remaining hosted-worker keyed
   computation, complete output transactions and quarantine compiler obligations
   remain open.

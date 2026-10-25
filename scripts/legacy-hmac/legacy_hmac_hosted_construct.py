@@ -2,7 +2,8 @@
 
 This follows the real worker CFG, without extracting/replacing a pseudo-function.
 Hash finalizers consume their owner; owner Drop and core clearing are separately
-reviewed non-panicking premises. Normalization output provenance is separate.
+reviewed non-panicking premises. The composed normalization projection checks
+output provenance separately from this ownership/scratch interpreter.
 """
 import re
 

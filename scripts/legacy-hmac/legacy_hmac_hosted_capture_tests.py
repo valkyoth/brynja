@@ -179,7 +179,9 @@ class CaptureTests:
         (leaf / 'Cargo.toml').write_text(manifest.replace('[lints]\nworkspace = true', '') + '\n[workspace]\n')
         shutil.copytree(d.FIXTURE.parent / 'src', fixture / 'src')
         shutil.copyfile(d.FIXTURE.parent / 'Cargo.lock', fixture / 'Cargo.lock')
-        (fixture / 'Cargo.toml').write_text(d.FIXTURE.read_text().replace('../../crates/brynja-legacy-hmac-std', str(leaf)))
+        (fixture / 'Cargo.toml').write_text(d.FIXTURE.read_text()
+            .replace('../../crates/brynja-legacy-hmac-std', str(leaf))
+            .replace('../../crates/', str(d.ROOT / 'crates') + '/'))
         count = 0
         for target, directory in ((d.TARGETS[0], 'strict_execution'), (d.TARGETS[2], 'macos_resident')):
             def emit():

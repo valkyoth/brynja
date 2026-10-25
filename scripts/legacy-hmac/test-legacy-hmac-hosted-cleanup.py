@@ -12,6 +12,8 @@ from legacy_hmac_hosted_authority_tests import AuthorityTests
 from legacy_hmac_hosted_keyed_tests import KeyedTests
 from legacy_hmac_hosted_scalar_tests import ScalarTests
 from legacy_hmac_hosted_construct_tests import ConstructTests
+from legacy_hmac_hosted_normalization_tests import NormalizationTests
+from legacy_hmac_hosted_normalization_compiled_tests import NormalizationCompiledTests
 
 spec = importlib.util.spec_from_file_location('driver', Path(__file__).with_name('check-legacy-hmac-hosted-cleanup.py'))
 driver = importlib.util.module_from_spec(spec)
@@ -19,7 +21,8 @@ spec.loader.exec_module(driver)
 h = driver.hosted
 
 
-class Hosted(CaptureTests, AuthorityTests, KeyedTests, ScalarTests, ConstructTests, unittest.TestCase):
+class Hosted(CaptureTests, AuthorityTests, KeyedTests, ScalarTests, ConstructTests, NormalizationTests,
+             NormalizationCompiledTests, unittest.TestCase):
     driver = driver
     @classmethod
     def setUpClass(cls):
@@ -131,9 +134,13 @@ class Hosted(CaptureTests, AuthorityTests, KeyedTests, ScalarTests, ConstructTes
             llvm = case[0]['brynja-legacy-hmac-hosted-cleanup']
             definitions, aliases = h.flow.definitions_and_aliases(llvm)
             names = h.model.demangle({name.strip('"') for name in re.findall(r'@("[^"]+"|[-\w.$]+)', llvm)})
-            for symbol, (signature, body) in definitions.items():
-                if not names[symbol].startswith('brynja_legacy_hmac_hosted_cleanup::'):
-                    continue
+            consumers = {'brynja_legacy_hmac_hosted_cleanup::' + identity + '::' + operation
+                         for identity in ('sha1', 'md5', 'sha1_compiled', 'md5_compiled')
+                         for operation in ('compute', 'verify')}
+            for consumer in sorted(consumers):
+                selected = [symbol for symbol in (*definitions, *aliases) if names[symbol] == consumer]
+                self.assertEqual(len(selected), 1)
+                signature, body = h.flow.resolve(selected[0], definitions, aliases)
                 call = next(item for item in self.calls(body, names) if item[3].startswith('<brynja_legacy_hmac_std::'))
                 line, callee, args, _ = call
                 self.rejects(case, body, line, line.replace(callee, callee + '_wrong'))
@@ -165,6 +172,14 @@ class Hosted(CaptureTests, AuthorityTests, KeyedTests, ScalarTests, ConstructTes
         h.graph(alternative, driver.FIXTURE, explicit)
         with self.assertRaises(ValueError):
             h.graph(alternative, driver.FIXTURE, explicit.with_name('wrong.toml'))
+        legacy = copy.deepcopy(self.metadata)
+        package = next(p for p in legacy['packages'] if p['name'] == 'brynja-legacy-hmac')
+        package['manifest_path'] = str(explicit)
+        with self.assertRaises(ValueError):
+            h.graph(legacy, driver.FIXTURE)
+        h.graph(legacy, driver.FIXTURE, legacy_manifest=explicit)
+        with self.assertRaises(ValueError):
+            h.graph(legacy, driver.FIXTURE, legacy_manifest=explicit.with_name('wrong.toml'))
         h.graph(self.metadata, driver.FIXTURE)
         mutations = []
         for field, value in (('source', 'registry+forged'), ('manifest_path', '/tmp/other/Cargo.toml')):

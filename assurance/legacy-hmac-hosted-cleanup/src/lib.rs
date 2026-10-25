@@ -1,6 +1,8 @@
 //! Real legacy host consumers; compiler emission is not native qualification.
 #![forbid(unsafe_code)]
 
+pub mod normalization;
+
 #[cfg(target_os = "macos")]
 use brynja_legacy_hmac_std::macos_resident as host;
 #[cfg(target_os = "linux")]

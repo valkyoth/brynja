@@ -64,7 +64,7 @@ def lifecycle_call(line):
 model.syntax = SimpleNamespace(call=lifecycle_call, operand=syntax.operand)
 
 
-def graph(metadata, fixture, hosted_manifest=None):
+def graph(metadata, fixture, hosted_manifest=None, legacy_manifest=None):
     edges = {
         'brynja-core': set(), 'brynja-hash-core': set(), 'brynja-crypto-cpu': set(),
         'brynja-crypto-cpu-std': {'brynja-core', 'brynja-crypto-cpu', 'brynja-hash-sha2', 'brynja-hash-sha3'},
@@ -74,7 +74,8 @@ def graph(metadata, fixture, hosted_manifest=None):
         'brynja-legacy-md5': {'brynja-core', 'brynja-hash-core'},
         'brynja-legacy-hmac': {'brynja-core', 'brynja-legacy-sha1', 'brynja-legacy-md5'},
         'brynja-legacy-hmac-std': {'brynja-core', 'brynja-crypto-cpu-std', 'brynja-legacy-hmac'},
-        'brynja-legacy-hmac-hosted-cleanup': {'brynja-legacy-hmac-std'},
+        'brynja-legacy-hmac-hosted-cleanup': {'brynja-legacy-hmac-std', 'brynja-core',
+                                            'brynja-legacy-sha1', 'brynja-legacy-md5'},
     }
     expected = set(edges)
     packages, nodes = metadata['packages'], metadata['resolve']['nodes']
@@ -88,6 +89,8 @@ def graph(metadata, fixture, hosted_manifest=None):
             runner.ROOT / 'crates' / package['name'] / 'Cargo.toml')
         if hosted_manifest is not None and package['name'] == 'brynja-legacy-hmac-std':
             path = hosted_manifest  # Explicit private compiled-mutant source only; no CLI override.
+        if legacy_manifest is not None and package['name'] == 'brynja-legacy-hmac':
+            path = legacy_manifest  # Same exact-path test-only binding for constructor mutants.
         require(package['manifest_path'] == str(path.resolve()), 'legacy hosted dependency path substitution')
         require(not any('custom-build' in target['kind'] for target in package['targets']),
                 'legacy hosted build-script contamination')
@@ -147,6 +150,7 @@ def validate(artifacts, target, panic):
     require(len(compilers) == 1, 'mixed legacy hosted compilers')
     compiler = compilers.pop()
     fixture = populations['brynja-legacy-hmac-hosted-cleanup']
+    initials = scalar.normalization.contracts.validate(fixture)
     leaf = populations['brynja-legacy-hmac-std']
     destructor = '<' + owner + '::Buffers as core::ops::drop::Drop>::drop'
     selected = [symbol for symbol in (*leaf[0], *leaf[1]) if leaf[2][symbol] == destructor]
@@ -209,7 +213,7 @@ def validate(artifacts, target, panic):
                     unavailable.check(worker_body, envelope_result, identity)
             else:
                 scalar.check(flow.resolve(worker, definitions, aliases)[1], names, compiler,
-                             identity, envelope_result, definitions, aliases, panic)
+                             identity, envelope_result, definitions, aliases, panic, initials[identity])
             checked[identity] = selected, worker, population, host
     require(len(checked) == 4 and len({item[1] for item in checked.values()}) == 4,
             'legacy host/worker population collapsed')

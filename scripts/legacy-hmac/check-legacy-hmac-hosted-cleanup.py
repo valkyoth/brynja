@@ -15,7 +15,7 @@ FEATURES = {'x86_64-unknown-linux-gnu': '+sha,+sse2,+avx2',
             'aarch64-unknown-linux-gnu': '+neon,+sha2', 'aarch64-apple-darwin': '+neon,+sha2'}
 
 
-def emit(directory, compiler, target, panic, simd=True, fixture=FIXTURE, hosted_manifest=None):
+def emit(directory, compiler, target, panic, simd=True, fixture=FIXTURE, hosted_manifest=None, legacy_manifest=None):
     hosted.require(compiler in ('1.90.0', '1.99.1') and target in TARGETS
                    and panic in ('abort', 'unwind'), 'unreviewed legacy hosted compiler profile')
     env = runner.environment(directory)
@@ -25,7 +25,7 @@ def emit(directory, compiler, target, panic, simd=True, fixture=FIXTURE, hosted_
         env['MACOSX_DEPLOYMENT_TARGET'] = '11.0'
     metadata = json.loads(runner.run(['cargo', '+' + compiler, 'metadata', '--manifest-path', str(fixture),
         '--locked', '--offline', '--format-version', '1', '--filter-platform', target], env))
-    hosted.graph(metadata, fixture, hosted_manifest)
+    hosted.graph(metadata, fixture, hosted_manifest, legacy_manifest)
     artifacts = {}
     for package in ('brynja-legacy-hmac-std', 'brynja-legacy-hmac-hosted-cleanup'):
         runner.run(['cargo', '+' + compiler, 'rustc', '--manifest-path', str(fixture), '--locked', '--offline',

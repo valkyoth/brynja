@@ -137,6 +137,7 @@ class Transport:
         if report_first:
             cursor.copy(source_tail, 29, cursor.gep(tags, 3))
         require(report == self.destination, 'MD5 report not from authenticated consumer Result')
+        self.tags = tags
         cursor.stop(self.report)
         self.points.add(self.report)
         t.audit(self.m, self.roots, self.points, self.consumer, self.report, (mapped,))

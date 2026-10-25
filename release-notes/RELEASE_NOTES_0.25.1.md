@@ -2143,6 +2143,43 @@ focused author-operated compiler validation, not native capture or a full-family
 sweep. The combined regression log is retained locally at
 `release-reports/v0251-hosted-md5-decision-final-regressions.log`.
 
+### Hosted MD5 tag-to-output copy routing
+
+The actual emitted authentication continuation now has a bounded copy-path
+checker. For every active-lane mask and supported tag length, each exposed tag
+must reach only its corresponding 16-byte output row, with matching source and
+destination lengths and no skipped, repeated or reordered active lanes. Inline
+accessor instructions are evaluated; Rust 1.90's outlined accessor is modeled
+only at its exact owner/index boundary. Typed downstream probes bind the copy
+Result's success and four error encodings on both reviewed compilers.
+
+Additional isolated-lane and boundary scenarios cover zero, oversized and
+overflowing widths. Each copy-error variant is injected at each lane, requiring
+an immediate stop to copying and the existing invariant-error worker Result.
+Successful and rejected copies must reach the original returned owner's Drop,
+and no copy may resume after that cleanup admission. These are compiler-path
+checks, not new API acceptance of otherwise invalid tag parameters.
+
+Returned tag layout, active metadata, disjoint backing storage and outlined
+accessor semantics remain reviewed callee premises. This projection ends at
+normal-return owned-region Drop admission: it does not yet establish complete
+post-copy or unwind erasure, nor the full hosted output-loan/quarantine
+transaction. No production code, dependency or release-gate policy changes.
+
+Validation: the three new groups pass in 189.493 seconds, rejecting 30 typed
+status, 1,443 emitted operand/guard-binding/effect and 14 compiled Rust defects;
+restored Linux and Apple baselines pass. Consistent tag/output SSA renaming also
+passes. The five neighboring decision/Result/health/control/graph groups pass
+in 102.605 seconds, retaining their 106, 635, 403 and 280 mutation cases.
+All 16 selected compiler/target/panic/SIMD profiles pass, as do fixture Clippy on
+Rust 1.90.0/1.99.1, workspace/fixture formatting, metadata, script inventory,
+assurance policy and documentation links. These are focused author-operated
+compiler checks, not native capture or a full-family sweep. Local logs:
+`release-reports/v0251-hosted-md5-tag-copy-debug.log`,
+`release-reports/v0251-hosted-md5-tag-copy-composed.log`,
+`release-reports/v0251-hosted-md5-tag-copy-renaming.log` and
+`release-reports/v0251-hosted-md5-tag-copy-matrix.log`.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -2199,7 +2236,9 @@ sweep. The combined regression log is retained locally at
   rejection now have dedicated checks. Budget/cancellation control transport and
   both actual callback targets now have dedicated checks. Original candidate and
   staging operands, compute/verify selection and public decision transport through
-  final Result storage now have dedicated checks. Tag-to-output copies remain open. Final
+  final Result storage now have dedicated checks. Tag-to-output copies and their
+  normal-return copy-error continuations now have dedicated checks. Post-copy
+  cleanup and unwind completeness remain open. Final
   MD5 composition review and the remaining hosted-worker keyed
   computation, complete output transactions and quarantine compiler obligations
   remain open.

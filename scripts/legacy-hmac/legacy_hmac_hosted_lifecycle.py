@@ -17,8 +17,10 @@ Candidate mode and the typed public decision bind through final Result storage.
 MD5 tag-output copies bind each active source lane to its matching output row
 through normal-return copy-error handling and owned-region Drop admission.
 Pending Result ownership and post-transfer normal/unwind destruction/lifetime
-paths compose with the source-bound nonthrowing core clearing premise. Complete
-host output/loan/quarantine transactions and final reconciliation remain separate.
+paths compose with the source-bound nonthrowing core clearing premise. Joined
+host output/decision/quarantine transactions and armed pre-entry rejections now
+compose too. Loan factories, full pre-arm request paths and final reconciliation
+remain separate.
 """
 import re
 import sys
@@ -62,6 +64,7 @@ import legacy_hmac_hosted_md5_decision as md5_decision
 import legacy_hmac_hosted_md5_tag_copy as md5_tag_copy
 import legacy_hmac_hosted_md5_tag_cleanup as md5_tag_cleanup
 import legacy_hmac_hosted_md5_result_cleanup as md5_result_cleanup
+import legacy_hmac_hosted_transaction as transaction
 
 model = shared.load('hmac_hosted_lifecycle', 'legacy_hosted_lifecycle_model')
 contracts = shared.load('hmac_hosted_contracts')
@@ -224,7 +227,8 @@ def validate(artifacts, target, panic):
             definitions, aliases, names = population
             signature, host = flow.resolve(selected, definitions, aliases)
             launch.Launch(signature, host, names, target, identity, resource)
-            capture.check(signature, host, names, target, identity)
+            captured = capture.check(signature, host, names, target, identity)
+            transaction.check(captured, compiler, owner, resource)
             normalized = dict(names)
             for symbol, name in names.items():
                 if identity == 'md5_compiled' and name == owner + '::md5_compiled::types::validate':

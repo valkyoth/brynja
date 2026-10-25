@@ -113,7 +113,21 @@ class CaptureTests:
         memory = work / h.capture_types.MEMORY
         memory.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(self.driver.ROOT / h.capture_types.MEMORY, memory)
+        leaf = work / 'crates/brynja-legacy-hmac/src/lib.rs'
+        leaf.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(self.driver.ROOT / 'crates/brynja-legacy-hmac/src/lib.rs', leaf)
         h.capture_types.validate(work)
+        original_leaf = leaf.read_text()
+        for before, after in (('MessageTooLong,', 'MessageTooLong = 9,'),
+                              ('Cancelled,', 'Cancelled, NewError,'),
+                              ('IneligibleWorkload,', '')):
+            self.assertIn(before, original_leaf)
+            try:
+                leaf.write_text(original_leaf.replace(before, after, 1))
+                with self.assertRaises(ValueError):
+                    h.capture_types.validate(work)
+            finally:
+                leaf.write_text(original_leaf)
         for directory in ('strict_execution', 'macos_resident'):
             for (file, name, kind), _ in h.capture_types.declarations(directory == 'macos_resident').items():
                 path = work / (h.capture_types.PREFIX + directory + '/' + file)

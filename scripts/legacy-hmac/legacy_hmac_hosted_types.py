@@ -35,6 +35,10 @@ def declarations(apple):
 
 
 def validate(root=ROOT):
+    source = inventory.rust.scrub((root / 'crates/brynja-legacy-hmac/src/lib.rs').read_text())
+    _, body = inventory.rust.declaration(source, 'Error', {'enum'})
+    require(re.sub(r'\s+', '', body) == 'MessageTooLong,TagLength,SecretMemory,ExecutionUnavailable,'
+            'ExecutionFailed,IneligibleWorkload,WorkLimit,Cancelled,', 'legacy leaf error domain changed')
     for directory in ('strict_execution', 'macos_resident'):
         for (file, name, kind), expected in declarations(directory == 'macos_resident').items():
             source = inventory.rust.scrub((root / (PREFIX + directory + '/' + file)).read_text())

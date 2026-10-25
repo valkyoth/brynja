@@ -2249,6 +2249,45 @@ checks, not native capture or a full-family sweep. Logs remain local at
 `release-reports/v0251-hosted-md5-result-cleanup-final-composed.log` and
 `release-reports/v0251-hosted-md5-result-cleanup-matrix.log`.
 
+### Hosted output admission and session reuse transactions
+
+The host-side checker now follows the actual post-join control flow for scalar
+SHA-1/MD5, compiled SHA-1 and MD5 batch sessions. It tests every current worker
+error payload, all three success payloads, compute/verify mode, cancellation,
+and incomplete/panicked workers. Only successful compute may retain output;
+verification, rejected shape, errors and cancellation must clear it. Staging
+must clear on every modeled return. The result category, meaningful error
+payload and verification decision must survive transport unchanged.
+
+Accelerated sessions must arm quarantine before native launch. Their different
+benign-error sets are checked explicitly: SHA-1 permits cancellation, invalid
+bits and message length rejection; MD5 also permits its reviewed tag, batch
+shape and compression-budget rejections. Backend/invariant/protocol failures
+must not rehabilitate the session. The shared pre-entry campaign checks armed
+mapping, attribute and unsuccessful thread-create rejections separately. Exact
+initial output/staging clears also dominate every host return, covering bytes
+left by a forgotten prior output loan. Both inlined buffer clears and outlined
+guard destruction are supported without rewriting emitted instructions.
+
+This composes the existing launch/join, capture, worker-result and buffer-Drop
+projections. Reviewed resource clear/destructor paths remain source-bound
+nonthrowing premises; fatal abort and process-wide erasure are not claimed.
+Full pre-arm request validation, public output-loan factories/lifetimes and
+final cross-projection reconciliation remain open. No production Rust,
+dependency or release-gate policy changes.
+
+Validation: the composed nine-group run passes in 118.336 seconds. It includes
+3,480 transaction outcomes across 24 emitted host profiles, 468 rejected
+artifact mutations, 20 rejected compiled Rust defects and restored Linux/Apple
+baselines. Source-domain, buffer destructor, launch identity/status, stack
+clearing, attribute failure and dependency-graph regressions also pass. All 16
+selected compiler/target/panic/SIMD profiles pass, as do formatting, metadata,
+script inventory, assurance policy and documentation links. These are focused
+author-operated compiler checks, not new native qualification or a full-family
+sweep. Local logs:
+`release-reports/v0251-hosted-transactions-composed.log` and
+`release-reports/v0251-hosted-transactions-matrix.log`.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -2309,10 +2348,11 @@ checks, not native capture or a full-family sweep. Logs remain local at
   normal-return copy-error continuations now have dedicated checks. Post-transfer
   tag destruction/lifetime paths now cover normal and recoverable unwind exits.
   Pending Result ownership, its health-failure/unwind destruction and the
-  moved Result's final lifetime now have dedicated composing checks. Final
-  MD5 composition review and the remaining hosted-worker keyed
-  computation, complete output transactions and quarantine compiler obligations
-  remain open.
+  moved Result's final lifetime now have dedicated composing checks. Post-join
+  output admission, result transport, quarantine classification and armed
+  pre-entry rejections now have composing host checks. Full pre-arm request
+  paths, public output-loan factories/lifetimes and final cross-projection
+  reconciliation remain open.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.
 

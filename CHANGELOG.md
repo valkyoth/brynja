@@ -12,7 +12,7 @@
 - Keep post-admission MD5 integrity failures quarantined, while preserving
   reuse after ordinary cancellation or work/length rejection. Document the
   scope of required SIMD, caller-owned memory and fatal-termination limits.
-- Independent retest and release qualification remain pending.
+- Independent source retest passed; final release verification remains pending.
 
 ## 0.24.52 candidate
 

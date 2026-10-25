@@ -1,6 +1,15 @@
 # v0.25.1 — Isolated legacy HMAC compatibility
 
-Status: in progress; not release-ready or published.
+Status: independent security retest passed; final release verification pending.
+Not tagged or published.
+
+The owner-supplied Codex Daybreak retest closes the leaf authentication finding
+at `783151b3`; the prior Claude retest confirms the earlier hosted fixes.
+All public verification APIs reject mismatch as an error. MD5 mismatch preserves
+only its public work report, which hosted workers validate before returning.
+Existing compatibility limits remain explicit. See the
+[pentest ledger](../security/pentest/v0.25.1.md) for review scope, author-operated
+native checks and the distinction between security retest and release qualification.
 
 ## Implemented scope
 

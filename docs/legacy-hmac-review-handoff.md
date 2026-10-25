@@ -48,7 +48,7 @@ authorization or correctness of the model itself.
 The following records precede the pentest fixes. They are historical, not
 qualification of the updated verification API or quarantine classification.
 See the [v0.25.1 remediation ledger](../security/pentest/v0.25.1.md) for the
-current author-tested changes and pending independent retest.
+current author-tested changes and the supplied independent retest of `783151b3`.
 
 The pre-remediation functional/package refresh uses
 `c5f504771c3ab8e9f1c4f8bc4c9974e658df58aa`. The exact source archive sent to
@@ -97,7 +97,8 @@ development runs, not completed detached release campaigns.
 ## Boundaries that remain explicit
 
 - Existing hash reviews do not independently qualify the new HMAC composition.
-  No independent v0.25.1 review is claimed by this handoff.
+  The supplied v0.25.1 source retests are recorded in the remediation ledger;
+  their scope is not independent qualification of every platform or campaign.
 - Linux protected memory and macOS resident memory are not interchangeable.
   The Apple profile has **no dump-exclusion guarantee**.
 - Caller inputs/copies, arbitrary compiler frames/registers, OS/TLS/panic

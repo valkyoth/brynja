@@ -4,6 +4,7 @@
 pub mod checkpoint;
 pub mod normalization;
 pub mod report;
+pub mod report_result;
 
 #[cfg(target_os = "macos")]
 use brynja_legacy_hmac_std::macos_resident as host;

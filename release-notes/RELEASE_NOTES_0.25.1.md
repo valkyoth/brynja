@@ -2000,6 +2000,40 @@ qualification. Production Rust, shared modern-HMAC checkers, release gates and
 approval records are unchanged. Local logs use
 `release-reports/v0251-hosted-md5-reports-`.
 
+### Hosted MD5 consumer Result-to-report transport
+
+Independent typed projections bind the 96-byte verification Result's report
+at offset 8 and the 120-byte authentication Result's report at offset 32,
+including their different error-niche positions. The emitted worker checker
+now composes those layouts with the actual consumer/report association, normal
+return, map-error branches, post-operation health revalidation and report call.
+Verification's split byte loads and 86/7-byte temporaries must reconstruct the
+same 88-byte report; authentication must copy its returned Result intact and
+pass that copy's report. Constant replacement, field substitution, missing or
+short copies, wrong offsets, wrong report arguments and failed-consumer paths
+reaching a report are rejected. No fixed SSA naming or source-file hash is used
+as a substitute for these checks.
+
+The transport roots must be distinct and allocated before use. Their exact
+start markers, pre-report lifetime bounds, duplicate end markers and hidden
+writes/escapes are checked. Authentication's mapped Result is still used after
+the report for secret-tag output/drop handling: completeness of those later
+cleanup paths is explicitly outside this report-transfer projection. Likewise,
+lane payloads, output copying, control/cancellation callbacks and complete host
+output-loan/quarantine transactions remain open; this is not whole-worker
+erasure or fresh native qualification. Production Rust, dependency manifests,
+release gates and approval records are unchanged.
+
+Validation: the composed 12-group MD5 report/health/graph regression run passes
+in 217.917 seconds. New cases reject 54 typed-layout substitutions, 635 emitted
+byte/guard/lifetime/escape mutations and 24 compiled Rust report corruptions;
+the existing 60 compiled health/report defects and their restored baselines
+also pass. Both compiler Clippy runs, formatting, script inventory, documentation
+links, metadata checks and all 16 selected compiler profiles pass. This is
+focused author-operated compiler validation, not a new full-family sweep or
+native capture. Logs are retained locally under
+`release-reports/v0251-hosted-md5-result-`.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -2051,7 +2085,8 @@ approval records are unchanged. Local logs use
   MD5's health-selector lifetimes, three checkpoints, post-consumer revalidation
   and rejected Result payload transport now also have composing checks. Typed
   report predicates, backend/count operands and rejected report status now have
-  dedicated checks; report-byte and full lane-payload transport remain open. Final
+  dedicated checks, as do typed Result-to-report byte transfers and success/error
+  admission. Full lane-payload and output transport remain open. Final
   MD5 composition review and the remaining hosted-worker keyed
   computation, complete output transactions and quarantine compiler obligations
   remain open.

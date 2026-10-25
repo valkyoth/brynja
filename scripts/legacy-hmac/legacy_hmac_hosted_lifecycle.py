@@ -10,7 +10,8 @@ including inlined temporary streams and worker Result status transport. MD5's
 borrowed health selectors, three checkpoint positions and rejection payload
 transport also compose here. Typed MD5 report predicates, captured backend,
 eight-slot active count and report rejection transport are checked separately.
-MD5 lane/report-byte/output transport and complete host output/loan/quarantine
+Typed consumer Result projections also bind report-byte transfers and admission.
+MD5 lane/output transport and complete host output/loan/quarantine
 transactions still require their separate qualification.
 """
 import re
@@ -46,6 +47,8 @@ import legacy_hmac_hosted_md5_boundaries as md5_boundaries
 import legacy_hmac_hosted_md5_report_layout as md5_report_layout
 import legacy_hmac_hosted_md5_report_logic as md5_report_logic
 import legacy_hmac_hosted_md5_report_caller as md5_report_caller
+import legacy_hmac_hosted_md5_result_layout as md5_result_layout
+import legacy_hmac_hosted_md5_result_transport as md5_result_transport
 
 model = shared.load('hmac_hosted_lifecycle', 'legacy_hosted_lifecycle_model')
 contracts = shared.load('hmac_hosted_contracts')
@@ -170,6 +173,7 @@ def validate(artifacts, target, panic):
     initials = scalar.normalization.contracts.validate(fixture)
     checkpoint_flow.probes(fixture)
     md5_report_layout.validate(fixture)
+    md5_result_layout.validate(fixture)
     leaf = populations['brynja-legacy-hmac-std']
     checkpoints.validate_callees(leaf, target, compiler)
     destructor = '<' + owner + '::Buffers as core::ops::drop::Drop>::drop'
@@ -252,6 +256,7 @@ def validate(artifacts, target, panic):
                         require(len(selected_reports) == 1, 'MD5 report callee missing/ambiguous')
                         md5_report_logic.validate(*flow.resolve(selected_reports[0], *leaf[:2]), compiler)
                         md5_report_caller.check(keyed_state, transfer, envelope_result, compiler, target)
+                        md5_result_transport.check(keyed_state, health_result, target)
                 else:
                     unavailable.check(worker_body, envelope_result, identity)
             else:

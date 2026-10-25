@@ -2288,6 +2288,46 @@ sweep. Local logs:
 `release-reports/v0251-hosted-transactions-composed.log` and
 `release-reports/v0251-hosted-transactions-matrix.log`.
 
+### Ordinary hosted output-loan construction and consumption
+
+Real downstream fixture calls now expose the ordinary Output methods for
+scalar SHA-1, scalar MD5 and compiled SHA-1. Their successful compute factories
+must borrow the session's retained output field, never staging or a different
+owner. Every current error category and meaningful nested payload must remain
+an error with no loan pointer. The factories compose with the previously
+checked execute transaction and its compute/verify shape admission.
+
+The emitted expose, declassify and Drop paths are checked for every supported
+legacy tag width. Borrowed exposure must preserve the storage pointer and span.
+Exact-width declassification must copy to the supplied public destination and
+clear the retained owner once; wrong-width requests must leave that destination
+untouched and still clear. Conservative first/second resident-access unwind
+edges also require clearing before propagation. Source-bound resource helpers,
+safe Rust exclusive borrowing and valid caller slices remain explicit premises;
+caller copies, fatal abort and whole-process erasure are not claimed.
+
+The distinct active-lane MD5 batch output representation is not covered by
+these ordinary-loan checks. Batch loan factories/methods, full pre-arm request
+paths and final cross-projection reconciliation remain open. Production Rust,
+dependencies and release-gate policy are unchanged; only assurance fixtures,
+checkers, regression tests and these progress notes changed.
+
+The focused loan campaign covers 54 emitted method profiles with 928 outcomes
+and 18 factory profiles with 546 outcomes. It rejects 390 method mutations,
+228 factory mutations and 12 compiled Rust defects; restored Linux and Apple
+baselines pass. Missing/duplicate probe populations are rejected, while a
+consistent SSA rename remains accepted. The hosted crate's 20 unit/integration
+tests and 16 doctests pass, including output-loan escape and simultaneous-borrow
+compile-fail tests. All 16 selected compiler/target/panic/SIMD profiles pass.
+The composed nine-group run passes in 160.475 seconds, retaining host
+transactions, source contracts, buffer clearing, dispatch and graph checks.
+Formatting, metadata, script inventory, assurance policy and doc links pass.
+These are focused author-operated checks, not new native qualification or an
+independent retest. Local logs are
+`release-reports/v0251-hosted-loans-composed.log`,
+`release-reports/v0251-hosted-loans-matrix.log` and
+`release-reports/v0251-hosted-loans-crate-tests.log`.
+
 - Complete the remaining qualification-specific failure-injection checks;
   focused native x86/Arm functional execution now passes.
 - Qualify both accelerated compositions and their protected/resident owners,
@@ -2350,9 +2390,10 @@ sweep. Local logs:
   Pending Result ownership, its health-failure/unwind destruction and the
   moved Result's final lifetime now have dedicated composing checks. Post-join
   output admission, result transport, quarantine classification and armed
-  pre-entry rejections now have composing host checks. Full pre-arm request
-  paths, public output-loan factories/lifetimes and final cross-projection
-  reconciliation remain open.
+  pre-entry rejections now have composing host checks. Ordinary output-loan
+  creation, exposure, explicit declassification and consuming clearing now also
+  have dedicated projections. Batch output loans, full pre-arm request paths
+  and final cross-projection reconciliation remain open.
 - Register API/capability owners and a separately scoped evidence family.
 - Obtain independent retest and run the affected release checks and GitHub.
 

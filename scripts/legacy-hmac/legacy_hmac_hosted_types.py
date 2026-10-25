@@ -21,6 +21,7 @@ def declarations(apple):
         ('mod.rs', 'Session', 'struct'): f'''stack:{stack}, staging:{buffer}, output:{buffer}, bytes:usize,
             limits:Limits, identity:PhantomData<fn()->A>, #[cfg(test)] fault:tests::Fault,''',
         ('mod.rs', 'Buffers', 'struct'): f"output:&'a mut {buffer}, staging:&'a mut {buffer}, keep:bool,",
+        ('mod.rs', 'Output', 'struct'): f"storage:&'a mut {buffer}, identity:PhantomData<fn()->A>,",
         ('sha1_compiled.rs', 'Sha1CompiledSession', 'struct'):
             'inner:Session<Sha1>, backend:Sha1Backend, quarantined:bool, #[cfg(test)] fault:tests::Fault,',
         ('md5_compiled.rs', 'Md5BatchSession', 'struct'): f'''stack:{stack}, staging:{buffer}, output:{buffer},

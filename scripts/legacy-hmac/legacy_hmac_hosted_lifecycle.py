@@ -19,8 +19,9 @@ through normal-return copy-error handling and owned-region Drop admission.
 Pending Result ownership and post-transfer normal/unwind destruction/lifetime
 paths compose with the source-bound nonthrowing core clearing premise. Joined
 host output/decision/quarantine transactions and armed pre-entry rejections now
-compose too. Loan factories, full pre-arm request paths and final reconciliation
-remain separate.
+compose too. Ordinary output loan construction/exposure/declassification/drop
+now compose with those transactions. Batch loans, full pre-arm request paths
+and final reconciliation remain separate.
 """
 import re
 import sys
@@ -65,6 +66,7 @@ import legacy_hmac_hosted_md5_tag_copy as md5_tag_copy
 import legacy_hmac_hosted_md5_tag_cleanup as md5_tag_cleanup
 import legacy_hmac_hosted_md5_result_cleanup as md5_result_cleanup
 import legacy_hmac_hosted_transaction as transaction
+import legacy_hmac_hosted_loans as loans
 
 model = shared.load('hmac_hosted_lifecycle', 'legacy_hosted_lifecycle_model')
 contracts = shared.load('hmac_hosted_contracts')
@@ -186,6 +188,7 @@ def validate(artifacts, target, panic):
     require(len(compilers) == 1, 'mixed legacy hosted compilers')
     compiler = compilers.pop()
     fixture = populations['brynja-legacy-hmac-hosted-cleanup']
+    loans.validate(fixture, target, compiler, panic)
     initials = scalar.normalization.contracts.validate(fixture)
     checkpoint_flow.probes(fixture)
     md5_report_layout.validate(fixture)
@@ -220,6 +223,9 @@ def validate(artifacts, target, panic):
                 selected = dispatch(signature, body, leaf[2], executor_name, identity, operation)
             else:
                 selected = dispatch(signature, body, fixture[2], executor_name, identity, operation)
+            if operation == 'compute' and identity != 'md5_compiled':
+                loans.creation(signature, body, leaf[2] if identity.endswith('_compiled') else fixture[2],
+                               target, compiler, identity, executor_name)
             if identity in checked:
                 require(checked[identity][0] == selected, 'compute/verify select different executors')
                 continue

@@ -15,10 +15,34 @@ use brynja_legacy_hmac_std::macos_resident as host;
 #[cfg(target_os = "linux")]
 use brynja_legacy_hmac_std::strict_execution as host;
 
+macro_rules! output_loan {
+    ($algorithm:ty) => {
+        #[inline(never)]
+        pub fn output_expose<'a>(output: &'a Output<'_, $algorithm>) -> &'a [u8] {
+            output.expose()
+        }
+
+        #[inline(never)]
+        pub fn output_declassify(
+            output: Output<'_, $algorithm>,
+            destination: &mut [u8],
+        ) -> Result<(), Error> {
+            output.declassify(destination, PublicDeclassification::acknowledge())
+        }
+
+        #[inline(never)]
+        pub fn output_clear(output: Output<'_, $algorithm>) {
+            drop(output);
+        }
+    };
+}
+
 macro_rules! scalar {
     ($name:ident, $algorithm:ty) => {
         pub mod $name {
             use super::host::*;
+
+            output_loan!($algorithm);
 
             #[inline(never)]
             pub fn compute<'a>(
@@ -46,6 +70,8 @@ scalar!(md5, Md5);
 
 pub mod sha1_compiled {
     use super::host::*;
+
+    output_loan!(Sha1);
 
     #[inline(never)]
     pub fn compute<'a>(

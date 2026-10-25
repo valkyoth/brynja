@@ -29,7 +29,7 @@
 "scripts/assurance/check-bare-metal.sh" = "5088a73fbe45e151498edfe8f21b22839f7cce05aec541d25722790d4ae50283"
 ".github/workflows/ci.yml" = "df492a2fd3216d9281aac659dfef3fdfe3394a153681f4f1b86655e6714b00ab"
 "README.md" = "f108a25dba831f27bf5d62a04abe3c1935a39535aeb85762d814f95f66567d91"
-"crates/brynja/README.md" = "0b21284b3eaf886e29795fcc96ee6a0ea4f3aa8873bf023fea175244ba2144fa"
+"crates/brynja/README.md" = "9831410a07ba142e5cb0b25b20588e3e47b5cb55649cb5e8bcb0823d09f764ed"
 "docs/VERIFICATION_STATUS.md" = "882600b26fce9b5eb3a5b43c668823be4a70842d480f76f1b15bc39fbe872d67"
 "docs/current-status.md" = "b57baf7e63d1ca2e75f54d9249a41b673816712e1586aa8daf76b673e52e53c8"
 "docs/RELEASE_PLAN.md" = "a0d5e9f70414e1f312cae9bf57c45b9699c8b91098b22d29b30cce4827818668"

@@ -67,8 +67,8 @@ SHA-2 covers SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256; S
 ### Legacy Message Authentication
 
 These compatibility APIs require separate legacy dependencies and are not
-exported by this modern facade. The v0.25.1 security retest passed; final release
-qualification remains pending, without independent cryptographic certification.
+exported by this modern facade. Qualification remains pending; no independent
+cryptographic certification is claimed.
 
 | Construction family | Implementation status | Owning crate | Independent verification |
 | --- | --- | --- | --- |

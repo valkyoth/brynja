@@ -1,4 +1,4 @@
-"""Read immutable schema-2 evidence on a different collecting machine.
+"""Read immutable schema-2/3 evidence on a different collecting machine.
 
 Recorded source/tool seals describe execution, not tools installed today. The
 live collector and resume runner still probe their tools. This offline reader
@@ -42,10 +42,12 @@ class History:
         self.active = set()
         self.visits = 0
 
-    def completed(self, receipt: str, depth: int = 0) -> tuple[dict, dict, dict]:
+    def completed(self, receipt: str, depth: int = 0, *, allow_failed=False) -> tuple[dict, dict, dict]:
         if depth > 16 or receipt in self.active:
             raise ValueError('historical checkpoint ancestry exceeds bound or cycles')
         if receipt in self.cache:
+            if self.cache[receipt][1]['state'] == 'failed' and not allow_failed:
+                raise ValueError('failed history requires explicit recovery')
             return self.cache[receipt]
         self.visits += 1
         if self.visits > 128 or not receipt_ok(receipt) or receipt not in self.locations:
@@ -53,16 +55,17 @@ class History:
         self.active.add(receipt)
         job = records.safe_path(self.locations[receipt])
         manifest = jobs.load(job, receipt)
-        if manifest['schema'] != 2:
-            raise ValueError('historical reuse requires schema-2 post-execution seals')
+        if manifest['schema'] not in (2, 3):
+            raise ValueError('historical reuse requires schema-2/3 post-execution seals')
         state, terminal = records.read(job / 'state.json'), records.read(job / 'result.json')
         if (set(state) != {'state', 'manifest', 'result_sha256'}
                 or set(terminal) != {'schema', 'manifest', 'state', 'started', 'ended',
                                      'elapsed_seconds', 'results', 'failure_class', 'resources'}
                 or state['manifest'] != receipt or state['result_sha256'] != records.digest(terminal)
                 or terminal['manifest'] != receipt or type(terminal['schema']) is not int
-                or terminal['schema'] != 2 or terminal['state'] != state['state']
-                or state['state'] not in {'passed', 'partial', 'cancelled', 'timed_out', 'log_limit'}
+                or terminal['schema'] != manifest['schema'] or terminal['state'] != state['state']
+                or state['state'] not in ({'passed', 'partial', 'cancelled', 'timed_out', 'log_limit'}
+                                         | ({'failed'} if allow_failed else set()))
                 or terminal['failure_class'] is not None):
             raise ValueError('historical terminal result is unsuccessful or corrupted')
         jobs.validate_usage(terminal['resources'])
@@ -79,6 +82,8 @@ class History:
             if records.git(root, 'status', '--porcelain', '--untracked-files=all').strip():
                 raise ValueError('historical source is not a clean committed snapshot')
         tool_record(manifest, job / 'source')
+        import detached_recovery as recovery
+        recovered = recovery.expected(manifest, job / 'source', self)
         found, seen, total = {}, set(), 0
         for record in terminal['results']:
             index = record.get('index')
@@ -88,18 +93,34 @@ class History:
             if (record.get('command') != manifest['commands'][index]
                     or record != records.read(job / f'command-{index:04d}.json')):
                 raise ValueError('historical command record changed')
-            if record['state'] == 'passed':
-                checkpoints.validate_record(manifest, job, record)
+            if record['state'] in {'passed', 'reused'}:
+                checkpoints.validate_record(manifest, job, record, recovered=recovered)
                 found[index] = record
                 total += record['log_bytes']
-            elif record['state'] not in {'cancelled', 'timed_out', 'log_limit'}:
-                raise ValueError('failed historical command requires investigation')
+            else:
+                # Failed/cancelled logs are retained and checked, never credited.
+                allowed = {'cancelled', 'timed_out', 'log_limit'} | ({'failed'} if allow_failed else set())
+                expected_keys = {'state', 'exit_code', 'elapsed_seconds', 'log_bytes', 'index', 'command',
+                                 'started', 'ended', 'log', 'log_sha256', 'checks'}
+                if (set(record) != expected_keys or record['state'] not in allowed
+                        or record['log'] != f'command-{index:04d}.log'
+                        or record['checks'] is not None
+                        or type(record['log_bytes']) is not int or record['log_bytes'] < 0
+                        or type(record['elapsed_seconds']) not in (int, float)
+                        or not math.isfinite(record['elapsed_seconds']) or record['elapsed_seconds'] < 0
+                        or (record['state'] == 'failed' and
+                            (type(record['exit_code']) is not int or record['exit_code'] == 0))
+                        or record['log_sha256'] != records.file_hash(job / record['log'], manifest['log_bytes'])
+                        or record['log_bytes'] != (job / record['log']).stat().st_size):
+                    raise ValueError('invalid failed/interrupted historical command')
+        if terminal['state'] == 'failed' and not any(r['state'] == 'failed' for r in terminal['results']):
+            raise ValueError('failed history lacks an investigated command failure')
         inherited = self.parents(manifest, depth + 1)
         if any(found.get(index) != record for index, record in inherited.items()):
             raise ValueError('historical inherited checkpoint missing or replaced')
         if terminal['state'] in {'passed', 'partial'}:
             expected = (set(range(len(manifest['commands']))) if terminal['state'] == 'passed'
-                        else checkpoints.indices(manifest) | set(inherited))
+                        else checkpoints.indices(manifest) | set(inherited) | set(recovered))
             if (set(found) != expected or len(found) != len(terminal['results'])
                     or list(found) != sorted(found)
                     or (job / 'cancel').exists() or elapsed > manifest['seconds'] + 10
@@ -127,6 +148,8 @@ class History:
             for field in ('sources', 'tools', 'commands', 'plan', 'phases', 'approval', 'miri_profile'):
                 if parent[field] != manifest[field]:
                     raise ValueError('historical parent execution inputs differ: ' + field)
+            if parent.get('recovery') != manifest.get('recovery'):
+                raise ValueError('historical recovery ancestry changed')
             for index, record in passed.items():
                 found.setdefault(index, record)
         return found

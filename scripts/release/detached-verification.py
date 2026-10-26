@@ -27,7 +27,9 @@ def main() -> int:
     start.add_argument("--shards", type=int, default=1)
     start.add_argument("--workers", type=int, default=1)
     start.add_argument("--resume", nargs=2, action="append", metavar=("JOB", "RECEIPT"),
-                       help="copy validated schema-2 passes into a NEW job; rerun interrupted commands")
+                       help="copy validated schema-2/3 passes into a NEW job; rerun interrupted commands")
+    start.add_argument('--recover', nargs=2, action='append', metavar=('JOB', 'RECEIPT'),
+                       help='explicitly recover compatible sealed passes, including investigated failed jobs; failures and missing work rerun')
     start.add_argument("--partition", help="run only zero-based INDEX/COUNT of the task set (not a complete receipt)")
     start.add_argument("--miri-profile", choices=("routine", "extended", "existing-full"),
                        help="default: routine internal / extended public; public cannot use routine")
@@ -43,9 +45,11 @@ def main() -> int:
                        for path, receipt in args.resume]
                       if args.resume else None)
             partition = [int(value) for value in args.partition.split("/")] if args.partition else None
+            recovery = ([{'job': str(records.safe_path(Path(path))), 'receipt': receipt}
+                         for path, receipt in args.recover] if args.recover else None)
             receipt = jobs.start(plans.ROOT, job, args.phase, args.approve_full,
                                  args.base, args.seconds, args.log_bytes, args.shards, args.workers,
-                                 resume, partition, args.miri_profile)
+                                 resume, partition, args.miri_profile, recovery)
             print(json.dumps({"job": str(job), "receipt": receipt, "state": "started"}))
         elif args.action == "_worker":
             return jobs.worker(job, args.receipt)

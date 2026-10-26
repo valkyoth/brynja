@@ -44,7 +44,17 @@ def run(manifest: dict, job: Path, receipt: str, started: float, stamp, validate
     count, workers = manifest["shards"], manifest["workers"]
     bounds(count, workers)
     groups = partition(manifest["commands"], count)
-    resumed = checkpoints.install(manifest, job) if manifest.get("schema") == 2 else {}
+    resumed = checkpoints.install(manifest, job) if manifest.get("schema") in (2, 3) else {}
+    if manifest.get('schema') == 3:
+        import detached_recovery
+        # A resumed schema-3 run already contains its recovered records. Only
+        # install recovery on the first generation, not over existing files.
+        if manifest.get('resume'):
+            expected = detached_recovery.expected(manifest, job / 'source')
+            if any(resumed.get(index) != record for index, record in expected.items()):
+                raise ValueError('resumed recovery records missing or changed')
+        else:
+            resumed.update(detached_recovery.install(manifest, job))
     assigned = checkpoints.indices(manifest)
     allowances = [manifest["log_bytes"] // count + (i < manifest["log_bytes"] % count)
                   for i in range(count)]
@@ -83,12 +93,12 @@ def run(manifest: dict, job: Path, receipt: str, started: float, stamp, validate
                 environment.pop("BRYNJA_DETACHED_RECEIPTS", None)
                 environment.update(command["environment"])
                 before = stamp()
-                if manifest.get("schema") == 2:
+                if manifest.get("schema") in (2, 3):
                     checkpoints.seal(manifest, root, validate)
                 result = process.execute(command["argv"], root, log, job / "cancel",
                                          seconds=remaining, maximum=allowances[index] - consumed,
                                          environment=environment, stdin=command["stdin"])
-                if manifest.get("schema") == 2:
+                if manifest.get("schema") in (2, 3):
                     result["checks"] = (checkpoints.seal(manifest, root, validate)
                                         if result["state"] == "passed" else None)
                 result.update({"index": command_index, "command": command, "started": before,

@@ -1,4 +1,4 @@
-"""Per-command checkpoints for schema-2 jobs, never inferred from legacy logs.
+"""Per-command checkpoints for schema-2/3 jobs, never inferred from legacy logs.
 
 These are trusted-owner drift checks, not signatures against a hostile runner.
 A resume creates a new immutable job; it never restarts an interpreter or
@@ -25,7 +25,11 @@ def seal(manifest: dict, root: Path, validate) -> dict:
     return identity(manifest)
 
 
-def validate_record(manifest: dict, job: Path, record: dict) -> None:
+def validate_record(manifest: dict, job: Path, record: dict, *, recovered=None) -> None:
+    if record.get('state') == 'reused':
+        import detached_recovery
+        detached_recovery.validate_record(manifest, job, record, recovered)
+        return
     index = record.get("index")
     if type(index) is not int or not 0 <= index < len(manifest["commands"]):
         raise ValueError("invalid checkpoint command index")
@@ -47,7 +51,7 @@ def validate_record(manifest: dict, job: Path, record: dict) -> None:
 
 def completed(job: Path, receipt: str, *, depth: int = 0,
               budget: list[int] | None = None) -> tuple[dict, dict[int, dict]]:
-    # Import locally: the job module uses this module for schema-2 collection.
+    # Import locally: the job module also uses this module for collection.
     import detached_job as jobs
     budget = [128] if budget is None else budget
     budget[0] -= 1
@@ -55,14 +59,14 @@ def completed(job: Path, receipt: str, *, depth: int = 0,
         raise ValueError("checkpoint ancestry exceeds bound")
     job = records.safe_path(job)
     manifest = jobs.load(job, receipt)
-    if manifest["schema"] != 2:
+    if manifest["schema"] not in (2, 3):
         raise ValueError("legacy jobs lack per-command post-validation; not resumable")
     state, terminal = records.read(job / "state.json"), records.read(job / "result.json")
     if (set(state) != {"state", "manifest", "result_sha256"}
             or set(terminal) != {"schema", "manifest", "state", "started", "ended",
                                  "elapsed_seconds", "results", "failure_class", "resources"}
             or state["manifest"] != receipt or state["result_sha256"] != records.digest(terminal)
-            or terminal.get("manifest") != receipt or terminal.get("schema") != 2
+            or terminal.get("manifest") != receipt or terminal.get("schema") != manifest['schema']
             or terminal.get("state") != state["state"]
             or state["state"] not in {"passed", "partial", "cancelled", "timed_out", "log_limit"}
             or terminal.get("failure_class") is not None):
@@ -75,6 +79,8 @@ def completed(job: Path, receipt: str, *, depth: int = 0,
         raise ValueError("invalid checkpoint terminal observations")
     jobs.validate_source(manifest, job / "source")
     seal(manifest, job / "source", jobs.validate_source)
+    import detached_recovery
+    recovered = detached_recovery.expected(manifest, job / 'source')
     found, seen = {}, set()
     for record in terminal["results"]:
         index = record.get("index")
@@ -85,8 +91,8 @@ def completed(job: Path, receipt: str, *, depth: int = 0,
         if (record.get("command") != manifest["commands"][index]
                 or record != records.read(job / f"command-{index:04d}.json")):
             raise ValueError("checkpoint result changed")
-        if record["state"] == "passed":
-            validate_record(manifest, job, record)
+        if record["state"] in {'passed', 'reused'}:
+            validate_record(manifest, job, record, recovered=recovered)
             found[index] = record
         elif record["state"] not in {"cancelled", "timed_out", "log_limit"}:
             raise ValueError("failed command needs investigation, not automatic resume")
@@ -120,6 +126,8 @@ def inherited(manifest: dict, *, depth: int = 0, budget: list[int] | None = None
         for field in ("sources", "tools", "commands", "plan", "phases", "approval", "miri_profile"):
             if parent[field] != manifest[field]:
                 raise ValueError("checkpoint execution inputs differ: " + field)
+        if parent.get('recovery') != manifest.get('recovery'):
+            raise ValueError('checkpoint recovery ancestry differs')
         for index, record in passed.items():
             # Repeated passes are retained in their parent, never counted twice.
             found.setdefault(index, record)
@@ -129,6 +137,8 @@ def inherited(manifest: dict, *, depth: int = 0, budget: list[int] | None = None
 def install(manifest: dict, job: Path) -> dict[int, dict]:
     found = inherited(manifest)
     if found:
+        import detached_recovery
+        recovered = detached_recovery.expected(manifest, job / 'source')
         references = manifest["resume"]
         if isinstance(references, dict):
             references = [references]
@@ -142,7 +152,7 @@ def install(manifest: dict, job: Path) -> dict[int, dict]:
                 with records.safe_path(parent / record["log"]).open("rb") as source:
                     shutil.copyfileobj(source, output)
             records.atomic(job / f"command-{index:04d}.json", record)
-            validate_record(manifest, job, record)
+            validate_record(manifest, job, record, recovered=recovered)
     return found
 
 

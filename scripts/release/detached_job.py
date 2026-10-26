@@ -77,13 +77,17 @@ def clone_inputs(root: Path, destination: Path, closure: dict) -> None:
 def start(root: Path, job: Path, phases: list[str], approval: str | None,
           base: str | None, seconds: int, log_bytes: int,
           shard_count: int = 1, workers: int = 1, resume: list | None = None,
-          partition: list[int] | None = None, miri_profile: str | None = None) -> str:
+          partition: list[int] | None = None, miri_profile: str | None = None,
+          recovery: list | None = None) -> str:
     if sys.platform not in {"linux", "darwin"}:
         raise ValueError("detached execution currently requires Linux or macOS")
     root, job = records.safe_path(root), records.safe_path(job)
     if job.is_relative_to(root) or root.is_relative_to(job):
         raise ValueError("job directory must be outside the source checkout")
     bounds(seconds, log_bytes)
+    if resume and recovery is None:
+        refs = [resume] if isinstance(resume, dict) else resume
+        recovery = load(Path(refs[0]['job']), refs[0]['receipt']).get('recovery')
     shards.bounds(shard_count, workers)
     if shard_count > 1 and os.environ.get("CARGO_TARGET_DIR"):
         raise ValueError("clear CARGO_TARGET_DIR so detached shards cannot share build output")
@@ -91,7 +95,7 @@ def start(root: Path, job: Path, phases: list[str], approval: str | None,
     from miri_cases import profile_for
     miri_profile = profile_for(plan["stage"], miri_profile)
     chosen = catalog.selected(plan, phases, approval, shard_count, root=root, miri_tasks=True,
-                              miri_profile=miri_profile)
+                              miri_profile=miri_profile, unit_tests=True)
     if plan["issues"] and any("environment" in issue or "RUSTUP_TOOLCHAIN" in issue for issue in plan["issues"]):
         raise ValueError("clear build/verifier environment overrides before detached execution")
     closure = records.sources(root)
@@ -107,14 +111,16 @@ def start(root: Path, job: Path, phases: list[str], approval: str | None,
         frozen = plans.build(root=job / "source", base=plan["base"])
         if frozen != plan:
             raise ValueError("frozen verification plan differs from approved plan")
-        manifest = {"schema": 2, "id": uuid.uuid4().hex, "created": stamp(),
+        manifest = {"schema": 3, "id": uuid.uuid4().hex, "created": stamp(),
                     "plan": plan, "approval": approval, "phases": phases,
                     "commands": chosen, "sources": closure, "tools": tools,
                     "seconds": seconds, "log_bytes": log_bytes,
                     "shards": shard_count, "workers": workers, "resume": resume,
-                    "partition": partition, "miri_profile": miri_profile}
+                    "partition": partition, "miri_profile": miri_profile, "recovery": recovery}
         checkpoints.indices(manifest)
         checkpoints.inherited(manifest)
+        import detached_recovery
+        detached_recovery.expected(manifest, job / 'source')
         records.atomic(job / "manifest.json", manifest)
         receipt = records.digest(manifest)
         records.atomic(job / "state.json", {"state": "pending", "manifest": receipt})
@@ -143,20 +149,25 @@ def load(job: Path, receipt: str) -> dict:
     manifest = records.read(job / "manifest.json")
     keys = {"schema", "id", "created", "plan", "approval", "phases", "commands",
             "sources", "tools", "seconds", "log_bytes", "shards", "workers"}
-    if manifest.get("schema") == 2:
+    if manifest.get("schema") in (2, 3):
         keys.update(("resume", "partition", "miri_profile"))
+    if manifest.get('schema') == 3:
+        keys.add('recovery')
     if (set(manifest) != keys
             or records.digest(manifest) != receipt or type(manifest.get("schema")) is not int
-            or manifest["schema"] not in (1, 2)):
+            or manifest["schema"] not in (1, 2, 3)):
         raise ValueError("detached launch receipt mismatch")
     bounds(manifest["seconds"], manifest["log_bytes"])
     shards.bounds(manifest["shards"], manifest["workers"])
     if len(manifest["commands"]) > records.MAX_COMMANDS:
         raise ValueError("detached command bound exceeded")
     checkpoints.indices(manifest)
-    if manifest["schema"] == 2:
+    if manifest["schema"] in (2, 3):
         from miri_cases import profile_for
         profile_for(manifest["plan"]["stage"], manifest["miri_profile"])
+    if manifest['schema'] == 3:
+        import detached_recovery
+        detached_recovery.references(manifest)
     return manifest
 
 
@@ -202,9 +213,9 @@ def validate_source(manifest: dict, root: Path, *, historical: bool = False) -> 
     if plans.execution_identity(plan) != plans.execution_identity(manifest["plan"]):
         raise ValueError("detached plan or approval changed")
     if catalog.selected(plan, manifest["phases"], manifest["approval"], manifest["shards"],
-                        root=root, miri_tasks=manifest["schema"] == 2,
+                        root=root, miri_tasks=manifest["schema"] in (2, 3),
                         miri_profile=manifest.get("miri_profile", "existing-full"),
-                        historical=historical) != manifest["commands"]:
+                        historical=historical, unit_tests=manifest['schema'] == 3) != manifest["commands"]:
         raise ValueError("detached command coverage changed")
 
 
@@ -264,10 +275,12 @@ def collect(job: Path, receipt: str, root: Path) -> dict:
     if len(result["results"]) != len(manifest["commands"]):
         raise ValueError("missing detached command results")
     total = 0
-    inherited = checkpoints.inherited(manifest) if manifest["schema"] == 2 else {}
+    inherited = checkpoints.inherited(manifest) if manifest["schema"] in (2, 3) else {}
+    import detached_recovery
+    recovered = detached_recovery.expected(manifest, job / 'source')
     for index, (command, record) in enumerate(zip(manifest["commands"], result["results"])):
-        if manifest["schema"] == 2:
-            checkpoints.validate_record(manifest, job, record)
+        if manifest["schema"] in (2, 3):
+            checkpoints.validate_record(manifest, job, record, recovered=recovered)
             if record["index"] != index or (index in inherited and record != inherited[index]):
                 raise ValueError("resumed checkpoint coverage changed")
             total += record["log_bytes"]
@@ -296,5 +309,6 @@ def collect(job: Path, receipt: str, root: Path) -> dict:
         validate_source(manifest, shards.source(job, index, manifest["shards"]))
     return {"state": "validated", "manifest": receipt, "head": manifest["plan"]["head"],
             "phases": manifest["phases"], "commands": len(result["results"]),
+            "reused_commands": sum(r['state'] == 'reused' for r in result['results']),
             "elapsed_seconds": result["elapsed_seconds"], "resources": result["resources"],
             "release_authorized": False}

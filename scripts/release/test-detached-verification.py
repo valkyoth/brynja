@@ -32,6 +32,8 @@ from miri_case_tests import MiriCaseTests
 from detached_history_tests import HistoryTests
 from phase_receipt_tests import PhaseReceiptTests
 from historical_group_tests import HistoricalGroupTests
+from detached_recovery_tests import RecoveryTests
+from verification_unit_tests import UnitTests
 
 
 def plan(groups=("parallelhash",), *, public=False, blocked=False):

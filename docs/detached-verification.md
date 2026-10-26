@@ -56,10 +56,15 @@ job**, not per command. `--seconds` and `--log-bytes` set explicit budgets,
 capped at one day and 1 GiB respectively. Exceeding either budget fails the job.
 For independent build shards, pass `--shards N --workers W`, with
 `1 <= W <= N <= 8`. Each shard gets its own source/build directory; Miri and
-Kani group lists are expanded into exact per-group commands. New schema-2 jobs
+Kani group lists are expanded into exact per-group commands. Schema-2/3 jobs
 split Miri further, at each Cargo invocation in the existing full-group driver,
 and into registered matrix cases under the selected profile.
-Other commands are unchanged. Commands are partitioned round-robin;
+Schema-3 jobs also split the modern and legacy hosted-HMAC cleanup unittest
+suites into named groups of at most four tests, grouped by defining module.
+Static discovery is checked against Python unittest discovery; no fixture or
+archived Python code is executed during inventory. Each group runs the normal
+suite setup/teardown and receives its own command receipt. Other commands are
+unchanged. Commands are partitioned round-robin;
 order within each shard is retained, but global phase order is not promised.
 Use serial mode if a local operation outside the registered workflow depends
 on earlier phases' generated build artifacts. Do not set `CARGO_TARGET_DIR`
@@ -102,15 +107,16 @@ or authorize substituting one platform's tests for another platform's lane.
 
 ### Resume interrupted work and combine partitions
 
-New jobs use schema 2: every successful command is source/plan/tool checked
+New jobs use schema 3: every newly executed successful command is source/plan/tool checked
 before and after execution, before its checkpoint is published. Logs are flushed
 as output arrives. Miri tasks print their group/task identity, test names, a
 host-clock elapsed duration on completion, and interpreter progress stacks.
 Progress output is not proof of success; a nonzero exit or zero passed tests
 fails the task. Miri safety checks remain enabled.
 
-To resume a cancelled, timed-out, or log-limited **schema-2** job, repeat the
-original selection and approval arguments, but use a new destination:
+To resume a cancelled, timed-out, or log-limited job with an unchanged command
+catalog and inputs, repeat the original selection and approval arguments, but
+use a new destination:
 
 ```sh
 python3 scripts/release/detached-verification.py start /tmp/brynja-verification-resumed --phase miri --resume /tmp/brynja-verification-my-run RECEIPT
@@ -123,6 +129,40 @@ receipts: parent evidence is revalidated at collection. A failed test, changed
 input, missing log, running/lost worker, or schema-1 job is not automatically
 resumable. In particular, the cancelled v0.24.49 sweep is still cancelled;
 its historical command records lack the new post-command attestations.
+
+### Explicit recovery after an investigated failure
+
+After investigating a failed command and testing its correction, use a new job:
+
+```sh
+python3 scripts/release/detached-verification.py start /tmp/brynja-verification-recovered --phase repository --phase matrix --recover /tmp/brynja-verification-failed FAILED_RECEIPT
+```
+
+This is not a successful relabeling of the old run. Schema-2/3 failed parents
+are eligible only through this explicit recovery path, after validation of the
+terminal record, original source snapshots, original command seals and all
+logs (including failed logs). Infrastructure/validation failures without a
+sealed command failure are rejected. Current baseline checks always run.
+
+Only successful matching commands with compatible tools and an unchanged
+implementation-family input scope can be reused. This is conservative: a
+changed test helper may invalidate other tests in its family; it does not
+establish arbitrary per-function independence. Unknown deltas run again.
+Failed, cancelled and missing commands never count as passed. Public-checkpoint
+and full-run approval requirements remain enforced.
+
+Recovered records explicitly say `reused` and cite the original receipt and
+command index; they retain the original log, not a fabricated current execution
+seal. A successful old whole suite may cover its unchanged enumerated groups.
+A failed old whole suite cannot supply subtest passes parsed out of stdout.
+Retain every ancestor directory, or include its relocated receipt/path in the
+historical collection registry. Recovery ancestry is checked again during
+collection. Ordinary `--resume` still refuses failed parents and inherits a
+schema-3 parent's existing recovery ancestry when resuming an interrupted job.
+
+The current task list must be completely covered by validated reused records
+and new passes before the new job can pass. Parallel work resumes from missing
+or invalidated task identities, not a single last-completed numeric index.
 
 To distribute one identical command set across prepared matching Linux hosts,
 use `--partition 0/2` on one and `--partition 1/2` on the other (zero-based;

@@ -12,7 +12,8 @@ PHASES = ("repository", "matrix", "asan", "miri", "kani")
 
 def selected(plan: dict, phases: list[str], approval: str | None, shards: int = 1,
              *, root=plans.ROOT, miri_tasks: bool = False,
-             miri_profile: str = "existing-full", historical: bool = False) -> list[dict]:
+             miri_profile: str = "existing-full", historical: bool = False,
+             unit_tests: bool = False) -> list[dict]:
     available = plans.scope.GROUPS
     if historical:
         import historical_groups
@@ -63,6 +64,9 @@ def selected(plan: dict, phases: list[str], approval: str | None, shards: int = 
                 environment["RUSTFLAGS"] = argv.pop(0).split("=", 1)[1]
             result.append({"phase": phase, "command": command, "argv": argv,
                            "stdin": source, "environment": environment})
+    if unit_tests:
+        import verification_units
+        result = [unit for entry in result for unit in verification_units.expand(entry, root)]
     if len(result) > MAX_COMMANDS:
         raise ValueError("too many detached commands")
     return result

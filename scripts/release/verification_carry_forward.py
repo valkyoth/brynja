@@ -74,7 +74,11 @@ def covered(entry: dict, previous: list[dict]) -> bool:
                     old['environment'] == entry['environment'] and old['argv'][0] == entry['argv'][0]):
                 found.update(verifier_groups(old) or ())
         return wanted <= found
-    return entry in previous
+    if entry in previous:
+        return True
+    import verification_units
+    expanded = verification_units.expand(entry, plans.ROOT)
+    return expanded != [entry] and all(unit in previous for unit in expanded)
 
 
 def disposition(entry: dict, context: dict) -> str:

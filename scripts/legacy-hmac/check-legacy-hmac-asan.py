@@ -9,7 +9,7 @@ import legacy_hmac_verifiers as verifier
 
 def cases():
     rows = [(['-p', 'brynja-legacy-hmac', '--test', name], count)
-            for name, count in (('bounded', 5), ('rfc2202', 2), ('contracts', 5))]
+            for name, count in (('bounded', 5), ('rfc2202', 2), ('contracts', 6))]
     rows.append((['-p', 'brynja-legacy-hmac', '--features', 'sha1-execution',
                   '--lib', 'execution::retained::tests'], 3))
     rows.extend((['-p', 'brynja-legacy-hmac-std', '--all-features', '--lib', name], count)

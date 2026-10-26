@@ -4,6 +4,7 @@ from contextlib import nullcontext, redirect_stdout
 import importlib.util
 import io
 import os
+import re
 from pathlib import Path
 import subprocess
 import sys
@@ -153,12 +154,12 @@ class VerifierTests(unittest.TestCase):
                 verifier.run(['cargo'], {})
 
     def test_asan_enforces_leaks_and_every_population(self):
-        populations = {'bounded': 5, 'rfc2202': 2, 'contracts': 5, 'execution::retained::tests': 3,
+        populations = {'bounded': 5, 'rfc2202': 2, 'contracts': 6, 'execution::retained::tests': 3,
                        'metadata_and_preselected_tag_policy': 2, 'batch_metadata_and_public_admission': 2,
                        'only_pre_entry_thread_errors_are_reusable': 2, 'missing_native': 4}
         hostile = {'ASAN_OPTIONS': 'detect_leaks=0', 'LSAN_OPTIONS': 'exitcode=0',
                    'RUSTFLAGS': '-Ctarget-cpu=native', 'CARGO_BUILD_BUILD_DIR': '/bad/cache'}
-        for missing in (None, *populations, 'ignored', 'failed'):
+        for missing in (None, *populations, 'ignored', 'failed', 'stale_contract_count', 'extra'):
             calls = []
             def run(argv, env):
                 self.assertEqual(env['ASAN_OPTIONS'], 'detect_leaks=1:halt_on_error=1:exitcode=1')
@@ -172,6 +173,10 @@ class VerifierTests(unittest.TestCase):
                 if missing == 'failed':
                     return f'test result: ok. {populations[name]} passed; 1 failed; 0 ignored;'
                 count = populations[name] if missing != name else 0
+                if missing == 'stale_contract_count' and name == 'contracts':
+                    count = 5
+                if missing == 'extra':
+                    count += 1
                 return f'test result: ok. {count} passed; 0 failed; 0 ignored;'
             with patch.dict(os.environ, hostile), patch.object(asan.sys, 'platform', 'linux'), \
                     patch.object(asan.platform, 'machine', return_value='x86_64'), \
@@ -184,6 +189,38 @@ class VerifierTests(unittest.TestCase):
                 else:
                     with self.assertRaisesRegex(ValueError, 'population'):
                         asan.main()
+
+    def test_asan_integration_counts_match_compiler_discovery(self):
+        # List, do not execute, the real binaries: no handwritten copy of the
+        # expected count can conceal an added/removed test from push diagnostics.
+        with verifier.cargo_environment.private_directory(ROOT) as temporary:
+            env = verifier.environment(Path(temporary))
+            for args, count in asan.cases():
+                if '--test' not in args:
+                    continue
+                output = verifier.run(['cargo', 'test', '--locked', '--offline',
+                                       *args, '--', '--list'], env)
+                names = re.findall(r'^([^\s:][^\n]*): test$', output, re.M)
+                with self.subTest(args=args):
+                    self.assertEqual(len(names), len(set(names)))
+                    self.assertEqual(len(names), count)
+                    if args[-1] == 'contracts':
+                        self.assertIn('mismatch_is_error_for_is_ok_and_question_mark', names)
+
+    def test_md5_compiled_mutation_anchors_match_current_source(self):
+        mutations = load('test-legacy-hmac-md5-cleanup')
+        source = (ROOT / 'crates/brynja-legacy-hmac/src/md5_batch/engine.rs').read_text()
+        with patch.object(mutations.driver, 'emit', side_effect=AssertionError('no compilation here')):
+            rows = mutations.teardown_mutations(source)
+            self.assertEqual(len(rows), 8)
+            quarantine = [after for _before, after, kind in rows if kind == 'quarantine']
+            self.assertTrue(any('| Error::ExecutionFailed)' in after for after in quarantine))
+            self.assertTrue(any('| Error::TagLength)' in after for after in quarantine))
+            for before, after, kind in rows:
+                self.assertNotEqual(source.replace(before, after, 1), source)
+                for replacement in ('', before + before):
+                    with self.subTest(before=before, replacement=replacement), self.assertRaises(ValueError):
+                        mutations.teardown_mutations(source.replace(before, replacement, 1))
 
     def test_kani_checks_identity_and_each_real_harness(self):
         pin = verifier.tool('kani')

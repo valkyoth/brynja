@@ -13,6 +13,25 @@ spec.loader.exec_module(driver)
 rows = driver.rows
 
 
+def teardown_mutations(source):
+    """Fail cheaply if any compiled mutation no longer targets the real source."""
+    consumed = "let result = consume(truncated.0.as_flattened())?;"
+    recoverable = "| Error::IneligibleWorkload)"
+    mutations = (
+        (consumed, consumed + " core::mem::forget(tags);", "teardown"),
+        (consumed, consumed + " core::mem::forget(inner_owner);", "teardown"),
+        (consumed, consumed + " core::mem::forget(workspace);", "teardown"),
+        (consumed, consumed + " core::hint::black_box(&result);", "teardown"),
+        (recoverable, "| Error::IneligibleWorkload | Error::ExecutionFailed)", "quarantine"),
+        (recoverable, "| Error::IneligibleWorkload | Error::TagLength)", "quarantine"),
+        ("| Error::Cancelled", "", "quarantine"),
+        ("self.executor.quarantine();", "core::hint::black_box(self.executor);", "quarantine"))
+    for before, after, _kind in mutations:
+        if source.count(before) != 1 or before == after:
+            raise ValueError("missing/ambiguous MD5 teardown mutation anchor: " + before)
+    return mutations
+
+
 class Md5CleanupTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -181,6 +200,7 @@ class Md5CleanupTests(unittest.TestCase):
                 driver.admission.validate(self.fixture.replace(body, body.replace(before, after, 1), 1), self.llvm)
 
     def test_compiled_rows_drop_mutants(self):
+        teardown_mutations((driver.ROOT / "crates/brynja-legacy-hmac/src/md5_batch/engine.rs").read_text())
         work, leaf = self.root / "fixture", self.root / "leaf"
         source = driver.ROOT / "crates/brynja-legacy-hmac"
         shutil.copytree(source / "src", leaf / "src")
@@ -409,15 +429,7 @@ class Md5CleanupTests(unittest.TestCase):
         # Compile semantic teardown/quarantine defects in the private leaf.
         # Source pins still describe the real dependencies; rejection must come
         # from the changed caller's emitted behavior, not a source-text check.
-        consumed = "let result = consume(truncated.0.as_flattened())?;"
-        for before, after, kind in (
-                (consumed, consumed + " core::mem::forget(tags);", "teardown"),
-                (consumed, consumed + " core::mem::forget(inner_owner);", "teardown"),
-                (consumed, consumed + " core::mem::forget(workspace);", "teardown"),
-                (consumed, consumed + " core::hint::black_box(&result);", "teardown"),
-                ("| Error::TagLength)", "| Error::TagLength | Error::ExecutionFailed)", "quarantine"),
-                ("| Error::Cancelled", "", "quarantine"),
-                ("self.executor.quarantine();", "core::hint::black_box(self.executor);", "quarantine")):
+        for before, after, kind in teardown_mutations(original):
             self.assertIn(before, original)
             path.write_text(original.replace(before, after, 1))
             artifacts = driver.emit(work, "1.99.1", "x86_64-unknown-linux-gnu", "unwind", True, work / "Cargo.toml")

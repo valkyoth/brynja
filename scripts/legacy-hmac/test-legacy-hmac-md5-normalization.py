@@ -13,6 +13,33 @@ bits, flow, syntax = normalization.bits, normalization.flow, normalization.synta
 Bits, Pointer = bits.Bits, bits.Pointer
 
 
+def mutate_probe(fixture, name, before, after):
+    """Mutate the named definition, never the first identical function body."""
+    definitions, aliases = flow.definitions_and_aliases(fixture)
+    body = normalization.pads.descriptors.admission.probe(definitions, aliases, name)
+    matches = [symbol for symbol in (*definitions, *aliases)
+               if re.search("30brynja_legacy_hmac_md5_cleanup" + str(len(name)) + name
+                            + r"(?:17h[0-9a-f]+E)?$", symbol)]
+    flow.require(len(matches) == 1, "mutation probe identity missing/ambiguous")
+    symbol = matches[0]
+    while symbol in aliases:  # probe() already rejects alias cycles.
+        symbol = aliases[symbol]
+    pattern = (r'^define [^\n]*@(?:"' + re.escape(symbol) + r'"|' + re.escape(symbol)
+               + r')\([^\n]*\)[^{]*\{\n(.*?)^\}')
+    sites = list(re.finditer(pattern, fixture, re.M | re.S))
+    flow.require(len(sites) == 1 and sites[0][1] == body,
+                 "mutation definition body missing/ambiguous")
+    flow.require(before != after and body.count(before) == 1,
+                 "mutation anchor missing/ambiguous/unchanged")
+    changed = body.replace(before, after, 1)
+    start, end = sites[0].span(1)
+    mutant = fixture[:start] + changed + fixture[end:]
+    mutated_definitions, mutated_aliases = flow.definitions_and_aliases(mutant)
+    flow.require(normalization.pads.descriptors.admission.probe(
+        mutated_definitions, mutated_aliases, name) == changed, "requested probe was not mutated")
+    return mutant
+
+
 class Normalization(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -157,14 +184,14 @@ class Normalization(unittest.TestCase):
 
     def test_independent_result_layout_probes(self):
         for fixture, llvm, _ in self.cases:
-            definitions, aliases = flow.definitions_and_aliases(fixture)
-            for name, before, after in (("normalized_scalar_success", "i64 8", "i64 0"),
-                                        ("normalized_scalar_error", "store i8 1", "store i8 0"),
-                                        ("normalized_simd_success", "i64 40", "i64 39")):
-                body = normalization.pads.descriptors.admission.probe(definitions, aliases, name)
-                self.assertIn(before, body)
-                with self.subTest(name=name), self.assertRaises(ValueError):
-                    normalization.validate(fixture.replace(body, body.replace(before, after, 1), 1), llvm)
+            for name, before, after, rejection in (
+                ("normalized_scalar_success", "i64 8", "i64 0", "normalization probe store aliases/escapes"),
+                ("normalized_scalar_error", "store i8 1", "store i8 0", "normalization Result layout changed"),
+                ("normalized_simd_success", "i64 40", "i64 39", "normalization report probe changed"),
+            ):
+                mutant = mutate_probe(fixture, name, before, after)
+                with self.subTest(name=name), self.assertRaisesRegex(ValueError, rejection):
+                    normalization.validate(mutant, llvm)
 
 
 class BitProvenance(unittest.TestCase):

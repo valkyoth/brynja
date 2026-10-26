@@ -243,6 +243,36 @@ class VerifierTests(unittest.TestCase):
                     count += len(variants)
             self.assertEqual(count, 38)
 
+    def test_normalization_mutation_targets_named_probe_not_identical_body(self):
+        mutations = load('test-legacy-hmac-md5-normalization')
+        name = 'normalized_scalar_error'
+        body = 'start:\n  store i8 1, ptr %_0, align 8\n  ret void\n'
+        for symbol in ('_ZN30brynja_legacy_hmac_md5_cleanup23' + name + '17h123abcE',
+                       '_RNvCsabc_30brynja_legacy_hmac_md5_cleanup23' + name):
+            for quoted in (False, True):
+                identity = '"' + symbol + '"' if quoted else symbol
+                target = 'define void @' + identity + '(ptr %_0) {\n' + body + '}\n'
+                decoy = 'define void @unrelated(ptr %_0) {\n' + body + '}\n'
+                for fixture in (decoy + target, target + decoy):
+                    with self.subTest(symbol=symbol, quoted=quoted, target_first=fixture == target + decoy):
+                        changed = mutations.mutate_probe(fixture, name, 'store i8 1', 'store i8 0')
+                        self.assertEqual(changed, fixture.replace(target, target.replace('store i8 1', 'store i8 0')))
+                        self.assertIn(decoy, changed)
+                alias = '@' + identity + ' = alias void (ptr), ptr @implementation\n'
+                implementation = 'define void @implementation(ptr %_0) {\n' + body + '}\n'
+                self.assertEqual(mutations.mutate_probe(decoy + alias + implementation, name,
+                                 'store i8 1', 'store i8 0'),
+                                 decoy + alias + implementation.replace('store i8 1', 'store i8 0'))
+                for fixture, before, after in (
+                    (decoy, 'store i8 1', 'store i8 0'),
+                    (target + target, 'store i8 1', 'store i8 0'),
+                    (target, 'absent', 'store i8 0'),
+                    (target, 'store i8 1', 'store i8 1'),
+                    (target.replace('store i8 1', 'store i8 1\nstore i8 1'), 'store i8 1', 'store i8 0'),
+                ):
+                    with self.assertRaises(ValueError):
+                        mutations.mutate_probe(fixture, name, before, after)
+
     def test_stream_mutations_reject_stale_or_ambiguous_anchors(self):
         mutations = load('legacy_hmac_hosted_stream_compiled_tests')
         root = ROOT / 'crates/brynja-legacy-hmac-std/src'

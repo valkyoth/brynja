@@ -3264,7 +3264,7 @@ sha256 = "34fbd1b8dd70046036a9357978f4dffb00e6fc9305a199a5c59d746b27400f82"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/test-legacy-hmac-md5-normalization.py"
-sha256 = "f52c7358d177ee7867c19ae74f38d40741404b732208496367feb1b8faeae4d8"
+sha256 = "0513085e90465bc5311b511d23a9e750e4b2e733c3ef127ac27f24dae8c8c945"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/test-legacy-hmac-md5-outer.py"
@@ -3340,7 +3340,7 @@ sha256 = "499885564fff26ca51015cb1341ace55cd72beaa81607c2dac004bcab5431bd8"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/test-legacy-hmac-verification.py"
-sha256 = "aa365c992967d3e691796b14eed499cbdf72baba7e26c979d1f58a13b0107856"
+sha256 = "c01068bcc8ed438c046299fd54b8586aecbe1e1034ef762090898cd6ff1ee71b"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/legacy_hmac_timing_review.py"

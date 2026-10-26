@@ -34,6 +34,7 @@ from phase_receipt_tests import PhaseReceiptTests
 from historical_group_tests import HistoricalGroupTests
 from detached_recovery_tests import RecoveryTests
 from verification_unit_tests import UnitTests
+from verification_test_only_tests import TestOnlyReuseTests
 
 
 def plan(groups=("parallelhash",), *, public=False, blocked=False):

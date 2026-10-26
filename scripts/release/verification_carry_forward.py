@@ -12,6 +12,7 @@ import detached_job as jobs
 import detached_manifest as records
 import verification_commands as commands
 import verification_plan as plans
+import verification_test_only as test_only
 
 
 def prepare(job: Path, receipt: str, root: Path, release_plan: dict, *,
@@ -39,7 +40,8 @@ def prepare(job: Path, receipt: str, root: Path, release_plan: dict, *,
         'changed_paths': plans.changed_paths(root, source),
     }
     return {'plan': delta, 'manifest': manifest, 'release_plan': release_plan,
-            'public_checkpoint': public_checkpoint}
+            'public_checkpoint': public_checkpoint,
+            'test_only_rerun': test_only.prove(root, source, delta['evidence']['changed_paths'])}
 
 
 def verifier_groups(entry: dict) -> set[str] | None:
@@ -92,6 +94,9 @@ def disposition(entry: dict, context: dict) -> str:
     driver = argv[1] if argv[0] == 'python3' else argv[0]
     if driver in changed or entry['stdin'] in changed:
         return 'run: changed command driver or input'
+    isolated = context.get('test_only_rerun')
+    if isolated and driver in isolated:
+        return 'run: dependent of corrected standalone test'
     groups = verifier_groups(entry)
     if groups is None:
         groups = commands.owners(entry['command'])
@@ -105,7 +110,7 @@ def disposition(entry: dict, context: dict) -> str:
     delta = context['plan']
     affected = (delta['verifiers'][entry['phase']] if entry['phase'] in delta['verifiers']
                 else delta['groups'])
-    if plans.requires_full(delta, entry['phase']) or groups.intersection(affected):
+    if plans.requires_full(delta, entry['phase']) or (groups.intersection(affected) and not isolated):
         return 'run: changed or unresolved implementation inputs'
     if not covered(entry, context['manifest']['commands']):
         return 'run: no matching successful command evidence'

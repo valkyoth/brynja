@@ -148,6 +148,14 @@ Only successful matching commands with compatible tools and an unchanged
 implementation-family input scope can be reused. This is conservative: a
 changed test helper may invalidate other tests in its family; it does not
 establish arbitrary per-function independence. Unknown deltas run again.
+An explicitly reviewed, raw-source-hash-bound standalone test correction can
+avoid invalidating its whole family: the corrected program and its registered
+dependent tests rerun, while unchanged checks remain eligible for reuse. The
+initial exception covers only the named MD5 normalization mutation correction
+and its quick-verifier regression. This is not a `test-*.py` or directory-wide
+exemption. Any other revision, shared helper, implementation/build input or
+structural review-policy change retains normal invalidation. Current baseline,
+tool identity, complete command coverage and public-checkpoint rules still apply.
 Failed, cancelled and missing commands never count as passed. Public-checkpoint
 and full-run approval requirements remain enforced.
 

@@ -222,6 +222,51 @@ class VerifierTests(unittest.TestCase):
                     with self.subTest(before=before, replacement=replacement), self.assertRaises(ValueError):
                         mutations.teardown_mutations(source.replace(before, replacement, 1))
 
+    def test_stream_compiled_mutations_match_current_workers_and_shared_tail(self):
+        mutations = load('legacy_hmac_hosted_stream_compiled_tests')
+        root = ROOT / 'crates/brynja-legacy-hmac-std/src'
+        common = (root / 'common.rs').read_text()
+        with patch.object(mutations, 'prepare', side_effect=AssertionError('no compiled fixture here')):
+            shared = mutations.tail_mutations(common)
+            self.assertEqual(len(shared), 2)
+            self.assertEqual(len(set(shared)), 2)
+            self.assertTrue(all(item != common for item in shared))
+            count = 2 * len(shared)
+            for directory in ('strict_execution', 'macos_resident'):
+                for file in ('worker.rs', 'sha1_compiled/worker.rs'):
+                    original = (root / directory / file).read_text()
+                    variants = mutations.worker_mutations(original, file == 'worker.rs')
+                    self.assertEqual(len(variants), 12 if file == 'worker.rs' else 5)
+                    self.assertEqual(len(set(variants)), len(variants))
+                    self.assertTrue(all(item != original for item in variants))
+                    self.assertTrue(all(mutations.TAIL_CALL in item for item in variants))
+                    count += len(variants)
+            self.assertEqual(count, 38)
+
+    def test_stream_mutations_reject_stale_or_ambiguous_anchors(self):
+        mutations = load('legacy_hmac_hosted_stream_compiled_tests')
+        root = ROOT / 'crates/brynja-legacy-hmac-std/src'
+        common = (root / 'common.rs').read_text()
+        for anchor in ('$request.tail.valid_bits == 8', '                $request.tail.valid_bits\n'):
+            for replacement in ('', anchor + anchor):
+                with self.subTest(anchor=anchor), self.assertRaises(ValueError):
+                    mutations.tail_mutations(common.replace(anchor, replacement, 1))
+        for directory in ('strict_execution', 'macos_resident'):
+            for file in ('worker.rs', 'sha1_compiled/worker.rs'):
+                source = (root / directory / file).read_text()
+                for anchor in (mutations.TAIL_CALL, 'chunk.chunks(4096)',
+                               '.chain(core::iter::once(complete))', 'state.update(part).map_err(Error::Mac)?;',
+                               '        let secret = state', '.finalize_bits_secret(tail, staging)'):
+                    for replacement in ('', anchor + anchor):
+                        with self.subTest(directory=directory, file=file, anchor=anchor), self.assertRaises(ValueError):
+                            mutations.worker_mutations(source.replace(anchor, replacement, 1), file == 'worker.rs')
+                if file == 'worker.rs':
+                    for replacement in ('', 'checkpoint(cancel)?;checkpoint(cancel)?;'):
+                        with self.assertRaises(ValueError):
+                            mutations.worker_mutations(source.replace('checkpoint(cancel)?;', replacement, 1), True)
+        with self.assertRaises(ValueError):
+            mutations.replace_once('anchor', 'anchor', 'anchor')
+
     def test_kani_checks_identity_and_each_real_harness(self):
         pin = verifier.tool('kani')
         banner = f'Kani Rust Verifier {pin["version"]} (cargo plugin)\nCBMC 6.11.0'

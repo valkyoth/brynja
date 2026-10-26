@@ -24189,7 +24189,7 @@
       ]
     }
   ],
-  "policy_sha256": "a07acf0248329c25742311c43d2f14ec84afc2ab400fec59292f973fda03af9c",
+  "policy_sha256": "e64372070cf16816217aa3f66fea6769b173111c1d24d5128e678c073366c216",
   "registered_secret_owners": [
     {
       "capability": "algorithm.hmac",

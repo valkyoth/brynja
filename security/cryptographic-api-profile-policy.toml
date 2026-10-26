@@ -2976,7 +2976,7 @@ sha256 = "26b6f443306e464780e3c8a0b59b0e3db8323e4441418fd33d380f8f254b2e6e"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/legacy_hmac_hosted_stream_compiled_tests.py"
-sha256 = "24c3415686e111f5f7076d77266658a1f2f0a662adb1f9b9edd4535e66f0a357"
+sha256 = "ca40e574aeb89babcd1692734325ec09af7e30e3bac666e67a36801cdc0f0e32"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/legacy_hmac_hosted_stream_tests.py"
@@ -3340,7 +3340,7 @@ sha256 = "499885564fff26ca51015cb1341ace55cd72beaa81607c2dac004bcab5431bd8"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/test-legacy-hmac-verification.py"
-sha256 = "16a98c25f140f9245e1353c40fe82390f2b61cbf4cc7d8dc8f83846de4016983"
+sha256 = "aa365c992967d3e691796b14eed499cbdf72baba7e26c979d1f58a13b0107856"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/legacy_hmac_timing_review.py"

@@ -117,7 +117,7 @@
         "boundary:pkix.0.94.0"
       ],
       "brynja_state": "current",
-      "content_sha256": "05d997b70a1047295685d54999e7461b49f1b86cffde562f68b7cf70bc080684",
+      "content_sha256": "c9b73b94dfb6449bb4c514d5aa6951907e588210f4245e7ebf3ccf82ca225bb0",
       "content_url": "https://www.iana.org/assignments/smi-numbers/smi-numbers.xml",
       "edition": "Structure of Management Information (SMI) Numbers (MIB Module Registrations)",
       "id": "iana:smi-numbers",
@@ -126,7 +126,7 @@
       "last_successful_observation": "2026-08-31",
       "metadata": {
         "created": "",
-        "updated": "2026-10-20"
+        "updated": "2026-10-23"
       },
       "planning_notices": [],
       "publisher": "IANA",
@@ -7562,5 +7562,5 @@
   "policy_sha256": "40fbbf9915be2b5202f3c1a8311a76e7c389345164753d1ef3dc0d9eadd42d80",
   "reviews_sha256": "47e2327e56be73e37fcbd935c7b97082a035cfb24aad02ef9dd937ae7eda1434",
   "schema": 1,
-  "source_ledger_sha256": "bbaa0c44ba3679741ac1dfd47caccd95a2216f58ca118c0225fdedbb70c5d594"
+  "source_ledger_sha256": "167725f852db5fa023ad2e4710e98cd22c70be2d2960a72c6faa6c92d6af1e98"
 }

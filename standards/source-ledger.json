@@ -611,9 +611,9 @@
         "0.3.3",
         "0.89.0"
       ],
-      "sha256": "05d997b70a1047295685d54999e7461b49f1b86cffde562f68b7cf70bc080684",
+      "sha256": "c9b73b94dfb6449bb4c514d5aa6951907e588210f4245e7ebf3ccf82ca225bb0",
       "title": "Structure of Management Information (SMI) Numbers (MIB Module Registrations)",
-      "updated": "2026-10-20",
+      "updated": "2026-10-23",
       "url": "https://www.iana.org/assignments/smi-numbers/smi-numbers.xml"
     },
     {

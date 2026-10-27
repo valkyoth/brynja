@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "8a36299c9400afea4021dd0227285f05d3d35d58b35444f3ea2560a3d7cd2527",
-  "domain_policy_sha256": "eccca67e243c3c604dbfba850c5262555b5b179a5ac6f192c8294b09708295ef",
-  "policy_sha256": "4b6a168bc7828512186259a459b81c81c58e7caaf1538a27b8c56da4b79189e8",
+  "domain_policy_sha256": "6d832fb2c666e94c811d20f1983a41a8fb7d7aa36b5607b6d760b25aabd4b640",
+  "policy_sha256": "74cada9fd554cc22c16a3d30d0c841af315eefed6247daff545197e5c19bb017",
   "requirements": [
     {
       "applicability": "delegate",
@@ -17330,7 +17330,7 @@
       "owner": "0.94.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 6,
+      "revision": 7,
       "scope": "protocol",
       "sources": [
         {
@@ -17348,7 +17348,7 @@
             "0.3.3",
             "0.89.0"
           ],
-          "sha256": "05d997b70a1047295685d54999e7461b49f1b86cffde562f68b7cf70bc080684"
+          "sha256": "c9b73b94dfb6449bb4c514d5aa6951907e588210f4245e7ebf3ccf82ca225bb0"
         }
       ],
       "statement": "Unselected SMI namespaces are preserved as caller-owned identifiers and do not gain implicit PKIX semantics.",
@@ -30872,9 +30872,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "eca54b490cf6b49d3fc28789854634ef9291dceff196d48a5b87e78aca08be97",
+  "residual_policy_sha256": "ac045b520c4093d634e02a6c92a26aa58182d6e74552e2a34b50fb7f3a2c0ee4",
   "schema": 5,
-  "source_ledger_sha256": "bbaa0c44ba3679741ac1dfd47caccd95a2216f58ca118c0225fdedbb70c5d594",
-  "surface_register_sha256": "0b04f107c23a7e64cb5aac51e632e352ac315213eb82bcbe2606608e66ddcbc5",
-  "transport_policy_sha256": "328ee6cefeb9fc9b96d3891f8c83b4440cecdbdc1770aadccc6bf684da38360a"
+  "source_ledger_sha256": "167725f852db5fa023ad2e4710e98cd22c70be2d2960a72c6faa6c92d6af1e98",
+  "surface_register_sha256": "2bd27839397277980c1c297f7db91e84e79c61364c2eda328af4b504332e8f3e",
+  "transport_policy_sha256": "8e16f298491b5deb4fe41181fcf722feacd7cd620cfb5ba11daf793ee88491dd"
 }

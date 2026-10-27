@@ -75,6 +75,24 @@ def test_october_registry_refresh_retains_unimplemented_draft_boundaries() -> No
         assert not any('RFC-ietf-' in source for source in row['normative_sources'])
 
 
+def test_october_iftype_refresh_remains_caller_owned() -> None:
+    surfaces = {item["id"]: item for item in current_surfaces()}
+    row = surfaces[
+        "iana.smi-numbers.smi-numbers-5."
+        "wayside-communication-over-optical-supervisory-channel.1"
+    ]
+    assert (row["disposition"], row["owner"]) == ("caller-owned", "0.94.0")
+    assert row["record"]["fields"] == {
+        "description": "Wayside Communication over Optical Supervisory Channel",
+        "name": "waysideOsc",
+        "value": "309",
+    }
+    assert row["registry"] == {"collection": "smi-numbers", "id": "smi-numbers-5"}
+    assert row["test_target"] == "tests/surface/smi_boundary.rs#caller_owned"
+    assert row["normative_sources"] == ["iana:smi-numbers", "rfc:5280"]
+    assert "do not gain implicit PKIX semantics" in row["rationale"]
+
+
 def test_dtls_rrc_boundary_drift_fails() -> None:
     broken = copy.deepcopy(current_surfaces())
     surface = next(

@@ -5656,10 +5656,10 @@
   "excluded_normative_section_count": 12,
   "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "eccca67e243c3c604dbfba850c5262555b5b179a5ac6f192c8294b09708295ef",
+  "policy_sha256": "6d832fb2c666e94c811d20f1983a41a8fb7d7aa36b5607b6d760b25aabd4b640",
   "requirement_count": 41,
   "schema": 1,
-  "surface_count": 3338,
+  "surface_count": 3339,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -20780,6 +20780,14 @@
       "disposition": "caller-owned",
       "domain": "pkix",
       "id": "iana.smi-numbers.smi-numbers-5.vpls-forwarding-instance-interface-type.1",
+      "owner": "0.94.0",
+      "requirement_id": "BRY-REQ-PKIX-0004"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "pkix",
+      "id": "iana.smi-numbers.smi-numbers-5.wayside-communication-over-optical-supervisory-channel.1",
       "owner": "0.94.0",
       "requirement_id": "BRY-REQ-PKIX-0004"
     },

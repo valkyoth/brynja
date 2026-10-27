@@ -28406,7 +28406,7 @@
       "requirement_ids": [
         "BRY-REQ-PKIXREG-0053"
       ],
-      "sha256": "05d997b70a1047295685d54999e7461b49f1b86cffde562f68b7cf70bc080684"
+      "sha256": "c9b73b94dfb6449bb4c514d5aa6951907e588210f4245e7ebf3ccf82ca225bb0"
     },
     {
       "id": "iana:tls-ech-configuration-extensions",
@@ -46225,6 +46225,12 @@
     },
     {
       "id": "iana.smi-numbers.smi-numbers-5.vpls-forwarding-instance-interface-type.1",
+      "requirement_ids": [
+        "BRY-REQ-PKIX-0004"
+      ]
+    },
+    {
+      "id": "iana.smi-numbers.smi-numbers-5.wayside-communication-over-optical-supervisory-channel.1",
       "requirement_ids": [
         "BRY-REQ-PKIX-0004"
       ]

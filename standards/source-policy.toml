@@ -2,6 +2,7 @@
 version = 1
 
 [review]
+v0251_smi_pin_provenance = "Owner-authorized author review on 2026-10-27 of the complete official IANA SMI Numbers XML diff. The 2026-10-23 update changes only the registry date, adds Interface Types (ifType) value 309 waysideOsc (Wayside Communication over Optical Supervisory Channel), and adds its contact entry. Every prior record is unchanged. The new interface identifier remains caller-owned under the existing unselected-SMI namespace policy; no PKIX semantics, HMAC behavior, cryptographic implementation, authority admission or release-gate rule changes. SHA-256 c9b73b94dfb6449bb4c514d5aa6951907e588210f4245e7ebf3ccf82ca225bb0 was reproduced from the official HTTPS XML. This is author source review, not independent cryptographic qualification."
 v0252_registry_pin_provenance = "Author review 2026-10-17: the official DNS Parameters XML advances its date to 2026-10-16, assigns temporary DELEGPARAM type 54 and temporary DELEG type 61440, and splits the surrounding unassigned range. Both expire 2027-10-16 and reference provisional draft-ietf-deleg-12. Existing caller-owned DNS boundary at v0.188.0 is unchanged; no draft authority, runtime implementation or cryptographic admission is added. The complete byte diff has no other semantic changes."
 v0250_registry_pin_provenance = "On 2026-10-15 the author reviewed current official IANA XML byte diffs for the v0.24.50 final gate. TLS Parameters and DNS Parameters change presentation, section-link encoding and whitespace only. TLS Extensions adds provisional n-pamp/3 and marks n-pamp/2 deprecated, referencing draft-bubblefish-npamp-02; application-protocol negotiation ownership remains caller-owned/future work. QUIC adds reset_stream_at transport parameter 0x1d and RESET_STREAM_AT frame 0x24 under the draft-typed RFC-ietf-quic-reliable-stream-reset-11 placeholder; QUIC transport ownership remains caller-owned. SMI adds id-pe-mtcCertificationAuthority-SHA256 (38), id-alg-mtcProof (67), and id-rdna-trustAnchorID (3) referencing draft-ietf-plants-merkle-tree-certs-06, alongside presentation/reference formatting changes; existing PKIX future-work ownership is retained. No provisional source is admitted as final normative authority and no runtime implementation, cryptographic admission or release-gate policy is changed. This is author review, not independent cryptographic qualification."
 checked_at = "2026-09-28"
@@ -72,7 +73,7 @@ milestones = ["0.3.0", "0.3.1", "0.3.3", "0.100.0"]
 [[registry]]
 id = "smi-numbers"
 url = "https://www.iana.org/assignments/smi-numbers/smi-numbers.xml"
-expected_sha256 = "05d997b70a1047295685d54999e7461b49f1b86cffde562f68b7cf70bc080684"
+expected_sha256 = "c9b73b94dfb6449bb4c514d5aa6951907e588210f4245e7ebf3ccf82ca225bb0"
 domains = ["pkix", "ocsp"]
 milestones = ["0.3.0", "0.3.1", "0.3.3", "0.89.0"]
 

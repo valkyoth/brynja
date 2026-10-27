@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "purpose": "native-observation-integrity",
-  "status": "pending-owner-review",
+  "status": "owner-approved",
   "reviewed_commit": "91d98587470afc04becb62d77028f86edd3d782c",
   "validation_changes": {
     "sha2-hardened": {

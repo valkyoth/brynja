@@ -2628,9 +2628,10 @@ the implemented scope, failure-path checks and existing limitations for review.
 - The owner-supplied independent retests are recorded as PASS in the
   [pentest record](../security/pentest/v0.25.1.md). This does not imply
   independent native qualification or certification.
-- Approve the refreshed MD5 native-evidence snapshot through the existing
-  external digest boundary. All four platform lanes have ordinary/hardened
-  captures with unchanged current inputs; historical observations are preserved.
+- The owner approved the refreshed MD5 native-evidence snapshot through the
+  existing external digest boundary on 2026-10-27. All four platform lanes have
+  ordinary/hardened captures with unchanged current inputs; historical
+  observations are preserved. Final validation still checks this approval.
 - Run the affected release checks using the existing reuse rules, then GitHub and
   separately authorized tagging. The completed local recovery and merged AWS
   Miri receipts are saved; final planning still requires eleven short

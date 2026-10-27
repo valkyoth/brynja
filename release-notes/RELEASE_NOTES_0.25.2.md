@@ -359,6 +359,20 @@ examples, not a new native qualification campaign.
 
 ## Remaining checkpoint work
 
+Two supplied focused reviews of `v0.25.1..6313481f` report no Critical, High or
+Medium issue. Their non-blocking notes are handled without runtime changes:
+protocol-owned attempt budgets remain explicit, every public HMAC verification
+entry documents fail-closed error handling, and the unpublished HMAC identity
+was checked against the official sparse registry index. Documentation mutations,
+leaf/hosted/strict tests and MSRV/current doctests pass. These focused reviews
+are not the cumulative public review; see the ledger for exact dispositions.
+
+The subsequent CI correction isolates two internal-release planner fixtures from
+the live public release stage. New public-mode assertions preserve the full
+checkpoint selection; all 143 detached-verification regressions pass. Planner,
+reuse and approval policy are unchanged, and the generated test binding is
+refreshed. This test-only follow-up still needs GitHub validation when committed.
+
 The [review handoff](../docs/hmac-public-checkpoint-review.md) now enumerates the
 completed author work and the remaining release work. The cumulative
 [pentest ledger](../security/pentest/v0.25.2.md) is explicitly pending, not PASS.

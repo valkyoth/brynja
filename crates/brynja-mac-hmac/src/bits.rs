@@ -60,6 +60,13 @@ impl<A: Algorithm> Hmac<A> {
     /// Comparison and public-length rejection follow the same policy as
     /// `verify`: all equal-length bytes are compared, with no early exit on
     /// a mismatch. No input-length preflight oracle is provided.
+    ///
+    /// # Errors
+    ///
+    /// A completed mismatch is [`Error::Mismatch`], never successful authentication.
+    /// A mismatch rejects this request; do not retry verification or fall back.
+    /// Other errors do not authenticate and must not select a weaker route.
+    /// The protocol must enforce failed-attempt and per-key usage budgets.
     pub fn verify_bits(self, input: A::FinalInput<'_>, candidate: &[u8]) -> Result<(), Error> {
         self.engine.verify(Some(input), candidate)
     }

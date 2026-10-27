@@ -2282,7 +2282,7 @@ sha256 = "b07235619595480d11f125a949cdeae95e96ee72f9bd43754e0328e679b28f7c"
 package = "brynja-crypto-cpu-std"
 path = "src/strict_hmac/mod.rs"
 status = "protected-scalar-hmac-session-development"
-sha256 = "eaeb18519f1c9ef0a867e58881efd6d39462de185c33e704133c29530046f80e"
+sha256 = "8ce07b80a8fba0e72789bf500d85b0e032f301fec4fb909c3d12e6a0bd91e19d"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -2312,7 +2312,7 @@ sha256 = "4ab072216b5bc2f655457ea5f4cbed3fcd7b132328c0ec9ce523658a61283030"
 package = "brynja-crypto-cpu-std"
 path = "src/strict_hmac/compiled.rs"
 status = "protected-compiled-hmac-session-development"
-sha256 = "5c7d56f76b81bc109380bec225c8d1ae3a221acbb51dd89a36cc30d17ee6d516"
+sha256 = "1679080cd56136bc513dc5cef3e262e0639596c3d09def874da1ef51006e04b3"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -2336,7 +2336,7 @@ sha256 = "d8b0089ee302f2f180ba02b6962b7d5e43887dcc965f3e44b54df57b0b93edc5"
 package = "brynja-crypto-cpu-std"
 path = "src/macos_resident/hmac/mod.rs"
 status = "macos-resident-hmac-session-development"
-sha256 = "e81dc63dbd394d7a06cdf6c1f9eabef45d823468cc9fdcdce63082684e5593a4"
+sha256 = "249f6db0b09cd7d190a48e4528ba6957da8c5055e24f98b49f32f50ff542a724"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -2366,7 +2366,7 @@ sha256 = "14edf3756e9eeb5491bf95c3060b75b49b4399f32841e2219abb80f494bd1e7c"
 package = "brynja-crypto-cpu-std"
 path = "src/macos_resident/hmac/compiled.rs"
 status = "macos-resident-hmac-compiled-session-development"
-sha256 = "26637bf7517a3a973e37df7513cbba720557c40ac12cf13d42c894ac91141957"
+sha256 = "943dad9ed3ac5b58285bc3cd081574dc077d4cc01aa2738a7e2428079993f285"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"

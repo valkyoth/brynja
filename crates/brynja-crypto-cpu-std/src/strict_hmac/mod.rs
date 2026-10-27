@@ -125,6 +125,14 @@ impl<A: Algorithm> Session<A> {
     /// Compares on the protected worker and releases only the decision.
     /// Candidate length must equal the preselected width. Full general tags
     /// compare canonical unused bits too; a noncanonical candidate cannot match.
+    ///
+    /// # Errors
+    ///
+    /// A completed [`Error::Mismatch`] permits session reuse for other requests,
+    /// not acceptance of this one. Reuse does not reset a protocol's attempt budget.
+    /// A mismatch rejects this request; do not retry verification or fall back.
+    /// Other errors do not authenticate and must not select a weaker route.
+    /// The protocol must enforce failed-attempt and per-key usage budgets.
     pub fn verify(
         &mut self,
         request: Request<'_>,

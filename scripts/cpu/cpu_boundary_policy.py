@@ -14,7 +14,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "2debf1c8418bc4201bdc79cb4f44295601df31a0757e4201670807793ad624fa"
+EXPECTED_POLICY_SHA256 = "1fa239db7b1c04ac9667aba7886bad419492d1180d847f6b3a814162da88f456"
 FORBIDDEN_CONSUMERS = (
     "brynja-tls",
     "brynja-tls12",

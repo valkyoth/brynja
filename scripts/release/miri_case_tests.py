@@ -5,7 +5,9 @@ import contextlib
 import io
 import os
 import sys
+import tempfile
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 
 import miri_cases
@@ -17,16 +19,28 @@ from miri_task_tests import runner
 
 
 class MiriCaseTests(unittest.TestCase):
-    def test_miri_runner_change_does_not_select_unrelated_verifiers(self):
-        with patch.object(plans.scope, 'select_repository', return_value=(False, ())) as shared, \
+    def miri_runner_plan(self, stage):
+        # The real repository changes release stage over time. Test the two
+        # policies explicitly rather than inheriting today's release metadata.
+        with tempfile.TemporaryDirectory() as directory, \
+                patch.object(plans.scope, 'select_repository', return_value=(False, ())) as shared, \
                 patch.object(plans.miri_dependencies, 'select', return_value=(True, plans.scope.GROUPS)), \
                 patch.object(plans, 'changed_paths', return_value=['scripts/zeroization/miri_cases.py']), \
                 patch.object(plans, 'fingerprint', return_value='a' * 64), \
                 patch.object(plans.inputs, 'snapshot', return_value=(None, None)), \
                 patch.object(plans.inputs, 'git', return_value=b'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'), \
                 patch.dict(os.environ, {}, clear=True):
-            plan = plans.build(base='v0.24.48')
+            root = Path(directory)
+            (root / 'release-crates.toml').write_text(
+                f'[release]\nversion="0.25.2"\nstage="{stage}"\n')
+            (root / 'rust-toolchain.toml').write_bytes((plans.ROOT / 'rust-toolchain.toml').read_bytes())
+            plan = plans.build(root=root, base='v0.24.48')
         self.assertFalse(shared.call_args.kwargs['include_miri_tasks'])
+        self.assertEqual(plan['stage'], stage)
+        return plan
+
+    def test_miri_runner_change_does_not_select_unrelated_verifiers(self):
+        plan = self.miri_runner_plan('internal')
         self.assertEqual(plan['verifiers']['asan'], [])
         self.assertEqual(plan['verifiers']['kani'], [])
         self.assertEqual(plan['verifiers']['miri'], list(plans.scope.GROUPS))
@@ -45,6 +59,16 @@ class MiriCaseTests(unittest.TestCase):
                'environment': {}}
         context = {'plan': plan, 'manifest': {'commands': [old]}, 'public_checkpoint': False}
         self.assertTrue(carry.disposition(old, context).startswith('reuse:'))
+
+    def test_public_checkpoint_still_selects_all_verifiers_after_miri_only_change(self):
+        plan = self.miri_runner_plan('public')
+        self.assertFalse(plan['approval_required'])
+        self.assertEqual(plan['groups'], list(plans.scope.GROUPS))
+        self.assertEqual(plan['full_phases'], ['asan', 'kani', 'matrix', 'miri', 'repository'])
+        self.assertIn('scheduled public crates.io checkpoint: full verification', plan['reasons'])
+        self.assertIn('Miri profile: extended (all registered matrix combinations)', plan['reasons'])
+        for groups in plan['verifiers'].values():
+            self.assertEqual(groups, list(plans.scope.GROUPS))
 
     def test_full_phase_scope_rejects_malformed_and_retains_legacy_fallback(self):
         plan = {'stage': 'internal', 'approval_required': True}

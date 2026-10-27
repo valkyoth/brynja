@@ -215,6 +215,24 @@ impl<A: Algorithm> Hmac<A> {
     /// Length rejection depends only on public policy. Equal-length comparison
     /// accumulates all differences without a content-dependent early exit.
     /// `Ok(())` means authenticated; a completed mismatch is [`Error::Mismatch`].
+    ///
+    /// # Errors
+    ///
+    /// A mismatch rejects this request; do not retry verification or fall back.
+    /// Other errors do not authenticate and must not select a weaker route.
+    /// The protocol must enforce failed-attempt and per-key usage budgets.
+    ///
+    /// ```
+    /// use brynja_mac_hmac::{Error, Hmac, Sha256};
+    /// fn authorize(key: &[u8], message: &[u8], candidate: &[u8]) -> Result<(), Error> {
+    ///     let mut mac = Hmac::<Sha256>::new(key)?;
+    ///     mac.update(message)?;
+    ///     mac.verify(candidate)?; // Reject mismatch and operational errors alike.
+    ///     Ok(()) // Protected application work may start only after verification.
+    /// }
+    /// assert_eq!(authorize(b"public test key", b"message", &[0; 32]), Err(Error::Mismatch));
+    /// assert_eq!(authorize(b"public test key", b"message", &[0; 15]), Err(Error::TagLength));
+    /// ```
     pub fn verify(self, candidate: &[u8]) -> Result<(), Error> {
         self.engine.verify(None, candidate)
     }

@@ -13,6 +13,32 @@ LEAF = "crates/brynja-mac-hmac/src/"
 HOST = "crates/brynja-crypto-cpu-std/src/"
 DOC = "docs/hmac-development-inventory.md"
 
+# Documentation tripwire, not a proof about downstream protocol control flow.
+VERIFY_DOCS = {
+    LEAF + "lib.rs": ("verify",),
+    LEAF + "bits.rs": ("verify_bits",),
+    LEAF + "execution/mod.rs": ("verify", "verify_bits"),
+    **{HOST + directory + "/" + name: ("verify",)
+       for directory in ("strict_hmac", "macos_resident/hmac")
+       for name in ("mod.rs", "compiled.rs")},
+}
+VERIFY_WARNINGS = (
+    "# Errors",
+    "A mismatch rejects this request; do not retry verification or fall back.",
+    "Other errors do not authenticate and must not select a weaker route.",
+    "The protocol must enforce failed-attempt and per-key usage budgets.",
+)
+
+
+def verification_docs(root):
+    for name, methods in VERIFY_DOCS.items():
+        source(root, name)  # Same regular-file requirement as code inputs.
+        text = (root / name).read_text()
+        for method in methods:
+            docs = re.findall(r"((?:[ \t]*///[^\n]*\n)+)[ \t]*pub fn " + method + r"\(", text)
+            require(len(docs) == 1 and all(token in docs[0] for token in VERIFY_WARNINGS),
+                    "verification error guidance missing: " + name + "#" + method)
+
 # Explicit expectations: adding an owner/field requires reviewing its lifetime.
 # Test-only fault fields are included, not silently discarded by the parser.
 OWNERS = {
@@ -108,6 +134,7 @@ def source(root, name):
 
 
 def validate(root=ROOT):
+    verification_docs(root)
     for target, (fields, _) in OWNERS.items():
         source(root, target.split("#")[0])
         rust.validate_type(root, target, fields)

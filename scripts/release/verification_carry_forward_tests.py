@@ -149,8 +149,11 @@ class CarryForwardTests(unittest.TestCase):
                                                '-c', 'commit.gpgsign=false', *args], cwd=root, stderr=subprocess.DEVNULL)
             git('init', '-q')
             originals = {}
-            for path in ('Cargo.lock', 'rust-toolchain.toml', 'release-crates.toml', 'assurance/policy.toml'):
+            for path in ('Cargo.lock', 'rust-toolchain.toml', 'assurance/policy.toml'):
                 originals[path] = (plans.ROOT / path).read_bytes()
+            # This test exercises internal-milestone approval, regardless of
+            # whether the real checkout currently prepares a public release.
+            originals['release-crates.toml'] = b'[release]\nversion="0.24.48"\nstage="internal"\n'
             for path in ('crates/brynja-hash-sha2/src/lib.rs', 'crates/brynja-hash-sha3/src/lib.rs',
                          'crates/brynja-legacy-md5/src/lib.rs', 'crates/brynja-core/src/lib.rs',
                          'scripts/release/verification_plan.py', 'scripts/zeroization/miri_scope.py',
@@ -171,6 +174,7 @@ class CarryForwardTests(unittest.TestCase):
                 (root / path).write_bytes(value)
                 try:
                     result = plans.build(root=root, base=base, verified_base=True)
+                    self.assertEqual(result['stage'], 'internal')
                     self.assertEqual(result['approval_required'], blocked, result['issues'])
                     self.assertEqual(set(result['groups']), set(expected))
                 finally:
@@ -226,6 +230,20 @@ class CarryForwardTests(unittest.TestCase):
                 self.assertTrue(plans.build(root=root, base=base, verified_base=True)['approval_required'])
             # Public CLI baselines cannot claim arbitrary commits as tested.
             self.assertTrue(plans.build(root=root, base=base)['approval_required'])
+            # A public checkpoint still selects the complete campaign. Its
+            # lack of an internal-fallback approval prompt is not reduced scope.
+            (root / 'release-crates.toml').write_bytes(
+                b'[release]\nversion="0.25.2"\nstage="public"\n')
+            (root / 'assurance/unknown/src/lib.rs').write_text('new\n')
+            public = plans.build(root=root, base=base, verified_base=True)
+            self.assertEqual(public['stage'], 'public')
+            self.assertFalse(public['approval_required'])
+            self.assertEqual(public['groups'], list(plans.scope.GROUPS))
+            self.assertTrue(any('assurance/unknown/src/lib.rs' in issue for issue in public['issues']))
+            for phase in ('repository', 'matrix', 'asan', 'miri', 'kani'):
+                self.assertTrue(plans.requires_full(public, phase))
+            for groups in public['verifiers'].values():
+                self.assertEqual(groups, list(plans.scope.GROUPS))
 
     def test_review_hash_rebinding_is_not_a_policy_or_path_exemption(self):
         compare = plans.inputs.json_hash_binding_only

@@ -19,6 +19,7 @@ class InventoryTests(unittest.TestCase):
             "lib.rs", "bits.rs", "algorithms.rs", "scratch.rs", "engine.rs", "execution/retained.rs")}
         paths |= {"crates/" + package + "/Cargo.toml" for _, package, _, _ in inventory.PROFILES}
         paths |= {name for _, name in inventory.EVIDENCE}
+        paths |= set(inventory.VERIFY_DOCS)
         paths.add("standards/protocol-surfaces.json")
         paths.add("security/cryptographic-api-profile-policy.toml")
         for name in paths:
@@ -127,6 +128,29 @@ class InventoryTests(unittest.TestCase):
     def test_comments_cannot_supply_a_missing_method(self):
         self.mutate(inventory.LEAF + "lib.rs", "pub fn cancel(self) {}",
                     "// pub fn cancel(self) {}\n")
+
+    def test_each_verification_method_retains_error_guidance(self):
+        import re
+        count = 0
+        for name, methods in inventory.VERIFY_DOCS.items():
+            path = self.root / name
+            original = path.read_text()
+            for method in methods:
+                match = re.search(r"((?:[ \t]*///[^\n]*\n)+)[ \t]*pub fn " + method + r"\(", original)
+                self.assertIsNotNone(match)
+                for warning in inventory.VERIFY_WARNINGS:
+                    with self.subTest(name=name, method=method, warning=warning):
+                        altered = match[1].replace(warning, "removed guidance")
+                        # A copy elsewhere must not satisfy this method's contract.
+                        path.write_text(original[:match.start(1)] + altered
+                                        + original[match.end(1):] + "\n// " + warning + "\n")
+                        try:
+                            with self.assertRaisesRegex(ValueError, "verification error guidance"):
+                                inventory.validate(self.root)
+                        finally:
+                            path.write_text(original)
+                        count += 1
+        self.assertEqual(count, 32)
 
     def test_normative_links_cannot_disappear(self):
         path = self.root / "standards/protocol-surfaces.json"

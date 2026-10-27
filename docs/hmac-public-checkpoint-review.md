@@ -1,11 +1,17 @@
 # v0.25.2 public checkpoint review handoff
 
-Status: author preparation; independent cumulative review and release
+Status: focused reviews received; independent cumulative review and release
 qualification pending. This document is not a PASS report or permission to
 publish. The implementation was prepared from
 `697b5ec2adedda6c92eeb914c7f5baee92e6e655`. Use the full candidate commit ID
 (`git rev-parse HEAD` in the clean review checkout) in the tester's report;
 do not use that preparation baseline as the reviewed identity.
+
+The owner-supplied Codex Daybreak and Claude reviews cover
+`v0.25.1..6313481f6ada011ad2b22f117a8230be3a4c9982` and report no Critical,
+High or Medium finding. The [ledger](../security/pentest/v0.25.2.md) records
+their exact scope, three non-blocking notes and the later author-tested
+documentation follow-up. They do not replace the full public-checkpoint review.
 
 ## Two different review ranges
 

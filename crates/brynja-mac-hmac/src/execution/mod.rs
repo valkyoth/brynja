@@ -143,6 +143,12 @@ impl<'a, A: Algorithm<'a>> Hmac<'a, A> {
 
     /// Consumes and compares all equal-length candidate bytes without fallback.
     /// Only a match returns `Ok(())`; a mismatch returns [`Error::Mismatch`].
+    ///
+    /// # Errors
+    ///
+    /// A mismatch rejects this request; do not retry verification or fall back.
+    /// Other errors do not authenticate and must not select a weaker route.
+    /// The protocol must enforce failed-attempt and per-key usage budgets.
     pub fn verify(self, candidate: &[u8]) -> Result<(), Error> {
         self.engine.take()?.verify(None, candidate)
     }
@@ -175,6 +181,13 @@ impl<'a, A: Algorithm<'a>> Hmac<'a, A> {
     }
 
     /// Consumes the exact final bits and verifies the preselected tag width.
+    ///
+    /// # Errors
+    ///
+    /// A completed mismatch is [`Error::Mismatch`], never successful authentication.
+    /// A mismatch rejects this request; do not retry verification or fall back.
+    /// Other errors do not authenticate and must not select a weaker route.
+    /// The protocol must enforce failed-attempt and per-key usage budgets.
     pub fn verify_bits(self, input: A::FinalInput<'_>, candidate: &[u8]) -> Result<(), Error> {
         self.engine.take()?.verify(Some(input), candidate)
     }

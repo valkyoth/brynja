@@ -313,11 +313,23 @@ def validate_release_state(root: Path) -> None:
                 "post-publication cumulative baseline drift")
         crates = table(release, "crates")
         adapter = table(crates, "brynja-sanitization")
+        # The third-party sanitization admission above is independent of the
+        # first-party adapter's coordinated publication version. Preserve the
+        # old non-publication state and admit only the reviewed dependency bump.
+        unchanged = (adapter.get("version") == "0.1.1" and
+                     adapter.get("change") in {"unchanged", "metadata", "dependency"} and
+                     adapter.get("publish") is False)
+        dependency_release = (adapter.get("version") == "0.1.2" and
+                              adapter.get("change") == "dependency" and
+                              adapter.get("publish") is True and
+                              metadata.get("stage") == "public")
         require(adapter.get("previous_version") == "0.1.1" and
-                adapter.get("version") == "0.1.1" and
-                adapter.get("change") in {"unchanged", "metadata", "dependency"} and
-                adapter.get("publish") is False,
+                (unchanged or dependency_release),
                 "published adapter release history drift")
+        package = table(read_toml(root / "crates/brynja-sanitization/Cargo.toml"), "package")
+        require(package.get("name") == "brynja-sanitization" and
+                package.get("version") == adapter.get("version"),
+                "adapter release/manifest identity drift")
 
 
 def archive_member(archive: tarfile.TarFile, suffix: str) -> bytes:

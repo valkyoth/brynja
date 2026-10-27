@@ -149,6 +149,76 @@ def test() -> None:
         require_rejection(root, "arbitrary source error")
 
 
+def test_adapter_release_history() -> None:
+    """First-party release metadata must not relax third-party admission."""
+    with tempfile.TemporaryDirectory(prefix="brynja-sanitization-release-") as temporary:
+        root = Path(temporary)
+        copy_fixture(root)
+        original = (root / "release-crates.toml").read_text()
+        manifest = root / "crates/brynja-sanitization/Cargo.toml"
+        original_manifest = manifest.read_text()
+        manifest_version = tomllib.loads(original_manifest)["package"]["version"]
+        release_version = tomllib.loads(original)["release"]["version"]
+        start = original.index('[crates."brynja-sanitization"]')
+        end = original.index('\n[crates.', start + 1)
+
+        def case(version="0.1.2", previous="0.1.1", change="dependency",
+                 publish=True, stage="public", actual=None, name="brynja-sanitization"):
+            row = ('[crates."brynja-sanitization"]\n'
+                   f'previous_version = "{previous}"\nversion = "{version}"\n'
+                   f'change = "{change}"\npublish = {str(publish).lower()}\n')
+            text = original[:start] + row + original[end:]
+            text = text.replace('stage = "public"', f'stage = "{stage}"', 1)
+            (root / "release-crates.toml").write_text(text)
+            manifest.write_text(original_manifest.replace(
+                f'version = "{manifest_version}"', f'version = "{actual or version}"', 1
+            ).replace('name = "brynja-sanitization"', f'name = "{name}"', 1))
+
+        # Both the historical no-publication state and the current selected
+        # dependency release retain all package/checksum/feature admission checks.
+        for change in ("unchanged", "metadata", "dependency"):
+            case(version="0.1.1", change=change, publish=False, stage="internal")
+            sanitization_admission.validate(root)
+        case()
+        sanitization_admission.validate(root)
+
+        rejections = (
+            {"version": "0.1.3"}, {"previous": "unpublished"},
+            {"previous": "0.1.0"}, {"change": "code"}, {"change": "initial"},
+            {"change": "unchanged"}, {"change": "metadata"},
+            {"publish": False}, {"stage": "internal"}, {"stage": "unknown"},
+            {"version": "0.1.1", "publish": True},
+        )
+        for mutation in rejections:
+            case(**mutation)
+            require_rejection(root, "published adapter release history drift")
+        for mutation in ({"actual": "0.1.1"}, {"actual": "0.1.3"},
+                         {"name": "substituted-adapter"}):
+            case(**mutation)
+            require_rejection(root, "adapter release/manifest identity drift")
+
+        # New adapter publication must not admit a new third-party identity,
+        # checksum, feature set or FIPS claim. Exercise the full validator.
+        for path, before, after, diagnostic in (
+            ("Cargo.toml", 'version = "=2.1.1", default-features = false',
+             'version = "=2.1.2", default-features = false', "workspace sanitization"),
+            ("Cargo.lock", sanitization_admission.PACKAGE_SHA256, "0" * 64, "lock identity"),
+            (str(sanitization_admission.RECORD), "default_features = false",
+             "default_features = true", "default features"),
+            (str(sanitization_admission.RECORD), 'fips_boundary = "excluded"',
+             'fips_boundary = "included"', "outside FIPS"),
+        ):
+            copy_fixture(root)
+            case()
+            replace(root / path, before, after)
+            require_rejection(root, diagnostic)
+        copy_fixture(root)
+        assert tomllib.loads((root / "release-crates.toml").read_text())["release"]["version"] == release_version
+        sanitization_admission.validate(root)
+    print("Adapter release history: four accepted states and eighteen identity/publication/admission regressions passed")
+
+
 if __name__ == "__main__":
     test()
     print("sanitization admission rejects seventeen identity, graph, error-boundary, release-history, feature, FIPS, and drift regressions")
+    test_adapter_release_history()

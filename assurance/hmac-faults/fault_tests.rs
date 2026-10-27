@@ -212,7 +212,12 @@ fn every_hash_boundary_releases_owners() {
         ] {
             reset(0, Fault::None);
             let mut output = [0x77; 32];
-            assert!(operation(key, mode, &mut output).is_ok());
+            let expected = if matches!(mode, Mode::Verify | Mode::BitVerify) {
+                Err(Error::Mismatch)
+            } else {
+                Ok(())
+            };
+            assert_eq!(operation(key, mode, &mut output), expected);
             let steps = closed();
             assert!(steps >= 3);
             for fail_at in 1..=steps {

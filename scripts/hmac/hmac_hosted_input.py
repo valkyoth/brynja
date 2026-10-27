@@ -147,7 +147,7 @@ class Input:
         returned = re.match('(' + V + ') = ', m.graph[self.update[0]][self.update[1]])
         require(returned, 'input update does not return a result')
         general = m.names[self.update_symbol].endswith(('::Sha512T>::update', '::HardenedSha512T>::update'))
-        ok = -1 if self.compiler == '1.99.1' else ((11 if m.compiled else 6) if general else 13)
+        ok = -1 if self.compiler == '1.99.1' else ((11 if m.compiled else 6) if general else 14)
         success_target = self.latch if self.rotated else self.part_header
         guard = self.returned(self.update)[0] if self.rotated else self.latch
         if self.rotated:

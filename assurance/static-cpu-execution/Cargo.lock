@@ -4,7 +4,7 @@ version = 4
 
 [[package]]
 name = "brynja-crypto-cpu"
-version = "0.1.1"
+version = "0.2.0"
 
 [[package]]
 name = "brynja-static-cpu-execution-fixture"

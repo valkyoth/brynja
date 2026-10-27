@@ -17,12 +17,12 @@ def install(consumer, roots, family):
     manifest.write_text(text)
     leaf = 'brynja-legacy-' + family
     for name, package in (('execution', leaf), ('hosted', leaf + '-std')):
-        (consumer / f'tests/{name}.rs').write_bytes((roots[package] / 'tests/hardened_execution.rs').read_bytes())
+        (consumer / f'tests/{name}.rs').write_bytes((shared.ROOT / 'crates' / package / 'tests/hardened_execution.rs').read_bytes())
     (consumer / 'tests/selection.rs').write_text(shared.cases.selection(family).replace('execution', 'hardened_execution'))
     (consumer / 'tests/scope.rs').write_text(cases.scope(family))
     if family == 'sha1':
         # Reuse the existing generator unchanged. Its support copies are not
-        # compiled; actual integration tests above come from extracted archives.
+        # compiled; integration tests above are repository fixtures against extracted libraries.
         scratch = consumer / 'oracle-generator'
         (scratch / 'src').mkdir(parents=True)
         (scratch / 'src/lib.rs').write_text('')

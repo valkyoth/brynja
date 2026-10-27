@@ -253,7 +253,7 @@ def execute(root, toolchain, bare_target, native_simd=False):
                       if p['name'] == package}
         require(all(not n['features'] for n in json.loads(metadata.stdout)['resolve']['nodes']
                     if n['id'] in identities), 'leaf unification enabled facade features')
-        extra = ('host = { package="brynja-crypto-cpu-std", version="=0.1.1", '
+        extra = ('host = { package="brynja-crypto-cpu-std", version="=0.2.0", '
                  'default-features=false, features=["runtime-execution"] }\n')
         hosted_features = ['sha2-runtime-execution', 'sha2-hardened-execution']
         manifest(consumer, roots, package, hosted_features, extra=extra)

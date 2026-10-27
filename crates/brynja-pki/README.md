@@ -4,9 +4,9 @@
 </p>
 
 <div align="center">
-  <a href="https://crates.io/crates/brynja">Crates.io</a>
+  <a href="https://crates.io/crates/brynja-pki">Crates.io</a>
   |
-  <a href="https://docs.rs/brynja">Docs.rs</a>
+  <a href="https://docs.rs/brynja-pki">Docs.rs</a>
   |
   <a href="https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md">Release Plan</a>
   |
@@ -19,7 +19,7 @@
 
 <p align="center">
   <a href="https://github.com/valkyoth/brynja">
-    <img src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
+    <img width="840" src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
   </a>
 </p>
 
@@ -41,8 +41,15 @@ There is no named independent review or FIPS 140-3 validation.
 
 ## Use
 
-Published packages provide the framing foundation; canonical value APIs
-include unpublished workspace functionality. To use this checkout:
+Use this bounded DER/ASN.1 foundation directly; it does not validate certificates.
+
+After this source version is published, install from the registry:
+
+```sh
+cargo add brynja-pki --no-default-features
+```
+
+For an unpublished candidate or matching local checkout instead:
 
 ```sh
 cargo add brynja-pki --path /path/to/brynja/crates/brynja-pki --no-default-features

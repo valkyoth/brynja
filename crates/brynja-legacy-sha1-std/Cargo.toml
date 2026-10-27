@@ -7,6 +7,7 @@ license.workspace = true
 repository.workspace = true
 description = "Opt-in host detection and fail-closed selection for legacy SHA-1"
 publish = ["crates-io"]
+include = ["Cargo.toml", "LICENSE-APACHE", "LICENSE-MIT", "README.md", "src/**/*.rs"]
 
 [features]
 default = []

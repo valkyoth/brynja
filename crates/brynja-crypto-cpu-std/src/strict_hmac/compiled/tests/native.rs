@@ -53,11 +53,17 @@ fn compare<A: Algorithm + for<'a> mac::execution::Algorithm<'a>>(
             assert_eq!(output.expose(), expected);
             drop(output);
             cleared(&session);
-            assert!(session.verify(request(), &expected, &Cancellation::new())?);
+            assert_eq!(
+                session.verify(request(), &expected, &Cancellation::new()),
+                Ok(())
+            );
             for index in [0, expected.len().checked_sub(1).ok_or(Error::Invariant)?] {
                 let mut wrong = expected.clone();
                 *wrong.get_mut(index).ok_or(Error::Invariant)? ^= 1;
-                assert!(!session.verify(request(), &wrong, &Cancellation::new())?);
+                assert_eq!(
+                    session.verify(request(), &wrong, &Cancellation::new()),
+                    Err(Error::Mismatch)
+                );
                 cleared(&session);
                 assert!(!session.is_quarantined());
             }

@@ -17,6 +17,7 @@ spec.loader.exec_module(shared)
 shared.PACKAGES = (*shared.PACKAGES, 'brynja-mac-kmac')
 
 
+# Fixtures come from the reviewed repository; runtime dependencies remain extracted archives.
 def package(destination, env):
     _, roots = shared.package(destination, env)
     consumer = destination / 'kmac-consumer'
@@ -28,7 +29,7 @@ def package(destination, env):
     manifest += '\n'.join(f'{name}={{path="{root.as_posix()}"}}' for name, root in roots.items()) + '\n'
     (consumer / 'Cargo.toml').write_text(manifest)
     (consumer / 'tests').mkdir(exist_ok=True)
-    shutil.copyfile(roots['brynja-mac-kmac'] / 'tests/execution.rs', consumer / 'tests/execution.rs')
+    shutil.copyfile(ROOT / 'crates/brynja-mac-kmac/tests/execution.rs', consumer / 'tests/execution.rs')
     return consumer, roots
 
 

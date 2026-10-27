@@ -2,7 +2,7 @@ use brynja_core::{SecretRegionInitialization, copy_secret_region};
 
 use crate::{
     Algorithm, Error,
-    output::{SecretTag, Tag, Verification},
+    output::{SecretTag, Tag},
     scratch::{Scratch, mask_pad},
 };
 
@@ -114,7 +114,7 @@ impl<A: Algorithm> Engine<A> {
         self,
         input: Option<A::FinalInput<'_>>,
         candidate: &[u8],
-    ) -> Result<Verification, Error> {
+    ) -> Result<(), Error> {
         if !crate::policy::exact_output(self.tag_bytes, candidate.len()) {
             return Err(Error::TagLength);
         }
@@ -129,8 +129,11 @@ impl<A: Algorithm> Engine<A> {
             }
             Ok(())
         })?;
-        Ok(Verification::new(brynja_core::secret_difference_is_zero(
-            &difference.0[0],
-        )))
+        // Declassify only after every selected byte has been compared.
+        if brynja_core::secret_difference_is_zero(&difference.0[0]).expose_public() {
+            Ok(())
+        } else {
+            Err(Error::Mismatch)
+        }
     }
 }

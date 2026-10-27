@@ -28,6 +28,11 @@ def main():
         original.replace('```rust', '```rust,no_run', 1),
         original.replace('```rust', '```rust,ignore', 1),
         original + '\n[Missing](https://github.com/valkyoth/brynja/blob/main/docs/absent-readme-test.md)\n',
+        original.replace('https://crates.io/crates/brynja-hash-sha2"', 'https://crates.io/crates/brynja"'),
+        original.replace('https://docs.rs/brynja-hash-sha2"', 'https://docs.rs/brynja"'),
+        original.replace(readmes.IMAGE, '../../.github/images/brynja.webp'),
+        original.replace('<img width="840"', '<img width="0"'),
+        original + '\n[Repository-only relative link](../../docs/RELEASE_PLAN.md)\n',
     ]
     method = Path.read_text
     for changed in mutants:
@@ -39,6 +44,42 @@ def main():
             except ValueError:
                 continue
         raise AssertionError('README regression escaped')
+    # Common corruption must not pass just because every header matches.
+    for old, new in ((readmes.IMAGE, 'https://example.invalid/logo.webp'),
+                     ('alt="Brynja security-first Rust cryptography and secure protocols overview"', 'alt=""')):
+        def shared_image(subject, *args, **kwargs):
+            return method(subject, *args, **kwargs).replace(old, new)
+        with patch.object(Path, 'read_text', shared_image):
+            try:
+                readmes.validate()
+            except ValueError:
+                continue
+        raise AssertionError('shared broken image accepted')
+    # Unpublished tools must link to their own source, not a nonexistent registry page.
+    tool = readmes.ROOT / 'crates/brynja-xtask/README.md'
+    before = tool.read_text()
+    changed = before.replace('https://github.com/valkyoth/brynja/tree/main/crates/brynja-xtask',
+                             'https://crates.io/crates/brynja-xtask')
+    with patch.object(Path, 'read_text', lambda subject, *a, **kw:
+                      changed if subject == tool else method(subject, *a, **kw)):
+        try:
+            readmes.validate()
+        except ValueError:
+            pass
+        else:
+            raise AssertionError('unpublished registry claim accepted')
+    # Placeholder crates retain an honest, crate-specific build example.
+    boundary = readmes.ROOT / 'crates/brynja-tls13/README.md'
+    before = boundary.read_text()
+    changed = before.replace('cargo test --locked -p brynja-tls13', 'cargo test --locked -p brynja')
+    with patch.object(Path, 'read_text', lambda subject, *a, **kw:
+                      changed if subject == boundary else method(subject, *a, **kw)):
+        try:
+            readmes.validate()
+        except ValueError:
+            pass
+        else:
+            raise AssertionError('unrelated placeholder example accepted')
     # Missing wrapper/source coverage is independently exercised by the scope
     # tests; the baseline must keep both that validator and real rustdoc runs.
     commands = (readmes.ROOT / 'scripts/checks.sh').read_text().splitlines()
@@ -46,7 +87,9 @@ def main():
                     'python3 scripts/repository/test-crate-readmes.py',
                     'cargo test --locked --offline --manifest-path assurance/crate-readmes/Cargo.toml --doc'):
         assert commands.count(command) == 1
-    print('Crate README policy rejects 12 header/status/timeline/pin/example/link regressions')
+    package_checks = (readmes.ROOT / 'scripts/repository/check-packages.sh').read_text().splitlines()
+    assert package_checks.count('python3 scripts/repository/check-crate-readmes.py') == 1
+    print('Crate README policy rejects 21 header/image/navigation/status/example/link regressions')
 
 
 if __name__ == '__main__':

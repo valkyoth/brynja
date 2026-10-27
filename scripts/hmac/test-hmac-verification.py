@@ -20,6 +20,7 @@ import detached_catalog as catalog
 import detached_manifest as records
 import verification_carry_forward as carry
 import miri_tasks
+import verification_units
 
 
 def load(name):
@@ -34,10 +35,31 @@ kani = load("check-hmac-kani")
 
 
 class ScopeTests(unittest.TestCase):
+    def test_split_hosted_suite_includes_prefix_regressions(self):
+        groups = verification_units.groups(ROOT, 'scripts/hmac/test-hmac-hosted-cleanup.py')
+        names = [name for group in groups for name in group]
+        for name in ('test_actual_wrapper_and_abstraction',
+                     'test_every_instruction_and_argument_is_load_bearing',
+                     'test_extra_access_unknown_identity_and_alias_cycle_reject'):
+            self.assertEqual(names.count('HostedTests.' + name), 1)
+
+    def test_combined_acceptance_follows_either_family_not_unrelated_campaigns(self):
+        checks = commands.catalog(ROOT / 'scripts/checks.sh', '# BEGIN VERIFICATION CATALOG')
+        for command in ('python3 scripts/hmac/check-hmac-facade.py',
+                        'python3 scripts/hmac/test-hmac-package.py'):
+            self.assertEqual(commands.owners(command), {'hmac', 'legacy_hmac'})
+            for family in ('hmac', 'legacy_hmac'):
+                self.assertIn(command, commands.selected(checks, [family]))
+            self.assertNotIn(command, commands.selected(checks, ['kmac']))
+        self.assertNotIn('python3 scripts/hmac/check-hmac-kani.py',
+                         commands.kani_commands(['legacy_hmac']))
+
     def test_hmac_changes_do_not_select_upstream_implementations(self):
         for path in ("crates/brynja-mac-hmac/src/engine.rs", "scripts/hmac/check-hmac-asan.py",
                      "assurance/hmac-policy/Cargo.lock", "assurance/hmac-faults/fault_tests.rs",
                      "assurance/hmac-facade/acceptance.rs", "scripts/hmac/check-hmac-facade.py",
+                     "assurance/hmac-facade/legacy.rs", "scripts/hmac/hmac_combined_acceptance.py",
+                     "scripts/hmac/hmac_combined_tests.py",
                      "assurance/hmac-strict/compiled.rs", "scripts/hmac/check-hmac-strict.py",
                      "crates/brynja-strict/src/hmac.rs", "crates/brynja-strict/src/hmac_tests.rs",
                      "assurance/hmac-cleanup/Cargo.lock", "assurance/hmac-cleanup/src/lib.rs",
@@ -54,6 +76,8 @@ class ScopeTests(unittest.TestCase):
                      "scripts/hmac/hmac_hosted_placement.py",
                      "scripts/hmac/hmac_hosted_authority.py",
                      "scripts/hmac/hmac_hosted_authority_tests.py",
+                     "scripts/hmac/hmac_hosted_prefix.py",
+                     "scripts/hmac/hmac_hosted_prefix_tests.py",
                      "scripts/hmac/hmac_hosted_keyed.py",
                      "scripts/hmac/hmac_hosted_keyed_tests.py",
                      "scripts/hmac/hmac_hosted_storage.py",

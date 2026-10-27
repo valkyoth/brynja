@@ -13,6 +13,23 @@ fn checked<T, E: std::fmt::Debug>(value: std::result::Result<T, E>) -> Result<T>
     value.map_err(|error| format!("{error:?}"))
 }
 
+// This benchmark deliberately groups matches/mismatches; operational failures
+// must still abort the timing campaign rather than becoming mismatch samples.
+fn leaf_decision(value: std::result::Result<(), brynja_mac_hmac::Error>) -> Result<bool> {
+    match value {
+        Ok(()) => Ok(true),
+        Err(brynja_mac_hmac::Error::Mismatch) => Ok(false),
+        Err(error) => checked(Err(error)),
+    }
+}
+fn host_decision(value: std::result::Result<(), host::Error>) -> Result<bool> {
+    match value {
+        Ok(()) => Ok(true),
+        Err(host::Error::Mismatch) => Ok(false),
+        Err(error) => checked(Err(error)),
+    }
+}
+
 pub enum Route<A: Algorithm> {
     Portable,
     Static(execution::Authority),
@@ -94,7 +111,7 @@ impl<A: Algorithm> Route<A> {
                 let mut state = checked(Hmac::<A>::with_tag_length(key, out.len()))?;
                 checked(state.update(message))?;
                 if let Some(candidate) = candidate {
-                    return Ok(checked(state.verify(black_box(candidate)))?.expose_public());
+                    return leaf_decision(state.verify(black_box(candidate)));
                 }
                 black_box(checked(state.finalize_tag(out))?.as_bytes());
             }
@@ -106,7 +123,7 @@ impl<A: Algorithm> Route<A> {
                 ))?;
                 checked(state.update(message))?;
                 if let Some(candidate) = candidate {
-                    return Ok(checked(state.verify(black_box(candidate)))?.expose_public());
+                    return leaf_decision(state.verify(black_box(candidate)));
                 }
                 black_box(checked(state.finalize_tag(out))?.as_bytes());
             }
@@ -117,13 +134,13 @@ impl<A: Algorithm> Route<A> {
                     };
                 checked(state.update(message))?;
                 if let Some(candidate) = candidate {
-                    return Ok(checked(state.verify(black_box(candidate)))?.expose_public());
+                    return leaf_decision(state.verify(black_box(candidate)));
                 }
                 black_box(checked(state.finalize_tag(out))?.as_bytes());
             }
             Self::Hosted(session) => {
                 if let Some(candidate) = candidate {
-                    return checked(session.verify(
+                    return host_decision(session.verify(
                         host::Request {
                             key,
                             chunks: &[message],
@@ -138,7 +155,7 @@ impl<A: Algorithm> Route<A> {
             }
             Self::Compiled(session) => {
                 if let Some(candidate) = candidate {
-                    return checked(session.verify(
+                    return host_decision(session.verify(
                         host::Request {
                             key,
                             chunks: &[message],

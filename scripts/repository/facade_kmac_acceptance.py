@@ -21,6 +21,7 @@ def require(value, message):
         raise ValueError('facade KMAC: ' + message)
 
 
+# Fixtures come from the reviewed repository; runtime dependencies remain extracted archives.
 def install(api, consumer, roots, package):
     (consumer / 'src/bin').mkdir(parents=True, exist_ok=True)
     api.manifest(consumer, roots, package, FEATURES, extra=HOST)
@@ -39,7 +40,7 @@ def install(api, consumer, roots, package):
         path = consumer / 'tests' / name
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(sources.rewrite(sources.scoped_tests(name, (fixture / 'tests' / name).read_text()), package))
-    text = sources.execution_tests((roots['brynja-mac-kmac'] / 'tests/execution.rs').read_text())
+    text = sources.execution_tests((ROOT / 'crates/brynja-mac-kmac/tests/execution.rs').read_text())
     (consumer / 'tests/execution.rs').write_text(sources.rewrite(text, package))
 
 

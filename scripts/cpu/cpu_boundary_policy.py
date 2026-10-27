@@ -14,7 +14,7 @@ CPU = "brynja-crypto-cpu"
 DETECTOR = "brynja-crypto-cpu-std"
 SHA2 = "brynja-hash-sha2"
 SHA3 = "brynja-hash-sha3"
-EXPECTED_POLICY_SHA256 = "2379aa2583a0bb12d7c94a1f6c1d7b367b2a460e61453b7a4bbde296fa95a3c3"
+EXPECTED_POLICY_SHA256 = "2debf1c8418bc4201bdc79cb4f44295601df31a0757e4201670807793ad624fa"
 FORBIDDEN_CONSUMERS = (
     "brynja-tls",
     "brynja-tls12",
@@ -218,12 +218,12 @@ def validate_policy_shape(policy: dict) -> None:
         fail("CPU boundary limits drifted")
     if policy["packages"] != {
         "kernel": {
-            "name": CPU, "version": "0.1.1", "runtime": "no_std",
+            "name": CPU, "version": "0.2.0", "runtime": "no_std",
             "dependencies": [], "default_features": [],
             "publication": "deferred-crates-io", "facade_feature": "cpu",
         },
         "detector": {
-            "name": DETECTOR, "version": "0.1.1", "runtime": "std",
+            "name": DETECTOR, "version": "0.2.0", "runtime": "std",
             "dependencies": [CPU, SHA2, SHA3, "brynja-core", "brynja-mac-kmac", "brynja-hash-tuple"], "default_features": [],
             "publication": "deferred-crates-io", "facade_feature": "none",
         },
@@ -257,7 +257,7 @@ def validate_policy_shape(policy: dict) -> None:
         fail("safe wrapper invariant inventory drifted")
 def validate_packages(root: Path) -> None:
     workspace = read_toml(root / "Cargo.toml")["workspace"]["dependencies"]
-    expected_pins = {CPU: "=0.1.1", DETECTOR: "=0.1.1", SHA2: "=0.1.0"}
+    expected_pins = {CPU: "=0.2.0", DETECTOR: "=0.2.0", SHA2: "=0.1.0"}
     for name, version in expected_pins.items():
         expected = {"path": f"crates/{name}", "version": version}
         if name == DETECTOR:

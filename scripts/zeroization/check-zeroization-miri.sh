@@ -186,13 +186,13 @@ full_parallelhash() {
 }
 
 quick_legacy() {
-    run_miri --manifest-path assurance/legacy-hash-public-api/Cargo.toml --lib dynamic_lifecycle_smoke
+    run_miri --manifest-path assurance/legacy-hash-public-api/current/Cargo.toml --lib dynamic_lifecycle_smoke
 }
 
 full_legacy() {
     # Wide vectors and file partitions run natively; interpret the bounded
     # package-external lifecycle case, as for other selected full groups.
-    run_miri --manifest-path assurance/legacy-hash-public-api/Cargo.toml --lib dynamic_
+    run_miri --manifest-path assurance/legacy-hash-public-api/current/Cargo.toml --lib dynamic_
     run_miri --manifest-path assurance/legacy-hash-final/Cargo.toml --no-default-features --lib dynamic_
 }
 

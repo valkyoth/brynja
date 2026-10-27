@@ -8,7 +8,7 @@ rust-version = "1.90"
 publish = false
 
 [dependencies]
-brynja-crypto-cpu = { path = "../../crates/brynja-crypto-cpu", version = "=0.1.1" }
+brynja-crypto-cpu = { path = "../../crates/brynja-crypto-cpu", version = "=0.2.0" }
 brynja-hash-sha3 = { path = "../../crates/brynja-hash-sha3", version = "=0.1.0" }
 
 [lints.rust]

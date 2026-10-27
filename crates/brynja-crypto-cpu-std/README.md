@@ -4,9 +4,9 @@
 </p>
 
 <div align="center">
-  <a href="https://crates.io/crates/brynja">Crates.io</a>
+  <a href="https://crates.io/crates/brynja-crypto-cpu-std">Crates.io</a>
   |
-  <a href="https://docs.rs/brynja">Docs.rs</a>
+  <a href="https://docs.rs/brynja-crypto-cpu-std">Docs.rs</a>
   |
   <a href="https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md">Release Plan</a>
   |
@@ -19,7 +19,7 @@
 
 <p align="center">
   <a href="https://github.com/valkyoth/brynja">
-    <img src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
+    <img width="840" src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
   </a>
 </p>
 
@@ -38,7 +38,7 @@ framing and XOF state stay on protected worker stacks; staging/output use
 protected mappings. Cancellation permits reuse; backend failure or worker panic
 quarantines permanently without fallback. Scalar `Session` remains unchanged.
 Compiler/platform qualification and independent retest remain pending.
-See the [compiled TupleHash API example](src/strict_tuplehash/compiled.rs).
+See the [compiled TupleHash API example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-crypto-cpu-std/src/strict_tuplehash/compiled.rs).
 
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
@@ -98,7 +98,8 @@ chunks and a canonical final-bit tail, while `verify` compares on the worker.
 Secret output loans require explicit declassification and clear on drop.
 Keys are not retained between calls. Unsupported platforms fail rather than
 fall back. This feature does not enable runtime detection or accelerated HMAC;
-compiler/platform qualification and strict-facade integration remain pending.
+it is also exposed through the separate `brynja-strict::hmac` facade.
+Current-checkpoint compiler/platform qualification remains separate from that integration.
 
 For explicit acceleration, additionally enable `strict-hmac-acceleration` and
 construct `strict_hmac::CompiledSession::<A>::new(policy, kernel, limits)`.
@@ -107,7 +108,7 @@ complete build-wide target features and a matching CPU/OS deployment guarantee.
 Authority is created on the protected worker, never passed in from the caller.
 Backend, invariant and worker failures permanently quarantine this session;
 ordinary request rejection and cancellation permit reuse. No error selects a
-scalar fallback. See the [compiled-session contract](src/strict_hmac/compiled.rs).
+scalar fallback. See the [compiled-session contract](https://github.com/valkyoth/brynja/blob/main/crates/brynja-crypto-cpu-std/src/strict_hmac/compiled.rs).
 
 On Apple Silicon macOS, the separate `macos-resident-hmac` feature exposes
 `macos_resident::hmac::Session<A>`. It uses the same bounded complete-request
@@ -118,7 +119,7 @@ It is not strict admission and is not exported by `brynja-strict`.
 with explicit Arm SHA-256, SHA-512 or Keccak selection and matching build-wide
 features; generic builds reject acceleration rather than silently substituting
 a scalar route. Scalar `Session` stays scalar under feature unification.
-See the [resident HMAC example and limits](src/macos_resident/hmac/mod.rs).
+See the [resident HMAC example and limits](https://github.com/valkyoth/brynja/blob/main/crates/brynja-crypto-cpu-std/src/macos_resident/hmac/mod.rs).
 
 The separate default-off `macos-resident` feature provides
 `macos_resident::Sha256Session` on Apple Silicon. It locks guarded output and
@@ -135,7 +136,7 @@ deployment requirements, without fallback. Separate `macos-resident-kmac` and
 on the resident worker; TupleHash preserves item boundaries across fragments.
 These APIs do not exclude dumps. The separate `macos-resident-batch` feature
 adds bounded SHA-2 and Keccak SIMD sessions; see the batch section below and
-the [contract and API examples](../../docs/macos-resident-profile.md).
+the [contract and API examples](https://github.com/valkyoth/brynja/blob/main/docs/macos-resident-profile.md).
 
 `strict-sha2` also exposes `windows_enclave`, the separate retained-result Windows
 x64 VBS interface re-exported as `brynja_strict::enclave`. It uses a trusted static
@@ -144,11 +145,11 @@ development switch. It currently supports scalar SHA-256 up to 1024 bytes,
 retained rehashing, cancellation and explicit public output. It does not expose
 enclave-private memory as host slices or make the Linux host-slice APIs work on
 Windows. Production-signed qualification remains pending.
-See the [API guide](../../docs/windows-enclave-owner.md).
+See the [API guide](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-owner.md).
 The distinct `windows_enclave::sha2` module covers streaming, all named SHA-2
 identities, general SHA-512/t and bit tails with retained cross-algorithm rehashing.
 Its version-six image is not interchangeable with the bounded worker. See the
-[streaming API guide](../../docs/windows-enclave-sha2.md).
+[streaming API guide](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-sha2.md).
 With `strict-sha2-acceleration`, explicitly use `sha2::Session::open_sha_ni`
 and a reviewed version-thirteen image for SHA-224/256. The enclave requires its
 complete SHA/SSE2/AVX/AVX2 bundle; other identities and mismatched images reject
@@ -160,7 +161,7 @@ not SIMD or parallel. With `strict-sha2-acceleration`, explicit
 `sha2_batch::Session::open_sha_ni` uses the distinct version-nineteen image and
 complete SHA/SSE2/AVX/AVX2/OS bundle for ordered SHA-224/256 items. Wide plans reject;
 scalar `open` stays scalar. This is not independent-message SIMD.
-See the [batch API and example](../../docs/windows-enclave-sha2-batch.md).
+See the [batch API and example](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-sha2-batch.md).
 The separate `windows_enclave::sha512_simd` interface requires
 `strict-sha2-acceleration` and explicit `Session::open_avx2` with a reviewed
 version-twenty image. It computes four independent wide SHA-2 messages in AVX2
@@ -178,10 +179,10 @@ With `strict-sha2` and `strict-sha3-acceleration`,
 four-message SHA-3/SHAKE/cSHAKE image. Each message/N/S field is bounded to 1024
 bytes and output to 2048 bits per lane. Explicit declassification, mandatory
 image trust and no-fallback behavior remain unchanged. See the
-[Keccak SIMD API and example](../../docs/windows-enclave-keccak-simd.md).
+[Keccak SIMD API and example](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-keccak-simd.md).
 With both `strict-sha2` and `strict-sha3`, `windows_enclave::sha3` adds the eight
 SHA-3/SHAKE/cSHAKE identities, streamed N/S and retained incremental output.
-Use the separate version-seven image and [SHA-3 guide](../../docs/windows-enclave-sha3.md).
+Use the separate version-seven image and [SHA-3 guide](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-sha3.md).
 For explicit AVX2, enable `strict-sha2` and `strict-sha3-acceleration`, then use
 `windows_enclave::sha3::Session::open_avx2` with the version-fourteen image.
 The baseline enclave entry validates AVX/AVX2 and OS vector state; the host needs
@@ -216,7 +217,7 @@ version-seventeen batch image. It retains mandatory production trust and checks
 the full AVX/AVX2/OS bundle inside the enclave. Slots execute sequentially using
 single-state AVX2, not independent-message SIMD or multicore batching. Scalar
 `open` remains unchanged; wrong images and unsupported routes never fall back.
-See the [batch API and qualification limits](../../docs/windows-enclave-sha3.md#batching).
+See the [batch API and qualification limits](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-sha3.md#batching).
 
 With `strict-sha2,strict-sha3`, `windows_enclave::parallelhash` provides all four
 ParallelHash identities, streamed leaves/customization, exact-bit retained
@@ -228,7 +229,7 @@ enable `strict-sha2,strict-sha3-acceleration` and use
 version-eighteen image. Complete AVX/AVX2/OS checks run inside the enclave; the
 host needs no build-wide AVX2 flags. Production image trust stays mandatory;
 failed selection never retries scalar. Root and leaves remain sequential, not
-multicore or SIMD. See the [API example and limits](../../docs/windows-enclave-parallelhash.md).
+multicore or SIMD. See the [API example and limits](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-parallelhash.md).
 
 The separate `windows_enclave::parallel_concurrent` API (features
 `strict-sha2,strict-sha3-acceleration`) selects a reviewed **five-thread** image:
@@ -238,7 +239,7 @@ declassification. It is one-shot, not a retained-secret-result API; worker joins
 and enclave destruction finish before the input borrows end. Existing sequential
 constructors still require one-thread images. Production signing and final-image
 cleanup qualification remain pending; development VBS execution is not independent
-verification. See the [concurrent API example and limits](../../docs/windows-enclave-parallel-concurrent.md#crate-api-integration).
+verification. See the [concurrent API example and limits](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-parallel-concurrent.md#crate-api-integration).
 
 Default-off `strict-kmac-acceleration` adds `strict_kmac::CompiledSession` with
 explicit AVX2 or Arm NEON/SHA3 selection. Enable the complete build-wide features
@@ -279,7 +280,7 @@ fallible and fails closed on unsupported systems or OS protection failure.
 before release. It is not a strict hashing authority;
 ordinary caller copies, stack and registers remain outside its guarantee.
 No hardware/SIMD instruction feature is required for this storage adapter.
-See the [implementation contract](../../docs/strict-hardening-profile.md).
+See the [implementation contract](https://github.com/valkyoth/brynja/blob/main/docs/strict-hardening-profile.md).
 
 The same feature provides `protected_memory::ProtectedStack`. Acquire it with
 `new(stack_bytes, max_mapping_bytes)`, then call `run` with a borrowed
@@ -304,7 +305,7 @@ whole-process/register-erasure guarantee. Inputs and caller-created copies remai
 caller responsibilities. Construct `Session::new(Algorithm::Sha256, limits)`
 with explicit stack/mapping, message-bit and chunk bounds, then use
 `session.hash(input)`. Drop the digest loan to clear output and reuse the session.
-See the [compiled API example and complete limits](src/strict_sha2/mod.rs).
+See the [compiled API example and complete limits](https://github.com/valkyoth/brynja/blob/main/crates/brynja-crypto-cpu-std/src/strict_sha2/mod.rs).
 
 `hash_chunks` also accepts a raw MSB-first final bit tail and a cooperative
 `Cancellation`. The returned digest loan has no implicit public conversion;
@@ -319,7 +320,7 @@ Empty N/S preserves SHAKE equivalence. Canonical validation runs on the protecte
 worker; output loans clear on Drop. Empty and partial-bit XOF output are supported.
 Prefix setup is bounded but not internally cancellable. This is scalar-only and
 qualification-pending, with the same target and caller-storage limits as above.
-See the [compiled SHA-3 session example](src/strict_sha3/mod.rs).
+See the [compiled SHA-3 session example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-crypto-cpu-std/src/strict_sha3/mod.rs).
 
 `strict-kmac` enables `strict_kmac::Session` with four scalar KMAC/KMACXOF
 identities. `Session::new(Algorithm::Kmac256(256), limits)` preacquires protected
@@ -331,8 +332,8 @@ Keys must be full-strength; fixed tags and verification also require full-streng
 output even if conformance-testing is enabled elsewhere. Use `declassify` for
 explicit public tags. Setup and fixed finalization are bounded, not internally
 cancellable. SIMD/hardware, native Arm and independent qualification remain pending.
-See the [compiled KMAC session example](src/strict_kmac/mod.rs) and the
-[resource/limit contract](../../docs/strict-hardening-profile.md).
+See the [compiled KMAC session example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-crypto-cpu-std/src/strict_kmac/mod.rs) and the
+[resource/limit contract](https://github.com/valkyoth/brynja/blob/main/docs/strict-hardening-profile.md).
 
 `strict-tuplehash` enables `strict_tuplehash::Session`. Construct it with
 `Algorithm::TupleHash256(256)` and explicit mapping, input/customization/output,
@@ -345,7 +346,7 @@ worker. Fixed/XOF output, including empty and partial-bit output, stays in an
 affine protected loan until exposure or explicit declassification. Setup and
 fixed finalization are bounded but not internally cancellable. This path is
 scalar-only, qualification-pending and has the target/caller-storage limits above.
-See the [compiled TupleHash session example](src/strict_tuplehash/mod.rs).
+See the [compiled TupleHash session example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-crypto-cpu-std/src/strict_tuplehash/mod.rs).
 
 `strict-batch` enables `strict_batch::Session` for protected independent-message
 SHA-2/SHA-3/SHAKE/cSHAKE batches. `Route::Sha256(None)`, `Sha512(None)` and
@@ -354,7 +355,7 @@ matching compiled AVX2/NEON and eligible actual SIMD work; it never silently
 falls back. SHA-256 has eight slots; wide/Keccak batches have four. Exact identity,
 bit width and inactive slots remain distinct, and outputs borrow protected
 storage. All public destinations are checked before declassification writes.
-See the [compiled batch example](src/strict_batch/mod.rs). Qualification is
+See the [compiled batch example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-crypto-cpu-std/src/strict_batch/mod.rs). Qualification is
 pending; caller inputs/copies and public lengths retain the limits above.
 
 Enable `sha256-batch` for the separate ordinary/public SHA-224/256 multibuffer
@@ -381,7 +382,15 @@ scheduling and migration. This is not an automatic runtime CPUID selector.
 Neither the state nor vector scratch is zeroized. See the
 [batch contract](https://github.com/valkyoth/brynja/blob/main/docs/sha256-batch-execution.md).
 
-The explicit execution APIs require the unpublished checkout:
+Opt in explicitly to hosted CPU execution.
+
+After this source version is published, install from the registry:
+
+```sh
+cargo add brynja-crypto-cpu-std --no-default-features --features runtime-execution
+```
+
+For an unpublished candidate or matching local checkout instead:
 
 ```sh
 cargo add brynja-crypto-cpu-std --path /path/to/brynja/crates/brynja-crypto-cpu-std --no-default-features --features runtime-execution
@@ -411,10 +420,10 @@ feature exposes `macos_resident::batch::Session`. Select
 explicit portable work; `Some(Neon)` requires a compatible deployment and
 actual SIMD work. Sparse lanes and scalar tails are supported. This is a
 resident/clearing profile, **not strict dump-excluded protection**.
-See the [complete batch API example](src/macos_resident/batch/mod.rs) and
-[resource limits and residuals](../../docs/macos-resident-profile.md).
+See the [complete batch API example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-crypto-cpu-std/src/macos_resident/batch/mod.rs) and
+[resource limits and residuals](https://github.com/valkyoth/brynja/blob/main/docs/macos-resident-profile.md).
 
-Windows enclave evidence covers [conditional Brynja-owned cleanup](../../docs/windows-enclave-whole-image-cleanup.md#bounded-cleanup-claim-and-evidence-map),
+Windows enclave evidence covers [conditional Brynja-owned cleanup](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-whole-image-cleanup.md#bounded-cleanup-claim-and-evidence-map),
 not complete SDK/OS or whole-process erasure. Development signing does not
 establish production deployment qualification. Windows ARM64 is unsupported by
 these enclave interfaces; Linux host-slice sessions are separate APIs.
@@ -444,7 +453,7 @@ does not prove arbitrary VM migration/hotplug safety. CPU quarantine revokes all
 borrowed accelerated executors; portable selection has no CPU authority, so use
 the portable executor's own `quarantine` when local revocation is wanted.
 Full qualification remains pending; see the
-[hardened multibuffer contract](../../docs/hardened-multibuffer-owners.md).
+[hardened multibuffer contract](https://github.com/valkyoth/brynja/blob/main/docs/hardened-multibuffer-owners.md).
 
 Hosted execution uses qualifying AArch64 system-wide feature APIs for
 SHA2/SHA-512/SHA3 kernels. Generic x86 and unreviewed platforms cannot derive
@@ -477,7 +486,7 @@ independent SHA-3/SHAKE/cSHAKE messages, with borrowed batch executors and
 caller-owned output staging. This is public-only, not a secret-erasing API.
 Generic x86 builds remain portable/unavailable; an AVX2-specialized deployment
 or an allowlisted AArch64 NEON platform is required for hosted SIMD.
-See the [Keccak batch contract](../../docs/keccak-batch-execution.md).
+See the [Keccak batch contract](https://github.com/valkyoth/brynja/blob/main/docs/keccak-batch-execution.md).
 
 ## Ordinary SHA-512-family batching
 
@@ -498,4 +507,4 @@ Portable defaults are unchanged. A Cargo feature alone does not enable AVX2;
 generic x86 builds remain portable/Unavailable. Static AVX2 requires
 `-C target-feature=+avx,+avx2` on a supporting deployment. Hosted Arm NEON
 relies on the documented OS ABI, not independent migration proof. No universal
-speedup is promised. See the [batch contract](../../docs/sha512-batch-execution.md).
+speedup is promised. See the [batch contract](https://github.com/valkyoth/brynja/blob/main/docs/sha512-batch-execution.md).

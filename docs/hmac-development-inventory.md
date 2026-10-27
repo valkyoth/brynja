@@ -34,7 +34,6 @@ No HMAC Windows enclave or independent-message SIMD batch API is implemented.
 | [Engine](../crates/brynja-mac-hmac/src/engine.rs) | `inner`, `outer`, `tag_bytes` | Two secret-bearing hash owners; public preselected tag width. Rust field drop, not a custom wipe. |
 | [SecretTag](../crates/brynja-mac-hmac/src/output.rs) | `algorithm`, `region` | OwnedSecretRegion clears the borrowed destination on drop. |
 | [Tag](../crates/brynja-mac-hmac/src/output.rs) | `algorithm`, `bytes` | Explicit public output; intentionally not an erasing owner. |
-| [Verification](../crates/brynja-mac-hmac/src/output.rs) | `choice` | Only the final comparison decision is explicitly declassified. |
 | [Hmac](../crates/brynja-mac-hmac/src/execution/mod.rs) | `_local`, `engine`, `kernel` | Retained engine borrows authority; failures cannot select fallback. |
 | [Guard](../crates/brynja-mac-hmac/src/execution/retained.rs) | `preserve`, `slot` | Error/unwind drops retained state unless the outcome preserves it. |
 | [Session](../crates/brynja-crypto-cpu-std/src/strict_hmac/mod.rs) | `_algorithm`, `bits`, `fault`, `limits`, `output`, `policy`, `stack`, `staging` | GNU/Linux protected stack and buffers; keyed states are constructed on the joined worker. |

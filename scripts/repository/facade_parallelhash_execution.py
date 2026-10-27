@@ -12,7 +12,7 @@ from facade_keccak_cases import require_runtime_rejection
 
 ROOT = batch.ROOT
 FEATURES = ['parallelhash-runtime-execution', 'sha3-hardened-execution']
-HOST = ('host = { package="brynja-crypto-cpu-std", version="=0.1.1", '
+HOST = ('host = { package="brynja-crypto-cpu-std", version="=0.2.0", '
         'default-features=false, features=["runtime-execution"] }\n'
         'threads = { package="brynja-hash-parallel-std", version="=0.1.0", '
         'default-features=false, features=["runtime-execution"] }\n')
@@ -60,8 +60,8 @@ def install(api, consumer, roots, package):
     (consumer / 'src/bin/route-probe.rs').write_text(rewrite(probes.PROBE, package))
     tests = consumer / 'tests'
     tests.mkdir(exist_ok=True)
-    leaf = roots['brynja-hash-parallel'] / 'tests'
-    host = roots[batch.ARCHIVE[0]] / 'tests'
+    leaf = ROOT / 'crates/brynja-hash-parallel/tests'
+    host = ROOT / 'crates' / batch.ARCHIVE[0] / 'tests'
     for target, path in (('execution', leaf / 'execution.rs'), ('execution_stream', leaf / 'execution_stream.rs'),
                          ('threaded_execution', host / 'execution.rs'), ('threaded_scoped', host / 'scoped_execution.rs'),
                          ('scoped_accelerated', leaf / 'scoped_accelerated.rs')):

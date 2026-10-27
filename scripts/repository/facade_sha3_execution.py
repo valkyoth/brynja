@@ -10,7 +10,7 @@ import facade_sha3_negatives as negatives
 
 ROOT = shared.ROOT
 FEATURES = ['sha3-runtime-execution']
-HOST = ('host = { package="brynja-crypto-cpu-std", version="=0.1.1", '
+HOST = ('host = { package="brynja-crypto-cpu-std", version="=0.2.0", '
         'default-features=false, features=["sponge-execution"] }\n')
 CASES = {'execution_cases': 'nist-bit-selected.txt', 'cshake_execution_cases': 'cshake-execution.txt'}
 TESTS = {'execution': 4, 'cshake_execution': 2}
@@ -39,6 +39,7 @@ def fixture_main(text):
     return '#![forbid(unsafe_code)]\n' + text
 
 
+# Fixtures come from the reviewed repository; runtime dependencies remain extracted archives.
 def install(api, consumer, roots, package):
     (consumer / 'src/bin').mkdir(parents=True, exist_ok=True)
     api.manifest(consumer, roots, package, FEATURES, extra=HOST)
@@ -46,7 +47,7 @@ def install(api, consumer, roots, package):
     main = (ROOT / 'assurance/sha3-execution/src/main.rs').read_text()
     (consumer / 'src/main.rs').write_text(rewrite(fixture_main(main), package))
     (consumer / 'src/bin/route-probe.rs').write_text(rewrite(probes.PROBE, package))
-    leaf = roots['brynja-hash-sha3'] / 'tests'
+    leaf = ROOT / 'crates/brynja-hash-sha3/tests'
     for location in ('src', 'tests'):
         base = consumer / location
         (base / 'vectors').mkdir(parents=True, exist_ok=True)

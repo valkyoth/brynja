@@ -11,8 +11,9 @@ from pathlib import Path
 HEADING = "## Cryptography Verification Status"
 ROOT_READMES = (Path("README.md"), Path("crates/brynja/README.md"))
 ROOT_ROWS = (
-    "| HMAC over legacy MD5/SHA-1 | 🚧 Development APIs; qualification pending | `brynja-legacy-hmac` | ❌ Not independently verified |",
-    "| Hosted legacy HMAC | 🚧 Linux protected / Apple Silicon resident owners; qualification pending | `brynja-legacy-hmac-std` | ❌ Not independently verified |",
+    "| HMAC over modern SHA-2/SHA-3 | ✅ Fully implemented | `brynja-mac-hmac` | ❌ Not independently verified |",
+    "| HMAC over legacy MD5/SHA-1 | ✅ Fully implemented | `brynja-legacy-hmac` | ❌ Not independently verified |",
+    "| Hosted legacy HMAC | ✅ Implemented | `brynja-legacy-hmac-std` | ❌ Not independently verified |",
     "| SHA-2 | ✅ Fully implemented | `brynja-hash-sha2` | ❌ Not independently verified |",
     "| SHA-3/SHAKE | ✅ Fully implemented | `brynja-hash-sha3` | ❌ Not independently verified |",
     "| TupleHash/TupleHashXOF | ✅ Fully implemented | `brynja-hash-tuple` | ❌ Not independently verified |",
@@ -122,6 +123,7 @@ def validate_document(path: Path, text: str, required_rows: tuple[str, ...]) -> 
                 "FIPS validation is a separate official claim",
                 "no FIPS 140-3 validation",
                 "certificate-bound operational-environment claim",
+                "Implementation completion does not authorize publication or imply platform qualification.",
             ):
                 if phrase not in prose:
                     raise VerificationStatusError(

@@ -103,9 +103,14 @@ impl<A: Algorithm + for<'a> brynja_mac_hmac::execution::Algorithm<'a>> CompiledS
         request: Request<'_>,
         candidate: &[u8],
         cancel: &Cancellation,
-    ) -> Result<bool, Error> {
-        self.execute(request, Some(candidate), cancel)?
-            .ok_or(Error::Invariant)
+    ) -> Result<(), Error> {
+        // execute validates the worker result and restores reusable health before
+        // converting a completed mismatch into an authentication error.
+        match self.execute(request, Some(candidate), cancel)? {
+            Some(true) => Ok(()),
+            Some(false) => Err(Error::Mismatch),
+            None => Err(Error::Invariant),
+        }
     }
     fn execute(
         &mut self,

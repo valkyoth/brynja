@@ -11,6 +11,7 @@ import hmac_hosted_capture as capture
 import hmac_hosted_capture_types as capture_types
 import hmac_hosted_placement as placement
 import hmac_hosted_authority as authority
+import hmac_hosted_prefix as prefix
 import hmac_hosted_keyed as keyed
 import hmac_hosted_storage as storage
 import hmac_hosted_scalar as scalar
@@ -77,6 +78,7 @@ def validate(llvm, target, compiler='1.99.1', panic='unwind'):
     types = constructor.construct.iterator.array_types(llvm, 'static')
     symbols = {name.strip('"') for name in re.findall(r'@("[^"]+"|[-\w.$]+)', llvm)}
     names = lifecycle.demangle(symbols)
+    definitions = prefix.abstract(definitions, aliases, names, compiler)
     owner, resource = lifecycle.profile(target)
     checked, workers = set(), set()
     for identity in common.IDENTITIES:

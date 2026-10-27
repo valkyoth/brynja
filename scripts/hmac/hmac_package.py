@@ -5,7 +5,7 @@ REQUIRED = frozenset({
     "Cargo.toml", "Cargo.toml.orig", "LICENSE-APACHE", "LICENSE-MIT", "README.md",
     "src/lib.rs", "src/algorithms.rs", "src/bits.rs", "src/engine.rs", "src/general.rs", "src/output.rs", "src/scratch.rs", "src/policy.rs",
     "src/execution/mod.rs", "src/execution/adapter.rs",
-    "src/execution/backends.rs", "src/execution/retained.rs",
+    "src/execution/backends.rs", "src/execution/retained.rs", "src/execution/tests.rs",
 })
 OPTIONAL = frozenset({"Cargo.lock", ".cargo_vcs_info.json"})
 
@@ -20,4 +20,4 @@ def validate_members(members):
             raise ValueError("noncanonical HMAC package entry")
     actual = set(names)
     if REQUIRED - actual or actual - REQUIRED - OPTIONAL:
-        raise ValueError("HMAC archive must contain only reviewed runtime sources and package metadata")
+        raise ValueError("HMAC archive must contain only reviewed Rust sources and package metadata")

@@ -69,7 +69,7 @@ RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-11 test \
     --target x86_64-unknown-linux-gnu
 
 RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-11 test \
-    --manifest-path assurance/legacy-hash-public-api/Cargo.toml \
+    --manifest-path assurance/legacy-hash-public-api/current/Cargo.toml \
     --lib --target x86_64-unknown-linux-gnu
 
 RUSTFLAGS="-Zsanitizer=address" cargo +nightly-2026-09-11 test \

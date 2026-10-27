@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use brynja_core::{Choice, OwnedSecretRegion};
+use brynja_core::OwnedSecretRegion;
 
 use crate::Algorithm;
 
@@ -65,22 +65,5 @@ impl<'a, A: Algorithm> SecretTag<'a, A> {
             .len()
             .saturating_mul(8)
             .min(A::TAG_BITS)
-    }
-}
-
-/// Explicitly declassified result of an equal-length authentication comparison.
-#[must_use = "the authentication decision must be checked"]
-pub struct Verification {
-    choice: Choice,
-}
-
-impl Verification {
-    pub(crate) const fn new(choice: Choice) -> Self {
-        Self { choice }
-    }
-
-    /// Reveals only the final authentication decision.
-    pub const fn expose_public(self) -> bool {
-        self.choice.expose_public()
     }
 }

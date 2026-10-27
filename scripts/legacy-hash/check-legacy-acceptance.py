@@ -10,8 +10,8 @@ def main():
     args = parser.parse_args()
     policy.validate(hashes=not args.write)
     policy.execute('python3', 'scripts/legacy-hash/check-legacy-vectors.py')
-    policy.execute('cargo', 'run', '--locked', '--offline', '--manifest-path', policy.FIXTURE + '/Cargo.toml')
-    policy.execute('cargo', 'test', '--locked', '--offline', '--manifest-path', policy.FIXTURE + '/Cargo.toml')
+    policy.execute('cargo', 'run', '--locked', '--offline', '--manifest-path', policy.CURRENT + '/Cargo.toml')
+    policy.execute('cargo', 'test', '--locked', '--offline', '--manifest-path', policy.CURRENT + '/Cargo.toml')
     if args.write:
         (policy.ROOT / policy.HASHES).write_text(policy.inventory())
     else:

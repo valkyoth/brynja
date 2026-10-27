@@ -40,7 +40,7 @@ class InventoryTests(unittest.TestCase):
     def test_current_inventory_and_pending_claims(self):
         inventory.validate(self.root)
         text = inventory.render()
-        self.assertEqual(len(inventory.OWNERS), 15)
+        self.assertEqual(len(inventory.OWNERS), 14)
         self.assertEqual(len(inventory.PROFILES), 10)
         for phrase in ("not compiler-qualified", "not dump exclusion",
                        "strict::hmac", "383 parameters", "direct-destructor model",
@@ -67,6 +67,7 @@ class InventoryTests(unittest.TestCase):
                     path.write_text(original)
 
     def test_methods_and_algorithms_cannot_disappear_or_expand(self):
+        self.mutate(inventory.LEAF + "lib.rs", "pub fn validate_tag_policy", "pub fn unchecked_tag_policy")
         self.mutate(inventory.LEAF + "lib.rs", "pub fn cancel(", "pub fn reset(")
         self.mutate(inventory.LEAF + "bits.rs", "pub fn verify_bits(", "pub fn verify_any(")
         path = self.root / (inventory.LEAF + "algorithms.rs")

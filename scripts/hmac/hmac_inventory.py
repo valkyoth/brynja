@@ -25,8 +25,6 @@ OWNERS = {
         {"region", "algorithm"}, "OwnedSecretRegion clears the borrowed destination on drop."),
     LEAF + "output.rs#Tag": (
         {"bytes", "algorithm"}, "Explicit public output; intentionally not an erasing owner."),
-    LEAF + "output.rs#Verification": (
-        {"choice"}, "Only the final comparison decision is explicitly declassified."),
     LEAF + "execution/mod.rs#Hmac": (
         {"engine", "kernel", "_local"}, "Retained engine borrows authority; failures cannot select fallback."),
     LEAF + "execution/retained.rs#Guard": (
@@ -50,7 +48,7 @@ ALGORITHMS = (
     "Sha3_224", "Sha3_256", "Sha3_384", "Sha3_512",
 )
 OPERATIONS = {
-    "lib.rs": {"authenticate", "new", "with_tag_length", "update",
+    "lib.rs": {"validate_tag_policy", "authenticate", "new", "with_tag_length", "update",
                "finalize_tag", "finalize_secret", "verify", "cancel"},
     "bits.rs": {"authenticate_bits", "finalize_bits_tag", "finalize_bits_secret", "verify_bits"},
 }

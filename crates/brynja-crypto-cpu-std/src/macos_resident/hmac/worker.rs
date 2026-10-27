@@ -84,12 +84,11 @@ pub(super) fn run<A: Algorithm>(
     checkpoint(cancel)?;
     let result = if let Some(candidate) = candidate {
         // Only the explicitly released boolean crosses back to the host stack.
-        Some(
-            state
-                .verify_bits(tail, candidate)
-                .map_err(Error::Mac)?
-                .expose_public(),
-        )
+        Some(match state.verify_bits(tail, candidate) {
+            Ok(()) => true,
+            Err(mac::Error::Mismatch) => false,
+            Err(error) => return Err(Error::Mac(error)),
+        })
     } else {
         let secret = state
             .finalize_bits_secret(tail, staging)

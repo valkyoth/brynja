@@ -65,7 +65,8 @@ class ScopeTests(unittest.TestCase):
             self.assertEqual(commands.scope.select([str(directory.relative_to(ROOT) / 'Cargo.lock')]),
                              (False, ('legacy_hmac',)))
             for mutant in (lock.replace(b'name = "brynja-core"', b'name = "unreviewed-core"'),
-                           lock.replace(b'version = "0.9.0"', b'version = "99.0.0"'),
+                           re.sub(rb'(name = "brynja-core"\nversion = ")[^"]+',
+                                  rb'\g<1>99.0.0', lock),
                            b'version=4\npackage="invalid"\n'):
                 self.assertNotEqual(mutant, lock)
                 with self.assertRaises((ValueError, TypeError)):

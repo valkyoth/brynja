@@ -4,9 +4,9 @@
 </p>
 
 <div align="center">
-  <a href="https://crates.io/crates/brynja">Crates.io</a>
+  <a href="https://crates.io/crates/brynja-mac-hmac">Crates.io</a>
   |
-  <a href="https://docs.rs/brynja">Docs.rs</a>
+  <a href="https://docs.rs/brynja-mac-hmac">Docs.rs</a>
   |
   <a href="https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md">Release Plan</a>
   |
@@ -19,34 +19,48 @@
 
 <p align="center">
   <a href="https://github.com/valkyoth/brynja">
-    <img src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
+    <img width="840" src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
   </a>
 </p>
 
 # brynja-mac-hmac
 
 First-party, allocation-free `no_std` HMAC over sealed, secret-bearing SHA-2 and
-SHA-3 owners. **Under development; not release-qualified or independently
-reviewed.** The modern facades expose a curated `hmac` namespace. The separate
+SHA-3 owners. **Portable APIs are implemented and acceptance-tested; the current
+checkpoint is not yet release-qualified or independently verified.** The modern
+facades expose a curated `hmac` namespace. The separate
 `brynja-strict::hmac` namespace exposes protected GNU/Linux sessions, with
 qualification still pending; it never substitutes the portable or Mac resident API.
+
+## Authentication results
+
+`verify` and `verify_bits` return `Result<(), Error>`: `Ok(())` means the
+authenticator matched, and `Error::Mismatch` means comparison completed without
+a match. `?` propagates authentication failure; `is_ok()` cannot accept a forged
+tag. Invalid lengths and operational failures remain distinct errors. All
+selected bytes are compared before the final decision is released.
+
+Migration from the development API: remove `.expose_public()` and handle the
+verification result directly. The former `Verification` decision wrapper is
+removed. Hosted protected/resident sessions use the same success-only contract
+with their own `Error::Mismatch`, without quarantining a completed mismatch.
 
 ## Cryptography Verification Status
 
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| HMAC-SHA-224/256/384/512 and SHA-512/224, SHA-512/256 | Portable initial implementation | ❌ No |
-| HMAC-SHA3-224/256/384/512 | Portable initial implementation | ❌ No |
-| Streaming, long-key normalization, explicit byte truncation, verification | Initial implementation with author tests | ❌ No |
-| Typed public/secret tags; owned-memory destruction | Implemented; HMAC-specific compiler qualification pending | ❌ No |
+| HMAC-SHA-224/256/384/512 and SHA-512/224, SHA-512/256 | ✅ Fully implemented portable API | ❌ No |
+| HMAC-SHA3-224/256/384/512 | ✅ Fully implemented portable API | ❌ No |
+| Streaming, long-key normalization, explicit byte truncation, verification | ✅ Implemented | ❌ No |
+| Typed public/secret tags; owned-memory destruction | ✅ Implemented; qualification tracked separately | ❌ No |
 | Explicit static SHA-2/Keccak accelerated composition | Implemented behind `hardened-execution`; HMAC-specific qualification pending | ❌ No |
 | Hosted CPU selection | Opt-in `brynja-crypto-cpu-std` HMAC bridge; native M2 author tests | ❌ No |
 | Protected scalar HMAC | Opt-in `brynja-crypto-cpu-std/strict-hmac` on supported GNU/Linux; author tests, qualification pending | ❌ No |
 | Protected compiled HMAC | Opt-in `brynja-crypto-cpu-std/strict-hmac-acceleration`; explicit SHA-2/Keccak kernel, authority constructed on protected worker | ❌ No |
 | Mac scalar/compiled resident sessions | Opt-in hosted Apple Silicon profile; guarded/locked worker, no dump-exclusion claim; qualification pending | ❌ No |
 | SIMD batching and Windows enclave HMAC | Not implemented by this HMAC API | ❌ No |
-| Canonical final-bit messages for the ten named algorithms | Implemented with author differential and lifecycle tests | ❌ No |
-| General SHA-512/t, t ≥ 128 and t < 512 except 384; exact full-bit tags | Portable implementation with author tests across 383 parameters | ❌ No |
+| Canonical final-bit messages for the ten named algorithms | ✅ Implemented; differential and lifecycle acceptance passed | ❌ No |
+| General SHA-512/t, t ≥ 128 and t < 512 except 384; exact full-bit tags | ✅ Implemented; 383-parameter acceptance passed | ❌ No |
 | General SHA-512/t below 128 bits | Rejected by HMAC's minimum-tag policy | Not applicable |
 | Fractional keys and arbitrary bit-level truncation | Not implemented by this HMAC API | ❌ No |
 
@@ -119,7 +133,15 @@ protection claim is made.
 
 ## API examples
 
-Use the unpublished workspace leaf while development is in progress:
+Use the leaf directly for typed modern HMAC.
+
+After this source version is published, install from the registry:
+
+```sh
+cargo add brynja-mac-hmac --no-default-features
+```
+
+For an unpublished candidate or matching local checkout instead:
 
 ```sh
 cargo add brynja-mac-hmac --path /path/to/brynja/crates/brynja-mac-hmac --no-default-features
@@ -134,7 +156,7 @@ let mut bytes = [0; 32];
 let tag = mac.finalize_tag(&mut bytes)?;
 let mut verifier = Hmac::<Sha256>::new(&key)?;
 verifier.update(b"authenticated message")?;
-assert!(verifier.verify(tag.as_bytes())?.expose_public());
+assert_eq!(verifier.verify(tag.as_bytes()), Ok(()));
 # Ok::<(), brynja_mac_hmac::Error>(())
 ```
 
@@ -142,13 +164,48 @@ assert!(verifier.verify(tag.as_bytes())?.expose_public());
 one-shot equivalent. For a protocol-defined truncated tag, both endpoints must
 select the exact length with `with_tag_length(key, length)` **before** processing
 the message. Never derive that policy from an attacker-supplied tag's length.
-This initial API accepts 16 through the full digest size in bytes. Shorter tags
+Byte-prefix policies accept 16 through the full digest size in bytes. Shorter tags
 reduce guessing resistance; applications own key-use and verification budgets.
+
+For an explicitly selected 128-bit protocol tag:
+
+```rust
+use brynja_mac_hmac::{Error, Hmac, Sha256};
+let key = [0x42; 32]; // Public test key, not a deployment secret.
+let mut signer = Hmac::<Sha256>::with_tag_length(&key, 16)?;
+signer.update(b"message")?;
+let mut output = [0; 16];
+let tag = signer.finalize_tag(&mut output)?;
+let mut verifier = Hmac::<Sha256>::with_tag_length(&key, 16)?;
+verifier.update(b"message")?;
+verifier.verify(tag.as_bytes())?;
+let mut forged = [0; 16];
+forged.copy_from_slice(tag.as_bytes());
+forged[0] ^= 1;
+let mut verifier = Hmac::<Sha256>::with_tag_length(&key, 16)?;
+verifier.update(b"message")?;
+assert_eq!(verifier.verify(&forged), Err(Error::Mismatch));
+# Ok::<(), Error>(())
+```
 
 Use `finalize_secret` to retain the output as secret material: its typed owner
 clears the caller destination on drop. Public tag errors leave the destination
 unchanged; secret-output errors clear it. States have no cloning, reset,
 formatting or cross-thread transfer API.
+
+```rust
+use brynja_mac_hmac::{Error, Hmac, Sha256};
+let key = [0x42; 32]; // Demonstration only.
+let mut output = [0xa5; 32];
+{
+    let mut signer = Hmac::<Sha256>::new(&key)?;
+    signer.update(b"message")?;
+    let secret_tag = signer.finalize_secret(&mut output)?;
+    assert_eq!(secret_tag.expose().len(), 32);
+} // The secret output loan clears its destination.
+assert_eq!(output, [0; 32]);
+# Ok::<(), Error>(())
+```
 
 For a message ending in a partial byte, use `authenticate_bits`, or finish a
 byte-streaming prefix with `finalize_bits_tag`, `finalize_bits_secret` or
@@ -175,9 +232,11 @@ outside the owned-memory guarantee. This is not a protected-memory API.
 
 ## Package contents and testing
 
-The crates.io allowlist contains runtime Rust sources, Cargo metadata, this
-README and both licences. Tests, oracle scripts and assurance evidence remain
-in the Git repository; no captures or evidence archives belong in the crate.
+The crates.io allowlist contains Rust sources, Cargo metadata, this README and
+both licences. Declared unit-test modules stay with their parent source so the
+extracted crate's own tests remain buildable. Standalone integration tests,
+vectors, oracle scripts and assurance evidence remain in the Git repository;
+no captures or evidence archives belong in the crate.
 
 ```sh
 cargo test -p brynja-mac-hmac --locked --offline

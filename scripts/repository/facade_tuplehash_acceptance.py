@@ -10,7 +10,7 @@ from facade_keccak_cases import require_runtime_rejection
 
 ROOT = Path(__file__).resolve().parents[2]
 FEATURES = ['tuplehash-runtime-execution']
-HOST = ('host = { package="brynja-crypto-cpu-std", version="=0.1.1", '
+HOST = ('host = { package="brynja-crypto-cpu-std", version="=0.2.0", '
         'default-features=false, features=["runtime-execution"] }\n')
 SOURCES = {'main.rs', 'selection.rs', 'dispatch.rs', 'scoped_accelerated.rs'}
 TESTS = {'scoped_accelerated.rs', 'scoped_accelerated/xof.rs'}
@@ -70,6 +70,7 @@ def rewrite(text, package):
     return text
 
 
+# Fixtures come from the reviewed repository; runtime dependencies remain extracted archives.
 def install(api, consumer, roots, package):
     (consumer / 'src/bin').mkdir(parents=True, exist_ok=True)
     api.manifest(consumer, roots, package, FEATURES, extra=HOST)
@@ -87,7 +88,7 @@ def install(api, consumer, roots, package):
         path.write_text('#![forbid(unsafe_code)]\n' + rewrite((source / 'tests' / filename).read_text(), package))
     # This is a consumer test switch, not a production/evidence cfg. Remove it
     # rather than enabling an extra Cargo feature in the downstream graph.
-    text = (roots['brynja-hash-tuple'] / 'tests/execution.rs').read_text()
+    text = (ROOT / 'crates/brynja-hash-tuple/tests/execution.rs').read_text()
     guard = '#![cfg(feature = "hardened-execution")]'
     require(text.count(guard) == 1, 'execution test feature guard')
     (consumer / 'tests/execution.rs').write_text(rewrite(text.replace(guard, '#![forbid(unsafe_code)]'), package))

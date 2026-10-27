@@ -22,7 +22,7 @@ def population(model, target):
 class Checkpoints:
     def __init__(self, model, flow, output, target, compiler):
         self.m, self.flow, self.output = model, flow, output
-        self.ok = -1 if compiler == '1.99.1' else 11
+        self.ok = -1 if compiler == '1.99.1' else 12
         self.target = target
         owner, _ = lifecycle.profile(target)
         self.cancel_name = '<' + owner + '::types::Cancellation>::check'

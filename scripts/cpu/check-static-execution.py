@@ -75,14 +75,14 @@ def package(root):
     env['CARGO_TARGET_DIR'] = str(root / 'build')
     run(['cargo', 'package', '--locked', '--offline', '--allow-dirty', '--no-verify',
          '-p', 'brynja-core', '-p', 'brynja-crypto-cpu'], env=env)
-    archive = root / 'build/package/brynja-crypto-cpu-0.1.1.crate'
+    archive = root / 'build/package/brynja-crypto-cpu-0.2.0.crate'
     # Input is the just-built local Cargo artifact, never a remote corpus.
     with tarfile.open(archive) as bundle:
         bundle.extractall(root / 'package', filter='data')
     core_version = tomllib.loads((ROOT / 'crates/brynja-core/Cargo.toml').read_text())['package']['version']
     with tarfile.open(root / 'build/package' / f'brynja-core-{core_version}.crate') as bundle:
         bundle.extractall(root / 'package', filter='data')
-    cpu = root / 'package/brynja-crypto-cpu-0.1.1'
+    cpu = root / 'package/brynja-crypto-cpu-0.2.0'
     core = root / 'package' / f'brynja-core-{core_version}'
     manifest = cpu / 'Cargo.toml'
     manifest.write_text(manifest.read_text() + '\n[patch.crates-io]\nbrynja-core = { path = "' + core.as_posix() + '" }\n')

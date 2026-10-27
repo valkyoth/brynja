@@ -3,6 +3,66 @@
 use brynja_crypto_cpu_std::execution::{Authority, HmacError, HmacSelection, Kernel, Mode, Route};
 use brynja_mac_hmac::{self as mac, execution::Algorithm};
 
+fn compare_tag_policy<A: for<'a> Algorithm<'a>>() -> Result<(), HmacError> {
+    let owner = Authority::new(Kernel::ArmSha256, Mode::Portable).map_err(HmacError::Hosted)?;
+    for width in core::iter::once(None).chain((0..=65).map(Some)).chain([
+        Some(usize::MAX / 8),
+        Some(usize::MAX / 8 + 1),
+        Some(usize::MAX),
+    ]) {
+        let selected = match width {
+            None => owner.hmac::<A>(b"unprocessed selection key"),
+            Some(bytes) => owner.hmac_with_tag_length::<A>(b"unprocessed selection key", bytes),
+        };
+        let expected = mac::validate_tag_policy::<A>(width);
+        assert_eq!(
+            selected.as_ref().map(|_| ()).map_err(|error| *error),
+            expected.map(|_| ()).map_err(HmacError::Mac)
+        );
+        let actual = selected
+            .map(|selection| {
+                let HmacSelection::Portable(policy) = selection else {
+                    return Err(HmacError::Mac(mac::Error::ExecutionFailed));
+                };
+                // Consume the policy; selection cannot silently replace a prefix with Full.
+                let stream = policy.start(b"actual key").map_err(HmacError::Mac)?;
+                let mut storage = [0; 64];
+                let output = storage
+                    .get_mut(..width.unwrap_or(A::TAG_BYTES))
+                    .ok_or(HmacError::Mac(mac::Error::TagLength))?;
+                Ok(stream
+                    .finalize_tag(output)
+                    .map_err(HmacError::Mac)?
+                    .bit_len())
+            })
+            .and_then(core::convert::identity);
+        assert_eq!(actual, expected.map_err(HmacError::Mac));
+    }
+    Ok(())
+}
+
+#[test]
+fn portable_policy_matches_leaf_for_all_algorithms_and_boundaries() -> Result<(), HmacError> {
+    compare_tag_policy::<mac::Sha224>()?;
+    compare_tag_policy::<mac::Sha256>()?;
+    compare_tag_policy::<mac::Sha384>()?;
+    compare_tag_policy::<mac::Sha512>()?;
+    compare_tag_policy::<mac::Sha512_224>()?;
+    compare_tag_policy::<mac::Sha512_256>()?;
+    compare_tag_policy::<mac::Sha3_224>()?;
+    compare_tag_policy::<mac::Sha3_256>()?;
+    compare_tag_policy::<mac::Sha3_384>()?;
+    compare_tag_policy::<mac::Sha3_512>()?;
+    compare_tag_policy::<mac::Sha512T<128>>()?;
+    compare_tag_policy::<mac::Sha512T<129>>()?;
+    compare_tag_policy::<mac::Sha512T<511>>()?;
+    compare_tag_policy::<mac::Sha512T<0>>()?;
+    compare_tag_policy::<mac::Sha512T<127>>()?;
+    compare_tag_policy::<mac::Sha512T<384>>()?;
+    compare_tag_policy::<mac::Sha512T<512>>()?;
+    compare_tag_policy::<mac::Sha512T<65535>>()
+}
+
 #[test]
 fn portable_selection_does_not_process_keys() -> Result<(), HmacError> {
     for kernel in [Kernel::ArmSha256, Kernel::ArmSha512, Kernel::ArmKeccak] {
@@ -119,12 +179,7 @@ fn compare<A: for<'a> Algorithm<'a>>(kernel: Kernel, mode: Mode) -> Result<(), H
     let candidate = expected
         .get(..16)
         .ok_or(HmacError::Mac(mac::Error::TagLength))?;
-    assert!(
-        verify
-            .verify(candidate)
-            .map_err(HmacError::Mac)?
-            .expose_public()
-    );
+    assert_eq!(verify.verify(candidate).map_err(HmacError::Mac), Ok(()));
     let HmacSelection::Accelerated(mut reject) = owner.hmac_with_tag_length::<A>(&key, 16)? else {
         return Err(HmacError::Mac(mac::Error::ExecutionFailed));
     };
@@ -134,11 +189,9 @@ fn compare<A: for<'a> Algorithm<'a>>(kernel: Kernel, mode: Mode) -> Result<(), H
         .first_mut()
         .ok_or(HmacError::Mac(mac::Error::TagLength))?;
     *first ^= 1;
-    assert!(
-        !reject
-            .verify(&changed)
-            .map_err(HmacError::Mac)?
-            .expose_public()
+    assert_eq!(
+        reject.verify(&changed).map_err(HmacError::Mac),
+        Err(HmacError::Mac(mac::Error::Mismatch))
     );
     // Invalid policy is an error on an admitted route, even under Prefer.
     assert!(matches!(

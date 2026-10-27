@@ -10,7 +10,7 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-CLOSURE = {'brynja-core': '0.9.0', 'brynja-hash-core': '0.1.0', 'brynja-legacy-sha1': '0.1.0'}
+CLOSURE = {'brynja-core': '0.10.0', 'brynja-hash-core': '0.1.0', 'brynja-legacy-sha1': '0.1.0'}
 
 
 def main():
@@ -27,7 +27,7 @@ def main():
         # not enable them. Patch real packaged first-party sources, not stubs.
         closure.update({name: '0.1.0' for name in ('brynja-hash-sha2', 'brynja-hash-sha3',
                         'brynja-mac-kmac', 'brynja-hash-tuple', 'brynja-mac-hmac')})
-        closure.update({'brynja-crypto-cpu': '0.1.1', 'brynja-crypto-cpu-std': '0.1.1'})
+        closure.update({'brynja-crypto-cpu': '0.2.0', 'brynja-crypto-cpu-std': '0.2.0'})
     with tempfile.TemporaryDirectory(prefix='brynja-sha1-package-') as temporary:
         root = Path(temporary)
         environment = dict(os.environ, CARGO_TARGET_DIR=str(root / 'target'))

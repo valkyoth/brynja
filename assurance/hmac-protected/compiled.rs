@@ -16,8 +16,8 @@ fn run<A: Algorithm + for<'a> mac::execution::Algorithm<'a>>(kernel: Kernel) -> 
     let output = session.authenticate(&key, b"packaged")?;
     assert_eq!(output.expose(), expected);
     drop(output);
-    assert!(session.verify(Request { key: &key, chunks: &[b"packaged"], tail: Bits::empty() },
-                           &expected, &Cancellation::new())?);
+    assert_eq!(session.verify(Request { key: &key, chunks: &[b"packaged"], tail: Bits::empty() },
+                           &expected, &Cancellation::new()), Ok(()));
     session.quarantine();
     assert!(matches!(session.authenticate(&key, b"packaged"), Err(Error::Quarantined)));
     Ok(())

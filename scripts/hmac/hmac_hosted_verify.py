@@ -1,8 +1,8 @@
 """Bind public verification arguments and decisions to the checked executor.
 
 The executor and its worker comparison are checked separately. This bridge
-must preserve their boolean/error result, not merely call a correctly named
-executor and then return a substituted decision.
+must map a true decision to success, false to Mismatch, absent decision to
+Invariant, and preserve operational errors without manufacturing success.
 """
 import hmac_engine_codegen as common
 import hmac_engine_final as syntax
@@ -15,12 +15,12 @@ require = common.require
 
 def results(compiler):
     require(compiler in ('1.90.0', '1.99.1'), 'unknown public verify compiler')
-    ok = 255 if compiler == '1.99.1' else 11
+    ok = 255 if compiler == '1.99.1' else 12
     yield from ((ok, payload, True) for payload in (0, 1, 2))
     # Exhaust the padding byte of unit errors rather than assign it a value
     # which could accidentally make a forged success branch appear valid.
-    domains = {0: range(14), 7: range(10), 9: range(7)}
-    for category in range(11):
+    domains = {0: range(14), 7: range(11), 9: range(7)}
+    for category in range(12):
         yield from ((category, payload, category in domains)
                     for payload in domains.get(category, range(256)))
 
@@ -36,7 +36,7 @@ def check(arguments, body, names, target, compiler, identity, compiled):
                  else 'algorithms::Sha' + identity[3:])
     expected = '<' + owner + '::' + ('compiled::CompiledSession' if compiled else 'Session')
     expected += '<brynja_mac_hmac::' + algorithm + '>>::execute'
-    ok = 255 if compiler == '1.99.1' else 11
+    ok = 255 if compiler == '1.99.1' else 12
     initial = {'%session': ('session', 0), '%request': ('request', 0),
                '%candidate.0': ('candidate', 0), '%candidate.1': 'candidate-length',
                '%cancel': ('cancel', 0)}
@@ -53,11 +53,12 @@ def check(arguments, body, names, target, compiler, identity, compiled):
 
         outcome, result, reached = flow.run(body, initial, {}, call)
         require(outcome == 'return' and len(calls) == 1, 'public verify exit/execution changed')
-        encoded = flow.expressions.integer(result, 16)
-        expected_category = (10 if payload == 2 else ok) if category == ok else category
-        require(encoded & 255 == expected_category, 'public verify result category changed')
-        if meaningful and not (category == ok and payload == 2):
-            require(encoded >> 8 == payload, 'public verify decision/error payload changed')
+        require(isinstance(result, tuple) and len(result) == 2, 'public verify result shape changed')
+        actual_category = flow.expressions.integer(result[0], 8)
+        expected_category = ({0: 11, 1: ok, 2: 10}[payload] if category == ok else category)
+        require(actual_category == expected_category, 'public verify result category changed')
+        if meaningful and category != ok:
+            require(flow.expressions.integer(result[1], 8) == payload, 'public verify decision/error payload changed')
         visited |= reached
     require(visited == set(common.blocks(body)), 'unreviewed public verify path')
 

@@ -1,4 +1,4 @@
-use crate::{Algorithm, Error, Hmac, SecretTag, Tag, Verification};
+use crate::{Algorithm, Error, Hmac, SecretTag, Tag};
 
 impl<A: Algorithm> Hmac<A> {
     /// Authenticates one canonical bit message with a byte-string key.
@@ -17,8 +17,8 @@ impl<A: Algorithm> Hmac<A> {
     /// let message = Sha2BitString::new(&[0xa0], 3).expect("canonical literal");
     /// let mut output = [0; 32];
     /// let tag = Hmac::<Sha256>::authenticate_bits(b"example key", message, &mut output)?;
-    /// assert!(Hmac::<Sha256>::new(b"example key")?
-    ///     .verify_bits(message, tag.as_bytes())?.expose_public());
+    /// assert_eq!(Hmac::<Sha256>::new(b"example key")?
+    ///     .verify_bits(message, tag.as_bytes()), Ok(()));
     /// # Ok::<(), brynja_mac_hmac::Error>(())
     /// ```
     pub fn authenticate_bits<'out>(
@@ -60,11 +60,7 @@ impl<A: Algorithm> Hmac<A> {
     /// Comparison and public-length rejection follow the same policy as
     /// `verify`: all equal-length bytes are compared, with no early exit on
     /// a mismatch. No input-length preflight oracle is provided.
-    pub fn verify_bits(
-        self,
-        input: A::FinalInput<'_>,
-        candidate: &[u8],
-    ) -> Result<Verification, Error> {
+    pub fn verify_bits(self, input: A::FinalInput<'_>, candidate: &[u8]) -> Result<(), Error> {
         self.engine.verify(Some(input), candidate)
     }
 }

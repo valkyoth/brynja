@@ -9,20 +9,27 @@ from hmac_faults import result, accepted, rejected, replace_once
 ROOT = Path(__file__).resolve().parents[2]
 
 
-def lifecycle(roots, directory, environment):
-    """Compile real retained-owner logic and kill behavioral cleanup mutants."""
+def lifecycle_fixture(roots, directory):
+    """Use the archive's own unit source; never repair it from the checkout."""
+    leaf = roots["brynja-mac-hmac"]
+    if not (leaf / "src/execution/tests.rs").is_file():
+        raise ValueError("HMAC archive is missing its declared unit-test module")
     fixture = directory / "execution-faults"
-    shutil.copytree(roots["brynja-mac-hmac"], fixture)
-    shutil.copyfile(ROOT / "crates/brynja-mac-hmac/src/execution/tests.rs",
-                    fixture / "src/execution/tests.rs")
+    shutil.copytree(leaf, fixture)
     manifest = fixture / "Cargo.toml"
     manifest.write_text(manifest.read_text() + "\n[workspace]\n[patch.crates-io]\n"
                         + "".join(f"{name}={{path={json.dumps(str(path))}}}\n"
                                   for name, path in roots.items() if name != "brynja-mac-hmac"))
+    return fixture
+
+
+def lifecycle(roots, directory, environment):
+    """Compile real retained-owner logic and kill behavioral cleanup mutants."""
+    fixture = lifecycle_fixture(roots, directory)
     run = result(["cargo", "generate-lockfile", "--offline"], fixture, environment)
     if run.returncode:
         raise ValueError(run.stderr)
-    base = ["cargo", "test", "--offline", "--locked", "--features", "hardened-execution", "--lib"]
+    base = ["cargo", "test", "--offline", "--locked", "--all-features", "--lib"]
     for profile in ([], ["--release"]):
         accepted(result([*base, *profile, "execution::tests"], fixture, environment), 4)
     # Cargo's normalized archive must retain the inherited workspace prohibition.

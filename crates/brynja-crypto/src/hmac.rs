@@ -17,13 +17,13 @@
 //! let tag = state.finalize_tag(&mut bytes)?;
 //! let mut verifier = Hmac::<Sha256>::new(&key)?;
 //! verifier.update(b"message")?;
-//! assert!(verifier.verify(tag.as_bytes())?.expose_public());
+//! assert_eq!(verifier.verify(tag.as_bytes()), Ok(()));
 //! # Ok::<(), Error>(())
 //! ```
 pub use brynja_mac_hmac::{
     Algorithm, Error, Fips202BitString, Fips202BitsError, Hmac, SecretTag, Sha2BitString,
     Sha2BitsError, Sha3_224, Sha3_256, Sha3_384, Sha3_512, Sha224, Sha256, Sha384, Sha512,
-    Sha512_224, Sha512_256, Sha512T, Tag, Verification,
+    Sha512_224, Sha512_256, Sha512T, Tag, validate_tag_policy,
 };
 
 /// Borrowed CPU-authority execution; no implicit detection or scalar fallback.

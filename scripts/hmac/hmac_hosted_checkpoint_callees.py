@@ -95,7 +95,7 @@ def run(arguments, body, names, compiled, healthy, cancelled, compiler):
                 predecessor, block = block, following
                 break
             elif returned:
-                ok = 255 if compiler == '1.99.1' else 11
+                ok = 255 if compiler == '1.99.1' else 12
                 expected = (9, 'backend-error') if compiled and not healthy else ((6 if cancelled else ok), 'undefined')
                 require(value(returned[1]) == expected and not live
                         and session == compiled and loads == int(not compiled or healthy),

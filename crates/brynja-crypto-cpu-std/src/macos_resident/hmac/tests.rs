@@ -78,8 +78,41 @@ pub(super) fn limits() -> Limits {
     }
 }
 
+fn policy_matches_leaf<A: Algorithm>() {
+    assert_eq!(
+        TagPolicy::Full.bits::<A>(),
+        brynja_mac_hmac::validate_tag_policy::<A>(None).map_err(Error::Mac)
+    );
+    for bytes in (0..=65).chain([usize::MAX / 8, usize::MAX / 8 + 1, usize::MAX]) {
+        let expected =
+            brynja_mac_hmac::validate_tag_policy::<A>(Some(bytes)).map_err(|error| match error {
+                brynja_mac_hmac::Error::TagLength => Error::InvalidTagPolicy,
+                other => Error::Mac(other),
+            });
+        assert_eq!(TagPolicy::Bytes(bytes).bits::<A>(), expected);
+    }
+}
+
 #[test]
 fn metadata_admission_and_exact_tag_policy() {
+    policy_matches_leaf::<Sha224>();
+    policy_matches_leaf::<Sha256>();
+    policy_matches_leaf::<Sha384>();
+    policy_matches_leaf::<Sha512>();
+    policy_matches_leaf::<Sha512_224>();
+    policy_matches_leaf::<Sha512_256>();
+    policy_matches_leaf::<Sha3_224>();
+    policy_matches_leaf::<Sha3_256>();
+    policy_matches_leaf::<Sha3_384>();
+    policy_matches_leaf::<Sha3_512>();
+    policy_matches_leaf::<Sha512T<128>>();
+    policy_matches_leaf::<Sha512T<129>>();
+    policy_matches_leaf::<Sha512T<511>>();
+    policy_matches_leaf::<Sha512T<0>>();
+    policy_matches_leaf::<Sha512T<127>>();
+    policy_matches_leaf::<Sha512T<384>>();
+    policy_matches_leaf::<Sha512T<512>>();
+    policy_matches_leaf::<Sha512T<65535>>();
     assert_eq!(TagPolicy::Full.bits::<Sha512T<129>>(), Ok(129));
     assert_eq!(TagPolicy::Bytes(16).bits::<Sha512T<129>>(), Ok(128));
     for policy in [

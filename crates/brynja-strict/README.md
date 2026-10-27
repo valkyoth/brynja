@@ -4,9 +4,9 @@
 </p>
 
 <div align="center">
-  <a href="https://crates.io/crates/brynja">Crates.io</a>
+  <a href="https://crates.io/crates/brynja-strict">Crates.io</a>
   |
-  <a href="https://docs.rs/brynja">Docs.rs</a>
+  <a href="https://docs.rs/brynja-strict">Docs.rs</a>
   |
   <a href="https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md">Release Plan</a>
   |
@@ -19,7 +19,7 @@
 
 <p align="center">
   <a href="https://github.com/valkyoth/brynja">
-    <img src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
+    <img width="840" src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
   </a>
 </p>
 
@@ -56,9 +56,9 @@ choice, not certification or proof that all application code uses this profile.
 Exports: `sha2`, `sha3` (SHAKE/cSHAKE), `hmac`, `kmac`, `tuplehash`, `parallelhash`
 and independent-message `batch`, plus the separate Windows `enclave` interface.
 Windows `enclave::sha2_batch` supports eight declared SHA-2 slots with retained
-all-plan output; see the [batch API example](../../docs/windows-enclave-sha2-batch.md).
+all-plan output; see the [batch API example](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-sha2-batch.md).
 `enclave::parallelhash` supports all four fixed/XOF identities and retained exact-bit
-composition; see the [ParallelHash example](../../docs/windows-enclave-parallelhash.md).
+composition; see the [ParallelHash example](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-parallelhash.md).
 This Windows path is sequential scalar or explicitly selected AVX2, not the Linux
 protected multicore API. With `acceleration`, use
 `enclave::parallelhash::Session::open_avx2` and the reviewed version-eighteen
@@ -68,14 +68,14 @@ The separate `enclave::parallel_concurrent` API, also under `acceleration`, uses
 an exact five-thread image with up to four scoped AVX2 leaf workers. It borrows
 caller inputs and requires explicit public declassification; it does not retain
 secret results. All joins and destruction precede borrow release. Production
-qualification remains pending. See the [concurrent example and limits](../../docs/windows-enclave-parallel-concurrent.md#crate-api-integration).
+qualification remains pending. See the [concurrent example and limits](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-parallel-concurrent.md#crate-api-integration).
 No legacy hashes, ordinary digests, raw CPU
 execution authorities, generic protected callbacks or protocol APIs are exported.
 Even with default features disabled, dependencies enable the protected sessions.
 
 ## Hardware and SIMD
 
-Windows enclave evidence covers [conditional Brynja-owned cleanup](../../docs/windows-enclave-whole-image-cleanup.md#bounded-cleanup-claim-and-evidence-map),
+Windows enclave evidence covers [conditional Brynja-owned cleanup](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-whole-image-cleanup.md#bounded-cleanup-claim-and-evidence-map),
 not complete SDK/OS or whole-process erasure. Development signing does not
 establish production deployment qualification. Windows ARM64 is unsupported by
 these enclave interfaces; Linux host-slice sessions are separate APIs.
@@ -93,7 +93,7 @@ Scalar `open` stays scalar; unsupported identities, platforms and images reject
 without fallback. `enclave::sha3::Session::open_avx2` separately requires the
 version-fourteen image and AVX/AVX2 plus enabled OS vector state. It covers all
 eight SHA-3/SHAKE/cSHAKE identities with the same retained-output interface;
-see the [SHA-3 guide](../../docs/windows-enclave-sha3.md).
+see the [SHA-3 guide](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-sha3.md).
 `enclave::kmac::Session::open_avx2` requires the distinct version-fifteen image
 and the same AVX/AVX2 plus OS vector-state bundle. All four identities preserve
 streamed key/customization setup, retained rekeying and verification without
@@ -111,24 +111,32 @@ sequential hardware acceleration, not independent-message SIMD.
 `enclave::sha512_simd::Session::open_avx2` selects the separate version-twenty
 four-message SHA-512-family AVX2 image. Each lane is bounded to 128..=1024 bytes
 with a common complete block; retained results require explicit declassification.
-It never falls back. See the [bounded SIMD example](../../docs/windows-enclave-sha2-batch.md#four-message-wide-simd).
+It never falls back. See the [bounded SIMD example](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-sha2-batch.md#four-message-wide-simd).
 With `acceleration`, `enclave::sha256_simd::Session::open_avx2` selects the
 distinct version-twenty-one image for eight independent SHA-224/256 AVX2 lanes.
 Each lane is bounded to 64..=1024 bytes with a complete block; wide identities
 reject. Retained results require explicit declassification into eight 32-byte
 slots. Production signature and import admission remain mandatory; there is no
-fallback. See the [narrow SIMD example](../../docs/windows-enclave-sha2-batch.md#eight-message-narrow-simd).
+fallback. See the [narrow SIMD example](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-sha2-batch.md#eight-message-narrow-simd).
 With `acceleration`, `enclave::keccak_simd::Session::open_avx2` selects the
 version-twenty-two image for four independent SHA-3/SHAKE/cSHAKE messages.
 Message/N/S fields are bounded to 1024 bytes each, output to 2048 bits per lane;
 mixed identities are supported. Trust checks and explicit declassification
-remain mandatory. See the [Keccak SIMD example](../../docs/windows-enclave-keccak-simd.md).
+remain mandatory. See the [Keccak SIMD example](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-keccak-simd.md).
 Production and
-independent qualification are pending; see the [SHA-2 guide](../../docs/windows-enclave-sha2.md).
+independent qualification are pending; see the [SHA-2 guide](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-sha2.md).
 
 ## Usage
 
-The development facade requires the checkout until its scheduled publication:
+Select this protected-only facade explicitly; it does not replace the portable facade.
+
+After this source version is published, install from the registry:
+
+```sh
+cargo add brynja-strict --no-default-features
+```
+
+For an unpublished candidate or matching local checkout instead:
 
 ```sh
 cargo add brynja-strict --path /path/to/brynja/crates/brynja-strict --no-default-features
@@ -146,7 +154,7 @@ let result = Session::new(Algorithm::Sha256, Limits {
 assert!(result.is_err());
 ```
 
-See the [compiled session-pool example](src/lib.rs) for successful hashing on a
+See the [compiled session-pool example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-strict/src/lib.rs) for successful hashing on a
 supported deployment. Construct a bounded pool at startup, use exclusive session
 loans, drop each output before reuse and retire quarantined compiled sessions.
 Do not allocate an unbounded new session per incoming request.
@@ -161,7 +169,7 @@ Empty or predictable keys are insecure even though the mathematical operation
 accepts them. Callers remain responsible for key entropy and input storage.
 
 This cross-platform example deliberately gives an invalid stack budget and
-checks fail-closed construction. The [module example](src/hmac.rs) shows a
+checks fail-closed construction. The [module example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-strict/src/hmac.rs) shows a
 successful complete request on a supported deployment.
 
 ```rust
@@ -195,7 +203,7 @@ Strict HMAC constructors reject on macOS and Windows. The separately named
 lower-level Mac resident HMAC API is not dump-excluded and is not re-exported
 here. Windows enclave HMAC is not implemented. The bounded compiler/native
 development checks are not independent review or release qualification; see the
-[HMAC composition inventory](../../docs/hmac-development-inventory.md).
+[HMAC composition inventory](https://github.com/valkyoth/brynja/blob/main/docs/hmac-development-inventory.md).
 
 ## Platform and memory limits
 
@@ -214,14 +222,14 @@ Windows trust/load/initialization checks. It retains SHA-256 results privately,
 supports retained rehashing and cancellation, and only releases bytes after
 explicit public declassification. Input is limited to 1024 bytes per request;
 caller-owned input storage remains outside protection. See the
-[owner/session example and deployment requirements](../../docs/windows-enclave-owner.md).
+[owner/session example and deployment requirements](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-owner.md).
 The separate `enclave::sha2::Session` supports all named SHA-2 identities,
 general SHA-512/t, streaming, final bit tails and retained cross-algorithm rehashing.
 It requires the matching version-six image. See the
-[streaming example and protection limits](../../docs/windows-enclave-sha2.md).
+[streaming example and protection limits](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-sha2.md).
 `enclave::sha3::Session` adds all eight SHA-3/SHAKE/cSHAKE identities, streamed
 N/S, incremental XOF output and exact-bit retained rehashing using a separate
-version-seven image. See the [SHA-3 guide](../../docs/windows-enclave-sha3.md).
+version-seven image. See the [SHA-3 guide](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-sha3.md).
 No production signing service is bundled; deployment credentials belong to the
 application publisher. Development-signing success is not production qualification.
 
@@ -237,4 +245,4 @@ scheduling, privileged snapshots, hibernation, arbitrary register interruption,
 external protection revocation, panic hooks and fatal abort remain outside the
 bounded protection. Sanitizer builds are diagnostics only, not qualified
 secret-processing deployments. Native Arm qualification and independent review
-remain pending. See the [complete contract](../../docs/strict-hardening-profile.md).
+remain pending. See the [complete contract](https://github.com/valkyoth/brynja/blob/main/docs/strict-hardening-profile.md).

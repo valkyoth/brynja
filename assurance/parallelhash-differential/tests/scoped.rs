@@ -1,3 +1,4 @@
+//! Public scoped ParallelHash lifecycle and bit-output acceptance.
 use brynja_hash_parallel::{
     ParallelHashError, ParallelHashPublicDeclassification as Public, hardened_in_place as api,
 };

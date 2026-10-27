@@ -1,12 +1,13 @@
 [package]
 name = "brynja-protocol"
-version = "0.1.0"
+version = "0.1.1"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 repository.workspace = true
 description = "Shared no_std wire framing for Brynja secure protocols"
 publish = ["crates-io"]
+include = ["Cargo.toml", "LICENSE-APACHE", "LICENSE-MIT", "README.md", "src/**/*.rs"]
 
 [features]
 default = []

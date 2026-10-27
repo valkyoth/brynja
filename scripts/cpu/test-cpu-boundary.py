@@ -116,11 +116,11 @@ def test() -> None:
         # Keep the whole entry exact: accepting the false flag must not relax
         # version/path identity or permit extra implicitly activated features.
         pin = ('brynja-crypto-cpu-std = { path = "crates/brynja-crypto-cpu-std", '
-               'version = "=0.1.1", default-features = false }')
+               'version = "=0.2.0", default-features = false }')
         for broken in (
             pin.replace(', default-features = false', ''),
             pin.replace('default-features = false', 'default-features = true'),
-            pin.replace('version = "=0.1.1"', 'version = "0.1.1"'),
+            pin.replace('version = "=0.2.0"', 'version = "0.2.0"'),
             pin.replace('path = "crates/brynja-crypto-cpu-std"', 'path = "crates/unreviewed"'),
             pin.replace('false }', 'false, features = ["runtime-execution"] }'),
         ):

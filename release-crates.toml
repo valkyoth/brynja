@@ -1,208 +1,208 @@
 [release]
-version = "0.25.1"
-milestone = "0.25.1"
+version = "0.25.2"
+milestone = "0.25.2"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11", "0.24.12", "0.24.13", "0.24.14", "0.24.15", "0.24.16", "0.24.17", "0.24.18", "0.24.19", "0.24.20", "0.24.21", "0.24.22", "0.24.23", "0.24.24", "0.24.25", "0.24.26", "0.24.27", "0.24.28", "0.24.29", "0.24.30", "0.24.31", "0.24.32", "0.24.33", "0.24.34", "0.24.35", "0.24.36", "0.24.37", "0.24.38", "0.24.39", "0.24.40", "0.24.41", "0.24.42", "0.24.43", "0.24.44", "0.24.45", "0.24.46", "0.24.47", "0.24.48", "0.24.49", "0.24.50", "0.24.51", "0.24.52", "0.24.53", "0.24.54", "0.24.55", "0.25.0", "0.25.1"]
+cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11", "0.24.12", "0.24.13", "0.24.14", "0.24.15", "0.24.16", "0.24.17", "0.24.18", "0.24.19", "0.24.20", "0.24.21", "0.24.22", "0.24.23", "0.24.24", "0.24.25", "0.24.26", "0.24.27", "0.24.28", "0.24.29", "0.24.30", "0.24.31", "0.24.32", "0.24.33", "0.24.34", "0.24.35", "0.24.36", "0.24.37", "0.24.38", "0.24.39", "0.24.40", "0.24.41", "0.24.42", "0.24.43", "0.24.44", "0.24.45", "0.24.46", "0.24.47", "0.24.48", "0.24.49", "0.24.50", "0.24.51", "0.24.52", "0.24.53", "0.24.54", "0.24.55", "0.25.0", "0.25.1", "0.25.2"]
 policy = "independent"
-stage = "internal"
-exceptional = true
-exception_reason = "New isolated secret-bearing legacy HMAC construction requires an exceptional independent security review before tagging."
+stage = "public"
+exceptional = false
+exception_reason = ""
 
 [crates."brynja"]
-previous_version = "0.25.0"
-version = "0.25.1"
-change = "metadata"
-publish = false
-reason = "Start the isolated legacy HMAC milestone; no publication or support-crate version changes."
+previous_version = "0.25.1"
+version = "0.25.2"
+change = "code"
+publish = true
+reason = "Public HMAC usability checkpoint after cumulative review of v0.20.0..v0.25.2; facade publishes last only after release authorization."
 
 [crates."brynja-legacy-hmac"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "code"
-publish = false
-reason = "Implement a separate legacy-only HMAC-SHA-1/MD5 owner; accelerated composition and independent qualification remain pending."
+change = "initial"
+publish = true
+reason = "Initial separately isolated legacy hash/MAC package; independent legacy admission remains required before publication."
 
 [crates."brynja-legacy-hmac-std"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "code"
-publish = false
-reason = "Add isolated hosted protected/resident legacy HMAC owners; accelerated hosted routes and independent qualification remain pending."
+change = "initial"
+publish = true
+reason = "Initial separately isolated legacy hash/MAC package; independent legacy admission remains required before publication."
 
 [crates."brynja-mac-hmac"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "code"
-publish = false
-reason = "Start the sealed modern HMAC leaf over hardened SHA-2/SHA-3 owners; completion, package acceptance and security qualification remain pending."
+change = "initial"
+publish = true
+reason = "Initial modern hash/MAC or strict-owner package at the cumulative public checkpoint; review and release authorization remain required."
 
 [crates."brynja-legacy-md5"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "code"
-publish = false
-reason = "Add distinct hardened AVX2/NEON storage, affine batch ownership and typed secret output; evidence and retest remain required before tagging."
+change = "initial"
+publish = true
+reason = "Initial separately isolated legacy hash/MAC package; independent legacy admission remains required before publication."
 
 [crates."brynja-legacy-sha1"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "code"
-publish = false
-reason = "Implement the complete isolated legacy SHA-1 leaf with ordinary and hardened byte/bit APIs; retain it unpublished until reviewed checkpoint admission."
+change = "initial"
+publish = true
+reason = "Initial separately isolated legacy hash/MAC package; independent legacy admission remains required before publication."
 
 [crates."brynja-core"]
 previous_version = "0.9.0"
-version = "0.9.0"
-change = "metadata"
-publish = false
-reason = "Retain published 0.9.0 unchanged at the internal v0.21.0 milestone."
+version = "0.10.0"
+change = "code"
+publish = true
+reason = "Cumulative secret-region operations and ownership APIs. Publication remains conditional on the checkpoint gates."
 
 [crates."brynja-crypto"]
 previous_version = "0.1.2"
-version = "0.1.2"
+version = "0.2.0"
 change = "code"
-publish = false
-reason = "Retain the published version while internal source adds explicit default-off modern execution/general-t/batch forwarding and leaf namespaces; no publication is selected."
+publish = true
+reason = "Implemented modern crypto facade and explicit execution namespaces. Publication remains conditional on the checkpoint gates."
 
 [crates."brynja-hash-core"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "code"
-publish = false
-reason = "Extend the unpublished no_std hash interface boundary with one canonical borrowed arbitrary-bit input descriptor while retaining it for v0.25.2."
+change = "initial"
+publish = true
+reason = "Initial modern hash/MAC or strict-owner package at the cumulative public checkpoint; review and release authorization remain required."
 
 [crates."brynja-hash-sha2"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "code"
-publish = false
-reason = "Retain default-off ordinary and hardened SHA-2 execution alongside portable constructors and separate unadmitted candidate APIs. No crate is published."
+change = "initial"
+publish = true
+reason = "Initial modern hash/MAC or strict-owner package at the cumulative public checkpoint; review and release authorization remain required."
 
 [crates."brynja-hash-sha3"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "code"
-publish = false
-reason = "Add separate default-off hardened SHA-3/SHAKE/cSHAKE execution owners with private-state clearing; preserve existing portable constructors and ordinary execution. No crate is published."
+change = "initial"
+publish = true
+reason = "Initial modern hash/MAC or strict-owner package at the cumulative public checkpoint; review and release authorization remain required."
 
 [crates."brynja-mac-kmac"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "code"
-publish = false
-reason = "Add the unpublished no_std KMAC leaf with complete KMAC128/KMAC256 and KMACXOF128/KMACXOF256 ordinary, arbitrary-bit, streaming, hardened-output and constant-time verification APIs."
+change = "initial"
+publish = true
+reason = "Initial modern hash/MAC or strict-owner package at the cumulative public checkpoint; review and release authorization remain required."
 
 [crates."brynja-hash-tuple"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "code"
-publish = false
-reason = "Add the unpublished no_std TupleHash leaf with complete TupleHash128/TupleHash256 and TupleHashXOF128/TupleHashXOF256 ordinary, arbitrary-bit, exact-length streaming-item, incremental-output and hardened APIs."
+change = "initial"
+publish = true
+reason = "Initial modern hash/MAC or strict-owner package at the cumulative public checkpoint; review and release authorization remain required."
 
 [crates."brynja-hash-parallel"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "code"
-publish = false
-reason = "Add the unpublished allocation-free no_std ParallelHash leaf with all four fixed/XOF identities, arbitrary-bit, hardened, and caller-scheduled APIs."
+change = "initial"
+publish = true
+reason = "Initial modern hash/MAC or strict-owner package at the cumulative public checkpoint; review and release authorization remain required."
 
 [crates."brynja-hash-parallel-std"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "code"
-publish = false
-reason = "Add the unpublished opt-in bounded native-thread executor with deterministic merge, cancellation, panic containment, and secret leaf-storage cleanup."
+change = "initial"
+publish = true
+reason = "Initial modern hash/MAC or strict-owner package at the cumulative public checkpoint; review and release authorization remain required."
 
 [crates."brynja-crypto-cpu"]
 previous_version = "0.1.1"
-version = "0.1.1"
+version = "0.2.0"
 change = "code"
-publish = false
-reason = "Retain published metadata 0.1.1 while adding hardened Keccak sessions and owned permutation scratch alongside existing execution authorities; fresh native qualification is required and no crate is published."
+publish = true
+reason = "Implemented scalar, accelerated and register-clearing kernel authorities. Publication remains conditional on the checkpoint gates."
 
 [crates."brynja-crypto-cpu-std"]
 previous_version = "0.1.1"
-version = "0.1.1"
+version = "0.2.0"
 change = "code"
-publish = false
-reason = "Retain published metadata 0.1.1 while adding optional default-off hosted sponge constructors through existing execution authority; no external dependency or publication."
+publish = true
+reason = "Implemented hosted protected/resident crypto and HMAC owners. Publication remains conditional on the checkpoint gates."
 
 [crates."brynja-strict"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "code"
-publish = false
-reason = "Separate strict-only facade over protected modern sessions; qualification pending, no publication."
+change = "initial"
+publish = true
+reason = "Initial modern hash/MAC or strict-owner package at the cumulative public checkpoint; review and release authorization remain required."
 
 [crates."brynja-pki"]
 previous_version = "0.2.0"
-version = "0.2.0"
+version = "0.3.0"
 change = "code"
-publish = false
-reason = "Retain published 0.2.0 while adding canonical ASN.1 primitives and ordered containers for the future v0.25.2 checkpoint."
+publish = true
+reason = "Cumulative canonical ASN.1 primitive and container APIs. Publication remains conditional on the checkpoint gates."
 
 [crates."brynja-protocol"]
 previous_version = "0.1.0"
-version = "0.1.0"
-change = "metadata"
-publish = false
-reason = "Retain published 0.1.0 shared record framing unchanged."
+version = "0.1.1"
+change = "dependency"
+publish = true
+reason = "Update exact first-party dependency pins and package metadata for the public checkpoint; no new runtime API is claimed."
 
 [crates."brynja-tls"]
 previous_version = "0.1.8"
-version = "0.1.8"
-change = "metadata"
-publish = false
-reason = "Retain published 0.1.8 unchanged; the TLS router remains unimplemented."
+version = "0.1.9"
+change = "dependency"
+publish = true
+reason = "Update exact first-party dependency pins and package metadata for the public checkpoint; no new runtime API is claimed."
 
 [crates."brynja-tls12"]
 previous_version = "0.1.8"
-version = "0.1.8"
+version = "0.1.9"
 change = "dependency"
-publish = false
-reason = "Retain published 0.1.8 while its inherited brynja-crypto dependency advances; the TLS 1.2 engine remains unimplemented."
+publish = true
+reason = "Update exact first-party dependency pins and package metadata for the public checkpoint; no new runtime API is claimed."
 
 [crates."brynja-tls13"]
 previous_version = "0.1.8"
-version = "0.1.8"
+version = "0.1.9"
 change = "dependency"
-publish = false
-reason = "Retain published 0.1.8 while its inherited brynja-crypto dependency advances; the TLS 1.3 engine remains unimplemented."
+publish = true
+reason = "Update exact first-party dependency pins and package metadata for the public checkpoint; no new runtime API is claimed."
 
 [crates."brynja-tls13-handshake"]
 previous_version = "0.1.8"
-version = "0.1.8"
+version = "0.1.9"
 change = "dependency"
-publish = false
-reason = "Retain published 0.1.8 while its inherited brynja-crypto dependency advances; the TLS 1.3 handshake engine remains unimplemented."
+publish = true
+reason = "Update exact first-party dependency pins and package metadata for the public checkpoint; no new runtime API is claimed."
 
 [crates."brynja-quic-tls"]
 previous_version = "0.1.8"
-version = "0.1.8"
-change = "metadata"
-publish = false
-reason = "Retain published 0.1.8 unchanged; QUIC-TLS remains unimplemented."
+version = "0.1.9"
+change = "dependency"
+publish = true
+reason = "Update exact first-party dependency pins and package metadata for the public checkpoint; no new runtime API is claimed."
 
 [crates."brynja-sanitization"]
 previous_version = "0.1.1"
-version = "0.1.1"
+version = "0.1.2"
 change = "dependency"
-publish = false
-reason = "Retain published 0.1.1 while source advances its exact first-party sanitization pin to reviewed 2.1.1; keep the adapter isolated from facades, engines, defaults, and FIPS boundaries."
+publish = true
+reason = "Update exact first-party dependency pins and package metadata for the public checkpoint; no new runtime API is claimed."
 
 [crates."brynja-dtls"]
 previous_version = "0.1.8"
-version = "0.1.8"
+version = "0.1.9"
 change = "dependency"
-publish = false
-reason = "Retain published 0.1.8 while its inherited brynja-crypto dependency advances; the DTLS engine remains unimplemented."
+publish = true
+reason = "Update exact first-party dependency pins and package metadata for the public checkpoint; no new runtime API is claimed."
 
 [crates."brynja-platform"]
 previous_version = "0.1.8"
-version = "0.1.8"
-change = "metadata"
-publish = false
-reason = "Retain published 0.1.8 unchanged; platform and provider effects remain unimplemented."
+version = "0.1.9"
+change = "dependency"
+publish = true
+reason = "Update exact first-party dependency pins and package metadata for the public checkpoint; no new runtime API is claimed."
 
 [crates."brynja-legacy"]
 previous_version = "unpublished"
@@ -298,13 +298,13 @@ reason = "Repository-only proof harnesses; they are never a crates.io product."
 [crates."brynja-legacy-sha1-std"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "code"
-publish = false
-reason = "New optional legacy host adapter remains held for an explicit public checkpoint."
+change = "initial"
+publish = true
+reason = "Initial separately isolated legacy hash/MAC package; independent legacy admission remains required before publication."
 
 [crates."brynja-legacy-md5-std"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "code"
-publish = false
-reason = "Add separate default-off hardened MD5 SIMD platform selection; retain ordinary and historical observation behavior and no publication."
+change = "initial"
+publish = true
+reason = "Initial separately isolated legacy hash/MAC package; independent legacy admission remains required before publication."

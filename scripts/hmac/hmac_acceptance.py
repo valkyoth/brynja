@@ -59,8 +59,8 @@ def negatives(consumer, environment, no_std_target=None):
     # A positive probe for EVERY admitted identity ensures negative failures
     # cannot be explained by unavailable imports, dependencies or Rust syntax.
     positive = prefix + '\n'.join(
-        f'pub fn positive_{index}(key: &[u8], message: &[u8], tag: &[u8]) -> Result<bool, Error> {{'
-        f'let mut mac = Hmac::<{algorithm}>::new(key)?; mac.update(message)?; Ok(mac.verify(tag)?.expose_public())}}'
+        f'pub fn positive_{index}(key: &[u8], message: &[u8], tag: &[u8]) -> Result<(), Error> {{'
+        f'let mut mac = Hmac::<{algorithm}>::new(key)?; mac.update(message)?; mac.verify(tag)}}'
         for index, algorithm in enumerate(ALGORITHMS))
     positive += '\n'.join(
         f'pub fn bits_{index}(key: &[u8], output: &mut [u8]) -> Result<(), Error> {{'
@@ -105,7 +105,7 @@ def mutants(roots, consumer, environment):
         ('digest.get(..self.tag_bytes)', 'digest.get(A::TAG_BYTES - self.tag_bytes..)', "vectors", "rfc4231_case5_explicit_truncation"),
         ('for (expected, actual) in tag.iter().zip(candidate) {',
          'for (expected, actual) in tag.iter().zip(candidate).take(1) {', "lifecycle", "sha256"),
-        ('&difference.0[0],\n        )))', '&0,\n        )))', "lifecycle", "sha256"),
+        ('secret_difference_is_zero(&difference.0[0])', 'secret_difference_is_zero(&0)', "lifecycle", "sha256"),
         ('Some(input) => A::finish_bits(self.inner, input, destination, absorb_inner)',
          'Some(_input) => A::finish(self.inner, destination, absorb_inner)', "bits", "known_bit_answers"),
     )
@@ -152,3 +152,29 @@ def mutants(roots, consumer, environment):
             path.write_text(original)
         accepted(result(command, consumer, environment), 1)
     print("HMAC packaged general exact-bit/policy mutants: 2 rejected")
+    tag_policy_mutants(roots, consumer, environment)
+
+
+def tag_policy_mutants(roots, consumer, environment):
+    path = roots["brynja-mac-hmac"] / "src/lib.rs"
+    original = path.read_text()
+    guard = "if !policy::valid_tag_length(A::TAG_BYTES, bytes) || bits > A::TAG_BITS {"
+    cases = (
+        ("A::validate()?;", "", "invalid_algorithms_precede_width_and_overflow_errors"),
+        (guard, "if bits > A::TAG_BITS {", "every_named_algorithm_and_tag_width"),
+        (guard, "if !policy::valid_tag_length(A::TAG_BYTES, bytes) {", "fractional_full_tags_are_not_byte_prefixes"),
+        ("bytes.checked_mul(8).ok_or(Error::TagLength)?", "match bytes.checked_mul(8) { Some(bits) => bits, None => return Ok(128) }",
+         "every_named_algorithm_and_tag_width"),
+        ("validate_tag_policy::<A>(Some(tag_bytes))?;", "", "fractional_full_tags_are_not_byte_prefixes"),
+        ("return Ok(A::TAG_BITS);", "return Ok(A::TAG_BYTES * 8);", "fractional_full_tags_are_not_byte_prefixes"),
+    )
+    for before, after, test in cases:
+        command = ["cargo", "test", "--offline", "--locked", "--release", "--test", "tag_policy", test, "--", "--exact"]
+        accepted(result(command, consumer, environment), 1)
+        try:
+            path.write_text(replace_once(original, before, after))
+            rejected(result(command, consumer, environment))
+        finally:
+            path.write_text(original)
+        accepted(result(command, consumer, environment), 1)
+    print("HMAC packaged shared tag policy: 6 compiled caller/algorithm/width mutants rejected")

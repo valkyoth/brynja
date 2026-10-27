@@ -1,10 +1,10 @@
 {
   "milestone": "0.24.31",
   "sha256": {
-    "assurance/static-cpu-execution/Cargo.lock": "cc154cd6722528445f1b30637d1ac967bac2730abea9eaca8fbd1fcf3f6fe24f",
-    "assurance/static-cpu-execution/Cargo.toml": "32fa1023273547186cc8b4fb883e1f9953a86ef0454c9b742d75979abaf1440c",
+    "assurance/static-cpu-execution/Cargo.lock": "c17768895cf933a18873b0e87c0a01ac0cefedfcfa62b8878af62ec2bc0b6e89",
+    "assurance/static-cpu-execution/Cargo.toml": "55b979e33ca23778c5a0c5806db04246e1323347a56bbf126cffbf1945258610",
     "assurance/static-cpu-execution/src/lib.rs": "0682f23b803098d0d458c22247ba37067f563c41b47567bd7ab9b3db1bc8515e",
-    "crates/brynja-crypto-cpu/Cargo.toml": "88b0e163db8a2fb28465b5606eb0e9d4fcdc8c6623f11f826b533894e1f7ae28",
+    "crates/brynja-crypto-cpu/Cargo.toml": "498c1d18064962fd1f183a2ce1e7d3e88fd0915a6c2db9d1179828afad6ab79f",
     "crates/brynja-crypto-cpu/src/aarch64_sha2.rs": "e9869ccd9e6bb2795a1ee753be0d1b6833009e507d84d904494f591964c3dc2f",
     "crates/brynja-crypto-cpu/src/aarch64_sha2/secret256.rs": "2ee599b4176cd3c278335dddc2292a8b65eb5094ca5c80a7993d3d9c0c038c9f",
     "crates/brynja-crypto-cpu/src/aarch64_sha2/secret512.rs": "8febc7fc79bb5813590293d8b17bc5d9f1bcb56f17dba55c844f28dd89bcf96e",
@@ -91,11 +91,11 @@
     "docs/threat-model.md": "1ba408fb8b2c369319b933f787752450e03b2afe275171ffe42986bcf4145a9c",
     "docs/unsafe-policy.md": "7309a3f3208955e5f68d29b5b9a002694abffe576f0fc78c31a7da5c0e3f5021",
     "scripts/checks.sh": "61ca5886d2fcafeef07ab380ac6edd75748b5271d9a34c2f54ea24470deff5d9",
-    "scripts/cpu/check-static-execution.py": "7cb4678bb69b5fddc4c8a722e2bcbdea70a01b61801010ea05a2ef1a4773ea7e",
+    "scripts/cpu/check-static-execution.py": "b7877e9dda29f7df07eeb140b6d8125b3d2773e6d10d8025549e69589a580443",
     "scripts/cpu/static_execution_docs.py": "39b98e559bb59646a9f93b429a4f137b96cd8a9bc1b9fa13eff66747e3f084a4",
     "scripts/repository/darwin_resident_abi.py": "b6ec7a57b01f4d01d2cd62e8b3dde75eaf6c152b087554d6ada0b41db5475af4",
     "scripts/repository/unsafe_policy.py": "23060b00850f848084eee4798f4664b4c7310a52e2d338115dcc52412779fad4",
-    "scripts/zeroization/check-zeroization-miri.sh": "5d220cd4ed57a0eb6d9dc5d771039d6df91152e1d5502919507b66a4ec84f40d",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "83b05d7162729f78d6a206e0beb1e81c5e2770911edc808d10475423e1d958b7"
+    "scripts/zeroization/check-zeroization-miri.sh": "901cc7414edd800a0d107fb54bc04296fb8834cc8b7a6a3d457b161ad0ae69c6",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "c4c007e150a53307366be333ba1c6f059b3c0a60cec51e322733230731daf801"
   }
 }

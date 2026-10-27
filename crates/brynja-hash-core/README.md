@@ -4,9 +4,9 @@
 </p>
 
 <div align="center">
-  <a href="https://crates.io/crates/brynja">Crates.io</a>
+  <a href="https://crates.io/crates/brynja-hash-core">Crates.io</a>
   |
-  <a href="https://docs.rs/brynja">Docs.rs</a>
+  <a href="https://docs.rs/brynja-hash-core">Docs.rs</a>
   |
   <a href="https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md">Release Plan</a>
   |
@@ -19,7 +19,7 @@
 
 <p align="center">
   <a href="https://github.com/valkyoth/brynja">
-    <img src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
+    <img width="840" src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
   </a>
 </p>
 
@@ -41,8 +41,16 @@ Interface tests are not independent cryptographic verification or FIPS validatio
 
 ## Use
 
-Use this unpublished workspace interface package directly only when composing
-or implementing compatible APIs:
+Use this interface package directly only when composing or implementing
+compatible APIs.
+
+After this source version is published, install from the registry:
+
+```sh
+cargo add brynja-hash-core --no-default-features
+```
+
+For an unpublished candidate or matching local checkout instead:
 
 ```sh
 cargo add brynja-hash-core --path /path/to/brynja/crates/brynja-hash-core --no-default-features

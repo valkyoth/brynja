@@ -11,7 +11,7 @@ license = "MIT OR Apache-2.0"
 [dependencies]
 brynja-hash-parallel = { path = "../../crates/brynja-hash-parallel", version = "=0.1.0", default-features = false, features = ["hardened-batch-execution"] }
 brynja-hash-parallel-std = { path = "../../crates/brynja-hash-parallel-std", version = "=0.1.0", default-features = false, features = ["runtime-batch-execution"] }
-brynja-crypto-cpu-std = { path = "../../crates/brynja-crypto-cpu-std", version = "=0.1.1", default-features = false, features = ["keccak-hardened-batch"] }
+brynja-crypto-cpu-std = { path = "../../crates/brynja-crypto-cpu-std", version = "=0.2.0", default-features = false, features = ["keccak-hardened-batch"] }
 
 [lints.rust]
 unsafe_code = "forbid"

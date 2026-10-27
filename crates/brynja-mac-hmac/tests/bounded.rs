@@ -24,7 +24,7 @@ fn exercise<A: BitCase>() {
     assert!(output.iter().all(|byte| *byte == 0));
     let mut verifier = require_ok!(Hmac::<A>::with_tag_length(b"short", 16));
     require_ok!(verifier.update(b"message"));
-    assert!(!require_ok!(verifier.verify(&[0; 16])).expose_public());
+    assert_eq!(verifier.verify(&[0; 16]), Err(Error::Mismatch));
     let mac = require_ok!(Hmac::<A>::new(&[]));
     let mut rejected = [0xa5; 1];
     assert!(matches!(

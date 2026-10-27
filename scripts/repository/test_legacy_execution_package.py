@@ -19,7 +19,7 @@ def document(family, base):
     packages = []
     for name in features:
         root = consumer if name == 'facade-consumer' else roots[name]
-        version = '0.0.0' if name == 'facade-consumer' else '0.9.0' if name == 'brynja-core' else '0.1.0'
+        version = '0.0.0' if name == 'facade-consumer' else '0.10.0' if name == 'brynja-core' else '0.1.0'
         packages.append(dict(id=name, name=name, version=version, source=None,
                              manifest_path=str(root / 'Cargo.toml'),
                              targets=[dict(kind=['lib'], src_path=str(root / 'src/lib.rs'))]))

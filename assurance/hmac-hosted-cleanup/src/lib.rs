@@ -26,7 +26,7 @@ macro_rules! probes {
                 request: Request<'_>,
                 candidate: &[u8],
                 cancel: &Cancellation,
-            ) -> Result<bool, Error> {
+            ) -> Result<(), Error> {
                 session.verify(request, candidate, cancel)
             }
 
@@ -45,7 +45,7 @@ macro_rules! probes {
                 request: Request<'_>,
                 candidate: &[u8],
                 cancel: &Cancellation,
-            ) -> Result<bool, Error> {
+            ) -> Result<(), Error> {
                 session.verify(request, candidate, cancel)
             }
 

@@ -52,15 +52,15 @@ fn exercise<A: BitCase>() {
                 }
                 assert!(output.iter().all(|byte| *byte == 0));
                 let verify = require_ok!(Hmac::<A>::with_tag_length(&key, 16));
-                assert!(
-                    require_ok!(verify.verify_bits(input, require_some!(expected.get(..16))))
-                        .expose_public()
+                assert_eq!(
+                    verify.verify_bits(input, require_some!(expected.get(..16))),
+                    Ok(())
                 );
                 let last = require_some!(expected.last_mut());
                 *last ^= 1;
-                assert!(
-                    !require_ok!(require_ok!(Hmac::<A>::new(&key)).verify_bits(input, &expected))
-                        .expose_public()
+                assert_eq!(
+                    require_ok!(Hmac::<A>::new(&key)).verify_bits(input, &expected),
+                    Err(Error::Mismatch)
                 );
             }
         }

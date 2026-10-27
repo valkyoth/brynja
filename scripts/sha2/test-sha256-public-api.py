@@ -37,7 +37,7 @@ def check_packaging_development_dependency() -> None:
             manifest = workspace / "Cargo.toml"
             command = ["cargo", "metadata", "--offline", "--no-deps", "--format-version", "1"]
             module.run(command, cwd=workspace)
-            line = 'brynja-crypto-cpu-std = { path = "crates/brynja-crypto-cpu-std", version = "=0.1.1" }'
+            line = 'brynja-crypto-cpu-std = { path = "crates/brynja-crypto-cpu-std", version = "=0.2.0" }'
             replace(manifest, line, "")
             result = module.run(command, cwd=workspace, success=False)
             assert 'dependency.brynja-crypto-cpu-std` was not found' in result.stdout, result.stdout

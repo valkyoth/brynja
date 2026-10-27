@@ -8,6 +8,7 @@ from pathlib import Path
 import subprocess
 import sys
 import tempfile
+import parallelhash_package_fixtures as fixtures
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts/sha3"))
@@ -111,13 +112,8 @@ def main():
         destination = Path(directory)
         environment = dict(os.environ, CARGO_TARGET_DIR=str(destination / "target"))
         _, roots = shared.package(destination, environment)
-        (roots['brynja-hash-parallel'] / 'tests/scoped.rs').write_bytes(
-            (ROOT / 'assurance/parallelhash-differential/tests/scoped.rs').read_bytes())
-        patches = "\n[patch.crates-io]\n" + "\n".join(
-            f'{name} = {{ path = "{path.as_posix()}" }}' for name, path in roots.items()) + "\n"
+        fixtures.prepare(roots, ROOT, check, environment)
         for name in ("brynja-hash-parallel", "brynja-hash-parallel-std"):
-            manifest = roots[name] / "Cargo.toml"
-            manifest.write_text(manifest.read_text() + "\n[workspace]\n" + patches)
             for profile in ([], ["--release"]):
                 check(["cargo", "test", "--offline", "--features", "runtime-execution", *profile], roots[name], environment)
         # Exercise the actual shipped protected API, separately from runtime

@@ -236,7 +236,7 @@ def classification_negatives(consumer, env, extra):
     library = consumer / 'src/lib.rs'
     old_manifest, old_library = manifest.read_text(), library.read_text()
     # The extracted CPU package is already in patch.crates-io.
-    addition = f'{CPU} = {{ version = "=0.1.1", features = ["runtime-execution"] }}\n'
+    addition = f'{CPU} = {{ version = "=0.2.0", features = ["runtime-execution"] }}\n'
     checks = [
         'session.compress_sha256(&mut [0; 8], PublicData::new(&[0; 64]))',
         'session.compress_sha256(PublicData::new(&mut [0; 8]), &[0; 64])',

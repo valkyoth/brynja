@@ -9,7 +9,7 @@ from pathlib import Path, PurePosixPath
 
 import legacy_acceptance as policy
 
-CLOSURE = {'brynja-core': '0.9.0', 'brynja-hash-core': '0.1.0',
+CLOSURE = {'brynja-core': '0.10.0', 'brynja-hash-core': '0.1.0',
            'brynja-legacy-sha1': '0.1.0', 'brynja-legacy-md5': '0.1.0'}
 
 

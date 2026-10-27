@@ -20,6 +20,7 @@ def require(value, message):
         raise ValueError('facade hardened SHA-3: ' + message)
 
 
+# Fixtures come from the reviewed repository; runtime dependencies remain extracted archives.
 def install(api, consumer, roots, package):
     (consumer / 'src/bin').mkdir(parents=True, exist_ok=True)
     api.manifest(consumer, roots, package, FEATURES, extra=shared.HOST)
@@ -28,7 +29,7 @@ def install(api, consumer, roots, package):
     tests = consumer / 'tests'
     (tests / 'keccak_properties').mkdir(parents=True, exist_ok=True)
     (tests / 'vectors').mkdir(exist_ok=True)
-    leaf = roots['brynja-hash-sha3'] / 'tests'
+    leaf = ROOT / 'crates/brynja-hash-sha3/tests'
     text = sources.owned((leaf / 'hardened_execution.rs').read_text())
     (tests / 'owned.rs').write_text(ordinary.rewrite(text, package))
     (tests / 'keccak_properties/mod.rs').write_text(ordinary.rewrite((leaf / 'keccak_properties/mod.rs').read_text(), package))

@@ -160,7 +160,7 @@ jobs:
           python scripts/cryptography/test-windows-enclave-teardown-results.py
           python scripts/cryptography/test-windows-enclave-historical-replay.py
       - name: Test frozen portable legacy consumer
-        run: cargo test --locked --manifest-path assurance/legacy-hash-public-api/Cargo.toml
+        run: cargo test --locked --manifest-path assurance/legacy-hash-public-api/current/Cargo.toml
       - name: Final legacy hash public acceptance
         run: cargo run --locked --manifest-path assurance/legacy-hash-final/Cargo.toml
       - name: Exercise detected SHA-256 candidate without granting admission
@@ -228,7 +228,7 @@ jobs:
       - name: Run SP 800-185 parallel execution acceptance
         run: cargo +${{ matrix.rust }} run --quiet --locked --manifest-path assurance/sp800185-final/Cargo.toml
       - name: Test frozen portable legacy consumer
-        run: cargo +${{ matrix.rust }} test --locked --manifest-path assurance/legacy-hash-public-api/Cargo.toml
+        run: cargo +${{ matrix.rust }} test --locked --manifest-path assurance/legacy-hash-public-api/current/Cargo.toml
       - name: Final legacy hash acceptance on selected compiler
         run: cargo +${{ matrix.rust }} run --locked --manifest-path assurance/legacy-hash-final/Cargo.toml
       - name: Verify zeroization emitted code
@@ -275,7 +275,7 @@ jobs:
       - name: Check portable SP 800-185 public API fixture
         run: cargo check --locked --manifest-path assurance/sp800185-public-api/Cargo.toml --lib --target ${{ matrix.target }}
       - name: Check frozen portable legacy consumer
-        run: cargo check --locked --manifest-path assurance/legacy-hash-public-api/Cargo.toml --lib --target ${{ matrix.target }}
+        run: cargo check --locked --manifest-path assurance/legacy-hash-public-api/current/Cargo.toml --lib --target ${{ matrix.target }}
       - name: Final legacy hash no_std consumer
         run: cargo check --locked --manifest-path assurance/legacy-hash-final/Cargo.toml --no-default-features --lib --target ${{ matrix.target }}
       - name: Verify zeroization emitted code

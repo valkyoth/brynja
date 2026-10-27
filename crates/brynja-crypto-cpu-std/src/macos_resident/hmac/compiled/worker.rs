@@ -89,12 +89,11 @@ pub(super) fn run<A: Algorithm + for<'a> CpuAlgorithm<'a>>(
     }
     checkpoint(cancel, &owner)?;
     let result = if let Some(candidate) = candidate {
-        Some(
-            state
-                .verify_bits(tail, candidate)
-                .map_err(Error::Mac)?
-                .expose_public(),
-        )
+        Some(match state.verify_bits(tail, candidate) {
+            Ok(()) => true,
+            Err(brynja_mac_hmac::Error::Mismatch) => false,
+            Err(error) => return Err(Error::Mac(error)),
+        })
     } else {
         let secret = state
             .finalize_bits_secret(tail, staging)

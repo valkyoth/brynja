@@ -25,7 +25,7 @@ fn check<A: Algorithm>(key: &[u8], input: &[u8], expected: &[u8]) {
     }
     let mut truncated = require_ok!(Hmac::<A>::with_tag_length(key, 16));
     require_ok!(truncated.update(input));
-    assert!(require_ok!(truncated.verify(require_some!(expected.get(..16)))).expose_public());
+    assert_eq!(truncated.verify(require_some!(expected.get(..16))), Ok(()));
 }
 
 #[test]

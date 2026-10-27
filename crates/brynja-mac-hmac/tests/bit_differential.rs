@@ -47,9 +47,9 @@ fn check<A: BitCase>(key: &[u8], input: &[u8], bits: usize, expected: &[u8]) {
         assert!(output.iter().all(|byte| *byte == 0));
         let mut verifier = require_ok!(Hmac::<A>::with_tag_length(key, 16));
         require_ok!(verifier.update(require_some!(input.get(..split))));
-        assert!(
-            require_ok!(verifier.verify_bits(suffix, require_some!(expected.get(..16))))
-                .expose_public()
+        assert_eq!(
+            verifier.verify_bits(suffix, require_some!(expected.get(..16))),
+            Ok(())
         );
     }
 }

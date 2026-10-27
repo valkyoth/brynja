@@ -4,9 +4,9 @@
 </p>
 
 <div align="center">
-  <a href="https://crates.io/crates/brynja">Crates.io</a>
+  <a href="https://crates.io/crates/brynja-legacy-md5-std">Crates.io</a>
   |
-  <a href="https://docs.rs/brynja">Docs.rs</a>
+  <a href="https://docs.rs/brynja-legacy-md5-std">Docs.rs</a>
   |
   <a href="https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md">Release Plan</a>
   |
@@ -19,7 +19,7 @@
 
 <p align="center">
   <a href="https://github.com/valkyoth/brynja">
-    <img src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
+    <img width="840" src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
   </a>
 </p>
 
@@ -92,8 +92,8 @@ drop(digest); // clears the borrowed output
 # Ok::<(), Box<dyn std::error::Error>>(())
 ```
 
-See the [resident scope](../../docs/macos-resident-profile.md),
-[scalar API](src/macos_resident/mod.rs) and [NEON example](src/macos_resident/batch/mod.rs).
+See the [resident scope](https://github.com/valkyoth/brynja/blob/main/docs/macos-resident-profile.md),
+[scalar API](https://github.com/valkyoth/brynja/blob/main/crates/brynja-legacy-md5-std/src/macos_resident/mod.rs) and [NEON example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-legacy-md5-std/src/macos_resident/batch/mod.rs).
 Unsupported targets reject; existing strict APIs and the modern facade are unchanged.
 
 ## Protected scalar compatibility profile
@@ -156,7 +156,16 @@ rejects batches without a complete active vector group before work/output mutati
 
 ## Use
 
-This adapter is unpublished. For a local checkout:
+Select this isolated legacy adapter explicitly.
+
+After this source version is published, install from the registry:
+
+```sh
+cargo add brynja-legacy-md5-std
+cargo add brynja-legacy-md5
+```
+
+For an unpublished candidate or matching local checkout instead:
 
 ```sh
 cargo add brynja-legacy-md5-std --path /path/to/brynja/crates/brynja-legacy-md5-std

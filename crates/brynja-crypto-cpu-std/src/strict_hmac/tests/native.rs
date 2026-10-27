@@ -38,12 +38,18 @@ fn compare<A: Algorithm>() -> Result<(), Error> {
                 chunks: &[b""],
                 tail: Bits::bytes(&message),
             };
-            assert!(session.verify(request(), &expected, &Cancellation::new())?);
+            assert_eq!(
+                session.verify(request(), &expected, &Cancellation::new()),
+                Ok(())
+            );
             cleared(&session);
             for index in [0, expected.len().checked_sub(1).ok_or(Error::Invariant)?] {
                 let mut wrong = expected.clone();
                 *wrong.get_mut(index).ok_or(Error::Invariant)? ^= 1;
-                assert!(!session.verify(request(), &wrong, &Cancellation::new())?);
+                assert_eq!(
+                    session.verify(request(), &wrong, &Cancellation::new()),
+                    Err(Error::Mismatch)
+                );
                 cleared(&session);
             }
         }
@@ -93,7 +99,10 @@ fn bit_case<A: Algorithm>(last: u8) -> Result<(), Error> {
         let output = session.compute(request(), &Cancellation::new())?;
         assert_eq!(output.expose(), expected);
         drop(output);
-        assert!(session.verify(request(), &expected, &Cancellation::new())?);
+        assert_eq!(
+            session.verify(request(), &expected, &Cancellation::new()),
+            Ok(())
+        );
         cleared(&session);
     }
     let bad = || Request {
@@ -165,15 +174,18 @@ fn cancellation_unwind_and_post_write_failure_clear_and_reuse() -> Result<(), Er
         }
     }
     session.fault = Fault::None;
-    assert!(session.verify(
-        Request {
-            key: b"key",
-            chunks: &[b"message"],
-            tail: Bits::empty()
-        },
-        &tag,
-        &Cancellation::new(),
-    )?);
+    assert_eq!(
+        session.verify(
+            Request {
+                key: b"key",
+                chunks: &[b"message"],
+                tail: Bits::empty()
+            },
+            &tag,
+            &Cancellation::new(),
+        ),
+        Ok(())
+    );
     Ok(())
 }
 
@@ -215,15 +227,15 @@ fn output_loans_forget_and_errors_preserve_public_bytes() -> Result<(), Error> {
     let mut public = [0; 16];
     output.declassify(&mut public, PublicDeclassification::acknowledge())?;
     cleared(&session);
-    assert!(
+    assert_eq!(
         mac::Hmac::<Sha256>::with_tag_length(b"key", 16)
             .map_err(Error::Mac)?
             .verify_bits(
                 mac::Sha2BitString::new(b"message", 8).map_err(|_| Error::InvalidBits)?,
                 &public
             )
-            .map_err(Error::Mac)?
-            .expose_public()
+            .map_err(Error::Mac),
+        Ok(())
     );
     Ok(())
 }
@@ -263,15 +275,18 @@ fn budgets_and_partial_tag_comparison_fail_closed() -> Result<(), Error> {
     }
     let mut wrong = tag;
     *wrong.get_mut(16).ok_or(Error::Invariant)? |= 1;
-    assert!(!session.verify(
-        Request {
-            key: b"key",
-            chunks: &[b"abc"],
-            tail: Bits::empty()
-        },
-        &wrong,
-        &Cancellation::new()
-    )?);
+    assert_eq!(
+        session.verify(
+            Request {
+                key: b"key",
+                chunks: &[b"abc"],
+                tail: Bits::empty()
+            },
+            &wrong,
+            &Cancellation::new()
+        ),
+        Err(Error::Mismatch)
+    );
     cleared(&session);
     bound.max_buffer_mapping_bytes = 1;
     assert!(Session::<Sha256>::new(TagPolicy::Full, bound).is_err());

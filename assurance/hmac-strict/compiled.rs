@@ -50,10 +50,10 @@ fn explicit_route_admission_and_no_fallback() -> Result<(), Error> {
                         let output = session.compute(request(), &Cancellation::new())?;
                         assert_eq!(output.expose(), reference);
                         drop(output);
-                        assert!(session.verify(request(), &reference, &Cancellation::new())?);
+                        assert_eq!(session.verify(request(), &reference, &Cancellation::new()), Ok(()));
                         let mut wrong = reference;
                         wrong[0] ^= 1;
-                        assert!(!session.verify(request(), &wrong, &Cancellation::new())?);
+                        assert_eq!(session.verify(request(), &wrong, &Cancellation::new()), Err(Error::Mismatch));
                     }
                     let cancel = Cancellation::new();
                     cancel.cancel();

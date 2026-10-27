@@ -4,9 +4,9 @@
 </p>
 
 <div align="center">
-  <a href="https://crates.io/crates/brynja">Crates.io</a>
+  <a href="https://crates.io/crates/brynja-crypto-cpu">Crates.io</a>
   |
-  <a href="https://docs.rs/brynja">Docs.rs</a>
+  <a href="https://docs.rs/brynja-crypto-cpu">Docs.rs</a>
   |
   <a href="https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md">Release Plan</a>
   |
@@ -19,7 +19,7 @@
 
 <p align="center">
   <a href="https://github.com/valkyoth/brynja">
-    <img src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
+    <img width="840" src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
   </a>
 </p>
 
@@ -98,7 +98,15 @@ assert_eq!(Kernel::Neon.width(), 4);
 
 See the [batch API and deployment contract](https://github.com/valkyoth/brynja/blob/main/docs/sha256-batch-execution.md).
 
-Current execution APIs are unpublished workspace functionality:
+Select raw CPU authority only when implementing an explicitly admitted route.
+
+After this source version is published, install from the registry:
+
+```sh
+cargo add brynja-crypto-cpu --no-default-features --features static-execution
+```
+
+For an unpublished candidate or matching local checkout instead:
 
 ```sh
 cargo add brynja-crypto-cpu --path /path/to/brynja/crates/brynja-crypto-cpu --no-default-features --features static-execution
@@ -162,7 +170,7 @@ Independent-state Keccak uses the separate default-off `keccak-batch` feature
 and `keccak_batch::{Authority, Session, Kernel}` API. It processes four public
 states on AVX2 or two on NEON, with no erasure or hash framing. Complete
 SHA-3/SHAKE/cSHAKE batches live in `brynja-hash-sha3::batch`.
-See the [Keccak batch contract](../../docs/keccak-batch-execution.md).
+See the [Keccak batch contract](https://github.com/valkyoth/brynja/blob/main/docs/keccak-batch-execution.md).
 
 ## Ordinary SHA-512-family batching
 
@@ -176,4 +184,4 @@ Portable defaults are unchanged. A Cargo feature alone does not enable AVX2;
 generic x86 builds remain portable/Unavailable. Static AVX2 requires
 `-C target-feature=+avx,+avx2` on a supporting deployment. Hosted Arm NEON
 relies on the documented OS ABI, not independent migration proof. No universal
-speedup is promised. See the [batch contract](../../docs/sha512-batch-execution.md).
+speedup is promised. See the [batch contract](https://github.com/valkyoth/brynja/blob/main/docs/sha512-batch-execution.md).

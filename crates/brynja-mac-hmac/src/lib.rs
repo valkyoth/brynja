@@ -30,7 +30,7 @@ pub use algorithms::{
 pub use brynja_hash_sha2::{BitString as Sha2BitString, BitStringError as Sha2BitsError};
 pub use brynja_hash_sha3::{Fips202BitString, Fips202BitsError};
 pub use general::Sha512T;
-pub use output::{SecretTag, Tag, Verification};
+pub use output::{SecretTag, Tag};
 
 /// Value-free failure from an HMAC operation.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -50,12 +50,42 @@ pub enum Error {
     ExecutionFailed,
     /// A secret storage or internal composition invariant failed.
     SecretMemory,
+    /// Comparison completed, but the supplied authenticator did not match.
+    Mismatch,
 }
 
 impl From<brynja_core::SecretMemoryError> for Error {
     fn from(_: brynja_core::SecretMemoryError) -> Self {
         Self::SecretMemory
     }
+}
+
+/// Validates a protocol-selected tag policy without processing a key.
+///
+/// Returns the exact tag width in bits. `None` selects the complete digest,
+/// including a fractional SHA-512/t final byte. `Some(bytes)` selects a
+/// whole-byte prefix of at least 16 bytes and at most floor(digest_bits / 8).
+/// An invalid algorithm is rejected before its tag width is considered.
+///
+/// Choose this policy from the protocol, never from an untrusted candidate tag.
+/// Success does not validate key strength, CPU authority or protected storage.
+///
+/// ```
+/// use brynja_mac_hmac::{validate_tag_policy, Error, Sha512T};
+/// assert_eq!(validate_tag_policy::<Sha512T<129>>(None), Ok(129));
+/// assert_eq!(validate_tag_policy::<Sha512T<129>>(Some(16)), Ok(128));
+/// assert_eq!(validate_tag_policy::<Sha512T<129>>(Some(17)), Err(Error::TagLength));
+/// ```
+pub fn validate_tag_policy<A: Algorithm>(tag_bytes: Option<usize>) -> Result<usize, Error> {
+    A::validate()?;
+    let Some(bytes) = tag_bytes else {
+        return Ok(A::TAG_BITS);
+    };
+    let bits = bytes.checked_mul(8).ok_or(Error::TagLength)?;
+    if !policy::valid_tag_length(A::TAG_BYTES, bytes) || bits > A::TAG_BITS {
+        return Err(Error::TagLength);
+    }
+    Ok(bits)
 }
 
 /// Affine, portable HMAC state for one admitted modern hash identity.
@@ -74,7 +104,7 @@ impl From<brynja_core::SecretMemoryError> for Error {
 /// let tag = mac.finalize_tag(&mut bytes)?;
 /// let mut verifier = Hmac::<Sha256>::new(&key)?;
 /// verifier.update(b"message")?;
-/// assert!(verifier.verify(tag.as_bytes())?.expose_public());
+/// verifier.verify(tag.as_bytes())?;
 /// # Ok::<(), brynja_mac_hmac::Error>(())
 /// ```
 ///
@@ -135,6 +165,7 @@ impl<A: Algorithm> Hmac<A> {
 
     /// Creates a state requiring the complete digest-sized authentication tag.
     pub fn new(key: &[u8]) -> Result<Self, Error> {
+        validate_tag_policy::<A>(None)?;
         Ok(Self {
             engine: engine::Engine::new(key, A::TAG_BYTES)?,
             _local: core::marker::PhantomData,
@@ -151,9 +182,7 @@ impl<A: Algorithm> Hmac<A> {
     /// candidate tag. Shorter tags reduce guessing resistance; no per-key usage
     /// or failed-verification budget is enforced by this construction.
     pub fn with_tag_length(key: &[u8], tag_bytes: usize) -> Result<Self, Error> {
-        if tag_bytes.checked_mul(8).ok_or(Error::TagLength)? > A::TAG_BITS {
-            return Err(Error::TagLength);
-        }
+        validate_tag_policy::<A>(Some(tag_bytes))?;
         Ok(Self {
             engine: engine::Engine::new(key, tag_bytes)?,
             _local: core::marker::PhantomData,
@@ -185,7 +214,8 @@ impl<A: Algorithm> Hmac<A> {
     ///
     /// Length rejection depends only on public policy. Equal-length comparison
     /// accumulates all differences without a content-dependent early exit.
-    pub fn verify(self, candidate: &[u8]) -> Result<Verification, Error> {
+    /// `Ok(())` means authenticated; a completed mismatch is [`Error::Mismatch`].
+    pub fn verify(self, candidate: &[u8]) -> Result<(), Error> {
         self.engine.verify(None, candidate)
     }
 

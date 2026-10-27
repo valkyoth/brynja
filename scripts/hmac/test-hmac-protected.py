@@ -48,7 +48,7 @@ class ProtectedAcceptanceTests(unittest.TestCase):
                 with patch.object(checks.host, "run", side_effect=run), redirect_stdout(io.StringIO()):
                     if mode == "behavioral":
                         checks.mutants(root, {})
-                        self.assertEqual(len(calls), 8)
+                        self.assertEqual(len(calls), 10)
                     else:
                         with self.assertRaises((ValueError, RuntimeError)):
                             checks.mutants(root, {})
@@ -78,7 +78,7 @@ class ProtectedAcceptanceTests(unittest.TestCase):
                 with patch.object(checks.host, "run", side_effect=run):
                     if mode == "behavioral":
                         checks.compiled.mutants(checks.host, root, {}, ["cargo", "test"])
-                        self.assertEqual(len(calls), 8)
+                        self.assertEqual(len(calls), 10)
                     else:
                         with self.assertRaises((ValueError, RuntimeError)):
                             checks.compiled.mutants(checks.host, root, {}, ["cargo", "test"])
@@ -98,6 +98,30 @@ class ProtectedAcceptanceTests(unittest.TestCase):
         with patch.object(checks.compiled.platform, "machine", return_value="riscv64"):
             with self.assertRaises(ValueError):
                 checks.compiled.native_environment({}, "sha256")
+
+    def test_preentry_regression_executes_both_profiles_and_rejects_skips(self):
+        for owner, module in ((profiles.PROTECTED, "protected_memory::platform::thread::tests"),
+                              (profiles.RESIDENT, "macos_resident::resource::darwin::tests")):
+            for summary, valid in (("1 passed; 0 failed; 0 ignored;", True),
+                                   ("0 passed; 0 failed; 1 ignored;", False),
+                                   ("0 passed; 0 failed; 0 ignored;", False)):
+                result = subprocess.CompletedProcess([], 0, "test result: ok. " + summary)
+                with patch.object(checks.host, "run", return_value=result) as run, redirect_stdout(io.StringIO()):
+                    if valid:
+                        checks.compiled.preentry(checks.host, Path("/workspace"), {}, "sha256", checks.population, owner)
+                        self.assertEqual(run.call_count, 2)
+                        for index, call in enumerate(run.call_args_list):
+                            command = call.args[0]
+                            self.assertIn(owner.feature + "-acceleration", command)
+                            self.assertEqual(command[-4:], [module + "::hmac_preentry_failures_preserve_session",
+                                                           "--", "--ignored", "--exact"])
+                            self.assertEqual("--release" in command, index == 1)
+                    else:
+                        with self.assertRaisesRegex(ValueError, "population changed"):
+                            checks.compiled.preentry(checks.host, Path("/workspace"), {}, "sha256", checks.population, owner)
+            with patch.object(checks.host, "run", side_effect=AssertionError("unexpected SHA-256 test")):
+                for kernel in ("sha512", "keccak"):
+                    checks.compiled.preentry(checks.host, Path("/workspace"), {}, kernel, checks.population, owner)
 
     def test_profiles_cannot_claim_the_other_platform(self):
         for system, arch in (("linux", "x86_64"), ("linux", "aarch64"),
@@ -136,7 +160,7 @@ class ProtectedAcceptanceTests(unittest.TestCase):
                 root = Path(raw)
                 (root / "src").mkdir()
                 manifest = root / "Cargo.toml"
-                manifest.write_text(f'brynja-crypto-cpu-std = {{version="=0.1.1", features = ["{owner.feature}"]}}')
+                manifest.write_text(f'brynja-crypto-cpu-std = {{version="=0.2.0", features = ["{owner.feature}"]}}')
                 calls = []
                 def run(command, *_args, **kwargs):
                     calls.append((root / "src/lib.rs").read_text())
@@ -167,7 +191,7 @@ class ProtectedAcceptanceTests(unittest.TestCase):
                     "test result: FAILED. 0 passed; 1 failed; 0 ignored;", "")
             with patch.object(checks.host, "run", side_effect=run), redirect_stdout(io.StringIO()):
                 checks.mutants(root, {}, profiles.RESIDENT)
-            self.assertEqual(len(calls), 8)
+            self.assertEqual(len(calls), 10)
             for path, original in before.items():
                 self.assertEqual(path.read_bytes(), original)
 

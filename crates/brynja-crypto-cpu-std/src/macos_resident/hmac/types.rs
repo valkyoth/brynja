@@ -12,17 +12,14 @@ pub enum TagPolicy {
 }
 impl TagPolicy {
     pub(super) fn bits<A: Algorithm>(self) -> Result<usize, Error> {
-        A::validate().map_err(Error::Mac)?;
-        match self {
-            Self::Full => Ok(A::TAG_BITS),
-            Self::Bytes(bytes) => {
-                let bits = bytes.checked_mul(8).ok_or(Error::InvalidTagPolicy)?;
-                if bytes < 16 || bits > A::TAG_BITS {
-                    return Err(Error::InvalidTagPolicy);
-                }
-                Ok(bits)
-            }
-        }
+        let selected = match self {
+            Self::Full => None,
+            Self::Bytes(bytes) => Some(bytes),
+        };
+        brynja_mac_hmac::validate_tag_policy::<A>(selected).map_err(|error| match error {
+            brynja_mac_hmac::Error::TagLength => Error::InvalidTagPolicy,
+            other => Error::Mac(other),
+        })
     }
 }
 
@@ -127,6 +124,8 @@ pub enum Error {
     Backend(brynja_crypto_cpu::static_execution::Error),
     /// Internal transfer/result invariant failed.
     Invariant,
+    /// Completed authentication mismatch; the session remains reusable.
+    Mismatch,
 }
 impl From<resident::Error> for Error {
     fn from(error: resident::Error) -> Self {

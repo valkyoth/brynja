@@ -42,32 +42,32 @@ FILES = (
     BARE_METAL, WORKFLOW,
 )
 EXPECTED_SHA256: dict[Path, str] = {
-    MANIFEST: "c5fb899c9a87d34d7d9eca0d754dfc10c373f046ad3b4b7e2eae6cc2d8ff5290",
-    LOCK: "027eb79d1fa146390ed95857c19c50824973d690a06ca13da26bc6b9beae412c",
+    MANIFEST: "148463f627927c459c513a68213189e8d04ba4ca0b9fe8cd379b257432c16df2",
+    LOCK: "b45b165e5eaf27fbaba96a13f62c2b93839fe819d4187de111e7539bcb119832",
     LIB: "06a093ae03acef95271d075c5582c51b5b83d63a62d30a3e1e547d1b72ce4395",
     BIT_API: "f63d7862befc7ad6ce82c63d05919ac556ef64d5ecd4d28f2b1e849ac8d6174e",
     ALGORITHMS: "adb8985464a1c2a5656eeb927791f680098d72847a67164539d72f56ad69ffd7",
     VECTORS: "677ff52adaa6b88a2b19e93219238b0751e539afaa7c7d3934740a2c68588d6f",
     MAIN: "676f7e6dfc44120ea26cc0a2cf69717ab21fb6bbd22c68039b20c8807e810161",
     CONTENT: "ab72282b43ccf28714e57ff9c4cedde2d3736a5e38eb1016c2d8956615c9cdd3",
-    LEAF_MANIFEST: "5049a02ff3a7fea3ed9d253bd9443c89808c0e44c8dc6f86d0449792be401da7",
+    LEAF_MANIFEST: "0a338ea179d9bdb536501b0d22060d9f0ef1f399cef0f9d2d7bdb1982f2dbe50",
     LEAF_LIB: "1608be107cfb881fd76ea57cdb44df14bd4bacf73122229676e18cb16d99821e",
-    LEAF_README: "f092c93b4e738221d49124f71eee7da6f60d22ae0cf5c90d735b693cbee01232",
+    LEAF_README: "9bd71f9d4a01b73a61e203ee40304803805aa89e5ff2c8d7eea4df78481f4843",
     CRYPTO_LIB: "fde4502fc7f0798aee00785f887cd7c40ef14030dcadeb40a5f8bec0fa0d58c9",
-    FACADE_MANIFEST: "2f8b978599157fbdfaba234084962d3ad2ed3ab1843c70ae9d2f995730427e79",
+    FACADE_MANIFEST: "a5dda85a768a199184f004f09e5d49fd07a8da5e7f12fa35e15984e4fe1c34be",
     FACADE_LIB: "6c32a6d7853876de0797e08bff739f553465ecb17d461c736ac73e2bd6c43a4a",
-    FACADE_README: "9831410a07ba142e5cb0b25b20588e3e47b5cb55649cb5e8bcb0823d09f764ed",
+    FACADE_README: "eed82e7d050f6622782ee76cf66eaed6886960df32e11f28e16b2a877b4d2483",
     CHECK_SCRIPT: "37b6f0605770c8948fd8972640bf4ca978c3536ac832c1ffc733cea235f2b62b",
     TEST_SCRIPT: "20010f7a853d382b1b7f12a0df2e0b65793d3be02bf9e6b16db70f4e9977ae40",
     CHECKS: "61ca5886d2fcafeef07ab380ac6edd75748b5271d9a34c2f54ea24470deff5d9",
-    RUST_MATRIX: "e01f175afb24a65867973743a44aa6bb05735ae00d6f93e0920ad4d908c8641d",
-    BARE_METAL: "5088a73fbe45e151498edfe8f21b22839f7cce05aec541d25722790d4ae50283",
-    WORKFLOW: "df492a2fd3216d9281aac659dfef3fdfe3394a153681f4f1b86655e6714b00ab",
+    RUST_MATRIX: "0f58049c65a572530b4a5e9e9ee551e1e6d76486e06e0d141921516e20532f3a",
+    BARE_METAL: "cd9121c6869abd402d808bf54d15ffb797dbbec398754c3297ee991c88f3d147",
+    WORKFLOW: "ca21ebe812b9f85e8c51cc98b5c28478ac0db74a13b1108903170f3e915026e7",
 }
 PACKAGES = (
-    ("brynja-core", "0.9.0", ("src/lib.rs",)),
+    ("brynja-core", "0.10.0", ("src/lib.rs",)),
     ("brynja-mac-hmac", "0.1.0", ("src/lib.rs",)),
-    ("brynja-crypto-cpu", "0.1.1", (
+    ("brynja-crypto-cpu", "0.2.0", (
         "src/lib.rs", "src/sha256.rs", "src/sha512.rs", "src/keccak.rs",
         "src/keccak_constants.rs", "src/x86_avx2_keccak.rs",
         "src/aarch64_sha3_keccak.rs",
@@ -94,23 +94,23 @@ PACKAGES = (
         "src/lib.rs", "src/backend.rs", "src/core_state.rs", "src/error.rs",
         "src/fixed.rs", "src/output.rs", "src/scheduled.rs", "src/xof.rs",
     )),
-    ("brynja-crypto", "0.1.2", ("src/lib.rs",)),
-    ("brynja-pki", "0.2.0", ("src/lib.rs",)),
-    ("brynja-protocol", "0.1.0", ("src/lib.rs",)),
-    ("brynja-tls13-handshake", "0.1.8", ("src/lib.rs",)),
-    ("brynja-tls12", "0.1.8", ("src/lib.rs",)),
-    ("brynja-tls13", "0.1.8", ("src/lib.rs",)),
-    ("brynja-tls", "0.1.8", ("src/lib.rs",)),
-    ("brynja-dtls", "0.1.8", ("src/lib.rs",)),
-    ("brynja-platform", "0.1.8", ("src/lib.rs",)),
-    ("brynja-quic-tls", "0.1.8", ("src/lib.rs",)),
-    ("brynja", "0.25.1", ("src/lib.rs",)),
+    ("brynja-crypto", "0.2.0", ("src/lib.rs",)),
+    ("brynja-pki", "0.3.0", ("src/lib.rs",)),
+    ("brynja-protocol", "0.1.1", ("src/lib.rs",)),
+    ("brynja-tls13-handshake", "0.1.9", ("src/lib.rs",)),
+    ("brynja-tls12", "0.1.9", ("src/lib.rs",)),
+    ("brynja-tls13", "0.1.9", ("src/lib.rs",)),
+    ("brynja-tls", "0.1.9", ("src/lib.rs",)),
+    ("brynja-dtls", "0.1.9", ("src/lib.rs",)),
+    ("brynja-platform", "0.1.9", ("src/lib.rs",)),
+    ("brynja-quic-tls", "0.1.9", ("src/lib.rs",)),
+    ("brynja", "0.25.2", ("src/lib.rs",)),
 )
 
 
 # Cargo must resolve development dependencies while packaging even though the
 # public consumer never enables this std adapter. Keep its runtime lock separate.
-PACKAGING_PACKAGES = (*PACKAGES, ("brynja-crypto-cpu-std", "0.1.1", ("src/lib.rs",)))
+PACKAGING_PACKAGES = (*PACKAGES, ("brynja-crypto-cpu-std", "0.2.0", ("src/lib.rs",)))
 
 
 class AcceptancePolicyError(RuntimeError):
@@ -145,7 +145,7 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
     }:
         fail("acceptance package identity changed")
     expected_dependencies = {
-        "brynja": {"path": "../../crates/brynja", "version": "=0.25.1", "default-features": False},
+        "brynja": {"path": "../../crates/brynja", "version": "=0.25.2", "default-features": False},
         "brynja-hash-sha3": {
             "path": "../../crates/brynja-hash-sha3", "version": "=0.1.0",
             "default-features": False,

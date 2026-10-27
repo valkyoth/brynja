@@ -6,10 +6,12 @@ import json
 import os
 from pathlib import Path
 import sys
+import tomllib
 from unittest.mock import patch
 
 import hmac_acceptance
 import hmac_package
+import hmac_combined_acceptance as combined
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.append(str(ROOT / "scripts/repository"))
@@ -67,6 +69,8 @@ def negatives(cargo, consumer, env, package):
 def execute(root, toolchain, bare_target):
     env = api.clean_environment(root)
     specifications = api.archives.specifications(api.packaging)
+    specifications += tuple((name, tomllib.loads((ROOT / 'crates' / name / 'Cargo.toml').read_text())
+                            ['package']['version'], ('src/lib.rs',)) for name in combined.ADDITIONAL)
     with patch.dict(os.environ, env, clear=True), \
             patch.object(api.packaging, "PACKAGING_PACKAGES", specifications):
         roots = api.parallelhash.package_roots(api.packaging, root)
@@ -111,6 +115,7 @@ def execute(root, toolchain, bare_target):
                     consumer, env, success=False), "E0432")
         print(f"{package}: portable no_std build, opt-in no_std check/native build, feature isolation PASS", flush=True)
     api.adversarial.protocols(api, consumer, roots, cargo, env, bare_target)
+    combined.execute(api, roots, consumer, cargo, env, bare_target)
     print("Focused HMAC facade acceptance: PASS; no native or independent qualification claim")
 
 

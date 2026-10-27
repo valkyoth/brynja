@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Test real HMAC archives downstream; retain test/evidence files only in Git."""
+"""Test real HMAC archives downstream; standalone fixtures/evidence stay in Git."""
 import argparse
 import json
 import os
@@ -50,7 +50,7 @@ def consumer_manifest(roots):
 
 def test_profiles(consumer, environment):
     for profile in ([], ["--release"]):
-        for test, count in (("vectors", 7), ("lifecycle", 11), ("bounded", 13), ("bits", 12), ("general", 6)):
+        for test, count in (("vectors", 7), ("lifecycle", 11), ("bounded", 13), ("bits", 12), ("general", 6), ("tag_policy", 3)):
             output = run(["cargo", "test", "--offline", "--locked", *profile, "--test", test], consumer, environment)
             if f"test result: ok. {count} passed; 0 failed; 0 ignored;" not in output:
                 raise ValueError("HMAC packaged test population changed: " + test + "\n" + output[-6000:])
@@ -86,7 +86,7 @@ def main():
         members = [str(path.relative_to(leaf)) for path in leaf.rglob("*") if path.is_file()]
         validate_members(members)
         archive = directory / "target/package/brynja-mac-hmac-0.1.0.crate"
-        print(f"HMAC runtime-only archive: {len(members)} files; {archive.stat().st_size} compressed bytes")
+        print(f"HMAC source/metadata archive: {len(members)} files; {archive.stat().st_size} compressed bytes")
         consumer = directory / "consumer"
         (consumer / "src").mkdir(parents=True)
         (consumer / "Cargo.toml").write_text(consumer_manifest(roots))
@@ -104,7 +104,7 @@ def main():
             if package["source"] is not None or Path(package["manifest_path"]).resolve() != location / "Cargo.toml":
                 raise ValueError("HMAC dependency escaped extracted archives")
         test_profiles(consumer, environment)
-        print("HMAC extracted archive: debug/release vectors, lifecycle, bounded, bits, general and README PASS")
+        print("HMAC extracted archive: debug/release vectors, lifecycle, bounded, bits, general, tag policy and README PASS")
         hmac_acceptance.negatives(consumer, environment, args.no_std_target)
         hmac_acceptance.mutants(roots, consumer, environment)
         hmac_faults.check(roots, directory, environment)

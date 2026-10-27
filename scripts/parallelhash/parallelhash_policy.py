@@ -98,6 +98,8 @@ DIFFERENTIAL = (
     PORTABLE / "README.md", STD / "README.md",
     Path("scripts/parallelhash/check-parallelhash-execution-differential.py"),
     Path("scripts/parallelhash/check-parallelhash-execution-package.py"),
+    Path("scripts/parallelhash/parallelhash_package_fixtures.py"),
+    Path("scripts/parallelhash/test-parallelhash-package-fixtures.py"),
     Path("scripts/parallelhash/check-parallelhash-execution-codegen.py"),
     Path("scripts/parallelhash/parallelhash_cleanup.py"),
     Path("scripts/parallelhash/parallelhash_execution_native.py"),

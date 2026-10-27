@@ -4,9 +4,9 @@
 </p>
 
 <div align="center">
-  <a href="https://crates.io/crates/brynja">Crates.io</a>
+  <a href="https://crates.io/crates/brynja-legacy-sha1-std">Crates.io</a>
   |
-  <a href="https://docs.rs/brynja">Docs.rs</a>
+  <a href="https://docs.rs/brynja-legacy-sha1-std">Docs.rs</a>
   |
   <a href="https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md">Release Plan</a>
   |
@@ -19,7 +19,7 @@
 
 <p align="center">
   <a href="https://github.com/valkyoth/brynja">
-    <img src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
+    <img width="840" src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
   </a>
 </p>
 
@@ -102,8 +102,8 @@ drop(digest); // clears the borrowed output
 # Ok::<(), Box<dyn std::error::Error>>(())
 ```
 
-See the [resident scope](../../docs/macos-resident-profile.md) and the
-[byte/bit API](src/macos_resident/mod.rs). Neither feature imports legacy
+See the [resident scope](https://github.com/valkyoth/brynja/blob/main/docs/macos-resident-profile.md) and the
+[byte/bit API](https://github.com/valkyoth/brynja/blob/main/crates/brynja-legacy-sha1-std/src/macos_resident/mod.rs). Neither feature imports legacy
 algorithms into the modern facade or enables strict Mac admission.
 
 The separate default-off `strict-execution` feature adds
@@ -118,10 +118,19 @@ output and the joined stack before reuse. Unsupported targets fail closed.
 This `Session` wrapper is scalar-only; separate `CompiledSession` selects
 SHA-NI/Arm. Qualification remains pending. Neither repairs collision resistance, protects caller copies,
 or promise whole-process/register/interruption erasure. The modern facade gains
-no legacy dependency. See the [compiled session example](src/strict_execution/mod.rs)
-and [strict-profile limits](../../docs/strict-hardening-profile.md).
+no legacy dependency. See the [compiled session example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-legacy-sha1-std/src/strict_execution/mod.rs)
+and [strict-profile limits](https://github.com/valkyoth/brynja/blob/main/docs/strict-hardening-profile.md).
 
-This adapter is unpublished. For a local checkout:
+Select this isolated legacy adapter explicitly.
+
+After this source version is published, install from the registry:
+
+```sh
+cargo add brynja-legacy-sha1-std
+cargo add brynja-legacy-sha1
+```
+
+For an unpublished candidate or matching local checkout instead:
 
 ```sh
 cargo add brynja-legacy-sha1-std --path /path/to/brynja/crates/brynja-legacy-sha1-std

@@ -27,9 +27,9 @@ fn compare<A: Algorithm>() -> Result<(), Error> {
         chunks: &[b"message"],
         tail: Bits::empty(),
     };
-    assert!(session.verify(request(), &public, &Cancellation::new())?);
+    assert_eq!(session.verify(request(), &public, &Cancellation::new()), Ok(()));
     public[0] ^= 1;
-    assert!(!session.verify(request(), &public, &Cancellation::new())?);
+    assert_eq!(session.verify(request(), &public, &Cancellation::new()), Err(Error::Mismatch));
     Ok(())
 }
 #[test]
@@ -82,7 +82,7 @@ fn packaged_full_partial_tag_has_exact_width() -> Result<(), Error> {
     assert_eq!(tag[16] & 127, 0);
     let mut wrong = tag;
     wrong[16] |= 1;
-    assert!(!session.verify(
+    assert_eq!(session.verify(
         Request {
             key: b"key",
             chunks: &[b"message"],
@@ -90,6 +90,6 @@ fn packaged_full_partial_tag_has_exact_width() -> Result<(), Error> {
         },
         &wrong,
         &Cancellation::new()
-    )?);
+    ), Err(Error::Mismatch));
     Ok(())
 }

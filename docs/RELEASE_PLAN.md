@@ -5332,12 +5332,22 @@ Exit criteria:
 
 ### v0.25.2 - HMAC Public API Usability Acceptance
 
-Status: planned
+Status: in progress
 
 Plan scope: Close the HMAC chain with downstream fixtures for every modern SHA-2/SHA-3 instantiation and the separately selected legacy SHA-1/MD5 adapters, exercising one-shot, streaming, long keys, truncated verification, invalid tags, package installation, cleanup evidence, and compile-time prevention of digest/tag or modern/legacy substitution.
 
 Goal: prove complete modern and isolated legacy HMAC use through ordinary public
 artifacts before HKDF or protocol integration.
+
+Implementation progress: the shared key-independent modern tag policy and
+authoritative mismatch errors are implemented through leaf, execution and
+hosted portable/protected/resident APIs. Combined extracted modern/legacy
+consumers, coordinated publication versions, lean archives and all crate README
+checks pass. This is author-tested implementation work, not a completed public
+checkpoint. The [review handoff](hmac-public-checkpoint-review.md) separates
+completed checks, historical captures and remaining cumulative review and
+qualification; [the candidate notes](../release-notes/RELEASE_NOTES_0.25.2.md)
+retain the detailed results.
 
 Owner-directed package footprint (2026-10-19): audit every selected publication
 crate and its first-party dependency closure. Ship runtime sources, required
@@ -5347,6 +5357,13 @@ crates.io archives. Establish explicit content allowlists where practical,
 measure archive contents/sizes, and regression-test extracted downstream builds
 including any source-include or build-script inputs. Do not delete repository
 evidence or weaken acceptance tests to reduce package size.
+
+Packaging audit decision: retain declared Rust unit-test modules alongside their
+parent source so the published crate remains self-contained under `cargo test`.
+Standalone integration fixtures, large vector files and evidence stay in the
+repository. This is a source/metadata archive policy, not a claim that every
+packaged Rust line is compiled into a downstream production binary. The HMAC
+extracted-package test must not repair a missing unit module from the checkout.
 
 Deliverables:
 

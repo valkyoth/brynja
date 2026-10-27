@@ -8,6 +8,7 @@ def replace_once(source, before, after):
     return source.replace(before, after)
 
 
+# Fixtures come from the reviewed repository; runtime dependencies remain extracted archives.
 def install(consumer, roots):
     hashes = shared.load('scripts/cryptography/macos_resident_oracle.py')
     keyed = shared.load('scripts/cryptography/macos_resident_keyed_oracle.py')
@@ -33,7 +34,7 @@ def install(consumer, roots):
     (consumer / 'src/bit_vectors.rs').write_text(strict_consumer_bits.SOURCE)
     (consumer / 'src/vectors').mkdir()
     for name in ('nist-bit-selected.txt', 'general-sha512-t-digest.txt'):
-        (consumer / 'src/vectors' / name).write_bytes((roots['brynja-hash-sha2'] / 'tests/vectors' / name).read_bytes())
+        (consumer / 'src/vectors' / name).write_bytes((shared.ROOT / 'crates/brynja-hash-sha2/tests/vectors' / name).read_bytes())
     (consumer / 'tests/acceptance.rs').write_text(SOURCE)
 
 

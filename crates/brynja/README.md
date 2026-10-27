@@ -19,23 +19,25 @@
 
 <p align="center">
   <a href="https://github.com/valkyoth/brynja">
-    <img src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
+    <img width="840" src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
   </a>
 </p>
 
 # brynja
 
-`brynja` is the small modern facade for the Brynja cryptography and secure-protocol workspace. It is allocation-independent `no_std` Rust without a C cryptographic library. Select the separate [brynja-strict facade](../brynja-strict/README.md) for protected-memory/worker-stack APIs: upgrading `brynja` does not enable them. Strict constructors reject unsupported platforms or unavailable resources; qualification remains pending.
+`brynja` is the small modern facade for the Brynja cryptography and secure-protocol workspace. It is allocation-independent `no_std` Rust without a C cryptographic library. Select the separate [brynja-strict facade](https://github.com/valkyoth/brynja/blob/main/crates/brynja-strict/README.md) for protected-memory/worker-stack APIs: upgrading `brynja` does not enable them. Strict constructors reject unsupported platforms or unavailable resources; qualification remains pending.
 
 > **Development status:** Brynja is pre-1.0, incomplete, and must not yet secure application traffic. It provides all six SHA-2 and FIPS 202 functions,
-> complete cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF, and ParallelHash/ParallelHashXOF families, plus security and bounded framing foundations,
+> complete cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF, and ParallelHash/ParallelHashXOF families, modern SHA-2/SHA-3 HMAC, plus security and bounded framing foundations,
 > but no TLS connection, certificate validator, or working protocol engine.
 
 ## Cryptography Verification Status
 
-These tables track concrete public capabilities and active pre-1.0 roadmap families. Implementation requires a complete public API and acceptance; a planned row is not yet usable. See the [component verification status](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md) for the crate-level audit inventory.
-✅ Implemented means a capability is ready; ✅ Fully implemented covers every named family member. A green implementation status does not mean independently verified.
+These tables track concrete public capabilities and active pre-1.0 roadmap families. Implementation requires a complete public API and passing functional acceptance; a planned row is not yet usable. See the [component verification status](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md) for the crate-level audit inventory.
+✅ Implemented means a capability is implemented and acceptance-tested; ✅ Fully implemented covers every named family member. Release qualification is separate and remains pending for this candidate. A green implementation status does not mean independently verified.
 Only linked sign-off from a named independent reviewer can change independent status. CI, Kani, Miri, sanitizers, fuzzing, differential testing, and pentests do not constitute independent verification.
+
+Implementation completion does not authorize publication or imply platform qualification.
 
 ### Modern Hash Functions
 
@@ -55,7 +57,13 @@ SHA-2 covers SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256; S
 | Construction family | Implementation status | Owning crate | Independent verification |
 | --- | --- | --- | --- |
 | KMAC/KMACXOF | ✅ Fully implemented | `brynja-mac-kmac` | ❌ Not independently verified |
-| HMAC over modern SHA-2/SHA-3 | 🚧 Development APIs; qualification pending | `brynja-mac-hmac` | ❌ Not independently verified |
+| HMAC over modern SHA-2/SHA-3 | ✅ Fully implemented | `brynja-mac-hmac` | ❌ Not independently verified |
+
+HMAC covers all ten named SHA-2/SHA-3 identities, streaming and one-shot use,
+long keys, byte/bit messages, preselected byte truncation, mismatch rejection
+and typed public/secret tags. General SHA-512/t retains the modern 128-bit
+minimum. Platform-specific acceleration and protected/resident qualification
+remain separate; there is no SIMD-batched or Windows enclave HMAC API.
 
 ### Legacy Hash Functions
 
@@ -67,13 +75,15 @@ SHA-2 covers SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256; S
 ### Legacy Message Authentication
 
 These compatibility APIs require separate legacy dependencies and are not
-exported by this modern facade. Qualification remains pending; no independent
+exported by this modern facade. Hosted owners cover GNU/Linux protected and
+Apple Silicon resident sessions, not a portable guarantee of protected memory.
+The current checkpoint's release qualification remains pending; no independent
 cryptographic certification is claimed.
 
 | Construction family | Implementation status | Owning crate | Independent verification |
 | --- | --- | --- | --- |
-| HMAC over legacy MD5/SHA-1 | 🚧 Development APIs; qualification pending | `brynja-legacy-hmac` | ❌ Not independently verified |
-| Hosted legacy HMAC | 🚧 Linux protected / Apple Silicon resident owners; qualification pending | `brynja-legacy-hmac-std` | ❌ Not independently verified |
+| HMAC over legacy MD5/SHA-1 | ✅ Fully implemented | `brynja-legacy-hmac` | ❌ Not independently verified |
+| Hosted legacy HMAC | ✅ Implemented | `brynja-legacy-hmac-std` | ❌ Not independently verified |
 
 ### Protocol And PKI Building Blocks
 
@@ -101,7 +111,16 @@ FIPS validation is a separate official claim from implementation and independent
 
 Default hash APIs remain portable. Separate CPU packages expose default-off raw static and platform-limited [hosted execution authority](https://github.com/valkyoth/brynja/blob/main/docs/hosted-cpu-execution.md). Opt-in leaf features provide complete ordinary SHA-2, [SHA-3/SHAKE](https://github.com/valkyoth/brynja/blob/main/docs/sha3-ordinary-execution.md) and [cSHAKE execution](https://github.com/valkyoth/brynja/blob/main/docs/cshake-ordinary-execution.md). Separate [hardened SHA-2](https://github.com/valkyoth/brynja/blob/main/docs/sha2-hardened-execution.md) and [hardened Keccak execution](https://github.com/valkyoth/brynja/blob/main/docs/hardened-keccak-execution.md) provide erasing owners and typed secret outputs. These paths have project-owned retest, native functional evidence and local release checks, not independent verification or FIPS validation. Register/spill erasure and universal platform safety are not guaranteed. See the [acceleration plan](https://github.com/valkyoth/brynja/blob/main/docs/ACCELERATION_USABILITY_AUDIT.md) and linked guides for exact platform restrictions.
 
-Published packages currently provide foundations; the hash/MAC examples below use this repository's unpublished APIs. Let Cargo select published metadata with `cargo add brynja --no-default-features`. For the examples in this checkout:
+Select a release containing the modern APIs described here. Older foundation-only
+packages do not expose the complete hash/MAC surface.
+
+After this source version is published, install from the registry:
+
+```sh
+cargo add brynja --no-default-features
+```
+
+For an unpublished candidate or matching local checkout instead:
 
 ```sh
 cargo add brynja --path /path/to/brynja/crates/brynja --no-default-features
@@ -113,7 +132,7 @@ The facade defaults to portable execution. Explicit per-family features forward
 existing execution and batch APIs through `crypto::sha2`, `crypto::sha3`,
 `crypto::kmac`, `crypto::tuplehash` and `crypto::parallelhash`. The separate
 `general-sha512-t` feature exposes general SHA-512/t. See the
-[feature and deployment guide](../../docs/facade-features.md).
+[feature and deployment guide](https://github.com/valkyoth/brynja/blob/main/docs/facade-features.md).
 Optional execution supports x86-64 SHA/AVX2 and AArch64 SHA2/SHA-512/SHA3,
 depending on family and platform authority; dedicated x86 SHA-512 remains
 emulated qualification only. Cargo features do not establish CPU support.
@@ -123,6 +142,34 @@ facade feature. ParallelHash accelerated scheduling retains its qualification
 limits; portable family completion does not close that work.
 
 ## Examples
+
+### Authenticate And Reject A Forged HMAC
+
+```rust
+use brynja::crypto::hmac::{Error, Hmac, Sha256};
+
+let key = [0x42; 32]; // Demonstration only; applications supply a secret key.
+let mut output = [0; 32];
+let tag = Hmac::<Sha256>::authenticate(&key, b"message", &mut output)?;
+
+let mut verifier = Hmac::<Sha256>::new(&key)?;
+verifier.update(b"message")?;
+verifier.verify(tag.as_bytes())?; // Only a match returns Ok(()).
+
+let mut forged = [0; 32];
+forged.copy_from_slice(tag.as_bytes());
+forged[0] ^= 1;
+let mut verifier = Hmac::<Sha256>::new(&key)?;
+verifier.update(b"message")?;
+assert_eq!(verifier.verify(&forged), Err(Error::Mismatch));
+# Ok::<(), Error>(())
+```
+
+Choose a protocol's tag length before processing keys or messages; never infer
+it from an incoming tag. The modern minimum is 128 bits. This portable API
+clears its owned secret state but does not lock caller buffers or worker stacks.
+Use the distinct protected/resident APIs when those storage properties are
+required. Legacy HMAC-MD5/SHA-1 requires a separate legacy crate dependency.
 
 ### Parse A Bounded TLS 1.3 Record Envelope
 
@@ -219,10 +266,11 @@ Callers must enforce their protocol's maximum candidate-tag length before KMAC v
 | `brynja` | Modern curated facade |
 | `brynja-core` | Bounded state, constant-time, secret-memory, provider, entropy, time, and security-outcome foundations |
 | `brynja-hash-*`, `brynja-mac-kmac` | Algorithm leaves with ordinary/hardened ownership and opt-in execution; see capability tables above |
+| `brynja-mac-hmac` | Modern SHA-2/SHA-3 HMAC; typed tags and success-only verification |
 | `brynja-crypto` | Cryptographic policy, composition, and protocol-facing provider boundary |
 | `brynja-pki` | Implemented DER/ASN.1 foundations; X.509, path validation and revocation planned |
 | `brynja-protocol` | Shared allocation-free TLS and DTLS record envelopes |
 | `brynja-tls12`, `brynja-tls13`, `brynja-dtls`, `brynja-quic-tls` | Planned modern protocol engines, not yet implemented |
-| `brynja-legacy-*` | Isolated obsolete protocols, SHA-1/MD5 and optional SHA-1/MD5 host-observation adapters |
+| `brynja-legacy-*` | Isolated obsolete protocol boundaries, SHA-1/MD5, legacy HMAC and explicit hosted companions |
 
 More: [release plan](https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md), [threat model](https://github.com/valkyoth/brynja/blob/main/docs/threat-model.md), [verification inventory](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md), and [security policy](https://github.com/valkyoth/brynja/blob/main/SECURITY.md). Licensed under either Apache-2.0 or MIT, at your option.

@@ -72,10 +72,10 @@ def install(consumer, roots, family):
     (consumer / 'src/lib.rs').write_text('#![no_std]\n#![forbid(unsafe_code)]\n')
     (consumer / 'src/bin/probe.rs').write_text(cases.PROBE)
     for name, package in (('execution', leaf), ('hosted', leaf + '-std')):
-        (consumer / f'tests/{name}.rs').write_bytes((roots[package] / 'tests/execution.rs').read_bytes())
+        (consumer / f'tests/{name}.rs').write_bytes((ROOT / 'crates' / package / 'tests/execution.rs').read_bytes())
     (consumer / 'tests/selection.rs').write_text(cases.selection(family))
     if family == 'sha1':
-        (consumer / 'tests/vectors/nist.txt').write_bytes((roots[leaf] / 'tests/vectors/nist.txt').read_bytes())
+        (consumer / 'tests/vectors/nist.txt').write_bytes((ROOT / 'crates' / leaf / 'tests/vectors/nist.txt').read_bytes())
         load('scripts/sha1/check-sha1-package.py').write_oracle(consumer / 'tests/oracle.rs')
     else:
         (consumer / 'src/main.rs').write_bytes((ROOT / 'assurance/md5-execution/src/main.rs').read_bytes())

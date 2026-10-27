@@ -14,7 +14,7 @@ require, V, L = values.require, values.V, values.L
 class Transaction:
     def __init__(self, record, compiled, compiler):
         self.r, self.compiled = record, compiled
-        self.ok = 255 if compiler == '1.99.1' else 11
+        self.ok = 255 if compiler == '1.99.1' else 12
         self.owner, self.resource = lifecycle.profile(record.target)
         self.drop = '<' + self.owner + '::Buffers as core::ops::drop::Drop>::drop'
         self.cancel = '<' + self.owner + '::types::Cancellation>::check'

@@ -21,7 +21,7 @@ def check(arguments, body, names, target, compiler, identity, compiled):
                  else 'algorithms::Sha' + identity[3:])
     expected = '<' + owner + '::' + ('compiled::CompiledSession' if compiled else 'Session')
     expected += '<brynja_mac_hmac::' + algorithm + '>>::execute'
-    ok = 255 if compiler == '1.99.1' else 11
+    ok = 255 if compiler == '1.99.1' else 12
     # Match the already-checked execute Result domain; unit-error padding stays
     # unknown rather than being used to justify admission or a pointer.
     results = [(ok, 2)]

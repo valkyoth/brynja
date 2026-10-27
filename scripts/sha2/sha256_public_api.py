@@ -43,27 +43,27 @@ FILES = (
     WORKFLOW,
 )
 EXPECTED_SHA256 = {
-    MANIFEST: "e5324f6ad25053620f470217e0332aa6dc2955384cd5e5d157599efe5658e247",
-    LOCK: "f691f765ce2b5052b2572a292722cac5f42e1458ed01054382e4793d95350aba",
+    MANIFEST: "6eb8bd1bba349440ef29136c11d6f2930109621b0d761d6b3e5c6f4b053679f9",
+    LOCK: "39c9666b8852c799a007c17bdcaeefd5ec72f2ee7b8b697c4481e2d194d2432c",
     LIB: "096ef101b31b38ededc2aeda9e3b0546757f57fc2875419f920876ce883f64ff",
     MAIN: "5147536fd2bdc395ceed7fb023c9a06971347a8d531c66c0cfde7b78fc878522",
     CONTENT: "a8f34a54459e9655229bb554c15ebb87f89a0bfbc600da8eb56999422fc0487f",
     SHA256_SOURCE: "7e7608615c9bc80703f0711230453d9390df70e06ce71bb61310179c71d9d701",
     SHA256_TEST: "c3eebf6ae0202321f72ddc131691720c94709e5281f905a5bd7d0fe4a603a3d1",
     CHECK_SCRIPT: "d424a02dcfc778f83ccf8004fc23c9456bd71a759ece3235bdb56f1f0f02ad9d",
-    TEST_SCRIPT: "0c56798dc24c229a2bfbd80364931c3c04d26c5c8d277bcd6ed1e82bcab11a6b",
+    TEST_SCRIPT: "5b9658fe3352d95c8c84aff1e165704f4c8c9c69a4744716c671f3a855cc15fc",
     CHECKS: "61ca5886d2fcafeef07ab380ac6edd75748b5271d9a34c2f54ea24470deff5d9",
-    RUST_MATRIX: "e01f175afb24a65867973743a44aa6bb05735ae00d6f93e0920ad4d908c8641d",
-    BARE_METAL: "5088a73fbe45e151498edfe8f21b22839f7cce05aec541d25722790d4ae50283",
-    WORKFLOW: "df492a2fd3216d9281aac659dfef3fdfe3394a153681f4f1b86655e6714b00ab",
+    RUST_MATRIX: "0f58049c65a572530b4a5e9e9ee551e1e6d76486e06e0d141921516e20532f3a",
+    BARE_METAL: "cd9121c6869abd402d808bf54d15ffb797dbbec398754c3297ee991c88f3d147",
+    WORKFLOW: "ca21ebe812b9f85e8c51cc98b5c28478ac0db74a13b1108903170f3e915026e7",
 }
 PACKAGES = (
-    ("brynja-core", "0.9.0", ("src/lib.rs",)),
+    ("brynja-core", "0.10.0", ("src/lib.rs",)),
     ("brynja-hash-core", "0.1.0", ("src/lib.rs",)),
     ("brynja-mac-hmac", "0.1.0", ("src/lib.rs",)),
     (
         "brynja-crypto-cpu",
-        "0.1.1",
+        "0.2.0",
         (
             "src/lib.rs",
             "src/sha256.rs",
@@ -127,13 +127,13 @@ PACKAGES = (
             "src/fixed.rs", "src/output.rs", "src/scheduled.rs", "src/xof.rs",
         ),
     ),
-    ("brynja-crypto", "0.1.2", ("src/lib.rs",)),
+    ("brynja-crypto", "0.2.0", ("src/lib.rs",)),
 )
 
 
 # Cargo must resolve development dependencies while packaging even though the
 # public consumer never enables this std adapter. Keep its runtime lock separate.
-PACKAGING_PACKAGES = (*PACKAGES, ("brynja-crypto-cpu-std", "0.1.1", ("src/lib.rs",)))
+PACKAGING_PACKAGES = (*PACKAGES, ("brynja-crypto-cpu-std", "0.2.0", ("src/lib.rs",)))
 
 
 class AcceptancePolicyError(RuntimeError):
@@ -178,7 +178,7 @@ def validate_repository(root: Path = ROOT, check_hashes: bool = True) -> None:
     expected_dependencies = {
         "brynja-crypto": {
             "path": "../../crates/brynja-crypto",
-            "version": "=0.1.2",
+            "version": "=0.2.0",
             "default-features": False,
         },
         "brynja-hash-sha2": {
@@ -352,8 +352,8 @@ cast_sign_loss = "forbid"
 too_many_arguments = "forbid"
 
 [workspace.dependencies]
-brynja-core = { path = "crates/brynja-core", version = "=0.9.0" }
-brynja-crypto = { path = "crates/brynja-crypto", version = "=0.1.2" }
+brynja-core = { path = "crates/brynja-core", version = "=0.10.0" }
+brynja-crypto = { path = "crates/brynja-crypto", version = "=0.2.0" }
 brynja-hash-core = { path = "crates/brynja-hash-core", version = "=0.1.0" }
 brynja-hash-sha2 = { path = "crates/brynja-hash-sha2", version = "=0.1.0" }
 brynja-hash-sha3 = { path = "crates/brynja-hash-sha3", version = "=0.1.0" }
@@ -361,8 +361,8 @@ brynja-hash-parallel = { path = "crates/brynja-hash-parallel", version = "=0.1.0
 brynja-hash-tuple = { path = "crates/brynja-hash-tuple", version = "=0.1.0" }
 brynja-mac-kmac = { path = "crates/brynja-mac-kmac", version = "=0.1.0" }
 brynja-mac-hmac = { path = "crates/brynja-mac-hmac", version = "=0.1.0" }
-brynja-crypto-cpu = { path = "crates/brynja-crypto-cpu", version = "=0.1.1" }
-brynja-crypto-cpu-std = { path = "crates/brynja-crypto-cpu-std", version = "=0.1.1" }
+brynja-crypto-cpu = { path = "crates/brynja-crypto-cpu", version = "=0.2.0" }
+brynja-crypto-cpu-std = { path = "crates/brynja-crypto-cpu-std", version = "=0.2.0" }
 """
     (workspace / "Cargo.toml").write_text(manifest, encoding="utf-8")
     return workspace

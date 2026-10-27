@@ -19,6 +19,9 @@ def main():
         (f'{policy.FIXTURE}/src/profiles.rs', 'PublicDeclassification::acknowledge()', 'implicit_authority()'),
         (f'{policy.FIXTURE}/src/profiles.rs', 'for chunk in [1, 7, 31, 64, 113]', 'for chunk in [64]'),
         (f'{policy.FIXTURE}/Cargo.toml', 'default-features = false', 'default-features = true'),
+        (f'{policy.CURRENT}/Cargo.toml', '../src/lib.rs', '../src/profiles.rs'),
+        (f'{policy.CURRENT}/Cargo.toml', '../src/main.rs', '../src/lib.rs'),
+        (f'{policy.CURRENT}/Cargo.toml', 'default-features = false', 'default-features = true'),
         ('crates/brynja-legacy-md5/src/hardened.rs', 'collisions', 'digests'),
         ('crates/brynja-legacy-sha1/src/ordinary.rs', 'collision', 'digest'),
         ('scripts/checks.sh', 'python3 scripts/legacy-hash/check-legacy-acceptance.py', 'true'),
@@ -47,12 +50,12 @@ def main():
         root = Path(temporary)
         fixture = root / 'consumer'
         shutil.copytree(policy.ROOT / policy.FIXTURE, fixture, ignore=shutil.ignore_patterns('target'))
-        manifest = fixture / 'Cargo.toml'
-        manifest.write_text(manifest.read_text().replace('../../crates', str(policy.ROOT / 'crates')))
-        subprocess.run(['cargo', 'run', '--locked', '--offline'], cwd=fixture, check=True, timeout=120)
+        manifest = fixture / 'current/Cargo.toml'
+        manifest.write_text(manifest.read_text().replace('../../../crates', str(policy.ROOT / 'crates')))
+        subprocess.run(['cargo', 'run', '--locked', '--offline'], cwd=manifest.parent, check=True, timeout=120)
         data = fixture / 'fixtures/representative.txt'
         data.write_bytes(data.read_bytes() + b'changed real file\n')
-        result = subprocess.run(['cargo', 'run', '--locked', '--offline'], cwd=fixture,
+        result = subprocess.run(['cargo', 'run', '--locked', '--offline'], cwd=manifest.parent,
                                 capture_output=True, text=True, timeout=120)
         assert result.returncode != 0 and 'assertion' in result.stderr, 'changed file was accepted'
     spec = importlib.util.spec_from_file_location('legacy_package', policy.ROOT / 'scripts/legacy-hash/check-legacy-package.py')
@@ -75,7 +78,7 @@ def main():
             except ValueError:
                 continue
             raise AssertionError('unsafe archive accepted')
-    print('Legacy acceptance rejects 9 structural corruptions, changed real-file output, and 8 unsafe archives')
+    print('Legacy acceptance rejects 12 structural corruptions, changed real-file output, and 8 unsafe archives')
 
 
 if __name__ == '__main__':

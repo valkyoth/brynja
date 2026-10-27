@@ -5,11 +5,22 @@ from unittest import mock
 
 
 class VerifyTests:
+    @staticmethod
+    def forged_result(line, field, value=None):
+        aggregate = line.strip().removeprefix('ret { i8, i8 } ')
+        prefix = ''
+        if value is None:
+            prefix = (f'%original = extractvalue {{ i8, i8 }} {aggregate}, {field}\n'
+                      '%flipped = xor i8 %original, 1\n')
+            value = '%flipped'
+        return (prefix + f'%forged = insertvalue {{ i8, i8 }} {aggregate}, i8 {value}, {field}\n'
+                'ret { i8, i8 } %forged')
+
     def test_composed_hosted_checker_reaches_every_boundary(self):
         d = self.driver
         # Wrap real validators, never replace them with PASS results. The same
         # artifact must reach every host/worker/callee/output boundary.
-        stages = ((d.capture, 'check', 24), (d.lifecycle, 'check_host', 24),
+        stages = ((d.prefix, 'abstract', 1), (d.capture, 'check', 24), (d.lifecycle, 'check_host', 24),
                   (d.transaction, 'check', 24), (d.guard_paths, 'check', 24),
                   (d.placement, 'check', 24), (d.authority, 'check', 12),
                   (d.keyed, 'check', 24), (d.constructor, 'check', 12),
@@ -37,7 +48,7 @@ class VerifyTests:
                 if target == d.TARGETS[2]:
                     self.assertTrue(all(row.args[1]['MACOSX_DEPLOYMENT_TARGET'] == '11.0'
                                         for row in commands.call_args_list))
-        print('Composed hosted graph: all 20 boundary populations and three dependency checks executed', flush=True)
+        print('Composed hosted graph: prefix abstraction, all 20 boundary populations and three dependency checks executed', flush=True)
 
     def verification_rows(self, profile):
         d = self.driver
@@ -63,11 +74,11 @@ class VerifyTests:
                     mutants.append(body.replace(line, line + '\n' + line.replace('%0 =', '%duplicate ='), 1))
                 if '= icmp eq ' in line:
                     mutants.append(body.replace(line, line.replace('icmp eq', 'icmp ne'), 1))
-                if line.strip().startswith('ret i16 '):
-                    for result in ('255', '511', '11', '267', '10'):
-                        mutants.append(body.replace(line, 'ret i16 ' + result, 1))
-                    result = line.strip().removeprefix('ret i16 ')
-                    mutants.append(body.replace(line, '%forged = xor i16 ' + result + ', 256\nret i16 %forged', 1))
+                if line.strip().startswith('ret { i8, i8 } '):
+                    for result in ('255', '12', '11', '10', '0'):
+                        mutants.append(body.replace(line, self.forged_result(line, 0, result), 1))
+                    for field in (0, 1):
+                        mutants.append(body.replace(line, self.forged_result(line, field), 1))
             mutants += [body.replace('start:', 'start:\nstore i8 0, ptr %candidate.0, align 1', 1),
                         body.replace('start:', 'start:\n%early = load i8, ptr %candidate.0, align 1', 1)]
             for mutant in mutants:
@@ -104,9 +115,8 @@ class VerifyTests:
         for target, profile in self.profiles.items():
             identity, compiled, _, args, body = next(self.verification_rows(profile))
             names = profile[3]
-            line = next(line for line in body.splitlines() if line.strip().startswith('ret i16 '))
-            value = line.strip().removeprefix('ret i16 ')
-            mutant = body.replace(line, '%forged = xor i16 ' + value + ', 256\nret i16 %forged', 1)
+            line = next(line for line in body.splitlines() if line.strip().startswith('ret { i8, i8 } '))
+            mutant = body.replace(line, self.forged_result(line, 1), 1)
             with self.assertRaisesRegex(ValueError, 'public verify decision/error payload changed'):
                 d.public_verify.check(args, mutant, names, target, '1.99.1', identity, compiled)
             require = d.public_verify.require
@@ -120,10 +130,11 @@ class VerifyTests:
         d = self.driver
         for compiler in ('1.90.0', '1.99.1'):
             rows = list(d.public_verify.results(compiler))
-            self.assertEqual(len(rows), 2082)
-            for category in range(11):
+            self.assertEqual(len(rows), 2339)
+            self.assertEqual(rows[:3], [(255 if compiler == '1.99.1' else 12, n, True) for n in (0, 1, 2)])
+            for category in range(12):
                 population = [p for c, p, meaningful in rows if c == category]
-                self.assertEqual(population, list(range({0: 14, 7: 10, 9: 7}.get(category, 256))))
+                self.assertEqual(population, list(range({0: 14, 7: 11, 9: 7}.get(category, 256))))
         for target, (llvm, *_) in self.profiles.items():
             d.artifact_profile(llvm, target, '1.99.1')
             declaration = re.search(r'^target triple = .*$', llvm, re.M)[0]
@@ -145,8 +156,8 @@ class VerifyTests:
                 original = path.read_text()
                 changes = (
                     ('Some(candidate), cancel)?', 'Some(&[]), cancel)?'),
-                    ('.ok_or(Error::Invariant)', '.map(|_| true).ok_or(Error::Invariant)'),
-                    ('.ok_or(Error::Invariant)', '.or(Some(false)).ok_or(Error::Invariant)'),
+                    ('Some(false) => Err(Error::Mismatch)', 'Some(false) => Ok(())'),
+                    ('None => Err(Error::Invariant)', 'None => Ok(())'),
                 )
                 for old, new in changes:
                     self.assertEqual(original.count(old), 1)

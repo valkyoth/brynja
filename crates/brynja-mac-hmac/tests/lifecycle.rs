@@ -4,6 +4,14 @@ mod support;
 
 use brynja_mac_hmac::*;
 
+fn authenticated<A: Algorithm>(key: &[u8], bytes: usize, tag: &[u8]) -> Result<u8, Error> {
+    let mut mac = Hmac::<A>::with_tag_length(key, bytes)?;
+    mac.update(b"message")?;
+    mac.verify(tag)?;
+    // Application work must not be reached by a mismatching authenticator.
+    Ok(42)
+}
+
 fn exercise<A: Algorithm>() {
     for key_bytes in [
         0,
@@ -22,7 +30,8 @@ fn exercise<A: Algorithm>() {
 
             let mut verifier = require_ok!(Hmac::<A>::with_tag_length(&key, tag_bytes));
             require_ok!(verifier.update(b"message"));
-            assert!(require_ok!(verifier.verify(&expected)).expose_public());
+            assert_eq!(verifier.verify(&expected), Ok(()));
+            assert_eq!(authenticated::<A>(&key, tag_bytes, &expected), Ok(42));
             for position in [
                 0,
                 require_some!(tag_bytes.checked_div(2)),
@@ -32,7 +41,10 @@ fn exercise<A: Algorithm>() {
                 *require_some!(bad.get_mut(position)) ^= 1;
                 let mut verifier = require_ok!(Hmac::<A>::with_tag_length(&key, tag_bytes));
                 require_ok!(verifier.update(b"message"));
-                assert!(!require_ok!(verifier.verify(&bad)).expose_public());
+                assert_eq!(verifier.verify(&bad), Err(Error::Mismatch));
+                let rejected = authenticated::<A>(&key, tag_bytes, &bad);
+                assert!(!rejected.is_ok());
+                assert_eq!(rejected, Err(Error::Mismatch));
             }
 
             let mut secret_bytes = vec![0xff; tag_bytes];

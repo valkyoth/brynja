@@ -37,8 +37,9 @@ fn check<const T: u16>(key: &[u8], message: &[u8], bits: usize, expected: &[u8])
         assert!(output.iter().all(|byte| *byte == 0));
     }
     let verifier = require_ok!(Hmac::<Sha512T<T>>::with_tag_length(key, 16));
-    assert!(
-        require_ok!(verifier.verify_bits(input, require_some!(expected.get(..16)))).expose_public()
+    assert_eq!(
+        verifier.verify_bits(input, require_some!(expected.get(..16))),
+        Ok(())
     );
 }
 

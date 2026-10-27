@@ -6,6 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 FIXTURE = 'assurance/legacy-hash-public-api'
+CURRENT = FIXTURE + '/current'
 HASHES = 'scripts/legacy-hash/legacy-reviewed.toml'
 FILES = [f'{FIXTURE}/{name}' for name in (
     'Cargo.toml', 'Cargo.lock', 'src/lib.rs', 'src/main.rs', 'src/profiles.rs',
@@ -21,6 +22,7 @@ FILES = [f'{FIXTURE}/{name}' for name in (
 )]
 FILES += ['crates/brynja-legacy-md5/src/compress/native.rs']
 FILES += ['crates/brynja-legacy-sha1/src/compress/native.rs']
+FILES += [CURRENT + '/Cargo.toml', CURRENT + '/Cargo.lock']
 
 
 def read(root, path):
@@ -33,6 +35,18 @@ def read(root, path):
 def validate(root=ROOT, hashes=True):
     loaded = {path: read(root, path) for path in FILES}
     manifest = tomllib.loads(loaded[f'{FIXTURE}/Cargo.toml'].decode())
+    current = tomllib.loads(loaded[f'{CURRENT}/Cargo.toml'].decode())
+    expected = dict(manifest)
+    expected['dependencies'] = {
+        name: {**dep, 'path': '../' + dep['path']}
+        for name, dep in manifest['dependencies'].items()
+    }
+    expected['lib'] = {'path': '../src/lib.rs'}
+    expected['bin'] = [{'name': manifest['package']['name'], 'path': '../src/main.rs'}]
+    if current != expected:
+        raise ValueError('current harness must execute the exact frozen portable sources')
+    if b'source =' in loaded[f'{CURRENT}/Cargo.lock']:
+        raise ValueError('external current fixture dependency')
     if manifest['package']['publish'] is not False or 'workspace' not in manifest:
         raise ValueError('fixture is not package-external and unpublished')
     if set(manifest['dependencies']) != {'brynja-legacy-sha1', 'brynja-legacy-md5'}:
@@ -66,11 +80,11 @@ def validate(root=ROOT, hashes=True):
         ('scripts/checks.sh', 'python3 scripts/legacy-hash/check-legacy-acceptance.py'),
         ('scripts/checks.sh', 'python3 scripts/legacy-hash/test-legacy-acceptance.py'),
         ('scripts/legacy-hash/check-legacy-acceptance.py', "policy.execute('python3', 'scripts/legacy-hash/check-panic-profiles.py', timeout=600)"),
-        ('scripts/ci/check-rust-version-matrix.sh', FIXTURE + '/Cargo.toml'),
-        ('scripts/assurance/check-bare-metal.sh', FIXTURE + '/Cargo.toml'),
-        ('scripts/zeroization/check-zeroization-miri.sh', FIXTURE + '/Cargo.toml'),
-        ('scripts/zeroization/check-zeroization-sanitizer.sh', FIXTURE + '/Cargo.toml'),
-        ('.github/workflows/ci.yml', FIXTURE + '/Cargo.toml'),
+        ('scripts/ci/check-rust-version-matrix.sh', CURRENT + '/Cargo.toml'),
+        ('scripts/assurance/check-bare-metal.sh', CURRENT + '/Cargo.toml'),
+        ('scripts/zeroization/check-zeroization-miri.sh', CURRENT + '/Cargo.toml'),
+        ('scripts/zeroization/check-zeroization-sanitizer.sh', CURRENT + '/Cargo.toml'),
+        ('.github/workflows/ci.yml', CURRENT + '/Cargo.toml'),
     ):
         if token not in read(root, path).decode():
             raise ValueError(f'mandatory acceptance gate missing: {path}')

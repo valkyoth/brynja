@@ -67,8 +67,24 @@ def native_environment(env, kernel, owner=PROTECTED):
     return result
 
 
+def preentry(host, workspace, env, kernel, population, owner=PROTECTED):
+    """Actually execute the ignored SHA-256 startup/forgotten-loan regression."""
+    if kernel != "sha256":
+        return
+    module = ("macos_resident::resource::darwin::tests" if owner == RESIDENT
+              else "protected_memory::platform::thread::tests")
+    test = module + "::hmac_preentry_failures_preserve_session"
+    for profile in ([], ["--release"]):
+        command = ["cargo", "test", "--offline", "-p", host.HOST, "--features",
+                   owner.feature + "-acceleration", "--lib", *profile,
+                   test, "--", "--ignored", "--exact"]
+        population(host.run(command, workspace, env), 1)
+    print(f"{owner.label} HMAC native startup failures: debug/release PASS")
+
+
 def native(host, root, workspace, consumer, env, kernel, population, owner=PROTECTED):
     env = native_environment(env, kernel, owner)
+    preentry(host, workspace, env, kernel, population, owner)
     command = ["cargo", "test", "--offline", "-p", host.HOST,
                "--features", owner.feature + "-acceleration", "--lib",
                owner.module + "::compiled::tests::native::" + kernel + "_route"]
@@ -91,13 +107,14 @@ def mutants(host, workspace, env, command, owner=PROTECTED):
     cases = [
         ("compiled.rs", "self.quarantined = true;", "self.quarantined = false;"),
         ("compiled/worker.rs", "state.update(part).map_err(Error::Mac)?;", "let _ = part;"),
-        ("compiled/worker.rs", ".expose_public(),", ".expose_public() || true,"),
+        ("compiled/worker.rs", "Err(brynja_mac_hmac::Error::Mismatch) => false,", "Err(brynja_mac_hmac::Error::Mismatch) => true,"),
+        ("compiled.rs", "Some(false) => Err(Error::Mismatch),", "Some(false) => Ok(()),"),
         ("mod.rs", "if !self.keep {", "if false {"),
     ]
     for name, before, after in cases:
         source = directory / name
         original = source.read_text()
-        expected = 2 if name == "compiled.rs" else 1
+        expected = 2 if before == "self.quarantined = true;" else 1
         if original.count(before) != expected:
             raise ValueError("compiled protected HMAC mutant anchor drift")
         try:

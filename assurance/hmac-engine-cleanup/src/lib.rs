@@ -38,8 +38,8 @@ macro_rules! probes {
             }
 
             #[inline(never)]
-            pub fn verify(state: Hmac<$algorithm>, candidate: &[u8]) -> Result<bool, Error> {
-                Ok(state.verify(candidate)?.expose_public())
+            pub fn verify(state: Hmac<$algorithm>, candidate: &[u8]) -> Result<(), Error> {
+                state.verify(candidate)
             }
 
             #[inline(never)]
@@ -70,8 +70,8 @@ macro_rules! probes {
                 state: Hmac<$algorithm>,
                 input: $bits<'_>,
                 candidate: &[u8],
-            ) -> Result<bool, Error> {
-                Ok(state.verify_bits(input, candidate)?.expose_public())
+            ) -> Result<(), Error> {
+                state.verify_bits(input, candidate)
             }
 
             #[inline(never)]

@@ -18,7 +18,7 @@ fn rfc4231_sha256_and_secret_lifecycle() -> Result<(), Error> {
     assert_eq!(output, [0; 32]);
     let mut verifier = Hmac::<Sha256>::new(&key)?;
     verifier.update(b"Hi There")?;
-    assert!(verifier.verify(&expected)?.expose_public());
+    assert_eq!(verifier.verify(&expected), Ok(()));
     Ok(())
 }
 
@@ -28,8 +28,40 @@ fn identity<A: Algorithm>() -> Result<(), Error> {
     let tag = Hmac::<A>::authenticate(&key, b"message", &mut output[..A::TAG_BYTES])?;
     assert_eq!(tag.bit_len(), A::TAG_BITS);
     let mut verifier = Hmac::<A>::new(&key)?;
+    verifier.update(b"mes")?;
+    verifier.update(b"sage")?;
+    assert_eq!(verifier.verify(tag.as_bytes()), Ok(()));
+    let mut forged = output;
+    forged[0] ^= 1;
+    let mut verifier = Hmac::<A>::new(&key)?;
     verifier.update(b"message")?;
-    assert!(verifier.verify(tag.as_bytes())?.expose_public());
+    assert_eq!(verifier.verify(&forged[..A::TAG_BYTES]), Err(Error::Mismatch));
+    let mut verifier = Hmac::<A>::new(&key)?;
+    verifier.update(b"message")?;
+    assert_eq!(verifier.verify(&output[..A::TAG_BYTES - 1]), Err(Error::TagLength));
+
+    let mut truncated = [0; 16];
+    let mut state = Hmac::<A>::with_tag_length(&key, 16)?;
+    state.update(b"message")?;
+    let tag = state.finalize_tag(&mut truncated)?;
+    assert_eq!(tag.as_bytes(), &output[..16]);
+    let mut verifier = Hmac::<A>::with_tag_length(&key, 16)?;
+    verifier.update(b"mes")?;
+    verifier.update(b"sage")?;
+    assert_eq!(verifier.verify(tag.as_bytes()), Ok(()));
+    truncated[0] ^= 1;
+    let mut verifier = Hmac::<A>::with_tag_length(&key, 16)?;
+    verifier.update(b"message")?;
+    assert_eq!(verifier.verify(&truncated), Err(Error::Mismatch));
+
+    let mut cleared = [0xa5; 64];
+    let mut state = Hmac::<A>::new(&key)?;
+    state.update(b"message")?;
+    let secret = state.finalize_secret(&mut cleared[..A::TAG_BYTES])?;
+    assert_eq!(secret.expose(), &output[..A::TAG_BYTES]);
+    drop(secret);
+    assert!(cleared[..A::TAG_BYTES].iter().all(|byte| *byte == 0));
+    assert!(cleared[A::TAG_BYTES..].iter().all(|byte| *byte == 0xa5));
     Ok(())
 }
 
@@ -67,11 +99,11 @@ fn final_bit_order_is_preserved() -> Result<(), Error> {
     let mut output = [0; 32];
     let tag = Hmac::<Sha256>::new(b"key")?
         .finalize_bits_tag(Sha2BitString::new(&[0xa0], 3).unwrap(), &mut output)?;
-    assert!(Hmac::<Sha256>::new(b"key")?
-        .verify_bits(Sha2BitString::new(&[0xa0], 3).unwrap(), tag.as_bytes())?.expose_public());
+    assert_eq!(Hmac::<Sha256>::new(b"key")?
+        .verify_bits(Sha2BitString::new(&[0xa0], 3).unwrap(), tag.as_bytes()), Ok(()));
     let tag = Hmac::<Sha3_256>::new(b"key")?
         .finalize_bits_tag(Fips202BitString::new(&[5], 3).unwrap(), &mut output)?;
-    assert!(Hmac::<Sha3_256>::new(b"key")?
-        .verify_bits(Fips202BitString::new(&[5], 3).unwrap(), tag.as_bytes())?.expose_public());
+    assert_eq!(Hmac::<Sha3_256>::new(b"key")?
+        .verify_bits(Fips202BitString::new(&[5], 3).unwrap(), tag.as_bytes()), Ok(()));
     Ok(())
 }

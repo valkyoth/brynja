@@ -44,9 +44,9 @@ class FixtureTests:
             path = fixture / "src/routes.rs"
             original = path.read_text()
             mutants = (
-                ("return Ok(checked(state.verify(black_box(candidate)))?.expose_public());",
+                ("return leaf_decision(state.verify(black_box(candidate)));",
                  "let _ = (state, candidate); return Ok(false);"),
-                ("return Ok(checked(state.verify(black_box(candidate)))?.expose_public());",
+                ("return leaf_decision(state.verify(black_box(candidate)));",
                  "let _ = (state, candidate); return Ok(true);"),
                 ("black_box(checked(state.finalize_tag(out))?.as_bytes());",
                  "let _ = state; out.fill(0);"),

@@ -104,9 +104,15 @@ mod native {
             let mut public = [0; 32];
             output.declassify(&mut public, PublicDeclassification::acknowledge())?;
             assert_eq!(public, EXPECTED);
-            assert!(session.verify(request(), &public, &Cancellation::new())?);
+            assert_eq!(
+                session.verify(request(), &public, &Cancellation::new()),
+                Ok(())
+            );
             public[0] ^= 1;
-            assert!(!session.verify(request(), &public, &Cancellation::new())?);
+            assert_eq!(
+                session.verify(request(), &public, &Cancellation::new()),
+                Err(Error::Mismatch)
+            );
         }
         Ok(())
     }
@@ -153,9 +159,15 @@ mod native {
                 assert_eq!(output.bit_len(), $bits);
                 let mut public = [0; $bytes];
                 output.declassify(&mut public, PublicDeclassification::acknowledge())?;
-                assert!(session.verify(request(), &public, &Cancellation::new())?);
+                assert_eq!(
+                    session.verify(request(), &public, &Cancellation::new()),
+                    Ok(())
+                );
                 public[0] ^= 1;
-                assert!(!session.verify(request(), &public, &Cancellation::new())?);
+                assert_eq!(
+                    session.verify(request(), &public, &Cancellation::new()),
+                    Err(Error::Mismatch)
+                );
             }};
         }
         check!(Sha224, 224, 28);
@@ -177,7 +189,10 @@ mod native {
             .declassify(&mut public, PublicDeclassification::acknowledge())?;
         assert_eq!(public[16] & 127, 0);
         public[16] |= 1;
-        assert!(!partial.verify(request(), &public, &Cancellation::new())?);
+        assert_eq!(
+            partial.verify(request(), &public, &Cancellation::new()),
+            Err(Error::Mismatch)
+        );
         Ok(())
     }
 }

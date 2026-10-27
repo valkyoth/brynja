@@ -31,7 +31,12 @@ fn exercise<A: BitCase + for<'a> execution::Algorithm<'a>>(kernel: Kernel) {
             assert_eq!(actual, expected);
             let mut verify = require_ok!(execution::Hmac::<A>::from_static(&authority, &key));
             require_ok!(verify.update(&message));
-            assert!(require_ok!(verify.verify(&expected)).expose_public());
+            assert_eq!(verify.verify(&expected), Ok(()));
+            let mut wrong = expected.clone();
+            *require_some!(wrong.last_mut()) ^= 1;
+            let mut reject = require_ok!(execution::Hmac::<A>::from_static(&authority, &key));
+            require_ok!(reject.update(&message));
+            assert_eq!(reject.verify(&wrong), Err(Error::Mismatch));
             for valid in 1..=7 {
                 let tail = if A::LOW_BITS { 1 } else { 0x80 };
                 let mut bytes = message.clone();
@@ -52,10 +57,16 @@ fn exercise<A: BitCase + for<'a> execution::Algorithm<'a>>(kernel: Kernel) {
                 let mac = require_ok!(execution::Hmac::<A>::from_static_with_tag_length(
                     &authority, &key, 16
                 ));
-                assert!(
-                    require_ok!(mac.verify_bits(bits, require_some!(expected.get(..16))))
-                        .expose_public()
+                assert_eq!(
+                    mac.verify_bits(bits, require_some!(expected.get(..16))),
+                    Ok(())
                 );
+                let mut wrong = require_some!(expected.get(..16)).to_vec();
+                *require_some!(wrong.last_mut()) ^= 1;
+                let reject = require_ok!(execution::Hmac::<A>::from_static_with_tag_length(
+                    &authority, &key, 16
+                ));
+                assert_eq!(reject.verify_bits(bits, &wrong), Err(Error::Mismatch));
             }
         }
     }

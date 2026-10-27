@@ -27,7 +27,7 @@ fn exercise<const T: u16>() {
             assert!(secret_bytes.iter().all(|byte| *byte == 0));
             let mut verifier = require_ok!(Hmac::<Sha512T<T>>::new(&key));
             require_ok!(verifier.update(&message));
-            assert!(require_ok!(verifier.verify(&full)).expose_public());
+            assert_eq!(verifier.verify(&full), Ok(()));
             let mut short = [0; 16];
             let mut mac = require_ok!(Hmac::<Sha512T<T>>::with_tag_length(&key, 16));
             require_ok!(mac.update(&message));
@@ -49,7 +49,7 @@ fn exercise<const T: u16>() {
                 drop(secret);
                 assert!(secret_bytes.iter().all(|byte| *byte == 0));
                 let verifier = require_ok!(Hmac::<Sha512T<T>>::new(&key));
-                assert!(require_ok!(verifier.verify_bits(input, &full)).expose_public());
+                assert_eq!(verifier.verify_bits(input, &full), Ok(()));
             }
         }
     }
@@ -216,9 +216,9 @@ fn canonical_verification_and_unwind() {
     for mask in [1, 2, 4, 8, 16, 32, 64, 128] {
         let mut changed = output;
         changed[16] ^= mask;
-        assert!(
-            !require_ok!(require_ok!(Hmac::<Sha512T<129>>::new(b"key")).verify(&changed))
-                .expose_public()
+        assert_eq!(
+            require_ok!(Hmac::<Sha512T<129>>::new(b"key")).verify(&changed),
+            Err(Error::Mismatch)
         );
     }
     let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {

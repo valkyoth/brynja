@@ -30,6 +30,13 @@ The new consumer calls the byte-identical v0.24.20 library fixture first. Its
 entire source, manifests, lock and real-file/bit corpus remain frozen in
 `scripts/legacy-hash/frozen-v02420.toml`. That old binary's historical
 "In progress" line is deliberately unchanged; it is not the current status.
+Since the v0.25.2 support-crate version update, direct portable execution uses
+`assurance/legacy-hash-public-api/current/Cargo.toml`. This unpublished harness
+points directly to the frozen `../src/lib.rs` and `../src/main.rs`, with a
+current lockfile; it does not copy or rewrite the historical consumer. The
+original lock remains an immutable historical input, not a current build graph.
+The SHA-1/MD5 CPU-fixture lock updates are separately bound as operational
+deltas and do not refresh or authorize historical native captures.
 The final consumer adds 160 frozen-vector/mask MD5 batch comparisons, ordinary
 and hardened outputs, complete secret-output destruction, cancellation, budget
 failure, recoverable unwind and both optional host adapters. Required

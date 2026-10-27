@@ -14,8 +14,8 @@ def document(family, resident=False):
     base = Path('/strict-legacy-test')
     roots = {name: base / name for name in features if name != 'facade-consumer'}
     consumer = base / 'consumer'
-    versions = {'facade-consumer': '0.0.0', 'brynja-core': '0.9.0',
-                'brynja-crypto-cpu': '0.1.1', 'brynja-crypto-cpu-std': '0.1.1'}
+    versions = {'facade-consumer': '0.0.0', 'brynja-core': '0.10.0',
+                'brynja-crypto-cpu': '0.2.0', 'brynja-crypto-cpu-std': '0.2.0'}
     packages = [dict(name=name, id=name, version=versions.get(name, '0.1.0'), source=None,
                      manifest_path=str((consumer if name == 'facade-consumer' else roots[name]) / 'Cargo.toml'),
                      targets=[dict(kind=['lib'], src_path=str((consumer if name == 'facade-consumer' else roots[name]) / 'src/lib.rs'))])

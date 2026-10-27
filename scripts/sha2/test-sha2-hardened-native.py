@@ -217,7 +217,11 @@ def capture_tests():
     original = evidence.source_digest('Cargo.lock', raw)
     facade = raw.replace(('name = "brynja"\nversion = "' + version + '"').encode(), b'name = "brynja"\nversion = "999.0.0"')
     assert evidence.source_digest('Cargo.lock', facade) == original
-    assert evidence.source_digest('Cargo.lock', raw.replace(b'name = "brynja-core"\nversion = "0.9.0"', b'name = "brynja-core"\nversion = "0.9.1"')) != original
+    core_version = next(row['version'] for row in tomllib.loads(raw.decode())['package'] if row['name'] == 'brynja-core')
+    core = raw.replace(('name = "brynja-core"\nversion = "' + core_version + '"').encode(),
+                       b'name = "brynja-core"\nversion = "999.0.0"')
+    assert core != raw
+    assert evidence.source_digest('Cargo.lock', core) != original
     print('Capture enforces native host/compiler, preflight-before-static and selected lock identity')
 
 

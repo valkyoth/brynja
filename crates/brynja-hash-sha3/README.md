@@ -4,9 +4,9 @@
 </p>
 
 <div align="center">
-  <a href="https://crates.io/crates/brynja">Crates.io</a>
+  <a href="https://crates.io/crates/brynja-hash-sha3">Crates.io</a>
   |
-  <a href="https://docs.rs/brynja">Docs.rs</a>
+  <a href="https://docs.rs/brynja-hash-sha3">Docs.rs</a>
   |
   <a href="https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md">Release Plan</a>
   |
@@ -19,7 +19,7 @@
 
 <p align="center">
   <a href="https://github.com/valkyoth/brynja">
-    <img src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
+    <img width="840" src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
   </a>
 </p>
 
@@ -51,7 +51,7 @@ not as separate algorithms implemented in this crate.
 identities) keeps active state in caller-owned storage through a scoped `with`
 callback. Consuming its handle does not move the secret owner. Scope exit clears
 storage even if the handle is forgotten; it can then be reused. See the
-[in-place guide](../../docs/hardened-in-place.md) and the tested module example.
+[in-place guide](https://github.com/valkyoth/brynja/blob/main/docs/hardened-in-place.md) and the tested module example.
 `Shake128Workspace` / `Shake256Workspace` transfer a borrow to an incremental
 reader; `Cshake128Workspace` / `Cshake256Workspace` initialize byte/bit N/S in
 the borrowed storage. These scoped APIs are portable: they do not select
@@ -65,7 +65,7 @@ only the borrowed handle. Static sessions require the complete compiled feature
 bundle; hosted sessions require `runtime-execution` and the existing platform
 authority. No fallback or renewed authority is implied. The outer result is
 admission and the inner value is the callback result. See the compiled module
-example and [in-place guide](../../docs/hardened-in-place.md).
+example and [in-place guide](https://github.com/valkyoth/brynja/blob/main/docs/hardened-in-place.md).
 The same module also provides `Shake128Workspace` / `Shake256Workspace` and
 `Cshake128Workspace` / `Cshake256Workspace`. Finalization transfers the exclusive
 borrow into an incremental reader without moving the sponge. cSHAKE absorbs
@@ -77,7 +77,15 @@ module example for secret output outliving a cSHAKE scope.
 
 ## Use
 
-These APIs include unpublished workspace functionality. Use a local checkout:
+Use the leaf directly for SHA-3, SHAKE and cSHAKE.
+
+After this source version is published, install from the registry:
+
+```sh
+cargo add brynja-hash-sha3 --no-default-features
+```
+
+For an unpublished candidate or matching local checkout instead:
 
 ```sh
 cargo add brynja-hash-sha3 --path /path/to/brynja/crates/brynja-hash-sha3 --no-default-features

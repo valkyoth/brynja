@@ -29,7 +29,7 @@ def package_workspace(destination):
     workspace = ORIGINAL_WORKSPACE(destination)
     path = workspace / "Cargo.toml"
     text = path.read_text()
-    before = 'brynja-crypto-cpu-std = { path = "crates/brynja-crypto-cpu-std", version = "=0.1.1" }'
+    before = 'brynja-crypto-cpu-std = { path = "crates/brynja-crypto-cpu-std", version = "=0.2.0" }'
     require(text.count(before) == 1, "host provider workspace default binding")
     path.write_text(text.replace(before, before[:-2] + ', default-features = false }'))
     return workspace

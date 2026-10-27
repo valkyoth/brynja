@@ -93,6 +93,12 @@ def owners(command: str) -> set[str]:
         raise ValueError("empty verification command")
     if argv[0].startswith("RUSTFLAGS="):
         argv = argv[1:]
+    if argv[0] == 'python3' and len(argv) > 1 and argv[1] in (
+            'scripts/hmac/check-hmac-facade.py', 'scripts/hmac/test-hmac-package.py'):
+        # These consumers explicitly co-install both families. Either family's
+        # implementation change must select this bounded integration check,
+        # without selecting the other family's entire verifier campaign.
+        return {'hmac', 'legacy_hmac'}
     if argv[0] == "cargo":
         if "--workspace" in argv or argv[1] in {"fetch", "fmt", "doc"}:
             return set()  # Broad but cheap build/lint/native compatibility baseline.

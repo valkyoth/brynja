@@ -8,7 +8,7 @@ import facade_sha2_execution_regressions as regressions
 
 ROOT = shared.ROOT
 FEATURES = ['sha2-runtime-execution', 'sha2-hardened-execution', 'general-sha512-t']
-HOST = ('host = { package="brynja-crypto-cpu-std", version="=0.1.1", '
+HOST = ('host = { package="brynja-crypto-cpu-std", version="=0.2.0", '
         'default-features=false, features=["runtime-execution"] }\n')
 VECTORS = ('nist-bit-selected.txt', 'general-sha512-t-digest.txt')
 MODES = (('portable', False), ('prefer', False), ('static', False), ('static', True),
@@ -29,6 +29,7 @@ def rewrite(text, package):
     return text
 
 
+# Fixtures come from the reviewed repository; runtime dependencies remain extracted archives.
 def install(api, consumer, roots, package, hardened):
     (consumer / 'src/bin').mkdir(parents=True, exist_ok=True)
     api.manifest(consumer, roots, package, FEATURES, extra=HOST)
@@ -52,9 +53,9 @@ def install(api, consumer, roots, package, hardened):
     (consumer / 'src/bin/route-probe.rs').write_text(rewrite(sources.PROBE, package))
     (consumer / 'src/vectors').mkdir(exist_ok=True)
     for vector in VECTORS:
-        (consumer / 'src/vectors' / vector).write_bytes((roots['brynja-hash-sha2'] / 'tests/vectors' / vector).read_bytes())
+        (consumer / 'src/vectors' / vector).write_bytes((ROOT / 'crates/brynja-hash-sha2/tests/vectors' / vector).read_bytes())
     (consumer / 'tests').mkdir(exist_ok=True)
-    text = (roots['brynja-hash-sha2'] / 'tests/execution.rs').read_text()
+    text = (ROOT / 'crates/brynja-hash-sha2/tests/execution.rs').read_text()
     text = sources.once(text, '#![cfg(feature = "static-execution")]', '#![forbid(unsafe_code)]')
     text = sources.once(text, '#[cfg(feature = "general-sha512-t")]\n', '')
     (consumer / 'tests/execution.rs').write_text(rewrite(text, package))

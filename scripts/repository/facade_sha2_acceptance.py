@@ -20,7 +20,7 @@ FAMILIES = {
 }
 FEATURES = ['general-sha512-t', 'sha2-static-execution', 'sha256-batch',
             'sha512-batch', 'sha256-hardened-batch', 'sha512-hardened-batch']
-HOST = ('host = { package="brynja-crypto-cpu-std", version="=0.1.1", '
+HOST = ('host = { package="brynja-crypto-cpu-std", version="=0.2.0", '
         'default-features=false, features=["sha256-batch", "sha512-batch", '
         '"sha256-hardened-batch", "sha512-hardened-batch"] }\n')
 

@@ -13,6 +13,7 @@ def require(value, message):
         raise ValueError('facade scoped SHA-2: ' + message)
 
 
+# Fixtures come from the reviewed repository; runtime dependencies remain extracted archives.
 def install(api, consumer, roots, package):
     (consumer / 'src/bin').mkdir(parents=True, exist_ok=True)
     api.manifest(consumer, roots, package, shared.FEATURES, extra=shared.HOST)
@@ -32,7 +33,7 @@ def install(api, consumer, roots, package):
         (consumer / 'src' / name).write_text(shared.rewrite(body, package))
     (consumer / 'src/vectors').mkdir(exist_ok=True)
     for name in shared.VECTORS:
-        (consumer / 'src/vectors' / name).write_bytes((roots['brynja-hash-sha2'] / 'tests/vectors' / name).read_bytes())
+        (consumer / 'src/vectors' / name).write_bytes((ROOT / 'crates/brynja-hash-sha2/tests/vectors' / name).read_bytes())
 
 
 def check_result(result, routes):

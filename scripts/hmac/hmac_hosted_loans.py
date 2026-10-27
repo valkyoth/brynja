@@ -89,7 +89,7 @@ def check(arguments, body, names, target, compiler, panic, method):
         else:
             require(outcome == 'return' and isinstance(result, tuple) and len(result) == 2,
                     'loan declassification Result shape changed')
-            ok = 255 if compiler == '1.99.1' else 11
+            ok = 255 if compiler == '1.99.1' else 12
             require(flow.expressions.integer(result[0], 8) == (ok if delta == 0 else 5)
                     and events == (['copy', 'clear'] if delta == 0 else ['clear']),
                     'loan declassification Result/cleanup changed')

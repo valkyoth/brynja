@@ -43,6 +43,7 @@ ROOT = (
     "verification status.\n"
     + "\nFIPS validation is a separate official claim. Brynja has no FIPS 140-3 "
     "validation and no certificate-bound operational-environment claim.\n"
+    + "\nImplementation completion does not authorize publication or imply platform qualification.\n"
 )
 IMPLEMENTED = (
     "| Example capability | ✅ Implemented | ❌ Not independently verified |"
@@ -72,13 +73,13 @@ def must_fail(text: str, expected: str) -> None:
 
 def legacy_root_rows() -> None:
     root = SCRIPT.resolve().parents[2]
-    rows = [row for row in MODULE.ROOT_ROWS if '`brynja-legacy-hmac' in row]
-    assert len(rows) == 2
+    rows = [row for row in MODULE.ROOT_ROWS if '`brynja-legacy-hmac' in row or '`brynja-mac-hmac`' in row]
+    assert len(rows) == 3
     for path in MODULE.ROOT_READMES:
         text = (root / path).read_text()
         MODULE.validate_document(path, text, MODULE.ROOT_ROWS)
         for row in rows:
-            for replacement in ('', row.replace('qualification pending', 'fully qualified'),
+            for replacement in ('', row.replace('✅ Fully implemented', '✅ Fully qualified').replace('✅ Implemented', '✅ Fully qualified'),
                                 row.replace('❌ Not independently verified', '✅ Verified')):
                 try:
                     MODULE.validate_document(path, text.replace(row, replacement), MODULE.ROOT_ROWS)
@@ -86,7 +87,14 @@ def legacy_root_rows() -> None:
                     pass
                 else:
                     raise AssertionError('legacy HMAC omission/overclaim accepted')
-    print('Legacy HMAC root tables reject 12 omission/qualification/review regressions')
+        warning = 'Implementation completion does not authorize publication or imply platform qualification.'
+        try:
+            MODULE.validate_document(path, text.replace(warning, ''), MODULE.ROOT_ROWS)
+        except MODULE.VerificationStatusError:
+            pass
+        else:
+            raise AssertionError('implementation/qualification separation omitted')
+    print('HMAC root tables reject 18 omission/qualification/review regressions and two missing boundary warnings')
 
 
 def crate_tables() -> None:

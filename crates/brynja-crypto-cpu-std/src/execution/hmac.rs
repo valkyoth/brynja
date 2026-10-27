@@ -38,12 +38,7 @@ impl<A: brynja_mac_hmac::Algorithm> PortableHmac<A> {
         }
     }
     fn new(tag_bytes: Option<usize>) -> Result<Self, HmacError> {
-        A::validate().map_err(HmacError::Mac)?;
-        if let Some(bytes) = tag_bytes
-            && (bytes < 16 || bytes.checked_mul(8).is_none_or(|bits| bits > A::TAG_BITS))
-        {
-            return Err(HmacError::Mac(brynja_mac_hmac::Error::TagLength));
-        }
+        brynja_mac_hmac::validate_tag_policy::<A>(tag_bytes).map_err(HmacError::Mac)?;
         Ok(Self {
             tag_bytes,
             _algorithm: PhantomData,

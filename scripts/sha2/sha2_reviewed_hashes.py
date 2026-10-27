@@ -33,10 +33,10 @@ TEST_HASHES = {
     "crates/brynja-hash-sha2/tests/bit_inputs.rs": "df9d40cd6e19f71b989f95cc82877919ed5f144bf790b3adb2b72c5dd3b78927",
     "crates/brynja-hash-sha2/tests/vectors/nist-bit-selected.txt": "a23d9c097b3f2218441b72707ba3b6094e0e85bf63ed0eb24fc70b635f846b8f",
     "assurance/sha2-bit-differential/Cargo.toml": "6b1f8929ace8039b132af488cb2b0e2746d00684c2ed5dcfd32baff92bc763c3",
-    "assurance/sha2-bit-differential/Cargo.lock": "81b71c99c04ce21079a5426446cb8ebf00e179329c30bfc5ea59c5406771fce4",
+    "assurance/sha2-bit-differential/Cargo.lock": "de002f4843ac1d5276610e6fb8e58acefa67c9bfcb14586f125c5b43b88c4bfa",
     "assurance/sha2-bit-differential/src/main.rs": "72a6459c642c353fc64687e5fd29ba3e25f427c756e87ab79d3b940848b99752",
     "scripts/sha2/check-sha2-bit-differential.py": "263990644d6176b5817893f1f0008b355c5aeef9f22e7e10be72ed92b9a2fcfc",
-    "scripts/zeroization/check-zeroization-miri.sh": "5d220cd4ed57a0eb6d9dc5d771039d6df91152e1d5502919507b66a4ec84f40d",
-    "scripts/zeroization/check-zeroization-sanitizer.sh": "83b05d7162729f78d6a206e0beb1e81c5e2770911edc808d10475423e1d958b7",
+    "scripts/zeroization/check-zeroization-miri.sh": "901cc7414edd800a0d107fb54bc04296fb8834cc8b7a6a3d457b161ad0ae69c6",
+    "scripts/zeroization/check-zeroization-sanitizer.sh": "c4c007e150a53307366be333ba1c6f059b3c0a60cec51e322733230731daf801",
     "scripts/sha2/sha2_test_policy.py": "df2cbbc5f4eeb588859b14447918f0f85cbd3cb2c97f10a39b267271903f1968",
 }

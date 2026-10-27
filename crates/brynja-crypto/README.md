@@ -4,9 +4,9 @@
 </p>
 
 <div align="center">
-  <a href="https://crates.io/crates/brynja">Crates.io</a>
+  <a href="https://crates.io/crates/brynja-crypto">Crates.io</a>
   |
-  <a href="https://docs.rs/brynja">Docs.rs</a>
+  <a href="https://docs.rs/brynja-crypto">Docs.rs</a>
   |
   <a href="https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md">Release Plan</a>
   |
@@ -19,7 +19,7 @@
 
 <p align="center">
   <a href="https://github.com/valkyoth/brynja">
-    <img src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
+    <img width="840" src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
   </a>
 </p>
 
@@ -35,7 +35,7 @@ their APIs without making each leaf depend on the entire crypto or TLS graph.
 | --- | --- | --- |
 | All six named SHA-2 and all six SHA-3/SHAKE functions | ✅ Fully implemented, reexported | ❌ No |
 | cSHAKE, KMAC/KMACXOF, TupleHash and ParallelHash families | ✅ Fully implemented, reexported | ❌ No |
-| Modern HMAC over SHA-2/SHA-3 | 🚧 Portable and explicit execution APIs; qualification pending | ❌ No |
+| Modern HMAC over SHA-2/SHA-3 | ✅ Fully implemented portable API; explicit execution qualification separate | ❌ No |
 | AEAD, KDF, RSA, ECC and executable provider effects | ❌ Not implemented | ❌ No |
 
 Named hashes and SP 800-185 constructions are usable; the broader planned
@@ -44,8 +44,16 @@ review or FIPS 140-3 validation is claimed.
 
 ## Use
 
-The hash/MAC APIs below require this unpublished checkout, not an older
-published foundation-only package:
+Use a release containing the hash/MAC APIs described here, not an older
+foundation-only package.
+
+After this source version is published, install from the registry:
+
+```sh
+cargo add brynja-crypto --no-default-features
+```
+
+For an unpublished candidate or matching local checkout instead:
 
 ```sh
 cargo add brynja-crypto --path /path/to/brynja/crates/brynja-crypto --no-default-features
@@ -81,7 +89,7 @@ let mut bytes = [0; 32];
 let tag = Hmac::<Sha256>::authenticate(&key, b"message", &mut bytes).unwrap();
 let mut verifier = Hmac::<Sha256>::new(&key).unwrap();
 verifier.update(b"message").unwrap();
-assert!(verifier.verify(tag.as_bytes()).unwrap().expose_public());
+verifier.verify(tag.as_bytes()).unwrap(); // Only a matching tag returns Ok(()).
 ```
 
 `hmac-hardened-execution` and `hmac-runtime-execution` expose borrowed-authority
@@ -98,7 +106,7 @@ Select default-off per-family execution/batch features through this facade or
 the algorithm leaves. Namespaces `sha2`, `sha3`, `hmac`, `kmac`, `tuplehash` and
 `parallelhash` expose the corresponding leaf APIs; `cpu` is an explicit
 no_std CPU-authority opt-in, not a hosted detector. See the
-[feature and deployment guide](../../docs/facade-features.md).
+[feature and deployment guide](https://github.com/valkyoth/brynja/blob/main/docs/facade-features.md).
 x86-64 SHA/AVX2 and AArch64 SHA2/SHA-512/SHA3 support is
 algorithm- and API-specific, not a global switch. Features do not authorize
 unsupported instructions or silently route secret state through ordinary kernels.

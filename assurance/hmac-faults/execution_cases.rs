@@ -14,7 +14,12 @@ fn preadmission_and_every_boundary_release_owners() {
                 };
                 reset(key, kernel, 0, Fault::None);
                 let mut output = [0x77; 32];
-                assert!(operate(&mut output).is_ok());
+                let expected = if matches!(mode, Mode::Verify | Mode::BitVerify) {
+                    Err(Error::Mismatch)
+                } else {
+                    Ok(())
+                };
+                assert_eq!(operate(&mut output), expected);
                 let events = closed();
                 let admitted = if key.len() > 64 { 3 } else { 2 };
                 assert!(

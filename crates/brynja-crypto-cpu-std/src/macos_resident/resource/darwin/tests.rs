@@ -255,7 +255,10 @@ fn hmac_preentry_failures_preserve_session() -> Result<(), crate::macos_resident
             assert!(!session.is_quarantined());
             session.assert_preentry_cleared();
             assert_eq!(session.authenticate(b"key", b"message")?.expose(), expected);
-            assert!(session.verify(request(), &expected, &Cancellation::new())?);
+            assert_eq!(
+                session.verify(request(), &expected, &Cancellation::new()),
+                Ok(())
+            );
         }
     }
     Ok(())

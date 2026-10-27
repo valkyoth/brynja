@@ -10,7 +10,7 @@ license = "MIT OR Apache-2.0"
 
 [dependencies]
 brynja-hash-sha2 = { path = "../../crates/brynja-hash-sha2", version = "=0.1.0", default-features = false, features = ["batch-execution", "static-execution"] }
-brynja-crypto-cpu-std = { path = "../../crates/brynja-crypto-cpu-std", version = "=0.1.1", default-features = false, features = ["sha256-batch"] }
+brynja-crypto-cpu-std = { path = "../../crates/brynja-crypto-cpu-std", version = "=0.2.0", default-features = false, features = ["sha256-batch"] }
 
 [lints.rust]
 unsafe_code = "forbid"

@@ -4,9 +4,9 @@
 </p>
 
 <div align="center">
-  <a href="https://crates.io/crates/brynja">Crates.io</a>
+  <a href="https://crates.io/crates/brynja-hash-sha2">Crates.io</a>
   |
-  <a href="https://docs.rs/brynja">Docs.rs</a>
+  <a href="https://docs.rs/brynja-hash-sha2">Docs.rs</a>
   |
   <a href="https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md">Release Plan</a>
   |
@@ -19,7 +19,7 @@
 
 <p align="center">
   <a href="https://github.com/valkyoth/brynja">
-    <img src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
+    <img width="840" src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
   </a>
 </p>
 
@@ -56,7 +56,7 @@ if the handle is forgotten. These scoped APIs use portable hardened hashing,
 not optional hardware/SIMD dispatch. With `general-sha512-t`,
 `hardened_in_place::Sha512TWorkspace::new(parameter)` also supports all 510
 parameters, with typed `Sha512TSecretDigest` output and explicit public
-declassification. See the [in-place guide](../../docs/hardened-in-place.md) and the
+declassification. See the [in-place guide](https://github.com/valkyoth/brynja/blob/main/docs/hardened-in-place.md) and the
 compiled module example. This is not whole-register/spill erasure; existing
 by-value and accelerated APIs retain their current guarantees.
 
@@ -112,8 +112,15 @@ x86-64 build stays portable in hosted `Mode::Prefer` and returns `Unavailable`
 in hosted `Mode::Require`, even on an AVX2-capable machine. This is deliberate;
 current-core CPUID alone does not prove safety across migration.
 
-The APIs documented here include unpublished workspace functionality. From a
-local checkout, without maintaining a dependency version in this example:
+Select this leaf for the SHA-2 APIs documented here.
+
+After this source version is published, install from the registry:
+
+```sh
+cargo add brynja-hash-sha2 --no-default-features
+```
+
+For an unpublished candidate or matching local checkout instead:
 
 ```sh
 cargo add brynja-hash-sha2 --path /path/to/brynja/crates/brynja-hash-sha2 --no-default-features
@@ -244,4 +251,4 @@ Portable defaults are unchanged. A Cargo feature alone does not enable AVX2;
 generic x86 builds remain portable/Unavailable. Static AVX2 requires
 `-C target-feature=+avx,+avx2` on a supporting deployment. Hosted Arm NEON
 relies on the documented OS ABI, not independent migration proof. No universal
-speedup is promised. See the [batch contract](../../docs/sha512-batch-execution.md).
+speedup is promised. See the [batch contract](https://github.com/valkyoth/brynja/blob/main/docs/sha512-batch-execution.md).

@@ -19,7 +19,7 @@
 
 <p align="center">
   <a href="https://github.com/valkyoth/brynja">
-    <img src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
+    <img width="840" src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
   </a>
 </p>
 
@@ -44,19 +44,22 @@ companion-adapter exceptions follow explicit admission and isolation policy.
 
 These tables track concrete public capabilities and the named implementation
 families in Brynja's active pre-1.0 roadmap. A capability is listed as
-implemented only after its complete public API and required acceptance evidence
-for that named milestone pass; a planned row is not yet usable.
+implemented after its complete public API and functional acceptance checks
+pass; a planned row is not yet usable. Release qualification and platform-specific
+assurance are separate from implementation completion.
 The broader crate-level audit inventory remains available in the
 [component verification status](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md).
 
-✅ Implemented means a named capability is ready; ✅ Fully implemented means
-every named member of that exact family is ready. Both require documented,
-consumer-usable public APIs and the repository's required evidence. A green
+✅ Implemented means a named capability is implemented and acceptance-tested;
+✅ Fully implemented means every named member of that exact family has a
+documented, consumer-usable public API and passing functional acceptance. A green
 implementation status does not mean independently verified. Independent status moves from ❌ to ✅ only
 when a named independent reviewer signs off and linked evidence identifies the
 reviewed implementation. The project's own tests, CI, Kani, Miri, sanitizers,
 fuzzing, differential testing, and pentests do not by themselves constitute
 independent cryptographic or protocol verification.
+
+Implementation completion does not authorize publication or imply platform qualification.
 
 ### Modern Hash Functions
 
@@ -96,7 +99,16 @@ KMACXOF128, and KMACXOF256.
 | Construction family | Implementation status | Owning crate | Independent verification |
 | --- | --- | --- | --- |
 | KMAC/KMACXOF | ✅ Fully implemented | `brynja-mac-kmac` | ❌ Not independently verified |
-| HMAC over modern SHA-2/SHA-3 | 🚧 Development APIs; qualification pending | `brynja-mac-hmac` | ❌ Not independently verified |
+| HMAC over modern SHA-2/SHA-3 | ✅ Fully implemented | `brynja-mac-hmac` | ❌ Not independently verified |
+
+HMAC completion covers the ten named SHA-2/SHA-3 identities, streaming and
+one-shot use, long keys, canonical final-bit messages, protocol-selected byte
+truncation, mismatch rejection and typed public/secret tags. General SHA-512/t
+is separately constrained by the modern 128-bit minimum. Protected/resident
+and accelerated APIs retain their documented target and qualification limits;
+SIMD HMAC batching and Windows enclave HMAC are not implemented.
+The v0.25.2 checkpoint remains pending cumulative retest and final release
+qualification; green implementation rows do not authorize publication.
 
 ### Legacy Hash Functions
 
@@ -111,13 +123,16 @@ legacy crate dependency even after implementation.
 ### Legacy Message Authentication
 
 Legacy HMAC is explicitly selected for compatibility, outside the modern facade.
-The [v0.25.1 security retest](security/pentest/v0.25.1.md) passed; final release
-qualification remains pending. This is not independent cryptographic certification.
+The [v0.25.1 security retest](security/pentest/v0.25.1.md) and that tagged
+release's required checks passed. Hosted owners cover GNU/Linux protected and
+Apple Silicon resident sessions; the latter do not claim dump exclusion.
+The current checkpoint is not yet release-qualified. This is not independent
+cryptographic certification.
 
 | Construction family | Implementation status | Owning crate | Independent verification |
 | --- | --- | --- | --- |
-| HMAC over legacy MD5/SHA-1 | 🚧 Development APIs; qualification pending | `brynja-legacy-hmac` | ❌ Not independently verified |
-| Hosted legacy HMAC | 🚧 Linux protected / Apple Silicon resident owners; qualification pending | `brynja-legacy-hmac-std` | ❌ Not independently verified |
+| HMAC over legacy MD5/SHA-1 | ✅ Fully implemented | `brynja-legacy-hmac` | ❌ Not independently verified |
+| Hosted legacy HMAC | ✅ Implemented | `brynja-legacy-hmac-std` | ❌ Not independently verified |
 
 ### Protocol And PKI Building Blocks
 

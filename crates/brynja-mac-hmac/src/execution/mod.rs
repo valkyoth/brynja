@@ -20,7 +20,7 @@ mod retained;
 #[cfg(test)]
 mod tests;
 
-use crate::{Error, SecretTag, Tag, Verification, engine::Engine};
+use crate::{Error, SecretTag, Tag, engine::Engine};
 use adapter::Adapter;
 use backends::Source;
 #[cfg(feature = "runtime-execution")]
@@ -65,9 +65,7 @@ impl<'a, A: Algorithm<'a>> Hmac<'a, A> {
         key: &[u8],
         tag_bytes: usize,
     ) -> Result<Self, Error> {
-        if tag_bytes.checked_mul(8).ok_or(Error::TagLength)? > A::TAG_BITS {
-            return Err(Error::TagLength);
-        }
+        crate::validate_tag_policy::<A>(Some(tag_bytes))?;
         Self::create(Source::Static(owner), key, tag_bytes)
     }
 
@@ -89,9 +87,7 @@ impl<'a, A: Algorithm<'a>> Hmac<'a, A> {
         key: &[u8],
         tag_bytes: usize,
     ) -> Result<Self, Error> {
-        if tag_bytes.checked_mul(8).ok_or(Error::TagLength)? > A::TAG_BITS {
-            return Err(Error::TagLength);
-        }
+        crate::validate_tag_policy::<A>(Some(tag_bytes))?;
         Self::create(Source::Runtime(owner), key, tag_bytes)
     }
 
@@ -146,7 +142,8 @@ impl<'a, A: Algorithm<'a>> Hmac<'a, A> {
     }
 
     /// Consumes and compares all equal-length candidate bytes without fallback.
-    pub fn verify(self, candidate: &[u8]) -> Result<Verification, Error> {
+    /// Only a match returns `Ok(())`; a mismatch returns [`Error::Mismatch`].
+    pub fn verify(self, candidate: &[u8]) -> Result<(), Error> {
         self.engine.take()?.verify(None, candidate)
     }
 
@@ -178,11 +175,7 @@ impl<'a, A: Algorithm<'a>> Hmac<'a, A> {
     }
 
     /// Consumes the exact final bits and verifies the preselected tag width.
-    pub fn verify_bits(
-        self,
-        input: A::FinalInput<'_>,
-        candidate: &[u8],
-    ) -> Result<Verification, Error> {
+    pub fn verify_bits(self, input: A::FinalInput<'_>, candidate: &[u8]) -> Result<(), Error> {
         self.engine.take()?.verify(Some(input), candidate)
     }
 

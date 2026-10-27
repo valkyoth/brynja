@@ -36,6 +36,7 @@ def environment(destination):
     return env
 
 
+# Fixtures come from the reviewed repository; runtime dependencies remain extracted archives.
 def package(destination, env):
     _, roots = ordinary.package(destination, env)
     consumer = destination / 'hardened-consumer'
@@ -50,8 +51,8 @@ def package(destination, env):
         f'{name}={{path="{root.as_posix()}"}}' for name, root in roots.items()) + '\n'
     (consumer / 'Cargo.toml').write_text(manifest)
     (consumer / 'src/lib.rs').write_text('pub use brynja_hash_sha3::hardened_execution as api;\n')
-    shutil.copyfile(roots['brynja-hash-sha3'] / 'tests/hardened_execution.rs', consumer / 'tests/api.rs')
-    shutil.copytree(roots['brynja-hash-sha3'] / 'tests/keccak_properties', consumer / 'tests/keccak_properties')
+    shutil.copyfile(ROOT / 'crates/brynja-hash-sha3/tests/hardened_execution.rs', consumer / 'tests/api.rs')
+    shutil.copytree(ROOT / 'crates/brynja-hash-sha3/tests/keccak_properties', consumer / 'tests/keccak_properties')
     return consumer, roots
 
 

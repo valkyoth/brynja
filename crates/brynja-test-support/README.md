@@ -4,9 +4,9 @@
 </p>
 
 <div align="center">
-  <a href="https://crates.io/crates/brynja">Crates.io</a>
+  <a href="https://github.com/valkyoth/brynja/tree/main/crates/brynja-test-support">Source (unpublished)</a>
   |
-  <a href="https://docs.rs/brynja">Docs.rs</a>
+  <a href="https://github.com/valkyoth/brynja/blob/main/crates/brynja-test-support/src/lib.rs">API source</a>
   |
   <a href="https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md">Release Plan</a>
   |
@@ -19,7 +19,7 @@
 
 <p align="center">
   <a href="https://github.com/valkyoth/brynja">
-    <img src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
+    <img width="840" src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
   </a>
 </p>
 
@@ -43,6 +43,18 @@ Fixture success is not independent cryptographic verification or certification.
 
 ```sh
 cargo test --locked -p brynja-test-support
+```
+
+For a deterministic clock-availability test inside the repository:
+
+```rust
+use brynja_core::{ClockUnavailable, MonotonicClockSource};
+use brynja_test_support::{DeterministicMonotonicClock, DeterministicReading};
+let script = [DeterministicReading::Value(7), DeterministicReading::Unavailable];
+let mut clock = DeterministicMonotonicClock::new(&script);
+assert_eq!(clock.read_monotonic_ticks(), Ok(7));
+assert_eq!(clock.read_monotonic_ticks(), Err(ClockUnavailable));
+assert_eq!(clock.consumed(), 2);
 ```
 
 Random fixtures exercise retry, failure, partial writes, underfill, reseed and

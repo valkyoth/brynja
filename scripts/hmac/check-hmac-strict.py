@@ -47,7 +47,7 @@ def graph(document, roots, consumer, *, compiled=False, unified=False):
 
 
 def manifest(consumer, roots, *, compiled=False, unified=False):
-    extra = ('host={package="brynja-crypto-cpu-std", version="=0.1.1", default-features=false, '
+    extra = ('host={package="brynja-crypto-cpu-std", version="=0.2.0", default-features=false, '
              'features=["strict-hmac-acceleration"]}\n') if unified else ''
     api.manifest(consumer, roots, 'brynja-strict', ['acceleration'] if compiled else [], extra=extra)
 

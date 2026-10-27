@@ -4,9 +4,9 @@
 </p>
 
 <div align="center">
-  <a href="https://crates.io/crates/brynja">Crates.io</a>
+  <a href="https://crates.io/crates/brynja-legacy-hmac">Crates.io</a>
   |
-  <a href="https://docs.rs/brynja">Docs.rs</a>
+  <a href="https://docs.rs/brynja-legacy-hmac">Docs.rs</a>
   |
   <a href="https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md">Release Plan</a>
   |
@@ -19,7 +19,7 @@
 
 <p align="center">
   <a href="https://github.com/valkyoth/brynja">
-    <img src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
+    <img width="840" src="https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp" alt="Brynja security-first Rust cryptography and secure protocols overview">
   </a>
 </p>
 
@@ -33,9 +33,9 @@ absent from modern facades, defaults, protocol negotiation and approved services
 
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| HMAC-SHA-1 and HMAC-MD5 | Portable initial implementation | ❌ No |
-| Streaming, long keys, explicit byte truncation and verification | Initial implementation with author tests | ❌ No |
-| Public tags and clearing secret tags | Implemented; composition cleanup qualification pending | ❌ No |
+| HMAC-SHA-1 and HMAC-MD5 | ✅ Fully implemented portable API | ❌ No |
+| Streaming, long keys, explicit byte truncation and verification | ✅ Implemented | ❌ No |
+| Public tags and clearing secret tags | ✅ Implemented; owned-memory clearing | ❌ No |
 | Explicit hardened SHA-1 execution | Opt-in `sha1-execution`; x86/Arm author tests, qualification pending | ❌ No |
 | MD5 SIMD HMAC | Opt-in `md5-batch`; AVX2/NEON author tests, qualification pending | ❌ No |
 

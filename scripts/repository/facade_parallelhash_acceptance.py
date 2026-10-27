@@ -14,7 +14,7 @@ from facade_keccak_cases import require_runtime_rejection
 ROOT = Path(__file__).resolve().parents[2]
 FEATURES = ['parallelhash-hardened-batch']
 ARCHIVE = ('brynja-hash-parallel-std', '0.1.0', ('src/lib.rs', 'src/execution/batch.rs'))
-HOST = ('host = { package="brynja-crypto-cpu-std", version="=0.1.1", '
+HOST = ('host = { package="brynja-crypto-cpu-std", version="=0.2.0", '
         'default-features=false, features=["keccak-hardened-batch"] }\n'
         'threads = { package="brynja-hash-parallel-std", version="=0.1.0", '
         'default-features=false, features=["runtime-batch-execution"] }\n')

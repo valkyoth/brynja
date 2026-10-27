@@ -77,7 +77,11 @@ def installer_inventory():
         fixture = root / 'assurance/kmac-execution'
         shutil.copytree(acceptance.ROOT / 'assurance/kmac-execution/src', fixture / 'src')
         shutil.copytree(acceptance.ROOT / 'assurance/kmac-execution/tests', fixture / 'tests')
-        roots = {'brynja-mac-kmac': acceptance.ROOT / 'crates/brynja-mac-kmac'}
+        leaf_tests = root / 'crates/brynja-mac-kmac/tests'
+        leaf_tests.mkdir(parents=True)
+        shutil.copyfile(acceptance.ROOT / 'crates/brynja-mac-kmac/tests/execution.rs',
+                        leaf_tests / 'execution.rs')
+        roots = {}  # Runtime archive roots must not supply repository fixtures.
         api = SimpleNamespace(manifest=lambda *a, **kw: None, source=lambda *a: None)
         with patch.object(acceptance, 'ROOT', root):
             for package in ('brynja', 'brynja-crypto'):

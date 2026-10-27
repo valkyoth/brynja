@@ -37,7 +37,9 @@ MACOS_RESIDENT = {
                  for name in (*MACOS_RESIDENT_COMMON, 'batch/mod.rs', 'batch/worker.rs',
                               'batch/tests.rs', 'batch/tests/native.rs')),
 }
-MD5_CHANGED = tuple('crates/brynja-legacy-md5/' + name for name in (
+# Publication-version lock refreshes belong to the current delta, never the
+# historical capture identity. The old snapshot and captures stay immutable.
+MD5_CHANGED = ('assurance/md5-cpu-public-api/Cargo.lock',) + tuple('crates/brynja-legacy-md5/' + name for name in (
     'src/batch/owner.rs', 'src/batch/tests.rs', 'src/engine.rs', 'src/output.rs', 'tests/api.rs',
     'src/hardened_in_place.rs', 'src/hardened_in_place/tests.rs',
     'src/batch/hardened_execution/in_place.rs', 'src/batch/hardened_execution/in_place/tests.rs',
@@ -58,7 +60,7 @@ MD5_CHANGED = tuple('crates/brynja-legacy-md5/' + name for name in (
         'src/strict_execution/tests.rs', 'src/strict_execution/tests/native.rs',
         'src/strict_execution/batch/mod.rs', 'src/strict_execution/batch/worker.rs',
         'src/strict_execution/batch/tests.rs', 'src/strict_execution/batch/tests/native.rs')) + SHARED_CHANGED + MACOS_RESIDENT['md5']
-SHA1_CHANGED = tuple('crates/brynja-legacy-sha1/' + name for name in (
+SHA1_CHANGED = ('assurance/sha1-cpu-public-api/Cargo.lock',) + tuple('crates/brynja-legacy-sha1/' + name for name in (
     'src/engine.rs', 'src/output.rs', 'tests/api.rs',
     'src/hardened_in_place.rs', 'src/hardened_in_place/tests.rs',
     'src/hardened_execution/in_place.rs', 'src/hardened_execution/in_place/tests.rs',

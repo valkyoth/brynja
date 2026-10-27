@@ -1,7 +1,7 @@
 # v0.25.2 public checkpoint review handoff
 
-Status: focused and cumulative reviews received; KMAC remediation retest and release
-qualification pending. This document is not a PASS report or permission to
+Status: focused and cumulative reviews received; KMAC remediation retest passed
+at `4ab30977`; release qualification pending. This document is not permission to
 publish. The implementation was prepared from
 `697b5ec2adedda6c92eeb914c7f5baee92e6e655`. Use the full candidate commit ID
 (`git rev-parse HEAD` in the clean review checkout) in the tester's report;
@@ -13,8 +13,11 @@ High or Medium finding. The [ledger](../security/pentest/v0.25.2.md) records
 their exact scope, three non-blocking notes and the later author-tested
 documentation follow-up. The later cumulative assessments through `1a44b73f`
 identified a Medium KMAC mismatch-success issue and a Low portable exact-width
-gap. Their remediation is described in the ledger and requires a focused
-independent retest. The original cumulative report remains preserved locally.
+gap. The supplied focused independent retest closes both at
+`4ab309779483bc9f1c13469fc152c54c82a77657`. The ledger preserves its execution
+limits and two non-blocking informational follow-ups; this is not fresh native
+qualification for code-reviewed platforms. The original cumulative report
+remains preserved locally.
 
 ## Two different review ranges
 

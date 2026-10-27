@@ -44,7 +44,9 @@ comparison. The public `KmacVerification` type is removed; use `Result<(), Error
 and reject all errors. Portable `verify_exact`/`verify_bits_exact` bind a
 protocol-selected width before output generation. Completed mismatches remain
 reusable after existing cleanup; backend errors never authorize fallback. This
-changes pre-publication APIs and requires independent retest.
+changes pre-publication APIs. The supplied independent retest of `4ab30977`
+closes both KMAC findings; platform execution limits and informational API/example
+follow-ups remain recorded in the pentest ledger. Release qualification is separate.
 
 Modern portable, static/runtime and protected/resident HMAC verification now
 returns `Result<(), Error>`. Only a matching authenticator is `Ok(())`; a

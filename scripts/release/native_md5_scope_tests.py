@@ -3,6 +3,7 @@ import copy
 import os
 import subprocess
 import tempfile
+import tomllib
 import unittest
 from pathlib import Path
 
@@ -36,12 +37,16 @@ class Md5DependencyProfileTests(unittest.TestCase):
                 self.assertNotIn('\x1b', result.stdout)
                 self.assert_feature_union(result.stdout)
 
-    def assert_feature_union(self, output):
+    def assert_feature_union(self, output, root=io.ROOT):
+        # This cross-check executes Cargo in the current checkout, not the
+        # frozen evidence fixture. Compare versions with that checkout's
+        # manifests while keeping the allowed roots and feature sets exact.
+        # This is not permission to update profile.REVIEWED or reuse evidence.
         expected = {
-            'brynja-core': ('0.9.0', 'default'),
-            'brynja-hash-core': ('0.1.0', 'default'),
-            'brynja-legacy-md5': ('0.1.0', 'batch,cpu,default,execution,hardened-execution'),
-            profile.HOST: ('0.1.0', 'default,runtime-execution,runtime-hardened-execution'),
+            'brynja-core': 'default',
+            'brynja-hash-core': 'default',
+            'brynja-legacy-md5': 'batch,cpu,default,execution,hardened-execution',
+            profile.HOST: 'default,runtime-execution,runtime-hardened-execution',
         }
         population = set()
         for line in output.splitlines():
@@ -50,11 +55,61 @@ class Md5DependencyProfileTests(unittest.TestCase):
             identity, enabled = line.removesuffix(' (*)').split('|')
             name = identity.split()[0]
             self.assertIn(name, expected)
-            version, actual_features = expected[name]
-            self.assertEqual(identity, f'{name} v{version} ({io.ROOT}/crates/{name})')
-            self.assertEqual(enabled, actual_features)
+            manifest = root / 'crates' / name / 'Cargo.toml'
+            package = tomllib.loads(manifest.read_text())['package']
+            self.assertEqual(package['name'], name)
+            self.assertIsInstance(package['version'], str)
+            self.assertEqual(identity,
+                f'{name} v{package["version"]} ({root}/crates/{name})')
+            self.assertEqual(enabled, expected[name])
             population.add(name)
         self.assertEqual(population, set(expected))
+
+    def feature_union_fixture(self, core_version):
+        root = self.root / 'current-checkout'
+        rows = (
+            ('brynja-core', core_version, 'default'),
+            ('brynja-hash-core', '0.1.0', 'default'),
+            ('brynja-legacy-md5', '0.1.0', 'batch,cpu,default,execution,hardened-execution'),
+            (profile.HOST, '0.1.0', 'default,runtime-execution,runtime-hardened-execution'),
+        )
+        output = []
+        for name, version, features in rows:
+            fixtures.write(root, f'crates/{name}/Cargo.toml',
+                f'[package]\nname="{name}"\nversion="{version}"\n')
+            output.append(f'{name} v{version} ({root}/crates/{name})|{features}')
+        return root, '\n'.join(output) + '\n'
+
+    def test_live_feature_union_tracks_manifest_version_bumps_not_old_literals(self):
+        root, old = self.feature_union_fixture('0.9.0')
+        self.assert_feature_union(old, root)
+        for version in ('0.10.0', '0.11.0'):
+            root, current = self.feature_union_fixture(version)
+            self.assert_feature_union(current, root)
+            with self.subTest(version=version), self.assertRaises(AssertionError):
+                self.assert_feature_union(old, root)
+            old = current
+
+    def test_live_feature_union_still_rejects_identity_feature_and_population_drift(self):
+        root, output = self.feature_union_fixture('0.10.0')
+        self.assert_feature_union(output, root)
+        for name in ('brynja-core', 'brynja-hash-core', 'brynja-legacy-md5', profile.HOST):
+            line = next(line for line in output.splitlines() if line.startswith(name + ' '))
+            version = line.split(' v', 1)[1].split(' ', 1)[0]
+            for changed in (
+                output.replace(f'{name} v{version}', f'{name} v9.9.9'),
+                output.replace(f'({root}/crates/{name})', f'(/unreviewed/{name})'),
+                output.replace(line, line + ',strict-execution'),
+                output.replace(line + '\n', ''),
+            ):
+                with self.subTest(name=name, changed=changed), self.assertRaises(AssertionError):
+                    self.assert_feature_union(changed, root)
+        with self.assertRaises(AssertionError):
+            self.assert_feature_union(output + 'unreviewed v1.0.0 (/unreviewed)|default\n', root)
+        fixtures.write(root, 'crates/brynja-core/Cargo.toml',
+            '[package]\nname="substituted-core"\nversion="0.10.0"\n')
+        with self.assertRaises(AssertionError):
+            self.assert_feature_union(output, root)
 
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix='brynja-md5-dependency-profile-')

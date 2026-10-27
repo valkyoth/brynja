@@ -228,7 +228,7 @@
     "scripts/release/native_hmac_tests.py": "30efdb4b4448312aa4e3e0375a1a4369daceb99944d9384abb4472a3f17fd192",
     "scripts/release/native_import_tests.py": "041d1238ac8429550b7aaf63ab18ea0702a97b0346683b3899d8104b84a6fe32",
     "scripts/release/native_md5_dependency_profile.py": "6e35b8ff2887891134cbea81b038c4b424d3fb69044add694f17871ed3b59648",
-    "scripts/release/native_md5_scope_tests.py": "0d74b20164a746c46e02c3ca8b0eb8b4dab26833d7ebe0b56910424d45a9cc6a",
+    "scripts/release/native_md5_scope_tests.py": "608300ea7f47b52b62494bf9baa8fadb8a43e02657418e9ec889edbf00dca229",
     "scripts/release/native_metadata_carry_forward.py": "a83fcfee8c405915618e8c8271446774fb7fbbdb8b3954bf256909f8302b466e",
     "scripts/release/native_review_carry_forward.py": "69b9198ccb85d10ac44a920aae6c44be2e25d2e4645ff0120c0c964c56b7dfb3",
     "scripts/release/native_review_checks.py": "d38f96b4386c2a60faa8692fc17d27dab6fbc5592c5600e86ca086ef2ab112b4",

@@ -1,8 +1,8 @@
 {
   "schema": 1,
   "purpose": "native-observation-integrity",
-  "status": "owner-approved",
-  "reviewed_commit": "af67fa67bba469d691d5bf993419fbd285fadd2c",
+  "status": "pending-owner-review",
+  "reviewed_commit": "91d98587470afc04becb62d77028f86edd3d782c",
   "validation_changes": {
     "sha2-hardened": {
       "scripts/sha2/check-sha2-hardened-native-evidence.py": {
@@ -18,30 +18,6 @@
       "scripts/sha1/check-sha1-hardened-native.py": {
         "after": "be392a38f1b5c6ac618c7e9016d220b8abb5df2a01a18d68da4cc9673aab7b10",
         "before": "269efd86a10057140720a144a6de604647774033ccc4113eecd97d14f57250fc"
-      }
-    },
-    "md5-execution": {
-      "scripts/md5/check-md5-package.py": {
-        "after": "9c67ddf684c3c5df3afb4c2946363f2bb50d1f002c68714ef8ea6daff62e06e8",
-        "before": "4517fcf5027fb03b9c6510b141b6ed0b3fe286dca578632d18b0f9f1afedb2ed"
-      },
-      "scripts/md5/check-md5-execution-native.py": {
-        "after": "8a241ce569c597b45632ef4abffa55ce2dbe31128cbf764f7285d8a7ad7f94df",
-        "before": "f469ae1ab4356dc1eea577ee415448f4c3fe9401de0c717aede21dd6cde3e10c"
-      }
-    },
-    "md5-hardened": {
-      "scripts/md5/check-md5-package.py": {
-        "after": "9c67ddf684c3c5df3afb4c2946363f2bb50d1f002c68714ef8ea6daff62e06e8",
-        "before": "4517fcf5027fb03b9c6510b141b6ed0b3fe286dca578632d18b0f9f1afedb2ed"
-      },
-      "scripts/md5/check-md5-execution-native.py": {
-        "after": "8a241ce569c597b45632ef4abffa55ce2dbe31128cbf764f7285d8a7ad7f94df",
-        "before": "f469ae1ab4356dc1eea577ee415448f4c3fe9401de0c717aede21dd6cde3e10c"
-      },
-      "scripts/md5/check-md5-hardened-native.py": {
-        "after": "73d396f5f0d69cd51c324f4ac618849bf9cf28a2783ba3db717c9394d0796eab",
-        "before": "cf27f602c225446567ee649e689e8d06b730c581761e6f53aaa429cc2353b21e"
       }
     },
     "keccak-hardened": {

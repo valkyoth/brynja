@@ -171,49 +171,61 @@ macro_rules! fixed {
             }
             /// Constant-work verification for the public candidate length.
             /// Callers must bound that length and use verify_exact for a fixed protocol width.
-            pub fn verify(mut self, candidate: &[u8]) -> Result<KmacVerification, Error> {
-                self.verification(None, crate::execution::bits(candidate)?, StrengthPolicy::Production)
+            ///
+            /// # Errors
+            /// Reject on `Mismatch` or any other error; never retry through a weaker route.
+            pub fn verify(mut self, candidate: &[u8]) -> Result<(), Error> {
+                self.verification(None, crate::execution::bits(candidate)?, StrengthPolicy::Production)?.into_result()
             }
             /// Rejects a protocol tag-width mismatch before hashing output.
             pub fn verify_exact(
                 mut self,
                 candidate: Fips202BitString<'_>,
                 expected_bits: u128,
-            ) -> Result<KmacVerification, Error> {
+            ) -> Result<(), Error> {
                 if u128::try_from(candidate.bit_len()).map_err(|_| Error::OutputTooLong)?
                     != expected_bits
                 {
                     return Err(Error::InvalidBitString);
                 }
-                self.verification(None, candidate, StrengthPolicy::Production)
+                self.verification(None, candidate, StrengthPolicy::Production)?.into_result()
             }
             /// Consuming canonical arbitrary-bit message and tag verification.
+            ///
+            /// # Errors
+            /// Reject on `Mismatch` or any other error; never retry through a weaker route.
             pub fn verify_bits(
                 mut self,
                 message: Fips202BitString<'_>,
                 candidate: Fips202BitString<'_>,
-            ) -> Result<KmacVerification, Error> {
-                self.verification(Some(message), candidate, StrengthPolicy::Production)
+            ) -> Result<(), Error> {
+                self.verification(Some(message), candidate, StrengthPolicy::Production)?.into_result()
             }
             conformance_api! { $profile;
             /// Exact-conformance byte verification, including weak tag parameters.
             #[cfg(feature = "conformance-testing")]
+            ///
+            /// # Errors
+            /// Reject on `Mismatch` or any other error; never retry through a weaker route.
             pub fn verify_conformance(
                 mut self,
                 candidate: &[u8],
-            ) -> Result<KmacVerification, Error> {
-                self.verification(None, crate::execution::bits(candidate)?, StrengthPolicy::Conformance)
+            ) -> Result<(), Error> {
+                self.verification(None, crate::execution::bits(candidate)?, StrengthPolicy::Conformance)?.into_result()
             }
             }
             conformance_api! { $profile;
             /// Exact-conformance arbitrary-bit verification.
             #[cfg(feature = "conformance-testing")]
+            ///
+            /// # Errors
+            /// Reject on `Mismatch` or any other error; never retry through a weaker route.
             pub fn verify_bits_conformance(
                 mut self,
                 message: Fips202BitString<'_>,
                 candidate: Fips202BitString<'_>,
-            ) -> Result<KmacVerification, Error> {
-                self.verification(Some(message), candidate, StrengthPolicy::Conformance)
+            ) -> Result<(), Error> {
+                self.verification(Some(message), candidate, StrengthPolicy::Conformance)?.into_result()
             }
             }
             fn tag<'out>(

@@ -97,7 +97,8 @@ macro_rules! probe {
                 })
                 .and_then(|result| result);
             match result {
-                Ok(value) => u8::from(!value.expose_public()),
+                Ok(()) => 0,
+                Err(KmacError::Mismatch) => 1,
                 Err(KmacError::InvalidBitString) => 2,
                 Err(KmacError::TagTooShort) => 3,
                 #[cfg(feature = "accelerated")]

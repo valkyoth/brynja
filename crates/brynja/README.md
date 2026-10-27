@@ -239,7 +239,7 @@ let mut mac = Kmac128::new(&key, b"example protocol").unwrap();
 mac.update(b"authenticated message").unwrap();
 let mut tag_bytes = [0_u8; 32];
 let tag = mac.finalize_tag(&mut tag_bytes).unwrap();
-assert!(tag.verify_candidate(tag.as_bytes()).expose_public());
+assert_eq!(tag.verify_candidate(tag.as_bytes()), Ok(()));
 
 let mut reader = KmacXof256::new(&key, b"example PRF").unwrap().finalize_xof().unwrap();
 let mut derived = [0_u8; 64];

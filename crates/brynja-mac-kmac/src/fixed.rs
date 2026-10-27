@@ -170,41 +170,88 @@ macro_rules! fixed_kmac {
             }
 
             /// Verifies one full-strength byte tag in constant work for its public length.
-            pub fn verify(mut self, candidate: &[u8]) -> Result<KmacVerification, KmacError> {
+            /// This is length-agile: bound candidate length and prefer `verify_exact`
+            /// when a protocol selects a fixed tag width independently of the candidate.
+            ///
+            /// # Errors
+            /// Reject on `Mismatch` or any other error; never retry through a weaker route.
+            pub fn verify(mut self, candidate: &[u8]) -> Result<(), KmacError> {
                 let candidate = byte_string(candidate)?;
-                self.verify_inner(None, candidate, StrengthPolicy::Production)
+                self.verify_inner(None, candidate, StrengthPolicy::Production)?.into_result()
+            }
+
+            /// Verifies a byte tag at an independently selected protocol bit width.
+            /// A width mismatch is rejected before generating or comparing output.
+            ///
+            /// # Errors
+            /// Reject the request on any error. `Mismatch` means authentication failed;
+            /// other failures never authorize retry through a weaker route.
+            pub fn verify_exact(self, candidate: &[u8], expected_bits: u128) -> Result<(), KmacError> {
+                let bits = byte_output_bits(candidate.len())?;
+                if bits != expected_bits {
+                    return Err(KmacError::InvalidBitString);
+                }
+                self.verify(candidate)
+            }
+
+            /// Verifies final message bits and a tag at a protocol-selected exact width.
+            /// Rejects a width mismatch before absorbing final bits or generating output.
+            ///
+            /// # Errors
+            /// Reject the request on any error, including `Mismatch`; never fall back.
+            pub fn verify_bits_exact(
+                self,
+                final_message: Fips202BitString<'_>,
+                candidate: Fips202BitString<'_>,
+                expected_bits: u128,
+            ) -> Result<(), KmacError> {
+                if u128::try_from(candidate.bit_len()).map_err(|_| KmacError::OutputTooLong)?
+                    != expected_bits
+                {
+                    return Err(KmacError::InvalidBitString);
+                }
+                self.verify_bits(final_message, candidate)
             }
 
             conformance_api! { $profile;
             /// Verifies any standards-valid byte tag, including short conformance values.
             #[cfg(feature = "conformance-testing")]
+            ///
+            /// # Errors
+            /// Reject on `Mismatch` or any other error; never retry through a weaker route.
             pub fn verify_conformance(
                 mut self,
                 candidate: &[u8],
-            ) -> Result<KmacVerification, KmacError> {
+            ) -> Result<(), KmacError> {
                 let candidate = byte_string(candidate)?;
-                self.verify_inner(None, candidate, StrengthPolicy::Conformance)
+                self.verify_inner(None, candidate, StrengthPolicy::Conformance)?.into_result()
             }
             }
 
             /// Verifies a full-strength arbitrary-bit tag after a final bit message.
+            ///
+            /// # Errors
+            /// Reject on `Mismatch` or any other error; never retry through a weaker route.
             pub fn verify_bits(
                 mut self,
                 final_message: Fips202BitString<'_>,
                 candidate: Fips202BitString<'_>,
-            ) -> Result<KmacVerification, KmacError> {
-                self.verify_inner(Some(final_message), candidate, StrengthPolicy::Production)
+            ) -> Result<(), KmacError> {
+                self.verify_inner(Some(final_message), candidate, StrengthPolicy::Production)?.into_result()
             }
 
             conformance_api! { $profile;
             /// Verifies an exact-conformance arbitrary-bit tag.
             #[cfg(feature = "conformance-testing")]
+            ///
+            /// # Errors
+            /// Reject on `Mismatch` or any other error; never retry through a weaker route.
             pub fn verify_bits_conformance(
                 mut self,
                 final_message: Fips202BitString<'_>,
                 candidate: Fips202BitString<'_>,
-            ) -> Result<KmacVerification, KmacError> {
-                self.verify_inner(Some(final_message), candidate, StrengthPolicy::Conformance)
+            ) -> Result<(), KmacError> {
+                self.verify_inner(Some(final_message), candidate, StrengthPolicy::Conformance)?.into_result()
             }
             }
 

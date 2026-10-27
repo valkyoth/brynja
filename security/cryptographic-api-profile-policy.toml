@@ -1140,7 +1140,7 @@ sha256 = "4158adf52d1739682281b6b8ccfa7107b8cd63823cd265b21b694b7c9272cbed"
 
 [[reviewed-source]]
 path = "crates/brynja-mac-kmac/src/output.rs"
-sha256 = "f9b30f0dd6f63059631c3e470e98754ffcfb2571c4396bc864c887287806aebd"
+sha256 = "66ea06204d4e3fc82cb9b77610a569ca8e7ba0c96b16133696207bda74e4593b"
 
 [[reviewed-source]]
 path = "crates/brynja-mac-kmac/src/packer.rs"
@@ -1148,7 +1148,7 @@ sha256 = "e5a35d85d83e2198ad58279f50c5dae8bc2f2e9074cacb1e7ef36c89cb1d1fc0"
 
 [[reviewed-source]]
 path = "crates/brynja-mac-kmac/tests/api.rs"
-sha256 = "90719b071f6f210881819d7806765e1b7be2ff5afae099a3c32b7e5cfe795e60"
+sha256 = "2d7a1339222b04a47dabfd3e8e855444032a87857bbf9a1f27f55e29a6aa55a1"
 
 [[reviewed-source]]
 path = "scripts/kmac/check-kmac-codegen.sh"

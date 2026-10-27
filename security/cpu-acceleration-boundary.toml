@@ -1136,13 +1136,13 @@ sha256 = "f53d36701983d2c7b887414412a971dfb5eb61899ca6dce35d64a29af2a9561f"
 package = "brynja-crypto-cpu-std"
 path = "src/strict_kmac/mod.rs"
 status = "protected-scalar-kmac-session-development"
-sha256 = "29c0d7cd520b5a7333dfd494fd85145754eeb29a59d476ac26f4edcef5528f1d"
+sha256 = "88f888eaf38d44985069a1a30709552f9e5f64f3f521921198f730c067bb2fb7"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/strict_kmac/types.rs"
 status = "protected-kmac-public-identity-and-bounds"
-sha256 = "346940bb3326bb06e3d10101ccca50a09be31e8fe38334378a67cc116e6c88fa"
+sha256 = "11f1c52b5ec9e7ea9e9c5d2eafd9f1d4e98bde184dcfaff17e2338ac7dd558d6"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -1160,7 +1160,7 @@ sha256 = "2e7601adcdb3a3451133183161fe097c6c3f5d6b7fda89db91b16a5e95ead603"
 package = "brynja-crypto-cpu-std"
 path = "src/strict_kmac/tests/native.rs"
 status = "protected-kmac-native-integration-tests"
-sha256 = "42a4277f89f6129fd802462446bc0b8e5ac0ba0fe83f97b413c5d3e0674e93f8"
+sha256 = "cc0900fd4a49cf863dfaac50940e84712863b26643f53c17802b079a5c42812b"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -1226,7 +1226,7 @@ sha256 = "dfcb09c9c518d44208609f6a30e97624ce367c3f14a1a2cab90f6c01db640367"
 package = "brynja-crypto-cpu-std"
 path = "src/strict_kmac/compiled.rs"
 status = "protected-compiled-kmac-session-development"
-sha256 = "d2b72a6a3b37be6738dbe4f9a94d65eddbbc676cee4a204e6fc9ef3aa7b3c3d1"
+sha256 = "7817812ebfaecd02e295b18f1a6f8568f28034040bee0ffaa7ebba74c82c006c"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -1244,7 +1244,7 @@ sha256 = "64e8608a7159dc68bb4c64385e73e7b92f29373162d921f58542d03823b565da"
 package = "brynja-crypto-cpu-std"
 path = "src/strict_kmac/compiled/tests/native.rs"
 status = "protected-compiled-kmac-native-tests"
-sha256 = "2ee87d8aa169b61541892779c4c67a013af8a08d8abf2dc9bc3a8bad70533275"
+sha256 = "729b57e22d86a6b1f4849a616e2d91e123840a6b98a6aef4298c90d4cf1973e5"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -1298,13 +1298,13 @@ sha256 = "3c6c9deae925a781e985c6e3eae699daf9f5f824a43821975b5d8b61b50c6288"
 package = "brynja-crypto-cpu-std"
 path = "src/windows_enclave/kmac/mod.rs"
 status = "windows-enclave-host-development"
-sha256 = "d7a3361b720b495eff0f9840b6423d631fde2bf2ca239222371c91510772e5c7"
+sha256 = "0af425656e212bc2c6ba82b2a22ce563822330746c02ee44f53587638426aa3c"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/windows_enclave/kmac/output.rs"
 status = "windows-enclave-host-development"
-sha256 = "b4aa2b017df418e82fea8f9bb8919ebb3dd0c3e380b0b77808bd283542de11cb"
+sha256 = "0149f4678032603b0d026f103cb057d09759a700d4e69393d874b9f7d37fc5e8"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -1316,7 +1316,7 @@ sha256 = "595aeaed3892fc634fd1ec8ad0cbc4e8905e12c0bd39b760254967aa88a8bbe3"
 package = "brynja-crypto-cpu-std"
 path = "src/windows_enclave/kmac/tests/native.rs"
 status = "windows-enclave-host-development"
-sha256 = "cc462c6b2e5fbdf261f2993cfcc9dd3a7973f3cadde20c74e6d86bc6a770c3a8"
+sha256 = "dc05874b848fc80fbc41af98fab975f27305f5c2955504fa96f35efb4f1be3a7"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -1328,7 +1328,7 @@ sha256 = "c6d72c2d9a49f82288b5aa39fea9727068b662b79fa7b26eb5b9ba3dac30047f"
 package = "brynja-crypto-cpu-std"
 path = "src/windows_enclave/kmac/tests.rs"
 status = "windows-enclave-host-development"
-sha256 = "04a57a0ba9dacbce678cc07e9b49b847d807697cc0bf73bae74af43c8940c26c"
+sha256 = "198e484250a2fece579acf3803d5d88ecdfac998da2c4d356b372df5afaf8144"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -1352,7 +1352,7 @@ sha256 = "6adb4ed18c49a9ef480bcb7d49ee896125344d5815ecf55fd51e5835b40882ef"
 package = "brynja-crypto-cpu-std"
 path = "src/windows_enclave/mod.rs"
 status = "windows-enclave-host-development"
-sha256 = "47e4a3f3af2b38081f0878c6eba59c8b2d726401f79e6537d3ce15269ede5769"
+sha256 = "a100b240a0420420927f6166854b171b20049d0f61c19e4d13ef392b5231024a"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -2132,13 +2132,13 @@ sha256 = "6156f2fdb441ad3274b6ce62aadf229648d9a680826af617971b2657c89d3209"
 package = "brynja-crypto-cpu-std"
 path = "src/macos_resident/kmac/mod.rs"
 status = "macos-resident-kmac-session-development"
-sha256 = "01490d0ccb9ae5174f94b17a079f65daaa0aece834b4f65f8f62370dcc39c19f"
+sha256 = "136dc006782ff58b595cf2c77e765ce191c41320fea41e536b6869ee08eeb688"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/macos_resident/kmac/types.rs"
 status = "macos-resident-kmac-api-types"
-sha256 = "d1273fb2a0a585ab84ac844d47a5000667f3382555286cdcdd1e926cffd7dc2b"
+sha256 = "31f11aec1b2eb74ac33337266020e77448cfa6fc6703d57ce9e36fcf7ec83503"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -2156,13 +2156,13 @@ sha256 = "8201dc135598fbf1d8180601b53c69380aba2965b1f62895a7efbb73bf302a7f"
 package = "brynja-crypto-cpu-std"
 path = "src/macos_resident/kmac/tests/native.rs"
 status = "macos-resident-kmac-native-tests"
-sha256 = "6508828d92df720d54c0842514f198e099d16351032a9f153eef9c75393530e4"
+sha256 = "ea336dae17e538edbc7b7e5413e28771a4998bc5ccae913a04237c814fd39a73"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
 path = "src/macos_resident/kmac/compiled.rs"
 status = "macos-resident-kmac-compiled-session-development"
-sha256 = "d9d51428cf5ef13757a4a54f6cf9584a8f0dbcce46911ba48fe7c28cfda97341"
+sha256 = "6f780cf7c37539ad13e1c595386415361607eade835d46cfdefbee43867972d9"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"
@@ -2180,7 +2180,7 @@ sha256 = "722af6ffe46cf53025a6afc5d7ee6fd5dfb48dd5beb7efff64a7b38e5eaaeef6"
 package = "brynja-crypto-cpu-std"
 path = "src/macos_resident/kmac/compiled/tests/native.rs"
 status = "macos-resident-kmac-compiled-native-tests"
-sha256 = "7814bf7c86c839a5004d4dc5014a13baf734d0b7c82e390e348a44f3780c7b88"
+sha256 = "a11c80fdaa2462e57389a2a47ac9248b904622f76cf63fe73110104adf7f7759"
 
 [[sources]]
 package = "brynja-crypto-cpu-std"

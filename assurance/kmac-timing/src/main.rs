@@ -57,6 +57,6 @@ fn measure(tag: &brynja_mac_kmac::KmacTag<'_>, candidate: &[u8]) -> u128 {
 
 fn run_batch(tag: &brynja_mac_kmac::KmacTag<'_>, candidate: &[u8]) {
     for _ in 0..REPETITIONS {
-        black_box(tag.verify_candidate(black_box(candidate)).expose_public());
+        black_box(tag.verify_candidate(black_box(candidate)).is_ok());
     }
 }

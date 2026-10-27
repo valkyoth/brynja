@@ -53,7 +53,8 @@ pub struct Retained<'a> {
 impl<'a> Retained<'a> {
     /// Compare the complete fixed tag inside the enclave and disclose only the
     /// public authentication decision. Both match and mismatch permit reuse.
-    pub fn verify(mut self, candidate: Bits<'_>) -> Result<bool, Error> {
+    /// Mismatch is `Err(Error::Mismatch)`, never a successful authentication.
+    pub fn verify(mut self, candidate: Bits<'_>) -> Result<(), Error> {
         if !self.loan.algorithm.fixed()
             || self.more
             || candidate.as_bytes().len() != self.width
@@ -61,9 +62,11 @@ impl<'a> Retained<'a> {
         {
             return Err(Error::Bounds);
         }
-        let result = self.loan.session.0.verify(self.loan.algorithm, candidate)?;
-        self.loan.active = false;
-        Ok(result)
+        let result = self.loan.session.0.verify(self.loan.algorithm, candidate);
+        if matches!(result, Ok(()) | Err(Error::Mismatch)) {
+            self.loan.active = false;
+        }
+        result
     }
     /// Use the exact retained bit string as the next full-strength key. Any old
     /// XOF reader is discarded. Customization is streamed; no key leaves enclave.

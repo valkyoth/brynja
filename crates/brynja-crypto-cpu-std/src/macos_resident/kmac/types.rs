@@ -95,6 +95,8 @@ pub struct Limits {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[non_exhaustive]
 pub enum Error {
+    /// The completed comparison did not authenticate the candidate; the session is reusable.
+    Mismatch,
     /// Required OS/target/thread protection failed.
     Resource(resident::Error),
     /// Invalid session configuration.
@@ -133,6 +135,7 @@ impl From<resident::Error> for Error {
 impl core::fmt::Display for Error {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         f.write_str(match self {
+            Self::Mismatch => "KMAC authentication mismatch",
             Self::Resource(_) => "resident KMAC resident resource failed",
             Self::InvalidLimits => "resident KMAC invalid limits",
             Self::WorkLimit => "resident KMAC work limit exceeded",

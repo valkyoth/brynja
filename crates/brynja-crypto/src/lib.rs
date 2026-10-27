@@ -146,8 +146,8 @@ pub use brynja_hash_tuple::{
 };
 pub use brynja_mac_kmac::{
     Kmac128, Kmac256, KmacError, KmacKeyPolicy, KmacPublicDeclassification, KmacSecretOutput,
-    KmacServiceStatus, KmacTag, KmacTagPolicy, KmacVerification, KmacXof128, KmacXof128Reader,
-    KmacXof256, KmacXof256Reader, kmac128, kmac128_bits, kmac256, kmac256_bits, kmacxof128_public,
+    KmacServiceStatus, KmacTag, KmacTagPolicy, KmacXof128, KmacXof128Reader, KmacXof256,
+    KmacXof256Reader, kmac128, kmac128_bits, kmac256, kmac256_bits, kmacxof128_public,
     kmacxof128_secret, kmacxof256_public, kmacxof256_secret,
 };
 

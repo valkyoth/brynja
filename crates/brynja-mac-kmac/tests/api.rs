@@ -151,7 +151,7 @@ fn domain_substitution_changes_outputs_and_fixed_is_not_xof_prefix() {
 fn verification_accepts_exact_tag_and_rejects_first_last_and_length_changes() {
     let mut output = [0_u8; 32];
     assert!(brynja_mac_kmac::kmac128(&KEY128, b"message", b"verify", &mut output).is_ok());
-    assert!(verify(&output));
+    assert_eq!(verify(&output), Ok(()));
     let mut first = output;
     if let Some(byte) = first.first_mut() {
         *byte ^= 1;
@@ -160,19 +160,19 @@ fn verification_accepts_exact_tag_and_rejects_first_last_and_length_changes() {
     if let Some(byte) = last.last_mut() {
         *byte ^= 1;
     }
-    assert!(!verify(&first));
-    assert!(!verify(&last));
-    assert!(!verify(output.get(..31).unwrap_or_default()));
+    assert_eq!(verify(&first), Err(brynja_mac_kmac::KmacError::Mismatch));
+    assert_eq!(verify(&last), Err(brynja_mac_kmac::KmacError::Mismatch));
+    assert_eq!(
+        verify(output.get(..31).unwrap_or_default()),
+        Err(brynja_mac_kmac::KmacError::Mismatch)
+    );
 }
 
-fn verify(candidate: &[u8]) -> bool {
-    Kmac128::new(&KEY128, b"verify")
-        .and_then(|mut state| {
-            state.update(b"message")?;
-            state.verify(candidate)
-        })
-        .map(|decision| decision.expose_public())
-        .unwrap_or(false)
+fn verify(candidate: &[u8]) -> Result<(), brynja_mac_kmac::KmacError> {
+    Kmac128::new(&KEY128, b"verify").and_then(|mut state| {
+        state.update(b"message")?;
+        state.verify(candidate)
+    })
 }
 
 #[test]

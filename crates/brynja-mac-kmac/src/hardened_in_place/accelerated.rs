@@ -43,7 +43,6 @@
 use super::core_state::{Core, Guard, Metadata, byte_valid, bytes};
 use crate::{
     Fips202BitString, KmacError, KmacKeyPolicy, KmacSecretOutput, KmacServiceStatus, KmacTag,
-    KmacVerification,
 };
 use brynja_hash_sha3::hardened_execution::{KeccakSession, Report, in_place as cshake};
 

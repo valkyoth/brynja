@@ -76,9 +76,8 @@ pub fn check(case: Case<'_>, selection: &Selection) -> Result<(), io::Error> {
                 .with_bits_conformance(case.key, case.custom, |state| {
                     state.verify_bits_conformance(case.message, candidate)
                 })
-                .map_err(invalid)?
                 .map_err(invalid)?;
-            if !verified.expose_public() {
+            if verified != Ok(()) {
                 return Err(invalid("verification mismatch"));
             }
             if !case.expected.is_empty() {
@@ -91,9 +90,8 @@ pub fn check(case: Case<'_>, selection: &Selection) -> Result<(), io::Error> {
                         .with_bits_conformance(case.key, case.custom, |state| {
                             state.verify_bits_conformance(case.message, candidate)
                         })
-                        .map_err(invalid)?
                         .map_err(invalid)?;
-                    if verified.expose_public() {
+                    if verified != Err(KmacError::Mismatch) {
                         return Err(invalid("wrong-tag verification mismatch"));
                     }
                 }

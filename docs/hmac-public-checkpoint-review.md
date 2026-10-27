@@ -1,6 +1,6 @@
 # v0.25.2 public checkpoint review handoff
 
-Status: focused reviews received; independent cumulative review and release
+Status: focused and cumulative reviews received; KMAC remediation retest and release
 qualification pending. This document is not a PASS report or permission to
 publish. The implementation was prepared from
 `697b5ec2adedda6c92eeb914c7f5baee92e6e655`. Use the full candidate commit ID
@@ -11,7 +11,10 @@ The owner-supplied Codex Daybreak and Claude reviews cover
 `v0.25.1..6313481f6ada011ad2b22f117a8230be3a4c9982` and report no Critical,
 High or Medium finding. The [ledger](../security/pentest/v0.25.2.md) records
 their exact scope, three non-blocking notes and the later author-tested
-documentation follow-up. They do not replace the full public-checkpoint review.
+documentation follow-up. The later cumulative assessments through `1a44b73f`
+identified a Medium KMAC mismatch-success issue and a Low portable exact-width
+gap. Their remediation is described in the ledger and requires a focused
+independent retest. The original cumulative report remains preserved locally.
 
 ## Two different review ranges
 
@@ -29,6 +32,16 @@ remain isolated from the separately selected legacy crates and unfinished
 protocol implementations must remain labelled as such.
 
 ## Immediate changes to review
+
+For the cumulative-review remediation, verify that **every public KMAC verify
+route** (including borrowed tags, conformance owners, scoped execution, protected,
+resident and retained enclave tags) rejects mismatch as an error. Exercise `?`
+and `.is_ok()` caller patterns, cleanup, repeated use after completed mismatch,
+terminal failures and no fallback. Check portable `verify_exact` and
+`verify_bits_exact` against an independently selected protocol width. Existing
+length-agile verification remains documented; it is not a fixed-width protocol
+policy. Legacy private offset fail-stop assertions retain their prior accepted
+scope, not a universal no-panic guarantee.
 
 1. **One modern tag policy.** `brynja-mac-hmac::validate_tag_policy` admits the
    algorithm before checking a key-independent tag width. Leaf, accelerated

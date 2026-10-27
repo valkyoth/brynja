@@ -184,7 +184,7 @@ assert!(session.is_err()); // no weaker memory fallback
 ```
 
 Use `compute(Request { key, chunks, tail }, &cancellation)` for chunks/final bits,
-or `verify` to release only a boolean decision. `Output::declassify` requires an
+or `verify` to authenticate with `Result<(), Error>` (mismatch is an error). `Output::declassify` requires an
 explicit `PublicDeclassification` acknowledgement. Original inputs and copies
 made through `Output::expose` are not protected by the session.
 

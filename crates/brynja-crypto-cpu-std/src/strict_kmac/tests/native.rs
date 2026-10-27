@@ -196,26 +196,32 @@ fn verification_is_exact_constant_work_and_clears_output() -> Result<(), Error> 
             .expose()
             .to_vec();
         session.fault = Fault::VerifyCompared(tag.len());
-        assert!(session.verify(
-            request(&[b"abc"]),
-            Bits {
-                bytes: &tag,
-                valid_bits: 3
-            },
-            &Cancellation::new()
-        )?);
+        assert_eq!(
+            session.verify(
+                request(&[b"abc"]),
+                Bits {
+                    bytes: &tag,
+                    valid_bits: 3
+                },
+                &Cancellation::new()
+            ),
+            Ok(())
+        );
         cleared(&session);
         for position in [0, 4095, 4096, tag.len().saturating_sub(1)] {
             let mut wrong = tag.clone();
             *wrong.get_mut(position).ok_or(Error::Invariant)? ^= 1;
-            assert!(!session.verify(
-                request(&[b"abc"]),
-                Bits {
-                    bytes: &wrong,
-                    valid_bits: 3
-                },
-                &Cancellation::new()
-            )?);
+            assert_eq!(
+                session.verify(
+                    request(&[b"abc"]),
+                    Bits {
+                        bytes: &wrong,
+                        valid_bits: 3
+                    },
+                    &Cancellation::new()
+                ),
+                Err(Error::Mismatch)
+            );
             cleared(&session);
         }
         let mut noncanonical = tag.clone();
@@ -368,14 +374,17 @@ fn actual_protection_and_explicit_public_release() -> Result<(), Error> {
             .authenticate(&[0x42; 32], b"abc", b"")?
             .declassify(&mut public, PublicDeclassification::acknowledge())?;
         cleared(&session);
-        assert!(session.verify(
-            request(&[b"abc"]),
-            Bits {
-                bytes: &public,
-                valid_bits: 1
-            },
-            &Cancellation::new()
-        )?);
+        assert_eq!(
+            session.verify(
+                request(&[b"abc"]),
+                Bits {
+                    bytes: &public,
+                    valid_bits: 1
+                },
+                &Cancellation::new()
+            ),
+            Ok(())
+        );
         cleared(&session);
     }
     for case in 0..4 {

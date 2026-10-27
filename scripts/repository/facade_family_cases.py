@@ -102,7 +102,7 @@ fn kmac_fixed_xof_and_full_strength_policy() {
             let mut actual = [0; 32];
             let expected = plain.finalize_tag(&mut expected).unwrap();
             let actual = selected.finalize_tag(&mut actual).unwrap();
-            assert!(actual.verify_candidate(expected.as_bytes()).expose_public());
+            assert_eq!(actual.verify_candidate(expected.as_bytes()), Ok(()));
             assert!(run::$state::new(run::Mode::Portable, &[0; 1], b"").is_err());
             assert!(run::$state::new(run::Mode::Require(None), &key, b"").is_err());
         }};

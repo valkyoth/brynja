@@ -2,7 +2,6 @@ use super::core_state::{Core, Guard, Metadata, byte_valid, bytes};
 use crate::policy::StrengthPolicy;
 use crate::{
     Fips202BitString, KmacError, KmacKeyPolicy, KmacSecretOutput, KmacServiceStatus, KmacTag,
-    KmacVerification,
 };
 use brynja_hash_sha3::hardened_in_place as cshake;
 
@@ -163,18 +162,24 @@ macro_rules! fixed {
             }
             /// Verifies at the candidate's public length. Use verify_exact when
             /// the application mandates one exact tag length.
-            pub fn verify(self, candidate: &[u8]) -> Result<KmacVerification, KmacError> {
+            ///
+            /// # Errors
+            /// Reject on `Mismatch` or any other error; never retry through a weaker route.
+            pub fn verify(self, candidate: &[u8]) -> Result<(), KmacError> {
                 self.core
-                    .verify(None, bytes(candidate)?, None, $strength, StrengthPolicy::Production)
+                    .verify(None, bytes(candidate)?, None, $strength, StrengthPolicy::Production)?.into_result()
             }
             /// Verifies a canonical-bit tag after final message bits.
+            ///
+            /// # Errors
+            /// Reject on `Mismatch` or any other error; never retry through a weaker route.
             pub fn verify_bits(
                 self,
                 input: Fips202BitString<'_>,
                 candidate: Fips202BitString<'_>,
-            ) -> Result<KmacVerification, KmacError> {
+            ) -> Result<(), KmacError> {
                 self.core
-                    .verify(Some(input), candidate, None, $strength, StrengthPolicy::Production)
+                    .verify(Some(input), candidate, None, $strength, StrengthPolicy::Production)?.into_result()
             }
             /// Binds verification to an application-specified public bit length.
             pub fn verify_exact(
@@ -182,9 +187,9 @@ macro_rules! fixed {
                 input: Fips202BitString<'_>,
                 candidate: Fips202BitString<'_>,
                 expected_bits: u128,
-            ) -> Result<KmacVerification, KmacError> {
+            ) -> Result<(), KmacError> {
                 self.core
-                    .verify(Some(input), candidate, Some(expected_bits), $strength, StrengthPolicy::Production)
+                    .verify(Some(input), candidate, Some(expected_bits), $strength, StrengthPolicy::Production)?.into_result()
             }
             conformance_api! { $profile;
             /// Produces a standards-valid public tag, even below production strength.
@@ -236,24 +241,30 @@ macro_rules! fixed {
             conformance_api! { $profile;
             /// Exact-conformance byte verification, including weak tag lengths.
             #[cfg(feature = "conformance-testing")]
+            ///
+            /// # Errors
+            /// Reject on `Mismatch` or any other error; never retry through a weaker route.
             pub fn verify_conformance(
                 self,
                 candidate: &[u8],
-            ) -> Result<KmacVerification, KmacError> {
+            ) -> Result<(), KmacError> {
                 self.core
-                    .verify(None, bytes(candidate)?, None, $strength, StrengthPolicy::Conformance)
+                    .verify(None, bytes(candidate)?, None, $strength, StrengthPolicy::Conformance)?.into_result()
             }
             }
             conformance_api! { $profile;
             /// Exact-conformance canonical-bit verification.
             #[cfg(feature = "conformance-testing")]
+            ///
+            /// # Errors
+            /// Reject on `Mismatch` or any other error; never retry through a weaker route.
             pub fn verify_bits_conformance(
                 self,
                 input: Fips202BitString<'_>,
                 candidate: Fips202BitString<'_>,
-            ) -> Result<KmacVerification, KmacError> {
+            ) -> Result<(), KmacError> {
                 self.core
-                    .verify(Some(input), candidate, None, $strength, StrengthPolicy::Conformance)
+                    .verify(Some(input), candidate, None, $strength, StrengthPolicy::Conformance)?.into_result()
             }
             }
             /// Consumes and clears without producing output.

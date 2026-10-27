@@ -50,13 +50,12 @@ macro_rules! profile {
                         }
                         let candidate = Fips202BitString::new(expected, valid)
                             .map_err(|_| io::Error::other("scoped candidate shape"))?;
-                        if !workspace
+                        if workspace
                             .$with_bits_conformance(key, custom, |state| {
                                 state.$verify_bits_conformance(message, candidate)
                             })
                             .and_then(core::convert::identity)
-                            .map_err(|_| io::Error::other("scoped verification failed"))?
-                            .expose_public()
+                            != Ok(())
                         {
                             return Err(
                                 io::Error::other("scoped oracle verification rejected").into()
@@ -72,9 +71,8 @@ macro_rules! profile {
                                     .$with_bits_conformance(key, custom, |state| {
                                         state.$verify_bits_conformance(message, candidate)
                                     })
-                                    .and_then(core::convert::identity)
-                                    .map_err(|_| io::Error::other("scoped verification failed"))?;
-                                if verified.expose_public() {
+                                    .and_then(core::convert::identity);
+                                if verified != Err(brynja_mac_kmac::KmacError::Mismatch) {
                                     return Err(
                                         io::Error::other("scoped wrong-tag mismatch").into()
                                     );

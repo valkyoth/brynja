@@ -37,6 +37,15 @@ are not rewritten to claim that the new caller code was previously qualified.
 
 ## Authoritative verification results
 
+The cumulative review also identified KMAC routes returning successful false
+decisions. The remediation extends mismatch-as-error to portable, selectable,
+scoped, protected/resident and Windows enclave KMAC, including borrowed tag
+comparison. The public `KmacVerification` type is removed; use `Result<(), Error>`
+and reject all errors. Portable `verify_exact`/`verify_bits_exact` bind a
+protocol-selected width before output generation. Completed mismatches remain
+reusable after existing cleanup; backend errors never authorize fallback. This
+changes pre-publication APIs and requires independent retest.
+
 Modern portable, static/runtime and protected/resident HMAC verification now
 returns `Result<(), Error>`. Only a matching authenticator is `Ok(())`; a
 completed mismatch is `Error::Mismatch`. The old boolean `Verification` wrapper

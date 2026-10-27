@@ -30,7 +30,44 @@ def package(destination, env):
     (consumer / 'Cargo.toml').write_text(manifest)
     (consumer / 'tests').mkdir(exist_ok=True)
     shutil.copyfile(ROOT / 'crates/brynja-mac-kmac/tests/execution.rs', consumer / 'tests/execution.rs')
+    shutil.copyfile(ROOT / 'crates/brynja-mac-kmac/tests/verification_errors.rs',
+                    consumer / 'tests/verification_errors.rs')
     return consumer, roots
+
+
+def verification_errors(consumer, roots, env):
+    """Compile and execute the public error/width contract against extracted sources."""
+    command = ['cargo', 'test', '--offline', '--features', 'hardened-execution',
+               '--test', 'verification_errors']
+    def run(profile, success):
+        result = shared.run([*command, *profile], consumer, env, success)
+        if success:
+            expected = 'test result: ok. 4 passed; 0 failed; 0 ignored;'
+            if expected not in result.stdout:
+                raise ValueError('KMAC verification positive population incomplete')
+        elif (result.returncode == 0 or 'test result: FAILED.' not in result.stdout
+              or 'could not compile' in result.stderr):
+            raise ValueError('KMAC verification mutant did not execute/fail: ' + result.stderr)
+
+    for profile in ([], ['--release']):
+        run(profile, True)
+    cases = (
+        ('output.rs', 'if self.expose_public() {', 'if true {'),
+        ('fixed.rs', 'if bits != expected_bits {', 'if false {'),
+        ('fixed.rs', '!= expected_bits\n', '!= expected_bits && false\n'),
+    )
+    for name, before, after in cases:
+        path = roots['brynja-mac-kmac'] / 'src' / name
+        original = path.read_text()
+        if original.count(before) != 1:
+            raise ValueError('ambiguous KMAC verification mutation: ' + before)
+        try:
+            path.write_text(original.replace(before, after))
+            for profile in ([], ['--release']):
+                run(profile, False)
+        finally:
+            path.write_text(original)
+    print('Packaged KMAC mismatch/exact-width mutants: PASS; rejected=6', flush=True)
 
 
 def negatives(consumer, env):
@@ -242,6 +279,8 @@ def main():
     native = parser.add_mutually_exclusive_group()
     native.add_argument('--native-x86', action='store_true')
     native.add_argument('--native-arm', action='store_true')
+    parser.add_argument('--verification-only', action='store_true',
+                        help='Run only extracted verification controls and compiled mutants')
     args = parser.parse_args()
     native_env = None
     if args.native_x86 or args.native_arm:
@@ -251,6 +290,9 @@ def main():
         destination = Path(directory)
         env = dict(os.environ, CARGO_TARGET_DIR=str(destination / 'target'))
         consumer, roots = package(destination, env)
+        verification_errors(consumer, roots, env)
+        if args.verification_only:
+            return
         guide = (ROOT / 'docs/kmac-accelerated-execution.md').read_text()
         example = guide.split('```rust\n', 1)[1].split('```', 1)[0]
         (consumer / 'examples').mkdir()

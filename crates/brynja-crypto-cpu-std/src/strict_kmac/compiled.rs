@@ -137,14 +137,19 @@ impl CompiledSession {
     /// Same full-strength, exact-bit-width policy as [`Session::verify`]. Equal-width
     /// canonical comparison has no content-dependent exit. All computed output is
     /// cleared even on success/mismatch; a mismatch does not quarantine the session.
+    /// Returns `Err(Error::Mismatch)` after cleanup for a completed mismatch.
+    /// Reject the request on any error; never retry through a weaker route.
     pub fn verify(
         &mut self,
         request: Request<'_>,
         candidate: Bits<'_>,
         cancel: &Cancellation,
-    ) -> Result<bool, Error> {
-        self.execute(request, Some(candidate), cancel)?
-            .ok_or(Error::Invariant)
+    ) -> Result<(), Error> {
+        match self.execute(request, Some(candidate), cancel)? {
+            Some(true) => Ok(()),
+            Some(false) => Err(Error::Mismatch),
+            None => Err(Error::Invariant),
+        }
     }
     fn execute(
         &mut self,

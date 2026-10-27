@@ -132,11 +132,14 @@ fn verification_full_width_first_middle_last_mismatches_and_cleanup() -> Result<
                     .compute(request(&key, chunks), &Cancellation::new())?
                     .expose()
                     .to_vec();
-                assert!(cpu.verify(
-                    request(&key, chunks),
-                    tag(&expected, valid(bits)?),
-                    &Cancellation::new()
-                )?);
+                assert_eq!(
+                    cpu.verify(
+                        request(&key, chunks),
+                        tag(&expected, valid(bits)?),
+                        &Cancellation::new()
+                    ),
+                    Ok(())
+                );
                 cleared(&cpu);
                 for index in [
                     0,
@@ -145,19 +148,25 @@ fn verification_full_width_first_middle_last_mismatches_and_cleanup() -> Result<
                 ] {
                     let mut wrong = expected.clone();
                     *wrong.get_mut(index).ok_or(Error::Invariant)? ^= 1;
-                    assert!(!cpu.verify(
-                        request(&key, chunks),
-                        tag(&wrong, valid(bits)?),
-                        &Cancellation::new()
-                    )?);
+                    assert_eq!(
+                        cpu.verify(
+                            request(&key, chunks),
+                            tag(&wrong, valid(bits)?),
+                            &Cancellation::new()
+                        ),
+                        Err(Error::Mismatch)
+                    );
                     cleared(&cpu);
                     assert!(!cpu.is_quarantined());
                 }
-                assert!(cpu.verify(
-                    request(&key, chunks),
-                    tag(&expected, valid(bits)?),
-                    &Cancellation::new()
-                )?);
+                assert_eq!(
+                    cpu.verify(
+                        request(&key, chunks),
+                        tag(&expected, valid(bits)?),
+                        &Cancellation::new()
+                    ),
+                    Ok(())
+                );
                 cleared(&cpu);
                 if bits > 32768 {
                     cpu.fault = Fault::CancelDuringComparison;
@@ -172,11 +181,14 @@ fn verification_full_width_first_middle_last_mismatches_and_cleanup() -> Result<
                     cleared(&cpu);
                     assert!(!cpu.is_quarantined());
                     cpu.fault = Fault::None;
-                    assert!(cpu.verify(
-                        request(&key, chunks),
-                        tag(&expected, valid(bits)?),
-                        &Cancellation::new()
-                    )?);
+                    assert_eq!(
+                        cpu.verify(
+                            request(&key, chunks),
+                            tag(&expected, valid(bits)?),
+                            &Cancellation::new()
+                        ),
+                        Ok(())
+                    );
                 }
             }
         }

@@ -23,6 +23,7 @@ SOURCES = tuple(CRATE / "src" / name for name in (
     "hardened_in_place/accelerated/xof.rs",
 ))
 TESTS = (CRATE / "tests/api.rs", CRATE / "tests/official_vectors.rs",
+         CRATE / "tests/verification_errors.rs",
          CRATE / "src/setup/tests.rs", CRATE / "src/setup/engine/tests.rs",
          CRATE / "src/packer/framing_tests.rs",
          CRATE / "src/hardened_in_place/tests.rs",
@@ -256,7 +257,7 @@ def validate(root: Path) -> None:
     output = loaded[CRATE / "src/output.rs"]
     for token in (
         "pub struct KmacTag", "pub struct KmacSecretOutput",
-        "pub struct KmacVerification", "ct_eq", "clear_owned_region",
+        "pub(crate) struct KmacVerification", "Err(crate::KmacError::Mismatch)", "ct_eq", "clear_owned_region",
         "brynja_core::accumulate_secret_byte_difference(&mut self.value[0], left, right);",
         "brynja_core::secret_difference_is_zero(&self.value[0])",
     ):

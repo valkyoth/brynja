@@ -156,14 +156,19 @@ impl Session {
     /// Verification requires full-strength output even for XOF sessions. For
     /// canonical equal-width candidates, comparison has no content-dependent exit.
     /// Malformed/public lengths may reject early. Computed output is always cleared.
+    /// Returns `Err(Error::Mismatch)` after cleanup for a completed mismatch.
+    /// Reject the request on any error; never retry through a weaker route.
     pub fn verify(
         &mut self,
         request: Request<'_>,
         candidate: Bits<'_>,
         cancel: &Cancellation,
-    ) -> Result<bool, Error> {
-        self.execute(request, Some(candidate), cancel)?
-            .ok_or(Error::Invariant)
+    ) -> Result<(), Error> {
+        match self.execute(request, Some(candidate), cancel)? {
+            Some(true) => Ok(()),
+            Some(false) => Err(Error::Mismatch),
+            None => Err(Error::Invariant),
+        }
     }
     fn execute(
         &mut self,

@@ -73,16 +73,21 @@ fn borrowed_verification_rejects_equal_mismatches_across_chunks() -> Result<(), 
                             .map_err(|_| KmacError::InvalidBitString)?;
                         assert_eq!(
                             crate::conformance::$name::new_bits_conformance(key, empty)?
-                                .verify_bits_conformance(empty, candidate)?
-                                .expose_public(),
-                            !mismatch
+                                .verify_bits_conformance(empty, candidate),
+                            if mismatch {
+                                Err(KmacError::Mismatch)
+                            } else {
+                                Ok(())
+                            }
                         );
                         assert_eq!(
-                            workspace
-                                .with_bits_conformance(key, empty, |state| state
-                                    .verify_bits_conformance(empty, candidate))??
-                                .expose_public(),
-                            !mismatch
+                            workspace.with_bits_conformance(key, empty, |state| state
+                                .verify_bits_conformance(empty, candidate))?,
+                            if mismatch {
+                                Err(KmacError::Mismatch)
+                            } else {
+                                Ok(())
+                            }
                         );
                         assert!(workspace.metadata_cleared());
                         #[cfg(feature = "hardened-execution")]
@@ -92,9 +97,12 @@ fn borrowed_verification_rejects_equal_mismatches_across_chunks() -> Result<(), 
                                 key,
                                 empty
                             )?
-                            .verify_bits_conformance(empty, candidate)?
-                            .expose_public(),
-                            !mismatch
+                            .verify_bits_conformance(empty, candidate),
+                            if mismatch {
+                                Err(KmacError::Mismatch)
+                            } else {
+                                Ok(())
+                            }
                         );
                     }
                 }
@@ -164,10 +172,10 @@ macro_rules! lifecycle {
         if miri_take($selected, &mut $visited, &mut $executed)? {
         let mut tag = [0; 65];
         let _ = workspace.with(&key, b"", |state| state.finalize_tag(&mut tag))??;
-        assert!(workspace.with(&key, b"", |state| state.verify(&tag))??.expose_public());
+        assert_eq!(workspace.with(&key, b"", |state| state.verify(&tag))?, Ok(()));
         for index in [0, 32, 64] {
             let byte = tag.get_mut(index).ok_or(KmacError::InvalidBitString)?; *byte ^= 1;
-            assert!(!workspace.with(&key, b"", |state| state.verify(&tag))??.expose_public());
+            assert_eq!(workspace.with(&key, b"", |state| state.verify(&tag))?, Err(KmacError::Mismatch));
             let byte = tag.get_mut(index).ok_or(KmacError::InvalidBitString)?; *byte ^= 1;
             assert!(workspace.metadata_cleared());
         }
@@ -220,7 +228,7 @@ fn scoped_all_bit_domains_match_existing_portable_api() -> Result<(), KmacError>
                         })??;
                         assert_eq!(output, expected);
                         let candidate = Fips202BitString::new(&output, output_valid).map_err(|_| KmacError::InvalidBitString)?;
-                        assert!(workspace.with_bits_conformance(key, custom, |state| state.verify_bits_conformance(input, candidate))??.expose_public());
+                        assert_eq!(workspace.with_bits_conformance(key, custom, |state| state.verify_bits_conformance(input, candidate))?, Ok(()));
                     }
                 }
             }

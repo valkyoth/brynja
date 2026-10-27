@@ -144,7 +144,7 @@ impl<T: Channel> Owner<T> {
         self.chunks(43, key)?;
         self.simple(44)
     }
-    fn verify(&mut self, algorithm: Algorithm, candidate: Bits<'_>) -> Result<bool, Error> {
+    fn verify(&mut self, algorithm: Algorithm, candidate: Bits<'_>) -> Result<(), Error> {
         let mut decision = [0xa5];
         self.issue(
             Request {
@@ -159,11 +159,11 @@ impl<T: Channel> Owner<T> {
         match decision {
             [0] => {
                 self.state = State::Ready;
-                Ok(false)
+                Err(Error::Mismatch)
             }
             [1] => {
                 self.state = State::Ready;
-                Ok(true)
+                Ok(())
             }
             _ => {
                 self.state = State::Quarantined;

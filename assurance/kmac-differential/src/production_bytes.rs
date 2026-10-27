@@ -54,11 +54,7 @@ pub(crate) fn check(
             }
             let mut verifier = $state::new(key, custom).map_err(|_| failure())?;
             verifier.update(message).map_err(|_| failure())?;
-            if !verifier
-                .verify(expected)
-                .map_err(|_| failure())?
-                .expose_public()
-            {
+            if verifier.verify(expected) != Ok(()) {
                 return Err(failure());
             }
             for position in [0, expected.len().checked_sub(1).ok_or_else(failure)?] {
@@ -66,11 +62,7 @@ pub(crate) fn check(
                 *bad.get_mut(position).ok_or_else(failure)? ^= 1;
                 let mut verifier = $state::new(key, custom).map_err(|_| failure())?;
                 verifier.update(message).map_err(|_| failure())?;
-                if verifier
-                    .verify(&bad)
-                    .map_err(|_| failure())?
-                    .expose_public()
-                {
+                if verifier.verify(&bad) != Err(KmacError::Mismatch) {
                     return Err(failure());
                 }
             }
@@ -91,9 +83,8 @@ pub(crate) fn check(
                     state.update(message)?;
                     state.verify(expected)
                 })
-                .and_then(core::convert::identity)
-                .map_err(|_| failure())?;
-            if !verified.expose_public() {
+                .and_then(core::convert::identity);
+            if verified != Ok(()) {
                 return Err(failure());
             }
             for position in [0, expected.len().checked_sub(1).ok_or_else(failure)?] {
@@ -104,9 +95,8 @@ pub(crate) fn check(
                         state.update(message)?;
                         state.verify(&bad)
                     })
-                    .and_then(core::convert::identity)
-                    .map_err(|_| failure())?;
-                if rejected.expose_public() {
+                    .and_then(core::convert::identity);
+                if rejected != Err(KmacError::Mismatch) {
                     return Err(failure());
                 }
             }

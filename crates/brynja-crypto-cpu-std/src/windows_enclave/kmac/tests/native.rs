@@ -129,15 +129,17 @@ pub(super) fn campaign(
                 assert_eq!(actual.as_slice(), expected.as_slice());
                 assert_eq!(session.state(), State::Ready);
                 if algorithm.fixed() {
-                    assert!(
+                    assert_eq!(
                         retain(session.stream(algorithm, key, custom)?, input, width, last)?
-                            .verify(bits(&expected, last)?)?
+                            .verify(bits(&expected, last)?),
+                        Ok(())
                     );
                     let mut bad = expected;
                     *bad.first_mut().ok_or(Error::Bounds)? ^= 1;
-                    assert!(
-                        !retain(session.stream(algorithm, key, custom)?, input, width, last)?
-                            .verify(bits(&bad, last)?)?
+                    assert_eq!(
+                        retain(session.stream(algorithm, key, custom)?, input, width, last)?
+                            .verify(bits(&bad, last)?),
+                        Err(Error::Mismatch)
                     );
                     assert_eq!(session.state(), State::Ready);
                 }

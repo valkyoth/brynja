@@ -60,8 +60,9 @@ impl<'tag> KmacTag<'tag> {
     }
 
     /// Compares another same-purpose byte tag without content-dependent exit.
-    pub fn verify_candidate(&self, candidate: &[u8]) -> KmacVerification {
-        compare_bytes(self.bytes, candidate)
+    /// Returns `Err(KmacError::Mismatch)` on mismatch; `?` never accepts a forgery.
+    pub fn verify_candidate(&self, candidate: &[u8]) -> Result<(), crate::KmacError> {
+        compare_bytes(self.bytes, candidate).into_result()
     }
 }
 
@@ -85,7 +86,7 @@ impl<'output> KmacSecretOutput<'output> {
 
 /// Opaque result of one constant-time KMAC verification.
 #[must_use = "the verification decision must be explicitly declassified"]
-pub struct KmacVerification {
+pub(crate) struct KmacVerification {
     choice: Choice,
 }
 
@@ -96,8 +97,16 @@ impl KmacVerification {
 
     /// Declassifies the final authentication decision.
     #[must_use]
-    pub const fn expose_public(self) -> bool {
+    pub(crate) const fn expose_public(self) -> bool {
         self.choice.expose_public()
+    }
+
+    pub(crate) fn into_result(self) -> Result<(), crate::KmacError> {
+        if self.expose_public() {
+            Ok(())
+        } else {
+            Err(crate::KmacError::Mismatch)
+        }
     }
 }
 

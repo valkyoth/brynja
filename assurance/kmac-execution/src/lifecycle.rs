@@ -66,11 +66,10 @@ pub fn check(case: Case<'_>, selection: &Selection) -> Result<(), io::Error> {
             }
             drop(secret);
             let candidate = Fips202BitString::new(expected, valid).map_err(fail)?;
-            if !api::$name::new_bits_conformance(selection.mode()?, key, custom)
+            if api::$name::new_bits_conformance(selection.mode()?, key, custom)
                 .map_err(fail)?
                 .verify_bits_conformance(message, candidate)
-                .map_err(fail)?
-                .expose_public()
+                != Ok(())
             {
                 return Err(fail("correct tag rejected"));
             }
@@ -82,8 +81,7 @@ pub fn check(case: Case<'_>, selection: &Selection) -> Result<(), io::Error> {
                     if api::$name::new_bits_conformance(selection.mode()?, key, custom)
                         .map_err(fail)?
                         .verify_bits_conformance(message, candidate)
-                        .map_err(fail)?
-                        .expose_public()
+                        != Err(brynja_mac_kmac::KmacError::Mismatch)
                     {
                         return Err(fail("incorrect tag accepted: mismatch"));
                     }

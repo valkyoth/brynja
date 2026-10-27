@@ -136,18 +136,16 @@ macro_rules! lifecycle {
                 state.update(b"secret message")?;
                 state.verify(&expected)
             })
-            .map_err(bad)?
             .map_err(bad)?;
-        assert!(yes.expose_public());
+        assert_eq!(yes, Ok(()));
         expected[0] ^= 1;
         let no = workspace
             .with(&key, b"domain", |mut state| {
                 state.update(b"secret message")?;
                 state.verify(&expected)
             })
-            .map_err(bad)?
             .map_err(bad)?;
-        assert!(!no.expose_public());
+        assert_eq!(no, Err(KmacError::Mismatch));
     }};
 }
 #[test]

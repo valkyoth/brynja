@@ -4,6 +4,8 @@ use brynja_hash_sha3::HardenedSha3Error;
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[non_exhaustive]
 pub enum KmacError {
+    /// The completed constant-time comparison did not authenticate the candidate.
+    Mismatch,
     /// The embedded hardened construction was irreversibly finalized or wiped.
     StateConsumed,
     /// The production constructor requires a key at least as long as the

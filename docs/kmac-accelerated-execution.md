@@ -50,6 +50,13 @@ tags and typed-secret finalizers, cancellation and constant-work verification.
 Callers must bound candidate lengths; `verify` uses the candidate length as the
 SP 800-185 output domain, not as truncation of a longer tag.
 
+All public verification routes return `Result<(), Error>`: `Ok(())` authenticates,
+and a completed mismatch is `Error::Mismatch`. Reject on any error; never retry
+through a weaker route. Hosted sessions restore reusable health only after their
+existing cleanup/receipt checks, before reporting a completed mismatch. Protocol
+failed-attempt limits remain the caller's responsibility. Portable fixed KMAC
+also offers `verify_exact` and `verify_bits_exact` for a protocol-selected width.
+
 `KmacXof128/256` finalize into an exclusively borrowed `Reader` for incremental
 public/secret output, mixed reads and consuming final-bit output. Reader Drop
 clears the original inline source; forgetting a reader cannot reopen absorption.

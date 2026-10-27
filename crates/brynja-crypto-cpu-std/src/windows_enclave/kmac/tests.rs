@@ -171,7 +171,14 @@ fn verification_decisions_fail_closed_on_invalid_or_failed_receipts() -> Result<
         o.transport.decision = decision;
         let result = o.verify(Algorithm::Kmac128, bits(&[0; 32], 8)?);
         if decision <= 1 {
-            assert_eq!(result, Ok(decision == 1));
+            assert_eq!(
+                result,
+                if decision == 1 {
+                    Ok(())
+                } else {
+                    Err(Error::Mismatch)
+                }
+            );
             assert_eq!(o.state, State::Ready);
         } else {
             assert_eq!(result, Err(Error::Protocol));

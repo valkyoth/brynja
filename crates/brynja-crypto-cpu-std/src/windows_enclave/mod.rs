@@ -262,6 +262,8 @@ pub enum State {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[non_exhaustive]
 pub enum Error {
+    /// A completed authentication comparison rejected the candidate.
+    Mismatch,
     /// Native Windows x64 VBS support is required.
     Unsupported,
     /// Invalid bounded location, artifact, policy or request size.

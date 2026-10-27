@@ -198,15 +198,13 @@ fn verification_rejects_content_length_and_domain_substitution() -> Result<(), K
     let key = [0x42; 32];
     let mut tag = [0; 32];
     let _tag = cpu::Kmac128::new(cpu::Mode::Portable, &key, b"domain")?.finalize_tag(&mut tag)?;
-    assert!(
-        cpu::Kmac128::new(cpu::Mode::Portable, &key, b"domain")?
-            .verify(&tag)?
-            .expose_public()
+    assert_eq!(
+        cpu::Kmac128::new(cpu::Mode::Portable, &key, b"domain")?.verify(&tag),
+        Ok(())
     );
-    assert!(
-        !cpu::Kmac128::new(cpu::Mode::Portable, &key, b"other")?
-            .verify(&tag)?
-            .expose_public()
+    assert_eq!(
+        cpu::Kmac128::new(cpu::Mode::Portable, &key, b"other")?.verify(&tag),
+        Err(KmacError::Mismatch)
     );
     let candidate = Fips202BitString::new(&tag, 8).map_err(|_| KmacError::InvalidBitString)?;
     assert!(
@@ -215,17 +213,15 @@ fn verification_rejects_content_length_and_domain_substitution() -> Result<(), K
             .is_err()
     );
     tag[0] ^= 1;
-    assert!(
-        !cpu::Kmac128::new(cpu::Mode::Portable, &key, b"domain")?
-            .verify(&tag)?
-            .expose_public()
+    assert_eq!(
+        cpu::Kmac128::new(cpu::Mode::Portable, &key, b"domain")?.verify(&tag),
+        Err(KmacError::Mismatch)
     );
     tag[0] ^= 1;
     tag[31] ^= 1;
-    assert!(
-        !cpu::Kmac128::new(cpu::Mode::Portable, &key, b"domain")?
-            .verify(&tag)?
-            .expose_public()
+    assert_eq!(
+        cpu::Kmac128::new(cpu::Mode::Portable, &key, b"domain")?.verify(&tag),
+        Err(KmacError::Mismatch)
     );
     Ok(())
 }

@@ -66,8 +66,18 @@ let mut mac = Kmac128::new(&key, b"example protocol").unwrap();
 mac.update(b"authenticated message").unwrap();
 let mut tag_bytes = [0; 32];
 let tag = mac.finalize_tag(&mut tag_bytes).unwrap();
-assert!(tag.verify_candidate(tag.as_bytes()).expose_public());
+assert_eq!(tag.verify_candidate(tag.as_bytes()), Ok(()));
 ```
+
+Verification succeeds only as `Ok(())`; a completed wrong-tag comparison returns
+`KmacError::Mismatch`. Propagate errors and reject the request—never fall back to
+a weaker route. Failed-attempt limits remain the protocol's responsibility.
+Portable `verify` and `verify_bits` are length-agile: KMAC binds the candidate's
+length into its computation. Bound that public length, or prefer `verify_exact`
+and `verify_bits_exact` with a protocol-selected width independent of the supplied
+tag. These reject a width mismatch before output generation. Hosted sessions bind
+the width at construction. This pre-publication change removes the old opaque
+verification decision from the public API.
 
 Keep derived output secret rather than implicitly converting it to public bytes:
 

@@ -4,24 +4,24 @@
   "owner_review": "accepted-correctness-with-residuals",
   "lanes": {
     "amd-x86_64": {
-      "artifact": "assurance/md5-execution-observations/v0.24.43/amd-x86_64-v0251.json",
-      "sha256": "b8f6b22672029da66f2c5db4692e37cb71761590cef4412379ff680ab24b63b0",
-      "commit": "10d7566ce906a626714e360de98c06c867dc35a0"
+      "artifact": "assurance/md5-execution-observations/v0.24.43/amd-x86_64-v0251-final.json",
+      "sha256": "6a41f7b9417f36c7bfb33c1bb97dc249c4dba600c74d178bf72b380049272232",
+      "commit": "542d7268c48d792c9ff784cae6d81a3dfaf5de30"
     },
     "intel-x86_64": {
-      "artifact": "assurance/md5-execution-observations/v0.24.43/intel-x86_64-v0251.json",
-      "sha256": "76efe517f1fa2cbe4889671617087fda6bd1be71c04cc1b7ac66821b10f96f36",
-      "commit": "10d7566ce906a626714e360de98c06c867dc35a0"
+      "artifact": "assurance/md5-execution-observations/v0.24.43/intel-x86_64-v0251-final.json",
+      "sha256": "9e2712c9200e19a4b8365ab196cae73f78534abe7d362ced62e53c10a240a07f",
+      "commit": "542d7268c48d792c9ff784cae6d81a3dfaf5de30"
     },
     "aws-aarch64": {
-      "artifact": "assurance/md5-execution-observations/v0.24.43/aws-aarch64-v0251.json",
-      "sha256": "5336047f2fcf27508fc9fc0bceae51a6e0f903ac90faf51e919d2b749d1c9b49",
-      "commit": "10d7566ce906a626714e360de98c06c867dc35a0"
+      "artifact": "assurance/md5-execution-observations/v0.24.43/aws-aarch64-v0251-final.json",
+      "sha256": "8eba31c0c03278bdbbd2251ad008a851758e08c29665528b0aba64f2aeb05570",
+      "commit": "542d7268c48d792c9ff784cae6d81a3dfaf5de30"
     },
     "apple-m2-aarch64": {
-      "artifact": "assurance/md5-execution-observations/v0.24.43/apple-m2-aarch64-v0251.json",
-      "sha256": "433373496789a3b65bcc543258b41a091550abbede18ff64cf026395dfe39c97",
-      "commit": "10d7566ce906a626714e360de98c06c867dc35a0"
+      "artifact": "assurance/md5-execution-observations/v0.24.43/apple-m2-aarch64-v0251-final.json",
+      "sha256": "0cad21174ef8082e14079d8829274fb79b28480e746b6d3620802e325cd7903b",
+      "commit": "542d7268c48d792c9ff784cae6d81a3dfaf5de30"
     }
   }
 }

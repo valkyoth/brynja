@@ -2625,11 +2625,16 @@ the implemented scope, failure-path checks and existing limitations for review.
 
 ## Outstanding before release
 
-- Complete the independent review disposition for the legacy-HMAC scope; the
-  implementation and bounded author-check handoff are ready for review, not
-  independently qualified.
+- The owner-supplied independent retests are recorded as PASS in the
+  [pentest record](../security/pentest/v0.25.1.md). This does not imply
+  independent native qualification or certification.
+- Approve the refreshed MD5 native-evidence snapshot through the existing
+  external digest boundary. All four platform lanes have ordinary/hardened
+  captures with unchanged current inputs; historical observations are preserved.
 - Run the affected release checks using the existing reuse rules, then GitHub and
-  separately authorized tagging. This includes any required remaining native
-  lane/receipt collection; development runs are not detached receipts.
+  separately authorized tagging. The completed local recovery and merged AWS
+  Miri receipts are saved; final planning still requires eleven short
+  legacy-HMAC Miri tasks and current repository checks. No full sweep is claimed
+  for a later checkout solely because these historical receipts passed.
 
 No crates.io publication or release tag is authorized by this work-in-progress.

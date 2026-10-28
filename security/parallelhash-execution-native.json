@@ -1,22 +1,22 @@
 {
   "schema": 1,
-  "capture_commit": "1f8f4e1527f9e91b1b1d26b61b8cfc95339ca835",
+  "capture_commit": "ea97052babc657846851a303962eb1244477f5d6",
   "lanes": {
     "linux-x86_64": {
-      "artifact": "assurance/parallelhash-execution-native/linux-x86_64-v0254.json",
-      "sha256": "2277fa3aaf8488092e121436a2339eb77ed09d0130443f719c86e6e6f5b09380",
-      "cpu": "model name : Intel(R) Xeon(R) 6975P-C",
+      "artifact": "assurance/parallelhash-execution-native/linux-x86_64-v0252-ea97052b.json",
+      "sha256": "0ee51bb8492b17cd2f7db5b4fab1f166c78e2a2605b523b96578358d213dd727",
+      "cpu": "model name : Intel(R) Xeon(R) Platinum 8488C",
       "reviewed": true
     },
     "linux-aarch64": {
-      "artifact": "assurance/parallelhash-execution-native/linux-aarch64-v0254.json",
-      "sha256": "dfaca2d0e9bb51a25b2c7c96cc449e9f3abb145be143ef57bc02623fcc5ce6ec",
+      "artifact": "assurance/parallelhash-execution-native/linux-aarch64-v0252-ea97052b.json",
+      "sha256": "51097eddf3f6270ab9799a928deae05c5dd6de1f365165db5cdcb45dc9ff6f4e",
       "cpu": "CPU architecture: 8; CPU implementer : 0x41; CPU part : 0xd4f; CPU revision : 1",
       "reviewed": true
     },
     "apple-aarch64": {
-      "artifact": "assurance/parallelhash-execution-native/apple-aarch64-v0254.json",
-      "sha256": "7e8c1462b8ed5f4e5087308b0e9c2213473e6cc69cbb73a6961fd23fe02364e8",
+      "artifact": "assurance/parallelhash-execution-native/apple-aarch64-v0252-ea97052b.json",
+      "sha256": "82ded563fd4401ba2f06670d61144fc7dcac2275aed10302dfbf6dabdbd9febc",
       "cpu": "Apple M2 Pro",
       "reviewed": true
     }

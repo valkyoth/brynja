@@ -264,11 +264,12 @@ class VerifierTests(unittest.TestCase):
         hostile = {"ASAN_OPTIONS": "detect_leaks=0", "LSAN_OPTIONS": "exitcode=0",
                    "RUSTFLAGS": "-Copt-level=0", "CARGO_BUILD_BUILD_DIR": "/bad/cache"}
         populations = {"bounded": 13, "vectors": 7, "lifecycle": 11, "bits": 12,
-                       "general": 6, "execution::tests": 4, "hmac": 2,
+                       "general": 6, "execution::tests": 4, "hmac": 3,
                        "strict_hmac::tests::metadata_admission_and_exact_tag_policy": 1,
                        "strict_hmac::compiled::tests::typed_kernel_admission_never_substitutes_a_backend": 1,
                        "macos_resident::hmac": 4}
-        for missing in (None, *populations, "old-general", "ignored-general", "failed-general"):
+        for missing in (None, *populations, "old-general", "ignored-general", "failed-general",
+                        "old-hmac", "ignored-hmac", "failed-hmac", "extra-hmac"):
             calls = []
 
             def run(argv, env):
@@ -288,6 +289,15 @@ class VerifierTests(unittest.TestCase):
                         ignored = 1
                     if missing == "failed-general":
                         failed = 1
+                if target == "hmac":
+                    if missing in ("old-hmac", "ignored-hmac"):
+                        count = 2
+                    if missing == "ignored-hmac":
+                        ignored = 2
+                    if missing == "failed-hmac":
+                        failed = 1
+                    if missing == "extra-hmac":
+                        count = 4
                 return f"test result: ok. {count} passed; {failed} failed; {ignored} ignored;"
 
             with patch.dict(os.environ, hostile), patch.object(asan.sys, "platform", "linux"), \

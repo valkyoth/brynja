@@ -1720,7 +1720,7 @@ sha256 = "e08b9974bd2944ba13c9848015e896f5a1d7d156918df5b6d44a62c18fe0622c"
 
 [[reviewed-source]]
 path = "scripts/hmac/check-hmac-asan.py"
-sha256 = "d663ce903ceffd548efca1462d22af9a7df78e5b5830a8d516dfec3d2cb6a43f"
+sha256 = "115d0d0473a8aa2d6a0329cecd181712a2d342ed178c5b5e163718ef50a8ca0e"
 
 [[reviewed-source]]
 path = "scripts/hmac/check-hmac-bit-differential.py"
@@ -2200,7 +2200,7 @@ sha256 = "38c2c6cd744fd32e1f3c9404154fb5e9f123f30e4ebaf4d3152de3e56f885714"
 
 [[reviewed-source]]
 path = "scripts/hmac/test-hmac-verification.py"
-sha256 = "1a0fc36f110542d9da671c096e9e91a1c9fb64bee12cf6f81ec13fb05c7c956c"
+sha256 = "d74b3de25517643794444bc68b76106b0e4160da9888413c49dd19152f23c74a"
 
 [[reviewed-source]]
 path = "scripts/hmac/test-hmac-workspace.py"

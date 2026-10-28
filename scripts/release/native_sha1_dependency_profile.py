@@ -11,6 +11,7 @@ import tomllib
 
 import native_review_io as io
 import native_md5_dependency_profile as md5
+import native_publication_metadata as publication
 
 PROFILE = 'sha1-native-hardened'
 REVIEW = '1f8f4e1527f9e91b1b1d26b61b8cfc95339ca835'
@@ -52,7 +53,7 @@ def reachability_rows(root, revision, closure, rows):
              if name.startswith('crates/') and len(name.split('/')) > 2}
     io.require(roots == ROOTS, 'SHA-1 command profile requires its exact capture roots')
     for name in REVIEWED:
-        raw = io.raw_blob(root, revision, name)
+        raw = publication.raw(root, revision, name, PROFILE)
         if name == MANIFEST:
             raw = manifest_bytes(root, revision, raw)
         if name == PACKAGE:

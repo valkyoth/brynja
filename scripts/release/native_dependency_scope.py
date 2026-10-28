@@ -10,6 +10,7 @@ import tomllib
 import native_review_io as io
 import native_md5_dependency_profile as md5
 import native_sha1_dependency_profile as sha1
+import native_publication_metadata as publication
 
 
 def graph(raw):
@@ -59,10 +60,13 @@ def inherited_dependencies(value):
 
 
 def manifest_equivalent(root, before, after, name, profile=None):
-    if profile != sha1.PROFILE or name != sha1.MANIFEST:
+    if publication.equivalent(root, before, after, name, profile):
+        return True
+    module = {sha1.PROFILE: sha1, md5.PROFILE: md5}.get(profile)
+    if module is None or name != module.MANIFEST:
         return False
-    return (sha1.manifest_bytes(root, before, io.raw_blob(root, before, name)) ==
-            sha1.manifest_bytes(root, after, io.raw_blob(root, after, name)))
+    return (module.manifest_bytes(root, before, publication.raw(root, before, name, profile)) ==
+            module.manifest_bytes(root, after, publication.raw(root, after, name, profile)))
 
 
 def projection(root, revision, closure, profile=None):
@@ -73,9 +77,11 @@ def projection(root, revision, closure, profile=None):
     manifests = {}
     for name in sorted(names):
         if name.startswith('crates/') and name.count('/') == 2 and name.endswith('/Cargo.toml'):
-            raw = io.raw_blob(root, revision, name)
+            raw = publication.raw(root, revision, name, profile)
             if profile == sha1.PROFILE and name == sha1.MANIFEST:
                 raw = sha1.manifest_bytes(root, revision, raw)
+            elif profile == md5.PROFILE and name == md5.MANIFEST:
+                raw = md5.manifest_bytes(root, revision, raw)
             manifest = tomllib.loads(raw.decode())
             package = manifest['package']['name']
             io.require(package not in manifests, 'duplicate local package identity')
@@ -83,7 +89,7 @@ def projection(root, revision, closure, profile=None):
     package_roots = {package for package, (name, _) in manifests.items()
                      if name.removesuffix('/Cargo.toml') in roots}
     io.require(len(package_roots) == len(roots), 'missing capture package manifest')
-    rows = graph(io.historical(root, revision, 'Cargo.lock'))
+    rows = graph(publication.raw(root, revision, 'Cargo.lock', profile))
     traversal = rows
     if profile is not None:
         profiles = {md5.PROFILE: md5, sha1.PROFILE: sha1}
@@ -117,7 +123,7 @@ def projection(root, revision, closure, profile=None):
         if name.startswith('assurance/') and name.endswith('/Cargo.toml'):
             inherited.update(inherited_dependencies(
                 tomllib.loads(io.historical(root, revision, name).decode())))
-    workspace = copy.deepcopy(tomllib.loads(io.historical(root, revision, 'Cargo.toml').decode()))
+    workspace = copy.deepcopy(tomllib.loads(publication.raw(root, revision, 'Cargo.toml', profile).decode()))
     dependencies = workspace.get('workspace', {}).get('dependencies', {})
     io.require(inherited <= dependencies.keys(), 'unresolved inherited dependency')
     if 'dependencies' in workspace.get('workspace', {}):

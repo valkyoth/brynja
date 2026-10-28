@@ -15,8 +15,10 @@ checked by the caller. A command/manifest change requires a new profile review,
 not automatic inference from a successful test or a missing capture input.
 """
 import copy
+import tomllib
 
 import native_review_io as io
+import native_publication_metadata as publication
 
 PROFILE = 'md5-native-execution'
 ROOTS = frozenset('crates/' + name for name in (
@@ -42,6 +44,20 @@ REVIEWED = {
 PACKAGE = 'scripts/md5/check-md5-package.py'
 OLD_ARCHIVES = b"'brynja-mac-kmac', 'brynja-hash-tuple')"
 HMAC_ARCHIVES = b"'brynja-mac-kmac', 'brynja-hash-tuple', 'brynja-mac-hmac')"
+MANIFEST = 'crates/' + HOST + '/Cargo.toml'
+DIRECT = b'brynja-legacy-md5 = { path = "../brynja-legacy-md5", version = "=0.1.0", features = ["cpu"] }'
+INHERITED = b'brynja-legacy-md5 = { workspace = true, default-features = true, features = ["cpu"] }'
+
+
+def manifest_bytes(root, revision, raw):
+    if INHERITED not in raw:
+        return raw
+    workspace = tomllib.loads(io.raw_blob(root, revision, 'Cargo.toml').decode())
+    io.require(raw.count(INHERITED) == 1 and DIRECT not in raw and
+               workspace['workspace']['dependencies'].get('brynja-legacy-md5') == {
+                   'path': 'crates/brynja-legacy-md5', 'version': '=0.1.0', 'default-features': False},
+               'MD5 inherited dependency identity/features changed')
+    return raw.replace(INHERITED, DIRECT, 1)
 
 
 def reviewed_bytes(name, raw):
@@ -60,7 +76,10 @@ def reachability_rows(root, revision, closure, rows):
              if name.startswith('crates/') and len(name.split('/')) > 2}
     io.require(roots == ROOTS, 'MD5 command profile requires its exact capture roots')
     for name, expected in REVIEWED.items():
-        io.require(io.sha(reviewed_bytes(name, io.raw_blob(root, revision, name))) == expected,
+        raw = publication.raw(root, revision, name, PROFILE)
+        if name == MANIFEST:
+            raw = manifest_bytes(root, revision, raw)
+        io.require(io.sha(reviewed_bytes(name, raw)) == expected,
                    'MD5 dependency command/manifest review changed: ' + name)
     # Preserve the original rows for output/projection comparison. Only the
     # traversal copy loses one reviewed inactive optional edge. No dev, build,

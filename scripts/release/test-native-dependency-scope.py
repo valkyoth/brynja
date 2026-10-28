@@ -11,6 +11,7 @@ import native_unchanged as reuse
 from native_md5_scope_tests import Md5DependencyProfileTests
 from native_hmac_tests import InactiveHmacTests, LegacyInactiveHmacTests, HmacFeatureGraphTests
 from native_sha1_scope_tests import Sha1DependencyProfileTests
+from native_publication_tests import PublicationMetadataTests, Sha1PublicationTests, Md5PublicationTests
 
 WORKSPACE = '''[workspace]
 members = ["crates/*"]

@@ -100,6 +100,10 @@ def disposition(entry: dict, context: dict) -> str:
     groups = verifier_groups(entry)
     if groups is None:
         groups = commands.owners(entry['command'])
+        if 'historical_ownership_root' in context:
+            import historical_command_scope
+            groups = historical_command_scope.owners(
+                entry['command'], context['historical_ownership_root'], groups)
     # Whole-workspace compatibility checks are implementation checks, not
     # documentation lint. Likewise emitted-code inspection needs code/compiler
     # changes, not a new release-note paragraph, to justify recompilation.

@@ -132,6 +132,7 @@ def validate(root=ROOT, write=False):
                  'native_dependency_scope.py', 'native_unchanged.py',
                  'native_md5_dependency_profile.py', 'native_md5_scope_tests.py',
                  'native_sha1_dependency_profile.py', 'native_sha1_scope_tests.py',
+                 'native_publication_metadata.py', 'native_publication_tests.py',
                  'native_hmac_profile.py', 'native_hmac_reuse.py', 'native_hmac_tests.py',
                  'test-native-dependency-scope.py',
                  'test-native-metadata-carry-forward.py'):
@@ -173,7 +174,8 @@ def regressions():
                                'native_review_carry_forward.py', 'native_tooling_review.py',
                                'native_review_families.py', 'native_review_checks.py',
                                'native_setup_review.py', 'native_hmac_profile.py',
-                               'native_hmac_reuse.py', 'native_sha1_dependency_profile.py')]
+                               'native_hmac_reuse.py', 'native_sha1_dependency_profile.py',
+                               'native_publication_metadata.py')]
         for name, before, after in cases:
             path = root / name
             original = path.read_text()

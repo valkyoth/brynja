@@ -17,12 +17,13 @@ import native_evidence_approval as approval_module
 import native_unchanged
 import native_hmac_reuse
 import native_hmac_profile
+import native_publication_metadata
 
 io.require(Path(approval_module.__file__).resolve() ==
            io.ROOT / 'scripts/release/native_evidence_approval.py', 'approval module identity')
 io.require(Path(native_unchanged.__file__).resolve() ==
            io.ROOT / 'scripts/release/native_unchanged.py', 'trusted review module identity')
-for module in (native_hmac_reuse, native_hmac_profile):
+for module in (native_hmac_reuse, native_hmac_profile, native_publication_metadata):
     io.require(Path(module.__file__).resolve() ==
                io.ROOT / 'scripts/release' / (module.__name__ + '.py'),
                'trusted review module identity: ' + module.__name__)

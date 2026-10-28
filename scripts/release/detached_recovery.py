@@ -37,6 +37,7 @@ def expected(manifest, root, reader=None):
     if not refs:
         return {}
     import detached_history as history
+    historical = reader is not None
     if reader is None:
         reader = history.History(locations(refs))
     found = {}
@@ -55,6 +56,10 @@ def expected(manifest, root, reader=None):
                    'test_only_rerun': carry.test_only.prove(root, source, delta['evidence']['changed_paths']),
                    'public_checkpoint': manifest['plan']['stage'] == 'public' and
                    (old['plan']['stage'] != 'public' or old['plan'].get('version') != manifest['plan'].get('version'))}
+        # Only a History reader reconstructs an already sealed recovery. New
+        # jobs and current carry-forward decisions retain today's ownership.
+        if historical:
+            context['historical_ownership_root'] = root
         old_root = reader.locations[ref['receipt']] / 'source'
         for index, entry in enumerate(manifest['commands']):
             if index in found:

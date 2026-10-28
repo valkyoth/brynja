@@ -136,21 +136,21 @@ def validate(root: Path) -> None:
     tag_miri = (root / "scripts/zeroization/check-tag-miri.sh").read_text(
         encoding="utf-8"
     )
-    if tag_miri.count('exec python3 scripts/release/run-verification.py miri') != 1:
+    if tag_miri.count('exec python3 scripts/release/run-verification.py miri --release-required') != 1:
         fail("local tag gate omits impact-selected Miri evidence")
     planner = (root / "scripts/release/verification_plan.py").read_text(encoding="utf-8")
     runner = (root / "scripts/release/run-verification.py").read_text(encoding="utf-8")
     if 'verifier_groups = {name: list(scope.GROUPS) for name in verifier_groups}' not in planner:
-        fail("public checkpoint no longer requires complete Miri evidence")
+        fail("full assurance checkpoint no longer requires complete Miri evidence")
     # The task runner replaced the monolithic shell invocation. Preserve the
     # same impact-selected obligation and require stage-selected coverage to
     # reach execution, not merely appear in a printed plan.
     for token in (
         'elif args.phase == "miri":',
         'groups = list(plans.scope.GROUPS) if full else plan["verifiers"]["miri"]',
-        'profile = profile_for(plan["stage"])',
+        'profile = plans.miri_profile(plan)',
         'for argv in task_commands(plans.ROOT, groups, profile):\n'
         '                    execute(shlex.join(argv))',
     ):
         if token not in runner:
-            fail("internal tag no longer requires focused Miri evidence")
+            fail("release policy no longer enforces focused Miri evidence")

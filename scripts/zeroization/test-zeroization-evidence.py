@@ -89,7 +89,7 @@ def test() -> None:
         for before, after in (
             ('elif args.phase == "miri":', 'elif args.phase == "disabled-miri":'),
             ('groups = list(plans.scope.GROUPS) if full else plan["verifiers"]["miri"]', 'groups = []'),
-            ('profile = profile_for(plan["stage"])', 'profile = "routine"'),
+            ('profile = plans.miri_profile(plan)', 'profile = "routine"'),
             ('task_commands(plans.ROOT, groups, profile)', 'task_commands(plans.ROOT, [], profile)'),
             ('execute(shlex.join(argv))', 'print(shlex.join(argv))'),
         ):

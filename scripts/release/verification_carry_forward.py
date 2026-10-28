@@ -28,11 +28,14 @@ def prepare(job: Path, receipt: str, root: Path, release_plan: dict, *,
         raise ValueError('carry-forward requires a clean committed evidence snapshot')
     records.git(root, 'merge-base', '--is-ancestor', source, 'HEAD')
     delta = plans.build(root=root, base=source, verified_base=True)
-    # A new scheduled public version still needs its full checkpoint. Later
-    # docs/tooling edits within that already-tested version may carry forward.
-    public_checkpoint = (release_plan['stage'] == 'public' and
-                         (manifest['plan']['stage'] != 'public' or
-                          manifest['plan'].get('version') != release_plan.get('version')))
+    # Only an explicitly full checkpoint invalidates unchanged prior coverage.
+    # Historical plans retain their original stage-based interpretation.
+    public_checkpoint = plans.new_full_checkpoint(release_plan, manifest['plan'])
+    if public_checkpoint and 'verification_mode' in release_plan:
+        # Receipt reuse must not become implicit permission for a fresh full
+        # campaign. Both foreground and phase-registry authorization see this.
+        delta['approval_required'] = True
+        delta['full_phases'] = list(catalog.PHASES)
     delta['evidence'] = {
         'source_commit': source, 'receipt': receipt, 'completed_commands': result['commands'],
         'current_commit': delta['head'], 'new_public_checkpoint': public_checkpoint,
@@ -88,7 +91,7 @@ def disposition(entry: dict, context: dict) -> str:
     if entry['phase'] in context.get('tool_drift', {}):
         return 'run: selected phase compiler/verifier changed'
     if context['public_checkpoint']:
-        return 'run: new public checkpoint'
+        return 'run: new full assurance checkpoint'
     changed = context['plan'].get('evidence', {}).get('changed_paths', [])
     argv = entry['argv']
     driver = argv[1] if argv[0] == 'python3' else argv[0]
@@ -138,8 +141,8 @@ def required(context: dict, phase: str, command: str | None = None) -> list[dict
     # authorizes the delta before executing anything. Split verifier groups so
     # a changed family cannot force an unrelated family to run again.
     approval = plan['fingerprint'] if plan['approval_required'] else None
-    from miri_cases import profile_for
     manifest = context.get('manifest', {})
-    requested = manifest.get('miri_profile') if plan['stage'] == 'internal' else None
+    requested = (manifest.get('miri_profile') if plan['stage'] == 'internal'
+                 and 'verification_mode' not in plan else None)
     return catalog.selected(plan, phases, approval, shards=8, miri_tasks=True,
-                            miri_profile=profile_for(plan['stage'], requested))
+                            miri_profile=plans.miri_profile(plan, requested))

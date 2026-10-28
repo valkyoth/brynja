@@ -29,7 +29,7 @@ def selected(plan: dict, phases: list[str], approval: str | None, shards: int = 
     repository = (commands.catalog(root / 'scripts/checks.sh', '# BEGIN VERIFICATION CATALOG')
                   if historical else commands.repository_commands(root))
     sanitizer = commands.catalog(root / "scripts/zeroization/check-zeroization-sanitizer.sh")
-    matrix = commands.matrix_commands(root)
+    matrix = commands.matrix_for_plan(plan, root)
     # Validate even commands outside the selected phase, just as foreground does.
     commands.selected(repository, list(plans.scope.GROUPS), full=True)
     commands.selected(sanitizer, list(plans.scope.GROUPS), full=True)

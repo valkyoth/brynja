@@ -14,8 +14,16 @@ This is project-owned testing, not independent cryptographic verification.
 | Shared core/CPU authority | Registered affected consumers, including SHA-2 |
 | Documentation or local version-only change | Metadata checks; reuse unchanged cryptographic campaigns |
 | Verifier change | Explain the affected verifier evidence; require approval for unexpected broad renewal |
-| Public crates.io checkpoint | Complete registered suite, automatically |
+| Routine crates.io release (`verification = "affected"`) | Affected families; unchanged successful receipts can carry forward |
+| Explicit full checkpoint (`verification = "full"`) | Complete registered suite, with execution approval |
 | Unclassified, malformed or unauthenticated scope | Stop before expensive execution; release verification is incomplete |
+
+The owner-approved policy from v0.25.2 separates publication from assurance
+scope. Use `[release].verification = "affected"` for subsequent routine releases.
+Development tags make no mandatory Miri claim; publication requires routine
+affected-code Miri. v0.25.2 explicitly retains `verification = "full"`.
+See [coverage by release](assurance/miri-coverage.md). Old sealed plans keep their
+original stage-based interpretation, including their original profile limits.
 
 The HMAC integration classifier recognizes only the registered dependency edge,
 exact opt-in feature lists and exact module-registration edits. It compares the
@@ -69,8 +77,8 @@ scripts/tag_gate.sh v0.24.34 --approve-full PLAN_FINGERPRINT
 
 Approval is not a permission to release or publish. A different HEAD, changed
 input or relevant build environment invalidates the fingerprint. Do not invent
-approval or reuse a stale token. Public checkpoints need no exceptional full-run
-approval because complete verification is the scheduled policy.
+approval or reuse a stale token. Explicit full checkpoints also require a
+matching execution approval; a public stage is no longer automatic approval.
 
 Ordinary push/PR CI runs `plan --check --ci` and `scripts/checks.sh --ci`.
 It neither reads the Actions approval variable nor consumes or grants release
@@ -120,7 +128,7 @@ failures but does not replace GitHub's independent checks or the release gate.
 `--ci` is accepted only for plan/repository diagnostics, never for Miri, ASan,
 Kani, compiler-matrix or arbitrary command execution. It produces no release
 receipt. The local release/tag gate does not use this mode: uncertain scope still
-requires exact owner approval, and public checkpoints retain complete verification.
+requires exact owner approval, and explicit full checkpoints retain complete verification.
 Pentest/native evidence and release-readiness checks remain release requirements,
 not prerequisites for ordinary code checks or GitHub CodeQL scanning.
 
@@ -131,8 +139,8 @@ not prerequisites for ordinary code checks or GitHub CodeQL scanning.
 - `scripts/tag_gate.sh vX.Y.Z`: approve scope first, then repository, selected
   native/QEMU, compiler-matrix, sanitizer, Miri and Kani checks, online authority
   and dependency checks, SBOM, committed report and release readiness.
-- `scripts/ci/check-rust-version-matrix.sh`: the same affected selection across
-  the twelve registered compiler versions.
+- `scripts/ci/check-rust-version-matrix.sh`: affected checks on MSRV and pinned
+  stable in affected mode; all registered compilers in full mode.
 - `scripts/zeroization/check-zeroization-miri.sh --selected sha2`: the exact
   selected group, with no interpreter smoke run of unrelated families.
 - `scripts/checks.sh --full-catalog` and
@@ -248,7 +256,7 @@ change does not rerun portable SHA-3, KMAC, TupleHash or ParallelHash ownership
 suites when both baseline and current lock graphs prove those crates have no CPU
 dependency. A new or removed CPU edge retains the broader checks. Shared core or
 SHA-3 changes still select those consumers. Missing or malformed dependency proof
-requires scope review; public checkpoints still run every Miri group.
+requires scope review; explicitly full checkpoints still run every Miri group.
 
 Version-only local pins and exact digest rebinding do not imply changed algorithms.
 The generated `standards/protocol-surfaces.json` has an explicit 8 MiB scope-read
@@ -258,7 +266,7 @@ it from mandatory standards/schema/reproducibility checks. Code, locks and other
 JSON retain their existing cap. Both baseline and current inputs remain bounded
 and regular-file checked; an exceeded cap still requires scope review. Metadata
 content remains bound into the plan fingerprint. A concurrent crypto change
-still selects its affected campaigns; public checkpoints still run the full suite.
+still selects its affected campaigns; explicitly full checkpoints run the full suite.
 
 Numeric source-span corrections inside the registered MIR caller-header table
 also do not change runtime code. The selector compares both Python syntax trees,

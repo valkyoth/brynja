@@ -318,10 +318,14 @@ scripts/release/release_crates.py --check
 ```
 
 The [scripts guide](scripts/README.md) groups assurance by component.
-[Focused assurance](docs/focused-assurance.md) runs full Miri campaigns for
-affected groups and smoke tests for unchanged groups; public checkpoints and
-unknown impacts require full coverage. Long Miri, sanitizer and Kani evidence
-runs locally. GitHub retains bounded checks and CodeQL Default.
+[Focused assurance](docs/focused-assurance.md) selects changed implementations
+and affected consumers, with validated reuse of unchanged results. Routine
+development tags do not require Miri; crates.io releases require affected-code
+Miri. Full extended campaigns are explicitly selected assurance checkpoints,
+not automatic consequences of publication. v0.25.2 retains its full checkpoint.
+See [Miri coverage by release](docs/assurance/miri-coverage.md) for tested
+snapshots and pending coverage. Unknown scope stops for review. Long verifier
+runs stay off ordinary GitHub CI, which retains bounded checks and CodeQL.
 
 ## License
 

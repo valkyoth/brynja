@@ -402,3 +402,34 @@ distinction between implemented APIs and release qualification.
    during this preparation.
 4. Obtain green GitHub/CodeQL on the reviewed candidate and explicit tag and
    publication authorization. The 30 selected packages have not been uploaded.
+
+## Owner-approved release-verification policy (2026-10-28)
+
+The pending-review wording above records the earlier preparation stage. The
+[current ledger](../security/pentest/v0.25.2.md) records the supplied clean KMAC
+retest and owner-accepted native refresh; neither is a completed full verifier
+campaign.
+
+The owner approved separating publication from expensive assurance selection:
+
+- `verification = "affected"`: changed implementations and their consumers;
+  public releases require routine Miri, development tags do not. Optional Miri
+  is reported as not required, never as a pass. Explicit developer runs remain
+  available. Unchanged covered commands can reuse validated historical receipts
+  across release versions, including an internal-to-public transition.
+- Routine compiler compatibility checks use MSRV plus pinned stable. Full
+  registered compiler coverage remains available through full mode.
+- `verification = "full"`: an explicit all-family extended checkpoint, with
+  execution approval. v0.25.2 retains this mode at the owner's request. Set the
+  next release to affected mode rather than inheriting this one-off full run.
+- Unknown scope, changed tools/drivers, failed or missing evidence, current
+  baseline checks and native external approval retain their existing controls.
+  Historical receipts keep their original inputs, profiles and meaning.
+
+The [Miri coverage table](../docs/assurance/miri-coverage.md) identifies actual
+tested snapshots separately from pending campaigns. Planner, foreground,
+detached/resume and multi-receipt paths share the new policy. Focused regressions
+exercise both modes and stages, mandatory publication coverage, explicit-run
+availability, compiler endpoint selection and refusal to silently approve a
+full run through an old receipt. No cryptographic implementation or dependency
+changed, and this policy update does not claim an independent retest.

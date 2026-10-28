@@ -197,3 +197,24 @@ def matrix_commands(root: Path = ROOT) -> list[tuple[str, str | None]]:
             owners(command)
             result.append((command, stdin if separator else None))
     return result
+
+
+def matrix_for_plan(plan: dict, root: Path = ROOT) -> list[tuple[str, str | None]]:
+    """Routine compatibility checks use MSRV + pinned stable; full stays available."""
+    entries = matrix_commands(root)
+    if plan.get('verification_mode') != 'affected':
+        return entries  # Includes immutable historical catalog reconstruction.
+    import tomllib
+    workspace = tomllib.loads((root / 'Cargo.toml').read_text())
+    minimum = workspace['workspace']['package']['rust-version']
+    if re.fullmatch(r'[0-9]+\.[0-9]+', minimum):
+        minimum += '.0'
+    stable = tomllib.loads((root / 'rust-toolchain.toml').read_text())['toolchain']['channel']
+    wanted = {minimum, stable}
+    if not all(isinstance(v, str) and re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', v) for v in wanted):
+        raise ValueError('routine matrix needs exact MSRV and stable compiler versions')
+    available = {shlex.split(command)[1].removeprefix('+') for command, _ in entries}
+    if not wanted <= available:
+        raise ValueError('routine matrix compiler missing from registered full catalog')
+    return [(command, stdin) for command, stdin in entries
+            if shlex.split(command)[1].removeprefix('+') in wanted]

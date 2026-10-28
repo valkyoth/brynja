@@ -54,8 +54,7 @@ def expected(manifest, root, reader=None):
         delta['evidence'] = {'changed_paths': plans.changed_paths(root, source)}
         context = {'plan': delta, 'manifest': {**old, 'commands': [r['command'] for r in passed.values()]},
                    'test_only_rerun': carry.test_only.prove(root, source, delta['evidence']['changed_paths']),
-                   'public_checkpoint': manifest['plan']['stage'] == 'public' and
-                   (old['plan']['stage'] != 'public' or old['plan'].get('version') != manifest['plan'].get('version'))}
+                   'public_checkpoint': plans.new_full_checkpoint(manifest['plan'], old['plan'])}
         # Only a History reader reconstructs an already sealed recovery. New
         # jobs and current carry-forward decisions retain today's ownership.
         if historical:

@@ -30,7 +30,12 @@ declarations do not force a campaign. New families must register their commands
 and downstream relationships; an unresolved scope is a reason to inspect the
 plan, not routinely approve all-family work. Native observations follow the
 [unchanged-input reuse rules](native-evidence-reuse.md). The owner-scheduled
-v0.24.55 full consolidation and public publication checkpoints remain separate.
+full consolidations remain separate. From v0.25.2, release metadata explicitly
+selects `verification = "affected"` or `"full"`; publication alone no longer
+requires a full campaign. v0.25.2 retains its owner-selected full checkpoint.
+See [Miri coverage by release](assurance/miri-coverage.md). Explicit detached
+Miri requests still execute on development versions even though their tag gate
+does not require them. Historical receipts keep their original coverage.
 
 If this asks for full-run approval, review its explanation and obtain explicit
 owner approval. Detachment does not approve that fallback. Pass the exact

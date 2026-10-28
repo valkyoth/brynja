@@ -226,6 +226,17 @@ class CheckpointTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "profile"):
             jobs.load(job, records.digest(manifest))
 
+    def test_affected_public_manifest_accepts_routine_but_full_does_not(self):
+        job, _ = self.job('affected-public', ['print("ok")'])
+        manifest = records.read(job / 'manifest.json')
+        manifest['plan'].update(stage='public', verification_mode='affected')
+        records.atomic(job / 'manifest.json', manifest)
+        self.assertEqual(jobs.load(job, records.digest(manifest))['miri_profile'], 'routine')
+        manifest['plan']['verification_mode'] = 'full'
+        records.atomic(job / 'manifest.json', manifest)
+        with self.assertRaisesRegex(ValueError, 'profile'):
+            jobs.load(job, records.digest(manifest))
+
     def test_legacy_and_nonzero_failures_are_not_auto_resumable(self):
         for name, schema, code in (("legacy", 1, 'print("ok")'), ("failed", 2, 'raise SystemExit(9)')):
             job = self.job(name, [code], schema=schema)

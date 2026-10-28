@@ -1,9 +1,12 @@
 # Bounded and resumable Miri verification
 
 Status: implementation approved by the owner, 2026-09-27; **partially implemented**.
-This work neither qualifies v0.24.49 nor authorizes a tag. New runs select a
-routine profile for internal releases and an extended profile for public
-checkpoints. Miri safety settings remain enabled. The complete routine Miri
+This work neither qualifies v0.24.49 nor authorizes a tag. The original
+stage-based policy below is historical: the owner-approved 2026-10-28 policy
+uses routine affected-code Miri for publication, optional Miri for development
+tags, and extended coverage for explicit full checkpoints (including v0.25.2).
+See [current policy and coverage](assurance/miri-coverage.md).
+Miri safety settings remain enabled. The complete routine Miri
 campaign and two-host collection now pass; see the
 [campaign record](detached-verification.md#complete-two-host-routine-miri-campaign).
 Extended-profile qualification, the per-test obligation inventory and other
@@ -427,9 +430,10 @@ that every option works with our frozen version.
 | Situation | Required Miri work | Other coverage |
 | --- | --- | --- |
 | Documentation/version/review metadata only | Reuse eligible unchanged tasks | Current repository, documentation and release checks |
-| Internal implementation tag | Bounded lifecycle/boundary tasks for affected families and consumers | Native vectors, differential tests, applicable sanitizers/proofs/codegen |
+| Internal implementation tag in affected mode | Optional; record not-run status rather than a pass | Native vectors, differential tests, applicable sanitizers/proofs/codegen |
 | Memory-ownership/unsafe/concurrency fix | Bounded tasks plus the explicit bug regression and affected safety obligations | Relevant native instruction/platform and failure-path qualification |
-| Registered publication checkpoint, RC or 1.0 | All-family bounded profile plus registered extended cases/targets/seeds | Existing publication requirements |
+| Routine publication in affected mode | Bounded affected-family tasks; validated reuse of unchanged coverage | Existing publication requirements |
+| Explicit full assurance checkpoint | All registered extended tasks | Full registered verification requirements |
 | Owner-requested assurance campaign | Explicit extended task set, normally remote | Report exact coverage; never imply certification |
 
 Reuse the existing checkpoint register; do not introduce a second release
@@ -440,8 +444,8 @@ not a defect and not a pass.
 
 An internal release summary must distinguish bounded coverage passed, extended
 coverage carried forward from a named snapshot, and extended coverage deferred
-under the approved profile. Public checkpoint completeness is not satisfied by
-an internal-profile receipt. The runner enforces routine/extended separation;
+under the approved profile. Full checkpoint completeness is not satisfied by
+a routine-profile receipt. The runner enforces routine/extended separation;
 additional targets/seeds and all-family bounded sizing remain follow-up work.
 
 ## Write tests around safety obligations

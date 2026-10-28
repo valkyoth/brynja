@@ -92,8 +92,7 @@ def start(root: Path, job: Path, phases: list[str], approval: str | None,
     if shard_count > 1 and os.environ.get("CARGO_TARGET_DIR"):
         raise ValueError("clear CARGO_TARGET_DIR so detached shards cannot share build output")
     plan = plans.build(root=root, base=base)
-    from miri_cases import profile_for
-    miri_profile = profile_for(plan["stage"], miri_profile)
+    miri_profile = plans.miri_profile(plan, miri_profile)
     chosen = catalog.selected(plan, phases, approval, shard_count, root=root, miri_tasks=True,
                               miri_profile=miri_profile, unit_tests=True)
     if plan["issues"] and any("environment" in issue or "RUSTUP_TOOLCHAIN" in issue for issue in plan["issues"]):
@@ -163,8 +162,7 @@ def load(job: Path, receipt: str) -> dict:
         raise ValueError("detached command bound exceeded")
     checkpoints.indices(manifest)
     if manifest["schema"] in (2, 3):
-        from miri_cases import profile_for
-        profile_for(manifest["plan"]["stage"], manifest["miri_profile"])
+        plans.miri_profile(manifest["plan"], manifest["miri_profile"])
     if manifest['schema'] == 3:
         import detached_recovery
         detached_recovery.references(manifest)

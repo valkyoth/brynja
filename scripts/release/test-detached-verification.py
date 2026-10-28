@@ -123,7 +123,9 @@ class SelectionTests(unittest.TestCase):
         spec = importlib.util.spec_from_file_location("foreground", Path(__file__).with_name("run-verification.py"))
         runner = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(runner)
-        for selected in (plan(), plan(()), plan(public=True), plan(blocked=True)):
+        for selected in (plan(), plan(()), plan(public=True), plan(blocked=True),
+                         {**plan(public=True), 'verification_mode': 'affected', 'full_phases': []},
+                         {**plan(), 'verification_mode': 'affected', 'full_phases': []}):
             approval = selected["fingerprint"] if selected["approval_required"] else None
             for phase in catalog.PHASES:
                 executed = []
@@ -134,9 +136,8 @@ class SelectionTests(unittest.TestCase):
                      patch.object(runner, "prepare_matrix"), \
                      patch.dict(os.environ, {}, clear=True), contextlib.redirect_stdout(io.StringIO()):
                     self.assertEqual(runner.main(), 0)
-                from miri_cases import profile_for
                 detached = catalog.selected(selected, [phase], approval, miri_tasks=True,
-                                            miri_profile=profile_for(selected['stage']))
+                                            miri_profile=plans.miri_profile(selected))
                 self.assertEqual(executed, [(c["command"], c["stdin"]) for c in detached])
 
     def test_invalid_phases_and_stale_approval(self):

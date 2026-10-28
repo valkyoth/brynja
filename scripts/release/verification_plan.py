@@ -88,6 +88,35 @@ def execution_identity(plan: dict) -> dict:
             if key not in {'issues', 'reasons', 'estimated_runtime'}}
 
 
+def verification_mode(plan: dict) -> str:
+    """Old sealed plans retain their stage-based meaning, without rewriting them."""
+    mode = plan.get('verification_mode')
+    if mode is None:
+        return 'full' if plan['stage'] == 'public' else 'affected'
+    if mode not in ('affected', 'full'):
+        raise ValueError('verification must be affected or full')
+    return mode
+
+
+def miri_profile(plan: dict, requested: str | None = None) -> str:
+    from miri_cases import profile_for
+    stage = 'public' if verification_mode(plan) == 'full' else 'internal'
+    return profile_for(stage, requested)
+
+
+def miri_required(plan: dict) -> bool:
+    # Historical receipts keep their obligations. New development tags may
+    # omit Miri, but publication or an explicit full checkpoint may not.
+    return ('verification_mode' not in plan or plan['stage'] == 'public'
+            or verification_mode(plan) == 'full')
+
+
+def new_full_checkpoint(current: dict, previous: dict) -> bool:
+    return (verification_mode(current) == 'full' and
+            (verification_mode(previous) != 'full' or
+             current.get('version') != previous.get('version')))
+
+
 def requires_full(plan: dict, phase: str) -> bool:
     """Approval permits a fallback; it does not expand unrelated verifier scope."""
     phase = 'repository' if phase == 'command' else phase
@@ -107,6 +136,12 @@ def build(root: Path = ROOT, base: str | None = None, *, verified_base: bool = F
     stage = config["stage"]
     if stage not in ("public", "internal"):
         raise ValueError("unknown release stage")
+    mode = config.get('verification')
+    if 'verification' in config and mode not in ('affected', 'full'):
+        raise ValueError('verification must be affected or full')
+    # Missing fields are reconstructed exactly for frozen historical receipts.
+    # Current release metadata declares its policy explicitly.
+    profile_plan = {'stage': stage, **({'verification_mode': mode} if mode else {})}
     toolchain = inputs.document((root / "rust-toolchain.toml").read_bytes())["toolchain"]["channel"]
     issues = environment_issues(dict(os.environ), toolchain)
     full_phases = set(('repository', 'matrix', 'asan', 'miri', 'kani')) if issues else set()
@@ -135,8 +170,12 @@ def build(root: Path = ROOT, base: str | None = None, *, verified_base: bool = F
             full = True
             issues.append(matrix + ': compiler coverage list changed; full compatibility matrix requires approval; verifier pins unchanged')
     reasons = []
-    reasons.append('Miri profile: ' + ('extended (all registered matrix combinations)' if stage == 'public'
+    reasons.append('Miri profile: ' + ('extended (all registered matrix combinations)' if miri_profile(profile_plan) == 'extended'
                    else 'routine (bounded registered matrix sample; full native tests retained)'))
+    if mode:
+        reasons.append('Verification policy: ' + mode + '; publication alone does not expand scope')
+        if not miri_required(profile_plan):
+            reasons.append('Development tag: Miri optional, not a claimed pass; explicit Miri runs remain available')
     if set(miri_groups) != set(groups):
         reasons.append('Miri uses its own task drivers and portable owner dependency closures in both lock graphs; ASan/Kani retain native implementation scope')
     for path in paths:
@@ -164,16 +203,19 @@ def build(root: Path = ROOT, base: str | None = None, *, verified_base: bool = F
     # Its policy-only baseline test does not replace rerunning changed proofs.
     if 'scripts/assurance/check-kani.sh' in paths:
         verifier_groups['kani'] = list(scope.GROUPS)
-    if stage == "public" and not verified_base:
+    if verification_mode(profile_plan) == 'full' and not verified_base:
         groups = scope.GROUPS
         verifier_groups = {name: list(scope.GROUPS) for name in verifier_groups}
         full_phases.update(('repository', 'matrix', 'asan', 'miri', 'kani'))
-        reasons.insert(0, "scheduled public crates.io checkpoint: full verification")
+        reasons.insert(0, "explicit full assurance checkpoint" if mode else
+                       "scheduled public crates.io checkpoint: full verification")
     return {
         "schema": 1, "version": config["version"], "stage": stage, "base": base,
         "head": inputs.git(root, "rev-parse", "HEAD").decode().strip(),
         "fingerprint": fingerprint(root, base, paths),
-        "approval_required": stage != "public" and bool(full or issues),
+        "approval_required": (bool(full or issues or (mode == 'full' and not verified_base)) if mode else
+                              stage != "public" and bool(full or issues)),
+        **({'verification_mode': mode} if mode else {}),
         "full_phases": sorted(full_phases),
         "issues": issues, "groups": list(groups), "verifiers": verifier_groups,
         "reasons": reasons,

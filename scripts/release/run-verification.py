@@ -42,12 +42,16 @@ def main() -> int:
     parser.add_argument("--approve-full")
     parser.add_argument("--ci", action="store_true", help="repository diagnostics only; never authorize release verification")
     parser.add_argument("--check", action="store_true", help="plan only; never run tests")
+    parser.add_argument('--release-required', action='store_true',
+                        help='Miri tag gate: development omission is not a test pass')
     parser.add_argument("--detached-job", type=Path)
     parser.add_argument("--detached-receipt")
     parser.add_argument("--detached-receipts", type=Path, help="phase receipt registry, including relocated parent jobs")
     args, extra = parser.parse_known_args()
     if extra and args.phase != "command":
         parser.error("unexpected verification arguments")
+    if args.release_required and (args.phase != 'miri' or args.ci):
+        parser.error('--release-required is only valid for the Miri release gate')
     if args.ci and (args.phase not in ("plan", "repository") or args.approve_full):
         parser.error("--ci is only for plan/repository diagnostics, without release approval")
     try:
@@ -65,6 +69,10 @@ def main() -> int:
                 raise ValueError('CI baseline must come from successful Actions ancestry, not --base')
             return push_ci.run(check=args.check or args.phase == 'plan')
         plan = plans.build(base=args.base)
+        if args.release_required and not plans.miri_required(plan):
+            print('MIRI NOT REQUIRED: development tag; no Miri pass claimed. '
+                  'Record coverage in docs/assurance/miri-coverage.md.', flush=True)
+            return 0
         if registry:
             import phase_receipts
             requested = extra[1:] if extra and extra[0] == '--' else extra
@@ -114,7 +122,7 @@ def main() -> int:
         commands.selected(catalog, list(plans.scope.GROUPS), full=True)
         sanitizer_catalog = commands.catalog(plans.ROOT / "scripts/zeroization/check-zeroization-sanitizer.sh")
         commands.selected(sanitizer_catalog, list(plans.scope.GROUPS), full=True)
-        matrix_catalog = commands.matrix_commands()
+        matrix_catalog = commands.matrix_for_plan(plan)
         plans.authorize(plan, args.approve_full or os.environ.get("BRYNJA_FULL_VERIFICATION_APPROVAL") or None)
         if args.phase == "plan" or args.check:
             return 0
@@ -153,8 +161,7 @@ def main() -> int:
             groups = list(plans.scope.GROUPS) if full else plan["verifiers"]["miri"]
             if groups:
                 from miri_tasks import commands as task_commands
-                from miri_cases import profile_for
-                profile = profile_for(plan["stage"])
+                profile = plans.miri_profile(plan)
                 print("Miri coverage profile: " + profile, flush=True)
                 for argv in task_commands(plans.ROOT, groups, profile):
                     execute(shlex.join(argv))

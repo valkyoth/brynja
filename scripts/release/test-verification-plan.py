@@ -370,6 +370,8 @@ else:
 
 
 def main() -> None:
+    from verification_policy_tests import run as policy_tests
+    policy_tests()
     approval_tests()
     selection_tests()
     miri_dependency_tests()

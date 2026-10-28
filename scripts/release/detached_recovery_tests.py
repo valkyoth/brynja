@@ -127,6 +127,10 @@ class RecoveryTests(unittest.TestCase):
                 self.assertEqual(recovery.expected(manifest, child[0] / 'source'), {})
             public = {**manifest, 'plan': {'stage': 'public', 'version': '1.0'}}
             self.assertEqual(recovery.expected(public, child[0] / 'source'), {})
+            affected = {**public, 'plan': {**public['plan'], 'verification_mode': 'affected'}}
+            self.assertEqual(set(recovery.expected(affected, child[0] / 'source')), {0})
+            full = {**public, 'plan': {**public['plan'], 'verification_mode': 'full'}}
+            self.assertEqual(recovery.expected(full, child[0] / 'source'), {})
             with patch.object(plans, 'build', return_value={'groups': ['legacy_hmac'], 'verifiers': {},
                                                           'stage': 'internal', 'full_phases': []}):
                 self.assertEqual(recovery.expected(manifest, child[0] / 'source'), {})

@@ -32,7 +32,7 @@ def main() -> int:
                        help='explicitly recover compatible sealed passes, including investigated failed jobs; failures and missing work rerun')
     start.add_argument("--partition", help="run only zero-based INDEX/COUNT of the task set (not a complete receipt)")
     start.add_argument("--miri-profile", choices=("routine", "extended", "existing-full"),
-                       help="default: routine internal / extended public; public cannot use routine")
+                       help="default: routine affected / extended full; full checkpoints cannot use routine")
     for name in ("status", "collect", "cancel", "_worker"):
         child = sub.add_parser(name)
         child.add_argument("job", type=Path)

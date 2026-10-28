@@ -181,6 +181,8 @@ def validate_release_context(release: dict, crates: dict) -> tuple[str, str]:
     baseline = release.get("baseline")
     cumulative = release.get("cumulative_milestones")
     stage = release.get("stage")
+    if 'verification' in release and release['verification'] not in ('affected', 'full'):
+        raise RuntimeError('verification must be affected or full')
     exceptional = release.get("exceptional")
     reason = release.get("exception_reason")
     if not all(isinstance(value, str) for value in (version, milestone, baseline, reason)):

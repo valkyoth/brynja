@@ -13,7 +13,10 @@ Only two executable entry points live directly in this directory:
 
 Start with `python3 scripts/release/run-verification.py plan --check`. Uncertain
 scope stops before expensive work and requires owner approval tied to the exact
-plan; public checkpoints still run everything. See [focused assurance](../docs/focused-assurance.md).
+plan; only explicitly full assurance checkpoints run everything. Routine public
+releases use affected-code verification; routine development tags make Miri
+optional. See [focused assurance](../docs/focused-assurance.md) and the
+[Miri coverage table](../docs/assurance/miri-coverage.md).
 
 The repository gate first runs `cargo fetch --locked` to prepare the exact
 workspace dependencies for its offline package consumers. Even a dependency-free

@@ -19,9 +19,10 @@ import native_sha1_dependency_profile as sha1
 import native_hmac_reuse as hmac_reuse
 import native_hmac_profile as hmac_profile
 import native_publication_metadata as publication
+import native_test_reuse as test_reuse
 
 for module in (approval_module, native_unchanged, setup, checks, scope, families,
-               tooling, dependencies, md5, sha1, hmac_reuse, hmac_profile, publication):
+               tooling, dependencies, md5, sha1, hmac_reuse, hmac_profile, publication, test_reuse):
     io.require(Path(module.__file__).resolve() ==
                io.ROOT / 'scripts/release' / (module.__name__ + '.py'),
                'trusted review module identity: ' + module.__name__)

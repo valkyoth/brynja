@@ -77,7 +77,7 @@
     "scripts/assurance/test-assurance.py": "268c37a2350a5a2f9127736455b1ab34ceed847976da63961adc47bc10568014",
     "scripts/release/native_metadata_carry_forward.py": "a83fcfee8c405915618e8c8271446774fb7fbbdb8b3954bf256909f8302b466e",
     "scripts/release/run-verification.py": "562a6145e804d4d1b271fb51514aee19ed97ce37c34fefae1aa65c04e11307f8",
-    "scripts/release/test-native-metadata-carry-forward.py": "fb316d5a330ce522b61c87c3e003f7391d8d5fe8a19a1b96de9dceeb59c9f361",
+    "scripts/release/test-native-metadata-carry-forward.py": "080145d6ce167ca5e0dc3058ec23454e9344e15936ecc1425ba0c3a2506e1a46",
     "scripts/release/test-verification-plan.py": "a4d7159c4c67d293337930b00af326847e249365f93862646e46efc213696ebd",
     "scripts/release/verification_carry_forward.py": "d7b495027c8bbe16410de205b83401e3b12bfe20a52d7afc03979b8dc043d319",
     "scripts/release/verification_carry_forward_tests.py": "4a0a0fad4a44fb96402e5f80be99618f4d67da43182450dcfba28deaef38e774",

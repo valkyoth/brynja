@@ -40,8 +40,9 @@ def unchanged(root, before, after, closure, reviewed_validation=frozenset(), dep
                    'nonregular family input: ' + name)
         if identity == current[name]:
             continue
-        # The caller has already checked both raw digests against the externally
-        # pinned review. Population/type checks above still apply to these paths.
+        # The caller checked both raw digests against either the externally
+        # pinned validation review or the exact source-bound test decomposition.
+        # External artifact approval and population/type checks still apply.
         if name in reviewed_validation:
             continue
         io.require((name == 'Cargo.lock' and lock(root, before) == lock(root, after)) or

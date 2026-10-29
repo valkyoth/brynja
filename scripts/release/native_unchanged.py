@@ -11,6 +11,7 @@ import native_md5_dependency_profile as md5
 import native_sha1_dependency_profile as sha1
 import native_hmac_reuse as hmac_reuse
 import native_hmac_profile as hmac_profile
+import native_test_reuse as test_reuse
 
 
 def validate_inputs(root, capture, head, current, captured, digest, validation_changes=None,
@@ -20,6 +21,13 @@ def validate_inputs(root, capture, head, current, captured, digest, validation_c
                          validation_changes, dependency_profile)
         return 'unchanged'
     except ValueError:
+        tests = test_reuse.changes(root, capture, head, current, captured, family)
+        if tests:
+            io.require(not (set(tests) & set(validation_changes or {})),
+                       'overlapping native test and validation reviews')
+            unchanged_inputs(root, capture, head, current, captured, digest,
+                             {**(validation_changes or {}), **tests}, dependency_profile)
+            return 'reviewed-test-only'
         if (family not in hmac_profile.FIXTURES or
                 hmac_profile.PREFIX + 'Cargo.toml' not in captured):
             raise
@@ -75,9 +83,13 @@ def validate_family(adapter, head):
     io.clean(adapter.root)
     io.require(io.git(adapter.root, 'rev-parse', 'HEAD').decode().strip() == head and
                adapter.sources() == current, 'checkout changed during native reuse')
-    disposition = ('implementation/build inputs unchanged' if mode == 'unchanged' else
-                   'original active inputs unchanged; exact inactive HMAC additions excluded; '
-                   'NO HMAC qualification')
+    disposition = {
+        'unchanged': 'implementation/build inputs unchanged',
+        'reviewed-test-only': 'production/build inputs unchanged; exact reviewed test decomposition; '
+                              'original native test population only, NOT a run of changed tests',
+        'inactive-hmac': 'original active inputs unchanged; exact inactive HMAC additions excluded; '
+                         'NO HMAC qualification',
+    }[mode]
     print(f'{adapter.name} native evidence: REUSED; {count} accepted records at {capture}; '
           f'{disposition}; {len(review["validation_changes"])} '
           'exact validation-only changes approved. Original compiler and platform '

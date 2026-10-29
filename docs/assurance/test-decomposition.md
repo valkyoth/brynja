@@ -312,6 +312,29 @@ original execution date and receipt chain for reused tasks; importing evidence
 does not invent an execution or authorize a release. Other verification phases
 and final candidate applicability remain separate checks.
 
+## Original native records after the test split
+
+The v0.25.2 KMAC, TupleHash and ParallelHash captures at
+`ea97052babc657846851a303962eb1244477f5d6` predate four test-module revisions.
+`scripts/release/native_test_reuse.py` binds those exact before/after bytes and
+their unchanged `#[cfg(test)]` declaring parents. KMAC keeps its 100 native setup
+combinations; TupleHash retains the native output-width product; ParallelHash
+retains matrix-to-lifecycle reuse and adds independently runnable lifecycle tests.
+The corresponding hash registers may change only by those exact pin replacements.
+
+This is not a general exemption for files named `tests.rs`. Unknown revisions,
+changed parent declarations, production code, capture commands, build inputs,
+added/deleted family sources and executable hash-register changes still fail.
+The external owner-approved native snapshot is authenticated before the test
+exception: changing a CPU label or PASS output and rehashing its index does not
+authorize that record. Source pins detect drift; they do not authenticate a runner.
+
+Successful reuse preserves the **original native test population and platforms**.
+It is not a fresh native execution of the revised tests, an independent retest,
+or release authorization. Current test/decomposition regressions and verifier
+receipts remain separate requirements. The owner approval manifest and its
+externally configured digest are not replaced by a candidate-computed value.
+
 ## Acceptance boundaries
 
 - No hidden full sweep from browsing or launching one task.

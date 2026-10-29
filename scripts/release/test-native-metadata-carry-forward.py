@@ -15,6 +15,7 @@ from native_review_tests import NativeReviewTests, init_repository
 from native_scope_tests import ScopedNativeTests, InactiveSha2Tests
 from native_setup_tests import SetupReviewTests
 from native_import_tests import ImportIsolationTests
+from native_test_reuse_tests import NativeTestReuseTests, RealTestDecompositionPins
 
 import native_metadata_carry_forward as review
 import native_evidence_approval as approval

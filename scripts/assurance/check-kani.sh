@@ -51,7 +51,7 @@ test "$harnesses" = "32" || {
 
 confined_harnesses="$(
     grep -R -l --include='*.rs' '#\[kani::proof\]' crates |
-        sort
+        LC_ALL=C sort
 )"
 expected_harness_files="$(printf '%s\n' \
     crates/brynja-hash-parallel/src/lib.rs \

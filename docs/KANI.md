@@ -8,7 +8,7 @@ compatible pairing, following the same model as `base64-ng`.
 
 ## Current Pairing
 
-- Active release toolchain: Rust `1.98.1`.
+- Active release toolchain: Rust `1.99.1`.
 - Required crate compatibility range: Rust `1.90.0` through `1.99.1`; the
   [compatibility matrix](../README.md#rust-version-support) is separate from
   the pinned release and verifier compilers.
@@ -45,6 +45,13 @@ or the release compiler held back merely to accommodate Kani.
 `scripts/assurance/check-kani.sh` verifies this policy, the installed pairing,
 the exact thirty-two-harness inventory, and all proof results when the verifier is available.
 An unavailable verifier remains an explicit skip and is not proof evidence.
+
+Harness paths are compared in byte order (`LC_ALL=C sort`), independently of
+your desktop language. This only fixes inventory ordering; it does not change
+which files or proofs are admitted. Regression checks exercise non-byte
+collation and still reject added or relocated harnesses. A failed inventory
+check happens before proofs run and must not be reported as a proof failure
+or a successful proof run.
 
 The SHA-2 harnesses prove only their stated checked byte/bit-length,
 byte-padding, and four-byte output-failure properties. Compiler evidence and

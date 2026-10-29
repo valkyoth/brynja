@@ -20,6 +20,7 @@ import assurance_mutation as mutation
 import assurance_policy as assurance
 import assurance_process_tests
 from assurance_nightly_tests import test_frozen_nightly_identity_and_update_notification
+from assurance_kani_tests import test_kani_inventory_locale_and_confinement
 import assurance_process_tree as process_tree
 from assurance_process import run_bounded
 

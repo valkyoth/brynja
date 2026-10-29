@@ -383,6 +383,7 @@ def build_evidence(policy: dict | None = None) -> dict:
         ROOT / "scripts" / "assurance" / "assurance_process_tests.py",
         *(ROOT / "scripts/assurance" / name for name in (
             "assurance_policy.py", "assurance_nightly.py", "assurance_nightly_tests.py",
+            "assurance_kani_tests.py",
             "assurance-fixture-adapter.py", "test-assurance.py",
             "check-assurance.py", "check-bare-metal.sh", "check-kani.sh")),
         ROOT / "scripts" / "tag_gate.sh",

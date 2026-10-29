@@ -525,7 +525,7 @@
     "crates/brynja-hash-sha2/tests/batch512_general/mod.rs": "efb9152dc032f87fe9f02bda1d72e22a95a64ad71ced035bd93256d2d3a9098494239826c4b88606c402c00b9905c21a33a9e6eec329ad692231b940a08fa626",
     "docs/sha512-batch-execution.md": "c788fa6467d860ffe1b769af7f52fdf4d3cf9c01b25f40287e685b5dacbb06217ec0d32539f51ade5c0abc5218b4eba7278adef6cb549a2acdbcf04eb03dc1d7",
     "rust-toolchain.toml": "2f30e26567a1311b5da9845c651177ab9ab71f6d5ee1d3b48bf704b69b673ff37548cebf4464d87342ecdb5bc4b813f320c39e7c0e4a77628c281729802cedaf",
-    "scripts/assurance/check-kani.sh": "5ec8cd411e979973da6952a3c33509908dab03bea2f344546e18fc63dcb95bd4272a51fa7a4558fb45ad633a07dc243d24fa55acc34fec674ca8103d3323d49d",
+    "scripts/assurance/check-kani.sh": "9ea10cdda7b5777bd422f466e7fd4012f4ff220a1076ffeec7028f10b6c1622be2c2ebbc8d950ad8bd07b67819f7275326b58f4cf43dfae69de9c8931a04bb2f",
     "scripts/checks.sh": "4b19261c04b7047bbeda69bbf2f9b1614cc0f5b829e8dae91b88cfece65ebf7c1b6bfa04bc20f84e5478c8a9b91f93d47a46bcebf489593439dbad1b553d0ac8",
     "scripts/sha2/capture-sha512-batch-native.py": "640077cc712be4cb91298dac0e6e0f5849c21d904a5d0c99a5e197f394b90f6c3f640989a35b0978698ae0fcd7a78dbca790c2dca520614f6b9dc05bb75ba8a9",
     "scripts/sha2/check-sha2-bit-differential.py": "9b7e4a4bdd4ae608481b332211dc2d5bce404832a978e4aee00a8c26f3ae8010fa9ae3cef56815aba095732537ab0965f12f82a8a3c84e3810dea213f10cb07b",

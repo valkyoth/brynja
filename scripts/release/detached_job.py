@@ -85,9 +85,12 @@ def start(root: Path, job: Path, phases: list[str], approval: str | None,
     if job.is_relative_to(root) or root.is_relative_to(job):
         raise ValueError("job directory must be outside the source checkout")
     bounds(seconds, log_bytes)
-    if resume and recovery is None:
+    parent = None
+    if resume:
         refs = [resume] if isinstance(resume, dict) else resume
-        recovery = load(Path(refs[0]['job']), refs[0]['receipt']).get('recovery')
+        parent = load(Path(refs[0]['job']), refs[0]['receipt'])
+        if recovery is None:
+            recovery = parent.get('recovery')
     shards.bounds(shard_count, workers)
     if shard_count > 1 and os.environ.get("CARGO_TARGET_DIR"):
         raise ValueError("clear CARGO_TARGET_DIR so detached shards cannot share build output")
@@ -116,6 +119,8 @@ def start(root: Path, job: Path, phases: list[str], approval: str | None,
                     "seconds": seconds, "log_bytes": log_bytes,
                     "shards": shard_count, "workers": workers, "resume": resume,
                     "partition": partition, "miri_profile": miri_profile, "recovery": recovery}
+        import miri_recovery_tools
+        miri_recovery_tools.bind(manifest, parent)
         checkpoints.indices(manifest)
         checkpoints.inherited(manifest)
         import detached_recovery
@@ -152,6 +157,8 @@ def load(job: Path, receipt: str) -> dict:
         keys.update(("resume", "partition", "miri_profile"))
     if manifest.get('schema') == 3:
         keys.add('recovery')
+        if 'recovery_tools' in manifest:
+            keys.add('recovery_tools')
     if (set(manifest) != keys
             or records.digest(manifest) != receipt or type(manifest.get("schema")) is not int
             or manifest["schema"] not in (1, 2, 3)):

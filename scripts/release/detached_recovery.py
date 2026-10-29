@@ -12,9 +12,11 @@ import verification_carry_forward as carry
 import verification_plan as plans
 import verification_units as units
 import miri_coverage_identity as miri_identity
+import miri_recovery_tools as recovery_tools
 
 
 def references(manifest):
+    recovery_tools.validate(manifest)
     refs = manifest.get('recovery')
     if refs is None:
         return []
@@ -46,8 +48,10 @@ def expected(manifest, root, reader=None):
         if ref['receipt'] not in reader.locations:
             raise ValueError('missing recovery ancestor location')
         old, terminal, passed = reader.completed(ref['receipt'], allow_failed=True)
-        # Even explicit recovery cannot reuse a changed compiler/interpreter.
-        if old['tools'] != manifest['tools']:
+        old_root = reader.locations[ref['receipt']] / 'source'
+        # Old jobs retain complete inventory equality. Versioned new Miri-only
+        # jobs may ignore unrelated installations, never a changed verifier.
+        if not recovery_tools.compatible(old, manifest, old_root, root):
             continue
         source = old['sources']['head']
         records.git(root, 'merge-base', '--is-ancestor', source, 'HEAD')
@@ -63,7 +67,6 @@ def expected(manifest, root, reader=None):
         # jobs and current carry-forward decisions retain today's ownership.
         if historical:
             context['historical_ownership_root'] = root
-        old_root = reader.locations[ref['receipt']] / 'source'
         meaning = miri_identity.Coverage(old_root, root)
         context.update(coverage_roots=(old_root, root), miri_coverage=meaning)
         # Build once: thousands of split tasks must not scan/reparse every old

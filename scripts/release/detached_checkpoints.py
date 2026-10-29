@@ -128,6 +128,8 @@ def inherited(manifest: dict, *, depth: int = 0, budget: list[int] | None = None
                 raise ValueError("checkpoint execution inputs differ: " + field)
         if parent.get('recovery') != manifest.get('recovery'):
             raise ValueError('checkpoint recovery ancestry differs')
+        if parent.get('recovery_tools') != manifest.get('recovery_tools'):
+            raise ValueError('checkpoint recovery tool policy differs')
         for index, record in passed.items():
             # Repeated passes are retained in their parent, never counted twice.
             found.setdefault(index, record)

@@ -32,6 +32,7 @@ from miri_split_tests import MiriSplitTests
 from miri_coverage_tests import MiriCoverageTests
 from miri_decomposition_tests import MiriDecompositionTests, ReviewedMiriDecompositionTests
 from miri_split_reuse_tests import SplitReuseTests, SplitReviewEndpoints
+from miri_recovery_tool_tests import MiriRecoveryToolTests
 from miri_case_tests import MiriCaseTests
 from detached_history_tests import HistoryTests
 from phase_receipt_tests import PhaseReceiptTests

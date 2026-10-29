@@ -173,6 +173,22 @@ historical collection registry. Recovery ancestry is checked again during
 collection. Ordinary `--resume` still refuses failed parents and inherits a
 schema-3 parent's existing recovery ancestry when resuming an interrupted job.
 
+For **new Miri-only recovery jobs**, the manifest records
+`recovery_tools: selected-miri-v1`. The selected Rust/Miri compiler and verifier,
+default Rust/Cargo and platform must match the historical records. Python/rustup
+version text and extra unused Rust installations may differ across machines.
+Both original inventories remain intact. Missing, ambiguous or changed selected
+tools reject reuse; policy-selected verifier commands must also match.
+
+This rule does not apply to mixed-phase jobs or unknown command launchers.
+Older manifests without the field keep their original full-inventory comparison.
+An ordinary resume preserves its parent's comparison rule. Every running job
+still seals and checks its own complete live inventory, so changing tools while
+it runs invalidates its results. These are recorded version/commit identities,
+not cryptographic authentication of compiler binaries or remote runners.
+The [task decomposition audit](assurance/test-decomposition.md) records the
+specific reviewed matrix splits and their read-only recovery reconciliation.
+
 The current task list must be completely covered by validated reused records
 and new passes before the new job can pass. Parallel work resumes from missing
 or invalidated task identities, not a single last-completed numeric index.
@@ -336,7 +352,7 @@ trusted tooling, never by executing archived validator code.
 
 Historical tool records remain unchanged. The collector may have extra Rust
 installations and different Python/rustup inventory text. Its platform, default
-Rust/Cargo, all recorded compiler identities and selected verifier identities
+Rust/Cargo, selected compiler identities and selected verifier identities
 must still match. This is evidence of the original execution, not qualification
 of a different compiler, verifier or platform. Existing live collection and
 resume still use their stricter full-inventory equality checks.

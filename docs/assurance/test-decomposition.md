@@ -170,11 +170,10 @@ TupleHash splits; new bounded ParallelHash cases are not automatically credited
 from old longer runs. This comparison does not create a completed receipt,
 change dashboard observations, or make the release ready.
 
-Before constructing an interrupted-job recovery on another machine, its recorded
-tool inventory must also satisfy the recovery validator. That path retains its
-stricter complete-inventory equality check; the read-only candidate count above
-uses the existing phase validator's selected-tool compatibility check. Matching
-selected tools is not permission to fabricate a historical host inventory.
+At this stage of the work, interrupted-job recovery still required complete tool
+inventory equality; the read-only candidate count above used the phase
+validator's selected-tool compatibility check. The versioned recovery rule
+below subsequently addresses that difference without rewriting old inventories.
 
 ## Reviewed split coverage (2026-10-29)
 
@@ -224,10 +223,35 @@ missing successful records, altered inputs and unsupported mappings.
 
 **This remains a read-only eligibility result, not a completed recovery job or
 release PASS.** No historical receipt, dashboard observation or approval was
-rewritten. The recovery tool-inventory constraint described above still needs
+rewritten. At this stage the recovery tool-inventory constraint still needed
 to be satisfied before constructing a new job. The 329 remaining tasks are not
 an automatic run authorization; other saved evidence and current baseline
 requirements must be reconciled before scheduling the remaining work.
+
+## Cross-machine recovery preview (2026-10-29)
+
+New Miri-only `--recover` jobs now seal `recovery_tools: selected-miri-v1` in
+their launch manifest. This uses the same selected compiler resolution as
+phase reuse, comparing the two recorded inventories without probing tools on
+the machine that later reads the history. It requires identical platform,
+default Rust/Cargo identity, selected Miri compiler identity, Miri version and
+policy-selected verifier command. Missing or ambiguous identities fail closed.
+Python/rustup version text and unrelated installed compilers remain recorded,
+but are not required to match across hosts for this rule.
+
+This is not a change to old receipts. Jobs without the field retain complete
+inventory equality. Mixed-phase and opaque-command jobs cannot opt into the
+Miri-only rule. Resume preserves the parent's rule; it cannot add, remove or
+change it. The running job still checks its **full live inventory** before and
+after execution. Source, dependency, command coverage and approval checks remain
+separate, and tool version records are not binary authentication.
+
+A read-only call through the actual recovery validator using the current local
+inventory and both original AWS receipts confirms **3,796 reusable tasks and
+329 remaining tasks**, with the family breakdown above unchanged. The differing
+inventory fields are Python/rustup and additional, unselected compilers. No
+receipt was changed and no recovery job was created or started. This resolves
+the cross-machine inventory obstacle; it is not a complete Miri/release PASS.
 
 ## Measured bounded smoke checks
 

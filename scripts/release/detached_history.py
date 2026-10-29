@@ -150,6 +150,8 @@ class History:
                     raise ValueError('historical parent execution inputs differ: ' + field)
             if parent.get('recovery') != manifest.get('recovery'):
                 raise ValueError('historical recovery ancestry changed')
+            if parent.get('recovery_tools') != manifest.get('recovery_tools'):
+                raise ValueError('historical recovery tool policy changed')
             for index, record in passed.items():
                 found.setdefault(index, record)
         return found

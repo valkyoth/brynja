@@ -10,6 +10,12 @@ import verification_plan as plans
 import miri_tasks
 
 
+def matrix_mode(root):
+    release = plans.inputs.document((root / 'release-crates.toml').read_bytes())['release']
+    return plans.verification_mode({'stage': release['stage'],
+                                    'verification_mode': release.get('verification')})
+
+
 def describe(entry, root, cache=None):
     argv = entry['argv']
     meaning = entry
@@ -52,7 +58,7 @@ def inventory(root, phases, profile):
     # This is a browsable inventory, NOT execution approval or a release plan.
     # Select all families to show never-run tasks too; never launch this list.
     groups = list(plans.scope.GROUPS)
-    plan = {'stage': 'internal', 'verification_mode': 'affected',
+    plan = {'stage': 'internal', 'verification_mode': matrix_mode(root),
             'approval_required': False, 'fingerprint': '', 'groups': groups,
             'verifiers': {p: groups for p in ('miri', 'kani', 'asan')},
             'full_phases': list(phases)}

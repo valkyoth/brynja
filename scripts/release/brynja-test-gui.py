@@ -9,7 +9,7 @@ import sys
 
 import detached_catalog
 import verification_plan as plans
-from test_dashboard_catalog import inventory
+from test_dashboard_catalog import inventory, matrix_mode
 import test_dashboard_store as store
 import test_dashboard_run as runner
 
@@ -63,7 +63,8 @@ def main():
             raise ValueError('unknown family or no tasks in selected phases')
         items = [i for i in items if args.family in i['families']]
     if args.action in (None, 'list'):
-        print(f'Brynja test dashboard — Miri profile: {args.profile}; no tests started\n')
+        print(f'Brynja test dashboard — Miri profile: {args.profile}; '
+              f'compiler matrix: {matrix_mode(plans.ROOT)}; no tests started\n')
         if getattr(args, 'tasks', False):
             if args.offset < 0 or not 1 <= args.limit <= 1000:
                 raise ValueError('offset must be nonnegative; limit must be 1..1000')

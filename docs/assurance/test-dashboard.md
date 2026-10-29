@@ -71,7 +71,7 @@ No compiler, verifier, network operation or test is started by listing. No
 third-party terminal/UI dependency is needed. This first interface is a command
 dashboard, not a mouse or arrow-key application. Filters precede the subcommand.
 Times are UTC. `--profile routine` lists routine Miri tasks; the initial default
-is extended to make the incomplete v0.25.2 campaign visible. Listing that profile
+is extended to make the v0.25.2 checkpoint catalog visible. Listing that profile
 does not authorize running the campaign or change release requirements.
 Task pages show 50 rows by default and shorten long labels to fit the terminal;
 `show TASK_ID` always exposes the full resolved definition and command.
@@ -128,6 +128,12 @@ The check types are:
 the original broad commands and can be very slow; it is not a recommended
 shortcut for daily work. The profile does not change the other check types or
 approve a release sweep.
+
+The compiler matrix follows `release-crates.toml`: `verification = "full"`
+lists every registered compiler, while `"affected"` lists the routine MSRV and
+pinned-stable combinations. The banner states which matrix is displayed. Changing
+the Miri `--profile` does not change this matrix selection. A smaller routine
+matrix must not appear to cover a full checkpoint.
 
 For a routine task, keep the profile when inspecting and starting it:
 

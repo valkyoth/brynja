@@ -34,6 +34,29 @@ def observation(state='passed', ended='2026-10-29T07:00:00Z'):
 
 
 class DashboardTests(unittest.TestCase):
+    def test_matrix_matches_configured_checkpoint_without_starting_processes(self):
+        with patch('subprocess.Popen', side_effect=AssertionError('listing ran a process')):
+            with patch.object(catalog, 'matrix_mode', return_value='full'):
+                full = catalog.inventory(plans.ROOT, ['matrix'], 'routine')
+            with patch.object(catalog, 'matrix_mode', return_value='affected'):
+                routine = catalog.inventory(plans.ROOT, ['matrix'], 'extended')
+        expected = catalog.verification_commands.matrix_commands(plans.ROOT)
+        self.assertEqual({(i['entry']['command'], i['entry']['stdin']) for i in full}, set(expected))
+        self.assertLess({i['id'] for i in routine}, {i['id'] for i in full})
+
+    def test_matrix_mode_reads_release_policy_and_rejects_invalid_mode(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = root / 'release-crates.toml'
+            for mode in ('affected', 'full'):
+                path.write_text(f'[release]\nstage="public"\nverification="{mode}"\n')
+                self.assertEqual(catalog.matrix_mode(root), mode)
+            path.write_text('[release]\nstage="public"\nverification="skip"\n')
+            with self.assertRaises(ValueError):
+                catalog.matrix_mode(root)
+            path.write_text('[release]\nstage="public"\n')
+            self.assertEqual(catalog.matrix_mode(root), 'full')
+
     def test_inventory_is_read_only_and_ids_unique(self):
         with patch('subprocess.Popen', side_effect=AssertionError('listing ran a process')):
             items = catalog.inventory(plans.ROOT, ['miri', 'repository', 'kani', 'asan', 'matrix'], 'routine')

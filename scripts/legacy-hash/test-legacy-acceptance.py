@@ -7,12 +7,61 @@ import subprocess
 import tarfile
 import tempfile
 from pathlib import Path
+from unittest.mock import patch
 
 import legacy_acceptance as policy
 
 
+def panic_profiles():
+    spec = importlib.util.spec_from_file_location(
+        'legacy_panic_profiles', policy.ROOT / 'scripts/legacy-hash/check-panic-profiles.py')
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    historical = policy.ROOT / policy.FIXTURE / 'Cargo.lock'
+    current = policy.ROOT / policy.CURRENT / 'Cargo.lock'
+    before = historical.read_bytes(), current.read_bytes()
+    assert before[0] != before[1], 'regression requires distinct historical/current locks'
+    for mode in ('success', 'lock-error', 'missing-marker', 'wrong-leaf-strategy'):
+        seen, directories = [], []
+
+        def run(command, *, cwd, env, **kwargs):
+            assert '--locked' in command and '--offline' in command and '--release' in command
+            assert (cwd / 'Cargo.lock').read_bytes() == before[1]
+            assert (cwd / 'src/lib.rs').read_bytes() == (policy.ROOT / policy.FIXTURE / 'src/lib.rs').read_bytes()
+            selected = Path(env['CARGO_TARGET_DIR']).name
+            expected = 'abort' if selected == 'abort' else 'unwind'
+            assert command[-2:] == ['--', expected]
+            assert env.get('CARGO_PROFILE_RELEASE_PANIC') == (None if selected == 'default' else selected)
+            seen.append(selected)
+            directories.append(cwd)
+            stderr = '\n'.join(
+                f'Running rustc --crate-name brynja_legacy_{leaf} '
+                + ('-C panic=abort' if expected == 'abort' else '') for leaf in ('sha1', 'md5'))
+            if mode == 'wrong-leaf-strategy':
+                stderr += '\nRunning rustc --crate-name brynja_legacy_md5 -C panic=abort'
+            return subprocess.CompletedProcess(command, 1 if mode == 'lock-error' else 0,
+                '' if mode == 'missing-marker' else f'downstream release profile: {expected}: PASS', stderr)
+
+        with patch.object(module.subprocess, 'run', side_effect=run):
+            if mode == 'success':
+                module.main()
+                assert seen == ['default', 'unwind', 'abort']
+            else:
+                try:
+                    module.main()
+                except ValueError:
+                    pass
+                else:
+                    raise AssertionError('panic profile accepted ' + mode)
+                assert seen == ['default']
+        assert all(not directory.exists() for directory in directories)
+        assert (historical.read_bytes(), current.read_bytes()) == before
+    print('Panic profiles use the current lock, preserve frozen inputs and reject three execution failures')
+
+
 def main():
     policy.validate()
+    panic_profiles()
     mutations = [
         (f'{policy.FIXTURE}/src/profiles.rs', 'finalize_bits_secret', 'omitted_bits_secret'),
         (f'{policy.FIXTURE}/src/profiles.rs', 'assert_eq!(output, [0; $size])', 'assert!(true)'),

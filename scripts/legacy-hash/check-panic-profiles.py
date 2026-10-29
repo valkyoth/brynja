@@ -35,6 +35,9 @@ def main():
         consumer = root / 'consumer'
         shutil.copytree(policy.ROOT / policy.FIXTURE, consumer,
                         ignore=shutil.ignore_patterns('target'))
+        # Replay frozen sources against today's dependency graph. The parent
+        # lock is historical evidence, not the lock for current leaf versions.
+        shutil.copyfile(policy.ROOT / policy.CURRENT / 'Cargo.lock', consumer / 'Cargo.lock')
         manifest = consumer / 'Cargo.toml'
         manifest.write_text(manifest.read_text().replace('../../crates', (policy.ROOT / 'crates').as_posix())
                             + '\n[[bin]]\nname="panic-profile"\npath="src/panic_profile.rs"\n')

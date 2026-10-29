@@ -60,8 +60,9 @@ class MiriTaskTests(unittest.TestCase):
     def test_single_task_cannot_cover_whole_family_or_another_task(self):
         tasks = catalog.selected(self.plan(["tuplehash"]), ["miri"], None, miri_tasks=True)
         whole = catalog.selected(self.plan(["tuplehash"]), ["miri"], None)
-        self.assertTrue(carry.covered(tasks[0], [tasks[0]]))
-        self.assertFalse(carry.covered(tasks[1], [tasks[0]]))
+        self.assertFalse(carry.covered(tasks[0], [tasks[0]]))  # Snapshot context is mandatory.
+        self.assertTrue(carry.covered(tasks[0], [tasks[0]], roots=(ROOT, ROOT)))
+        self.assertFalse(carry.covered(tasks[1], [tasks[0]], roots=(ROOT, ROOT)))
         self.assertFalse(carry.covered(whole[0], tasks))
         self.assertFalse(carry.covered(tasks[0], whole))
 

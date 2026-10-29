@@ -141,7 +141,8 @@ class PhaseReceiptTests(unittest.TestCase):
         def context(job, receipt, root, requested, **kwargs):
             chosen = [miri] if receipt == 'a' * 64 else [kani]
             return {'plan': plan(), 'manifest': {'commands': chosen, 'phases': [chosen[0]['phase']]},
-                    'release_plan': requested, 'public_checkpoint': False}
+                    'release_plan': requested, 'public_checkpoint': False,
+                    'coverage_roots': (carry.plans.ROOT, carry.plans.ROOT)}
         def required(ctx, phase, _command):
             return [miri if phase == 'miri' else kani]
         with patch.object(phases, 'load', return_value=registry), \

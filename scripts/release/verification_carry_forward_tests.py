@@ -261,8 +261,9 @@ class CarryForwardTests(unittest.TestCase):
             ("if context['public_checkpoint']:", "if False:"),
             ('if not groups:', 'if False:'),
             ('groups.intersection(affected)', 'False'),
-            ("if not covered(entry, context['manifest']['commands']):", 'if False:'),
-            ("if driver in changed or entry['stdin'] in changed:", 'if False:'),
+            ("if not covered(entry, context['manifest']['commands'], roots=context.get('coverage_roots'),\n"
+             "                   miri=context.get('miri_coverage')):", 'if False:'),
+            ("if (driver in changed and not exact_decomposition) or entry['stdin'] in changed:", 'if False:'),
         ):
             self.assertEqual(source.count(before), 1)
             mutant = types.ModuleType('carry_mutant')

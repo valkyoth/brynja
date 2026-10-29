@@ -82,10 +82,11 @@ class VerificationPolicyTests(unittest.TestCase):
         old = self.build(stage='internal')
         current = {**old, 'stage': 'public', 'version': '0.26.0'}
         self.assertFalse(plans.new_full_checkpoint(current, old))
-        check = {'phase': 'miri', 'command': 'test', 'stdin': None, 'environment': {},
+        check = {'phase': 'miri', 'command': 'python3 scripts/zeroization/run-miri-task.py --group kmac --task 0 --profile routine', 'stdin': None, 'environment': {},
                  'argv': ['python3', 'scripts/zeroization/run-miri-task.py',
                           '--group', 'kmac', '--task', '0', '--profile', 'routine']}
         context = {'plan': self.build(groups=()), 'manifest': {'commands': [check]},
+                   'coverage_roots': (plans.ROOT, plans.ROOT),
                    'public_checkpoint': plans.new_full_checkpoint(current, old)}
         self.assertTrue(carry.disposition(check, context).startswith('reuse:'))
         for changed in ({'tool_drift': {'miri': 'new interpreter'}},

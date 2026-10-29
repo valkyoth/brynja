@@ -132,6 +132,50 @@ proposed old-suite-to-new-task coverage, with regressions rejecting mismatched
 selectors or changed assertions. Only then can the remaining execution list be
 determined; there is no reason here to automatically restart all 4,125 tasks.
 
+## Unchanged-family reuse proof (2026-10-29)
+
+The carry-forward and interrupted-job recovery paths now resolve each Miri
+ordinal against its own snapshot's reviewed catalog **before** comparing
+coverage. Identical command text is insufficient: the same task number can
+select another test after a split. Moved tasks can match only if their complete
+definitions match, including profile, features, selectors, output-width index,
+completion marker and bounded-coverage label. Whole-suite-to-new-subset reuse
+is not inferred by this rule. Original receipt/index/log provenance is retained.
+
+An exact raw-byte review binds the three 2026-10-29 Miri runner/catalog changes.
+Only for that change pair, the ordinary source-scope validator can classify the
+remaining delta without those three files forcing every Miri family to rerun.
+Unknown runner edits, altered line endings, build/graph uncertainty and ambient
+compiler overrides do not qualify. Changed Rust tests still invalidate their
+family and downstream consumers; this is not an exemption for test directories.
+Tool compatibility, new full-checkpoint boundaries and run approval remain
+separate requirements. The normal planner is unchanged and no new run is
+automatically approved by this proof.
+
+Using the two validated interrupted receipts above, the current source proof
+and selected-tool compatibility check identify these eligible saved passes:
+
+| Family | Eligible exact-definition passes |
+| --- | ---: |
+| MD5 | 940 |
+| SHA-1 | 683 |
+| SHA-2 | 26 |
+| SHA-3 | 133 |
+| Core / sanitization | 2 |
+| **Total** | **1,784** |
+
+The other 2,341 current tasks are **not yet covered by this proof**, not an
+instruction to rerun all of them. Further scoped analysis can consider KMAC and
+TupleHash splits; new bounded ParallelHash cases are not automatically credited
+from old longer runs. This comparison does not create a completed receipt,
+change dashboard observations, or make the release ready.
+
+Before constructing an interrupted-job recovery on another machine, its recorded
+tool inventory must also satisfy the recovery validator. That path retains its
+stricter complete-inventory equality check; the read-only candidate count above
+uses the existing phase validator's selected-tool compatibility check. Matching
+selected tools is not permission to fabricate a historical host inventory.
+
 ## Measured bounded smoke checks
 
 Bounded local Miri smoke checks on `nightly-2026-09-11` passed for these selected

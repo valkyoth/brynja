@@ -11,6 +11,7 @@ import detached_manifest as records
 import verification_carry_forward as carry
 import verification_plan as plans
 import verification_units as units
+import miri_coverage_identity as miri_identity
 
 
 def references(manifest):
@@ -54,26 +55,39 @@ def expected(manifest, root, reader=None):
         delta['evidence'] = {'changed_paths': plans.changed_paths(root, source)}
         context = {'plan': delta, 'manifest': {**old, 'commands': [r['command'] for r in passed.values()]},
                    'test_only_rerun': carry.test_only.prove(root, source, delta['evidence']['changed_paths']),
+                   'miri_decomposition_groups': carry.decomposition.prove(
+                       root, source, delta['evidence']['changed_paths']),
                    'public_checkpoint': plans.new_full_checkpoint(manifest['plan'], old['plan'])}
         # Only a History reader reconstructs an already sealed recovery. New
         # jobs and current carry-forward decisions retain today's ownership.
         if historical:
             context['historical_ownership_root'] = root
         old_root = reader.locations[ref['receipt']] / 'source'
+        meaning = miri_identity.Coverage(old_root, root)
+        context.update(coverage_roots=(old_root, root), miri_coverage=meaning)
+        # Build once: thousands of split tasks must not scan/reparse every old
+        # task for each candidate. The index contains validated passes only.
+        miri_passes, other_passes = {}, []
+        for i, record in passed.items():
+            if miri_identity.is_task(record['command']):
+                miri_passes.setdefault(meaning.old.key(record['command']), []).append((i, record))
+            else:
+                other_passes.append((i, record))
         for index, entry in enumerate(manifest['commands']):
             if index in found:
                 continue
-            matches = [(i, r) for i, r in passed.items()
-                       if units.covers(r['command'], entry, old_root, root)]
+            matches = (miri_passes.get(meaning.new.key(entry), []) if miri_identity.is_task(entry)
+                       else [(i, r) for i, r in other_passes
+                             if units.covers(r['command'], entry, old_root, root)])
             if not matches:
                 continue
             # Coverage has already been established above, including whole-suite
             # to unit-group expansion. The existing source-delta policy must
             # still permit reuse of this particular implementation check.
-            scoped = {**context, 'manifest': {**old, 'commands': [entry]}}
+            previous_index, previous = matches[0]
+            scoped = {**context, 'manifest': {**old, 'commands': [previous['command']]}}
             if not carry.disposition(entry, scoped).startswith('reuse:'):
                 continue
-            previous_index, previous = matches[0]
             found[index] = {
                 'state': 'reused', 'index': index, 'command': entry,
                 'origin': {'receipt': ref['receipt'], 'index': previous_index},

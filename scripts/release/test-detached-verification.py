@@ -29,6 +29,8 @@ from verification_carry_forward_tests import CarryForwardTests
 from detached_checkpoint_tests import CheckpointTests
 from miri_task_tests import MiriTaskTests
 from miri_split_tests import MiriSplitTests
+from miri_coverage_tests import MiriCoverageTests
+from miri_decomposition_tests import MiriDecompositionTests, ReviewedMiriDecompositionTests
 from miri_case_tests import MiriCaseTests
 from detached_history_tests import HistoryTests
 from phase_receipt_tests import PhaseReceiptTests

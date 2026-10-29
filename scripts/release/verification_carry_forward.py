@@ -13,6 +13,8 @@ import detached_manifest as records
 import verification_commands as commands
 import verification_plan as plans
 import verification_test_only as test_only
+import miri_coverage_identity as miri_identity
+import miri_decomposition_reuse as decomposition
 
 
 def prepare(job: Path, receipt: str, root: Path, release_plan: dict, *,
@@ -44,6 +46,9 @@ def prepare(job: Path, receipt: str, root: Path, release_plan: dict, *,
     }
     return {'plan': delta, 'manifest': manifest, 'release_plan': release_plan,
             'public_checkpoint': public_checkpoint,
+            'coverage_roots': (job / 'source', root),
+            'miri_coverage': miri_identity.Coverage(job / 'source', root),
+            'miri_decomposition_groups': decomposition.prove(root, source, delta['evidence']['changed_paths']),
             'test_only_rerun': test_only.prove(root, source, delta['evidence']['changed_paths'])}
 
 
@@ -67,10 +72,17 @@ def verifier_groups(entry: dict) -> set[str] | None:
     return None
 
 
-def covered(entry: dict, previous: list[dict]) -> bool:
+def covered(entry: dict, previous: list[dict], *, roots=None, miri=None) -> bool:
     # A single task is not evidence for every other task in its family.
     if entry['argv'][:2] == ['python3', 'scripts/zeroization/run-miri-task.py']:
-        return entry in previous
+        if roots is None:
+            return False  # No snapshot context, no proof of ordinal meaning.
+        resolver = miri or miri_identity.Coverage(*roots)
+        return any(resolver.covers(old, entry) for old in previous)
+    if roots is not None:
+        import verification_units
+        if any(verification_units.covers(old, entry, *roots, miri=miri) for old in previous):
+            return True
     wanted = verifier_groups(entry)
     if wanted is not None:
         found = set()
@@ -95,12 +107,14 @@ def disposition(entry: dict, context: dict) -> str:
     changed = context['plan'].get('evidence', {}).get('changed_paths', [])
     argv = entry['argv']
     driver = argv[1] if argv[0] == 'python3' else argv[0]
-    if driver in changed or entry['stdin'] in changed:
+    groups = verifier_groups(entry)
+    exact_decomposition = (miri_identity.is_task(entry) and entry['phase'] == 'miri'
+                           and bool(groups) and groups <= context.get('miri_decomposition_groups', set()))
+    if (driver in changed and not exact_decomposition) or entry['stdin'] in changed:
         return 'run: changed command driver or input'
     isolated = context.get('test_only_rerun')
     if isolated and driver in isolated:
         return 'run: dependent of corrected standalone test'
-    groups = verifier_groups(entry)
     if groups is None:
         groups = commands.owners(entry['command'])
         if 'historical_ownership_root' in context:
@@ -117,9 +131,11 @@ def disposition(entry: dict, context: dict) -> str:
     delta = context['plan']
     affected = (delta['verifiers'][entry['phase']] if entry['phase'] in delta['verifiers']
                 else delta['groups'])
-    if plans.requires_full(delta, entry['phase']) or (groups.intersection(affected) and not isolated):
+    if not exact_decomposition and (plans.requires_full(delta, entry['phase']) or
+                                   (groups.intersection(affected) and not isolated)):
         return 'run: changed or unresolved implementation inputs'
-    if not covered(entry, context['manifest']['commands']):
+    if not covered(entry, context['manifest']['commands'], roots=context.get('coverage_roots'),
+                   miri=context.get('miri_coverage')):
         return 'run: no matching successful command evidence'
     return 'reuse: unchanged implementation inputs'
 

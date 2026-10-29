@@ -8,6 +8,7 @@ import shlex
 from pathlib import PurePosixPath
 
 import detached_manifest as records
+import miri_coverage_identity as miri_identity
 
 SUITES = {
     'scripts/hmac/test-hmac-hosted-cleanup.py': 'HostedTests',
@@ -74,7 +75,12 @@ def expand(entry, root):
             for names in groups(root, argv[1])]
 
 
-def covers(old, new, old_root, new_root):
+def covers(old, new, old_root, new_root, *, miri=None):
+    # Even byte-identical command lines may refer to different Miri cases after
+    # catalog edits. Resolve before the ordinary exact-command shortcut.
+    if miri_identity.is_task(old) or miri_identity.is_task(new):
+        resolver = miri or miri_identity.Coverage(old_root, new_root)
+        return resolver.covers(old, new)
     if old == new:
         return True
     # A successful old whole suite can cover its unchanged, enumerated subsets.

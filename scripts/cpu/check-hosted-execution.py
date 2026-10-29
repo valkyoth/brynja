@@ -282,8 +282,8 @@ def hmac_consumer(consumer, env, extra):
         for profile in ([], ['--release']):
             result = run(['cargo', 'test', '--offline', '--test', 'hmac', *profile, *extra],
                          consumer, env)
-            if 'test result: ok. 2 passed; 0 failed; 1 ignored;' not in result.stdout:
-                raise ValueError('packaged hosted HMAC population changed')
+            if 'test result: ok. 3 passed; 0 failed; 1 ignored;' not in result.stdout:
+                raise ValueError('packaged hosted HMAC population changed\n' + result.stdout[-6000:])
         probe = '''use brynja_crypto_cpu_std::execution::{Authority, HmacSelection};
 use brynja_mac_hmac::Sha256;
 pub fn borrow(owner: &Authority) -> HmacSelection<'_, Sha256> {

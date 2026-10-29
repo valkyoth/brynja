@@ -17,6 +17,54 @@ spec.loader.exec_module(checks)
 
 
 class ProtectedAcceptanceTests(unittest.TestCase):
+    def test_packaged_hmac_population_and_restoration(self):
+        expected = "test result: ok. 3 passed; 0 failed; 1 ignored;"
+        for bad in (None, "", "test result: ok. 2 passed; 0 failed; 1 ignored;",
+                    "test result: ok. 2 passed; 0 failed; 2 ignored;",
+                    "test result: FAILED. 2 passed; 1 failed; 1 ignored;", "runner-error"):
+            for failure_profile in (0, 1):
+                with self.subTest(bad=bad, profile=failure_profile), tempfile.TemporaryDirectory() as raw:
+                    root = Path(raw)
+                    (root / "src").mkdir()
+                    manifest, library = root / "Cargo.toml", root / "src/lib.rs"
+                    original = '[dependencies]\nhost = { features = ["runtime-execution"] }\n'
+                    manifest.write_text(original)
+                    library.write_text("// original consumer\n")
+                    calls = []
+                    diagnostics = iter(("E0515", "E0451", "E0308", "E0599"))
+
+                    def run(command, *_args, **kwargs):
+                        if "test" in command:
+                            index = len(calls)
+                            calls.append(command)
+                            self.assertEqual("--release" in command, index == 1)
+                            self.assertIn("portable_policy_matches_leaf_for_all_algorithms_and_boundaries",
+                                          (root / "tests/hmac.rs").read_text())
+                            output = expected
+                            if bad is not None and index == failure_profile:
+                                if bad == "runner-error":
+                                    raise RuntimeError("test runner failed")
+                                output = bad
+                            return subprocess.CompletedProcess(command, 0, output, "")
+                        diagnostic = (f"error[{next(diagnostics)}] hmac"
+                                      if kwargs.get("success") is False else "")
+                        return subprocess.CompletedProcess(command, bool(diagnostic), "", diagnostic)
+
+                    with patch.object(checks.host, "run", side_effect=run), redirect_stdout(io.StringIO()):
+                        if bad is None:
+                            checks.host.hmac_consumer(root, {}, [])
+                            self.assertEqual(len(calls), 2)
+                            self.assertIsNone(next(diagnostics, None))
+                        else:
+                            with self.assertRaises((ValueError, RuntimeError)) as raised:
+                                checks.host.hmac_consumer(root, {}, [])
+                            self.assertEqual(len(calls), failure_profile + 1)
+                            if bad != "runner-error":
+                                self.assertIn(bad, str(raised.exception))
+                    self.assertEqual(manifest.read_text(), original)
+                    self.assertEqual(library.read_text(), "// original consumer\n")
+                    self.assertFalse((root / "tests/hmac.rs").exists())
+
     def test_population_requires_every_native_test(self):
         checks.population(subprocess.CompletedProcess([], 0, "test result: ok. 3 passed; 0 failed; 0 ignored;"), 3)
         for summary in ("0 passed; 0 failed; 3 ignored;", "2 passed; 0 failed; 1 ignored;",

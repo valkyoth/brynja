@@ -52,7 +52,7 @@ def main():
             plans.ROOT, args.phase or list(detached_catalog.PHASES), args.profile)}
         rows = [r for r in store.latest(observations).values()
                 if (not args.family or args.family in r['families'])
-                and (not args.phase or r['phase'] in args.phase)]
+                and (not args.phase or r['phase'] in args.phase) and 'seconds' in r]
         for row in sorted(rows, key=lambda r: r.get('seconds', 0), reverse=True)[:20]:
             print(f'{row["id"]:28} {store.duration(row.get("seconds", 0)):9} '
                   f'{store.text(row["state"]):12} {store.brief(labels.get(row["id"], row["label"]), 52)}')

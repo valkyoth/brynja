@@ -54,6 +54,14 @@ own scope. This is not a claim that every path in a release was interpreted.
 | --- | --- | --- | --- |
 | v0.25.1 | `44eac32b5cf1ccd017f174588de3ff3466e5ab0c` | Routine, 587 tasks across eleven selected families; Linux x86-64, `nightly-2026-09-11` | PASS at that snapshot. Two AWS partitions (294 + 293) combined without re-execution; logs and receipt validated. Later candidate checks/reuse remain separate. |
 | v0.25.2 | `c7ae3f72c49add27b13d92faa72fe80c18348d22` | Extended checkpoint: 2,962 of 4,122 tasks passed; four in-flight tasks cancelled; 1,160 tasks remain without a completed pass | **PARTIAL / OWNER-CANCELLED**, 2026-10-29. Both terminal records, frozen sources and logs downloaded and historically validated. Not a full campaign PASS or release authorization. |
+| v0.25.2 | `a4c16d1b0c4fce6a0b4cf79930e9bad0df662a4a`, with validated reuse from the original AWS source above | Revised extended catalog: 4,125/4,125 covered; 3,796 reused results plus 329 fresh executions; Linux x86-64, `nightly-2026-09-11` | **Completed checkpoint**, 2026-10-29. Four local continuation batches reconciled. Bounded ParallelHash coverage, not exhaustive interpreted coverage; no release authorization. |
+
+The completed v0.25.2 receipt is
+`3a531d553d3d97f98884d1c3fe3450b5923dd4ac2e60df92a5d770f63953c631`.
+Its original receipt ancestry, source seals and logs validate. Reused task coverage
+includes reviewed decomposition of earlier matrix commands; it does not mean
+3,796 separate new executions. The cancelled AWS records remain partial and
+unchanged. See the [batch reconciliation](test-decomposition.md#completed-checkpoint-reconciliation-2026-10-29).
 
 The v0.25.1 receipt is
 `623c2febf6aa0c97db7ed63ba7e6913741e5ca0e483466f1d6822a50d12ded54`.

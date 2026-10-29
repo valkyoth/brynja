@@ -146,13 +146,16 @@ after `list`. The maximum page size is 1000.
 For example:
 
 ```text
-IMPLEMENTATION   CHECK       PASSED/TOTAL  STATUS          LAST RUN (UTC)        LONGEST
-md5              asan        2/4           partial         2026-10-29T08:07:38Z  0m00s
+IMPLEMENTATION   CHECK       COVERED/TOTAL REUSED  STATUS          LAST RUN (UTC)        LONGEST
+md5              asan        2/4           0       partial         2026-10-29T08:07:38Z  0m00s
 ```
 
 This means two of the four currently listed tasks have a latest recorded pass.
 It does not mean that the other two failed. Use `list --tasks` to see which
 ones are missing, interrupted or failed.
+
+`COVERED/TOTAL` includes validated reused results; `REUSED` shows how many of
+those were reused rather than executed in the imported job.
 
 - `LAST RUN` is the most recent recorded timestamp in that row, in UTC, not
   necessarily the time every task completed. An active attempt uses its current
@@ -161,6 +164,10 @@ ones are missing, interrupted or failed.
   tasks, not a total runtime or estimate of time remaining.
 - `0m00s` can mean a duration below one second, or no observations yet.
 - In `list --tasks`, `DURATION` belongs to that individual task's latest attempt.
+- Reused tasks retain their original execution date. Their duration is `-`:
+  an older matrix may cover several new tasks, so its duration cannot honestly
+  be assigned to each one. `show TASK_ID` retains the source command's duration,
+  execution commit and receipt chain. `slow` excludes these unmeasured durations.
 - Long names are shortened on screen. `show TASK_ID` displays the full name.
 
 ## Inspect and refresh another check
@@ -262,17 +269,19 @@ current catalog. Reimporting does not inflate the summary's unique task count.
 
 ## Read status honestly
 
-- **all observed:** every displayed task has a latest recorded pass; this can
+- **all observed:** every displayed task has a latest recorded pass or validated reuse; this can
   combine historical runs and is not current-source or release qualification.
 - **partial:** some observations exist, but coverage is incomplete or interrupted.
 - **failures:** the latest attempt for at least one task failed/was invalidated.
 - **never run:** no observation has been imported or generated for that task ID.
 
-Individual tasks also show `running`, `passed`, `failed`, `timed_out`,
+Individual tasks also show `running`, `passed`, `reused`, `failed`, `timed_out`,
 `cancelled`, `interrupted`, `log_limit` or `invalidated`. `log_limit` means the
 output reached the safety limit. `invalidated` means the run cannot be accepted,
 for example because its source or tool inventory changed during execution.
 A newer failure remains visible even if an earlier attempt passed.
+Importing reuse later does not replace its original execution time with the
+import time, so it cannot conceal a newer failed attempt.
 
 Current applicability is deliberately **not assessed** by the dashboard. Task
 IDs bind command meaning (including Miri selectors/profile), not proof that a

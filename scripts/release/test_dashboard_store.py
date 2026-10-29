@@ -11,8 +11,9 @@ from pathlib import Path
 import detached_manifest as records
 from detached_history import History
 from test_dashboard_catalog import describe
+import test_dashboard_provenance as provenance
 
-STATES = {'passed', 'failed', 'cancelled', 'timed_out', 'log_limit',
+STATES = {'passed', 'reused', 'failed', 'cancelled', 'timed_out', 'log_limit',
           'running', 'interrupted', 'invalidated'}
 
 
@@ -81,14 +82,20 @@ def import_job(store, job, receipt, *, locations=None):
                 raise ValueError('invalid relocated receipt location')
             lookup[identity] = records.safe_path(Path(path))
     lookup[receipt] = records.safe_path(job)
-    manifest, terminal, passed = History(lookup).completed(receipt)
+    reader = History(lookup)
+    manifest, terminal, passed = reader.completed(receipt)
     rows, cache = [], {}
     for record in terminal['results']:
         item = describe(record['command'], job / 'source', cache)
+        reused = record['state'] == 'reused'
+        if reused and record['index'] not in passed:
+            raise ValueError('dashboard reuse record was not validated')
+        timing = (provenance.execution(reader, record) if reused else
+                  {'ended': record['ended'], 'seconds': record['elapsed_seconds']})
         rows.append({'id': item['id'], 'families': item['families'],
                      'phase': record['command']['phase'], 'label': item['label'],
-                     'state': 'passed' if record['index'] in passed else record['state'],
-                     'ended': record['ended'], 'seconds': record['elapsed_seconds'],
+                     'state': 'reused' if reused else 'passed' if record['index'] in passed else record['state'],
+                     **timing,
                      'origin': 'validated historical receipt', 'receipt': receipt,
                      'commit': manifest['plan']['head'],
                      'log': str(job / record['log']),
@@ -98,7 +105,9 @@ def import_job(store, job, receipt, *, locations=None):
     save(prepare(store), {'schema': 1, 'release_authorized': False,
                           'observations': rows})
     return {'receipt': receipt, 'campaign_state': terminal['state'],
-            'passes': len(passed), 'recorded': len(rows), 'release_authorized': False}
+            'passes': sum(r['state'] == 'passed' for r in rows),
+            'reused': sum(r['state'] == 'reused' for r in rows),
+            'covered': len(passed), 'recorded': len(rows), 'release_authorized': False}
 
 
 def text(value):
@@ -133,16 +142,17 @@ def render(items, observations, *, tasks=False, family=None):
         for owner in item['families']:
             if family is None or owner == family:
                 groups.setdefault((owner, item['entry']['phase']), []).append(item)
-    print(f'{"IMPLEMENTATION":16} {"CHECK":11} {"PASSED/TOTAL":13} {"STATUS":15} {"LAST RUN (UTC)":21} LONGEST')
+    print(f'{"IMPLEMENTATION":16} {"CHECK":11} {"COVERED/TOTAL":13} {"REUSED":7} {"STATUS":15} {"LAST RUN (UTC)":21} LONGEST')
     for (family, phase), subset in sorted(groups.items()):
         rows = [known[i['id']] for i in subset if i['id'] in known]
         passed = sum(r['state'] == 'passed' for r in rows)
+        reused = sum(r['state'] == 'reused' for r in rows)
         failed = any(r['state'] in {'failed', 'invalidated'} for r in rows)
-        status = ('failures' if failed else 'all observed' if passed == len(subset)
+        status = ('failures' if failed else 'all observed' if passed + reused == len(subset)
                   else 'partial' if rows else 'never run')
         date = max((r['ended'] for r in rows), default='-')
         longest = max((r.get('seconds', 0) for r in rows), default=0)
-        print(f'{family:16} {phase:11} {str(passed)+"/"+str(len(subset)):13} '
+        print(f'{family:16} {phase:11} {str(passed + reused)+"/"+str(len(subset)):13} {reused:<7} '
               f'{status:15} {text(date).replace("+00:00", "Z")[:20]:21} {duration(longest)}')
     print('\nHistorical/diagnostic observations only; current source/tool applicability is NOT assessed.')
     print('Partial is not PASS. No dashboard result authorizes a release; use show ID for provenance.')

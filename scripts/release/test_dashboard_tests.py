@@ -14,6 +14,7 @@ from unittest.mock import patch
 import test_dashboard_catalog as catalog
 import test_dashboard_store as store
 import test_dashboard_run as runner
+import test_dashboard_provenance as provenance
 import verification_plan as plans
 
 
@@ -123,6 +124,79 @@ class DashboardTests(unittest.TestCase):
             self.assertEqual(summary['passes'], 0)
             self.assertFalse(summary['release_authorized'])
             self.assertEqual(store.read(Path(directory))[0]['state'], 'cancelled')
+
+    def reuse_fixture(self):
+        original = {'index': 7, 'command': entry(), 'state': 'passed',
+                    'ended': '2026-10-28T01:00:00Z', 'elapsed_seconds': 900,
+                    'log': 'command-0007.log', 'log_sha256': 'a'*64, 'log_bytes': 12}
+        reused = {'index': 1, 'command': entry(), 'state': 'reused',
+                  'origin': {'receipt': 'b'*64, 'index': 7}, 'log': 'command-0001.log',
+                  'log_sha256': 'a'*64, 'log_bytes': 12}
+        return original, reused
+
+    def test_reused_import_preserves_original_date_and_does_not_invent_task_duration(self):
+        original, reused = self.reuse_fixture()
+        manifest = {'plan': {'head': 'c'*40}, 'sources': {'head': 'c'*40}}
+        ancestor = {'sources': {'head': 'd'*40}}
+        with tempfile.TemporaryDirectory() as directory, patch.object(store, 'History') as reader, \
+                patch.object(store, 'describe', return_value=task()):
+            reader.return_value.completed.side_effect = lambda receipt, **kwargs: (
+                (ancestor, {'state': 'cancelled'}, {7: original}) if receipt == 'b'*64
+                else (manifest, {'state': 'passed', 'results': [reused]}, {1: reused}))
+            summary = store.import_job(Path(directory), Path(directory), 'c'*64)
+            row = store.read(Path(directory))[0]
+        self.assertEqual((summary['passes'], summary['reused'], summary['covered']), (0, 1, 1))
+        self.assertEqual(row['state'], 'reused')
+        self.assertEqual(row['ended'], original['ended'])
+        self.assertEqual(row['execution_commit'], 'd'*40)
+        self.assertEqual(row['execution_origin'], reused['origin'])
+        self.assertEqual(row['source_command_seconds'], 900)
+        self.assertNotIn('seconds', row)
+        self.assertFalse(summary['release_authorized'])
+        newer_failure = observation('failed', '2026-10-29T01:00:00Z')
+        self.assertEqual(store.latest([newer_failure, row])[row['id']]['state'], 'failed')
+
+    def test_reuse_summary_counts_coverage_but_labels_reuse_separately(self):
+        row = {**observation(), 'state': 'reused'}
+        row.pop('seconds')
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            store.render([task()], [row])
+            store.render([task()], [row], tasks=True)
+        self.assertIn('COVERED/TOTAL', out.getvalue())
+        self.assertIn('REUSED', out.getvalue())
+        self.assertIn('1/1', out.getvalue())
+        self.assertIn('all observed', out.getvalue())
+        self.assertIn('reused', out.getvalue())
+
+    def test_reuse_origin_chain_is_traced_to_actual_execution(self):
+        original, reused = self.reuse_fixture()
+        middle = {**reused, 'index': 7, 'origin': {'receipt': 'c'*64, 'index': 7}}
+        with patch.object(store, 'History') as reader:
+            reader.completed.side_effect = lambda receipt, **kwargs: (
+                {'sources': {'head': receipt}}, {}, {7: middle if receipt == 'b'*64 else original})
+            result = provenance.execution(reader, reused)
+        self.assertEqual(result['reuse_chain'], [reused['origin'], middle['origin']])
+        self.assertEqual(result['execution_commit'], 'c'*64)
+
+    def test_reuse_missing_failed_corrupt_and_cyclic_origin_rejected(self):
+        original, reused = self.reuse_fixture()
+        for previous in (None, {**original, 'state': 'failed'},
+                         {**original, 'log_sha256': 'e'*64}, {**original, 'log_bytes': 13}, reused):
+            with self.subTest(previous=previous), patch.object(store, 'History') as reader:
+                reader.completed.return_value = ({'sources': {'head': 'd'*40}}, {},
+                                                  {} if previous is None else {7: previous})
+                with self.assertRaises(ValueError):
+                    provenance.execution(reader, reused)
+
+    def test_unvalidated_reuse_never_saves_dashboard_success(self):
+        _, reused = self.reuse_fixture()
+        with tempfile.TemporaryDirectory() as directory, patch.object(store, 'History') as reader, \
+                patch.object(store, 'describe', return_value=task()):
+            target = Path(directory) / 'history'
+            reader.return_value.completed.return_value = ({}, {'results': [reused]}, {})
+            with self.assertRaises(ValueError):
+                store.import_job(target, Path(directory), 'a'*64)
+            self.assertFalse(target.exists())
 
     def execute_fixture(self, directory, code, seconds=2, sources=None):
         root = Path(directory)

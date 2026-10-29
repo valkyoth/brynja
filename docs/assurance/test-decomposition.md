@@ -280,8 +280,37 @@ reference/public/secret computations remain together on the same workspace.
 The trusted reader recognizes the exact old catalog digest and reconstructs its
 old commands without executing archived Python. Unknown historical catalogs are
 rejected rather than interpreting their ordinal IDs through the current list.
-Remaining work is to validate formal reuse against the final test revision and
-schedule only required work. Spot interruption recovery remains planned.
+The subsequent checkpoint reconciliation below completed that formal reuse and
+the remaining executions. Spot interruption recovery remains planned.
+
+## Completed checkpoint reconciliation (2026-10-29)
+
+The author-operated local continuation at
+`a4c16d1b0c4fce6a0b4cf79930e9bad0df662a4a` completed the revised extended
+catalog using `nightly-2026-09-11`, two workers and two Cargo build jobs:
+
+| Batch | Budget | Terminal state | Fresh passes | Cumulative covered tasks |
+| --- | --- | --- | --- | --- |
+| 01 | 30 minutes | Timed out; completed results retained | 41 | 3,837 |
+| 02 | 30 minutes | Timed out; completed results retained | 48 | 3,885 |
+| 03 | 2 hours | Timed out; completed results retained | 167 | 4,052 |
+| 04 | 2 hours | Passed in about 80 minutes | 73 | 4,125 |
+
+The final receipt is
+`3a531d553d3d97f98884d1c3fe3450b5923dd4ac2e60df92a5d770f63953c631`.
+The historical reader validated all four batches and their original AWS ancestry:
+**3,796 reused task results + 329 fresh passes = 4,125 covered tasks**, with none
+remaining. The receipt's result digest is
+`b2b30b0a7603107304caf7483bc35e740ef8b095f2ccdc623774c491d54580b9`.
+Local receipts and logs are retained outside Cargo target storage in
+`../brynja-evidence/jobs/v0252-miri-recovery-a4c16d1b-20261029-batchNN/`.
+
+This completes the approved bounded ParallelHash Miri checkpoint, not exhaustive
+interpreted ParallelHash coverage or native SIMD qualification. Earlier cancelled
+or timed-out receipts are not rewritten as passed. The dashboard preserves the
+original execution date and receipt chain for reused tasks; importing evidence
+does not invent an execution or authorize a release. Other verification phases
+and final candidate applicability remain separate checks.
 
 ## Acceptance boundaries
 

@@ -176,6 +176,59 @@ stricter complete-inventory equality check; the read-only candidate count above
 uses the existing phase validator's selected-tool compatibility check. Matching
 selected tools is not permission to fabricate a historical host inventory.
 
+## Reviewed split coverage (2026-10-29)
+
+The follow-up comparison validates both interrupted receipts again and adds
+two narrowly reviewed coverage mappings:
+
+- A completed old KMAC default test suite covers the 100 newly separated setup
+  scenarios and the three unchanged verification-error tests. A passing line
+  inside a cancelled or failed command is **not** sufficient.
+- Each completed old TupleHash input case covers its five separate output-width
+  tasks. The input, strength, fixed/XOF route and width selection must match.
+  A single new width does not cover the old combined case in reverse.
+
+Both mappings require exact raw-byte hashes of the old and new runner/catalog,
+the edited test helper and its supporting test source. The ordinary source and
+dependency checks must also allow the family. Unknown assertions, features,
+selectors, markers, upstream changes or compiler-policy changes reject reuse.
+This is a review of these specific splits, not a generic rule that a large test
+always covers a smaller one. Broad suites remain pending because this mapping
+does not prove their entire populations, including newly added regressions.
+ParallelHash's new bounded tasks do not inherit old exhaustive passes.
+
+The two receipts contain 1,468 and 1,494 completed command passes. Against the
+4,125-task extended catalog, the source/coverage comparison and selected-tool
+check identify **3,796 eligible tasks**: 2,763 exact-definition matches and
+1,033 reviewed subsets of successful old commands.
+
+| Family | Eligible current tasks | Not covered by these receipts and this proof |
+| --- | ---: | ---: |
+| MD5 | 940 | 0 |
+| SHA-1 | 683 | 0 |
+| SHA-2 | 26 | 0 |
+| SHA-3 | 133 | 0 |
+| Core / sanitization | 2 | 0 |
+| KMAC | 161 | 3 |
+| TupleHash | 1,851 | 116 |
+| ParallelHash | 0 | 173 |
+| HMAC / legacy HMAC | 0 | 28 |
+| Acceleration / static CPU / legacy | 0 | 9 |
+| **Total** | **3,796** | **329** |
+
+The larger eligible-task count does not mean more tests were executed. One old
+completed matrix can support several new constituent tasks. Recovery references
+retain the original receipt, command index and log digest and label that result
+`reused`, not a fresh execution. Regression tests cover this expansion and reject
+missing successful records, altered inputs and unsupported mappings.
+
+**This remains a read-only eligibility result, not a completed recovery job or
+release PASS.** No historical receipt, dashboard observation or approval was
+rewritten. The recovery tool-inventory constraint described above still needs
+to be satisfied before constructing a new job. The 329 remaining tasks are not
+an automatic run authorization; other saved evidence and current baseline
+requirements must be reconciled before scheduling the remaining work.
+
 ## Measured bounded smoke checks
 
 Bounded local Miri smoke checks on `nightly-2026-09-11` passed for these selected

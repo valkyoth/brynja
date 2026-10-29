@@ -9,6 +9,7 @@ import shlex
 
 import verification_plan as plans
 import miri_tasks
+import miri_split_review as splits
 
 
 def is_task(entry):
@@ -57,8 +58,30 @@ class Coverage:
     def __init__(self, old_root, new_root):
         self.old = Resolver(old_root)
         self.new = Resolver(new_root)
+        self.reviewed = {}
+        self.predecessors = {}
+
+    def keys_for(self, new):
+        key = self.new.key(new)
+        if key is None:
+            return ()
+        if key not in self.predecessors:
+            definition = json.loads(key)
+            group, profile = definition['group'], definition['profile']
+            keys = [key]
+            if group not in self.reviewed:
+                self.reviewed[group] = splits.reviewed_roots(self.old.root, self.new.root, group)
+            if self.reviewed[group]:
+                catalog_key = (group, profile)
+                if catalog_key not in self.old.catalogs:
+                    self.old.catalogs[catalog_key] = miri_tasks.task_inventory(self.old.root, group, profile)
+                previous = splits.predecessor(definition['task'], group, profile, self.old.catalogs[catalog_key])
+                if previous is not None:
+                    keys.append(json.dumps({**definition, 'task': previous}, sort_keys=True))
+            self.predecessors[key] = tuple(dict.fromkeys(keys))
+        return self.predecessors[key]
 
     def covers(self, old, new):
         if not is_task(old) or not is_task(new):
             return False
-        return self.old.key(old) == self.new.key(new)
+        return self.old.key(old) in self.keys_for(new)

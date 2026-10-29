@@ -5,6 +5,7 @@ run, and the delta starts at a validated, clean ancestor snapshot, not an
 operator-selected commit. Unknown deltas retain the full-run approval boundary.
 """
 from pathlib import Path
+import json
 import shlex
 
 import detached_catalog as catalog
@@ -15,6 +16,7 @@ import verification_plan as plans
 import verification_test_only as test_only
 import miri_coverage_identity as miri_identity
 import miri_decomposition_reuse as decomposition
+import miri_split_review as splits
 
 
 def prepare(job: Path, receipt: str, root: Path, release_plan: dict, *,
@@ -49,6 +51,7 @@ def prepare(job: Path, receipt: str, root: Path, release_plan: dict, *,
             'coverage_roots': (job / 'source', root),
             'miri_coverage': miri_identity.Coverage(job / 'source', root),
             'miri_decomposition_groups': decomposition.prove(root, source, delta['evidence']['changed_paths']),
+            'miri_split_groups': splits.source_groups(root, source, delta['evidence']['changed_paths']),
             'test_only_rerun': test_only.prove(root, source, delta['evidence']['changed_paths'])}
 
 
@@ -110,6 +113,13 @@ def disposition(entry: dict, context: dict) -> str:
     groups = verifier_groups(entry)
     exact_decomposition = (miri_identity.is_task(entry) and entry['phase'] == 'miri'
                            and bool(groups) and groups <= context.get('miri_decomposition_groups', set()))
+    if (miri_identity.is_task(entry) and entry['phase'] == 'miri' and groups
+            and groups <= context.get('miri_split_groups', set()) and context.get('coverage_roots')):
+        meaning = context.get('miri_coverage') or miri_identity.Coverage(*context['coverage_roots'])
+        definition = meaning.new.key(entry)
+        # Broad suites may include new regression tests; this rule does not
+        # establish their complete populations, only the reviewed exact cases.
+        exact_decomposition = json.loads(definition)['task']['argv'][-2:] == ['--', '--exact']
     if (driver in changed and not exact_decomposition) or entry['stdin'] in changed:
         return 'run: changed command driver or input'
     isolated = context.get('test_only_rerun')

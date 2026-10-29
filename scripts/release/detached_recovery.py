@@ -57,6 +57,7 @@ def expected(manifest, root, reader=None):
                    'test_only_rerun': carry.test_only.prove(root, source, delta['evidence']['changed_paths']),
                    'miri_decomposition_groups': carry.decomposition.prove(
                        root, source, delta['evidence']['changed_paths']),
+                   'miri_split_groups': carry.splits.source_groups(root, source, delta['evidence']['changed_paths']),
                    'public_checkpoint': plans.new_full_checkpoint(manifest['plan'], old['plan'])}
         # Only a History reader reconstructs an already sealed recovery. New
         # jobs and current carry-forward decisions retain today's ownership.
@@ -76,7 +77,8 @@ def expected(manifest, root, reader=None):
         for index, entry in enumerate(manifest['commands']):
             if index in found:
                 continue
-            matches = (miri_passes.get(meaning.new.key(entry), []) if miri_identity.is_task(entry)
+            matches = ([match for key in meaning.keys_for(entry) for match in miri_passes.get(key, [])]
+                       if miri_identity.is_task(entry)
                        else [(i, r) for i, r in other_passes
                              if units.covers(r['command'], entry, old_root, root)])
             if not matches:

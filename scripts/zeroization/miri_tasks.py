@@ -83,7 +83,20 @@ def parse(body: str, variables: dict[str, str] | None = None) -> list[list[str]]
 
 
 def task_inventory(root: Path, group: str, profile: str) -> list[dict]:
-    return miri_cases.tasks(group, inventory(root, group), profile)
+    if profile == 'existing-full':
+        return miri_cases.tasks(group, inventory(root, group), profile)
+    return miri_cases.tasks(group, inventory(root, group), profile, legacy=legacy_cases(root))
+
+
+def legacy_cases(root: Path) -> bool:
+    """Do not reinterpret archived task ordinals through today's case catalog."""
+    raw = (root / 'scripts/zeroization/miri_cases.py').read_bytes()
+    current = Path(miri_cases.__file__).read_bytes()
+    if raw == current:
+        return False
+    if hashlib.sha256(raw).hexdigest() == '1c7d01c4937aed4966a6166ca888799d954da8b2c39dfc00a6e61a85c392a6b1':
+        return True
+    raise ValueError('unreviewed historical Miri case catalog; keep original receipt, do not reinterpret task IDs')
 
 
 def commands(root: Path, groups: list[str], profile: str = "existing-full") -> list[list[str]]:

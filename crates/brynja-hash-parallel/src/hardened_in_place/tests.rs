@@ -5,7 +5,7 @@ use crate::{
 };
 
 macro_rules! check {
-    ($test:ident, $workspace:ident, $ordinary:ident) => {
+    ($test:ident, $lifecycle:ident, $finish:ident, $workspace:ident, $ordinary:ident) => {
         #[test]
         fn $test() -> Result<(), Error> {
             let (selected, bounded) = miri_selection(48)?;
@@ -65,12 +65,22 @@ macro_rules! check {
                     assert!(workspace.cleared());
                 }
             }
-            // The matrix-independent lifecycle checks below belong to case 0.
-            // Native execution still reaches them once, after the full matrix.
-            if selected.is_some_and(|case| case != 0) {
-                miri_complete(selected, visited, executed, 48, stringify!($test));
-                return Ok(());
+            // Keep native cross-matrix reuse AND the original Miri case-zero
+            // ordering. The separate lifecycle task is a quick independent
+            // entry point, not a replacement for that reuse interaction.
+            if selected.is_none_or(|case| case == 0) {
+                $finish(&mut workspace)?;
             }
+            miri_complete(selected, visited, executed, 48, stringify!($test));
+            Ok(())
+        }
+
+        #[test]
+        fn $lifecycle() -> Result<(), Error> {
+            $finish(&mut $workspace::new())
+        }
+
+        fn $finish(workspace: &mut $workspace) -> Result<(), Error> {
             let mut block = [0xa5; 7];
             for action in 0..2 {
                 workspace.with(&mut block, b"", |mut state| {
@@ -113,18 +123,21 @@ macro_rules! check {
                 state.finalize_public(&mut [], Public::acknowledge())
             })??;
             assert!(workspace.cleared());
-            miri_complete(selected, visited, executed, 48, stringify!($test));
             Ok(())
         }
     };
 }
 check!(
     scoped_parallel128_matches_and_clears,
+    scoped_parallel128_lifecycle,
+    finish_parallel128,
     ParallelHash128Workspace,
     ParallelHash128
 );
 check!(
     scoped_parallel256_matches_and_clears,
+    scoped_parallel256_lifecycle,
+    finish_parallel256,
     ParallelHash256Workspace,
     ParallelHash256
 );

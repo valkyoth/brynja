@@ -30,11 +30,19 @@ pub(super) fn miri_selection(total: usize) -> (Option<usize>, Option<usize>) {
     } else {
         None
     };
+    let explicit_width = if cfg!(miri) {
+        std::env::var("BRYNJA_MIRI_WIDTH").ok()
+    } else {
+        None
+    };
     assert!(selected.is_none_or(|case| case < total));
     let width = if let Some(case) = selected {
         let profile = std::env::var("BRYNJA_MIRI_PROFILE");
         assert!(matches!(profile.as_deref(), Ok("routine" | "extended")));
-        if profile.as_deref() == Ok("routine") {
+        if let Some(value) = explicit_width.as_deref() {
+            assert_eq!(profile.as_deref(), Ok("extended"));
+            Some(parse_width(value))
+        } else if profile.as_deref() == Ok("routine") {
             // Empty-input cases must have nonempty output, so their tail width
             // is exercised rather than disappearing on both sides of the test.
             Some((case % 8).saturating_add(1) % 5)
@@ -42,9 +50,16 @@ pub(super) fn miri_selection(total: usize) -> (Option<usize>, Option<usize>) {
             None
         }
     } else {
+        assert!(explicit_width.is_none());
         None
     };
     (selected, width)
+}
+
+fn parse_width(value: &str) -> usize {
+    let width = value.parse::<usize>().unwrap_or(usize::MAX);
+    assert!(width < 5);
+    width
 }
 
 pub(super) fn miri_complete(
@@ -57,8 +72,8 @@ pub(super) fn miri_complete(
 ) {
     assert_eq!(visited, total);
     assert!(width.is_none_or(|index| index < 5 && selected.is_some()));
-    // Native/extended retain the whole width product; routine covers every
-    // dimension without the product, with its exact width selected above.
+    // Native/unsplit runs retain the width product. Exact extended tasks split
+    // that product without omitting widths; routine retains its prior sampling.
     let expected = if selected.is_some() {
         Some(if width.is_some() { 1 } else { 5 })
     } else {
@@ -67,12 +82,25 @@ pub(super) fn miri_complete(
     assert_eq!(Some(executed), expected);
     #[cfg(miri)]
     if let Some(case) = selected {
-        std::println!("\nMIRI_CASE_PASS: {_name}:{case}");
+        if let Ok(value) = std::env::var("BRYNJA_MIRI_WIDTH") {
+            let index = parse_width(&value);
+            assert_eq!(width, Some(index));
+            std::println!("\nMIRI_CASE_PASS: {_name}:{case}:width={index}");
+        } else {
+            std::println!("\nMIRI_CASE_PASS: {_name}:{case}");
+        }
     }
 }
 
 #[test]
 fn miri_chunks_reject_incomplete_or_duplicate_output_widths() {
+    for width in 0..5 {
+        assert_eq!(parse_width(&std::format!("{width}")), width);
+        miri_complete(Some(0), 48, 1, 48, Some(width), "accounting");
+    }
+    for value in ["", "-1", "5", "9999999999999999999999999", "all"] {
+        assert!(catch_unwind(|| parse_width(value)).is_err());
+    }
     miri_complete(None, 48, 240, 48, None, "accounting");
     assert!(
         catch_unwind(|| {

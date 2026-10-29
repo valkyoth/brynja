@@ -76,7 +76,7 @@ def case_environment(root: Path, task: dict) -> dict:
     # Cargo-Miri caches the compiler launch environment. Runtime selectors must
     # be explicit interpreter inputs, not option_env! in that cached environment.
     for key, value in task["environment"].items():
-        if key not in {"BRYNJA_MIRI_CASE", "BRYNJA_MIRI_PROFILE"} or not re.fullmatch(r"[a-z0-9-]+", value):
+        if key not in {"BRYNJA_MIRI_CASE", "BRYNJA_MIRI_PROFILE", "BRYNJA_MIRI_WIDTH"} or not re.fullmatch(r"[a-z0-9-]+", value):
             raise ValueError("invalid Miri case environment")
         env["MIRIFLAGS"] += f" -Zmiri-env-set={key}={value}"
     return env
@@ -106,12 +106,14 @@ def main() -> int:
     command += ["--nocapture"]
     started = time.monotonic()
     print("MIRI_TASK_START " + json.dumps({"group": args.group, "task": args.task,
-          "argv": command, "profile": args.profile, "case": task["environment"]}), flush=True)
+          "argv": command, "profile": args.profile, "case": task["environment"],
+          "coverage": task.get('coverage', 'registered')}), flush=True)
     code, passed = stream(command, root, env, task["marker"])
     if code != 0 or passed == 0:
         raise ValueError(f"Miri task failed or ran zero tests: exit={code}, passed={passed}")
     print("MIRI_TASK_PASS " + json.dumps({"group": args.group, "task": args.task,
-          "passed": passed, "elapsed_seconds": time.monotonic() - started}), flush=True)
+          "passed": passed, "elapsed_seconds": time.monotonic() - started,
+          "coverage": task.get('coverage', 'registered')}), flush=True)
     return 0
 
 

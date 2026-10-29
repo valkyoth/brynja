@@ -18,6 +18,17 @@ releases use affected-code verification; routine development tags make Miri
 optional. See [focused assurance](../docs/focused-assurance.md) and the
 [Miri coverage table](../docs/assurance/miri-coverage.md).
 
+For a terminal overview, run `python3 scripts/release/brynja-test-gui.py`.
+It lists checks by implementation, last recorded run, completion and duration;
+`show` explains a task and `run` starts only the explicitly selected task.
+Saved detached jobs can be validated and imported without rerunning tests.
+The [test dashboard guide](../docs/assurance/test-dashboard.md) walks through
+running one MD5 check, explains every command and status column, and shows how
+to watch logs or cancel a run. It also explains why local diagnostic results
+are separate from release approval. See the
+[task decomposition audit](../docs/assurance/test-decomposition.md) for the work
+to split long tests into smaller tasks.
+
 The repository gate first runs `cargo fetch --locked` to prepare the exact
 workspace dependencies for its offline package consumers. Even a dependency-free
 leaf can trigger workspace lockfile resolution during packaging. Run

@@ -1,13 +1,15 @@
 """Reviewed decomposition of costly legacy hash, KMAC and SP 800-185 matrices.
 
 Routine cases are boundary/lifecycle sampling, not exhaustive crypto evidence.
-Extended tasks address every original combination, one case/chunk per invocation.
-The native Rust tests retain their complete matrices in both profiles.
+Extended tasks retain full products except owner-approved bounded ParallelHash
+sampling (2026-10-29). Native Rust tests retain every complete matrix.
 """
 from __future__ import annotations
 
 PROFILES = ("existing-full", "routine", "extended")
 TUPLE = "execution::core_state::tests::borrowed_staging_matches_independently_packed_cshake"
+KMAC_VERIFICATION = ('kmac128_mismatch_and_exact_width', 'kmac256_mismatch_and_exact_width',
+                     'scoped_mismatch_propagates_and_workspace_can_be_reused')
 
 
 def profile_for(stage: str, requested: str | None = None) -> str:
@@ -75,7 +77,10 @@ def matrices(group: str) -> list[dict]:
                  'package': 'brynja-mac-kmac', 'features': []},
                 {'name': 'hardened_in_place::xof::tests::scoped_xof_lifecycle_shapes_and_large_public_reads',
                  'marker': 'kmac-scoped-xof-lifecycle', 'total': 16, 'routine': list(range(16)),
-                 'package': 'brynja-mac-kmac', 'features': []}, *official]
+                 'package': 'brynja-mac-kmac', 'features': []}, *official,
+                dict(name='setup::tests::streamed_setup_matches_all_four_contiguous_identities',
+                     marker='kmac-streamed-setup', total=100, routine=list(range(100)),
+                     package='brynja-mac-kmac', features=[])]
     if group == "tuplehash":
         # Both strengths, every initial residue and final width, all seven
         # staging lengths, without the full Cartesian product.
@@ -91,7 +96,7 @@ def matrices(group: str) -> list[dict]:
                       ('all_xof_profiles_match_irregular_and_mixed_secret_public_output',
                        'tuplehash-execution-xof', 2))],
                 *[dict(name='hardened_in_place::' + module + '::' + name,
-                       marker=name, total=total,
+                       marker=name, total=total, widths=5,
                        routine=[bit % 6 * 8 + bit for bit in range(8)],
                        package='brynja-hash-tuple', features=[])
                   for module, total, suffix in (
@@ -172,6 +177,10 @@ def singles(group: str) -> list[str]:
         ]
     if group == 'parallelhash':
         return [
+            'hardened_in_place::tests::scoped_parallel128_lifecycle',
+            'hardened_in_place::tests::scoped_parallel256_lifecycle',
+            'hardened_in_place::xof::tests::scoped_parallel_xof128_lifecycle',
+            'hardened_in_place::xof::tests::scoped_parallel_xof256_lifecycle',
             'streamed_scheduled_and_one_shot_are_identical',
             'empty_input_has_zero_leaves_and_b_one_is_valid',
             'reordered_leaf_permanently_fails_closed',
@@ -185,6 +194,7 @@ def singles(group: str) -> list[str]:
             'domain_substitution_changes_outputs_and_fixed_is_not_xof_prefix',
             'verification_accepts_exact_tag_and_rejects_first_last_and_length_changes',
             'arbitrary_bits_are_canonical_and_streaming_xof_tracks_output',
+            *KMAC_VERIFICATION,
         ]
     if group != 'sha3':
         return []
@@ -204,40 +214,61 @@ def singles(group: str) -> list[str]:
     ]
 
 
-def tasks(group: str, original: list[list[str]], profile: str) -> list[dict]:
+def tasks(group: str, original: list[list[str]], profile: str, *, legacy=False) -> list[dict]:
     if profile not in PROFILES:
         raise ValueError("unknown Miri coverage profile")
     if profile == "existing-full":
         return [{"argv": argv, "environment": {}, "marker": None} for argv in original]
     registered = matrices(group)
+    names = singles(group)
+    if legacy:
+        # Reconstruct the explicitly hash-bound pre-decomposition catalog with
+        # trusted code. Never import Python from an evidence archive.
+        registered = [{key: value for key, value in matrix.items() if key != 'widths'}
+                      for matrix in registered if matrix['marker'] != 'kmac-streamed-setup']
+        names = [name for name in names if name not in KMAC_VERIFICATION
+                 and not (group == 'parallelhash' and name.startswith('hardened_in_place::'))]
+    case_profile = 'routine' if group == 'parallelhash' and not legacy else profile
     result = []
     for argv in original:
         argv = list(argv)
         if registered:
             if "--" not in argv:
                 argv.append("--")
-            for name in [case['name'] for case in registered] + singles(group):
+            for name in [case['name'] for case in registered] + names:
                 argv.extend(["--skip", name])
         result.append({"argv": argv, "environment": {}, "marker": None})
     for matrix in registered:
-        indices = matrix["routine"] if profile == "routine" else range(matrix["total"])
+        indices = matrix["routine"] if case_profile == "routine" else range(matrix["total"])
         for index in indices:
             features = matrix.get('features', ['hardened-execution'])
             argv = ['-p', matrix['package']]
             if features:
                 argv += ['--features', ','.join(features)]
-            result.append({"argv": [*argv, *matrix.get('target', ['--lib']), matrix["name"], "--", "--exact"],
-                           "environment": {"BRYNJA_MIRI_CASE": str(index), "BRYNJA_MIRI_PROFILE": profile},
-                           "marker": f"MIRI_CASE_PASS: {matrix['marker']}:{index}"})
-    for name in singles(group):
-        if group == 'tuplehash':
+            widths = range(matrix['widths']) if profile == 'extended' and 'widths' in matrix else [None]
+            for width in widths:
+                environment = {"BRYNJA_MIRI_CASE": str(index), "BRYNJA_MIRI_PROFILE": case_profile}
+                marker = f"MIRI_CASE_PASS: {matrix['marker']}:{index}"
+                if width is not None:
+                    environment['BRYNJA_MIRI_WIDTH'] = str(width)
+                    marker += f':width={width}'
+                task = {"argv": [*argv, *matrix.get('target', ['--lib']), matrix["name"], "--", "--exact"],
+                        "environment": environment, "marker": marker}
+                if group == 'parallelhash' and not legacy:
+                    task['coverage'] = 'bounded-parallelhash-v1'
+                result.append(task)
+    for name in names:
+        if group in ('tuplehash', 'parallelhash'):
             target = ['--lib'] if name.startswith('hardened_in_place::') else ['--test', 'api']
-            result.append({'argv': ['-p', 'brynja-hash-tuple', *target, name, '--', '--exact'],
+            package = 'brynja-hash-tuple' if group == 'tuplehash' else 'brynja-hash-parallel'
+            result.append({'argv': ['-p', package, *target, name, '--', '--exact'],
                            'environment': {}, 'marker': None})
             continue
         package, target = {'kmac': ('brynja-mac-kmac', 'api'),
                            'parallelhash': ('brynja-hash-parallel', 'api'),
                            'sha3': ('brynja-hash-sha3', 'hardened')}[group]
+        if group == 'kmac' and name in KMAC_VERIFICATION:
+            target = 'verification_errors'
         result.append({'argv': ['-p', package, '--test', target, name, '--', '--exact'],
                        'environment': {}, 'marker': None})
     return result

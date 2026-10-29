@@ -170,7 +170,7 @@ def build(root: Path = ROOT, base: str | None = None, *, verified_base: bool = F
             full = True
             issues.append(matrix + ': compiler coverage list changed; full compatibility matrix requires approval; verifier pins unchanged')
     reasons = []
-    reasons.append('Miri profile: ' + ('extended (all registered matrix combinations)' if miri_profile(profile_plan) == 'extended'
+    reasons.append('Miri profile: ' + ('extended (registered coverage; ParallelHash bounded, exhaustive native matrices retained)' if miri_profile(profile_plan) == 'extended'
                    else 'routine (bounded registered matrix sample; full native tests retained)'))
     if mode:
         reasons.append('Verification policy: ' + mode + '; publication alone does not expand scope')

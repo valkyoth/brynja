@@ -14,7 +14,7 @@ REVIEWED_HASHES = {
     "crates/brynja-hash-tuple/src/hardened_in_place/backend.rs": "bdcdf96ae50da3a38cbf0e7a80b47a7d5b41b73ea41fb2a26650c45ebbe93fcf",
     "crates/brynja-hash-tuple/src/hardened_in_place/core_state.rs": "838f78b620f1b23cd9c8895c45e68175faefff44f4430a2e8e5940e19c610785",
     "crates/brynja-hash-tuple/src/hardened_in_place/fixed.rs": "f62ac835d29441f804ac44811e21769274bd7b499cb6b55d6d1f951ee4036f38",
-    "crates/brynja-hash-tuple/src/hardened_in_place/tests.rs": "22d550592424950eff033ead263246aff6b83d972db8aa6f06e81b95459f6581",
+    "crates/brynja-hash-tuple/src/hardened_in_place/tests.rs": "cda6d794f4326ad31cd894c34ffd5b7f54ec071eb77817785af4e0246c43f5cd",
     "crates/brynja-hash-tuple/src/hardened_in_place/core_state/tests.rs": "785f5b5121fd695c484156ed27d9f5f940f44c0b647d587597fda1efbfd59424",
     "assurance/tuplehash-differential/src/scoped.rs": "1a4e4a84ec662142744be601db360fe4f2c23a400348007c53c2356319adad5f",
     "crates/brynja-hash-tuple/src/backend.rs": "845400daa8451df50a08d98c7c45e7660a19d17a4e3216e87b2abe59af75eae9",

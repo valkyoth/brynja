@@ -5,7 +5,7 @@ REVIEWED_HASHES = {
     "crates/brynja-mac-kmac/tests/verification_errors.rs": "5df3042c6fedb7fc2b326da99ec5b9dfde558a574312b7bb952995d10da583fe",
     "crates/brynja-mac-kmac/src/setup/engine.rs": "3c3547253b3c82a6b82cf720360a9fd289985420e6eaa3fcecbe8bcac9cfa100",
     "crates/brynja-mac-kmac/src/setup/engine/tests.rs": "3d246bdedac9cc385cf8cc115e33f71e58a0925785e4ca53b8229a9b31eaadb0",
-    "crates/brynja-mac-kmac/src/setup/tests.rs": "036dc52cce7799735231c14490f88bd51056b225c45d340259193990cdd9c68f",
+    "crates/brynja-mac-kmac/src/setup/tests.rs": "61d6e038f6fccede178a0ecf1f4bc03937a771c93b578db811175e479ab0c5e9",
     "crates/brynja-mac-kmac/src/setup.rs": "2753458ba00729f09991515926061de544a4ab3b21c0f03bf3c9d0f412c18bc5",
     "crates/brynja-mac-kmac/src/hardened_in_place/accelerated/xof.rs": "29e9efaf5202ba906b89735f32b9b6acd9d71db052520d91f6a0c1646344e2eb",
     "crates/brynja-mac-kmac/src/hardened_in_place/accelerated.rs": "a5267c7c3324760fe6bf8835708d2e5d579a337507fda63bb0cc031db80ce930",

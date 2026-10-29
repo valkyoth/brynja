@@ -1516,7 +1516,7 @@ sha256 = "3d246bdedac9cc385cf8cc115e33f71e58a0925785e4ca53b8229a9b31eaadb0"
 
 [[reviewed-source]]
 path = "crates/brynja-mac-kmac/src/setup/tests.rs"
-sha256 = "036dc52cce7799735231c14490f88bd51056b225c45d340259193990cdd9c68f"
+sha256 = "61d6e038f6fccede178a0ecf1f4bc03937a771c93b578db811175e479ab0c5e9"
 
 [[reviewed-source]]
 path = "crates/brynja-mac-kmac/src/setup.rs"

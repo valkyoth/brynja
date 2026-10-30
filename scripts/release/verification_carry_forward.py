@@ -14,6 +14,7 @@ import detached_manifest as records
 import verification_commands as commands
 import verification_plan as plans
 import verification_test_only as test_only
+import verification_tooling_reuse as tooling_reuse
 import miri_coverage_identity as miri_identity
 import miri_decomposition_reuse as decomposition
 import miri_split_review as splits
@@ -52,7 +53,8 @@ def prepare(job: Path, receipt: str, root: Path, release_plan: dict, *,
             'miri_coverage': miri_identity.Coverage(job / 'source', root),
             'miri_decomposition_groups': decomposition.prove(root, source, delta['evidence']['changed_paths']),
             'miri_split_groups': splits.source_groups(root, source, delta['evidence']['changed_paths']),
-            'test_only_rerun': test_only.prove(root, source, delta['evidence']['changed_paths'])}
+            'test_only_rerun': test_only.prove(root, source, delta['evidence']['changed_paths']),
+            'tooling_only_phases': tooling_reuse.prove(root, source, delta['evidence']['changed_paths'])}
 
 
 def verifier_groups(entry: dict) -> set[str] | None:
@@ -141,8 +143,9 @@ def disposition(entry: dict, context: dict) -> str:
     delta = context['plan']
     affected = (delta['verifiers'][entry['phase']] if entry['phase'] in delta['verifiers']
                 else delta['groups'])
+    tooling_only = entry['phase'] in context.get('tooling_only_phases', set())
     if not exact_decomposition and (plans.requires_full(delta, entry['phase']) or
-                                   (groups.intersection(affected) and not isolated)):
+                                   (groups.intersection(affected) and not isolated and not tooling_only)):
         return 'run: changed or unresolved implementation inputs'
     if not covered(entry, context['manifest']['commands'], roots=context.get('coverage_roots'),
                    miri=context.get('miri_coverage')):

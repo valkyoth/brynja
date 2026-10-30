@@ -41,6 +41,7 @@ from historical_command_scope_tests import HistoricalCommandScopeTests
 from detached_recovery_tests import RecoveryTests
 from verification_unit_tests import UnitTests
 from verification_test_only_tests import TestOnlyReuseTests
+from verification_tooling_tests import ToolingReuseTests, ToolingReviewEndpoints
 from test_dashboard_tests import DashboardTests
 
 

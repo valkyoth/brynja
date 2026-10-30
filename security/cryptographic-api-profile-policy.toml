@@ -2160,7 +2160,7 @@ sha256 = "1f4593e757948b79beaed68256b2b090214885b8f009105c06ad2c2331113450"
 
 [[reviewed-source]]
 path = "scripts/hmac/test-hmac-execution-cleanup.py"
-sha256 = "bb75df580675cfd005b52ba9d428420b521ece2a83604a27583f37c203e09f18"
+sha256 = "30b2a5df8b28ecb6b41a4ae5e76631f2251c2acc7dfad95a0e706327fd959c08"
 
 [[reviewed-source]]
 path = "scripts/hmac/test-hmac-facade.py"

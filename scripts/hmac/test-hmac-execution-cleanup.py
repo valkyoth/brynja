@@ -159,10 +159,19 @@ class ExecutionTests(ScratchTests, FinalTests, WrapperTests, AdmissionTests, Con
         # edge; it must remain constrained by the very same SSA result.
         functions, definitions, aliases = driver.emitted(llvm)
         body = functions["sha224", "update_cancel"]
-        comparison = re.search(r"(%[-\w.]+ = icmp eq i8 )(%[-\w.]+)(, 13)", body)
-        self.assertIsNotNone(comparison)
+        # Result's discriminant is compiler layout, not a stable Rust ABI.
+        # Locate the repeated condition through the switch's SSA operand,
+        # rather than pinning the old enum population's success value (13).
+        switches = re.findall(r"switch i8 (%[-\w.]+), label %[-\w.]+ \[(.*?)\]", body, re.S)
+        self.assertEqual(len(switches), 1)
+        operand, cases = switches[0]
+        comparisons = list(re.finditer(
+            r"(%[-\w.]+ = icmp eq i8 )(" + re.escape(operand) + r")(, (-?\d+))", body))
+        self.assertEqual(len(comparisons), 1)
+        comparison = comparisons[0]
+        self.assertIn(comparison[4], re.findall(r"i8 (-?\d+), label", cases))
         mutated = body.replace(comparison[0], comparison[1] + "%independent" + comparison[3])
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegex(ValueError, 'undefined update comparison operand'):
             driver.update.check(mutated, "sha224", definitions, aliases, "1.90.0", "abort")
         changed = body.replace("store i64 3,", "store i64 0,")
         self.assertNotEqual(changed, body)

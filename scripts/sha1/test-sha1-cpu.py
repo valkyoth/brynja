@@ -75,6 +75,19 @@ def main():
             file = root/path
             file.parent.mkdir(parents=True,exist_ok=True)
             shutil.copyfile(policy.ROOT/path,file)
+        shutil.copyfile(policy.ROOT/'scripts/sha1/cpu-reviewed.toml', root/'scripts/sha1/cpu-reviewed.toml')
+        policy.validate(root)
+        readme = root/'scripts/README.md'
+        original = readme.read_bytes()
+        try:
+            for changed in (original + b'\nUnreviewed documentation addition.\n',
+                            original.replace(b'\n', b'\r\n')):
+                readme.write_bytes(changed)
+                try: policy.validate(root)
+                except ValueError as error:
+                    assert str(error) == 'CPU reviewed source changed: scripts/README.md', str(error)
+                else: raise AssertionError('accepted unreviewed README bytes')
+        finally: readme.write_bytes(original)
         policy.validate(root,hashes=False)
         for path, old, new in cases:
             file = root/path
@@ -87,5 +100,6 @@ def main():
                 else: raise AssertionError('accepted CPU regression '+old)
             finally: file.write_text(before)
     print(f'SHA-1 CPU rejects {len(cases)} authority, feature, quarantine, lifecycle and isolation mutations')
+    print('SHA-1 CPU rejects README content and line-ending review drift')
 
 if __name__ == '__main__': main()

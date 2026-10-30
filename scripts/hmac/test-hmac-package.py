@@ -43,7 +43,7 @@ class PackageTests(unittest.TestCase):
                 test = command[-1]
                 if test == "general" and bad:
                     return "test result: ok. " + bad
-                return f"test result: ok. {populations.get(test, 1)} passed; 0 failed; 0 ignored;"
+                return f"test result: ok. {populations.get(test, 3)} passed; 0 failed; 0 ignored;"
             with patch.object(driver, "run", side_effect=run):
                 if bad:
                     with self.assertRaisesRegex(ValueError, "population changed: general"):
@@ -52,6 +52,33 @@ class PackageTests(unittest.TestCase):
                     driver.test_profiles(Path("/consumer"), {})
                     self.assertEqual(len(calls), 14)
                     self.assertEqual(["--release" in c for c in calls if c[-1] == "general"], [False, True])
+
+    def test_readme_population_requires_all_three_examples_in_both_profiles(self):
+        readme = (driver.ROOT / "crates/brynja-mac-hmac/README.md").read_text()
+        self.assertEqual(readme.count("```rust\n"), 3)
+        populations = {"vectors": 7, "lifecycle": 11, "bounded": 13,
+                       "bits": 12, "general": 6, "tag_policy": 3}
+        rejected = ("", "0 passed; 0 failed; 0 ignored;",
+                    "1 passed; 0 failed; 0 ignored;", "2 passed; 0 failed; 0 ignored;",
+                    "4 passed; 0 failed; 0 ignored;", "2 passed; 0 failed; 1 ignored;",
+                    "3 passed; 1 failed; 0 ignored;", "3 passed; 0 failed; 1 ignored;")
+        for release in (False, True):
+            for bad in (None, *rejected):
+                calls = []
+                def run(command, *_):
+                    calls.append(command)
+                    if command[-1] == "--doc":
+                        if bad is not None and ("--release" in command) == release:
+                            return "test result: ok. " + bad
+                        return "test result: ok. 3 passed; 0 failed; 0 ignored;"
+                    return f"test result: ok. {populations[command[-1]]} passed; 0 failed; 0 ignored;"
+                with self.subTest(release=release, summary=bad), patch.object(driver, "run", side_effect=run):
+                    if bad is not None:
+                        with self.assertRaisesRegex(ValueError, "README example population changed"):
+                            driver.test_profiles(Path("/consumer"), {})
+                    else:
+                        driver.test_profiles(Path("/consumer"), {})
+                        self.assertEqual(["--release" in c for c in calls if c[-1] == "--doc"], [False, True])
 
     def test_failed_child_preserves_diagnostics_and_cannot_pass(self):
         for code in (101, 1, -9):

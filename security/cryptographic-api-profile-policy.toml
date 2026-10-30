@@ -1768,7 +1768,7 @@ sha256 = "1093f1edc2757bb5963d4f1fd5ab1b12e99a666d7c1f676a069c65158df63ad1"
 
 [[reviewed-source]]
 path = "scripts/hmac/check-hmac-package.py"
-sha256 = "43796a8ac887129265c67fc806e09d1af9d3be9f3818c5280157c04dab7f81fa"
+sha256 = "06a7e6c537bdab0fbc9fdca2ab8f4cfab3ee444ae5a073daa47a84e753eeb5b1"
 
 [[reviewed-source]]
 path = "scripts/hmac/check-hmac-protected.py"
@@ -2180,7 +2180,7 @@ sha256 = "8085bba7712eee2bc8c8a3ffea9204333b7bbf9a11db9670a53c00d94b170a70"
 
 [[reviewed-source]]
 path = "scripts/hmac/test-hmac-package.py"
-sha256 = "9d5be617530c607f3947016acf8d621663fab990467e604cc3672d233b9a982e"
+sha256 = "c34542e36289cd512f0a015085925afd998b2bff94344b2f1d5ecbd092b8b7ff"
 
 [[reviewed-source]]
 path = "scripts/hmac/test-hmac-protected.py"

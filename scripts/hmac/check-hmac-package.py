@@ -55,8 +55,8 @@ def test_profiles(consumer, environment):
             if f"test result: ok. {count} passed; 0 failed; 0 ignored;" not in output:
                 raise ValueError("HMAC packaged test population changed: " + test + "\n" + output[-6000:])
         output = run(["cargo", "test", "--offline", "--locked", *profile, "--doc"], consumer, environment)
-        if "test result: ok. 1 passed; 0 failed; 0 ignored;" not in output:
-            raise ValueError("HMAC README example did not execute")
+        if "test result: ok. 3 passed; 0 failed; 0 ignored;" not in output:
+            raise ValueError("HMAC README example population changed\n" + output[-6000:])
 
 
 def main():

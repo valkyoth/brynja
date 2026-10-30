@@ -181,11 +181,18 @@ class CompiledCalleeTests:
                         workers = [s for s in definitions if 'thread::enter' in names[s]
                                    and '::compiled::CompiledSession<brynja_mac_hmac::' + algorithm + '>' in names[s]]
                         self.assertEqual(len(workers), 1)
-                        model = d.keyed.check(definitions[workers[0]][1], names, '1.99.1', identity, True)
                         expected = ('accelerated finalizer exits with live/wrong owner'
-                                    if 'core::mem::forget(self.outer)' in new else '.')
-                        with self.subTest(target=target, identity=identity, mutant=new), self.assertRaisesRegex(ValueError, expected):
-                            d.consumers.compiled(model, identity, definitions, aliases, '1.99.1', 'unwind')
+                                    if 'core::mem::forget(self.outer)' in new else 'scratch')
+                        with self.subTest(target=target, identity=identity, mutant=new):
+                            # Isolate the consuming-body obligation: a source
+                            # mutation may also change earlier admission codegen.
+                            # Earlier rejection must not mask this cleanup check.
+                            model = d.keyed.Admission(definitions[workers[0]][1], names,
+                                                      '1.99.1', identity, True)
+                            with self.assertRaisesRegex(ValueError, expected):
+                                d.consumers.compiled(model, identity, definitions, aliases, '1.99.1', 'unwind')
+                    with self.assertRaises(ValueError):
+                        d.validate(llvm, target)
                     count += 1
                 finally:
                     source.write_text(original)

@@ -1972,7 +1972,7 @@ sha256 = "78a919309682eaea08fb38319dc4835419c6f796039649248d1f231eb896b9c5"
 
 [[reviewed-source]]
 path = "scripts/hmac/hmac_hosted_compiled_callee_tests.py"
-sha256 = "5eb27c646087eca9574ac8cef2728d8dc926cc7ceffeb5c23e3900f5b8a5a509"
+sha256 = "dee488b4b5efadc5370f52eec7bac019b855c79f46c198bfa3de0999cd7f7a5f"
 
 [[reviewed-source]]
 path = "scripts/hmac/hmac_hosted_constructor.py"
@@ -2004,7 +2004,7 @@ sha256 = "d9fd0c1c3eebc755491185eb14e9dc31993ae4c60c9971ac5d69ff7284e6a414"
 
 [[reviewed-source]]
 path = "scripts/hmac/hmac_hosted_input_tests.py"
-sha256 = "8a23dab1a50c982feb22a6fab22d37eb4fc48d5713faaf3802d2c465ebbcd78e"
+sha256 = "59cb05fb2c2922d944c12574a3a0a2dba219f384019c17dcfa45e1faa123d96d"
 
 [[reviewed-source]]
 path = "scripts/hmac/hmac_hosted_keyed.py"
@@ -2048,7 +2048,7 @@ sha256 = "d5420e6a9ba29d2ef1c293748db44f3f71b505f202fcf9da1ad6a306f08f8594"
 
 [[reviewed-source]]
 path = "scripts/hmac/hmac_hosted_output_tests.py"
-sha256 = "e52229e68d32da752c2cdb11ffd5e29978a4d5918230bfedfeeb764eb5228d6d"
+sha256 = "14f5df428e9131bfd8315238e2f96423d5c379644ce6cf73d86bd5af7da95050"
 
 [[reviewed-source]]
 path = "scripts/hmac/hmac_hosted_placement.py"

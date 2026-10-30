@@ -130,7 +130,7 @@ class InputTests:
                             original.replace('            request.tail.valid_bits\n', '            8\n'),
                             original.replace('state.update(part).map_err(Error::Mac)?;',
                                              'for _ in 0..request.tail.valid_bits { state.update(part).map_err(Error::Mac)?; }')]
-                for mutant in variants:
+                for case, mutant in enumerate(variants):
                     self.assertNotEqual(mutant, original)
                     try:
                         path.write_text(mutant)
@@ -145,9 +145,14 @@ class InputTests:
                                             if ('general::Sha512T<' + identity[7:] + '>' if identity.startswith('general')
                                                 else 'algorithms::Sha' + identity[3:] + '>') in names[worker])
                             arguments, body = d.common.resolve(worker, definitions, aliases)
-                            model = d.keyed.check(body, names, '1.99.1', identity, compiled)
-                            with self.assertRaises(ValueError):
-                                d.input_flow.check(model, arguments)
+                            with self.subTest(target=target, compiled=compiled, case=case, identity=identity):
+                                # Require the input checker itself to reject each
+                                # mutant, independently of earlier admission checks.
+                                model = d.keyed.Admission(body, names, '1.99.1', identity, compiled)
+                                with self.assertRaises(ValueError):
+                                    d.input_flow.check(model, arguments)
+                        with self.assertRaises(ValueError):
+                            d.validate(llvm, target)
                     finally:
                         path.write_text(original)
                     d.validate(d.emit(work / target, '1.99.1', target, 'unwind', fixture / 'Cargo.toml')[1], target)

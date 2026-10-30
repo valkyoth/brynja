@@ -155,7 +155,7 @@ class OutputTests:
                 variants = [original.replace(anchor, forgotten),
                             shortened.replace('.finalize_bits_secret(tail, staging)',
                                               '.finalize_bits_secret(tail, &mut staging[..staging_len])')]
-                for mutant in variants:
+                for case, mutant in enumerate(variants):
                     try:
                         path.write_text(mutant)
                         llvm = d.emit(work / target, '1.99.1', target, 'unwind', fixture / 'Cargo.toml')[1]
@@ -169,9 +169,14 @@ class OutputTests:
                                             if ('general::Sha512T<' + identity[7:] + '>' if identity.startswith('general')
                                                 else 'algorithms::Sha' + identity[3:] + '>') in names[worker])
                             arguments, body = d.common.resolve(worker, definitions, aliases)
-                            model = d.keyed.check(body, names, '1.99.1', identity, compiled)
-                            with self.assertRaises(ValueError):
-                                d.output.check(model, arguments)
+                            with self.subTest(target=target, compiled=compiled, case=case, identity=identity):
+                                # Exercise output lifetime/cleanup rejection even
+                                # when the mutant also fails earlier admission.
+                                model = d.keyed.Admission(body, names, '1.99.1', identity, compiled)
+                                with self.assertRaises(ValueError):
+                                    d.output.check(model, arguments)
+                        with self.assertRaises(ValueError):
+                            d.validate(llvm, target)
                     finally:
                         path.write_text(original)
                     d.validate(d.emit(work / target, '1.99.1', target, 'unwind', fixture / 'Cargo.toml')[1], target)

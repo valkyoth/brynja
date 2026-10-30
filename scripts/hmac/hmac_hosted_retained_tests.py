@@ -130,15 +130,21 @@ class RetainedTests:
                                     if ('general::Sha512T<' + identity[7:] + '>' if identity.startswith('general')
                                         else 'algorithms::Sha' + identity[3:] + '>') in names[worker])
                     body = driver.common.resolve(worker, definitions, aliases)[1]
-                    model = driver.keyed.check(body, names, '1.99.1', identity, compiled)
-                    driver.storage.check(model, identity)
-                    with self.assertRaisesRegex(ValueError,
-                            r'without (both|engine) cleanup/consumption|'
-                            r'lifetime ends (with unconsumed owner|without engine consumption)'):
-                        if compiled:
-                            driver.compiled_worker.check(model, identity, definitions, aliases, '1.99.1', 'unwind')
-                        else:
-                            driver.scalar.check(model, identity, definitions, aliases, 'unwind')
+                    with self.subTest(target=target, identity=identity, compiled=compiled):
+                        # The forget-on-error mutant can also change admission
+                        # codegen. Require the retained-owner checker itself to
+                        # reject it, rather than relying on that earlier guard.
+                        model = driver.keyed.Admission(body, names, '1.99.1', identity, compiled)
+                        driver.storage.check(model, identity)
+                        with self.assertRaisesRegex(ValueError,
+                                r'without (both|engine) cleanup/consumption|'
+                                r'lifetime ends (with unconsumed owner|without engine consumption)'):
+                            if compiled:
+                                driver.compiled_worker.check(model, identity, definitions, aliases, '1.99.1', 'unwind')
+                            else:
+                                driver.scalar.check(model, identity, definitions, aliases, 'unwind')
+                with self.assertRaises(ValueError):
+                    driver.validate(llvm, target)
             finally:
                 path.write_text(original)
             driver.validate(driver.emit(work / target, '1.99.1', target, 'unwind', fixture / 'Cargo.toml')[1], target)

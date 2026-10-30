@@ -2056,7 +2056,7 @@ sha256 = "6659dfd36b86113bfe55084221063a862bd9287886b1f91ffd37c044ec75ec6d"
 
 [[reviewed-source]]
 path = "scripts/hmac/hmac_hosted_retained_tests.py"
-sha256 = "de2b4571c13cd5839d7d56c96fcebafe738b4b9dc9d1fe52da77065cf912228b"
+sha256 = "8648784aa6dd54d56365d99d4d416b6081025d02338532cdc1dcd3f912fa8116"
 
 [[reviewed-source]]
 path = "scripts/hmac/hmac_hosted_scalar.py"

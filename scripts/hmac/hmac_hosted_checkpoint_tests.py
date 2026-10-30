@@ -114,7 +114,7 @@ class CheckpointTests:
                 variants.append(run.replace(checkpoint, checkpoint.replace('?', '.ok()'), 1))
                 if compiled:
                     variants.append(run.replace('    cancel.check()?;', '    /* missing early cancellation */', 1))
-                for mutant in variants:
+                for case, mutant in enumerate(variants):
                     try:
                         path.write_text(prefix + mutant)
                         llvm = d.emit(work / target, '1.99.1', target, 'unwind', fixture / 'Cargo.toml')[1]
@@ -128,8 +128,16 @@ class CheckpointTests:
                                             if ('general::Sha512T<' + identity[7:] + '>' if identity.startswith('general')
                                                 else 'algorithms::Sha' + identity[3:] + '>') in names[worker])
                             arguments, body = d.common.resolve(worker, definitions, aliases)
-                            with self.assertRaisesRegex(ValueError, 'checkpoint'):
-                                self.checkpoint_model(arguments, body, names, identity, compiled, target, '1.99.1')
+                            with self.subTest(target=target, compiled=compiled, case=case, identity=identity):
+                                # A missing boundary can also change keyed-admission
+                                # codegen. Prove checkpoint rejection independently,
+                                # before requiring the complete pipeline to fail closed.
+                                model = d.keyed.Admission(body, names, '1.99.1', identity, compiled)
+                                with self.assertRaisesRegex(ValueError, 'checkpoint'):
+                                    d.checkpoints.preflight(model, arguments, target, '1.99.1')
+                                with self.assertRaises(ValueError):
+                                    self.checkpoint_model(arguments, body, names, identity,
+                                                          compiled, target, '1.99.1')
                         count += 1
                     finally:
                         path.write_text(original)

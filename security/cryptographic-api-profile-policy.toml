@@ -1960,7 +1960,7 @@ sha256 = "880d2ef4f2069e81709fd77c9fbe87e015547f6d15f968c0e3cfc57c0dfc0e09"
 
 [[reviewed-source]]
 path = "scripts/hmac/hmac_hosted_checkpoint_tests.py"
-sha256 = "f1cc1481244bce8b33fcba9b2bff0849023c87b77f36a3e253be77149682acd9"
+sha256 = "352cac647bfdd428d500f29540ab8e29b27886f979bf289d96d2619b85a98241"
 
 [[reviewed-source]]
 path = "scripts/hmac/hmac_hosted_checkpoints.py"

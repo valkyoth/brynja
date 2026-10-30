@@ -52,6 +52,23 @@ def validate():
             raise ValueError('cSHAKE/hosted dynamic analysis missing: ' + path)
 
 
+def external_cases(consumer):
+    """Stage reviewed test inputs beside the consumer, never inside a crate."""
+    main = consumer / 'src/main.rs'
+    source = main.read_text()
+    for name in ('execution_cases', 'cshake_execution_cases'):
+        before = f'#[path = "../../../crates/brynja-hash-sha3/tests/{name}/mod.rs"]'
+        if source.count(before) != 1:
+            raise ValueError('unexpected SHA-3 consumer fixture path: ' + name)
+        source = source.replace(before, f'#[path = "../cases/{name}/mod.rs"]')
+    for name in ('execution_cases/mod.rs', 'cshake_execution_cases/mod.rs',
+                 'vectors/nist-bit-selected.txt', 'vectors/cshake-execution.txt'):
+        destination = consumer / 'cases' / name
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / 'crates/brynja-hash-sha3/tests' / name, destination)
+    main.write_text(source)
+
+
 def package(destination, env):
     # Cargo resolves even disabled optional path dependencies. Keep those
     # first-party manifests present, without activating their features. Family
@@ -83,8 +100,7 @@ def package(destination, env):
     manifest += '\n[patch.crates-io]\n' + '\n'.join(
         f'{name} = {{ path = "{root.as_posix()}" }}' for name, root in roots.items()) + '\n'
     (consumer / 'Cargo.toml').write_text(manifest)
-    main = consumer / 'src/main.rs'
-    main.write_text(main.read_text().replace('../../../crates/brynja-hash-sha3', roots['brynja-hash-sha3'].as_posix()))
+    external_cases(consumer)
     return consumer, roots
 
 

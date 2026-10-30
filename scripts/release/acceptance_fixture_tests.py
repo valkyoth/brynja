@@ -1,6 +1,57 @@
 """Reject stale current facade consumers without running Cargo."""
 from pathlib import Path
+import shutil
+import tempfile
 from unittest.mock import patch
+
+
+def sha3_external_cases(driver):
+    """Downstream tests do not require test files in published archives."""
+    original_root = driver.ROOT
+    names = ('execution_cases/mod.rs', 'cshake_execution_cases/mod.rs',
+             'vectors/nist-bit-selected.txt', 'vectors/cshake-execution.txt')
+    main = (original_root / 'assurance/sha3-execution/src/main.rs').read_text()
+    for broken in (None, *names, 'missing-path', 'duplicate-path'):
+        with tempfile.TemporaryDirectory(prefix='brynja-sha3-external-cases-') as directory:
+            root = Path(directory)
+            consumer = root / 'consumer'
+            (consumer / 'src').mkdir(parents=True)
+            source = main
+            path = '#[path = "../../../crates/brynja-hash-sha3/tests/execution_cases/mod.rs"]'
+            if broken == 'missing-path':
+                source = source.replace(path, '')
+            elif broken == 'duplicate-path':
+                source += '\n' + path
+            (consumer / 'src/main.rs').write_text(source)
+            for name in names:
+                if name == broken:
+                    continue
+                target = root / 'crates/brynja-hash-sha3/tests' / name
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(original_root / 'crates/brynja-hash-sha3/tests' / name, target)
+            with patch.object(driver, 'ROOT', root):
+                if broken is not None:
+                    try:
+                        driver.external_cases(consumer)
+                    except (ValueError, FileNotFoundError):
+                        pass
+                    else:
+                        raise AssertionError('accepted missing/ambiguous external fixture: ' + broken)
+                    assert (consumer / 'src/main.rs').read_text() == source
+                    continue
+                driver.external_cases(consumer)
+            copied = sorted(p.relative_to(consumer / 'cases').as_posix()
+                            for p in (consumer / 'cases').rglob('*') if p.is_file())
+            assert copied == sorted(names)
+            for name in names:
+                assert (consumer / 'cases' / name).read_bytes() == (
+                    original_root / 'crates/brynja-hash-sha3/tests' / name).read_bytes()
+            rewritten = (consumer / 'src/main.rs').read_text()
+            assert '../../../crates/' not in rewritten
+            for name in ('execution_cases', 'cshake_execution_cases'):
+                assert f'#[path = "../cases/{name}/mod.rs"]' in rewritten
+            assert not (root / 'packages').exists(), 'fixture staging wrote into package area'
+    print('SHA-3 external fixtures retain exact case/vector bytes and reject six missing/ambiguous inputs')
 
 
 def check(metadata):

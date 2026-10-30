@@ -22,6 +22,7 @@ def package_optional_closure():
     spec = importlib.util.spec_from_file_location('packaged_sha3', metadata.ROOT / 'scripts/sha3/check-sha3-execution.py')
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
+    fixtures.sha3_external_cases(module)
     class BeforeCargo(Exception):
         pass
     for extras in ((), ('brynja-mac-kmac',), ('brynja-hash-tuple',),

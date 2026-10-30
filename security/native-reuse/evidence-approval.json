@@ -3,7 +3,26 @@
   "purpose": "native-observation-integrity",
   "status": "owner-approved",
   "reviewed_commit": "bd3c9c9a964819be49880a4c140552e9202825ca",
-  "validation_changes": {},
+  "validation_changes": {
+    "keccak-hardened": {
+      "scripts/sha3/check-sha3-execution.py": {
+        "before": "c8fdd1b99400267f73f02e16afe45c7fd59ed505f9ce03962b63762a307b3581",
+        "after": "0b651058be3b4e3c14b1409d4e2f3a215619da7ca1562a005976bdb751676d05"
+      }
+    },
+    "kmac-execution": {
+      "scripts/sha3/check-sha3-execution.py": {
+        "before": "c8fdd1b99400267f73f02e16afe45c7fd59ed505f9ce03962b63762a307b3581",
+        "after": "0b651058be3b4e3c14b1409d4e2f3a215619da7ca1562a005976bdb751676d05"
+      }
+    },
+    "tuplehash-execution": {
+      "scripts/sha3/check-sha3-execution.py": {
+        "before": "c8fdd1b99400267f73f02e16afe45c7fd59ed505f9ce03962b63762a307b3581",
+        "after": "0b651058be3b4e3c14b1409d4e2f3a215619da7ca1562a005976bdb751676d05"
+      }
+    }
+  },
   "families": [
     "sha2-hardened",
     "sha1-hardened",

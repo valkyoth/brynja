@@ -23,12 +23,30 @@ ORCHESTRATION = frozenset('scripts/release/' + name for name in (
     'verification_tooling_tests.py', 'verification_carry_forward.py',
     'test-detached-verification.py'))
 GENERATED = 'assurance/evidence.json'
+NATIVE_REVIEW = 'security/native-reuse/evidence-approval.json'
+# Owner approved this exact metadata transition on 2026-10-30. These hashes
+# cannot authorize native reuse: the independently supplied protected pin and
+# every original artifact are still checked by native_evidence_approval.
+NATIVE_PAIR = ('367046bb0dd112d0be1e5aed37218883a3469b1bde3c64bc025ce03eb015dca8',
+               '913a2f47caf84000f61671c7643f12824642057e3ae9f142b92213ba3a4b7f6d')
 ADDED_INPUTS = frozenset({
     'scripts/assurance/assurance_kani_tests.py',
     'scripts/release/verification_tooling_reuse.py',
     'scripts/release/verification_tooling_review.py',
     'scripts/release/verification_tooling_tests.py',
 })
+
+
+def approved_native_update(root, before, after):
+    """Recognize one approved metadata change; never supply its trusted pin."""
+    if before is None or after is None or tuple(
+            hashlib.sha256(raw).hexdigest() for raw in (before, after)) != NATIVE_PAIR:
+        return False
+    import native_evidence_approval as approval
+    head = plans.inputs.git(root, 'rev-parse', 'HEAD').decode().strip()
+    for family in approval.INDEXES:
+        approval.validate(family, root, head)
+    return True
 
 
 def generated_only(root, base, before, after, changed):
@@ -76,6 +94,10 @@ ASan/Kani snapshot already contains it. Unknown baselines have no exception.
             if name in ORCHESTRATION:
                 # snapshot still rejects symlinks/oversized inputs.
                 if after is None:
+                    return set()
+                continue
+            if name == NATIVE_REVIEW:
+                if not approved_native_update(root, before, after):
                     return set()
                 continue
             if name == GENERATED:

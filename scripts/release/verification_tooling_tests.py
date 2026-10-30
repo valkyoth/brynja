@@ -2,6 +2,7 @@
 import copy
 import hashlib
 import json
+import os
 import subprocess
 import tempfile
 import unittest
@@ -122,6 +123,61 @@ class ToolingReuseTests(unittest.TestCase):
         self.write(added, b'new helper')
         new['inputs'][added] = hashlib.sha256(b'new helper').hexdigest()
         self.assertTrue(check(new, (self.driver, added)))
+
+    def test_native_metadata_transition_is_not_general_profile_exemption(self):
+        self.write(tooling.NATIVE_REVIEW, b'proposed manifest')
+        with patch.object(tooling, 'approved_native_update', return_value=True) as guard:
+            self.assertEqual(self.prove(), tooling.PHASES)
+            guard.assert_called_once()
+        with patch.object(tooling, 'approved_native_update', return_value=False):
+            self.assertFalse(self.prove())
+        with patch.object(tooling, 'approved_native_update', side_effect=ValueError('unapproved')):
+            self.assertFalse(self.prove())
+
+    def test_native_pair_requires_external_pin_and_original_artifacts(self):
+        import native_evidence_approval as approval
+        import native_review_tests as fixtures
+        import native_review_io as io
+        root = self.root / 'native-fixture'
+        root.mkdir()
+        fixtures.init_repository(root)
+        fixtures.write(root, 'crates/example/src/lib.rs', 'pub fn original() {}\n')
+        capture = fixtures.commit(root)
+        artifact = 'assurance/kmac-execution-native/test.json'
+        record = {'commit': capture, 'cpu': 'synthetic test CPU', 'results': {'test': 'fixture'}}
+        fixtures.write(root, artifact, record)
+        index = approval.INDEXES['kmac-execution']
+        fixtures.write(root, index, {'lanes': {'test': {'artifact': artifact,
+            'sha256': io.sha(io.read(root, artifact))}}})
+        anchor = fixtures.commit(root)
+        old = {'schema': 1, 'purpose': 'native-observation-integrity', 'status': 'owner-approved',
+               'reviewed_commit': anchor, 'families': ['kmac-execution'], 'validation_changes': {}}
+        fixtures.write(root, approval.REVIEW, old)
+        fixtures.commit(root)
+        before = (root / approval.REVIEW).read_bytes()
+        new = {**old, 'validation_changes': {'kmac-execution': {
+            'scripts/check.py': {'before': 'a' * 64, 'after': 'b' * 64}}}}
+        fixtures.write(root, approval.REVIEW, new)
+        fixtures.commit(root)
+        after = (root / approval.REVIEW).read_bytes()
+        pair = (io.sha(before), io.sha(after))
+        with patch.object(tooling, 'NATIVE_PAIR', pair), \
+             patch.object(approval, 'INDEXES', {'kmac-execution': index}):
+            for value in ('', pair[0], '0' * 64):
+                with self.subTest(pin=value), patch.dict(os.environ, {approval.ENVIRONMENT: value}):
+                    with self.assertRaises(ValueError):
+                        tooling.approved_native_update(root, before, after)
+            with patch.dict(os.environ, {approval.ENVIRONMENT: pair[1]}):
+                self.assertTrue(tooling.approved_native_update(root, before, after))
+                self.assertFalse(tooling.approved_native_update(root, before, after + b'\n'))
+                self.assertFalse(tooling.approved_native_update(root, after, before))
+                self.assertFalse(tooling.approved_native_update(root, None, after))
+                fixtures.write(root, artifact, {**record, 'cpu': 'FORGED CPU'})
+                fixtures.write(root, index, {'lanes': {'test': {'artifact': artifact,
+                    'sha256': io.sha(io.read(root, artifact))}}})
+                fixtures.commit(root)
+                with self.assertRaisesRegex(ValueError, 'approved native index/artifact changed'):
+                    tooling.approved_native_update(root, before, after)
 
     def test_decisions_keep_tool_driver_checkpoint_and_missing_coverage_gates(self):
         tasks = [entry('cargo +1.90.0 check --workspace', 'matrix'),

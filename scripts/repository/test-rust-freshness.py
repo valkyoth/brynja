@@ -14,7 +14,7 @@ import rust_freshness as policy
 MATRIX = 'scripts/ci/check-rust-version-matrix.sh'
 FILES = (
     MATRIX, 'rust-toolchain.toml', 'assurance/zeroization-matrix.toml',
-    'assurance/constant-time-matrix.toml', '.github/workflows/ci.yml',
+    'assurance/constant-time-matrix.toml', '.github/workflows/qualification.yml',
     'scripts/checks.sh', 'scripts/tag_gate.sh', 'scripts/zeroization/check-tag-miri.sh',
     'scripts/release/verification_plan.py', 'scripts/release/run-verification.py',
 )
@@ -86,9 +86,9 @@ class FreshnessTests(unittest.TestCase):
         (self.root / MATRIX).write_text(original)
 
     def test_ci_codegen_and_tag_bindings_remain_required(self):
-        cases = [('.github/workflows/ci.yml', ', 1.99.1]', ']')]
+        cases = [('.github/workflows/qualification.yml', ', 1.99.1]', ']')]
         for family in ('zeroization', 'constant-time'):
-            cases.append(('.github/workflows/ci.yml',
+            cases.append(('.github/workflows/qualification.yml',
                           f'scripts/{family}/check-{family}-codegen.sh', 'scripts/omitted.sh'))
         for command in ('scripts/ci/check-rust-version-matrix.sh', 'scripts/ci/check_latest_tools.sh'):
             cases.append(('scripts/tag_gate.sh', command, 'true'))

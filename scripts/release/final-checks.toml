@@ -1,0 +1,51 @@
+# Reviewed finite list for the tooling-only .3 delta. No implicit family sweep.
+# Update this list deliberately for the next component and its integrations.
+schema = 1
+version = "0.25.3"
+scope = "Standalone verification tracker, bounded release gate and publication handoff; no cryptographic implementation changes. Earlier component evidence remains historical evidence, not a freshness gate."
+ci_checks = ["tracker-tests", "tracker-lint", "tracker-format", "registry-tests", "release-regressions", "package-plan", "package-contents", "release-metadata"]
+
+[[checks]]
+id = "tracker-tests"
+command = ["cargo", "test", "--manifest-path", "tools/brynja-verify/Cargo.toml", "--locked"]
+timeout_seconds = 300
+[[checks]]
+id = "tracker-lint"
+command = ["cargo", "clippy", "--manifest-path", "tools/brynja-verify/Cargo.toml", "--locked", "--all-targets", "--", "-D", "warnings"]
+timeout_seconds = 300
+[[checks]]
+id = "tracker-format"
+command = ["cargo", "fmt", "--manifest-path", "tools/brynja-verify/Cargo.toml", "--check"]
+timeout_seconds = 60
+[[checks]]
+id = "registry-tests"
+command = ["python3", "scripts/release/test-verification-registry.py"]
+timeout_seconds = 60
+[[checks]]
+id = "release-regressions"
+command = ["python3", "scripts/release/test-scoped-release.py"]
+timeout_seconds = 120
+[[checks]]
+id = "release-metadata"
+command = ["python3", "scripts/release/test-release-crates.py"]
+timeout_seconds = 120
+[[checks]]
+id = "package-plan"
+command = ["python3", "scripts/release/release_crates.py", "--check"]
+timeout_seconds = 120
+[[checks]]
+id = "package-contents"
+command = ["python3", "scripts/release/release_crates.py", "--package-check"]
+timeout_seconds = 300
+[[checks]]
+id = "dependency-policy"
+command = ["cargo", "deny", "check"]
+timeout_seconds = 120
+[[checks]]
+id = "advisories"
+command = ["cargo", "audit", "--deny", "warnings"]
+timeout_seconds = 120
+[[checks]]
+id = "tracker-advisories"
+command = ["cargo", "audit", "--file", "tools/brynja-verify/Cargo.lock", "--deny", "warnings"]
+timeout_seconds = 120

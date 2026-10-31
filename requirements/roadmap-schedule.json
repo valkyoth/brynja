@@ -777,6 +777,13 @@
       "scope_sha256": "14b21f12ac3fefb2cecf0b843f435a58a5ac69a5af3d9ddf557b9781b5e894d0"
     },
     {
+      "id": "0.25.3",
+      "version": "0.25.3",
+      "title": "Scoped Verification And Publication Handoff",
+      "requires": ["0.25.2"],
+      "scope_sha256": "a4157b327c084bb4b973e74e2de4bb8c6177c968813fcca9138808c822b91931"
+    },
+    {
       "id": "0.26.0",
       "version": "0.26.0",
       "title": "Complete HKDF And TLS Labels",
@@ -19886,5 +19893,5 @@
       "disposition": "Import/merge is the present operation; the family cannot claim bidirectional closure before explicit export acceptance."
     }
   ],
-  "audited_graph_sha256": "baa13d30fcfc45770a7d19c6b5583d6d2b23f6429a5ac7f088db76c08fe2f9b2"
+  "audited_graph_sha256": "99c26b819901ea75488bb11af98b945b8a14011eaf042c2a05c91be339c38f18"
 }

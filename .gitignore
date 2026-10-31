@@ -14,6 +14,8 @@ README.internal.md
 logs/
 release-reports/
 *.pid
+/verification/.runner/
+**/.verify-*.tmp
 
 # Local-only licensed or redistribution-restricted references
 /references/local/*

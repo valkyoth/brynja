@@ -1,21 +1,21 @@
 [release]
-version = "0.25.2"
-milestone = "0.25.2"
+version = "0.25.3"
+milestone = "0.25.3"
 baseline = "0.20.0"
-cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11", "0.24.12", "0.24.13", "0.24.14", "0.24.15", "0.24.16", "0.24.17", "0.24.18", "0.24.19", "0.24.20", "0.24.21", "0.24.22", "0.24.23", "0.24.24", "0.24.25", "0.24.26", "0.24.27", "0.24.28", "0.24.29", "0.24.30", "0.24.31", "0.24.32", "0.24.33", "0.24.34", "0.24.35", "0.24.36", "0.24.37", "0.24.38", "0.24.39", "0.24.40", "0.24.41", "0.24.42", "0.24.43", "0.24.44", "0.24.45", "0.24.46", "0.24.47", "0.24.48", "0.24.49", "0.24.50", "0.24.51", "0.24.52", "0.24.53", "0.24.54", "0.24.55", "0.25.0", "0.25.1", "0.25.2"]
+cumulative_milestones = ["0.21.0", "0.22.0", "0.22.1", "0.22.2", "0.22.3", "0.23.0", "0.23.1", "0.23.2", "0.23.3", "0.23.4", "0.24.0", "0.24.1", "0.24.2", "0.24.3", "0.24.4", "0.24.5", "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11", "0.24.12", "0.24.13", "0.24.14", "0.24.15", "0.24.16", "0.24.17", "0.24.18", "0.24.19", "0.24.20", "0.24.21", "0.24.22", "0.24.23", "0.24.24", "0.24.25", "0.24.26", "0.24.27", "0.24.28", "0.24.29", "0.24.30", "0.24.31", "0.24.32", "0.24.33", "0.24.34", "0.24.35", "0.24.36", "0.24.37", "0.24.38", "0.24.39", "0.24.40", "0.24.41", "0.24.42", "0.24.43", "0.24.44", "0.24.45", "0.24.46", "0.24.47", "0.24.48", "0.24.49", "0.24.50", "0.24.51", "0.24.52", "0.24.53", "0.24.54", "0.24.55", "0.25.0", "0.25.1", "0.25.2", "0.25.3"]
 policy = "independent"
 stage = "public"
-# Explicit one-off full assurance checkpoint; subsequent releases use "affected".
-verification = "full"
+# Legacy explicit runner default only; routine gates use final-checks.toml, not this selector.
+verification = "affected"
 exceptional = false
 exception_reason = ""
 
 [crates."brynja"]
-previous_version = "0.25.1"
-version = "0.25.2"
+previous_version = "0.25.2"
+version = "0.25.3"
 change = "code"
 publish = true
-reason = "Public HMAC usability checkpoint after cumulative review of v0.20.0..v0.25.2; facade publishes last only after release authorization."
+reason = "First publication of the completed HMAC checkpoint, with scoped verification/release tooling; .2 remains GitHub-only and the facade publishes last after scoped review and green CI."
 
 [crates."brynja-legacy-hmac"]
 previous_version = "unpublished"

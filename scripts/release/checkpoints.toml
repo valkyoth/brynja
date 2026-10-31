@@ -3,7 +3,8 @@
 schema = 1
 
 [checkpoints]
-"25" = "0.25.2"
+# .2 remains GitHub-only; the owner explicitly selected .3 for first publication.
+"25" = "0.25.3"
 "30" = "0.30.2"
 "35" = "0.35.0"
 "40" = "0.40.0"

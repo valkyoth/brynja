@@ -10,6 +10,7 @@ import subprocess
 import sys
 import time
 from pathlib import Path
+import scoped_release
 
 from release_policy import (
     DEFAULT_PLAN,
@@ -98,6 +99,11 @@ def run_preflight(
     release_tag_at_head: bool,
     evidence_environment: dict[str, str] | None = None,
 ) -> None:
+    if scoped_release.enabled(version):
+        # The gate ran before the GitHub push. Only inspect the exact candidate
+        # and existing GitHub results here: never repeat tests/proofs/audits.
+        scoped_release.publication(version, dry_run=dry_run, root=ROOT)
+        return
     gate = gate_path(version)
     environment = (
         {"BRYNJA_RELEASE_PUBLISH_TAG": f"v{version}"}
@@ -172,8 +178,9 @@ def wait_for_index(package: str, version: str, *, dry_run: bool) -> None:
     time.sleep(5)
 
 
-def publish(package: str, *, dry_run: bool) -> None:
-    run(["cargo", "publish", "-p", package], dry_run=dry_run)
+def publish(package: str, *, dry_run: bool, checked_candidate: bool = False) -> None:
+    flags = ["--no-verify", "--locked"] if checked_candidate else []
+    run(["cargo", "publish", *flags, "-p", package], dry_run=dry_run)
 
 
 def package_archive(package: str) -> None:
@@ -339,7 +346,8 @@ def main() -> int:
             evidence_environment=environment,
         )
         for index, package in enumerate(steps):
-            publish(package, dry_run=args.dry_run)
+            publish(package, dry_run=args.dry_run,
+                    checked_candidate=scoped_release.enabled(version))
             if index != len(steps) - 1:
                 wait_for_index(
                     package,

@@ -42,6 +42,16 @@ companion-adapter exceptions follow explicit admission and isolation policy.
 
 ## Cryptography Verification Status
 
+**Verification workflow from v0.25.3:** implement a component, complete its
+agreed scoped checks, record the evidence, and close it. Unrelated development
+does not reopen completed components. The local
+[brynja-verify tracker](docs/assurance/brynja-verify.md) reports actual executions
+and input freshness separately; it is not a release gate or certification.
+Releases follow clean pentest/retest → finite final checks → green GitHub →
+publication of that same candidate, without restarting verification at upload.
+See the [completion rule](docs/assurance/component-completion.md) and
+[release handoff and transition status](docs/release/scoped-release.md).
+
 These tables track concrete public capabilities and the named implementation
 families in Brynja's active pre-1.0 roadmap. A capability is listed as
 implemented after its complete public API and functional acceptance checks

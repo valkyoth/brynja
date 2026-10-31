@@ -1,0 +1,562 @@
+# Portable hash/MAC harness catalog. Native/proof/hosted assessments retain
+# their historical catalog; registration does not establish current coverage.
+schema = 1
+execution_semantics = 1
+
+[groups.hash-core]
+paths = ["crates/brynja-core/src", "crates/brynja-hash-core/src"]
+
+[groups.hash-core.toml]
+"Cargo.toml" = ["workspace.package.edition", "workspace.package.rust-version", "workspace.lints", "profile.dev", "profile.test", "workspace.dependencies.brynja-core.path", "workspace.dependencies.brynja-hash-core.path"]
+"crates/brynja-core/Cargo.toml" = ["package.name", "package.edition", "package.rust-version", "lib", "features.default", "dependencies", "lints"]
+"crates/brynja-hash-core/Cargo.toml" = ["package.name", "package.edition", "package.rust-version", "lib", "features.default", "dependencies", "lints"]
+
+[[groups.hash-core.locks]]
+path = "Cargo.lock"
+packages = ["brynja-core", "brynja-hash-core"]
+
+[groups.compiler]
+[[groups.compiler.tools]]
+program = "rustc"
+toolchain = "1.99.1"
+[[groups.compiler.tools]]
+program = "cargo"
+toolchain = "1.99.1"
+
+[groups.md5-api]
+paths = ["crates/brynja-legacy-md5/src", "crates/brynja-legacy-md5/tests/api.rs", "crates/brynja-legacy-md5/tests/vectors/rfc1321.txt"]
+[groups.md5-api.toml]
+"crates/brynja-legacy-md5/Cargo.toml" = ["package.name", "package.edition", "package.rust-version", "package.build", "lib", "test", "features.default", "dependencies", "dev-dependencies", "build-dependencies", "lints"]
+[[groups.md5-api.locks]]
+path = "Cargo.lock"
+packages = ["brynja-legacy-md5"]
+
+[groups.sha1-api]
+paths = ["crates/brynja-legacy-sha1/src", "crates/brynja-legacy-sha1/tests/api.rs", "crates/brynja-legacy-sha1/tests/vectors/nist.txt"]
+[groups.sha1-api.toml]
+"crates/brynja-legacy-sha1/Cargo.toml" = ["package.name", "package.edition", "package.rust-version", "package.build", "lib", "test", "features.default", "dependencies", "dev-dependencies", "build-dependencies", "lints"]
+[[groups.sha1-api.locks]]
+path = "Cargo.lock"
+packages = ["brynja-legacy-sha1"]
+
+[[checks]]
+component = "md5"
+id = "known-answers"
+name = "RFC vectors, ordinary/hardened/streaming"
+establishes = "Existing RFC 1321 byte vectors on portable owners; not SIMD or native-backend qualification."
+command = ["cargo", "+1.99.1", "test", "--locked", "--offline", "-p", "brynja-legacy-md5", "--no-default-features", "--test", "api", "official_rfc_vectors_ordinary_hardened_and_streamed", "--", "--exact"]
+cwd = "."
+inputs = ["hash-core", "compiler", "md5-api", "md5-source"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test official_rfc_vectors_ordinary_hardened_and_streamed ... ok", "test result: ok. 1 passed; 0 failed; 0 ignored;"]
+minimum_tests = 1
+
+# Portable harness registrations. Source groups are reusable, test inputs stay
+# check-specific. Optional native/proof assessments retain their old catalog.
+
+[groups.sha2-source]
+paths = ["crates/brynja-hash-sha2/src"]
+[groups.sha2-source.toml]
+"crates/brynja-hash-sha2/Cargo.toml" = ["package.name","package.edition","package.rust-version","package.build","package.autotests","lib","features.default","dependencies","dev-dependencies","build-dependencies","lints","features.general-sha512-t"]
+"Cargo.toml" = ["workspace.dependencies.brynja-hash-sha2.path","workspace.dependencies.brynja-hash-sha2.features","workspace.dependencies.brynja-hash-sha2.default-features","workspace.dependencies.brynja-hash-sha2.package","workspace.dependencies.brynja-hash-sha2.git","workspace.dependencies.brynja-hash-sha2.registry"]
+[[groups.sha2-source.locks]]
+path = "Cargo.lock"
+packages = ["brynja-hash-sha2"]
+
+[groups.sha3-source]
+paths = ["crates/brynja-hash-sha3/src"]
+[groups.sha3-source.toml]
+"crates/brynja-hash-sha3/Cargo.toml" = ["package.name","package.edition","package.rust-version","package.build","package.autotests","lib","features.default","dependencies","dev-dependencies","build-dependencies","lints"]
+"Cargo.toml" = ["workspace.dependencies.brynja-hash-sha3.path","workspace.dependencies.brynja-hash-sha3.features","workspace.dependencies.brynja-hash-sha3.default-features","workspace.dependencies.brynja-hash-sha3.package","workspace.dependencies.brynja-hash-sha3.git","workspace.dependencies.brynja-hash-sha3.registry"]
+[[groups.sha3-source.locks]]
+path = "Cargo.lock"
+packages = ["brynja-hash-sha3"]
+
+[groups.kmac-source]
+paths = ["crates/brynja-mac-kmac/src"]
+[groups.kmac-source.toml]
+"crates/brynja-mac-kmac/Cargo.toml" = ["package.name","package.edition","package.rust-version","package.build","package.autotests","lib","features.default","dependencies","dev-dependencies","build-dependencies","lints"]
+"Cargo.toml" = ["workspace.dependencies.brynja-mac-kmac.path","workspace.dependencies.brynja-mac-kmac.features","workspace.dependencies.brynja-mac-kmac.default-features","workspace.dependencies.brynja-mac-kmac.package","workspace.dependencies.brynja-mac-kmac.git","workspace.dependencies.brynja-mac-kmac.registry"]
+[[groups.kmac-source.locks]]
+path = "Cargo.lock"
+packages = ["brynja-mac-kmac"]
+
+[groups.hmac-source]
+paths = ["crates/brynja-mac-hmac/src"]
+[groups.hmac-source.toml]
+"crates/brynja-mac-hmac/Cargo.toml" = ["package.name","package.edition","package.rust-version","package.build","package.autotests","lib","features.default","dependencies","dev-dependencies","build-dependencies","lints"]
+"Cargo.toml" = ["workspace.dependencies.brynja-mac-hmac.path","workspace.dependencies.brynja-mac-hmac.features","workspace.dependencies.brynja-mac-hmac.default-features","workspace.dependencies.brynja-mac-hmac.package","workspace.dependencies.brynja-mac-hmac.git","workspace.dependencies.brynja-mac-hmac.registry"]
+[[groups.hmac-source.locks]]
+path = "Cargo.lock"
+packages = ["brynja-mac-hmac"]
+
+[groups.tuplehash-source]
+paths = ["crates/brynja-hash-tuple/src"]
+[groups.tuplehash-source.toml]
+"crates/brynja-hash-tuple/Cargo.toml" = ["package.name","package.edition","package.rust-version","package.build","package.autotests","lib","features.default","dependencies","dev-dependencies","build-dependencies","lints"]
+"Cargo.toml" = ["workspace.dependencies.brynja-hash-tuple.path","workspace.dependencies.brynja-hash-tuple.features","workspace.dependencies.brynja-hash-tuple.default-features","workspace.dependencies.brynja-hash-tuple.package","workspace.dependencies.brynja-hash-tuple.git","workspace.dependencies.brynja-hash-tuple.registry"]
+[[groups.tuplehash-source.locks]]
+path = "Cargo.lock"
+packages = ["brynja-hash-tuple"]
+
+[groups.parallelhash-source]
+paths = ["crates/brynja-hash-parallel/src"]
+[groups.parallelhash-source.toml]
+"crates/brynja-hash-parallel/Cargo.toml" = ["package.name","package.edition","package.rust-version","package.build","package.autotests","lib","features.default","dependencies","dev-dependencies","build-dependencies","lints"]
+"Cargo.toml" = ["workspace.dependencies.brynja-hash-parallel.path","workspace.dependencies.brynja-hash-parallel.features","workspace.dependencies.brynja-hash-parallel.default-features","workspace.dependencies.brynja-hash-parallel.package","workspace.dependencies.brynja-hash-parallel.git","workspace.dependencies.brynja-hash-parallel.registry"]
+[[groups.parallelhash-source.locks]]
+path = "Cargo.lock"
+packages = ["brynja-hash-parallel"]
+
+[groups.legacy-hmac-source]
+paths = ["crates/brynja-legacy-hmac/src"]
+[groups.legacy-hmac-source.toml]
+"crates/brynja-legacy-hmac/Cargo.toml" = ["package.name","package.edition","package.rust-version","package.build","package.autotests","lib","features.default","dependencies","dev-dependencies","build-dependencies","lints"]
+"Cargo.toml" = ["workspace.dependencies.brynja-legacy-hmac.path","workspace.dependencies.brynja-legacy-hmac.features","workspace.dependencies.brynja-legacy-hmac.default-features","workspace.dependencies.brynja-legacy-hmac.package","workspace.dependencies.brynja-legacy-hmac.git","workspace.dependencies.brynja-legacy-hmac.registry"]
+[[groups.legacy-hmac-source.locks]]
+path = "Cargo.lock"
+packages = ["brynja-legacy-hmac"]
+
+[groups.md5-source]
+paths = ["crates/brynja-legacy-md5/src"]
+[groups.md5-source.toml]
+"crates/brynja-legacy-md5/Cargo.toml" = ["package.name","package.edition","package.rust-version","package.build","package.autotests","lib","features.default","dependencies","dev-dependencies","build-dependencies","lints"]
+"Cargo.toml" = ["workspace.dependencies.brynja-legacy-md5.path","workspace.dependencies.brynja-legacy-md5.features","workspace.dependencies.brynja-legacy-md5.default-features","workspace.dependencies.brynja-legacy-md5.package","workspace.dependencies.brynja-legacy-md5.git","workspace.dependencies.brynja-legacy-md5.registry"]
+[[groups.md5-source.locks]]
+path = "Cargo.lock"
+packages = ["brynja-legacy-md5"]
+
+[groups.sha1-source]
+paths = ["crates/brynja-legacy-sha1/src"]
+[groups.sha1-source.toml]
+"crates/brynja-legacy-sha1/Cargo.toml" = ["package.name","package.edition","package.rust-version","package.build","package.autotests","lib","features.default","dependencies","dev-dependencies","build-dependencies","lints"]
+"Cargo.toml" = ["workspace.dependencies.brynja-legacy-sha1.path","workspace.dependencies.brynja-legacy-sha1.features","workspace.dependencies.brynja-legacy-sha1.default-features","workspace.dependencies.brynja-legacy-sha1.package","workspace.dependencies.brynja-legacy-sha1.git","workspace.dependencies.brynja-legacy-sha1.registry"]
+[[groups.sha1-source.locks]]
+path = "Cargo.lock"
+packages = ["brynja-legacy-sha1"]
+
+[groups.cpu-source]
+paths = ["crates/brynja-crypto-cpu/src"]
+[groups.cpu-source.toml]
+"crates/brynja-crypto-cpu/Cargo.toml" = ["package.name","package.edition","package.rust-version","package.build","package.autotests","lib","features.default","dependencies","dev-dependencies","build-dependencies","lints","features"]
+"Cargo.toml" = ["workspace.dependencies.brynja-crypto-cpu.path","workspace.dependencies.brynja-crypto-cpu.features","workspace.dependencies.brynja-crypto-cpu.default-features","workspace.dependencies.brynja-crypto-cpu.package","workspace.dependencies.brynja-crypto-cpu.git","workspace.dependencies.brynja-crypto-cpu.registry"]
+[[groups.cpu-source.locks]]
+path = "Cargo.lock"
+packages = ["brynja-crypto-cpu"]
+
+[groups.hosted-cpu-source]
+paths = ["crates/brynja-crypto-cpu-std/src"]
+[groups.hosted-cpu-source.toml]
+"crates/brynja-crypto-cpu-std/Cargo.toml" = ["package.name","package.edition","package.rust-version","package.build","package.autotests","lib","features.default","dependencies","dev-dependencies","build-dependencies","lints","features"]
+"Cargo.toml" = ["workspace.dependencies.brynja-crypto-cpu-std.path","workspace.dependencies.brynja-crypto-cpu-std.features","workspace.dependencies.brynja-crypto-cpu-std.default-features","workspace.dependencies.brynja-crypto-cpu-std.package","workspace.dependencies.brynja-crypto-cpu-std.git","workspace.dependencies.brynja-crypto-cpu-std.registry"]
+[[groups.hosted-cpu-source.locks]]
+path = "Cargo.lock"
+packages = ["brynja-crypto-cpu-std"]
+
+[groups.sha2-sha224-harness]
+paths = ["crates/brynja-hash-sha2/tests/sha224.rs"]
+
+[[checks]]
+component = "sha2"
+id = "sha224"
+name = "sha2 sha224 (portable)"
+establishes = "Existing no-default-feature portable harness; not native/SIMD, Miri, proof or whole-component qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-hash-sha2","--no-default-features","--test","sha224"]
+cwd = "."
+inputs = ["hash-core","compiler","sha2-source","sha2-sha224-harness"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test official_short_and_long_vectors_match_fips_and_nist_cavp ... ok"]
+minimum_tests = 1
+
+[groups.sha2-sha256-harness]
+paths = ["crates/brynja-hash-sha2/tests/sha256.rs"]
+
+[[checks]]
+component = "sha2"
+id = "sha256"
+name = "sha2 sha256 (portable)"
+establishes = "Existing no-default-feature portable harness; not native/SIMD, Miri, proof or whole-component qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-hash-sha2","--no-default-features","--test","sha256"]
+cwd = "."
+inputs = ["hash-core","compiler","sha2-source","sha2-sha256-harness"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test official_fips_vectors ... ok"]
+minimum_tests = 1
+
+[groups.sha2-sha384-harness]
+paths = ["crates/brynja-hash-sha2/tests/sha384.rs"]
+
+[[checks]]
+component = "sha2"
+id = "sha384"
+name = "sha2 sha384 (portable)"
+establishes = "Existing no-default-feature portable harness; not native/SIMD, Miri, proof or whole-component qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-hash-sha2","--no-default-features","--test","sha384"]
+cwd = "."
+inputs = ["hash-core","compiler","sha2-source","sha2-sha384-harness"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test official_short_and_long_vectors_match_fips_and_nist_cavp ... ok"]
+minimum_tests = 1
+
+[groups.sha2-sha512-harness]
+paths = ["crates/brynja-hash-sha2/tests/sha512.rs"]
+
+[[checks]]
+component = "sha2"
+id = "sha512"
+name = "sha2 sha512 (portable)"
+establishes = "Existing no-default-feature portable harness; not native/SIMD, Miri, proof or whole-component qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-hash-sha2","--no-default-features","--test","sha512"]
+cwd = "."
+inputs = ["hash-core","compiler","sha2-source","sha2-sha512-harness"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test official_short_and_long_vectors_match_fips_and_nist_cavp ... ok"]
+minimum_tests = 1
+
+[groups.sha2-sha512-224-harness]
+paths = ["crates/brynja-hash-sha2/tests/sha512_224.rs"]
+
+[[checks]]
+component = "sha2"
+id = "sha512-224"
+name = "sha2 sha512 224 (portable)"
+establishes = "Existing no-default-feature portable harness; not native/SIMD, Miri, proof or whole-component qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-hash-sha2","--no-default-features","--test","sha512_224"]
+cwd = "."
+inputs = ["hash-core","compiler","sha2-source","sha2-sha512-224-harness"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test official_short_and_long_nist_cavp_vectors_match ... ok"]
+minimum_tests = 1
+
+[groups.sha2-sha512-256-harness]
+paths = ["crates/brynja-hash-sha2/tests/sha512_256.rs"]
+
+[[checks]]
+component = "sha2"
+id = "sha512-256"
+name = "sha2 sha512 256 (portable)"
+establishes = "Existing no-default-feature portable harness; not native/SIMD, Miri, proof or whole-component qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-hash-sha2","--no-default-features","--test","sha512_256"]
+cwd = "."
+inputs = ["hash-core","compiler","sha2-source","sha2-sha512-256-harness"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test official_short_and_long_nist_cavp_vectors_match ... ok"]
+minimum_tests = 1
+
+[groups.sha3-sha3-224-harness]
+paths = ["crates/brynja-hash-sha3/tests/sha3_224.rs","crates/brynja-hash-sha3/tests/support"]
+
+[[checks]]
+component = "sha3"
+id = "sha3-224"
+name = "sha3 sha3 224 (portable)"
+establishes = "Existing no-default-feature portable harness; not native/SIMD, Miri, proof or whole-component qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-hash-sha3","--no-default-features","--test","sha3_224"]
+cwd = "."
+inputs = ["hash-core","compiler","sha3-source","sha3-sha3-224-harness"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test official_fips202_zero_and_1600_bit_vectors_match ... ok"]
+minimum_tests = 1
+
+[groups.sha3-sha3-256-harness]
+paths = ["crates/brynja-hash-sha3/tests/sha3_256.rs","crates/brynja-hash-sha3/tests/support"]
+
+[[checks]]
+component = "sha3"
+id = "sha3-256"
+name = "sha3 sha3 256 (portable)"
+establishes = "Existing no-default-feature portable harness; not native/SIMD, Miri, proof or whole-component qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-hash-sha3","--no-default-features","--test","sha3_256"]
+cwd = "."
+inputs = ["hash-core","compiler","sha3-source","sha3-sha3-256-harness"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test official_fips202_zero_and_1600_bit_vectors_match ... ok"]
+minimum_tests = 1
+
+[groups.sha3-sha3-384-harness]
+paths = ["crates/brynja-hash-sha3/tests/sha3_384.rs","crates/brynja-hash-sha3/tests/support"]
+
+[[checks]]
+component = "sha3"
+id = "sha3-384"
+name = "sha3 sha3 384 (portable)"
+establishes = "Existing no-default-feature portable harness; not native/SIMD, Miri, proof or whole-component qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-hash-sha3","--no-default-features","--test","sha3_384"]
+cwd = "."
+inputs = ["hash-core","compiler","sha3-source","sha3-sha3-384-harness"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test official_fips202_zero_and_1600_bit_vectors_match ... ok"]
+minimum_tests = 1
+
+[groups.sha3-sha3-512-harness]
+paths = ["crates/brynja-hash-sha3/tests/sha3_512.rs","crates/brynja-hash-sha3/tests/support"]
+
+[[checks]]
+component = "sha3"
+id = "sha3-512"
+name = "sha3 sha3 512 (portable)"
+establishes = "Existing no-default-feature portable harness; not native/SIMD, Miri, proof or whole-component qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-hash-sha3","--no-default-features","--test","sha3_512"]
+cwd = "."
+inputs = ["hash-core","compiler","sha3-source","sha3-sha3-512-harness"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test official_fips202_zero_and_1600_bit_vectors_match ... ok"]
+minimum_tests = 1
+
+[groups.sha3-shake128-harness]
+paths = ["crates/brynja-hash-sha3/tests/shake128.rs","crates/brynja-hash-sha3/tests/support"]
+
+[[checks]]
+component = "sha3"
+id = "shake128"
+name = "sha3 shake128 (portable)"
+establishes = "Existing no-default-feature portable harness; not native/SIMD, Miri, proof or whole-component qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-hash-sha3","--no-default-features","--test","shake128"]
+cwd = "."
+inputs = ["hash-core","compiler","sha3-source","sha3-shake128-harness"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test official_fips202_zero_and_1600_bit_vectors_match ... ok"]
+minimum_tests = 1
+
+[groups.sha3-shake256-harness]
+paths = ["crates/brynja-hash-sha3/tests/shake256.rs","crates/brynja-hash-sha3/tests/support"]
+
+[[checks]]
+component = "sha3"
+id = "shake256"
+name = "sha3 shake256 (portable)"
+establishes = "Existing no-default-feature portable harness; not native/SIMD, Miri, proof or whole-component qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-hash-sha3","--no-default-features","--test","shake256"]
+cwd = "."
+inputs = ["hash-core","compiler","sha3-source","sha3-shake256-harness"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test official_fips202_zero_and_1600_bit_vectors_match ... ok"]
+minimum_tests = 1
+
+[groups.sha3-cshake-harness]
+paths = ["crates/brynja-hash-sha3/tests/cshake.rs","crates/brynja-hash-sha3/tests/support"]
+
+[[checks]]
+component = "sha3"
+id = "cshake"
+name = "sha3 cshake (portable)"
+establishes = "Existing no-default-feature portable harness; not native/SIMD, Miri, proof or whole-component qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-hash-sha3","--no-default-features","--test","cshake"]
+cwd = "."
+inputs = ["hash-core","compiler","sha3-source","sha3-cshake-harness"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test every_official_nist_cshake_example_matches ... ok"]
+minimum_tests = 1
+
+[groups.kmac-official-vectors-harness]
+paths = ["crates/brynja-mac-kmac/tests/official_vectors.rs"]
+
+[[checks]]
+component = "kmac"
+id = "official-vectors"
+name = "kmac official vectors (portable)"
+establishes = "Existing no-default-feature portable harness; not native/SIMD, Miri, proof or whole-component qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-mac-kmac","--no-default-features","--test","official_vectors"]
+cwd = "."
+inputs = ["hash-core","compiler","kmac-source","sha3-source","kmac-official-vectors-harness"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test all_six_official_kmac_examples_match ... ok"]
+minimum_tests = 1
+
+[groups.kmac-verification-errors-harness]
+paths = ["crates/brynja-mac-kmac/tests/verification_errors.rs"]
+
+[[checks]]
+component = "kmac"
+id = "verification-errors"
+name = "kmac verification errors (portable)"
+establishes = "Existing no-default-feature portable harness; not native/SIMD, Miri, proof or whole-component qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-mac-kmac","--no-default-features","--test","verification_errors"]
+cwd = "."
+inputs = ["hash-core","compiler","kmac-source","sha3-source","kmac-verification-errors-harness"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test scoped_mismatch_propagates_and_workspace_can_be_reused ... ok"]
+minimum_tests = 1
+
+[groups.tuplehash-official-vectors-harness]
+paths = ["crates/brynja-hash-tuple/tests/official_vectors.rs"]
+
+[[checks]]
+component = "tuplehash"
+id = "official-vectors"
+name = "tuplehash official vectors (portable)"
+establishes = "Existing no-default-feature portable harness; not native/SIMD, Miri, proof or whole-component qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-hash-tuple","--no-default-features","--test","official_vectors"]
+cwd = "."
+inputs = ["hash-core","compiler","tuplehash-source","sha3-source","tuplehash-official-vectors-harness"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test all_six_official_fixed_examples_match ... ok"]
+minimum_tests = 1
+
+[groups.tuplehash-api-harness]
+paths = ["crates/brynja-hash-tuple/tests/api.rs"]
+
+[[checks]]
+component = "tuplehash"
+id = "api"
+name = "tuplehash api (portable)"
+establishes = "Existing no-default-feature portable harness; not native/SIMD, Miri, proof or whole-component qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-hash-tuple","--no-default-features","--test","api"]
+cwd = "."
+inputs = ["hash-core","compiler","tuplehash-source","sha3-source","tuplehash-api-harness"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test tuple_boundaries_order_and_empty_items_are_distinct ... ok"]
+minimum_tests = 1
+
+[groups.parallelhash-official-vectors-harness]
+paths = ["crates/brynja-hash-parallel/tests/official_vectors.rs"]
+
+[[checks]]
+component = "parallelhash"
+id = "official-vectors"
+name = "parallelhash official vectors (portable)"
+establishes = "Existing no-default-feature portable harness; not native/SIMD, Miri, proof or whole-component qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-hash-parallel","--no-default-features","--test","official_vectors"]
+cwd = "."
+inputs = ["hash-core","compiler","parallelhash-source","sha3-source","sha2-source","cpu-source","hosted-cpu-source","parallelhash-official-vectors-harness"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test all_six_official_fixed_examples_match ... ok"]
+minimum_tests = 1
+
+[groups.parallelhash-api-harness]
+paths = ["crates/brynja-hash-parallel/tests/api.rs"]
+
+[[checks]]
+component = "parallelhash"
+id = "api"
+name = "parallelhash api (portable)"
+establishes = "Existing no-default-feature portable harness; not native/SIMD, Miri, proof or whole-component qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-hash-parallel","--no-default-features","--test","api"]
+cwd = "."
+inputs = ["hash-core","compiler","parallelhash-source","sha3-source","sha2-source","cpu-source","hosted-cpu-source","parallelhash-api-harness"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test streamed_scheduled_and_one_shot_are_identical ... ok"]
+minimum_tests = 1
+
+[groups.hmac-vectors-harness]
+paths = ["crates/brynja-mac-hmac/tests/vectors.rs","crates/brynja-mac-hmac/tests/support"]
+
+[[checks]]
+component = "hmac"
+id = "vectors"
+name = "hmac vectors (portable)"
+establishes = "Existing no-default-feature portable harness; not native/SIMD, Miri, proof or whole-component qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-mac-hmac","--no-default-features","--test","vectors"]
+cwd = "."
+inputs = ["hash-core","compiler","hmac-source","sha2-source","sha3-source","hmac-vectors-harness"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test rfc4231_case1 ... ok"]
+minimum_tests = 1
+
+[groups.hmac-tag-policy-harness]
+paths = ["crates/brynja-mac-hmac/tests/tag_policy.rs","crates/brynja-mac-hmac/tests/support"]
+
+[[checks]]
+component = "hmac"
+id = "tag-policy"
+name = "hmac tag policy (portable)"
+establishes = "Existing no-default-feature portable harness; not native/SIMD, Miri, proof or whole-component qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-mac-hmac","--no-default-features","--test","tag_policy"]
+cwd = "."
+inputs = ["hash-core","compiler","hmac-source","sha2-source","sha3-source","hmac-tag-policy-harness"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test every_named_algorithm_and_tag_width ... ok"]
+minimum_tests = 1
+
+[groups.legacy-hmac-rfc2202-harness]
+paths = ["crates/brynja-legacy-hmac/tests/rfc2202.rs"]
+
+[[checks]]
+component = "legacy_hmac"
+id = "rfc2202"
+name = "legacy_hmac rfc2202 (portable)"
+establishes = "Existing no-default-feature portable harness; not native/SIMD, Miri, proof or whole-component qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-legacy-hmac","--no-default-features","--test","rfc2202"]
+cwd = "."
+inputs = ["hash-core","compiler","legacy-hmac-source","md5-source","sha1-source","legacy-hmac-rfc2202-harness"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test md5_all_seven_rfc_vectors_and_every_admitted_truncation ... ok"]
+minimum_tests = 1
+
+[groups.legacy-hmac-contracts-harness]
+paths = ["crates/brynja-legacy-hmac/tests/contracts.rs"]
+
+[[checks]]
+component = "legacy_hmac"
+id = "contracts"
+name = "legacy_hmac contracts (portable)"
+establishes = "Existing no-default-feature portable harness; not native/SIMD, Miri, proof or whole-component qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-legacy-hmac","--no-default-features","--test","contracts"]
+cwd = "."
+inputs = ["hash-core","compiler","legacy-hmac-source","md5-source","sha1-source","legacy-hmac-contracts-harness"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test md5_key_message_and_verification_boundaries ... ok"]
+minimum_tests = 1
+
+[[checks]]
+component = "md5"
+id = "boundaries"
+name = "Padding and partial-bit boundaries"
+establishes = "Existing portable padding/partial-bit boundary test; not a fresh Miri execution."
+command = ["cargo", "+1.99.1", "test", "--locked", "--offline", "-p", "brynja-legacy-md5", "--no-default-features", "--test", "api", "dynamic_analysis_covers_padding_and_partial_bit_boundaries", "--", "--exact"]
+cwd = "."
+inputs = ["hash-core", "compiler", "md5-api", "md5-source"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test dynamic_analysis_covers_padding_and_partial_bit_boundaries ... ok", "test result: ok. 1 passed; 0 failed; 0 ignored;"]
+minimum_tests = 1
+
+[[checks]]
+component = "sha1"
+id = "known-answers"
+name = "NIST vectors, ordinary/hardened/streaming"
+establishes = "Existing NIST byte vectors on portable owners; not hardware SHA-1 qualification."
+command = ["cargo", "+1.99.1", "test", "--locked", "--offline", "-p", "brynja-legacy-sha1", "--no-default-features", "--test", "api", "official_nist_vectors_ordinary_hardened_and_streamed", "--", "--exact"]
+cwd = "."
+inputs = ["hash-core", "compiler", "sha1-api", "sha1-source"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test official_nist_vectors_ordinary_hardened_and_streamed ... ok", "test result: ok. 1 passed; 0 failed; 0 ignored;"]
+minimum_tests = 1
+
+[[checks]]
+component = "sha1"
+id = "boundaries"
+name = "Padding and partial-bit boundaries"
+establishes = "Existing portable padding/partial-bit boundary test; not a fresh Miri execution."
+command = ["cargo", "+1.99.1", "test", "--locked", "--offline", "-p", "brynja-legacy-sha1", "--no-default-features", "--test", "api", "dynamic_analysis_covers_padding_and_partial_bit_boundaries", "--", "--exact"]
+cwd = "."
+inputs = ["hash-core", "compiler", "sha1-api", "sha1-source"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test dynamic_analysis_covers_padding_and_partial_bit_boundaries ... ok", "test result: ok. 1 passed; 0 failed; 0 ignored;"]
+minimum_tests = 1

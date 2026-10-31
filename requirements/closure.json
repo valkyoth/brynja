@@ -1445,6 +1445,17 @@
       "version": "0.25.2"
     },
     {
+      "boundary": {
+        "class": "repository-governance",
+        "rationale": "These repository, release, and assurance-harness milestones are governed by local security invariants and tooling policy rather than a protocol authority."
+      },
+      "requirement_ids": [],
+      "scope": "Separate component-scoped verification from routine releases: provide the standalone local brynja-verify runner, preserve historical evidence honestly, use finite final checks, and publish the same green GitHub candidate without restarting verification.",
+      "source_ids": [],
+      "title": "Scoped Verification And Publication Handoff",
+      "version": "0.25.3"
+    },
+    {
       "boundary": null,
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0004"

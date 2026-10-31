@@ -1,0 +1,502 @@
+{
+  "schema": 1,
+  "status": "historical-unmapped",
+  "local_evidence_root": "../brynja-evidence",
+  "registry_sha256": "3db62f70549d2c0aab9f78cb3421cf3c11f1b9db441464950f9c21e79393d10f",
+  "mapping": {
+    "exact_command_matches": [],
+    "current_passes_imported": 0,
+    "reason": "The 27 registered portable checks have no exact command match in these observations. Legacy records also use different source/tool identity schemas; no present-day fingerprint or execution timestamp has been assigned."
+  },
+  "limitations": [
+    "Counts are stored observation rows, not distinct fresh executions; imports and receipts overlap.",
+    "Reused rows retain the old record as reported. Original execution provenance must be read from its retained receipt chain, not inferred from the importing campaign commit.",
+    "All earlier failures and cancellations remain in the referenced originals. Nothing here authorizes release or claims current source applicability."
+  ],
+  "total_observations": 10020,
+  "outcomes": {
+    "cancelled": 4,
+    "failed": 3,
+    "passed": 5470,
+    "reused": 4543
+  },
+  "files": [
+    {
+      "path": "dashboard/001d7dd7e1df461898a75a800d20c415.json",
+      "sha256": "608365df402cdaca26489dbfc4b1d225b51bc72d171b85b5dc569fd47e7ddb0e",
+      "observations": 1470,
+      "outcomes": {
+        "cancelled": 2,
+        "passed": 1468
+      },
+      "first_recorded_end": "2026-10-28T11:22:16Z",
+      "last_recorded_end": "2026-10-29T07:16:31Z"
+    },
+    {
+      "path": "dashboard/0b456e529f8242a3aebe1e3f4ff60a03.json",
+      "sha256": "88d64abef141b7d87b0f244d23516f68e150e6e383c0caf17d9821ee3aebbed6",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T18:24:20Z",
+      "last_recorded_end": "2026-10-29T18:24:20Z"
+    },
+    {
+      "path": "dashboard/11600153a6cc46889864f57cec8b3d07.json",
+      "sha256": "1d68d557c00771714967f4f58fec0098e0df2e22b45a27fa7f37904fd9b8beac",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T18:30:56Z",
+      "last_recorded_end": "2026-10-29T18:30:56Z"
+    },
+    {
+      "path": "dashboard/19ee60ec29904a71a788b9ad77d997df.json",
+      "sha256": "489140b9ae58aedbff81280e565342521b151419b926e737d494383ee0145e1e",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T18:31:18Z",
+      "last_recorded_end": "2026-10-29T18:31:18Z"
+    },
+    {
+      "path": "dashboard/1fc75319700e41f2b3f7958e6e5a8382.json",
+      "sha256": "8285ab3fa7a62b3af7b63698706cc14079d1ab74b56039724edb803d6cc4c6fa",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T18:31:14Z",
+      "last_recorded_end": "2026-10-29T18:31:14Z"
+    },
+    {
+      "path": "dashboard/25121a7707d8441ead5328f49bd52879.json",
+      "sha256": "0d14b8c4d7c90077c95688cecefca884a0db6e47c3e2886f149e559238c252fa",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T18:30:34Z",
+      "last_recorded_end": "2026-10-29T18:30:34Z"
+    },
+    {
+      "path": "dashboard/26e431100aca453cbedec165929dd2f9.json",
+      "sha256": "edc9ab47870782b3c8cccffc1b47f9dd4327bfb71e0c80072dd9bfe117687ebf",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T16:59:52Z",
+      "last_recorded_end": "2026-10-29T16:59:52Z"
+    },
+    {
+      "path": "dashboard/3c3d7a49d12d4a9fa8a10a20b6adb0ec.json",
+      "sha256": "f7f0d1884de9b9de277612f03872a1b4ce77a3914f6f4e3ff42f5e29596e2578",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T18:30:52Z",
+      "last_recorded_end": "2026-10-29T18:30:52Z"
+    },
+    {
+      "path": "dashboard/3eeae961df41404caa1cfcbcda653334.json",
+      "sha256": "21a5366569390000daf25a09e0933aff1a94aec5a37df350e87a481546de3387",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T17:20:04Z",
+      "last_recorded_end": "2026-10-29T17:20:04Z"
+    },
+    {
+      "path": "dashboard/4747acfbe0a24ee29396e57957010b54.json",
+      "sha256": "0c36670a5b23151bcc8d1fc23987057e9a91471c3f1da066ac3b1f5a314f8785",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T16:59:32Z",
+      "last_recorded_end": "2026-10-29T16:59:32Z"
+    },
+    {
+      "path": "dashboard/4ad9d45151174ba28139a2cb28bc3341.json",
+      "sha256": "a8d13e21cdc4c68a99c1d07574f402cab67b83f970239250a846846bfd042beb",
+      "observations": 14,
+      "outcomes": {
+        "passed": 10,
+        "reused": 4
+      },
+      "first_recorded_end": "2026-10-28T11:15:43Z",
+      "last_recorded_end": "2026-10-28T11:22:23Z"
+    },
+    {
+      "path": "dashboard/4cd17c430c2a44b5b74644f10f2c6209.json",
+      "sha256": "73b4854bb305da9ba317c25666478286c1f8bd45b2574211191692099914e85b",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T08:04:53Z",
+      "last_recorded_end": "2026-10-29T08:04:53Z"
+    },
+    {
+      "path": "dashboard/56f5d103bb934a7d86008bc9c10144b7.json",
+      "sha256": "969958c4eecca07f762b045706939dd040f99e0ea8b3e5515f4ba80b2caaf67f",
+      "observations": 1,
+      "outcomes": {
+        "failed": 1
+      },
+      "first_recorded_end": "2026-10-29T16:58:25Z",
+      "last_recorded_end": "2026-10-29T16:58:25Z"
+    },
+    {
+      "path": "dashboard/6136cb22291542a6b70fe4b9facd6921.json",
+      "sha256": "40c623ecdfb0c6d5005c4423692fa699c95615215f88db5140c7751b3f31f2de",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T18:30:29Z",
+      "last_recorded_end": "2026-10-29T18:30:29Z"
+    },
+    {
+      "path": "dashboard/61e748cd0dda4df78dcdb175b75e49e3.json",
+      "sha256": "e5e0ff2982754c47960f645c5e068b5231961917c01ec4103d94402ae5b333bd",
+      "observations": 51,
+      "outcomes": {
+        "passed": 50,
+        "reused": 1
+      },
+      "first_recorded_end": "2026-10-28T11:28:19Z",
+      "last_recorded_end": "2026-10-28T11:41:18Z"
+    },
+    {
+      "path": "dashboard/634adb5af2d94fb1b86ece0acc96cc7b.json",
+      "sha256": "4f44b5a9a77dafdde65a77689bf77ecb22552f9bfe9c72d4a43cfe629e56795a",
+      "observations": 1,
+      "outcomes": {
+        "failed": 1
+      },
+      "first_recorded_end": "2026-10-29T16:56:57Z",
+      "last_recorded_end": "2026-10-29T16:56:57Z"
+    },
+    {
+      "path": "dashboard/6b23915dcf5148f3bf0130e2dec4deef.json",
+      "sha256": "a6240c882d3678a9bba7e189a4729d2ed3a0966b05e2919dcc72585ef1b1ae16",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T16:55:26Z",
+      "last_recorded_end": "2026-10-29T16:55:26Z"
+    },
+    {
+      "path": "dashboard/6f9fce4572154ccfa6e1412982aff1ce.json",
+      "sha256": "cebaeae62a85d98b06c41aaa9891295f673681297a7d872a71aa30f75a41a538",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T16:54:51Z",
+      "last_recorded_end": "2026-10-29T16:54:51Z"
+    },
+    {
+      "path": "dashboard/77976e5c09424f629e2235817c711722.json",
+      "sha256": "2a862725b9c9517588484c40cfe8ac0ee1420c8c8eb3e2e8e96ccb25ecf95f0e",
+      "observations": 1,
+      "outcomes": {
+        "failed": 1
+      },
+      "first_recorded_end": "2026-10-29T16:58:32Z",
+      "last_recorded_end": "2026-10-29T16:58:32Z"
+    },
+    {
+      "path": "dashboard/7b743fb7dcb04109912e807cd4da79cc.json",
+      "sha256": "e91b647d45208d61d46e7fea171b68dd8e91b02a1fab7f07ea4af1ec331032cc",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T18:30:43Z",
+      "last_recorded_end": "2026-10-29T18:30:43Z"
+    },
+    {
+      "path": "dashboard/7d79faddf80842a7957c6d9c8707b136.json",
+      "sha256": "6618aa7b3a40a5bf71b74c89106a614fc659730ff3a1bef9f70891f619aa2f1e",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T08:07:38Z",
+      "last_recorded_end": "2026-10-29T08:07:38Z"
+    },
+    {
+      "path": "dashboard/7e8fd528acd74dd6b2e4743e59b1e964.json",
+      "sha256": "5fffe97fc73e44d762ca656e78e2be27847b6508f6696a169df32ad3933eed16",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T18:31:27Z",
+      "last_recorded_end": "2026-10-29T18:31:27Z"
+    },
+    {
+      "path": "dashboard/80321f3617c040a58985ec8721b49966.json",
+      "sha256": "b1e48b00b4baaa5b3134ad5bb4353037044f33d1dbb2918e817077d88b6f29d0",
+      "observations": 1496,
+      "outcomes": {
+        "cancelled": 2,
+        "passed": 1494
+      },
+      "first_recorded_end": "2026-10-28T11:17:05Z",
+      "last_recorded_end": "2026-10-29T07:16:31Z"
+    },
+    {
+      "path": "dashboard/85adb9c70bcd4765a2fad236e7060ddf.json",
+      "sha256": "4f9098e79f97374f0e525886ae16e3478af7b1a80b727f6c147fa68b2dcc88ec",
+      "observations": 817,
+      "outcomes": {
+        "passed": 230,
+        "reused": 587
+      },
+      "first_recorded_end": "2026-10-26T13:13:06Z",
+      "last_recorded_end": "2026-10-26T20:23:51Z"
+    },
+    {
+      "path": "dashboard/8897efc67304471e8db216f3c48b9a2e.json",
+      "sha256": "11a4548702d99cce3e2a8b347f0c1e297cb1173e9c31a789af21fd53f0ac5bb2",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T16:53:49Z",
+      "last_recorded_end": "2026-10-29T16:53:49Z"
+    },
+    {
+      "path": "dashboard/8ed7f5e22f4c46f4a55482b95e3070f3.json",
+      "sha256": "5bf37c352ae867864879ad95569594a96736a9bdb43b22e001a3aab3daf2a5d4",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T16:56:16Z",
+      "last_recorded_end": "2026-10-29T16:56:16Z"
+    },
+    {
+      "path": "dashboard/a21cd29232b74caa93315215986dd50b.json",
+      "sha256": "342a368007b4cec44aa55d8827fa5b57b3256eb5d4468eb528ef2da24ba236b9",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T18:31:09Z",
+      "last_recorded_end": "2026-10-29T18:31:09Z"
+    },
+    {
+      "path": "dashboard/ad251cf2e2dd40b9bf775d88be37d01f.json",
+      "sha256": "0452f6f9477fa8f80e3e27adb6be74a6d861a1767971fda28bcbc37d8c9f661e",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T18:30:26Z",
+      "last_recorded_end": "2026-10-29T18:30:26Z"
+    },
+    {
+      "path": "dashboard/aeb152a77f254e39a0ba95d04ab2bc96.json",
+      "sha256": "9f89d0e7e5de74750378ba0259b999bc22368974c1191e74d3cab67f7acf4af0",
+      "observations": 4125,
+      "outcomes": {
+        "passed": 329,
+        "reused": 3796
+      },
+      "first_recorded_end": "2026-10-28T11:17:05Z",
+      "last_recorded_end": "2026-10-29T16:05:46Z"
+    },
+    {
+      "path": "dashboard/b3df88c999f840bba217e68f2fd1916b.json",
+      "sha256": "36b04d3d900d8c5c6f4c3cc4e4cad3ad48a1fd37e4a51f51210d133285ef1001",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T16:53:27Z",
+      "last_recorded_end": "2026-10-29T16:53:27Z"
+    },
+    {
+      "path": "dashboard/b4a11b7649444fccb2046fbf09b4fba4.json",
+      "sha256": "6f902fb4c44049348a5a2c80e0cc4479b85742336d138dd18d0cec0a4c55f314",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T18:31:00Z",
+      "last_recorded_end": "2026-10-29T18:31:00Z"
+    },
+    {
+      "path": "dashboard/b86b6bbc0f27426faf31e28c39afa326.json",
+      "sha256": "2b78914c3aa1bdb1dd0ba3c831a2da30700edc38462b86a70200a73c67adba64",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T16:55:58Z",
+      "last_recorded_end": "2026-10-29T16:55:58Z"
+    },
+    {
+      "path": "dashboard/bd6719bf6fa04a3dbbfba3a48561ec61.json",
+      "sha256": "fda554c7e3065c5d90f780b3f1353c0abbc650a5a0c36559df0725babc8d4bec",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T16:55:08Z",
+      "last_recorded_end": "2026-10-29T16:55:08Z"
+    },
+    {
+      "path": "dashboard/c7f37a27d5ac43e6afd1663ef5a8bbf6.json",
+      "sha256": "b8f52b2e55f528ca89067583ae0f15972480aab854c7c280376b2f0c10a50624",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T18:31:05Z",
+      "last_recorded_end": "2026-10-29T18:31:05Z"
+    },
+    {
+      "path": "dashboard/ccdf7c97af2a4b95881b8fe68722ff20.json",
+      "sha256": "b11e846258486261d2afd106c5e3c54e81f9198d36b24fec6061f466e6a6f856",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T18:30:47Z",
+      "last_recorded_end": "2026-10-29T18:30:47Z"
+    },
+    {
+      "path": "dashboard/cf06c6fd57f84a119fcee760c8393e1d.json",
+      "sha256": "98befd5cf24ee420fb31f9ffad114900e8fa49989b1cce681b59ec4fc1838797",
+      "observations": 65,
+      "outcomes": {
+        "passed": 65
+      },
+      "first_recorded_end": "2026-10-29T17:51:14Z",
+      "last_recorded_end": "2026-10-29T17:58:20Z"
+    },
+    {
+      "path": "dashboard/d03442007dce4f1e911d69f05ee2300b.json",
+      "sha256": "e38f93695580a3633392001c9876e10f676895e1113b4751063b55544822ebb5",
+      "observations": 1166,
+      "outcomes": {
+        "passed": 1166
+      },
+      "first_recorded_end": "2026-10-19T10:58:59Z",
+      "last_recorded_end": "2026-10-19T17:30:44Z"
+    },
+    {
+      "path": "dashboard/d469785f58ea47d3a006d732f7aef881.json",
+      "sha256": "d3d23a21d1a42ba4eb22412cac17402a61943380cb0a5e23343febd7a6a64a44",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T07:32:41+00:00",
+      "last_recorded_end": "2026-10-29T07:32:41+00:00"
+    },
+    {
+      "path": "dashboard/e07bf3abe4524b3ab4ab84decd0ba42b.json",
+      "sha256": "fa35470213b05f5a142db2c4d10fc042de9afddd4ff2a2f9447e48160500fc17",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T18:31:23Z",
+      "last_recorded_end": "2026-10-29T18:31:23Z"
+    },
+    {
+      "path": "dashboard/e1acd7ab400a44349330a669cb863696.json",
+      "sha256": "9cb2b203e710d545f9a55787895baf73e7977521337141df919e78812bd9f440",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T08:38:40Z",
+      "last_recorded_end": "2026-10-29T08:38:40Z"
+    },
+    {
+      "path": "dashboard/e740367e8a874d079b461ca1adaeb1b7.json",
+      "sha256": "c73f55bd2ddeaa61c9e6bcacd3fe6685fd73830987ce36a7a47dcacdec7c11ba",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T17:20:08Z",
+      "last_recorded_end": "2026-10-29T17:20:08Z"
+    },
+    {
+      "path": "dashboard/ebaa963469fa4c56840d2d8e772711b1.json",
+      "sha256": "75579d1a42bb35a32993517eb5edb50acc704645bf081ad735ab54fced166a61",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T07:37:14Z",
+      "last_recorded_end": "2026-10-29T07:37:14Z"
+    },
+    {
+      "path": "dashboard/eeb84770af01450e8741766399901fa3.json",
+      "sha256": "0a3f21485d9e888f63a368434dd066161ef92c1e992390a82a1a2c2c932ea6e5",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T16:59:01Z",
+      "last_recorded_end": "2026-10-29T16:59:01Z"
+    },
+    {
+      "path": "dashboard/f3ff0804612c48b4836b1cc7dd13718c.json",
+      "sha256": "44748c6d5b6242a646d35fd587b6d749b0a659caa70642324d0119a46771daf1",
+      "observations": 415,
+      "outcomes": {
+        "passed": 260,
+        "reused": 155
+      },
+      "first_recorded_end": "2026-10-29T20:01:45Z",
+      "last_recorded_end": "2026-10-30T21:09:32Z"
+    },
+    {
+      "path": "dashboard/f466801f38124f92b965060a68158543.json",
+      "sha256": "eb796d2d6aa340d02f1c33e3ad7fcf9e99adebc7b2b8f9795c1c1b9d6b6cdbc7",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T16:55:40Z",
+      "last_recorded_end": "2026-10-29T16:55:40Z"
+    },
+    {
+      "path": "dashboard/f66b15504fc649448b20b17b36d235a5.json",
+      "sha256": "5b8737970bf2e4eca5a6b568cdb4a065b14c60378c68313286ae949245aae666",
+      "observations": 1,
+      "outcomes": {
+        "passed": 1
+      },
+      "first_recorded_end": "2026-10-29T18:30:38Z",
+      "last_recorded_end": "2026-10-29T18:30:38Z"
+    },
+    {
+      "path": "dashboard/f94f88d3bb3f4be0bbc763892894c9f9.json",
+      "sha256": "065d4e48f1b6c4380c34e8a082921fca3f97d4eeebc5444b84415b70499b3872",
+      "observations": 364,
+      "outcomes": {
+        "passed": 364
+      },
+      "first_recorded_end": "2026-10-29T19:09:21Z",
+      "last_recorded_end": "2026-10-29T19:53:06Z"
+    }
+  ]
+}

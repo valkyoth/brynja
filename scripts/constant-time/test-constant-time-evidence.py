@@ -13,7 +13,7 @@ import constant_time_evidence
 ROOT = Path(__file__).resolve().parents[2]
 FILES = (
     Path("assurance/constant-time-matrix.toml"),
-    Path(".github/workflows/ci.yml"),
+    Path(".github/workflows/qualification.yml"),
     Path("scripts/checks.sh"),
 )
 
@@ -62,7 +62,7 @@ def test() -> None:
         require_rejection(root, "compiler or target coverage")
         copy_fixture(root)
 
-        replace(root / ".github/workflows/ci.yml", ", 1.99.1]", "]")
+        replace(root / ".github/workflows/qualification.yml", ", 1.99.1]", "]")
         require_rejection(root, "compiler matrix")
         copy_fixture(root)
 
@@ -71,7 +71,7 @@ def test() -> None:
         require_rejection(root, "claim or artifact")
         copy_fixture(root)
 
-        workflow = root / ".github/workflows/ci.yml"
+        workflow = root / ".github/workflows/qualification.yml"
         replace(workflow, "scripts/constant-time/check-constant-time-codegen.sh", "scripts/omitted-codegen.sh")
         require_rejection(root, "both constant-time evidence dimensions")
         copy_fixture(root)

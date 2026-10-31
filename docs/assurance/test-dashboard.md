@@ -1,5 +1,10 @@
 # Test dashboard: everyday guide
 
+For new component work, use the standalone
+[brynja-verify guide](brynja-verify.md). This Python dashboard remains available
+for historical catalogs, detached jobs and results; its old release-reuse rules
+do not become prerequisites of the new tracker or v0.25.3 publication flow.
+
 The dashboard helps you answer three questions: **What tests exist? What ran
 last time? How do I run just one check?** It prints tables in your terminal;
 despite the `gui` filename, there is no separate window or mouse interface.

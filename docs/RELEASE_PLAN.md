@@ -5332,7 +5332,12 @@ Exit criteria:
 
 ### v0.25.2 - HMAC Public API Usability Acceptance
 
-Status: in progress
+Status: released
+
+Owner disposition: GitHub-only tag retained. Nothing was published from .2;
+the first crates.io publication of this completed implementation moves to .3.
+Original tests, retests and evidence retain their recorded provenance. This
+disposition does not claim the interrupted final gate completed.
 
 Plan scope: Close the HMAC chain with downstream fixtures for every modern SHA-2/SHA-3 instantiation and the separately selected legacy SHA-1/MD5 adapters, exercising one-shot, streaming, long keys, truncated verification, invalid tags, package installation, cleanup evidence, and compile-time prevention of digest/tag or modern/legacy substitution.
 
@@ -5391,7 +5396,40 @@ Verification:
 Exit criteria:
 
 - no named HMAC profile or public usability requirement remains incomplete;
-- `v0.25.2 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.25.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.25.3 - Scoped Verification And Publication Handoff
+
+Status: in progress
+
+Plan scope: Separate component-scoped verification from routine releases: provide the standalone local brynja-verify runner, preserve historical evidence honestly, use finite final checks, and publish the same green GitHub candidate without restarting verification.
+
+Goal: close the 0.25 series without tying unrelated implementation work to
+repeated qualification or publication-time verification campaigns.
+
+Deliverables:
+
+- standalone Rust developer runner with explicit commands, scoped inputs,
+  original execution provenance and readable generated status tables;
+- preserve historical results without manufacturing current passes; keep the
+  evidence tracker separate from release authorization;
+- finite pre-push checks and publication-only handoff after clean review and
+  green GitHub; retain old qualification commands for explicit use.
+
+Verification:
+
+- use temporary repositories and fake commands to test freshness, isolation,
+  interruptions, history, locking and accurate outcomes; no crypto campaign;
+- test CI/gate/publication selection, exact-commit GitHub guards and preservation
+  of the existing package order and lean archive contents;
+- obtain the scoped .3 pentest/retest and complete the finite final checklist;
+  earlier completed cryptographic components remain closed absent a named cause.
+
+Exit criteria:
+
+- agreed tracker, migration and release-handoff behaviors pass their focused
+  regressions; documentation describes actual coverage and limitations;
+- `v0.25.3 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.26.0 - Complete HKDF And TLS Labels
 
@@ -6069,7 +6107,7 @@ Exit criteria:
 - the named capability is complete and usable at its declared boundary, its
   residual gaps are explicit, and the next row does not inherit hidden
   implementation work;
-- `v0.30.2 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.30.2 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.31.0 - Complete Poly1305
 
@@ -6684,7 +6722,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.35.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.35.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.36.0 - X25519 ECDH Lifecycle
 
@@ -6981,7 +7019,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.40.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.40.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.41.0 - P-384 ECDH Lifecycle
 
@@ -7208,7 +7246,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.45.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.45.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.46.0 - RSA-PSS Private Operations
 
@@ -8039,7 +8077,7 @@ Exit criteria:
 
 - The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
 - Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
-- `v0.50.1 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.50.1 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.51.0 - Version-One Algorithm And Transitive Completeness Register
 
@@ -8319,7 +8357,7 @@ Exit criteria:
 
 - the named capability is publicly usable at its declared boundary, every
   residual is explicit, and no later row inherits omitted implementation work;
-- `v0.55.1 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.55.1 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.56.0 - Complete Legacy ElGamal Parameters And Keys
 
@@ -8739,7 +8777,7 @@ Exit criteria:
 
 - the named capability is publicly usable at its declared boundary, every
   residual is explicit, and no later row inherits omitted implementation work;
-- `v0.60.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.60.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.61.0 - Complete Legacy RC4
 
@@ -8984,7 +9022,7 @@ Exit criteria:
 
 - the named capability is publicly usable at its declared boundary, every
   residual is explicit, and no later row inherits omitted implementation work;
-- `v0.65.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.65.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.66.0 - Complete Legacy Twofish
 
@@ -9419,7 +9457,7 @@ Exit criteria:
 
 - the named capability is publicly usable at its declared boundary, every
   residual is explicit, and no later row inherits omitted implementation work;
-- `v0.70.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.70.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.71.0 - Complete SM4
 
@@ -10014,7 +10052,7 @@ Exit criteria:
 
 - the named capability is publicly usable at its declared boundary, every
   residual is explicit, and no later row inherits omitted implementation work;
-- `v0.75.2 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.75.2 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.76.0 - Complete RSA-PSS Signing And Verification
 
@@ -10644,7 +10682,7 @@ Exit criteria:
 
 - the named capability is publicly usable at its declared boundary, every
   residual is explicit, and no later row inherits omitted implementation work;
-- `v0.80.2 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.80.2 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.81.0 - Complete Brotli Family
 
@@ -11089,7 +11127,7 @@ Exit criteria:
 
 - the named capability is publicly usable at its declared boundary, every
   residual is explicit, and no later row inherits omitted implementation work;
-- `v0.85.4 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.85.4 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.86.0 - Complete SLH-DSA SHA2-128 Parameter Sets
 
@@ -11766,7 +11804,7 @@ Exit criteria:
 
 - The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
 - Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
-- `v0.90.7 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.90.7 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.91.0 - X.509 Decoder
 
@@ -11911,7 +11949,7 @@ Verification:
 Exit criteria:
 
 - identity, PKI, revocation, and CT are fail-closed, bounded, deterministic, and independently audited;
-- `v0.95.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.95.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.96.0 - Certificate Policy Processing
 
@@ -12364,7 +12402,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.100.6 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.100.6 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.101.0 - Modern PKI Audit Gate
 
@@ -12952,7 +12990,7 @@ Verification:
 Exit criteria:
 
 - stream TLS and QUIC share one handshake, DTLS retains independent state, and internal effects remain unstable until optional composition completes;
-- `v0.105.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.105.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.106.0 - Internal Sans-I/O Execution Contract
 
@@ -13103,7 +13141,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.110.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.110.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.111.0 - HelloRetryRequest And Cookies
 
@@ -13248,7 +13286,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.115.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.115.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.116.0 - Client Authentication And Finished
 
@@ -13466,7 +13504,7 @@ Exit criteria:
 - every admitted external PSK has reviewable strength, provenance, role, peer,
   domain, lifetime, and destruction policy with no silent group or combined-
   certificate mode;
-- `v0.120.2 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.120.2 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.121.0 - Zero-RTT
 
@@ -13611,7 +13649,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.3 is audited independently and final routing later selects symmetrically after both engines exist;
-- `v0.125.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.125.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.126.0 - TLS 1.3 Audit Gate
 
@@ -13930,7 +13968,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.2 is compliant, isolated, explicitly configured, disableable, and audited before integrated routing;
-- `v0.130.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.130.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.131.0 - TLS 1.2 Signaling And Renegotiation Semantics
 
@@ -14147,7 +14185,7 @@ Verification:
 Exit criteria:
 
 - TLS 1.2 is compliant, isolated, explicitly configured, disableable, and audited before integrated routing;
-- `v0.135.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.135.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.136.0 - Integrated Evergreen One-Pass TLS Router
 
@@ -14420,7 +14458,7 @@ Verification:
 Exit criteria:
 
 - QUIC uses the shared handshake with explicit completion, confirmation, resumption, zero-RTT, and transport-owned quantity and packet state;
-- `v0.140.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.140.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.141.0 - QUIC Transport Parameters
 
@@ -14630,7 +14668,7 @@ Verification:
 Exit criteria:
 
 - QUIC uses the shared handshake with explicit completion, confirmation, resumption, zero-RTT, and transport-owned quantity and packet state;
-- `v0.145.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.145.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.146.0 - DTLS Path Identity Contract
 
@@ -14775,7 +14813,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.150.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.150.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.151.0 - DTLS 1.2 Connection IDs
 
@@ -14956,7 +14994,7 @@ Exit criteria:
 
 - every CID path change is either validated by the selected RFC 9853 procedure
   or remains bound to the prior path without application-data leakage;
-- `v0.155.1 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.155.1 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.156.0 - DTLS 1.3 State Machines
 
@@ -15143,7 +15181,7 @@ Verification:
 Exit criteria:
 
 - both engines exist before one-pass routing, DTLS early data is absent in v1, and CID behavior remains version-specific;
-- `v0.160.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.160.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.161.0 - ML-KEM Arithmetic And Encoding
 
@@ -15396,7 +15434,7 @@ Verification:
 Exit criteria:
 
 - every selected hybrid completes both components and only Preferred may select a separately offered classical group when hybrids are unavailable;
-- `v0.165.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.165.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.166.0 - PQ Standards And Audit Gate
 
@@ -15680,7 +15718,7 @@ Exit criteria:
 
 - the named mechanism or construction is complete at its declared boundary and
   no later validation row inherits hidden algorithm or state-machine work;
-- `v0.170.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.170.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.171.0 - Complete CTR_DRBG
 
@@ -16175,7 +16213,7 @@ Exit criteria:
 - complete-image integrity and pre-operational tests block every service until
   success, alone issue the exact module-owned attestation required by execution
   and approved status, and fail deterministically under every injected fault;
-- `v0.175.1 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.175.1 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.176.0 - FIPS Observational Security Event Integration
 
@@ -16488,7 +16526,7 @@ Exit criteria:
 
 - only the exact issued module can carry the exact permitted certificate-bound
   claim, and all other builds fail closed to a non-validated status;
-- `v0.180.2 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.180.2 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.181.0 - Boundary And Package Audit
 
@@ -16787,7 +16825,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.185.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.185.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.186.0 - Complete HPKE KDF Identities And Labeled Operations
 
@@ -17387,7 +17425,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.190.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.190.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.191.0 - ECH HRR Retry And Rotation
 
@@ -17565,7 +17603,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.195.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.195.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.196.0 - Generated Optional-Feature Composition Foundation
 
@@ -18100,7 +18138,7 @@ Verification:
 Exit criteria:
 
 - optional modules compose safely before API freeze and remain downstream of validated and protocol interfaces;
-- `v0.200.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.200.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.201.0 - Aesynx ABI And Emulator Qualification
 
@@ -18282,7 +18320,7 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior; a complete public-checkpoint Miri campaign can run sequentially or concurrently across local and SSH workers with identical fail-closed acceptance;
-- `v0.205.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.205.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.206.0 - Sustained Platform And Hostile-Load Qualification
 
@@ -18427,7 +18465,7 @@ Verification:
 Exit criteria:
 
 - the exact-commit evidence is complete, findings are dispositioned, and claims do not exceed tested behavior;
-- `v0.210.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.210.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 RFC 9580 is admitted as an independent modern protocol family. It reuses exact
 reviewed primitive crates but never TLS state, PKIX trust, implicit platform
@@ -18691,7 +18729,7 @@ Verification:
 Exit criteria:
 
 - protected secret material has a complete custody contract and cannot be exposed by a partial or unauthenticated transition;
-- `v0.215.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.215.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.216.0 - Complete Reusable BLAKE2b
 
@@ -19136,7 +19174,7 @@ Exit criteria:
 
 - the named algorithm or profile is complete at its public boundary and the
   next row inherits no hidden implementation or usability work;
-- `v0.220.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.220.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.221.0 - Complete First-Party EAX
 
@@ -19414,7 +19452,7 @@ Verification:
 Exit criteria:
 
 - v4 fingerprints interoperate through one exact legacy edge while SHA-1 signing, generation and every unauthorized consumer remain impossible;
-- `v0.225.2 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.225.2 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.226.0 - OpenPGP CFB And Protected Secret-Key Compatibility
 
@@ -19806,7 +19844,7 @@ Verification:
 Exit criteria:
 
 - v1 SEIPD compatibility is complete, whole-message authenticated before release and unable to become an implicit alternative to modern v2 SEIPD;
-- `v0.230.2 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.230.2 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.231.0 - OpenPGP Signed, One-Pass, And Detached Messages
 
@@ -20100,7 +20138,7 @@ Exit criteria:
 
 - The exact named public capability and all its promised operation directions pass the listed independent-vector, package, resource and applicable secret-lifecycle evidence; no wider implementation, backend admission or certification is inferred.
 - Apply the mandatory exceptional pentest trigger for hostile codecs, key/secret handling or cryptographic changes; preserve findings, fix and retest before the signed tag. Acceptance-only stops review the full named implementation delta.
-- `v0.235.2 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.235.2 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.236.0 - OpenPGP External-Key And Sanitization Integration
 
@@ -20381,7 +20419,7 @@ Verification:
 Exit criteria:
 
 - every named protocol is completely assigned or explicitly blocks 1.0 pending authentic authority;
-- `v0.240.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.240.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.241.0 - Complete TLS 1.1 Codec And State Machines
 
@@ -20696,7 +20734,7 @@ Verification:
 Exit criteria:
 
 - SSL 2.0 has no unresolved critical or high implementation finding and no fallback path;
-- `v0.245.2 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.245.2 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.246.0 - Complete WTLS Codec And State Machines
 
@@ -21014,7 +21052,7 @@ Verification:
 Exit criteria:
 
 - No advertised direction or parameter is a stub; record exact evidence and residual limitations. Trigger an exceptional pentest for new secret, unsafe, parser or trust-boundary code and close all blocking findings before exit.
-- `v0.250.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.250.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.251.0 - Threefish Authority Parameters And Public Cipher Contract
 
@@ -21739,7 +21777,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.255.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.255.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.256.0 - Fletcher - Authority And API Freeze
 
@@ -22489,7 +22527,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.260.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.260.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.261.0 - Zobrist - Authority And API Freeze
 
@@ -23439,7 +23477,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.265.7 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.265.7 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.266.0 - Murmur - Authority And API Freeze
 
@@ -24289,7 +24327,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.270.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.270.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.271.0 - MetroHash - Authority And API Freeze
 
@@ -25089,7 +25127,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.275.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.275.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.276.0 - OSDB - Authority And API Freeze
 
@@ -25839,7 +25877,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.280.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.280.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.281.0 - FxHash - Authority And API Freeze
 
@@ -26589,7 +26627,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.285.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.285.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.286.0 - MumHash - Authority And API Freeze
 
@@ -27414,7 +27452,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.290.7 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.290.7 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.291.0 - BLAKE2X - Authority And API Freeze
 
@@ -28389,7 +28427,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.295.7 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.295.7 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.296.0 - Grostl - Authority And API Freeze
 
@@ -29264,7 +29302,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.300.9 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.300.9 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.301.0 - Whirlpool - Authority And API Freeze
 
@@ -30014,7 +30052,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.305.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.305.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.306.0 - FSB - Authority And API Freeze
 
@@ -30764,7 +30802,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.310.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.310.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.311.0 - MD4 and SHA-0 - Authority And API Freeze
 
@@ -31664,7 +31702,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.315.6 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.315.6 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.316.0 - Snefru - Authority And API Freeze
 
@@ -32464,7 +32502,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.320.6 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.320.6 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.321.0 - N-Hash - Authority And API Freeze
 
@@ -33264,7 +33302,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.325.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.325.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.326.0 - PMAC - Authority And API Freeze
 
@@ -34089,7 +34127,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.330.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.330.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.331.0 - HMAC catalogue adapters - Authority And API Freeze
 
@@ -34939,7 +34977,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.335.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.335.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.336.0 - Poseidon - Authority And API Freeze
 
@@ -35639,7 +35677,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.340.4 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.340.4 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.341.0 - Perceptual image hashes - Authority And API Freeze
 
@@ -36389,7 +36427,7 @@ Verification:
 Exit criteria:
 
 - Obtain the family specialist review and risk-appropriate pentest, resolve blocking findings, and retain explicit research/legacy limitations. Full functionality never implies cryptographic safety or FIPS certification; source-blocked rows cannot pass as implemented.
-- `v0.345.3 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.345.3 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.346.0 - Complete Catalogue Reuse And Consumer Closure
 
@@ -36614,7 +36652,7 @@ Verification:
 Exit criteria:
 
 - No advertised direction or parameter is a stub; record exact evidence and residual limitations. Trigger an exceptional pentest for new secret, unsafe, parser or trust-boundary code and close all blocking findings before exit.
-- `v0.350.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.350.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.351.0 - Existing hash API backfill - Authority And Public API Contract
 
@@ -37510,7 +37548,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.355.6 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.355.6 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.356.0 - AES key wrap with padding - Authority And Public API Contract
 
@@ -38350,7 +38388,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.360.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.360.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.361.0 - XTS-AES - Authority And Public API Contract
 
@@ -39218,7 +39256,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.365.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.365.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.366.0 - Durable nonce and one-time state - Authority And Public API Contract
 
@@ -40142,7 +40180,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.370.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.370.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.371.0 - secp256k1 - Authority And Public API Contract
 
@@ -41066,7 +41104,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.375.6 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.375.6 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.376.0 - BLS12-381 pairing substrate - Authority And Public API Contract
 
@@ -42236,7 +42274,7 @@ Exit criteria:
 
 - The step has runnable public acceptance or an explicit non-executable contract deliverable. Family Fully implemented status requires the final closure, every promised direction and profile, real adapter error preservation and all operational route evidence; research and legacy isolation and deployment restrictions remain visible.
 - Architecture-specific native evidence and owner cleanup are checked independently from named independent cryptographic review and FIPS validation. Keep EIP bytes/gas/forks, transaction/address rules, wallet/keystore conventions and network protocols in downstream crates; no Brynja production dependency on eth.
-- `v0.380.7 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.380.7 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.381.0 - Reusable ECIES profiles - Authority And Complete Public API Contract
 
@@ -43509,7 +43547,7 @@ Exit criteria:
 
 - The step has runnable public acceptance or an explicit non-executable contract deliverable. Family Fully implemented status requires the final closure, every promised direction and profile, real adapter error preservation and all operational route evidence; research and legacy isolation and deployment restrictions remain visible.
 - Architecture-specific native evidence and owner cleanup are checked independently from named independent cryptographic review and FIPS validation. Keep EIP bytes/gas/forks, transaction/address rules, wallet/keystore conventions and network protocols in downstream crates; no Brynja production dependency on eth.
-- `v0.385.7 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.385.7 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.386.0 - Byte-field Reed-Solomon erasure coding - Authority And Complete Public API Contract
 
@@ -44780,7 +44818,7 @@ Exit criteria:
 
 - The step has runnable public acceptance or an explicit non-executable contract deliverable. Family Fully implemented status requires the final closure, every promised direction and profile, real adapter error preservation and all operational route evidence; research and legacy isolation and deployment restrictions remain visible.
 - Architecture-specific native evidence and owner cleanup are checked independently from named independent cryptographic review and FIPS validation. Keep EIP bytes/gas/forks, transaction/address rules, wallet/keystore conventions and network protocols in downstream crates; no Brynja production dependency on eth.
-- `v0.390.7 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.390.7 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.391.0 - BLS12-381 reusable MSM and pairing consumer APIs - Authority And Complete Public API Contract
 
@@ -45728,7 +45766,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.395.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.395.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.396.0 - SPAKE2+ - Authority And Public API Contract
 
@@ -46624,7 +46662,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.400.6 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.400.6 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.401.0 - Verifiable random functions - Authority And Public API Contract
 
@@ -47548,7 +47586,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.405.6 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.405.6 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.406.0 - HQC - Authority And Public API Contract
 
@@ -48416,7 +48454,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.410.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.410.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.411.0 - XTEA - Authority And Public API Contract
 
@@ -49256,7 +49294,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.415.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.415.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.416.0 - SHACAL-2 - Authority And Public API Contract
 
@@ -50096,7 +50134,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.420.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.420.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.421.0 - PRESENT - Authority And Public API Contract
 
@@ -50936,7 +50974,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.425.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.425.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.426.0 - HC-256 - Authority And Public API Contract
 
@@ -51776,7 +51814,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.430.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.430.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.431.0 - ZUC - Authority And Public API Contract
 
@@ -52616,7 +52654,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.435.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.435.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.436.0 - Fugue - Authority And Public API Contract
 
@@ -53456,7 +53494,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.440.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.440.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.441.0 - BMW - Authority And Public API Contract
 
@@ -54324,7 +54362,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.445.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.445.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.446.0 - sdhash - Authority And Public API Contract
 
@@ -55272,7 +55310,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.450.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.450.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.451.0 - Groth16 - Authority And Public API Contract
 
@@ -56140,7 +56178,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.455.6 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.455.6 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.456.0 - BGV - Authority And Public API Contract
 
@@ -57092,7 +57130,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.460.6 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.460.6 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.461.0 - Arithmetic MPC - Authority And Public API Contract
 
@@ -58072,7 +58110,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.465.6 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.465.6 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.466.0 - JOSE keys and signatures - Authority And Public API Contract
 
@@ -59051,7 +59089,7 @@ Exit criteria:
 
 - The step has runnable public acceptance or an explicit non-executable contract deliverable. Family Fully implemented status requires the final closure, every promised direction and profile, real adapter error preservation and all operational route evidence; research and legacy isolation and deployment restrictions remain visible.
 - Architecture-specific native evidence and owner cleanup are checked independently from named independent cryptographic review and FIPS validation. Keep EIP bytes/gas/forks, transaction/address rules, wallet/keystore conventions and network protocols in downstream crates; no Brynja production dependency on eth.
-- `v0.470.8 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.470.8 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.471.0 - SSH transport - Authority And Public API Contract
 
@@ -60003,7 +60041,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.475.5 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.475.5 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.476.0 - WireGuard tunnel - Authority And Public API Contract
 
@@ -60955,7 +60993,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.480.6 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.480.6 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.481.0 - EDHOC - Authority And Public API Contract
 
@@ -61935,7 +61973,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.485.6 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.485.6 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.486.0 - IPsec policy and integration - Authority And Public API Contract
 
@@ -62719,7 +62757,7 @@ Exit criteria:
 
 - Every deliverable for this step is externally usable or explicitly an admission gate; final-acceptance steps close all declared operations and parameters, replay real consumer fixtures, retain exact evidence and update implementation status only after closure.
 - Review exceptional pentest triggers for hostile parsing, secrets, unsafe code, authentication, durable state and trust changes; obtain the required PASS pentest/retest before tagging where triggered, with no claim of independent cryptographic review or FIPS validation from CI alone.
-- `v0.490.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.490.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.491.0 - Integrated Complete Brynja Ecosystem Package Freeze
 
@@ -62877,7 +62915,7 @@ Verification:
 Exit criteria:
 
 - the complete post-v0.350.0 delta and exact selected package set are ready to become the frozen production candidate;
-- `v0.495.0 scheduled release checkpoint reached. Pentest all changes after the previous public tag through this candidate, commit the PASS report, obtain green GitHub and CodeQL, then create the signed tag and publish the selected crates.`
+- `v0.495.0 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v1.0.0-rc.1 - Exact Production Candidate
 

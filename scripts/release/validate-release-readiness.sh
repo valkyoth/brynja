@@ -34,6 +34,14 @@ test "$#" -eq 1 || {
 report="security/pentest/${version}.md"
 publish_tag="${BRYNJA_RELEASE_PUBLISH_TAG:-}"
 
+flow="$(python3 -c 'import sys; v=sys.argv[1].removeprefix("v").split("-")[0]; print("scoped" if tuple(map(int,v.split("."))) >= (0,25,3) else "historical")' "$version")"
+if test "$flow" = scoped; then
+    if test "$allow_pending" = true; then
+        exec python3 scripts/release/scoped_release.py "$version" --review-only --allow-pending
+    fi
+    exec python3 scripts/release/scoped_release.py "$version" --review-only
+fi
+
 test -s "$report" || fail "missing pentest report: ${report}"
 git cat-file -e "HEAD:${report}" 2>/dev/null ||
     fail "pentest report must be committed at HEAD: ${report}"

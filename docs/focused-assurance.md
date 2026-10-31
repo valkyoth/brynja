@@ -1,5 +1,13 @@
 # Impact-selected verification from v0.24.34
 
+**Historical policy:** the rules below describe the earlier verification and
+receipt system. From v0.25.3, use the
+[component-completion rule](assurance/component-completion.md),
+[standalone tracker](assurance/brynja-verify.md), and
+[scoped release handoff](release/scoped-release.md). Existing evidence and its
+limitations are preserved; this page does not require routine releases to
+renew old receipts or run additional campaigns.
+
 The repository and local release gates select expensive campaigns by affected
 implementation, dependency, fixture and verifier inputs. A short native workspace
 build/test/lint baseline and repository/release integrity checks remain mandatory.

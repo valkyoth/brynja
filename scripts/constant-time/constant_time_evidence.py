@@ -84,7 +84,7 @@ def validate(root: Path) -> None:
     if tuple(matrix["limits"].get("values", ())) != LIMITS:
         fail("constant-time evidence limits drifted")
 
-    workflow = (root / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    workflow = (root / ".github/workflows/qualification.yml").read_text(encoding="utf-8")
     compiler_step = (
         'run: scripts/constant-time/check-constant-time-codegen.sh "${{ matrix.rust }}" '
         "x86_64-unknown-linux-gnu"

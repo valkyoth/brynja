@@ -7,18 +7,17 @@ one growing flat directory.
 
 Only two executable entry points live directly in this directory:
 
-- `scripts/checks.sh` runs impact-selected expensive checks and the cheap repository baseline.
-- `scripts/tag_gate.sh vX.Y.Z` adds tag-only, online, matrix, SBOM, release,
-  impact-selected local Miri, AddressSanitizer, and required local proof gates.
+- `scripts/checks.sh` runs the explicit component CI list from v0.25.3.
+- `scripts/tag_gate.sh vX.Y.Z` runs the finite final-check list after the scoped
+  pentest/retest, before pushing the release candidate. `--list` runs nothing.
 
-Start with `python3 scripts/release/run-verification.py plan --check`. Uncertain
-scope stops before expensive work and requires owner approval tied to the exact
-plan; only explicitly full assurance checkpoints run everything. Routine public
-releases use affected-code verification; routine development tags make Miri
-optional. See [focused assurance](../docs/focused-assurance.md) and the
-[Miri coverage table](../docs/assurance/miri-coverage.md).
+Start with [brynja-verify](../docs/assurance/brynja-verify.md) for component status
+and explicitly selected checks. `full-check` scans inputs only; it never runs a
+campaign. See the [component completion rule](../docs/assurance/component-completion.md)
+and [release handoff](../docs/release/scoped-release.md). Publishing the same
+green candidate does not rerun final checks. Completed components stay closed.
 
-For a terminal overview, run `python3 scripts/release/brynja-test-gui.py`.
+For the historical terminal dashboard, run `python3 scripts/release/brynja-test-gui.py`.
 It lists checks by implementation, last recorded run, completion and duration;
 `show` explains a task and `run` starts only the explicitly selected task.
 Saved detached jobs can be validated and imported without rerunning tests.
@@ -29,7 +28,8 @@ are separate from release approval. See the
 [task decomposition audit](../docs/assurance/test-decomposition.md) for the work
 to split long tests into smaller tasks.
 
-The repository gate first runs `cargo fetch --locked` to prepare the exact
+The explicitly selected historical full catalog (`scripts/checks.sh --full-catalog`)
+first runs `cargo fetch --locked` to prepare the exact
 workspace dependencies for its offline package consumers. Even a dependency-free
 leaf can trigger workspace lockfile resolution during packaging. Run
 `python3 scripts/repository/test-offline-bootstrap.py --cold-cache` to reproduce
@@ -114,46 +114,32 @@ digest and IV checks, not evidence for the future general message hasher.
    first if the responsibility is genuinely distinct.
 2. Keep helper modules beside the checks that import them. Do not create a
    second implementation of shared assurance logic inside an algorithm folder.
-3. Update `checks.sh`, `tag_gate.sh`, workflows, documentation, policy hashes,
-   evidence indexes, and every internal caller in the same commit.
+3. Update affected callers and documentation. Register a new release check only
+   when it is part of the component's agreed completion target, not every gate.
 4. Preserve historical pentest reports: paths recorded in an old report describe
    the reviewed historical commit and are not rewritten.
-5. Run `python3 scripts/repository/check-script-layout.py`,
-   `python3 scripts/repository/test-script-layout.py`, and `scripts/checks.sh`.
+5. Run the affected layout/caller regressions and agreed component checks.
 
 Moving a file does not by itself change a cryptographic result, but path-bound
-policy and evidence must be refreshed. If implementation code or fixture
-semantics change during a move, all affected cryptographic evidence must be
-rerun under the normal exact-commit rule.
+tooling may need correction. Preserve original evidence. If implementation or
+fixture semantics change, identify the affected property and run the smallest
+relevant check set; do not infer a repository-wide campaign.
 
-## Miri Profiles And Future Sharding
+## Explicit historical verification commands
 
-Every internal tag runs one bounded Miri smoke case for each registered group
-and the complete suite for every group affected by changes since the previous
-signed tag, including downstream groups. Semantic dependency changes select
-affected consumers; local version/hash-binding-only changes do not invalidate
-unchanged implementations. Unknown runtime/compiler impact fails closed to the
-full suite. Every public stage that can publish to crates.io always runs all
-groups. See [focused assurance](../docs/focused-assurance.md) for exact rules.
+Existing family harnesses, Miri profiles and detached runners remain available
+for explicitly requested assessments and historical inspection. They are not
+automatically selected by the new release gate. See the
+[Miri coverage table](../docs/assurance/miri-coverage.md) for actual recorded work.
 
 The current groups are `core`, `sanitization`, `sha2`, `sha3`, `kmac`,
 `tuplehash`, `parallelhash`, `sha1`, `md5`, `legacy`, `acceleration`
 (the isolated, dependency-free contract model), and `static_cpu`
 (the raw static authority lifecycle and downstream fixture).
-`zeroization/check-zeroization-miri.sh --group GROUP` is a shard entry point so
-the groups can later run concurrently on isolated headless workers. Shard
-results are not yet accepted by the tag gate: a future aggregator must bind
-every result to the same commit, pinned Miri toolchain, group inventory, runner
-hash, configuration, and successful exit before distributed evidence can
-replace the local complete run. Missing, duplicate, stale, or mixed evidence
-must fail closed.
-
-The v0.157.0 assurance milestone will adapt `base64-ng`'s existing operator
-model: an ignored SQLite session records detached local and SSH job state,
-supports progress checks and retries, clones the exact clean commit remotely,
-retrieves each result, and unlocks aggregation only after local validation.
-That database is orchestration state, never evidence; exact-source bundles and
-the complete validated aggregate are the release boundary.
+`zeroization/check-zeroization-miri.sh --group GROUP` remains a group entry point.
+The existing detached runner can preserve and reconcile split results with their
+original provenance. Do not substitute partial results for completed coverage,
+or initiate these larger runs merely to initialize the new tracker.
 
 MD5 batch/SIMD assurance is grouped under `scripts/md5/`: the `check-md5-cpu.py`
 entry point runs production rejection, packaged batch consumers and native-capture

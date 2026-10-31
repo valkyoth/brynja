@@ -257,7 +257,7 @@ def validate_workflow(workflow: str) -> None:
     for target in TARGETS:
         if workflow.count(f"          - {target}\n") != 1:
             fail(f"CI must contain bare-metal target exactly once: {target}")
-    install = "run: rustup target add " + " ".join(TARGETS)
+    install = 'run: rustup target add ${{ matrix.target }}'
     if workflow.count(install) != 1:
         fail("CI bare-metal target installation drifted")
     command = (
@@ -307,7 +307,7 @@ def validate_repository(policy: dict) -> None:
         msrv += ".0"
     if release != policy["toolchains"]["release"] or msrv != policy["toolchains"]["msrv"]:
         fail("assurance toolchains disagree with Cargo or rust-toolchain.toml")
-    workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+    workflow = (ROOT / ".github" / "workflows" / "qualification.yml").read_text(encoding="utf-8")
     validate_workflow(workflow)
     nightly = next(tool for tool in policy["tools"] if tool["id"] == "miri")
     install = f"rustup toolchain install {nightly['version']} --profile minimal --component miri,rust-src"
@@ -367,7 +367,7 @@ def build_evidence(policy: dict | None = None) -> dict:
     validate_repository(current)
     inputs = [
         POLICY,
-        ROOT / ".github" / "workflows" / "ci.yml",
+        ROOT / ".github" / "workflows" / "qualification.yml",
         ROOT / "rust-toolchain.toml",
         ROOT / "docs" / "KANI.md",
         ROOT / "docs" / "unsafe-policy.md",

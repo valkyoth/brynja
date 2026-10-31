@@ -16,9 +16,9 @@ class Checkpoints(unittest.TestCase):
         self.document = {'schema': 1, 'checkpoints': {'25': '0.25.2', '30': '0.30.2'}}
 
     def test_explicit_closure_and_historical_boundaries(self):
-        for version in ('0.10.0', '0.15.0', '0.20.0', '0.25.2', '0.30.2', '1.0.0-rc.1', '1.0.0'):
+        for version in ('0.10.0', '0.15.0', '0.20.0', '0.25.3', '0.30.2', '1.0.0-rc.1', '1.0.0'):
             self.assertEqual(policy.milestone_class(version), 'public')
-        for version in ('0.24.23', '0.25.0', '0.25.1', '0.25.3', '0.30.0', '0.30.1', '0.30.3'):
+        for version in ('0.24.23', '0.25.0', '0.25.1', '0.25.2', '0.30.0', '0.30.1', '0.30.3'):
             self.assertEqual(policy.milestone_class(version), 'internal')
 
     def test_later_patch_does_not_implicitly_move_checkpoint(self):
@@ -68,20 +68,20 @@ class Checkpoints(unittest.TestCase):
             policy.validate_release_context(self.context('0.25.0', 'public'), {'brynja': {'publish': True}})
         with self.assertRaisesRegex(RuntimeError, 'empty publication selection'):
             policy.validate_release_context(self.context('0.25.0', 'internal'), {'brynja': {'publish': True}})
-        policy.validate_release_context(self.context('0.25.2', 'public'), {'brynja': {'publish': True}})
+        policy.validate_release_context(self.context('0.25.3', 'public'), {'brynja': {'publish': True}})
         with self.assertRaisesRegex(RuntimeError, 'non-checkpoint'):
-            policy.validate_release_context(self.context('0.25.2', 'internal'), {})
+            policy.validate_release_context(self.context('0.25.3', 'internal'), {})
         early = self.context('0.25.0', 'public')
         early.update(exceptional=True, exception_reason='Reviewed security correction')
         policy.validate_release_context(early, {'brynja': {'publish': True}})
 
     def test_cumulative_range_includes_the_closing_patches(self):
-        first = policy.roadmap_range('0.20.0', '0.25.2')
-        self.assertEqual(first[-3:], ['0.25.0', '0.25.1', '0.25.2'])
-        second = policy.roadmap_range('0.25.2', '0.30.2')
-        self.assertNotIn('0.25.2', second)
+        first = policy.roadmap_range('0.20.0', '0.25.3')
+        self.assertEqual(first[-4:], ['0.25.0', '0.25.1', '0.25.2', '0.25.3'])
+        second = policy.roadmap_range('0.25.3', '0.30.2')
+        self.assertNotIn('0.25.3', second)
         self.assertEqual(second[-3:], ['0.30.0', '0.30.1', '0.30.2'])
-        incomplete = self.context('0.25.2', 'public')
+        incomplete = self.context('0.25.3', 'public')
         incomplete['cumulative_milestones'].pop()
         with self.assertRaisesRegex(RuntimeError, 'exact roadmap delta'):
             policy.validate_release_context(incomplete, {})

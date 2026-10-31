@@ -92,7 +92,7 @@ def validate(root: Path) -> None:
     }:
         fail("zeroization dynamic-analysis policy drifted")
 
-    workflow = (root / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    workflow = (root / ".github/workflows/qualification.yml").read_text(encoding="utf-8")
     compiler_step = (
         'run: scripts/zeroization/check-zeroization-codegen.sh "${{ matrix.rust }}" '
         "x86_64-unknown-linux-gnu"

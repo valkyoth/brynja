@@ -1,0 +1,24 @@
+[package]
+name = "brynja-verify"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+description = "Local, explicitly scoped verification runner; not a release gate"
+license = "MIT OR Apache-2.0"
+
+# Independent developer workspace: none of these dependencies enter the crypto
+# workspace, its feature resolution, lockfile or published packages.
+[workspace]
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+toml = "1.1"
+sha2 = "0.10.9"
+fs2 = "0.4.3"
+time = { version = "0.3", features = ["formatting"] }
+ctrlc = { version = "3.5", features = ["termination"] }
+
+[dev-dependencies]
+tempfile = "3.27"

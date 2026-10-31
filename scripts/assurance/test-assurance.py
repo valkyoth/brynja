@@ -104,7 +104,7 @@ def test_process_tree_policy_drift_fails() -> None:
 
 
 def test_missing_native_assurance_ci_fails() -> None:
-    workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    workflow = (ROOT / ".github/workflows/qualification.yml").read_text(encoding="utf-8")
     broken = workflow.replace(
         "      - name: Test assurance platform boundary\n"
         "        run: python scripts/assurance/test-assurance.py\n",
@@ -153,14 +153,14 @@ def test_kani_toolchain_separation_fails_closed() -> None:
 
 
 def test_missing_ci_target_fails() -> None:
-    workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    workflow = (ROOT / ".github/workflows/qualification.yml").read_text(encoding="utf-8")
     broken = workflow.replace("          - x86_64-unknown-none\n", "")
     with fails_with("CI must contain bare-metal target exactly once"):
         assurance.validate_workflow(broken)
 
 
 def test_bare_metal_ci_cannot_compile_std_packages() -> None:
-    workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    workflow = (ROOT / ".github/workflows/qualification.yml").read_text(encoding="utf-8")
     local = (ROOT / "scripts/assurance/check-bare-metal.sh").read_text(encoding="utf-8")
     local = local.replace("\\\n", " ")
     local_command = next(line.strip() for line in local.splitlines()
@@ -177,7 +177,7 @@ def test_bare_metal_ci_cannot_compile_std_packages() -> None:
 
 
 def test_native_cpu_evidence_requires_exact_backend_binding() -> None:
-    workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    workflow = (ROOT / ".github/workflows/qualification.yml").read_text(encoding="utf-8")
     broken = workflow.replace(
         "            expected_backend: aarch64-sha2\n",
         "            expected_backend: x86-sha\n",
@@ -188,8 +188,8 @@ def test_native_cpu_evidence_requires_exact_backend_binding() -> None:
 
 
 def test_missing_repository_gate_target_install_fails() -> None:
-    workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
-    install = "        run: rustup target add " + " ".join(assurance.TARGETS) + "\n"
+    workflow = (ROOT / ".github/workflows/qualification.yml").read_text(encoding="utf-8")
+    install = '        run: rustup target add ${{ matrix.target }}\n'
     broken = workflow.replace(install, "")
     with fails_with("CI bare-metal target installation drifted"):
         assurance.validate_workflow(broken)

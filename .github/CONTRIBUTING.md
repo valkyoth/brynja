@@ -11,7 +11,11 @@ contributions are provided under the same dual license.
 
 ## Development
 
-Use the pinned toolchain and run:
+Follow the [component completion rule](../docs/assurance/component-completion.md):
+agree the component's finite checks, implement, verify, record, close, move on.
+Starting another component does not reopen completed work. Inspect and run named
+assessments with [brynja-verify](../docs/assurance/brynja-verify.md); status commands
+never execute tests. Use the pinned toolchain. The current finite CI list is:
 
 ```bash
 scripts/checks.sh
@@ -19,9 +23,16 @@ cargo deny check
 cargo audit
 ```
 
-Do not add third-party Cargo crates, unsafe Rust, implicit std/alloc use, a
-modern-to-historical dependency edge, or Rust files over 500 lines. Report
+Do not add third-party dependencies to production cryptographic crates, unsafe
+Rust, implicit std/alloc use, a modern-to-historical dependency edge, or Rust
+files over 500 lines. The standalone `tools/brynja-verify` developer workspace
+has separately locked and audited tool dependencies; these do not enter
+production package graphs. Report
 exploitable issues privately as described in SECURITY.md.
+
+For release, follow the [scoped handoff](../docs/release/scoped-release.md): clean
+pentest/retest, finite final checks, push, green exact-candidate GitHub, publish.
+Publishing does not restart verification. Fix CI problems at their actual scope.
 
 ## Non-production CPU evidence builds
 

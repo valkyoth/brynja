@@ -1,43 +1,9 @@
 name: Dedicated x86 SHA512 emulation
 
+# Run explicitly for a concrete SHA512 backend/tooling change; unrelated
+# workspace lock/version changes do not renew completed qualification.
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'crates/brynja-core/**'
-      - 'crates/brynja-hash-core/**'
-      - 'Cargo.toml'
-      - 'Cargo.lock'
-      - 'rust-toolchain.toml'
-      - 'crates/brynja-crypto-cpu/src/**'
-      - 'crates/brynja-crypto-cpu/Cargo.toml'
-      - 'crates/brynja-hash-sha2/src/**'
-      - 'crates/brynja-hash-sha2/Cargo.toml'
-      - 'assurance/sha2-execution/**'
-      - 'assurance/sha2-hardened-execution/**'
-      - 'assurance/general-sha512-t/**'
-      - 'scripts/sha2/**'
-      - 'scripts/ci/install-sde.sh'
-      - '.github/workflows/dedicated-sha512.yml'
-  pull_request:
-    branches: [main]
-    paths:
-      - 'crates/brynja-core/**'
-      - 'crates/brynja-hash-core/**'
-      - 'Cargo.toml'
-      - 'Cargo.lock'
-      - 'rust-toolchain.toml'
-      - 'crates/brynja-crypto-cpu/src/**'
-      - 'crates/brynja-crypto-cpu/Cargo.toml'
-      - 'crates/brynja-hash-sha2/src/**'
-      - 'crates/brynja-hash-sha2/Cargo.toml'
-      - 'assurance/sha2-execution/**'
-      - 'assurance/sha2-hardened-execution/**'
-      - 'assurance/general-sha512-t/**'
-      - 'scripts/sha2/**'
-      - 'scripts/ci/install-sde.sh'
-      - '.github/workflows/dedicated-sha512.yml'
 
 permissions:
   contents: read

@@ -4,7 +4,19 @@ Miri checks memory/ownership behavior of executed Rust paths, not cryptographic
 correctness or native SIMD/assembly behavior. These are author-operated results,
 not independent certification. A tag or green CI badge does not imply Miri ran.
 
-## Release policy (owner-approved 2026-10-28)
+## Current policy from v0.25.3
+
+Miri is an explicitly agreed component assessment, not an automatic consequence
+of a tag or crates.io publication. Completed work stays closed unless a named
+change or finding affects it. The [completion rule](component-completion.md)
+and [scoped release flow](../release/scoped-release.md) supersede the historical
+selection policy below. The results table retains its original scope and dates.
+
+## Historical selection policy (v0.25.2 and earlier)
+
+The following describes the owner-approved 2026-10-28/29 checkpoint machinery,
+retained for interpreting and explicitly resuming historical jobs. It is not
+the default v0.25.3 release gate.
 
 Set `[release].verification = "affected"` in `release-crates.toml` for routine
 releases, including crates.io releases. Publication alone does not invalidate

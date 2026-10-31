@@ -2,6 +2,16 @@
 set -euo pipefail
 
 version="${1:-}"
+if ! [[ "$version" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-rc\.[0-9]+)?$ ]]; then
+    echo "expected vMAJOR.MINOR.PATCH[-rc.N]; no verification started" >&2
+    exit 2
+fi
+# New releases use the finite pre-push list. Historical gates remain available
+# for interpreting old releases, not as prerequisites of the current tracker.
+flow="$(python3 -c 'import sys; sys.path.insert(0, "scripts/release"); from scoped_release import enabled; print("scoped" if enabled(sys.argv[1]) else "historical")' "$version")"
+if test "$flow" = scoped; then
+    exec python3 scripts/release/scoped_release.py "$@"
+fi
 if test "$#" -eq 3 && test "$2" = "--approve-full"; then
     export BRYNJA_FULL_VERIFICATION_APPROVAL="$3"
 elif test "$#" -ne 1; then

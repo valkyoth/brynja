@@ -1,6 +1,16 @@
 # Crate Version Matrix
 
-Status: v0.20.0 published; milestones through v0.24.54 signed with their recorded review dispositions and verification deferrals. v0.24.55 final closure is in progress; its consolidated verification is not yet complete. No publication is selected.
+Current publication selection: v0.25.3; v0.25.2 remains GitHub-only. The
+authoritative package names, versions and dependency order are in
+[`release-crates.toml`](../release-crates.toml), inspectable with
+`python3 scripts/release/release_crates.py --check`. Selection is not publication
+or a claim that the .3 final gate/pentest has passed.
+
+## Historical matrix (v0.24.x planning snapshot)
+
+The narrative and table below are retained historical planning context, not the
+current package manifest or publication status. References to a planned .2
+publication now lead to the .3 checkpoint above.
 
 The latest signed and published checkpoint is v0.20.0. The `brynja` facade now
 advances to internal `0.24.55`. General SHA-512/t has callable ordinary/hardened

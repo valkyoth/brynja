@@ -207,6 +207,10 @@ class PushTests(unittest.TestCase):
         for command in ('cargo deny check', 'cargo audit --deny warnings', 'generate-sbom.sh --check',
                         'check-github-release-controls.py --public'):
             self.assertIn(command, audit)
+        self.assertIn('scoped_release.py --ci', workflow)
+        workflow = (ROOT / '.github/workflows/qualification.yml').read_text()
+        self.assertNotIn('\n  push:', workflow)
+        self.assertNotIn('\n  pull_request:', workflow)
         self.assertIn('cargo test --workspace --all-features', workflow)
         for family in ('sha256', 'sha2', 'sha3'):
             self.assertIn(f'cargo run --locked --manifest-path assurance/{family}-public-api/Cargo.toml', workflow)

@@ -16,37 +16,26 @@ def validate(installer, workflow):
                   "--proto '=https' --proto-redir '=https'", '--no-same-owner --no-same-permissions'):
         if token not in installer:
             raise ValueError('SDE installer contract missing: ' + token)
-    for token in ('push:', 'pull_request:', 'paths:', "github.repository == 'valkyoth/brynja'",
+    for token in ('workflow_dispatch:', "github.repository == 'valkyoth/brynja'",
                   "BRYNJA_ACCEPT_INTEL_SDE_LICENSE: '1'", 'contents: read', 'timeout-minutes: 25',
                   '1.90.0 1.98.1 nightly-2026-09-11',
                   'python3 scripts/sha2/check-x86-sha512.py --sde "$sde_executable" --asan'):
         if token not in workflow:
             raise ValueError('SDE workflow contract missing: ' + token)
-    # Both events must include the shared implementation and build inputs.
-    for event in ('push', 'pull_request'):
-        section = re.split(r'\n(?:  [a-z_]+:|\S)', workflow.split('  ' + event + ':', 1)[1], maxsplit=1)[0]
-        for path in ('crates/brynja-core/**', 'crates/brynja-hash-core/**',
-                     'Cargo.toml', 'Cargo.lock', 'rust-toolchain.toml'):
-            if section.splitlines().count("      - '" + path + "'") != 1:
-                raise ValueError('SDE dependency filter missing: ' + event + ': ' + path)
+    if re.search(r'^  (push|pull_request|schedule):', workflow, re.M):
+        raise ValueError('SDE qualification must be explicitly started')
 
 
 def regressions():
     installer, workflow = INSTALLER.read_text(), WORKFLOW.read_text()
     validate(installer, workflow)
-    for path in ('crates/brynja-core/**', 'crates/brynja-hash-core/**',
-                 'Cargo.toml', 'Cargo.lock', 'rust-toolchain.toml'):
-        line = "      - '" + path + "'"
-        for index in (0, 1):
-            parts = workflow.split(line)
-            for replacement in ('', '#' + line):
-                changed = parts[0] + (replacement if index == 0 else line) + parts[1] + (replacement if index == 1 else line) + parts[2]
-                try:
-                    validate(installer, changed)
-                except ValueError:
-                    pass
-                else:
-                    raise AssertionError('dependency path removal/comment escaped: ' + path)
+    for event in ('push', 'pull_request', 'schedule'):
+        try:
+            validate(installer, workflow.replace('on:', f'on:\n  {event}:'))
+        except ValueError:
+            pass
+        else:
+            raise AssertionError('implicit SDE campaign escaped: ' + event)
     for old in ('BRYNJA_ACCEPT_INTEL_SDE_LICENSE', 'sha256sum --check --status',
                 '94e97d623fec54385686e1e7ba65ebc9941748c05ee451423948334892bf2b50'):
         try:
@@ -55,7 +44,7 @@ def regressions():
             pass
         else:
             raise AssertionError('installer policy mutant escaped')
-    for old in ('--asan', "github.repository == 'valkyoth/brynja'", 'contents: read'):
+    for old in ('--asan', "github.repository == 'valkyoth/brynja'", 'contents: read', 'workflow_dispatch:'):
         try:
             validate(installer, workflow.replace(old, 'removed'))
         except ValueError:
@@ -97,7 +86,7 @@ chmod +x "$1/sde-external-10.13.1-2026-07-28-lin/sde64"''',
             assert (result.returncode == 0) == (len(expected) == 3)
             if result.returncode == 0:
                 assert Path(result.stdout.strip()).is_file()
-    print('SDE installer: four execution cases, six policy and twenty dependency-filter regressions PASS')
+    print('SDE installer: four execution cases, seven policy and three explicit-only workflow regressions PASS')
 
 
 if __name__ == '__main__':

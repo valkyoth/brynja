@@ -38,7 +38,7 @@ class ResidentCiTests(unittest.TestCase):
                 codegen.attribute_setup(*changed)
 
     def test_workflow_runs_native_job_and_regressions(self):
-        workflow = (ROOT / '.github/workflows/ci.yml').read_text()
+        workflow = (ROOT / '.github/workflows/qualification.yml').read_text()
         job = workflow.split('  macos-resident:\n', 1)[1].split('\n  host:', 1)[0]
         self.assertIn('runs-on: macos-latest', job)
         self.assertIn('run: python3 scripts/cryptography/check-macos-resident-ci.py --stage tests\n', job)

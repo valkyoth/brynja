@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "attempts": {},
+  "views": {
+    "md5/boundaries": {
+      "checked_at": "2026-10-31T14:24:38.188882334Z",
+      "fingerprint": "818ea947f98fb96461b3bd584a47b0c08c08b808e373da2aa1fa43a5af9e86c4",
+      "result": "Not run",
+      "freshness": "No recorded result",
+      "source": "—",
+      "performed_at": "—",
+      "last_success": null
+    },
+    "md5/known-answers": {
+      "checked_at": "2026-10-31T14:24:37.74621993Z",
+      "fingerprint": "070815868348415b00494fa9084f407d63890d05171b9b6903e191214ec6b2da",
+      "result": "Not run",
+      "freshness": "No recorded result",
+      "source": "—",
+      "performed_at": "—",
+      "last_success": null
+    }
+  },
+  "historical": [
+    {
+      "reference": "verification/historical-index.json",
+      "explanation": "Indexed 47 preserved dashboard files containing 10020 historical observation rows (5470 passed, 4543 reused, 3 failed, 4 cancelled), with original file digests and recorded date ranges. These overlapping rows are not distinct fresh executions. None matches the 27 registered portable commands; no current pass or new execution date was imported."
+    },
+    {
+      "reference": "docs/evidence-index.md",
+      "explanation": "Original evidence index retained. No new execution or current fingerprint is inferred from this index."
+    },
+    {
+      "reference": "docs/assurance/test-dashboard.md",
+      "explanation": "The previous dashboard and sealed detached results remain available. Its aggregated runs have not yet been mapped to this initial named-check catalog; not run here does not mean the component was never tested."
+    }
+  ]
+}

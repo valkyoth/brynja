@@ -94,6 +94,12 @@ HISTORICAL_EXIT = (
     "`{version} implementation stop reached. Run pentest for this release "
     "candidate and commit the updated report.`"
 )
+SCOPED_CHECKPOINT_EXIT = (
+    "`{version} scheduled release checkpoint reached. Pentest the changed component "
+    "and necessary integrations, commit the scoped PASS disposition, complete the "
+    "finite final checks, obtain green GitHub and CodeQL, then tag and publish the "
+    "same candidate without rerunning verification.`"
+)
 
 
 def expected_versions() -> list[str]:
@@ -111,6 +117,8 @@ def expected_exit(version: str) -> str:
     }:
         return HISTORICAL_EXIT.format(version=version)
     template = CHECKPOINT_EXIT if is_scheduled_checkpoint(version) else INTERNAL_EXIT
+    if is_scheduled_checkpoint(version) and tuple(map(int, version.removeprefix('v').split('.'))) >= (0, 25, 3):
+        template = SCOPED_CHECKPOINT_EXIT
     return template.format(version=version)
 
 

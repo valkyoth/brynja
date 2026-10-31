@@ -4,7 +4,7 @@ reviewed_at = "2026-07-30"
 
 [[plan_boundary]]
 class = "repository-governance"
-versions = ["0.1.0", "0.2.0", "0.4.0"]
+versions = ["0.1.0", "0.2.0", "0.4.0", "0.25.3"]
 rationale = "These repository, release, and assurance-harness milestones are governed by local security invariants and tooling policy rather than a protocol authority."
 
 [[plan_boundary]]

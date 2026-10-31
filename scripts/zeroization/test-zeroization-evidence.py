@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[2]
 def copy_fixture(destination: Path) -> None:
     for relative in (
         Path("assurance/zeroization-matrix.toml"),
-        Path(".github/workflows/ci.yml"),
+        Path(".github/workflows/qualification.yml"),
         Path("scripts/checks.sh"),
         Path("scripts/tag_gate.sh"),
         Path("scripts/zeroization/check-tag-miri.sh"),
@@ -52,7 +52,7 @@ def test() -> None:
         zeroization_evidence.validate(root)
 
         matrix = root / "assurance/zeroization-matrix.toml"
-        workflow = root / ".github/workflows/ci.yml"
+        workflow = root / ".github/workflows/qualification.yml"
         checks = root / "scripts/checks.sh"
         tag_gate = root / "scripts/tag_gate.sh"
 

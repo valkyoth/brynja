@@ -16,7 +16,13 @@ def validate(driver):
         expected = '''#!/usr/bin/env sh
 set -eu
 
+# Routine diagnostics no longer consume qualification receipts or expand to
+# completed components. The historical full catalog is explicit-only.
 if test "${1:-}" != "--full-catalog"; then
+    flow="$(python3 -c 'import sys,tomllib; sys.path.insert(0,"scripts/release"); from scoped_release import enabled; print("scoped" if enabled(tomllib.load(open("release-crates.toml","rb"))["release"]["version"]) else "historical")')"
+    if test "$flow" = scoped; then
+        exec python3 scripts/release/scoped_release.py --ci "$@"
+    fi
     exec python3 scripts/release/run-verification.py repository "$@"
 fi
 shift

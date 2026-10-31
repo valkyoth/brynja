@@ -245,7 +245,7 @@
     "scripts/release/native_sha1_scope_tests.py": "2767c4d524c2dc11ac37830896ea8093941216e13651e6da77ec6a7cc8265c5f",
     "scripts/release/native_sha2_carry_forward.py": "f92bcd88ad95f5fec6c9114415e12d263de0dc77cf1fbb072245abab4589613c",
     "scripts/release/native_test_reuse.py": "fd671fbe829498dde06860e980a516d485f356c9292acf50b9cfb413b3213ba0",
-    "scripts/release/native_test_reuse_tests.py": "1eed6642fa428238f0a7cf0e5d949d2840cc15a78c7f0dcaeedd70008b04a1ce",
+    "scripts/release/native_test_reuse_tests.py": "a86ff44fa9864ca8057643ac10cf22620156d45b0776f063e60750798db8b183",
     "scripts/release/native_tooling_review.py": "4f5cb181ec3f4341458fb2508d044d41e4ce7bb5a7f78d4c0ef0ab3ea354a7dc",
     "scripts/release/native_unchanged.py": "8468b24f44008e770e9a7fbf5ee074354cd484161efe08fcec58c52657783f58",
     "scripts/release/test-native-dependency-scope.py": "36483031cfbef5fd4adc0e9ddb1b9dfeb80db42034ac5635ef8457badf026563",

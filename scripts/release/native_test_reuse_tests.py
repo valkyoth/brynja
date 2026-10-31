@@ -196,14 +196,36 @@ class NativeTestReuseTests(unittest.TestCase):
 
 
 class RealTestDecompositionPins(unittest.TestCase):
+    # This is a historical exact-delta fixture, not approval of today's checkout.
+    # Later documentation pins must not turn its positive control into a failure.
+    reviewed = '24695de45cc1763b93cac648f222e0952035c2fd'
+
+    def changes_at(self, family, revision):
+        register, _, rows = tests.FAMILIES[family]
+        names = {register} | {name for row in rows for name in row[:2]}
+        before = {name: io.sha(io.raw_blob(io.ROOT, tests.CAPTURE, name)) for name in names}
+        after = {name: io.sha(io.raw_blob(io.ROOT, revision, name)) for name in names}
+        return tests.changes(io.ROOT, tests.CAPTURE, revision, after, before, family)
+
     def test_all_four_committed_revisions_and_declaring_parents(self):
-        head = io.git(io.ROOT, 'rev-parse', 'HEAD').decode().strip()
         count = 0
         for family, (register, _, rows) in tests.FAMILIES.items():
-            names = {register} | {name for row in rows for name in row[:2]}
-            before = {name: io.sha(io.raw_blob(io.ROOT, tests.CAPTURE, name)) for name in names}
-            after = {name: io.sha(io.raw_blob(io.ROOT, head, name)) for name in names}
-            changes = tests.changes(io.ROOT, tests.CAPTURE, head, after, before, family)
+            changes = self.changes_at(family, self.reviewed)
             self.assertEqual(set(changes), {register} | {row[0] for row in rows})
             count += len(rows)
         self.assertEqual(count, 4)
+
+    def test_later_readme_pins_do_not_gain_test_only_approval(self):
+        # Real documentation-only follow-up: the test modules and parents stayed
+        # identical, but the register also changed two README pins. The narrow
+        # test-only proof must still reject that distinct delta.
+        later = '5902fbe88b66a6098e721f52a472611ae3921a74'
+        family = 'parallelhash-execution'
+        register, _, rows = tests.FAMILIES[family]
+        for name in {name for row in rows for name in row[:2]}:
+            self.assertEqual(io.raw_blob(io.ROOT, self.reviewed, name),
+                             io.raw_blob(io.ROOT, later, name))
+        self.assertNotEqual(io.raw_blob(io.ROOT, self.reviewed, register),
+                            io.raw_blob(io.ROOT, later, register))
+        with self.assertRaisesRegex(ValueError, 'test review cannot change executable policy or other pins'):
+            self.changes_at(family, later)

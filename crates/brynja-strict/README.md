@@ -31,27 +31,31 @@ choice, not certification or proof that all application code uses this profile.
 
 ## Cryptography Verification Status
 
+✅ marks an implemented API within the stated feature/platform scope, not
+independent review, certification or unrestricted deployment approval.
+Qualification limits remain separate from implementation completion.
+
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| Strict-only modern protected sessions | 🚧 Implemented; qualification pending | ❌ No |
-| Protected HMAC SHA-2/general SHA-512/t/SHA-3 sessions | 🚧 Scalar and explicit compiled routes; qualification pending | ❌ No |
-| Windows x64 VBS retained SHA-256 owner/session | 🚧 Bounded scalar API; development-tested; production qualification pending | ❌ No |
-| Windows x64 VBS streaming SHA-2 and general SHA-512/t | 🚧 Scalar version-six worker; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS SHA-224/256 SHA-NI sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS streaming SHA-3/SHAKE/cSHAKE | 🚧 Scalar version-seven worker; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS SHA-3/SHAKE/cSHAKE AVX2 sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS streaming KMAC/KMACXOF | 🚧 Scalar version-eight worker; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS KMAC/KMACXOF AVX2 sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS streaming TupleHash/TupleHashXOF | 🚧 Scalar version-nine worker; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS TupleHash/TupleHashXOF AVX2 sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS SHA-2 batches | 🚧 Scalar and opt-in sequential SHA-NI SHA-224/256; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS SHA-3/SHAKE/cSHAKE batches | 🚧 Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS eight-message SHA-224/256 SIMD | 🚧 Opt-in AVX2; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS four-message SHA-512-family SIMD | 🚧 Opt-in AVX2; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS four-message SHA-3/SHAKE/cSHAKE SIMD | 🚧 Opt-in AVX2; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS ParallelHash/ParallelHashXOF | 🚧 Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS concurrent ParallelHash/ParallelHashXOF | 🚧 Opt-in four-worker AVX2; public output only; qualification pending | ❌ No |
-| Explicit compiled hardware/SIMD selection | 🚧 Implemented; qualification pending | ❌ No |
+| Strict-only modern protected sessions | ✅ Implemented; qualification pending | ❌ No |
+| Protected HMAC SHA-2/general SHA-512/t/SHA-3 sessions | ✅ Implemented; Scalar and explicit compiled routes; qualification pending | ❌ No |
+| Windows x64 VBS retained SHA-256 owner/session | ✅ Implemented; Bounded scalar API; development-tested; production qualification pending | ❌ No |
+| Windows x64 VBS streaming SHA-2 and general SHA-512/t | ✅ Implemented; Scalar version-six worker; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS SHA-224/256 SHA-NI sessions | ✅ Implemented; Explicit opt-in; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS streaming SHA-3/SHAKE/cSHAKE | ✅ Implemented; Scalar version-seven worker; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS SHA-3/SHAKE/cSHAKE AVX2 sessions | ✅ Implemented; Explicit opt-in; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS streaming KMAC/KMACXOF | ✅ Implemented; Scalar version-eight worker; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS KMAC/KMACXOF AVX2 sessions | ✅ Implemented; Explicit opt-in; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS streaming TupleHash/TupleHashXOF | ✅ Implemented; Scalar version-nine worker; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS TupleHash/TupleHashXOF AVX2 sessions | ✅ Implemented; Explicit opt-in; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS SHA-2 batches | ✅ Implemented; Scalar and opt-in sequential SHA-NI SHA-224/256; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS SHA-3/SHAKE/cSHAKE batches | ✅ Implemented; Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS eight-message SHA-224/256 SIMD | ✅ Implemented; Opt-in AVX2; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS four-message SHA-512-family SIMD | ✅ Implemented; Opt-in AVX2; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS four-message SHA-3/SHAKE/cSHAKE SIMD | ✅ Implemented; Opt-in AVX2; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS ParallelHash/ParallelHashXOF | ✅ Implemented; Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS concurrent ParallelHash/ParallelHashXOF | ✅ Implemented; Opt-in four-worker AVX2; public output only; qualification pending | ❌ No |
+| Explicit compiled hardware/SIMD selection | ✅ Implemented; qualification pending | ❌ No |
 
 Exports: `sha2`, `sha3` (SHAKE/cSHAKE), `hmac`, `kmac`, `tuplehash`, `parallelhash`
 and independent-message `batch`, plus the separate Windows `enclave` interface.

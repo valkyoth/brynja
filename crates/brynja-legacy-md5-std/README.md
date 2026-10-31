@@ -30,6 +30,10 @@ allocation-free `no_std`; this adapter is never a modern-facade dependency.
 
 ## Cryptography Verification Status
 
+✅ marks an implemented API within the stated feature/platform scope, not
+independent review, certification or unrestricted deployment approval.
+Qualification limits remain separate from implementation completion.
+
 Default-off `strict-acceleration` adds `strict_execution::batch::Session`.
 Supply protected stack/output mapping budgets and an aggregate input-bit limit.
 `digest` accepts eight `Option<Input>` slots, a finite compression budget and
@@ -46,12 +50,12 @@ Kani, Miri, fuzzing or a pentest is not independent cryptographic verification.
 
 | Algorithm | Implemented | Independently verified |
 | --- | --- | --- |
-| Protected compiled MD5 SIMD batches | 🚧 Implemented; qualification pending | ❌ No |
+| Protected compiled MD5 SIMD batches | ✅ Implemented; qualification pending | ❌ No |
 | MD5 | ✅ Fully implemented | ❌ Not independently verified |
-| Ordinary hosted batch SIMD | 🚧 In progress; native qualification pending | ❌ No |
-| Hardened hosted batch SIMD | 🚧 In progress; retest and native evidence pending | ❌ No |
-| Opt-in protected scalar MD5 session | 🚧 Implemented; qualification pending | ❌ No |
-| Apple Silicon resident scalar/NEON MD5 sessions (no dump exclusion) | 🚧 Implemented; qualification pending | ❌ No |
+| Ordinary hosted batch SIMD | ✅ Implemented; native observations recorded; independent qualification not claimed | ❌ No |
+| Hardened hosted batch SIMD | ✅ Implemented; native observations recorded; independent qualification not claimed | ❌ No |
+| Opt-in protected scalar MD5 session | ✅ Implemented; qualification pending | ❌ No |
+| Apple Silicon resident scalar/NEON MD5 sessions (no dump exclusion) | ✅ Implemented; qualification pending | ❌ No |
 
 ## Apple Silicon resident compatibility profile
 
@@ -206,7 +210,7 @@ assert_eq!(report.work.scalar_blocks + report.work.vector_blocks, 24);
 ```
 
 See the [ordinary execution contract](https://github.com/valkyoth/brynja/blob/main/docs/legacy-md5-execution.md)
-for authority, ordered batch semantics and pending native evidence.
+for authority, ordered batch semantics and recorded native observations.
 
 MD5 is collision-broken. Do not use it for new authentication, signatures or
 password hashing. Public data only; use the leaf's portable hardened batch

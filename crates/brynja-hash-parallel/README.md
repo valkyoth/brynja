@@ -31,17 +31,21 @@ block-size parameter `B`. Cryptographic code is first-party Rust.
 
 ## Cryptography Verification Status
 
+✅ marks an implemented API within the stated feature/platform scope, not
+independent review, certification or unrestricted deployment approval.
+Qualification limits remain separate from implementation completion.
+
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
 | All four portable ParallelHash/ParallelHashXOF identities | ✅ Fully implemented | ❌ No |
 | Byte/bit input, streaming, scheduled leaves and hardened secret output | ✅ Implemented | ❌ No |
-| Caller-owned portable scoped fixed-output/XOF workspaces | 🚧 Implemented; complete residue qualification pending | ❌ No |
-| Portable scoped exact-plan collectors with fixed/XOF output | 🚧 Implemented; qualification pending | ❌ No |
-| Accelerated scoped exact-plan collectors and leaf workspaces | 🚧 Implemented; qualification pending | ❌ No |
-| Typed multibuffer jobs and clearing result handoff to scoped collectors | 🚧 Implemented; qualification pending | ❌ No |
-| Scoped accelerated fixed-output/XOF root/leaf workspaces | 🚧 Implemented; qualification pending | ❌ No |
-| Opt-in accelerated scheduling and streaming | 🚧 In progress: qualification pending | ❌ No |
-| Hardened scheduled/streaming leaf SIMD groups | 🚧 Implemented; qualification pending | ❌ No |
+| Caller-owned portable scoped fixed-output/XOF workspaces | ✅ Implemented; complete residue qualification pending | ❌ No |
+| Portable scoped exact-plan collectors with fixed/XOF output | ✅ Implemented; qualification pending | ❌ No |
+| Accelerated scoped exact-plan collectors and leaf workspaces | ✅ Implemented; qualification pending | ❌ No |
+| Typed multibuffer jobs and clearing result handoff to scoped collectors | ✅ Implemented; qualification pending | ❌ No |
+| Scoped accelerated fixed-output/XOF root/leaf workspaces | ✅ Implemented; qualification pending | ❌ No |
+| Opt-in accelerated scheduling and streaming | ✅ Implemented; qualification pending | ❌ No |
+| Hardened scheduled/streaming leaf SIMD groups | ✅ Implemented; qualification pending | ❌ No |
 
 Brynja is not FIPS 140-3 validated. Project tests and pentests are not named
 independent cryptographic review. See the

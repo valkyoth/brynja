@@ -294,6 +294,40 @@ def resident_status_rows() -> None:
     print('Resident status rejects 36 omission, duplicate and qualification/independent-review overclaims')
 
 
+def completed_api_status_rows() -> None:
+    """Completion is green without erasing limits or promoting candidate APIs."""
+    root = SCRIPT.resolve().parents[2]
+    checked = 0
+    for crate, capabilities in {
+        'brynja-legacy-md5': ('Ordinary batch AVX2 / NEON execution',
+                            'Hardened batch AVX2 / NEON execution'),
+        'brynja-legacy-md5-std': ('Ordinary hosted batch SIMD', 'Hardened hosted batch SIMD'),
+        'brynja-hash-parallel': ('Opt-in accelerated scheduling and streaming',),
+        'brynja-hash-parallel-std': ('Independently selected hardened root/worker acceleration',),
+    }.items():
+        path = Path('crates') / crate / 'README.md'
+        text = (root / path).read_text()
+        assert 'Qualification limits remain separate from implementation completion.' in text
+        for capability in capabilities:
+            row, = [r for r in MODULE.CRATE_ROWS[path.as_posix()]
+                    if r.startswith('| ' + capability + ' |')]
+            assert '| ✅ Implemented;' in row and row.endswith('| ❌ No |')
+            for replacement in (row.replace('✅ Implemented', '🚧 In progress'),
+                                row.replace('❌ No', '✅ Independently verified')):
+                try:
+                    MODULE.validate_crate_document(path, text.replace(row, replacement))
+                except MODULE.VerificationStatusError:
+                    checked += 1
+                else:
+                    raise AssertionError('completion/review status regression accepted')
+    cpu = (root / 'crates/brynja-crypto-cpu/README.md').read_text()
+    assert '| RISC-V Zknh SHA-256/SHA-512 candidates | 🚧 QEMU/codegen only; unadmitted | ❌ No |' in cpu
+    hmac = (root / 'crates/brynja-mac-hmac/README.md').read_text()
+    assert '| SIMD batching and Windows enclave HMAC | Not implemented by this HMAC API | ❌ No |' in hmac
+    assert checked == 12
+    print('Completed API status rejects 12 stale/review promotions; unimplemented candidates retained')
+
+
 def main() -> int:
     legacy_root_rows()
     crate_tables()
@@ -301,6 +335,7 @@ def main() -> int:
     scoped_status_rows()
     windows_simd_status_rows()
     resident_status_rows()
+    completed_api_status_rows()
     MODULE.validate_document(Path("fixture.md"), BASE, (ROW,))
     MODULE.validate_document(Path("README.md"), ROOT, (ROW,))
     must_fail(BASE.replace(MODULE.HEADING, "## Status"), "heading")

@@ -31,17 +31,21 @@ package owns scheduling, resource admission and local worker selection.
 
 ## Cryptography Verification Status
 
+✅ marks an implemented API within the stated feature/platform scope, not
+independent review, certification or unrestricted deployment approval.
+Qualification limits remain separate from implementation completion.
+
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
 | Bounded portable ParallelHash/ParallelHashXOF worker executor | ✅ Implemented | ❌ No |
-| Scoped portable root with bounded borrowed-leaf thread handoff | 🚧 Implemented; qualification pending | ❌ No |
-| Scoped root/leaf storage with independently selected threaded acceleration | 🚧 Implemented; qualification pending | ❌ No |
-| Independently selected hardened root/worker acceleration | 🚧 In progress: qualification pending | ❌ No |
-| Hardened multibuffer worker groups with clearing result transport | 🚧 Implemented; qualification pending | ❌ No |
-| Scoped multibuffer workers with guarded parent slots and scoped root | 🚧 Implemented; qualification pending | ❌ No |
-| Strict protected scalar root, concurrent leaf stacks, CVs and output | 🚧 Implemented; qualification pending | ❌ No |
-| Strict protected accelerated root and single/SIMD leaf workers | 🚧 Implemented; qualification pending | ❌ No |
-| Apple Silicon resident scalar/Arm/NEON root and bounded concurrent leaf workers; no dump exclusion | 🚧 Implemented; qualification pending | ❌ No |
+| Scoped portable root with bounded borrowed-leaf thread handoff | ✅ Implemented; qualification pending | ❌ No |
+| Scoped root/leaf storage with independently selected threaded acceleration | ✅ Implemented; qualification pending | ❌ No |
+| Independently selected hardened root/worker acceleration | ✅ Implemented; qualification pending | ❌ No |
+| Hardened multibuffer worker groups with clearing result transport | ✅ Implemented; qualification pending | ❌ No |
+| Scoped multibuffer workers with guarded parent slots and scoped root | ✅ Implemented; qualification pending | ❌ No |
+| Strict protected scalar root, concurrent leaf stacks, CVs and output | ✅ Implemented; qualification pending | ❌ No |
+| Strict protected accelerated root and single/SIMD leaf workers | ✅ Implemented; qualification pending | ❌ No |
+| Apple Silicon resident scalar/Arm/NEON root and bounded concurrent leaf workers; no dump exclusion | ✅ Implemented; qualification pending | ❌ No |
 
 Brynja is not FIPS 140-3 validated. Threading and project tests do not constitute
 independent verification. This `std` package is absent from the modern facade's

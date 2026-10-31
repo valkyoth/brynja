@@ -29,13 +29,17 @@ First-party, allocation-free `no_std` legacy MD5 for explicit compatibility.
 
 ## Cryptography Verification Status
 
+✅ marks an implemented API within the stated feature/platform scope, not
+independent review, certification or unrestricted deployment approval.
+Qualification limits remain separate from implementation completion.
+
 | Hash | Implemented | Independently verified |
 | --- | --- | --- |
 | MD5 | ✅ Fully implemented | ❌ Not independently verified |
-| Ordinary batch AVX2 / NEON execution | 🚧 In progress; native qualification pending | ❌ No |
-| Hardened batch AVX2 / NEON execution | 🚧 In progress; retest and native evidence pending | ❌ No |
-| Caller-owned portable scoped workspace | 🚧 Implemented; residue qualification pending | ❌ No |
-| Caller-owned scoped hardened AVX2 / NEON batches | 🚧 Implemented; residue qualification pending | ❌ No |
+| Ordinary batch AVX2 / NEON execution | ✅ Implemented; native observations recorded; independent qualification not claimed | ❌ No |
+| Hardened batch AVX2 / NEON execution | ✅ Implemented; native observations recorded; independent qualification not claimed | ❌ No |
+| Caller-owned portable scoped workspace | ✅ Implemented; residue qualification pending | ❌ No |
+| Caller-owned scoped hardened AVX2 / NEON batches | ✅ Implemented; residue qualification pending | ❌ No |
 
 No named independent reviewer has signed off. Project tests, CI, Kani, Miri,
 fuzzing and pentesting are not independent cryptographic review. No FIPS
@@ -48,7 +52,8 @@ MD5 is not appropriate for new security designs, collision-resistant hashes,
 signatures, certificates or password hashing. A raw digest is not a MAC.
 Memory cleanup does not repair the algorithm. This crate is never enabled by
 the modern `brynja` facade, TLS, PKIX, FIPS, or a general-purpose hash default.
-Later HMAC/HKDF/OpenPGP integrations need separately typed legacy admission.
+HMAC-MD5 is available separately in `brynja-legacy-hmac` with explicit legacy
+admission. Future HKDF/OpenPGP integrations need their own legacy admission.
 
 ## Use
 
@@ -187,6 +192,10 @@ unification exposes types, not execution permission. A separate optional
 required acceleration. SIMD is for public independent messages, not single-stream
 acceleration; AVX-512 and RISC-V Vector remain unimplemented pending qualification.
 
+That restriction belongs to the historical `cpu` candidate API, not the separate
+implemented `execution` and `hardened-execution` APIs described below. Those
+opt-in APIs can execute AVX2/NEON on supported, explicitly authorized platforms.
+
 ```rust
 # #[cfg(feature = "batch")] {
 use brynja_legacy_md5::{BitString, Md5Batch, Md5BatchControl};
@@ -271,7 +280,7 @@ assert_eq!(report.work.scalar_blocks, 24);
 Static specialization is an explicit deployment obligation on every schedulable
 CPU, not runtime detection or migration protection. See the
 [ordinary execution contract](https://github.com/valkyoth/brynja/blob/main/docs/legacy-md5-execution.md)
-for platform limits, exact grouping rules and pending native qualification.
+for platform limits, exact grouping rules and recorded native observations.
 
 Final ordinary/hardened byte/bit and execution-route dispositions are documented in
 [legacy final acceptance](https://github.com/valkyoth/brynja/blob/main/docs/legacy-hash-final-acceptance.md).

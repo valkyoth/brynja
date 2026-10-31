@@ -31,13 +31,17 @@ absent from modern facades, defaults, protocol negotiation and approved services
 
 ## Cryptography Verification Status
 
+✅ marks an implemented API within the stated feature/platform scope, not
+independent review, certification or unrestricted deployment approval.
+Qualification limits remain separate from implementation completion.
+
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
 | HMAC-SHA-1 and HMAC-MD5 | ✅ Fully implemented portable API | ❌ No |
 | Streaming, long keys, explicit byte truncation and verification | ✅ Implemented | ❌ No |
 | Public tags and clearing secret tags | ✅ Implemented; owned-memory clearing | ❌ No |
-| Explicit hardened SHA-1 execution | Opt-in `sha1-execution`; x86/Arm author tests, qualification pending | ❌ No |
-| MD5 SIMD HMAC | Opt-in `md5-batch`; AVX2/NEON author tests, qualification pending | ❌ No |
+| Explicit hardened SHA-1 execution | ✅ Implemented; Opt-in `sha1-execution`; x86/Arm author tests, qualification pending | ❌ No |
+| MD5 SIMD HMAC | ✅ Implemented; Opt-in `md5-batch`; AVX2/NEON author tests, qualification pending | ❌ No |
 
 No independent qualification or FIPS approval is claimed. Existing hash
 qualification does not qualify this new keyed composition. Caller copies,

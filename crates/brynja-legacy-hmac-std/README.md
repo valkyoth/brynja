@@ -32,13 +32,17 @@ once published; until then use the reviewed workspace path.
 
 ## Cryptography Verification Status
 
+✅ marks an implemented API within the stated feature/platform scope, not
+independent review, certification or unrestricted deployment approval.
+Qualification limits remain separate from implementation completion.
+
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| Protected scalar SHA-1/MD5 HMAC | Linux-only `strict-execution`; byte/chunk/bit and tag-policy author tests pass | ❌ No |
-| Protected output loans and worker clearing | Native mapping/fault checks and extracted debug/release mutation tests pass | ❌ No |
-| Hosted SHA-1 hardware sessions | Explicit protected/resident owners, worker-local authority and terminal quarantine | ❌ No |
-| Protected/resident MD5 SIMD batches | Explicit bounded owners; full groups, aggregate verification and clearing output loans | ❌ No |
-| Apple Silicon resident profile | Scalar SHA-1/MD5 sessions; native lifecycle/bit tests; no dump exclusion | ❌ No |
+| Protected scalar SHA-1/MD5 HMAC | ✅ Implemented; Linux-only `strict-execution`; byte/chunk/bit and tag-policy author tests pass | ❌ No |
+| Protected output loans and worker clearing | ✅ Implemented; Native mapping/fault checks and extracted debug/release mutation tests pass | ❌ No |
+| Hosted SHA-1 hardware sessions | ✅ Implemented; Explicit protected/resident owners, worker-local authority and terminal quarantine | ❌ No |
+| Protected/resident MD5 SIMD batches | ✅ Implemented; Explicit bounded owners; full groups, aggregate verification and clearing output loans | ❌ No |
+| Apple Silicon resident profile | ✅ Implemented; Scalar SHA-1/MD5 sessions; native lifecycle/bit tests; no dump exclusion | ❌ No |
 
 ## Hardware and SIMD
 

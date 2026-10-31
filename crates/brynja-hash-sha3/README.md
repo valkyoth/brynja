@@ -30,17 +30,21 @@ Keccak-f[1600] implementation. Ordinary and hardened owners are separate.
 
 ## Cryptography Verification Status
 
+✅ marks an implemented API within the stated feature/platform scope, not
+independent review, certification or unrestricted deployment approval.
+Qualification limits remain separate from implementation completion.
+
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
 | SHA3-224/256/384/512 and SHAKE128/256 | ✅ Fully implemented | ❌ No |
 | Byte/bit input and arbitrary-bit SHAKE output | ✅ Fully implemented | ❌ No |
 | cSHAKE128/256 and SP 800-185 encodings | ✅ Fully implemented | ❌ No |
 | Hardened states and classified outputs | ✅ Implemented | ❌ No |
-| Scoped in-place hardened SHA-3/SHAKE/cSHAKE | Development; ownership checks implemented, residue qualification pending | ❌ No |
-| Scoped accelerated SHA-3/SHAKE/cSHAKE | Development; explicit static/hosted session, residue qualification pending | ❌ No |
+| Scoped in-place hardened SHA-3/SHAKE/cSHAKE | ✅ Implemented; ownership checks implemented, residue qualification pending | ❌ No |
+| Scoped accelerated SHA-3/SHAKE/cSHAKE | ✅ Implemented; explicit static/hosted session, residue qualification pending | ❌ No |
 | Ordinary and hardened accelerated execution | ✅ Opt-in, platform-limited | ❌ No |
-| Hardened SHA-3/SHAKE/cSHAKE multibuffer owners | 🚧 Implemented; qualification pending | ❌ No |
-| Independent-message multibuffer SHA-3/SHAKE/cSHAKE | Development; native qualification pending | ❌ No |
+| Hardened SHA-3/SHAKE/cSHAKE multibuffer owners | ✅ Implemented; qualification pending | ❌ No |
+| Independent-message multibuffer SHA-3/SHAKE/cSHAKE | ✅ Implemented; native qualification pending | ❌ No |
 
 FIPS 202 and SP 800-185 specify these algorithms; they do not confer FIPS
 140-3 validation. Brynja has no named independent cryptographic review or FIPS

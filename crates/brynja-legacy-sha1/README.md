@@ -37,13 +37,17 @@ is under qualification. See the
 
 ## Cryptography Verification Status
 
+✅ marks an implemented API within the stated feature/platform scope, not
+independent review, certification or unrestricted deployment approval.
+Qualification limits remain separate from implementation completion.
+
 | Hash | Implemented | Independently verified |
 | --- | --- | --- |
 | SHA-1 | ✅ Fully implemented | ❌ Not independently verified |
 | Opt-in ordinary acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |
 | Opt-in hardened acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |
-| Caller-owned portable scoped workspace | 🚧 Implemented; residue qualification pending | ❌ Not independently verified |
-| Scoped hardened execution workspace | 🚧 Portable/SHA-NI/Arm routes; residue qualification pending | ❌ Not independently verified |
+| Caller-owned portable scoped workspace | ✅ Implemented; residue qualification pending | ❌ Not independently verified |
+| Scoped hardened execution workspace | ✅ Implemented; Portable/SHA-NI/Arm routes; residue qualification pending | ❌ Not independently verified |
 
 No named independent reviewer has signed off. Project tests, CI, Kani, Miri,
 fuzzing and pentesting are not independent cryptographic review. No FIPS

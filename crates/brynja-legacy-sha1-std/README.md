@@ -30,6 +30,10 @@ This crate is not a default or modern-facade dependency. The leaf stays `no_std`
 
 ## Cryptography Verification Status
 
+✅ marks an implemented API within the stated feature/platform scope, not
+independent review, certification or unrestricted deployment approval.
+Qualification limits remain separate from implementation completion.
+
 Default-off `strict-acceleration` adds `strict_execution::CompiledSession`.
 Use the scalar session's `Limits`, `hash` and `hash_chunks` interfaces, with
 build-wide SHA/SSE2 on x86-64 or NEON/SHA2 on little-endian GNU/Linux AArch64.
@@ -43,12 +47,12 @@ Kani, Miri, fuzzing or a pentest is not independent cryptographic verification.
 
 | Algorithm | Implemented | Independently verified |
 | --- | --- | --- |
-| Protected compiled SHA-1 sessions | 🚧 Implemented; qualification pending | ❌ Not independently verified |
+| Protected compiled SHA-1 sessions | ✅ Implemented; qualification pending | ❌ Not independently verified |
 | SHA-1 | ✅ Fully implemented | ❌ Not independently verified |
 | Opt-in hosted ordinary acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |
 | Opt-in hosted hardened acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |
-| Protected scalar SHA-1 sessions (Linux GNU x86-64/little-endian AArch64) | 🚧 Implemented; qualification pending | ❌ Not independently verified |
-| Apple Silicon resident scalar/Arm SHA-1 sessions (no dump exclusion) | 🚧 Implemented; qualification pending | ❌ Not independently verified |
+| Protected scalar SHA-1 sessions (Linux GNU x86-64/little-endian AArch64) | ✅ Implemented; qualification pending | ❌ Not independently verified |
+| Apple Silicon resident scalar/Arm SHA-1 sessions (no dump exclusion) | ✅ Implemented; qualification pending | ❌ Not independently verified |
 
 ## Hardware and SIMD
 

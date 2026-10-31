@@ -31,6 +31,10 @@ It is not automatically installed or added to facade/default graphs.
 
 ## Cryptography Verification Status
 
+✅ marks an implemented API within the stated feature/platform scope, not
+independent review, certification or unrestricted deployment approval.
+Qualification limits remain separate from implementation completion.
+
 Default-off `strict-tuplehash-acceleration` exposes `strict_tuplehash::CompiledSession`.
 Select build-wide AVX2 or Arm NEON/SHA3 on supported GNU/Linux strict targets,
 and preserve CPU/OS support throughout execution. Authority, exact-item writers,
@@ -42,44 +46,44 @@ See the [compiled TupleHash API example](https://github.com/valkyoth/brynja/blob
 
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| Apple Silicon resident byte/worker resources | Default-off `macos_resident::memory`; guarded, locked, fork-excluded, clearing; no dump exclusion or automatic cryptographic admission | ❌ No |
-| Hosted hardened HMAC over SHA-2/SHA-3 | 🚧 Default-off `hmac-execution`; native M2 author tests; qualification pending | ❌ No |
-| Protected compiled HMAC over SHA-2/SHA-3 | 🚧 Default-off `strict-hmac-acceleration`; GNU/Linux, explicit target features, no fallback; qualification pending | ❌ No |
-| Protected scalar HMAC (supported GNU/Linux targets) | 🚧 Default-off `strict-hmac`; typed bounded requests and worker-side verification; qualification pending | ❌ No |
-| Apple Silicon resident HMAC over SHA-2/SHA-3 | 🚧 Default-off scalar or explicit Arm SHA2/SHA512/Keccak; no dump exclusion; qualification pending | ❌ No |
-| Apple Silicon resident SHA-2/SHA-3, KMAC/TupleHash | 🚧 Separate opt-in scalar/Arm resident/clearing APIs; no dump exclusion; qualification pending | ❌ No |
-| Apple Silicon resident SHA-2/general-t and SHA-3/SHAKE/cSHAKE | 🚧 Scalar or explicit Arm SHA2/SHA512/Keccak; bit-aware, bounded output/cancellation; no dump-exclusion guarantee; qualification pending | ❌ No |
-| Apple Silicon resident SHA-2/Keccak independent-message batches | 🚧 Default-off resident workspace/output; explicit portable or required NEON, no fallback; no dump exclusion; qualification pending | ❌ No |
-| Windows x64 VBS retained SHA-256 owner/session | 🚧 Bounded scalar API; development-tested; production qualification pending | ❌ No |
-| Windows x64 VBS streaming SHA-2 and general SHA-512/t | 🚧 Scalar version-six worker; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS SHA-224/256 SHA-NI sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS streaming SHA-3/SHAKE/cSHAKE | 🚧 Scalar version-seven worker; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS SHA-3/SHAKE/cSHAKE AVX2 sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS streaming KMAC/KMACXOF | 🚧 Scalar version-eight worker; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS KMAC/KMACXOF AVX2 sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS streaming TupleHash/TupleHashXOF | 🚧 Scalar version-nine worker; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS TupleHash/TupleHashXOF AVX2 sessions | 🚧 Explicit opt-in; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS SHA-2 batches | 🚧 Scalar and opt-in sequential SHA-NI SHA-224/256; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS SHA-3/SHAKE/cSHAKE batches | 🚧 Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS eight-message SHA-224/256 SIMD | 🚧 Opt-in AVX2; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS four-message SHA-512-family SIMD | 🚧 Opt-in AVX2; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS four-message SHA-3/SHAKE/cSHAKE SIMD | 🚧 Opt-in AVX2; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS ParallelHash/ParallelHashXOF | 🚧 Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS concurrent ParallelHash/ParallelHashXOF | 🚧 Opt-in four-worker AVX2; public output only; qualification pending | ❌ No |
-| Protected compiled TupleHash/TupleHashXOF sessions | 🚧 Implemented; qualification pending | ❌ No |
-| Protected SHA-2/SHA-3/SHAKE/cSHAKE SIMD batch sessions | 🚧 Implemented; qualification pending | ❌ No |
-| Protected byte storage (Linux GNU x86-64/little-endian AArch64) | 🚧 Implemented; qualification pending; not strict execution | ❌ No |
-| Joined single/group protected execution stacks (same Linux GNU targets) | 🚧 Implemented; qualification pending; not strict hashing | ❌ No |
-| Protected scalar SHA-2 sessions (same Linux GNU targets) | 🚧 Six named identities and general SHA-512/t; qualification pending | ❌ No |
-| Protected compiled SHA-2 hardware sessions (same Linux GNU targets) | 🚧 Explicit static kernels; qualification pending | ❌ No |
-| Protected scalar SHA-3/SHAKE/cSHAKE sessions (same Linux GNU targets) | 🚧 Eight identities with exact-bit output; qualification pending | ❌ No |
-| Protected compiled SHA-3/SHAKE/cSHAKE sessions (same Linux GNU targets) | 🚧 Explicit static AVX2/Arm kernels; qualification pending | ❌ No |
-| Protected scalar KMAC/KMACXOF sessions (same Linux GNU targets) | 🚧 Four identities, protected verification; qualification pending | ❌ No |
-| Protected compiled KMAC/KMACXOF sessions (same Linux GNU targets) | 🚧 Explicit static AVX2/Arm kernels and protected verification; qualification pending | ❌ No |
-| Protected scalar TupleHash/TupleHashXOF sessions (same Linux GNU targets) | 🚧 Four identities, exact item completion; qualification pending | ❌ No |
-| Hosted independent-message SHA-512-family batching | 🚧 Implemented; qualification pending | ❌ No |
-| Distinct hardened SHA-2 and Keccak hosted batch owners | 🚧 Implemented; qualification pending | ❌ No |
-| Hosted independent-message SHA-3/SHAKE/cSHAKE batching | 🚧 Implemented; qualification pending | ❌ No |
+| Apple Silicon resident byte/worker resources | ✅ Implemented; Default-off `macos_resident::memory`; guarded, locked, fork-excluded, clearing; no dump exclusion or automatic cryptographic admission | ❌ No |
+| Hosted hardened HMAC over SHA-2/SHA-3 | ✅ Implemented; Default-off `hmac-execution`; native M2 author tests; qualification pending | ❌ No |
+| Protected compiled HMAC over SHA-2/SHA-3 | ✅ Implemented; Default-off `strict-hmac-acceleration`; GNU/Linux, explicit target features, no fallback; qualification pending | ❌ No |
+| Protected scalar HMAC (supported GNU/Linux targets) | ✅ Implemented; Default-off `strict-hmac`; typed bounded requests and worker-side verification; qualification pending | ❌ No |
+| Apple Silicon resident HMAC over SHA-2/SHA-3 | ✅ Implemented; Default-off scalar or explicit Arm SHA2/SHA512/Keccak; no dump exclusion; qualification pending | ❌ No |
+| Apple Silicon resident SHA-2/SHA-3, KMAC/TupleHash | ✅ Implemented; Separate opt-in scalar/Arm resident/clearing APIs; no dump exclusion; qualification pending | ❌ No |
+| Apple Silicon resident SHA-2/general-t and SHA-3/SHAKE/cSHAKE | ✅ Implemented; Scalar or explicit Arm SHA2/SHA512/Keccak; bit-aware, bounded output/cancellation; no dump-exclusion guarantee; qualification pending | ❌ No |
+| Apple Silicon resident SHA-2/Keccak independent-message batches | ✅ Implemented; Default-off resident workspace/output; explicit portable or required NEON, no fallback; no dump exclusion; qualification pending | ❌ No |
+| Windows x64 VBS retained SHA-256 owner/session | ✅ Implemented; Bounded scalar API; development-tested; production qualification pending | ❌ No |
+| Windows x64 VBS streaming SHA-2 and general SHA-512/t | ✅ Implemented; Scalar version-six worker; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS SHA-224/256 SHA-NI sessions | ✅ Implemented; Explicit opt-in; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS streaming SHA-3/SHAKE/cSHAKE | ✅ Implemented; Scalar version-seven worker; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS SHA-3/SHAKE/cSHAKE AVX2 sessions | ✅ Implemented; Explicit opt-in; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS streaming KMAC/KMACXOF | ✅ Implemented; Scalar version-eight worker; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS KMAC/KMACXOF AVX2 sessions | ✅ Implemented; Explicit opt-in; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS streaming TupleHash/TupleHashXOF | ✅ Implemented; Scalar version-nine worker; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS TupleHash/TupleHashXOF AVX2 sessions | ✅ Implemented; Explicit opt-in; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS SHA-2 batches | ✅ Implemented; Scalar and opt-in sequential SHA-NI SHA-224/256; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS SHA-3/SHAKE/cSHAKE batches | ✅ Implemented; Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS eight-message SHA-224/256 SIMD | ✅ Implemented; Opt-in AVX2; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS four-message SHA-512-family SIMD | ✅ Implemented; Opt-in AVX2; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS four-message SHA-3/SHAKE/cSHAKE SIMD | ✅ Implemented; Opt-in AVX2; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS ParallelHash/ParallelHashXOF | ✅ Implemented; Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
+| Windows x64 VBS concurrent ParallelHash/ParallelHashXOF | ✅ Implemented; Opt-in four-worker AVX2; public output only; qualification pending | ❌ No |
+| Protected compiled TupleHash/TupleHashXOF sessions | ✅ Implemented; qualification pending | ❌ No |
+| Protected SHA-2/SHA-3/SHAKE/cSHAKE SIMD batch sessions | ✅ Implemented; qualification pending | ❌ No |
+| Protected byte storage (Linux GNU x86-64/little-endian AArch64) | ✅ Implemented; qualification pending; not strict execution | ❌ No |
+| Joined single/group protected execution stacks (same Linux GNU targets) | ✅ Implemented; qualification pending; not strict hashing | ❌ No |
+| Protected scalar SHA-2 sessions (same Linux GNU targets) | ✅ Implemented; Six named identities and general SHA-512/t; qualification pending | ❌ No |
+| Protected compiled SHA-2 hardware sessions (same Linux GNU targets) | ✅ Implemented; Explicit static kernels; qualification pending | ❌ No |
+| Protected scalar SHA-3/SHAKE/cSHAKE sessions (same Linux GNU targets) | ✅ Implemented; Eight identities with exact-bit output; qualification pending | ❌ No |
+| Protected compiled SHA-3/SHAKE/cSHAKE sessions (same Linux GNU targets) | ✅ Implemented; Explicit static AVX2/Arm kernels; qualification pending | ❌ No |
+| Protected scalar KMAC/KMACXOF sessions (same Linux GNU targets) | ✅ Implemented; Four identities, protected verification; qualification pending | ❌ No |
+| Protected compiled KMAC/KMACXOF sessions (same Linux GNU targets) | ✅ Implemented; Explicit static AVX2/Arm kernels and protected verification; qualification pending | ❌ No |
+| Protected scalar TupleHash/TupleHashXOF sessions (same Linux GNU targets) | ✅ Implemented; Four identities, exact item completion; qualification pending | ❌ No |
+| Hosted independent-message SHA-512-family batching | ✅ Implemented; qualification pending | ❌ No |
+| Distinct hardened SHA-2 and Keccak hosted batch owners | ✅ Implemented; qualification pending | ❌ No |
+| Hosted independent-message SHA-3/SHAKE/cSHAKE batching | ✅ Implemented; qualification pending | ❌ No |
 | Hosted independent-message SHA-224/256 batching | ✅ Opt-in, platform-limited | ❌ No |
 | Historical SHA-2 host observation and portable fallback | ✅ Implemented; candidate routes unadmitted | ❌ No |
 | Explicit hosted raw execution | ✅ Opt-in, qualifying AArch64 only | ❌ No |

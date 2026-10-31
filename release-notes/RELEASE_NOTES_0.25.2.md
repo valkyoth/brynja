@@ -1,6 +1,7 @@
 # v0.25.2 — HMAC public API usability acceptance
 
-Status: implementation in progress; not release-ready, tagged or published.
+Status: implementation and the recorded verification checkpoint completed;
+final GitHub and release authorization pending. Not tagged or published.
 
 This is the planned public checkpoint after the modern and isolated legacy HMAC
 development milestones. It does not authorize publication before cumulative
@@ -368,7 +369,7 @@ enforce those distinctions; image/navigation/link/example regressions reject
 1.90.0 and 1.99.1. Platform-gated examples remain bounded compilation/use
 examples, not a new native qualification campaign.
 
-## Remaining checkpoint work
+## Earlier checkpoint preparation
 
 Two supplied focused reviews of `v0.25.1..6313481f` report no Critical, High or
 Medium issue. Their non-blocking notes are handled without runtime changes:
@@ -433,3 +434,35 @@ exercise both modes and stages, mandatory publication coverage, explicit-run
 availability, compiler endpoint selection and refusal to silently approve a
 full run through an old receipt. No cryptographic implementation or dependency
 changed, and this policy update does not claim an independent retest.
+
+## Completed checkpoint handoff (2026-10-31)
+
+This update supersedes the earlier pending-review and campaign wording above.
+The cumulative pentest ledger records PASS, Retest PASS and zero open findings;
+the supplied reviewers' original execution limits remain unchanged.
+
+At `0f68ca13d1ab7a740d89fe75dc40feec3d85f96f`, the final foreground repository
+run completed with **106 current checks passed and 252 unchanged checks reused**.
+It includes package/API acceptance, workspace tests and documentation generation.
+Its local-only log, `repository-final-0f68ca13-20261031.log`, has SHA-256
+`2da63396942de46afe890fae17cc60038caf0221b6486e702c39da829e67fbc0`.
+The log and phase registry are retained in `brynja-evidence/registries/` under
+`v0252-checkpoint-20261028`, outside Cargo build storage.
+
+The reconciled compiler matrix (364 commands), ASan (51), Kani (14) and Miri
+(4,125 registered tasks) retain their original successful receipts and source,
+tool and platform identities. These are compatible historical results, not
+fresh executions at `0f68ca13`. Miri's bounded ParallelHash profile and original
+decomposition/reuse counts remain in the [coverage table](../docs/assurance/miri-coverage.md).
+All eight native-family validators also pass through the approved reuse paths.
+The owner-approved manifest digest is
+`913a2f47caf84000f61671c7643f12824642057e3ae9f142b92213ba3a4b7f6d`;
+it was activated in local protected configuration, not derived by a candidate
+workflow. Captures and independent-review claims were not rewritten.
+
+This handoff changes documentation only. GitHub must check the resulting
+candidate, and tag/publication authorization remains separate. This is not a
+claim that the entire tag gate has run or that packages have been uploaded.
+Before v0.26, the owner has requested a separate scoped-completion policy change:
+completed components stay closed unless a named change or finding justifies
+bounded verification. That gate redesign is not part of this checkpoint.

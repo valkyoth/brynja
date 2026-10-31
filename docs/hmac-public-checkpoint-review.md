@@ -1,7 +1,8 @@
 # v0.25.2 public checkpoint review handoff
 
 Status: focused and cumulative reviews received; KMAC remediation retest passed
-at `4ab30977`; release qualification pending. This document is not permission to
+at `4ab30977`; recorded verification checkpoint completed through `0f68ca13`.
+Final GitHub and release authorization remain pending. This document is not permission to
 publish. The implementation was prepared from
 `697b5ec2adedda6c92eeb914c7f5baee92e6e655`. Use the full candidate commit ID
 (`git rev-parse HEAD` in the clean review checkout) in the tester's report;
@@ -138,18 +139,17 @@ new boundary violations, regressions and misleading claims remain actionable.
 
 ## Remaining release work
 
-1. Freeze a candidate commit and obtain the cumulative independent review.
-   Record actual findings and retests in the
-   [pending ledger](../security/pentest/v0.25.2.md); do not inherit an earlier PASS.
-2. Reconcile current compiler/native/timing receipts with their exact inputs.
-   Reuse only where the existing proof permits it; collect genuinely changed
-   routes before claiming final qualification. Development logs alone do not
-   provide an external native approval.
-3. Complete the public checkpoint's verification and clean-tree package check.
-   The current planner selects repository, compiler matrix, ASan, Miri and Kani
-   with the extended public Miri profile. No new full sweep was launched during
-   this handoff preparation. This public-checkpoint requirement is distinct from
-   incremental verification at ordinary implementation milestones.
-4. Obtain green GitHub/CodeQL on the reviewed candidate, then explicit tag and
-   publication authorization. Publish selected dependencies before the facade;
-   the new exact versions are not assumed already available in the registry.
+The [ledger](../security/pentest/v0.25.2.md) now records the supplied cumulative
+review and clean remediation retest. The
+[completed checkpoint handoff](../release-notes/RELEASE_NOTES_0.25.2.md#completed-checkpoint-handoff-2026-10-31)
+records the final 106 passing repository checks, 252 reused checks, compatible
+compiler/Miri/Kani/ASan receipts and approved native reuse. Original evidence
+identities and qualification limits remain intact; no fresh independent review
+is claimed for author-tested tooling corrections.
+
+1. Obtain green GitHub/CodeQL for the final documentation/correction candidate.
+2. Complete the remaining release authorization checks; checkpoint completion
+   is not itself a claim that the full tag gate ran.
+3. Obtain explicit tag and publication authorization. Publish selected
+   dependencies before the facade; the new exact versions are not assumed
+   already available in the registry.

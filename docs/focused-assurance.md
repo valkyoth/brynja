@@ -5,6 +5,34 @@ implementation, dependency, fixture and verifier inputs. A short native workspac
 build/test/lint baseline and repository/release integrity checks remain mandatory.
 This is project-owned testing, not independent cryptographic verification.
 
+## Publication evidence handoff
+
+Before tagging, check the local evidence handoff without running tests or
+uploading packages:
+
+```sh
+python3 scripts/release/release_crates.py --version X.Y.Z --evidence-check \
+  --detached-receipts /absolute/path/to/phase-receipts.json
+```
+
+Supply `BRYNJA_NATIVE_REVIEW_SHA256` from the separately approved operator
+configuration (or pass that approved value as `--native-review-sha256`). Never
+calculate the expected digest from the candidate manifest. Keep the build
+environment used for the receipts, including `CARGO_BUILD_JOBS` where recorded.
+The registry and its original job directories must remain available; the
+publisher does not search for or manufacture evidence. The same explicit
+options work on the eventual publication command. Existing detached-receipt
+environment variables also remain supported.
+
+`--evidence-check` validates saved deep-verifier results and native artifact
+approval. It does not replace native source-equivalence checks, current
+repository checks, GitHub, or the complete release gate. Publication refuses
+unresolved Miri/Kani/ASan/compiler work instead of launching a refresh. Correct
+missing/mismatched handoff inputs first; a full-run approval cannot bypass this
+publication guard. No matching tag is needed for `--evidence-check`.
+
+## Change scope
+
 | Change | Expensive verification |
 | --- | --- |
 | HMAC source, fixture, or exact HMAC-only facade/hosted registration | HMAC; independent shared changes retain their own scope |

@@ -21,6 +21,50 @@ def approval_context(delta=None, phase='miri', receipt='a' * 64):
 
 
 class PhaseReceiptTests(unittest.TestCase):
+    def test_publication_requires_reused_verifiers_but_not_repository(self):
+        checks = [(entry('policy check'), 'run: current repository checks')]
+        phases.require_verifier_reuse(checks)
+        for phase in ('miri', 'asan', 'kani', 'matrix'):
+            task = entry('verifier', phase)
+            phases.require_verifier_reuse(checks + [(task, 'reuse: matching successful observation')])
+            with self.assertRaisesRegex(ValueError, phase + '=1'):
+                phases.require_verifier_reuse(checks + [(task, 'run: unresolved inputs')])
+            with self.assertRaisesRegex(ValueError, 'invalid publication'):
+                phases.require_verifier_reuse([(task, 'pass without evidence')])
+
+    def test_publication_refuses_missing_handoff_before_planning(self):
+        spec = importlib.util.spec_from_file_location('publication_runner', Path(__file__).with_name('run-verification.py'))
+        runner = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(runner)
+        for args, env in ((['runner', 'plan', '--check', '--require-reuse'], {}),
+                          (['runner', 'plan', '--check'], {'BRYNJA_RELEASE_PUBLISH_TAG': 'v0.25.2',
+                            'BRYNJA_FULL_VERIFICATION_APPROVAL': 'a' * 64})):
+            with patch.object(sys, 'argv', args), patch.dict(os.environ, env, clear=True), \
+                 patch.object(runner.plans, 'build') as build, patch.object(runner, 'execute') as execute, \
+                 contextlib.redirect_stderr(io.StringIO()):
+                self.assertEqual(runner.main(), 1)
+                build.assert_not_called()
+                execute.assert_not_called()
+
+    def test_publication_check_rejects_unresolved_receipts_even_with_approval(self):
+        spec = importlib.util.spec_from_file_location('publication_runner', Path(__file__).with_name('run-verification.py'))
+        runner = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(runner)
+        for reuse in (False, True):
+            checks = [(entry('miri fixture', 'miri'), 'reuse: compatible' if reuse else 'run: changed')]
+            contexts = [approval_context()]
+            with patch.object(sys, 'argv', ['runner', 'plan', '--check', '--require-reuse',
+                                           '--detached-receipts', '/tmp/registry']), \
+                 patch.dict(os.environ, {}, clear=True), \
+                 patch.object(runner.plans, 'build', return_value=plan()), \
+                 patch.object(phases, 'prepare', return_value=(contexts, checks)), \
+                 patch.object(runner.plans, 'authorize') as authorize, \
+                 patch.object(runner, 'execute') as execute, \
+                 contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+                self.assertEqual(runner.main(), 0 if reuse else 1)
+                self.assertEqual(authorize.call_count, int(reuse))
+                execute.assert_not_called()
+
     def test_new_matrix_receipt_resolves_only_its_own_completed_work(self):
         old = {**plan(blocked=True), 'full_phases': ['matrix']}
         current = {**plan(), 'full_phases': [], 'fingerprint': 'b' * 64}

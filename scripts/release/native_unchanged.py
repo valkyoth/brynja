@@ -21,13 +21,16 @@ def validate_inputs(root, capture, head, current, captured, digest, validation_c
                          validation_changes, dependency_profile)
         return 'unchanged'
     except ValueError:
-        tests = test_reuse.changes(root, capture, head, current, captured, family)
+        docs = test_reuse.readme_changes(root, capture, head, current, captured, family)
+        tests = test_reuse.changes(root, capture, head, current, captured, family,
+                                  include_readmes=bool(docs))
+        tests = {**docs, **tests}
         if tests:
             io.require(not (set(tests) & set(validation_changes or {})),
                        'overlapping native test and validation reviews')
             unchanged_inputs(root, capture, head, current, captured, digest,
                              {**(validation_changes or {}), **tests}, dependency_profile)
-            return 'reviewed-test-only'
+            return 'reviewed-test-and-readme' if docs else 'reviewed-test-only'
         if (family not in hmac_profile.FIXTURES or
                 hmac_profile.PREFIX + 'Cargo.toml' not in captured):
             raise
@@ -87,6 +90,9 @@ def validate_family(adapter, head):
         'unchanged': 'implementation/build inputs unchanged',
         'reviewed-test-only': 'production/build inputs unchanged; exact reviewed test decomposition; '
                               'original native test population only, NOT a run of changed tests',
+        'reviewed-test-and-readme': 'production/build inputs unchanged; exact reviewed README prose '
+                                    'and test-only changes; original native test population only, '
+                                    'NOT a run of changed tests',
         'inactive-hmac': 'original active inputs unchanged; exact inactive HMAC additions excluded; '
                          'NO HMAC qualification',
     }[mode]

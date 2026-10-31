@@ -10,7 +10,7 @@ import json
 import subprocess
 
 import verification_plan as plans
-from verification_tooling_review import REVIEW
+from verification_tooling_review import REVIEW, FOLLOWUP
 
 PHASES = frozenset({'miri', 'asan', 'kani', 'matrix'})
 SECURITY_METADATA = frozenset('security/' + name for name in (
@@ -109,11 +109,17 @@ ASan/Kani snapshot already contains it. Unknown baselines have no exception.
                         or not generated_only(root, base, before, after, changed)):
                     return set()
                 continue
-            if (not (name.startswith(('scripts/', 'docs/')) or name in SECURITY_METADATA)
+            documentation = (name == 'README.md' or name.startswith('crates/') and
+                             name.endswith('/README.md') or
+                             name.startswith(('release-notes/', 'security/pentest/')) and name.endswith('.md'))
+            if (not (name.startswith(('scripts/', 'docs/')) or name in SECURITY_METADATA or documentation)
                     or name.startswith('scripts/zeroization/')
                     or (name == 'scripts/assurance/check-kani.sh' and 'kani' in phases)):
                 return set()
-            row = policy['files'].get(name)
+            # The original review stays immutable. The follow-up lists exact
+            # README/report bytes, pin-only changes and publisher/test fixes;
+            # it does not exempt arbitrary documentation or repository scripts.
+            row = FOLLOWUP.get(name, policy['files'].get(name))
             if not row or after is None:
                 return set()
             old = hashlib.sha256(before).hexdigest() if before is not None else None

@@ -9,6 +9,13 @@ artifacts with the external owner approval before using this source proof.
 import native_review_io as io
 
 CAPTURE = 'ea97052babc657846851a303962eb1244477f5d6'
+README_BEFORE = 'cfdd9ac41c0af720bed099b6a241802236615395'
+README_AFTER = 'f15b943dccdb91a4fe5198bf84da52d8dcf57ea8'
+READMES = {
+    'md5-execution': ('brynja-legacy-md5', 'brynja-legacy-md5-std'),
+    'md5-hardened': ('brynja-legacy-md5', 'brynja-legacy-md5-std'),
+    'parallelhash-execution': ('brynja-hash-parallel', 'brynja-hash-parallel-std'),
+}
 # Test path, unchanged declaring parent, parent digest, old/new test digests.
 FAMILIES = {
     'kmac-execution': ('scripts/kmac/kmac_reviewed_hashes.py', '"', (
@@ -37,7 +44,33 @@ FAMILIES = {
 }
 
 
-def changes(root, capture, head, current, captured, family):
+def readme_changes(root, capture, head, current, captured, family):
+    """Only the four reviewed prose corrections; no general README exemption.
+
+    Executable examples are identical at these fixed review endpoints. Current
+    bytes must match the endpoint exactly, including line endings and mode.
+    Artifact approval remains the caller's mandatory independent prerequisite.
+    """
+    if capture != CAPTURE or family not in READMES:
+        return {}
+    result = {}
+    for crate in READMES[family]:
+        name = f'crates/{crate}/README.md'
+        if current.get(name) == captured.get(name):
+            continue
+        io.require(name in current and name in captured, 'README review input missing')
+        before = io.raw_blob(root, README_BEFORE, name)
+        after = io.raw_blob(root, README_AFTER, name)
+        io.require(io.raw_blob(root, capture, name) == before and
+                   io.raw_blob(root, head, name) == after, 'unreviewed README bytes: ' + name)
+        for revision in (capture, head, README_BEFORE, README_AFTER):
+            io.require(io.tree(root, revision)[name].startswith('100644 blob '),
+                       'README review mode changed')
+        result[name] = {'before': io.sha(before), 'after': io.sha(after)}
+    return result
+
+
+def changes(root, capture, head, current, captured, family, *, include_readmes=False):
     """Return exact reviewed raw-byte pairs, or no exception for other captures.
 
 The caller still checks the entire source/build closure, additions/deletions,
@@ -66,6 +99,13 @@ ancestry, artifact identity, original results and approved validation deltas.
         io.require(expected_register.count(old) == 1, 'test review pin missing/ambiguous')
         expected_register = expected_register.replace(old, new, 1)
         result[name] = {'before': before, 'after': after}
+    if include_readmes:
+        for name, pair in readme_changes(root, capture, head, current, captured, family).items():
+            old = f'{quote}{name}{quote}: {quote}{pair["before"]}{quote}'.encode()
+            new = f'{quote}{name}{quote}: {quote}{pair["after"]}{quote}'.encode()
+            io.require(expected_register.count(old) == 1, 'README review pin missing/ambiguous')
+            expected_register = expected_register.replace(old, new, 1)
+            result[name] = pair
     new_register = io.raw_blob(root, head, register)
     io.require(new_register == expected_register,
                'test review cannot change executable policy or other pins')

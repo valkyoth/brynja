@@ -42,6 +42,8 @@ def main() -> int:
     parser.add_argument("--approve-full")
     parser.add_argument("--ci", action="store_true", help="repository diagnostics only; never authorize release verification")
     parser.add_argument("--check", action="store_true", help="plan only; never run tests")
+    parser.add_argument('--require-reuse', action='store_true',
+                        help='plan only: require completed deep-verifier evidence; never start a refresh')
     parser.add_argument('--release-required', action='store_true',
                         help='Miri tag gate: development omission is not a test pass')
     parser.add_argument("--detached-job", type=Path)
@@ -54,10 +56,18 @@ def main() -> int:
         parser.error('--release-required is only valid for the Miri release gate')
     if args.ci and (args.phase not in ("plan", "repository") or args.approve_full):
         parser.error("--ci is only for plan/repository diagnostics, without release approval")
+    if args.require_reuse and (args.phase != 'plan' or args.ci):
+        parser.error('--require-reuse is only valid for the release plan')
     try:
         job = args.detached_job or os.environ.get("BRYNJA_DETACHED_JOB")
         receipt = args.detached_receipt or os.environ.get("BRYNJA_DETACHED_RECEIPT")
         registry = args.detached_receipts or os.environ.get("BRYNJA_DETACHED_RECEIPTS")
+        publication_check = args.require_reuse or (
+            args.phase == 'plan' and bool(os.environ.get('BRYNJA_RELEASE_PUBLISH_TAG')))
+        if publication_check and not (registry or job and receipt):
+            raise ValueError('saved publication evidence missing: supply BRYNJA_DETACHED_RECEIPTS '
+                             '(or --detached-receipts), or the existing detached job/receipt pair. '
+                             'Do not authorize a new sweep to fix a missing handoff.')
         if registry and (job or receipt):
             raise ValueError("choose a phase registry or a single detached receipt, not both")
         if bool(job) != bool(receipt):
@@ -78,6 +88,8 @@ def main() -> int:
             requested = extra[1:] if extra and extra[0] == '--' else extra
             contexts, decisions = phase_receipts.prepare(
                 Path(registry), plans.ROOT, plan, args.phase, shlex.join(requested) if requested else None)
+            if publication_check:
+                phase_receipts.require_verifier_reuse(decisions)
             for context in contexts:
                 print(plans.explain(context['plan']), flush=True)
             authorization = phase_receipts.authorization_plan(plan, contexts, decisions)
@@ -103,6 +115,9 @@ def main() -> int:
             requested = extra[1:] if extra and extra[0] == '--' else extra
             entries = carry.required(context, args.phase, shlex.join(requested) if requested else None)
             decisions = [(entry, carry.disposition(entry, context)) for entry in entries]
+            if publication_check:
+                from phase_receipts import require_verifier_reuse
+                require_verifier_reuse(decisions)
             for entry, reason in decisions:
                 print(reason.upper() + ': ' + entry['command'], flush=True)
             plans.authorize(delta, args.approve_full or os.environ.get('BRYNJA_FULL_VERIFICATION_APPROVAL') or None)

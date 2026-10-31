@@ -92,6 +92,39 @@ class Checkpoints(unittest.TestCase):
         self.assertEqual(run.call_args_list[0].args[0], ['scripts/tag_gate.sh', 'v0.25.2'])
         self.assertEqual(run.call_args_list[0].kwargs['extra_env'], {'BRYNJA_RELEASE_PUBLISH_TAG': 'v0.25.2'})
 
+    def test_explicit_evidence_inputs_reach_gate_without_granting_approval(self):
+        environment = {'BRYNJA_DETACHED_RECEIPTS': '/saved/phase-receipts.json',
+                       'BRYNJA_NATIVE_REVIEW_SHA256': 'a' * 64}
+        with patch.object(publisher, 'run') as run:
+            publisher.run_preflight('0.25.2', dry_run=False, release_tag_at_head=True,
+                                    evidence_environment=environment)
+        self.assertEqual(run.call_args_list[0].kwargs['extra_env'],
+                         {**environment, 'BRYNJA_RELEASE_PUBLISH_TAG': 'v0.25.2'})
+        self.assertNotIn('BRYNJA_FULL_VERIFICATION_APPROVAL', environment)
+
+    def test_evidence_check_never_tags_tests_or_publishes(self):
+        environment = {'BRYNJA_NATIVE_REVIEW_SHA256': 'a' * 64}
+        with patch.object(publisher, 'run') as run:
+            publisher.check_evidence(environment)
+        self.assertEqual([call.args[0] for call in run.call_args_list], [
+            ['python3', 'scripts/release/native_evidence_approval.py'],
+            ['python3', 'scripts/release/run-verification.py', 'plan', '--check', '--require-reuse']])
+        self.assertTrue(all(call.kwargs['extra_env'] == environment for call in run.call_args_list))
+        with patch.object(publisher, 'run', side_effect=RuntimeError('invalid native approval')) as run:
+            with self.assertRaisesRegex(RuntimeError, 'invalid native approval'):
+                publisher.check_evidence(environment)
+            self.assertEqual(run.call_count, 1)
+
+    def test_no_automatic_native_digest_or_registry_discovery(self):
+        self.assertEqual(publisher.evidence_environment(None, None), {})
+        self.assertEqual(publisher.evidence_environment(None, 'b' * 64),
+                         {'BRYNJA_NATIVE_REVIEW_SHA256': 'b' * 64})
+        for bad in ('', 'b' * 63, 'B' * 64, 'compute-from-checkout'):
+            with self.assertRaises(RuntimeError):
+                publisher.evidence_environment(None, bad)
+        with self.assertRaises(OSError):
+            publisher.evidence_environment('/nonexistent/brynja-registry.json', None)
+
 
 def run_tests():
     result = unittest.TextTestRunner().run(unittest.defaultTestLoader.loadTestsFromTestCase(Checkpoints))

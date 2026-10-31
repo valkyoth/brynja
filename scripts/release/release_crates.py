@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import re
 import subprocess
 import sys
 import time
@@ -95,6 +96,7 @@ def run_preflight(
     *,
     dry_run: bool,
     release_tag_at_head: bool,
+    evidence_environment: dict[str, str] | None = None,
 ) -> None:
     gate = gate_path(version)
     environment = (
@@ -102,6 +104,8 @@ def run_preflight(
         if release_tag_at_head
         else None
     )
+    if evidence_environment:
+        environment = {**(environment or {}), **evidence_environment}
     if gate is None:
         run(
             ["scripts/tag_gate.sh", f"v{version}"],
@@ -116,6 +120,29 @@ def run_preflight(
         )
     run(["cargo", "deny", "check"], dry_run=dry_run)
     run(["cargo", "audit", "--deny", "warnings"], dry_run=dry_run)
+
+
+def evidence_environment(registry: str | None, approval: str | None) -> dict[str, str]:
+    """Explicit operator inputs; never discover receipts or derive approval."""
+    result = {}
+    if registry is not None:
+        path = Path(registry).expanduser().resolve(strict=True)
+        if not path.is_file():
+            raise RuntimeError("--detached-receipts must name the saved phase registry")
+        result["BRYNJA_DETACHED_RECEIPTS"] = str(path)
+    if approval is not None:
+        if re.fullmatch('[0-9a-f]{64}', approval) is None:
+            raise RuntimeError("--native-review-sha256 requires the externally approved SHA-256")
+        result["BRYNJA_NATIVE_REVIEW_SHA256"] = approval
+    return result
+
+
+def check_evidence(environment: dict[str, str]) -> None:
+    """Read-only handoff check, available BEFORE tagging; never run/publish."""
+    run(["python3", "scripts/release/native_evidence_approval.py"],
+        dry_run=False, extra_env=environment)
+    run(["python3", "scripts/release/run-verification.py", "plan", "--check", "--require-reuse"],
+        dry_run=False, extra_env=environment)
 
 
 def selected_steps(start_at: str | None, steps: tuple[str, ...]) -> tuple[str, ...]:
@@ -228,6 +255,20 @@ def main() -> int:
         help="Print the guarded publication sequence without publishing.",
     )
     mode.add_argument(
+        "--evidence-check",
+        action="store_true",
+        help="Validate saved receipts and native approval before tagging; no tests or uploads."
+             " Native source-equivalence and current repository checks remain separate.",
+    )
+    parser.add_argument(
+        "--detached-receipts",
+        help="Saved phase-receipt registry; alternatively set BRYNJA_DETACHED_RECEIPTS.",
+    )
+    parser.add_argument(
+        "--native-review-sha256",
+        help="Independently approved native manifest digest; alternatively set BRYNJA_NATIVE_REVIEW_SHA256.",
+    )
+    mode.add_argument(
         "--package-check",
         action="store_true",
         help=(
@@ -257,6 +298,12 @@ def main() -> int:
                 f"release plan {version} is valid for stage={plan['stage']} "
                 f"with {len(steps)} selected crate(s)"
             )
+            return 0
+        environment = evidence_environment(args.detached_receipts, args.native_review_sha256)
+        if args.evidence_check:
+            require_clean_tree(dry_run=False)
+            check_evidence(environment)
+            print("Saved verifier evidence and native artifact approval validated; no tests or uploads run.")
             return 0
         if args.package_check:
             require_clean_tree(dry_run=False)
@@ -289,6 +336,7 @@ def main() -> int:
             version,
             dry_run=args.dry_run,
             release_tag_at_head=tag_at_head,
+            evidence_environment=environment,
         )
         for index, package in enumerate(steps):
             publish(package, dry_run=args.dry_run)

@@ -15,6 +15,25 @@ class ToolDrift(ValueError):
     """Valid historical evidence needs a fresh run with today's selected tools."""
 
 
+def require_verifier_reuse(decisions: list) -> None:
+    """Publication consumes completed qualification; it never starts a refresh.
+
+    Repository checks still run at the candidate. This is not a full gate PASS.
+    Every selected deep-verifier command must have an actual compatible result.
+    """
+    pending = {}
+    for entry, reason in decisions:
+        if entry['phase'] not in catalog.PHASES or not reason.startswith(('reuse:', 'run:')):
+            raise ValueError('invalid publication evidence decision')
+        if entry['phase'] != 'repository' and reason.startswith('run:'):
+            pending[entry['phase']] = pending.get(entry['phase'], 0) + 1
+    if pending:
+        counts = ', '.join(f'{phase}={count}' for phase, count in sorted(pending.items()))
+        raise ValueError('publication evidence unresolved (' + counts + '); no tests or uploads started. '
+                         'Reconcile the saved receipts or finish the specifically affected checks separately; '
+                         '--approve-full does not bypass this publication guard.')
+
+
 def compiler_keys(manifest: dict, root: Path) -> set[str]:
     """Resolve only understood launchers; opaque scripts keep the full inventory.
 

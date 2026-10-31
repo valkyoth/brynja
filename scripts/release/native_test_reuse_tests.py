@@ -3,6 +3,7 @@ import contextlib
 import io as output
 import json
 import os
+import re
 from pathlib import Path
 import tempfile
 from types import SimpleNamespace
@@ -229,3 +230,47 @@ class RealTestDecompositionPins(unittest.TestCase):
                             io.raw_blob(io.ROOT, later, register))
         with self.assertRaisesRegex(ValueError, 'test review cannot change executable policy or other pins'):
             self.changes_at(family, later)
+
+    def test_exact_readme_supplement_preserves_all_executable_examples(self):
+        for family, crates in tests.READMES.items():
+            names = {f'crates/{crate}/README.md' for crate in crates}
+            before = {n: io.sha(io.raw_blob(io.ROOT, tests.CAPTURE, n)) for n in names}
+            after = {n: io.sha(io.raw_blob(io.ROOT, tests.README_AFTER, n)) for n in names}
+            result = tests.readme_changes(io.ROOT, tests.CAPTURE, tests.README_AFTER,
+                                         after, before, family)
+            self.assertEqual(set(result), names)
+            for name in names:
+                old = io.raw_blob(io.ROOT, tests.README_BEFORE, name)
+                new = io.raw_blob(io.ROOT, tests.README_AFTER, name)
+                fences = rb'(?ms)^```[^\n]*\n.*?^```[^\n]*$'
+                self.assertEqual(re.findall(fences, old), re.findall(fences, new))
+                self.assertEqual(result[name], {'before': before[name], 'after': after[name]})
+                self.assertEqual(io.sha(old), before[name])
+            self.assertEqual(tests.readme_changes(io.ROOT, 'f' * 40, tests.README_AFTER,
+                                                 after, before, family), {})
+
+    def test_readme_changes_and_combined_pin_policy_remain_bounded(self):
+        family = 'parallelhash-execution'
+        register, _, rows = tests.FAMILIES[family]
+        names = {register} | {n for row in rows for n in row[:2]} | {
+            f'crates/{crate}/README.md' for crate in tests.READMES[family]}
+        before = {n: io.sha(io.raw_blob(io.ROOT, tests.CAPTURE, n)) for n in names}
+        after = {n: io.sha(io.raw_blob(io.ROOT, tests.README_AFTER, n)) for n in names}
+        result = tests.changes(io.ROOT, tests.CAPTURE, tests.README_AFTER, after, before,
+                               family, include_readmes=True)
+        self.assertEqual(len(result), 5)  # two tests, two READMEs, one exact pin module
+        raw_blob = io.raw_blob
+        candidate = 'e' * 40
+        def mutate(name, suffix):
+            def changed(root, revision, path):
+                data = raw_blob(root, tests.README_AFTER if revision == candidate else revision, path)
+                return data + suffix if revision == candidate and path == name else data
+            return changed
+        for name in names:
+            with self.subTest(path=name), patch.object(io, 'raw_blob', side_effect=mutate(name, b'\r\n')):
+                # Tree identity is held constant so raw-byte checking, not a
+                # missing fixture commit, must reject this mutation.
+                with patch.object(io, 'tree', return_value=io.tree(io.ROOT, tests.README_AFTER)):
+                    with self.assertRaises(ValueError):
+                        tests.changes(io.ROOT, tests.CAPTURE, candidate, after, before,
+                                      family, include_readmes=True)

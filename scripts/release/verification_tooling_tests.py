@@ -56,6 +56,41 @@ class ToolingReuseTests(unittest.TestCase):
         self.profile['bases'][self.base] = ['repository']
         self.assertFalse(self.prove())
 
+    def test_followup_is_exact_and_does_not_replace_original_review(self):
+        original = copy.deepcopy(self.profile)
+        path = self.root / self.driver
+        newer = b'follow-up checker correction\n'
+        row = {**self.profile['files'][self.driver], 'after': hashlib.sha256(newer).hexdigest()}
+        with patch.dict(tooling.FOLLOWUP, {self.driver: row}):
+            self.assertFalse(self.prove())
+            self.write(self.driver, newer)
+            self.assertEqual(self.prove(), tooling.PHASES)
+            self.write(self.driver, newer.replace(b'\n', b'\r\n'))
+            self.assertFalse(self.prove())
+            self.write(self.driver, newer)
+            path.chmod(0o755)
+            self.assertFalse(self.prove())
+        self.assertEqual(self.profile, original)
+
+    def test_readme_followup_is_not_a_general_documentation_exemption(self):
+        name = 'crates/example/README.md'
+        self.write(name, b'new reviewed prose\n')
+        row = {'before': [None], 'after': hashlib.sha256(b'new reviewed prose\n').hexdigest(),
+               'mode': '100644'}
+        with patch.dict(tooling.FOLLOWUP, {name: row}):
+            self.assertEqual(self.prove(), tooling.PHASES)
+            self.write(name, b'new reviewed prose\n```rust\nunsafe { change() }\n```\n')
+            self.assertFalse(self.prove())
+        self.assertFalse(self.prove())
+        (self.root / name).unlink()
+        for name in ('crates/example/src/lib.rs', 'Cargo.toml',
+                     'scripts/zeroization/run-miri-task.py', 'scripts/assurance/check-kani.sh',
+                     'security/native-reuse/evidence-approval.json'):
+            self.write(name, b'new reviewed prose\n')
+            with patch.dict(tooling.FOLLOWUP, {name: row}):
+                self.assertFalse(self.prove())
+            (self.root / name).unlink()
+
     def test_no_production_build_driver_or_authority_exemption(self):
         for name in ('crates/brynja-hash-sha3/src/lib.rs', 'Cargo.toml', 'Cargo.lock',
                      'assurance/sha3-execution/src/main.rs', 'assurance/policy.toml',

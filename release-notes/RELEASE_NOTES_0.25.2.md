@@ -466,3 +466,22 @@ claim that the entire tag gate has run or that packages have been uploaded.
 Before v0.26, the owner has requested a separate scoped-completion policy change:
 completed components stay closed unless a named change or finding justifies
 bounded verification. That gate redesign is not part of this checkpoint.
+
+### Publication handoff correction
+
+The initial `v0.25.2` tag was withdrawn before any crates.io upload after the
+publisher correctly stopped on missing local evidence context. The final
+README and test-fixture corrections also needed explicit source-equivalence
+reconciliation. The original tag object and all capture/receipt artifacts are
+preserved; withdrawing the tag does not revoke the recorded test results.
+
+The publisher now offers `--evidence-check` before tagging and explicit receipt
+and externally approved digest options. Its release-plan preflight refuses
+unresolved deep-verifier work rather than starting another campaign. The
+follow-up review binds the exact documentation, pin and tooling changes without
+altering the original review endpoints. Four native-input README corrections
+preserve executable examples; ParallelHash's README pin changes compose with
+the existing exact test-decomposition proof. These are retained original
+observations, not fresh captures or an additional independent retest. Current
+repository/GitHub checks and authorization for the replacement tag remain
+required.

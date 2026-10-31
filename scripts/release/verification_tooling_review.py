@@ -3,6 +3,10 @@
 # endpoints. These additional exact pairs never waive repository checks,
 # missing command evidence, changed tools, production inputs or native approval.
 FOLLOWUP = {
+    # Classifier-only correction: existing archive entries must not be treated
+    # as a new HMAC integration when only README digest bindings change.
+    "scripts/zeroization/scope_hmac.py": {"before":["a4544f3796be87d48913f09f340152900b8a7251bade539f30c46d8ef45fd7d2"],"after":"3738d6fa44b68f027b166a2b05d78c240f4ee20d123f54855e2293f35e3540a2","mode":"100644"},
+    "scripts/release/verification_carry_forward_tests.py": {"before":["4a0a0fad4a44fb96402e5f80be99618f4d67da43182450dcfba28deaef38e774"],"after":"01f85ad4de4d50df0f37cd396e8e035dd2801d8a6bb420ac46309281533a631e","mode":"100644"},
     "README.md": {"before":["67750815a8284ba657c0e39cdf4cf4ae3405be8d4a75ce8035f5e69e766ded6e"],"after":"9117231c13e06a024b858b8dd12f34facadaa65a69014bced0555705d2d7ab85","mode":"100644"},
     "crates/brynja-crypto-cpu-std/README.md": {"before":["c90c332d6e05dc7e244c4c696c17a3f9ffbe3a7b6a86816ba6ef44a21ef15c82"],"after":"c958982827025ba25cbf681d74390fcafed579d1977f8d004900d390b33ae38d","mode":"100644"},
     "crates/brynja-crypto-cpu/README.md": {"before":["286c9b92dd7f01049fa4a0ffed20d28827b3d61aa069fb5f4750bf6f2e0de857"],"after":"d941b546847a936c541549bf11db1eb6ff485e80119814a8b5fdf4a2a787fe89","mode":"100644"},

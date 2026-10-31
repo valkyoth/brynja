@@ -226,6 +226,11 @@ def public_archive_only(path, before, after):
     additions = [b'    ("brynja-mac-hmac", "0.1.0", ("src/lib.rs",)),\n']
     if path.endswith('sha256_public_api.py'):
         additions.append(b'brynja-mac-hmac = { path = "crates/brynja-mac-hmac", version = "=0.1.0" }\n')
+    # An already-present HMAC entry is not a new integration. Without an
+    # actual entry delta, let the existing version/digest metadata classifier
+    # handle the edit; otherwise a README hash refresh reopens all HMAC work.
+    if not any(before.count(item) != after.count(item) for item in additions):
+        return False
     for raw in (before, after):
         for addition in additions:
             if raw.count(addition) > 1:

@@ -113,7 +113,10 @@ ASan/Kani snapshot already contains it. Unknown baselines have no exception.
                              name.endswith('/README.md') or
                              name.startswith(('release-notes/', 'security/pentest/')) and name.endswith('.md'))
             if (not (name.startswith(('scripts/', 'docs/')) or name in SECURITY_METADATA or documentation)
-                    or name.startswith('scripts/zeroization/')
+                    # Only this scope classifier may use an exact reviewed
+                    # byte pair. Miri task definitions/execution stay excluded.
+                    or (name.startswith('scripts/zeroization/')
+                        and name != 'scripts/zeroization/scope_hmac.py')
                     or (name == 'scripts/assurance/check-kani.sh' and 'kani' in phases)):
                 return set()
             # The original review stays immutable. The follow-up lists exact

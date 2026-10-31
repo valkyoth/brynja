@@ -32,6 +32,59 @@ class CarryForwardTests(unittest.TestCase):
         return {'plan': plan(groups, blocked), 'manifest': {'commands': entries},
                 'release_plan': plan(plans.scope.GROUPS), 'public_checkpoint': False}
 
+    def test_readme_rebinding_does_not_reopen_completed_hmac(self):
+        from review_metadata_tests import selected
+        import scope_hmac
+        base = '41c3287cbf44b661354e47f1d059dc2119a45bbd'
+        after = 'f15b943dccdb91a4fe5198bf84da52d8dcf57ea8'
+        paths = ('scripts/sha2/sha2_public_api.py', 'scripts/sha3/sha3_public_api.py')
+        changes = {path: tuple(plans.inputs.snapshot(plans.ROOT, rev, path)[0]
+                               for rev in (base, after)) for path in paths}
+        manifest = b'[package]\nversion="0.25.2"\n'
+        sources = {'crates/brynja/Cargo.toml': (manifest, manifest)}
+        for path, (old, new) in changes.items():
+            self.assertNotEqual(old, new)
+            self.assertTrue(plans.inputs.python_bindings_only(old, new))
+            self.assertFalse(scope_hmac.public_archive_only(path, old, new))
+        self.assertEqual(selected(changes, sources), (False, ()))
+        command = entry('python3 scripts/hmac/test-hmac-hosted-cleanup.py')
+        context = self.context([command], selected(changes, sources)[1])
+        context['plan']['evidence'] = {'changed_paths': list(changes)}
+        self.assertEqual(carry.disposition(command, context), 'reuse: unchanged implementation inputs')
+        # Classification does not manufacture successful evidence or exempt
+        # current policy tests, new checkpoints, tools, drivers or assertions.
+        context['manifest']['commands'] = []
+        self.assertEqual(carry.disposition(command, context), 'run: no matching successful command evidence')
+        context['manifest']['commands'] = [command]
+        for baseline in ('python3 scripts/release/test-detached-verification.py',
+                         'python3 scripts/zeroization/test-scope-inputs.py'):
+            self.assertEqual(carry.disposition(entry(baseline), context),
+                             'run: current repository/tooling baseline')
+        context['public_checkpoint'] = True
+        self.assertEqual(carry.disposition(command, context), 'run: new full assurance checkpoint')
+        context['public_checkpoint'] = False
+        context['tool_drift'] = {'repository': True}
+        self.assertEqual(carry.disposition(command, context), 'run: selected phase compiler/verifier changed')
+        context.pop('tool_drift')
+        for path in ('crates/brynja-mac-hmac/src/engine.rs',
+                     'crates/brynja-hash-sha2/src/lib.rs',
+                     'assurance/hmac-hosted-cleanup/src/lib.rs',
+                     'scripts/hmac/test-hmac-hosted-cleanup.py',
+                     'scripts/hmac/hmac_hosted_checkpoint_tests.py',
+                     'Cargo.toml', '.cargo/config.toml'):
+            changed = {**changes, path: (b'old', b'new')}
+            full, groups = selected(changed, sources)
+            altered = self.context([command], groups, full)
+            altered['plan']['evidence'] = {'changed_paths': list(changed)}
+            self.assertTrue(carry.disposition(command, altered).startswith('run:'), path)
+        addition = b'    ("brynja-mac-hmac", "0.1.0", ("src/lib.rs",)),\n'
+        for path, (_, new) in changes.items():
+            self.assertEqual(new.count(addition), 1)
+            for left, right in ((new.replace(addition, b''), new),
+                                (new, new.replace(addition, b''))):
+                self.assertEqual(selected({path: (left, right)}, sources), (False, ('hmac',)))
+            self.assertIn('hmac', selected({path: (new, new + b'changed_assertion()\n')}, sources)[1])
+
     def test_baseline_always_runs_and_missing_or_changed_commands_never_reuse(self):
         sha2 = entry('python3 scripts/sha2/check-sha2-execution.py')
         baseline = entry('python3 scripts/release/test-detached-verification.py')

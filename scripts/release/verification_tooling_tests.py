@@ -105,6 +105,22 @@ class ToolingReuseTests(unittest.TestCase):
                 self.assertFalse(self.prove())
                 (self.root / name).unlink()
 
+    def test_scope_classifier_needs_exact_review_not_directory_exemption(self):
+        name = 'scripts/zeroization/scope_hmac.py'
+        raw = b'# reviewed classification correction\n'
+        row = {'before': [None], 'after': hashlib.sha256(raw).hexdigest(), 'mode': '100644'}
+        self.write(name, raw)
+        self.assertFalse(self.prove())
+        with patch.dict(tooling.FOLLOWUP, {name: row}):
+            self.assertEqual(self.prove(), tooling.PHASES)
+            self.write(name, raw + b'# unreviewed edit\n')
+            self.assertFalse(self.prove())
+            self.write(name, raw.replace(b'\n', b'\r\n'))
+            self.assertFalse(self.prove())
+            self.write(name, raw)
+            (self.root / name).chmod(0o755)
+            self.assertFalse(self.prove())
+
     def test_bytes_removal_mode_and_symlinks_reject(self):
         path = self.root / self.driver
         for raw in (b'corrected checker\r\n', b'new checker\n', b''):

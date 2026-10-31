@@ -30,6 +30,11 @@ allocation-free `no_std`; this adapter is never a modern-facade dependency.
 
 ## Cryptography Verification Status
 
+Project test results and their exact scope are recorded in the
+[completed project checkpoint](https://github.com/valkyoth/brynja/blob/main/release-notes/RELEASE_NOTES_0.25.2.md#completed-checkpoint-handoff-2026-10-31)
+and its linked native/retest records. These are project assurance results,
+not independent cryptographic certification or coverage of every deployment.
+
 ✅ marks an implemented API within the stated feature/platform scope, not
 independent review, certification or unrestricted deployment approval.
 Qualification limits remain separate from implementation completion.
@@ -43,19 +48,19 @@ required on GNU/Linux x86-64 or little-endian AArch64 respectively. Deployment
 must preserve support throughout execution. Ineligible workloads reject;
 scalar tails and padding use clearing owners on protected stacks. Budget and
 cancellation failures preserve reuse; backend failure or panic quarantines.
-Compiler/platform qualification and independent retest remain pending.
+Project tests are recorded separately from independent cryptographic review.
 
 No named independent reviewer has verified this component. Passing tests, CI,
 Kani, Miri, fuzzing or a pentest is not independent cryptographic verification.
 
 | Algorithm | Implemented | Independently verified |
 | --- | --- | --- |
-| Protected compiled MD5 SIMD batches | ✅ Implemented; qualification pending | ❌ No |
+| Protected compiled MD5 SIMD batches | ✅ Implemented | ❌ No |
 | MD5 | ✅ Fully implemented | ❌ Not independently verified |
 | Ordinary hosted batch SIMD | ✅ Implemented; native observations recorded; independent qualification not claimed | ❌ No |
 | Hardened hosted batch SIMD | ✅ Implemented; native observations recorded; independent qualification not claimed | ❌ No |
-| Opt-in protected scalar MD5 session | ✅ Implemented; qualification pending | ❌ No |
-| Apple Silicon resident scalar/NEON MD5 sessions (no dump exclusion) | ✅ Implemented; qualification pending | ❌ No |
+| Opt-in protected scalar MD5 session | ✅ Implemented | ❌ No |
+| Apple Silicon resident scalar/NEON MD5 sessions (no dump exclusion) | ✅ Implemented | ❌ No |
 
 ## Apple Silicon resident compatibility profile
 
@@ -71,7 +76,7 @@ eight ordered slots, required NEON vector work, clearing scalar tails/padding,
 explicit compression budget and cancellation. Build-wide `+neon` and compatible
 deployment throughout execution are required; a Cargo feature is not instruction
 admission. Ineligible workloads reject, not silently fall back. Batch shape and
-work reports remain public. Independent review/qualification remain pending.
+work reports remain public. Independent cryptographic certification is not claimed.
 
 ```rust
 # #[cfg(feature = "macos-resident")] {
@@ -113,7 +118,7 @@ does not select SIMD and does not repair MD5's collision weakness.
 
 See the [compiled Session example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-legacy-md5-std/src/strict_execution/mod.rs)
 and [strict-profile limitations](https://github.com/valkyoth/brynja/blob/main/docs/strict-hardening-profile.md).
-Native/platform qualification and independent retest remain pending. Inputs,
+The recorded native tests do not cover every deployment. Inputs,
 caller copies, abort and whole-process/register/interruption erasure are not
 covered by this resource profile.
 

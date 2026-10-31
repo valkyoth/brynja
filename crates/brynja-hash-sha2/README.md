@@ -30,22 +30,27 @@ SHA-512, SHA-512/224 and SHA-512/256, plus optional general SHA-512/t.
 
 ## Cryptography Verification Status
 
+Project test results and their exact scope are recorded in the
+[completed project checkpoint](https://github.com/valkyoth/brynja/blob/main/release-notes/RELEASE_NOTES_0.25.2.md#completed-checkpoint-handoff-2026-10-31)
+and its linked native/retest records. These are project assurance results,
+not independent cryptographic certification or coverage of every deployment.
+
 ✅ marks an implemented API within the stated feature/platform scope, not
 independent review, certification or unrestricted deployment approval.
 Qualification limits remain separate from implementation completion.
 
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| Hardened SHA-224/256 multibuffer owners and typed secret output | ✅ Implemented; qualification pending | ❌ No |
-| Hardened SHA-512-family multibuffer owners with exact general-t identity | ✅ Implemented; qualification pending | ❌ No |
-| Independent-message SHA-512-family AVX2 / NEON batching | ✅ Implemented; qualification pending | ❌ No |
+| Hardened SHA-224/256 multibuffer owners and typed secret output | ✅ Implemented | ❌ No |
+| Hardened SHA-512-family multibuffer owners with exact general-t identity | ✅ Implemented | ❌ No |
+| Independent-message SHA-512-family AVX2 / NEON batching | ✅ Implemented | ❌ No |
 | Independent-message SHA-224/256 AVX2 / NEON batching | ✅ Opt-in, platform-limited | ❌ No |
 | SHA-2 (all six identities, ordinary and hardened byte and arbitrary-bit APIs) | ✅ Fully implemented | ❌ Not independently verified |
-| Scoped in-place hardened states for six named identities and general SHA-512/t | ✅ Implemented; ownership checks implemented, residue qualification pending | ❌ No |
-| Scoped named/general-t SHA-2 with explicit portable/static/hosted execution | ✅ Implemented; opt-in, platform-limited; residue qualification pending | ❌ No |
+| Scoped in-place hardened states for six named identities and general SHA-512/t | ✅ Implemented; ownership checks implemented; owned-storage cleanup, not caller-copy erasure | ❌ No |
+| Scoped named/general-t SHA-2 with explicit portable/static/hosted execution | ✅ Implemented; opt-in, platform-limited; owned-storage cleanup, not caller-copy erasure | ❌ No |
 | General SHA-512/t, all 510 valid parameters | ✅ Fully implemented; opt-in | ❌ No |
 | Ordinary and hardened CPU execution | ✅ Opt-in, platform-limited | ❌ No |
-| Dedicated x86 SHA-512-family execution (`sha512,avx2,avx`) | ✅ Implemented; SDE tested, qualification pending | ❌ No |
+| Dedicated x86 SHA-512-family execution (`sha512,avx2,avx`) | ✅ Implemented; SDE tested; dedicated silicon not tested | ❌ No |
 
 These implementations follow FIPS 180-4. That algorithm standard is not
 FIPS 140-3 validation: Brynja has no validated module or named independent
@@ -208,7 +213,7 @@ outputs retain the exact parameter and canonical final-byte mask; general IV
 derivation is charged to the finite work budget. The module rustdoc includes a
 runnable example. Hosted adapters are available through the separate
 `brynja-crypto-cpu-std/sha256-hardened-batch` and `sha512-hardened-batch` features.
-Both profiles await qualification. Batch shapes remain public.
+Both profiles retain their deployment and cleanup limits. Batch shapes remain public.
 
 See [ordinary execution](https://github.com/valkyoth/brynja/blob/main/docs/sha2-ordinary-execution.md)
 and [hardened execution](https://github.com/valkyoth/brynja/blob/main/docs/sha2-hardened-execution.md)

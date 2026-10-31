@@ -30,6 +30,11 @@ Keccak-f[1600] implementation. Ordinary and hardened owners are separate.
 
 ## Cryptography Verification Status
 
+Project test results and their exact scope are recorded in the
+[completed project checkpoint](https://github.com/valkyoth/brynja/blob/main/release-notes/RELEASE_NOTES_0.25.2.md#completed-checkpoint-handoff-2026-10-31)
+and its linked native/retest records. These are project assurance results,
+not independent cryptographic certification or coverage of every deployment.
+
 ✅ marks an implemented API within the stated feature/platform scope, not
 independent review, certification or unrestricted deployment approval.
 Qualification limits remain separate from implementation completion.
@@ -40,11 +45,11 @@ Qualification limits remain separate from implementation completion.
 | Byte/bit input and arbitrary-bit SHAKE output | ✅ Fully implemented | ❌ No |
 | cSHAKE128/256 and SP 800-185 encodings | ✅ Fully implemented | ❌ No |
 | Hardened states and classified outputs | ✅ Implemented | ❌ No |
-| Scoped in-place hardened SHA-3/SHAKE/cSHAKE | ✅ Implemented; ownership checks implemented, residue qualification pending | ❌ No |
-| Scoped accelerated SHA-3/SHAKE/cSHAKE | ✅ Implemented; explicit static/hosted session, residue qualification pending | ❌ No |
+| Scoped in-place hardened SHA-3/SHAKE/cSHAKE | ✅ Implemented; ownership checks implemented; owned-storage cleanup, not caller-copy erasure | ❌ No |
+| Scoped accelerated SHA-3/SHAKE/cSHAKE | ✅ Implemented; explicit static/hosted session; owned-storage cleanup, not caller-copy erasure | ❌ No |
 | Ordinary and hardened accelerated execution | ✅ Opt-in, platform-limited | ❌ No |
-| Hardened SHA-3/SHAKE/cSHAKE multibuffer owners | ✅ Implemented; qualification pending | ❌ No |
-| Independent-message multibuffer SHA-3/SHAKE/cSHAKE | ✅ Implemented; native qualification pending | ❌ No |
+| Hardened SHA-3/SHAKE/cSHAKE multibuffer owners | ✅ Implemented | ❌ No |
+| Independent-message multibuffer SHA-3/SHAKE/cSHAKE | ✅ Implemented | ❌ No |
 
 FIPS 202 and SP 800-185 specify these algorithms; they do not confer FIPS
 140-3 validation. Brynja has no named independent cryptographic review or FIPS
@@ -156,7 +161,7 @@ Caller-provided staging clears in full on every exit. Batch shape, lengths and
 work reports remain public metadata, not traffic-analysis protection.
 The module rustdoc provides a runnable secret-output example. The separate
 `brynja-crypto-cpu-std/keccak-hardened-batch` feature adds a hosted adapter;
-full qualification remains pending. See the
+see the
 [hardened ownership contract](https://github.com/valkyoth/brynja/blob/main/docs/hardened-multibuffer-owners.md).
 
 Default-off `batch-execution` adds `batch::Executor` for up to four independent

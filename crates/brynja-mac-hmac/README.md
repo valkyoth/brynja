@@ -26,11 +26,11 @@
 # brynja-mac-hmac
 
 First-party, allocation-free `no_std` HMAC over sealed, secret-bearing SHA-2 and
-SHA-3 owners. **Portable APIs are implemented and acceptance-tested; the current
-checkpoint is not yet release-qualified or independently verified.** The modern
+SHA-3 owners. **Portable APIs are implemented and acceptance-tested; this is
+not independent cryptographic certification.** The modern
 facades expose a curated `hmac` namespace. The separate
-`brynja-strict::hmac` namespace exposes protected GNU/Linux sessions, with
-qualification still pending; it never substitutes the portable or Mac resident API.
+`brynja-strict::hmac` namespace exposes protected GNU/Linux sessions; it never
+substitutes the portable or Mac resident API.
 
 ## Authentication results
 
@@ -47,6 +47,11 @@ with their own `Error::Mismatch`, without quarantining a completed mismatch.
 
 ## Cryptography Verification Status
 
+Project test results and their exact scope are recorded in the
+[completed project checkpoint](https://github.com/valkyoth/brynja/blob/main/release-notes/RELEASE_NOTES_0.25.2.md#completed-checkpoint-handoff-2026-10-31)
+and its linked native/retest records. These are project assurance results,
+not independent cryptographic certification or coverage of every deployment.
+
 ✅ marks an implemented API within the stated feature/platform scope, not
 independent review, certification or unrestricted deployment approval.
 Qualification limits remain separate from implementation completion.
@@ -56,12 +61,12 @@ Qualification limits remain separate from implementation completion.
 | HMAC-SHA-224/256/384/512 and SHA-512/224, SHA-512/256 | ✅ Fully implemented portable API | ❌ No |
 | HMAC-SHA3-224/256/384/512 | ✅ Fully implemented portable API | ❌ No |
 | Streaming, long-key normalization, explicit byte truncation, verification | ✅ Implemented | ❌ No |
-| Typed public/secret tags; owned-memory destruction | ✅ Implemented; qualification tracked separately | ❌ No |
-| Explicit static SHA-2/Keccak accelerated composition | ✅ Implemented behind `hardened-execution`; HMAC-specific qualification pending | ❌ No |
+| Typed public/secret tags; owned-memory destruction | ✅ Implemented | ❌ No |
+| Explicit static SHA-2/Keccak accelerated composition | ✅ Implemented behind `hardened-execution` | ❌ No |
 | Hosted CPU selection | ✅ Implemented; Opt-in `brynja-crypto-cpu-std` HMAC bridge; native M2 author tests | ❌ No |
-| Protected scalar HMAC | ✅ Implemented; Opt-in `brynja-crypto-cpu-std/strict-hmac` on supported GNU/Linux; author tests, qualification pending | ❌ No |
+| Protected scalar HMAC | ✅ Implemented; Opt-in `brynja-crypto-cpu-std/strict-hmac` on supported GNU/Linux; author tests | ❌ No |
 | Protected compiled HMAC | ✅ Implemented; Opt-in `brynja-crypto-cpu-std/strict-hmac-acceleration`; explicit SHA-2/Keccak kernel, authority constructed on protected worker | ❌ No |
-| Mac scalar/compiled resident sessions | ✅ Implemented; Opt-in hosted Apple Silicon profile; guarded/locked worker, no dump-exclusion claim; qualification pending | ❌ No |
+| Mac scalar/compiled resident sessions | ✅ Implemented; Opt-in hosted Apple Silicon profile; guarded/locked worker, no dump-exclusion claim | ❌ No |
 | SIMD batching and Windows enclave HMAC | Not implemented by this HMAC API | ❌ No |
 | Canonical final-bit messages for the ten named algorithms | ✅ Implemented; differential and lifecycle acceptance passed | ❌ No |
 | General SHA-512/t, t ≥ 128 and t < 512 except 384; exact full-bit tags | ✅ Implemented; 383-parameter acceptance passed | ❌ No |
@@ -97,8 +102,8 @@ three Arm routes on an M2 Pro and GNU/Linux Neoverse-V2 (including wide SHA-2
 and two general t widths). Linux Arm also passes protected-session, strict-facade
 and extracted-adapter checks.
 Dedicated x86 SHA-512 composition passes explicit Intel SDE emulation in both
-the leaf and protected-session APIs; native-silicon qualification remains
-pending. AVX-512 alone is not SHA512. These runs do not constitute independent
+the leaf and protected-session APIs; dedicated x86 SHA512 silicon has not
+been tested. AVX-512 alone is not SHA512. These runs do not constitute independent
 native qualification.
 
 The leaf's `runtime-execution` feature accepts an already established
@@ -129,7 +134,7 @@ The additional `strict-hmac-acceleration` feature exposes
 authority. Backend or entered-worker failure permanently quarantines it, without
 scalar fallback. An attribute/setup or thread-create failure before worker entry
 returns a resource error but leaves the session reusable; no key was processed.
-Its independent compiler/native qualification remains pending. The
+Recorded native project tests do not establish independent certification. The
 separate hosted `macos-resident-hmac` and `macos-resident-hmac-acceleration`
 features provide Apple Silicon resident sessions, not dump exclusion or strict
 fallback. SIMD HMAC batching is not implemented. No performance or whole-process

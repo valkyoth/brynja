@@ -29,6 +29,11 @@ First-party, allocation-free `no_std` legacy MD5 for explicit compatibility.
 
 ## Cryptography Verification Status
 
+Project test results and their exact scope are recorded in the
+[completed project checkpoint](https://github.com/valkyoth/brynja/blob/main/release-notes/RELEASE_NOTES_0.25.2.md#completed-checkpoint-handoff-2026-10-31)
+and its linked native/retest records. These are project assurance results,
+not independent cryptographic certification or coverage of every deployment.
+
 ✅ marks an implemented API within the stated feature/platform scope, not
 independent review, certification or unrestricted deployment approval.
 Qualification limits remain separate from implementation completion.
@@ -38,8 +43,8 @@ Qualification limits remain separate from implementation completion.
 | MD5 | ✅ Fully implemented | ❌ Not independently verified |
 | Ordinary batch AVX2 / NEON execution | ✅ Implemented; native observations recorded; independent qualification not claimed | ❌ No |
 | Hardened batch AVX2 / NEON execution | ✅ Implemented; native observations recorded; independent qualification not claimed | ❌ No |
-| Caller-owned portable scoped workspace | ✅ Implemented; residue qualification pending | ❌ No |
-| Caller-owned scoped hardened AVX2 / NEON batches | ✅ Implemented; residue qualification pending | ❌ No |
+| Caller-owned portable scoped workspace | ✅ Implemented; owned-storage cleanup, not caller-copy erasure | ❌ No |
+| Caller-owned scoped hardened AVX2 / NEON batches | ✅ Implemented; owned-storage cleanup, not caller-copy erasure | ❌ No |
 
 No named independent reviewer has signed off. Project tests, CI, Kani, Miri,
 fuzzing and pentesting are not independent cryptographic review. No FIPS
@@ -190,7 +195,7 @@ candidate sessions. Production builds cannot execute them. Cargo feature
 unification exposes types, not execution permission. A separate optional
 `brynja-legacy-md5-std` reports host features, uses portable fallback and rejects
 required acceleration. SIMD is for public independent messages, not single-stream
-acceleration; AVX-512 and RISC-V Vector remain unimplemented pending qualification.
+acceleration; AVX-512 and RISC-V Vector are not implemented by this API.
 
 That restriction belongs to the historical `cpu` candidate API, not the separate
 implemented `execution` and `hardened-execution` APIs described below. Those

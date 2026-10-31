@@ -31,6 +31,11 @@ package owns scheduling, resource admission and local worker selection.
 
 ## Cryptography Verification Status
 
+Project test results and their exact scope are recorded in the
+[completed project checkpoint](https://github.com/valkyoth/brynja/blob/main/release-notes/RELEASE_NOTES_0.25.2.md#completed-checkpoint-handoff-2026-10-31)
+and its linked native/retest records. These are project assurance results,
+not independent cryptographic certification or coverage of every deployment.
+
 ✅ marks an implemented API within the stated feature/platform scope, not
 independent review, certification or unrestricted deployment approval.
 Qualification limits remain separate from implementation completion.
@@ -38,14 +43,14 @@ Qualification limits remain separate from implementation completion.
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
 | Bounded portable ParallelHash/ParallelHashXOF worker executor | ✅ Implemented | ❌ No |
-| Scoped portable root with bounded borrowed-leaf thread handoff | ✅ Implemented; qualification pending | ❌ No |
-| Scoped root/leaf storage with independently selected threaded acceleration | ✅ Implemented; qualification pending | ❌ No |
-| Independently selected hardened root/worker acceleration | ✅ Implemented; qualification pending | ❌ No |
-| Hardened multibuffer worker groups with clearing result transport | ✅ Implemented; qualification pending | ❌ No |
-| Scoped multibuffer workers with guarded parent slots and scoped root | ✅ Implemented; qualification pending | ❌ No |
-| Strict protected scalar root, concurrent leaf stacks, CVs and output | ✅ Implemented; qualification pending | ❌ No |
-| Strict protected accelerated root and single/SIMD leaf workers | ✅ Implemented; qualification pending | ❌ No |
-| Apple Silicon resident scalar/Arm/NEON root and bounded concurrent leaf workers; no dump exclusion | ✅ Implemented; qualification pending | ❌ No |
+| Scoped portable root with bounded borrowed-leaf thread handoff | ✅ Implemented | ❌ No |
+| Scoped root/leaf storage with independently selected threaded acceleration | ✅ Implemented | ❌ No |
+| Independently selected hardened root/worker acceleration | ✅ Implemented | ❌ No |
+| Hardened multibuffer worker groups with clearing result transport | ✅ Implemented | ❌ No |
+| Scoped multibuffer workers with guarded parent slots and scoped root | ✅ Implemented | ❌ No |
+| Strict protected scalar root, concurrent leaf stacks, CVs and output | ✅ Implemented | ❌ No |
+| Strict protected accelerated root and single/SIMD leaf workers | ✅ Implemented | ❌ No |
+| Apple Silicon resident scalar/Arm/NEON root and bounded concurrent leaf workers; no dump exclusion | ✅ Implemented | ❌ No |
 
 Brynja is not FIPS 140-3 validated. Threading and project tests do not constitute
 independent verification. This `std` package is absent from the modern facade's
@@ -86,7 +91,7 @@ Native resource failure is an error, never a weaker allocation. Recoverable
 worker unwinding joins and clears owned memory, but panic hooks/OS TLS, fatal
 aborts, snapshots, dumps and arbitrary register capture are outside this
 contract. Do not fork, cancel native workers, or revoke admitted protections
-during use. Qualification and independent retest remain pending.
+during use. Project tests do not establish independent cryptographic certification.
 
 The separate, default-off `strict-execution` feature provides
 `strict_execution::Session` for complete bounded requests. It preacquires
@@ -98,7 +103,8 @@ single-state or SIMD-group leaf workers. Incomplete SIMD groups and unequal tail
 use explicit clearing scalar work on protected stacks; backend failures never
 authorize fallback. Deployment must guarantee the compiled feature bundle
 throughout scheduling/migration. Inputs remain caller-owned; lengths and scheduling
-are public. Native GNU/Linux protection and independent qualification are pending.
+are public. Native project tests do not establish independent certification
+or protection of caller-owned storage.
 
 See the [compiled strict Session example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-hash-parallel-std/src/strict_execution/mod.rs)
 and [strict-profile limitations](https://github.com/valkyoth/brynja/blob/main/docs/strict-hardening-profile.md).
@@ -243,8 +249,8 @@ zero-leaf messages do not create workers or claim a leaf route. The executor gat
 stays held through public output commit. Required routes reject unavailable
 authority; a backend error never authorizes fallback. Static deployment and
 cached hosted-detection limitations remain the same as the other adapters.
-This adapter is single-state-per-worker, not multibuffer execution. Complete
-compiler-copy/register/spill qualification remains pending. Scoped multibuffer
+This adapter is single-state-per-worker, not multibuffer execution. Cleanup
+covers owned storage, not arbitrary caller-frame registers, spills or copies. Scoped multibuffer
 execution is available through the separate adapter below; existing executors
 are unchanged.
 
@@ -263,8 +269,8 @@ including incomplete final groups; Prefer explicitly permits clearing tails.
 Workers create their own clearing authority/workspace and return only completed,
 plan-bound CV loans. Every started worker is joined, results merge in order, and
 unmerged results clear on failures. Reports separate actual vector/scalar work,
-groups, accelerated leaves and submitted thread width. This is implemented
-development functionality, not complete native/compiler qualification.
+groups, accelerated leaves and submitted thread width. These implemented
+ownership guarantees do not cover arbitrary compiler or caller-created copies.
 
 For scoped root and worker storage, use
 `execution::batch::in_place::Executor` with the same `Config` and `Request`.
@@ -292,7 +298,7 @@ The report separates root route, actual accelerated leaves and thread width.
 Threads are not SIMD lanes. A backend error never authorizes fallback.
 Multibuffer workers instead use four-state AVX2 or two-state NEON kernels;
 their root still uses independently selected single-state execution.
-The new execution profile still requires final qualification and native evidence;
+Native project observations are recorded separately from independent review;
 see the [execution guide](https://github.com/valkyoth/brynja/blob/main/docs/parallelhash-execution.md).
 
 ## Resource and cleanup boundaries

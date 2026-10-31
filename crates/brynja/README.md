@@ -25,7 +25,7 @@
 
 # brynja
 
-`brynja` is the small modern facade for the Brynja cryptography and secure-protocol workspace. It is allocation-independent `no_std` Rust without a C cryptographic library. Select the separate [brynja-strict facade](https://github.com/valkyoth/brynja/blob/main/crates/brynja-strict/README.md) for protected-memory/worker-stack APIs: upgrading `brynja` does not enable them. Strict constructors reject unsupported platforms or unavailable resources; qualification remains pending.
+`brynja` is the small modern facade for the Brynja cryptography and secure-protocol workspace. It is allocation-independent `no_std` Rust without a C cryptographic library. Select the separate [brynja-strict facade](https://github.com/valkyoth/brynja/blob/main/crates/brynja-strict/README.md) for protected-memory/worker-stack APIs: upgrading `brynja` does not enable them. Strict constructors reject unsupported platforms or unavailable resources; their platform and cleanup limits remain explicit.
 
 > **Development status:** Brynja is pre-1.0, incomplete, and must not yet secure application traffic. It provides all six SHA-2 and FIPS 202 functions,
 > complete cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF, and ParallelHash/ParallelHashXOF families, modern SHA-2/SHA-3 HMAC, plus security and bounded framing foundations,
@@ -34,7 +34,7 @@
 ## Cryptography Verification Status
 
 These tables track concrete public capabilities and active pre-1.0 roadmap families. Implementation requires a complete public API and passing functional acceptance; a planned row is not yet usable. See the [component verification status](https://github.com/valkyoth/brynja/blob/main/docs/VERIFICATION_STATUS.md) for the crate-level audit inventory.
-✅ Implemented means a capability is implemented and acceptance-tested; ✅ Fully implemented covers every named family member. Release qualification is separate and remains pending for this candidate. A green implementation status does not mean independently verified.
+✅ Implemented means a capability is implemented and acceptance-tested; ✅ Fully implemented covers every named family member. Project verification is recorded in the [completed checkpoint](https://github.com/valkyoth/brynja/blob/main/release-notes/RELEASE_NOTES_0.25.2.md#completed-checkpoint-handoff-2026-10-31); publication requires separate approval. A green implementation status does not mean independently verified.
 Only linked sign-off from a named independent reviewer can change independent status. CI, Kani, Miri, sanitizers, fuzzing, differential testing, and pentests do not constitute independent verification.
 
 Implementation completion does not authorize publication or imply platform qualification.
@@ -77,8 +77,8 @@ remain separate; there is no SIMD-batched or Windows enclave HMAC API.
 These compatibility APIs require separate legacy dependencies and are not
 exported by this modern facade. Hosted owners cover GNU/Linux protected and
 Apple Silicon resident sessions, not a portable guarantee of protected memory.
-The current checkpoint's release qualification remains pending; no independent
-cryptographic certification is claimed.
+The completed project checkpoint does not establish independent
+cryptographic certification.
 
 | Construction family | Implementation status | Owning crate | Independent verification |
 | --- | --- | --- | --- |

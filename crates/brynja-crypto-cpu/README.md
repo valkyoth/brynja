@@ -31,6 +31,11 @@ leaves; raw compression or permutation is not a complete hash API.
 
 ## Cryptography Verification Status
 
+Project test results and their exact scope are recorded in the
+[completed project checkpoint](https://github.com/valkyoth/brynja/blob/main/release-notes/RELEASE_NOTES_0.25.2.md#completed-checkpoint-handoff-2026-10-31)
+and its linked native/retest records. These are project assurance results,
+not independent cryptographic certification or coverage of every deployment.
+
 ✅ marks an implemented API within the stated feature/platform scope, not
 independent review, certification or unrestricted deployment approval.
 Qualification limits remain separate from implementation completion.
@@ -39,20 +44,20 @@ Dedicated x86 SHA-512 is available through the opt-in static/runtime kernel
 identity `X86Sha512`, requiring `sha512,avx2,avx` and OS-enabled XMM/YMM state
 (Rust's SHA512 feature implies AVX2).
 Ordinary and distinct clearing-owner execution have SDE and compiler-cleanup coverage;
-dedicated-silicon native qualification remains pending. SHA-NI and AVX-512
+dedicated x86 SHA512 silicon has not been tested. SHA-NI and AVX-512
 do not substitute for SHA512. See the
 [dedicated execution contract](https://github.com/valkyoth/brynja/blob/main/docs/x86-sha512-execution.md).
 
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| Hardened SHA-224/256 batch compression with clearing packed storage | ✅ Implemented; CPU foundation; qualification pending | ❌ No |
-| Hardened SHA-512-family batch compression with clearing packed storage | ✅ Implemented; CPU foundation; qualification pending | ❌ No |
-| Hardened independent-state Keccak AVX2 / NEON with clearing storage | ✅ Implemented; CPU foundation; qualification pending | ❌ No |
-| SHA-512-family four-lane AVX2 / two-lane NEON compression | ✅ Implemented; qualification pending | ❌ No |
-| Keccak four-state AVX2 / two-state NEON permutation | ✅ Implemented; qualification pending | ❌ No |
+| Hardened SHA-224/256 batch compression with clearing packed storage | ✅ Implemented; CPU foundation | ❌ No |
+| Hardened SHA-512-family batch compression with clearing packed storage | ✅ Implemented; CPU foundation | ❌ No |
+| Hardened independent-state Keccak AVX2 / NEON with clearing storage | ✅ Implemented; CPU foundation | ❌ No |
+| SHA-512-family four-lane AVX2 / two-lane NEON compression | ✅ Implemented | ❌ No |
+| Keccak four-state AVX2 / two-state NEON permutation | ✅ Implemented | ❌ No |
 | Independent-message SHA-224/256 AVX2 / NEON kernels | ✅ Opt-in, platform-limited | ❌ No |
 | Static x86-64 SHA-256 and AVX2 Keccak execution | ✅ Opt-in | ❌ No |
-| Dedicated x86 SHA-512 ordinary and hardened execution | ✅ Implemented; emulated qualification only | ❌ No |
+| Dedicated x86 SHA-512 ordinary and hardened execution | ✅ Implemented; SDE tested; dedicated silicon not tested | ❌ No |
 | Static AArch64 SHA-256, SHA-512 and SHA3 Keccak execution | ✅ Opt-in | ❌ No |
 | Low-level hosted-authority boundary | ✅ Platform proof required | ❌ No |
 | Hardened SHA-2 and Keccak sessions with clearing scratch | ✅ Opt-in | ❌ No |
@@ -76,8 +81,7 @@ The separate `sha512-hardened-batch` feature exposes the equivalent
 `sha512_hardened_batch` owners for four AVX2 or two NEON states. These are raw
 compression APIs; complete framing and typed secret outputs live in the SHA-2
 crate's `hardened_batch` and `hardened_batch512` modules. Distinct hosted batch
-adapters are available in `brynja-crypto-cpu-std`; final release qualification
-remains pending. Neither feature enables or reuses ordinary
+adapters are available in `brynja-crypto-cpu-std`. Neither feature enables or reuses ordinary
 batch storage. See the
 [implementation design](https://github.com/valkyoth/brynja/blob/main/docs/hardened-multibuffer-owners.md).
 
@@ -88,8 +92,7 @@ four independent states; little-endian AArch64 NEON permutes two. Use
 byte states. Both preserve caller state on rejection and clear all packed
 workspace regions on every exit. These are raw permutation APIs, not hashing or
 padding APIs; the caller still owns its state and all copies. Complete hardened
-SHA-3/SHAKE/cSHAKE framing is available in `brynja-hash-sha3::hardened_batch`;
-final release qualification remains pending.
+SHA-3/SHAKE/cSHAKE framing is available in `brynja-hash-sha3::hardened_batch`.
 
 The separate default-off `sha256-batch` feature exposes independent-message
 AVX2 (eight lanes) and AArch64 NEON (four lanes) compression. Both raw states and

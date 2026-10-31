@@ -31,6 +31,11 @@ their APIs without making each leaf depend on the entire crypto or TLS graph.
 
 ## Cryptography Verification Status
 
+Project test results and their exact scope are recorded in the
+[completed project checkpoint](https://github.com/valkyoth/brynja/blob/main/release-notes/RELEASE_NOTES_0.25.2.md#completed-checkpoint-handoff-2026-10-31)
+and its linked native/retest records. These are project assurance results,
+not independent cryptographic certification or coverage of every deployment.
+
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
 | All six named SHA-2 and all six SHA-3/SHAKE functions | ✅ Fully implemented, reexported | ❌ No |
@@ -97,7 +102,8 @@ execution explicitly; neither enables automatic detection or fallback. Portable
 HMAC stays portable when other dependencies enable CPU features. Tag truncation
 is preselected, byte-based and at least 128 bits; full general SHA-512/t tags
 retain their exact bit width. Use `finalize_secret` for clearing secret output.
-These APIs do not promise protected memory; qualification remains pending.
+These APIs do not promise protected memory. Use the separate protected or
+resident session APIs when their documented storage guarantees are required.
 
 ## Hardware and SIMD
 

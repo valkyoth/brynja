@@ -31,31 +31,36 @@ choice, not certification or proof that all application code uses this profile.
 
 ## Cryptography Verification Status
 
+Project test results and their exact scope are recorded in the
+[completed project checkpoint](https://github.com/valkyoth/brynja/blob/main/release-notes/RELEASE_NOTES_0.25.2.md#completed-checkpoint-handoff-2026-10-31)
+and its linked native/retest records. These are project assurance results,
+not independent cryptographic certification or coverage of every deployment.
+
 ✅ marks an implemented API within the stated feature/platform scope, not
 independent review, certification or unrestricted deployment approval.
 Qualification limits remain separate from implementation completion.
 
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| Strict-only modern protected sessions | ✅ Implemented; qualification pending | ❌ No |
-| Protected HMAC SHA-2/general SHA-512/t/SHA-3 sessions | ✅ Implemented; Scalar and explicit compiled routes; qualification pending | ❌ No |
-| Windows x64 VBS retained SHA-256 owner/session | ✅ Implemented; Bounded scalar API; development-tested; production qualification pending | ❌ No |
-| Windows x64 VBS streaming SHA-2 and general SHA-512/t | ✅ Implemented; Scalar version-six worker; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS SHA-224/256 SHA-NI sessions | ✅ Implemented; Explicit opt-in; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS streaming SHA-3/SHAKE/cSHAKE | ✅ Implemented; Scalar version-seven worker; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS SHA-3/SHAKE/cSHAKE AVX2 sessions | ✅ Implemented; Explicit opt-in; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS streaming KMAC/KMACXOF | ✅ Implemented; Scalar version-eight worker; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS KMAC/KMACXOF AVX2 sessions | ✅ Implemented; Explicit opt-in; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS streaming TupleHash/TupleHashXOF | ✅ Implemented; Scalar version-nine worker; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS TupleHash/TupleHashXOF AVX2 sessions | ✅ Implemented; Explicit opt-in; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS SHA-2 batches | ✅ Implemented; Scalar and opt-in sequential SHA-NI SHA-224/256; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS SHA-3/SHAKE/cSHAKE batches | ✅ Implemented; Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS eight-message SHA-224/256 SIMD | ✅ Implemented; Opt-in AVX2; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS four-message SHA-512-family SIMD | ✅ Implemented; Opt-in AVX2; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS four-message SHA-3/SHAKE/cSHAKE SIMD | ✅ Implemented; Opt-in AVX2; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS ParallelHash/ParallelHashXOF | ✅ Implemented; Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS concurrent ParallelHash/ParallelHashXOF | ✅ Implemented; Opt-in four-worker AVX2; public output only; qualification pending | ❌ No |
-| Explicit compiled hardware/SIMD selection | ✅ Implemented; qualification pending | ❌ No |
+| Strict-only modern protected sessions | ✅ Implemented | ❌ No |
+| Protected HMAC SHA-2/general SHA-512/t/SHA-3 sessions | ✅ Implemented; Scalar and explicit compiled routes | ❌ No |
+| Windows x64 VBS retained SHA-256 owner/session | ✅ Implemented; Bounded scalar API; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS streaming SHA-2 and general SHA-512/t | ✅ Implemented; Scalar version-six worker; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS SHA-224/256 SHA-NI sessions | ✅ Implemented; Explicit opt-in; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS streaming SHA-3/SHAKE/cSHAKE | ✅ Implemented; Scalar version-seven worker; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS SHA-3/SHAKE/cSHAKE AVX2 sessions | ✅ Implemented; Explicit opt-in; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS streaming KMAC/KMACXOF | ✅ Implemented; Scalar version-eight worker; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS KMAC/KMACXOF AVX2 sessions | ✅ Implemented; Explicit opt-in; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS streaming TupleHash/TupleHashXOF | ✅ Implemented; Scalar version-nine worker; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS TupleHash/TupleHashXOF AVX2 sessions | ✅ Implemented; Explicit opt-in; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS SHA-2 batches | ✅ Implemented; Scalar and opt-in sequential SHA-NI SHA-224/256; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS SHA-3/SHAKE/cSHAKE batches | ✅ Implemented; Scalar and opt-in sequential AVX2; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS eight-message SHA-224/256 SIMD | ✅ Implemented; Opt-in AVX2; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS four-message SHA-512-family SIMD | ✅ Implemented; Opt-in AVX2; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS four-message SHA-3/SHAKE/cSHAKE SIMD | ✅ Implemented; Opt-in AVX2; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS ParallelHash/ParallelHashXOF | ✅ Implemented; Scalar and opt-in sequential AVX2; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS concurrent ParallelHash/ParallelHashXOF | ✅ Implemented; Opt-in four-worker AVX2; public output only; production signing not tested | ❌ No |
+| Explicit compiled hardware/SIMD selection | ✅ Implemented | ❌ No |
 
 Exports: `sha2`, `sha3` (SHAKE/cSHAKE), `hmac`, `kmac`, `tuplehash`, `parallelhash`
 and independent-message `batch`, plus the separate Windows `enclave` interface.
@@ -71,8 +76,8 @@ back. Production trust and current-image qualification remain required.
 The separate `enclave::parallel_concurrent` API, also under `acceleration`, uses
 an exact five-thread image with up to four scoped AVX2 leaf workers. It borrows
 caller inputs and requires explicit public declassification; it does not retain
-secret results. All joins and destruction precede borrow release. Production
-qualification remains pending. See the [concurrent example and limits](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-parallel-concurrent.md#crate-api-integration).
+secret results. All joins and destruction precede borrow release. Tests use
+development-signed images, not production-signed deployment. See the [concurrent example and limits](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-parallel-concurrent.md#crate-api-integration).
 No legacy hashes, ordinary digests, raw CPU
 execution authorities, generic protected callbacks or protocol APIs are exported.
 Even with default features disabled, dependencies enable the protected sessions.
@@ -127,8 +132,8 @@ version-twenty-two image for four independent SHA-3/SHAKE/cSHAKE messages.
 Message/N/S fields are bounded to 1024 bytes each, output to 2048 bits per lane;
 mixed identities are supported. Trust checks and explicit declassification
 remain mandatory. See the [Keccak SIMD example](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-keccak-simd.md).
-Production and
-independent qualification are pending; see the [SHA-2 guide](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-sha2.md).
+Production-signed deployment and independent cryptographic certification
+are not established by development tests; see the [SHA-2 guide](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-sha2.md).
 
 ## Usage
 
@@ -248,5 +253,5 @@ Inputs and copies made by the application remain its responsibility. Lengths,
 scheduling, privileged snapshots, hibernation, arbitrary register interruption,
 external protection revocation, panic hooks and fatal abort remain outside the
 bounded protection. Sanitizer builds are diagnostics only, not qualified
-secret-processing deployments. Native Arm qualification and independent review
-remain pending. See the [complete contract](https://github.com/valkyoth/brynja/blob/main/docs/strict-hardening-profile.md).
+secret-processing deployments. Native Arm project observations are recorded;
+independent cryptographic certification is not claimed. See the [complete contract](https://github.com/valkyoth/brynja/blob/main/docs/strict-hardening-profile.md).

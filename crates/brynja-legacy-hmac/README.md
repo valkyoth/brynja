@@ -31,6 +31,11 @@ absent from modern facades, defaults, protocol negotiation and approved services
 
 ## Cryptography Verification Status
 
+Project test results and their exact scope are recorded in the
+[completed project checkpoint](https://github.com/valkyoth/brynja/blob/main/release-notes/RELEASE_NOTES_0.25.2.md#completed-checkpoint-handoff-2026-10-31)
+and its linked native/retest records. These are project assurance results,
+not independent cryptographic certification or coverage of every deployment.
+
 ✅ marks an implemented API within the stated feature/platform scope, not
 independent review, certification or unrestricted deployment approval.
 Qualification limits remain separate from implementation completion.
@@ -40,8 +45,8 @@ Qualification limits remain separate from implementation completion.
 | HMAC-SHA-1 and HMAC-MD5 | ✅ Fully implemented portable API | ❌ No |
 | Streaming, long keys, explicit byte truncation and verification | ✅ Implemented | ❌ No |
 | Public tags and clearing secret tags | ✅ Implemented; owned-memory clearing | ❌ No |
-| Explicit hardened SHA-1 execution | ✅ Implemented; Opt-in `sha1-execution`; x86/Arm author tests, qualification pending | ❌ No |
-| MD5 SIMD HMAC | ✅ Implemented; Opt-in `md5-batch`; AVX2/NEON author tests, qualification pending | ❌ No |
+| Explicit hardened SHA-1 execution | ✅ Implemented; Opt-in `sha1-execution`; x86/Arm author tests | ❌ No |
+| MD5 SIMD HMAC | ✅ Implemented; Opt-in `md5-batch`; AVX2/NEON author tests | ❌ No |
 
 No independent qualification or FIPS approval is claimed. Existing hash
 qualification does not qualify this new keyed composition. Caller copies,

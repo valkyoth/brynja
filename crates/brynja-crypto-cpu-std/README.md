@@ -31,6 +31,11 @@ It is not automatically installed or added to facade/default graphs.
 
 ## Cryptography Verification Status
 
+Project test results and their exact scope are recorded in the
+[completed project checkpoint](https://github.com/valkyoth/brynja/blob/main/release-notes/RELEASE_NOTES_0.25.2.md#completed-checkpoint-handoff-2026-10-31)
+and its linked native/retest records. These are project assurance results,
+not independent cryptographic certification or coverage of every deployment.
+
 ✅ marks an implemented API within the stated feature/platform scope, not
 independent review, certification or unrestricted deployment approval.
 Qualification limits remain separate from implementation completion.
@@ -41,49 +46,49 @@ and preserve CPU/OS support throughout execution. Authority, exact-item writers,
 framing and XOF state stay on protected worker stacks; staging/output use
 protected mappings. Cancellation permits reuse; backend failure or worker panic
 quarantines permanently without fallback. Scalar `Session` remains unchanged.
-Compiler/platform qualification and independent retest remain pending.
+Project tests are recorded separately from independent cryptographic review.
 See the [compiled TupleHash API example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-crypto-cpu-std/src/strict_tuplehash/compiled.rs).
 
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
 | Apple Silicon resident byte/worker resources | ✅ Implemented; Default-off `macos_resident::memory`; guarded, locked, fork-excluded, clearing; no dump exclusion or automatic cryptographic admission | ❌ No |
-| Hosted hardened HMAC over SHA-2/SHA-3 | ✅ Implemented; Default-off `hmac-execution`; native M2 author tests; qualification pending | ❌ No |
-| Protected compiled HMAC over SHA-2/SHA-3 | ✅ Implemented; Default-off `strict-hmac-acceleration`; GNU/Linux, explicit target features, no fallback; qualification pending | ❌ No |
-| Protected scalar HMAC (supported GNU/Linux targets) | ✅ Implemented; Default-off `strict-hmac`; typed bounded requests and worker-side verification; qualification pending | ❌ No |
-| Apple Silicon resident HMAC over SHA-2/SHA-3 | ✅ Implemented; Default-off scalar or explicit Arm SHA2/SHA512/Keccak; no dump exclusion; qualification pending | ❌ No |
-| Apple Silicon resident SHA-2/SHA-3, KMAC/TupleHash | ✅ Implemented; Separate opt-in scalar/Arm resident/clearing APIs; no dump exclusion; qualification pending | ❌ No |
-| Apple Silicon resident SHA-2/general-t and SHA-3/SHAKE/cSHAKE | ✅ Implemented; Scalar or explicit Arm SHA2/SHA512/Keccak; bit-aware, bounded output/cancellation; no dump-exclusion guarantee; qualification pending | ❌ No |
-| Apple Silicon resident SHA-2/Keccak independent-message batches | ✅ Implemented; Default-off resident workspace/output; explicit portable or required NEON, no fallback; no dump exclusion; qualification pending | ❌ No |
-| Windows x64 VBS retained SHA-256 owner/session | ✅ Implemented; Bounded scalar API; development-tested; production qualification pending | ❌ No |
-| Windows x64 VBS streaming SHA-2 and general SHA-512/t | ✅ Implemented; Scalar version-six worker; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS SHA-224/256 SHA-NI sessions | ✅ Implemented; Explicit opt-in; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS streaming SHA-3/SHAKE/cSHAKE | ✅ Implemented; Scalar version-seven worker; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS SHA-3/SHAKE/cSHAKE AVX2 sessions | ✅ Implemented; Explicit opt-in; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS streaming KMAC/KMACXOF | ✅ Implemented; Scalar version-eight worker; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS KMAC/KMACXOF AVX2 sessions | ✅ Implemented; Explicit opt-in; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS streaming TupleHash/TupleHashXOF | ✅ Implemented; Scalar version-nine worker; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS TupleHash/TupleHashXOF AVX2 sessions | ✅ Implemented; Explicit opt-in; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS SHA-2 batches | ✅ Implemented; Scalar and opt-in sequential SHA-NI SHA-224/256; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS SHA-3/SHAKE/cSHAKE batches | ✅ Implemented; Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS eight-message SHA-224/256 SIMD | ✅ Implemented; Opt-in AVX2; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS four-message SHA-512-family SIMD | ✅ Implemented; Opt-in AVX2; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS four-message SHA-3/SHAKE/cSHAKE SIMD | ✅ Implemented; Opt-in AVX2; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS ParallelHash/ParallelHashXOF | ✅ Implemented; Scalar and opt-in sequential AVX2; development-tested; qualification pending | ❌ No |
-| Windows x64 VBS concurrent ParallelHash/ParallelHashXOF | ✅ Implemented; Opt-in four-worker AVX2; public output only; qualification pending | ❌ No |
-| Protected compiled TupleHash/TupleHashXOF sessions | ✅ Implemented; qualification pending | ❌ No |
-| Protected SHA-2/SHA-3/SHAKE/cSHAKE SIMD batch sessions | ✅ Implemented; qualification pending | ❌ No |
-| Protected byte storage (Linux GNU x86-64/little-endian AArch64) | ✅ Implemented; qualification pending; not strict execution | ❌ No |
-| Joined single/group protected execution stacks (same Linux GNU targets) | ✅ Implemented; qualification pending; not strict hashing | ❌ No |
-| Protected scalar SHA-2 sessions (same Linux GNU targets) | ✅ Implemented; Six named identities and general SHA-512/t; qualification pending | ❌ No |
-| Protected compiled SHA-2 hardware sessions (same Linux GNU targets) | ✅ Implemented; Explicit static kernels; qualification pending | ❌ No |
-| Protected scalar SHA-3/SHAKE/cSHAKE sessions (same Linux GNU targets) | ✅ Implemented; Eight identities with exact-bit output; qualification pending | ❌ No |
-| Protected compiled SHA-3/SHAKE/cSHAKE sessions (same Linux GNU targets) | ✅ Implemented; Explicit static AVX2/Arm kernels; qualification pending | ❌ No |
-| Protected scalar KMAC/KMACXOF sessions (same Linux GNU targets) | ✅ Implemented; Four identities, protected verification; qualification pending | ❌ No |
-| Protected compiled KMAC/KMACXOF sessions (same Linux GNU targets) | ✅ Implemented; Explicit static AVX2/Arm kernels and protected verification; qualification pending | ❌ No |
-| Protected scalar TupleHash/TupleHashXOF sessions (same Linux GNU targets) | ✅ Implemented; Four identities, exact item completion; qualification pending | ❌ No |
-| Hosted independent-message SHA-512-family batching | ✅ Implemented; qualification pending | ❌ No |
-| Distinct hardened SHA-2 and Keccak hosted batch owners | ✅ Implemented; qualification pending | ❌ No |
-| Hosted independent-message SHA-3/SHAKE/cSHAKE batching | ✅ Implemented; qualification pending | ❌ No |
+| Hosted hardened HMAC over SHA-2/SHA-3 | ✅ Implemented; Default-off `hmac-execution`; native M2 author tests | ❌ No |
+| Protected compiled HMAC over SHA-2/SHA-3 | ✅ Implemented; Default-off `strict-hmac-acceleration`; GNU/Linux, explicit target features, no fallback | ❌ No |
+| Protected scalar HMAC (supported GNU/Linux targets) | ✅ Implemented; Default-off `strict-hmac`; typed bounded requests and worker-side verification | ❌ No |
+| Apple Silicon resident HMAC over SHA-2/SHA-3 | ✅ Implemented; Default-off scalar or explicit Arm SHA2/SHA512/Keccak; no dump exclusion | ❌ No |
+| Apple Silicon resident SHA-2/SHA-3, KMAC/TupleHash | ✅ Implemented; Separate opt-in scalar/Arm resident/clearing APIs; no dump exclusion | ❌ No |
+| Apple Silicon resident SHA-2/general-t and SHA-3/SHAKE/cSHAKE | ✅ Implemented; Scalar or explicit Arm SHA2/SHA512/Keccak; bit-aware, bounded output/cancellation; no dump-exclusion guarantee | ❌ No |
+| Apple Silicon resident SHA-2/Keccak independent-message batches | ✅ Implemented; Default-off resident workspace/output; explicit portable or required NEON, no fallback; no dump exclusion | ❌ No |
+| Windows x64 VBS retained SHA-256 owner/session | ✅ Implemented; Bounded scalar API; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS streaming SHA-2 and general SHA-512/t | ✅ Implemented; Scalar version-six worker; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS SHA-224/256 SHA-NI sessions | ✅ Implemented; Explicit opt-in; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS streaming SHA-3/SHAKE/cSHAKE | ✅ Implemented; Scalar version-seven worker; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS SHA-3/SHAKE/cSHAKE AVX2 sessions | ✅ Implemented; Explicit opt-in; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS streaming KMAC/KMACXOF | ✅ Implemented; Scalar version-eight worker; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS KMAC/KMACXOF AVX2 sessions | ✅ Implemented; Explicit opt-in; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS streaming TupleHash/TupleHashXOF | ✅ Implemented; Scalar version-nine worker; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS TupleHash/TupleHashXOF AVX2 sessions | ✅ Implemented; Explicit opt-in; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS SHA-2 batches | ✅ Implemented; Scalar and opt-in sequential SHA-NI SHA-224/256; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS SHA-3/SHAKE/cSHAKE batches | ✅ Implemented; Scalar and opt-in sequential AVX2; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS eight-message SHA-224/256 SIMD | ✅ Implemented; Opt-in AVX2; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS four-message SHA-512-family SIMD | ✅ Implemented; Opt-in AVX2; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS four-message SHA-3/SHAKE/cSHAKE SIMD | ✅ Implemented; Opt-in AVX2; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS ParallelHash/ParallelHashXOF | ✅ Implemented; Scalar and opt-in sequential AVX2; development-tested; production signing not tested | ❌ No |
+| Windows x64 VBS concurrent ParallelHash/ParallelHashXOF | ✅ Implemented; Opt-in four-worker AVX2; public output only; production signing not tested | ❌ No |
+| Protected compiled TupleHash/TupleHashXOF sessions | ✅ Implemented | ❌ No |
+| Protected SHA-2/SHA-3/SHAKE/cSHAKE SIMD batch sessions | ✅ Implemented | ❌ No |
+| Protected byte storage (Linux GNU x86-64/little-endian AArch64) | ✅ Implemented; not strict execution | ❌ No |
+| Joined single/group protected execution stacks (same Linux GNU targets) | ✅ Implemented; not strict hashing | ❌ No |
+| Protected scalar SHA-2 sessions (same Linux GNU targets) | ✅ Implemented; Six named identities and general SHA-512/t | ❌ No |
+| Protected compiled SHA-2 hardware sessions (same Linux GNU targets) | ✅ Implemented; Explicit static kernels | ❌ No |
+| Protected scalar SHA-3/SHAKE/cSHAKE sessions (same Linux GNU targets) | ✅ Implemented; Eight identities with exact-bit output | ❌ No |
+| Protected compiled SHA-3/SHAKE/cSHAKE sessions (same Linux GNU targets) | ✅ Implemented; Explicit static AVX2/Arm kernels | ❌ No |
+| Protected scalar KMAC/KMACXOF sessions (same Linux GNU targets) | ✅ Implemented; Four identities, protected verification | ❌ No |
+| Protected compiled KMAC/KMACXOF sessions (same Linux GNU targets) | ✅ Implemented; Explicit static AVX2/Arm kernels and protected verification | ❌ No |
+| Protected scalar TupleHash/TupleHashXOF sessions (same Linux GNU targets) | ✅ Implemented; Four identities, exact item completion | ❌ No |
+| Hosted independent-message SHA-512-family batching | ✅ Implemented | ❌ No |
+| Distinct hardened SHA-2 and Keccak hosted batch owners | ✅ Implemented | ❌ No |
+| Hosted independent-message SHA-3/SHAKE/cSHAKE batching | ✅ Implemented | ❌ No |
 | Hosted independent-message SHA-224/256 batching | ✅ Opt-in, platform-limited | ❌ No |
 | Historical SHA-2 host observation and portable fallback | ✅ Implemented; candidate routes unadmitted | ❌ No |
 | Explicit hosted raw execution | ✅ Opt-in, qualifying AArch64 only | ❌ No |
@@ -148,7 +153,8 @@ image policy and Windows signature/load/initialization checks, not a runtime
 development switch. It currently supports scalar SHA-256 up to 1024 bytes,
 retained rehashing, cancellation and explicit public output. It does not expose
 enclave-private memory as host slices or make the Linux host-slice APIs work on
-Windows. Production-signed qualification remains pending.
+Windows. Tests use development-signed images; production signing and deployment
+validation are the application publisher's responsibility.
 See the [API guide](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-owner.md).
 The distinct `windows_enclave::sha2` module covers streaming, all named SHA-2
 identities, general SHA-512/t and bit tails with retained cross-algorithm rehashing.
@@ -158,7 +164,7 @@ With `strict-sha2-acceleration`, explicitly use `sha2::Session::open_sha_ni`
 and a reviewed version-thirteen image for SHA-224/256. The enclave requires its
 complete SHA/SSE2/AVX/AVX2 bundle; other identities and mismatched images reject
 without scalar fallback. Default constructors stay scalar. This development-tested
-route still needs production, register/dump and independent qualification.
+route does not establish production-signed deployment or whole-process erasure.
 `windows_enclave::sha2_batch` adds eight declared SHA-2 slots, streamed item
 writers and sealed retained results. Its separate version-ten worker is scalar,
 not SIMD or parallel. With `strict-sha2-acceleration`, explicit
@@ -171,7 +177,8 @@ The separate `windows_enclave::sha512_simd` interface requires
 version-twenty image. It computes four independent wide SHA-2 messages in AVX2
 lanes, bounded to 128..=1024 bytes per lane; no scalar fallback or unbounded
 streaming is promised. Production signature/import admission remains mandatory.
-Development host tests pass; current-image and independent qualification remain pending.
+Development-signed native route tests are recorded; they do not establish
+production-signed deployment or independent cryptographic certification.
 The distinct `windows_enclave::sha256_simd::Session::open_avx2` interface uses
 the same opt-in feature and a reviewed version-twenty-one image for eight
 independent SHA-224/256 lanes. Each lane contains 64..=1024 bytes with a common
@@ -192,7 +199,8 @@ For explicit AVX2, enable `strict-sha2` and `strict-sha3-acceleration`, then use
 The baseline enclave entry validates AVX/AVX2 and OS vector state; the host needs
 no build-wide AVX2 flags. Trust checks remain mandatory, scalar `open` stays
 scalar, and failed acceleration never selects a fallback. Development tests
-pass; production and independent qualification remain pending.
+pass; production-signed deployment and independent cryptographic certification
+are not established by these tests.
 With `strict-sha2` and `strict-kmac`, `windows_enclave::kmac` supports all four
 KMAC identities, streamed key/customization setup, retained-output rekeying and
 full-width tag verification. Its separate version-eight image keeps tags and
@@ -204,7 +212,8 @@ For explicit AVX2, enable `strict-sha2` and `strict-kmac-acceleration`, then use
 image. Complete AVX/AVX2 and OS vector-state checks happen inside the enclave;
 host builds need no AVX2 flags. Image trust remains mandatory and failed
 acceleration never falls back to scalar. Caller inputs remain caller-owned;
-production, independent and current-image cleanup qualification remain pending.
+cleanup claims cover the documented Brynja-owned boundary, not SDK/OS storage
+or whole-process erasure. Production-signed deployment is not tested.
 
 With `strict-sha2,strict-tuplehash`, `windows_enclave::tuplehash` supports all four
 TupleHash identities, streamed item framing, retained composition and incremental
@@ -213,7 +222,7 @@ XOF output. `Session::open` uses the scalar version-nine image. Explicit
 version-sixteen image, with complete AVX/AVX2 and OS vector-state checks inside
 the enclave. It retains mandatory image trust and never falls back to scalar.
 Caller buffers remain outside enclave protection; development execution does
-not establish production or current-image cleanup qualification.
+not establish production-signed deployment or whole-image erasure.
 
 With `strict-sha2,strict-sha3-acceleration`,
 `windows_enclave::sha3_batch::Session::open_avx2` explicitly selects the
@@ -241,9 +250,10 @@ one root and up to four scoped AVX2 leaf workers per wave. All four ParallelHash
 identities accept borrowed byte/bit inputs and require explicit public-output
 declassification. It is one-shot, not a retained-secret-result API; worker joins
 and enclave destruction finish before the input borrows end. Existing sequential
-constructors still require one-thread images. Production signing and final-image
-cleanup qualification remain pending; development VBS execution is not independent
-verification. See the [concurrent API example and limits](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-parallel-concurrent.md#crate-api-integration).
+constructors still require one-thread images. Production-signed deployment is
+not tested; cleanup is conditional on the documented Brynja-owned boundary,
+not complete SDK/OS or whole-image erasure. Development VBS execution is not
+independent cryptographic verification. See the [concurrent API example and limits](https://github.com/valkyoth/brynja/blob/main/docs/windows-enclave-parallel-concurrent.md#crate-api-integration).
 
 Default-off `strict-kmac-acceleration` adds `strict_kmac::CompiledSession` with
 explicit AVX2 or Arm NEON/SHA3 selection. Enable the complete build-wide features
@@ -253,8 +263,7 @@ worker stacks; output and staging use resident protected mappings. A tag mismatc
 or cancellation permits reuse; backend failure or worker panic permanently
 quarantines the session. Full-strength key/tag rules and scalar `Session` are
 unchanged. The [compiled KMAC API example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-crypto-cpu-std/src/strict_kmac/compiled.rs)
-shows explicit setup and secret output ownership. Compiler/platform qualification
-and independent retest remain pending.
+shows explicit setup and secret output ownership. Project tests are recorded separately from independent cryptographic review.
 
 Default-off `strict-sha3-acceleration` adds `strict_sha3::CompiledSession` for
 SHA-3, SHAKE and cSHAKE with exact-bit outputs and optional bit-oriented N/S.
@@ -263,8 +272,7 @@ features, and establish compatible CPU/OS deployment throughout execution.
 Authority, scoped sponge and XOF staging stay on protected worker stacks; failed
 backends cannot silently fall back or regain health. Cancellation allows reuse.
 Scalar `Session` is unchanged. The [compiled SHA-3 API example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-crypto-cpu-std/src/strict_sha3/compiled.rs)
-shows construction and protected output ownership. Wider compiler/platform
-qualification and independent retest remain pending.
+shows construction and protected output ownership. Project tests are recorded separately from independent cryptographic review.
 
 Default-off `strict-sha2-acceleration` adds `strict_sha2::CompiledSession`.
 It requires an exact compatible SHA-2 kernel and its complete build-wide target
@@ -274,7 +282,8 @@ session without scalar fallback. Ordinary cancellation permits reuse. This is
 not runtime CPU detection: deployment must preserve CPU/OS support across
 scheduling and migration. The scalar `strict_sha2::Session` remains unchanged.
 See the [compiled hardware-session example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-crypto-cpu-std/src/strict_sha2/compiled.rs).
-Native Arm/dedicated x86 SHA-512 and emitted-code qualification remain pending.
+Native Arm observations are recorded; dedicated x86 SHA512 instruction
+execution is SDE-tested, not tested on dedicated SHA512 silicon.
 
 `protected-memory` provides bounded `protected_memory::ProtectedBytes` with
 resident pages, per-mapping core-dump exclusion and guard pages. Allocation is
@@ -322,8 +331,7 @@ output-bit and chunk limits. `hash` uses byte input; `hash_chunks` accepts raw
 LSB-first `Bits`, and `hash_customized_chunks` additionally accepts cSHAKE N/S.
 Empty N/S preserves SHAKE equivalence. Canonical validation runs on the protected
 worker; output loans clear on Drop. Empty and partial-bit XOF output are supported.
-Prefix setup is bounded but not internally cancellable. This is scalar-only and
-qualification-pending, with the same target and caller-storage limits as above.
+Prefix setup is bounded but not internally cancellable. This is scalar-only, with the same target and caller-storage limits as above.
 See the [compiled SHA-3 session example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-crypto-cpu-std/src/strict_sha3/mod.rs).
 
 `strict-kmac` enables `strict_kmac::Session` with four scalar KMAC/KMACXOF
@@ -331,11 +339,13 @@ identities. `Session::new(Algorithm::Kmac256(256), limits)` preacquires protecte
 stack, staging and output. `authenticate(key, message, customization)` returns a
 secret output loan; `compute(request, cancellation)` also supports bit keys,
 customization and message tails. `verify(request, candidate, cancellation)`
-compares on the protected worker and returns only the public Boolean decision.
+compares on the protected worker and returns `Ok(())` for a match or
+`Error::Mismatch` for a completed mismatch, without exporting the tag.
 Keys must be full-strength; fixed tags and verification also require full-strength
 output even if conformance-testing is enabled elsewhere. Use `declassify` for
 explicit public tags. Setup and fixed finalization are bounded, not internally
-cancellable. SIMD/hardware, native Arm and independent qualification remain pending.
+cancellable. This constructor is scalar; the separate `CompiledSession` above
+provides explicit acceleration. Neither API implies independent certification.
 See the [compiled KMAC session example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-crypto-cpu-std/src/strict_kmac/mod.rs) and the
 [resource/limit contract](https://github.com/valkyoth/brynja/blob/main/docs/strict-hardening-profile.md).
 
@@ -349,7 +359,7 @@ one empty element. Item lengths are derived and completed on the protected
 worker. Fixed/XOF output, including empty and partial-bit output, stays in an
 affine protected loan until exposure or explicit declassification. Setup and
 fixed finalization are bounded but not internally cancellable. This path is
-scalar-only, qualification-pending and has the target/caller-storage limits above.
+scalar-only and has the target/caller-storage limits above.
 See the [compiled TupleHash session example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-crypto-cpu-std/src/strict_tuplehash/mod.rs).
 
 `strict-batch` enables `strict_batch::Session` for protected independent-message
@@ -359,8 +369,8 @@ matching compiled AVX2/NEON and eligible actual SIMD work; it never silently
 falls back. SHA-256 has eight slots; wide/Keccak batches have four. Exact identity,
 bit width and inactive slots remain distinct, and outputs borrow protected
 storage. All public destinations are checked before declassification writes.
-See the [compiled batch example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-crypto-cpu-std/src/strict_batch/mod.rs). Qualification is
-pending; caller inputs/copies and public lengths retain the limits above.
+See the [compiled batch example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-crypto-cpu-std/src/strict_batch/mod.rs).
+Caller inputs/copies and public lengths retain the limits above.
 
 Enable `sha256-batch` for the separate ordinary/public SHA-224/256 multibuffer
 adapter. Portable selection never probes; Require fails on unqualified platforms
@@ -456,7 +466,7 @@ Little-endian AArch64 NEON uses allowlisted OS feature contracts. Cached detecti
 does not prove arbitrary VM migration/hotplug safety. CPU quarantine revokes all
 borrowed accelerated executors; portable selection has no CPU authority, so use
 the portable executor's own `quarantine` when local revocation is wanted.
-Full qualification remains pending; see the
+See the
 [hardened multibuffer contract](https://github.com/valkyoth/brynja/blob/main/docs/hardened-multibuffer-owners.md).
 
 Hosted execution uses qualifying AArch64 system-wide feature APIs for

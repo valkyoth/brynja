@@ -30,6 +30,11 @@ This crate is not a default or modern-facade dependency. The leaf stays `no_std`
 
 ## Cryptography Verification Status
 
+Project test results and their exact scope are recorded in the
+[completed project checkpoint](https://github.com/valkyoth/brynja/blob/main/release-notes/RELEASE_NOTES_0.25.2.md#completed-checkpoint-handoff-2026-10-31)
+and its linked native/retest records. These are project assurance results,
+not independent cryptographic certification or coverage of every deployment.
+
 ✅ marks an implemented API within the stated feature/platform scope, not
 independent review, certification or unrestricted deployment approval.
 Qualification limits remain separate from implementation completion.
@@ -47,12 +52,12 @@ Kani, Miri, fuzzing or a pentest is not independent cryptographic verification.
 
 | Algorithm | Implemented | Independently verified |
 | --- | --- | --- |
-| Protected compiled SHA-1 sessions | ✅ Implemented; qualification pending | ❌ Not independently verified |
+| Protected compiled SHA-1 sessions | ✅ Implemented | ❌ Not independently verified |
 | SHA-1 | ✅ Fully implemented | ❌ Not independently verified |
 | Opt-in hosted ordinary acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |
 | Opt-in hosted hardened acceleration | ✅ Opt-in, platform-limited | ❌ Not independently verified |
-| Protected scalar SHA-1 sessions (Linux GNU x86-64/little-endian AArch64) | ✅ Implemented; qualification pending | ❌ Not independently verified |
-| Apple Silicon resident scalar/Arm SHA-1 sessions (no dump exclusion) | ✅ Implemented; qualification pending | ❌ Not independently verified |
+| Protected scalar SHA-1 sessions (Linux GNU x86-64/little-endian AArch64) | ✅ Implemented | ❌ Not independently verified |
+| Apple Silicon resident scalar/Arm SHA-1 sessions (no dump exclusion) | ✅ Implemented | ❌ Not independently verified |
 
 ## Hardware and SIMD
 
@@ -120,7 +125,7 @@ protected loan: Drop clears it, `expose` borrows secret bytes, and `declassify`
 requires explicit public-output authority. Errors and recoverable unwind clear
 output and the joined stack before reuse. Unsupported targets fail closed.
 This `Session` wrapper is scalar-only; separate `CompiledSession` selects
-SHA-NI/Arm. Qualification remains pending. Neither repairs collision resistance, protects caller copies,
+SHA-NI/Arm. Neither repairs collision resistance, protects caller copies,
 or promise whole-process/register/interruption erasure. The modern facade gains
 no legacy dependency. See the [compiled session example](https://github.com/valkyoth/brynja/blob/main/crates/brynja-legacy-sha1-std/src/strict_execution/mod.rs)
 and [strict-profile limits](https://github.com/valkyoth/brynja/blob/main/docs/strict-hardening-profile.md).

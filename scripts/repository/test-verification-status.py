@@ -192,12 +192,12 @@ def windows_simd_status_rows() -> None:
             matching = [row for row in rows if 'Windows x64 VBS ' + capability in row]
             assert len(matching) == 1, (path, capability)
             row, = matching
-            assert 'Opt-in AVX2; development-tested; qualification pending' in row
+            assert 'Opt-in AVX2; development-tested; production signing not tested' in row
             assert row.endswith('| ❌ No |')
             for changed in (text.replace(row, ''),
                             text.replace(row, row + '\n' + row),
                             text.replace(row, row.replace('❌ No', '✅ Independently verified')),
-                            text.replace(row, row.replace('qualification pending', 'production qualified'))):
+                            text.replace(row, row.replace('production signing not tested', 'production qualified'))):
                 try:
                     MODULE.validate_crate_document(path, changed)
                 except MODULE.VerificationStatusError:
@@ -272,11 +272,11 @@ def resident_status_rows() -> None:
             if 'Apple Silicon resident' not in row:
                 continue
             rows_checked += 1
-            warning = 'qualification pending'
+            warning = 'no dump exclusion'
             if row.startswith('| Apple Silicon resident byte/worker resources |'):
                 warning = 'no dump exclusion or automatic cryptographic admission'
-            elif name == 'crates/brynja-legacy-hmac-std/README.md':
-                warning = 'no dump exclusion'
+            elif 'no dump-exclusion guarantee' in row:
+                warning = 'no dump-exclusion guarantee'
             assert warning in row and 'dump' in row
             text = (root / name).read_text()
             for changed in ('', row + '\n' + row,
@@ -311,7 +311,7 @@ def completed_api_status_rows() -> None:
         for capability in capabilities:
             row, = [r for r in MODULE.CRATE_ROWS[path.as_posix()]
                     if r.startswith('| ' + capability + ' |')]
-            assert '| ✅ Implemented;' in row and row.endswith('| ❌ No |')
+            assert '| ✅ Implemented' in row and row.endswith('| ❌ No |')
             for replacement in (row.replace('✅ Implemented', '🚧 In progress'),
                                 row.replace('❌ No', '✅ Independently verified')):
                 try:
@@ -328,6 +328,21 @@ def completed_api_status_rows() -> None:
     print('Completed API status rejects 12 stale/review promotions; unimplemented candidates retained')
 
 
+def current_readme_milestones() -> None:
+    """Current README prose must not reopen completed checkpoints generically."""
+    root = SCRIPT.resolve().parents[2]
+    paths = [root / 'README.md', *sorted((root / 'crates').glob('*/README.md'))]
+    for path in paths:
+        prose = ' '.join(path.read_text().split()).lower()
+        for stale in ('qualification pending', 'qualification remains pending',
+                      'qualification remain pending', 'qualification is pending',
+                      'qualification-pending', 'await qualification',
+                      'not yet release-qualified', 'pending cumulative retest'):
+            assert stale not in prose, (path, stale)
+    assert len(paths) == 44
+    print('44 current READMEs retain no stale blanket qualification milestones')
+
+
 def main() -> int:
     legacy_root_rows()
     crate_tables()
@@ -336,6 +351,7 @@ def main() -> int:
     windows_simd_status_rows()
     resident_status_rows()
     completed_api_status_rows()
+    current_readme_milestones()
     MODULE.validate_document(Path("fixture.md"), BASE, (ROW,))
     MODULE.validate_document(Path("README.md"), ROOT, (ROW,))
     must_fail(BASE.replace(MODULE.HEADING, "## Status"), "heading")

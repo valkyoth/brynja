@@ -107,8 +107,9 @@ truncation, mismatch rejection and typed public/secret tags. General SHA-512/t
 is separately constrained by the modern 128-bit minimum. Protected/resident
 and accelerated APIs retain their documented target and qualification limits;
 SIMD HMAC batching and Windows enclave HMAC are not implemented.
-The v0.25.2 checkpoint remains pending cumulative retest and final release
-qualification; green implementation rows do not authorize publication.
+The [v0.25.2 record](security/pentest/v0.25.2.md#author-operated-checkpoint-completion-2026-10-31)
+records the supplied remediation retest and completed project checkpoint;
+green implementation rows do not authorize publication.
 
 ### Legacy Hash Functions
 
@@ -126,8 +127,9 @@ Legacy HMAC is explicitly selected for compatibility, outside the modern facade.
 The [v0.25.1 security retest](security/pentest/v0.25.1.md) and that tagged
 release's required checks passed. Hosted owners cover GNU/Linux protected and
 Apple Silicon resident sessions; the latter do not claim dump exclusion.
-The current checkpoint is not yet release-qualified. This is not independent
-cryptographic certification.
+The [completed v0.25.2 checkpoint](security/pentest/v0.25.2.md#author-operated-checkpoint-completion-2026-10-31)
+records project verification, not independent cryptographic certification or
+authorization to publish.
 
 | Construction family | Implementation status | Owning crate | Independent verification |
 | --- | --- | --- | --- |
@@ -258,7 +260,7 @@ Detailed release-by-release history belongs in those reports and
 | Package group | Responsibility |
 | --- | --- |
 | `brynja` | Curated modern facade |
-| `brynja-strict` | Separate strict-only protected modern sessions; qualification pending |
+| `brynja-strict` | Separate strict-only protected modern sessions; explicit platform limits |
 | `brynja-core`, `brynja-hash-core` | Bounded ownership, constant-time and hash interfaces |
 | `brynja-hash-*`, `brynja-mac-*` | Reusable algorithm and construction families |
 | `brynja-crypto` | Cryptographic composition, provider contracts and policy |
@@ -283,7 +285,9 @@ Apple Silicon macOS has separate, default-off resident/clearing session APIs
 for modern hashes, KMAC, TupleHash, batching and ParallelHash, with separately
 scoped legacy adapters. They require locked guarded storage and joined workers,
 but do **not** guarantee core-dump exclusion and are not a fallback for
-`brynja-strict`. Independent review and release qualification remain pending.
+`brynja-strict`. Native project tests are recorded in the
+[v0.25.2 report](security/pentest/v0.25.2.md#author-native-refresh--ea97052b-2026-10-28);
+they do not establish dump exclusion or independent cryptographic certification.
 See the [resident profile contract](docs/macos-resident-profile.md).
 
 ## Rust Version Support

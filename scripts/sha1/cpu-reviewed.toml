@@ -23,7 +23,7 @@
 "crates/brynja-legacy-sha1/tests/cpu.rs" = "7f4cf901b207aa2d08dcb42c5d5f4f3c397be076949d490e927a93a70dc64338"
 "crates/brynja-legacy-sha1-std/Cargo.toml" = "ae04f64c5d01737c13c9161fd6dabc8e57d5aa99c19271e4cd2b8bac72bd6c23"
 "crates/brynja-legacy-sha1-std/src/lib.rs" = "7a8b4abe2625379ff97754341ea328903da064f6b84afb95cf77ea2900399f05"
-"crates/brynja-legacy-sha1-std/README.md" = "9a6ba55703190c44b6c792e34f95083c5d726f8288188b9f3bbf724530d34349"
+"crates/brynja-legacy-sha1-std/README.md" = "4632aa9cd697333463f67d900e5b8bc92595d27046a128e34a324a1e987259b6"
 "assurance/sha1-cpu-public-api/Cargo.toml" = "ccc78d086a871035f4801cecb7b0458579ee3d8e44e832b21513e05914756e53"
 "assurance/sha1-cpu-public-api/Cargo.lock" = "7635d4f63b033c5bf24b5c9ece1142dd0c951208e92d672321a2795ebb8b15e5"
 "assurance/sha1-cpu-public-api/src/main.rs" = "80e3ccc45ecad212e6aa16eae53b4ed95f2f96aa063f6fc07bfedba8d0d49061"

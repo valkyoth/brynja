@@ -1,7 +1,8 @@
 # v0.25.3 — Scoped verification and publication handoff
 
-Status: candidate; scoped pentest/retest, final checks and green candidate CI are
-still required. Nothing has been published from this release.
+Status: candidate; owner-supplied scoped pentest accepted on 2026-11-01 for
+37d29d9e063cd3181ebabf70af1fcf414f4b75e4. Final checks and green candidate CI
+remain required. Nothing has been published from this release.
 
 ## Scope
 

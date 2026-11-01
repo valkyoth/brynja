@@ -91,7 +91,7 @@ impl<const N: usize> Drop for Scratch<N> {
 ///
 /// Drop clears its complete region. No Clone, Copy, Debug, Send or Sync is
 /// exposed. Expansion borrows the owner, allowing deliberate domain-separated
-/// reuse without exporting or reconstructing the PRK. Safe borrows prohibit
+/// reuse without requiring export or reconstruction of the PRK. Safe borrows prohibit
 /// input/output overlap; disjoint slices of one allocation are supported.
 ///
 /// ```

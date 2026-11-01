@@ -3429,7 +3429,7 @@ sha256 = "032218b62332bfd42653aa23c673849e00cb8a27ef41de9239e598e3753dfe42"
 
 [[reviewed-source]]
 path = "crates/brynja-crypto/src/hkdf/derive.rs"
-sha256 = "b756e5c73a979b3562143136f82ea2d8e39219c467f7c0fec5978cc81e5f9cf7"
+sha256 = "58b080a466113e77b89833ea958cf5eefedd6943728d150508e600fb82af1732"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hkdf/src/lib.rs"

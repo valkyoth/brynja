@@ -79,6 +79,28 @@ impl ExpansionLength {
 /// without a NUL terminator, text normalization or implicit transcript hashing.
 /// This checks TLS wire bounds, not the hash-dependent HKDF output bound.
 /// Label/context are borrowed metadata, not clearing secret owners.
+/// Expand through `Prk::expand_tls13`; encoding is crate-private so callers
+/// cannot accidentally feed this label into raw Expand without length binding.
+///
+/// A separate output buffer still does not grant access to the raw encoder:
+///
+/// ```compile_fail,E0624
+/// use brynja_crypto::hkdf::Tls13Label;
+/// let label = Tls13Label::new(b"key", b"abc", 32).unwrap();
+/// let mut encoding = [0; 514];
+/// label.encode(&mut encoding).unwrap();
+/// ```
+///
+/// Checked expansion also rejects overlapping label/output borrows:
+///
+/// ```compile_fail,E0502
+/// use brynja_crypto::hkdf::{Prk, Sha256, Tls13Label};
+/// let mut prk_storage = [0; 32];
+/// let prk = Prk::<Sha256>::extract(None, b"ikm", &mut prk_storage).unwrap();
+/// let mut storage = [b'x'; 32];
+/// let label = Tls13Label::new(&storage[..1], &[], 32).unwrap();
+/// let _key = prk.expand_tls13(&label, &mut storage).unwrap();
+/// ```
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct Tls13Label<'a> {
     label: &'a [u8],
@@ -138,17 +160,8 @@ impl<'a> Tls13Label<'a> {
     /// capacity is untouched. There is no fallible work after the first write.
     /// Safe borrows prohibit exact or partial overlap with label/context; disjoint
     /// slices of one allocation are allowed. No unsafe aliasing workaround exists.
-    /// This is a low-level wire encoder, not an expansion operation. Passing its
-    /// bytes to raw `Prk::expand` does not bind the output length. For key
-    /// derivation use `Prk::expand_tls13` or `Prk::expand_label`, which do bind it.
-    ///
-    /// ```compile_fail
-    /// use brynja_crypto::hkdf::Tls13Label;
-    /// let mut storage = [b'x'; 32];
-    /// let label = Tls13Label::new(&storage[..1], &[], 32).unwrap();
-    /// label.encode(&mut storage).unwrap();
-    /// ```
-    pub fn encode<'b>(&self, destination: &'b mut [u8]) -> Result<&'b [u8], ParameterError> {
+    /// Internal wire encoder, reached after the checked expansion length gate.
+    pub(crate) fn encode<'b>(&self, destination: &'b mut [u8]) -> Result<&'b [u8], ParameterError> {
         let encoded = destination
             .get_mut(..self.encoded_bytes)
             .ok_or(ParameterError::DestinationLength)?;
@@ -166,3 +179,7 @@ impl<'a> Tls13Label<'a> {
         Ok(encoded)
     }
 }
+
+#[cfg(all(test, not(kani)))]
+#[path = "parameter_tests.rs"]
+mod tests;

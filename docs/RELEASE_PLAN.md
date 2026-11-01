@@ -5449,15 +5449,17 @@ Initial implementation slice (2026-11-01):
   enumerates counters without wrapping beyond 255. It accepts public width
   metadata, not an arbitrary cryptographic algorithm; the key-owning interface
   obtains the width from its admitted HMAC identity.
-- `Tls13Label` validates and encodes the RFC 8446 section 7.1 label into a
-  caller buffer. Invalid fields are rejected before writing; short destinations
+- `Tls13Label` validates the RFC 8446 section 7.1 label. After review hardening,
+  encoding is crate-private and public derivation uses length-checked expansion.
+  Internal encoding rejects invalid fields before writing; short destinations
   remain unchanged and excess capacity is untouched. Safe Rust borrows prohibit
   overlapping input/output, while disjoint slices of one allocation are allowed.
 - These helpers are allocation-free in the existing `no_std` composition crate.
   They do not process keys, derive output, select a hash, or claim secret cleanup.
 - The finite checks are `brynja-verify run hkdf parameters` (six regressions,
   including a bounded exhaustive arithmetic model) and
-  `brynja-verify run hkdf label-aliasing` (one compile-fail doctest).
+  `brynja-verify run hkdf label-aliasing` (two compile-fail doctests: private
+  encoder access and overlapping label/output borrows in checked expansion).
   `brynja-verify hkdf` only refreshes their status. These checks do not rerun
   completed hash/HMAC assessments and are not release gates.
 

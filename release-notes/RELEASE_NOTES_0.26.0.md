@@ -104,6 +104,42 @@ The temporary root `PENTEST.md` was removed after remediation and testing, as
 requested. Findings and compatibility decisions are retained above. Independent
 candidate retest and release authorization remain pending.
 
+### Follow-up retest remediation (2026-11-01)
+
+The supplied retest of `1a188c84` confirmed explicit clearing and the dependency
+change, found no new security issues, and retained two minor corrections:
+
+- Close the remaining public encoder route. `Tls13Label::encode` is now
+  crate-private, superseding the first review's decision to leave that encoder
+  public. Users of the label type derive through `expand_tls13` or
+  `expand_label`. Raw HKDF Expand remains available for arbitrary info; this
+  cannot prevent a caller from independently constructing malformed TLS bytes.
+- Clarify the owner documentation: reuse does not **require** exporting or
+  reconstructing a PRK; explicit `expose` remains available.
+
+The six existing parameter/wire regressions move unchanged into unit-test
+scope to exercise the private encoder. The tracker now selects that exact
+module rather than the removed integration harness. Two external compile-fail
+doctests independently cover encoder privacy (using disjoint buffers) and
+overlapping label/output borrows through checked expansion. Registry regression
+tests pin the new selectors, exact populations and moved source input.
+
+The maintainer-approved policy remains: zero-length output is supported,
+including matching zero-length labels; long PRK imports and explicit export
+remain available, and label framing remains generic over six SHA-2 identities.
+Their bounds, cleanup exclusions and caller responsibilities are unchanged and
+tested. The safe u16-to-usize cast and Kani dead-code allowance need no change,
+as the retest itself notes. These notes are not independent release approval.
+
+Follow-up validation: all 17 modern registrations passed again, including the
+moved six-test module and both compile-fail tests. The shared-input legacy bounds
+proof passed again; the other 14 legacy observations remain current without
+rerunning unchanged inputs. Both crate suites, Clippy, formatting, public docs,
+facade compilation, 166 registry tests, nine owner-contract tests, five proof
+adapter tests, API-profile regressions, release-plan/scoped-release regressions
+and requirements/protocol-surface checks passed. The temporary follow-up
+`PENTEST.md` was removed after these checks; its dispositions are retained here.
+
 ### Earlier candidate preparation
 
 Candidate preparation checks (2026-11-01; not the post-review final gate):

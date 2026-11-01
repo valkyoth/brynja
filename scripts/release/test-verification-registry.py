@@ -71,7 +71,14 @@ def validate(registry):
         assert all(flag in argv for flag in ('--offline', '--locked', '--no-default-features'))
         assert '--workspace' not in argv and '--all-features' not in argv
         package = argv[argv.index('-p') + 1]
-        harness = argv[argv.index('--test') + 1]
+        if '--lib' in argv:
+            assert key == ('hkdf', 'parameters'), 'unexpected library test selection'
+            assert argv[-2:] == ['--lib', 'hkdf::parameters::tests::']
+            test = 'crates/brynja-crypto/src/hkdf/parameter_tests.rs'
+        else:
+            assert '--test' in argv, 'missing test harness selection'
+            harness = argv[argv.index('--test') + 1]
+            test = f'crates/{package}/tests/{harness}.rs'
         assert package in CLOSURES
         groups = [registry['groups'][name] for name in check['inputs']]
         paths = {path for group in groups for path in group.get('paths', [])}
@@ -81,7 +88,6 @@ def validate(registry):
             assert f'crates/{name}/src' in paths, f'missing source: {name}'
             assert f'crates/{name}/Cargo.toml' in manifests, f'missing manifest: {name}'
             assert name in locks, f'missing lock row: {name}'
-        test = f'crates/{package}/tests/{harness}.rs'
         assert test in paths, 'missing harness input'
         source = (ROOT / test).read_text()
         assert check['success']['minimum_tests'] >= 1
@@ -191,8 +197,25 @@ class RegistryTests(unittest.TestCase):
         hkdf_dynamic.validate(self.registry, CLOSURES)
         hkdf_dynamic.negative_controls(self.registry, CLOSURES)
 
+    def test_hkdf_private_encoder_keeps_wire_and_public_boundary_coverage(self):
+        checks = {c['id']: c for c in self.registry['checks'] if c['component'] == 'hkdf'}
+        prefix = ['cargo', '+1.99.1', 'test', '--locked', '--offline', '-p',
+                  'brynja-crypto', '--no-default-features']
+        for name, selector, count in (
+                ('parameters', ['--lib', 'hkdf::parameters::tests::'], 6),
+                ('label-aliasing', ['--doc', 'hkdf::parameters::Tls13Label'], 2)):
+            check = checks[name]
+            self.assertEqual(check['command'], prefix + selector)
+            self.assertEqual(check['success']['minimum_tests'], count)
+            self.assertEqual(check['success']['exact_tests'], count)
+            self.assertIn(f'test result: ok. {count} passed; 0 failed; 0 ignored;',
+                          check['success']['contains'])
+            self.assertIn('hkdf-composition', check['inputs'])
+        self.assertEqual(self.registry['groups']['hkdf-parameters']['paths'],
+                         ['crates/brynja-crypto/src/hkdf/parameter_tests.rs'])
+
     def test_missing_transitive_source_and_harness_are_rejected(self):
-        for group in ('hash-core', 'md5-api'):
+        for group in ('hash-core', 'md5-api', 'hkdf-parameters'):
             changed = copy.deepcopy(self.registry)
             changed['groups'][group]['paths'] = []
             with self.assertRaises(AssertionError):

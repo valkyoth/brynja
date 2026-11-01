@@ -1,6 +1,6 @@
 //! Scoped HKDF metadata bounds and TLS label framing regressions.
 
-use brynja_crypto::hkdf::{ExpansionLength, ParameterError, Tls13Label};
+use super::{ExpansionLength, ParameterError, Tls13Label};
 
 #[test]
 fn expansion_boundaries_and_exhaustion() -> Result<(), ParameterError> {

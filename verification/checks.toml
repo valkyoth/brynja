@@ -510,7 +510,7 @@ path = "Cargo.lock"
 packages = ["brynja-crypto"]
 
 [groups.hkdf-parameters]
-paths = ["crates/brynja-crypto/tests/hkdf_parameters.rs"]
+paths = ["crates/brynja-crypto/src/hkdf/parameter_tests.rs"]
 
 [groups.hkdf-derivation]
 paths = ["crates/brynja-crypto/tests/hkdf_derivation.rs"]
@@ -579,8 +579,8 @@ toolchain = "1.99.1"
 component = "hkdf"
 id = "parameters"
 name = "HKDF bounds and TLS label framing"
-establishes = "Six public-metadata regressions: block bounds/counters, finite arithmetic model, exact TLS label bytes, unchanged short destinations and disjoint slices. No Extract/Expand, secret cleanup, symbolic proof or whole-HKDF qualification."
-command = ["cargo", "+1.99.1", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--test", "hkdf_parameters"]
+establishes = "Six internal parameter/encoding regressions: block bounds/counters, finite arithmetic model, exact TLS label bytes, unchanged short destinations and disjoint slices. No Extract/Expand, secret cleanup, symbolic proof or whole-HKDF qualification."
+command = ["cargo", "+1.99.1", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--lib", "hkdf::parameters::tests::"]
 cwd = "."
 inputs = ["compiler", "hkdf-composition", "hkdf-parameters", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
 reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
@@ -594,17 +594,17 @@ exact_tests = 6
 component = "hkdf"
 id = "label-aliasing"
 category = "compile-fail"
-name = "TLS label rejects overlapping safe borrows"
-establishes = "The TLS label encoder's overlapping-borrow doctest must fail to compile. Not a dynamic overlap detector or a cryptographic derivation test."
+name = "TLS label encoder privacy and overlapping safe borrows"
+establishes = "Two compile-fail doctests: external callers cannot access the encoder, and checked expansion rejects overlapping label/output borrows. Not a dynamic overlap detector or a cryptographic derivation test."
 command = ["cargo", "+1.99.1", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--doc", "hkdf::parameters::Tls13Label"]
 cwd = "."
 inputs = ["compiler", "hkdf-rustdoc", "hkdf-composition", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
 reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
 timeout_seconds = 600
 [checks.success]
-contains = ["test result: ok. 1 passed; 0 failed; 0 ignored;"]
-minimum_tests = 1
-exact_tests = 1
+contains = ["test result: ok. 2 passed; 0 failed; 0 ignored;"]
+minimum_tests = 2
+exact_tests = 2
 
 [groups.hash-core]
 paths = ["crates/brynja-core/src", "crates/brynja-hash-core/src"]

@@ -63,9 +63,11 @@ a weak or non-pseudorandom PRK. Labels alone do not implement a TLS key schedule
 authenticate a transcript or admit every SHA-2 identity to a TLS cipher suite.
 This API is not password hashing, protected/resident memory or FIPS validation.
 Empty output remains supported; a protocol requiring a nonempty key must enforce
-that at its boundary. Public `Tls13Label::encode` is a low-level wire encoder:
-passing its bytes to raw `expand` does not bind lengths and can produce
-prefix-related outputs. Use `expand_tls13` for an existing label or
+that at its boundary. `Tls13Label::encode` is crate-private; callers cannot
+obtain its raw encoding through this API and accidentally bypass the checked
+expansion path. Raw `expand` still accepts arbitrary caller-supplied info; it
+does not interpret or validate manually constructed TLS encodings. Use
+`expand_tls13` for an existing label or
 `expand_label` to construct one from the destination length. These helpers remain
 generic over the six supported SHA-2 identities, not TLS cipher-suite admission.
 PRK `expose` is an explicit export boundary: copied bytes are not erased by

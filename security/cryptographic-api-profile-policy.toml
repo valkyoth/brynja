@@ -2377,7 +2377,7 @@ sha256 = "254d1afb4f0ec0b7610395eb275af24db4e259826d40173f64fb8824b17eae3e"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/Cargo.toml"
-sha256 = "80dfaf794733969c798b623e0d97903c72f5fb5d179046e28883ba0c4b5243a3"
+sha256 = "99aeeb5fc8e3956ef379b3f07b4e7507f9eee49a357ccc15f0e0247fde9b6d19"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/lib.rs"
@@ -3429,11 +3429,11 @@ sha256 = "032218b62332bfd42653aa23c673849e00cb8a27ef41de9239e598e3753dfe42"
 
 [[reviewed-source]]
 path = "crates/brynja-crypto/src/hkdf/derive.rs"
-sha256 = "993cd60dc3a6c46e37c242bc661d3805ccad455cade180cb5092342d96866133"
+sha256 = "b756e5c73a979b3562143136f82ea2d8e39219c467f7c0fec5978cc81e5f9cf7"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hkdf/src/lib.rs"
-sha256 = "749369007a92e1d729089209950af9b14f1d4849d9b90ca2a480e8a2eeb55ffa"
+sha256 = "33aadd9fb0d085b02fe7306a62a0c2eba38dcd054b959fda1ee964f7be963dfd"
 
 [[reviewed-source]]
 path = "scripts/cryptography/hkdf_owner_contract.py"

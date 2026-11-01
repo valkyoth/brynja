@@ -45,6 +45,67 @@ screen is not a constant-time certification. See the
 
 ## Release handoff — pending
 
+### Review remediation (2026-11-01)
+
+The supplied review of candidate `432b866b` reported no Critical/High issues,
+two Medium findings across the two reviewers, and five Low findings. The
+following dispositions preserve the compatible API policy explicitly approved
+by the maintainer. These are author remediation notes, not an independent PASS
+or a replacement for the scoped candidate retest.
+
+- **Medium, dependency policy:** centralize the exact legacy HMAC workspace pin
+  and inherit it from legacy HKDF and legacy HMAC std. Twelve negative controls
+  reject duplicated declarations and changed version/feature policies.
+- **Medium, TLS length binding:** add `expand_tls13`, rejecting mismatched label
+  and destination lengths before output admission; route `expand_label` through
+  it. Tests cover equal-length independent answers, shorter/longer/empty
+  mismatches, unchanged rejected buffers, differing-length domain separation
+  and the hash-specific output bound. Raw encoding/Expand remain low-level and
+  explicitly do not provide this binding.
+- **Low, long imported PRK work:** retain long imports for compatibility.
+  Document re-keying/re-hashing per output block (up to 255 times) and require
+  caller admission limits. Existing long-key independent vectors stay tested;
+  no keyed-state caching or reduced-work guarantee is claimed.
+- **Low, empty output:** retain intentional zero-length support and test it.
+  Protocol-specific nonempty key requirements remain the caller's policy.
+- **Low, PRK export:** retain the explicit `expose` boundary. Document and test
+  that exported copies survive owner clearing and require their own cleanup.
+- **Low, Drop-only cleanup:** add consuming `clear` on both PRK/output families.
+  Test complete long-PRK clearing, canaries, immediate buffer reuse and the
+  empty-output `None` receipt, while preserving Drop/unwind tests. Forget/leak
+  remains excluded; explicit clearing is not automatic leak prevention.
+- **Low, generic TLS framing:** retain all six modern SHA-2 identities, with
+  tests for the checked helper on each. These are framing helpers, not cipher
+  negotiation or TLS interoperability approval.
+
+The enlarged lifecycle test also exposed Miri stdout/stderr interleaving in the
+runner's completion binding. Lifecycle bindings now match the exact selected
+test name plus a successful one-test summary, not adjacent name/`ok` output.
+Registry controls reject restoration of the fragile adjacency requirement;
+process success, exact population and instrumentation remain mandatory. The
+original rejected attempt remains in the tracker.
+
+Post-remediation validation on the working tree based on `432b866b`:
+
+- All 17 modern and 15 legacy HKDF registrations are current passes, including
+  sanitizers, selected Miri tests, public-bounds proofs, compiler cleanup,
+  MSRV/no_std, optimized tests and bounded timing screens.
+- All 18 finite CI check commands passed. The wrapper correctly refused release
+  candidate status because this worktree is uncommitted; this is not a final
+  gate or GitHub PASS. Separate `cargo deny check`, `cargo audit --deny warnings`
+  and SBOM comparison also passed.
+- The verifier's 50 Rust tests and 165 registry tests passed, including the
+  updated completion-binding regressions. Public API documentation builds,
+  formatting, Clippy and whitespace checks passed. The metadata-only legacy
+  HMAC std consumer passed its four doctests and all-feature compilation.
+- Historical data and saved observations outside HKDF/legacy HKDF are unchanged.
+
+The temporary root `PENTEST.md` was removed after remediation and testing, as
+requested. Findings and compatibility decisions are retained above. Independent
+candidate retest and release authorization remain pending.
+
+### Earlier candidate preparation
+
 Candidate preparation checks (2026-11-01; not the post-review final gate):
 
 - Facade compile and scoped formatting passed. Ten affected facade fixture

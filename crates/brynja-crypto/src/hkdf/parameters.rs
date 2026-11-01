@@ -8,7 +8,7 @@ pub enum ParameterError {
     HashLength,
     /// Requested output exceeds the RFC 5869 255-block limit.
     ExpansionLength,
-    /// Requested output does not fit the TLS label's two-byte length field.
+    /// Output does not fit the TLS field or differs from a supplied label's length.
     TlsOutputLength,
     /// Unprefixed TLS label must contain 1 through 249 bytes.
     LabelLength,
@@ -127,12 +127,20 @@ impl<'a> Tls13Label<'a> {
         self.encoded_bytes
     }
 
+    /// Output size committed to by this label, not the label encoding size.
+    pub const fn output_len(self) -> usize {
+        self.output_bytes as usize
+    }
+
     /// Writes one complete label and returns its initialized prefix.
     ///
     /// Insufficient capacity leaves all destination bytes unchanged. Excess
     /// capacity is untouched. There is no fallible work after the first write.
     /// Safe borrows prohibit exact or partial overlap with label/context; disjoint
     /// slices of one allocation are allowed. No unsafe aliasing workaround exists.
+    /// This is a low-level wire encoder, not an expansion operation. Passing its
+    /// bytes to raw `Prk::expand` does not bind the output length. For key
+    /// derivation use `Prk::expand_tls13` or `Prk::expand_label`, which do bind it.
     ///
     /// ```compile_fail
     /// use brynja_crypto::hkdf::Tls13Label;

@@ -194,5 +194,19 @@ fn disjoint_storage_and_drop_during_unwind() -> Result<(), Error> {
     assert!(result.is_err());
     assert_eq!(storage, [0; 20]);
     assert_eq!(output, [0; 41]);
+    let mut storage = [0xa5; 82];
+    let mut output = [0xa5; 3];
+    let prk = Sha1Prk::import(LegacyUse::acknowledge(), &[0x55; 80], &mut storage[1..81])?;
+    let exported = prk.expose().to_vec(); // Public test data only.
+    assert!(prk.expand(b"clear", &mut output[1..2])?.clear().is_some());
+    assert_eq!(output, [0xa5, 0, 0xa5]);
+    assert!(prk.expand(&[], &mut [])?.clear().is_none());
+    let _cleared = prk.clear();
+    assert_eq!((storage[0], storage[81]), (0xa5, 0xa5));
+    assert!(storage[1..81].iter().all(|b| *b == 0));
+    assert_eq!(exported, [0x55; 80]);
+    let _cleared =
+        Sha1Prk::import(LegacyUse::acknowledge(), &[0x42; 80], &mut storage[1..81])?.clear();
+    assert!(storage[1..81].iter().all(|b| *b == 0));
     Ok(())
 }

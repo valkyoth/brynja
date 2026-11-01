@@ -13,7 +13,7 @@ default = []
 
 [dependencies]
 brynja-core.workspace = true
-brynja-legacy-hmac = { path = "../brynja-legacy-hmac", version = "=0.1.0", default-features = false }
+brynja-legacy-hmac.workspace = true
 
 [lints]
 workspace = true

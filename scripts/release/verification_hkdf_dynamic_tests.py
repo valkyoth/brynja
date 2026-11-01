@@ -51,8 +51,13 @@ def validate(registry, closures):
                 # Progress notes can split the test-name/ok line. Exact test
                 # selection, process success and exact population still bind
                 # the result; do not depend on merged stdout/stderr adjacency.
-                signal = 'test ' + (lifecycle + ' ... ok' if check_id == 'miri-lifecycle' else fault)
+                signal = 'test ' + (lifecycle if check_id == 'miri-lifecycle' else fault)
                 assert signal in check['success']['contains']
+                interleaved = (signal + ' ... note: progress report: current operation\n'
+                               '  so far, 10000000 basic blocks have been executed\n'
+                               'ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; '
+                               '0 measured; 0 filtered out; finished in 1.00s\n')
+                assert all(text in interleaved for text in check['success']['contains'])
             else:
                 assert env['RUSTFLAGS'] == '-Zsanitizer=address'
                 assert env['CARGO_ENCODED_RUSTFLAGS'] == ''
@@ -67,6 +72,8 @@ def negative_controls(registry, closures):
         ('asan-fault-cleanup', 'environment', 'ASAN_OPTIONS', 'detect_leaks=0'),
         ('miri-lifecycle', 'environment', 'MIRIFLAGS', '-Zmiri-disable-validation'),
         ('miri-fault-cleanup', 'success', 'exact_tests', 0),
+        ('miri-lifecycle', 'success', 'contains',
+         ['test result: ok.', 'test disjoint_allocation_and_unwind_cleanup ... ok']),
     ):
         changed = copy.deepcopy(registry)
         row = next(c for c in changed['checks'] if c['component'] == 'hkdf' and c['id'] == check_id)

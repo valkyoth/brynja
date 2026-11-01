@@ -17,11 +17,11 @@ The finite requirements and their scoped check IDs are:
 | Explicit legacy separation | Concrete SHA-1 PRK; Extract and import require `LegacyUse`; no MD5 HKDF, TLS labels or modern fallback | `legacy_hkdf/ownership`, `legacy_hkdf/derivation` |
 | RFC 5869 Extract/import | Extract produces full HashLen; absent salt uses HashLen zero bytes; explicit empty salt is accepted. Import requires at least HashLen and is not entropy extraction | `derivation`, `legacy_hkdf/derivation` |
 | Complete bounded Expand | Exactly the requested bytes, at most 255 full digest blocks; chained full HMAC outputs, counters 1..255, no wrapping. Zero output performs no HMAC | `parameters`, `derivation`, both `bounds-proof` checks |
-| TLS label framing | Big-endian u16 output length, exact `tls13 ` prefix, unprefixed label length 1..249, context length 0..255; at most 514 encoded bytes. No NUL, normalization or implicit transcript hash | `parameters`, `derivation`, `bounds-proof` |
+| TLS label framing | Big-endian u16 output length, exact `tls13 ` prefix, unprefixed label length 1..249, context length 0..255; at most 514 encoded bytes. `expand_tls13` rejects encoded/output length mismatch before admission; `expand_label` delegates to it. No NUL, normalization or implicit transcript hash | `parameters`, `derivation`, `bounds-proof` (public predicates only) |
 | No overlapping mutable output | Safe borrowing excludes exact and partial input/output overlap; disjoint slices of one allocation work | `ownership`, `label-aliasing`, `derivation`, legacy ownership/derivation |
 | Public rejection atomicity | Length/label validation precedes destination admission; rejected destination is unchanged, not zeroed | `parameters`, both `derivation` checks |
 | No partial admitted output | Core initialization guard clears the entire destination on later errors/recoverable unwind; only complete ownership is returned | both `fault-cleanup` and `optimized-fault-cleanup` checks |
-| Secret lifetime | Affine local PRK/output owners clear caller regions on Drop; private full-block and TLS scratch clear while live. Imported/source buffers remain caller-owned | both ownership, derivation and fault-cleanup checks |
+| Secret lifetime | Affine local PRK/output owners clear caller regions on Drop or consuming `clear`; empty output returns no clearing receipt. Private full-block and TLS scratch clear while live. Imported/source buffers and exported copies remain caller-owned | both ownership, derivation, Miri lifecycle and fault-cleanup checks |
 | Bounded dynamic memory/lifetime analysis | Existing derivation and fault suites under ASan/LSan; exact disjoint-storage/unwind and selected three-block fault cases under Miri, with validity checks enabled | both `asan-derivation`, `asan-fault-cleanup`, `miri-lifecycle` and `miri-fault-cleanup`; [scope and exclusions](evidence-index.md#hkdf-dynamic-analysis-scope) |
 | Public-owner destruction dispatch | Real public PRK/output consumers pass exact pointer and extent to core Drop on normal/recoverable-unwind paths; x86_64 Rust 1.90.0/1.99.1, abort/unwind; core cleanup delegated, operation scratch and compiler copies excluded | both `owner-dispatch` checks; twelve broken emitted-output controls per build |
 | Operation-local scratch dispatch | Named production Extract/Expand and modern TLS label scratch must dispatch full-region clearing before normal/error/recoverable-unwind exits; x86_64 Rust 1.90.0/1.99.1 abort/unwind; HMAC/core internals and compiler copies excluded | both `operation-scratch` checks; 120 modern and 15 legacy rejected mutations per build |
@@ -51,8 +51,10 @@ populated-scratch instrumentation exists only in test builds. `Tls13Label`
 is public Debug/Copy metadata, not a clearing secret owner.
 Input lengths and selected identities are not hidden. Work is proportional to
 the input and requested block count; Expand processes `info` again for each
-block. Imported PRK length, IKM, salt and info have no HKDF-specific work quota.
-Callers must bound untrusted input sizes and request frequency. There is no
+block. HMAC is re-keyed for each block: an imported PRK longer than the HMAC
+block size is hashed again up to 255 times. Imported PRK length, IKM, salt and
+info have no HKDF-specific work quota. Callers must bound untrusted input sizes,
+requested output and request frequency. There is no
 RNG, nonce allocator, cancellation callback, provider token or protocol state.
 
 Applications remain responsible for entropy, salt selection, protocol/role
@@ -60,6 +62,15 @@ binding, domain separation and clearing their own copies. Import cannot detect
 a weak or non-pseudorandom PRK. Labels alone do not implement a TLS key schedule,
 authenticate a transcript or admit every SHA-2 identity to a TLS cipher suite.
 This API is not password hashing, protected/resident memory or FIPS validation.
+Empty output remains supported; a protocol requiring a nonempty key must enforce
+that at its boundary. Public `Tls13Label::encode` is a low-level wire encoder:
+passing its bytes to raw `expand` does not bind lengths and can produce
+prefix-related outputs. Use `expand_tls13` for an existing label or
+`expand_label` to construct one from the destination length. These helpers remain
+generic over the six supported SHA-2 identities, not TLS cipher-suite admission.
+PRK `expose` is an explicit export boundary: copied bytes are not erased by
+clearing the owner. `clear` permits sequencing before the next operation, but
+does not prevent callers from forgetting/leaking an owner instead.
 Forget, abort, termination, double panic, register/spill/compiler copies, paging,
 dumps and physical-memory recovery remain outside Drop-based clearing claims.
 

@@ -6,6 +6,7 @@
 
 use brynja_crypto::hkdf::{
     Algorithm, Error, ParameterError, Prk, Sha224, Sha256, Sha384, Sha512, Sha512_224, Sha512_256,
+    Tls13Label,
 };
 
 fn hex(bytes: &[u8]) -> String {
@@ -207,6 +208,42 @@ fn tls_expand_label_matches_independent_sha384_answer() -> Result<(), Error> {
         hex(key.expose()),
         "ef87e80909a27e763d047ffbbbf540acd17c1ed06d5a741b6a08e805fed34ebe"
     );
+    let label = Tls13Label::new(b"key", b"abc", 32)?;
+    assert_eq!(label.output_len(), 32);
+    let mut checked = [0; 32];
+    assert_eq!(
+        prk.expand_tls13(&label, &mut checked)?.expose(),
+        key.expose()
+    );
+    for length in [0, 16, 31, 33] {
+        let mut wrong = vec![0xa5; length];
+        assert_eq!(
+            prk.expand_tls13(&label, &mut wrong).err(),
+            Some(Error::Parameters(ParameterError::TlsOutputLength))
+        );
+        assert!(wrong.iter().all(|b| *b == 0xa5));
+    }
+    let mut shorter = [0; 16];
+    let short_label = Tls13Label::new(b"key", b"abc", 16)?;
+    assert_ne!(
+        prk.expand_tls13(&short_label, &mut shorter)?.expose(),
+        key.expose().get(..16).ok_or(Error::SecretMemory)?
+    );
+    let empty_label = Tls13Label::new(b"key", b"abc", 0)?;
+    assert!(prk.expand_tls13(&empty_label, &mut [])?.clear().is_none());
+    let mut wrong = [0xa5];
+    assert_eq!(
+        prk.expand_tls13(&empty_label, &mut wrong).err(),
+        Some(Error::Parameters(ParameterError::TlsOutputLength))
+    );
+    assert_eq!(wrong, [0xa5]);
+    let mut too_long = vec![0xa5; 48 * 255 + 1];
+    let long_label = Tls13Label::new(b"key", b"abc", too_long.len())?;
+    assert_eq!(
+        prk.expand_tls13(&long_label, &mut too_long).err(),
+        Some(Error::Parameters(ParameterError::ExpansionLength))
+    );
+    assert!(too_long.iter().all(|b| *b == 0xa5));
     Ok(())
 }
 
@@ -231,6 +268,41 @@ fn disjoint_allocation_and_unwind_cleanup() -> Result<(), Error> {
     assert!(result.is_err());
     assert_eq!(storage, [0; 32]);
     assert_eq!(output, [0; 65]);
+    explicit_clear::<Sha224>()?;
+    explicit_clear::<Sha256>()?;
+    explicit_clear::<Sha384>()?;
+    explicit_clear::<Sha512>()?;
+    explicit_clear::<Sha512_224>()?;
+    explicit_clear::<Sha512_256>()?;
+    Ok(())
+}
+
+fn explicit_clear<A: Algorithm>() -> Result<(), Error> {
+    // Canaries establish that clearing owns exactly the selected region. Long
+    // imported keys exercise complete-region clearing, not just HashLen bytes.
+    let mut storage = [0xa5; 82];
+    let mut output = [0xa5; 3];
+    let prk = Prk::<A>::import(&[0x55; 80], &mut storage[1..81])?;
+    let exported = prk.expose().to_vec(); // Public test data only.
+    assert!(prk.expand(b"clear", &mut output[1..2])?.clear().is_some());
+    assert_eq!(output, [0xa5, 0, 0xa5]);
+    assert!(prk.expand(&[], &mut [])?.clear().is_none());
+    // Generic framing remains available for every explicit SHA-2 identity;
+    // selecting an interoperable TLS cipher suite is the caller's policy.
+    let label = Tls13Label::new(b"key", b"abc", 1)?;
+    assert!(
+        prk.expand_tls13(&label, &mut output[1..2])?
+            .clear()
+            .is_some()
+    );
+    assert_eq!(output, [0xa5, 0, 0xa5]);
+    let _cleared = prk.clear();
+    assert_eq!((storage[0], storage[81]), (0xa5, 0xa5));
+    assert!(storage[1..81].iter().all(|b| *b == 0));
+    assert_eq!(exported, [0x55; 80]); // Explicit export is outside owner cleanup.
+    // The consumed owner releases its borrow for immediate storage reuse.
+    let _cleared = Prk::<A>::import(&[0x42; 80], &mut storage[1..81])?.clear();
+    assert!(storage[1..81].iter().all(|b| *b == 0));
     Ok(())
 }
 

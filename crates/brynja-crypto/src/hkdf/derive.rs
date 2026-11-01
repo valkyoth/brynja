@@ -185,6 +185,10 @@ impl<'a, A: Algorithm> Prk<'a, A> {
     /// Use Extract for raw input key material. Destination must exactly match
     /// input length; either public length rejection leaves it unchanged.
     /// The caller retains responsibility for clearing the imported input.
+    /// Long imports are supported, not a resource-admission policy: expansion
+    /// re-keys HMAC for each output block and re-hashes keys longer than its
+    /// block size each time (up to 255 times). Bound untrusted key/info lengths
+    /// and requested output at the application boundary.
     pub fn import(input: &[u8], destination: &'a mut [u8]) -> Result<Self, Error> {
         if input.len() < A::TAG_BYTES {
             return Err(Error::PrkLength);
@@ -205,8 +209,17 @@ impl<'a, A: Algorithm> Prk<'a, A> {
     }
 
     /// Explicitly borrows the secret PRK; application copies need their own cleanup.
+    /// Neither `clear` nor Drop erases copies made through this export boundary.
     pub fn expose(&self) -> &[u8] {
         self.region.expose()
+    }
+
+    /// Clears the entire PRK region now and consumes this owner.
+    ///
+    /// Application copies still need their own cleanup. This cannot run if the
+    /// caller forgets/leaks the owner instead of invoking it.
+    pub fn clear(self) -> brynja_core::OwnedRegionClearComplete {
+        self.region.clear()
     }
 
     /// Expands to exactly the destination length, at most 255 full digest blocks.
@@ -215,6 +228,9 @@ impl<'a, A: Algorithm> Prk<'a, A> {
     /// leaves destination unchanged. Once admitted, operational errors/unwind
     /// clear the entire destination; partial output is never returned. Successful
     /// output clears on owner Drop. PRK remains reusable on success or failure.
+    /// Protocols requiring nonempty keys must reject empty destinations before
+    /// calling. Raw `info` is opaque; use `expand_tls13` or `expand_label` to bind
+    /// a TLS-framed length to the actual output size.
     pub fn expand<'b>(
         &self,
         info: &[u8],
@@ -280,6 +296,23 @@ impl<'a, A: Algorithm> Prk<'a, A> {
         destination: &'b mut [u8],
     ) -> Result<DerivedKey<'b, A>, Error> {
         let label = Tls13Label::new(label, context, destination.len())?;
+        self.expand_tls13(&label, destination)
+    }
+
+    /// Expands a validated label only to its committed output length.
+    ///
+    /// A mismatch is rejected before output admission and leaves the entire
+    /// destination unchanged. Raw `expand` treats info as opaque bytes and
+    /// cannot provide this TLS length binding. Like `expand_label`, this is a
+    /// framing primitive, not cipher-suite admission or a TLS key schedule.
+    pub fn expand_tls13<'b>(
+        &self,
+        label: &Tls13Label<'_>,
+        destination: &'b mut [u8],
+    ) -> Result<DerivedKey<'b, A>, Error> {
+        if label.output_len() != destination.len() {
+            return Err(Error::Parameters(ParameterError::TlsOutputLength));
+        }
         let mut encoded = Scratch::<514>::new();
         self.expand(label.encode(&mut encoded.0)?, destination)
     }
@@ -305,6 +338,12 @@ pub struct DerivedKey<'a, A: Algorithm> {
     local: PhantomData<(A, *mut ())>,
 }
 impl<A: Algorithm> DerivedKey<'_, A> {
+    /// Clears owned output now and consumes the key. Empty output owns no
+    /// region and returns `None`; no clearing receipt is fabricated for it.
+    pub fn clear(self) -> Option<brynja_core::OwnedRegionClearComplete> {
+        self.region.map(OwnedSecretRegion::clear)
+    }
+
     /// Borrows derived secret bytes, without transferring their clearing owner.
     pub fn expose(&self) -> &[u8] {
         self.region.as_ref().map_or(&[], OwnedSecretRegion::expose)

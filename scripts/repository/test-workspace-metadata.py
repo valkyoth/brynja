@@ -12,6 +12,8 @@ import json
 import subprocess
 import sys
 import tempfile
+import tomllib
+import legacy_hmac_workspace_policy as legacy_hmac_policy
 from pathlib import Path
 
 VALIDATOR = Path(__file__).with_name("validate-workspace-metadata.py")
@@ -470,7 +472,36 @@ def reject_invalid_and_exhausted(baseline: dict) -> None:
     )
 
 
+def test_shared_legacy_hmac_pin() -> None:
+    root = Path(__file__).resolve().parents[2]
+    workspace = tomllib.loads((root / "Cargo.toml").read_text())
+    consumers = {name: tomllib.loads((root / "crates" / name / "Cargo.toml").read_text())
+                 for name in legacy_hmac_policy.SHARED_HMAC_CONSUMERS}
+    validate = legacy_hmac_policy.validate_shared_hmac_pin
+    validate(workspace, consumers)
+    def rejected(workspace, consumers):
+        try:
+            validate(workspace, consumers)
+        except ValueError:
+            return
+        raise AssertionError("accepted duplicated/overridden legacy HMAC dependency")
+    for field, value in (("version", "0.1"), ("default-features", True),
+                         ("path", "crates/brynja-mac-hmac"), ("features", ["sha1-execution"])):
+        changed = copy.deepcopy(workspace)
+        changed["workspace"]["dependencies"]["brynja-legacy-hmac"][field] = value
+        rejected(changed, consumers)
+    for name in consumers:
+        for value in ({"path": "../brynja-legacy-hmac", "version": "=0.1.0", "default-features": False},
+                      {"workspace": True, "features": ["sha1-execution"]},
+                      {"workspace": True, "default-features": True}, {}):
+            changed = copy.deepcopy(consumers)
+            changed[name]["dependencies"]["brynja-legacy-hmac"] = value
+            rejected(workspace, changed)
+    print("Shared legacy HMAC pin rejects 12 inheritance/version/feature regressions")
+
+
 def main() -> int:
+    test_shared_legacy_hmac_pin()
     no_default = metadata("--no-default-features")
     all_features = metadata("--all-features")
     test_baselines(no_default, all_features)

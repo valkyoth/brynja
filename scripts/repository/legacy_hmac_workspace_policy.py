@@ -1,5 +1,17 @@
 """Exact opt-in legacy composition features, never modern facade forwarding."""
 
+SHARED_HMAC_CONSUMERS = ("brynja-legacy-hkdf", "brynja-legacy-hmac-std")
+
+
+def validate_shared_hmac_pin(workspace, consumers):
+    expected = {"path": "crates/brynja-legacy-hmac", "version": "=0.1.0",
+                "default-features": False}
+    if workspace.get("workspace", {}).get("dependencies", {}).get("brynja-legacy-hmac") != expected:
+        raise ValueError("legacy HMAC requires one exact no-default workspace pin")
+    for name in SHARED_HMAC_CONSUMERS:
+        if consumers.get(name, {}).get("dependencies", {}).get("brynja-legacy-hmac") != {"workspace": True}:
+            raise ValueError(name + " must inherit the legacy HMAC workspace pin without overrides")
+
 FEATURES = {
     "default": [],
     "sha1-execution": ["brynja-legacy-sha1/hardened-execution"],

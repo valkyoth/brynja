@@ -187,6 +187,10 @@ impl<'a> Sha1Prk<'a> {
     /// Destination must exactly match input length. Public length errors preserve
     /// it; later failures clear it. Import does not extract entropy and does not
     /// clear the caller's input. Safe borrowing excludes overlapping buffers.
+    /// Long imports are supported, not a resource-admission policy: expansion
+    /// re-keys HMAC for each output block and re-hashes keys longer than its
+    /// block size each time (up to 255 times). Bound untrusted key/info lengths
+    /// and requested output at the application boundary.
     ///
     /// ```compile_fail
     /// use brynja_legacy_hkdf::Sha1Prk;
@@ -213,8 +217,16 @@ impl<'a> Sha1Prk<'a> {
     }
 
     /// Explicitly borrows secret PRK bytes; application copies need separate cleanup.
+    /// Neither `clear` nor Drop erases copies made through this export boundary.
     pub fn expose(&self) -> &[u8] {
         self.region.expose()
+    }
+
+    /// Clears the entire PRK region now and consumes this owner.
+    /// Application copies require their own cleanup; forgetting the owner
+    /// instead still bypasses this operation and Drop.
+    pub fn clear(self) -> brynja_core::OwnedRegionClearComplete {
+        self.region.clear()
     }
 
     /// Expands into exactly the destination length, up to 5100 bytes.
@@ -225,6 +237,8 @@ impl<'a> Sha1Prk<'a> {
     /// PRK stays reusable. Borrowing prohibits overlap with PRK/info but permits
     /// disjoint slices of one allocation. Construction's acknowledgement covers
     /// subsequent SHA-1 expansions; there is no protocol negotiation or fallback.
+    /// Protocols requiring nonempty keys must reject empty destinations before
+    /// calling this primitive.
     pub fn expand<'b>(
         &self,
         info: &[u8],
@@ -298,6 +312,12 @@ pub struct DerivedKey<'a> {
     local: PhantomData<*mut ()>,
 }
 impl DerivedKey<'_> {
+    /// Clears owned output now and consumes the key. Empty output owns no
+    /// region and returns `None`; no clearing receipt is fabricated for it.
+    pub fn clear(self) -> Option<brynja_core::OwnedRegionClearComplete> {
+        self.region.map(OwnedSecretRegion::clear)
+    }
+
     /// Borrows secret output without transferring its clearing owner.
     pub fn expose(&self) -> &[u8] {
         self.region.as_ref().map_or(&[], OwnedSecretRegion::expose)

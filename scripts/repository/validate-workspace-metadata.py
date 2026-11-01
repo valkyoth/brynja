@@ -39,6 +39,11 @@ AMBIGUOUS_LEGACY_NAMES = frozenset(
     }
 )
 def load_policy() -> dict[str, dict]:
+    legacy_hmac_policy.validate_shared_hmac_pin(
+        tomllib.loads((ROOT / "Cargo.toml").read_text()),
+        {name: tomllib.loads((ROOT / "crates" / name / "Cargo.toml").read_text())
+         for name in legacy_hmac_policy.SHARED_HMAC_CONSUMERS},
+    )
     with POLICY.open("rb") as handle:
         document = tomllib.load(handle)
     if document.get("schema") != {"version": 1}:

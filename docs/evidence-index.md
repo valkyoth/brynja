@@ -105,7 +105,10 @@ inferred from this narrative.
   Address instrumentation and leak detection are explicit, sanitizer failures
   are fatal, and the runner requires exact passed-test populations.
 - Miri runs one exact disjoint-storage/Drop-during-unwind test and one exact
-  fault test per family. Modern fault coverage is SHA-256 TLS label expansion;
+  fault test per family. Lifecycle tests also cover consuming explicit clearing,
+  long imported PRKs, canaries, exported-copy exclusions, empty output and
+  immediate storage reuse; modern coverage includes all six identities and
+  their checked label helper. Modern fault coverage is SHA-256 TLS label expansion;
   legacy coverage is SHA-1 expansion with retained/reusable PRK. Both fault
   tests inject errors and unwinds at 22 composition boundaries of a three-block
   request, observing scratch clearing while storage remains live. This is not
@@ -120,6 +123,9 @@ failed attempt remains recorded. The binding now checks the selected name,
 successful process exit, successful summary and exactly one passed test without
 requiring stdout/stderr adjacency; the corrected binding was rerun. This was a
 completion-signal fix, not a waived test failure or modified production code.
+The expanded modern lifecycle test later exposed the same interleaving; both
+lifecycle bindings now use the same non-adjacent completion contract, with the
+original rejected execution retained and a regression against reintroducing it.
 
 Registry regressions check all eight commands, dependency closures, exact test
 counts and instrumentation, with negative controls for disabled sanitizers,

@@ -5,6 +5,7 @@ from pathlib import Path
 import re
 import tomllib
 import unittest
+import verification_hkdf_dynamic_tests as hkdf_dynamic
 from verification_sanitizer_tests import SanitizerRegistryTests
 from verification_miri_tests import MiriBindingTests
 from verification_kani_tests import KaniBindingTests
@@ -35,6 +36,13 @@ ROOT = Path(__file__).resolve().parents[2]
 # Reviewed, explicit build closures for these portable harness commands only.
 # This is not automatic feature/dependency analysis or a release-family planner.
 CLOSURES = {
+    'brynja-legacy-hkdf': {'brynja-core', 'brynja-hash-core', 'brynja-legacy-hmac',
+                          'brynja-legacy-sha1', 'brynja-legacy-md5'},
+    # HKDF metadata is tested through the composition crate, so its default
+    # compiled dependencies remain declared even though no hash is exercised.
+    'brynja-crypto': {'brynja-core', 'brynja-hash-core', 'brynja-hash-sha2',
+                      'brynja-hash-sha3', 'brynja-hash-tuple', 'brynja-hash-parallel',
+                      'brynja-mac-kmac', 'brynja-mac-hmac'},
     'brynja-legacy-md5': {'brynja-core', 'brynja-hash-core'},
     'brynja-legacy-sha1': {'brynja-core', 'brynja-hash-core'},
     'brynja-hash-sha2': {'brynja-core', 'brynja-hash-core'},
@@ -94,6 +102,95 @@ class RegistryTests(unittest.TestCase):
     def test_registered_harnesses_and_explicit_closures(self):
         validate(self.registry)
 
+    def test_hkdf_optimized_checks_reuse_exact_existing_suites(self):
+        selected = [c for c in self.registry['checks']
+                    if c['component'] in ('hkdf', 'legacy_hkdf') and c.get('category') == 'optimized']
+        self.assertEqual(len(selected), 4)
+        self.assertEqual(self.registry['groups']['hkdf-optimized']['toml'],
+                         {'Cargo.toml': ['profile.release']})
+        for check in selected:
+            original = next(c for c in self.registry['checks']
+                            if c['component'] == check['component']
+                            and c['id'] == check['id'].removeprefix('optimized-'))
+            self.assertEqual([arg for arg in check['command'] if arg != '--release'], original['command'])
+            self.assertEqual(check['command'].count('--release'), 1)
+            self.assertEqual(set(check['inputs']), set(original['inputs']) | {'hkdf-optimized'})
+            self.assertEqual(check['success'], original['success'])
+            self.assertIn('CARGO_PROFILE_RELEASE_OPT_LEVEL', check['reject_environment'])
+            self.assertIn('CARGO_PROFILE_RELEASE_LTO', check['reject_environment'])
+            self.assertNotIn('--workspace', check['command'])
+            self.assertNotIn('--all-features', check['command'])
+
+    def test_hkdf_owner_compiler_checks_are_separate_and_scoped(self):
+        for component, family, package in (
+                ('hkdf', 'modern', 'brynja-crypto'),
+                ('legacy_hkdf', 'legacy', 'brynja-legacy-hkdf')):
+            check, = [c for c in self.registry['checks']
+                      if c['component'] == component and c['id'] == 'owner-dispatch']
+            self.assertEqual(check['command'],
+                             ['python3', 'scripts/hkdf/check-hkdf-owner-cleanup.py', family])
+            self.assertEqual(check['category'], 'compiler')
+            self.assertTrue({'compiler', 'hkdf-msrv', 'hkdf-owner-codegen'} <= set(check['inputs']))
+            paths = {p for group in check['inputs'] for p in self.registry['groups'][group].get('paths', [])}
+            for dependency in CLOSURES[package] | {package}:
+                self.assertIn(f'crates/{dependency}/src', paths)
+            self.assertIn('assurance/hkdf-owner-cleanup/Cargo.lock', paths)
+            self.assertEqual(len(check['success']['contains']), 5)
+            for compiler in ('1.90.0', '1.99.1'):
+                for panic in ('abort', 'unwind'):
+                    self.assertTrue(any(f'Rust {compiler}; x86_64; panic={panic};' in signal
+                                        for signal in check['success']['contains']))
+
+    def test_hkdf_operation_compiler_checks_are_separate_and_scoped(self):
+        for component, family, package, consumers, mutations in (
+                ('hkdf', 'modern', 'brynja-crypto', 18, 120),
+                ('legacy_hkdf', 'legacy', 'brynja-legacy-hkdf', 2, 15)):
+            check, = [c for c in self.registry['checks']
+                      if c['component'] == component and c['id'] == 'operation-scratch']
+            self.assertEqual(check['command'],
+                             ['python3', 'scripts/hkdf/check-hkdf-operation-cleanup.py', family])
+            self.assertEqual(check['category'], 'compiler')
+            self.assertTrue({'compiler', 'hkdf-msrv', 'hkdf-operation-codegen'} <= set(check['inputs']))
+            paths = {p for group in check['inputs'] for p in self.registry['groups'][group].get('paths', [])}
+            for dependency in CLOSURES[package] | {package}:
+                self.assertIn(f'crates/{dependency}/src', paths)
+            self.assertIn('scripts/hmac/hmac_engine_scratch.py', paths)
+            if family == 'modern':
+                self.assertIn('assurance/hkdf-operation-cleanup/Cargo.lock', paths)
+                self.assertIn('assurance/hkdf-operation-cleanup/src', paths)
+            else:
+                self.assertIn('hkdf-optimized', check['inputs'])
+            signals = check['success']['contains']
+            self.assertEqual(len(signals), 5)
+            for compiler in ('1.90.0', '1.99.1'):
+                for panic in ('abort', 'unwind'):
+                    self.assertIn(f'HKDF {family} operation scratch: PASS; Rust {compiler}; x86_64; '
+                                  f'panic={panic}; {consumers} consumers; {mutations} rejected mutations', signals)
+
+    def test_hkdf_timing_screens_are_diagnostics_with_exact_populations(self):
+        for component, family, package, count in (
+                ('hkdf', 'modern', 'brynja-crypto', 36),
+                ('legacy_hkdf', 'legacy', 'brynja-legacy-hkdf', 5)):
+            check, = [c for c in self.registry['checks']
+                      if c['component'] == component and c['id'] == 'timing-screen']
+            self.assertEqual(check['command'], ['python3', 'scripts/hkdf/check-hkdf-timing.py', family])
+            self.assertEqual(check['category'], 'timing')
+            self.assertEqual(check['platform'], 'linux-x86_64')
+            paths = {p for group in check['inputs'] for p in self.registry['groups'][group].get('paths', [])}
+            for dependency in CLOSURES[package] | {package}:
+                self.assertIn(f'crates/{dependency}/src', paths)
+            self.assertIn('assurance/hkdf-timing/Cargo.lock', paths)
+            self.assertIn('scripts/hmac/hmac_timing.py', paths)
+            self.assertIn('Independent HKDF timing preflight: PASS', check['success']['unique_lines'])
+            self.assertIn(f'HKDF {family} timing screen: {count} campaigns; 512 pairs; 4 repetitions; zero alarms',
+                          check['success']['unique_lines'])
+            self.assertIn('not constant-time', check['establishes'])
+            self.assertIn('No automatic retry', check['establishes'])
+
+    def test_hkdf_dynamic_bindings_and_negative_controls(self):
+        hkdf_dynamic.validate(self.registry, CLOSURES)
+        hkdf_dynamic.negative_controls(self.registry, CLOSURES)
+
     def test_missing_transitive_source_and_harness_are_rejected(self):
         for group in ('hash-core', 'md5-api'):
             changed = copy.deepcopy(self.registry)
@@ -104,7 +201,8 @@ class RegistryTests(unittest.TestCase):
     def test_zero_population_or_wrong_marker_is_rejected(self):
         for field, value in (('minimum_tests', 0), ('contains', ['test not_a_test ... ok'])):
             changed = copy.deepcopy(self.registry)
-            changed['checks'][0]['success'][field] = value
+            check = next(c for c in changed['checks'] if c.get('category', 'portable') == 'portable')
+            check['success'][field] = value
             with self.assertRaises(AssertionError):
                 validate(changed)
 

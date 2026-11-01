@@ -5,6 +5,607 @@ execution_semantics = 1
 catalog = "verification/catalog.json"
 includes = ["verification/miri-checks.json", "verification/kani-checks.json", "verification/matrix-checks.json", "verification/extra-checks.json"]
 
+[[checks]]
+component = "hkdf"
+id = "asan-derivation"
+category = "asan"
+name = "Modern HKDF asan derivation"
+establishes = "8 existing vector/bounds/lifecycle tests under ASan/LSan. No exhaustive dynamic analysis, native backend, whole-frame erasure or constant-time claim."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","--target","x86_64-unknown-linux-gnu","-p","brynja-crypto","--no-default-features","--test","hkdf_derivation"]
+cwd = "."
+inputs = ["asan-tools","hkdf-composition","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","hkdf-derivation"]
+environment = { RUSTFLAGS = "-Zsanitizer=address", CARGO_ENCODED_RUSTFLAGS = "", ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1", LSAN_OPTIONS = "exitcode=23", CARGO_TARGET_DIR = "target/hkdf-asan", RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","ASAN_OPTIONS","LSAN_OPTIONS"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 8
+exact_tests = 8
+
+[[checks]]
+component = "hkdf"
+id = "asan-fault-cleanup"
+category = "asan"
+name = "Modern HKDF asan fault cleanup"
+establishes = "5 existing injected-fault/live-scratch tests under ASan/LSan. No exhaustive dynamic analysis, native backend, whole-frame erasure or constant-time claim."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","--target","x86_64-unknown-linux-gnu","-p","brynja-crypto","--no-default-features","--lib","hkdf_fault_"]
+cwd = "."
+inputs = ["asan-tools","hkdf-composition","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
+environment = { RUSTFLAGS = "-Zsanitizer=address", CARGO_ENCODED_RUSTFLAGS = "", ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1", LSAN_OPTIONS = "exitcode=23", CARGO_TARGET_DIR = "target/hkdf-asan", RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","ASAN_OPTIONS","LSAN_OPTIONS"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 5
+exact_tests = 5
+
+[[checks]]
+component = "hkdf"
+id = "miri-lifecycle"
+category = "miri"
+name = "Modern HKDF miri lifecycle"
+establishes = "One exact existing test under Miri: disjoint caller storage and output/PRK Drop during unwind. No exhaustive dynamic analysis, native backend, whole-frame erasure or constant-time claim."
+command = ["cargo","+nightly-2026-09-11","miri","test","--locked","--offline","--target","x86_64-unknown-linux-gnu","-p","brynja-crypto","--no-default-features","--test","hkdf_derivation","disjoint_allocation_and_unwind_cleanup","--","--exact"]
+cwd = "."
+inputs = ["miri-tools","hkdf-composition","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","hkdf-derivation"]
+environment = { MIRIFLAGS = "-Zmiri-report-progress=10000000", CARGO_TARGET_DIR = "target/hkdf-miri", RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","MIRIFLAGS","MIRI_SYSROOT","MIRI_BE_RUSTC","MIRI_REPLACE_LIBRS_IF_NOT_TEST","BRYNJA_MIRI_CASE","BRYNJA_MIRI_PROFILE","BRYNJA_MIRI_WIDTH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["test result: ok.","test disjoint_allocation_and_unwind_cleanup ... ok"]
+minimum_tests = 1
+exact_tests = 1
+
+[[checks]]
+component = "hkdf"
+id = "miri-fault-cleanup"
+category = "miri"
+name = "Modern HKDF miri fault cleanup"
+establishes = "One exact existing test under Miri: injected expansion failures/unwinds and live scratch cleanup through TLS label expansion. No exhaustive dynamic analysis, native backend, whole-frame erasure or constant-time claim."
+command = ["cargo","+nightly-2026-09-11","miri","test","--locked","--offline","--target","x86_64-unknown-linux-gnu","-p","brynja-crypto","--no-default-features","--lib","hkdf::derive::tests::hkdf_fault_tls_label_scratch_clears","--","--exact"]
+cwd = "."
+inputs = ["miri-tools","hkdf-composition","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
+environment = { MIRIFLAGS = "-Zmiri-report-progress=10000000", CARGO_TARGET_DIR = "target/hkdf-miri", RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","MIRIFLAGS","MIRI_SYSROOT","MIRI_BE_RUSTC","MIRI_REPLACE_LIBRS_IF_NOT_TEST","BRYNJA_MIRI_CASE","BRYNJA_MIRI_PROFILE","BRYNJA_MIRI_WIDTH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["test result: ok.","test hkdf::derive::tests::hkdf_fault_tls_label_scratch_clears"]
+minimum_tests = 1
+exact_tests = 1
+
+[[checks]]
+component = "legacy_hkdf"
+id = "asan-derivation"
+category = "asan"
+name = "Legacy HKDF asan derivation"
+establishes = "6 existing vector/bounds/lifecycle tests under ASan/LSan. No exhaustive dynamic analysis, native backend, whole-frame erasure or constant-time claim."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","--target","x86_64-unknown-linux-gnu","-p","brynja-legacy-hkdf","--no-default-features","--test","derivation"]
+cwd = "."
+inputs = ["asan-tools","legacy-hkdf-source","hash-core","legacy-hmac-source","sha1-source","md5-source","legacy-hkdf-derivation"]
+environment = { RUSTFLAGS = "-Zsanitizer=address", CARGO_ENCODED_RUSTFLAGS = "", ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1", LSAN_OPTIONS = "exitcode=23", CARGO_TARGET_DIR = "target/hkdf-asan", RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","ASAN_OPTIONS","LSAN_OPTIONS"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 6
+exact_tests = 6
+
+[[checks]]
+component = "legacy_hkdf"
+id = "asan-fault-cleanup"
+category = "asan"
+name = "Legacy HKDF asan fault cleanup"
+establishes = "4 existing injected-fault/live-scratch tests under ASan/LSan. No exhaustive dynamic analysis, native backend, whole-frame erasure or constant-time claim."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","--target","x86_64-unknown-linux-gnu","-p","brynja-legacy-hkdf","--no-default-features","--lib","hkdf_fault_"]
+cwd = "."
+inputs = ["asan-tools","legacy-hkdf-source","hash-core","legacy-hmac-source","sha1-source","md5-source"]
+environment = { RUSTFLAGS = "-Zsanitizer=address", CARGO_ENCODED_RUSTFLAGS = "", ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1", LSAN_OPTIONS = "exitcode=23", CARGO_TARGET_DIR = "target/hkdf-asan", RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","ASAN_OPTIONS","LSAN_OPTIONS"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 4
+exact_tests = 4
+
+[[checks]]
+component = "legacy_hkdf"
+id = "miri-lifecycle"
+category = "miri"
+name = "Legacy HKDF miri lifecycle"
+establishes = "One exact existing test under Miri: disjoint caller storage and output/PRK Drop during unwind. No exhaustive dynamic analysis, native backend, whole-frame erasure or constant-time claim."
+command = ["cargo","+nightly-2026-09-11","miri","test","--locked","--offline","--target","x86_64-unknown-linux-gnu","-p","brynja-legacy-hkdf","--no-default-features","--test","derivation","disjoint_storage_and_drop_during_unwind","--","--exact"]
+cwd = "."
+inputs = ["miri-tools","legacy-hkdf-source","hash-core","legacy-hmac-source","sha1-source","md5-source","legacy-hkdf-derivation"]
+environment = { MIRIFLAGS = "-Zmiri-report-progress=10000000", CARGO_TARGET_DIR = "target/hkdf-miri", RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","MIRIFLAGS","MIRI_SYSROOT","MIRI_BE_RUSTC","MIRI_REPLACE_LIBRS_IF_NOT_TEST","BRYNJA_MIRI_CASE","BRYNJA_MIRI_PROFILE","BRYNJA_MIRI_WIDTH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["test result: ok.","test disjoint_storage_and_drop_during_unwind ... ok"]
+minimum_tests = 1
+exact_tests = 1
+
+[[checks]]
+component = "legacy_hkdf"
+id = "miri-fault-cleanup"
+category = "miri"
+name = "Legacy HKDF miri fault cleanup"
+establishes = "One exact existing test under Miri: injected expansion failures/unwinds and live scratch cleanup with reusable PRK. No exhaustive dynamic analysis, native backend, whole-frame erasure or constant-time claim."
+command = ["cargo","+nightly-2026-09-11","miri","test","--locked","--offline","--target","x86_64-unknown-linux-gnu","-p","brynja-legacy-hkdf","--no-default-features","--lib","tests::hkdf_fault_expand_clears_output_and_retains_prk","--","--exact"]
+cwd = "."
+inputs = ["miri-tools","legacy-hkdf-source","hash-core","legacy-hmac-source","sha1-source","md5-source"]
+environment = { MIRIFLAGS = "-Zmiri-report-progress=10000000", CARGO_TARGET_DIR = "target/hkdf-miri", RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","MIRIFLAGS","MIRI_SYSROOT","MIRI_BE_RUSTC","MIRI_REPLACE_LIBRS_IF_NOT_TEST","BRYNJA_MIRI_CASE","BRYNJA_MIRI_PROFILE","BRYNJA_MIRI_WIDTH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["test result: ok.","test tests::hkdf_fault_expand_clears_output_and_retains_prk"]
+minimum_tests = 1
+exact_tests = 1
+
+[groups.hkdf-timing]
+paths = ["assurance/hkdf-timing/Cargo.toml", "assurance/hkdf-timing/Cargo.lock", "assurance/hkdf-timing/src", "scripts/hkdf/check-hkdf-timing.py", "scripts/hkdf/hkdf_timing.py", "scripts/hkdf/test-hkdf-timing.py", "scripts/hmac/hmac_timing.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py"]
+optional_paths = ["assurance/hkdf-timing/build.rs"]
+[[groups.hkdf-timing.tools]]
+program = "python3"
+
+[[checks]]
+component = "hkdf"
+id = "timing-screen"
+category = "timing"
+name = "Modern HKDF bounded host timing diagnostic"
+establishes = "Synthetic fixed-zero versus fixed-FF secrets at equal public lengths; 36 campaigns, 512 paired samples, four requests per measurement, balanced AB/BA order on one allowed logical CPU. Independent Python HMAC preflight checks both classes before measurement. Includes PRK admission and owner cleanup; raw samples and alarms retained. Paired-t threshold 10 is a diagnostic alarm, not constant-time, cache, cross-target, statistical security or release qualification. No automatic retry."
+command = ["python3", "scripts/hkdf/check-hkdf-timing.py", "modern"]
+cwd = "."
+inputs = ["compiler","hkdf-timing","hkdf-composition","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET"]
+platform = "linux-x86_64"
+timeout_seconds = 900
+log_bytes = 16777216
+[checks.success]
+unique_lines = ["Independent HKDF timing preflight: PASS", "HKDF modern timing screen: 36 campaigns; 512 pairs; 4 repetitions; zero alarms", "Observation only; not constant-time, cache, cross-target or independent qualification"]
+contains = ["HKDF modern timing screen: 36 campaigns; 512 pairs; 4 repetitions; zero alarms"]
+
+[[checks]]
+component = "legacy_hkdf"
+id = "timing-screen"
+category = "timing"
+name = "Legacy HKDF bounded host timing diagnostic"
+establishes = "Synthetic fixed-zero versus fixed-FF secrets at equal public lengths; 5 campaigns, 512 paired samples, four requests per measurement, balanced AB/BA order on one allowed logical CPU. Independent Python HMAC preflight checks both classes before measurement. Includes PRK admission and owner cleanup; raw samples and alarms retained. Paired-t threshold 10 is a diagnostic alarm, not constant-time, cache, cross-target, statistical security or release qualification. No automatic retry."
+command = ["python3", "scripts/hkdf/check-hkdf-timing.py", "legacy"]
+cwd = "."
+inputs = ["compiler","hkdf-timing","legacy-hkdf-source","hash-core","legacy-hmac-source","sha1-source","md5-source"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET"]
+platform = "linux-x86_64"
+timeout_seconds = 900
+log_bytes = 16777216
+[checks.success]
+unique_lines = ["Independent HKDF timing preflight: PASS", "HKDF legacy timing screen: 5 campaigns; 512 pairs; 4 repetitions; zero alarms", "Observation only; not constant-time, cache, cross-target or independent qualification"]
+contains = ["HKDF legacy timing screen: 5 campaigns; 512 pairs; 4 repetitions; zero alarms"]
+
+[groups.hkdf-operation-codegen]
+paths = ["scripts/hkdf/check-hkdf-operation-cleanup.py", "scripts/hkdf/hkdf_operation_codegen.py", "scripts/hmac/hmac_engine_codegen.py", "scripts/hmac/hmac_engine_scratch.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py", "assurance/hkdf-operation-cleanup/Cargo.toml"]
+[[groups.hkdf-operation-codegen.tools]]
+program = "python3"
+
+[groups.hkdf-operation-fixture]
+paths = ["assurance/hkdf-operation-cleanup/Cargo.lock", "assurance/hkdf-operation-cleanup/src"]
+optional_paths = ["assurance/hkdf-operation-cleanup/build.rs"]
+
+[[checks]]
+component = "hkdf"
+id = "operation-scratch"
+category = "compiler"
+name = "Modern HKDF operation-local scratch cleanup"
+establishes = "18 production operation consumers on x86_64, Rust 1.90.0 and 1.99.1, abort and unwind profiles. Conservative LLVM lifetime analysis checks named scratch pointer/extent clearing dispatch on normal/error/recoverable-unwind exits; 120 rejected mutations per build. Delegates core clearing and HMAC internals. Not whole-frame erasure, arbitrary LLVM verification or timing qualification."
+command = ["python3", "scripts/hkdf/check-hkdf-operation-cleanup.py", "modern"]
+cwd = "."
+inputs = ["compiler","hkdf-msrv","hkdf-operation-codegen","hkdf-operation-fixture","hkdf-composition","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET"]
+platform = "linux-x86_64"
+timeout_seconds = 1200
+[checks.success]
+contains = ["HKDF modern operation scratch: PASS; Rust 1.90.0; x86_64; panic=abort; 18 consumers; 120 rejected mutations","HKDF modern operation scratch: PASS; Rust 1.90.0; x86_64; panic=unwind; 18 consumers; 120 rejected mutations","HKDF modern operation scratch: PASS; Rust 1.99.1; x86_64; panic=abort; 18 consumers; 120 rejected mutations","HKDF modern operation scratch: PASS; Rust 1.99.1; x86_64; panic=unwind; 18 consumers; 120 rejected mutations","HKDF modern operation scratch complete: 4 configurations;"]
+
+[[checks]]
+component = "legacy_hkdf"
+id = "operation-scratch"
+category = "compiler"
+name = "Legacy HKDF operation-local scratch cleanup"
+establishes = "2 production operation consumers on x86_64, Rust 1.90.0 and 1.99.1, abort and unwind profiles. Conservative LLVM lifetime analysis checks named scratch pointer/extent clearing dispatch on normal/error/recoverable-unwind exits; 15 rejected mutations per build. Delegates core clearing and HMAC internals. Not whole-frame erasure, arbitrary LLVM verification or timing qualification."
+command = ["python3", "scripts/hkdf/check-hkdf-operation-cleanup.py", "legacy"]
+cwd = "."
+inputs = ["compiler","hkdf-msrv","hkdf-operation-codegen","hkdf-optimized","legacy-hkdf-source","hash-core","legacy-hmac-source","sha1-source","md5-source"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET"]
+platform = "linux-x86_64"
+timeout_seconds = 1200
+[checks.success]
+contains = ["HKDF legacy operation scratch: PASS; Rust 1.90.0; x86_64; panic=abort; 2 consumers; 15 rejected mutations","HKDF legacy operation scratch: PASS; Rust 1.90.0; x86_64; panic=unwind; 2 consumers; 15 rejected mutations","HKDF legacy operation scratch: PASS; Rust 1.99.1; x86_64; panic=abort; 2 consumers; 15 rejected mutations","HKDF legacy operation scratch: PASS; Rust 1.99.1; x86_64; panic=unwind; 2 consumers; 15 rejected mutations","HKDF legacy operation scratch complete: 4 configurations;"]
+
+[groups.hkdf-owner-codegen]
+paths = ["assurance/hkdf-owner-cleanup/Cargo.toml", "assurance/hkdf-owner-cleanup/Cargo.lock", "assurance/hkdf-owner-cleanup/src", "scripts/hkdf/check-hkdf-owner-cleanup.py", "scripts/hkdf/hkdf_owner_codegen.py", "scripts/hmac/hmac_engine_codegen.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py"]
+optional_paths = ["assurance/hkdf-owner-cleanup/build.rs"]
+[[groups.hkdf-owner-codegen.tools]]
+program = "python3"
+
+[[checks]]
+component = "hkdf"
+id = "owner-dispatch"
+category = "compiler"
+name = "Modern HKDF owned-region destructor dispatch"
+establishes = "12 real public PRK/output consumers on x86_64, Rust 1.90.0 and 1.99.1, abort and unwind profiles. Symbolic descriptor tracking checks normal/recoverable-unwind dispatch with exact owned pointer and length, including empty output. Each build rejects 12 broken LLVM controls. Delegates to the existing core destructor; not scratch, full derivation, whole-frame erasure or side-channel qualification."
+command = ["python3", "scripts/hkdf/check-hkdf-owner-cleanup.py", "modern"]
+cwd = "."
+inputs = ["compiler", "hkdf-msrv", "hkdf-owner-codegen", "hkdf-composition", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET"]
+platform = "linux-x86_64"
+timeout_seconds = 1200
+[checks.success]
+contains = ["HKDF modern owner dispatch: PASS; Rust 1.90.0; x86_64; panic=abort; 12 probes; 12 rejected mutations", "HKDF modern owner dispatch: PASS; Rust 1.90.0; x86_64; panic=unwind; 12 probes; 12 rejected mutations", "HKDF modern owner dispatch: PASS; Rust 1.99.1; x86_64; panic=abort; 12 probes; 12 rejected mutations", "HKDF modern owner dispatch: PASS; Rust 1.99.1; x86_64; panic=unwind; 12 probes; 12 rejected mutations", "HKDF modern owner dispatch complete: 4 configurations;"]
+
+[[checks]]
+component = "legacy_hkdf"
+id = "owner-dispatch"
+category = "compiler"
+name = "Legacy HKDF owned-region destructor dispatch"
+establishes = "2 real public PRK/output consumers on x86_64, Rust 1.90.0 and 1.99.1, abort and unwind profiles. Symbolic descriptor tracking checks normal/recoverable-unwind dispatch with exact owned pointer and length, including empty output. Each build rejects 12 broken LLVM controls. Delegates to the existing core destructor; not scratch, full derivation, whole-frame erasure or side-channel qualification."
+command = ["python3", "scripts/hkdf/check-hkdf-owner-cleanup.py", "legacy"]
+cwd = "."
+inputs = ["compiler", "hkdf-msrv", "hkdf-owner-codegen", "legacy-hkdf-source", "hash-core", "legacy-hmac-source", "sha1-source", "md5-source"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET"]
+platform = "linux-x86_64"
+timeout_seconds = 1200
+[checks.success]
+contains = ["HKDF legacy owner dispatch: PASS; Rust 1.90.0; x86_64; panic=abort; 2 probes; 12 rejected mutations", "HKDF legacy owner dispatch: PASS; Rust 1.90.0; x86_64; panic=unwind; 2 probes; 12 rejected mutations", "HKDF legacy owner dispatch: PASS; Rust 1.99.1; x86_64; panic=abort; 2 probes; 12 rejected mutations", "HKDF legacy owner dispatch: PASS; Rust 1.99.1; x86_64; panic=unwind; 2 probes; 12 rejected mutations", "HKDF legacy owner dispatch complete: 4 configurations;"]
+
+[groups.hkdf-optimized]
+[groups.hkdf-optimized.toml]
+"Cargo.toml" = ["profile.release"]
+
+[[checks]]
+component = "hkdf"
+id = "optimized-derivation"
+category = "optimized"
+name = "Modern HKDF optimized vectors and lifecycle"
+establishes = "8 existing vector, bounds and caller-buffer lifecycle tests under the workspace release optimization profile on Rust 1.99.1. Test harness uses recoverable unwind; this is not a panic-abort cleanup, emitted-code, timing or spill-erasure proof."
+command = ["cargo", "+1.99.1", "test", "--locked", "--offline", "--release", "-p", "brynja-crypto", "--no-default-features", "--test", "hkdf_derivation"]
+cwd = "."
+inputs = ["compiler", "hkdf-optimized", "hkdf-composition", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source", "hkdf-derivation"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_PROFILE_RELEASE_OPT_LEVEL", "CARGO_PROFILE_RELEASE_LTO", "CARGO_PROFILE_RELEASE_CODEGEN_UNITS", "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS", "CARGO_PROFILE_RELEASE_DEBUG_ASSERTIONS", "CARGO_PROFILE_RELEASE_PANIC"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok. 8 passed; 0 failed; 0 ignored;"]
+minimum_tests = 8
+exact_tests = 8
+
+[[checks]]
+component = "hkdf"
+id = "optimized-fault-cleanup"
+category = "optimized"
+name = "Modern HKDF optimized injected faults and cleanup"
+establishes = "5 existing composition-boundary fault and live-buffer cleanup tests under the workspace release optimization profile on Rust 1.99.1. Test harness uses recoverable unwind; this is not a panic-abort cleanup, emitted-code, timing or spill-erasure proof."
+command = ["cargo", "+1.99.1", "test", "--locked", "--offline", "--release", "-p", "brynja-crypto", "--no-default-features", "--lib", "hkdf_fault_"]
+cwd = "."
+inputs = ["compiler", "hkdf-optimized", "hkdf-composition", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_PROFILE_RELEASE_OPT_LEVEL", "CARGO_PROFILE_RELEASE_LTO", "CARGO_PROFILE_RELEASE_CODEGEN_UNITS", "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS", "CARGO_PROFILE_RELEASE_DEBUG_ASSERTIONS", "CARGO_PROFILE_RELEASE_PANIC"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok. 5 passed; 0 failed; 0 ignored;"]
+minimum_tests = 5
+exact_tests = 5
+
+[[checks]]
+component = "legacy_hkdf"
+id = "optimized-derivation"
+category = "optimized"
+name = "Legacy HKDF optimized vectors and lifecycle"
+establishes = "6 existing vector, bounds and caller-buffer lifecycle tests under the workspace release optimization profile on Rust 1.99.1. Test harness uses recoverable unwind; this is not a panic-abort cleanup, emitted-code, timing or spill-erasure proof."
+command = ["cargo", "+1.99.1", "test", "--locked", "--offline", "--release", "-p", "brynja-legacy-hkdf", "--no-default-features", "--test", "derivation"]
+cwd = "."
+inputs = ["compiler", "hkdf-optimized", "legacy-hkdf-source", "hash-core", "legacy-hmac-source", "sha1-source", "md5-source", "legacy-hkdf-derivation"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_PROFILE_RELEASE_OPT_LEVEL", "CARGO_PROFILE_RELEASE_LTO", "CARGO_PROFILE_RELEASE_CODEGEN_UNITS", "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS", "CARGO_PROFILE_RELEASE_DEBUG_ASSERTIONS", "CARGO_PROFILE_RELEASE_PANIC"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok. 6 passed; 0 failed; 0 ignored;"]
+minimum_tests = 6
+exact_tests = 6
+
+[[checks]]
+component = "legacy_hkdf"
+id = "optimized-fault-cleanup"
+category = "optimized"
+name = "Legacy HKDF optimized injected faults and cleanup"
+establishes = "4 existing composition-boundary fault and live-buffer cleanup tests under the workspace release optimization profile on Rust 1.99.1. Test harness uses recoverable unwind; this is not a panic-abort cleanup, emitted-code, timing or spill-erasure proof."
+command = ["cargo", "+1.99.1", "test", "--locked", "--offline", "--release", "-p", "brynja-legacy-hkdf", "--no-default-features", "--lib", "hkdf_fault_"]
+cwd = "."
+inputs = ["compiler", "hkdf-optimized", "legacy-hkdf-source", "hash-core", "legacy-hmac-source", "sha1-source", "md5-source"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_PROFILE_RELEASE_OPT_LEVEL", "CARGO_PROFILE_RELEASE_LTO", "CARGO_PROFILE_RELEASE_CODEGEN_UNITS", "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS", "CARGO_PROFILE_RELEASE_DEBUG_ASSERTIONS", "CARGO_PROFILE_RELEASE_PANIC"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok. 4 passed; 0 failed; 0 ignored;"]
+minimum_tests = 4
+exact_tests = 4
+
+[groups.hkdf-policy-proof]
+paths = ["assurance/hkdf-policy/Cargo.toml", "assurance/hkdf-policy/Cargo.lock", "assurance/hkdf-policy/src", "crates/brynja-crypto/src/hkdf/parameters.rs", "crates/brynja-legacy-hkdf/src/policy.rs", "scripts/hkdf/check-hkdf-kani.py", "assurance/policy.toml"]
+
+[[checks]]
+component = "hkdf"
+id = "no-std-thumb"
+category = "target"
+name = "Modern HKDF no_std Cortex-M compile on Rust 1.90.0"
+establishes = "Compile the modern composition library and its dependencies for thumbv7em-none-eabi without default features. Compile-only: no target execution, linker, erasure or timing claim. Requires an installed target; installs nothing."
+command = ["cargo", "+1.90.0", "check", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--lib", "--target", "thumbv7em-none-eabi"]
+cwd = "."
+inputs = ["hkdf-msrv", "hkdf-composition", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 600
+[checks.success]
+contains = ["Finished `dev` profile"]
+
+[[checks]]
+component = "legacy_hkdf"
+id = "no-std-thumb"
+category = "target"
+name = "Legacy HKDF no_std Cortex-M compile on Rust 1.90.0"
+establishes = "Compile the isolated legacy HKDF library and its dependencies for thumbv7em-none-eabi without default features. Compile-only: no target execution, linker, erasure or timing claim. Requires an installed target; installs nothing."
+command = ["cargo", "+1.90.0", "check", "--locked", "--offline", "-p", "brynja-legacy-hkdf", "--no-default-features", "--lib", "--target", "thumbv7em-none-eabi"]
+cwd = "."
+inputs = ["hkdf-msrv", "legacy-hkdf-source", "hash-core", "legacy-hmac-source", "sha1-source", "md5-source"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 600
+[checks.success]
+contains = ["Finished `dev` profile"]
+
+[[checks]]
+component = "hkdf"
+id = "bounds-proof"
+category = "kani"
+name = "HKDF production length and TLS label bounds"
+establishes = "Four Kani harnesses compile actual production predicates: supported digest widths, invalid widths, TLS field admission/encoded size, and unchanged short destination. Not HKDF/HMAC correctness, full encoding, zeroization or constant-time proof."
+command = ["python3", "scripts/hkdf/check-hkdf-kani.py", "modern"]
+cwd = "."
+inputs = ["kani-tools", "kani-setup", "hkdf-policy-proof"]
+platform = "linux-x86_64"
+timeout_seconds = 1500
+[checks.success]
+contains = ["HKDF modern public bounds: PASS; 4 proofs; no cryptographic proof claim"]
+
+[[checks]]
+component = "legacy_hkdf"
+id = "bounds-proof"
+category = "kani"
+name = "Legacy HKDF production length and block bounds"
+establishes = "One Kani harness compiles the actual legacy production expansion predicate: admission iff length <= 5100 and minimal block count. Not SHA-1/HKDF correctness, zeroization or constant-time proof."
+command = ["python3", "scripts/hkdf/check-hkdf-kani.py", "legacy"]
+cwd = "."
+inputs = ["kani-tools", "kani-setup", "hkdf-policy-proof"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["HKDF legacy public bounds: PASS; 1 proofs; no cryptographic proof claim"]
+
+[[checks]]
+component = "hkdf"
+id = "fault-cleanup"
+category = "fault"
+name = "HKDF injected errors, unwinds and live scratch cleanup"
+establishes = "Five unit tests inject errors/unwinds at every instrumented Extract/import/three-block Expand boundary, across six modern identities, including TLS label scratch. Observe scratch before storage dies and caller output after interruption. Not leaf-HMAC fault injection, abort/spill erasure or symbolic proof."
+command = ["cargo", "+1.99.1", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--lib", "hkdf_fault_"]
+cwd = "."
+inputs = ["compiler", "hkdf-composition", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok. 5 passed; 0 failed; 0 ignored;"]
+minimum_tests = 5
+exact_tests = 5
+
+[[checks]]
+component = "legacy_hkdf"
+id = "fault-cleanup"
+category = "fault"
+name = "Legacy HKDF injected errors, unwinds and live scratch cleanup"
+establishes = "Four unit tests inject errors/unwinds at every instrumented SHA-1 Extract/import/three-block Expand boundary and observe live scratch clearing. Not leaf-HMAC fault injection, abort/spill erasure or symbolic proof."
+command = ["cargo", "+1.99.1", "test", "--locked", "--offline", "-p", "brynja-legacy-hkdf", "--no-default-features", "--lib", "hkdf_fault_"]
+cwd = "."
+inputs = ["compiler", "legacy-hkdf-source", "hash-core", "legacy-hmac-source", "sha1-source", "md5-source"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok. 4 passed; 0 failed; 0 ignored;"]
+minimum_tests = 4
+exact_tests = 4
+
+# Explicit legacy component; never part of modern HKDF's implicit run scope.
+[groups.legacy-hkdf-source]
+paths = ["crates/brynja-legacy-hkdf/src"]
+optional_paths = ["crates/brynja-legacy-hkdf/build.rs"]
+[groups.legacy-hkdf-source.toml]
+"Cargo.toml" = ["workspace.resolver", "workspace.package.edition", "workspace.package.rust-version", "workspace.lints", "profile.dev", "profile.test"]
+"crates/brynja-legacy-hkdf/Cargo.toml" = ["package.name", "package.edition", "package.rust-version", "package.build", "package.autotests", "lib", "test", "features", "dependencies", "dev-dependencies", "build-dependencies", "lints"]
+[[groups.legacy-hkdf-source.locks]]
+path = "Cargo.lock"
+packages = ["brynja-legacy-hkdf"]
+
+[groups.legacy-hkdf-derivation]
+paths = ["crates/brynja-legacy-hkdf/tests/derivation.rs"]
+
+[[checks]]
+component = "legacy_hkdf"
+id = "derivation"
+name = "Explicit HKDF-SHA-1 vectors, bounds and caller-buffer lifecycle"
+establishes = "Six tests including RFC 5869 A.4-A.7, salt/empty cases, PRK import/reuse, full counter-255 output, public-error atomicity and caller-buffer Drop/unwind. Not modern admission, fault injection or compiler cleanup qualification."
+command = ["cargo", "+1.99.1", "test", "--locked", "--offline", "-p", "brynja-legacy-hkdf", "--no-default-features", "--test", "derivation"]
+cwd = "."
+inputs = ["compiler", "legacy-hkdf-source", "legacy-hkdf-derivation", "hash-core", "legacy-hmac-source", "sha1-source", "md5-source"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok. 6 passed; 0 failed; 0 ignored;"]
+minimum_tests = 6
+exact_tests = 6
+
+[[checks]]
+component = "legacy_hkdf"
+id = "ownership"
+category = "compile-fail"
+name = "Legacy acknowledgement and HKDF ownership contracts"
+establishes = "One positive usage doctest and nine compile-fail examples for explicit acknowledgement, fixed SHA-1 identity and local/affine borrowing. Not operational-fault or physical-erasure evidence."
+command = ["cargo", "+1.99.1", "test", "--locked", "--offline", "-p", "brynja-legacy-hkdf", "--no-default-features", "--doc"]
+cwd = "."
+inputs = ["compiler", "hkdf-rustdoc", "legacy-hkdf-source", "hash-core", "legacy-hmac-source", "sha1-source", "md5-source"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 10
+exact_tests = 10
+
+[[checks]]
+component = "legacy_hkdf"
+id = "msrv-derivation"
+category = "matrix"
+name = "Legacy HKDF-SHA-1 derivation on Rust 1.90.0"
+establishes = "The same six legacy HKDF tests on the minimum Rust version; portable host only, not a full target/compiler matrix."
+command = ["cargo", "+1.90.0", "test", "--locked", "--offline", "-p", "brynja-legacy-hkdf", "--no-default-features", "--test", "derivation"]
+cwd = "."
+inputs = ["hkdf-msrv", "legacy-hkdf-source", "legacy-hkdf-derivation", "hash-core", "legacy-hmac-source", "sha1-source", "md5-source"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok. 6 passed; 0 failed; 0 ignored;"]
+minimum_tests = 6
+exact_tests = 6
+
+# v0.26.0 scoped HKDF development checks; not whole-milestone qualification.
+# Cargo compiles the composition crate's default dependency closure; these
+# inputs affect HKDF checks without adding any reverse dependency to old checks.
+[groups.hkdf-composition]
+paths = ["crates/brynja-crypto/src"]
+optional_paths = ["crates/brynja-crypto/build.rs"]
+[groups.hkdf-composition.toml]
+"Cargo.toml" = ["workspace.resolver", "workspace.package.edition", "workspace.package.rust-version", "workspace.lints", "profile.dev", "profile.test"]
+"crates/brynja-crypto/Cargo.toml" = ["package.name", "package.edition", "package.rust-version", "package.build", "package.autotests", "lib", "test", "features", "dependencies", "dev-dependencies", "build-dependencies", "lints"]
+[[groups.hkdf-composition.locks]]
+path = "Cargo.lock"
+packages = ["brynja-crypto"]
+
+[groups.hkdf-parameters]
+paths = ["crates/brynja-crypto/tests/hkdf_parameters.rs"]
+
+[groups.hkdf-derivation]
+paths = ["crates/brynja-crypto/tests/hkdf_derivation.rs"]
+
+[groups.hkdf-msrv]
+[[groups.hkdf-msrv.tools]]
+program = "rustc"
+toolchain = "1.90.0"
+[[groups.hkdf-msrv.tools]]
+program = "cargo"
+toolchain = "1.90.0"
+
+[[checks]]
+component = "hkdf"
+id = "msrv-derivation"
+category = "matrix"
+name = "Modern HKDF derivation on Rust 1.90.0"
+establishes = "The same eight modern HKDF vector/lifecycle tests on the declared minimum Rust version; host portable build only, not a full compiler/target matrix."
+command = ["cargo", "+1.90.0", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--test", "hkdf_derivation"]
+cwd = "."
+inputs = ["hkdf-msrv", "hkdf-composition", "hkdf-derivation", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok. 8 passed; 0 failed; 0 ignored;"]
+minimum_tests = 8
+exact_tests = 8
+
+[[checks]]
+component = "hkdf"
+id = "derivation"
+name = "Modern HKDF vectors, bounds and caller-buffer lifecycle"
+establishes = "RFC 5869 SHA-256 A.1-A.3, independent answers and counter-255 limits for all six standard SHA-2 identities, TLS label derivation, import/reuse, public failure atomicity and output/PRK Drop/unwind. Not fault-injection, compiler cleanup qualification, SHA-1 or a formal proof."
+command = ["cargo", "+1.99.1", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--test", "hkdf_derivation"]
+cwd = "."
+inputs = ["compiler", "hkdf-composition", "hkdf-derivation", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok. 8 passed; 0 failed; 0 ignored;"]
+minimum_tests = 8
+exact_tests = 8
+
+[[checks]]
+component = "hkdf"
+id = "ownership"
+category = "compile-fail"
+name = "HKDF ownership and admission API contracts"
+establishes = "One positive usage doctest and seven compile-fail examples for algorithm admission, affine/local ownership and disjoint borrowing. Not runtime fault injection or proof of physical secret erasure."
+command = ["cargo", "+1.99.1", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--doc", "hkdf::derive"]
+cwd = "."
+inputs = ["compiler", "hkdf-rustdoc", "hkdf-composition", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 8
+exact_tests = 8
+
+[groups.hkdf-rustdoc]
+[[groups.hkdf-rustdoc.tools]]
+program = "rustdoc"
+toolchain = "1.99.1"
+
+[[checks]]
+component = "hkdf"
+id = "parameters"
+name = "HKDF bounds and TLS label framing"
+establishes = "Six public-metadata regressions: block bounds/counters, finite arithmetic model, exact TLS label bytes, unchanged short destinations and disjoint slices. No Extract/Expand, secret cleanup, symbolic proof or whole-HKDF qualification."
+command = ["cargo", "+1.99.1", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--test", "hkdf_parameters"]
+cwd = "."
+inputs = ["compiler", "hkdf-composition", "hkdf-parameters", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok. 6 passed; 0 failed; 0 ignored;"]
+minimum_tests = 6
+exact_tests = 6
+
+[[checks]]
+component = "hkdf"
+id = "label-aliasing"
+category = "compile-fail"
+name = "TLS label rejects overlapping safe borrows"
+establishes = "The TLS label encoder's overlapping-borrow doctest must fail to compile. Not a dynamic overlap detector or a cryptographic derivation test."
+command = ["cargo", "+1.99.1", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--doc", "hkdf::parameters::Tls13Label"]
+cwd = "."
+inputs = ["compiler", "hkdf-rustdoc", "hkdf-composition", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok. 1 passed; 0 failed; 0 ignored;"]
+minimum_tests = 1
+exact_tests = 1
+
 [groups.hash-core]
 paths = ["crates/brynja-core/src", "crates/brynja-hash-core/src"]
 

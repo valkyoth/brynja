@@ -5,8 +5,8 @@ Generated from the reviewed policy and semantic standards surfaces. Do not edit 
 - Capabilities: **135**
 - API dimensions per capability: **22**
 - Current secret owners: **8**
-- Registered capability owners: **9**
-- Planned secret owners: **72**
+- Registered capability owners: **10**
+- Planned secret owners: **71**
 
 ## Profile Coverage
 
@@ -31,8 +31,8 @@ Generated from the reviewed policy and semantic standards surfaces. Do not edit 
 
 | Disposition | Capabilities |
 | --- | ---: |
-| `future-work` | 116 |
-| `implemented` | 14 |
+| `future-work` | 115 |
+| `implemented` | 15 |
 | `intentionally-rejected` | 1 |
 | `legacy-only` | 3 |
 | `safely-ignored` | 1 |
@@ -54,6 +54,7 @@ registration is not an execution receipt or independent qualification.
 
 | Capability | Profile | Route | Storage | Qualification |
 | --- | --- | --- | --- | --- |
+| `algorithm.hkdf` | `legacy-sha1` | `portable` | caller-backed-clearing-regions | side-channel-qualification-and-independent-review-pending |
 | `algorithm.hmac` | `legacy-sha1-md5` | `portable` | transitive-fixed-owned-memory-not-residency | scoped-release-reconciliation-and-independent-review-pending |
 | `algorithm.hmac` | `legacy-sha1-md5` | `sha1-execution` | borrowed-hardened-workspace | scoped-release-reconciliation-and-independent-review-pending |
 | `algorithm.hmac` | `legacy-sha1-md5` | `md5-batch` | borrowed-hardened-workspace-and-owned-rows | scoped-release-reconciliation-and-independent-review-pending |

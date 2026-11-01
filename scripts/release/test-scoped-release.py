@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import subprocess
 import tempfile
+import tomllib
 import unittest
 from unittest.mock import patch
 
@@ -55,6 +56,34 @@ class ScopedRelease(unittest.TestCase):
             self.assertTrue(scoped.enabled(version))
         with self.assertRaises(ValueError):
             scoped.enabled('garbage')
+
+    def test_hkdf_candidate_gate_is_finite_and_does_not_publish(self):
+        plan = scoped.load('0.26.0')
+        commands = {check['id']: check['command'] for check in plan['checks']}
+        self.assertEqual(len(commands), 21)
+        self.assertEqual(commands['release-plan'], ['scripts/release/test-release-plan.sh'])
+        self.assertEqual(commands['hkdf-tests'],
+            ['cargo', 'test', '--locked', '-p', 'brynja-crypto', '-p',
+             'brynja-legacy-hkdf', '--no-default-features'])
+        self.assertEqual(commands['facade-integration'],
+            ['cargo', 'check', '--locked', '-p', 'brynja', '--no-default-features'])
+        self.assertEqual(set(plan['ci_checks']), set(commands) -
+                         {'sbom', 'dependency-policy', 'advisories'})
+        for command in commands.values():
+            self.assertNotIn('--workspace', command)
+            self.assertNotIn('--all', command)
+            self.assertNotIn('publish', command)
+            self.assertNotIn('miri', command)
+            self.assertNotIn('kani', command)
+            self.assertFalse(any('run-verification' in arg or 'brynja-verify' in arg
+                                 or 'check-hkdf-timing.py' in arg for arg in command))
+        release = tomllib.loads((scoped.ROOT / 'release-crates.toml').read_text())
+        self.assertEqual(release['release']['version'], '0.26.0')
+        self.assertEqual(release['release']['stage'], 'internal')
+        self.assertFalse(any(row['publish'] for row in release['crates'].values()))
+        self.assertIn('brynja-legacy-hkdf', release['crates'])
+        order = publisher.PUBLISH_ORDER
+        self.assertLess(order.index('brynja-legacy-hmac'), order.index('brynja-legacy-hkdf'))
 
     def test_invalid_tag_gate_argument_does_not_enter_historical_campaign(self):
         out = subprocess.run(['bash', 'scripts/tag_gate.sh', 'garbage'], cwd=scoped.ROOT,

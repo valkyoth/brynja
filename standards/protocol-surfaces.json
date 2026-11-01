@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "5733789475a3723fd447ee533b9c1d373533deb5e2205c01966bea5063092e73",
+  "policy_sha256": "362bdd6e89fbd51cb05ca6ddb37c48fa2a73151e894220f4a998955c5212fdf6",
   "schema": 2,
   "source_ledger_sha256": "167725f852db5fa023ad2e4710e98cd22c70be2d2960a72c6faa6c92d6af1e98",
   "surfaces": [
@@ -114,8 +114,8 @@
       "test_target": "tests/surface/primitives.rs#ghash"
     },
     {
-      "code_target": "crates/brynja-crypto/src/hkdf.rs",
-      "disposition": "future-work",
+      "code_target": "crates/brynja-crypto/src/hkdf/derive.rs#Prk",
+      "disposition": "implemented",
       "domain": "cryptography",
       "id": "algorithm.hkdf",
       "kind": "semantic",
@@ -123,8 +123,8 @@
         "rfc:5869"
       ],
       "owner": "0.26.0",
-      "rationale": "HKDF remains future first-party extract and expand logic with bounded labels and outputs.",
-      "test_target": "tests/surface/primitives.rs#hkdf"
+      "rationale": "Portable HKDF Extract/Expand over six sealed standard SHA-2 identities and checked TLS label framing are implemented with caller-backed clearing owners. SHA-1 compatibility is isolated in brynja-legacy-hkdf, never a modern fallback. Scoped vectors, lifecycle tests and public-bound proofs do not establish complete compiler/side-channel qualification or independent review; these remain unfinished development work.",
+      "test_target": "crates/brynja-crypto/tests/hkdf_derivation.rs#rfc5869_sha256_cases_one_through_three"
     },
     {
       "code_target": "crates/brynja-mac-hmac/src/lib.rs#Hmac",

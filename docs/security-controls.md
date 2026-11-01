@@ -1,5 +1,72 @@
 # Security Controls
 
+## HKDF development contract (v0.26.0)
+
+This section describes the implemented portable composition, not a release
+approval or independent verification. Modern code lives in
+[`brynja-crypto/src/hkdf`](../crates/brynja-crypto/src/hkdf.rs); historical SHA-1
+compatibility lives in the separate
+[`brynja-legacy-hkdf`](../crates/brynja-legacy-hkdf/src/lib.rs) crate. Existing
+hash/HMAC evidence is not promoted into evidence for this composition.
+
+The finite requirements and their scoped check IDs are:
+
+| Requirement | Enforcement | Evidence (`hkdf/` unless stated otherwise) |
+| --- | --- | --- |
+| Explicit algorithm identity | Sealed six standard SHA-2 identities; typed PRKs cannot change identity. SHA-3, general SHA-512/t and custom implementations are excluded | `ownership`, `derivation` |
+| Explicit legacy separation | Concrete SHA-1 PRK; Extract and import require `LegacyUse`; no MD5 HKDF, TLS labels or modern fallback | `legacy_hkdf/ownership`, `legacy_hkdf/derivation` |
+| RFC 5869 Extract/import | Extract produces full HashLen; absent salt uses HashLen zero bytes; explicit empty salt is accepted. Import requires at least HashLen and is not entropy extraction | `derivation`, `legacy_hkdf/derivation` |
+| Complete bounded Expand | Exactly the requested bytes, at most 255 full digest blocks; chained full HMAC outputs, counters 1..255, no wrapping. Zero output performs no HMAC | `parameters`, `derivation`, both `bounds-proof` checks |
+| TLS label framing | Big-endian u16 output length, exact `tls13 ` prefix, unprefixed label length 1..249, context length 0..255; at most 514 encoded bytes. No NUL, normalization or implicit transcript hash | `parameters`, `derivation`, `bounds-proof` |
+| No overlapping mutable output | Safe borrowing excludes exact and partial input/output overlap; disjoint slices of one allocation work | `ownership`, `label-aliasing`, `derivation`, legacy ownership/derivation |
+| Public rejection atomicity | Length/label validation precedes destination admission; rejected destination is unchanged, not zeroed | `parameters`, both `derivation` checks |
+| No partial admitted output | Core initialization guard clears the entire destination on later errors/recoverable unwind; only complete ownership is returned | both `fault-cleanup` and `optimized-fault-cleanup` checks |
+| Secret lifetime | Affine local PRK/output owners clear caller regions on Drop; private full-block and TLS scratch clear while live. Imported/source buffers remain caller-owned | both ownership, derivation and fault-cleanup checks |
+| Bounded dynamic memory/lifetime analysis | Existing derivation and fault suites under ASan/LSan; exact disjoint-storage/unwind and selected three-block fault cases under Miri, with validity checks enabled | both `asan-derivation`, `asan-fault-cleanup`, `miri-lifecycle` and `miri-fault-cleanup`; [scope and exclusions](evidence-index.md#hkdf-dynamic-analysis-scope) |
+| Public-owner destruction dispatch | Real public PRK/output consumers pass exact pointer and extent to core Drop on normal/recoverable-unwind paths; x86_64 Rust 1.90.0/1.99.1, abort/unwind; core cleanup delegated, operation scratch and compiler copies excluded | both `owner-dispatch` checks; twelve broken emitted-output controls per build |
+| Operation-local scratch dispatch | Named production Extract/Expand and modern TLS label scratch must dispatch full-region clearing before normal/error/recoverable-unwind exits; x86_64 Rust 1.90.0/1.99.1 abort/unwind; HMAC/core internals and compiler copies excluded | both `operation-scratch` checks; 120 modern and 15 legacy rejected mutations per build |
+| Bounded host timing diagnostic | Equal-length zero/FF secret contrasts, independent correctness preflight, balanced order, retained samples and fail-on-alarm; no retry-to-pass or constant-time claim | both `timing-screen` checks; 36 modern and five legacy campaigns on Rust 1.99.1 Linux x86_64 |
+| Portable bounded storage | No heap allocation or OS/backend selection; modern expansion has two 64-byte scratch arrays, TLS adds 514 bytes, legacy expansion has two 20-byte arrays, plus transitive HMAC state | both `no-std-thumb` checks; source review, not a total-stack bound |
+
+`optimized-derivation` and `optimized-fault-cleanup` reuse existing tests under
+Rust 1.99.1 release optimization. Cargo's test harness supports recoverable
+unwind even though the workspace normal release profile requests abort. Passing
+these tests does not establish cleanup after abort or an optimizer-independent
+memory-erasure guarantee. The Kani harnesses cover public predicates, not HMAC
+or full derivation correctness; consult `show COMPONENT CHECK` for exact scope.
+The [derivation invariant review](evidence-index.md#hkdf-derivation-invariant-review)
+records full-tag chaining, counter/output accounting, destination admission and
+ownership transfer. It is an author review with delegated HMAC/core premises,
+not a complete derivation proof or independent assessment.
+
+The composition branches on public lengths, block counters and fallible status;
+it introduces no secret-byte comparison or secret-indexed lookup. This is a
+source-level observation, not emitted-code or statistical timing qualification.
+The separate [host timing screen](evidence-index.md#hkdf-host-timing-observations)
+recorded no alarms for its two synthetic patterns; this finite observation does
+not establish secret-independent timing or waive further security review.
+The [operation-by-operation review](evidence-index.md#hkdf-source-level-side-channel-review)
+records public decision inputs and delegated assumptions; byte-dependent
+populated-scratch instrumentation exists only in test builds. `Tls13Label`
+is public Debug/Copy metadata, not a clearing secret owner.
+Input lengths and selected identities are not hidden. Work is proportional to
+the input and requested block count; Expand processes `info` again for each
+block. Imported PRK length, IKM, salt and info have no HKDF-specific work quota.
+Callers must bound untrusted input sizes and request frequency. There is no
+RNG, nonce allocator, cancellation callback, provider token or protocol state.
+
+Applications remain responsible for entropy, salt selection, protocol/role
+binding, domain separation and clearing their own copies. Import cannot detect
+a weak or non-pseudorandom PRK. Labels alone do not implement a TLS key schedule,
+authenticate a transcript or admit every SHA-2 identity to a TLS cipher suite.
+This API is not password hashing, protected/resident memory or FIPS validation.
+Forget, abort, termination, double panic, register/spill/compiler copies, paging,
+dumps and physical-memory recovery remain outside Drop-based clearing claims.
+
+Current observations are in the [tracker report](VERIFICATION_RESULTS.md);
+remaining qualification is in the [0.26.0 plan](RELEASE_PLAN.md#v0260---complete-hkdf-and-tls-labels).
+These controls create no repository-wide rerun or release gate.
+
 ## Isolated legacy MD5
 
 v0.24.19 adds a separate no_std MD5 leaf, with no modern facade, protocol or

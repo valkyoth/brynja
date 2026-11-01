@@ -41,11 +41,26 @@ not independent cryptographic certification or coverage of every deployment.
 | All six named SHA-2 and all six SHA-3/SHAKE functions | ✅ Fully implemented, reexported | ❌ No |
 | cSHAKE, KMAC/KMACXOF, TupleHash and ParallelHash families | ✅ Fully implemented, reexported | ❌ No |
 | Modern HMAC over SHA-2/SHA-3 | ✅ Fully implemented portable API; explicit execution qualification separate | ❌ No |
-| AEAD, KDF, RSA, ECC and executable provider effects | ❌ Not implemented | ❌ No |
+| HKDF and TLS Expand-Label over six standard SHA-2 identities | Development implementation; qualification unfinished | ❌ No |
+| AEAD, other KDFs, RSA, ECC and executable provider effects | ❌ Not implemented | ❌ No |
 
 Named hashes and SP 800-185 constructions are usable; the broader planned
 cryptographic composition layer is not complete. No independent cryptographic
 review or FIPS 140-3 validation is claimed.
+
+The `hkdf` module is new, unpublished 0.26.0 development work. It uses explicit
+SHA-2 identities, caller-backed `Prk`/`DerivedKey` clearing owners and no
+allocation or implicit backend selection. Import requires an already
+pseudorandom key; it does not replace Extract for raw input key material.
+Public length/label rejections leave output unchanged; errors after secret
+output initialization clear the destination. Dropping a successful owner clears
+its buffer. Application copies, forgotten owners, compiler spills, aborts and
+host-memory protection remain outside those cleanup guarantees.
+See `hkdf::Prk` API examples and `brynja-verify hkdf` for scoped observations;
+these results are neither a full HKDF assessment nor a release gate.
+Historical HKDF-SHA-1 is available only through the separate development crate
+`brynja-legacy-hkdf` with explicit legacy acknowledgement. It is not a feature
+or dependency of this modern crate and is tracked under `legacy_hkdf`.
 
 ## Use
 

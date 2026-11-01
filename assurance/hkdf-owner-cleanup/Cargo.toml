@@ -1,0 +1,23 @@
+[package]
+name = "brynja-hkdf-owner-cleanup"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[workspace]
+
+[features]
+default = []
+modern = ["dep:brynja-crypto"]
+legacy = ["dep:brynja-legacy-hkdf"]
+
+[dependencies]
+brynja-crypto = { path = "../../crates/brynja-crypto", default-features = false, optional = true }
+brynja-legacy-hkdf = { path = "../../crates/brynja-legacy-hkdf", default-features = false, optional = true }
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+overflow-checks = true

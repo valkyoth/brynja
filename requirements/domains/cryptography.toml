@@ -71,18 +71,18 @@ mapping_rationale = "The HMAC semantic surface is directly sourced by the curren
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0004"
-revision = 2
+revision = 3
 owner = "0.26.0"
-lifecycle = "planned"
+lifecycle = "implemented"
 decision_ids = ["algorithm.hkdf"]
 sources = [{ id = "rfc:5869", authority_role = "current" }]
 statement = "HKDF extract and expand preserve salt and input-key-material semantics and reject output lengths beyond the counter limit."
 invariants = ["key-lifecycle", "resource-bound", "validation", "work-bound"]
-target = "crates/brynja-crypto/src/hkdf.rs#Hkdf"
-positive_test = "tests/requirements/crypto_hkdf.rs#rfc5869_vectors"
-negative_test = "tests/requirements/crypto_hkdf.rs#counter_and_label_exhaustion"
-work_bound = "Expand performs at most 255 hash-output blocks and rejects every output or label length that cannot be represented safely."
-evidence_gap = "Vectors, boundary tests, counter proofs, and key-lifecycle evidence remain unresolved until the v0.26.0 implementation."
+target = "crates/brynja-crypto/src/hkdf/derive.rs#Prk"
+positive_test = "crates/brynja-crypto/tests/hkdf_derivation.rs#rfc5869_sha256_cases_one_through_three"
+negative_test = "crates/brynja-crypto/tests/hkdf_derivation.rs#public_rejections_leave_buffers_unchanged"
+work_bound = "Expand performs at most 255 full digest blocks, processing info per block, and rejects unrepresentable output or label lengths. Extract is linear in supplied salt and IKM; imported PRK and info lengths remain caller-bounded."
+evidence_gap = "Scoped modern and isolated legacy vectors, debug/optimized lifecycle and fault tests, public-bound Kani harnesses and Cortex-M compilation are recorded by brynja-verify. These are development observations, not independent review or full derivation, emitted-code, constant-time or spill-erasure proof. Compiler/side-channel review and package/API inventory closure remain pending; see docs/security-controls.md and docs/RELEASE_PLAN.md."
 residual = "TLS label encoding adds downstream protocol bounds and does not weaken the RFC 5869 extraction and expansion limits."
 mapping_rationale = "The HKDF semantic surface and registry-backed KDF entries cite RFC 5869 directly and are owned by the bounded HKDF milestone."
 

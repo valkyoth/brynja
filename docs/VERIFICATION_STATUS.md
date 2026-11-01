@@ -1,5 +1,22 @@
 # Component Verification Status
 
+## HKDF development scope (v0.26.0)
+
+Modern SHA-2 HKDF/TLS labels in `brynja-crypto` and explicit legacy SHA-1 HKDF
+in `brynja-legacy-hkdf` are implemented but qualification is unfinished.
+The [requirements and control mapping](security-controls.md#hkdf-development-contract-v0260)
+separates vectors, ownership, debug/optimized lifecycle tests, public-bounds
+proofs, bounded public-owner and operation-scratch clearing dispatch, source-level
+side-channel and derivation-invariant reviews, scoped ASan/LSan and Miri cases,
+bounded host timing diagnostics and compile-only target
+observations. `brynja-verify hkdf` and
+`brynja-verify legacy_hkdf` display current scoped results without executing
+checks. They are not independent review, a full derivation proof, side-channel
+qualification or release approval. Existing component evidence is not rerun
+solely because this composition has been added.
+
+## Existing component inventory
+
 General SHA-512/t is a separate **Fully implemented** portable extension: v0.24.26 implements
 ordinary/hardened byte/bit hashing and typed secret output under the
 [authority/API contract](sha512-t-contract.md); final family closure is v0.24.29.

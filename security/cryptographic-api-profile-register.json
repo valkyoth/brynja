@@ -1424,12 +1424,12 @@
           "owner": "0.26.0"
         }
       },
-      "code_target": "crates/brynja-crypto/src/hkdf.rs",
+      "code_target": "crates/brynja-crypto/src/hkdf/derive.rs#Prk",
       "consumer_links": [
         "consumer:protocol",
         "consumer:provider"
       ],
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "cryptography",
       "explicit_rejections": [
         "copy-secret-state",
@@ -1472,7 +1472,7 @@
       "ordinary_hardened_separation": "required",
       "owner": "0.26.0",
       "profile": "keyed-construction",
-      "test_target": "tests/surface/primitives.rs#hkdf"
+      "test_target": "crates/brynja-crypto/tests/hkdf_derivation.rs#rfc5869_sha256_cases_one_through_three"
     },
     {
       "api": {
@@ -19878,74 +19878,6 @@
       ]
     },
     {
-      "capability": "algorithm.hkdf",
-      "evidence": [
-        "tests/surface/primitives.rs#hkdf",
-        "scripts/zeroization/check-zeroization-codegen.sh"
-      ],
-      "fields": [
-        "key",
-        "inner-state",
-        "outer-state",
-        "partial-input",
-        "phase"
-      ],
-      "id": "planned.algorithm.hkdf",
-      "lifecycle_edges": [
-        "creation",
-        "success",
-        "error",
-        "cancellation",
-        "replacement",
-        "rekey",
-        "failed-construction",
-        "recoverable-unwind",
-        "drop"
-      ],
-      "operations": {
-        "derive-secret": {
-          "output_classification": "typed-secret-owned",
-          "partial_failure_policy": "clear-complete-secret-destination",
-          "verification": "not-applicable"
-        },
-        "generate-authenticator": {
-          "output_classification": "explicit-public-declassification",
-          "partial_failure_policy": "unchanged-destination",
-          "verification": "not-applicable"
-        },
-        "verify-authenticator": {
-          "output_classification": "no-output",
-          "partial_failure_policy": "not-applicable",
-          "verification": "before-output-release"
-        }
-      },
-      "owner": "0.26.0",
-      "planned_cleanup_contract": "mandatory-core-or-separately-reviewed-equivalent",
-      "planned_implementation_target": "crates/brynja-crypto/src/hkdf.rs",
-      "residual_risks": [
-        "mem-forget",
-        "process-abort",
-        "forced-termination",
-        "power-loss",
-        "register-copies",
-        "cpu-caches",
-        "compiler-created-copies",
-        "crash-dumps",
-        "suspend-images",
-        "os-swap-and-paging",
-        "dma-visible-copies",
-        "physical-memory-remanence"
-      ],
-      "state": "planned",
-      "temporaries": [
-        "normalized-key",
-        "derived-key",
-        "message-schedule",
-        "block-copy",
-        "output-staging"
-      ]
-    },
-    {
       "capability": "algorithm.legacy-pkcs1-client-signature",
       "evidence": [
         "tests/surface/signatures.rs#legacy_client_pkcs1_rejected",
@@ -24189,8 +24121,102 @@
       ]
     }
   ],
-  "policy_sha256": "d3f41bf93c4c84265e87dd2e734d6368b477112e691f14e0fb5c40a376452ce3",
+  "policy_sha256": "f26a482df54e6cf3826f9256c50acede4e421c492ecc4908be1ae09944b33d82",
   "registered_secret_owners": [
+    {
+      "capability": "algorithm.hkdf",
+      "cleanup_bindings": [
+        "crates/brynja-crypto/src/hkdf/derive.rs#DerivedKey",
+        "crates/brynja-crypto/src/hkdf/derive.rs#Scratch::drop",
+        "crates/brynja-legacy-hkdf/src/lib.rs#Sha1Prk",
+        "crates/brynja-legacy-hkdf/src/lib.rs#DerivedKey",
+        "crates/brynja-legacy-hkdf/src/lib.rs#Scratch::drop",
+        "crates/brynja-core/src/secret_memory.rs#OwnedSecretRegion"
+      ],
+      "cleanup_model": "transitive-owned-fields-and-consuming-handoffs",
+      "compatibility_profiles": [
+        {
+          "admission": "explicit-LegacyUse-no-modern-fallback",
+          "id": "legacy-sha1",
+          "output": "crates/brynja-legacy-hkdf/src/lib.rs#DerivedKey",
+          "qualification": "side-channel-qualification-and-independent-review-pending",
+          "routes": [
+            {
+              "id": "portable",
+              "storage": "caller-backed-clearing-regions"
+            }
+          ],
+          "scratch_bytes": 20,
+          "symbol": "crates/brynja-legacy-hkdf/src/lib.rs#Sha1Prk"
+        }
+      ],
+      "compiler_checks": [
+        "python3 scripts/hkdf/check-hkdf-owner-cleanup.py modern",
+        "python3 scripts/hkdf/check-hkdf-owner-cleanup.py legacy",
+        "python3 scripts/hkdf/check-hkdf-operation-cleanup.py modern",
+        "python3 scripts/hkdf/check-hkdf-operation-cleanup.py legacy"
+      ],
+      "compiler_scope": "public-owner-and-operation-scratch-dispatch-x86_64-rust-1.90.0-and-1.99.1-abort-and-unwind",
+      "delegated_owners": [
+        "core.owned-secret-region",
+        "core.secret-region-initialization",
+        "registered.algorithm.hmac"
+      ],
+      "evidence": [
+        "crates/brynja-crypto/tests/hkdf_derivation.rs",
+        "crates/brynja-legacy-hkdf/tests/derivation.rs",
+        "assurance/hkdf-owner-cleanup/src/lib.rs",
+        "scripts/hkdf/check-hkdf-owner-cleanup.py",
+        "scripts/hkdf/hkdf_owner_codegen.py",
+        "scripts/cryptography/test-hkdf-owner-contract.py",
+        "assurance/hkdf-operation-cleanup/src/lib.rs",
+        "scripts/hkdf/check-hkdf-operation-cleanup.py",
+        "scripts/hkdf/hkdf_operation_codegen.py"
+      ],
+      "fields": [
+        "region:caller-backed-owned-secret-region",
+        "local:algorithm-and-thread-local-marker"
+      ],
+      "id": "registered.algorithm.hkdf",
+      "lifecycle_edges": [
+        "creation",
+        "success",
+        "error",
+        "cancellation",
+        "replacement",
+        "rekey",
+        "failed-construction",
+        "recoverable-unwind",
+        "drop"
+      ],
+      "output_classification": "typed-secret-owned",
+      "partial_failure_policy": "clear-complete-secret-destination",
+      "qualification": "side-channel-qualification-and-independent-review-pending",
+      "residual_risks": [
+        "mem-forget",
+        "process-abort",
+        "forced-termination",
+        "power-loss",
+        "register-copies",
+        "cpu-caches",
+        "compiler-created-copies",
+        "crash-dumps",
+        "suspend-images",
+        "os-swap-and-paging",
+        "dma-visible-copies",
+        "physical-memory-remanence"
+      ],
+      "state": "registered",
+      "storage": "caller-backed-regions-with-fixed-operation-scratch",
+      "symbol": "crates/brynja-crypto/src/hkdf/derive.rs#Prk",
+      "temporaries": [
+        "block:Scratch<64>",
+        "previous:Scratch<64>",
+        "encoded:Scratch<514>",
+        "hmac:delegated-secret-owner",
+        "caller-input-and-compiler-copies:outside-owned-storage"
+      ]
+    },
     {
       "capability": "algorithm.hmac",
       "cleanup_bindings": [
@@ -24901,5 +24927,5 @@
     "physical-memory-remanence"
   ],
   "schema": 1,
-  "surface_register_sha256": "2bd27839397277980c1c297f7db91e84e79c61364c2eda328af4b504332e8f3e"
+  "surface_register_sha256": "c565271e2840568147efa426f371284d796269f4d683f8993622cf1264db9152"
 }

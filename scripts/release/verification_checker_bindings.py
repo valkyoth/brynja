@@ -6,7 +6,7 @@ OWNER_HELPERS = [
     'scripts/cryptography/' + name + '.py' for name in (
         'secret_owner_compiler', 'mir_cleanup_flow', 'api_profile_contracts',
         'api_profile_operations', 'legacy_md5_owner_contract', 'legacy_sha1_owner_contract',
-        'hmac_owner_contract', 'legacy_hmac_owner_contract', 'rust_source_contract')]
+        'hmac_owner_contract', 'legacy_hmac_owner_contract', 'hkdf_owner_contract', 'rust_source_contract')]
 
 RESIDENT_PACKAGES = ('brynja-core', 'brynja-hash-core', 'brynja-crypto-cpu', 'brynja-crypto-cpu-std',
     'brynja-hash-sha2', 'brynja-hash-sha3', 'brynja-mac-kmac', 'brynja-hash-tuple', 'brynja-mac-hmac',

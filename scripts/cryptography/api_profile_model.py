@@ -347,8 +347,11 @@ def validate_secret_policy(
         composed = contracts.COMPOSED_OWNER_CONTRACTS.get(owner.get("id"))
         if composed is not None:
             try:
-                contracts.hmac_owner_contract.validate(root, owner, registered)
-                contracts.hmac_owner_contract.compatibility.validate(root, owner["compatibility_profiles"], registered)
+                if owner["id"] == contracts.hkdf_owner_contract.ID:
+                    contracts.hkdf_owner_contract.validate(root, owner, registered, policy["current-secret-owner"])
+                else:
+                    contracts.hmac_owner_contract.validate(root, owner, registered)
+                    contracts.hmac_owner_contract.compatibility.validate(root, owner["compatibility_profiles"], registered)
             except (ValueError, rust_contract.RustContractError) as error:
                 fail(str(error))
         else:

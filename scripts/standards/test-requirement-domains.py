@@ -39,7 +39,9 @@ def validation_fixture() -> tuple[dict, dict, set[str], dict, dict, set[str]]:
         if item["domain"] in domain.SURFACE_DOMAINS
         or set(item["normative_sources"]).intersection(authorities)
     }
-    planned = next(item for item in requirements if item["lifecycle"] == "planned")
+    # Keep the synthetic AES cross-link distinct as earlier primitives advance.
+    planned = next(item for item in requirements
+                   if item["lifecycle"] == "planned" and "algorithm.aes" not in item["decision_ids"])
     return planned, authorities, versions, surface_map, register, allowed
 
 

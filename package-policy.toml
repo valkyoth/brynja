@@ -33,6 +33,12 @@ publish = "crates-io"
 required = []
 optional = {}
 
+[packages.brynja-legacy-hkdf]
+class = "legacy-engine"
+publish = "crates-io"
+required = ["brynja-core", "brynja-legacy-hmac"]
+optional = {}
+
 [packages.brynja-legacy-hmac]
 class = "legacy-engine"
 publish = "crates-io"
@@ -48,7 +54,7 @@ optional = { strict-execution = "brynja-crypto-cpu-std" }
 [packages.brynja-crypto]
 class = "modern-shared"
 publish = "crates-io"
-required = ["brynja-hash-parallel", "brynja-hash-sha2", "brynja-hash-sha3", "brynja-hash-tuple", "brynja-mac-kmac", "brynja-mac-hmac"]
+required = ["brynja-core", "brynja-hash-parallel", "brynja-hash-sha2", "brynja-hash-sha3", "brynja-hash-tuple", "brynja-mac-kmac", "brynja-mac-hmac"]
 optional = { cpu = "brynja-crypto-cpu" }
 
 [packages.brynja-hash-core]

@@ -23,6 +23,7 @@ FEATURE_SETS = {
 def no_defaults(package, dependency):
     """Legacy cryptographic/provider dependencies never unify defaults implicitly."""
     return dependency in {
+        "brynja-legacy-hkdf": {"brynja-legacy-hmac"},
         "brynja-legacy-hmac": {"brynja-legacy-sha1", "brynja-legacy-md5"},
         "brynja-legacy-hmac-std": {"brynja-legacy-hmac", "brynja-crypto-cpu-std"},
     }.get(package, set())

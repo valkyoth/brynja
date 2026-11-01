@@ -12,7 +12,10 @@ BASE = {'brynja-core', 'brynja-hash-core'}
 def validate(registry):
     catalog = json.loads((ROOT / 'verification/catalog.json').read_text())
     rows = {r['id']: r for r in catalog['entries'] if r['phase'] == 'asan'}
-    checks = [c for c in registry['checks'] if c.get('category') == 'asan']
+    # This validator owns the historical catalog bindings. New HKDF runs have
+    # separate exact-command/population regressions in RegistryTests.
+    checks = [c for c in registry['checks'] if c.get('category') == 'asan'
+              and c['component'] not in ('hkdf', 'legacy_hkdf')]
     assert len(checks) == 32
     assert len({c['id'] for c in checks}) == 32
     for check in checks:
@@ -81,7 +84,8 @@ class SanitizerRegistryTests(unittest.TestCase):
         validate(self.registry)
 
     def test_weakened_flags_population_or_input_scope_are_rejected(self):
-        first = next(c for c in self.registry['checks'] if c.get('category') == 'asan')
+        first = next(c for c in self.registry['checks'] if c.get('category') == 'asan'
+                     and c['component'] not in ('hkdf', 'legacy_hkdf'))
         for path, value in [('platform', 'macos-aarch64'), ('inputs', ['asan-tools'])]:
             changed = copy.deepcopy(self.registry)
             next(c for c in changed['checks'] if c['id'] == first['id'])[path] = value

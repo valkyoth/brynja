@@ -100,6 +100,38 @@ pure-Rust facade, or optional adapter dependency that enters a core graph.
 
 ## Required Controls
 
+### HKDF composition boundary (v0.26.0 development)
+
+HKDF assets are IKM, imported/extracted PRKs, intermediate HMAC outputs and
+derived keys. Adversarial callers can choose input lengths, salt/info, label
+bytes, contexts and destination sizes; mistakes can confuse algorithm identity,
+raw IKM with an imported PRK, roles or protocols, or modern and legacy selection.
+Length overflow/counter wrap, partial output after failure, overlapping borrows,
+reused stale destination bytes and recoverable interruption are explicit threats.
+
+The [HKDF control contract](security-controls.md#hkdf-development-contract-v0260)
+maps these threats to sealed identities, checked admission, caller-backed
+clearing owners, safe borrow exclusion and scoped vector/fault/bounds tests.
+SHA-1 compatibility is a separately selected crate requiring acknowledgement;
+it is not a downgrade path inside the modern API. Its implementation does not
+authorize use in a new protocol or restore SHA-1 collision resistance.
+
+The construction does not supply entropy, enforce domain separation, authenticate
+inputs or implement a TLS schedule. Weak imported PRKs and repeated identical
+PRK/info requests cannot be detected as misuse. Large borrowed salt, IKM, PRK or
+info buffers can consume proportionate CPU; callers own request/work limits.
+Lengths, algorithm choice and public errors are observable. HMAC dependencies
+and compiler lowering remain part of the side-channel boundary; source review
+and bounded public-predicate proofs are not constant-time certification.
+
+Drop-based observations exclude caller copies, forgotten owners, aborts and
+termination, spills/registers, dumps/paging and physical attacks. Fault injection
+occurs at HKDF composition checkpoints, not arbitrary instructions or failures
+inside HMAC. No protected memory, native execution, independent review or FIPS
+claim follows from the local tracker being green.
+
+### Foundation and existing component controls
+
 - strict canonical parsing with exact consumption and bounded work;
 - fallible untrusted-input paths return typed errors and must not rely on
   unwinding, panic recovery, unchecked arithmetic, or indexing; release builds

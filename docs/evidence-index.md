@@ -1,5 +1,252 @@
 # Permanent Evidence Index
 
+## HKDF development evidence (v0.26.0)
+
+The live, scoped observations are in [verification results](VERIFICATION_RESULTS.md)
+and [`verification/results.json`](../verification/results.json), with stable
+definitions in [`verification/checks.toml`](../verification/checks.toml).
+Inspect using `brynja-verify hkdf` or `brynja-verify legacy_hkdf`; these commands
+run no tests. `show COMPONENT CHECK` gives provenance, scope and freshness.
+
+- Modern tests: [`hkdf_derivation.rs`](../crates/brynja-crypto/tests/hkdf_derivation.rs),
+  [`hkdf_parameters.rs`](../crates/brynja-crypto/tests/hkdf_parameters.rs),
+  production-module doctests and private fault/cleanup tests.
+- Legacy tests: [`derivation.rs`](../crates/brynja-legacy-hkdf/tests/derivation.rs),
+  crate doctests and private fault/cleanup tests.
+- Bounds proofs: [`assurance/hkdf-policy`](../assurance/hkdf-policy/src/lib.rs)
+  imports the real production predicates; four modern harnesses and one legacy
+  harness execute separately. No HMAC or complete derivation proof is claimed.
+- Compiler configurations: host Rust 1.90.0 derivation, Rust 1.99.1 debug and
+  optimized tests, plus Rust 1.90.0 Cortex-M compile-only registrations.
+- Dynamic analysis: separate `asan-derivation`, `asan-fault-cleanup`,
+  `miri-lifecycle` and `miri-fault-cleanup` registrations reuse existing tests
+  for each family. See the [exact scope](#hkdf-dynamic-analysis-scope).
+- Public-owner dispatch: `owner-dispatch` is separately registered for modern
+  and legacy families. The [actual-type probes](../assurance/hkdf-owner-cleanup/src/lib.rs)
+  and [bounded LLVM checker](../scripts/hkdf/hkdf_owner_codegen.py) track complete
+  owned descriptors to core Drop on normal and recoverable-unwind paths, using
+  Rust 1.90.0/1.99.1 x86_64 abort/unwind builds. Each build rejects twelve broken
+  emitted-output controls. Core cleanup is delegated; operation scratch,
+  derivation internals, whole-frame erasure and timing remain outside this check.
+- Operation scratch: separate `operation-scratch` registrations analyze actual
+  production Extract/Expand bodies and modern Expand-Label consumers without
+  test instrumentation. Rust 1.90.0/1.99.1 x86_64 abort/unwind builds cover 18
+  modern consumers and two legacy consumers. Named lifetimes must dispatch
+  complete clearing of Extract's block, Expand's block/previous buffers and
+  the modern label buffer before normal/error/recoverable-unwind exits.
+  Each build rejects short clear, wrong pointer/callee, early return and
+  post-clear write mutations for every scratch role (120 modern, 15 legacy).
+  The checker reuses the existing conservative HMAC scratch analysis without
+  editing or rerunning HMAC checks. MIR/assembly presence checks identify
+  artifacts; the flow analysis is LLVM-only. Core clearing and HMAC internals
+  remain delegated premises, not newly proved callees. This is not an arbitrary
+  LLVM verifier, whole-frame erasure or cross-target/timing qualification.
+- Host timing diagnostic: `timing-screen` is separately registered for each
+  family. The [synthetic fixture](../assurance/hkdf-timing/src/main.rs) and
+  [strict population/oracle parser](../scripts/hkdf/hkdf_timing.py) compare
+  fixed-zero and fixed-FF secrets at identical public lengths. The runner
+  retains raw samples, compiler/binary identity, host and logical CPU; an alarm
+  fails the check and must be investigated rather than retried to obtain a pass.
+
+The [requirements/control mapping](security-controls.md#hkdf-development-contract-v0260)
+and [threat boundary](threat-model.md#hkdf-composition-boundary-v0260-development)
+describe what these observations do and do not establish. A current local pass
+is not certification, independent review, a signed receipt or release approval.
+Source/control changes invalidate only their declared dependants; documentation
+edits do not require replaying unchanged cryptographic evidence.
+
+### HKDF derivation invariant review
+
+Local author review, 2026-11-01, of the same modern/legacy production sources
+and the delegated core initialization guard, not an independent audit or a
+symbolic proof of the complete derivation:
+
+- Extract validates the exact HashLen destination before admission, passes
+  salt/IKM to HMAC in the correct roles, and writes the complete secret tag
+  before transferring initialized ownership. Absent salt uses HashLen zero
+  bytes. Import instead checks input length at least HashLen and exact matching
+  destination length; it does not establish entropy or pseudorandomness.
+- Expand admits the public length before touching the destination. Zero output
+  returns an empty owner without HMAC. At block `i`, the initialized prefix
+  consists of the preceding output fragments; `remaining` is the requested
+  length minus that prefix. The first block omits a previous tag, subsequent
+  blocks consume the full previous HashLen tag, and every block appends `info`
+  then the one-byte counter. Only the output fragment is truncated, never the
+  chaining value. Checked subtraction and bounded counters prevent wrapping.
+- The full previous tag is copied while its secret owner is still live. The
+  two scratch guards remain responsible for their complete arrays. Core
+  initialization checks each sequential write's extent and permits ownership
+  transfer only after exact completion; errors/unwind retain its clearing
+  guard. The existing PRK is shared-borrowed and never advanced or consumed by
+  Expand, so faults cannot leave a persistent partial counter or chaining state.
+- Expand-Label validates and encodes metadata before calling Expand. An output
+  exceeding the selected hash's bound is still rejected before destination
+  admission, and the encoded-label guard clears on that return. Label/context
+  are used verbatim; no transcript hashing, TLS hash selection or key schedule
+  is inferred. Legacy SHA-1 exposes no label operation.
+
+This reasoning depends on the sealed digest widths and the existing HMAC/core
+contracts. It does not prove those callees, machine-code erasure, entropy,
+constant-time behavior or cleanup after forget/abort. Safe-borrow restrictions,
+counter-255 vectors, fault tests and compiler dispatch checks are separate
+supporting observations, not substitutes for independent review.
+
+### HKDF dynamic analysis scope
+
+The eight scoped registrations use installed `nightly-2026-09-11` on Linux
+x86_64, locked/offline dependencies, no default features, and separate build
+directories. They do not run historical hash/HMAC assessment campaigns.
+All eight registrations have passing local executions on 2026-11-01; exact
+timestamps, fingerprints and attempts remain in the tracker rather than being
+inferred from this narrative.
+
+- ASan/LSan runs the complete existing derivation harness (eight modern tests,
+  six legacy tests) and all HKDF injected-fault tests (five modern, four legacy).
+  Address instrumentation and leak detection are explicit, sanitizer failures
+  are fatal, and the runner requires exact passed-test populations.
+- Miri runs one exact disjoint-storage/Drop-during-unwind test and one exact
+  fault test per family. Modern fault coverage is SHA-256 TLS label expansion;
+  legacy coverage is SHA-1 expansion with retained/reusable PRK. Both fault
+  tests inject errors and unwinds at 22 composition boundaries of a three-block
+  request, observing scratch clearing while storage remains live. This is not
+  every algorithm, maximum output, Extract/import fault path or input under Miri.
+- Miri retains its default validity checks. Its portable core transfer model
+  does not execute native assembly. Neither sanitizer nor interpreter success
+  proves whole-stack/register erasure, timing, or exhaustive correctness.
+
+The first modern Miri fault execution passed its test but was rejected by the
+runner because progress stderr split the expected test-name/`ok` line. That
+failed attempt remains recorded. The binding now checks the selected name,
+successful process exit, successful summary and exactly one passed test without
+requiring stdout/stderr adjacency; the corrected binding was rerun. This was a
+completion-signal fix, not a waived test failure or modified production code.
+
+Registry regressions check all eight commands, dependency closures, exact test
+counts and instrumentation, with negative controls for disabled sanitizers,
+disabled Miri validation and zero-test acceptance. The shared owner tooling's
+input declarations also include its new HKDF contract import. Old saved results
+are not rewritten; affected tooling may become stale when next scanned.
+
+### HKDF source-level side-channel review
+
+Local author review, 2026-11-01, of modern `hkdf/derive.rs`,
+`hkdf/parameters.rs`, and legacy `lib.rs`/`policy.rs` on the working tree based
+on `efd5d9c300011b768d776ea99590531cb6e5ff33`. This is a source observation,
+not a runner pass, independent assessment, statistical experiment or compiler
+constant-time proof. It adds no claim about unchanged HMAC/hash internals.
+
+| Operation | Decisions and indexing in the HKDF composition |
+| --- | --- |
+| Extract | Exact destination length, selected digest width, optional-salt presence and fallible HMAC/core status; IKM/salt contents are only passed to HMAC |
+| Import | Input/destination lengths and core initialization status; input bytes are copied without content comparison |
+| Expand | Public output length, block counter, remaining byte count and fallible HMAC/core status; PRK/chaining/output contents do not select branches or indices |
+| Expand-Label | Public field lengths, output length and sequential encoding; label/context contents are copied verbatim, not parsed or compared |
+
+Lengths, algorithm identity, salt presence and call/error shape are not hidden.
+The test-only populated-scratch inspection branches on byte values, but is
+guarded by `cfg(test)` and absent from the production artifact fixtures.
+Long imported PRKs may trigger HMAC key normalization; input lengths and
+normalization behavior remain visible. Delegated HMAC/core error and timing
+behavior must retain their own contracts; this review does not prove them.
+The public `Tls13Label` metadata type is Debug/Copy and is not a secret owner:
+callers must not treat it as protected storage for secret context bytes.
+
+Work scales with salt/IKM/import/info lengths and requested block count; Expand
+rehashes `info` and initializes HMAC for each block. No input work quota or
+constant wall-time promise is made. The bounded timing observations below
+supplement this source review; they do not close machine-code secret-flow,
+other-architecture or independent review.
+
+### HKDF host timing observations
+
+Author-operated diagnostic, 2026-11-01, working tree based on
+`efd5d9c300011b768d776ea99590531cb6e5ff33`, Linux x86_64 logical CPU 0,
+Rust 1.99.1 (`58cf8f9c35b355199727627d07ae34a4e2846d67`), LLVM 23.1.1.
+The isolated fixture uses release optimization, fat LTO, one codegen unit,
+overflow checks and panic=abort. Modern and legacy are separate feature builds;
+neither runs an existing hash/HMAC campaign.
+
+Each campaign has 32 discarded warmup pairs and 512 measured pairs (256 AB,
+256 BA), with four complete requests in each measurement. Input preparation
+and stdout I/O are outside measurement; PRK import/admission, output exposure
+to `black_box`, and owner destruction are inside. Expand derives three blocks
+with a partial final block (`2 * HashLen + 7` bytes), not maximum-length output.
+This measures full requests, not isolated reusable-PRK Expand latency.
+
+The six modern identities each cover IKM-value variation with fixed 32-byte
+salt, 200-byte salt-value variation with fixed IKM, 200-byte PRK import,
+HashLen/200-byte PRK expansion, and TLS label expansion. Legacy SHA-1 covers
+the same five non-label cases. Public lengths and metadata are identical
+within each pair. Both classes of every operation must match the independent
+Python HMAC-based oracle before measurements run; RFC 5869 A.1 separately
+pins that oracle's expansion recurrence.
+
+| Family | Campaigns | Alarms at absolute paired-t >= 10 | Largest absolute paired-t | Completed (UTC) |
+| --- | ---: | ---: | ---: | --- |
+| Modern SHA-2 | 36 | 0 | 4.648 | 2026-11-01T18:52:31.648848695Z |
+| Legacy SHA-1 | 5 | 0 | 1.550 | 2026-11-01T18:52:50.070370891Z |
+
+Raw logs are local runner artifacts (not authenticated or committed receipts):
+
+- Modern: `verification/.runner/logs/2-1793559147384362646.log`, SHA-256
+  `3e54440eff16defb48aea1657b0af04aa461b551e20ba96a981af143653c6bae`.
+- Legacy: `verification/.runner/logs/2-1793559168114526742.log`, SHA-256
+  `5427f16629fb50aa36d7bf7e663b5e3620d0921d1d93335c367a3f2860e89db7`.
+
+Eight parser/oracle regressions reject missing/reordered/duplicated identities,
+corrupt preflight outputs, invalid measurement values and obvious timing alarms,
+including constant nonzero differences with zero variance. Registry regressions
+require the exact population/completion signals and source closures.
+
+Zero alarms is only this finite screen's outcome. Two fixed patterns are not a
+randomized secret population; the coarse alarm threshold is not a security
+acceptance threshold. Clock quantization (especially short import measurements),
+shared-host noise, deterministic order, cache history and false negatives remain
+limitations. There is no power/cache/EM assessment, cross-machine or compiler
+matrix timing claim, formal constant-time proof, independent review or release
+approval. The check must not be used to certify underlying HMAC/hash primitives.
+
+### Initial HKDF artifact inspection
+
+Local manual diagnostic, 2026-11-01, on the uncommitted HKDF working tree based
+on `efd5d9c300011b768d776ea99590531cb6e5ff33`. These commands compiled existing
+integration harnesses; they did not execute them or record a new runner pass:
+
+```sh
+cargo +1.99.1 rustc --locked --offline --release -p brynja-crypto --no-default-features --test hkdf_derivation -- --emit=mir,llvm-ir,asm
+cargo +1.99.1 rustc --locked --offline --release -p brynja-legacy-hkdf --no-default-features --test derivation -- --emit=mir,llvm-ir,asm
+```
+
+Compiler: rustc `58cf8f9c35b355199727627d07ae34a4e2846d67`, LLVM 23.1.1,
+`x86_64-unknown-linux-gnu`. Workspace release optimization is used, but these
+test harnesses support unwind; this is not an inspection of the normal
+panic-abort build. The library instantiations do not enable private `cfg(test)`
+fault instrumentation.
+
+- Modern LLVM IR contains Extract and Expand instantiations for all six SHA-2
+  identities and a separate SHA-256 Expand-Label body. Detailed inspection of
+  SHA-512/224 Expand found two 64-byte scratch regions cleared on normal, error
+  and unwind exits, with the admitted destination also cleared on failure.
+- SHA-256 Expand-Label retains clearing of its 514-byte encoding scratch on
+  normal and unwind exits. Legacy Expand retains two 20-byte scratch regions
+  and error/unwind cleanup of both plus the admitted destination.
+- The modern assembly's `zeroize_region_volatile` routine contains byte-zero
+  stores and the compiler memory barrier. LLVM IR also contains compiler-created
+  HMAC state copies; named-region cleanup is not erasure of every copy or spill.
+
+The local LLVM artifacts were
+`target/release/deps/hkdf_derivation-bc0046e6d54f7b5c.ll` (SHA-256
+`1700864c8ea635973f29ead01d6be7015fb335f27ad59f55d20b4979d1213e6e`)
+and `target/release/deps/derivation-4d657902d4de8a2f.ll` (SHA-256
+`4f0d685e35f208ff708ec8edf97540a6fbc402b5343e75e04532a2fb0d45d01a`).
+These ignored build artifacts may be replaced by later builds; their hashes
+identify this observation, not authenticated or durable execution receipts.
+This manual inspection did not establish complete control-flow/taint or timing
+assessment, cross-target qualification or independent review. The subsequently
+registered public-owner dispatch checks above have a narrower, explicit scope.
+
+## Earlier evidence narratives
+
 Status: v0.20.0 published; milestones through v0.24.33 signed. v0.24.34 implements [impact-selected verification](focused-assurance.md) and [hardened SHA-2 execution](sha2-hardened-execution.md). Local acceptance is complete; exceptional pentest and fresh native Arm/Mac evidence remain pending. No publication, independent verification or FIPS validation is claimed.
 
 General SHA-512/t admission is in [the contract](sha512-t-contract.md) and

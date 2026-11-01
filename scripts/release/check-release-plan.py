@@ -100,6 +100,12 @@ SCOPED_CHECKPOINT_EXIT = (
     "finite final checks, obtain green GitHub and CodeQL, then tag and publish the "
     "same candidate without rerunning verification.`"
 )
+SCOPED_INTERNAL_EXIT = (
+    "`{version} development milestone reached. Obtain a green scoped pentest/retest, "
+    "complete the finite final release gate, push the candidate and obtain green "
+    "GitHub and CodeQL, then create the signed tag. This development milestone "
+    "is not a scheduled crates.io publication.`"
+)
 
 
 def expected_versions() -> list[str]:
@@ -112,6 +118,11 @@ def is_scheduled_checkpoint(version: str) -> bool:
 
 
 def expected_exit(version: str) -> str:
+    # Migrate the prepared development milestone without rewriting historical
+    # exits or the unopened roadmap. The general scoped-release policy applies
+    # to future candidates when their detailed plans are prepared as well.
+    if version == "v0.26.0":
+        return SCOPED_INTERNAL_EXIT.format(version=version)
     if version.startswith("v1.") or version.removeprefix("v").split(".")[1] in {
         str(number) for number in range(1, 11)
     }:

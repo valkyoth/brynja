@@ -464,11 +464,11 @@
         "rfc:5869"
       ],
       "targets": [
-        "planned-symbol:crates/brynja-crypto/src/hkdf.rs#Hkdf"
+        "actual-symbol:crates/brynja-crypto/src/hkdf/derive.rs#Prk"
       ],
       "tests": [
-        "planned:positive:tests/requirements/crypto_hkdf.rs#rfc5869_vectors",
-        "planned:negative:tests/requirements/crypto_hkdf.rs#counter_and_label_exhaustion"
+        "planned:positive:crates/brynja-crypto/tests/hkdf_derivation.rs#rfc5869_sha256_cases_one_through_three",
+        "planned:negative:crates/brynja-crypto/tests/hkdf_derivation.rs#public_rejections_leave_buffers_unchanged"
       ]
     },
     "BRY-REQ-CRYPTO-0005": {
@@ -11192,6 +11192,9 @@
       "actual-symbol:crates/brynja-core/src/secret.rs#SecretState": [
         "BRY-REQ-TLS-0010"
       ],
+      "actual-symbol:crates/brynja-crypto/src/hkdf/derive.rs#Prk": [
+        "BRY-REQ-CRYPTO-0004"
+      ],
       "actual-symbol:crates/brynja-hash-parallel/src/lib.rs#PARALLEL_HASH_IMPLEMENTED": [
         "BRY-REQ-CRYPTO-0017"
       ],
@@ -11313,9 +11316,6 @@
       ],
       "planned-symbol:crates/brynja-crypto/src/ghash.rs#Ghash": [
         "BRY-REQ-CRYPTO-0006"
-      ],
-      "planned-symbol:crates/brynja-crypto/src/hkdf.rs#Hkdf": [
-        "BRY-REQ-CRYPTO-0004"
       ],
       "planned-symbol:crates/brynja-crypto/src/hpke.rs": [
         "BRY-REQ-HPKE-0138",
@@ -11711,6 +11711,9 @@
       "planned:negative:crates/brynja-core/tests/entropy.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-ENTROPY-0014"
       ],
+      "planned:negative:crates/brynja-crypto/tests/hkdf_derivation.rs#public_rejections_leave_buffers_unchanged": [
+        "BRY-REQ-CRYPTO-0004"
+      ],
       "planned:negative:crates/brynja-mac-hmac/tests/lifecycle.rs#exercise": [
         "BRY-REQ-CRYPTO-0003"
       ],
@@ -11796,9 +11799,6 @@
       ],
       "planned:negative:tests/requirements/crypto_ghash.rs#length_and_counter_bounds": [
         "BRY-REQ-CRYPTO-0006"
-      ],
-      "planned:negative:tests/requirements/crypto_hkdf.rs#counter_and_label_exhaustion": [
-        "BRY-REQ-CRYPTO-0004"
       ],
       "planned:negative:tests/requirements/crypto_rsa.rs#ambiguous_parameters_and_padding": [
         "BRY-REQ-CRYPTO-0011"
@@ -12135,6 +12135,9 @@
       "planned:positive:crates/brynja-core/tests/entropy.rs#contract": [
         "BRY-REQ-ENTROPY-0014"
       ],
+      "planned:positive:crates/brynja-crypto/tests/hkdf_derivation.rs#rfc5869_sha256_cases_one_through_three": [
+        "BRY-REQ-CRYPTO-0004"
+      ],
       "planned:positive:crates/brynja-mac-hmac/tests/vectors.rs#rfc4231_case1": [
         "BRY-REQ-CRYPTO-0003"
       ],
@@ -12222,9 +12225,6 @@
       ],
       "planned:positive:tests/requirements/crypto_ghash.rs#nist_vectors": [
         "BRY-REQ-CRYPTO-0006"
-      ],
-      "planned:positive:tests/requirements/crypto_hkdf.rs#rfc5869_vectors": [
-        "BRY-REQ-CRYPTO-0004"
       ],
       "planned:positive:tests/requirements/crypto_rsa.rs#pss_and_pkcs1_vectors": [
         "BRY-REQ-CRYPTO-0011"

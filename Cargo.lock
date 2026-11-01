@@ -4,7 +4,7 @@ version = 4
 
 [[package]]
 name = "brynja"
-version = "0.25.3"
+version = "0.26.0"
 dependencies = [
  "brynja-core",
  "brynja-crypto",
@@ -24,6 +24,7 @@ version = "0.10.0"
 name = "brynja-crypto"
 version = "0.2.0"
 dependencies = [
+ "brynja-core",
  "brynja-crypto-cpu",
  "brynja-hash-parallel",
  "brynja-hash-sha2",
@@ -128,6 +129,14 @@ dependencies = [
  "brynja-legacy-tls10",
  "brynja-legacy-tls11",
  "brynja-legacy-wtls",
+]
+
+[[package]]
+name = "brynja-legacy-hkdf"
+version = "0.1.0"
+dependencies = [
+ "brynja-core",
+ "brynja-legacy-hmac",
 ]
 
 [[package]]

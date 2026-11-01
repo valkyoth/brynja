@@ -3,11 +3,13 @@
 
 import legacy_md5_owner_contract, legacy_sha1_owner_contract
 import hmac_owner_contract
+import hkdf_owner_contract
 from api_profile_operations import OPERATION_CONTRACTS
 
 # The direct-destructor MIR checker intentionally handles only the original
 # map. Composed owners bind their distinct emitted-code pipeline explicitly.
 COMPOSED_OWNER_CONTRACTS = {hmac_owner_contract.ID: {"record": hmac_owner_contract.RECORD}}
+COMPOSED_OWNER_CONTRACTS[hkdf_owner_contract.ID] = {"record": hkdf_owner_contract.RECORD}
 
 CURRENT_OWNER_SYMBOLS = {
     "adapter.sanitized-secret": "crates/brynja-sanitization/src/lib.rs#SanitizedSecret",
@@ -475,3 +477,4 @@ for legacy_contract in (legacy_md5_owner_contract, legacy_sha1_owner_contract):
         REGISTERED_CALLER_MIR_HEADERS, REGISTERED_SANITIZER_MIR_IDENTITIES, REVIEWED_SOURCE_PATHS)
 
 REVIEWED_SOURCE_PATHS.update(hmac_owner_contract.reviewed_paths())
+REVIEWED_SOURCE_PATHS.update(hkdf_owner_contract.REVIEWED_PATHS)

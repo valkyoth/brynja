@@ -1,55 +1,111 @@
-# Reviewed finite list for the tooling-only .3 delta. No implicit family sweep.
-# Update this list deliberately for the next component and its integrations.
+# Finite HKDF development-candidate gate. Verification campaigns stay separate.
+# No crates.io publication is selected for this internal milestone.
 schema = 1
-version = "0.25.3"
-scope = "Standalone verification tracker, bounded release gate and publication handoff; no cryptographic implementation changes. Earlier component evidence remains historical evidence, not a freshness gate."
-ci_checks = ["tracker-tests", "tracker-lint", "tracker-format", "registry-tests", "catalog-tests", "release-regressions", "package-plan", "package-contents", "release-metadata"]
+version = "0.26.0"
+scope = "Portable modern HKDF/TLS labels, isolated legacy HKDF-SHA-1 and their API/metadata integrations. Scoped pentest required; no historical evidence-freshness gate or implicit dynamic/proof/timing campaign."
+ci_checks = ["hkdf-tests","hkdf-lint","hkdf-format","facade-integration","hkdf-owner-contract","hkdf-proof-adapter","hkdf-timing-parser","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
 
 [[checks]]
-id = "tracker-tests"
-command = ["cargo", "test", "--manifest-path", "tools/brynja-verify/Cargo.toml", "--locked"]
+id = "hkdf-tests"
+command = ["cargo","test","--locked","-p","brynja-crypto","-p","brynja-legacy-hkdf","--no-default-features"]
 timeout_seconds = 300
+
 [[checks]]
-id = "tracker-lint"
-command = ["cargo", "clippy", "--manifest-path", "tools/brynja-verify/Cargo.toml", "--locked", "--all-targets", "--", "-D", "warnings"]
+id = "hkdf-lint"
+command = ["cargo","clippy","--locked","-p","brynja-crypto","-p","brynja-legacy-hkdf","--no-default-features","--all-targets","--no-deps","--","-D","warnings"]
 timeout_seconds = 300
+
 [[checks]]
-id = "tracker-format"
-command = ["cargo", "fmt", "--manifest-path", "tools/brynja-verify/Cargo.toml", "--check"]
+id = "hkdf-format"
+command = ["cargo","fmt","--package","brynja","--package","brynja-crypto","--package","brynja-legacy-hkdf","--check"]
 timeout_seconds = 60
+
+[[checks]]
+id = "facade-integration"
+command = ["cargo","check","--locked","-p","brynja","--no-default-features"]
+timeout_seconds = 300
+
+[[checks]]
+id = "hkdf-owner-contract"
+command = ["python3","scripts/cryptography/test-hkdf-owner-contract.py"]
+timeout_seconds = 60
+
+[[checks]]
+id = "hkdf-proof-adapter"
+command = ["python3","scripts/hkdf/test-hkdf-kani.py"]
+timeout_seconds = 60
+
+[[checks]]
+id = "hkdf-timing-parser"
+command = ["python3","scripts/hkdf/test-hkdf-timing.py"]
+timeout_seconds = 60
+
 [[checks]]
 id = "registry-tests"
-command = ["python3", "scripts/release/test-verification-registry.py"]
+command = ["python3","scripts/release/test-verification-registry.py"]
 timeout_seconds = 60
-[[checks]]
-id = "catalog-tests"
-command = ["python3", "scripts/release/test-verification-catalog.py"]
-timeout_seconds = 60
+
 [[checks]]
 id = "release-regressions"
-command = ["python3", "scripts/release/test-scoped-release.py"]
+command = ["python3","scripts/release/test-scoped-release.py"]
 timeout_seconds = 120
+
 [[checks]]
 id = "release-metadata"
-command = ["python3", "scripts/release/test-release-crates.py"]
+command = ["python3","scripts/release/test-release-crates.py"]
 timeout_seconds = 120
+
+[[checks]]
+id = "release-plan"
+command = ["scripts/release/test-release-plan.sh"]
+timeout_seconds = 120
+
+[[checks]]
+id = "workspace-metadata"
+command = ["python3","scripts/repository/test-workspace-metadata.py"]
+timeout_seconds = 120
+
+[[checks]]
+id = "api-profiles"
+command = ["python3","scripts/cryptography/check-api-profiles.py"]
+timeout_seconds = 60
+
+[[checks]]
+id = "api-profile-tests"
+command = ["python3","scripts/cryptography/test-api-profiles.py"]
+timeout_seconds = 120
+
+[[checks]]
+id = "requirements"
+command = ["python3","scripts/standards/check-requirements.py"]
+timeout_seconds = 120
+
+[[checks]]
+id = "requirement-domain-tests"
+command = ["python3","scripts/standards/test-requirement-domains.py"]
+timeout_seconds = 120
+
+[[checks]]
+id = "protocol-surfaces"
+command = ["python3","scripts/standards/check-protocol-surfaces.py"]
+timeout_seconds = 120
+
 [[checks]]
 id = "package-plan"
-command = ["python3", "scripts/release/release_crates.py", "--check"]
+command = ["python3","scripts/release/release_crates.py","--check"]
 timeout_seconds = 120
+
 [[checks]]
-id = "package-contents"
-command = ["python3", "scripts/release/release_crates.py", "--package-check"]
-timeout_seconds = 300
+id = "sbom"
+command = ["scripts/release/generate-sbom.sh","--check"]
+timeout_seconds = 120
+
 [[checks]]
 id = "dependency-policy"
-command = ["cargo", "deny", "check"]
+command = ["cargo","deny","check"]
 timeout_seconds = 120
+
 [[checks]]
 id = "advisories"
-command = ["cargo", "audit", "--deny", "warnings"]
-timeout_seconds = 120
-[[checks]]
-id = "tracker-advisories"
-command = ["cargo", "audit", "--file", "tools/brynja-verify/Cargo.lock", "--deny", "warnings"]
+command = ["cargo","audit","--deny","warnings"]
 timeout_seconds = 120

@@ -25827,7 +25827,7 @@
         "algorithm.hkdf"
       ],
       "id": "BRY-REQ-CRYPTO-0004",
-      "lifecycle": "planned",
+      "lifecycle": "implemented",
       "owner": "0.26.0",
       "source_ids": [
         "rfc:5869"

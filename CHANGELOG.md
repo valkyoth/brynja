@@ -1,5 +1,34 @@
 # Changelog
 
+## 0.26.0 development (unreleased)
+
+- Add allocation-free HKDF Extract/Expand for six explicit standard SHA-2
+  identities in `brynja-crypto`, caller-backed PRK/derived-key clearing owners,
+  checked 255-block limits and exact TLS 1.3 Expand-Label framing.
+- Add separate, explicitly acknowledged SHA-1 compatibility in
+  `brynja-legacy-hkdf`; no modern fallback, MD5 HKDF or legacy TLS label API.
+- Register scoped vectors, ownership contracts, injected-fault cleanup,
+  public-bounds proofs, optimized regressions and Cortex-M compile checks in
+  `brynja-verify`. Document requirements, threat boundaries and evidence scope.
+- Register actual public-owner destructor-dispatch checks for both HKDF families
+  on x86_64 Rust 1.90.0/1.99.1 with abort/unwind and broken-output controls;
+  this delegates core cleanup and does not claim operation-scratch or spill erasure.
+- Add separate production-operation scratch dispatch checks for modern/legacy
+  HKDF on both compiler endpoints and panic profiles, with broken-cleanup
+  controls. Document the bounded source-level side-channel review; no timing
+  qualification, whole-frame erasure or independent review is claimed.
+- Add separate HKDF timing diagnostics with independent preflight, strict
+  populations, retained raw observations and fail-on-alarm behavior. Initial
+  modern/legacy screens reported no alarms; this is not a constant-time claim.
+- Reuse HKDF derivation/fault tests under ASan/LSan and selected lifecycle/fault
+  cases under Miri; document derivation invariants and bounded coverage. Track
+  the HKDF helper in shared owner-check inputs without rewriting old results.
+- Qualification and scoped security/release review remain unfinished. This is
+  not independent verification, constant-time certification or a release gate.
+- Prepare the internal 0.26.0 facade/version inventory, SBOM and finite release
+  list. No crates.io uploads are selected; scoped pentest and clean-candidate
+  authorization remain mandatory. Supporting-crate versions are unchanged.
+
 ## 0.25.1 candidate
 
 - Add explicit legacy-only HMAC-SHA-1 and HMAC-MD5 owners, hardware/SIMD

@@ -1,4 +1,33 @@
 [[registered-secret-owner]]
+id = "registered.algorithm.hkdf"
+capability = "algorithm.hkdf"
+symbol = "crates/brynja-crypto/src/hkdf/derive.rs#Prk"
+fields = ["region:caller-backed-owned-secret-region","local:algorithm-and-thread-local-marker"]
+temporaries = ["block:Scratch<64>","previous:Scratch<64>","encoded:Scratch<514>","hmac:delegated-secret-owner","caller-input-and-compiler-copies:outside-owned-storage"]
+cleanup_model = "transitive-owned-fields-and-consuming-handoffs"
+delegated_owners = ["core.owned-secret-region","core.secret-region-initialization","registered.algorithm.hmac"]
+cleanup_bindings = ["crates/brynja-crypto/src/hkdf/derive.rs#DerivedKey","crates/brynja-crypto/src/hkdf/derive.rs#Scratch::drop","crates/brynja-legacy-hkdf/src/lib.rs#Sha1Prk","crates/brynja-legacy-hkdf/src/lib.rs#DerivedKey","crates/brynja-legacy-hkdf/src/lib.rs#Scratch::drop","crates/brynja-core/src/secret_memory.rs#OwnedSecretRegion"]
+compiler_checks = ["python3 scripts/hkdf/check-hkdf-owner-cleanup.py modern","python3 scripts/hkdf/check-hkdf-owner-cleanup.py legacy","python3 scripts/hkdf/check-hkdf-operation-cleanup.py modern","python3 scripts/hkdf/check-hkdf-operation-cleanup.py legacy"]
+compiler_scope = "public-owner-and-operation-scratch-dispatch-x86_64-rust-1.90.0-and-1.99.1-abort-and-unwind"
+qualification = "side-channel-qualification-and-independent-review-pending"
+evidence = ["crates/brynja-crypto/tests/hkdf_derivation.rs","crates/brynja-legacy-hkdf/tests/derivation.rs","assurance/hkdf-owner-cleanup/src/lib.rs","scripts/hkdf/check-hkdf-owner-cleanup.py","scripts/hkdf/hkdf_owner_codegen.py","scripts/cryptography/test-hkdf-owner-contract.py","assurance/hkdf-operation-cleanup/src/lib.rs","scripts/hkdf/check-hkdf-operation-cleanup.py","scripts/hkdf/hkdf_operation_codegen.py"]
+storage = "caller-backed-regions-with-fixed-operation-scratch"
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+
+[[registered-secret-owner.compatibility_profiles]]
+id = "legacy-sha1"
+symbol = "crates/brynja-legacy-hkdf/src/lib.rs#Sha1Prk"
+admission = "explicit-LegacyUse-no-modern-fallback"
+output = "crates/brynja-legacy-hkdf/src/lib.rs#DerivedKey"
+scratch_bytes = 20
+qualification = "side-channel-qualification-and-independent-review-pending"
+
+[[registered-secret-owner.compatibility_profiles.routes]]
+id = "portable"
+storage = "caller-backed-clearing-regions"
+
+[[registered-secret-owner]]
 id = "registered.algorithm.md5"
 capability = "algorithm.md5"
 symbol = "crates/brynja-legacy-md5/src/owner.rs#brynja_legacy_md5::owner::Md5Owner"
@@ -174,7 +203,7 @@ cleanup_bindings = ["crates/brynja-legacy-hmac-std/src/macos_resident/mod.rs#Buf
 [schema]
 version = 1
 milestone = "0.24.15"
-surface_register_sha256 = "2bd27839397277980c1c297f7db91e84e79c61364c2eda328af4b504332e8f3e"
+surface_register_sha256 = "c565271e2840568147efa426f371284d796269f4d683f8993622cf1264db9152"
 
 [api]
 dimensions = [
@@ -1208,7 +1237,7 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "f95e8561f66f7b0c72a28c3720f09b05f474a5bd24364b89e7809da62a0384a2"
+sha256 = "7ffddc868a668bad366109f95cf4c8955f81b2d7d6a1578bee9d4c780926332a"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_operations.py"
@@ -1216,7 +1245,7 @@ sha256 = "7138ad8b49633b9aee89d4d722ff4402ec4562b719e2262361c20afcee15ef9b"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"
-sha256 = "2cd825d47c3aedba19995ea6c112cb6902fe106ec3f92f335d3436b7c65e73c5"
+sha256 = "fa8eab5176d28fcbbfca43479fabc8acf08e0b9b513bcd0b977a21b431500800"
 
 [[reviewed-source]]
 path = "scripts/cryptography/check-secret-owner-compiler.py"
@@ -1236,7 +1265,7 @@ sha256 = "107bfea74f0dacc422e930332485ac3279a70a087fc74a30d3628196c676779d"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-api-profiles.py"
-sha256 = "e6e52771b5fc7baf955064b1982c5ddda1b49e5667ce1e7e6c061e666f7d11e8"
+sha256 = "1381e43384f95161d38ef4e95def54eda26d4e46a5b6ad3c0e2142df2b899ce7"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-mir-cleanup-flow.py"
@@ -1744,7 +1773,7 @@ sha256 = "96147048320d9968b6c810a15719be735df39a85a314060d22e5de6dd7d668e2"
 
 [[reviewed-source]]
 path = "scripts/hmac/check-hmac-facade.py"
-sha256 = "aea68c6a9a528e1538f180ca4d0df31fbea8940d4e50243e946285f83cb5454b"
+sha256 = "90c29b6198fad76e65f7fbf10c0f6eef4d0b5d79bc1208be372fc5d05b026a0a"
 
 [[reviewed-source]]
 path = "scripts/hmac/check-hmac-general-differential.py"
@@ -1768,11 +1797,11 @@ sha256 = "1093f1edc2757bb5963d4f1fd5ab1b12e99a666d7c1f676a069c65158df63ad1"
 
 [[reviewed-source]]
 path = "scripts/hmac/check-hmac-package.py"
-sha256 = "06a7e6c537bdab0fbc9fdca2ab8f4cfab3ee444ae5a073daa47a84e753eeb5b1"
+sha256 = "5de36cf7c7e7feaf4a60d88970be2e26722636e768093622392e89a8a2b0fb35"
 
 [[reviewed-source]]
 path = "scripts/hmac/check-hmac-protected.py"
-sha256 = "cb8308b353dcf6e3513b91591fc70715f64917542d0012943d41714467828b82"
+sha256 = "2d4a6662c5dc8a3f43fa2bc3481f1792935a966fd540a147d1ae816bb5c13220"
 
 [[reviewed-source]]
 path = "scripts/hmac/check-hmac-static-cleanup.py"
@@ -2576,7 +2605,7 @@ sha256 = "b6fbd9ac83855244620e8086f9a9828f780dbdbfa7fffa767be867865e139d0d"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/check-legacy-hmac-hosted-package.py"
-sha256 = "fdfb740214275b8fa486da366ec87b544e4a249e966d64f866da64427c642633"
+sha256 = "1a740857824a9882728ff16051f1104d8ef0f1ef9af399cc2f99463b18d8a5d6"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/check-legacy-hmac-md5-cleanup.py"
@@ -2584,7 +2613,7 @@ sha256 = "4b6d1ee81b3053fad3976a3d06941488b736283fe19f78240545a3f926ca2501"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/check-legacy-hmac-package.py"
-sha256 = "62bd4305b70b77a2d36695335f136a08c9743d67b8719f6775f81c0efe5647e1"
+sha256 = "63a56164857cf878ee3fee36ee5caaabea47b6cf89712ab61afca61d82a64d2e"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/check-legacy-hmac-sha1-native.py"
@@ -3385,3 +3414,59 @@ sha256 = "b7465e7809511174bb77c4a780e1f18838bfed83a7778b2262cd07c3e908c2db"
 [[reviewed-source]]
 path = "scripts/hmac/hmac_combined_tests.py"
 sha256 = "2be82e73a4ae5e7f58356f7bf04d448b2fe380039847f3392b5e18b50b49aff9"
+
+[[reviewed-source]]
+path = "assurance/hkdf-owner-cleanup/Cargo.lock"
+sha256 = "20d683469e7918216252b704fb610ca186469f6700a3a5db1b760a2d37792ae8"
+
+[[reviewed-source]]
+path = "assurance/hkdf-owner-cleanup/Cargo.toml"
+sha256 = "c83cd9d9f454a2f5856d2734e91f77fc38af389f9057523046d372037b2eeb61"
+
+[[reviewed-source]]
+path = "assurance/hkdf-owner-cleanup/src/lib.rs"
+sha256 = "032218b62332bfd42653aa23c673849e00cb8a27ef41de9239e598e3753dfe42"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto/src/hkdf/derive.rs"
+sha256 = "993cd60dc3a6c46e37c242bc661d3805ccad455cade180cb5092342d96866133"
+
+[[reviewed-source]]
+path = "crates/brynja-legacy-hkdf/src/lib.rs"
+sha256 = "749369007a92e1d729089209950af9b14f1d4849d9b90ca2a480e8a2eeb55ffa"
+
+[[reviewed-source]]
+path = "scripts/cryptography/hkdf_owner_contract.py"
+sha256 = "c61eaf00bef35e2199c621cb022c9880833e1198e1b7cd92b41b3f912186c1d3"
+
+[[reviewed-source]]
+path = "scripts/cryptography/test-hkdf-owner-contract.py"
+sha256 = "c6e79082746777b931134fd3e372ea7ef5b12319277121012e6d8a82c0e46026"
+
+[[reviewed-source]]
+path = "scripts/hkdf/check-hkdf-owner-cleanup.py"
+sha256 = "38f99debcc6b8d847ff5fc875d1f34dd0a0638d2816c0e4c397333474b0c32da"
+
+[[reviewed-source]]
+path = "scripts/hkdf/hkdf_owner_codegen.py"
+sha256 = "ab151a32ba6bdb75280896ba66fea36956e019d2e890433195fa63dfb80eb2dc"
+
+[[reviewed-source]]
+path = "assurance/hkdf-operation-cleanup/Cargo.lock"
+sha256 = "bc08bce208700e4213f4e271cc6beddad55257f3067ff2e6849b743514895a6c"
+
+[[reviewed-source]]
+path = "assurance/hkdf-operation-cleanup/Cargo.toml"
+sha256 = "73bc037875e6d7495cf00a8fcf109918b529d3d0cf05c4f57ffe16514827a3c8"
+
+[[reviewed-source]]
+path = "assurance/hkdf-operation-cleanup/src/lib.rs"
+sha256 = "f5d046f30dd3e358c463c150910891a3b57921496a8ee3fcd7ff0d6715fc18bc"
+
+[[reviewed-source]]
+path = "scripts/hkdf/check-hkdf-operation-cleanup.py"
+sha256 = "b1b6e49977f8f16700460f3146bc593353b1f0687af895281c09c685affe295b"
+
+[[reviewed-source]]
+path = "scripts/hkdf/hkdf_operation_codegen.py"
+sha256 = "b3d83f472c1bd6d6c079976d90e3cca627793bb72137afa02fa7bb929800f8dc"

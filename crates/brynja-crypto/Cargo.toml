@@ -35,6 +35,7 @@ parallelhash-runtime-execution = ["cpu", "brynja-hash-parallel/runtime-execution
 parallelhash-hardened-batch = ["cpu", "brynja-hash-parallel/hardened-batch-execution"]
 
 [dependencies]
+brynja-core = { workspace = true }
 brynja-crypto-cpu = { workspace = true, optional = true }
 brynja-hash-sha2 = { workspace = true }
 brynja-hash-sha3 = { workspace = true }

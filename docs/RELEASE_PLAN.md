@@ -5433,12 +5433,289 @@ Exit criteria:
 
 ### v0.26.0 - Complete HKDF And TLS Labels
 
-Status: planned
+Status: awaiting pentest
+
+Portable modern derivation and isolated SHA-1 compatibility are implemented.
+Candidate metadata is prepared; qualification/review and release approval remain pending.
 
 Plan scope: Implement complete generic RFC 5869 HKDF Extract and Expand over admitted HMAC algorithms plus TLS HKDF-Expand-Label, including absent versus empty salt, empty input and info, exact 255-block bounds, checked output and counter exhaustion, aliasing policy, secret-owned intermediate state, cleanup, and symbolic or bounded proof harnesses; modern profiles admit SHA-2 while any SHA-1 compatibility use remains isolated and explicit.
 
 Goal: complete generic HKDF and the exact TLS label construction without hidden
 hash selection, partial output or deferred RFC behavior.
+
+Initial implementation slice (2026-11-01):
+
+- `brynja_crypto::hkdf::ExpansionLength` admits the RFC 5869 output bound and
+  enumerates counters without wrapping beyond 255. It accepts public width
+  metadata, not an arbitrary cryptographic algorithm; the key-owning interface
+  obtains the width from its admitted HMAC identity.
+- `Tls13Label` validates and encodes the RFC 8446 section 7.1 label into a
+  caller buffer. Invalid fields are rejected before writing; short destinations
+  remain unchanged and excess capacity is untouched. Safe Rust borrows prohibit
+  overlapping input/output, while disjoint slices of one allocation are allowed.
+- These helpers are allocation-free in the existing `no_std` composition crate.
+  They do not process keys, derive output, select a hash, or claim secret cleanup.
+- The finite checks are `brynja-verify run hkdf parameters` (six regressions,
+  including a bounded exhaustive arithmetic model) and
+  `brynja-verify run hkdf label-aliasing` (one compile-fail doctest).
+  `brynja-verify hkdf` only refreshes their status. These checks do not rerun
+  completed hash/HMAC assessments and are not release gates.
+
+Modern derivation slice (2026-11-01):
+
+- `Prk<A>` now implements Extract, explicit already-pseudorandom key import,
+  reusable Expand and integrated TLS Expand-Label for the six standard SHA-2
+  HMAC identities. It does not admit SHA-3, general SHA-512/t or arbitrary hashes.
+- PRK and `DerivedKey` own caller-backed clearing regions. Existing first-party
+  `brynja-core` secret initialization/copy/clear primitives and HMAC secret
+  finalization are reused; no new third-party production dependency is added.
+- Wrong public lengths/labels leave destination unchanged. After admission,
+  output is guarded through initialization; operational failure or recoverable
+  unwind clears that whole destination. Successful output and PRKs clear on
+  Drop. Full-block intermediate scratch and label scratch also have clearing
+  guards. Caller copies, forgotten owners, compiler spills, paging and aborts
+  remain outside these guarantees; this is not protected/resident memory.
+- `brynja-verify run hkdf derivation` covers eight tests: RFC 5869 A.1-A.3,
+  frozen independent Python/OpenSSL-backed answers for all six SHA-2 identities,
+  real counter-255 output and rejection above it, empty input/info/output,
+  absent/empty salt, long PRK import, reuse, TLS labels, unchanged public-error
+  destinations, disjoint allocation and caller-buffer Drop/unwind cleanup.
+- `brynja-verify run hkdf ownership` covers eight doctests: one positive example
+  and seven compile-fail admission/ownership/aliasing contracts. Scoped Clippy,
+  formatting and registry-closure checks also pass. These are development
+  results, not complete lifecycle/fault or compiler cleanup qualification.
+- `brynja-verify run hkdf msrv-derivation` passes the same eight derivation
+  tests on installed Rust 1.90.0, with offline/locked dependencies. This is a
+  host-portable MSRV result, not completion of the target/compiler matrix.
+
+Remaining candidate/review work, before claiming this milestone complete:
+
+- review the prepared candidate diff, version/release notes and
+  0.26.0 finite gate manifest. The internal stage selects zero uploads; existing
+  support versions are retained. Do not turn the scoped verification inventory
+  into a publication-time campaign;
+- obtain scoped independent security/pentest review of the production API,
+  derivation invariants and declared evidence limits. Source review, bounded
+  compiler dispatch checks and single-host timing diagnostics do not close
+  side-channel qualification or prove whole-frame erasure. Keep the owner
+  qualification marked pending unless separately justified; do not relabel
+  local passes as independent approval;
+- resolve review findings and rerun only changed-input checks, then use the
+  finite gate, GitHub checks and explicit signed-tag authorization. No release
+  approval is supplied by this development work;
+- keep packaged public-API usability acceptance in the explicitly planned
+  v0.26.1 milestone below, rather than silently broadening 0.26.0.
+
+Inventory and initial compiler-inspection slice (2026-11-01):
+
+- Package policy now includes the isolated legacy HKDF leaf and the modern
+  composition crate's direct core dependency. Workspace metadata regressions
+  enforce the no-default legacy HMAC edge and reject modern-to-legacy HKDF edges.
+- The HKDF standards surface and requirement point to the actual `Prk` API and
+  positive/negative tests. Requirement revision 3 is `implemented`, respecting
+  the immutable planned-to-implemented transition; no tested/evidenced lifecycle
+  promotion or release acceptance is inferred from local runner observations.
+- Regenerated protocol surfaces, requirement coverage and API profiles pass
+  their checks. The composed HKDF secret-owner contract now registers the bounded
+  public-owner dispatch checks below. Five stale API-profile source pins were reconciled against the exact
+  accepted 0.25.3 toolchain/offline-selection changes; no hash/HMAC source or
+  historical test result was changed or requalified.
+- Existing integration harnesses emitted MIR, LLVM IR and assembly for the real
+  production libraries using host Rust 1.99.1 release optimization. Inspection
+  found named scratch-clearing calls and actual zeroing stores, but also
+  compiler-created HMAC copies. This does not establish whole-stack/register
+  erasure, constant-time behavior, other targets or abort-path cleanup. The
+  commands and bounded observations are recorded in the
+  [evidence index](evidence-index.md#initial-hkdf-artifact-inspection).
+
+Public-owner compiler dispatch slice (2026-11-01):
+
+- `assurance/hkdf-owner-cleanup` consumes actual public PRK and derived-key types,
+  borrowing each owner to an observer that may unwind before destruction. The
+  modern-only feature selects twelve probes over six identities; legacy-only
+  selects two SHA-1 probes. The fixture rejects both/neither family selections.
+- `brynja-verify run hkdf owner-dispatch` and the separate `legacy_hkdf` check
+  pass on x86_64 Rust 1.90.0 and 1.99.1 with both abort and unwind profiles.
+  Symbolic LLVM descriptor tracking checks the exact pointer and full length
+  delivered to core Drop on normal/recoverable-unwind paths, including optional
+  empty output and empty internal core-region states. Unknown instructions and
+  changed ABI/layout fail closed. MIR/public-type and assembly-symbol presence
+  are additional identity checks, not standalone erasure proofs.
+- Each compiler/profile rejects twelve mutations of its own emitted output:
+  wrong destructor/observer/pointer/extent, short descriptor copy, missing
+  cleanup, early return, post-cleanup write, wrong target, missing probe,
+  unknown instruction and uninitialized cleanup descriptor. Eight separate
+  contract regressions check canonical scope, delegated owners, clearing field
+  types, absence of invented destructors and the scoped command binding.
+- The API-profile register now records this transitive ownership contract, with
+  legacy isolation explicit. It does not invent `Prk::drop` or `DerivedKey::drop`.
+  The existing core destructor's non-panicking full-region cleanup is a
+  delegated premise. Scratch, derivation internals, compiler copies/spills,
+  abort/termination cleanup, timing and independent review are not established
+  by these consuming probes. No broader crypto campaign or release gate runs.
+
+Operation-scratch and source-review slice (2026-11-01):
+
+- Separate `operation-scratch` compiler registrations analyze production modern
+  Extract, Expand and TLS label bodies (18 consumers) and concrete legacy
+  Extract/Expand (two consumers), without test-only fault instrumentation.
+  Both Rust 1.90.0/1.99.1 x86_64 abort/unwind configurations pass. Named block,
+  previous-block and label scratch lifetimes require full-pointer/extent clearing
+  dispatch before normal/error/recoverable-unwind exits. Per-build controls
+  reject 120 modern and 15 legacy broken-cleanup mutations.
+- The reused scratch analysis is conservative and compiler-shape-specific,
+  not a general LLVM verifier. HMAC internals and core clearing are delegated,
+  not newly proved; compiler spills/copies and abort cleanup remain excluded.
+  Neither production sources nor existing HMAC checker inputs were changed.
+- The source-level side-channel review identifies public lengths, counters,
+  salt presence and fallible status as decision inputs; no HKDF secret-byte
+  branch or indexed lookup was found. Test-only populated-scratch inspection
+  is absent from normal builds. Timing/secret-flow qualification and independent
+  review remain open; see the [bounded review](evidence-index.md#hkdf-source-level-side-channel-review).
+- Nine composed-owner contract regressions now require both scoped compiler
+  commands, preserving delegated-owner and qualification limitations.
+
+Bounded host timing diagnostic slice (2026-11-01):
+
+- An isolated `assurance/hkdf-timing` fixture builds modern and legacy families
+  separately. It contrasts fixed-zero and fixed-FF secrets at equal public
+  lengths for Extract's IKM and salt, long PRK import, short/long PRK expansion,
+  and modern TLS label expansion. Each campaign records 512 balanced-order
+  sample pairs after warmup, four full requests per measurement, on one allowed
+  Linux x86_64 logical CPU. Requests include PRK admission and owner cleanup.
+- Both classes must match an independent Python HMAC-based oracle before
+  measurement. Exact identity/order/population and completion are checked;
+  eight regressions reject corrupt outputs and missing/invalid measurements,
+  including constant nonzero timing differences. Raw observations, binary and
+  compiler identity are retained in local runner logs. Alarms fail the check;
+  there is no automatic retry, acceptance waiver or release-gate coupling.
+- Rust 1.99.1 initial screens report zero alarms in 36 modern and five legacy
+  campaigns. Two fixed patterns and a coarse paired-t alarm do not establish
+  constant-time behavior, cache resistance, cross-target qualification or
+  independent review. The [observation record](evidence-index.md#hkdf-host-timing-observations)
+  preserves exact scope, sample counts, log hashes and residual limitations.
+
+Dynamic-analysis and derivation-review slice (2026-11-01):
+
+- Add four scoped registrations per family, reusing existing tests: complete
+  derivation/fault suites under ASan/LSan, and exact disjoint-storage/unwind plus
+  selected three-block fault cases under Miri. Instrumentation, dependency
+  closures, passed-test counts and anti-weakening controls have registry tests.
+- Record the author review of full-tag chaining, bounded counters, exact output
+  accounting, admission and guarded ownership transfer in the
+  [evidence index](evidence-index.md#hkdf-derivation-invariant-review).
+  It assumes existing HMAC/core contracts and is not a full derivation proof.
+- Miri does not execute native transfer assembly or every algorithm/input;
+  sanitizer success is not erasure or timing qualification. Keep these limits
+  explicit and retain the initial runner completion-signal rejection in history.
+- Repair shared owner-tool input declarations for the new HKDF contract helper
+  and regenerate only the extra registrations. Saved unrelated observations
+  remain unchanged; newly tracked inputs can make affected tooling stale.
+
+Isolated legacy slice (2026-11-01):
+
+- Separate `brynja-legacy-hkdf` crate, with a concrete `Sha1Prk` API and explicit
+  `LegacyUse` acknowledgement for both Extract and already-pseudorandom PRK
+  import. Reusable Expand remains SHA-1 only; no generic hash parameter, MD5
+  HKDF, TLS 1.3 labels or modern fallback is exposed.
+- The crate reuses the existing first-party legacy HMAC and core secret-memory
+  owners. Its HMAC dependency also builds MD5, but the HKDF API never selects
+  it. Local Cargo dependency-tree inspection confirms the modern composition
+  crate has no legacy dependency and the legacy HKDF crate has no modern one.
+- `brynja-verify run legacy_hkdf derivation` passes six tests including RFC 5869
+  A.4-A.7, absent/empty salt, empty IKM/info/output, PRK import/reuse, frozen
+  independent long-PRK and counter-255 answers, public rejection atomicity,
+  disjoint slices, and caller-buffer Drop/recoverable-unwind cleanup.
+- `brynja-verify run legacy_hkdf ownership` passes ten doctests (one positive,
+  nine compile-fail) covering acknowledgement, fixed SHA-1 selection, aliasing
+  and affine/local ownership. `msrv-derivation` passes the same six derivation
+  tests on Rust 1.90.0. Scoped Clippy, formatting and registry checks pass.
+- `brynja-verify legacy_hkdf` is a status-only command. This component's runs do
+  not implicitly select `hkdf`, HMAC, SHA-1 or MD5 assessments. Those existing
+  implementations were not edited or requalified. Those vector/API results
+  do not constitute fault-injection, compiler-erasure or formal-proof evidence.
+
+Composition failure/cleanup slice (2026-11-01):
+
+- Private `cfg(test)` interruption points exercise the actual Extract, import
+  and Expand implementations. No fault-control feature, callback or additional
+  dependency is present in normal production builds. Each crate carries its
+  own test helper so packaged sources do not depend on an external test file.
+- `brynja-verify run hkdf fault-cleanup` passes five unit tests covering all six
+  modern SHA-2 identities, import, TLS label scratch, and populated scratch Drop.
+  `brynja-verify run legacy_hkdf fault-cleanup` passes four corresponding SHA-1
+  unit tests. Controls are thread-local and disarmed after each test operation.
+- For each identity, inject both a returned error and a recoverable unwind at
+  all five Extract boundaries and all 22 boundaries of a three-block Expand;
+  import has two boundaries. Assertions check that admitted output is entirely
+  cleared, no partial key is returned, and an existing PRK stays reusable.
+  The ordinary vector suites separately exercise the full 255-block limit.
+- Test-only observations occur inside scratch Drop, after the existing volatile
+  clear and while storage is still live. Tests require populated chaining/label
+  scratch to have been observed clearing, plus normal/unwinding destruction of
+  a deliberately populated scratch buffer. They do not inspect freed storage.
+- These injections cover HKDF composition boundaries, not failures inside the
+  HMAC/hash implementation or arbitrary machine instructions. Live-buffer
+  observations are not proof of register/spill erasure, abort cleanup, physical
+  memory protection, constant-time behavior or cryptographic correctness.
+- The affected HKDF registrations are refreshed because their source inputs
+  changed. Unrelated hash/HMAC assessments are not rerun. Scoped Clippy,
+  formatting and registry validation remain separate development checks.
+
+Production public-bounds proof and no_std slice (2026-11-01):
+
+- `assurance/hkdf-policy` compiles the actual modern metadata and legacy block
+  admission sources via path modules; it has no cryptographic dependencies or
+  copied predicate model. The public modern API remains re-exported unchanged.
+- `brynja-verify run hkdf bounds-proof` passes four Kani 0.68.0 / CBMC 6.11.0
+  harnesses on x86_64: output admission and minimal block count for the supported
+  28/32/48/64-byte widths, rejection of zero/overflowing widths, TLS field bounds
+  and encoded size (label lengths 0..250, context lengths 0..256), and unchanged
+  symbolic destinations shorter than the 16-byte `key`/`abc` label encoding.
+  Output length is symbolic across the host `usize` range; the short-destination
+  harness uses a symbolic u16 wire length. Default safety/overflow/unwinding
+  checks remain enabled. These are explicitly bounded scope claims.
+- `brynja-verify run legacy_hkdf bounds-proof` separately passes one harness:
+  production admission iff output length is at most 5100, with zero/minimal
+  block counts. Neither command selects the other component's proof harnesses.
+  Both compile the same dependency-free fixture, so its two production source
+  files are declared inputs to both bindings rather than silently omitted.
+- `brynja-verify run hkdf no-std-thumb` and the corresponding `legacy_hkdf`
+  command compile only their libraries/dependencies for installed
+  `thumbv7em-none-eabi` using Rust 1.90.0, locked/offline and without default
+  features. This establishes compile compatibility, not target execution,
+  linker integration, timing or physical cleanup. No toolchains are installed.
+- Five fake-verifier adapter regressions cover exact modern/legacy selection,
+  missing/wrong success counts, verifier failure and non-executing inventory.
+  Scoped Clippy (`--no-deps -D warnings`), formatting and registry checks pass.
+  A dependency-inclusive Clippy attempt encountered existing SHA-2/SHA-3
+  `chunks_exact_to_as_chunks` warnings; those completed primitives were not edited.
+- Only affected HKDF checks are rerun after factoring the production predicates.
+  These results do not certify HKDF/HMAC correctness, full TLS encoding,
+  constant-time behavior, erasure or release readiness.
+
+Optimized lifecycle and security-contract slice (2026-11-01):
+
+- Added `optimized-derivation` and `optimized-fault-cleanup` to both components,
+  reusing their existing test bodies rather than introducing another campaign.
+  All four Rust 1.99.1 release-profile executions pass: modern eight vector/
+  lifecycle and five injected-fault tests; legacy six and four respectively.
+- The release profile is a declared input only to these optimized registrations;
+  the commands reject ambient optimization/LTO/codegen/overflow/debug-assertion/
+  panic overrides. A registry regression checks exact suite reuse, result counts
+  and component/dependency scope. Existing debug/proof execution dates are kept.
+- Cargo test harnesses support recoverable unwind even under release
+  optimization. These observations do not establish panic-abort cleanup, exact
+  emitted-code ownership, register/spill erasure or constant-time behavior.
+- The [HKDF security contract](security-controls.md#hkdf-development-contract-v0260)
+  maps requirements to checks, distinguishes public rejection from admitted
+  secret failure, inventories scratch and caller duties, and bounds the claims.
+  The threat model, current-status page, changelog and permanent evidence index
+  now link this development scope. No independent/security release approval is
+  inferred and the crate versions remain unchanged.
+
+Completed 0.25.3 evidence remains historical/current according to its own scoped
+inputs. Starting HKDF does not authorize a repository-wide verification campaign.
 
 Deliverables:
 
@@ -5458,7 +5735,7 @@ Verification:
 Exit criteria:
 
 - admitted algorithms have functional, caller-buffer, lifecycle, resource, and side-channel evidence before downstream use;
-- `v0.26.0 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.26.0 development milestone reached. Obtain a green scoped pentest/retest, complete the finite final release gate, push the candidate and obtain green GitHub and CodeQL, then create the signed tag. This development milestone is not a scheduled crates.io publication.`
 
 ### v0.26.1 - HKDF Public API Usability Acceptance
 

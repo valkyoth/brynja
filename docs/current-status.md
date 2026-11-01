@@ -1,5 +1,40 @@
 # Current Status
 
+Current development (2026-11-01): v0.26.0 HKDF is a local candidate based on
+tagged `v0.25.3`, pending scoped pentest and final gate. Portable modern SHA-2
+Extract/Expand/TLS labels and isolated legacy SHA-1 HKDF are implemented.
+The [HKDF contract](security-controls.md#hkdf-development-contract-v0260)
+documents requirements, ownership, work bounds and residual risks. Scoped
+vectors, borrow/admission contracts, fault cleanup, public-bounds Kani proofs
+and Cortex-M compilation have recorded results in
+[brynja-verify](VERIFICATION_RESULTS.md). Optimized vector/lifecycle checks
+reuse the same test bodies; neither those tests nor historical HMAC evidence
+establish independent review or compiler/side-channel qualification of HKDF.
+The composed-owner contract now has separate passing `owner-dispatch` compiler
+checks for modern and legacy public owners on x86_64, Rust 1.90.0/1.99.1,
+abort/unwind. These check exact owned-region destruction dispatch, not operation
+scratch, derivation internals, whole-frame erasure or timing behavior.
+Separate `operation-scratch` checks now cover named production Extract/Expand
+and modern TLS label scratch on those same compiler/profile combinations.
+The source-level side-channel review records public decision inputs and
+delegated assumptions; timing qualification and independent review remain open.
+Separate bounded `timing-screen` diagnostics now record zero alarms across
+36 modern and five legacy campaigns. These single-host, two-pattern observations
+do not promote HKDF to constant-time or independently qualified status.
+All eight new scoped ASan/LSan and Miri registrations pass, reusing existing
+derivation/fault tests and selected interpreter cases. The derivation-invariant
+review records full-tag chaining and guarded ownership transfer, with HMAC/core
+premises explicit. These additions are bounded development evidence, not an
+independent security assessment. Shared owner-tool input declarations now track
+the new HKDF helper; unrelated saved results have not been rewritten.
+See the [remaining 0.26.0 work](RELEASE_PLAN.md#v0260---complete-hkdf-and-tls-labels).
+No repository-wide verification campaign or release operation is implied.
+The facade manifest and finite gate now select 0.26.0. Release stage is
+`internal`, with zero crates selected for upload; supporting-crate versions
+are retained. See the [candidate notes](../release-notes/RELEASE_NOTES_0.26.0.md).
+
+## Earlier milestone narratives
+
 v0.24.55 is signed at `c0c2e069` after the completed 1,166-task consolidated
 checkpoint, final tag gate and green GitHub/CodeQL. No crates.io publication
 occurred. Modern HMAC development for v0.25.0 now includes ten named SHA-2/SHA-3

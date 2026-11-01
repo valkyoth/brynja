@@ -13,7 +13,13 @@
 //! TupleHash/TupleHashXOF identities with structural tuple-item APIs and all
 //! four ParallelHash/ParallelHashXOF identities with allocation-free
 //! sequential and caller-scheduled leaf APIs are also exposed through
-//! [`crypto`]. It exposes checked
+//! [`crypto`]. Modern HMAC is exposed under [`crypto::hmac`]; portable HKDF
+//! Extract/Expand and TLS 1.3 label framing for six standard SHA-2 identities
+//! are exposed under [`crypto::hkdf`], using caller-backed clearing key owners.
+//! Legacy HKDF-SHA-1 remains in a separate explicitly acknowledged crate and
+//! is not re-exported here. HKDF qualification and scoped release review remain
+//! pending; label framing is not a complete TLS key schedule.
+//! It exposes checked
 //! numeric/resource domains, transactional borrowed cursors, caller-owned
 //! workspaces, secret-lifetime and owned-memory
 //! foundations, fixed-width constant-time operations, provider capability
@@ -29,8 +35,7 @@
 //! selection. A bounded borrowed DER reader exposes canonical framing and
 //! values without schema-driven ASN.1 or X.509 semantics. This crate does not
 //! provide a TLS connection API, provider effect, or any cryptographic
-//! algorithm outside these six SHA-2, six FIPS 202, two cSHAKE, four KMAC, and
-//! four TupleHash, and four ParallelHash identities, plus the explicit
+//! algorithm outside the hash/MAC/KDF surfaces described above and the explicit
 //! `general-sha512-t` extension. Default-off family execution and batch features
 //! forward existing leaf APIs under [`crypto::sha2`], [`crypto::sha3`],
 //! [`crypto::kmac`], [`crypto::tuplehash`] and [`crypto::parallelhash`]. They do

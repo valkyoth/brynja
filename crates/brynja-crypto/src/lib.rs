@@ -5,8 +5,9 @@
 //! SP 800-185 encodings, cSHAKE128/cSHAKE256, all four KMAC/KMACXOF
 //! identities, all four TupleHash/TupleHashXOF identities, and all four
 //! ParallelHash/ParallelHashXOF identities are exposed from their small family
-//! crates. Provider effects, AEADs, KDFs, public-key
+//! crates. Provider effects, AEADs, other KDFs, public-key
 //! algorithms, and the complete planned composition layer remain unimplemented.
+//! Portable modern HKDF is under development; it is not release-qualified.
 
 #![no_std]
 
@@ -15,6 +16,8 @@
 /// its existing deployment, target-feature, health and classification contract.
 #[cfg(feature = "cpu")]
 pub use brynja_crypto_cpu as cpu;
+/// Portable modern HKDF and TLS 1.3 label framing; qualification is pending.
+pub mod hkdf;
 /// Modern sealed HMAC construction; development implementation, qualification pending.
 /// Portable by default; neither this namespace nor its execution opt-ins promise
 /// protected host memory. No legacy HMAC, arbitrary digest plug-ins or key export.

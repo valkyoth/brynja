@@ -44,10 +44,27 @@ final disposition in the release notes. There is no new automated receipt chain.
 An error selecting the current flow stops immediately; it never falls back to
 the historical gate or requests a larger verification campaign.
 
-For .3, the list covers the tracker, release regressions, package metadata/content
+For .3, the list covered the tracker, release regressions, package metadata/content
 and dependency policy/advisories. It does not repeat hash/MAC qualification.
 Future components need their own agreed functional/integration commands in this
 list; missing registration is not permission to omit necessary tests.
+
+### Current 0.26.0 candidate
+
+The current list selects 21 finite checks for HKDF development: modern/legacy
+functional and API tests, scoped lint/format, facade compilation, helper and
+registry regressions, package/requirements/API metadata, SBOM and dependency
+policy/advisories. CI selects the first 18; its separate audit job retains SBOM,
+dependency/advisory checks, standalone-tool advisories and release controls.
+The proof-adapter and timing-parser entries test the tools with fixtures; they
+do not execute proofs or timing measurements. The list never invokes the
+verification runner, historical catalog or dynamic/compiler campaigns.
+
+Use `scripts/tag_gate.sh v0.26.0 --list` to inspect without execution. The actual
+gate still requires a clean committed candidate and its genuine scoped PASS
+pentest/retest. Candidate preparation cannot supply that approval. The release
+stage is internal, so no crates.io uploads are selected. See the
+[candidate notes](../../release-notes/RELEASE_NOTES_0.26.0.md).
 
 ## Publication does not run the gate again
 

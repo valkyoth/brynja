@@ -70,7 +70,7 @@ def profile_paths():
 def definitions():
     return {
         ('python3', 'scripts/cryptography/check-api-profiles.py'): dict(kind='profile', markers=[
-            'cryptographic API register covers 135 capabilities, 8 current and 9 registered capability owners, and 72 planned secret owners']),
+            'cryptographic API register covers 135 capabilities, 8 current and 10 registered capability owners, and 71 planned secret owners']),
         ('python3', 'scripts/cryptography/test-api-profiles.py'): dict(kind='profile', markers=[
             'Split operation contracts retain public exports and reject helper review drift',
             'cryptographic API-profile policy rejects twenty-five structural regressions and twenty-three secret-output downgrades']),

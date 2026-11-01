@@ -140,6 +140,29 @@ adapter tests, API-profile regressions, release-plan/scoped-release regressions
 and requirements/protocol-surface checks passed. The temporary follow-up
 `PENTEST.md` was removed after these checks; its dispositions are retained here.
 
+### Build hygiene and doctest evidence retest (2026-11-01)
+
+The next supplied review reported an untracked copy of the removed integration
+harness and an overstatement of compile-fail diagnostic coverage. At remediation
+time `crates/brynja-crypto/tests/hkdf_parameters.rs` was already absent from the
+working directory. A registry regression now checks the filesystem, including
+untracked/ignored files and symlinks, so that obsolete harness cannot silently
+return. The six tests remain in the internal parameter module.
+
+The `label-aliasing` name, evidence description and security controls now state
+that the examples only have to fail compilation. Stable rustdoc does not check
+their annotated E0624/E0502 codes; an unrelated compilation error can satisfy
+them. This corrects the diagnostic-specific implication of the previous retest
+notes; no new diagnostic-matching probe or stronger assurance is claimed.
+Production code and API behavior are unchanged.
+
+Validation used a new empty target directory: both HKDF crate suites and their
+doctests passed, as did all-target Clippy with warnings denied. Formatting,
+168 registry tests and 23 scoped-release tests passed. The revised tracker
+registration was executed and passed its exact two-example population.
+The temporary `PENTEST.md` was removed after validation; these dispositions
+remain recorded here. This is not independent approval or a final release gate.
+
 ### Earlier candidate preparation
 
 Candidate preparation checks (2026-11-01; not the post-review final gate):

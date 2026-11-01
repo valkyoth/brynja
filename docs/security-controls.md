@@ -28,6 +28,14 @@ The finite requirements and their scoped check IDs are:
 | Bounded host timing diagnostic | Equal-length zero/FF secret contrasts, independent correctness preflight, balanced order, retained samples and fail-on-alarm; no retry-to-pass or constant-time claim | both `timing-screen` checks; 36 modern and five legacy campaigns on Rust 1.99.1 Linux x86_64 |
 | Portable bounded storage | No heap allocation or OS/backend selection; modern expansion has two 64-byte scratch arrays, TLS adds 514 bytes, legacy expansion has two 20-byte arrays, plus transitive HMAC state | both `no-std-thumb` checks; source review, not a total-stack bound |
 
+The `label-aliasing` registration asserts only that the two external encoder
+and overlapping label/output examples fail to compile. Stable rustdoc does not
+check their annotated E0624/E0502 codes: an unrelated compile error can also
+satisfy a compile-fail example. These tests are not diagnostic-specific proof
+of encoder privacy or borrowing rejection. The enforcement is the crate-private
+method and Rust's safe borrowing rules; the six internal wire-format tests and
+positive derivation tests exercise the supported paths separately.
+
 `optimized-derivation` and `optimized-fault-cleanup` reuse existing tests under
 Rust 1.99.1 release optimization. Cargo's test harness supports recoverable
 unwind even though the workspace normal release profile requests abort. Passing

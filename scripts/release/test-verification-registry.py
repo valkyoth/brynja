@@ -214,6 +214,20 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(self.registry['groups']['hkdf-parameters']['paths'],
                          ['crates/brynja-crypto/src/hkdf/parameter_tests.rs'])
 
+    def test_removed_hkdf_integration_harness_does_not_return(self):
+        # Inspect the filesystem, not git's index: ignored/untracked leftovers
+        # are also auto-discovered by Cargo and can break tests and Clippy.
+        obsolete = ROOT / 'crates/brynja-crypto/tests/hkdf_parameters.rs'
+        self.assertFalse(obsolete.exists() or obsolete.is_symlink(),
+                         'Remove the obsolete external encoder harness; its six tests live in src/hkdf/parameter_tests.rs')
+
+    def test_label_doctests_do_not_claim_diagnostic_specific_evidence(self):
+        check = next(c for c in self.registry['checks']
+                     if (c['component'], c['id']) == ('hkdf', 'label-aliasing'))
+        self.assertIn('assert only', check['establishes'])
+        self.assertIn('Stable rustdoc does not verify', check['establishes'])
+        self.assertIn('unrelated compile errors', check['establishes'])
+
     def test_missing_transitive_source_and_harness_are_rejected(self):
         for group in ('hash-core', 'md5-api', 'hkdf-parameters'):
             changed = copy.deepcopy(self.registry)

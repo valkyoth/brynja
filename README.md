@@ -248,14 +248,16 @@ See the [threat model](docs/threat-model.md),
 ## Development Tags And Pentesting
 
 Every development version receives a signed, immutable tag only after its
-required local checks, green GitHub/CodeQL and explicit owner approval.
-Crates.io publication and scheduled pentests occur every fifth minor series
-at its registered final patch—not at each intermediate tag.
+required scoped pentest/retest and local checks, green GitHub/CodeQL and explicit
+owner approval. Crates.io publication and cumulative checkpoint pentests occur
+every fifth minor series at its registered final patch—not at each intermediate
+tag. A scoped development pentest does not automatically reopen completed
+component verification or launch a repository-wide campaign.
 
 Checkpoint pentests look backwards over the complete delta since the previous
 public checkpoint, including every intermediate patch and remediation.
 For example, the next checkpoint covers all changes after `0.20.0` through
-`0.25.2`; the following covers changes after that checkpoint through the
+`0.25.3`; the following covers changes after that checkpoint through the
 registered end of the `0.30.x` series. Exceptional pentests remain mandatory
 for material security-boundary changes and serious findings.
 

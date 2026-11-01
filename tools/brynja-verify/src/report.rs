@@ -64,12 +64,23 @@ pub fn current_pass(view: &View) -> bool {
     view.result.starts_with("passed") && view.freshness == "Up to date"
 }
 
-pub fn refresh(root: &Path, registry: &Registry, state: &mut State, component: Option<&str>) {
+pub fn refresh(
+    root: &Path,
+    registry: &Registry,
+    state: &mut State,
+    component: Option<&str>,
+    category: Option<&str>,
+    id: Option<&str>,
+) {
+    let mut cache = inputs::ScanCache::new();
     for check in &registry.checks {
-        if component.is_some_and(|c| c != check.component) {
+        if component.is_some_and(|c| c != check.component)
+            || category.is_some_and(|c| c != check.category)
+            || id.is_some_and(|i| i != check.id)
+        {
             continue;
         }
-        let current = inputs::snapshot(root, registry, check, None);
+        let current = inputs::scan(root, registry, check, &mut cache);
         let mut next = view(
             state
                 .attempts
@@ -96,7 +107,36 @@ fn text(raw: &str) -> String {
         .replace('|', "\\|")
 }
 
-pub fn render(registry: &Registry, state: &State) -> String {
+pub fn display_view(check: &Check, state: &State, catalog: &crate::catalog::Catalog) -> View {
+    let mut view = state
+        .views
+        .get(&check.key())
+        .cloned()
+        .unwrap_or_else(|| View {
+            result: "Not run".into(),
+            freshness: "Not scanned".into(),
+            ..View::default()
+        });
+    // Presentation only. Never manufacture an Attempt, compatible fingerprint,
+    // or new timestamp from a catalog observation. A new attempt always wins.
+    if state.attempts.get(&check.key()).is_none_or(Vec::is_empty)
+        && let Some(record) = catalog
+            .entry(&check.component, &check.id)
+            .and_then(|e| e.history.last())
+    {
+        view.result = format!("Historical {}", record.result);
+        view.source = record.source.clone();
+        view.performed_at = record.ended.clone();
+        let detail = match view.freshness.as_str() {
+            "No recorded result" => "No execution recorded by this runner.",
+            other => other,
+        };
+        view.freshness = format!("Historical inputs unmapped; not a current pass. {detail}");
+    }
+    view
+}
+
+pub fn render(registry: &Registry, state: &State, catalog: &crate::catalog::Catalog) -> String {
     let mut out = String::from(
         "# Verification results\n\nLocal developer observations, not certification or a release gate. No unrun or outdated assessment automatically blocks release. Execution timestamps are original UTC times. Freshness is the last meaningful component scan; unchanged scans do not rewrite timestamps.\n",
     );
@@ -108,12 +148,7 @@ pub fn render(registry: &Registry, state: &State) -> String {
             component = &check.component;
             out.push_str(&format!("\n## {}\n\n| Check | Source tested | Performed at | Result | Freshness | Status last changed (UTC) |\n| --- | --- | --- | --- | --- | --- |\n", text(component)));
         }
-        let empty = View {
-            result: "Not run".into(),
-            freshness: "Not scanned".into(),
-            ..View::default()
-        };
-        let v = state.views.get(&check.key()).unwrap_or(&empty);
+        let v = display_view(check, state, catalog);
         out.push_str(&format!(
             "| {} — {} | {} | {} | {} | {} | {} |\n",
             text(&check.id),
@@ -139,19 +174,41 @@ pub fn render(registry: &Registry, state: &State) -> String {
 }
 
 pub fn write(root: &Path, registry: &Registry, state: &State) -> Result<()> {
-    storage::atomic(root, storage::REPORT, render(registry, state).as_bytes())
+    let catalog = crate::catalog::load(root, registry)?;
+    let mut output = render(registry, state, &catalog);
+    output.push_str(&catalog.markdown(registry));
+    storage::atomic(root, storage::REPORT, output.as_bytes())
 }
 
-pub fn terminal(registry: &Registry, state: &State, component: Option<&str>) {
+pub fn terminal(
+    registry: &Registry,
+    state: &State,
+    component: Option<&str>,
+    catalog: &crate::catalog::Catalog,
+    category: Option<&str>,
+    id: Option<&str>,
+) {
+    if id.is_none() {
+        print!(
+            "{}",
+            crate::summary::render(registry, state, catalog, component, category)
+        );
+        return;
+    }
     println!(
         "{:<14} {:<22} {:<14} FRESHNESS",
         "COMPONENT", "CHECK", "RESULT"
     );
-    for check in &registry.checks {
-        if component.is_some_and(|c| c != check.component) {
+    let mut checks: Vec<_> = registry.checks.iter().collect();
+    checks.sort_by_key(|c| (&c.component, &c.id));
+    for check in checks {
+        if component.is_some_and(|c| c != check.component)
+            || category.is_some_and(|c| c != check.category)
+            || id.is_some_and(|i| i != check.id)
+        {
             continue;
         }
-        let v = state.views.get(&check.key()).cloned().unwrap_or_default();
+        let v = display_view(check, state, catalog);
         println!(
             "{:<14} {:<22} {:<14} {}",
             text(&check.component),

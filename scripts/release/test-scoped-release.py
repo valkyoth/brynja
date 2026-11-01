@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Release redesign regressions: fake commands and records, no crypto campaigns."""
 import copy
+import contextlib
+import io
 import json
 import os
 from pathlib import Path
@@ -168,6 +170,75 @@ class ScopedRelease(unittest.TestCase):
             run.assert_not_called()
             publisher.publish('brynja', dry_run=True, checked_candidate=True)
             run.assert_called_once_with(['cargo', 'publish', '--no-verify', '--locked', '-p', 'brynja'], dry_run=True)
+
+    def test_publication_cli_ignores_legacy_evidence_and_never_runs_checks(self):
+        plan = dict(version='0.25.3', stage='public',
+                    crates={'brynja': dict(version='0.25.3', change='code')})
+        forbidden = AssertionError('publication must not inspect historical evidence or execute checks')
+        with patch('sys.argv', ['release_crates.py', '--version', '0.25.3', '--yes',
+                               '--detached-receipts', '/missing/old-receipts.json',
+                               '--native-review-sha256', 'obsolete']), \
+             patch.object(publisher, 'validate_repository', return_value=plan), \
+             patch.object(publisher, 'publish_plan', return_value=('brynja',)), \
+             patch.object(publisher, 'require_clean_tree') as clean, \
+             patch.object(publisher, 'check_release_tag', return_value=True) as tag, \
+             patch.object(publisher, 'evidence_environment', side_effect=forbidden), \
+             patch.object(publisher, 'check_evidence', side_effect=forbidden), \
+             patch.object(publisher, 'gate_path', side_effect=forbidden), \
+             patch.object(scoped, 'gate', side_effect=forbidden), \
+             patch.object(scoped, 'publication') as handoff, \
+             patch.object(publisher, 'run') as run:
+            self.assertEqual(publisher.main(), 0)
+            clean.assert_called_once_with(dry_run=False)
+            tag.assert_called_once_with('0.25.3', dry_run=False)
+            handoff.assert_called_once_with('0.25.3', dry_run=False, root=publisher.ROOT)
+            run.assert_called_once_with(
+                ['cargo', 'publish', '--no-verify', '--locked', '-p', 'brynja'], dry_run=False)
+
+    def test_publication_guards_read_identity_and_ci_not_evidence(self):
+        self.write('verification/results.json', '{"status":"unmapped, outdated"}')
+        self.git('add', '.')
+        self.git('commit', '-qm', 'historical evidence accepted as is')
+        self.git('tag', 'v0.25.3')
+        head = scoped.git(self.root, 'rev-parse', 'HEAD')
+        runs = [{**r, 'head_sha': head} for r in self.runs]
+        checks = [{**c, 'head_sha': head} for c in self.checks]
+        original_run = subprocess.run
+        def guarded_run(command, **kwargs):
+            if command == ['git', 'verify-tag', 'v0.25.3']:
+                return subprocess.CompletedProcess(command, 0)
+            self.assertEqual(command[0], 'git')
+            self.assertIn(command[1], ('status', 'show', 'rev-parse'))
+            return original_run(command, **kwargs)
+        # Real local candidate/report/tag reads; only signature and remote I/O mocked.
+        with patch.object(scoped, 'pages', side_effect=[runs, checks]) as pages, \
+             patch.object(scoped.subprocess, 'run', side_effect=guarded_run) as run, \
+             patch.object(scoped, 'execute', side_effect=AssertionError('no verification')):
+            scoped.publication('0.25.3', dry_run=False, root=self.root)
+            run.assert_any_call(['git', 'verify-tag', 'v0.25.3'], cwd=self.root, check=True)
+            self.assertEqual(pages.call_count, 2)
+
+    def test_publication_pending_review_is_a_clear_error_not_an_upload(self):
+        plan = dict(version='0.25.3', stage='public',
+                    crates={'brynja': dict(version='0.25.3', change='code')})
+        with patch('sys.argv', ['release_crates.py', '--yes']), \
+             patch.object(publisher, 'validate_repository', return_value=plan), \
+             patch.object(publisher, 'publish_plan', return_value=('brynja',)), \
+             patch.object(publisher, 'require_clean_tree'), \
+             patch.object(publisher, 'check_release_tag', return_value=True), \
+             patch.object(scoped, 'publication', side_effect=ValueError('pentest pending')), \
+             patch.object(publisher, 'run') as run:
+            self.assertEqual(publisher.main(), 1)
+            run.assert_not_called()
+
+    def test_dry_run_wait_never_claims_upload_or_prompts(self):
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output), \
+             patch('builtins.input', side_effect=AssertionError('no prompt')), \
+             patch.object(publisher.time, 'sleep', side_effect=AssertionError('no wait')):
+            publisher.wait_for_index('brynja-core', '0.10.0', dry_run=True)
+        self.assertIn('nothing uploaded', output.getvalue())
+        self.assertNotIn('Published ', output.getvalue())
 
     def test_github_requires_success_for_the_exact_commit(self):
         scoped.github_green(self.head, self.runs, self.checks)

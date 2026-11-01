@@ -1,0 +1,1920 @@
+{
+  "schema": 1,
+  "groups": {
+    "kani-tools": {
+      "tools": [
+        {
+          "program": "cargo",
+          "toolchain": "1.90.0"
+        },
+        {
+          "program": "rustc",
+          "toolchain": "1.90.0"
+        },
+        {
+          "program": "python3"
+        },
+        {
+          "program": "cargo-kani"
+        },
+        {
+          "program": "kani-bundle",
+          "toolchain": "0.68.0"
+        }
+      ]
+    },
+    "kani-workspace": {
+      "toml": {
+        "Cargo.toml": [
+          "workspace.package.edition",
+          "workspace.package.rust-version",
+          "workspace.lints",
+          "workspace.resolver",
+          "profile.dev",
+          "profile.test"
+        ]
+      }
+    },
+    "kani-setup": {
+      "paths": [
+        "scripts/hmac/hmac_verifiers.py",
+        "scripts/repository/facade_cargo_environment.py"
+      ]
+    },
+    "kani-adapter": {
+      "paths": [
+        "scripts/release/run-kani-component.py"
+      ],
+      "toml": {
+        "assurance/policy.toml": [
+          "toolchains.kani"
+        ]
+      }
+    },
+    "kani-inherited-workspace": {
+      "toml": {
+        "Cargo.toml": [
+          "workspace.package.edition",
+          "workspace.package.rust-version",
+          "workspace.lints"
+        ]
+      }
+    },
+    "kani-sha2-core": {
+      "paths": [
+        "crates/brynja-core/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-core/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-core/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-core"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-core"
+          ]
+        }
+      ]
+    },
+    "kani-sha2-crypto-cpu": {
+      "paths": [
+        "crates/brynja-crypto-cpu/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-crypto-cpu/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-crypto-cpu/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-crypto-cpu"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-crypto-cpu"
+          ]
+        }
+      ]
+    },
+    "kani-sha2-hash-core": {
+      "paths": [
+        "crates/brynja-hash-core/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-hash-core/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-hash-core/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-hash-core"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-hash-core"
+          ]
+        }
+      ]
+    },
+    "kani-sha2-hash-sha2": {
+      "paths": [
+        "crates/brynja-hash-sha2/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-hash-sha2/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-hash-sha2/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-hash-sha2"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-hash-sha2"
+          ]
+        }
+      ]
+    },
+    "kani-sha1-core": {
+      "paths": [
+        "crates/brynja-core/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-core/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-core/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-core"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-core"
+          ]
+        }
+      ]
+    },
+    "kani-sha1-hash-core": {
+      "paths": [
+        "crates/brynja-hash-core/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-hash-core/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-hash-core/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-hash-core"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-hash-core"
+          ]
+        }
+      ]
+    },
+    "kani-sha1-legacy-sha1": {
+      "paths": [
+        "crates/brynja-legacy-sha1/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-legacy-sha1/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-legacy-sha1/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-legacy-sha1"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-legacy-sha1"
+          ]
+        }
+      ]
+    },
+    "kani-sha3-core": {
+      "paths": [
+        "crates/brynja-core/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-core/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-core/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-core"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-core"
+          ]
+        }
+      ]
+    },
+    "kani-sha3-crypto-cpu": {
+      "paths": [
+        "crates/brynja-crypto-cpu/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-crypto-cpu/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-crypto-cpu/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-crypto-cpu"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-crypto-cpu"
+          ]
+        }
+      ]
+    },
+    "kani-sha3-hash-core": {
+      "paths": [
+        "crates/brynja-hash-core/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-hash-core/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-hash-core/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-hash-core"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-hash-core"
+          ]
+        }
+      ]
+    },
+    "kani-sha3-hash-sha3": {
+      "paths": [
+        "crates/brynja-hash-sha3/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-hash-sha3/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-hash-sha3/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-hash-sha3"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-hash-sha3"
+          ]
+        }
+      ]
+    },
+    "kani-tuplehash-core": {
+      "paths": [
+        "crates/brynja-core/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-core/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-core/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-core"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-core"
+          ]
+        }
+      ]
+    },
+    "kani-tuplehash-hash-core": {
+      "paths": [
+        "crates/brynja-hash-core/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-hash-core/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-hash-core/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-hash-core"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-hash-core"
+          ]
+        }
+      ]
+    },
+    "kani-tuplehash-hash-sha3": {
+      "paths": [
+        "crates/brynja-hash-sha3/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-hash-sha3/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-hash-sha3/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-hash-sha3"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-hash-sha3"
+          ]
+        }
+      ]
+    },
+    "kani-tuplehash-hash-tuple": {
+      "paths": [
+        "crates/brynja-hash-tuple/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-hash-tuple/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-hash-tuple/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-hash-tuple"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-hash-tuple"
+          ]
+        }
+      ]
+    },
+    "kani-legacy-hmac-fixture": {
+      "paths": [
+        "assurance/legacy-hmac-policy/src",
+        "scripts/legacy-hmac/check-legacy-hmac-kani.py",
+        "scripts/legacy-hmac/legacy_hmac_verifiers.py",
+        "assurance/legacy-hmac-policy/Cargo.toml",
+        "assurance/policy.toml"
+      ],
+      "optional_paths": [
+        "assurance/legacy-hmac-policy/build.rs"
+      ],
+      "locks": [
+        {
+          "path": "assurance/legacy-hmac-policy/Cargo.lock",
+          "packages": [
+            "brynja-legacy-hmac-policy-fixture"
+          ]
+        }
+      ]
+    },
+    "kani-legacy-hmac-core": {
+      "paths": [
+        "crates/brynja-core/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-core/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-core/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-core"
+        ]
+      },
+      "locks": [
+        {
+          "path": "assurance/legacy-hmac-policy/Cargo.lock",
+          "packages": [
+            "brynja-core"
+          ]
+        }
+      ]
+    },
+    "kani-legacy-hmac-hash-core": {
+      "paths": [
+        "crates/brynja-hash-core/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-hash-core/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-hash-core/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-hash-core"
+        ]
+      },
+      "locks": [
+        {
+          "path": "assurance/legacy-hmac-policy/Cargo.lock",
+          "packages": [
+            "brynja-hash-core"
+          ]
+        }
+      ]
+    },
+    "kani-legacy-hmac-legacy-hmac": {
+      "paths": [
+        "crates/brynja-legacy-hmac/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-legacy-hmac/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-legacy-hmac/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-legacy-hmac"
+        ]
+      },
+      "locks": [
+        {
+          "path": "assurance/legacy-hmac-policy/Cargo.lock",
+          "packages": [
+            "brynja-legacy-hmac"
+          ]
+        }
+      ]
+    },
+    "kani-legacy-hmac-legacy-md5": {
+      "paths": [
+        "crates/brynja-legacy-md5/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-legacy-md5/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-legacy-md5/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-legacy-md5"
+        ]
+      },
+      "locks": [
+        {
+          "path": "assurance/legacy-hmac-policy/Cargo.lock",
+          "packages": [
+            "brynja-legacy-md5"
+          ]
+        }
+      ]
+    },
+    "kani-legacy-hmac-legacy-sha1": {
+      "paths": [
+        "crates/brynja-legacy-sha1/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-legacy-sha1/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-legacy-sha1/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-legacy-sha1"
+        ]
+      },
+      "locks": [
+        {
+          "path": "assurance/legacy-hmac-policy/Cargo.lock",
+          "packages": [
+            "brynja-legacy-sha1"
+          ]
+        }
+      ]
+    },
+    "kani-hmac-fixture": {
+      "paths": [
+        "assurance/hmac-policy/src",
+        "scripts/hmac/check-hmac-kani.py",
+        "crates/brynja-mac-hmac/src/policy.rs",
+        "assurance/hmac-policy/Cargo.toml",
+        "assurance/policy.toml"
+      ],
+      "optional_paths": [
+        "assurance/hmac-policy/build.rs"
+      ],
+      "locks": [
+        {
+          "path": "assurance/hmac-policy/Cargo.lock",
+          "packages": [
+            "brynja-hmac-policy-fixture"
+          ]
+        }
+      ]
+    },
+    "kani-parallelhash-core": {
+      "paths": [
+        "crates/brynja-core/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-core/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-core/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-core"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-core"
+          ]
+        }
+      ]
+    },
+    "kani-parallelhash-crypto-cpu": {
+      "paths": [
+        "crates/brynja-crypto-cpu/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-crypto-cpu/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-crypto-cpu/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-crypto-cpu"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-crypto-cpu"
+          ]
+        }
+      ]
+    },
+    "kani-parallelhash-crypto-cpu-std": {
+      "paths": [
+        "crates/brynja-crypto-cpu-std/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-crypto-cpu-std/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-crypto-cpu-std/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-crypto-cpu-std"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-crypto-cpu-std"
+          ]
+        }
+      ]
+    },
+    "kani-parallelhash-hash-core": {
+      "paths": [
+        "crates/brynja-hash-core/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-hash-core/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-hash-core/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-hash-core"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-hash-core"
+          ]
+        }
+      ]
+    },
+    "kani-parallelhash-hash-parallel": {
+      "paths": [
+        "crates/brynja-hash-parallel/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-hash-parallel/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-hash-parallel/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-hash-parallel"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-hash-parallel"
+          ]
+        }
+      ]
+    },
+    "kani-parallelhash-hash-sha2": {
+      "paths": [
+        "crates/brynja-hash-sha2/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-hash-sha2/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-hash-sha2/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-hash-sha2"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-hash-sha2"
+          ]
+        }
+      ]
+    },
+    "kani-parallelhash-hash-sha3": {
+      "paths": [
+        "crates/brynja-hash-sha3/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-hash-sha3/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-hash-sha3/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-hash-sha3"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-hash-sha3"
+          ]
+        }
+      ]
+    },
+    "kani-kmac-core": {
+      "paths": [
+        "crates/brynja-core/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-core/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-core/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-core"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-core"
+          ]
+        }
+      ]
+    },
+    "kani-kmac-hash-core": {
+      "paths": [
+        "crates/brynja-hash-core/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-hash-core/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-hash-core/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-hash-core"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-hash-core"
+          ]
+        }
+      ]
+    },
+    "kani-kmac-hash-sha3": {
+      "paths": [
+        "crates/brynja-hash-sha3/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-hash-sha3/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-hash-sha3/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-hash-sha3"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-hash-sha3"
+          ]
+        }
+      ]
+    },
+    "kani-kmac-mac-kmac": {
+      "paths": [
+        "crates/brynja-mac-kmac/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-mac-kmac/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-mac-kmac/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-mac-kmac"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-mac-kmac"
+          ]
+        }
+      ]
+    },
+    "kani-md5-core": {
+      "paths": [
+        "crates/brynja-core/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-core/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-core/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-core"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-core"
+          ]
+        }
+      ]
+    },
+    "kani-md5-hash-core": {
+      "paths": [
+        "crates/brynja-hash-core/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-hash-core/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-hash-core/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-hash-core"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-hash-core"
+          ]
+        }
+      ]
+    },
+    "kani-md5-legacy-md5": {
+      "paths": [
+        "crates/brynja-legacy-md5/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-legacy-md5/build.rs"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-legacy-md5/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-legacy-md5"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-legacy-md5"
+          ]
+        }
+      ]
+    }
+  },
+  "checks": [
+    {
+      "component": "sha2",
+      "id": "kani-0010bedf4627201f",
+      "name": "sha2 bounded Kani proofs",
+      "category": "kani",
+      "establishes": "Existing public-length/control predicates only; not a cryptographic construction proof.",
+      "command": [
+        "python3",
+        "scripts/release/run-kani-component.py",
+        "sha2",
+        "--steps-json",
+        "[[[\"-p\",\"brynja-hash-sha2\",\"--features\",\"batch-execution\"],11],[[\"-p\",\"brynja-hash-sha2\",\"--features\",\"batch512-execution\",\"--harness\",\"batch512::control::proofs::batch_budget_is_atomic_and_never_wraps\"],1]]"
+      ],
+      "cwd": ".",
+      "inputs": [
+        "kani-tools",
+        "kani-setup",
+        "kani-workspace",
+        "kani-adapter",
+        "kani-sha2-core",
+        "kani-sha2-crypto-cpu",
+        "kani-sha2-hash-core",
+        "kani-sha2-hash-sha2"
+      ],
+      "platform": "linux-x86_64",
+      "environment": {
+        "RUSTUP_AUTO_INSTALL": "0",
+        "CARGO_NET_OFFLINE": "true"
+      },
+      "reject_environment": [
+        "MIRIFLAGS",
+        "RUSTFLAGS",
+        "CARGO_ENCODED_RUSTFLAGS",
+        "RUSTDOCFLAGS",
+        "CARGO_BUILD_TARGET",
+        "MIRI_SYSROOT",
+        "MIRI_BE_RUSTC",
+        "MIRI_REPLACE_LIBRS_IF_NOT_TEST",
+        "RUSTC",
+        "RUSTC_WRAPPER",
+        "RUSTC_WORKSPACE_WRAPPER",
+        "BRYNJA_MIRI_CASE",
+        "BRYNJA_MIRI_PROFILE",
+        "BRYNJA_MIRI_WIDTH",
+        "KANI_HOME",
+        "KANIFLAGS",
+        "KANI_ARGS"
+      ],
+      "success": {
+        "contains": [
+          "Scoped Kani sha2: PASS; 12 existing bounded proofs"
+        ],
+        "unique_lines": [
+          "Scoped Kani sha2: PASS; 12 existing bounded proofs"
+        ]
+      },
+      "timeout_seconds": 1200,
+      "log_bytes": 16777216
+    },
+    {
+      "component": "sha1",
+      "id": "kani-0359032efe7506a6",
+      "name": "sha1 bounded Kani proofs",
+      "category": "kani",
+      "establishes": "Existing public-length/control predicates only; not a cryptographic construction proof.",
+      "command": [
+        "python3",
+        "scripts/release/run-kani-component.py",
+        "sha1",
+        "--steps-json",
+        "[[[\"-p\",\"brynja-legacy-sha1\"],1]]"
+      ],
+      "cwd": ".",
+      "inputs": [
+        "kani-tools",
+        "kani-setup",
+        "kani-workspace",
+        "kani-adapter",
+        "kani-sha1-core",
+        "kani-sha1-hash-core",
+        "kani-sha1-legacy-sha1"
+      ],
+      "platform": "linux-x86_64",
+      "environment": {
+        "RUSTUP_AUTO_INSTALL": "0",
+        "CARGO_NET_OFFLINE": "true"
+      },
+      "reject_environment": [
+        "MIRIFLAGS",
+        "RUSTFLAGS",
+        "CARGO_ENCODED_RUSTFLAGS",
+        "RUSTDOCFLAGS",
+        "CARGO_BUILD_TARGET",
+        "MIRI_SYSROOT",
+        "MIRI_BE_RUSTC",
+        "MIRI_REPLACE_LIBRS_IF_NOT_TEST",
+        "RUSTC",
+        "RUSTC_WRAPPER",
+        "RUSTC_WORKSPACE_WRAPPER",
+        "BRYNJA_MIRI_CASE",
+        "BRYNJA_MIRI_PROFILE",
+        "BRYNJA_MIRI_WIDTH",
+        "KANI_HOME",
+        "KANIFLAGS",
+        "KANI_ARGS"
+      ],
+      "success": {
+        "contains": [
+          "Scoped Kani sha1: PASS; 1 existing bounded proofs"
+        ],
+        "unique_lines": [
+          "Scoped Kani sha1: PASS; 1 existing bounded proofs"
+        ]
+      },
+      "timeout_seconds": 1200,
+      "log_bytes": 16777216
+    },
+    {
+      "component": "sha3",
+      "id": "kani-587c6eac14110d17",
+      "name": "sha3 bounded Kani proofs",
+      "category": "kani",
+      "establishes": "Existing public-length/control predicates only; not a cryptographic construction proof.",
+      "command": [
+        "python3",
+        "scripts/release/run-kani-component.py",
+        "sha3",
+        "--steps-json",
+        "[[[\"-p\",\"brynja-hash-sha3\"],10],[[\"-p\",\"brynja-hash-sha3\",\"--features\",\"batch-execution\",\"--harness\",\"batch::control::proofs::batch_budget_is_atomic_and_never_wraps\"],1]]"
+      ],
+      "cwd": ".",
+      "inputs": [
+        "kani-tools",
+        "kani-setup",
+        "kani-workspace",
+        "kani-adapter",
+        "kani-sha3-core",
+        "kani-sha3-crypto-cpu",
+        "kani-sha3-hash-core",
+        "kani-sha3-hash-sha3"
+      ],
+      "platform": "linux-x86_64",
+      "environment": {
+        "RUSTUP_AUTO_INSTALL": "0",
+        "CARGO_NET_OFFLINE": "true"
+      },
+      "reject_environment": [
+        "MIRIFLAGS",
+        "RUSTFLAGS",
+        "CARGO_ENCODED_RUSTFLAGS",
+        "RUSTDOCFLAGS",
+        "CARGO_BUILD_TARGET",
+        "MIRI_SYSROOT",
+        "MIRI_BE_RUSTC",
+        "MIRI_REPLACE_LIBRS_IF_NOT_TEST",
+        "RUSTC",
+        "RUSTC_WRAPPER",
+        "RUSTC_WORKSPACE_WRAPPER",
+        "BRYNJA_MIRI_CASE",
+        "BRYNJA_MIRI_PROFILE",
+        "BRYNJA_MIRI_WIDTH",
+        "KANI_HOME",
+        "KANIFLAGS",
+        "KANI_ARGS"
+      ],
+      "success": {
+        "contains": [
+          "Scoped Kani sha3: PASS; 11 existing bounded proofs"
+        ],
+        "unique_lines": [
+          "Scoped Kani sha3: PASS; 11 existing bounded proofs"
+        ]
+      },
+      "timeout_seconds": 1200,
+      "log_bytes": 16777216
+    },
+    {
+      "component": "tuplehash",
+      "id": "kani-6963894ec5d793b1",
+      "name": "tuplehash bounded Kani proofs",
+      "category": "kani",
+      "establishes": "Existing public-length/control predicates only; not a cryptographic construction proof.",
+      "command": [
+        "python3",
+        "scripts/release/run-kani-component.py",
+        "tuplehash",
+        "--steps-json",
+        "[[[\"-p\",\"brynja-hash-tuple\"],2]]"
+      ],
+      "cwd": ".",
+      "inputs": [
+        "kani-tools",
+        "kani-setup",
+        "kani-workspace",
+        "kani-adapter",
+        "kani-tuplehash-core",
+        "kani-tuplehash-hash-core",
+        "kani-tuplehash-hash-sha3",
+        "kani-tuplehash-hash-tuple"
+      ],
+      "platform": "linux-x86_64",
+      "environment": {
+        "RUSTUP_AUTO_INSTALL": "0",
+        "CARGO_NET_OFFLINE": "true"
+      },
+      "reject_environment": [
+        "MIRIFLAGS",
+        "RUSTFLAGS",
+        "CARGO_ENCODED_RUSTFLAGS",
+        "RUSTDOCFLAGS",
+        "CARGO_BUILD_TARGET",
+        "MIRI_SYSROOT",
+        "MIRI_BE_RUSTC",
+        "MIRI_REPLACE_LIBRS_IF_NOT_TEST",
+        "RUSTC",
+        "RUSTC_WRAPPER",
+        "RUSTC_WORKSPACE_WRAPPER",
+        "BRYNJA_MIRI_CASE",
+        "BRYNJA_MIRI_PROFILE",
+        "BRYNJA_MIRI_WIDTH",
+        "KANI_HOME",
+        "KANIFLAGS",
+        "KANI_ARGS"
+      ],
+      "success": {
+        "contains": [
+          "Scoped Kani tuplehash: PASS; 2 existing bounded proofs"
+        ],
+        "unique_lines": [
+          "Scoped Kani tuplehash: PASS; 2 existing bounded proofs"
+        ]
+      },
+      "timeout_seconds": 1200,
+      "log_bytes": 16777216
+    },
+    {
+      "component": "legacy_hmac",
+      "id": "kani-78c99ce7f8ddb72a",
+      "name": "legacy_hmac bounded Kani proofs",
+      "category": "kani",
+      "establishes": "Existing public-length/control predicates only; not a cryptographic construction proof.",
+      "command": [
+        "python3",
+        "scripts/legacy-hmac/check-legacy-hmac-kani.py"
+      ],
+      "cwd": ".",
+      "inputs": [
+        "kani-tools",
+        "kani-setup",
+        "kani-legacy-hmac-fixture",
+        "kani-inherited-workspace",
+        "kani-legacy-hmac-core",
+        "kani-legacy-hmac-hash-core",
+        "kani-legacy-hmac-legacy-hmac",
+        "kani-legacy-hmac-legacy-md5",
+        "kani-legacy-hmac-legacy-sha1"
+      ],
+      "platform": "linux-x86_64",
+      "environment": {
+        "RUSTUP_AUTO_INSTALL": "0",
+        "CARGO_NET_OFFLINE": "true"
+      },
+      "reject_environment": [
+        "MIRIFLAGS",
+        "RUSTFLAGS",
+        "CARGO_ENCODED_RUSTFLAGS",
+        "RUSTDOCFLAGS",
+        "CARGO_BUILD_TARGET",
+        "MIRI_SYSROOT",
+        "MIRI_BE_RUSTC",
+        "MIRI_REPLACE_LIBRS_IF_NOT_TEST",
+        "RUSTC",
+        "RUSTC_WRAPPER",
+        "RUSTC_WORKSPACE_WRAPPER",
+        "BRYNJA_MIRI_CASE",
+        "BRYNJA_MIRI_PROFILE",
+        "BRYNJA_MIRI_WIDTH",
+        "KANI_HOME",
+        "KANIFLAGS",
+        "KANI_ARGS"
+      ],
+      "success": {
+        "contains": [
+          "Legacy HMAC invalid-tag-width Kani: PASS; 2 proofs; no cryptographic proof claim"
+        ],
+        "unique_lines": [
+          "Legacy HMAC invalid-tag-width Kani: PASS; 2 proofs; no cryptographic proof claim"
+        ]
+      },
+      "timeout_seconds": 1200,
+      "log_bytes": 16777216
+    },
+    {
+      "component": "hmac",
+      "id": "kani-83b160642dda6ea2",
+      "name": "hmac bounded Kani proofs",
+      "category": "kani",
+      "establishes": "Existing public-length/control predicates only; not a cryptographic construction proof.",
+      "command": [
+        "python3",
+        "scripts/hmac/check-hmac-kani.py"
+      ],
+      "cwd": ".",
+      "inputs": [
+        "kani-tools",
+        "kani-setup",
+        "kani-hmac-fixture"
+      ],
+      "platform": "linux-x86_64",
+      "environment": {
+        "RUSTUP_AUTO_INSTALL": "0",
+        "CARGO_NET_OFFLINE": "true"
+      },
+      "reject_environment": [
+        "MIRIFLAGS",
+        "RUSTFLAGS",
+        "CARGO_ENCODED_RUSTFLAGS",
+        "RUSTDOCFLAGS",
+        "CARGO_BUILD_TARGET",
+        "MIRI_SYSROOT",
+        "MIRI_BE_RUSTC",
+        "MIRI_REPLACE_LIBRS_IF_NOT_TEST",
+        "RUSTC",
+        "RUSTC_WRAPPER",
+        "RUSTC_WORKSPACE_WRAPPER",
+        "BRYNJA_MIRI_CASE",
+        "BRYNJA_MIRI_PROFILE",
+        "BRYNJA_MIRI_WIDTH",
+        "KANI_HOME",
+        "KANIFLAGS",
+        "KANI_ARGS"
+      ],
+      "success": {
+        "contains": [
+          "HMAC public-length Kani proofs: PASS; 2 proofs, no cryptographic proof claim"
+        ],
+        "unique_lines": [
+          "HMAC public-length Kani proofs: PASS; 2 proofs, no cryptographic proof claim"
+        ]
+      },
+      "timeout_seconds": 1200,
+      "log_bytes": 16777216
+    },
+    {
+      "component": "parallelhash",
+      "id": "kani-e09c9345908c0249",
+      "name": "parallelhash bounded Kani proofs",
+      "category": "kani",
+      "establishes": "Existing public-length/control predicates only; not a cryptographic construction proof.",
+      "command": [
+        "python3",
+        "scripts/release/run-kani-component.py",
+        "parallelhash",
+        "--steps-json",
+        "[[[\"-p\",\"brynja-hash-parallel\"],1]]"
+      ],
+      "cwd": ".",
+      "inputs": [
+        "kani-tools",
+        "kani-setup",
+        "kani-workspace",
+        "kani-adapter",
+        "kani-parallelhash-core",
+        "kani-parallelhash-crypto-cpu",
+        "kani-parallelhash-crypto-cpu-std",
+        "kani-parallelhash-hash-core",
+        "kani-parallelhash-hash-parallel",
+        "kani-parallelhash-hash-sha2",
+        "kani-parallelhash-hash-sha3"
+      ],
+      "platform": "linux-x86_64",
+      "environment": {
+        "RUSTUP_AUTO_INSTALL": "0",
+        "CARGO_NET_OFFLINE": "true"
+      },
+      "reject_environment": [
+        "MIRIFLAGS",
+        "RUSTFLAGS",
+        "CARGO_ENCODED_RUSTFLAGS",
+        "RUSTDOCFLAGS",
+        "CARGO_BUILD_TARGET",
+        "MIRI_SYSROOT",
+        "MIRI_BE_RUSTC",
+        "MIRI_REPLACE_LIBRS_IF_NOT_TEST",
+        "RUSTC",
+        "RUSTC_WRAPPER",
+        "RUSTC_WORKSPACE_WRAPPER",
+        "BRYNJA_MIRI_CASE",
+        "BRYNJA_MIRI_PROFILE",
+        "BRYNJA_MIRI_WIDTH",
+        "KANI_HOME",
+        "KANIFLAGS",
+        "KANI_ARGS"
+      ],
+      "success": {
+        "contains": [
+          "Scoped Kani parallelhash: PASS; 1 existing bounded proofs"
+        ],
+        "unique_lines": [
+          "Scoped Kani parallelhash: PASS; 1 existing bounded proofs"
+        ]
+      },
+      "timeout_seconds": 1200,
+      "log_bytes": 16777216
+    },
+    {
+      "component": "kmac",
+      "id": "kani-e212c20e6c0cd514",
+      "name": "kmac bounded Kani proofs",
+      "category": "kani",
+      "establishes": "Existing public-length/control predicates only; not a cryptographic construction proof.",
+      "command": [
+        "python3",
+        "scripts/release/run-kani-component.py",
+        "kmac",
+        "--steps-json",
+        "[[[\"-p\",\"brynja-mac-kmac\"],2]]"
+      ],
+      "cwd": ".",
+      "inputs": [
+        "kani-tools",
+        "kani-setup",
+        "kani-workspace",
+        "kani-adapter",
+        "kani-kmac-core",
+        "kani-kmac-hash-core",
+        "kani-kmac-hash-sha3",
+        "kani-kmac-mac-kmac"
+      ],
+      "platform": "linux-x86_64",
+      "environment": {
+        "RUSTUP_AUTO_INSTALL": "0",
+        "CARGO_NET_OFFLINE": "true"
+      },
+      "reject_environment": [
+        "MIRIFLAGS",
+        "RUSTFLAGS",
+        "CARGO_ENCODED_RUSTFLAGS",
+        "RUSTDOCFLAGS",
+        "CARGO_BUILD_TARGET",
+        "MIRI_SYSROOT",
+        "MIRI_BE_RUSTC",
+        "MIRI_REPLACE_LIBRS_IF_NOT_TEST",
+        "RUSTC",
+        "RUSTC_WRAPPER",
+        "RUSTC_WORKSPACE_WRAPPER",
+        "BRYNJA_MIRI_CASE",
+        "BRYNJA_MIRI_PROFILE",
+        "BRYNJA_MIRI_WIDTH",
+        "KANI_HOME",
+        "KANIFLAGS",
+        "KANI_ARGS"
+      ],
+      "success": {
+        "contains": [
+          "Scoped Kani kmac: PASS; 2 existing bounded proofs"
+        ],
+        "unique_lines": [
+          "Scoped Kani kmac: PASS; 2 existing bounded proofs"
+        ]
+      },
+      "timeout_seconds": 1200,
+      "log_bytes": 16777216
+    },
+    {
+      "component": "md5",
+      "id": "kani-f158c3ad14210065",
+      "name": "md5 bounded Kani proofs",
+      "category": "kani",
+      "establishes": "Existing public-length/control predicates only; not a cryptographic construction proof.",
+      "command": [
+        "python3",
+        "scripts/release/run-kani-component.py",
+        "md5",
+        "--steps-json",
+        "[[[\"-p\",\"brynja-legacy-md5\",\"--features\",\"batch\"],3]]"
+      ],
+      "cwd": ".",
+      "inputs": [
+        "kani-tools",
+        "kani-setup",
+        "kani-workspace",
+        "kani-adapter",
+        "kani-md5-core",
+        "kani-md5-hash-core",
+        "kani-md5-legacy-md5"
+      ],
+      "platform": "linux-x86_64",
+      "environment": {
+        "RUSTUP_AUTO_INSTALL": "0",
+        "CARGO_NET_OFFLINE": "true"
+      },
+      "reject_environment": [
+        "MIRIFLAGS",
+        "RUSTFLAGS",
+        "CARGO_ENCODED_RUSTFLAGS",
+        "RUSTDOCFLAGS",
+        "CARGO_BUILD_TARGET",
+        "MIRI_SYSROOT",
+        "MIRI_BE_RUSTC",
+        "MIRI_REPLACE_LIBRS_IF_NOT_TEST",
+        "RUSTC",
+        "RUSTC_WRAPPER",
+        "RUSTC_WORKSPACE_WRAPPER",
+        "BRYNJA_MIRI_CASE",
+        "BRYNJA_MIRI_PROFILE",
+        "BRYNJA_MIRI_WIDTH",
+        "KANI_HOME",
+        "KANIFLAGS",
+        "KANI_ARGS"
+      ],
+      "success": {
+        "contains": [
+          "Scoped Kani md5: PASS; 3 existing bounded proofs"
+        ],
+        "unique_lines": [
+          "Scoped Kani md5: PASS; 3 existing bounded proofs"
+        ]
+      },
+      "timeout_seconds": 1200,
+      "log_bytes": 16777216
+    }
+  ]
+}

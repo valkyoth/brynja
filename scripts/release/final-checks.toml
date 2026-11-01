@@ -3,7 +3,7 @@
 schema = 1
 version = "0.25.3"
 scope = "Standalone verification tracker, bounded release gate and publication handoff; no cryptographic implementation changes. Earlier component evidence remains historical evidence, not a freshness gate."
-ci_checks = ["tracker-tests", "tracker-lint", "tracker-format", "registry-tests", "release-regressions", "package-plan", "package-contents", "release-metadata"]
+ci_checks = ["tracker-tests", "tracker-lint", "tracker-format", "registry-tests", "catalog-tests", "release-regressions", "package-plan", "package-contents", "release-metadata"]
 
 [[checks]]
 id = "tracker-tests"
@@ -20,6 +20,10 @@ timeout_seconds = 60
 [[checks]]
 id = "registry-tests"
 command = ["python3", "scripts/release/test-verification-registry.py"]
+timeout_seconds = 60
+[[checks]]
+id = "catalog-tests"
+command = ["python3", "scripts/release/test-verification-catalog.py"]
 timeout_seconds = 60
 [[checks]]
 id = "release-regressions"

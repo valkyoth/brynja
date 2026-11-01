@@ -14,6 +14,23 @@ use std::{
 };
 
 pub fn successful(signal: &Success, output: &str) -> bool {
+    if signal.unique_prefixes.iter().any(|prefix| {
+        prefix.is_empty()
+            || output
+                .lines()
+                .filter(|line| line.starts_with(prefix))
+                .count()
+                != 1
+    }) {
+        return false;
+    }
+    if signal
+        .unique_lines
+        .iter()
+        .any(|marker| output.lines().filter(|line| *line == marker).count() != 1)
+    {
+        return false;
+    }
     if signal.contains.is_empty()
         || signal
             .contains
@@ -29,7 +46,11 @@ pub fn successful(signal: &Success, output: &str) -> bool {
                 let parts: Vec<_> = rest.split(';').collect();
                 if parts.len() < 3
                     || parts[1].trim() != "0 failed"
-                    || parts[2].trim() != "0 ignored"
+                    || parts[2]
+                        .trim()
+                        .strip_suffix(" ignored")
+                        .and_then(|s| s.parse::<u64>().ok())
+                        .is_none_or(|n| n != 0 && !signal.allow_ignored)
                 {
                     return false;
                 }
@@ -48,7 +69,12 @@ pub fn successful(signal: &Success, output: &str) -> bool {
                 return false;
             }
         }
-        if minimum == 0 || passed < minimum {
+        if minimum == 0
+            || passed < minimum
+            || signal
+                .exact_tests
+                .is_some_and(|expected| passed != expected)
+        {
             return false;
         }
     }
@@ -148,6 +174,7 @@ pub fn run(
         outcome: "running".into(),
         explanation: "execution in progress".into(),
         command: check.command.clone(),
+        stdin: check.stdin.clone(),
         cwd: check.cwd.clone(),
         environment: inputs::environment(check),
         before,
@@ -175,6 +202,9 @@ pub fn run(
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())
         .stdin(Stdio::null());
+    if let Some(path) = &check.stdin {
+        command.stdin(File::open(storage::relative(root, path)?)?);
+    }
     for name in [
         "PATH",
         "HOME",
@@ -278,7 +308,14 @@ pub fn run(
     attempt.log_sha256 = Some(inputs::hash(&std::fs::read(log_path)?));
     let passed = attempt.outcome == "passed";
     storage::save(root, state)?; // Execution is recorded before rendering.
-    report::refresh(root, registry, state, Some(&check.component));
+    report::refresh(
+        root,
+        registry,
+        state,
+        Some(&check.component),
+        None,
+        Some(&check.id),
+    );
     storage::save(root, state)?;
     report::write(root, registry, state)?;
     Ok(passed)

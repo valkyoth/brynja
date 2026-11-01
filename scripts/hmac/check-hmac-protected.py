@@ -100,6 +100,7 @@ def mutants(workspace, env, owner=PROTECTED):
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--toolchain", help="explicit installed Rust toolchain for packaging and consumers")
     parser.add_argument("--native-kernel", choices=("sha256", "sha512", "keccak"))
     parser.add_argument("--macos-resident", action="store_true",
                         help="Apple Silicon residency only; never dump exclusion")
@@ -109,6 +110,8 @@ def main():
     with verifier.cargo_environment.private_directory(ROOT) as raw:
         root = Path(raw)
         env = verifier.environment(root)
+        if args.toolchain:
+            env.update(RUSTUP_TOOLCHAIN=args.toolchain, RUSTUP_AUTO_INSTALL="0", CARGO_NET_OFFLINE="true")
         shutil.copyfile(ROOT / "rust-toolchain.toml", root / "rust-toolchain.toml")
         workspace = host.isolated(root)
         for profile in ([], ["--release"]):

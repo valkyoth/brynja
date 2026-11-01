@@ -3,6 +3,7 @@
   "status": "historical-unmapped",
   "local_evidence_root": "../brynja-evidence",
   "registry_sha256": "3db62f70549d2c0aab9f78cb3421cf3c11f1b9db441464950f9c21e79393d10f",
+  "registry_scope": "Original 27 portable registrations at initial reconciliation; not a digest or mapping of the later sanitizer registrations.",
   "mapping": {
     "exact_command_matches": [],
     "current_passes_imported": 0,

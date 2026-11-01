@@ -61,6 +61,7 @@ def test_profiles(consumer, environment):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--toolchain", help="explicit installed Rust toolchain for packaging and consumers")
     parser.add_argument("--no-std-target", help="also build the extracted consumer for an installed bare-metal target")
     parser.add_argument("--adapter-kernel", choices=("sha256", "sha512", "keccak"), action="append",
                         help="explicit real native adapter handoffs; refuses unsupported host instructions")
@@ -76,6 +77,8 @@ def main():
                        if not key.startswith(("CARGO_", "RUST", "BRYNJA_"))}
         environment["CARGO_HOME"] = str(directory / "empty-cargo-home")
         environment["CARGO_TARGET_DIR"] = str(directory / "consumer-target")
+        if args.toolchain:
+            environment.update(RUSTUP_TOOLCHAIN=args.toolchain, RUSTUP_AUTO_INSTALL="0", CARGO_NET_OFFLINE="true")
         cargo_environment.check(ROOT, environment)
         # Reuse the existing real-archive builder and safe extractor. This
         # changes only its selected package population in this process.

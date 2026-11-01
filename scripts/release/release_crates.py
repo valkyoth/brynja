@@ -169,11 +169,11 @@ def require_public_stage(stage: str) -> None:
 
 
 def wait_for_index(package: str, version: str, *, dry_run: bool) -> None:
+    if dry_run:
+        print(f"[dry-run] would wait for {package} {version} to be indexed; nothing uploaded")
+        return
     print(f"Published {package} {version}.")
     print(f"Confirm https://crates.io/crates/{package}/{version} before continuing.")
-    if dry_run:
-        print("[dry-run] skipping crates.io wait")
-        return
     input("Press Enter after crates.io indexes this version: ")
     time.sleep(5)
 
@@ -264,8 +264,8 @@ def main() -> int:
     mode.add_argument(
         "--evidence-check",
         action="store_true",
-        help="Validate saved receipts and native approval before tagging; no tests or uploads."
-             " Native source-equivalence and current repository checks remain separate.",
+        help="Explicit historical diagnostic only: validate old receipts/native approval."
+             " Never required for publication from 0.25.3; no uploads.",
     )
     parser.add_argument(
         "--detached-receipts",
@@ -306,8 +306,8 @@ def main() -> int:
                 f"with {len(steps)} selected crate(s)"
             )
             return 0
-        environment = evidence_environment(args.detached_receipts, args.native_review_sha256)
         if args.evidence_check:
+            environment = evidence_environment(args.detached_receipts, args.native_review_sha256)
             require_clean_tree(dry_run=False)
             check_evidence(environment)
             print("Saved verifier evidence and native artifact approval validated; no tests or uploads run.")
@@ -316,6 +316,14 @@ def main() -> int:
             require_clean_tree(dry_run=False)
             package_check(steps)
             return 0
+
+        environment = {}
+        if scoped_release.enabled(version):
+            if args.detached_receipts is not None or args.native_review_sha256 is not None:
+                print("Legacy evidence options are ignored for publication from 0.25.3; "
+                      "no receipts or native evidence are inspected.", file=sys.stderr)
+        else:
+            environment = evidence_environment(args.detached_receipts, args.native_review_sha256)
 
         if plan["stage"] == "internal":
             if args.dry_run:
@@ -354,10 +362,11 @@ def main() -> int:
                     plan["crates"][package]["version"],
                     dry_run=args.dry_run,
                 )
-        print("Release publish sequence completed.")
+        print("Dry-run publication plan completed; nothing uploaded." if args.dry_run
+              else "Release publish sequence completed.")
         print(f"Recommended follow-up: cargo info {FACADE}@{version}")
         return 0
-    except (OSError, RuntimeError, subprocess.CalledProcessError) as error:
+    except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as error:
         print(error, file=sys.stderr)
         return 1
 

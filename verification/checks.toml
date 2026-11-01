@@ -1,7 +1,9 @@
-# Portable hash/MAC harness catalog. Native/proof/hosted assessments retain
-# their historical catalog; registration does not establish current coverage.
+# Scoped portable and selected sanitizer checks. Remaining native/proof/hosted
+# assessments retain their historical catalog; registration is not evidence.
 schema = 1
 execution_semantics = 1
+catalog = "verification/catalog.json"
+includes = ["verification/miri-checks.json", "verification/kani-checks.json", "verification/matrix-checks.json", "verification/extra-checks.json"]
 
 [groups.hash-core]
 paths = ["crates/brynja-core/src", "crates/brynja-hash-core/src"]
@@ -559,4 +561,841 @@ inputs = ["hash-core", "compiler", "sha1-api", "sha1-source"]
 timeout_seconds = 600
 [checks.success]
 contains = ["test dynamic_analysis_covers_padding_and_partial_bit_boundaries ... ok", "test result: ok. 1 passed; 0 failed; 0 ignored;"]
+minimum_tests = 1
+
+# Explicit sanitizer bindings. Historical catalog records remain separate.
+# These checks are selected only by run; status never executes sanitizers.
+[groups.asan-tools]
+[[groups.asan-tools.tools]]
+program = "cargo"
+toolchain = "nightly-2026-09-11"
+[[groups.asan-tools.tools]]
+program = "rustc"
+toolchain = "nightly-2026-09-11"
+[groups.asan-workspace.toml]
+"Cargo.toml" = ["workspace.package.edition","workspace.package.rust-version","workspace.lints","workspace.resolver","profile.dev","profile.test"]
+
+[groups.asan-source-core]
+paths = ["crates/brynja-core/src"]
+optional_paths = ["crates/brynja-core/build.rs"]
+[groups.asan-source-core.toml]
+"crates/brynja-core/Cargo.toml" = ["package.name","package.edition","package.rust-version","package.build","package.links","package.autotests","lib","test","features","dependencies","dev-dependencies","build-dependencies","target","lints"]
+"Cargo.toml" = ["workspace.dependencies.brynja-core.path","workspace.dependencies.brynja-core.features","workspace.dependencies.brynja-core.default-features","workspace.dependencies.brynja-core.package","workspace.dependencies.brynja-core.git","workspace.dependencies.brynja-core.registry"]
+[[groups.asan-source-core.locks]]
+path = "Cargo.lock"
+packages = ["brynja-core"]
+
+[groups.asan-source-crypto-cpu]
+paths = ["crates/brynja-crypto-cpu/src"]
+optional_paths = ["crates/brynja-crypto-cpu/build.rs"]
+[groups.asan-source-crypto-cpu.toml]
+"crates/brynja-crypto-cpu/Cargo.toml" = ["package.name","package.edition","package.rust-version","package.build","package.links","package.autotests","lib","test","features","dependencies","dev-dependencies","build-dependencies","target","lints"]
+"Cargo.toml" = ["workspace.dependencies.brynja-crypto-cpu.path","workspace.dependencies.brynja-crypto-cpu.features","workspace.dependencies.brynja-crypto-cpu.default-features","workspace.dependencies.brynja-crypto-cpu.package","workspace.dependencies.brynja-crypto-cpu.git","workspace.dependencies.brynja-crypto-cpu.registry"]
+[[groups.asan-source-crypto-cpu.locks]]
+path = "Cargo.lock"
+packages = ["brynja-crypto-cpu"]
+
+[groups.asan-source-crypto-cpu-std]
+paths = ["crates/brynja-crypto-cpu-std/src"]
+optional_paths = ["crates/brynja-crypto-cpu-std/build.rs"]
+[groups.asan-source-crypto-cpu-std.toml]
+"crates/brynja-crypto-cpu-std/Cargo.toml" = ["package.name","package.edition","package.rust-version","package.build","package.links","package.autotests","lib","test","features","dependencies","dev-dependencies","build-dependencies","target","lints"]
+"Cargo.toml" = ["workspace.dependencies.brynja-crypto-cpu-std.path","workspace.dependencies.brynja-crypto-cpu-std.features","workspace.dependencies.brynja-crypto-cpu-std.default-features","workspace.dependencies.brynja-crypto-cpu-std.package","workspace.dependencies.brynja-crypto-cpu-std.git","workspace.dependencies.brynja-crypto-cpu-std.registry"]
+[[groups.asan-source-crypto-cpu-std.locks]]
+path = "Cargo.lock"
+packages = ["brynja-crypto-cpu-std"]
+
+[groups.asan-source-hash-core]
+paths = ["crates/brynja-hash-core/src"]
+optional_paths = ["crates/brynja-hash-core/build.rs"]
+[groups.asan-source-hash-core.toml]
+"crates/brynja-hash-core/Cargo.toml" = ["package.name","package.edition","package.rust-version","package.build","package.links","package.autotests","lib","test","features","dependencies","dev-dependencies","build-dependencies","target","lints"]
+"Cargo.toml" = ["workspace.dependencies.brynja-hash-core.path","workspace.dependencies.brynja-hash-core.features","workspace.dependencies.brynja-hash-core.default-features","workspace.dependencies.brynja-hash-core.package","workspace.dependencies.brynja-hash-core.git","workspace.dependencies.brynja-hash-core.registry"]
+[[groups.asan-source-hash-core.locks]]
+path = "Cargo.lock"
+packages = ["brynja-hash-core"]
+
+[groups.asan-source-hash-parallel]
+paths = ["crates/brynja-hash-parallel/src"]
+optional_paths = ["crates/brynja-hash-parallel/build.rs"]
+[groups.asan-source-hash-parallel.toml]
+"crates/brynja-hash-parallel/Cargo.toml" = ["package.name","package.edition","package.rust-version","package.build","package.links","package.autotests","lib","test","features","dependencies","dev-dependencies","build-dependencies","target","lints"]
+"Cargo.toml" = ["workspace.dependencies.brynja-hash-parallel.path","workspace.dependencies.brynja-hash-parallel.features","workspace.dependencies.brynja-hash-parallel.default-features","workspace.dependencies.brynja-hash-parallel.package","workspace.dependencies.brynja-hash-parallel.git","workspace.dependencies.brynja-hash-parallel.registry"]
+[[groups.asan-source-hash-parallel.locks]]
+path = "Cargo.lock"
+packages = ["brynja-hash-parallel"]
+
+[groups.asan-source-hash-parallel-std]
+paths = ["crates/brynja-hash-parallel-std/src"]
+optional_paths = ["crates/brynja-hash-parallel-std/build.rs"]
+[groups.asan-source-hash-parallel-std.toml]
+"crates/brynja-hash-parallel-std/Cargo.toml" = ["package.name","package.edition","package.rust-version","package.build","package.links","package.autotests","lib","test","features","dependencies","dev-dependencies","build-dependencies","target","lints"]
+"Cargo.toml" = ["workspace.dependencies.brynja-hash-parallel-std.path","workspace.dependencies.brynja-hash-parallel-std.features","workspace.dependencies.brynja-hash-parallel-std.default-features","workspace.dependencies.brynja-hash-parallel-std.package","workspace.dependencies.brynja-hash-parallel-std.git","workspace.dependencies.brynja-hash-parallel-std.registry"]
+[[groups.asan-source-hash-parallel-std.locks]]
+path = "Cargo.lock"
+packages = ["brynja-hash-parallel-std"]
+
+[groups.asan-source-hash-sha2]
+paths = ["crates/brynja-hash-sha2/src"]
+optional_paths = ["crates/brynja-hash-sha2/build.rs"]
+[groups.asan-source-hash-sha2.toml]
+"crates/brynja-hash-sha2/Cargo.toml" = ["package.name","package.edition","package.rust-version","package.build","package.links","package.autotests","lib","test","features","dependencies","dev-dependencies","build-dependencies","target","lints"]
+"Cargo.toml" = ["workspace.dependencies.brynja-hash-sha2.path","workspace.dependencies.brynja-hash-sha2.features","workspace.dependencies.brynja-hash-sha2.default-features","workspace.dependencies.brynja-hash-sha2.package","workspace.dependencies.brynja-hash-sha2.git","workspace.dependencies.brynja-hash-sha2.registry"]
+[[groups.asan-source-hash-sha2.locks]]
+path = "Cargo.lock"
+packages = ["brynja-hash-sha2"]
+
+[groups.asan-source-hash-sha3]
+paths = ["crates/brynja-hash-sha3/src"]
+optional_paths = ["crates/brynja-hash-sha3/build.rs"]
+[groups.asan-source-hash-sha3.toml]
+"crates/brynja-hash-sha3/Cargo.toml" = ["package.name","package.edition","package.rust-version","package.build","package.links","package.autotests","lib","test","features","dependencies","dev-dependencies","build-dependencies","target","lints"]
+"Cargo.toml" = ["workspace.dependencies.brynja-hash-sha3.path","workspace.dependencies.brynja-hash-sha3.features","workspace.dependencies.brynja-hash-sha3.default-features","workspace.dependencies.brynja-hash-sha3.package","workspace.dependencies.brynja-hash-sha3.git","workspace.dependencies.brynja-hash-sha3.registry"]
+[[groups.asan-source-hash-sha3.locks]]
+path = "Cargo.lock"
+packages = ["brynja-hash-sha3"]
+
+[groups.asan-source-hash-tuple]
+paths = ["crates/brynja-hash-tuple/src"]
+optional_paths = ["crates/brynja-hash-tuple/build.rs"]
+[groups.asan-source-hash-tuple.toml]
+"crates/brynja-hash-tuple/Cargo.toml" = ["package.name","package.edition","package.rust-version","package.build","package.links","package.autotests","lib","test","features","dependencies","dev-dependencies","build-dependencies","target","lints"]
+"Cargo.toml" = ["workspace.dependencies.brynja-hash-tuple.path","workspace.dependencies.brynja-hash-tuple.features","workspace.dependencies.brynja-hash-tuple.default-features","workspace.dependencies.brynja-hash-tuple.package","workspace.dependencies.brynja-hash-tuple.git","workspace.dependencies.brynja-hash-tuple.registry"]
+[[groups.asan-source-hash-tuple.locks]]
+path = "Cargo.lock"
+packages = ["brynja-hash-tuple"]
+
+[groups.asan-source-legacy-md5]
+paths = ["crates/brynja-legacy-md5/src"]
+optional_paths = ["crates/brynja-legacy-md5/build.rs"]
+[groups.asan-source-legacy-md5.toml]
+"crates/brynja-legacy-md5/Cargo.toml" = ["package.name","package.edition","package.rust-version","package.build","package.links","package.autotests","lib","test","features","dependencies","dev-dependencies","build-dependencies","target","lints"]
+"Cargo.toml" = ["workspace.dependencies.brynja-legacy-md5.path","workspace.dependencies.brynja-legacy-md5.features","workspace.dependencies.brynja-legacy-md5.default-features","workspace.dependencies.brynja-legacy-md5.package","workspace.dependencies.brynja-legacy-md5.git","workspace.dependencies.brynja-legacy-md5.registry"]
+[[groups.asan-source-legacy-md5.locks]]
+path = "Cargo.lock"
+packages = ["brynja-legacy-md5"]
+
+[groups.asan-source-legacy-sha1]
+paths = ["crates/brynja-legacy-sha1/src"]
+optional_paths = ["crates/brynja-legacy-sha1/build.rs"]
+[groups.asan-source-legacy-sha1.toml]
+"crates/brynja-legacy-sha1/Cargo.toml" = ["package.name","package.edition","package.rust-version","package.build","package.links","package.autotests","lib","test","features","dependencies","dev-dependencies","build-dependencies","target","lints"]
+"Cargo.toml" = ["workspace.dependencies.brynja-legacy-sha1.path","workspace.dependencies.brynja-legacy-sha1.features","workspace.dependencies.brynja-legacy-sha1.default-features","workspace.dependencies.brynja-legacy-sha1.package","workspace.dependencies.brynja-legacy-sha1.git","workspace.dependencies.brynja-legacy-sha1.registry"]
+[[groups.asan-source-legacy-sha1.locks]]
+path = "Cargo.lock"
+packages = ["brynja-legacy-sha1"]
+
+[groups.asan-source-mac-kmac]
+paths = ["crates/brynja-mac-kmac/src"]
+optional_paths = ["crates/brynja-mac-kmac/build.rs"]
+[groups.asan-source-mac-kmac.toml]
+"crates/brynja-mac-kmac/Cargo.toml" = ["package.name","package.edition","package.rust-version","package.build","package.links","package.autotests","lib","test","features","dependencies","dev-dependencies","build-dependencies","target","lints"]
+"Cargo.toml" = ["workspace.dependencies.brynja-mac-kmac.path","workspace.dependencies.brynja-mac-kmac.features","workspace.dependencies.brynja-mac-kmac.default-features","workspace.dependencies.brynja-mac-kmac.package","workspace.dependencies.brynja-mac-kmac.git","workspace.dependencies.brynja-mac-kmac.registry"]
+[[groups.asan-source-mac-kmac.locks]]
+path = "Cargo.lock"
+packages = ["brynja-mac-kmac"]
+
+[groups.asan-tests-core]
+paths = ["crates/brynja-core/tests"]
+
+[groups.asan-tests-hash-parallel]
+paths = ["crates/brynja-hash-parallel/tests"]
+
+[groups.asan-tests-hash-parallel-std]
+paths = ["crates/brynja-hash-parallel-std/tests"]
+
+[groups.asan-tests-hash-sha2]
+paths = ["crates/brynja-hash-sha2/tests"]
+
+[groups.asan-tests-hash-sha3]
+paths = ["crates/brynja-hash-sha3/tests"]
+
+[groups.asan-tests-hash-tuple]
+paths = ["crates/brynja-hash-tuple/tests"]
+
+[groups.asan-tests-legacy-md5]
+paths = ["crates/brynja-legacy-md5/tests"]
+
+[groups.asan-tests-legacy-sha1]
+paths = ["crates/brynja-legacy-sha1/tests"]
+
+[groups.asan-tests-mac-kmac]
+paths = ["crates/brynja-mac-kmac/tests"]
+
+[[checks]]
+component = "sha2"
+id = "asan-04550050dcb9a814"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-hash-sha2 --features general-sha512-t --test general_hash --lib --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-hash-sha2","--features","general-sha512-t","--test","general_hash","--lib","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-hash-core","asan-source-hash-sha2","asan-tests-hash-sha2"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "kmac"
+id = "asan-08702793c572dc40"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-mac-kmac --features hardened-execution --lib --test execution --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-mac-kmac","--features","hardened-execution","--lib","--test","execution","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-crypto-cpu","asan-source-hash-core","asan-source-hash-sha3","asan-source-mac-kmac","asan-tests-mac-kmac"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[groups.asan-harness-106c9d5d31321a06]
+paths = ["scripts/md5/check-md5-execution-asan.py"]
+[[groups.asan-harness-106c9d5d31321a06.tools]]
+program = "python3"
+
+[[checks]]
+component = "md5"
+id = "asan-106c9d5d31321a06"
+category = "asan"
+platform = "linux-x86_64"
+name = "MD5 native AVX2 execution ASan/LSan"
+establishes = "Existing native AVX2 sanitizer harness; required backend is checked by the original harness."
+command = ["python3","scripts/md5/check-md5-execution-asan.py"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-hash-core","asan-source-legacy-md5","asan-tests-legacy-md5","asan-harness-106c9d5d31321a06"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+[checks.success]
+contains = ["Native operational MD5 AVX2 ASan and LeakSanitizer: PASS"]
+minimum_tests = 1
+
+[groups.asan-harness-2045c74f5ce3a389]
+paths = ["scripts/md5/check-md5-hardened-asan.py"]
+[[groups.asan-harness-2045c74f5ce3a389.tools]]
+program = "python3"
+
+[[checks]]
+component = "md5"
+id = "asan-2045c74f5ce3a389"
+category = "asan"
+platform = "linux-x86_64"
+name = "MD5 native AVX2 hardened execution ASan/LSan"
+establishes = "Existing native AVX2 sanitizer harness; required backend is checked by the original harness."
+command = ["python3","scripts/md5/check-md5-hardened-asan.py"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-hash-core","asan-source-legacy-md5","asan-tests-legacy-md5","asan-harness-2045c74f5ce3a389"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+[checks.success]
+contains = ["Native hardened MD5 AVX2 ASan and LeakSanitizer: PASS"]
+minimum_tests = 1
+
+[[checks]]
+component = "sha3"
+id = "asan-22a4b40011da9ec9"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-hash-sha3 --tests --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-hash-sha3","--tests","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-hash-core","asan-source-hash-sha3","asan-tests-hash-sha3"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "md5"
+id = "asan-29ef43204a4dca9a"
+category = "asan"
+platform = "linux-x86_64"
+name = "MD5 portable API ASan/LSan"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-legacy-md5","--tests","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-hash-core","asan-source-legacy-md5","asan-tests-legacy-md5"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "sha2"
+id = "asan-2c69d708fd5c0fe5"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-hash-sha2 --test sha512_224 --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-hash-sha2","--test","sha512_224","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-hash-core","asan-source-hash-sha2","asan-tests-hash-sha2"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "tuplehash"
+id = "asan-3916df16ab897c1f"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-hash-tuple --test api forgotten_or_manually_dropped_items_cannot_bypass_the_open_latch --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-hash-tuple","--test","api","forgotten_or_manually_dropped_items_cannot_bypass_the_open_latch","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-hash-core","asan-source-hash-sha3","asan-source-hash-tuple","asan-tests-hash-tuple"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "md5"
+id = "asan-39a32d560a36f69b"
+category = "asan"
+platform = "linux-x86_64"
+name = "MD5 CPU/batch memory tests ASan/LSan"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-legacy-md5","--features","cpu","--lib","--test","cpu","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-hash-core","asan-source-legacy-md5","asan-tests-legacy-md5"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "parallelhash"
+id = "asan-4281667f8a151cb1"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-hash-parallel --features runtime-execution --tests --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-hash-parallel","--features","runtime-execution","--tests","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-crypto-cpu","asan-source-crypto-cpu-std","asan-source-hash-core","asan-source-hash-parallel","asan-source-hash-sha2","asan-source-hash-sha3","asan-tests-hash-parallel"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "sha2"
+id = "asan-520d60426fa5aed2"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-hash-sha2 --test sha384 --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-hash-sha2","--test","sha384","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-hash-core","asan-source-hash-sha2","asan-tests-hash-sha2"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "parallelhash"
+id = "asan-56d807bc48306bed"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-hash-parallel-std --features runtime-execution --tests --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-hash-parallel-std","--features","runtime-execution","--tests","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-crypto-cpu","asan-source-crypto-cpu-std","asan-source-hash-core","asan-source-hash-parallel","asan-source-hash-parallel-std","asan-source-hash-sha2","asan-source-hash-sha3","asan-tests-hash-parallel-std"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "tuplehash"
+id = "asan-5a25677c4973093e"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-hash-tuple --tests --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-hash-tuple","--tests","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-hash-core","asan-source-hash-sha3","asan-source-hash-tuple","asan-tests-hash-tuple"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "sha2"
+id = "asan-6ee45099731c4589"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-hash-sha2 --test bit_inputs --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-hash-sha2","--test","bit_inputs","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-hash-core","asan-source-hash-sha2","asan-tests-hash-sha2"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "kmac"
+id = "asan-84d3b0f8bded00a0"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-mac-kmac --tests --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-mac-kmac","--tests","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-hash-core","asan-source-hash-sha3","asan-source-mac-kmac","asan-tests-mac-kmac"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "sha2"
+id = "asan-861e3741e26062ef"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-hash-sha2 --test sha512_256 --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-hash-sha2","--test","sha512_256","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-hash-core","asan-source-hash-sha2","asan-tests-hash-sha2"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "core"
+id = "asan-86a15efc28b1bc63"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-core --test secret_memory --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-core","--test","secret_memory","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-tests-core"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "sha2"
+id = "asan-895e0181dc4a7150"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-hash-sha2 --features runtime-execution,general-sha512-t --test execution --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-hash-sha2","--features","runtime-execution,general-sha512-t","--test","execution","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-crypto-cpu","asan-source-hash-core","asan-source-hash-sha2","asan-tests-hash-sha2"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "sha1"
+id = "asan-90cc767cfe1b9fa6"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-legacy-sha1 --tests --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-legacy-sha1","--tests","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-hash-core","asan-source-legacy-sha1","asan-tests-legacy-sha1"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "sha2"
+id = "asan-941ec9ae501e8ec5"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-hash-sha2 --features general-sha512-t --test general --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-hash-sha2","--features","general-sha512-t","--test","general","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-hash-core","asan-source-hash-sha2","asan-tests-hash-sha2"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "sha1"
+id = "asan-9585d55c2643dd11"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-legacy-sha1 --features execution --test execution --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-legacy-sha1","--features","execution","--test","execution","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-hash-core","asan-source-legacy-sha1","asan-tests-legacy-sha1"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "sha2"
+id = "asan-99cbd63d372920fc"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-hash-sha2 --test sha224 --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-hash-sha2","--test","sha224","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-hash-core","asan-source-hash-sha2","asan-tests-hash-sha2"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "sha3"
+id = "asan-ab78391f09dd5ff7"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-hash-sha3 --lib final_bit_output_clears_the_exact_reader_source --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-hash-sha3","--lib","final_bit_output_clears_the_exact_reader_source","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-hash-core","asan-source-hash-sha3","asan-tests-hash-sha3"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "sha3"
+id = "asan-b5b4abe9e5870423"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-hash-sha3 --lib borrowing_reader_never_extracts_the_absorbing_owner --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-hash-sha3","--lib","borrowing_reader_never_extracts_the_absorbing_owner","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-hash-core","asan-source-hash-sha3","asan-tests-hash-sha3"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "sha2"
+id = "asan-babb8a05e04b62ae"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-hash-sha2 --test hardened --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-hash-sha2","--test","hardened","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-hash-core","asan-source-hash-sha2","asan-tests-hash-sha2"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "sha1"
+id = "asan-c09513dded223753"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-legacy-sha1 --features cpu --lib --test cpu --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-legacy-sha1","--features","cpu","--lib","--test","cpu","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-hash-core","asan-source-legacy-sha1","asan-tests-legacy-sha1"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "sha3"
+id = "asan-c4be62d8f40f124d"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-hash-sha3 --features static-execution --lib --test execution --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-hash-sha3","--features","static-execution","--lib","--test","execution","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-crypto-cpu","asan-source-hash-core","asan-source-hash-sha3","asan-tests-hash-sha3"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "sha3"
+id = "asan-d376183b8436fa1e"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-hash-sha3 --features static-execution --test cshake_execution --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-hash-sha3","--features","static-execution","--test","cshake_execution","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-crypto-cpu","asan-source-hash-core","asan-source-hash-sha3","asan-tests-hash-sha3"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "sha2"
+id = "asan-d9e527695c9f7e14"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-hash-sha2 --test sha512 --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-hash-sha2","--test","sha512","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-hash-core","asan-source-hash-sha2","asan-tests-hash-sha2"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "tuplehash"
+id = "asan-dbb418559d074495"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-hash-tuple --features hardened-execution --lib --test execution --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-hash-tuple","--features","hardened-execution","--lib","--test","execution","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-crypto-cpu","asan-source-hash-core","asan-source-hash-sha3","asan-source-hash-tuple","asan-tests-hash-tuple"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "sha2"
+id = "asan-e96236909f79ef96"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-hash-sha2 --lib --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-hash-sha2","--lib","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-hash-core","asan-source-hash-sha2","asan-tests-hash-sha2"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+
+[[checks]]
+component = "sha2"
+id = "asan-f1863514a04ac11d"
+category = "asan"
+platform = "linux-x86_64"
+name = "RUSTFLAGS=\"-Zsanitizer=address\" cargo +nightly-2026-09-11 test -p brynja-hash-sha2 --test sha256 --target x86_64-unknown-linux-gnu"
+establishes = "Existing selected libtest memory-safety harness under ASan/LSan, not unexecuted native backend qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-hash-sha2","--test","sha256","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools","asan-workspace","asan-source-core","asan-source-hash-core","asan-source-hash-sha2","asan-tests-hash-sha2"]
+timeout_seconds = 1800
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+RUSTFLAGS = "-Zsanitizer=address"
+CARGO_ENCODED_RUSTFLAGS = ""
+[checks.success]
+contains = ["test result: ok."]
 minimum_tests = 1

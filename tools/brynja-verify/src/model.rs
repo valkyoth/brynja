@@ -8,6 +8,9 @@ pub type Map = BTreeMap<String, String>;
 pub struct Registry {
     pub schema: u32,
     pub execution_semantics: u32,
+    pub catalog: Option<String>,
+    #[serde(default)]
+    pub includes: Vec<String>,
     #[serde(default)]
     pub groups: BTreeMap<String, Group>,
     pub checks: Vec<Check>,
@@ -17,7 +20,15 @@ pub struct Registry {
 #[serde(deny_unknown_fields)]
 pub struct Group {
     #[serde(default)]
+    pub normalize_local_versions: bool,
+    #[serde(default)]
     pub paths: Vec<String>,
+    // Absence is fingerprinted too: e.g. a newly added automatic build.rs.
+    #[serde(default)]
+    pub optional_paths: Vec<String>,
+    // File-only, fixed-depth patterns; '*' matches within one path component.
+    #[serde(default)]
+    pub patterns: Vec<String>,
     // Explicit TOML projections: only the selected fields affect identity.
     #[serde(default)]
     pub toml: BTreeMap<String, Vec<String>>,
@@ -39,6 +50,10 @@ pub struct LockInput {
 pub struct Tool {
     pub program: String,
     pub toolchain: Option<String>,
+    // For checkers with an existing PATH fallback. Absence is an input, not a
+    // missing required tool or permission to skip the actual check.
+    #[serde(default)]
+    pub optional: bool,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
@@ -48,15 +63,30 @@ pub struct Check {
     pub id: String,
     pub name: String,
     pub establishes: String,
+    #[serde(default = "portable", skip_serializing_if = "is_portable")]
+    pub category: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub platform: Option<String>,
     pub command: Vec<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub stdin: Option<String>,
     pub cwd: String,
     pub inputs: Vec<String>,
     #[serde(default)]
     pub environment: Map,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub reject_environment: Vec<String>,
     pub success: Success,
     pub timeout_seconds: u64,
     #[serde(default = "log_limit")]
     pub log_bytes: u64,
+}
+
+fn portable() -> String {
+    "portable".into()
+}
+fn is_portable(value: &String) -> bool {
+    value == "portable"
 }
 
 fn log_limit() -> u64 {
@@ -73,9 +103,20 @@ impl Check {
 #[serde(deny_unknown_fields)]
 pub struct Success {
     pub contains: Vec<String>,
+    // Ordinary compatibility suites deliberately leave native-only tests ignored.
+    // They still require nonzero executed tests and never claim those ignored lanes.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub allow_ignored: bool,
     // Use the existing libtest summary, not test discovery or a new population
     // framework. Backends/proofs should additionally require their own marker.
     pub minimum_tests: Option<u64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub exact_tests: Option<u64>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub unique_lines: Vec<String>,
+    // Existing compiler drivers append diagnostic counts to profile markers.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub unique_prefixes: Vec<String>,
 }
 
 #[derive(Debug, Default, Clone, Deserialize, Serialize, PartialEq, Eq)]
@@ -95,6 +136,8 @@ pub struct Attempt {
     pub outcome: String,
     pub explanation: String,
     pub command: Vec<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub stdin: Option<String>,
     pub cwd: String,
     pub environment: Map,
     pub before: Snapshot,

@@ -68,6 +68,9 @@ def negatives(cargo, consumer, env, package):
 
 def execute(root, toolchain, bare_target):
     env = api.clean_environment(root)
+    # Packaging uses bare cargo too; select the same compiler as the explicit
+    # downstream cargo +toolchain commands after clearing ambient overrides.
+    env.update(RUSTUP_TOOLCHAIN=toolchain, RUSTUP_AUTO_INSTALL="0", CARGO_NET_OFFLINE="true")
     specifications = api.archives.specifications(api.packaging)
     specifications += tuple((name, tomllib.loads((ROOT / 'crates' / name / 'Cargo.toml').read_text())
                             ['package']['version'], ('src/lib.rs',)) for name in combined.ADDITIONAL)

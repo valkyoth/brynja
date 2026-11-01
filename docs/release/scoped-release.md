@@ -13,6 +13,10 @@ default: implement, verify the finite agreed scope, record, close, move on.
 4. Push the candidate and wait for its GitHub checks, including CodeQL, to pass.
 5. Create the signed release tag and publish that same clean candidate.
 
+The passing scoped pentest/retest requirement also applies to development
+releases, including 0.26.x. This does not change the separate crates.io
+checkpoint cadence or require a full cryptographic campaign for each tag.
+
 If GitHub finds a problem, fix and test that problem, update any affected review
 disposition, push again and wait for green. Do not automatically repeat completed
 component campaigns or the entire final gate. A substantive change still needs
@@ -70,11 +74,27 @@ outdated optional tracker rows do not block unrelated releases. Evidence remains
 honest about source, platform, date and limitations; this is not certification
 or an authenticated runner-attestation system.
 
+Legacy `--detached-receipts` and `--native-review-sha256` arguments are ignored
+with a warning on the modern publication path. Even a missing old receipt file
+cannot start or block publication checks. Only explicit `--evidence-check`
+invokes the historical diagnostic; it is not a publication step.
+
+For 0.25.3, the owner accepts the existing tested data as-is. Preserve original
+results, dates and provenance, including unmapped historical status. This is a
+release decision, not a claim of new executions or universal current passes.
+The pending .3 pentest, finite release checks and exact-candidate GitHub/tag
+guards still apply.
+
 ## Transition status
 
 The standalone runner, finite CI selection, gate/publication handoff and .3
-publication metadata are implemented. The 27 registered portable checks are
-not a replacement inventory for every historical assessment. The historical
+publication metadata are implemented. The 27 portable, 48 sanitizer, 4,933 Miri,
+nine Kani, 350 compiler compatibility and 320 component fixture/script runnable
+registrations are separate from the complete browseable inventory. All assessment
+bindings are migrated; helpers and retired history are references, not unfinished
+work. One hundred twelve owner-approved manual diagnostics retain their commands
+and history without becoming component obligations. Registration completion does
+not mean every check was executed or historical inputs were mapped. The historical
 index preserves the old dashboard records without fabricating current passes;
 see [migration details](../assurance/brynja-verify.md#files-and-history).
 

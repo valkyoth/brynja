@@ -118,6 +118,7 @@ def mutations(roots, env, resident=False):
 def main():
     policy.wrapper_parity(api.ROOT / 'crates/brynja-legacy-hmac-std/src')
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--toolchain", help="explicit installed Rust toolchain for packaging and consumers")
     parser.add_argument("--resident", action="store_true", help="explicit native macOS resident profile, NOT dump exclusion")
     selection = parser.add_mutually_exclusive_group()
     selection.add_argument("--sha1-native", action="store_true", help="explicit compiled SHA-1; requires real native hardware")
@@ -147,6 +148,8 @@ def main():
         directory = Path(temporary)
         env = {k: v for k, v in os.environ.items() if not k.startswith(("CARGO_", "RUST", "BRYNJA_"))}
         env.update(CARGO_HOME=str(directory / "cargo-home"), CARGO_TARGET_DIR=str(directory / "consumer-target"))
+        if args.toolchain:
+            env.update(RUSTUP_TOOLCHAIN=args.toolchain, RUSTUP_AUTO_INSTALL="0", CARGO_NET_OFFLINE="true")
         if accelerated or md5:
             env["RUSTFLAGS"] = "-C target-feature=" + target_features
         api.cargo_environment.check(api.ROOT, env)

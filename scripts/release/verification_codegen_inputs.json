@@ -1,0 +1,53 @@
+{
+  "scripts/tuplehash/check-tuplehash-execution-codegen.py": [
+    "scripts/cryptography/mir_cleanup_flow.py",
+    "scripts/tuplehash/check-tuplehash-execution-codegen.py"
+  ],
+  "scripts/kmac/check-kmac-execution-codegen.py": [
+    "scripts/cryptography/mir_cleanup_flow.py",
+    "scripts/kmac/check-kmac-execution-codegen.py"
+  ],
+  "scripts/parallelhash/check-parallelhash-execution-codegen.py": [
+    "scripts/cryptography/mir_cleanup_flow.py",
+    "scripts/parallelhash/check-parallelhash-execution-codegen.py",
+    "scripts/parallelhash/parallelhash_cleanup.py"
+  ],
+  "scripts/sha2/check-sha256-batch-codegen.py": [
+    "scripts/sha2/check-sha256-batch-codegen.py",
+    "scripts/sha2/sha256_batch_acceptance.py"
+  ],
+  "scripts/sha2/check-sha512-batch-codegen.py": [
+    "scripts/sha2/check-sha512-batch-codegen.py",
+    "scripts/sha2/sha512_batch_acceptance.py",
+    "scripts/sha2/sha512_t_digest_oracle.py",
+    "scripts/sha2/sha512_t_iv_oracle.py"
+  ],
+  "scripts/sha2/check-sha2-hardened-execution-codegen.py": [
+    "scripts/sha2/check-sha2-hardened-execution-codegen.py"
+  ],
+  "scripts/sha3/check-keccak-batch-codegen.py": [
+    "scripts/sha3/check-keccak-batch-codegen.py",
+    "scripts/sha3/keccak_batch_codegen.py"
+  ],
+  "scripts/sha3/check-keccak-hardened-codegen.py": [
+    "scripts/cryptography/mir_cleanup_flow.py",
+    "scripts/sha3/check-keccak-hardened-codegen.py"
+  ],
+  "scripts/sha1/check-sha1-hardened-codegen.py": [
+    "assurance/register-cleanup/check.py",
+    "assurance/register-cleanup/check_sha1.py",
+    "scripts/cryptography/mir_cleanup_flow.py",
+    "scripts/sha1/check-sha1-hardened-codegen.py",
+    "scripts/sha1/hardened_codegen.py"
+  ],
+  "scripts/md5/check-md5-execution-codegen.py": [
+    "scripts/md5/check-md5-execution-codegen.py"
+  ],
+  "scripts/md5/check-md5-hardened-codegen.py": [
+    "assurance/register-cleanup/check.py",
+    "assurance/register-cleanup/check_md5.py",
+    "scripts/cryptography/mir_cleanup_flow.py",
+    "scripts/md5/check-md5-hardened-codegen.py",
+    "scripts/md5/md5_hardened_codegen.py"
+  ]
+}

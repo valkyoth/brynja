@@ -5,6 +5,30 @@ from pathlib import Path
 import re
 import tomllib
 import unittest
+from verification_sanitizer_tests import SanitizerRegistryTests
+from verification_miri_tests import MiriBindingTests
+from verification_kani_tests import KaniBindingTests
+from verification_additional_tests import AdditionalBindingTests
+from verification_script_tests import ScriptBindingTests
+from verification_assessment_tests import AssessmentBindingTests
+from verification_engine_tests import EngineBindingTests
+from verification_md5_checker_tests import Md5CheckerBindingTests
+from verification_hosted_tests import HostedBindingTests
+from verification_compiler_tests import CompilerBindingTests
+from verification_codegen_tests import CodegenBindingTests
+from verification_shell_tests import ShellBindingTests
+from verification_checker_tests import CheckerBindingTests
+from verification_source_policy_tests import PolicyBindingTests
+from verification_legacy_policy_tests import LegacyPolicyBindingTests
+from verification_hardened_tests import HardenedBindingTests
+from verification_inventory_tests import InventoryBindingTests
+from verification_control_tests import ControlBindingTests
+from verification_record_policy_tests import RecordPolicyBindingTests
+from verification_package_tests import PackageBindingTests
+from verification_execution_tests import ExecutionBindingTests
+from verification_owner_tests import OwnerBindingTests
+from verification_acceptance_tests import AcceptanceBindingTests
+from verification_final_tests import FinalBindingTests
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -29,6 +53,8 @@ CLOSURES = {
 def validate(registry):
     seen = set()
     for check in registry['checks']:
+        if check.get('category', 'portable') != 'portable':
+            continue
         key = (check['component'], check['id'])
         assert key not in seen, 'duplicate check'
         seen.add(key)
@@ -58,7 +84,7 @@ def validate(registry):
         for path in paths:
             assert (ROOT / path).exists(), f'missing input: {path}'
         assert not any(path in ('verification/results.json', 'docs/VERIFICATION_RESULTS.md') for path in paths)
-    assert {c['command'][c['command'].index('-p') + 1] for c in registry['checks']} == set(CLOSURES)
+    assert {c['command'][c['command'].index('-p') + 1] for c in registry['checks'] if c.get('category', 'portable') == 'portable'} == set(CLOSURES)
 
 
 class RegistryTests(unittest.TestCase):

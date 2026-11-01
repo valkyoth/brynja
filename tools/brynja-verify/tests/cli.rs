@@ -5,6 +5,35 @@ mod common;
 use common::Fixture;
 
 #[test]
+fn optional_build_input_addition_and_removal_are_detected() {
+    let f = Fixture::new();
+    let raw = fs::read_to_string(f.root().join("verification/checks.toml")).unwrap();
+    f.write(
+        "verification/checks.toml",
+        &raw.replace("[groups.md5]", "[groups.md5]\noptional_paths=['build.rs']"),
+    );
+    f.ok(&["run", "md5", "answers"]);
+    f.write("build.rs", "new automatic build input");
+    f.ok(&["md5"]);
+    assert!(
+        f.view("md5/answers")["freshness"]
+            .as_str()
+            .unwrap()
+            .contains("build.rs")
+    );
+    fs::remove_file(f.root().join("build.rs")).unwrap();
+    f.ok(&["md5"]);
+    assert_eq!(f.view("md5/answers")["freshness"], "Up to date");
+    assert_eq!(
+        f.state()["attempts"]["md5/answers"]
+            .as_array()
+            .unwrap()
+            .len(),
+        1
+    );
+}
+
+#[test]
 fn registry_changes_during_execution_cannot_be_current_passes() {
     for edit in [
         "s.replace('execution_semantics=1', 'execution_semantics=2')",

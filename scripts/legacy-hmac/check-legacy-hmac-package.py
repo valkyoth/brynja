@@ -90,6 +90,7 @@ def verification_mutants(leaf, consumer, environment, sha1, md5):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--toolchain", help="explicit installed Rust toolchain for packaging and consumers")
     parser.add_argument("--sha1-native", action="store_true", help="also require actual native SHA1 execution from extracted archives")
     parser.add_argument("--md5-native", action="store_true", help="also require actual native MD5 SIMD HMAC from extracted archives")
     args = parser.parse_args()
@@ -103,6 +104,8 @@ def main():
         environment = {k: v for k, v in os.environ.items() if not k.startswith(("CARGO_", "RUST", "BRYNJA_"))}
         environment["CARGO_HOME"] = str(directory / "cargo-home")
         environment["CARGO_TARGET_DIR"] = str(directory / "consumer-target")
+        if args.toolchain:
+            environment.update(RUSTUP_TOOLCHAIN=args.toolchain, RUSTUP_AUTO_INSTALL="0", CARGO_NET_OFFLINE="true")
         cargo_environment.check(ROOT, environment)
         # Keep the existing safe extraction and Cargo environment rules unchanged.
         with patch.object(packaging, "PACKAGING_PACKAGES", specifications), patch.dict(os.environ, environment, clear=True):

@@ -1,0 +1,1063 @@
+{
+  "hmac": {
+    "helpers": [
+      "scripts/cryptography/hmac_owner_contract.py",
+      "scripts/cryptography/legacy_hmac_owner_contract.py",
+      "scripts/cryptography/rust_source_contract.py",
+      "scripts/hmac/check-hmac-hosted-cleanup.py",
+      "scripts/hmac/hmac_callee_identity.py",
+      "scripts/hmac/hmac_constructor_state.py",
+      "scripts/hmac/hmac_engine_codegen.py",
+      "scripts/hmac/hmac_engine_construct.py",
+      "scripts/hmac/hmac_engine_construct_state.py",
+      "scripts/hmac/hmac_engine_final.py",
+      "scripts/hmac/hmac_engine_scratch.py",
+      "scripts/hmac/hmac_engine_update.py",
+      "scripts/hmac/hmac_execution_admission.py",
+      "scripts/hmac/hmac_execution_admission_contracts.py",
+      "scripts/hmac/hmac_execution_construct.py",
+      "scripts/hmac/hmac_execution_construct_contracts.py",
+      "scripts/hmac/hmac_execution_construct_state.py",
+      "scripts/hmac/hmac_execution_construct_tests.py",
+      "scripts/hmac/hmac_execution_drop.py",
+      "scripts/hmac/hmac_execution_final.py",
+      "scripts/hmac/hmac_execution_final_contracts.py",
+      "scripts/hmac/hmac_execution_iterator.py",
+      "scripts/hmac/hmac_execution_scratch.py",
+      "scripts/hmac/hmac_execution_update.py",
+      "scripts/hmac/hmac_hosted_authority.py",
+      "scripts/hmac/hmac_hosted_authority_tests.py",
+      "scripts/hmac/hmac_hosted_buffers.py",
+      "scripts/hmac/hmac_hosted_callee_admission.py",
+      "scripts/hmac/hmac_hosted_capture.py",
+      "scripts/hmac/hmac_hosted_capture_tests.py",
+      "scripts/hmac/hmac_hosted_capture_types.py",
+      "scripts/hmac/hmac_hosted_checkpoint_callees.py",
+      "scripts/hmac/hmac_hosted_checkpoint_results.py",
+      "scripts/hmac/hmac_hosted_checkpoint_tests.py",
+      "scripts/hmac/hmac_hosted_checkpoints.py",
+      "scripts/hmac/hmac_hosted_compiled.py",
+      "scripts/hmac/hmac_hosted_compiled_callee_tests.py",
+      "scripts/hmac/hmac_hosted_constructor.py",
+      "scripts/hmac/hmac_hosted_constructor_tests.py",
+      "scripts/hmac/hmac_hosted_consumer_prefix.py",
+      "scripts/hmac/hmac_hosted_consumers.py",
+      "scripts/hmac/hmac_hosted_contracts.py",
+      "scripts/hmac/hmac_hosted_guard_paths.py",
+      "scripts/hmac/hmac_hosted_input.py",
+      "scripts/hmac/hmac_hosted_input_tests.py",
+      "scripts/hmac/hmac_hosted_keyed.py",
+      "scripts/hmac/hmac_hosted_keyed_tests.py",
+      "scripts/hmac/hmac_hosted_lifecycle.py",
+      "scripts/hmac/hmac_hosted_loan_creation.py",
+      "scripts/hmac/hmac_hosted_loan_flow.py",
+      "scripts/hmac/hmac_hosted_loan_resources.py",
+      "scripts/hmac/hmac_hosted_loan_tests.py",
+      "scripts/hmac/hmac_hosted_loans.py",
+      "scripts/hmac/hmac_hosted_output.py",
+      "scripts/hmac/hmac_hosted_output_paths.py",
+      "scripts/hmac/hmac_hosted_output_tests.py",
+      "scripts/hmac/hmac_hosted_placement.py",
+      "scripts/hmac/hmac_hosted_preentry.py",
+      "scripts/hmac/hmac_hosted_prefix.py",
+      "scripts/hmac/hmac_hosted_prefix_tests.py",
+      "scripts/hmac/hmac_hosted_retained_tests.py",
+      "scripts/hmac/hmac_hosted_scalar.py",
+      "scripts/hmac/hmac_hosted_scalar_callee_tests.py",
+      "scripts/hmac/hmac_hosted_storage.py",
+      "scripts/hmac/hmac_hosted_tail.py",
+      "scripts/hmac/hmac_hosted_tail_transfer.py",
+      "scripts/hmac/hmac_hosted_transaction.py",
+      "scripts/hmac/hmac_hosted_transaction_tests.py",
+      "scripts/hmac/hmac_hosted_transaction_values.py",
+      "scripts/hmac/hmac_hosted_verify.py",
+      "scripts/hmac/hmac_hosted_verify_tests.py",
+      "scripts/hmac/hmac_inventory.py",
+      "scripts/hmac/hmac_verifiers.py",
+      "scripts/hmac/test-hmac-hosted-cleanup.py",
+      "scripts/repository/facade_cargo_environment.py"
+    ],
+    "selections": [
+      {
+        "id": "repository-01aab5d012b3ff6a",
+        "command": [
+          "python3",
+          "scripts/hmac/test-hmac-hosted-cleanup.py",
+          "HostedTests.test_msrv_output_speculation_is_not_admission",
+          "HostedTests.test_output_provenance_lifetimes_and_cleanup_paths"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-0974afde7ff13a34",
+        "command": [
+          "python3",
+          "scripts/hmac/test-hmac-hosted-cleanup.py",
+          "HostedTests.test_public_verification_result_domain_and_profile",
+          "HostedTests.test_real_compiling_public_verification_mutants"
+        ],
+        "compilers": [
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-24046be4f9898718",
+        "command": [
+          "python3",
+          "scripts/hmac/test-hmac-hosted-cleanup.py",
+          "HostedTests.test_emitted_compiler_identity_cannot_borrow_other_niche",
+          "HostedTests.test_msrv_authority_error_niche_is_not_interchangeable",
+          "HostedTests.test_worker_authority_transfer_admission_and_lifetime"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-39dded231efc63bb",
+        "command": [
+          "python3",
+          "scripts/hmac/test-hmac-hosted-cleanup.py",
+          "HostedTests.test_msrv_hosted_constructor_transfers_and_tag_provenance",
+          "HostedTests.test_real_compiled_hosted_constructor_mutants"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-510cceb0eca9b8fc",
+        "command": [
+          "python3",
+          "scripts/hmac/test-hmac-hosted-cleanup.py",
+          "HostedTests.test_actual_scalar_constructor_and_consuming_callees",
+          "HostedTests.test_msrv_scalar_constructor_and_consuming_callees",
+          "HostedTests.test_real_compiling_scalar_callee_mutants",
+          "HostedTests.test_scalar_tag_and_partial_owner_cannot_escape"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-5191a0fa1ae06221",
+        "command": [
+          "python3",
+          "scripts/hmac/test-hmac-hosted-cleanup.py",
+          "HostedTests.test_capture_fields_reject_substitution_and_missing_initialization",
+          "HostedTests.test_capture_type_declarations_do_not_admit_owned_keyed_state",
+          "HostedTests.test_worker_factory_inputs_and_local_destinations"
+        ],
+        "compilers": [
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-52382ee0d626d362",
+        "command": [
+          "python3",
+          "scripts/hmac/test-hmac-hosted-cleanup.py",
+          "HostedTests.test_actual_wrapper_and_abstraction",
+          "HostedTests.test_every_instruction_and_argument_is_load_bearing",
+          "HostedTests.test_extra_access_unknown_identity_and_alias_cycle_reject"
+        ],
+        "compilers": [
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-5eadfa6b7be85bdd",
+        "command": [
+          "python3",
+          "scripts/hmac/test-hmac-hosted-cleanup.py",
+          "HostedTests.test_emitted_checkpoint_callees",
+          "HostedTests.test_msrv_worker_checkpoint_guards_and_results",
+          "HostedTests.test_real_compiled_checkpoint_callee_mutants",
+          "HostedTests.test_real_compiled_worker_checkpoint_mutants"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-71a86486bfd3e33f",
+        "command": [
+          "python3",
+          "scripts/hmac/test-hmac-hosted-cleanup.py",
+          "HostedTests.test_split_scalar_initialization_and_tag_state"
+        ],
+        "compilers": [
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-797354369057fc29",
+        "command": [
+          "python3",
+          "scripts/hmac/test-hmac-hosted-cleanup.py",
+          "HostedTests.test_actual_public_loan_and_construction_mutations",
+          "HostedTests.test_actual_public_loan_resource_mutations",
+          "HostedTests.test_loan_flow_undefined_shift_and_unreviewed_effects",
+          "HostedTests.test_msrv_public_loan_and_construction_mutations"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-89cd4e459dc04a84",
+        "command": [
+          "python3",
+          "scripts/hmac/test-hmac-hosted-cleanup.py",
+          "HostedTests.test_dynamic_tag_cannot_escape_before_returned_owners",
+          "HostedTests.test_dynamic_tag_partial_overwrites",
+          "HostedTests.test_exact_constructor_helper_contexts",
+          "HostedTests.test_hosted_constructor_transfers_and_tag_provenance"
+        ],
+        "compilers": [
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-8e9fc491ac9f9034",
+        "command": [
+          "python3",
+          "scripts/hmac/test-hmac-hosted-cleanup.py",
+          "HostedTests.test_actual_public_verification_mutations",
+          "HostedTests.test_composed_hosted_checker_reaches_every_boundary",
+          "HostedTests.test_msrv_public_verification_mutations",
+          "HostedTests.test_public_verification_decision_guard_is_load_bearing"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-96a0b14c8845d403",
+        "command": [
+          "python3",
+          "scripts/hmac/test-hmac-hosted-cleanup.py",
+          "HostedTests.test_nonunwinding_source_premises_are_raw_byte_bound",
+          "HostedTests.test_real_compiled_resource_and_capture_mutants",
+          "HostedTests.test_unavailable_only_build_cannot_count_as_accelerated_coverage"
+        ],
+        "compilers": [
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-a03068027be82a53",
+        "command": [
+          "python3",
+          "scripts/hmac/test-hmac-hosted-cleanup.py",
+          "HostedTests.test_compiled_worker_cleanup_paths_and_helpers",
+          "HostedTests.test_msrv_inline_cleanup_and_loop_lifetimes",
+          "HostedTests.test_retained_storage_lifetimes",
+          "HostedTests.test_scalar_worker_cleanup_paths_and_helpers"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-a4fb7887321604dc",
+        "command": [
+          "python3",
+          "scripts/hmac/test-hmac-hosted-cleanup.py",
+          "HostedTests.test_callbacks_must_resolve_and_belong_to_the_actual_session",
+          "HostedTests.test_demangler_fallback_and_exact_population",
+          "HostedTests.test_each_host_executor_rejects_lifecycle_mutations",
+          "HostedTests.test_graph_contamination_and_missing_owners"
+        ],
+        "compilers": [
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-abe7941ccae18fcb",
+        "command": [
+          "python3",
+          "scripts/hmac/test-hmac-hosted-cleanup.py",
+          "HostedTests.test_input_iterators_and_tail_provenance",
+          "HostedTests.test_msrv_input_split_and_result_cases",
+          "HostedTests.test_nonempty_part_cannot_repeat_before_advance",
+          "HostedTests.test_real_compiled_input_mutants"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-bc9fc370d0857f1c",
+        "command": [
+          "python3",
+          "scripts/hmac/test-hmac-hosted-cleanup.py",
+          "HostedTests.test_public_loan_clear_guard_is_load_bearing",
+          "HostedTests.test_real_compiling_public_loan_mutants"
+        ],
+        "compilers": [
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-e1ee14d77592d7c2",
+        "command": [
+          "python3",
+          "scripts/hmac/test-hmac-hosted-cleanup.py",
+          "HostedTests.test_real_compiled_host_transaction_mutants",
+          "HostedTests.test_transaction_undefined_bits_and_unsigned_extension"
+        ],
+        "compilers": [
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-ee14450624659eca",
+        "command": [
+          "python3",
+          "scripts/hmac/test-hmac-hosted-cleanup.py",
+          "HostedTests.test_actual_compiled_consuming_handoffs_and_cleanup",
+          "HostedTests.test_compiled_handoff_continuation_guard_is_load_bearing",
+          "HostedTests.test_msrv_compiled_consuming_handoffs_and_cleanup",
+          "HostedTests.test_real_compiling_accelerated_consumer_mutants"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-eff89e7447bf2554",
+        "command": [
+          "python3",
+          "scripts/hmac/test-hmac-hosted-cleanup.py",
+          "HostedTests.test_worker_checkpoint_arguments_guards_and_results"
+        ],
+        "compilers": [
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-faf282d949ab66c0",
+        "command": [
+          "python3",
+          "scripts/hmac/test-hmac-hosted-cleanup.py",
+          "HostedTests.test_keyed_result_admission_transfer_and_lifetimes",
+          "HostedTests.test_msrv_keyed_error_niche_is_not_interchangeable"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-fd18013034bff4a2",
+        "command": [
+          "python3",
+          "scripts/hmac/test-hmac-hosted-cleanup.py",
+          "HostedTests.test_emitted_buffer_destructor_mutations",
+          "HostedTests.test_hosted_actual_constructor_authority_binding",
+          "HostedTests.test_joined_host_transaction_mutations",
+          "HostedTests.test_msrv_joined_host_transaction_mutations"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      }
+    ]
+  },
+  "legacy_hmac": {
+    "helpers": [
+      "scripts/cryptography/hmac_owner_contract.py",
+      "scripts/cryptography/legacy_hmac_owner_contract.py",
+      "scripts/cryptography/rust_source_contract.py",
+      "scripts/hmac/hmac_callee_identity.py",
+      "scripts/hmac/hmac_constructor_state.py",
+      "scripts/hmac/hmac_engine_codegen.py",
+      "scripts/hmac/hmac_engine_final.py",
+      "scripts/hmac/hmac_engine_scratch.py",
+      "scripts/hmac/hmac_engine_update.py",
+      "scripts/hmac/hmac_execution_admission_contracts.py",
+      "scripts/hmac/hmac_execution_construct_contracts.py",
+      "scripts/hmac/hmac_execution_drop.py",
+      "scripts/hmac/hmac_execution_final_contracts.py",
+      "scripts/hmac/hmac_execution_iterator.py",
+      "scripts/hmac/hmac_execution_update.py",
+      "scripts/hmac/hmac_hosted_authority.py",
+      "scripts/hmac/hmac_hosted_capture.py",
+      "scripts/hmac/hmac_hosted_checkpoint_results.py",
+      "scripts/hmac/hmac_hosted_checkpoint_tests.py",
+      "scripts/hmac/hmac_hosted_checkpoints.py",
+      "scripts/hmac/hmac_hosted_contracts.py",
+      "scripts/hmac/hmac_hosted_input.py",
+      "scripts/hmac/hmac_hosted_input_tests.py",
+      "scripts/hmac/hmac_hosted_keyed.py",
+      "scripts/hmac/hmac_hosted_lifecycle.py",
+      "scripts/hmac/hmac_hosted_loan_flow.py",
+      "scripts/hmac/hmac_hosted_loan_resources.py",
+      "scripts/hmac/hmac_hosted_output.py",
+      "scripts/hmac/hmac_hosted_output_paths.py",
+      "scripts/hmac/hmac_hosted_preentry.py",
+      "scripts/hmac/hmac_hosted_scalar.py",
+      "scripts/hmac/hmac_hosted_storage.py",
+      "scripts/hmac/hmac_hosted_tail.py",
+      "scripts/hmac/hmac_hosted_tail_transfer.py",
+      "scripts/hmac/hmac_hosted_transaction_values.py",
+      "scripts/hmac/hmac_inventory.py",
+      "scripts/legacy-hmac/check-legacy-hmac-hosted-cleanup.py",
+      "scripts/legacy-hmac/legacy_hmac_engine_codegen.py",
+      "scripts/legacy-hmac/legacy_hmac_engine_construct.py",
+      "scripts/legacy-hmac/legacy_hmac_engine_final.py",
+      "scripts/legacy-hmac/legacy_hmac_engine_scratch.py",
+      "scripts/legacy-hmac/legacy_hmac_execution_admission.py",
+      "scripts/legacy-hmac/legacy_hmac_execution_admission_contracts.py",
+      "scripts/legacy-hmac/legacy_hmac_execution_final.py",
+      "scripts/legacy-hmac/legacy_hmac_execution_graph.py",
+      "scripts/legacy-hmac/legacy_hmac_execution_handoff.py",
+      "scripts/legacy-hmac/legacy_hmac_execution_iterator.py",
+      "scripts/legacy-hmac/legacy_hmac_execution_state.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_authority.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_authority_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_backend.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_batch_creation.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_batch_flow.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_batch_loan_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_batch_loans.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_buffers.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_capture.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_capture_model.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_capture_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_checkpoint_boundaries.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_checkpoint_compiled_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_checkpoint_flow.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_checkpoint_inline.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_checkpoint_results.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_checkpoint_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_checkpoints.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_compiled_fixture.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_construct.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_construct_model.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_construct_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_constructor.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_envelope.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_input.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_keyed.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_keyed_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_launch.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_lifecycle.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_loan_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_loans.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_boundaries.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_checkpoint.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_checkpoint_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_compiled_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_control.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_control_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_decision.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_decision_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_health.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_lane_layout.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_lane_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_lanes.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_report_caller.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_report_compiled_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_report_layout.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_report_logic.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_report_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_result_cleanup.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_result_cleanup_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_result_layout.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_result_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_result_tools.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_result_transport.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_status.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_tag_cleanup.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_tag_cleanup_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_tag_copy.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_md5_tag_copy_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_normalization.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_normalization_compiled_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_normalization_contracts.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_normalization_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_output.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_prearm.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_prearm_cases.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_prearm_flow.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_prearm_layout.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_prearm_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_preentry.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_reconcile.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_reconcile_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_retained.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_scalar.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_scalar_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_storage.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_stream_compiled_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_stream_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_transaction.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_transaction_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_types.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_unavailable.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_verify.py",
+      "scripts/legacy-hmac/legacy_hmac_hosted_verify_tests.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_admission.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_descriptors.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_error_flow.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_fence.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_handoff.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_inner_owner.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_inner_report.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_key_model.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_keys.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_normalization.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_normalization_bits.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_normalization_flow.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_normalization_return.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_outer.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_outer_model.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_outer_result.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_output_views.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_pad_model.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_pads.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_phases.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_report_return.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_reports.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_results.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_return_layout.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_return_writes.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_row_contracts.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_row_origins.py",
+      "scripts/legacy-hmac/legacy_hmac_md5_rows.py",
+      "scripts/legacy-hmac/legacy_hmac_timing.py",
+      "scripts/legacy-hmac/legacy_hmac_timing_runner.py",
+      "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+      "scripts/repository/facade_cargo_environment.py"
+    ],
+    "selections": [
+      {
+        "id": "repository-03f1d2b9bebce80b",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_compiled_md5_tag_cleanup_defects",
+          "Hosted.test_md5_tag_cleanup_paths_and_mutations"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-058f9e2b2b42f93d",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_compiled_stream_input_output_and_checkpoints"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-1ff9a4ad7fcb6f4d",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_scalar_retained_cleanup_and_actual_helpers",
+          "Hosted.test_scalar_retained_initialization_and_terminals",
+          "Hosted.test_scalar_retained_storage"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-24d750f6f6a5b475",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_compiled_mode_declarations",
+          "Hosted.test_compiled_out_workers_only_reject",
+          "Hosted.test_keyed_selection_capture_operands",
+          "Hosted.test_worker_backend_matching_guard"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-3728f8f997e23036",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_md5_report_count_backend_and_rejection_transport",
+          "Hosted.test_md5_report_decision_truth_table",
+          "Hosted.test_md5_report_typed_layout_probes"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-4de6f66a75c6a9a7",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_projection_reconciliation",
+          "Hosted.test_reconciliation_output_is_atomic"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-4fe746dcb9d21c88",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_every_capture_field_initialization",
+          "Hosted.test_worker_capture_reads_and_take_order",
+          "Hosted.test_worker_completion_panic_and_result_order"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-504d6844437d0bde",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_compiled_public_verification_defects",
+          "Hosted.test_public_verification_results",
+          "Hosted.test_public_verification_typed_and_padding"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-52f6fd22f835e3be",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_unknown_effects_and_fatal_join_failure"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-549d2005774ac3a1",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_normalization_descriptor_lifetimes_and_drops",
+          "Hosted.test_normalization_independent_layout_and_initial_bytes",
+          "Hosted.test_normalization_routes_and_copy_results"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-55fcad8fc4597e80",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_compiled_md5_health_checkpoint_defects"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-57936d560ccf738f",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_stream_output_provenance_and_cleanup"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-678b24accf409085",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_scalar_checkpoint_boundaries_and_error_transport",
+          "Hosted.test_scalar_checkpoint_callee_acquire_and_result",
+          "Hosted.test_stream_input_iterators_tail_and_error_admission",
+          "Hosted.test_stream_iteration_repeated_update"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-67b2526cefae01f7",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_native_call_population_and_handle_identity",
+          "Hosted.test_no_work_or_reclaim_while_worker_unjoined",
+          "Hosted.test_shared_checker_is_unchanged_and_intrinsics_are_narrow",
+          "Hosted.test_stack_clear_identity_and_completion"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-79dd7c8fe009d130",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_batch_loan_scalar_walker",
+          "Hosted.test_compiled_batch_loan_defects"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-8727d9b8bfd39625",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_compiled_host_transaction_defects",
+          "Hosted.test_host_output_quarantine_transactions"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-89fa210b0b54d13e",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_compiled_md5_report_defects"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-8b81a09bebcb5d2a",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_create_and_join_status_polarity",
+          "Hosted.test_exact_worker_identity_not_another_valid_closure",
+          "Hosted.test_graph_identity_features_paths_and_edges",
+          "Hosted.test_launch_storage_and_attribute_transport"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-8d3a9f8f4797e57f",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_compiled_md5_lane_defects",
+          "Hosted.test_md5_lane_slots_payloads_and_rejections",
+          "Hosted.test_md5_lane_typed_geometry"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-9b398551a1cd2a98",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_compiled_md5_report_transport_defects",
+          "Hosted.test_md5_result_bytes_lifetimes_and_errors",
+          "Hosted.test_md5_result_typed_projections"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-9bbe59d74c22fa80",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_compiled_prearm_defects",
+          "Hosted.test_prearm_projection_cache_and_walker",
+          "Hosted.test_prearm_request_policy_and_artifact_defects",
+          "Hosted.test_prearm_typed_layout_probes"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-a08b90c35936569e",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_compiled_ordinary_loan_defects",
+          "Hosted.test_ordinary_loan_factories",
+          "Hosted.test_ordinary_loan_methods",
+          "Hosted.test_ordinary_loan_probe_population"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-a88b8995e202a026",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_borrowed_lifetime_reconciliation",
+          "Hosted.test_compiled_batch_width_probe_defect",
+          "Hosted.test_compiled_ordinary_setup_cleanup_defect",
+          "Hosted.test_ordinary_setup_error_paths"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-af41975fd30189a6",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_compiled_md5_decision_defects",
+          "Hosted.test_md5_candidate_and_decision_transport",
+          "Hosted.test_md5_typed_decision_and_success_modes"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-b1390ef6065db2e9",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_attribute_error_cannot_launch",
+          "Hosted.test_compiled_consumer_route_mutants",
+          "Hosted.test_compiled_public_adapter_arguments",
+          "Hosted.test_consumer_arguments_and_route_binding"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-b40e8d9fc76c55e1",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_compiled_md5_control_defects",
+          "Hosted.test_md5_control_transport_and_vtable",
+          "Hosted.test_md5_control_typed_layout_and_callbacks"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-b4613f13c350ffee",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_compiled_md5_pending_result_defects",
+          "Hosted.test_md5_pending_result_cleanup_mutations"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-b9b201d645ec42df",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_accelerated_checkpoint_callee_paths_and_lifetimes",
+          "Hosted.test_accelerated_checkpoint_placement_and_error_results",
+          "Hosted.test_checkpoint_typed_probes_are_load_bearing",
+          "Hosted.test_inlined_checkpoint_temporary_owner_provenance"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-c0b30169cd6d35de",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_buffer_destructor_identity_order_and_keep",
+          "Hosted.test_capture_extra_late_conditional_and_escaped_writes",
+          "Hosted.test_capture_source_contracts",
+          "Hosted.test_compiled_host_capture_and_buffer_defects"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-d21b9dc44625f653",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_compiled_scalar_constructor_provenance"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-d273904dffd0ae84",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_scalar_constructor_births_transfers_and_renaming",
+          "Hosted.test_scalar_constructor_key_pad_status_and_cleanup",
+          "Hosted.test_scalar_constructor_scratch_and_catch_boundary"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-d2f163fc5f001ac4",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_md5_checkpoint_callee_provenance",
+          "Hosted.test_md5_health_and_checkpoint_boundaries",
+          "Hosted.test_md5_status_bit_identity_and_cycle_rejection"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-e29f3dd756b3d0c4",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_compiled_accelerated_checkpoint_defects"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-e5fa01e2760b6f09",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_authority_compiler_identity_is_not_inferred_from_niche",
+          "Hosted.test_authority_error_exclusion_and_live_storage",
+          "Hosted.test_authority_every_transfer_write_and_escape",
+          "Hosted.test_authority_factory_mode_identity_and_keyed_borrow"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-e64f9e5f65e6977c",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_compiled_md5_tag_copy_defects",
+          "Hosted.test_md5_tag_copy_masks_lengths_and_errors",
+          "Hosted.test_md5_tag_copy_operand_guard_and_effect_mutations"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-f7303a3d4f3ae00d",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_batch_loan_factories",
+          "Hosted.test_batch_loan_forwarding_and_move",
+          "Hosted.test_batch_loan_methods",
+          "Hosted.test_batch_loan_projection_cache_identity"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      },
+      {
+        "id": "repository-fc9995b9c28f75ae",
+        "command": [
+          "python3",
+          "scripts/legacy-hmac/test-legacy-hmac-hosted-cleanup.py",
+          "Hosted.test_keyed_admission_bytes_errors_and_renaming",
+          "Hosted.test_keyed_storage_lifetimes_and_escapes",
+          "Hosted.test_keyed_terminal_handoffs",
+          "Hosted.test_retained_cleanup_and_selector_immutability"
+        ],
+        "compilers": [
+          "1.90.0",
+          "1.99.1"
+        ]
+      }
+    ]
+  }
+}

@@ -1,3 +1,5 @@
+// Integration binaries exercise different subsets of these shared helpers.
+#![allow(dead_code)]
 use serde_json::Value;
 use std::{
     fs,

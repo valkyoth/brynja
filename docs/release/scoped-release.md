@@ -82,8 +82,9 @@ invokes the historical diagnostic; it is not a publication step.
 For 0.25.3, the owner accepts the existing tested data as-is. Preserve original
 results, dates and provenance, including unmapped historical status. This is a
 release decision, not a claim of new executions or universal current passes.
-The pending .3 pentest, finite release checks and exact-candidate GitHub/tag
-guards still apply.
+The .3 pentest, finite release checks and exact-candidate GitHub/tag guards
+still apply; their actual disposition is recorded in the versioned report and
+release notes, not inferred from tracker status.
 
 ## Transition status
 
@@ -106,6 +107,10 @@ workflow is triggered just by a version bump or unrelated source change.
 `scripts/checks.sh --full-catalog` remains an explicitly requested historical
 catalog run, not the routine default.
 
-The .3 scoped pentest/retest, final committed-candidate gate and green GitHub
-handoff are still required. Do not publish .2 or call .3 release-ready based on
-this document. Existing captures and the GitHub-only .2 tag are unchanged.
+The .3 owner-supplied scoped pentest and finite final checks have passed; see
+the [review](../../security/pentest/v0.25.3.md) and
+[final-gate record](../../release-notes/RELEASE_NOTES_0.25.3.md#final-gate--pass-2026-11-01)
+for exact ranges, execution commit and limitations. The exact-candidate green
+GitHub and signed-tag handoff are still required. Do not publish .2 or infer
+publication authorization from this document alone. Existing captures and the
+GitHub-only .2 tag are unchanged.

@@ -1,8 +1,9 @@
 # v0.25.3 — Scoped verification and publication handoff
 
 Status: candidate; owner-supplied scoped pentest accepted on 2026-11-01 for
-37d29d9e063cd3181ebabf70af1fcf414f4b75e4. Final checks and green candidate CI
-remain required. Nothing has been published from this release.
+37d29d9e063cd3181ebabf70af1fcf414f4b75e4. All 12 finite final checks passed
+on 2026-11-01 as recorded below. Green candidate CI and signed-tag/publication
+handoff remain required. Nothing has been published from this release.
 
 ## Scope
 
@@ -50,11 +51,41 @@ grouping, profile isolation, preserved dates/history, mixed failures/outdated
 inputs and fractional UTC ordering. Saved results and the generated report were
 unchanged; no cryptographic campaign was run.
 
-Next: obtain the scoped .3 pentest/retest result and resolve any concrete
-findings, then run the finite final gate on the clean committed candidate,
-push and wait for that candidate's GitHub checks, and publish after the existing
-identity/status guards. No final-gate pass, independent review, tag, push or
-publication is claimed here.
+Next: push the candidate and wait for that exact commit's GitHub/CodeQL results,
+then create the owner-approved signed tag and publish after the existing
+identity/status guards. No tag, push or publication is claimed here.
+
+### Final gate — PASS (2026-11-01)
+
+The owner's supplied assessment was recorded in documentation-only commit
+`fca1c7729106c225a57b21e233c4e133cef3f6a2`. The final gate ran against that clean
+commit with its committed PASS review disposition. All 12 entries from
+`scripts/release/final-checks.toml` passed:
+
+- `tracker-tests`: 50 tests; `tracker-lint`; `tracker-format`.
+- `registry-tests`: 160 tests; `catalog-tests`: three tests.
+- `release-regressions`: 22 tests; `release-metadata`: 37 policy cases and ten
+  checkpoint tests.
+- `package-plan`: 30 crates; `package-contents`: 30 file lists and two root
+  archives, with no verification compilation or upload.
+- `dependency-policy`; `advisories`: 44 production/workspace dependencies;
+  `tracker-advisories`: 59 standalone-tool dependencies, using 1,395 loaded
+  RustSec advisories.
+
+The initial full-list invocation stopped after ten successful checks because
+the sandbox denied the advisory-cache lock. Only `--check advisories` was
+retried with cache access (PASS), followed by the remaining
+`--check tracker-advisories` (PASS). Earlier successes were retained, not rerun;
+this was an environment error, not a vulnerability finding. The worktree stayed
+clean throughout execution. The initial output remains in
+`target/release-0.25.3-final-gate.log`; the final tracker scan is in
+`target/release-0.25.3-tracker-advisories.log`. These are local, untracked logs.
+
+This follow-up records results and updates transition wording only. It changes
+no implementation, manifests, registry, acceptance conditions, gate commands or
+stored evidence. The successful checks retain the execution commit above; they
+are not relabeled as executions on the follow-up commit. GitHub must assess the
+actual pushed commit. No Miri/Kani/ASan/native campaign or evidence refresh ran.
 
 ### Development history
 

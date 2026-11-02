@@ -154,6 +154,34 @@ class ScopedRelease(unittest.TestCase):
         for token in ('check-rust-version-matrix', 'run-verification.py', 'needs:', 'continue-on-error'):
             self.assertNotIn(token, routine)
 
+    def test_routine_ci_fetches_locked_workspace_before_offline_checks(self):
+        workflow = (scoped.ROOT / '.github/workflows/ci.yml').read_text()
+
+        def validate(text):
+            checks_job = text.split('\n  checks:\n', 1)[1].split('\n  audit:', 1)[0]
+            commands = [line.strip().removeprefix('run: ')
+                        for line in checks_job.splitlines()
+                        if line.strip().startswith('run: ')]
+            self.assertEqual(commands.count('cargo fetch --locked'), 1)
+            self.assertLess(commands.index('rustup show'),
+                            commands.index('cargo fetch --locked'))
+            self.assertLess(commands.index('cargo fetch --locked'),
+                            commands.index('python3 scripts/release/scoped_release.py --ci'))
+
+        validate(workflow)
+        fetch = '        run: cargo fetch --locked\n'
+        run = '        run: python3 scripts/release/scoped_release.py --ci\n'
+        for replacement in ('', '        # run: cargo fetch --locked\n',
+                            '        run: cargo fetch\n',
+                            '        run: cargo fetch --locked --offline\n',
+                            '        run: cargo fetch --locked --manifest-path assurance/hkdf-timing/Cargo.toml\n'):
+            with self.subTest(replacement=replacement), self.assertRaises(AssertionError):
+                validate(workflow.replace(fetch, replacement))
+        with self.assertRaises(AssertionError):
+            validate(workflow.replace(fetch, '').replace(run, run + fetch))
+        with self.assertRaises(AssertionError):
+            validate(workflow.replace(fetch, '').replace('\n  audit:\n', '\n  audit:\n' + fetch))
+
     def test_only_explicit_final_checks_run_no_evidence(self):
         # An unrelated tracker failure/missing receipt must not block this gate.
         self.write('verification/results.json', '{"status":"outdated, failed"}')

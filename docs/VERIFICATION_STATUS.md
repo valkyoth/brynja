@@ -4,6 +4,10 @@
 
 Modern SHA-2 HKDF/TLS labels in `brynja-crypto` and explicit legacy SHA-1 HKDF
 in `brynja-legacy-hkdf` are implemented but qualification is unfinished.
+The [owner-supplied scoped retest](../security/pentest/v0.26.0.md) through
+`5ca34e14` reports no qualifying Critical/High/Medium findings. This records
+development review, not named independent cryptographic verification,
+military-production approval or completed cross-target qualification.
 The [requirements and control mapping](security-controls.md#hkdf-development-contract-v0260)
 separates vectors, ownership, debug/optimized lifecycle tests, public-bounds
 proofs, bounded public-owner and operation-scratch clearing dispatch, source-level

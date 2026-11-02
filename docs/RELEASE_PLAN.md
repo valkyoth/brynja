@@ -5433,10 +5433,15 @@ Exit criteria:
 
 ### v0.26.0 - Complete HKDF And TLS Labels
 
-Status: awaiting pentest
+Status: awaiting green CI
 
 Portable modern derivation and isolated SHA-1 compatibility are implemented.
-Candidate metadata is prepared; qualification/review and release approval remain pending.
+The owner-supplied scoped retest through `5ca34e14` reports no qualifying
+Critical/High/Medium findings; its disposition and deployment restrictions are
+recorded in [the permanent review](../security/pentest/v0.26.0.md).
+GitHub/CodeQL passed for that head. Final-gate completion, exact-candidate CI
+after recording, and signed-tag approval remain pending; broader independent
+cryptographic and deployment qualification are not claimed.
 
 Plan scope: Implement complete generic RFC 5869 HKDF Extract and Expand over admitted HMAC algorithms plus TLS HKDF-Expand-Label, including absent versus empty salt, empty input and info, exact 255-block bounds, checked output and counter exhaustion, aliasing policy, secret-owned intermediate state, cleanup, and symbolic or bounded proof harnesses; modern profiles admit SHA-2 while any SHA-1 compatibility use remains isolated and explicit.
 
@@ -5496,8 +5501,9 @@ Remaining candidate/review work, before claiming this milestone complete:
   0.26.0 finite gate manifest. The internal stage selects zero uploads; existing
   support versions are retained. Do not turn the scoped verification inventory
   into a publication-time campaign;
-- obtain scoped independent security/pentest review of the production API,
-  derivation invariants and declared evidence limits. Source review, bounded
+- retain the recorded owner-supplied scoped pentest of the production API,
+  derivation invariants and declared evidence limits. It is not named independent
+  cryptographic verification. Source review, bounded
   compiler dispatch checks and single-host timing diagnostics do not close
   side-channel qualification or prove whole-frame erasure. Keep the owner
   qualification marked pending unless separately justified; do not relabel

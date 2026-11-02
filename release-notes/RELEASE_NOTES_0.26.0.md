@@ -1,7 +1,8 @@
 # v0.26.0 candidate — HKDF and TLS labels
 
-Status: local development candidate for review; scoped pentest, final gate and
-exact-candidate GitHub/CodeQL are pending. No tag or publication is authorized
+Status: scoped owner-supplied pentest/retest recorded through `5ca34e14`;
+GitHub/CodeQL passed for that head. Final gate and exact-candidate checks after
+recording remain pending. No tag or publication is authorized
 by these notes. This is an internal milestone, with zero crates.io uploads.
 
 ## Implemented scope
@@ -44,6 +45,25 @@ screen is not a constant-time certification. See the
 [security contract](../docs/security-controls.md#hkdf-development-contract-v0260).
 
 ## Release handoff — pending
+
+### Final scoped retest (2026-11-02)
+
+The [permanent assessment](../security/pentest/v0.26.0.md) records the supplied
+review from v0.25.3 through `5ca34e14`: zero qualifying Critical, High or Medium
+findings. The baseline's abbreviated ID identifies the annotated tag object;
+the record includes its peeled commit. Reviewer-reported tests remain attributed
+to that reviewer rather than becoming new local tracker results.
+
+Deployment restrictions remain: independently qualified target/compiler/profile
+combinations, explicit legacy-only SHA-1 approval, application input work limits,
+protocol-enforced TLS hash/transcript selection, and controls for copies outside
+owned clearing regions. This internal milestone is not military-production
+approval, FIPS validation or named independent cryptographic verification.
+
+The CI dependency bootstrap was tested with a fresh Cargo cache and 24 scoped
+release regressions, then passed on GitHub at `5ca34e14`. All four CodeQL analyses
+passed. Alert #13 was narrowly dismissed as synthetic test material; production
+scanning remains enabled. No production code changed in that CI correction.
 
 ### Review remediation (2026-11-01)
 
@@ -189,7 +209,7 @@ routine CI uses its explicit 18-check subset plus the separate audit job.
 It does not run the tracker or restart Miri/Kani/sanitizer/timing/compiler
 campaigns. Preparing or listing this manifest does not mean the final gate ran.
 
-Remaining: obtain and accurately record the candidate's scoped pentest/retest,
-run the finite final gate, push and wait for that commit's
-GitHub/CodeQL results, then obtain explicit signed-tag approval. No PASS report
-has been fabricated for this candidate and nothing has been uploaded.
+Remaining: commit the review-recording changes, run the finite final gate,
+push and wait for that commit's GitHub/CodeQL results, then obtain explicit
+signed-tag approval. The scoped review disposition is now recorded; nothing
+has been uploaded to crates.io.

@@ -1,8 +1,8 @@
 # Finite HKDF development-candidate gate. Verification campaigns stay separate.
 # No crates.io publication is selected for this internal milestone.
 schema = 1
-version = "0.26.0"
-scope = "Portable modern HKDF/TLS labels, isolated legacy HKDF-SHA-1 and their API/metadata integrations. Scoped pentest required; no historical evidence-freshness gate or implicit dynamic/proof/timing campaign."
+version = "0.26.1"
+scope = "Modern/legacy HKDF multipart info, packaged public API acceptance, license completeness and candidate metadata. Owner-supplied scoped pentest/retest recorded; no historical evidence-freshness gate or implicit dynamic/proof/timing campaign."
 ci_checks = ["hkdf-tests","hkdf-lint","hkdf-format","facade-integration","hkdf-owner-contract","hkdf-proof-adapter","hkdf-timing-parser","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
 
 [[checks]]
@@ -99,6 +99,16 @@ timeout_seconds = 120
 id = "sbom"
 command = ["scripts/release/generate-sbom.sh","--check"]
 timeout_seconds = 120
+
+[[checks]]
+id = "hkdf-package-runner-tests"
+command = ["python3","scripts/hkdf/test-hkdf-public-api.py"]
+timeout_seconds = 120
+
+[[checks]]
+id = "hkdf-packaged-endpoints"
+command = ["python3","scripts/hkdf/check-hkdf-public-api.py","--family","all"]
+timeout_seconds = 300
 
 [[checks]]
 id = "dependency-policy"

@@ -1,8 +1,8 @@
 [release]
-version = "0.26.0"
-milestone = "0.26.0"
+version = "0.26.1"
+milestone = "0.26.1"
 baseline = "0.25.3"
-cumulative_milestones = ["0.26.0"]
+cumulative_milestones = ["0.26.0", "0.26.1"]
 policy = "independent"
 stage = "internal"
 # Legacy explicit runner default only; routine gates use final-checks.toml, not this selector.
@@ -11,8 +11,8 @@ exceptional = false
 exception_reason = ""
 
 [crates."brynja"]
-previous_version = "0.25.3"
-version = "0.26.0"
+previous_version = "0.26.0"
+version = "0.26.1"
 change = "code"
 publish = false
 reason = "HKDF development milestone; scoped pentest and green CI required before a signed tag. No crates.io publication selected."

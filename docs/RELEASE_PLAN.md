@@ -5747,7 +5747,7 @@ Exit criteria:
 
 ### v0.26.1 - HKDF Public API Usability Acceptance
 
-Status: in progress
+Status: awaiting green CI
 
 Plan scope: Exercise the packaged public HKDF API with all RFC 5869 cases, representative TLS 1.3 labels, multi-block outputs, boundary failures, irregular input ownership, modern SHA-2 instantiations, and the separately selected legacy SHA-1 compatibility path, proving no private API, allocation, std, implicit hash selection, or partial output is required.
 
@@ -5766,9 +5766,11 @@ assembly buffer, with explicit plain-concatenation semantics and regression
 coverage. Existing `expand` remains compatible. TLS transcript/key-schedule
 integration stays at v0.109.0, not this milestone.
 See the acceptance document for finding dispositions and rerun results.
-Candidate version and release-gate preparation, commit, scoped pentest retest,
-green GitHub/CodeQL and signed tag remain
-separate pending steps; this is not a release approval or package publication.
+Candidate version and release-gate metadata are prepared. The owner-supplied
+scoped pentest and final license-packaging retest are recorded in
+`security/pentest/v0.26.1.md`. The finite final gate, exact-candidate green
+GitHub/CodeQL and explicit signed-tag approval remain separate requirements;
+this is not package publication or independent cryptographic qualification.
 
 The user has explicitly requested a pentest before the final gate for this
 milestone. This activates the exceptional-review requirement below: commit the

@@ -201,6 +201,9 @@ def package_files(crate):
             paths.add(relative)
     if not {Path('Cargo.toml'), Path('src/lib.rs')} <= paths:
         raise ValueError('package is missing its manifest or library')
+    for required in ('LICENSE-APACHE', 'LICENSE-MIT', 'README.md'):
+        if Path(required) not in paths:
+            raise ValueError(f'package lacks {required}: {crate}')
     return paths
 
 

@@ -370,3 +370,26 @@ The temporary `PENTEST.md` was deleted after preserving this disposition and
 validation record. Repository changes remain uncommitted; no tag, push or
 publication was performed. The normal committed-candidate retest and final
 gate remain pending.
+
+## License packaging retest — 2026-11-03
+
+The retest of `ca290d0b` found one remaining Low packaging defect:
+`brynja-legacy-hkdf` declared both license texts and a README in its include
+list, but those files did not exist. The crate now carries the same MIT and
+Apache-2.0 license texts as the other legacy crates, plus a README documenting
+legacy-only use, multipart semantics and qualification/cleanup limits.
+
+The packaged runner now requires `LICENSE-APACHE`, `LICENSE-MIT` and `README.md`
+in every selected crate, rather than treating unmatched include entries as
+optional. Regression tests cover each missing source document, symlinked
+documents and each missing archive document. Real Cargo archive parity remains
+covered. All 26 runner tests and 169 registry tests passed. Both registered
+modern and legacy packaged endpoint checks passed on Rust 1.90.0 and 1.99.1,
+including debug/release consumer tests, compiler-negative controls and no_std
+Cortex-M compilation. The copied license texts were byte-compared with the
+legacy HMAC crate, and `git diff --check` passed.
+
+No cryptographic implementation changed. The full compiler matrices and dynamic
+analysis were not rerun for this packaging-only fix; their earlier executions
+are not new evidence for the changed package inputs. No commit, tag, push or
+publication was performed in this follow-up.

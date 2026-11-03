@@ -188,6 +188,8 @@ class PublicApiTests(unittest.TestCase):
             + '[workspace]\n')
         (root / 'src/lib.rs').write_text('mod ignored; pub fn value() -> u8 { ignored::value() }\n')
         (root / 'src/ignored.rs').write_text('pub fn value() -> u8 { 42 }\n')
+        for name in ('LICENSE-APACHE', 'LICENSE-MIT', 'README.md'):
+            (root / name).write_text('synthetic package documentation\n')
         (root / '.gitignore').write_text('*.key\nPENTEST.md\n/src/ignored.rs\n')
         for name in ('notes.key', 'PENTEST.md', 'notes.txt'):
             (root / name).write_text('synthetic unpublished input\n')
@@ -197,13 +199,26 @@ class PublicApiTests(unittest.TestCase):
         for package in set(api.MODERN + api.LEGACY):
             paths = api.package_files(api.ROOT / 'crates' / package)
             self.assertIn(Path('src/lib.rs'), paths)
+            self.assertTrue({Path(p) for p in ('LICENSE-APACHE', 'LICENSE-MIT', 'README.md')} <= paths)
             self.assertNotIn(Path('PENTEST.md'), paths)
 
     def test_package_inputs_exclude_unpublished_files(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = self.package_fixture(Path(temporary) / 'source', list(api.PACKAGE_INPUTS))
             self.assertEqual(api.package_files(root),
-                             {Path(p) for p in ('Cargo.toml', 'src/lib.rs', 'src/ignored.rs')})
+                             {Path(p) for p in ('Cargo.toml', 'src/lib.rs', 'src/ignored.rs',
+                                               'LICENSE-APACHE', 'LICENSE-MIT', 'README.md')})
+
+    def test_missing_package_documentation_stops_before_cargo(self):
+        for name in ('LICENSE-APACHE', 'LICENSE-MIT', 'README.md'):
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as temporary:
+                base = Path(temporary)
+                crate = self.package_fixture(base / 'source', list(api.PACKAGE_INPUTS))
+                (crate / name).unlink()
+                with patch.object(api, 'run') as process:
+                    with self.assertRaisesRegex(ValueError, f'package lacks {name}'):
+                        api.package_files(crate)
+                    process.assert_not_called()
 
     def test_unreviewed_or_missing_include_list_fails_closed(self):
         for includes in (None, ['**/*'], [*api.PACKAGE_INPUTS, '*.key'],
@@ -214,7 +229,8 @@ class PublicApiTests(unittest.TestCase):
                     api.package_files(root)
 
     def test_package_inputs_reject_symlinks(self):
-        for name in ('Cargo.toml', 'src/ignored.rs', 'src/nested'):
+        for name in ('Cargo.toml', 'src/ignored.rs', 'src/nested',
+                     'LICENSE-APACHE', 'LICENSE-MIT', 'README.md'):
             with self.subTest(name=name), tempfile.TemporaryDirectory() as temporary:
                 base = Path(temporary)
                 root = self.package_fixture(base / 'source', list(api.PACKAGE_INPUTS))
@@ -225,7 +241,8 @@ class PublicApiTests(unittest.TestCase):
                     api.package_files(root)
 
     def test_archive_selection_and_bytes_cannot_drift(self):
-        for change in ('extra', 'missing', 'changed', 'manifest'):
+        for change in ('extra', 'missing', 'changed', 'manifest',
+                       'LICENSE-APACHE', 'LICENSE-MIT', 'README.md'):
             with self.subTest(change=change), tempfile.TemporaryDirectory() as temporary:
                 base = Path(temporary)
                 crate = self.package_fixture(base / 'source', list(api.PACKAGE_INPUTS))
@@ -240,6 +257,8 @@ class PublicApiTests(unittest.TestCase):
                     (unpacked / 'notes.key').write_text('synthetic extra')
                 elif change == 'missing':
                     (unpacked / 'src/ignored.rs').unlink()
+                elif change in ('LICENSE-APACHE', 'LICENSE-MIT', 'README.md'):
+                    (unpacked / change).unlink()
                 else:
                     (unpacked / ('Cargo.toml.orig' if change == 'manifest' else 'src/lib.rs')).write_text('altered')
                 with self.assertRaisesRegex(ValueError, 'archive'):

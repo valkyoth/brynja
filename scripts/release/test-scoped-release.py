@@ -58,9 +58,9 @@ class ScopedRelease(unittest.TestCase):
             scoped.enabled('garbage')
 
     def test_hkdf_candidate_gate_is_finite_and_does_not_publish(self):
-        plan = scoped.load('0.26.0')
+        plan = scoped.load('0.26.1')
         commands = {check['id']: check['command'] for check in plan['checks']}
-        self.assertEqual(len(commands), 21)
+        self.assertEqual(len(commands), 23)
         self.assertEqual(commands['release-plan'], ['scripts/release/test-release-plan.sh'])
         self.assertEqual(commands['hkdf-tests'],
             ['cargo', 'test', '--locked', '-p', 'brynja-crypto', '-p',
@@ -68,7 +68,12 @@ class ScopedRelease(unittest.TestCase):
         self.assertEqual(commands['facade-integration'],
             ['cargo', 'check', '--locked', '-p', 'brynja', '--no-default-features'])
         self.assertEqual(set(plan['ci_checks']), set(commands) -
-                         {'sbom', 'dependency-policy', 'advisories'})
+                         {'sbom', 'dependency-policy', 'advisories',
+                          'hkdf-package-runner-tests', 'hkdf-packaged-endpoints'})
+        self.assertEqual(commands['hkdf-package-runner-tests'],
+                         ['python3', 'scripts/hkdf/test-hkdf-public-api.py'])
+        self.assertEqual(commands['hkdf-packaged-endpoints'],
+                         ['python3', 'scripts/hkdf/check-hkdf-public-api.py', '--family', 'all'])
         for command in commands.values():
             self.assertNotIn('--workspace', command)
             self.assertNotIn('--all', command)
@@ -78,7 +83,7 @@ class ScopedRelease(unittest.TestCase):
             self.assertFalse(any('run-verification' in arg or 'brynja-verify' in arg
                                  or 'check-hkdf-timing.py' in arg for arg in command))
         release = tomllib.loads((scoped.ROOT / 'release-crates.toml').read_text())
-        self.assertEqual(release['release']['version'], '0.26.0')
+        self.assertEqual(release['release']['version'], '0.26.1')
         self.assertEqual(release['release']['stage'], 'internal')
         self.assertFalse(any(row['publish'] for row in release['crates'].values()))
         self.assertIn('brynja-legacy-hkdf', release['crates'])

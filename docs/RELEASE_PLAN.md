@@ -5747,11 +5747,33 @@ Exit criteria:
 
 ### v0.26.1 - HKDF Public API Usability Acceptance
 
-Status: planned
+Status: in progress
 
 Plan scope: Exercise the packaged public HKDF API with all RFC 5869 cases, representative TLS 1.3 labels, multi-block outputs, boundary failures, irregular input ownership, modern SHA-2 instantiations, and the separately selected legacy SHA-1 compatibility path, proving no private API, allocation, std, implicit hash selection, or partial output is required.
 
 Goal: close HKDF with a downstream proof of real extract, expand and TLS-label use.
+
+Implementation note: separate modern/legacy `no_std` consumers and the packaged
+runner are implemented; see [the acceptance command and scope](assurance/hkdf-public-api.md).
+All 14 supported host compilers passed debug/release consumer tests and
+diagnostic-checked rejection probes locally; Rust 1.90.0 and 1.99.1 also passed
+Cortex-M compilation. Candidate pentest remediation isolates Cargo configuration,
+adds published TLS/QUIC vectors and stronger compiler-contract probes, and
+redacts production TLS-label Debug output without changing derivation behavior.
+The user additionally authorized multipart `info` before closing this milestone:
+modern and isolated legacy `expand_parts` stream borrowed parts without an
+assembly buffer, with explicit plain-concatenation semantics and regression
+coverage. Existing `expand` remains compatible. TLS transcript/key-schedule
+integration stays at v0.109.0, not this milestone.
+See the acceptance document for finding dispositions and rerun results.
+Candidate version and release-gate preparation, commit, scoped pentest retest,
+green GitHub/CodeQL and signed tag remain
+separate pending steps; this is not a release approval or package publication.
+
+The user has explicitly requested a pentest before the final gate for this
+milestone. This activates the exceptional-review requirement below: commit the
+candidate, obtain its pentest/retest, run the finite final gate, then wait for
+green GitHub/CodeQL and user approval before tagging.
 
 Deliverables:
 

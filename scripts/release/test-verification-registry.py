@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """Check explicit portable registrations and fixture versions without running crypto."""
 import copy
+import json
 from pathlib import Path
 import re
 import tomllib
 import unittest
 import verification_hkdf_dynamic_tests as hkdf_dynamic
+import verification_hkdf_public_dynamic_tests as hkdf_public_dynamic
 from verification_sanitizer_tests import SanitizerRegistryTests
 from verification_miri_tests import MiriBindingTests
 from verification_kani_tests import KaniBindingTests
@@ -108,6 +110,16 @@ class RegistryTests(unittest.TestCase):
     def test_registered_harnesses_and_explicit_closures(self):
         validate(self.registry)
 
+    def test_hkdf_downstream_dynamic_checks_and_negative_controls(self):
+        registry = copy.deepcopy(self.registry)
+        for include in registry['includes']:
+            registry['groups'].update(json.loads((ROOT / include).read_text())['groups'])
+        hkdf_public_dynamic.validate(registry)
+        hkdf_public_dynamic.negative_controls(registry)
+        dynamic = [c for c in self.registry['checks']
+                   if c['component'] in ('hkdf', 'legacy_hkdf') and c.get('category') in ('asan', 'miri')]
+        self.assertEqual(len(dynamic), 13)
+
     def test_hkdf_optimized_checks_reuse_exact_existing_suites(self):
         selected = [c for c in self.registry['checks']
                     if c['component'] in ('hkdf', 'legacy_hkdf') and c.get('category') == 'optimized']
@@ -149,8 +161,8 @@ class RegistryTests(unittest.TestCase):
 
     def test_hkdf_operation_compiler_checks_are_separate_and_scoped(self):
         for component, family, package, consumers, mutations in (
-                ('hkdf', 'modern', 'brynja-crypto', 18, 120),
-                ('legacy_hkdf', 'legacy', 'brynja-legacy-hkdf', 2, 15)):
+                ('hkdf', 'modern', 'brynja-crypto', 24, 180),
+                ('legacy_hkdf', 'legacy', 'brynja-legacy-hkdf', 3, 25)):
             check, = [c for c in self.registry['checks']
                       if c['component'] == component and c['id'] == 'operation-scratch']
             self.assertEqual(check['command'],

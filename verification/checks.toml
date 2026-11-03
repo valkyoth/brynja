@@ -5,6 +5,259 @@ execution_semantics = 1
 catalog = "verification/catalog.json"
 includes = ["verification/miri-checks.json", "verification/kani-checks.json", "verification/matrix-checks.json", "verification/extra-checks.json"]
 
+# Dynamic checks execute downstream checkout fixtures, not packaged archives.
+[groups.hkdf-public-api-dynamic]
+paths = ["Cargo.toml", "Cargo.lock", "assurance/hkdf-public-api-common.rs", "scripts/release/verification_hkdf_public_dynamic_tests.py"]
+optional_paths = [".cargo/config", ".cargo/config.toml"]
+
+[[checks]]
+component = "hkdf"
+id = "asan-public-api"
+category = "asan"
+name = "Modern downstream HKDF ASan/LSan public API"
+establishes = "All 5 downstream public API tests under ASan/LSan, including RFC vectors, multipart info and output limits. Checkout dependencies; packaged-source acceptance is separate. No exhaustive dynamic, constant-time or target-runtime qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","--manifest-path","assurance/hkdf-public-api/Cargo.toml","--lib","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools", "hkdf-public-api-dynamic", "hkdf-public-api-modern"]
+environment = { RUSTFLAGS = "-Zsanitizer=address", CARGO_ENCODED_RUSTFLAGS = "", ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1", LSAN_OPTIONS = "exitcode=23", CARGO_TARGET_DIR = "target/hkdf-public-api-asan", RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","ASAN_OPTIONS","LSAN_OPTIONS"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 5
+exact_tests = 5
+
+[[checks]]
+component = "hkdf"
+id = "miri-public-api-ownership"
+category = "miri"
+name = "Modern downstream HKDF Miri ownership"
+establishes = "One exact downstream test under Miri: irregular caller storage, imports, errors, explicit clearing and consumer-unwind Drop. Checkout dependencies; packaged-source acceptance is separate. No exhaustive dynamic, constant-time or target-runtime qualification."
+command = ["cargo","+nightly-2026-09-11","miri","test","--locked","--offline","--manifest-path","assurance/hkdf-public-api/Cargo.toml","--lib","--target","x86_64-unknown-linux-gnu","tests::ownership","--","--exact"]
+cwd = "."
+inputs = ["miri-tools", "hkdf-public-api-dynamic", "hkdf-public-api-modern"]
+environment = { MIRIFLAGS = "-Zmiri-report-progress=10000000", CARGO_TARGET_DIR = "target/hkdf-public-api-miri", RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","MIRIFLAGS","MIRI_SYSROOT","MIRI_BE_RUSTC","MIRI_REPLACE_LIBRS_IF_NOT_TEST","BRYNJA_MIRI_CASE","BRYNJA_MIRI_PROFILE","BRYNJA_MIRI_WIDTH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["test result: ok.","test tests::ownership"]
+minimum_tests = 1
+exact_tests = 1
+
+[[checks]]
+component = "hkdf"
+id = "miri-public-api-tls"
+category = "miri"
+name = "Modern downstream HKDF Miri tls"
+establishes = "One exact downstream test under Miri: public TLS framing, length binding and label limits. Checkout dependencies; packaged-source acceptance is separate. No exhaustive dynamic, constant-time or target-runtime qualification."
+command = ["cargo","+nightly-2026-09-11","miri","test","--locked","--offline","--manifest-path","assurance/hkdf-public-api/Cargo.toml","--lib","--target","x86_64-unknown-linux-gnu","tests::tls","--","--exact"]
+cwd = "."
+inputs = ["miri-tools", "hkdf-public-api-dynamic", "hkdf-public-api-modern"]
+environment = { MIRIFLAGS = "-Zmiri-report-progress=10000000", CARGO_TARGET_DIR = "target/hkdf-public-api-miri", RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","MIRIFLAGS","MIRI_SYSROOT","MIRI_BE_RUSTC","MIRI_REPLACE_LIBRS_IF_NOT_TEST","BRYNJA_MIRI_CASE","BRYNJA_MIRI_PROFILE","BRYNJA_MIRI_WIDTH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["test result: ok.","test tests::tls"]
+minimum_tests = 1
+exact_tests = 1
+
+[[checks]]
+component = "legacy_hkdf"
+id = "asan-public-api"
+category = "asan"
+name = "Legacy downstream HKDF ASan/LSan public API"
+establishes = "All 4 downstream public API tests under ASan/LSan, including RFC vectors, multipart info and output limits. Checkout dependencies; packaged-source acceptance is separate. No exhaustive dynamic, constant-time or target-runtime qualification."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","--manifest-path","assurance/legacy-hkdf-public-api/Cargo.toml","--lib","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools", "hkdf-public-api-dynamic", "hkdf-public-api-legacy"]
+environment = { RUSTFLAGS = "-Zsanitizer=address", CARGO_ENCODED_RUSTFLAGS = "", ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1", LSAN_OPTIONS = "exitcode=23", CARGO_TARGET_DIR = "target/hkdf-public-api-asan", RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","ASAN_OPTIONS","LSAN_OPTIONS"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 4
+exact_tests = 4
+
+[[checks]]
+component = "legacy_hkdf"
+id = "miri-public-api-ownership"
+category = "miri"
+name = "Legacy downstream HKDF Miri ownership"
+establishes = "One exact downstream test under Miri: irregular caller storage, imports, errors, explicit clearing and consumer-unwind Drop. Checkout dependencies; packaged-source acceptance is separate. No exhaustive dynamic, constant-time or target-runtime qualification."
+command = ["cargo","+nightly-2026-09-11","miri","test","--locked","--offline","--manifest-path","assurance/legacy-hkdf-public-api/Cargo.toml","--lib","--target","x86_64-unknown-linux-gnu","tests::ownership","--","--exact"]
+cwd = "."
+inputs = ["miri-tools", "hkdf-public-api-dynamic", "hkdf-public-api-legacy"]
+environment = { MIRIFLAGS = "-Zmiri-report-progress=10000000", CARGO_TARGET_DIR = "target/hkdf-public-api-miri", RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","MIRIFLAGS","MIRI_SYSROOT","MIRI_BE_RUSTC","MIRI_REPLACE_LIBRS_IF_NOT_TEST","BRYNJA_MIRI_CASE","BRYNJA_MIRI_PROFILE","BRYNJA_MIRI_WIDTH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["test result: ok.","test tests::ownership"]
+minimum_tests = 1
+exact_tests = 1
+
+# Package-external HKDF usability; explicit execution, no publication.
+[groups.hkdf-public-api-runner]
+paths = ["Cargo.toml", "Cargo.lock", "assurance/hkdf-public-api-common.rs", "scripts/hkdf/check-hkdf-public-api.py", "scripts/hkdf/test-hkdf-public-api.py", "scripts/repository/facade_cargo_environment.py"]
+optional_paths = [".cargo/config", ".cargo/config.toml"]
+[[groups.hkdf-public-api-runner.tools]]
+program = "python3"
+
+[[groups.hkdf-public-api-matrix.tools]]
+program = "cargo"
+toolchain = "1.90.0"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "rustc"
+toolchain = "1.90.0"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "cargo"
+toolchain = "1.91.0"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "rustc"
+toolchain = "1.91.0"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "cargo"
+toolchain = "1.92.0"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "rustc"
+toolchain = "1.92.0"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "cargo"
+toolchain = "1.93.0"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "rustc"
+toolchain = "1.93.0"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "cargo"
+toolchain = "1.94.0"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "rustc"
+toolchain = "1.94.0"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "cargo"
+toolchain = "1.95.0"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "rustc"
+toolchain = "1.95.0"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "cargo"
+toolchain = "1.96.0"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "rustc"
+toolchain = "1.96.0"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "cargo"
+toolchain = "1.96.1"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "rustc"
+toolchain = "1.96.1"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "cargo"
+toolchain = "1.97.0"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "rustc"
+toolchain = "1.97.0"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "cargo"
+toolchain = "1.97.1"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "rustc"
+toolchain = "1.97.1"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "cargo"
+toolchain = "1.98.0"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "rustc"
+toolchain = "1.98.0"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "cargo"
+toolchain = "1.98.1"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "rustc"
+toolchain = "1.98.1"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "cargo"
+toolchain = "1.99.0"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "rustc"
+toolchain = "1.99.0"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "cargo"
+toolchain = "1.99.1"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "rustc"
+toolchain = "1.99.1"
+
+[groups.hkdf-public-api-modern]
+paths = ["crates/brynja","crates/brynja-core","crates/brynja-crypto","crates/brynja-crypto-cpu","crates/brynja-crypto-cpu-std","crates/brynja-dtls","crates/brynja-hash-core","crates/brynja-hash-parallel","crates/brynja-hash-sha2","crates/brynja-hash-sha3","crates/brynja-hash-tuple","crates/brynja-mac-hmac","crates/brynja-mac-kmac","crates/brynja-pki","crates/brynja-platform","crates/brynja-protocol","crates/brynja-quic-tls","crates/brynja-tls","crates/brynja-tls12","crates/brynja-tls13","crates/brynja-tls13-handshake","assurance/hkdf-public-api/Cargo.toml","assurance/hkdf-public-api/Cargo.lock","assurance/hkdf-public-api/src"]
+
+[[checks]]
+component = "hkdf"
+id = "packaged-public-api"
+category = "package"
+name = "Packaged modern HKDF public API (MSRV/current endpoints)"
+establishes = "Unpacked crate sources, public no_std consumer, debug/release vectors and bounds, ownership cleanup and diagnostic-checked negative controls. Cortex-M compile only at Rust 1.90.0 and 1.99.1; not target execution, constant-time or deployment qualification."
+command = ["python3","scripts/hkdf/check-hkdf-public-api.py","--family","modern"]
+cwd = "."
+inputs = ["hkdf-public-api-runner","hkdf-public-api-modern","compiler","hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+timeout_seconds = 600
+[checks.success]
+contains = ["HKDF packaged public API modern: PASS; no upload"]
+
+[[checks]]
+component = "hkdf"
+id = "public-api-matrix"
+category = "matrix"
+name = "Packaged modern HKDF public API (14 host compilers)"
+establishes = "Unpacked crate sources, public no_std consumer, debug/release vectors and bounds, ownership cleanup and diagnostic-checked negative controls. Cortex-M compile only at Rust 1.90.0 and 1.99.1; not target execution, constant-time or deployment qualification."
+command = ["python3","scripts/hkdf/check-hkdf-public-api.py","--family","modern","--matrix"]
+cwd = "."
+inputs = ["hkdf-public-api-runner","hkdf-public-api-modern","hkdf-public-api-matrix"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+timeout_seconds = 1800
+[checks.success]
+contains = ["HKDF packaged public API modern: PASS; no upload","HKDF packaged public API modern: MATRIX PASS; 14 host compilers"]
+
+[groups.hkdf-public-api-legacy]
+paths = ["crates/brynja-core","crates/brynja-hash-core","crates/brynja-legacy-hkdf","crates/brynja-legacy-hmac","crates/brynja-legacy-md5","crates/brynja-legacy-sha1","assurance/legacy-hkdf-public-api/Cargo.toml","assurance/legacy-hkdf-public-api/Cargo.lock","assurance/legacy-hkdf-public-api/src"]
+
+[[checks]]
+component = "legacy_hkdf"
+id = "packaged-public-api"
+category = "package"
+name = "Packaged legacy HKDF public API (MSRV/current endpoints)"
+establishes = "Unpacked crate sources, public no_std consumer, debug/release vectors and bounds, ownership cleanup and diagnostic-checked negative controls. Cortex-M compile only at Rust 1.90.0 and 1.99.1; not target execution, constant-time or deployment qualification."
+command = ["python3","scripts/hkdf/check-hkdf-public-api.py","--family","legacy"]
+cwd = "."
+inputs = ["hkdf-public-api-runner","hkdf-public-api-legacy","compiler","hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+timeout_seconds = 600
+[checks.success]
+contains = ["HKDF packaged public API legacy: PASS; no upload"]
+
+[[checks]]
+component = "legacy_hkdf"
+id = "public-api-matrix"
+category = "matrix"
+name = "Packaged legacy HKDF public API (14 host compilers)"
+establishes = "Unpacked crate sources, public no_std consumer, debug/release vectors and bounds, ownership cleanup and diagnostic-checked negative controls. Cortex-M compile only at Rust 1.90.0 and 1.99.1; not target execution, constant-time or deployment qualification."
+command = ["python3","scripts/hkdf/check-hkdf-public-api.py","--family","legacy","--matrix"]
+cwd = "."
+inputs = ["hkdf-public-api-runner","hkdf-public-api-legacy","hkdf-public-api-matrix"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+timeout_seconds = 1800
+[checks.success]
+contains = ["HKDF packaged public API legacy: PASS; no upload","HKDF packaged public API legacy: MATRIX PASS; 14 host compilers"]
+
 [[checks]]
 component = "hkdf"
 id = "asan-derivation"
@@ -64,7 +317,7 @@ component = "hkdf"
 id = "miri-fault-cleanup"
 category = "miri"
 name = "Modern HKDF miri fault cleanup"
-establishes = "One exact existing test under Miri: injected expansion failures/unwinds and live scratch cleanup through TLS label expansion. No exhaustive dynamic analysis, native backend, whole-frame erasure or constant-time claim."
+establishes = "One exact test under Miri: injected expansion failures/unwinds and live scratch cleanup through TLS label and multipart expansion. No exhaustive dynamic analysis, native backend, whole-frame erasure or constant-time claim."
 command = ["cargo","+nightly-2026-09-11","miri","test","--locked","--offline","--target","x86_64-unknown-linux-gnu","-p","brynja-crypto","--no-default-features","--lib","hkdf::derive::tests::hkdf_fault_tls_label_scratch_clears","--","--exact"]
 cwd = "."
 inputs = ["miri-tools","hkdf-composition","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
@@ -205,7 +458,7 @@ component = "hkdf"
 id = "operation-scratch"
 category = "compiler"
 name = "Modern HKDF operation-local scratch cleanup"
-establishes = "18 production operation consumers on x86_64, Rust 1.90.0 and 1.99.1, abort and unwind profiles. Conservative LLVM lifetime analysis checks named scratch pointer/extent clearing dispatch on normal/error/recoverable-unwind exits; 120 rejected mutations per build. Delegates core clearing and HMAC internals. Not whole-frame erasure, arbitrary LLVM verification or timing qualification."
+establishes = "24 production operation consumers on x86_64, Rust 1.90.0 and 1.99.1, abort and unwind profiles. Conservative LLVM lifetime analysis checks named scratch pointer/extent clearing dispatch on normal/error/recoverable-unwind exits; 180 rejected mutations per build. Delegates core clearing and HMAC internals. Not whole-frame erasure, arbitrary LLVM verification or timing qualification."
 command = ["python3", "scripts/hkdf/check-hkdf-operation-cleanup.py", "modern"]
 cwd = "."
 inputs = ["compiler","hkdf-msrv","hkdf-operation-codegen","hkdf-operation-fixture","hkdf-composition","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
@@ -214,14 +467,14 @@ reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTC", "RUSTC_WR
 platform = "linux-x86_64"
 timeout_seconds = 1200
 [checks.success]
-contains = ["HKDF modern operation scratch: PASS; Rust 1.90.0; x86_64; panic=abort; 18 consumers; 120 rejected mutations","HKDF modern operation scratch: PASS; Rust 1.90.0; x86_64; panic=unwind; 18 consumers; 120 rejected mutations","HKDF modern operation scratch: PASS; Rust 1.99.1; x86_64; panic=abort; 18 consumers; 120 rejected mutations","HKDF modern operation scratch: PASS; Rust 1.99.1; x86_64; panic=unwind; 18 consumers; 120 rejected mutations","HKDF modern operation scratch complete: 4 configurations;"]
+contains = ["HKDF modern operation scratch: PASS; Rust 1.90.0; x86_64; panic=abort; 24 consumers; 180 rejected mutations","HKDF modern operation scratch: PASS; Rust 1.90.0; x86_64; panic=unwind; 24 consumers; 180 rejected mutations","HKDF modern operation scratch: PASS; Rust 1.99.1; x86_64; panic=abort; 24 consumers; 180 rejected mutations","HKDF modern operation scratch: PASS; Rust 1.99.1; x86_64; panic=unwind; 24 consumers; 180 rejected mutations","HKDF modern operation scratch complete: 4 configurations;"]
 
 [[checks]]
 component = "legacy_hkdf"
 id = "operation-scratch"
 category = "compiler"
 name = "Legacy HKDF operation-local scratch cleanup"
-establishes = "2 production operation consumers on x86_64, Rust 1.90.0 and 1.99.1, abort and unwind profiles. Conservative LLVM lifetime analysis checks named scratch pointer/extent clearing dispatch on normal/error/recoverable-unwind exits; 15 rejected mutations per build. Delegates core clearing and HMAC internals. Not whole-frame erasure, arbitrary LLVM verification or timing qualification."
+establishes = "3 production operation consumers on x86_64, Rust 1.90.0 and 1.99.1, abort and unwind profiles. Conservative LLVM lifetime analysis checks named scratch pointer/extent clearing dispatch on normal/error/recoverable-unwind exits; 25 rejected mutations per build. Delegates core clearing and HMAC internals. Not whole-frame erasure, arbitrary LLVM verification or timing qualification."
 command = ["python3", "scripts/hkdf/check-hkdf-operation-cleanup.py", "legacy"]
 cwd = "."
 inputs = ["compiler","hkdf-msrv","hkdf-operation-codegen","hkdf-optimized","legacy-hkdf-source","hash-core","legacy-hmac-source","sha1-source","md5-source"]
@@ -230,7 +483,7 @@ reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTC", "RUSTC_WR
 platform = "linux-x86_64"
 timeout_seconds = 1200
 [checks.success]
-contains = ["HKDF legacy operation scratch: PASS; Rust 1.90.0; x86_64; panic=abort; 2 consumers; 15 rejected mutations","HKDF legacy operation scratch: PASS; Rust 1.90.0; x86_64; panic=unwind; 2 consumers; 15 rejected mutations","HKDF legacy operation scratch: PASS; Rust 1.99.1; x86_64; panic=abort; 2 consumers; 15 rejected mutations","HKDF legacy operation scratch: PASS; Rust 1.99.1; x86_64; panic=unwind; 2 consumers; 15 rejected mutations","HKDF legacy operation scratch complete: 4 configurations;"]
+contains = ["HKDF legacy operation scratch: PASS; Rust 1.90.0; x86_64; panic=abort; 3 consumers; 25 rejected mutations","HKDF legacy operation scratch: PASS; Rust 1.90.0; x86_64; panic=unwind; 3 consumers; 25 rejected mutations","HKDF legacy operation scratch: PASS; Rust 1.99.1; x86_64; panic=abort; 3 consumers; 25 rejected mutations","HKDF legacy operation scratch: PASS; Rust 1.99.1; x86_64; panic=unwind; 3 consumers; 25 rejected mutations","HKDF legacy operation scratch complete: 4 configurations;"]
 
 [groups.hkdf-owner-codegen]
 paths = ["assurance/hkdf-owner-cleanup/Cargo.toml", "assurance/hkdf-owner-cleanup/Cargo.lock", "assurance/hkdf-owner-cleanup/src", "scripts/hkdf/check-hkdf-owner-cleanup.py", "scripts/hkdf/hkdf_owner_codegen.py", "scripts/hmac/hmac_engine_codegen.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py"]

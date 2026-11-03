@@ -14,6 +14,30 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
+  hkdf-public-api:
+    name: Packaged HKDF public API acceptance
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install acceptance endpoints and bare-metal target
+        run: |
+          rustup toolchain install 1.90.0 --profile minimal --target thumbv7em-none-eabi
+          rustup toolchain install 1.99.1 --profile minimal --component rustfmt,clippy --target thumbv7em-none-eabi
+      - name: Fetch locked workspace dependencies before offline acceptance
+        run: cargo +1.99.1 fetch --locked
+      - name: Test runner rejection controls
+        run: python3 scripts/hkdf/test-hkdf-public-api.py
+      - name: Check consumer formatting and lint
+        run: |
+          cargo +1.99.1 fmt --manifest-path assurance/hkdf-public-api/Cargo.toml --check
+          cargo +1.99.1 fmt --manifest-path assurance/legacy-hkdf-public-api/Cargo.toml --check
+          cargo +1.99.1 clippy --locked --offline --manifest-path assurance/hkdf-public-api/Cargo.toml --all-targets --no-deps -- -D warnings
+          cargo +1.99.1 clippy --locked --offline --manifest-path assurance/legacy-hkdf-public-api/Cargo.toml --all-targets --no-deps -- -D warnings
+      - name: Exercise only packaged public HKDF consumers
+        run: python3 scripts/hkdf/check-hkdf-public-api.py
+
   checks:
     name: Format lint test policy and audit
     runs-on: ubuntu-latest

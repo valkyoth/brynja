@@ -79,6 +79,8 @@ impl ExpansionLength {
 /// without a NUL terminator, text normalization or implicit transcript hashing.
 /// This checks TLS wire bounds, not the hash-dependent HKDF output bound.
 /// Label/context are borrowed metadata, not clearing secret owners.
+/// `Copy` duplicates only these borrows; the caller owns their storage and
+/// clearing policy. `Debug` reports lengths, never label or context bytes.
 /// Expand through `Prk::expand_tls13`; encoding is crate-private so callers
 /// cannot accidentally feed this label into raw Expand without length binding.
 ///
@@ -101,7 +103,7 @@ impl ExpansionLength {
 /// let label = Tls13Label::new(&storage[..1], &[], 32).unwrap();
 /// let _key = prk.expand_tls13(&label, &mut storage).unwrap();
 /// ```
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Eq, PartialEq)]
 pub struct Tls13Label<'a> {
     label: &'a [u8],
     context: &'a [u8],
@@ -109,6 +111,16 @@ pub struct Tls13Label<'a> {
     label_bytes: u8,
     context_bytes: u8,
     encoded_bytes: usize,
+}
+
+impl core::fmt::Debug for Tls13Label<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_struct("Tls13Label")
+            .field("label_bytes", &self.label.len())
+            .field("context_bytes", &self.context.len())
+            .field("output_bytes", &self.output_bytes)
+            .finish_non_exhaustive()
+    }
 }
 
 impl<'a> Tls13Label<'a> {

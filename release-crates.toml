@@ -69,9 +69,9 @@ reason = "Portable modern HKDF and TLS labels; retain supporting-crate version d
 [crates."brynja-hash-core"]
 previous_version = "0.1.0"
 version = "0.1.0"
-change = "unchanged"
+change = "metadata"
 publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+reason = "Explicit package include list for HKDF downstream archive parity; retain the internal checkpoint version with no publication selected."
 
 [crates."brynja-hash-sha2"]
 previous_version = "0.1.0"
@@ -118,9 +118,9 @@ reason = "Retain the 0.25.3 checkpoint version; no component change or publicati
 [crates."brynja-crypto-cpu"]
 previous_version = "0.2.0"
 version = "0.2.0"
-change = "unchanged"
+change = "metadata"
 publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+reason = "Explicit package include list for HKDF downstream archive parity; retain the internal checkpoint version with no publication selected."
 
 [crates."brynja-crypto-cpu-std"]
 previous_version = "0.2.0"
@@ -153,37 +153,37 @@ reason = "Retain the 0.25.3 checkpoint version; no component change or publicati
 [crates."brynja-tls"]
 previous_version = "0.1.9"
 version = "0.1.9"
-change = "unchanged"
+change = "metadata"
 publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+reason = "Explicit package include list for HKDF downstream archive parity; retain the internal checkpoint version with no publication selected."
 
 [crates."brynja-tls12"]
 previous_version = "0.1.9"
 version = "0.1.9"
-change = "unchanged"
+change = "metadata"
 publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+reason = "Explicit package include list for HKDF downstream archive parity; retain the internal checkpoint version with no publication selected."
 
 [crates."brynja-tls13"]
 previous_version = "0.1.9"
 version = "0.1.9"
-change = "unchanged"
+change = "metadata"
 publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+reason = "Explicit package include list for HKDF downstream archive parity; retain the internal checkpoint version with no publication selected."
 
 [crates."brynja-tls13-handshake"]
 previous_version = "0.1.9"
 version = "0.1.9"
-change = "unchanged"
+change = "metadata"
 publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+reason = "Explicit package include list for HKDF downstream archive parity; retain the internal checkpoint version with no publication selected."
 
 [crates."brynja-quic-tls"]
 previous_version = "0.1.9"
 version = "0.1.9"
-change = "unchanged"
+change = "metadata"
 publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+reason = "Explicit package include list for HKDF downstream archive parity; retain the internal checkpoint version with no publication selected."
 
 [crates."brynja-sanitization"]
 previous_version = "0.1.2"
@@ -195,16 +195,16 @@ reason = "Retain the 0.25.3 checkpoint version; no component change or publicati
 [crates."brynja-dtls"]
 previous_version = "0.1.9"
 version = "0.1.9"
-change = "unchanged"
+change = "metadata"
 publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+reason = "Explicit package include list for HKDF downstream archive parity; retain the internal checkpoint version with no publication selected."
 
 [crates."brynja-platform"]
 previous_version = "0.1.9"
 version = "0.1.9"
-change = "unchanged"
+change = "metadata"
 publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+reason = "Explicit package include list for HKDF downstream archive parity; retain the internal checkpoint version with no publication selected."
 
 [crates."brynja-legacy"]
 previous_version = "unpublished"

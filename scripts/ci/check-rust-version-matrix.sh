@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if test "${1:-}" = "--hkdf-public-api"; then
+    shift
+    exec python3 scripts/hkdf/check-hkdf-public-api.py --matrix "$@"
+fi
+
 if test "${1:-}" != "--full-catalog"; then
     exec python3 scripts/release/run-verification.py matrix "$@"
 fi

@@ -26,6 +26,15 @@ macro_rules! operations {
             }
 
             #[inline(never)]
+            pub fn expand_parts<'a>(
+                prk: &Prk<'_, $algorithm>,
+                info: &[&[u8]],
+                output: &'a mut [u8],
+            ) -> Result<DerivedKey<'a, $algorithm>, Error> {
+                prk.expand_parts(info, output)
+            }
+
+            #[inline(never)]
             pub fn label<'a>(
                 prk: &Prk<'_, $algorithm>,
                 label: &[u8],

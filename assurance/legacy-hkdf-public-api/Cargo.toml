@@ -1,0 +1,11 @@
+[workspace]
+
+[package]
+name = "brynja-legacy-hkdf-public-api-fixture"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[dependencies]
+brynja-legacy-hkdf = { path = "../../crates/brynja-legacy-hkdf", version = "=0.1.0", default-features = false }

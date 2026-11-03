@@ -24,7 +24,7 @@ The finite requirements and their scoped check IDs are:
 | Secret lifetime | Affine local PRK/output owners clear caller regions on Drop or consuming `clear`; empty output returns no clearing receipt. Private full-block and TLS scratch clear while live. Imported/source buffers and exported copies remain caller-owned | both ownership, derivation, Miri lifecycle and fault-cleanup checks |
 | Bounded dynamic memory/lifetime analysis | Existing derivation and fault suites under ASan/LSan; exact disjoint-storage/unwind and selected three-block fault cases under Miri, with validity checks enabled | both `asan-derivation`, `asan-fault-cleanup`, `miri-lifecycle` and `miri-fault-cleanup`; [scope and exclusions](evidence-index.md#hkdf-dynamic-analysis-scope) |
 | Public-owner destruction dispatch | Real public PRK/output consumers pass exact pointer and extent to core Drop on normal/recoverable-unwind paths; x86_64 Rust 1.90.0/1.99.1, abort/unwind; core cleanup delegated, operation scratch and compiler copies excluded | both `owner-dispatch` checks; twelve broken emitted-output controls per build |
-| Operation-local scratch dispatch | Named production Extract/Expand and modern TLS label scratch must dispatch full-region clearing before normal/error/recoverable-unwind exits; x86_64 Rust 1.90.0/1.99.1 abort/unwind; HMAC/core internals and compiler copies excluded | both `operation-scratch` checks; 120 modern and 15 legacy rejected mutations per build |
+| Operation-local scratch dispatch | Named production Extract/Expand, multipart Expand and modern TLS label scratch must dispatch full-region clearing before normal/error/recoverable-unwind exits; x86_64 Rust 1.90.0/1.99.1 abort/unwind; HMAC/core internals and compiler copies excluded | both `operation-scratch` checks; 180 modern and 25 legacy rejected mutations per build |
 | Bounded host timing diagnostic | Equal-length zero/FF secret contrasts, independent correctness preflight, balanced order, retained samples and fail-on-alarm; no retry-to-pass or constant-time claim | both `timing-screen` checks; 36 modern and five legacy campaigns on Rust 1.99.1 Linux x86_64 |
 | Portable bounded storage | No heap allocation or OS/backend selection; modern expansion has two 64-byte scratch arrays, TLS adds 514 bytes, legacy expansion has two 20-byte arrays, plus transitive HMAC state | both `no-std-thumb` checks; source review, not a total-stack bound |
 
@@ -56,7 +56,9 @@ not establish secret-independent timing or waive further security review.
 The [operation-by-operation review](evidence-index.md#hkdf-source-level-side-channel-review)
 records public decision inputs and delegated assumptions; byte-dependent
 populated-scratch instrumentation exists only in test builds. `Tls13Label`
-is public Debug/Copy metadata, not a clearing secret owner.
+borrows caller-owned metadata, not a clearing secret owner. Its Debug output
+contains lengths only, never label/context bytes. Copy duplicates the borrows;
+callers retain responsibility for clearing any sensitive label/context storage.
 Input lengths and selected identities are not hidden. Work is proportional to
 the input and requested block count; Expand processes `info` again for each
 block. HMAC is re-keyed for each block: an imported PRK longer than the HMAC
@@ -81,6 +83,18 @@ generic over the six supported SHA-2 identities, not TLS cipher-suite admission.
 PRK `expose` is an explicit export boundary: copied bytes are not erased by
 clearing the owner. `clear` permits sequencing before the next operation, but
 does not prevent callers from forgetting/leaking an owner instead.
+Owners intentionally remain `!Send`/`!Sync`. Create, use and clear them on the
+same worker, or within a thread-local async task; do not copy secret bytes merely
+to satisfy a multithreaded executor's `Send` bound. A cross-thread key service
+needs its own reviewed ownership and lifecycle boundary. `expand` takes one
+contiguous `info` slice; `expand_parts` accepts an ordered list of borrowed slices
+without allocating or copying a concatenation buffer. Empty parts contribute no
+bytes, and part boundaries do not add separators: `[ab, c]` and `[a, bc]` are
+equivalent. Protocols must supply unambiguous field framing themselves and bound
+part count (including empty parts), total input length and output length to
+control work. Input storage remains caller-owned and needs its own clearing if
+sensitive; it need not outlive the derived output owner. Reusable keyed HMAC
+state remains a potential performance extension, not an existing capability.
 Forget, abort, termination, double panic, register/spill/compiler copies, paging,
 dumps and physical-memory recovery remain outside Drop-based clearing claims.
 

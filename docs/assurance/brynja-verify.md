@@ -83,6 +83,11 @@ This is a best-effort guard, not execution from an immutable source snapshot.
 
 ## Reading results
 
+HKDF has package-external usability checks: `packaged-public-api` runs the
+MSRV/current endpoints and `public-api-matrix` runs all supported host compilers.
+Both are available for `hkdf` and `legacy_hkdf`; neither publishes packages.
+See [HKDF public API acceptance](hkdf-public-api.md) for scope and prerequisites.
+
 Terminal status is grouped by the command being run, within each component and
 category/profile. For example, the many `md5-bulk:N` cases appear under one
 `md5-bulk` group per Miri profile. Different commands, working directories,

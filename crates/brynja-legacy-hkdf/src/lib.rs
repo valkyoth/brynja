@@ -244,6 +244,24 @@ impl<'a> Sha1Prk<'a> {
         info: &[u8],
         destination: &'b mut [u8],
     ) -> Result<DerivedKey<'b>, Error> {
+        self.expand_parts(&[info], destination)
+    }
+
+    /// Expands the ordered concatenation of borrowed info parts without allocation.
+    ///
+    /// Empty parts and an empty list contribute no bytes. Boundaries add no
+    /// separators: `[b"ab", b"c"]` and `[b"a", b"bc"]` are equivalent. Callers
+    /// must encode protocol framing and bound both part count (including empty
+    /// parts) and total input size; every output block visits every part.
+    ///
+    /// The 5100-byte bound, legacy acknowledgement and destination-clearing
+    /// contract of `expand` are unchanged. Inputs remain caller-owned and are
+    /// borrowed only during this call; the output owner borrows its destination.
+    pub fn expand_parts<'b>(
+        &self,
+        info_parts: &[&[u8]],
+        destination: &'b mut [u8],
+    ) -> Result<DerivedKey<'b>, Error> {
         let blocks = policy::expansion_blocks(destination.len()).ok_or(Error::OutputLength)?;
         if destination.is_empty() {
             return Ok(DerivedKey {
@@ -266,9 +284,11 @@ impl<'a> Sha1Prk<'a> {
             }
             #[cfg(test)]
             fault::checkpoint().map_err(|()| Error::SecretMemory)?;
-            mac.update(info)?;
-            #[cfg(test)]
-            fault::checkpoint().map_err(|()| Error::SecretMemory)?;
+            for part in info_parts {
+                mac.update(part)?;
+                #[cfg(test)]
+                fault::checkpoint().map_err(|()| Error::SecretMemory)?;
+            }
             mac.update(&[counter])?;
             #[cfg(test)]
             fault::checkpoint().map_err(|()| Error::SecretMemory)?;
@@ -349,6 +369,14 @@ mod tests {
         expected.copy_from_slice(prk.expose());
         fault::exercise(41, 22, |destination| {
             let result = prk.expand(b"public info", destination).map(drop);
+            assert_eq!(prk.expose(), expected);
+            result
+        })?;
+        // Admission plus nine checkpoints per block, including each info part.
+        fault::exercise(41, 28, |destination| {
+            let result = prk
+                .expand_parts(&[b"public", &[], b" info"], destination)
+                .map(drop);
             assert_eq!(prk.expose(), expected);
             result
         })?;

@@ -3429,11 +3429,11 @@ sha256 = "032218b62332bfd42653aa23c673849e00cb8a27ef41de9239e598e3753dfe42"
 
 [[reviewed-source]]
 path = "crates/brynja-crypto/src/hkdf/derive.rs"
-sha256 = "58b080a466113e77b89833ea958cf5eefedd6943728d150508e600fb82af1732"
+sha256 = "fe56007ccb5c962208c135f6790c5ecf6881fbb9aaa8201e1ab4e7f3fcfb4d17"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hkdf/src/lib.rs"
-sha256 = "33aadd9fb0d085b02fe7306a62a0c2eba38dcd054b959fda1ee964f7be963dfd"
+sha256 = "af6a20ba7e778f28557d0e4c3198e9f245b35ef88b9ba80ec5f9ff6947acd526"
 
 [[reviewed-source]]
 path = "scripts/cryptography/hkdf_owner_contract.py"
@@ -3461,7 +3461,7 @@ sha256 = "73bc037875e6d7495cf00a8fcf109918b529d3d0cf05c4f57ffe16514827a3c8"
 
 [[reviewed-source]]
 path = "assurance/hkdf-operation-cleanup/src/lib.rs"
-sha256 = "f5d046f30dd3e358c463c150910891a3b57921496a8ee3fcd7ff0d6715fc18bc"
+sha256 = "cad22c38faad9ed757981bbc29d4d3b007aa5895e5f8ff9cf93b5f6ee8d13a10"
 
 [[reviewed-source]]
 path = "scripts/hkdf/check-hkdf-operation-cleanup.py"
@@ -3469,4 +3469,4 @@ sha256 = "b1b6e49977f8f16700460f3146bc593353b1f0687af895281c09c685affe295b"
 
 [[reviewed-source]]
 path = "scripts/hkdf/hkdf_operation_codegen.py"
-sha256 = "b3d83f472c1bd6d6c079976d90e3cca627793bb72137afa02fa7bb929800f8dc"
+sha256 = "60b44151f2415745aeb89c154264c13615ebd5e3d076ee030a646a5e1a800be0"

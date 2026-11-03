@@ -7,6 +7,7 @@ license.workspace = true
 repository.workspace = true
 description = "Explicit legacy-only HKDF-SHA-1 compatibility"
 publish = ["crates-io"]
+include = ["Cargo.toml","LICENSE-APACHE","LICENSE-MIT","README.md","src/**/*.rs","tests/**/*.rs"]
 
 [features]
 default = []

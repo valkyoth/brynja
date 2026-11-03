@@ -30,12 +30,13 @@ run no tests. `show COMPONENT CHECK` gives provenance, scope and freshness.
   derivation internals, whole-frame erasure and timing remain outside this check.
 - Operation scratch: separate `operation-scratch` registrations analyze actual
   production Extract/Expand bodies and modern Expand-Label consumers without
-  test instrumentation. Rust 1.90.0/1.99.1 x86_64 abort/unwind builds cover 18
-  modern consumers and two legacy consumers. Named lifetimes must dispatch
+  test instrumentation. Rust 1.90.0/1.99.1 x86_64 abort/unwind builds cover 24
+  modern consumers and three legacy consumers. Named lifetimes must dispatch
   complete clearing of Extract's block, Expand's block/previous buffers and
   the modern label buffer before normal/error/recoverable-unwind exits.
   Each build rejects short clear, wrong pointer/callee, early return and
-  post-clear write mutations for every scratch role (120 modern, 15 legacy).
+  post-clear write mutations for every scratch role (180 modern, 25 legacy),
+  including the multipart expansion operation and the contiguous wrapper.
   The checker reuses the existing conservative HMAC scratch analysis without
   editing or rerunning HMAC checks. MIR/assembly presence checks identify
   artifacts; the flow analysis is LLVM-only. Core clearing and HMAC internals

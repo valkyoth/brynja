@@ -236,6 +236,27 @@ impl<'a, A: Algorithm> Prk<'a, A> {
         info: &[u8],
         destination: &'b mut [u8],
     ) -> Result<DerivedKey<'b, A>, Error> {
+        self.expand_parts(&[info], destination)
+    }
+
+    /// Expands using the ordered concatenation of borrowed `info` parts.
+    ///
+    /// This is exactly raw `expand` on the concatenated bytes, without allocating
+    /// or copying a concatenation buffer. Empty parts (including an empty list)
+    /// contribute no bytes. Part boundaries add no separators or domain binding:
+    /// `[b"ab", b"c"]` and `[b"a", b"bc"]` describe the same info. Protocols must
+    /// supply any required lengths, delimiters and labels themselves.
+    ///
+    /// The output bound, pre-admission rejection and clearing guarantees of
+    /// `expand` apply unchanged. Parts are borrowed only for this call; the output
+    /// owner borrows only its destination. Input storage remains caller-owned.
+    /// Each block visits every part; callers must bound part count (even empty
+    /// parts), total input size and output size when accepting untrusted input.
+    pub fn expand_parts<'b>(
+        &self,
+        info_parts: &[&[u8]],
+        destination: &'b mut [u8],
+    ) -> Result<DerivedKey<'b, A>, Error> {
         let plan = ExpansionLength::new(A::TAG_BYTES, destination.len())?;
         if destination.is_empty() {
             return Ok(DerivedKey {
@@ -258,9 +279,11 @@ impl<'a, A: Algorithm> Prk<'a, A> {
             }
             #[cfg(test)]
             fault::checkpoint().map_err(|()| Error::SecretMemory)?;
-            mac.update(info)?;
-            #[cfg(test)]
-            fault::checkpoint().map_err(|()| Error::SecretMemory)?;
+            for part in info_parts {
+                mac.update(part)?;
+                #[cfg(test)]
+                fault::checkpoint().map_err(|()| Error::SecretMemory)?;
+            }
             mac.update(&[counter])?;
             #[cfg(test)]
             fault::checkpoint().map_err(|()| Error::SecretMemory)?;
@@ -381,6 +404,15 @@ mod tests {
             assert_eq!(prk.expose(), expected);
             result
         })?;
+        // Three parts, including an empty part: admission + (6 + 3) * 3.
+        // Interrupt every part boundary, including after earlier blocks wrote output.
+        fault::exercise(length, 28, |destination| {
+            let result = prk
+                .expand_parts(&[b"public", &[], b" context"], destination)
+                .map(drop);
+            assert_eq!(prk.expose(), expected);
+            result
+        })?;
         // Also checked after unwinding, where the closure's assertion was skipped.
         assert_eq!(prk.expose(), expected);
         assert!(fault::saw_populated_scratch(64));
@@ -426,6 +458,12 @@ mod tests {
                 .map(drop)
         })?;
         assert!(fault::saw_populated_scratch(514));
+        // Keep the bounded Miri-selected fault test on the multipart path too.
+        fault::exercise(33, 19, |destination| {
+            prk.expand_parts(&[b"public", &[], b" context"], destination)
+                .map(drop)
+        })?;
+        assert!(fault::saw_populated_scratch(64));
         Ok(())
     }
 

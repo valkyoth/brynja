@@ -1,0 +1,11 @@
+[workspace]
+
+[package]
+name = "brynja-hkdf-public-api-fixture"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[dependencies]
+brynja = { path = "../../crates/brynja", version = "=0.26.0", default-features = false }

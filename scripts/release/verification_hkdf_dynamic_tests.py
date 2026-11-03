@@ -4,7 +4,8 @@ import copy
 
 def validate(registry, closures):
     selected = [c for c in registry['checks'] if c['component'] in ('hkdf', 'legacy_hkdf')
-                and c.get('category') in ('miri', 'asan')]
+                and c['id'] in ('asan-derivation', 'asan-fault-cleanup',
+                                'miri-lifecycle', 'miri-fault-cleanup')]
     assert len(selected) == 8
     for component, package, harness, lifecycle, fault, vectors, faults in (
         ('hkdf', 'brynja-crypto', 'hkdf_derivation', 'disjoint_allocation_and_unwind_cleanup',

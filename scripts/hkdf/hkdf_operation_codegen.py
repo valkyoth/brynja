@@ -9,6 +9,7 @@ import hmac_engine_scratch as scratch
 
 IDENTITIES = ("sha224", "sha256", "sha384", "sha512", "sha512_224", "sha512_256")
 ROLES = {"extract": {"block": 64}, "expand": {"block": 64, "previous": 64},
+         "expand_parts": {"block": 64, "previous": 64},
          "label": {"encoded": 514}}
 
 
@@ -34,13 +35,16 @@ def consumers(llvm, family):
     definitions, aliases = graph.definitions_and_aliases(llvm)
     result = {}
     if family == "legacy":
-        for op in ("extract", "expand"):
+        for op in ("extract", "expand", "expand_parts"):
             names = [name for name in definitions if re.fullmatch(
                 r"(?:_RNvMs\w*_Cs\w+_18brynja_legacy_hkdfNtB\w+_7Sha1Prk"
                 + str(len(op)) + op + r"|_ZN18brynja_legacy_hkdf7Sha1Prk"
                 + str(len(op)) + op + r"17h[0-9a-f]+E)", name)]
             require(len(names) == 1, "missing/ambiguous production SHA-1 " + op)
-            result["sha1", op] = definitions[names[0]][1]
+            body = definitions[names[0]][1]
+            if op == "expand":
+                body = operation_body(body, op, family, definitions, aliases)
+            result["sha1", op] = body
         return result
     for identity in IDENTITIES:
         for op in ROLES:
@@ -49,17 +53,29 @@ def consumers(llvm, family):
                      if re.search(suffix + r"(?:17h[0-9a-f]+E)?$", name)]
             require(len(names) == 1, "missing/ambiguous public consumer " + identity + "/" + op)
             body = graph.resolve(names[0], definitions, aliases)[1]
-            role = next(iter(ROLES[op]))
-            if not re.search("%" + role + r"(?:\.[-\w]+)* = alloca", body):
-                method = "expand_label" if op == "label" else op
-                calls = re.findall(r'\b(?:call|invoke)\b[^\n]*@("[^"]+"|\w+)\(', body)
-                calls = [name.strip('"') for name in calls]
-                calls = [name for name in calls if "13brynja_crypto4hkdf6derive" in name
-                         and re.search(str(len(method)) + method + r"(?:17h[0-9a-f]+E|Cs\w+_29brynja_hkdf_operation_cleanup)$", name)]
-                require(len(calls) == 1, "consumer lacks exact production operation")
-                body = graph.resolve(calls[0], definitions, aliases)[1]
-            result[identity, op] = body
+            result[identity, op] = operation_body(body, op, family, definitions, aliases)
     return result
+
+
+def operation_body(body, operation, family, definitions, aliases):
+    """Follow only the known production operation/delegation, never arbitrary calls."""
+    role = next(iter(ROLES[operation]))
+    methods = {"expand", "expand_parts"} if operation == "expand" else {
+        "expand_label" if operation == "label" else operation}
+    seen = set()
+    while not re.search("%" + role + r"(?:\.[-\w]+)* = alloca", body):
+        calls = re.findall(r'\b(?:call|invoke)\b[^\n]*@("[^"]+"|\w+)\(', body)
+        prefix = "18brynja_legacy_hkdf" if family == "legacy" else "13brynja_crypto4hkdf6derive"
+        calls = [name.strip('"') for name in calls]
+        calls = [name for name in calls if prefix in name and any(
+            re.search(str(len(method)) + method +
+                      r"(?:17h[0-9a-f]+E|Cs\w+_29brynja_hkdf_operation_cleanup)?$", name)
+            for method in methods)]
+        require(len(calls) == 1, "consumer lacks exact production operation")
+        require(calls[0] not in seen, "cyclic operation delegation")
+        seen.add(calls[0])
+        body = graph.resolve(calls[0], definitions, aliases)[1]
+    return body
 
 
 def check(llvm, family, panic):

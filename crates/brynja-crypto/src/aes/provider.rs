@@ -48,9 +48,10 @@ pub enum Permissions {
 ///
 /// On success, write exactly one complete block and report `BLOCK_BYTES`.
 /// The wrapper checks the reported length, not the truth of an adapter's claims
-/// or mathematical correctness. Encryption also rejects exact input echoes as
-/// a defensive bypass policy, including legitimate AES fixed points. It cannot
-/// detect partial leakage or other wrong output; the adapter remains trusted.
+/// or mathematical correctness. All complete block values are accepted,
+/// including ciphertext equal to plaintext: AES does not exclude fixed points.
+/// Correct AES computation and prevention of plaintext bypass/leakage remain
+/// the admitted adapter's responsibility, not a heuristic output-value filter.
 /// Partial writes on error are permitted: output
 /// scratch is guarded and never released. Adapters must clear their own copies
 /// and must not expose keys/plaintext in error text, logs or Debug output.
@@ -120,8 +121,8 @@ impl<B: Aes128Backend> Aes128ProviderKey<B> {
 
     /// Encrypt into clearing caller storage; no mode or authentication.
     /// Every error/unwind clears the admitted destination, including rejection.
-    /// Exact input echoes are rejected and quarantine the binding, even if the
-    /// result was a legitimate AES fixed point. This is not correctness validation.
+    /// A complete successful result is not filtered by its value; equality with
+    /// the input does not invalidate the result or quarantine the binding.
     pub fn encrypt_block<'out>(
         &mut self,
         input: &[u8; BLOCK_BYTES],
@@ -141,7 +142,8 @@ impl<B: Aes128Backend> Aes128ProviderKey<B> {
     }
 
     /// Explicitly release ciphertext. Public output is unchanged on error/unwind.
-    /// Uses the same exact-echo rejection policy as [`Self::encrypt_block`].
+    /// Correct ciphertext is the trusted adapter's responsibility. No heuristic
+    /// output-value filter or independent verification of AES is performed.
     pub fn encrypt_block_public(
         &mut self,
         input: &[u8; BLOCK_BYTES],
@@ -192,22 +194,8 @@ impl<B: Aes128Backend> Aes128ProviderKey<B> {
             if written != BLOCK_BYTES {
                 return Err(Error::Provider(ProviderFailureKind::InvalidOutput));
             }
-            if !inverse {
-                let mut difference = Scratch::<1>::new();
-                for (actual, original) in output.iter().zip(input) {
-                    brynja_core::accumulate_secret_byte_difference(
-                        &mut difference.0[0],
-                        actual,
-                        original,
-                    );
-                }
-                let echoed =
-                    brynja_core::secret_difference_is_zero(&difference.0[0]).expose_public();
-                drop(difference);
-                if echoed {
-                    return Err(Error::Provider(ProviderFailureKind::InvalidOutput));
-                }
-            }
+            // Output correctness is the admitted backend's responsibility.
+            // Do not exclude values from AES's complete block output domain.
             Ok(())
         })
     }

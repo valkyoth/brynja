@@ -1,50 +1,38 @@
 use super::*;
 
 #[test]
-fn echoed_encryption_is_atomic_and_permanently_quarantines() {
+fn equal_input_output_is_accepted_without_quarantine_in_every_direction() {
+    // An echo mock tests the wrapper's value-independent contract; it is not
+    // an AES implementation or evidence of a particular real key's fixed point.
     for input in [[0; 16], [0xff; 16], INPUT] {
-        for public in [false, true] {
-            let (backend, state) = Mock::new(Permissions::EncryptAndDecrypt);
-            state.borrow_mut().behavior = Behavior::Echo;
-            let mut key = Aes128ProviderKey::new(Owned(backend));
+        let (backend, state) = Mock::new(Permissions::EncryptAndDecrypt);
+        state.borrow_mut().behavior = Behavior::Echo;
+        let mut key = Aes128ProviderKey::new(Owned(backend));
+        for _ in 0..2 {
             let mut output = [0xa5; 16];
-            let result = if public {
-                key.encrypt_block_public(&input, &mut output, PublicCiphertext::acknowledge())
-            } else {
-                key.encrypt_block(&input, &mut output)
-                    .map(|block| block.clear())
-            };
-            assert_eq!(
-                result,
-                Err(Error::Provider(ProviderFailureKind::InvalidOutput))
-            );
-            assert_eq!(output, if public { [0xa5; 16] } else { [0; 16] });
-            state.borrow_mut().behavior = Behavior::Good;
-            assert!(matches!(
-                key.encrypt_block(&INPUT, &mut output),
-                Err(Error::Quarantined)
-            ));
-            assert!(matches!(
-                key.decrypt_block(&CIPHER, &mut output),
-                Err(Error::Quarantined)
-            ));
+            let block = must(key.encrypt_block(&input, &mut output));
+            assert_eq!(block.expose(), input);
+            block.clear();
+            assert_eq!(output, [0; 16]);
+            let block = must(key.decrypt_block(&input, &mut output));
+            assert_eq!(block.expose(), input);
+            drop(block);
+            assert_eq!(output, [0; 16]);
             output.fill(0xa5);
-            assert_eq!(
-                key.encrypt_block_public(&INPUT, &mut output, PublicCiphertext::acknowledge()),
-                Err(Error::Quarantined)
-            );
-            assert_eq!(output, [0xa5; 16]);
-            assert_eq!(state.borrow().calls.len(), 1);
-            must(key.destroy());
-            assert_eq!(state.borrow().destroyed, 1);
+            must(key.encrypt_block_public(&input, &mut output, PublicCiphertext::acknowledge()));
+            assert_eq!(output, input);
         }
+        assert_eq!(state.borrow().calls.len(), 6);
+        must(key.destroy());
+        assert_eq!(state.borrow().destroyed, 1);
     }
 }
 
 #[test]
-fn echo_guard_checks_every_bit_but_does_not_validate_encryption() {
-    // Deliberately incorrect output differing in any single bit passes this
-    // narrow policy. It is not an AES correctness check or leakage detector.
+fn successful_block_values_are_not_heuristically_validated() {
+    // The trusted adapter, not the wrapper, must ensure AES correctness.
+    // Single-bit differences are neither evidence of encryption nor invalid
+    // block values that the wrapper can reject independently of the key.
     let (backend, state) = Mock::new(Permissions::Encrypt);
     let mut key = Aes128ProviderKey::new(backend);
     for position in 0..16 {
@@ -70,7 +58,7 @@ fn echo_guard_checks_every_bit_but_does_not_validate_encryption() {
 }
 
 #[test]
-fn echo_policy_does_not_reject_decryption_fixed_points() {
+fn equal_decryption_result_preserves_binding_for_later_encryption() {
     let (backend, state) = Mock::new(Permissions::EncryptAndDecrypt);
     state.borrow_mut().behavior = Behavior::Echo;
     let mut key = Aes128ProviderKey::new(backend);

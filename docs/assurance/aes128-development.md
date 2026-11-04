@@ -683,13 +683,14 @@ and !Sync. No unsafe trait override is added by the wrapper.
 Encryption/decryption permissions remain distinct. Secret output uses the same
 clearing `SecretBlock`; public ciphertext requires `PublicCiphertext` and is
 committed only after a complete successful block. Adapter partial writes occur
-only in guarded scratch. Reported lengths other than 16 are rejected, but a
-complete encrypted block equal to its input is also rejected inside terminal
-dispatch. Both encryption APIs use a full-block borrowed constant-time
-difference with clearing scratch. This defensive exact-echo policy also rejects
-legitimate AES fixed points; it is not an AES validity rule. Partial plaintext
-leakage or other incorrect output still cannot be detected by the trait, and
-decryption is not subject to this encryption-only release policy.
+only in guarded scratch. Reported lengths other than 16 are rejected. Complete
+successful blocks are not filtered by value in either direction: a ciphertext
+equal to its plaintext is not excluded by AES and does not quarantine the
+binding. The previous exact-echo rejection was removed as a correctness and
+availability defect. Output correctness, mechanism/key admission and prevention
+of bypass/leakage remain the trusted adapter's responsibility. The wrapper does
+not authenticate or independently verify the adapter's computation. Echo mocks
+test this value-independent API contract, not actual AES fixed-point vectors.
 Errors/unwinds make dispatch terminal. This is not physical fault
 detection, nor does it erase adapter copies, registers, spills or aborted stacks.
 

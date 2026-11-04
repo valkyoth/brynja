@@ -18,6 +18,19 @@ Miri profiles stay separate. `list COMPONENT [CATEGORY]` lists individual IDs;
 `show COMPONENT ID` shows their exact commands, dates, sources and history.
 Grouping changes neither execution selection nor stored evidence.
 
+Results storage uses schema 2: `verification/results.json` is a small index;
+full before/after snapshots live in `verification/snapshots/<sha256>.json` and
+are deduplicated by the hash of their complete contents. Commit both the index
+and referenced snapshot files. These hashes detect corruption, not authenticity.
+Logs remain local under `.runner/logs` as before.
+
+After updating the installed runner, use `brynja-verify migrate-results` to
+upgrade an existing schema-1 file without scanning, recovering interrupted
+attempts, executing checks, changing saved statuses, or rewriting Git history.
+Migration preserves every attempt and is idempotent. Normal status/run saves
+also write schema 2; read-only `show` and `report` still accept schema 1.
+Older runners cannot read schema 2 and must be upgraded. No LFS is required.
+
 See the [everyday guide](../../docs/assurance/brynja-verify.md) for all commands,
 registry format, history, limitations and troubleshooting. The runnable registry
 has 27 portable harness checks, 48 scoped sanitizer commands, 4,933 existing

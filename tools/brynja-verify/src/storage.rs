@@ -9,6 +9,7 @@ use time::{OffsetDateTime, format_description::well_known::Rfc3339};
 
 pub const STATE: &str = "verification/results.json";
 pub const REPORT: &str = "docs/VERIFICATION_RESULTS.md";
+pub const SNAPSHOTS: &str = "verification/snapshots";
 
 pub fn stamp() -> String {
     OffsetDateTime::now_utc()
@@ -52,6 +53,8 @@ pub fn lock(root: &Path) -> Result<File> {
 pub fn atomic(root: &Path, name: &str, bytes: &[u8]) -> Result<()> {
     let path = relative(root, name)?;
     if fs::read(&path).ok().as_deref() == Some(bytes) {
+        File::open(&path)?.sync_all()?;
+        sync_parents(root, &path)?;
         return Ok(());
     }
     let parent = path.parent().ok_or("output parent missing")?;
@@ -65,6 +68,9 @@ pub fn atomic(root: &Path, name: &str, bytes: &[u8]) -> Result<()> {
         file.write_all(bytes)?;
         file.sync_all()?;
         fs::rename(&temp, &path)?;
+        // Publish references only after object files and directory entries are
+        // durable. Sync newly created ancestor directories as well (Unix).
+        sync_parents(root, &path)?;
         Ok(())
     })();
     // Never remove somebody else's temporary file on create_new failure.
@@ -79,6 +85,21 @@ pub fn atomic(root: &Path, name: &str, bytes: &[u8]) -> Result<()> {
     result
 }
 
+pub fn sync_parents(root: &Path, path: &Path) -> Result<()> {
+    #[cfg(unix)]
+    for directory in path
+        .parent()
+        .ok_or("output parent missing")?
+        .ancestors()
+        .take_while(|p| p.starts_with(root))
+    {
+        File::open(directory)?.sync_all()?;
+    }
+    #[cfg(not(unix))]
+    let _ = (root, path);
+    Ok(())
+}
+
 pub fn load(root: &Path) -> Result<State> {
     let path = relative(root, STATE)?;
     if !path.exists() {
@@ -87,17 +108,11 @@ pub fn load(root: &Path) -> Result<State> {
             ..State::default()
         });
     }
-    let state: State = serde_json::from_slice(&fs::read(path)?)?;
-    if state.schema != 1 {
-        return Err("unsupported results schema".into());
-    }
-    Ok(state)
+    crate::snapshot_store::decode(root, &fs::read(path)?)
 }
 
 pub fn save(root: &Path, state: &State) -> Result<()> {
-    let mut bytes = serde_json::to_vec_pretty(state)?;
-    bytes.push(b'\n');
-    atomic(root, STATE, &bytes)
+    crate::snapshot_store::save(root, state)
 }
 
 pub fn recover(state: &mut State, component: Option<&str>) {

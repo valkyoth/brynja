@@ -137,12 +137,56 @@ repository-wide registered status view refreshed.
 - `verification/kani-checks.json`: explicit bindings for nine existing proof groups.
 - `verification/catalog.json`: generated full existing inventory and original
   historical observations, without current-pass claims.
-- `verification/results.json`: authoritative attempts, fingerprints and views.
+- `verification/results.json`: local attempts and views, with content IDs for
+  before/after snapshots (schema 2). Not authenticated certification evidence.
+- `verification/snapshots/<sha256>.json`: complete input snapshots, stored once
+  per unique content hash. Track these alongside the index in Git.
 - `docs/VERIFICATION_RESULTS.md`: generated report, not a database.
 - `docs/VERIFICATION_CATALOG.md`: every catalog assessment and its latest
   historical outcome; use `show` to see all older successes/failures as well.
 - `verification/.runner/logs/`: ignored local execution logs, referenced and
   hashed in attempts. Preserve relevant logs with your other local evidence.
+
+### Results storage migration
+
+Update the installed runner before opening a checkout containing schema 2:
+
+```sh
+cargo install --path tools/brynja-verify --locked --offline --force
+brynja-verify migrate-results
+```
+
+The offline install assumes dependencies are already available locally.
+`migrate-results` requires an existing results file and takes the same exclusive
+state lock as execution. It does not load the registry, inspect inputs/tools,
+run checks, recover running attempts, rewrite the report, or change outcomes,
+dates, sources, failures, saved freshness or historical references. Repeating it
+on unchanged state does not rewrite the index or create duplicate objects.
+Normal status/run saves also upgrade schema 1; `show` and `report` can still
+read schema 1 without migrating it. Old binaries fail on schema 2: upgrade them,
+do not delete results or manufacture a new pass to work around that error.
+
+Each object ID is SHA-256 over the complete snapshot file, including its final
+newline, not merely the recorded input fingerprint. All referenced objects are
+loaded and hash-checked before state is used. Missing, corrupt, malformed or
+symlinked objects produce an error before execution; they never become an empty
+history or a successful check. Restore the exact missing/corrupt objects from
+the matching Git revision or backup. `show` still expands complete snapshots.
+Content hashes protect integrity, not authenticity against someone who can
+rewrite both snapshots and the index. Records remain local observations.
+
+Objects are written before atomic index replacement, with file and directory
+sync on Unix. A failed write can leave complete unreferenced objects or a
+PID-specific `.verify-*.tmp` diagnostic file; it does not replace the old index
+with references to partial objects. No automatic history pruning or object
+garbage collection occurs. Preserve the index and all referenced objects when
+copying a checkout. Snapshot outputs are excluded from verification inputs.
+
+This removes duplicate snapshots and splits future growth across immutable
+files; the index still grows with attempt metadata. It is not a bounded-history
+policy. Previously committed large blobs remain in Git history, and a push
+containing those old commits can still warn. No history rewrite, force-push or
+Git LFS migration is performed.
 
 The scoped runnable registry contains **5,687 checks/configurations**: 27 portable,
 48 sanitizer, 4,933 Miri, nine Kani, 350 compiler compatibility and 320 component

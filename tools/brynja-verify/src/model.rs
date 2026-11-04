@@ -128,7 +128,7 @@ pub struct Snapshot {
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
-pub struct Attempt {
+pub struct Attempt<S = Snapshot> {
     pub id: String,
     pub source: String,
     pub started: String,
@@ -140,10 +140,31 @@ pub struct Attempt {
     pub stdin: Option<String>,
     pub cwd: String,
     pub environment: Map,
-    pub before: Snapshot,
-    pub after: Option<Snapshot>,
+    pub before: S,
+    pub after: Option<S>,
     pub log: String,
     pub log_sha256: Option<String>,
+}
+
+impl<S> Attempt<S> {
+    pub fn with_snapshots<T>(&self, before: T, after: Option<T>) -> Attempt<T> {
+        Attempt {
+            id: self.id.clone(),
+            source: self.source.clone(),
+            started: self.started.clone(),
+            ended: self.ended.clone(),
+            outcome: self.outcome.clone(),
+            explanation: self.explanation.clone(),
+            command: self.command.clone(),
+            stdin: self.stdin.clone(),
+            cwd: self.cwd.clone(),
+            environment: self.environment.clone(),
+            before,
+            after,
+            log: self.log.clone(),
+            log_sha256: self.log_sha256.clone(),
+        }
+    }
 }
 
 #[derive(Debug, Default, Clone, Deserialize, Serialize, PartialEq, Eq)]
@@ -160,10 +181,10 @@ pub struct View {
 
 #[derive(Debug, Default, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
-pub struct State {
+pub struct State<S = Snapshot> {
     pub schema: u32,
     #[serde(default)]
-    pub attempts: BTreeMap<String, Vec<Attempt>>,
+    pub attempts: BTreeMap<String, Vec<Attempt<S>>>,
     #[serde(default)]
     pub views: BTreeMap<String, View>,
     // Evidence that cannot be mapped stays discoverable without becoming PASS.

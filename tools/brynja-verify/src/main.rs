@@ -7,6 +7,7 @@ mod patterns;
 mod registrations;
 mod report;
 mod runner;
+mod snapshot_store;
 mod storage;
 mod summary;
 
@@ -26,6 +27,7 @@ brynja-verify [--root PATH] run COMPONENT CHECK
 brynja-verify [--root PATH] run COMPONENT --needed|--all [--category CATEGORY]
 brynja-verify [--root PATH] full-check
 brynja-verify [--root PATH] report
+brynja-verify [--root PATH] migrate-results
 brynja-verify [--root PATH] list COMPONENT [CATEGORY]
 brynja-verify [--root PATH] show COMPONENT CHECK
 
@@ -36,6 +38,7 @@ Use list COMPONENT [CATEGORY] and show COMPONENT CHECK for individual details.
 full-check is a LOCAL STATUS SCAN, NOT a verification campaign. It executes no
 tests/proofs, compiles nothing, installs no tools and contacts no remote services.
 report regenerates the report from saved state without scanning inputs.
+migrate-results losslessly upgrades saved storage; no scan, recovery or execution.
 run executes sequentially and stops on failure, retaining completed results.
 --needed excludes current successful results; --all explicitly reruns them.
 --category restricts execution, for example run md5 --needed --category asan.
@@ -144,6 +147,18 @@ fn main_result() -> Result<bool> {
         std::env::current_dir()?
     };
     let root = std::fs::canonicalize(root)?;
+    if args == ["migrate-results"] {
+        let _lock = storage::lock(&root)?;
+        if !storage::relative(&root, storage::STATE)?.is_file() {
+            return Err("no results file to migrate".into());
+        }
+        let state = storage::load(&root)?;
+        storage::save(&root, &state)?;
+        println!(
+            "Results stored as schema 2 with content-addressed snapshots. No attempts or views changed; no verification executed."
+        );
+        return Ok(true);
+    }
     let registry = registry(&root)?;
     let catalog = catalog::load(&root, &registry)?;
     if args.first().is_some_and(|a| a == "list" || a == "show") {

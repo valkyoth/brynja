@@ -26,8 +26,16 @@ pub fn head(root: &Path) -> Result<String> {
 }
 
 pub fn excluded(name: &str) -> bool {
+    let normalized = name
+        .split('/')
+        .filter(|p| !p.is_empty() && *p != ".")
+        .collect::<Vec<_>>()
+        .join("/");
+    let name = normalized.as_str();
     name == storage::STATE
         || name == storage::REPORT
+        || name == storage::SNAPSHOTS
+        || name.starts_with(&format!("{}/", storage::SNAPSHOTS))
         || name
             .split('/')
             .any(|p| matches!(p, ".git" | "target" | ".runner" | "__pycache__"))

@@ -177,7 +177,7 @@ pub fn run(
         stdin: check.stdin.clone(),
         cwd: check.cwd.clone(),
         environment: inputs::environment(check),
-        before,
+        before: before.into(),
         after: None,
         log: log_name,
         log_sha256: None,
@@ -293,7 +293,7 @@ pub fn run(
     // Re-read the selected definition as well as its files. Command, bounds,
     // completion criteria and input declarations may have changed while running.
     let after = inputs::registered_snapshot(root, &check.key());
-    if outcome == "passed" && after.as_ref().ok() != Some(&attempt.before) {
+    if outcome == "passed" && after.as_ref().ok() != Some(attempt.before.as_ref()) {
         outcome = "input_changed".into();
         explanation = match &after {
             Ok(now) => inputs::difference(&attempt.before, now),
@@ -303,7 +303,7 @@ pub fn run(
     attempt.ended = Some(storage::stamp());
     attempt.outcome = outcome;
     attempt.explanation = explanation;
-    attempt.after = after.ok();
+    attempt.after = after.ok().map(Into::into);
     log.sync_all()?;
     attempt.log_sha256 = Some(inputs::hash(&std::fs::read(log_path)?));
     let passed = attempt.outcome == "passed";

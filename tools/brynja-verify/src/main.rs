@@ -9,6 +9,7 @@ mod report;
 mod runner;
 mod snapshot_store;
 mod storage;
+mod store_limits;
 mod summary;
 
 use model::*;

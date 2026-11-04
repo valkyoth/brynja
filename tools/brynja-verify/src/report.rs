@@ -23,7 +23,7 @@ pub fn view(rows: &[Attempt], current: &Result<Snapshot>) -> View {
             current
                 .as_ref()
                 .ok()
-                .and_then(|now| rows.iter().rev().find(|r| r.before == *now))
+                .and_then(|now| rows.iter().rev().find(|r| r.before.as_ref() == now))
                 .unwrap_or(latest)
         } else {
             latest
@@ -41,8 +41,8 @@ pub fn view(rows: &[Attempt], current: &Result<Snapshot>) -> View {
             ));
         }
         view.freshness = match current {
-            Ok(now) if selected.before == *now => {
-                if selected.outcome == "passed" && selected.after.as_ref() == Some(now) {
+            Ok(now) if selected.before.as_ref() == now => {
+                if selected.outcome == "passed" && selected.after.as_deref() == Some(now) {
                     "Up to date".into()
                 } else {
                     format!(

@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::collections::BTreeMap;
+use std::{collections::BTreeMap, sync::Arc};
 
 pub type Map = BTreeMap<String, String>;
 
@@ -128,7 +128,7 @@ pub struct Snapshot {
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
-pub struct Attempt<S = Snapshot> {
+pub struct Attempt<S = Arc<Snapshot>> {
     pub id: String,
     pub source: String,
     pub started: String,
@@ -180,10 +180,10 @@ pub struct View {
 }
 
 #[derive(Debug, Default, Deserialize, Serialize)]
-#[serde(deny_unknown_fields)]
-pub struct State<S = Snapshot> {
+#[serde(deny_unknown_fields, bound(deserialize = "S: Deserialize<'de>"))]
+pub struct State<S = Arc<Snapshot>> {
     pub schema: u32,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::store_limits::attempts")]
     pub attempts: BTreeMap<String, Vec<Attempt<S>>>,
     #[serde(default)]
     pub views: BTreeMap<String, View>,

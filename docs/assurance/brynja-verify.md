@@ -183,10 +183,71 @@ garbage collection occurs. Preserve the index and all referenced objects when
 copying a checkout. Snapshot outputs are excluded from verification inputs.
 
 This removes duplicate snapshots and splits future growth across immutable
-files; the index still grows with attempt metadata. It is not a bounded-history
-policy. Previously committed large blobs remain in Git history, and a push
+files; the index still grows with attempt metadata. It does not prune history;
+the artifact budgets below stop over-limit loads/saves. Previously committed
+large blobs remain in Git history, and a push
 containing those old commits can still warn. No history rewrite, force-push or
 Git LFS migration is performed.
+
+### Artifact resource limits
+
+Schema-2 references share immutable `Arc<Snapshot>` allocations: repeating an
+object ID does not duplicate its maps or strings in memory. Freshness still
+compares full snapshot contents, not pointer identity. The disk schema and
+stored content hashes are unchanged.
+
+The runner enforces fixed budgets, not values supplied by an artifact:
+
+- Results index: 64 MiB, including legacy schema-1 input.
+- Individual schema-2 snapshot: 2 MiB.
+- Total distinct referenced snapshot-file bytes per load/save: 256 MiB.
+- Attempts: 10,000 across all groups, enforced during JSON deserialization
+  before accepting another row, and again before saving.
+- Expanded `show` JSON: 64 MiB, serialized directly from borrowed data into a
+  bounded buffer, without first expanding snapshots into a JSON value tree.
+
+Byte limits include final newlines. File metadata is checked before reading;
+the read itself is also bounded so file growth cannot bypass that check.
+Totals use checked arithmetic, and repeated object references are charged only
+once. Legacy inline snapshots are bounded by the index limit rather than the
+schema-2 object limits. Byte budgets bound serialized data, **not total process
+RSS**: parsed maps/strings, allocator overhead and other tool data use additional
+memory. This is not an OS sandbox for an untrusted checkout or its commands.
+
+Over-budget artifacts fail closed before execution; no automatic truncation,
+history deletion or current-pass substitution occurs. Saving enforces the same
+budgets and never publishes an index the loader would reject for these limits.
+An oversized detail response fails without printing partial JSON or changing
+state. Preserve the complete store when arranging explicit archival/rotation
+at a limit; do not delete evidence merely to silence the error. As with other
+save failures, a limit reached while completing a run leaves the durable
+starting record and local log, not a fabricated successful completion.
+
+### Snapshot storage follow-up review — 2026-11-04
+
+The [owner-supplied review](../../security/pentest/v0.27.0-snapshot-storage-review-input.md)
+identified Medium snapshot-reference memory amplification. The remediation is
+shared immutable snapshots plus the parsing/serialization budgets above. It also
+removes the intermediate expanded JSON value from `show`; otherwise that path
+could recreate the same amplification after loading. No disk schema, content
+hash, cryptographic implementation or recorded verification result changed.
+
+Regression coverage includes 10,000 attempts sharing one 140 KiB object through
+20,000 references (allocation identity is asserted), rejection of the next row
+before parsing it, exact and exceeded byte/count/cumulative budgets, growing
+streams, sparse oversized files, checked-add overflow, failed-save preservation,
+and bounded detailed output without partial JSON. Existing tests continue to
+cover malformed IDs, hash mismatches, symlinks, legacy migration, interrupted
+writes, matching-input reuse and failure precedence.
+
+Local validation: all 69 verifier tests passed on Rust 1.90.0 and 1.99.1,
+including an isolated MSRV build directory; Clippy with `-D warnings`, formatting,
+280 registry tests, 25 scoped-release tests and diff-integrity checks passed.
+The updated installed runner's migration and detail-read smoke checks left the
+real index, report and all 410 objects byte-identical. These observations are
+not an independent retest or release approval. The accompanying AES observations
+retain their [existing dispositions](aes128-pentest-remediation.md); physical
+leakage/qualification limits are not claimed fixed by this storage change.
 
 The scoped runnable registry contains **5,687 checks/configurations**: 27 portable,
 48 sanitizer, 4,933 Miri, nine Kani, 350 compiler compatibility and 320 component

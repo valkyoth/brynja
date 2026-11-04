@@ -96,8 +96,8 @@ fn migration_preserves_every_field_and_deduplicates_full_content() {
         old.attempts["md5/a"][1].after.clone().unwrap(),
     ] {
         assert_eq!(
-            crate::report::view(&old.attempts["md5/a"], &Ok(now.clone())),
-            crate::report::view(&restored.attempts["md5/a"], &Ok(now))
+            crate::report::view(&old.attempts["md5/a"], &Ok((*now).clone())),
+            crate::report::view(&restored.attempts["md5/a"], &Ok((*now).clone()))
         );
     }
     let bytes = fs::read(root.join(storage::STATE)).unwrap();
@@ -222,4 +222,227 @@ fn symlinked_object_or_directory_is_rejected_even_if_content_matches() {
         assert!(storage::load(root).is_err());
         assert!(storage::save(root, &state).is_err());
     }
+}
+
+#[test]
+fn ten_thousand_references_share_one_large_allocation() {
+    let dir = tempfile::tempdir().unwrap();
+    let root = dir.path();
+    storage::save(root, &sample()).unwrap();
+    let snapshot = Snapshot {
+        fingerprint: "large-shared-object".into(),
+        inputs: [("large".into(), "x".repeat(140 * 1024))].into(),
+    };
+    let bytes = store_limits::encode(&snapshot, LIMITS.object, false).unwrap();
+    let id = inputs::hash(&bytes);
+    fs::write(root.join(name(&id).unwrap()), bytes).unwrap();
+    let mut disk: State<String> = serde_json::from_value(index(root)).unwrap();
+    let mut row = disk.attempts["md5/a"][0].clone();
+    row.before = id.clone();
+    row.after = Some(id);
+    disk.attempts = [("md5/a".into(), vec![row.clone(); LIMITS.attempts])].into();
+    let bytes = store_limits::encode(&disk, LIMITS.index, false).unwrap();
+    // 20,000 references would formerly deep-copy roughly 2.7 GiB.
+    let loaded = decode(root, &bytes).unwrap();
+    let first = &loaded.attempts["md5/a"][0].before;
+    assert_eq!(first.inputs["large"].len(), 140 * 1024);
+    for row in &loaded.attempts["md5/a"] {
+        assert!(Arc::ptr_eq(first, &row.before));
+        assert!(Arc::ptr_eq(first, row.after.as_ref().unwrap()));
+    }
+    // The cap applies across keys, not just within a single group.
+    disk.attempts.insert("aes/b".into(), vec![row]);
+    let bytes = store_limits::encode(&disk, LIMITS.index, false).unwrap();
+    assert!(
+        decode(root, &bytes)
+            .unwrap_err()
+            .to_string()
+            .contains("attempt count")
+    );
+    // Refuse the next row before even parsing its contents (and across keys).
+    let mut invalid_next = serde_json::to_value(&disk).unwrap();
+    invalid_next["attempts"]
+        .as_object_mut()
+        .unwrap()
+        .remove("aes/b");
+    invalid_next["attempts"]["zz/overflow"] = json!([null]);
+    let bytes = serde_json::to_vec(&invalid_next).unwrap();
+    assert!(
+        decode(root, &bytes)
+            .unwrap_err()
+            .to_string()
+            .contains("attempt count")
+    );
+}
+
+#[test]
+fn load_budgets_accept_exact_boundaries_and_reject_excess_before_expansion() {
+    let dir = tempfile::tempdir().unwrap();
+    let root = dir.path();
+    storage::save(root, &sample()).unwrap();
+    let bytes = fs::read(root.join(storage::STATE)).unwrap();
+    let sizes: Vec<_> = objects(root)
+        .iter()
+        .map(|p| fs::metadata(p).unwrap().len() as usize)
+        .collect();
+    let limits = Limits {
+        index: bytes.len(),
+        object: *sizes.iter().max().unwrap(),
+        total_objects: sizes.iter().sum(),
+        attempts: 5,
+    };
+    equal_contents(
+        &sample(),
+        &decode_with_limits(root, &bytes, limits).unwrap(),
+    );
+    for limited in [
+        Limits {
+            index: limits.index - 1,
+            ..limits
+        },
+        Limits {
+            object: limits.object - 1,
+            ..limits
+        },
+        Limits {
+            total_objects: limits.total_objects - 1,
+            ..limits
+        },
+        Limits {
+            attempts: 4,
+            ..limits
+        },
+    ] {
+        assert!(
+            decode_with_limits(root, &bytes, limited)
+                .unwrap_err()
+                .to_string()
+                .contains("storage limit")
+        );
+    }
+    // Refuse the count before trying to read any referenced objects.
+    for path in objects(root) {
+        fs::remove_file(path).unwrap();
+    }
+    assert!(
+        decode_with_limits(
+            root,
+            &bytes,
+            Limits {
+                attempts: 4,
+                ..limits
+            }
+        )
+        .unwrap_err()
+        .to_string()
+        .contains("attempt count")
+    );
+    let legacy = serde_json::to_vec(&sample()).unwrap();
+    assert!(
+        decode_with_limits(
+            root,
+            &legacy,
+            Limits {
+                index: legacy.len() - 1,
+                ..LIMITS
+            }
+        )
+        .is_err()
+    );
+    assert!(
+        decode_with_limits(
+            root,
+            &legacy,
+            Limits {
+                attempts: 4,
+                ..LIMITS
+            }
+        )
+        .is_err()
+    );
+    equal_contents(
+        &sample(),
+        &decode_with_limits(
+            root,
+            &legacy,
+            Limits {
+                index: legacy.len(),
+                attempts: 5,
+                ..LIMITS
+            },
+        )
+        .unwrap(),
+    );
+}
+
+#[test]
+fn save_budgets_never_replace_a_usable_index_with_unreadable_state() {
+    let dir = tempfile::tempdir().unwrap();
+    let root = dir.path();
+    let state = sample();
+    storage::save(root, &state).unwrap();
+    let original = fs::read(root.join(storage::STATE)).unwrap();
+    let sizes: Vec<_> = objects(root)
+        .iter()
+        .map(|p| fs::metadata(p).unwrap().len() as usize)
+        .collect();
+    let exact = Limits {
+        index: original.len(),
+        object: *sizes.iter().max().unwrap(),
+        total_objects: sizes.iter().sum(),
+        attempts: 5,
+    };
+    save_with_limits(root, &state, exact).unwrap();
+    for limited in [
+        Limits {
+            index: exact.index - 1,
+            ..exact
+        },
+        Limits {
+            object: exact.object - 1,
+            ..exact
+        },
+        Limits {
+            total_objects: exact.total_objects - 1,
+            ..exact
+        },
+        Limits {
+            attempts: 4,
+            ..exact
+        },
+    ] {
+        assert!(
+            save_with_limits(root, &state, limited)
+                .unwrap_err()
+                .to_string()
+                .contains("storage limit")
+        );
+        assert_eq!(fs::read(root.join(storage::STATE)).unwrap(), original);
+        equal_contents(&storage::load(root).unwrap(), &state);
+    }
+}
+
+#[test]
+fn save_refuses_oversized_existing_object_without_repair_or_index_change() {
+    let dir = tempfile::tempdir().unwrap();
+    let root = dir.path();
+    let state = sample();
+    storage::save(root, &state).unwrap();
+    let original = fs::read(root.join(storage::STATE)).unwrap();
+    let path = root.join(name(&first_id(root)).unwrap());
+    let length = (LIMITS.object as u64) + 1;
+    fs::OpenOptions::new()
+        .write(true)
+        .open(&path)
+        .unwrap()
+        .set_len(length)
+        .unwrap();
+    assert!(
+        storage::save(root, &state)
+            .unwrap_err()
+            .to_string()
+            .contains("storage limit")
+    );
+    assert_eq!(fs::metadata(path).unwrap().len(), length);
+    assert_eq!(fs::read(root.join(storage::STATE)).unwrap(), original);
 }

@@ -52,7 +52,11 @@ pub fn lock(root: &Path) -> Result<File> {
 
 pub fn atomic(root: &Path, name: &str, bytes: &[u8]) -> Result<()> {
     let path = relative(root, name)?;
-    if fs::read(&path).ok().as_deref() == Some(bytes) {
+    if crate::store_limits::read(&path, bytes.len())
+        .ok()
+        .as_deref()
+        == Some(bytes)
+    {
         File::open(&path)?.sync_all()?;
         sync_parents(root, &path)?;
         return Ok(());
@@ -108,7 +112,10 @@ pub fn load(root: &Path) -> Result<State> {
             ..State::default()
         });
     }
-    crate::snapshot_store::decode(root, &fs::read(path)?)
+    crate::snapshot_store::decode(
+        root,
+        &crate::store_limits::read(&path, crate::store_limits::LIMITS.index)?,
+    )
 }
 
 pub fn save(root: &Path, state: &State) -> Result<()> {

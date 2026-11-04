@@ -31,6 +31,12 @@ Migration preserves every attempt and is idempotent. Normal status/run saves
 also write schema 2; read-only `show` and `report` still accept schema 1.
 Older runners cannot read schema 2 and must be upgraded. No LFS is required.
 
+Snapshot references also share memory. Artifact budgets are 64 MiB per index,
+2 MiB per snapshot, 256 MiB of distinct snapshot bytes and 10,000 attempts
+across groups. Expanded `show` output is capped at 64 MiB. Oversized artifacts
+fail explicitly; no history is silently dropped. See the guide for recovery
+and the distinction between serialized-byte budgets and process memory.
+
 See the [everyday guide](../../docs/assurance/brynja-verify.md) for all commands,
 registry format, history, limitations and troubleshooting. The runnable registry
 has 27 portable harness checks, 48 scoped sanitizer commands, 4,933 existing

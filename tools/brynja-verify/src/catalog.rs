@@ -219,12 +219,24 @@ impl Catalog {
                             .is_some_and(|row| row.families.contains(&c.component)))
             }) {
                 let state = storage::load(root)?;
-                println!(
-                    "{}",
-                    serde_json::to_string_pretty(
-                        &serde_json::json!({"registration": check, "attempts":state.attempts.get(&check.key()), "view":crate::report::display_view(check, &state, self), "historical_catalog": self.entry(component, &check.id)})
-                    )?
-                );
+                // Borrow the shared snapshots directly. json! would first deep
+                // expand every reference into a Value, defeating storage sharing.
+                #[derive(Serialize)]
+                struct Detail<'a> {
+                    attempts: Option<&'a Vec<Attempt>>,
+                    historical_catalog: Option<&'a Entry>,
+                    registration: &'a Check,
+                    view: View,
+                }
+                let detail = Detail {
+                    attempts: state.attempts.get(&check.key()),
+                    historical_catalog: self.entry(component, &check.id),
+                    registration: check,
+                    view: crate::report::display_view(check, &state, self),
+                };
+                let bytes =
+                    crate::store_limits::encode(&detail, crate::store_limits::LIMITS.index, true)?;
+                std::io::Write::write_all(&mut std::io::stdout().lock(), &bytes)?;
             } else if let Some(row) = self.entry(component, &args[2]) {
                 println!(
                     "{} No execution selected.\n{}",

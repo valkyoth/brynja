@@ -5,6 +5,7 @@ import importlib.util
 import json
 from pathlib import Path
 import tempfile
+from types import SimpleNamespace
 import tomllib
 import unittest
 from unittest.mock import patch
@@ -20,6 +21,50 @@ def success():
 
 
 class ConsumerTests(unittest.TestCase):
+    def missing_result(self):
+        message = {'level': 'error', 'code': {'code': 'E0432'}, 'message': 'unresolved import aes',
+                   'spans': [{'is_primary': True, 'file_name': 'src/lib.rs'}]}
+        return SimpleNamespace(returncode=101, stdout=json.dumps({'reason': 'compiler-message', 'message': message}))
+
+    def test_feature_failure_is_exact_and_not_a_build_problem(self):
+        consumer.missing_aes(self.missing_result())
+        for code, output in [(0, ''), (1, ''), (-9, ''), (101, ''),
+                             (101, self.missing_result().stdout * 2),
+                             (101, self.missing_result().stdout.replace('E0432', 'E0308')),
+                             (101, self.missing_result().stdout.replace('src/lib.rs', 'other.rs')),
+                             (101, self.missing_result().stdout.replace('aes', 'unrelated'))]:
+            with self.subTest(code=code, output=output), self.assertRaises(ValueError):
+                consumer.missing_aes(SimpleNamespace(returncode=code, stdout=output))
+
+    def test_feature_probe_exercises_both_defaults_and_positive_controls(self):
+        for route in consumer.ROUTES:
+            seen = []
+            def run(command, env, cwd):
+                seen.append((command, (cwd / 'Cargo.toml').read_text(), (cwd / 'src/lib.rs').read_text()))
+                return ''
+            with tempfile.TemporaryDirectory() as temporary, \
+                 patch.object(consumer.verifier, 'run', side_effect=run), \
+                 patch.object(consumer.subprocess, 'run', return_value=self.missing_result()) as negative, \
+                 patch('builtins.print') as emit:
+                consumer.feature_probe('1.90.0', route, Path(temporary) / 'probe')
+            self.assertEqual(negative.call_count, 2)
+            self.assertEqual(len(seen), 6)
+            for offset, defaults in ((0, 'true'), (3, 'false')):
+                self.assertIn('default-features=' + defaults, seen[offset][1])
+                self.assertIn('features=[]', seen[offset][1])
+                self.assertIn('::hkdf;', seen[offset + 1][2])
+                self.assertIn('features=["hazmat-aes-block"]', seen[offset + 2][1])
+                self.assertIn('::aes::Aes128Key;', seen[offset + 2][2])
+            emit.assert_called_once()
+
+    def test_feature_probe_failure_never_prints_success(self):
+        with tempfile.TemporaryDirectory() as temporary, \
+             patch.object(consumer.verifier, 'run'), \
+             patch.object(consumer.subprocess, 'run', return_value=SimpleNamespace(returncode=0, stdout='')), \
+             patch('builtins.print') as emit, self.assertRaises(ValueError):
+            consumer.feature_probe('1.90.0', 'direct', Path(temporary) / 'probe')
+        emit.assert_not_called()
+
     def test_matrix_and_endpoint_populations(self):
         self.assertEqual(consumer.MATRIX, ('1.90.0', '1.91.0', '1.92.0', '1.93.0', '1.94.0', '1.95.0',
                                           '1.96.0', '1.96.1', '1.97.0', '1.97.1', '1.98.0', '1.98.1', '1.99.0', '1.99.1'))
@@ -74,6 +119,8 @@ class ConsumerTests(unittest.TestCase):
             features = [route] if name == consumer.NAME else ['default']
             if name == 'brynja' or (name == 'brynja-crypto' and route == 'direct'):
                 features = []
+            if name in ('brynja', 'brynja-crypto'):
+                features.append('hazmat-aes-block')
             if name == 'brynja-hash-sha2':
                 features.append('general-sha512-t')
             packages.append({'id': name, 'name': name, 'manifest_path': str(manifest), 'source': None})

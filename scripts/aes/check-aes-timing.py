@@ -35,7 +35,8 @@ def policy():
         'package': {'name': 'brynja-aes-timing', 'version': '0.0.0', 'edition': '2024',
                     'rust-version': '1.90', 'publish': False},
         'workspace': {},
-        'dependencies': {'brynja-crypto': {'path': '../../crates/brynja-crypto', 'default-features': False}},
+        'dependencies': {'brynja-crypto': {'path': '../../crates/brynja-crypto', 'default-features': False,
+                                          'features': ['hazmat-aes-block']}},
         'profile': {'release': {'opt-level': 3, 'lto': 'fat', 'codegen-units': 1,
                                 'overflow-checks': True, 'panic': 'abort'}},
     }, 'fixture build policy changed')

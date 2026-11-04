@@ -37,6 +37,11 @@ class OwnerContractTests(unittest.TestCase):
     def test_current_contract(self):
         self.validate()
 
+    def test_reject_empty_scratch_guard_removal(self):
+        self.mutate(contract.SOURCE, 'assert!(N > 0,', 'assert!(N >= 0,')
+        with self.assertRaisesRegex(ValueError, 'nonempty compile-time guard'):
+            self.validate()
+
     def test_fixed_array_signature_has_a_real_body(self):
         body = contract.callable_body(self.root, contract.SOURCE, 'Aes128Key', 'transform')
         self.assertIn('Scratch::<176>::new()', body)

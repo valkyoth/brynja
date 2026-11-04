@@ -11,7 +11,9 @@
 
 #![no_std]
 
-/// Development portable AES-128 block primitive; deployment qualification pending.
+/// Opt-in raw AES-128 blocks, not authenticated message encryption.
+/// Requires `hazmat-aes-block`; deployment qualification remains separate.
+#[cfg(feature = "hazmat-aes-block")]
 pub mod aes;
 
 /// Explicit CPU authority and batch owners, not automatic detection or dispatch.

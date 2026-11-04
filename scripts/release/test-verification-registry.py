@@ -159,6 +159,10 @@ class RegistryTests(unittest.TestCase):
                 self.assertRegex(check[field], r'^[a-z0-9_-]+$')
             self.assertIn('aes-build', check['inputs'])
             self.assertNotIn('--workspace', check['command'])
+            if check['command'][0] == 'cargo':
+                command = check['command']
+                self.assertIn('--features', command)
+                self.assertEqual(command[command.index('--features') + 1], 'hazmat-aes-block')
             if count:
                 self.assertEqual(check['success']['exact_tests'], count)
                 self.assertEqual(check['success']['minimum_tests'], count)
@@ -207,7 +211,7 @@ class RegistryTests(unittest.TestCase):
             f'AES_DOWNSTREAM_HOST: {compiler} {route} {profile} 6 exact tests'
             for compiler in consumer.TOOLCHAINS for route in consumer.ROUTES for profile in ('debug', 'release')
         ] + [f'AES_DOWNSTREAM_TARGET: {compiler} {route} thumbv7em-none-eabi compile-only'
-             for compiler in consumer.TOOLCHAINS for route in consumer.ROUTES])
+             for compiler in consumer.TOOLCHAINS for route in consumer.ROUTES] + consumer.FEATURE_MARKERS)
         self.assertTrue({'aes-build', 'aes-consumer', 'compiler', 'hkdf-msrv'} <= set(check['inputs']))
         paths = self.registry['groups']['aes-consumer']['paths']
         for name in consumer.FACADE:
@@ -230,7 +234,7 @@ class RegistryTests(unittest.TestCase):
             f'AES_DOWNSTREAM_HOST: {compiler} {route} {profile} 6 exact tests'
             for compiler in consumer.MATRIX for route in consumer.ROUTES for profile in ('debug', 'release')
         ] + [f'AES_DOWNSTREAM_TARGET: {compiler} {route} thumbv7em-none-eabi compile-only'
-             for compiler in consumer.TOOLCHAINS for route in consumer.ROUTES])
+             for compiler in consumer.TOOLCHAINS for route in consumer.ROUTES] + consumer.FEATURE_MARKERS)
 
     def test_aes_timing_scope_and_full_input_closure(self):
         check = next(c for c in self.registry['checks'] if c['component'] == 'aes' and c['id'] == 'timing-screen')
@@ -284,7 +288,8 @@ class RegistryTests(unittest.TestCase):
         mutation = checks['mutation-controls']
         self.assertEqual(mutation['command'], ['python3', 'scripts/aes/check-aes-mutations.py'])
         self.assertEqual(mutation['success']['unique_lines'], [aes_runner_tests.mutation.MARKER] +
-                         ['AES_MUTATION_REJECTED: ' + m[0] for m in aes_runner_tests.mutation.MUTATIONS])
+                         ['AES_MUTATION_REJECTED: ' + m[0] for m in aes_runner_tests.mutation.MUTATIONS] +
+                         [aes_runner_tests.mutation.SCRATCH_MARKER])
         self.assertTrue({'aes-mutations', 'compiler', 'hash-core'} <= set(mutation['inputs']))
         owner = checks['owner-dispatch']
         self.assertEqual(owner['command'], ['python3', 'scripts/aes/check-aes-owner-cleanup.py'])
@@ -337,7 +342,7 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(len(selected), 1)
         check = selected[0]
         self.assertEqual(check['command'], ['python3', 'scripts/cryptography/test-aes-owner-contract.py'])
-        self.assertEqual(check['success'], {'contains': ['Ran 19 tests in '], 'unique_lines': ['OK']})
+        self.assertEqual(check['success'], {'contains': ['Ran 20 tests in '], 'unique_lines': ['OK']})
         paths = self.registry['groups']['aes-owner-contract']['paths']
         for path in ('security/cryptographic-api-profile-policy.toml', 'verification/checks.toml',
                      'scripts/cryptography/aes_owner_contract.py', 'scripts/cryptography/rust_source_contract.py',

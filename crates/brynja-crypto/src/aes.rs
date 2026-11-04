@@ -1,4 +1,5 @@
 //! Development portable AES-128 block primitive (FIPS 197).
+//! Available only with the explicit `hazmat-aes-block` Cargo feature.
 //!
 //! No mode, authentication, padding, nonce management, acceleration or implicit
 //! algorithm selection. Do not encrypt messages by repeatedly applying this
@@ -10,6 +11,10 @@
 //! ephemeral schedule which is cleared on return/error/unwind. Clearing does
 //! not cover caller copies, compiler spills/registers, forgotten owners, abort,
 //! paging or dumps. The input key/block remain the caller's responsibility.
+//! This software API requires no HSM, but does not detect physical arithmetic
+//! faults or provide power/EM resistance. Error/unwind tests are not physical
+//! fault-injection qualification. Each call processes exactly one block and
+//! rebuilds the schedule; callers must bound repeated work on untrusted traffic.
 
 #![forbid(unsafe_code)]
 
@@ -54,6 +59,7 @@ impl From<brynja_core::SecretMemoryError> for Error {
 struct Scratch<const N: usize>([u8; N]);
 impl<const N: usize> Scratch<N> {
     fn new() -> Self {
+        const { assert!(N > 0, "AES scratch must not be empty") };
         Self([0; N])
     }
 }

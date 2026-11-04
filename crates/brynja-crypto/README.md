@@ -64,6 +64,14 @@ or dependency of this modern crate and is tracked under `legacy_hkdf`.
 
 ## Use
 
+The internal v0.27.0 candidate also provides raw software AES-128 blocks under
+the **default-off** `hazmat-aes-block` feature. Enable that feature explicitly
+on either `brynja-crypto` or `brynja` when using the matching checkout. No HSM
+is required. This is not message encryption or an AEAD: no authentication,
+padding, nonce management or TLS integration is included. Physical fault
+detection, compiler-spill erasure and cross-target side-channel qualification
+are not promised. See the repository's `docs/assurance/aes128-pentest-remediation.md`.
+
 Use a release containing the hash/MAC APIs described here, not an older
 foundation-only package.
 

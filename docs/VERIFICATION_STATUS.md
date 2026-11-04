@@ -4,6 +4,11 @@
 
 `brynja-crypto::aes` provides a development-only portable AES-128 key owner and
 forward/inverse block APIs, plus explicit failure-atomic public ciphertext.
+They require the default-off `hazmat-aes-block` feature, including explicit
+forwarding through `brynja`. No HSM is required. The
+[pentest dispositions](assurance/aes128-pentest-remediation.md) retain unresolved
+physical-threat and broader compiler-qualification limits separately from crate
+fixes; remediation is awaiting the owner's retest, not release approval.
 NIST AES-128 block KATs, an independent OpenSSL comparison, ownership,
 round-boundary faults, exact misuse diagnostics, bounded field/index proofs,
 compiling mutation controls, bounded public-owner emitted Drop dispatch and

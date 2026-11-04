@@ -1,5 +1,10 @@
 # v0.27.0 candidate — portable AES-128 blocks
 
+Raw AES requires explicit `hazmat-aes-block` opt-in on `brynja-crypto` or
+`brynja`; it is absent from defaults. Software-only use requires no HSM.
+See the [pentest dispositions](../docs/assurance/aes128-pentest-remediation.md)
+for remaining platform limits and the separate future provider design.
+
 Internal development candidate; no crates.io publication is selected. Scoped
 pentest/retest, final release gate and exact-candidate GitHub/CodeQL are pending.
 

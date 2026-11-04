@@ -90,7 +90,7 @@ def diagnostic_matches(result, code, source):
 
 def run_probes(toolchain, directory, env):
     build = verifier.run(['cargo', '+' + toolchain, 'build', '--locked', '--offline',
-                          '-p', 'brynja-crypto', '--no-default-features', '--message-format=json'], env)
+                          '-p', 'brynja-crypto', '--no-default-features', '--features', 'hazmat-aes-block', '--message-format=json'], env)
     artifacts = []
     for line in build.splitlines():
         if not line.startswith('{'):

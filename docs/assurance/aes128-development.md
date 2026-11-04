@@ -4,6 +4,17 @@ Status: initial implementation; milestone and qualification incomplete.
 
 ## Scope and authority
 
+Raw AES is absent unless the caller explicitly enables `hazmat-aes-block` on
+`brynja-crypto` or the forwarding feature on `brynja`. Software-only operation
+requires no HSM. This is a low-level block primitive, not authenticated message
+encryption. Cargo features are additive: another dependency enabling the feature
+also enables it for that resolved package; this is an opt-in boundary, not an
+access-control mechanism.
+
+The [pentest dispositions](aes128-pentest-remediation.md) separate crate fixes
+from remaining physical-threat and compiler/target qualification limits, and
+describe optional future provider integration. They are not a green retest.
+
 `brynja_crypto::aes` (also through `brynja::crypto::aes`) implements the
 AES-128 key expansion, CIPHER and INVCIPHER from
 [FIPS 197-upd1](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197-upd1.pdf),

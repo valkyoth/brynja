@@ -64,7 +64,7 @@ class ScopedRelease(unittest.TestCase):
         self.assertEqual(commands['release-plan'], ['scripts/release/test-release-plan.sh'])
         self.assertEqual(commands['crypto-tests'],
             ['cargo', 'test', '--locked', '-p', 'brynja-crypto', '-p',
-             'brynja-legacy-hkdf', '--no-default-features'])
+             'brynja-legacy-hkdf', '--no-default-features', '--features', 'brynja-crypto/hazmat-aes-block'])
         self.assertEqual(commands['facade-integration'],
             ['cargo', 'check', '--locked', '-p', 'brynja', '--no-default-features'])
         self.assertEqual(set(plan['ci_checks']), set(commands) -

@@ -48,7 +48,7 @@ reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODE
 timeout_seconds = 600
 [checks.success]
 contains = ["AES downstream: PASS;"]
-unique_lines = ["AES downstream: PASS; 8 host configurations; 4 Cortex-M compile checks; checkout sources only", "AES_DOWNSTREAM_HOST: 1.90.0 direct debug 6 exact tests", "AES_DOWNSTREAM_HOST: 1.90.0 direct release 6 exact tests", "AES_DOWNSTREAM_HOST: 1.90.0 facade debug 6 exact tests", "AES_DOWNSTREAM_HOST: 1.90.0 facade release 6 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 direct debug 6 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 direct release 6 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 facade debug 6 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 facade release 6 exact tests", "AES_DOWNSTREAM_TARGET: 1.90.0 direct thumbv7em-none-eabi compile-only", "AES_DOWNSTREAM_TARGET: 1.90.0 facade thumbv7em-none-eabi compile-only", "AES_DOWNSTREAM_TARGET: 1.99.1 direct thumbv7em-none-eabi compile-only", "AES_DOWNSTREAM_TARGET: 1.99.1 facade thumbv7em-none-eabi compile-only"]
+unique_lines = ["AES downstream: PASS; 8 host configurations; 4 Cortex-M compile checks; checkout sources only", "AES_DOWNSTREAM_HOST: 1.90.0 direct debug 6 exact tests", "AES_DOWNSTREAM_HOST: 1.90.0 direct release 6 exact tests", "AES_DOWNSTREAM_HOST: 1.90.0 facade debug 6 exact tests", "AES_DOWNSTREAM_HOST: 1.90.0 facade release 6 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 direct debug 6 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 direct release 6 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 facade debug 6 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 facade release 6 exact tests", "AES_DOWNSTREAM_TARGET: 1.90.0 direct thumbv7em-none-eabi compile-only", "AES_DOWNSTREAM_TARGET: 1.90.0 facade thumbv7em-none-eabi compile-only", "AES_DOWNSTREAM_TARGET: 1.99.1 direct thumbv7em-none-eabi compile-only", "AES_DOWNSTREAM_TARGET: 1.99.1 facade thumbv7em-none-eabi compile-only", "AES_FEATURE_GATE: 1.90.0 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.90.0 facade absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.99.1 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.99.1 facade absent with defaults on/off; explicit opt-in works"]
 
 [[checks]]
 component = "aes"
@@ -64,7 +64,7 @@ reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODE
 timeout_seconds = 1800
 [checks.success]
 contains = ["AES downstream matrix: PASS;"]
-unique_lines = ["AES downstream matrix: PASS; 14 compilers; 56 host configurations; 4 Cortex-M compile checks; checkout sources only","AES_DOWNSTREAM_HOST: 1.90.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.90.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.90.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.90.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 facade release 6 exact tests","AES_DOWNSTREAM_TARGET: 1.90.0 direct thumbv7em-none-eabi compile-only","AES_DOWNSTREAM_TARGET: 1.90.0 facade thumbv7em-none-eabi compile-only","AES_DOWNSTREAM_TARGET: 1.99.1 direct thumbv7em-none-eabi compile-only","AES_DOWNSTREAM_TARGET: 1.99.1 facade thumbv7em-none-eabi compile-only"]
+unique_lines = ["AES downstream matrix: PASS; 14 compilers; 56 host configurations; 4 Cortex-M compile checks; checkout sources only","AES_DOWNSTREAM_HOST: 1.90.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.90.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.90.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.90.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 facade release 6 exact tests","AES_DOWNSTREAM_TARGET: 1.90.0 direct thumbv7em-none-eabi compile-only","AES_DOWNSTREAM_TARGET: 1.90.0 facade thumbv7em-none-eabi compile-only","AES_DOWNSTREAM_TARGET: 1.99.1 direct thumbv7em-none-eabi compile-only","AES_DOWNSTREAM_TARGET: 1.99.1 facade thumbv7em-none-eabi compile-only", "AES_FEATURE_GATE: 1.90.0 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.90.0 facade absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.99.1 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.99.1 facade absent with defaults on/off; explicit opt-in works"]
 
 [groups.aes-timing]
 paths = ["assurance/aes-timing/Cargo.toml", "assurance/aes-timing/Cargo.lock", "assurance/aes-timing/src", "scripts/aes/check-aes-timing.py", "scripts/aes/test-aes-timing.py", "scripts/hmac/hmac_timing.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py"]
@@ -99,14 +99,14 @@ component = "aes"
 id = "owner-contract"
 category = "repository"
 name = "AES-128 scoped development-owner inventory and negative controls"
-establishes = "Nineteen source-policy/parser regressions bind actual clearing fields, markers, scratch, explicit clear and compiler commands to the AES-128 development-only inventory. Does not execute cryptography, complete the AES family or establish qualification."
+establishes = "Twenty source-policy/parser regressions bind actual clearing fields, markers, nonempty scratch, explicit clear and compiler commands to the AES-128 development-only inventory. Does not execute cryptography, complete the AES family or establish qualification."
 command = ["python3", "scripts/cryptography/test-aes-owner-contract.py"]
 cwd = "."
 inputs = ["aes-build", "aes-owner-contract"]
 reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTC_WRAPPER"]
 timeout_seconds = 60
 [checks.success]
-contains = ["Ran 19 tests in "]
+contains = ["Ran 20 tests in "]
 unique_lines = ["OK"]
 
 [groups.aes-build]
@@ -125,7 +125,7 @@ id = "vectors"
 category = "portable"
 name = "AES-128 public vectors and clearing owners"
 establishes = "568 AESAVS records plus six published block pairs, strict fixture parser, public/secret output, canaries and 256 reuse round trips. No full CAVP campaign, emitted-code or side-channel qualification."
-command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--test","aes128"]
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block","--test","aes128"]
 cwd = "."
 inputs = ["compiler","aes-build","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -142,7 +142,7 @@ id = "rounds-and-faults"
 category = "fault"
 name = "AES-128 schedule, field and round-boundary fault cleanup"
 establishes = "Five unit tests: complete FIPS example schedule, finite field/inverse checks, linear transforms, secret-output errors/unwinds at all 11 key-add boundaries in both directions, plus failure-atomic public ciphertext. Live scratch clearing observations, not proof or register erasure."
-command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--lib","aes::"]
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block","--lib","aes::"]
 cwd = "."
 inputs = ["compiler","aes-build","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -159,7 +159,7 @@ id = "msrv-vectors"
 category = "matrix"
 name = "AES-128 public vectors on Rust 1.90.0"
 establishes = "The same six public tests on MSRV. Not a full compiler matrix."
-command = ["cargo","+1.90.0","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--test","aes128"]
+command = ["cargo","+1.90.0","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block","--test","aes128"]
 cwd = "."
 inputs = ["hkdf-msrv","aes-build","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -176,7 +176,7 @@ id = "ownership"
 category = "compile-fail"
 name = "AES-128 typed ownership examples"
 establishes = "One positive example and nine compile-fail examples. Rustdoc accepts any compiler error; diagnostic-specific acceptance is provided by separate api-current/api-msrv registrations."
-command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--doc","aes::"]
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block","--doc","aes::"]
 cwd = "."
 inputs = ["compiler","hkdf-rustdoc","aes-build","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -193,7 +193,7 @@ id = "optimized-vectors"
 category = "optimized"
 name = "AES-128 public vectors in release profile"
 establishes = "Six public vector/lifecycle tests in release profile. No assembly inspection or constant-time qualification."
-command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--release","--test","aes128"]
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block","--release","--test","aes128"]
 cwd = "."
 inputs = ["compiler","aes-build","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -210,7 +210,7 @@ id = "no-std-thumb"
 category = "target"
 name = "AES-128 no_std Cortex-M compilation"
 establishes = "Compile-only composition crate, including AES. No on-target execution or timing claim."
-command = ["cargo","+1.90.0","check","--locked","--offline","-p","brynja-crypto","--no-default-features","--lib","--target","thumbv7em-none-eabi"]
+command = ["cargo","+1.90.0","check","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block","--lib","--target","thumbv7em-none-eabi"]
 cwd = "."
 inputs = ["hkdf-msrv","aes-build","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -225,7 +225,7 @@ id = "asan-vectors"
 category = "asan"
 name = "AES-128 public vectors under ASan/LSan"
 establishes = "Six public AES tests under ASan/LSan; no timing or complete memory-safety proof."
-command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--test","aes128","--target","x86_64-unknown-linux-gnu"]
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block","--test","aes128","--target","x86_64-unknown-linux-gnu"]
 cwd = "."
 inputs = ["asan-tools","aes-build","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
 environment = { RUSTFLAGS = "-Zsanitizer=address", CARGO_ENCODED_RUSTFLAGS = "", ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1", LSAN_OPTIONS = "exitcode=23", CARGO_TARGET_DIR = "target/aes-asan", RUSTUP_AUTO_INSTALL = "0" }
@@ -243,7 +243,7 @@ id = "miri-ownership"
 category = "miri"
 name = "AES-128 clearing output and canaries under Miri"
 establishes = "One exact public ownership test under Miri. Does not exercise every round fault under Miri or qualify emitted code."
-command = ["cargo","+nightly-2026-09-11","miri","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--test","aes128","--target","x86_64-unknown-linux-gnu","output_outlives_key_and_explicit_clear_preserves_canaries","--","--exact"]
+command = ["cargo","+nightly-2026-09-11","miri","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block","--test","aes128","--target","x86_64-unknown-linux-gnu","output_outlives_key_and_explicit_clear_preserves_canaries","--","--exact"]
 cwd = "."
 inputs = ["miri-tools","aes-build","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
 environment = { MIRIFLAGS = "-Zmiri-report-progress=10000000", CARGO_TARGET_DIR = "target/aes-miri", RUSTUP_AUTO_INSTALL = "0" }
@@ -261,7 +261,7 @@ id = "asan-faults"
 category = "asan-fault"
 name = "AES-128 round faults and scratch cleanup under ASan/LSan"
 establishes = "Five internal tests including every round-key error/unwind and failure-atomic public ciphertext. No timing or complete memory-safety proof."
-command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--lib","--target","x86_64-unknown-linux-gnu","aes::"]
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block","--lib","--target","x86_64-unknown-linux-gnu","aes::"]
 cwd = "."
 inputs = ["asan-tools","aes-build","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
 environment = { RUSTFLAGS = "-Zsanitizer=address", CARGO_ENCODED_RUSTFLAGS = "", ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1", LSAN_OPTIONS = "exitcode=23", CARGO_TARGET_DIR = "target/aes-asan", RUSTUP_AUTO_INSTALL = "0" }
@@ -280,7 +280,7 @@ id = "miri-public"
 category = "miri"
 name = "AES-128 explicit public ciphertext under Miri"
 establishes = "One exact public ciphertext commit/canary test under Miri. Does not exercise every round fault under Miri or qualify emitted code."
-command = ["cargo","+nightly-2026-09-11","miri","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--test","aes128","--target","x86_64-unknown-linux-gnu","public_ciphertext_commit_preserves_inputs_and_canaries","--","--exact"]
+command = ["cargo","+nightly-2026-09-11","miri","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block","--test","aes128","--target","x86_64-unknown-linux-gnu","public_ciphertext_commit_preserves_inputs_and_canaries","--","--exact"]
 cwd = "."
 inputs = ["miri-tools","aes-build","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
 environment = { MIRIFLAGS = "-Zmiri-report-progress=10000000", CARGO_TARGET_DIR = "target/aes-miri", RUSTUP_AUTO_INSTALL = "0" }
@@ -372,7 +372,7 @@ reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "C
 timeout_seconds = 1200
 [checks.success]
 contains = ["AES mutations: PASS; 12 compiling defects rejected by named tests"]
-unique_lines = ["AES mutations: PASS; 12 compiling defects rejected by named tests", "AES_MUTATION_REJECTED: field-modulus", "AES_MUTATION_REJECTED: forward-affine", "AES_MUTATION_REJECTED: inverse-affine", "AES_MUTATION_REJECTED: round-constant", "AES_MUTATION_REJECTED: prior-key-word", "AES_MUTATION_REJECTED: shift-direction", "AES_MUTATION_REJECTED: skip-round", "AES_MUTATION_REJECTED: inverse-mix", "AES_MUTATION_REJECTED: final-round-key", "AES_MUTATION_REJECTED: skip-schedule-clear", "AES_MUTATION_REJECTED: forget-key-clear", "AES_MUTATION_REJECTED: early-public-write"]
+unique_lines = ["AES mutations: PASS; 12 compiling defects rejected by named tests", "AES_MUTATION_REJECTED: field-modulus", "AES_MUTATION_REJECTED: forward-affine", "AES_MUTATION_REJECTED: inverse-affine", "AES_MUTATION_REJECTED: round-constant", "AES_MUTATION_REJECTED: prior-key-word", "AES_MUTATION_REJECTED: shift-direction", "AES_MUTATION_REJECTED: skip-round", "AES_MUTATION_REJECTED: inverse-mix", "AES_MUTATION_REJECTED: final-round-key", "AES_MUTATION_REJECTED: skip-schedule-clear", "AES_MUTATION_REJECTED: forget-key-clear", "AES_MUTATION_REJECTED: early-public-write", "AES scratch: PASS; zero length rejected at compile time; positive control compiled"]
 
 [[checks]]
 component = "aes"
@@ -423,7 +423,7 @@ id = "differential"
 category = "differential"
 name = "AES-128 independent OpenSSL block comparison"
 establishes = "4096 deterministic public block comparisons over 64 keys: independent forward and inverse inputs. Executable fingerprint and runtime version recorded; external shared libraries are not pinned. No timing or validation certification claim."
-command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--test","aes128_differential","openssl_independent_encrypt_and_decrypt_corpus","--","--ignored","--exact","--nocapture"]
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block","--test","aes128_differential","openssl_independent_encrypt_and_decrypt_corpus","--","--ignored","--exact","--nocapture"]
 cwd = "."
 inputs = ["compiler","aes-build","aes-oracle","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }

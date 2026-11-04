@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import re
 import shutil
+import subprocess
 import sys
 import tomllib
 
@@ -29,6 +30,8 @@ FACADE = DIRECT | {'brynja', 'brynja-pki', 'brynja-protocol', 'brynja-tls',
 FILES = ('Cargo.toml', 'Cargo.lock', 'src/lib.rs', 'tests/consumer.rs')
 MARKER = 'AES downstream: PASS; 8 host configurations; 4 Cortex-M compile checks; checkout sources only'
 MATRIX_MARKER = 'AES downstream matrix: PASS; 14 compilers; 56 host configurations; 4 Cortex-M compile checks; checkout sources only'
+FEATURE_MARKERS = [f'AES_FEATURE_GATE: {compiler} {route} absent with defaults on/off; explicit opt-in works'
+                   for compiler in TOOLCHAINS for route in ROUTES]
 
 
 def require(condition, message):
@@ -43,7 +46,8 @@ def policy(manifest):
                     'rust-version': '1.90', 'publish': False},
         'features': {'default': [], 'direct': ['dep:brynja-crypto'], 'facade': ['dep:brynja']},
         'dependencies': {name: {'path': '../../crates/' + name, 'default-features': False,
-                                'optional': True} for name in ('brynja', 'brynja-crypto')},
+                                'optional': True, 'features': ['hazmat-aes-block']}
+                         for name in ('brynja', 'brynja-crypto')},
         'test': [{'name': 'consumer', 'path': 'tests/consumer.rs'}],
         'profile': {'release': {'overflow-checks': True}},
     }, 'fixture build policy changed')
@@ -87,6 +91,8 @@ def graph(metadata, route, directory):
         features = {route} if name == NAME else {'default'}
         if name == 'brynja' or (name == 'brynja-crypto' and route == 'direct'):
             features = set()
+        if name in ('brynja', 'brynja-crypto'):
+            features.add('hazmat-aes-block')
         if name == 'brynja-hash-sha2':
             features.add('general-sha512-t')  # Existing composition dependency, not AES acceleration.
         require(set(node['features']) == features, 'unexpected features: ' + name)
@@ -123,6 +129,46 @@ def configuration(compiler, route, directory, compile_target=True):
         print(f'AES_DOWNSTREAM_TARGET: {compiler} {route} thumbv7em-none-eabi compile-only', flush=True)
 
 
+def missing_aes(result):
+    require(result.returncode == 101, 'disabled AES must fail compilation')
+    messages = [json.loads(line) for line in result.stdout.splitlines() if line.strip()]
+    errors = [row['message'] for row in messages
+              if row.get('reason') == 'compiler-message' and row['message']['level'] == 'error']
+    require(len(errors) == 1 and errors[0].get('code', {}).get('code') == 'E0432' and
+            any(span['is_primary'] and span['file_name'] == 'src/lib.rs' for span in errors[0]['spans']) and
+            'aes' in errors[0]['message'], 'wrong disabled-AES compiler failure')
+
+
+def feature_probe(compiler, route, directory):
+    require(route in ROUTES, 'unknown route')
+    directory.mkdir()
+    (directory / 'src').mkdir()
+    dependency = 'brynja-crypto' if route == 'direct' else 'brynja'
+    module = 'brynja_crypto' if route == 'direct' else 'brynja::crypto'
+    env = verifier.environment(directory)
+    env.update(CARGO_NET_OFFLINE='true', RUSTUP_AUTO_INSTALL='0', CARGO_TERM_COLOR='never')
+    cargo = ['cargo', '+' + compiler]
+    source = directory / 'src/lib.rs'
+    manifest = directory / 'Cargo.toml'
+    for defaults in ('true', 'false'):
+        text = ('[workspace]\n[package]\nname="aes-feature-probe"\nversion="0.0.0"\n'
+                'edition="2024"\npublish=false\n[dependencies]\n' + dependency + '={path=' +
+                json.dumps(str(ROOT / 'crates' / dependency)) + ',default-features=' + defaults + ',features=[]}\n')
+        manifest.write_text(text)
+        source.write_text(f'#![no_std]\npub use {module}::aes::Aes128Key;\n')
+        verifier.run(cargo + ['generate-lockfile', '--offline'], env, directory)
+        command = cargo + ['check', '--locked', '--offline', '--lib', '--message-format=json']
+        result = subprocess.run(command, cwd=directory, env=env, text=True, capture_output=True, timeout=120)
+        missing_aes(result)
+        # A nearby usable API and then the exact AES import must both compile.
+        source.write_text(f'#![no_std]\npub use {module}::hkdf;\n')
+        verifier.run(command, env, directory)
+        manifest.write_text(text.replace('features=[]', 'features=["hazmat-aes-block"]'))
+        source.write_text(f'#![no_std]\npub use {module}::aes::Aes128Key;\n')
+        verifier.run(command, env, directory)
+    print(f'AES_FEATURE_GATE: {compiler} {route} absent with defaults on/off; explicit opt-in works', flush=True)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--matrix', action='store_true')
@@ -130,6 +176,8 @@ def main():
     for compiler in MATRIX if args.matrix else TOOLCHAINS:
         for route in ROUTES:
             with verifier.cargo_environment.private_directory(ROOT) as temporary:
+                if compiler in TOOLCHAINS:
+                    feature_probe(compiler, route, Path(temporary) / 'feature-probe')
                 configuration(compiler, route, Path(temporary), compiler in TOOLCHAINS)
     print(MATRIX_MARKER if args.matrix else MARKER)
 

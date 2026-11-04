@@ -13,8 +13,8 @@ direct = ["dep:brynja-crypto"]
 facade = ["dep:brynja"]
 
 [dependencies]
-brynja-crypto = { path = "../../crates/brynja-crypto", default-features = false, optional = true }
-brynja = { path = "../../crates/brynja", default-features = false, optional = true }
+brynja-crypto = { path = "../../crates/brynja-crypto", default-features = false, optional = true, features = ["hazmat-aes-block"] }
+brynja = { path = "../../crates/brynja", default-features = false, optional = true, features = ["hazmat-aes-block"] }
 
 [[test]]
 name = "consumer"

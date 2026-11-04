@@ -102,6 +102,8 @@ def validate(root, owner, current):
         clear = callable_body(root, SOURCE, name, 'clear')
         require(compact(clear) == 'let_=self.region.clear();', 'explicit clear delegation changed')
     require(re.search(r'struct Scratch<const N: usize>\(\[u8; N\]\);', text), 'scratch storage changed')
+    constructor = compact(callable_body(root, SOURCE, 'Scratch', 'new'))
+    require(constructor.startswith('const{assert!(N>0,'), 'scratch nonempty compile-time guard changed')
     drop = callable_body(root, SOURCE, 'Scratch', 'drop')
     require(compact(drop) == 'let_=clear_owned_region(&mutself.0);#[cfg(test)]tests::observe_clear(&self.0);',
             'mandatory scratch clearing changed')

@@ -27,7 +27,7 @@ LEAVES = {
     'parallelhash-runtime-execution': ('brynja-hash-parallel', 'runtime-execution'),
     'parallelhash-hardened-batch': ('brynja-hash-parallel', 'hardened-batch-execution'),
 }
-CRYPTO = {'cpu': ['dep:brynja-crypto-cpu']}
+CRYPTO = {'cpu': ['dep:brynja-crypto-cpu'], 'hazmat-aes-block': []}
 CRYPTO.update({feature: ([] if feature == 'general-sha512-t' else ['cpu']) +
               [owner + '/' + leaf] for feature, (owner, leaf) in LEAVES.items()})
 FEATURES = {
@@ -63,6 +63,8 @@ def regressions(baseline, package, reject):
     for name, features in FEATURES.items():
         for feature in features:
             for replacement in ([], ['brynja-mac-kmac/conformance-testing']):
+                if replacement == features[feature]:
+                    continue  # An explicitly empty leaf feature is not a missing edge.
                 changed = copy.deepcopy(baseline)
                 package(changed, name)['features'][feature] = replacement
                 reject(changed, 'all-features', 'feature policy differs',

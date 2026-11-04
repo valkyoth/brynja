@@ -147,7 +147,7 @@ def collect(directory, compiler, panic):
                CARGO_PROFILE_RELEASE_CODEGEN_UNITS='1', CARGO_PROFILE_RELEASE_OPT_LEVEL='3',
                CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true', CARGO_NET_OFFLINE='true', RUSTUP_AUTO_INSTALL='0')
     verifier.run(['cargo', '+' + compiler, 'rustc', '--locked', '--offline', '--release', '--lib',
-                  '-p', 'brynja-crypto', '--no-default-features', '--target', 'x86_64-unknown-linux-gnu',
+                  '-p', 'brynja-crypto', '--no-default-features', '--features', 'hazmat-aes-block', '--target', 'x86_64-unknown-linux-gnu',
                   '--', '--emit=mir,llvm-ir,asm'], env)
     artifacts = {}
     for extension in ('mir', 'll', 's'):

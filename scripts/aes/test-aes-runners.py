@@ -25,6 +25,55 @@ owner = load('check-aes-owner-cleanup')
 operation = load('check-aes-operation-cleanup')
 
 
+class ScratchTests(unittest.TestCase):
+    def result(self):
+        message = {'level': 'error', 'code': {'code': 'E0080'},
+                   'message': 'evaluation panicked: AES scratch must not be empty',
+                   'spans': [{'is_primary': True, 'file_name': 'src/aes.rs'}]}
+        return SimpleNamespace(returncode=101, stdout=json.dumps({'reason': 'compiler-message', 'message': message}), stderr='')
+
+    def test_exact_scratch_diagnostic(self):
+        result = self.result()
+        self.assertTrue(mutation.scratch_rejected(result))
+        for code, output in [(0, result.stdout), (-9, result.stdout), (101, ''), (101, 'null'),
+                             (101, result.stdout.replace('E0080', 'E0432')),
+                             (101, result.stdout.replace('src/aes.rs', 'src/other.rs')),
+                             (101, result.stdout + '\n' + result.stdout)]:
+            self.assertFalse(mutation.scratch_rejected(SimpleNamespace(returncode=code, stdout=output)))
+
+    def test_scratch_source_restored_even_on_wrong_failure(self):
+        for accepted in (True, False):
+            with tempfile.TemporaryDirectory() as temporary:
+                directory = Path(temporary)
+                (directory / 'src').mkdir()
+                source = directory / 'src/aes.rs'
+                source.write_text('original')
+                with patch.object(mutation.verifier, 'run') as run, \
+                     patch.object(mutation.subprocess, 'run', return_value=self.result()), \
+                     patch.object(mutation, 'scratch_rejected', return_value=accepted), \
+                     patch('builtins.print') as emit:
+                    if accepted:
+                        mutation.scratch_contract(directory, '1.99.1')
+                        self.assertEqual(run.call_count, 2)
+                        emit.assert_called_once_with(mutation.SCRATCH_MARKER, flush=True)
+                    else:
+                        with self.assertRaises(ValueError):
+                            mutation.scratch_contract(directory, '1.99.1')
+                        emit.assert_not_called()
+                self.assertEqual(source.read_text(), 'original')
+
+    def test_scratch_macro_must_originate_in_production_source(self):
+        result = self.result()
+        row = json.loads(result.stdout)
+        span = row['message']['spans'][0]
+        span.update(file_name='/rustc/core/panic.rs', expansion={'span': {'file_name': 'src/aes.rs'}})
+        result.stdout = json.dumps(row)
+        self.assertTrue(mutation.scratch_rejected(result))
+        span['expansion']['span']['file_name'] = 'src/other.rs'
+        result.stdout = json.dumps(row)
+        self.assertFalse(mutation.scratch_rejected(result))
+
+
 def diagnostic(code='E0277', source='probe.rs', primary=True, status=1):
     message = {'$message_type': 'diagnostic', 'level': 'error', 'code': {'code': code},
                'spans': [{'file_name': str(source), 'is_primary': primary}]}

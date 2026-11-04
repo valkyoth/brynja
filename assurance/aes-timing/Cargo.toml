@@ -8,7 +8,7 @@ publish = false
 [workspace]
 
 [dependencies]
-brynja-crypto = { path = "../../crates/brynja-crypto", default-features = false }
+brynja-crypto = { path = "../../crates/brynja-crypto", default-features = false, features = ["hazmat-aes-block"] }
 
 [profile.release]
 opt-level = 3

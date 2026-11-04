@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Compile deliberate AES defects in private copies; require named test failures."""
 import argparse
+import json
 from pathlib import Path
 import shutil
 import subprocess
@@ -36,6 +37,7 @@ MUTATIONS = (
      ') -> Result<(), Error> {\n        output.copy_from_slice(input);\n        let mut schedule', PUBLIC_FAULT),
 )
 MARKER = 'AES mutations: PASS; 12 compiling defects rejected by named tests'
+SCRATCH_MARKER = 'AES scratch: PASS; zero length rejected at compile time; positive control compiled'
 
 
 def mutate(source, old, new):
@@ -50,6 +52,48 @@ def rejected(result, test):
             and f'test {test} ... FAILED' in output
             and 'test result: FAILED. 0 passed; 1 failed; 0 ignored;' in output
             and 'assertion' in output)
+
+
+def scratch_rejected(result):
+    if result.returncode != 101:
+        return False
+    try:
+        errors = [row['message'] for row in map(json.loads, result.stdout.splitlines())
+                  if row.get('reason') == 'compiler-message' and row['message']['level'] == 'error']
+        return (len(errors) == 1 and (errors[0].get('code') or {}).get('code') == 'E0080' and
+                'AES scratch must not be empty' in errors[0]['message'] and
+                any(s['is_primary'] and scratch_span(s) for s in errors[0]['spans']))
+    except (ValueError, TypeError, AttributeError, KeyError):
+        return False
+
+
+def scratch_span(span):
+    # rustc reports the panic macro body as primary; follow its call site,
+    # never the macro definition site, back to the production constructor.
+    while span:
+        if span['file_name'] == 'src/aes.rs':
+            return True
+        span = (span.get('expansion') or {}).get('span')
+    return False
+
+
+def scratch_contract(directory, compiler):
+    path = directory / 'src/aes.rs'
+    original = path.read_text()
+    env = verifier.environment(directory)
+    env.update(CARGO_NET_OFFLINE='true', RUSTUP_AUTO_INSTALL='0')
+    command = ['cargo', '+' + compiler, 'build', '--locked', '--offline', '--lib', '--message-format=json']
+    try:
+        path.write_text(original + '\npub fn scratch_probe() { let _ = Scratch::<1>::new(); }\n')
+        verifier.run(command, env, directory)
+        path.write_text(original + '\npub fn scratch_probe() { let _ = Scratch::<0>::new(); }\n')
+        result = subprocess.run(command, cwd=directory, env=env, text=True, capture_output=True, timeout=120)
+        if not scratch_rejected(result):
+            raise ValueError('wrong empty-scratch failure: ' + result.stdout[-4000:] + result.stderr[-1000:])
+    finally:
+        path.write_text(original)
+    verifier.run(command, env, directory)
+    print(SCRATCH_MARKER, flush=True)
 
 
 def prepare(directory):
@@ -113,6 +157,7 @@ def main():
         raise ValueError('mutation population drift')
     with verifier.cargo_environment.private_directory(ROOT) as temporary:
         campaign(Path(temporary), '1.99.1')
+        scratch_contract(Path(temporary), '1.99.1')
 
 
 if __name__ == '__main__':

@@ -3,16 +3,16 @@
 schema = 1
 version = "0.27.0"
 scope = "Portable AES-128 blocks and ownership, bounded downstream consumers, retained modern/legacy HKDF compatibility, registry and candidate metadata. Scoped pentest/retest required before release authorization; no historical evidence-freshness gate or implicit dynamic/proof/timing/compiler-matrix campaign."
-ci_checks = ["crypto-tests","crypto-lint","crypto-format","facade-integration","hkdf-owner-contract","aes-owner-contract","aes-dataflow-regressions","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
+ci_checks = ["crypto-tests","crypto-lint","crypto-format","facade-integration","hkdf-owner-contract","aes-owner-contract","aes-dataflow-regressions","aes-provider-api","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
 
 [[checks]]
 id = "crypto-tests"
-command = ["cargo","test","--locked","-p","brynja-crypto","-p","brynja-legacy-hkdf","--no-default-features","--features","brynja-crypto/hazmat-aes-block"]
+command = ["cargo","test","--locked","-p","brynja-crypto","-p","brynja-legacy-hkdf","--no-default-features","--features","brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider"]
 timeout_seconds = 300
 
 [[checks]]
 id = "crypto-lint"
-command = ["cargo","clippy","--locked","-p","brynja-crypto","-p","brynja-legacy-hkdf","--no-default-features","--features","brynja-crypto/hazmat-aes-block","--all-targets","--no-deps","--","-D","warnings"]
+command = ["cargo","clippy","--locked","-p","brynja-crypto","-p","brynja-legacy-hkdf","--no-default-features","--features","brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider","--all-targets","--no-deps","--","-D","warnings"]
 timeout_seconds = 300
 
 [[checks]]
@@ -39,6 +39,11 @@ timeout_seconds = 60
 id = "aes-dataflow-regressions"
 command = ["python3","scripts/aes/test-aes-dataflow.py"]
 timeout_seconds = 60
+
+[[checks]]
+id = "aes-provider-api"
+command = ["python3","scripts/aes/check-aes-provider-api.py","1.99.1"]
+timeout_seconds = 300
 
 [[checks]]
 id = "registry-tests"

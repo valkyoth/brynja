@@ -14,14 +14,22 @@ ROOT = verifier.ROOT
 MARKER = 'AES operation cleanup complete: 4 configurations; delegated core clearing; not whole-frame erasure or timing qualification'
 ROLES = {'public': {'schedule': (176, 1), 'state': (16, 1)},
          'secret': {'schedule': (176, 1), 'state': (16, 1)},
-         'expand': {'word': (4, 1)}, 'rounds': {'previous': (16, 4)}}
+         'expand': {'word': (4, 1)}, 'rounds': {'previous': (16, 4)},
+         'cached-new': {'schedule': (176, 1)},
+         'cached-public': {'state': (16, 1)}, 'cached-secret': {'state': (16, 1)}}
 METHODS = {'public': ('Aes128Key', 'encrypt_block_public'),
            'secret': ('Aes128Key', 'transform'),
            'encrypt': ('Aes128Key', 'encrypt_block'),
            'decrypt': ('Aes128Key', 'decrypt_block'),
            'key-clear': ('Aes128Key', 'clear'),
            'block-clear': ('SecretBlock', 'clear'),
-           'expand': ('portable', 'expand'), 'rounds': ('portable', 'transform')}
+           'expand': ('portable', 'expand'), 'rounds': ('portable', 'transform'),
+           'cached-new': ('Aes128ExpandedKey', 'new'),
+           'cached-public': ('Aes128ExpandedKey', 'encrypt_block_public'),
+           'cached-secret': ('Aes128ExpandedKey', 'transform'),
+           'cached-encrypt': ('Aes128ExpandedKey', 'encrypt_block'),
+           'cached-decrypt': ('Aes128ExpandedKey', 'decrypt_block'),
+           'cached-clear': ('Aes128ExpandedKey', 'clear')}
 
 
 def require(condition, message):
@@ -41,10 +49,16 @@ def select(llvm):
         selected[role] = (names[0], *graph.resolve(names[0], definitions, aliases))
     # Require the actual public consumers to reach the reviewed implementation.
     for caller, callees in {'encrypt': ('secret',), 'decrypt': ('secret',),
-                            'secret': ('expand', 'rounds'), 'public': ('expand', 'rounds')}.items():
+                            'secret': ('expand', 'rounds'), 'public': ('expand', 'rounds'),
+                            'cached-new': ('expand',), 'cached-encrypt': ('cached-secret',),
+                            'cached-decrypt': ('cached-secret',), 'cached-secret': ('rounds',),
+                            'cached-public': ('rounds',)}.items():
         for callee in callees:
             require(re.search(r'\b(?:call|invoke)\b[^\n]*@' + re.escape(selected[callee][0]) + r'\(',
                               selected[caller][2]), 'missing production call edge: ' + caller + '/' + callee)
+    for caller in ('cached-secret', 'cached-public'):
+        require(not re.search(r'\b(?:call|invoke)\b[^\n]*@' + re.escape(selected['expand'][0]) + r'\(',
+                              selected[caller][2]), 'cached operation re-expands schedule')
     return selected
 
 
@@ -78,7 +92,7 @@ def check_body(body, role):
     # Each inlined ShiftRows copy gets its own lifetime state, including loops.
     operation = 'aes-' + role
     scratch.SCRATCH[operation] = {re.escape(name[1:]): size for name, size in selected.items()}
-    if role == 'secret':
+    if role in ('secret', 'cached-secret', 'cached-new'):
         require(len(re.findall(r'%destination = alloca \[24 x i8\],', body)) == 1,
                 'output guard storage changed')
         require('%initialization' not in body, 'ambiguous output guard')
@@ -94,10 +108,10 @@ def check(llvm, panic):
     for role in ROLES:
         body = selected[role][2]
         # Expansion/round helpers may be proven nounwind even with panic=unwind.
-        if role in ('public', 'secret'):
+        if role in ('public', 'secret', 'cached-public', 'cached-secret', 'cached-new'):
             require(('landingpad ' in body) == (panic == 'unwind'), 'operation panic profile changed')
         check_body(body, role)
-    for role in ('key-clear', 'block-clear'):
+    for role in ('key-clear', 'block-clear', 'cached-clear'):
         check_clear(*selected[role][1:])
     return selected
 
@@ -125,7 +139,7 @@ def negative_controls(selected):
                     rejected += 1
                     continue
                 raise ValueError('accepted scratch mutation: ' + role + '/' + pointer + '/' + name)
-    for role in ('key-clear', 'block-clear'):
+    for role in ('key-clear', 'block-clear', 'cached-clear'):
         _, args, body = selected[role]
         pointer, length = [arg.split()[-1] for arg in args.split(', ')]
         for mutant in (body.replace(pointer, 'null'), body.replace(length, '0'),
@@ -161,7 +175,7 @@ def collect(directory, compiler, panic):
         require(symbol in artifacts['s'], 'assembly method absent: ' + role)
     require('Aes128Key' in artifacts['mir'] and 'SecretBlock' in artifacts['mir'], 'MIR owner identities absent')
     print(f'AES operation cleanup: PASS; Rust {compiler}; x86_64; panic={panic}; '
-          f'4 scratch bodies; 2 explicit clears; {count} rejected IR mutations', flush=True)
+          f'7 scratch bodies; 3 explicit clears; {count} rejected IR mutations', flush=True)
 
 
 def main():

@@ -1,10 +1,10 @@
 [[reviewed-source]]
 path = "crates/brynja-crypto/src/aes.rs"
-sha256 = "e2200de501e79439851f61645d4e4f986df4b756501574eb4fe5bb46edd7acd3"
+sha256 = "04df1829ec8e6b38041dc92134d32033e4a65e8f4e3d28dab51e1a8a90cb3a6c"
 
 [[reviewed-source]]
 path = "crates/brynja-crypto/src/aes/portable.rs"
-sha256 = "3de08af60dfa727e7e38744c6dfb628d05c09c22fb49aa07285691f0e915f878"
+sha256 = "9979ffe4db756e576e932de44ffa805ef97371626cdc12fa371ce1fd79dbd6ae"
 
 [[reviewed-source]]
 path = "crates/brynja-crypto/src/aes/portable/field.rs"
@@ -16,35 +16,35 @@ sha256 = "59b2eee78deef0faae98db8b30fafbf750dd624c9e7111025283595f9d349105"
 
 [[reviewed-source]]
 path = "crates/brynja-crypto/src/aes/tests.rs"
-sha256 = "f3e43779cd1b7e4a09bdc80de9eedea244b901a4eb8c9dd43233660687d2d787"
+sha256 = "11e94a593d55166a20a955b6b2c9883181db81116371c6a815af601f453e58c3"
 
 [[reviewed-source]]
 path = "crates/brynja-crypto/tests/aes128.rs"
-sha256 = "ed7e9dc3967d4867eaa1035ea9a10fcc5820d177c1f905997f2c0635d4c7a7b5"
+sha256 = "cbb469a0dbbb14dabb832789931cb63e787a21ff5ef948bc95c08977dc38e1fb"
 
 [[reviewed-source]]
 path = "scripts/cryptography/aes_owner_contract.py"
-sha256 = "81524b408432f7111071d7c431fc4cc4e5f69e5fd04f80484c4e0b6068198d51"
+sha256 = "c61a02ac07c889ccb398caa0ef467bc5bb2831291864c840072c97476cf0c374"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-aes-owner-contract.py"
-sha256 = "0a5105161961b9994a53d27b9b7bc652f8ad035a96b209f58a31c2758a86c154"
+sha256 = "592b6267a758712719f51a951300c08e790ac7c998d6fb5c1b98804bb121cf0f"
 
 [[reviewed-source]]
 path = "scripts/aes/check-aes-api.py"
-sha256 = "6b462d54fc48c194e70df8f3e1122500851a2b90db371e0bd8e287ab38109632"
+sha256 = "215b904a9c51fcf4df95bfc2fba771a381d607676ca39ec77e5d1999383f6e90"
 
 [[reviewed-source]]
 path = "scripts/aes/check-aes-owner-cleanup.py"
-sha256 = "64fa55a057b50d623f3ec5a99470d138ff10babf3c5d5dcbda0bee595197f303"
+sha256 = "4fe86034f59704c70f548abd91983dc64ebf0ff8a3bf61bc86b0029cbbb9deb9"
 
 [[reviewed-source]]
 path = "scripts/aes/check-aes-operation-cleanup.py"
-sha256 = "92b1324ae07497f170f1814757bcacba9268074a7aa73582dc1e6517f293cf37"
+sha256 = "012c7a6e107c3796d936bac6259089f539c15dffdc8c4253b51e33b1ec775991"
 
 [[reviewed-source]]
 path = "scripts/aes/test-aes-runners.py"
-sha256 = "5d18d83716cbc7ec44746df7b114b1061c4a205f292126470109c3f6504493f7"
+sha256 = "1961b9cadf7af9799837cccb7186704ddba8cc537cef82e71ec872369481c8bf"
 
 [[reviewed-source]]
 path = "assurance/aes-owner-cleanup/Cargo.toml"
@@ -56,7 +56,7 @@ sha256 = "934160a3ba4b41d62632dbe283fabeb5a9fcdfea045b3339a1376b2a3f31f4ab"
 
 [[reviewed-source]]
 path = "assurance/aes-owner-cleanup/src/lib.rs"
-sha256 = "23143fa7d1f6e3c4e4a6fec3d010701d76b38cf91f9fe78e780ee2af9a219792"
+sha256 = "40a8d9c0a34cb2f618b56ca5911fbe83812e8fb47b578fc6ba65bbf56cfd4cbd"
 
 [[development-secret-owner]]
 id = "development.algorithm.aes128"
@@ -68,11 +68,12 @@ block_bytes = 16
 rounds = 10
 symbol = "crates/brynja-crypto/src/aes.rs#Aes128Key"
 output_symbol = "crates/brynja-crypto/src/aes.rs#SecretBlock"
+expanded_key_symbol = "crates/brynja-crypto/src/aes.rs#Aes128ExpandedKey"
 fields = ["region:caller-backed-owned-secret-region", "local:thread-local-marker"]
 temporaries = ["schedule:Scratch<176>", "state:Scratch<16>", "word:Scratch<4>", "previous:Scratch<16>", "scalar-and-caller-copies:outside-owned-storage"]
 cleanup_model = "delegated-owner-drop-and-explicit-clear-with-operation-local-guards"
 delegated_owners = ["core.owned-secret-region", "core.secret-region-initialization"]
-cleanup_bindings = ["crates/brynja-crypto/src/aes.rs#Aes128Key::clear", "crates/brynja-crypto/src/aes.rs#SecretBlock::clear", "crates/brynja-crypto/src/aes.rs#Scratch::drop"]
+cleanup_bindings = ["crates/brynja-crypto/src/aes.rs#Aes128Key::clear", "crates/brynja-crypto/src/aes.rs#SecretBlock::clear", "crates/brynja-crypto/src/aes.rs#Scratch::drop", "crates/brynja-crypto/src/aes.rs#Aes128ExpandedKey::clear"]
 compiler_checks = ["python3 scripts/aes/check-aes-owner-cleanup.py", "python3 scripts/aes/check-aes-operation-cleanup.py"]
 compiler_scope = "bounded-dispatch-x86_64-rust-1.90.0-and-1.99.1-abort-and-unwind"
 qualification = "development-only-family-incomplete-side-channel-and-independent-review-pending"
@@ -85,6 +86,11 @@ operations = [
   {api = "Aes128Key::clear", output = "none", failure = "delegated-core-clear"},
   {api = "SecretBlock::clear", output = "none", failure = "delegated-core-clear"},
   {api = "SecretBlock::expose", output = "borrowed-secret-bytes", failure = "infallible"},
+  {api = "Aes128ExpandedKey::new", output = "typed-secret-expanded-key", failure = "clear-admitted-key-storage"},
+  {api = "Aes128ExpandedKey::encrypt_block", output = "typed-secret-block", failure = "clear-admitted-output"},
+  {api = "Aes128ExpandedKey::decrypt_block", output = "typed-secret-block", failure = "clear-admitted-output"},
+  {api = "Aes128ExpandedKey::encrypt_block_public", output = "explicit-public-ciphertext", failure = "unchanged-output"},
+  {api = "Aes128ExpandedKey::clear", output = "none", failure = "delegated-core-clear"},
 ]
 lifecycle_scope = ["import", "success", "error", "failed-construction", "recoverable-unwind", "explicit-clear", "drop"]
 excluded_scope = ["AES-192", "AES-256", "key-generation", "streaming-modes", "authentication", "cancellation-api", "rekey-api", "key-export", "backend-selection", "TLS"]

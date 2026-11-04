@@ -76,6 +76,9 @@ where
             let mut groups = BTreeMap::new();
             let mut remaining = LIMITS.attempts;
             while let Some(key) = map.next_key()? {
+                if groups.contains_key(&key) {
+                    return Err(A::Error::custom("duplicate attempt group key"));
+                }
                 let rows = map.next_value_seed(Rows(&mut remaining, PhantomData))?;
                 groups.insert(key, rows);
             }
@@ -128,6 +131,11 @@ fn read_stream(reader: impl Read, maximum: usize) -> Result<Vec<u8>> {
 }
 
 pub fn read(path: &Path, maximum: usize) -> Result<Vec<u8>> {
+    // Reject pre-existing FIFOs/devices before open can block. The handle check
+    // below remains necessary; this is not protection from hostile path races.
+    if !std::fs::symlink_metadata(path)?.is_file() {
+        return Err("verification artifact must be a regular file".into());
+    }
     let file = File::open(path)?;
     let metadata = file.metadata()?;
     if !metadata.is_file() {
@@ -141,6 +149,36 @@ pub fn read(path: &Path, maximum: usize) -> Result<Vec<u8>> {
         .into());
     }
     read_stream(file, maximum)
+}
+
+pub fn views<'de, D>(
+    deserializer: D,
+) -> std::result::Result<std::collections::BTreeMap<String, crate::model::View>, D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
+    use serde::de::{Error, MapAccess, Visitor};
+    struct Unique;
+    impl<'de> Visitor<'de> for Unique {
+        type Value = std::collections::BTreeMap<String, crate::model::View>;
+        fn expecting(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+            f.write_str("unique view keys")
+        }
+        fn visit_map<A: MapAccess<'de>>(
+            self,
+            mut map: A,
+        ) -> std::result::Result<Self::Value, A::Error> {
+            let mut views = Self::Value::new();
+            while let Some(key) = map.next_key()? {
+                if views.contains_key(&key) {
+                    return Err(A::Error::custom("duplicate view key"));
+                }
+                views.insert(key, map.next_value()?);
+            }
+            Ok(views)
+        }
+    }
+    deserializer.deserialize_map(Unique)
 }
 
 struct BoundedOutput {

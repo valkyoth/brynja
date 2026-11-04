@@ -83,11 +83,13 @@ fn decode_with_limits(root: &Path, bytes: &[u8], limits: Limits) -> Result<State
             // size is already bounded by the index budget. They remain readable
             // for migration; schema 2 uses shared immutable objects below.
             let state: State = serde_json::from_slice(bytes)?;
+            crate::rotation::validate(&state)?;
             check_attempts(&state, limits)?;
             Ok(state)
         }
-        2 => {
+        2 | 3 => {
             let disk: State<String> = serde_json::from_slice(bytes)?;
+            crate::rotation::validate(&disk)?;
             check_attempts(&disk, limits)?;
             let mut cache = BTreeMap::new();
             let mut total = 0;
@@ -106,10 +108,11 @@ fn decode_with_limits(root: &Path, bytes: &[u8], limits: Limits) -> Result<State
                 attempts.insert(key, expanded);
             }
             Ok(State {
-                schema: 2,
+                schema: disk.schema,
                 attempts,
                 views: disk.views,
                 historical: disk.historical,
+                archives: disk.archives,
             })
         }
         _ => Err("unsupported results schema".into()),
@@ -163,9 +166,15 @@ pub fn save(root: &Path, state: &State) -> Result<()> {
 }
 
 fn save_with_limits(root: &Path, state: &State, limits: Limits) -> Result<()> {
-    if !matches!(state.schema, 1 | 2) {
+    let bytes = index_bytes(root, state, limits)?;
+    storage::atomic(root, storage::STATE, &bytes)
+}
+
+pub(crate) fn index_bytes(root: &Path, state: &State, limits: Limits) -> Result<Vec<u8>> {
+    if !matches!(state.schema, 1..=3) {
         return Err("unsupported results schema".into());
     }
+    crate::rotation::validate(state)?;
     check_attempts(state, limits)?;
     let mut saved = BTreeSet::new();
     let mut total = 0;
@@ -189,15 +198,17 @@ fn save_with_limits(root: &Path, state: &State, limits: Limits) -> Result<()> {
         attempts: BTreeMap<&'a String, Vec<Attempt<String>>>,
         views: &'a BTreeMap<String, View>,
         historical: &'a Vec<Historical>,
+        #[serde(skip_serializing_if = "Vec::is_empty")]
+        archives: &'a Vec<String>,
     }
     // Objects first, atomic index last. A failed/interrupted save can leave
     // unreferenced objects, never an index referencing a partial object. No GC.
     let disk = Index {
-        schema: 2,
+        schema: if state.archives.is_empty() { 2 } else { 3 },
         attempts,
         views: &state.views,
         historical: &state.historical,
+        archives: &state.archives,
     };
-    let bytes = store_limits::encode(&disk, limits.index, true)?;
-    storage::atomic(root, storage::STATE, &bytes)
+    store_limits::encode(&disk, limits.index, true)
 }

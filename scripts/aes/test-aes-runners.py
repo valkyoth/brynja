@@ -83,8 +83,8 @@ def diagnostic(code='E0277', source='probe.rs', primary=True, status=1):
 class ApiTests(unittest.TestCase):
     def test_population_and_nearby_controls(self):
         cases = api.probes()
-        self.assertEqual(len(cases), 29)
-        self.assertEqual(len({c[0] for c in cases}), 29)
+        self.assertEqual(len(cases), 58)
+        self.assertEqual(len({c[0] for c in cases}), 58)
         for name, negative, positive, code in cases:
             self.assertNotEqual(negative, positive, name)
             self.assertRegex(code, '^E[0-9]{4}$')
@@ -140,12 +140,12 @@ class ApiTests(unittest.TestCase):
 
     def test_every_positive_and_negative_runs(self):
         commands, output = self.invoke()
-        self.assertEqual(len(commands), 59)
+        self.assertEqual(len(commands), 117)
         self.assertIn('--locked', commands[0])
         self.assertIn('--offline', commands[0])
         self.assertTrue(all(c[1] == '+1.99.1' for c in commands))
-        self.assertEqual(output.count('AES_API_CASE:'), 29)
-        self.assertIn('AES_API_PASS: 1.99.1 29 paired probes', output)
+        self.assertEqual(output.count('AES_API_CASE:'), 58)
+        self.assertIn('AES_API_PASS: 1.99.1 58 paired probes', output)
 
     def test_positive_failure_propagates(self):
         with self.assertRaises(RuntimeError):
@@ -250,7 +250,7 @@ class MutationTests(unittest.TestCase):
                     raise RuntimeError('mutant does not compile')
                 if 'generate-lockfile' in command:
                     return ''
-                count = 6 if '--test' in command else 5
+                count = 6 if '--test' in command else 7
                 return f'test result: ok. {count} passed; 0 failed; 0 ignored;'
 
             with (patch.object(mutation.verifier, 'environment', return_value={}),
@@ -269,7 +269,7 @@ class MutationTests(unittest.TestCase):
             def run(command, *_args):
                 if '--no-run' in command or 'generate-lockfile' in command:
                     return ''
-                count = 6 if '--test' in command else 5
+                count = 6 if '--test' in command else 7
                 return f'test result: ok. {count} passed; 0 failed; 0 ignored;'
 
             with (patch.object(mutation.verifier, 'environment', return_value={}),
@@ -309,7 +309,7 @@ class OwnerCodegenTests(unittest.TestCase):
     def test_both_exit_models_and_all_negative_controls(self):
         for panic in ('abort', 'unwind'):
             llvm = self.fixture(panic)
-            self.assertEqual(owner.check(llvm, panic), 2)
+            self.assertEqual(owner.check(llvm, panic), 3)
             self.assertEqual(owner.negative_controls(llvm, panic), 12)
 
     def test_wrong_panic_profile_or_missing_probe_fails(self):
@@ -337,19 +337,24 @@ class OperationCodegenTests(unittest.TestCase):
             if role.endswith('-clear'):
                 args = 'ptr %self.0, i64 %self.1'
                 body += f'  tail call void {cls.OWNER_CLEAR}(ptr %self.0, i64 %self.1)\n'
-            elif role in ('encrypt', 'decrypt'):
-                body += f'  call void @{symbols["secret"]}()\n'
+            elif role in ('encrypt', 'decrypt', 'cached-encrypt', 'cached-decrypt'):
+                target = 'cached-secret' if role.startswith('cached-') else 'secret'
+                body += f'  call void @{symbols[target]}()\n'
             else:
                 pointers = {f'%{name}' + (f'.i{n}' if count > 1 else ''): size
                             for name, (size, count) in operation.ROLES[role].items() for n in range(count)}
-                if role == 'secret':
+                if role in ('secret', 'cached-secret', 'cached-new'):
                     body += '  %destination = alloca [24 x i8], align 8\n'
                 for pointer, size in pointers.items():
                     body += f'  {pointer} = alloca [{size} x i8], align 1\n'
                     body += f'  call void @llvm.lifetime.start.p0(ptr {pointer})\n'
                     body += f'  store i8 1, ptr {pointer}, align 1\n'
-                if role in ('public', 'secret'):
-                    body += f'  call void @{symbols["expand"]}()\n'
+                if role in ('public', 'secret', 'cached-new'):
+                    if role == 'cached-new' and panic == 'unwind':
+                        body += f'  invoke void @{symbols["expand"]}()\n    to label %normal unwind label %cleanup\nnormal:\n'
+                    else:
+                        body += f'  call void @{symbols["expand"]}()\n'
+                if role in ('public', 'secret', 'cached-public', 'cached-secret'):
                     if panic == 'unwind':
                         body += f'  invoke void @{symbols["rounds"]}()\n    to label %normal unwind label %cleanup\nnormal:\n'
                     else:
@@ -358,7 +363,7 @@ class OperationCodegenTests(unittest.TestCase):
                                  f'  call void @llvm.lifetime.end.p0(ptr {pointer})\n'
                                  for pointer, size in pointers.items())
                 body += clears
-                if panic == 'unwind' and role in ('public', 'secret'):
+                if panic == 'unwind' and role in ('public', 'secret', 'cached-public', 'cached-secret', 'cached-new'):
                     body += '  ret void\ncleanup:\n  %ex = landingpad { ptr, i32 }\n  cleanup\n'
                     body += clears + '  resume { ptr, i32 } %ex\n'
             if not body.endswith(' %ex\n'):
@@ -369,8 +374,8 @@ class OperationCodegenTests(unittest.TestCase):
     def test_both_graphs_and_all_mutants(self):
         for panic in ('abort', 'unwind'):
             selected = operation.check(self.fixture(panic), panic)
-            self.assertEqual(len(selected), 8)
-            self.assertEqual(operation.negative_controls(selected), 55)
+            self.assertEqual(len(selected), 14)
+            self.assertEqual(operation.negative_controls(selected), 75)
 
     def test_wrong_target_profile_population_and_call_edges(self):
         good = self.fixture('abort')
@@ -392,6 +397,15 @@ class OperationCodegenTests(unittest.TestCase):
         mutant = good.replace('cleanup:\n', 'cleanup:\n  resume { ptr, i32 } undef\n')
         with self.assertRaises(ValueError):
             operation.check(mutant, 'unwind')
+
+    def test_cached_operation_cannot_reexpand(self):
+        good = self.fixture('abort')
+        selected = operation.select(good)
+        for role in ('cached-secret', 'cached-public'):
+            body = selected[role][2]
+            changed = body.replace('start:', 'start:\n  call void @' + selected['expand'][0] + '()')
+            with self.assertRaisesRegex(ValueError, 're-expands'):
+                operation.check(good.replace(body, changed), 'abort')
 
     def test_public_error_branch_cannot_return_with_live_scratch(self):
         body = operation.select(self.fixture('abort'))['public'][2]

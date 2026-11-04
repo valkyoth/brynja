@@ -135,6 +135,27 @@ class OwnerContractTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'binding missing or replaced'):
             self.validate()
 
+    def test_cached_owner_is_not_exempt_from_clearing_contract(self):
+        self.mutate(contract.SOURCE, "pub struct Aes128ExpandedKey<'a> {",
+                    "pub struct Aes128ExpandedKey<'a> {\n retained: [u8; 176],")
+        with self.assertRaises(rust.RustContractError):
+            self.validate()
+
+    def test_cached_schedule_width_is_fixed(self):
+        self.mutate(contract.SOURCE, 'EXPANDED_KEY_BYTES: usize = 176;', 'EXPANDED_KEY_BYTES: usize = 160;')
+        with self.assertRaisesRegex(ValueError, 'expanded key width'):
+            self.validate()
+
+    def test_cached_import_requires_guarded_schedule(self):
+        self.mutate(contract.SOURCE, 'Scratch::<EXPANDED_KEY_BYTES>::new()', 'Ordinary::<EXPANDED_KEY_BYTES>::new()')
+        with self.assertRaisesRegex(ValueError, 'admission/expansion'):
+            self.validate()
+
+    def test_cached_blocks_must_not_expand(self):
+        self.mutate(contract.SOURCE, 'Scratch::<BLOCK_BYTES>::new()', 'portable::expand(); Scratch::<BLOCK_BYTES>::new()')
+        with self.assertRaisesRegex(ValueError, 'cached block unexpectedly expands'):
+            self.validate()
+
 
 if __name__ == '__main__':
     unittest.main()

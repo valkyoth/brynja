@@ -1,6 +1,6 @@
 //! Explicit opt-in independent OpenSSL comparison, using public synthetic data.
 //! Not a production dependency, mode API, timing test or CAVP validation.
-use brynja_crypto::aes::{Aes128Key, PublicCiphertext};
+use brynja_crypto::aes::{Aes128ExpandedKey, Aes128Key, PublicCiphertext};
 use std::{
     io::Write,
     process::{Command, Stdio},
@@ -85,6 +85,9 @@ fn openssl_independent_encrypt_and_decrypt_corpus() -> TestResult<()> {
         }
         let mut storage = [0; 16];
         let key = Aes128Key::new(&key_bytes, &mut storage).map_err(|_| "key admission")?;
+        let mut expanded = [0; 176];
+        let cached = Aes128ExpandedKey::new(&key_bytes, &mut expanded)
+            .map_err(|_| "cached key admission")?;
         for decrypt in [false, true] {
             let mut input = [0; 512];
             fill(&mut random, &mut input);
@@ -109,10 +112,26 @@ fn openssl_independent_encrypt_and_decrypt_corpus() -> TestResult<()> {
                     assert_eq!(&output, expected, "forward corpus {case}");
                 }
                 comparisons = comparisons.checked_add(1).ok_or("comparison overflow")?;
+                if decrypt {
+                    assert_eq!(
+                        cached
+                            .decrypt_block(block, &mut output)
+                            .map_err(|_| "cached decrypt")?
+                            .expose(),
+                        expected,
+                        "cached inverse {case}"
+                    );
+                } else {
+                    cached
+                        .encrypt_block_public(block, &mut output, PublicCiphertext::acknowledge())
+                        .map_err(|_| "cached encrypt")?;
+                    assert_eq!(&output, expected, "cached forward {case}");
+                }
             }
         }
     }
     assert_eq!(comparisons, 4096);
     println!("AES_OPENSSL_COMPARISONS: 4096");
+    println!("AES_CACHED_OPENSSL_COMPARISONS: 4096");
     Ok(())
 }

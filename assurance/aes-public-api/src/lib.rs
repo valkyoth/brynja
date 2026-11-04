@@ -26,3 +26,16 @@ pub fn public_block(
     key.clear();
     result
 }
+
+/// Explicit cached schedule route; also instantiated by the no_std target build.
+pub fn cached_public_block(
+    input_key: &[u8; 16],
+    storage: &mut [u8; 176],
+    input: &[u8; 16],
+    output: &mut [u8; 16],
+) -> Result<(), aes::Error> {
+    let key = aes::Aes128ExpandedKey::new(input_key, storage)?;
+    let result = key.encrypt_block_public(input, output, aes::PublicCiphertext::acknowledge());
+    key.clear();
+    result
+}

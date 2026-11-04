@@ -60,11 +60,13 @@ class ScopedRelease(unittest.TestCase):
     def test_aes_candidate_gate_is_finite_and_does_not_publish(self):
         plan = scoped.load('0.27.0')
         commands = {check['id']: check['command'] for check in plan['checks']}
-        self.assertEqual(len(commands), 24)
+        self.assertEqual(len(commands), 25)
         self.assertEqual(commands['release-plan'], ['scripts/release/test-release-plan.sh'])
         self.assertEqual(commands['crypto-tests'],
             ['cargo', 'test', '--locked', '-p', 'brynja-crypto', '-p',
-             'brynja-legacy-hkdf', '--no-default-features', '--features', 'brynja-crypto/hazmat-aes-block'])
+             'brynja-legacy-hkdf', '--no-default-features', '--features', 'brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider'])
+        self.assertEqual(commands['aes-provider-api'],
+                         ['python3', 'scripts/aes/check-aes-provider-api.py', '1.99.1'])
         self.assertEqual(commands['facade-integration'],
             ['cargo', 'check', '--locked', '-p', 'brynja', '--no-default-features'])
         self.assertEqual(set(plan['ci_checks']), set(commands) -

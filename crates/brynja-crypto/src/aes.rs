@@ -6,15 +6,21 @@
 //! primitive as ECB. Deployment/side-channel qualification is pending.
 //! Source arithmetic has fixed work and no secret-indexed tables; this is not
 //! a guarantee about every compiler's emitted code or every target's timing.
+//! Bounded emitted-code observations cover selected x86_64 Linux builds on
+//! Rust 1.90.0/1.99.1 (optimized abort/unwind); Cortex-M is compile-only.
+//! Other targets are not side-channel qualified. See the repository's
+//! `docs/assurance/aes128-development.md` target support matrix for exact scope.
 //!
-//! Keys and outputs borrow clearing caller storage. Each operation expands an
-//! ephemeral schedule which is cleared on return/error/unwind. Clearing does
+//! Keys and outputs borrow clearing caller storage. `Aes128Key` expands an
+//! ephemeral schedule per operation; `Aes128ExpandedKey` expands once at import
+//! into 176 caller-owned bytes, clearing them on explicit clear or Drop. Clearing does
 //! not cover caller copies, compiler spills/registers, forgotten owners, abort,
 //! paging or dumps. The input key/block remain the caller's responsibility.
 //! This software API requires no HSM, but does not detect physical arithmetic
 //! faults or provide power/EM resistance. Error/unwind tests are not physical
-//! fault-injection qualification. Each call processes exactly one block and
-//! rebuilds the schedule; callers must bound repeated work on untrusted traffic.
+//! fault-injection qualification. Each call processes exactly one block;
+//! callers must bound repeated work on untrusted traffic. Caching removes
+//! repeated expansion, not the need for application traffic admission.
 
 #![forbid(unsafe_code)]
 
@@ -23,10 +29,16 @@ use core::marker::PhantomData;
 
 mod portable;
 
+/// Explicit, optional external AES-128 key providers; no device driver is bundled.
+#[cfg(feature = "external-key-provider")]
+pub mod provider;
+
 /// AES block size, in bytes (all AES variants use this block size).
 pub const BLOCK_BYTES: usize = 16;
 /// AES-128 key size, in bytes. Other key sizes are not admitted here.
 pub const KEY_BYTES: usize = 16;
+/// Caller storage for all eleven AES-128 round keys, including the initial key.
+pub const EXPANDED_KEY_BYTES: usize = 176;
 
 /// Explicit authority to release one encrypted block as public ciphertext.
 /// This does not authenticate it or make raw block encryption a message mode.
@@ -206,6 +218,122 @@ impl<'a> Aes128Key<'a> {
         let mut state = Scratch::<16>::new();
         state.0.copy_from_slice(input);
         portable::transform(&mut state.0, &schedule.0, inverse)?;
+        destination.write(&state.0)?;
+        Ok(SecretBlock {
+            region: destination.finish()?,
+            local: PhantomData,
+        })
+    }
+}
+
+/// Optional caller-backed cached AES-128 schedule for repeated block operations.
+///
+/// Expands once at import; encryption/decryption do not re-expand the key.
+/// Contains key-equivalent secret material (including the original key) and
+/// must be protected exactly like a key. The larger secret footprint is a
+/// storage/performance tradeoff, not extra independent secret information.
+/// No allocation, key export, Copy, Clone, Debug, Send or Sync is provided.
+/// `clear` consumes the owner; Drop also clears all 176 caller-owned bytes.
+/// Copies, compiler spills/registers, forgetting and abort remain outside this
+/// guarantee. This is still a raw block primitive, not a mode or rate limiter.
+///
+/// ```
+/// use brynja_crypto::aes::{Aes128ExpandedKey, EXPANDED_KEY_BYTES, Error};
+/// let mut storage = [0; EXPANDED_KEY_BYTES];
+/// let key = Aes128ExpandedKey::new(&[0; 16], &mut storage)?;
+/// let mut output = [0; 16];
+/// for input in [[0; 16], [1; 16]] {
+///     key.encrypt_block(&input, &mut output)?.clear();
+/// }
+/// key.clear();
+/// assert_eq!(storage, [0; EXPANDED_KEY_BYTES]);
+/// # Ok::<(), Error>(())
+/// ```
+#[must_use = "keep the expanded-key owner live until use is complete"]
+pub struct Aes128ExpandedKey<'a> {
+    region: OwnedSecretRegion<'a>,
+    local: PhantomData<*mut ()>,
+}
+
+impl<'a> Aes128ExpandedKey<'a> {
+    /// Imports a 16-byte key and expands into clearing caller storage.
+    /// Admitted storage clears on error/unwind; the input key is not cleared.
+    pub fn new(
+        input: &[u8; KEY_BYTES],
+        storage: &'a mut [u8; EXPANDED_KEY_BYTES],
+    ) -> Result<Self, Error> {
+        let mut destination = SecretRegionInitialization::begin(storage)?;
+        let mut schedule = Scratch::<EXPANDED_KEY_BYTES>::new();
+        portable::expand(input, &mut schedule.0)?;
+        destination.write(&schedule.0)?;
+        #[cfg(test)]
+        tests::expansion_checkpoint()?;
+        Ok(Self {
+            region: destination.finish()?,
+            local: PhantomData,
+        })
+    }
+
+    /// Clears all cached round keys immediately and consumes the owner.
+    pub fn clear(self) {
+        let _ = self.region.clear();
+    }
+
+    /// Encrypts one block into a clearing output; no mode or authentication.
+    /// Errors and recoverable unwinds clear the admitted output, not the key.
+    pub fn encrypt_block<'out>(
+        &self,
+        input: &[u8; BLOCK_BYTES],
+        output: &'out mut [u8; BLOCK_BYTES],
+    ) -> Result<SecretBlock<'out>, Error> {
+        self.transform(input, output, false)
+    }
+
+    /// Decrypts one block into a clearing output; does not authenticate it.
+    /// Errors and recoverable unwinds clear the admitted output, not the key.
+    pub fn decrypt_block<'out>(
+        &self,
+        input: &[u8; BLOCK_BYTES],
+        output: &'out mut [u8; BLOCK_BYTES],
+    ) -> Result<SecretBlock<'out>, Error> {
+        self.transform(input, output, true)
+    }
+
+    /// Explicitly releases one encrypted block as public ciphertext.
+    /// The entire destination remains unchanged on error or unwind.
+    pub fn encrypt_block_public(
+        &self,
+        input: &[u8; BLOCK_BYTES],
+        output: &mut [u8; BLOCK_BYTES],
+        _authority: PublicCiphertext,
+    ) -> Result<(), Error> {
+        let schedule: &[u8; EXPANDED_KEY_BYTES] = self
+            .region
+            .expose()
+            .try_into()
+            .map_err(|_| Error::SecretMemory)?;
+        let mut state = Scratch::<BLOCK_BYTES>::new();
+        state.0.copy_from_slice(input);
+        portable::transform(&mut state.0, schedule, false)?;
+        output.copy_from_slice(&state.0);
+        Ok(())
+    }
+
+    fn transform<'out>(
+        &self,
+        input: &[u8; BLOCK_BYTES],
+        output: &'out mut [u8; BLOCK_BYTES],
+        inverse: bool,
+    ) -> Result<SecretBlock<'out>, Error> {
+        let mut destination = SecretRegionInitialization::begin(output)?;
+        let schedule: &[u8; EXPANDED_KEY_BYTES] = self
+            .region
+            .expose()
+            .try_into()
+            .map_err(|_| Error::SecretMemory)?;
+        let mut state = Scratch::<BLOCK_BYTES>::new();
+        state.0.copy_from_slice(input);
+        portable::transform(&mut state.0, schedule, inverse)?;
         destination.write(&state.0)?;
         Ok(SecretBlock {
             region: destination.finish()?,

@@ -36,6 +36,8 @@ pub fn excluded(name: &str) -> bool {
         || name == storage::REPORT
         || name == storage::SNAPSHOTS
         || name.starts_with(&format!("{}/", storage::SNAPSHOTS))
+        || name == storage::ARCHIVES
+        || name.starts_with(&format!("{}/", storage::ARCHIVES))
         || name
             .split('/')
             .any(|p| matches!(p, ".git" | "target" | ".runner" | "__pycache__"))

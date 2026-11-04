@@ -19159,7 +19159,8 @@
       "cleanup_bindings": [
         "crates/brynja-crypto/src/aes.rs#Aes128Key::clear",
         "crates/brynja-crypto/src/aes.rs#SecretBlock::clear",
-        "crates/brynja-crypto/src/aes.rs#Scratch::drop"
+        "crates/brynja-crypto/src/aes.rs#Scratch::drop",
+        "crates/brynja-crypto/src/aes.rs#Aes128ExpandedKey::clear"
       ],
       "cleanup_model": "delegated-owner-drop-and-explicit-clear-with-operation-local-guards",
       "compiler_checks": [
@@ -19192,6 +19193,7 @@
         "backend-selection",
         "TLS"
       ],
+      "expanded_key_symbol": "crates/brynja-crypto/src/aes.rs#Aes128ExpandedKey",
       "fields": [
         "region:caller-backed-owned-secret-region",
         "local:thread-local-marker"
@@ -19243,6 +19245,31 @@
           "api": "SecretBlock::expose",
           "failure": "infallible",
           "output": "borrowed-secret-bytes"
+        },
+        {
+          "api": "Aes128ExpandedKey::new",
+          "failure": "clear-admitted-key-storage",
+          "output": "typed-secret-expanded-key"
+        },
+        {
+          "api": "Aes128ExpandedKey::encrypt_block",
+          "failure": "clear-admitted-output",
+          "output": "typed-secret-block"
+        },
+        {
+          "api": "Aes128ExpandedKey::decrypt_block",
+          "failure": "clear-admitted-output",
+          "output": "typed-secret-block"
+        },
+        {
+          "api": "Aes128ExpandedKey::encrypt_block_public",
+          "failure": "unchanged-output",
+          "output": "explicit-public-ciphertext"
+        },
+        {
+          "api": "Aes128ExpandedKey::clear",
+          "failure": "delegated-core-clear",
+          "output": "none"
         }
       ],
       "output_symbol": "crates/brynja-crypto/src/aes.rs#SecretBlock",
@@ -24244,7 +24271,7 @@
       ]
     }
   ],
-  "policy_sha256": "8e16cc9b4c25a763bdde915a8ce69f6b4f29a16c10f1b91534a2a0d5d8c15062",
+  "policy_sha256": "f2c073d2571616619582ebb78872b62c9aa50a848efaad48d94b2fff75d800df",
   "registered_secret_owners": [
     {
       "capability": "algorithm.hkdf",

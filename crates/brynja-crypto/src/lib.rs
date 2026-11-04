@@ -5,9 +5,11 @@
 //! SP 800-185 encodings, cSHAKE128/cSHAKE256, all four KMAC/KMACXOF
 //! identities, all four TupleHash/TupleHashXOF identities, and all four
 //! ParallelHash/ParallelHashXOF identities are exposed from their small family
-//! crates. Provider effects, AEADs, other KDFs, public-key
+//! crates. Device adapters, AEADs, other KDFs, public-key
 //! algorithms, and the complete planned composition layer remain unimplemented.
 //! Portable modern HKDF is under development; it is not release-qualified.
+//! Optional external-key lifecycle contracts and AES-128 adapter operations
+//! are available; no hardware driver or HSM qualification is bundled.
 
 #![no_std]
 
@@ -15,6 +17,10 @@
 /// Requires `hazmat-aes-block`; deployment qualification remains separate.
 #[cfg(feature = "hazmat-aes-block")]
 pub mod aes;
+
+/// Optional algorithm-neutral external-key lifecycle contracts, not a device driver.
+#[cfg(feature = "external-key-provider")]
+pub mod provider;
 
 /// Explicit CPU authority and batch owners, not automatic detection or dispatch.
 /// Cargo features do not prove instruction support; each constructor retains

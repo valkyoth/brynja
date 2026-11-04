@@ -67,6 +67,11 @@ aes_contract_tests = importlib.util.module_from_spec(aes_contract_spec)
 aes_contract_spec.loader.exec_module(aes_contract_tests)
 AesDevelopmentOwnerTests = aes_contract_tests.OwnerContractTests
 
+provider_spec = importlib.util.spec_from_file_location('aes_provider_tests', ROOT / 'scripts/aes/test-aes-provider-runner.py')
+provider_tests = importlib.util.module_from_spec(provider_spec)
+provider_spec.loader.exec_module(provider_tests)
+AesProviderRunnerTests = provider_tests.ProviderRunnerTests
+
 # Reviewed, explicit build closures for these portable harness commands only.
 # This is not automatic feature/dependency analysis or a release-family planner.
 CLOSURES = {
@@ -144,14 +149,16 @@ class RegistryTests(unittest.TestCase):
 
     def test_aes_initial_checks_pin_harnesses_and_counts(self):
         checks = {c['id']: c for c in self.registry['checks'] if c['component'] == 'aes'}
-        expected = {'vectors': 6, 'rounds-and-faults': 5, 'msrv-vectors': 6,
-                    'ownership': 10, 'optimized-vectors': 6, 'no-std-thumb': 0,
-                    'asan-vectors': 6, 'miri-ownership': 1, 'asan-faults': 5,
+        expected = {'vectors': 6, 'rounds-and-faults': 7, 'msrv-vectors': 6,
+                    'ownership': 11, 'optimized-vectors': 6, 'no-std-thumb': 0,
+                    'asan-vectors': 6, 'miri-ownership': 1, 'asan-faults': 7,
                     'miri-public': 1, 'differential': 1, 'field-layout-proof': 0,
                     'api-msrv': 0, 'api-current': 0, 'mutation-controls': 0,
                     'owner-dispatch': 0, 'operation-cleanup': 0, 'owner-contract': 0,
                     'downstream': 0, 'downstream-matrix': 0, 'timing-screen': 0,
-                    'dataflow-review': 0}
+                    'dataflow-review': 0, 'provider-native': 12, 'provider-msrv': 12,
+                    'provider-asan': 12, 'provider-miri': 12, 'provider-api-current': 0,
+                    'provider-api-msrv': 0, 'provider-no-std': 0, 'provider-docs': 1}
         self.assertEqual(set(checks), set(expected))
         for name, count in expected.items():
             check = checks[name]
@@ -162,7 +169,8 @@ class RegistryTests(unittest.TestCase):
             if check['command'][0] == 'cargo':
                 command = check['command']
                 self.assertIn('--features', command)
-                self.assertEqual(command[command.index('--features') + 1], 'hazmat-aes-block')
+                features = 'hazmat-aes-block,external-key-provider' if name.startswith('provider-') else 'hazmat-aes-block'
+                self.assertEqual(command[command.index('--features') + 1], features)
             if count:
                 self.assertEqual(check['success']['exact_tests'], count)
                 self.assertEqual(check['success']['minimum_tests'], count)
@@ -198,7 +206,7 @@ class RegistryTests(unittest.TestCase):
         oracle = checks['differential']
         self.assertEqual(oracle['command'][-5:],
                          ['openssl_independent_encrypt_and_decrypt_corpus', '--', '--ignored', '--exact', '--nocapture'])
-        self.assertEqual(oracle['success']['unique_lines'], ['AES_OPENSSL_COMPARISONS: 4096'])
+        self.assertEqual(oracle['success']['unique_lines'], ['AES_OPENSSL_COMPARISONS: 4096', 'AES_CACHED_OPENSSL_COMPARISONS: 4096'])
         self.assertIn('aes-oracle', oracle['inputs'])
         self.assertEqual(self.registry['groups']['aes-oracle']['tools'], [{'program': 'openssl'}])
 
@@ -258,7 +266,7 @@ class RegistryTests(unittest.TestCase):
         for name, version, tool in [('api-msrv', '1.90.0', 'hkdf-msrv'), ('api-current', '1.99.1', 'compiler')]:
             check = checks[name]
             self.assertEqual(check['command'], ['python3', 'scripts/aes/check-aes-api.py', version])
-            self.assertEqual(check['success']['unique_lines'], [f'AES_API_PASS: {version} 29 paired probes'])
+            self.assertEqual(check['success']['unique_lines'], [f'AES_API_PASS: {version} 58 paired probes'])
             self.assertTrue({tool, 'aes-build', 'aes-runner'} <= set(check['inputs']))
         for group in ('aes-proof', 'aes-runner'):
             paths = self.registry['groups'][group]['paths']
@@ -296,7 +304,7 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(owner['platform'], 'linux-x86_64')
         self.assertTrue({'aes-owner-codegen', 'compiler', 'hkdf-msrv'} <= set(owner['inputs']))
         self.assertEqual(owner['success']['unique_lines'], [aes_runner_tests.owner.MARKER] +
-                         [f'AES owner dispatch: PASS; Rust {compiler}; x86_64; panic={panic}; 2 probes; 12 rejected IR mutations'
+                         [f'AES owner dispatch: PASS; Rust {compiler}; x86_64; panic={panic}; 3 probes; 12 rejected IR mutations'
                           for compiler in ('1.90.0', '1.99.1') for panic in ('abort', 'unwind')])
         paths = self.registry['groups']['aes-owner-codegen']['paths']
         for helper in ('scripts/hkdf/hkdf_owner_codegen.py', 'scripts/hmac/hmac_engine_codegen.py',
@@ -329,7 +337,7 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(check['platform'], 'linux-x86_64')
         self.assertTrue({'aes-operation-codegen', 'aes-build', 'compiler', 'hkdf-msrv', 'hash-core'} <= set(check['inputs']))
         self.assertEqual(check['success']['unique_lines'], [aes_runner_tests.operation.MARKER] +
-                         [f'AES operation cleanup: PASS; Rust {compiler}; x86_64; panic={panic}; 4 scratch bodies; 2 explicit clears; 55 rejected IR mutations'
+                         [f'AES operation cleanup: PASS; Rust {compiler}; x86_64; panic={panic}; 7 scratch bodies; 3 explicit clears; 75 rejected IR mutations'
                           for compiler in ('1.90.0', '1.99.1') for panic in ('abort', 'unwind')])
         paths = self.registry['groups']['aes-operation-codegen']['paths']
         for helper in ('scripts/aes/check-aes-operation-cleanup.py', 'scripts/aes/test-aes-runners.py',
@@ -342,7 +350,7 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(len(selected), 1)
         check = selected[0]
         self.assertEqual(check['command'], ['python3', 'scripts/cryptography/test-aes-owner-contract.py'])
-        self.assertEqual(check['success'], {'contains': ['Ran 20 tests in '], 'unique_lines': ['OK']})
+        self.assertEqual(check['success'], {'contains': ['Ran 24 tests in '], 'unique_lines': ['OK']})
         paths = self.registry['groups']['aes-owner-contract']['paths']
         for path in ('security/cryptographic-api-profile-policy.toml', 'verification/checks.toml',
                      'scripts/cryptography/aes_owner_contract.py', 'scripts/cryptography/rust_source_contract.py',

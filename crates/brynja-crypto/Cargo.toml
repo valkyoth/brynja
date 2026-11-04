@@ -12,6 +12,7 @@ include = ["Cargo.toml","LICENSE-APACHE","LICENSE-MIT","README.md","src/**/*.rs"
 [features]
 default = []
 hazmat-aes-block = []
+external-key-provider = []
 hmac-hardened-execution = ["cpu", "brynja-mac-hmac/hardened-execution"]
 hmac-runtime-execution = ["cpu", "brynja-mac-hmac/runtime-execution"]
 cpu = ["dep:brynja-crypto-cpu"]
@@ -56,3 +57,7 @@ required-features = ["hazmat-aes-block"]
 [[test]]
 name = "aes128_differential"
 required-features = ["hazmat-aes-block"]
+
+[[test]]
+name = "aes128_provider"
+required-features = ["hazmat-aes-block", "external-key-provider"]

@@ -5825,7 +5825,13 @@ Internal candidate metadata and a finite final checklist are prepared; the
 owner-requested scoped pentest/retest, clean-candidate final gate and green
 GitHub/CodeQL remain pending. Deployment-specific compiler/target side-channel
 qualification remains separate and is not inferred from this milestone.
-No AES-192/256, backend, mode or TLS work is admitted here.
+The owner-authorized follow-up adds an optional caller-owned clearing cached
+schedule and independently opted-in external-key provider contracts. The latter
+separate reusable lifecycle/destruction from AES-specific operations and are
+tested with reference/mock adapters, not a hardware driver. A concrete optional
+PKCS#11 adapter is planned at v0.27.6 and does not block this candidate.
+No AES-192/256, accelerated backend, executable device adapter, mode or TLS work
+is admitted here.
 
 Plan scope: Implement complete FIPS 197 AES-128 key expansion and forward and inverse block operations with typed keys, official vectors, immediate schedule destruction, portable constant-time code without secret-indexed tables, proofs, emitted-code evidence, and directly usable encrypt/decrypt APIs.
 
@@ -6042,6 +6048,57 @@ Exit criteria:
   residual gaps are explicit, and the next row does not inherit hidden
   implementation work;
 - `v0.27.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.27.6 - Optional PKCS11 External-Key Adapter
+
+Status: planned
+
+Plan scope: After v0.27.5, implement an optional separately packaged PKCS#11 external-device adapter over the reusable external-key provider contracts, initially limited to explicit AES-128 block operations with opaque non-exportable key bindings, session/login management, exact mechanism and usage admission, fallible owned-key destruction and no software fallback; keep vendor dependencies and FFI outside the core workspace and require explicit dependency/FFI review plus software-token integration and named-device acceptance before hardware support claims.
+
+Goal: provide ready-to-configure optional external-device integration without
+making an HSM mandatory or changing ordinary software cryptographic APIs.
+
+Deliverables:
+
+- ship a separately packaged/locked downstream adapter (proposed
+  `brynja-provider-pkcs11`), never a default or transitive core, facade,
+  bare-metal, legacy or FIPS-module dependency; obtain explicit dependency/FFI
+  policy approval before admitting a device-client library, and do not replace
+  first-party software primitives with foreign or delegated software crypto;
+- reuse algorithm-neutral key lifecycle and failure contracts; bind one
+  provider/session and opaque key together, distinguish borrowed persistent
+  keys from owned generated keys, and validate AES-128 identity, permitted
+  directions, mechanism, sensitivity and non-exportability; selection, login,
+  key lookup and permitted device-side generation must be explicit;
+- define session ownership, concurrency, authentication-secret cleanup, device
+  removal, stale/reused handles, partial output and timeout/uncertain completion
+  behavior; keep destruction explicit and fallible, never infer it from Drop,
+  and prohibit silent fallback, key export and automatic uncertain retries;
+- keep initial operations limited to the existing AES-128 contract; later MAC,
+  signing, agreement, derive-to-handle and whole-operation AEAD interfaces need
+  separate algorithm-specific milestones rather than blanket capability grants.
+
+Verification:
+
+- add scoped `brynja-verify` registrations for mock fault injection and
+  software-token integration, including wrong keys/mechanisms/usage, login
+  failure, session loss, handle substitution, partial output, cleanup and
+  uncertain destruction; software tokens are test fixtures, not hardware
+  custody evidence or production software fallbacks;
+- exercise package-external consumer examples, compile-time ownership,
+  default-feature isolation, supported host compilers, adapter native/FFI
+  boundaries and dependency policy; retain core no_std build checks;
+- qualify at least one explicitly named device/module/firmware/client
+  configuration before claiming supported hardware; record unavailable hardware
+  coverage as unfinished, and do not infer physical protection, FIPS validation
+  or universal HSM compatibility from a passing adapter test.
+
+Exit criteria:
+
+- publish exact supported mechanisms, devices, ownership and operational limits;
+  require a scoped pentest/retest of this new native/device trust boundary and
+  keep all ordinary software builds independent of the adapter;
+- `v0.27.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.28.0 - GHASH
 

@@ -27,7 +27,7 @@ LEAVES = {
     'parallelhash-runtime-execution': ('brynja-hash-parallel', 'runtime-execution'),
     'parallelhash-hardened-batch': ('brynja-hash-parallel', 'hardened-batch-execution'),
 }
-CRYPTO = {'cpu': ['dep:brynja-crypto-cpu'], 'hazmat-aes-block': []}
+CRYPTO = {'cpu': ['dep:brynja-crypto-cpu'], 'hazmat-aes-block': [], 'external-key-provider': []}
 CRYPTO.update({feature: ([] if feature == 'general-sha512-t' else ['cpu']) +
               [owner + '/' + leaf] for feature, (owner, leaf) in LEAVES.items()})
 FEATURES = {

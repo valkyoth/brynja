@@ -172,6 +172,44 @@
         "after": "1466e5fc487bd670e80138b8abc48b74e0264837873b77afa6472611f896d767",
         "log": "verification/.runner/logs/2-1793792279856850578.log",
         "log_sha256": "438b7a927e4137b1663ec1c9274d3fceca91de5c7afc92fb26527010ad057ef0"
+      },
+      {
+        "id": "2-1793804909235599529",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 6e73fce6e1dc45afec85af161c22f439710c14f7adcd0a44be4145ac56e31421",
+        "started": "2026-11-04T15:08:29.235597776Z",
+        "ended": "2026-11-04T15:08:31.773604751Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-api.py",
+          "1.99.1"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "d228ad7e968ff5554d642b6c102afff073257d34b5b0c0dfa8e49c76d421095a",
+        "after": "d228ad7e968ff5554d642b6c102afff073257d34b5b0c0dfa8e49c76d421095a",
+        "log": "verification/.runner/logs/2-1793804909235599529.log",
+        "log_sha256": "9c2ae5064becbf49ddca80a06007c2fc487e6f0a0ec370896212f72e36e2e15b"
+      },
+      {
+        "id": "3-1793808575844060738",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 746862ea72070b591ee71b0d1cf60ec897274055a43fef9fce6e48b4ebef8482",
+        "started": "2026-11-04T16:09:35.844058474Z",
+        "ended": "2026-11-04T16:09:39.119454545Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-api.py",
+          "1.99.1"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "098ce1a749c64d3751a9d8c97aba47003fa930f42afd66a25b6994dac10960e6",
+        "after": "098ce1a749c64d3751a9d8c97aba47003fa930f42afd66a25b6994dac10960e6",
+        "log": "verification/.runner/logs/3-1793808575844060738.log",
+        "log_sha256": "9c2ae5064becbf49ddca80a06007c2fc487e6f0a0ec370896212f72e36e2e15b"
       }
     ],
     "aes/api-msrv": [
@@ -345,6 +383,44 @@
         "after": "c19995a7eff6eff7c665af72b8b010082c737448a942a28c8cdd791e551a7894",
         "log": "verification/.runner/logs/2-1793792277516277487.log",
         "log_sha256": "a15de2d5152aebbb2f2aa4ef9bca2f3ba5722ee432d77e30c3f0cb29ccd53773"
+      },
+      {
+        "id": "2-1793804906013716400",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 823cc71dde44b361212d22f5a499f4ec94230a8d330d592b98667306830a2a9c",
+        "started": "2026-11-04T15:08:26.013714646Z",
+        "ended": "2026-11-04T15:08:28.850174695Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-api.py",
+          "1.90.0"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "eea9f98893d1d1d9b786c44d5615e967fa6cd1a6f2a946b38883c412ba3ca0c2",
+        "after": "eea9f98893d1d1d9b786c44d5615e967fa6cd1a6f2a946b38883c412ba3ca0c2",
+        "log": "verification/.runner/logs/2-1793804906013716400.log",
+        "log_sha256": "cf7c1ad8018d20ca627ef61eb430a70cda00c1067b019cf057f15ef6c3d3ba95"
+      },
+      {
+        "id": "2-1793808579891986127",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 5450b269d04babf459302a7b7c9f17a23b81a92cd9fb4eecd1bc55f81f746d7a",
+        "started": "2026-11-04T16:09:39.891983773Z",
+        "ended": "2026-11-04T16:09:43.107569547Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-api.py",
+          "1.90.0"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "1c021c6a110c7eeed60d7600cc4baa2cf9cdcd142581bd4ec195c411d0afe4b0",
+        "after": "1c021c6a110c7eeed60d7600cc4baa2cf9cdcd142581bd4ec195c411d0afe4b0",
+        "log": "verification/.runner/logs/2-1793808579891986127.log",
+        "log_sha256": "cf7c1ad8018d20ca627ef61eb430a70cda00c1067b019cf057f15ef6c3d3ba95"
       }
     ],
     "aes/asan-faults": [
@@ -699,6 +775,43 @@
         "after": "69d759368a993d00ad16f43f9bade1ac9009819c46c7160353c3cc069d60c9eb",
         "log": "verification/.runner/logs/2-1793792268728426326.log",
         "log_sha256": "2f49220c8785c32b14d77717a125ebc8c734f87ee67fa428b5e08072613fa877"
+      },
+      {
+        "id": "2-1793804895745714425",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 0b02562db6032c131c66bb83dd1c4ec4f4f5f3232b31cdd0ccefab8c4dd1e808",
+        "started": "2026-11-04T15:08:15.745712892Z",
+        "ended": "2026-11-04T15:08:16.528320663Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+nightly-2026-09-11",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-aes-block",
+          "--lib",
+          "--target",
+          "x86_64-unknown-linux-gnu",
+          "aes::"
+        ],
+        "cwd": ".",
+        "environment": {
+          "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1:exitcode=1",
+          "CARGO_ENCODED_RUSTFLAGS": "",
+          "CARGO_TARGET_DIR": "target/aes-asan",
+          "LSAN_OPTIONS": "exitcode=23",
+          "RUSTFLAGS": "-Zsanitizer=address",
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "c94b783f95fbed57cc25cf923b5b1a9e5766f3275548159b763e6b4ec89b5d73",
+        "after": "c94b783f95fbed57cc25cf923b5b1a9e5766f3275548159b763e6b4ec89b5d73",
+        "log": "verification/.runner/logs/2-1793804895745714425.log",
+        "log_sha256": "f89f69f717098f1a5121f2478a9b14376af19080c5064a748fce5c8821f1c3f0"
       }
     ],
     "aes/asan-vectors": [
@@ -1123,6 +1236,43 @@
         "after": "35b313efaf9284a2339b75233aab5af1e548effecc21a4d7e3125e0a722d5d43",
         "log": "verification/.runner/logs/2-1793792264897884443.log",
         "log_sha256": "15bf9dbf66d0292258391713bcec7bd6baac7e02367915f9ca6aa2a3e74bf7f3"
+      },
+      {
+        "id": "2-1793804890539002806",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 70e3be4b580d18fcb876b02f34e21deb1fa46544394f73f96488b5b91c7807b2",
+        "started": "2026-11-04T15:08:10.539000441Z",
+        "ended": "2026-11-04T15:08:11.439584465Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+nightly-2026-09-11",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-aes-block",
+          "--test",
+          "aes128",
+          "--target",
+          "x86_64-unknown-linux-gnu"
+        ],
+        "cwd": ".",
+        "environment": {
+          "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1:exitcode=1",
+          "CARGO_ENCODED_RUSTFLAGS": "",
+          "CARGO_TARGET_DIR": "target/aes-asan",
+          "LSAN_OPTIONS": "exitcode=23",
+          "RUSTFLAGS": "-Zsanitizer=address",
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "75201bc99af26088275c37384443ffc1ba304ee70682adac628314066b3f1001",
+        "after": "75201bc99af26088275c37384443ffc1ba304ee70682adac628314066b3f1001",
+        "log": "verification/.runner/logs/2-1793804890539002806.log",
+        "log_sha256": "9af12c2a83849f64a628732be3e74d29f473aa6916a809c6bec4fb875d39331d"
       }
     ],
     "aes/dataflow-review": [
@@ -1225,6 +1375,26 @@
         "after": "a8a122a731cb5e332292c90e356764551c136b7298e6297807e5f183a29c2afa",
         "log": "verification/.runner/logs/2-1793792174913169313.log",
         "log_sha256": "46a441ff71dcaad9d2bcc9e5f50c17c921d55854ebc5e5f8cefff59f2147f91f"
+      },
+      {
+        "id": "2-1793804798019032248",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 54a43b082684af529dd8d505aae7c86cffdfe14fc035c37de34240ce6eecf993",
+        "started": "2026-11-04T15:06:38.019030294Z",
+        "ended": "2026-11-04T15:06:41.780644292Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-dataflow.py"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "46d05e635144aa5cafc7a3cbbe52fe5cdbd7086dacd9123fa2a8b1e24fde295c",
+        "after": "46d05e635144aa5cafc7a3cbbe52fe5cdbd7086dacd9123fa2a8b1e24fde295c",
+        "log": "verification/.runner/logs/2-1793804798019032248.log",
+        "log_sha256": "0afc4c2f076ad9b7ce1170027eb0ea8670a1ea90629ae18dfc0db9f69acd8287"
       }
     ],
     "aes/differential": [
@@ -1559,6 +1729,41 @@
         "after": "b28a6e09f1a33f45984113ed0fbd85e9c7b78099a8cc7b7dde77056c5f1c72f9",
         "log": "verification/.runner/logs/2-1793792293375298936.log",
         "log_sha256": "e582a27b7134769df861141fbdd60a2bed26bb8ba3ac7c801907dc29b2c4eb7c"
+      },
+      {
+        "id": "2-1793804923959364365",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint feab7cf65039a5a3f98530af1f1a511ddacdbd040db9146e5a756d18046716a1",
+        "started": "2026-11-04T15:08:43.959362902Z",
+        "ended": "2026-11-04T15:08:45.520318275Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.99.1",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-aes-block",
+          "--test",
+          "aes128_differential",
+          "openssl_independent_encrypt_and_decrypt_corpus",
+          "--",
+          "--ignored",
+          "--exact",
+          "--nocapture"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "58ce59e8cd699b830388c0c667a9c6e21902776fd43373ea24520184cf862970",
+        "after": "58ce59e8cd699b830388c0c667a9c6e21902776fd43373ea24520184cf862970",
+        "log": "verification/.runner/logs/2-1793804923959364365.log",
+        "log_sha256": "fb663852d987116c2c43079c922c8e2053dd704da3315b49969ee7fbcaa07c61"
       }
     ],
     "aes/downstream": [
@@ -1721,6 +1926,26 @@
         "after": "1e8b6fe65b59c46839cb1ec756655dc6b562529dc4247affa8ee02f65fb89243",
         "log": "verification/.runner/logs/2-1793792179456109571.log",
         "log_sha256": "feb1d18289f5e3dbd64f6fc639d329d8d386b319cac31e9964d9993ab58c1821"
+      },
+      {
+        "id": "2-1793804802232967992",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 79b55a4e10259d434e625a63f8ee601eb7f4efdb118cdfe8e0d3fd68d163b1f0",
+        "started": "2026-11-04T15:06:42.232966109Z",
+        "ended": "2026-11-04T15:06:55.817233795Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-consumer.py"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "752d2094e632b5f6bdb5dde534c93236214acb533038bc81200e6f05ee7d8134",
+        "after": "752d2094e632b5f6bdb5dde534c93236214acb533038bc81200e6f05ee7d8134",
+        "log": "verification/.runner/logs/2-1793804802232967992.log",
+        "log_sha256": "feb1d18289f5e3dbd64f6fc639d329d8d386b319cac31e9964d9993ab58c1821"
       }
     ],
     "aes/downstream-matrix": [
@@ -1869,6 +2094,27 @@
         "before": "0287aa23dba2943b58b2090ddceff0ba3d122179d6698df1f3d0e12d097439ea",
         "after": "0287aa23dba2943b58b2090ddceff0ba3d122179d6698df1f3d0e12d097439ea",
         "log": "verification/.runner/logs/2-1793792194568350938.log",
+        "log_sha256": "4420b83f5c77411d5005cc3a172011c20c68c55a06b142d74cd35496aa626193"
+      },
+      {
+        "id": "2-1793804817057069341",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 2237fdeea8167bdeed0c3db78e7fa51340f40527b0ed680da4471451c67ea284",
+        "started": "2026-11-04T15:06:57.057067387Z",
+        "ended": "2026-11-04T15:07:54.000405982Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-consumer.py",
+          "--matrix"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "e440de6cc6c8ca87d5967ee0a7badccc2a3f6e653400fd88c1f2db727a9537a9",
+        "after": "e440de6cc6c8ca87d5967ee0a7badccc2a3f6e653400fd88c1f2db727a9537a9",
+        "log": "verification/.runner/logs/2-1793804817057069341.log",
         "log_sha256": "4420b83f5c77411d5005cc3a172011c20c68c55a06b142d74cd35496aa626193"
       }
     ],
@@ -2034,6 +2280,24 @@
         "after": "ff1d3af1a10668b9def88d205ae76f2853249978175aa501b386288b1bc31796",
         "log": "verification/.runner/logs/2-1793792273136579166.log",
         "log_sha256": "6eec4f6fd747c1364108e3220b75639dd9957f3270aa242f80b9bd469b4eb509"
+      },
+      {
+        "id": "2-1793804901594990384",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 4b7514632de1bf54e354a956aed420b52a1b3155622f81162e27d8ac42ebb720",
+        "started": "2026-11-04T15:08:21.5949883Z",
+        "ended": "2026-11-04T15:08:25.374005651Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-kani.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "7d14cb38de22929bb7abcfcb65770c1b8356f844587d77db54081d780911f0d5",
+        "after": "7d14cb38de22929bb7abcfcb65770c1b8356f844587d77db54081d780911f0d5",
+        "log": "verification/.runner/logs/2-1793804901594990384.log",
+        "log_sha256": "524d6f0425e6083417a392094bbfab3f57b19480f5725f3c1ceac511c30898a6"
       }
     ],
     "aes/miri-ownership": [
@@ -2470,6 +2734,44 @@
         "after": "c9b5eeeb1b177c2d7982f54f0d3e85c3e51f5ffdd5f60db62d4aff7ff2def868",
         "log": "verification/.runner/logs/2-1793792266110486481.log",
         "log_sha256": "4dbd1ddcc9d38cff2209898a3f6df00b477a8df34244c459a8267fdd1cd52214"
+      },
+      {
+        "id": "2-1793804891830859050",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 3ec131fc90ae8d9dbfa1b14fea53f8137edf53a3c92c1f56b3a32b3bb04c6542",
+        "started": "2026-11-04T15:08:11.830857677Z",
+        "ended": "2026-11-04T15:08:15.362235033Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+nightly-2026-09-11",
+          "miri",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-aes-block",
+          "--test",
+          "aes128",
+          "--target",
+          "x86_64-unknown-linux-gnu",
+          "output_outlives_key_and_explicit_clear_preserves_canaries",
+          "--",
+          "--exact"
+        ],
+        "cwd": ".",
+        "environment": {
+          "CARGO_TARGET_DIR": "target/aes-miri",
+          "MIRIFLAGS": "-Zmiri-report-progress=10000000",
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "5154e5cf03e3972af66011a53895fe8748be699574c0a215608d155a850c73d3",
+        "after": "5154e5cf03e3972af66011a53895fe8748be699574c0a215608d155a850c73d3",
+        "log": "verification/.runner/logs/2-1793804891830859050.log",
+        "log_sha256": "e32ab97021e979c1b42b418f65fb8b0eefe2cfe172288f88e5e6bbe6e459754a"
       }
     ],
     "aes/miri-public": [
@@ -2834,6 +3136,44 @@
         "after": "0c10d9ca08043a664a6b4e0786be58d51a30c958afcfd31e0305a9bad06e9a34",
         "log": "verification/.runner/logs/2-1793792269872082818.log",
         "log_sha256": "47710af728f5eab8d89d17714cdbd6e39a20d3b7aea6dc1f090529dadb4f54a5"
+      },
+      {
+        "id": "2-1793804896926374289",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint d7089c57fa11ac02ed5f4cbb3a1df4731a535a36101bebe6de8e4542521feef3",
+        "started": "2026-11-04T15:08:16.926372816Z",
+        "ended": "2026-11-04T15:08:20.42853097Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+nightly-2026-09-11",
+          "miri",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-aes-block",
+          "--test",
+          "aes128",
+          "--target",
+          "x86_64-unknown-linux-gnu",
+          "public_ciphertext_commit_preserves_inputs_and_canaries",
+          "--",
+          "--exact"
+        ],
+        "cwd": ".",
+        "environment": {
+          "CARGO_TARGET_DIR": "target/aes-miri",
+          "MIRIFLAGS": "-Zmiri-report-progress=10000000",
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "ad557e88b36b8ef05c617743ea47f7562aa8cd0cd4365205393af85ed42534bf",
+        "after": "ad557e88b36b8ef05c617743ea47f7562aa8cd0cd4365205393af85ed42534bf",
+        "log": "verification/.runner/logs/2-1793804896926374289.log",
+        "log_sha256": "236eb683bdf74e7d063f74d063f9aad5bdc982414059ae5d11fc6b902ae8c353"
       }
     ],
     "aes/msrv-vectors": [
@@ -3174,6 +3514,36 @@
         "after": "caff4a3654cc6f9640fa4b88beb0c8601c593f7230a16e1ff0ca63708940e472",
         "log": "verification/.runner/logs/2-1793792257704268142.log",
         "log_sha256": "1a00b1e1028ca98efb1f244a523111a390b591ea345bdf260d9882dc81e36d74"
+      },
+      {
+        "id": "2-1793804882904162831",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 4b9663cb8c111b6c47833cae7f5ae2e189d66f5c9a45e4cbc2520e7cefe96240",
+        "started": "2026-11-04T15:08:02.904161248Z",
+        "ended": "2026-11-04T15:08:03.831858638Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.90.0",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-aes-block",
+          "--test",
+          "aes128"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "1ea7d5625c01296bd6dfd32c9dff12520beed44acabf5587e4bc7b864568ddbb",
+        "after": "1ea7d5625c01296bd6dfd32c9dff12520beed44acabf5587e4bc7b864568ddbb",
+        "log": "verification/.runner/logs/2-1793804882904162831.log",
+        "log_sha256": "7a2e139a1afd98d4857a921081f2cc802153a77992864a1700eb7ee387ea5bdc"
       }
     ],
     "aes/mutation-controls": [
@@ -3319,6 +3689,24 @@
         "before": "e6097e1f7403cddb445a11f6b3ec9f2ef506999374f9d5f4b7540f24d9faf0f9",
         "after": "e6097e1f7403cddb445a11f6b3ec9f2ef506999374f9d5f4b7540f24d9faf0f9",
         "log": "verification/.runner/logs/2-1793792282027661057.log",
+        "log_sha256": "9bc6888d0fd233b06e01ef0b8c417bd30752bc6025526c6e73ea233e58f49e2c"
+      },
+      {
+        "id": "2-1793804912151187453",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 09a975e2c413396488b09f43809bbfb43ede79701eac2432533bdeb1527c8f64",
+        "started": "2026-11-04T15:08:32.15118588Z",
+        "ended": "2026-11-04T15:08:34.764874966Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-mutations.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "a3062af7ce428badec9ed7cdecd7315055f644e529d2b615e5a5d1a221fe76d1",
+        "after": "a3062af7ce428badec9ed7cdecd7315055f644e529d2b615e5a5d1a221fe76d1",
+        "log": "verification/.runner/logs/2-1793804912151187453.log",
         "log_sha256": "9bc6888d0fd233b06e01ef0b8c417bd30752bc6025526c6e73ea233e58f49e2c"
       }
     ],
@@ -3672,6 +4060,37 @@
         "after": "80c24ac5b7859eee5163cdf2f33ee4442efa394017448fa84cc52a82aa20eb62",
         "log": "verification/.runner/logs/2-1793792263991333701.log",
         "log_sha256": "ae7dd7ccaf4da108bb650434c9124d827fe8a2dc490f74f4215f197ca77d44d8"
+      },
+      {
+        "id": "2-1793804889527590394",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 7c70792e918c82c1883cea8c186d2b68e35146722eca18853e0bc5b5213cf443",
+        "started": "2026-11-04T15:08:09.527589072Z",
+        "ended": "2026-11-04T15:08:10.168382158Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.90.0",
+          "check",
+          "--locked",
+          "--offline",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-aes-block",
+          "--lib",
+          "--target",
+          "thumbv7em-none-eabi"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "831d4c95374541fce4fa57ec8efac33128f09b9700ec83149fc86945cf7c4db1",
+        "after": "831d4c95374541fce4fa57ec8efac33128f09b9700ec83149fc86945cf7c4db1",
+        "log": "verification/.runner/logs/2-1793804889527590394.log",
+        "log_sha256": "56af895d97f08b438100b343ce04b1905cd9aff35aaee5608a284f2741f8325c"
       }
     ],
     "aes/operation-cleanup": [
@@ -3800,6 +4219,24 @@
         "after": "a63e5803408761bc1ecfbcf16c2cb1b13a376938dd16e57ec29509333976a133",
         "log": "verification/.runner/logs/2-1793792288849294812.log",
         "log_sha256": "f3d96bb3401a79317b75e3ee5d5bb411141ce2a07fecf5f6caf3f4ba94d3210d"
+      },
+      {
+        "id": "2-1793804919351378547",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint bb7c22f37c828716fb1711d879946181133eb01c40974dbac562a1ebae42a7d0",
+        "started": "2026-11-04T15:08:39.351376483Z",
+        "ended": "2026-11-04T15:08:43.558902105Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-operation-cleanup.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "591ba625d0f8dc18c401825705027f5a091aa82f33d9db7e849c75e069c07279",
+        "after": "591ba625d0f8dc18c401825705027f5a091aa82f33d9db7e849c75e069c07279",
+        "log": "verification/.runner/logs/2-1793804919351378547.log",
+        "log_sha256": "8e583e84a981b56f4cc8c4d7209b28d29430f5c83a9bd34a282a5db53614c1d9"
       }
     ],
     "aes/optimized-vectors": [
@@ -4152,6 +4589,37 @@
         "after": "8e6c7ace09054b7562445b768d6c4b2b832abb6be96e3aff34c9921701ed94b2",
         "log": "verification/.runner/logs/2-1793792259907177310.log",
         "log_sha256": "1482bb7c2ed2d4897325b632f1ec49ac5da49d20962a53a1048d729b2de7b6be"
+      },
+      {
+        "id": "2-1793804885304964408",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 68676069650771668ddf522a5efc517596b2ed4870caa91f4d0ee6dfd27ae053",
+        "started": "2026-11-04T15:08:05.304962825Z",
+        "ended": "2026-11-04T15:08:09.14944348Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.99.1",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-aes-block",
+          "--release",
+          "--test",
+          "aes128"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "1b4e0e75c9a2861f6ba13af349e6858a754615aefacb72aa179602bcd895f5da",
+        "after": "1b4e0e75c9a2861f6ba13af349e6858a754615aefacb72aa179602bcd895f5da",
+        "log": "verification/.runner/logs/2-1793804885304964408.log",
+        "log_sha256": "286535acf283afebc6007e49ddc69363fd211bfd504f620304779f9b91d80017"
       }
     ],
     "aes/owner-contract": [
@@ -4262,6 +4730,42 @@
         "after": "f70a5992142447a7d2f8db0966594fe594da909665df61264b55370404da8d72",
         "log": "verification/.runner/logs/2-1793792254041218126.log",
         "log_sha256": "2d8ff4b6ec7d84d17444132b841b96a46bc15783708b13d8d2f8c0dd358ab0ba"
+      },
+      {
+        "id": "2-1793804877846879287",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint b1781fbc7a97189bdfa03243d359b25976086303a85dec91003d6a5352497992",
+        "started": "2026-11-04T15:07:57.846878015Z",
+        "ended": "2026-11-04T15:08:00.522137017Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/cryptography/test-aes-owner-contract.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "95d1c61d0775dff436a4bac4c2bcaef013ee474f388f26c9011ee40bca13f967",
+        "after": "95d1c61d0775dff436a4bac4c2bcaef013ee474f388f26c9011ee40bca13f967",
+        "log": "verification/.runner/logs/2-1793804877846879287.log",
+        "log_sha256": "08df24eaa60d22f00a7c95a74675c34b422dbf80c3421e7db66a370c8c77c0ca"
+      },
+      {
+        "id": "2-1793805034178355601",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 1b9de1d9926e640926783d920e77bf05831c1b736fa756038b53f858f302e3a8",
+        "started": "2026-11-04T15:10:34.178354038Z",
+        "ended": "2026-11-04T15:10:36.834331064Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/cryptography/test-aes-owner-contract.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "6a63a2b4be46e3613b5bd828e6e0f2b0bde3d2c9546f815bb40adc5aa4a9e989",
+        "after": "6a63a2b4be46e3613b5bd828e6e0f2b0bde3d2c9546f815bb40adc5aa4a9e989",
+        "log": "verification/.runner/logs/2-1793805034178355601.log",
+        "log_sha256": "85289402cffb70d5d3473ab735c812e3258710946310f75c3254fb0f2589b8ff"
       }
     ],
     "aes/owner-dispatch": [
@@ -4408,6 +4912,24 @@
         "after": "64467983729720cd2e158b96d090c9993de26a63db4ec452d5a4f3e94c09392f",
         "log": "verification/.runner/logs/2-1793792284741401985.log",
         "log_sha256": "ac754b644d7320a65777f11c09c40c0004b37286aea85da2e84fb81e0c77857a"
+      },
+      {
+        "id": "2-1793804915197148866",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 603c0d5eb0b0cdbc0e929664bed4787572582e5147af66e8bd8a1a0a442aadab",
+        "started": "2026-11-04T15:08:35.197147353Z",
+        "ended": "2026-11-04T15:08:38.888050692Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-owner-cleanup.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "dd1f3aa2955ea03f767237eb5067f21d7ca1ceb93a1f1d35f764fde221f6f9da",
+        "after": "dd1f3aa2955ea03f767237eb5067f21d7ca1ceb93a1f1d35f764fde221f6f9da",
+        "log": "verification/.runner/logs/2-1793804915197148866.log",
+        "log_sha256": "8f13c18d099701c1c4855d29b5b3ca8948a481c730c6629ddaa162cbcdd2b1f6"
       }
     ],
     "aes/ownership": [
@@ -4748,6 +5270,286 @@
         "after": "5258f09a3a196de0c9bb21034a7b03cf7f10eaf801426089a21993c819ac7840",
         "log": "verification/.runner/logs/2-1793792258889131129.log",
         "log_sha256": "a43dac217d5116db5f67efe184d548d6bcbcfc3748413e4893737f6f35e7cf83"
+      },
+      {
+        "id": "2-1793804884216018191",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 73d7d9e6ce323245eef60c48010407596409a3caf10eef253e82654aae0a588a",
+        "started": "2026-11-04T15:08:04.216016237Z",
+        "ended": "2026-11-04T15:08:04.936116768Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.99.1",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-aes-block",
+          "--doc",
+          "aes::"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "be7557bb87ad11fbc41d5ea8486f427ecc0578b8d19246a9973d493d9cfa0d7d",
+        "after": "be7557bb87ad11fbc41d5ea8486f427ecc0578b8d19246a9973d493d9cfa0d7d",
+        "log": "verification/.runner/logs/2-1793804884216018191.log",
+        "log_sha256": "ba4df12d621d9cfea44cb3a221d718412baf02be15d845f809c38edb8c505dad"
+      }
+    ],
+    "aes/provider-api-current": [
+      {
+        "id": "2-1793808489638321357",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint dbb2850f9f80edb025152e7bf74cb41886805b56da30070c207eb2f3ef7c4a3a",
+        "started": "2026-11-04T16:08:09.638319404Z",
+        "ended": "2026-11-04T16:08:18.386047586Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-provider-api.py",
+          "1.99.1"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "bc70cc74de241fdd2c67592489a2d40f4614f167fa71fdb861b06bfa3135a519",
+        "after": "bc70cc74de241fdd2c67592489a2d40f4614f167fa71fdb861b06bfa3135a519",
+        "log": "verification/.runner/logs/2-1793808489638321357.log",
+        "log_sha256": "50294d3709e6d7e8255ad22b5200d6edfe78b9c0d998a5606a7c1f6a4de68e02"
+      }
+    ],
+    "aes/provider-api-msrv": [
+      {
+        "id": "2-1793808498812994360",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 4396d7db6c1579781ee6e343d6f426deb653ba89c0f4442170abb1807f52d09e",
+        "started": "2026-11-04T16:08:18.812991835Z",
+        "ended": "2026-11-04T16:08:28.44644278Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-provider-api.py",
+          "1.90.0"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "d3806c20b7f39584830b4b650f2e0f671784d492af8a3321a8d7afdc9be0a7a8",
+        "after": "d3806c20b7f39584830b4b650f2e0f671784d492af8a3321a8d7afdc9be0a7a8",
+        "log": "verification/.runner/logs/2-1793808498812994360.log",
+        "log_sha256": "2b2bfd229055f3dd69d1f1a4971d6392b90e400a14da45990282829e29d2c801"
+      }
+    ],
+    "aes/provider-asan": [
+      {
+        "id": "2-1793808471763331065",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint badebab8eba6919e48e9019665a57d4fc1ebb2412b2dd6c7a7db8d264ecf9412",
+        "started": "2026-11-04T16:07:51.763327548Z",
+        "ended": "2026-11-04T16:07:53.099537194Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+nightly-2026-09-11",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-aes-block,external-key-provider",
+          "--test",
+          "aes128_provider",
+          "--target",
+          "x86_64-unknown-linux-gnu"
+        ],
+        "cwd": ".",
+        "environment": {
+          "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1:exitcode=1",
+          "CARGO_ENCODED_RUSTFLAGS": "",
+          "CARGO_TARGET_DIR": "target/aes-provider-asan",
+          "LSAN_OPTIONS": "exitcode=23",
+          "RUSTFLAGS": "-Zsanitizer=address",
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "3c45741bbfc5dfca0923331fb38097bbb0ac1274093f8ebda7e7d96b619f63d1",
+        "after": "3c45741bbfc5dfca0923331fb38097bbb0ac1274093f8ebda7e7d96b619f63d1",
+        "log": "verification/.runner/logs/2-1793808471763331065.log",
+        "log_sha256": "ed5a9f4a7b76e8f329d7f20d27627ec89b49d065f91345805a2f07896a2da4c3"
+      }
+    ],
+    "aes/provider-docs": [
+      {
+        "id": "2-1793808509711479203",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint a27ae0797fbaa60ead5060f5568bae61cb8986995a8c54b6df33c6ec070a02a1",
+        "started": "2026-11-04T16:08:29.711476859Z",
+        "ended": "2026-11-04T16:08:30.110655182Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.99.1",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-aes-block,external-key-provider",
+          "--doc",
+          "aes::provider"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "97068c6ce7d7e5c9e7c52c295aaa77979bca9bfd2cdaac4f7b8746d78b17e604",
+        "after": "97068c6ce7d7e5c9e7c52c295aaa77979bca9bfd2cdaac4f7b8746d78b17e604",
+        "log": "verification/.runner/logs/2-1793808509711479203.log",
+        "log_sha256": "e01f11d68a90dd3243e69bd5ebaea8bfc86c765d3bd758740fd35d83e50a28e1"
+      }
+    ],
+    "aes/provider-miri": [
+      {
+        "id": "2-1793808473552011584",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 146bb1a5155b3622807b9341807b8e499ea2228c7279eb856d1181fecda631c7",
+        "started": "2026-11-04T16:07:53.55200936Z",
+        "ended": "2026-11-04T16:08:09.217426125Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+nightly-2026-09-11",
+          "miri",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-aes-block,external-key-provider",
+          "--test",
+          "aes128_provider",
+          "--target",
+          "x86_64-unknown-linux-gnu"
+        ],
+        "cwd": ".",
+        "environment": {
+          "CARGO_TARGET_DIR": "target/aes-provider-miri",
+          "MIRIFLAGS": "-Zmiri-report-progress=10000000",
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "b55f010b82a788b43531c4707a6152e88910eb5ea444b563f1cd79cc20dee13b",
+        "after": "b55f010b82a788b43531c4707a6152e88910eb5ea444b563f1cd79cc20dee13b",
+        "log": "verification/.runner/logs/2-1793808473552011584.log",
+        "log_sha256": "3a7365fccc2de7c5dce62d6699335dd36e7ebc85af1fe6f4cdb1d3170f76348e"
+      }
+    ],
+    "aes/provider-msrv": [
+      {
+        "id": "2-1793808470775451879",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 4ce3b559fd1b72cefa0ec86d268cf29de73a5f84084a9465a8d51b391179ad89",
+        "started": "2026-11-04T16:07:50.775449094Z",
+        "ended": "2026-11-04T16:07:51.349022256Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.90.0",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-aes-block,external-key-provider",
+          "--test",
+          "aes128_provider"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "200d68b4e90047c0c346d02cbd9730906cb5708e2f14dbb896ef993736841b3e",
+        "after": "200d68b4e90047c0c346d02cbd9730906cb5708e2f14dbb896ef993736841b3e",
+        "log": "verification/.runner/logs/2-1793808470775451879.log",
+        "log_sha256": "756f6209ac5d4ee80faf4d2ed62be5c36c43bc256fa031f784d891273e18f12d"
+      }
+    ],
+    "aes/provider-native": [
+      {
+        "id": "2-1793808469836439987",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint d25b25e4ddee2df1c4f29032128b2a84007331daa5ef7ffec8995258dc0da1b8",
+        "started": "2026-11-04T16:07:49.836426411Z",
+        "ended": "2026-11-04T16:07:50.323390606Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.99.1",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-aes-block,external-key-provider",
+          "--test",
+          "aes128_provider"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "ea99fa82f9f0c5ec6c98809a782da2b123be6582ecfde3d0c7c8687fc5c94c56",
+        "after": "ea99fa82f9f0c5ec6c98809a782da2b123be6582ecfde3d0c7c8687fc5c94c56",
+        "log": "verification/.runner/logs/2-1793808469836439987.log",
+        "log_sha256": "d3f9aafc0385061474191ca23c9d5b111d72252994f2e6e5fc31fb6316d030d4"
+      }
+    ],
+    "aes/provider-no-std": [
+      {
+        "id": "2-1793808508876883241",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 65eef5de6204f4a43e4a0d9b7d8a2f1ec06586ccd94920ab0a7e71e18e7e265c",
+        "started": "2026-11-04T16:08:28.876880887Z",
+        "ended": "2026-11-04T16:08:29.296037036Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.90.0",
+          "check",
+          "--locked",
+          "--offline",
+          "-p",
+          "brynja",
+          "--no-default-features",
+          "--features",
+          "hazmat-aes-block,external-key-provider",
+          "--target",
+          "thumbv7em-none-eabi"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "bc46d4744ac14fac9a0cca59c7d57c19c4f441370b305cb37b0da59971a8f9b6",
+        "after": "bc46d4744ac14fac9a0cca59c7d57c19c4f441370b305cb37b0da59971a8f9b6",
+        "log": "verification/.runner/logs/2-1793808508876883241.log",
+        "log_sha256": "61884c341d49f1f5366833807ff589db364d41f703cbee2c509b43baa1648888"
       }
     ],
     "aes/rounds-and-faults": [
@@ -5088,6 +5890,36 @@
         "after": "dc1000b1316c6e65c57bfcadea13e66101584e1b9b72a9390939de7b35f3dcc8",
         "log": "verification/.runner/logs/2-1793792256609839125.log",
         "log_sha256": "2062f790d35e4ac5bfd2ce91c267b1230e9d0798108659d750116e324885ea96"
+      },
+      {
+        "id": "2-1793804881971290620",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint cd53811a231907ca961a200045e2af99d4b88a06e3551febd9edd43e83927e45",
+        "started": "2026-11-04T15:08:01.971288706Z",
+        "ended": "2026-11-04T15:08:02.533331387Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.99.1",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-aes-block",
+          "--lib",
+          "aes::"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "11513ae744502da007b411740c3c2c56f22bd3e91e4057fcc1c1be96b025d1f8",
+        "after": "11513ae744502da007b411740c3c2c56f22bd3e91e4057fcc1c1be96b025d1f8",
+        "log": "verification/.runner/logs/2-1793804881971290620.log",
+        "log_sha256": "e732ad5ce913fb352718253b9a04f8db300aaac1267601eaac1d8f5336ed2a26"
       }
     ],
     "aes/timing-screen": [
@@ -5170,6 +6002,26 @@
         "after": "861feaccf93fbe504636644dc590e4a86702320b58cbc0e5eca06ce34cdac618",
         "log": "verification/.runner/logs/2-1793792250946473078.log",
         "log_sha256": "fc35a8f1c998ad68133c865f9bec6ad47498089ae9f17de2a5a4ba931d61d2ac"
+      },
+      {
+        "id": "2-1793804874655641013",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 8e17a98075660b138fc76ebf5c24d13f02845477dce31d11cd808dc51b53c823",
+        "started": "2026-11-04T15:07:54.655639249Z",
+        "ended": "2026-11-04T15:07:57.553444571Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-timing.py"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "00a7c8ed8b96d4e8b47f428e459b9cf21948f6b4fde7566174068283162114a9",
+        "after": "00a7c8ed8b96d4e8b47f428e459b9cf21948f6b4fde7566174068283162114a9",
+        "log": "verification/.runner/logs/2-1793804874655641013.log",
+        "log_sha256": "36ea330188470540110c53d6fb15908f7fe1ddf3bbfead5fb0988ac074a0467f"
       }
     ],
     "aes/vectors": [
@@ -5510,6 +6362,36 @@
         "after": "d2674234989d9fb37696acc9d1ed888daf8da4f697787ebda4eaf04783f53007",
         "log": "verification/.runner/logs/2-1793792255492525455.log",
         "log_sha256": "6998cf91ae0beae494a933920421078951b996a2dc1e9cbcedad78b36cede5ae"
+      },
+      {
+        "id": "2-1793804880856001035",
+        "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint f327d3d79a7264ee60cfb732b1b7146acbce354f823b0ce1d40674ad72aa98bf",
+        "started": "2026-11-04T15:08:00.855999322Z",
+        "ended": "2026-11-04T15:08:01.602758243Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.99.1",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-aes-block",
+          "--test",
+          "aes128"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "a105ccd82fb61cb10a99ac5bc9445ba3941f4c8fc756f54c9b6c9a4b75587329",
+        "after": "a105ccd82fb61cb10a99ac5bc9445ba3941f4c8fc756f54c9b6c9a4b75587329",
+        "log": "verification/.runner/logs/2-1793804880856001035.log",
+        "log_sha256": "5eb0c3c5c46bd1371419892e6d6e80e9732eca0a09589b0b4e3a89abfa66ea58"
       }
     ],
     "hkdf/asan-derivation": [
@@ -11597,202 +12479,274 @@
   },
   "views": {
     "aes/api-current": {
-      "checked_at": "2026-11-04T11:38:01.807907274Z",
-      "fingerprint": "24c9956dd61a9d77f9d56811f1a908cdadf36950ac89785147791f32b10addd4",
+      "checked_at": "2026-11-04T16:09:39.244475013Z",
+      "fingerprint": "746862ea72070b591ee71b0d1cf60ec897274055a43fef9fce6e48b4ebef8482",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 8a2fb9c3a60d49c5bb935941c33a877674f35303; scoped fingerprint 24c9956dd61a9d77f9d56811f1a908cdadf36950ac89785147791f32b10addd4",
-      "performed_at": "2026-11-04T11:38:01.712114105Z",
-      "last_success": "2026-11-04T11:38:01.712114105Z"
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 746862ea72070b591ee71b0d1cf60ec897274055a43fef9fce6e48b4ebef8482",
+      "performed_at": "2026-11-04T16:09:39.119454545Z",
+      "last_success": "2026-11-04T16:09:39.119454545Z"
     },
     "aes/api-msrv": {
-      "checked_at": "2026-11-04T11:37:59.628403959Z",
-      "fingerprint": "244e0bc2ba0973f088a5f8c83e2f558af9ff0b79bc27e5afc46d29b8e4d88e55",
+      "checked_at": "2026-11-04T16:09:43.241331771Z",
+      "fingerprint": "5450b269d04babf459302a7b7c9f17a23b81a92cd9fb4eecd1bc55f81f746d7a",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 8a2fb9c3a60d49c5bb935941c33a877674f35303; scoped fingerprint 244e0bc2ba0973f088a5f8c83e2f558af9ff0b79bc27e5afc46d29b8e4d88e55",
-      "performed_at": "2026-11-04T11:37:59.529118477Z",
-      "last_success": "2026-11-04T11:37:59.529118477Z"
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 5450b269d04babf459302a7b7c9f17a23b81a92cd9fb4eecd1bc55f81f746d7a",
+      "performed_at": "2026-11-04T16:09:43.107569547Z",
+      "last_success": "2026-11-04T16:09:43.107569547Z"
     },
     "aes/asan-faults": {
-      "checked_at": "2026-11-04T11:37:49.625583714Z",
-      "fingerprint": "d4f43c4314f3a35ba74dea05306b192b19f2223a1e4ce63c40dba6d9908bb0e0",
+      "checked_at": "2026-11-04T15:08:16.645866074Z",
+      "fingerprint": "0b02562db6032c131c66bb83dd1c4ec4f4f5f3232b31cdd0ccefab8c4dd1e808",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 8a2fb9c3a60d49c5bb935941c33a877674f35303; scoped fingerprint d4f43c4314f3a35ba74dea05306b192b19f2223a1e4ce63c40dba6d9908bb0e0",
-      "performed_at": "2026-11-04T11:37:49.526182754Z",
-      "last_success": "2026-11-04T11:37:49.526182754Z"
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 0b02562db6032c131c66bb83dd1c4ec4f4f5f3232b31cdd0ccefab8c4dd1e808",
+      "performed_at": "2026-11-04T15:08:16.528320663Z",
+      "last_success": "2026-11-04T15:08:16.528320663Z"
     },
     "aes/asan-vectors": {
-      "checked_at": "2026-11-04T11:37:45.861573973Z",
-      "fingerprint": "cd6a5d20403350e12be3581c9f4b0823531b089dd539ba8e11ebb28bc9e496d0",
+      "checked_at": "2026-11-04T15:08:11.555061964Z",
+      "fingerprint": "70e3be4b580d18fcb876b02f34e21deb1fa46544394f73f96488b5b91c7807b2",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 8a2fb9c3a60d49c5bb935941c33a877674f35303; scoped fingerprint cd6a5d20403350e12be3581c9f4b0823531b089dd539ba8e11ebb28bc9e496d0",
-      "performed_at": "2026-11-04T11:37:45.765332922Z",
-      "last_success": "2026-11-04T11:37:45.765332922Z"
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 70e3be4b580d18fcb876b02f34e21deb1fa46544394f73f96488b5b91c7807b2",
+      "performed_at": "2026-11-04T15:08:11.439584465Z",
+      "last_success": "2026-11-04T15:08:11.439584465Z"
     },
     "aes/dataflow-review": {
-      "checked_at": "2026-11-04T11:36:19.145777697Z",
-      "fingerprint": "10b9379a4b3c7a67dc47b93d16ceca807051c706930ab2e24d04144ed7844b4c",
+      "checked_at": "2026-11-04T15:06:41.91530631Z",
+      "fingerprint": "54a43b082684af529dd8d505aae7c86cffdfe14fc035c37de34240ce6eecf993",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 8a2fb9c3a60d49c5bb935941c33a877674f35303; scoped fingerprint 10b9379a4b3c7a67dc47b93d16ceca807051c706930ab2e24d04144ed7844b4c",
-      "performed_at": "2026-11-04T11:36:19.028811148Z",
-      "last_success": "2026-11-04T11:36:19.028811148Z"
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 54a43b082684af529dd8d505aae7c86cffdfe14fc035c37de34240ce6eecf993",
+      "performed_at": "2026-11-04T15:06:41.780644292Z",
+      "last_success": "2026-11-04T15:06:41.780644292Z"
     },
     "aes/differential": {
-      "checked_at": "2026-11-04T11:38:14.726465302Z",
-      "fingerprint": "109b8ce167adb3258305727d3ee905657da24f1cf8650d3449c689f22ce13433",
+      "checked_at": "2026-11-04T15:08:45.641097464Z",
+      "fingerprint": "feab7cf65039a5a3f98530af1f1a511ddacdbd040db9146e5a756d18046716a1",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 8a2fb9c3a60d49c5bb935941c33a877674f35303; scoped fingerprint 109b8ce167adb3258305727d3ee905657da24f1cf8650d3449c689f22ce13433",
-      "performed_at": "2026-11-04T11:38:14.627960519Z",
-      "last_success": "2026-11-04T11:38:14.627960519Z"
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint feab7cf65039a5a3f98530af1f1a511ddacdbd040db9146e5a756d18046716a1",
+      "performed_at": "2026-11-04T15:08:45.520318275Z",
+      "last_success": "2026-11-04T15:08:45.520318275Z"
     },
     "aes/downstream": {
-      "checked_at": "2026-11-04T11:36:33.490538212Z",
-      "fingerprint": "21e1d628a66706e2cbf75d6464e74906591fb4381e1b28856de7a0f98f045eee",
+      "checked_at": "2026-11-04T15:06:55.955014022Z",
+      "fingerprint": "79b55a4e10259d434e625a63f8ee601eb7f4efdb118cdfe8e0d3fd68d163b1f0",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 8a2fb9c3a60d49c5bb935941c33a877674f35303; scoped fingerprint 21e1d628a66706e2cbf75d6464e74906591fb4381e1b28856de7a0f98f045eee",
-      "performed_at": "2026-11-04T11:36:33.371051018Z",
-      "last_success": "2026-11-04T11:36:33.371051018Z"
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 79b55a4e10259d434e625a63f8ee601eb7f4efdb118cdfe8e0d3fd68d163b1f0",
+      "performed_at": "2026-11-04T15:06:55.817233795Z",
+      "last_success": "2026-11-04T15:06:55.817233795Z"
     },
     "aes/downstream-matrix": {
-      "checked_at": "2026-11-04T11:37:30.721822817Z",
-      "fingerprint": "92ee26db0c2fa0b217657b6d2eb9aba8cf6ff6ef8173e8ae60ee9c4e4a3447bb",
+      "checked_at": "2026-11-04T15:07:54.402802342Z",
+      "fingerprint": "2237fdeea8167bdeed0c3db78e7fa51340f40527b0ed680da4471451c67ea284",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 8a2fb9c3a60d49c5bb935941c33a877674f35303; scoped fingerprint 92ee26db0c2fa0b217657b6d2eb9aba8cf6ff6ef8173e8ae60ee9c4e4a3447bb",
-      "performed_at": "2026-11-04T11:37:30.343066579Z",
-      "last_success": "2026-11-04T11:37:30.343066579Z"
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 2237fdeea8167bdeed0c3db78e7fa51340f40527b0ed680da4471451c67ea284",
+      "performed_at": "2026-11-04T15:07:54.000405982Z",
+      "last_success": "2026-11-04T15:07:54.000405982Z"
     },
     "aes/field-layout-proof": {
-      "checked_at": "2026-11-04T11:37:57.276557556Z",
-      "fingerprint": "4ec0460b2e2852599c120202d2ec034053ca45f3eac41d89edea496b18347419",
+      "checked_at": "2026-11-04T15:08:25.750889608Z",
+      "fingerprint": "4b7514632de1bf54e354a956aed420b52a1b3155622f81162e27d8ac42ebb720",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 8a2fb9c3a60d49c5bb935941c33a877674f35303; scoped fingerprint 4ec0460b2e2852599c120202d2ec034053ca45f3eac41d89edea496b18347419",
-      "performed_at": "2026-11-04T11:37:56.92183332Z",
-      "last_success": "2026-11-04T11:37:56.92183332Z"
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 4b7514632de1bf54e354a956aed420b52a1b3155622f81162e27d8ac42ebb720",
+      "performed_at": "2026-11-04T15:08:25.374005651Z",
+      "last_success": "2026-11-04T15:08:25.374005651Z"
     },
     "aes/miri-ownership": {
-      "checked_at": "2026-11-04T11:37:48.498572438Z",
-      "fingerprint": "ff7c178efe7396a59abe3cb1a9a943abdb0d274eca61dc289eb4a2c34a7edcec",
+      "checked_at": "2026-11-04T15:08:15.49343685Z",
+      "fingerprint": "3ec131fc90ae8d9dbfa1b14fea53f8137edf53a3c92c1f56b3a32b3bb04c6542",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 8a2fb9c3a60d49c5bb935941c33a877674f35303; scoped fingerprint ff7c178efe7396a59abe3cb1a9a943abdb0d274eca61dc289eb4a2c34a7edcec",
-      "performed_at": "2026-11-04T11:37:48.393480204Z",
-      "last_success": "2026-11-04T11:37:48.393480204Z"
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 3ec131fc90ae8d9dbfa1b14fea53f8137edf53a3c92c1f56b3a32b3bb04c6542",
+      "performed_at": "2026-11-04T15:08:15.362235033Z",
+      "last_success": "2026-11-04T15:08:15.362235033Z"
     },
     "aes/miri-public": {
-      "checked_at": "2026-11-04T11:37:52.132530195Z",
-      "fingerprint": "c4e879d0e5554dd53975aaed8a16c2b6eb97bbf228f726130ec2019ee5916b5d",
+      "checked_at": "2026-11-04T15:08:20.557293196Z",
+      "fingerprint": "d7089c57fa11ac02ed5f4cbb3a1df4731a535a36101bebe6de8e4542521feef3",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 8a2fb9c3a60d49c5bb935941c33a877674f35303; scoped fingerprint c4e879d0e5554dd53975aaed8a16c2b6eb97bbf228f726130ec2019ee5916b5d",
-      "performed_at": "2026-11-04T11:37:52.026656239Z",
-      "last_success": "2026-11-04T11:37:52.026656239Z"
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint d7089c57fa11ac02ed5f4cbb3a1df4731a535a36101bebe6de8e4542521feef3",
+      "performed_at": "2026-11-04T15:08:20.42853097Z",
+      "last_success": "2026-11-04T15:08:20.42853097Z"
     },
     "aes/msrv-vectors": {
-      "checked_at": "2026-11-04T11:37:38.636194967Z",
-      "fingerprint": "11de36ff2d79c40df5fdeb8f7ee5e6d830e14cccd9e5342e7e43f7847e6fff41",
+      "checked_at": "2026-11-04T15:08:03.948125002Z",
+      "fingerprint": "4b9663cb8c111b6c47833cae7f5ae2e189d66f5c9a45e4cbc2520e7cefe96240",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 8a2fb9c3a60d49c5bb935941c33a877674f35303; scoped fingerprint 11de36ff2d79c40df5fdeb8f7ee5e6d830e14cccd9e5342e7e43f7847e6fff41",
-      "performed_at": "2026-11-04T11:37:38.5417515Z",
-      "last_success": "2026-11-04T11:37:38.5417515Z"
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 4b9663cb8c111b6c47833cae7f5ae2e189d66f5c9a45e4cbc2520e7cefe96240",
+      "performed_at": "2026-11-04T15:08:03.831858638Z",
+      "last_success": "2026-11-04T15:08:03.831858638Z"
     },
     "aes/mutation-controls": {
-      "checked_at": "2026-11-04T11:38:04.445744757Z",
-      "fingerprint": "2479149f7ee5adc6d4cd60bda3b20f893b90cc8a3e9ab2fe49585ca816651156",
+      "checked_at": "2026-11-04T15:08:34.877660778Z",
+      "fingerprint": "09a975e2c413396488b09f43809bbfb43ede79701eac2432533bdeb1527c8f64",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 8a2fb9c3a60d49c5bb935941c33a877674f35303; scoped fingerprint 2479149f7ee5adc6d4cd60bda3b20f893b90cc8a3e9ab2fe49585ca816651156",
-      "performed_at": "2026-11-04T11:38:04.361409139Z",
-      "last_success": "2026-11-04T11:38:04.361409139Z"
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 09a975e2c413396488b09f43809bbfb43ede79701eac2432533bdeb1527c8f64",
+      "performed_at": "2026-11-04T15:08:34.764874966Z",
+      "last_success": "2026-11-04T15:08:34.764874966Z"
     },
     "aes/no-std-thumb": {
-      "checked_at": "2026-11-04T11:37:44.669688837Z",
-      "fingerprint": "462bb2782107487f036b6a7989fd99e2455b9fd89f9f3a88f5521f0bd428d33d",
+      "checked_at": "2026-11-04T15:08:10.284969386Z",
+      "fingerprint": "7c70792e918c82c1883cea8c186d2b68e35146722eca18853e0bc5b5213cf443",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 8a2fb9c3a60d49c5bb935941c33a877674f35303; scoped fingerprint 462bb2782107487f036b6a7989fd99e2455b9fd89f9f3a88f5521f0bd428d33d",
-      "performed_at": "2026-11-04T11:37:44.559440897Z",
-      "last_success": "2026-11-04T11:37:44.559440897Z"
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 7c70792e918c82c1883cea8c186d2b68e35146722eca18853e0bc5b5213cf443",
+      "performed_at": "2026-11-04T15:08:10.168382158Z",
+      "last_success": "2026-11-04T15:08:10.168382158Z"
     },
     "aes/operation-cleanup": {
-      "checked_at": "2026-11-04T11:38:13.135983256Z",
-      "fingerprint": "390f42df2cdd7af7d25838f3360f2cacb76ff7defc2be402d3c2eeafabfa6740",
+      "checked_at": "2026-11-04T15:08:43.702306031Z",
+      "fingerprint": "bb7c22f37c828716fb1711d879946181133eb01c40974dbac562a1ebae42a7d0",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 8a2fb9c3a60d49c5bb935941c33a877674f35303; scoped fingerprint 390f42df2cdd7af7d25838f3360f2cacb76ff7defc2be402d3c2eeafabfa6740",
-      "performed_at": "2026-11-04T11:38:13.015229357Z",
-      "last_success": "2026-11-04T11:38:13.015229357Z"
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint bb7c22f37c828716fb1711d879946181133eb01c40974dbac562a1ebae42a7d0",
+      "performed_at": "2026-11-04T15:08:43.558902105Z",
+      "last_success": "2026-11-04T15:08:43.558902105Z"
     },
     "aes/optimized-vectors": {
-      "checked_at": "2026-11-04T11:37:43.757376248Z",
-      "fingerprint": "10afa358eb57246e25e22aa60b9b7414ce87fed52c7db346b0e1836043f09880",
+      "checked_at": "2026-11-04T15:08:09.261760469Z",
+      "fingerprint": "68676069650771668ddf522a5efc517596b2ed4870caa91f4d0ee6dfd27ae053",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 8a2fb9c3a60d49c5bb935941c33a877674f35303; scoped fingerprint 10afa358eb57246e25e22aa60b9b7414ce87fed52c7db346b0e1836043f09880",
-      "performed_at": "2026-11-04T11:37:43.65212799Z",
-      "last_success": "2026-11-04T11:37:43.65212799Z"
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 68676069650771668ddf522a5efc517596b2ed4870caa91f4d0ee6dfd27ae053",
+      "performed_at": "2026-11-04T15:08:09.14944348Z",
+      "last_success": "2026-11-04T15:08:09.14944348Z"
     },
     "aes/owner-contract": {
-      "checked_at": "2026-11-04T11:37:35.268049421Z",
-      "fingerprint": "a2b532d3e0be31fbe5920e4fc533cab29185c12b6344ed421ad4b587885c461c",
+      "checked_at": "2026-11-04T15:10:36.923483009Z",
+      "fingerprint": "1b9de1d9926e640926783d920e77bf05831c1b736fa756038b53f858f302e3a8",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 8a2fb9c3a60d49c5bb935941c33a877674f35303; scoped fingerprint a2b532d3e0be31fbe5920e4fc533cab29185c12b6344ed421ad4b587885c461c",
-      "performed_at": "2026-11-04T11:37:35.195203243Z",
-      "last_success": "2026-11-04T11:37:35.195203243Z"
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 1b9de1d9926e640926783d920e77bf05831c1b736fa756038b53f858f302e3a8",
+      "performed_at": "2026-11-04T15:10:36.834331064Z",
+      "last_success": "2026-11-04T15:10:36.834331064Z"
     },
     "aes/owner-dispatch": {
-      "checked_at": "2026-11-04T11:38:08.550983308Z",
-      "fingerprint": "1aee97d83eb7f51612425f72a151a33dc666a90948a0d9882c8e13128bdcc418",
+      "checked_at": "2026-11-04T15:08:39.028370222Z",
+      "fingerprint": "603c0d5eb0b0cdbc0e929664bed4787572582e5147af66e8bd8a1a0a442aadab",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 8a2fb9c3a60d49c5bb935941c33a877674f35303; scoped fingerprint 1aee97d83eb7f51612425f72a151a33dc666a90948a0d9882c8e13128bdcc418",
-      "performed_at": "2026-11-04T11:38:08.430903949Z",
-      "last_success": "2026-11-04T11:38:08.430903949Z"
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 603c0d5eb0b0cdbc0e929664bed4787572582e5147af66e8bd8a1a0a442aadab",
+      "performed_at": "2026-11-04T15:08:38.888050692Z",
+      "last_success": "2026-11-04T15:08:38.888050692Z"
     },
     "aes/ownership": {
-      "checked_at": "2026-11-04T11:37:39.681726962Z",
-      "fingerprint": "3a68402b3b87199afd4bdd5062b11058eabd0f5fe677aa83b9cc5485404e34a1",
+      "checked_at": "2026-11-04T15:08:05.05341307Z",
+      "fingerprint": "73d7d9e6ce323245eef60c48010407596409a3caf10eef253e82654aae0a588a",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 8a2fb9c3a60d49c5bb935941c33a877674f35303; scoped fingerprint 3a68402b3b87199afd4bdd5062b11058eabd0f5fe677aa83b9cc5485404e34a1",
-      "performed_at": "2026-11-04T11:37:39.576304225Z",
-      "last_success": "2026-11-04T11:37:39.576304225Z"
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 73d7d9e6ce323245eef60c48010407596409a3caf10eef253e82654aae0a588a",
+      "performed_at": "2026-11-04T15:08:04.936116768Z",
+      "last_success": "2026-11-04T15:08:04.936116768Z"
+    },
+    "aes/provider-api-current": {
+      "checked_at": "2026-11-04T16:08:18.514656148Z",
+      "fingerprint": "dbb2850f9f80edb025152e7bf74cb41886805b56da30070c207eb2f3ef7c4a3a",
+      "result": "passed",
+      "freshness": "Up to date",
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint dbb2850f9f80edb025152e7bf74cb41886805b56da30070c207eb2f3ef7c4a3a",
+      "performed_at": "2026-11-04T16:08:18.386047586Z",
+      "last_success": "2026-11-04T16:08:18.386047586Z"
+    },
+    "aes/provider-api-msrv": {
+      "checked_at": "2026-11-04T16:08:28.576222888Z",
+      "fingerprint": "4396d7db6c1579781ee6e343d6f426deb653ba89c0f4442170abb1807f52d09e",
+      "result": "passed",
+      "freshness": "Up to date",
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 4396d7db6c1579781ee6e343d6f426deb653ba89c0f4442170abb1807f52d09e",
+      "performed_at": "2026-11-04T16:08:28.44644278Z",
+      "last_success": "2026-11-04T16:08:28.44644278Z"
+    },
+    "aes/provider-asan": {
+      "checked_at": "2026-11-04T16:07:53.230929179Z",
+      "fingerprint": "badebab8eba6919e48e9019665a57d4fc1ebb2412b2dd6c7a7db8d264ecf9412",
+      "result": "passed",
+      "freshness": "Up to date",
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint badebab8eba6919e48e9019665a57d4fc1ebb2412b2dd6c7a7db8d264ecf9412",
+      "performed_at": "2026-11-04T16:07:53.099537194Z",
+      "last_success": "2026-11-04T16:07:53.099537194Z"
+    },
+    "aes/provider-docs": {
+      "checked_at": "2026-11-04T16:08:30.231084057Z",
+      "fingerprint": "a27ae0797fbaa60ead5060f5568bae61cb8986995a8c54b6df33c6ec070a02a1",
+      "result": "passed",
+      "freshness": "Up to date",
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint a27ae0797fbaa60ead5060f5568bae61cb8986995a8c54b6df33c6ec070a02a1",
+      "performed_at": "2026-11-04T16:08:30.110655182Z",
+      "last_success": "2026-11-04T16:08:30.110655182Z"
+    },
+    "aes/provider-miri": {
+      "checked_at": "2026-11-04T16:08:09.356223046Z",
+      "fingerprint": "146bb1a5155b3622807b9341807b8e499ea2228c7279eb856d1181fecda631c7",
+      "result": "passed",
+      "freshness": "Up to date",
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 146bb1a5155b3622807b9341807b8e499ea2228c7279eb856d1181fecda631c7",
+      "performed_at": "2026-11-04T16:08:09.217426125Z",
+      "last_success": "2026-11-04T16:08:09.217426125Z"
+    },
+    "aes/provider-msrv": {
+      "checked_at": "2026-11-04T16:07:51.479328649Z",
+      "fingerprint": "4ce3b559fd1b72cefa0ec86d268cf29de73a5f84084a9465a8d51b391179ad89",
+      "result": "passed",
+      "freshness": "Up to date",
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 4ce3b559fd1b72cefa0ec86d268cf29de73a5f84084a9465a8d51b391179ad89",
+      "performed_at": "2026-11-04T16:07:51.349022256Z",
+      "last_success": "2026-11-04T16:07:51.349022256Z"
+    },
+    "aes/provider-native": {
+      "checked_at": "2026-11-04T16:07:50.466050058Z",
+      "fingerprint": "d25b25e4ddee2df1c4f29032128b2a84007331daa5ef7ffec8995258dc0da1b8",
+      "result": "passed",
+      "freshness": "Up to date",
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint d25b25e4ddee2df1c4f29032128b2a84007331daa5ef7ffec8995258dc0da1b8",
+      "performed_at": "2026-11-04T16:07:50.323390606Z",
+      "last_success": "2026-11-04T16:07:50.323390606Z"
+    },
+    "aes/provider-no-std": {
+      "checked_at": "2026-11-04T16:08:29.43120733Z",
+      "fingerprint": "65eef5de6204f4a43e4a0d9b7d8a2f1ec06586ccd94920ab0a7e71e18e7e265c",
+      "result": "passed",
+      "freshness": "Up to date",
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 65eef5de6204f4a43e4a0d9b7d8a2f1ec06586ccd94920ab0a7e71e18e7e265c",
+      "performed_at": "2026-11-04T16:08:29.296037036Z",
+      "last_success": "2026-11-04T16:08:29.296037036Z"
     },
     "aes/rounds-and-faults": {
-      "checked_at": "2026-11-04T11:37:37.471689755Z",
-      "fingerprint": "81b3711b4612f148c01702aa1e5275cc252f09453843521add56d7f769e0c30c",
+      "checked_at": "2026-11-04T15:08:02.650860658Z",
+      "fingerprint": "cd53811a231907ca961a200045e2af99d4b88a06e3551febd9edd43e83927e45",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 8a2fb9c3a60d49c5bb935941c33a877674f35303; scoped fingerprint 81b3711b4612f148c01702aa1e5275cc252f09453843521add56d7f769e0c30c",
-      "performed_at": "2026-11-04T11:37:37.377335556Z",
-      "last_success": "2026-11-04T11:37:37.377335556Z"
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint cd53811a231907ca961a200045e2af99d4b88a06e3551febd9edd43e83927e45",
+      "performed_at": "2026-11-04T15:08:02.533331387Z",
+      "last_success": "2026-11-04T15:08:02.533331387Z"
     },
     "aes/timing-screen": {
-      "checked_at": "2026-11-04T11:37:33.893770384Z",
-      "fingerprint": "4b84fe15bea0d4f99bc47163b414f2d8930522d967e15921f7a6afd69236b94a",
+      "checked_at": "2026-11-04T15:07:57.677482503Z",
+      "fingerprint": "8e17a98075660b138fc76ebf5c24d13f02845477dce31d11cd808dc51b53c823",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 8a2fb9c3a60d49c5bb935941c33a877674f35303; scoped fingerprint 4b84fe15bea0d4f99bc47163b414f2d8930522d967e15921f7a6afd69236b94a",
-      "performed_at": "2026-11-04T11:37:33.791008147Z",
-      "last_success": "2026-11-04T11:37:33.791008147Z"
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint 8e17a98075660b138fc76ebf5c24d13f02845477dce31d11cd808dc51b53c823",
+      "performed_at": "2026-11-04T15:07:57.553444571Z",
+      "last_success": "2026-11-04T15:07:57.553444571Z"
     },
     "aes/vectors": {
-      "checked_at": "2026-11-04T11:37:36.382558Z",
-      "fingerprint": "37c634d335f04afbf4b4ce8e61c099e0c7770b05c728a6532655b629ee080d8c",
+      "checked_at": "2026-11-04T15:08:01.718295595Z",
+      "fingerprint": "f327d3d79a7264ee60cfb732b1b7146acbce354f823b0ce1d40674ad72aa98bf",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 8a2fb9c3a60d49c5bb935941c33a877674f35303; scoped fingerprint 37c634d335f04afbf4b4ce8e61c099e0c7770b05c728a6532655b629ee080d8c",
-      "performed_at": "2026-11-04T11:37:36.289101441Z",
-      "last_success": "2026-11-04T11:37:36.289101441Z"
+      "source": "working tree based on 88b1ac93a5d745a9e853edb7a691a2c5c4af1098; scoped fingerprint f327d3d79a7264ee60cfb732b1b7146acbce354f823b0ce1d40674ad72aa98bf",
+      "performed_at": "2026-11-04T15:08:01.602758243Z",
+      "last_success": "2026-11-04T15:08:01.602758243Z"
     },
     "hkdf/asan-derivation": {
       "checked_at": "2026-11-03T14:14:59.745631804Z",

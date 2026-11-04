@@ -13,7 +13,7 @@ import hmac_verifiers as verifier
 ROOT = verifier.ROOT
 FIXTURE = ROOT / 'assurance/aes-owner-cleanup'
 CRATE = 'brynja_aes_owner_cleanup'
-PROBES = {'key_drop': 'Aes128Key', 'block_drop': 'SecretBlock'}
+PROBES = {'key_drop': 'Aes128Key', 'block_drop': 'SecretBlock', 'expanded_drop': 'Aes128ExpandedKey'}
 MARKER = 'AES owner dispatch complete: 4 configurations; delegated core Drop; not scratch, physical-erasure or timing qualification'
 
 
@@ -49,7 +49,7 @@ def check(llvm, panic):
         require(('landingpad ' in body) == (panic == 'unwind'), 'panic profile mismatch')
         for populated in (False, True):
             for observer_unwinds in ((False, True) if panic == 'unwind' else (False,)):
-                # Both AES owners contain precisely one OwnedSecretRegion:
+                # All three AES owners contain precisely one OwnedSecretRegion:
                 # the same two-word descriptor ABI as the executor's "prk"
                 # case. No HKDF algorithm or output-option premise is used.
                 dispatch.execute(arguments, body, 'prk', True, populated,

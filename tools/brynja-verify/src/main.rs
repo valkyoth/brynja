@@ -6,6 +6,7 @@ mod model;
 mod patterns;
 mod registrations;
 mod report;
+mod rotation;
 mod runner;
 mod snapshot_store;
 mod storage;
@@ -29,6 +30,9 @@ brynja-verify [--root PATH] run COMPONENT --needed|--all [--category CATEGORY]
 brynja-verify [--root PATH] full-check
 brynja-verify [--root PATH] report
 brynja-verify [--root PATH] migrate-results
+brynja-verify [--root PATH] rotate-results
+brynja-verify [--root PATH] list-archives
+brynja-verify [--root PATH] show-archive SHA256
 brynja-verify [--root PATH] list COMPONENT [CATEGORY]
 brynja-verify [--root PATH] show COMPONENT CHECK
 
@@ -40,6 +44,9 @@ full-check is a LOCAL STATUS SCAN, NOT a verification campaign. It executes no
 tests/proofs, compiles nothing, installs no tools and contacts no remote services.
 report regenerates the report from saved state without scanning inputs.
 migrate-results losslessly upgrades saved storage; no scan, recovery or execution.
+rotate-results checkpoints all history, retains only the latest attempt per check,
+and clears cached views. Older scopes may need reruns; no archive is a live pass.
+list-archives lists checkpoint IDs; show-archive validates and prints one index.
 run executes sequentially and stops on failure, retaining completed results.
 --needed excludes current successful results; --all explicitly reruns them.
 --category restricts execution, for example run md5 --needed --category asan.
@@ -148,6 +155,28 @@ fn main_result() -> Result<bool> {
         std::env::current_dir()?
     };
     let root = std::fs::canonicalize(root)?;
+    if args == ["rotate-results"]
+        || args == ["list-archives"]
+        || (args.len() == 2 && args[0] == "show-archive")
+    {
+        let _lock = storage::lock(&root)?;
+        if args[0] == "rotate-results" {
+            match rotation::rotate(&root)? {
+                Some(id) => println!(
+                    "Results checkpoint: {id}. Latest attempts retained; cached views cleared. Run a status scan; no verification executed. Commit the index, archive and snapshots together."
+                ),
+                None => println!("No older attempts to rotate; no changes."),
+            }
+        } else if args[0] == "show-archive" {
+            let bytes = rotation::read(&root, &args[1])?;
+            std::io::Write::write_all(&mut std::io::stdout().lock(), &bytes)?;
+        } else {
+            for id in storage::load(&root)?.archives {
+                println!("{id}");
+            }
+        }
+        return Ok(true);
+    }
     if args == ["migrate-results"] {
         let _lock = storage::lock(&root)?;
         if !storage::relative(&root, storage::STATE)?.is_file() {
@@ -156,7 +185,7 @@ fn main_result() -> Result<bool> {
         let state = storage::load(&root)?;
         storage::save(&root, &state)?;
         println!(
-            "Results stored as schema 2 with content-addressed snapshots. No attempts or views changed; no verification executed."
+            "Results stored with content-addressed snapshots (schema 2, or 3 with archives). No attempts or views changed; no verification executed."
         );
         return Ok(true);
     }
@@ -257,6 +286,11 @@ fn main_result() -> Result<bool> {
     );
     storage::save(&root, &state)?;
     report::write(&root, &registry, &state)?;
+    if full {
+        for warning in rotation::warnings(&root)? {
+            eprintln!("{warning}");
+        }
+    }
     if !running {
         println!(
             "Status scan only; no verification executed. {}",

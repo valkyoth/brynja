@@ -1,5 +1,5 @@
 //! Public AES-128 development regressions. Fixed answers, not only round trips.
-use brynja_crypto::aes::{Aes128Key, Error, PublicCiphertext};
+use brynja_crypto::aes::{Aes128ExpandedKey, Aes128Key, Error, PublicCiphertext};
 
 const GFSBOX: &str = include_str!("fixtures/aes128/ECBGFSbox128.rsp");
 const KEYSBOX: &str = include_str!("fixtures/aes128/ECBKeySbox128.rsp");
@@ -86,6 +86,29 @@ fn nist_aesavs_all_four_aes128_ecb_kat_files() -> Result<(), Error> {
             }
             key.clear();
             assert_eq!(storage, [0; 16]);
+            let mut expanded_storage = [0xa5; 176];
+            let cached = Aes128ExpandedKey::new(&vector.key, &mut expanded_storage)?;
+            let result = if vector.decrypt {
+                cached.decrypt_block(&vector.input, &mut output)?
+            } else {
+                cached.encrypt_block(&vector.input, &mut output)?
+            };
+            assert_eq!(
+                result.expose(),
+                vector.expected,
+                "cached {name} case {case}"
+            );
+            result.clear();
+            if !vector.decrypt {
+                cached.encrypt_block_public(
+                    &vector.input,
+                    &mut output,
+                    PublicCiphertext::acknowledge(),
+                )?;
+                assert_eq!(output, vector.expected, "cached public {name} case {case}");
+            }
+            cached.clear();
+            assert_eq!(expanded_storage, [0; 176]);
             total = total.checked_add(1).ok_or(Error::SecretMemory)?;
         }
     }
@@ -146,6 +169,18 @@ fn public_ciphertext_commit_preserves_inputs_and_canaries() -> Result<(), Error>
     assert_eq!(output.last(), Some(&0xa5));
     assert_eq!(input, [0; 16]);
     assert_eq!(storage, [0; 16]);
+    let mut expanded = [0xa5; 176];
+    let cached = Aes128ExpandedKey::new(&input, &mut expanded)?;
+    let expected = output;
+    let block: &mut [u8; 16] = output
+        .get_mut(1..17)
+        .ok_or(Error::SecretMemory)?
+        .try_into()
+        .map_err(|_| Error::SecretMemory)?;
+    cached.encrypt_block_public(&input, block, PublicCiphertext::acknowledge())?;
+    cached.clear();
+    assert_eq!(output, expected);
+    assert_eq!(expanded, [0; 176]);
     Ok(())
 }
 
@@ -249,6 +284,18 @@ fn output_outlives_key_and_explicit_clear_preserves_canaries() -> Result<(), Err
     assert_eq!(output_bytes.first(), Some(&0xa5));
     assert_eq!(output_bytes.last(), Some(&0xa5));
     assert_eq!(output_bytes.get(1..17), Some([0; 16].as_slice()));
+    let mut expanded = [[0xa5; 176]; 3];
+    let mut out = [[0x5a; 16]; 3];
+    let result = {
+        let key = Aes128ExpandedKey::new(&[0; 16], &mut expanded[1])?;
+        let result = key.encrypt_block(&[0; 16], &mut out[1])?;
+        key.clear();
+        result
+    };
+    assert_eq!(result.expose(), hex("66e94bd4ef8a2c3b884cfa59ca342b2e")?);
+    result.clear();
+    assert_eq!(expanded, [[0xa5; 176], [0; 176], [0xa5; 176]]);
+    assert_eq!(out, [[0x5a; 16], [0; 16], [0x5a; 16]]);
     Ok(())
 }
 
@@ -267,6 +314,19 @@ fn independent_key_owners_can_be_reused_without_export() -> Result<(), Error> {
         let mut decrypted = [0; 16];
         let result = key.decrypt_block(ciphertext, &mut decrypted)?;
         assert_eq!(result.expose(), input);
+        let mut expanded = [0; 176];
+        let cached = Aes128ExpandedKey::new(&[seed; 16], &mut expanded)?;
+        let mut cached_output = [0; 16];
+        assert_eq!(
+            cached.encrypt_block(&input, &mut cached_output)?.expose(),
+            ciphertext
+        );
+        assert_eq!(
+            cached
+                .decrypt_block(ciphertext, &mut cached_output)?
+                .expose(),
+            input
+        );
     }
     Ok(())
 }

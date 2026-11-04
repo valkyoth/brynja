@@ -139,6 +139,11 @@ fn snapshot_outputs_are_never_verification_inputs() {
         "verification/./snapshots",
         "verification//snapshots",
         "verification/snapshots/a.json",
+        "verification/archives",
+        "./verification/archives",
+        "verification/./archives",
+        "verification//archives",
+        "verification/archives/a.json",
     ] {
         let f = Fixture::new();
         let registry = fs::read_to_string(f.root().join("verification/checks.toml")).unwrap();
@@ -177,6 +182,10 @@ fn snapshot_outputs_are_never_verification_inputs() {
     f.write(
         "verification/snapshots/unreferenced.json",
         "incomplete orphan",
+    );
+    f.write(
+        "verification/archives/unreferenced.json",
+        "incomplete checkpoint",
     );
     f.ok(&["md5"]);
     assert_eq!(f.view("md5/answers")["freshness"], "Up to date");

@@ -185,11 +185,14 @@ pub struct State<S = Arc<Snapshot>> {
     pub schema: u32,
     #[serde(default, deserialize_with = "crate::store_limits::attempts")]
     pub attempts: BTreeMap<String, Vec<Attempt<S>>>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::store_limits::views")]
     pub views: BTreeMap<String, View>,
     // Evidence that cannot be mapped stays discoverable without becoming PASS.
     #[serde(default)]
     pub historical: Vec<Historical>,
+    // Immutable checkpoints, reference-only; never implicit execution evidence.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub archives: Vec<String>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]

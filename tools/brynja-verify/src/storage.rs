@@ -10,6 +10,7 @@ use time::{OffsetDateTime, format_description::well_known::Rfc3339};
 pub const STATE: &str = "verification/results.json";
 pub const REPORT: &str = "docs/VERIFICATION_RESULTS.md";
 pub const SNAPSHOTS: &str = "verification/snapshots";
+pub const ARCHIVES: &str = "verification/archives";
 
 pub fn stamp() -> String {
     OffsetDateTime::now_utc()

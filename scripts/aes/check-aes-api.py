@@ -2,6 +2,7 @@
 """Diagnostic-specific AES ownership checks against checkout-built public APIs."""
 import argparse
 import json
+import re
 from pathlib import Path
 import subprocess
 import sys
@@ -63,7 +64,13 @@ def probes():
         ('consumed-acknowledgement', START + 'let authority=PublicCiphertext::acknowledge(); let _=key.encrypt_block_public(&[0;16],&mut [0;16],authority); let _=key.encrypt_block_public(&[0;16],&mut [0;16],authority); }',
          START + 'let _=key.encrypt_block_public(&[0;16],&mut [0;16],PublicCiphertext::acknowledge()); let _=key.encrypt_block_public(&[0;16],&mut [0;16],PublicCiphertext::acknowledge()); }', 'E0382'),
     ]
-    if len(cases) != 29 or len({c[0] for c in cases}) != 29:
+    def cached(source):
+        source = source.replace('Aes128Key', 'Aes128ExpandedKey').replace('s=[0;16]', 's=[0;176]')
+        return re.sub(r'(Aes128ExpandedKey::new\(&\[0;\d+\],&mut\s*\[0;)(16|15)(\]\))',
+                      lambda m: m[1] + ('176' if m[2] == '16' else '175') + m[3], source)
+    cases += [('cached-' + name, cached(negative), cached(positive), code)
+              for name, negative, positive, code in list(cases)]
+    if len(cases) != 58 or len({c[0] for c in cases}) != 58:
         raise ValueError('AES API probe population drift')
     return cases
 
@@ -88,15 +95,18 @@ def diagnostic_matches(result, code, source):
                     for s in errors[0].get('spans', [])))
 
 
-def run_probes(toolchain, directory, env):
+def run_probes(toolchain, directory, env, *, cases=None, features='hazmat-aes-block',
+               package='brynja-crypto', label='AES_API'):
+    cases = probes() if cases is None else cases
+    library = package.replace('-', '_')
     build = verifier.run(['cargo', '+' + toolchain, 'build', '--locked', '--offline',
-                          '-p', 'brynja-crypto', '--no-default-features', '--features', 'hazmat-aes-block', '--message-format=json'], env)
+                          '-p', package, '--no-default-features', '--features', features, '--message-format=json'], env)
     artifacts = []
     for line in build.splitlines():
         if not line.startswith('{'):
             continue
         row = json.loads(line)
-        if row.get('reason') == 'compiler-artifact' and row.get('target', {}).get('name') == 'brynja_crypto':
+        if row.get('reason') == 'compiler-artifact' and row.get('target', {}).get('name') == library:
             artifacts.extend(Path(p) for p in row['filenames'] if p.endswith('.rlib'))
     if len(artifacts) != 1 or not artifacts[0].resolve().is_relative_to(directory.resolve()):
         raise ValueError('missing/ambiguous/private-target AES library artifact')
@@ -107,8 +117,8 @@ def run_probes(toolchain, directory, env):
     command = ['rustc', '+' + toolchain, '--edition=2024', '--crate-name', 'aes_probe',
                '--emit=metadata', '--error-format=json', '-o', str(directory / 'probe.rmeta'),
                '-L', 'dependency=' + str(dependencies),
-               '--extern', 'brynja_crypto=' + str(artifacts[0]), str(source)]
-    for name, negative, positive, code in probes():
+               '--extern', library + '=' + str(artifacts[0]), str(source)]
+    for name, negative, positive, code in cases:
         source.write_text(positive)
         verifier.run(command, env, directory)
         source.write_text(negative)
@@ -116,8 +126,8 @@ def run_probes(toolchain, directory, env):
                                 capture_output=True, timeout=60)
         if not diagnostic_matches(result, code, source):
             raise ValueError(f'{toolchain}/{name}: expected only {code}\n{result.stderr[-4000:]}')
-        print(f'AES_API_CASE: {toolchain} {name} {code}', flush=True)
-    print(f'AES_API_PASS: {toolchain} 29 paired probes', flush=True)
+        print(f'{label}_CASE: {toolchain} {name} {code}', flush=True)
+    print(f'{label}_PASS: {toolchain} {len(cases)} paired probes', flush=True)
 
 
 def main():

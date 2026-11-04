@@ -854,6 +854,15 @@
       "scope_sha256": "746436b94c7ff54de4361a2e8aea99d8d3afac876fabc3fa5f45b2c2c0cf9f4b"
     },
     {
+      "id": "0.27.6",
+      "version": "0.27.6",
+      "title": "Optional PKCS11 External-Key Adapter",
+      "requires": [
+        "0.27.5"
+      ],
+      "scope_sha256": "12f3e450a386fd39de0c7307edd70093582ebce68fa4ca8816944b71b4c6065e"
+    },
+    {
       "id": "0.28.0",
       "version": "0.28.0",
       "title": "GHASH",
@@ -19893,5 +19902,5 @@
       "disposition": "Import/merge is the present operation; the family cannot claim bidirectional closure before explicit export acceptance."
     }
   ],
-  "audited_graph_sha256": "99c26b819901ea75488bb11af98b945b8a14011eaf042c2a05c91be339c38f18"
+  "audited_graph_sha256": "de93373ce9847f041283895dbbd16e67aaca9df8ff6ea53bc14a039e15e8e6e2"
 }

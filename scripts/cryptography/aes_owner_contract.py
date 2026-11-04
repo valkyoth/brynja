@@ -16,13 +16,14 @@ RECORD = {
     'rounds': 10,
     'symbol': SOURCE + '#Aes128Key',
     'output_symbol': SOURCE + '#SecretBlock',
+    'expanded_key_symbol': SOURCE + '#Aes128ExpandedKey',
     'fields': ['region:caller-backed-owned-secret-region', 'local:thread-local-marker'],
     'temporaries': ['schedule:Scratch<176>', 'state:Scratch<16>', 'word:Scratch<4>',
                     'previous:Scratch<16>', 'scalar-and-caller-copies:outside-owned-storage'],
     'cleanup_model': 'delegated-owner-drop-and-explicit-clear-with-operation-local-guards',
     'delegated_owners': ['core.owned-secret-region', 'core.secret-region-initialization'],
     'cleanup_bindings': [SOURCE + '#Aes128Key::clear', SOURCE + '#SecretBlock::clear',
-                         SOURCE + '#Scratch::drop'],
+                         SOURCE + '#Scratch::drop', SOURCE + '#Aes128ExpandedKey::clear'],
     'compiler_checks': ['python3 scripts/aes/check-aes-owner-cleanup.py',
                         'python3 scripts/aes/check-aes-operation-cleanup.py'],
     'compiler_scope': 'bounded-dispatch-x86_64-rust-1.90.0-and-1.99.1-abort-and-unwind',
@@ -36,6 +37,11 @@ RECORD = {
         {'api': 'Aes128Key::clear', 'output': 'none', 'failure': 'delegated-core-clear'},
         {'api': 'SecretBlock::clear', 'output': 'none', 'failure': 'delegated-core-clear'},
         {'api': 'SecretBlock::expose', 'output': 'borrowed-secret-bytes', 'failure': 'infallible'},
+        {'api': 'Aes128ExpandedKey::new', 'output': 'typed-secret-expanded-key', 'failure': 'clear-admitted-key-storage'},
+        {'api': 'Aes128ExpandedKey::encrypt_block', 'output': 'typed-secret-block', 'failure': 'clear-admitted-output'},
+        {'api': 'Aes128ExpandedKey::decrypt_block', 'output': 'typed-secret-block', 'failure': 'clear-admitted-output'},
+        {'api': 'Aes128ExpandedKey::encrypt_block_public', 'output': 'explicit-public-ciphertext', 'failure': 'unchanged-output'},
+        {'api': 'Aes128ExpandedKey::clear', 'output': 'none', 'failure': 'delegated-core-clear'},
     ],
     'lifecycle_scope': ['import', 'success', 'error', 'failed-construction', 'recoverable-unwind', 'explicit-clear', 'drop'],
     'excluded_scope': ['AES-192', 'AES-256', 'key-generation', 'streaming-modes', 'authentication',
@@ -93,7 +99,7 @@ def validate(root, owner, current):
     require(set(RECORD['delegated_owners']) <= {row.get('id') for row in current},
             'delegated core owner absent')
     text = rust.scrub((root / SOURCE).read_text())
-    for name in ('Aes128Key', 'SecretBlock'):
+    for name in ('Aes128Key', 'Aes128ExpandedKey', 'SecretBlock'):
         rust.validate_type(root, SOURCE + '#' + name, {'region', 'local'})
         _, body = rust.declaration(text, name, {'struct'})
         require(compact(body) == "region:OwnedSecretRegion<'a>,local:PhantomData<*mut()>,",
@@ -112,12 +118,22 @@ def validate(root, owner, current):
         callable_body(root, SOURCE, name, method)
     for name in ('KEY_BYTES', 'BLOCK_BYTES'):
         require(re.search(r'pub const ' + name + r': usize = 16;', text), 'fixed AES-128 width changed')
+    require('pub const EXPANDED_KEY_BYTES: usize = 176;' in text, 'expanded key width changed')
     authority = rust.declaration(text, 'PublicCiphertext', {'struct'})[1]
     require(compact(authority) == '_private:(),', 'public authority is no longer private')
     for method in ('encrypt_block_public', 'transform'):
         body = callable_body(root, SOURCE, 'Aes128Key', method)
         require('Scratch::<176>::new()' in body and 'Scratch::<16>::new()' in body,
                 'operation scratch guards changed')
+        cached = callable_body(root, SOURCE, 'Aes128ExpandedKey', method)
+        require('portable::expand' not in cached and 'Scratch::<BLOCK_BYTES>::new()' in cached,
+                'cached block unexpectedly expands or loses state guard')
+    constructor = callable_body(root, SOURCE, 'Aes128ExpandedKey', 'new')
+    require('SecretRegionInitialization::begin(storage)' in constructor
+            and 'Scratch::<EXPANDED_KEY_BYTES>::new()' in constructor
+            and 'portable::expand(input, &mut schedule.0)' in constructor
+            and 'destination.write(&schedule.0)' in constructor,
+            'cached key admission/expansion changed')
     portable = rust.scrub((root / PORTABLE).read_text())
     for method, size in (('expand', 4), ('shift', 16)):
         body = callable_body(root, PORTABLE, None, method)

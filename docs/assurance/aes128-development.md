@@ -31,6 +31,13 @@ and TLS are excluded. No new third-party dependency is introduced.
 - `Aes128Key::new` copies an exact 16-byte key into exact 16-byte caller storage.
   Array types reject other key sizes at compile time. Input copies remain the
   caller's responsibility; no key export, implicit hash or backend selection.
+- `Aes128ExpandedKey::new` instead expands once into exact 176-byte caller
+  storage. It offers the same secret encrypt/decrypt and explicit public
+  encrypt operations, with no schedule export or per-block re-expansion.
+  The schedule contains key-equivalent information (including the original
+  key), not an independent secret. The tradeoff is storage footprint and the
+  lifetime of that representation, not an increase in secret entropy. Choose
+  this owner for repeated blocks; neither owner provides a mode or traffic quota.
 - `encrypt_block` and `decrypt_block` take one exact 16-byte input and a disjoint
   output buffer. Both return `SecretBlock`; ciphertext is not automatically
   declassified. `expose` explicitly borrows its bytes.
@@ -42,20 +49,45 @@ and TLS are excluded. No new third-party dependency is introduced.
 - The key and output owners have no Copy, Clone, Debug, Send or Sync. Explicit
   consuming `clear` and ordinary Drop clear their caller storage. Output may
   outlive the key; safe borrowing prevents overlapping inputs and live outputs.
-- Each secret-output operation admits output with `SecretRegionInitialization`, then
-  expands a 176-byte schedule into a clearing guard. State, expansion word and
-  row-permutation scratch also have guards. No populated scratch is returned
-  by value. The schedule dies before the output owner returns.
+- Each secret-output operation admits output with `SecretRegionInitialization`.
+  `Aes128Key` expands an operation-local guarded schedule; the cached owner
+  borrows its retained schedule without copying or expanding it. Cached import
+  admits and clears caller storage before expansion in a temporary clearing
+  guard. State, expansion word and row-permutation scratch also have guards.
+  No populated scratch is returned by value.
 - Internal checked-index failures return a value-free error and the admitted
   output clears. Test-only hooks inject failure or unwind after each of the
   eleven round-key additions, in both directions. The tests observe guards'
   storage after wiping but before destruction, and caller buffers afterwards.
   These hooks are absent from ordinary builds.
+- Cached import tests inject errors and unwinds at all 42 instrumented points
+  (initial key copy, forty generated words, destination write). Cached block
+  tests cover all eleven round boundaries and retained-key reuse, with an
+  expansion trap proving that subsequent operations do not re-expand.
 - The public ciphertext path has equivalent error/unwind injection at all eleven
   round-key boundaries, checking unchanged output, live scratch cleanup and
   subsequent successful key reuse.
 
 ## Constant-work design versus qualification
+
+### Bounded target support matrix
+
+These are crate-owned verification scopes, not requirements to buy an HSM or
+delegate checking our code to users. A passing compile test is never treated as
+constant-time qualification. Registrations record freshness for the exact inputs.
+
+| Target | Compiler/profile | What is checked | What is not established |
+| --- | --- | --- | --- |
+| `x86_64-unknown-linux-gnu` | Rust 1.90.0 and 1.99.1; opt-level 3, configured fat LTO, one codegen unit, overflow checks; abort/unwind | Six portable helper instruction streams and bounded secret-dataflow model; ephemeral/cached wrapper call edges and clearing dispatch; public-owner Drop dispatch | Whole-program constant time, final-link LTO, register/spill erasure, instruction latency or physical leakage |
+| `x86_64-unknown-linux-gnu` | Rust 1.90.0 and 1.99.1; debug/release public consumers | Known answers, ownership/lifecycle, cached reuse; focused sanitizer/Miri checks use the separately registered nightly | A passing functional or interpreter test does not qualify emitted timing |
+| `thumbv7em-none-eabi` | Rust 1.90.0 and 1.99.1 downstream consumer | `no_std` compilation, including cached-key import/use/clear | Target execution, emitted-code side channels or physical leakage |
+| AArch64 and other targets/compiler versions/profiles | No AES emitted-code qualification in this milestone | No broader claim inferred from portable Rust | Future crate qualification work before extending this matrix |
+
+Extending the emitted-code checker to AArch64, stronger timing experiments, and
+AESAVS Monte Carlo/multiblock campaigns are **crate work**, not deployment tasks.
+They remain uncompleted; the present 568 KATs and 4096 independent comparisons
+(for both key owners, reusing each cached schedule across blocks) are not those
+additional campaigns. AES remains opt-in development scope.
 
 GF(256) multiplication uses eight fixed steps and masks; inversion uses a
 fixed exponentiation chain. The S-box and inverse S-box have no lookup tables.
@@ -236,7 +268,7 @@ complete successfully, including its reachability and safety checks.
 
 `scripts/aes/check-aes-api.py` builds the composition library in a private target
 directory and compiles external consumers with Rust 1.90.0 or 1.99.1. Each of
-29 negative probes has a neighboring positive control compiled against that
+58 negative probes has a neighboring positive control compiled against that
 same artifact. A negative passes only with compiler exit status 1, the one
 expected diagnostic code, and a primary span in the probe source. Missing
 libraries, unrelated errors, successful invalid programs and compiler failures
@@ -259,7 +291,7 @@ missing/duplicate proof summaries. The normal registry suite includes them.
 `scripts/aes/check-aes-mutations.py` copies the production AES module, internal
 tests and public vector harness into a private temporary fixture with the real
 core dependency. The repository's production files are never edited. Both the
-unaltered and restored copies must pass all six public and five internal tests.
+unaltered and restored copies must pass all six public and seven internal tests.
 Each of twelve deliberate defects must compile successfully, then fail its
 specific regression by assertion with exactly one failing test. Build errors,
 zero-test runs, a different failed test, process aborts and surviving defects
@@ -276,7 +308,7 @@ failures. Only public test keys and blocks enter the fixture.
 
 ## Bounded public-owner emitted-code dispatch
 
-`assurance/aes-owner-cleanup` consumes the actual `Aes128Key` and `SecretBlock`
+`assurance/aes-owner-cleanup` consumes the actual `Aes128Key`, `Aes128ExpandedKey` and `SecretBlock`
 types through ordinary Drop after borrowing each with an observer. The checker
 builds library artifacts for x86_64 Linux with Rust 1.90.0 and 1.99.1, each under
 abort and unwind profiles (opt-level 3, one codegen unit, overflow checks,
@@ -310,13 +342,15 @@ or spill cleanup, cleanup after abort/forget, constant time or independent revie
 on Rust 1.90.0 and 1.99.1, x86_64 Linux, with abort/unwind, opt-level 3, one
 codegen unit, overflow checks and configured fat LTO. It selects exact production
 methods, requires the public encrypt/decrypt consumers to call the shared secret
-operation, and requires both output paths to call the production expansion and
-round helpers. MIR/assembly presence checks establish artifact identities only.
+operation. Ephemeral operations call expansion and rounds; cached import calls
+expansion, and cached operations call rounds without expansion.
+MIR/assembly presence checks establish artifact identities only.
 The flow checks operate on emitted LLVM, not a source-only clearing marker.
 
-Four bodies contain nine checked allocations: schedule/state in each secret and
-public operation, the expansion word, and four inlined ShiftRows copies in the
-round helper. The bounded graph walker follows all modeled branch, loop, error,
+Seven bodies contain twelve checked allocations: schedule/state in each ephemeral
+secret and public operation, the expansion word, four inlined ShiftRows copies,
+the cached-import schedule and the two cached-operation states.
+The bounded graph walker follows all modeled branch, loop, error,
 return and unwind edges. Each allocation has inactive, live-needing-clear and
 live-cleared states. Its complete extent must be dispatched to the core clearing
 function before its lifetime ends or the function exits. Other calls/stores
@@ -326,14 +360,14 @@ non-panicking clearing behavior remain separate obligations; the latter is an
 existing delegated premise. Unreachable double-panic termination is not a
 recoverable-unwind or erasure guarantee.
 
-Both public consuming `clear` methods must have the observed direct two-word
+All three public consuming `clear` methods must have the observed direct two-word
 descriptor-forwarding body, with unchanged pointer and length sent to
 `OwnedSecretRegion::clear`. New control flow, inlining, instructions or calls in
 these bodies require checker review. This verifies delegation, not the core
 callee again. The scratch checker models lifetime/clearing effects rather than
 interpreting AES arithmetic or proving the public ciphertext commit.
 
-Each compiler/profile must reject 55 IR-text mutations: five for each of the nine
+Each compiler/profile must reject 75 IR-text mutations: five for each of the twelve
 scratch allocations (short extent, wrong pointer/callee, early return, write
 after clear), plus five for each explicit-clear method. Ten synthetic runner
 regressions cover those controls, bypassed error/unwind cleanup, repeated
@@ -613,6 +647,57 @@ other targets and compiler versions, instruction timing, speculative execution
 and physical leakage remain outside this review. Separate cleanup and timing
 registrations retain their own narrower claims. No production cipher changes
 were made for this review, and no deployment or release approval is implied.
+
+## Optional external-key integration — 2026-11-04
+
+The default-off `external-key-provider` feature exposes algorithm-neutral
+`crypto::provider::{ExternalKey, OwnedKeyBackend, Error, ProviderFailureKind}`.
+It neither enables AES nor requires an HSM. Ownership/destruction and terminal
+dispatch can be reused by future MAC, signing, agreement or derivation APIs;
+each still needs its own exact algorithm/usage and output contract. There is
+no catch-all operation that silently grants unrelated capabilities. Core
+`ProviderInstallation`/request budgets remain separate protocol admission
+contracts; this low-level API does not assert or consume their authorization.
+
+Enable both `external-key-provider` and `hazmat-aes-block` on `brynja-crypto`
+(or the same explicitly forwarded features on `brynja`) for
+`aes::provider::{Aes128Backend, Aes128ProviderKey, Permissions}`. The adapter
+constructs and validates one key/session binding before moving it into the
+owner. AES-128 type/size, key identity, usage and promised non-exportability
+are adapter responsibilities; revocable device permissions must be checked
+at operation time too. No free raw key identifier is accepted by block calls,
+and no key bytes, adapter extraction, backend replacement or fallback API exists.
+Software `Aes128Key` and `Aes128ExpandedKey` are unchanged.
+
+Encryption/decryption permissions remain distinct. Secret output uses the same
+clearing `SecretBlock`; public ciphertext requires `PublicCiphertext` and is
+committed only after a complete successful block. Adapter partial writes occur
+only in guarded scratch. Reported lengths other than 16 are rejected, but a
+trusted adapter that lies about bytes written/correctness cannot be detected
+by the trait. Errors/unwinds make dispatch terminal. This is not physical fault
+detection, nor does it erase adapter copies, registers, spills or aborted stacks.
+
+Drop releases only the adapter's local resources. Persistent borrowed backends
+do not implement `OwnedKeyBackend`; owning backends can explicitly `destroy`,
+which consumes the binding on success, failure or unwind. Successful destruction
+is a provider assertion, not an attested receipt. Uncertain destruction requires
+out-of-band reconciliation; automatic retries are forbidden by the contract.
+Dropping/forgetting a binding is not proof of device-key destruction.
+
+The first interface is synchronous and one-block only. Adapters own I/O bounds,
+authentication, session/handle generation checks, native-code correctness,
+error sanitization and any device resource cleanup. A timeout does not prove
+device cancellation. No device driver, PKCS#11 integration, hardware support
+list or hardware certification is bundled. Tests use a software reference and
+faulting mocks. Future modes should use whole-operation device interfaces;
+future derive-to-handle APIs must preserve non-exportable key custody.
+
+Eight `aes / provider` registrations cover 12 native contract tests at Rust
+1.90.0/1.99.1, the same tests under Miri and ASan/LSan, 56 paired positive/negative
+compiler probes at each endpoint through direct/facade routes, an adapter usage
+doc test, and Cortex-M facade compile-only acceptance. They can be selected with
+`brynja-verify run aes --needed --category provider`. These are API contract and
+mock/reference observations, never evidence of actual HSM behavior.
 
 ## Candidate preparation — 2026-11-04
 

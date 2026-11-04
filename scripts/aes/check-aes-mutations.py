@@ -123,7 +123,7 @@ def campaign(directory, compiler):
     cargo = ['cargo', '+' + compiler]
     verifier.run([*cargo, 'generate-lockfile', '--offline'], env, directory)
     test = [*cargo, 'test', '--locked', '--offline']
-    for selection, count in ((['--test', 'aes128'], 6), (['--lib', 'aes::'], 5)):
+    for selection, count in ((['--test', 'aes128'], 6), (['--lib', 'aes::'], 7)):
         output = verifier.run([*test, *selection], env, directory)
         if f'test result: ok. {count} passed; 0 failed; 0 ignored;' not in output:
             raise ValueError('unaltered AES baseline population failed')
@@ -143,7 +143,7 @@ def campaign(directory, compiler):
         finally:
             path.write_text(original)
     # Confirm restoration and unchanged baseline after the last defect.
-    for selection, count in ((['--test', 'aes128'], 6), (['--lib', 'aes::'], 5)):
+    for selection, count in ((['--test', 'aes128'], 6), (['--lib', 'aes::'], 7)):
         output = verifier.run([*test, *selection], env, directory)
         if f'test result: ok. {count} passed; 0 failed; 0 ignored;' not in output:
             raise ValueError('restored AES baseline failed')

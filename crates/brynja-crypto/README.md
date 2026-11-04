@@ -64,6 +64,16 @@ or dependency of this modern crate and is tracked under `legacy_hkdf`.
 
 ## Use
 
+The independent, default-off `external-key-provider` feature exposes
+algorithm-neutral `provider::{ExternalKey, OwnedKeyBackend}` lifecycle contracts.
+It does not enable AES. Enable it together with `hazmat-aes-block` to use
+`aes::provider::{Aes128Backend, Aes128ProviderKey, Permissions}` with a trusted
+application/device adapter. Both features forward explicitly through `brynja`.
+No hardware driver, PKCS#11 integration, automatic fallback or HSM requirement
+is bundled. Software keys remain unchanged; provider keys use opaque bindings,
+not imported key bytes. Drop releases the adapter, not the device key; explicit
+destruction requires an owning adapter. Adapter/device qualification is separate.
+
 The internal v0.27.0 candidate also provides raw software AES-128 blocks under
 the **default-off** `hazmat-aes-block` feature. Enable that feature explicitly
 on either `brynja-crypto` or `brynja` when using the matching checkout. No HSM
@@ -71,6 +81,10 @@ is required. This is not message encryption or an AEAD: no authentication,
 padding, nonce management or TLS integration is included. Physical fault
 detection, compiler-spill erasure and cross-target side-channel qualification
 are not promised. See the repository's `docs/assurance/aes128-pentest-remediation.md`.
+For repeated blocks, `aes::Aes128ExpandedKey` optionally retains its schedule in
+176 caller-owned clearing bytes; `aes::Aes128Key` retains the smaller 16-byte key
+and expands per operation. Both remain raw, unauthenticated block APIs. The
+bounded target/compiler support matrix is in `docs/assurance/aes128-development.md`.
 
 Use a release containing the hash/MAC APIs described here, not an older
 foundation-only package.

@@ -23,6 +23,8 @@ pub(super) fn expand(key: &[u8], schedule: &mut [u8; 176]) -> Result<(), Error> 
         .ok_or(Error::SecretMemory)?
         .copy_from_slice(key);
     let mut word = Scratch::<4>::new();
+    #[cfg(test)]
+    super::tests::expansion_checkpoint()?;
     let mut rcon = 1;
     for offset in (16usize..176).step_by(4) {
         for (i, byte) in word.0.iter_mut().enumerate() {
@@ -40,6 +42,8 @@ pub(super) fn expand(key: &[u8], schedule: &mut [u8; 176]) -> Result<(), Error> 
             let value = read(schedule, offset.wrapping_sub(16).wrapping_add(i))? ^ byte;
             write(schedule, offset.wrapping_add(i), value)?;
         }
+        #[cfg(test)]
+        super::tests::expansion_checkpoint()?;
     }
     Ok(())
 }

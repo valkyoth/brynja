@@ -51,6 +51,34 @@ fn first_id(root: &Path) -> String {
         .into()
 }
 
+#[test]
+fn rotation_failure_preserves_index_and_reuses_complete_orphan_checkpoint() {
+    let dir = tempfile::tempdir().unwrap();
+    let root = dir.path();
+    let mut state = sample();
+    for rows in state.attempts.values_mut() {
+        rows.retain(|row| row.outcome != "running");
+    }
+    storage::save(root, &state).unwrap();
+    let old = fs::read(root.join(storage::STATE)).unwrap();
+    let id = inputs::hash(&old);
+    let temp = root.join(format!("verification/.verify-{}.tmp", std::process::id()));
+    fs::write(&temp, b"do not overwrite").unwrap();
+    assert!(crate::rotation::rotate(root).is_err());
+    assert_eq!(fs::read(root.join(storage::STATE)).unwrap(), old);
+    assert_eq!(crate::rotation::read(root, &id).unwrap(), old);
+    assert_eq!(fs::read(&temp).unwrap(), b"do not overwrite");
+    fs::remove_file(temp).unwrap();
+    let archive = root.join(format!("{}/{id}.json", storage::ARCHIVES));
+    fs::write(&archive, b"corrupt checkpoint").unwrap();
+    assert!(crate::rotation::rotate(root).is_err());
+    assert_eq!(fs::read(root.join(storage::STATE)).unwrap(), old);
+    assert_eq!(fs::read(&archive).unwrap(), b"corrupt checkpoint");
+    fs::write(archive, &old).unwrap();
+    assert_eq!(crate::rotation::rotate(root).unwrap(), Some(id));
+    assert_eq!(storage::load(root).unwrap().attempts["md5/a"].len(), 1);
+}
+
 fn objects(root: &Path) -> Vec<std::path::PathBuf> {
     fs::read_dir(root.join(storage::SNAPSHOTS))
         .unwrap()
@@ -148,7 +176,7 @@ fn invalid_references_and_schemas_fail_closed() {
         changed["attempts"]["md5/a"][0]["before"] = bad;
         assert!(decode(root, &serde_json::to_vec(&changed).unwrap()).is_err());
     }
-    for schema in [0, 3, u32::MAX] {
+    for schema in [0, 4, u32::MAX] {
         let mut changed = original.clone();
         changed["schema"] = schema.into();
         assert!(decode(root, &serde_json::to_vec(&changed).unwrap()).is_err());

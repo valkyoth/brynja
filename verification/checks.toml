@@ -6,6 +6,152 @@ catalog = "verification/catalog.json"
 includes = ["verification/miri-checks.json", "verification/kani-checks.json", "verification/matrix-checks.json", "verification/extra-checks.json"]
 
 
+# Optional external-key contracts. Mock adapters are not hardware qualification.
+[groups.aes-provider]
+paths = ["crates/brynja-crypto/src/provider.rs", "crates/brynja-crypto/src/aes/provider.rs", "crates/brynja-crypto/tests/aes128_provider.rs", "scripts/aes/check-aes-provider-api.py", "scripts/aes/test-aes-provider-runner.py", "scripts/aes/check-aes-api.py", "scripts/aes/test-aes-runners.py", "scripts/repository/facade_workspace_policy.py"]
+[[groups.aes-provider.tools]]
+program = "python3"
+
+[[checks]]
+component = "aes"
+id = "provider-native"
+category = "provider"
+name = "AES-128 provider mock lifecycle and fault contracts"
+establishes = "Optional trusted adapter API only: exact directions, opaque binding, explicit ownership and destruction, terminal errors/unwind and clearing or transactional output. Test/reference adapters only; no real HSM, PKCS#11, physical protection, timing or device destruction qualification. Cortex-M is compile-only."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block,external-key-provider","--test","aes128_provider"]
+cwd = "."
+inputs = ["aes-build", "aes-provider", "aes-consumer", "compiler"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 12
+exact_tests = 12
+
+[[checks]]
+component = "aes"
+id = "provider-msrv"
+category = "provider"
+name = "AES-128 provider mock contracts on Rust 1.90.0"
+establishes = "Optional trusted adapter API only: exact directions, opaque binding, explicit ownership and destruction, terminal errors/unwind and clearing or transactional output. Test/reference adapters only; no real HSM, PKCS#11, physical protection, timing or device destruction qualification. Cortex-M is compile-only."
+command = ["cargo","+1.90.0","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block,external-key-provider","--test","aes128_provider"]
+cwd = "."
+inputs = ["aes-build", "aes-provider", "aes-consumer", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 12
+exact_tests = 12
+
+[[checks]]
+component = "aes"
+id = "provider-asan"
+category = "provider"
+name = "AES-128 provider mock contracts under ASan/LSan"
+establishes = "Optional trusted adapter API only: exact directions, opaque binding, explicit ownership and destruction, terminal errors/unwind and clearing or transactional output. Test/reference adapters only; no real HSM, PKCS#11, physical protection, timing or device destruction qualification. Cortex-M is compile-only."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block,external-key-provider","--test","aes128_provider","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["aes-build", "aes-provider", "aes-consumer", "asan-tools"]
+environment = { RUSTUP_AUTO_INSTALL = "0", RUSTFLAGS = "-Zsanitizer=address", CARGO_ENCODED_RUSTFLAGS = "", ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1", LSAN_OPTIONS = "exitcode=23", CARGO_TARGET_DIR = "target/aes-provider-asan" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","RUSTUP_TOOLCHAIN","ASAN_OPTIONS","LSAN_OPTIONS"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 12
+exact_tests = 12
+
+[[checks]]
+component = "aes"
+id = "provider-miri"
+category = "provider"
+name = "AES-128 provider mock contracts under Miri"
+establishes = "Optional trusted adapter API only: exact directions, opaque binding, explicit ownership and destruction, terminal errors/unwind and clearing or transactional output. Test/reference adapters only; no real HSM, PKCS#11, physical protection, timing or device destruction qualification. Cortex-M is compile-only."
+command = ["cargo","+nightly-2026-09-11","miri","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block,external-key-provider","--test","aes128_provider","--target","x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["aes-build", "aes-provider", "aes-consumer", "miri-tools"]
+environment = { RUSTUP_AUTO_INSTALL = "0", MIRIFLAGS = "-Zmiri-report-progress=10000000", CARGO_TARGET_DIR = "target/aes-provider-miri" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","RUSTUP_TOOLCHAIN","MIRIFLAGS","MIRI_SYSROOT","MIRI_BE_RUSTC","MIRI_REPLACE_LIBRS_IF_NOT_TEST","BRYNJA_MIRI_CASE","BRYNJA_MIRI_PROFILE","BRYNJA_MIRI_WIDTH"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 12
+exact_tests = 12
+
+[[checks]]
+component = "aes"
+id = "provider-api-current"
+category = "provider"
+name = "External-key provider ownership and feature contracts on Rust 1.99.1"
+establishes = "Optional trusted adapter API only: exact directions, opaque binding, explicit ownership and destruction, terminal errors/unwind and clearing or transactional output. Test/reference adapters only; no real HSM, PKCS#11, physical protection, timing or device destruction qualification. Cortex-M is compile-only."
+command = ["python3","scripts/aes/check-aes-provider-api.py","1.99.1"]
+cwd = "."
+inputs = ["aes-build", "aes-provider", "aes-consumer", "compiler"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","RUSTUP_TOOLCHAIN","PYTHONOPTIMIZE","PYTHONPATH"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["AES_PROVIDER_API_PASS:"]
+unique_lines = ["AES_PROVIDER_API_PASS: 1.99.1 56 paired probes; direct and facade; independent opt-ins"]
+
+[[checks]]
+component = "aes"
+id = "provider-api-msrv"
+category = "provider"
+name = "External-key provider ownership and feature contracts on Rust 1.90.0"
+establishes = "Optional trusted adapter API only: exact directions, opaque binding, explicit ownership and destruction, terminal errors/unwind and clearing or transactional output. Test/reference adapters only; no real HSM, PKCS#11, physical protection, timing or device destruction qualification. Cortex-M is compile-only."
+command = ["python3","scripts/aes/check-aes-provider-api.py","1.90.0"]
+cwd = "."
+inputs = ["aes-build", "aes-provider", "aes-consumer", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","RUSTUP_TOOLCHAIN","PYTHONOPTIMIZE","PYTHONPATH"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["AES_PROVIDER_API_PASS:"]
+unique_lines = ["AES_PROVIDER_API_PASS: 1.90.0 56 paired probes; direct and facade; independent opt-ins"]
+
+[[checks]]
+component = "aes"
+id = "provider-no-std"
+category = "provider"
+name = "External-key provider facade Cortex-M compile on Rust 1.90.0"
+establishes = "Optional trusted adapter API only: exact directions, opaque binding, explicit ownership and destruction, terminal errors/unwind and clearing or transactional output. Test/reference adapters only; no real HSM, PKCS#11, physical protection, timing or device destruction qualification. Cortex-M is compile-only."
+command = ["cargo","+1.90.0","check","--locked","--offline","-p","brynja","--no-default-features","--features","hazmat-aes-block,external-key-provider","--target","thumbv7em-none-eabi"]
+cwd = "."
+inputs = ["aes-build", "aes-provider", "aes-consumer", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["Finished `dev` profile"]
+
+[[checks]]
+component = "aes"
+id = "provider-docs"
+category = "provider"
+name = "External-key provider adapter usage example"
+establishes = "Optional trusted adapter API only: exact directions, opaque binding, explicit ownership and destruction, terminal errors/unwind and clearing or transactional output. Test/reference adapters only; no real HSM, PKCS#11, physical protection, timing or device destruction qualification. Cortex-M is compile-only."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block,external-key-provider","--doc","aes::provider"]
+cwd = "."
+inputs = ["aes-build", "aes-provider", "aes-consumer", "compiler"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 1
+exact_tests = 1
+
 # Initial AES-128 development checks; not complete milestone qualification.
 [groups.aes-dataflow]
 paths = ["scripts/aes/check-aes-dataflow.py", "scripts/aes/test-aes-dataflow.py", "scripts/aes/aes_machine_review.py", "scripts/aes/machine-review.json", "docs/assurance/aes128-development.md", "scripts/hmac/hmac_engine_codegen.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py"]
@@ -99,14 +245,14 @@ component = "aes"
 id = "owner-contract"
 category = "repository"
 name = "AES-128 scoped development-owner inventory and negative controls"
-establishes = "Twenty source-policy/parser regressions bind actual clearing fields, markers, nonempty scratch, explicit clear and compiler commands to the AES-128 development-only inventory. Does not execute cryptography, complete the AES family or establish qualification."
+establishes = "Twenty-four source-policy/parser regressions bind actual clearing fields, markers, nonempty scratch, cached schedule width/import/reuse, explicit clear and compiler commands to the AES-128 development-only inventory. Does not execute cryptography, complete the AES family or establish qualification."
 command = ["python3", "scripts/cryptography/test-aes-owner-contract.py"]
 cwd = "."
 inputs = ["aes-build", "aes-owner-contract"]
 reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTC_WRAPPER"]
 timeout_seconds = 60
 [checks.success]
-contains = ["Ran 20 tests in "]
+contains = ["Ran 24 tests in "]
 unique_lines = ["OK"]
 
 [groups.aes-build]
@@ -141,7 +287,7 @@ component = "aes"
 id = "rounds-and-faults"
 category = "fault"
 name = "AES-128 schedule, field and round-boundary fault cleanup"
-establishes = "Five unit tests: complete FIPS example schedule, finite field/inverse checks, linear transforms, secret-output errors/unwinds at all 11 key-add boundaries in both directions, plus failure-atomic public ciphertext. Live scratch clearing observations, not proof or register erasure."
+establishes = "Seven unit tests: FIPS schedule, field/inverse and linear transforms, secret-output errors/unwinds at all 11 round boundaries, cached import errors/unwinds and reuse without re-expansion, plus failure-atomic public ciphertext. Live scratch clearing observations, not physical fault resistance or register erasure."
 command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block","--lib","aes::"]
 cwd = "."
 inputs = ["compiler","aes-build","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
@@ -150,8 +296,8 @@ reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARG
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok."]
-minimum_tests = 5
-exact_tests = 5
+minimum_tests = 7
+exact_tests = 7
 
 [[checks]]
 component = "aes"
@@ -175,7 +321,7 @@ component = "aes"
 id = "ownership"
 category = "compile-fail"
 name = "AES-128 typed ownership examples"
-establishes = "One positive example and nine compile-fail examples. Rustdoc accepts any compiler error; diagnostic-specific acceptance is provided by separate api-current/api-msrv registrations."
+establishes = "Two positive examples and nine compile-fail examples. Rustdoc accepts any compiler error; diagnostic-specific acceptance for both key owners is provided by separate api-current/api-msrv registrations."
 command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block","--doc","aes::"]
 cwd = "."
 inputs = ["compiler","hkdf-rustdoc","aes-build","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
@@ -184,8 +330,8 @@ reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARG
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok."]
-minimum_tests = 10
-exact_tests = 10
+minimum_tests = 11
+exact_tests = 11
 
 [[checks]]
 component = "aes"
@@ -260,7 +406,7 @@ component = "aes"
 id = "asan-faults"
 category = "asan-fault"
 name = "AES-128 round faults and scratch cleanup under ASan/LSan"
-establishes = "Five internal tests including every round-key error/unwind and failure-atomic public ciphertext. No timing or complete memory-safety proof."
+establishes = "Seven internal tests including cached import failures, every round-key error/unwind, reuse without re-expansion and failure-atomic public ciphertext. No timing or complete memory-safety proof."
 command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block","--lib","--target","x86_64-unknown-linux-gnu","aes::"]
 cwd = "."
 inputs = ["asan-tools","aes-build","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
@@ -270,8 +416,8 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok."]
-minimum_tests = 5
-exact_tests = 5
+minimum_tests = 7
+exact_tests = 7
 
 
 [[checks]]
@@ -324,30 +470,30 @@ component = "aes"
 id = "api-msrv"
 category = "compile-fail"
 name = "AES-128 exact public API diagnostics on Rust 1.90.0"
-establishes = "29 paired valid/invalid public API probes on checkout-built composition library. Exact diagnostic code and primary probe source required. Affine/local owners, fixed widths, borrowing, secret lifetime and explicit public ciphertext. Not packaged-source acceptance or runtime cleanup proof."
+establishes = "58 paired valid/invalid public API probes on checkout-built composition library. Exact diagnostic code and primary probe source required. Affine/local owners, fixed widths, borrowing, secret lifetime and explicit public ciphertext. Not packaged-source acceptance or runtime cleanup proof."
 command = ["python3", "scripts/aes/check-aes-api.py", "1.90.0"]
 cwd = "."
 inputs = ["hkdf-msrv", "aes-build", "aes-runner", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
 reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER"]
 timeout_seconds = 600
 [checks.success]
-unique_lines = ["AES_API_PASS: 1.90.0 29 paired probes"]
-contains = ["AES_API_PASS: 1.90.0 29 paired probes"]
+unique_lines = ["AES_API_PASS: 1.90.0 58 paired probes"]
+contains = ["AES_API_PASS: 1.90.0 58 paired probes"]
 
 [[checks]]
 component = "aes"
 id = "api-current"
 category = "compile-fail"
 name = "AES-128 exact public API diagnostics on Rust 1.99.1"
-establishes = "29 paired valid/invalid public API probes on checkout-built composition library. Exact diagnostic code and primary probe source required. Affine/local owners, fixed widths, borrowing, secret lifetime and explicit public ciphertext. Not packaged-source acceptance or runtime cleanup proof."
+establishes = "58 paired valid/invalid public API probes on checkout-built composition library. Exact diagnostic code and primary probe source required. Affine/local owners, fixed widths, borrowing, secret lifetime and explicit public ciphertext. Not packaged-source acceptance or runtime cleanup proof."
 command = ["python3", "scripts/aes/check-aes-api.py", "1.99.1"]
 cwd = "."
 inputs = ["compiler", "aes-build", "aes-runner", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
 reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER"]
 timeout_seconds = 600
 [checks.success]
-unique_lines = ["AES_API_PASS: 1.99.1 29 paired probes"]
-contains = ["AES_API_PASS: 1.99.1 29 paired probes"]
+unique_lines = ["AES_API_PASS: 1.99.1 58 paired probes"]
+contains = ["AES_API_PASS: 1.99.1 58 paired probes"]
 
 [groups.aes-mutations]
 paths = ["scripts/aes/check-aes-mutations.py", "scripts/aes/test-aes-runners.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py"]
@@ -388,7 +534,7 @@ platform = "linux-x86_64"
 timeout_seconds = 1200
 [checks.success]
 contains = ["AES owner dispatch complete: 4 configurations; delegated core Drop; not scratch, physical-erasure or timing qualification"]
-unique_lines = ["AES owner dispatch complete: 4 configurations; delegated core Drop; not scratch, physical-erasure or timing qualification", "AES owner dispatch: PASS; Rust 1.90.0; x86_64; panic=abort; 2 probes; 12 rejected IR mutations", "AES owner dispatch: PASS; Rust 1.90.0; x86_64; panic=unwind; 2 probes; 12 rejected IR mutations", "AES owner dispatch: PASS; Rust 1.99.1; x86_64; panic=abort; 2 probes; 12 rejected IR mutations", "AES owner dispatch: PASS; Rust 1.99.1; x86_64; panic=unwind; 2 probes; 12 rejected IR mutations"]
+unique_lines = ["AES owner dispatch complete: 4 configurations; delegated core Drop; not scratch, physical-erasure or timing qualification", "AES owner dispatch: PASS; Rust 1.90.0; x86_64; panic=abort; 3 probes; 12 rejected IR mutations", "AES owner dispatch: PASS; Rust 1.90.0; x86_64; panic=unwind; 3 probes; 12 rejected IR mutations", "AES owner dispatch: PASS; Rust 1.99.1; x86_64; panic=abort; 3 probes; 12 rejected IR mutations", "AES owner dispatch: PASS; Rust 1.99.1; x86_64; panic=unwind; 3 probes; 12 rejected IR mutations"]
 
 # Dynamic checks execute downstream checkout fixtures, not packaged archives.
 
@@ -402,7 +548,7 @@ component = "aes"
 id = "operation-cleanup"
 category = "compiler"
 name = "AES-128 emitted operation scratch and explicit-clear dispatch"
-establishes = "Production x86_64 optimized library bodies on Rust 1.90.0/1.99.1, abort/unwind: schedule, state, expansion word and four inlined row-shift allocations dispatch full extents to delegated core clearing on modeled exits; two public clear methods forward their exact descriptors. 55 rejected IR-checker mutations per configuration. Not final application LTO, physical/whole-frame erasure, core callee reproof or timing qualification."
+establishes = "Production x86_64 optimized library bodies on Rust 1.90.0/1.99.1, abort/unwind: seven scratch bodies across ephemeral and cached owners dispatch full extents to delegated core clearing on modeled exits; three public clear methods forward their exact descriptors. 75 rejected IR-checker mutations per configuration. Not final application LTO, physical/whole-frame erasure, core callee reproof or timing qualification."
 command = ["python3", "scripts/aes/check-aes-operation-cleanup.py"]
 cwd = "."
 inputs = ["compiler", "hkdf-msrv", "aes-build", "aes-operation-codegen", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
@@ -411,7 +557,7 @@ platform = "linux-x86_64"
 timeout_seconds = 1200
 [checks.success]
 contains = ["AES operation cleanup complete: 4 configurations; delegated core clearing; not whole-frame erasure or timing qualification"]
-unique_lines = ["AES operation cleanup complete: 4 configurations; delegated core clearing; not whole-frame erasure or timing qualification", "AES operation cleanup: PASS; Rust 1.90.0; x86_64; panic=abort; 4 scratch bodies; 2 explicit clears; 55 rejected IR mutations", "AES operation cleanup: PASS; Rust 1.90.0; x86_64; panic=unwind; 4 scratch bodies; 2 explicit clears; 55 rejected IR mutations", "AES operation cleanup: PASS; Rust 1.99.1; x86_64; panic=abort; 4 scratch bodies; 2 explicit clears; 55 rejected IR mutations", "AES operation cleanup: PASS; Rust 1.99.1; x86_64; panic=unwind; 4 scratch bodies; 2 explicit clears; 55 rejected IR mutations"]
+unique_lines = ["AES operation cleanup complete: 4 configurations; delegated core clearing; not whole-frame erasure or timing qualification", "AES operation cleanup: PASS; Rust 1.90.0; x86_64; panic=abort; 7 scratch bodies; 3 explicit clears; 75 rejected IR mutations", "AES operation cleanup: PASS; Rust 1.90.0; x86_64; panic=unwind; 7 scratch bodies; 3 explicit clears; 75 rejected IR mutations", "AES operation cleanup: PASS; Rust 1.99.1; x86_64; panic=abort; 7 scratch bodies; 3 explicit clears; 75 rejected IR mutations", "AES operation cleanup: PASS; Rust 1.99.1; x86_64; panic=unwind; 7 scratch bodies; 3 explicit clears; 75 rejected IR mutations"]
 
 [groups.aes-oracle]
 [[groups.aes-oracle.tools]]
@@ -431,7 +577,7 @@ reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARG
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok.", "Independent oracle: OpenSSL"]
-unique_lines = ["AES_OPENSSL_COMPARISONS: 4096"]
+unique_lines = ["AES_OPENSSL_COMPARISONS: 4096", "AES_CACHED_OPENSSL_COMPARISONS: 4096"]
 minimum_tests = 1
 exact_tests = 1
 # Dynamic checks execute downstream checkout fixtures, not packaged archives.

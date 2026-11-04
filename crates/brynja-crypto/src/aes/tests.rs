@@ -10,6 +10,21 @@ std::thread_local! {
     static POINT: Cell<usize> = const { Cell::new(0) };
     static FAIL: Cell<Option<(usize,bool)>> = const { Cell::new(None) };
     static CLEARED: Cell<usize> = const { Cell::new(0) };
+    static EXPANSION_POINT: Cell<usize> = const { Cell::new(0) };
+    static EXPANSION_FAIL: Cell<Option<(usize,bool)>> = const { Cell::new(None) };
+}
+pub(super) fn expansion_checkpoint() -> Result<(), Error> {
+    let point = EXPANSION_POINT.get();
+    EXPANSION_POINT.set(point.wrapping_add(1));
+    if let Some((selected, unwind)) = EXPANSION_FAIL.get()
+        && selected == point
+    {
+        if unwind {
+            resume_unwind(Box::new("AES test-only expansion unwind"));
+        }
+        return Err(Error::SecretMemory);
+    }
+    Ok(())
 }
 pub(super) fn observe_clear(bytes: &[u8]) {
     assert!(bytes.iter().all(|b| *b == 0));
@@ -132,5 +147,84 @@ fn fips197_appendix_a1_complete_schedule() -> Result<(), Error> {
         &mut schedule.0,
     )?;
     assert_eq!(schedule.0, expected);
+    Ok(())
+}
+
+#[test]
+fn cached_import_failures_clear_all_storage_and_temporary_schedule() -> Result<(), Error> {
+    for unwind in [false, true] {
+        // Initial key copy, forty generated words, and caller-schedule write.
+        for point in 0..42 {
+            let input = [0x42; 16];
+            let mut backing = [[0xa5; 176]; 3];
+            EXPANSION_POINT.set(0);
+            EXPANSION_FAIL.set(Some((point, unwind)));
+            CLEARED.set(0);
+            let result = catch_unwind(AssertUnwindSafe(|| {
+                Aes128ExpandedKey::new(&input, &mut backing[1]).map(|k| k.clear())
+            }));
+            EXPANSION_FAIL.set(None);
+            if unwind {
+                assert!(result.is_err());
+            } else {
+                assert!(matches!(result, Ok(Err(Error::SecretMemory))));
+            }
+            assert_eq!(backing, [[0xa5; 176], [0; 176], [0xa5; 176]]);
+            assert_eq!(input, [0x42; 16]);
+            assert_eq!(CLEARED.get() & 5, 5); // expansion word and temporary schedule
+            Aes128ExpandedKey::new(&input, &mut backing[1])?.clear();
+        }
+    }
+    Ok(())
+}
+
+#[test]
+fn cached_round_failures_preserve_key_without_reexpansion() -> Result<(), Error> {
+    for public in [false, true] {
+        for inverse in [false, true] {
+            if public && inverse {
+                continue;
+            }
+            for unwind in [false, true] {
+                let mut storage = [0; 176];
+                let key = Aes128ExpandedKey::new(&[0x42; 16], &mut storage)?;
+                let original = key.region.expose().to_vec();
+                EXPANSION_POINT.set(0);
+                EXPANSION_FAIL.set(Some((0, false))); // Any per-block expansion must fail.
+                for point in 0..11 {
+                    let mut output = [0xa5; 16];
+                    POINT.set(0);
+                    FAIL.set(Some((point, unwind)));
+                    CLEARED.set(0);
+                    let result = catch_unwind(AssertUnwindSafe(|| {
+                        if public {
+                            key.encrypt_block_public(
+                                &[0x77; 16],
+                                &mut output,
+                                PublicCiphertext::acknowledge(),
+                            )
+                        } else {
+                            key.transform(&[0x77; 16], &mut output, inverse)
+                                .map(|b| b.clear())
+                        }
+                    }));
+                    FAIL.set(None);
+                    if unwind {
+                        assert!(result.is_err());
+                    } else {
+                        assert!(matches!(result, Ok(Err(Error::SecretMemory))));
+                    }
+                    assert_eq!(output, if public { [0xa5; 16] } else { [0; 16] });
+                    assert_eq!(key.region.expose(), original);
+                    assert_eq!(CLEARED.get(), 2); // state/row scratch only, never a new schedule
+                    key.encrypt_block(&[0; 16], &mut output)?.clear();
+                }
+                assert_eq!(EXPANSION_POINT.get(), 0);
+                EXPANSION_FAIL.set(None);
+                key.clear();
+                assert_eq!(storage, [0; 176]);
+            }
+        }
+    }
     Ok(())
 }

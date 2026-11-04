@@ -141,6 +141,9 @@ repository-wide registered status view refreshed.
   before/after snapshots (schema 2). Not authenticated certification evidence.
 - `verification/snapshots/<sha256>.json`: complete input snapshots, stored once
   per unique content hash. Track these alongside the index in Git.
+- `verification/archives/<sha256>.json`: explicit rotation checkpoints, each a
+  complete bounded results index with snapshot references. Schema 3 adds their
+  content IDs to the live index; schema 2 remains used until the first rotation.
 - `docs/VERIFICATION_RESULTS.md`: generated report, not a database.
 - `docs/VERIFICATION_CATALOG.md`: every catalog assessment and its latest
   historical outcome; use `show` to see all older successes/failures as well.
@@ -222,6 +225,56 @@ state. Preserve the complete store when arranging explicit archival/rotation
 at a limit; do not delete evidence merely to silence the error. As with other
 save failures, a limit reached while completing a run leaves the durable
 starting record and local log, not a fabricated successful completion.
+
+### Explicit history checkpoints and capacity warnings
+
+`full-check` warns at 75% of the index, individual snapshot, total referenced
+snapshot, attempt-count and archive-reference limits. Before capacity is
+exhausted, explicitly run:
+
+```sh
+brynja-verify rotate-results
+brynja-verify list-archives
+brynja-verify show-archive SHA256
+```
+
+Update the installed binary first; older runners reject schema 3. Rotation takes
+the exclusive state lock, requires no registry/tool inspection, runs no checks,
+and refuses outstanding running attempts. It durably checkpoints the complete
+live index before retaining only the latest attempt in each check group. The
+checkpoint ID hashes its entire file, including the newline. All original
+attempts, dates, outcomes, views and snapshot references survive there. No
+snapshot, log or archive is deleted. Commit archives and snapshots with the live
+index. Unchanged groups with at most one attempt make rotation a no-op.
+
+Archived attempts are reference-only: automatic freshness/reversion reuse scans
+only the retained live attempts. This may require a rerun after reverting inputs;
+it never revives an old pass while dropping an intervening failure. Cached views
+are cleared and the generated report is invalidated; run a status scan to refresh
+them. Rotation preserves the latest failed/interrupted outcome, not an older
+success. A failed write can leave a complete orphan checkpoint or an invalidated
+derived report, but cannot discard the complete pre-rotation index/history.
+
+`show-archive` checks that checkpoint's hash, schema, resource limits and all its
+snapshot objects before printing compact-reference JSON. It does not expand
+snapshots into repeated JSON or recursively load earlier archive chains. Normal
+checks do not load historical archives. Restore missing archives/objects from
+Git or backups to inspect them; hashes are not signatures or certification.
+Archive references are unique lower-case SHA-256 IDs, capped at 1024. There is
+no unbounded chain walk or automatic deletion policy.
+
+Rotation cannot shrink a single oversized snapshot or a store consisting only
+of necessary latest rows. It also cannot load an already invalid/over-budget
+index: restore a valid complete backup rather than bypassing limits or deleting
+evidence. Archive files and their snapshots consume disk even though only live
+references count toward the live-load budget.
+
+Duplicate JSON attempt-group/view keys are rejected instead of silently losing
+earlier data. Pre-existing non-regular artifacts, including FIFOs, are rejected
+before opening and the opened handle is checked again. This is not protection
+against an adversary racing local filesystem replacements. A single row is
+still bounded by the overall index limit, not a separate smaller per-row budget;
+use OS memory limits for hostile checkouts.
 
 ### Snapshot storage follow-up review — 2026-11-04
 

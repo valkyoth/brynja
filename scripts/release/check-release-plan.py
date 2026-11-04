@@ -30,6 +30,7 @@ FIELDS = (
 
 # Public-operation closure is required before executable downstream use.
 API_CLOSURE_EDGES = (
+    ("v0.27.5", "v0.27.6"),
     ("v0.34.6", "v0.39.0"),
     ("v0.34.6", "v0.77.2"),
     ("v0.34.6", "v0.103.0"),
@@ -48,6 +49,8 @@ API_CLOSURE_EDGES = (
 )
 
 API_SCOPE_CONTRACTS = {
+    "v0.27.6": ("separately packaged", "AES-128", "non-exportable",
+               "no software fallback", "dependency/FFI review", "named-device acceptance"),
     "v0.34.0": ("brynja-encoding-der", "compatibility re-exports"),
     "v0.34.6": ("encode/decode", "independent encodings", "hardened"),
     "v0.49.5": ("signing and verification", "DER"),

@@ -19152,6 +19152,129 @@
       ]
     }
   ],
+  "development_secret_owners": [
+    {
+      "block_bytes": 16,
+      "capability": "algorithm.aes",
+      "cleanup_bindings": [
+        "crates/brynja-crypto/src/aes.rs#Aes128Key::clear",
+        "crates/brynja-crypto/src/aes.rs#SecretBlock::clear",
+        "crates/brynja-crypto/src/aes.rs#Scratch::drop"
+      ],
+      "cleanup_model": "delegated-owner-drop-and-explicit-clear-with-operation-local-guards",
+      "compiler_checks": [
+        "python3 scripts/aes/check-aes-owner-cleanup.py",
+        "python3 scripts/aes/check-aes-operation-cleanup.py"
+      ],
+      "compiler_scope": "bounded-dispatch-x86_64-rust-1.90.0-and-1.99.1-abort-and-unwind",
+      "delegated_owners": [
+        "core.owned-secret-region",
+        "core.secret-region-initialization"
+      ],
+      "evidence": [
+        "crates/brynja-crypto/tests/aes128.rs",
+        "crates/brynja-crypto/src/aes/tests.rs",
+        "scripts/aes/check-aes-api.py",
+        "scripts/aes/check-aes-owner-cleanup.py",
+        "scripts/aes/check-aes-operation-cleanup.py",
+        "scripts/cryptography/test-aes-owner-contract.py",
+        "docs/assurance/aes128-development.md"
+      ],
+      "excluded_scope": [
+        "AES-192",
+        "AES-256",
+        "key-generation",
+        "streaming-modes",
+        "authentication",
+        "cancellation-api",
+        "rekey-api",
+        "key-export",
+        "backend-selection",
+        "TLS"
+      ],
+      "fields": [
+        "region:caller-backed-owned-secret-region",
+        "local:thread-local-marker"
+      ],
+      "id": "development.algorithm.aes128",
+      "key_bytes": 16,
+      "lifecycle_scope": [
+        "import",
+        "success",
+        "error",
+        "failed-construction",
+        "recoverable-unwind",
+        "explicit-clear",
+        "drop"
+      ],
+      "milestone": "0.27.0",
+      "operations": [
+        {
+          "api": "Aes128Key::new",
+          "failure": "clear-admitted-key-storage",
+          "output": "typed-secret-key"
+        },
+        {
+          "api": "Aes128Key::encrypt_block",
+          "failure": "clear-admitted-output",
+          "output": "typed-secret-block"
+        },
+        {
+          "api": "Aes128Key::decrypt_block",
+          "failure": "clear-admitted-output",
+          "output": "typed-secret-block"
+        },
+        {
+          "api": "Aes128Key::encrypt_block_public",
+          "failure": "unchanged-output",
+          "output": "explicit-public-ciphertext"
+        },
+        {
+          "api": "Aes128Key::clear",
+          "failure": "delegated-core-clear",
+          "output": "none"
+        },
+        {
+          "api": "SecretBlock::clear",
+          "failure": "delegated-core-clear",
+          "output": "none"
+        },
+        {
+          "api": "SecretBlock::expose",
+          "failure": "infallible",
+          "output": "borrowed-secret-bytes"
+        }
+      ],
+      "output_symbol": "crates/brynja-crypto/src/aes.rs#SecretBlock",
+      "qualification": "development-only-family-incomplete-side-channel-and-independent-review-pending",
+      "residual_risks": [
+        "mem-forget",
+        "process-abort",
+        "forced-termination",
+        "power-loss",
+        "register-copies",
+        "cpu-caches",
+        "compiler-created-copies",
+        "crash-dumps",
+        "suspend-images",
+        "os-swap-and-paging",
+        "dma-visible-copies",
+        "physical-memory-remanence"
+      ],
+      "rounds": 10,
+      "state": "development",
+      "storage": "caller-backed-key-and-output-with-fixed-operation-scratch",
+      "symbol": "crates/brynja-crypto/src/aes.rs#Aes128Key",
+      "temporaries": [
+        "schedule:Scratch<176>",
+        "state:Scratch<16>",
+        "word:Scratch<4>",
+        "previous:Scratch<16>",
+        "scalar-and-caller-copies:outside-owned-storage"
+      ],
+      "variant": "AES-128"
+    }
+  ],
   "explicit_rejections": [
     "copy-secret-state",
     "clone-secret-state",
@@ -24121,7 +24244,7 @@
       ]
     }
   ],
-  "policy_sha256": "8e4f43984eca114a4dca7d0ef3dbdda04f8b0659fbe0303f55b025afbd2b74e3",
+  "policy_sha256": "9763c78e114bd25a5f0459855d70d71f0f4e3085df8799d18a35bcb5ed6033b7",
   "registered_secret_owners": [
     {
       "capability": "algorithm.hkdf",
@@ -24927,5 +25050,5 @@
     "physical-memory-remanence"
   ],
   "schema": 1,
-  "surface_register_sha256": "c565271e2840568147efa426f371284d796269f4d683f8993622cf1264db9152"
+  "surface_register_sha256": "d65df549f9169ac16e3b3b2c00145fa6422272b6d54fefb029ecd2b4857401e3"
 }

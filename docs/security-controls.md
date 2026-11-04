@@ -1,5 +1,59 @@
 # Security Controls
 
+## AES-128 development contract (v0.27.0)
+
+The development-only [`brynja_crypto::aes`](../crates/brynja-crypto/src/aes.rs)
+implements one AES-128 block operation at a time. The planned family requirement
+`BRY-REQ-CRYPTO-0005` remains **planned**, not silently completed by this subset.
+The [owner register](cryptographic-api-profile-register.md#development-only-variant-owners)
+separately records `development.algorithm.aes128`, its real fields, guarded
+temporaries, operation-specific destinations and limited lifecycle scope.
+
+The normative algorithm mapping below uses
+[FIPS 197-upd1](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197-upd1.pdf).
+The ownership and failure rules are Brynja's additional API controls, not claims
+that FIPS specifies this Rust interface. Evidence IDs are under `aes/` in
+`brynja-verify`; registration alone is not a passing execution or certification.
+
+| Requirement / source | Enforcement | Scoped evidence |
+| --- | --- | --- |
+| State ordering and fixed block/key parameters (§3.4, §5 Table 3) | Column-major 16-byte state, exact 16-byte key and buffers, ten rounds | `vectors`, `api-msrv`, `api-current` |
+| Field operations (§4), forward/inverse substitutions (§5.1.1, §5.3.2) | Fixed-work polynomial arithmetic, inversion and affine maps, no secret-indexed tables | `rounds-and-faults`, `field-layout-proof`, `mutation-controls`; proof covers multiplication, not full substitution |
+| Forward rounds (§5.1) and inverse rounds (§5.3) | Separate operation direction, inverse order/coefficients, final-round handling | `vectors`, `differential`, `optimized-vectors`, `mutation-controls` |
+| Key expansion (§5.2, Appendix A.1) | Ephemeral 176-byte schedule, four-byte word guard, AES-128 round constants | `rounds-and-faults` full schedule answer, `vectors`, `operation-cleanup` |
+| Key import and output ownership (Brynja control) | Private clearing regions; no Copy/Clone/Debug/Send/Sync; exact disjoint storage; consuming clear | `ownership`, `api-msrv`, `api-current`, `owner-dispatch`, `operation-cleanup` |
+| Secret-output failure (Brynja control) | Admitted destination clears on error/unwind; output owner survives independently of key | `rounds-and-faults`, `asan-faults`, `miri-ownership` |
+| Explicit ciphertext release (Brynja control) | Consumed `PublicCiphertext` acknowledgement; output unchanged until final commit; no public plaintext path | `vectors`, `rounds-and-faults`, `api-msrv`, `api-current`, `miri-public` |
+| Local temporary destruction (Brynja control) | Schedule, state, word and row-copy guards delegate clearing to core | `rounds-and-faults`, `asan-faults`, `owner-dispatch`, `operation-cleanup` |
+| Bounded work and portable surface | One fixed-size block, no heap, retained schedule, callback, implicit backend or unbounded input | `msrv-vectors`, `no-std-thumb`; Cortex-M is compilation only |
+| Downstream portable API (Brynja control) | Isolated direct/façade consumers, exact active dependencies/features, six lifecycle/vector tests in debug/release | `downstream`, `downstream-matrix`; fourteen host compilers, endpoint-only Cortex-M compile, checkout sources rather than archives |
+| Bounded timing diagnostic (observation, not a security guarantee) | Fixed-width zero/FF key/block contrasts, independent OpenSSL preflight, balanced order and fail-on-alarm without retries | `timing-screen`; six campaigns on Rust 1.99.1 Linux x86_64, raw samples retained, not constant-time qualification |
+| Bounded emitted dataflow (not whole-program qualification) | All loaded bytes tainted; reject secret branches, addresses and control operands in six LLVM helpers; explicit six-helper assembly control/address review with pinned instruction streams and a restricted scalar inverse checker | `dataflow-review`; Rust 1.90.0/1.99.1 x86_64 abort/unwind; changed streams require re-review; not an assembly noninterference proof; excludes wrapper/core machine code, final application LTO and other targets |
+
+All four KAT files and 568 records are identified in the
+[development evidence contract](assurance/aes128-development.md). The independent
+oracle covers 4096 public block comparisons. Neither constitutes a full AESAVS
+validation campaign. Source-review, API contracts, runtime tests, bounded proofs
+and emitted clearing dispatch have distinct scopes; none substitutes for the
+others or establishes machine-code constant time.
+
+The broad symmetric-cipher profile also plans key generation, incremental modes,
+cancellation, provider and backend integration. This raw block API does not
+pretend to implement those dimensions. Callers supply securely generated key
+material; `new` imports bytes and does not assess entropy. There is no rekey or
+reset operation: drop/clear the old owner before reusing its storage. Fixed-size
+operations have no cancellation callback, while applications must bound the
+number of calls. Do not treat raw blocks as authenticated message encryption or
+construct ECB messages by repeating this API. Modes, IV/nonce policy, padding,
+authentication, replay protection, protocol admission and TLS remain separate.
+
+Residual limits: caller input/copies, scalar compiler temporaries, registers,
+spills, caches, abort, `mem::forget`, paging, dumps and physical remanence are
+outside the owned-region cleanup claim. The emitted checks cover pre-link
+x86_64 library artifacts on the two pinned compilers, not final application LTO
+or deployed-target timing. Independent review and side-channel qualification
+remain pending; see the [threat model](threat-model.md#aes-128-block-boundary-v0270-development).
+
 ## HKDF development contract (v0.26.0)
 
 This section describes the implemented portable composition, not a release

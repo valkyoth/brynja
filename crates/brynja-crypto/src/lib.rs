@@ -11,6 +11,9 @@
 
 #![no_std]
 
+/// Development portable AES-128 block primitive; deployment qualification pending.
+pub mod aes;
+
 /// Explicit CPU authority and batch owners, not automatic detection or dispatch.
 /// Cargo features do not prove instruction support; each constructor retains
 /// its existing deployment, target-feature, health and classification contract.

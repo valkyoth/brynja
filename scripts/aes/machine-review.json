@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "review": "docs/assurance/aes128-development.md#six-helper-machine-review--2026-11-04",
+  "target": "x86_64-unknown-linux-gnu",
+  "panics": ["abort", "unwind"],
+  "compilers": {
+    "1.90.0": {
+      "substitute": "39f0f0b7514d743427d7f0eadca7b69e9d586e99263a1e0a7c2345f7c36787e4",
+      "mix": "f8804950473577fe4d7351906107faa144fc60e0151e960e76d8f8bfe7cba3ca",
+      "expand": "ff874ce7cb9035b7f2b57c5c1e3bd5987d57adc46dd9752757281c169270e062",
+      "add_key": "59dae8c181c79d2484871b53647134a2bfa325e54dd0f00ecb2aa1473761437c",
+      "transform": "9000141bbc9850383a1d5a02fd16daaa1b28f6e17c307aeb9312838f6757d94e",
+      "inverse": "a0352dcd055f548e6a7ef021f5347d48dea541378c73f37d5ce6e9af8c98f684"
+    },
+    "1.99.1": {
+      "substitute": "39f0f0b7514d743427d7f0eadca7b69e9d586e99263a1e0a7c2345f7c36787e4",
+      "mix": "77bf48b43857f8dd215cdac312600295d186417791dae7aee8c46fb9fed1ff07",
+      "expand": "00be260e6e766f0f2efc7b935c509ab6461abf12b0e8af1650b9d54f46cf3b67",
+      "add_key": "59dae8c181c79d2484871b53647134a2bfa325e54dd0f00ecb2aa1473761437c",
+      "transform": "396a9eba70871cc81a3af549bb0343cf9aef3cfbdf3c17fbcc48d2032a8a79ce",
+      "inverse": "535bbc4e2025b2b33ef4bba46a2e98cab09d1212c331c5be8bd6c0e82f29b72d"
+    }
+  }
+}

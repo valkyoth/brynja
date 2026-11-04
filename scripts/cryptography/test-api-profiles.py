@@ -273,6 +273,29 @@ def main() -> int:
     assert len(first["current_secret_owners"]) == 8
     assert len(first["registered_secret_owners"]) == 10
     assert len(first["planned_secret_owners"]) == 71
+    assert len(first['development_secret_owners']) == 1
+    development = first['development_secret_owners'][0]
+    assert development['id'] == 'development.algorithm.aes128'
+    assert development['state'] == 'development'
+    assert development['variant'] == 'AES-128'
+    assert development['lifecycle_scope'] != list(model.LIFECYCLE_EDGES)
+    assert 'key-generation' in development['excluded_scope']
+    assert any(row['id'] == 'planned.algorithm.aes' for row in first['planned_secret_owners'])
+    assert not any(row['id'] == 'registered.algorithm.aes' for row in first['registered_secret_owners'])
+    assert next(row for row in first['capabilities'] if row['id'] == 'algorithm.aes')['disposition'] == 'future-work'
+    def remove_development(policy, _surfaces):
+        policy['development-secret-owner'] = []
+    rejects(remove_development, 'development secret-owner inventory')
+    def duplicate_development(policy, _surfaces):
+        policy['development-secret-owner'] *= 2
+    rejects(duplicate_development, 'development secret-owner inventory')
+    def promote_development(policy, _surfaces):
+        policy['development-secret-owner'][0]['qualification'] = 'complete'
+    rejects(promote_development, 'canonical scoped record')
+    def wrong_development_core(policy, _surfaces):
+        policy['development-secret-owner'][0]['delegated_owners'] = []
+    rejects(wrong_development_core, 'canonical scoped record')
+    print('AES-128 development owner remains separate from planned AES-family completion')
     assert all(len(row["api"]) == 22 for row in first["capabilities"])
     assert all(row["consumer_links"] for row in first["capabilities"])
     assert all(row["explicit_rejections"] == list(model.REJECTIONS) for row in first["capabilities"])

@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "362bdd6e89fbd51cb05ca6ddb37c48fa2a73151e894220f4a998955c5212fdf6",
+  "policy_sha256": "a89b574be16a179583fc769290ee87260e5e837d312d6fd4b307006832de513a",
   "schema": 2,
   "source_ledger_sha256": "167725f852db5fa023ad2e4710e98cd22c70be2d2960a72c6faa6c92d6af1e98",
   "surfaces": [
@@ -13,7 +13,7 @@
         "nist:NIST.FIPS.197-upd1.pdf"
       ],
       "owner": "0.27.0",
-      "rationale": "AES-128 and AES-256 remain future first-party implementations with architecture-specific review gates.",
+      "rationale": "The full AES family remains future work. A development-only portable AES-128 block implementation now has typed clearing key/output owners and bounded vector, proof, misuse, dynamic and emitted cleanup checks. AES-192/256, modes, acceleration, side-channel qualification and independent review are not admitted by that partial scope; see docs/assurance/aes128-development.md.",
       "test_target": "tests/surface/primitives.rs#aes"
     },
     {

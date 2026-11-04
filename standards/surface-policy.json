@@ -1035,7 +1035,7 @@
         "disposition": "future-work",
         "domain": "cryptography",
         "owner": "0.27.0",
-        "rationale": "AES-128 and AES-256 remain future first-party implementations with architecture-specific review gates.",
+        "rationale": "The full AES family remains future work. A development-only portable AES-128 block implementation now has typed clearing key/output owners and bounded vector, proof, misuse, dynamic and emitted cleanup checks. AES-192/256, modes, acceleration, side-channel qualification and independent review are not admitted by that partial scope; see docs/assurance/aes128-development.md.",
         "sources": ["nist:NIST.FIPS.197-upd1.pdf"],
         "test_target": "tests/surface/primitives.rs#aes"
       },

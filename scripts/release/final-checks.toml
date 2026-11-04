@@ -1,22 +1,22 @@
-# Finite HKDF development-candidate gate. Verification campaigns stay separate.
+# Finite AES-128 development-candidate gate. Verification campaigns stay separate.
 # No crates.io publication is selected for this internal milestone.
 schema = 1
-version = "0.26.1"
-scope = "Modern/legacy HKDF multipart info, packaged public API acceptance, license completeness and candidate metadata. Owner-supplied scoped pentest/retest recorded; no historical evidence-freshness gate or implicit dynamic/proof/timing campaign."
-ci_checks = ["hkdf-tests","hkdf-lint","hkdf-format","facade-integration","hkdf-owner-contract","hkdf-proof-adapter","hkdf-timing-parser","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
+version = "0.27.0"
+scope = "Portable AES-128 blocks and ownership, bounded downstream consumers, retained modern/legacy HKDF compatibility, registry and candidate metadata. Scoped pentest/retest required before release authorization; no historical evidence-freshness gate or implicit dynamic/proof/timing/compiler-matrix campaign."
+ci_checks = ["crypto-tests","crypto-lint","crypto-format","facade-integration","hkdf-owner-contract","aes-owner-contract","aes-dataflow-regressions","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
 
 [[checks]]
-id = "hkdf-tests"
+id = "crypto-tests"
 command = ["cargo","test","--locked","-p","brynja-crypto","-p","brynja-legacy-hkdf","--no-default-features"]
 timeout_seconds = 300
 
 [[checks]]
-id = "hkdf-lint"
+id = "crypto-lint"
 command = ["cargo","clippy","--locked","-p","brynja-crypto","-p","brynja-legacy-hkdf","--no-default-features","--all-targets","--no-deps","--","-D","warnings"]
 timeout_seconds = 300
 
 [[checks]]
-id = "hkdf-format"
+id = "crypto-format"
 command = ["cargo","fmt","--package","brynja","--package","brynja-crypto","--package","brynja-legacy-hkdf","--check"]
 timeout_seconds = 60
 
@@ -31,13 +31,13 @@ command = ["python3","scripts/cryptography/test-hkdf-owner-contract.py"]
 timeout_seconds = 60
 
 [[checks]]
-id = "hkdf-proof-adapter"
-command = ["python3","scripts/hkdf/test-hkdf-kani.py"]
+id = "aes-owner-contract"
+command = ["python3","scripts/cryptography/test-aes-owner-contract.py"]
 timeout_seconds = 60
 
 [[checks]]
-id = "hkdf-timing-parser"
-command = ["python3","scripts/hkdf/test-hkdf-timing.py"]
+id = "aes-dataflow-regressions"
+command = ["python3","scripts/aes/test-aes-dataflow.py"]
 timeout_seconds = 60
 
 [[checks]]
@@ -108,6 +108,11 @@ timeout_seconds = 120
 [[checks]]
 id = "hkdf-packaged-endpoints"
 command = ["python3","scripts/hkdf/check-hkdf-public-api.py","--family","all"]
+timeout_seconds = 300
+
+[[checks]]
+id = "aes-downstream-endpoints"
+command = ["python3","scripts/aes/check-aes-consumer.py"]
 timeout_seconds = 300
 
 [[checks]]

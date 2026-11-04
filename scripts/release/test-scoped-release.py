@@ -57,19 +57,26 @@ class ScopedRelease(unittest.TestCase):
         with self.assertRaises(ValueError):
             scoped.enabled('garbage')
 
-    def test_hkdf_candidate_gate_is_finite_and_does_not_publish(self):
-        plan = scoped.load('0.26.1')
+    def test_aes_candidate_gate_is_finite_and_does_not_publish(self):
+        plan = scoped.load('0.27.0')
         commands = {check['id']: check['command'] for check in plan['checks']}
-        self.assertEqual(len(commands), 23)
+        self.assertEqual(len(commands), 24)
         self.assertEqual(commands['release-plan'], ['scripts/release/test-release-plan.sh'])
-        self.assertEqual(commands['hkdf-tests'],
+        self.assertEqual(commands['crypto-tests'],
             ['cargo', 'test', '--locked', '-p', 'brynja-crypto', '-p',
              'brynja-legacy-hkdf', '--no-default-features'])
         self.assertEqual(commands['facade-integration'],
             ['cargo', 'check', '--locked', '-p', 'brynja', '--no-default-features'])
         self.assertEqual(set(plan['ci_checks']), set(commands) -
                          {'sbom', 'dependency-policy', 'advisories',
-                          'hkdf-package-runner-tests', 'hkdf-packaged-endpoints'})
+                          'hkdf-package-runner-tests', 'hkdf-packaged-endpoints',
+                          'aes-downstream-endpoints'})
+        self.assertEqual(commands['aes-owner-contract'],
+                         ['python3', 'scripts/cryptography/test-aes-owner-contract.py'])
+        self.assertEqual(commands['aes-dataflow-regressions'],
+                         ['python3', 'scripts/aes/test-aes-dataflow.py'])
+        self.assertEqual(commands['aes-downstream-endpoints'],
+                         ['python3', 'scripts/aes/check-aes-consumer.py'])
         self.assertEqual(commands['hkdf-package-runner-tests'],
                          ['python3', 'scripts/hkdf/test-hkdf-public-api.py'])
         self.assertEqual(commands['hkdf-packaged-endpoints'],
@@ -80,15 +87,49 @@ class ScopedRelease(unittest.TestCase):
             self.assertNotIn('publish', command)
             self.assertNotIn('miri', command)
             self.assertNotIn('kani', command)
+            self.assertNotIn('--matrix', command)
             self.assertFalse(any('run-verification' in arg or 'brynja-verify' in arg
-                                 or 'check-hkdf-timing.py' in arg for arg in command))
+                                 or 'check-hkdf-timing.py' in arg
+                                 or 'check-aes-timing.py' in arg
+                                 or 'check-aes-kani.py' in arg
+                                 or 'check-aes-dataflow.py' in arg for arg in command))
         release = tomllib.loads((scoped.ROOT / 'release-crates.toml').read_text())
-        self.assertEqual(release['release']['version'], '0.26.1')
+        self.assertEqual(release['release']['version'], '0.27.0')
         self.assertEqual(release['release']['stage'], 'internal')
+        self.assertTrue(release['release']['exceptional'])
+        self.assertIn('pentest', release['release']['exception_reason'])
         self.assertFalse(any(row['publish'] for row in release['crates'].values()))
         self.assertIn('brynja-legacy-hkdf', release['crates'])
         order = publisher.PUBLISH_ORDER
         self.assertLess(order.index('brynja-legacy-hmac'), order.index('brynja-legacy-hkdf'))
+
+    def test_aes_ci_endpoints_fetch_before_offline_consumers(self):
+        workflow = (scoped.ROOT / '.github/workflows/ci.yml').read_text()
+        job = workflow.split('\n  aes-public-api:\n', 1)[1].split('\n  hkdf-public-api:', 1)[0]
+
+        def validate(text):
+            fetch = '        run: cargo +1.99.1 fetch --locked\n'
+            consumer = '        run: python3 scripts/aes/check-aes-consumer.py\n'
+            self.assertEqual(text.count(fetch), 1)
+            self.assertEqual(text.count(consumer), 1)
+            self.assertLess(text.index(fetch), text.index('cargo +1.99.1 clippy'))
+            self.assertLess(text.index(fetch), text.index(consumer))
+            self.assertIn('rustup toolchain install 1.90.0 --profile minimal --target thumbv7em-none-eabi', text)
+            self.assertIn('rustup toolchain install 1.99.1 --profile minimal --component rustfmt,clippy --target thumbv7em-none-eabi', text)
+            self.assertIn('run: python3 scripts/aes/test-aes-consumer.py', text)
+            for route in ('direct', 'facade'):
+                self.assertIn(f'--no-default-features --features {route} --all-targets --no-deps -- -D warnings', text)
+            for token in ('--matrix', 'check-aes-timing.py', 'check-aes-kani.py',
+                          'check-aes-dataflow.py', 'brynja-verify', 'continue-on-error'):
+                self.assertNotIn(token, text)
+
+        validate(job)
+        for before, after in [('fetch --locked', 'fetch --locked --offline'),
+                              ('check-aes-consumer.py\n', 'check-aes-consumer.py --matrix\n'),
+                              ('--features facade', '--features direct'),
+                              ('--target thumbv7em-none-eabi', '')]:
+            with self.subTest(before=before), self.assertRaises(AssertionError):
+                validate(job.replace(before, after))
 
     def test_invalid_tag_gate_argument_does_not_enter_historical_campaign(self):
         out = subprocess.run(['bash', 'scripts/tag_gate.sh', 'garbage'], cwd=scoped.ROOT,

@@ -1,5 +1,27 @@
 # Component Verification Status
 
+## AES-128 development scope (v0.27.0, in progress)
+
+`brynja-crypto::aes` provides a development-only portable AES-128 key owner and
+forward/inverse block APIs, plus explicit failure-atomic public ciphertext.
+NIST AES-128 block KATs, an independent OpenSSL comparison, ownership,
+round-boundary faults, exact misuse diagnostics, bounded field/index proofs,
+compiling mutation controls, bounded public-owner emitted Drop dispatch and
+operation-scratch/explicit-clear dispatch, isolated direct/façade consumers
+across fourteen pinned compilers, a bounded synthetic host timing screen,
+six-helper LLVM secret-dataflow and fingerprint-bound helper assembly review,
+MSRV and selected dynamic checks are registered under
+`brynja-verify aes`.
+The source-bound register tracks AES-128 as a development-only variant owner;
+the broader AES-family requirement remains planned. The
+[control mapping](security-controls.md#aes-128-development-contract-v0270)
+and threat model distinguish implemented block operations from future modes,
+key generation, backends and qualification.
+Registration alone is not a pass. The [development contract](assurance/aes128-development.md)
+lists remaining milestone work and the compiler/target limits of those checks.
+There is no whole-program constant-time,
+independent review, full-AES-family, mode or deployment qualification claim.
+
 ## HKDF development scope (v0.26.0)
 
 Modern SHA-2 HKDF/TLS labels in `brynja-crypto` and explicit legacy SHA-1 HKDF

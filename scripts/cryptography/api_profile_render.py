@@ -14,6 +14,7 @@ def render_coverage(register: dict) -> bytes:
         f"- API dimensions per capability: **{len(register['api_dimensions'])}**",
         f"- Current secret owners: **{len(register['current_secret_owners'])}**",
         f"- Registered capability owners: **{len(register['registered_secret_owners'])}**",
+        f"- Development-only variant owners: **{len(register['development_secret_owners'])}**",
         f"- Planned secret owners: **{len(register['planned_secret_owners'])}**", "",
         "## Profile Coverage", "", "| Profile | Capabilities |", "| --- | ---: |",
     ]
@@ -41,5 +42,15 @@ def render_coverage(register: dict) -> bytes:
             for route in profile["routes"]:
                 lines.append(f"| `{owner['capability']}` | `{profile['id']}` | `{route['id']}` | "
                              f"{route['storage']} | {profile['qualification']} |")
-    lines.append("")
+    lines.extend(['', '## Development-only Variant Owners', '',
+                  'These records inventory existing partial implementations. They do not complete',
+                  'their planned algorithm families or grant deployment qualification. Lifecycle',
+                  'and operation scope is explicit in each JSON record; unsupported generation,',
+                  'cancellation, modes and backends are not inferred from a family profile.', '',
+                  '| Variant | Family | Owner | Scope | Qualification |',
+                  '| --- | --- | --- | --- | --- |'])
+    for owner in register['development_secret_owners']:
+        lines.append(f"| {owner['variant']} | `{owner['capability']}` | `{owner['symbol']}` | "
+                     f"{owner['compiler_scope']} | {owner['qualification']} |")
+    lines.append('')
     return "\n".join(lines).encode()

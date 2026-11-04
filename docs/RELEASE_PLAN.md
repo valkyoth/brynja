@@ -5798,7 +5798,34 @@ Exit criteria:
 
 ### v0.27.0 - Complete Portable AES-128
 
-Status: planned
+Status: in progress
+
+Development note: the first portable AES-128 block implementation is present in
+`brynja-crypto::aes`, with caller-backed key/output ownership, operation-local
+schedule destruction, fixed-work table-free field arithmetic, authoritative
+568 NIST block KAT records, independent OpenSSL comparisons, paired misuse
+diagnostics, narrow production arithmetic/index proofs, compiling mutation
+controls, bounded public-owner Drop and operation-scratch/explicit-clear emitted
+dispatch, and round-boundary error/unwind regressions. See
+[the AES-128 development contract](assurance/aes128-development.md).
+The source-bound development-owner register and requirement/control/threat
+mapping now inventory AES-128 without completing the wider AES family.
+Isolated direct/facade checkout consumers exercise six public tests across
+fourteen pinned host compilers in debug/release, plus endpoint no_std Cortex-M
+compilation. A bounded Rust 1.99.1 synthetic host timing screen retains samples
+and fails on alarms; it does not establish constant-time qualification.
+Six portable helpers also have bounded LLVM secret-dataflow checks and explicit
+control/address assembly review on Rust 1.90.0/1.99.1 x86_64 abort/unwind.
+Pinned instruction streams require re-review on change; the inverse helper
+also has a restricted assembly checker. This is not whole-program qualification.
+The AES-128 transformation/vector mapping has been reviewed against the pinned
+FIPS 197 authority; this is not CAVP validation or independent review.
+Packaged AES-family acceptance remains the separate v0.27.2 milestone.
+Internal candidate metadata and a finite final checklist are prepared; the
+owner-requested scoped pentest/retest, clean-candidate final gate and green
+GitHub/CodeQL remain pending. Deployment-specific compiler/target side-channel
+qualification remains separate and is not inferred from this milestone.
+No AES-192/256, backend, mode or TLS work is admitted here.
 
 Plan scope: Implement complete FIPS 197 AES-128 key expansion and forward and inverse block operations with typed keys, official vectors, immediate schedule destruction, portable constant-time code without secret-indexed tables, proofs, emitted-code evidence, and directly usable encrypt/decrypt APIs.
 

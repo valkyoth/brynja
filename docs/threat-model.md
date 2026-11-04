@@ -100,6 +100,42 @@ pure-Rust facade, or optional adapter dependency that enters a core graph.
 
 ## Required Controls
 
+### AES-128 block boundary (v0.27.0 development)
+
+Assets are imported key bytes, the ephemeral expansion schedule, plaintext,
+secret-classified ciphertext, intermediate state and caller-owned destinations.
+Attackers may control all block contents, repeatedly query a reused key, observe
+timing/cache behavior, supply the wrong key width, misuse overlapping storage,
+retain secret output after key destruction, induce error/unwind, or mistake raw
+block encryption for an authenticated message construction. They may also
+confuse AES-128 progress with completion of AES-192/256, CPU admission or FIPS
+validation.
+
+The [AES control mapping](security-controls.md#aes-128-development-contract-v0270)
+binds fixed array sizes, distinct forward/inverse operations, affine clearing
+owners, explicit ciphertext release and operation-local scratch to their actual
+checks. Secret destinations clear on admitted failures; public ciphertext
+destinations are unchanged on failures. Safe borrows prevent overlapping input
+and output and prevent callers from mutating live key/output storage. Ordinary
+Drop and explicit consuming clear delegate to core; caller-created copies do
+not inherit those owners. Round-boundary fault hooks test error/unwind behavior,
+not arbitrary instruction faults, hardware fault attacks or a malicious core
+clearing implementation.
+
+There is no entropy source or key-generation claim, no mode/nonce/padding/MAC,
+no replay handling, no backend dispatch and no cancellation/rekey API. A caller
+chooses secure key material and a reviewed higher-level construction. A
+successful block decrypt is not authentication. Explicit public ciphertext
+authority is an API acknowledgement, not enforcement against a caller that
+deliberately copies bytes obtained through secret exposure.
+
+Table-free fixed-work source and passing vectors do not establish compiled
+constant time. Local adversaries, optimizer changes and final-link transforms
+remain relevant. Cleanup of guarded storage does not imply register/spill,
+caller-copy, cache, swap, crash-dump or physical-memory erasure, and does not
+survive forgotten owners or abort. The development-owner record must preserve
+these limits and must not promote the planned family to a qualified capability.
+
 ### HKDF composition boundary (v0.26.0 development)
 
 HKDF assets are IKM, imported/extracted PRKs, intermediate HMAC outputs and

@@ -38,7 +38,11 @@ class LegacyOwnerTests(unittest.TestCase):
         self.assertEqual(owner['symbol'], 'crates/brynja-mac-hmac/src/engine.rs#Engine')
         self.assertEqual(owner['compatibility_profiles'], [contract.RECORD])
         self.assertEqual(len(register['capabilities']), 135)
-        self.assertEqual(len(register['registered_secret_owners']), 9)
+        self.assertEqual(len(register['registered_secret_owners']), 10)
+        self.assertIn('registered.algorithm.hkdf',
+                      {row['id'] for row in register['registered_secret_owners']})
+        self.assertEqual([row['id'] for row in register['development_secret_owners']],
+                         ['development.algorithm.aes128'])
         self.assertEqual({r['id'] for r in self.profiles[0]['routes']},
                          {'portable', 'sha1-execution', 'md5-batch', 'strict_execution', 'macos_resident'})
         self.assertIn('pending', self.profiles[0]['qualification'])

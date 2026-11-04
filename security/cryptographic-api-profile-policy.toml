@@ -1,3 +1,95 @@
+[[reviewed-source]]
+path = "crates/brynja-crypto/src/aes.rs"
+sha256 = "8f92a986305d7a1af96aaee987bc661fa1e9f2c5ec94fa02b96e591df465265f"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto/src/aes/portable.rs"
+sha256 = "3de08af60dfa727e7e38744c6dfb628d05c09c22fb49aa07285691f0e915f878"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto/src/aes/portable/field.rs"
+sha256 = "e9b724c09bdb4a7266e35cdc34077f6434cae1db978636ebe169b922ce2a8dec"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto/src/aes/portable/layout.rs"
+sha256 = "59b2eee78deef0faae98db8b30fafbf750dd624c9e7111025283595f9d349105"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto/src/aes/tests.rs"
+sha256 = "f3e43779cd1b7e4a09bdc80de9eedea244b901a4eb8c9dd43233660687d2d787"
+
+[[reviewed-source]]
+path = "crates/brynja-crypto/tests/aes128.rs"
+sha256 = "ed7e9dc3967d4867eaa1035ea9a10fcc5820d177c1f905997f2c0635d4c7a7b5"
+
+[[reviewed-source]]
+path = "scripts/cryptography/aes_owner_contract.py"
+sha256 = "f417cd6323642576ef4ba7891a07abef172b8211f5fd238b91c034efd973e5c7"
+
+[[reviewed-source]]
+path = "scripts/cryptography/test-aes-owner-contract.py"
+sha256 = "289d3cb7c1b52b0bfa78dbe6bc0dc0de5395348db44d510dc2e08d98075a76b6"
+
+[[reviewed-source]]
+path = "scripts/aes/check-aes-api.py"
+sha256 = "b9efa956a971c0869fb90acb1f97094a1aefc9577c3ce30313508bd9a816def2"
+
+[[reviewed-source]]
+path = "scripts/aes/check-aes-owner-cleanup.py"
+sha256 = "cf8af6a4c7c5a12b332dc44a815ed97b4b0e42cc27eaad9afc6268b86902cfc9"
+
+[[reviewed-source]]
+path = "scripts/aes/check-aes-operation-cleanup.py"
+sha256 = "dcb06d7c17df2a5eef1d91f64515b69e8cc19492bbd1c72a4be4eb51ceb75974"
+
+[[reviewed-source]]
+path = "scripts/aes/test-aes-runners.py"
+sha256 = "7f6a48ccb34fc4b62abe85a207addf028497792f7cc9f428f0a9c40f982f33e9"
+
+[[reviewed-source]]
+path = "assurance/aes-owner-cleanup/Cargo.toml"
+sha256 = "d5cd249ff79900dbc1eb295b430b9ac201c1ee4322a76f31e07bdf690fe30535"
+
+[[reviewed-source]]
+path = "assurance/aes-owner-cleanup/Cargo.lock"
+sha256 = "934160a3ba4b41d62632dbe283fabeb5a9fcdfea045b3339a1376b2a3f31f4ab"
+
+[[reviewed-source]]
+path = "assurance/aes-owner-cleanup/src/lib.rs"
+sha256 = "23143fa7d1f6e3c4e4a6fec3d010701d76b38cf91f9fe78e780ee2af9a219792"
+
+[[development-secret-owner]]
+id = "development.algorithm.aes128"
+capability = "algorithm.aes"
+variant = "AES-128"
+milestone = "0.27.0"
+key_bytes = 16
+block_bytes = 16
+rounds = 10
+symbol = "crates/brynja-crypto/src/aes.rs#Aes128Key"
+output_symbol = "crates/brynja-crypto/src/aes.rs#SecretBlock"
+fields = ["region:caller-backed-owned-secret-region", "local:thread-local-marker"]
+temporaries = ["schedule:Scratch<176>", "state:Scratch<16>", "word:Scratch<4>", "previous:Scratch<16>", "scalar-and-caller-copies:outside-owned-storage"]
+cleanup_model = "delegated-owner-drop-and-explicit-clear-with-operation-local-guards"
+delegated_owners = ["core.owned-secret-region", "core.secret-region-initialization"]
+cleanup_bindings = ["crates/brynja-crypto/src/aes.rs#Aes128Key::clear", "crates/brynja-crypto/src/aes.rs#SecretBlock::clear", "crates/brynja-crypto/src/aes.rs#Scratch::drop"]
+compiler_checks = ["python3 scripts/aes/check-aes-owner-cleanup.py", "python3 scripts/aes/check-aes-operation-cleanup.py"]
+compiler_scope = "bounded-dispatch-x86_64-rust-1.90.0-and-1.99.1-abort-and-unwind"
+qualification = "development-only-family-incomplete-side-channel-and-independent-review-pending"
+storage = "caller-backed-key-and-output-with-fixed-operation-scratch"
+operations = [
+  {api = "Aes128Key::new", output = "typed-secret-key", failure = "clear-admitted-key-storage"},
+  {api = "Aes128Key::encrypt_block", output = "typed-secret-block", failure = "clear-admitted-output"},
+  {api = "Aes128Key::decrypt_block", output = "typed-secret-block", failure = "clear-admitted-output"},
+  {api = "Aes128Key::encrypt_block_public", output = "explicit-public-ciphertext", failure = "unchanged-output"},
+  {api = "Aes128Key::clear", output = "none", failure = "delegated-core-clear"},
+  {api = "SecretBlock::clear", output = "none", failure = "delegated-core-clear"},
+  {api = "SecretBlock::expose", output = "borrowed-secret-bytes", failure = "infallible"},
+]
+lifecycle_scope = ["import", "success", "error", "failed-construction", "recoverable-unwind", "explicit-clear", "drop"]
+excluded_scope = ["AES-192", "AES-256", "key-generation", "streaming-modes", "authentication", "cancellation-api", "rekey-api", "key-export", "backend-selection", "TLS"]
+evidence = ["crates/brynja-crypto/tests/aes128.rs", "crates/brynja-crypto/src/aes/tests.rs", "scripts/aes/check-aes-api.py", "scripts/aes/check-aes-owner-cleanup.py", "scripts/aes/check-aes-operation-cleanup.py", "scripts/cryptography/test-aes-owner-contract.py", "docs/assurance/aes128-development.md"]
+
 [[registered-secret-owner]]
 id = "registered.algorithm.hkdf"
 capability = "algorithm.hkdf"
@@ -203,7 +295,7 @@ cleanup_bindings = ["crates/brynja-legacy-hmac-std/src/macos_resident/mod.rs#Buf
 [schema]
 version = 1
 milestone = "0.24.15"
-surface_register_sha256 = "c565271e2840568147efa426f371284d796269f4d683f8993622cf1264db9152"
+surface_register_sha256 = "d65df549f9169ac16e3b3b2c00145fa6422272b6d54fefb029ecd2b4857401e3"
 
 [api]
 dimensions = [
@@ -1237,7 +1329,7 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "7ffddc868a668bad366109f95cf4c8955f81b2d7d6a1578bee9d4c780926332a"
+sha256 = "e381820243c46851fb9e000fbc20a617670396d4134827f88385442cf6448142"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_operations.py"
@@ -1245,7 +1337,7 @@ sha256 = "7138ad8b49633b9aee89d4d722ff4402ec4562b719e2262361c20afcee15ef9b"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"
-sha256 = "fa8eab5176d28fcbbfca43479fabc8acf08e0b9b513bcd0b977a21b431500800"
+sha256 = "83a5b4bdbe6560229f8bc887deb5c23f7f7e562b4c4537b846b26a02bc87705a"
 
 [[reviewed-source]]
 path = "scripts/cryptography/check-secret-owner-compiler.py"
@@ -1265,7 +1357,7 @@ sha256 = "107bfea74f0dacc422e930332485ac3279a70a087fc74a30d3628196c676779d"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-api-profiles.py"
-sha256 = "1381e43384f95161d38ef4e95def54eda26d4e46a5b6ad3c0e2142df2b899ce7"
+sha256 = "e82bcaf8bd9ed18d717a235ce09e70801460c1ad63a6a09a0e00005c458ccc0e"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-mir-cleanup-flow.py"
@@ -1741,7 +1833,7 @@ sha256 = "3675a288af2a84007cdd20685f53e61c5b32b32bdf4735e4d285bbba4389ab12"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_render.py"
-sha256 = "c7eb30f4d6ae7ece1f6a86e591ee48f649529b25e994c8fcb5c31c89970d5502"
+sha256 = "74c962a957f0542c12718a23657ff45777e59e05fb4a111acd552e0c289dad4f"
 
 [[reviewed-source]]
 path = "scripts/cryptography/hmac_owner_contract.py"
@@ -2585,7 +2677,7 @@ sha256 = "ac0a4d9f9d19b73b40a97a0052363418cbf81863f34f806b74a4aff82e8dddcd"
 
 [[reviewed-source]]
 path = "scripts/cryptography/legacy_hmac_owner_tests.py"
-sha256 = "c7aa73a62d3bc56fedd9c64ebe7fcbf4d1839b835c6d0dae0ccb01eaf00c8e71"
+sha256 = "e2f63c0a3438b95371ea45f6e002c313b855832b8d5ef0c7424c2651dadf786d"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/check-legacy-hmac-cleanup.py"

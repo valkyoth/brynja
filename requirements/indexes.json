@@ -495,11 +495,11 @@
         "nist:NIST.FIPS.197-upd1.pdf"
       ],
       "targets": [
-        "planned-symbol:crates/brynja-crypto/src/aes.rs#Aes"
+        "planned-symbol:crates/brynja-crypto/src/aes.rs#Aes128Key"
       ],
       "tests": [
-        "planned:positive:tests/requirements/crypto_aes.rs#fips197_vectors",
-        "planned:negative:tests/requirements/crypto_aes.rs#invalid_key_sizes"
+        "planned:positive:crates/brynja-crypto/tests/aes128.rs#nist_aesavs_all_four_aes128_ecb_kat_files",
+        "planned:negative:scripts/aes/check-aes-api.py#main"
       ]
     },
     "BRY-REQ-CRYPTO-0006": {
@@ -11293,7 +11293,7 @@
       "legacy-boundary:crates/brynja-legacy/src/lib.rs": [
         "BRY-REQ-LEGACY-0800"
       ],
-      "planned-symbol:crates/brynja-crypto/src/aes.rs#Aes": [
+      "planned-symbol:crates/brynja-crypto/src/aes.rs#Aes128Key": [
         "BRY-REQ-CRYPTO-0005"
       ],
       "planned-symbol:crates/brynja-crypto/src/aes_gcm.rs#AesGcm": [
@@ -11726,6 +11726,9 @@
       "planned:negative:crates/brynja-protocol/tests/wire_policy.rs#inner_content_is_closed_and_heartbeat_is_never_admitted": [
         "BRY-REQ-TLS-0019"
       ],
+      "planned:negative:scripts/aes/check-aes-api.py#main": [
+        "BRY-REQ-CRYPTO-0005"
+      ],
       "planned:negative:scripts/hash/test-final-acceptance.py#main": [
         "BRY-REQ-CRYPTO-0001",
         "BRY-REQ-CRYPTO-0002"
@@ -11784,9 +11787,6 @@
       ],
       "planned:negative:tests/requirements/crypto_aead.rs#chacha20_poly1305_failure_atomicity": [
         "BRY-REQ-CRYPTO-0009"
-      ],
-      "planned:negative:tests/requirements/crypto_aes.rs#invalid_key_sizes": [
-        "BRY-REQ-CRYPTO-0005"
       ],
       "planned:negative:tests/requirements/crypto_chacha.rs#counter_exhaustion": [
         "BRY-REQ-CRYPTO-0008"
@@ -12135,6 +12135,9 @@
       "planned:positive:crates/brynja-core/tests/entropy.rs#contract": [
         "BRY-REQ-ENTROPY-0014"
       ],
+      "planned:positive:crates/brynja-crypto/tests/aes128.rs#nist_aesavs_all_four_aes128_ecb_kat_files": [
+        "BRY-REQ-CRYPTO-0005"
+      ],
       "planned:positive:crates/brynja-crypto/tests/hkdf_derivation.rs#rfc5869_sha256_cases_one_through_three": [
         "BRY-REQ-CRYPTO-0004"
       ],
@@ -12210,9 +12213,6 @@
       ],
       "planned:positive:tests/requirements/crypto_aead.rs#chacha20_poly1305_vectors": [
         "BRY-REQ-CRYPTO-0009"
-      ],
-      "planned:positive:tests/requirements/crypto_aes.rs#fips197_vectors": [
-        "BRY-REQ-CRYPTO-0005"
       ],
       "planned:positive:tests/requirements/crypto_chacha.rs#rfc8439_vectors": [
         "BRY-REQ-CRYPTO-0008"

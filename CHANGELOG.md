@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.27.0 development candidate (unreleased)
+
+- Add portable AES-128 key expansion and forward/inverse single-block APIs,
+  caller-backed clearing key/output owners, operation-local scratch cleanup,
+  and explicitly acknowledged failure-atomic public ciphertext.
+- Add NIST vectors, independent block comparisons, ownership/fault regressions,
+  bounded proofs, Miri/ASan checks, compiler consumers, emitted-code review and
+  a bounded timing screen through `brynja-verify aes`.
+- Keep AES-192/256, modes, authentication, acceleration and TLS integration out
+  of scope. Local observations are not deployment qualification or independent
+  certification; see the AES-128 development contract for exact limitations.
+- Prepare the internal candidate and finite release checklist. Scoped pentest,
+  final gate and exact-candidate GitHub/CodeQL remain pending. No publication
+  is selected and no release approval is recorded.
+
 ## 0.26.0 development (unreleased)
 
 - Add allocation-free HKDF Extract/Expand for six explicit standard SHA-2

@@ -88,17 +88,18 @@ mapping_rationale = "The HKDF semantic surface and registry-backed KDF entries c
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0005"
+revision = 2
 owner = "0.27.0"
 lifecycle = "planned"
 decision_ids = ["algorithm.aes"]
 sources = [{ id = "nist:NIST.FIPS.197-upd1.pdf", authority_role = "current" }]
-statement = "AES-128 and AES-256 implement the pinned updated FIPS 197 transformations without secret-indexed lookup tables."
+statement = "The AES family must implement the pinned updated FIPS 197 transformations for each admitted key size without secret-indexed lookup tables. AES-128 is the v0.27.0 development scope; AES-192/256 remain separate v0.27.1 work."
 invariants = ["constant-time", "resource-bound", "side-channel", "work-bound"]
-target = "crates/brynja-crypto/src/aes.rs#Aes"
-positive_test = "tests/requirements/crypto_aes.rs#fips197_vectors"
-negative_test = "tests/requirements/crypto_aes.rs#invalid_key_sizes"
+target = "crates/brynja-crypto/src/aes.rs#Aes128Key"
+positive_test = "crates/brynja-crypto/tests/aes128.rs#nist_aesavs_all_four_aes128_ecb_kat_files"
+negative_test = "scripts/aes/check-aes-api.py#main"
 work_bound = "Every block uses a fixed round count determined only by the public key size and accepts only complete fixed-size blocks."
-evidence_gap = "Known-answer, differential, emitted-code, cache, branch, and statistical evidence remain unresolved until v0.27.0."
+evidence_gap = "AES-128 development checks cover NIST block vectors, independent differential comparisons, finite/fault tests, paired API diagnostics, bounded field/index proofs and host owner/scratch clearing dispatch. These do not complete the planned AES family or prove full-cipher correctness, constant-time machine code, physical erasure or independent review. The exact FIPS section and ownership mapping is in docs/security-controls.md; side-channel review and downstream acceptance remain open."
 residual = "Architecture-specific acceleration requires separate dispatch and side-channel review and cannot silently replace the portable path."
 mapping_rationale = "The AES semantic surface is directly and exclusively governed by the independently pinned updated FIPS 197 authority."
 

@@ -62,7 +62,7 @@ def profile_paths():
                 # not arbitrary discovery of the whole repository.
                 if name.endswith(('.rs', '.py', '.sh', '.md', '.toml', '.lock')):
                     paths.add(name)
-    for key in ('cleanup', 'current-secret-owner', 'registered-secret-owner'):
+    for key in ('cleanup', 'current-secret-owner', 'registered-secret-owner', 'development-secret-owner'):
         targets(policy[key])
     return sorted(paths)
 

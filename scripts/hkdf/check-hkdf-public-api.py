@@ -30,6 +30,9 @@ REJECT_ENV = ('RUSTFLAGS', 'CARGO_ENCODED_RUSTFLAGS', 'RUSTDOCFLAGS',
               'RUSTC', 'RUSTDOC', 'RUSTC_WRAPPER', 'RUSTC_WORKSPACE_WRAPPER',
               'CARGO_BUILD_TARGET', 'RUSTUP_TOOLCHAIN')
 PACKAGE_INPUTS = ('Cargo.toml', 'LICENSE-APACHE', 'LICENSE-MIT', 'README.md', 'src/**/*.rs')
+AES_FIXTURE_PATTERN = 'tests/fixtures/aes128/*'
+AES_FIXTURES = {'README.md', 'ECBGFSbox128.rsp', 'ECBKeySbox128.rsp',
+                'ECBVarKey128.rsp', 'ECBVarTxt128.rsp'}
 GENERATED_FILES = {'Cargo.toml', 'Cargo.toml.orig', 'Cargo.lock', '.cargo_vcs_info.json'}
 
 
@@ -188,8 +191,12 @@ def package_files(crate):
             raise ValueError('symlinked package input: ' + str(tree))
     if (crate / 'Cargo.toml').is_symlink():
         raise ValueError('symlinked package manifest')
-    includes = tomllib.loads((crate / 'Cargo.toml').read_text())['package'].get('include')
-    if includes not in (list(PACKAGE_INPUTS), [*PACKAGE_INPUTS, 'tests/**/*.rs']):
+    package = tomllib.loads((crate / 'Cargo.toml').read_text())['package']
+    includes = package.get('include')
+    reviewed = [list(PACKAGE_INPUTS), [*PACKAGE_INPUTS, 'tests/**/*.rs']]
+    if package.get('name') == 'brynja-crypto':
+        reviewed.append([*PACKAGE_INPUTS, 'tests/**/*.rs', AES_FIXTURE_PATTERN])
+    if includes not in reviewed:
         raise ValueError('package requires a reviewed explicit include list: ' + str(crate))
     paths = set()
     for pattern in includes:
@@ -199,6 +206,11 @@ def package_files(crate):
                     (source, *source.parents) if p == crate or crate in p.parents)):
                 raise ValueError('package input must be a regular non-symlink file: ' + str(source))
             paths.add(relative)
+    if AES_FIXTURE_PATTERN in includes:
+        actual = {p for p in paths if p.is_relative_to('tests/fixtures/aes128')}
+        expected = {Path('tests/fixtures/aes128') / name for name in AES_FIXTURES}
+        if actual != expected:
+            raise ValueError('AES fixture package population differs from review')
     if not {Path('Cargo.toml'), Path('src/lib.rs')} <= paths:
         raise ValueError('package is missing its manifest or library')
     for required in ('LICENSE-APACHE', 'LICENSE-MIT', 'README.md'):

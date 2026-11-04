@@ -35,8 +35,12 @@
 //! selection. A bounded borrowed DER reader exposes canonical framing and
 //! values without schema-driven ASN.1 or X.509 semantics. This crate does not
 //! provide a TLS connection API, provider effect, or any cryptographic
-//! algorithm outside the hash/MAC/KDF surfaces described above and the explicit
-//! `general-sha512-t` extension. Default-off family execution and batch features
+//! algorithm outside the hash/MAC/KDF surfaces described above, the explicit
+//! `general-sha512-t` extension, and the development-only AES-128 block API
+//! under [`crypto::aes`]. AES-128 uses caller-backed clearing key/output owners;
+//! it is not a mode, authenticated encryption or TLS integration, and its
+//! compiler/side-channel qualification and independent review remain pending.
+//! Default-off family execution and batch features
 //! forward existing leaf APIs under [`crypto::sha2`], [`crypto::sha3`],
 //! [`crypto::kmac`], [`crypto::tuplehash`] and [`crypto::parallelhash`]. They do
 //! not enable hosted detection or change portable defaults. Cargo features do

@@ -4,6 +4,7 @@
 import legacy_md5_owner_contract, legacy_sha1_owner_contract
 import hmac_owner_contract
 import hkdf_owner_contract
+import aes_owner_contract
 from api_profile_operations import OPERATION_CONTRACTS
 
 # The direct-destructor MIR checker intentionally handles only the original
@@ -478,3 +479,4 @@ for legacy_contract in (legacy_md5_owner_contract, legacy_sha1_owner_contract):
 
 REVIEWED_SOURCE_PATHS.update(hmac_owner_contract.reviewed_paths())
 REVIEWED_SOURCE_PATHS.update(hkdf_owner_contract.REVIEWED_PATHS)
+REVIEWED_SOURCE_PATHS.update(aes_owner_contract.REVIEWED_PATHS)

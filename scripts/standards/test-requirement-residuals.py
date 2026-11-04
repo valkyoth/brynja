@@ -163,8 +163,9 @@ def test_october_errata_statuses_keep_verified_held_and_rejected_distinct() -> N
 def test_current_bidirectional_closure() -> None:
     artifact = closure_build()
     assert len(artifact["sources"]) == 131
-    assert len(artifact["plans"]) == 2158
+    assert len(artifact["plans"]) == 2159
     plans = {plan["version"]: plan for plan in artifact["plans"]}
+    assert plans["0.26.1"]["title"] == "HKDF Public API Usability Acceptance"
     for patch in range(30, 56):
         assert plans[f"0.24.{patch}"]["boundary"]["class"] == "planned-authority-admission"
     # Preserve released platform stops and all four remaining backfill tasks;

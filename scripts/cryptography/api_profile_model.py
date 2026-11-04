@@ -266,7 +266,7 @@ def validate_policy(policy: dict, surfaces: dict, root: Path = ROOT) -> dict[str
         "schema", "api", "cleanup", "lifecycle", "output", "residual",
         "rejection", "profile", "secret-template", "assignment",
         "completion-overrides", "secret-owner-overrides",
-        "current-secret-owner", "registered-secret-owner", "reviewed-source",
+        "current-secret-owner", "registered-secret-owner", "development-secret-owner", "reviewed-source",
     }
     exact_keys(policy, expected_top, "API-profile policy")
     schema = policy["schema"]
@@ -382,6 +382,21 @@ def validate_secret_policy(
             validate_target(root, target, f"registered secret owner {owner['id']} binding")
     if not set(contracts.COMPOSED_OWNER_CONTRACTS) <= {row.get("id") for row in registered}:
         fail("composed secret-owner inventory is incomplete")
+    development = policy['development-secret-owner']
+    if len(development) != 1 or development[0].get('id') != contracts.aes_owner_contract.ID:
+        fail('development secret-owner inventory is incomplete or duplicated')
+    owner = development[0]
+    try:
+        contracts.aes_owner_contract.validate(root, owner, policy['current-secret-owner'])
+    except (ValueError, rust_contract.RustContractError) as error:
+        fail(str(error))
+    if owner['capability'] in capabilities:
+        fail('development owner cannot replace a registered capability owner')
+    if semantic is not None and (owner['capability'] not in semantic or
+                                semantic[owner['capability']]['disposition'] != 'future-work'):
+        fail('development owner cannot promote the AES-family disposition')
+    for target in [owner['symbol'], owner['output_symbol'], *owner['cleanup_bindings'], *owner['evidence']]:
+        validate_target(root, target, 'development secret-owner target')
     reviews = policy["reviewed-source"]
     paths = [review.get("path") for review in reviews]
     if set(paths) != contracts.REVIEWED_SOURCE_PATHS or len(paths) != len(set(paths)):
@@ -477,6 +492,9 @@ def build_register(policy: dict, surfaces: dict, root: Path = ROOT) -> dict:
         "capabilities": capabilities,
         "cleanup": policy["cleanup"],
         "current_secret_owners": sorted(current_owners, key=lambda row: row["id"]),
+        # Partial variants never remove or fulfill their planned family owner.
+        "development_secret_owners": [dict(owner, state='development', residual_risks=list(RESIDUALS))
+                                      for owner in policy['development-secret-owner']],
         "explicit_rejections": list(REJECTIONS),
         "planned_secret_owners": sorted(planned_owners, key=lambda row: row["id"]),
         "registered_secret_owners": sorted(registered_owners, key=lambda row: row["id"]),

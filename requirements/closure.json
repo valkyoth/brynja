@@ -1492,7 +1492,7 @@
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0005"
       ],
-      "scope": "Implement complete FIPS 197 AES-128 key expansion and forward and inverse block operations with typed keys, official vectors, immediate schedule destruction, portable constant-time code without secret-indexed tables, proofs, emitted-code evidence, and directly usable encrypt/decrypt APIs.",
+      "scope": "Implement complete FIPS 197 AES-128 key expansion and forward and inverse block operations with typed keys, official vectors, an ephemeral schedule by default and an optional caller-owned cached schedule cleared on clear/Drop, portable constant-time code without secret-indexed tables, proofs, emitted-code evidence, and directly usable encrypt/decrypt APIs.",
       "source_ids": [
         "nist:NIST.FIPS.180-4.pdf",
         "nist:NIST.FIPS.197-upd1.pdf",
@@ -1525,7 +1525,7 @@
         "rationale": "New explicit portable public acceptance gates freeze usable output before acceleration or composition; algorithm authority remains with its implementation owner."
       },
       "requirement_ids": [],
-      "scope": "Before v0.27.3, freeze a package-external forced-portable fixture for the currently implemented AES-128 AES-192 And AES-256 profiles, exercising all supported parameters, real consumer operations, boundaries, typed secret outputs and cleanup; backend work may not begin until this exact portable acceptance passes.",
+      "scope": "Before v0.27.3, freeze a package-external forced-portable fixture for the currently implemented AES-128 AES-192 And AES-256 profiles, exercising all supported parameters, real consumer operations, boundaries, typed secret outputs and cleanup; backend work may not begin until this exact portable acceptance passes. Require explicit compiler/target/profile qualification, final-linked/LTO checks, fixed-versus-random timing and AESAVS Monte Carlo and multiblock campaigns.",
       "source_ids": [],
       "title": "AES-128 AES-192 And AES-256 Portable Public API Acceptance",
       "version": "0.27.2"
@@ -1536,7 +1536,7 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Add isolated AES-128, AES-192, and AES-256 encrypt and decrypt backends for exact x86_64 AES-NI or VAES bundles and exact AArch64 AES bundles, with AMD, observed-feature AWS Intel, Apple M2, and AWS Arm native evidence; retain identical KAT, quarantine, no_std static selection, opt-in std selection, side-channel, and destruction semantics.",
+      "scope": "Add isolated AES-128, AES-192, and AES-256 encrypt and decrypt backends for exact x86_64 AES-NI or VAES bundles and exact AArch64 AES bundles, with AMD, observed-feature AWS Intel, Apple M2, and AWS Arm native evidence; retain identical KAT, quarantine, no_std static selection, opt-in std selection, side-channel, and destruction semantics. Extend the portable emitted-code, fixed-versus-random timing and AESAVS acceptance to every admitted backend and named native configuration.",
       "source_ids": [],
       "title": "Complete AES x86_64 And AArch64 Acceleration",
       "version": "0.27.3"
@@ -1547,7 +1547,7 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Add RISC-V AES-128, AES-192, and AES-256 encrypt and decrypt backends for exact ratified scalar-crypto or vector-crypto bundles only when the compiler and observed deployment ISA can express them safely; require official vectors, scalar differentials, forced dispatch, generated-code review, and qualifying native evidence before admission.",
+      "scope": "Add RISC-V AES-128, AES-192, and AES-256 encrypt and decrypt backends for exact ratified scalar-crypto or vector-crypto bundles only when the compiler and observed deployment ISA can express them safely; require official vectors, scalar differentials, forced dispatch, generated-code review, and qualifying native evidence before admission. Extend the portable emitted-code, fixed-versus-random timing and AESAVS acceptance to every admitted bundle; compile-only or emulated results are not native qualification.",
       "source_ids": [],
       "title": "Complete AES RISC-V Acceleration Candidate",
       "version": "0.27.4"
@@ -1558,10 +1558,32 @@
         "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
       },
       "requirement_ids": [],
-      "scope": "Close the AES primitive chain with a packaged public consumer that performs forward and inverse known-answer operations for all three key widths through scalar and every admitted backend, verifies round trips and schedule cleanup, rejects wrong key sizes and unavailable forced paths, and preserves no_std, package, and architecture isolation.",
+      "scope": "Close the AES primitive chain with a packaged public consumer that performs forward and inverse known-answer operations for all three key widths through scalar and every admitted backend, verifies round trips and schedule cleanup, rejects wrong key sizes and unavailable forced paths, and preserves no_std, package, and architecture isolation. Close the compiler/target/profile qualification matrix and AESAVS campaigns for every admitted implementation, with explicit physical-protection residuals and no mandatory HSM.",
       "source_ids": [],
       "title": "AES Public API Usability Acceptance",
       "version": "0.27.5"
+    },
+    {
+      "boundary": {
+        "class": "planned-authority-admission",
+        "rationale": "The optional separately packaged PKCS#11 adapter must admit an exact PKCS#11 revision, mechanism and key-attribute requirements, dependency/FFI policy and device/session lifecycle contracts before implementation. The existing neutral provider API is not device support, attestation or qualification evidence."
+      },
+      "requirement_ids": [],
+      "scope": "After v0.27.5, implement an optional separately packaged PKCS#11 external-device adapter over the reusable external-key provider contracts, initially limited to explicit AES-128 block operations with opaque non-exportable key bindings, session/login management, exact mechanism and usage admission, fallible owned-key destruction and no software fallback; keep vendor dependencies and FFI outside the core workspace and require explicit dependency/FFI review plus software-token integration and named-device acceptance before hardware support claims.",
+      "source_ids": [],
+      "title": "Optional PKCS11 External-Key Adapter",
+      "version": "0.27.6"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "The optional fault-detecting AES profile requires a reviewed bounded fault model, independently structured redundancy, schedule and control-flow integrity, output withholding and permanent failure tests. Existing AES authority does not establish physical resistance; named deployment evidence remains required for physical claims."
+      },
+      "requirement_ids": [],
+      "scope": "After v0.27.5, implement a default-off fault-detecting AES profile for all three key widths and both block directions under an explicit bounded fault model, with independently structured redundant computation, key-schedule integrity checks, withheld output and terminal failure on detected faults; retain ordinary portable APIs, require no HSM or PKCS#11 adapter, and make no physical fault-resistance claim without named-hardware evidence.",
+      "source_ids": [],
+      "title": "Optional Fault-Detecting AES Profile",
+      "version": "0.27.7"
     },
     {
       "boundary": null,

@@ -3,6 +3,16 @@ milestone = "0.3.5"
 reviewed_at = "2026-07-30"
 
 [[plan_boundary]]
+class = "planned-authority-admission"
+versions = ["0.27.6"]
+rationale = "The optional separately packaged PKCS#11 adapter must admit an exact PKCS#11 revision, mechanism and key-attribute requirements, dependency/FFI policy and device/session lifecycle contracts before implementation. The existing neutral provider API is not device support, attestation or qualification evidence."
+
+[[plan_boundary]]
+class = "internal-security-design"
+versions = ["0.27.7"]
+rationale = "The optional fault-detecting AES profile requires a reviewed bounded fault model, independently structured redundancy, schedule and control-flow integrity, output withholding and permanent failure tests. Existing AES authority does not establish physical resistance; named deployment evidence remains required for physical claims."
+
+[[plan_boundary]]
 class = "repository-governance"
 versions = ["0.1.0", "0.2.0", "0.4.0", "0.25.3"]
 rationale = "These repository, release, and assurance-harness milestones are governed by local security invariants and tooling policy rather than a protocol authority."

@@ -163,7 +163,7 @@ def test_october_errata_statuses_keep_verified_held_and_rejected_distinct() -> N
 def test_current_bidirectional_closure() -> None:
     artifact = closure_build()
     assert len(artifact["sources"]) == 131
-    assert len(artifact["plans"]) == 2159
+    assert len(artifact["plans"]) == 2161
     plans = {plan["version"]: plan for plan in artifact["plans"]}
     assert plans["0.26.1"]["title"] == "HKDF Public API Usability Acceptance"
     for patch in range(30, 56):
@@ -391,6 +391,25 @@ def test_orphan_plan_fails() -> None:
     )
     target["versions"].remove("0.1.0")
     assert_fails("plan-to-source boundary differs", closure_build, broken)
+
+
+def test_optional_provider_and_fault_plans_have_explicit_boundaries() -> None:
+    claims = closure.read_claims()
+    for version, classification in (
+        ("0.27.6", "planned-authority-admission"),
+        ("0.27.7", "internal-security-design"),
+    ):
+        matches = [
+            item for item in claims["plan_boundary"]
+            if version in item["versions"]
+        ]
+        assert len(matches) == 1
+        assert matches[0]["class"] == classification
+        broken = copy.deepcopy(claims)
+        for item in broken["plan_boundary"]:
+            if version in item["versions"]:
+                item["versions"].remove(version)
+        assert_fails("plan-to-source boundary differs", closure_build, broken)
 
 
 def test_unbound_fips_plan_fails() -> None:

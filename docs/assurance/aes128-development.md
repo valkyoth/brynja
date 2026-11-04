@@ -725,10 +725,11 @@ mock/reference observations, never evidence of actual HSM behavior.
 
 The facade, dependent fixture pins/locks, release inventory and SBOM now identify
 0.27.0. Supporting component versions remain unchanged and no crate is selected
-for publication. The finite final checklist has 24 entries; routine component
-CI selects 18, with separate bounded AES and packaged HKDF consumer jobs. Deep
-verification remains explicit and separate. The owner's scoped pentest is
-required, not recorded as passed.
+for publication. The finite final checklist has 25 entries; routine component
+CI selects 19, with separate bounded AES and packaged HKDF consumer jobs. Deep
+verification remains explicit and separate. The owner's scoped review chain
+and focused provider retest are recorded as PASS in
+[the release report](../../security/pentest/v0.27.0.md).
 
 Preparation caught two integration issues: old exact facade fixture pins and
 the packaged HKDF runner's rejection of the composition crate's new AES vector
@@ -747,5 +748,6 @@ diagnostic negatives and Cortex-M checks.
 These working-tree checks are not the clean-commit final release gate. Earlier
 AES campaign executions retain their original input fingerprints and dates;
 version/lock/document changes can make those records outdated. No historical
-result is promoted or relabeled as a new execution. Candidate commit, scoped
-pentest/retest, final gate and exact-commit GitHub/CodeQL are still pending.
+result is promoted or relabeled as a new execution. The code candidate and
+scoped pentest/retest are now recorded; final gate and exact-commit GitHub/CodeQL
+remain separate requirements. Physical deployment qualification is not implied.

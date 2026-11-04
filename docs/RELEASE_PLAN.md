@@ -5821,9 +5821,10 @@ also has a restricted assembly checker. This is not whole-program qualification.
 The AES-128 transformation/vector mapping has been reviewed against the pinned
 FIPS 197 authority; this is not CAVP validation or independent review.
 Packaged AES-family acceptance remains the separate v0.27.2 milestone.
-Internal candidate metadata and a finite final checklist are prepared; the
-owner-requested scoped pentest/retest, clean-candidate final gate and green
-GitHub/CodeQL remain pending. Deployment-specific compiler/target side-channel
+Internal candidate metadata and a finite final checklist are prepared. The
+owner-supplied scoped pentest/retest is recorded in
+[the release report](../security/pentest/v0.27.0.md); clean-candidate final gate
+and green GitHub/CodeQL remain separate requirements. Compiler/target side-channel
 qualification remains separate and is not inferred from this milestone.
 The owner-authorized follow-up adds an optional caller-owned clearing cached
 schedule and independently opted-in external-key provider contracts. The latter

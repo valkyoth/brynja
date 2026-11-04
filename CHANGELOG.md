@@ -11,9 +11,9 @@
 - Keep AES-192/256, modes, authentication, acceleration and TLS integration out
   of scope. Local observations are not deployment qualification or independent
   certification; see the AES-128 development contract for exact limitations.
-- Prepare the internal candidate and finite release checklist. Scoped pentest,
-  final gate and exact-candidate GitHub/CodeQL remain pending. No publication
-  is selected and no release approval is recorded.
+- Record the owner-supplied scoped pentest/retest PASS, including removal of the
+  invalid provider echo filter. Final gate and exact-candidate GitHub/CodeQL
+  remain separate requirements. No publication or signed-tag approval is selected.
 
 ## 0.26.0 development (unreleased)
 

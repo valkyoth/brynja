@@ -3,10 +3,11 @@
 Raw AES requires explicit `hazmat-aes-block` opt-in on `brynja-crypto` or
 `brynja`; it is absent from defaults. Software-only use requires no HSM.
 See the [pentest dispositions](../docs/assurance/aes128-pentest-remediation.md)
-for remaining platform limits and the separate future provider design.
+for remaining platform limits and the optional provider integration contract.
 
-Internal development candidate; no crates.io publication is selected. Scoped
-pentest/retest, final release gate and exact-candidate GitHub/CodeQL are pending.
+Internal development candidate; no crates.io publication is selected. The
+[owner-supplied scoped retest](../security/pentest/v0.27.0.md) is PASS. Final
+release gate and exact-candidate GitHub/CodeQL remain separate requirements.
 
 ## Implemented boundary
 
@@ -15,6 +16,9 @@ complete AES-128 key expansion and encrypt/decrypt operations on exact 16-byte
 blocks. Secret output is the default. Public encryption requires an explicit
 `PublicCiphertext` acknowledgement and commits only after successful completion.
 Key/output owners and operation scratch use the existing clearing foundation.
+An optional caller-owned `Aes128ExpandedKey` caches the clearing schedule.
+The separate default-off `external-key-provider` feature exposes trusted-adapter
+contracts, not a concrete device driver or a hardware qualification claim.
 
 This is a block primitive, not an encryption protocol. It supplies no mode,
 authentication, nonce handling, padding, AES-192/256, acceleration or TLS
@@ -50,10 +54,12 @@ exact five-file AES fixture set in addition to its existing include forms.
 Regression controls reject missing, extra, symlinked or altered archived
 fixtures; this packaging compatibility fix is not AES-family acceptance.
 
-The owner-requested scoped pentest must review the delta from v0.26.1 through
-the committed candidate, including the new primitive, owners, verification
-tooling and CI/release changes. No PASS report has been created for this work.
-After accepted review and any tested remediation: run the finite final gate on
+The committed review report records the owner-supplied review chain and focused
+retest of the provider correction at `293388d5`. The previous echo filter is
+removed: valid AES output values are not heuristically rejected. Physical
+side-channel and fault qualification remain deployment restrictions, not a
+mandatory HSM or an invented military build profile.
+After accepted review and tested remediation: run the finite final gate on
 the clean committed candidate, obtain green exact-commit GitHub/CodeQL, and
 request explicit signed-tag approval. These notes authorize none of those
 external actions and do not claim independent security approval.

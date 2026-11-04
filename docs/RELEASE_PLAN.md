@@ -5833,7 +5833,7 @@ PKCS#11 adapter is planned at v0.27.6 and does not block this candidate.
 No AES-192/256, accelerated backend, executable device adapter, mode or TLS work
 is admitted here.
 
-Plan scope: Implement complete FIPS 197 AES-128 key expansion and forward and inverse block operations with typed keys, official vectors, immediate schedule destruction, portable constant-time code without secret-indexed tables, proofs, emitted-code evidence, and directly usable encrypt/decrypt APIs.
+Plan scope: Implement complete FIPS 197 AES-128 key expansion and forward and inverse block operations with typed keys, official vectors, an ephemeral schedule by default and an optional caller-owned cached schedule cleared on clear/Drop, portable constant-time code without secret-indexed tables, proofs, emitted-code evidence, and directly usable encrypt/decrypt APIs.
 
 Goal: close the **Complete Portable AES-128** review unit as a complete named capability
 without silently admitting adjacent algorithms, acceleration, or consumer scope.
@@ -5851,9 +5851,15 @@ Deliverables:
 
 Verification:
 
-- run every applicable authoritative vector, boundary, streaming or partition,
-  malformed-input, exhaustion, misuse, failure-atomicity, and scalar
-  differential campaign named by the Plan scope;
+- require the 568 NIST block KATs, full AES-128 schedule vector, exhaustive
+  byte substitution/inverse checks, 4096 independent differential cases per
+  software key owner, ownership/admission misuse and cleanup/failure tests;
+  AESAVS Monte Carlo and multiblock campaigns are explicitly assigned to
+  v0.27.2, not required or claimed completed by this development milestone;
+- retain the bounded x86_64 helper/wrapper and clearing checks and existing
+  diagnostic timing screen. Portable AArch64 emitted-code qualification,
+  final-linked/LTO review and stronger fixed-versus-random timing are assigned
+  to v0.27.2, with accelerated-backend qualification at v0.27.3 and v0.27.4;
 - run applicable Kani, emitted-code, constant-time, zeroization, native-backend,
   package-external, no_std, and forced-failure evidence without broadening the
   claim beyond what was measured;
@@ -5911,7 +5917,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Before v0.27.3, freeze a package-external forced-portable fixture for the currently implemented AES-128 AES-192 And AES-256 profiles, exercising all supported parameters, real consumer operations, boundaries, typed secret outputs and cleanup; backend work may not begin until this exact portable acceptance passes.
+Plan scope: Before v0.27.3, freeze a package-external forced-portable fixture for the currently implemented AES-128 AES-192 And AES-256 profiles, exercising all supported parameters, real consumer operations, boundaries, typed secret outputs and cleanup; backend work may not begin until this exact portable acceptance passes. Require explicit compiler/target/profile qualification, final-linked/LTO checks, fixed-versus-random timing and AESAVS Monte Carlo and multiblock campaigns.
 
 Goal: close public usability before a dependent implementation can consume the capability.
 
@@ -5921,22 +5927,46 @@ Deliverables:
 - Cover one-shot and incremental use where applicable, all supported directions, parameter and length bounds, misuse and required failure atomicity; keep later profiles explicitly absent.
 - Bind private-state and typed-output cleanup, source/parameter identities, no_std package graphs and compiled README examples to the exact accepted candidate.
 
+- Publish an explicit compiler/target/profile qualification matrix for portable
+  AES on x86_64 and AArch64, covering expansion, encryption, decryption, cached
+  and operation-local schedules, public wrappers and cleanup. Include
+  representative final-linked/LTO consumers, optimization and panic profiles;
+  compile-only targets remain visibly unqualified for side-channel claims.
+- Register these bounded campaigns in `brynja-verify`, preserving scoped input
+  identities and failure artifacts independently of the finite release gate.
+
 Verification:
 
 - Run known-answer and independent differential/property cases through packaged public operations, including empty/boundary/hostile inputs and cross-profile substitution failures.
 - Exercise cleanup on success/error/cancellation/unwind/Drop and applicable Miri, sanitizer, proof and emitted-code checks; disclose residuals instead of claiming register erasure.
 - Pass MSRV/latest compiler, no-default/all-feature, package, documentation and dependency-isolation gates; obtain any exceptional pentest triggered by the change and fix its findings.
+- Review emitted code for secret-dependent branches and addresses, cleanup
+  dispatch and residual secret copies/spills; changes to qualified artifacts
+  require review and invalidate affected observations. This is not a guarantee
+  of complete spill/register erasure or every downstream compiler build.
+- Run fixed-versus-random timing experiments on named native hardware,
+  separately measuring expansion, encryption and decryption with cached and
+  operation-local schedules. Predeclare sample counts, input classes, noise
+  handling and alarm thresholds; retain alarms with no retries-to-pass.
+  Passing timing screens are not proof of constant time or power/EM resistance.
+- Run AESAVS Monte Carlo and multiblock campaigns for all three key widths and
+  both directions, with pinned authoritative inputs/expected results and
+  documented raw-block harness semantics, not a newly exposed mode API.
+  These correctness campaigns do not establish physical fault resistance.
 
 Exit criteria:
 
 - The frozen portable fixture passes before dependent or accelerated execution; later evidence must replay it unchanged or invalidate affected results after a fix.
+- The qualification matrix, stronger timing assessment and AESAVS campaigns
+  are completed for the declared acceptance configurations; missing evidence
+  remains unfinished, not a pass inferred from existing KATs or compile checks.
 - `v0.27.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.27.3 - Complete AES x86_64 And AArch64 Acceleration
 
 Status: planned
 
-Plan scope: Add isolated AES-128, AES-192, and AES-256 encrypt and decrypt backends for exact x86_64 AES-NI or VAES bundles and exact AArch64 AES bundles, with AMD, observed-feature AWS Intel, Apple M2, and AWS Arm native evidence; retain identical KAT, quarantine, no_std static selection, opt-in std selection, side-channel, and destruction semantics.
+Plan scope: Add isolated AES-128, AES-192, and AES-256 encrypt and decrypt backends for exact x86_64 AES-NI or VAES bundles and exact AArch64 AES bundles, with AMD, observed-feature AWS Intel, Apple M2, and AWS Arm native evidence; retain identical KAT, quarantine, no_std static selection, opt-in std selection, side-channel, and destruction semantics. Extend the portable emitted-code, fixed-versus-random timing and AESAVS acceptance to every admitted backend and named native configuration.
 
 Goal: close the **Complete AES x86_64 And AArch64 Acceleration** review unit as a complete named capability
 without silently admitting adjacent algorithms, acceleration, or consumer scope.
@@ -5954,6 +5984,14 @@ Deliverables:
 
 Verification:
 
+- Replay the v0.27.2 emitted-code and fixed-versus-random timing acceptance
+  for every admitted backend, covering expansion, both block directions,
+  cached and operation-local schedules, dispatch and cleanup. Bind evidence
+  to exact compiler/target/profile combinations and named native hardware,
+  including representative final-linked/LTO consumers and no retries-to-pass.
+- Replay AESAVS Monte Carlo and multiblock campaigns for all three key widths
+  through forced backend selection. Hardware AES instructions alone do not
+  qualify surrounding code or demonstrate power/EM or physical fault resistance.
 - run every applicable authoritative vector, boundary, streaming or partition,
   malformed-input, exhaustion, misuse, failure-atomicity, and scalar
   differential campaign named by the Plan scope;
@@ -5975,7 +6013,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Add RISC-V AES-128, AES-192, and AES-256 encrypt and decrypt backends for exact ratified scalar-crypto or vector-crypto bundles only when the compiler and observed deployment ISA can express them safely; require official vectors, scalar differentials, forced dispatch, generated-code review, and qualifying native evidence before admission.
+Plan scope: Add RISC-V AES-128, AES-192, and AES-256 encrypt and decrypt backends for exact ratified scalar-crypto or vector-crypto bundles only when the compiler and observed deployment ISA can express them safely; require official vectors, scalar differentials, forced dispatch, generated-code review, and qualifying native evidence before admission. Extend the portable emitted-code, fixed-versus-random timing and AESAVS acceptance to every admitted bundle; compile-only or emulated results are not native qualification.
 
 Goal: close the **Complete AES RISC-V Acceleration Candidate** review unit as a complete named capability
 without silently admitting adjacent algorithms, acceleration, or consumer scope.
@@ -5993,6 +6031,14 @@ Deliverables:
 
 Verification:
 
+- Replay the v0.27.2 emitted-code and fixed-versus-random timing acceptance
+  for each admitted RISC-V bundle, covering expansion, both block directions,
+  cached and operation-local schedules, dispatch and cleanup. Bind evidence
+  to exact compiler/target/profile combinations and named native hardware,
+  including representative final-linked/LTO consumers and no retries-to-pass.
+- Replay AESAVS Monte Carlo and multiblock campaigns for all three key widths
+  through forced backend selection. Emulators and compile checks are not native
+  leakage qualification; unavailable hardware leaves the backend unadmitted.
 - run every applicable authoritative vector, boundary, streaming or partition,
   malformed-input, exhaustion, misuse, failure-atomicity, and scalar
   differential campaign named by the Plan scope;
@@ -6014,7 +6060,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Close the AES primitive chain with a packaged public consumer that performs forward and inverse known-answer operations for all three key widths through scalar and every admitted backend, verifies round trips and schedule cleanup, rejects wrong key sizes and unavailable forced paths, and preserves no_std, package, and architecture isolation.
+Plan scope: Close the AES primitive chain with a packaged public consumer that performs forward and inverse known-answer operations for all three key widths through scalar and every admitted backend, verifies round trips and schedule cleanup, rejects wrong key sizes and unavailable forced paths, and preserves no_std, package, and architecture isolation. Close the compiler/target/profile qualification matrix and AESAVS campaigns for every admitted implementation, with explicit physical-protection residuals and no mandatory HSM.
 
 Goal: close the **AES Public API Usability Acceptance** review unit as a complete named capability
 without silently admitting adjacent algorithms, acceleration, or consumer scope.
@@ -6032,6 +6078,17 @@ Deliverables:
 
 Verification:
 
+- Close the qualification matrix from v0.27.2 through v0.27.4: require recorded
+  emitted-code and fixed-versus-random timing acceptance for each admitted
+  compiler/target/profile and backend, cached and operation-local schedules,
+  with representative final-linked/LTO consumers and no retries-to-pass.
+- Require AESAVS Monte Carlo and multiblock campaigns for all three key widths
+  and both directions through packaged portable and forced-backend operations.
+  Preserve scoped reuse of unchanged evidence; do not rerun whole campaigns
+  merely to tag a release or confuse correctness with physical qualification.
+- Publish explicit residuals: no universal spill/register erasure, power/EM
+  resistance or physical fault resistance. HSM use remains optional; ordinary
+  software consumers do not depend on v0.27.6 or v0.27.7.
 - run every applicable authoritative vector, boundary, streaming or partition,
   malformed-input, exhaustion, misuse, failure-atomicity, and scalar
   differential campaign named by the Plan scope;
@@ -6074,6 +6131,12 @@ Deliverables:
   removal, stale/reused handles, partial output and timeout/uncertain completion
   behavior; keep destruction explicit and fallible, never infer it from Drop,
   and prohibit silent fallback, key export and automatic uncertain retries;
+- assess a distinct rejected-before-execution outcome before freezing the
+  adapter API. An error name such as busy/rejected is not proof that work never
+  started; require a reviewed adapter contract and evidence that no operation,
+  output or device state change occurred and the binding remains valid. Preserve
+  quarantine for uncertain outcomes, malformed output and panics. Retry, if
+  admitted, must be explicit and bounded, never automatic after uncertainty;
 - keep initial operations limited to the existing AES-128 contract; later MAC,
   signing, agreement, derive-to-handle and whole-operation AEAD interfaces need
   separate algorithm-specific milestones rather than blanket capability grants.
@@ -6088,6 +6151,11 @@ Verification:
 - exercise package-external consumer examples, compile-time ownership,
   default-feature isolation, supported host compilers, adapter native/FFI
   boundaries and dependency policy; retain core no_std build checks;
+- test rejected-before-execution versus uncertain completion, stale sessions,
+  conflicting concurrent users and errors after partial execution; preserve the
+  conservative terminal behavior until a tested replacement contract exists.
+  Thread traits must reflect backend/session restrictions, including transfer
+  to a worker and non-transferable adapters, not merely device locking flags;
 - qualify at least one explicitly named device/module/firmware/client
   configuration before claiming supported hardware; record unavailable hardware
   coverage as unfinished, and do not infer physical protection, FIPS validation
@@ -6099,6 +6167,64 @@ Exit criteria:
   require a scoped pentest/retest of this new native/device trust boundary and
   keep all ordinary software builds independent of the adapter;
 - `v0.27.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.27.7 - Optional Fault-Detecting AES Profile
+
+Status: planned
+
+Plan scope: After v0.27.5, implement a default-off fault-detecting AES profile for all three key widths and both block directions under an explicit bounded fault model, with independently structured redundant computation, key-schedule integrity checks, withheld output and terminal failure on detected faults; retain ordinary portable APIs, require no HSM or PKCS#11 adapter, and make no physical fault-resistance claim without named-hardware evidence.
+
+Goal: provide an optional software defense against specified computational
+faults without making a hardware provider mandatory for ordinary users.
+
+Deliverables:
+
+- Review the bounded fault model before implementation: specify corruption
+  locations, timing, multiplicity, persistence, attacker capabilities and
+  excluded common-mode or control-flow faults. Decide which portable/backend
+  combinations can satisfy it; unsupported configurations must fail admission,
+  not silently fall back to unchecked execution.
+- Implement independently structured redundant computation and key-schedule
+  integrity checks for cached and operation-local keys. Identical repeated
+  encryption is not sufficient; address shared corrupted inputs/schedules and
+  comparison bypass within the stated model, and document remaining limits.
+- Compare results without secret-dependent timing, commit output only after
+  successful checks, clear admitted secret destinations and temporary state on
+  failure, preserve public destinations on failure, and permanently disable the
+  affected key/session after a detected fault. No implicit retry or reset.
+- Keep the API default-off, no_std and caller-owned, with explicit CPU/storage
+  costs and ownership/lifecycle rules. Ordinary software APIs and the optional
+  v0.27.6 adapter remain independent; HSM use remains optional.
+
+Verification:
+
+- Add scoped `brynja-verify` campaigns injecting corruption into intermediate
+  values, key schedules and check/control flow as specified by the model, for
+  every supported key width, direction and schedule lifetime. Exercise
+  persistent faults and modeled common-mode faults; returned errors and panics
+  alone do not count as computational fault detection tests.
+- Assert every modeled fault is detected or cannot alter the correct result;
+  faulty output must never be committed within the stated model. Verify secret
+  cleanup and public failure atomicity hold, and later calls on the failed
+  key/session are rejected without encryption/decryption or implicit retry.
+  Confirm unsupported fault classes remain explicitly outside the claim.
+- Replay authoritative vectors, independent differentials and AESAVS campaigns
+  without faults; test package-external ownership, feature isolation, error and
+  unwind cleanup, Miri/sanitizers, emitted code and fixed-versus-random timing
+  for the new profile rather than inheriting ordinary AES qualification.
+- Require a scoped independent pentest/retest of the fault model and its
+  implementation. Physical fault-resistance claims additionally require
+  named-hardware experiments against that model; software injection alone is
+  not physical qualification, and the profile does not establish power/EM
+  resistance or complete spill/register erasure.
+
+Exit criteria:
+
+- The default-off profile meets its reviewed bounded fault model with recorded
+  evidence and documented residuals; unsupported guarantees remain unclaimed.
+  If the model cannot be satisfied, retain this milestone as unfinished rather
+  than relabeling ordinary error handling as fault detection.
+- `v0.27.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.28.0 - GHASH
 

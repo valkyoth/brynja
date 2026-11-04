@@ -29,9 +29,16 @@ CALL = 'let _=key.encrypt_block(&[0;16],&mut[0;16]); '
 def probes():
     cases = []
     for owner in ('Aes128ProviderKey<Backend>', 'ExternalKey<Backend>'):
-        for bound in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
+        for bound in ('Copy', 'Clone', 'core::fmt::Debug'):
             negative = PREFIX + f'fn require<T:{bound}>(){{}} fn main(){{require::<{owner}>();}}'
             cases.append((owner + '-' + bound, negative, negative.replace('T:' + bound, 'T'), 'E0277'))
+        for bound, field in (('Send', 'std::rc::Rc<()>'), ('Sync', 'std::cell::Cell<u8>')):
+            positive = PREFIX + f'fn require<T:{bound}>(){{}} fn main(){{require::<{owner}>();}}'
+            negative = positive.replace('struct Backend;', f'struct Backend({field});')
+            # Cell is Send but not Sync: allow transfer without requiring sharing.
+            if bound == 'Send':
+                positive = positive.replace('struct Backend;', 'struct Backend(std::cell::Cell<u8>);')
+            cases.append((owner + '-' + bound, negative, positive, 'E0277'))
     cases += [
         ('borrowed-cannot-destroy', START + 'let _=key.destroy();}',
          OWNED + START + 'let _=key.destroy();}', 'E0599'),

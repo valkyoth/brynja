@@ -48,7 +48,10 @@ pub enum Permissions {
 ///
 /// On success, write exactly one complete block and report `BLOCK_BYTES`.
 /// The wrapper checks the reported length, not the truth of an adapter's claims
-/// or mathematical correctness. Partial writes on error are permitted: output
+/// or mathematical correctness. Encryption also rejects exact input echoes as
+/// a defensive bypass policy, including legitimate AES fixed points. It cannot
+/// detect partial leakage or other wrong output; the adapter remains trusted.
+/// Partial writes on error are permitted: output
 /// scratch is guarded and never released. Adapters must clear their own copies
 /// and must not expose keys/plaintext in error text, logs or Debug output.
 /// Adapter Drop releases local resources, never implicitly destroys a persistent
@@ -75,7 +78,8 @@ pub trait Aes128Backend {
 /// Provider-bound AES-128 key with clearing outputs and fail-closed operations.
 ///
 /// Owns the adapter (which may itself borrow a session). No key bytes, adapter
-/// extraction, raw handle substitution, Copy, Clone, Debug, Send or Sync API.
+/// extraction, raw handle substitution, Copy, Clone or Debug API. Send/Sync
+/// follow the backend; software key and secret-output owners remain thread-local.
 /// Drop only drops the adapter. It does NOT destroy the external key. An owned
 /// key requires explicit [`Self::destroy`]; a borrowed backend cannot call it.
 /// Output ownership is independent of the key's lifetime.
@@ -116,6 +120,8 @@ impl<B: Aes128Backend> Aes128ProviderKey<B> {
 
     /// Encrypt into clearing caller storage; no mode or authentication.
     /// Every error/unwind clears the admitted destination, including rejection.
+    /// Exact input echoes are rejected and quarantine the binding, even if the
+    /// result was a legitimate AES fixed point. This is not correctness validation.
     pub fn encrypt_block<'out>(
         &mut self,
         input: &[u8; BLOCK_BYTES],
@@ -135,6 +141,7 @@ impl<B: Aes128Backend> Aes128ProviderKey<B> {
     }
 
     /// Explicitly release ciphertext. Public output is unchanged on error/unwind.
+    /// Uses the same exact-echo rejection policy as [`Self::encrypt_block`].
     pub fn encrypt_block_public(
         &mut self,
         input: &[u8; BLOCK_BYTES],
@@ -184,6 +191,22 @@ impl<B: Aes128Backend> Aes128ProviderKey<B> {
             .map_err(Error::Provider)?;
             if written != BLOCK_BYTES {
                 return Err(Error::Provider(ProviderFailureKind::InvalidOutput));
+            }
+            if !inverse {
+                let mut difference = Scratch::<1>::new();
+                for (actual, original) in output.iter().zip(input) {
+                    brynja_core::accumulate_secret_byte_difference(
+                        &mut difference.0[0],
+                        actual,
+                        original,
+                    );
+                }
+                let echoed =
+                    brynja_core::secret_difference_is_zero(&difference.0[0]).expose_public();
+                drop(difference);
+                if echoed {
+                    return Err(Error::Provider(ProviderFailureKind::InvalidOutput));
+                }
             }
             Ok(())
         })

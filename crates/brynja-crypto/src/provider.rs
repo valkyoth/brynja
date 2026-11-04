@@ -14,7 +14,6 @@
 #![forbid(unsafe_code)]
 
 pub use brynja_core::ProviderFailureKind;
-use core::marker::PhantomData;
 
 /// Value-free operation or output-storage failure, shared across algorithms.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -54,7 +53,9 @@ pub trait OwnedKeyBackend {
 /// Algorithm-specific owners use this same terminal-failure lifecycle. The
 /// adapter may itself borrow a session; the binding never imports/exports key
 /// bytes or provides raw-handle replacement or adapter extraction. No Copy,
-/// Clone, Debug, Send or Sync. Backend Drop must release local resources only.
+/// Clone or Debug. Send/Sync follow the backend's auto traits: adapters must
+/// encode thread-affine sessions and shared-device synchronization correctly.
+/// Backend Drop must release local resources only.
 /// Dropping this binding does NOT destroy the external key. Use explicit
 /// [`Self::destroy`] for owned keys; borrowed backends do not implement it.
 #[must_use = "retain the binding until external-key use is complete"]
@@ -62,7 +63,6 @@ pub struct ExternalKey<B> {
     backend: B,
     #[cfg(feature = "hazmat-aes-block")]
     healthy: bool,
-    local: PhantomData<*mut ()>,
 }
 
 impl<B> ExternalKey<B> {
@@ -72,7 +72,6 @@ impl<B> ExternalKey<B> {
             backend,
             #[cfg(feature = "hazmat-aes-block")]
             healthy: true,
-            local: PhantomData,
         }
     }
 

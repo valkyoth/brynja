@@ -8,6 +8,9 @@ use std::cell::RefCell;
 use std::panic::{AssertUnwindSafe, catch_unwind, resume_unwind};
 use std::rc::Rc;
 
+#[path = "aes128_provider_regressions/mod.rs"]
+mod regressions;
+
 fn must<T, E: core::fmt::Debug>(result: Result<T, E>) -> T {
     match result {
         Ok(value) => value,
@@ -25,6 +28,8 @@ const CIPHER: [u8; 16] = [
 #[derive(Clone, Copy)]
 enum Behavior {
     Good,
+    Echo,
+    AlmostEcho(usize, u8),
     Fail(ProviderFailureKind),
     Length(usize),
     Panic,
@@ -75,6 +80,15 @@ impl Mock {
         // Deliberately write a partial result before failures or panic.
         output[..7].fill(0xee);
         match self.state.borrow().behavior {
+            Behavior::Echo => {
+                output.copy_from_slice(input);
+                return Ok(16);
+            }
+            Behavior::AlmostEcho(position, mask) => {
+                output.copy_from_slice(input);
+                *must(output.get_mut(position).ok_or("invalid mock bit position")) ^= mask;
+                return Ok(16);
+            }
             Behavior::Fail(error) => return Err(error),
             Behavior::Length(length) => return Ok(length),
             Behavior::Panic => resume_unwind(Box::new("injected adapter unwind")),

@@ -17,7 +17,7 @@ use std::{
 #[path = "snapshot_store_tests.rs"]
 mod tests;
 
-fn name(id: &str) -> Result<String> {
+pub(crate) fn name(id: &str) -> Result<String> {
     if id.len() != 64
         || !id
             .bytes()

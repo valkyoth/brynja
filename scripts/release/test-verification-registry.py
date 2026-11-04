@@ -156,8 +156,8 @@ class RegistryTests(unittest.TestCase):
                     'api-msrv': 0, 'api-current': 0, 'mutation-controls': 0,
                     'owner-dispatch': 0, 'operation-cleanup': 0, 'owner-contract': 0,
                     'downstream': 0, 'downstream-matrix': 0, 'timing-screen': 0,
-                    'dataflow-review': 0, 'provider-native': 12, 'provider-msrv': 12,
-                    'provider-asan': 12, 'provider-miri': 12, 'provider-api-current': 0,
+                    'dataflow-review': 0, 'provider-native': 16, 'provider-msrv': 16,
+                    'provider-asan': 16, 'provider-miri': 16, 'provider-api-current': 0,
                     'provider-api-msrv': 0, 'provider-no-std': 0, 'provider-docs': 1}
         self.assertEqual(set(checks), set(expected))
         for name, count in expected.items():

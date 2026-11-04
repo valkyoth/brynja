@@ -89,6 +89,12 @@ They remain uncompleted; the present 568 KATs and 4096 independent comparisons
 (for both key owners, reusing each cached schedule across blocks) are not those
 additional campaigns. AES remains opt-in development scope.
 
+These tasks are explicitly assigned to v0.27.2 portable acceptance in the
+[release plan](../RELEASE_PLAN.md): AArch64 emitted-code checks, representative
+final-linked/LTO consumers, stronger isolated fixed-versus-random timing and
+AESAVS MCT/MMT. Versions 0.27.3/0.27.4 repeat the qualification for accelerated
+backends; 0.27.5 closes the matrix. They are not completed v0.27.0 evidence.
+
 GF(256) multiplication uses eight fixed steps and masks; inversion uses a
 fixed exponentiation chain. The S-box and inverse S-box have no lookup tables.
 Round counts and memory positions depend only on public fixed dimensions and
@@ -669,12 +675,22 @@ at operation time too. No free raw key identifier is accepted by block calls,
 and no key bytes, adapter extraction, backend replacement or fallback API exists.
 Software `Aes128Key` and `Aes128ExpandedKey` are unchanged.
 
+External bindings inherit Send/Sync from their backend. A thread-affine backend
+must encode that restriction; shared device/session synchronization remains the
+adapter's responsibility. Software key and secret-output owners remain !Send
+and !Sync. No unsafe trait override is added by the wrapper.
+
 Encryption/decryption permissions remain distinct. Secret output uses the same
 clearing `SecretBlock`; public ciphertext requires `PublicCiphertext` and is
 committed only after a complete successful block. Adapter partial writes occur
 only in guarded scratch. Reported lengths other than 16 are rejected, but a
-trusted adapter that lies about bytes written/correctness cannot be detected
-by the trait. Errors/unwinds make dispatch terminal. This is not physical fault
+complete encrypted block equal to its input is also rejected inside terminal
+dispatch. Both encryption APIs use a full-block borrowed constant-time
+difference with clearing scratch. This defensive exact-echo policy also rejects
+legitimate AES fixed points; it is not an AES validity rule. Partial plaintext
+leakage or other incorrect output still cannot be detected by the trait, and
+decryption is not subject to this encryption-only release policy.
+Errors/unwinds make dispatch terminal. This is not physical fault
 detection, nor does it erase adapter copies, registers, spills or aborted stacks.
 
 Drop releases only the adapter's local resources. Persistent borrowed backends
@@ -692,7 +708,12 @@ list or hardware certification is bundled. Tests use a software reference and
 faulting mocks. Future modes should use whole-operation device interfaces;
 future derive-to-handle APIs must preserve non-exportable key custody.
 
-Eight `aes / provider` registrations cover 12 native contract tests at Rust
+All adapter failures, including Rejected and Unavailable, remain terminal now.
+Version 0.27.6 must assess a separately specified rejected-before-execution
+outcome versus uncertain completion. Error names alone do not authorize retry;
+there is no reset, backend extraction or automatic uncertain retry here.
+
+Eight `aes / provider` registrations cover 16 native contract tests at Rust
 1.90.0/1.99.1, the same tests under Miri and ASan/LSan, 56 paired positive/negative
 compiler probes at each endpoint through direct/facade routes, an adapter usage
 doc test, and Cortex-M facade compile-only acceptance. They can be selected with

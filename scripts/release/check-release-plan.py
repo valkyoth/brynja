@@ -31,6 +31,7 @@ FIELDS = (
 # Public-operation closure is required before executable downstream use.
 API_CLOSURE_EDGES = (
     ("v0.27.5", "v0.27.6"),
+    ("v0.27.5", "v0.27.7"),
     ("v0.34.6", "v0.39.0"),
     ("v0.34.6", "v0.77.2"),
     ("v0.34.6", "v0.103.0"),
@@ -49,8 +50,22 @@ API_CLOSURE_EDGES = (
 )
 
 API_SCOPE_CONTRACTS = {
+    "v0.27.0": ("ephemeral schedule by default", "optional caller-owned cached schedule",
+               "cleared on clear/Drop"),
+    "v0.27.2": ("compiler/target/profile qualification", "final-linked/LTO",
+               "fixed-versus-random timing", "AESAVS Monte Carlo and multiblock"),
+    "v0.27.3": ("emitted-code", "fixed-versus-random timing", "AESAVS acceptance",
+               "every admitted backend", "named native configuration"),
+    "v0.27.4": ("emitted-code", "fixed-versus-random timing", "AESAVS acceptance",
+               "every admitted bundle", "not native qualification"),
+    "v0.27.5": ("qualification matrix", "AESAVS campaigns",
+               "physical-protection residuals", "no mandatory HSM"),
     "v0.27.6": ("separately packaged", "AES-128", "non-exportable",
                "no software fallback", "dependency/FFI review", "named-device acceptance"),
+    "v0.27.7": ("default-off", "all three key widths", "both block directions",
+               "bounded fault model", "independently structured redundant computation",
+               "key-schedule integrity checks", "withheld output", "terminal failure",
+               "no HSM or PKCS#11 adapter", "no physical fault-resistance claim"),
     "v0.34.0": ("brynja-encoding-der", "compatibility re-exports"),
     "v0.34.6": ("encode/decode", "independent encodings", "hardened"),
     "v0.49.5": ("signing and verification", "DER"),
@@ -67,6 +82,51 @@ API_SCOPE_CONTRACTS = {
     "v0.197.0": ("scheduled before this stop", "unchecked cryptographic internals", "reviewed public hash"),
     "v0.491.1": ("public package", "complete safe operation directions"),
 }
+
+
+# Detailed acceptance requirements must survive edits to the expanded plan too.
+AES_ACCEPTANCE_CONTRACTS = {
+    "v0.27.0": ("568 NIST block KATs", "4096 independent differential cases",
+               "AESAVS Monte Carlo and multiblock campaigns are explicitly assigned to v0.27.2",
+               "not required or claimed completed by this development milestone",
+               "stronger fixed-versus-random timing are assigned to v0.27.2"),
+    "v0.27.2": ("x86_64 and AArch64", "final-linked/LTO", "copies/spills",
+               "cached and operation-local schedules", "Predeclare sample counts",
+               "no retries-to-pass", "not proof of constant time or power/EM resistance",
+               "AESAVS Monte Carlo and multiblock", "missing evidence remains unfinished"),
+    "v0.27.3": ("every admitted backend", "fixed-versus-random timing",
+               "cached and operation-local schedules", "final-linked/LTO",
+               "no retries-to-pass", "AESAVS Monte Carlo and multiblock"),
+    "v0.27.4": ("each admitted RISC-V bundle", "fixed-versus-random timing",
+               "cached and operation-local schedules", "final-linked/LTO",
+               "no retries-to-pass", "AESAVS Monte Carlo and multiblock",
+               "unavailable hardware leaves the backend unadmitted"),
+    "v0.27.5": ("qualification matrix", "fixed-versus-random timing",
+               "final-linked/LTO", "no retries-to-pass", "AESAVS Monte Carlo and multiblock",
+               "Preserve scoped reuse", "HSM use remains optional"),
+    "v0.27.6": ("rejected-before-execution outcome",
+               "quarantine for uncertain outcomes, malformed output and panics",
+               "explicit and bounded, never automatic after uncertainty",
+               "Thread traits must reflect backend/session restrictions"),
+    "v0.27.7": ("Review the bounded fault model before implementation",
+               "unsupported configurations must fail admission",
+               "Identical repeated encryption is not sufficient",
+               "comparison bypass", "without secret-dependent timing",
+               "permanently disable", "No implicit retry or reset",
+               "HSM use remains optional", "check/control flow",
+               "persistent faults", "returned errors and panics alone do not count",
+               "every modeled fault is detected or cannot alter the correct result",
+               "independent pentest/retest", "software injection alone is not physical qualification",
+               "retain this milestone as unfinished"),
+}
+
+
+def validate_aes_acceptance(version: str, section: str) -> None:
+    # A matching summary scope must not mask removal of the detailed criteria.
+    normalized = " ".join(section.partition("Deliverables:")[2].split())
+    for requirement in AES_ACCEPTANCE_CONTRACTS.get(version, ()):
+        if requirement not in normalized:
+            raise ValueError(f"{version} lost AES acceptance requirement: {requirement}")
 
 
 def validate_api_closure(entries: list[tuple[str, str, str]]) -> None:
@@ -195,6 +255,7 @@ def validate(release_path: Path, version_path: Path) -> None:
             raise ValueError(f"{version} title differs from VERSION_PLAN.md")
         end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
         section = text[match.end():end]
+        validate_aes_acceptance(version, section)
 
         offsets = [field_offset(section, field, version) for field in FIELDS]
         if offsets != sorted(offsets):

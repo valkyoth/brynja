@@ -52,6 +52,28 @@ fn first_id(root: &Path) -> String {
 }
 
 #[test]
+fn capacity_warnings_validate_before_and_after_snapshot_ids() {
+    let dir = tempfile::tempdir().unwrap();
+    let root = dir.path();
+    storage::save(root, &sample()).unwrap();
+    let valid = index(root);
+    assert!(crate::rotation::warnings(root).is_ok());
+    for field in ["before", "after"] {
+        for invalid in ["", "../outside", "BAD", &"A".repeat(64), &"a".repeat(63)] {
+            let mut corrupt = valid.clone();
+            corrupt["attempts"]["md5/a"][0][field] = invalid.into();
+            fs::write(
+                root.join(storage::STATE),
+                serde_json::to_vec(&corrupt).unwrap(),
+            )
+            .unwrap();
+            let error = crate::rotation::warnings(root).unwrap_err().to_string();
+            assert!(error.contains("invalid snapshot content ID"), "{error}");
+        }
+    }
+}
+
+#[test]
 fn rotation_failure_preserves_index_and_reuses_complete_orphan_checkpoint() {
     let dir = tempfile::tempdir().unwrap();
     let root = dir.path();

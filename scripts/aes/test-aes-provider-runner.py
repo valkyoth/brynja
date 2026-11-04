@@ -46,6 +46,18 @@ class ProviderRunnerTests(unittest.TestCase):
                 runner.run('1.99.1')
         self.assertNotIn('AES_PROVIDER_API_PASS', output.getvalue())
 
+    def test_thread_traits_follow_backend_not_unconditional_rejection(self):
+        cases = {name: (negative, positive) for name, negative, positive, _ in runner.probes()}
+        for owner in ('Aes128ProviderKey<Backend>', 'ExternalKey<Backend>'):
+            negative, positive = cases[owner + '-Send']
+            self.assertIn('std::rc::Rc<()>', negative)
+            self.assertIn('std::cell::Cell<u8>', positive)
+            self.assertIn('T:Send', positive)
+            negative, positive = cases[owner + '-Sync']
+            self.assertIn('std::cell::Cell<u8>', negative)
+            self.assertIn('struct Backend;', positive)
+            self.assertIn('T:Sync', positive)
+
 
 if __name__ == '__main__':
     unittest.main()

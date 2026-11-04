@@ -13,6 +13,13 @@ python3 scripts/release/test-expansion-plan.py
 python3 scripts/release/test-roadmap-schedule.py
 python3 scripts/release/test-acceleration-plan.py
 
+sed -i '/^### v0\.27\.2 - /,/^### v0\.27\.3 - /s/no retries-to-pass/omitted/' "$release_tmp"
+if python3 scripts/release/check-release-plan.py "$release_tmp" "$version_tmp" >/dev/null 2>&1; then
+    echo "release plan validator accepted removal of AES timing alarm policy" >&2
+    exit 1
+fi
+cp docs/RELEASE_PLAN.md "$release_tmp"
+
 sed -i 's/Obtain a green scoped pentest\/retest/Skip scoped review/' "$release_tmp"
 if python3 scripts/release/check-release-plan.py "$release_tmp" "$version_tmp" >/dev/null 2>&1; then
     echo "release plan validator accepted removal of scoped development review" >&2
@@ -134,4 +141,28 @@ for version, tokens in plan.API_SCOPE_CONTRACTS.items():
                   else (v, title, scope) for v, title, scope in entries])
         cases += 1
 print(f"public API roadmap closure rejects {cases} dependency and paired-operation regressions")
+
+text = Path("docs/RELEASE_PLAN.md").read_text()
+headings = list(plan.HEADING.finditer(text))
+sections = {m.group(1): text[m.end():headings[i + 1].start() if i + 1 < len(headings) else len(text)]
+            for i, m in enumerate(headings)}
+cases = 0
+for version, tokens in plan.AES_ACCEPTANCE_CONTRACTS.items():
+    section = " ".join(sections[version].split())
+    plan.validate_aes_acceptance(version, sections[version])
+    try:
+        plan.validate_aes_acceptance(version, sections[version].partition("Deliverables:")[0])
+    except ValueError:
+        cases += 1
+    else:
+        raise AssertionError(f"AES acceptance validator accepted summary-only criteria for {version}")
+    for token in tokens:
+        assert token in section
+        try:
+            plan.validate_aes_acceptance(version, section.replace(token, "omitted"))
+        except ValueError:
+            cases += 1
+        else:
+            raise AssertionError(f"AES acceptance validator accepted removal of {token}")
+print(f"AES roadmap acceptance rejects {cases} qualification and fault-model regressions")
 PY

@@ -8,7 +8,7 @@ includes = ["verification/miri-checks.json", "verification/kani-checks.json", "v
 
 # Optional external-key contracts. Mock adapters are not hardware qualification.
 [groups.aes-provider]
-paths = ["crates/brynja-crypto/src/provider.rs", "crates/brynja-crypto/src/aes/provider.rs", "crates/brynja-crypto/tests/aes128_provider.rs", "scripts/aes/check-aes-provider-api.py", "scripts/aes/test-aes-provider-runner.py", "scripts/aes/check-aes-api.py", "scripts/aes/test-aes-runners.py", "scripts/repository/facade_workspace_policy.py"]
+paths = ["crates/brynja-crypto/src/provider.rs", "crates/brynja-crypto/src/aes/provider.rs", "crates/brynja-crypto/tests/aes128_provider.rs", "crates/brynja-crypto/tests/aes128_provider_regressions", "scripts/aes/check-aes-provider-api.py", "scripts/aes/test-aes-provider-runner.py", "scripts/aes/check-aes-api.py", "scripts/aes/test-aes-runners.py", "scripts/repository/facade_workspace_policy.py"]
 [[groups.aes-provider.tools]]
 program = "python3"
 
@@ -27,8 +27,8 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok."]
-minimum_tests = 12
-exact_tests = 12
+minimum_tests = 16
+exact_tests = 16
 
 [[checks]]
 component = "aes"
@@ -45,8 +45,8 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok."]
-minimum_tests = 12
-exact_tests = 12
+minimum_tests = 16
+exact_tests = 16
 
 [[checks]]
 component = "aes"
@@ -63,8 +63,8 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok."]
-minimum_tests = 12
-exact_tests = 12
+minimum_tests = 16
+exact_tests = 16
 
 [[checks]]
 component = "aes"
@@ -81,8 +81,8 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok."]
-minimum_tests = 12
-exact_tests = 12
+minimum_tests = 16
+exact_tests = 16
 
 [[checks]]
 component = "aes"

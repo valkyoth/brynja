@@ -117,7 +117,7 @@ pub fn warnings(root: &Path) -> Result<Vec<String>> {
     let mut total = 0;
     let mut largest = 0;
     for id in ids {
-        let path = storage::relative(root, &format!("{}/{id}.json", storage::SNAPSHOTS))?;
+        let path = storage::relative(root, &snapshot_store::name(id)?)?;
         let size = usize::try_from(fs::metadata(path)?.len())?;
         store_limits::charge(&mut total, size, LIMITS.total_objects, "snapshot bytes")?;
         largest = largest.max(size);

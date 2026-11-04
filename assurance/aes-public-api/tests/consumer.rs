@@ -51,7 +51,8 @@ fn drop_clears_only_owned_regions() {
     let mut schedules = [[0xa5; 176]; 3];
     {
         let cached = Aes128ExpandedKey::new(&KEY, &mut schedules[1]).unwrap();
-        cached.encrypt_block(&INPUT, &mut outputs[1]).unwrap();
+        let output = cached.encrypt_block(&INPUT, &mut outputs[1]).unwrap();
+        assert_eq!(output.expose(), CIPHER);
     }
     assert_eq!(schedules, [[0xa5; 176], [0; 176], [0xa5; 176]]);
     assert_eq!(outputs, [[0x5a; 16], [0; 16], [0x5a; 16]]);

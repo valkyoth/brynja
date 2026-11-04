@@ -725,11 +725,13 @@ mock/reference observations, never evidence of actual HSM behavior.
 
 The facade, dependent fixture pins/locks, release inventory and SBOM now identify
 0.27.0. Supporting component versions remain unchanged and no crate is selected
-for publication. The finite final checklist has 25 entries; routine component
+for publication. The finite final checklist has 28 entries; routine component
 CI selects 19, with separate bounded AES and packaged HKDF consumer jobs. Deep
 verification remains explicit and separate. The owner's scoped review chain
 and focused provider retest are recorded as PASS in
 [the release report](../../security/pentest/v0.27.0.md).
+The standalone AES consumer formatting and strict direct/facade lint commands
+are included in the local final checklist as well as their separate CI job.
 
 Preparation caught two integration issues: old exact facade fixture pins and
 the packaged HKDF runner's rejection of the composition crate's new AES vector

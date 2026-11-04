@@ -116,6 +116,21 @@ command = ["python3","scripts/hkdf/check-hkdf-public-api.py","--family","all"]
 timeout_seconds = 300
 
 [[checks]]
+id = "aes-consumer-format"
+command = ["cargo","+1.99.1","fmt","--manifest-path","assurance/aes-public-api/Cargo.toml","--check"]
+timeout_seconds = 60
+
+[[checks]]
+id = "aes-consumer-lint-direct"
+command = ["cargo","+1.99.1","clippy","--locked","--offline","--manifest-path","assurance/aes-public-api/Cargo.toml","--no-default-features","--features","direct","--all-targets","--no-deps","--","-D","warnings"]
+timeout_seconds = 300
+
+[[checks]]
+id = "aes-consumer-lint-facade"
+command = ["cargo","+1.99.1","clippy","--locked","--offline","--manifest-path","assurance/aes-public-api/Cargo.toml","--no-default-features","--features","facade","--all-targets","--no-deps","--","-D","warnings"]
+timeout_seconds = 300
+
+[[checks]]
 id = "aes-downstream-endpoints"
 command = ["python3","scripts/aes/check-aes-consumer.py"]
 timeout_seconds = 300

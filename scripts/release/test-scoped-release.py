@@ -60,7 +60,7 @@ class ScopedRelease(unittest.TestCase):
     def test_aes_candidate_gate_is_finite_and_does_not_publish(self):
         plan = scoped.load('0.27.0')
         commands = {check['id']: check['command'] for check in plan['checks']}
-        self.assertEqual(len(commands), 25)
+        self.assertEqual(len(commands), 28)
         self.assertEqual(commands['release-plan'], ['scripts/release/test-release-plan.sh'])
         self.assertEqual(commands['crypto-tests'],
             ['cargo', 'test', '--locked', '-p', 'brynja-crypto', '-p',
@@ -72,13 +72,28 @@ class ScopedRelease(unittest.TestCase):
         self.assertEqual(set(plan['ci_checks']), set(commands) -
                          {'sbom', 'dependency-policy', 'advisories',
                           'hkdf-package-runner-tests', 'hkdf-packaged-endpoints',
-                          'aes-downstream-endpoints'})
+                          'aes-downstream-endpoints', 'aes-consumer-format',
+                          'aes-consumer-lint-direct', 'aes-consumer-lint-facade'})
         self.assertEqual(commands['aes-owner-contract'],
                          ['python3', 'scripts/cryptography/test-aes-owner-contract.py'])
         self.assertEqual(commands['aes-dataflow-regressions'],
                          ['python3', 'scripts/aes/test-aes-dataflow.py'])
         self.assertEqual(commands['aes-downstream-endpoints'],
                          ['python3', 'scripts/aes/check-aes-consumer.py'])
+        consumer_manifest = 'assurance/aes-public-api/Cargo.toml'
+        expected_consumer_checks = {
+            'aes-consumer-format': ['cargo', '+1.99.1', 'fmt', '--manifest-path',
+                                    consumer_manifest, '--check'],
+        }
+        for route in ('direct', 'facade'):
+            expected_consumer_checks['aes-consumer-lint-' + route] = [
+                'cargo', '+1.99.1', 'clippy', '--locked', '--offline',
+                '--manifest-path', consumer_manifest, '--no-default-features',
+                '--features', route, '--all-targets', '--no-deps', '--', '-D', 'warnings']
+        workflow = (scoped.ROOT / '.github/workflows/ci.yml').read_text()
+        for name, command in expected_consumer_checks.items():
+            self.assertEqual(commands[name], command)
+            self.assertIn(' '.join(command), workflow)
         self.assertEqual(commands['hkdf-package-runner-tests'],
                          ['python3', 'scripts/hkdf/test-hkdf-public-api.py'])
         self.assertEqual(commands['hkdf-packaged-endpoints'],

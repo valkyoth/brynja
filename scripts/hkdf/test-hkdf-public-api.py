@@ -209,15 +209,73 @@ class PublicApiTests(unittest.TestCase):
                              {Path(p) for p in ('Cargo.toml', 'src/lib.rs', 'src/ignored.rs',
                                                'LICENSE-APACHE', 'LICENSE-MIT', 'README.md')})
 
-    def aes_package_fixture(self, root):
-        crate = self.package_fixture(root, [*api.PACKAGE_INPUTS, 'tests/**/*.rs', api.AES_FIXTURE_PATTERN])
+    def aes_package_fixture(self, root, *, wide=False):
+        patterns = list(api.AES_FIXTURE_SETS) if wide else [api.AES_FIXTURE_PATTERN]
+        crate = self.package_fixture(root, [*api.PACKAGE_INPUTS, 'tests/**/*.rs', *patterns])
         manifest = crate / 'Cargo.toml'
         manifest.write_text(manifest.read_text().replace('package-selection-fixture', 'brynja-crypto'))
-        fixtures = crate / 'tests/fixtures/aes128'
-        fixtures.mkdir(parents=True)
-        for name in api.AES_FIXTURES:
-            (fixtures / name).write_text('synthetic fixture\n')
-        return crate, fixtures
+        for pattern in patterns:
+            fixtures = crate / Path(pattern).parent
+            fixtures.mkdir(parents=True)
+            for name in api.AES_FIXTURE_SETS[pattern]:
+                (fixtures / name).write_text('synthetic fixture\n')
+        return crate, crate / 'tests/fixtures/aes128'
+
+    def test_wide_fixture_selection_is_exact_for_each_width(self):
+        for bits in (128, 192, 256):
+            for change in ('missing', 'extra', 'symlink', 'other-crate', 'broad-glob', 'omit-width'):
+                with self.subTest(bits=bits, change=change), tempfile.TemporaryDirectory() as temporary:
+                    crate, _ = self.aes_package_fixture(Path(temporary) / 'source', wide=True)
+                    selected = api.package_files(crate)
+                    fixtures = {p for p in selected if p.is_relative_to('tests/fixtures')}
+                    self.assertEqual(fixtures, {
+                        Path(f'tests/fixtures/aes{width}') / name
+                        for width in (128, 192, 256)
+                        for name in ('README.md', f'ECBGFSbox{width}.rsp', f'ECBKeySbox{width}.rsp',
+                                     f'ECBVarKey{width}.rsp', f'ECBVarTxt{width}.rsp')})
+                    target = crate / f'tests/fixtures/aes{bits}/ECBVarKey{bits}.rsp'
+                    if change == 'missing':
+                        target.unlink()
+                    elif change == 'extra':
+                        (target.parent / 'notes.key').write_text('not a vector')
+                    elif change == 'symlink':
+                        target.unlink()
+                        target.symlink_to(target.parent / 'README.md')
+                    else:
+                        manifest = crate / 'Cargo.toml'
+                        old, new = {
+                            'other-crate': ('brynja-crypto', 'brynja-core'),
+                            'broad-glob': (f'tests/fixtures/aes{bits}/*', 'tests/fixtures/**/*'),
+                            'omit-width': (f', "tests/fixtures/aes{bits}/*"', ''),
+                        }[change]
+                        self.assertIn(old, manifest.read_text())
+                        manifest.write_text(manifest.read_text().replace(old, new))
+                    with patch.object(api, 'run') as process, self.assertRaises(ValueError):
+                        api.package_files(crate)
+                    process.assert_not_called()
+
+    def test_archived_wide_fixtures_must_match_source(self):
+        for bits in (128, 192, 256):
+            for change in ('missing', 'changed', 'extra'):
+                with self.subTest(bits=bits, change=change), tempfile.TemporaryDirectory() as temporary:
+                    base = Path(temporary)
+                    crate, _ = self.aes_package_fixture(base / 'source', wide=True)
+                    archive = base / 'unpacked'
+                    for path in api.package_files(crate):
+                        target = archive / path
+                        target.parent.mkdir(parents=True, exist_ok=True)
+                        target.write_bytes((crate / path).read_bytes())
+                    (archive / 'Cargo.toml.orig').write_bytes((crate / 'Cargo.toml').read_bytes())
+                    api.check_packaged_inputs(crate, archive)
+                    target = archive / f'tests/fixtures/aes{bits}/ECBVarKey{bits}.rsp'
+                    if change == 'missing':
+                        target.unlink()
+                    elif change == 'changed':
+                        target.write_text('altered vector')
+                    else:
+                        (target.parent / 'notes.key').write_text('unreviewed input')
+                    with self.assertRaisesRegex(ValueError, 'archive'):
+                        api.check_packaged_inputs(crate, archive)
 
     def test_aes_fixture_include_is_component_specific_and_exact(self):
         for change in ('missing', 'extra', 'symlink', 'other-crate', 'broad-glob'):

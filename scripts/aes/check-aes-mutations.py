@@ -35,8 +35,20 @@ MUTATIONS = (
     ('early-public-write', 'src/aes.rs',
      ') -> Result<(), Error> {\n        let mut schedule',
      ') -> Result<(), Error> {\n        output.copy_from_slice(input);\n        let mut schedule', PUBLIC_FAULT),
+    ('aes256-extra-subword', 'src/aes/portable/wide.rs', 'K == 32 && position == 16',
+     'K == 24 && position == 16', ('--lib', 'aes::tests::wide::fips197_complete_aes256_schedule')),
+    ('aes192-prior-word', 'src/aes/portable/wide.rs', 'layout::prior_word_index(offset, K, i)',
+     'layout::prior_word_index(offset, 4, i)', ('--lib', 'aes::tests::wide::fips197_complete_aes192_schedule')),
+    ('wide-skip-round', 'src/aes/portable/wide.rs', 'for round in 1..R {',
+     'for round in 1..R.wrapping_sub(1) {', ('--test', 'aes_wide_kat', 'aes192::all_four_kat_files_both_owners')),
+    ('wide-inverse-key', 'src/aes/portable/wide.rs', 'add_key(state, schedule, 0)\n',
+     'add_key(state, schedule, 1)\n', ('--test', 'aes_wide_kat', 'aes256::all_four_kat_files_both_owners')),
+    ('aes192-schedule-clear', 'src/aes.rs', 'let _ = clear_owned_region(&mut self.0);',
+     'if N != 208 { let _ = clear_owned_region(&mut self.0); }', ('--lib', 'aes::tests::wide::fips197_complete_aes192_schedule')),
+    ('aes256-schedule-clear', 'src/aes.rs', 'let _ = clear_owned_region(&mut self.0);',
+     'if N != 240 { let _ = clear_owned_region(&mut self.0); }', ('--lib', 'aes::tests::wide::fips197_complete_aes256_schedule')),
 )
-MARKER = 'AES mutations: PASS; 12 compiling defects rejected by named tests'
+MARKER = 'AES mutations: PASS; 18 compiling defects rejected by named tests'
 SCRATCH_MARKER = 'AES scratch: PASS; zero length rejected at compile time; positive control compiled'
 
 
@@ -106,6 +118,9 @@ def prepare(directory):
     (directory / 'tests').mkdir()
     shutil.copy2(ROOT / 'crates/brynja-crypto/tests/aes128.rs', directory / 'tests/aes128.rs')
     shutil.copytree(ROOT / 'crates/brynja-crypto/tests/fixtures/aes128', directory / 'tests/fixtures/aes128')
+    shutil.copy2(ROOT / 'crates/brynja-crypto/tests/aes_wide_kat.rs', directory / 'tests/aes_wide_kat.rs')
+    for bits in (192, 256):
+        shutil.copytree(ROOT / f'crates/brynja-crypto/tests/fixtures/aes{bits}', directory / f'tests/fixtures/aes{bits}')
     # A quoted TOML literal path avoids shell interpolation and TOML escapes.
     core = ROOT / 'crates/brynja-core'
     if "'" in str(core) or '\n' in str(core):
@@ -123,7 +138,7 @@ def campaign(directory, compiler):
     cargo = ['cargo', '+' + compiler]
     verifier.run([*cargo, 'generate-lockfile', '--offline'], env, directory)
     test = [*cargo, 'test', '--locked', '--offline']
-    for selection, count in ((['--test', 'aes128'], 6), (['--lib', 'aes::'], 7)):
+    for selection, count in ((['--test', 'aes128'], 6), (['--test', 'aes_wide_kat'], 4), (['--lib', 'aes::'], 17)):
         output = verifier.run([*test, *selection], env, directory)
         if f'test result: ok. {count} passed; 0 failed; 0 ignored;' not in output:
             raise ValueError('unaltered AES baseline population failed')
@@ -143,7 +158,7 @@ def campaign(directory, compiler):
         finally:
             path.write_text(original)
     # Confirm restoration and unchanged baseline after the last defect.
-    for selection, count in ((['--test', 'aes128'], 6), (['--lib', 'aes::'], 7)):
+    for selection, count in ((['--test', 'aes128'], 6), (['--test', 'aes_wide_kat'], 4), (['--lib', 'aes::'], 17)):
         output = verifier.run([*test, *selection], env, directory)
         if f'test result: ok. {count} passed; 0 failed; 0 ignored;' not in output:
             raise ValueError('restored AES baseline failed')
@@ -153,7 +168,7 @@ def campaign(directory, compiler):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.parse_args()
-    if len(MUTATIONS) != 12 or len({m[0] for m in MUTATIONS}) != 12:
+    if len(MUTATIONS) != 18 or len({m[0] for m in MUTATIONS}) != 18:
         raise ValueError('mutation population drift')
     with verifier.cargo_environment.private_directory(ROOT) as temporary:
         campaign(Path(temporary), '1.99.1')

@@ -52,13 +52,58 @@ mod proofs {
 
     #[kani::proof]
     fn admitted_round_key_indices_are_exact_and_bounded() {
+        let width: u8 = kani::any();
+        kani::assume(width < 3);
+        let (rounds, size) = match width {
+            0 => (10, 176),
+            1 => (12, 208),
+            _ => (14, 240),
+        };
         let round: usize = kani::any();
         let byte: usize = kani::any();
-        kani::assume(round <= 10 && byte < 16);
+        kani::assume(round <= rounds && byte < 16);
         let index = layout::round_key_index(round, byte);
         assert_eq!(index, round * 16 + byte);
-        assert!(index < 176);
+        assert!(index < size);
         assert_eq!(index / 16, round);
         assert_eq!(index % 16, byte);
+    }
+
+    #[kani::proof]
+    fn wide_parameter_admission_is_exact() {
+        let key: usize = kani::any();
+        let size: usize = kani::any();
+        let rounds: usize = kani::any();
+        let admitted = layout::valid_wide_parameters(key, size, rounds);
+        assert_eq!(
+            admitted,
+            (key == 24 && size == 208 && rounds == 12)
+                || (key == 32 && size == 240 && rounds == 14)
+        );
+        if admitted {
+            assert_eq!(size, (rounds + 1) * 16);
+            assert_eq!(rounds, key / 4 + 6);
+            assert!(key < size);
+        }
+    }
+
+    #[kani::proof]
+    fn wide_schedule_indices_reference_initialized_words() {
+        let aes256: bool = kani::any();
+        let (key, size) = if aes256 { (32, 240) } else { (24, 208) };
+        let offset: usize = kani::any();
+        let byte: usize = kani::any();
+        kani::assume(offset >= key && offset < size && offset % 4 == 0 && byte < 4);
+        let destination = layout::word_byte_index(offset, byte);
+        let previous = layout::prior_word_index(offset, 4, byte);
+        let prior = layout::prior_word_index(offset, key, byte);
+        assert_eq!(destination, offset + byte);
+        assert_eq!(previous, offset - 4 + byte);
+        assert_eq!(prior, offset - key + byte);
+        assert!(destination < size);
+        assert!(previous < offset && prior < offset);
+        assert_eq!(previous % 4, byte);
+        assert_eq!(prior % 4, byte);
+        assert_eq!(destination % 4, byte);
     }
 }

@@ -1,9 +1,9 @@
-# Finite AES-128 development-candidate gate. Verification campaigns stay separate.
+# Finite AES-192/256 development-candidate gate. Verification campaigns stay separate.
 # No crates.io publication is selected for this internal milestone.
 schema = 1
-version = "0.27.0"
-scope = "Portable AES-128 blocks and ownership, bounded downstream consumers, retained modern/legacy HKDF compatibility, registry and candidate metadata. Scoped pentest/retest required before release authorization; no historical evidence-freshness gate or implicit dynamic/proof/timing/compiler-matrix campaign."
-ci_checks = ["crypto-tests","crypto-lint","crypto-format","facade-integration","hkdf-owner-contract","aes-owner-contract","aes-dataflow-regressions","aes-provider-api","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
+version = "0.27.1"
+scope = "Portable AES-192/256 blocks and clearing owners, retained AES-128/provider contracts, bounded downstream consumers, modern/legacy HKDF compatibility, registry and candidate metadata. Scoped pentest/retest required before release authorization; no historical evidence-freshness gate or implicit dynamic/proof/timing/compiler-matrix campaign."
+ci_checks = ["crypto-tests","crypto-lint","crypto-format","facade-integration","hkdf-owner-contract","aes-owner-contract","aes-wide-owner-contract","aes-wide-api","aes-dataflow-regressions","aes-provider-api","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
 
 [[checks]]
 id = "crypto-tests"
@@ -39,6 +39,16 @@ timeout_seconds = 60
 id = "aes-dataflow-regressions"
 command = ["python3","scripts/aes/test-aes-dataflow.py"]
 timeout_seconds = 60
+
+[[checks]]
+id = "aes-wide-owner-contract"
+command = ["python3","scripts/cryptography/test-aes-wide-owner-contract.py"]
+timeout_seconds = 60
+
+[[checks]]
+id = "aes-wide-api"
+command = ["python3","scripts/aes/check-aes-wide-api.py","1.99.1"]
+timeout_seconds = 300
 
 [[checks]]
 id = "aes-provider-api"

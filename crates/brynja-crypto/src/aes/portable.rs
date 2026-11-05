@@ -12,6 +12,7 @@ fn write(bytes: &mut [u8], index: usize, value: u8) -> Result<(), Error> {
 
 mod field;
 mod layout;
+pub(super) mod wide;
 use field::{inv_sbox, multiply, sbox, xtime};
 
 pub(super) fn expand(key: &[u8], schedule: &mut [u8; 176]) -> Result<(), Error> {

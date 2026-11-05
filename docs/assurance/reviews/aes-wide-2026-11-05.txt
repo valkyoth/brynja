@@ -1,0 +1,167 @@
+CLAUDE:
+I found no Critical or High issues in the AES-192/256 work since v0.27.0. There are two Medium items and four Low ones, mostly verification gaps that matter under a military threat model rather than bugs in the cipher.
+
+Scope. HEAD is exactly the v0.27.0 commit (9b2c8ee9), so there are no new commits. Everything since the tag is the uncommitted AES-192/256 work in your working tree. The code I reviewed is crates/brynja-crypto/src/aes/{wide.rs, portable/wide.rs, portable/layout.rs}, the changes to aes.rs, the tests and fixtures, the assurance crates and the Cargo/lockfile changes.
+
+Correctness checks (all pass)
+
+┌───────────────────────────────────────────────────────────────────────────────────────────┬─────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                           Check                                           │                                                   Result                                                    │
+├───────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Key expansion vs FIPS 197 (Nk=6/8, RotWord/SubWord/Rcon, the AES-256 extra SubWord at i   │ Correct; I checked it by hand against the spec                                                              │
+│ mod 8 = 4, w[i−Nk])                                                                       │                                                                                                             │
+├───────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Full AES-192/256 schedules vs FIPS 197 Appendix A.2/A.3                                   │ Exact match, all 52/60 words                                                                                │
+├───────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ NIST AESAVS KAT files (GFSbox, KeySbox, VarKey, VarTxt)                                   │ 700 + 810 records pass, both directions, both key types                                                     │
+├───────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ SP 800-38A F.1.3–F.1.6 example blocks                                                     │ Pass                                                                                                        │
+├───────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ OpenSSL differential (ignored by default; I ran it with --ignored)                        │ Pass                                                                                                        │
+├───────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Round counts, inverse round order, round-key indexing                                     │ Correct; out-of-range reads return errors instead of panicking                                              │
+├───────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ unsafe                                                                                    │ None; #![forbid(unsafe_code)] is in place                                                                   │
+├───────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ .unwrap() / .expect() in production paths                                                 │ None                                                                                                        │
+├───────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Concurrency                                                                               │ Key types are neither Send nor Sync (enforced by a PhantomData<*mut ()> field); there is no shared state    │
+├───────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Dependencies                                                                              │ No new crates; lockfile changes are only version bumps; cargo audit reports nothing                         │
+├───────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Zeroization                                                                               │ Schedule, state and word scratch are cleared on drop; failure and unwind paths are tested at every round    │
+│                                                                                           │ and every expansion step                                                                                    │
+└───────────────────────────────────────────────────────────────────────────────────────────┴─────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+Findings
+
+1. Medium: constant-time behaviour is only verified at the IR level, not in the machine code
+
+- Location: crates/brynja-crypto/src/aes/portable/field.rs:6, :13; it now also protects the new key schedule in portable/wide.rs:23-44.
+- Type: side channel (timing).
+- Description: The S-box is computed with masks like 0u8.wrapping_sub(b & 1), which is constant-time in source but not guaranteed after code generation. LLVM can turn these into branches or cmov-less selects on some targets and optimization levels. The timing evidence is weak against a strong attacker:
+  - check-aes-dataflow.py inspects LLVM IR, not the final linked machine code.
+  - brynja-aes-wide-timing compares only two fixed classes (all-0x00 vs all-0xff) with 512 samples.
+  - AES-192/256 add new secret-dependent work (SubWord on key bytes, including the extra AES-256 SubWord), and none of it has machine-code-level evidence yet.
+- Remediation: Add a value barrier on the masks, and add a check on the final linked binary that rejects conditional branches or memory lookups indexed by secrets in multiply, xtime, sbox, inv_sbox and the wide expand/transform, per target. Also run a dudect-style fixed-vs-random test with at least 10⁶ samples before calling this qualified.
+#[inline(always)]
+fn barrier(x: u8) -> u8 {
+    // Opaque to the optimizer; prevents mask-to-branch rewriting.
+    core::hint::black_box(x)
+}
+pub(super) fn xtime(a: u8) -> u8 {
+    (a << 1) ^ (0x1b & barrier(0u8.wrapping_sub(a >> 7)))
+}
+  black_box is best-effort, so the binary-level check is still the real control.
+
+2. Medium: no fault-injection countermeasure (relevant for a military threat model)
+
+- Location: crates/brynja-crypto/src/aes/portable/wide.rs:60-89.
+- Type: missing protection against physical attack (differential fault analysis).
+- Description: A single induced fault in the last rounds lets an attacker recover round keys. For AES-256, two consecutive recovered round keys give the whole master key. The docs say physical attacks are out of scope, which is acceptable for a library. But nothing in the API lets a high-assurance user opt into a defense.
+- Remediation: Add an optional encrypt-and-verify path that releases output only if a recomputation matches:
+pub fn encrypt_block_verified<'out>(&self, input: &[u8; 16], output: &'out mut [u8; 16])
+    -> Result<SecretBlock<'out>, Error> {
+    let destination = SecretRegionInitialization::begin(output)?;
+    let mut a = Scratch::<16>::new(); a.0.copy_from_slice(input);
+    wide::transform::<K, S, R>(&mut a.0, schedule, false)?;
+    let mut b = Scratch::<16>::new(); b.0.copy_from_slice(&a.0);
+    wide::transform::<K, S, R>(&mut b.0, schedule, true)?;      // decrypt back
+    let diff = b.0.iter().zip(input).fold(0u8, |d, (x, y)| d | (x ^ y));
+    if core::hint::black_box(diff) != 0 { return Err(Error::SecretMemory); } // output cleared on drop
+    /* destination.write(&a.0)?; finish */
+}
+
+3. Low: the conformance testing is not yet complete
+
+- Location: docs/assurance/aes-wide-development.md:33, :105-106; tests/fixtures/aes{192,256}/README.md.
+- Type: incomplete validation.
+- Description: The AESAVS Monte Carlo (MCT) and multi-block message (MMT) tests are defes roughly 10⁵ chained operations per key size and catches state-carryover bugs that
+  single-block KATs miss. Packaged-archive acceptance and AArch64/LTO qualification are ll of this honestly.
+- Remediation: Keep the 0.27.1 tag gated as "development". Do not describe AES-192/256 a the binary-level check from finding 1 are green.
+
+4. Low: the ephemeral key types cost a lot of CPU per block
+
+- Location: crates/brynja-crypto/src/aes/wide.rs:81-92, :95-104.
+- Type: denial of service through CPU cost.
+- Description: Aes192Key/Aes256Key rebuild the full 208/240-byte schedule on every blockout 15 field multiplications of 8 steps each. With 14 rounds plus key expansion forAES-256, the cost per block is large. An attacker who controls how many blocks are processed gets a strong CPU amplifier. The docs warn about this, but nothing in the API limits it.
+- Remediation: Point protocol-facing code to Aes*ExpandedKey. Also consider a #[doc] warning plus a lint or policy check in the protocol crates that rejects the ephemeral types inside per-message loops.
+
+5. Low: two different contents ship under the same version number
+
+- Location: release-crates.toml (brynja-crypto: previous_version = "0.2.0", version = "0
+- Type: supply chain / provenance.
+- Description: brynja-crypto gains new public API (four types and four constants) but keassurance crate pins =0.2.0. SBOM entries, caches or anyone resolving without the pathdependency cannot tell the AES-128-only 0.2.0 from the AES-192/256 0.2.0.
+- Remediation:
+[crates."brynja-crypto"]
+previous_version = "0.2.0"
+version = "0.2.1-dev.1"   # or 0.2.1; update all assurance pins to match
+
+6. Low: the OpenSSL test oracle is found through PATH
+
+- Location: crates/brynja-crypto/tests/aes_wide_differential.rs:23, :74.
+- Type: test-integrity / supply chain.
+- Description: Command::new("openssl") runs whatever openssl comes first on PATH. A poisoned CI image could supply a fake oracle that agrees with a broken implementation. The KATs limit the damage, but the differential test exists to be independent evidence.
+- Remediation:
+let exe = std::env::var_os("BRYNJA_OPENSSL").ok_or("set BRYNJA_OPENSSL to an absolute path")?;
+let exe = std::path::PathBuf::from(exe);
+if !exe.is_absolute() { return Err("oracle path must be absolute".into()); }
+Command::new(&exe) /* … */
+  Then record the oracle binary's SHA-256 next to the version string in the verification results.
+
+Accepted limits I did not raise as findings
+
+These are already documented:
+- Register and stack copies of intermediate values in mix are not cleared.
+- The caller's input key copy is not cleared.
+- Cached schedules keep key-equivalent material in memory longer.
+- The external-key provider remains AES-128 only.
+- There are no modes or AEAD; this is a raw block primitive by design.
+
+CODEX DAYBREAK:
+## Security assessment
+
+One release-blocking supply-chain finding was identified. I found no serious cryptographic implementation, memory-safety, concurrency, arithmetic, or software timing-control defect in the reviewed AES-192/256 code.
+
+### Finding 1
+
+- Severity: High
+- Location: aes.rs (crates/brynja-crypto/src/aes.rs:34), wide.rs (crates/brynja-crypto/src/aes/wide.rs:1), VERIFICATION_RESULTS.md (docs/VERIFICATION_RESULTS.md:49)
+- Vulnerability Type: Supply-chain integrity / non-reproducible source identity
+- Description: The dereferenced v0.27.0 tag and HEAD are the same commit (9b2c8ee9). Therefore, git diff v0.27.0..HEAD is empty. The AES-192/256 implementation exists only in a dirty working tree containing 70 modified and 103 untracked files; the primary implementation files are untracked. A build from HEAD and a package created from the dirty tree can consequently contain different code. This prevents an immutable commit, signed tag, CI run, or verification record from conclusively identifying the reviewed implementation. For a military-grade supply chain, release provenance is not established.
+- Remediation: Commit only the explicitly reviewed candidate, require a clean tree, and rerun all security checks against that exact commit before signing it.
+
+# Stage an explicit reviewed set—never use an indiscriminate broad add.
+git add \
+  crates/brynja-crypto/src/aes.rs \
+  crates/brynja-crypto/src/aes/portable.rs \
+  crates/brynja-crypto/src/aes/portable/layout.rs \
+  crates/brynja-crypto/src/aes/portable/wide.rs \
+  crates/brynja-crypto/src/aes/wide.rs \
+  crates/brynja-crypto/tests/aes_wide.rs \
+  crates/brynja-crypto/tests/aes_wide_kat.rs \
+  crates/brynja-crypto/tests/aes_wide_differential.rs
+
+git diff --cached --check
+git commit -S -m "Add reviewed AES-192/256 block primitives"
+
+test -z "$(git status --porcelain)"
+test "$(git rev-parse 'v0.27.0^{}')" != "$(git rev-parse HEAD)"
+
+# Rerun the complete gate against this exact commit, then sign the tag.
+git tag -s v0.27.1 -m "Reviewed AES-192/256 development candidate"
+
+Do not treat the present working-tree results as release authorization for the future commit without an exact-commit retest.
+
+## Implementation verdict
+
+The reviewed implementation appears correct within its deliberately narrow raw-block boundary:
+
+- No unsafe code, raw pointers, manual Send/Sync, transmutation, unchecked indexing, or production unwrap/expect.
+- AES-192 and AES-256 schedule lengths, key dependencies, AES-256 extra SubWord, and 12/14-round transformations match FIPS 197.
+- Fixed-width arrays and private const-generic instantiations prevent width/round confusion.
+- Key, expanded schedule, state, word, and output owners clear their admitted storage on success, error, unwind, explicit clear, and ordinary drop.
+- Public ciphertext is staged and copied only after successful completion.
+- Owners are non-Copy, non-Clone, non-Debug, non-Send, and non-Sync.
+- Runtime work and memory consumption are fixed per block; no attacker-controlled allocation or unbounded loop was introduced.
+- The dependency delta introduces no third-party dependency. The lockfile only changes the façade version. The sole registry dependency in the workspace, sanitization 2.1.1, returned no known advisory from the current OSV query; absence of a known advisory is not an independent source audit. RustSec advisory database

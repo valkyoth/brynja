@@ -1,5 +1,26 @@
 # Component Verification Status
 
+## AES-192/256 development scope (v0.27.1 candidate)
+
+Distinct ephemeral and cached portable key owners are implemented behind the
+existing opt-in feature. Initial FIPS schedules, published block examples,
+ownership and error/unwind checks are described in the
+[wide-key development scope](assurance/aes-wide-development.md).
+The full single-block KAT corpus, independent differential checks, bounded
+production parameter/index proofs, seven-owner emitted Drop checks and separate
+wide operation-scratch/explicit-clear dispatch checks are added. The isolated
+public consumers now exercise all three widths across fourteen compilers and
+four Cortex-M compile-only builds. Bounded LLVM dataflow and fingerprint-bound
+assembly review cover all eleven portable helpers on the two x86_64 compiler
+endpoints. The separate 26-campaign wide-key host timing screen recorded zero
+alarms on its first run; exact population, timing boundaries and local evidence
+identifiers are in the development scope. The normative requirement and
+[control mapping](security-controls.md#aes-192256-development-contract-v0271)
+now describe all three widths without promoting family qualification. Candidate
+metadata and the finite checklist are prepared, and the registered AES refresh
+passed. Owner review and the clean-candidate final gate remain pending, as do
+the broader target/side-channel campaigns scheduled for v0.27.2.
+
 ## AES-128 development scope (v0.27.0, in progress)
 
 `brynja-crypto::aes` provides a development-only portable AES-128 key owner and

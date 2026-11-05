@@ -74,7 +74,7 @@ is bundled. Software keys remain unchanged; provider keys use opaque bindings,
 not imported key bytes. Drop releases the adapter, not the device key; explicit
 destruction requires an owning adapter. Adapter/device qualification is separate.
 
-The internal v0.27.0 candidate also provides raw software AES-128 blocks under
+The internal v0.27.1 development slice provides raw software AES-128/192/256 blocks under
 the **default-off** `hazmat-aes-block` feature. Enable that feature explicitly
 on either `brynja-crypto` or `brynja` when using the matching checkout. No HSM
 is required. This is not message encryption or an AEAD: no authentication,
@@ -85,6 +85,25 @@ For repeated blocks, `aes::Aes128ExpandedKey` optionally retains its schedule in
 176 caller-owned clearing bytes; `aes::Aes128Key` retains the smaller 16-byte key
 and expands per operation. Both remain raw, unauthenticated block APIs. The
 bounded target/compiler support matrix is in `docs/assurance/aes128-development.md`.
+
+AES-192 and AES-256 have distinct `aes::Aes192Key`/`aes::Aes256Key` types,
+requiring 24/32 caller-owned key bytes. Their optional `Aes192ExpandedKey`/
+`Aes256ExpandedKey` forms require 208/240 caller-owned clearing schedule bytes.
+Every operation still handles exactly one 16-byte block. Both key forms provide
+secret `encrypt_block`/`decrypt_block` output and explicitly acknowledged
+`encrypt_block_public`; there is no public decrypt or automatic key-size choice.
+Input key copies remain the caller's responsibility. Cached schedules increase
+the lifetime and footprint of key-equivalent material. See
+`docs/assurance/aes-wide-development.md` for their separate evidence and limits.
+The optional external-key provider interface remains AES-128 only.
+
+The ordinary AES-192/256 key forms rebuild their full schedule on every block.
+For repeated blocks in a separately reviewed construction, prefer the matching
+expanded-key form when its longer secret lifetime is acceptable. Caching avoids
+repeated expansion, not the cost of the rounds themselves. All operations are
+bounded per block, but neither API supplies a request quota: applications must
+limit attacker-controlled block counts, request rates and concurrency. Raw AES
+blocks alone must not be used as a message-encryption protocol.
 
 Use a release containing the hash/MAC APIs described here, not an older
 foundation-only package.

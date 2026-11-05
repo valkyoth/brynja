@@ -6,6 +6,8 @@ use std::{
     panic::{AssertUnwindSafe, catch_unwind, resume_unwind},
 };
 
+mod wide;
+
 std::thread_local! {
     static POINT: Cell<usize> = const { Cell::new(0) };
     static FAIL: Cell<Option<(usize,bool)>> = const { Cell::new(None) };
@@ -32,6 +34,8 @@ pub(super) fn observe_clear(bytes: &[u8]) {
         CLEARED.get()
             | match bytes.len() {
                 176 => 1,
+                208 => 8,
+                240 => 16,
                 16 => 2,
                 4 => 4,
                 _ => 0,

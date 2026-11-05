@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import copy
 import sys
+import tomllib
 from pathlib import Path
 
 
@@ -62,6 +63,26 @@ def test_generation_is_deterministic() -> None:
     first = domain.build(ledger, register, versions)
     second = domain.build(ledger, register, versions)
     assert standards.json_bytes(first) == standards.json_bytes(second)
+
+
+def test_aes_wide_development_keeps_family_qualification_open() -> None:
+    _scope, requirements, _digest = domain.load_policy()
+    aes = next(item for item in requirements if item['id'] == 'BRY-REQ-CRYPTO-0005')
+    assert aes['revision'] == 3
+    assert aes['lifecycle'] == 'planned'
+    assert aes['decision_ids'] == ['algorithm.aes']
+    assert 'AES-192/256 ephemeral and cached owners' in aes['statement']
+    for limitation in ('No full-cipher proof', 'whole-program constant-time', 'physical erasure',
+                       'independent qualification', 'v0.27.2'):
+        assert limitation in aes['evidence_gap']
+    controls = (lib.ROOT / 'docs/security-controls.md').read_text()
+    registry = tomllib.loads((lib.ROOT / 'verification/checks.toml').read_text())
+    ids = {item['id'] for item in registry['checks'] if item['component'] == 'aes'}
+    for check in ('wide-kat', 'wide-differential', 'wide-api-msrv', 'wide-api-current',
+                  'field-layout-proof', 'wide-operation-cleanup', 'dataflow-review',
+                  'downstream-matrix', 'wide-timing-screen'):
+        assert check in ids and f'`{check}`' in controls
+    assert 'Cortex-M builds are compile-only' in controls
 
 
 def test_every_authority_is_covered_once_or_more() -> None:

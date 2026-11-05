@@ -1,4 +1,4 @@
-//! Development portable AES-128 block primitive (FIPS 197).
+//! Development portable AES block primitives (FIPS 197).
 //! Available only with the explicit `hazmat-aes-block` Cargo feature.
 //!
 //! No mode, authentication, padding, nonce management, acceleration or implicit
@@ -21,6 +21,10 @@
 //! fault-injection qualification. Each call processes exactly one block;
 //! callers must bound repeated work on untrusted traffic. Caching removes
 //! repeated expansion, not the need for application traffic admission.
+//!
+//! AES-192/AES-256 use distinct key owners and 208/240-byte cached schedules.
+//! Their qualification is in progress; AES-128 observations do not qualify the
+//! new key schedules or round counts. The external provider API remains AES-128.
 
 #![forbid(unsafe_code)]
 
@@ -28,6 +32,8 @@ use brynja_core::{OwnedSecretRegion, SecretRegionInitialization, clear_owned_reg
 use core::marker::PhantomData;
 
 mod portable;
+mod wide;
+pub use wide::{Aes192ExpandedKey, Aes192Key, Aes256ExpandedKey, Aes256Key};
 
 /// Explicit, optional external AES-128 key providers; no device driver is bundled.
 #[cfg(feature = "external-key-provider")]
@@ -35,10 +41,18 @@ pub mod provider;
 
 /// AES block size, in bytes (all AES variants use this block size).
 pub const BLOCK_BYTES: usize = 16;
-/// AES-128 key size, in bytes. Other key sizes are not admitted here.
+/// AES-128 key size, in bytes. Retained for source compatibility.
 pub const KEY_BYTES: usize = 16;
 /// Caller storage for all eleven AES-128 round keys, including the initial key.
 pub const EXPANDED_KEY_BYTES: usize = 176;
+/// AES-192 key size, in bytes.
+pub const AES192_KEY_BYTES: usize = 24;
+/// AES-192 schedule size: thirteen 16-byte round keys.
+pub const AES192_EXPANDED_KEY_BYTES: usize = 208;
+/// AES-256 key size, in bytes.
+pub const AES256_KEY_BYTES: usize = 32;
+/// AES-256 schedule size: fifteen 16-byte round keys.
+pub const AES256_EXPANDED_KEY_BYTES: usize = 240;
 
 /// Explicit authority to release one encrypted block as public ciphertext.
 /// This does not authenticate it or make raw block encryption a message mode.

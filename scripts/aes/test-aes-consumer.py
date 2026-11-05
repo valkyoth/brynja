@@ -17,7 +17,7 @@ spec.loader.exec_module(consumer)
 
 def success():
     return '\n'.join('test ' + name + ' ... ok' for name in sorted(consumer.TESTS)) + (
-        '\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n')
+        '\ntest result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n')
 
 
 class ConsumerTests(unittest.TestCase):
@@ -54,7 +54,10 @@ class ConsumerTests(unittest.TestCase):
                 self.assertIn('features=[]', seen[offset][1])
                 self.assertIn('::hkdf;', seen[offset + 1][2])
                 self.assertIn('features=["hazmat-aes-block"]', seen[offset + 2][1])
-                self.assertIn('::aes::Aes128Key;', seen[offset + 2][2])
+                self.assertIn('::aes::{', seen[offset + 2][2])
+                for owner in consumer.OWNERS:
+                    self.assertIn(owner, seen[offset][2])
+                    self.assertIn(owner, seen[offset + 2][2])
             emit.assert_called_once()
 
     def test_feature_probe_failure_never_prints_success(self):
@@ -91,6 +94,20 @@ class ConsumerTests(unittest.TestCase):
         for output in bad:
             with self.subTest(output=output), self.assertRaises(ValueError):
                 consumer.check_tests(output)
+
+    def test_each_width_and_owner_is_explicit(self):
+        names = {'known_answer_both_directions', 'drop_clears_only_owned_regions',
+                 'explicit_clear_and_reuse', 'output_outlives_key',
+                 'public_ciphertext_persists_after_key_clear', 'consumer_unwind_clears_key_and_output'}
+        self.assertEqual(consumer.TESTS, names | {f'wide::aes{bits}::{name}'
+                                               for bits in (192, 256) for name in names})
+        self.assertEqual(consumer.OWNERS, tuple(f'Aes{bits}{kind}' for bits in (128, 192, 256)
+                                              for kind in ('Key', 'ExpandedKey')))
+        for name in consumer.TESTS:
+            with self.subTest(name=name), self.assertRaises(ValueError):
+                consumer.check_tests(success().replace(f'test {name} ... ok', f'test {name} ... ignored'))
+        with self.assertRaises(ValueError):
+            consumer.check_tests(success().replace('18 passed', '6 passed'))
 
     def test_fixture_policy(self):
         original = tomllib.loads((consumer.FIXTURE / 'Cargo.toml').read_text())

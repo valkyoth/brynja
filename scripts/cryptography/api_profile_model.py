@@ -383,20 +383,23 @@ def validate_secret_policy(
     if not set(contracts.COMPOSED_OWNER_CONTRACTS) <= {row.get("id") for row in registered}:
         fail("composed secret-owner inventory is incomplete")
     development = policy['development-secret-owner']
-    if len(development) != 1 or development[0].get('id') != contracts.aes_owner_contract.ID:
+    import aes_wide_owner_contract as wide
+    ids = [owner.get('id') for owner in development]
+    if len(ids) != 3 or set(ids) != {contracts.aes_owner_contract.ID, *wide.RECORDS}:
         fail('development secret-owner inventory is incomplete or duplicated')
-    owner = development[0]
-    try:
-        contracts.aes_owner_contract.validate(root, owner, policy['current-secret-owner'])
-    except (ValueError, rust_contract.RustContractError) as error:
-        fail(str(error))
-    if owner['capability'] in capabilities:
-        fail('development owner cannot replace a registered capability owner')
-    if semantic is not None and (owner['capability'] not in semantic or
-                                semantic[owner['capability']]['disposition'] != 'future-work'):
-        fail('development owner cannot promote the AES-family disposition')
-    for target in [owner['symbol'], owner['output_symbol'], *owner['cleanup_bindings'], *owner['evidence']]:
-        validate_target(root, target, 'development secret-owner target')
+    for owner in development:
+        contract = wide if owner['id'] in wide.RECORDS else contracts.aes_owner_contract
+        try:
+            contract.validate(root, owner, policy['current-secret-owner'])
+        except (ValueError, rust_contract.RustContractError) as error:
+            fail(str(error))
+        if owner['capability'] in capabilities:
+            fail('development owner cannot replace a registered capability owner')
+        if semantic is not None and (owner['capability'] not in semantic or
+                                    semantic[owner['capability']]['disposition'] != 'future-work'):
+            fail('development owner cannot promote the AES-family disposition')
+        for target in [owner['symbol'], owner['output_symbol'], *owner['cleanup_bindings'], *owner['evidence']]:
+            validate_target(root, target, 'development secret-owner target')
     reviews = policy["reviewed-source"]
     paths = [review.get("path") for review in reviews]
     if set(paths) != contracts.REVIEWED_SOURCE_PATHS or len(paths) != len(set(paths)):

@@ -19,15 +19,17 @@ TOOLCHAINS = ('1.90.0', '1.99.1')
 MATRIX = ('1.90.0', '1.91.0', '1.92.0', '1.93.0', '1.94.0', '1.95.0',
           '1.96.0', '1.96.1', '1.97.0', '1.97.1', '1.98.0', '1.98.1', '1.99.0', '1.99.1')
 ROUTES = ('direct', 'facade')
-TESTS = {'known_answer_both_directions', 'drop_clears_only_owned_regions',
+BASE_TESTS = {'known_answer_both_directions', 'drop_clears_only_owned_regions',
          'explicit_clear_and_reuse', 'output_outlives_key',
          'public_ciphertext_persists_after_key_clear', 'consumer_unwind_clears_key_and_output'}
+TESTS = BASE_TESTS | {f'wide::aes{bits}::{name}' for bits in (192, 256) for name in BASE_TESTS}
+OWNERS = ('Aes128Key', 'Aes128ExpandedKey', 'Aes192Key', 'Aes192ExpandedKey', 'Aes256Key', 'Aes256ExpandedKey')
 DIRECT = {'brynja-core', 'brynja-crypto', 'brynja-hash-core', 'brynja-hash-parallel',
           'brynja-hash-sha2', 'brynja-hash-sha3', 'brynja-hash-tuple',
           'brynja-mac-hmac', 'brynja-mac-kmac'}
 FACADE = DIRECT | {'brynja', 'brynja-pki', 'brynja-protocol', 'brynja-tls',
                    'brynja-tls12', 'brynja-tls13', 'brynja-tls13-handshake'}
-FILES = ('Cargo.toml', 'Cargo.lock', 'src/lib.rs', 'tests/consumer.rs')
+FILES = ('Cargo.toml', 'Cargo.lock', 'src/lib.rs', 'src/wide.rs', 'tests/consumer.rs', 'tests/wide/mod.rs')
 MARKER = 'AES downstream: PASS; 8 host configurations; 4 Cortex-M compile checks; checkout sources only'
 MATRIX_MARKER = 'AES downstream matrix: PASS; 14 compilers; 56 host configurations; 4 Cortex-M compile checks; checkout sources only'
 FEATURE_MARKERS = [f'AES_FEATURE_GATE: {compiler} {route} absent with defaults on/off; explicit opt-in works'
@@ -104,7 +106,7 @@ def check_tests(output):
             all(status == 'ok' for _, status in rows), 'missing, duplicated, ignored or failed consumer test')
     summaries = re.findall(r'^test result: .*$', output, re.M)
     require(len(summaries) == 1 and summaries[0].startswith(
-        'test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;'),
+        'test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;'),
         'consumer test population summary changed')
 
 
@@ -123,7 +125,7 @@ def configuration(compiler, route, directory, compile_target=True):
             command.append('--release')
         output = verifier.run(command, env, directory)
         check_tests(output)
-        print(f'AES_DOWNSTREAM_HOST: {compiler} {route} {profile} 6 exact tests', flush=True)
+        print(f'AES_DOWNSTREAM_HOST: {compiler} {route} {profile} 18 exact tests', flush=True)
     if compile_target:
         verifier.run(cargo + ['check'] + selection + ['--lib', '--target', 'thumbv7em-none-eabi'], env, directory)
         print(f'AES_DOWNSTREAM_TARGET: {compiler} {route} thumbv7em-none-eabi compile-only', flush=True)
@@ -150,12 +152,13 @@ def feature_probe(compiler, route, directory):
     cargo = ['cargo', '+' + compiler]
     source = directory / 'src/lib.rs'
     manifest = directory / 'Cargo.toml'
+    aes_import = f'#![no_std]\npub use {module}::aes::{{' + ', '.join(OWNERS) + '};\n'
     for defaults in ('true', 'false'):
         text = ('[workspace]\n[package]\nname="aes-feature-probe"\nversion="0.0.0"\n'
                 'edition="2024"\npublish=false\n[dependencies]\n' + dependency + '={path=' +
                 json.dumps(str(ROOT / 'crates' / dependency)) + ',default-features=' + defaults + ',features=[]}\n')
         manifest.write_text(text)
-        source.write_text(f'#![no_std]\npub use {module}::aes::Aes128Key;\n')
+        source.write_text(aes_import)
         verifier.run(cargo + ['generate-lockfile', '--offline'], env, directory)
         command = cargo + ['check', '--locked', '--offline', '--lib', '--message-format=json']
         result = subprocess.run(command, cwd=directory, env=env, text=True, capture_output=True, timeout=120)
@@ -164,7 +167,7 @@ def feature_probe(compiler, route, directory):
         source.write_text(f'#![no_std]\npub use {module}::hkdf;\n')
         verifier.run(command, env, directory)
         manifest.write_text(text.replace('features=[]', 'features=["hazmat-aes-block"]'))
-        source.write_text(f'#![no_std]\npub use {module}::aes::Aes128Key;\n')
+        source.write_text(aes_import)
         verifier.run(command, env, directory)
     print(f'AES_FEATURE_GATE: {compiler} {route} absent with defaults on/off; explicit opt-in works', flush=True)
 

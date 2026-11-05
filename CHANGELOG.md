@@ -1,5 +1,38 @@
 # Changelog
 
+## 0.27.1 development candidate (unreleased)
+
+- Add distinct opt-in portable AES-192/AES-256 owners and optional caller-owned
+  clearing cached schedules, retaining 16-byte blocks and guarded secret/public
+  output semantics. The AES-128 implementation and provider contract are unchanged.
+- Add complete FIPS schedule examples, published block examples, ownership and
+  injected-failure regressions plus paired API diagnostics. Remaining qualification
+  is explicit in `docs/assurance/aes-wide-development.md`; this is not a release-ready claim.
+- Extend verification with all 1510 AES-192/256 single-block AESAVS KAT records,
+  independent forward/inverse OpenSSL comparisons for both owner forms, and
+  compiling schedule/round/cleanup mutation controls. No production dependency added.
+- Extend bounded production parameter/index proofs to all AES widths and emitted
+  Drop-dispatch checks to all seven public owners on both compiler endpoints and
+  panic profiles. Add separate wide operation-scratch/explicit-clear dispatch
+  checks with 130 rejected IR mutations per configuration; remaining compiler,
+  target and side-channel qualification stays open.
+- Extend direct/façade downstream consumers to eighteen tests across all three
+  AES widths, fourteen Rust compilers and four Cortex-M compile-only builds.
+  Extend bounded LLVM dataflow and reviewed assembly fingerprints from six to
+  eleven portable helpers, with new taint, selection and call-graph regressions.
+  Broader qualification remains unfinished.
+- Add a separate bounded AES-192/256 timing screen with 26 ephemeral/cached/import
+  campaigns, independent preflight and retained samples; the first run had zero
+  alarms. Update the normative requirement, threat model and control mapping
+  without promoting the family to qualified status. Stronger timing, packaged
+  acceptance and broader target/compiler work remain scheduled for v0.27.2.
+- Preserve packaged HKDF compatibility by admitting only the composition crate's
+  exact AES-128/192/256 fixture sets. Add missing/extra/symlink, include-policy and
+  archive-byte regression checks; this does not claim AES-family package acceptance.
+- Prepare the internal facade version, isolated consumer pins, SBOM and finite
+  candidate checklist. Owner pentest/retest and release authorization are pending;
+  no supporting-crate version increase or crates.io publication is selected.
+
 ## 0.27.0 development candidate (unreleased)
 
 - Add portable AES-128 key expansion and forward/inverse single-block APIs,

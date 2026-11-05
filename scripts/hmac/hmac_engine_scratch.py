@@ -35,7 +35,7 @@ def consumer(body, operation, definitions, aliases):
     return outlined
 
 
-def output_guard_drop(line, body):
+def output_guard_drop(line, body, argument_guards=()):
     """Separate caller-output guard; safe Rust excludes aliasing local scratch."""
     v0 = (r"@_RNvXs_NtCs\w+_11brynja_core13secret_memoryNtB\w+_"
           r"26SecretRegionInitializationNtNtNtCs\w+_4core3ops4drop4Drop4drop\(")
@@ -46,7 +46,11 @@ def output_guard_drop(line, body):
     argument = re.search(r"(%[-\w.]+)\)", line)
     require(argument and re.fullmatch(r"%initialization(?:\.[-\w]+)*", argument[1]),
             "output guard identity changed")
-    require(re.search(re.escape(argument[1]) + r" = alloca \[24 x i8\],", body),
+    # An outlined consumer can receive the distinct caller-output descriptor
+    # by argument. Its caller must validate the typed, noalias 24-byte ABI;
+    # default callers continue to require a real local allocation.
+    require(argument[1] in argument_guards or
+            re.search(re.escape(argument[1]) + r" = alloca \[24 x i8\],", body),
             "output guard storage changed")
     return True
 
@@ -61,7 +65,7 @@ def allocations(body, operation):
     return result
 
 
-def check(body, operation, independent_cleanup=None):
+def check(body, operation, independent_cleanup=None, *, argument_guards=()):
     owners = allocations(body, operation)
     names = tuple(owners)
     graph = blocks(body)
@@ -109,7 +113,7 @@ def check(body, operation, independent_cleanup=None):
                     require(values[slot] != -1, "clear outside scratch lifetime")
                     values[slot] = 1
                     cleared.add(name)
-            elif output_guard_drop(line, body):
+            elif output_guard_drop(line, body, argument_guards):
                 pass
             elif independent_cleanup is not None and independent_cleanup(line):
                 # Caller must establish a distinct allocation and a reviewed

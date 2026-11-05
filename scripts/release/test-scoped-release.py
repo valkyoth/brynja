@@ -58,9 +58,9 @@ class ScopedRelease(unittest.TestCase):
             scoped.enabled('garbage')
 
     def test_aes_candidate_gate_is_finite_and_does_not_publish(self):
-        plan = scoped.load('0.27.0')
+        plan = scoped.load('0.27.1')
         commands = {check['id']: check['command'] for check in plan['checks']}
-        self.assertEqual(len(commands), 28)
+        self.assertEqual(len(commands), 30)
         self.assertEqual(commands['release-plan'], ['scripts/release/test-release-plan.sh'])
         self.assertEqual(commands['crypto-tests'],
             ['cargo', 'test', '--locked', '-p', 'brynja-crypto', '-p',
@@ -76,6 +76,10 @@ class ScopedRelease(unittest.TestCase):
                           'aes-consumer-lint-direct', 'aes-consumer-lint-facade'})
         self.assertEqual(commands['aes-owner-contract'],
                          ['python3', 'scripts/cryptography/test-aes-owner-contract.py'])
+        self.assertEqual(commands['aes-wide-owner-contract'],
+                         ['python3', 'scripts/cryptography/test-aes-wide-owner-contract.py'])
+        self.assertEqual(commands['aes-wide-api'],
+                         ['python3', 'scripts/aes/check-aes-wide-api.py', '1.99.1'])
         self.assertEqual(commands['aes-dataflow-regressions'],
                          ['python3', 'scripts/aes/test-aes-dataflow.py'])
         self.assertEqual(commands['aes-downstream-endpoints'],
@@ -108,10 +112,11 @@ class ScopedRelease(unittest.TestCase):
             self.assertFalse(any('run-verification' in arg or 'brynja-verify' in arg
                                  or 'check-hkdf-timing.py' in arg
                                  or 'check-aes-timing.py' in arg
+                                 or 'check-aes-wide-timing.py' in arg
                                  or 'check-aes-kani.py' in arg
                                  or 'check-aes-dataflow.py' in arg for arg in command))
         release = tomllib.loads((scoped.ROOT / 'release-crates.toml').read_text())
-        self.assertEqual(release['release']['version'], '0.27.0')
+        self.assertEqual(release['release']['version'], '0.27.1')
         self.assertEqual(release['release']['stage'], 'internal')
         self.assertTrue(release['release']['exceptional'])
         self.assertIn('pentest', release['release']['exception_reason'])
@@ -277,6 +282,28 @@ class ScopedRelease(unittest.TestCase):
     def test_version_mismatch_never_falls_back_to_full_campaign(self):
         with self.assertRaisesRegex(ValueError, 'finite'):
             scoped.gate('0.26.0', root=self.root)
+
+    def test_untracked_implementation_blocks_before_execution(self):
+        self.write('crates/new-cipher/src/lib.rs', '// uncommitted implementation\n')
+        with patch.object(scoped, 'execute') as run:
+            with self.assertRaisesRegex(ValueError, 'clean'):
+                scoped.gate('0.25.3', root=self.root)
+        run.assert_not_called()
+
+    def test_staged_implementation_still_requires_commit(self):
+        self.write('crates/new-cipher/src/lib.rs', '// staged implementation\n')
+        self.git('add', 'crates/new-cipher/src/lib.rs')
+        with patch.object(scoped, 'execute') as run:
+            with self.assertRaisesRegex(ValueError, 'clean'):
+                scoped.gate('0.25.3', root=self.root)
+        run.assert_not_called()
+
+    def test_deleted_tracked_review_blocks_before_execution(self):
+        (self.root / 'security/pentest/v0.25.3.md').unlink()
+        with patch.object(scoped, 'execute') as run:
+            with self.assertRaisesRegex(ValueError, 'clean'):
+                scoped.gate('0.25.3', root=self.root)
+        run.assert_not_called()
 
     def test_candidate_change_during_gate_blocks_completion(self):
         with patch.object(scoped, 'execute', side_effect=lambda *a: self.write('changed', 'x')):

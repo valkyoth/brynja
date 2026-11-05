@@ -8,7 +8,8 @@ import hashlib
 from pathlib import Path
 import re
 
-ROLES = {'substitute', 'mix', 'expand', 'add_key', 'transform', 'inverse'}
+ROLES = {'substitute', 'mix', 'expand', 'add_key', 'transform', 'inverse',
+         'expand192', 'expand256', 'transform192', 'transform256', 'wide_add_key'}
 POLICY = Path(__file__).with_name('machine-review.json')
 CLEAR = r'(?:_RNvNt\w+_11brynja_core13secret_memory18clear_owned_region|_ZN11brynja_core13secret_memory18clear_owned_region17h[0-9a-f]+E)'
 
@@ -62,7 +63,7 @@ def fingerprints(assembly, selected):
 def check(assembly, selected, compiler, panic, policy):
     require(set(policy) == {'schema', 'review', 'target', 'panics', 'compilers'} and policy['schema'] == 1,
             'unrecognized policy')
-    require(policy['review'] == 'docs/assurance/aes128-development.md#six-helper-machine-review--2026-11-04'
+    require(policy['review'] == 'docs/assurance/aes-wide-development.md#eleven-helper-machine-review--2026-11-05'
             and policy['target'] == 'x86_64-unknown-linux-gnu'
             and policy['panics'] == ['abort', 'unwind']
             and set(policy['compilers']) == {'1.90.0', '1.99.1'}, 'review scope changed')

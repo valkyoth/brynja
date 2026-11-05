@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Execute three exact production AES field/layout proofs; no full AES claim."""
+"""Execute five exact production AES field/index/admission proofs; no full AES claim."""
 import argparse
 from pathlib import Path
 import re
@@ -11,9 +11,11 @@ import hmac_verifiers as verifier
 
 HARNESSES = ('multiplication_matches_polynomial_reduction',
              'shift_indices_are_bounded_inverse_permutations',
-             'admitted_round_key_indices_are_exact_and_bounded')
+             'admitted_round_key_indices_are_exact_and_bounded',
+             'wide_parameter_admission_is_exact',
+             'wide_schedule_indices_reference_initialized_words')
 SUMMARY = 'Complete - 1 successfully verified harnesses, 0 failures, 1 total.'
-MARKER = 'AES field/layout: PASS; 3 proofs; not full AES or constant-time proof'
+MARKER = 'AES field/layout: PASS; 5 proofs; not full AES or constant-time proof'
 
 
 def policy():
@@ -29,7 +31,7 @@ def policy():
         raise ValueError('AES proof lock identity changed')
     source = (directory / 'src/lib.rs').read_text()
     names = re.findall(r'#\[kani::proof\]\s+(?:#\[kani::unwind\(\d+\)\]\s+)?fn ([a-z_]+)\(\)', source)
-    if tuple(names) != HARNESSES or source.count('#[kani::proof]') != 3:
+    if tuple(names) != HARNESSES or source.count('#[kani::proof]') != 5:
         raise ValueError('AES proof population drift')
     for name in ('field', 'layout'):
         if f'#[path = "../../../crates/brynja-crypto/src/aes/portable/{name}.rs"]\nmod {name};' not in source:
@@ -48,7 +50,7 @@ def main():
     args = parser.parse_args()
     policy()
     if args.policy_only:
-        print('AES field/layout inventory: 3 proofs; NOT executed')
+        print('AES field/layout inventory: 5 proofs; NOT executed')
         return
     pin = verifier.tool('kani')
     with verifier.cargo_environment.private_directory(verifier.ROOT) as temporary:

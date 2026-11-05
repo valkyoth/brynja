@@ -190,9 +190,9 @@ class KaniTests(unittest.TestCase):
             kani.main()
         return commands, captured.getvalue()
 
-    def test_three_exact_harnesses_execute(self):
+    def test_five_exact_harnesses_execute(self):
         commands, output = self.invoke()
-        self.assertEqual(len(commands), 4)
+        self.assertEqual(len(commands), 6)
         self.assertEqual([c[-2:] for c in commands[1:]],
                          [['proofs::' + n, '--exact'] for n in kani.HARNESSES])
         self.assertIn(kani.MARKER, output)
@@ -212,8 +212,8 @@ class KaniTests(unittest.TestCase):
 
 class MutationTests(unittest.TestCase):
     def test_population_and_nonvacuous_anchors(self):
-        self.assertEqual(len(mutation.MUTATIONS), 12)
-        self.assertEqual(len({m[0] for m in mutation.MUTATIONS}), 12)
+        self.assertEqual(len(mutation.MUTATIONS), 18)
+        self.assertEqual(len({m[0] for m in mutation.MUTATIONS}), 18)
         with tempfile.TemporaryDirectory() as temporary:
             directory = Path(temporary)
             mutation.prepare(directory)
@@ -250,7 +250,7 @@ class MutationTests(unittest.TestCase):
                     raise RuntimeError('mutant does not compile')
                 if 'generate-lockfile' in command:
                     return ''
-                count = 6 if '--test' in command else 7
+                count = 4 if 'aes_wide_kat' in command else (6 if '--test' in command else 17)
                 return f'test result: ok. {count} passed; 0 failed; 0 ignored;'
 
             with (patch.object(mutation.verifier, 'environment', return_value={}),
@@ -269,7 +269,7 @@ class MutationTests(unittest.TestCase):
             def run(command, *_args):
                 if '--no-run' in command or 'generate-lockfile' in command:
                     return ''
-                count = 6 if '--test' in command else 7
+                count = 4 if 'aes_wide_kat' in command else (6 if '--test' in command else 17)
                 return f'test result: ok. {count} passed; 0 failed; 0 ignored;'
 
             with (patch.object(mutation.verifier, 'environment', return_value={}),
@@ -309,7 +309,7 @@ class OwnerCodegenTests(unittest.TestCase):
     def test_both_exit_models_and_all_negative_controls(self):
         for panic in ('abort', 'unwind'):
             llvm = self.fixture(panic)
-            self.assertEqual(owner.check(llvm, panic), 3)
+            self.assertEqual(owner.check(llvm, panic), 7)
             self.assertEqual(owner.negative_controls(llvm, panic), 12)
 
     def test_wrong_panic_profile_or_missing_probe_fails(self):
@@ -318,6 +318,14 @@ class OwnerCodegenTests(unittest.TestCase):
                             (self.fixture('abort').replace('key_drop', 'unknown_key'), 'abort')):
             with self.assertRaises(ValueError):
                 owner.check(text, panic)
+
+    def test_every_named_owner_is_required(self):
+        for probe in owner.PROBES:
+            # Preserve other probes, including aliases with shared bodies.
+            suffix = str(len(probe)) + probe
+            text = self.fixture('abort').replace(suffix + '(', suffix + '_missing(')
+            with self.subTest(probe=probe), self.assertRaises(ValueError):
+                owner.check(text, 'abort')
 
 
 class OperationCodegenTests(unittest.TestCase):

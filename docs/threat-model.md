@@ -136,6 +136,36 @@ caller-copy, cache, swap, crash-dump or physical-memory erasure, and does not
 survive forgotten owners or abort. The development-owner record must preserve
 these limits and must not promote the planned family to a qualified capability.
 
+### AES-192/256 block boundary (v0.27.1 development)
+
+The wide-key slices add 24/32-byte keys and 208/240-byte expanded schedules to
+the AES asset inventory. An attacker can exploit width/round confusion, the
+AES-256-specific extra SubWord step, stale cached-key storage, accidental secret
+publication, repeated chosen blocks or implementation-dependent control/address
+leakage. Named types and exact caller buffers prevent implicit selection and
+cross-width reinterpretation. Only 12/14-round private parameter triples are
+instantiated. The shared field primitive is reused, but each expansion and
+transform instantiation has its own vectors, fault checks and emitted review.
+
+The [wide control mapping](security-controls.md#aes-192256-development-contract-v0271)
+distinguishes runtime, API, bounded proof, compiler and timing observations.
+Cached schedules trade repeated expansion for longer-lived key-equivalent
+material. They remain affine, caller-owned, non-exportable through the API and
+thread-local, and are cleared on explicit clear/Drop. That does not erase caller
+input copies, registers, spills, swap or dumps. Secret-output guards are separate
+from key lifetimes. Public ciphertext requires acknowledgement and is staged
+until success; there is no public plaintext release API.
+
+One host's zero/FF timing contrasts cannot exclude other inputs, cache attacks,
+compiler transformations, speculative effects, power/EM leakage or faults.
+The cached-operation screen excludes import/Drop, which is measured separately.
+Injected Rust errors/unwinds test cleanup/transactional behavior, not physical
+fault detection. No HSM is required or claimed supported by these new software
+owners. Provider integration remains a separate AES-128 contract. Modes,
+authentication, key generation, backend admission and protocol policy remain
+outside this block API. Broader qualification remains explicitly scheduled,
+not inferred from passing local checks.
+
 ### HKDF composition boundary (v0.26.0 development)
 
 HKDF assets are IKM, imported/extracted PRKs, intermediate HMAC outputs and

@@ -1,4 +1,4 @@
-//! Checkout-external AES-128 consumer. Not a mode, protocol or package audit.
+//! Checkout-external AES consumers. Not a mode, protocol or package audit.
 #![no_std]
 #![forbid(unsafe_code)]
 
@@ -12,6 +12,10 @@ compile_error!("select exactly one public API route");
 pub use brynja::crypto::aes;
 #[cfg(feature = "direct")]
 pub use brynja_crypto::aes;
+
+// Concrete wrappers also exercise both wide-key directions in no_std builds.
+mod wide;
+pub use wide::*;
 
 /// Exercise construction, explicit declassification and consuming clear through
 /// only the selected dependency's public API. Caller input copies are not owned.

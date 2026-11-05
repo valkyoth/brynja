@@ -19300,6 +19300,298 @@
         "scalar-and-caller-copies:outside-owned-storage"
       ],
       "variant": "AES-128"
+    },
+    {
+      "block_bytes": 16,
+      "capability": "algorithm.aes",
+      "cleanup_bindings": [
+        "crates/brynja-crypto/src/aes/wide.rs#clear",
+        "crates/brynja-crypto/src/aes.rs#SecretBlock::clear",
+        "crates/brynja-crypto/src/aes.rs#Scratch::drop"
+      ],
+      "cleanup_model": "delegated-owner-drop-and-explicit-clear-with-operation-local-guards",
+      "compiler_checks": [
+        "python3 scripts/aes/check-aes-owner-cleanup.py",
+        "python3 scripts/aes/check-aes-wide-operation-cleanup.py"
+      ],
+      "compiler_scope": "bounded-owner-and-operation-scratch-dispatch-x86_64-rust-1.90.0-and-1.99.1-abort-and-unwind-not-whole-frame-or-timing",
+      "delegated_owners": [
+        "core.owned-secret-region",
+        "core.secret-region-initialization"
+      ],
+      "evidence": [
+        "crates/brynja-crypto/tests/aes_wide.rs",
+        "crates/brynja-crypto/src/aes/tests/wide.rs",
+        "crates/brynja-crypto/tests/aes_wide_kat.rs",
+        "crates/brynja-crypto/tests/aes_wide_differential.rs",
+        "scripts/aes/check-aes-wide-api.py",
+        "scripts/cryptography/test-aes-wide-owner-contract.py",
+        "docs/assurance/aes-wide-development.md"
+      ],
+      "excluded_scope": [
+        "other-AES-key-widths",
+        "key-generation",
+        "streaming-modes",
+        "authentication",
+        "cancellation-api",
+        "rekey-api",
+        "key-export",
+        "backend-selection",
+        "TLS"
+      ],
+      "expanded_key_symbol": "crates/brynja-crypto/src/aes/wide.rs#Aes192ExpandedKey",
+      "fields": [
+        "region:caller-backed-owned-secret-region",
+        "local:thread-local-marker"
+      ],
+      "id": "development.algorithm.aes192",
+      "key_bytes": 24,
+      "lifecycle_scope": [
+        "import",
+        "success",
+        "error",
+        "failed-construction",
+        "recoverable-unwind",
+        "explicit-clear",
+        "drop"
+      ],
+      "milestone": "0.27.1",
+      "operations": [
+        {
+          "api": "Aes192Key::new",
+          "failure": "clear-admitted-key-storage",
+          "output": "typed-secret-key"
+        },
+        {
+          "api": "Aes192Key::encrypt_block",
+          "failure": "clear-admitted-output",
+          "output": "typed-secret-block"
+        },
+        {
+          "api": "Aes192Key::decrypt_block",
+          "failure": "clear-admitted-output",
+          "output": "typed-secret-block"
+        },
+        {
+          "api": "Aes192Key::encrypt_block_public",
+          "failure": "unchanged-output",
+          "output": "explicit-public-ciphertext"
+        },
+        {
+          "api": "Aes192Key::clear",
+          "failure": "delegated-core-clear",
+          "output": "none"
+        },
+        {
+          "api": "SecretBlock::clear",
+          "failure": "delegated-core-clear",
+          "output": "none"
+        },
+        {
+          "api": "SecretBlock::expose",
+          "failure": "infallible",
+          "output": "borrowed-secret-bytes"
+        },
+        {
+          "api": "Aes192ExpandedKey::new",
+          "failure": "clear-admitted-key-storage",
+          "output": "typed-secret-expanded-key"
+        },
+        {
+          "api": "Aes192ExpandedKey::encrypt_block",
+          "failure": "clear-admitted-output",
+          "output": "typed-secret-block"
+        },
+        {
+          "api": "Aes192ExpandedKey::decrypt_block",
+          "failure": "clear-admitted-output",
+          "output": "typed-secret-block"
+        },
+        {
+          "api": "Aes192ExpandedKey::encrypt_block_public",
+          "failure": "unchanged-output",
+          "output": "explicit-public-ciphertext"
+        },
+        {
+          "api": "Aes192ExpandedKey::clear",
+          "failure": "delegated-core-clear",
+          "output": "none"
+        }
+      ],
+      "output_symbol": "crates/brynja-crypto/src/aes.rs#SecretBlock",
+      "qualification": "development-only-v0.27.1-in-progress-independent-review-pending",
+      "residual_risks": [
+        "mem-forget",
+        "process-abort",
+        "forced-termination",
+        "power-loss",
+        "register-copies",
+        "cpu-caches",
+        "compiler-created-copies",
+        "crash-dumps",
+        "suspend-images",
+        "os-swap-and-paging",
+        "dma-visible-copies",
+        "physical-memory-remanence"
+      ],
+      "rounds": 12,
+      "state": "development",
+      "storage": "caller-backed-key-and-output-with-fixed-operation-scratch",
+      "symbol": "crates/brynja-crypto/src/aes/wide.rs#Aes192Key",
+      "temporaries": [
+        "schedule:Scratch<208>",
+        "state:Scratch<16>",
+        "word:Scratch<4>",
+        "previous:Scratch<16>",
+        "scalar-and-caller-copies:outside-owned-storage"
+      ],
+      "variant": "AES-192"
+    },
+    {
+      "block_bytes": 16,
+      "capability": "algorithm.aes",
+      "cleanup_bindings": [
+        "crates/brynja-crypto/src/aes/wide.rs#clear",
+        "crates/brynja-crypto/src/aes.rs#SecretBlock::clear",
+        "crates/brynja-crypto/src/aes.rs#Scratch::drop"
+      ],
+      "cleanup_model": "delegated-owner-drop-and-explicit-clear-with-operation-local-guards",
+      "compiler_checks": [
+        "python3 scripts/aes/check-aes-owner-cleanup.py",
+        "python3 scripts/aes/check-aes-wide-operation-cleanup.py"
+      ],
+      "compiler_scope": "bounded-owner-and-operation-scratch-dispatch-x86_64-rust-1.90.0-and-1.99.1-abort-and-unwind-not-whole-frame-or-timing",
+      "delegated_owners": [
+        "core.owned-secret-region",
+        "core.secret-region-initialization"
+      ],
+      "evidence": [
+        "crates/brynja-crypto/tests/aes_wide.rs",
+        "crates/brynja-crypto/src/aes/tests/wide.rs",
+        "crates/brynja-crypto/tests/aes_wide_kat.rs",
+        "crates/brynja-crypto/tests/aes_wide_differential.rs",
+        "scripts/aes/check-aes-wide-api.py",
+        "scripts/cryptography/test-aes-wide-owner-contract.py",
+        "docs/assurance/aes-wide-development.md"
+      ],
+      "excluded_scope": [
+        "other-AES-key-widths",
+        "key-generation",
+        "streaming-modes",
+        "authentication",
+        "cancellation-api",
+        "rekey-api",
+        "key-export",
+        "backend-selection",
+        "TLS"
+      ],
+      "expanded_key_symbol": "crates/brynja-crypto/src/aes/wide.rs#Aes256ExpandedKey",
+      "fields": [
+        "region:caller-backed-owned-secret-region",
+        "local:thread-local-marker"
+      ],
+      "id": "development.algorithm.aes256",
+      "key_bytes": 32,
+      "lifecycle_scope": [
+        "import",
+        "success",
+        "error",
+        "failed-construction",
+        "recoverable-unwind",
+        "explicit-clear",
+        "drop"
+      ],
+      "milestone": "0.27.1",
+      "operations": [
+        {
+          "api": "Aes256Key::new",
+          "failure": "clear-admitted-key-storage",
+          "output": "typed-secret-key"
+        },
+        {
+          "api": "Aes256Key::encrypt_block",
+          "failure": "clear-admitted-output",
+          "output": "typed-secret-block"
+        },
+        {
+          "api": "Aes256Key::decrypt_block",
+          "failure": "clear-admitted-output",
+          "output": "typed-secret-block"
+        },
+        {
+          "api": "Aes256Key::encrypt_block_public",
+          "failure": "unchanged-output",
+          "output": "explicit-public-ciphertext"
+        },
+        {
+          "api": "Aes256Key::clear",
+          "failure": "delegated-core-clear",
+          "output": "none"
+        },
+        {
+          "api": "SecretBlock::clear",
+          "failure": "delegated-core-clear",
+          "output": "none"
+        },
+        {
+          "api": "SecretBlock::expose",
+          "failure": "infallible",
+          "output": "borrowed-secret-bytes"
+        },
+        {
+          "api": "Aes256ExpandedKey::new",
+          "failure": "clear-admitted-key-storage",
+          "output": "typed-secret-expanded-key"
+        },
+        {
+          "api": "Aes256ExpandedKey::encrypt_block",
+          "failure": "clear-admitted-output",
+          "output": "typed-secret-block"
+        },
+        {
+          "api": "Aes256ExpandedKey::decrypt_block",
+          "failure": "clear-admitted-output",
+          "output": "typed-secret-block"
+        },
+        {
+          "api": "Aes256ExpandedKey::encrypt_block_public",
+          "failure": "unchanged-output",
+          "output": "explicit-public-ciphertext"
+        },
+        {
+          "api": "Aes256ExpandedKey::clear",
+          "failure": "delegated-core-clear",
+          "output": "none"
+        }
+      ],
+      "output_symbol": "crates/brynja-crypto/src/aes.rs#SecretBlock",
+      "qualification": "development-only-v0.27.1-in-progress-independent-review-pending",
+      "residual_risks": [
+        "mem-forget",
+        "process-abort",
+        "forced-termination",
+        "power-loss",
+        "register-copies",
+        "cpu-caches",
+        "compiler-created-copies",
+        "crash-dumps",
+        "suspend-images",
+        "os-swap-and-paging",
+        "dma-visible-copies",
+        "physical-memory-remanence"
+      ],
+      "rounds": 14,
+      "state": "development",
+      "storage": "caller-backed-key-and-output-with-fixed-operation-scratch",
+      "symbol": "crates/brynja-crypto/src/aes/wide.rs#Aes256Key",
+      "temporaries": [
+        "schedule:Scratch<240>",
+        "state:Scratch<16>",
+        "word:Scratch<4>",
+        "previous:Scratch<16>",
+        "scalar-and-caller-copies:outside-owned-storage"
+      ],
+      "variant": "AES-256"
     }
   ],
   "explicit_rejections": [
@@ -24271,7 +24563,7 @@
       ]
     }
   ],
-  "policy_sha256": "f2c073d2571616619582ebb78872b62c9aa50a848efaad48d94b2fff75d800df",
+  "policy_sha256": "469f596af48483ca758aa21e570c1677fd4017df2abffc2d1ce98ed20967bed3",
   "registered_secret_owners": [
     {
       "capability": "algorithm.hkdf",

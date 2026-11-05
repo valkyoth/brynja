@@ -154,7 +154,7 @@ exact_tests = 1
 
 # Initial AES-128 development checks; not complete milestone qualification.
 [groups.aes-dataflow]
-paths = ["scripts/aes/check-aes-dataflow.py", "scripts/aes/test-aes-dataflow.py", "scripts/aes/aes_machine_review.py", "scripts/aes/machine-review.json", "docs/assurance/aes128-development.md", "scripts/hmac/hmac_engine_codegen.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py"]
+paths = ["scripts/aes/check-aes-dataflow.py", "scripts/aes/test-aes-dataflow.py", "scripts/aes/aes_machine_review.py", "scripts/aes/machine-review.json", "docs/assurance/aes128-development.md", "docs/assurance/aes-wide-development.md", "scripts/hmac/hmac_engine_codegen.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py"]
 [[groups.aes-dataflow.tools]]
 program = "python3"
 
@@ -162,8 +162,8 @@ program = "python3"
 component = "aes"
 id = "dataflow-review"
 category = "compiler"
-name = "AES-128 bounded LLVM dataflow and reviewed helper assembly"
-establishes = "Six real portable LLVM helpers on Rust 1.90.0/1.99.1 release x86_64 abort/unwind: every load is secret; fixed-point taint rejects secret branches, addresses, shifts and public helper arguments/status. Scalar inverse assembly permits only reviewed arithmetic and fixed stack addresses. All six helper instruction streams match explicit reviewed fingerprints; changes require re-review, not automatic approval. Excludes wrapper/core machine analysis, final application LTO, other targets and constant-time qualification."
+name = "AES-128/192/256 bounded LLVM dataflow and reviewed helper assembly"
+establishes = "Eleven real portable LLVM helpers on Rust 1.90.0/1.99.1 release x86_64 abort/unwind: every load is secret; fixed-point taint rejects secret branches, switches, addresses, shifts, remainder operands and public helper arguments/status. Scalar inverse assembly permits only reviewed arithmetic and fixed stack addresses. All eleven helper instruction streams match explicit reviewed fingerprints; changes require re-review, not automatic approval. Excludes wrapper/core machine analysis, final application LTO, other targets and constant-time qualification."
 command = ["python3", "scripts/aes/check-aes-dataflow.py"]
 cwd = "."
 inputs = ["aes-build", "aes-dataflow", "compiler", "hkdf-msrv", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
@@ -173,10 +173,10 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["AES dataflow review:"]
-unique_lines = ["AES dataflow review: 4 configurations; 6 LLVM and assembly helpers; not whole-program constant-time qualification", "AES dataflow: PASS; Rust 1.90.0; panic=abort; 6 helpers; 740 inverse machine instructions", "AES dataflow: PASS; Rust 1.90.0; panic=unwind; 6 helpers; 740 inverse machine instructions", "AES dataflow: PASS; Rust 1.99.1; panic=abort; 6 helpers; 749 inverse machine instructions", "AES dataflow: PASS; Rust 1.99.1; panic=unwind; 6 helpers; 749 inverse machine instructions", "AES machine review: PASS; Rust 1.90.0; panic=abort; 6 reviewed instruction streams", "AES machine review: PASS; Rust 1.90.0; panic=unwind; 6 reviewed instruction streams", "AES machine review: PASS; Rust 1.99.1; panic=abort; 6 reviewed instruction streams", "AES machine review: PASS; Rust 1.99.1; panic=unwind; 6 reviewed instruction streams"]
+unique_lines = ["AES dataflow review: 4 configurations; 11 LLVM and assembly helpers; not whole-program constant-time qualification", "AES dataflow: PASS; Rust 1.90.0; panic=abort; 11 helpers; 740 inverse machine instructions", "AES dataflow: PASS; Rust 1.90.0; panic=unwind; 11 helpers; 740 inverse machine instructions", "AES dataflow: PASS; Rust 1.99.1; panic=abort; 11 helpers; 749 inverse machine instructions", "AES dataflow: PASS; Rust 1.99.1; panic=unwind; 11 helpers; 749 inverse machine instructions", "AES machine review: PASS; Rust 1.90.0; panic=abort; 11 reviewed instruction streams", "AES machine review: PASS; Rust 1.90.0; panic=unwind; 11 reviewed instruction streams", "AES machine review: PASS; Rust 1.99.1; panic=abort; 11 reviewed instruction streams", "AES machine review: PASS; Rust 1.99.1; panic=unwind; 11 reviewed instruction streams"]
 
 [groups.aes-consumer]
-paths = ["assurance/aes-public-api/Cargo.toml", "assurance/aes-public-api/Cargo.lock", "assurance/aes-public-api/src/lib.rs", "assurance/aes-public-api/tests/consumer.rs", "scripts/aes/check-aes-consumer.py", "scripts/aes/test-aes-consumer.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py", "crates/brynja", "crates/brynja-core", "crates/brynja-crypto", "crates/brynja-hash-core", "crates/brynja-hash-parallel", "crates/brynja-hash-sha2", "crates/brynja-hash-sha3", "crates/brynja-hash-tuple", "crates/brynja-mac-hmac", "crates/brynja-mac-kmac", "crates/brynja-pki", "crates/brynja-protocol", "crates/brynja-tls", "crates/brynja-tls12", "crates/brynja-tls13", "crates/brynja-tls13-handshake"]
+paths = ["assurance/aes-public-api/Cargo.toml", "assurance/aes-public-api/Cargo.lock", "assurance/aes-public-api/src/lib.rs", "assurance/aes-public-api/tests/consumer.rs", "assurance/aes-public-api/tests/wide/mod.rs", "assurance/aes-public-api/src/wide.rs", "scripts/aes/check-aes-consumer.py", "scripts/aes/test-aes-consumer.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py", "crates/brynja", "crates/brynja-core", "crates/brynja-crypto", "crates/brynja-hash-core", "crates/brynja-hash-parallel", "crates/brynja-hash-sha2", "crates/brynja-hash-sha3", "crates/brynja-hash-tuple", "crates/brynja-mac-hmac", "crates/brynja-mac-kmac", "crates/brynja-pki", "crates/brynja-protocol", "crates/brynja-tls", "crates/brynja-tls12", "crates/brynja-tls13", "crates/brynja-tls13-handshake"]
 [[groups.aes-consumer.tools]]
 program = "python3"
 
@@ -184,8 +184,8 @@ program = "python3"
 component = "aes"
 id = "downstream"
 category = "consumer"
-name = "AES-128 isolated direct and facade public consumers"
-establishes = "Six exact public consumer tests in eight host configurations: both public routes, Rust 1.90.0/1.99.1, debug/release; four no_std Cortex-M compile-only checks. Pins active dependency sources/features and observes caller unwind/Drop/explicit clearing. Checkout sources, not packaged acceptance, full compiler matrix, target execution or side-channel qualification."
+name = "AES-128/192/256 isolated direct and facade public consumers"
+establishes = "Eighteen exact public consumer tests across all three AES widths in eight host configurations: both public routes, Rust 1.90.0/1.99.1, debug/release; four no_std Cortex-M compile-only checks. Pins active dependency sources/features and observes caller unwind/Drop/explicit clearing. Checkout sources, not packaged acceptance, full compiler matrix, target execution or side-channel qualification."
 command = ["python3", "scripts/aes/check-aes-consumer.py"]
 cwd = "."
 inputs = ["aes-build", "aes-consumer", "compiler", "hkdf-msrv"]
@@ -194,14 +194,14 @@ reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODE
 timeout_seconds = 600
 [checks.success]
 contains = ["AES downstream: PASS;"]
-unique_lines = ["AES downstream: PASS; 8 host configurations; 4 Cortex-M compile checks; checkout sources only", "AES_DOWNSTREAM_HOST: 1.90.0 direct debug 6 exact tests", "AES_DOWNSTREAM_HOST: 1.90.0 direct release 6 exact tests", "AES_DOWNSTREAM_HOST: 1.90.0 facade debug 6 exact tests", "AES_DOWNSTREAM_HOST: 1.90.0 facade release 6 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 direct debug 6 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 direct release 6 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 facade debug 6 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 facade release 6 exact tests", "AES_DOWNSTREAM_TARGET: 1.90.0 direct thumbv7em-none-eabi compile-only", "AES_DOWNSTREAM_TARGET: 1.90.0 facade thumbv7em-none-eabi compile-only", "AES_DOWNSTREAM_TARGET: 1.99.1 direct thumbv7em-none-eabi compile-only", "AES_DOWNSTREAM_TARGET: 1.99.1 facade thumbv7em-none-eabi compile-only", "AES_FEATURE_GATE: 1.90.0 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.90.0 facade absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.99.1 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.99.1 facade absent with defaults on/off; explicit opt-in works"]
+unique_lines = ["AES downstream: PASS; 8 host configurations; 4 Cortex-M compile checks; checkout sources only", "AES_DOWNSTREAM_HOST: 1.90.0 direct debug 18 exact tests", "AES_DOWNSTREAM_HOST: 1.90.0 direct release 18 exact tests", "AES_DOWNSTREAM_HOST: 1.90.0 facade debug 18 exact tests", "AES_DOWNSTREAM_HOST: 1.90.0 facade release 18 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 direct debug 18 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 direct release 18 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 facade debug 18 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 facade release 18 exact tests", "AES_DOWNSTREAM_TARGET: 1.90.0 direct thumbv7em-none-eabi compile-only", "AES_DOWNSTREAM_TARGET: 1.90.0 facade thumbv7em-none-eabi compile-only", "AES_DOWNSTREAM_TARGET: 1.99.1 direct thumbv7em-none-eabi compile-only", "AES_DOWNSTREAM_TARGET: 1.99.1 facade thumbv7em-none-eabi compile-only", "AES_FEATURE_GATE: 1.90.0 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.90.0 facade absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.99.1 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.99.1 facade absent with defaults on/off; explicit opt-in works"]
 
 [[checks]]
 component = "aes"
 id = "downstream-matrix"
 category = "matrix"
-name = "AES-128 isolated public consumers across 14 Rust compilers"
-establishes = "Six exact tests for both public routes in debug/release on 14 pinned compilers (56 host configurations); four endpoint-only Cortex-M compile checks. Checkout consumers, not package archives, target execution or timing qualification."
+name = "AES-128/192/256 isolated public consumers across 14 Rust compilers"
+establishes = "Eighteen exact tests across all three AES widths for both public routes in debug/release on 14 pinned compilers (56 host configurations); four endpoint-only Cortex-M compile checks. Checkout consumers, not package archives, target execution or timing qualification."
 command = ["python3", "scripts/aes/check-aes-consumer.py", "--matrix"]
 cwd = "."
 inputs = ["aes-build", "aes-consumer", "hkdf-public-api-matrix"]
@@ -210,7 +210,7 @@ reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODE
 timeout_seconds = 1800
 [checks.success]
 contains = ["AES downstream matrix: PASS;"]
-unique_lines = ["AES downstream matrix: PASS; 14 compilers; 56 host configurations; 4 Cortex-M compile checks; checkout sources only","AES_DOWNSTREAM_HOST: 1.90.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.90.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.90.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.90.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 facade release 6 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 direct debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 direct release 6 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 facade debug 6 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 facade release 6 exact tests","AES_DOWNSTREAM_TARGET: 1.90.0 direct thumbv7em-none-eabi compile-only","AES_DOWNSTREAM_TARGET: 1.90.0 facade thumbv7em-none-eabi compile-only","AES_DOWNSTREAM_TARGET: 1.99.1 direct thumbv7em-none-eabi compile-only","AES_DOWNSTREAM_TARGET: 1.99.1 facade thumbv7em-none-eabi compile-only", "AES_FEATURE_GATE: 1.90.0 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.90.0 facade absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.99.1 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.99.1 facade absent with defaults on/off; explicit opt-in works"]
+unique_lines = ["AES downstream matrix: PASS; 14 compilers; 56 host configurations; 4 Cortex-M compile checks; checkout sources only","AES_DOWNSTREAM_HOST: 1.90.0 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.90.0 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.90.0 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.90.0 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 facade release 18 exact tests","AES_DOWNSTREAM_TARGET: 1.90.0 direct thumbv7em-none-eabi compile-only","AES_DOWNSTREAM_TARGET: 1.90.0 facade thumbv7em-none-eabi compile-only","AES_DOWNSTREAM_TARGET: 1.99.1 direct thumbv7em-none-eabi compile-only","AES_DOWNSTREAM_TARGET: 1.99.1 facade thumbv7em-none-eabi compile-only", "AES_FEATURE_GATE: 1.90.0 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.90.0 facade absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.99.1 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.99.1 facade absent with defaults on/off; explicit opt-in works"]
 
 [groups.aes-timing]
 paths = ["assurance/aes-timing/Cargo.toml", "assurance/aes-timing/Cargo.lock", "assurance/aes-timing/src", "scripts/aes/check-aes-timing.py", "scripts/aes/test-aes-timing.py", "scripts/hmac/hmac_timing.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py"]
@@ -235,6 +235,29 @@ log_bytes = 4194304
 contains = ["AES_TIMING_END measure"]
 unique_lines = ["Independent AES timing preflight: PASS", "AES timing screen: 6 campaigns; 512 pairs; 4 repetitions; zero alarms", "Observation only; not constant-time, cache, cross-target or independent qualification"]
 
+[groups.aes-wide-timing]
+paths = ["scripts/aes/check-aes-wide-timing.py", "scripts/aes/test-aes-wide-timing.py"]
+[[groups.aes-wide-timing.tools]]
+program = "python3"
+
+[[checks]]
+component = "aes"
+id = "wide-timing-screen"
+category = "timing"
+name = "AES-192/256 ephemeral, cached and import host timing observation"
+establishes = "26 fixed-width zero/FF contrasts: encrypt/decrypt/public-output key and block contrasts for ephemeral and cached owners at each width, plus cached import/Drop. Cached operations exclude construction/Drop; ephemeral operations include them. Rust 1.99.1 release fat-LTO abort on one Linux x86_64 logical CPU; 512 pairs, four repetitions, 32 warmup pairs, fixed paired-score threshold 10. OpenSSL preflight; raw samples retained, alarms fail without retries. Not fixed-versus-random, constant-time, cache, physical, cross-target or independent qualification."
+command = ["python3", "scripts/aes/check-aes-wide-timing.py"]
+cwd = "."
+inputs = ["aes-build", "aes-timing", "aes-wide-timing", "aes-oracle", "compiler", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+log_bytes = 4194304
+[checks.success]
+contains = ["AES_WIDE_TIMING_END measure"]
+unique_lines = ["Independent AES wide timing preflight: PASS", "AES wide timing screen: 26 campaigns; 512 pairs; 4 repetitions; zero alarms", "Observation only; not constant-time, cache, cross-target or independent qualification"]
+
 [groups.aes-owner-contract]
 paths = ["security/cryptographic-api-profile-policy.toml", "verification/checks.toml", "scripts/cryptography/aes_owner_contract.py", "scripts/cryptography/rust_source_contract.py", "scripts/cryptography/test-aes-owner-contract.py"]
 [[groups.aes-owner-contract.tools]]
@@ -255,8 +278,216 @@ timeout_seconds = 60
 contains = ["Ran 24 tests in "]
 unique_lines = ["OK"]
 
+[[checks]]
+component = "aes"
+id = "wide-vectors"
+category = "portable"
+name = "AES-192/256 public vectors and clearing owners"
+establishes = "Eight initial public AES-192/256 tests: SP 800-38A block examples in both directions and both owner forms, clearing, canaries, lifetime and reuse. Not the full AESAVS corpus or emitted-code/side-channel qualification."
+command = ["cargo", "+1.99.1", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--features", "hazmat-aes-block", "--test", "aes_wide"]
+cwd = "."
+inputs = ["compiler", "aes-build", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+environment = {RUSTUP_AUTO_INSTALL = "0"}
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 8
+exact_tests = 8
+
+[[checks]]
+component = "aes"
+id = "wide-msrv-vectors"
+category = "matrix"
+name = "AES-192/256 public vectors on Rust 1.90.0"
+establishes = "Eight initial public AES-192/256 tests: SP 800-38A block examples in both directions and both owner forms, clearing, canaries, lifetime and reuse. Not the full AESAVS corpus or emitted-code/side-channel qualification."
+command = ["cargo", "+1.90.0", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--features", "hazmat-aes-block", "--test", "aes_wide"]
+cwd = "."
+inputs = ["hkdf-msrv", "aes-build", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+environment = {RUSTUP_AUTO_INSTALL = "0"}
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 8
+exact_tests = 8
+
+[[checks]]
+component = "aes"
+id = "wide-optimized-vectors"
+category = "optimized"
+name = "AES-192/256 public vectors in release profile"
+establishes = "Eight initial public AES-192/256 tests: SP 800-38A block examples in both directions and both owner forms, clearing, canaries, lifetime and reuse. Not the full AESAVS corpus or emitted-code/side-channel qualification."
+command = ["cargo", "+1.99.1", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--features", "hazmat-aes-block", "--release", "--test", "aes_wide"]
+cwd = "."
+inputs = ["compiler", "aes-build", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+environment = {RUSTUP_AUTO_INSTALL = "0"}
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_PROFILE_RELEASE_OPT_LEVEL", "CARGO_PROFILE_RELEASE_LTO", "CARGO_PROFILE_RELEASE_DEBUG_ASSERTIONS", "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS", "CARGO_PROFILE_RELEASE_PANIC"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 8
+exact_tests = 8
+
+[[checks]]
+component = "aes"
+id = "wide-asan-vectors"
+category = "asan"
+name = "AES-192/256 public vectors under ASan/LSan"
+establishes = "Eight initial public AES-192/256 tests: SP 800-38A block examples in both directions and both owner forms, clearing, canaries, lifetime and reuse. Not the full AESAVS corpus or emitted-code/side-channel qualification."
+command = ["cargo", "+nightly-2026-09-11", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--features", "hazmat-aes-block", "--test", "aes_wide", "--target", "x86_64-unknown-linux-gnu"]
+cwd = "."
+inputs = ["asan-tools", "aes-build", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+environment = {RUSTFLAGS = "-Zsanitizer=address", CARGO_ENCODED_RUSTFLAGS = "", ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1", LSAN_OPTIONS = "exitcode=23", CARGO_TARGET_DIR = "target/aes-asan", RUSTUP_AUTO_INSTALL = "0"}
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "ASAN_OPTIONS", "LSAN_OPTIONS"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 8
+exact_tests = 8
+
+[[checks]]
+component = "aes"
+id = "wide-miri-ownership"
+category = "miri"
+name = "AES-192/256 clearing output and canaries under Miri"
+establishes = "Two selected ownership/canary tests, one per added key width, both ephemeral and cached owners under Miri. Not all vectors or every fault path."
+command = ["cargo", "+nightly-2026-09-11", "miri", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--features", "hazmat-aes-block", "--test", "aes_wide", "--target", "x86_64-unknown-linux-gnu", "drop_clears_exact_regions_and_preserves_canaries"]
+cwd = "."
+inputs = ["miri-tools", "aes-build", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+environment = {MIRIFLAGS = "-Zmiri-report-progress=10000000", CARGO_TARGET_DIR = "target/aes-miri", RUSTUP_AUTO_INSTALL = "0"}
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "MIRIFLAGS", "MIRI_SYSROOT", "MIRI_BE_RUSTC", "MIRI_REPLACE_LIBRS_IF_NOT_TEST", "BRYNJA_MIRI_CASE", "BRYNJA_MIRI_PROFILE", "BRYNJA_MIRI_WIDTH"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 2
+exact_tests = 2
+
+[[checks]]
+component = "aes"
+id = "wide-api-msrv"
+category = "compile-fail"
+name = "AES-192/256 exact public API diagnostics on Rust 1.90.0"
+establishes = "76 paired compiler diagnostic probes across four named wide-key owners. Exact widths, aliasing, lifetimes, clear consumption, trait bounds and public acknowledgement. No runtime or emitted-code proof."
+command = ["python3", "scripts/aes/check-aes-wide-api.py", "1.90.0"]
+cwd = "."
+inputs = ["hkdf-msrv", "aes-build", "aes-runner", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 600
+[checks.success]
+contains = ["AES_WIDE_API_PASS: 1.90.0 76 paired probes"]
+unique_lines = ["AES_WIDE_API_PASS: 1.90.0 76 paired probes"]
+
+[[checks]]
+component = "aes"
+id = "wide-api-current"
+category = "compile-fail"
+name = "AES-192/256 exact public API diagnostics on Rust 1.99.1"
+establishes = "76 paired compiler diagnostic probes across four named wide-key owners. Exact widths, aliasing, lifetimes, clear consumption, trait bounds and public acknowledgement. No runtime or emitted-code proof."
+command = ["python3", "scripts/aes/check-aes-wide-api.py", "1.99.1"]
+cwd = "."
+inputs = ["compiler", "aes-build", "aes-runner", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 600
+[checks.success]
+contains = ["AES_WIDE_API_PASS: 1.99.1 76 paired probes"]
+unique_lines = ["AES_WIDE_API_PASS: 1.99.1 76 paired probes"]
+
+[[checks]]
+component = "aes"
+id = "wide-kat"
+category = "portable"
+name = "AES-192/256 complete single-block KAT corpus and clearing owners"
+establishes = "700 AES-192 and 810 AES-256 AESAVS single-block KAT records, both directions and both owner forms, public encryption, clearing and strict parser negative controls. Not MCT/MMT, mode or CAVP validation, emitted-code or timing qualification."
+command = ["cargo", "+1.99.1", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--features", "hazmat-aes-block", "--test", "aes_wide_kat", "--", "--nocapture"]
+cwd = "."
+inputs = ["compiler", "aes-build", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+environment = {RUSTUP_AUTO_INSTALL = "0"}
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+unique_lines = ["AES192_KAT_RECORDS: 700", "AES256_KAT_RECORDS: 810"]
+minimum_tests = 4
+exact_tests = 4
+
+[[checks]]
+component = "aes"
+id = "wide-msrv-kat"
+category = "matrix"
+name = "AES-192/256 complete single-block KAT corpus on Rust 1.90.0"
+establishes = "700 AES-192 and 810 AES-256 AESAVS single-block KAT records, both directions and both owner forms, public encryption, clearing and strict parser negative controls. Not MCT/MMT, mode or CAVP validation, emitted-code or timing qualification."
+command = ["cargo", "+1.90.0", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--features", "hazmat-aes-block", "--test", "aes_wide_kat", "--", "--nocapture"]
+cwd = "."
+inputs = ["hkdf-msrv", "aes-build", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+environment = {RUSTUP_AUTO_INSTALL = "0"}
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+unique_lines = ["AES192_KAT_RECORDS: 700", "AES256_KAT_RECORDS: 810"]
+minimum_tests = 4
+exact_tests = 4
+
+[[checks]]
+component = "aes"
+id = "wide-optimized-kat"
+category = "optimized"
+name = "AES-192/256 complete single-block KAT corpus in release profile"
+establishes = "700 AES-192 and 810 AES-256 AESAVS single-block KAT records, both directions and both owner forms, public encryption, clearing and strict parser negative controls. Not MCT/MMT, mode or CAVP validation, emitted-code or timing qualification."
+command = ["cargo", "+1.99.1", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--features", "hazmat-aes-block", "--release", "--test", "aes_wide_kat", "--", "--nocapture"]
+cwd = "."
+inputs = ["compiler", "aes-build", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+environment = {RUSTUP_AUTO_INSTALL = "0"}
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_PROFILE_RELEASE_OPT_LEVEL", "CARGO_PROFILE_RELEASE_LTO", "CARGO_PROFILE_RELEASE_DEBUG_ASSERTIONS", "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS", "CARGO_PROFILE_RELEASE_PANIC"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+unique_lines = ["AES192_KAT_RECORDS: 700", "AES256_KAT_RECORDS: 810"]
+minimum_tests = 4
+exact_tests = 4
+
+[[checks]]
+component = "aes"
+id = "wide-asan-kat"
+category = "asan"
+name = "AES-192/256 complete single-block KAT corpus under ASan/LSan"
+establishes = "700 AES-192 and 810 AES-256 AESAVS single-block KAT records, both directions and both owner forms, public encryption, clearing and strict parser negative controls. Not MCT/MMT, mode or CAVP validation, emitted-code or timing qualification."
+command = ["cargo", "+nightly-2026-09-11", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--features", "hazmat-aes-block", "--test", "aes_wide_kat", "--target", "x86_64-unknown-linux-gnu", "--", "--nocapture"]
+cwd = "."
+inputs = ["asan-tools", "aes-build", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+environment = {RUSTFLAGS = "-Zsanitizer=address", CARGO_ENCODED_RUSTFLAGS = "", ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1", LSAN_OPTIONS = "exitcode=23", CARGO_TARGET_DIR = "target/aes-asan", RUSTUP_AUTO_INSTALL = "0"}
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "ASAN_OPTIONS", "LSAN_OPTIONS"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+unique_lines = ["AES192_KAT_RECORDS: 700", "AES256_KAT_RECORDS: 810"]
+minimum_tests = 4
+exact_tests = 4
+
+[[checks]]
+component = "aes"
+id = "wide-differential"
+category = "differential"
+name = "AES-192/256 independent OpenSSL block comparisons"
+establishes = "4096 cases per width (64 keys, 32 blocks per direction), each through ephemeral/cached owners, including secret/public forward and independent inverse inputs. Public synthetic keys only. External shared libraries are not pinned. No timing or certification claim."
+command = ["python3", "scripts/aes/check-aes-differential.py", "wide"]
+cwd = "."
+inputs = ["compiler", "aes-build", "aes-oracle", "aes-differential-runner", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+environment = {RUSTUP_AUTO_INSTALL = "0"}
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "BRYNJA_OPENSSL", "OPENSSL_CONF", "OPENSSL_MODULES", "OPENSSL_ENGINES"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok.", "Independent oracle: OpenSSL", "Independent oracle SHA-256:"]
+unique_lines = ["AES differential oracle identity: unchanged", "AES192_OPENSSL_COMPARISONS: 4096", "AES192_CACHED_OPENSSL_COMPARISONS: 4096", "AES256_OPENSSL_COMPARISONS: 4096", "AES256_CACHED_OPENSSL_COMPARISONS: 4096"]
+minimum_tests = 2
+exact_tests = 2
+
 [groups.aes-build]
-paths = ["crates/brynja-crypto/src", "crates/brynja-crypto/tests/aes128.rs", "crates/brynja-crypto/tests/aes128_differential.rs", "crates/brynja-crypto/tests/fixtures/aes128", "scripts/release/test-verification-registry.py"]
+paths = ["crates/brynja-crypto/src", "crates/brynja-crypto/tests/aes128.rs", "crates/brynja-crypto/tests/aes_wide.rs", "crates/brynja-crypto/tests/aes_wide_kat.rs", "crates/brynja-crypto/tests/aes_wide_differential.rs", "crates/brynja-crypto/tests/fixtures/aes192", "crates/brynja-crypto/tests/fixtures/aes256", "crates/brynja-crypto/tests/aes128_differential.rs", "crates/brynja-crypto/tests/fixtures/aes128", "scripts/release/test-verification-registry.py"]
 optional_paths = ["crates/brynja-crypto/build.rs", ".cargo/config", ".cargo/config.toml"]
 [groups.aes-build.toml]
 "Cargo.toml" = ["workspace.resolver", "workspace.package.edition", "workspace.package.rust-version", "workspace.lints", "workspace.dependencies", "profile.dev", "profile.test", "profile.release"]
@@ -286,8 +517,8 @@ exact_tests = 6
 component = "aes"
 id = "rounds-and-faults"
 category = "fault"
-name = "AES-128 schedule, field and round-boundary fault cleanup"
-establishes = "Seven unit tests: FIPS schedule, field/inverse and linear transforms, secret-output errors/unwinds at all 11 round boundaries, cached import errors/unwinds and reuse without re-expansion, plus failure-atomic public ciphertext. Live scratch clearing observations, not physical fault resistance or register erasure."
+name = "AES-128/192/256 schedule, field and round-boundary fault cleanup"
+establishes = "Seventeen unit tests: FIPS schedule, field/inverse and linear transforms, secret-output errors/unwinds at all 11 round boundaries, cached import errors/unwinds and reuse without re-expansion, plus failure-atomic public ciphertext. Live scratch clearing observations, not physical fault resistance or register erasure."
 command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block","--lib","aes::"]
 cwd = "."
 inputs = ["compiler","aes-build","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
@@ -296,8 +527,8 @@ reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARG
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok."]
-minimum_tests = 7
-exact_tests = 7
+minimum_tests = 17
+exact_tests = 17
 
 [[checks]]
 component = "aes"
@@ -405,8 +636,8 @@ exact_tests = 1
 component = "aes"
 id = "asan-faults"
 category = "asan-fault"
-name = "AES-128 round faults and scratch cleanup under ASan/LSan"
-establishes = "Seven internal tests including cached import failures, every round-key error/unwind, reuse without re-expansion and failure-atomic public ciphertext. No timing or complete memory-safety proof."
+name = "AES-128/192/256 round faults and scratch cleanup under ASan/LSan"
+establishes = "Seventeen internal tests including cached import failures, every round-key error/unwind, reuse without re-expansion and failure-atomic public ciphertext. No timing or complete memory-safety proof."
 command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block","--lib","--target","x86_64-unknown-linux-gnu","aes::"]
 cwd = "."
 inputs = ["asan-tools","aes-build","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
@@ -416,8 +647,8 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok."]
-minimum_tests = 7
-exact_tests = 7
+minimum_tests = 17
+exact_tests = 17
 
 
 [[checks]]
@@ -440,7 +671,7 @@ exact_tests = 1
 
 # Exact downstream compiler diagnostics and narrow production proofs.
 [groups.aes-runner]
-paths = ["scripts/aes/check-aes-api.py", "scripts/aes/test-aes-runners.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py"]
+paths = ["scripts/aes/check-aes-wide-api.py", "scripts/aes/check-aes-api.py", "scripts/aes/test-aes-runners.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py"]
 [[groups.aes-runner.tools]]
 program = "python3"
 
@@ -453,8 +684,8 @@ program = "python3"
 component = "aes"
 id = "field-layout-proof"
 category = "kani"
-name = "AES-128 production field arithmetic and admitted indices"
-establishes = "Three exact Kani harnesses: all byte-pair field multiplication against polynomial reduction, shift index permutation/inversion, admitted round-key index bounds. Production modules compiled directly. Not full AES correctness, cleanup or constant-time proof."
+name = "AES-128/192/256 production field arithmetic and admitted indices"
+establishes = "Five exact Kani harnesses: all byte-pair field multiplication against polynomial reduction, shift index permutation/inversion, round-key bounds for all three widths, exact wide-parameter admission and initialized-word schedule indices. Production modules compiled directly. Not full AES correctness, cleanup or constant-time proof."
 command = ["python3", "scripts/aes/check-aes-kani.py"]
 cwd = "."
 inputs = ["kani-tools", "kani-setup", "aes-build", "aes-proof"]
@@ -462,8 +693,8 @@ reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPP
 platform = "linux-x86_64"
 timeout_seconds = 1200
 [checks.success]
-unique_lines = ["AES field/layout: PASS; 3 proofs; not full AES or constant-time proof"]
-contains = ["AES field/layout: PASS; 3 proofs; not full AES or constant-time proof"]
+unique_lines = ["AES field/layout: PASS; 5 proofs; not full AES or constant-time proof"]
+contains = ["AES field/layout: PASS; 5 proofs; not full AES or constant-time proof"]
 
 [[checks]]
 component = "aes"
@@ -509,23 +740,23 @@ program = "python3"
 component = "aes"
 id = "mutation-controls"
 category = "mutation"
-name = "AES-128 compiling algorithm and cleanup mutation controls"
-establishes = "Twelve deliberate defects in private copies of production AES code must compile and fail their designated assertions, between passing unmodified baselines. Uses real core dependency. Not exhaustive mutation coverage, full AES proof or packaged-source acceptance."
+name = "AES-128/192/256 compiling algorithm and cleanup mutation controls"
+establishes = "Eighteen deliberate defects in private copies of production AES code must compile and fail their designated assertions, between passing unmodified baselines. Uses real core dependency. Not exhaustive mutation coverage, full AES proof or packaged-source acceptance."
 command = ["python3", "scripts/aes/check-aes-mutations.py"]
 cwd = "."
 inputs = ["compiler", "aes-build", "aes-mutations", "hash-core"]
 reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
 timeout_seconds = 1200
 [checks.success]
-contains = ["AES mutations: PASS; 12 compiling defects rejected by named tests"]
-unique_lines = ["AES mutations: PASS; 12 compiling defects rejected by named tests", "AES_MUTATION_REJECTED: field-modulus", "AES_MUTATION_REJECTED: forward-affine", "AES_MUTATION_REJECTED: inverse-affine", "AES_MUTATION_REJECTED: round-constant", "AES_MUTATION_REJECTED: prior-key-word", "AES_MUTATION_REJECTED: shift-direction", "AES_MUTATION_REJECTED: skip-round", "AES_MUTATION_REJECTED: inverse-mix", "AES_MUTATION_REJECTED: final-round-key", "AES_MUTATION_REJECTED: skip-schedule-clear", "AES_MUTATION_REJECTED: forget-key-clear", "AES_MUTATION_REJECTED: early-public-write", "AES scratch: PASS; zero length rejected at compile time; positive control compiled"]
+contains = ["AES mutations: PASS; 18 compiling defects rejected by named tests"]
+unique_lines = ["AES mutations: PASS; 18 compiling defects rejected by named tests", "AES_MUTATION_REJECTED: field-modulus", "AES_MUTATION_REJECTED: forward-affine", "AES_MUTATION_REJECTED: inverse-affine", "AES_MUTATION_REJECTED: round-constant", "AES_MUTATION_REJECTED: prior-key-word", "AES_MUTATION_REJECTED: shift-direction", "AES_MUTATION_REJECTED: skip-round", "AES_MUTATION_REJECTED: inverse-mix", "AES_MUTATION_REJECTED: final-round-key", "AES_MUTATION_REJECTED: skip-schedule-clear", "AES_MUTATION_REJECTED: forget-key-clear", "AES_MUTATION_REJECTED: early-public-write", "AES_MUTATION_REJECTED: aes256-extra-subword", "AES_MUTATION_REJECTED: aes192-prior-word", "AES_MUTATION_REJECTED: wide-skip-round", "AES_MUTATION_REJECTED: wide-inverse-key", "AES_MUTATION_REJECTED: aes192-schedule-clear", "AES_MUTATION_REJECTED: aes256-schedule-clear", "AES scratch: PASS; zero length rejected at compile time; positive control compiled"]
 
 [[checks]]
 component = "aes"
 id = "owner-dispatch"
 category = "compiler"
-name = "AES-128 public owner emitted Drop dispatch"
-establishes = "Two real public owners, Rust 1.90.0/1.99.1 x86_64 release, abort/unwind: bounded LLVM descriptor flow to delegated core Drop, including observer unwind. Twelve rejected IR-checker mutations per configuration. Not explicit-clear/operation-scratch emitted evidence, core destructor reproof, physical erasure or timing qualification."
+name = "AES-128/192/256 public owner emitted Drop dispatch"
+establishes = "Seven real public owners (three ephemeral keys, three cached schedules and SecretBlock), Rust 1.90.0/1.99.1 x86_64 release, abort/unwind: bounded LLVM descriptor flow to delegated core Drop, including observer unwind. Twelve rejected IR-checker mutations per configuration. Not explicit-clear/operation-scratch emitted evidence, core destructor reproof, physical erasure or timing qualification."
 command = ["python3", "scripts/aes/check-aes-owner-cleanup.py"]
 cwd = "."
 inputs = ["compiler", "hkdf-msrv", "aes-build", "aes-owner-codegen", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
@@ -534,7 +765,7 @@ platform = "linux-x86_64"
 timeout_seconds = 1200
 [checks.success]
 contains = ["AES owner dispatch complete: 4 configurations; delegated core Drop; not scratch, physical-erasure or timing qualification"]
-unique_lines = ["AES owner dispatch complete: 4 configurations; delegated core Drop; not scratch, physical-erasure or timing qualification", "AES owner dispatch: PASS; Rust 1.90.0; x86_64; panic=abort; 3 probes; 12 rejected IR mutations", "AES owner dispatch: PASS; Rust 1.90.0; x86_64; panic=unwind; 3 probes; 12 rejected IR mutations", "AES owner dispatch: PASS; Rust 1.99.1; x86_64; panic=abort; 3 probes; 12 rejected IR mutations", "AES owner dispatch: PASS; Rust 1.99.1; x86_64; panic=unwind; 3 probes; 12 rejected IR mutations"]
+unique_lines = ["AES owner dispatch complete: 4 configurations; delegated core Drop; not scratch, physical-erasure or timing qualification", "AES owner dispatch: PASS; Rust 1.90.0; x86_64; panic=abort; 7 probes; 12 rejected IR mutations", "AES owner dispatch: PASS; Rust 1.90.0; x86_64; panic=unwind; 7 probes; 12 rejected IR mutations", "AES owner dispatch: PASS; Rust 1.99.1; x86_64; panic=abort; 7 probes; 12 rejected IR mutations", "AES owner dispatch: PASS; Rust 1.99.1; x86_64; panic=unwind; 7 probes; 12 rejected IR mutations"]
 
 # Dynamic checks execute downstream checkout fixtures, not packaged archives.
 
@@ -559,9 +790,35 @@ timeout_seconds = 1200
 contains = ["AES operation cleanup complete: 4 configurations; delegated core clearing; not whole-frame erasure or timing qualification"]
 unique_lines = ["AES operation cleanup complete: 4 configurations; delegated core clearing; not whole-frame erasure or timing qualification", "AES operation cleanup: PASS; Rust 1.90.0; x86_64; panic=abort; 7 scratch bodies; 3 explicit clears; 75 rejected IR mutations", "AES operation cleanup: PASS; Rust 1.90.0; x86_64; panic=unwind; 7 scratch bodies; 3 explicit clears; 75 rejected IR mutations", "AES operation cleanup: PASS; Rust 1.99.1; x86_64; panic=abort; 7 scratch bodies; 3 explicit clears; 75 rejected IR mutations", "AES operation cleanup: PASS; Rust 1.99.1; x86_64; panic=unwind; 7 scratch bodies; 3 explicit clears; 75 rejected IR mutations"]
 
+[groups.aes-wide-operation-codegen]
+paths = ["scripts/aes/check-aes-wide-operation-cleanup.py", "scripts/aes/test-aes-wide-operation-cleanup.py", "scripts/aes/check-aes-operation-cleanup.py", "scripts/hmac/hmac_engine_codegen.py", "scripts/hmac/hmac_engine_scratch.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py"]
+[[groups.aes-wide-operation-codegen.tools]]
+program = "python3"
+
+[[checks]]
+component = "aes"
+id = "wide-operation-cleanup"
+category = "compiler"
+name = "AES-192/256 emitted operation scratch and explicit-clear dispatch"
+establishes = "Production x86_64 optimized library bodies on Rust 1.90.0/1.99.1, abort/unwind: fourteen scratch bodies across ephemeral/cached owners and their called monomorphizations dispatch full extents to delegated core clearing on modeled exits; four explicit clear methods forward their descriptors. 130 rejected IR mutations per configuration. Outlined caller-output guards are distinct from local scratch; this is not a proof of their lifecycle, final application LTO, physical/whole-frame erasure, core callee behavior or timing."
+command = ["python3", "scripts/aes/check-aes-wide-operation-cleanup.py"]
+cwd = "."
+inputs = ["compiler", "hkdf-msrv", "aes-build", "aes-wide-operation-codegen", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+platform = "linux-x86_64"
+timeout_seconds = 1200
+[checks.success]
+contains = ["AES wide operation cleanup complete: 4 configurations; delegated core clearing; not whole-frame erasure or timing qualification"]
+unique_lines = ["AES wide operation cleanup complete: 4 configurations; delegated core clearing; not whole-frame erasure or timing qualification", "AES wide operation cleanup: PASS; Rust 1.90.0; x86_64; panic=abort; 14 scratch bodies; 4 explicit clears; 130 rejected IR mutations", "AES wide operation cleanup: PASS; Rust 1.90.0; x86_64; panic=unwind; 14 scratch bodies; 4 explicit clears; 130 rejected IR mutations", "AES wide operation cleanup: PASS; Rust 1.99.1; x86_64; panic=abort; 14 scratch bodies; 4 explicit clears; 130 rejected IR mutations", "AES wide operation cleanup: PASS; Rust 1.99.1; x86_64; panic=unwind; 14 scratch bodies; 4 explicit clears; 130 rejected IR mutations"]
+
 [groups.aes-oracle]
 [[groups.aes-oracle.tools]]
 program = "openssl"
+
+[groups.aes-differential-runner]
+paths = ["scripts/aes/check-aes-differential.py", "scripts/aes/test-aes-differential.py"]
+[[groups.aes-differential-runner.tools]]
+program = "python3"
 
 [[checks]]
 component = "aes"
@@ -569,15 +826,15 @@ id = "differential"
 category = "differential"
 name = "AES-128 independent OpenSSL block comparison"
 establishes = "4096 deterministic public block comparisons over 64 keys: independent forward and inverse inputs. Executable fingerprint and runtime version recorded; external shared libraries are not pinned. No timing or validation certification claim."
-command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block","--test","aes128_differential","openssl_independent_encrypt_and_decrypt_corpus","--","--ignored","--exact","--nocapture"]
+command = ["python3", "scripts/aes/check-aes-differential.py", "128"]
 cwd = "."
-inputs = ["compiler","aes-build","aes-oracle","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
+inputs = ["compiler","aes-build","aes-oracle", "aes-differential-runner","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
-reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","OPENSSL_CONF","OPENSSL_MODULES","OPENSSL_ENGINES"]
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","BRYNJA_OPENSSL", "OPENSSL_CONF","OPENSSL_MODULES","OPENSSL_ENGINES"]
 timeout_seconds = 600
 [checks.success]
-contains = ["test result: ok.", "Independent oracle: OpenSSL"]
-unique_lines = ["AES_OPENSSL_COMPARISONS: 4096", "AES_CACHED_OPENSSL_COMPARISONS: 4096"]
+contains = ["test result: ok.", "Independent oracle: OpenSSL", "Independent oracle SHA-256:"]
+unique_lines = ["AES differential oracle identity: unchanged", "AES_OPENSSL_COMPARISONS: 4096", "AES_CACHED_OPENSSL_COMPARISONS: 4096"]
 minimum_tests = 1
 exact_tests = 1
 # Dynamic checks execute downstream checkout fixtures, not packaged archives.

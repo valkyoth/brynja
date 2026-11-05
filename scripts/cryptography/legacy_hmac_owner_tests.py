@@ -42,7 +42,7 @@ class LegacyOwnerTests(unittest.TestCase):
         self.assertIn('registered.algorithm.hkdf',
                       {row['id'] for row in register['registered_secret_owners']})
         self.assertEqual([row['id'] for row in register['development_secret_owners']],
-                         ['development.algorithm.aes128'])
+                         ['development.algorithm.aes128', 'development.algorithm.aes192', 'development.algorithm.aes256'])
         self.assertEqual({r['id'] for r in self.profiles[0]['routes']},
                          {'portable', 'sha1-execution', 'md5-batch', 'strict_execution', 'macos_resident'})
         self.assertIn('pending', self.profiles[0]['qualification'])

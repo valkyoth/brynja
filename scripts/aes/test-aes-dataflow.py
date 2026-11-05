@@ -119,6 +119,103 @@ class DataflowTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             flow.check_body('substitute', 'ptr %state, i8 %inverse', body(''), {})
 
+    def test_public_remainder_and_truncation_but_not_secret_division(self):
+        args = 'ptr %key, i64 %length, ptr %schedule'
+        for width, prefix in (('64', ''), ('8', '  %small = trunc nuw i64 %length to i8\n')):
+            value = '%length' if width == '64' else '%small'
+            operation = prefix + f'  %position = urem i{width} {value}, 24\n'
+            flow.check_body('expand192', args, body(operation), {})
+            secret = '  %loaded = load i64, ptr %key, align 1\n'
+            with self.subTest(width=width), self.assertRaisesRegex(ValueError, 'secret-dependent remainder'):
+                flow.check_body('expand192', args, body(secret + operation.replace('%length', '%loaded')), {})
+        for operation in ('urem i64 %length, 32', 'urem i64 %length, %length',
+                          'trunc ptr %key to i8', 'trunc i64 %length to i1'):
+            with self.subTest(operation=operation), self.assertRaises(ValueError):
+                flow.check_body('expand192', args, body('  %bad = ' + operation + '\n'), {})
+
+    def test_switch_control_is_public_and_cases_are_exact_constants(self):
+        args = 'ptr %key, i64 %length, ptr %schedule'
+        switch = ('  switch i64 %length, label %done [\n'
+                  '    i64 0, label %done\n    i64 16, label %done\n  ]\ndone:\n')
+        flow.check_body('expand256', args, body(switch), {})
+        with self.assertRaisesRegex(ValueError, 'secret-dependent switch'):
+            flow.check_body('expand256', args, body('  %loaded = load i64, ptr %key, align 1\n'
+                                                   + switch.replace('%length', '%loaded')), {})
+        for bad in (switch.replace('i64 16', 'i64 0'), switch.replace('i64 16', 'i64 %length'),
+                    switch.replace(']', ''), switch.replace('%length', '%missing')):
+            with self.subTest(bad=bad), self.assertRaises(ValueError):
+                flow.check_body('expand256', args, body(bad), {})
+
+    def test_wide_helpers_preserve_taint_for_every_role(self):
+        for role in ('expand192', 'expand256', 'transform192', 'transform256', 'wide_add_key'):
+            args = ', '.join(kind + ' %arg' + str(i) for i, kind in enumerate(flow.SHAPES[role]))
+            with self.subTest(role=role), self.assertRaisesRegex(ValueError, 'secret-dependent branch'):
+                flow.check_body(role, args, body('  %byte = load i8, ptr %arg0, align 1\n'
+                    '  %condition = icmp eq i8 %byte, 0\n'
+                    '  br i1 %condition, label %done, label %done\ndone:\n'), {})
+
+    def test_every_wide_call_edge_is_required(self):
+        selected = {}
+        for role, shape in flow.SHAPES.items():
+            args = ', '.join(kind + ' %arg' + str(i) for i, kind in enumerate(shape))
+            calls = []
+            for callee in sorted(flow.EDGES[role]):
+                operands = ', '.join(kind + (' null' if kind == 'ptr' else ' 0')
+                                     for kind in flow.SHAPES[callee])
+                calls.append('  ' + ('%secret = call i8' if callee == 'inverse' else 'call void')
+                             + ' @' + callee + '(' + operands + ')\n')
+            code = 'start:\n' + ''.join(calls) + ('  ret i8 %arg0\n' if role == 'inverse' else '  ret void\n')
+            selected[role] = (role, args, code)
+        with patch.object(flow, 'select', return_value=selected):
+            flow.check_ir('fixture')
+        for role in ('expand192', 'expand256', 'transform192', 'transform256'):
+            for callee in flow.EDGES[role]:
+                changed = dict(selected)
+                name, args, code = changed[role]
+                code = ''.join(line for line in code.splitlines(True) if '@' + callee + '(' not in line)
+                changed[role] = (name, args, code)
+                with self.subTest(role=role, callee=callee), patch.object(flow, 'select', return_value=changed), \
+                     self.assertRaisesRegex(ValueError, 'call graph changed'):
+                    flow.check_ir('fixture')
+
+    def test_wide_selection_follows_consumers_and_rejects_scope_changes(self):
+        prefix = '_RNv13brynja_crypto3aes8portable'
+        definitions = {prefix + ('5field' if role == 'inverse' else '') + str(len(role)) + role:
+                       ('', '') for role in flow.BASE_ROLES}
+        definitions[prefix + '4wide7add_key'] = ('', '')
+        for bits, extent in ((192, 208), (256, 240)):
+            consumer = f'_RNv13brynja_crypto3aes4wide9Aes{bits}Key20encrypt_block_public'
+            calls = []
+            for helper in ('expand', 'transform'):
+                name = prefix + '4wide' + str(len(helper)) + helper + str(bits)
+                definitions[name] = (f'ptr dereferenceable({extent}) %schedule', '')
+                calls.append('call void @' + name + '()')
+            definitions[consumer] = ('', '\n'.join(calls))
+        def select(defs, aliases=None):
+            with patch.object(flow.graph, 'definitions_and_aliases', return_value=(defs, aliases or {})):
+                return flow.select('target triple = "x86_64-unknown-linux-gnu"')
+        self.assertEqual(set(select(definitions)), set(flow.SHAPES))
+        for name in definitions:
+            broken = dict(definitions)
+            del broken[name]
+            with self.subTest(missing=name), self.assertRaises(ValueError):
+                select(broken)
+        for bits in (192, 256):
+            broken = dict(definitions)
+            name = prefix + '4wide6expand' + str(bits)
+            broken[name] = ('ptr dereferenceable(176) %schedule', '')
+            with self.subTest(width=bits), self.assertRaisesRegex(ValueError, 'schedule ABI'):
+                select(broken)
+        with self.assertRaisesRegex(ValueError, 'population changed'):
+            select({**definitions, prefix + '7unknown': ('', '')})
+        with self.assertRaisesRegex(ValueError, 'aliases require review'):
+            select(definitions, {prefix + 'alias': 'other'})
+        broken = dict(definitions)
+        consumer = '_RNv13brynja_crypto3aes4wide9Aes192Key20encrypt_block_public'
+        broken[consumer] = ('', broken[consumer][1].replace('expand192', 'expand256'))
+        with self.assertRaisesRegex(ValueError, 'schedule ABI'):
+            select(broken)
+
     def test_fixed_stack_inverse_assembly_and_arithmetic_lea_allowed(self):
         self.assertEqual(flow.check_inverse_assembly(assembly('\tpushq %rbx\n\tmovb %al, -8(%rsp)\n'
                           '\tleal (,%rdi,8), %eax\n\tcmovnsl %ecx, %eax\n\tpopq %rbx\n'), 'inverse'), 107)

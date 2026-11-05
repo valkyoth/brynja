@@ -273,7 +273,7 @@ def main() -> int:
     assert len(first["current_secret_owners"]) == 8
     assert len(first["registered_secret_owners"]) == 10
     assert len(first["planned_secret_owners"]) == 71
-    assert len(first['development_secret_owners']) == 1
+    assert len(first['development_secret_owners']) == 3
     development = first['development_secret_owners'][0]
     assert development['id'] == 'development.algorithm.aes128'
     assert development['state'] == 'development'

@@ -1,21 +1,21 @@
 [release]
-version = "0.27.0"
-milestone = "0.27.0"
+version = "0.27.1"
+milestone = "0.27.1"
 baseline = "0.25.3"
-cumulative_milestones = ["0.26.0", "0.26.1", "0.27.0"]
+cumulative_milestones = ["0.26.0", "0.26.1", "0.27.0", "0.27.1"]
 policy = "independent"
 stage = "internal"
 # Legacy explicit runner default only; routine gates use final-checks.toml, not this selector.
 verification = "affected"
 exceptional = true
-exception_reason = "New portable AES-128 primitive and secret-owner boundary; owner-requested scoped pentest/retest before the finite final gate."
+exception_reason = "New portable AES-192/256 primitives and clearing key owners; owner-requested scoped pentest/retest before the finite final gate."
 
 [crates."brynja"]
-previous_version = "0.26.1"
-version = "0.27.0"
+previous_version = "0.27.0"
+version = "0.27.1"
 change = "code"
 publish = false
-reason = "Portable AES-128 development milestone; scoped pentest and green CI required before a signed tag. No crates.io publication selected."
+reason = "Portable AES-192/256 development milestone; scoped pentest and green CI required before a signed tag. No crates.io publication selected."
 
 [crates."brynja-legacy-hmac"]
 previous_version = "0.1.0"
@@ -64,7 +64,7 @@ previous_version = "0.2.0"
 version = "0.2.0"
 change = "code"
 publish = false
-reason = "Portable modern HKDF/TLS labels and AES-128 block API; retain supporting-crate version during the internal development train."
+reason = "Portable modern HKDF/TLS labels and AES-128/192/256 block APIs; retain supporting-crate version during the internal development train."
 
 [crates."brynja-hash-core"]
 previous_version = "0.1.0"

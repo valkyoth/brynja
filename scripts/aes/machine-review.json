@@ -1,10 +1,15 @@
 {
   "schema": 1,
-  "review": "docs/assurance/aes128-development.md#six-helper-machine-review--2026-11-04",
+  "review": "docs/assurance/aes-wide-development.md#eleven-helper-machine-review--2026-11-05",
   "target": "x86_64-unknown-linux-gnu",
   "panics": ["abort", "unwind"],
   "compilers": {
     "1.90.0": {
+      "expand192": "06b4fc56b3683a55115877efcd6f7dd466f7b1162a4099aadfec775734924f34",
+      "expand256": "9fe5dcdd2c14bdbd9db54d8fd8fff0c437302afa46d6d364bbcaf640bee6a20a",
+      "transform192": "384404981128aebb946b7dd0a2d97d609428b051c90569272fe00b5ede1fc330",
+      "transform256": "107631f75a16d09732aa0fa80d0492c526f70571dfc47ccb1b8e6ad889a19d40",
+      "wide_add_key": "ec572766c02b001d6ba2f2a0c5d355ac675a3633588566fef8add2b193318ade",
       "substitute": "39f0f0b7514d743427d7f0eadca7b69e9d586e99263a1e0a7c2345f7c36787e4",
       "mix": "f8804950473577fe4d7351906107faa144fc60e0151e960e76d8f8bfe7cba3ca",
       "expand": "ff874ce7cb9035b7f2b57c5c1e3bd5987d57adc46dd9752757281c169270e062",
@@ -13,6 +18,11 @@
       "inverse": "a0352dcd055f548e6a7ef021f5347d48dea541378c73f37d5ce6e9af8c98f684"
     },
     "1.99.1": {
+      "expand192": "efc5345c128c7591a67d50945425ca84fac7f1236ee6f0df3dc30e61c2eb173b",
+      "expand256": "0e25d1c9d49b994915c70295f7d9310266a60f57f9b2edeb937c44d4d9b66ff2",
+      "transform192": "e3183ad5a56ddfd39db6dd25aeb72b0f75551bbef31adc451eed71a0380fd571",
+      "transform256": "9f0b562ee30454c3293726d63b0dc06c186cbf084c9f4933fd513414efdd134a",
+      "wide_add_key": "031ffb80bbce067202b92eb335d417aff22f27178438deacad68a3ebc1e252cc",
       "substitute": "39f0f0b7514d743427d7f0eadca7b69e9d586e99263a1e0a7c2345f7c36787e4",
       "mix": "77bf48b43857f8dd215cdac312600295d186417791dae7aee8c46fb9fed1ff07",
       "expand": "00be260e6e766f0f2efc7b935c509ab6461abf12b0e8af1650b9d54f46cf3b67",

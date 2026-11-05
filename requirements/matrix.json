@@ -1,6 +1,6 @@
 {
   "closure_policy_sha256": "934069ce9123a9a97910a48110ad8692f9c34c12ea997ad15d059d2f72bf4d4f",
-  "domain_policy_sha256": "6bca5f1ed4a95822e3c94b7c295b688d22f23a35e2dacade046694cff47e97b4",
+  "domain_policy_sha256": "392190ff8a50eb98299395ff8de5a08ee651831ef2c89bd615a388c86c5df215",
   "policy_sha256": "9ca99baa1a7db272f816b4e60e67e468c8d9021e14205282210e27a17c7a50e9",
   "requirements": [
     {
@@ -1203,7 +1203,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "AES-128 development checks cover NIST block vectors, independent differential comparisons, finite/fault tests, paired API diagnostics, bounded field/index proofs and host owner/scratch clearing dispatch. These do not complete the planned AES family or prove full-cipher correctness, constant-time machine code, physical erasure or independent review. The exact FIPS section and ownership mapping is in docs/security-controls.md; side-channel review and downstream acceptance remain open.",
+      "evidence_gap": "Development checks now cover all three widths: single-block NIST KATs, independent differential comparisons, fault/lifecycle tests, paired API diagnostics, bounded production field/index proofs, host owner/scratch clearing dispatch, fourteen-compiler checkout consumers, endpoint Cortex-M compilation, eleven-helper LLVM/assembly review and bounded synthetic host timing screens. The exact FIPS and ownership mapping is in docs/security-controls.md. No full-cipher proof, whole-program constant-time, physical erasure or independent qualification is established. Packaged acceptance, AESAVS MCT/MMT, broader target/final-linked review and stronger fixed-versus-random timing remain v0.27.2 work; see docs/assurance/aes-wide-development.md.",
       "id": "BRY-REQ-CRYPTO-0005",
       "invariants": [
         "constant-time",
@@ -1217,7 +1217,7 @@
       "owner": "0.27.0",
       "profile": "crypto-encoding-pkix",
       "residual": "Architecture-specific acceleration requires separate dispatch and side-channel review and cannot silently replace the portable path.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -1243,7 +1243,7 @@
           "sha256": "62c86eb567f13edb8f71826e985da870b04ef6381634f303cdb16e84d47becd1"
         }
       ],
-      "statement": "The AES family must implement the pinned updated FIPS 197 transformations for each admitted key size without secret-indexed lookup tables. AES-128 is the v0.27.0 development scope; AES-192/256 remain separate v0.27.1 work.",
+      "statement": "The AES family must implement the pinned updated FIPS 197 transformations for each admitted key size without secret-indexed lookup tables. AES-128 is the v0.27.0 development slice; v0.27.1 adds distinct AES-192/256 ephemeral and cached owners. These development slices do not themselves close portable acceptance or compiler/target qualification.",
       "strength": "INVARIANT",
       "targets": [
         {

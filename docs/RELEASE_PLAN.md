@@ -5877,7 +5877,14 @@ Exit criteria:
 
 ### v0.27.1 - Complete Portable AES-192 And AES-256
 
-Status: planned
+Status: in progress
+
+Typed portable owners, full single-block KATs, differential/fault/lifecycle checks,
+bounded proofs, emitted cleanup/dataflow review, compiler consumers and a bounded
+wide-key timing screen are implemented. The normative/control mapping is updated;
+candidate metadata and the finite checklist are prepared, and the scoped AES
+refresh passed. Owner review and the clean-candidate final gate remain pending. See
+[the scoped progress and remaining work](assurance/aes-wide-development.md).
 
 Plan scope: Complete FIPS 197 AES-192 and AES-256 key expansion and forward and inverse block operations over the reviewed portable owner while preserving distinct key and round identities, typed APIs, official vectors, cleanup, proofs, and per-compiler and per-target constant-time evidence.
 

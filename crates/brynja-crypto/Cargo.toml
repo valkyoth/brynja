@@ -7,7 +7,7 @@ license.workspace = true
 repository.workspace = true
 description = "Cryptographic provider, policy, and composition layer for Brynja"
 publish = ["crates-io"]
-include = ["Cargo.toml","LICENSE-APACHE","LICENSE-MIT","README.md","src/**/*.rs","tests/**/*.rs","tests/fixtures/aes128/*"]
+include = ["Cargo.toml","LICENSE-APACHE","LICENSE-MIT","README.md","src/**/*.rs","tests/**/*.rs","tests/fixtures/aes128/*","tests/fixtures/aes192/*","tests/fixtures/aes256/*"]
 
 [features]
 default = []
@@ -49,6 +49,18 @@ brynja-mac-hmac = { workspace = true }
 
 [lints]
 workspace = true
+
+[[test]]
+name = "aes_wide"
+required-features = ["hazmat-aes-block"]
+
+[[test]]
+name = "aes_wide_kat"
+required-features = ["hazmat-aes-block"]
+
+[[test]]
+name = "aes_wide_differential"
+required-features = ["hazmat-aes-block"]
 
 [[test]]
 name = "aes128"

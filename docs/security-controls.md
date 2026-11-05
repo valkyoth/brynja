@@ -1,5 +1,48 @@
 # Security Controls
 
+## AES-192/256 development contract (v0.27.1)
+
+The default-off `hazmat-aes-block` API extends the portable block implementation
+with distinct `Aes192Key`/`Aes256Key` and optional `Aes192ExpandedKey`/
+`Aes256ExpandedKey` owners. The existing façade forwards that feature explicitly.
+All blocks are 16 bytes. Imports require exactly 24/32 key bytes; caller-backed
+cached schedules occupy exactly 208/240 bytes and are key-equivalent material.
+There is no public const-generic algorithm, automatic key-size selection, heap
+allocation, key export, mode, authentication, implicit acceleration or hardware
+requirement. The optional external-provider API still covers AES-128 only.
+
+`BRY-REQ-CRYPTO-0005` remains **planned** at the family-qualification level.
+The source-bound owner register separately records
+`development.algorithm.aes192` and `development.algorithm.aes256`; passing
+development checks does not promote `algorithm.aes` to a qualified capability.
+The normative source remains the pinned FIPS 197-upd1 used below. These Rust
+ownership and failure rules are additional Brynja controls, not FIPS mandates.
+All check IDs in this table are scoped to `aes/` in `brynja-verify`.
+
+| Requirement / source | Enforcement | Scoped evidence |
+| --- | --- | --- |
+| Exact identity and parameters (§3.4, §5 Table 3) | Named key types, exact array lengths, 12/14 rounds, no caller-defined variant | `wide-vectors`, `wide-api-msrv`, `wide-api-current`; compile-time production parameter assertion |
+| Expansion (§5.2, Appendix A.2/A.3) | AES-192 word dependency; AES-256 additional SubWord; guarded 208/240-byte schedule and four-byte word | `rounds-and-faults` complete schedule answers and injected errors/unwinds; `wide-kat`, `mutation-controls` |
+| Forward and inverse operations (§5.1/§5.3) | Distinct directions, final-round handling, table-free shared field arithmetic | `wide-kat` all 700/810 single-block records, `wide-differential` 4096 comparisons per width through both owner forms, `wide-optimized-kat` |
+| Bounded arithmetic (Brynja control) | Exact parameter triples, fixed public loop bounds and checked schedule access | `field-layout-proof` five production-helper proofs; schedule-index proof assumes aligned admitted offsets, not full-cipher/loop correctness |
+| Borrowing and output ownership (Brynja control) | Private clearing storage, no Copy/Clone/Debug/Send/Sync, disjoint borrows, output lifetime independent of key | `wide-vectors`, `wide-api-msrv`, `wide-api-current`, `downstream`, `downstream-matrix` |
+| Failure and ciphertext release (Brynja control) | Secret destination admitted before expansion and cleared on error/unwind; public destination committed only after success with explicit acknowledgement; no public decrypt | `rounds-and-faults`, `asan-faults`, `wide-vectors`, `wide-asan-vectors` |
+| Ephemeral/cached cleanup (Brynja control) | Ordinary operations expand locally; optional cached owners retain schedules until consuming clear/Drop; local guards delegate to core | `owner-dispatch`, `wide-operation-cleanup`, `wide-miri-ownership`; Miri covers two selected canary/lifecycle tests, not every fault path |
+| Public consumer and no_std boundary | Direct/façade imports, exact features/dependency closure, 18 tests across all widths | `downstream-matrix`: 56 host configurations on fourteen compilers; four endpoint Cortex-M builds are compile-only, checkout sources rather than archives |
+| Bounded emitted-code review | All eleven helpers checked for secret LLVM control/address flow; reviewed x86_64 instruction-stream fingerprints | `dataflow-review`: Rust 1.90.0/1.99.1 abort/unwind, not wrapper/core analysis, final-linked code or whole-program constant time |
+| Bounded timing observation | 26 zero/FF contrasts over ephemeral/cached operations and cached import/Drop; independent preflight, fixed population/threshold, retained alarms | `wide-timing-screen`: Rust 1.99.1, one Linux x86_64 logical CPU; not fixed-versus-random, cache, physical or cross-target qualification |
+
+The [development evidence contract](assurance/aes-wide-development.md) records
+the measurements and remaining acceptance work. The scheduled v0.27.2 package,
+MCT/MMT, broader emitted-code and stronger timing campaigns are not silently
+counted as complete. Caller copies, compiler spills/registers, forgotten owners,
+aborts, paging, dumps and physical side channels remain outside owned-storage
+clearing. Cached schedules deliberately increase secret lifetime/footprint;
+choose ephemeral owners when reuse is unnecessary. Neither raw encryption nor
+successful decryption authenticates a message. Applications must supply secure
+keys and a reviewed authenticated construction and bound the number of calls.
+See the [wide-key threat boundary](threat-model.md#aes-192256-block-boundary-v0271-development).
+
 ## AES-128 development contract (v0.27.0)
 
 The development-only [`brynja_crypto::aes`](../crates/brynja-crypto/src/aes.rs)
@@ -25,10 +68,10 @@ that FIPS specifies this Rust interface. Evidence IDs are under `aes/` in
 | Secret-output failure (Brynja control) | Admitted destination clears on error/unwind; output owner survives independently of key | `rounds-and-faults`, `asan-faults`, `miri-ownership` |
 | Explicit ciphertext release (Brynja control) | Consumed `PublicCiphertext` acknowledgement; output unchanged until final commit; no public plaintext path | `vectors`, `rounds-and-faults`, `api-msrv`, `api-current`, `miri-public` |
 | Local temporary destruction (Brynja control) | Schedule, state, word and row-copy guards delegate clearing to core | `rounds-and-faults`, `asan-faults`, `owner-dispatch`, `operation-cleanup` |
-| Bounded work and portable surface | One fixed-size block, no heap, retained schedule, callback, implicit backend or unbounded input | `msrv-vectors`, `no-std-thumb`; Cortex-M is compilation only |
-| Downstream portable API (Brynja control) | Isolated direct/façade consumers, exact active dependencies/features, six lifecycle/vector tests in debug/release | `downstream`, `downstream-matrix`; fourteen host compilers, endpoint-only Cortex-M compile, checkout sources rather than archives |
+| Bounded work and portable surface | One fixed-size block, no heap, callback, implicit backend or unbounded input; ephemeral schedule by default, optional caller-owned cached schedule cleared on clear/Drop | `msrv-vectors`, `no-std-thumb`; Cortex-M is compilation only |
+| Downstream portable API (Brynja control) | Isolated direct/façade consumers, exact active dependencies/features, six AES-128 lifecycle/vector tests within eighteen all-width tests in debug/release | `downstream`, `downstream-matrix`; fourteen host compilers, endpoint-only Cortex-M compile, checkout sources rather than archives |
 | Bounded timing diagnostic (observation, not a security guarantee) | Fixed-width zero/FF key/block contrasts, independent OpenSSL preflight, balanced order and fail-on-alarm without retries | `timing-screen`; six campaigns on Rust 1.99.1 Linux x86_64, raw samples retained, not constant-time qualification |
-| Bounded emitted dataflow (not whole-program qualification) | All loaded bytes tainted; reject secret branches, addresses and control operands in six LLVM helpers; explicit six-helper assembly control/address review with pinned instruction streams and a restricted scalar inverse checker | `dataflow-review`; Rust 1.90.0/1.99.1 x86_64 abort/unwind; changed streams require re-review; not an assembly noninterference proof; excludes wrapper/core machine code, final application LTO and other targets |
+| Bounded emitted dataflow (not whole-program qualification) | All loaded bytes tainted; reject secret branches, addresses and control operands in six AES-128 helpers within the eleven-helper all-width check; explicit assembly control/address review with pinned instruction streams and a restricted scalar inverse checker | `dataflow-review`; Rust 1.90.0/1.99.1 x86_64 abort/unwind; changed streams require re-review; not an assembly noninterference proof; excludes wrapper/core machine code, final application LTO and other targets |
 
 All four KAT files and 568 records are identified in the
 [development evidence contract](assurance/aes128-development.md). The independent

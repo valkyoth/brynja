@@ -14,11 +14,21 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import aes_machine_review as machine
 
 ROOT = verifier.ROOT
-MARKER = 'AES dataflow review: 4 configurations; 6 LLVM and assembly helpers; not whole-program constant-time qualification'
+MARKER = 'AES dataflow review: 4 configurations; 11 LLVM and assembly helpers; not whole-program constant-time qualification'
 VAR = r'%[-\w.]+'
 SHAPES = {'substitute': ('ptr', 'i1'), 'mix': ('ptr', 'i1'),
           'expand': ('ptr', 'i64', 'ptr'), 'add_key': ('ptr', 'ptr', 'i64'),
           'transform': ('ptr', 'ptr', 'i1'), 'inverse': ('i8',)}
+BASE_ROLES = set(SHAPES)
+SHAPES.update({'expand192': SHAPES['expand'], 'expand256': SHAPES['expand'],
+               'transform192': SHAPES['transform'], 'transform256': SHAPES['transform'],
+               'wide_add_key': ('ptr', 'ptr', 'i64', 'i64')})
+EDGES = {'inverse': set(), 'mix': set(), 'add_key': set(),
+         'substitute': {'inverse'}, 'expand': {'inverse'},
+         'transform': {'substitute', 'mix', 'add_key'},
+         'expand192': {'inverse'}, 'expand256': {'inverse'}, 'wide_add_key': set(),
+         'transform192': {'substitute', 'mix', 'wide_add_key'},
+         'transform256': {'substitute', 'mix', 'wide_add_key'}}
 CLEAR = r'(?:_RNvNt\w+_11brynja_core13secret_memory18clear_owned_region|_ZN11brynja_core13secret_memory18clear_owned_region17h[0-9a-f]+E)'
 
 
@@ -36,12 +46,30 @@ def select(llvm):
     definitions, aliases = graph.definitions_and_aliases(llvm)
     require(not any('13brynja_crypto3aes8portable' in name for name in aliases), 'portable aliases require review')
     result = {}
-    for role in SHAPES:
+    for role in sorted(BASE_ROLES):
         suffix = ('5field' if role == 'inverse' else '') + str(len(role)) + role
         names = [name for name in definitions if re.search(
             r'13brynja_crypto3aes8portable' + suffix + r'(?:17h[0-9a-f]+E)?$', name)]
         require(len(names) == 1, 'missing/ambiguous helper: ' + role)
         result[role] = (names[0], *definitions[names[0]])
+    for bits, extent in ((192, 208), (256, 240)):
+        # Follow each concrete public consumer, not the first generic match.
+        owner = f'Aes{bits}Key'
+        names = [name for name in definitions if '13brynja_crypto3aes4wide' in name
+                 and re.search(str(len(owner)) + owner + r'20encrypt_block_public(?:17h[0-9a-f]+E)?$', name)]
+        require(len(names) == 1, 'missing/ambiguous public wide consumer')
+        calls = set(re.findall(r'\b(?:call|invoke)\b[^\n]*@(\w+)\(', definitions[names[0]][1]))
+        for helper in ('expand', 'transform'):
+            names = [name for name in calls if '8portable4wide' + str(len(helper)) + helper in name]
+            require(len(names) == 1 and names[0] in definitions, 'missing/ambiguous wide helper')
+            item = (names[0], *definitions[names[0]])
+            require(re.search(r'\bdereferenceable\(' + str(extent) + r'\) %schedule(?:,|$)', item[1]),
+                    'wrong wide schedule ABI')
+            result[helper + str(bits)] = item
+    names = [name for name in definitions if re.search(
+        r'13brynja_crypto3aes8portable4wide7add_key(?:17h[0-9a-f]+E)?$', name)]
+    require(len(names) == 1, 'missing/ambiguous wide add-key')
+    result['wide_add_key'] = (names[0], *definitions[names[0]])
     # Do not silently accept an unreviewed additional portable helper.
     require({name for name in definitions if '13brynja_crypto3aes8portable' in name}
             == {item[0] for item in result.values()}, 'portable helper population changed')
@@ -63,6 +91,10 @@ def check_body(role, arguments, body, callees):
     known = {name for _, name in args}
     secret = set(known) if role == 'inverse' else set()
     deps, sinks, edges = {}, [], set()
+    # LLVM prints switch cases on separate lines. Fold only this exact grammar;
+    # labels/case constants are not data operands, but the selector is a sink.
+    body = re.sub(r'switch i64 ([^\n]+) \[\n((?:\s*i64 -?\d+, label %[-\w.]+\n)+)\s*\]',
+                  lambda match: 'switch i64 ' + match[1] + ' [ ' + ' '.join(match[2].split()) + ' ]', body)
     lines = [line for block in graph.blocks(body).values() for line in block]
     require(lines, 'empty helper')
     for original in lines:
@@ -88,6 +120,17 @@ def check_body(role, arguments, body, callees):
         elif op == 'alloca':
             require(target and re.fullmatch(r'alloca \[\d+ x i8\], align \d+', expression), 'unmodeled allocation')
             deps[target] = set()
+        elif op == 'urem':
+            # AES-192 schedule periodicity only. Do not admit secret division
+            # or silently generalize the model to arbitrary divisors.
+            require(target and re.fullmatch(r'urem i(?:8|64) ' + VAR + r', 24', expression),
+                    'unmodeled remainder')
+            deps[target] = uses
+            sinks.append(('remainder operands', uses))
+        elif op == 'trunc':
+            require(target and re.fullmatch(r'trunc(?: nuw)? i64 ' + VAR + r' to i8', expression),
+                    'unmodeled truncation')
+            deps[target] = uses
         elif op == 'getelementptr':
             require(target and re.fullmatch(r'getelementptr(?: inbounds)?(?: nuw)? i8, ptr ' + VAR
                                            + r', i64 (?:' + VAR + r'|-?\d+)', expression), 'unmodeled address')
@@ -110,6 +153,14 @@ def check_body(role, arguments, body, callees):
             require(branch or re.fullmatch(r'br label ' + VAR, expression), 'unmodeled branch')
             uses = variables(branch[1]) if branch else set()
             sinks.append(('branch', uses))
+        elif op == 'switch':
+            switch = re.fullmatch(r'switch i64 (' + VAR + r'), label ' + VAR
+                                  + r' \[ ((?:i64 -?\d+, label ' + VAR + r'\s*)+)\]', expression)
+            require(target is None and switch is not None, 'unmodeled switch')
+            cases = re.findall(r'i64 (-?\d+),', switch[2])
+            require(len(cases) == len(set(cases)), 'duplicate switch case')
+            uses = {switch[1]}
+            sinks.append(('switch selector', uses))
         elif op == 'ret':
             require(target is None and re.fullmatch(r'ret (?:void|i(?:1|8) (?:' + VAR + r'|true|false|\d+))', expression),
                     'unmodeled return')
@@ -167,9 +218,7 @@ def check_ir(llvm):
     selected = select(llvm)
     callees = {item[0]: role for role, item in selected.items()}
     edges = {role: check_body(role, args, body, callees) for role, (_, args, body) in selected.items()}
-    require(edges == {'inverse': set(), 'mix': set(), 'add_key': set(),
-                      'substitute': {'inverse'}, 'expand': {'inverse'},
-                      'transform': {'substitute', 'mix', 'add_key'}}, 'portable call graph changed')
+    require(edges == EDGES, 'portable call graph changed')
     return selected
 
 
@@ -225,8 +274,8 @@ def collect(directory, compiler, panic):
     selected = check_ir(artifacts['ll'])
     count = check_inverse_assembly(artifacts['s'], selected['inverse'][0])
     machine.check(artifacts['s'], selected, compiler, panic, json.loads(machine.POLICY.read_text()))
-    print(f'AES machine review: PASS; Rust {compiler}; panic={panic}; 6 reviewed instruction streams')
-    print(f'AES dataflow: PASS; Rust {compiler}; panic={panic}; 6 helpers; {count} inverse machine instructions')
+    print(f'AES machine review: PASS; Rust {compiler}; panic={panic}; 11 reviewed instruction streams')
+    print(f'AES dataflow: PASS; Rust {compiler}; panic={panic}; 11 helpers; {count} inverse machine instructions')
 
 
 def main():

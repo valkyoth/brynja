@@ -48,6 +48,11 @@ AesMutationTests = aes_runner_tests.MutationTests
 AesOwnerCodegenTests = aes_runner_tests.OwnerCodegenTests
 AesOperationCodegenTests = aes_runner_tests.OperationCodegenTests
 
+wide_operation_spec = importlib.util.spec_from_file_location('aes_wide_operation_tests', ROOT / 'scripts/aes/test-aes-wide-operation-cleanup.py')
+wide_operation_tests = importlib.util.module_from_spec(wide_operation_spec)
+wide_operation_spec.loader.exec_module(wide_operation_tests)
+AesWideOperationCodegenTests = wide_operation_tests.WideOperationTests
+
 aes_consumer_spec = importlib.util.spec_from_file_location('aes_consumer_tests', ROOT / 'scripts/aes/test-aes-consumer.py')
 aes_consumer_tests = importlib.util.module_from_spec(aes_consumer_spec)
 aes_consumer_spec.loader.exec_module(aes_consumer_tests)
@@ -57,6 +62,14 @@ aes_timing_spec = importlib.util.spec_from_file_location('aes_timing_tests', ROO
 aes_timing_tests = importlib.util.module_from_spec(aes_timing_spec)
 aes_timing_spec.loader.exec_module(aes_timing_tests)
 AesTimingTests = aes_timing_tests.TimingTests
+aes_wide_timing_spec = importlib.util.spec_from_file_location('aes_wide_timing_tests', ROOT / 'scripts/aes/test-aes-wide-timing.py')
+aes_wide_timing_tests = importlib.util.module_from_spec(aes_wide_timing_spec)
+aes_wide_timing_spec.loader.exec_module(aes_wide_timing_tests)
+AesWideTimingTests = aes_wide_timing_tests.WideTimingTests
+aes_differential_spec = importlib.util.spec_from_file_location('aes_differential_tests', ROOT / 'scripts/aes/test-aes-differential.py')
+aes_differential_tests = importlib.util.module_from_spec(aes_differential_spec)
+aes_differential_spec.loader.exec_module(aes_differential_tests)
+AesDifferentialTests = aes_differential_tests.DifferentialTests
 aes_dataflow_spec = importlib.util.spec_from_file_location('aes_dataflow_tests', ROOT / 'scripts/aes/test-aes-dataflow.py')
 aes_dataflow_tests = importlib.util.module_from_spec(aes_dataflow_spec)
 aes_dataflow_spec.loader.exec_module(aes_dataflow_tests)
@@ -66,6 +79,11 @@ aes_contract_spec = importlib.util.spec_from_file_location('aes_contract_tests',
 aes_contract_tests = importlib.util.module_from_spec(aes_contract_spec)
 aes_contract_spec.loader.exec_module(aes_contract_tests)
 AesDevelopmentOwnerTests = aes_contract_tests.OwnerContractTests
+
+wide_contract_spec = importlib.util.spec_from_file_location('aes_wide_contract_tests', ROOT / 'scripts/cryptography/test-aes-wide-owner-contract.py')
+wide_contract_tests = importlib.util.module_from_spec(wide_contract_spec)
+wide_contract_spec.loader.exec_module(wide_contract_tests)
+AesWideDevelopmentOwnerTests = wide_contract_tests.WideOwnerTests
 
 provider_spec = importlib.util.spec_from_file_location('aes_provider_tests', ROOT / 'scripts/aes/test-aes-provider-runner.py')
 provider_tests = importlib.util.module_from_spec(provider_spec)
@@ -149,16 +167,22 @@ class RegistryTests(unittest.TestCase):
 
     def test_aes_initial_checks_pin_harnesses_and_counts(self):
         checks = {c['id']: c for c in self.registry['checks'] if c['component'] == 'aes'}
-        expected = {'vectors': 6, 'rounds-and-faults': 7, 'msrv-vectors': 6,
+        expected = {'vectors': 6, 'rounds-and-faults': 17, 'msrv-vectors': 6,
                     'ownership': 11, 'optimized-vectors': 6, 'no-std-thumb': 0,
-                    'asan-vectors': 6, 'miri-ownership': 1, 'asan-faults': 7,
+                    'asan-vectors': 6, 'miri-ownership': 1, 'asan-faults': 17,
                     'miri-public': 1, 'differential': 1, 'field-layout-proof': 0,
                     'api-msrv': 0, 'api-current': 0, 'mutation-controls': 0,
                     'owner-dispatch': 0, 'operation-cleanup': 0, 'owner-contract': 0,
                     'downstream': 0, 'downstream-matrix': 0, 'timing-screen': 0,
                     'dataflow-review': 0, 'provider-native': 16, 'provider-msrv': 16,
                     'provider-asan': 16, 'provider-miri': 16, 'provider-api-current': 0,
-                    'provider-api-msrv': 0, 'provider-no-std': 0, 'provider-docs': 1}
+                    'provider-api-msrv': 0, 'provider-no-std': 0, 'provider-docs': 1,
+                    'wide-vectors': 8, 'wide-msrv-vectors': 8, 'wide-optimized-vectors': 8,
+                    'wide-asan-vectors': 8, 'wide-miri-ownership': 2,
+                    'wide-api-msrv': 0, 'wide-api-current': 0,
+                    'wide-kat': 4, 'wide-msrv-kat': 4, 'wide-optimized-kat': 4,
+                    'wide-asan-kat': 4, 'wide-differential': 2, 'wide-operation-cleanup': 0,
+                    'wide-timing-screen': 0}
         self.assertEqual(set(checks), set(expected))
         for name, count in expected.items():
             check = checks[name]
@@ -177,6 +201,32 @@ class RegistryTests(unittest.TestCase):
             self.assertIn('RUSTC_WRAPPER', check['reject_environment'])
         self.assertEqual(checks['rounds-and-faults']['command'][-2:], ['--lib', 'aes::'])
         self.assertEqual(checks['ownership']['command'][-2:], ['--doc', 'aes::'])
+        for name in ('wide-vectors', 'wide-msrv-vectors', 'wide-optimized-vectors',
+                     'wide-asan-vectors', 'wide-miri-ownership'):
+            command = checks[name]['command']
+            self.assertEqual(command[command.index('--test') + 1], 'aes_wide')
+        for name, version in (('wide-api-msrv', '1.90.0'), ('wide-api-current', '1.99.1')):
+            self.assertEqual(checks[name]['command'], ['python3', 'scripts/aes/check-aes-wide-api.py', version])
+            self.assertEqual(checks[name]['success']['unique_lines'], [f'AES_WIDE_API_PASS: {version} 76 paired probes'])
+        self.assertIn('crates/brynja-crypto/tests/aes_wide.rs', self.registry['groups']['aes-build']['paths'])
+        for name in ('wide-kat', 'wide-msrv-kat', 'wide-optimized-kat', 'wide-asan-kat'):
+            command = checks[name]['command']
+            self.assertEqual(command[command.index('--test') + 1], 'aes_wide_kat')
+            self.assertEqual(command[-2:], ['--', '--nocapture'])
+            self.assertEqual(checks[name]['success']['unique_lines'],
+                             ['AES192_KAT_RECORDS: 700', 'AES256_KAT_RECORDS: 810'])
+        oracle = checks['wide-differential']
+        for name, suite in (('wide-differential', 'wide'), ('differential', '128')):
+            registered = checks[name]
+            self.assertEqual(registered['command'], ['python3', 'scripts/aes/check-aes-differential.py', suite])
+            self.assertIn('aes-differential-runner', registered['inputs'])
+            self.assertIn('BRYNJA_OPENSSL', registered['reject_environment'])
+            self.assertIn('Independent oracle SHA-256:', registered['success']['contains'])
+            self.assertIn('AES differential oracle identity: unchanged', registered['success']['unique_lines'])
+        self.assertEqual(oracle['success']['unique_lines'],
+                         ['AES differential oracle identity: unchanged'] +
+                         [f'AES{bits}_{cache}OPENSSL_COMPARISONS: 4096' for bits in (192, 256) for cache in ('', 'CACHED_')])
+        self.assertIn('aes-oracle', oracle['inputs'])
         self.assertEqual(checks['miri-ownership']['command'][-3:],
                          ['output_outlives_key_and_explicit_clear_preserves_canaries', '--', '--exact'])
         for name in ('vectors','msrv-vectors','optimized-vectors','asan-vectors'):
@@ -204,9 +254,8 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(checks['miri-public']['command'][-3:],
                          ['public_ciphertext_commit_preserves_inputs_and_canaries', '--', '--exact'])
         oracle = checks['differential']
-        self.assertEqual(oracle['command'][-5:],
-                         ['openssl_independent_encrypt_and_decrypt_corpus', '--', '--ignored', '--exact', '--nocapture'])
-        self.assertEqual(oracle['success']['unique_lines'], ['AES_OPENSSL_COMPARISONS: 4096', 'AES_CACHED_OPENSSL_COMPARISONS: 4096'])
+        self.assertEqual(oracle['command'], ['python3', 'scripts/aes/check-aes-differential.py', '128'])
+        self.assertEqual(oracle['success']['unique_lines'], ['AES differential oracle identity: unchanged', 'AES_OPENSSL_COMPARISONS: 4096', 'AES_CACHED_OPENSSL_COMPARISONS: 4096'])
         self.assertIn('aes-oracle', oracle['inputs'])
         self.assertEqual(self.registry['groups']['aes-oracle']['tools'], [{'program': 'openssl'}])
 
@@ -216,7 +265,7 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(check['command'], ['python3', 'scripts/aes/check-aes-consumer.py'])
         self.assertEqual(check['success']['contains'], ['AES downstream: PASS;'])
         self.assertEqual(check['success']['unique_lines'], [consumer.MARKER] + [
-            f'AES_DOWNSTREAM_HOST: {compiler} {route} {profile} 6 exact tests'
+            f'AES_DOWNSTREAM_HOST: {compiler} {route} {profile} 18 exact tests'
             for compiler in consumer.TOOLCHAINS for route in consumer.ROUTES for profile in ('debug', 'release')
         ] + [f'AES_DOWNSTREAM_TARGET: {compiler} {route} thumbv7em-none-eabi compile-only'
              for compiler in consumer.TOOLCHAINS for route in consumer.ROUTES] + consumer.FEATURE_MARKERS)
@@ -239,7 +288,7 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual({(t['program'], t['toolchain']) for t in tools},
                          {(program, compiler) for compiler in consumer.MATRIX for program in ('cargo', 'rustc')})
         self.assertEqual(check['success']['unique_lines'], [consumer.MATRIX_MARKER] + [
-            f'AES_DOWNSTREAM_HOST: {compiler} {route} {profile} 6 exact tests'
+            f'AES_DOWNSTREAM_HOST: {compiler} {route} {profile} 18 exact tests'
             for compiler in consumer.MATRIX for route in consumer.ROUTES for profile in ('debug', 'release')
         ] + [f'AES_DOWNSTREAM_TARGET: {compiler} {route} thumbv7em-none-eabi compile-only'
              for compiler in consumer.TOOLCHAINS for route in consumer.ROUTES] + consumer.FEATURE_MARKERS)
@@ -256,6 +305,20 @@ class RegistryTests(unittest.TestCase):
                      'scripts/aes/test-aes-timing.py', 'scripts/hmac/hmac_timing.py',
                      'scripts/hmac/hmac_verifiers.py', 'scripts/repository/facade_cargo_environment.py'):
             self.assertIn(path, paths)
+
+    def test_aes_wide_timing_scope_and_full_input_closure(self):
+        check = next(c for c in self.registry['checks'] if c['component'] == 'aes' and c['id'] == 'wide-timing-screen')
+        self.assertEqual(check['command'], ['python3', 'scripts/aes/check-aes-wide-timing.py'])
+        self.assertEqual(check['platform'], 'linux-x86_64')
+        self.assertEqual(check['success']['unique_lines'], ['Independent AES wide timing preflight: PASS',
+                         aes_wide_timing_tests.timing.MARKER,
+                         'Observation only; not constant-time, cache, cross-target or independent qualification'])
+        self.assertTrue({'aes-build', 'aes-timing', 'aes-wide-timing', 'aes-oracle', 'compiler', 'hash-core'} <= set(check['inputs']))
+        self.assertEqual(set(self.registry['groups']['aes-wide-timing']['paths']), {
+            'scripts/aes/check-aes-wide-timing.py', 'scripts/aes/test-aes-wide-timing.py'})
+        self.assertIn('assurance/aes-timing/src', self.registry['groups']['aes-timing']['paths'])
+        self.assertIn('PYTHONOPTIMIZE', check['reject_environment'])
+        self.assertGreaterEqual(check['log_bytes'], 4 * 1024 * 1024)
 
     def test_aes_proof_and_diagnostic_bindings(self):
         checks = {c['id']: c for c in self.registry['checks'] if c['component'] == 'aes'}
@@ -291,6 +354,29 @@ class RegistryTests(unittest.TestCase):
         self.assertIn('crates/brynja-crypto/tests/fixtures/aes128',
                       self.registry['groups']['aes-build']['paths'])
 
+    def test_wide_aes_fixtures_and_package_inclusion(self):
+        expected = {
+            (192, 'ECBGFSbox192.rsp'): 'bee6349ecc3ab031db9b6effc3632f54ddd49287d27257693261972c35abb1db',
+            (192, 'ECBKeySbox192.rsp'): '0e08371b787b8e1663f92c8941f4cb60d9afc558fd1f25c4b0e29e43772cfc38',
+            (192, 'ECBVarKey192.rsp'): '4d6a3d6f8e4e5d6745f37b0c41191e25f029c32810e69288919d7e85a081944a',
+            (192, 'ECBVarTxt192.rsp'): 'a41f30d494e25a2a6618d4dfd0ca0b33fe563fe1efeb8529134ab602ac2d9a28',
+            (256, 'ECBGFSbox256.rsp'): '6669478d69cd45d4f64549bb3c78389a0fb01eae149d804a8cccc9713ea0d511',
+            (256, 'ECBKeySbox256.rsp'): '323077de259a06dcb2abf389d4e60cd3399d8608e6253504b103a4ce68b08171',
+            (256, 'ECBVarKey256.rsp'): 'ae2de0c7f11b8d52867db67a17521e8ef9eaa047febe22339ececb2d02c15329',
+            (256, 'ECBVarTxt256.rsp'): '6541ad108a78256d6ddefe34283c3037112f893626daf7acfab9cca278196c1c',
+        }
+        manifest = tomllib.loads((ROOT / 'crates/brynja-crypto/Cargo.toml').read_text())
+        for bits in (192, 256):
+            relative = f'crates/brynja-crypto/tests/fixtures/aes{bits}'
+            directory = ROOT / relative
+            self.assertEqual({p.name for p in directory.iterdir()}, {'README.md'} | {n for (b, n) in expected if b == bits})
+            self.assertIn(f'tests/fixtures/aes{bits}/*', manifest['package']['include'])
+            self.assertIn(relative, self.registry['groups']['aes-build']['paths'])
+        for (bits, name), digest in expected.items():
+            path = ROOT / f'crates/brynja-crypto/tests/fixtures/aes{bits}' / name
+            self.assertFalse(path.is_symlink())
+            self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), digest)
+
     def test_aes_mutation_and_codegen_scope(self):
         checks = {c['id']: c for c in self.registry['checks'] if c['component'] == 'aes'}
         mutation = checks['mutation-controls']
@@ -304,7 +390,7 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(owner['platform'], 'linux-x86_64')
         self.assertTrue({'aes-owner-codegen', 'compiler', 'hkdf-msrv'} <= set(owner['inputs']))
         self.assertEqual(owner['success']['unique_lines'], [aes_runner_tests.owner.MARKER] +
-                         [f'AES owner dispatch: PASS; Rust {compiler}; x86_64; panic={panic}; 3 probes; 12 rejected IR mutations'
+                         [f'AES owner dispatch: PASS; Rust {compiler}; x86_64; panic={panic}; 7 probes; 12 rejected IR mutations'
                           for compiler in ('1.90.0', '1.99.1') for panic in ('abort', 'unwind')])
         paths = self.registry['groups']['aes-owner-codegen']['paths']
         for helper in ('scripts/hkdf/hkdf_owner_codegen.py', 'scripts/hmac/hmac_engine_codegen.py',
@@ -317,14 +403,14 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(check['platform'], 'linux-x86_64')
         self.assertTrue({'aes-build', 'aes-dataflow', 'compiler', 'hkdf-msrv', 'hash-core'} <= set(check['inputs']))
         self.assertEqual(check['success']['unique_lines'], [aes_dataflow_tests.flow.MARKER] +
-                         [f'AES dataflow: PASS; Rust {compiler}; panic={panic}; 6 helpers; {count} inverse machine instructions'
+                         [f'AES dataflow: PASS; Rust {compiler}; panic={panic}; 11 helpers; {count} inverse machine instructions'
                           for compiler, count in (('1.90.0', 740), ('1.99.1', 749)) for panic in ('abort', 'unwind')] +
-                         [f'AES machine review: PASS; Rust {compiler}; panic={panic}; 6 reviewed instruction streams'
+                         [f'AES machine review: PASS; Rust {compiler}; panic={panic}; 11 reviewed instruction streams'
                           for compiler in ('1.90.0', '1.99.1') for panic in ('abort', 'unwind')])
         self.assertEqual(set(self.registry['groups']['aes-dataflow']['paths']), {
             'scripts/aes/check-aes-dataflow.py', 'scripts/aes/test-aes-dataflow.py',
             'scripts/aes/aes_machine_review.py', 'scripts/aes/machine-review.json',
-            'docs/assurance/aes128-development.md',
+            'docs/assurance/aes128-development.md', 'docs/assurance/aes-wide-development.md',
             'scripts/hmac/hmac_engine_codegen.py', 'scripts/hmac/hmac_verifiers.py',
             'scripts/repository/facade_cargo_environment.py'})
         self.assertIn('PYTHONOPTIMIZE', check['reject_environment'])
@@ -344,6 +430,23 @@ class RegistryTests(unittest.TestCase):
                        'scripts/hmac/hmac_engine_codegen.py', 'scripts/hmac/hmac_engine_scratch.py',
                        'scripts/hmac/hmac_verifiers.py', 'scripts/repository/facade_cargo_environment.py'):
             self.assertIn(helper, paths)
+
+    def test_aes_wide_operation_cleanup_scope(self):
+        checks = [c for c in self.registry['checks'] if c['component'] == 'aes' and c['id'] == 'wide-operation-cleanup']
+        self.assertEqual(len(checks), 1)
+        check = checks[0]
+        self.assertEqual(check['command'], ['python3', 'scripts/aes/check-aes-wide-operation-cleanup.py'])
+        self.assertEqual(check['platform'], 'linux-x86_64')
+        self.assertEqual(check['category'], 'compiler')
+        self.assertTrue({'aes-wide-operation-codegen', 'aes-build', 'compiler', 'hkdf-msrv', 'hash-core'} <= set(check['inputs']))
+        self.assertEqual(check['success']['unique_lines'], [wide_operation_tests.wide.MARKER] +
+                         [f'AES wide operation cleanup: PASS; Rust {compiler}; x86_64; panic={panic}; 14 scratch bodies; 4 explicit clears; 130 rejected IR mutations'
+                          for compiler in ('1.90.0', '1.99.1') for panic in ('abort', 'unwind')])
+        self.assertEqual(set(self.registry['groups']['aes-wide-operation-codegen']['paths']), {
+            'scripts/aes/check-aes-wide-operation-cleanup.py', 'scripts/aes/test-aes-wide-operation-cleanup.py',
+            'scripts/aes/check-aes-operation-cleanup.py', 'scripts/hmac/hmac_engine_codegen.py',
+            'scripts/hmac/hmac_engine_scratch.py', 'scripts/hmac/hmac_verifiers.py',
+            'scripts/repository/facade_cargo_environment.py'})
 
     def test_aes_development_owner_scope(self):
         selected = [c for c in self.registry['checks'] if c['component'] == 'aes' and c['id'] == 'owner-contract']

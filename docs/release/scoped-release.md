@@ -8,7 +8,8 @@ default: implement, verify the finite agreed scope, record, close, move on.
 
 1. Implement the component and its necessary integrations, with their agreed
    checks. Resolve known blocking findings.
-2. Obtain a clean pentest/retest disposition and commit the accurate report.
+2. Commit the candidate, obtain its scoped pentest/retest disposition, then
+   commit only the accurate approval report with its `Reviewed-Commit` identity.
 3. Run the finite final release checks for that candidate.
 4. Push the candidate and wait for its GitHub checks, including CodeQL, to pass.
 5. Create the signed release tag and publish that same clean candidate.
@@ -22,6 +23,29 @@ disposition, push again and wait for green. Do not automatically repeat complete
 component campaigns or the entire final gate. A substantive change still needs
 its affected checks and review. Never treat a previous commit's green status as
 the new commit's status.
+
+### Review binding from v0.27.1
+
+A PASS disposition must contain exactly one `Reviewed-Commit: <full 40-digit
+commit ID>` identifying an available ancestor of the release candidate. The
+candidate tree must match that reviewed commit everywhere except its own
+`security/pentest/vVERSION.md` file. Code, assurance, CI, documentation, evidence,
+file-mode and type changes after review require an updated scoped disposition;
+the gate does not guess which edits are harmless. Complete and commit these
+changes before the review, then add only the versioned approval record.
+
+This is a two-commit workflow, not a requirement to retest every cryptographic
+primitive: review the intervening delta and run its affected tests. If final
+contents are restored exactly to the reviewed tree, intermediate changes do
+not invalidate that content identity. Legacy reports through v0.27.0 retain
+their historical format; newer PASS records cannot omit the binding.
+`RETEST REQUIRED` may be inspected with `--allow-pending`, but never authorizes
+the final gate or publication. CI may still run without a PASS record.
+
+The binding prevents accidental reuse of stale approval. It does not authenticate
+the reviewer: a party allowed to rewrite both code and approval can still forge
+the record. Owner review, repository permissions and signed release identity
+remain separate controls. Approved-reviewer key infrastructure is not claimed.
 
 ## The finite gate
 

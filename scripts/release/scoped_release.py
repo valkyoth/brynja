@@ -51,11 +51,43 @@ def load(version: str, root: Path = ROOT) -> dict:
     return plan
 
 
+def reviewed_commit(raw: str, report: str, root: Path, head: str) -> None:
+    """Bind approval to reviewed tree contents, except its own disposition file.
+
+    This is a local provenance guard, not authentication of a reviewer's identity.
+    Commit the candidate first; commit only its approval record after review.
+    """
+    values = re.findall(r'^Reviewed-Commit: (.*)$', raw, re.MULTILINE)
+    if len(values) != 1 or not re.fullmatch(r'[0-9a-f]{40}', values[0]):
+        raise ValueError('pentest report requires exactly one full Reviewed-Commit')
+    reviewed = values[0]
+    try:
+        resolved = git(root, 'rev-parse', '--verify', f'{reviewed}^{{commit}}')
+    except subprocess.CalledProcessError as error:
+        raise ValueError('Reviewed-Commit must identify an available commit') from error
+    if resolved != reviewed:
+        raise ValueError('Reviewed-Commit must be a commit object, not a tag')
+    ancestor = subprocess.run(['git', 'merge-base', '--is-ancestor', reviewed, head],
+                              cwd=root, capture_output=True)
+    if ancestor.returncode != 0:
+        raise ValueError('Reviewed-Commit must be an ancestor of this candidate')
+    # NUL delimiters and disabled rename detection avoid ambiguous filenames and
+    # ensure additions/deletions/type/mode changes are all included.
+    changed = set(subprocess.check_output(
+        ['git', 'diff', '--no-ext-diff', '--no-textconv', '--no-renames',
+         '--name-only', '-z', reviewed, head], cwd=root).split(b'\0')) - {b''}
+    if changed - {os.fsencode(report)}:
+        raise ValueError('candidate contents changed after Reviewed-Commit; obtain a scoped retest')
+
+
 def pentest(version: str, root: Path = ROOT, *, allow_pending: bool = False) -> None:
     """Inspect the committed disposition, not every prior implementation."""
+    if not enabled(version):
+        raise ValueError('scoped pentest flow starts at v0.25.3')
     version = 'v' + version.removeprefix('v')
     name = f'security/pentest/{version}.md'
-    raw = git(root, 'show', f'HEAD:{name}')
+    head = git(root, 'rev-parse', 'HEAD')
+    raw = git(root, 'show', f'{head}:{name}')
     pending = allow_pending and re.findall(r'^Status: (.*)$', raw, re.MULTILINE) == ['RETEST REQUIRED']
     for field, expected in [('Version', version), ('Status', 'RETEST REQUIRED' if pending else 'PASS'),
                             ('Retest', 'PENDING' if pending else 'PASS'), ('Open-Findings', '0')]:
@@ -67,8 +99,13 @@ def pentest(version: str, root: Path = ROOT, *, allow_pending: bool = False) -> 
             raise ValueError(f'{name} requires {field}')
         if field == 'Date':
             datetime.date.fromisoformat(values[0])
-    # No requirement to touch the report on every documentation/CI commit.
-    # Relevant post-review changes still require an honest scoped disposition.
+    # Preserve historical report formats, but never accept an unbound approval
+    # for v0.27.1 or a later candidate. Pending inspection is not authorization.
+    numbers = tuple(map(int, version[1:].split('-', 1)[0].split('.')))
+    if numbers >= (0, 27, 1) and not pending:
+        reviewed_commit(raw, name, root, head)
+    if git(root, 'rev-parse', 'HEAD') != head:
+        raise ValueError('candidate changed while inspecting pentest approval')
 
 
 def candidate(version: str, root: Path = ROOT) -> None:
@@ -111,9 +148,11 @@ def gate(version: str, selected: str | None = None, *, listing: bool = False, ci
         for check in chosen:
             print(f"{check['id']}: {check['command']} (limit {check['timeout_seconds']}s)")
         return
+    before = git(root, 'rev-parse', 'HEAD')
     if not ci:
         candidate(version, root)
-    before = git(root, 'rev-parse', 'HEAD')
+    if git(root, 'rev-parse', 'HEAD') != before:
+        raise RuntimeError('candidate changed during review validation')
     for check in chosen:
         execute(check, root)
     if git(root, 'rev-parse', 'HEAD') != before or git(root, 'status', '--porcelain'):
@@ -169,8 +208,10 @@ def publication(version: str, *, dry_run: bool, root: Path = ROOT) -> None:
     if dry_run:
         print('[dry-run] publication handoff: clean tagged candidate + existing green GitHub; no tests')
         return
-    candidate(version, root)
     head = git(root, 'rev-parse', 'HEAD')
+    candidate(version, root)
+    if git(root, 'rev-parse', 'HEAD') != head:
+        raise RuntimeError('candidate changed during review validation')
     tag = 'v' + version.removeprefix('v')
     if git(root, 'rev-parse', f'{tag}^{{commit}}') != head:
         raise ValueError('tag does not identify this candidate')
@@ -178,6 +219,8 @@ def publication(version: str, *, dry_run: bool, root: Path = ROOT) -> None:
     repo = 'repos/valkyoth/brynja'
     github_green(head, pages(f'{repo}/actions/runs?head_sha={head}&per_page=100', 'workflow_runs', root),
                  pages(f'{repo}/commits/{head}/check-runs?per_page=100&filter=latest', 'check_runs', root))
+    if git(root, 'rev-parse', 'HEAD') != head or git(root, 'status', '--porcelain'):
+        raise RuntimeError('candidate changed during publication handoff')
     print(f'Publication handoff: existing GitHub results green for {head}. No verification rerun.')
 
 

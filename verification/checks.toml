@@ -478,11 +478,11 @@ command = ["python3", "scripts/aes/check-aes-differential.py", "wide"]
 cwd = "."
 inputs = ["compiler", "aes-build", "aes-oracle", "aes-differential-runner", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
 environment = {RUSTUP_AUTO_INSTALL = "0"}
-reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "BRYNJA_OPENSSL", "OPENSSL_CONF", "OPENSSL_MODULES", "OPENSSL_ENGINES"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "BRYNJA_OPENSSL", "LD_PRELOAD", "LD_LIBRARY_PATH", "LD_AUDIT", "OPENSSL_ia32cap", "OPENSSL_CONF", "OPENSSL_MODULES", "OPENSSL_ENGINES"]
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok.", "Independent oracle: OpenSSL", "Independent oracle SHA-256:"]
-unique_lines = ["AES differential oracle identity: unchanged", "AES192_OPENSSL_COMPARISONS: 4096", "AES192_CACHED_OPENSSL_COMPARISONS: 4096", "AES256_OPENSSL_COMPARISONS: 4096", "AES256_CACHED_OPENSSL_COMPARISONS: 4096"]
+unique_lines = ["AES differential executable identity: unchanged; shared libraries not measured", "AES192_OPENSSL_COMPARISONS: 4096", "AES192_CACHED_OPENSSL_COMPARISONS: 4096", "AES256_OPENSSL_COMPARISONS: 4096", "AES256_CACHED_OPENSSL_COMPARISONS: 4096"]
 minimum_tests = 2
 exact_tests = 2
 
@@ -830,11 +830,11 @@ command = ["python3", "scripts/aes/check-aes-differential.py", "128"]
 cwd = "."
 inputs = ["compiler","aes-build","aes-oracle", "aes-differential-runner","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
-reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","BRYNJA_OPENSSL", "OPENSSL_CONF","OPENSSL_MODULES","OPENSSL_ENGINES"]
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","BRYNJA_OPENSSL", "LD_PRELOAD", "LD_LIBRARY_PATH", "LD_AUDIT", "OPENSSL_ia32cap", "OPENSSL_CONF","OPENSSL_MODULES","OPENSSL_ENGINES"]
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok.", "Independent oracle: OpenSSL", "Independent oracle SHA-256:"]
-unique_lines = ["AES differential oracle identity: unchanged", "AES_OPENSSL_COMPARISONS: 4096", "AES_CACHED_OPENSSL_COMPARISONS: 4096"]
+unique_lines = ["AES differential executable identity: unchanged; shared libraries not measured", "AES_OPENSSL_COMPARISONS: 4096", "AES_CACHED_OPENSSL_COMPARISONS: 4096"]
 minimum_tests = 1
 exact_tests = 1
 # Dynamic checks execute downstream checkout fixtures, not packaged archives.

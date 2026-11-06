@@ -62,6 +62,7 @@ class DifferentialTests(unittest.TestCase):
             runner.select({})
 
     def test_environment_override_rejected_even_empty(self):
+        self.assertTrue({'LD_PRELOAD', 'LD_LIBRARY_PATH', 'LD_AUDIT', 'OPENSSL_ia32cap'} <= set(runner.FORBIDDEN))
         for name in runner.FORBIDDEN:
             for value in ('', '/tmp/untrusted'):
                 with self.subTest(name=name, value=value), self.assertRaisesRegex(ValueError, name):
@@ -71,6 +72,8 @@ class DifferentialTests(unittest.TestCase):
         self.assertEqual(runner.digest(self.exe), hashlib.sha256(self.exe.read_bytes()).hexdigest())
 
     def test_success_binds_both_suites_and_logs_identity(self):
+        self.assertIn('executable identity', runner.SUCCESS)
+        self.assertIn('shared libraries not measured', runner.SUCCESS)
         for suite, target in (('128', 'aes128_differential'), ('wide', 'aes_wide_differential')):
             output = io.StringIO()
             with patch.dict(os.environ, {}, clear=True), \

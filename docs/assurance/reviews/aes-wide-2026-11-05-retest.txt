@@ -1,0 +1,123 @@
+CLAUDE:
+What I re-checked (now committed as 533872f8):
+
+┌──────────────────────────────────────────────────────────────────────────────────────────┬───────────────────────────────────────────────────────────────────────────────────┐
+│                                          Check                                           │                                      Result                                       │
+├──────────────────────────────────────────────────────────────────────────────────────────┼───────────────────────────────────────────────────────────────────────────────────┤
+│ Production AES code                                                                      │ Identical apart from rustdoc                                                      │
+├──────────────────────────────────────────────────────────────────────────────────────────┼───────────────────────────────────────────────────────────────────────────────────┤
+│ AES-192/256 KATs, SP 800-38A blocks, FIPS 197 schedules, fault/unwind and clearing tests │ Pass                                                                              │
+├──────────────────────────────────────────────────────────────────────────────────────────┼───────────────────────────────────────────────────────────────────────────────────┤
+│ New OpenSSL runner, wide suite                                                           │ 4 × 4096 comparisons pass; the openssl binary's hash is the same before and after │
+├──────────────────────────────────────────────────────────────────────────────────────────┼───────────────────────────────────────────────────────────────────────────────────┤
+│ Runner regression tests                                                                  │ 12/12 pass                                                                        │
+├──────────────────────────────────────────────────────────────────────────────────────────┼───────────────────────────────────────────────────────────────────────────────────┤
+│ Clippy with --no-deps -D warnings on 1.99.1                                              │ Clean                                                                             │
+└──────────────────────────────────────────────────────────────────────────────────────────┴───────────────────────────────────────────────────────────────────────────────────┘
+
+Status of each finding
+
+┌─────┬──────────────────────┬─────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│  #  │       Finding        │     Status      │                                                                         My view                                                                          │
+├─────┼──────────────────────┼─────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│     │ Constant-time        │ I partly        │ You're right: check-aes-dataflow.py emits and reviews assembly as well as LLVM IR. All five new wide routines have pinned fingerprints for two compilers │
+│ 1   │ evidence             │ overstated it.  │  and both panic modes. What's still open is AArch64, LTO and whole-binary coverage, plus a proper fixed-vs-random timing test; these are scheduled for   │
+│     │                      │                 │ v0.27.2. Not adding black_box is a defensible choice.                                                                                                    │
+├─────┼──────────────────────┼─────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 2   │ Fault injection      │ Deferred to     │ Your rebuttal is correct that encrypt-then-decrypt with the same schedule misses schedule faults. It does still catch faults in the data path, the most  │
+│     │                      │ v0.27.7         │ common fault-attack class, but your plan for independent redundancy is the better design. I accept the deferral.                                         │
+├─────┼──────────────────────┼─────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 3   │ MCT/MMT and package  │ Deferred to     │ Fine, as long as 0.27.1 stays labelled a development milestone.                                                                                          │
+│     │ acceptance           │ v0.27.2         │                                                                                                                                                          │
+├─────┼──────────────────────┼─────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 4   │ Per-block expansion  │ Fixed in the    │ The new "Work budget" rustdoc is accurate and enough for a fixed-size block API.                                                                         │
+│     │ cost                 │ docs            │                                                                                                                                                          │
+├─────┼──────────────────────┼─────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 5   │ brynja-crypto keeps  │ Not changed, by │ Acceptable while publish = false and the release gate refuses crates.io. It only becomes a real problem if someone publishes outside the gate.           │
+│     │ version 0.2.0        │  policy         │                                                                                                                                                          │
+├─────┼──────────────────────┼─────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 6   │ OpenSSL found via    │ Fixed           │ Both test suites now require an absolute BRYNJA_OPENSSL, the runner records the binary's path, SHA-256 and version, and it checks the FIPS 197 Appendix  │
+│     │ PATH                 │                 │ C answers for all three widths before running. I checked those three answers myself.                                                                     │
+└─────┴──────────────────────┴─────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+New items, both Low and both in test tooling only
+
+1. The oracle hash covers the wrong file. scripts/aes/check-aes-differential.py hashes /usr/bin/openssl, which is a small front-end. The AES code actually used is in libcrypto.so.3, so the log line "oracle identity: unchanged" doesn't cover the code doing the comparison. The doc does say dynamic libraries are trusted, but the log line reads stronger than that. To fix it:
+   - Add LD_PRELOAD, LD_LIBRARY_PATH, LD_AUDIT and OPENSSL_ia32cap to FORBIDDEN.
+   - Also hash the resolved libcrypto, for example:
+FORBIDDEN = (..., 'LD_PRELOAD', 'LD_LIBRARY_PATH', 'LD_AUDIT', 'OPENSSL_ia32cap')
+libcrypto = next(Path(l.split('=>')[1].split()[0]).resolve()
+                 for l in subprocess.run(['ldd', str(executable)], capture_output=True,
+                                         text=True, check=True).stdout.splitlines()
+                 if 'libcrypto' in l and '=>' in l)
+# record and compare digest(libcrypto) before/after, like the executable
+2. One IR-checker rule was relaxed. scripts/hmac/hmac_engine_scratch.py now accepts an output guard passed in as a function argument instead of a local allocation. I checked how it is used: only the AES shared-secret role enables it. That role first requires a noalias dereferenceable(24) %destination argument that is never redefined, and HMAC callers keep the old strict rule. This is sound; just keep it from being enabled anywhere else without the same checks.
+
+Unrelated to this change: clippy without --no-deps fails on brynja-hash-sha3 with the 1.99 lint chunks_exact_to_as_chunks. That crate hasn't changed since v0.27.0 and CI uses --no-deps, so it doesn't block anything. It will start failing if CI drops --no-deps or the dependency lints get stricter.
+
+CODEX:
+The update fixes the previous High provenance issue. The AES-192/256 implementation is now in a clean, signed commit (533872f8), and I found no new serious production-code vulnerability.
+
+## Remaining finding
+
+- Severity: Medium
+- Location: scoped_release.py (scripts/release/scoped_release.py:54)
+- Vulnerability Type: Review-to-release TOCTOU / incomplete evidence binding
+- Description: The release gate verifies that a committed pentest report says PASS, but it does not bind that report to a reviewed commit or tree hash. After a PASS report is committed, later production-code commits could retain the old report and still pass candidate(), provided the worktree is clean. GitHub checks bind automated tests to HEAD, but the manual security review does not.
+- Current impact: Not presently exploitable in the workflow because security/pentest/v0.27.1.md is absent, so the final gate correctly refuses this candidate. This weakness predates the update, but the new release-gate tests do not close it.
+- Remediation: Use a two-commit workflow: commit the reviewed candidate, then add a report containing Reviewed-Commit, allowing no production changes after that commit.
+
+def reviewed_commit(version: str, raw: str, root: Path) -> None:
+    values = re.findall(r"^Reviewed-Commit: ([0-9a-f]{40})$", raw, re.MULTILINE)
+    if len(values) != 1:
+        raise ValueError("pentest report requires exactly one Reviewed-Commit")
+
+    reviewed = git(root, "rev-parse", f"{values[0]}^{{commit}}")
+    report = f"security/pentest/v{version.removeprefix('v')}.md"
+
+    changed = set(
+        git(root, "diff", "--name-only", f"{reviewed}..HEAD").splitlines()
+    )
+
+    # The post-review commit may add only its disposition.
+    if changed - {report}:
+        raise ValueError(
+            "production or assurance code changed after the reviewed commit"
+        )
+
+For stronger assurance, require the review commit or detached report to be signed by an approved reviewer key.
+
+## Verified improvements
+
+- HEAD differs from v0.27.0 and contains the complete implementation.
+- Worktree is clean.
+- The commit has a valid ED25519 Git signature.
+- Release gates now reject dirty, untracked, staged-but-uncommitted, and deleted-review states.
+- The OpenSSL oracle runner now selects one canonical absolute executable, records its SHA-256, checks known answers, and verifies that its identity remains unchanged.
+- No third-party dependency was added.
+
+## Retest results
+
+All relevant checks passed:
+
+- Full brynja-crypto --all-features suite.
+- 1,510 AES-192/256 AESAVS KAT records.
+- 4,096 OpenSSL comparisons per key width through both owner forms.
+- 76 API and ownership compile probes.
+- Eighteen mutation controls.
+- Owner and operation-scratch cleanup checks across both supported compilers and panic modes.
+- LLVM and assembly dataflow review of eleven AES helpers.
+- Twelve oracle-runner negative tests.
+- Twenty-eight release-gate regression tests.
+- Exact CI Clippy command, formatting, locked metadata, and diff-integrity checks.
+
+## Security verdict
+
+No Critical or High findings remain in the reviewed implementation. I found no new flaw in:
+
+- AES-192/256 key expansion or round ordering
+- memory safety or bounds handling
+- key/output cleanup
+- concurrency restrictions
+- public-output transactionality
+- arithmetic or denial-of-service behavior

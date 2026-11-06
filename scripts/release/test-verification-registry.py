@@ -221,10 +221,12 @@ class RegistryTests(unittest.TestCase):
             self.assertEqual(registered['command'], ['python3', 'scripts/aes/check-aes-differential.py', suite])
             self.assertIn('aes-differential-runner', registered['inputs'])
             self.assertIn('BRYNJA_OPENSSL', registered['reject_environment'])
+            for variable in ('LD_PRELOAD', 'LD_LIBRARY_PATH', 'LD_AUDIT', 'OPENSSL_ia32cap'):
+                self.assertIn(variable, registered['reject_environment'])
             self.assertIn('Independent oracle SHA-256:', registered['success']['contains'])
-            self.assertIn('AES differential oracle identity: unchanged', registered['success']['unique_lines'])
+            self.assertIn('AES differential executable identity: unchanged; shared libraries not measured', registered['success']['unique_lines'])
         self.assertEqual(oracle['success']['unique_lines'],
-                         ['AES differential oracle identity: unchanged'] +
+                         ['AES differential executable identity: unchanged; shared libraries not measured'] +
                          [f'AES{bits}_{cache}OPENSSL_COMPARISONS: 4096' for bits in (192, 256) for cache in ('', 'CACHED_')])
         self.assertIn('aes-oracle', oracle['inputs'])
         self.assertEqual(checks['miri-ownership']['command'][-3:],
@@ -255,7 +257,7 @@ class RegistryTests(unittest.TestCase):
                          ['public_ciphertext_commit_preserves_inputs_and_canaries', '--', '--exact'])
         oracle = checks['differential']
         self.assertEqual(oracle['command'], ['python3', 'scripts/aes/check-aes-differential.py', '128'])
-        self.assertEqual(oracle['success']['unique_lines'], ['AES differential oracle identity: unchanged', 'AES_OPENSSL_COMPARISONS: 4096', 'AES_CACHED_OPENSSL_COMPARISONS: 4096'])
+        self.assertEqual(oracle['success']['unique_lines'], ['AES differential executable identity: unchanged; shared libraries not measured', 'AES_OPENSSL_COMPARISONS: 4096', 'AES_CACHED_OPENSSL_COMPARISONS: 4096'])
         self.assertIn('aes-oracle', oracle['inputs'])
         self.assertEqual(self.registry['groups']['aes-oracle']['tools'], [{'program': 'openssl'}])
 

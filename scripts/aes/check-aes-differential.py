@@ -12,8 +12,9 @@ import shutil
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
-SUCCESS = 'AES differential oracle identity: unchanged'
-FORBIDDEN = ('BRYNJA_OPENSSL', 'OPENSSL_CONF', 'OPENSSL_MODULES', 'OPENSSL_ENGINES')
+SUCCESS = 'AES differential executable identity: unchanged; shared libraries not measured'
+FORBIDDEN = ('BRYNJA_OPENSSL', 'OPENSSL_CONF', 'OPENSSL_MODULES', 'OPENSSL_ENGINES',
+             'LD_PRELOAD', 'LD_LIBRARY_PATH', 'LD_AUDIT', 'OPENSSL_ia32cap')
 VECTORS = {
     128: '69c4e0d86a7b0430d8cdb78070b4c55a',
     192: 'dda97ca4864cdfe06eaf70a0ec0d7191',

@@ -1,0 +1,70 @@
+# SAST security report: v0.27.0..HEAD
+
+Reviewed range:
+
+- Baseline: daebb8c139df1c0d586d71150a7fb72573445588
+- HEAD: 533872f86f9a8757e266da8f8e9f22bd57aecc13
+- HEAD commit signature: valid ED25519 signature
+- Production Rust files were clean; unrelated uncommitted documentation and verification changes were excluded.
+
+## Finding 1
+
+- Severity: Medium
+- Location: crates/brynja-crypto/Cargo.toml:3 (crates/brynja-crypto/Cargo.toml:3), Cargo.toml:41 (Cargo.toml:41), release-crates.toml:62 (release-crates.toml:62), sbom/brynja.spdx.json:785 (sbom/brynja.spdx.json:785)
+- Vulnerability Type: Supply-chain integrity / artifact identity collision
+- Description: brynja-crypto gained four public AES key-owner types, new constants, implementations, tests, and packaged fixtures, but remains version 0.2.0. The SBOM therefore identifies both the older AES-128-only source and the new AES-192/256 source as brynja-crypto@0.2.0. Internal registries, caches, audit evidence, binary authorization systems, or offline deployments can no longer determine implementation content from package identity alone. This is especially problematic for military provenance and configuration-control requirements.
+- Remediation: Assign a new immutable component version and update every exact pin and SBOM identifier before distributing any artifact.
+
+# crates/brynja-crypto/Cargo.toml
+[package]
+name = "brynja-crypto"
+version = "0.2.1"
+
+# workspace Cargo.toml
+[workspace.dependencies]
+brynja-crypto = {
+    path = "crates/brynja-crypto",
+    version = "=0.2.1"
+}
+
+# release-crates.toml
+[crates."brynja-crypto"]
+previous_version = "0.2.0"
+version = "0.2.1"
+change = "code"
+publish = false
+
+Regenerate all lockfiles and the SBOM, and bind release evidence to both the signed commit and packaged-crate SHA-256.
+
+## Cryptographic implementation verdict
+
+No Critical or High implementation vulnerability was found.
+
+The AES-192/AES-256 implementation is internally consistent with FIPS 197:
+
+- Correct 24/32-byte key sizes, 208/240-byte schedules, and 12/14 rounds.
+- Correct AES-256 additional SubWord operation.
+- Correct forward and inverse round ordering.
+- Bounds-checked schedule access and fixed compile-time parameter admission.
+- No unsafe blocks, raw-pointer dereferences, manual Send/Sync, unchecked indexing, or production unwrap/expect.
+- Key, schedule, state, and word scratch storage are cleared on normal, error, and recoverable-unwind paths.
+- Key and output owners are deliberately !Send + !Sync.
+- Public ciphertext is staged and only committed after successful encryption.
+- No new third-party dependencies were introduced. The lockfile contains one unchanged external crate, sanitization 2.1.1; no matching RustSec advisory was identified. RustSec is the authoritative Rust advisory database used by cargo-audit. RustSec advisory database
+
+## Verification performed
+
+- 29 library tests passed.
+- 8 AES-wide API/ownership tests passed.
+- All 1,510 AESAVS KAT records passed through both owner variants.
+- Independent OpenSSL 3.5.3 differential testing passed:
+  - AES-192: 4,096 comparisons
+  - AES-256: 4,096 comparisons
+  - Both cached and ephemeral owners
+  - Both encryption and independent-ciphertext decryption
+- 22 doctests and compile-fail ownership tests passed.
+- Package contents include the implementations, tests, and all AES-192/256 fixtures.
+- git diff --check passed.
+
+Clippy with -D warnings is presently blocked by unrelated, pre-existing chunks_exact style warnings in SHA-2/SHA-3 dependencies; these are not security defects in this change.
+

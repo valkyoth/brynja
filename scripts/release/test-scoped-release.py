@@ -427,5 +427,173 @@ class ScopedRelease(unittest.TestCase):
                 scoped.execute(dict(id='fixture', command=command, timeout_seconds=1), self.root)
 
 
+class ReviewBindingTests(unittest.TestCase):
+    write = ScopedRelease.write
+    git = ScopedRelease.git
+    report = 'security/pentest/v0.27.1.md'
+
+    def setUp(self):
+        self.directory = tempfile.TemporaryDirectory(prefix='brynja-review-binding-')
+        self.addCleanup(self.directory.cleanup)
+        self.root = Path(self.directory.name)
+        self.git('init', '-q')
+        self.git('config', 'user.name', 'Fixture')
+        self.git('config', 'user.email', 'fixture@example.invalid')
+        self.git('config', 'commit.gpgsign', 'false')
+        self.write('release-crates.toml', '[release]\nversion="0.27.1"\n')
+        self.write('production.rs', '// reviewed candidate\n')
+        self.write(scoped.PLAN, 'schema=1\nversion="0.27.1"\nscope="fixture"\n'
+                   '[[checks]]\nid="one"\ncommand=["fixture"]\ntimeout_seconds=1\n')
+        self.commit('candidate')
+        self.reviewed = scoped.git(self.root, 'rev-parse', 'HEAD')
+        self.approve()
+
+    def commit(self, message):
+        self.git('add', '.')
+        self.git('commit', '-qm', message)
+
+    def approve(self, field=None, pending=False):
+        self.write(self.report,
+                   'Version: v0.27.1\n' +
+                   ('Status: RETEST REQUIRED\nRetest: PENDING\n' if pending else 'Status: PASS\nRetest: PASS\n') +
+                   'Open-Findings: 0\nDate: 2026-11-05\nTester: Fixture\nScope: candidate\n' +
+                   (f'Reviewed-Commit: {self.reviewed}\n' if field is None else field))
+        self.commit('review disposition')
+
+    def assert_blocked(self, pattern='Reviewed-Commit'):
+        with patch.object(scoped, 'execute') as run:
+            with self.assertRaisesRegex(ValueError, pattern):
+                scoped.gate('0.27.1', root=self.root)
+        run.assert_not_called()
+
+    def test_report_only_commit_allows_finite_gate(self):
+        with patch.object(scoped, 'execute') as run:
+            scoped.gate('0.27.1', root=self.root)
+        self.assertEqual(run.call_count, 1)
+
+    def test_missing_duplicate_and_non_full_commit_are_rejected(self):
+        for field in ('', 'Reviewed-Commit: HEAD\n', f'Reviewed-Commit: {self.reviewed[:8]}\n',
+                      f'Reviewed-Commit: {self.reviewed}\nReviewed-Commit: {self.reviewed}\n',
+                      'Reviewed-Commit: --all\n', 'Reviewed-Commit: ' + 'f' * 40 + '\n'):
+            with self.subTest(field=field):
+                self.approve(field)
+                self.assert_blocked()
+
+    def test_blob_and_annotated_tag_are_not_commits(self):
+        blob = scoped.git(self.root, 'rev-parse', 'HEAD:production.rs')
+        self.git('tag', '-a', 'review-tag', self.reviewed, '-m', 'not a commit identity')
+        tag = scoped.git(self.root, 'rev-parse', 'review-tag')
+        for value in (blob, tag):
+            with self.subTest(value=value):
+                self.approve(f'Reviewed-Commit: {value}\n')
+                self.assert_blocked()
+
+    def test_same_tree_unrelated_commit_is_rejected(self):
+        tree = scoped.git(self.root, 'rev-parse', f'{self.reviewed}^{{tree}}')
+        unrelated = scoped.git(self.root, 'commit-tree', tree, '-m', 'unrelated root')
+        self.approve(f'Reviewed-Commit: {unrelated}\n')
+        self.assert_blocked('ancestor')
+
+    def test_stale_review_cannot_authorize_production_change(self):
+        self.write('production.rs', '// unreviewed code\n')
+        self.commit('changed code')
+        self.assert_blocked('changed after')
+
+    def test_assurance_ci_docs_and_evidence_changes_also_require_disposition(self):
+        for path in ('assurance/new.rs', '.github/workflows/ci.yml', 'docs/new.md',
+                     'verification/results.json', 'security/pentest/other.md',
+                     ' security/pentest/v0.27.1.md', 'newline\nname'):
+            with self.subTest(path=path):
+                self.write(path, 'new contents\n')
+                self.commit('unreviewed addition')
+                self.assert_blocked('changed after')
+                (self.root / path).unlink()
+                self.commit('restore candidate')
+                scoped.candidate('0.27.1', self.root)
+
+    def test_deletion_mode_and_symlink_changes_are_rejected(self):
+        source = self.root / 'production.rs'
+        source.chmod(0o755)
+        self.commit('mode change')
+        self.assert_blocked('changed after')
+        source.unlink()
+        self.commit('deletion')
+        self.assert_blocked('changed after')
+        source.symlink_to('release-crates.toml')
+        self.commit('type change')
+        self.assert_blocked('changed after')
+
+    def test_retest_of_new_candidate_restores_authorization(self):
+        self.write('production.rs', '// changed and then reviewed\n')
+        self.commit('new candidate')
+        self.reviewed = scoped.git(self.root, 'rev-parse', 'HEAD')
+        self.approve()
+        scoped.candidate('0.27.1', self.root)
+
+    def test_pending_inspection_is_not_release_authorization(self):
+        self.approve('', pending=True)
+        scoped.pentest('0.27.1', self.root, allow_pending=True)
+        self.assert_blocked('Status: PASS')
+        self.approve('')
+        with self.assertRaisesRegex(ValueError, 'Reviewed-Commit'):
+            scoped.pentest('0.27.1', self.root, allow_pending=True)
+
+    def test_publication_refuses_stale_review_before_remote_queries(self):
+        self.write('production.rs', '// later change\n')
+        self.commit('unreviewed production change')
+        with patch.object(scoped, 'pages') as pages, self.assertRaisesRegex(ValueError, 'changed after'):
+            scoped.publication('0.27.1', dry_run=False, root=self.root)
+        pages.assert_not_called()
+
+    def test_moving_head_during_pentest_inspection_is_rejected(self):
+        real = scoped.reviewed_commit
+        def move(*args):
+            real(*args)
+            self.write('production.rs', '// concurrently changed\n')
+            self.commit('concurrent edit')
+        with patch.object(scoped, 'reviewed_commit', side_effect=move):
+            self.assert_blocked('changed while')
+
+    def test_head_changed_after_candidate_validation_never_executes_checks(self):
+        real = scoped.candidate
+        def move(*args):
+            real(*args)
+            self.write('production.rs', '// concurrent edit\n')
+            self.commit('concurrent edit')
+        with patch.object(scoped, 'candidate', side_effect=move), \
+             patch.object(scoped, 'execute') as run, \
+             self.assertRaisesRegex(RuntimeError, 'changed during review'):
+            scoped.gate('0.27.1', root=self.root)
+        run.assert_not_called()
+
+    def test_head_changed_after_candidate_validation_blocks_publication(self):
+        real = scoped.candidate
+        def move(*args):
+            real(*args)
+            self.write('production.rs', '// concurrent edit\n')
+            self.commit('concurrent edit')
+        with patch.object(scoped, 'candidate', side_effect=move), \
+             patch.object(scoped, 'pages') as pages, \
+             self.assertRaisesRegex(RuntimeError, 'changed during review'):
+            scoped.publication('0.27.1', dry_run=False, root=self.root)
+        pages.assert_not_called()
+
+    def test_worktree_changed_during_remote_checks_blocks_handoff(self):
+        self.git('tag', 'v0.27.1')
+        real_run = subprocess.run
+        def allow_fixture_tag(command, *args, **kwargs):
+            if command == ['git', 'verify-tag', 'v0.27.1']:
+                return subprocess.CompletedProcess(command, 0)
+            return real_run(command, *args, **kwargs)
+        def remote(*args):
+            self.write('production.rs', '// changed while waiting for GitHub\n')
+            return []
+        with patch.object(scoped.subprocess, 'run', side_effect=allow_fixture_tag), \
+             patch.object(scoped, 'pages', side_effect=remote), \
+             patch.object(scoped, 'github_green'), \
+             self.assertRaisesRegex(RuntimeError, 'changed during publication'):
+            scoped.publication('0.27.1', dry_run=False, root=self.root)
+
+
 if __name__ == '__main__':
     unittest.main()

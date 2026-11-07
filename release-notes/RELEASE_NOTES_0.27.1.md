@@ -65,3 +65,18 @@ The facade version and isolated consumer pins advance to 0.27.1. Supporting
 crate versions stay unchanged in this internal train. After owner review and
 tested remediation, commit the accepted candidate, run the finite final gate,
 wait for green GitHub/CodeQL and obtain explicit signed-tag authorization.
+
+## Review disposition — 2026-11-07
+
+The owner-supplied implementation reviews and scoped tooling retest are retained
+in the [remediation record](../docs/assurance/aes-wide-pentest-remediation.md).
+The latest tooling review covers `533872f8..ac1d9135`; it does not report a new
+cipher defect. Its stronger reviewer-authentication, gate-attestation, oracle
+isolation and trusted-tool infrastructure requirements are accepted limitations
+of the agreed trusted-owner/trusted-host workflow, not implemented protections.
+The owner requested proceeding with the finite final checks without expanding
+that workflow. This is not military qualification or a finding-free independent
+review verdict. The versioned review disposition records the reviewed candidate
+identity and the earlier implementation-review chain. Final-gate completion and
+exact-commit GitHub/CodeQL are still separate requirements; no tag or publication
+is authorized by this record.

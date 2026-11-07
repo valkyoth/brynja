@@ -1,0 +1,166 @@
+# Security assessment: 533872f8…ac1d9135
+
+Scope:
+
+- Baseline: 533872f86f9a8757e266da8f8e9f22bd57aecc13
+- HEAD: ac1d913571406269a049519b2217e4257eb5ae00
+- One signed commit reviewed.
+- Worktree was clean.
+- No Rust, Cargo manifest, lockfile, cryptographic primitive, or protocol implementation changed in this range.
+- The changed attack surface is release authorization, verification evidence, and the OpenSSL test oracle.
+
+## Finding 1
+
+- Severity: High
+- Location: scoped_release.py:54 (scripts/release/scoped_release.py:54), scoped_release.py:83 (scripts/release/scoped_release.py:83), scoped-release.md:45 (docs/release/scoped-release.md:45)
+- Vulnerability Type: Release authorization forgery / missing reviewer authentication
+- Description: The new control correctly binds Reviewed-Commit to the candidate contents, but Tester, Status: PASS, and Open-Findings: 0 are ordinary repository text. There is no signature from an approved security reviewer. Anyone capable of committing both candidate code and its approval file can create a syntactically valid PASS disposition. A signed tag authenticates the releaser, not an independent reviewer. Under a military insider-threat model, this defeats separation of duties and permits unreviewed cryptographic code to satisfy the automated release check.
+- Remediation: Require a detached signature from an independently controlled reviewer key. The trusted signer file must be supplied by protected CI/release infrastructure, not by the candidate repository.
+
+from pathlib import Path
+import subprocess
+
+TRUSTED_REVIEWERS = Path("/etc/brynja/reviewers.allowed_signers")
+
+def verify_review_signature(
+    report: str,
+    signature: Path,
+    reviewer: str,
+) -> None:
+    if not TRUSTED_REVIEWERS.is_file():
+        raise ValueError("trusted reviewer configuration unavailable")
+
+    subprocess.run(
+        [
+            "/usr/bin/ssh-keygen",
+            "-Y", "verify",
+            "-f", str(TRUSTED_REVIEWERS),
+            "-I", reviewer,
+            "-n", "brynja-pentest-v1",
+            "-s", str(signature),
+        ],
+        input=report.encode("utf-8"),
+        check=True,
+        timeout=15,
+    )
+
+The signed payload should include the full reviewed commit, release version, scope, status, date, and findings count. Repository permissions should also require a distinct reviewer identity.
+
+## Finding 2
+
+- Severity: High
+- Location: scoped_release.py:207 (scripts/release/scoped_release.py:207), release_crates.py:95 (scripts/release/release_crates.py:95), release_crates.py:181 (scripts/release/release_crates.py:181)
+- Vulnerability Type: Release-gate bypass / supply-chain integrity
+- Description: Publication checks the candidate, pentest record, tag, GitHub status, and CodeQL, but it neither runs the complete finite gate nor verifies a receipt proving the gate ran for this commit. The publisher then uses cargo publish --no-verify. An operator can invoke publication without ever running SBOM, dependency-policy, advisory, packaged-consumer, or other non-CI checks. The comments assume these checks previously ran, but no technical control establishes that fact. This can publish a vulnerable or incorrectly packaged artifact despite a successful handoff.
+- Remediation: The simplest fail-closed implementation is to run the complete finite gate immediately before publication:
+
+def publication(version: str, *, dry_run: bool, root: Path = ROOT) -> None:
+    if dry_run:
+        print("[dry-run] no publication or checks executed")
+        return
+
+    head = git(root, "rev-parse", "HEAD")
+
+    # Mandatory complete gate for this exact candidate.
+    gate(version, selected=None, listing=False, ci=False, root=root)
+
+    if git(root, "rev-parse", "HEAD") != head:
+        raise RuntimeError("candidate changed after final gate")
+    if git(root, "status", "--porcelain", "--untracked-files=all"):
+        raise RuntimeError("candidate became dirty after final gate")
+
+    tag = "v" + version.removeprefix("v")
+    if git(root, "rev-parse", f"{tag}^{{commit}}") != head:
+        raise ValueError("tag does not identify the gated candidate")
+
+    subprocess.run(
+        ["/usr/bin/git", "verify-tag", tag],
+        cwd=root,
+        check=True,
+    )
+
+If rerunning is operationally unacceptable, require a signed, non-replayable receipt containing the commit, complete ordered check list, command digests, results, timestamps, toolchain identities, and artifact hashes.
+
+The current v0.27.1 milestone is marked internal, so its crates.io publication path is presently blocked. The vulnerable handoff design applies when a later plan changes the stage to public.
+
+## Finding 3
+
+- Severity: Medium
+- Location: check-aes-differential.py:25 (scripts/aes/check-aes-differential.py:25), check-aes-differential.py:43 (scripts/aes/check-aes-differential.py:43), check-aes-differential.py:64 (scripts/aes/check-aes-differential.py:64)
+- Vulnerability Type: Incomplete test-oracle attestation / TOCTOU
+- Description: The runner hashes only the OpenSSL executable. OpenSSL’s shared libraries, providers, dynamic loader, and configuration closure remain unmeasured. A malicious libcrypto or provider can pass the six known-answer preflight vectors and then produce outputs chosen to agree with a defective implementation. Hashing the executable again afterward does not detect this. Replacing and restoring the executable between hashes is also possible for an attacker with sufficient filesystem access. The script documents the limitation, but the resulting differential test can still be recorded as passed.
+- Remediation: Run the oracle in a hermetic, read-only image pinned by digest, or use a statically linked independently sourced oracle whose complete binary is pinned.
+
+ORACLE_IMAGE = (
+    "registry.example.mil/crypto/openssl-oracle@"
+    "sha256:0123456789abcdef0123456789abcdef"
+    "0123456789abcdef0123456789abcdef"
+)
+
+def oracle(args: list[str], data: bytes) -> bytes:
+    completed = subprocess.run(
+        [
+            "/usr/bin/podman", "run", "--rm",
+            "--network=none",
+            "--read-only",
+            "--cap-drop=all",
+            "--security-opt=no-new-privileges",
+            "--pids-limit=32",
+            "--memory=128m",
+            "--user=65534:65534",
+            "-i",
+            ORACLE_IMAGE,
+            "/usr/local/bin/openssl",
+            *args,
+        ],
+        input=data,
+        capture_output=True,
+        check=True,
+        timeout=15,
+        env={"PATH": "/usr/bin:/bin"},
+    )
+    return completed.stdout
+
+The image manifest, OpenSSL source/version, provider configuration, and image digest should become inputs to the verification fingerprint.
+
+## Finding 4
+
+- Severity: Medium
+- Location: scoped_release.py:22 (scripts/release/scoped_release.py:22), scoped_release.py:120 (scripts/release/scoped_release.py:120), scoped_release.py:202 (scripts/release/scoped_release.py:202)
+- Vulnerability Type: Search-path hijacking / verification bypass
+- Description: Security-critical commands such as git, gh, cargo, and python3 are resolved through inherited PATH. Final-check processes also inherit the caller’s complete environment, including Python import paths and tool wrapper configuration. A poisoned release shell or runner can substitute programs that return successful results, forge Git identities or GitHub responses, and cause checks to be reported as passed.
+- Remediation: Resolve approved tools once, compare their digests against protected configuration, use absolute paths, and construct a minimal environment.
+
+TRUSTED_TOOLS = {
+    "git": Path("/usr/bin/git"),
+    "gh": Path("/usr/bin/gh"),
+    "python3": Path("/usr/bin/python3"),
+    "cargo": Path("/opt/brynja/rust/1.99.1/bin/cargo"),
+}
+
+SAFE_ENV = {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "PYTHONNOUSERSITE": "1",
+    "PYTHONSAFEPATH": "1",
+    "RUSTUP_AUTO_INSTALL": "0",
+}
+
+def execute(check: dict, root: Path) -> None:
+    command = list(check["command"])
+    tool = TRUSTED_TOOLS.get(command[0])
+    if tool is None or not tool.is_file():
+        raise RuntimeError("unapproved release tool")
+    command[0] = str(tool)
+
+    subprocess.run(
+        command,
+        cwd=root,
+        env=SAFE_ENV,
+        check=True,
+        timeout=check["timeout_seconds"],
+        start_new_session=True,
+    )
+
+For stronger assurance, run the entire gate inside a measured, immutable build environment.

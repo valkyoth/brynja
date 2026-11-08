@@ -1,0 +1,224 @@
+{
+  "assembly": {
+    "1.90.0/abort": {
+      "begin": {
+        "instructions": 23,
+        "branches": 1,
+        "calls": {
+          "bl @zeroize": 1
+        },
+        "sha256": "786dbfbcf3d38b7bd054d839c3dd8ca3593e86ab784a2f93295fe57603d37622"
+      },
+      "write": {
+        "instructions": 28,
+        "branches": 3,
+        "calls": {
+          "bl @copy": 1
+        },
+        "sha256": "9e74a3c442002178ba2c95cbd846255bb5502b85b18e60cf332d7b9a7ebe535d"
+      },
+      "finish": {
+        "instructions": 16,
+        "branches": 2,
+        "calls": {
+          "b @zeroize": 1
+        },
+        "sha256": "5bf7623fb80b23dbd4e63a9d4b908f84a9441f8869575025a87871f21636ad3f"
+      },
+      "clear": {
+        "instructions": 9,
+        "branches": 1,
+        "calls": {
+          "bl @zeroize": 1
+        },
+        "sha256": "73b66a534564526fb36eb26ab308a1bf2721c5307a37a03da4887aba72250203"
+      },
+      "guard_drop": {
+        "instructions": 6,
+        "branches": 1,
+        "calls": {
+          "b @zeroize": 1
+        },
+        "sha256": "8068d4a7c250ff39dd0379f02d04df905a32e64dcd76cebf8e34870550c2614b"
+      },
+      "copy": {
+        "instructions": 21,
+        "branches": 4,
+        "calls": {},
+        "sha256": "a6317413c158ed680a11e50725200e4293d0aab7c03de3b1dd8191177c2be77e"
+      },
+      "zeroize": {
+        "instructions": 5,
+        "branches": 2,
+        "calls": {},
+        "sha256": "a1ab96f7134825e18c12a1b31dd6c682680356c9a4ab83fb50dfd33517532715"
+      }
+    },
+    "1.90.0/unwind": {
+      "begin": {
+        "instructions": 23,
+        "branches": 1,
+        "calls": {
+          "bl @zeroize": 1
+        },
+        "sha256": "5b8d9e5af2272a2052c778c69ebfbc437877dfae9cd273864274d8a2faae041e"
+      },
+      "write": {
+        "instructions": 28,
+        "branches": 3,
+        "calls": {
+          "bl @copy": 1
+        },
+        "sha256": "1f308d301c58cce8e1d4f13d324144c5bdad5ec2c3a0eab3c22536cfdf834508"
+      },
+      "finish": {
+        "instructions": 16,
+        "branches": 2,
+        "calls": {
+          "b @zeroize": 1
+        },
+        "sha256": "5bf7623fb80b23dbd4e63a9d4b908f84a9441f8869575025a87871f21636ad3f"
+      },
+      "clear": {
+        "instructions": 9,
+        "branches": 1,
+        "calls": {
+          "bl @zeroize": 1
+        },
+        "sha256": "73b66a534564526fb36eb26ab308a1bf2721c5307a37a03da4887aba72250203"
+      },
+      "guard_drop": {
+        "instructions": 6,
+        "branches": 1,
+        "calls": {
+          "b @zeroize": 1
+        },
+        "sha256": "8068d4a7c250ff39dd0379f02d04df905a32e64dcd76cebf8e34870550c2614b"
+      },
+      "copy": {
+        "instructions": 21,
+        "branches": 4,
+        "calls": {},
+        "sha256": "a6317413c158ed680a11e50725200e4293d0aab7c03de3b1dd8191177c2be77e"
+      },
+      "zeroize": {
+        "instructions": 5,
+        "branches": 2,
+        "calls": {},
+        "sha256": "a1ab96f7134825e18c12a1b31dd6c682680356c9a4ab83fb50dfd33517532715"
+      }
+    },
+    "1.99.1/abort": {
+      "begin": {
+        "instructions": 23,
+        "branches": 1,
+        "calls": {
+          "bl @zeroize": 1
+        },
+        "sha256": "5b8d9e5af2272a2052c778c69ebfbc437877dfae9cd273864274d8a2faae041e"
+      },
+      "write": {
+        "instructions": 29,
+        "branches": 3,
+        "calls": {
+          "bl @copy": 1
+        },
+        "sha256": "d75bb890646efd4d29a0754824f3cb81960ce3ac5bdc2a3998d5eb4fe35196e7"
+      },
+      "finish": {
+        "instructions": 15,
+        "branches": 2,
+        "calls": {
+          "b @zeroize": 1
+        },
+        "sha256": "3107936ac52118cbfaab9828cf218b1269fe515ad9e27a21d495487384bb9c84"
+      },
+      "clear": {
+        "instructions": 9,
+        "branches": 1,
+        "calls": {
+          "bl @zeroize": 1
+        },
+        "sha256": "0c4e7b7704b64253db3051fd2b12143737d657e787494e0e21bc751b97eac85f"
+      },
+      "guard_drop": {
+        "instructions": 6,
+        "branches": 1,
+        "calls": {
+          "b @zeroize": 1
+        },
+        "sha256": "8068d4a7c250ff39dd0379f02d04df905a32e64dcd76cebf8e34870550c2614b"
+      },
+      "copy": {
+        "instructions": 21,
+        "branches": 4,
+        "calls": {},
+        "sha256": "a6317413c158ed680a11e50725200e4293d0aab7c03de3b1dd8191177c2be77e"
+      },
+      "zeroize": {
+        "instructions": 6,
+        "branches": 2,
+        "calls": {},
+        "sha256": "a605217c67a674b546b992420cf12d86feb56fa2bcf14010afd47675a7a9b088"
+      }
+    },
+    "1.99.1/unwind": {
+      "begin": {
+        "instructions": 23,
+        "branches": 1,
+        "calls": {
+          "bl @zeroize": 1
+        },
+        "sha256": "5b8d9e5af2272a2052c778c69ebfbc437877dfae9cd273864274d8a2faae041e"
+      },
+      "write": {
+        "instructions": 29,
+        "branches": 3,
+        "calls": {
+          "bl @copy": 1
+        },
+        "sha256": "d75bb890646efd4d29a0754824f3cb81960ce3ac5bdc2a3998d5eb4fe35196e7"
+      },
+      "finish": {
+        "instructions": 15,
+        "branches": 2,
+        "calls": {
+          "b @zeroize": 1
+        },
+        "sha256": "3107936ac52118cbfaab9828cf218b1269fe515ad9e27a21d495487384bb9c84"
+      },
+      "clear": {
+        "instructions": 9,
+        "branches": 1,
+        "calls": {
+          "bl @zeroize": 1
+        },
+        "sha256": "0c4e7b7704b64253db3051fd2b12143737d657e787494e0e21bc751b97eac85f"
+      },
+      "guard_drop": {
+        "instructions": 6,
+        "branches": 1,
+        "calls": {
+          "b @zeroize": 1
+        },
+        "sha256": "8068d4a7c250ff39dd0379f02d04df905a32e64dcd76cebf8e34870550c2614b"
+      },
+      "copy": {
+        "instructions": 21,
+        "branches": 4,
+        "calls": {},
+        "sha256": "a6317413c158ed680a11e50725200e4293d0aab7c03de3b1dd8191177c2be77e"
+      },
+      "zeroize": {
+        "instructions": 6,
+        "branches": 2,
+        "calls": {},
+        "sha256": "a605217c67a674b546b992420cf12d86feb56fa2bcf14010afd47675a7a9b088"
+      }
+    }
+  },
+  "zeroize_llvm": {
+    "1.90.0": "a5f5672c0087771eaea0a3d324692c9188873071fcd2048c652e56aa2ea710ea",
+    "1.99.1": "1dcf4f20698e3d6d5ae519ae566f0661a1527cd7637f39808076bf614ea567cf"
+  }
+}

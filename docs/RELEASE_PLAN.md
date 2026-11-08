@@ -5923,7 +5923,54 @@ Exit criteria:
 
 ### v0.27.2 - AES-128 AES-192 And AES-256 Portable Public API Acceptance
 
-Status: planned
+Status: in progress
+
+Progress: archive-only public consumers and paired ownership diagnostics are
+implemented as `aes/packaged-portable`; pinned package-external AESAVS MCT/MMT
+campaigns and independent OpenSSL comparisons are registered for both compiler
+endpoints and public import routes. The comparisons cover debug/release and
+both key-owner forms, including explicit public encryption. Separate packaged
+fixed-versus-random timing observations cover both compiler endpoints on the
+named native x86_64 host. Native AWS AArch64 observations now cover both compiler
+endpoints' fixed/random campaigns and packaged final-linked public operations
+and caller cleanup. Eleven portable AES helpers, six surviving secret-output
+wrappers, copy and zeroizer in each of the sixteen retained ARM executables now
+have bounded emitted-code review, with six public boundaries and six constructors
+additionally reviewed in the eight KAT executables, plus six cleanup bodies in
+each lifecycle executable and four ELF-bound unwind imports (17,756 rejected
+mutations overall). Other secret entry points, lifecycle constructor copies,
+arbitrary caller cleanup and external unwind dispatch are outside this bounded
+review. Compiler-generated intermediate spills are recorded, not
+claimed erased.
+The AArch64 compile-only slice now models eleven LLVM helpers and reviews all
+eleven assembly helpers, six secret wrappers, six public boundaries, six
+constructors, twelve secret entry points and seven matched core bodies across
+both compiler endpoints and panic profiles. Archive-only x86_64 final-linked consumers additionally cover
+both import routes and panic profiles, with all eleven portable AES helper
+bodies (including expansion/transform loop bounds, scratch cleanup and linked
+constant/call binding), six surviving secret-output wrappers with normal/error
+cleanup, six explicit public consumer boundaries with success-guarded publication
+and owner clearing, six constructors, and core copy/zeroizer instruction/encoding
+review after fat LTO.
+Separate archive-only linked lifecycle checks exercise all six public key
+owners, caller-side early returns and actual caller unwinds with canaries and
+surviving-key reuse. Six explicit consumer cleanup bodies and their zeroizer
+are reviewed per lifecycle binary, including unwind landing pads and resume
+import binding; abort cleanup and internal fault injection are not claimed.
+Other inlined caller paths and exception-table/runtime unwind dispatch remain
+outside the bounded review. The declared timing profile remains opt3/fat-LTO/
+panic-abort on both named hosts and compiler endpoints, not every downstream
+optimization or panic configuration. No-default/all-feature direct/facade tests
+and documentation builds are registered for both compiler endpoints. Scoped
+Miri, sanitizers, field/layout proofs and cleanup checks have been refreshed.
+The internal facade version, isolated consumer pins, SBOM and finite checklist
+are prepared for 0.27.2. Candidate input-identity reconciliation is complete:
+affected package/API/compiler checks and both hosts' fixed/random observations
+passed, and the new native artifacts passed the existing bounded review policies.
+Commit-bound owner review, the finite final gate and GitHub remain pending. See
+[`aes-portable-acceptance.md`](assurance/aes-portable-acceptance.md) for the exact
+scope and remaining work. Correctness, bounded emitted-code review and timing
+observations remain distinct evidence, not interchangeable passes.
 
 Plan scope: Before v0.27.3, freeze a package-external forced-portable fixture for the currently implemented AES-128 AES-192 And AES-256 profiles, exercising all supported parameters, real consumer operations, boundaries, typed secret outputs and cleanup; backend work may not begin until this exact portable acceptance passes. Require explicit compiler/target/profile qualification, final-linked/LTO checks, fixed-versus-random timing and AESAVS Monte Carlo and multiblock campaigns.
 

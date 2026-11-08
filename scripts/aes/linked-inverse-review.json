@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "target": "x86_64-unknown-linux-gnu",
+  "profile": "opt3-fat-lto-cgu1-overflow",
+  "routes": ["direct", "facade"],
+  "panics": ["abort", "unwind"],
+  "review": "docs/assurance/aes-linked-review.md",
+  "compilers": {
+    "1.90.0": {
+      "inverse_sha256": "979ebeee5db37b46d9e0890e1c99ddfd13d27c66c74d8e619b4efe7dd341db01",
+      "inverse_bytes_sha256": "b9c90c7149ecaa747cb1382b309d69bf3675c26fd20cafa9cdb223df6f858bfc",
+      "instructions": 740,
+      "symbol_bytes": 2385
+    },
+    "1.99.1": {
+      "inverse_sha256": "9fb3b9d02e398be29ab2fe4e0cfec0d7c9b8bc88ca539a8b42de0ef44736af3b",
+      "inverse_bytes_sha256": "373671ebe4323347f3431ff5f276e1327e0d4fbab973c19ac1172ca34e137973",
+      "instructions": 749,
+      "symbol_bytes": 2533
+    }
+  }
+}

@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.27.2 acceptance candidate (unreleased)
+
+- Add archive-only portable AES-128/192/256 consumers, paired API/feature
+  diagnostics, README execution and no_std Cortex-M compile checks.
+- Add AESAVS Monte Carlo/multiblock campaigns and packaged OpenSSL comparisons
+  for both ephemeral and cached owners. No production AES implementation changes.
+- Add bounded x86_64/AArch64 emitted-code and representative final-linked/LTO
+  reviews, including caller cleanup paths and fail-closed mutation regressions.
+  Retain native AWS AArch64 observations separately from local runner results.
+- Add predeclared fixed-versus-random timing screens on two hosts/compiler
+  endpoints. These observations are not constant-time or physical qualification;
+  compiler spills, registers and arbitrary downstream builds remain outside claims.
+- Prepare internal facade version 0.27.2 and matching isolated consumer pins.
+  Candidate evidence reconciliation passed; owner pentest and the existing finite
+  final gate remain required. No crates.io publication or new release gate is selected.
+
 ## 0.27.1 development candidate (unreleased)
 
 - Add distinct opt-in portable AES-192/AES-256 owners and optional caller-owned

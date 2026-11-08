@@ -1,0 +1,170 @@
+{
+  "1.90.0/abort": {
+    "cached192_decrypt": {
+      "branches": 3,
+      "calls": {
+        "begin": 1,
+        "guard_drop": 1,
+        "secret192": 1
+      },
+      "instructions": 53,
+      "sha256": "4914f2c2acf2ec7440575a91e7e82bfa9c8a9b5d1f6bc2e827412357a2959a5a"
+    },
+    "cached192_encrypt": {
+      "branches": 3,
+      "calls": {
+        "begin": 1,
+        "guard_drop": 1,
+        "secret192": 1
+      },
+      "instructions": 53,
+      "sha256": "e1d18df37caa82c324a562c27a9ede1e52ecaa73e53bd19dedbb3cf2a2320f98"
+    },
+    "cached256_decrypt": {
+      "branches": 3,
+      "calls": {
+        "begin": 1,
+        "guard_drop": 1,
+        "secret256": 1
+      },
+      "instructions": 53,
+      "sha256": "79c99be1471045f85c3dd83bbbafbba69206c4417107e1852dd3234a0b1bdbee"
+    },
+    "cached256_encrypt": {
+      "branches": 3,
+      "calls": {
+        "begin": 1,
+        "guard_drop": 1,
+        "secret256": 1
+      },
+      "instructions": 53,
+      "sha256": "69fdfd2ea2f9004db791002b87f16b9d29f8e76a17d52ffcd5e0ddfe9a3c8f1d"
+    }
+  },
+  "1.90.0/unwind": {
+    "cached192_decrypt": {
+      "branches": 3,
+      "calls": {
+        "begin": 1,
+        "guard_drop": 1,
+        "secret192": 1
+      },
+      "instructions": 53,
+      "sha256": "fe460f3a27b075fb6a9b62b283e2121b1f8e1a1923919a3c053ca796239c2e7d"
+    },
+    "cached192_encrypt": {
+      "branches": 3,
+      "calls": {
+        "begin": 1,
+        "guard_drop": 1,
+        "secret192": 1
+      },
+      "instructions": 53,
+      "sha256": "5132f4d7eb64d0232f657c04338034b51183c287640b5e390619c0aa615b40d0"
+    },
+    "cached256_decrypt": {
+      "branches": 3,
+      "calls": {
+        "begin": 1,
+        "guard_drop": 1,
+        "secret256": 1
+      },
+      "instructions": 53,
+      "sha256": "fb01e713d4f37b167dd384941b9043380b51609cdc545a33bc714974a6ea42f2"
+    },
+    "cached256_encrypt": {
+      "branches": 3,
+      "calls": {
+        "begin": 1,
+        "guard_drop": 1,
+        "secret256": 1
+      },
+      "instructions": 53,
+      "sha256": "c6765cca44060845936c28ce4b539b121828912de8b426c8f16640cf9f95890c"
+    }
+  },
+  "1.99.1/abort": {
+    "cached192_decrypt": {
+      "branches": 3,
+      "calls": {
+        "begin": 1,
+        "guard_drop": 1,
+        "secret192": 1
+      },
+      "instructions": 57,
+      "sha256": "75f143979d6e683e950e60bd90df0b412a906075064d16480c0948f45f1df5c6"
+    },
+    "cached192_encrypt": {
+      "branches": 3,
+      "calls": {
+        "begin": 1,
+        "guard_drop": 1,
+        "secret192": 1
+      },
+      "instructions": 57,
+      "sha256": "d19cb0ef988295716cad1f9e295871a6999934b0277e8e77c75549e8ae569502"
+    },
+    "cached256_decrypt": {
+      "branches": 3,
+      "calls": {
+        "begin": 1,
+        "guard_drop": 1,
+        "secret256": 1
+      },
+      "instructions": 57,
+      "sha256": "568d3e09e90113283b068bd7cba0ea31fb5099129c1e068eca1e1fd1b760c0a5"
+    },
+    "cached256_encrypt": {
+      "branches": 3,
+      "calls": {
+        "begin": 1,
+        "guard_drop": 1,
+        "secret256": 1
+      },
+      "instructions": 57,
+      "sha256": "4643ca895ad2caec095d691207ec9c5322cfc7348427d34fd178b10d125d8b12"
+    }
+  },
+  "1.99.1/unwind": {
+    "cached192_decrypt": {
+      "branches": 3,
+      "calls": {
+        "begin": 1,
+        "guard_drop": 1,
+        "secret192": 1
+      },
+      "instructions": 57,
+      "sha256": "75f143979d6e683e950e60bd90df0b412a906075064d16480c0948f45f1df5c6"
+    },
+    "cached192_encrypt": {
+      "branches": 3,
+      "calls": {
+        "begin": 1,
+        "guard_drop": 1,
+        "secret192": 1
+      },
+      "instructions": 57,
+      "sha256": "d19cb0ef988295716cad1f9e295871a6999934b0277e8e77c75549e8ae569502"
+    },
+    "cached256_decrypt": {
+      "branches": 3,
+      "calls": {
+        "begin": 1,
+        "guard_drop": 1,
+        "secret256": 1
+      },
+      "instructions": 57,
+      "sha256": "568d3e09e90113283b068bd7cba0ea31fb5099129c1e068eca1e1fd1b760c0a5"
+    },
+    "cached256_encrypt": {
+      "branches": 3,
+      "calls": {
+        "begin": 1,
+        "guard_drop": 1,
+        "secret256": 1
+      },
+      "instructions": 57,
+      "sha256": "4643ca895ad2caec095d691207ec9c5322cfc7348427d34fd178b10d125d8b12"
+    }
+  }
+}

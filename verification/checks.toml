@@ -175,6 +175,559 @@ timeout_seconds = 600
 contains = ["AES dataflow review:"]
 unique_lines = ["AES dataflow review: 4 configurations; 11 LLVM and assembly helpers; not whole-program constant-time qualification", "AES dataflow: PASS; Rust 1.90.0; panic=abort; 11 helpers; 740 inverse machine instructions", "AES dataflow: PASS; Rust 1.90.0; panic=unwind; 11 helpers; 740 inverse machine instructions", "AES dataflow: PASS; Rust 1.99.1; panic=abort; 11 helpers; 749 inverse machine instructions", "AES dataflow: PASS; Rust 1.99.1; panic=unwind; 11 helpers; 749 inverse machine instructions", "AES machine review: PASS; Rust 1.90.0; panic=abort; 11 reviewed instruction streams", "AES machine review: PASS; Rust 1.90.0; panic=unwind; 11 reviewed instruction streams", "AES machine review: PASS; Rust 1.99.1; panic=abort; 11 reviewed instruction streams", "AES machine review: PASS; Rust 1.99.1; panic=unwind; 11 reviewed instruction streams"]
 
+[groups.aes-aarch64-dataflow]
+paths = ["scripts/aes/check-aes-aarch64-dataflow.py", "scripts/aes/aes_aarch64_review.py", "scripts/aes/test-aes-aarch64-dataflow.py", "scripts/aes/aarch64-inverse-review.json", "docs/assurance/aes-aarch64-review.md", "scripts/aes/aes_aarch64_helpers.py", "scripts/aes/test-aes-aarch64-helpers.py", "scripts/aes/aes_aarch64_rounds.py", "scripts/aes/test-aes-aarch64-rounds.py", "scripts/aes/aarch64-rounds-review.json", "scripts/aes/aes_aarch64_wrappers.py", "scripts/aes/test-aes-aarch64-wrappers.py", "scripts/aes/aarch64-wrappers-review.json", "scripts/aes/aes_aarch64_core.py", "scripts/aes/test-aes-aarch64-core.py", "scripts/aes/aarch64-core-review.json", "scripts/aes/aes_aarch64_public.py", "scripts/aes/test-aes-aarch64-public.py", "scripts/aes/aarch64-public-review.json", "scripts/aes/aes_aarch64_constructors.py", "scripts/aes/test-aes-aarch64-constructors.py", "scripts/aes/aarch64-constructors-review.json", "scripts/aes/aes_aarch64_callers.py", "scripts/aes/test-aes-aarch64-callers.py", "scripts/aes/aarch64-callers-review.json"]
+
+[[checks]]
+component = "aes"
+id = "aarch64-dataflow-review"
+category = "compiler"
+name = "AArch64 AES helpers, secret/public boundaries, constructors, callers and core cleanup (compile-only)"
+establishes = "Four aarch64-unknown-linux-gnu compiler/panic configurations: Rust 1.90.0/1.99.1, release abort/unwind. Eleven LLVM helpers reject secret-dependent control and addresses; eleven assembly helpers, six secret-output wrappers, six public-output boundaries, six constructors, twelve secret-output entry points and seven matched core dependency bodies have reviewed policies covering bounds, result handling, transfer and cleanup. The zeroizer LLVM volatile store and compiler fence are pinned. Each configuration rejects 804 injected mutations. Does not establish native execution/timing, arbitrary consumer inlining or other API/lifecycle bodies, exception-table/runtime unwind dispatch, final-linked/LTO qualification, caller spill/register erasure or physical resistance."
+command = ["python3", "scripts/aes/check-aes-aarch64-dataflow.py"]
+cwd = "."
+inputs = ["aes-build", "aes-dataflow", "aes-aarch64-dataflow", "asan-source-core", "compiler", "hkdf-msrv", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["AES AArch64 artifact:", "AES AArch64 core artifact:", "AES AArch64 zeroizer LLVM:"]
+unique_lines = ["AES AArch64 dataflow: 4 compile-only configurations; 11 LLVM helpers; eleven assembly helpers, six secret wrappers, six public boundaries, six constructors, twelve secret entry points and seven matched core bodies reviewed; not native or final-linked qualification", "AES AArch64 configuration: PASS; 1.90.0; abort; 11 LLVM helpers; 596 inverse instructions; ten additional assembly helpers; six secret wrappers; six public boundaries; six constructors; twelve secret entry points; seven matched core bodies; 804 rejected mutations", "AES AArch64 configuration: PASS; 1.90.0; unwind; 11 LLVM helpers; 596 inverse instructions; ten additional assembly helpers; six secret wrappers; six public boundaries; six constructors; twelve secret entry points; seven matched core bodies; 804 rejected mutations", "AES AArch64 configuration: PASS; 1.99.1; abort; 11 LLVM helpers; 599 inverse instructions; ten additional assembly helpers; six secret wrappers; six public boundaries; six constructors; twelve secret entry points; seven matched core bodies; 804 rejected mutations", "AES AArch64 configuration: PASS; 1.99.1; unwind; 11 LLVM helpers; 599 inverse instructions; ten additional assembly helpers; six secret wrappers; six public boundaries; six constructors; twelve secret entry points; seven matched core bodies; 804 rejected mutations"]
+
+[groups.aes-feature-integration]
+# Broad facade feature composition: dependency source changes invalidate these cheap checks.
+paths = ["Cargo.toml", "Cargo.lock", "crates"]
+optional_paths = [".cargo/config", ".cargo/config.toml"]
+
+[[checks]]
+component = "aes"
+id = "feature-msrv-minimal-test"
+category = "integration"
+name = "AES opt-in feature composition: 1.90.0, minimal, test"
+establishes = "No-default-feature direct/facade integration and doctests: 32 passing tests. AES absence/explicit admission are separately checked by packaged paired probes."
+command = ["cargo","+1.90.0","test","--locked","--offline","-p","brynja-crypto","-p","brynja","--no-default-features"]
+cwd = "."
+inputs = ["aes-build", "aes-feature-integration", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "LD_PRELOAD", "LD_LIBRARY_PATH", "DYLD_INSERT_LIBRARIES", "DYLD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 32
+exact_tests = 32
+
+[[checks]]
+component = "aes"
+id = "feature-msrv-minimal-doc"
+category = "integration"
+name = "AES opt-in feature composition: 1.90.0, minimal, doc"
+establishes = "Builds direct and facade documentation; no runtime or timing claim."
+command = ["cargo","+1.90.0","doc","--locked","--offline","-p","brynja-crypto","-p","brynja","--no-default-features","--no-deps"]
+cwd = "."
+inputs = ["aes-build", "aes-feature-integration", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "LD_PRELOAD", "LD_LIBRARY_PATH", "DYLD_INSERT_LIBRARIES", "DYLD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["Generated"]
+
+[[checks]]
+component = "aes"
+id = "feature-msrv-all-test"
+category = "integration"
+name = "AES opt-in feature composition: 1.90.0, all, test"
+establishes = "All-feature direct/facade integration and doctests: 97 passing tests. Three opt-in OpenSSL corpus tests remain ignored here and are covered by separate differential registrations. Not packaged or side-channel qualification."
+command = ["cargo","+1.90.0","test","--locked","--offline","-p","brynja-crypto","-p","brynja","--all-features"]
+cwd = "."
+inputs = ["aes-build", "aes-feature-integration", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "LD_PRELOAD", "LD_LIBRARY_PATH", "DYLD_INSERT_LIBRARIES", "DYLD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 97
+exact_tests = 97
+allow_ignored = true
+
+[[checks]]
+component = "aes"
+id = "feature-msrv-all-doc"
+category = "integration"
+name = "AES opt-in feature composition: 1.90.0, all, doc"
+establishes = "Builds direct and facade documentation; no runtime or timing claim."
+command = ["cargo","+1.90.0","doc","--locked","--offline","-p","brynja-crypto","-p","brynja","--all-features","--no-deps"]
+cwd = "."
+inputs = ["aes-build", "aes-feature-integration", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "LD_PRELOAD", "LD_LIBRARY_PATH", "DYLD_INSERT_LIBRARIES", "DYLD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["Generated"]
+
+[[checks]]
+component = "aes"
+id = "feature-current-minimal-test"
+category = "integration"
+name = "AES opt-in feature composition: 1.99.1, minimal, test"
+establishes = "No-default-feature direct/facade integration and doctests: 32 passing tests. AES absence/explicit admission are separately checked by packaged paired probes."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","-p","brynja","--no-default-features"]
+cwd = "."
+inputs = ["aes-build", "aes-feature-integration", "compiler"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "LD_PRELOAD", "LD_LIBRARY_PATH", "DYLD_INSERT_LIBRARIES", "DYLD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 32
+exact_tests = 32
+
+[[checks]]
+component = "aes"
+id = "feature-current-minimal-doc"
+category = "integration"
+name = "AES opt-in feature composition: 1.99.1, minimal, doc"
+establishes = "Builds direct and facade documentation; no runtime or timing claim."
+command = ["cargo","+1.99.1","doc","--locked","--offline","-p","brynja-crypto","-p","brynja","--no-default-features","--no-deps"]
+cwd = "."
+inputs = ["aes-build", "aes-feature-integration", "compiler"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "LD_PRELOAD", "LD_LIBRARY_PATH", "DYLD_INSERT_LIBRARIES", "DYLD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["Generated"]
+
+[[checks]]
+component = "aes"
+id = "feature-current-all-test"
+category = "integration"
+name = "AES opt-in feature composition: 1.99.1, all, test"
+establishes = "All-feature direct/facade integration and doctests: 97 passing tests. Three opt-in OpenSSL corpus tests remain ignored here and are covered by separate differential registrations. Not packaged or side-channel qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","-p","brynja","--all-features"]
+cwd = "."
+inputs = ["aes-build", "aes-feature-integration", "compiler"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "LD_PRELOAD", "LD_LIBRARY_PATH", "DYLD_INSERT_LIBRARIES", "DYLD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 97
+exact_tests = 97
+allow_ignored = true
+
+[[checks]]
+component = "aes"
+id = "feature-current-all-doc"
+category = "integration"
+name = "AES opt-in feature composition: 1.99.1, all, doc"
+establishes = "Builds direct and facade documentation; no runtime or timing claim."
+command = ["cargo","+1.99.1","doc","--locked","--offline","-p","brynja-crypto","-p","brynja","--all-features","--no-deps"]
+cwd = "."
+inputs = ["aes-build", "aes-feature-integration", "compiler"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "LD_PRELOAD", "LD_LIBRARY_PATH", "DYLD_INSERT_LIBRARIES", "DYLD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["Generated"]
+
+# v0.27.2 portable package acceptance: no release-gate coupling.
+[groups.aes-packaged]
+paths = ["Cargo.toml", "Cargo.lock", "assurance/aes-public-api/Cargo.toml", "assurance/aes-public-api/Cargo.lock", "assurance/aes-public-api/src/lib.rs", "assurance/aes-public-api/src/wide.rs", "assurance/aes-public-api/tests/consumer.rs", "assurance/aes-public-api/tests/wide/mod.rs", "scripts/aes/check-aes-packaged.py", "scripts/aes/test-aes-packaged.py", "scripts/aes/check-aes-consumer.py", "scripts/aes/check-aes-api.py", "scripts/aes/check-aes-wide-api.py", "scripts/hkdf/check-hkdf-public-api.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py"]
+optional_paths = [".cargo/config", ".cargo/config.toml"]
+[[groups.aes-packaged.tools]]
+program = "python3"
+
+[[checks]]
+component = "aes"
+id = "packaged-portable"
+category = "package"
+name = "Packaged portable AES-128/192/256 public API (MSRV/current endpoints)"
+establishes = "Byte-checked Cargo archives only; exact portable dependency graphs; 18 public consumer tests per configuration across two routes, two compilers and debug/release; 536 paired diagnostic probes, four archived README executions, default-off feature controls and four no_std Cortex-M compile checks. No acceleration, target execution, side-channel qualification, MCT/MMT or whole-v0.27.2 completion is claimed."
+command = ["python3", "scripts/aes/check-aes-packaged.py"]
+cwd = "."
+inputs = ["aes-packaged", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+timeout_seconds = 900
+[checks.success]
+contains = ["AES packaged portable: PASS;"]
+unique_lines = ["AES packaged portable: PASS; 8 host configurations; 4 Cortex-M compile checks; 536 paired API probes; 4 README runs; 4 feature gates; no upload"]
+
+[groups.aes-avs]
+paths = ["assurance/aes-avs", "scripts/aes/check-aes-avs.py", "scripts/aes/test-aes-avs.py"]
+
+[[checks]]
+component = "aes"
+id = "avs-msrv-direct"
+category = "campaign"
+name = "Packaged portable AESAVS MCT/MMT 1.90.0 direct"
+establishes = "Pinned NIST ECB sample vectors applied to the public raw-block API from byte-checked Cargo archives. All three key widths, both directions and both owners; 600 chained MCT records with 1000 inner iterations each, 60 MMT records, parser/chain negative controls. Release profile only; no mode API, CAVP validation, timing or physical-fault qualification."
+command = ["python3", "scripts/aes/check-aes-avs.py", "--toolchain", "1.90.0", "--route", "direct"]
+cwd = "."
+inputs = ["aes-packaged", "aes-avs", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+timeout_seconds = 600
+[checks.success]
+contains = ["AESAVS packaged: PASS;"]
+minimum_tests = 12
+exact_tests = 12
+unique_lines = ["AESAVS_MCT: 128 200 records; 1000 iterations; 2 owners; 400000 block operations","AESAVS_MCT: 192 200 records; 1000 iterations; 2 owners; 400000 block operations","AESAVS_MCT: 256 200 records; 1000 iterations; 2 owners; 400000 block operations","AESAVS_MMT: 128 20 records; 110 blocks; 2 owners; public encryption checked","AESAVS_MMT: 192 20 records; 110 blocks; 2 owners; public encryption checked","AESAVS_MMT: 256 20 records; 110 blocks; 2 owners; public encryption checked","AESAVS packaged: PASS; 1.90.0 direct release; 600 MCT records; 60 MMT records; both owners"]
+
+[[checks]]
+component = "aes"
+id = "avs-msrv-facade"
+category = "campaign"
+name = "Packaged portable AESAVS MCT/MMT 1.90.0 facade"
+establishes = "Pinned NIST ECB sample vectors applied to the public raw-block API from byte-checked Cargo archives. All three key widths, both directions and both owners; 600 chained MCT records with 1000 inner iterations each, 60 MMT records, parser/chain negative controls. Release profile only; no mode API, CAVP validation, timing or physical-fault qualification."
+command = ["python3", "scripts/aes/check-aes-avs.py", "--toolchain", "1.90.0", "--route", "facade"]
+cwd = "."
+inputs = ["aes-packaged", "aes-avs", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+timeout_seconds = 600
+[checks.success]
+contains = ["AESAVS packaged: PASS;"]
+minimum_tests = 12
+exact_tests = 12
+unique_lines = ["AESAVS_MCT: 128 200 records; 1000 iterations; 2 owners; 400000 block operations","AESAVS_MCT: 192 200 records; 1000 iterations; 2 owners; 400000 block operations","AESAVS_MCT: 256 200 records; 1000 iterations; 2 owners; 400000 block operations","AESAVS_MMT: 128 20 records; 110 blocks; 2 owners; public encryption checked","AESAVS_MMT: 192 20 records; 110 blocks; 2 owners; public encryption checked","AESAVS_MMT: 256 20 records; 110 blocks; 2 owners; public encryption checked","AESAVS packaged: PASS; 1.90.0 facade release; 600 MCT records; 60 MMT records; both owners"]
+
+[[checks]]
+component = "aes"
+id = "avs-current-direct"
+category = "campaign"
+name = "Packaged portable AESAVS MCT/MMT 1.99.1 direct"
+establishes = "Pinned NIST ECB sample vectors applied to the public raw-block API from byte-checked Cargo archives. All three key widths, both directions and both owners; 600 chained MCT records with 1000 inner iterations each, 60 MMT records, parser/chain negative controls. Release profile only; no mode API, CAVP validation, timing or physical-fault qualification."
+command = ["python3", "scripts/aes/check-aes-avs.py", "--toolchain", "1.99.1", "--route", "direct"]
+cwd = "."
+inputs = ["aes-packaged", "aes-avs", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+timeout_seconds = 600
+[checks.success]
+contains = ["AESAVS packaged: PASS;"]
+minimum_tests = 12
+exact_tests = 12
+unique_lines = ["AESAVS_MCT: 128 200 records; 1000 iterations; 2 owners; 400000 block operations","AESAVS_MCT: 192 200 records; 1000 iterations; 2 owners; 400000 block operations","AESAVS_MCT: 256 200 records; 1000 iterations; 2 owners; 400000 block operations","AESAVS_MMT: 128 20 records; 110 blocks; 2 owners; public encryption checked","AESAVS_MMT: 192 20 records; 110 blocks; 2 owners; public encryption checked","AESAVS_MMT: 256 20 records; 110 blocks; 2 owners; public encryption checked","AESAVS packaged: PASS; 1.99.1 direct release; 600 MCT records; 60 MMT records; both owners"]
+
+[[checks]]
+component = "aes"
+id = "avs-current-facade"
+category = "campaign"
+name = "Packaged portable AESAVS MCT/MMT 1.99.1 facade"
+establishes = "Pinned NIST ECB sample vectors applied to the public raw-block API from byte-checked Cargo archives. All three key widths, both directions and both owners; 600 chained MCT records with 1000 inner iterations each, 60 MMT records, parser/chain negative controls. Release profile only; no mode API, CAVP validation, timing or physical-fault qualification."
+command = ["python3", "scripts/aes/check-aes-avs.py", "--toolchain", "1.99.1", "--route", "facade"]
+cwd = "."
+inputs = ["aes-packaged", "aes-avs", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+timeout_seconds = 600
+[checks.success]
+contains = ["AESAVS packaged: PASS;"]
+minimum_tests = 12
+exact_tests = 12
+unique_lines = ["AESAVS_MCT: 128 200 records; 1000 iterations; 2 owners; 400000 block operations","AESAVS_MCT: 192 200 records; 1000 iterations; 2 owners; 400000 block operations","AESAVS_MCT: 256 200 records; 1000 iterations; 2 owners; 400000 block operations","AESAVS_MMT: 128 20 records; 110 blocks; 2 owners; public encryption checked","AESAVS_MMT: 192 20 records; 110 blocks; 2 owners; public encryption checked","AESAVS_MMT: 256 20 records; 110 blocks; 2 owners; public encryption checked","AESAVS packaged: PASS; 1.99.1 facade release; 600 MCT records; 60 MMT records; both owners"]
+
+[groups.aes-fixed-random]
+paths = ["assurance/aes-fixed-random", "scripts/aes/check-aes-fixed-random.py", "scripts/aes/test-aes-fixed-random.py"]
+
+[[checks]]
+component = "aes"
+id = "packaged-fixed-random-msrv"
+category = "timing-fixed-random"
+name = "Packaged portable AES fixed/random 1.90.0 native x86_64"
+establishes = "Predeclared first-order host observation: 39 contrasts across AES-128/192/256, cached/ephemeral operations and cached expansion, 8192 pairs each, 4 repetitions; raw samples retained, Welch and paired threshold 4.5, no cropping or retry-to-pass. Archive-only direct public API; explicit fat-LTO opt3 panic-abort binary and native host identity. Trusted host/oracle; not proof of constant time, higher-order leakage absence, physical protection, AArch64 or arbitrary-profile qualification."
+command = ["python3", "scripts/aes/check-aes-fixed-random.py", "--toolchain", "1.90.0"]
+cwd = "."
+platform = "linux-x86_64"
+inputs = ["aes-packaged", "aes-fixed-random", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "BRYNJA_OPENSSL", "OPENSSL_CONF", "OPENSSL_MODULES", "OPENSSL_ENGINES", "LD_PRELOAD", "LD_LIBRARY_PATH", "LD_AUDIT", "OPENSSL_ia32cap"]
+timeout_seconds = 900
+log_bytes = 67108864
+[checks.success]
+minimum_tests = 4
+exact_tests = 4
+contains = ["AES-fixed-random-native-observation", "binary_sha256", "oracle_sha256"]
+unique_lines = ["Independent AES fixed/random preflight: PASS", "AES fixed/random: 39 campaigns; 8192 pairs; 4 repetitions; zero alarms; noise policy satisfied", "AES fixed/random completed: 1.90.0; native x86_64-unknown-linux-gnu; opt3-fat-lto-cgu1-overflow-abort"]
+
+[[checks]]
+component = "aes"
+id = "packaged-fixed-random-current"
+category = "timing-fixed-random"
+name = "Packaged portable AES fixed/random 1.99.1 native x86_64"
+establishes = "Predeclared first-order host observation: 39 contrasts across AES-128/192/256, cached/ephemeral operations and cached expansion, 8192 pairs each, 4 repetitions; raw samples retained, Welch and paired threshold 4.5, no cropping or retry-to-pass. Archive-only direct public API; explicit fat-LTO opt3 panic-abort binary and native host identity. Trusted host/oracle; not proof of constant time, higher-order leakage absence, physical protection, AArch64 or arbitrary-profile qualification."
+command = ["python3", "scripts/aes/check-aes-fixed-random.py", "--toolchain", "1.99.1"]
+cwd = "."
+platform = "linux-x86_64"
+inputs = ["aes-packaged", "aes-fixed-random", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "BRYNJA_OPENSSL", "OPENSSL_CONF", "OPENSSL_MODULES", "OPENSSL_ENGINES", "LD_PRELOAD", "LD_LIBRARY_PATH", "LD_AUDIT", "OPENSSL_ia32cap"]
+timeout_seconds = 900
+log_bytes = 67108864
+[checks.success]
+minimum_tests = 4
+exact_tests = 4
+contains = ["AES-fixed-random-native-observation", "binary_sha256", "oracle_sha256"]
+unique_lines = ["Independent AES fixed/random preflight: PASS", "AES fixed/random: 39 campaigns; 8192 pairs; 4 repetitions; zero alarms; noise policy satisfied", "AES fixed/random completed: 1.99.1; native x86_64-unknown-linux-gnu; opt3-fat-lto-cgu1-overflow-abort"]
+
+[[checks]]
+component = "aes"
+id = "packaged-fixed-random-arm-msrv"
+category = "timing-fixed-random"
+name = "Packaged portable AES fixed/random 1.90.0 native aarch64"
+establishes = "Predeclared first-order host observation: 39 contrasts across AES-128/192/256, cached/ephemeral operations and cached expansion, 8192 pairs each, 4 repetitions; raw samples retained, Welch and paired threshold 4.5, no cropping or retry-to-pass. Archive-only direct public API; explicit fat-LTO opt3 panic-abort binary and native host identity. Trusted host/oracle; not proof of constant time, higher-order leakage absence, physical protection, x86_64 or arbitrary-profile qualification."
+command = ["python3", "scripts/aes/check-aes-fixed-random.py", "--toolchain", "1.90.0"]
+cwd = "."
+platform = "linux-aarch64"
+inputs = ["aes-packaged", "aes-fixed-random", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "BRYNJA_OPENSSL", "OPENSSL_CONF", "OPENSSL_MODULES", "OPENSSL_ENGINES", "LD_PRELOAD", "LD_LIBRARY_PATH", "LD_AUDIT", "OPENSSL_ia32cap"]
+timeout_seconds = 900
+log_bytes = 67108864
+[checks.success]
+minimum_tests = 4
+exact_tests = 4
+contains = ["AES-fixed-random-native-observation", "binary_sha256", "oracle_sha256"]
+unique_lines = ["Independent AES fixed/random preflight: PASS", "AES fixed/random: 39 campaigns; 8192 pairs; 4 repetitions; zero alarms; noise policy satisfied", "AES fixed/random completed: 1.90.0; native aarch64-unknown-linux-gnu; opt3-fat-lto-cgu1-overflow-abort"]
+
+[[checks]]
+component = "aes"
+id = "packaged-fixed-random-arm-current"
+category = "timing-fixed-random"
+name = "Packaged portable AES fixed/random 1.99.1 native aarch64"
+establishes = "Predeclared first-order host observation: 39 contrasts across AES-128/192/256, cached/ephemeral operations and cached expansion, 8192 pairs each, 4 repetitions; raw samples retained, Welch and paired threshold 4.5, no cropping or retry-to-pass. Archive-only direct public API; explicit fat-LTO opt3 panic-abort binary and native host identity. Trusted host/oracle; not proof of constant time, higher-order leakage absence, physical protection, x86_64 or arbitrary-profile qualification."
+command = ["python3", "scripts/aes/check-aes-fixed-random.py", "--toolchain", "1.99.1"]
+cwd = "."
+platform = "linux-aarch64"
+inputs = ["aes-packaged", "aes-fixed-random", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "BRYNJA_OPENSSL", "OPENSSL_CONF", "OPENSSL_MODULES", "OPENSSL_ENGINES", "LD_PRELOAD", "LD_LIBRARY_PATH", "LD_AUDIT", "OPENSSL_ia32cap"]
+timeout_seconds = 900
+log_bytes = 67108864
+[checks.success]
+minimum_tests = 4
+exact_tests = 4
+contains = ["AES-fixed-random-native-observation", "binary_sha256", "oracle_sha256"]
+unique_lines = ["Independent AES fixed/random preflight: PASS", "AES fixed/random: 39 campaigns; 8192 pairs; 4 repetitions; zero alarms; noise policy satisfied", "AES fixed/random completed: 1.99.1; native aarch64-unknown-linux-gnu; opt3-fat-lto-cgu1-overflow-abort"]
+
+[groups.aes-packaged-differential]
+paths = ["assurance/aes-differential", "scripts/aes/check-aes-packaged-differential.py", "scripts/aes/test-aes-packaged-differential.py"]
+
+[groups.aes-linked]
+paths = ["assurance/aes-linked", "scripts/aes/check-aes-linked.py", "scripts/aes/test-aes-linked.py", "scripts/aes/linked-inverse-review.json", "scripts/aes/aes_linked_helpers.py", "scripts/aes/test-aes-linked-helpers.py", "scripts/aes/aes_linked_mix.py", "scripts/aes/test-aes-linked-mix.py", "scripts/aes/aes_linked_substitute.py", "scripts/aes/test-aes-linked-substitute.py", "scripts/aes/aes_linked_rounds.py", "scripts/aes/test-aes-linked-rounds.py", "scripts/aes/aes_linked_wrappers.py", "scripts/aes/test-aes-linked-wrappers.py", "scripts/aes/aes_linked_public.py", "scripts/aes/test-aes-linked-public.py", "docs/assurance/aes-linked-review.md"]
+[[groups.aes-linked.tools]]
+program = "llvm-nm"
+[[groups.aes-linked.tools]]
+program = "llvm-objdump"
+
+[groups.aes-arm-native]
+paths = ["scripts/aes/check-aes-aarch64-native.py", "scripts/aes/test-aes-aarch64-native.py"]
+
+[groups.aes-arm-linked-review]
+paths = ["scripts/aes/check-aes-aarch64-linked.py", "scripts/aes/aes_aarch64_linked.py", "scripts/aes/test-aes-aarch64-linked.py", "scripts/aes/aarch64-linked-review.json", "scripts/aes/aes_aarch64_linked_wrappers.py", "scripts/aes/aarch64-linked-wrappers-review.json", "scripts/aes/test-aes-aarch64-linked-wrappers.py", "scripts/aes/aes_aarch64_linked_public.py", "scripts/aes/aarch64-linked-public-review.json", "scripts/aes/test-aes-aarch64-linked-public.py", "scripts/aes/aes_aarch64_linked_cleanup.py", "scripts/aes/aarch64-linked-cleanup-review.json", "scripts/aes/aarch64-linked-cleanup-fixtures.json", "scripts/aes/test-aes-aarch64-linked-cleanup.py", "docs/assurance/aes-aarch64-linked-review.md", "assurance/aes-native-observations/v0.27.2/aws-aarch64.json"]
+
+[[checks]]
+component = "aes"
+id = "aarch64-linked-helpers-review"
+category = "compiler-linked"
+name = "Retained native AArch64 linked AES boundaries, constructors and caller cleanup"
+establishes = "Offline replay over sixteen retained native GNU/Linux AArch64 binaries, Rust 1.90.0/1.99.1, direct/facade and abort/unwind. Eleven AES helpers, six surviving secret-output wrappers, copy and zeroizer per executable, six public boundaries and six constructors in eight KAT executables, and six caller cleanup bodies in eight lifecycle executables have reviewed instruction/encoding policies; 17756 mutations rejected. Four unwind imports bind PLT bytes to the ELF dynamic symbol and GOT relocation. Reviewed normal/error/landing-pad paths cover explicit clearing, not complete spill erasure or external unwind dispatch. Retained compiled inputs must match current package sources and public fixtures. No new native/timing execution, other inlined entry-point qualification or physical protection is claimed."
+command = ["python3", "scripts/aes/check-aes-aarch64-linked.py"]
+cwd = "."
+inputs = ["aes-build", "aes-packaged", "aes-linked", "aes-linked-lifecycle", "aes-arm-native", "aes-arm-linked-review", "aes-dataflow", "hkdf-public-api-modern"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+timeout_seconds = 180
+[checks.success]
+contains = ["AES ARM retained source files matched:"]
+unique_lines = ["AES ARM linked helper review: 16 retained executables; eleven AES helpers, six secret wrappers, copy and zeroizer each; six public boundaries and six constructors in eight KAT executables; six caller cleanup bodies in eight lifecycle executables with four bound unwind imports; 17756 rejected mutations; other entry points and unwind dispatch unreviewed"]
+
+[[checks]]
+component = "aes"
+id = "packaged-arm-native-msrv"
+category = "native-correctness"
+name = "Packaged native AArch64 AES correctness and caller lifecycle 1.90.0"
+establishes = "Archive-only GNU/Linux AArch64 final-linked opt3/fat-LTO consumers, direct/facade and abort/unwind: 72 known-answer operations, 288 normal lifecycle cases and 96 caller unwinds per compiler. ELF identities, portable helper inventory and disassembly retained for subsequent review. No timing, emitted-code qualification, abort cleanup, physical protection or complete spill/register erasure is claimed."
+command = ["python3", "scripts/aes/check-aes-aarch64-native.py", "--toolchain", "1.90.0"]
+cwd = "."
+platform = "linux-aarch64"
+inputs = ["aes-packaged", "aes-linked", "aes-linked-lifecycle", "aes-arm-native", "aes-dataflow", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+timeout_seconds = 900
+[checks.success]
+contains = ["\"artifact\"", "\"sha256\""]
+unique_lines = ["AES ARM native: PASS; 1.90.0; direct; abort; 18 operations; 72 normal lifecycle cases; 0 caller unwinds; final-linked artifacts retained; machine-code qualification not claimed","AES ARM native: PASS; 1.90.0; direct; unwind; 18 operations; 72 normal lifecycle cases; 48 caller unwinds; final-linked artifacts retained; machine-code qualification not claimed","AES ARM native: PASS; 1.90.0; facade; abort; 18 operations; 72 normal lifecycle cases; 0 caller unwinds; final-linked artifacts retained; machine-code qualification not claimed","AES ARM native: PASS; 1.90.0; facade; unwind; 18 operations; 72 normal lifecycle cases; 48 caller unwinds; final-linked artifacts retained; machine-code qualification not claimed","AES ARM native completed: 1.90.0; four configurations; correctness only; no timing or machine-code approval"]
+
+[[checks]]
+component = "aes"
+id = "packaged-arm-native-current"
+category = "native-correctness"
+name = "Packaged native AArch64 AES correctness and caller lifecycle 1.99.1"
+establishes = "Archive-only GNU/Linux AArch64 final-linked opt3/fat-LTO consumers, direct/facade and abort/unwind: 72 known-answer operations, 288 normal lifecycle cases and 96 caller unwinds per compiler. ELF identities, portable helper inventory and disassembly retained for subsequent review. No timing, emitted-code qualification, abort cleanup, physical protection or complete spill/register erasure is claimed."
+command = ["python3", "scripts/aes/check-aes-aarch64-native.py", "--toolchain", "1.99.1"]
+cwd = "."
+platform = "linux-aarch64"
+inputs = ["aes-packaged", "aes-linked", "aes-linked-lifecycle", "aes-arm-native", "aes-dataflow", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+timeout_seconds = 900
+[checks.success]
+contains = ["\"artifact\"", "\"sha256\""]
+unique_lines = ["AES ARM native: PASS; 1.99.1; direct; abort; 18 operations; 72 normal lifecycle cases; 0 caller unwinds; final-linked artifacts retained; machine-code qualification not claimed","AES ARM native: PASS; 1.99.1; direct; unwind; 18 operations; 72 normal lifecycle cases; 48 caller unwinds; final-linked artifacts retained; machine-code qualification not claimed","AES ARM native: PASS; 1.99.1; facade; abort; 18 operations; 72 normal lifecycle cases; 0 caller unwinds; final-linked artifacts retained; machine-code qualification not claimed","AES ARM native: PASS; 1.99.1; facade; unwind; 18 operations; 72 normal lifecycle cases; 48 caller unwinds; final-linked artifacts retained; machine-code qualification not claimed","AES ARM native completed: 1.99.1; four configurations; correctness only; no timing or machine-code approval"]
+
+[groups.aes-linked-lifecycle]
+paths = ["assurance/aes-linked/lifecycle.rs", "scripts/aes/check-aes-linked-lifecycle.py", "scripts/aes/test-aes-linked-lifecycle.py", "scripts/aes/aes_linked_cleanup.py", "scripts/aes/test-aes-linked-cleanup.py"]
+
+[[checks]]
+component = "aes"
+id = "packaged-lifecycle-msrv"
+category = "package-lifecycle"
+name = "Packaged AES final-linked caller cleanup and unwind on Rust 1.90.0"
+establishes = "Four archive-only native x86_64 fat-LTO executables: direct/facade, abort/unwind. All six portable key owners: Drop, explicit clearing, output outliving key, caller early return, public ciphertext persistence and canaries. 288 normal cases and 96 actual caller unwinds with surviving-key reuse; four panic-harness negative controls. Six consumer cleanup bodies and their zeroizer reviewed per binary, including unwind landing pads and resume import binding; 276 machine mutations rejected. No internal AES failure injection, abort cleanup, spill erasure, exception-table/runtime qualification or physical qualification claimed."
+command = ["python3", "scripts/aes/check-aes-linked-lifecycle.py", "--toolchain", "1.90.0"]
+cwd = "."
+inputs = ["aes-packaged", "aes-linked", "aes-linked-lifecycle", "aes-dataflow", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["binary_sha256", "machine_reviews", "AES_LINKED_LIFECYCLE: complete; 72 normal cases; 48 caller unwinds"]
+unique_lines = ["AES linked lifecycle: PASS; 1.90.0; direct; abort; 72 normal cases; 0 caller unwinds; six cleanup boundaries reviewed; 63 rejected mutations", "AES linked lifecycle: PASS; 1.90.0; direct; unwind; 72 normal cases; 48 caller unwinds; six cleanup boundaries reviewed; 75 rejected mutations", "AES linked lifecycle: PASS; 1.90.0; facade; abort; 72 normal cases; 0 caller unwinds; six cleanup boundaries reviewed; 63 rejected mutations", "AES linked lifecycle: PASS; 1.90.0; facade; unwind; 72 normal cases; 48 caller unwinds; six cleanup boundaries reviewed; 75 rejected mutations", "AES linked lifecycle completed: 1.90.0; four binaries; 288 normal cases; 96 caller unwinds; 4 panic controls; 276 machine mutations rejected"]
+
+[[checks]]
+component = "aes"
+id = "packaged-lifecycle-current"
+category = "package-lifecycle"
+name = "Packaged AES final-linked caller cleanup and unwind on Rust 1.99.1"
+establishes = "Four archive-only native x86_64 fat-LTO executables: direct/facade, abort/unwind. All six portable key owners: Drop, explicit clearing, output outliving key, caller early return, public ciphertext persistence and canaries. 288 normal cases and 96 actual caller unwinds with surviving-key reuse; four panic-harness negative controls. Six consumer cleanup bodies and their zeroizer reviewed per binary, including unwind landing pads and resume import binding; 276 machine mutations rejected. No internal AES failure injection, abort cleanup, spill erasure, exception-table/runtime qualification or physical qualification claimed."
+command = ["python3", "scripts/aes/check-aes-linked-lifecycle.py", "--toolchain", "1.99.1"]
+cwd = "."
+inputs = ["aes-packaged", "aes-linked", "aes-linked-lifecycle", "aes-dataflow", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["binary_sha256", "machine_reviews", "AES_LINKED_LIFECYCLE: complete; 72 normal cases; 48 caller unwinds"]
+unique_lines = ["AES linked lifecycle: PASS; 1.99.1; direct; abort; 72 normal cases; 0 caller unwinds; six cleanup boundaries reviewed; 63 rejected mutations", "AES linked lifecycle: PASS; 1.99.1; direct; unwind; 72 normal cases; 48 caller unwinds; six cleanup boundaries reviewed; 75 rejected mutations", "AES linked lifecycle: PASS; 1.99.1; facade; abort; 72 normal cases; 0 caller unwinds; six cleanup boundaries reviewed; 63 rejected mutations", "AES linked lifecycle: PASS; 1.99.1; facade; unwind; 72 normal cases; 48 caller unwinds; six cleanup boundaries reviewed; 75 rejected mutations", "AES linked lifecycle completed: 1.99.1; four binaries; 288 normal cases; 96 caller unwinds; 4 panic controls; 276 machine mutations rejected"]
+
+[[checks]]
+component = "aes"
+id = "packaged-linked-msrv"
+category = "compiler-linked"
+name = "Packaged AES final-linked x86_64 operations and bounded helper review on Rust 1.90.0"
+establishes = "Four native x86_64 final executables using archive-only direct/facade imports and abort/unwind, opt3 fat LTO cgu1 overflow checks. Each executes 18 known-answer operations with output/key storage clearing assertions, retains eleven helper symbols and matches eleven portable AES helpers, six surviving secret-output wrappers, six explicit public consumer boundaries, six constructors and core copy/zeroizer instructions/encoding, including bounds, normal/error cleanup and ELF constant/call binding; 256 mutations rejected. Compiler spills remain; other inlined client code and unwind dispatch, physical resistance and other targets are not qualified."
+command = ["python3", "scripts/aes/check-aes-linked.py", "--toolchain", "1.90.0"]
+cwd = "."
+inputs = ["aes-packaged", "aes-linked", "aes-dataflow", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["AES_LINKED_KAT: complete; 18 operations", "binary_sha256", "inverse_bytes_sha256"]
+unique_lines = ["AES linked: PASS; 1.90.0; direct; abort; 18 operations; 11 portable helpers; six secret wrappers, six public boundaries, six constructors and two core routines reviewed; 256 rejected mutations", "AES linked: PASS; 1.90.0; direct; unwind; 18 operations; 11 portable helpers; six secret wrappers, six public boundaries, six constructors and two core routines reviewed; 256 rejected mutations", "AES linked: PASS; 1.90.0; facade; abort; 18 operations; 11 portable helpers; six secret wrappers, six public boundaries, six constructors and two core routines reviewed; 256 rejected mutations", "AES linked: PASS; 1.90.0; facade; unwind; 18 operations; 11 portable helpers; six secret wrappers, six public boundaries, six constructors and two core routines reviewed; 256 rejected mutations", "AES linked completed: 1.90.0; four packaged final executables; eleven portable helpers, six secret wrappers, six public boundaries, six constructors and two core routines reviewed"]
+
+[[checks]]
+component = "aes"
+id = "packaged-linked-current"
+category = "compiler-linked"
+name = "Packaged AES final-linked x86_64 operations and bounded helper review on Rust 1.99.1"
+establishes = "Four native x86_64 final executables using archive-only direct/facade imports and abort/unwind, opt3 fat LTO cgu1 overflow checks. Each executes 18 known-answer operations with output/key storage clearing assertions, retains eleven helper symbols and matches eleven portable AES helpers, six surviving secret-output wrappers, six explicit public consumer boundaries, six constructors and core copy/zeroizer instructions/encoding, including bounds, normal/error cleanup and ELF constant/call binding; 256 mutations rejected. Compiler spills remain; other inlined client code and unwind dispatch, physical resistance and other targets are not qualified."
+command = ["python3", "scripts/aes/check-aes-linked.py", "--toolchain", "1.99.1"]
+cwd = "."
+inputs = ["aes-packaged", "aes-linked", "aes-dataflow", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["AES_LINKED_KAT: complete; 18 operations", "binary_sha256", "inverse_bytes_sha256"]
+unique_lines = ["AES linked: PASS; 1.99.1; direct; abort; 18 operations; 11 portable helpers; six secret wrappers, six public boundaries, six constructors and two core routines reviewed; 256 rejected mutations", "AES linked: PASS; 1.99.1; direct; unwind; 18 operations; 11 portable helpers; six secret wrappers, six public boundaries, six constructors and two core routines reviewed; 256 rejected mutations", "AES linked: PASS; 1.99.1; facade; abort; 18 operations; 11 portable helpers; six secret wrappers, six public boundaries, six constructors and two core routines reviewed; 256 rejected mutations", "AES linked: PASS; 1.99.1; facade; unwind; 18 operations; 11 portable helpers; six secret wrappers, six public boundaries, six constructors and two core routines reviewed; 256 rejected mutations", "AES linked completed: 1.99.1; four packaged final executables; eleven portable helpers, six secret wrappers, six public boundaries, six constructors and two core routines reviewed"]
+
+[[checks]]
+component = "aes"
+id = "packaged-diff-msrv-direct"
+category = "package-differential"
+name = "Packaged AES/OpenSSL comparison 1.90.0 direct"
+establishes = "Package-external portable AES-128/192/256 against one identity-recorded OpenSSL executable, preflighted with published vectors. Per profile: 4096 independent forward/inverse cases per width through both key owners, plus 2048 public encryptions per owner/width and cleanup assertions. Debug/release; isolated archive graphs. Trusted host and shared libraries; not oracle authenticity, timing, target qualification or certification."
+command = ["python3", "scripts/aes/check-aes-packaged-differential.py", "--toolchain", "1.90.0", "--route", "direct"]
+cwd = "."
+inputs = ["aes-packaged", "aes-packaged-differential", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "BRYNJA_OPENSSL", "OPENSSL_CONF", "OPENSSL_MODULES", "OPENSSL_ENGINES", "LD_PRELOAD", "LD_LIBRARY_PATH", "LD_AUDIT", "OPENSSL_ia32cap"]
+timeout_seconds = 900
+[checks.success]
+contains = ["AES packaged differential: PASS;", "Independent oracle SHA-256:", "Independent oracle: OpenSSL"]
+minimum_tests = 8
+exact_tests = 8
+unique_lines = ["AES differential executable identity: unchanged; shared libraries not measured","AES packaged differential: PASS; 1.90.0 direct; debug/release; all three widths; no upload","AES_PACKAGED_DIFFERENTIAL_PROFILE: 1.90.0 direct debug; 12288 cases; both owners; public encryption checked","AES_PACKAGED_DIFFERENTIAL_PROFILE: 1.90.0 direct release; 12288 cases; both owners; public encryption checked"]
+
+[[checks]]
+component = "aes"
+id = "packaged-diff-msrv-facade"
+category = "package-differential"
+name = "Packaged AES/OpenSSL comparison 1.90.0 facade"
+establishes = "Package-external portable AES-128/192/256 against one identity-recorded OpenSSL executable, preflighted with published vectors. Per profile: 4096 independent forward/inverse cases per width through both key owners, plus 2048 public encryptions per owner/width and cleanup assertions. Debug/release; isolated archive graphs. Trusted host and shared libraries; not oracle authenticity, timing, target qualification or certification."
+command = ["python3", "scripts/aes/check-aes-packaged-differential.py", "--toolchain", "1.90.0", "--route", "facade"]
+cwd = "."
+inputs = ["aes-packaged", "aes-packaged-differential", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "BRYNJA_OPENSSL", "OPENSSL_CONF", "OPENSSL_MODULES", "OPENSSL_ENGINES", "LD_PRELOAD", "LD_LIBRARY_PATH", "LD_AUDIT", "OPENSSL_ia32cap"]
+timeout_seconds = 900
+[checks.success]
+contains = ["AES packaged differential: PASS;", "Independent oracle SHA-256:", "Independent oracle: OpenSSL"]
+minimum_tests = 8
+exact_tests = 8
+unique_lines = ["AES differential executable identity: unchanged; shared libraries not measured","AES packaged differential: PASS; 1.90.0 facade; debug/release; all three widths; no upload","AES_PACKAGED_DIFFERENTIAL_PROFILE: 1.90.0 facade debug; 12288 cases; both owners; public encryption checked","AES_PACKAGED_DIFFERENTIAL_PROFILE: 1.90.0 facade release; 12288 cases; both owners; public encryption checked"]
+
+[[checks]]
+component = "aes"
+id = "packaged-diff-current-direct"
+category = "package-differential"
+name = "Packaged AES/OpenSSL comparison 1.99.1 direct"
+establishes = "Package-external portable AES-128/192/256 against one identity-recorded OpenSSL executable, preflighted with published vectors. Per profile: 4096 independent forward/inverse cases per width through both key owners, plus 2048 public encryptions per owner/width and cleanup assertions. Debug/release; isolated archive graphs. Trusted host and shared libraries; not oracle authenticity, timing, target qualification or certification."
+command = ["python3", "scripts/aes/check-aes-packaged-differential.py", "--toolchain", "1.99.1", "--route", "direct"]
+cwd = "."
+inputs = ["aes-packaged", "aes-packaged-differential", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "BRYNJA_OPENSSL", "OPENSSL_CONF", "OPENSSL_MODULES", "OPENSSL_ENGINES", "LD_PRELOAD", "LD_LIBRARY_PATH", "LD_AUDIT", "OPENSSL_ia32cap"]
+timeout_seconds = 900
+[checks.success]
+contains = ["AES packaged differential: PASS;", "Independent oracle SHA-256:", "Independent oracle: OpenSSL"]
+minimum_tests = 8
+exact_tests = 8
+unique_lines = ["AES differential executable identity: unchanged; shared libraries not measured","AES packaged differential: PASS; 1.99.1 direct; debug/release; all three widths; no upload","AES_PACKAGED_DIFFERENTIAL_PROFILE: 1.99.1 direct debug; 12288 cases; both owners; public encryption checked","AES_PACKAGED_DIFFERENTIAL_PROFILE: 1.99.1 direct release; 12288 cases; both owners; public encryption checked"]
+
+[[checks]]
+component = "aes"
+id = "packaged-diff-current-facade"
+category = "package-differential"
+name = "Packaged AES/OpenSSL comparison 1.99.1 facade"
+establishes = "Package-external portable AES-128/192/256 against one identity-recorded OpenSSL executable, preflighted with published vectors. Per profile: 4096 independent forward/inverse cases per width through both key owners, plus 2048 public encryptions per owner/width and cleanup assertions. Debug/release; isolated archive graphs. Trusted host and shared libraries; not oracle authenticity, timing, target qualification or certification."
+command = ["python3", "scripts/aes/check-aes-packaged-differential.py", "--toolchain", "1.99.1", "--route", "facade"]
+cwd = "."
+inputs = ["aes-packaged", "aes-packaged-differential", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "BRYNJA_OPENSSL", "OPENSSL_CONF", "OPENSSL_MODULES", "OPENSSL_ENGINES", "LD_PRELOAD", "LD_LIBRARY_PATH", "LD_AUDIT", "OPENSSL_ia32cap"]
+timeout_seconds = 900
+[checks.success]
+contains = ["AES packaged differential: PASS;", "Independent oracle SHA-256:", "Independent oracle: OpenSSL"]
+minimum_tests = 8
+exact_tests = 8
+unique_lines = ["AES differential executable identity: unchanged; shared libraries not measured","AES packaged differential: PASS; 1.99.1 facade; debug/release; all three widths; no upload","AES_PACKAGED_DIFFERENTIAL_PROFILE: 1.99.1 facade debug; 12288 cases; both owners; public encryption checked","AES_PACKAGED_DIFFERENTIAL_PROFILE: 1.99.1 facade release; 12288 cases; both owners; public encryption checked"]
+
 [groups.aes-consumer]
 paths = ["assurance/aes-public-api/Cargo.toml", "assurance/aes-public-api/Cargo.lock", "assurance/aes-public-api/src/lib.rs", "assurance/aes-public-api/tests/consumer.rs", "assurance/aes-public-api/tests/wide/mod.rs", "assurance/aes-public-api/src/wide.rs", "scripts/aes/check-aes-consumer.py", "scripts/aes/test-aes-consumer.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py", "crates/brynja", "crates/brynja-core", "crates/brynja-crypto", "crates/brynja-hash-core", "crates/brynja-hash-parallel", "crates/brynja-hash-sha2", "crates/brynja-hash-sha3", "crates/brynja-hash-tuple", "crates/brynja-mac-hmac", "crates/brynja-mac-kmac", "crates/brynja-pki", "crates/brynja-protocol", "crates/brynja-tls", "crates/brynja-tls12", "crates/brynja-tls13", "crates/brynja-tls13-handshake"]
 [[groups.aes-consumer.tools]]

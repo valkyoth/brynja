@@ -24,6 +24,30 @@ def assembly(instruction=''):
 
 
 class DataflowTests(unittest.TestCase):
+    def test_target_must_be_exact_and_unique(self):
+        for llvm, target in (
+                ('target triple = "aarch64-unknown-linux-gnu"', 'x86_64-unknown-linux-gnu'),
+                ('target triple = "x86_64-unknown-linux-gnu"', 'aarch64-unknown-linux-gnu'),
+                ('target triple = "aarch64-unknown-linux-gnu"\n' * 2, 'aarch64-unknown-linux-gnu'),
+                ('target triple = "other"', 'other')):
+            with self.subTest(target=target), self.assertRaisesRegex(ValueError, 'wrong target'):
+                flow.select(llvm, target)
+
+    def test_saturating_subtraction_only_models_public_wide_slice_lengths(self):
+        args = 'ptr %state, ptr %schedule, i64 %length, i64 %round'
+        call = '  %remaining = call i64 @llvm.usub.sat.i64(i64 %length, i64 %round)\n'
+        flow.check_body('wide_add_key', args, body(call), {})
+        for operand in ('%length', '%round'):
+            with self.subTest(operand=operand), self.assertRaisesRegex(ValueError, 'secret-dependent saturating length operands'):
+                flow.check_body('wide_add_key', args, body(
+                    '  %loaded = load i64, ptr %state, align 1\n' + call.replace(operand, '%loaded')), {})
+        with self.assertRaisesRegex(ValueError, 'unmodeled saturating subtraction'):
+            self.check('  %remaining = call i64 @llvm.usub.sat.i64(i64 16, i64 1)\n')
+        for changed in (call.replace('i64', 'i32'), call.replace(', i64 %round', ''),
+                        call.replace('i64 %round', 'i64 1')):
+            with self.subTest(changed=changed), self.assertRaises(ValueError):
+                flow.check_body('wide_add_key', args, body(changed), {})
+
     def check(self, instructions, callees=None):
         return flow.check_body('substitute', ARGS, body(instructions), callees or {})
 

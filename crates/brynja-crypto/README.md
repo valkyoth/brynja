@@ -74,7 +74,7 @@ is bundled. Software keys remain unchanged; provider keys use opaque bindings,
 not imported key bytes. Drop releases the adapter, not the device key; explicit
 destruction requires an owning adapter. Adapter/device qualification is separate.
 
-The internal v0.27.1 development slice provides raw software AES-128/192/256 blocks under
+The internal v0.27.2 acceptance candidate retains raw software AES-128/192/256 blocks under
 the **default-off** `hazmat-aes-block` feature. Enable that feature explicitly
 on either `brynja-crypto` or `brynja` when using the matching checkout. No HSM
 is required. This is not message encryption or an AEAD: no authentication,
@@ -104,6 +104,66 @@ repeated expansion, not the cost of the rounds themselves. All operations are
 bounded per block, but neither API supplies a request quota: applications must
 limit attacker-controlled block counts, request rates and concurrency. Raw AES
 blocks alone must not be used as a message-encryption protocol.
+
+### Raw AES ownership example (development API)
+
+Enable `hazmat-aes-block` explicitly. This example uses the public FIPS 197
+Appendix C inputs, **not production keys**. It exercises all three widths and
+both key-storage choices. For the facade import, replace `brynja_crypto::aes`
+with `brynja::crypto::aes` and enable the feature on `brynja`.
+Do not build message encryption by repeating these raw block operations.
+
+<!-- AES-PACKAGED-EXAMPLE-BEGIN -->
+```rust
+use brynja_crypto::aes::{
+    Aes128Key, Aes128ExpandedKey, Aes192Key, Aes192ExpandedKey,
+    Aes256Key, Aes256ExpandedKey,
+};
+
+fn main() {
+    let plain = [0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77,
+                 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff];
+    macro_rules! example {
+        ($owner:ident, $width:literal, $storage:literal, $expected:expr) => {{
+            let input_key: [u8; $width] = core::array::from_fn(|i| i as u8);
+            let mut storage = [0; $storage];
+            let mut ciphertext = [0; 16];
+            let mut recovered = [0; 16];
+            let key = $owner::new(&input_key, &mut storage).unwrap();
+            let encrypted = key.encrypt_block(&plain, &mut ciphertext).unwrap();
+            assert_eq!(encrypted.expose(), &$expected);
+            let block: &[u8; 16] = encrypted.expose().try_into().unwrap();
+            let decrypted = key.decrypt_block(block, &mut recovered).unwrap();
+            assert_eq!(decrypted.expose(), &plain);
+            // Outputs have independent lifetimes; consuming clear ends key use.
+            key.clear();
+            drop(decrypted);
+            drop(encrypted);
+            assert_eq!(storage, [0; $storage]);
+            assert_eq!(ciphertext, [0; 16]);
+            assert_eq!(recovered, [0; 16]);
+            // The original input_key is a caller-created copy, not owned by key.
+        }};
+    }
+    let aes128 = [0x69, 0xc4, 0xe0, 0xd8, 0x6a, 0x7b, 0x04, 0x30,
+                  0xd8, 0xcd, 0xb7, 0x80, 0x70, 0xb4, 0xc5, 0x5a];
+    let aes192 = [0xdd, 0xa9, 0x7c, 0xa4, 0x86, 0x4c, 0xdf, 0xe0,
+                  0x6e, 0xaf, 0x70, 0xa0, 0xec, 0x0d, 0x71, 0x91];
+    let aes256 = [0x8e, 0xa2, 0xb7, 0xca, 0x51, 0x67, 0x45, 0xbf,
+                  0xea, 0xfc, 0x49, 0x90, 0x4b, 0x49, 0x60, 0x89];
+    example!(Aes128Key, 16, 16, aes128);
+    example!(Aes128ExpandedKey, 16, 176, aes128);
+    example!(Aes192Key, 24, 24, aes192);
+    example!(Aes192ExpandedKey, 24, 208, aes192);
+    example!(Aes256Key, 32, 32, aes256);
+    example!(Aes256ExpandedKey, 32, 240, aes256);
+}
+```
+<!-- AES-PACKAGED-EXAMPLE-END -->
+
+The explicit `brynja-verify run aes packaged-portable` check compiles and runs
+this example from Cargo's archive through both public import routes. That is
+API/correctness evidence, not side-channel or physical-fault qualification.
 
 Use a release containing the hash/MAC APIs described here, not an older
 foundation-only package.

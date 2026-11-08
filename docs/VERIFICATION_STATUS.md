@@ -1,5 +1,21 @@
 # Component Verification Status
 
+## Portable AES-family acceptance (v0.27.2 candidate, in progress)
+
+The [acceptance record](assurance/aes-portable-acceptance.md) now covers
+archive-only consumers, AESAVS Monte Carlo/multiblock campaigns, packaged
+independent comparisons, bounded x86_64/AArch64 and final-linked code reviews,
+native AWS observations and predeclared fixed-versus-random timing screens.
+Production AES code is unchanged. The facade version is prepared as 0.27.2;
+candidate-scoped package/API/compiler checks and both hosts' fixed/random
+observations have been refreshed. Native artifacts match the candidate inputs
+and passed the existing bounded review policies. Earlier observations remain
+preserved under their original identities, not silently promoted to new passes.
+Owner pentest and the existing finite final gate remain pending. This does not
+promote physical side-channel/fault resistance, complete compiler-spill erasure
+or arbitrary downstream builds to qualified status. Older sections below retain
+their milestone-specific development scope; they are not the live v0.27.2 result.
+
 ## AES-192/256 development scope (v0.27.1 candidate)
 
 Distinct ephemeral and cached portable key owners are implemented behind the

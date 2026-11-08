@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "target": "aarch64-unknown-linux-gnu",
+  "profile": "opt3-fat-lto-cgu1-overflow",
+  "review": "docs/assurance/aes-aarch64-linked-review.md",
+  "bodies": {
+    "key128": {"instructions": 68, "branches": 4, "calls": 8, "constants": 0, "text_sha256": "95e5ba33edaf44aa7cc23003fad8389d8d6f0a04ebdd97856524de71a4e3f47b", "encoding_sha256": "8e9418032e8299d76b81dbd5854b719305d919c32869e1643800202cbc958863"},
+    "key128-current-unwind": {"instructions": 68, "branches": 4, "calls": 8, "constants": 0, "text_sha256": "4617f76f238bb09aaf7b84c5a1a0fec928c1f389e85683a36a675848a43b08d1", "encoding_sha256": "ea561fd3641a5398701e24ebb53c9e3e43192586ca7d92b3ac3167d2e61ee708"},
+    "cached128-msrv": {"instructions": 52, "branches": 5, "calls": 5, "constants": 0, "text_sha256": "12e0de5257e146651b0a4d9c87b37d1913a001b834f294865f4fd01aa5e14284", "encoding_sha256": "ca5a268e0110192d1ac425d23f6a1f2abb6f9b5c0cfb99c267b82bc851290fb5"},
+    "cached128-current": {"instructions": 52, "branches": 4, "calls": 5, "constants": 0, "text_sha256": "437110c3ab9064bbc7210d433bcd5190508f8d0469b84c44c12f90c8d3164a1c", "encoding_sha256": "be52eb18386e17465ca4befba2a36cbf4703f86c49c19e4429d04245e45b3664"},
+    "key192-abort": {"instructions": 58, "branches": 2, "calls": 5, "constants": 1, "text_sha256": "b204bdac3add2cb2f5bc64fa48f47efbeabb36ca75ed569dbfc98964109ac300", "encoding_sha256": "9c6e793df4d5448d4e5fd087dea1be7c912add436cc527de087b1063ae199d75"},
+    "key192-unwind": {"instructions": 58, "branches": 2, "calls": 5, "constants": 1, "text_sha256": "209c747346d223722e8902df49490d3a52633903a9addc8aba2bd4f2165db46a", "encoding_sha256": "324ff838d1bcf4456cbef052333801a0ba945e0cd54bc361b64f057e42e5fac5"},
+    "key256-abort": {"instructions": 59, "branches": 2, "calls": 5, "constants": 1, "text_sha256": "cfb347abf421762854aa043f5a9a3159dd2bc551e170a3b8bf293bfd3ebef16e", "encoding_sha256": "8c88ba0cc7bc53bd1511282bb2a21406dacf40d43cb0bb2d955030be30f11e0a"},
+    "key256-unwind": {"instructions": 59, "branches": 2, "calls": 5, "constants": 1, "text_sha256": "985f677213fb957daaa36af47ae51b9685b47bbe1e0784a473290dab777f7009", "encoding_sha256": "b2040c1ec7b4b7915b8366d040828258ead88034c3544a06da978220cd37744b"},
+    "secret192-msrv": {"instructions": 67, "branches": 8, "calls": 6, "constants": 0, "text_sha256": "c1dd8a009d322e86f5a0a5e1dee8558e27b4bb476cc9d7a07e84689d73dac5af", "encoding_sha256": "7c53ceb8402372767bfedb396ba54bba5abd709fa281d097d1a5119af211781c"},
+    "secret256-msrv": {"instructions": 67, "branches": 8, "calls": 6, "constants": 0, "text_sha256": "9a4226a5c96d5fb4a8a92a1537a8e41ef5d99feee51ab15b7e0b7751ba0c3752", "encoding_sha256": "7c53ceb8402372767bfedb396ba54bba5abd709fa281d097d1a5119af211781c"},
+    "secret192-current": {"instructions": 66, "branches": 8, "calls": 6, "constants": 0, "text_sha256": "a1dbcdd9fc78f132b134a808291a5ab51c296abe0bc35735deddec0d35ccc02e", "encoding_sha256": "8d21f450ccb99da23561146b53a7bdcd25c9d64cbae176240493e07330aa478b"},
+    "secret256-current": {"instructions": 66, "branches": 8, "calls": 6, "constants": 0, "text_sha256": "f8950d1fd3fd0727899cd6f6409370f98d1b0f999797f72670fc4f9f6af3c32c", "encoding_sha256": "8d21f450ccb99da23561146b53a7bdcd25c9d64cbae176240493e07330aa478b"},
+    "copy": {"instructions": 21, "branches": 4, "calls": 0, "constants": 0, "text_sha256": "a6317413c158ed680a11e50725200e4293d0aab7c03de3b1dd8191177c2be77e", "encoding_sha256": "a3cc162cd5727cb6f36dfb8cd0e3842007e0d81c9b0e5fd0a1b68e6974d1d460"}
+  },
+  "configurations": {
+    "1.90.0/abort": {"key128": "key128", "cached128": "cached128-msrv", "key192": "key192-abort", "key256": "key256-abort", "secret192": "secret192-msrv", "secret256": "secret256-msrv", "copy": "copy"},
+    "1.90.0/unwind": {"key128": "key128", "cached128": "cached128-msrv", "key192": "key192-unwind", "key256": "key256-unwind", "secret192": "secret192-msrv", "secret256": "secret256-msrv", "copy": "copy"},
+    "1.99.1/abort": {"key128": "key128", "cached128": "cached128-current", "key192": "key192-abort", "key256": "key256-abort", "secret192": "secret192-current", "secret256": "secret256-current", "copy": "copy"},
+    "1.99.1/unwind": {"key128": "key128-current-unwind", "cached128": "cached128-current", "key192": "key192-unwind", "key256": "key256-unwind", "secret192": "secret192-current", "secret256": "secret256-current", "copy": "copy"}
+  }
+}

@@ -1,0 +1,305 @@
+{
+  "schema": 1,
+  "kind": "operator-collected-native-observation",
+  "milestone": "0.27.2",
+  "candidate_base_commit": "d3d78b5f463d7157d8bf18bb691ef7597e82be89",
+  "candidate_state": "0.27.2 versioned uncommitted working-tree snapshot; archive digests bind actual transferred files",
+  "target": "aarch64-unknown-linux-gnu",
+  "host": {
+    "provider": "operator-supplied AWS; not independently attested",
+    "cpu": "ARM Neoverse-V2 r0p1",
+    "cores": 2,
+    "threads_per_core": 1,
+    "kernel": "7.0.0-1014-aws",
+    "glibc": "2.43",
+    "memory": "3.7 GiB",
+    "timing_cpu": 0,
+    "governor": "unavailable",
+    "boost": "unavailable"
+  },
+  "source_archives": [
+    {
+      "path": "target/aes-aws-candidate-source-20261108.tar.gz",
+      "sha256": "27f9da9aeea59dc649d60197e123072b709fefeeb785e816172fbdc2c7e83d32"
+    }
+  ],
+  "observation_archives": [
+    {
+      "path": "target/aes-aws-candidate-20261108/observations.tar.gz",
+      "sha256": "2b08d3dfef19697ae1878e2cc97ecaecd4a05cc4fae014deaecf8f2da779d3bb"
+    },
+    {
+      "path": "target/aes-aws-candidate-20261108/linked-artifacts.tar.gz",
+      "sha256": "86d9a5f145b6c0ee9d50e0cf748150c10df9d49f07a9e2369bdcbdffae45bea2"
+    }
+  ],
+  "timing": [
+    {
+      "compiler": "1.90.0",
+      "started": "2026-11-08T10:00:45Z",
+      "ended": "2026-11-08T10:01:34Z",
+      "exit_code": 0,
+      "log_sha256": "6e56bc3cb1fc146081bf44344634ed5e548d5ffb22e1792844b5a52616120e01",
+      "binary_sha256": "da4f6f1cd2e3879471a446135161342d4d32e1ef8879dbc4f8b42313f94a6d72",
+      "oracle_sha256": "923692545ed22fed73e05418c42ffac4772a40c84b055926ed595e902ea9a922",
+      "profile": "opt3-fat-lto-cgu1-overflow-abort",
+      "campaigns": 39,
+      "pairs_per_campaign": 8192,
+      "repetitions_per_class": 4,
+      "threshold": 4.5,
+      "alarms": 0,
+      "inconclusive": 0,
+      "max_abs_welch_t": 2.314931669664289,
+      "max_abs_paired_t": 2.2768460756838547,
+      "max_class_cv": 0.20332288332924836,
+      "measurement_attempt": 1
+    },
+    {
+      "compiler": "1.99.1",
+      "started": "2026-11-08T10:01:59Z",
+      "ended": "2026-11-08T10:02:48Z",
+      "exit_code": 0,
+      "log_sha256": "03a53c66e500d9c8385bff06450d943e0bd636a9243888aed3c4268e2dad2e8b",
+      "binary_sha256": "97217eb293081bcf1cced40e502bdb18987edd2c5639f469508b6e47ba7b1605",
+      "oracle_sha256": "923692545ed22fed73e05418c42ffac4772a40c84b055926ed595e902ea9a922",
+      "profile": "opt3-fat-lto-cgu1-overflow-abort",
+      "campaigns": 39,
+      "pairs_per_campaign": 8192,
+      "repetitions_per_class": 4,
+      "threshold": 4.5,
+      "alarms": 0,
+      "inconclusive": 0,
+      "max_abs_welch_t": 2.0597660014601082,
+      "max_abs_paired_t": 2.010815729467799,
+      "max_class_cv": 0.045043610072329356,
+      "measurement_attempt": 1
+    }
+  ],
+  "native": [
+    {
+      "compiler": "1.90.0",
+      "started": "2026-11-08T10:01:34Z",
+      "ended": "2026-11-08T10:01:59Z",
+      "exit_code": 0,
+      "log_sha256": "603d9580d4655404d6bccd6caa687f63b24db1421bfa3dfa9d8bf6caadde8553",
+      "configurations": 4,
+      "known_answer_operations": 72,
+      "normal_lifecycle_cases": 288,
+      "caller_unwinds": 96,
+      "artifacts": [
+        {
+          "artifact": "target/aes-arm-native-1.90.0-tpf8x1sy/direct-abort/linked.elf",
+          "sha256": "369448bd958f33234e35badb709fa7e9b7edae62d8b01439f809336f33a50dd0"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-tpf8x1sy/direct-abort/linked.nm",
+          "sha256": "c5a84f903bb2db345ed8b71b80e562ecdac935415205b31715dcfb3fc94ce398"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-tpf8x1sy/direct-abort/linked.asm",
+          "sha256": "6b27cf1bb6e54e2bf7c7df1ad359b21854c306e23d244df3dae997bc383905a9"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-tpf8x1sy/direct-abort/lifecycle.elf",
+          "sha256": "442aca06d1f3fda2b4474233f69b184691d92bf06d297c516b2d9dcc9dc6279b"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-tpf8x1sy/direct-abort/lifecycle.nm",
+          "sha256": "0598cb07c88a4842530ff0f344b063b8446affe388fc4201e3b87d3ee7708ee8"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-tpf8x1sy/direct-abort/lifecycle.asm",
+          "sha256": "6a27e9f8b789c2d5f5b7f10350653e4bcd2f0f40d9a0caf53b1f45b9f293fc55"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-tpf8x1sy/direct-unwind/linked.elf",
+          "sha256": "31754124f9ba7e95d11d4e8899388aecde87832c7eef3d4e09895d3785b87531"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-tpf8x1sy/direct-unwind/linked.nm",
+          "sha256": "d151e082e2f0cec560b3539d49949652335e0afaa51c6cf49de3def9e039e503"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-tpf8x1sy/direct-unwind/linked.asm",
+          "sha256": "7720c13a25d11e313d29e3e655b47eb82ae705056c3ba8820757fd691b338c6d"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-tpf8x1sy/direct-unwind/lifecycle.elf",
+          "sha256": "5fb6c172716fbf5180d499a2281b84f7b3a23bc406e52b89572b80b583ee8a19"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-tpf8x1sy/direct-unwind/lifecycle.nm",
+          "sha256": "7a0825eee8007373f3513eac53a78fda37c2c226cbd3643ba51071fd9f4b442e"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-tpf8x1sy/direct-unwind/lifecycle.asm",
+          "sha256": "108fe698e12e4e1f6e36e675dc083e77cb669f05103ed5434f3120ff9ed00737"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-tpf8x1sy/facade-abort/linked.elf",
+          "sha256": "c8037ac3743408f4aa313b86045a3830c70d3f9316cccd1baf7f8d2b60f7105c"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-tpf8x1sy/facade-abort/linked.nm",
+          "sha256": "6f7c3609ce93070effa777a4051377686c4cbca2df96923551753e53f43eba91"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-tpf8x1sy/facade-abort/linked.asm",
+          "sha256": "588961498238d818691d2ed8a699b104e4fd2ef78ef7282483e7d332305eef3a"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-tpf8x1sy/facade-abort/lifecycle.elf",
+          "sha256": "6fe8d0dc7e6897436c7cb6b4b87c40b6fc7ff88a2e2ba7d22ee8ba6e5a9e2471"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-tpf8x1sy/facade-abort/lifecycle.nm",
+          "sha256": "6b6c3e5c9ba30df020f9c34d32f7506469ca8e59e4a13f8aa61a2572fb8e055b"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-tpf8x1sy/facade-abort/lifecycle.asm",
+          "sha256": "f6f7eb28d2f0f75dfd86ca8aef65fb2cc5ccd5adc25d82d5cba238eeafe68467"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-tpf8x1sy/facade-unwind/linked.elf",
+          "sha256": "83f76c2db8d4789dcb3a8812d29bf93c9362ea55bfdcb91ffeebaeed42792447"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-tpf8x1sy/facade-unwind/linked.nm",
+          "sha256": "80d6983fcaf7c7042d62e5744fd8f2b0d5ac5753683f73f4005d201f5af5f0bc"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-tpf8x1sy/facade-unwind/linked.asm",
+          "sha256": "861b105dedb68abca4eea4f3a641f0af07ee07fdb397f3009f729d2f291c033d"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-tpf8x1sy/facade-unwind/lifecycle.elf",
+          "sha256": "05f5b4a52c85f8a7f791149315861c2c36af42029baeb0aac352ea153cb8a881"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-tpf8x1sy/facade-unwind/lifecycle.nm",
+          "sha256": "4a45e46e0d3e4f0a987f54f2276b0f8d0f6ad364a1c94009552cfe105cf9767c"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-tpf8x1sy/facade-unwind/lifecycle.asm",
+          "sha256": "54d21111a4f299ddbc1e6013a4a141908cb40793a477ec32ebdf6bc03b4f90ec"
+        }
+      ]
+    },
+    {
+      "compiler": "1.99.1",
+      "started": "2026-11-08T10:02:48Z",
+      "ended": "2026-11-08T10:03:10Z",
+      "exit_code": 0,
+      "log_sha256": "442f496bbb59d102ceef009a82b7942bfcced86040cd111a199163cda5ee984d",
+      "configurations": 4,
+      "known_answer_operations": 72,
+      "normal_lifecycle_cases": 288,
+      "caller_unwinds": 96,
+      "artifacts": [
+        {
+          "artifact": "target/aes-arm-native-1.99.1-itcrer7c/direct-abort/linked.elf",
+          "sha256": "ef5a1c1b28f251c212bf7c92224deba02a51143d3a03255d232230d57f85e3e8"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-itcrer7c/direct-abort/linked.nm",
+          "sha256": "9e409b04796757d863fb79e758f1d6908562716ae2fc776e97c8200a9b1ebab2"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-itcrer7c/direct-abort/linked.asm",
+          "sha256": "54770cfc0c2bff5dff15f5fe186b75e6e345e85d1b4dd1f6c2597a3dade6cd10"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-itcrer7c/direct-abort/lifecycle.elf",
+          "sha256": "6b713df54a768ae56f89f400698e89160babe8b5b9f02d741e010d384b6747ce"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-itcrer7c/direct-abort/lifecycle.nm",
+          "sha256": "471098dd9acd66655ca0b29dbdd79aa99bdaf175774807609fae948d9f075202"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-itcrer7c/direct-abort/lifecycle.asm",
+          "sha256": "efdb0344a4596ea8369c42a87866815817459ab3f11bfe1ed7954e6987e6030d"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-itcrer7c/direct-unwind/linked.elf",
+          "sha256": "96385b82d5fc186ef188ce2c438c3126fd34e1efe4f186493e3315bbd8752177"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-itcrer7c/direct-unwind/linked.nm",
+          "sha256": "a8027f33a0cbb3743b4e738f7698821bc984bc1b8d8c64598d907952395b1c12"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-itcrer7c/direct-unwind/linked.asm",
+          "sha256": "2800377b4bce9369e449b8f8193523204550d98308cbe9a56fb5b4e8c7a4cc84"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-itcrer7c/direct-unwind/lifecycle.elf",
+          "sha256": "c083397b146cc44a2fd00b915abe7e22cf1671d74e36d7af2c4ea619afd27577"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-itcrer7c/direct-unwind/lifecycle.nm",
+          "sha256": "1192e32156c9534eda503f8bf570385865bd86553d270f9c085aa071ef987013"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-itcrer7c/direct-unwind/lifecycle.asm",
+          "sha256": "2822324cdb83bdaafaf28b524291d021c62c7d003880f4c537e01376001daf5a"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-itcrer7c/facade-abort/linked.elf",
+          "sha256": "4bf0c24070427439eb5e8c602ebc11ee4a6611d9ed47c84aa60fe791beef7625"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-itcrer7c/facade-abort/linked.nm",
+          "sha256": "dfbdd3e68dc1d3f9c2149c7f3012193b569dec77a970325e0f94926392133144"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-itcrer7c/facade-abort/linked.asm",
+          "sha256": "d376907bf2d8f91055b0e586b6ee613d6c64986088ec169c0d182ce1e157c894"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-itcrer7c/facade-abort/lifecycle.elf",
+          "sha256": "9af55ae2240552cbeca732b8e54d9a47b80fea2500e81d09b144a221fc767096"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-itcrer7c/facade-abort/lifecycle.nm",
+          "sha256": "f3b489990dbc66e2ad73489d01e24f8411bb88c65a1a3ae2f9e18e40bcae52ce"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-itcrer7c/facade-abort/lifecycle.asm",
+          "sha256": "f9d4427d73bcbf69787c2be6de14906b73f48fa5df6e64a9c0f50a30284c95ab"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-itcrer7c/facade-unwind/linked.elf",
+          "sha256": "cd6f8055a3d8e655adb15cc7bc2c92e2cb6883fae68f246b228e4ed7c8450e95"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-itcrer7c/facade-unwind/linked.nm",
+          "sha256": "371f16d536fb4f7dcb48dec9ebcc07f62db9e1f2ecf064c5806e36ee2163f8d3"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-itcrer7c/facade-unwind/linked.asm",
+          "sha256": "6762221226f0233f177752e1a9b672fc8857fafb6e0072a10aa71c742c1a23c1"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-itcrer7c/facade-unwind/lifecycle.elf",
+          "sha256": "256f49f2e51167f7b8dcd66a91832cd17d2879f8c28decc91fcf81bfe8cd00db"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-itcrer7c/facade-unwind/lifecycle.nm",
+          "sha256": "e1ed00af8db634992a641edf8a79bf7f6ea002f8ebcfe6e5d7370fbf5dc6b65b"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-itcrer7c/facade-unwind/lifecycle.asm",
+          "sha256": "51d326b3045aeb26787963c1febddb737571e693c45cb07a899315e27ca6418d"
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "not an authenticated receipt or certification",
+    "not a brynja-verify execution receipt; remote scripts invoked directly",
+    "not final-linked machine-code qualification",
+    "not arbitrary-profile, power/EM, fault or complete spill/register-erasure evidence"
+  ],
+  "previous_observation": "assurance/aes-native-observations/v0.27.2/aws-aarch64-pre-version.json"
+}

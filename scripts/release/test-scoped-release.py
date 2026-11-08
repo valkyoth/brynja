@@ -58,7 +58,7 @@ class ScopedRelease(unittest.TestCase):
             scoped.enabled('garbage')
 
     def test_aes_candidate_gate_is_finite_and_does_not_publish(self):
-        plan = scoped.load('0.27.1')
+        plan = scoped.load('0.27.2')
         commands = {check['id']: check['command'] for check in plan['checks']}
         self.assertEqual(len(commands), 30)
         self.assertEqual(commands['release-plan'], ['scripts/release/test-release-plan.sh'])
@@ -116,7 +116,7 @@ class ScopedRelease(unittest.TestCase):
                                  or 'check-aes-kani.py' in arg
                                  or 'check-aes-dataflow.py' in arg for arg in command))
         release = tomllib.loads((scoped.ROOT / 'release-crates.toml').read_text())
-        self.assertEqual(release['release']['version'], '0.27.1')
+        self.assertEqual(release['release']['version'], '0.27.2')
         self.assertEqual(release['release']['stage'], 'internal')
         self.assertTrue(release['release']['exceptional'])
         self.assertIn('pentest', release['release']['exception_reason'])

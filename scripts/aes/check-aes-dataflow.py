@@ -41,8 +41,9 @@ def variables(expression):
     return set(re.findall(VAR, expression))
 
 
-def select(llvm):
-    require('target triple = "x86_64-unknown-linux-gnu"' in llvm, 'wrong target')
+def select(llvm, target='x86_64-unknown-linux-gnu'):
+    require(target in ('x86_64-unknown-linux-gnu', 'aarch64-unknown-linux-gnu')
+            and re.findall(r'^target triple = "([^"]+)"$', llvm, re.M) == [target], 'wrong target')
     definitions, aliases = graph.definitions_and_aliases(llvm)
     require(not any('13brynja_crypto3aes8portable' in name for name in aliases), 'portable aliases require review')
     result = {}
@@ -185,6 +186,16 @@ def check_body(role, arguments, body, callees):
                 require(target is not None, 'missing rotate result')
                 deps[target] = uses
                 sinks.append(('rotate count', variables(operands.rsplit(',', 1)[1])))
+            elif name == 'llvm.usub.sat.i64':
+                # AArch64 wide_add_key lowers its remaining public slice length
+                # to max(length - round_offset, 0). Admit only this exact scalar
+                # operation with public operands, never secret saturation.
+                require(role == 'wide_add_key' and target is not None
+                        and re.fullmatch(r'(?:tail )?call i64 @llvm\.usub\.sat\.i64\(i64 '
+                                         + VAR + r', i64 ' + VAR + r'\)(?: #\d+)?', expression),
+                        'unmodeled saturating subtraction')
+                deps[target] = uses
+                sinks.append(('saturating length operands', uses))
             elif (name in ('llvm.memcpy.p0.p0.i64', 'llvm.memmove.p0.p0.i64',
                            'llvm.lifetime.start.p0', 'llvm.lifetime.end.p0',
                            'llvm.experimental.noalias.scope.decl') or re.fullmatch(CLEAR, name)):
@@ -214,8 +225,8 @@ def check_body(role, arguments, body, callees):
     return edges
 
 
-def check_ir(llvm):
-    selected = select(llvm)
+def check_ir(llvm, target='x86_64-unknown-linux-gnu'):
+    selected = select(llvm, target)
     callees = {item[0]: role for role, item in selected.items()}
     edges = {role: check_body(role, args, body, callees) for role, (_, args, body) in selected.items()}
     require(edges == EDGES, 'portable call graph changed')

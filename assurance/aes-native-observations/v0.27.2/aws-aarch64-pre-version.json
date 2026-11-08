@@ -1,0 +1,316 @@
+{
+  "schema": 1,
+  "kind": "operator-collected-native-observation",
+  "milestone": "0.27.2",
+  "candidate_base_commit": "d3d78b5f463d7157d8bf18bb691ef7597e82be89",
+  "candidate_state": "uncommitted working-tree snapshot; archive digests bind actual transferred files",
+  "target": "aarch64-unknown-linux-gnu",
+  "host": {
+    "provider": "operator-supplied AWS; not independently attested",
+    "cpu": "ARM Neoverse-V2 r0p1",
+    "cores": 2,
+    "threads_per_core": 1,
+    "kernel": "7.0.0-1014-aws",
+    "glibc": "2.43",
+    "memory": "3.7 GiB",
+    "timing_cpu": 0,
+    "governor": "unavailable",
+    "boost": "unavailable"
+  },
+  "source_archives": [
+    {
+      "path": "target/aes-aws-source-20261108.tar.gz",
+      "sha256": "45ffb29ef674595ac98e7018c45cc5f322b230a24b3d3e7eafe7ba85881d4276"
+    },
+    {
+      "path": "target/aes-aws-native-addon-20261108.tar.gz",
+      "sha256": "16cebf32fec9dd8881ce25358a5be585c0c445580bedfb40a38733f281ebcc0f"
+    }
+  ],
+  "observation_archives": [
+    {
+      "path": "target/aes-aws-20261108/observations.tar.gz",
+      "sha256": "ec4039e5d109eedaedb2ee3cb25cf0f63cf664961732ddd66809961ec1ba770f"
+    },
+    {
+      "path": "target/aes-aws-20261108/linked-artifacts.tar.gz",
+      "sha256": "be5228714f650dbed125f6884ea014d655208bcedb885e262a2751b82e58dfd5"
+    }
+  ],
+  "timing": [
+    {
+      "compiler": "1.90.0",
+      "started": "2026-11-08T08:27:23Z",
+      "ended": "2026-11-08T08:28:12Z",
+      "exit_code": 0,
+      "log_sha256": "9cbeb6442fc65ffcde5ab2a140a730709bbe36d25cab58c23acc627d56d4c341",
+      "binary_sha256": "0b00836ebb0b28ef64a9bc6a88c69b93af009061beb1b4752795796c79dac22d",
+      "oracle_sha256": "923692545ed22fed73e05418c42ffac4772a40c84b055926ed595e902ea9a922",
+      "profile": "opt3-fat-lto-cgu1-overflow-abort",
+      "campaigns": 39,
+      "pairs_per_campaign": 8192,
+      "repetitions_per_class": 4,
+      "threshold": 4.5,
+      "alarms": 0,
+      "inconclusive": 0,
+      "max_abs_welch_t": 2.1946968123288557,
+      "max_abs_paired_t": 2.1554753128781865,
+      "max_class_cv": 0.3313997457879055,
+      "prior_attempt": {
+        "exit_code": 1,
+        "reason": "group-writable target directory rejected before any build or timing measurement",
+        "log_sha256": "c41c76788d29df4908d1914d8f297d95a3c42068976fcbd44b8a5ee882eff57b"
+      }
+    },
+    {
+      "compiler": "1.99.1",
+      "started": "2026-11-08T08:28:12Z",
+      "ended": "2026-11-08T08:29:00Z",
+      "exit_code": 0,
+      "log_sha256": "5585845e213e3336e9ccc1209db32cdbde7c98146f0e754a87657733f91aac73",
+      "binary_sha256": "cb3fee59bad81b4236385fc988da4feeac9efb1d3783ad85687e2ee15dc0be13",
+      "oracle_sha256": "923692545ed22fed73e05418c42ffac4772a40c84b055926ed595e902ea9a922",
+      "profile": "opt3-fat-lto-cgu1-overflow-abort",
+      "campaigns": 39,
+      "pairs_per_campaign": 8192,
+      "repetitions_per_class": 4,
+      "threshold": 4.5,
+      "alarms": 0,
+      "inconclusive": 0,
+      "max_abs_welch_t": 3.0472066285634494,
+      "max_abs_paired_t": 2.9791070048516843,
+      "max_class_cv": 0.06756288792474353,
+      "prior_attempt": {
+        "exit_code": 1,
+        "reason": "group-writable target directory rejected before any build or timing measurement",
+        "log_sha256": "c41c76788d29df4908d1914d8f297d95a3c42068976fcbd44b8a5ee882eff57b"
+      }
+    }
+  ],
+  "native": [
+    {
+      "compiler": "1.90.0",
+      "started": "2026-11-08T08:29:53Z",
+      "ended": "2026-11-08T08:30:19Z",
+      "exit_code": 0,
+      "log_sha256": "ef9cd9849bcf9bcf5fc7345e85f29db23775b77c3a1ac2626bec8f2152e15550",
+      "configurations": 4,
+      "known_answer_operations": 72,
+      "normal_lifecycle_cases": 288,
+      "caller_unwinds": 96,
+      "artifacts": [
+        {
+          "artifact": "target/aes-arm-native-1.90.0-_4_iwxf8/direct-abort/linked.elf",
+          "sha256": "f4da5954d76e74dcf6468e081d3a2ac2ae69d49af0dd234ce9fcf4967bb17bea"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-_4_iwxf8/direct-abort/linked.nm",
+          "sha256": "309e6067c7cb57ccb0d8c6aab77e107c8ef5ff9ccacf35fd83b95f3f436f060d"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-_4_iwxf8/direct-abort/linked.asm",
+          "sha256": "89f9c3597a9e8d8125d180c006b101bbff5925421fdae5eaeb5a8f42c6426587"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-_4_iwxf8/direct-abort/lifecycle.elf",
+          "sha256": "b0e00a0086707e465a1ddb904f45e412b260b719020577d9a8496f407529325e"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-_4_iwxf8/direct-abort/lifecycle.nm",
+          "sha256": "f4cf0777f0ac0fe5275a3c8988ba88bc38f662a308e4f66a82458e3fd393e3b2"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-_4_iwxf8/direct-abort/lifecycle.asm",
+          "sha256": "f9639ceed01de5f2f35e98dcb98c0b0896a038e021f7bea9bbfd106debef45ea"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-_4_iwxf8/direct-unwind/linked.elf",
+          "sha256": "144748274e7d681f682bc70c43577361e07e8e15bec573bedb0b62ef09b6ce57"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-_4_iwxf8/direct-unwind/linked.nm",
+          "sha256": "6af254b7a86b041d3dfa6fffe9c6702342e27d1214d3e6ea5a87d611367907ba"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-_4_iwxf8/direct-unwind/linked.asm",
+          "sha256": "08f6ec47266427f531a2c36ac64114a450d2a807b476e221b0e855e17cde0b5f"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-_4_iwxf8/direct-unwind/lifecycle.elf",
+          "sha256": "530921d3ea39b7acf38d38bf18151d2d4f7a45842ef8cede66f02c5ccf44dec2"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-_4_iwxf8/direct-unwind/lifecycle.nm",
+          "sha256": "2333bab240d1b30f02b6d4aa3bcda94488376eb496c0be59d388f40d7dcf386b"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-_4_iwxf8/direct-unwind/lifecycle.asm",
+          "sha256": "e107d2ce5f0e17fcecca7295217af9e3eae9fba82fa16efc1cd76933eb4ab935"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-_4_iwxf8/facade-abort/linked.elf",
+          "sha256": "64cf5b98e03c3a611a8e1a3d54540d58845292324d7f733a795ae2270b4a9a50"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-_4_iwxf8/facade-abort/linked.nm",
+          "sha256": "818d3ac34182318f7e91a1f8039fb82fdabc51bb08e50b2d2ad25fb564f3709b"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-_4_iwxf8/facade-abort/linked.asm",
+          "sha256": "d1bda6d9822e83d44b03910d93402e40f332fbdf672e93998d8a90220c2ecc0f"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-_4_iwxf8/facade-abort/lifecycle.elf",
+          "sha256": "83b8475d78c6c4cc32a1bb757adcb04c1076ce700d749a88b4e55d9437040ba0"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-_4_iwxf8/facade-abort/lifecycle.nm",
+          "sha256": "569cd1b6b0f5de9a82fbae279a181ee600642110016a55d3a7b512f13eb75f5e"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-_4_iwxf8/facade-abort/lifecycle.asm",
+          "sha256": "a86991322b4b8cf5e5373eb444ffabca6dee042dec536099c3551d3d2152b0dd"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-_4_iwxf8/facade-unwind/linked.elf",
+          "sha256": "1ce5ab9992ab189a1f8b2c431351afa60b8e2dd3bd03ccc967cd4f2941341506"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-_4_iwxf8/facade-unwind/linked.nm",
+          "sha256": "f89efad37737ee650a40b97f059b4eccc783d972b059d02f7b2ce1c37463a095"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-_4_iwxf8/facade-unwind/linked.asm",
+          "sha256": "63843132613a8ad1bdeebcd8a1f6aa73242d8de3d32cb63c7b7c6c6a4ed01cc7"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-_4_iwxf8/facade-unwind/lifecycle.elf",
+          "sha256": "50bf250de43338ccd462d411d6c2919d8161a60c12d938c10d30c6af62e83383"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-_4_iwxf8/facade-unwind/lifecycle.nm",
+          "sha256": "b90ca4b3ef9659b46781a22e95baccd5471e1a10baabe3d8b988dcde74b210f4"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.90.0-_4_iwxf8/facade-unwind/lifecycle.asm",
+          "sha256": "1abccf7a7f1de8269ae509652b3ea801134d9af09d0d53e302e33e60b85be612"
+        }
+      ]
+    },
+    {
+      "compiler": "1.99.1",
+      "started": "2026-11-08T08:30:19Z",
+      "ended": "2026-11-08T08:30:41Z",
+      "exit_code": 0,
+      "log_sha256": "362d6e731a2b55f3f955e0b44340d54f5593f79f4ec4750971f6c782ed01a57e",
+      "configurations": 4,
+      "known_answer_operations": 72,
+      "normal_lifecycle_cases": 288,
+      "caller_unwinds": 96,
+      "artifacts": [
+        {
+          "artifact": "target/aes-arm-native-1.99.1-wj_otyny/direct-abort/linked.elf",
+          "sha256": "253fa8de0ab942048034f545a559fdf52de1e469ae8c443e2914bed6e2e71fd3"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-wj_otyny/direct-abort/linked.nm",
+          "sha256": "ef31ba8ab4ced3a1077c3b55b288393ab2aee24386fa91ef16020ad023a5beff"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-wj_otyny/direct-abort/linked.asm",
+          "sha256": "96f161d2c5f8a9d7f5f7463d0b16139ff57d5da1827634a36bc1b119023c331b"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-wj_otyny/direct-abort/lifecycle.elf",
+          "sha256": "c50cb8ff412f8b4f98a9ffd4dc41f1d40e9a58a9c9fd5c9f751b94a7f5dcc4bd"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-wj_otyny/direct-abort/lifecycle.nm",
+          "sha256": "0c8be6ccffc8f7170e49cda3a34efffee2635fae1714c3880fc87735cbd4c29e"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-wj_otyny/direct-abort/lifecycle.asm",
+          "sha256": "e0fb231fc22bdb3c2cf2694d6dd96f9c09491722583fd94235cc18079d9e4287"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-wj_otyny/direct-unwind/linked.elf",
+          "sha256": "2a047a7bdb17fcf552bbd5b8cc50dbbc7f8fb4462c4cac8f0826853b0494dd2f"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-wj_otyny/direct-unwind/linked.nm",
+          "sha256": "9db1988e3ccd38b7a357e8abfe3fb691836ecf1f0816cbb09e37db77c26f41c8"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-wj_otyny/direct-unwind/linked.asm",
+          "sha256": "2829e6898b11f90103a044468da2eda3582a9e42181ae0ba4a344f488316f36f"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-wj_otyny/direct-unwind/lifecycle.elf",
+          "sha256": "e87191c384bdabf711c712bc827384e9a8205f96fe3d6834248b0f4d87f1f7e6"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-wj_otyny/direct-unwind/lifecycle.nm",
+          "sha256": "97282671768dfd507e7e001299291ee51fec43db0de7b906093224bdc0b58f3b"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-wj_otyny/direct-unwind/lifecycle.asm",
+          "sha256": "2cbb5204685b83f9666a426df7b1e0aef4e0afd374deb36ace859581c0b0acee"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-wj_otyny/facade-abort/linked.elf",
+          "sha256": "b6cc0720af031b6484848b6e74173b9f23b8d7611e3592302a454185d33307a8"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-wj_otyny/facade-abort/linked.nm",
+          "sha256": "aca8d266ccc760213bfff00a039470f66caf1b2d2e74c285d3a999d5b3d11ed8"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-wj_otyny/facade-abort/linked.asm",
+          "sha256": "8c83adf710d523e6790f526226f2827e67ced23ec8094a94659f9bb31cc4ddc1"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-wj_otyny/facade-abort/lifecycle.elf",
+          "sha256": "84a6db94ee03f3ec257003a762ab4945eed5703d68e45cefcdace212bc53d88e"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-wj_otyny/facade-abort/lifecycle.nm",
+          "sha256": "8965447442802c52314841264cc72e7001e4a5b2f0a6cd2b4847bc2a2693a8b1"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-wj_otyny/facade-abort/lifecycle.asm",
+          "sha256": "e7263d7d6a783adf4addb0d9ca5e5ce7a0fabcd0256c55783cfd3c28e3ebe953"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-wj_otyny/facade-unwind/linked.elf",
+          "sha256": "d0842733355f416bdc20342c147204adc9eb668dbc2342f0ff53670c084ce1d4"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-wj_otyny/facade-unwind/linked.nm",
+          "sha256": "4065116b9cec154791f33c4c178a98ffc4334bc3306da29e9ca99a1e55cd0bd4"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-wj_otyny/facade-unwind/linked.asm",
+          "sha256": "5f43f201ba92fbd30e96d87b48f36df78f9a32a578ffd7111f6626082020aacc"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-wj_otyny/facade-unwind/lifecycle.elf",
+          "sha256": "1fe68d1b27e08c649c07edf2daf96de54787d690ac41f710deae72f97dc58cef"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-wj_otyny/facade-unwind/lifecycle.nm",
+          "sha256": "281f35609f1c7a931bf6eec28b6aee20e3a495fb3b6b786450cc611814e447a5"
+        },
+        {
+          "artifact": "target/aes-arm-native-1.99.1-wj_otyny/facade-unwind/lifecycle.asm",
+          "sha256": "8bc1ee3c7e97ff9a161bd475fcdcc389236a4fcdd8502c58d7720662221acfe5"
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "not an authenticated receipt or certification",
+    "not a brynja-verify execution receipt; remote scripts invoked directly",
+    "not final-linked machine-code qualification",
+    "not arbitrary-profile, power/EM, fault or complete spill/register-erasure evidence"
+  ]
+}

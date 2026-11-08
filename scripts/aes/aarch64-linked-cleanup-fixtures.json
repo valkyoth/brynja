@@ -1,0 +1,236 @@
+{
+  "1.90.0/abort": {
+    "lines": [
+      "sub sp, sp, #64",
+      "stp x29, x30, [sp, #48]",
+      "add x29, sp, #48",
+      "add x8, sp, #8",
+      "stp x1, x2, [sp, #16]",
+      "add x10, sp, #24",
+      "str x0, [sp, #8]",
+      "sub x9, x29, #8",
+      "str x3, [sp, #32]",
+      "stur x8, [x29, #-8]",
+      "sub x8, x29, #8",
+      "stur x10, [x29, #-8]",
+      "stur x4, [x29, #-8]",
+      "ldur x8, [x29, #-8]",
+      "blr x8",
+      "ldr x0, [sp, #24]",
+      "cbz x0, 0xca90 <_ZN9lifecycle14cleanup_key12817h7d6e0cfd298251adE+0x4c>",
+      "ldr x1, [sp, #32]",
+      "bl 0x11aec <_ZN11brynja_core22secret_memory_volatile23zeroize_region_volatile17h25c73960b83d2a46E>",
+      "ldr x0, [sp, #8]",
+      "cbz x0, 0xcaa0 <_ZN9lifecycle14cleanup_key12817h7d6e0cfd298251adE+0x5c>",
+      "ldr x1, [sp, #16]",
+      "bl 0x11aec <_ZN11brynja_core22secret_memory_volatile23zeroize_region_volatile17h25c73960b83d2a46E>",
+      "mov w8, #16",
+      "stur x8, [x29, #-8]",
+      "sub x8, x29, #8",
+      "ldur x0, [x29, #-8]",
+      "ldp x29, x30, [sp, #48]",
+      "add sp, sp, #64",
+      "ret"
+    ],
+    "raw": "ff0301d1fd7b03a9fdc30091e8230091e10b01a9ea630091e00700f9a92300d1e31300f9a8831ff8a82300d1aa831ff8a4831ff8a8835ff800013fd6e00f40f9600000b4e11340f918140094e00740f9600000b4e10b40f91414009408028052a8831ff8a82300d1a0835ff8fd7b43a9ff030191c0035fd6",
+    "row": [
+      "_ZN9lifecycle14cleanup_key12817h7d6e0cfd298251adE",
+      51780,
+      120
+    ],
+    "targets": {
+      "zeroize": [
+        "_ZN11brynja_core22secret_memory_volatile23zeroize_region_volatile17h25c73960b83d2a46E",
+        72428,
+        20
+      ]
+    }
+  },
+  "1.90.0/unwind": {
+    "lines": [
+      "sub sp, sp, #64",
+      "stp x29, x30, [sp, #32]",
+      "str x19, [sp, #48]",
+      "add x29, sp, #32",
+      "mov x8, sp",
+      "stp x1, x2, [sp, #8]",
+      "add x10, sp, #16",
+      "str x0, [sp]",
+      "add x9, x29, #24",
+      "str x3, [sp, #24]",
+      "str x8, [x29, #24]",
+      "add x8, x29, #24",
+      "str x10, [x29, #24]",
+      "str x4, [x29, #24]",
+      "ldr x8, [x29, #24]",
+      "blr x8",
+      "ldr x0, [sp, #16]",
+      "cbz x0, 0xd548 <_ZN9lifecycle14cleanup_key12817h7ba2a70916a3b2dcE+0x50>",
+      "ldr x1, [sp, #24]",
+      "bl 0x18fd4 <_ZN11brynja_core22secret_memory_volatile23zeroize_region_volatile17hd79a11be00e66ddfE>",
+      "ldr x0, [sp]",
+      "cbz x0, 0xd558 <_ZN9lifecycle14cleanup_key12817h7ba2a70916a3b2dcE+0x60>",
+      "ldr x1, [sp, #8]",
+      "bl 0x18fd4 <_ZN11brynja_core22secret_memory_volatile23zeroize_region_volatile17hd79a11be00e66ddfE>",
+      "mov w8, #16",
+      "str x8, [x29, #24]",
+      "add x8, x29, #24",
+      "ldr x0, [x29, #24]",
+      "ldp x29, x30, [sp, #32]",
+      "ldr x19, [sp, #48]",
+      "add sp, sp, #64",
+      "ret",
+      "ldr x8, [sp, #16]",
+      "mov x19, x0",
+      "cbnz x8, 0xd594 <_ZN9lifecycle14cleanup_key12817h7ba2a70916a3b2dcE+0x9c>",
+      "ldr x0, [sp]",
+      "cbnz x0, 0xd5a8 <_ZN9lifecycle14cleanup_key12817h7ba2a70916a3b2dcE+0xb0>",
+      "mov x0, x19",
+      "bl 0x43e0 <_Unwind_Resume@plt>",
+      "ldr x1, [sp, #24]",
+      "mov x0, x8",
+      "bl 0x18fd4 <_ZN11brynja_core22secret_memory_volatile23zeroize_region_volatile17hd79a11be00e66ddfE>",
+      "ldr x0, [sp]",
+      "cbz x0, 0xd58c <_ZN9lifecycle14cleanup_key12817h7ba2a70916a3b2dcE+0x94>",
+      "ldr x1, [sp, #8]",
+      "bl 0x18fd4 <_ZN11brynja_core22secret_memory_volatile23zeroize_region_volatile17hd79a11be00e66ddfE>",
+      "mov x0, x19",
+      "bl 0x43e0 <_Unwind_Resume@plt>"
+    ],
+    "raw": "ff0301d1fd7b02a9f31b00f9fd830091e8030091e18b00a9ea430091e00300f9a9630091e30f00f9a80f00f9a8630091aa0f00f9a40f00f9a80f40f900013fd6e00b40f9600000b4e10f40f9a42e0094e00340f9600000b4e10740f9a02e009408028052a80f00f9a8630091a00f40f9fd7b42a9f31b40f9ff030191c0035fd6e80b40f9f30300aaa80000b5e00340f9000100b5e00313aa94dbff97e10f40f9e00308aa8e2e0094e00340f940ffffb4e10740f98a2e0094e00313aa8bdbff97",
+    "row": [
+      "_ZN9lifecycle14cleanup_key12817h7ba2a70916a3b2dcE",
+      54520,
+      192
+    ],
+    "targets": {
+      "resume": [
+        "_Unwind_Resume@plt",
+        17376,
+        16
+      ],
+      "zeroize": [
+        "_ZN11brynja_core22secret_memory_volatile23zeroize_region_volatile17hd79a11be00e66ddfE",
+        102356,
+        20
+      ]
+    }
+  },
+  "1.99.1/abort": {
+    "lines": [
+      "sub sp, sp, #64",
+      "stp x29, x30, [sp, #48]",
+      "add x29, sp, #48",
+      "mov x8, sp",
+      "stp x1, x2, [sp, #8]",
+      "add x10, sp, #16",
+      "str x0, [sp]",
+      "sub x9, x29, #8",
+      "str x3, [sp, #24]",
+      "stur x8, [x29, #-8]",
+      "sub x8, x29, #8",
+      "stur x10, [x29, #-8]",
+      "stur x4, [x29, #-8]",
+      "ldur x8, [x29, #-8]",
+      "blr x8",
+      "ldr x0, [sp, #16]",
+      "cbz x0, 0x8240 <_RNvCs3aZOHyMN9P_9lifecycle14cleanup_key128+0x4c>",
+      "ldr x1, [sp, #24]",
+      "bl 0x11234 <_RNvNtCsjkudw6p6SG2_11brynja_core22secret_memory_volatile23zeroize_region_volatile>",
+      "ldr x0, [sp]",
+      "cbz x0, 0x8250 <_RNvCs3aZOHyMN9P_9lifecycle14cleanup_key128+0x5c>",
+      "ldr x1, [sp, #8]",
+      "bl 0x11234 <_RNvNtCsjkudw6p6SG2_11brynja_core22secret_memory_volatile23zeroize_region_volatile>",
+      "mov w8, #16",
+      "stur x8, [x29, #-16]",
+      "sub x8, x29, #16",
+      "ldur x0, [x29, #-16]",
+      "ldp x29, x30, [sp, #48]",
+      "add sp, sp, #64",
+      "ret"
+    ],
+    "raw": "ff0301d1fd7b03a9fdc30091e8030091e18b00a9ea430091e00300f9a92300d1e30f00f9a8831ff8a82300d1aa831ff8a4831ff8a8835ff800013fd6e00b40f9600000b4e10f40f9fe230094e00340f9600000b4e10740f9fa23009408028052a8031ff8a84300d1a0035ff8fd7b43a9ff030191c0035fd6",
+    "row": [
+      "_RNvCs3aZOHyMN9P_9lifecycle14cleanup_key128",
+      33268,
+      120
+    ],
+    "targets": {
+      "zeroize": [
+        "_RNvNtCsjkudw6p6SG2_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+        70196,
+        24
+      ]
+    }
+  },
+  "1.99.1/unwind": {
+    "lines": [
+      "sub sp, sp, #80",
+      "stp x29, x30, [sp, #48]",
+      "str x19, [sp, #64]",
+      "add x29, sp, #48",
+      "add x8, sp, #8",
+      "stp x1, x2, [sp, #16]",
+      "add x10, sp, #24",
+      "str x0, [sp, #8]",
+      "add x9, x29, #24",
+      "str x3, [sp, #32]",
+      "str x8, [x29, #24]",
+      "add x8, x29, #24",
+      "str x10, [x29, #24]",
+      "str x4, [x29, #24]",
+      "ldr x8, [x29, #24]",
+      "blr x8",
+      "ldr x0, [sp, #24]",
+      "cbz x0, 0x8674 <_RNvCsXykFkdmqnE_9lifecycle14cleanup_key128+0x50>",
+      "ldr x1, [sp, #32]",
+      "bl 0x18c5c <_RNvNtCsbofNUOSKZ6c_11brynja_core22secret_memory_volatile23zeroize_region_volatile>",
+      "ldr x0, [sp, #8]",
+      "cbz x0, 0x8684 <_RNvCsXykFkdmqnE_9lifecycle14cleanup_key128+0x60>",
+      "ldr x1, [sp, #16]",
+      "bl 0x18c5c <_RNvNtCsbofNUOSKZ6c_11brynja_core22secret_memory_volatile23zeroize_region_volatile>",
+      "mov w8, #16",
+      "stur x8, [x29, #-8]",
+      "sub x8, x29, #8",
+      "ldur x0, [x29, #-8]",
+      "ldp x29, x30, [sp, #48]",
+      "ldr x19, [sp, #64]",
+      "add sp, sp, #80",
+      "ret",
+      "ldr x8, [sp, #24]",
+      "mov x19, x0",
+      "cbnz x8, 0x86c0 <_RNvCsXykFkdmqnE_9lifecycle14cleanup_key128+0x9c>",
+      "ldr x0, [sp, #8]",
+      "cbnz x0, 0x86d4 <_RNvCsXykFkdmqnE_9lifecycle14cleanup_key128+0xb0>",
+      "mov x0, x19",
+      "bl 0x35a0 <_Unwind_Resume@plt>",
+      "ldr x1, [sp, #32]",
+      "mov x0, x8",
+      "bl 0x18c5c <_RNvNtCsbofNUOSKZ6c_11brynja_core22secret_memory_volatile23zeroize_region_volatile>",
+      "ldr x0, [sp, #8]",
+      "cbz x0, 0x86b8 <_RNvCsXykFkdmqnE_9lifecycle14cleanup_key128+0x94>",
+      "ldr x1, [sp, #16]",
+      "bl 0x18c5c <_RNvNtCsbofNUOSKZ6c_11brynja_core22secret_memory_volatile23zeroize_region_volatile>",
+      "mov x0, x19",
+      "bl 0x35a0 <_Unwind_Resume@plt>"
+    ],
+    "raw": "ff4301d1fd7b03a9f32300f9fdc30091e8230091e10b01a9ea630091e00700f9a9630091e31300f9a80f00f9a8630091aa0f00f9a40f00f9a80f40f900013fd6e00f40f9600000b4e11340f97b410094e00740f9600000b4e10b40f97741009408028052a8831ff8a82300d1a0835ff8fd7b43a9f32340f9ff430191c0035fd6e80f40f9f30300aaa80000b5e00740f9000100b5e00313aab9ebff97e11340f9e00308aa65410094e00740f940ffffb4e10b40f961410094e00313aab0ebff97",
+    "row": [
+      "_RNvCsXykFkdmqnE_9lifecycle14cleanup_key128",
+      34340,
+      192
+    ],
+    "targets": {
+      "resume": [
+        "_Unwind_Resume@plt",
+        13728,
+        16
+      ],
+      "zeroize": [
+        "_RNvNtCsbofNUOSKZ6c_11brynja_core22secret_memory_volatile23zeroize_region_volatile",
+        101468,
+        24
+      ]
+    }
+  }
+}

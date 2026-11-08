@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "review": "docs/assurance/aes-aarch64-review.md",
+  "target": "aarch64-unknown-linux-gnu",
+  "panics": ["abort", "unwind"],
+  "compilers": {
+    "1.90.0": {
+      "abort": "bb2c31886d61dfbd1b8cd10726ca0555322796679053ce90b768b60663e90b68",
+      "unwind": "be21e627b3cd0abceb71846cadb91953f8e7129e04a527dee4077e3039e979fc"
+    },
+    "1.99.1": {
+      "abort": "f9d290950f92494eb4167f261a836ade0f8ebe75b5d4b96ab399e2d66a822c13",
+      "unwind": "f9d290950f92494eb4167f261a836ade0f8ebe75b5d4b96ab399e2d66a822c13"
+    }
+  }
+}

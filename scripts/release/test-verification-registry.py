@@ -58,6 +58,26 @@ aes_consumer_tests = importlib.util.module_from_spec(aes_consumer_spec)
 aes_consumer_spec.loader.exec_module(aes_consumer_tests)
 AesConsumerTests = aes_consumer_tests.ConsumerTests
 
+aes_packaged_spec = importlib.util.spec_from_file_location('aes_packaged_tests', ROOT / 'scripts/aes/test-aes-packaged.py')
+aes_packaged_tests = importlib.util.module_from_spec(aes_packaged_spec)
+aes_packaged_spec.loader.exec_module(aes_packaged_tests)
+AesPackagedTests = aes_packaged_tests.PackagedTests
+
+aes_avs_spec = importlib.util.spec_from_file_location('aes_avs_tests', ROOT / 'scripts/aes/test-aes-avs.py')
+aes_avs_tests = importlib.util.module_from_spec(aes_avs_spec)
+aes_avs_spec.loader.exec_module(aes_avs_tests)
+AesAvsTests = aes_avs_tests.AvsTests
+
+aes_packaged_diff_spec = importlib.util.spec_from_file_location('aes_packaged_diff_tests', ROOT / 'scripts/aes/test-aes-packaged-differential.py')
+aes_packaged_diff_tests = importlib.util.module_from_spec(aes_packaged_diff_spec)
+aes_packaged_diff_spec.loader.exec_module(aes_packaged_diff_tests)
+AesPackagedDifferentialTests = aes_packaged_diff_tests.PackagedDifferentialTests
+
+aes_fixed_random_spec = importlib.util.spec_from_file_location('aes_fixed_random_tests', ROOT / 'scripts/aes/test-aes-fixed-random.py')
+aes_fixed_random_tests = importlib.util.module_from_spec(aes_fixed_random_spec)
+aes_fixed_random_spec.loader.exec_module(aes_fixed_random_tests)
+AesFixedRandomTests = aes_fixed_random_tests.FixedRandomTests
+
 aes_timing_spec = importlib.util.spec_from_file_location('aes_timing_tests', ROOT / 'scripts/aes/test-aes-timing.py')
 aes_timing_tests = importlib.util.module_from_spec(aes_timing_spec)
 aes_timing_spec.loader.exec_module(aes_timing_tests)
@@ -74,6 +94,95 @@ aes_dataflow_spec = importlib.util.spec_from_file_location('aes_dataflow_tests',
 aes_dataflow_tests = importlib.util.module_from_spec(aes_dataflow_spec)
 aes_dataflow_spec.loader.exec_module(aes_dataflow_tests)
 AesDataflowTests = aes_dataflow_tests.DataflowTests
+aes_arm_spec = importlib.util.spec_from_file_location('aes_arm_tests', ROOT / 'scripts/aes/test-aes-aarch64-dataflow.py')
+aes_arm_tests = importlib.util.module_from_spec(aes_arm_spec)
+aes_arm_spec.loader.exec_module(aes_arm_tests)
+AesAarch64DataflowTests = aes_arm_tests.Aarch64DataflowTests
+aes_arm_helpers_spec = importlib.util.spec_from_file_location('aes_arm_helper_tests', ROOT / 'scripts/aes/test-aes-aarch64-helpers.py')
+aes_arm_helper_tests = importlib.util.module_from_spec(aes_arm_helpers_spec)
+aes_arm_helpers_spec.loader.exec_module(aes_arm_helper_tests)
+AesAarch64HelperTests = aes_arm_helper_tests.Aarch64HelperTests
+aes_arm_rounds_spec = importlib.util.spec_from_file_location('aes_arm_round_tests', ROOT / 'scripts/aes/test-aes-aarch64-rounds.py')
+aes_arm_round_tests = importlib.util.module_from_spec(aes_arm_rounds_spec)
+aes_arm_rounds_spec.loader.exec_module(aes_arm_round_tests)
+AesAarch64RoundTests = aes_arm_round_tests.Aarch64RoundTests
+aes_arm_wrappers_spec = importlib.util.spec_from_file_location('aes_arm_wrapper_tests', ROOT / 'scripts/aes/test-aes-aarch64-wrappers.py')
+aes_arm_wrapper_tests = importlib.util.module_from_spec(aes_arm_wrappers_spec)
+aes_arm_wrappers_spec.loader.exec_module(aes_arm_wrapper_tests)
+AesAarch64WrapperTests = aes_arm_wrapper_tests.Aarch64WrapperTests
+aes_arm_core_spec = importlib.util.spec_from_file_location('aes_arm_core_tests', ROOT / 'scripts/aes/test-aes-aarch64-core.py')
+aes_arm_core_tests = importlib.util.module_from_spec(aes_arm_core_spec)
+aes_arm_core_spec.loader.exec_module(aes_arm_core_tests)
+AesAarch64CoreTests = aes_arm_core_tests.Aarch64CoreTests
+aes_arm_public_spec = importlib.util.spec_from_file_location('aes_arm_public_tests', ROOT / 'scripts/aes/test-aes-aarch64-public.py')
+aes_arm_public_tests = importlib.util.module_from_spec(aes_arm_public_spec)
+aes_arm_public_spec.loader.exec_module(aes_arm_public_tests)
+AesAarch64PublicTests = aes_arm_public_tests.Aarch64PublicTests
+aes_arm_constructors_spec = importlib.util.spec_from_file_location('aes_arm_constructors_tests', ROOT / 'scripts/aes/test-aes-aarch64-constructors.py')
+aes_arm_constructors_tests = importlib.util.module_from_spec(aes_arm_constructors_spec)
+aes_arm_constructors_spec.loader.exec_module(aes_arm_constructors_tests)
+AesAarch64ConstructorTests = aes_arm_constructors_tests.Aarch64ConstructorTests
+aes_arm_callers_spec = importlib.util.spec_from_file_location('aes_arm_callers_tests', ROOT / 'scripts/aes/test-aes-aarch64-callers.py')
+aes_arm_callers_tests = importlib.util.module_from_spec(aes_arm_callers_spec)
+aes_arm_callers_spec.loader.exec_module(aes_arm_callers_tests)
+AesAarch64CallerTests = aes_arm_callers_tests.Aarch64CallerTests
+aes_arm_native_spec = importlib.util.spec_from_file_location('aes_arm_native_tests', ROOT / 'scripts/aes/test-aes-aarch64-native.py')
+aes_arm_native_tests = importlib.util.module_from_spec(aes_arm_native_spec)
+aes_arm_native_spec.loader.exec_module(aes_arm_native_tests)
+AesAarch64NativeTests = aes_arm_native_tests.Aarch64NativeTests
+aes_arm_linked_spec = importlib.util.spec_from_file_location('aes_arm_linked_tests', ROOT / 'scripts/aes/test-aes-aarch64-linked.py')
+aes_arm_linked_tests = importlib.util.module_from_spec(aes_arm_linked_spec)
+aes_arm_linked_spec.loader.exec_module(aes_arm_linked_tests)
+AesAarch64LinkedTests = aes_arm_linked_tests.Aarch64LinkedTests
+
+aes_arm_linked_wrappers_spec = importlib.util.spec_from_file_location('aes_arm_linked_wrapper_tests', ROOT / 'scripts/aes/test-aes-aarch64-linked-wrappers.py')
+aes_arm_linked_wrappers_tests = importlib.util.module_from_spec(aes_arm_linked_wrappers_spec)
+aes_arm_linked_wrappers_spec.loader.exec_module(aes_arm_linked_wrappers_tests)
+AesAarch64LinkedWrapperTests = aes_arm_linked_wrappers_tests.Aarch64LinkedWrapperTests
+aes_arm_linked_public_spec = importlib.util.spec_from_file_location('aes_arm_linked_public_tests', ROOT / 'scripts/aes/test-aes-aarch64-linked-public.py')
+aes_arm_linked_public_tests = importlib.util.module_from_spec(aes_arm_linked_public_spec)
+aes_arm_linked_public_spec.loader.exec_module(aes_arm_linked_public_tests)
+AesAarch64LinkedPublicTests = aes_arm_linked_public_tests.Aarch64LinkedPublicTests
+aes_arm_linked_cleanup_spec = importlib.util.spec_from_file_location('aes_arm_linked_cleanup_tests', ROOT / 'scripts/aes/test-aes-aarch64-linked-cleanup.py')
+aes_arm_linked_cleanup_tests = importlib.util.module_from_spec(aes_arm_linked_cleanup_spec)
+aes_arm_linked_cleanup_spec.loader.exec_module(aes_arm_linked_cleanup_tests)
+AesAarch64LinkedCleanupTests = aes_arm_linked_cleanup_tests.Aarch64LinkedCleanupTests
+aes_linked_spec = importlib.util.spec_from_file_location('aes_linked_tests', ROOT / 'scripts/aes/test-aes-linked.py')
+aes_linked_tests = importlib.util.module_from_spec(aes_linked_spec)
+aes_linked_spec.loader.exec_module(aes_linked_tests)
+AesLinkedTests = aes_linked_tests.LinkedTests
+aes_linked_helpers_spec = importlib.util.spec_from_file_location('aes_linked_helper_tests', ROOT / 'scripts/aes/test-aes-linked-helpers.py')
+aes_linked_helper_tests = importlib.util.module_from_spec(aes_linked_helpers_spec)
+aes_linked_helpers_spec.loader.exec_module(aes_linked_helper_tests)
+AesLinkedHelperTests = aes_linked_helper_tests.LinkedHelperTests
+aes_linked_mix_spec = importlib.util.spec_from_file_location('aes_linked_mix_tests', ROOT / 'scripts/aes/test-aes-linked-mix.py')
+aes_linked_mix_tests = importlib.util.module_from_spec(aes_linked_mix_spec)
+aes_linked_mix_spec.loader.exec_module(aes_linked_mix_tests)
+AesLinkedMixTests = aes_linked_mix_tests.LinkedMixTests
+aes_linked_sub_spec = importlib.util.spec_from_file_location('aes_linked_sub_tests', ROOT / 'scripts/aes/test-aes-linked-substitute.py')
+aes_linked_sub_tests = importlib.util.module_from_spec(aes_linked_sub_spec)
+aes_linked_sub_spec.loader.exec_module(aes_linked_sub_tests)
+AesLinkedSubstituteTests = aes_linked_sub_tests.LinkedSubstituteTests
+aes_linked_round_spec = importlib.util.spec_from_file_location('aes_linked_round_tests', ROOT / 'scripts/aes/test-aes-linked-rounds.py')
+aes_linked_round_tests = importlib.util.module_from_spec(aes_linked_round_spec)
+aes_linked_round_spec.loader.exec_module(aes_linked_round_tests)
+AesLinkedRoundsTests = aes_linked_round_tests.LinkedRoundsTests
+aes_lifecycle_spec = importlib.util.spec_from_file_location('aes_lifecycle_tests', ROOT / 'scripts/aes/test-aes-linked-lifecycle.py')
+aes_lifecycle_tests = importlib.util.module_from_spec(aes_lifecycle_spec)
+aes_lifecycle_spec.loader.exec_module(aes_lifecycle_tests)
+AesLinkedLifecycleTests = aes_lifecycle_tests.LinkedLifecycleTests
+aes_wrapper_spec = importlib.util.spec_from_file_location('aes_wrapper_tests', ROOT / 'scripts/aes/test-aes-linked-wrappers.py')
+aes_wrapper_tests = importlib.util.module_from_spec(aes_wrapper_spec)
+aes_wrapper_spec.loader.exec_module(aes_wrapper_tests)
+AesLinkedWrapperTests = aes_wrapper_tests.LinkedWrapperTests
+aes_public_spec = importlib.util.spec_from_file_location('aes_public_tests', ROOT / 'scripts/aes/test-aes-linked-public.py')
+aes_public_tests = importlib.util.module_from_spec(aes_public_spec)
+aes_public_spec.loader.exec_module(aes_public_tests)
+AesLinkedPublicTests = aes_public_tests.LinkedPublicTests
+aes_cleanup_spec = importlib.util.spec_from_file_location('aes_cleanup_tests', ROOT / 'scripts/aes/test-aes-linked-cleanup.py')
+aes_cleanup_tests = importlib.util.module_from_spec(aes_cleanup_spec)
+aes_cleanup_spec.loader.exec_module(aes_cleanup_tests)
+AesLinkedCleanupTests = aes_cleanup_tests.LinkedCleanupTests
 sys.path.insert(0, str(ROOT / 'scripts/cryptography'))
 aes_contract_spec = importlib.util.spec_from_file_location('aes_contract_tests', ROOT / 'scripts/cryptography/test-aes-owner-contract.py')
 aes_contract_tests = importlib.util.module_from_spec(aes_contract_spec)
@@ -174,7 +283,7 @@ class RegistryTests(unittest.TestCase):
                     'api-msrv': 0, 'api-current': 0, 'mutation-controls': 0,
                     'owner-dispatch': 0, 'operation-cleanup': 0, 'owner-contract': 0,
                     'downstream': 0, 'downstream-matrix': 0, 'timing-screen': 0,
-                    'dataflow-review': 0, 'provider-native': 16, 'provider-msrv': 16,
+                    'dataflow-review': 0, 'aarch64-dataflow-review': 0, 'aarch64-linked-helpers-review': 0, 'provider-native': 16, 'provider-msrv': 16,
                     'provider-asan': 16, 'provider-miri': 16, 'provider-api-current': 0,
                     'provider-api-msrv': 0, 'provider-no-std': 0, 'provider-docs': 1,
                     'wide-vectors': 8, 'wide-msrv-vectors': 8, 'wide-optimized-vectors': 8,
@@ -182,19 +291,48 @@ class RegistryTests(unittest.TestCase):
                     'wide-api-msrv': 0, 'wide-api-current': 0,
                     'wide-kat': 4, 'wide-msrv-kat': 4, 'wide-optimized-kat': 4,
                     'wide-asan-kat': 4, 'wide-differential': 2, 'wide-operation-cleanup': 0,
-                    'wide-timing-screen': 0}
+                    'wide-timing-screen': 0, 'packaged-portable': 0,
+                    'avs-msrv-direct': 12, 'avs-msrv-facade': 12,
+                    'avs-current-direct': 12, 'avs-current-facade': 12,
+                    'packaged-diff-msrv-direct': 8, 'packaged-diff-msrv-facade': 8,
+                    'packaged-diff-current-direct': 8, 'packaged-diff-current-facade': 8,
+                    'packaged-fixed-random-msrv': 4, 'packaged-fixed-random-current': 4,
+                    'packaged-fixed-random-arm-msrv': 4, 'packaged-fixed-random-arm-current': 4,
+                    'packaged-arm-native-msrv': 0, 'packaged-arm-native-current': 0,
+                    'packaged-linked-msrv': 0, 'packaged-linked-current': 0,
+                    'packaged-lifecycle-msrv': 0, 'packaged-lifecycle-current': 0}
+        for endpoint in ('msrv', 'current'):
+            for profile, count in (('minimal', 32), ('all', 97)):
+                expected[f'feature-{endpoint}-{profile}-test'] = count
+                expected[f'feature-{endpoint}-{profile}-doc'] = 0
         self.assertEqual(set(checks), set(expected))
         for name, count in expected.items():
             check = checks[name]
             for field in ('component', 'id', 'category'):
                 self.assertRegex(check[field], r'^[a-z0-9_-]+$')
-            self.assertIn('aes-build', check['inputs'])
+            self.assertIn('aes-packaged' if name.startswith(('packaged-', 'avs-')) else 'aes-build', check['inputs'])
             self.assertNotIn('--workspace', check['command'])
             if check['command'][0] == 'cargo':
                 command = check['command']
-                self.assertIn('--features', command)
-                features = 'hazmat-aes-block,external-key-provider' if name.startswith('provider-') else 'hazmat-aes-block'
-                self.assertEqual(command[command.index('--features') + 1], features)
+                if name.startswith('feature-'):
+                    _, endpoint, profile, action = name.split('-')
+                    version = '1.90.0' if endpoint == 'msrv' else '1.99.1'
+                    flag = '--no-default-features' if profile == 'minimal' else '--all-features'
+                    self.assertEqual(command, ['cargo', '+'+version, action, '--locked', '--offline',
+                                             '-p', 'brynja-crypto', '-p', 'brynja', flag]
+                                     + (['--no-deps'] if action == 'doc' else []))
+                    self.assertIn('aes-feature-integration', check['inputs'])
+                    self.assertEqual(self.registry['groups']['aes-feature-integration']['paths'],
+                                     ['Cargo.toml', 'Cargo.lock', 'crates'])
+                    self.assertIn('LD_LIBRARY_PATH', check['reject_environment'])
+                    if action == 'doc':
+                        self.assertEqual(check['success']['contains'], ['Generated'])
+                    self.assertEqual(check['success'].get('allow_ignored', False),
+                                     action == 'test' and profile == 'all')
+                else:
+                    self.assertIn('--features', command)
+                    features = 'hazmat-aes-block,external-key-provider' if name.startswith('provider-') else 'hazmat-aes-block'
+                    self.assertEqual(command[command.index('--features') + 1], features)
             if count:
                 self.assertEqual(check['success']['exact_tests'], count)
                 self.assertEqual(check['success']['minimum_tests'], count)

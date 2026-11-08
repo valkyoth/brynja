@@ -1,8 +1,8 @@
-# Finite AES-192/256 development-candidate gate. Verification campaigns stay separate.
+# Finite AES-family acceptance-candidate gate. Verification campaigns stay separate.
 # No crates.io publication is selected for this internal milestone.
 schema = 1
-version = "0.27.1"
-scope = "Portable AES-192/256 blocks and clearing owners, retained AES-128/provider contracts, bounded downstream consumers, modern/legacy HKDF compatibility, registry and candidate metadata. Scoped pentest/retest required before release authorization; no historical evidence-freshness gate or implicit dynamic/proof/timing/compiler-matrix campaign."
+version = "0.27.2"
+scope = "Portable AES-family acceptance tooling and bounded compiler/target observations, retained AES-128/192/256 and provider contracts, bounded downstream consumers, modern/legacy HKDF compatibility, registry and candidate metadata. Scoped pentest/retest required before release authorization; no historical evidence-freshness gate or implicit dynamic/proof/timing/compiler-matrix campaign."
 ci_checks = ["crypto-tests","crypto-lint","crypto-format","facade-integration","hkdf-owner-contract","aes-owner-contract","aes-wide-owner-contract","aes-wide-api","aes-dataflow-regressions","aes-provider-api","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
 
 [[checks]]

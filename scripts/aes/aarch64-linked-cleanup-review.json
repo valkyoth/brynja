@@ -1,0 +1,232 @@
+{
+  "configurations": {
+    "1.90.0/abort": {
+      "cached128": {
+        "branches": 2,
+        "calls": 2,
+        "constants": 0,
+        "encoding_sha256": "b2d565676109db8b715bf83aae75af0c619ae78e6be7b659f5d531e9f8ab9e9c",
+        "indirect_calls": 1,
+        "instructions": 30,
+        "text_sha256": "82333844e9f1edf6bc67408ee6dc70150b4d4cd11053f93153a2cda29cba0115"
+      },
+      "cached192": {
+        "branches": 2,
+        "calls": 2,
+        "constants": 0,
+        "encoding_sha256": "a92ce5530709423352cd1a5d67cfabc7cc08783800d4c8195034ae247d4c589e",
+        "indirect_calls": 1,
+        "instructions": 30,
+        "text_sha256": "395f1c5286d303bb2b4e4f407fb978e01a41b1f0c459681ee2df89da7113e4f4"
+      },
+      "cached256": {
+        "branches": 2,
+        "calls": 2,
+        "constants": 0,
+        "encoding_sha256": "dc19eb7465c79627e7bbc1e2e82553c8182f1e221db78e4d75c20965f0bf114f",
+        "indirect_calls": 1,
+        "instructions": 30,
+        "text_sha256": "c9ac7b8706c0f0c7d8860f5681faad0260bf06cdf1d2470bf3d64e0690c45dd4"
+      },
+      "key128": {
+        "branches": 2,
+        "calls": 2,
+        "constants": 0,
+        "encoding_sha256": "0a081e88fc53ed7a1a018ec6b58059a745fdc2b7c0bdee7bdecb1cf3b2dbdab1",
+        "indirect_calls": 1,
+        "instructions": 30,
+        "text_sha256": "c416bfad3a1376cbe7b610b4544f5ad75b67e943079e3a29da9a23d44836c363"
+      },
+      "key192": {
+        "branches": 2,
+        "calls": 2,
+        "constants": 0,
+        "encoding_sha256": "ab1aca77f07aef42d3cd715306c3d49ada85784c165e15df01ad84cc79e228f2",
+        "indirect_calls": 1,
+        "instructions": 30,
+        "text_sha256": "ce479d011095d228de262b436317da7c2d99d9d55bcdfd1eb15752a3d3edff1b"
+      },
+      "key256": {
+        "branches": 2,
+        "calls": 2,
+        "constants": 0,
+        "encoding_sha256": "8a14326b10139d4f748ae4a1887bad5958116f302cf558bd75eaa2b1b7706138",
+        "indirect_calls": 1,
+        "instructions": 30,
+        "text_sha256": "3cdaccb4e483060ce7301bacb635e70af6120e48ca092c4c81de3debeaa6e10b"
+      }
+    },
+    "1.90.0/unwind": {
+      "cached128": {
+        "branches": 5,
+        "calls": 6,
+        "constants": 0,
+        "encoding_sha256": "ab9f86b3d86d96508eebac226e59b10bb147ad2ce4448e47c90659e3fc7d5f3d",
+        "indirect_calls": 1,
+        "instructions": 48,
+        "text_sha256": "645cfb439bf5a1c65149ae4fcbdcb05771788a165fd4551fe1cb5fb777275e0b"
+      },
+      "cached192": {
+        "branches": 5,
+        "calls": 6,
+        "constants": 0,
+        "encoding_sha256": "a05e0dcf41eb5178a8dec9ef304ec763dc53c26fa95ea5545921c874efdfdc5c",
+        "indirect_calls": 1,
+        "instructions": 48,
+        "text_sha256": "4cab3b39f8377223bf3f9965f9498a9aaa12ec3a95b88516549ce02dd6917fce"
+      },
+      "cached256": {
+        "branches": 5,
+        "calls": 6,
+        "constants": 0,
+        "encoding_sha256": "98da19bb38a5e695f5b566bf7d09581daefd15838083ee4e91732ea1f4e37ab9",
+        "indirect_calls": 1,
+        "instructions": 48,
+        "text_sha256": "a7403f9cfc0f3a218d37bac9536ab3bef91c84a77b5e09003c05a7f8fc3495fc"
+      },
+      "key128": {
+        "branches": 5,
+        "calls": 6,
+        "constants": 0,
+        "encoding_sha256": "6b566e9cb22644583a1deffafdc56f02e8d6275c4f679bf7c3bb3751fa82bb5f",
+        "indirect_calls": 1,
+        "instructions": 48,
+        "text_sha256": "459bc46aa7f3c29e5596207d0f684c1c36276d7f4293e8712692d9afdf92f8f5"
+      },
+      "key192": {
+        "branches": 5,
+        "calls": 6,
+        "constants": 0,
+        "encoding_sha256": "ef4267014936b3a5c2a3e83a2a916867900f40f19f609cf6f690acbacb848c35",
+        "indirect_calls": 1,
+        "instructions": 48,
+        "text_sha256": "c78c2d912b8a665c905c479bd0af2ca890db87a2c0e89f639c84fbd8added217"
+      },
+      "key256": {
+        "branches": 5,
+        "calls": 6,
+        "constants": 0,
+        "encoding_sha256": "a97735ac4eb8609d67ce0b4486a1564c99491b291644e17ea2dbef094a35503c",
+        "indirect_calls": 1,
+        "instructions": 48,
+        "text_sha256": "746ee89daf4664be08d8c038776c542b935929873a5c01c12ef92c3ccd8c4be2"
+      }
+    },
+    "1.99.1/abort": {
+      "cached128": {
+        "branches": 2,
+        "calls": 2,
+        "constants": 0,
+        "encoding_sha256": "45b74bfab842a499fa6b9ad8e26fa9d94fa51dcad4b3297a02a69fdd83d6a3a3",
+        "indirect_calls": 1,
+        "instructions": 30,
+        "text_sha256": "a4b5f34da0aa0261ff2181db6fcaff5914b77fd1eeee1c7be802a766e579d448"
+      },
+      "cached192": {
+        "branches": 2,
+        "calls": 2,
+        "constants": 0,
+        "encoding_sha256": "975da870c75272a394365304e61000287de6fcbd296a6227a1affe2bf085f9d7",
+        "indirect_calls": 1,
+        "instructions": 30,
+        "text_sha256": "48afa55cdac235f6d8d57c8edee5bd1b44794e4ccd8dd7abae480dec945085a7"
+      },
+      "cached256": {
+        "branches": 2,
+        "calls": 2,
+        "constants": 0,
+        "encoding_sha256": "171dae104ccb0cf46c8ee41eb64651e472ba0409dbdf11e018b71c842b860e90",
+        "indirect_calls": 1,
+        "instructions": 30,
+        "text_sha256": "d41e72c86971556a672ca0f2f7fea783f0d16064dcd9e88bc1da73a3a093097c"
+      },
+      "key128": {
+        "branches": 2,
+        "calls": 2,
+        "constants": 0,
+        "encoding_sha256": "a4ba2579d9ae310ee6ae9105a6875ccf7bbc11238ce42c7fc59e76fe6353acd7",
+        "indirect_calls": 1,
+        "instructions": 30,
+        "text_sha256": "6cbfcf36735821b788b38a94a4400d8e276c1d9c8e62931546898e17c8714799"
+      },
+      "key192": {
+        "branches": 2,
+        "calls": 2,
+        "constants": 0,
+        "encoding_sha256": "b0ea2c8f22dcb775e53cdf5451eca687ca59608e838768654377df429ea6ae2b",
+        "indirect_calls": 1,
+        "instructions": 30,
+        "text_sha256": "b26bbe68755ce676aebd8b4f82280622c5bd4c63f6a4f984363c810b284f5040"
+      },
+      "key256": {
+        "branches": 2,
+        "calls": 2,
+        "constants": 0,
+        "encoding_sha256": "5ceb8ee6db75859481c2d3afba19a70c6d053e0d43fd5358efce75f0428d7e40",
+        "indirect_calls": 1,
+        "instructions": 30,
+        "text_sha256": "21acad9b3c7fbc021dba120f8514cec0eef209d0c7336b7443f6cba12c6aeeac"
+      }
+    },
+    "1.99.1/unwind": {
+      "cached128": {
+        "branches": 5,
+        "calls": 6,
+        "constants": 0,
+        "encoding_sha256": "78af3c8346658b38785450a441d62e4d6a07d731c6f81f1265cc5d932174cbd1",
+        "indirect_calls": 1,
+        "instructions": 48,
+        "text_sha256": "4b266a820f6c9a7a86e7da21fb90dc2d242d0ce5c5c3dfbb1d416f8f50a53786"
+      },
+      "cached192": {
+        "branches": 5,
+        "calls": 6,
+        "constants": 0,
+        "encoding_sha256": "37f2eb094d7b094caaed82c4b4ca90f6546998c0e137045b257a571dd19e339e",
+        "indirect_calls": 1,
+        "instructions": 48,
+        "text_sha256": "601402c3430a55db57261fa81b4dca29e20891edc8ed7499df36cae6b5f1dd14"
+      },
+      "cached256": {
+        "branches": 5,
+        "calls": 6,
+        "constants": 0,
+        "encoding_sha256": "945b077740c0d5d3de4bb169cb8551a655aa37933b9ed8fbcb4f94a06daec8ff",
+        "indirect_calls": 1,
+        "instructions": 48,
+        "text_sha256": "78766707ca51cb3e70b45ac4da26a8de6e579ad65262afd4e30b20190cca1d64"
+      },
+      "key128": {
+        "branches": 5,
+        "calls": 6,
+        "constants": 0,
+        "encoding_sha256": "207c5123b3d5a17051bd482e5a2bf1537204fccaa014890caf5e8fd570cbe242",
+        "indirect_calls": 1,
+        "instructions": 48,
+        "text_sha256": "ac7ee09737daff16e6a29029e9581b54e0d659e67083acc3b985301abcb60b3c"
+      },
+      "key192": {
+        "branches": 5,
+        "calls": 6,
+        "constants": 0,
+        "encoding_sha256": "daeacee1c233cf3091fdad32aa40818b1e3d574331aa69909179936d5266944b",
+        "indirect_calls": 1,
+        "instructions": 48,
+        "text_sha256": "6f53d9cae9326e05806af74f484e8b7f22e55f54b074fe02a104558ea2e797bf"
+      },
+      "key256": {
+        "branches": 5,
+        "calls": 6,
+        "constants": 0,
+        "encoding_sha256": "cee10f0eae43df243749558b6828dbb1409ab2d6ba18fb18700ca14365135776",
+        "indirect_calls": 1,
+        "instructions": 48,
+        "text_sha256": "02c3a4aa21bd0c25f826d6d00cdd89b6cccd4f52ed947f912007dcdd7d7c664d"
+      }
+    }
+  },
+  "profile": "opt3-fat-lto-cgu1-overflow",
+  "review": "docs/assurance/aes-aarch64-linked-review.md",
+  "schema": 1,
+  "target": "aarch64-unknown-linux-gnu"
+}

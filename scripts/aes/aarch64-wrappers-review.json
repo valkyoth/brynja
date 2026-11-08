@@ -1,0 +1,358 @@
+{
+  "1.90.0/abort": {
+    "key128": {
+      "instructions": 104,
+      "branches": 7,
+      "calls": {
+        "begin": 1,
+        "expand": 1,
+        "transform": 1,
+        "write": 1,
+        "finish": 1,
+        "clear": 4,
+        "guard_drop": 1
+      },
+      "metadata_labels": 0,
+      "sha256": "f162868a20f82530f7d9a335e4be1d54193215fe4dea6fd7c7d868fc9095175f"
+    },
+    "cached128": {
+      "instructions": 88,
+      "branches": 8,
+      "calls": {
+        "begin": 1,
+        "transform": 1,
+        "write": 1,
+        "finish": 1,
+        "clear": 2,
+        "guard_drop": 1
+      },
+      "metadata_labels": 0,
+      "sha256": "d9cad1f94e69c32c47fefceb9a9bb3d420c11d05ba6978a5961904a83428eb5a"
+    },
+    "key192": {
+      "instructions": 76,
+      "branches": 2,
+      "calls": {
+        "begin": 1,
+        "expand192": 1,
+        "secret192": 1,
+        "clear": 2,
+        "guard_drop": 1
+      },
+      "metadata_labels": 0,
+      "sha256": "8de1dfbc7c5713b0c783b0ed9440432b8517ef9fee7c8b18546187ee0c1188f9"
+    },
+    "key256": {
+      "instructions": 77,
+      "branches": 2,
+      "calls": {
+        "begin": 1,
+        "expand256": 1,
+        "secret256": 1,
+        "clear": 2,
+        "guard_drop": 1
+      },
+      "metadata_labels": 0,
+      "sha256": "19955556ec5b96f2041b7c72ebf8ff81b04f0d7be3997863cfac5da4c13b77bb"
+    },
+    "secret192": {
+      "instructions": 53,
+      "branches": 4,
+      "calls": {
+        "transform192": 1,
+        "write": 1,
+        "finish": 1,
+        "clear": 2,
+        "guard_drop": 1
+      },
+      "metadata_labels": 0,
+      "sha256": "2fabc6d5b39bc9b65b813c2f4a49bb5d029f27fc3cdc3f0a0cf0c4a819e014e6"
+    },
+    "secret256": {
+      "instructions": 53,
+      "branches": 4,
+      "calls": {
+        "transform256": 1,
+        "write": 1,
+        "finish": 1,
+        "clear": 2,
+        "guard_drop": 1
+      },
+      "metadata_labels": 0,
+      "sha256": "11481f0d9196de6c66280b2929cc36ceee3ec7f0edbac8425371d8dfb2f8d2e8"
+    }
+  },
+  "1.90.0/unwind": {
+    "key128": {
+      "instructions": 128,
+      "branches": 12,
+      "calls": {
+        "begin": 1,
+        "expand": 1,
+        "transform": 1,
+        "write": 1,
+        "finish": 1,
+        "clear": 6,
+        "guard_drop": 2,
+        "resume": 1,
+        "panic_cleanup": 1
+      },
+      "metadata_labels": 25,
+      "sha256": "c744f18a2043a04de3d33dbeaa81f1e00f47aa837d62cb569dcb730bb240f37f"
+    },
+    "cached128": {
+      "instructions": 104,
+      "branches": 12,
+      "calls": {
+        "begin": 1,
+        "transform": 1,
+        "write": 1,
+        "finish": 1,
+        "clear": 3,
+        "guard_drop": 2,
+        "resume": 1,
+        "panic_cleanup": 1
+      },
+      "metadata_labels": 16,
+      "sha256": "3d9a183a59da84b50e23c65f1ff4e47e882693016d75562d23ace853daf8dd5a"
+    },
+    "key192": {
+      "instructions": 90,
+      "branches": 4,
+      "calls": {
+        "begin": 1,
+        "expand192": 1,
+        "secret192": 1,
+        "clear": 3,
+        "guard_drop": 2,
+        "resume": 1,
+        "panic_cleanup": 1
+      },
+      "metadata_labels": 14,
+      "sha256": "af12adc0f071dd609e43b0bdbd9d78515f2215113eac30d8228026f22e7da365"
+    },
+    "key256": {
+      "instructions": 91,
+      "branches": 4,
+      "calls": {
+        "begin": 1,
+        "expand256": 1,
+        "secret256": 1,
+        "clear": 3,
+        "guard_drop": 2,
+        "resume": 1,
+        "panic_cleanup": 1
+      },
+      "metadata_labels": 14,
+      "sha256": "f95284ef47392965431c5018036905ff2f9bd00dd18ca1a0fb85311e0086d1bc"
+    },
+    "secret192": {
+      "instructions": 70,
+      "branches": 7,
+      "calls": {
+        "transform192": 1,
+        "write": 1,
+        "finish": 1,
+        "clear": 3,
+        "guard_drop": 2,
+        "resume": 1,
+        "panic_cleanup": 1
+      },
+      "metadata_labels": 16,
+      "sha256": "2e2affb378ca2f6bac8409d947d48cdc4bcdcd579ba84cfc04e8bd684e94d45d"
+    },
+    "secret256": {
+      "instructions": 70,
+      "branches": 7,
+      "calls": {
+        "transform256": 1,
+        "write": 1,
+        "finish": 1,
+        "clear": 3,
+        "guard_drop": 2,
+        "resume": 1,
+        "panic_cleanup": 1
+      },
+      "metadata_labels": 16,
+      "sha256": "9191e201d6bd4604643088d1f31c2e4f72b043070dfd4a3ffedcc9a841cc497b"
+    }
+  },
+  "1.99.1/abort": {
+    "key128": {
+      "instructions": 102,
+      "branches": 7,
+      "calls": {
+        "begin": 1,
+        "expand": 1,
+        "transform": 1,
+        "write": 1,
+        "finish": 1,
+        "clear": 4,
+        "guard_drop": 1
+      },
+      "metadata_labels": 0,
+      "sha256": "06c94e7ebd26330bf1ef5d9d4b263bae3be0c0408eb4a45739bb908d10d0d7b0"
+    },
+    "cached128": {
+      "instructions": 86,
+      "branches": 7,
+      "calls": {
+        "begin": 1,
+        "transform": 1,
+        "write": 1,
+        "finish": 1,
+        "clear": 2,
+        "guard_drop": 1
+      },
+      "metadata_labels": 0,
+      "sha256": "85bd722d9bc97f99d82efa414133bec7f72694dbe9f0ba0954a3b1bb5027eb74"
+    },
+    "key192": {
+      "instructions": 68,
+      "branches": 4,
+      "calls": {
+        "begin": 1,
+        "expand192": 1,
+        "secret192": 1,
+        "clear": 2,
+        "guard_drop": 1
+      },
+      "metadata_labels": 0,
+      "sha256": "4b6f3a75b944f128f92138cb46e360845ec6ae214aca0a6b6b5461d4152ab47c"
+    },
+    "key256": {
+      "instructions": 69,
+      "branches": 4,
+      "calls": {
+        "begin": 1,
+        "expand256": 1,
+        "secret256": 1,
+        "clear": 2,
+        "guard_drop": 1
+      },
+      "metadata_labels": 0,
+      "sha256": "11b970075ef26143562ef6b42e2d356fc7c28650d2279ff6e3621096cb059201"
+    },
+    "secret192": {
+      "instructions": 52,
+      "branches": 4,
+      "calls": {
+        "transform192": 1,
+        "write": 1,
+        "finish": 1,
+        "clear": 2,
+        "guard_drop": 1
+      },
+      "metadata_labels": 0,
+      "sha256": "99fea3504b9aad6f0e2ece22e8687396ea3b2b5e6c663e82e332196efbea02fe"
+    },
+    "secret256": {
+      "instructions": 52,
+      "branches": 4,
+      "calls": {
+        "transform256": 1,
+        "write": 1,
+        "finish": 1,
+        "clear": 2,
+        "guard_drop": 1
+      },
+      "metadata_labels": 0,
+      "sha256": "d556403fdf21956809ab2c7ed787c8cc0f2e345654e4ac15d41d93bd5fe25d25"
+    }
+  },
+  "1.99.1/unwind": {
+    "key128": {
+      "instructions": 127,
+      "branches": 12,
+      "calls": {
+        "begin": 1,
+        "expand": 1,
+        "transform": 1,
+        "write": 1,
+        "finish": 1,
+        "clear": 7,
+        "guard_drop": 2,
+        "resume": 1,
+        "panic_cleanup": 1
+      },
+      "metadata_labels": 28,
+      "sha256": "7cddf933f61ad79898cacaba3e04719e94b1b5f139b12bf805ceebba76e9b33d"
+    },
+    "cached128": {
+      "instructions": 100,
+      "branches": 9,
+      "calls": {
+        "begin": 1,
+        "transform": 1,
+        "write": 1,
+        "finish": 1,
+        "clear": 3,
+        "guard_drop": 2,
+        "resume": 1,
+        "panic_cleanup": 1
+      },
+      "metadata_labels": 16,
+      "sha256": "2c2b5a90705709202e923f701631497434e4d26c8366faa235b7633dfa781ac4"
+    },
+    "key192": {
+      "instructions": 82,
+      "branches": 6,
+      "calls": {
+        "begin": 1,
+        "expand192": 1,
+        "secret192": 1,
+        "clear": 3,
+        "guard_drop": 2,
+        "resume": 1,
+        "panic_cleanup": 1
+      },
+      "metadata_labels": 14,
+      "sha256": "ec76a53e269eea9072035cb38ec8bf24f603bc7ac867efd17620e4fcf3e9be9f"
+    },
+    "key256": {
+      "instructions": 83,
+      "branches": 6,
+      "calls": {
+        "begin": 1,
+        "expand256": 1,
+        "secret256": 1,
+        "clear": 3,
+        "guard_drop": 2,
+        "resume": 1,
+        "panic_cleanup": 1
+      },
+      "metadata_labels": 14,
+      "sha256": "9c77ac2a7cac921c044531be97df5f1fa78a3b8adb50f632fc0ae0033917f35e"
+    },
+    "secret192": {
+      "instructions": 69,
+      "branches": 6,
+      "calls": {
+        "transform192": 1,
+        "write": 1,
+        "finish": 1,
+        "clear": 3,
+        "guard_drop": 2,
+        "resume": 1,
+        "panic_cleanup": 1
+      },
+      "metadata_labels": 16,
+      "sha256": "d67048eee6b737676f1c8acb873cc12316594de260a3a52e888e52c4cc4478f4"
+    },
+    "secret256": {
+      "instructions": 69,
+      "branches": 6,
+      "calls": {
+        "transform256": 1,
+        "write": 1,
+        "finish": 1,
+        "clear": 3,
+        "guard_drop": 2,
+        "resume": 1,
+        "panic_cleanup": 1
+      },
+      "metadata_labels": 16,
+      "sha256": "6a3aeda48f48df83297c231121d7fd2f69e9f136be74d5c4faf57546774f0382"
+    }
+  }
+}

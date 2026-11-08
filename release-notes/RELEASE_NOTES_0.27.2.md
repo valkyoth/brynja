@@ -46,3 +46,13 @@ snapshots; the version change is not evidence of a new successful execution.
 Commit the prepared candidate for the owner's scoped pentest, address and test
 any accepted findings, then record the reviewed commit and run the existing
 final gate. No approval, tag or publication is authorized by these notes.
+
+## Scoped review follow-up
+
+Both owner-supplied reviews of `a4b3c892` report no Critical/High/Medium findings.
+The [item-by-item dispositions](../docs/assurance/aes-portable-pentest-remediation.md)
+retain accepted deployment/timing limitations and point to the already completed
+native ARM work. A tested optional offline ZIP-to-fixture provenance checker
+closes one small tooling gap without changing AES, timing policy or the release
+gate. That follow-up is separate from the original reviewed commit; release
+approval remains pending the owner's scoped disposition.

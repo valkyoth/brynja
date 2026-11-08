@@ -1,17 +1,27 @@
 #!/usr/bin/env python3
 """Offline negative controls for the AESAVS package campaign runner."""
+import contextlib
 import importlib.util
+import hashlib
+import io
 from pathlib import Path
 import shutil
+import stat
 import tempfile
 from types import SimpleNamespace
 import tomllib
 import unittest
+import warnings
+import zipfile
 from unittest.mock import patch
 
 spec = importlib.util.spec_from_file_location('aes_avs', Path(__file__).with_name('check-aes-avs.py'))
 avs = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(avs)
+
+spec = importlib.util.spec_from_file_location('avs_provenance', Path(__file__).with_name('check-aes-avs-provenance.py'))
+provenance = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(provenance)
 
 
 def success():
@@ -111,7 +121,108 @@ class AvsTests(unittest.TestCase):
                 self.assertEqual(set(check['success']['unique_lines']), set(avs.MARKERS) | {avs.marker(compiler, route)})
                 self.assertGreaterEqual(check['timeout_seconds'], 300)
         self.assertEqual(set(doc['groups']['aes-avs']['paths']), {
-            'assurance/aes-avs', 'scripts/aes/check-aes-avs.py', 'scripts/aes/test-aes-avs.py'})
+            'assurance/aes-avs', 'scripts/aes/check-aes-avs.py', 'scripts/aes/test-aes-avs.py',
+            'scripts/aes/check-aes-avs-provenance.py'})
+
+    def archive(self, kind='MCT', mutation=None):
+        stream = io.BytesIO()
+        names = [f'ECB{kind}{bits}.rsp' for bits in (128, 192, 256)]
+        with zipfile.ZipFile(stream, 'w') as archive, warnings.catch_warnings():
+            warnings.simplefilter('ignore', UserWarning)
+            for name in names:
+                if mutation == 'missing' and name == names[0]:
+                    continue
+                raw = (avs.FIXTURE / 'fixtures' / name).read_bytes()
+                if mutation == 'content' and name == names[0]:
+                    raw += b'CHANGED\n'
+                info = zipfile.ZipInfo(name)
+                info.external_attr = (stat.S_IFLNK | 0o777) << 16 if mutation == 'symlink' else (stat.S_IFREG | 0o600) << 16
+                archive.writestr(info, raw.replace(b'\n', b'\r\n') + b'\r\n\r\n')
+            if mutation == 'duplicate':
+                archive.writestr(names[0], b'duplicate')
+            if mutation == 'traversal':
+                archive.writestr('../outside', b'no extraction')
+        return stream.getvalue()
+
+    def check(self, data, kind='MCT'):
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / 'original.zip'
+            path.write_bytes(data)
+            # Synthetic archives test admission after the original-digest guard.
+            # The command line offers no hash override.
+            with patch.dict(provenance.ARCHIVES, {kind: hashlib.sha256(data).hexdigest()}):
+                return provenance.check_archive(path, kind)
+
+    def test_original_archive_pins_match_documented_downloads(self):
+        readme = (avs.FIXTURE / 'README.md').read_text()
+        self.assertEqual(set(provenance.ARCHIVES), {'MCT', 'MMT'})
+        for digest in provenance.ARCHIVES.values():
+            self.assertIn(digest, readme)
+
+    def test_normalization_reproduces_each_checked_in_fixture(self):
+        for kind in ('MCT', 'MMT'):
+            self.assertEqual(self.check(self.archive(kind), kind), 3)
+
+    def test_wrong_original_digest_fails_before_zip_parsing(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / 'wrong.zip'
+            path.write_bytes(self.archive())
+            with patch.object(provenance.zipfile, 'ZipFile') as opened, self.assertRaisesRegex(ValueError, 'ZIP hash mismatch'):
+                provenance.check_archive(path, 'MCT')
+            opened.assert_not_called()
+
+    def test_malformed_archives_and_response_changes_fail(self):
+        for mutation in ('missing', 'duplicate', 'traversal', 'symlink', 'content'):
+            with self.subTest(mutation=mutation), self.assertRaises(ValueError):
+                self.check(self.archive(mutation=mutation))
+        with self.assertRaises(zipfile.BadZipFile):
+            self.check(b'not a zip')
+
+    def test_size_limits_and_nonregular_inputs_fail(self):
+        with patch.object(provenance, 'MAX_ARCHIVE', 10), self.assertRaisesRegex(ValueError, 'size limit'):
+            self.check(self.archive())
+        with patch.object(provenance, 'MAX_MEMBER', 10), self.assertRaisesRegex(ValueError, 'oversized'):
+            self.check(self.archive())
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / 'original.zip'
+            source.write_bytes(self.archive())
+            link = root / 'link.zip'
+            link.symlink_to(source)
+            for path in (root / 'missing', root, link):
+                with self.assertRaisesRegex(ValueError, 'provenance input'):
+                    provenance.check_archive(path, 'MCT')
+
+    def test_checked_in_bytes_and_symlinks_cannot_be_substituted(self):
+        data = self.archive()
+        with tempfile.TemporaryDirectory() as temporary:
+            fixture = Path(temporary) / 'fixtures'
+            shutil.copytree(avs.FIXTURE / 'fixtures', fixture)
+            first = fixture / 'ECBMCT128.rsp'
+            first.write_bytes(b'changed')
+            with patch.object(provenance.avs, 'FIXTURE', fixture.parent), self.assertRaisesRegex(ValueError, 'differs from original'):
+                self.check(data)
+            first.unlink()
+            first.symlink_to(avs.FIXTURE / 'fixtures/ECBMCT128.rsp')
+            with patch.object(provenance.avs, 'FIXTURE', fixture.parent), self.assertRaisesRegex(ValueError, 'symlinked'):
+                self.check(data)
+
+    def test_cli_success_requires_both_archives_and_emits_one_marker(self):
+        stream = io.StringIO()
+        args = ['provenance', '--mct', 'mct.zip', '--mmt', 'mmt.zip']
+        with patch('sys.argv', args), patch.object(provenance, 'check_archive', return_value=3) as check, contextlib.redirect_stdout(stream):
+            provenance.main()
+        self.assertEqual(check.call_args_list[0].args, (Path('mct.zip'), 'MCT'))
+        self.assertEqual(check.call_args_list[1].args, (Path('mmt.zip'), 'MMT'))
+        self.assertEqual(stream.getvalue().splitlines(), [provenance.MARKER])
+
+    def test_cli_failed_second_archive_never_emits_success(self):
+        stream = io.StringIO()
+        args = ['provenance', '--mct', 'mct.zip', '--mmt', 'mmt.zip']
+        with patch('sys.argv', args), patch.object(provenance, 'check_archive', side_effect=[3, ValueError('bad MMT')]), contextlib.redirect_stdout(stream), contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
+            provenance.main()
+        self.assertEqual(error.exception.code, 2)
+        self.assertNotIn(provenance.MARKER, stream.getvalue())
 
 
 if __name__ == '__main__':

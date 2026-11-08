@@ -362,7 +362,7 @@ contains = ["AES packaged portable: PASS;"]
 unique_lines = ["AES packaged portable: PASS; 8 host configurations; 4 Cortex-M compile checks; 536 paired API probes; 4 README runs; 4 feature gates; no upload"]
 
 [groups.aes-avs]
-paths = ["assurance/aes-avs", "scripts/aes/check-aes-avs.py", "scripts/aes/test-aes-avs.py"]
+paths = ["assurance/aes-avs", "scripts/aes/check-aes-avs.py", "scripts/aes/test-aes-avs.py", "scripts/aes/check-aes-avs-provenance.py"]
 
 [[checks]]
 component = "aes"

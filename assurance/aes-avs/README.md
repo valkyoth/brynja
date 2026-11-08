@@ -31,6 +31,21 @@ checks are offline and verify these normalized SHA-256 values before compiling:
 
 ## Exact campaign semantics
 
+To independently re-derive the checked-in fixtures from locally retained
+original downloads, run this optional offline check:
+
+```sh
+python3 scripts/aes/check-aes-avs-provenance.py --mct /path/to/aesmct.zip --mmt /path/to/aesmmt.zip
+```
+
+It verifies both original ZIP hashes above, reads exactly the selected response
+members without extraction, applies the documented newline normalization and
+compares both normalized hashes and checked-in bytes. Missing, duplicate,
+symlinked, oversized or changed inputs fail. It downloads/writes nothing and is
+not an extra release gate or a requirement for ordinary AESAVS executions.
+The pins rely on the trusted repository; this is reproducibility, not a NIST
+signature or protection against an attacker who can replace the policy itself.
+
 [AESAVS sections 6.3 and 6.4.1](https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Algorithm-Validation-Program/documents/aes/AESAVS.pdf)
 define the selected MMT and ECB MCT sequences. The ECB inner loop is exactly
 1,000 operations per outer record (j = 0 through 999); the NIST download page's

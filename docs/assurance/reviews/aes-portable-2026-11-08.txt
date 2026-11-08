@@ -1,0 +1,177 @@
+CLAUDE:
+Security review: v0.27.1 → HEAD (a4b3c892)
+
+I found no Critical, High or Medium vulnerabilities. Nothing in this range is exploitable as far as I can tell.
+
+What changed in the range
+
+The range is one commit, a4b3c892, with 286 files (+27,990 / −4,023). No production Rust code changed. In crates/, only crates/brynja/Cargo.toml (version bump to 0.27.2) and crates/brynja-crypto/README.md (a new usage example) differ. Everything else is assurance tooling:
+- AVS harness: NIST ECB Monte Carlo (MCT) and multi-block (MMT) tests, assurance/aes-avs/avs.rs.
+- OpenSSL comparison: assurance/aes-differential/differential.rs.
+- Timing experiment: fixed-versus-random inputs, assurance/aes-fixed-random/timing.rs plus the Python statistics checker.
+- Lifecycle checks: assurance/aes-linked/.
+- Assembly checks: about 60 Python scripts that review AArch64 and linked x86 machine code.
+- Registries and docs: verification registry and documentation updates.
+
+You asked me to check the implementation itself, so I also reviewed the AES code that this release accepts (crates/brynja-crypto/src/aes*) and the memory-clearing code it relies on (brynja-core secret_memory*).
+
+Checking AES against FIPS 197
+
+┌──────────────────────────────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                Component                 │                                                                            Result                                                                            │
+├──────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ GF(2⁸) multiply / xtime                  │ Correct. Fixed 8 steps, mask-based, no branches.                                                                                                             │
+│ (portable/field.rs:3-14)                 │                                                                                                                                                              │
+├──────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Inversion, a²⁵⁴ (field.rs:16-30)         │ Correct: 2+4+…+128 = 254, and 0 maps to 0 with no special case.                                                                                              │
+├──────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ S-box / inverse S-box affine transforms  │ Correct (0x63 constant; inverse uses rotl 1,3,6 ⊕ 0x05). Unit tests cover all 256 values.                                                                    │
+│ (field.rs:31-37)                         │                                                                                                                                                              │
+├──────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ ShiftRows source index (layout.rs:22-31) │ Correct for column-major state, both directions.                                                                                                             │
+├──────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ MixColumns / InvMixColumns               │ Correct coefficients (2,3,1,1 / 14,11,13,9).                                                                                                                 │
+│ (portable.rs:77-93)                      │                                                                                                                                                              │
+├──────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ AES-128 key expansion                    │ Correct; Rcon sequence 01…36.                                                                                                                                │
+│ (portable.rs:18-50)                      │                                                                                                                                                              │
+├──────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ AES-192/256 key expansion                │ Correct. RotWord/SubWord/Rcon applies when offset % K == 0; AES-256 applies an extra SubWord when i mod 8 = 4. Only the (24,208,12) and (32,240,14)          │
+│ (portable/wide.rs:7-49)                  │ parameter sets compile, enforced at compile time.                                                                                                            │
+├──────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Decryption order                         │ Correct standard inverse cipher (not the equivalent inverse cipher), round counts 10/12/14.                                                                  │
+├──────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Memory safety                            │ #![forbid(unsafe_code)] in aes.rs. Every index goes through checked get/get_mut. The only unsafe is a per-byte write_volatile followed by a compiler_fence   │
+│                                          │ in brynja-core/src/secret_memory_volatile.rs:14, and it is sound.                                                                                            │
+├──────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Clearing on error and unwind             │ The output region is admitted, and therefore cleared on failure, before key expansion. All scratch buffers clear on Drop.                                    │
+├──────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Send/Sync                                │ PhantomData<*mut ()> makes every key owner neither Send nor Sync; doc tests confirm this fails to compile. There is no concurrency surface.                  │
+├──────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Dependencies                             │ Cargo.lock changed only for the brynja version bump. No new crates.                                                                                          │
+├──────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ AVS harness logic                        │ The MCT key update (128: last block; 192: last 8 bytes of the second-to-last block plus the last block; 256: both blocks) matches AESAVS §6.4.1. The harness │
+│                                          │  checks the full chain rather than restarting from each published key, which is the strict way to do it.                                                     │
+└──────────────────────────────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+I ran cargo test -p brynja-crypto --features hazmat-aes-block aes and all tests passed.
+
+Findings
+
+All are Low or Informational. Most are documented limitations that matter under a military or physical-access threat model.
+
+1. No fault-injection countermeasure in the block primitive
+
+- Severity: Low here, but Medium if the deployment includes physical or glitch attackers.
+- Location: crates/brynja-crypto/src/aes/portable.rs:95-123, portable/wide.rs:60-89, and the public encryption paths aes.rs:196-209 and aes/wide.rs:103-112.
+- Type: Missing defence against fault attacks.
+- Description: A single computation releases ciphertext. One induced fault in rounds 8–9 lets a fault analysis recover an AES-128 key from very few faulty ciphertexts. This is documented ("does not detect physical arithmetic faults"), but for a defence product it is the main gap left in an otherwise complete primitive. The encrypt_block_public path, which releases ciphertext externally, is where a check would help most.
+- Remediation (optional hardened path: decrypt again and compare in constant time before releasing):
+portable::transform(&mut state.0, &schedule.0, false)?;
+let mut check = Scratch::<16>::new();
+check.0.copy_from_slice(&state.0);
+portable::transform(&mut check.0, &schedule.0, true)?;
+if !brynja_core::constant_time::bytes_eq(&check.0, input) {   // existing CT helper
+    return Err(Error::SecretMemory);                           // output untouched
+}
+output.copy_from_slice(&state.0);
+  This roughly doubles the cost, so put it behind a feature flag or a separate *_verifie
+
+2. The public-ciphertext acknowledgement can be created anywhere
+
+- Severity: Informational.
+- Location: crates/brynja-crypto/src/aes.rs:63-68.
+- Type: API design (declassification is in name only).
+- Description: PublicCiphertext::acknowledge() is a pub const fn that any code can call, so the type documents intent but enforces nothing. That is acceptable as a speed bump. It should not be described in
+  assurance documents as an access-control boundary.
+- Remediation: Either document it as advisory only, or make it non-const and #[must_use]r, for example acknowledge_public_release(reason: &'static str), so call sites are easy
+  to grep.
+
+3. Clearing cannot reach register and scalar copies
+
+- Severity: Informational.
+- Location: portable.rs:80 (let (x, y, z, w) = …), the field arithmetic temporaries, and.
+- Type: Secret data may remain in memory.
+- Description: This is correctly documented. Spilled stack slots from multiply/inverse can hold intermediate state bytes after return. The AArch64 and x86 fingerprint checks only confirm the instruction
+  stream; they do not show that spill slots are empty.
+- Remediation: If you need stronger guarantees, add a stack-scrubbing call at the API boundary for high-assurance builds, sized from the maximum frame the assembly review already measures:
+#[inline(never)] fn scrub_stack() { let mut s = [0u8; 512]; clear_owned_region(&mut s).o); }
+
+4. The AArch64 constant-time evidence is compile-time only
+
+- Severity: Informational.
+- Location: scripts/aes/check-aes-aarch64-dataflow.py:116-118, assurance/aes-native-obse
+- Type: Limit of the side-channel assurance scope.
+- Description: The review checks --emit=asm from the --lib rlib. With fat LTO, final code generation happens at link time, so the reviewed instructions are not necessarily what ships. This is stated ("not
+  native or final-linked qualification"). The fixed-versus-random experiment is first-orithout SMT, boost or CPU isolation.
+- Remediation: Before you claim AArch64 side-channel qualification, run the linked-binary review that x86 already has and native timing on the target hardware.
+
+5. Timing-experiment noise threshold is loose
+
+- Severity: Low (affects the assurance tooling only).
+- Location: scripts/aes/check-aes-fixed-random.py:23 (MAX_CV = 1.0).
+- Type: Statistical method.
+- Description: A coefficient of variation up to 100% still counts as conclusive. Each saon, volatile clearing and Drop, so a small round-level effect can disappear in thatnoise. With t ≥ 4.5 and no multiple-comparison correction across 39 campaigns, a pass means "nothing detected", not "no leak".
+- Remediation: Tighten the threshold (for example MAX_CV = 0.25). Add a sensitivity control: one campaign with a deliberately inserted secret-dependent delay that the test must flag, so a pass is shown to
+  mean something.
+
+6. AVS fixtures are pinned to repository hashes, not checked against NIST originals
+
+- Severity: Low.
+- Location: scripts/aes/check-aes-avs.py:17-24, assurance/aes-avs/README.md.
+- Type: Supply-chain provenance.
+- Description: The checked hashes are of the CRLF→LF-normalized files. The NIST zip hashes appear only in the README, and no tool re-derives the normalized files from the zips. Practical risk is very low: forging a self-consistent 1000-step MCT chain would require a matching faulty AES, and catch it.
+- Remediation: Add an offline re-derivation script that, given the original aesmct.zip/azip hashes, normalizes the files and compares them with the pinned HASHES.
+
+CODEX DAYBREAK:
+# Security review: v0.27.1..HEAD
+
+Reviewed range: v0.27.1..a4b3c892
+
+## Findings
+
+No Critical, High, or Medium severity security findings were identified in this change set. Therefore, no remediation snippets are required.
+
+## Key conclusions
+
+- No production cryptographic implementation changed. The diff contains no changes under:
+  - crates/brynja-crypto/src
+  - crates/brynja-crypto-cpu/src
+  - crates/brynja-crypto-cpu-std/src
+- The only shipped-crate change is the brynja version from 0.27.1 to 0.27.2.
+- No dependency versions, sources, or features changed. The lockfile contains no external registry dependencies.
+- No new unsafe, raw pointer operation, unsafe impl Send/Sync, concurrency primitive, or FFI boundary was introduced.
+- Every newly added Rust assurance harness uses #![forbid(unsafe_code)].
+- The AESAVS Monte Carlo key-update logic, including the distinct AES-192 and AES-256 rules, is correctly implemented in avs.rs (assurance/aes-avs/avs.rs:69).
+- Packaged tests operate on unpacked Cargo archives and validate their dependency graph rather than silently testing checkout sources in check-aes-packaged.py (scripts/aes/check-aes-packaged.py:207).
+- The independent differential runner rejects loader and OpenSSL environment overrides and verifies the OpenSSL executable identity before and after testing in check-aes-differential.py (scripts/aes/check-aes-differential.py:16).
+
+## Verification performed
+
+- cargo clippy with AES block and external-provider features: passed with warnings denied.
+- Full brynja-crypto tests, provider tests, doctests, compile-fail API tests, KATs, failure-atomicity, cleanup, and unwind tests: passed.
+- 559 verification-registry tests: passed.
+- 42 scoped-release tests: passed.
+- cargo deny check advisories: passed.
+- cargo audit --no-fetch --stale: no vulnerabilities reported across 45 packages.
+- Packaged AESAVS release run:
+  - AES-128/192/256
+  - 600 Monte Carlo records
+  - 60 multiblock records
+  - 1,200,000 block operations
+  - ephemeral and cached owners
+  - passed.
+- Packaged OpenSSL 3.5.3 differential run:
+  - AES-128/192/256
+  - encryption and decryption
+  - ephemeral, cached, and public-output routes
+  - debug and release profiles
+  - 12,288 registered comparisons per profile
+  - passed.
+- git diff --check: passed.
+
+## Security boundaries that remain important
+
+This candidate is a complete implementation of its claimed AES single-block scope, not a complete secure encryption protocol. It does not provide an authenticated mode, nonce management, message framing, or a TLS key schedule. That limitation is accurately documented in RELEASE_NOTES_0.27.2.md (release-notes/RELEASE_NOTES_0.27.2.md:9).
+
+It also does not establish military deployment approval, physical side-channel resistance, fault-injection resistance, complete register/spill erasure, FIPS 140-3 validation, or independent cryptographic review. The repository explicitly preserves those limitations in VERIFICATION_STATUS.md (docs/VERIFICATION_STATUS.md:115).

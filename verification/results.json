@@ -2307,6 +2307,54 @@
         "after": "6ed19a6143e2b1dd3924370b361bde91311136de9ea5e2f76b3410112fbf3948",
         "log": "verification/.runner/logs/1082-1794132151066464734.log",
         "log_sha256": "9dc427d46fa6770ac6aa46d7064f761c90247beb30d88521e4eef9449d28868e"
+      },
+      {
+        "id": "3240-1794135247883291569",
+        "source": "working tree based on a4b3c8923aa5ec040192cb34cd7d12f84e218057; scoped fingerprint f6e04466abecdbe6e7bc86a6ea1e34adb5fe8685dd575246c5985ba102169ef3",
+        "started": "2026-11-08T10:54:07.883289615Z",
+        "ended": "2026-11-08T10:54:20.138730002Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-avs.py",
+          "--toolchain",
+          "1.99.1",
+          "--route",
+          "direct"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "8972acc6cabf35f808114e789a12104d29474474192893925cbf45728a4a703f",
+        "after": "8972acc6cabf35f808114e789a12104d29474474192893925cbf45728a4a703f",
+        "log": "verification/.runner/logs/3240-1794135247883291569.log",
+        "log_sha256": "3a4d60c504b8f9914ab885515a5c37a8b427720c72557d5b15e6ceddb3945f8d"
+      },
+      {
+        "id": "3240-1794135309881412572",
+        "source": "working tree based on a4b3c8923aa5ec040192cb34cd7d12f84e218057; scoped fingerprint fe0bc5517f66d8500f14c3ae2f403799f30509e9d20e152eb221ff0a867e066e",
+        "started": "2026-11-08T10:55:09.881410498Z",
+        "ended": "2026-11-08T10:55:22.183714613Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-avs.py",
+          "--toolchain",
+          "1.99.1",
+          "--route",
+          "direct"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "c779c731b3cf68273fcd8ad54ee6a67ab4b3cea85641fa0047a6ac5e79a454a9",
+        "after": "c779c731b3cf68273fcd8ad54ee6a67ab4b3cea85641fa0047a6ac5e79a454a9",
+        "log": "verification/.runner/logs/3240-1794135309881412572.log",
+        "log_sha256": "a1c4f8d354b32cb03619a0879886a786a45c43241f55ef4a660c908b5c4c6c83"
       }
     ],
     "aes/avs-current-facade": [
@@ -2381,6 +2429,54 @@
         "after": "a3846330c1ebd2665087e3ed70cd1d2b0c4408083bcbf2dd418d21485f5c1a93",
         "log": "verification/.runner/logs/1541-1794132163656911064.log",
         "log_sha256": "c604769a33ab909eeb9694b0bfe974139ae8596b4cc291678db00cf419d5bae4"
+      },
+      {
+        "id": "4778-1794135261376169731",
+        "source": "working tree based on a4b3c8923aa5ec040192cb34cd7d12f84e218057; scoped fingerprint 2bf9673a3dd6b72d195cc15d502280eea4e4b709a97111088289c6a0d43dd9a9",
+        "started": "2026-11-08T10:54:21.376167326Z",
+        "ended": "2026-11-08T10:54:33.531790636Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-avs.py",
+          "--toolchain",
+          "1.99.1",
+          "--route",
+          "facade"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "db08fe1cb3269511989d87b8f2c61df3a09faefd5eb93c862eb4cd4088399ffb",
+        "after": "db08fe1cb3269511989d87b8f2c61df3a09faefd5eb93c862eb4cd4088399ffb",
+        "log": "verification/.runner/logs/4778-1794135261376169731.log",
+        "log_sha256": "7ee5e3bd498cdc2389939b9d43f0a9aaa50e4f3a8196b0a0dd4ba9a2c0446d58"
+      },
+      {
+        "id": "4778-1794135323455349320",
+        "source": "working tree based on a4b3c8923aa5ec040192cb34cd7d12f84e218057; scoped fingerprint 6d5ac9f9971a29394f633fe525108c25062c4aca70129bbea204995f3f83cae7",
+        "started": "2026-11-08T10:55:23.455347116Z",
+        "ended": "2026-11-08T10:55:35.852532032Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-avs.py",
+          "--toolchain",
+          "1.99.1",
+          "--route",
+          "facade"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "a98339fa7644d5ecfc572fa17fa7d7fb2890716cc4931b5d54b3ddbfb2d0a63b",
+        "after": "a98339fa7644d5ecfc572fa17fa7d7fb2890716cc4931b5d54b3ddbfb2d0a63b",
+        "log": "verification/.runner/logs/4778-1794135323455349320.log",
+        "log_sha256": "f26f114aaf2e65c4a38bdd85d7a733a10ff66fee2b60df9c7705ddb59462b655"
       }
     ],
     "aes/avs-msrv-direct": [
@@ -2455,6 +2551,54 @@
         "after": "4ca0772869adf3b707be60fc72fd21195921919dc33fc38adae0660d1dc00e97",
         "log": "verification/.runner/logs/3-1794132126869609131.log",
         "log_sha256": "80e0913f8e4fc5b877cb796977dc85731223890d072b75b55a2aa5e04f43526d"
+      },
+      {
+        "id": "3-1794135221622952700",
+        "source": "working tree based on a4b3c8923aa5ec040192cb34cd7d12f84e218057; scoped fingerprint 5da21c73fd01ddb5026c2f9b3d6cf3be70e683114c66e7a119a357334485c729",
+        "started": "2026-11-08T10:53:41.622950495Z",
+        "ended": "2026-11-08T10:53:53.579921438Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-avs.py",
+          "--toolchain",
+          "1.90.0",
+          "--route",
+          "direct"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "cd0942ad5f0f09f4f5a9c9553cf61cfbf8b06271bc81d9ecc2a51850b4c568dc",
+        "after": "cd0942ad5f0f09f4f5a9c9553cf61cfbf8b06271bc81d9ecc2a51850b4c568dc",
+        "log": "verification/.runner/logs/3-1794135221622952700.log",
+        "log_sha256": "33c23c7db898cda7b818f68d48db76c3f9d15c3026084b9afa67b2530dee86f6"
+      },
+      {
+        "id": "3-1794135283665751280",
+        "source": "working tree based on a4b3c8923aa5ec040192cb34cd7d12f84e218057; scoped fingerprint f7dacf6ed9bd03d94bb98c383a3f11a6e7c49dab387b110a06f6e16b1ddc52be",
+        "started": "2026-11-08T10:54:43.665749377Z",
+        "ended": "2026-11-08T10:54:55.698260742Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-avs.py",
+          "--toolchain",
+          "1.90.0",
+          "--route",
+          "direct"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "236d44fe47c869706b91101476cc1137f8f9573b77af4856991eb3e6fd2efee3",
+        "after": "236d44fe47c869706b91101476cc1137f8f9573b77af4856991eb3e6fd2efee3",
+        "log": "verification/.runner/logs/3-1794135283665751280.log",
+        "log_sha256": "33c23c7db898cda7b818f68d48db76c3f9d15c3026084b9afa67b2530dee86f6"
       }
     ],
     "aes/avs-msrv-facade": [
@@ -2529,6 +2673,54 @@
         "after": "abb9f1266e8c7cf75ce56160c5a76f49046bc2145f41cd7a20d126bb529b0309",
         "log": "verification/.runner/logs/508-1794132139016848002.log",
         "log_sha256": "eb8a864ea1a19452faa339a396e5167c14734a1c53a8321d54d4191d75926642"
+      },
+      {
+        "id": "1587-1794135234836314492",
+        "source": "working tree based on a4b3c8923aa5ec040192cb34cd7d12f84e218057; scoped fingerprint 17e315a7a6aa600b76c82f8575b90de8a8c34a243785d9128e501b758cba2516",
+        "started": "2026-11-08T10:53:54.836310895Z",
+        "ended": "2026-11-08T10:54:06.670917116Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-avs.py",
+          "--toolchain",
+          "1.90.0",
+          "--route",
+          "facade"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "ee700611dc04734638f5bd9d7dc5231e13bcc0a94f679890e9f2174136f130fc",
+        "after": "ee700611dc04734638f5bd9d7dc5231e13bcc0a94f679890e9f2174136f130fc",
+        "log": "verification/.runner/logs/1587-1794135234836314492.log",
+        "log_sha256": "c12546ae12afd5e87e10fa20d13d52f6dcda92c374366080f65798a59504bd9f"
+      },
+      {
+        "id": "1587-1794135296951012436",
+        "source": "working tree based on a4b3c8923aa5ec040192cb34cd7d12f84e218057; scoped fingerprint c7272e0509b8bc6b2a62ac9f56708d8937298f9bb8f28a626afb3d3d221d85a2",
+        "started": "2026-11-08T10:54:56.951010503Z",
+        "ended": "2026-11-08T10:55:08.651657538Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-avs.py",
+          "--toolchain",
+          "1.90.0",
+          "--route",
+          "facade"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "6e085372b8406ead7d7e23679160777d5bd90f8af368d8ef06cb29cd54f5967f",
+        "after": "6e085372b8406ead7d7e23679160777d5bd90f8af368d8ef06cb29cd54f5967f",
+        "log": "verification/.runner/logs/1587-1794135296951012436.log",
+        "log_sha256": "66a46f833b89e77be076a3d6db1c8f26fc339db5f10e6814a8ae381cee81e1c9"
       }
     ],
     "aes/dataflow-review": [
@@ -21798,40 +21990,40 @@
       "last_success": "2026-11-08T09:47:04.952085345Z"
     },
     "aes/avs-current-direct": {
-      "checked_at": "2026-11-08T10:02:42.746406156Z",
-      "fingerprint": "ef17e6eb337f9c7ac6903cde66da7e027775f8d66afbdd5f2d43cf1f8c969ce9",
+      "checked_at": "2026-11-08T10:55:22.441835169Z",
+      "fingerprint": "fe0bc5517f66d8500f14c3ae2f403799f30509e9d20e152eb221ff0a867e066e",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on d3d78b5f463d7157d8bf18bb691ef7597e82be89; scoped fingerprint ef17e6eb337f9c7ac6903cde66da7e027775f8d66afbdd5f2d43cf1f8c969ce9",
-      "performed_at": "2026-11-08T10:02:42.507779041Z",
-      "last_success": "2026-11-08T10:02:42.507779041Z"
+      "source": "working tree based on a4b3c8923aa5ec040192cb34cd7d12f84e218057; scoped fingerprint fe0bc5517f66d8500f14c3ae2f403799f30509e9d20e152eb221ff0a867e066e",
+      "performed_at": "2026-11-08T10:55:22.183714613Z",
+      "last_success": "2026-11-08T10:55:22.183714613Z"
     },
     "aes/avs-current-facade": {
-      "checked_at": "2026-11-08T10:02:55.192663193Z",
-      "fingerprint": "e44b475b072e9bdd8537287c624ce4d88e67bf1a367de31c126757476da019cc",
+      "checked_at": "2026-11-08T10:55:36.099585505Z",
+      "fingerprint": "6d5ac9f9971a29394f633fe525108c25062c4aca70129bbea204995f3f83cae7",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on d3d78b5f463d7157d8bf18bb691ef7597e82be89; scoped fingerprint e44b475b072e9bdd8537287c624ce4d88e67bf1a367de31c126757476da019cc",
-      "performed_at": "2026-11-08T10:02:54.95689438Z",
-      "last_success": "2026-11-08T10:02:54.95689438Z"
+      "source": "working tree based on a4b3c8923aa5ec040192cb34cd7d12f84e218057; scoped fingerprint 6d5ac9f9971a29394f633fe525108c25062c4aca70129bbea204995f3f83cae7",
+      "performed_at": "2026-11-08T10:55:35.852532032Z",
+      "last_success": "2026-11-08T10:55:35.852532032Z"
     },
     "aes/avs-msrv-direct": {
-      "checked_at": "2026-11-08T10:02:18.080927547Z",
-      "fingerprint": "ac4783ffe906e90ea0673e67f8232a7aefacf79eb04c898340c701e17194e3c6",
+      "checked_at": "2026-11-08T10:54:55.953315364Z",
+      "fingerprint": "f7dacf6ed9bd03d94bb98c383a3f11a6e7c49dab387b110a06f6e16b1ddc52be",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on d3d78b5f463d7157d8bf18bb691ef7597e82be89; scoped fingerprint ac4783ffe906e90ea0673e67f8232a7aefacf79eb04c898340c701e17194e3c6",
-      "performed_at": "2026-11-08T10:02:17.848184143Z",
-      "last_success": "2026-11-08T10:02:17.848184143Z"
+      "source": "working tree based on a4b3c8923aa5ec040192cb34cd7d12f84e218057; scoped fingerprint f7dacf6ed9bd03d94bb98c383a3f11a6e7c49dab387b110a06f6e16b1ddc52be",
+      "performed_at": "2026-11-08T10:54:55.698260742Z",
+      "last_success": "2026-11-08T10:54:55.698260742Z"
     },
     "aes/avs-msrv-facade": {
-      "checked_at": "2026-11-08T10:02:30.138687947Z",
-      "fingerprint": "c520f63097c32953da46af3ce405f715fe4a19232b7840d68d4ea6a2004fed5d",
+      "checked_at": "2026-11-08T10:55:08.90273532Z",
+      "fingerprint": "c7272e0509b8bc6b2a62ac9f56708d8937298f9bb8f28a626afb3d3d221d85a2",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on d3d78b5f463d7157d8bf18bb691ef7597e82be89; scoped fingerprint c520f63097c32953da46af3ce405f715fe4a19232b7840d68d4ea6a2004fed5d",
-      "performed_at": "2026-11-08T10:02:29.904447072Z",
-      "last_success": "2026-11-08T10:02:29.904447072Z"
+      "source": "working tree based on a4b3c8923aa5ec040192cb34cd7d12f84e218057; scoped fingerprint c7272e0509b8bc6b2a62ac9f56708d8937298f9bb8f28a626afb3d3d221d85a2",
+      "performed_at": "2026-11-08T10:55:08.651657538Z",
+      "last_success": "2026-11-08T10:55:08.651657538Z"
     },
     "aes/dataflow-review": {
       "checked_at": "2026-11-08T09:48:03.243983764Z",

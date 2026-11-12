@@ -129,14 +129,16 @@ def target_roles(role):
     return ()
 
 
-def observe(lines, raw, row, image, targets, *, callback=False):
+def observe(lines, raw, row, image, targets, *, callback=False, tail_calls=()):
     symbol, start, size = row
     require(len(lines) * 4 == len(raw) == size and lines, 'instruction partition changed')
     loads = segments(image)
     pos = mapped(loads, start, size, 5)
     require(image[pos:pos + size] == raw, 'decoded bytes differ from executable')
     normalized, encoded = [], bytearray(raw)
-    pages, constants, calls, branches, indirect = {}, [], 0, 0, 0
+    require(isinstance(tail_calls, tuple) and len(set(tail_calls)) == len(tail_calls)
+            and all(role in targets for role in tail_calls), 'invalid tail-call policy')
+    pages, constants, calls, branches, indirect, tails = {}, [], 0, 0, 0, 0
     for i, line in enumerate(lines):
         pc = start + i * 4
         word = int.from_bytes(raw[i * 4:i * 4 + 4], 'little')
@@ -146,7 +148,7 @@ def observe(lines, raw, row, image, targets, *, callback=False):
             normalized.append(line)
             indirect += 1
             continue
-        branch = re.fullmatch(r'(bl|b|b\.(?:hs|ls|hi|lo|eq|ne)|cbn?z [wx](?:[0-9]|[12][0-9]|30)|tbn?z w(?:[0-9]|[12][0-9]|30), #0)(?:,)? 0x([0-9a-f]+) <([^>]+)>', line)
+        branch = re.fullmatch(r'(bl|b|b\.(?:hs|ls|hi|lo|eq|ne)|cbn?z [wx](?:[0-9]|[12][0-9]|30)|tbn?z w(?:[0-9]|[12][0-9]|30), #(?:0|24))(?:,)? 0x([0-9a-f]+) <([^>]+)>', line)
         if branch:
             require(not pages, 'control flow crosses pending constant page')
             op, destination, annotation = branch.groups()
@@ -167,20 +169,24 @@ def observe(lines, raw, row, image, targets, *, callback=False):
                 actual = pc + signed((word >> 5) & 0x7ffff, 19) * 4
                 mask = 0xff00001f
             else:
-                mnemonic, register, _ = op.replace(',', '').split()
-                expected = 0x36000000 | (0x1000000 if mnemonic == 'tbnz' else 0) | int(register[1:])
+                mnemonic, register, bit = op.replace(',', '').split()
+                expected = 0x36000000 | (0x1000000 if mnemonic == 'tbnz' else 0) | (int(bit[1:]) << 19) | int(register[1:])
                 require(word & 0xfff8001f == expected, 'test-branch encoding mismatch')
                 actual = pc + signed((word >> 5) & 0x3fff, 14) * 4
                 mask = 0xfff8001f
             require(actual == destination, 'branch decoded/encoded destination mismatch')
-            if op == 'bl':
+            external_tail = op == 'b' and not start <= destination < start + size
+            if op == 'bl' or external_tail:
                 matches = [role for role, (name, address, extent) in targets.items()
                            if name == annotation and address == destination and extent > 0]
                 require(len(matches) == 1, 'unreviewed call target')
+                require(not external_tail or matches[0] in tail_calls, 'unreviewed tail-call target')
                 target = targets[matches[0]]
                 require(target[1] + target[2] <= start or start + size <= target[1], 'overlapping call target')
                 mapped(loads, target[1], target[2], 5)
-                normalized.append('bl @' + matches[0]); calls += 1
+                normalized.append(op + ' @' + matches[0])
+                calls += not external_tail
+                tails += external_tail
             else:
                 relative = destination - start
                 require(0 <= relative < size and relative % 4 == 0
@@ -188,7 +194,7 @@ def observe(lines, raw, row, image, targets, *, callback=False):
                 normalized.append(f'{op} @+{relative // 4}'); branches += 1
             # Local offsets remain in the encoding policy. Only bound external
             # call displacements vary with final link layout.
-            if op == 'bl':
+            if op == 'bl' or external_tail:
                 encoded[i * 4:i * 4 + 4] = (word & mask).to_bytes(4, 'little')
             continue
         page = re.fullmatch(r'adrp x(\d+), 0x([0-9a-f]+) <[^>]+>', line)
@@ -234,6 +240,8 @@ def observe(lines, raw, row, image, targets, *, callback=False):
             'encoding_sha256': hashlib.sha256(encoded).hexdigest()}
     if callback:
         result['indirect_calls'] = indirect
+    if tail_calls:
+        result['tail_calls'] = tails
     return result, constants, normalized
 
 

@@ -1,6 +1,8 @@
 # Portable AES acceptance (v0.27.2)
 
-Status: in progress. This milestone adds acceptance evidence around the
+Status: completed at signed `v0.27.2` (`56a1b780`). Owner-approved scoped retest,
+the thirty finite final checks and exact-candidate GitHub CI/CodeQL passed.
+This milestone adds acceptance evidence around the
 existing AES-128/192/256 implementation; it does not add an accelerated backend,
 mode, protocol or mandatory hardware provider. v0.27.3 remains the planned
 x86_64/AArch64 acceleration milestone.

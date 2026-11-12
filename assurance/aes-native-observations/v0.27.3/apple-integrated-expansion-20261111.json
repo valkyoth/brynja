@@ -1,0 +1,1323 @@
+{
+  "kind": "unauthenticated-development-observation",
+  "date": "2026-11-11",
+  "scope": "Integrated backend-assisted expansion correctness refresh on Apple M2 Pro; not timing or final-linked qualification.",
+  "source": {
+    "base_commit": "56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e",
+    "working_tree": "uncommitted development changes",
+    "archive": "target/aes-accelerated-timing-source-20261110.tar.gz",
+    "archive_sha256": "7a90292b5bf4aa89bb133090a2f4175ec9f707d7c6f574f09882d674955fc6b8",
+    "fixture_overlay": "target/aes-mac-integrated-fixtures-20261111.tar.gz",
+    "fixture_overlay_sha256": "ab9d0f4db95a3f4be3b576f6ff30059f803edd3050dfc166b81f451e9b9af707",
+    "package_archive_sha256": {
+      "brynja": "1eac3382d1ef632b9f46670adf65cec1131bf40d6b317a5f605f74be4b53baab",
+      "brynja-core": "3ac8894a7a05e5ae25c164091998ca081933bb960769bc3238ec5972d1c61679",
+      "brynja-crypto": "8f90c00bf91f026fecc24af312b793b0865e914c796d329fa297abe8cdf5523a",
+      "brynja-crypto-cpu": "97a9bc44256395a983e11c185320904728d3ac4ae9138deebc0a907d15c87ad9",
+      "brynja-crypto-cpu-std": "137e62d9576b2ec32669528b2449877ed0efc77cf2a6f72348290ba192918261",
+      "brynja-dtls": "3894782c6e1a295a1aabe2560a959be3ae1476cf67fb9cd9a543fcb2a1c9f421",
+      "brynja-hash-core": "13b6fe81e8b96028ebe481d543193a1e5d34a78a7ac048b7ef0fa5c66d3dcbf2",
+      "brynja-hash-parallel": "ca4050cfdb521d4279c31283906d284862405e9c83212fbbedb97b7dfbf4e932",
+      "brynja-hash-sha2": "1c0fbdbab191c7e11fd1ed9d1f967c5dffa7932aa75579987f9211fb69a26fb8",
+      "brynja-hash-sha3": "5040888f602843134d1110a8021ac2d7a6ae9b782709a986dbb3a341425c08c7",
+      "brynja-hash-tuple": "85b186bf25fb9c65b2c2df31f626cd8f92455f2e3f774d987bba2b3d2e13ce03",
+      "brynja-mac-hmac": "8b8742a1177059b66e981b1ac1f94c563ae0394332e12a4406d023ea4dade196",
+      "brynja-mac-kmac": "15c0164e3bfc496355c22c95d3623c384c7a4114e282230f0741a62e6ee84df0",
+      "brynja-pki": "42936cff98f924f34831f8aa4cba616faf011fdd8a1826d57879a39084650f48",
+      "brynja-platform": "02fdab9954540d215e81000427628ca8e6018f3b3db843e5e34d0ed0b2d4f3bf",
+      "brynja-protocol": "79ba3a20529393efd8770690bd93626841224f9375e8cd5363178c757a0abfb3",
+      "brynja-quic-tls": "52ce4fb7f875a51d03f70088a0ca883f38a827a3b330a2d7b462d88c90ade04c",
+      "brynja-tls": "cb6e0aa7d5e815847108dd37e1b6e142b139fb03a9e95c4519130d73e55ce399",
+      "brynja-tls12": "0561887cf6d7f46dae18d6c50a85e2cf83108af957e503456ea52c4754a26698",
+      "brynja-tls13": "edd0f449e0a21c1b20d5d0e57ab9236596aee93b71e3a342404ef48940290ccc",
+      "brynja-tls13-handshake": "62e80577689a7b87a3839d7a5cfeee5a2bf39cbc4ddd6d77ce62f2cb8ee6a2cb"
+    }
+  },
+  "host": {
+    "cpu": "Apple M2 Pro",
+    "os": "macOS 27.2.1",
+    "build": "26B131",
+    "target": "aarch64-apple-darwin",
+    "oracle": "OpenSSL 4.1.0",
+    "oracle_executable": "/opt/homebrew/Cellar/openssl@4/4.1.0/bin/openssl",
+    "oracle_executable_sha256": "da101a01999a93ea6eddfe1392752bce2b5a91a41e4b00e1d9656fc682a1dc85"
+  },
+  "retained_bundle": {
+    "path": "target/aes-native-mac-integrated-20261111/observations.tar.gz",
+    "sha256": "dd1e2def12ee2fbb77d1f37d702e53e74f770470686f05a99a5380150765e716",
+    "remote_directory": "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ"
+  },
+  "campaigns": [
+    {
+      "configuration": {
+        "compiler": "1.90.0",
+        "route": "direct",
+        "admission": "hosted",
+        "suite": "avs"
+      },
+      "directory": "target/aes-accelerated-campaigns/1.90.0-direct-hosted-native-avs-4emymcex",
+      "execution": {
+        "kind": "unauthenticated-development-observation",
+        "toolchain": "rustc 1.90.0 (1159e78c4 2025-09-14)\nbinary: rustc\ncommit-hash: 1159e78c4747b02ef996e55082b704c09b970588\ncommit-date: 2025-09-14\nhost: aarch64-apple-darwin\nrelease: 1.90.0\nLLVM version: 20.1.8\n",
+        "host": "macOS-27.2.1-arm64-arm-64bit-Mach-O",
+        "machine": "arm64",
+        "mode": "native",
+        "admission": "hosted",
+        "route": "direct",
+        "suite": "avs",
+        "rustflags": "-Ctarget-feature=-aes",
+        "oracle_sha256": null,
+        "profiles": [
+          {
+            "profile": "release",
+            "build": [
+              "cargo",
+              "+1.90.0",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "direct,hosted",
+              "--test",
+              "avs",
+              "--release",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-campaigns/1.90.0-direct-hosted-native-avs-4emymcex/release-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "release-tests",
+            "sha256": "7684f8cad55acc417b31d1e251df6b3162dc15ebe54df2cb4342d1c30ecd613a"
+          }
+        ],
+        "scope": "Correctness only; no timing, emitted-code or physical qualification."
+      },
+      "log": "logs/1.90.0-direct-hosted-avs.log",
+      "log_sha256": "4b1c693cdd488c25f80e2e2e1b0ea18ba50d1ee86fe6397e6b83b33b4f566d8a",
+      "files_sha256": {
+        "execution.json": "e53a01a05c56b65472775c2f5a3dda10f6e6373f820c53a6ff18be33d742e1e4",
+        "metadata.json": "9079452baf1af07ade7564a47889ed61a9c354cf57a69223f76709f4cfea0263",
+        "release-build.jsonl": "d6cf6130fcca23ad86b19b50df15c528069065a240849836a88889384fb45236",
+        "release-build.stderr": "c9b9f059e58895e7316d7a37148f9dad71c8ac8fff5a20e2fd7630a1bbf18789",
+        "release-tests": "7684f8cad55acc417b31d1e251df6b3162dc15ebe54df2cb4342d1c30ecd613a",
+        "release.log": "819a707b47af000008fe788f43ef7db01213b1d6f75e72bc3b440eabaa6d39a5"
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.90.0",
+        "route": "direct",
+        "admission": "hosted",
+        "suite": "differential"
+      },
+      "directory": "target/aes-accelerated-campaigns/1.90.0-direct-hosted-native-differential-dqylrozh",
+      "execution": {
+        "kind": "unauthenticated-development-observation",
+        "toolchain": "rustc 1.90.0 (1159e78c4 2025-09-14)\nbinary: rustc\ncommit-hash: 1159e78c4747b02ef996e55082b704c09b970588\ncommit-date: 2025-09-14\nhost: aarch64-apple-darwin\nrelease: 1.90.0\nLLVM version: 20.1.8\n",
+        "host": "macOS-27.2.1-arm64-arm-64bit-Mach-O",
+        "machine": "arm64",
+        "mode": "native",
+        "admission": "hosted",
+        "route": "direct",
+        "suite": "differential",
+        "rustflags": "-Ctarget-feature=-aes",
+        "oracle_sha256": "da101a01999a93ea6eddfe1392752bce2b5a91a41e4b00e1d9656fc682a1dc85",
+        "profiles": [
+          {
+            "profile": "debug",
+            "build": [
+              "cargo",
+              "+1.90.0",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "direct,hosted",
+              "--test",
+              "differential",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-campaigns/1.90.0-direct-hosted-native-differential-dqylrozh/debug-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "debug-tests",
+            "sha256": "c7a0f5f78209e5b16c2bb6201a5097ed95456ce64fa41b0b73ebcb463f83d7a1"
+          },
+          {
+            "profile": "release",
+            "build": [
+              "cargo",
+              "+1.90.0",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "direct,hosted",
+              "--test",
+              "differential",
+              "--release",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-campaigns/1.90.0-direct-hosted-native-differential-dqylrozh/release-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "release-tests",
+            "sha256": "090455abc3371d82b00dc710e56bb38b3965752aa1c451a8c799b18af3563eed"
+          }
+        ],
+        "scope": "Correctness only; no timing, emitted-code or physical qualification."
+      },
+      "log": "logs/1.90.0-direct-hosted-differential.log",
+      "log_sha256": "f31d1e074146ac38ba820c49ee8df3f4342b757964c94621e3d5369ebb6679ba",
+      "files_sha256": {
+        "debug-build.jsonl": "3f7b8c38f93839fa69c36544b13f2c87e41b830864f68dbe877c56775cc9aaba",
+        "debug-build.stderr": "fa3ea059c8a8530479be14dd4cfd307ac2ed6b9e29c6f4b9afb30cd7c2d9173a",
+        "debug-tests": "c7a0f5f78209e5b16c2bb6201a5097ed95456ce64fa41b0b73ebcb463f83d7a1",
+        "debug.log": "1f896f2ab581e0f80cdc3655072ba7516ddbd4e1b231867168b7fd67fa064e39",
+        "execution.json": "8e0c15916a8e78ae44459b33626bc506e5f52526a798869cb7a4d2edaf825b54",
+        "metadata.json": "10730d53136f259ad4eec2fb4f203a03d1458f513e9abac898a56f17d6d68880",
+        "release-build.jsonl": "846fdd108a144c62870d9f70f3229eda5ba2debe18afad3ed302b04093bc704e",
+        "release-build.stderr": "dad61b5f1fd6e6378157a5da8b24bf71344e204b927f6d20fd6afb47eeda44b4",
+        "release-tests": "090455abc3371d82b00dc710e56bb38b3965752aa1c451a8c799b18af3563eed",
+        "release.log": "fc595d2e7fb8906fbd7cc131d819580a25b3f1f42effc9e00bcdccc6109f8208"
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.90.0",
+        "route": "direct",
+        "admission": "static",
+        "suite": "avs"
+      },
+      "directory": "target/aes-accelerated-campaigns/1.90.0-direct-static-native-avs-5stomuvs",
+      "execution": {
+        "kind": "unauthenticated-development-observation",
+        "toolchain": "rustc 1.90.0 (1159e78c4 2025-09-14)\nbinary: rustc\ncommit-hash: 1159e78c4747b02ef996e55082b704c09b970588\ncommit-date: 2025-09-14\nhost: aarch64-apple-darwin\nrelease: 1.90.0\nLLVM version: 20.1.8\n",
+        "host": "macOS-27.2.1-arm64-arm-64bit-Mach-O",
+        "machine": "arm64",
+        "mode": "native",
+        "admission": "static",
+        "route": "direct",
+        "suite": "avs",
+        "rustflags": "-Ctarget-feature=+aes,+neon",
+        "oracle_sha256": null,
+        "profiles": [
+          {
+            "profile": "release",
+            "build": [
+              "cargo",
+              "+1.90.0",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "direct",
+              "--test",
+              "avs",
+              "--release",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-campaigns/1.90.0-direct-static-native-avs-5stomuvs/release-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "release-tests",
+            "sha256": "1237bd8ab7ac24499f209cbc1fe6016415286e7d28f32a78ff81990c45cd5650"
+          }
+        ],
+        "scope": "Correctness only; no timing, emitted-code or physical qualification."
+      },
+      "log": "logs/1.90.0-direct-static-avs.log",
+      "log_sha256": "f271f86e809ec631cc323eb36aebeacdec3adec4b3612baf93316ca0ae37c521",
+      "files_sha256": {
+        "execution.json": "568f35255f9b7be8dfa22fd67afd4e2729bd1e7c8a9fafec0820580428eb5aac",
+        "metadata.json": "4a945ead807729c7fb370e306ee9c41bbfa9c013b89a51b8d939d10989d3e44f",
+        "release-build.jsonl": "b04162004d1e733f4b042eb1d4194481647c5d7f77b03cc06d89ad00e36fe30e",
+        "release-build.stderr": "b82aa4da26c9d07934bd5eed672498a891b006b98a112c1efd3a055325e53e02",
+        "release-tests": "1237bd8ab7ac24499f209cbc1fe6016415286e7d28f32a78ff81990c45cd5650",
+        "release.log": "748041c7bf51ae296e9c62173b1388d69b11f15a0600ad2d71118e36acc85147"
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.90.0",
+        "route": "direct",
+        "admission": "static",
+        "suite": "differential"
+      },
+      "directory": "target/aes-accelerated-campaigns/1.90.0-direct-static-native-differential-vecuoe_w",
+      "execution": {
+        "kind": "unauthenticated-development-observation",
+        "toolchain": "rustc 1.90.0 (1159e78c4 2025-09-14)\nbinary: rustc\ncommit-hash: 1159e78c4747b02ef996e55082b704c09b970588\ncommit-date: 2025-09-14\nhost: aarch64-apple-darwin\nrelease: 1.90.0\nLLVM version: 20.1.8\n",
+        "host": "macOS-27.2.1-arm64-arm-64bit-Mach-O",
+        "machine": "arm64",
+        "mode": "native",
+        "admission": "static",
+        "route": "direct",
+        "suite": "differential",
+        "rustflags": "-Ctarget-feature=+aes,+neon",
+        "oracle_sha256": "da101a01999a93ea6eddfe1392752bce2b5a91a41e4b00e1d9656fc682a1dc85",
+        "profiles": [
+          {
+            "profile": "debug",
+            "build": [
+              "cargo",
+              "+1.90.0",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "direct",
+              "--test",
+              "differential",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-campaigns/1.90.0-direct-static-native-differential-vecuoe_w/debug-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "debug-tests",
+            "sha256": "a2e95a7775ddf426d00222c1295113cb48deff8fc004ecaceb405e40d5e4461b"
+          },
+          {
+            "profile": "release",
+            "build": [
+              "cargo",
+              "+1.90.0",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "direct",
+              "--test",
+              "differential",
+              "--release",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-campaigns/1.90.0-direct-static-native-differential-vecuoe_w/release-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "release-tests",
+            "sha256": "a66c85e81c2eef19837b6eef9a0e959de641e61dd73c6dcbacd5c37254cbe7bd"
+          }
+        ],
+        "scope": "Correctness only; no timing, emitted-code or physical qualification."
+      },
+      "log": "logs/1.90.0-direct-static-differential.log",
+      "log_sha256": "4b282a7706f66d2da00b92ee17dff984fb2d918735b8769b8305b668d5ad99c0",
+      "files_sha256": {
+        "debug-build.jsonl": "1b86606d9d2a33df50e0ffb969cede0b7541ba1244eb827e68e1ce4faa718cfb",
+        "debug-build.stderr": "ce0d7340902089f73ad1a45986da0235e24f1a8b37d4cffad2354e393312cece",
+        "debug-tests": "a2e95a7775ddf426d00222c1295113cb48deff8fc004ecaceb405e40d5e4461b",
+        "debug.log": "da7f64afdcb498513df82f7b65cec6ae976cdd9c926569eff942682974c3329b",
+        "execution.json": "c268117e67f4580d73bb26179374a2f8db03c2cd0b78f95710f5a1240602da1a",
+        "metadata.json": "d82d22f31b18b38cadc311c7a905e804bd8cc09ca98525a3c750d4e4be94002a",
+        "release-build.jsonl": "8b3ef334714c4d30194e656aa90f58002cd2b6451b2104f961e7bedd49ed1700",
+        "release-build.stderr": "4a86040724480f9b7b81ce6bed5f9e01463baa9e42504b3b9f5d410cfaefb6fb",
+        "release-tests": "a66c85e81c2eef19837b6eef9a0e959de641e61dd73c6dcbacd5c37254cbe7bd",
+        "release.log": "a6c100e0f98bf2d5f8e56e44a594cf9d3d4eca67574ea48499a4bd203b3c4cd6"
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.90.0",
+        "route": "facade",
+        "admission": "hosted",
+        "suite": "avs"
+      },
+      "directory": "target/aes-accelerated-campaigns/1.90.0-facade-hosted-native-avs-g_kktrf7",
+      "execution": {
+        "kind": "unauthenticated-development-observation",
+        "toolchain": "rustc 1.90.0 (1159e78c4 2025-09-14)\nbinary: rustc\ncommit-hash: 1159e78c4747b02ef996e55082b704c09b970588\ncommit-date: 2025-09-14\nhost: aarch64-apple-darwin\nrelease: 1.90.0\nLLVM version: 20.1.8\n",
+        "host": "macOS-27.2.1-arm64-arm-64bit-Mach-O",
+        "machine": "arm64",
+        "mode": "native",
+        "admission": "hosted",
+        "route": "facade",
+        "suite": "avs",
+        "rustflags": "-Ctarget-feature=-aes",
+        "oracle_sha256": null,
+        "profiles": [
+          {
+            "profile": "release",
+            "build": [
+              "cargo",
+              "+1.90.0",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "facade,hosted",
+              "--test",
+              "avs",
+              "--release",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-campaigns/1.90.0-facade-hosted-native-avs-g_kktrf7/release-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "release-tests",
+            "sha256": "69a191a1b26d6d72ebfbee49180dc7f19aa648b3a615c303c5b5243861981a0c"
+          }
+        ],
+        "scope": "Correctness only; no timing, emitted-code or physical qualification."
+      },
+      "log": "logs/1.90.0-facade-hosted-avs.log",
+      "log_sha256": "6b139151b894f6ede7c0c666335ab5b620d0d20cf04e0feef66b38364d6cb0ab",
+      "files_sha256": {
+        "execution.json": "34696e1bdb117445fb8084b2e96956b8159c1b501252c16c73aa2b6bcd213198",
+        "metadata.json": "52e97eade0f87bb11136374c91ae1da6dabe51b8d2536fe00dd334fddaf474c6",
+        "release-build.jsonl": "f9e96e2918c0df2087f486ac350c8912d3ed3e4584128c26c6788935237d14b4",
+        "release-build.stderr": "c9f0327cfc17d341f25900b9ca63ca33ec833860952e2c5dee8d214746111d3d",
+        "release-tests": "69a191a1b26d6d72ebfbee49180dc7f19aa648b3a615c303c5b5243861981a0c",
+        "release.log": "819a707b47af000008fe788f43ef7db01213b1d6f75e72bc3b440eabaa6d39a5"
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.90.0",
+        "route": "facade",
+        "admission": "hosted",
+        "suite": "differential"
+      },
+      "directory": "target/aes-accelerated-campaigns/1.90.0-facade-hosted-native-differential-1ls2olu6",
+      "execution": {
+        "kind": "unauthenticated-development-observation",
+        "toolchain": "rustc 1.90.0 (1159e78c4 2025-09-14)\nbinary: rustc\ncommit-hash: 1159e78c4747b02ef996e55082b704c09b970588\ncommit-date: 2025-09-14\nhost: aarch64-apple-darwin\nrelease: 1.90.0\nLLVM version: 20.1.8\n",
+        "host": "macOS-27.2.1-arm64-arm-64bit-Mach-O",
+        "machine": "arm64",
+        "mode": "native",
+        "admission": "hosted",
+        "route": "facade",
+        "suite": "differential",
+        "rustflags": "-Ctarget-feature=-aes",
+        "oracle_sha256": "da101a01999a93ea6eddfe1392752bce2b5a91a41e4b00e1d9656fc682a1dc85",
+        "profiles": [
+          {
+            "profile": "debug",
+            "build": [
+              "cargo",
+              "+1.90.0",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "facade,hosted",
+              "--test",
+              "differential",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-campaigns/1.90.0-facade-hosted-native-differential-1ls2olu6/debug-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "debug-tests",
+            "sha256": "4ead3d3d8ecbbc2c5f73339a1a4899c2091db5c61c31be830ef8b586192b47bc"
+          },
+          {
+            "profile": "release",
+            "build": [
+              "cargo",
+              "+1.90.0",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "facade,hosted",
+              "--test",
+              "differential",
+              "--release",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-campaigns/1.90.0-facade-hosted-native-differential-1ls2olu6/release-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "release-tests",
+            "sha256": "cfaebce4c09d9acb8b24e0eeb42c740e10e7c132e4fe7553d07955b3cb602b42"
+          }
+        ],
+        "scope": "Correctness only; no timing, emitted-code or physical qualification."
+      },
+      "log": "logs/1.90.0-facade-hosted-differential.log",
+      "log_sha256": "7ab1043322b1bf34dc512b6ef5aff34d9eb9c5f660103ee3c2c5fd789f684cad",
+      "files_sha256": {
+        "debug-build.jsonl": "e84cf7e223324ecfd91aab98d884db31509343de50590e319f3dbd1ede14157d",
+        "debug-build.stderr": "5d8a443e3f216ba6cb63c2980d687336c7395f4cc15c8edcafa2a9a5d2045736",
+        "debug-tests": "4ead3d3d8ecbbc2c5f73339a1a4899c2091db5c61c31be830ef8b586192b47bc",
+        "debug.log": "438078c2b9e5c915d5410722b4b98b4340f4994dcae6f651e2ce2d941bf36331",
+        "execution.json": "b2afbe6b171a22dbdece53d4e2d2b1d8f3221636d5f2c0ddc8c71778dea93825",
+        "metadata.json": "5e6947d5c4f8e84e67a7b79e9b416c1db642e6b5f5633a3026fc39a8e5685052",
+        "release-build.jsonl": "6f65f5fa7a2b5f3b4378ce48453b9a53bdf317473caded9102f1f69cde85ee1b",
+        "release-build.stderr": "1e42ec88c7d05a0d037a6320d4fde42f7da9d9e329490b1c579b19e9ab8e5880",
+        "release-tests": "cfaebce4c09d9acb8b24e0eeb42c740e10e7c132e4fe7553d07955b3cb602b42",
+        "release.log": "e3a9913472e3a1649a2b7f8073fb39592d6a9a07197968a8700b3fdb54af056d"
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.90.0",
+        "route": "facade",
+        "admission": "static",
+        "suite": "avs"
+      },
+      "directory": "target/aes-accelerated-campaigns/1.90.0-facade-static-native-avs-jvbg1qa6",
+      "execution": {
+        "kind": "unauthenticated-development-observation",
+        "toolchain": "rustc 1.90.0 (1159e78c4 2025-09-14)\nbinary: rustc\ncommit-hash: 1159e78c4747b02ef996e55082b704c09b970588\ncommit-date: 2025-09-14\nhost: aarch64-apple-darwin\nrelease: 1.90.0\nLLVM version: 20.1.8\n",
+        "host": "macOS-27.2.1-arm64-arm-64bit-Mach-O",
+        "machine": "arm64",
+        "mode": "native",
+        "admission": "static",
+        "route": "facade",
+        "suite": "avs",
+        "rustflags": "-Ctarget-feature=+aes,+neon",
+        "oracle_sha256": null,
+        "profiles": [
+          {
+            "profile": "release",
+            "build": [
+              "cargo",
+              "+1.90.0",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "facade",
+              "--test",
+              "avs",
+              "--release",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-campaigns/1.90.0-facade-static-native-avs-jvbg1qa6/release-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "release-tests",
+            "sha256": "0d37c09149fd61ed570dd5b0ae96a9ee775065e06133546030ecc8ce3de80132"
+          }
+        ],
+        "scope": "Correctness only; no timing, emitted-code or physical qualification."
+      },
+      "log": "logs/1.90.0-facade-static-avs.log",
+      "log_sha256": "07480c81eb2efaceb83a55869da93af85ff579b5f5ef9aab060fa771f4e5f665",
+      "files_sha256": {
+        "execution.json": "c3eaf1257feb722003f38f76a1cc73d0b5c98770025ab93ff4ff7d23f6f25945",
+        "metadata.json": "2f6d57d97d812715b76d9dedb326f83e56363aa65d94b4ea70325e466a626c7c",
+        "release-build.jsonl": "3730fe72e67e62c54552bc9b536bb6bae673352d7160326366a942ae3bf8b494",
+        "release-build.stderr": "16a86c4e48e26b7f329f0b9d6feaeec9e091dc1b86a772eeb9e60d0d72214e7d",
+        "release-tests": "0d37c09149fd61ed570dd5b0ae96a9ee775065e06133546030ecc8ce3de80132",
+        "release.log": "819a707b47af000008fe788f43ef7db01213b1d6f75e72bc3b440eabaa6d39a5"
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.90.0",
+        "route": "facade",
+        "admission": "static",
+        "suite": "differential"
+      },
+      "directory": "target/aes-accelerated-campaigns/1.90.0-facade-static-native-differential-_6_704k7",
+      "execution": {
+        "kind": "unauthenticated-development-observation",
+        "toolchain": "rustc 1.90.0 (1159e78c4 2025-09-14)\nbinary: rustc\ncommit-hash: 1159e78c4747b02ef996e55082b704c09b970588\ncommit-date: 2025-09-14\nhost: aarch64-apple-darwin\nrelease: 1.90.0\nLLVM version: 20.1.8\n",
+        "host": "macOS-27.2.1-arm64-arm-64bit-Mach-O",
+        "machine": "arm64",
+        "mode": "native",
+        "admission": "static",
+        "route": "facade",
+        "suite": "differential",
+        "rustflags": "-Ctarget-feature=+aes,+neon",
+        "oracle_sha256": "da101a01999a93ea6eddfe1392752bce2b5a91a41e4b00e1d9656fc682a1dc85",
+        "profiles": [
+          {
+            "profile": "debug",
+            "build": [
+              "cargo",
+              "+1.90.0",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "facade",
+              "--test",
+              "differential",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-campaigns/1.90.0-facade-static-native-differential-_6_704k7/debug-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "debug-tests",
+            "sha256": "6690b44dce920de26d61b5ffdedc74bb917f90bbf9cee9e7968c76ed9e09725c"
+          },
+          {
+            "profile": "release",
+            "build": [
+              "cargo",
+              "+1.90.0",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "facade",
+              "--test",
+              "differential",
+              "--release",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-campaigns/1.90.0-facade-static-native-differential-_6_704k7/release-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "release-tests",
+            "sha256": "c22c45790ac172055910a0073d0755efa4cc17ee67428c5b8d6feaf0ff7ec955"
+          }
+        ],
+        "scope": "Correctness only; no timing, emitted-code or physical qualification."
+      },
+      "log": "logs/1.90.0-facade-static-differential.log",
+      "log_sha256": "ebeaafb81a9871d9c8db22e878b66865e913e0d0e6551cc173a5f8bdf1fa5478",
+      "files_sha256": {
+        "debug-build.jsonl": "7655c3bd37fd00664abf295b197b4d0320ec6440feecadb9babe29f2f9559b08",
+        "debug-build.stderr": "6e3eb770c36bffb104f94eae5766f5128812d24bae39db7fee62c264f09bb255",
+        "debug-tests": "6690b44dce920de26d61b5ffdedc74bb917f90bbf9cee9e7968c76ed9e09725c",
+        "debug.log": "02abdd0e39326a7861aaef16ff7960a6912cd3f2d08a0bf04d308ba649866e33",
+        "execution.json": "8da2a2f072bbe76ba798fe31c362ff4365e32f0270d579ff5460bccb26a66beb",
+        "metadata.json": "1587d7f208d2216457dc7c1bd15672fdfaff04f39ec542290a817551286fd6fd",
+        "release-build.jsonl": "5731bf8fc4b747d7271e57d5e1726ee536676a3014af48627796a017e09fbf9e",
+        "release-build.stderr": "3b75a7b88df2c564159be6ace9bd2acd80a1186f9ed2395b7371ad6ab4109cc9",
+        "release-tests": "c22c45790ac172055910a0073d0755efa4cc17ee67428c5b8d6feaf0ff7ec955",
+        "release.log": "6feb45245a2443116d82fffa142491e41ec2533a6c60e7f2cde75d7719c59b98"
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.99.1",
+        "route": "direct",
+        "admission": "hosted",
+        "suite": "avs"
+      },
+      "directory": "target/aes-accelerated-campaigns/1.99.1-direct-hosted-native-avs-67f7836_",
+      "execution": {
+        "kind": "unauthenticated-development-observation",
+        "toolchain": "rustc 1.99.1 (58cf8f9c3 2026-10-13)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: aarch64-apple-darwin\nrelease: 1.99.1\nLLVM version: 23.1.1\n",
+        "host": "macOS-27.2.1-arm64-arm-64bit-Mach-O",
+        "machine": "arm64",
+        "mode": "native",
+        "admission": "hosted",
+        "route": "direct",
+        "suite": "avs",
+        "rustflags": "-Ctarget-feature=-aes",
+        "oracle_sha256": null,
+        "profiles": [
+          {
+            "profile": "release",
+            "build": [
+              "cargo",
+              "+1.99.1",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "direct,hosted",
+              "--test",
+              "avs",
+              "--release",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-campaigns/1.99.1-direct-hosted-native-avs-67f7836_/release-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "release-tests",
+            "sha256": "155acd2267eb75ad92c6bb03da890ec702c300125098e58474553c0001d996d9"
+          }
+        ],
+        "scope": "Correctness only; no timing, emitted-code or physical qualification."
+      },
+      "log": "logs/1.99.1-direct-hosted-avs.log",
+      "log_sha256": "edf7ee610a982bfd27af7aaadbbaf0d602378e7850aa5a9e6faadd5024b9bc55",
+      "files_sha256": {
+        "execution.json": "690a0fd382a6657156eb909d69006c575cfdac5c0dbc7acbce327eeaddcd076b",
+        "metadata.json": "6ca4ba96c6a44c409a4238af85cbdcd5526610dec83e3052b8f263386f0dc046",
+        "release-build.jsonl": "fa7d9d0d7ee274db77c705257b32be26450b4e5e662e306da9f3dc194186c756",
+        "release-build.stderr": "418f15d4510bf76d3182d976cc945bd1670a330deffb10fb14663b388a5786e8",
+        "release-tests": "155acd2267eb75ad92c6bb03da890ec702c300125098e58474553c0001d996d9",
+        "release.log": "420c4d71359346ea4435c699f09693239d5afd8da540f287f0e07f42fad8e5e0"
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.99.1",
+        "route": "direct",
+        "admission": "hosted",
+        "suite": "differential"
+      },
+      "directory": "target/aes-accelerated-campaigns/1.99.1-direct-hosted-native-differential-wytnbh5z",
+      "execution": {
+        "kind": "unauthenticated-development-observation",
+        "toolchain": "rustc 1.99.1 (58cf8f9c3 2026-10-13)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: aarch64-apple-darwin\nrelease: 1.99.1\nLLVM version: 23.1.1\n",
+        "host": "macOS-27.2.1-arm64-arm-64bit-Mach-O",
+        "machine": "arm64",
+        "mode": "native",
+        "admission": "hosted",
+        "route": "direct",
+        "suite": "differential",
+        "rustflags": "-Ctarget-feature=-aes",
+        "oracle_sha256": "da101a01999a93ea6eddfe1392752bce2b5a91a41e4b00e1d9656fc682a1dc85",
+        "profiles": [
+          {
+            "profile": "debug",
+            "build": [
+              "cargo",
+              "+1.99.1",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "direct,hosted",
+              "--test",
+              "differential",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-campaigns/1.99.1-direct-hosted-native-differential-wytnbh5z/debug-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "debug-tests",
+            "sha256": "5035761834cac5368d9aac66e660fdc5bc79c6813886e4b9ec1f5312a77c1e06"
+          },
+          {
+            "profile": "release",
+            "build": [
+              "cargo",
+              "+1.99.1",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "direct,hosted",
+              "--test",
+              "differential",
+              "--release",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-campaigns/1.99.1-direct-hosted-native-differential-wytnbh5z/release-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "release-tests",
+            "sha256": "d968cee8099deb574500d4a4f2d059847356648c937bed5e81ca4697cea4a029"
+          }
+        ],
+        "scope": "Correctness only; no timing, emitted-code or physical qualification."
+      },
+      "log": "logs/1.99.1-direct-hosted-differential.log",
+      "log_sha256": "94459b8de972f3ea6675b50cef1752ddad600d53c9d804f8c7c206bb2d24ae0a",
+      "files_sha256": {
+        "debug-build.jsonl": "5fe6b40a0d39be72ddc31244b30d7625c75c12689d7e90618b305d689e270332",
+        "debug-build.stderr": "c44cae5a4096a132291d77120f2203b37f1f64165ad5aa9659cdf8be910690cd",
+        "debug-tests": "5035761834cac5368d9aac66e660fdc5bc79c6813886e4b9ec1f5312a77c1e06",
+        "debug.log": "1c601663058c6ca960715ba75b1733f5a404d6c2973a214a019a8bec32d947c5",
+        "execution.json": "d1941e32f87484cf7b3cad755e0c93807eac2210290716001785b68a73b3688d",
+        "metadata.json": "62e4e8ee2371813524a15d79133811a28a3e3f711dbd5442e9b14b70b671e619",
+        "release-build.jsonl": "7d68bf4e767aa3fa035c0610b1ac7927a10a67ad3092766684ac06e178c2ca8b",
+        "release-build.stderr": "8ceafe0cbd7bb091840c534242e66417a552f2fb73f92da643797493df206bf7",
+        "release-tests": "d968cee8099deb574500d4a4f2d059847356648c937bed5e81ca4697cea4a029",
+        "release.log": "af157bc7d6ad6b158f332b6dc8dfc588f2807851f7621b79ad27a92e1e31033c"
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.99.1",
+        "route": "direct",
+        "admission": "static",
+        "suite": "avs"
+      },
+      "directory": "target/aes-accelerated-campaigns/1.99.1-direct-static-native-avs-fqueospi",
+      "execution": {
+        "kind": "unauthenticated-development-observation",
+        "toolchain": "rustc 1.99.1 (58cf8f9c3 2026-10-13)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: aarch64-apple-darwin\nrelease: 1.99.1\nLLVM version: 23.1.1\n",
+        "host": "macOS-27.2.1-arm64-arm-64bit-Mach-O",
+        "machine": "arm64",
+        "mode": "native",
+        "admission": "static",
+        "route": "direct",
+        "suite": "avs",
+        "rustflags": "-Ctarget-feature=+aes,+neon",
+        "oracle_sha256": null,
+        "profiles": [
+          {
+            "profile": "release",
+            "build": [
+              "cargo",
+              "+1.99.1",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "direct",
+              "--test",
+              "avs",
+              "--release",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-campaigns/1.99.1-direct-static-native-avs-fqueospi/release-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "release-tests",
+            "sha256": "1dd4ce7345a5a54ce8465e57780a7bad93e99c3e60ddb4368b4dd762b9d0bfa2"
+          }
+        ],
+        "scope": "Correctness only; no timing, emitted-code or physical qualification."
+      },
+      "log": "logs/1.99.1-direct-static-avs.log",
+      "log_sha256": "69437a68ef8370277f7294a5987fe31497ebee64e12e371a9d2daf8d00b3a09d",
+      "files_sha256": {
+        "execution.json": "e2368f3334462aa3d68415fae952df21f84c2df972ad22ed141ac72dea7aeafa",
+        "metadata.json": "2d7b8ae52a260476e5e369b94a41ac9408df429411967a31e72de08d40bc1662",
+        "release-build.jsonl": "fe979ea95f85162a44feb24eca18c550fc1aab6d4e28395923a70ccf020761d4",
+        "release-build.stderr": "a35b70b63221a47aa99546a1fd48ba8ab6de3792c890d518c84e83b804297107",
+        "release-tests": "1dd4ce7345a5a54ce8465e57780a7bad93e99c3e60ddb4368b4dd762b9d0bfa2",
+        "release.log": "f4ae2198393cdba5f6f5cfe8fcb7811768cba434ddc8f31c6249e4740a08dfd7"
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.99.1",
+        "route": "direct",
+        "admission": "static",
+        "suite": "differential"
+      },
+      "directory": "target/aes-accelerated-campaigns/1.99.1-direct-static-native-differential-__us6uup",
+      "execution": {
+        "kind": "unauthenticated-development-observation",
+        "toolchain": "rustc 1.99.1 (58cf8f9c3 2026-10-13)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: aarch64-apple-darwin\nrelease: 1.99.1\nLLVM version: 23.1.1\n",
+        "host": "macOS-27.2.1-arm64-arm-64bit-Mach-O",
+        "machine": "arm64",
+        "mode": "native",
+        "admission": "static",
+        "route": "direct",
+        "suite": "differential",
+        "rustflags": "-Ctarget-feature=+aes,+neon",
+        "oracle_sha256": "da101a01999a93ea6eddfe1392752bce2b5a91a41e4b00e1d9656fc682a1dc85",
+        "profiles": [
+          {
+            "profile": "debug",
+            "build": [
+              "cargo",
+              "+1.99.1",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "direct",
+              "--test",
+              "differential",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-campaigns/1.99.1-direct-static-native-differential-__us6uup/debug-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "debug-tests",
+            "sha256": "b7b22aab264aea69f53c3a403624dac191ece9ac9755f48f52455ea46db6dae4"
+          },
+          {
+            "profile": "release",
+            "build": [
+              "cargo",
+              "+1.99.1",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "direct",
+              "--test",
+              "differential",
+              "--release",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-campaigns/1.99.1-direct-static-native-differential-__us6uup/release-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "release-tests",
+            "sha256": "ace528b1148a8f8c9deb961f9d306d20ef2911cbfc662c1b1011a0d6c4cd038c"
+          }
+        ],
+        "scope": "Correctness only; no timing, emitted-code or physical qualification."
+      },
+      "log": "logs/1.99.1-direct-static-differential.log",
+      "log_sha256": "4aea0a5ea54b46e8f6a64a115883af273a311c02fe46495e9f1076ba831d0c7a",
+      "files_sha256": {
+        "debug-build.jsonl": "7f68d8f80d3ac61b904a21196c96f5566feaacdc166abb0f05382968c23e08ff",
+        "debug-build.stderr": "efb1c77f618a0b692d18b14b42323815cb9e944bd5b414dfbaa181ffbcbecfa0",
+        "debug-tests": "b7b22aab264aea69f53c3a403624dac191ece9ac9755f48f52455ea46db6dae4",
+        "debug.log": "259c55633be50b3f7e244ccdc48123731a2322c855de9474e9fb24f7947bbfe4",
+        "execution.json": "5fecfc60ef81656f2a3b3f155bf3021a238912067c995733516fda96d17dcc7e",
+        "metadata.json": "cb14532782f595adc9fcf5bd436a736e2c9fe3172b8fb28db025dfb1430ac69d",
+        "release-build.jsonl": "3324bef9f72a2ce9a963bd2919c6458d31d98c539c74252d05f37edbf44a6386",
+        "release-build.stderr": "595fd7ab784fb3ba8b7ab5b7a88d9c6b87cd4d043c7bb6657e7034d5b2f38ca7",
+        "release-tests": "ace528b1148a8f8c9deb961f9d306d20ef2911cbfc662c1b1011a0d6c4cd038c",
+        "release.log": "3e4419b86f709c939ff5085904471f6adb9e667322428e49e364597cee6c1ceb"
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.99.1",
+        "route": "facade",
+        "admission": "hosted",
+        "suite": "avs"
+      },
+      "directory": "target/aes-accelerated-campaigns/1.99.1-facade-hosted-native-avs-9oy268bo",
+      "execution": {
+        "kind": "unauthenticated-development-observation",
+        "toolchain": "rustc 1.99.1 (58cf8f9c3 2026-10-13)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: aarch64-apple-darwin\nrelease: 1.99.1\nLLVM version: 23.1.1\n",
+        "host": "macOS-27.2.1-arm64-arm-64bit-Mach-O",
+        "machine": "arm64",
+        "mode": "native",
+        "admission": "hosted",
+        "route": "facade",
+        "suite": "avs",
+        "rustflags": "-Ctarget-feature=-aes",
+        "oracle_sha256": null,
+        "profiles": [
+          {
+            "profile": "release",
+            "build": [
+              "cargo",
+              "+1.99.1",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "facade,hosted",
+              "--test",
+              "avs",
+              "--release",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-campaigns/1.99.1-facade-hosted-native-avs-9oy268bo/release-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "release-tests",
+            "sha256": "dc4bba1fe6907b02ee893b0b83b22566b7b1576204297fe3d5825b7fe8511723"
+          }
+        ],
+        "scope": "Correctness only; no timing, emitted-code or physical qualification."
+      },
+      "log": "logs/1.99.1-facade-hosted-avs.log",
+      "log_sha256": "a24b0685523e8c453432e8ca14c72646656926b052f417b1e75a96bf75988c20",
+      "files_sha256": {
+        "execution.json": "c53ae500599657776c979fd550a2c6948802414f6f0183963c19207002380fb2",
+        "metadata.json": "21b00d009897c599dab56dea37725d0beffe6511432d92f5b3dd868505dc0136",
+        "release-build.jsonl": "10c9a99512b9d4f1743df56a07ca94ef5a19c61c18bcdaafcbb8bae7e869f7ce",
+        "release-build.stderr": "d1ce503aaec113a5589d263a3a1754f96ca1c8d7dcafd04e4772406dd8706432",
+        "release-tests": "dc4bba1fe6907b02ee893b0b83b22566b7b1576204297fe3d5825b7fe8511723",
+        "release.log": "f4ae2198393cdba5f6f5cfe8fcb7811768cba434ddc8f31c6249e4740a08dfd7"
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.99.1",
+        "route": "facade",
+        "admission": "hosted",
+        "suite": "differential"
+      },
+      "directory": "target/aes-accelerated-campaigns/1.99.1-facade-hosted-native-differential-wj58qiez",
+      "execution": {
+        "kind": "unauthenticated-development-observation",
+        "toolchain": "rustc 1.99.1 (58cf8f9c3 2026-10-13)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: aarch64-apple-darwin\nrelease: 1.99.1\nLLVM version: 23.1.1\n",
+        "host": "macOS-27.2.1-arm64-arm-64bit-Mach-O",
+        "machine": "arm64",
+        "mode": "native",
+        "admission": "hosted",
+        "route": "facade",
+        "suite": "differential",
+        "rustflags": "-Ctarget-feature=-aes",
+        "oracle_sha256": "da101a01999a93ea6eddfe1392752bce2b5a91a41e4b00e1d9656fc682a1dc85",
+        "profiles": [
+          {
+            "profile": "debug",
+            "build": [
+              "cargo",
+              "+1.99.1",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "facade,hosted",
+              "--test",
+              "differential",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-campaigns/1.99.1-facade-hosted-native-differential-wj58qiez/debug-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "debug-tests",
+            "sha256": "8d2b77a07f03c48b6b20fa4d3d35c8a88e212264e8b40a17c9c77cbd2be9f93d"
+          },
+          {
+            "profile": "release",
+            "build": [
+              "cargo",
+              "+1.99.1",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "facade,hosted",
+              "--test",
+              "differential",
+              "--release",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-campaigns/1.99.1-facade-hosted-native-differential-wj58qiez/release-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "release-tests",
+            "sha256": "5e30ecdc86ee43e39d65d4e88993a5148e2137e06d0642b7322a9d6984e9c8c1"
+          }
+        ],
+        "scope": "Correctness only; no timing, emitted-code or physical qualification."
+      },
+      "log": "logs/1.99.1-facade-hosted-differential.log",
+      "log_sha256": "a68463899f8a65d6996d7ce686fe3e8b4db57b7ebac2cb7cd57c61c41ea6d3e8",
+      "files_sha256": {
+        "debug-build.jsonl": "bfeb2fd06476d58600ee38ca36007dafbe8c66961e8ab5dcc3f8630d712a2b3d",
+        "debug-build.stderr": "ffa4dfc378108817ee6a7dcd04fed9516551adcc85d4582ae65f9882be0e4d6c",
+        "debug-tests": "8d2b77a07f03c48b6b20fa4d3d35c8a88e212264e8b40a17c9c77cbd2be9f93d",
+        "debug.log": "2f67b762396bb778fc8f9d3c49f1d6673807139ba2d31dea26b9bd31806455bc",
+        "execution.json": "8bf81bccdc29cfa9b3f3084bbed02e71c2150a5921f455637e684af0b9d4bd30",
+        "metadata.json": "4deb15384be307979d00d66b681f74c0ecf8c99ceedac79b39680912401dae93",
+        "release-build.jsonl": "7ec13c1e9b3d51d4f313ac4dfeb6d627945cc873942ab2b11494b17d12245efd",
+        "release-build.stderr": "06d790771d5616770548e712094b1cc11d0bf95734c46dc95fe8210714544c03",
+        "release-tests": "5e30ecdc86ee43e39d65d4e88993a5148e2137e06d0642b7322a9d6984e9c8c1",
+        "release.log": "ef68304f30679658ad56dcfb21891df788986dbfdb65279f7526b97968d21072"
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.99.1",
+        "route": "facade",
+        "admission": "static",
+        "suite": "avs"
+      },
+      "directory": "target/aes-accelerated-campaigns/1.99.1-facade-static-native-avs-3cmdhwk2",
+      "execution": {
+        "kind": "unauthenticated-development-observation",
+        "toolchain": "rustc 1.99.1 (58cf8f9c3 2026-10-13)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: aarch64-apple-darwin\nrelease: 1.99.1\nLLVM version: 23.1.1\n",
+        "host": "macOS-27.2.1-arm64-arm-64bit-Mach-O",
+        "machine": "arm64",
+        "mode": "native",
+        "admission": "static",
+        "route": "facade",
+        "suite": "avs",
+        "rustflags": "-Ctarget-feature=+aes,+neon",
+        "oracle_sha256": null,
+        "profiles": [
+          {
+            "profile": "release",
+            "build": [
+              "cargo",
+              "+1.99.1",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "facade",
+              "--test",
+              "avs",
+              "--release",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-campaigns/1.99.1-facade-static-native-avs-3cmdhwk2/release-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "release-tests",
+            "sha256": "8fa2b1d0311e32efe2f398dad2f62fff4fddeddaeefb884b4607ea81cd5cb293"
+          }
+        ],
+        "scope": "Correctness only; no timing, emitted-code or physical qualification."
+      },
+      "log": "logs/1.99.1-facade-static-avs.log",
+      "log_sha256": "f63d8d4f404e8b50c93678853e2ca19e9d3d1398d03f77635382fe407f9c4203",
+      "files_sha256": {
+        "execution.json": "75912bf406c47d1cdee4ecd52db9514233927bb0518d4592e931d4cfdff2e236",
+        "metadata.json": "30934c862fc32a5179f3d67d1cea1ee98af93b710389abc4050460ba3c981bc1",
+        "release-build.jsonl": "f2e4763f948bbcd07d9880a650b7b5beb9227da099f874d55f05309609a7f13d",
+        "release-build.stderr": "f7d5251cd74b20fa05588d5875fafc9b5830bbecf561604c9ae64f9bc6547485",
+        "release-tests": "8fa2b1d0311e32efe2f398dad2f62fff4fddeddaeefb884b4607ea81cd5cb293",
+        "release.log": "f4ae2198393cdba5f6f5cfe8fcb7811768cba434ddc8f31c6249e4740a08dfd7"
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.99.1",
+        "route": "facade",
+        "admission": "static",
+        "suite": "differential"
+      },
+      "directory": "target/aes-accelerated-campaigns/1.99.1-facade-static-native-differential-mmuaq_kv",
+      "execution": {
+        "kind": "unauthenticated-development-observation",
+        "toolchain": "rustc 1.99.1 (58cf8f9c3 2026-10-13)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: aarch64-apple-darwin\nrelease: 1.99.1\nLLVM version: 23.1.1\n",
+        "host": "macOS-27.2.1-arm64-arm-64bit-Mach-O",
+        "machine": "arm64",
+        "mode": "native",
+        "admission": "static",
+        "route": "facade",
+        "suite": "differential",
+        "rustflags": "-Ctarget-feature=+aes,+neon",
+        "oracle_sha256": "da101a01999a93ea6eddfe1392752bce2b5a91a41e4b00e1d9656fc682a1dc85",
+        "profiles": [
+          {
+            "profile": "debug",
+            "build": [
+              "cargo",
+              "+1.99.1",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "facade",
+              "--test",
+              "differential",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-campaigns/1.99.1-facade-static-native-differential-mmuaq_kv/debug-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "debug-tests",
+            "sha256": "2ca13ee2f9171b6d2b55ec170a3cff858f2942bf9ff653e46cc58f5f6d86f28a"
+          },
+          {
+            "profile": "release",
+            "build": [
+              "cargo",
+              "+1.99.1",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "facade",
+              "--test",
+              "differential",
+              "--release",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-campaigns/1.99.1-facade-static-native-differential-mmuaq_kv/release-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "release-tests",
+            "sha256": "f4ad2e38d24996cf322364b72a4c64fdc7cf3dc10402f7e46c9116208e8daa41"
+          }
+        ],
+        "scope": "Correctness only; no timing, emitted-code or physical qualification."
+      },
+      "log": "logs/1.99.1-facade-static-differential.log",
+      "log_sha256": "2046f6882446e01abc7fa07e112b244691a42da717039154f44c8a5d17aae876",
+      "files_sha256": {
+        "debug-build.jsonl": "066a08d80e3e7b78604990ebed7a0789a30d4556f5b643772a3e8a09b5a6b8bb",
+        "debug-build.stderr": "c1c7fa2e2bc6dfea9e446fe0a684d16a987f05fa26f1aa2c8311bcc826c83ce9",
+        "debug-tests": "2ca13ee2f9171b6d2b55ec170a3cff858f2942bf9ff653e46cc58f5f6d86f28a",
+        "debug.log": "6725125a663829fc3e4585fcfe547140fdd2e931443d0a5b61f3f04efaa54677",
+        "execution.json": "7eea58ac768ec031717a9ae44edb7b5c4eb34c2b7bdde2d2257d8a9a65cc6d5d",
+        "metadata.json": "1218567e1caa0fb41339ca7476e26e70545be3530d46d2215a673cc14087e946",
+        "release-build.jsonl": "3b50e6ad6c5273a313fde5421423b31535d96510b2680566a7e500e9471d4816",
+        "release-build.stderr": "43282f2bd9849f8d3726af4c5e157f9b7a7d62bfd587c8d059e68658d8bb6898",
+        "release-tests": "f4ad2e38d24996cf322364b72a4c64fdc7cf3dc10402f7e46c9116208e8daa41",
+        "release.log": "a6c100e0f98bf2d5f8e56e44a594cf9d3d4eca67574ea48499a4bd203b3c4cd6"
+      }
+    }
+  ],
+  "lifecycle": [
+    {
+      "compiler": "1.90.0",
+      "admission": "static",
+      "directory": "target/aes-static/native-1.90.0-5yyvl1y5",
+      "log": "logs/static-lifecycle-1.90.0.log",
+      "log_sha256": "6db96c7ae7d6ebd492d26c12e7aa588dca1493cb58058fb4526c6748cda87052",
+      "files_sha256": {
+        "authority.log": "c243806dcce340193f25b392f459d46afe06870b34f9b7e8a71c59821785eb8a",
+        "faults.log": "7a2bc2485b75b5eea0ddbf9b0714f9bf3e46d4d122b563216e505371317aa923",
+        "owners.log": "f74b039db61a8fe91fe1b5f3687036760357d392354a839a71807dfba773aea4",
+        "probe": "34e5cf85d55ddd776c60e24596b8f0538ba9d8e0f793aa6afdcb73f6acbfe98b",
+        "probe-compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "probe.log": "61edd8a1848aca8cd08abcf49f3e4c1c6817d9eb98d0fbb33fcd9bc54115c5f3"
+      }
+    },
+    {
+      "compiler": "1.90.0",
+      "admission": "hosted",
+      "directory": "target/aes-hosted/native-1.90.0-xn1jj9lc",
+      "log": "logs/hosted-lifecycle-1.90.0.log",
+      "log_sha256": "e8a826044639412fbdffe6dbb1da8a08026aa1fb0e874caddcce3d2409f73207",
+      "files_sha256": {
+        "consumer-debug.log": "c7017a8d6c65d4e6a52dda501c7f9b29893379fead2fd6b3047c766f13dd76d8",
+        "consumer-release.log": "de2fbb6b077eac444decf0a012ffb5a8ab8f62ade3e93d965135e55728431bed",
+        "selection.log": "748e97b61f7980be36599708be40b86780475e15f7ce4c50d94a130f0b8bdb54"
+      }
+    },
+    {
+      "compiler": "1.99.1",
+      "admission": "static",
+      "directory": "target/aes-static/native-1.99.1-0ud8k0qe",
+      "log": "logs/static-lifecycle-1.99.1.log",
+      "log_sha256": "9dbaf082895bf5602c3ff9781c5677d8f56a589424a0f1357cd48ce333ae7eb5",
+      "files_sha256": {
+        "authority.log": "ad62e05052e674c4893e04087ef941d71f196e4ad1e261c456ca0279950503ad",
+        "faults.log": "a172e0e324cab92fd8f8db94721c2a86ba002b1dd257cccbc3ebe2dd1d081de7",
+        "owners.log": "ce7d6042a69566389726cf9f83e084408552e2542f8face92c9d6c0cb3182cbf",
+        "probe": "e4ec1838148c61820543032d11e74b765f9ad6252e6709b273bae81abb800eff",
+        "probe-compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "probe.log": "61edd8a1848aca8cd08abcf49f3e4c1c6817d9eb98d0fbb33fcd9bc54115c5f3"
+      }
+    },
+    {
+      "compiler": "1.99.1",
+      "admission": "hosted",
+      "directory": "target/aes-hosted/native-1.99.1-kldy2v9y",
+      "log": "logs/hosted-lifecycle-1.99.1.log",
+      "log_sha256": "065fcb5a7c5aff5c774ac367b9b59129d808b0282da9ba7311a855fab1e0c49a",
+      "files_sha256": {
+        "consumer-debug.log": "48bed03a98965feb9c38898b354c4834230895b8d2e4e72d96e97176ebbd9f62",
+        "consumer-release.log": "b03fb4b230c380f82e366d0014d6e02f9855c6bb68d399ec0fa346f25ee7ff28",
+        "selection.log": "a7a67adc9ae365d04cd3420c8fa01954106f9897c64aedd41f785da2a4cde0dc"
+      }
+    }
+  ],
+  "setup_failures": [
+    {
+      "log": "logs/preflight-missing-fixtures.log",
+      "sha256": "2ffaf6927471bb989ac6036b25d92b8e5197c84c7d7dc4bec4262eba240b0af9",
+      "reason": "missing or symlinked AESAVS fixture: avs.rs",
+      "disposition": "Setup corrected before campaign execution; original failure retained. No validation rule relaxed."
+    },
+    {
+      "log": "logs/preflight-oracle-environment.log",
+      "sha256": "1ae2e16ecb529bf483b55f5a11e400d5e6f1f669364c89a181633046cf3754d9",
+      "reason": "unexpected oracle environment: BRYNJA_OPENSSL",
+      "disposition": "Setup corrected before campaign execution; original failure retained. No validation rule relaxed."
+    }
+  ],
+  "empty_failed_preflight_directories": [
+    "target/aes-accelerated-campaigns/1.90.0-direct-static-native-avs-fq5llu4y"
+  ],
+  "replay": "16 configuration identities, 21 package hashes per campaign, exact test/authority markers, dependency graphs, 24 saved binary hashes and four lifecycle logs checked locally. No native binaries re-executed during replay.",
+  "limits": [
+    "Local unauthenticated observations, not certification or independent review.",
+    "Campaign binaries retained; lifecycle build caches excluded, with logs and ISA probe binaries retained.",
+    "Does not resolve earlier timing alarms, qualify Mach-O final-linked callers, or establish physical resistance."
+  ]
+}

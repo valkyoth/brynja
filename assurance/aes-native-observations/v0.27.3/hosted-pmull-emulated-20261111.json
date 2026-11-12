@@ -1,0 +1,1443 @@
+{
+  "schema": 1,
+  "scope": "Explicit Linux hosted AES/PMULL target-feature admission, 2026-11-11",
+  "source_base": "56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e",
+  "source_status": "uncommitted development working tree; not a tagged source receipt",
+  "hosted_package_sha256": "d6b0176a3800f57614937482813d39603bfed77f483d2f137ea33cd9d23021bb",
+  "source_note": "Capture preceded a test-only rustfmt line wrap; recorded package identity is retained unchanged.",
+  "configurations": 8,
+  "quarantined_executions": 5024,
+  "missing_feature_executions": 32,
+  "observations": [
+    {
+      "compiler": "1.90.0",
+      "route": "direct",
+      "panic": "abort",
+      "target": "aarch64-unknown-linux-musl",
+      "admission": "hosted",
+      "profile": "opt3-fat-lto-cgu1-overflow",
+      "execution": "qemu-emulated",
+      "binary_sha256": "11d4973bb502d42f24b56806356a55981562181922170e08cb519e52734bcc63",
+      "machine_review": "scoped-review",
+      "symbol_command": [
+        "/usr/bin/llvm-nm-23",
+        "--print-size",
+        "--defined-only",
+        "/home/eldryoth/Work/codex-projects/brynja/target/aes-accelerated-startup/1.90.0-hosted-arm-qemu-gyluh99n/direct-abort.elf"
+      ],
+      "fixture_sha256": "540b73ec8ed4ac86d9bf283a3cdd01650345d221386b5b761ceba1b7fe60c145",
+      "execution_command": [
+        "/usr/bin/qemu-aarch64",
+        "-cpu",
+        "max",
+        "/home/eldryoth/Work/codex-projects/brynja/target/aes-accelerated-startup/1.90.0-hosted-arm-qemu-gyluh99n/direct-abort.elf"
+      ],
+      "host": {
+        "system": "Linux",
+        "machine": "x86_64"
+      },
+      "tools": [
+        {
+          "path": "/usr/bin/llvm-nm-23",
+          "sha256": "3d447cc4199a83d532074a45686884a3ee984f78fd4e300356cea627166f7b57"
+        },
+        {
+          "path": "/usr/bin/llvm-objdump-23",
+          "sha256": "431df9267765434276d9017cbfb63072d60a7e3972657cdfbced6fa32765534b"
+        },
+        {
+          "path": "/usr/bin/qemu-aarch64",
+          "sha256": "61f98212cd11dcace419357c2cf4a2115531abf110991eacbb795d2681e78d64"
+        }
+      ],
+      "review": {
+        "bodies": {
+          "bcmp": {
+            "instructions": 1,
+            "branches": 0,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "922c3fc2e87c0cf7b2a79854ce777eb1ed03b76e21c7c80fc018c05e4f15eddf",
+            "encoding_sha256": "a7911cdfdc28e6a1867e359ba426081aacfa692fdeb3e978d2a68dd924fa8c3e",
+            "tail_calls": 1
+          },
+          "memcmp": {
+            "instructions": 14,
+            "branches": 4,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "6240918890c293741e523871495642947193d88df256de0c1fbdcd2460520452",
+            "encoding_sha256": "3ead36c2e051fe4bd6e57d97a75cb9a10a1ac20d53b716dfda3ccef3578ed3c8"
+          },
+          "startup": {
+            "instructions": 254,
+            "branches": 11,
+            "calls": 14,
+            "constants": 3,
+            "text_sha256": "7fc8b43295ae33ec86ee8526f52e21510258ded8a4adb648f0883c3b1da6df64",
+            "encoding_sha256": "49ab63604cf4157610cc0651ea068bee54f299d4cf515990669b8ab0cd77c131",
+            "address_constants": 7,
+            "mutable_caches": 1
+          }
+        },
+        "rejected_code_mutations": 1345,
+        "rejected_constant_mutations": 728,
+        "references": [
+          {
+            "role": "schedule128",
+            "offset": 7241,
+            "size": 176
+          },
+          {
+            "role": "schedule192",
+            "offset": 7417,
+            "size": 208
+          },
+          {
+            "role": "schedule256",
+            "offset": 7625,
+            "size": 240
+          },
+          {
+            "role": "plain",
+            "offset": 1072,
+            "size": 16
+          },
+          {
+            "role": "cipher128",
+            "offset": 576,
+            "size": 16
+          },
+          {
+            "role": "cipher192",
+            "offset": 1088,
+            "size": 16
+          },
+          {
+            "role": "cipher256",
+            "offset": 656,
+            "size": 16
+          }
+        ],
+        "dependencies": {
+          "rounds": {
+            "kernels": [
+              {
+                "bits": 128,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+              },
+              {
+                "bits": 192,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+              },
+              {
+                "bits": 256,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+              }
+            ],
+            "rejected_mutations": 570,
+            "scope": "three complete round-kernel bodies only; callers, dispatch, expansion and cleanup outside these bodies unreviewed"
+          },
+          "expansion": {
+            "expansions": [
+              {
+                "bits": 128,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+              },
+              {
+                "bits": 192,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+              },
+              {
+                "bits": 256,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+              }
+            ],
+            "rejected_mutations": 735,
+            "scope": "three complete hardware expansion bodies only; caller admission, ownership and cleanup remain separate"
+          }
+        },
+        "platform_dependency": {
+          "symbol": "_ZN10std_detect6detect5cache21detect_and_initialize17hc4df1f5d10b6eedfE",
+          "size": 2392,
+          "sha256": "3dd7f7d0459220c38422603deb291e92f2c8c2d2c4941deb96268af8a5a8ef4e",
+          "trust": "std_detect and Linux capability reporting are trusted, not independently qualified here"
+        },
+        "scope": "Linux ARM hosted startup, runtime AES/PMULL admission and terminal startup health; NEON is a target baseline; not macOS, native, OS or physical qualification"
+      },
+      "executed_unavailable_controls": [
+        "warm-aes-absent",
+        "cold-aes-absent",
+        "warm-pmull-absent",
+        "cold-pmull-absent"
+      ],
+      "quarantine_case_count": 628,
+      "retained_report": "target/aes-accelerated-startup/1.90.0-hosted-arm-qemu-gyluh99n/direct-abort.json",
+      "retained_report_sha256": "2dbc486af3cc9d5060e634197afae39ae3ea57bcf366d02c44f1ac392f3312cc"
+    },
+    {
+      "compiler": "1.90.0",
+      "route": "direct",
+      "panic": "unwind",
+      "target": "aarch64-unknown-linux-musl",
+      "admission": "hosted",
+      "profile": "opt3-fat-lto-cgu1-overflow",
+      "execution": "qemu-emulated",
+      "binary_sha256": "e3a1b940a865cf37a89692d47a6aaf3e37d5f15ff16a598e762a77f2af5102a2",
+      "machine_review": "scoped-review",
+      "symbol_command": [
+        "/usr/bin/llvm-nm-23",
+        "--print-size",
+        "--defined-only",
+        "/home/eldryoth/Work/codex-projects/brynja/target/aes-accelerated-startup/1.90.0-hosted-arm-qemu-gyluh99n/direct-unwind.elf"
+      ],
+      "fixture_sha256": "540b73ec8ed4ac86d9bf283a3cdd01650345d221386b5b761ceba1b7fe60c145",
+      "execution_command": [
+        "/usr/bin/qemu-aarch64",
+        "-cpu",
+        "max",
+        "/home/eldryoth/Work/codex-projects/brynja/target/aes-accelerated-startup/1.90.0-hosted-arm-qemu-gyluh99n/direct-unwind.elf"
+      ],
+      "host": {
+        "system": "Linux",
+        "machine": "x86_64"
+      },
+      "tools": [
+        {
+          "path": "/usr/bin/llvm-nm-23",
+          "sha256": "3d447cc4199a83d532074a45686884a3ee984f78fd4e300356cea627166f7b57"
+        },
+        {
+          "path": "/usr/bin/llvm-objdump-23",
+          "sha256": "431df9267765434276d9017cbfb63072d60a7e3972657cdfbced6fa32765534b"
+        },
+        {
+          "path": "/usr/bin/qemu-aarch64",
+          "sha256": "61f98212cd11dcace419357c2cf4a2115531abf110991eacbb795d2681e78d64"
+        }
+      ],
+      "review": {
+        "bodies": {
+          "bcmp": {
+            "instructions": 1,
+            "branches": 0,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "922c3fc2e87c0cf7b2a79854ce777eb1ed03b76e21c7c80fc018c05e4f15eddf",
+            "encoding_sha256": "a7911cdfdc28e6a1867e359ba426081aacfa692fdeb3e978d2a68dd924fa8c3e",
+            "tail_calls": 1
+          },
+          "memcmp": {
+            "instructions": 14,
+            "branches": 4,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "6240918890c293741e523871495642947193d88df256de0c1fbdcd2460520452",
+            "encoding_sha256": "3ead36c2e051fe4bd6e57d97a75cb9a10a1ac20d53b716dfda3ccef3578ed3c8"
+          },
+          "startup": {
+            "instructions": 254,
+            "branches": 11,
+            "calls": 14,
+            "constants": 3,
+            "text_sha256": "7fc8b43295ae33ec86ee8526f52e21510258ded8a4adb648f0883c3b1da6df64",
+            "encoding_sha256": "49ab63604cf4157610cc0651ea068bee54f299d4cf515990669b8ab0cd77c131",
+            "address_constants": 7,
+            "mutable_caches": 1
+          }
+        },
+        "rejected_code_mutations": 1345,
+        "rejected_constant_mutations": 728,
+        "references": [
+          {
+            "role": "schedule128",
+            "offset": 7209,
+            "size": 176
+          },
+          {
+            "role": "schedule192",
+            "offset": 7385,
+            "size": 208
+          },
+          {
+            "role": "schedule256",
+            "offset": 7593,
+            "size": 240
+          },
+          {
+            "role": "plain",
+            "offset": 1072,
+            "size": 16
+          },
+          {
+            "role": "cipher128",
+            "offset": 576,
+            "size": 16
+          },
+          {
+            "role": "cipher192",
+            "offset": 1088,
+            "size": 16
+          },
+          {
+            "role": "cipher256",
+            "offset": 656,
+            "size": 16
+          }
+        ],
+        "dependencies": {
+          "rounds": {
+            "kernels": [
+              {
+                "bits": 128,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+              },
+              {
+                "bits": 192,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+              },
+              {
+                "bits": 256,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+              }
+            ],
+            "rejected_mutations": 570,
+            "scope": "three complete round-kernel bodies only; callers, dispatch, expansion and cleanup outside these bodies unreviewed"
+          },
+          "expansion": {
+            "expansions": [
+              {
+                "bits": 128,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+              },
+              {
+                "bits": 192,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+              },
+              {
+                "bits": 256,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+              }
+            ],
+            "rejected_mutations": 735,
+            "scope": "three complete hardware expansion bodies only; caller admission, ownership and cleanup remain separate"
+          }
+        },
+        "platform_dependency": {
+          "symbol": "_ZN10std_detect6detect5cache21detect_and_initialize17hc4df1f5d10b6eedfE",
+          "size": 2392,
+          "sha256": "bb435d956a902897acdf3378e56e20b50bc3205b19811c5ba556bdaabea30486",
+          "trust": "std_detect and Linux capability reporting are trusted, not independently qualified here"
+        },
+        "scope": "Linux ARM hosted startup, runtime AES/PMULL admission and terminal startup health; NEON is a target baseline; not macOS, native, OS or physical qualification"
+      },
+      "executed_unavailable_controls": [
+        "warm-aes-absent",
+        "cold-aes-absent",
+        "warm-pmull-absent",
+        "cold-pmull-absent"
+      ],
+      "quarantine_case_count": 628,
+      "retained_report": "target/aes-accelerated-startup/1.90.0-hosted-arm-qemu-gyluh99n/direct-unwind.json",
+      "retained_report_sha256": "7d1939bbc0003265edcd9f4a858f6df3d441e6581ad0348918e9b7ee20138311"
+    },
+    {
+      "compiler": "1.90.0",
+      "route": "facade",
+      "panic": "abort",
+      "target": "aarch64-unknown-linux-musl",
+      "admission": "hosted",
+      "profile": "opt3-fat-lto-cgu1-overflow",
+      "execution": "qemu-emulated",
+      "binary_sha256": "73fb8e05ff26efe648f3fb6ce67a13dbe71838d2a6f677a304671fddb62fd319",
+      "machine_review": "scoped-review",
+      "symbol_command": [
+        "/usr/bin/llvm-nm-23",
+        "--print-size",
+        "--defined-only",
+        "/home/eldryoth/Work/codex-projects/brynja/target/aes-accelerated-startup/1.90.0-hosted-arm-qemu-gyluh99n/facade-abort.elf"
+      ],
+      "fixture_sha256": "540b73ec8ed4ac86d9bf283a3cdd01650345d221386b5b761ceba1b7fe60c145",
+      "execution_command": [
+        "/usr/bin/qemu-aarch64",
+        "-cpu",
+        "max",
+        "/home/eldryoth/Work/codex-projects/brynja/target/aes-accelerated-startup/1.90.0-hosted-arm-qemu-gyluh99n/facade-abort.elf"
+      ],
+      "host": {
+        "system": "Linux",
+        "machine": "x86_64"
+      },
+      "tools": [
+        {
+          "path": "/usr/bin/llvm-nm-23",
+          "sha256": "3d447cc4199a83d532074a45686884a3ee984f78fd4e300356cea627166f7b57"
+        },
+        {
+          "path": "/usr/bin/llvm-objdump-23",
+          "sha256": "431df9267765434276d9017cbfb63072d60a7e3972657cdfbced6fa32765534b"
+        },
+        {
+          "path": "/usr/bin/qemu-aarch64",
+          "sha256": "61f98212cd11dcace419357c2cf4a2115531abf110991eacbb795d2681e78d64"
+        }
+      ],
+      "review": {
+        "bodies": {
+          "bcmp": {
+            "instructions": 1,
+            "branches": 0,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "922c3fc2e87c0cf7b2a79854ce777eb1ed03b76e21c7c80fc018c05e4f15eddf",
+            "encoding_sha256": "a7911cdfdc28e6a1867e359ba426081aacfa692fdeb3e978d2a68dd924fa8c3e",
+            "tail_calls": 1
+          },
+          "memcmp": {
+            "instructions": 14,
+            "branches": 4,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "6240918890c293741e523871495642947193d88df256de0c1fbdcd2460520452",
+            "encoding_sha256": "3ead36c2e051fe4bd6e57d97a75cb9a10a1ac20d53b716dfda3ccef3578ed3c8"
+          },
+          "startup": {
+            "instructions": 254,
+            "branches": 11,
+            "calls": 14,
+            "constants": 3,
+            "text_sha256": "7fc8b43295ae33ec86ee8526f52e21510258ded8a4adb648f0883c3b1da6df64",
+            "encoding_sha256": "49ab63604cf4157610cc0651ea068bee54f299d4cf515990669b8ab0cd77c131",
+            "address_constants": 7,
+            "mutable_caches": 1
+          }
+        },
+        "rejected_code_mutations": 1345,
+        "rejected_constant_mutations": 728,
+        "references": [
+          {
+            "role": "schedule128",
+            "offset": 7241,
+            "size": 176
+          },
+          {
+            "role": "schedule192",
+            "offset": 7417,
+            "size": 208
+          },
+          {
+            "role": "schedule256",
+            "offset": 7625,
+            "size": 240
+          },
+          {
+            "role": "plain",
+            "offset": 1072,
+            "size": 16
+          },
+          {
+            "role": "cipher128",
+            "offset": 576,
+            "size": 16
+          },
+          {
+            "role": "cipher192",
+            "offset": 1088,
+            "size": 16
+          },
+          {
+            "role": "cipher256",
+            "offset": 656,
+            "size": 16
+          }
+        ],
+        "dependencies": {
+          "rounds": {
+            "kernels": [
+              {
+                "bits": 128,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+              },
+              {
+                "bits": 192,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+              },
+              {
+                "bits": 256,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+              }
+            ],
+            "rejected_mutations": 570,
+            "scope": "three complete round-kernel bodies only; callers, dispatch, expansion and cleanup outside these bodies unreviewed"
+          },
+          "expansion": {
+            "expansions": [
+              {
+                "bits": 128,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+              },
+              {
+                "bits": 192,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+              },
+              {
+                "bits": 256,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+              }
+            ],
+            "rejected_mutations": 735,
+            "scope": "three complete hardware expansion bodies only; caller admission, ownership and cleanup remain separate"
+          }
+        },
+        "platform_dependency": {
+          "symbol": "_ZN10std_detect6detect5cache21detect_and_initialize17hc4df1f5d10b6eedfE",
+          "size": 2392,
+          "sha256": "3dd7f7d0459220c38422603deb291e92f2c8c2d2c4941deb96268af8a5a8ef4e",
+          "trust": "std_detect and Linux capability reporting are trusted, not independently qualified here"
+        },
+        "scope": "Linux ARM hosted startup, runtime AES/PMULL admission and terminal startup health; NEON is a target baseline; not macOS, native, OS or physical qualification"
+      },
+      "executed_unavailable_controls": [
+        "warm-aes-absent",
+        "cold-aes-absent",
+        "warm-pmull-absent",
+        "cold-pmull-absent"
+      ],
+      "quarantine_case_count": 628,
+      "retained_report": "target/aes-accelerated-startup/1.90.0-hosted-arm-qemu-gyluh99n/facade-abort.json",
+      "retained_report_sha256": "322540152a4c520704d57a983fa3b29ce7935395cc89877ad478194e38787e32"
+    },
+    {
+      "compiler": "1.90.0",
+      "route": "facade",
+      "panic": "unwind",
+      "target": "aarch64-unknown-linux-musl",
+      "admission": "hosted",
+      "profile": "opt3-fat-lto-cgu1-overflow",
+      "execution": "qemu-emulated",
+      "binary_sha256": "15876a41f6b9b25521b3e14639826614f8e4361747c7ad76f23046dc8c39d635",
+      "machine_review": "scoped-review",
+      "symbol_command": [
+        "/usr/bin/llvm-nm-23",
+        "--print-size",
+        "--defined-only",
+        "/home/eldryoth/Work/codex-projects/brynja/target/aes-accelerated-startup/1.90.0-hosted-arm-qemu-gyluh99n/facade-unwind.elf"
+      ],
+      "fixture_sha256": "540b73ec8ed4ac86d9bf283a3cdd01650345d221386b5b761ceba1b7fe60c145",
+      "execution_command": [
+        "/usr/bin/qemu-aarch64",
+        "-cpu",
+        "max",
+        "/home/eldryoth/Work/codex-projects/brynja/target/aes-accelerated-startup/1.90.0-hosted-arm-qemu-gyluh99n/facade-unwind.elf"
+      ],
+      "host": {
+        "system": "Linux",
+        "machine": "x86_64"
+      },
+      "tools": [
+        {
+          "path": "/usr/bin/llvm-nm-23",
+          "sha256": "3d447cc4199a83d532074a45686884a3ee984f78fd4e300356cea627166f7b57"
+        },
+        {
+          "path": "/usr/bin/llvm-objdump-23",
+          "sha256": "431df9267765434276d9017cbfb63072d60a7e3972657cdfbced6fa32765534b"
+        },
+        {
+          "path": "/usr/bin/qemu-aarch64",
+          "sha256": "61f98212cd11dcace419357c2cf4a2115531abf110991eacbb795d2681e78d64"
+        }
+      ],
+      "review": {
+        "bodies": {
+          "bcmp": {
+            "instructions": 1,
+            "branches": 0,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "922c3fc2e87c0cf7b2a79854ce777eb1ed03b76e21c7c80fc018c05e4f15eddf",
+            "encoding_sha256": "a7911cdfdc28e6a1867e359ba426081aacfa692fdeb3e978d2a68dd924fa8c3e",
+            "tail_calls": 1
+          },
+          "memcmp": {
+            "instructions": 14,
+            "branches": 4,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "6240918890c293741e523871495642947193d88df256de0c1fbdcd2460520452",
+            "encoding_sha256": "3ead36c2e051fe4bd6e57d97a75cb9a10a1ac20d53b716dfda3ccef3578ed3c8"
+          },
+          "startup": {
+            "instructions": 254,
+            "branches": 11,
+            "calls": 14,
+            "constants": 3,
+            "text_sha256": "7fc8b43295ae33ec86ee8526f52e21510258ded8a4adb648f0883c3b1da6df64",
+            "encoding_sha256": "49ab63604cf4157610cc0651ea068bee54f299d4cf515990669b8ab0cd77c131",
+            "address_constants": 7,
+            "mutable_caches": 1
+          }
+        },
+        "rejected_code_mutations": 1345,
+        "rejected_constant_mutations": 728,
+        "references": [
+          {
+            "role": "schedule128",
+            "offset": 7209,
+            "size": 176
+          },
+          {
+            "role": "schedule192",
+            "offset": 7385,
+            "size": 208
+          },
+          {
+            "role": "schedule256",
+            "offset": 7593,
+            "size": 240
+          },
+          {
+            "role": "plain",
+            "offset": 1072,
+            "size": 16
+          },
+          {
+            "role": "cipher128",
+            "offset": 576,
+            "size": 16
+          },
+          {
+            "role": "cipher192",
+            "offset": 1088,
+            "size": 16
+          },
+          {
+            "role": "cipher256",
+            "offset": 656,
+            "size": 16
+          }
+        ],
+        "dependencies": {
+          "rounds": {
+            "kernels": [
+              {
+                "bits": 128,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+              },
+              {
+                "bits": 192,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+              },
+              {
+                "bits": 256,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+              }
+            ],
+            "rejected_mutations": 570,
+            "scope": "three complete round-kernel bodies only; callers, dispatch, expansion and cleanup outside these bodies unreviewed"
+          },
+          "expansion": {
+            "expansions": [
+              {
+                "bits": 128,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+              },
+              {
+                "bits": 192,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+              },
+              {
+                "bits": 256,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+              }
+            ],
+            "rejected_mutations": 735,
+            "scope": "three complete hardware expansion bodies only; caller admission, ownership and cleanup remain separate"
+          }
+        },
+        "platform_dependency": {
+          "symbol": "_ZN10std_detect6detect5cache21detect_and_initialize17hc4df1f5d10b6eedfE",
+          "size": 2392,
+          "sha256": "8e29d79a5c7c58716d960646adf4a36b877eccd7fa5f53641b8852ef6e6e1869",
+          "trust": "std_detect and Linux capability reporting are trusted, not independently qualified here"
+        },
+        "scope": "Linux ARM hosted startup, runtime AES/PMULL admission and terminal startup health; NEON is a target baseline; not macOS, native, OS or physical qualification"
+      },
+      "executed_unavailable_controls": [
+        "warm-aes-absent",
+        "cold-aes-absent",
+        "warm-pmull-absent",
+        "cold-pmull-absent"
+      ],
+      "quarantine_case_count": 628,
+      "retained_report": "target/aes-accelerated-startup/1.90.0-hosted-arm-qemu-gyluh99n/facade-unwind.json",
+      "retained_report_sha256": "01d9a90a4c92978fab16460c0aa1b438aee721980e8f892d040cf77fa9081c95"
+    },
+    {
+      "compiler": "1.99.1",
+      "route": "direct",
+      "panic": "abort",
+      "target": "aarch64-unknown-linux-musl",
+      "admission": "hosted",
+      "profile": "opt3-fat-lto-cgu1-overflow",
+      "execution": "qemu-emulated",
+      "binary_sha256": "bd47f2ce5dfe7bb1b185fa958c2789e50509940c2448097db3ad3e0f0f3eb717",
+      "machine_review": "scoped-review",
+      "symbol_command": [
+        "/usr/bin/llvm-nm-23",
+        "--print-size",
+        "--defined-only",
+        "/home/eldryoth/Work/codex-projects/brynja/target/aes-accelerated-startup/1.99.1-hosted-arm-qemu-aus68y2q/direct-abort.elf"
+      ],
+      "fixture_sha256": "540b73ec8ed4ac86d9bf283a3cdd01650345d221386b5b761ceba1b7fe60c145",
+      "execution_command": [
+        "/usr/bin/qemu-aarch64",
+        "-cpu",
+        "max",
+        "/home/eldryoth/Work/codex-projects/brynja/target/aes-accelerated-startup/1.99.1-hosted-arm-qemu-aus68y2q/direct-abort.elf"
+      ],
+      "host": {
+        "system": "Linux",
+        "machine": "x86_64"
+      },
+      "tools": [
+        {
+          "path": "/usr/bin/llvm-nm-23",
+          "sha256": "3d447cc4199a83d532074a45686884a3ee984f78fd4e300356cea627166f7b57"
+        },
+        {
+          "path": "/usr/bin/llvm-objdump-23",
+          "sha256": "431df9267765434276d9017cbfb63072d60a7e3972657cdfbced6fa32765534b"
+        },
+        {
+          "path": "/usr/bin/qemu-aarch64",
+          "sha256": "61f98212cd11dcace419357c2cf4a2115531abf110991eacbb795d2681e78d64"
+        }
+      ],
+      "review": {
+        "bodies": {
+          "bcmp": {
+            "instructions": 1,
+            "branches": 0,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "922c3fc2e87c0cf7b2a79854ce777eb1ed03b76e21c7c80fc018c05e4f15eddf",
+            "encoding_sha256": "a7911cdfdc28e6a1867e359ba426081aacfa692fdeb3e978d2a68dd924fa8c3e",
+            "tail_calls": 1
+          },
+          "memcmp": {
+            "instructions": 13,
+            "branches": 3,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "f6ed30b42b342adc292bee072864fe4a7b1a0a4720f101026df09de2065b44ff",
+            "encoding_sha256": "292e7a7fee0451387e07735f24b56ca03fc0c3a048cdda1692a0154a55e1bf33"
+          },
+          "startup": {
+            "instructions": 251,
+            "branches": 11,
+            "calls": 14,
+            "constants": 3,
+            "text_sha256": "0c1607a4a7150bb248e94cd5cb58cfcd264d077032cde49e106d887ef4489009",
+            "encoding_sha256": "16f893fbbbbfdb4fad12bd01219103725b8f013efaa82a35f99f654787219071",
+            "address_constants": 7,
+            "mutable_caches": 1
+          }
+        },
+        "rejected_code_mutations": 1325,
+        "rejected_constant_mutations": 728,
+        "references": [
+          {
+            "role": "schedule128",
+            "offset": 13257,
+            "size": 176
+          },
+          {
+            "role": "schedule192",
+            "offset": 13433,
+            "size": 208
+          },
+          {
+            "role": "schedule256",
+            "offset": 13641,
+            "size": 240
+          },
+          {
+            "role": "plain",
+            "offset": 4768,
+            "size": 16
+          },
+          {
+            "role": "cipher128",
+            "offset": 4272,
+            "size": 16
+          },
+          {
+            "role": "cipher192",
+            "offset": 4784,
+            "size": 16
+          },
+          {
+            "role": "cipher256",
+            "offset": 4368,
+            "size": 16
+          }
+        ],
+        "dependencies": {
+          "rounds": {
+            "kernels": [
+              {
+                "bits": 128,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+              },
+              {
+                "bits": 192,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+              },
+              {
+                "bits": 256,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+              }
+            ],
+            "rejected_mutations": 570,
+            "scope": "three complete round-kernel bodies only; callers, dispatch, expansion and cleanup outside these bodies unreviewed"
+          },
+          "expansion": {
+            "expansions": [
+              {
+                "bits": 128,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+              },
+              {
+                "bits": 192,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+              },
+              {
+                "bits": 256,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+              }
+            ],
+            "rejected_mutations": 735,
+            "scope": "three complete hardware expansion bodies only; caller admission, ownership and cleanup remain separate"
+          }
+        },
+        "platform_dependency": {
+          "symbol": "_RNvNtNtCs4UJ8wuTG4D3_10std_detect6detect5cache21detect_and_initialize",
+          "size": 2116,
+          "sha256": "bcbc9266778f537d1457921492e05bcb71215ef14147eeab81aa534d991093b8",
+          "trust": "std_detect and Linux capability reporting are trusted, not independently qualified here"
+        },
+        "scope": "Linux ARM hosted startup, runtime AES/PMULL admission and terminal startup health; NEON is a target baseline; not macOS, native, OS or physical qualification"
+      },
+      "executed_unavailable_controls": [
+        "warm-aes-absent",
+        "cold-aes-absent",
+        "warm-pmull-absent",
+        "cold-pmull-absent"
+      ],
+      "quarantine_case_count": 628,
+      "retained_report": "target/aes-accelerated-startup/1.99.1-hosted-arm-qemu-aus68y2q/direct-abort.json",
+      "retained_report_sha256": "c09c1177ba4cf116c4ff695e5f96e33cd9894289960b98ae25438a634e926bc8"
+    },
+    {
+      "compiler": "1.99.1",
+      "route": "direct",
+      "panic": "unwind",
+      "target": "aarch64-unknown-linux-musl",
+      "admission": "hosted",
+      "profile": "opt3-fat-lto-cgu1-overflow",
+      "execution": "qemu-emulated",
+      "binary_sha256": "0e68ae27d6ce71ce859f7670a205ea75c349139ec08462701de75c751cbbd328",
+      "machine_review": "scoped-review",
+      "symbol_command": [
+        "/usr/bin/llvm-nm-23",
+        "--print-size",
+        "--defined-only",
+        "/home/eldryoth/Work/codex-projects/brynja/target/aes-accelerated-startup/1.99.1-hosted-arm-qemu-aus68y2q/direct-unwind.elf"
+      ],
+      "fixture_sha256": "540b73ec8ed4ac86d9bf283a3cdd01650345d221386b5b761ceba1b7fe60c145",
+      "execution_command": [
+        "/usr/bin/qemu-aarch64",
+        "-cpu",
+        "max",
+        "/home/eldryoth/Work/codex-projects/brynja/target/aes-accelerated-startup/1.99.1-hosted-arm-qemu-aus68y2q/direct-unwind.elf"
+      ],
+      "host": {
+        "system": "Linux",
+        "machine": "x86_64"
+      },
+      "tools": [
+        {
+          "path": "/usr/bin/llvm-nm-23",
+          "sha256": "3d447cc4199a83d532074a45686884a3ee984f78fd4e300356cea627166f7b57"
+        },
+        {
+          "path": "/usr/bin/llvm-objdump-23",
+          "sha256": "431df9267765434276d9017cbfb63072d60a7e3972657cdfbced6fa32765534b"
+        },
+        {
+          "path": "/usr/bin/qemu-aarch64",
+          "sha256": "61f98212cd11dcace419357c2cf4a2115531abf110991eacbb795d2681e78d64"
+        }
+      ],
+      "review": {
+        "bodies": {
+          "bcmp": {
+            "instructions": 1,
+            "branches": 0,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "922c3fc2e87c0cf7b2a79854ce777eb1ed03b76e21c7c80fc018c05e4f15eddf",
+            "encoding_sha256": "a7911cdfdc28e6a1867e359ba426081aacfa692fdeb3e978d2a68dd924fa8c3e",
+            "tail_calls": 1
+          },
+          "memcmp": {
+            "instructions": 13,
+            "branches": 3,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "f6ed30b42b342adc292bee072864fe4a7b1a0a4720f101026df09de2065b44ff",
+            "encoding_sha256": "292e7a7fee0451387e07735f24b56ca03fc0c3a048cdda1692a0154a55e1bf33"
+          },
+          "startup": {
+            "instructions": 251,
+            "branches": 11,
+            "calls": 14,
+            "constants": 3,
+            "text_sha256": "0c1607a4a7150bb248e94cd5cb58cfcd264d077032cde49e106d887ef4489009",
+            "encoding_sha256": "16f893fbbbbfdb4fad12bd01219103725b8f013efaa82a35f99f654787219071",
+            "address_constants": 7,
+            "mutable_caches": 1
+          }
+        },
+        "rejected_code_mutations": 1325,
+        "rejected_constant_mutations": 728,
+        "references": [
+          {
+            "role": "schedule128",
+            "offset": 13533,
+            "size": 176
+          },
+          {
+            "role": "schedule192",
+            "offset": 13709,
+            "size": 208
+          },
+          {
+            "role": "schedule256",
+            "offset": 13917,
+            "size": 240
+          },
+          {
+            "role": "plain",
+            "offset": 5056,
+            "size": 16
+          },
+          {
+            "role": "cipher128",
+            "offset": 4560,
+            "size": 16
+          },
+          {
+            "role": "cipher192",
+            "offset": 5072,
+            "size": 16
+          },
+          {
+            "role": "cipher256",
+            "offset": 4656,
+            "size": 16
+          }
+        ],
+        "dependencies": {
+          "rounds": {
+            "kernels": [
+              {
+                "bits": 128,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+              },
+              {
+                "bits": 192,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+              },
+              {
+                "bits": 256,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+              }
+            ],
+            "rejected_mutations": 570,
+            "scope": "three complete round-kernel bodies only; callers, dispatch, expansion and cleanup outside these bodies unreviewed"
+          },
+          "expansion": {
+            "expansions": [
+              {
+                "bits": 128,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+              },
+              {
+                "bits": 192,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+              },
+              {
+                "bits": 256,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+              }
+            ],
+            "rejected_mutations": 735,
+            "scope": "three complete hardware expansion bodies only; caller admission, ownership and cleanup remain separate"
+          }
+        },
+        "platform_dependency": {
+          "symbol": "_RNvNtNtCs4UJ8wuTG4D3_10std_detect6detect5cache21detect_and_initialize",
+          "size": 2116,
+          "sha256": "d8e3f8f60cec19b6f2253a840961fc0ac1cc8ab7027ff468b09ea70ebbdac87e",
+          "trust": "std_detect and Linux capability reporting are trusted, not independently qualified here"
+        },
+        "scope": "Linux ARM hosted startup, runtime AES/PMULL admission and terminal startup health; NEON is a target baseline; not macOS, native, OS or physical qualification"
+      },
+      "executed_unavailable_controls": [
+        "warm-aes-absent",
+        "cold-aes-absent",
+        "warm-pmull-absent",
+        "cold-pmull-absent"
+      ],
+      "quarantine_case_count": 628,
+      "retained_report": "target/aes-accelerated-startup/1.99.1-hosted-arm-qemu-aus68y2q/direct-unwind.json",
+      "retained_report_sha256": "178bb805220265262100a53c7b04c52ee70e72c9b06dfdb4b5f72b7f81864335"
+    },
+    {
+      "compiler": "1.99.1",
+      "route": "facade",
+      "panic": "abort",
+      "target": "aarch64-unknown-linux-musl",
+      "admission": "hosted",
+      "profile": "opt3-fat-lto-cgu1-overflow",
+      "execution": "qemu-emulated",
+      "binary_sha256": "f1a54801c6fa3e73c4380c1080ab9b7fd22590fccb16f31761be1068e1f2a7f5",
+      "machine_review": "scoped-review",
+      "symbol_command": [
+        "/usr/bin/llvm-nm-23",
+        "--print-size",
+        "--defined-only",
+        "/home/eldryoth/Work/codex-projects/brynja/target/aes-accelerated-startup/1.99.1-hosted-arm-qemu-aus68y2q/facade-abort.elf"
+      ],
+      "fixture_sha256": "540b73ec8ed4ac86d9bf283a3cdd01650345d221386b5b761ceba1b7fe60c145",
+      "execution_command": [
+        "/usr/bin/qemu-aarch64",
+        "-cpu",
+        "max",
+        "/home/eldryoth/Work/codex-projects/brynja/target/aes-accelerated-startup/1.99.1-hosted-arm-qemu-aus68y2q/facade-abort.elf"
+      ],
+      "host": {
+        "system": "Linux",
+        "machine": "x86_64"
+      },
+      "tools": [
+        {
+          "path": "/usr/bin/llvm-nm-23",
+          "sha256": "3d447cc4199a83d532074a45686884a3ee984f78fd4e300356cea627166f7b57"
+        },
+        {
+          "path": "/usr/bin/llvm-objdump-23",
+          "sha256": "431df9267765434276d9017cbfb63072d60a7e3972657cdfbced6fa32765534b"
+        },
+        {
+          "path": "/usr/bin/qemu-aarch64",
+          "sha256": "61f98212cd11dcace419357c2cf4a2115531abf110991eacbb795d2681e78d64"
+        }
+      ],
+      "review": {
+        "bodies": {
+          "bcmp": {
+            "instructions": 1,
+            "branches": 0,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "922c3fc2e87c0cf7b2a79854ce777eb1ed03b76e21c7c80fc018c05e4f15eddf",
+            "encoding_sha256": "a7911cdfdc28e6a1867e359ba426081aacfa692fdeb3e978d2a68dd924fa8c3e",
+            "tail_calls": 1
+          },
+          "memcmp": {
+            "instructions": 13,
+            "branches": 3,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "f6ed30b42b342adc292bee072864fe4a7b1a0a4720f101026df09de2065b44ff",
+            "encoding_sha256": "292e7a7fee0451387e07735f24b56ca03fc0c3a048cdda1692a0154a55e1bf33"
+          },
+          "startup": {
+            "instructions": 251,
+            "branches": 11,
+            "calls": 14,
+            "constants": 3,
+            "text_sha256": "0c1607a4a7150bb248e94cd5cb58cfcd264d077032cde49e106d887ef4489009",
+            "encoding_sha256": "16f893fbbbbfdb4fad12bd01219103725b8f013efaa82a35f99f654787219071",
+            "address_constants": 7,
+            "mutable_caches": 1
+          }
+        },
+        "rejected_code_mutations": 1325,
+        "rejected_constant_mutations": 728,
+        "references": [
+          {
+            "role": "schedule128",
+            "offset": 13257,
+            "size": 176
+          },
+          {
+            "role": "schedule192",
+            "offset": 13433,
+            "size": 208
+          },
+          {
+            "role": "schedule256",
+            "offset": 13641,
+            "size": 240
+          },
+          {
+            "role": "plain",
+            "offset": 4768,
+            "size": 16
+          },
+          {
+            "role": "cipher128",
+            "offset": 4272,
+            "size": 16
+          },
+          {
+            "role": "cipher192",
+            "offset": 4784,
+            "size": 16
+          },
+          {
+            "role": "cipher256",
+            "offset": 4368,
+            "size": 16
+          }
+        ],
+        "dependencies": {
+          "rounds": {
+            "kernels": [
+              {
+                "bits": 128,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+              },
+              {
+                "bits": 192,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+              },
+              {
+                "bits": 256,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+              }
+            ],
+            "rejected_mutations": 570,
+            "scope": "three complete round-kernel bodies only; callers, dispatch, expansion and cleanup outside these bodies unreviewed"
+          },
+          "expansion": {
+            "expansions": [
+              {
+                "bits": 128,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+              },
+              {
+                "bits": 192,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+              },
+              {
+                "bits": 256,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+              }
+            ],
+            "rejected_mutations": 735,
+            "scope": "three complete hardware expansion bodies only; caller admission, ownership and cleanup remain separate"
+          }
+        },
+        "platform_dependency": {
+          "symbol": "_RNvNtNtCs4UJ8wuTG4D3_10std_detect6detect5cache21detect_and_initialize",
+          "size": 2116,
+          "sha256": "31b278717d6ff82f91e6c1ee406dc7594820d5eaa2e3e85fbfa8f516637d7868",
+          "trust": "std_detect and Linux capability reporting are trusted, not independently qualified here"
+        },
+        "scope": "Linux ARM hosted startup, runtime AES/PMULL admission and terminal startup health; NEON is a target baseline; not macOS, native, OS or physical qualification"
+      },
+      "executed_unavailable_controls": [
+        "warm-aes-absent",
+        "cold-aes-absent",
+        "warm-pmull-absent",
+        "cold-pmull-absent"
+      ],
+      "quarantine_case_count": 628,
+      "retained_report": "target/aes-accelerated-startup/1.99.1-hosted-arm-qemu-aus68y2q/facade-abort.json",
+      "retained_report_sha256": "292f3a25ae7b25520037f93016acdbd74ed365e50cbb439e63944db18d23f42e"
+    },
+    {
+      "compiler": "1.99.1",
+      "route": "facade",
+      "panic": "unwind",
+      "target": "aarch64-unknown-linux-musl",
+      "admission": "hosted",
+      "profile": "opt3-fat-lto-cgu1-overflow",
+      "execution": "qemu-emulated",
+      "binary_sha256": "2255ed6f153441996cb8e2819995afb27a332cc6d36e9e207db8f75de574d3c7",
+      "machine_review": "scoped-review",
+      "symbol_command": [
+        "/usr/bin/llvm-nm-23",
+        "--print-size",
+        "--defined-only",
+        "/home/eldryoth/Work/codex-projects/brynja/target/aes-accelerated-startup/1.99.1-hosted-arm-qemu-aus68y2q/facade-unwind.elf"
+      ],
+      "fixture_sha256": "540b73ec8ed4ac86d9bf283a3cdd01650345d221386b5b761ceba1b7fe60c145",
+      "execution_command": [
+        "/usr/bin/qemu-aarch64",
+        "-cpu",
+        "max",
+        "/home/eldryoth/Work/codex-projects/brynja/target/aes-accelerated-startup/1.99.1-hosted-arm-qemu-aus68y2q/facade-unwind.elf"
+      ],
+      "host": {
+        "system": "Linux",
+        "machine": "x86_64"
+      },
+      "tools": [
+        {
+          "path": "/usr/bin/llvm-nm-23",
+          "sha256": "3d447cc4199a83d532074a45686884a3ee984f78fd4e300356cea627166f7b57"
+        },
+        {
+          "path": "/usr/bin/llvm-objdump-23",
+          "sha256": "431df9267765434276d9017cbfb63072d60a7e3972657cdfbced6fa32765534b"
+        },
+        {
+          "path": "/usr/bin/qemu-aarch64",
+          "sha256": "61f98212cd11dcace419357c2cf4a2115531abf110991eacbb795d2681e78d64"
+        }
+      ],
+      "review": {
+        "bodies": {
+          "bcmp": {
+            "instructions": 1,
+            "branches": 0,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "922c3fc2e87c0cf7b2a79854ce777eb1ed03b76e21c7c80fc018c05e4f15eddf",
+            "encoding_sha256": "a7911cdfdc28e6a1867e359ba426081aacfa692fdeb3e978d2a68dd924fa8c3e",
+            "tail_calls": 1
+          },
+          "memcmp": {
+            "instructions": 13,
+            "branches": 3,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "f6ed30b42b342adc292bee072864fe4a7b1a0a4720f101026df09de2065b44ff",
+            "encoding_sha256": "292e7a7fee0451387e07735f24b56ca03fc0c3a048cdda1692a0154a55e1bf33"
+          },
+          "startup": {
+            "instructions": 251,
+            "branches": 11,
+            "calls": 14,
+            "constants": 3,
+            "text_sha256": "0c1607a4a7150bb248e94cd5cb58cfcd264d077032cde49e106d887ef4489009",
+            "encoding_sha256": "16f893fbbbbfdb4fad12bd01219103725b8f013efaa82a35f99f654787219071",
+            "address_constants": 7,
+            "mutable_caches": 1
+          }
+        },
+        "rejected_code_mutations": 1325,
+        "rejected_constant_mutations": 728,
+        "references": [
+          {
+            "role": "schedule128",
+            "offset": 13533,
+            "size": 176
+          },
+          {
+            "role": "schedule192",
+            "offset": 13709,
+            "size": 208
+          },
+          {
+            "role": "schedule256",
+            "offset": 13917,
+            "size": 240
+          },
+          {
+            "role": "plain",
+            "offset": 5056,
+            "size": 16
+          },
+          {
+            "role": "cipher128",
+            "offset": 4560,
+            "size": 16
+          },
+          {
+            "role": "cipher192",
+            "offset": 5072,
+            "size": 16
+          },
+          {
+            "role": "cipher256",
+            "offset": 4656,
+            "size": 16
+          }
+        ],
+        "dependencies": {
+          "rounds": {
+            "kernels": [
+              {
+                "bits": 128,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+              },
+              {
+                "bits": 192,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+              },
+              {
+                "bits": 256,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+              }
+            ],
+            "rejected_mutations": 570,
+            "scope": "three complete round-kernel bodies only; callers, dispatch, expansion and cleanup outside these bodies unreviewed"
+          },
+          "expansion": {
+            "expansions": [
+              {
+                "bits": 128,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+              },
+              {
+                "bits": 192,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+              },
+              {
+                "bits": 256,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+              }
+            ],
+            "rejected_mutations": 735,
+            "scope": "three complete hardware expansion bodies only; caller admission, ownership and cleanup remain separate"
+          }
+        },
+        "platform_dependency": {
+          "symbol": "_RNvNtNtCs4UJ8wuTG4D3_10std_detect6detect5cache21detect_and_initialize",
+          "size": 2116,
+          "sha256": "d8e3f8f60cec19b6f2253a840961fc0ac1cc8ab7027ff468b09ea70ebbdac87e",
+          "trust": "std_detect and Linux capability reporting are trusted, not independently qualified here"
+        },
+        "scope": "Linux ARM hosted startup, runtime AES/PMULL admission and terminal startup health; NEON is a target baseline; not macOS, native, OS or physical qualification"
+      },
+      "executed_unavailable_controls": [
+        "warm-aes-absent",
+        "cold-aes-absent",
+        "warm-pmull-absent",
+        "cold-pmull-absent"
+      ],
+      "quarantine_case_count": 628,
+      "retained_report": "target/aes-accelerated-startup/1.99.1-hosted-arm-qemu-aus68y2q/facade-unwind.json",
+      "retained_report_sha256": "bed317a423f2cf0727d8d42f423d0e38247a6923c0edd634e310c53e9d69ea3a"
+    }
+  ],
+  "limits": [
+    "QEMU execution is not native qualification or hardware without PMULL.",
+    "Detector observations are replaced only in isolated control executables.",
+    "Existing native Linux and Apple hosted observations predate this source correction.",
+    "OS/hypervisor lifetime guarantees, physical protection and timing are not established here."
+  ]
+}

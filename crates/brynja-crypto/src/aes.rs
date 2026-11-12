@@ -1,8 +1,9 @@
 //! Development portable AES block primitives (FIPS 197).
 //! Available only with the explicit `hazmat-aes-block` Cargo feature.
 //!
-//! No mode, authentication, padding, nonce management, acceleration or implicit
-//! algorithm selection. Do not encrypt messages by repeatedly applying this
+//! No mode, authentication, padding, nonce management or implicit algorithm
+//! selection. These constructors remain portable. Explicit static acceleration
+//! is separately gated under `aes::execution`. Do not encrypt messages by repeatedly applying this
 //! primitive as ECB. Deployment/side-channel qualification is pending.
 //! Source arithmetic has fixed work and no secret-indexed tables; this is not
 //! a guarantee about every compiler's emitted code or every target's timing.
@@ -34,6 +35,10 @@ use core::marker::PhantomData;
 mod portable;
 mod wide;
 pub use wide::{Aes192ExpandedKey, Aes192Key, Aes256ExpandedKey, Aes256Key};
+
+/// Explicit clearing AES owners bound to a checked static hardware authority.
+#[cfg(feature = "aes-static-execution")]
+pub mod execution;
 
 /// Explicit, optional external AES-128 key providers; no device driver is bundled.
 #[cfg(feature = "external-key-provider")]

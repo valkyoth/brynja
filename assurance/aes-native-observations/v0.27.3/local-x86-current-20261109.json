@@ -1,0 +1,1049 @@
+{
+  "identity": {
+    "compiler": "rustc 1.99.1 (58cf8f9c3 2026-10-13)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: x86_64-unknown-linux-gnu\nrelease: 1.99.1\nLLVM version: 23.1.1\n",
+    "route": "direct",
+    "admission": "static",
+    "target": "x86_64-unknown-linux-gnu",
+    "profile": "opt3-fat-lto-cgu1-overflow-unwind",
+    "binary_sha256": "7c9df0c144918d2b6a0b9884af88c0b416b5727580a90a07bf0569d6c132a1cc",
+    "flags": "-Ctarget-feature=+aes,+sse2",
+    "versions": {
+      "brynja": "0.27.2",
+      "brynja-core": "0.10.0",
+      "brynja-crypto": "0.2.0",
+      "brynja-crypto-cpu": "0.2.0",
+      "brynja-crypto-cpu-std": "0.2.0",
+      "brynja-dtls": "0.1.9",
+      "brynja-hash-core": "0.1.0",
+      "brynja-hash-parallel": "0.1.0",
+      "brynja-hash-sha2": "0.1.0",
+      "brynja-hash-sha3": "0.1.0",
+      "brynja-hash-tuple": "0.1.0",
+      "brynja-mac-hmac": "0.1.0",
+      "brynja-mac-kmac": "0.1.0",
+      "brynja-pki": "0.3.0",
+      "brynja-platform": "0.1.9",
+      "brynja-protocol": "0.1.1",
+      "brynja-quic-tls": "0.1.9",
+      "brynja-tls": "0.1.9",
+      "brynja-tls12": "0.1.9",
+      "brynja-tls13": "0.1.9",
+      "brynja-tls13-handshake": "0.1.9"
+    },
+    "archive_sha256": {
+      "brynja": "46157e779cd1147fbf2e6ff973b10f5fbfe79ed917c5e154e619bc2cb43f0e0d",
+      "brynja-core": "3ac8894a7a05e5ae25c164091998ca081933bb960769bc3238ec5972d1c61679",
+      "brynja-crypto": "b1c27d420d4e3c728025341c0e5cad381b8cc84e688cc448600fa7a1212be82e",
+      "brynja-crypto-cpu": "b91131bbb2d50012712888f5dba25195fe6cb1f14e0437d08d393b4c228f1c06",
+      "brynja-crypto-cpu-std": "227d03a858ee41025d910cc00065e8bbd08be098762614f593f65040a5195ea3",
+      "brynja-dtls": "f1c3c7d861ca583a861010da0f8bff48f62d1f6fb03acc91dcbbf6d0572bab2b",
+      "brynja-hash-core": "13b6fe81e8b96028ebe481d543193a1e5d34a78a7ac048b7ef0fa5c66d3dcbf2",
+      "brynja-hash-parallel": "ad36ecb82850323b118837cc00d000c84884fe1b2a91e046205de61326c85636",
+      "brynja-hash-sha2": "6789380c398f786876f2d4d229cc2a19c9fac0e48c1db0a41c236b87ddd74671",
+      "brynja-hash-sha3": "5540d41efc822597149a87a6b0800e3c18d6832f1a0139994ba1ed529926f957",
+      "brynja-hash-tuple": "bf80666869ccaf81129a294b804c0af1e1b698875b1bbc31d4ede2a9e8ea2a24",
+      "brynja-mac-hmac": "df7a3cf963cc6aa4dd1d84e7a4d7b8387dc7158656bbd86f8d10a65dee87399e",
+      "brynja-mac-kmac": "b09c53f0ea943864d63722f25c2f6683e66b9efe4162f1383529dd255ec85940",
+      "brynja-pki": "42936cff98f924f34831f8aa4cba616faf011fdd8a1826d57879a39084650f48",
+      "brynja-platform": "02fdab9954540d215e81000427628ca8e6018f3b3db843e5e34d0ed0b2d4f3bf",
+      "brynja-protocol": "79ba3a20529393efd8770690bd93626841224f9375e8cd5363178c757a0abfb3",
+      "brynja-quic-tls": "3d6a25934c066a5342c0995ec852d4fbaa64be9123b6554409677caaa26c8395",
+      "brynja-tls": "8f0bd82f0adfb6b81a4c51ecc0436d367cbeaa386397015254f1e7ba06f910dc",
+      "brynja-tls12": "fabedbe07f833c9592453425717b5b4cbbd237daa07eb23b5a5650263cffa072",
+      "brynja-tls13": "ddbc3c38c54db1175114172a09eac2966f758b50831af6ab3acdbdd8f250a6d8",
+      "brynja-tls13-handshake": "953833ecd8c5e73808e9daebda04eaab686a764febf0da702c0c739cb13fbe07"
+    },
+    "fixture_sha256": "d1270bf7fa1830eecba399960704527d0d7530d812fb1c949e13b0f08afc2a96",
+    "observation": "local-x86-current-20261109",
+    "source": "byte-checked working-tree archives; not a clean tagged release"
+  },
+  "host": {
+    "platform": "Linux-7.3.1-1-default-x86_64-with-glibc2.44",
+    "machine": "x86_64",
+    "logical_cpu": 0,
+    "cpuinfo": "processor\t: 0\nvendor_id\t: AuthenticAMD\ncpu family\t: 26\nmodel\t\t: 68\nmodel name\t: AMD Ryzen 9 9950X3D 16-Core Processor\nstepping\t: 0\nmicrocode\t: 0xb404035\ncpu MHz\t\t: 5498.336\ncache size\t: 1024 KB\nphysical id\t: 0\nsiblings\t: 32\ncore id\t\t: 0\ncpu cores\t: 16\napicid\t\t: 0\ninitial apicid\t: 0\nfpu\t\t: yes\nfpu_exception\t: yes\ncpuid level\t: 16\nwp\t\t: yes\nflags\t\t: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good amd_lbr_v2 nopl xtopology nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpuid_fault cpb cat_l3 cdp_l3 hw_pstate ssbd mba perfmon_v2 ibrs ibpb stibp ibrs_enhanced vmmcall fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local user_shstk avx_vnni avx512_bf16 clzero irperf xsaveerptr rdpru wbnoinvd cppc arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold avic v_vmsave_vmload vgif x2avic v_spec_ctrl vnmi avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid bus_lock_detect movdiri movdir64b overflow_recov succor smca fsrm avx512_vp2intersect flush_l1d amd_lbr_pmc_freeze\nbugs\t\t: sysret_ss_attrs spectre_v1 spectre_v2 spec_store_bypass srso spectre_v2_user vmscape\nbogomips\t: 8583.31\nTLB size\t: 192 4K pages\nclflush size\t: 64\ncache_alignment\t: 64\naddress sizes\t: 48 bits physical, 48 bits virtual\npower management: ts ttp tm hwpstate cpb eff_freq_ro [13] [14]",
+    "load_before": [
+      2.86767578125,
+      2.07568359375,
+      1.8525390625
+    ],
+    "governor": "powersave\n",
+    "siblings": "0,16\n",
+    "boost": "1\n",
+    "policy": "9 samples of 64 operations; 8 warmup batches; alternating pair order; all samples retained; no threshold or retries"
+  },
+  "measurement": {
+    "command": [
+      "/home/eldryoth/Work/codex-projects/brynja/target/facade-acceptance-ikmcccoa/target/x86_64-unknown-linux-gnu/release/performance",
+      "--measure"
+    ],
+    "returncode": 0,
+    "stdout": "AES_FORCED_AUTHORITY: X86AesNi\nAES_PERFORMANCE_PREFLIGHT_PASS: 48 cases\nAES_PERFORMANCE_POLICY: 9 64 8\nSAMPLE 128 raw construct-clear 0 portable 1012\nSAMPLE 128 raw construct-clear 0 accelerated 1152\nSAMPLE 128 raw construct-clear 1 accelerated 1152\nSAMPLE 128 raw construct-clear 1 portable 972\nSAMPLE 128 raw construct-clear 2 portable 952\nSAMPLE 128 raw construct-clear 2 accelerated 1162\nSAMPLE 128 raw construct-clear 3 accelerated 1142\nSAMPLE 128 raw construct-clear 3 portable 972\nSAMPLE 128 raw construct-clear 4 portable 982\nSAMPLE 128 raw construct-clear 4 accelerated 1142\nSAMPLE 128 raw construct-clear 5 accelerated 1152\nSAMPLE 128 raw construct-clear 5 portable 972\nSAMPLE 128 raw construct-clear 6 portable 982\nSAMPLE 128 raw construct-clear 6 accelerated 1152\nSAMPLE 128 raw construct-clear 7 accelerated 1142\nSAMPLE 128 raw construct-clear 7 portable 982\nSAMPLE 128 raw construct-clear 8 portable 971\nSAMPLE 128 raw construct-clear 8 accelerated 1143\nSAMPLE 128 raw encrypt 0 portable 451711\nSAMPLE 128 raw encrypt 0 accelerated 96682\nSAMPLE 128 raw encrypt 1 accelerated 93636\nSAMPLE 128 raw encrypt 1 portable 449226\nSAMPLE 128 raw encrypt 2 portable 451901\nSAMPLE 128 raw encrypt 2 accelerated 93436\nSAMPLE 128 raw encrypt 3 accelerated 93687\nSAMPLE 128 raw encrypt 3 portable 448524\nSAMPLE 128 raw encrypt 4 portable 464295\nSAMPLE 128 raw encrypt 4 accelerated 130075\nSAMPLE 128 raw encrypt 5 accelerated 96572\nSAMPLE 128 raw encrypt 5 portable 445910\nSAMPLE 128 raw encrypt 6 portable 448755\nSAMPLE 128 raw encrypt 6 accelerated 93316\nSAMPLE 128 raw encrypt 7 accelerated 93867\nSAMPLE 128 raw encrypt 7 portable 448745\nSAMPLE 128 raw encrypt 8 portable 452121\nSAMPLE 128 raw encrypt 8 accelerated 92995\nSAMPLE 128 raw decrypt 0 portable 448915\nSAMPLE 128 raw decrypt 0 accelerated 93897\nSAMPLE 128 raw decrypt 1 accelerated 94488\nSAMPLE 128 raw decrypt 1 portable 451000\nSAMPLE 128 raw decrypt 2 portable 449857\nSAMPLE 128 raw decrypt 2 accelerated 93796\nSAMPLE 128 raw decrypt 3 accelerated 94127\nSAMPLE 128 raw decrypt 3 portable 448424\nSAMPLE 128 raw decrypt 4 portable 446481\nSAMPLE 128 raw decrypt 4 accelerated 93747\nSAMPLE 128 raw decrypt 5 accelerated 94017\nSAMPLE 128 raw decrypt 5 portable 449236\nSAMPLE 128 raw decrypt 6 portable 454927\nSAMPLE 128 raw decrypt 6 accelerated 93817\nSAMPLE 128 raw decrypt 7 accelerated 93937\nSAMPLE 128 raw decrypt 7 portable 457312\nSAMPLE 128 raw decrypt 8 portable 448285\nSAMPLE 128 raw decrypt 8 accelerated 94027\nSAMPLE 128 raw public 0 portable 448735\nSAMPLE 128 raw public 0 accelerated 92484\nSAMPLE 128 raw public 1 accelerated 92785\nSAMPLE 128 raw public 1 portable 449066\nSAMPLE 128 raw public 2 portable 448915\nSAMPLE 128 raw public 2 accelerated 93236\nSAMPLE 128 raw public 3 accelerated 93195\nSAMPLE 128 raw public 3 portable 450678\nSAMPLE 128 raw public 4 portable 450298\nSAMPLE 128 raw public 4 accelerated 93366\nSAMPLE 128 raw public 5 accelerated 94918\nSAMPLE 128 raw public 5 portable 448074\nSAMPLE 128 raw public 6 portable 448965\nSAMPLE 128 raw public 6 accelerated 96692\nSAMPLE 128 raw public 7 accelerated 96863\nSAMPLE 128 raw public 7 portable 500913\nSAMPLE 128 raw public 8 portable 455888\nSAMPLE 128 raw public 8 accelerated 103375\nSAMPLE 128 cached construct-clear 0 portable 95239\nSAMPLE 128 cached construct-clear 0 accelerated 96091\nSAMPLE 128 cached construct-clear 1 accelerated 98105\nSAMPLE 128 cached construct-clear 1 portable 95089\nSAMPLE 128 cached construct-clear 2 portable 95559\nSAMPLE 128 cached construct-clear 2 accelerated 96171\nSAMPLE 128 cached construct-clear 3 accelerated 95740\nSAMPLE 128 cached construct-clear 3 portable 97424\nSAMPLE 128 cached construct-clear 4 portable 95530\nSAMPLE 128 cached construct-clear 4 accelerated 95920\nSAMPLE 128 cached construct-clear 5 accelerated 95921\nSAMPLE 128 cached construct-clear 5 portable 95660\nSAMPLE 128 cached construct-clear 6 portable 97654\nSAMPLE 128 cached construct-clear 6 accelerated 95860\nSAMPLE 128 cached construct-clear 7 accelerated 95841\nSAMPLE 128 cached construct-clear 7 portable 95660\nSAMPLE 128 cached construct-clear 8 portable 95400\nSAMPLE 128 cached construct-clear 8 accelerated 95831\nSAMPLE 128 cached encrypt 0 portable 364326\nSAMPLE 128 cached encrypt 0 accelerated 801\nSAMPLE 128 cached encrypt 1 accelerated 792\nSAMPLE 128 cached encrypt 1 portable 360639\nSAMPLE 128 cached encrypt 2 portable 358655\nSAMPLE 128 cached encrypt 2 accelerated 771\nSAMPLE 128 cached encrypt 3 accelerated 781\nSAMPLE 128 cached encrypt 3 portable 364256\nSAMPLE 128 cached encrypt 4 portable 356591\nSAMPLE 128 cached encrypt 4 accelerated 772\nSAMPLE 128 cached encrypt 5 accelerated 761\nSAMPLE 128 cached encrypt 5 portable 360499\nSAMPLE 128 cached encrypt 6 portable 363776\nSAMPLE 128 cached encrypt 6 accelerated 771\nSAMPLE 128 cached encrypt 7 accelerated 761\nSAMPLE 128 cached encrypt 7 portable 361531\nSAMPLE 128 cached encrypt 8 portable 362843\nSAMPLE 128 cached encrypt 8 accelerated 761\nSAMPLE 128 cached decrypt 0 portable 357514\nSAMPLE 128 cached decrypt 0 accelerated 791\nSAMPLE 128 cached decrypt 1 accelerated 792\nSAMPLE 128 cached decrypt 1 portable 353285\nSAMPLE 128 cached decrypt 2 portable 355710\nSAMPLE 128 cached decrypt 2 accelerated 782\nSAMPLE 128 cached decrypt 3 accelerated 782\nSAMPLE 128 cached decrypt 3 portable 355058\nSAMPLE 128 cached decrypt 4 portable 353325\nSAMPLE 128 cached decrypt 4 accelerated 772\nSAMPLE 128 cached decrypt 5 accelerated 772\nSAMPLE 128 cached decrypt 5 portable 359016\nSAMPLE 128 cached decrypt 6 portable 352764\nSAMPLE 128 cached decrypt 6 accelerated 772\nSAMPLE 128 cached decrypt 7 accelerated 772\nSAMPLE 128 cached decrypt 7 portable 354167\nSAMPLE 128 cached decrypt 8 portable 365639\nSAMPLE 128 cached decrypt 8 accelerated 792\nSAMPLE 128 cached public 0 portable 410673\nSAMPLE 128 cached public 0 accelerated 441\nSAMPLE 128 cached public 1 accelerated 400\nSAMPLE 128 cached public 1 portable 354809\nSAMPLE 128 cached public 2 portable 363885\nSAMPLE 128 cached public 2 accelerated 401\nSAMPLE 128 cached public 3 accelerated 421\nSAMPLE 128 cached public 3 portable 361992\nSAMPLE 128 cached public 4 portable 358996\nSAMPLE 128 cached public 4 accelerated 401\nSAMPLE 128 cached public 5 accelerated 401\nSAMPLE 128 cached public 5 portable 356632\nSAMPLE 128 cached public 6 portable 370758\nSAMPLE 128 cached public 6 accelerated 401\nSAMPLE 128 cached public 7 accelerated 421\nSAMPLE 128 cached public 7 portable 361240\nSAMPLE 128 cached public 8 portable 357954\nSAMPLE 128 cached public 8 accelerated 400\nSAMPLE 192 raw construct-clear 0 portable 1102\nSAMPLE 192 raw construct-clear 0 accelerated 1283\nSAMPLE 192 raw construct-clear 1 accelerated 1273\nSAMPLE 192 raw construct-clear 1 portable 1112\nSAMPLE 192 raw construct-clear 2 portable 1112\nSAMPLE 192 raw construct-clear 2 accelerated 1272\nSAMPLE 192 raw construct-clear 3 accelerated 1282\nSAMPLE 192 raw construct-clear 3 portable 1102\nSAMPLE 192 raw construct-clear 4 portable 1112\nSAMPLE 192 raw construct-clear 4 accelerated 1272\nSAMPLE 192 raw construct-clear 5 accelerated 1272\nSAMPLE 192 raw construct-clear 5 portable 1122\nSAMPLE 192 raw construct-clear 6 portable 1113\nSAMPLE 192 raw construct-clear 6 accelerated 1282\nSAMPLE 192 raw construct-clear 7 accelerated 1272\nSAMPLE 192 raw construct-clear 7 portable 1112\nSAMPLE 192 raw construct-clear 8 portable 1113\nSAMPLE 192 raw construct-clear 8 accelerated 1292\nSAMPLE 192 raw encrypt 0 portable 518907\nSAMPLE 192 raw encrypt 0 accelerated 82536\nSAMPLE 192 raw encrypt 1 accelerated 77887\nSAMPLE 192 raw encrypt 1 portable 513648\nSAMPLE 192 raw encrypt 2 portable 516463\nSAMPLE 192 raw encrypt 2 accelerated 77596\nSAMPLE 192 raw encrypt 3 accelerated 77756\nSAMPLE 192 raw encrypt 3 portable 508708\nSAMPLE 192 raw encrypt 4 portable 523696\nSAMPLE 192 raw encrypt 4 accelerated 77817\nSAMPLE 192 raw encrypt 5 accelerated 77847\nSAMPLE 192 raw encrypt 5 portable 517515\nSAMPLE 192 raw encrypt 6 portable 516172\nSAMPLE 192 raw encrypt 6 accelerated 77787\nSAMPLE 192 raw encrypt 7 accelerated 77767\nSAMPLE 192 raw encrypt 7 portable 529327\nSAMPLE 192 raw encrypt 8 portable 513577\nSAMPLE 192 raw encrypt 8 accelerated 77747\nSAMPLE 192 raw decrypt 0 portable 502076\nSAMPLE 192 raw decrypt 0 accelerated 78418\nSAMPLE 192 raw decrypt 1 accelerated 78007\nSAMPLE 192 raw decrypt 1 portable 499662\nSAMPLE 192 raw decrypt 2 portable 508819\nSAMPLE 192 raw decrypt 2 accelerated 78137\nSAMPLE 192 raw decrypt 3 accelerated 78107\nSAMPLE 192 raw decrypt 3 portable 501494\nSAMPLE 192 raw decrypt 4 portable 499841\nSAMPLE 192 raw decrypt 4 accelerated 78288\nSAMPLE 192 raw decrypt 5 accelerated 80131\nSAMPLE 192 raw decrypt 5 portable 503628\nSAMPLE 192 raw decrypt 6 portable 500553\nSAMPLE 192 raw decrypt 6 accelerated 78167\nSAMPLE 192 raw decrypt 7 accelerated 78177\nSAMPLE 192 raw decrypt 7 portable 503358\nSAMPLE 192 raw decrypt 8 portable 512796\nSAMPLE 192 raw decrypt 8 accelerated 78037\nSAMPLE 192 raw public 0 portable 527483\nSAMPLE 192 raw public 0 accelerated 77536\nSAMPLE 192 raw public 1 accelerated 77566\nSAMPLE 192 raw public 1 portable 514168\nSAMPLE 192 raw public 2 portable 517525\nSAMPLE 192 raw public 2 accelerated 77696\nSAMPLE 192 raw public 3 accelerated 77376\nSAMPLE 192 raw public 3 portable 519008\nSAMPLE 192 raw public 4 portable 512756\nSAMPLE 192 raw public 4 accelerated 77566\nSAMPLE 192 raw public 5 accelerated 77616\nSAMPLE 192 raw public 5 portable 527854\nSAMPLE 192 raw public 6 portable 513598\nSAMPLE 192 raw public 6 accelerated 77586\nSAMPLE 192 raw public 7 accelerated 81313\nSAMPLE 192 raw public 7 portable 512044\nSAMPLE 192 raw public 8 portable 513868\nSAMPLE 192 raw public 8 accelerated 79349\nSAMPLE 192 cached construct-clear 0 portable 79489\nSAMPLE 192 cached construct-clear 0 accelerated 80242\nSAMPLE 192 cached construct-clear 1 accelerated 80422\nSAMPLE 192 cached construct-clear 1 portable 80732\nSAMPLE 192 cached construct-clear 2 portable 79981\nSAMPLE 192 cached construct-clear 2 accelerated 80582\nSAMPLE 192 cached construct-clear 3 accelerated 81584\nSAMPLE 192 cached construct-clear 3 portable 79439\nSAMPLE 192 cached construct-clear 4 portable 83698\nSAMPLE 192 cached construct-clear 4 accelerated 80732\nSAMPLE 192 cached construct-clear 5 accelerated 80742\nSAMPLE 192 cached construct-clear 5 portable 79890\nSAMPLE 192 cached construct-clear 6 portable 80040\nSAMPLE 192 cached construct-clear 6 accelerated 80962\nSAMPLE 192 cached construct-clear 7 accelerated 80702\nSAMPLE 192 cached construct-clear 7 portable 79970\nSAMPLE 192 cached construct-clear 8 portable 79920\nSAMPLE 192 cached construct-clear 8 accelerated 81233\nSAMPLE 192 cached encrypt 0 portable 442624\nSAMPLE 192 cached encrypt 0 accelerated 842\nSAMPLE 192 cached encrypt 1 accelerated 801\nSAMPLE 192 cached encrypt 1 portable 434699\nSAMPLE 192 cached encrypt 2 portable 436582\nSAMPLE 192 cached encrypt 2 accelerated 811\nSAMPLE 192 cached encrypt 3 accelerated 801\nSAMPLE 192 cached encrypt 3 portable 437995\nSAMPLE 192 cached encrypt 4 portable 438926\nSAMPLE 192 cached encrypt 4 accelerated 812\nSAMPLE 192 cached encrypt 5 accelerated 802\nSAMPLE 192 cached encrypt 5 portable 440269\nSAMPLE 192 cached encrypt 6 portable 436993\nSAMPLE 192 cached encrypt 6 accelerated 801\nSAMPLE 192 cached encrypt 7 accelerated 802\nSAMPLE 192 cached encrypt 7 portable 442253\nSAMPLE 192 cached encrypt 8 portable 443375\nSAMPLE 192 cached encrypt 8 accelerated 811\nSAMPLE 192 cached decrypt 0 portable 428257\nSAMPLE 192 cached decrypt 0 accelerated 862\nSAMPLE 192 cached decrypt 1 accelerated 822\nSAMPLE 192 cached decrypt 1 portable 546850\nSAMPLE 192 cached decrypt 2 portable 426694\nSAMPLE 192 cached decrypt 2 accelerated 842\nSAMPLE 192 cached decrypt 3 accelerated 811\nSAMPLE 192 cached decrypt 3 portable 423608\nSAMPLE 192 cached decrypt 4 portable 425842\nSAMPLE 192 cached decrypt 4 accelerated 812\nSAMPLE 192 cached decrypt 5 accelerated 841\nSAMPLE 192 cached decrypt 5 portable 432845\nSAMPLE 192 cached decrypt 6 portable 425161\nSAMPLE 192 cached decrypt 6 accelerated 812\nSAMPLE 192 cached decrypt 7 accelerated 801\nSAMPLE 192 cached decrypt 7 portable 422686\nSAMPLE 192 cached decrypt 8 portable 425291\nSAMPLE 192 cached decrypt 8 accelerated 802\nSAMPLE 192 cached public 0 portable 446822\nSAMPLE 192 cached public 0 accelerated 491\nSAMPLE 192 cached public 1 accelerated 481\nSAMPLE 192 cached public 1 portable 445820\nSAMPLE 192 cached public 2 portable 448996\nSAMPLE 192 cached public 2 accelerated 481\nSAMPLE 192 cached public 3 accelerated 471\nSAMPLE 192 cached public 3 portable 438065\nSAMPLE 192 cached public 4 portable 436222\nSAMPLE 192 cached public 4 accelerated 481\nSAMPLE 192 cached public 5 accelerated 470\nSAMPLE 192 cached public 5 portable 438856\nSAMPLE 192 cached public 6 portable 435731\nSAMPLE 192 cached public 6 accelerated 480\nSAMPLE 192 cached public 7 accelerated 481\nSAMPLE 192 cached public 7 portable 438145\nSAMPLE 192 cached public 8 portable 441973\nSAMPLE 192 cached public 8 accelerated 501\nSAMPLE 256 raw construct-clear 0 portable 1162\nSAMPLE 256 raw construct-clear 0 accelerated 1443\nSAMPLE 256 raw construct-clear 1 accelerated 1432\nSAMPLE 256 raw construct-clear 1 portable 1173\nSAMPLE 256 raw construct-clear 2 portable 1172\nSAMPLE 256 raw construct-clear 2 accelerated 1433\nSAMPLE 256 raw construct-clear 3 accelerated 1433\nSAMPLE 256 raw construct-clear 3 portable 1162\nSAMPLE 256 raw construct-clear 4 portable 1192\nSAMPLE 256 raw construct-clear 4 accelerated 1453\nSAMPLE 256 raw construct-clear 5 accelerated 1453\nSAMPLE 256 raw construct-clear 5 portable 1172\nSAMPLE 256 raw construct-clear 6 portable 1172\nSAMPLE 256 raw construct-clear 6 accelerated 1453\nSAMPLE 256 raw construct-clear 7 accelerated 1462\nSAMPLE 256 raw construct-clear 7 portable 1163\nSAMPLE 256 raw construct-clear 8 portable 1162\nSAMPLE 256 raw construct-clear 8 accelerated 1443\nSAMPLE 256 raw encrypt 0 portable 640977\nSAMPLE 256 raw encrypt 0 accelerated 121829\nSAMPLE 256 raw encrypt 1 accelerated 122321\nSAMPLE 256 raw encrypt 1 portable 641017\nSAMPLE 256 raw encrypt 2 portable 637180\nSAMPLE 256 raw encrypt 2 accelerated 121869\nSAMPLE 256 raw encrypt 3 accelerated 125406\nSAMPLE 256 raw encrypt 3 portable 629436\nSAMPLE 256 raw encrypt 4 portable 630127\nSAMPLE 256 raw encrypt 4 accelerated 121700\nSAMPLE 256 raw encrypt 5 accelerated 121489\nSAMPLE 256 raw encrypt 5 portable 636128\nSAMPLE 256 raw encrypt 6 portable 635768\nSAMPLE 256 raw encrypt 6 accelerated 121759\nSAMPLE 256 raw encrypt 7 accelerated 121779\nSAMPLE 256 raw encrypt 7 portable 649644\nSAMPLE 256 raw encrypt 8 portable 634084\nSAMPLE 256 raw encrypt 8 accelerated 121930\nSAMPLE 256 raw decrypt 0 portable 619888\nSAMPLE 256 raw decrypt 0 accelerated 123963\nSAMPLE 256 raw decrypt 1 accelerated 122040\nSAMPLE 256 raw decrypt 1 portable 622863\nSAMPLE 256 raw decrypt 2 portable 621260\nSAMPLE 256 raw decrypt 2 accelerated 124495\nSAMPLE 256 raw decrypt 3 accelerated 122371\nSAMPLE 256 raw decrypt 3 portable 617382\nSAMPLE 256 raw decrypt 4 portable 618545\nSAMPLE 256 raw decrypt 4 accelerated 122330\nSAMPLE 256 raw decrypt 5 accelerated 132570\nSAMPLE 256 raw decrypt 5 portable 618806\nSAMPLE 256 raw decrypt 6 portable 616561\nSAMPLE 256 raw decrypt 6 accelerated 124795\nSAMPLE 256 raw decrypt 7 accelerated 122521\nSAMPLE 256 raw decrypt 7 portable 620719\nSAMPLE 256 raw decrypt 8 portable 617463\nSAMPLE 256 raw decrypt 8 accelerated 122481\nSAMPLE 256 raw public 0 portable 634635\nSAMPLE 256 raw public 0 accelerated 121770\nSAMPLE 256 raw public 1 accelerated 123613\nSAMPLE 256 raw public 1 portable 627612\nSAMPLE 256 raw public 2 portable 643041\nSAMPLE 256 raw public 2 accelerated 121218\nSAMPLE 256 raw public 3 accelerated 124103\nSAMPLE 256 raw public 3 portable 628994\nSAMPLE 256 raw public 4 portable 632862\nSAMPLE 256 raw public 4 accelerated 121188\nSAMPLE 256 raw public 5 accelerated 121309\nSAMPLE 256 raw public 5 portable 633723\nSAMPLE 256 raw public 6 portable 635708\nSAMPLE 256 raw public 6 accelerated 121138\nSAMPLE 256 raw public 7 accelerated 123652\nSAMPLE 256 raw public 7 portable 637881\nSAMPLE 256 raw public 8 portable 631520\nSAMPLE 256 raw public 8 accelerated 123062\nSAMPLE 256 cached construct-clear 0 portable 123934\nSAMPLE 256 cached construct-clear 0 accelerated 124955\nSAMPLE 256 cached construct-clear 1 accelerated 124835\nSAMPLE 256 cached construct-clear 1 portable 128221\nSAMPLE 256 cached construct-clear 2 portable 123953\nSAMPLE 256 cached construct-clear 2 accelerated 124906\nSAMPLE 256 cached construct-clear 3 accelerated 124885\nSAMPLE 256 cached construct-clear 3 portable 125817\nSAMPLE 256 cached construct-clear 4 portable 124835\nSAMPLE 256 cached construct-clear 4 accelerated 124194\nSAMPLE 256 cached construct-clear 5 accelerated 124425\nSAMPLE 256 cached construct-clear 5 portable 128552\nSAMPLE 256 cached construct-clear 6 portable 123973\nSAMPLE 256 cached construct-clear 6 accelerated 124755\nSAMPLE 256 cached construct-clear 7 accelerated 124514\nSAMPLE 256 cached construct-clear 7 portable 124565\nSAMPLE 256 cached construct-clear 8 portable 123933\nSAMPLE 256 cached construct-clear 8 accelerated 124845\nSAMPLE 256 cached encrypt 0 portable 509780\nSAMPLE 256 cached encrypt 0 accelerated 871\nSAMPLE 256 cached encrypt 1 accelerated 851\nSAMPLE 256 cached encrypt 1 portable 517765\nSAMPLE 256 cached encrypt 2 portable 510482\nSAMPLE 256 cached encrypt 2 accelerated 852\nSAMPLE 256 cached encrypt 3 accelerated 842\nSAMPLE 256 cached encrypt 3 portable 526301\nSAMPLE 256 cached encrypt 4 portable 509590\nSAMPLE 256 cached encrypt 4 accelerated 861\nSAMPLE 256 cached encrypt 5 accelerated 842\nSAMPLE 256 cached encrypt 5 portable 517285\nSAMPLE 256 cached encrypt 6 portable 508298\nSAMPLE 256 cached encrypt 6 accelerated 842\nSAMPLE 256 cached encrypt 7 accelerated 852\nSAMPLE 256 cached encrypt 7 portable 511995\nSAMPLE 256 cached encrypt 8 portable 509289\nSAMPLE 256 cached encrypt 8 accelerated 852\nSAMPLE 256 cached decrypt 0 portable 498199\nSAMPLE 256 cached decrypt 0 accelerated 891\nSAMPLE 256 cached decrypt 1 accelerated 882\nSAMPLE 256 cached decrypt 1 portable 496545\nSAMPLE 256 cached decrypt 2 portable 493570\nSAMPLE 256 cached decrypt 2 accelerated 881\nSAMPLE 256 cached decrypt 3 accelerated 891\nSAMPLE 256 cached decrypt 3 portable 496806\nSAMPLE 256 cached decrypt 4 portable 494041\nSAMPLE 256 cached decrypt 4 accelerated 881\nSAMPLE 256 cached decrypt 5 accelerated 882\nSAMPLE 256 cached decrypt 5 portable 495813\nSAMPLE 256 cached decrypt 6 portable 492958\nSAMPLE 256 cached decrypt 6 accelerated 892\nSAMPLE 256 cached decrypt 7 accelerated 891\nSAMPLE 256 cached decrypt 7 portable 505843\nSAMPLE 256 cached decrypt 8 portable 501935\nSAMPLE 256 cached decrypt 8 accelerated 911\nSAMPLE 256 cached public 0 portable 524107\nSAMPLE 256 cached public 0 accelerated 541\nSAMPLE 256 cached public 1 accelerated 582\nSAMPLE 256 cached public 1 portable 514559\nSAMPLE 256 cached public 2 portable 509741\nSAMPLE 256 cached public 2 accelerated 511\nSAMPLE 256 cached public 3 accelerated 511\nSAMPLE 256 cached public 3 portable 516553\nSAMPLE 256 cached public 4 portable 504991\nSAMPLE 256 cached public 4 accelerated 511\nSAMPLE 256 cached public 5 accelerated 511\nSAMPLE 256 cached public 5 portable 512365\nSAMPLE 256 cached public 6 portable 512085\nSAMPLE 256 cached public 6 accelerated 511\nSAMPLE 256 cached public 7 accelerated 511\nSAMPLE 256 cached public 7 portable 513478\nSAMPLE 256 cached public 8 portable 506884\nSAMPLE 256 cached public 8 accelerated 511\nAES_PERFORMANCE_END: 432 samples; diagnostic only\n",
+    "stderr": ""
+  },
+  "summary": [
+    {
+      "bits": 128,
+      "owner": "raw",
+      "operation": "construct-clear",
+      "backend": "portable",
+      "samples_ns": [
+        1012,
+        972,
+        952,
+        972,
+        982,
+        972,
+        982,
+        982,
+        971
+      ],
+      "median_ns_per_operation": 15.1875,
+      "min_ns_per_operation": 14.875,
+      "max_ns_per_operation": 15.8125
+    },
+    {
+      "bits": 128,
+      "owner": "raw",
+      "operation": "construct-clear",
+      "backend": "accelerated",
+      "samples_ns": [
+        1152,
+        1152,
+        1162,
+        1142,
+        1142,
+        1152,
+        1152,
+        1142,
+        1143
+      ],
+      "median_ns_per_operation": 18,
+      "min_ns_per_operation": 17.84375,
+      "max_ns_per_operation": 18.15625
+    },
+    {
+      "bits": 128,
+      "owner": "raw",
+      "operation": "encrypt",
+      "backend": "portable",
+      "samples_ns": [
+        451711,
+        449226,
+        451901,
+        448524,
+        464295,
+        445910,
+        448755,
+        448745,
+        452121
+      ],
+      "median_ns_per_operation": 7019.15625,
+      "min_ns_per_operation": 6967.34375,
+      "max_ns_per_operation": 7254.609375
+    },
+    {
+      "bits": 128,
+      "owner": "raw",
+      "operation": "encrypt",
+      "backend": "accelerated",
+      "samples_ns": [
+        96682,
+        93636,
+        93436,
+        93687,
+        130075,
+        96572,
+        93316,
+        93867,
+        92995
+      ],
+      "median_ns_per_operation": 1463.859375,
+      "min_ns_per_operation": 1453.046875,
+      "max_ns_per_operation": 2032.421875
+    },
+    {
+      "bits": 128,
+      "owner": "raw",
+      "operation": "decrypt",
+      "backend": "portable",
+      "samples_ns": [
+        448915,
+        451000,
+        449857,
+        448424,
+        446481,
+        449236,
+        454927,
+        457312,
+        448285
+      ],
+      "median_ns_per_operation": 7019.3125,
+      "min_ns_per_operation": 6976.265625,
+      "max_ns_per_operation": 7145.5
+    },
+    {
+      "bits": 128,
+      "owner": "raw",
+      "operation": "decrypt",
+      "backend": "accelerated",
+      "samples_ns": [
+        93897,
+        94488,
+        93796,
+        94127,
+        93747,
+        94017,
+        93817,
+        93937,
+        94027
+      ],
+      "median_ns_per_operation": 1467.765625,
+      "min_ns_per_operation": 1464.796875,
+      "max_ns_per_operation": 1476.375
+    },
+    {
+      "bits": 128,
+      "owner": "raw",
+      "operation": "public",
+      "backend": "portable",
+      "samples_ns": [
+        448735,
+        449066,
+        448915,
+        450678,
+        450298,
+        448074,
+        448965,
+        500913,
+        455888
+      ],
+      "median_ns_per_operation": 7016.65625,
+      "min_ns_per_operation": 7001.15625,
+      "max_ns_per_operation": 7826.765625
+    },
+    {
+      "bits": 128,
+      "owner": "raw",
+      "operation": "public",
+      "backend": "accelerated",
+      "samples_ns": [
+        92484,
+        92785,
+        93236,
+        93195,
+        93366,
+        94918,
+        96692,
+        96863,
+        103375
+      ],
+      "median_ns_per_operation": 1458.84375,
+      "min_ns_per_operation": 1445.0625,
+      "max_ns_per_operation": 1615.234375
+    },
+    {
+      "bits": 128,
+      "owner": "cached",
+      "operation": "construct-clear",
+      "backend": "portable",
+      "samples_ns": [
+        95239,
+        95089,
+        95559,
+        97424,
+        95530,
+        95660,
+        97654,
+        95660,
+        95400
+      ],
+      "median_ns_per_operation": 1493.109375,
+      "min_ns_per_operation": 1485.765625,
+      "max_ns_per_operation": 1525.84375
+    },
+    {
+      "bits": 128,
+      "owner": "cached",
+      "operation": "construct-clear",
+      "backend": "accelerated",
+      "samples_ns": [
+        96091,
+        98105,
+        96171,
+        95740,
+        95920,
+        95921,
+        95860,
+        95841,
+        95831
+      ],
+      "median_ns_per_operation": 1498.75,
+      "min_ns_per_operation": 1495.9375,
+      "max_ns_per_operation": 1532.890625
+    },
+    {
+      "bits": 128,
+      "owner": "cached",
+      "operation": "encrypt",
+      "backend": "portable",
+      "samples_ns": [
+        364326,
+        360639,
+        358655,
+        364256,
+        356591,
+        360499,
+        363776,
+        361531,
+        362843
+      ],
+      "median_ns_per_operation": 5648.921875,
+      "min_ns_per_operation": 5571.734375,
+      "max_ns_per_operation": 5692.59375
+    },
+    {
+      "bits": 128,
+      "owner": "cached",
+      "operation": "encrypt",
+      "backend": "accelerated",
+      "samples_ns": [
+        801,
+        792,
+        771,
+        781,
+        772,
+        761,
+        771,
+        761,
+        761
+      ],
+      "median_ns_per_operation": 12.046875,
+      "min_ns_per_operation": 11.890625,
+      "max_ns_per_operation": 12.515625
+    },
+    {
+      "bits": 128,
+      "owner": "cached",
+      "operation": "decrypt",
+      "backend": "portable",
+      "samples_ns": [
+        357514,
+        353285,
+        355710,
+        355058,
+        353325,
+        359016,
+        352764,
+        354167,
+        365639
+      ],
+      "median_ns_per_operation": 5547.78125,
+      "min_ns_per_operation": 5511.9375,
+      "max_ns_per_operation": 5713.109375
+    },
+    {
+      "bits": 128,
+      "owner": "cached",
+      "operation": "decrypt",
+      "backend": "accelerated",
+      "samples_ns": [
+        791,
+        792,
+        782,
+        782,
+        772,
+        772,
+        772,
+        772,
+        792
+      ],
+      "median_ns_per_operation": 12.21875,
+      "min_ns_per_operation": 12.0625,
+      "max_ns_per_operation": 12.375
+    },
+    {
+      "bits": 128,
+      "owner": "cached",
+      "operation": "public",
+      "backend": "portable",
+      "samples_ns": [
+        410673,
+        354809,
+        363885,
+        361992,
+        358996,
+        356632,
+        370758,
+        361240,
+        357954
+      ],
+      "median_ns_per_operation": 5644.375,
+      "min_ns_per_operation": 5543.890625,
+      "max_ns_per_operation": 6416.765625
+    },
+    {
+      "bits": 128,
+      "owner": "cached",
+      "operation": "public",
+      "backend": "accelerated",
+      "samples_ns": [
+        441,
+        400,
+        401,
+        421,
+        401,
+        401,
+        401,
+        421,
+        400
+      ],
+      "median_ns_per_operation": 6.265625,
+      "min_ns_per_operation": 6.25,
+      "max_ns_per_operation": 6.890625
+    },
+    {
+      "bits": 192,
+      "owner": "raw",
+      "operation": "construct-clear",
+      "backend": "portable",
+      "samples_ns": [
+        1102,
+        1112,
+        1112,
+        1102,
+        1112,
+        1122,
+        1113,
+        1112,
+        1113
+      ],
+      "median_ns_per_operation": 17.375,
+      "min_ns_per_operation": 17.21875,
+      "max_ns_per_operation": 17.53125
+    },
+    {
+      "bits": 192,
+      "owner": "raw",
+      "operation": "construct-clear",
+      "backend": "accelerated",
+      "samples_ns": [
+        1283,
+        1273,
+        1272,
+        1282,
+        1272,
+        1272,
+        1282,
+        1272,
+        1292
+      ],
+      "median_ns_per_operation": 19.890625,
+      "min_ns_per_operation": 19.875,
+      "max_ns_per_operation": 20.1875
+    },
+    {
+      "bits": 192,
+      "owner": "raw",
+      "operation": "encrypt",
+      "backend": "portable",
+      "samples_ns": [
+        518907,
+        513648,
+        516463,
+        508708,
+        523696,
+        517515,
+        516172,
+        529327,
+        513577
+      ],
+      "median_ns_per_operation": 8069.734375,
+      "min_ns_per_operation": 7948.5625,
+      "max_ns_per_operation": 8270.734375
+    },
+    {
+      "bits": 192,
+      "owner": "raw",
+      "operation": "encrypt",
+      "backend": "accelerated",
+      "samples_ns": [
+        82536,
+        77887,
+        77596,
+        77756,
+        77817,
+        77847,
+        77787,
+        77767,
+        77747
+      ],
+      "median_ns_per_operation": 1215.421875,
+      "min_ns_per_operation": 1212.4375,
+      "max_ns_per_operation": 1289.625
+    },
+    {
+      "bits": 192,
+      "owner": "raw",
+      "operation": "decrypt",
+      "backend": "portable",
+      "samples_ns": [
+        502076,
+        499662,
+        508819,
+        501494,
+        499841,
+        503628,
+        500553,
+        503358,
+        512796
+      ],
+      "median_ns_per_operation": 7844.9375,
+      "min_ns_per_operation": 7807.21875,
+      "max_ns_per_operation": 8012.4375
+    },
+    {
+      "bits": 192,
+      "owner": "raw",
+      "operation": "decrypt",
+      "backend": "accelerated",
+      "samples_ns": [
+        78418,
+        78007,
+        78137,
+        78107,
+        78288,
+        80131,
+        78167,
+        78177,
+        78037
+      ],
+      "median_ns_per_operation": 1221.359375,
+      "min_ns_per_operation": 1218.859375,
+      "max_ns_per_operation": 1252.046875
+    },
+    {
+      "bits": 192,
+      "owner": "raw",
+      "operation": "public",
+      "backend": "portable",
+      "samples_ns": [
+        527483,
+        514168,
+        517525,
+        519008,
+        512756,
+        527854,
+        513598,
+        512044,
+        513868
+      ],
+      "median_ns_per_operation": 8033.875,
+      "min_ns_per_operation": 8000.6875,
+      "max_ns_per_operation": 8247.71875
+    },
+    {
+      "bits": 192,
+      "owner": "raw",
+      "operation": "public",
+      "backend": "accelerated",
+      "samples_ns": [
+        77536,
+        77566,
+        77696,
+        77376,
+        77566,
+        77616,
+        77586,
+        81313,
+        79349
+      ],
+      "median_ns_per_operation": 1212.28125,
+      "min_ns_per_operation": 1209,
+      "max_ns_per_operation": 1270.515625
+    },
+    {
+      "bits": 192,
+      "owner": "cached",
+      "operation": "construct-clear",
+      "backend": "portable",
+      "samples_ns": [
+        79489,
+        80732,
+        79981,
+        79439,
+        83698,
+        79890,
+        80040,
+        79970,
+        79920
+      ],
+      "median_ns_per_operation": 1249.53125,
+      "min_ns_per_operation": 1241.234375,
+      "max_ns_per_operation": 1307.78125
+    },
+    {
+      "bits": 192,
+      "owner": "cached",
+      "operation": "construct-clear",
+      "backend": "accelerated",
+      "samples_ns": [
+        80242,
+        80422,
+        80582,
+        81584,
+        80732,
+        80742,
+        80962,
+        80702,
+        81233
+      ],
+      "median_ns_per_operation": 1261.4375,
+      "min_ns_per_operation": 1253.78125,
+      "max_ns_per_operation": 1274.75
+    },
+    {
+      "bits": 192,
+      "owner": "cached",
+      "operation": "encrypt",
+      "backend": "portable",
+      "samples_ns": [
+        442624,
+        434699,
+        436582,
+        437995,
+        438926,
+        440269,
+        436993,
+        442253,
+        443375
+      ],
+      "median_ns_per_operation": 6858.21875,
+      "min_ns_per_operation": 6792.171875,
+      "max_ns_per_operation": 6927.734375
+    },
+    {
+      "bits": 192,
+      "owner": "cached",
+      "operation": "encrypt",
+      "backend": "accelerated",
+      "samples_ns": [
+        842,
+        801,
+        811,
+        801,
+        812,
+        802,
+        801,
+        802,
+        811
+      ],
+      "median_ns_per_operation": 12.53125,
+      "min_ns_per_operation": 12.515625,
+      "max_ns_per_operation": 13.15625
+    },
+    {
+      "bits": 192,
+      "owner": "cached",
+      "operation": "decrypt",
+      "backend": "portable",
+      "samples_ns": [
+        428257,
+        546850,
+        426694,
+        423608,
+        425842,
+        432845,
+        425161,
+        422686,
+        425291
+      ],
+      "median_ns_per_operation": 6653.78125,
+      "min_ns_per_operation": 6604.46875,
+      "max_ns_per_operation": 8544.53125
+    },
+    {
+      "bits": 192,
+      "owner": "cached",
+      "operation": "decrypt",
+      "backend": "accelerated",
+      "samples_ns": [
+        862,
+        822,
+        842,
+        811,
+        812,
+        841,
+        812,
+        801,
+        802
+      ],
+      "median_ns_per_operation": 12.6875,
+      "min_ns_per_operation": 12.515625,
+      "max_ns_per_operation": 13.46875
+    },
+    {
+      "bits": 192,
+      "owner": "cached",
+      "operation": "public",
+      "backend": "portable",
+      "samples_ns": [
+        446822,
+        445820,
+        448996,
+        438065,
+        436222,
+        438856,
+        435731,
+        438145,
+        441973
+      ],
+      "median_ns_per_operation": 6857.125,
+      "min_ns_per_operation": 6808.296875,
+      "max_ns_per_operation": 7015.5625
+    },
+    {
+      "bits": 192,
+      "owner": "cached",
+      "operation": "public",
+      "backend": "accelerated",
+      "samples_ns": [
+        491,
+        481,
+        481,
+        471,
+        481,
+        470,
+        480,
+        481,
+        501
+      ],
+      "median_ns_per_operation": 7.515625,
+      "min_ns_per_operation": 7.34375,
+      "max_ns_per_operation": 7.828125
+    },
+    {
+      "bits": 256,
+      "owner": "raw",
+      "operation": "construct-clear",
+      "backend": "portable",
+      "samples_ns": [
+        1162,
+        1173,
+        1172,
+        1162,
+        1192,
+        1172,
+        1172,
+        1163,
+        1162
+      ],
+      "median_ns_per_operation": 18.3125,
+      "min_ns_per_operation": 18.15625,
+      "max_ns_per_operation": 18.625
+    },
+    {
+      "bits": 256,
+      "owner": "raw",
+      "operation": "construct-clear",
+      "backend": "accelerated",
+      "samples_ns": [
+        1443,
+        1432,
+        1433,
+        1433,
+        1453,
+        1453,
+        1453,
+        1462,
+        1443
+      ],
+      "median_ns_per_operation": 22.546875,
+      "min_ns_per_operation": 22.375,
+      "max_ns_per_operation": 22.84375
+    },
+    {
+      "bits": 256,
+      "owner": "raw",
+      "operation": "encrypt",
+      "backend": "portable",
+      "samples_ns": [
+        640977,
+        641017,
+        637180,
+        629436,
+        630127,
+        636128,
+        635768,
+        649644,
+        634084
+      ],
+      "median_ns_per_operation": 9939.5,
+      "min_ns_per_operation": 9834.9375,
+      "max_ns_per_operation": 10150.6875
+    },
+    {
+      "bits": 256,
+      "owner": "raw",
+      "operation": "encrypt",
+      "backend": "accelerated",
+      "samples_ns": [
+        121829,
+        122321,
+        121869,
+        125406,
+        121700,
+        121489,
+        121759,
+        121779,
+        121930
+      ],
+      "median_ns_per_operation": 1903.578125,
+      "min_ns_per_operation": 1898.265625,
+      "max_ns_per_operation": 1959.46875
+    },
+    {
+      "bits": 256,
+      "owner": "raw",
+      "operation": "decrypt",
+      "backend": "portable",
+      "samples_ns": [
+        619888,
+        622863,
+        621260,
+        617382,
+        618545,
+        618806,
+        616561,
+        620719,
+        617463
+      ],
+      "median_ns_per_operation": 9668.84375,
+      "min_ns_per_operation": 9633.765625,
+      "max_ns_per_operation": 9732.234375
+    },
+    {
+      "bits": 256,
+      "owner": "raw",
+      "operation": "decrypt",
+      "backend": "accelerated",
+      "samples_ns": [
+        123963,
+        122040,
+        124495,
+        122371,
+        122330,
+        132570,
+        124795,
+        122521,
+        122481
+      ],
+      "median_ns_per_operation": 1914.390625,
+      "min_ns_per_operation": 1906.875,
+      "max_ns_per_operation": 2071.40625
+    },
+    {
+      "bits": 256,
+      "owner": "raw",
+      "operation": "public",
+      "backend": "portable",
+      "samples_ns": [
+        634635,
+        627612,
+        643041,
+        628994,
+        632862,
+        633723,
+        635708,
+        637881,
+        631520
+      ],
+      "median_ns_per_operation": 9901.921875,
+      "min_ns_per_operation": 9806.4375,
+      "max_ns_per_operation": 10047.515625
+    },
+    {
+      "bits": 256,
+      "owner": "raw",
+      "operation": "public",
+      "backend": "accelerated",
+      "samples_ns": [
+        121770,
+        123613,
+        121218,
+        124103,
+        121188,
+        121309,
+        121138,
+        123652,
+        123062
+      ],
+      "median_ns_per_operation": 1902.65625,
+      "min_ns_per_operation": 1892.78125,
+      "max_ns_per_operation": 1939.109375
+    },
+    {
+      "bits": 256,
+      "owner": "cached",
+      "operation": "construct-clear",
+      "backend": "portable",
+      "samples_ns": [
+        123934,
+        128221,
+        123953,
+        125817,
+        124835,
+        128552,
+        123973,
+        124565,
+        123933
+      ],
+      "median_ns_per_operation": 1946.328125,
+      "min_ns_per_operation": 1936.453125,
+      "max_ns_per_operation": 2008.625
+    },
+    {
+      "bits": 256,
+      "owner": "cached",
+      "operation": "construct-clear",
+      "backend": "accelerated",
+      "samples_ns": [
+        124955,
+        124835,
+        124906,
+        124885,
+        124194,
+        124425,
+        124755,
+        124514,
+        124845
+      ],
+      "median_ns_per_operation": 1950.546875,
+      "min_ns_per_operation": 1940.53125,
+      "max_ns_per_operation": 1952.421875
+    },
+    {
+      "bits": 256,
+      "owner": "cached",
+      "operation": "encrypt",
+      "backend": "portable",
+      "samples_ns": [
+        509780,
+        517765,
+        510482,
+        526301,
+        509590,
+        517285,
+        508298,
+        511995,
+        509289
+      ],
+      "median_ns_per_operation": 7976.28125,
+      "min_ns_per_operation": 7942.15625,
+      "max_ns_per_operation": 8223.453125
+    },
+    {
+      "bits": 256,
+      "owner": "cached",
+      "operation": "encrypt",
+      "backend": "accelerated",
+      "samples_ns": [
+        871,
+        851,
+        852,
+        842,
+        861,
+        842,
+        842,
+        852,
+        852
+      ],
+      "median_ns_per_operation": 13.3125,
+      "min_ns_per_operation": 13.15625,
+      "max_ns_per_operation": 13.609375
+    },
+    {
+      "bits": 256,
+      "owner": "cached",
+      "operation": "decrypt",
+      "backend": "portable",
+      "samples_ns": [
+        498199,
+        496545,
+        493570,
+        496806,
+        494041,
+        495813,
+        492958,
+        505843,
+        501935
+      ],
+      "median_ns_per_operation": 7758.515625,
+      "min_ns_per_operation": 7702.46875,
+      "max_ns_per_operation": 7903.796875
+    },
+    {
+      "bits": 256,
+      "owner": "cached",
+      "operation": "decrypt",
+      "backend": "accelerated",
+      "samples_ns": [
+        891,
+        882,
+        881,
+        891,
+        881,
+        882,
+        892,
+        891,
+        911
+      ],
+      "median_ns_per_operation": 13.921875,
+      "min_ns_per_operation": 13.765625,
+      "max_ns_per_operation": 14.234375
+    },
+    {
+      "bits": 256,
+      "owner": "cached",
+      "operation": "public",
+      "backend": "portable",
+      "samples_ns": [
+        524107,
+        514559,
+        509741,
+        516553,
+        504991,
+        512365,
+        512085,
+        513478,
+        506884
+      ],
+      "median_ns_per_operation": 8005.703125,
+      "min_ns_per_operation": 7890.484375,
+      "max_ns_per_operation": 8189.171875
+    },
+    {
+      "bits": 256,
+      "owner": "cached",
+      "operation": "public",
+      "backend": "accelerated",
+      "samples_ns": [
+        541,
+        582,
+        511,
+        511,
+        511,
+        511,
+        511,
+        511,
+        511
+      ],
+      "median_ns_per_operation": 7.984375,
+      "min_ns_per_operation": 7.984375,
+      "max_ns_per_operation": 9.09375
+    }
+  ],
+  "kind": "AES performance diagnostic; not side-channel acceptance or a current verification pass",
+  "observation": "local-x86-current-20261109",
+  "retention": "All measurement output and all 432 samples retained. Host cpuinfo contains first processor record; complete original host file remains under target/aes-performance/local-x86-current-20261109."
+}

@@ -5923,7 +5923,7 @@ Exit criteria:
 
 ### v0.27.2 - AES-128 AES-192 And AES-256 Portable Public API Acceptance
 
-Status: in progress
+Status: released
 
 Progress: archive-only public consumers and paired ownership diagnostics are
 implemented as `aes/packaged-portable`; pinned package-external AESAVS MCT/MMT
@@ -5967,7 +5967,9 @@ The internal facade version, isolated consumer pins, SBOM and finite checklist
 are prepared for 0.27.2. Candidate input-identity reconciliation is complete:
 affected package/API/compiler checks and both hosts' fixed/random observations
 passed, and the new native artifacts passed the existing bounded review policies.
-Commit-bound owner review, the finite final gate and GitHub remain pending. See
+Commit-bound owner review, all thirty finite final checks, GitHub CI and CodeQL
+passed; signed v0.27.2 identifies `56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e`.
+No crates.io publication was selected. See
 [`aes-portable-acceptance.md`](assurance/aes-portable-acceptance.md) for the exact
 scope and remaining work. Correctness, bounded emitted-code review and timing
 observations remain distinct evidence, not interchangeable passes.
@@ -6019,7 +6021,341 @@ Exit criteria:
 
 ### v0.27.3 - Complete AES x86_64 And AArch64 Acceleration
 
-Status: planned
+Status: in progress
+
+Progress: isolated AES-NI and little-endian AArch64 AES round candidates cover
+all three key widths and both directions in the explicit workspace harness.
+NIST KAT and alignment/canary checks are registered for both compiler endpoints,
+with native x86 and explicitly emulated AArch64 kept separate. Default-off
+`aes-static-execution` now connects sealed static admission, startup KATs,
+quarantine and explicit operation-local/cached clearing owners; existing
+constructors stay portable. Static lifecycle and KAT runs also passed natively
+on Apple M2 Pro with both compiler endpoints. Default-off hosted selection now
+admits reviewed Linux/macOS AArch64 system bundles and keeps x86 CPUID-only
+selection unavailable. Baseline-compiled hosted downstream KAT/lifecycle runs
+passed on Apple M2 Pro and AArch64 QEMU in debug/release on both endpoints.
+Forced-backend package-external AESAVS and independent OpenSSL campaigns are
+implemented for direct/facade consumers. Sixteen local compiler/route/backend
+configurations passed, with ARM emulation explicitly distinct from native runs.
+Sixteen further configurations passed natively on Apple M2 Pro, covering both
+static and hosted admission, both API routes, both compilers and both campaigns.
+Six local linked-kernel configurations now pass across 24 package-external
+fat-LTO consumers, with exact instruction/executable-byte checks and mutation
+controls for all three complete round-kernel bodies. Native x86 and emulated
+AArch64 results remain distinct; surrounding callers, dispatch, expansion and
+cleanup still require their separate final-linked review.
+The x86 cached public-encryption caller slice now also passes across eight
+freshly linked consumers, binding authority/length checks, publication, matched
+kernels and volatile cleanup. A separate cached secret-output slice now passes
+across eight further consumers, binding admission, encrypt/decrypt selection,
+staged copy, returned secret-owner fields and cleanup, including the newer
+compiler's clearing tail edge. The fixture checks cleared destinations on
+quarantined cached encryption and decryption. Constructors, ephemeral paths,
+returned-owner destruction, ARM callers and exception-table dispatch remain
+outside those bounded caller slices. The x86 per-operation secret-output slice
+now passes across eight further consumers, including temporary schedule setup,
+matching portable expansion/inverse bodies, post-expansion authority rechecks,
+both block directions and cleanup. Its fixture also exercises quarantined
+constructor rejection for both owner forms. A separate x86 public-output slice
+now reviews package-external per-operation wrappers, including staged publication,
+post-expansion admission and cleanup, while replaying the previous operation and
+expansion policies. Its fixture checks that quarantine preserves public output.
+A separate x86 lifecycle slice now reviews all six package-external constructor
+bodies and the two destruction bodies retained after LTO merging, with explicit
+clear/Drop execution checks for every key-owner type and returned secret blocks.
+The ARM cleanup slice now binds the complete volatile-clear helper and two
+retained destruction bodies with exact instruction/byte templates, replayed
+round kernels and explicit clear/Drop execution. Static/hosted AArch64 ELF
+consumers run under emulation, not native qualification. A separate ARM
+constructor slice now binds all six raw/cached constructors, the copy helper,
+unchanged portable expansion/inverse policies and the cleanup/kernel review.
+The ARM cached-caller slice now binds three public-encryption and three shared
+secret encrypt/decrypt bodies, with admission, staged output, matched-width
+dispatch, clearing and quarantine. Older compiler unwind paths retain a bound
+trusted runtime boundary, without exception-table or unwinder qualification.
+The ARM per-operation caller slice now binds six public/secret bodies, temporary
+width-specific expansion, post-expansion admission, staging and schedule cleanup,
+while replaying the cached caller and dependency closure. Broader native
+qualification remains unfinished;
+arbitrary downstream inlining and every fixture call site are not qualified.
+The unchanged portable package consumer also passes all eight host
+configurations, 536 paired API probes, four no_std compile checks and archived
+README/default-off feature checks against the development archives.
+Packaged static x86 ASan/LSan lifecycle coverage now has a separate registered
+runner for both API routes in debug/release, requiring explicit failing bounds
+and leak controls before the archived owner tests. This is sampled dynamic
+coverage, not ARM or physical-protection qualification.
+Packaged accelerated no_std acceptance now covers static/runtime features on
+Cortex-M, Linux x86 AES-NI and AArch64 musl AES/NEON at both compiler endpoints,
+through direct/facade library builds and paired ownership/feature diagnostics.
+These are compile-only checks; the failed bare-metal x86 SIMD trial remains
+outside the supported acceptance scope, without an ABI override.
+An archive-only performance diagnostic now separates construction/clearing from
+raw/cached block-operation cost. Its registered checks validate correctness
+without taking measurements; explicitly requested observations retain every
+sample and do not establish a speed gate or side-channel qualification.
+Isolated hardware-assisted expansion candidates now cover all widths with
+complete schedule comparisons, NIST round trips, alignment canaries and
+positive/negative no_std shape checks. Explicit accelerated owners now call
+them through sealed session admission, with complete-schedule startup checks,
+error/unwind cleanup, cached reuse and post-expansion revocation regressions.
+Portable constructors are unchanged. Old linked-code policies and native
+observations do not qualify this replacement and require refreshed review.
+Native x86 and emulated ARM have separate checks.
+The six linked-kernel registrations now pass for the integrated expansion,
+requiring exact instructions and executable bytes for all three expansion and
+round bodies in 24 fresh fat-LTO consumers, with 29,160 rejected byte/text
+mutations. This bounded body review does not close the changed surrounding
+caller/admission/cleanup closure or refresh native AArch64 observations.
+The two x86 per-operation secret-output registrations now also pass across
+eight fresh consumers: exact outer wrappers, hardware expansion and all six
+width/direction-bound session bodies, with cached caller/copy/clear review
+replayed. Their 144 known-answer operations, 17,004 wrapper mutations and 4,560
+session mutations do not by themselves qualify public-output, constructor,
+startup/hosted or ARM caller boundaries. The public-output and lifecycle checks
+now separately pass across sixteen further fresh static x86 consumers,
+including the changed post-expansion admission and 1.90.0 constructor unwind
+cleanup. These exercised 288 known-answer operations and rejected 11,886
+public-wrapper and 16,532 constructor/destruction mutations, plus replayed
+dependency controls. ARM construction and cached-caller checks now separately
+pass across 32 fresh emulated static/hosted consumers, including hardware
+expansion, post-admission and MSRV unwind cleanup. These exercised 576 known-answer
+operations, rejected 38,820 constructor/copy and 35,910 cached-caller mutations,
+and replayed expansion/runtime/cleanup/kernel controls. ARM per-operation caller
+review now also passes in sixteen fresh static/hosted emulated consumers, with
+six separately reviewed width/direction-bound session bodies required before
+the caller review. These exercised 288 known-answer operations and rejected
+71,180 caller and 16,080 session mutations, plus replayed dependencies. The full
+registry/tooling suite passed 755 tests at that stage. Static ARM startup now
+separately passes in eight fresh packaged LTO consumers, binding complete
+startup/comparator bodies, all expected schedules and six independent answers.
+All 5,024 corrupted-answer executions quarantined the admitted owner, alongside
+8,360 code and 5,824 referenced-data rejection controls and replayed kernels.
+The registry/tooling suite passed 764 tests at that stage. Hosted Linux ARM
+startup now also passes in eight fresh packaged consumers, binding runtime AES
+admission before kernels and terminal self-test quarantine without Prefer
+fallback. All 5,024 corrupted-answer executions and sixteen warm/cold missing-AES
+software controls behaved as required; 10,120 code and 5,824 data mutations were
+rejected. Rust std_detect and Linux capability reporting remain trusted, and
+NEON is a target baseline. The suite passed 770 tests at that stage. Static x86
+startup now also passes in eight fresh native packaged consumers after a
+baseline AES/SSE2 probe: all 5,024 corrupted-answer executions quarantined,
+8,460 code and 5,760 referenced-data mutations were rejected, and actual ELF
+metadata binds the libc comparison import. libc and its loader remain trusted.
+The suite passed 779 tests at that stage. A subsequent Neoverse-V2 refresh
+passed 16 native GNU-target correctness campaigns and both compilers' lifecycle
+checks with the integrated hardware expansion. Fresh native Linux AArch64 musl
+builds also passed the unchanged linked-operation and startup policies across
+32 consumers, including 10,048 corrupted-answer quarantine executions and
+16 simulated missing-AES controls. The suite now passes 784 tests. See
+[`aes-accelerated-native-arm.md`](assurance/aes-accelerated-native-arm.md)
+for this bounded native replay and its retained working-tree observations.
+Four separately predeclared integrated-expansion performance observations on
+AWS Arm and local AMD also completed once each, retaining all 1,728 samples
+without speed thresholds or retries. All 786 tooling/registry tests and eight
+host/compiler/route performance-fixture correctness configurations passed.
+These are performance diagnostics, not fixed-versus-random acceptance; see
+[`aes-accelerated-performance-results.md`](assurance/aes-accelerated-performance-results.md).
+The subsequent accelerated fixed/random fixture passed eight native correctness
+configurations and 797 tooling tests. Its four predeclared observations retained
+all 1,277,952 pairs, but AMD was noise-inconclusive and ARM produced three
+non-noise-flagged campaign alarms across the two compilers. No observation is a
+timing pass; investigate the exact binaries and possible harness confounds
+without discarding samples or retrying to green. See
+[`aes-accelerated-fixed-random-results.md`](assurance/aes-accelerated-fixed-random-results.md).
+A separately predeclared native ARM address/value control experiment retained
+2,555,904 further pairs. Shared-address controls had no alarms, but one
+separate-address campaign alarmed and all eight arms had noisy campaigns;
+causality and timing acceptance remain unresolved. Eight control-fixture
+correctness configurations and 804 tooling tests passed without production
+crypto changes. See
+[`aes-timing-address-controls-results.md`](assurance/aes-timing-address-controls-results.md).
+A further, separately declared dispatch-isolated experiment retained 2,555,904
+AES pairs and 32,768 timer/copy-control pairs. No AES control alarmed, but all
+eight arms remained noise-inconclusive; the original alarms are not closed.
+Eight native correctness configurations and 811 tooling tests passed, with no
+production crypto changes. Timer overhead is material at this sample duration;
+any longer-batch experiment must be separately justified and declared. See
+[`aes-timing-dispatch-controls-results.md`](assurance/aes-timing-dispatch-controls-results.md).
+A separately declared fixed 1024-operation experiment on the replacement AWS
+Neoverse-V2 passed its unchanged screen in all eight AES controls: zero alarms
+and zero noise-inconclusive campaigns. All 2,555,904 AES pairs and 32,768
+overhead pairs were retained and replayed. Eight native correctness
+configurations and 816 tooling tests passed. This different host/batch does
+not retroactively resolve the earlier alarms or qualify arbitrary consumers;
+their explicit disposition and broader platform review remain required. See
+[`aes-timing-batch-controls-results.md`](assurance/aes-timing-batch-controls-results.md).
+The integrated-expansion Apple M2 Pro correctness refresh also passed all
+sixteen direct/facade, static/hosted, AESAVS/OpenSSL configurations across both
+compilers, plus four static/hosted lifecycle runs. All 24 retained campaign
+binaries, package identities and exact completion markers were checked locally;
+two corrected setup failures remain recorded. This refresh replaces the earlier
+Apple portable-expansion correctness baseline, not final-linked or timing
+qualification. See the
+[`Apple observation record`](../assurance/aes-native-observations/v0.27.3/apple-integrated-expansion-20261111.json).
+Sixteen optimized Apple direct/facade, static/hosted, abort/unwind consumers
+have also executed and their Mach-O binaries/disassembly are retained for
+review. This is explicitly capture-only, not a machine-code approval. Two
+new negative controls, 818 tooling tests and all six existing Linux
+linked-kernel configurations passed. See the
+[`Apple linked capture`](../assurance/aes-native-observations/v0.27.3/apple-linked-capture-20261111.json).
+A separate offline Mach-O reviewer now validates actual mappings and function
+boundaries and matches all 96 complete round/expansion bodies in those sixteen
+executables. All 192 real-binary edge mutations were rejected; sixteen new
+regression tests (including 1,044 synthetic byte mutations) are included in the
+passing 834-test tooling suite. No native runs were repeated. This closes only
+the bounded kernel-body step, not Apple caller/admission/cleanup or unwind
+qualification. See [`Apple kernel-body review`](assurance/aes-apple-linked-kernels.md).
+The separate Apple cleanup step also passes all 48 retained zeroizer/destruction
+bodies across the sixteen binaries, with 832 actual-body byte mutations rejected
+and the AES body dependency rechecked. Nine new tests bring the passing tooling
+suite to 843. This does not approve every caller or exception path; that step
+left the older compiler's unwind-import stub binding open. See
+[`Apple retained cleanup review`](assurance/aes-apple-linked-cleanup.md).
+The subsequent session step matches all 96 complete session functions, binds
+direction and width-specific calls, and checks the older compiler's retained
+quarantine pad and static unwind import/stub/lazy-pointer/helper chain. All
+12,000 actual session-byte mutations were rejected and dependencies rechecked;
+sixteen new tests bring the passing tooling suite to 859. This does not qualify
+exception dispatch, dyld/system unwinder or higher-level constructors/callers.
+No native measurements were repeated. See
+[`Apple session review`](assurance/aes-apple-linked-sessions.md).
+The constructor step now matches all 96 raw/cached constructor bodies and
+16 copy helpers, including destination/scratch clearing, exact lengths,
+width-bound expansion, revalidation, failure quarantine and retained MSRV
+unwind-pad instructions. All 30,576 actual-body byte mutations were rejected;
+session/cleanup/AES dependencies were rechecked. Nine new tests bring the
+passing tooling suite to 868. Higher-level operation callers, exception
+dispatch and Apple startup/lifetime admission remain separate. No native
+measurements or production code changed. See
+[`Apple constructor review`](assurance/aes-apple-linked-constructors.md).
+The cached-caller step also matches all 96 retained public-encryption/secret
+encrypt-decrypt bodies, covering schedule checks, width/direction-bound calls,
+output publication, clearing and retained unwind pads. All 27,888 actual-byte
+mutations were rejected, with constructor/copy/session/cleanup/AES dependencies
+rechecked. Nine new tests bring the passing tooling suite to 877. Ephemeral
+callers, exception dispatch and Apple startup/lifetime admission remain
+separate; no native measurements or production code changed. See
+[`Apple cached-caller review`](assurance/aes-apple-linked-cached.md).
+The ephemeral public-caller step matches 48 retained fixture-inlined bodies,
+including temporary expansion, repeated admission, staged publication and
+schedule/block clearing. All 24,320 actual caller-byte mutations were rejected.
+Eight new tests cover 12,160 synthetic byte mutations;
+all 885 integrated tooling tests pass. Ephemeral secret-output callers,
+exception dispatch and Apple startup/lifetime admission remain separate.
+No native measurements or production code changed. See
+[`Apple ephemeral public review`](assurance/aes-apple-linked-ephemeral-public.md).
+The ephemeral secret-output step matches 48 shared encrypt/decrypt bodies,
+including clear-before-admission, temporary expansion/revalidation,
+direction-bound sessions, result admission and cleanup before owner return.
+The checker rejects 29,520 retained-binary single-byte mutation controls
+without executing altered binaries. Nine new tests cover 14,760 synthetic
+byte mutations; all 894 integrated tooling tests pass. Apple startup/lifetime
+admission, other call sites and exception dispatch remain separate; no
+production code or native measurements changed. See
+[`Apple ephemeral secret review`](assurance/aes-apple-linked-ephemeral-secret.md).
+The focused Apple startup capture now passes sixteen native configurations
+using unchanged package-external fixtures. It retains separate startup symbols,
+Mach-O binaries and hashes; package identities match the earlier source capture.
+All 897 integrated tooling tests pass, and the existing Linux hosted startup
+review still passes four consumers plus 2,512 quarantine and eight missing-feature
+controls. Apple capture is not machine-code approval: startup/comparison/callee
+review, corrupted-answer and missing-feature controls, and platform lifetime
+admission remain open. See the
+[`startup capture scope`](assurance/aes-accelerated-startup.md#apple-capture-only-follow-up-2026-11-11).
+The subsequent static Apple review matches eight complete startup bodies,
+rechecks 48 AES bodies and binds eight system `memcmp` imports. It rejects
+6,224 code-byte complements and 5,824 constant-bit flips offline; all 906
+integrated tooling tests pass. libc/dyld remain trusted runtime dependencies,
+not locally qualified comparator code. Apple executed corrupted-answer controls,
+hosted startup/detector and lifetime admission remain open. See
+[`Apple static startup review`](assurance/aes-apple-static-startup.md).
+The separate native Apple static follow-up passes eight original binaries and
+eight unchanged re-signed positives, plus 5,024 corrupted-answer quarantine
+executions. Hashes, complete static reviews and exact case logs replay locally.
+Seven runner tests pass on Linux/macOS and all 913 integrated tooling tests pass.
+Ad-hoc signing changes only its terminal payload and two validated size fields;
+the initial overly strict signing pilot is retained. No production code,
+timing experiment or publication gate changed. Hosted startup/detection and
+platform lifetime admission remain open; see the
+[`native quarantine controls`](assurance/aes-apple-static-startup.md#native-quarantine-controls).
+The Apple hosted offline follow-up now matches eight complete 236-instruction
+startup bodies, their fixed KATs and 48 AES dependencies. It binds system
+comparison imports, zero-filled feature caches and cold-detector calls, rejecting
+7,552 code-byte complements and 5,824 constant-bit flips. Seven new tests cover
+mode/feature/state branches, mapping and target substitution, configuration and
+CLI failure. Detector/OS implementations remain trusted; native hosted negative
+controls and platform lifetime admission remain open. See the
+[`Apple hosted startup review`](assurance/aes-apple-hosted-startup.md).
+All 920 integrated tooling tests and the eight earlier static startup replays
+pass after this extension; no production Rust or publication gate changed.
+The subsequent native hosted Apple controls pass all eight original binaries
+and eight unchanged re-signed positives, 5,024 corrupted-answer quarantine runs
+and 16 warm/cold missing-feature runs. Both Require and Prefer are exercised by
+every negative fixture. All original hashes, full reviews and exact mutation/
+observation logs replay locally. Nine runner and eight hosted-reviewer tests
+pass on Linux/macOS, and all 923 integrated tooling tests pass. Platform lifetime
+admission remains separate; no production Rust, timing experiment, verifier
+current-pass record or publication gate changed. See the
+[`hosted native results`](assurance/aes-apple-hosted-startup.md#native-results-2026-11-11).
+The native AWS Intel Xeon 6975P-C static AES-NI lane now passes eight
+direct/facade AESAVS/OpenSSL configurations and six lifecycle/admission runs
+across both compilers. Sixteen optimized consumers pass the existing bounded
+lifecycle/startup code reviews, including 5,024 executed startup quarantine
+controls. Retained hashes, exact populations and code reviews were replayed
+locally; an initial missing-helper transfer failure remains recorded. Hosted
+x86 remains unavailable and no VAES qualification is claimed. See
+the [`Intel native observation`](../assurance/aes-native-observations/v0.27.3/intel-native-20261111.json).
+The separately declared Intel measurements also completed once per compiler:
+864 performance samples, 2,555,904 AES timing pairs and 32,768 overhead pairs
+were retained and independently replayed. All eight fixed-1024 AES controls
+had zero alarms and zero noise-inconclusive campaigns. Eight native fixture
+configurations and 43 runner regression tests passed. Actual measured binaries
+passed bounded round/expansion review, with representative timer-loop inspection;
+this is not whole-program qualification and does not close earlier timing alarms.
+See [`Intel measurement results`](assurance/aes-intel-measurement-results.md).
+The 2026-11-11 detector-source review found a missing explicit PMULL precondition
+in Linux hosted AES admission. Both pinned Rust endpoints expose runtime AES
+and PMULL separately while the Rust `aes` target feature covers both. The
+adapter now checks both, with all sixteen feature/migration combinations tested.
+Eight refreshed Linux linked/LTO fixtures passed in emulation, including 5,024
+corrupted-answer executions and 32 absent-AES/absent-PMULL controls. The subsequent
+native Linux/Apple refresh now passes eight configurations per platform,
+including 10,048 corrupted-answer executions and 64 independent missing-feature
+controls. Returned binary identities, complete scoped reviews and case
+populations replay locally; the 923-test tooling/registry suite passes.
+Earlier records are retained as historical observations, not relabeled as
+current-source passes. See the
+[`native hosted refresh`](assurance/aes-acceleration-development.md#native-hosted-pmull-refresh-2026-11-11).
+Additional hosted targets, remaining
+final-linked admission and broader native qualification remain open; hosted x86
+still lacks the required migration guarantee and is not admitted by these checks.
+The [acceptance inventory](assurance/aes-acceleration-acceptance.md) reconciles
+completed scoped work without relabeling historical results. The native Apple
+measurement runner and all eight correctness-only fixture configurations now
+pass; 931 tooling/registry tests pass. Apple sampling follows a separate
+[one-shot declaration](assurance/aes-apple-measurement-declaration.md), explicitly
+unpinned and without threshold changes or retroactive closure of earlier alarms.
+Those four observations are now complete and locally replayed: 864 performance
+samples, 2,555,904 AES timing pairs and 32,768 diagnostic pairs. All eight Apple
+timing controls had zero alarms; one MSRV campaign exceeded the noise limit,
+so MSRV remains inconclusive while current passed its screen. Captured source
+for all 21 packaged crates matches local files. Both measured binaries passed
+exact six-body ARM kernel/expansion review plus representative timer/callee
+inspection, not whole-program qualification. See the
+[Apple results](assurance/aes-apple-measurement-results.md).
+The [original ARM alarm-path review](assurance/aes-arm-alarm-path-review.md)
+now traces all four non-noise alarm campaigns in their three retained binaries:
+18 complete round/expansion bodies matched, and bounded caller inspection
+identified public wrapper work inside the timer without establishing a cause
+for the alarms. No measurements were repeated or signals cleared by this review.
+The [offline population diagnostics](assurance/aes-retained-timing-diagnostics.md)
+also replay all 117 campaign verdicts and 958,464 retained pairs from those
+observations; order/time grouping does not establish a benign cause. The
+optional diagnostic tool has 12 synthetic regressions and adds no release gate.
+Remaining measured-code review and explicit disposition of retained timing
+alarms/noise keep acceptance open. See
+[`aes-acceleration-development.md`](assurance/aes-acceleration-development.md).
 
 Plan scope: Add isolated AES-128, AES-192, and AES-256 encrypt and decrypt backends for exact x86_64 AES-NI or VAES bundles and exact AArch64 AES bundles, with AMD, observed-feature AWS Intel, Apple M2, and AWS Arm native evidence; retain identical KAT, quarantine, no_std static selection, opt-in std selection, side-channel, and destruction semantics. Extend the portable emitted-code, fixed-versus-random timing and AESAVS acceptance to every admitted backend and named native configuration.
 

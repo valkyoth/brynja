@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "declared_utc": "2026-11-12T17:53:00Z",
+  "rounds": 4,
+  "controls": [
+    "separate-values",
+    "shared-values",
+    "separate-identical",
+    "shared-identical"
+  ],
+  "timeout_seconds": 180,
+  "collector_sha256": "0589bbe49aef4fbab555e9e9879d3ec757de9ea1b2231b12722985759de6d130",
+  "timing_parser_sha256": "08bb7ae4cd54255837eaf931ed59a272bb44c3714a481e4dd916bd4b26a956f9",
+  "controls_parser_sha256": "a0a6d763131fa1ede09fd7c3a4873f57b9c36d530ed2f0e0a519b7fb8e503c03",
+  "policy_sha256": "9efb640a2a9870685b6a919813aaa081670960130bf2b584328b3364f9990b41",
+  "bounded_review_sha256": "1faece7bb980f93be2328c7c3b3868ff6eaf036ae8f78c25135782fec25627fd",
+  "probe_source_sha256": "07b3ef5f48f3bf73036f13573df7286656880e829c7aa13a4001e0b72e8fbdc8",
+  "system": "Linux",
+  "machine": "aarch64",
+  "cpu": 0,
+  "host": "ubuntu@13.49.18.65",
+  "hardware": "Neoverse-V2",
+  "destination": "/home/ubuntu/brynja-dit-timing-0273-Sz3kLVpj/observations-20261112-dit-finite-01",
+  "binaries": {
+    "1.90.0": {
+      "binary": "/home/ubuntu/brynja-dit-timing-0273-Sz3kLVpj/check-1.90.0-direct-1v3hpwz4/fixed-random",
+      "binary_sha256": "cb4e8fa290a531a45120012705ed71a260ab8eb903c1ed0c3e99dd042d4170bf",
+      "probe": "/home/ubuntu/brynja-dit-timing-0273-Sz3kLVpj/check-1.90.0-direct-1v3hpwz4/host-probe",
+      "probe_sha256": "2d124c8c434597fb317d374c233cacdbab3de3dc7af40db6f8bd4b6645f9e1b5"
+    },
+    "1.99.1": {
+      "binary": "/home/ubuntu/brynja-dit-timing-0273-Sz3kLVpj/check-1.99.1-direct-p25m7p2o/fixed-random",
+      "binary_sha256": "a39087dbd9e628a985d7b98e264fa887b4121ef8709a9150157104400f1d60c0",
+      "probe": "/home/ubuntu/brynja-dit-timing-0273-Sz3kLVpj/check-1.99.1-direct-p25m7p2o/host-probe",
+      "probe_sha256": "7d7bc67418c10b59083ff362a4e3d36cbde3cca423b7240c332bf4b17b9c05c5"
+    }
+  }
+}

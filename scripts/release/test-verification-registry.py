@@ -68,6 +68,198 @@ aes_avs_tests = importlib.util.module_from_spec(aes_avs_spec)
 aes_avs_spec.loader.exec_module(aes_avs_tests)
 AesAvsTests = aes_avs_tests.AvsTests
 
+aes_kernel_spec = importlib.util.spec_from_file_location('aes_kernel_tests', ROOT / 'scripts/aes/test-aes-kernel-candidate.py')
+aes_kernel_tests = importlib.util.module_from_spec(aes_kernel_spec)
+aes_kernel_spec.loader.exec_module(aes_kernel_tests)
+AesKernelCandidateTests = aes_kernel_tests.KernelCandidateTests
+
+aes_expansion_spec = importlib.util.spec_from_file_location('aes_expansion_tests', ROOT / 'scripts/aes/test-aes-expansion-candidate.py')
+aes_expansion_tests = importlib.util.module_from_spec(aes_expansion_spec)
+aes_expansion_spec.loader.exec_module(aes_expansion_tests)
+AesExpansionCandidateTests = aes_expansion_tests.ExpansionCandidateTests
+
+aes_static_spec = importlib.util.spec_from_file_location('aes_static_tests', ROOT / 'scripts/aes/test-aes-static.py')
+aes_static_tests = importlib.util.module_from_spec(aes_static_spec)
+aes_static_spec.loader.exec_module(aes_static_tests)
+AesStaticTests = aes_static_tests.StaticTests
+
+aes_hosted_spec = importlib.util.spec_from_file_location('aes_hosted_tests', ROOT / 'scripts/aes/test-aes-hosted.py')
+aes_hosted_tests = importlib.util.module_from_spec(aes_hosted_spec)
+aes_hosted_spec.loader.exec_module(aes_hosted_tests)
+AesHostedTests = aes_hosted_tests.HostedTests
+
+aes_dit_spec = importlib.util.spec_from_file_location('aes_dit_tests', ROOT / 'scripts/aes/test-aes-dit.py')
+aes_dit_tests = importlib.util.module_from_spec(aes_dit_spec)
+aes_dit_spec.loader.exec_module(aes_dit_tests)
+AesDitTests = aes_dit_tests.DitTests
+aes_dit_linked_spec = importlib.util.spec_from_file_location('aes_dit_linked_tests', ROOT / 'scripts/aes/test-aes-dit-linked.py')
+aes_dit_linked_tests = importlib.util.module_from_spec(aes_dit_linked_spec)
+aes_dit_linked_spec.loader.exec_module(aes_dit_linked_tests)
+AesDitLinkedTests = aes_dit_linked_tests.DitLinkedTests
+aes_dit_finite_spec = importlib.util.spec_from_file_location('aes_dit_finite_tests', ROOT / 'scripts/aes/test-aes-dit-finite.py')
+aes_dit_finite_tests = importlib.util.module_from_spec(aes_dit_finite_spec)
+aes_dit_finite_spec.loader.exec_module(aes_dit_finite_tests)
+AesDitFiniteTests = aes_dit_finite_tests.FiniteTests
+aes_dit_finite_analysis_spec = importlib.util.spec_from_file_location('aes_dit_finite_analysis_tests', ROOT / 'scripts/aes/test-aes-dit-finite-analysis.py')
+aes_dit_finite_analysis_tests = importlib.util.module_from_spec(aes_dit_finite_analysis_spec)
+aes_dit_finite_analysis_spec.loader.exec_module(aes_dit_finite_analysis_tests)
+AesDitFiniteAnalysisTests = aes_dit_finite_analysis_tests.FiniteAnalysisTests
+aes_dit_sensitivity_spec = importlib.util.spec_from_file_location('aes_dit_sensitivity_tests', ROOT / 'scripts/aes/test-aes-dit-sensitivity.py')
+aes_dit_sensitivity_tests = importlib.util.module_from_spec(aes_dit_sensitivity_spec)
+aes_dit_sensitivity_spec.loader.exec_module(aes_dit_sensitivity_tests)
+AesDitSensitivityTests = aes_dit_sensitivity_tests.DitSensitivityTests
+
+aes_execution_api_spec = importlib.util.spec_from_file_location('aes_execution_api_tests', ROOT / 'scripts/aes/test-aes-execution-api.py')
+aes_execution_api_tests = importlib.util.module_from_spec(aes_execution_api_spec)
+aes_execution_api_spec.loader.exec_module(aes_execution_api_tests)
+AesExecutionApiTests = aes_execution_api_tests.ExecutionApiTests
+
+aes_campaign_spec = importlib.util.spec_from_file_location('aes_campaign_tests', ROOT / 'scripts/aes/test-aes-accelerated-campaigns.py')
+aes_campaign_tests = importlib.util.module_from_spec(aes_campaign_spec)
+aes_campaign_spec.loader.exec_module(aes_campaign_tests)
+AesAcceleratedCampaignTests = aes_campaign_tests.AcceleratedCampaignTests
+
+aes_accelerated_linked_spec = importlib.util.spec_from_file_location('aes_accelerated_linked_tests', ROOT / 'scripts/aes/test-aes-accelerated-linked.py')
+aes_accelerated_linked_tests = importlib.util.module_from_spec(aes_accelerated_linked_spec)
+aes_accelerated_linked_spec.loader.exec_module(aes_accelerated_linked_tests)
+AesAcceleratedLinkedTests = aes_accelerated_linked_tests.AcceleratedLinkedTests
+aes_apple_linked_spec = importlib.util.spec_from_file_location('aes_apple_linked_tests', ROOT / 'scripts/aes/test-aes-apple-linked-kernels.py')
+aes_apple_linked_tests = importlib.util.module_from_spec(aes_apple_linked_spec)
+aes_apple_linked_spec.loader.exec_module(aes_apple_linked_tests)
+AesAppleLinkedTests = aes_apple_linked_tests.AppleKernelTests
+aes_apple_cleanup_spec = importlib.util.spec_from_file_location('aes_apple_cleanup_tests', ROOT / 'scripts/aes/test-aes-apple-linked-cleanup.py')
+aes_apple_cleanup_tests = importlib.util.module_from_spec(aes_apple_cleanup_spec)
+aes_apple_cleanup_spec.loader.exec_module(aes_apple_cleanup_tests)
+AesAppleCleanupTests = aes_apple_cleanup_tests.AppleCleanupTests
+aes_apple_import_spec = importlib.util.spec_from_file_location('aes_apple_import_tests', ROOT / 'scripts/aes/test-aes-apple-unwind-import.py')
+aes_apple_import_tests = importlib.util.module_from_spec(aes_apple_import_spec)
+aes_apple_import_spec.loader.exec_module(aes_apple_import_tests)
+AesAppleImportTests = aes_apple_import_tests.AppleImportTests
+aes_apple_sessions_spec = importlib.util.spec_from_file_location('aes_apple_sessions_tests', ROOT / 'scripts/aes/test-aes-apple-linked-sessions.py')
+aes_apple_sessions_tests = importlib.util.module_from_spec(aes_apple_sessions_spec)
+aes_apple_sessions_spec.loader.exec_module(aes_apple_sessions_tests)
+AesAppleSessionTests = aes_apple_sessions_tests.AppleSessionTests
+aes_apple_constructors_spec = importlib.util.spec_from_file_location('aes_apple_constructors_tests', ROOT / 'scripts/aes/test-aes-apple-linked-constructors.py')
+aes_apple_constructors_tests = importlib.util.module_from_spec(aes_apple_constructors_spec)
+aes_apple_constructors_spec.loader.exec_module(aes_apple_constructors_tests)
+AesAppleConstructorTests = aes_apple_constructors_tests.AppleConstructorTests
+aes_apple_cached_spec = importlib.util.spec_from_file_location('aes_apple_cached_tests', ROOT / 'scripts/aes/test-aes-apple-linked-cached.py')
+aes_apple_cached_tests = importlib.util.module_from_spec(aes_apple_cached_spec)
+aes_apple_cached_spec.loader.exec_module(aes_apple_cached_tests)
+AesAppleCachedTests = aes_apple_cached_tests.AppleCachedTests
+aes_apple_ephemeral_public_spec = importlib.util.spec_from_file_location('aes_apple_ephemeral_public_tests', ROOT / 'scripts/aes/test-aes-apple-linked-ephemeral-public.py')
+aes_apple_ephemeral_public_tests = importlib.util.module_from_spec(aes_apple_ephemeral_public_spec)
+aes_apple_ephemeral_public_spec.loader.exec_module(aes_apple_ephemeral_public_tests)
+AesAppleEphemeralPublicTests = aes_apple_ephemeral_public_tests.AppleEphemeralPublicTests
+aes_apple_ephemeral_secret_spec = importlib.util.spec_from_file_location('aes_apple_ephemeral_secret_tests', ROOT / 'scripts/aes/test-aes-apple-linked-ephemeral-secret.py')
+aes_apple_ephemeral_secret_tests = importlib.util.module_from_spec(aes_apple_ephemeral_secret_spec)
+aes_apple_ephemeral_secret_spec.loader.exec_module(aes_apple_ephemeral_secret_tests)
+AesAppleEphemeralSecretTests = aes_apple_ephemeral_secret_tests.AppleEphemeralSecretTests
+aes_apple_startup_spec = importlib.util.spec_from_file_location('aes_apple_startup_tests', ROOT / 'scripts/aes/test-aes-apple-startup-static.py')
+aes_apple_startup_tests = importlib.util.module_from_spec(aes_apple_startup_spec)
+aes_apple_startup_spec.loader.exec_module(aes_apple_startup_tests)
+AesAppleStaticStartupTests = aes_apple_startup_tests.AppleStaticStartupTests
+aes_apple_hosted_startup_spec = importlib.util.spec_from_file_location('aes_apple_hosted_startup_tests', ROOT / 'scripts/aes/test-aes-apple-startup-hosted.py')
+aes_apple_hosted_startup_tests = importlib.util.module_from_spec(aes_apple_hosted_startup_spec)
+aes_apple_hosted_startup_spec.loader.exec_module(aes_apple_hosted_startup_tests)
+AesAppleHostedStartupTests = aes_apple_hosted_startup_tests.AppleHostedStartupTests
+aes_apple_control_spec = importlib.util.spec_from_file_location('aes_apple_control_tests', ROOT / 'scripts/aes/test-aes-apple-startup-controls.py')
+aes_apple_control_tests = importlib.util.module_from_spec(aes_apple_control_spec)
+aes_apple_control_spec.loader.exec_module(aes_apple_control_tests)
+AesAppleStartupControlTests = aes_apple_control_tests.AppleStartupControlTests
+aes_accelerated_expansion_spec = importlib.util.spec_from_file_location('aes_accelerated_expansion_tests', ROOT / 'scripts/aes/test-aes-accelerated-expansion.py')
+aes_accelerated_expansion_tests = importlib.util.module_from_spec(aes_accelerated_expansion_spec)
+aes_accelerated_expansion_spec.loader.exec_module(aes_accelerated_expansion_tests)
+AesAcceleratedExpansionTests = aes_accelerated_expansion_tests.AcceleratedExpansionTests
+aes_accelerated_public_spec = importlib.util.spec_from_file_location('aes_accelerated_public_tests', ROOT / 'scripts/aes/test-aes-accelerated-public.py')
+aes_accelerated_public_tests = importlib.util.module_from_spec(aes_accelerated_public_spec)
+aes_accelerated_public_spec.loader.exec_module(aes_accelerated_public_tests)
+AesAcceleratedPublicTests = aes_accelerated_public_tests.AcceleratedPublicTests
+aes_accelerated_secret_spec = importlib.util.spec_from_file_location('aes_accelerated_secret_tests', ROOT / 'scripts/aes/test-aes-accelerated-secret.py')
+aes_accelerated_secret_tests = importlib.util.module_from_spec(aes_accelerated_secret_spec)
+aes_accelerated_secret_spec.loader.exec_module(aes_accelerated_secret_tests)
+AesAcceleratedSecretTests = aes_accelerated_secret_tests.AcceleratedSecretTests
+aes_accelerated_ephemeral_spec = importlib.util.spec_from_file_location('aes_accelerated_ephemeral_tests', ROOT / 'scripts/aes/test-aes-accelerated-ephemeral.py')
+aes_accelerated_ephemeral_tests = importlib.util.module_from_spec(aes_accelerated_ephemeral_spec)
+aes_accelerated_ephemeral_spec.loader.exec_module(aes_accelerated_ephemeral_tests)
+AesAcceleratedEphemeralTests = aes_accelerated_ephemeral_tests.AcceleratedEphemeralTests
+
+aes_accelerated_sessions_spec = importlib.util.spec_from_file_location('aes_accelerated_sessions_tests', ROOT / 'scripts/aes/test-aes-accelerated-sessions.py')
+aes_accelerated_sessions_tests = importlib.util.module_from_spec(aes_accelerated_sessions_spec)
+aes_accelerated_sessions_spec.loader.exec_module(aes_accelerated_sessions_tests)
+AesAcceleratedSessionTests = aes_accelerated_sessions_tests.AcceleratedSessionTests
+
+aes_accelerated_ephemeral_public_spec = importlib.util.spec_from_file_location('aes_accelerated_ephemeral_public_tests', ROOT / 'scripts/aes/test-aes-accelerated-ephemeral-public.py')
+aes_accelerated_ephemeral_public_tests = importlib.util.module_from_spec(aes_accelerated_ephemeral_public_spec)
+aes_accelerated_ephemeral_public_spec.loader.exec_module(aes_accelerated_ephemeral_public_tests)
+AesAcceleratedEphemeralPublicTests = aes_accelerated_ephemeral_public_tests.AcceleratedEphemeralPublicTests
+
+aes_accelerated_lifecycle_spec = importlib.util.spec_from_file_location('aes_accelerated_lifecycle_tests', ROOT / 'scripts/aes/test-aes-accelerated-lifecycle.py')
+aes_accelerated_lifecycle_tests = importlib.util.module_from_spec(aes_accelerated_lifecycle_spec)
+aes_accelerated_lifecycle_spec.loader.exec_module(aes_accelerated_lifecycle_tests)
+AesAcceleratedLifecycleTests = aes_accelerated_lifecycle_tests.AcceleratedLifecycleTests
+
+aes_accelerated_arm_cleanup_spec = importlib.util.spec_from_file_location('aes_accelerated_arm_cleanup_tests', ROOT / 'scripts/aes/test-aes-accelerated-arm-cleanup.py')
+aes_accelerated_arm_cleanup_tests = importlib.util.module_from_spec(aes_accelerated_arm_cleanup_spec)
+aes_accelerated_arm_cleanup_spec.loader.exec_module(aes_accelerated_arm_cleanup_tests)
+AesAcceleratedArmCleanupTests = aes_accelerated_arm_cleanup_tests.AcceleratedArmCleanupTests
+
+aes_accelerated_arm_constructor_spec = importlib.util.spec_from_file_location('aes_accelerated_arm_constructor_tests', ROOT / 'scripts/aes/test-aes-accelerated-arm-constructors.py')
+aes_accelerated_arm_constructor_tests = importlib.util.module_from_spec(aes_accelerated_arm_constructor_spec)
+aes_accelerated_arm_constructor_spec.loader.exec_module(aes_accelerated_arm_constructor_tests)
+AesAcceleratedArmConstructorTests = aes_accelerated_arm_constructor_tests.AcceleratedArmConstructorTests
+
+aes_accelerated_arm_cached_spec = importlib.util.spec_from_file_location('aes_accelerated_arm_cached_tests', ROOT / 'scripts/aes/test-aes-accelerated-arm-cached.py')
+aes_accelerated_arm_cached_tests = importlib.util.module_from_spec(aes_accelerated_arm_cached_spec)
+aes_accelerated_arm_cached_spec.loader.exec_module(aes_accelerated_arm_cached_tests)
+AesAcceleratedArmCachedTests = aes_accelerated_arm_cached_tests.AcceleratedArmCachedTests
+
+aes_accelerated_arm_ephemeral_spec = importlib.util.spec_from_file_location('aes_accelerated_arm_ephemeral_tests', ROOT / 'scripts/aes/test-aes-accelerated-arm-ephemeral.py')
+aes_accelerated_arm_ephemeral_tests = importlib.util.module_from_spec(aes_accelerated_arm_ephemeral_spec)
+aes_accelerated_arm_ephemeral_spec.loader.exec_module(aes_accelerated_arm_ephemeral_tests)
+AesAcceleratedArmEphemeralTests = aes_accelerated_arm_ephemeral_tests.AcceleratedArmEphemeralTests
+aes_accelerated_arm_session_spec = importlib.util.spec_from_file_location('aes_accelerated_arm_session_tests', ROOT / 'scripts/aes/test-aes-accelerated-arm-sessions.py')
+aes_accelerated_arm_session_tests = importlib.util.module_from_spec(aes_accelerated_arm_session_spec)
+aes_accelerated_arm_session_spec.loader.exec_module(aes_accelerated_arm_session_tests)
+AesAcceleratedArmSessionTests = aes_accelerated_arm_session_tests.AcceleratedArmSessionTests
+aes_accelerated_startup_spec = importlib.util.spec_from_file_location('aes_accelerated_startup_tests', ROOT / 'scripts/aes/test-aes-accelerated-startup.py')
+aes_accelerated_startup_tests = importlib.util.module_from_spec(aes_accelerated_startup_spec)
+aes_accelerated_startup_spec.loader.exec_module(aes_accelerated_startup_tests)
+AesAcceleratedStartupTests = aes_accelerated_startup_tests.AcceleratedStartupTests
+aes_accelerated_hosted_startup_spec = importlib.util.spec_from_file_location('aes_accelerated_hosted_startup_tests', ROOT / 'scripts/aes/test-aes-accelerated-startup-hosted.py')
+aes_accelerated_hosted_startup_tests = importlib.util.module_from_spec(aes_accelerated_hosted_startup_spec)
+aes_accelerated_hosted_startup_spec.loader.exec_module(aes_accelerated_hosted_startup_tests)
+AesAcceleratedHostedStartupTests = aes_accelerated_hosted_startup_tests.HostedStartupTests
+aes_accelerated_x86_startup_spec = importlib.util.spec_from_file_location('aes_accelerated_x86_startup_tests', ROOT / 'scripts/aes/test-aes-accelerated-startup-x86.py')
+aes_accelerated_x86_startup_tests = importlib.util.module_from_spec(aes_accelerated_x86_startup_spec)
+aes_accelerated_x86_startup_spec.loader.exec_module(aes_accelerated_x86_startup_tests)
+AesAcceleratedX86StartupTests = aes_accelerated_x86_startup_tests.X86StartupTests
+
+aes_accelerated_sanitizer_spec = importlib.util.spec_from_file_location('aes_accelerated_sanitizer_tests', ROOT / 'scripts/aes/test-aes-accelerated-sanitizers.py')
+aes_accelerated_sanitizer_tests = importlib.util.module_from_spec(aes_accelerated_sanitizer_spec)
+aes_accelerated_sanitizer_spec.loader.exec_module(aes_accelerated_sanitizer_tests)
+AesAcceleratedSanitizerTests = aes_accelerated_sanitizer_tests.AcceleratedSanitizerTests
+
+aes_accelerated_no_std_spec = importlib.util.spec_from_file_location('aes_accelerated_no_std_tests', ROOT / 'scripts/aes/test-aes-accelerated-no-std.py')
+aes_accelerated_no_std_tests = importlib.util.module_from_spec(aes_accelerated_no_std_spec)
+aes_accelerated_no_std_spec.loader.exec_module(aes_accelerated_no_std_tests)
+AesAcceleratedNoStdTests = aes_accelerated_no_std_tests.AcceleratedNoStdTests
+
+aes_performance_spec = importlib.util.spec_from_file_location('aes_performance_tests', ROOT / 'scripts/aes/test-aes-performance.py')
+aes_performance_tests = importlib.util.module_from_spec(aes_performance_spec)
+aes_performance_spec.loader.exec_module(aes_performance_tests)
+AesPerformanceTests = aes_performance_tests.AesPerformanceTests
+
+aes_accelerated_timing_spec = importlib.util.spec_from_file_location('aes_accelerated_timing_tests', ROOT / 'scripts/aes/test-aes-accelerated-fixed-random.py')
+aes_accelerated_timing_tests = importlib.util.module_from_spec(aes_accelerated_timing_spec)
+aes_accelerated_timing_spec.loader.exec_module(aes_accelerated_timing_tests)
+AesAcceleratedTimingTests = aes_accelerated_timing_tests.AesAcceleratedTimingTests
+
+aes_crossover_spec = importlib.util.spec_from_file_location('aes_crossover_tests', ROOT / 'scripts/aes/test-aes-timing-slot-crossover.py')
+aes_crossover_tests = importlib.util.module_from_spec(aes_crossover_spec)
+aes_crossover_spec.loader.exec_module(aes_crossover_tests)
+AesCrossoverTests = aes_crossover_tests.CrossoverTests
+
 aes_packaged_diff_spec = importlib.util.spec_from_file_location('aes_packaged_diff_tests', ROOT / 'scripts/aes/test-aes-packaged-differential.py')
 aes_packaged_diff_tests = importlib.util.module_from_spec(aes_packaged_diff_spec)
 aes_packaged_diff_spec.loader.exec_module(aes_packaged_diff_tests)
@@ -302,15 +494,57 @@ class RegistryTests(unittest.TestCase):
                     'packaged-linked-msrv': 0, 'packaged-linked-current': 0,
                     'packaged-lifecycle-msrv': 0, 'packaged-lifecycle-current': 0}
         for endpoint in ('msrv', 'current'):
-            for profile, count in (('minimal', 32), ('all', 97)):
+            expected[f'accelerated-arm-startup-{endpoint}'] = 0
+            expected[f'accelerated-arm-hosted-startup-{endpoint}'] = 0
+            expected[f'accelerated-x86-startup-{endpoint}'] = 0
+            expected[f'accelerated-public-linked-{endpoint}'] = 0
+            expected[f'accelerated-secret-linked-{endpoint}'] = 0
+            expected[f'accelerated-ephemeral-linked-{endpoint}'] = 0
+            expected[f'accelerated-ephemeral-public-linked-{endpoint}'] = 0
+            expected[f'accelerated-lifecycle-linked-{endpoint}'] = 0
+            for admission in ('static', 'hosted'):
+                expected[f'accelerated-arm-cleanup-{admission}-{endpoint}'] = 0
+                expected[f'accelerated-arm-constructors-{admission}-{endpoint}'] = 0
+                expected[f'accelerated-arm-cached-{admission}-{endpoint}'] = 0
+                expected[f'accelerated-arm-ephemeral-{admission}-{endpoint}'] = 0
+            for mode, admission in (('native', 'static'), ('arm-qemu', 'static'), ('arm-qemu', 'hosted')):
+                expected[f'accelerated-linked-{mode}-{admission}-{endpoint}'] = 0
+            for route in ('direct', 'facade'):
+                for admission, mode, suite in (('static', 'native', 'avs'),
+                                                ('static', 'native', 'differential'),
+                                                ('static', 'arm-qemu', 'avs'),
+                                                ('hosted', 'arm-qemu', 'avs')):
+                    expected[f'accelerated-{suite}-{admission}-{mode}-{endpoint}-{route}'] = 8 if suite == 'differential' else 12
+            expected[f'execution-api-{endpoint}'] = 0
+            for mode in ('native', 'arm-qemu'):
+                expected[f'hosted-{mode}-{endpoint}'] = 6
+                expected[f'dit-{mode}-{endpoint}'] = 11 if mode == 'arm-qemu' else 4
+            for mode in ('native', 'baseline', 'arm-qemu'):
+                expected[f'static-{mode}-{endpoint}'] = 7 if mode == 'baseline' else 26
+            for arch in ('x86', 'arm-qemu'):
+                expected[f'kernel-{arch}-{endpoint}'] = 5
+                expected[f'expansion-{arch}-{endpoint}'] = 10
+            for profile, count in (('minimal', 32), ('all', 98)):
                 expected[f'feature-{endpoint}-{profile}-test'] = count
                 expected[f'feature-{endpoint}-{profile}-doc'] = 0
+        for route in ('direct', 'facade'):
+            expected[f'accelerated-sanitizers-{route}'] = 26
+            for compiler in ('msrv', 'current'):
+                expected[f'accelerated-no-std-{route}-{compiler}'] = 0
+                expected[f'performance-fixture-{route}-{compiler}'] = 4
+                expected[f'accelerated-timing-fixture-{route}-{compiler}'] = 4
+                expected[f'timing-controls-fixture-{route}-{compiler}'] = 8
+                expected[f'timing-dispatch-fixture-{route}-{compiler}'] = 10
+                expected[f'timing-batch-fixture-{route}-{compiler}'] = 10
+                expected[f'timing-crossover-fixture-{route}-{compiler}'] = 13
         self.assertEqual(set(checks), set(expected))
         for name, count in expected.items():
             check = checks[name]
             for field in ('component', 'id', 'category'):
                 self.assertRegex(check[field], r'^[a-z0-9_-]+$')
-            self.assertIn('aes-packaged' if name.startswith(('packaged-', 'avs-')) else 'aes-build', check['inputs'])
+            input_group = ('aes-kernel-candidate' if name.startswith('kernel-') else
+                           'aes-packaged' if name.startswith(('packaged-', 'avs-')) else 'aes-build')
+            self.assertIn(input_group, check['inputs'])
             self.assertNotIn('--workspace', check['command'])
             if check['command'][0] == 'cargo':
                 command = check['command']

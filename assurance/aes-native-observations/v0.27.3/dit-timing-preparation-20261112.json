@@ -1,0 +1,611 @@
+{
+  "date": "2026-11-12",
+  "scope": "Retained DIT-required timing fixture preparation, native Linux correctness, and raw-kernel checks; NOT a timing observation or whole-program qualification",
+  "native_linux_directory": "/home/ubuntu/brynja-dit-timing-0273-Sz3kLVpj",
+  "native_linux_host": "ubuntu@13.49.18.65",
+  "native_linux_host_key": "SHA256:YiDOyfhwOf+3je2sRxQGdD2mr+Tu0x4rsMBSo1nzmPk",
+  "binaries": [
+    {
+      "directory": "target/aes-accelerated-fixed-random/check-1.90.0-direct-1v3hpwz4",
+      "identity": {
+        "compiler": "rustc 1.90.0 (1159e78c4 2025-09-14)\nbinary: rustc\ncommit-hash: 1159e78c4747b02ef996e55082b704c09b970588\ncommit-date: 2025-09-14\nhost: x86_64-unknown-linux-gnu\nrelease: 1.90.0\nLLVM version: 20.1.8\n",
+        "route": "direct",
+        "admission": "static",
+        "target": "aarch64-unknown-linux-musl",
+        "profile": "opt3-fat-lto-cgu1-overflow-abort",
+        "kernel": "ArmAes",
+        "binary_sha256": "cb4e8fa290a531a45120012705ed71a260ab8eb903c1ed0c3e99dd042d4170bf",
+        "flags": "-Ctarget-feature=+aes,+neon,+dit",
+        "versions": {
+          "brynja": "0.27.2",
+          "brynja-core": "0.10.0",
+          "brynja-crypto": "0.2.0",
+          "brynja-crypto-cpu": "0.2.0",
+          "brynja-crypto-cpu-std": "0.2.0",
+          "brynja-dtls": "0.1.9",
+          "brynja-hash-core": "0.1.0",
+          "brynja-hash-parallel": "0.1.0",
+          "brynja-hash-sha2": "0.1.0",
+          "brynja-hash-sha3": "0.1.0",
+          "brynja-hash-tuple": "0.1.0",
+          "brynja-mac-hmac": "0.1.0",
+          "brynja-mac-kmac": "0.1.0",
+          "brynja-pki": "0.3.0",
+          "brynja-platform": "0.1.9",
+          "brynja-protocol": "0.1.1",
+          "brynja-quic-tls": "0.1.9",
+          "brynja-tls": "0.1.9",
+          "brynja-tls12": "0.1.9",
+          "brynja-tls13": "0.1.9",
+          "brynja-tls13-handshake": "0.1.9"
+        },
+        "oracle": "/usr/bin/openssl",
+        "dit_policy": "Require",
+        "correctness_execution": "QEMU max; no native execution or timing",
+        "authority_fixture_sha256": "c7d1cda1fb700737a1b3fca7f4cb92b4c3a5312ca3d6acdf34d8209aa4b43e43",
+        "host_probe_sha256": "07b3ef5f48f3bf73036f13573df7286656880e829c7aa13a4001e0b72e8fbdc8",
+        "host_probe_binary_sha256": "2d124c8c434597fb317d374c233cacdbab3de3dc7af40db6f8bd4b6645f9e1b5",
+        "oracle_sha256": "07b75fb6f7ad9b9810e018537faf5dbaa14b7d89f6235e5937680c2c215daee1",
+        "observation": null,
+        "controls": [
+          "separate-values",
+          "shared-values",
+          "separate-identical",
+          "shared-identical"
+        ],
+        "value_controls": "shared-values primary; shared-identical negative; separate arms diagnostic",
+        "dispatch_isolated": false,
+        "long_batch": false,
+        "archive_sha256": {
+          "brynja": "7f2ff9aa4543f54840c352f34979ab064c420a1c33e98ac06c919409debf8363",
+          "brynja-core": "3ac8894a7a05e5ae25c164091998ca081933bb960769bc3238ec5972d1c61679",
+          "brynja-crypto": "1326b8c0d32251d9c9cf6b762577f09d09d8f8bc63a63a96edcf2c684bfc7590",
+          "brynja-crypto-cpu": "ae7af51becf8756d86ed580f831e53fca4c8dd3ca598cbd6d0bf5e5217ae7c7f",
+          "brynja-crypto-cpu-std": "b76d9304fd2f292a195082006169fd0aba36013a34a1bf46af8dcedf992ec3d3",
+          "brynja-dtls": "a6fcee42e973a1cb3836d9a784e62e83199dba7b606bd2f16d1ac13246009c99",
+          "brynja-hash-core": "13b6fe81e8b96028ebe481d543193a1e5d34a78a7ac048b7ef0fa5c66d3dcbf2",
+          "brynja-hash-parallel": "01771e2d852e8353cfbe2d21c68e98ea37fff370af6689d0e3daf31b4cd5a1fe",
+          "brynja-hash-sha2": "99f423f4716c056036dc0506f86b9b0f1a3f146609a5222ed4f056df4d4565a8",
+          "brynja-hash-sha3": "a316a3bb4d1a5d60cbd7e1af0be3e1e49c83c90dbbd2bcf4cf521975637aaf69",
+          "brynja-hash-tuple": "a013562e2fa3055e142eb2a15810eb81509172e4685bfcbcdbfc295ac9bd9f3e",
+          "brynja-mac-hmac": "6f9499f4a0b6a244f2e4819f4037ce2c6e764929fb7428ed16de04924d01b672",
+          "brynja-mac-kmac": "dd952aaa696d3324c728617381a7658277bca17cdb64feedd615ccb84fe06991",
+          "brynja-pki": "42936cff98f924f34831f8aa4cba616faf011fdd8a1826d57879a39084650f48",
+          "brynja-platform": "02fdab9954540d215e81000427628ca8e6018f3b3db843e5e34d0ed0b2d4f3bf",
+          "brynja-protocol": "79ba3a20529393efd8770690bd93626841224f9375e8cd5363178c757a0abfb3",
+          "brynja-quic-tls": "096593d743de145c729188dea11221051f07072531e43ddb2c20cd4601b12105",
+          "brynja-tls": "0378ae8253114d8f4095492a7b13fd329d78361140e30f8d50c16748cefe0bb4",
+          "brynja-tls12": "657557f5735a17199a556944a4f2d950a23bcaf35665da013a8de78847875aff",
+          "brynja-tls13": "4a958ee81ab3992d9f3f695e196c02624fb4aeaf65700b738d3661a1e05dcd8e",
+          "brynja-tls13-handshake": "68879bea739f48804e2f52cb4f49758c965336d531beaf1d1a069358fec12fc2"
+        },
+        "fixture_sha256": "0f159e356f536d908bf6c4e87ea571b6b469f38aa07669f01027248470a2b7be",
+        "pairs": 8192,
+        "repeat": 4,
+        "warmup": 256,
+        "seed": 176468862379556860,
+        "threshold": 4.5,
+        "maximum_cv": 1,
+        "policy": "no rejection/cropping/adaptive stopping/retry-to-pass",
+        "source": "byte-checked working-tree archives; not a clean tagged release"
+      },
+      "identity_sha256": "874d4b7e55fa99bf5fba9178e111c7023f3e7008cb98e600009aefd40cc735d2",
+      "assembly_sha256": "54a97f7d1636ee8664058f3a174071576b2f4e1f364469a6e1ae5450ca392837",
+      "round_review": {
+        "kernels": [
+          {
+            "bits": 128,
+            "instructions": 38,
+            "symbol_bytes": 152,
+            "bytes_sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+          },
+          {
+            "bits": 192,
+            "instructions": 38,
+            "symbol_bytes": 152,
+            "bytes_sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+          },
+          {
+            "bits": 256,
+            "instructions": 38,
+            "symbol_bytes": 152,
+            "bytes_sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+          }
+        ],
+        "rejected_mutations": 570,
+        "scope": "three complete round-kernel bodies only; callers, dispatch, expansion and cleanup outside these bodies unreviewed"
+      },
+      "expansion_review": {
+        "expansions": [
+          {
+            "bits": 128,
+            "instructions": 49,
+            "symbol_bytes": 196,
+            "bytes_sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+          },
+          {
+            "bits": 192,
+            "instructions": 49,
+            "symbol_bytes": 196,
+            "bytes_sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+          },
+          {
+            "bits": 256,
+            "instructions": 49,
+            "symbol_bytes": 196,
+            "bytes_sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+          }
+        ],
+        "rejected_mutations": 735,
+        "scope": "three complete hardware expansion bodies only; caller admission, ownership and cleanup remain separate"
+      },
+      "native_log_directory": "target/aes-accelerated-fixed-random/native-preflight-au043esa/check-1.90.0-direct-1v3hpwz4",
+      "native_logs": {
+        "hashes-after.json": "8188861eb4b799aa182efc1a5e93c5392b8e039342488ce1768124f63bf13924",
+        "hashes-before.json": "8188861eb4b799aa182efc1a5e93c5392b8e039342488ce1768124f63bf13924",
+        "preflight-separate-identical.json": "248db06e68e12617d0c9ff08cb0e8326107a91473ea00a4f61d456e889277055",
+        "preflight-separate-values.json": "4fc146e1925fbfb874c682f6859997d428d6ca4dc86370414986d48e7e834188",
+        "preflight-shared-identical.json": "755201c1f02f5aa17cbfecebe71c78d918624c07a7506395df402758d1f9a182",
+        "preflight-shared-values.json": "3c554f4e363a851e419384eb45eb2edcf3c97b19f7c8ca96b09779bb825ee154",
+        "probe.json": "0ae45195905bb60df1edeb29a8b1e63026d8ea9e710da2e999bbed56f93a8146"
+      },
+      "native_correctness": "DIT capability probe and four controls, 234 vectors per control; 936 OpenSSL matches; executable/probe hashes checked before and after"
+    },
+    {
+      "directory": "target/aes-accelerated-fixed-random/check-1.99.1-direct-p25m7p2o",
+      "identity": {
+        "compiler": "rustc 1.99.1 (58cf8f9c3 2026-10-13)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: x86_64-unknown-linux-gnu\nrelease: 1.99.1\nLLVM version: 23.1.1\n",
+        "route": "direct",
+        "admission": "static",
+        "target": "aarch64-unknown-linux-musl",
+        "profile": "opt3-fat-lto-cgu1-overflow-abort",
+        "kernel": "ArmAes",
+        "binary_sha256": "a39087dbd9e628a985d7b98e264fa887b4121ef8709a9150157104400f1d60c0",
+        "flags": "-Ctarget-feature=+aes,+neon,+dit",
+        "versions": {
+          "brynja": "0.27.2",
+          "brynja-core": "0.10.0",
+          "brynja-crypto": "0.2.0",
+          "brynja-crypto-cpu": "0.2.0",
+          "brynja-crypto-cpu-std": "0.2.0",
+          "brynja-dtls": "0.1.9",
+          "brynja-hash-core": "0.1.0",
+          "brynja-hash-parallel": "0.1.0",
+          "brynja-hash-sha2": "0.1.0",
+          "brynja-hash-sha3": "0.1.0",
+          "brynja-hash-tuple": "0.1.0",
+          "brynja-mac-hmac": "0.1.0",
+          "brynja-mac-kmac": "0.1.0",
+          "brynja-pki": "0.3.0",
+          "brynja-platform": "0.1.9",
+          "brynja-protocol": "0.1.1",
+          "brynja-quic-tls": "0.1.9",
+          "brynja-tls": "0.1.9",
+          "brynja-tls12": "0.1.9",
+          "brynja-tls13": "0.1.9",
+          "brynja-tls13-handshake": "0.1.9"
+        },
+        "oracle": "/usr/bin/openssl",
+        "dit_policy": "Require",
+        "correctness_execution": "QEMU max; no native execution or timing",
+        "authority_fixture_sha256": "c7d1cda1fb700737a1b3fca7f4cb92b4c3a5312ca3d6acdf34d8209aa4b43e43",
+        "host_probe_sha256": "07b3ef5f48f3bf73036f13573df7286656880e829c7aa13a4001e0b72e8fbdc8",
+        "host_probe_binary_sha256": "7d7bc67418c10b59083ff362a4e3d36cbde3cca423b7240c332bf4b17b9c05c5",
+        "oracle_sha256": "07b75fb6f7ad9b9810e018537faf5dbaa14b7d89f6235e5937680c2c215daee1",
+        "observation": null,
+        "controls": [
+          "separate-values",
+          "shared-values",
+          "separate-identical",
+          "shared-identical"
+        ],
+        "value_controls": "shared-values primary; shared-identical negative; separate arms diagnostic",
+        "dispatch_isolated": false,
+        "long_batch": false,
+        "archive_sha256": {
+          "brynja": "7f2ff9aa4543f54840c352f34979ab064c420a1c33e98ac06c919409debf8363",
+          "brynja-core": "3ac8894a7a05e5ae25c164091998ca081933bb960769bc3238ec5972d1c61679",
+          "brynja-crypto": "1326b8c0d32251d9c9cf6b762577f09d09d8f8bc63a63a96edcf2c684bfc7590",
+          "brynja-crypto-cpu": "ae7af51becf8756d86ed580f831e53fca4c8dd3ca598cbd6d0bf5e5217ae7c7f",
+          "brynja-crypto-cpu-std": "b76d9304fd2f292a195082006169fd0aba36013a34a1bf46af8dcedf992ec3d3",
+          "brynja-dtls": "a6fcee42e973a1cb3836d9a784e62e83199dba7b606bd2f16d1ac13246009c99",
+          "brynja-hash-core": "13b6fe81e8b96028ebe481d543193a1e5d34a78a7ac048b7ef0fa5c66d3dcbf2",
+          "brynja-hash-parallel": "01771e2d852e8353cfbe2d21c68e98ea37fff370af6689d0e3daf31b4cd5a1fe",
+          "brynja-hash-sha2": "99f423f4716c056036dc0506f86b9b0f1a3f146609a5222ed4f056df4d4565a8",
+          "brynja-hash-sha3": "a316a3bb4d1a5d60cbd7e1af0be3e1e49c83c90dbbd2bcf4cf521975637aaf69",
+          "brynja-hash-tuple": "a013562e2fa3055e142eb2a15810eb81509172e4685bfcbcdbfc295ac9bd9f3e",
+          "brynja-mac-hmac": "6f9499f4a0b6a244f2e4819f4037ce2c6e764929fb7428ed16de04924d01b672",
+          "brynja-mac-kmac": "dd952aaa696d3324c728617381a7658277bca17cdb64feedd615ccb84fe06991",
+          "brynja-pki": "42936cff98f924f34831f8aa4cba616faf011fdd8a1826d57879a39084650f48",
+          "brynja-platform": "02fdab9954540d215e81000427628ca8e6018f3b3db843e5e34d0ed0b2d4f3bf",
+          "brynja-protocol": "79ba3a20529393efd8770690bd93626841224f9375e8cd5363178c757a0abfb3",
+          "brynja-quic-tls": "096593d743de145c729188dea11221051f07072531e43ddb2c20cd4601b12105",
+          "brynja-tls": "0378ae8253114d8f4095492a7b13fd329d78361140e30f8d50c16748cefe0bb4",
+          "brynja-tls12": "657557f5735a17199a556944a4f2d950a23bcaf35665da013a8de78847875aff",
+          "brynja-tls13": "4a958ee81ab3992d9f3f695e196c02624fb4aeaf65700b738d3661a1e05dcd8e",
+          "brynja-tls13-handshake": "68879bea739f48804e2f52cb4f49758c965336d531beaf1d1a069358fec12fc2"
+        },
+        "fixture_sha256": "0f159e356f536d908bf6c4e87ea571b6b469f38aa07669f01027248470a2b7be",
+        "pairs": 8192,
+        "repeat": 4,
+        "warmup": 256,
+        "seed": 176468862379556860,
+        "threshold": 4.5,
+        "maximum_cv": 1,
+        "policy": "no rejection/cropping/adaptive stopping/retry-to-pass",
+        "source": "byte-checked working-tree archives; not a clean tagged release"
+      },
+      "identity_sha256": "4ed5acdbeefcfacfdf938a408854c79a4ab9994468ef36552616a0b5ec9c8d3d",
+      "assembly_sha256": "1bd1c1744ca5d5ff51999e58f05566fe892a0e5dfd85cae01f1b4c614c350530",
+      "round_review": {
+        "kernels": [
+          {
+            "bits": 128,
+            "instructions": 38,
+            "symbol_bytes": 152,
+            "bytes_sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+          },
+          {
+            "bits": 192,
+            "instructions": 38,
+            "symbol_bytes": 152,
+            "bytes_sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+          },
+          {
+            "bits": 256,
+            "instructions": 38,
+            "symbol_bytes": 152,
+            "bytes_sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+          }
+        ],
+        "rejected_mutations": 570,
+        "scope": "three complete round-kernel bodies only; callers, dispatch, expansion and cleanup outside these bodies unreviewed"
+      },
+      "expansion_review": {
+        "expansions": [
+          {
+            "bits": 128,
+            "instructions": 49,
+            "symbol_bytes": 196,
+            "bytes_sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+          },
+          {
+            "bits": 192,
+            "instructions": 49,
+            "symbol_bytes": 196,
+            "bytes_sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+          },
+          {
+            "bits": 256,
+            "instructions": 49,
+            "symbol_bytes": 196,
+            "bytes_sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+          }
+        ],
+        "rejected_mutations": 735,
+        "scope": "three complete hardware expansion bodies only; caller admission, ownership and cleanup remain separate"
+      },
+      "native_log_directory": "target/aes-accelerated-fixed-random/native-preflight-au043esa/check-1.99.1-direct-p25m7p2o",
+      "native_logs": {
+        "hashes-after.json": "320a6eddedb243c551393f01ed5710e8902e403d810df6f2fd5f6a12bdec88ac",
+        "hashes-before.json": "320a6eddedb243c551393f01ed5710e8902e403d810df6f2fd5f6a12bdec88ac",
+        "preflight-separate-identical.json": "8b99047a09c5311f306b9a5cd0d03d47f9035bbb84e126a22dee1f00c1db5fae",
+        "preflight-separate-values.json": "65c63554632a11ca4d3965a12c9de6c398b5fbc6c92d618d7373dc3e31300e38",
+        "preflight-shared-identical.json": "9e998a7c8dbab6a7335ca417e4c332d134d711df8dbc18c8a8558632d925a81b",
+        "preflight-shared-values.json": "186e99f5f279e2faf8d268c4dcafc491a4bf64a4f9016e930cc9583e3e717b9a",
+        "probe.json": "822f106ebffa573f590786efd8a4b4dafdd88b42a7141e14c907e8a18b3ec95b"
+      },
+      "native_correctness": "DIT capability probe and four controls, 234 vectors per control; 936 OpenSSL matches; executable/probe hashes checked before and after"
+    },
+    {
+      "directory": "target/aes-dit-mac-fixtures-20261112/check-1.90.0-direct-ubv8w1xi",
+      "identity": {
+        "compiler": "rustc 1.90.0 (1159e78c4 2025-09-14)\nbinary: rustc\ncommit-hash: 1159e78c4747b02ef996e55082b704c09b970588\ncommit-date: 2025-09-14\nhost: aarch64-apple-darwin\nrelease: 1.90.0\nLLVM version: 20.1.8\n",
+        "route": "direct",
+        "admission": "static",
+        "target": "aarch64-apple-darwin",
+        "profile": "opt3-fat-lto-cgu1-overflow-abort",
+        "kernel": "ArmAes",
+        "binary_sha256": "427a8cdf320e362408e0e10b7f4fb3383a5b1ff9eedcff55804c7a51f5e10597",
+        "flags": "-Ctarget-feature=+aes,+neon,+dit",
+        "versions": {
+          "brynja": "0.27.2",
+          "brynja-core": "0.10.0",
+          "brynja-crypto": "0.2.0",
+          "brynja-crypto-cpu": "0.2.0",
+          "brynja-crypto-cpu-std": "0.2.0",
+          "brynja-dtls": "0.1.9",
+          "brynja-hash-core": "0.1.0",
+          "brynja-hash-parallel": "0.1.0",
+          "brynja-hash-sha2": "0.1.0",
+          "brynja-hash-sha3": "0.1.0",
+          "brynja-hash-tuple": "0.1.0",
+          "brynja-mac-hmac": "0.1.0",
+          "brynja-mac-kmac": "0.1.0",
+          "brynja-pki": "0.3.0",
+          "brynja-platform": "0.1.9",
+          "brynja-protocol": "0.1.1",
+          "brynja-quic-tls": "0.1.9",
+          "brynja-tls": "0.1.9",
+          "brynja-tls12": "0.1.9",
+          "brynja-tls13": "0.1.9",
+          "brynja-tls13-handshake": "0.1.9"
+        },
+        "oracle": "/opt/homebrew/Cellar/openssl@4/4.1.0/bin/openssl",
+        "dit_policy": "Require",
+        "authority_fixture_sha256": "c7d1cda1fb700737a1b3fca7f4cb92b4c3a5312ca3d6acdf34d8209aa4b43e43",
+        "host_probe_sha256": "07b3ef5f48f3bf73036f13573df7286656880e829c7aa13a4001e0b72e8fbdc8",
+        "oracle_sha256": "da101a01999a93ea6eddfe1392752bce2b5a91a41e4b00e1d9656fc682a1dc85",
+        "observation": null,
+        "controls": [
+          "separate-values",
+          "shared-values",
+          "separate-identical",
+          "shared-identical"
+        ],
+        "value_controls": "shared-values primary; shared-identical negative; separate arms diagnostic",
+        "dispatch_isolated": false,
+        "long_batch": false,
+        "archive_sha256": {
+          "brynja": "7f2ff9aa4543f54840c352f34979ab064c420a1c33e98ac06c919409debf8363",
+          "brynja-core": "3ac8894a7a05e5ae25c164091998ca081933bb960769bc3238ec5972d1c61679",
+          "brynja-crypto": "1326b8c0d32251d9c9cf6b762577f09d09d8f8bc63a63a96edcf2c684bfc7590",
+          "brynja-crypto-cpu": "ae7af51becf8756d86ed580f831e53fca4c8dd3ca598cbd6d0bf5e5217ae7c7f",
+          "brynja-crypto-cpu-std": "b76d9304fd2f292a195082006169fd0aba36013a34a1bf46af8dcedf992ec3d3",
+          "brynja-dtls": "a6fcee42e973a1cb3836d9a784e62e83199dba7b606bd2f16d1ac13246009c99",
+          "brynja-hash-core": "13b6fe81e8b96028ebe481d543193a1e5d34a78a7ac048b7ef0fa5c66d3dcbf2",
+          "brynja-hash-parallel": "01771e2d852e8353cfbe2d21c68e98ea37fff370af6689d0e3daf31b4cd5a1fe",
+          "brynja-hash-sha2": "99f423f4716c056036dc0506f86b9b0f1a3f146609a5222ed4f056df4d4565a8",
+          "brynja-hash-sha3": "a316a3bb4d1a5d60cbd7e1af0be3e1e49c83c90dbbd2bcf4cf521975637aaf69",
+          "brynja-hash-tuple": "a013562e2fa3055e142eb2a15810eb81509172e4685bfcbcdbfc295ac9bd9f3e",
+          "brynja-mac-hmac": "6f9499f4a0b6a244f2e4819f4037ce2c6e764929fb7428ed16de04924d01b672",
+          "brynja-mac-kmac": "dd952aaa696d3324c728617381a7658277bca17cdb64feedd615ccb84fe06991",
+          "brynja-pki": "42936cff98f924f34831f8aa4cba616faf011fdd8a1826d57879a39084650f48",
+          "brynja-platform": "02fdab9954540d215e81000427628ca8e6018f3b3db843e5e34d0ed0b2d4f3bf",
+          "brynja-protocol": "79ba3a20529393efd8770690bd93626841224f9375e8cd5363178c757a0abfb3",
+          "brynja-quic-tls": "096593d743de145c729188dea11221051f07072531e43ddb2c20cd4601b12105",
+          "brynja-tls": "0378ae8253114d8f4095492a7b13fd329d78361140e30f8d50c16748cefe0bb4",
+          "brynja-tls12": "657557f5735a17199a556944a4f2d950a23bcaf35665da013a8de78847875aff",
+          "brynja-tls13": "4a958ee81ab3992d9f3f695e196c02624fb4aeaf65700b738d3661a1e05dcd8e",
+          "brynja-tls13-handshake": "68879bea739f48804e2f52cb4f49758c965336d531beaf1d1a069358fec12fc2"
+        },
+        "fixture_sha256": "0f159e356f536d908bf6c4e87ea571b6b469f38aa07669f01027248470a2b7be",
+        "pairs": 8192,
+        "repeat": 4,
+        "warmup": 256,
+        "seed": 176468862379556860,
+        "threshold": 4.5,
+        "maximum_cv": 1,
+        "policy": "no rejection/cropping/adaptive stopping/retry-to-pass",
+        "source": "byte-checked working-tree archives; not a clean tagged release"
+      },
+      "identity_sha256": "bddc4d1ad1002f5e0aa55ee924a7456a4ced6b3d02a92a5c64288aee20a3ce0a",
+      "assembly_sha256": "3dba0c31cc36a80e9e8927bd03feb451f2c61b892700192dc87a70ce07136bb1",
+      "raw_kernel_review": {
+        "binary_sha256": "427a8cdf320e362408e0e10b7f4fb3383a5b1ff9eedcff55804c7a51f5e10597",
+        "bodies": [
+          {
+            "role": "expand",
+            "bits": 128,
+            "symbol": "__ZN17brynja_crypto_cpu3aes14aarch64_expand6expand17hc5aee4c261dfd423E",
+            "address": "0x10000a754",
+            "file_offset": 42836,
+            "size": 196,
+            "instructions": 49,
+            "sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+          },
+          {
+            "role": "expand",
+            "bits": 192,
+            "symbol": "__ZN17brynja_crypto_cpu3aes14aarch64_expand6expand17he243d0cb56d26c65E",
+            "address": "0x10000a818",
+            "file_offset": 43032,
+            "size": 196,
+            "instructions": 49,
+            "sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+          },
+          {
+            "role": "expand",
+            "bits": 256,
+            "symbol": "__ZN17brynja_crypto_cpu3aes14aarch64_expand6expand17hbe07e0b77b39b687E",
+            "address": "0x10000a8dc",
+            "file_offset": 43228,
+            "size": 196,
+            "instructions": 49,
+            "sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+          },
+          {
+            "role": "transform",
+            "bits": 128,
+            "symbol": "__ZN17brynja_crypto_cpu3aes7aarch649transform17h4bfe453daa6b744aE",
+            "address": "0x10000a9a0",
+            "file_offset": 43424,
+            "size": 152,
+            "instructions": 38,
+            "sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+          },
+          {
+            "role": "transform",
+            "bits": 192,
+            "symbol": "__ZN17brynja_crypto_cpu3aes7aarch649transform17h7afd96949d7ee5cdE",
+            "address": "0x10000aa38",
+            "file_offset": 43576,
+            "size": 152,
+            "instructions": 38,
+            "sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+          },
+          {
+            "role": "transform",
+            "bits": 256,
+            "symbol": "__ZN17brynja_crypto_cpu3aes7aarch649transform17hada04a830829ab81E",
+            "address": "0x10000aad0",
+            "file_offset": 43728,
+            "size": 152,
+            "instructions": 38,
+            "sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+          }
+        ],
+        "scope": "Six complete Mach-O function extents match reviewed ARM encodings; callers, admission, cleanup and unwind remain unreviewed."
+      },
+      "native_correctness": "Previously recorded in dit-fixture-review-20261112.json; not rerun here"
+    },
+    {
+      "directory": "target/aes-dit-mac-fixtures-20261112/check-1.99.1-direct-vqmorv1y",
+      "identity": {
+        "compiler": "rustc 1.99.1 (58cf8f9c3 2026-10-13)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: aarch64-apple-darwin\nrelease: 1.99.1\nLLVM version: 23.1.1\n",
+        "route": "direct",
+        "admission": "static",
+        "target": "aarch64-apple-darwin",
+        "profile": "opt3-fat-lto-cgu1-overflow-abort",
+        "kernel": "ArmAes",
+        "binary_sha256": "d6f98877b00e845d448fbeae78ac3381a8c59464fafbc471c0b1bfbdf8638539",
+        "flags": "-Ctarget-feature=+aes,+neon,+dit",
+        "versions": {
+          "brynja": "0.27.2",
+          "brynja-core": "0.10.0",
+          "brynja-crypto": "0.2.0",
+          "brynja-crypto-cpu": "0.2.0",
+          "brynja-crypto-cpu-std": "0.2.0",
+          "brynja-dtls": "0.1.9",
+          "brynja-hash-core": "0.1.0",
+          "brynja-hash-parallel": "0.1.0",
+          "brynja-hash-sha2": "0.1.0",
+          "brynja-hash-sha3": "0.1.0",
+          "brynja-hash-tuple": "0.1.0",
+          "brynja-mac-hmac": "0.1.0",
+          "brynja-mac-kmac": "0.1.0",
+          "brynja-pki": "0.3.0",
+          "brynja-platform": "0.1.9",
+          "brynja-protocol": "0.1.1",
+          "brynja-quic-tls": "0.1.9",
+          "brynja-tls": "0.1.9",
+          "brynja-tls12": "0.1.9",
+          "brynja-tls13": "0.1.9",
+          "brynja-tls13-handshake": "0.1.9"
+        },
+        "oracle": "/opt/homebrew/Cellar/openssl@4/4.1.0/bin/openssl",
+        "dit_policy": "Require",
+        "authority_fixture_sha256": "c7d1cda1fb700737a1b3fca7f4cb92b4c3a5312ca3d6acdf34d8209aa4b43e43",
+        "host_probe_sha256": "07b3ef5f48f3bf73036f13573df7286656880e829c7aa13a4001e0b72e8fbdc8",
+        "oracle_sha256": "da101a01999a93ea6eddfe1392752bce2b5a91a41e4b00e1d9656fc682a1dc85",
+        "observation": null,
+        "controls": [
+          "separate-values",
+          "shared-values",
+          "separate-identical",
+          "shared-identical"
+        ],
+        "value_controls": "shared-values primary; shared-identical negative; separate arms diagnostic",
+        "dispatch_isolated": false,
+        "long_batch": false,
+        "archive_sha256": {
+          "brynja": "7f2ff9aa4543f54840c352f34979ab064c420a1c33e98ac06c919409debf8363",
+          "brynja-core": "3ac8894a7a05e5ae25c164091998ca081933bb960769bc3238ec5972d1c61679",
+          "brynja-crypto": "1326b8c0d32251d9c9cf6b762577f09d09d8f8bc63a63a96edcf2c684bfc7590",
+          "brynja-crypto-cpu": "ae7af51becf8756d86ed580f831e53fca4c8dd3ca598cbd6d0bf5e5217ae7c7f",
+          "brynja-crypto-cpu-std": "b76d9304fd2f292a195082006169fd0aba36013a34a1bf46af8dcedf992ec3d3",
+          "brynja-dtls": "a6fcee42e973a1cb3836d9a784e62e83199dba7b606bd2f16d1ac13246009c99",
+          "brynja-hash-core": "13b6fe81e8b96028ebe481d543193a1e5d34a78a7ac048b7ef0fa5c66d3dcbf2",
+          "brynja-hash-parallel": "01771e2d852e8353cfbe2d21c68e98ea37fff370af6689d0e3daf31b4cd5a1fe",
+          "brynja-hash-sha2": "99f423f4716c056036dc0506f86b9b0f1a3f146609a5222ed4f056df4d4565a8",
+          "brynja-hash-sha3": "a316a3bb4d1a5d60cbd7e1af0be3e1e49c83c90dbbd2bcf4cf521975637aaf69",
+          "brynja-hash-tuple": "a013562e2fa3055e142eb2a15810eb81509172e4685bfcbcdbfc295ac9bd9f3e",
+          "brynja-mac-hmac": "6f9499f4a0b6a244f2e4819f4037ce2c6e764929fb7428ed16de04924d01b672",
+          "brynja-mac-kmac": "dd952aaa696d3324c728617381a7658277bca17cdb64feedd615ccb84fe06991",
+          "brynja-pki": "42936cff98f924f34831f8aa4cba616faf011fdd8a1826d57879a39084650f48",
+          "brynja-platform": "02fdab9954540d215e81000427628ca8e6018f3b3db843e5e34d0ed0b2d4f3bf",
+          "brynja-protocol": "79ba3a20529393efd8770690bd93626841224f9375e8cd5363178c757a0abfb3",
+          "brynja-quic-tls": "096593d743de145c729188dea11221051f07072531e43ddb2c20cd4601b12105",
+          "brynja-tls": "0378ae8253114d8f4095492a7b13fd329d78361140e30f8d50c16748cefe0bb4",
+          "brynja-tls12": "657557f5735a17199a556944a4f2d950a23bcaf35665da013a8de78847875aff",
+          "brynja-tls13": "4a958ee81ab3992d9f3f695e196c02624fb4aeaf65700b738d3661a1e05dcd8e",
+          "brynja-tls13-handshake": "68879bea739f48804e2f52cb4f49758c965336d531beaf1d1a069358fec12fc2"
+        },
+        "fixture_sha256": "0f159e356f536d908bf6c4e87ea571b6b469f38aa07669f01027248470a2b7be",
+        "pairs": 8192,
+        "repeat": 4,
+        "warmup": 256,
+        "seed": 176468862379556860,
+        "threshold": 4.5,
+        "maximum_cv": 1,
+        "policy": "no rejection/cropping/adaptive stopping/retry-to-pass",
+        "source": "byte-checked working-tree archives; not a clean tagged release"
+      },
+      "identity_sha256": "0c61d28c8e09e53b8f2eb9cfcdf54ff833a44f2a4a17738506b2bf720c94b2d6",
+      "assembly_sha256": "dc58cffe1e6643d588bdb74e82acaf74a81f912fbb8f7a872fa774c8e36adcae",
+      "raw_kernel_review": {
+        "binary_sha256": "d6f98877b00e845d448fbeae78ac3381a8c59464fafbc471c0b1bfbdf8638539",
+        "bodies": [
+          {
+            "role": "transform",
+            "bits": 128,
+            "symbol": "__RINvNtNtCsclZHcywxDmA_17brynja_crypto_cpu3aes7aarch649transformKjb_EB6_",
+            "address": "0x100009b58",
+            "file_offset": 39768,
+            "size": 152,
+            "instructions": 38,
+            "sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+          },
+          {
+            "role": "transform",
+            "bits": 192,
+            "symbol": "__RINvNtNtCsclZHcywxDmA_17brynja_crypto_cpu3aes7aarch649transformKjd_EB6_",
+            "address": "0x100009cd0",
+            "file_offset": 40144,
+            "size": 152,
+            "instructions": 38,
+            "sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+          },
+          {
+            "role": "transform",
+            "bits": 256,
+            "symbol": "__RINvNtNtCsclZHcywxDmA_17brynja_crypto_cpu3aes7aarch649transformKjf_EB6_",
+            "address": "0x100009e48",
+            "file_offset": 40520,
+            "size": 152,
+            "instructions": 38,
+            "sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+          },
+          {
+            "role": "expand",
+            "bits": 128,
+            "symbol": "__RINvNtNtCsclZHcywxDmA_17brynja_crypto_cpu3aes14aarch64_expand6expandKj10_Kjb0_EB6_",
+            "address": "0x10000a180",
+            "file_offset": 41344,
+            "size": 196,
+            "instructions": 49,
+            "sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+          },
+          {
+            "role": "expand",
+            "bits": 192,
+            "symbol": "__RINvNtNtCsclZHcywxDmA_17brynja_crypto_cpu3aes14aarch64_expand6expandKj18_Kjd0_EB6_",
+            "address": "0x10000a244",
+            "file_offset": 41540,
+            "size": 196,
+            "instructions": 49,
+            "sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+          },
+          {
+            "role": "expand",
+            "bits": 256,
+            "symbol": "__RINvNtNtCsclZHcywxDmA_17brynja_crypto_cpu3aes14aarch64_expand6expandKj20_Kjf0_EB6_",
+            "address": "0x10000a308",
+            "file_offset": 41736,
+            "size": 196,
+            "instructions": 49,
+            "sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+          }
+        ],
+        "scope": "Six complete Mach-O function extents match reviewed ARM encodings; callers, admission, cleanup and unwind remain unreviewed."
+      },
+      "native_correctness": "Previously recorded in dit-fixture-review-20261112.json; not rerun here"
+    }
+  ],
+  "preparation_failure": "Initial local native-preflight orchestration rejected OPENSSL_CONF at oracle selection before any remote execution; corrected ordering, retained failed setup directory native-preflight-6yp9comc. No timing attempted.",
+  "pending": [
+    "Complete bounded caller/timer review across retained Linux and Apple binaries",
+    "Freeze host/compiler/binary and finite launch declaration",
+    "Collect and retain all shared-address and diagnostic controls without retry-to-pass"
+  ]
+}

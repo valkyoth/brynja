@@ -92,12 +92,50 @@ class Aarch64LinkedTests(unittest.TestCase):
         for bad in ('b.hs 0x1004 <helper+0x4>', 'b.hs 0x1008 <other+0x8>', 'b.eq 0x1008 <helper+0x8>'):
             with self.assertRaises(ValueError): r.observe([bad, *text[1:]], raw, row, image(raw), {})
 
+    def test_dit_readback_branch_binds_bit_register_and_direction(self):
+        row = ('helper', 0x1000, 12)
+        for mnemonic, opcode in (('tbz', 0x36000000), ('tbnz', 0x37000000)):
+            for bit in (0, 24):
+                raw = words(opcode | (bit << 19) | (2 << 5) | 9, 0xd503201f, 0xd65f03c0)
+                line = f'{mnemonic} w9, #{bit}, 0x1008 <helper+0x8>'
+                self.assertEqual(r.observe([line, 'nop', 'ret'], raw, row, image(raw), {})[0]['branches'], 1)
+                for bad in (line.replace(f'#{bit}', f'#{24 if bit == 0 else 0}'),
+                            line.replace('w9', 'w8'), line.replace(mnemonic, 'tbnz' if mnemonic == 'tbz' else 'tbz'),
+                            line.replace('0x1008 <helper+0x8>', '0x1004 <helper+0x4>'),
+                            line.replace(f'#{bit}', '#23')):
+                    with self.subTest(bad=bad), self.assertRaises(ValueError):
+                        r.observe([bad, 'nop', 'ret'], raw, row, image(raw), {})
+
     def test_calls_bind_exact_target_and_read_execute_mapping(self):
         raw = words(0x94000008, 0xd65f03c0)
         text, row = ['bl 0x1020 <inverse>', 'ret'], ('helper', 0x1000, 8)
         self.assertEqual(r.observe(text, raw, row, image(raw), {'inverse': ('inverse', 0x1020, 4)})[0]['calls'], 1)
         for targets in ({}, {'inverse': ('wrong', 0x1020, 4)}, {'inverse': ('inverse', 0x1024, 4)}):
             with self.assertRaises(ValueError): r.observe(text, raw, row, image(raw), targets)
+
+    def test_tail_call_requires_explicit_role_and_exact_executable_target(self):
+        raw = words(0x14000008)
+        row, text = ('helper', 0x1000, 4), ['b 0x1020 <clear>']
+        targets = {'zeroize': ('clear', 0x1020, 4)}
+        with self.assertRaisesRegex(ValueError, 'unreviewed tail-call target'):
+            r.observe(text, raw, row, image(raw), targets)
+        actual, _, normalized = r.observe(text, raw, row, image(raw), targets, tail_calls=('zeroize',))
+        self.assertEqual((actual['calls'], actual['tail_calls'], normalized), (0, 1, ['b @zeroize']))
+        for bad in (('unknown',), ('zeroize', 'zeroize'), ['zeroize']):
+            with self.assertRaisesRegex(ValueError, 'invalid tail-call policy'):
+                r.observe(text, raw, row, image(raw), targets, tail_calls=bad)
+        for wrong in ({'zeroize': ('other', 0x1020, 4)}, {'zeroize': ('clear', 0x1024, 4)},
+                      {'zeroize': ('clear', 0x2000, 4)}):
+            with self.assertRaises(ValueError):
+                r.observe(text, raw, row, image(raw), wrong, tail_calls=('zeroize',))
+        for wrong in (words(0x94000008), words(0x14000009)):
+            with self.assertRaises(ValueError):
+                r.observe(text, wrong, row, image(wrong), targets, tail_calls=('zeroize',))
+        # Local B remains local even if tail calls are enabled.
+        code = words(0x14000001, 0xd65f03c0)
+        result = r.observe(['b 0x1004 <helper+0x4>', 'ret'], code, ('helper', 0x1000, 8),
+                           image(code), targets, tail_calls=('zeroize',))[0]
+        self.assertEqual((result['branches'], result['tail_calls']), (1, 0))
 
     def test_compare_test_branches_bind_register_width_predicate_and_bit(self):
         variants = [('b.hi', 0x54000048), ('b.lo', 0x54000043), ('cbz w1,', 0x34000041),

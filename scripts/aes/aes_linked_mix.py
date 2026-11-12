@@ -48,13 +48,17 @@ def file_offset(loads, address, size, flags):
     return matches[0]
 
 
-def observe(lines, raw, sizes, symbol, start, image, call_targets=None, indirect_callback=None):
+def observe(lines, raw, sizes, symbol, start, image, call_targets=None, indirect_callback=None, tail_calls=None):
     require(len(lines) == len(sizes) and lines and all(type(n) is int and 1 <= n <= 15 for n in sizes)
             and sum(sizes) == len(raw), 'invalid instruction partition')
     loads = segments(image)
     offset = file_offset(loads, start, len(raw), 5)
     require(image[offset:offset + len(raw)] == raw, 'decoded bytes differ from executable')
     targets = call_targets or {}
+    require(tail_calls is None or (isinstance(tail_calls, tuple)
+            and len(set(tail_calls)) == len(tail_calls) and set(tail_calls) <= set(targets)),
+            'invalid tail-call roles')
+    tails = 0
     # Only the separately pinned caller-cleanup fixture may admit one opaque
     # callback, loaded from its public function-pointer argument. All AES helper
     # reviews leave this disabled. The exact caller stream binds that dataflow.
@@ -97,6 +101,20 @@ def observe(lines, raw, sizes, symbol, start, image, call_targets=None, indirect
             constants.append((pos, width))
             normalized.append(f'{op} @constant[{constant}], %xmm{register}')
             encoded[cursor + length - 4:cursor + length] = b'\0' * 4
+        elif tail_calls and line.startswith('jmp ') and not re.fullmatch(
+                r'jmp 0x[0-9a-f]+ <' + re.escape(symbol) + r'\+0x[0-9a-f]+>', line):
+            # An explicitly selected direct tail edge, not a local branch or
+            # general permission for indirect jumps. Bind the actual E9 rel32.
+            match = re.fullmatch(r'jmp 0x([0-9a-f]+) <([^>]+)>', line)
+            require(match is not None and length == 5 and instruction[:1] == b'\xe9',
+                    'unsupported tail-call encoding/operand')
+            target, name = int(match[1], 16), match[2]
+            matches = [role for role in tail_calls if targets[role][0] == name and targets[role][1] == target]
+            require(len(matches) == 1 and target == start + cursor + length
+                    + int.from_bytes(instruction[1:], 'little', signed=True), 'tail-call destination mismatch')
+            normalized.append('jmp @' + matches[0])
+            encoded[cursor + 1:cursor + length] = b'\0' * 4
+            tails += 1
         elif line.startswith(('je ', 'jne ', 'ja ', 'jbe ', 'jb ', 'jae ', 'jmp ')):
             match = re.fullmatch(r'(je|jne|ja|jbe|jb|jae|jmp) 0x([0-9a-f]+) <' + re.escape(symbol) + r'\+0x([0-9a-f]+)>', line)
             require(match is not None, 'unsupported branch annotation')
@@ -135,6 +153,8 @@ def observe(lines, raw, sizes, symbol, start, image, call_targets=None, indirect
               'encoding_sha256': hashlib.sha256(encoded).hexdigest()}
     if call_targets is not None:
         actual['calls'] = calls
+    if tail_calls is not None:
+        actual['tail_calls'] = tails
     if indirect_callback is not None:
         require(callbacks == 1, 'callback population changed')
         actual['indirect_calls'] = callbacks

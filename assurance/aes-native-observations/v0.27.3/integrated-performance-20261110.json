@@ -1,0 +1,960 @@
+{
+  "kind": "unauthenticated-development-performance-observations",
+  "date": "2026-11-10",
+  "policy": "docs/assurance/aes-accelerated-performance.md: Integrated-expansion native experiment, declared 2026-11-10",
+  "policy_sha256": "35ac9b19d3f81b1168e81f2e8d295137cdf7592bd566209c18a03673d645f073",
+  "source": {
+    "base_commit": "56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e",
+    "working_tree": "Uncommitted v0.27.3 development; not clean-tag certification.",
+    "bundles": [
+      {
+        "path": "target/aes-native-performance-source-20261110.tar.gz",
+        "sha256": "0a5c6c5f5c1d33cff0c63f3429d3938e03de08d7cd698441510717704b6ba841",
+        "checked_source_files": 1531
+      },
+      {
+        "path": "target/aes-performance-registry-20261110.tar.gz",
+        "sha256": "5df1214c07d369600172c923e56b8647fdca7774855939a71860adc9cb806db1",
+        "checked_source_files": 1
+      }
+    ],
+    "package_sha256": {
+      "brynja": "1eac3382d1ef632b9f46670adf65cec1131bf40d6b317a5f605f74be4b53baab",
+      "brynja-core": "3ac8894a7a05e5ae25c164091998ca081933bb960769bc3238ec5972d1c61679",
+      "brynja-crypto": "8f90c00bf91f026fecc24af312b793b0865e914c796d329fa297abe8cdf5523a",
+      "brynja-crypto-cpu": "97a9bc44256395a983e11c185320904728d3ac4ae9138deebc0a907d15c87ad9",
+      "brynja-crypto-cpu-std": "137e62d9576b2ec32669528b2449877ed0efc77cf2a6f72348290ba192918261",
+      "brynja-dtls": "3894782c6e1a295a1aabe2560a959be3ae1476cf67fb9cd9a543fcb2a1c9f421",
+      "brynja-hash-core": "13b6fe81e8b96028ebe481d543193a1e5d34a78a7ac048b7ef0fa5c66d3dcbf2",
+      "brynja-hash-parallel": "ca4050cfdb521d4279c31283906d284862405e9c83212fbbedb97b7dfbf4e932",
+      "brynja-hash-sha2": "1c0fbdbab191c7e11fd1ed9d1f967c5dffa7932aa75579987f9211fb69a26fb8",
+      "brynja-hash-sha3": "5040888f602843134d1110a8021ac2d7a6ae9b782709a986dbb3a341425c08c7",
+      "brynja-hash-tuple": "85b186bf25fb9c65b2c2df31f626cd8f92455f2e3f774d987bba2b3d2e13ce03",
+      "brynja-mac-hmac": "8b8742a1177059b66e981b1ac1f94c563ae0394332e12a4406d023ea4dade196",
+      "brynja-mac-kmac": "15c0164e3bfc496355c22c95d3623c384c7a4114e282230f0741a62e6ee84df0",
+      "brynja-pki": "42936cff98f924f34831f8aa4cba616faf011fdd8a1826d57879a39084650f48",
+      "brynja-platform": "02fdab9954540d215e81000427628ca8e6018f3b3db843e5e34d0ed0b2d4f3bf",
+      "brynja-protocol": "79ba3a20529393efd8770690bd93626841224f9375e8cd5363178c757a0abfb3",
+      "brynja-quic-tls": "52ce4fb7f875a51d03f70088a0ca883f38a827a3b330a2d7b462d88c90ade04c",
+      "brynja-tls": "cb6e0aa7d5e815847108dd37e1b6e142b139fb03a9e95c4519130d73e55ce399",
+      "brynja-tls12": "0561887cf6d7f46dae18d6c50a85e2cf83108af957e503456ea52c4754a26698",
+      "brynja-tls13": "edd0f449e0a21c1b20d5d0e57ab9236596aee93b71e3a342404ef48940290ccc",
+      "brynja-tls13-handshake": "62e80577689a7b87a3839d7a5cfeee5a2bf39cbc4ddd6d77ce62f2cb8ee6a2cb"
+    }
+  },
+  "observations": [
+    {
+      "name": "aws-arm-integrated-msrv-20261110",
+      "cpu": "ARM Neoverse-V2 r0p1",
+      "compiler": "rustc 1.90.0 (1159e78c4 2025-09-14)\nbinary: rustc\ncommit-hash: 1159e78c4747b02ef996e55082b704c09b970588\ncommit-date: 2025-09-14\nhost: aarch64-unknown-linux-gnu\nrelease: 1.90.0\nLLVM version: 20.1.8\n",
+      "target": "aarch64-unknown-linux-gnu",
+      "kernel": "ArmAes",
+      "flags": "-Ctarget-feature=+aes,+neon",
+      "profile": "opt3-fat-lto-cgu1-overflow-unwind",
+      "result": "observed; no speed or side-channel verdict",
+      "artifacts": "target/aes-native-performance-20261110/aws/target/aes-performance/aws-arm-integrated-msrv-20261110",
+      "binary_sha256": "7ec101bd05803821586f2bf18826cc49237bd1842b2245798af59474d870affc",
+      "identity_sha256": "baf82854d19ca33fd758ed8332195be1026563212342748794d90939e05616a7",
+      "raw_process_sha256": "5615ba66d79172534a32eb2de0cb055f7b850e890e53487b0601c12b59d771fe",
+      "summary_sha256": "905ed97211ab307a7e853538ed5426675cb048056427c0f086cda1fbb2f9f795",
+      "host_context_sha256": "48eb95c10b4ffb9a8961dd92031c78111480e04eea57f3965710d04a585e52b1",
+      "host_context": {
+        "platform": "Linux-7.0.0-1014-aws-aarch64-with-glibc2.43",
+        "machine": "aarch64",
+        "logical_cpu": 0,
+        "load_before": [
+          0.810546875,
+          0.48876953125,
+          0.48779296875
+        ],
+        "governor": "unavailable",
+        "siblings": "0\n",
+        "boost": "unavailable"
+      },
+      "cases": 48,
+      "samples": 432,
+      "pairs": [
+        {
+          "bits": 128,
+          "owner": "raw",
+          "operation": "construct-clear",
+          "portable_median_ns_per_operation": 19.40625,
+          "accelerated_median_ns_per_operation": 25.890625,
+          "portable_over_accelerated_median_ratio": 0.7495473747736874
+        },
+        {
+          "bits": 128,
+          "owner": "raw",
+          "operation": "encrypt",
+          "portable_median_ns_per_operation": 12475.5,
+          "accelerated_median_ns_per_operation": 205.53125,
+          "portable_over_accelerated_median_ratio": 60.69879884445796
+        },
+        {
+          "bits": 128,
+          "owner": "raw",
+          "operation": "decrypt",
+          "portable_median_ns_per_operation": 12604.40625,
+          "accelerated_median_ns_per_operation": 213.171875,
+          "portable_over_accelerated_median_ratio": 59.12790441984901
+        },
+        {
+          "bits": 128,
+          "owner": "raw",
+          "operation": "public",
+          "portable_median_ns_per_operation": 12453.328125,
+          "accelerated_median_ns_per_operation": 187.375,
+          "portable_over_accelerated_median_ratio": 66.46205803869246
+        },
+        {
+          "bits": 128,
+          "owner": "cached",
+          "operation": "construct-clear",
+          "portable_median_ns_per_operation": 2843.015625,
+          "accelerated_median_ns_per_operation": 312.484375,
+          "portable_over_accelerated_median_ratio": 9.098104905245263
+        },
+        {
+          "bits": 128,
+          "owner": "cached",
+          "operation": "encrypt",
+          "portable_median_ns_per_operation": 9748.3125,
+          "accelerated_median_ns_per_operation": 29.328125,
+          "portable_over_accelerated_median_ratio": 332.387852956846
+        },
+        {
+          "bits": 128,
+          "owner": "cached",
+          "operation": "decrypt",
+          "portable_median_ns_per_operation": 9867.265625,
+          "accelerated_median_ns_per_operation": 30.71875,
+          "portable_over_accelerated_median_ratio": 321.21312309257377
+        },
+        {
+          "bits": 128,
+          "owner": "cached",
+          "operation": "public",
+          "portable_median_ns_per_operation": 9742.46875,
+          "accelerated_median_ns_per_operation": 14.09375,
+          "portable_over_accelerated_median_ratio": 691.2616407982262
+        },
+        {
+          "bits": 192,
+          "owner": "raw",
+          "operation": "construct-clear",
+          "portable_median_ns_per_operation": 24.140625,
+          "accelerated_median_ns_per_operation": 27.296875,
+          "portable_over_accelerated_median_ratio": 0.884373211219233
+        },
+        {
+          "bits": 192,
+          "owner": "raw",
+          "operation": "encrypt",
+          "portable_median_ns_per_operation": 13997.875,
+          "accelerated_median_ns_per_operation": 222.65625,
+          "portable_over_accelerated_median_ratio": 62.867649122807016
+        },
+        {
+          "bits": 192,
+          "owner": "raw",
+          "operation": "decrypt",
+          "portable_median_ns_per_operation": 14127.515625,
+          "accelerated_median_ns_per_operation": 234.765625,
+          "portable_over_accelerated_median_ratio": 60.17710482529118
+        },
+        {
+          "bits": 192,
+          "owner": "raw",
+          "operation": "public",
+          "portable_median_ns_per_operation": 14001.3125,
+          "accelerated_median_ns_per_operation": 204.96875,
+          "portable_over_accelerated_median_ratio": 68.30949839914621
+        },
+        {
+          "bits": 192,
+          "owner": "cached",
+          "operation": "construct-clear",
+          "portable_median_ns_per_operation": 2452.0,
+          "accelerated_median_ns_per_operation": 371.296875,
+          "portable_over_accelerated_median_ratio": 6.60387998148382
+        },
+        {
+          "bits": 192,
+          "owner": "cached",
+          "operation": "encrypt",
+          "portable_median_ns_per_operation": 11717.34375,
+          "accelerated_median_ns_per_operation": 30.140625,
+          "portable_over_accelerated_median_ratio": 388.75583203732504
+        },
+        {
+          "bits": 192,
+          "owner": "cached",
+          "operation": "decrypt",
+          "portable_median_ns_per_operation": 11829.859375,
+          "accelerated_median_ns_per_operation": 32.75,
+          "portable_over_accelerated_median_ratio": 361.21708015267177
+        },
+        {
+          "bits": 192,
+          "owner": "cached",
+          "operation": "public",
+          "portable_median_ns_per_operation": 11705.140625,
+          "accelerated_median_ns_per_operation": 14.21875,
+          "portable_over_accelerated_median_ratio": 823.2186813186813
+        },
+        {
+          "bits": 256,
+          "owner": "raw",
+          "operation": "construct-clear",
+          "portable_median_ns_per_operation": 30.484375,
+          "accelerated_median_ns_per_operation": 37.921875,
+          "portable_over_accelerated_median_ratio": 0.803873094355171
+        },
+        {
+          "bits": 256,
+          "owner": "raw",
+          "operation": "encrypt",
+          "portable_median_ns_per_operation": 17189.15625,
+          "accelerated_median_ns_per_operation": 260.09375,
+          "portable_over_accelerated_median_ratio": 66.0883095037847
+        },
+        {
+          "bits": 256,
+          "owner": "raw",
+          "operation": "decrypt",
+          "portable_median_ns_per_operation": 17341.46875,
+          "accelerated_median_ns_per_operation": 274.71875,
+          "portable_over_accelerated_median_ratio": 63.12444545557957
+        },
+        {
+          "bits": 256,
+          "owner": "raw",
+          "operation": "public",
+          "portable_median_ns_per_operation": 17193.75,
+          "accelerated_median_ns_per_operation": 243.9375,
+          "portable_over_accelerated_median_ratio": 70.48424289008454
+        },
+        {
+          "bits": 256,
+          "owner": "cached",
+          "operation": "construct-clear",
+          "portable_median_ns_per_operation": 3723.484375,
+          "accelerated_median_ns_per_operation": 437.359375,
+          "portable_over_accelerated_median_ratio": 8.513557929334429
+        },
+        {
+          "bits": 256,
+          "owner": "cached",
+          "operation": "encrypt",
+          "portable_median_ns_per_operation": 13659.53125,
+          "accelerated_median_ns_per_operation": 32.984375,
+          "portable_over_accelerated_median_ratio": 414.1212695405021
+        },
+        {
+          "bits": 256,
+          "owner": "cached",
+          "operation": "decrypt",
+          "portable_median_ns_per_operation": 13783.09375,
+          "accelerated_median_ns_per_operation": 35.5625,
+          "portable_over_accelerated_median_ratio": 387.5738137082601
+        },
+        {
+          "bits": 256,
+          "owner": "cached",
+          "operation": "public",
+          "portable_median_ns_per_operation": 13668.265625,
+          "accelerated_median_ns_per_operation": 15.078125,
+          "portable_over_accelerated_median_ratio": 906.4963730569948
+        }
+      ]
+    },
+    {
+      "name": "aws-arm-integrated-current-20261110",
+      "cpu": "ARM Neoverse-V2 r0p1",
+      "compiler": "rustc 1.99.1 (58cf8f9c3 2026-10-13)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: aarch64-unknown-linux-gnu\nrelease: 1.99.1\nLLVM version: 23.1.1\n",
+      "target": "aarch64-unknown-linux-gnu",
+      "kernel": "ArmAes",
+      "flags": "-Ctarget-feature=+aes,+neon",
+      "profile": "opt3-fat-lto-cgu1-overflow-unwind",
+      "result": "observed; no speed or side-channel verdict",
+      "artifacts": "target/aes-native-performance-20261110/aws/target/aes-performance/aws-arm-integrated-current-20261110",
+      "binary_sha256": "0323aa62883fe452d0193ef8eab89202f3bc0e5fd3377933b78be17d5221f92f",
+      "identity_sha256": "5f6e480d2230269874242cc4abe1cff1c06919907c6942ebea71702d8cf72453",
+      "raw_process_sha256": "7ad600cfebfd08db06edf249e73c1a8a264b23c39dd2a0135d49c69ca5466113",
+      "summary_sha256": "ea11cceaeb96c553554ff719ee14be0eb828fe91562c9b1b1f780878a3eb90a0",
+      "host_context_sha256": "ca9133050c77e816ae0e44dc446b457b6f541e3a16b868dc44d83c46cc089d71",
+      "host_context": {
+        "platform": "Linux-7.0.0-1014-aws-aarch64-with-glibc2.43",
+        "machine": "aarch64",
+        "logical_cpu": 0,
+        "load_before": [
+          0.84033203125,
+          0.50634765625,
+          0.49365234375
+        ],
+        "governor": "unavailable",
+        "siblings": "0\n",
+        "boost": "unavailable"
+      },
+      "cases": 48,
+      "samples": 432,
+      "pairs": [
+        {
+          "bits": 128,
+          "owner": "raw",
+          "operation": "construct-clear",
+          "portable_median_ns_per_operation": 18.75,
+          "accelerated_median_ns_per_operation": 23.09375,
+          "portable_over_accelerated_median_ratio": 0.8119079837618404
+        },
+        {
+          "bits": 128,
+          "owner": "raw",
+          "operation": "encrypt",
+          "portable_median_ns_per_operation": 12813.9375,
+          "accelerated_median_ns_per_operation": 206.015625,
+          "portable_over_accelerated_median_ratio": 62.198862343572245
+        },
+        {
+          "bits": 128,
+          "owner": "raw",
+          "operation": "decrypt",
+          "portable_median_ns_per_operation": 12950.75,
+          "accelerated_median_ns_per_operation": 212.5625,
+          "portable_over_accelerated_median_ratio": 60.92678623934137
+        },
+        {
+          "bits": 128,
+          "owner": "raw",
+          "operation": "public",
+          "portable_median_ns_per_operation": 12772.53125,
+          "accelerated_median_ns_per_operation": 187.0625,
+          "portable_over_accelerated_median_ratio": 68.27948546608754
+        },
+        {
+          "bits": 128,
+          "owner": "cached",
+          "operation": "construct-clear",
+          "portable_median_ns_per_operation": 2832.15625,
+          "accelerated_median_ns_per_operation": 313.09375,
+          "portable_over_accelerated_median_ratio": 9.045713145024454
+        },
+        {
+          "bits": 128,
+          "owner": "cached",
+          "operation": "encrypt",
+          "portable_median_ns_per_operation": 10119.15625,
+          "accelerated_median_ns_per_operation": 30.265625,
+          "portable_over_accelerated_median_ratio": 334.34486319050075
+        },
+        {
+          "bits": 128,
+          "owner": "cached",
+          "operation": "decrypt",
+          "portable_median_ns_per_operation": 10237.125,
+          "accelerated_median_ns_per_operation": 32.1875,
+          "portable_over_accelerated_median_ratio": 318.04660194174755
+        },
+        {
+          "bits": 128,
+          "owner": "cached",
+          "operation": "public",
+          "portable_median_ns_per_operation": 10091.4375,
+          "accelerated_median_ns_per_operation": 14.75,
+          "portable_over_accelerated_median_ratio": 684.1652542372881
+        },
+        {
+          "bits": 192,
+          "owner": "raw",
+          "operation": "construct-clear",
+          "portable_median_ns_per_operation": 23.3125,
+          "accelerated_median_ns_per_operation": 29.34375,
+          "portable_over_accelerated_median_ratio": 0.7944621938232161
+        },
+        {
+          "bits": 192,
+          "owner": "raw",
+          "operation": "encrypt",
+          "portable_median_ns_per_operation": 14348.53125,
+          "accelerated_median_ns_per_operation": 218.0,
+          "portable_over_accelerated_median_ratio": 65.8189506880734
+        },
+        {
+          "bits": 192,
+          "owner": "raw",
+          "operation": "decrypt",
+          "portable_median_ns_per_operation": 14497.125,
+          "accelerated_median_ns_per_operation": 233.171875,
+          "portable_over_accelerated_median_ratio": 62.17355759565771
+        },
+        {
+          "bits": 192,
+          "owner": "raw",
+          "operation": "public",
+          "portable_median_ns_per_operation": 14318.625,
+          "accelerated_median_ns_per_operation": 205.09375,
+          "portable_over_accelerated_median_ratio": 69.81502361724822
+        },
+        {
+          "bits": 192,
+          "owner": "cached",
+          "operation": "construct-clear",
+          "portable_median_ns_per_operation": 2389.90625,
+          "accelerated_median_ns_per_operation": 371.046875,
+          "portable_over_accelerated_median_ratio": 6.44098201878132
+        },
+        {
+          "bits": 192,
+          "owner": "cached",
+          "operation": "encrypt",
+          "portable_median_ns_per_operation": 12129.375,
+          "accelerated_median_ns_per_operation": 30.015625,
+          "portable_over_accelerated_median_ratio": 404.102030192608
+        },
+        {
+          "bits": 192,
+          "owner": "cached",
+          "operation": "decrypt",
+          "portable_median_ns_per_operation": 12306.125,
+          "accelerated_median_ns_per_operation": 33.234375,
+          "portable_over_accelerated_median_ratio": 370.28302773859895
+        },
+        {
+          "bits": 192,
+          "owner": "cached",
+          "operation": "public",
+          "portable_median_ns_per_operation": 12113.359375,
+          "accelerated_median_ns_per_operation": 15.9375,
+          "portable_over_accelerated_median_ratio": 760.0539215686274
+        },
+        {
+          "bits": 256,
+          "owner": "raw",
+          "operation": "construct-clear",
+          "portable_median_ns_per_operation": 30.078125,
+          "accelerated_median_ns_per_operation": 38.34375,
+          "portable_over_accelerated_median_ratio": 0.7844335778321109
+        },
+        {
+          "bits": 256,
+          "owner": "raw",
+          "operation": "encrypt",
+          "portable_median_ns_per_operation": 17630.15625,
+          "accelerated_median_ns_per_operation": 263.71875,
+          "portable_over_accelerated_median_ratio": 66.85211517952364
+        },
+        {
+          "bits": 256,
+          "owner": "raw",
+          "operation": "decrypt",
+          "portable_median_ns_per_operation": 17835.6875,
+          "accelerated_median_ns_per_operation": 273.609375,
+          "portable_over_accelerated_median_ratio": 65.18668265661584
+        },
+        {
+          "bits": 256,
+          "owner": "raw",
+          "operation": "public",
+          "portable_median_ns_per_operation": 17612.421875,
+          "accelerated_median_ns_per_operation": 243.296875,
+          "portable_over_accelerated_median_ratio": 72.39066212831545
+        },
+        {
+          "bits": 256,
+          "owner": "cached",
+          "operation": "construct-clear",
+          "portable_median_ns_per_operation": 3700.59375,
+          "accelerated_median_ns_per_operation": 434.640625,
+          "portable_over_accelerated_median_ratio": 8.514146025811554
+        },
+        {
+          "bits": 256,
+          "owner": "cached",
+          "operation": "encrypt",
+          "portable_median_ns_per_operation": 14135.5625,
+          "accelerated_median_ns_per_operation": 32.46875,
+          "portable_over_accelerated_median_ratio": 435.3589990375361
+        },
+        {
+          "bits": 256,
+          "owner": "cached",
+          "operation": "decrypt",
+          "portable_median_ns_per_operation": 14326.296875,
+          "accelerated_median_ns_per_operation": 35.390625,
+          "portable_over_accelerated_median_ratio": 404.80485651214127
+        },
+        {
+          "bits": 256,
+          "owner": "cached",
+          "operation": "public",
+          "portable_median_ns_per_operation": 14134.625,
+          "accelerated_median_ns_per_operation": 16.015625,
+          "portable_over_accelerated_median_ratio": 882.5521951219512
+        }
+      ]
+    },
+    {
+      "name": "amd-integrated-msrv-20261110",
+      "cpu": "AMD Ryzen 9 9950X3D",
+      "compiler": "rustc 1.90.0 (1159e78c4 2025-09-14)\nbinary: rustc\ncommit-hash: 1159e78c4747b02ef996e55082b704c09b970588\ncommit-date: 2025-09-14\nhost: x86_64-unknown-linux-gnu\nrelease: 1.90.0\nLLVM version: 20.1.8\n",
+      "target": "x86_64-unknown-linux-gnu",
+      "kernel": "X86AesNi",
+      "flags": "-Ctarget-feature=+aes,+sse2",
+      "profile": "opt3-fat-lto-cgu1-overflow-unwind",
+      "result": "observed; no speed or side-channel verdict",
+      "artifacts": "target/aes-performance/amd-integrated-msrv-20261110",
+      "binary_sha256": "80f0219527dcdce782a40a13ed4ca3a011112521411228ab4b86a56579edfd12",
+      "identity_sha256": "70cee291d570668479910fa30154e1bb779a1bab58d076f8e3d8aedc332efb92",
+      "raw_process_sha256": "9d9b2ef6c9d53c964710fefca3fa7e92ffa1c8daa12ca6d3cc4136b9553eb9af",
+      "summary_sha256": "0497df5299efb214aab97291cdb954a0768767986537bbd9fd57bacbccb8233a",
+      "host_context_sha256": "e672e5622fbfb8fc9f6e4c13fd28337ed454e64874aa10996bfa3f63daf8cb4e",
+      "host_context": {
+        "platform": "Linux-7.3.1-1-default-x86_64-with-glibc2.44",
+        "machine": "x86_64",
+        "logical_cpu": 0,
+        "load_before": [
+          1.15966796875,
+          1.587890625,
+          1.46826171875
+        ],
+        "governor": "powersave\n",
+        "siblings": "0,16\n",
+        "boost": "1\n"
+      },
+      "cases": 48,
+      "samples": 432,
+      "pairs": [
+        {
+          "bits": 128,
+          "owner": "raw",
+          "operation": "construct-clear",
+          "portable_median_ns_per_operation": 15.03125,
+          "accelerated_median_ns_per_operation": 18.9375,
+          "portable_over_accelerated_median_ratio": 0.7937293729372937
+        },
+        {
+          "bits": 128,
+          "owner": "raw",
+          "operation": "encrypt",
+          "portable_median_ns_per_operation": 6696.046875,
+          "accelerated_median_ns_per_operation": 59.171875,
+          "portable_over_accelerated_median_ratio": 113.16266173752311
+        },
+        {
+          "bits": 128,
+          "owner": "raw",
+          "operation": "decrypt",
+          "portable_median_ns_per_operation": 6850.09375,
+          "accelerated_median_ns_per_operation": 66.0625,
+          "portable_over_accelerated_median_ratio": 103.69110690633869
+        },
+        {
+          "bits": 128,
+          "owner": "raw",
+          "operation": "public",
+          "portable_median_ns_per_operation": 6683.375,
+          "accelerated_median_ns_per_operation": 55.421875,
+          "portable_over_accelerated_median_ratio": 120.59092190583591
+        },
+        {
+          "bits": 128,
+          "owner": "cached",
+          "operation": "construct-clear",
+          "portable_median_ns_per_operation": 1455.71875,
+          "accelerated_median_ns_per_operation": 98.9375,
+          "portable_over_accelerated_median_ratio": 14.713518635502211
+        },
+        {
+          "bits": 128,
+          "owner": "cached",
+          "operation": "encrypt",
+          "portable_median_ns_per_operation": 5273.203125,
+          "accelerated_median_ns_per_operation": 11.75,
+          "portable_over_accelerated_median_ratio": 448.78324468085106
+        },
+        {
+          "bits": 128,
+          "owner": "cached",
+          "operation": "decrypt",
+          "portable_median_ns_per_operation": 5432.890625,
+          "accelerated_median_ns_per_operation": 11.75,
+          "portable_over_accelerated_median_ratio": 462.37367021276594
+        },
+        {
+          "bits": 128,
+          "owner": "cached",
+          "operation": "public",
+          "portable_median_ns_per_operation": 5259.90625,
+          "accelerated_median_ns_per_operation": 5.640625,
+          "portable_over_accelerated_median_ratio": 932.5041551246537
+        },
+        {
+          "bits": 192,
+          "owner": "raw",
+          "operation": "construct-clear",
+          "portable_median_ns_per_operation": 16.90625,
+          "accelerated_median_ns_per_operation": 22.390625,
+          "portable_over_accelerated_median_ratio": 0.755059316120028
+        },
+        {
+          "bits": 192,
+          "owner": "raw",
+          "operation": "encrypt",
+          "portable_median_ns_per_operation": 7542.46875,
+          "accelerated_median_ns_per_operation": 59.171875,
+          "portable_over_accelerated_median_ratio": 127.4671243728545
+        },
+        {
+          "bits": 192,
+          "owner": "raw",
+          "operation": "decrypt",
+          "portable_median_ns_per_operation": 7690.109375,
+          "accelerated_median_ns_per_operation": 67.9375,
+          "portable_over_accelerated_median_ratio": 113.19388224471021
+        },
+        {
+          "bits": 192,
+          "owner": "raw",
+          "operation": "public",
+          "portable_median_ns_per_operation": 7523.703125,
+          "accelerated_median_ns_per_operation": 55.109375,
+          "portable_over_accelerated_median_ratio": 136.52310745676212
+        },
+        {
+          "bits": 192,
+          "owner": "cached",
+          "operation": "construct-clear",
+          "portable_median_ns_per_operation": 1227.0,
+          "accelerated_median_ns_per_operation": 105.203125,
+          "portable_over_accelerated_median_ratio": 11.663151641170355
+        },
+        {
+          "bits": 192,
+          "owner": "cached",
+          "operation": "encrypt",
+          "portable_median_ns_per_operation": 6314.234375,
+          "accelerated_median_ns_per_operation": 12.515625,
+          "portable_over_accelerated_median_ratio": 504.5081148564295
+        },
+        {
+          "bits": 192,
+          "owner": "cached",
+          "operation": "decrypt",
+          "portable_median_ns_per_operation": 6492.84375,
+          "accelerated_median_ns_per_operation": 12.375,
+          "portable_over_accelerated_median_ratio": 524.6742424242424
+        },
+        {
+          "bits": 192,
+          "owner": "cached",
+          "operation": "public",
+          "portable_median_ns_per_operation": 6310.484375,
+          "accelerated_median_ns_per_operation": 6.109375,
+          "portable_over_accelerated_median_ratio": 1032.918158567775
+        },
+        {
+          "bits": 256,
+          "owner": "raw",
+          "operation": "construct-clear",
+          "portable_median_ns_per_operation": 18.46875,
+          "accelerated_median_ns_per_operation": 21.609375,
+          "portable_over_accelerated_median_ratio": 0.8546637744034707
+        },
+        {
+          "bits": 256,
+          "owner": "raw",
+          "operation": "encrypt",
+          "portable_median_ns_per_operation": 9151.609375,
+          "accelerated_median_ns_per_operation": 74.203125,
+          "portable_over_accelerated_median_ratio": 123.33185933880817
+        },
+        {
+          "bits": 256,
+          "owner": "raw",
+          "operation": "decrypt",
+          "portable_median_ns_per_operation": 9376.09375,
+          "accelerated_median_ns_per_operation": 84.6875,
+          "portable_over_accelerated_median_ratio": 110.7140221402214
+        },
+        {
+          "bits": 256,
+          "owner": "raw",
+          "operation": "public",
+          "portable_median_ns_per_operation": 9159.59375,
+          "accelerated_median_ns_per_operation": 69.828125,
+          "portable_over_accelerated_median_ratio": 131.1734168717834
+        },
+        {
+          "bits": 256,
+          "owner": "cached",
+          "operation": "construct-clear",
+          "portable_median_ns_per_operation": 1805.734375,
+          "accelerated_median_ns_per_operation": 125.71875,
+          "portable_over_accelerated_median_ratio": 14.363286104896844
+        },
+        {
+          "bits": 256,
+          "owner": "cached",
+          "operation": "encrypt",
+          "portable_median_ns_per_operation": 7385.78125,
+          "accelerated_median_ns_per_operation": 13.3125,
+          "portable_over_accelerated_median_ratio": 554.8004694835681
+        },
+        {
+          "bits": 256,
+          "owner": "cached",
+          "operation": "decrypt",
+          "portable_median_ns_per_operation": 7620.90625,
+          "accelerated_median_ns_per_operation": 13.15625,
+          "portable_over_accelerated_median_ratio": 579.2612826603325
+        },
+        {
+          "bits": 256,
+          "owner": "cached",
+          "operation": "public",
+          "portable_median_ns_per_operation": 7394.390625,
+          "accelerated_median_ns_per_operation": 6.265625,
+          "portable_over_accelerated_median_ratio": 1180.152119700748
+        }
+      ]
+    },
+    {
+      "name": "amd-integrated-current-20261110",
+      "cpu": "AMD Ryzen 9 9950X3D",
+      "compiler": "rustc 1.99.1 (58cf8f9c3 2026-10-13)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: x86_64-unknown-linux-gnu\nrelease: 1.99.1\nLLVM version: 23.1.1\n",
+      "target": "x86_64-unknown-linux-gnu",
+      "kernel": "X86AesNi",
+      "flags": "-Ctarget-feature=+aes,+sse2",
+      "profile": "opt3-fat-lto-cgu1-overflow-unwind",
+      "result": "observed; no speed or side-channel verdict",
+      "artifacts": "target/aes-performance/amd-integrated-current-20261110",
+      "binary_sha256": "6c3ae88d7347cce2327480f72e7aa44b2a3c2cd8b4484529ef13c3cb3172356e",
+      "identity_sha256": "6a785c7c90b50c6108472ff4786281ba2e65e46e80a0d1c52223d1334a7deaf6",
+      "raw_process_sha256": "39addf1a27c93d77ee64bf1f649b97b6ae26015b8f4fd4fea1b619121d022890",
+      "summary_sha256": "2ae2190d27af21ad6d859cab07199ba81a7f36d51997ff3587673f37110ee7c5",
+      "host_context_sha256": "22c9480a8494cef17c52d7c9d67278bd96f1ec07048472c3c53924a9344a0241",
+      "host_context": {
+        "platform": "Linux-7.3.1-1-default-x86_64-with-glibc2.44",
+        "machine": "x86_64",
+        "logical_cpu": 0,
+        "load_before": [
+          1.54736328125,
+          1.66162109375,
+          1.49267578125
+        ],
+        "governor": "powersave\n",
+        "siblings": "0,16\n",
+        "boost": "1\n"
+      },
+      "cases": 48,
+      "samples": 432,
+      "pairs": [
+        {
+          "bits": 128,
+          "owner": "raw",
+          "operation": "construct-clear",
+          "portable_median_ns_per_operation": 15.171875,
+          "accelerated_median_ns_per_operation": 17.84375,
+          "portable_over_accelerated_median_ratio": 0.850262697022767
+        },
+        {
+          "bits": 128,
+          "owner": "raw",
+          "operation": "encrypt",
+          "portable_median_ns_per_operation": 6999.578125,
+          "accelerated_median_ns_per_operation": 59.96875,
+          "portable_over_accelerated_median_ratio": 116.72042730588848
+        },
+        {
+          "bits": 128,
+          "owner": "raw",
+          "operation": "decrypt",
+          "portable_median_ns_per_operation": 7034.96875,
+          "accelerated_median_ns_per_operation": 66.53125,
+          "portable_over_accelerated_median_ratio": 105.73931423203382
+        },
+        {
+          "bits": 128,
+          "owner": "raw",
+          "operation": "public",
+          "portable_median_ns_per_operation": 6984.546875,
+          "accelerated_median_ns_per_operation": 55.71875,
+          "portable_over_accelerated_median_ratio": 125.35361749859787
+        },
+        {
+          "bits": 128,
+          "owner": "cached",
+          "operation": "construct-clear",
+          "portable_median_ns_per_operation": 1489.84375,
+          "accelerated_median_ns_per_operation": 97.6875,
+          "portable_over_accelerated_median_ratio": 15.251119641714652
+        },
+        {
+          "bits": 128,
+          "owner": "cached",
+          "operation": "encrypt",
+          "portable_median_ns_per_operation": 5519.453125,
+          "accelerated_median_ns_per_operation": 11.890625,
+          "portable_over_accelerated_median_ratio": 464.18528252299603
+        },
+        {
+          "bits": 128,
+          "owner": "cached",
+          "operation": "decrypt",
+          "portable_median_ns_per_operation": 5534.15625,
+          "accelerated_median_ns_per_operation": 12.359375,
+          "portable_over_accelerated_median_ratio": 447.7699115044248
+        },
+        {
+          "bits": 128,
+          "owner": "cached",
+          "operation": "public",
+          "portable_median_ns_per_operation": 5519.609375,
+          "accelerated_median_ns_per_operation": 6.421875,
+          "portable_over_accelerated_median_ratio": 859.5012165450122
+        },
+        {
+          "bits": 192,
+          "owner": "raw",
+          "operation": "construct-clear",
+          "portable_median_ns_per_operation": 17.84375,
+          "accelerated_median_ns_per_operation": 20.03125,
+          "portable_over_accelerated_median_ratio": 0.890795631825273
+        },
+        {
+          "bits": 192,
+          "owner": "raw",
+          "operation": "encrypt",
+          "portable_median_ns_per_operation": 8094.78125,
+          "accelerated_median_ns_per_operation": 60.109375,
+          "portable_over_accelerated_median_ratio": 134.6675331427086
+        },
+        {
+          "bits": 192,
+          "owner": "raw",
+          "operation": "decrypt",
+          "portable_median_ns_per_operation": 7818.625,
+          "accelerated_median_ns_per_operation": 68.40625,
+          "portable_over_accelerated_median_ratio": 114.29693924166286
+        },
+        {
+          "bits": 192,
+          "owner": "raw",
+          "operation": "public",
+          "portable_median_ns_per_operation": 8076.609375,
+          "accelerated_median_ns_per_operation": 55.734375,
+          "portable_over_accelerated_median_ratio": 144.9125315391085
+        },
+        {
+          "bits": 192,
+          "owner": "cached",
+          "operation": "construct-clear",
+          "portable_median_ns_per_operation": 1249.234375,
+          "accelerated_median_ns_per_operation": 104.09375,
+          "portable_over_accelerated_median_ratio": 12.00105073551486
+        },
+        {
+          "bits": 192,
+          "owner": "cached",
+          "operation": "encrypt",
+          "portable_median_ns_per_operation": 6862.453125,
+          "accelerated_median_ns_per_operation": 12.6875,
+          "portable_over_accelerated_median_ratio": 540.8830049261084
+        },
+        {
+          "bits": 192,
+          "owner": "cached",
+          "operation": "decrypt",
+          "portable_median_ns_per_operation": 6639.0625,
+          "accelerated_median_ns_per_operation": 12.6875,
+          "portable_over_accelerated_median_ratio": 523.2758620689655
+        },
+        {
+          "bits": 192,
+          "owner": "cached",
+          "operation": "public",
+          "portable_median_ns_per_operation": 6849.3125,
+          "accelerated_median_ns_per_operation": 7.671875,
+          "portable_over_accelerated_median_ratio": 892.7820773930754
+        },
+        {
+          "bits": 256,
+          "owner": "raw",
+          "operation": "construct-clear",
+          "portable_median_ns_per_operation": 18.15625,
+          "accelerated_median_ns_per_operation": 22.234375,
+          "portable_over_accelerated_median_ratio": 0.8165846802529867
+        },
+        {
+          "bits": 256,
+          "owner": "raw",
+          "operation": "encrypt",
+          "portable_median_ns_per_operation": 9923.6875,
+          "accelerated_median_ns_per_operation": 74.828125,
+          "portable_over_accelerated_median_ratio": 132.6197536020046
+        },
+        {
+          "bits": 256,
+          "owner": "raw",
+          "operation": "decrypt",
+          "portable_median_ns_per_operation": 9658.5,
+          "accelerated_median_ns_per_operation": 84.859375,
+          "portable_over_accelerated_median_ratio": 113.81771312833732
+        },
+        {
+          "bits": 256,
+          "owner": "raw",
+          "operation": "public",
+          "portable_median_ns_per_operation": 9907.5625,
+          "accelerated_median_ns_per_operation": 69.671875,
+          "portable_over_accelerated_median_ratio": 142.2031845705315
+        },
+        {
+          "bits": 256,
+          "owner": "cached",
+          "operation": "construct-clear",
+          "portable_median_ns_per_operation": 1941.78125,
+          "accelerated_median_ns_per_operation": 125.859375,
+          "portable_over_accelerated_median_ratio": 15.428181253879577
+        },
+        {
+          "bits": 256,
+          "owner": "cached",
+          "operation": "encrypt",
+          "portable_median_ns_per_operation": 8026.515625,
+          "accelerated_median_ns_per_operation": 13.15625,
+          "portable_over_accelerated_median_ratio": 610.0914489311164
+        },
+        {
+          "bits": 256,
+          "owner": "cached",
+          "operation": "decrypt",
+          "portable_median_ns_per_operation": 7765.71875,
+          "accelerated_median_ns_per_operation": 13.296875,
+          "portable_over_accelerated_median_ratio": 584.0258519388955
+        },
+        {
+          "bits": 256,
+          "owner": "cached",
+          "operation": "public",
+          "portable_median_ns_per_operation": 8040.921875,
+          "accelerated_median_ns_per_operation": 8.296875,
+          "portable_over_accelerated_median_ratio": 969.15065913371
+        }
+      ]
+    }
+  ],
+  "samples_retained": 1728,
+  "evidence": {
+    "aws_archive": "target/aes-native-performance-20261110/aws-observations.tar.gz",
+    "aws_archive_sha256": "94e0a803b607e3179c80bb385cd1a630e80bee6d0c4a40661e2721bfb095b8d9",
+    "aws_remote_directory": "/home/ubuntu/brynja-aes-performance-0273-E3GbpUUq"
+  },
+  "setup_diagnostic": "Initial remote Python regression invocation lacked verification/checks.toml. It failed before fixture builds or measurement; logs/tooling.log is retained. Supplied the registry bundle and all 13 tests passed in logs/tooling-attempt2.log.",
+  "limitations": [
+    "Four observations, one measurement invocation each; no speed threshold, cropping or retries.",
+    "Static admission, direct API, single-block operation and specific profile only.",
+    "Shared virtualized ARM host and non-isolated AMD host; frequency, scheduling and timer overhead remain.",
+    "Not fixed/random side-channel acceptance, throughput guarantees, physical protection or a new release gate."
+  ]
+}

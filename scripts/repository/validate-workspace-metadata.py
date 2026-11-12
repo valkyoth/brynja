@@ -223,6 +223,8 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
         expected["hardened-execution"] = ["dep:brynja-crypto-cpu", "brynja-crypto-cpu/hardened-execution", "brynja-hash-sha2/hardened-execution", "brynja-hash-sha3/hardened-execution"]
         expected["runtime-execution"] = ["hardened-execution", "brynja-crypto-cpu/runtime-execution", "brynja-hash-sha2/runtime-execution", "brynja-hash-sha3/runtime-execution"]
     if name == "brynja-crypto-cpu":
+        expected["aes-static-execution"] = []
+        expected["aes-runtime-execution"] = ["aes-static-execution"]
         expected["sha256-hardened-batch"] = ["dep:brynja-core"]
         expected["sha512-hardened-batch"] = ["dep:brynja-core"]
         expected["keccak-hardened-batch"] = ["dep:brynja-core"]
@@ -232,6 +234,7 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
         expected["runtime-execution"] = ["static-execution"]
         expected["hardened-execution"] = ["static-execution", "dep:brynja-core"]
     if name == "brynja-crypto-cpu-std":
+        expected["aes-runtime-execution"] = ["brynja-crypto-cpu/aes-runtime-execution"]
         expected.update({"strict-hmac": ["protected-memory", "dep:brynja-mac-hmac"], "strict-hmac-acceleration": ["strict-hmac", "brynja-mac-hmac/hardened-execution"]})
         expected["hmac-execution"] = ["runtime-execution", "dep:brynja-mac-hmac", "brynja-mac-hmac/runtime-execution"]
         expected.update({"strict-sha2": ["protected-memory", "brynja-hash-sha2/general-sha512-t"], "strict-sha2-acceleration": ["strict-sha2", "brynja-hash-sha2/hardened-execution"], "strict-sha3": ["protected-memory", "dep:brynja-hash-sha3"], "strict-sha3-acceleration": ["strict-sha3", "brynja-hash-sha3/hardened-execution"], "strict-kmac": ["protected-memory", "dep:brynja-mac-kmac"], "strict-kmac-acceleration": ["strict-kmac", "brynja-mac-kmac/hardened-execution"], "strict-tuplehash": ["protected-memory", "dep:brynja-hash-tuple"], "strict-tuplehash-acceleration": ["strict-tuplehash", "brynja-hash-tuple/hardened-execution"]})

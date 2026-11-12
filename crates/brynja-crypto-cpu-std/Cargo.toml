@@ -11,6 +11,7 @@ include = ["Cargo.toml", "LICENSE-APACHE", "LICENSE-MIT", "README.md", "src/**/*
 
 [features]
 default = []
+aes-runtime-execution = ["brynja-crypto-cpu/aes-runtime-execution"]
 macos-resident = ["dep:brynja-core", "brynja-hash-sha2/general-sha512-t", "dep:brynja-hash-sha3"]
 macos-resident-acceleration = ["macos-resident", "brynja-hash-sha2/hardened-execution", "brynja-hash-sha3/hardened-execution"]
 macos-resident-kmac = ["macos-resident", "dep:brynja-mac-kmac"]

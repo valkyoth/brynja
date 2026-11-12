@@ -1,0 +1,58 @@
+{
+  "1.90.0": {
+    "bcmp": {
+      "branches": 0,
+      "calls": 0,
+      "constants": 0,
+      "encoding_sha256": "a7911cdfdc28e6a1867e359ba426081aacfa692fdeb3e978d2a68dd924fa8c3e",
+      "instructions": 1,
+      "tail_calls": 1,
+      "text_sha256": "922c3fc2e87c0cf7b2a79854ce777eb1ed03b76e21c7c80fc018c05e4f15eddf"
+    },
+    "memcmp": {
+      "branches": 4,
+      "calls": 0,
+      "constants": 0,
+      "encoding_sha256": "3ead36c2e051fe4bd6e57d97a75cb9a10a1ac20d53b716dfda3ccef3578ed3c8",
+      "instructions": 14,
+      "text_sha256": "6240918890c293741e523871495642947193d88df256de0c1fbdcd2460520452"
+    },
+    "startup": {
+      "address_constants": 7,
+      "branches": 2,
+      "calls": 12,
+      "constants": 3,
+      "encoding_sha256": "f77ce97d73284fcc04f510447d15d7b2a7e81ca160367ac215329d9e46a6b90f",
+      "instructions": 196,
+      "text_sha256": "0b20b14371069e43602f2a8d31ae1b6d1d11d5e30123c758b0f079b708f38423"
+    }
+  },
+  "1.99.1": {
+    "bcmp": {
+      "branches": 0,
+      "calls": 0,
+      "constants": 0,
+      "encoding_sha256": "a7911cdfdc28e6a1867e359ba426081aacfa692fdeb3e978d2a68dd924fa8c3e",
+      "instructions": 1,
+      "tail_calls": 1,
+      "text_sha256": "922c3fc2e87c0cf7b2a79854ce777eb1ed03b76e21c7c80fc018c05e4f15eddf"
+    },
+    "memcmp": {
+      "branches": 3,
+      "calls": 0,
+      "constants": 0,
+      "encoding_sha256": "292e7a7fee0451387e07735f24b56ca03fc0c3a048cdda1692a0154a55e1bf33",
+      "instructions": 13,
+      "text_sha256": "f6ed30b42b342adc292bee072864fe4a7b1a0a4720f101026df09de2065b44ff"
+    },
+    "startup": {
+      "address_constants": 7,
+      "branches": 2,
+      "calls": 12,
+      "constants": 3,
+      "encoding_sha256": "411e4ded037cb7a392ccfd175858ec768dbbc890408ea0c67c8c11197a047880",
+      "instructions": 193,
+      "text_sha256": "9299ebb38c4af27a4c3bd93615513835571f61e52c12e4f553d2cc07a882eb4b"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "1.90.0": {
+    "instructions": 254,
+    "branches": 11,
+    "calls": 14,
+    "constants": 3,
+    "text_sha256": "7fc8b43295ae33ec86ee8526f52e21510258ded8a4adb648f0883c3b1da6df64",
+    "encoding_sha256": "49ab63604cf4157610cc0651ea068bee54f299d4cf515990669b8ab0cd77c131",
+    "address_constants": 7,
+    "mutable_caches": 1
+  },
+  "1.99.1": {
+    "instructions": 251,
+    "branches": 11,
+    "calls": 14,
+    "constants": 3,
+    "text_sha256": "0c1607a4a7150bb248e94cd5cb58cfcd264d077032cde49e106d887ef4489009",
+    "encoding_sha256": "16f893fbbbbfdb4fad12bd01219103725b8f013efaa82a35f99f654787219071",
+    "address_constants": 7,
+    "mutable_caches": 1
+  }
+}

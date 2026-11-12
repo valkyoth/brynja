@@ -1,0 +1,362 @@
+{
+  "kind": "unauthenticated-development-observation",
+  "date": "2026-11-09",
+  "scope": "Forced-backend package-external AESAVS MCT/MMT and independent OpenSSL comparisons; not final qualification",
+  "source": {
+    "base_commit": "56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e",
+    "working_tree": "uncommitted development changes",
+    "archive": "target/aes-campaigns-mac-20261109.tar.gz",
+    "archive_sha256": "d4e339d9243b9636677442331569009c955ac6986dc438eef88d4d306ffc81d1",
+    "contents": [
+      "Cargo.toml",
+      "Cargo.lock",
+      "rust-toolchain.toml",
+      "crates",
+      "assurance/aes-accelerated-campaigns",
+      "assurance/aes-avs",
+      "assurance/aes-differential",
+      "assurance/aes-kernel-candidate/probe.rs",
+      "scripts/aes",
+      "scripts/hkdf/check-hkdf-public-api.py",
+      "scripts/hmac/hmac_verifiers.py",
+      "scripts/repository/facade_cargo_environment.py"
+    ]
+  },
+  "host": {
+    "cpu": "Apple M2 Pro",
+    "os": "macOS 27.0.1",
+    "target": "aarch64-apple-darwin",
+    "static_rustflags": "-Ctarget-feature=+aes,+neon",
+    "hosted_rustflags": "-Ctarget-feature=-aes",
+    "oracle": "OpenSSL 4.1.0 23 Oct 2026",
+    "oracle_executable": "/opt/homebrew/Cellar/openssl@4/4.1.0/bin/openssl",
+    "oracle_executable_sha256": "da101a01999a93ea6eddfe1392752bce2b5a91a41e4b00e1d9656fc682a1dc85"
+  },
+  "runs": [
+    {
+      "command": [
+        "python3",
+        "scripts/aes/check-aes-accelerated-campaigns.py",
+        "--toolchain",
+        "1.90.0",
+        "--route",
+        "direct",
+        "--admission",
+        "static",
+        "--suite",
+        "avs"
+      ],
+      "result": "passed",
+      "exact_tests": 12,
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 direct static native avs"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/aes/check-aes-accelerated-campaigns.py",
+        "--toolchain",
+        "1.90.0",
+        "--route",
+        "direct",
+        "--admission",
+        "static",
+        "--suite",
+        "differential"
+      ],
+      "result": "passed",
+      "exact_tests": 8,
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 direct static native differential"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/aes/check-aes-accelerated-campaigns.py",
+        "--toolchain",
+        "1.90.0",
+        "--route",
+        "direct",
+        "--admission",
+        "hosted",
+        "--suite",
+        "avs"
+      ],
+      "result": "passed",
+      "exact_tests": 12,
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 direct hosted native avs"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/aes/check-aes-accelerated-campaigns.py",
+        "--toolchain",
+        "1.90.0",
+        "--route",
+        "direct",
+        "--admission",
+        "hosted",
+        "--suite",
+        "differential"
+      ],
+      "result": "passed",
+      "exact_tests": 8,
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 direct hosted native differential"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/aes/check-aes-accelerated-campaigns.py",
+        "--toolchain",
+        "1.90.0",
+        "--route",
+        "facade",
+        "--admission",
+        "static",
+        "--suite",
+        "avs"
+      ],
+      "result": "passed",
+      "exact_tests": 12,
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 facade static native avs"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/aes/check-aes-accelerated-campaigns.py",
+        "--toolchain",
+        "1.90.0",
+        "--route",
+        "facade",
+        "--admission",
+        "static",
+        "--suite",
+        "differential"
+      ],
+      "result": "passed",
+      "exact_tests": 8,
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 facade static native differential"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/aes/check-aes-accelerated-campaigns.py",
+        "--toolchain",
+        "1.90.0",
+        "--route",
+        "facade",
+        "--admission",
+        "hosted",
+        "--suite",
+        "avs"
+      ],
+      "result": "passed",
+      "exact_tests": 12,
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 facade hosted native avs"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/aes/check-aes-accelerated-campaigns.py",
+        "--toolchain",
+        "1.90.0",
+        "--route",
+        "facade",
+        "--admission",
+        "hosted",
+        "--suite",
+        "differential"
+      ],
+      "result": "passed",
+      "exact_tests": 8,
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 facade hosted native differential"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/aes/check-aes-accelerated-campaigns.py",
+        "--toolchain",
+        "1.99.1",
+        "--route",
+        "direct",
+        "--admission",
+        "static",
+        "--suite",
+        "avs"
+      ],
+      "result": "passed",
+      "exact_tests": 12,
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 direct static native avs"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/aes/check-aes-accelerated-campaigns.py",
+        "--toolchain",
+        "1.99.1",
+        "--route",
+        "direct",
+        "--admission",
+        "static",
+        "--suite",
+        "differential"
+      ],
+      "result": "passed",
+      "exact_tests": 8,
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 direct static native differential"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/aes/check-aes-accelerated-campaigns.py",
+        "--toolchain",
+        "1.99.1",
+        "--route",
+        "direct",
+        "--admission",
+        "hosted",
+        "--suite",
+        "avs"
+      ],
+      "result": "passed",
+      "exact_tests": 12,
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 direct hosted native avs"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/aes/check-aes-accelerated-campaigns.py",
+        "--toolchain",
+        "1.99.1",
+        "--route",
+        "direct",
+        "--admission",
+        "hosted",
+        "--suite",
+        "differential"
+      ],
+      "result": "passed",
+      "exact_tests": 8,
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 direct hosted native differential"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/aes/check-aes-accelerated-campaigns.py",
+        "--toolchain",
+        "1.99.1",
+        "--route",
+        "facade",
+        "--admission",
+        "static",
+        "--suite",
+        "avs"
+      ],
+      "result": "passed",
+      "exact_tests": 12,
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 facade static native avs"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/aes/check-aes-accelerated-campaigns.py",
+        "--toolchain",
+        "1.99.1",
+        "--route",
+        "facade",
+        "--admission",
+        "static",
+        "--suite",
+        "differential"
+      ],
+      "result": "passed",
+      "exact_tests": 8,
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 facade static native differential"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/aes/check-aes-accelerated-campaigns.py",
+        "--toolchain",
+        "1.99.1",
+        "--route",
+        "facade",
+        "--admission",
+        "hosted",
+        "--suite",
+        "avs"
+      ],
+      "result": "passed",
+      "exact_tests": 12,
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 facade hosted native avs"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/aes/check-aes-accelerated-campaigns.py",
+        "--toolchain",
+        "1.99.1",
+        "--route",
+        "facade",
+        "--admission",
+        "hosted",
+        "--suite",
+        "differential"
+      ],
+      "result": "passed",
+      "exact_tests": 8,
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 facade hosted native differential"
+    }
+  ],
+  "populations": {
+    "avs_per_configuration": {
+      "profiles": [
+        "release"
+      ],
+      "mct_records": 600,
+      "mct_block_operations": 1200000,
+      "mmt_records": 60,
+      "owners": [
+        "operation-local",
+        "cached"
+      ],
+      "widths": [
+        128,
+        192,
+        256
+      ]
+    },
+    "differential_per_configuration": {
+      "profiles": [
+        "debug",
+        "release"
+      ],
+      "independent_cases_per_profile_per_owner": 12288,
+      "public_encryptions_per_profile_per_owner": 6144,
+      "widths": [
+        128,
+        192,
+        256
+      ]
+    }
+  },
+  "retained_artifacts": {
+    "remote_directory": "/Users/builduser/brynja-aes-campaigns.ZJYLeO",
+    "archive": "target/aes-campaigns-mac-observations-20261109.tar.gz",
+    "archive_sha256": "48862042ef63b15282cac1cf3043a09fad8b72fd6196be9704f6646ccfade40a",
+    "combined_log": "target/aes-accelerated-campaigns/mac-native.log",
+    "combined_log_sha256": "ab2524e8670f3844f6ec0213feced2067549dca66db2cfdb2d26f62e585b2ea3",
+    "availability": "Local and remote development logs and metadata, not committed archives or signed receipts; disposable Cargo builds removed"
+  },
+  "preflight_failure": {
+    "directory": "/tmp/brynja-aes-campaigns.F0Xznd",
+    "reason": "Private Cargo workspace policy rejected world-writable /private/tmp before packaging or campaign execution",
+    "disposition": "Retained failed log; ran unchanged source archive under a private builder-owned home directory, without weakening the policy"
+  },
+  "not_established": [
+    "Clean committed release-candidate source binding",
+    "Native AWS Arm or Intel execution",
+    "Final-linked/LTO emitted-code review",
+    "Timing or performance qualification",
+    "Shared-library identity or oracle authenticity",
+    "Register/spill erasure or physical side-channel/fault resistance"
+  ]
+}

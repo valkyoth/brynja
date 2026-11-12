@@ -12,6 +12,8 @@ include = ["Cargo.toml","LICENSE-APACHE","LICENSE-MIT","README.md","src/**/*.rs"
 [features]
 default = []
 hazmat-aes-block = []
+aes-static-execution = ["hazmat-aes-block", "cpu", "brynja-crypto-cpu/aes-static-execution"]
+aes-runtime-execution = ["aes-static-execution", "brynja-crypto-cpu/aes-runtime-execution"]
 external-key-provider = []
 hmac-hardened-execution = ["cpu", "brynja-mac-hmac/hardened-execution"]
 hmac-runtime-execution = ["cpu", "brynja-mac-hmac/runtime-execution"]
@@ -49,6 +51,10 @@ brynja-mac-hmac = { workspace = true }
 
 [lints]
 workspace = true
+
+[[test]]
+name = "aes_execution"
+required-features = ["aes-static-execution"]
 
 [[test]]
 name = "aes_wide"

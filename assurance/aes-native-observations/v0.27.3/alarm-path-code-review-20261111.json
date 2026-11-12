@@ -1,0 +1,316 @@
+{
+  "kind": "offline-alarm-binary-template-replay-and-excerpt-capture",
+  "scope": "Exact round/expansion bodies plus hashed excerpts for manual alarm-path review; no new samples, causal attribution or timing acceptance.",
+  "inspector_sha256": "b25cf8caee5b4b7378cece56dede6cb9ef11cd33e911dbfbdbeb669ff22b03ee",
+  "llvm_version": [
+    "LLVM (http://llvm.org/):",
+    "  LLVM version 23.1.4",
+    "  Optimized build."
+  ],
+  "records": [
+    {
+      "name": "aws-arm-integrated-msrv-20261110",
+      "binary_sha256": "ac4e7bc5f1ec07fba222b83473cb81646bd05bbf7e394f660020275ae5ceaedc",
+      "fixture_sha256": "40c5b3fef20c1fa9e716aaf828a0635234a74ad376750b650e296189c09d3a8a",
+      "historical_record": "assurance/aes-native-observations/v0.27.3/integrated-fixed-random-20261110.json",
+      "historical_record_sha256": "e05a0aafa5cac7e014ff50eac62b6ddef7b40b0b814b1d07dc2c51e863e8f523",
+      "review": {
+        "round": {
+          "kernels": [
+            {
+              "bits": 128,
+              "instructions": 38,
+              "symbol_bytes": 152,
+              "bytes_sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+            },
+            {
+              "bits": 192,
+              "instructions": 38,
+              "symbol_bytes": 152,
+              "bytes_sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+            },
+            {
+              "bits": 256,
+              "instructions": 38,
+              "symbol_bytes": 152,
+              "bytes_sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+            }
+          ],
+          "rejected_mutations": 570,
+          "scope": "three complete round-kernel bodies only; callers, dispatch, expansion and cleanup outside these bodies unreviewed"
+        },
+        "expansion": {
+          "expansions": [
+            {
+              "bits": 128,
+              "instructions": 49,
+              "symbol_bytes": 196,
+              "bytes_sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+            },
+            {
+              "bits": 192,
+              "instructions": 49,
+              "symbol_bytes": 196,
+              "bytes_sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+            },
+            {
+              "bits": 256,
+              "instructions": 49,
+              "symbol_bytes": 196,
+              "bytes_sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+            }
+          ],
+          "rejected_mutations": 735,
+          "scope": "three complete hardware expansion bodies only; caller admission, ownership and cleanup remain separate"
+        }
+      },
+      "excerpts_for_manual_review": [
+        {
+          "roles": [
+            "memory-helper"
+          ],
+          "symbol": "brynja_core::secret_memory_transfer::copy_bytes::h7d406e63e46557fb",
+          "address": "0xffc8",
+          "size": 84,
+          "body_sha256": "a3cc162cd5727cb6f36dfb8cd0e3842007e0d81c9b0e5fd0a1b68e6974d1d460",
+          "excerpt": "target/aes-alarm-path-review-20261111/aws-arm-integrated-msrv-20261110-ffc8.asm",
+          "excerpt_sha256": "d897db20fadf69aed287f3a1d4f957ce541b174973444b6172520930d10d0161"
+        },
+        {
+          "roles": [
+            "memory-helper"
+          ],
+          "symbol": "brynja_core::secret_memory_volatile::zeroize_region_volatile::h334dedd1cca0c865",
+          "address": "0xffb4",
+          "size": 20,
+          "body_sha256": "2bd345dd27182689cf019ef78611ed674a8a2b66a2dde58b4537b98bee551121",
+          "excerpt": "target/aes-alarm-path-review-20261111/aws-arm-integrated-msrv-20261110-ffb4.asm",
+          "excerpt_sha256": "951ce9a7e5abb4cce23e951c7129f8c273d587ad5a7b8f5226b611781cfaceaa"
+        },
+        {
+          "roles": [
+            "original-msrv-aes256-trial-containing-cached-public-timer"
+          ],
+          "symbol": "fixed_random::aes256::hc22ff14aaeb12345",
+          "address": "0xd7e4",
+          "size": 6088,
+          "body_sha256": "d51dbc4890a4bffe4c75a79a0d6d36f82fa0f192340d04d2351c06a55672ebd9",
+          "excerpt": "target/aes-alarm-path-review-20261111/aws-arm-integrated-msrv-20261110-d7e4.asm",
+          "excerpt_sha256": "82033a2ddd7143c6fbc0d6f2c7db1f11fa35b44160873439320e8462e2c7475b"
+        }
+      ],
+      "full_disassembly": "target/aes-alarm-path-review-20261111/aws-arm-integrated-msrv-20261110.asm",
+      "full_disassembly_sha256": "4c09487ec104f3f66acf43651d33ce24e2ca9ea01f8b24853f5e042d0120ff83"
+    },
+    {
+      "name": "aws-arm-integrated-current-20261110",
+      "binary_sha256": "f41c546107b68307e0a502aa0e7acdf3d1211b7371273318d375bf96e79d4837",
+      "fixture_sha256": "40c5b3fef20c1fa9e716aaf828a0635234a74ad376750b650e296189c09d3a8a",
+      "historical_record": "assurance/aes-native-observations/v0.27.3/integrated-fixed-random-20261110.json",
+      "historical_record_sha256": "e05a0aafa5cac7e014ff50eac62b6ddef7b40b0b814b1d07dc2c51e863e8f523",
+      "review": {
+        "round": {
+          "kernels": [
+            {
+              "bits": 128,
+              "instructions": 38,
+              "symbol_bytes": 152,
+              "bytes_sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+            },
+            {
+              "bits": 192,
+              "instructions": 38,
+              "symbol_bytes": 152,
+              "bytes_sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+            },
+            {
+              "bits": 256,
+              "instructions": 38,
+              "symbol_bytes": 152,
+              "bytes_sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+            }
+          ],
+          "rejected_mutations": 570,
+          "scope": "three complete round-kernel bodies only; callers, dispatch, expansion and cleanup outside these bodies unreviewed"
+        },
+        "expansion": {
+          "expansions": [
+            {
+              "bits": 128,
+              "instructions": 49,
+              "symbol_bytes": 196,
+              "bytes_sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+            },
+            {
+              "bits": 192,
+              "instructions": 49,
+              "symbol_bytes": 196,
+              "bytes_sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+            },
+            {
+              "bits": 256,
+              "instructions": 49,
+              "symbol_bytes": 196,
+              "bytes_sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+            }
+          ],
+          "rejected_mutations": 735,
+          "scope": "three complete hardware expansion bodies only; caller admission, ownership and cleanup remain separate"
+        }
+      },
+      "excerpts_for_manual_review": [
+        {
+          "roles": [
+            "aes192-cached-timer"
+          ],
+          "symbol": "fixed_random::timed::<fixed_random::aes192::{closure#4}>",
+          "address": "0x9710",
+          "size": 1828,
+          "body_sha256": "c0a38cfcc77cb037d6491b757b96ced2cf9f5b3df37032115ae49a3b0dfbc7f9",
+          "excerpt": "target/aes-alarm-path-review-20261111/aws-arm-integrated-current-20261110-9710.asm",
+          "excerpt_sha256": "5d558113d929d9bd28bc1efe1c279b7378fc337fd85d386a0deba7f726d0308c"
+        },
+        {
+          "roles": [
+            "aes256-cached-timer"
+          ],
+          "symbol": "fixed_random::timed::<fixed_random::aes256::{closure#4}>",
+          "address": "0xa6c4",
+          "size": 1828,
+          "body_sha256": "3d5bc7da292c0fb22ff63e4be3271edb1acef34534c7f235573960f93b065b5e",
+          "excerpt": "target/aes-alarm-path-review-20261111/aws-arm-integrated-current-20261110-a6c4.asm",
+          "excerpt_sha256": "5578be31e1ad196d716c4418e1edcd5a442e65f00b5e0c8059823b5fa66a0b8f"
+        },
+        {
+          "roles": [
+            "aes192-secret-callee"
+          ],
+          "symbol": "<brynja_crypto::aes::execution::Aes192ExpandedKey>::secret",
+          "address": "0xf828",
+          "size": 304,
+          "body_sha256": "988d2759e0db4e678d6f71c0db8e14670b186d716545a50429e73327d25b392e",
+          "excerpt": "target/aes-alarm-path-review-20261111/aws-arm-integrated-current-20261110-f828.asm",
+          "excerpt_sha256": "dc82cee266ffe7024d100b2f124697e128a9d9ae4fef1aa6b1f77545fa4b4f31"
+        },
+        {
+          "roles": [
+            "memory-helper"
+          ],
+          "symbol": "brynja_core::secret_memory_transfer::copy_bytes",
+          "address": "0xf0ac",
+          "size": 84,
+          "body_sha256": "a3cc162cd5727cb6f36dfb8cd0e3842007e0d81c9b0e5fd0a1b68e6974d1d460",
+          "excerpt": "target/aes-alarm-path-review-20261111/aws-arm-integrated-current-20261110-f0ac.asm",
+          "excerpt_sha256": "f12e872501c6323fcc6e9a90c4d4258b7007532c6729e4fb4421e907dcd59ff9"
+        },
+        {
+          "roles": [
+            "memory-helper"
+          ],
+          "symbol": "brynja_core::secret_memory_volatile::zeroize_region_volatile",
+          "address": "0xf094",
+          "size": 24,
+          "body_sha256": "c3b230fe62f22b91bf34aad374d55433f0165bf7515056d8b51d55121dab8c11",
+          "excerpt": "target/aes-alarm-path-review-20261111/aws-arm-integrated-current-20261110-f094.asm",
+          "excerpt_sha256": "4a2e3953436fa00841dcb83694c14baa922273303d0722050245dfb67c566754"
+        }
+      ],
+      "full_disassembly": "target/aes-alarm-path-review-20261111/aws-arm-integrated-current-20261110.asm",
+      "full_disassembly_sha256": "9f0ffbdf2119b9269eaa589f4aa83d77d6f7da30d14db73938b057e3b1198d7f"
+    },
+    {
+      "name": "aws-arm-address-controls-current-20261110",
+      "binary_sha256": "4b98b2d41e709b455a104729f442b07c3ec2349d18d827b19ca06d404373dbee",
+      "fixture_sha256": "0f159e356f536d908bf6c4e87ea571b6b469f38aa07669f01027248470a2b7be",
+      "historical_record": "assurance/aes-native-observations/v0.27.3/timing-address-controls-20261110.json",
+      "historical_record_sha256": "4657ad2f004f4d9cf27fe86867580c4f0ff67c1f467eec1257cf801f44d36438",
+      "review": {
+        "round": {
+          "kernels": [
+            {
+              "bits": 128,
+              "instructions": 38,
+              "symbol_bytes": 152,
+              "bytes_sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+            },
+            {
+              "bits": 192,
+              "instructions": 38,
+              "symbol_bytes": 152,
+              "bytes_sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+            },
+            {
+              "bits": 256,
+              "instructions": 38,
+              "symbol_bytes": 152,
+              "bytes_sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+            }
+          ],
+          "rejected_mutations": 570,
+          "scope": "three complete round-kernel bodies only; callers, dispatch, expansion and cleanup outside these bodies unreviewed"
+        },
+        "expansion": {
+          "expansions": [
+            {
+              "bits": 128,
+              "instructions": 49,
+              "symbol_bytes": 196,
+              "bytes_sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+            },
+            {
+              "bits": 192,
+              "instructions": 49,
+              "symbol_bytes": 196,
+              "bytes_sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+            },
+            {
+              "bits": 256,
+              "instructions": 49,
+              "symbol_bytes": 196,
+              "bytes_sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+            }
+          ],
+          "rejected_mutations": 735,
+          "scope": "three complete hardware expansion bodies only; caller admission, ownership and cleanup remain separate"
+        }
+      },
+      "excerpts_for_manual_review": [
+        {
+          "roles": [
+            "aes256-cached-timer"
+          ],
+          "symbol": "fixed_random::timed::<fixed_random::aes256::{closure#4}>",
+          "address": "0xa6c4",
+          "size": 1828,
+          "body_sha256": "c7616153790fde4a8d2143c1b99cdc942edf23eac4422d6e22769ac37e3b9c73",
+          "excerpt": "target/aes-alarm-path-review-20261111/aws-arm-address-controls-current-20261110-a6c4.asm",
+          "excerpt_sha256": "a50cdadec97bbd8a1431fa23e353f9b6827b01f475987f2691624d904597e8c6"
+        },
+        {
+          "roles": [
+            "memory-helper"
+          ],
+          "symbol": "brynja_core::secret_memory_transfer::copy_bytes",
+          "address": "0xf618",
+          "size": 84,
+          "body_sha256": "a3cc162cd5727cb6f36dfb8cd0e3842007e0d81c9b0e5fd0a1b68e6974d1d460",
+          "excerpt": "target/aes-alarm-path-review-20261111/aws-arm-address-controls-current-20261110-f618.asm",
+          "excerpt_sha256": "35aed786b3c6d1d36cf6b6bac37adb3196ffc6a2c692435ad21e46a488cb7a90"
+        },
+        {
+          "roles": [
+            "memory-helper"
+          ],
+          "symbol": "brynja_core::secret_memory_volatile::zeroize_region_volatile",
+          "address": "0xf600",
+          "size": 24,
+          "body_sha256": "c3b230fe62f22b91bf34aad374d55433f0165bf7515056d8b51d55121dab8c11",
+          "excerpt": "target/aes-alarm-path-review-20261111/aws-arm-address-controls-current-20261110-f600.asm",
+          "excerpt_sha256": "cada10ee0d495c7821f79a21cd809d791ba4929a107840bb77df261dcca1bcd6"
+        }
+      ],
+      "full_disassembly": "target/aes-alarm-path-review-20261111/aws-arm-address-controls-current-20261110.asm",
+      "full_disassembly_sha256": "63326fc7a5808d3f38de328c56776a850f960ae1b887f9dbdc9837cdd433e113"
+    }
+  ]
+}

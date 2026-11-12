@@ -1,0 +1,245 @@
+CODEX DAYBREAK:
+# Security assessment
+
+Verdict: no new AES implementation defect, memory-safety vulnerability, race condition, or cryptographic correctness failure was demonstrated. The DIT implementation appears correct within its declared raw-kernel scope.
+
+However, I found one High-severity release-provenance issue and three Medium-severity assurance limitations. I would not authorize a military/high-assurance release until these are resolved or explicitly risk-accepted.
+
+## 1. Candidate is not represented by v0.27.2..HEAD
+
+- Severity: High
+- Location: Git repository state; candidate sources including aes/mod.rs (crates/brynja-crypto-cpu/src/aes/mod.rs:1), aes/dit.rs (crates/brynja-crypto-cpu/src/aes/dit.rs:1), execution.rs (crates/brynja-crypto/src/aes/execution.rs:1), and hosted aes.rs (crates/brynja-crypto-cpu-std/src/aes.rs:1)
+- Vulnerability Type: Supply-chain integrity / release provenance / TOCTOU
+- Description: HEAD is commit 56a1b780…, which is exactly the commit tagged v0.27.2. Therefore git diff v0.27.2..HEAD is empty. The AES acceleration, DIT, evidence, and tests reviewed here are modified or untracked working-tree files. A Git checkout, archive, CI runner, or signed source attestation for HEAD will not contain this candidate. The code tested locally can consequently differ from the code later committed or released.
+- Risk: This prevents reproducible review and hash-bound authorization. In a high-assurance pipeline, it is a release blocker even though it is not an AES arithmetic defect.
+- Remediation:
+
+# Run before security review and release approval.
+test -z "$(git status --porcelain --untracked-files=all)" || {
+    echo "Refusing review/release from a dirty tree"
+    exit 1
+}
+
+git diff --quiet v0.27.2..HEAD && {
+    echo "Candidate range is empty"
+    exit 1
+}
+
+git verify-commit HEAD
+git bundle create reviewed-candidate.bundle v0.27.2..HEAD
+sha256sum reviewed-candidate.bundle
+
+Commit the complete candidate first, preferably as a signed commit, and bind the pentest report, binaries, verification results, and eventual tag to that exact commit.
+
+## 2. “Zero alarms” has insufficient sensitivity for the historical effects
+
+- Severity: Medium
+- Location: check-aes-fixed-random.py:23 (scripts/aes/check-aes-fixed-random.py:23), check-aes-fixed-random.py:80 (scripts/aes/check-aes-fixed-random.py:80), aes-dit-finite-results.md:3 (docs/assurance/aes-dit-finite-results.md:3)
+- Vulnerability Type: Timing-assurance false negative / missing statistical-power bound
+- Description: From the retained shared-values means, variances, and 8,192-pair population, the median effect needed to reach the frozen 4.5 cutoff is approximately:
+  - Cached operations: 6.1 ns per four-operation sample.
+  - Ephemeral operations: 14.0 ns per four-operation sample.
+
+  Both Welch and paired statistics have approximately these floors. The historical signals were only about 0.4–2.5 ns per sample. The experiment therefore could not reliably detect effects of the size under investigation. The document correctly says “inconclusive,” but presenting “0 alarms” without this bound can still be misread as affirmative evidence.
+- Remediation: Record the detection floor for every campaign and summarize it in the results.
+
+welch_detection_floor_ns = LIMIT * math.sqrt(sum(variances) / SAMPLES)
+paired_detection_floor_ns = (
+    LIMIT * math.sqrt(statistics.variance(differences) / SAMPLES)
+)
+
+return {
+    "mean_ns": means,
+    "welch_abs_t": welch,
+    "paired_abs_t": paired,
+    "welch_detection_floor_ns": welch_detection_floor_ns,
+    "paired_detection_floor_ns": paired_detection_floor_ns,
+    "alarm": w_signal or p_signal,
+    "inconclusive": any(v == 0 for v in variances)
+        or any(c > MAX_CV for c in cv),
+}
+
+The results should explicitly state that the historical 0.4–2.5 ns effects fall below these observed detection floors.
+
+## 3. A stable address/context offset produced zero alarms
+
+- Severity: Medium
+- Location: aes-dit-finite-results.md:24 (docs/assurance/aes-dit-finite-results.md:24), retained Linux finite-screen samples
+- Vulnerability Type: Measurement blind spot / known false negative
+- Description: Offline 1%-trimmed estimates from the retained Rust 1.90.0 Linux samples show a repeatable value-independent offset that the frozen statistic classified as zero alarms:
+
+| Campaign | Separate values, four launches | Separate identical, four launches |
+|---|---|---|
+| AES-256 ephemeral public path | −3.42, −3.29, −3.43, −3.39 ns | approximately −3.36, −3.22, −3.48, −3.37 ns |
+| AES-256 cached encrypt-block | −1.17, −1.24, −1.13, −1.16 ns | −1.18, −1.13, −1.28, −1.17 ns |
+
+This is not evidence of secret-value-dependent AES timing—the identical-input controls show that. It is evidence that “zero alarms” does not mean the test can observe stable effects in this range.
+
+A shared-identical AES-192 ephemeral public-key campaign was also negative in all four launches, roughly −0.8 to −1.6 ns. Because that campaign was selected post hoc, it is suggestive only.
+
+- Remediation: Add the table as a post-observation diagnostic, clearly separated from the frozen verdict. For a future experiment, predeclare a robust estimator or run on an interrupt-isolated core.
+
+### Sensitivity limitation
+
+The frozen alarm statistic missed stable, value-independent offsets visible
+under a separately reported 1% trimmed estimator. These diagnostics do not
+change the frozen verdict and are not a replacement acceptance test. They
+demonstrate that zero alarms cannot exclude effects in the observed 1–4 ns
+range.
+
+Do not retrofit the trimmed estimator as a passing criterion for the existing experiment.
+
+## 4. Results omit the operational cost and complete DIT scope boundary
+
+- Severity: Medium
+- Location: DIT entry at aes/mod.rs:413 (crates/brynja-crypto-cpu/src/aes/mod.rs:413) and aes/mod.rs:444 (crates/brynja-crypto-cpu/src/aes/mod.rs:444); wrapper staging/copy at execution.rs:178 (crates/brynja-crypto/src/aes/execution.rs:178) and execution.rs:203 (crates/brynja-crypto/src/aes/execution.rs:203); aes-dit-finite-results.md:89 (docs/assurance/aes-dit-finite-results.md:89)
+- Vulnerability Type: Side-channel scope gap / availability-capacity risk
+- Description:
+  - DIT covers the raw expansion and block kernels. Destination clearing, key/block staging, public output copy, and scratch cleanup execute under the caller’s prior DIT state. This is correctly disclosed in other design documents but should be repeated in the finite results.
+  - Offline comparison with the retained pre-DIT Rust 1.99.1 samples shows cached four-operation durations increasing from roughly 89–178 ns to approximately 349–460 ns. This is about 65–68 ns additional latency per block around the median. Ephemeral paths gain roughly 100 ns per operation.
+  - DitPolicy::Require is opt-in, so this is not an intrinsic remotely exploitable DoS. It is nevertheless material for traffic admission, capacity planning, and deadline-sensitive systems.
+- Remediation:
+
+### DIT scope and capacity limitation
+
+DIT is enabled only around the raw AES expansion and round kernels. Wrapper
+staging, output copying and clearing execute with the caller's previous DIT
+state. This result is not a whole-API timing qualification.
+
+Per-operation DIT entry, read-back, ISB and restoration materially increase
+latency. Deployment capacity and adversarial request-rate limits must be
+requalified with DIT enabled. No performance or denial-of-service resistance
+claim follows from this timing screen.
+
+If whole-wrapper DIT coverage is required later, use one reviewed RAII scope around the entire wrapper operation and requalify its final linked machine code; do not merely broaden the documentation claim.
+
+## Areas with no serious defect found
+
+- Memory safety: no reachable out-of-bounds assembly access, UAF, double-free, raw-pointer lifetime violation, or unsafe Send/Sync implementation found.
+- Concurrency: authorities and key owners are intentionally thread-bound; 127 compile-fail API probes passed under each compiler.
+- Error handling: no production unwrap, expect, panic, or unchecked caller-controlled arithmetic was found in the candidate AES paths.
+- Secret lifecycle: key schedules, staging state, and secret outputs are guarded by clearing owners on errors and unwind. Abort, dumps, paging, compiler spills, and caller copies remain explicitly outside the guarantee.
+- AES correctness: AES-128/192/256 encryption, decryption, expansion, alignment/canary cases, invalid shape rejection, and startup quarantine passed on x86 and AArch64 QEMU with Rust 1.90.0 and 1.99.1.
+- DIT: encoding, bit 24, enable read-back, required-policy fail-closed behavior, nesting, error/unwind restoration, and startup use all passed. No DIT implementation defect was demonstrated.
+- Dependencies: the candidate does not change Cargo.lock or add a third-party AES dependency. The production AES graph is workspace-local. I found no matching advisory for the sole registry package while checking the current RustSec advisory database.
+
+No new timing measurements were run. Timing conclusions above came from offline analysis of the retained raw samples. The final security disposition is therefore: no demonstrated AES defect, but timing qualification remains inconclusive and the dirty/uncommitted candidate cannot yet be security-attested.
+
+CLAUDE:
+I found no Critical or High defect between v0.27.2 and the working tree. I found no memory-safety, soundness, cryptographic-correctness or zeroization defect in the new accelerated AES code. Most of what's left is about how the DIT protection is scoped, how strong the timing evidence is, and some hardening.
+
+Scope: HEAD is still tagged v0.27.2, so all the new work is uncommitted. I reviewed the Rust changes line by line: crates/brynja-crypto-cpu/src/aes/*, crates/brynja-crypto/src/aes/execution.rs, crates/brynja-crypto-cpu-std/src/aes.rs, and the feature and Cargo changes. I did not do a deep review of the Python measurement scripts.
+
+What I ran:
+- x86_64 (AES-NI): the brynja-crypto-cpu AES tests and the full brynja-crypto suite pass, including the NIST AESAVS KAT corpus.
+- AArch64: the three crates' tests pass under QEMU (-cpu max), built with +aes,+neon,+dit. QEMU only checks function; it says nothing about timing.
+
+Checked and correct
+
+- x86 block kernel: the round count and the reverse-order aesdec/aesimc decryption are correct for 11, 13 and 15 round keys. The register constraints are sound, and xmm0/xmm1 are cleared on exit.
+- ARM block kernel: the AESE/AESMC encrypt path and the AESD/AESIMC decrypt path (with the round keys passed through AESIMC in registers) are correct, including the last round's XOR.
+- Key expansion (both architectures): I checked RotWord as ror 8, the extra SubWord step for AES-256, the Rcon wrap 0x80 → 0x1b → 0x36, and all bounds. The only branches depend on public counters.
+- Startup KAT vectors: they match FIPS-197 Appendix C, and the expected key schedules are independent of the expansion being tested.
+- DIT: the register encoding S3_3_C4_C2_5 and bit 24 are right. The bit is read back before secret work, the previous state is restored on drop and on unwind, and Require cannot be downgraded.
+- Thread safety: Authority is neither Send nor Sync (PhantomData<*mut ()> plus Cell), so Session and the key owners stay on one thread.
+- Zeroization: Scratch, SecretRegionInitialization and OwnedSecretRegion all clear with volatile writes on drop. A failed operation quarantines the authority and never falls back to portable AES.
+- Supply chain: the changes add Cargo features only. No dependencies were added and Cargo.lock is unchanged.
+
+Findings
+
+F1 — Medium: the DIT timing results overstate what "0 alarms" means
+
+- Location: docs/assurance/aes-dit-finite-results.md (all 95 lines).
+- Type: gap in the assurance evidence.
+- Description: I confirmed that none of the three limitations you listed appear in the document; the only mention of "offset" is line 48. I did not recompute your numbers.
+  a. The frozen 4.5 threshold can only detect differences of about 6 ns (cached) or 14 ns (ephemeral), while the historical alarms were 0.4–2.5 ns.
+  b. A repeatable ~3.4 ns address offset under DIT produced zero alarms. That is evidence the test cannot see effects of this size.
+  c. DIT adds about +68 ns per cached block and about +100 ns per ephemeral operation.
+
+  As written, the table at lines 24–33 reads as if the effect went away. A pentester would draw the wrong conclusion from it.
+- Remediation: add an addendum. Don't edit the hash-bound declaration.
+## Limitations (post-collection review)
+1. Sensitivity: the frozen |t| ≥ 4.5 rule cannot detect shared-values differences below ~6 ns (cached) or ~14 ns (ephemeral, median); historical alarms were 0.4–2.5 ns.
+2. A value-independent ≈3.4 ns separate-address offset (±0.05 ns, 1% trimmed mean) persists under DIT yet raised 0 alarms, which demonstrates (1).
+3. DIT scoping costs ≈+68 ns/cached block and ≈+100 ns/ephemeral op versus the pre-DIT 1.99.1 binary.
+4. DIT covers only the raw kernels; staging, output copy and clearing run with the caller's DIT state.
+
+F2 — Medium: DIT covers the raw kernels, not the whole secret-handling operation
+
+- Location: the DIT scopes in brynja-crypto-cpu/src/aes/mod.rs:415 and :447. Secret data is also handled outside them in brynja-crypto/src/aes/execution.rs: state.0.copy_from_slice(input), destination.write, and the Scratch drop/zeroize.
+- Type: side channel (incomplete protection scope).
+- Description: Copying plaintext, ciphertext and schedules, and clearing them afterwards, runs with whatever DIT state the caller had. The uncached Aes*Key form also opens two separate DIT windows per block (expand, then transform). Fixed-size copies are unlikely to leak values, but Arm makes no timing promise for code run without DIT. "DIT-scoped" therefore does not mean "secret handling is DIT-scoped".
+- Remediation: open one scope per owner operation and run the kernels inside it, for example:
+// brynja-crypto-cpu: crate-visible scoped entry; kernels skip their own scope when nested
+impl Session<'_> {
+    #[doc(hidden)]
+    pub fn with_dit<T>(&self, f: impl FnOnce() -> Result<T, Error>) -> Result<T, Error> {
+        self.check()?;
+        #[cfg(all(target_arch = "aarch64", target_endian = "little"))]
+        let _g = unsafe { dit::enter(self.owner.dit) }?;
+        f()
+    }
+}
+// execution.rs: secret()
+self.session.with_dit(|| self.with_schedule(|schedule| { /* copy, kernel, write, clear */ }))
+
+F3 — Low (performance, and denial of service under load): the DIT entry/exit sequence is costly
+
+- Location: brynja-crypto-cpu/src/aes/dit.rs:35-49.
+- Type: efficiency.
+- Description: Every kernel call does mrs + msr + isb + mrs on entry and msr + isb on exit, even when DIT is already on. That likely explains most of the +68 ns per block, though I have not measured it. The uncached form pays this twice per block.
+- Remediation: skip the write and the restore when DIT is already set. Also check in the Arm ARM whether a write to the PSTATE.DIT bit needs a context-synchronizing isb; if it does not, the isb can be dropped. Keep the read-back.
+pub(super) fn enter(register: R) -> Result<Self, Error> {
+    let previous = register.read();
+    if previous & (1 << 24) != 0 { return Ok(Self { register, previous, restore: false }); }
+    register.write(1 << 24);
+    if register.read() & (1 << 24) == 0 { register.write(previous); return Err(Error::DitUnavailable); }
+    Ok(Self { register, previous, restore: true })
+}
+impl<R: Register> Drop for Scope<R> { fn drop(&mut self) { if self.restore { self.register.write(self.previous) } } }
+
+F4 — Low: the static Authority::new default quietly runs without DIT
+
+- Location: brynja-crypto-cpu/src/aes/mod.rs:144, :213.
+- Type: insecure default.
+- Description: new() uses IfAvailable. An Arm build without +dit runs AES with DIT off, even on hardware that supports it, and nothing reports an error. For a military profile the strict choice should be the default, or at least easy to enforce.
+- Remediation: require it explicitly in high-assurance profiles and treat a missing DIT as a build error.
+#[cfg(all(feature = "require-dit", target_arch = "aarch64", not(target_feature = "dit")))]
+compile_error!("require-dit: build with -C target-feature=+dit");
+pub fn new(kernel: Kernel) -> Result<Self, Error> {
+    Self::new_with_dit(kernel, if cfg!(feature = "require-dit") { DitPolicy::Require } else { DitPolicy::IfAvailable })
+}
+
+F5 — Low: the DIT decision is calculated twice in the static path
+
+- Location: brynja-crypto-cpu/src/aes/mod.rs:151-157 and :213-218.
+- Type: logic and maintainability hazard.
+- Description: new_with_dit throws away the bool returned by dit::admit, and stats own. The two agree today. If someone later adds a policy such as Disabled, or
+  changes one of the two paths, the policy and the actual behaviour can drift ap
+- Remediation:
+let enabled = dit::admit(policy, kernel == Kernel::ArmAes && cfg!(target_feature = "dit"))?;
+Ok(Self::start_with_dit(kernel, Admission::Static, enabled))
+
+F6 — Low: the self-test does not detect faults at runtime
+
+- Location: brynja-crypto-cpu/src/aes/kat.rs:194.
+- Type: missing countermeasure for the threat model.
+- Description: The self-test is one KAT per key width at startup. There is no conditional or periodic retest, and no check that catches a single corrupted block result. That matters against
+  fault injection (glitching, Rowhammer-type faults on the schedule), and fault ilitary threat model. The test suite also has no NIST Monte Carlo (MCT) runs.
+- Remediation: add an opt-in check that decrypts each result and compares it with the input (about twice the cost). It runs on secret data, so compare in constant time. Also add the AESAVS
+  MCT files to tests/fixtures.
+self.session.$encrypt(&mut state.0, schedule)?;
+let mut check = Scratch::<16>::new(); check.0 = state.0;
+self.session.$decrypt(&mut check.0, schedule)?;
+if !brynja_core::ct_eq(&check.0, input) { self.session.quarantine(); return Err(Error::Execution(KernelError::InternalDomain)); }
+
+F7 — Info: hardening notes
+
+- The safe public Session::expand{128,192,256} (mod.rs, operations!) writes a secret key schedule into a buffer the caller owns and does not clear. This is documented, but it is an easy way
+  to leave key material in memory. Consider #[doc(hidden)] or a sealed type that
+- PublicCiphertext::acknowledge() can be called by anyone. It slows misuse down but does not prevent it. This is a pre-existing design choice.
+- The generation counter only ever takes the fixed values 1, 2 and 3, and the qu StaleGeneration can never be returned. Either remove it or make it a realcounter.
+- A storage-only failure (for example destination.write in Aes*Key::new) quarantevery key on that thread. This fails closed as designed, but one bad call
+  disables all of them.
+- The brynja facade exposes aes-runtime-execution, which only unlocks the unsafe, while the safe hosted adapter (brynja-crypto-cpu-std) is not reachable from the facade. Consider not exposing that feature through the facade.
+- x86 has no equivalent of the DIT control (Intel DOITM is controlled through an MSR by the OS). AES-NI itself runs in constant time, but the wrapper code has no such guarantee. State this in the x86 limitations.

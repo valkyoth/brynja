@@ -1,0 +1,817 @@
+{
+  "kind": "unauthenticated-development-capture",
+  "date": "2026-11-11",
+  "scope": "16 native Mach-O final-linked consumers executed the correctness fixture; machine-code review NOT performed.",
+  "source": {
+    "base_commit": "56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e",
+    "working_tree": "uncommitted development changes",
+    "archive": "target/aes-accelerated-timing-source-20261110.tar.gz",
+    "archive_sha256": "7a90292b5bf4aa89bb133090a2f4175ec9f707d7c6f574f09882d674955fc6b8",
+    "fixture_overlay": "target/aes-mac-integrated-fixtures-20261111.tar.gz",
+    "fixture_overlay_sha256": "ab9d0f4db95a3f4be3b576f6ff30059f803edd3050dfc166b81f451e9b9af707",
+    "package_archive_sha256": {
+      "brynja": "1eac3382d1ef632b9f46670adf65cec1131bf40d6b317a5f605f74be4b53baab",
+      "brynja-core": "3ac8894a7a05e5ae25c164091998ca081933bb960769bc3238ec5972d1c61679",
+      "brynja-crypto": "8f90c00bf91f026fecc24af312b793b0865e914c796d329fa297abe8cdf5523a",
+      "brynja-crypto-cpu": "97a9bc44256395a983e11c185320904728d3ac4ae9138deebc0a907d15c87ad9",
+      "brynja-crypto-cpu-std": "137e62d9576b2ec32669528b2449877ed0efc77cf2a6f72348290ba192918261",
+      "brynja-dtls": "3894782c6e1a295a1aabe2560a959be3ae1476cf67fb9cd9a543fcb2a1c9f421",
+      "brynja-hash-core": "13b6fe81e8b96028ebe481d543193a1e5d34a78a7ac048b7ef0fa5c66d3dcbf2",
+      "brynja-hash-parallel": "ca4050cfdb521d4279c31283906d284862405e9c83212fbbedb97b7dfbf4e932",
+      "brynja-hash-sha2": "1c0fbdbab191c7e11fd1ed9d1f967c5dffa7932aa75579987f9211fb69a26fb8",
+      "brynja-hash-sha3": "5040888f602843134d1110a8021ac2d7a6ae9b782709a986dbb3a341425c08c7",
+      "brynja-hash-tuple": "85b186bf25fb9c65b2c2df31f626cd8f92455f2e3f774d987bba2b3d2e13ce03",
+      "brynja-mac-hmac": "8b8742a1177059b66e981b1ac1f94c563ae0394332e12a4406d023ea4dade196",
+      "brynja-mac-kmac": "15c0164e3bfc496355c22c95d3623c384c7a4114e282230f0741a62e6ee84df0",
+      "brynja-pki": "42936cff98f924f34831f8aa4cba616faf011fdd8a1826d57879a39084650f48",
+      "brynja-platform": "02fdab9954540d215e81000427628ca8e6018f3b3db843e5e34d0ed0b2d4f3bf",
+      "brynja-protocol": "79ba3a20529393efd8770690bd93626841224f9375e8cd5363178c757a0abfb3",
+      "brynja-quic-tls": "52ce4fb7f875a51d03f70088a0ca883f38a827a3b330a2d7b462d88c90ade04c",
+      "brynja-tls": "cb6e0aa7d5e815847108dd37e1b6e142b139fb03a9e95c4519130d73e55ce399",
+      "brynja-tls12": "0561887cf6d7f46dae18d6c50a85e2cf83108af957e503456ea52c4754a26698",
+      "brynja-tls13": "edd0f449e0a21c1b20d5d0e57ab9236596aee93b71e3a342404ef48940290ccc",
+      "brynja-tls13-handshake": "62e80577689a7b87a3839d7a5cfeee5a2bf39cbc4ddd6d77ce62f2cb8ee6a2cb"
+    }
+  },
+  "host": {
+    "cpu": "Apple M2 Pro",
+    "os": "macOS 27.2.1",
+    "build": "26B131",
+    "target": "aarch64-apple-darwin",
+    "oracle": "OpenSSL 4.1.0",
+    "oracle_executable": "/opt/homebrew/Cellar/openssl@4/4.1.0/bin/openssl",
+    "oracle_executable_sha256": "da101a01999a93ea6eddfe1392752bce2b5a91a41e4b00e1d9656fc682a1dc85"
+  },
+  "runner_sha256": "13833256611d868442a545de9921475b7dd6026c262f74e5f24a118054713320",
+  "inspection_tool_version": "LLVM 23.1.1-rust-1.99.1-stable (llvm-tools component)",
+  "compiler_identities": {
+    "1.90.0": "rustc 1.90.0 (1159e78c4 2025-09-14)\nbinary: rustc\ncommit-hash: 1159e78c4747b02ef996e55082b704c09b970588\ncommit-date: 2025-09-14\nhost: aarch64-apple-darwin\nrelease: 1.90.0\nLLVM version: 20.1.8\n",
+    "1.99.1": "rustc 1.99.1 (58cf8f9c3 2026-10-13)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: aarch64-apple-darwin\nrelease: 1.99.1\nLLVM version: 23.1.1\n"
+  },
+  "retained_bundle": {
+    "path": "target/aes-native-mac-linked-20261111/observations.tar.gz",
+    "sha256": "2ea9b57631c994d3aec41b7dac3ab15490123f0fc67ef4f2e0bb2b3cdf4b269e",
+    "remote": "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/linked-capture-20261111.tar.gz"
+  },
+  "records": [
+    {
+      "directory": "target/aes-accelerated-linked/1.90.0-apple-native-hosted-ykk3k42c",
+      "report": {
+        "compiler": "1.90.0",
+        "target": "aarch64-apple-darwin",
+        "route": "direct",
+        "admission": "hosted",
+        "panic": "abort",
+        "profile": "opt3-fat-lto-cgu1-overflow",
+        "binary_sha256": "2a58b15805b898ebccc83cb010df803223679f1561af26364370bec4624130f0",
+        "execution": "native",
+        "execution_command": [
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.90.0-apple-native-hosted-ykk3k42c/direct-abort.macho"
+        ],
+        "machine_review": "not-performed",
+        "symbol_command": [
+          "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+          "--defined-only",
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.90.0-apple-native-hosted-ykk3k42c/direct-abort.macho"
+        ],
+        "host": {
+          "system": "Darwin",
+          "machine": "arm64"
+        },
+        "tools": [
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+            "sha256": "65902eef48a374f0fddad3ac6229ce6333a800c7695a5f24de1fcc5bf3fa26c8"
+          },
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-objdump",
+            "sha256": "14d52f92dcdca0843dac908e57912ced974a13fd37a4918667776096ce941f66"
+          }
+        ]
+      },
+      "files_sha256": {
+        "direct-abort-build.log": "7731621a13f1a4909825278884f10b911333b40a7a13a6941ce02a6d790e9803",
+        "direct-abort-execution.log": "c8a29e50ee9b5dd1b6cec5f623c9ee0e252d9f3c5915aa2a4e0c771f6ca8b5c9",
+        "direct-abort.asm": "0edcac3595099033479b49a8562f52fa7bca850691532d5dd34ea26c72000f00",
+        "direct-abort.json": "4af7a1a97c3dce4182b4bf06bc8c1f5cd28fd11d827cb00fd76ae0343de88f27",
+        "direct-abort.macho": "2a58b15805b898ebccc83cb010df803223679f1561af26364370bec4624130f0",
+        "direct-abort.nm": "04f7b097fc060f18d59c51c9ac3c572b27270597a06f63fc0d40ff1dd5c34143"
+      },
+      "metadata_sha256": "7e6391c5508452f7492c6decafadba53a78997ff987d4a3dd42619be1daee42e",
+      "capture_log": "logs/linked-capture-1.90.0-hosted.log",
+      "capture_log_sha256": "afae695c01b64901aced44a61542b51023400bb43095ebc06d5317cf2e3a9d90"
+    },
+    {
+      "directory": "target/aes-accelerated-linked/1.90.0-apple-native-hosted-ykk3k42c",
+      "report": {
+        "compiler": "1.90.0",
+        "target": "aarch64-apple-darwin",
+        "route": "direct",
+        "admission": "hosted",
+        "panic": "unwind",
+        "profile": "opt3-fat-lto-cgu1-overflow",
+        "binary_sha256": "57ddfcc0f66d941bb3c9b005db18c06b68695c9bc7e4cd5d1604505f751ed210",
+        "execution": "native",
+        "execution_command": [
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.90.0-apple-native-hosted-ykk3k42c/direct-unwind.macho"
+        ],
+        "machine_review": "not-performed",
+        "symbol_command": [
+          "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+          "--defined-only",
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.90.0-apple-native-hosted-ykk3k42c/direct-unwind.macho"
+        ],
+        "host": {
+          "system": "Darwin",
+          "machine": "arm64"
+        },
+        "tools": [
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+            "sha256": "65902eef48a374f0fddad3ac6229ce6333a800c7695a5f24de1fcc5bf3fa26c8"
+          },
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-objdump",
+            "sha256": "14d52f92dcdca0843dac908e57912ced974a13fd37a4918667776096ce941f66"
+          }
+        ]
+      },
+      "files_sha256": {
+        "direct-unwind-build.log": "a8da848656ed1d84238f76102617e06a1e61989c45d02b33555fc9f23662c189",
+        "direct-unwind-execution.log": "c8a29e50ee9b5dd1b6cec5f623c9ee0e252d9f3c5915aa2a4e0c771f6ca8b5c9",
+        "direct-unwind.asm": "75aed111ac7ec41f0ebf7371eb78fa8fcac93bd52e018b3b1cb62c52c5ce103e",
+        "direct-unwind.json": "63af1042f1013ac831c8f63a36a35ea99ec7a7508605ec1b5310a21777f4aeba",
+        "direct-unwind.macho": "57ddfcc0f66d941bb3c9b005db18c06b68695c9bc7e4cd5d1604505f751ed210",
+        "direct-unwind.nm": "1731aee7a9bbb8e25bf6ee3b51e1c7758fae4eec9dc5de48d2bd76fe13af2070"
+      },
+      "metadata_sha256": "7e6391c5508452f7492c6decafadba53a78997ff987d4a3dd42619be1daee42e",
+      "capture_log": "logs/linked-capture-1.90.0-hosted.log",
+      "capture_log_sha256": "afae695c01b64901aced44a61542b51023400bb43095ebc06d5317cf2e3a9d90"
+    },
+    {
+      "directory": "target/aes-accelerated-linked/1.90.0-apple-native-hosted-ykk3k42c",
+      "report": {
+        "compiler": "1.90.0",
+        "target": "aarch64-apple-darwin",
+        "route": "facade",
+        "admission": "hosted",
+        "panic": "abort",
+        "profile": "opt3-fat-lto-cgu1-overflow",
+        "binary_sha256": "196dc60830b293c1ceeb64c479bc1f24133d6a1c9622e2b28fd91592103688cf",
+        "execution": "native",
+        "execution_command": [
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.90.0-apple-native-hosted-ykk3k42c/facade-abort.macho"
+        ],
+        "machine_review": "not-performed",
+        "symbol_command": [
+          "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+          "--defined-only",
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.90.0-apple-native-hosted-ykk3k42c/facade-abort.macho"
+        ],
+        "host": {
+          "system": "Darwin",
+          "machine": "arm64"
+        },
+        "tools": [
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+            "sha256": "65902eef48a374f0fddad3ac6229ce6333a800c7695a5f24de1fcc5bf3fa26c8"
+          },
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-objdump",
+            "sha256": "14d52f92dcdca0843dac908e57912ced974a13fd37a4918667776096ce941f66"
+          }
+        ]
+      },
+      "files_sha256": {
+        "facade-abort-build.log": "f346a1a3ef5c861a09bcc849e014acaf25292c8f0d5c0471b2e68fc70992887b",
+        "facade-abort-execution.log": "c8a29e50ee9b5dd1b6cec5f623c9ee0e252d9f3c5915aa2a4e0c771f6ca8b5c9",
+        "facade-abort.asm": "34a97b196eee1e57c508c5527ef91538ade455f5f475e4356356df48fe7c4ab4",
+        "facade-abort.json": "c585fb096ab256946fa71e75f8f951db07aab55f1c0237aab609d295004645a6",
+        "facade-abort.macho": "196dc60830b293c1ceeb64c479bc1f24133d6a1c9622e2b28fd91592103688cf",
+        "facade-abort.nm": "f0f06323e9c56a90f95c354ccd1217e5e79b85ed499f3bff9f519fe363365370"
+      },
+      "metadata_sha256": "18ad9f3aa564e09725781f0ecf589823c8c67f54033589877eb700a548d9fc46",
+      "capture_log": "logs/linked-capture-1.90.0-hosted.log",
+      "capture_log_sha256": "afae695c01b64901aced44a61542b51023400bb43095ebc06d5317cf2e3a9d90"
+    },
+    {
+      "directory": "target/aes-accelerated-linked/1.90.0-apple-native-hosted-ykk3k42c",
+      "report": {
+        "compiler": "1.90.0",
+        "target": "aarch64-apple-darwin",
+        "route": "facade",
+        "admission": "hosted",
+        "panic": "unwind",
+        "profile": "opt3-fat-lto-cgu1-overflow",
+        "binary_sha256": "bd8e3a954b5a529cdfa509769235faeff504a5b58f6276214f1ed1947181c684",
+        "execution": "native",
+        "execution_command": [
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.90.0-apple-native-hosted-ykk3k42c/facade-unwind.macho"
+        ],
+        "machine_review": "not-performed",
+        "symbol_command": [
+          "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+          "--defined-only",
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.90.0-apple-native-hosted-ykk3k42c/facade-unwind.macho"
+        ],
+        "host": {
+          "system": "Darwin",
+          "machine": "arm64"
+        },
+        "tools": [
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+            "sha256": "65902eef48a374f0fddad3ac6229ce6333a800c7695a5f24de1fcc5bf3fa26c8"
+          },
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-objdump",
+            "sha256": "14d52f92dcdca0843dac908e57912ced974a13fd37a4918667776096ce941f66"
+          }
+        ]
+      },
+      "files_sha256": {
+        "facade-unwind-build.log": "d9d60081c278eb6c3681b2eddac0ad31d575723ff01e513433fdd7254e784bba",
+        "facade-unwind-execution.log": "c8a29e50ee9b5dd1b6cec5f623c9ee0e252d9f3c5915aa2a4e0c771f6ca8b5c9",
+        "facade-unwind.asm": "e8f1f1634d692a96bfe58faee10f64d4c971ca093ad832f2f3ea3dbb0cfde88d",
+        "facade-unwind.json": "ca91eaa0b82060132e4a92fc22e492aff974793bdbd91e7f4deb2b803d6e6459",
+        "facade-unwind.macho": "bd8e3a954b5a529cdfa509769235faeff504a5b58f6276214f1ed1947181c684",
+        "facade-unwind.nm": "77dc02e53fb5762890046b8b39467da19945b9c0e410187316ea287839d092ce"
+      },
+      "metadata_sha256": "18ad9f3aa564e09725781f0ecf589823c8c67f54033589877eb700a548d9fc46",
+      "capture_log": "logs/linked-capture-1.90.0-hosted.log",
+      "capture_log_sha256": "afae695c01b64901aced44a61542b51023400bb43095ebc06d5317cf2e3a9d90"
+    },
+    {
+      "directory": "target/aes-accelerated-linked/1.90.0-apple-native-static-otffrbw6",
+      "report": {
+        "compiler": "1.90.0",
+        "target": "aarch64-apple-darwin",
+        "route": "direct",
+        "admission": "static",
+        "panic": "abort",
+        "profile": "opt3-fat-lto-cgu1-overflow",
+        "binary_sha256": "e48767a1fde2cb770f5c69f868df101c1d06711bdc6240d63d81290573ac9afc",
+        "execution": "native",
+        "execution_command": [
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.90.0-apple-native-static-otffrbw6/direct-abort.macho"
+        ],
+        "machine_review": "not-performed",
+        "symbol_command": [
+          "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+          "--defined-only",
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.90.0-apple-native-static-otffrbw6/direct-abort.macho"
+        ],
+        "host": {
+          "system": "Darwin",
+          "machine": "arm64"
+        },
+        "tools": [
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+            "sha256": "65902eef48a374f0fddad3ac6229ce6333a800c7695a5f24de1fcc5bf3fa26c8"
+          },
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-objdump",
+            "sha256": "14d52f92dcdca0843dac908e57912ced974a13fd37a4918667776096ce941f66"
+          }
+        ]
+      },
+      "files_sha256": {
+        "direct-abort-build.log": "4b7f428108a7f00e9c8caea9e2ce9f0193376062394f1fd6185fa7936260c7e7",
+        "direct-abort-execution.log": "c8a29e50ee9b5dd1b6cec5f623c9ee0e252d9f3c5915aa2a4e0c771f6ca8b5c9",
+        "direct-abort.asm": "ae641d40d507cf618ea74c802930cc26ff107a1d0245e807d64ccca3e2a3ba43",
+        "direct-abort.json": "0be4b8f57391c08ef0a66843c9117d6c25e2cd15dd36c41d0e6f573b8e233f5b",
+        "direct-abort.macho": "e48767a1fde2cb770f5c69f868df101c1d06711bdc6240d63d81290573ac9afc",
+        "direct-abort.nm": "8b9057ee761660fb23d0163fe76a23bc6b32ea02af17f0b714bbb205a93db964"
+      },
+      "metadata_sha256": "fc14c400f596d39478bb435e0a70bde4ae21afe08b450e0d18e494fc8a74c2ae",
+      "capture_log": "logs/linked-capture-1.90.0-static.log",
+      "capture_log_sha256": "048147fa8c1636c413db8a2fab6b67375469e8f81e41120b99fe2754c3d2327a"
+    },
+    {
+      "directory": "target/aes-accelerated-linked/1.90.0-apple-native-static-otffrbw6",
+      "report": {
+        "compiler": "1.90.0",
+        "target": "aarch64-apple-darwin",
+        "route": "direct",
+        "admission": "static",
+        "panic": "unwind",
+        "profile": "opt3-fat-lto-cgu1-overflow",
+        "binary_sha256": "5d06798ce18db848f3e24ed8b233ae49c326d9f4208b82743cd8f8df823069b8",
+        "execution": "native",
+        "execution_command": [
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.90.0-apple-native-static-otffrbw6/direct-unwind.macho"
+        ],
+        "machine_review": "not-performed",
+        "symbol_command": [
+          "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+          "--defined-only",
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.90.0-apple-native-static-otffrbw6/direct-unwind.macho"
+        ],
+        "host": {
+          "system": "Darwin",
+          "machine": "arm64"
+        },
+        "tools": [
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+            "sha256": "65902eef48a374f0fddad3ac6229ce6333a800c7695a5f24de1fcc5bf3fa26c8"
+          },
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-objdump",
+            "sha256": "14d52f92dcdca0843dac908e57912ced974a13fd37a4918667776096ce941f66"
+          }
+        ]
+      },
+      "files_sha256": {
+        "direct-unwind-build.log": "ef0f598ec7bf68a5d032ccc805f3f3d282b55f80d9e308602d6ee2f7aef875fd",
+        "direct-unwind-execution.log": "c8a29e50ee9b5dd1b6cec5f623c9ee0e252d9f3c5915aa2a4e0c771f6ca8b5c9",
+        "direct-unwind.asm": "2f52a9cd1ac920dedab6a2f9b870b39ff08291918f91136597fa079b4f6933c1",
+        "direct-unwind.json": "792691e5ee6085b7a06ccc397b335ebdfd2141de1d2b18a6ec4519007ca654bc",
+        "direct-unwind.macho": "5d06798ce18db848f3e24ed8b233ae49c326d9f4208b82743cd8f8df823069b8",
+        "direct-unwind.nm": "8fdbb0594106337c3243050971ce5ecf26bcb9df913623febb583b58940d09a2"
+      },
+      "metadata_sha256": "fc14c400f596d39478bb435e0a70bde4ae21afe08b450e0d18e494fc8a74c2ae",
+      "capture_log": "logs/linked-capture-1.90.0-static.log",
+      "capture_log_sha256": "048147fa8c1636c413db8a2fab6b67375469e8f81e41120b99fe2754c3d2327a"
+    },
+    {
+      "directory": "target/aes-accelerated-linked/1.90.0-apple-native-static-otffrbw6",
+      "report": {
+        "compiler": "1.90.0",
+        "target": "aarch64-apple-darwin",
+        "route": "facade",
+        "admission": "static",
+        "panic": "abort",
+        "profile": "opt3-fat-lto-cgu1-overflow",
+        "binary_sha256": "80f49e7936e065a3bf8b819aab6bcceead222d80e087a4c9c0b356930f40988a",
+        "execution": "native",
+        "execution_command": [
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.90.0-apple-native-static-otffrbw6/facade-abort.macho"
+        ],
+        "machine_review": "not-performed",
+        "symbol_command": [
+          "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+          "--defined-only",
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.90.0-apple-native-static-otffrbw6/facade-abort.macho"
+        ],
+        "host": {
+          "system": "Darwin",
+          "machine": "arm64"
+        },
+        "tools": [
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+            "sha256": "65902eef48a374f0fddad3ac6229ce6333a800c7695a5f24de1fcc5bf3fa26c8"
+          },
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-objdump",
+            "sha256": "14d52f92dcdca0843dac908e57912ced974a13fd37a4918667776096ce941f66"
+          }
+        ]
+      },
+      "files_sha256": {
+        "facade-abort-build.log": "bed522ed3baa9cdddd92297aea1cc5eb73fbbe6188dca959552f9a0df4c89c74",
+        "facade-abort-execution.log": "c8a29e50ee9b5dd1b6cec5f623c9ee0e252d9f3c5915aa2a4e0c771f6ca8b5c9",
+        "facade-abort.asm": "78cad990812473bda94157f521798d4f54c7df701aceaad41ceba33d1c581386",
+        "facade-abort.json": "3fad8562c0ee8e17de57d243aaba31819e0ca380518de34fd534e33026603822",
+        "facade-abort.macho": "80f49e7936e065a3bf8b819aab6bcceead222d80e087a4c9c0b356930f40988a",
+        "facade-abort.nm": "fdf8c175dde5d3193e3cf4fa2bbc448ebc920af52acb0db7e32a1874f7eb4de5"
+      },
+      "metadata_sha256": "61353ba2574b92f6bfdd36fcf52b9bb60cb74529ea093371c14508e97a6b3793",
+      "capture_log": "logs/linked-capture-1.90.0-static.log",
+      "capture_log_sha256": "048147fa8c1636c413db8a2fab6b67375469e8f81e41120b99fe2754c3d2327a"
+    },
+    {
+      "directory": "target/aes-accelerated-linked/1.90.0-apple-native-static-otffrbw6",
+      "report": {
+        "compiler": "1.90.0",
+        "target": "aarch64-apple-darwin",
+        "route": "facade",
+        "admission": "static",
+        "panic": "unwind",
+        "profile": "opt3-fat-lto-cgu1-overflow",
+        "binary_sha256": "599a85b69c179d9db6f6052e922161ece958125e25bc164fc86b65c846d76ab3",
+        "execution": "native",
+        "execution_command": [
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.90.0-apple-native-static-otffrbw6/facade-unwind.macho"
+        ],
+        "machine_review": "not-performed",
+        "symbol_command": [
+          "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+          "--defined-only",
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.90.0-apple-native-static-otffrbw6/facade-unwind.macho"
+        ],
+        "host": {
+          "system": "Darwin",
+          "machine": "arm64"
+        },
+        "tools": [
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+            "sha256": "65902eef48a374f0fddad3ac6229ce6333a800c7695a5f24de1fcc5bf3fa26c8"
+          },
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-objdump",
+            "sha256": "14d52f92dcdca0843dac908e57912ced974a13fd37a4918667776096ce941f66"
+          }
+        ]
+      },
+      "files_sha256": {
+        "facade-unwind-build.log": "0533226ad36f7f0e2895dfb20879494d7ab7304902ea211809ae2546bfdcdb99",
+        "facade-unwind-execution.log": "c8a29e50ee9b5dd1b6cec5f623c9ee0e252d9f3c5915aa2a4e0c771f6ca8b5c9",
+        "facade-unwind.asm": "394b57a09e2fdf7b76669959d18fd5bf2f07f3d7e8c0ff23441ca4fc8212b9ee",
+        "facade-unwind.json": "7f96f46085409ecb9a9973069837824314d305ee1d700bfd9bc28e040d56a77f",
+        "facade-unwind.macho": "599a85b69c179d9db6f6052e922161ece958125e25bc164fc86b65c846d76ab3",
+        "facade-unwind.nm": "0100356c1c5a2d19552cd35ddc88e453565d35184b2ce5c6d957694f1c0cfed4"
+      },
+      "metadata_sha256": "61353ba2574b92f6bfdd36fcf52b9bb60cb74529ea093371c14508e97a6b3793",
+      "capture_log": "logs/linked-capture-1.90.0-static.log",
+      "capture_log_sha256": "048147fa8c1636c413db8a2fab6b67375469e8f81e41120b99fe2754c3d2327a"
+    },
+    {
+      "directory": "target/aes-accelerated-linked/1.99.1-apple-native-hosted-nh3wc_hr",
+      "report": {
+        "compiler": "1.99.1",
+        "target": "aarch64-apple-darwin",
+        "route": "direct",
+        "admission": "hosted",
+        "panic": "abort",
+        "profile": "opt3-fat-lto-cgu1-overflow",
+        "binary_sha256": "d7ebad09006cd2147b674ecd470dc92488c2856a5debc5278b618b562ff4a562",
+        "execution": "native",
+        "execution_command": [
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.99.1-apple-native-hosted-nh3wc_hr/direct-abort.macho"
+        ],
+        "machine_review": "not-performed",
+        "symbol_command": [
+          "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+          "--defined-only",
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.99.1-apple-native-hosted-nh3wc_hr/direct-abort.macho"
+        ],
+        "host": {
+          "system": "Darwin",
+          "machine": "arm64"
+        },
+        "tools": [
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+            "sha256": "65902eef48a374f0fddad3ac6229ce6333a800c7695a5f24de1fcc5bf3fa26c8"
+          },
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-objdump",
+            "sha256": "14d52f92dcdca0843dac908e57912ced974a13fd37a4918667776096ce941f66"
+          }
+        ]
+      },
+      "files_sha256": {
+        "direct-abort-build.log": "24557178aba9de238fcb971991bbaf3ab22772f14746b3b970969dbdd55efe4b",
+        "direct-abort-execution.log": "c8a29e50ee9b5dd1b6cec5f623c9ee0e252d9f3c5915aa2a4e0c771f6ca8b5c9",
+        "direct-abort.asm": "5e718c0759e5d96ee299e901de69ff983a8509fa476688e2bbe6084724f2c7b8",
+        "direct-abort.json": "6a2232bb3e9aec8284a63ddffd1ba181ffc9f5fb8a4a81375ffc9d07385c9623",
+        "direct-abort.macho": "d7ebad09006cd2147b674ecd470dc92488c2856a5debc5278b618b562ff4a562",
+        "direct-abort.nm": "c75625431e691228b3a8197cc83959cce9f1949bc36e446a0cf6eeee1b54ea9c"
+      },
+      "metadata_sha256": "0a2d6bdfc044d2bde4353f08e8a2c1aac831744884ee2a394dce6aa5f34171a0",
+      "capture_log": "logs/linked-capture-1.99.1-hosted.log",
+      "capture_log_sha256": "d1ad19397424c69cf793a903882e3bc3faa5888c5e748c46913aa5bf5f1c79b4"
+    },
+    {
+      "directory": "target/aes-accelerated-linked/1.99.1-apple-native-hosted-nh3wc_hr",
+      "report": {
+        "compiler": "1.99.1",
+        "target": "aarch64-apple-darwin",
+        "route": "direct",
+        "admission": "hosted",
+        "panic": "unwind",
+        "profile": "opt3-fat-lto-cgu1-overflow",
+        "binary_sha256": "4330a4d2974c49171751d297f2ee8cb2eb840df57fecd304e77ed69f0cab9027",
+        "execution": "native",
+        "execution_command": [
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.99.1-apple-native-hosted-nh3wc_hr/direct-unwind.macho"
+        ],
+        "machine_review": "not-performed",
+        "symbol_command": [
+          "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+          "--defined-only",
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.99.1-apple-native-hosted-nh3wc_hr/direct-unwind.macho"
+        ],
+        "host": {
+          "system": "Darwin",
+          "machine": "arm64"
+        },
+        "tools": [
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+            "sha256": "65902eef48a374f0fddad3ac6229ce6333a800c7695a5f24de1fcc5bf3fa26c8"
+          },
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-objdump",
+            "sha256": "14d52f92dcdca0843dac908e57912ced974a13fd37a4918667776096ce941f66"
+          }
+        ]
+      },
+      "files_sha256": {
+        "direct-unwind-build.log": "736657db4b0e9480eb5bd41229965ed60b2d6e6e51c9bb3e7c9b1ff367883fde",
+        "direct-unwind-execution.log": "c8a29e50ee9b5dd1b6cec5f623c9ee0e252d9f3c5915aa2a4e0c771f6ca8b5c9",
+        "direct-unwind.asm": "1e445b24cbdf36222be1e5dc804ff47d34dbd37a062b09b3cb6da73bb0a39b87",
+        "direct-unwind.json": "f0319ea9a783d7f7fdb8bf826609d28955e64211a293bf920cdc4622630fb1b5",
+        "direct-unwind.macho": "4330a4d2974c49171751d297f2ee8cb2eb840df57fecd304e77ed69f0cab9027",
+        "direct-unwind.nm": "cd6bf01534c12040a35f0bad4dc7b97ec46e793e65e52a9a9452a6fe38700a4e"
+      },
+      "metadata_sha256": "0a2d6bdfc044d2bde4353f08e8a2c1aac831744884ee2a394dce6aa5f34171a0",
+      "capture_log": "logs/linked-capture-1.99.1-hosted.log",
+      "capture_log_sha256": "d1ad19397424c69cf793a903882e3bc3faa5888c5e748c46913aa5bf5f1c79b4"
+    },
+    {
+      "directory": "target/aes-accelerated-linked/1.99.1-apple-native-hosted-nh3wc_hr",
+      "report": {
+        "compiler": "1.99.1",
+        "target": "aarch64-apple-darwin",
+        "route": "facade",
+        "admission": "hosted",
+        "panic": "abort",
+        "profile": "opt3-fat-lto-cgu1-overflow",
+        "binary_sha256": "fac40d364645aacd6153dc5120a90bcff44382ed043f08319fcf4323159921b0",
+        "execution": "native",
+        "execution_command": [
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.99.1-apple-native-hosted-nh3wc_hr/facade-abort.macho"
+        ],
+        "machine_review": "not-performed",
+        "symbol_command": [
+          "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+          "--defined-only",
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.99.1-apple-native-hosted-nh3wc_hr/facade-abort.macho"
+        ],
+        "host": {
+          "system": "Darwin",
+          "machine": "arm64"
+        },
+        "tools": [
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+            "sha256": "65902eef48a374f0fddad3ac6229ce6333a800c7695a5f24de1fcc5bf3fa26c8"
+          },
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-objdump",
+            "sha256": "14d52f92dcdca0843dac908e57912ced974a13fd37a4918667776096ce941f66"
+          }
+        ]
+      },
+      "files_sha256": {
+        "facade-abort-build.log": "408bed3ddde8db5cc82b89f8d4d2d506470f5fe44fc35a28c131574b1a716617",
+        "facade-abort-execution.log": "c8a29e50ee9b5dd1b6cec5f623c9ee0e252d9f3c5915aa2a4e0c771f6ca8b5c9",
+        "facade-abort.asm": "676bb89c271ae109a854d274cba30b3cecfc25b886052ee4bc51003fd9b94722",
+        "facade-abort.json": "082caa013936b0b229fe96c0216b900c8244fe0281102c6beb0795bb5e710e30",
+        "facade-abort.macho": "fac40d364645aacd6153dc5120a90bcff44382ed043f08319fcf4323159921b0",
+        "facade-abort.nm": "6fe4a8c3e5cbfc124ba0eae1b8a7f14d990dd8ed6daf51fd7149ff726d37e7ef"
+      },
+      "metadata_sha256": "ba5dcf2524bc3a66f7fd8cdd4ad6f855015c33c5f35431281595f63895b7c0d5",
+      "capture_log": "logs/linked-capture-1.99.1-hosted.log",
+      "capture_log_sha256": "d1ad19397424c69cf793a903882e3bc3faa5888c5e748c46913aa5bf5f1c79b4"
+    },
+    {
+      "directory": "target/aes-accelerated-linked/1.99.1-apple-native-hosted-nh3wc_hr",
+      "report": {
+        "compiler": "1.99.1",
+        "target": "aarch64-apple-darwin",
+        "route": "facade",
+        "admission": "hosted",
+        "panic": "unwind",
+        "profile": "opt3-fat-lto-cgu1-overflow",
+        "binary_sha256": "74f9fdba10a7c6767bd84ad2f5393dde211a9f0ad5bf05b69d1f95f2fa1228b9",
+        "execution": "native",
+        "execution_command": [
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.99.1-apple-native-hosted-nh3wc_hr/facade-unwind.macho"
+        ],
+        "machine_review": "not-performed",
+        "symbol_command": [
+          "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+          "--defined-only",
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.99.1-apple-native-hosted-nh3wc_hr/facade-unwind.macho"
+        ],
+        "host": {
+          "system": "Darwin",
+          "machine": "arm64"
+        },
+        "tools": [
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+            "sha256": "65902eef48a374f0fddad3ac6229ce6333a800c7695a5f24de1fcc5bf3fa26c8"
+          },
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-objdump",
+            "sha256": "14d52f92dcdca0843dac908e57912ced974a13fd37a4918667776096ce941f66"
+          }
+        ]
+      },
+      "files_sha256": {
+        "facade-unwind-build.log": "392fa161b5546d37beb6eb70500fc6e75eedcbcb028a611482ca0fe546a50dbf",
+        "facade-unwind-execution.log": "c8a29e50ee9b5dd1b6cec5f623c9ee0e252d9f3c5915aa2a4e0c771f6ca8b5c9",
+        "facade-unwind.asm": "535c5404745ce278b0da3d5123deecf663f587bed151f8f0ca00f8b2c254ee8d",
+        "facade-unwind.json": "77084174f37e55dd4c33751abee2eb60ea9a259b4bcd52d758e8ca431c279e89",
+        "facade-unwind.macho": "74f9fdba10a7c6767bd84ad2f5393dde211a9f0ad5bf05b69d1f95f2fa1228b9",
+        "facade-unwind.nm": "ba229c835a568390d4b1f4acd5d3bf19c0a81181b1c5e5bd2a8e95a99667fc82"
+      },
+      "metadata_sha256": "ba5dcf2524bc3a66f7fd8cdd4ad6f855015c33c5f35431281595f63895b7c0d5",
+      "capture_log": "logs/linked-capture-1.99.1-hosted.log",
+      "capture_log_sha256": "d1ad19397424c69cf793a903882e3bc3faa5888c5e748c46913aa5bf5f1c79b4"
+    },
+    {
+      "directory": "target/aes-accelerated-linked/1.99.1-apple-native-static-3plfai3a",
+      "report": {
+        "compiler": "1.99.1",
+        "target": "aarch64-apple-darwin",
+        "route": "direct",
+        "admission": "static",
+        "panic": "abort",
+        "profile": "opt3-fat-lto-cgu1-overflow",
+        "binary_sha256": "617ca4fa55eaefc36e77181262ff95e979191ea77e5a21cb0aa46dc6018884ed",
+        "execution": "native",
+        "execution_command": [
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.99.1-apple-native-static-3plfai3a/direct-abort.macho"
+        ],
+        "machine_review": "not-performed",
+        "symbol_command": [
+          "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+          "--defined-only",
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.99.1-apple-native-static-3plfai3a/direct-abort.macho"
+        ],
+        "host": {
+          "system": "Darwin",
+          "machine": "arm64"
+        },
+        "tools": [
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+            "sha256": "65902eef48a374f0fddad3ac6229ce6333a800c7695a5f24de1fcc5bf3fa26c8"
+          },
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-objdump",
+            "sha256": "14d52f92dcdca0843dac908e57912ced974a13fd37a4918667776096ce941f66"
+          }
+        ]
+      },
+      "files_sha256": {
+        "direct-abort-build.log": "350babfec2e0698dc0c2d4e6201c8e31b0256e35c5b8a2cc9590de61414857a1",
+        "direct-abort-execution.log": "c8a29e50ee9b5dd1b6cec5f623c9ee0e252d9f3c5915aa2a4e0c771f6ca8b5c9",
+        "direct-abort.asm": "3a548225ca77e28cff2a0498a545537409656004f0ba51ac2e2ce6fb1d163add",
+        "direct-abort.json": "1ea8b30862e2c52d1df4ae9d502ebb931b6b3fe4aeb21a8f60a7e8124d48bfd4",
+        "direct-abort.macho": "617ca4fa55eaefc36e77181262ff95e979191ea77e5a21cb0aa46dc6018884ed",
+        "direct-abort.nm": "bbc026d53583a25960efc53a6c0f90cd47c154309f7188f42b8a768a6085b3e7"
+      },
+      "metadata_sha256": "e80e371e6a41e0fe2ee6daa9180c7147e8c8d5b63ac0909f35682a47389c0b54",
+      "capture_log": "logs/linked-capture-1.99.1-static.log",
+      "capture_log_sha256": "e9459963bc7c1cf566efe2e8d0655a910e049057a6e1e5e55c0d5a505dd5b6ac"
+    },
+    {
+      "directory": "target/aes-accelerated-linked/1.99.1-apple-native-static-3plfai3a",
+      "report": {
+        "compiler": "1.99.1",
+        "target": "aarch64-apple-darwin",
+        "route": "direct",
+        "admission": "static",
+        "panic": "unwind",
+        "profile": "opt3-fat-lto-cgu1-overflow",
+        "binary_sha256": "075748714e43f137300b4482b89e31fed86f1a4c75538df862e1081e55ba44e8",
+        "execution": "native",
+        "execution_command": [
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.99.1-apple-native-static-3plfai3a/direct-unwind.macho"
+        ],
+        "machine_review": "not-performed",
+        "symbol_command": [
+          "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+          "--defined-only",
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.99.1-apple-native-static-3plfai3a/direct-unwind.macho"
+        ],
+        "host": {
+          "system": "Darwin",
+          "machine": "arm64"
+        },
+        "tools": [
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+            "sha256": "65902eef48a374f0fddad3ac6229ce6333a800c7695a5f24de1fcc5bf3fa26c8"
+          },
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-objdump",
+            "sha256": "14d52f92dcdca0843dac908e57912ced974a13fd37a4918667776096ce941f66"
+          }
+        ]
+      },
+      "files_sha256": {
+        "direct-unwind-build.log": "a16f2d140e8c9c0230b4c144a48c115802c45d48b9c0840bd03f1156e90e9af7",
+        "direct-unwind-execution.log": "c8a29e50ee9b5dd1b6cec5f623c9ee0e252d9f3c5915aa2a4e0c771f6ca8b5c9",
+        "direct-unwind.asm": "c035ecfafcb042cfaba72145d611b59cb6bcbecd63065144587f21ce924002c8",
+        "direct-unwind.json": "ff81c098b6fc112501b861cd3f1160a41428040638aab571f626dee190863018",
+        "direct-unwind.macho": "075748714e43f137300b4482b89e31fed86f1a4c75538df862e1081e55ba44e8",
+        "direct-unwind.nm": "21371f100f56f6656978d88a85ff57ec7773d0729a3f2ce03d1f27dc6652ed2b"
+      },
+      "metadata_sha256": "e80e371e6a41e0fe2ee6daa9180c7147e8c8d5b63ac0909f35682a47389c0b54",
+      "capture_log": "logs/linked-capture-1.99.1-static.log",
+      "capture_log_sha256": "e9459963bc7c1cf566efe2e8d0655a910e049057a6e1e5e55c0d5a505dd5b6ac"
+    },
+    {
+      "directory": "target/aes-accelerated-linked/1.99.1-apple-native-static-3plfai3a",
+      "report": {
+        "compiler": "1.99.1",
+        "target": "aarch64-apple-darwin",
+        "route": "facade",
+        "admission": "static",
+        "panic": "abort",
+        "profile": "opt3-fat-lto-cgu1-overflow",
+        "binary_sha256": "371cfb7cc97c3badd0db3b4922e195ce5ad437f5d1508382eaae134f78473161",
+        "execution": "native",
+        "execution_command": [
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.99.1-apple-native-static-3plfai3a/facade-abort.macho"
+        ],
+        "machine_review": "not-performed",
+        "symbol_command": [
+          "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+          "--defined-only",
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.99.1-apple-native-static-3plfai3a/facade-abort.macho"
+        ],
+        "host": {
+          "system": "Darwin",
+          "machine": "arm64"
+        },
+        "tools": [
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+            "sha256": "65902eef48a374f0fddad3ac6229ce6333a800c7695a5f24de1fcc5bf3fa26c8"
+          },
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-objdump",
+            "sha256": "14d52f92dcdca0843dac908e57912ced974a13fd37a4918667776096ce941f66"
+          }
+        ]
+      },
+      "files_sha256": {
+        "facade-abort-build.log": "aa40d194a51f193976071a25a53606f47023c5c3ae11949ea985349d2751a1da",
+        "facade-abort-execution.log": "c8a29e50ee9b5dd1b6cec5f623c9ee0e252d9f3c5915aa2a4e0c771f6ca8b5c9",
+        "facade-abort.asm": "78c3be513ff441c3e00ec4ae36ca819eca0187047cdf678b4c5d02dc824f8870",
+        "facade-abort.json": "0e743a0cec52cdde885df57d2d89f50d8def3d81ea843ba1e37e04c6fedcc8b4",
+        "facade-abort.macho": "371cfb7cc97c3badd0db3b4922e195ce5ad437f5d1508382eaae134f78473161",
+        "facade-abort.nm": "1040d3b5b9fd79380f5f638c632f4d09b00b19aebec6f4941fd9072eb2f19ff3"
+      },
+      "metadata_sha256": "487ced6576b8b74d72def5b7074b3c389a6fd0300fde3dae7aa963e04a06aa46",
+      "capture_log": "logs/linked-capture-1.99.1-static.log",
+      "capture_log_sha256": "e9459963bc7c1cf566efe2e8d0655a910e049057a6e1e5e55c0d5a505dd5b6ac"
+    },
+    {
+      "directory": "target/aes-accelerated-linked/1.99.1-apple-native-static-3plfai3a",
+      "report": {
+        "compiler": "1.99.1",
+        "target": "aarch64-apple-darwin",
+        "route": "facade",
+        "admission": "static",
+        "panic": "unwind",
+        "profile": "opt3-fat-lto-cgu1-overflow",
+        "binary_sha256": "1696f18a5b764380d5cd3791b30d5929daafba945aa2eedc74a12816b984ab0b",
+        "execution": "native",
+        "execution_command": [
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.99.1-apple-native-static-3plfai3a/facade-unwind.macho"
+        ],
+        "machine_review": "not-performed",
+        "symbol_command": [
+          "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+          "--defined-only",
+          "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/target/aes-accelerated-linked/1.99.1-apple-native-static-3plfai3a/facade-unwind.macho"
+        ],
+        "host": {
+          "system": "Darwin",
+          "machine": "arm64"
+        },
+        "tools": [
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-nm",
+            "sha256": "65902eef48a374f0fddad3ac6229ce6333a800c7695a5f24de1fcc5bf3fa26c8"
+          },
+          {
+            "path": "/Users/builduser/.rustup/toolchains/1.99.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/bin/llvm-objdump",
+            "sha256": "14d52f92dcdca0843dac908e57912ced974a13fd37a4918667776096ce941f66"
+          }
+        ]
+      },
+      "files_sha256": {
+        "facade-unwind-build.log": "51b1fc1ce558f461c067e972bff3b3bcb0341ff62a4d3c1c3f9ee79023154aa3",
+        "facade-unwind-execution.log": "c8a29e50ee9b5dd1b6cec5f623c9ee0e252d9f3c5915aa2a4e0c771f6ca8b5c9",
+        "facade-unwind.asm": "d3cdb65fadbf4ecd069364c429d460140d3af845a8694e09a0bfd49529231bd3",
+        "facade-unwind.json": "224a07a0e4c758024276f5790017a3ec41807ee40e6ded0f30a6d64549dcfb86",
+        "facade-unwind.macho": "1696f18a5b764380d5cd3791b30d5929daafba945aa2eedc74a12816b984ab0b",
+        "facade-unwind.nm": "08a40d4b6584b1b3cfaffe95659e0c49ff8211baf05a8a983cb74dfe390a63b5"
+      },
+      "metadata_sha256": "487ced6576b8b74d72def5b7074b3c389a6fd0300fde3dae7aa963e04a06aa46",
+      "capture_log": "logs/linked-capture-1.99.1-static.log",
+      "capture_log_sha256": "e9459963bc7c1cf566efe2e8d0655a910e049057a6e1e5e55c0d5a505dd5b6ac"
+    }
+  ],
+  "validation": "Exact 16-member configuration population, fixture output, binary hashes, Mach-O ARM64 executable headers, source package hashes and dependency graphs checked locally.",
+  "limits": [
+    "Capture only; not registered as a current machine-review pass.",
+    "The source is an uncommitted development working tree based on the recorded commit.",
+    "Apple Mach-O mapping, instruction bodies, dispatch/caller/cleanup and timing qualification remain open.",
+    "Does not close previous timing alarms or claim spill/register/physical protection."
+  ]
+}

@@ -11,6 +11,8 @@ include = ["Cargo.toml","LICENSE-APACHE","LICENSE-MIT","README.md","src/**/*.rs"
 
 [features]
 default = []
+aes-static-execution = []
+aes-runtime-execution = ["aes-static-execution"]
 sha256-hardened-batch = ["dep:brynja-core"]
 sha512-hardened-batch = ["dep:brynja-core"]
 keccak-hardened-batch = ["dep:brynja-core"]

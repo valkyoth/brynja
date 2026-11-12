@@ -1,0 +1,50 @@
+{
+  "1.90.0": {
+    "abort": {
+      "instructions": 185,
+      "symbol_bytes": 913,
+      "constant_loads": 0,
+      "text_sha256": "2ca0beba16cec91db816fe18bae7b217be29a1113dba08e4732e1f3f901f6329",
+      "encoding_sha256": "9a82245f28c5054a962e4fff14d76a26fc3bf42e933edaa5524204d2dd2167a4",
+      "calls": 9,
+      "reference_addresses": 4,
+      "vector_references": 14,
+      "import_calls": 3
+    },
+    "unwind": {
+      "instructions": 185,
+      "symbol_bytes": 913,
+      "constant_loads": 0,
+      "text_sha256": "2ca0beba16cec91db816fe18bae7b217be29a1113dba08e4732e1f3f901f6329",
+      "encoding_sha256": "9a82245f28c5054a962e4fff14d76a26fc3bf42e933edaa5524204d2dd2167a4",
+      "calls": 9,
+      "reference_addresses": 4,
+      "vector_references": 14,
+      "import_calls": 3
+    }
+  },
+  "1.99.1": {
+    "abort": {
+      "instructions": 172,
+      "symbol_bytes": 845,
+      "constant_loads": 0,
+      "text_sha256": "60afccde81d037674a245788a9ead91e309ea6d3d63d6c4bf10b952fe5b48524",
+      "encoding_sha256": "c5f040a0cc0d537b5866c7949a045b4a6e5a60f87c20c27489d9200ba58b86a7",
+      "calls": 9,
+      "reference_addresses": 3,
+      "vector_references": 16,
+      "import_calls": 3
+    },
+    "unwind": {
+      "instructions": 172,
+      "symbol_bytes": 845,
+      "constant_loads": 0,
+      "text_sha256": "60afccde81d037674a245788a9ead91e309ea6d3d63d6c4bf10b952fe5b48524",
+      "encoding_sha256": "c5f040a0cc0d537b5866c7949a045b4a6e5a60f87c20c27489d9200ba58b86a7",
+      "calls": 9,
+      "reference_addresses": 3,
+      "vector_references": 16,
+      "import_calls": 3
+    }
+  }
+}

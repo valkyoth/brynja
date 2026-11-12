@@ -38,6 +38,28 @@ def fixture(start=0x1000, pool=0x3000):
 
 
 class LinkedMixTests(unittest.TestCase):
+    def test_direct_tail_call_requires_explicit_role_and_encoding_binding(self):
+        image = bytearray(fixture()[-1])
+        raw = bytes.fromhex('e92b000000')
+        image[0x200:0x205] = raw
+        args = [['jmp 0x1030 <clear>'], raw, [5], 'owner', 0x1000, bytes(image), {'zeroize': ('clear', 0x1030, 1)}]
+        with self.assertRaises(ValueError):
+            mix.observe(*args)
+        result, _ = mix.observe(*args, tail_calls=('zeroize',))
+        self.assertEqual((result['calls'], result['tail_calls']), (0, 1))
+        for text in ('jmp 0x1031 <clear>', 'jmp 0x1030 <other>', 'jmp *%rax', 'je 0x1030 <clear>'):
+            with self.assertRaises(ValueError):
+                mix.observe([text], *args[1:], tail_calls=('zeroize',))
+        for roles in ((), ('other',), ('zeroize', 'zeroize'), ['zeroize']):
+            with self.assertRaises(ValueError):
+                mix.observe(*args, tail_calls=roles)
+        for offset in (0, 1, 2, 3, 4):
+            altered, changed = bytearray(raw), bytearray(image)
+            altered[offset] ^= 1
+            changed[0x200 + offset] ^= 1
+            with self.assertRaises(ValueError):
+                mix.observe(args[0], bytes(altered), [5], 'owner', 0x1000, bytes(changed), args[-1], tail_calls=('zeroize',))
+
     def test_mapped_bytes_and_constants_are_bound(self):
         args = fixture()
         actual, locations = mix.observe(*args)

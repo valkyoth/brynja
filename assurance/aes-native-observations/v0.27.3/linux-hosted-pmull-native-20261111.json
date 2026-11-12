@@ -1,0 +1,1503 @@
+{
+  "kind": "native-Linux-hosted-explicit-PMULL-startup",
+  "date": "2026-11-11",
+  "source": {
+    "method": "Per crate: SHA-256 of compact sorted JSON mapping each relative regular-file path to its SHA-256; excludes target and __pycache__ path components.",
+    "local": {
+      "brynja": {
+        "files": 5,
+        "sha256": "07dcc54e2da845b4dc977f08943117ce7867b3154627394b5d846184d5fba20e"
+      },
+      "brynja-core": {
+        "files": 96,
+        "sha256": "1433e85e6c326fd2bbf1b7dfe47c9afb6db4d3904f0f3cd61dca486e7f7c9931"
+      },
+      "brynja-crypto": {
+        "files": 52,
+        "sha256": "ee3b35b4b8c3190722d198b1260b38d90194f7e19a01f451ff18c7f3c9a142af"
+      },
+      "brynja-crypto-cpu": {
+        "files": 92,
+        "sha256": "0b1177e416e53e3fb158d9418b3d263f4f35eb83618546981332561e4cd01f14"
+      },
+      "brynja-crypto-cpu-std": {
+        "files": 276,
+        "sha256": "9c33ec9bdbdbeca97299b4ffa0fe3725949d6fabed1a7e0d932bf5f8528256b0"
+      },
+      "brynja-hash-core": {
+        "files": 7,
+        "sha256": "5dd6e0db23faa9598c4df157e59106aa2b6af48a4d51094777c0bbc2e065f409"
+      },
+      "brynja-hash-sha2": {
+        "files": 105,
+        "sha256": "5a3f75c4e0f6305ac286b57253a7e3cbb94de3585e8a480d8cadbf49db33f8f5"
+      },
+      "brynja-hash-sha3": {
+        "files": 91,
+        "sha256": "cd4074057328734976548254cd8702b21564bdf6d82a55b706e2cce317b204ac"
+      }
+    },
+    "apple": {
+      "brynja": {
+        "files": 5,
+        "sha256": "07dcc54e2da845b4dc977f08943117ce7867b3154627394b5d846184d5fba20e"
+      },
+      "brynja-core": {
+        "files": 96,
+        "sha256": "1433e85e6c326fd2bbf1b7dfe47c9afb6db4d3904f0f3cd61dca486e7f7c9931"
+      },
+      "brynja-crypto": {
+        "files": 52,
+        "sha256": "ee3b35b4b8c3190722d198b1260b38d90194f7e19a01f451ff18c7f3c9a142af"
+      },
+      "brynja-crypto-cpu": {
+        "files": 92,
+        "sha256": "0b1177e416e53e3fb158d9418b3d263f4f35eb83618546981332561e4cd01f14"
+      },
+      "brynja-crypto-cpu-std": {
+        "files": 276,
+        "sha256": "9c33ec9bdbdbeca97299b4ffa0fe3725949d6fabed1a7e0d932bf5f8528256b0"
+      },
+      "brynja-hash-core": {
+        "files": 7,
+        "sha256": "5dd6e0db23faa9598c4df157e59106aa2b6af48a4d51094777c0bbc2e065f409"
+      },
+      "brynja-hash-sha2": {
+        "files": 105,
+        "sha256": "5a3f75c4e0f6305ac286b57253a7e3cbb94de3585e8a480d8cadbf49db33f8f5"
+      },
+      "brynja-hash-sha3": {
+        "files": 91,
+        "sha256": "cd4074057328734976548254cd8702b21564bdf6d82a55b706e2cce317b204ac"
+      }
+    },
+    "linux_arm": {
+      "brynja": {
+        "files": 5,
+        "sha256": "07dcc54e2da845b4dc977f08943117ce7867b3154627394b5d846184d5fba20e"
+      },
+      "brynja-core": {
+        "files": 96,
+        "sha256": "1433e85e6c326fd2bbf1b7dfe47c9afb6db4d3904f0f3cd61dca486e7f7c9931"
+      },
+      "brynja-crypto": {
+        "files": 52,
+        "sha256": "ee3b35b4b8c3190722d198b1260b38d90194f7e19a01f451ff18c7f3c9a142af"
+      },
+      "brynja-crypto-cpu": {
+        "files": 92,
+        "sha256": "0b1177e416e53e3fb158d9418b3d263f4f35eb83618546981332561e4cd01f14"
+      },
+      "brynja-crypto-cpu-std": {
+        "files": 276,
+        "sha256": "9c33ec9bdbdbeca97299b4ffa0fe3725949d6fabed1a7e0d932bf5f8528256b0"
+      },
+      "brynja-hash-core": {
+        "files": 7,
+        "sha256": "5dd6e0db23faa9598c4df157e59106aa2b6af48a4d51094777c0bbc2e065f409"
+      },
+      "brynja-hash-sha2": {
+        "files": 105,
+        "sha256": "5a3f75c4e0f6305ac286b57253a7e3cbb94de3585e8a480d8cadbf49db33f8f5"
+      },
+      "brynja-hash-sha3": {
+        "files": 91,
+        "sha256": "cd4074057328734976548254cd8702b21564bdf6d82a55b706e2cce317b204ac"
+      }
+    },
+    "base_commit": "56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e",
+    "status": "uncommitted development tree, not a tagged source receipt",
+    "hosted_package_sha256": "b8583ee0e46b8a6cb0d167a9fdeba5ee2dbd0020144bcb1098f716b17dfce2f5"
+  },
+  "retained_archive": {
+    "path": "target/aes-native-pmull-20261111/linux-arm/pmull-native-observations.tar.gz",
+    "sha256": "40cc292e7434fb077c0b2f5523cd1da545b4af79fe55d716779e9004823fab37"
+  },
+  "scripts": {
+    "check-aes-accelerated-startup.py": "18d8a0a5504892781952bff76b5ac1122646e990a5b6ec524b40646fcca59b5f",
+    "aes_accelerated_startup_hosted.py": "8d228763017ac9899210e5b015502f4fffc99dc5e5b76493cb24dd00db740dfe",
+    "startup-hosted-review.json": "be4a530e9415127e744d45db954e198ed03707d24e9df87e4579a293d078a27b"
+  },
+  "records": [
+    {
+      "compiler": "1.90.0",
+      "route": "direct",
+      "panic": "abort",
+      "target": "aarch64-unknown-linux-musl",
+      "admission": "hosted",
+      "profile": "opt3-fat-lto-cgu1-overflow",
+      "execution": "native",
+      "binary_sha256": "7fc36febb398f7a14fa50a5817bddb927d73ccb30ca27d0d97e9f0691643a57d",
+      "machine_review": "scoped-review",
+      "symbol_command": [
+        "/usr/lib/llvm-21/bin/llvm-nm",
+        "--print-size",
+        "--defined-only",
+        "/home/ubuntu/brynja-aes-pmull-0273-O4J721fJ/target/aes-accelerated-startup/1.90.0-hosted-arm-native-d6ax_2ju/direct-abort.elf"
+      ],
+      "fixture_sha256": "540b73ec8ed4ac86d9bf283a3cdd01650345d221386b5b761ceba1b7fe60c145",
+      "execution_command": [
+        "/home/ubuntu/brynja-aes-pmull-0273-O4J721fJ/target/aes-accelerated-startup/1.90.0-hosted-arm-native-d6ax_2ju/direct-abort.elf"
+      ],
+      "host": {
+        "system": "Linux",
+        "machine": "aarch64"
+      },
+      "tools": [
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-nm",
+          "sha256": "03f15f9348714773e5647af1337da1b03cca9bf744f28adbb76932c574420ab6"
+        },
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-objdump",
+          "sha256": "fc06a844c23d2aa96a061b3c44733185bfc39e733b8461b59e79b7694dd215a3"
+        }
+      ],
+      "review": {
+        "bodies": {
+          "bcmp": {
+            "instructions": 1,
+            "branches": 0,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "922c3fc2e87c0cf7b2a79854ce777eb1ed03b76e21c7c80fc018c05e4f15eddf",
+            "encoding_sha256": "a7911cdfdc28e6a1867e359ba426081aacfa692fdeb3e978d2a68dd924fa8c3e",
+            "tail_calls": 1
+          },
+          "memcmp": {
+            "instructions": 14,
+            "branches": 4,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "6240918890c293741e523871495642947193d88df256de0c1fbdcd2460520452",
+            "encoding_sha256": "3ead36c2e051fe4bd6e57d97a75cb9a10a1ac20d53b716dfda3ccef3578ed3c8"
+          },
+          "startup": {
+            "instructions": 254,
+            "branches": 11,
+            "calls": 14,
+            "constants": 3,
+            "text_sha256": "7fc8b43295ae33ec86ee8526f52e21510258ded8a4adb648f0883c3b1da6df64",
+            "encoding_sha256": "49ab63604cf4157610cc0651ea068bee54f299d4cf515990669b8ab0cd77c131",
+            "address_constants": 7,
+            "mutable_caches": 1
+          }
+        },
+        "rejected_code_mutations": 1345,
+        "rejected_constant_mutations": 728,
+        "references": [
+          {
+            "role": "schedule128",
+            "offset": 7241,
+            "size": 176
+          },
+          {
+            "role": "schedule192",
+            "offset": 7417,
+            "size": 208
+          },
+          {
+            "role": "schedule256",
+            "offset": 7625,
+            "size": 240
+          },
+          {
+            "role": "plain",
+            "offset": 1072,
+            "size": 16
+          },
+          {
+            "role": "cipher128",
+            "offset": 576,
+            "size": 16
+          },
+          {
+            "role": "cipher192",
+            "offset": 1088,
+            "size": 16
+          },
+          {
+            "role": "cipher256",
+            "offset": 656,
+            "size": 16
+          }
+        ],
+        "dependencies": {
+          "rounds": {
+            "kernels": [
+              {
+                "bits": 128,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+              },
+              {
+                "bits": 192,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+              },
+              {
+                "bits": 256,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+              }
+            ],
+            "rejected_mutations": 570,
+            "scope": "three complete round-kernel bodies only; callers, dispatch, expansion and cleanup outside these bodies unreviewed"
+          },
+          "expansion": {
+            "expansions": [
+              {
+                "bits": 128,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+              },
+              {
+                "bits": 192,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+              },
+              {
+                "bits": 256,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+              }
+            ],
+            "rejected_mutations": 735,
+            "scope": "three complete hardware expansion bodies only; caller admission, ownership and cleanup remain separate"
+          }
+        },
+        "platform_dependency": {
+          "symbol": "_ZN10std_detect6detect5cache21detect_and_initialize17hc4df1f5d10b6eedfE",
+          "size": 2392,
+          "sha256": "3dd7f7d0459220c38422603deb291e92f2c8c2d2c4941deb96268af8a5a8ef4e",
+          "trust": "std_detect and Linux capability reporting are trusted, not independently qualified here"
+        },
+        "scope": "Linux ARM hosted startup, runtime AES/PMULL admission and terminal startup health; NEON is a target baseline; not macOS, native, OS or physical qualification"
+      },
+      "executed_unavailable_controls": [
+        "warm-aes-absent",
+        "cold-aes-absent",
+        "warm-pmull-absent",
+        "cold-pmull-absent"
+      ],
+      "quarantined_answers": 628,
+      "retained_report": "target/aes-native-pmull-20261111/linux-arm/target/aes-accelerated-startup/1.90.0-hosted-arm-native-d6ax_2ju/direct-abort.json",
+      "retained_report_sha256": "2e257c3bdbd4f4dbdc6ad253ca3bf495e0c1c0e56fe9f2c7d6ff8c4eaf48b08c"
+    },
+    {
+      "compiler": "1.90.0",
+      "route": "direct",
+      "panic": "unwind",
+      "target": "aarch64-unknown-linux-musl",
+      "admission": "hosted",
+      "profile": "opt3-fat-lto-cgu1-overflow",
+      "execution": "native",
+      "binary_sha256": "a274dd5f534ff0a5a9021d87803dd4414ce2889c1df32b491911a1a9feb25bae",
+      "machine_review": "scoped-review",
+      "symbol_command": [
+        "/usr/lib/llvm-21/bin/llvm-nm",
+        "--print-size",
+        "--defined-only",
+        "/home/ubuntu/brynja-aes-pmull-0273-O4J721fJ/target/aes-accelerated-startup/1.90.0-hosted-arm-native-d6ax_2ju/direct-unwind.elf"
+      ],
+      "fixture_sha256": "540b73ec8ed4ac86d9bf283a3cdd01650345d221386b5b761ceba1b7fe60c145",
+      "execution_command": [
+        "/home/ubuntu/brynja-aes-pmull-0273-O4J721fJ/target/aes-accelerated-startup/1.90.0-hosted-arm-native-d6ax_2ju/direct-unwind.elf"
+      ],
+      "host": {
+        "system": "Linux",
+        "machine": "aarch64"
+      },
+      "tools": [
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-nm",
+          "sha256": "03f15f9348714773e5647af1337da1b03cca9bf744f28adbb76932c574420ab6"
+        },
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-objdump",
+          "sha256": "fc06a844c23d2aa96a061b3c44733185bfc39e733b8461b59e79b7694dd215a3"
+        }
+      ],
+      "review": {
+        "bodies": {
+          "bcmp": {
+            "instructions": 1,
+            "branches": 0,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "922c3fc2e87c0cf7b2a79854ce777eb1ed03b76e21c7c80fc018c05e4f15eddf",
+            "encoding_sha256": "a7911cdfdc28e6a1867e359ba426081aacfa692fdeb3e978d2a68dd924fa8c3e",
+            "tail_calls": 1
+          },
+          "memcmp": {
+            "instructions": 14,
+            "branches": 4,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "6240918890c293741e523871495642947193d88df256de0c1fbdcd2460520452",
+            "encoding_sha256": "3ead36c2e051fe4bd6e57d97a75cb9a10a1ac20d53b716dfda3ccef3578ed3c8"
+          },
+          "startup": {
+            "instructions": 254,
+            "branches": 11,
+            "calls": 14,
+            "constants": 3,
+            "text_sha256": "7fc8b43295ae33ec86ee8526f52e21510258ded8a4adb648f0883c3b1da6df64",
+            "encoding_sha256": "49ab63604cf4157610cc0651ea068bee54f299d4cf515990669b8ab0cd77c131",
+            "address_constants": 7,
+            "mutable_caches": 1
+          }
+        },
+        "rejected_code_mutations": 1345,
+        "rejected_constant_mutations": 728,
+        "references": [
+          {
+            "role": "schedule128",
+            "offset": 7209,
+            "size": 176
+          },
+          {
+            "role": "schedule192",
+            "offset": 7385,
+            "size": 208
+          },
+          {
+            "role": "schedule256",
+            "offset": 7593,
+            "size": 240
+          },
+          {
+            "role": "plain",
+            "offset": 1072,
+            "size": 16
+          },
+          {
+            "role": "cipher128",
+            "offset": 576,
+            "size": 16
+          },
+          {
+            "role": "cipher192",
+            "offset": 1088,
+            "size": 16
+          },
+          {
+            "role": "cipher256",
+            "offset": 656,
+            "size": 16
+          }
+        ],
+        "dependencies": {
+          "rounds": {
+            "kernels": [
+              {
+                "bits": 128,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+              },
+              {
+                "bits": 192,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+              },
+              {
+                "bits": 256,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+              }
+            ],
+            "rejected_mutations": 570,
+            "scope": "three complete round-kernel bodies only; callers, dispatch, expansion and cleanup outside these bodies unreviewed"
+          },
+          "expansion": {
+            "expansions": [
+              {
+                "bits": 128,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+              },
+              {
+                "bits": 192,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+              },
+              {
+                "bits": 256,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+              }
+            ],
+            "rejected_mutations": 735,
+            "scope": "three complete hardware expansion bodies only; caller admission, ownership and cleanup remain separate"
+          }
+        },
+        "platform_dependency": {
+          "symbol": "_ZN10std_detect6detect5cache21detect_and_initialize17hc4df1f5d10b6eedfE",
+          "size": 2392,
+          "sha256": "bb435d956a902897acdf3378e56e20b50bc3205b19811c5ba556bdaabea30486",
+          "trust": "std_detect and Linux capability reporting are trusted, not independently qualified here"
+        },
+        "scope": "Linux ARM hosted startup, runtime AES/PMULL admission and terminal startup health; NEON is a target baseline; not macOS, native, OS or physical qualification"
+      },
+      "executed_unavailable_controls": [
+        "warm-aes-absent",
+        "cold-aes-absent",
+        "warm-pmull-absent",
+        "cold-pmull-absent"
+      ],
+      "quarantined_answers": 628,
+      "retained_report": "target/aes-native-pmull-20261111/linux-arm/target/aes-accelerated-startup/1.90.0-hosted-arm-native-d6ax_2ju/direct-unwind.json",
+      "retained_report_sha256": "42eca70b7185785cfba8f80cc650102d9057e60f0e783d3227959427667804b8"
+    },
+    {
+      "compiler": "1.90.0",
+      "route": "facade",
+      "panic": "abort",
+      "target": "aarch64-unknown-linux-musl",
+      "admission": "hosted",
+      "profile": "opt3-fat-lto-cgu1-overflow",
+      "execution": "native",
+      "binary_sha256": "bee152d2fc032b9747da8c5e1ca4db1a2bb4df1f0cd503565d2ddb44f1c85633",
+      "machine_review": "scoped-review",
+      "symbol_command": [
+        "/usr/lib/llvm-21/bin/llvm-nm",
+        "--print-size",
+        "--defined-only",
+        "/home/ubuntu/brynja-aes-pmull-0273-O4J721fJ/target/aes-accelerated-startup/1.90.0-hosted-arm-native-d6ax_2ju/facade-abort.elf"
+      ],
+      "fixture_sha256": "540b73ec8ed4ac86d9bf283a3cdd01650345d221386b5b761ceba1b7fe60c145",
+      "execution_command": [
+        "/home/ubuntu/brynja-aes-pmull-0273-O4J721fJ/target/aes-accelerated-startup/1.90.0-hosted-arm-native-d6ax_2ju/facade-abort.elf"
+      ],
+      "host": {
+        "system": "Linux",
+        "machine": "aarch64"
+      },
+      "tools": [
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-nm",
+          "sha256": "03f15f9348714773e5647af1337da1b03cca9bf744f28adbb76932c574420ab6"
+        },
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-objdump",
+          "sha256": "fc06a844c23d2aa96a061b3c44733185bfc39e733b8461b59e79b7694dd215a3"
+        }
+      ],
+      "review": {
+        "bodies": {
+          "bcmp": {
+            "instructions": 1,
+            "branches": 0,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "922c3fc2e87c0cf7b2a79854ce777eb1ed03b76e21c7c80fc018c05e4f15eddf",
+            "encoding_sha256": "a7911cdfdc28e6a1867e359ba426081aacfa692fdeb3e978d2a68dd924fa8c3e",
+            "tail_calls": 1
+          },
+          "memcmp": {
+            "instructions": 14,
+            "branches": 4,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "6240918890c293741e523871495642947193d88df256de0c1fbdcd2460520452",
+            "encoding_sha256": "3ead36c2e051fe4bd6e57d97a75cb9a10a1ac20d53b716dfda3ccef3578ed3c8"
+          },
+          "startup": {
+            "instructions": 254,
+            "branches": 11,
+            "calls": 14,
+            "constants": 3,
+            "text_sha256": "7fc8b43295ae33ec86ee8526f52e21510258ded8a4adb648f0883c3b1da6df64",
+            "encoding_sha256": "49ab63604cf4157610cc0651ea068bee54f299d4cf515990669b8ab0cd77c131",
+            "address_constants": 7,
+            "mutable_caches": 1
+          }
+        },
+        "rejected_code_mutations": 1345,
+        "rejected_constant_mutations": 728,
+        "references": [
+          {
+            "role": "schedule128",
+            "offset": 7241,
+            "size": 176
+          },
+          {
+            "role": "schedule192",
+            "offset": 7417,
+            "size": 208
+          },
+          {
+            "role": "schedule256",
+            "offset": 7625,
+            "size": 240
+          },
+          {
+            "role": "plain",
+            "offset": 1072,
+            "size": 16
+          },
+          {
+            "role": "cipher128",
+            "offset": 576,
+            "size": 16
+          },
+          {
+            "role": "cipher192",
+            "offset": 1088,
+            "size": 16
+          },
+          {
+            "role": "cipher256",
+            "offset": 656,
+            "size": 16
+          }
+        ],
+        "dependencies": {
+          "rounds": {
+            "kernels": [
+              {
+                "bits": 128,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+              },
+              {
+                "bits": 192,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+              },
+              {
+                "bits": 256,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+              }
+            ],
+            "rejected_mutations": 570,
+            "scope": "three complete round-kernel bodies only; callers, dispatch, expansion and cleanup outside these bodies unreviewed"
+          },
+          "expansion": {
+            "expansions": [
+              {
+                "bits": 128,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+              },
+              {
+                "bits": 192,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+              },
+              {
+                "bits": 256,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+              }
+            ],
+            "rejected_mutations": 735,
+            "scope": "three complete hardware expansion bodies only; caller admission, ownership and cleanup remain separate"
+          }
+        },
+        "platform_dependency": {
+          "symbol": "_ZN10std_detect6detect5cache21detect_and_initialize17hc4df1f5d10b6eedfE",
+          "size": 2392,
+          "sha256": "3dd7f7d0459220c38422603deb291e92f2c8c2d2c4941deb96268af8a5a8ef4e",
+          "trust": "std_detect and Linux capability reporting are trusted, not independently qualified here"
+        },
+        "scope": "Linux ARM hosted startup, runtime AES/PMULL admission and terminal startup health; NEON is a target baseline; not macOS, native, OS or physical qualification"
+      },
+      "executed_unavailable_controls": [
+        "warm-aes-absent",
+        "cold-aes-absent",
+        "warm-pmull-absent",
+        "cold-pmull-absent"
+      ],
+      "quarantined_answers": 628,
+      "retained_report": "target/aes-native-pmull-20261111/linux-arm/target/aes-accelerated-startup/1.90.0-hosted-arm-native-d6ax_2ju/facade-abort.json",
+      "retained_report_sha256": "d67c7c2fe8851f65af8476b1b40c4e843431e4c00ffc44de07fa49eb22076d5e"
+    },
+    {
+      "compiler": "1.90.0",
+      "route": "facade",
+      "panic": "unwind",
+      "target": "aarch64-unknown-linux-musl",
+      "admission": "hosted",
+      "profile": "opt3-fat-lto-cgu1-overflow",
+      "execution": "native",
+      "binary_sha256": "a18f7558165b0e7ab6547b619e6679b8a7d36dd4e5215b9a2719681af4d0a814",
+      "machine_review": "scoped-review",
+      "symbol_command": [
+        "/usr/lib/llvm-21/bin/llvm-nm",
+        "--print-size",
+        "--defined-only",
+        "/home/ubuntu/brynja-aes-pmull-0273-O4J721fJ/target/aes-accelerated-startup/1.90.0-hosted-arm-native-d6ax_2ju/facade-unwind.elf"
+      ],
+      "fixture_sha256": "540b73ec8ed4ac86d9bf283a3cdd01650345d221386b5b761ceba1b7fe60c145",
+      "execution_command": [
+        "/home/ubuntu/brynja-aes-pmull-0273-O4J721fJ/target/aes-accelerated-startup/1.90.0-hosted-arm-native-d6ax_2ju/facade-unwind.elf"
+      ],
+      "host": {
+        "system": "Linux",
+        "machine": "aarch64"
+      },
+      "tools": [
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-nm",
+          "sha256": "03f15f9348714773e5647af1337da1b03cca9bf744f28adbb76932c574420ab6"
+        },
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-objdump",
+          "sha256": "fc06a844c23d2aa96a061b3c44733185bfc39e733b8461b59e79b7694dd215a3"
+        }
+      ],
+      "review": {
+        "bodies": {
+          "bcmp": {
+            "instructions": 1,
+            "branches": 0,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "922c3fc2e87c0cf7b2a79854ce777eb1ed03b76e21c7c80fc018c05e4f15eddf",
+            "encoding_sha256": "a7911cdfdc28e6a1867e359ba426081aacfa692fdeb3e978d2a68dd924fa8c3e",
+            "tail_calls": 1
+          },
+          "memcmp": {
+            "instructions": 14,
+            "branches": 4,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "6240918890c293741e523871495642947193d88df256de0c1fbdcd2460520452",
+            "encoding_sha256": "3ead36c2e051fe4bd6e57d97a75cb9a10a1ac20d53b716dfda3ccef3578ed3c8"
+          },
+          "startup": {
+            "instructions": 254,
+            "branches": 11,
+            "calls": 14,
+            "constants": 3,
+            "text_sha256": "7fc8b43295ae33ec86ee8526f52e21510258ded8a4adb648f0883c3b1da6df64",
+            "encoding_sha256": "49ab63604cf4157610cc0651ea068bee54f299d4cf515990669b8ab0cd77c131",
+            "address_constants": 7,
+            "mutable_caches": 1
+          }
+        },
+        "rejected_code_mutations": 1345,
+        "rejected_constant_mutations": 728,
+        "references": [
+          {
+            "role": "schedule128",
+            "offset": 7209,
+            "size": 176
+          },
+          {
+            "role": "schedule192",
+            "offset": 7385,
+            "size": 208
+          },
+          {
+            "role": "schedule256",
+            "offset": 7593,
+            "size": 240
+          },
+          {
+            "role": "plain",
+            "offset": 1072,
+            "size": 16
+          },
+          {
+            "role": "cipher128",
+            "offset": 576,
+            "size": 16
+          },
+          {
+            "role": "cipher192",
+            "offset": 1088,
+            "size": 16
+          },
+          {
+            "role": "cipher256",
+            "offset": 656,
+            "size": 16
+          }
+        ],
+        "dependencies": {
+          "rounds": {
+            "kernels": [
+              {
+                "bits": 128,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+              },
+              {
+                "bits": 192,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+              },
+              {
+                "bits": 256,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+              }
+            ],
+            "rejected_mutations": 570,
+            "scope": "three complete round-kernel bodies only; callers, dispatch, expansion and cleanup outside these bodies unreviewed"
+          },
+          "expansion": {
+            "expansions": [
+              {
+                "bits": 128,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+              },
+              {
+                "bits": 192,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+              },
+              {
+                "bits": 256,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+              }
+            ],
+            "rejected_mutations": 735,
+            "scope": "three complete hardware expansion bodies only; caller admission, ownership and cleanup remain separate"
+          }
+        },
+        "platform_dependency": {
+          "symbol": "_ZN10std_detect6detect5cache21detect_and_initialize17hc4df1f5d10b6eedfE",
+          "size": 2392,
+          "sha256": "bb435d956a902897acdf3378e56e20b50bc3205b19811c5ba556bdaabea30486",
+          "trust": "std_detect and Linux capability reporting are trusted, not independently qualified here"
+        },
+        "scope": "Linux ARM hosted startup, runtime AES/PMULL admission and terminal startup health; NEON is a target baseline; not macOS, native, OS or physical qualification"
+      },
+      "executed_unavailable_controls": [
+        "warm-aes-absent",
+        "cold-aes-absent",
+        "warm-pmull-absent",
+        "cold-pmull-absent"
+      ],
+      "quarantined_answers": 628,
+      "retained_report": "target/aes-native-pmull-20261111/linux-arm/target/aes-accelerated-startup/1.90.0-hosted-arm-native-d6ax_2ju/facade-unwind.json",
+      "retained_report_sha256": "aada735136f2b71e1b69635b6ef0e5b41262be4acce7b07808b14a8fbc5ce311"
+    },
+    {
+      "compiler": "1.99.1",
+      "route": "direct",
+      "panic": "abort",
+      "target": "aarch64-unknown-linux-musl",
+      "admission": "hosted",
+      "profile": "opt3-fat-lto-cgu1-overflow",
+      "execution": "native",
+      "binary_sha256": "9aef33efd0133bf130db5fbb68ecfe27b04a5ec9eb9195acada57c744e005049",
+      "machine_review": "scoped-review",
+      "symbol_command": [
+        "/usr/lib/llvm-21/bin/llvm-nm",
+        "--print-size",
+        "--defined-only",
+        "/home/ubuntu/brynja-aes-pmull-0273-O4J721fJ/target/aes-accelerated-startup/1.99.1-hosted-arm-native-7wmng4fx/direct-abort.elf"
+      ],
+      "fixture_sha256": "540b73ec8ed4ac86d9bf283a3cdd01650345d221386b5b761ceba1b7fe60c145",
+      "execution_command": [
+        "/home/ubuntu/brynja-aes-pmull-0273-O4J721fJ/target/aes-accelerated-startup/1.99.1-hosted-arm-native-7wmng4fx/direct-abort.elf"
+      ],
+      "host": {
+        "system": "Linux",
+        "machine": "aarch64"
+      },
+      "tools": [
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-nm",
+          "sha256": "03f15f9348714773e5647af1337da1b03cca9bf744f28adbb76932c574420ab6"
+        },
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-objdump",
+          "sha256": "fc06a844c23d2aa96a061b3c44733185bfc39e733b8461b59e79b7694dd215a3"
+        }
+      ],
+      "review": {
+        "bodies": {
+          "bcmp": {
+            "instructions": 1,
+            "branches": 0,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "922c3fc2e87c0cf7b2a79854ce777eb1ed03b76e21c7c80fc018c05e4f15eddf",
+            "encoding_sha256": "a7911cdfdc28e6a1867e359ba426081aacfa692fdeb3e978d2a68dd924fa8c3e",
+            "tail_calls": 1
+          },
+          "memcmp": {
+            "instructions": 13,
+            "branches": 3,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "f6ed30b42b342adc292bee072864fe4a7b1a0a4720f101026df09de2065b44ff",
+            "encoding_sha256": "292e7a7fee0451387e07735f24b56ca03fc0c3a048cdda1692a0154a55e1bf33"
+          },
+          "startup": {
+            "instructions": 251,
+            "branches": 11,
+            "calls": 14,
+            "constants": 3,
+            "text_sha256": "0c1607a4a7150bb248e94cd5cb58cfcd264d077032cde49e106d887ef4489009",
+            "encoding_sha256": "16f893fbbbbfdb4fad12bd01219103725b8f013efaa82a35f99f654787219071",
+            "address_constants": 7,
+            "mutable_caches": 1
+          }
+        },
+        "rejected_code_mutations": 1325,
+        "rejected_constant_mutations": 728,
+        "references": [
+          {
+            "role": "schedule128",
+            "offset": 13257,
+            "size": 176
+          },
+          {
+            "role": "schedule192",
+            "offset": 13433,
+            "size": 208
+          },
+          {
+            "role": "schedule256",
+            "offset": 13641,
+            "size": 240
+          },
+          {
+            "role": "plain",
+            "offset": 4768,
+            "size": 16
+          },
+          {
+            "role": "cipher128",
+            "offset": 4272,
+            "size": 16
+          },
+          {
+            "role": "cipher192",
+            "offset": 4784,
+            "size": 16
+          },
+          {
+            "role": "cipher256",
+            "offset": 4368,
+            "size": 16
+          }
+        ],
+        "dependencies": {
+          "rounds": {
+            "kernels": [
+              {
+                "bits": 128,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+              },
+              {
+                "bits": 192,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+              },
+              {
+                "bits": 256,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+              }
+            ],
+            "rejected_mutations": 570,
+            "scope": "three complete round-kernel bodies only; callers, dispatch, expansion and cleanup outside these bodies unreviewed"
+          },
+          "expansion": {
+            "expansions": [
+              {
+                "bits": 128,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+              },
+              {
+                "bits": 192,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+              },
+              {
+                "bits": 256,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+              }
+            ],
+            "rejected_mutations": 735,
+            "scope": "three complete hardware expansion bodies only; caller admission, ownership and cleanup remain separate"
+          }
+        },
+        "platform_dependency": {
+          "symbol": "_RNvNtNtCs4UJ8wuTG4D3_10std_detect6detect5cache21detect_and_initialize",
+          "size": 2116,
+          "sha256": "31b278717d6ff82f91e6c1ee406dc7594820d5eaa2e3e85fbfa8f516637d7868",
+          "trust": "std_detect and Linux capability reporting are trusted, not independently qualified here"
+        },
+        "scope": "Linux ARM hosted startup, runtime AES/PMULL admission and terminal startup health; NEON is a target baseline; not macOS, native, OS or physical qualification"
+      },
+      "executed_unavailable_controls": [
+        "warm-aes-absent",
+        "cold-aes-absent",
+        "warm-pmull-absent",
+        "cold-pmull-absent"
+      ],
+      "quarantined_answers": 628,
+      "retained_report": "target/aes-native-pmull-20261111/linux-arm/target/aes-accelerated-startup/1.99.1-hosted-arm-native-7wmng4fx/direct-abort.json",
+      "retained_report_sha256": "ebb8b1f04ce28553470f660cb0d1cf6e664cf34e6d7d7d482ad1b5cf19cf1945"
+    },
+    {
+      "compiler": "1.99.1",
+      "route": "direct",
+      "panic": "unwind",
+      "target": "aarch64-unknown-linux-musl",
+      "admission": "hosted",
+      "profile": "opt3-fat-lto-cgu1-overflow",
+      "execution": "native",
+      "binary_sha256": "fd4563b28fca9b5bffcb1237d37dc58c1a8ff30675c601024487fec577fd8c5c",
+      "machine_review": "scoped-review",
+      "symbol_command": [
+        "/usr/lib/llvm-21/bin/llvm-nm",
+        "--print-size",
+        "--defined-only",
+        "/home/ubuntu/brynja-aes-pmull-0273-O4J721fJ/target/aes-accelerated-startup/1.99.1-hosted-arm-native-7wmng4fx/direct-unwind.elf"
+      ],
+      "fixture_sha256": "540b73ec8ed4ac86d9bf283a3cdd01650345d221386b5b761ceba1b7fe60c145",
+      "execution_command": [
+        "/home/ubuntu/brynja-aes-pmull-0273-O4J721fJ/target/aes-accelerated-startup/1.99.1-hosted-arm-native-7wmng4fx/direct-unwind.elf"
+      ],
+      "host": {
+        "system": "Linux",
+        "machine": "aarch64"
+      },
+      "tools": [
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-nm",
+          "sha256": "03f15f9348714773e5647af1337da1b03cca9bf744f28adbb76932c574420ab6"
+        },
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-objdump",
+          "sha256": "fc06a844c23d2aa96a061b3c44733185bfc39e733b8461b59e79b7694dd215a3"
+        }
+      ],
+      "review": {
+        "bodies": {
+          "bcmp": {
+            "instructions": 1,
+            "branches": 0,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "922c3fc2e87c0cf7b2a79854ce777eb1ed03b76e21c7c80fc018c05e4f15eddf",
+            "encoding_sha256": "a7911cdfdc28e6a1867e359ba426081aacfa692fdeb3e978d2a68dd924fa8c3e",
+            "tail_calls": 1
+          },
+          "memcmp": {
+            "instructions": 13,
+            "branches": 3,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "f6ed30b42b342adc292bee072864fe4a7b1a0a4720f101026df09de2065b44ff",
+            "encoding_sha256": "292e7a7fee0451387e07735f24b56ca03fc0c3a048cdda1692a0154a55e1bf33"
+          },
+          "startup": {
+            "instructions": 251,
+            "branches": 11,
+            "calls": 14,
+            "constants": 3,
+            "text_sha256": "0c1607a4a7150bb248e94cd5cb58cfcd264d077032cde49e106d887ef4489009",
+            "encoding_sha256": "16f893fbbbbfdb4fad12bd01219103725b8f013efaa82a35f99f654787219071",
+            "address_constants": 7,
+            "mutable_caches": 1
+          }
+        },
+        "rejected_code_mutations": 1325,
+        "rejected_constant_mutations": 728,
+        "references": [
+          {
+            "role": "schedule128",
+            "offset": 13533,
+            "size": 176
+          },
+          {
+            "role": "schedule192",
+            "offset": 13709,
+            "size": 208
+          },
+          {
+            "role": "schedule256",
+            "offset": 13917,
+            "size": 240
+          },
+          {
+            "role": "plain",
+            "offset": 5056,
+            "size": 16
+          },
+          {
+            "role": "cipher128",
+            "offset": 4560,
+            "size": 16
+          },
+          {
+            "role": "cipher192",
+            "offset": 5072,
+            "size": 16
+          },
+          {
+            "role": "cipher256",
+            "offset": 4656,
+            "size": 16
+          }
+        ],
+        "dependencies": {
+          "rounds": {
+            "kernels": [
+              {
+                "bits": 128,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+              },
+              {
+                "bits": 192,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+              },
+              {
+                "bits": 256,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+              }
+            ],
+            "rejected_mutations": 570,
+            "scope": "three complete round-kernel bodies only; callers, dispatch, expansion and cleanup outside these bodies unreviewed"
+          },
+          "expansion": {
+            "expansions": [
+              {
+                "bits": 128,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+              },
+              {
+                "bits": 192,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+              },
+              {
+                "bits": 256,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+              }
+            ],
+            "rejected_mutations": 735,
+            "scope": "three complete hardware expansion bodies only; caller admission, ownership and cleanup remain separate"
+          }
+        },
+        "platform_dependency": {
+          "symbol": "_RNvNtNtCs4UJ8wuTG4D3_10std_detect6detect5cache21detect_and_initialize",
+          "size": 2116,
+          "sha256": "275ac4a2f02d6819cd366b3cb4a8e2694e50142b258fc386a4a7b6da9a7b35ca",
+          "trust": "std_detect and Linux capability reporting are trusted, not independently qualified here"
+        },
+        "scope": "Linux ARM hosted startup, runtime AES/PMULL admission and terminal startup health; NEON is a target baseline; not macOS, native, OS or physical qualification"
+      },
+      "executed_unavailable_controls": [
+        "warm-aes-absent",
+        "cold-aes-absent",
+        "warm-pmull-absent",
+        "cold-pmull-absent"
+      ],
+      "quarantined_answers": 628,
+      "retained_report": "target/aes-native-pmull-20261111/linux-arm/target/aes-accelerated-startup/1.99.1-hosted-arm-native-7wmng4fx/direct-unwind.json",
+      "retained_report_sha256": "a079d626f002c403bb5c60d762f8a4f573438b8ab7d4bbaaadca265768c3ab1b"
+    },
+    {
+      "compiler": "1.99.1",
+      "route": "facade",
+      "panic": "abort",
+      "target": "aarch64-unknown-linux-musl",
+      "admission": "hosted",
+      "profile": "opt3-fat-lto-cgu1-overflow",
+      "execution": "native",
+      "binary_sha256": "b93688aa09312c8602ce5de6dd1718ceb37b92b286e36c0917c71a99809d26fb",
+      "machine_review": "scoped-review",
+      "symbol_command": [
+        "/usr/lib/llvm-21/bin/llvm-nm",
+        "--print-size",
+        "--defined-only",
+        "/home/ubuntu/brynja-aes-pmull-0273-O4J721fJ/target/aes-accelerated-startup/1.99.1-hosted-arm-native-7wmng4fx/facade-abort.elf"
+      ],
+      "fixture_sha256": "540b73ec8ed4ac86d9bf283a3cdd01650345d221386b5b761ceba1b7fe60c145",
+      "execution_command": [
+        "/home/ubuntu/brynja-aes-pmull-0273-O4J721fJ/target/aes-accelerated-startup/1.99.1-hosted-arm-native-7wmng4fx/facade-abort.elf"
+      ],
+      "host": {
+        "system": "Linux",
+        "machine": "aarch64"
+      },
+      "tools": [
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-nm",
+          "sha256": "03f15f9348714773e5647af1337da1b03cca9bf744f28adbb76932c574420ab6"
+        },
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-objdump",
+          "sha256": "fc06a844c23d2aa96a061b3c44733185bfc39e733b8461b59e79b7694dd215a3"
+        }
+      ],
+      "review": {
+        "bodies": {
+          "bcmp": {
+            "instructions": 1,
+            "branches": 0,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "922c3fc2e87c0cf7b2a79854ce777eb1ed03b76e21c7c80fc018c05e4f15eddf",
+            "encoding_sha256": "a7911cdfdc28e6a1867e359ba426081aacfa692fdeb3e978d2a68dd924fa8c3e",
+            "tail_calls": 1
+          },
+          "memcmp": {
+            "instructions": 13,
+            "branches": 3,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "f6ed30b42b342adc292bee072864fe4a7b1a0a4720f101026df09de2065b44ff",
+            "encoding_sha256": "292e7a7fee0451387e07735f24b56ca03fc0c3a048cdda1692a0154a55e1bf33"
+          },
+          "startup": {
+            "instructions": 251,
+            "branches": 11,
+            "calls": 14,
+            "constants": 3,
+            "text_sha256": "0c1607a4a7150bb248e94cd5cb58cfcd264d077032cde49e106d887ef4489009",
+            "encoding_sha256": "16f893fbbbbfdb4fad12bd01219103725b8f013efaa82a35f99f654787219071",
+            "address_constants": 7,
+            "mutable_caches": 1
+          }
+        },
+        "rejected_code_mutations": 1325,
+        "rejected_constant_mutations": 728,
+        "references": [
+          {
+            "role": "schedule128",
+            "offset": 13257,
+            "size": 176
+          },
+          {
+            "role": "schedule192",
+            "offset": 13433,
+            "size": 208
+          },
+          {
+            "role": "schedule256",
+            "offset": 13641,
+            "size": 240
+          },
+          {
+            "role": "plain",
+            "offset": 4768,
+            "size": 16
+          },
+          {
+            "role": "cipher128",
+            "offset": 4272,
+            "size": 16
+          },
+          {
+            "role": "cipher192",
+            "offset": 4784,
+            "size": 16
+          },
+          {
+            "role": "cipher256",
+            "offset": 4368,
+            "size": 16
+          }
+        ],
+        "dependencies": {
+          "rounds": {
+            "kernels": [
+              {
+                "bits": 128,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+              },
+              {
+                "bits": 192,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+              },
+              {
+                "bits": 256,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+              }
+            ],
+            "rejected_mutations": 570,
+            "scope": "three complete round-kernel bodies only; callers, dispatch, expansion and cleanup outside these bodies unreviewed"
+          },
+          "expansion": {
+            "expansions": [
+              {
+                "bits": 128,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+              },
+              {
+                "bits": 192,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+              },
+              {
+                "bits": 256,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+              }
+            ],
+            "rejected_mutations": 735,
+            "scope": "three complete hardware expansion bodies only; caller admission, ownership and cleanup remain separate"
+          }
+        },
+        "platform_dependency": {
+          "symbol": "_RNvNtNtCs4UJ8wuTG4D3_10std_detect6detect5cache21detect_and_initialize",
+          "size": 2116,
+          "sha256": "31b278717d6ff82f91e6c1ee406dc7594820d5eaa2e3e85fbfa8f516637d7868",
+          "trust": "std_detect and Linux capability reporting are trusted, not independently qualified here"
+        },
+        "scope": "Linux ARM hosted startup, runtime AES/PMULL admission and terminal startup health; NEON is a target baseline; not macOS, native, OS or physical qualification"
+      },
+      "executed_unavailable_controls": [
+        "warm-aes-absent",
+        "cold-aes-absent",
+        "warm-pmull-absent",
+        "cold-pmull-absent"
+      ],
+      "quarantined_answers": 628,
+      "retained_report": "target/aes-native-pmull-20261111/linux-arm/target/aes-accelerated-startup/1.99.1-hosted-arm-native-7wmng4fx/facade-abort.json",
+      "retained_report_sha256": "d63b90cd2b85edcb50e60c42c5b80e6cbd4a0045140c981cae6ec7ffc8f89827"
+    },
+    {
+      "compiler": "1.99.1",
+      "route": "facade",
+      "panic": "unwind",
+      "target": "aarch64-unknown-linux-musl",
+      "admission": "hosted",
+      "profile": "opt3-fat-lto-cgu1-overflow",
+      "execution": "native",
+      "binary_sha256": "d0d031947377878c4bc37483077406c8bf24e3f5dcb9972377ea167047600395",
+      "machine_review": "scoped-review",
+      "symbol_command": [
+        "/usr/lib/llvm-21/bin/llvm-nm",
+        "--print-size",
+        "--defined-only",
+        "/home/ubuntu/brynja-aes-pmull-0273-O4J721fJ/target/aes-accelerated-startup/1.99.1-hosted-arm-native-7wmng4fx/facade-unwind.elf"
+      ],
+      "fixture_sha256": "540b73ec8ed4ac86d9bf283a3cdd01650345d221386b5b761ceba1b7fe60c145",
+      "execution_command": [
+        "/home/ubuntu/brynja-aes-pmull-0273-O4J721fJ/target/aes-accelerated-startup/1.99.1-hosted-arm-native-7wmng4fx/facade-unwind.elf"
+      ],
+      "host": {
+        "system": "Linux",
+        "machine": "aarch64"
+      },
+      "tools": [
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-nm",
+          "sha256": "03f15f9348714773e5647af1337da1b03cca9bf744f28adbb76932c574420ab6"
+        },
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-objdump",
+          "sha256": "fc06a844c23d2aa96a061b3c44733185bfc39e733b8461b59e79b7694dd215a3"
+        }
+      ],
+      "review": {
+        "bodies": {
+          "bcmp": {
+            "instructions": 1,
+            "branches": 0,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "922c3fc2e87c0cf7b2a79854ce777eb1ed03b76e21c7c80fc018c05e4f15eddf",
+            "encoding_sha256": "a7911cdfdc28e6a1867e359ba426081aacfa692fdeb3e978d2a68dd924fa8c3e",
+            "tail_calls": 1
+          },
+          "memcmp": {
+            "instructions": 13,
+            "branches": 3,
+            "calls": 0,
+            "constants": 0,
+            "text_sha256": "f6ed30b42b342adc292bee072864fe4a7b1a0a4720f101026df09de2065b44ff",
+            "encoding_sha256": "292e7a7fee0451387e07735f24b56ca03fc0c3a048cdda1692a0154a55e1bf33"
+          },
+          "startup": {
+            "instructions": 251,
+            "branches": 11,
+            "calls": 14,
+            "constants": 3,
+            "text_sha256": "0c1607a4a7150bb248e94cd5cb58cfcd264d077032cde49e106d887ef4489009",
+            "encoding_sha256": "16f893fbbbbfdb4fad12bd01219103725b8f013efaa82a35f99f654787219071",
+            "address_constants": 7,
+            "mutable_caches": 1
+          }
+        },
+        "rejected_code_mutations": 1325,
+        "rejected_constant_mutations": 728,
+        "references": [
+          {
+            "role": "schedule128",
+            "offset": 13533,
+            "size": 176
+          },
+          {
+            "role": "schedule192",
+            "offset": 13709,
+            "size": 208
+          },
+          {
+            "role": "schedule256",
+            "offset": 13917,
+            "size": 240
+          },
+          {
+            "role": "plain",
+            "offset": 5056,
+            "size": 16
+          },
+          {
+            "role": "cipher128",
+            "offset": 4560,
+            "size": 16
+          },
+          {
+            "role": "cipher192",
+            "offset": 5072,
+            "size": 16
+          },
+          {
+            "role": "cipher256",
+            "offset": 4656,
+            "size": 16
+          }
+        ],
+        "dependencies": {
+          "rounds": {
+            "kernels": [
+              {
+                "bits": 128,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+              },
+              {
+                "bits": 192,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+              },
+              {
+                "bits": 256,
+                "instructions": 38,
+                "symbol_bytes": 152,
+                "bytes_sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+              }
+            ],
+            "rejected_mutations": 570,
+            "scope": "three complete round-kernel bodies only; callers, dispatch, expansion and cleanup outside these bodies unreviewed"
+          },
+          "expansion": {
+            "expansions": [
+              {
+                "bits": 128,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+              },
+              {
+                "bits": 192,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+              },
+              {
+                "bits": 256,
+                "instructions": 49,
+                "symbol_bytes": 196,
+                "bytes_sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+              }
+            ],
+            "rejected_mutations": 735,
+            "scope": "three complete hardware expansion bodies only; caller admission, ownership and cleanup remain separate"
+          }
+        },
+        "platform_dependency": {
+          "symbol": "_RNvNtNtCs4UJ8wuTG4D3_10std_detect6detect5cache21detect_and_initialize",
+          "size": 2116,
+          "sha256": "3a8df21f404160ed2011c7ec632f8c8bb17e1feb7f7176dbfbf7b447cbfbd3e4",
+          "trust": "std_detect and Linux capability reporting are trusted, not independently qualified here"
+        },
+        "scope": "Linux ARM hosted startup, runtime AES/PMULL admission and terminal startup health; NEON is a target baseline; not macOS, native, OS or physical qualification"
+      },
+      "executed_unavailable_controls": [
+        "warm-aes-absent",
+        "cold-aes-absent",
+        "warm-pmull-absent",
+        "cold-pmull-absent"
+      ],
+      "quarantined_answers": 628,
+      "retained_report": "target/aes-native-pmull-20261111/linux-arm/target/aes-accelerated-startup/1.99.1-hosted-arm-native-7wmng4fx/facade-unwind.json",
+      "retained_report_sha256": "701c34e8540116083e03db4756b761afc30ffeb6c9accc6c4abeb51e5673211a"
+    }
+  ],
+  "totals": {
+    "configurations": 8,
+    "corrupted_answers_quarantined": 5024,
+    "missing_feature_executions": 32
+  },
+  "limits": [
+    "Unauthenticated observations, not certification or a verification-runner current pass.",
+    "Detector observation substitutions do not test hardware lacking AES or PMULL.",
+    "System detection, OS/hypervisor capability lifetime and physical protection remain outside this review.",
+    "Existing timing alarms are unchanged.",
+    "Individual Linux negative outputs are checked by the runner but not retained; the report retains their complete case population."
+  ]
+}

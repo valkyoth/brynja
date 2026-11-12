@@ -8,6 +8,9 @@
 
 #![no_std]
 
+#[cfg(feature = "aes-static-execution")]
+pub mod aes;
+
 #[cfg(feature = "sha256-hardened-batch")]
 pub mod sha256_hardened_batch;
 

@@ -8,12 +8,41 @@ use std::{
 
 mod wide;
 
+#[cfg(all(
+    feature = "aes-static-execution",
+    any(
+        all(
+            target_arch = "x86_64",
+            target_feature = "aes",
+            target_feature = "sse2"
+        ),
+        all(
+            target_arch = "aarch64",
+            target_endian = "little",
+            target_feature = "aes",
+            target_feature = "neon"
+        )
+    )
+))]
+mod execution;
+
 std::thread_local! {
     static POINT: Cell<usize> = const { Cell::new(0) };
     static FAIL: Cell<Option<(usize,bool)>> = const { Cell::new(None) };
     static CLEARED: Cell<usize> = const { Cell::new(0) };
     static EXPANSION_POINT: Cell<usize> = const { Cell::new(0) };
     static EXPANSION_FAIL: Cell<Option<(usize,bool)>> = const { Cell::new(None) };
+    static EXECUTION_REVOKE: Cell<bool> = const { Cell::new(false) };
+}
+#[cfg(feature = "aes-static-execution")]
+pub(super) fn execution_expansion_checkpoint(
+    session: &brynja_crypto_cpu::aes::Session<'_>,
+) -> Result<(), Error> {
+    expansion_checkpoint()?;
+    if EXECUTION_REVOKE.get() && EXPANSION_POINT.get() == 2 {
+        session.quarantine();
+    }
+    Ok(())
 }
 pub(super) fn expansion_checkpoint() -> Result<(), Error> {
     let point = EXPANSION_POINT.get();

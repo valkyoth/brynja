@@ -6,6 +6,2063 @@ catalog = "verification/catalog.json"
 includes = ["verification/miri-checks.json", "verification/kani-checks.json", "verification/matrix-checks.json", "verification/extra-checks.json"]
 
 
+
+# Development-only raw round kernels: no public dispatch or qualification.
+[groups.aes-kernel-candidate]
+paths = ["crates/brynja-crypto-cpu/src/aes", "assurance/aes-kernel-candidate", "crates/brynja-crypto/tests/fixtures/aes128", "crates/brynja-crypto/tests/fixtures/aes192", "crates/brynja-crypto/tests/fixtures/aes256", "scripts/aes/check-aes-kernel-candidate.py", "scripts/aes/test-aes-kernel-candidate.py"]
+[[groups.aes-kernel-candidate.tools]]
+program = "python3"
+[groups.aes-kernel-qemu]
+[[groups.aes-kernel-qemu.tools]]
+program = "qemu-aarch64"
+
+[[checks]]
+component = "aes"
+id = "kernel-x86-msrv"
+category = "kernel-candidate"
+name = "AES round candidates x86 on Rust 1.90.0"
+establishes = "Internal round candidate correctness only: 2078 NIST KAT records and 768 alignment/canary combinations, both directions and all widths. Native x86 AES-NI, not public acceleration, startup admission, lifecycle, timing, spill erasure or native platform qualification. Test-only expansion; production portable APIs unchanged."
+command = ["python3","scripts/aes/check-aes-kernel-candidate.py","--toolchain","1.90.0"]
+cwd = "."
+inputs = ["aes-kernel-candidate","hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok. 5 passed; 0 failed; 0 ignored;", "AES kernel candidate PASS"]
+minimum_tests = 5
+exact_tests = 5
+unique_lines = ["AES_KERNEL_KAT_PASS: 128:568", "AES_KERNEL_KAT_PASS: 192:700", "AES_KERNEL_KAT_PASS: 256:810", "AES_KERNEL_ALIGNMENT_PASS: 768"]
+
+[[checks]]
+component = "aes"
+id = "kernel-x86-current"
+category = "kernel-candidate"
+name = "AES round candidates x86 on Rust 1.99.1"
+establishes = "Internal round candidate correctness only: 2078 NIST KAT records and 768 alignment/canary combinations, both directions and all widths. Native x86 AES-NI, not public acceleration, startup admission, lifecycle, timing, spill erasure or native platform qualification. Test-only expansion; production portable APIs unchanged."
+command = ["python3","scripts/aes/check-aes-kernel-candidate.py","--toolchain","1.99.1"]
+cwd = "."
+inputs = ["aes-kernel-candidate","compiler"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok. 5 passed; 0 failed; 0 ignored;", "AES kernel candidate PASS"]
+minimum_tests = 5
+exact_tests = 5
+unique_lines = ["AES_KERNEL_KAT_PASS: 128:568", "AES_KERNEL_KAT_PASS: 192:700", "AES_KERNEL_KAT_PASS: 256:810", "AES_KERNEL_ALIGNMENT_PASS: 768"]
+
+[[checks]]
+component = "aes"
+id = "kernel-arm-qemu-msrv"
+category = "kernel-candidate"
+name = "AES round candidates arm-qemu on Rust 1.90.0"
+establishes = "Internal round candidate correctness only: 2078 NIST KAT records and 768 alignment/canary combinations, both directions and all widths. AArch64 QEMU emulation, not public acceleration, startup admission, lifecycle, timing, spill erasure or native platform qualification. Test-only expansion; production portable APIs unchanged."
+command = ["python3","scripts/aes/check-aes-kernel-candidate.py","--toolchain","1.90.0","--qemu-aarch64"]
+cwd = "."
+inputs = ["aes-kernel-candidate","hkdf-msrv","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok. 5 passed; 0 failed; 0 ignored;", "AES kernel candidate PASS"]
+minimum_tests = 5
+exact_tests = 5
+unique_lines = ["AES_KERNEL_KAT_PASS: 128:568", "AES_KERNEL_KAT_PASS: 192:700", "AES_KERNEL_KAT_PASS: 256:810", "AES_KERNEL_ALIGNMENT_PASS: 768"]
+
+[[checks]]
+component = "aes"
+id = "kernel-arm-qemu-current"
+category = "kernel-candidate"
+name = "AES round candidates arm-qemu on Rust 1.99.1"
+establishes = "Internal round candidate correctness only: 2078 NIST KAT records and 768 alignment/canary combinations, both directions and all widths. AArch64 QEMU emulation, not public acceleration, startup admission, lifecycle, timing, spill erasure or native platform qualification. Test-only expansion; production portable APIs unchanged."
+command = ["python3","scripts/aes/check-aes-kernel-candidate.py","--toolchain","1.99.1","--qemu-aarch64"]
+cwd = "."
+inputs = ["aes-kernel-candidate","compiler","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok. 5 passed; 0 failed; 0 ignored;", "AES kernel candidate PASS"]
+minimum_tests = 5
+exact_tests = 5
+unique_lines = ["AES_KERNEL_KAT_PASS: 128:568", "AES_KERNEL_KAT_PASS: 192:700", "AES_KERNEL_KAT_PASS: 256:810", "AES_KERNEL_ALIGNMENT_PASS: 768"]
+
+
+[groups.aes-expansion-candidate]
+paths = ["scripts/aes/check-aes-expansion-candidate.py", "scripts/aes/test-aes-expansion-candidate.py", "docs/assurance/aes-expansion-candidates.md"]
+
+[[checks]]
+component = "aes"
+id = "expansion-x86-msrv"
+category = "aes-expansion-candidate"
+name = "Isolated AES key expansion x86 on Rust 1.90.0"
+establishes = "Candidate correctness only: every schedule byte for 2078 NIST cases and 774 generated keys; 768 key/output alignments, canaries and round trips. Three valid no_std shapes and five rejected dimensions. Native x86 AES-NI. Isolated kernel harness only; owner integration is checked separately. No timing, performance, lifecycle or emitted-code qualification."
+command = ["python3","scripts/aes/check-aes-expansion-candidate.py","--toolchain","1.90.0","--mode","x86"]
+cwd = "."
+inputs = ["aes-expansion-candidate","aes-kernel-candidate","aes-build","aes-packaged","hkdf-public-api-modern","hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","PYTHONOPTIMIZE","PYTHONPATH","LD_PRELOAD","LD_AUDIT","LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["test result: ok. 10 passed; 0 failed; 0 ignored;"]
+minimum_tests = 10
+exact_tests = 10
+unique_lines = ["AES_KERNEL_KAT_PASS: 128:568","AES_KERNEL_KAT_PASS: 192:700","AES_KERNEL_KAT_PASS: 256:810","AES_KERNEL_ALIGNMENT_PASS: 768","AES_EXPANSION_KAT_PASS: 128:568","AES_EXPANSION_KAT_PASS: 192:700","AES_EXPANSION_KAT_PASS: 256:810","AES_EXPANSION_ALIGNMENT_PASS: 768","AES_EXPANSION_GENERATED_PASS: 774","AES_EXPANSION_DOMAIN_PASS: 3 valid shapes; 5 rejected shapes; no_std","AES_EXPANSION_CANDIDATE_PASS: 1.90.0 x86; correctness only; not public admission"]
+
+[[checks]]
+component = "aes"
+id = "expansion-x86-current"
+category = "aes-expansion-candidate"
+name = "Isolated AES key expansion x86 on Rust 1.99.1"
+establishes = "Candidate correctness only: every schedule byte for 2078 NIST cases and 774 generated keys; 768 key/output alignments, canaries and round trips. Three valid no_std shapes and five rejected dimensions. Native x86 AES-NI. Isolated kernel harness only; owner integration is checked separately. No timing, performance, lifecycle or emitted-code qualification."
+command = ["python3","scripts/aes/check-aes-expansion-candidate.py","--toolchain","1.99.1","--mode","x86"]
+cwd = "."
+inputs = ["aes-expansion-candidate","aes-kernel-candidate","aes-build","aes-packaged","hkdf-public-api-modern","compiler"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","PYTHONOPTIMIZE","PYTHONPATH","LD_PRELOAD","LD_AUDIT","LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["test result: ok. 10 passed; 0 failed; 0 ignored;"]
+minimum_tests = 10
+exact_tests = 10
+unique_lines = ["AES_KERNEL_KAT_PASS: 128:568","AES_KERNEL_KAT_PASS: 192:700","AES_KERNEL_KAT_PASS: 256:810","AES_KERNEL_ALIGNMENT_PASS: 768","AES_EXPANSION_KAT_PASS: 128:568","AES_EXPANSION_KAT_PASS: 192:700","AES_EXPANSION_KAT_PASS: 256:810","AES_EXPANSION_ALIGNMENT_PASS: 768","AES_EXPANSION_GENERATED_PASS: 774","AES_EXPANSION_DOMAIN_PASS: 3 valid shapes; 5 rejected shapes; no_std","AES_EXPANSION_CANDIDATE_PASS: 1.99.1 x86; correctness only; not public admission"]
+
+[[checks]]
+component = "aes"
+id = "expansion-arm-qemu-msrv"
+category = "aes-expansion-candidate"
+name = "Isolated AES key expansion arm-qemu on Rust 1.90.0"
+establishes = "Candidate correctness only: every schedule byte for 2078 NIST cases and 774 generated keys; 768 key/output alignments, canaries and round trips. Three valid no_std shapes and five rejected dimensions. AArch64 QEMU emulation, not native qualification. Isolated kernel harness only; owner integration is checked separately. No timing, performance, lifecycle or emitted-code qualification."
+command = ["python3","scripts/aes/check-aes-expansion-candidate.py","--toolchain","1.90.0","--mode","arm-qemu"]
+cwd = "."
+inputs = ["aes-expansion-candidate","aes-kernel-candidate","aes-build","aes-packaged","hkdf-public-api-modern","hkdf-msrv","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","PYTHONOPTIMIZE","PYTHONPATH","LD_PRELOAD","LD_AUDIT","LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["test result: ok. 10 passed; 0 failed; 0 ignored;"]
+minimum_tests = 10
+exact_tests = 10
+unique_lines = ["AES_KERNEL_KAT_PASS: 128:568","AES_KERNEL_KAT_PASS: 192:700","AES_KERNEL_KAT_PASS: 256:810","AES_KERNEL_ALIGNMENT_PASS: 768","AES_EXPANSION_KAT_PASS: 128:568","AES_EXPANSION_KAT_PASS: 192:700","AES_EXPANSION_KAT_PASS: 256:810","AES_EXPANSION_ALIGNMENT_PASS: 768","AES_EXPANSION_GENERATED_PASS: 774","AES_EXPANSION_DOMAIN_PASS: 3 valid shapes; 5 rejected shapes; no_std","AES_EXPANSION_CANDIDATE_PASS: 1.90.0 arm-qemu; correctness only; not public admission"]
+
+[[checks]]
+component = "aes"
+id = "expansion-arm-qemu-current"
+category = "aes-expansion-candidate"
+name = "Isolated AES key expansion arm-qemu on Rust 1.99.1"
+establishes = "Candidate correctness only: every schedule byte for 2078 NIST cases and 774 generated keys; 768 key/output alignments, canaries and round trips. Three valid no_std shapes and five rejected dimensions. AArch64 QEMU emulation, not native qualification. Isolated kernel harness only; owner integration is checked separately. No timing, performance, lifecycle or emitted-code qualification."
+command = ["python3","scripts/aes/check-aes-expansion-candidate.py","--toolchain","1.99.1","--mode","arm-qemu"]
+cwd = "."
+inputs = ["aes-expansion-candidate","aes-kernel-candidate","aes-build","aes-packaged","hkdf-public-api-modern","compiler","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","PYTHONOPTIMIZE","PYTHONPATH","LD_PRELOAD","LD_AUDIT","LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["test result: ok. 10 passed; 0 failed; 0 ignored;"]
+minimum_tests = 10
+exact_tests = 10
+unique_lines = ["AES_KERNEL_KAT_PASS: 128:568","AES_KERNEL_KAT_PASS: 192:700","AES_KERNEL_KAT_PASS: 256:810","AES_KERNEL_ALIGNMENT_PASS: 768","AES_EXPANSION_KAT_PASS: 128:568","AES_EXPANSION_KAT_PASS: 192:700","AES_EXPANSION_KAT_PASS: 256:810","AES_EXPANSION_ALIGNMENT_PASS: 768","AES_EXPANSION_GENERATED_PASS: 774","AES_EXPANSION_DOMAIN_PASS: 3 valid shapes; 5 rejected shapes; no_std","AES_EXPANSION_CANDIDATE_PASS: 1.99.1 arm-qemu; correctness only; not public admission"]
+
+[groups.aes-accelerated-startup]
+paths = ["assurance/aes-accelerated-campaigns/startup.rs", "scripts/aes/check-aes-accelerated-startup.py", "scripts/aes/aes_accelerated_startup_arm.py", "scripts/aes/startup-arm-reference.json", "scripts/aes/startup-arm-review.json", "scripts/aes/test-aes-accelerated-startup.py", "docs/assurance/aes-accelerated-startup.md"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-arm-startup-msrv"
+category = "aes-linked-arm-startup"
+name = "Packaged LTO AES static ARM startup admission, Rust 1.90.0"
+establishes = "Four emulated direct/facade abort/unwind consumers. Complete startup and comparison-helper bodies bind wrong-backend rejection, three complete expected schedules, six independent block answers and terminal health. All code/reference bytes have negative controls; each executable quarantines 628 separately corrupted public startup answers. Replays exact hardware expansion and round kernels. Not hosted/x86 startup, arbitrary inlining, native or physical-fault qualification, timing or spill erasure."
+command = ["python3", "scripts/aes/check-aes-accelerated-startup.py", "--toolchain", "1.90.0"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-startup", "aes-accelerated-linked", "aes-accelerated-arm-constructors", "aes-accelerated-arm-cleanup", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv", "aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ARM_STARTUP_LINKED_PASS:"]
+unique_lines = ["AES_ARM_STARTUP_LINKED_PASS: 1.90.0; four static emulated consumers"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-arm-startup-current"
+category = "aes-linked-arm-startup"
+name = "Packaged LTO AES static ARM startup admission, Rust 1.99.1"
+establishes = "Four emulated direct/facade abort/unwind consumers. Complete startup and comparison-helper bodies bind wrong-backend rejection, three complete expected schedules, six independent block answers and terminal health. All code/reference bytes have negative controls; each executable quarantines 628 separately corrupted public startup answers. Replays exact hardware expansion and round kernels. Not hosted/x86 startup, arbitrary inlining, native or physical-fault qualification, timing or spill erasure."
+command = ["python3", "scripts/aes/check-aes-accelerated-startup.py", "--toolchain", "1.99.1"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-startup", "aes-accelerated-linked", "aes-accelerated-arm-constructors", "aes-accelerated-arm-cleanup", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv", "aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ARM_STARTUP_LINKED_PASS:"]
+unique_lines = ["AES_ARM_STARTUP_LINKED_PASS: 1.99.1; four static emulated consumers"]
+
+[groups.aes-accelerated-hosted-startup]
+paths = ["assurance/aes-accelerated-campaigns/startup-hosted.rs", "scripts/aes/aes_accelerated_startup_hosted.py", "scripts/aes/startup-hosted-review.json", "scripts/aes/test-aes-accelerated-startup-hosted.py", "docs/assurance/aes-accelerated-hosted-startup.md"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-arm-hosted-startup-msrv"
+category = "aes-linked-arm-hosted-startup"
+name = "Packaged LTO AES hosted Linux ARM startup admission, Rust 1.90.0"
+establishes = "Four emulated direct/facade abort/unwind consumers. Complete crate startup boundary binds Portable/wrong-architecture rejection, runtime AES detection before kernels, complete schedules, independent block answers and terminal health without Prefer fallback. Each executable quarantines 628 corrupted answers and rejects two missing-AES controls. Replays expansion, round and comparator reviews. Rust std_detect and Linux capability reporting remain trusted; NEON is a target baseline. Not macOS, native, physical, timing or spill qualification."
+command = ["python3", "scripts/aes/check-aes-accelerated-startup.py", "--toolchain", "1.90.0", "--admission", "hosted"]
+cwd = "."
+inputs = ["aes-build", "hosted-cpu-source", "aes-accelerated-startup", "aes-accelerated-hosted-startup", "aes-accelerated-linked", "aes-accelerated-arm-constructors", "aes-accelerated-arm-cleanup", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv", "aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ARM_HOSTED_STARTUP_LINKED_PASS:"]
+unique_lines = ["AES_ARM_HOSTED_STARTUP_LINKED_PASS: 1.90.0; four hosted emulated consumers"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-arm-hosted-startup-current"
+category = "aes-linked-arm-hosted-startup"
+name = "Packaged LTO AES hosted Linux ARM startup admission, Rust 1.99.1"
+establishes = "Four emulated direct/facade abort/unwind consumers. Complete crate startup boundary binds Portable/wrong-architecture rejection, runtime AES detection before kernels, complete schedules, independent block answers and terminal health without Prefer fallback. Each executable quarantines 628 corrupted answers and rejects two missing-AES controls. Replays expansion, round and comparator reviews. Rust std_detect and Linux capability reporting remain trusted; NEON is a target baseline. Not macOS, native, physical, timing or spill qualification."
+command = ["python3", "scripts/aes/check-aes-accelerated-startup.py", "--toolchain", "1.99.1", "--admission", "hosted"]
+cwd = "."
+inputs = ["aes-build", "hosted-cpu-source", "aes-accelerated-startup", "aes-accelerated-hosted-startup", "aes-accelerated-linked", "aes-accelerated-arm-constructors", "aes-accelerated-arm-cleanup", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv", "aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ARM_HOSTED_STARTUP_LINKED_PASS:"]
+unique_lines = ["AES_ARM_HOSTED_STARTUP_LINKED_PASS: 1.99.1; four hosted emulated consumers"]
+
+[groups.aes-accelerated-x86-startup]
+paths = ["assurance/aes-accelerated-campaigns/startup-x86.rs", "assurance/aes-kernel-candidate/probe.rs", "scripts/aes/check-aes-accelerated-startup-x86.py", "scripts/aes/aes_accelerated_startup_x86.py", "scripts/aes/startup-x86-review.json", "scripts/aes/startup-arm-reference.json", "scripts/aes/aes_linked_mix.py", "scripts/aes/test-aes-accelerated-startup-x86.py", "docs/assurance/aes-accelerated-x86-startup.md"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-x86-startup-msrv"
+category = "aes-linked-x86-startup"
+name = "Packaged LTO AES static x86 startup admission, Rust 1.90.0"
+establishes = "Four direct/facade abort/unwind native consumers after a baseline AES/SSE2 host probe. Complete startup body binds wrong-backend rejection, all expected schedules, six independent block answers and terminal health. Replays hardware expansion and round reviews, binds libc bcmp through actual ELF dynamic metadata, rejects code/reference mutations and quarantines 628 corrupted-answer binaries per consumer. libc and loader remain trusted. Not hosted admission, other native CPUs, arbitrary inlining, timing or physical/spill qualification."
+command = ["python3", "scripts/aes/check-aes-accelerated-startup-x86.py", "--toolchain", "1.90.0"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-x86-startup", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_X86_STARTUP_LINKED_PASS:"]
+unique_lines = ["AES_X86_STARTUP_LINKED_PASS: 1.90.0; four static native consumers"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-x86-startup-current"
+category = "aes-linked-x86-startup"
+name = "Packaged LTO AES static x86 startup admission, Rust 1.99.1"
+establishes = "Four direct/facade abort/unwind native consumers after a baseline AES/SSE2 host probe. Complete startup body binds wrong-backend rejection, all expected schedules, six independent block answers and terminal health. Replays hardware expansion and round reviews, binds libc bcmp through actual ELF dynamic metadata, rejects code/reference mutations and quarantines 628 corrupted-answer binaries per consumer. libc and loader remain trusted. Not hosted admission, other native CPUs, arbitrary inlining, timing or physical/spill qualification."
+command = ["python3", "scripts/aes/check-aes-accelerated-startup-x86.py", "--toolchain", "1.99.1"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-x86-startup", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_X86_STARTUP_LINKED_PASS:"]
+unique_lines = ["AES_X86_STARTUP_LINKED_PASS: 1.99.1; four static native consumers"]
+
+[groups.aes-accelerated-linked]
+paths = ["assurance/aes-accelerated-campaigns/linked.rs", "assurance/aes-accelerated-campaigns/lifecycle.rs", "scripts/aes/check-aes-accelerated-linked.py", "scripts/aes/aes_accelerated_linked_kernels.py", "scripts/aes/aes_accelerated_linked_expansion.py", "scripts/aes/test-aes-accelerated-linked.py", "scripts/aes/test-aes-accelerated-expansion.py", "docs/assurance/aes-accelerated-linked-kernels.md", "docs/assurance/aes-accelerated-linked-expansion.md"]
+[[groups.aes-accelerated-linked.tools]]
+program = "llvm-nm"
+[[groups.aes-accelerated-linked.tools]]
+program = "llvm-objdump"
+
+[[checks]]
+component = "aes"
+id = "accelerated-linked-native-static-msrv"
+category = "aes-linked-kernel"
+name = "Packaged LTO AES kernel bodies, 1.90.0 native static"
+establishes = "Four byte-checked packaged LTO consumers: direct/facade and abort/unwind. Executes 18 known-answer operations plus clearing/quarantine checks each, then reviews all three complete round and three complete hardware expansion bodies by exact instructions and executable bytes with per-byte and per-instruction negative controls. Native x86 AES-NI. Does not review surrounding callers, dispatch or caller cleanup/spills; no timing, performance or physical-fault claim."
+command = ["python3","scripts/aes/check-aes-accelerated-linked.py","--toolchain","1.90.0","--mode","native","--admission","static"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-linked","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_LINKED_PASS: 1.90.0 native static; four consumers; kernel bodies only"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-linked-arm-qemu-static-msrv"
+category = "aes-linked-kernel"
+name = "Packaged LTO AES kernel bodies, 1.90.0 arm-qemu static"
+establishes = "Four byte-checked packaged LTO consumers: direct/facade and abort/unwind. Executes 18 known-answer operations plus clearing/quarantine checks each, then reviews all three complete round and three complete hardware expansion bodies by exact instructions and executable bytes with per-byte and per-instruction negative controls. AArch64 QEMU emulation, not native qualification. Does not review surrounding callers, dispatch or caller cleanup/spills; no timing, performance or physical-fault claim."
+command = ["python3","scripts/aes/check-aes-accelerated-linked.py","--toolchain","1.90.0","--mode","arm-qemu","--admission","static"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-linked","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_LINKED_PASS: 1.90.0 arm-qemu static; four consumers; kernel bodies only"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-linked-arm-qemu-hosted-msrv"
+category = "aes-linked-kernel"
+name = "Packaged LTO AES kernel bodies, 1.90.0 arm-qemu hosted"
+establishes = "Four byte-checked packaged LTO consumers: direct/facade and abort/unwind. Executes 18 known-answer operations plus clearing/quarantine checks each, then reviews all three complete round and three complete hardware expansion bodies by exact instructions and executable bytes with per-byte and per-instruction negative controls. AArch64 QEMU emulation, not native qualification. Does not review surrounding callers, dispatch or caller cleanup/spills; no timing, performance or physical-fault claim."
+command = ["python3","scripts/aes/check-aes-accelerated-linked.py","--toolchain","1.90.0","--mode","arm-qemu","--admission","hosted"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-linked","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_LINKED_PASS: 1.90.0 arm-qemu hosted; four consumers; kernel bodies only"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-linked-native-static-current"
+category = "aes-linked-kernel"
+name = "Packaged LTO AES kernel bodies, 1.99.1 native static"
+establishes = "Four byte-checked packaged LTO consumers: direct/facade and abort/unwind. Executes 18 known-answer operations plus clearing/quarantine checks each, then reviews all three complete round and three complete hardware expansion bodies by exact instructions and executable bytes with per-byte and per-instruction negative controls. Native x86 AES-NI. Does not review surrounding callers, dispatch or caller cleanup/spills; no timing, performance or physical-fault claim."
+command = ["python3","scripts/aes/check-aes-accelerated-linked.py","--toolchain","1.99.1","--mode","native","--admission","static"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-linked","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_LINKED_PASS: 1.99.1 native static; four consumers; kernel bodies only"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-linked-arm-qemu-static-current"
+category = "aes-linked-kernel"
+name = "Packaged LTO AES kernel bodies, 1.99.1 arm-qemu static"
+establishes = "Four byte-checked packaged LTO consumers: direct/facade and abort/unwind. Executes 18 known-answer operations plus clearing/quarantine checks each, then reviews all three complete round and three complete hardware expansion bodies by exact instructions and executable bytes with per-byte and per-instruction negative controls. AArch64 QEMU emulation, not native qualification. Does not review surrounding callers, dispatch or caller cleanup/spills; no timing, performance or physical-fault claim."
+command = ["python3","scripts/aes/check-aes-accelerated-linked.py","--toolchain","1.99.1","--mode","arm-qemu","--admission","static"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-linked","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_LINKED_PASS: 1.99.1 arm-qemu static; four consumers; kernel bodies only"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-linked-arm-qemu-hosted-current"
+category = "aes-linked-kernel"
+name = "Packaged LTO AES kernel bodies, 1.99.1 arm-qemu hosted"
+establishes = "Four byte-checked packaged LTO consumers: direct/facade and abort/unwind. Executes 18 known-answer operations plus clearing/quarantine checks each, then reviews all three complete round and three complete hardware expansion bodies by exact instructions and executable bytes with per-byte and per-instruction negative controls. AArch64 QEMU emulation, not native qualification. Does not review surrounding callers, dispatch or caller cleanup/spills; no timing, performance or physical-fault claim."
+command = ["python3","scripts/aes/check-aes-accelerated-linked.py","--toolchain","1.99.1","--mode","arm-qemu","--admission","hosted"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-linked","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_LINKED_PASS: 1.99.1 arm-qemu hosted; four consumers; kernel bodies only"]
+
+[groups.aes-accelerated-public]
+paths = ["scripts/aes/aes_accelerated_linked_public.py", "scripts/aes/test-aes-accelerated-public.py", "scripts/aes/aes_linked_mix.py", "scripts/aes/aes_linked_helpers.py", "scripts/aes/aes_linked_cleanup.py", "docs/assurance/aes-accelerated-linked-public.md"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-public-linked-msrv"
+category = "aes-linked-public"
+name = "Packaged LTO cached AES public encryption, Rust 1.90.0 x86"
+establishes = "Four executed packaged direct/facade abort/unwind consumers; exact complete cached public-encryption wrapper streams for all widths, authority/length guards, staging/publication, matching reviewed kernels and volatile clear. Includes emitted unwind landing pad and bound resume import, not exception-table proof. Excludes constructors, secret-output/ephemeral wrappers, ARM callers, timing and spill-erasure claims."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.90.0", "--mode", "native", "--admission", "static", "--review-cached-public"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-public", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_PUBLIC_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_PUBLIC_LINKED_PASS: 1.90.0; four consumers; x86 cached public wrappers, kernels and volatile clear"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-public-linked-current"
+category = "aes-linked-public"
+name = "Packaged LTO cached AES public encryption, Rust 1.99.1 x86"
+establishes = "Four executed packaged direct/facade abort/unwind consumers; exact complete cached public-encryption wrapper streams for all widths, authority/length guards, staging/publication, matching reviewed kernels and volatile clear. Excludes constructors, secret-output/ephemeral wrappers, ARM callers, exception-table proof, timing and spill-erasure claims."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.99.1", "--mode", "native", "--admission", "static", "--review-cached-public"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-public", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_PUBLIC_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_PUBLIC_LINKED_PASS: 1.99.1; four consumers; x86 cached public wrappers, kernels and volatile clear"]
+
+[groups.aes-accelerated-secret]
+paths = ["scripts/aes/aes_accelerated_linked_secret.py", "scripts/aes/test-aes-accelerated-secret.py", "scripts/aes/aes_accelerated_linked_public.py", "scripts/aes/aes_linked_mix.py", "scripts/aes/aes_linked_helpers.py", "scripts/aes/aes_linked_cleanup.py", "scripts/aes/aes_linked_wrappers.py", "docs/assurance/aes-accelerated-linked-secret.md"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-secret-linked-msrv"
+category = "aes-linked-secret"
+name = "Packaged LTO cached AES secret output, Rust 1.90.0 x86"
+establishes = "Four executed packaged direct/facade abort/unwind consumers; complete cached secret encrypt/decrypt wrapper streams for all widths, authority/bounds/direction checks, staged copy to clearing output owner, rejection cleanup, matching kernels, copy and volatile clear. Includes emitted unwind landing pad and bound resume import, not exception-table proof. Excludes constructors, ephemeral operations, returned-owner destruction review, ARM callers, timing and spill-erasure claims."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.90.0", "--mode", "native", "--admission", "static", "--review-cached-secret"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-secret", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_SECRET_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_SECRET_LINKED_PASS: 1.90.0; four consumers; x86 cached secret wrappers, kernels, copy and volatile clear"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-secret-linked-current"
+category = "aes-linked-secret"
+name = "Packaged LTO cached AES secret output, Rust 1.99.1 x86"
+establishes = "Four executed packaged direct/facade abort/unwind consumers; complete cached secret encrypt/decrypt wrapper streams for all widths, authority/bounds/direction checks, staged copy to clearing output owner, rejection cleanup including validated tail call, matching kernels, copy and volatile clear. Excludes constructors, ephemeral operations, returned-owner destruction review, ARM callers, exception-table proof, timing and spill-erasure claims."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.99.1", "--mode", "native", "--admission", "static", "--review-cached-secret"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-secret", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_SECRET_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_SECRET_LINKED_PASS: 1.99.1; four consumers; x86 cached secret wrappers, kernels, copy and volatile clear"]
+
+[groups.aes-accelerated-ephemeral]
+paths = ["scripts/aes/aes_accelerated_linked_ephemeral.py", "scripts/aes/test-aes-accelerated-ephemeral.py", "scripts/aes/aes_accelerated_linked_sessions.py", "scripts/aes/test-aes-accelerated-sessions.py", "docs/assurance/aes-accelerated-linked-ephemeral.md"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-ephemeral-linked-msrv"
+category = "aes-linked-ephemeral"
+name = "Packaged LTO AES per-operation secret output and expansion, Rust 1.90.0 x86"
+establishes = "Four executed packaged direct/facade abort/unwind consumers; complete per-operation secret encrypt/decrypt wrappers for all widths, initial and post-expansion authority checks, temporary schedule initialization and cleanup, reviewed hardware expansion and six width/direction-bound session bodies, matching hardware kernels, copy and volatile clear. Replays cached secret review. Emitted unwind pad/import bound, not exception-table proof. Constructor quarantine rejection tested, not constructor machine-code qualification. Excludes public ephemeral callers, destructor entry points, ARM, timing and spill-erasure claims."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.90.0", "--mode", "native", "--admission", "static", "--review-ephemeral-secret"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-ephemeral", "aes-accelerated-secret", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-linked", "aes-dataflow", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_EPHEMERAL_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_EPHEMERAL_LINKED_PASS: 1.90.0; four consumers; x86 cached and ephemeral secret wrappers, expansion closure, kernels, copy and volatile clear"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-ephemeral-linked-current"
+category = "aes-linked-ephemeral"
+name = "Packaged LTO AES per-operation secret output and expansion, Rust 1.99.1 x86"
+establishes = "Four executed packaged direct/facade abort/unwind consumers; complete per-operation secret encrypt/decrypt wrappers for all widths, initial and post-expansion authority checks, temporary schedule initialization and cleanup, reviewed hardware expansion and six width/direction-bound session bodies, matching hardware kernels, copy and volatile clear. Replays cached secret review. Constructor quarantine rejection tested, not constructor machine-code qualification. Excludes public ephemeral callers, destructor entry points, ARM, exception-table proof, timing and spill-erasure claims."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.99.1", "--mode", "native", "--admission", "static", "--review-ephemeral-secret"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-ephemeral", "aes-accelerated-secret", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-linked", "aes-dataflow", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_EPHEMERAL_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_EPHEMERAL_LINKED_PASS: 1.99.1; four consumers; x86 cached and ephemeral secret wrappers, expansion closure, kernels, copy and volatile clear"]
+
+[groups.aes-accelerated-campaigns]
+paths = ["assurance/aes-accelerated-campaigns/lib.rs", "assurance/aes-kernel-candidate/probe.rs", "scripts/aes/check-aes-accelerated-campaigns.py", "scripts/aes/test-aes-accelerated-campaigns.py"]
+
+[groups.aes-accelerated-ephemeral-public]
+paths = ["scripts/aes/aes_accelerated_linked_ephemeral_public.py", "scripts/aes/test-aes-accelerated-ephemeral-public.py", "docs/assurance/aes-accelerated-linked-ephemeral-public.md"]
+
+[groups.aes-accelerated-timing]
+paths = ["assurance/aes-accelerated-campaigns/dit-probe.rs", "scripts/aes/check-aes-accelerated-fixed-random.py", "scripts/aes/test-aes-accelerated-fixed-random.py", "scripts/aes/aes_timing_controls.py", "scripts/aes/aes_timing_dispatch.py", "scripts/aes/aes_timing_batch.py", "scripts/aes/aes_timing_slot_crossover.py", "assurance/aes-accelerated-campaigns/timing-controls.rs", "assurance/aes-accelerated-campaigns/timing-dispatch.rs", "assurance/aes-accelerated-campaigns/timing-overhead.rs", "docs/assurance/aes-accelerated-fixed-random.md", "docs/assurance/aes-timing-address-controls.md", "docs/assurance/aes-timing-dispatch-controls.md", "docs/assurance/aes-timing-batch-controls.md"]
+
+[groups.aes-timing-crossover]
+paths = ["assurance/aes-accelerated-campaigns/timing-slot-crossover.rs", "assurance/aes-accelerated-campaigns/timing-slot-driver.rs", "scripts/aes/aes_timing_slot_crossover.py", "scripts/aes/test-aes-timing-slot-crossover.py", "docs/assurance/aes-slot-crossover-design.md"]
+
+[[checks]]
+component = "aes"
+id = "timing-crossover-fixture-direct-msrv"
+category = "aes-timing-crossover-fixture"
+name = "AES class/slot crossover fixture correctness, direct, Rust 1.90.0"
+establishes = "Thirteen Rust tests and 576 OpenSSL crossover-cell comparisons against packaged native x86 static AES-NI. Correctness only: observations are disabled for this mode. No ARM timing qualification or retrospective clearance of alarms."
+command = ["python3", "scripts/aes/check-aes-accelerated-fixed-random.py", "--toolchain", "1.90.0", "--route", "direct", "--slot-crossover"]
+cwd = "."
+inputs = ["aes-timing-crossover", "aes-accelerated-timing", "aes-fixed-random", "aes-performance", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_TIMING_CROSSOVER_FIXTURE_PASS:"]
+unique_lines = ["AES_ACCELERATED_TIMING_CROSSOVER_FIXTURE_PASS: 1.90.0 direct; 13 tests; 576 vectors; correctness only"]
+minimum_tests = 13
+exact_tests = 13
+
+[[checks]]
+component = "aes"
+id = "timing-crossover-fixture-facade-msrv"
+category = "aes-timing-crossover-fixture"
+name = "AES class/slot crossover fixture correctness, facade, Rust 1.90.0"
+establishes = "Thirteen Rust tests and 576 OpenSSL crossover-cell comparisons against packaged native x86 static AES-NI. Correctness only: observations are disabled for this mode. No ARM timing qualification or retrospective clearance of alarms."
+command = ["python3", "scripts/aes/check-aes-accelerated-fixed-random.py", "--toolchain", "1.90.0", "--route", "facade", "--slot-crossover"]
+cwd = "."
+inputs = ["aes-timing-crossover", "aes-accelerated-timing", "aes-fixed-random", "aes-performance", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_TIMING_CROSSOVER_FIXTURE_PASS:"]
+unique_lines = ["AES_ACCELERATED_TIMING_CROSSOVER_FIXTURE_PASS: 1.90.0 facade; 13 tests; 576 vectors; correctness only"]
+minimum_tests = 13
+exact_tests = 13
+
+[[checks]]
+component = "aes"
+id = "timing-crossover-fixture-direct-current"
+category = "aes-timing-crossover-fixture"
+name = "AES class/slot crossover fixture correctness, direct, Rust 1.99.1"
+establishes = "Thirteen Rust tests and 576 OpenSSL crossover-cell comparisons against packaged native x86 static AES-NI. Correctness only: observations are disabled for this mode. No ARM timing qualification or retrospective clearance of alarms."
+command = ["python3", "scripts/aes/check-aes-accelerated-fixed-random.py", "--toolchain", "1.99.1", "--route", "direct", "--slot-crossover"]
+cwd = "."
+inputs = ["aes-timing-crossover", "aes-accelerated-timing", "aes-fixed-random", "aes-performance", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_TIMING_CROSSOVER_FIXTURE_PASS:"]
+unique_lines = ["AES_ACCELERATED_TIMING_CROSSOVER_FIXTURE_PASS: 1.99.1 direct; 13 tests; 576 vectors; correctness only"]
+minimum_tests = 13
+exact_tests = 13
+
+[[checks]]
+component = "aes"
+id = "timing-crossover-fixture-facade-current"
+category = "aes-timing-crossover-fixture"
+name = "AES class/slot crossover fixture correctness, facade, Rust 1.99.1"
+establishes = "Thirteen Rust tests and 576 OpenSSL crossover-cell comparisons against packaged native x86 static AES-NI. Correctness only: observations are disabled for this mode. No ARM timing qualification or retrospective clearance of alarms."
+command = ["python3", "scripts/aes/check-aes-accelerated-fixed-random.py", "--toolchain", "1.99.1", "--route", "facade", "--slot-crossover"]
+cwd = "."
+inputs = ["aes-timing-crossover", "aes-accelerated-timing", "aes-fixed-random", "aes-performance", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_TIMING_CROSSOVER_FIXTURE_PASS:"]
+unique_lines = ["AES_ACCELERATED_TIMING_CROSSOVER_FIXTURE_PASS: 1.99.1 facade; 13 tests; 576 vectors; correctness only"]
+minimum_tests = 13
+exact_tests = 13
+
+[[checks]]
+component = "aes"
+id = "timing-batch-fixture-direct-msrv"
+category = "aes-timing-batch-fixture"
+name = "AES timing 1024-operation timing fixture correctness, direct, Rust 1.90.0"
+establishes = "Ten Rust tests and 936 OpenSSL comparisons across four address/value controls against packaged native x86 static AES-NI. Correctness only: no implicit timing measurements and no side-channel pass. Separate manual factorial observations retain every control, alarm and noisy result."
+command = ["python3", "scripts/aes/check-aes-accelerated-fixed-random.py", "--toolchain", "1.90.0", "--route", "direct", "--controls", "--isolate-dispatch", "--long-batch"]
+cwd = "."
+inputs = ["aes-accelerated-timing", "aes-fixed-random", "aes-performance", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_TIMING_BATCH_FIXTURE_PASS:"]
+unique_lines = ["AES_ACCELERATED_TIMING_BATCH_FIXTURE_PASS: 1.90.0 direct; 10 tests; 936 vectors; correctness only"]
+minimum_tests = 10
+exact_tests = 10
+
+[[checks]]
+component = "aes"
+id = "timing-batch-fixture-facade-msrv"
+category = "aes-timing-batch-fixture"
+name = "AES timing 1024-operation timing fixture correctness, facade, Rust 1.90.0"
+establishes = "Ten Rust tests and 936 OpenSSL comparisons across four address/value controls against packaged native x86 static AES-NI. Correctness only: no implicit timing measurements and no side-channel pass. Separate manual factorial observations retain every control, alarm and noisy result."
+command = ["python3", "scripts/aes/check-aes-accelerated-fixed-random.py", "--toolchain", "1.90.0", "--route", "facade", "--controls", "--isolate-dispatch", "--long-batch"]
+cwd = "."
+inputs = ["aes-accelerated-timing", "aes-fixed-random", "aes-performance", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_TIMING_BATCH_FIXTURE_PASS:"]
+unique_lines = ["AES_ACCELERATED_TIMING_BATCH_FIXTURE_PASS: 1.90.0 facade; 10 tests; 936 vectors; correctness only"]
+minimum_tests = 10
+exact_tests = 10
+
+[[checks]]
+component = "aes"
+id = "timing-batch-fixture-direct-current"
+category = "aes-timing-batch-fixture"
+name = "AES timing 1024-operation timing fixture correctness, direct, Rust 1.99.1"
+establishes = "Ten Rust tests and 936 OpenSSL comparisons across four address/value controls against packaged native x86 static AES-NI. Correctness only: no implicit timing measurements and no side-channel pass. Separate manual factorial observations retain every control, alarm and noisy result."
+command = ["python3", "scripts/aes/check-aes-accelerated-fixed-random.py", "--toolchain", "1.99.1", "--route", "direct", "--controls", "--isolate-dispatch", "--long-batch"]
+cwd = "."
+inputs = ["aes-accelerated-timing", "aes-fixed-random", "aes-performance", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_TIMING_BATCH_FIXTURE_PASS:"]
+unique_lines = ["AES_ACCELERATED_TIMING_BATCH_FIXTURE_PASS: 1.99.1 direct; 10 tests; 936 vectors; correctness only"]
+minimum_tests = 10
+exact_tests = 10
+
+[[checks]]
+component = "aes"
+id = "timing-batch-fixture-facade-current"
+category = "aes-timing-batch-fixture"
+name = "AES timing 1024-operation timing fixture correctness, facade, Rust 1.99.1"
+establishes = "Ten Rust tests and 936 OpenSSL comparisons across four address/value controls against packaged native x86 static AES-NI. Correctness only: no implicit timing measurements and no side-channel pass. Separate manual factorial observations retain every control, alarm and noisy result."
+command = ["python3", "scripts/aes/check-aes-accelerated-fixed-random.py", "--toolchain", "1.99.1", "--route", "facade", "--controls", "--isolate-dispatch", "--long-batch"]
+cwd = "."
+inputs = ["aes-accelerated-timing", "aes-fixed-random", "aes-performance", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_TIMING_BATCH_FIXTURE_PASS:"]
+unique_lines = ["AES_ACCELERATED_TIMING_BATCH_FIXTURE_PASS: 1.99.1 facade; 10 tests; 936 vectors; correctness only"]
+minimum_tests = 10
+exact_tests = 10
+
+[[checks]]
+component = "aes"
+id = "timing-dispatch-fixture-direct-msrv"
+category = "aes-timing-dispatch-fixture"
+name = "AES timing dispatch controls correctness, direct, Rust 1.90.0"
+establishes = "Ten Rust tests and 936 OpenSSL comparisons across four address/value controls against packaged native x86 static AES-NI. Correctness only: no implicit timing measurements and no side-channel pass. Separate manual factorial observations retain every control, alarm and noisy result."
+command = ["python3", "scripts/aes/check-aes-accelerated-fixed-random.py", "--toolchain", "1.90.0", "--route", "direct", "--controls", "--isolate-dispatch"]
+cwd = "."
+inputs = ["aes-accelerated-timing", "aes-fixed-random", "aes-performance", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_TIMING_DISPATCH_FIXTURE_PASS:"]
+unique_lines = ["AES_ACCELERATED_TIMING_DISPATCH_FIXTURE_PASS: 1.90.0 direct; 10 tests; 936 vectors; correctness only"]
+minimum_tests = 10
+exact_tests = 10
+
+[[checks]]
+component = "aes"
+id = "timing-dispatch-fixture-facade-msrv"
+category = "aes-timing-dispatch-fixture"
+name = "AES timing dispatch controls correctness, facade, Rust 1.90.0"
+establishes = "Ten Rust tests and 936 OpenSSL comparisons across four address/value controls against packaged native x86 static AES-NI. Correctness only: no implicit timing measurements and no side-channel pass. Separate manual factorial observations retain every control, alarm and noisy result."
+command = ["python3", "scripts/aes/check-aes-accelerated-fixed-random.py", "--toolchain", "1.90.0", "--route", "facade", "--controls", "--isolate-dispatch"]
+cwd = "."
+inputs = ["aes-accelerated-timing", "aes-fixed-random", "aes-performance", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_TIMING_DISPATCH_FIXTURE_PASS:"]
+unique_lines = ["AES_ACCELERATED_TIMING_DISPATCH_FIXTURE_PASS: 1.90.0 facade; 10 tests; 936 vectors; correctness only"]
+minimum_tests = 10
+exact_tests = 10
+
+[[checks]]
+component = "aes"
+id = "timing-dispatch-fixture-direct-current"
+category = "aes-timing-dispatch-fixture"
+name = "AES timing dispatch controls correctness, direct, Rust 1.99.1"
+establishes = "Ten Rust tests and 936 OpenSSL comparisons across four address/value controls against packaged native x86 static AES-NI. Correctness only: no implicit timing measurements and no side-channel pass. Separate manual factorial observations retain every control, alarm and noisy result."
+command = ["python3", "scripts/aes/check-aes-accelerated-fixed-random.py", "--toolchain", "1.99.1", "--route", "direct", "--controls", "--isolate-dispatch"]
+cwd = "."
+inputs = ["aes-accelerated-timing", "aes-fixed-random", "aes-performance", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_TIMING_DISPATCH_FIXTURE_PASS:"]
+unique_lines = ["AES_ACCELERATED_TIMING_DISPATCH_FIXTURE_PASS: 1.99.1 direct; 10 tests; 936 vectors; correctness only"]
+minimum_tests = 10
+exact_tests = 10
+
+[[checks]]
+component = "aes"
+id = "timing-dispatch-fixture-facade-current"
+category = "aes-timing-dispatch-fixture"
+name = "AES timing dispatch controls correctness, facade, Rust 1.99.1"
+establishes = "Ten Rust tests and 936 OpenSSL comparisons across four address/value controls against packaged native x86 static AES-NI. Correctness only: no implicit timing measurements and no side-channel pass. Separate manual factorial observations retain every control, alarm and noisy result."
+command = ["python3", "scripts/aes/check-aes-accelerated-fixed-random.py", "--toolchain", "1.99.1", "--route", "facade", "--controls", "--isolate-dispatch"]
+cwd = "."
+inputs = ["aes-accelerated-timing", "aes-fixed-random", "aes-performance", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_TIMING_DISPATCH_FIXTURE_PASS:"]
+unique_lines = ["AES_ACCELERATED_TIMING_DISPATCH_FIXTURE_PASS: 1.99.1 facade; 10 tests; 936 vectors; correctness only"]
+minimum_tests = 10
+exact_tests = 10
+
+[[checks]]
+component = "aes"
+id = "timing-controls-fixture-direct-msrv"
+category = "aes-timing-controls-fixture"
+name = "AES timing address/value controls correctness, direct, Rust 1.90.0"
+establishes = "Eight Rust tests and 936 OpenSSL comparisons across four address/value controls against packaged native x86 static AES-NI. Correctness only: no implicit timing measurements and no side-channel pass. Separate manual factorial observations retain every control, alarm and noisy result."
+command = ["python3", "scripts/aes/check-aes-accelerated-fixed-random.py", "--toolchain", "1.90.0", "--route", "direct", "--controls"]
+cwd = "."
+inputs = ["aes-accelerated-timing", "aes-fixed-random", "aes-performance", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_TIMING_CONTROLS_FIXTURE_PASS:"]
+unique_lines = ["AES_ACCELERATED_TIMING_CONTROLS_FIXTURE_PASS: 1.90.0 direct; 8 tests; 936 vectors; correctness only"]
+minimum_tests = 8
+exact_tests = 8
+
+[[checks]]
+component = "aes"
+id = "timing-controls-fixture-facade-msrv"
+category = "aes-timing-controls-fixture"
+name = "AES timing address/value controls correctness, facade, Rust 1.90.0"
+establishes = "Eight Rust tests and 936 OpenSSL comparisons across four address/value controls against packaged native x86 static AES-NI. Correctness only: no implicit timing measurements and no side-channel pass. Separate manual factorial observations retain every control, alarm and noisy result."
+command = ["python3", "scripts/aes/check-aes-accelerated-fixed-random.py", "--toolchain", "1.90.0", "--route", "facade", "--controls"]
+cwd = "."
+inputs = ["aes-accelerated-timing", "aes-fixed-random", "aes-performance", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_TIMING_CONTROLS_FIXTURE_PASS:"]
+unique_lines = ["AES_ACCELERATED_TIMING_CONTROLS_FIXTURE_PASS: 1.90.0 facade; 8 tests; 936 vectors; correctness only"]
+minimum_tests = 8
+exact_tests = 8
+
+[[checks]]
+component = "aes"
+id = "timing-controls-fixture-direct-current"
+category = "aes-timing-controls-fixture"
+name = "AES timing address/value controls correctness, direct, Rust 1.99.1"
+establishes = "Eight Rust tests and 936 OpenSSL comparisons across four address/value controls against packaged native x86 static AES-NI. Correctness only: no implicit timing measurements and no side-channel pass. Separate manual factorial observations retain every control, alarm and noisy result."
+command = ["python3", "scripts/aes/check-aes-accelerated-fixed-random.py", "--toolchain", "1.99.1", "--route", "direct", "--controls"]
+cwd = "."
+inputs = ["aes-accelerated-timing", "aes-fixed-random", "aes-performance", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_TIMING_CONTROLS_FIXTURE_PASS:"]
+unique_lines = ["AES_ACCELERATED_TIMING_CONTROLS_FIXTURE_PASS: 1.99.1 direct; 8 tests; 936 vectors; correctness only"]
+minimum_tests = 8
+exact_tests = 8
+
+[[checks]]
+component = "aes"
+id = "timing-controls-fixture-facade-current"
+category = "aes-timing-controls-fixture"
+name = "AES timing address/value controls correctness, facade, Rust 1.99.1"
+establishes = "Eight Rust tests and 936 OpenSSL comparisons across four address/value controls against packaged native x86 static AES-NI. Correctness only: no implicit timing measurements and no side-channel pass. Separate manual factorial observations retain every control, alarm and noisy result."
+command = ["python3", "scripts/aes/check-aes-accelerated-fixed-random.py", "--toolchain", "1.99.1", "--route", "facade", "--controls"]
+cwd = "."
+inputs = ["aes-accelerated-timing", "aes-fixed-random", "aes-performance", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_TIMING_CONTROLS_FIXTURE_PASS:"]
+unique_lines = ["AES_ACCELERATED_TIMING_CONTROLS_FIXTURE_PASS: 1.99.1 facade; 8 tests; 936 vectors; correctness only"]
+minimum_tests = 8
+exact_tests = 8
+
+[[checks]]
+component = "aes"
+id = "accelerated-timing-fixture-direct-msrv"
+category = "aes-accelerated-timing-fixture"
+name = "Accelerated AES timing fixture correctness, direct, Rust 1.90.0"
+establishes = "Archive-only native x86 static AES-NI timing-fixture correctness: four tests and 234 independent OpenSSL vector comparisons across 39 campaigns. No timing samples collected, no timing pass or native ARM qualification claimed. Measurements require explicit separate one-shot observations."
+command = ["python3", "scripts/aes/check-aes-accelerated-fixed-random.py", "--toolchain", "1.90.0", "--route", "direct"]
+cwd = "."
+inputs = ["aes-accelerated-timing", "aes-fixed-random", "aes-performance", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_TIMING_FIXTURE_PASS:"]
+unique_lines = ["AES_ACCELERATED_TIMING_FIXTURE_PASS: 1.90.0 direct; 4 tests; 234 vectors; correctness only"]
+minimum_tests = 4
+exact_tests = 4
+
+[[checks]]
+component = "aes"
+id = "accelerated-timing-fixture-facade-msrv"
+category = "aes-accelerated-timing-fixture"
+name = "Accelerated AES timing fixture correctness, facade, Rust 1.90.0"
+establishes = "Archive-only native x86 static AES-NI timing-fixture correctness: four tests and 234 independent OpenSSL vector comparisons across 39 campaigns. No timing samples collected, no timing pass or native ARM qualification claimed. Measurements require explicit separate one-shot observations."
+command = ["python3", "scripts/aes/check-aes-accelerated-fixed-random.py", "--toolchain", "1.90.0", "--route", "facade"]
+cwd = "."
+inputs = ["aes-accelerated-timing", "aes-fixed-random", "aes-performance", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_TIMING_FIXTURE_PASS:"]
+unique_lines = ["AES_ACCELERATED_TIMING_FIXTURE_PASS: 1.90.0 facade; 4 tests; 234 vectors; correctness only"]
+minimum_tests = 4
+exact_tests = 4
+
+[[checks]]
+component = "aes"
+id = "accelerated-timing-fixture-direct-current"
+category = "aes-accelerated-timing-fixture"
+name = "Accelerated AES timing fixture correctness, direct, Rust 1.99.1"
+establishes = "Archive-only native x86 static AES-NI timing-fixture correctness: four tests and 234 independent OpenSSL vector comparisons across 39 campaigns. No timing samples collected, no timing pass or native ARM qualification claimed. Measurements require explicit separate one-shot observations."
+command = ["python3", "scripts/aes/check-aes-accelerated-fixed-random.py", "--toolchain", "1.99.1", "--route", "direct"]
+cwd = "."
+inputs = ["aes-accelerated-timing", "aes-fixed-random", "aes-performance", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_TIMING_FIXTURE_PASS:"]
+unique_lines = ["AES_ACCELERATED_TIMING_FIXTURE_PASS: 1.99.1 direct; 4 tests; 234 vectors; correctness only"]
+minimum_tests = 4
+exact_tests = 4
+
+[[checks]]
+component = "aes"
+id = "accelerated-timing-fixture-facade-current"
+category = "aes-accelerated-timing-fixture"
+name = "Accelerated AES timing fixture correctness, facade, Rust 1.99.1"
+establishes = "Archive-only native x86 static AES-NI timing-fixture correctness: four tests and 234 independent OpenSSL vector comparisons across 39 campaigns. No timing samples collected, no timing pass or native ARM qualification claimed. Measurements require explicit separate one-shot observations."
+command = ["python3", "scripts/aes/check-aes-accelerated-fixed-random.py", "--toolchain", "1.99.1", "--route", "facade"]
+cwd = "."
+inputs = ["aes-accelerated-timing", "aes-fixed-random", "aes-performance", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "aes-oracle", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_TIMING_FIXTURE_PASS:"]
+unique_lines = ["AES_ACCELERATED_TIMING_FIXTURE_PASS: 1.99.1 facade; 4 tests; 234 vectors; correctness only"]
+minimum_tests = 4
+exact_tests = 4
+
+[groups.aes-performance]
+paths = ["scripts/aes/check-aes-performance.py", "scripts/aes/test-aes-performance.py", "assurance/aes-accelerated-campaigns/performance.rs", "docs/assurance/aes-accelerated-performance.md"]
+
+[[checks]]
+component = "aes"
+id = "performance-fixture-direct-msrv"
+category = "aes-performance-fixture"
+name = "Packaged AES performance fixture correctness, direct, Rust 1.90.0"
+establishes = "Archive-only native x86 static AES-NI fixture correctness, opt3/fat-LTO/cgu1/overflow/unwind; four tests and 48 public known-answer/clearing cases across three widths, raw/cached, portable/accelerated, construction/encrypt/decrypt/public output. Does not collect measurements, establish a speed threshold, qualify side channels or native ARM. Explicit manual observations remain separate."
+command = ["python3", "scripts/aes/check-aes-performance.py", "--toolchain", "1.90.0", "--route", "direct"]
+cwd = "."
+inputs = ["aes-performance", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_PERFORMANCE_FIXTURE_PASS:"]
+unique_lines = ["AES_PERFORMANCE_FIXTURE_PASS: 1.90.0 direct; 4 tests; 48 cases; correctness only"]
+minimum_tests = 4
+exact_tests = 4
+
+[[checks]]
+component = "aes"
+id = "performance-fixture-facade-msrv"
+category = "aes-performance-fixture"
+name = "Packaged AES performance fixture correctness, facade, Rust 1.90.0"
+establishes = "Archive-only native x86 static AES-NI fixture correctness, opt3/fat-LTO/cgu1/overflow/unwind; four tests and 48 public known-answer/clearing cases across three widths, raw/cached, portable/accelerated, construction/encrypt/decrypt/public output. Does not collect measurements, establish a speed threshold, qualify side channels or native ARM. Explicit manual observations remain separate."
+command = ["python3", "scripts/aes/check-aes-performance.py", "--toolchain", "1.90.0", "--route", "facade"]
+cwd = "."
+inputs = ["aes-performance", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_PERFORMANCE_FIXTURE_PASS:"]
+unique_lines = ["AES_PERFORMANCE_FIXTURE_PASS: 1.90.0 facade; 4 tests; 48 cases; correctness only"]
+minimum_tests = 4
+exact_tests = 4
+
+[[checks]]
+component = "aes"
+id = "performance-fixture-direct-current"
+category = "aes-performance-fixture"
+name = "Packaged AES performance fixture correctness, direct, Rust 1.99.1"
+establishes = "Archive-only native x86 static AES-NI fixture correctness, opt3/fat-LTO/cgu1/overflow/unwind; four tests and 48 public known-answer/clearing cases across three widths, raw/cached, portable/accelerated, construction/encrypt/decrypt/public output. Does not collect measurements, establish a speed threshold, qualify side channels or native ARM. Explicit manual observations remain separate."
+command = ["python3", "scripts/aes/check-aes-performance.py", "--toolchain", "1.99.1", "--route", "direct"]
+cwd = "."
+inputs = ["aes-performance", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_PERFORMANCE_FIXTURE_PASS:"]
+unique_lines = ["AES_PERFORMANCE_FIXTURE_PASS: 1.99.1 direct; 4 tests; 48 cases; correctness only"]
+minimum_tests = 4
+exact_tests = 4
+
+[[checks]]
+component = "aes"
+id = "performance-fixture-facade-current"
+category = "aes-performance-fixture"
+name = "Packaged AES performance fixture correctness, facade, Rust 1.99.1"
+establishes = "Archive-only native x86 static AES-NI fixture correctness, opt3/fat-LTO/cgu1/overflow/unwind; four tests and 48 public known-answer/clearing cases across three widths, raw/cached, portable/accelerated, construction/encrypt/decrypt/public output. Does not collect measurements, establish a speed threshold, qualify side channels or native ARM. Explicit manual observations remain separate."
+command = ["python3", "scripts/aes/check-aes-performance.py", "--toolchain", "1.99.1", "--route", "facade"]
+cwd = "."
+inputs = ["aes-performance", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_PERFORMANCE_FIXTURE_PASS:"]
+unique_lines = ["AES_PERFORMANCE_FIXTURE_PASS: 1.99.1 facade; 4 tests; 48 cases; correctness only"]
+minimum_tests = 4
+exact_tests = 4
+
+[groups.aes-accelerated-no-std]
+paths = ["scripts/aes/check-aes-accelerated-no-std.py", "scripts/aes/test-aes-accelerated-no-std.py", "assurance/aes-accelerated-campaigns/no-std.rs", "docs/assurance/aes-accelerated-no-std.md"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-no-std-direct-msrv"
+category = "aes-accelerated-no-std"
+name = "Packaged accelerated AES no_std and API isolation, direct, Rust 1.90.0"
+establishes = "Archive-only no_std libraries: static/runtime feature modes, Cortex-M, Linux x86 AES-NI and AArch64 musl AES/NEON, debug/release. Requires 12 library builds and 62 paired feature/ownership/admission diagnostics on Cortex-M. Exact archive dependency graphs exclude hosted adapters. Compile only: not target execution, unsupported bare-metal x86 SIMD ABI, native qualification, timing, physical faults or spill erasure."
+command = ["python3", "scripts/aes/check-aes-accelerated-no-std.py", "--toolchain", "1.90.0", "--route", "direct"]
+cwd = "."
+inputs = ["aes-accelerated-no-std", "aes-execution-api", "aes-runner", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","PYTHONOPTIMIZE","PYTHONPATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_NO_STD_PASS:"]
+unique_lines = ["AES_ACCELERATED_NO_STD_PASS: 1.90.0 direct; 12 library builds; 62 paired probes; compile only","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-thumbv7em-none-eabi-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-thumbv7em-none-eabi-release","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-x86_64-unknown-linux-gnu-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-x86_64-unknown-linux-gnu-release","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-aarch64-unknown-linux-musl-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-aarch64-unknown-linux-musl-release","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-thumbv7em-none-eabi-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-thumbv7em-none-eabi-release","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-x86_64-unknown-linux-gnu-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-x86_64-unknown-linux-gnu-release","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-aarch64-unknown-linux-musl-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-aarch64-unknown-linux-musl-release"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-no-std-facade-msrv"
+category = "aes-accelerated-no-std"
+name = "Packaged accelerated AES no_std and API isolation, facade, Rust 1.90.0"
+establishes = "Archive-only no_std libraries: static/runtime feature modes, Cortex-M, Linux x86 AES-NI and AArch64 musl AES/NEON, debug/release. Requires 12 library builds and 62 paired feature/ownership/admission diagnostics on Cortex-M. Exact archive dependency graphs exclude hosted adapters. Compile only: not target execution, unsupported bare-metal x86 SIMD ABI, native qualification, timing, physical faults or spill erasure."
+command = ["python3", "scripts/aes/check-aes-accelerated-no-std.py", "--toolchain", "1.90.0", "--route", "facade"]
+cwd = "."
+inputs = ["aes-accelerated-no-std", "aes-execution-api", "aes-runner", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","PYTHONOPTIMIZE","PYTHONPATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_NO_STD_PASS:"]
+unique_lines = ["AES_ACCELERATED_NO_STD_PASS: 1.90.0 facade; 12 library builds; 62 paired probes; compile only","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-thumbv7em-none-eabi-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-thumbv7em-none-eabi-release","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-x86_64-unknown-linux-gnu-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-x86_64-unknown-linux-gnu-release","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-aarch64-unknown-linux-musl-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-aarch64-unknown-linux-musl-release","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-thumbv7em-none-eabi-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-thumbv7em-none-eabi-release","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-x86_64-unknown-linux-gnu-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-x86_64-unknown-linux-gnu-release","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-aarch64-unknown-linux-musl-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-aarch64-unknown-linux-musl-release"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-no-std-direct-current"
+category = "aes-accelerated-no-std"
+name = "Packaged accelerated AES no_std and API isolation, direct, Rust 1.99.1"
+establishes = "Archive-only no_std libraries: static/runtime feature modes, Cortex-M, Linux x86 AES-NI and AArch64 musl AES/NEON, debug/release. Requires 12 library builds and 62 paired feature/ownership/admission diagnostics on Cortex-M. Exact archive dependency graphs exclude hosted adapters. Compile only: not target execution, unsupported bare-metal x86 SIMD ABI, native qualification, timing, physical faults or spill erasure."
+command = ["python3", "scripts/aes/check-aes-accelerated-no-std.py", "--toolchain", "1.99.1", "--route", "direct"]
+cwd = "."
+inputs = ["aes-accelerated-no-std", "aes-execution-api", "aes-runner", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","PYTHONOPTIMIZE","PYTHONPATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_NO_STD_PASS:"]
+unique_lines = ["AES_ACCELERATED_NO_STD_PASS: 1.99.1 direct; 12 library builds; 62 paired probes; compile only","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-thumbv7em-none-eabi-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-thumbv7em-none-eabi-release","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-x86_64-unknown-linux-gnu-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-x86_64-unknown-linux-gnu-release","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-aarch64-unknown-linux-musl-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-aarch64-unknown-linux-musl-release","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-thumbv7em-none-eabi-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-thumbv7em-none-eabi-release","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-x86_64-unknown-linux-gnu-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-x86_64-unknown-linux-gnu-release","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-aarch64-unknown-linux-musl-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-aarch64-unknown-linux-musl-release"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-no-std-facade-current"
+category = "aes-accelerated-no-std"
+name = "Packaged accelerated AES no_std and API isolation, facade, Rust 1.99.1"
+establishes = "Archive-only no_std libraries: static/runtime feature modes, Cortex-M, Linux x86 AES-NI and AArch64 musl AES/NEON, debug/release. Requires 12 library builds and 62 paired feature/ownership/admission diagnostics on Cortex-M. Exact archive dependency graphs exclude hosted adapters. Compile only: not target execution, unsupported bare-metal x86 SIMD ABI, native qualification, timing, physical faults or spill erasure."
+command = ["python3", "scripts/aes/check-aes-accelerated-no-std.py", "--toolchain", "1.99.1", "--route", "facade"]
+cwd = "."
+inputs = ["aes-accelerated-no-std", "aes-execution-api", "aes-runner", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","PYTHONOPTIMIZE","PYTHONPATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_NO_STD_PASS:"]
+unique_lines = ["AES_ACCELERATED_NO_STD_PASS: 1.99.1 facade; 12 library builds; 62 paired probes; compile only","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-thumbv7em-none-eabi-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-thumbv7em-none-eabi-release","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-x86_64-unknown-linux-gnu-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-x86_64-unknown-linux-gnu-release","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-aarch64-unknown-linux-musl-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-aarch64-unknown-linux-musl-release","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-thumbv7em-none-eabi-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-thumbv7em-none-eabi-release","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-x86_64-unknown-linux-gnu-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-x86_64-unknown-linux-gnu-release","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-aarch64-unknown-linux-musl-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-aarch64-unknown-linux-musl-release"]
+
+[groups.aes-accelerated-sanitizers]
+paths = ["scripts/aes/check-aes-accelerated-sanitizers.py", "scripts/aes/test-aes-accelerated-sanitizers.py", "assurance/aes-accelerated-campaigns/sanitizer-control.rs", "assurance/aes-kernel-candidate/probe.rs", "crates/brynja-crypto/tests/aes_execution.rs", "docs/assurance/aes-accelerated-sanitizers.md"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-sanitizers-direct"
+category = "aes-accelerated-sanitizers"
+name = "Packaged accelerated AES ASan/LSan, direct API"
+establishes = "Native Linux x86 AES-NI static admission on nightly-2026-09-11; archive-only dependencies; debug/release each execute 13 named tests covering all widths, both owner forms, vectors, quarantine, clearing and caller unwind. Both profiles require failing bounds/leak controls with specific diagnoses and exit codes. Installed std is not rebuilt. Not ARM, exhaustive memory safety, constant time, physical faults, spill erasure or final-linked qualification."
+command = ["python3", "scripts/aes/check-aes-accelerated-sanitizers.py", "--route", "direct"]
+cwd = "."
+inputs = ["aes-accelerated-sanitizers", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "asan-tools"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "ASAN_OPTIONS", "LSAN_OPTIONS", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_SANITIZERS_PASS:"]
+unique_lines = ["AES_ACCELERATED_SANITIZERS_PASS: direct; 2 profiles; 26 tests; 4 failing sanitizer controls","AES_ACCELERATED_SANITIZER_PROFILE_PASS: direct debug; 13 tests","AES_SANITIZER_CONTROL_PASS: direct debug bounds","AES_SANITIZER_CONTROL_PASS: direct debug leak","AES_ACCELERATED_SANITIZER_PROFILE_PASS: direct release; 13 tests","AES_SANITIZER_CONTROL_PASS: direct release bounds","AES_SANITIZER_CONTROL_PASS: direct release leak"]
+minimum_tests = 26
+exact_tests = 26
+
+[[checks]]
+component = "aes"
+id = "accelerated-sanitizers-facade"
+category = "aes-accelerated-sanitizers"
+name = "Packaged accelerated AES ASan/LSan, facade API"
+establishes = "Native Linux x86 AES-NI static admission on nightly-2026-09-11; archive-only dependencies; debug/release each execute 13 named tests covering all widths, both owner forms, vectors, quarantine, clearing and caller unwind. Both profiles require failing bounds/leak controls with specific diagnoses and exit codes. Installed std is not rebuilt. Not ARM, exhaustive memory safety, constant time, physical faults, spill erasure or final-linked qualification."
+command = ["python3", "scripts/aes/check-aes-accelerated-sanitizers.py", "--route", "facade"]
+cwd = "."
+inputs = ["aes-accelerated-sanitizers", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "asan-tools"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "PYTHONOPTIMIZE", "PYTHONPATH", "ASAN_OPTIONS", "LSAN_OPTIONS", "LD_PRELOAD", "LD_AUDIT", "LD_LIBRARY_PATH"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_SANITIZERS_PASS:"]
+unique_lines = ["AES_ACCELERATED_SANITIZERS_PASS: facade; 2 profiles; 26 tests; 4 failing sanitizer controls","AES_ACCELERATED_SANITIZER_PROFILE_PASS: facade debug; 13 tests","AES_SANITIZER_CONTROL_PASS: facade debug bounds","AES_SANITIZER_CONTROL_PASS: facade debug leak","AES_ACCELERATED_SANITIZER_PROFILE_PASS: facade release; 13 tests","AES_SANITIZER_CONTROL_PASS: facade release bounds","AES_SANITIZER_CONTROL_PASS: facade release leak"]
+minimum_tests = 26
+exact_tests = 26
+
+[groups.aes-accelerated-arm-ephemeral]
+paths = ["scripts/aes/aes_accelerated_linked_arm_ephemeral.py", "scripts/aes/accelerated-arm-ephemeral-review.json", "scripts/aes/test-aes-accelerated-arm-ephemeral.py", "scripts/aes/aes_accelerated_linked_arm_sessions.py", "scripts/aes/accelerated-arm-session-review.json", "scripts/aes/test-aes-accelerated-arm-sessions.py", "docs/assurance/aes-accelerated-linked-arm-ephemeral.md"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-arm-ephemeral-static-msrv"
+category = "aes-linked-arm-ephemeral"
+name = "Packaged LTO AES ARM per-operation callers, Rust 1.90.0 static"
+establishes = "Four emulated AArch64 direct/facade abort/unwind consumers. Six per-operation public/secret bodies bind health/generation and bundle rechecks after matched-width temporary expansion, dispatch, staging, clearing and quarantine. Requires six separately reviewed width/direction-bound session bodies; replays cached/constructor/hardware-expansion/copy/cleanup/kernel closure. Retained 1.90 unwind runtime is a pinned trusted boundary, not qualified internals or exception tables. Not native hardware qualification, arbitrary inlining, every call site, timing or spill/register erasure."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.90.0", "--mode", "arm-qemu", "--admission", "static", "--review-arm-ephemeral"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-arm-ephemeral", "aes-accelerated-arm-cached", "aes-accelerated-arm-constructors", "aes-accelerated-arm-cleanup", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv", "aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_ARM_EPHEMERAL_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_ARM_EPHEMERAL_LINKED_PASS: 1.90.0 static; four emulated consumers; per-operation public/secret callers and replayed cached closure"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-arm-ephemeral-hosted-msrv"
+category = "aes-linked-arm-ephemeral"
+name = "Packaged LTO AES ARM per-operation callers, Rust 1.90.0 hosted"
+establishes = "Four emulated AArch64 direct/facade abort/unwind consumers. Six per-operation public/secret bodies bind health/generation and bundle rechecks after matched-width temporary expansion, dispatch, staging, clearing and quarantine. Requires six separately reviewed width/direction-bound session bodies; replays cached/constructor/hardware-expansion/copy/cleanup/kernel closure. Retained 1.90 unwind runtime is a pinned trusted boundary, not qualified internals or exception tables. Not native hardware qualification, arbitrary inlining, every call site, timing or spill/register erasure."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.90.0", "--mode", "arm-qemu", "--admission", "hosted", "--review-arm-ephemeral"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-arm-ephemeral", "aes-accelerated-arm-cached", "aes-accelerated-arm-constructors", "aes-accelerated-arm-cleanup", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv", "aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_ARM_EPHEMERAL_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_ARM_EPHEMERAL_LINKED_PASS: 1.90.0 hosted; four emulated consumers; per-operation public/secret callers and replayed cached closure"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-arm-ephemeral-static-current"
+category = "aes-linked-arm-ephemeral"
+name = "Packaged LTO AES ARM per-operation callers, Rust 1.99.1 static"
+establishes = "Four emulated AArch64 direct/facade abort/unwind consumers. Six per-operation public/secret bodies bind health/generation and bundle rechecks after matched-width temporary expansion, dispatch, staging, clearing and quarantine. Requires six separately reviewed width/direction-bound session bodies; replays cached/constructor/hardware-expansion/copy/cleanup/kernel closure. Retained 1.90 unwind runtime is a pinned trusted boundary, not qualified internals or exception tables. Not native hardware qualification, arbitrary inlining, every call site, timing or spill/register erasure."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.99.1", "--mode", "arm-qemu", "--admission", "static", "--review-arm-ephemeral"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-arm-ephemeral", "aes-accelerated-arm-cached", "aes-accelerated-arm-constructors", "aes-accelerated-arm-cleanup", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv", "aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_ARM_EPHEMERAL_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_ARM_EPHEMERAL_LINKED_PASS: 1.99.1 static; four emulated consumers; per-operation public/secret callers and replayed cached closure"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-arm-ephemeral-hosted-current"
+category = "aes-linked-arm-ephemeral"
+name = "Packaged LTO AES ARM per-operation callers, Rust 1.99.1 hosted"
+establishes = "Four emulated AArch64 direct/facade abort/unwind consumers. Six per-operation public/secret bodies bind health/generation and bundle rechecks after matched-width temporary expansion, dispatch, staging, clearing and quarantine. Requires six separately reviewed width/direction-bound session bodies; replays cached/constructor/hardware-expansion/copy/cleanup/kernel closure. Retained 1.90 unwind runtime is a pinned trusted boundary, not qualified internals or exception tables. Not native hardware qualification, arbitrary inlining, every call site, timing or spill/register erasure."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.99.1", "--mode", "arm-qemu", "--admission", "hosted", "--review-arm-ephemeral"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-arm-ephemeral", "aes-accelerated-arm-cached", "aes-accelerated-arm-constructors", "aes-accelerated-arm-cleanup", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv", "aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_ARM_EPHEMERAL_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_ARM_EPHEMERAL_LINKED_PASS: 1.99.1 hosted; four emulated consumers; per-operation public/secret callers and replayed cached closure"]
+
+[groups.aes-accelerated-arm-cached]
+paths = ["scripts/aes/aes_accelerated_linked_arm_cached.py", "scripts/aes/accelerated-arm-cached-review.json", "scripts/aes/test-aes-accelerated-arm-cached.py", "docs/assurance/aes-accelerated-linked-arm-cached.md"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-arm-cached-static-msrv"
+category = "aes-linked-arm-cached"
+name = "Packaged LTO AES ARM cached callers, Rust 1.90.0 static"
+establishes = "Four emulated AArch64 direct/facade abort/unwind consumers. Six cached public/secret caller bodies bind health/generation, bundle and schedule checks, matched-width encrypt/decrypt dispatch, staged output, clearing and quarantine. Replays constructor/expansion/copy/cleanup/kernel closure. Pins retained 1.90 unwind runtime boundary without qualifying its internals or exception tables. Not ephemeral callers, native hardware qualification, arbitrary inlining, every call site, timing or spill/register erasure."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.90.0", "--mode", "arm-qemu", "--admission", "static", "--review-arm-cached"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-arm-cached", "aes-accelerated-arm-constructors", "aes-accelerated-arm-cleanup", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv", "aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_ARM_CACHED_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_ARM_CACHED_LINKED_PASS: 1.90.0 static; four emulated consumers; cached public/secret callers and replayed constructor closure"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-arm-cached-hosted-msrv"
+category = "aes-linked-arm-cached"
+name = "Packaged LTO AES ARM cached callers, Rust 1.90.0 hosted"
+establishes = "Four emulated AArch64 direct/facade abort/unwind consumers. Six cached public/secret caller bodies bind health/generation, bundle and schedule checks, matched-width encrypt/decrypt dispatch, staged output, clearing and quarantine. Replays constructor/expansion/copy/cleanup/kernel closure. Pins retained 1.90 unwind runtime boundary without qualifying its internals or exception tables. Not ephemeral callers, native hardware qualification, arbitrary inlining, every call site, timing or spill/register erasure."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.90.0", "--mode", "arm-qemu", "--admission", "hosted", "--review-arm-cached"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-arm-cached", "aes-accelerated-arm-constructors", "aes-accelerated-arm-cleanup", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv", "aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_ARM_CACHED_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_ARM_CACHED_LINKED_PASS: 1.90.0 hosted; four emulated consumers; cached public/secret callers and replayed constructor closure"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-arm-cached-static-current"
+category = "aes-linked-arm-cached"
+name = "Packaged LTO AES ARM cached callers, Rust 1.99.1 static"
+establishes = "Four emulated AArch64 direct/facade abort/unwind consumers. Six cached public/secret caller bodies bind health/generation, bundle and schedule checks, matched-width encrypt/decrypt dispatch, staged output, clearing and quarantine. Replays constructor/expansion/copy/cleanup/kernel closure. Pins retained 1.90 unwind runtime boundary without qualifying its internals or exception tables. Not ephemeral callers, native hardware qualification, arbitrary inlining, every call site, timing or spill/register erasure."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.99.1", "--mode", "arm-qemu", "--admission", "static", "--review-arm-cached"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-arm-cached", "aes-accelerated-arm-constructors", "aes-accelerated-arm-cleanup", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv", "aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_ARM_CACHED_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_ARM_CACHED_LINKED_PASS: 1.99.1 static; four emulated consumers; cached public/secret callers and replayed constructor closure"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-arm-cached-hosted-current"
+category = "aes-linked-arm-cached"
+name = "Packaged LTO AES ARM cached callers, Rust 1.99.1 hosted"
+establishes = "Four emulated AArch64 direct/facade abort/unwind consumers. Six cached public/secret caller bodies bind health/generation, bundle and schedule checks, matched-width encrypt/decrypt dispatch, staged output, clearing and quarantine. Replays constructor/expansion/copy/cleanup/kernel closure. Pins retained 1.90 unwind runtime boundary without qualifying its internals or exception tables. Not ephemeral callers, native hardware qualification, arbitrary inlining, every call site, timing or spill/register erasure."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.99.1", "--mode", "arm-qemu", "--admission", "hosted", "--review-arm-cached"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-arm-cached", "aes-accelerated-arm-constructors", "aes-accelerated-arm-cleanup", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv", "aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_ARM_CACHED_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_ARM_CACHED_LINKED_PASS: 1.99.1 hosted; four emulated consumers; cached public/secret callers and replayed constructor closure"]
+
+[groups.aes-accelerated-arm-constructors]
+paths = ["scripts/aes/aes_accelerated_linked_arm_constructors.py", "scripts/aes/test-aes-accelerated-arm-constructors.py", "scripts/aes/aes_aarch64_linked.py", "scripts/aes/test-aes-aarch64-linked.py", "scripts/aes/aarch64-linked-review.json", "docs/assurance/aes-accelerated-linked-arm-constructors.md"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-arm-constructors-static-msrv"
+category = "aes-linked-arm-constructors"
+name = "Packaged LTO AES ARM constructors and expansion, Rust 1.90.0 static"
+establishes = "Four emulated packaged AArch64 direct/facade abort/unwind consumers. Full six constructor fixture bodies bind admission, authority/generation, exact-width copy and hardware expansion, post-expansion admission, destination/temporary clearing and quarantine. Reviews copy, complete hardware expansion, MSRV unwind cleanup/runtime boundary, and replayed clear/destruction and round kernels. Not operation callers, startup or native hardware qualification, every fixture call site, arbitrary inlining, exception-table dispatch, unwinder qualification, timing or spill/register erasure."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.90.0", "--mode", "arm-qemu", "--admission", "static", "--review-arm-constructors"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-arm-constructors", "aes-accelerated-arm-cleanup", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv", "aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_ARM_CONSTRUCTORS_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_ARM_CONSTRUCTORS_LINKED_PASS: 1.90.0 static; four emulated consumers; six constructors, copy, expansion and cleanup closure"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-arm-constructors-hosted-msrv"
+category = "aes-linked-arm-constructors"
+name = "Packaged LTO AES ARM constructors and expansion, Rust 1.90.0 hosted"
+establishes = "Four emulated packaged AArch64 direct/facade abort/unwind consumers. Full six constructor fixture bodies bind admission, authority/generation, exact-width copy and hardware expansion, post-expansion admission, destination/temporary clearing and quarantine. Reviews copy, complete hardware expansion, MSRV unwind cleanup/runtime boundary, and replayed clear/destruction and round kernels. Not operation callers, startup or native hardware qualification, every fixture call site, arbitrary inlining, exception-table dispatch, unwinder qualification, timing or spill/register erasure."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.90.0", "--mode", "arm-qemu", "--admission", "hosted", "--review-arm-constructors"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-arm-constructors", "aes-accelerated-arm-cleanup", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv", "aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_ARM_CONSTRUCTORS_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_ARM_CONSTRUCTORS_LINKED_PASS: 1.90.0 hosted; four emulated consumers; six constructors, copy, expansion and cleanup closure"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-arm-constructors-static-current"
+category = "aes-linked-arm-constructors"
+name = "Packaged LTO AES ARM constructors and expansion, Rust 1.99.1 static"
+establishes = "Four emulated packaged AArch64 direct/facade abort/unwind consumers. Full six constructor fixture bodies bind admission, authority/generation, exact-width copy and hardware expansion, post-expansion admission, destination/temporary clearing and quarantine. Reviews copy, complete hardware expansion, MSRV unwind cleanup/runtime boundary, and replayed clear/destruction and round kernels. Not operation callers, startup or native hardware qualification, every fixture call site, arbitrary inlining, exception-table dispatch, unwinder qualification, timing or spill/register erasure."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.99.1", "--mode", "arm-qemu", "--admission", "static", "--review-arm-constructors"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-arm-constructors", "aes-accelerated-arm-cleanup", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv", "aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_ARM_CONSTRUCTORS_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_ARM_CONSTRUCTORS_LINKED_PASS: 1.99.1 static; four emulated consumers; six constructors, copy, expansion and cleanup closure"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-arm-constructors-hosted-current"
+category = "aes-linked-arm-constructors"
+name = "Packaged LTO AES ARM constructors and expansion, Rust 1.99.1 hosted"
+establishes = "Four emulated packaged AArch64 direct/facade abort/unwind consumers. Full six constructor fixture bodies bind admission, authority/generation, exact-width copy and hardware expansion, post-expansion admission, destination/temporary clearing and quarantine. Reviews copy, complete hardware expansion, MSRV unwind cleanup/runtime boundary, and replayed clear/destruction and round kernels. Not operation callers, startup or native hardware qualification, every fixture call site, arbitrary inlining, exception-table dispatch, unwinder qualification, timing or spill/register erasure."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.99.1", "--mode", "arm-qemu", "--admission", "hosted", "--review-arm-constructors"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-arm-constructors", "aes-accelerated-arm-cleanup", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv", "aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_ARM_CONSTRUCTORS_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_ARM_CONSTRUCTORS_LINKED_PASS: 1.99.1 hosted; four emulated consumers; six constructors, copy, expansion and cleanup closure"]
+
+[groups.aes-accelerated-arm-cleanup]
+paths = ["scripts/aes/aes_accelerated_linked_arm_cleanup.py", "scripts/aes/test-aes-accelerated-arm-cleanup.py", "docs/assurance/aes-accelerated-linked-arm-cleanup.md"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-arm-cleanup-static-msrv"
+category = "aes-linked-arm-cleanup"
+name = "Packaged LTO AES ARM clearing and destruction, Rust 1.90.0 static"
+establishes = "Four emulated AArch64 packaged direct/facade abort/unwind consumers. Exact executable-byte and instruction checks bind volatile clearing and two retained destruction bodies to the reviewed clear helper; all key-owner clear/Drop routes and secret output clearing are exercised. Replays all three round kernels. Not native hardware qualification, constructor/operation-caller review, every-call-site proof, arbitrary inlining, exception-table proof, timing or spill/register erasure."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.90.0", "--mode", "arm-qemu", "--admission", "static", "--review-arm-cleanup"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-arm-cleanup", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv", "aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_ARM_CLEANUP_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_ARM_CLEANUP_LINKED_PASS: 1.90.0 static; four emulated consumers; volatile clear, retained destruction bodies and round kernels"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-arm-cleanup-hosted-msrv"
+category = "aes-linked-arm-cleanup"
+name = "Packaged LTO AES ARM clearing and destruction, Rust 1.90.0 hosted"
+establishes = "Four emulated AArch64 packaged direct/facade abort/unwind consumers. Exact executable-byte and instruction checks bind volatile clearing and two retained destruction bodies to the reviewed clear helper; all key-owner clear/Drop routes and secret output clearing are exercised. Replays all three round kernels. Not native hardware qualification, constructor/operation-caller review, every-call-site proof, arbitrary inlining, exception-table proof, timing or spill/register erasure."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.90.0", "--mode", "arm-qemu", "--admission", "hosted", "--review-arm-cleanup"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-arm-cleanup", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv", "aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_ARM_CLEANUP_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_ARM_CLEANUP_LINKED_PASS: 1.90.0 hosted; four emulated consumers; volatile clear, retained destruction bodies and round kernels"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-arm-cleanup-static-current"
+category = "aes-linked-arm-cleanup"
+name = "Packaged LTO AES ARM clearing and destruction, Rust 1.99.1 static"
+establishes = "Four emulated AArch64 packaged direct/facade abort/unwind consumers. Exact executable-byte and instruction checks bind volatile clearing and two retained destruction bodies to the reviewed clear helper; all key-owner clear/Drop routes and secret output clearing are exercised. Replays all three round kernels. Not native hardware qualification, constructor/operation-caller review, every-call-site proof, arbitrary inlining, exception-table proof, timing or spill/register erasure."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.99.1", "--mode", "arm-qemu", "--admission", "static", "--review-arm-cleanup"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-arm-cleanup", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv", "aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_ARM_CLEANUP_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_ARM_CLEANUP_LINKED_PASS: 1.99.1 static; four emulated consumers; volatile clear, retained destruction bodies and round kernels"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-arm-cleanup-hosted-current"
+category = "aes-linked-arm-cleanup"
+name = "Packaged LTO AES ARM clearing and destruction, Rust 1.99.1 hosted"
+establishes = "Four emulated AArch64 packaged direct/facade abort/unwind consumers. Exact executable-byte and instruction checks bind volatile clearing and two retained destruction bodies to the reviewed clear helper; all key-owner clear/Drop routes and secret output clearing are exercised. Replays all three round kernels. Not native hardware qualification, constructor/operation-caller review, every-call-site proof, arbitrary inlining, exception-table proof, timing or spill/register erasure."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.99.1", "--mode", "arm-qemu", "--admission", "hosted", "--review-arm-cleanup"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-arm-cleanup", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv", "aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_ARM_CLEANUP_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_ARM_CLEANUP_LINKED_PASS: 1.99.1 hosted; four emulated consumers; volatile clear, retained destruction bodies and round kernels"]
+
+[groups.aes-accelerated-lifecycle]
+paths = ["scripts/aes/aes_accelerated_linked_lifecycle.py", "scripts/aes/test-aes-accelerated-lifecycle.py", "docs/assurance/aes-accelerated-linked-lifecycle.md"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-lifecycle-linked-msrv"
+category = "aes-linked-lifecycle"
+name = "Packaged LTO AES constructors and destruction, Rust 1.90.0 x86"
+establishes = "Four executed packaged direct/facade abort/unwind consumers; six full constructor fixture bodies, authority/generation binding, destination and temporary schedule clearing, exact-width copy/hardware expansion with post-expansion admission, plus two retained destruction bodies bound to volatile clearing. All six key-owner types and returned secret blocks exercise explicit clear and normal Drop. Binds the 1.90.0 cached-constructor unwind pad and resume import, not exception-table dispatch. Replays previous operation dependency reviews. Excludes every-fixture-call-site proof, arbitrary downstream inlining, ARM lifecycle, exception-table proof, timing and spill erasure."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.90.0", "--mode", "native", "--admission", "static", "--review-lifecycle"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-lifecycle", "aes-accelerated-ephemeral-public", "aes-accelerated-ephemeral", "aes-accelerated-secret", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-linked", "aes-dataflow", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_LIFECYCLE_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_LIFECYCLE_LINKED_PASS: 1.90.0; four consumers; x86 constructors, retained destruction bodies and replayed operation closure"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-lifecycle-linked-current"
+category = "aes-linked-lifecycle"
+name = "Packaged LTO AES constructors and destruction, Rust 1.99.1 x86"
+establishes = "Four executed packaged direct/facade abort/unwind consumers; six full constructor fixture bodies, authority/generation binding, destination and temporary schedule clearing, exact-width copy/hardware expansion with post-expansion admission, plus two retained destruction bodies bound to volatile clearing. All six key-owner types and returned secret blocks exercise explicit clear and normal Drop. Replays previous operation dependency reviews. Excludes every-fixture-call-site proof, arbitrary downstream inlining, ARM lifecycle, exception-table proof, timing and spill erasure."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.99.1", "--mode", "native", "--admission", "static", "--review-lifecycle"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-lifecycle", "aes-accelerated-ephemeral-public", "aes-accelerated-ephemeral", "aes-accelerated-secret", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-linked", "aes-dataflow", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_LIFECYCLE_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_LIFECYCLE_LINKED_PASS: 1.99.1; four consumers; x86 constructors, retained destruction bodies and replayed operation closure"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-ephemeral-public-linked-msrv"
+category = "aes-linked-ephemeral-public"
+name = "Packaged LTO AES per-operation public output, Rust 1.90.0 x86"
+establishes = "Four executed packaged direct/facade abort/unwind consumers; full external public-operation wrapper streams for all widths, initial and post-expansion admission, staged output release and temporary cleanup. Replays prior cached public, cached/ephemeral secret, hardware expansion, session, kernel, copy and clear reviews. Public quarantine rejection preserves caller output. Binds emitted unwind pad/import, not exception-table proof. Excludes constructors, destructors, ARM callers, arbitrary downstream inlining, timing and spill-erasure claims."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.90.0", "--mode", "native", "--admission", "static", "--review-ephemeral-public"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-ephemeral-public", "aes-accelerated-ephemeral", "aes-accelerated-secret", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-linked", "aes-dataflow", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_EPHEMERAL_PUBLIC_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_EPHEMERAL_PUBLIC_LINKED_PASS: 1.90.0; four consumers; x86 per-operation public wrappers and replayed operation dependency closure"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-ephemeral-public-linked-current"
+category = "aes-linked-ephemeral-public"
+name = "Packaged LTO AES per-operation public output, Rust 1.99.1 x86"
+establishes = "Four executed packaged direct/facade abort/unwind consumers; full external public-operation wrapper streams for all widths, initial and post-expansion admission, staged output release and temporary cleanup. Replays prior cached public, cached/ephemeral secret, hardware expansion, session, kernel, copy and clear reviews. Public quarantine rejection preserves caller output. Excludes constructors, destructors, ARM callers, arbitrary downstream inlining, exception-table proof, timing and spill-erasure claims."
+command = ["python3", "scripts/aes/check-aes-accelerated-linked.py", "--toolchain", "1.99.1", "--mode", "native", "--admission", "static", "--review-ephemeral-public"]
+cwd = "."
+inputs = ["aes-build", "aes-accelerated-ephemeral-public", "aes-accelerated-ephemeral", "aes-accelerated-secret", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-linked", "aes-dataflow", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_ACCELERATED_EPHEMERAL_PUBLIC_LINKED_PASS:"]
+unique_lines = ["AES_ACCELERATED_EPHEMERAL_PUBLIC_LINKED_PASS: 1.99.1; four consumers; x86 per-operation public wrappers and replayed operation dependency closure"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-avs-static-native-msrv-direct"
+category = "aes-campaign"
+name = "Forced static native AES avs, 1.90.0 direct"
+establishes = "Byte-checked Cargo archives, forced hardware owners with no portable fallback. NIST AESAVS 600 MCT records (1.2 million block operations) and 60 MMT records; all widths and both owners in release. Native x86 AES-NI with explicit static ISA contract. Correctness only; no timing, final-linked review, spill-erasure or physical-fault claim."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.90.0","--route","direct","--admission","static","--mode","native","--suite","avs"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 4000
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 12
+exact_tests = 12
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 direct static native avs"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-differential-static-native-msrv-direct"
+category = "aes-campaign"
+name = "Forced static native AES differential, 1.90.0 direct"
+establishes = "Byte-checked Cargo archives, forced hardware owners with no portable fallback. OpenSSL independent corpus, all three widths and both owners in debug/release; executable identity checked, shared libraries trusted. Native x86 AES-NI with explicit static ISA contract. Correctness only; no timing, final-linked review, spill-erasure or physical-fault claim."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.90.0","--route","direct","--admission","static","--mode","native","--suite","differential"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-oracle"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","BRYNJA_OPENSSL","OPENSSL_CONF","OPENSSL_MODULES","OPENSSL_ENGINES","LD_PRELOAD","LD_LIBRARY_PATH","LD_AUDIT","OPENSSL_ia32cap"]
+platform = "linux-x86_64"
+timeout_seconds = 4000
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 8
+exact_tests = 8
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 direct static native differential"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-avs-static-arm-qemu-msrv-direct"
+category = "aes-campaign"
+name = "Forced static arm-qemu AES avs, 1.90.0 direct"
+establishes = "Byte-checked Cargo archives, forced hardware owners with no portable fallback. NIST AESAVS 600 MCT records (1.2 million block operations) and 60 MMT records; all widths and both owners in release. AArch64 QEMU emulation, not native qualification. Correctness only; no timing, final-linked review, spill-erasure or physical-fault claim."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.90.0","--route","direct","--admission","static","--mode","arm-qemu","--suite","avs"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 4000
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 12
+exact_tests = 12
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 direct static arm-qemu avs"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-avs-hosted-arm-qemu-msrv-direct"
+category = "aes-campaign"
+name = "Forced hosted arm-qemu AES avs, 1.90.0 direct"
+establishes = "Byte-checked Cargo archives, forced hardware owners with no portable fallback. NIST AESAVS 600 MCT records (1.2 million block operations) and 60 MMT records; all widths and both owners in release. AArch64 QEMU emulation, not native qualification. Correctness only; no timing, final-linked review, spill-erasure or physical-fault claim."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.90.0","--route","direct","--admission","hosted","--mode","arm-qemu","--suite","avs"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 4000
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 12
+exact_tests = 12
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 direct hosted arm-qemu avs"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-avs-static-native-msrv-facade"
+category = "aes-campaign"
+name = "Forced static native AES avs, 1.90.0 facade"
+establishes = "Byte-checked Cargo archives, forced hardware owners with no portable fallback. NIST AESAVS 600 MCT records (1.2 million block operations) and 60 MMT records; all widths and both owners in release. Native x86 AES-NI with explicit static ISA contract. Correctness only; no timing, final-linked review, spill-erasure or physical-fault claim."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.90.0","--route","facade","--admission","static","--mode","native","--suite","avs"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 4000
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 12
+exact_tests = 12
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 facade static native avs"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-differential-static-native-msrv-facade"
+category = "aes-campaign"
+name = "Forced static native AES differential, 1.90.0 facade"
+establishes = "Byte-checked Cargo archives, forced hardware owners with no portable fallback. OpenSSL independent corpus, all three widths and both owners in debug/release; executable identity checked, shared libraries trusted. Native x86 AES-NI with explicit static ISA contract. Correctness only; no timing, final-linked review, spill-erasure or physical-fault claim."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.90.0","--route","facade","--admission","static","--mode","native","--suite","differential"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-oracle"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","BRYNJA_OPENSSL","OPENSSL_CONF","OPENSSL_MODULES","OPENSSL_ENGINES","LD_PRELOAD","LD_LIBRARY_PATH","LD_AUDIT","OPENSSL_ia32cap"]
+platform = "linux-x86_64"
+timeout_seconds = 4000
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 8
+exact_tests = 8
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 facade static native differential"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-avs-static-arm-qemu-msrv-facade"
+category = "aes-campaign"
+name = "Forced static arm-qemu AES avs, 1.90.0 facade"
+establishes = "Byte-checked Cargo archives, forced hardware owners with no portable fallback. NIST AESAVS 600 MCT records (1.2 million block operations) and 60 MMT records; all widths and both owners in release. AArch64 QEMU emulation, not native qualification. Correctness only; no timing, final-linked review, spill-erasure or physical-fault claim."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.90.0","--route","facade","--admission","static","--mode","arm-qemu","--suite","avs"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 4000
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 12
+exact_tests = 12
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 facade static arm-qemu avs"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-avs-hosted-arm-qemu-msrv-facade"
+category = "aes-campaign"
+name = "Forced hosted arm-qemu AES avs, 1.90.0 facade"
+establishes = "Byte-checked Cargo archives, forced hardware owners with no portable fallback. NIST AESAVS 600 MCT records (1.2 million block operations) and 60 MMT records; all widths and both owners in release. AArch64 QEMU emulation, not native qualification. Correctness only; no timing, final-linked review, spill-erasure or physical-fault claim."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.90.0","--route","facade","--admission","hosted","--mode","arm-qemu","--suite","avs"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 4000
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 12
+exact_tests = 12
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 facade hosted arm-qemu avs"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-avs-static-native-current-direct"
+category = "aes-campaign"
+name = "Forced static native AES avs, 1.99.1 direct"
+establishes = "Byte-checked Cargo archives, forced hardware owners with no portable fallback. NIST AESAVS 600 MCT records (1.2 million block operations) and 60 MMT records; all widths and both owners in release. Native x86 AES-NI with explicit static ISA contract. Correctness only; no timing, final-linked review, spill-erasure or physical-fault claim."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.99.1","--route","direct","--admission","static","--mode","native","--suite","avs"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 4000
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 12
+exact_tests = 12
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 direct static native avs"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-differential-static-native-current-direct"
+category = "aes-campaign"
+name = "Forced static native AES differential, 1.99.1 direct"
+establishes = "Byte-checked Cargo archives, forced hardware owners with no portable fallback. OpenSSL independent corpus, all three widths and both owners in debug/release; executable identity checked, shared libraries trusted. Native x86 AES-NI with explicit static ISA contract. Correctness only; no timing, final-linked review, spill-erasure or physical-fault claim."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.99.1","--route","direct","--admission","static","--mode","native","--suite","differential"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-oracle"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","BRYNJA_OPENSSL","OPENSSL_CONF","OPENSSL_MODULES","OPENSSL_ENGINES","LD_PRELOAD","LD_LIBRARY_PATH","LD_AUDIT","OPENSSL_ia32cap"]
+platform = "linux-x86_64"
+timeout_seconds = 4000
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 8
+exact_tests = 8
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 direct static native differential"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-avs-static-arm-qemu-current-direct"
+category = "aes-campaign"
+name = "Forced static arm-qemu AES avs, 1.99.1 direct"
+establishes = "Byte-checked Cargo archives, forced hardware owners with no portable fallback. NIST AESAVS 600 MCT records (1.2 million block operations) and 60 MMT records; all widths and both owners in release. AArch64 QEMU emulation, not native qualification. Correctness only; no timing, final-linked review, spill-erasure or physical-fault claim."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.99.1","--route","direct","--admission","static","--mode","arm-qemu","--suite","avs"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 4000
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 12
+exact_tests = 12
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 direct static arm-qemu avs"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-avs-hosted-arm-qemu-current-direct"
+category = "aes-campaign"
+name = "Forced hosted arm-qemu AES avs, 1.99.1 direct"
+establishes = "Byte-checked Cargo archives, forced hardware owners with no portable fallback. NIST AESAVS 600 MCT records (1.2 million block operations) and 60 MMT records; all widths and both owners in release. AArch64 QEMU emulation, not native qualification. Correctness only; no timing, final-linked review, spill-erasure or physical-fault claim."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.99.1","--route","direct","--admission","hosted","--mode","arm-qemu","--suite","avs"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 4000
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 12
+exact_tests = 12
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 direct hosted arm-qemu avs"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-avs-static-native-current-facade"
+category = "aes-campaign"
+name = "Forced static native AES avs, 1.99.1 facade"
+establishes = "Byte-checked Cargo archives, forced hardware owners with no portable fallback. NIST AESAVS 600 MCT records (1.2 million block operations) and 60 MMT records; all widths and both owners in release. Native x86 AES-NI with explicit static ISA contract. Correctness only; no timing, final-linked review, spill-erasure or physical-fault claim."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.99.1","--route","facade","--admission","static","--mode","native","--suite","avs"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 4000
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 12
+exact_tests = 12
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 facade static native avs"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-differential-static-native-current-facade"
+category = "aes-campaign"
+name = "Forced static native AES differential, 1.99.1 facade"
+establishes = "Byte-checked Cargo archives, forced hardware owners with no portable fallback. OpenSSL independent corpus, all three widths and both owners in debug/release; executable identity checked, shared libraries trusted. Native x86 AES-NI with explicit static ISA contract. Correctness only; no timing, final-linked review, spill-erasure or physical-fault claim."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.99.1","--route","facade","--admission","static","--mode","native","--suite","differential"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-oracle"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","BRYNJA_OPENSSL","OPENSSL_CONF","OPENSSL_MODULES","OPENSSL_ENGINES","LD_PRELOAD","LD_LIBRARY_PATH","LD_AUDIT","OPENSSL_ia32cap"]
+platform = "linux-x86_64"
+timeout_seconds = 4000
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 8
+exact_tests = 8
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 facade static native differential"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-avs-static-arm-qemu-current-facade"
+category = "aes-campaign"
+name = "Forced static arm-qemu AES avs, 1.99.1 facade"
+establishes = "Byte-checked Cargo archives, forced hardware owners with no portable fallback. NIST AESAVS 600 MCT records (1.2 million block operations) and 60 MMT records; all widths and both owners in release. AArch64 QEMU emulation, not native qualification. Correctness only; no timing, final-linked review, spill-erasure or physical-fault claim."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.99.1","--route","facade","--admission","static","--mode","arm-qemu","--suite","avs"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 4000
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 12
+exact_tests = 12
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 facade static arm-qemu avs"]
+
+[[checks]]
+component = "aes"
+id = "accelerated-avs-hosted-arm-qemu-current-facade"
+category = "aes-campaign"
+name = "Forced hosted arm-qemu AES avs, 1.99.1 facade"
+establishes = "Byte-checked Cargo archives, forced hardware owners with no portable fallback. NIST AESAVS 600 MCT records (1.2 million block operations) and 60 MMT records; all widths and both owners in release. AArch64 QEMU emulation, not native qualification. Correctness only; no timing, final-linked review, spill-erasure or physical-fault claim."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.99.1","--route","facade","--admission","hosted","--mode","arm-qemu","--suite","avs"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 4000
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 12
+exact_tests = 12
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 facade hosted arm-qemu avs"]
+
+[groups.aes-execution-api]
+paths = ["scripts/aes/check-aes-execution-api.py", "scripts/aes/test-aes-execution-api.py"]
+
+[[checks]]
+component = "aes"
+id = "execution-api-msrv"
+category = "compile-fail"
+name = "AES static/hosted exact ownership and admission diagnostics on Rust 1.90.0"
+establishes = "127 paired probes: six clearing owners and authority lifetimes, nontransfer/nonclone bounds, unsafe platform obligations, no report forgery, static/runtime feature isolation and hosted owner encapsulation. Exact diagnostic counts/codes and primary probe source required. Checkout-built direct/facade/hosted APIs, not packaged or runtime cleanup qualification."
+command = ["python3", "scripts/aes/check-aes-execution-api.py", "1.90.0"]
+cwd = "."
+inputs = ["aes-execution-api", "aes-runner", "aes-build", "aes-feature-integration", "cpu-source", "hosted-cpu-source", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["AES_EXECUTION_API_0_PASS:", "AES_EXECUTION_API_6_PASS:"]
+unique_lines = ["AES_EXECUTION_API_PASS: 1.90.0 127 paired probes"]
+
+[[checks]]
+component = "aes"
+id = "execution-api-current"
+category = "compile-fail"
+name = "AES static/hosted exact ownership and admission diagnostics on Rust 1.99.1"
+establishes = "127 paired probes: six clearing owners and authority lifetimes, nontransfer/nonclone bounds, unsafe platform obligations, no report forgery, static/runtime feature isolation and hosted owner encapsulation. Exact diagnostic counts/codes and primary probe source required. Checkout-built direct/facade/hosted APIs, not packaged or runtime cleanup qualification."
+command = ["python3", "scripts/aes/check-aes-execution-api.py", "1.99.1"]
+cwd = "."
+inputs = ["aes-execution-api", "aes-runner", "aes-build", "aes-feature-integration", "cpu-source", "hosted-cpu-source", "compiler"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["AES_EXECUTION_API_0_PASS:", "AES_EXECUTION_API_6_PASS:"]
+unique_lines = ["AES_EXECUTION_API_PASS: 1.99.1 127 paired probes"]
+
+[groups.aes-dit]
+paths = ["scripts/aes/check-aes-dit.py", "scripts/aes/test-aes-dit.py", "scripts/aes/check-aes-static.py", "docs/assurance/aes-dit.md"]
+[[groups.aes-dit.tools]]
+program = "python3"
+
+[[checks]]
+component = "aes"
+id = "dit-native-msrv"
+category = "aes-dit"
+name = "AES optional/required DIT and restoration native on Rust 1.90.0"
+establishes = "Local DIT policy, nested restoration, enable failure and unwind models; no native ARM execution. Not timing or physical-security qualification."
+command = ["python3","scripts/aes/check-aes-dit.py","--toolchain","1.90.0"]
+cwd = "."
+inputs = ["aes-dit","aes-build","cpu-source","hosted-cpu-source","hash-core","sha2-source","hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","RUSTUP_TOOLCHAIN","CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER","CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 4
+exact_tests = 4
+unique_lines = ["AES_DIT_PASS: native 1.90.0"]
+
+[[checks]]
+component = "aes"
+id = "dit-native-current"
+category = "aes-dit"
+name = "AES optional/required DIT and restoration native on Rust 1.99.1"
+establishes = "Local DIT policy, nested restoration, enable failure and unwind models; no native ARM execution. Not timing or physical-security qualification."
+command = ["python3","scripts/aes/check-aes-dit.py","--toolchain","1.99.1"]
+cwd = "."
+inputs = ["aes-dit","aes-build","cpu-source","hosted-cpu-source","hash-core","sha2-source","compiler"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","RUSTUP_TOOLCHAIN","CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER","CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 4
+exact_tests = 4
+unique_lines = ["AES_DIT_PASS: native 1.99.1"]
+
+[[checks]]
+component = "aes"
+id = "dit-arm-qemu-msrv"
+category = "aes-dit"
+name = "AES optional/required DIT and restoration arm-qemu on Rust 1.90.0"
+establishes = "Emulated DIT scope, all-width kernel restoration, plus AES without DIT and explicit required-DIT rejection. Not timing or physical-security qualification."
+command = ["python3","scripts/aes/check-aes-dit.py","--toolchain","1.90.0","--qemu-aarch64"]
+cwd = "."
+inputs = ["aes-dit","aes-build","cpu-source","hosted-cpu-source","hash-core","sha2-source","hkdf-msrv","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","RUSTUP_TOOLCHAIN","CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER","CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 11
+exact_tests = 11
+unique_lines = ["AES_DIT_PASS: arm-qemu 1.90.0"]
+
+[[checks]]
+component = "aes"
+id = "dit-arm-qemu-current"
+category = "aes-dit"
+name = "AES optional/required DIT and restoration arm-qemu on Rust 1.99.1"
+establishes = "Emulated DIT scope, all-width kernel restoration, plus AES without DIT and explicit required-DIT rejection. Not timing or physical-security qualification."
+command = ["python3","scripts/aes/check-aes-dit.py","--toolchain","1.99.1","--qemu-aarch64"]
+cwd = "."
+inputs = ["aes-dit","aes-build","cpu-source","hosted-cpu-source","hash-core","sha2-source","compiler","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","RUSTUP_TOOLCHAIN","CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER","CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 11
+exact_tests = 11
+unique_lines = ["AES_DIT_PASS: arm-qemu 1.99.1"]
+
+[groups.aes-hosted-execution]
+paths = ["scripts/aes/check-aes-hosted.py", "scripts/aes/test-aes-hosted.py", "scripts/aes/check-aes-static.py", "assurance/aes-hosted/Cargo.toml", "assurance/aes-hosted/Cargo.lock", "assurance/aes-hosted/src"]
+[[groups.aes-hosted-execution.tools]]
+program = "python3"
+
+[[checks]]
+component = "aes"
+id = "hosted-native-msrv"
+category = "aes-hosted"
+name = "AES hosted native baseline selection and owners on Rust 1.90.0"
+establishes = "Native x86 pre-execution unavailability, not accelerated execution. Six selection/lifecycle tests including optional/required DIT policy; full bundle and migration preconditions, explicit portable/prefer/require, terminal errors. Baseline compiled, not timing or native/final-linked qualification."
+command = ["python3","scripts/aes/check-aes-hosted.py","--toolchain","1.90.0"]
+cwd = "."
+inputs = ["aes-hosted-execution","aes-build","cpu-source","hosted-cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "RUSTUP_TOOLCHAIN", "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER", "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["test result: ok. 6 passed; 0 failed; 0 ignored;"]
+minimum_tests = 6
+exact_tests = 6
+unique_lines = ["AES_HOSTED_PASS: native 1.90.0"]
+
+[[checks]]
+component = "aes"
+id = "hosted-native-current"
+category = "aes-hosted"
+name = "AES hosted native baseline selection and owners on Rust 1.99.1"
+establishes = "Native x86 pre-execution unavailability, not accelerated execution. Six selection/lifecycle tests including optional/required DIT policy; full bundle and migration preconditions, explicit portable/prefer/require, terminal errors. Baseline compiled, not timing or native/final-linked qualification."
+command = ["python3","scripts/aes/check-aes-hosted.py","--toolchain","1.99.1"]
+cwd = "."
+inputs = ["aes-hosted-execution","aes-build","cpu-source","hosted-cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","compiler"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "RUSTUP_TOOLCHAIN", "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER", "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["test result: ok. 6 passed; 0 failed; 0 ignored;"]
+minimum_tests = 6
+exact_tests = 6
+unique_lines = ["AES_HOSTED_PASS: native 1.99.1"]
+
+[[checks]]
+component = "aes"
+id = "hosted-arm-qemu-msrv"
+category = "aes-hosted"
+name = "AES hosted arm-qemu baseline selection and owners on Rust 1.90.0"
+establishes = "Emulated AArch64 runtime admission with 2078 NIST KAT records through both clearing owner forms, debug and release. Six selection/lifecycle tests including optional/required DIT policy; full bundle and migration preconditions, explicit portable/prefer/require, terminal errors. Baseline compiled, not timing or native/final-linked qualification."
+command = ["python3","scripts/aes/check-aes-hosted.py","--toolchain","1.90.0","--qemu-aarch64"]
+cwd = "."
+inputs = ["aes-hosted-execution","aes-build","cpu-source","hosted-cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","hkdf-msrv","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "RUSTUP_TOOLCHAIN", "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER", "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["test result: ok. 6 passed; 0 failed; 0 ignored;"]
+minimum_tests = 6
+exact_tests = 6
+unique_lines = ["AES_HOSTED_PASS: arm-qemu 1.90.0"]
+
+[[checks]]
+component = "aes"
+id = "hosted-arm-qemu-current"
+category = "aes-hosted"
+name = "AES hosted arm-qemu baseline selection and owners on Rust 1.99.1"
+establishes = "Emulated AArch64 runtime admission with 2078 NIST KAT records through both clearing owner forms, debug and release. Six selection/lifecycle tests including optional/required DIT policy; full bundle and migration preconditions, explicit portable/prefer/require, terminal errors. Baseline compiled, not timing or native/final-linked qualification."
+command = ["python3","scripts/aes/check-aes-hosted.py","--toolchain","1.99.1","--qemu-aarch64"]
+cwd = "."
+inputs = ["aes-hosted-execution","aes-build","cpu-source","hosted-cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","compiler","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "RUSTUP_TOOLCHAIN", "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER", "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["test result: ok. 6 passed; 0 failed; 0 ignored;"]
+minimum_tests = 6
+exact_tests = 6
+unique_lines = ["AES_HOSTED_PASS: arm-qemu 1.99.1"]
+
+[groups.aes-static-execution]
+paths = ["scripts/aes/check-aes-static.py", "scripts/aes/test-aes-static.py", "assurance/aes-kernel-candidate/probe.rs", "crates/brynja-crypto/tests/aes_execution.rs"]
+[[groups.aes-static-execution.tools]]
+program = "python3"
+
+[[checks]]
+component = "aes"
+id = "static-native-msrv"
+category = "aes-static"
+name = "AES static native ownership and admission on Rust 1.90.0"
+establishes = "Native x86 development run: Explicit startup admission, forward schedules, both clearing owner forms and all widths/directions; selected errors/unwinds revoke without fallback. Correctness only, not final native qualification, hosted selection, timing, emitted-code or physical-fault protection."
+command = ["python3","scripts/aes/check-aes-static.py","--mode","native","--toolchain","1.90.0"]
+cwd = "."
+inputs = ["aes-static-execution","aes-build","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "RUSTUP_TOOLCHAIN", "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER", "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_STATIC_PASS: native 1.90.0"]
+minimum_tests = 26
+exact_tests = 26
+unique_lines = ["AES_STATIC_PASS: native 1.90.0","AES_EXECUTION_KAT_PASS: 128:568","AES_EXECUTION_KAT_PASS: 192:700","AES_EXECUTION_KAT_PASS: 256:810", "AES_EXPANSION_STARTUP_PASS: 624 mismatches rejected", "AES_EXECUTION_EXPANSION_OPERATION_FAULT_PASS: 36", "AES_EXECUTION_EXPANSION_CONSTRUCTOR_FAULT_PASS: 12", "AES_EXECUTION_EXPANSION_CACHED_PASS: 3", "AES_EXECUTION_EXPANSION_REVOKE_PASS: 12"]
+
+[[checks]]
+component = "aes"
+id = "static-native-current"
+category = "aes-static"
+name = "AES static native ownership and admission on Rust 1.99.1"
+establishes = "Native x86 development run: Explicit startup admission, forward schedules, both clearing owner forms and all widths/directions; selected errors/unwinds revoke without fallback. Correctness only, not final native qualification, hosted selection, timing, emitted-code or physical-fault protection."
+command = ["python3","scripts/aes/check-aes-static.py","--mode","native","--toolchain","1.99.1"]
+cwd = "."
+inputs = ["aes-static-execution","aes-build","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","compiler"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "RUSTUP_TOOLCHAIN", "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER", "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_STATIC_PASS: native 1.99.1"]
+minimum_tests = 26
+exact_tests = 26
+unique_lines = ["AES_STATIC_PASS: native 1.99.1","AES_EXECUTION_KAT_PASS: 128:568","AES_EXECUTION_KAT_PASS: 192:700","AES_EXECUTION_KAT_PASS: 256:810", "AES_EXPANSION_STARTUP_PASS: 624 mismatches rejected", "AES_EXECUTION_EXPANSION_OPERATION_FAULT_PASS: 36", "AES_EXECUTION_EXPANSION_CONSTRUCTOR_FAULT_PASS: 12", "AES_EXECUTION_EXPANSION_CACHED_PASS: 3", "AES_EXECUTION_EXPANSION_REVOKE_PASS: 12"]
+
+[[checks]]
+component = "aes"
+id = "static-baseline-msrv"
+category = "aes-static"
+name = "AES static baseline ownership and admission on Rust 1.90.0"
+establishes = "Missing-ISA rejection and lifecycle model only; no accelerated execution. Explicit startup admission, forward schedules, both clearing owner forms and all widths/directions; selected errors/unwinds revoke without fallback. Correctness only, not final native qualification, hosted selection, timing, emitted-code or physical-fault protection."
+command = ["python3","scripts/aes/check-aes-static.py","--mode","baseline","--toolchain","1.90.0"]
+cwd = "."
+inputs = ["aes-static-execution","aes-build","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "RUSTUP_TOOLCHAIN", "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER", "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_STATIC_PASS: baseline 1.90.0"]
+minimum_tests = 7
+exact_tests = 7
+unique_lines = ["AES_STATIC_PASS: baseline 1.90.0"]
+
+[[checks]]
+component = "aes"
+id = "static-baseline-current"
+category = "aes-static"
+name = "AES static baseline ownership and admission on Rust 1.99.1"
+establishes = "Missing-ISA rejection and lifecycle model only; no accelerated execution. Explicit startup admission, forward schedules, both clearing owner forms and all widths/directions; selected errors/unwinds revoke without fallback. Correctness only, not final native qualification, hosted selection, timing, emitted-code or physical-fault protection."
+command = ["python3","scripts/aes/check-aes-static.py","--mode","baseline","--toolchain","1.99.1"]
+cwd = "."
+inputs = ["aes-static-execution","aes-build","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","compiler"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "RUSTUP_TOOLCHAIN", "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER", "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_STATIC_PASS: baseline 1.99.1"]
+minimum_tests = 7
+exact_tests = 7
+unique_lines = ["AES_STATIC_PASS: baseline 1.99.1"]
+
+[[checks]]
+component = "aes"
+id = "static-arm-qemu-msrv"
+category = "aes-static"
+name = "AES static arm-qemu ownership and admission on Rust 1.90.0"
+establishes = "AArch64 emulation only: Explicit startup admission, forward schedules, both clearing owner forms and all widths/directions; selected errors/unwinds revoke without fallback. Correctness only, not final native qualification, hosted selection, timing, emitted-code or physical-fault protection."
+command = ["python3","scripts/aes/check-aes-static.py","--mode","arm-qemu","--toolchain","1.90.0"]
+cwd = "."
+inputs = ["aes-static-execution","aes-build","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","hkdf-msrv","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "RUSTUP_TOOLCHAIN", "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER", "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_STATIC_PASS: arm-qemu 1.90.0"]
+minimum_tests = 26
+exact_tests = 26
+unique_lines = ["AES_STATIC_PASS: arm-qemu 1.90.0","AES_EXECUTION_KAT_PASS: 128:568","AES_EXECUTION_KAT_PASS: 192:700","AES_EXECUTION_KAT_PASS: 256:810", "AES_EXPANSION_STARTUP_PASS: 624 mismatches rejected", "AES_EXECUTION_EXPANSION_OPERATION_FAULT_PASS: 36", "AES_EXECUTION_EXPANSION_CONSTRUCTOR_FAULT_PASS: 12", "AES_EXECUTION_EXPANSION_CACHED_PASS: 3", "AES_EXECUTION_EXPANSION_REVOKE_PASS: 12"]
+
+[[checks]]
+component = "aes"
+id = "static-arm-qemu-current"
+category = "aes-static"
+name = "AES static arm-qemu ownership and admission on Rust 1.99.1"
+establishes = "AArch64 emulation only: Explicit startup admission, forward schedules, both clearing owner forms and all widths/directions; selected errors/unwinds revoke without fallback. Correctness only, not final native qualification, hosted selection, timing, emitted-code or physical-fault protection."
+command = ["python3","scripts/aes/check-aes-static.py","--mode","arm-qemu","--toolchain","1.99.1"]
+cwd = "."
+inputs = ["aes-static-execution","aes-build","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","compiler","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "RUSTUP_TOOLCHAIN", "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER", "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_STATIC_PASS: arm-qemu 1.99.1"]
+minimum_tests = 26
+exact_tests = 26
+unique_lines = ["AES_STATIC_PASS: arm-qemu 1.99.1","AES_EXECUTION_KAT_PASS: 128:568","AES_EXECUTION_KAT_PASS: 192:700","AES_EXECUTION_KAT_PASS: 256:810", "AES_EXPANSION_STARTUP_PASS: 624 mismatches rejected", "AES_EXECUTION_EXPANSION_OPERATION_FAULT_PASS: 36", "AES_EXECUTION_EXPANSION_CONSTRUCTOR_FAULT_PASS: 12", "AES_EXECUTION_EXPANSION_CACHED_PASS: 3", "AES_EXECUTION_EXPANSION_REVOKE_PASS: 12"]
+
 # Optional external-key contracts. Mock adapters are not hardware qualification.
 [groups.aes-provider]
 paths = ["crates/brynja-crypto/src/provider.rs", "crates/brynja-crypto/src/aes/provider.rs", "crates/brynja-crypto/tests/aes128_provider.rs", "crates/brynja-crypto/tests/aes128_provider_regressions", "scripts/aes/check-aes-provider-api.py", "scripts/aes/test-aes-provider-runner.py", "scripts/aes/check-aes-api.py", "scripts/aes/test-aes-runners.py", "scripts/repository/facade_workspace_policy.py"]
@@ -239,7 +2296,7 @@ component = "aes"
 id = "feature-msrv-all-test"
 category = "integration"
 name = "AES opt-in feature composition: 1.90.0, all, test"
-establishes = "All-feature direct/facade integration and doctests: 97 passing tests. Three opt-in OpenSSL corpus tests remain ignored here and are covered by separate differential registrations. Not packaged or side-channel qualification."
+establishes = "All-feature direct/facade integration and doctests: 98 passing tests, including the baseline static-AES rejection control, not hardware execution. Three opt-in OpenSSL corpus tests remain ignored here and are covered by separate differential registrations. Not packaged or side-channel qualification."
 command = ["cargo","+1.90.0","test","--locked","--offline","-p","brynja-crypto","-p","brynja","--all-features"]
 cwd = "."
 inputs = ["aes-build", "aes-feature-integration", "hkdf-msrv"]
@@ -249,8 +2306,8 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok."]
-minimum_tests = 97
-exact_tests = 97
+minimum_tests = 98
+exact_tests = 98
 allow_ignored = true
 
 [[checks]]
@@ -308,7 +2365,7 @@ component = "aes"
 id = "feature-current-all-test"
 category = "integration"
 name = "AES opt-in feature composition: 1.99.1, all, test"
-establishes = "All-feature direct/facade integration and doctests: 97 passing tests. Three opt-in OpenSSL corpus tests remain ignored here and are covered by separate differential registrations. Not packaged or side-channel qualification."
+establishes = "All-feature direct/facade integration and doctests: 98 passing tests, including the baseline static-AES rejection control, not hardware execution. Three opt-in OpenSSL corpus tests remain ignored here and are covered by separate differential registrations. Not packaged or side-channel qualification."
 command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","-p","brynja","--all-features"]
 cwd = "."
 inputs = ["aes-build", "aes-feature-integration", "compiler"]
@@ -318,8 +2375,8 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok."]
-minimum_tests = 97
-exact_tests = 97
+minimum_tests = 98
+exact_tests = 98
 allow_ignored = true
 
 [[checks]]

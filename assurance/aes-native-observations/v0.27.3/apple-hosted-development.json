@@ -1,0 +1,51 @@
+{
+  "kind": "unauthenticated-development-observation",
+  "date": "2026-11-09",
+  "scope": "Baseline-compiled hosted AES admission and downstream clearing owners, debug/release; not final qualification",
+  "source": {
+    "base_commit": "56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e",
+    "working_tree": "uncommitted development changes",
+    "archive": "target/aes-hosted-mac-reviewed-20261109.tar.gz",
+    "archive_sha256": "f3bff057b5150db92ef667a5f072855e535d36a4ce272e5095b8b83ab9805824",
+    "contents": ["Cargo.toml", "Cargo.lock", "rust-toolchain.toml", "crates", "assurance/aes-hosted", "scripts/aes/check-aes-hosted.py", "scripts/aes/check-aes-static.py"]
+  },
+  "host": {
+    "cpu": "Apple M2 Pro",
+    "os": "macOS 27.0.1",
+    "target": "aarch64-apple-darwin",
+    "global_rustflags": "-Ctarget-feature=-aes"
+  },
+  "runs": [
+    {
+      "command": "python3 scripts/aes/check-aes-hosted.py --toolchain 1.90.0",
+      "result": "passed",
+      "selector_tests": 5,
+      "consumer_profiles": ["debug", "release"],
+      "completion": "AES_HOSTED_PASS: native 1.90.0"
+    },
+    {
+      "command": "python3 scripts/aes/check-aes-hosted.py --toolchain 1.99.1",
+      "result": "passed",
+      "selector_tests": 5,
+      "consumer_profiles": ["debug", "release"],
+      "completion": "AES_HOSTED_PASS: native 1.99.1"
+    }
+  ],
+  "kat_records_per_owner_form_per_profile": {"aes128": 568, "aes192": 700, "aes256": 810},
+  "retained_artifacts": {
+    "remote_directory": "/tmp/brynja-aes-hosted.Gjds8s",
+    "archive": "target/aes-hosted-mac-observations-20261109.tar.gz",
+    "archive_sha256": "73e3bb043769f59e7e28b6a7e1e5beb709e60e597d5b34d282a8ea075935b7f8",
+    "combined_log": "target/aes-kernel-candidate/hosted-mac-native.log",
+    "combined_log_sha256": "f28df4341f19cd0aab578e89c17ba103298d0cfcfb17a780f4912c5512e57bef",
+    "availability": "Local and remote development artifacts, not committed archives or signed receipts"
+  },
+  "not_established": [
+    "Clean committed release-candidate source binding",
+    "Native AWS Arm or Intel execution",
+    "Forced-backend MCT/MMT and complete independent differential campaign",
+    "Final-linked/LTO emitted-code review",
+    "Timing or performance qualification",
+    "Register/spill erasure or physical side-channel/fault resistance"
+  ]
+}

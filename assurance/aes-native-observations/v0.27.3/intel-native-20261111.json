@@ -1,0 +1,1180 @@
+{
+  "kind": "unauthenticated-development-observation",
+  "date": "2026-11-11",
+  "scope": "Native Intel static AES-NI correctness and scoped final-linked lifecycle/startup review; no timing measurement.",
+  "source": {
+    "base_commit": "56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e",
+    "working_tree": "uncommitted development changes",
+    "archive": "target/aes-accelerated-timing-source-20261110.tar.gz",
+    "archive_sha256": "7a90292b5bf4aa89bb133090a2f4175ec9f707d7c6f574f09882d674955fc6b8",
+    "fixture_overlay_sha256": "6771c1cf63e75e6ce5ba5b182da84c7115ccdb8d67958c4087e1421f25e7205b",
+    "review_support_overlay_sha256": "bc09af706aef5cf0da4909944151dcbcb3360feb160c6b4291226dc0e8c3e43f",
+    "package_archive_sha256": {
+      "brynja": "1eac3382d1ef632b9f46670adf65cec1131bf40d6b317a5f605f74be4b53baab",
+      "brynja-core": "3ac8894a7a05e5ae25c164091998ca081933bb960769bc3238ec5972d1c61679",
+      "brynja-crypto": "8f90c00bf91f026fecc24af312b793b0865e914c796d329fa297abe8cdf5523a",
+      "brynja-crypto-cpu": "97a9bc44256395a983e11c185320904728d3ac4ae9138deebc0a907d15c87ad9",
+      "brynja-crypto-cpu-std": "137e62d9576b2ec32669528b2449877ed0efc77cf2a6f72348290ba192918261",
+      "brynja-dtls": "3894782c6e1a295a1aabe2560a959be3ae1476cf67fb9cd9a543fcb2a1c9f421",
+      "brynja-hash-core": "13b6fe81e8b96028ebe481d543193a1e5d34a78a7ac048b7ef0fa5c66d3dcbf2",
+      "brynja-hash-parallel": "ca4050cfdb521d4279c31283906d284862405e9c83212fbbedb97b7dfbf4e932",
+      "brynja-hash-sha2": "1c0fbdbab191c7e11fd1ed9d1f967c5dffa7932aa75579987f9211fb69a26fb8",
+      "brynja-hash-sha3": "5040888f602843134d1110a8021ac2d7a6ae9b782709a986dbb3a341425c08c7",
+      "brynja-hash-tuple": "85b186bf25fb9c65b2c2df31f626cd8f92455f2e3f774d987bba2b3d2e13ce03",
+      "brynja-mac-hmac": "8b8742a1177059b66e981b1ac1f94c563ae0394332e12a4406d023ea4dade196",
+      "brynja-mac-kmac": "15c0164e3bfc496355c22c95d3623c384c7a4114e282230f0741a62e6ee84df0",
+      "brynja-pki": "42936cff98f924f34831f8aa4cba616faf011fdd8a1826d57879a39084650f48",
+      "brynja-platform": "02fdab9954540d215e81000427628ca8e6018f3b3db843e5e34d0ed0b2d4f3bf",
+      "brynja-protocol": "79ba3a20529393efd8770690bd93626841224f9375e8cd5363178c757a0abfb3",
+      "brynja-quic-tls": "52ce4fb7f875a51d03f70088a0ca883f38a827a3b330a2d7b462d88c90ade04c",
+      "brynja-tls": "cb6e0aa7d5e815847108dd37e1b6e142b139fb03a9e95c4519130d73e55ce399",
+      "brynja-tls12": "0561887cf6d7f46dae18d6c50a85e2cf83108af957e503456ea52c4754a26698",
+      "brynja-tls13": "edd0f449e0a21c1b20d5d0e57ab9236596aee93b71e3a342404ef48940290ccc",
+      "brynja-tls13-handshake": "62e80577689a7b87a3839d7a5cfeee5a2bf39cbc4ddd6d77ce62f2cb8ee6a2cb"
+    }
+  },
+  "host": {
+    "host-uname.log": "Linux ip-172-31-0-4 7.0.0-1014-aws #14-Ubuntu SMP PREEMPT Thu Sep 17 19:08:36 UTC 2026 x86_64 GNU/Linux\n",
+    "host-cpu.log": "Architecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               GenuineIntel\nModel name:                              Intel(R) Xeon(R) 6975P-C\nCPU family:                              6\nModel:                                   173\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                5400.00\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq monitor ssse3 fma cx16 pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch cpuid_fault ssbd ibrs ibpb stibp ibrs_enhanced fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves avx_vnni avx512_bf16 wbnoinvd ida arat avx512vbmi umip pku ospke waitpkg avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg tme avx512_vpopcntdq rdpid bus_lock_detect cldemote movdiri movdir64b md_clear serialize amx_bf16 avx512_fp16 amx_tile amx_int8 flush_l1d arch_capabilities\nHypervisor vendor:                       KVM\nVirtualization type:                     full\nL1d cache:                               96 KiB (2 instances)\nL1i cache:                               128 KiB (2 instances)\nL2 cache:                                4 MiB (2 instances)\nL3 cache:                                480 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Enhanced / Automatic IBRS; IBPB conditional; PBRSB-eIBRS Not affected; BHI BHI_DIS_S\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n",
+    "host-memory.log": "               total        used        free      shared  buff/cache   available\nMem:           7.6Gi       569Mi       4.7Gi       2.9Mi       2.6Gi       7.0Gi\nSwap:             0B          0B          0B\n",
+    "openssl.log": "OpenSSL 3.5.5 27 Jan 2026 (Library: OpenSSL 3.5.5 27 Jan 2026)\nbuilt on: Wed Sep 30 18:46:30 2026 UTC\nplatform: debian-amd64\noptions:  bn(64,64)\ncompiler: gcc -fPIC -pthread -m64 -Wa,--noexecstack -Wall -fzero-call-used-regs=used-gpr -Wa,--noexecstack -g -O2 -Werror=implicit-function-declaration -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -ffile-prefix-map=/build/openssl-gBAggd/openssl-3.5.5=. -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -march=x86-64-v3 -fdebug-prefix-map=/build/openssl-gBAggd/openssl-3.5.5=/usr/src/openssl-3.5.5-1ubuntu3.7 -DOPENSSL_USE_NODELETE -DL_ENDIAN -DOPENSSL_PIC -DOPENSSL_BUILDING_OPENSSL -DZLIB -DZSTD -DNDEBUG -Wdate-time -D_FORTIFY_SOURCE=3\nOPENSSLDIR: \"/usr/lib/ssl\"\nENGINESDIR: \"/usr/lib/x86_64-linux-gnu/engines-3\"\nMODULESDIR: \"/usr/lib/x86_64-linux-gnu/ossl-modules\"\nSeeding source: os-specific JITTER (3060300)\nCPUINFO: OPENSSL_ia32cap=0xfffab20b5f8bffff:0x1b407f7ef1bf27eb:0x00201c30bfc04400:0x0000000000084000:0x0007000100000000\n",
+    "llvm.log": "Ubuntu LLVM version 21.1.8\n  Optimized build.\n\n\n  Registered Targets:\n    aarch64     - AArch64 (little endian)\n    aarch64_32  - AArch64 (little endian ILP32)\n    aarch64_be  - AArch64 (big endian)\n    amdgcn      - AMD GCN GPUs\n    arm         - ARM\n    arm64       - ARM64 (little endian)\n    arm64_32    - ARM64 (little endian ILP32)\n    armeb       - ARM (big endian)\n    avr         - Atmel AVR Microcontroller\n    bpf         - BPF (host endian)\n    bpfeb       - BPF (big endian)\n    bpfel       - BPF (little endian)\n    hexagon     - Hexagon\n    lanai       - Lanai\n    loongarch32 - 32-bit LoongArch\n    loongarch64 - 64-bit LoongArch\n    m68k        - Motorola 68000 family\n    mips        - MIPS (32-bit big endian)\n    mips64      - MIPS (64-bit big endian)\n    mips64el    - MIPS (64-bit little endian)\n    mipsel      - MIPS (32-bit little endian)\n    msp430      - MSP430 [experimental]\n    nvptx       - NVIDIA PTX 32-bit\n    nvptx64     - NVIDIA PTX 64-bit\n    ppc32       - PowerPC 32\n    ppc32le     - PowerPC 32 LE\n    ppc64       - PowerPC 64\n    ppc64le     - PowerPC 64 LE\n    r600        - AMD GPUs HD2XXX-HD6XXX\n    riscv32     - 32-bit RISC-V\n    riscv64     - 64-bit RISC-V\n    sparc       - Sparc\n    sparcel     - Sparc LE\n    sparcv9     - Sparc V9\n    spirv       - SPIR-V Logical\n    spirv32     - SPIR-V 32-bit\n    spirv64     - SPIR-V 64-bit\n    systemz     - SystemZ\n    thumb       - Thumb\n    thumbeb     - Thumb (big endian)\n    ve          - VE\n    wasm32      - WebAssembly 32-bit\n    wasm64      - WebAssembly 64-bit\n    x86         - 32-bit X86: Pentium-Pro and above\n    x86-64      - 64-bit X86: EM64T and AMD64\n    xcore       - XCore\n    xtensa      - Xtensa 32\n"
+  },
+  "compiler_identities": {
+    "1.90.0": "rustc 1.90.0 (1159e78c4 2025-09-14)\nbinary: rustc\ncommit-hash: 1159e78c4747b02ef996e55082b704c09b970588\ncommit-date: 2025-09-14\nhost: x86_64-unknown-linux-gnu\nrelease: 1.90.0\nLLVM version: 20.1.8\n",
+    "1.99.1": "rustc 1.99.1 (58cf8f9c3 2026-10-13)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: x86_64-unknown-linux-gnu\nrelease: 1.99.1\nLLVM version: 23.1.1\n"
+  },
+  "retained_bundle": {
+    "path": "target/aes-native-intel-20261111/observations.tar.gz",
+    "sha256": "55aa3a7c27a034ab57029e6f56f671e6b3d298c54a7e2d4c3690a2f2fc6d7a00",
+    "remote_directory": "/home/ubuntu/brynja-aes-intel-0273-sNAxn8"
+  },
+  "campaigns": [
+    {
+      "directory": "target/aes-accelerated-campaigns/1.90.0-direct-static-native-avs-wt8j9r_t",
+      "execution": {
+        "kind": "unauthenticated-development-observation",
+        "toolchain": "rustc 1.90.0 (1159e78c4 2025-09-14)\nbinary: rustc\ncommit-hash: 1159e78c4747b02ef996e55082b704c09b970588\ncommit-date: 2025-09-14\nhost: x86_64-unknown-linux-gnu\nrelease: 1.90.0\nLLVM version: 20.1.8\n",
+        "host": "Linux-7.0.0-1014-aws-x86_64-with-glibc2.43",
+        "machine": "x86_64",
+        "mode": "native",
+        "admission": "static",
+        "route": "direct",
+        "suite": "avs",
+        "rustflags": "-Ctarget-feature=+aes,+sse2",
+        "oracle_sha256": null,
+        "profiles": [
+          {
+            "profile": "release",
+            "build": [
+              "cargo",
+              "+1.90.0",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "direct",
+              "--test",
+              "avs",
+              "--release",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/home/ubuntu/brynja-aes-intel-0273-sNAxn8/target/aes-accelerated-campaigns/1.90.0-direct-static-native-avs-wt8j9r_t/release-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "release-tests",
+            "sha256": "ec068d686cda56b7a1eadaa36bc6dc8a629186540f045cff6287e7fafb35c4ec"
+          }
+        ],
+        "scope": "Correctness only; no timing, emitted-code or physical qualification."
+      },
+      "files_sha256": {
+        "execution.json": "583b5fd201a8570f25f2addb48640ffeb7d9c4b2befe838d41c86fb6874d1b93",
+        "metadata.json": "2e18f75d9cbe926b315f677057622218d3988cabf0ca60bb161e35dacfdfdbb3",
+        "release-build.jsonl": "043ea5d8ad150ee4879246a88c36e23fda98500995e9902b07eb430722f10989",
+        "release-build.stderr": "d0a50ba928ca133536c8bdbade9580b051663deaea7d6d5c0d6b68f63c7f8176",
+        "release-tests": "ec068d686cda56b7a1eadaa36bc6dc8a629186540f045cff6287e7fafb35c4ec",
+        "release.log": "e661d229e265288e35e4a4c10a28bedd4af8bba10f180c1913d190c10b2f1f60"
+      },
+      "log_sha256": "9d09a1d2730e6fdf746999c65e739cc6fea8eabf1aafce662ceb92eb50ce9cfa"
+    },
+    {
+      "directory": "target/aes-accelerated-campaigns/1.90.0-direct-static-native-differential-6f_ynt71",
+      "execution": {
+        "kind": "unauthenticated-development-observation",
+        "toolchain": "rustc 1.90.0 (1159e78c4 2025-09-14)\nbinary: rustc\ncommit-hash: 1159e78c4747b02ef996e55082b704c09b970588\ncommit-date: 2025-09-14\nhost: x86_64-unknown-linux-gnu\nrelease: 1.90.0\nLLVM version: 20.1.8\n",
+        "host": "Linux-7.0.0-1014-aws-x86_64-with-glibc2.43",
+        "machine": "x86_64",
+        "mode": "native",
+        "admission": "static",
+        "route": "direct",
+        "suite": "differential",
+        "rustflags": "-Ctarget-feature=+aes,+sse2",
+        "oracle_sha256": "b82312087f662b01397b15d537ee792b7dadcf99339a1ff7b31499500f443c03",
+        "profiles": [
+          {
+            "profile": "debug",
+            "build": [
+              "cargo",
+              "+1.90.0",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "direct",
+              "--test",
+              "differential",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/home/ubuntu/brynja-aes-intel-0273-sNAxn8/target/aes-accelerated-campaigns/1.90.0-direct-static-native-differential-6f_ynt71/debug-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "debug-tests",
+            "sha256": "20a07b6a2dfacd1a77029dfac03d9cccd797dc3182912013575904f73718b4f9"
+          },
+          {
+            "profile": "release",
+            "build": [
+              "cargo",
+              "+1.90.0",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "direct",
+              "--test",
+              "differential",
+              "--release",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/home/ubuntu/brynja-aes-intel-0273-sNAxn8/target/aes-accelerated-campaigns/1.90.0-direct-static-native-differential-6f_ynt71/release-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "release-tests",
+            "sha256": "b5353a7759b20991869d849159e26bb21849668926a73fbdebb07748fc0b6a67"
+          }
+        ],
+        "scope": "Correctness only; no timing, emitted-code or physical qualification."
+      },
+      "files_sha256": {
+        "debug-build.jsonl": "414179ee8649e8fc4baf3d01dd8f590292e7bacc3c44be0a6a4ea8411e6c9666",
+        "debug-build.stderr": "e82b9c9a7760b71cb55a20e1e24fd3c3e00db13b9f3dd51e147fc072aa8057ae",
+        "debug-tests": "20a07b6a2dfacd1a77029dfac03d9cccd797dc3182912013575904f73718b4f9",
+        "debug.log": "8dcf62623ccf42f6d968afbf1d5150f170c8c96a12752f8c8d901d82e801dcb6",
+        "execution.json": "23bfda01d79c937a1d9bd487c85743c1f88dda849b7a6446b7876e8d17d6a775",
+        "metadata.json": "2a18f31046745f39a596711141c4aa49a9e03c1f23d44435ad380058d81495f4",
+        "release-build.jsonl": "e35712aa5c35b74d65e2210d3951206b2afa83bee6b8ac49fa19f839d67845c4",
+        "release-build.stderr": "b5fdcd42bef5b006c81f1bff140424eb2ceec54ead336832df50d91567fb03eb",
+        "release-tests": "b5353a7759b20991869d849159e26bb21849668926a73fbdebb07748fc0b6a67",
+        "release.log": "c777781d71e4dc32ae7c0ec4b7bd5a5cd7196e10cc0fd85718b99b9c9f329d20"
+      },
+      "log_sha256": "72eaafef07d075386e4663dc51c4f20c481d10fb5c6f6f62806ce3f502100d26"
+    },
+    {
+      "directory": "target/aes-accelerated-campaigns/1.90.0-facade-static-native-avs-9t3_frjm",
+      "execution": {
+        "kind": "unauthenticated-development-observation",
+        "toolchain": "rustc 1.90.0 (1159e78c4 2025-09-14)\nbinary: rustc\ncommit-hash: 1159e78c4747b02ef996e55082b704c09b970588\ncommit-date: 2025-09-14\nhost: x86_64-unknown-linux-gnu\nrelease: 1.90.0\nLLVM version: 20.1.8\n",
+        "host": "Linux-7.0.0-1014-aws-x86_64-with-glibc2.43",
+        "machine": "x86_64",
+        "mode": "native",
+        "admission": "static",
+        "route": "facade",
+        "suite": "avs",
+        "rustflags": "-Ctarget-feature=+aes,+sse2",
+        "oracle_sha256": null,
+        "profiles": [
+          {
+            "profile": "release",
+            "build": [
+              "cargo",
+              "+1.90.0",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "facade",
+              "--test",
+              "avs",
+              "--release",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/home/ubuntu/brynja-aes-intel-0273-sNAxn8/target/aes-accelerated-campaigns/1.90.0-facade-static-native-avs-9t3_frjm/release-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "release-tests",
+            "sha256": "ee525a56121b98c7d41b70f10e157d34cbfdcaf8a8958dd5b1ff793d5c60dca9"
+          }
+        ],
+        "scope": "Correctness only; no timing, emitted-code or physical qualification."
+      },
+      "files_sha256": {
+        "execution.json": "e3bda0d83819425090b1144e94e9f763565cdd31942643b940f733352fb309c5",
+        "metadata.json": "b2b04346c321ac3c7f8aea94f9fb2e8c0de90944f80546a8cb307517c68193c3",
+        "release-build.jsonl": "6e8513ff3158786968a62ad1a8878a8487a0cd33df91457604b1b3620b6445ec",
+        "release-build.stderr": "c4b4b7747311ca090f43b8df5247043bf7ab435116f66b82020d3080641693df",
+        "release-tests": "ee525a56121b98c7d41b70f10e157d34cbfdcaf8a8958dd5b1ff793d5c60dca9",
+        "release.log": "e661d229e265288e35e4a4c10a28bedd4af8bba10f180c1913d190c10b2f1f60"
+      },
+      "log_sha256": "17c97954a3a99446735e4957a17a15ecfec1a17779e68f09c9f75749b4365c3f"
+    },
+    {
+      "directory": "target/aes-accelerated-campaigns/1.90.0-facade-static-native-differential-dmfald05",
+      "execution": {
+        "kind": "unauthenticated-development-observation",
+        "toolchain": "rustc 1.90.0 (1159e78c4 2025-09-14)\nbinary: rustc\ncommit-hash: 1159e78c4747b02ef996e55082b704c09b970588\ncommit-date: 2025-09-14\nhost: x86_64-unknown-linux-gnu\nrelease: 1.90.0\nLLVM version: 20.1.8\n",
+        "host": "Linux-7.0.0-1014-aws-x86_64-with-glibc2.43",
+        "machine": "x86_64",
+        "mode": "native",
+        "admission": "static",
+        "route": "facade",
+        "suite": "differential",
+        "rustflags": "-Ctarget-feature=+aes,+sse2",
+        "oracle_sha256": "b82312087f662b01397b15d537ee792b7dadcf99339a1ff7b31499500f443c03",
+        "profiles": [
+          {
+            "profile": "debug",
+            "build": [
+              "cargo",
+              "+1.90.0",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "facade",
+              "--test",
+              "differential",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/home/ubuntu/brynja-aes-intel-0273-sNAxn8/target/aes-accelerated-campaigns/1.90.0-facade-static-native-differential-dmfald05/debug-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "debug-tests",
+            "sha256": "5ef212af66daf623e58bbb96983d4efee48c34dd7f28f4dd1f0093eb9727c2bd"
+          },
+          {
+            "profile": "release",
+            "build": [
+              "cargo",
+              "+1.90.0",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "facade",
+              "--test",
+              "differential",
+              "--release",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/home/ubuntu/brynja-aes-intel-0273-sNAxn8/target/aes-accelerated-campaigns/1.90.0-facade-static-native-differential-dmfald05/release-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "release-tests",
+            "sha256": "0d470a4f7b8efc878963faa8c8e7a02f5fe7935347190987a7743c3891ca6d70"
+          }
+        ],
+        "scope": "Correctness only; no timing, emitted-code or physical qualification."
+      },
+      "files_sha256": {
+        "debug-build.jsonl": "ca2ab78b772a765b37e356ce8fe84374a1a15bf326284b12c0e193b9636a04a8",
+        "debug-build.stderr": "c4a9e090148292c02190bef3fa7771c3a1b770aca260493c2d338288c91f2087",
+        "debug-tests": "5ef212af66daf623e58bbb96983d4efee48c34dd7f28f4dd1f0093eb9727c2bd",
+        "debug.log": "8dcf62623ccf42f6d968afbf1d5150f170c8c96a12752f8c8d901d82e801dcb6",
+        "execution.json": "41912372d2392fdea0fa006ff1ebc5f6859899ca9893dc7aa6512e771903233a",
+        "metadata.json": "16cd29113252f6f23b6b983d2c2fc293df446de364106e9d265661874d50db65",
+        "release-build.jsonl": "9ba0f88d28960f848566c6675991f0f44340bb69854c09f0eb37ec7a0c44c319",
+        "release-build.stderr": "8ca19ffca2fb66db15c2200409ed80cfba9e158a791d4acf833c00a0b6e5a602",
+        "release-tests": "0d470a4f7b8efc878963faa8c8e7a02f5fe7935347190987a7743c3891ca6d70",
+        "release.log": "f400c105ac75cc37731f6ec48ab5a0a5950229012d1eb62a62242413ef2a3a15"
+      },
+      "log_sha256": "8915f36b31508d310a254c57e80b8681e104ece367d1d331c16cf8538c3d4075"
+    },
+    {
+      "directory": "target/aes-accelerated-campaigns/1.99.1-direct-static-native-avs-d1yil5gq",
+      "execution": {
+        "kind": "unauthenticated-development-observation",
+        "toolchain": "rustc 1.99.1 (58cf8f9c3 2026-10-13)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: x86_64-unknown-linux-gnu\nrelease: 1.99.1\nLLVM version: 23.1.1\n",
+        "host": "Linux-7.0.0-1014-aws-x86_64-with-glibc2.43",
+        "machine": "x86_64",
+        "mode": "native",
+        "admission": "static",
+        "route": "direct",
+        "suite": "avs",
+        "rustflags": "-Ctarget-feature=+aes,+sse2",
+        "oracle_sha256": null,
+        "profiles": [
+          {
+            "profile": "release",
+            "build": [
+              "cargo",
+              "+1.99.1",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "direct",
+              "--test",
+              "avs",
+              "--release",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/home/ubuntu/brynja-aes-intel-0273-sNAxn8/target/aes-accelerated-campaigns/1.99.1-direct-static-native-avs-d1yil5gq/release-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "release-tests",
+            "sha256": "91d40b1fcc545fb94158f7619b087efe1a234cb03848c9030774167770edc03c"
+          }
+        ],
+        "scope": "Correctness only; no timing, emitted-code or physical qualification."
+      },
+      "files_sha256": {
+        "execution.json": "c5f8405528425904a52d03b3513e2c9c77459f51113a1636178f410a1c7c2608",
+        "metadata.json": "44da047c606b2d0f7b4161004e2e850164bd637d2d85102b6b444dc4e15def44",
+        "release-build.jsonl": "1de629d205af4e97b87da2c3952d2f09af281b7a4a9ce08d657cf9688274413e",
+        "release-build.stderr": "6ca6a9fa6157bd83438c7a0f101f2f6d6a6bac7f8ba9bf6df37ec6e001662319",
+        "release-tests": "91d40b1fcc545fb94158f7619b087efe1a234cb03848c9030774167770edc03c",
+        "release.log": "d151cc3af4a78a5ad2be4aa628a511edd964e45c76264a1adea1abcf3ea40827"
+      },
+      "log_sha256": "5699563c8dd3dfa3ad88bf2e13804b0c052dce338fe3095b68e42de010f99d61"
+    },
+    {
+      "directory": "target/aes-accelerated-campaigns/1.99.1-direct-static-native-differential-1kb1p1ib",
+      "execution": {
+        "kind": "unauthenticated-development-observation",
+        "toolchain": "rustc 1.99.1 (58cf8f9c3 2026-10-13)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: x86_64-unknown-linux-gnu\nrelease: 1.99.1\nLLVM version: 23.1.1\n",
+        "host": "Linux-7.0.0-1014-aws-x86_64-with-glibc2.43",
+        "machine": "x86_64",
+        "mode": "native",
+        "admission": "static",
+        "route": "direct",
+        "suite": "differential",
+        "rustflags": "-Ctarget-feature=+aes,+sse2",
+        "oracle_sha256": "b82312087f662b01397b15d537ee792b7dadcf99339a1ff7b31499500f443c03",
+        "profiles": [
+          {
+            "profile": "debug",
+            "build": [
+              "cargo",
+              "+1.99.1",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "direct",
+              "--test",
+              "differential",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/home/ubuntu/brynja-aes-intel-0273-sNAxn8/target/aes-accelerated-campaigns/1.99.1-direct-static-native-differential-1kb1p1ib/debug-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "debug-tests",
+            "sha256": "587d223185b49e669e4053c6ca524b0f49514898f5effa8eaaf3a048507635bc"
+          },
+          {
+            "profile": "release",
+            "build": [
+              "cargo",
+              "+1.99.1",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "direct",
+              "--test",
+              "differential",
+              "--release",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/home/ubuntu/brynja-aes-intel-0273-sNAxn8/target/aes-accelerated-campaigns/1.99.1-direct-static-native-differential-1kb1p1ib/release-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "release-tests",
+            "sha256": "1705283166811d3c9f0d80042d90acfe98bcaa7a7e88aa2cf74bc56a0a7d238c"
+          }
+        ],
+        "scope": "Correctness only; no timing, emitted-code or physical qualification."
+      },
+      "files_sha256": {
+        "debug-build.jsonl": "4ca7a1f75569fdb9affc8530eb880daa75d36f9c8f525b3a8ba3a0b185976665",
+        "debug-build.stderr": "2f716d196bb15d8212e392217b77f1c28b072ad4ca371e6b8d03e0d85119f769",
+        "debug-tests": "587d223185b49e669e4053c6ca524b0f49514898f5effa8eaaf3a048507635bc",
+        "debug.log": "9757679842c6bb734a8c3d25621053c696dcc4c222ed056fbf6724d1dafee645",
+        "execution.json": "87ea111bfaeedf5c0a892f614fa2eb5889937107d00dd6668e77d63751b48427",
+        "metadata.json": "bca8f7257f08272a4ecf7de61e4e2d0e8e0dc130d03d4801afcf386fb6b1d314",
+        "release-build.jsonl": "db841c52e3b5b2fc692002dd6fca4f882c5597eb04cba2b213e237b0b64f6eb4",
+        "release-build.stderr": "3256bfc03f787c753b5e614540273c7e9032abd42b07bd217c25045c4f4c6752",
+        "release-tests": "1705283166811d3c9f0d80042d90acfe98bcaa7a7e88aa2cf74bc56a0a7d238c",
+        "release.log": "c777781d71e4dc32ae7c0ec4b7bd5a5cd7196e10cc0fd85718b99b9c9f329d20"
+      },
+      "log_sha256": "c3ccd0a0496336bb71733b1e70f14a64ec70bfefde02de91a2520814c920f086"
+    },
+    {
+      "directory": "target/aes-accelerated-campaigns/1.99.1-facade-static-native-avs-3fftgv6o",
+      "execution": {
+        "kind": "unauthenticated-development-observation",
+        "toolchain": "rustc 1.99.1 (58cf8f9c3 2026-10-13)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: x86_64-unknown-linux-gnu\nrelease: 1.99.1\nLLVM version: 23.1.1\n",
+        "host": "Linux-7.0.0-1014-aws-x86_64-with-glibc2.43",
+        "machine": "x86_64",
+        "mode": "native",
+        "admission": "static",
+        "route": "facade",
+        "suite": "avs",
+        "rustflags": "-Ctarget-feature=+aes,+sse2",
+        "oracle_sha256": null,
+        "profiles": [
+          {
+            "profile": "release",
+            "build": [
+              "cargo",
+              "+1.99.1",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "facade",
+              "--test",
+              "avs",
+              "--release",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/home/ubuntu/brynja-aes-intel-0273-sNAxn8/target/aes-accelerated-campaigns/1.99.1-facade-static-native-avs-3fftgv6o/release-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "release-tests",
+            "sha256": "ea3305aee2de6362b103b0ea8b6f1d26edfdd07e6a248d4eec91d169524d31da"
+          }
+        ],
+        "scope": "Correctness only; no timing, emitted-code or physical qualification."
+      },
+      "files_sha256": {
+        "execution.json": "1118b6e9b34ffaf452dbd6a79308ec549c66c6850d69de0491c470294fede5e7",
+        "metadata.json": "53caff9c9195927ca0b9fb205a2ac986f723496ed83dea3c113b53f4ca14b9c2",
+        "release-build.jsonl": "184cd2eee1fc6c23176009959d8dabf98b0d4e70565974913a6d4f7e228b03cf",
+        "release-build.stderr": "33a58ce649c4db9d0a2a936eee818ea099af4993a64385e3f63b983485b4806b",
+        "release-tests": "ea3305aee2de6362b103b0ea8b6f1d26edfdd07e6a248d4eec91d169524d31da",
+        "release.log": "d151cc3af4a78a5ad2be4aa628a511edd964e45c76264a1adea1abcf3ea40827"
+      },
+      "log_sha256": "e8f2717540276fae7a4615fce5bbeb420dcf930f8dad0b82bcef6e8f9978ea65"
+    },
+    {
+      "directory": "target/aes-accelerated-campaigns/1.99.1-facade-static-native-differential-2mpvmz5a",
+      "execution": {
+        "kind": "unauthenticated-development-observation",
+        "toolchain": "rustc 1.99.1 (58cf8f9c3 2026-10-13)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: x86_64-unknown-linux-gnu\nrelease: 1.99.1\nLLVM version: 23.1.1\n",
+        "host": "Linux-7.0.0-1014-aws-x86_64-with-glibc2.43",
+        "machine": "x86_64",
+        "mode": "native",
+        "admission": "static",
+        "route": "facade",
+        "suite": "differential",
+        "rustflags": "-Ctarget-feature=+aes,+sse2",
+        "oracle_sha256": "b82312087f662b01397b15d537ee792b7dadcf99339a1ff7b31499500f443c03",
+        "profiles": [
+          {
+            "profile": "debug",
+            "build": [
+              "cargo",
+              "+1.99.1",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "facade",
+              "--test",
+              "differential",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/home/ubuntu/brynja-aes-intel-0273-sNAxn8/target/aes-accelerated-campaigns/1.99.1-facade-static-native-differential-2mpvmz5a/debug-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "debug-tests",
+            "sha256": "243a0a5cbbee36276f525e1f134b87853e255fd77bf342d25ff77c3c53aa9762"
+          },
+          {
+            "profile": "release",
+            "build": [
+              "cargo",
+              "+1.99.1",
+              "test",
+              "--locked",
+              "--offline",
+              "--no-default-features",
+              "--features",
+              "facade",
+              "--test",
+              "differential",
+              "--release",
+              "--no-run",
+              "--message-format=json"
+            ],
+            "execution": [
+              "/home/ubuntu/brynja-aes-intel-0273-sNAxn8/target/aes-accelerated-campaigns/1.99.1-facade-static-native-differential-2mpvmz5a/release-tests",
+              "--include-ignored",
+              "--show-output",
+              "--test-threads=1"
+            ],
+            "binary": "release-tests",
+            "sha256": "fea375a646b23b56df4b780705338768328dd2dcc0e2d85d3df9a7bc2973422c"
+          }
+        ],
+        "scope": "Correctness only; no timing, emitted-code or physical qualification."
+      },
+      "files_sha256": {
+        "debug-build.jsonl": "9380b288b5f3f6e1d5129c151235add054e8c9dceb23031f315f5c7d73978513",
+        "debug-build.stderr": "52d074394c85f4726c1721178e5e05d6f5cacc1827c2cf8f0b00fa575e477771",
+        "debug-tests": "243a0a5cbbee36276f525e1f134b87853e255fd77bf342d25ff77c3c53aa9762",
+        "debug.log": "9757679842c6bb734a8c3d25621053c696dcc4c222ed056fbf6724d1dafee645",
+        "execution.json": "58bb50cb6d59a3ed564434148b413e85dc452e2fe711d256829139fea6627232",
+        "metadata.json": "3dc207390fecda69ba21b3a2df12a9a8a999f16bcd3495a7ee5e0f63fcc77f5a",
+        "release-build.jsonl": "52723767239faedc35e3653b4bacbe1fbfa5f3e725413467998513c92a578d6c",
+        "release-build.stderr": "52cae96d8c4309e99eff39d1519052d80bb96705676517be4355ebbe1a941980",
+        "release-tests": "fea375a646b23b56df4b780705338768328dd2dcc0e2d85d3df9a7bc2973422c",
+        "release.log": "c777781d71e4dc32ae7c0ec4b7bd5a5cd7196e10cc0fd85718b99b9c9f329d20"
+      },
+      "log_sha256": "c7ab7062bf7479249d53a65cf39530b9051672c4ae095b13b38cc6e1b435987d"
+    }
+  ],
+  "linked_reviews": [
+    {
+      "kind": "lifecycle",
+      "compiler": "1.90.0",
+      "route": "direct",
+      "panic": "abort",
+      "directory": "target/aes-accelerated-linked/1.90.0-native-static-wacmpjo8",
+      "binary_sha256": "cf909ea4de30dc6651b3ba99380eac430ac115664306d60a39436d4daf9970c4",
+      "tools": [
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-nm",
+          "sha256": "53d2d68e7cb454690b91a85c8e10f0af9af4c63539e655d517e630b76ced0a75"
+        },
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-objdump",
+          "sha256": "acc7a550df92321adc6e17ff87e45ede270304b996c8cc4e5cf49a028c48b6da"
+        }
+      ],
+      "review_replayed": true,
+      "executed_quarantine_cases": null,
+      "files_sha256": {
+        "direct-abort-build.log": "d386011add0e4ea0f8d9429c4b8c3594d83a2a65a68ed66682dc7e5b964fbef0",
+        "direct-abort-execution.log": "8b7829306633e4c5196e5a87cf2edef916182c50162bd8ffd0c08fcd3d4b20ca",
+        "direct-abort-relocations.txt": "4bf29f6587fcfaf608b456913a1deedf0fa40a60538f973fc78e7cb37b6f4e1c",
+        "direct-abort.asm": "6510f6a6d2c257cbb20be72d55ad9c08106f7921ad34adcb1be8444744873a88",
+        "direct-abort.elf": "cf909ea4de30dc6651b3ba99380eac430ac115664306d60a39436d4daf9970c4",
+        "direct-abort.json": "b1783a218076961ae2e4ae8d388ce08498fa2e1b635c80511b3f45702ccdea90",
+        "direct-abort.nm": "0525963b1b4082dbef8786bda6877d73b395c1b71f2777518a3d075162c3e5aa"
+      },
+      "metadata_sha256": "e9776ff281498120f813fc343b0ee4daeed18d8e68f4f1d56de218aaa362a0ae",
+      "log_sha256": "19f31d398ae3ae4df363f93837effc88dd97076136b357debc07c40b72a93500"
+    },
+    {
+      "kind": "lifecycle",
+      "compiler": "1.90.0",
+      "route": "direct",
+      "panic": "unwind",
+      "directory": "target/aes-accelerated-linked/1.90.0-native-static-wacmpjo8",
+      "binary_sha256": "193458bc2ecdcd9600056dc59e2334400da8c49d45ca8dafe7401f9fbf483cf1",
+      "tools": [
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-nm",
+          "sha256": "53d2d68e7cb454690b91a85c8e10f0af9af4c63539e655d517e630b76ced0a75"
+        },
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-objdump",
+          "sha256": "acc7a550df92321adc6e17ff87e45ede270304b996c8cc4e5cf49a028c48b6da"
+        }
+      ],
+      "review_replayed": true,
+      "executed_quarantine_cases": null,
+      "files_sha256": {
+        "direct-unwind-build.log": "23708f36211a5044cf45507e48786d4363cdeb28f0f3d90c3e0995fd8d8daccf",
+        "direct-unwind-execution.log": "8b7829306633e4c5196e5a87cf2edef916182c50162bd8ffd0c08fcd3d4b20ca",
+        "direct-unwind-relocations.txt": "3d2073dd55067cd171ea354e62712c79e9ed354a032dec64b62eefd9ec436759",
+        "direct-unwind.asm": "3bfa3a37bd52d50de49fce31ff36baa486e3716ed38cb38f9afb1add80a539ee",
+        "direct-unwind.elf": "193458bc2ecdcd9600056dc59e2334400da8c49d45ca8dafe7401f9fbf483cf1",
+        "direct-unwind.json": "fdc0619bd66b518318f8e8d06cb99b9e1cbd666ac511fb1439bb6d44189df7b0",
+        "direct-unwind.nm": "a093228d9b15fcdac4a16c0ce94cb1a7e1de600a21464f7456582196e755f9f6"
+      },
+      "metadata_sha256": "e9776ff281498120f813fc343b0ee4daeed18d8e68f4f1d56de218aaa362a0ae",
+      "log_sha256": "19f31d398ae3ae4df363f93837effc88dd97076136b357debc07c40b72a93500"
+    },
+    {
+      "kind": "lifecycle",
+      "compiler": "1.90.0",
+      "route": "facade",
+      "panic": "abort",
+      "directory": "target/aes-accelerated-linked/1.90.0-native-static-wacmpjo8",
+      "binary_sha256": "7def77b82b889f03eab5bfe186ddd6fc6705217a3282d63566cbe5fb44246fe3",
+      "tools": [
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-nm",
+          "sha256": "53d2d68e7cb454690b91a85c8e10f0af9af4c63539e655d517e630b76ced0a75"
+        },
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-objdump",
+          "sha256": "acc7a550df92321adc6e17ff87e45ede270304b996c8cc4e5cf49a028c48b6da"
+        }
+      ],
+      "review_replayed": true,
+      "executed_quarantine_cases": null,
+      "files_sha256": {
+        "facade-abort-build.log": "7c2b25957d7a948b0c788fde88742af88d5b31fc1242768dd41ad86818485c12",
+        "facade-abort-execution.log": "8b7829306633e4c5196e5a87cf2edef916182c50162bd8ffd0c08fcd3d4b20ca",
+        "facade-abort-relocations.txt": "8ce863b445252ccfcb4d046e6822654094723875fad1d04aceecd5552cb01603",
+        "facade-abort.asm": "a7703cfc7afccc210eaa16301b8509734545636ed3ca2eaf3d0765d1fb842dee",
+        "facade-abort.elf": "7def77b82b889f03eab5bfe186ddd6fc6705217a3282d63566cbe5fb44246fe3",
+        "facade-abort.json": "a49bfccf9527a2fdc6407f052093b7f3dfbe97da7b9150e689d8e6df6d530cc9",
+        "facade-abort.nm": "c4c1788e29e6ca4f8dfcb36ae39316e41f8894a9969d0c1e4e32cbb5e0c2998e"
+      },
+      "metadata_sha256": "d6392d88da0c680c753a4ed8405da343d9c0b90a4668a2cd62ef67626611975c",
+      "log_sha256": "19f31d398ae3ae4df363f93837effc88dd97076136b357debc07c40b72a93500"
+    },
+    {
+      "kind": "lifecycle",
+      "compiler": "1.90.0",
+      "route": "facade",
+      "panic": "unwind",
+      "directory": "target/aes-accelerated-linked/1.90.0-native-static-wacmpjo8",
+      "binary_sha256": "4037ac5b52d166177bc5e88c7693f44fa247c67c51bb71cc84d18e5cfabbc7c5",
+      "tools": [
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-nm",
+          "sha256": "53d2d68e7cb454690b91a85c8e10f0af9af4c63539e655d517e630b76ced0a75"
+        },
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-objdump",
+          "sha256": "acc7a550df92321adc6e17ff87e45ede270304b996c8cc4e5cf49a028c48b6da"
+        }
+      ],
+      "review_replayed": true,
+      "executed_quarantine_cases": null,
+      "files_sha256": {
+        "facade-unwind-build.log": "b580b871e3bff7323ce1d1d0bb544bbbf1afc47baec1a4d7b99ab8ee0fceded5",
+        "facade-unwind-execution.log": "8b7829306633e4c5196e5a87cf2edef916182c50162bd8ffd0c08fcd3d4b20ca",
+        "facade-unwind-relocations.txt": "0501fa0ad221425161358b778f3897102aa6d03e46eda3bc9596c6451e532a68",
+        "facade-unwind.asm": "a79495ef52f0a8edc40fcfd46189a9410f0b30190c49309d7d4ef5a8d23d5ffa",
+        "facade-unwind.elf": "4037ac5b52d166177bc5e88c7693f44fa247c67c51bb71cc84d18e5cfabbc7c5",
+        "facade-unwind.json": "5efd4a02a690fdf028b0d8d983f8e006988a007dd66b9f3278a26e7d38f449dc",
+        "facade-unwind.nm": "20ac2b6785fc63c97c4b78c3f032efc4ae8c2a2bffc3d8ebc0d0eacd59993a37"
+      },
+      "metadata_sha256": "d6392d88da0c680c753a4ed8405da343d9c0b90a4668a2cd62ef67626611975c",
+      "log_sha256": "19f31d398ae3ae4df363f93837effc88dd97076136b357debc07c40b72a93500"
+    },
+    {
+      "kind": "lifecycle",
+      "compiler": "1.99.1",
+      "route": "direct",
+      "panic": "abort",
+      "directory": "target/aes-accelerated-linked/1.99.1-native-static-jb9l6wr1",
+      "binary_sha256": "593a264925276e22881a2197766c69869c3d88e9f81a3218c2ccc590b34b737a",
+      "tools": [
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-nm",
+          "sha256": "53d2d68e7cb454690b91a85c8e10f0af9af4c63539e655d517e630b76ced0a75"
+        },
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-objdump",
+          "sha256": "acc7a550df92321adc6e17ff87e45ede270304b996c8cc4e5cf49a028c48b6da"
+        }
+      ],
+      "review_replayed": true,
+      "executed_quarantine_cases": null,
+      "files_sha256": {
+        "direct-abort-build.log": "e12bec84a870ce4c8604fa3653d92f5affb5b598a59bccf49eba8b81d53c26e8",
+        "direct-abort-execution.log": "8b7829306633e4c5196e5a87cf2edef916182c50162bd8ffd0c08fcd3d4b20ca",
+        "direct-abort-relocations.txt": "e4db323bc8bc4c6a6bdabf44e193fefcaec47c9c3eaedf240d07960258c43dad",
+        "direct-abort.asm": "9e248c4a6bb4a8f638582a9943924b630bb4d972fc2ef64601b51e883ec92c42",
+        "direct-abort.elf": "593a264925276e22881a2197766c69869c3d88e9f81a3218c2ccc590b34b737a",
+        "direct-abort.json": "9b47d944adf42d3f0e36794f1fe03fbfc5f08a26cc119f5f14558ffea1e36472",
+        "direct-abort.nm": "54eb35e83899ea093336d8d51418520aa3a4bb532322aa343ba502d823287867"
+      },
+      "metadata_sha256": "62c56288fdcfd1492fdaca83724217c41685521115fa8badc53a856233455f24",
+      "log_sha256": "0bff72c4f8a50ecf22cae7e51a111e23585d08132e6eef3cb9ddea205bc219a9"
+    },
+    {
+      "kind": "lifecycle",
+      "compiler": "1.99.1",
+      "route": "direct",
+      "panic": "unwind",
+      "directory": "target/aes-accelerated-linked/1.99.1-native-static-jb9l6wr1",
+      "binary_sha256": "b1bd25aa5aa506cd05fc2206101587d05f902611162ca52d9b4942af5c32ff21",
+      "tools": [
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-nm",
+          "sha256": "53d2d68e7cb454690b91a85c8e10f0af9af4c63539e655d517e630b76ced0a75"
+        },
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-objdump",
+          "sha256": "acc7a550df92321adc6e17ff87e45ede270304b996c8cc4e5cf49a028c48b6da"
+        }
+      ],
+      "review_replayed": true,
+      "executed_quarantine_cases": null,
+      "files_sha256": {
+        "direct-unwind-build.log": "c9b75518b23a7a7fd04fcf6ee782a8066a0a461fae7c0170caa8a5e713a9d5b5",
+        "direct-unwind-execution.log": "8b7829306633e4c5196e5a87cf2edef916182c50162bd8ffd0c08fcd3d4b20ca",
+        "direct-unwind-relocations.txt": "15efef690850fa528f61d0af22ae5bbccc57e4409eae089699c74379018ba361",
+        "direct-unwind.asm": "bf53489c560fb6b10da17c2ee5a0e39695d31519b832bd46a00117c850ed637f",
+        "direct-unwind.elf": "b1bd25aa5aa506cd05fc2206101587d05f902611162ca52d9b4942af5c32ff21",
+        "direct-unwind.json": "f48e1c5d80b74afec12405e67e33c5b385ff87d472c92bf625f5d0fe6041047b",
+        "direct-unwind.nm": "4172260a0e31ebb8453a5df9330be3a1b14b7d12bc63e2e079faf3727a5fb4e3"
+      },
+      "metadata_sha256": "62c56288fdcfd1492fdaca83724217c41685521115fa8badc53a856233455f24",
+      "log_sha256": "0bff72c4f8a50ecf22cae7e51a111e23585d08132e6eef3cb9ddea205bc219a9"
+    },
+    {
+      "kind": "lifecycle",
+      "compiler": "1.99.1",
+      "route": "facade",
+      "panic": "abort",
+      "directory": "target/aes-accelerated-linked/1.99.1-native-static-jb9l6wr1",
+      "binary_sha256": "2fb3770a6086a4e867d36c0e3b4a375420797637fe8b634975645c8df91695fc",
+      "tools": [
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-nm",
+          "sha256": "53d2d68e7cb454690b91a85c8e10f0af9af4c63539e655d517e630b76ced0a75"
+        },
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-objdump",
+          "sha256": "acc7a550df92321adc6e17ff87e45ede270304b996c8cc4e5cf49a028c48b6da"
+        }
+      ],
+      "review_replayed": true,
+      "executed_quarantine_cases": null,
+      "files_sha256": {
+        "facade-abort-build.log": "2c9f50f8b2ea9dfb1772a89d7068b689de0388fa8fbddd1d0c25624e60835256",
+        "facade-abort-execution.log": "8b7829306633e4c5196e5a87cf2edef916182c50162bd8ffd0c08fcd3d4b20ca",
+        "facade-abort-relocations.txt": "6de1b497390f94a155a210c72391b1fbc40113934faaae1136bc410b53c166a7",
+        "facade-abort.asm": "109c0568a5ef87f732dccd89fb3f9e862148a1bd9cea4f7ca7a7929c83ac30a5",
+        "facade-abort.elf": "2fb3770a6086a4e867d36c0e3b4a375420797637fe8b634975645c8df91695fc",
+        "facade-abort.json": "8ed86b3f5bdc65343af522619b3d285624a9b0986e709ea2cca39b343bc84839",
+        "facade-abort.nm": "8739d4ddc77b4e5a3ef0621f1f451aa40c57d68c8f9ff195fa96d915e11d1371"
+      },
+      "metadata_sha256": "7986667c49036fef4fb9f922d7da9fddf836b88dd7c49172b9622a4e8bc1f6d2",
+      "log_sha256": "0bff72c4f8a50ecf22cae7e51a111e23585d08132e6eef3cb9ddea205bc219a9"
+    },
+    {
+      "kind": "lifecycle",
+      "compiler": "1.99.1",
+      "route": "facade",
+      "panic": "unwind",
+      "directory": "target/aes-accelerated-linked/1.99.1-native-static-jb9l6wr1",
+      "binary_sha256": "85b29a4ee88c00f94469b5c7228b8165950e0e2c17d785c8a1b7bd1cc2d3c618",
+      "tools": [
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-nm",
+          "sha256": "53d2d68e7cb454690b91a85c8e10f0af9af4c63539e655d517e630b76ced0a75"
+        },
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-objdump",
+          "sha256": "acc7a550df92321adc6e17ff87e45ede270304b996c8cc4e5cf49a028c48b6da"
+        }
+      ],
+      "review_replayed": true,
+      "executed_quarantine_cases": null,
+      "files_sha256": {
+        "facade-unwind-build.log": "dd9b52c69d89011792be7cf2aae4c8005f9e9d37e3a953dc4d78dd66884142b2",
+        "facade-unwind-execution.log": "8b7829306633e4c5196e5a87cf2edef916182c50162bd8ffd0c08fcd3d4b20ca",
+        "facade-unwind-relocations.txt": "fab523a3271fec085212d924dc19ab87498a6bd249b78e65e0876826f21e4dc1",
+        "facade-unwind.asm": "9e227d838e78ca5f9c9781e9a3a28564814c7fae55f29abe037002abdf812898",
+        "facade-unwind.elf": "85b29a4ee88c00f94469b5c7228b8165950e0e2c17d785c8a1b7bd1cc2d3c618",
+        "facade-unwind.json": "007b021a5a4b77edd76dd2a5bd41f5aeb0471202b2722c41d20104a8611c5579",
+        "facade-unwind.nm": "9120d4c4e44d03c7c47b1a4076fa72fd4bd41c05c8470fe02e99ef6f6b9de788"
+      },
+      "metadata_sha256": "7986667c49036fef4fb9f922d7da9fddf836b88dd7c49172b9622a4e8bc1f6d2",
+      "log_sha256": "0bff72c4f8a50ecf22cae7e51a111e23585d08132e6eef3cb9ddea205bc219a9"
+    },
+    {
+      "kind": "startup",
+      "compiler": "1.90.0",
+      "route": "direct",
+      "panic": "abort",
+      "directory": "target/aes-accelerated-startup-x86/1.90.0-1qv7q7sf",
+      "binary_sha256": "de21bfb909aab3534dc123830be08d5984b121d067d8bbd1bc8416837501260c",
+      "tools": [
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-nm",
+          "sha256": "53d2d68e7cb454690b91a85c8e10f0af9af4c63539e655d517e630b76ced0a75"
+        },
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-objdump",
+          "sha256": "acc7a550df92321adc6e17ff87e45ede270304b996c8cc4e5cf49a028c48b6da"
+        }
+      ],
+      "review_replayed": true,
+      "executed_quarantine_cases": 628,
+      "files_sha256": {
+        "direct-abort-build.log": "b0b2c200358b18f935d7b8cf761decb7147bcf63a2e33a7fbe1ac269f4afaa4a",
+        "direct-abort-execution.log": "7e6909fbe9fab74a2f8901725dd559001a3c1ac87f60cc9d87bf9e7bad0c0df5",
+        "direct-abort.asm": "23342d849bde704cee726c63404a7cb2bc88769955032115ed734f11e7776f61",
+        "direct-abort.elf": "de21bfb909aab3534dc123830be08d5984b121d067d8bbd1bc8416837501260c",
+        "direct-abort.json": "b9e02765a707b17e88926379475a369b3ccbc98e21b7aeb16af04f139e08e762",
+        "direct-abort.nm": "7ae0b9aefc73bb0e3c0ce3beba381b70990eca0b050cd7165c1c3d6c0b11f79b"
+      },
+      "metadata_sha256": "1444fb00e1cdefc93256ecdd29c315621575f932b94c24be92553d4a546b2417",
+      "log_sha256": "c9d21006e5f1c0ef13d268ff45773e1fc01a032f968c4715fa3c0e89a27dc778"
+    },
+    {
+      "kind": "startup",
+      "compiler": "1.90.0",
+      "route": "direct",
+      "panic": "unwind",
+      "directory": "target/aes-accelerated-startup-x86/1.90.0-1qv7q7sf",
+      "binary_sha256": "2ebab28b542d0b711ae8ff6880b800dd42c127830897787e78e6165d449f3c97",
+      "tools": [
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-nm",
+          "sha256": "53d2d68e7cb454690b91a85c8e10f0af9af4c63539e655d517e630b76ced0a75"
+        },
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-objdump",
+          "sha256": "acc7a550df92321adc6e17ff87e45ede270304b996c8cc4e5cf49a028c48b6da"
+        }
+      ],
+      "review_replayed": true,
+      "executed_quarantine_cases": 628,
+      "files_sha256": {
+        "direct-unwind-build.log": "f41d350e50105792ab135089bf3e5d48de9ed6f0ac32fc239651a93c707683ab",
+        "direct-unwind-execution.log": "7e6909fbe9fab74a2f8901725dd559001a3c1ac87f60cc9d87bf9e7bad0c0df5",
+        "direct-unwind.asm": "cab96c7dabd40b8b120156f114f65991a125f8b182ad9ba019b3d555672e1b66",
+        "direct-unwind.elf": "2ebab28b542d0b711ae8ff6880b800dd42c127830897787e78e6165d449f3c97",
+        "direct-unwind.json": "6f178b0731e1358c5df47e515369de8e47bbeba8acadc204277ea6456dfc4ff2",
+        "direct-unwind.nm": "291204214482cbc50542229d5a4ff1eec6b8e13951b2466fad2d64b36ea3c34f"
+      },
+      "metadata_sha256": "1444fb00e1cdefc93256ecdd29c315621575f932b94c24be92553d4a546b2417",
+      "log_sha256": "c9d21006e5f1c0ef13d268ff45773e1fc01a032f968c4715fa3c0e89a27dc778"
+    },
+    {
+      "kind": "startup",
+      "compiler": "1.90.0",
+      "route": "facade",
+      "panic": "abort",
+      "directory": "target/aes-accelerated-startup-x86/1.90.0-1qv7q7sf",
+      "binary_sha256": "7cf552677f5e15f77368e6d0223aa6dca4ec4e87f9057a15c953c7e5f73ddf8c",
+      "tools": [
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-nm",
+          "sha256": "53d2d68e7cb454690b91a85c8e10f0af9af4c63539e655d517e630b76ced0a75"
+        },
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-objdump",
+          "sha256": "acc7a550df92321adc6e17ff87e45ede270304b996c8cc4e5cf49a028c48b6da"
+        }
+      ],
+      "review_replayed": true,
+      "executed_quarantine_cases": 628,
+      "files_sha256": {
+        "facade-abort-build.log": "76927465b23a4ddfd2e92f6850c1d2bfa6044ccef20be8df56e669444b7a7474",
+        "facade-abort-execution.log": "7e6909fbe9fab74a2f8901725dd559001a3c1ac87f60cc9d87bf9e7bad0c0df5",
+        "facade-abort.asm": "be54c3072fca9f7cd2ac1fb2ea5a6075c6e5df13ae5058f3b0f3fb7a62bb0b5f",
+        "facade-abort.elf": "7cf552677f5e15f77368e6d0223aa6dca4ec4e87f9057a15c953c7e5f73ddf8c",
+        "facade-abort.json": "103f3c786203bd916da32f8c390318c61e443f7904a630e5b94ae693e6969ecd",
+        "facade-abort.nm": "41abf569eff8b0572216f73e866b505c277b05f45f17ff4859d85e9d7d92b87f"
+      },
+      "metadata_sha256": "94250e696e1462de78823660f046ef87530acadf52cfcc7cc8f3bda2b74d5a51",
+      "log_sha256": "c9d21006e5f1c0ef13d268ff45773e1fc01a032f968c4715fa3c0e89a27dc778"
+    },
+    {
+      "kind": "startup",
+      "compiler": "1.90.0",
+      "route": "facade",
+      "panic": "unwind",
+      "directory": "target/aes-accelerated-startup-x86/1.90.0-1qv7q7sf",
+      "binary_sha256": "10adc4a5cc220338a533e2d655bf1f502d6d6a4583fd505b76e633470b2cf024",
+      "tools": [
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-nm",
+          "sha256": "53d2d68e7cb454690b91a85c8e10f0af9af4c63539e655d517e630b76ced0a75"
+        },
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-objdump",
+          "sha256": "acc7a550df92321adc6e17ff87e45ede270304b996c8cc4e5cf49a028c48b6da"
+        }
+      ],
+      "review_replayed": true,
+      "executed_quarantine_cases": 628,
+      "files_sha256": {
+        "facade-unwind-build.log": "7c94746539405f4ff87471d721a411bc5fe475cfc9812ec98d09c256b31163ed",
+        "facade-unwind-execution.log": "7e6909fbe9fab74a2f8901725dd559001a3c1ac87f60cc9d87bf9e7bad0c0df5",
+        "facade-unwind.asm": "ebf4118310a8c03e7a35dafb3449bd36e8f7cea3a4b3929700947263ecbefa90",
+        "facade-unwind.elf": "10adc4a5cc220338a533e2d655bf1f502d6d6a4583fd505b76e633470b2cf024",
+        "facade-unwind.json": "c1e33c07d7d63aae5f2277a5a013d338112b4b5bfbe274780920991123944cac",
+        "facade-unwind.nm": "c2b61c5bfa3d115089be340ba50b0f657c1691a3b947c73f60de0361b0dd1ba8"
+      },
+      "metadata_sha256": "94250e696e1462de78823660f046ef87530acadf52cfcc7cc8f3bda2b74d5a51",
+      "log_sha256": "c9d21006e5f1c0ef13d268ff45773e1fc01a032f968c4715fa3c0e89a27dc778"
+    },
+    {
+      "kind": "startup",
+      "compiler": "1.99.1",
+      "route": "direct",
+      "panic": "abort",
+      "directory": "target/aes-accelerated-startup-x86/1.99.1-k1apd395",
+      "binary_sha256": "021c27bcd48f705a60f63888384bd750b3c5d0c362e05d445360d0e72f1e9b7c",
+      "tools": [
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-nm",
+          "sha256": "53d2d68e7cb454690b91a85c8e10f0af9af4c63539e655d517e630b76ced0a75"
+        },
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-objdump",
+          "sha256": "acc7a550df92321adc6e17ff87e45ede270304b996c8cc4e5cf49a028c48b6da"
+        }
+      ],
+      "review_replayed": true,
+      "executed_quarantine_cases": 628,
+      "files_sha256": {
+        "direct-abort-build.log": "7ec13704b9907468b947da3a0e8d648be5505bf3daa58f2dbf8daa62567d4221",
+        "direct-abort-execution.log": "7e6909fbe9fab74a2f8901725dd559001a3c1ac87f60cc9d87bf9e7bad0c0df5",
+        "direct-abort.asm": "725fca8661a36000b8ce970557f91f90edff4efad65c2e90cc3d022d3f32e29b",
+        "direct-abort.elf": "021c27bcd48f705a60f63888384bd750b3c5d0c362e05d445360d0e72f1e9b7c",
+        "direct-abort.json": "8b22d3c229f21d0412b6a82778e093f107a7ee8be31b3d2e481ec556b3acdafc",
+        "direct-abort.nm": "5453510f7aa98b84f3a11c7b34147f3229cfaed86f7c8d0149d66c76cfb2ced9"
+      },
+      "metadata_sha256": "b0818c232bfbe61882e9f85c1464725aaf830e020777efebc161c32532d06e11",
+      "log_sha256": "9d791bd19771dfdbf86e4ba721ba05871b540e940e292de047942837013451f1"
+    },
+    {
+      "kind": "startup",
+      "compiler": "1.99.1",
+      "route": "direct",
+      "panic": "unwind",
+      "directory": "target/aes-accelerated-startup-x86/1.99.1-k1apd395",
+      "binary_sha256": "76f2117385e9660c3f3e3723de2ebdbe986c787f9393858811f40085696ddfe2",
+      "tools": [
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-nm",
+          "sha256": "53d2d68e7cb454690b91a85c8e10f0af9af4c63539e655d517e630b76ced0a75"
+        },
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-objdump",
+          "sha256": "acc7a550df92321adc6e17ff87e45ede270304b996c8cc4e5cf49a028c48b6da"
+        }
+      ],
+      "review_replayed": true,
+      "executed_quarantine_cases": 628,
+      "files_sha256": {
+        "direct-unwind-build.log": "3359a3bd3673e28c1d8918a732476b4f7d7a650f81ec5018ee6735e8b25852a7",
+        "direct-unwind-execution.log": "7e6909fbe9fab74a2f8901725dd559001a3c1ac87f60cc9d87bf9e7bad0c0df5",
+        "direct-unwind.asm": "273f7b184e8c0e963877bb867792e640e89bf7801912bf55c04435b40a86ebbf",
+        "direct-unwind.elf": "76f2117385e9660c3f3e3723de2ebdbe986c787f9393858811f40085696ddfe2",
+        "direct-unwind.json": "5af1e7996dd0a8164ea1b06b1db03252d214d4a91075ae51a66cc96a597095d7",
+        "direct-unwind.nm": "8b7cc96fb1b742c27c8df880b2c28c5be6aea3f38b4995980699e6e93e67d17f"
+      },
+      "metadata_sha256": "b0818c232bfbe61882e9f85c1464725aaf830e020777efebc161c32532d06e11",
+      "log_sha256": "9d791bd19771dfdbf86e4ba721ba05871b540e940e292de047942837013451f1"
+    },
+    {
+      "kind": "startup",
+      "compiler": "1.99.1",
+      "route": "facade",
+      "panic": "abort",
+      "directory": "target/aes-accelerated-startup-x86/1.99.1-k1apd395",
+      "binary_sha256": "4264328002a9aaf55aa583ee3749f8dc1ba6160dce3b6da355d0cd9e47dd5cfb",
+      "tools": [
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-nm",
+          "sha256": "53d2d68e7cb454690b91a85c8e10f0af9af4c63539e655d517e630b76ced0a75"
+        },
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-objdump",
+          "sha256": "acc7a550df92321adc6e17ff87e45ede270304b996c8cc4e5cf49a028c48b6da"
+        }
+      ],
+      "review_replayed": true,
+      "executed_quarantine_cases": 628,
+      "files_sha256": {
+        "facade-abort-build.log": "dd72be297651b527c183cf4586066150de29e596809ff78ba18cb17da671e595",
+        "facade-abort-execution.log": "7e6909fbe9fab74a2f8901725dd559001a3c1ac87f60cc9d87bf9e7bad0c0df5",
+        "facade-abort.asm": "b1248d1968965999fc7727b8ca6e19e805e269a0eda40f2c80bdd11a601be23b",
+        "facade-abort.elf": "4264328002a9aaf55aa583ee3749f8dc1ba6160dce3b6da355d0cd9e47dd5cfb",
+        "facade-abort.json": "6e58fd197ac93188cb6c955754f09193c400994923734c949838af1651af79d3",
+        "facade-abort.nm": "a44e7a53b1b01a7649b19e01bd27897f31f790e0f3182dcb9cd3ce006663deeb"
+      },
+      "metadata_sha256": "8b11c645987a1ab962d7e16ca645baec0c6d29ea0f6cfe165442b61527035ccf",
+      "log_sha256": "9d791bd19771dfdbf86e4ba721ba05871b540e940e292de047942837013451f1"
+    },
+    {
+      "kind": "startup",
+      "compiler": "1.99.1",
+      "route": "facade",
+      "panic": "unwind",
+      "directory": "target/aes-accelerated-startup-x86/1.99.1-k1apd395",
+      "binary_sha256": "05bf496273f6971349e6bb55637c27edec0985d799de839c24662afac492542d",
+      "tools": [
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-nm",
+          "sha256": "53d2d68e7cb454690b91a85c8e10f0af9af4c63539e655d517e630b76ced0a75"
+        },
+        {
+          "path": "/usr/lib/llvm-21/bin/llvm-objdump",
+          "sha256": "acc7a550df92321adc6e17ff87e45ede270304b996c8cc4e5cf49a028c48b6da"
+        }
+      ],
+      "review_replayed": true,
+      "executed_quarantine_cases": 628,
+      "files_sha256": {
+        "facade-unwind-build.log": "2bac695c928671a851d5de76d384d8dca2f4ec0582cfbb2a76f7a49e499a32d6",
+        "facade-unwind-execution.log": "7e6909fbe9fab74a2f8901725dd559001a3c1ac87f60cc9d87bf9e7bad0c0df5",
+        "facade-unwind.asm": "84b57c6fffa683e6c390101dce9de7ed8a162e26972f099d6a7b428cab60f461",
+        "facade-unwind.elf": "05bf496273f6971349e6bb55637c27edec0985d799de839c24662afac492542d",
+        "facade-unwind.json": "57834867f31e9546d679659c8cb6ca7e0ef007b4958b502a4938c2647ec8a3f6",
+        "facade-unwind.nm": "dfee5f4d12f01f3135571e02b3fdfcbb280bd3a11f15f4d9387cef6f1414732d"
+      },
+      "metadata_sha256": "8b11c645987a1ab962d7e16ca645baec0c6d29ea0f6cfe165442b61527035ccf",
+      "log_sha256": "9d791bd19771dfdbf86e4ba721ba05871b540e940e292de047942837013451f1"
+    }
+  ],
+  "lifecycle": [
+    {
+      "compiler": "1.90.0",
+      "mode": "native",
+      "directory": "target/aes-static/native-1.90.0-_qzyyx3b",
+      "files_sha256": {
+        "authority.log": "6efb8b13c4e3ca7e8311dde27b1651b02a51b11030c07dc07c046fc77bf82c70",
+        "faults.log": "e701c83b637169d9101fe2989db1c16d873e92f9b11df8518ba994cd57dda1fe",
+        "owners.log": "64b57b7071ffea9b6a46c2c15c17fd7ba15866ea00400104e591aa00c7d4531f",
+        "probe": "a001c7437dc7f92ba0fdba1ebccdb013c085638791c94f030b8629e123432536",
+        "probe-compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "probe.log": "61edd8a1848aca8cd08abcf49f3e4c1c6817d9eb98d0fbb33fcd9bc54115c5f3"
+      },
+      "log_sha256": "5ca8f5867aa2d5b002df73db57fc76b1191055ec42b465db36ec1b5d68ea0a8a"
+    },
+    {
+      "compiler": "1.90.0",
+      "mode": "baseline",
+      "directory": "target/aes-static/baseline-1.90.0-3kg4uhvn",
+      "files_sha256": {
+        "authority.log": "08e5632a19eac7026b2f562c25eb012fb3c23f0d71fb4263e53bdb60fab03611",
+        "owners.log": "33cffd265a71436c056a6437591e7ec2c32bf4b11a79c5441c5b47c04387be01"
+      },
+      "log_sha256": "d409978296783c7e6faf82814f03734a285e945b20d82b35518d2ce878d807ea"
+    },
+    {
+      "compiler": "1.90.0",
+      "mode": "hosted-unavailable",
+      "directory": "target/aes-hosted/native-1.90.0-xwwnb78k",
+      "files_sha256": {
+        "consumer-debug.log": "346e58630592b475ecd5a20104f9f738e7f47642c48d05dd5358abbecd7057cb",
+        "consumer-release.log": "cd8ec036b2bc34595a9cbd12b64da2600c12a0277815e47ec5f38a02c6fdf917",
+        "selection.log": "874fdc22fc812e1286f27610664f291854290608f2b1bc9821b898115d21376e"
+      },
+      "log_sha256": "f940b8b74af812c729f6ea771aa2f6b9fc86809ac7375f95f378b9325729e64c"
+    },
+    {
+      "compiler": "1.99.1",
+      "mode": "native",
+      "directory": "target/aes-static/native-1.99.1-js2wcr_1",
+      "files_sha256": {
+        "authority.log": "3f719253f8f47d244686b4a9e561c6bd22ca9a257f64e07353d3912658d02266",
+        "faults.log": "9aed262be60db43852928b8f2585d7d780e1fef3f8269237badd5557eff74144",
+        "owners.log": "14695cb04e2a27a3a9a4295b4a63122f631466c11c327e6d8d8220c82bdf67ec",
+        "probe": "129f917ff419aae6e5323beace38e694fdbb7151f0e515f69201a3f215f440e7",
+        "probe-compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "probe.log": "61edd8a1848aca8cd08abcf49f3e4c1c6817d9eb98d0fbb33fcd9bc54115c5f3"
+      },
+      "log_sha256": "4c6817a9e6b4c5799f6f650fa75ef288e770ea395c8b0b4ba6444a718e561076"
+    },
+    {
+      "compiler": "1.99.1",
+      "mode": "baseline",
+      "directory": "target/aes-static/baseline-1.99.1-c2n0opj8",
+      "files_sha256": {
+        "authority.log": "43620d974b2bd3945e15bff83800b4c5f56a70bc438584dfabd2a1f6738af44e",
+        "owners.log": "4dd8a2798a4c9e99aad37430005ba9c0ac1d42d041c680ce0bfda1919bff31c8"
+      },
+      "log_sha256": "91d9895c576a5da2bcdf9103ade0f466e682f6e3c8b7b77bd90cad1cf7c8e41a"
+    },
+    {
+      "compiler": "1.99.1",
+      "mode": "hosted-unavailable",
+      "directory": "target/aes-hosted/native-1.99.1-z5sg6fpo",
+      "files_sha256": {
+        "consumer-debug.log": "58d1222df1cd0bcd99a531b18afce7c0fbbcd23c7c496a50292be97802a916a6",
+        "consumer-release.log": "5df7363f6c7a65c3fa990afbbd4322a28fbe909e0ac136abb252cb072cf2a334",
+        "selection.log": "4d2d853c0a1e4191c71a2c7659aa2b3ae5cf421b9119a4890a62e493a4c3d230"
+      },
+      "log_sha256": "9df39ebadc3442f21954a13f001e686f3d653c4c0ad833d26be2ae78bb15b7c8"
+    }
+  ],
+  "incomplete_attempts": [
+    {
+      "directory": "target/aes-accelerated-linked/1.90.0-native-static-966_ztaf",
+      "files_sha256": {
+        "direct-abort-build.log": "e581b07bda34d6c704a35174e9c136fa8e47a41be9c0c8dce1d7b49cc0c3a7e5",
+        "direct-abort-execution.log": "8b7829306633e4c5196e5a87cf2edef916182c50162bd8ffd0c08fcd3d4b20ca",
+        "direct-abort-relocations.txt": "169baae775146f68f7a76aabf868e97510f586e4ac3e165ba3144b718a5f7963",
+        "direct-abort.asm": "87782ac2490ae5227c610aa198d845ceffa05345f29ad894922e12a6b57d8e0f",
+        "direct-abort.elf": "6f936ee94550651fdd3bbe4846a8a0b349e43febb0eabf7b4a8173a67de6bf1e",
+        "direct-abort.nm": "4057b7da48ca10cce4c7c8435b3f231fb5226cfff0198316bc4197ad0e0052b5",
+        "direct-metadata.json": "f56b9154ca8fbba14d35900bd6905cd8612842838deaa0e541f86b0688c7d726"
+      },
+      "status": "Incomplete review: missing helper import; not counted as a pass."
+    }
+  ],
+  "setup_failure_log_sha256": "14d8b6dd52e1f352a39aabd57a164848a9846cf88f3e10f768b087c0ddc70381",
+  "setup_failure_disposition": "Shared Python helper omitted from transfer; added unchanged repository support files. Failed review retained, rules unchanged. Only the interrupted linked check restarted; successful campaigns were not repeated.",
+  "limits": [
+    "Hosted x86 remains unavailable; no migration-safe runtime admission claimed.",
+    "VAES/AVX support advertised by the host was not used or qualified here.",
+    "No timing, physical-fault, power/EM or compiler-spill erasure claim.",
+    "Exact named consumers only; not arbitrary downstream inlining or exception-table proof.",
+    "Lifecycle build caches excluded; their logs and ISA probes retained."
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "declared_utc": "2026-11-12T17:53:00Z",
+  "rounds": 4,
+  "controls": [
+    "separate-values",
+    "shared-values",
+    "separate-identical",
+    "shared-identical"
+  ],
+  "timeout_seconds": 180,
+  "collector_sha256": "0589bbe49aef4fbab555e9e9879d3ec757de9ea1b2231b12722985759de6d130",
+  "timing_parser_sha256": "08bb7ae4cd54255837eaf931ed59a272bb44c3714a481e4dd916bd4b26a956f9",
+  "controls_parser_sha256": "a0a6d763131fa1ede09fd7c3a4873f57b9c36d530ed2f0e0a519b7fb8e503c03",
+  "policy_sha256": "9efb640a2a9870685b6a919813aaa081670960130bf2b584328b3364f9990b41",
+  "bounded_review_sha256": "1faece7bb980f93be2328c7c3b3868ff6eaf036ae8f78c25135782fec25627fd",
+  "probe_source_sha256": "07b3ef5f48f3bf73036f13573df7286656880e829c7aa13a4001e0b72e8fbdc8",
+  "system": "Darwin",
+  "machine": "arm64",
+  "cpu": null,
+  "host": "macosbuilder (builduser@10.0.0.2)",
+  "hardware": "Apple M2 Pro",
+  "destination": "/Users/builduser/brynja-dit-0273-tnLoZOqv/observations-20261112-dit-finite-01",
+  "binaries": {
+    "1.90.0": {
+      "binary": "/Users/builduser/brynja-dit-0273-tnLoZOqv/target/aes-accelerated-fixed-random/check-1.90.0-direct-ubv8w1xi/fixed-random",
+      "binary_sha256": "427a8cdf320e362408e0e10b7f4fb3383a5b1ff9eedcff55804c7a51f5e10597",
+      "probe": "/Users/builduser/brynja-dit-probes-4jnGfmHq/probe-1.90.0",
+      "probe_sha256": "045eaceae9f1ca7327b014641e5588cba1e92a3af0ebcfb31d7afe0dd77337c8"
+    },
+    "1.99.1": {
+      "binary": "/Users/builduser/brynja-dit-0273-tnLoZOqv/target/aes-accelerated-fixed-random/check-1.99.1-direct-vqmorv1y/fixed-random",
+      "binary_sha256": "d6f98877b00e845d448fbeae78ac3381a8c59464fafbc471c0b1bfbdf8638539",
+      "probe": "/Users/builduser/brynja-dit-probes-4jnGfmHq/probe-1.99.1",
+      "probe_sha256": "efc6f171929d2851e71289be6ba778209e6928b08273fea75e7a9548120e9c00"
+    }
+  }
+}

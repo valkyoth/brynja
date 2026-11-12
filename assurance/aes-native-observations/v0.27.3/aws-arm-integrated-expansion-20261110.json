@@ -1,0 +1,455 @@
+{
+  "kind": "unauthenticated-development-observation",
+  "date": "2026-11-10",
+  "scope": "Integrated ARM AESE expansion and round backend; native correctness, not final qualification.",
+  "source": {
+    "base_commit": "56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e",
+    "working_tree": "Uncommitted v0.27.3 development snapshot, not a clean tagged checkout.",
+    "archives": [
+      {
+        "path": "target/aes-aws-arm-expansion-20261110.tar.gz",
+        "sha256": "193c1a63bf91b7a97b15fc8c6ea21bff52fda2ff7020f1a17e394bc47a295f88",
+        "checked_source_files": 1530
+      },
+      {
+        "path": "target/aes-aws-arm-hosted-fixture-20261110.tar.gz",
+        "sha256": "c105502292feaaa79beee3ba38be9bf633eea13f786fb4252df2c203b9d1371e",
+        "checked_source_files": 3
+      }
+    ],
+    "package_sha256": {
+      "brynja-0.27.2": "1eac3382d1ef632b9f46670adf65cec1131bf40d6b317a5f605f74be4b53baab",
+      "brynja-core-0.10.0": "3ac8894a7a05e5ae25c164091998ca081933bb960769bc3238ec5972d1c61679",
+      "brynja-crypto-0.2.0": "8f90c00bf91f026fecc24af312b793b0865e914c796d329fa297abe8cdf5523a",
+      "brynja-crypto-cpu-0.2.0": "97a9bc44256395a983e11c185320904728d3ac4ae9138deebc0a907d15c87ad9",
+      "brynja-crypto-cpu-std-0.2.0": "137e62d9576b2ec32669528b2449877ed0efc77cf2a6f72348290ba192918261",
+      "brynja-dtls-0.1.9": "3894782c6e1a295a1aabe2560a959be3ae1476cf67fb9cd9a543fcb2a1c9f421",
+      "brynja-hash-core-0.1.0": "13b6fe81e8b96028ebe481d543193a1e5d34a78a7ac048b7ef0fa5c66d3dcbf2",
+      "brynja-hash-parallel-0.1.0": "ca4050cfdb521d4279c31283906d284862405e9c83212fbbedb97b7dfbf4e932",
+      "brynja-hash-sha2-0.1.0": "1c0fbdbab191c7e11fd1ed9d1f967c5dffa7932aa75579987f9211fb69a26fb8",
+      "brynja-hash-sha3-0.1.0": "5040888f602843134d1110a8021ac2d7a6ae9b782709a986dbb3a341425c08c7",
+      "brynja-hash-tuple-0.1.0": "85b186bf25fb9c65b2c2df31f626cd8f92455f2e3f774d987bba2b3d2e13ce03",
+      "brynja-mac-hmac-0.1.0": "8b8742a1177059b66e981b1ac1f94c563ae0394332e12a4406d023ea4dade196",
+      "brynja-mac-kmac-0.1.0": "15c0164e3bfc496355c22c95d3623c384c7a4114e282230f0741a62e6ee84df0",
+      "brynja-pki-0.3.0": "42936cff98f924f34831f8aa4cba616faf011fdd8a1826d57879a39084650f48",
+      "brynja-platform-0.1.9": "02fdab9954540d215e81000427628ca8e6018f3b3db843e5e34d0ed0b2d4f3bf",
+      "brynja-protocol-0.1.1": "79ba3a20529393efd8770690bd93626841224f9375e8cd5363178c757a0abfb3",
+      "brynja-quic-tls-0.1.9": "52ce4fb7f875a51d03f70088a0ca883f38a827a3b330a2d7b462d88c90ade04c",
+      "brynja-tls-0.1.9": "cb6e0aa7d5e815847108dd37e1b6e142b139fb03a9e95c4519130d73e55ce399",
+      "brynja-tls12-0.1.9": "0561887cf6d7f46dae18d6c50a85e2cf83108af957e503456ea52c4754a26698",
+      "brynja-tls13-0.1.9": "edd0f449e0a21c1b20d5d0e57ab9236596aee93b71e3a342404ef48940290ccc",
+      "brynja-tls13-handshake-0.1.9": "62e80577689a7b87a3839d7a5cfeee5a2bf39cbc4ddd6d77ce62f2cb8ee6a2cb"
+    }
+  },
+  "host": {
+    "cpu": "ARM Neoverse-V2 r0p1",
+    "logical_cpus": 4,
+    "target": "aarch64-unknown-linux-gnu",
+    "kernel": "7.0.0-1014-aws",
+    "oracle": "OpenSSL 3.5.5",
+    "oracle_executable_sha256": "923692545ed22fed73e05418c42ffac4772a40c84b055926ed595e902ea9a922",
+    "context": "logs/host.txt",
+    "context_sha256": "9b488354f2a6261e8cc237d88b0fd5772975f9620db62448e4d2d0abff52716d"
+  },
+  "evidence": {
+    "local_directory": "target/aes-native-aws-arm-expansion-20261110",
+    "remote_directory": "/home/ubuntu/brynja-aes-0273-DyYgL1Re",
+    "archive": "observations.tar.gz",
+    "archive_sha256": "337a7718a4d9bd84362950ea8fcd7ebb57983cd60b2c30fcf01184d476c162c6",
+    "completed_utc": "Tue Nov 10 17:13:59 UTC 2026"
+  },
+  "initial_attempt": {
+    "result": "preflight-rejected",
+    "reason": "New target directory inherited group-write permissions from umask; no compilation or test execution.",
+    "log": "logs/1.90.0-direct-static-avs.log",
+    "log_sha256": "096ab83936bdce6d7bb1a8b9bca21ce31744dbffe2783bfed51293c99ee9286d",
+    "resolution": "Restricted target to mode 0700 and used umask 077; original diagnostic preserved."
+  },
+  "runs": [
+    {
+      "toolchain": "1.90.0",
+      "route": "direct",
+      "admission": "static",
+      "suite": "avs",
+      "result": "passed",
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 direct static native avs",
+      "test_executions": 12,
+      "log": "logs-attempt2/1.90.0-direct-static-avs.log",
+      "log_sha256": "8b3a26881e1b7c69c4f6fc043b03e8376fe696e1be4d7f5c44f5b9963cfb9df5",
+      "artifacts": "target/aes-accelerated-campaigns/1.90.0-direct-static-native-avs-y7yoalp2",
+      "binaries": [
+        {
+          "profile": "release",
+          "binary": "release-tests",
+          "sha256": "675764ca692a656eae67f7159a5392e44b923dce7a5d01cffa260ae2d50cdeb7"
+        }
+      ]
+    },
+    {
+      "toolchain": "1.90.0",
+      "route": "direct",
+      "admission": "static",
+      "suite": "differential",
+      "result": "passed",
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 direct static native differential",
+      "test_executions": 8,
+      "log": "logs-attempt2/1.90.0-direct-static-differential.log",
+      "log_sha256": "b2cf4f4659392d45323138a05187ea6d493889df2e77aeb3ae029db8338e7a25",
+      "artifacts": "target/aes-accelerated-campaigns/1.90.0-direct-static-native-differential-xmcldwrp",
+      "binaries": [
+        {
+          "profile": "debug",
+          "binary": "debug-tests",
+          "sha256": "2192efb3da8cd2649f24926362ccd01c787c7ac345f15bc04494e0ce51a52b18"
+        },
+        {
+          "profile": "release",
+          "binary": "release-tests",
+          "sha256": "5882d65e58ed32ce841d0a482a670d652b155dda43e067af870612d4bc15a16f"
+        }
+      ]
+    },
+    {
+      "toolchain": "1.90.0",
+      "route": "direct",
+      "admission": "hosted",
+      "suite": "avs",
+      "result": "passed",
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 direct hosted native avs",
+      "test_executions": 12,
+      "log": "logs-attempt2/1.90.0-direct-hosted-avs.log",
+      "log_sha256": "fe81c978884c8bf9532ea8644089179bcc6839879c057d01b3d8d87a82c0a56f",
+      "artifacts": "target/aes-accelerated-campaigns/1.90.0-direct-hosted-native-avs-ipee37zf",
+      "binaries": [
+        {
+          "profile": "release",
+          "binary": "release-tests",
+          "sha256": "f1eeccf8a3e6155cc1decc1837b52e140a7f40616ad3a6b24f1b170971bd5823"
+        }
+      ]
+    },
+    {
+      "toolchain": "1.90.0",
+      "route": "direct",
+      "admission": "hosted",
+      "suite": "differential",
+      "result": "passed",
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 direct hosted native differential",
+      "test_executions": 8,
+      "log": "logs-attempt2/1.90.0-direct-hosted-differential.log",
+      "log_sha256": "cffba61b819b33a2b998ec680dbae2991b7e1732e13ff5cf73bef305e83aa676",
+      "artifacts": "target/aes-accelerated-campaigns/1.90.0-direct-hosted-native-differential-d8bgzsm3",
+      "binaries": [
+        {
+          "profile": "debug",
+          "binary": "debug-tests",
+          "sha256": "be54320a84f935ac1adccde0208de44da768902b223c270046fe16402c7d3330"
+        },
+        {
+          "profile": "release",
+          "binary": "release-tests",
+          "sha256": "ef10e609499fe88782e0eaf3a9fd12aba812b8356cd2a13e3b06c3fb9d5576f9"
+        }
+      ]
+    },
+    {
+      "toolchain": "1.90.0",
+      "route": "facade",
+      "admission": "static",
+      "suite": "avs",
+      "result": "passed",
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 facade static native avs",
+      "test_executions": 12,
+      "log": "logs-attempt2/1.90.0-facade-static-avs.log",
+      "log_sha256": "1e074bea60020bf0424aec4a016310fc7f2fa89e1f1c8cabaf8f4ab0a8f5f81f",
+      "artifacts": "target/aes-accelerated-campaigns/1.90.0-facade-static-native-avs-hcz_hy9p",
+      "binaries": [
+        {
+          "profile": "release",
+          "binary": "release-tests",
+          "sha256": "2e26d821b1bd9e4b5481aaa483e696fd8b450bb2fc09799ce35fc6dc4b73907c"
+        }
+      ]
+    },
+    {
+      "toolchain": "1.90.0",
+      "route": "facade",
+      "admission": "static",
+      "suite": "differential",
+      "result": "passed",
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 facade static native differential",
+      "test_executions": 8,
+      "log": "logs-attempt2/1.90.0-facade-static-differential.log",
+      "log_sha256": "75c3375e84988fe511e167eaa4a4a3f91d55b5e2642a0a7828bd1135d75afd2d",
+      "artifacts": "target/aes-accelerated-campaigns/1.90.0-facade-static-native-differential-v7izyadx",
+      "binaries": [
+        {
+          "profile": "debug",
+          "binary": "debug-tests",
+          "sha256": "197eda4c52ea03ea33c324e04994ea674c48b6afa30674930bba561fc6f5391a"
+        },
+        {
+          "profile": "release",
+          "binary": "release-tests",
+          "sha256": "c6408b27ff310fe7f7f8774d1f137c67fac94a3dfcfac4c37da71634e9136c16"
+        }
+      ]
+    },
+    {
+      "toolchain": "1.90.0",
+      "route": "facade",
+      "admission": "hosted",
+      "suite": "avs",
+      "result": "passed",
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 facade hosted native avs",
+      "test_executions": 12,
+      "log": "logs-attempt2/1.90.0-facade-hosted-avs.log",
+      "log_sha256": "4ea937742591340d9dd741ee843209bbe748559d43229a099c665783029c3e6d",
+      "artifacts": "target/aes-accelerated-campaigns/1.90.0-facade-hosted-native-avs-0oll0yfb",
+      "binaries": [
+        {
+          "profile": "release",
+          "binary": "release-tests",
+          "sha256": "8f6a3cfd35f0782ad41c2c634dffea9713c7b757fed1d28af58828462d999acb"
+        }
+      ]
+    },
+    {
+      "toolchain": "1.90.0",
+      "route": "facade",
+      "admission": "hosted",
+      "suite": "differential",
+      "result": "passed",
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 facade hosted native differential",
+      "test_executions": 8,
+      "log": "logs-attempt2/1.90.0-facade-hosted-differential.log",
+      "log_sha256": "8cf75ae67c0626f0a0d52d0a526c35b5c75041693b00d9be9f7d3c10f0ebf5e4",
+      "artifacts": "target/aes-accelerated-campaigns/1.90.0-facade-hosted-native-differential-45_0ep8z",
+      "binaries": [
+        {
+          "profile": "debug",
+          "binary": "debug-tests",
+          "sha256": "17b2006564e3318012e905f3e096764a7d96c0df282901748fa41b2f7ca19ce9"
+        },
+        {
+          "profile": "release",
+          "binary": "release-tests",
+          "sha256": "e4928526c3d990bb49895cb0c8e6e10ca84cfa1040c3bb6815d818390b2e61ec"
+        }
+      ]
+    },
+    {
+      "toolchain": "1.99.1",
+      "route": "direct",
+      "admission": "static",
+      "suite": "avs",
+      "result": "passed",
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 direct static native avs",
+      "test_executions": 12,
+      "log": "logs-attempt2/1.99.1-direct-static-avs.log",
+      "log_sha256": "3f5815dcf1a63761c20b5d48c2af0e9ae335fdf977120245c4ab80b615d6a0dc",
+      "artifacts": "target/aes-accelerated-campaigns/1.99.1-direct-static-native-avs-fioh2fk7",
+      "binaries": [
+        {
+          "profile": "release",
+          "binary": "release-tests",
+          "sha256": "e8a83685b5494a43bdf82ce76e82275f59f096aa9b26b0bdf5d36d88a3b03340"
+        }
+      ]
+    },
+    {
+      "toolchain": "1.99.1",
+      "route": "direct",
+      "admission": "static",
+      "suite": "differential",
+      "result": "passed",
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 direct static native differential",
+      "test_executions": 8,
+      "log": "logs-attempt2/1.99.1-direct-static-differential.log",
+      "log_sha256": "fc75922156fbc100c1e58663eddb9fc834192624b40e4c37cd949f3abb0e6cc7",
+      "artifacts": "target/aes-accelerated-campaigns/1.99.1-direct-static-native-differential-0fs3qk81",
+      "binaries": [
+        {
+          "profile": "debug",
+          "binary": "debug-tests",
+          "sha256": "b959835e35555451697d00bf808ea198dc6070228f085cd3d7dcea7bb1af65bf"
+        },
+        {
+          "profile": "release",
+          "binary": "release-tests",
+          "sha256": "0957fc946241af9cda5cae9af568da000935e9ada07d89eae731e1d4c73bf67f"
+        }
+      ]
+    },
+    {
+      "toolchain": "1.99.1",
+      "route": "direct",
+      "admission": "hosted",
+      "suite": "avs",
+      "result": "passed",
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 direct hosted native avs",
+      "test_executions": 12,
+      "log": "logs-attempt2/1.99.1-direct-hosted-avs.log",
+      "log_sha256": "6d465f0fe51edf77634a2da578237a229d1f307d6c5aa241f6ac8187f27845d5",
+      "artifacts": "target/aes-accelerated-campaigns/1.99.1-direct-hosted-native-avs-8derhl7x",
+      "binaries": [
+        {
+          "profile": "release",
+          "binary": "release-tests",
+          "sha256": "96b009ff462cacb139468172bc535052c781129f6e89c757c96fad84b6f27a6b"
+        }
+      ]
+    },
+    {
+      "toolchain": "1.99.1",
+      "route": "direct",
+      "admission": "hosted",
+      "suite": "differential",
+      "result": "passed",
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 direct hosted native differential",
+      "test_executions": 8,
+      "log": "logs-attempt2/1.99.1-direct-hosted-differential.log",
+      "log_sha256": "3eb0d7bf0959f6c4940fc49948f6ca508f5160c4a322b1d7a677f0c4deb34b52",
+      "artifacts": "target/aes-accelerated-campaigns/1.99.1-direct-hosted-native-differential-woxf8prj",
+      "binaries": [
+        {
+          "profile": "debug",
+          "binary": "debug-tests",
+          "sha256": "764733f1223768221559acc3fea494d6267fce7105b066b6779df5b052879665"
+        },
+        {
+          "profile": "release",
+          "binary": "release-tests",
+          "sha256": "3abaa93c1f33cad3bbcf41a0e47f3fd86ece12e4f9482cab3e0bb2bb946324f2"
+        }
+      ]
+    },
+    {
+      "toolchain": "1.99.1",
+      "route": "facade",
+      "admission": "static",
+      "suite": "avs",
+      "result": "passed",
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 facade static native avs",
+      "test_executions": 12,
+      "log": "logs-attempt2/1.99.1-facade-static-avs.log",
+      "log_sha256": "4bb9b0b535ba22d9f7f1a61b16bdeeb4cb66a5b4d90eb4a5982167fb73bc7506",
+      "artifacts": "target/aes-accelerated-campaigns/1.99.1-facade-static-native-avs-qq5opgd5",
+      "binaries": [
+        {
+          "profile": "release",
+          "binary": "release-tests",
+          "sha256": "a9ff73d59c76377aa488bd7e75073a8ceaf3be2b48a1d0265245a21a6190d69c"
+        }
+      ]
+    },
+    {
+      "toolchain": "1.99.1",
+      "route": "facade",
+      "admission": "static",
+      "suite": "differential",
+      "result": "passed",
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 facade static native differential",
+      "test_executions": 8,
+      "log": "logs-attempt2/1.99.1-facade-static-differential.log",
+      "log_sha256": "fedafb3c3e4f712193f7d48e243d593fbcf980816d5eacd295cfddcb625febb5",
+      "artifacts": "target/aes-accelerated-campaigns/1.99.1-facade-static-native-differential-frrukha2",
+      "binaries": [
+        {
+          "profile": "debug",
+          "binary": "debug-tests",
+          "sha256": "776f5b17d581fbfa3f3d7d8c6257ea1c5b9c1caa73444d6cac798bec603af2d0"
+        },
+        {
+          "profile": "release",
+          "binary": "release-tests",
+          "sha256": "2187d6f5b5cca8cedfbacce87d1ae5e743c6e16df43ea983437590bfa08615ac"
+        }
+      ]
+    },
+    {
+      "toolchain": "1.99.1",
+      "route": "facade",
+      "admission": "hosted",
+      "suite": "avs",
+      "result": "passed",
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 facade hosted native avs",
+      "test_executions": 12,
+      "log": "logs-attempt2/1.99.1-facade-hosted-avs.log",
+      "log_sha256": "3f485cb579b2ecc71938d82ff7eeb8c90fe62154d6c5eda22b732c622cb547a5",
+      "artifacts": "target/aes-accelerated-campaigns/1.99.1-facade-hosted-native-avs-56ua_yu4",
+      "binaries": [
+        {
+          "profile": "release",
+          "binary": "release-tests",
+          "sha256": "6bba859b657aac954675af1c16eaf0e51dc6ac9d71b93e017cdb25eca871d88d"
+        }
+      ]
+    },
+    {
+      "toolchain": "1.99.1",
+      "route": "facade",
+      "admission": "hosted",
+      "suite": "differential",
+      "result": "passed",
+      "completion": "AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 facade hosted native differential",
+      "test_executions": 8,
+      "log": "logs-attempt2/1.99.1-facade-hosted-differential.log",
+      "log_sha256": "9b43a80052b5d51c06318668e65ba9f43a191a087b52c8a86f656490016519b3",
+      "artifacts": "target/aes-accelerated-campaigns/1.99.1-facade-hosted-native-differential-26p1xvhx",
+      "binaries": [
+        {
+          "profile": "debug",
+          "binary": "debug-tests",
+          "sha256": "e57703e789f96328ef4dd716f292bbcb815bdf7ff245923b0ee862e340af0abe"
+        },
+        {
+          "profile": "release",
+          "binary": "release-tests",
+          "sha256": "eee6bb2b553c4a85e84e8a793722a3a8cfb698a420e4a5e7dc4a27736bb2c0b7"
+        }
+      ]
+    }
+  ],
+  "lifecycle": [
+    {
+      "toolchain": "1.90.0",
+      "kind": "static",
+      "result": "passed",
+      "completion": "AES_STATIC_PASS: native 1.90.0",
+      "log": "logs-lifecycle/1.90.0-static.log",
+      "log_sha256": "d24a64d1f261cc101c3258495390a065b1ee02afe77f63efd956c3f2e5e593e9"
+    },
+    {
+      "toolchain": "1.90.0",
+      "kind": "hosted",
+      "result": "passed",
+      "completion": "AES_HOSTED_PASS: native 1.90.0",
+      "log": "logs-lifecycle/1.90.0-hosted.log",
+      "log_sha256": "e7f72aaf9f658af0fa7462e5f0f5f7354d47e1cd612c925f93f70eeb16de0bb3"
+    },
+    {
+      "toolchain": "1.99.1",
+      "kind": "static",
+      "result": "passed",
+      "completion": "AES_STATIC_PASS: native 1.99.1",
+      "log": "logs-lifecycle/1.99.1-static.log",
+      "log_sha256": "653ea08d20a5072777a8e058b1a344cfcdf0f795ce9eea3fd7b2760af21c2aca"
+    },
+    {
+      "toolchain": "1.99.1",
+      "kind": "hosted",
+      "result": "passed",
+      "completion": "AES_HOSTED_PASS: native 1.99.1",
+      "log": "logs-lifecycle/1.99.1-hosted.log",
+      "log_sha256": "9a7abd07a043e3b5cf9ba52cae3e2269213ad1885dfb04637acb95da904c6309"
+    }
+  ],
+  "limitations": [
+    "No timings collected; concurrent correctness checks are not timing experiments.",
+    "No final-linked instruction qualification, physical-fault or power/EM claim.",
+    "Toolchain, OS, OpenSSL shared libraries and build host remain trusted.",
+    "Campaign binaries retained locally; lifecycle build trees also remain on the remote host.",
+    "Not imported as an authenticated verifier receipt or release gate."
+  ]
+}

@@ -1,0 +1,1495 @@
+{
+  "kind": "unauthenticated-offline-Apple-hosted-startup-review",
+  "date": "2026-11-11",
+  "capture": "assurance/aes-native-observations/v0.27.3/apple-startup-capture-20261111.json",
+  "capture_sha256": "5fe94747f6c4059cc03d0461e268a8cf36f74196d1874c773cc18fd5a70ea695",
+  "source": {
+    "base_commit": "56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e",
+    "working_tree": "uncommitted development changes",
+    "archive": "target/aes-accelerated-timing-source-20261110.tar.gz",
+    "archive_sha256": "7a90292b5bf4aa89bb133090a2f4175ec9f707d7c6f574f09882d674955fc6b8",
+    "fixture_overlay": "target/aes-mac-integrated-fixtures-20261111.tar.gz",
+    "fixture_overlay_sha256": "ab9d0f4db95a3f4be3b576f6ff30059f803edd3050dfc166b81f451e9b9af707",
+    "package_archive_sha256": {
+      "brynja": "1eac3382d1ef632b9f46670adf65cec1131bf40d6b317a5f605f74be4b53baab",
+      "brynja-core": "3ac8894a7a05e5ae25c164091998ca081933bb960769bc3238ec5972d1c61679",
+      "brynja-crypto": "8f90c00bf91f026fecc24af312b793b0865e914c796d329fa297abe8cdf5523a",
+      "brynja-crypto-cpu": "97a9bc44256395a983e11c185320904728d3ac4ae9138deebc0a907d15c87ad9",
+      "brynja-crypto-cpu-std": "137e62d9576b2ec32669528b2449877ed0efc77cf2a6f72348290ba192918261",
+      "brynja-dtls": "3894782c6e1a295a1aabe2560a959be3ae1476cf67fb9cd9a543fcb2a1c9f421",
+      "brynja-hash-core": "13b6fe81e8b96028ebe481d543193a1e5d34a78a7ac048b7ef0fa5c66d3dcbf2",
+      "brynja-hash-parallel": "ca4050cfdb521d4279c31283906d284862405e9c83212fbbedb97b7dfbf4e932",
+      "brynja-hash-sha2": "1c0fbdbab191c7e11fd1ed9d1f967c5dffa7932aa75579987f9211fb69a26fb8",
+      "brynja-hash-sha3": "5040888f602843134d1110a8021ac2d7a6ae9b782709a986dbb3a341425c08c7",
+      "brynja-hash-tuple": "85b186bf25fb9c65b2c2df31f626cd8f92455f2e3f774d987bba2b3d2e13ce03",
+      "brynja-mac-hmac": "8b8742a1177059b66e981b1ac1f94c563ae0394332e12a4406d023ea4dade196",
+      "brynja-mac-kmac": "15c0164e3bfc496355c22c95d3623c384c7a4114e282230f0741a62e6ee84df0",
+      "brynja-pki": "42936cff98f924f34831f8aa4cba616faf011fdd8a1826d57879a39084650f48",
+      "brynja-platform": "02fdab9954540d215e81000427628ca8e6018f3b3db843e5e34d0ed0b2d4f3bf",
+      "brynja-protocol": "79ba3a20529393efd8770690bd93626841224f9375e8cd5363178c757a0abfb3",
+      "brynja-quic-tls": "52ce4fb7f875a51d03f70088a0ca883f38a827a3b330a2d7b462d88c90ade04c",
+      "brynja-tls": "cb6e0aa7d5e815847108dd37e1b6e142b139fb03a9e95c4519130d73e55ce399",
+      "brynja-tls12": "0561887cf6d7f46dae18d6c50a85e2cf83108af957e503456ea52c4754a26698",
+      "brynja-tls13": "edd0f449e0a21c1b20d5d0e57ab9236596aee93b71e3a342404ef48940290ccc",
+      "brynja-tls13-handshake": "62e80577689a7b87a3839d7a5cfeee5a2bf39cbc4ddd6d77ce62f2cb8ee6a2cb"
+    }
+  },
+  "retained_bundle": {
+    "path": "target/aes-native-mac-startup-20261111/observations.tar.gz",
+    "sha256": "e04082dd30f72cba1347e54ead4860416163e2c14cd209d9988d1ce6a6eed17b",
+    "remote": "/Users/builduser/brynja-aes-integrated-0273.WmKUXZ/startup-capture-20261111.tar.gz"
+  },
+  "review_script_sha256": {
+    "check-aes-apple-linked.py": "b03324048aeb53e2b620dc193cda9e73067d311466c7e24b748d858dff0061ef",
+    "aes_apple_startup_hosted.py": "90cef3278a9d7d5eba37a4e43ceba94b61dea64a57243d98051ba1650bb2132b",
+    "aes_apple_startup_static.py": "d12882a1773d3528cc62b7d2443686c2bd489edf7d54b4721b3ac4e868214b9e",
+    "aes_apple_unwind_import.py": "7551a714b3e6efc77a5ac173b5ae4d6f442279ad4247aa3f14795612dbb06dab",
+    "aes_apple_linked_kernels.py": "6708734682945721f3261bbf9cddf5f8c813a78978daf6a7acb4c000fc6f95c9",
+    "aes_apple_linked_constructors.py": "9a644d8605a15a6d8c8384b7a198e3de422c382db71fb00a352fb036d47786de",
+    "aes_accelerated_linked_expansion.py": "32c0b197ebb5561b31c02ee1b8fc59fb195e27ad04ea53fa5f99f5ba1346f169",
+    "aes_accelerated_linked_kernels.py": "86c26067b78db77e87dcfc88b13dfe90b10e34dc07b0828cb2b19a3a31a0af1d",
+    "startup-arm-reference.json": "9e6bf8aad299d36fc786ecf3e2e90099feba1dc2086a448b497b6c2cbf0793ac",
+    "test-aes-apple-startup-hosted.py": "75aa462d8227489f282b34d7e9608c55769150ca38565aaeaafbe9ccc651fcf7"
+  },
+  "records": [
+    {
+      "configuration": {
+        "compiler": "1.90.0",
+        "route": "direct",
+        "panic": "abort"
+      },
+      "binary": "target/aes-native-mac-startup-20261111/target/aes-accelerated-startup/1.90.0-hosted-apple-native-6tqo_kut/direct-abort.macho",
+      "review": {
+        "binary_sha256": "ecddaf64e2ad1737e9787e2ea93e300834c4bba15b840d06f3298545508fdef3",
+        "compiler": "1.90.0",
+        "panic": "abort",
+        "admission": "hosted",
+        "startup": {
+          "symbol": "__ZN30brynja_aes_accelerated_fixture7startup17h65aa11e4278160acE",
+          "address": "0x100002564",
+          "file_offset": 9572,
+          "size": 944,
+          "instructions": 236,
+          "sha256": "72caa3ba5dd7dd7db1a505f3402eac86b71832b1b1c11e83a80a05ae576bf2ff"
+        },
+        "references": [
+          {
+            "role": "key16",
+            "offset": 232560,
+            "size": 16,
+            "address": "0x100038c70"
+          },
+          {
+            "role": "schedule128",
+            "offset": 235941,
+            "size": 176,
+            "address": "0x1000399a5"
+          },
+          {
+            "role": "tail8",
+            "offset": 233136,
+            "size": 8,
+            "address": "0x100038eb0"
+          },
+          {
+            "role": "schedule192",
+            "offset": 236117,
+            "size": 208,
+            "address": "0x100039a55"
+          },
+          {
+            "role": "tail16",
+            "offset": 232576,
+            "size": 16,
+            "address": "0x100038c80"
+          },
+          {
+            "role": "schedule256",
+            "offset": 236325,
+            "size": 240,
+            "address": "0x100039b25"
+          },
+          {
+            "role": "plain",
+            "offset": 232784,
+            "size": 16,
+            "address": "0x100038d50"
+          },
+          {
+            "role": "cipher128",
+            "offset": 232800,
+            "size": 16,
+            "address": "0x100038d60"
+          },
+          {
+            "role": "cipher192",
+            "offset": 232816,
+            "size": 16,
+            "address": "0x100038d70"
+          },
+          {
+            "role": "cipher256",
+            "offset": 232832,
+            "size": 16,
+            "address": "0x100038d80"
+          }
+        ],
+        "comparison_import": {
+          "symbol": "_memcmp",
+          "library": "/usr/lib/libSystem.B.dylib",
+          "stub_address": "0x1000387c0",
+          "stub_file_offset": 231360,
+          "pointer_address": "0x10004c108",
+          "helper_address": "0x100038ae4",
+          "lazy_record_offset": 739,
+          "scope": "Static import declaration/stub/pointer/per-symbol helper binding only; dyld common dispatcher, rebasing and the named system function are trusted, not qualified."
+        },
+        "kernels": {
+          "binary_sha256": "ecddaf64e2ad1737e9787e2ea93e300834c4bba15b840d06f3298545508fdef3",
+          "bodies": [
+            {
+              "role": "expand",
+              "bits": 128,
+              "symbol": "__ZN17brynja_crypto_cpu3aes14aarch64_expand6expand17h84c24483678b169fE",
+              "address": "0x100005148",
+              "file_offset": 20808,
+              "size": 196,
+              "instructions": 49,
+              "sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+            },
+            {
+              "role": "expand",
+              "bits": 192,
+              "symbol": "__ZN17brynja_crypto_cpu3aes14aarch64_expand6expand17h747dad429090f7ebE",
+              "address": "0x10000520c",
+              "file_offset": 21004,
+              "size": 196,
+              "instructions": 49,
+              "sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+            },
+            {
+              "role": "expand",
+              "bits": 256,
+              "symbol": "__ZN17brynja_crypto_cpu3aes14aarch64_expand6expand17hc0657a1848d07a9cE",
+              "address": "0x1000052d0",
+              "file_offset": 21200,
+              "size": 196,
+              "instructions": 49,
+              "sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+            },
+            {
+              "role": "transform",
+              "bits": 128,
+              "symbol": "__ZN17brynja_crypto_cpu3aes7aarch649transform17hb159ce1bc56a3edaE",
+              "address": "0x100005394",
+              "file_offset": 21396,
+              "size": 152,
+              "instructions": 38,
+              "sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+            },
+            {
+              "role": "transform",
+              "bits": 192,
+              "symbol": "__ZN17brynja_crypto_cpu3aes7aarch649transform17h757b42c05bf6057dE",
+              "address": "0x10000542c",
+              "file_offset": 21548,
+              "size": 152,
+              "instructions": 38,
+              "sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+            },
+            {
+              "role": "transform",
+              "bits": 256,
+              "symbol": "__ZN17brynja_crypto_cpu3aes7aarch649transform17h3cda3fc338a83058E",
+              "address": "0x1000054c4",
+              "file_offset": 21700,
+              "size": 152,
+              "instructions": 38,
+              "sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+            }
+          ],
+          "scope": "Six complete Mach-O function extents match reviewed ARM encodings; callers, admission, cleanup and unwind remain unreviewed."
+        },
+        "detector": {
+          "symbol": "__ZN10std_detect6detect5cache21detect_and_initialize17hd56b683089bc624aE",
+          "address": "0x100037bc0",
+          "size": 2676,
+          "file_offset": 228288,
+          "sha256": "c60e8eee24472bb8abf4ed79fb5828d709d4fdc9578f10fbd4746e74bdad7801"
+        },
+        "cache": {
+          "symbol": "__ZN10std_detect6detect5cache5CACHE17h02b815a9cfda5612E.0",
+          "address": "0x10004cc88",
+          "size": 8,
+          "section": 16
+        },
+        "scope": "Apple hosted startup branches, KATs, kernels and declared memcmp/cache/detector bindings. std_detect and libc/dyld implementations, OS capabilities and lifetime guarantees remain trusted, not qualified here."
+      },
+      "rejected_mutations": {
+        "startup_code_byte_complements": 944,
+        "referenced_constant_bit0_flips": 728
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.90.0",
+        "route": "direct",
+        "panic": "unwind"
+      },
+      "binary": "target/aes-native-mac-startup-20261111/target/aes-accelerated-startup/1.90.0-hosted-apple-native-6tqo_kut/direct-unwind.macho",
+      "review": {
+        "binary_sha256": "72a815a7722a9180fee7a7a2ac97de8ea4fce4c6934fc43b0256b84a6d71ba75",
+        "compiler": "1.90.0",
+        "panic": "unwind",
+        "admission": "hosted",
+        "startup": {
+          "symbol": "__ZN30brynja_aes_accelerated_fixture7startup17h8d35dcb2a058d798E",
+          "address": "0x1000025a8",
+          "file_offset": 9640,
+          "size": 944,
+          "instructions": 236,
+          "sha256": "4cf4c2e29c85b91968a46ffa0ff77f548f5962a51a36a9ff482318f616b57f49"
+        },
+        "references": [
+          {
+            "role": "key16",
+            "offset": 234864,
+            "size": 16,
+            "address": "0x100039570"
+          },
+          {
+            "role": "schedule128",
+            "offset": 238245,
+            "size": 176,
+            "address": "0x10003a2a5"
+          },
+          {
+            "role": "tail8",
+            "offset": 235440,
+            "size": 8,
+            "address": "0x1000397b0"
+          },
+          {
+            "role": "schedule192",
+            "offset": 238421,
+            "size": 208,
+            "address": "0x10003a355"
+          },
+          {
+            "role": "tail16",
+            "offset": 234880,
+            "size": 16,
+            "address": "0x100039580"
+          },
+          {
+            "role": "schedule256",
+            "offset": 238629,
+            "size": 240,
+            "address": "0x10003a425"
+          },
+          {
+            "role": "plain",
+            "offset": 235088,
+            "size": 16,
+            "address": "0x100039650"
+          },
+          {
+            "role": "cipher128",
+            "offset": 235104,
+            "size": 16,
+            "address": "0x100039660"
+          },
+          {
+            "role": "cipher192",
+            "offset": 235120,
+            "size": 16,
+            "address": "0x100039670"
+          },
+          {
+            "role": "cipher256",
+            "offset": 235136,
+            "size": 16,
+            "address": "0x100039680"
+          }
+        ],
+        "comparison_import": {
+          "symbol": "_memcmp",
+          "library": "/usr/lib/libSystem.B.dylib",
+          "stub_address": "0x1000390a8",
+          "stub_file_offset": 233640,
+          "pointer_address": "0x10004c118",
+          "helper_address": "0x1000393e4",
+          "lazy_record_offset": 802,
+          "scope": "Static import declaration/stub/pointer/per-symbol helper binding only; dyld common dispatcher, rebasing and the named system function are trusted, not qualified."
+        },
+        "kernels": {
+          "binary_sha256": "72a815a7722a9180fee7a7a2ac97de8ea4fce4c6934fc43b0256b84a6d71ba75",
+          "bodies": [
+            {
+              "role": "expand",
+              "bits": 128,
+              "symbol": "__ZN17brynja_crypto_cpu3aes14aarch64_expand6expand17hfcaf54b28be7420bE",
+              "address": "0x100005760",
+              "file_offset": 22368,
+              "size": 196,
+              "instructions": 49,
+              "sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+            },
+            {
+              "role": "expand",
+              "bits": 192,
+              "symbol": "__ZN17brynja_crypto_cpu3aes14aarch64_expand6expand17h78aa1cf99d5ca19aE",
+              "address": "0x100005824",
+              "file_offset": 22564,
+              "size": 196,
+              "instructions": 49,
+              "sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+            },
+            {
+              "role": "expand",
+              "bits": 256,
+              "symbol": "__ZN17brynja_crypto_cpu3aes14aarch64_expand6expand17h264535617b884298E",
+              "address": "0x1000058e8",
+              "file_offset": 22760,
+              "size": 196,
+              "instructions": 49,
+              "sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+            },
+            {
+              "role": "transform",
+              "bits": 128,
+              "symbol": "__ZN17brynja_crypto_cpu3aes7aarch649transform17hb71577288cd33661E",
+              "address": "0x1000059ac",
+              "file_offset": 22956,
+              "size": 152,
+              "instructions": 38,
+              "sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+            },
+            {
+              "role": "transform",
+              "bits": 192,
+              "symbol": "__ZN17brynja_crypto_cpu3aes7aarch649transform17h182f4a722652161dE",
+              "address": "0x100005a44",
+              "file_offset": 23108,
+              "size": 152,
+              "instructions": 38,
+              "sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+            },
+            {
+              "role": "transform",
+              "bits": 256,
+              "symbol": "__ZN17brynja_crypto_cpu3aes7aarch649transform17h3f1e602433f014ceE",
+              "address": "0x100005adc",
+              "file_offset": 23260,
+              "size": 152,
+              "instructions": 38,
+              "sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+            }
+          ],
+          "scope": "Six complete Mach-O function extents match reviewed ARM encodings; callers, admission, cleanup and unwind remain unreviewed."
+        },
+        "detector": {
+          "symbol": "__ZN10std_detect6detect5cache21detect_and_initialize17hd56b683089bc624aE",
+          "address": "0x100038490",
+          "size": 2676,
+          "file_offset": 230544,
+          "sha256": "ef811898703e34b188350cc20ad4494cd2440e8f28802a33a2b24a402d6f2599"
+        },
+        "cache": {
+          "symbol": "__ZN10std_detect6detect5cache5CACHE17h02b815a9cfda5612E.0",
+          "address": "0x10004cc98",
+          "size": 8,
+          "section": 16
+        },
+        "scope": "Apple hosted startup branches, KATs, kernels and declared memcmp/cache/detector bindings. std_detect and libc/dyld implementations, OS capabilities and lifetime guarantees remain trusted, not qualified here."
+      },
+      "rejected_mutations": {
+        "startup_code_byte_complements": 944,
+        "referenced_constant_bit0_flips": 728
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.90.0",
+        "route": "facade",
+        "panic": "abort"
+      },
+      "binary": "target/aes-native-mac-startup-20261111/target/aes-accelerated-startup/1.90.0-hosted-apple-native-6tqo_kut/facade-abort.macho",
+      "review": {
+        "binary_sha256": "5283a9ac4273a6c80069607bfb385cafa86275df5ce4c699d7acd87c3edd01b7",
+        "compiler": "1.90.0",
+        "panic": "abort",
+        "admission": "hosted",
+        "startup": {
+          "symbol": "__ZN30brynja_aes_accelerated_fixture7startup17h288bfaf89e86b12dE",
+          "address": "0x100002564",
+          "file_offset": 9572,
+          "size": 944,
+          "instructions": 236,
+          "sha256": "1b3d5e70adbefb1cf29a7b88b8a7e11621023a8704778522f56b51470d4ed9fc"
+        },
+        "references": [
+          {
+            "role": "key16",
+            "offset": 232560,
+            "size": 16,
+            "address": "0x100038c70"
+          },
+          {
+            "role": "schedule128",
+            "offset": 235941,
+            "size": 176,
+            "address": "0x1000399a5"
+          },
+          {
+            "role": "tail8",
+            "offset": 233136,
+            "size": 8,
+            "address": "0x100038eb0"
+          },
+          {
+            "role": "schedule192",
+            "offset": 236117,
+            "size": 208,
+            "address": "0x100039a55"
+          },
+          {
+            "role": "tail16",
+            "offset": 232576,
+            "size": 16,
+            "address": "0x100038c80"
+          },
+          {
+            "role": "schedule256",
+            "offset": 236325,
+            "size": 240,
+            "address": "0x100039b25"
+          },
+          {
+            "role": "plain",
+            "offset": 232784,
+            "size": 16,
+            "address": "0x100038d50"
+          },
+          {
+            "role": "cipher128",
+            "offset": 232800,
+            "size": 16,
+            "address": "0x100038d60"
+          },
+          {
+            "role": "cipher192",
+            "offset": 232816,
+            "size": 16,
+            "address": "0x100038d70"
+          },
+          {
+            "role": "cipher256",
+            "offset": 232832,
+            "size": 16,
+            "address": "0x100038d80"
+          }
+        ],
+        "comparison_import": {
+          "symbol": "_memcmp",
+          "library": "/usr/lib/libSystem.B.dylib",
+          "stub_address": "0x1000387c0",
+          "stub_file_offset": 231360,
+          "pointer_address": "0x10004c108",
+          "helper_address": "0x100038ae4",
+          "lazy_record_offset": 739,
+          "scope": "Static import declaration/stub/pointer/per-symbol helper binding only; dyld common dispatcher, rebasing and the named system function are trusted, not qualified."
+        },
+        "kernels": {
+          "binary_sha256": "5283a9ac4273a6c80069607bfb385cafa86275df5ce4c699d7acd87c3edd01b7",
+          "bodies": [
+            {
+              "role": "expand",
+              "bits": 128,
+              "symbol": "__ZN17brynja_crypto_cpu3aes14aarch64_expand6expand17h84c24483678b169fE",
+              "address": "0x100005214",
+              "file_offset": 21012,
+              "size": 196,
+              "instructions": 49,
+              "sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+            },
+            {
+              "role": "expand",
+              "bits": 192,
+              "symbol": "__ZN17brynja_crypto_cpu3aes14aarch64_expand6expand17h747dad429090f7ebE",
+              "address": "0x1000052d8",
+              "file_offset": 21208,
+              "size": 196,
+              "instructions": 49,
+              "sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+            },
+            {
+              "role": "expand",
+              "bits": 256,
+              "symbol": "__ZN17brynja_crypto_cpu3aes14aarch64_expand6expand17hc0657a1848d07a9cE",
+              "address": "0x10000539c",
+              "file_offset": 21404,
+              "size": 196,
+              "instructions": 49,
+              "sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+            },
+            {
+              "role": "transform",
+              "bits": 128,
+              "symbol": "__ZN17brynja_crypto_cpu3aes7aarch649transform17hb159ce1bc56a3edaE",
+              "address": "0x100005460",
+              "file_offset": 21600,
+              "size": 152,
+              "instructions": 38,
+              "sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+            },
+            {
+              "role": "transform",
+              "bits": 192,
+              "symbol": "__ZN17brynja_crypto_cpu3aes7aarch649transform17h757b42c05bf6057dE",
+              "address": "0x1000054f8",
+              "file_offset": 21752,
+              "size": 152,
+              "instructions": 38,
+              "sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+            },
+            {
+              "role": "transform",
+              "bits": 256,
+              "symbol": "__ZN17brynja_crypto_cpu3aes7aarch649transform17h3cda3fc338a83058E",
+              "address": "0x100005590",
+              "file_offset": 21904,
+              "size": 152,
+              "instructions": 38,
+              "sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+            }
+          ],
+          "scope": "Six complete Mach-O function extents match reviewed ARM encodings; callers, admission, cleanup and unwind remain unreviewed."
+        },
+        "detector": {
+          "symbol": "__ZN10std_detect6detect5cache21detect_and_initialize17hd56b683089bc624aE",
+          "address": "0x100037bc0",
+          "size": 2676,
+          "file_offset": 228288,
+          "sha256": "c60e8eee24472bb8abf4ed79fb5828d709d4fdc9578f10fbd4746e74bdad7801"
+        },
+        "cache": {
+          "symbol": "__ZN10std_detect6detect5cache5CACHE17h02b815a9cfda5612E.0",
+          "address": "0x10004cc88",
+          "size": 8,
+          "section": 16
+        },
+        "scope": "Apple hosted startup branches, KATs, kernels and declared memcmp/cache/detector bindings. std_detect and libc/dyld implementations, OS capabilities and lifetime guarantees remain trusted, not qualified here."
+      },
+      "rejected_mutations": {
+        "startup_code_byte_complements": 944,
+        "referenced_constant_bit0_flips": 728
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.90.0",
+        "route": "facade",
+        "panic": "unwind"
+      },
+      "binary": "target/aes-native-mac-startup-20261111/target/aes-accelerated-startup/1.90.0-hosted-apple-native-6tqo_kut/facade-unwind.macho",
+      "review": {
+        "binary_sha256": "ca05a5d8c1ed8489317008db11f5d22f6be43964ec977dc38baf322baa0a9715",
+        "compiler": "1.90.0",
+        "panic": "unwind",
+        "admission": "hosted",
+        "startup": {
+          "symbol": "__ZN30brynja_aes_accelerated_fixture7startup17h868445c7bbdbdf99E",
+          "address": "0x1000025a8",
+          "file_offset": 9640,
+          "size": 944,
+          "instructions": 236,
+          "sha256": "4cf4c2e29c85b91968a46ffa0ff77f548f5962a51a36a9ff482318f616b57f49"
+        },
+        "references": [
+          {
+            "role": "key16",
+            "offset": 234864,
+            "size": 16,
+            "address": "0x100039570"
+          },
+          {
+            "role": "schedule128",
+            "offset": 238245,
+            "size": 176,
+            "address": "0x10003a2a5"
+          },
+          {
+            "role": "tail8",
+            "offset": 235440,
+            "size": 8,
+            "address": "0x1000397b0"
+          },
+          {
+            "role": "schedule192",
+            "offset": 238421,
+            "size": 208,
+            "address": "0x10003a355"
+          },
+          {
+            "role": "tail16",
+            "offset": 234880,
+            "size": 16,
+            "address": "0x100039580"
+          },
+          {
+            "role": "schedule256",
+            "offset": 238629,
+            "size": 240,
+            "address": "0x10003a425"
+          },
+          {
+            "role": "plain",
+            "offset": 235088,
+            "size": 16,
+            "address": "0x100039650"
+          },
+          {
+            "role": "cipher128",
+            "offset": 235104,
+            "size": 16,
+            "address": "0x100039660"
+          },
+          {
+            "role": "cipher192",
+            "offset": 235120,
+            "size": 16,
+            "address": "0x100039670"
+          },
+          {
+            "role": "cipher256",
+            "offset": 235136,
+            "size": 16,
+            "address": "0x100039680"
+          }
+        ],
+        "comparison_import": {
+          "symbol": "_memcmp",
+          "library": "/usr/lib/libSystem.B.dylib",
+          "stub_address": "0x1000390a8",
+          "stub_file_offset": 233640,
+          "pointer_address": "0x10004c118",
+          "helper_address": "0x1000393e4",
+          "lazy_record_offset": 802,
+          "scope": "Static import declaration/stub/pointer/per-symbol helper binding only; dyld common dispatcher, rebasing and the named system function are trusted, not qualified."
+        },
+        "kernels": {
+          "binary_sha256": "ca05a5d8c1ed8489317008db11f5d22f6be43964ec977dc38baf322baa0a9715",
+          "bodies": [
+            {
+              "role": "expand",
+              "bits": 128,
+              "symbol": "__ZN17brynja_crypto_cpu3aes14aarch64_expand6expand17hfcaf54b28be7420bE",
+              "address": "0x100005760",
+              "file_offset": 22368,
+              "size": 196,
+              "instructions": 49,
+              "sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+            },
+            {
+              "role": "expand",
+              "bits": 192,
+              "symbol": "__ZN17brynja_crypto_cpu3aes14aarch64_expand6expand17h78aa1cf99d5ca19aE",
+              "address": "0x100005824",
+              "file_offset": 22564,
+              "size": 196,
+              "instructions": 49,
+              "sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+            },
+            {
+              "role": "expand",
+              "bits": 256,
+              "symbol": "__ZN17brynja_crypto_cpu3aes14aarch64_expand6expand17h264535617b884298E",
+              "address": "0x1000058e8",
+              "file_offset": 22760,
+              "size": 196,
+              "instructions": 49,
+              "sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+            },
+            {
+              "role": "transform",
+              "bits": 128,
+              "symbol": "__ZN17brynja_crypto_cpu3aes7aarch649transform17hb71577288cd33661E",
+              "address": "0x1000059ac",
+              "file_offset": 22956,
+              "size": 152,
+              "instructions": 38,
+              "sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+            },
+            {
+              "role": "transform",
+              "bits": 192,
+              "symbol": "__ZN17brynja_crypto_cpu3aes7aarch649transform17h182f4a722652161dE",
+              "address": "0x100005a44",
+              "file_offset": 23108,
+              "size": 152,
+              "instructions": 38,
+              "sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+            },
+            {
+              "role": "transform",
+              "bits": 256,
+              "symbol": "__ZN17brynja_crypto_cpu3aes7aarch649transform17h3f1e602433f014ceE",
+              "address": "0x100005adc",
+              "file_offset": 23260,
+              "size": 152,
+              "instructions": 38,
+              "sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+            }
+          ],
+          "scope": "Six complete Mach-O function extents match reviewed ARM encodings; callers, admission, cleanup and unwind remain unreviewed."
+        },
+        "detector": {
+          "symbol": "__ZN10std_detect6detect5cache21detect_and_initialize17hd56b683089bc624aE",
+          "address": "0x100038490",
+          "size": 2676,
+          "file_offset": 230544,
+          "sha256": "ef811898703e34b188350cc20ad4494cd2440e8f28802a33a2b24a402d6f2599"
+        },
+        "cache": {
+          "symbol": "__ZN10std_detect6detect5cache5CACHE17h02b815a9cfda5612E.0",
+          "address": "0x10004cc98",
+          "size": 8,
+          "section": 16
+        },
+        "scope": "Apple hosted startup branches, KATs, kernels and declared memcmp/cache/detector bindings. std_detect and libc/dyld implementations, OS capabilities and lifetime guarantees remain trusted, not qualified here."
+      },
+      "rejected_mutations": {
+        "startup_code_byte_complements": 944,
+        "referenced_constant_bit0_flips": 728
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.99.1",
+        "route": "direct",
+        "panic": "abort"
+      },
+      "binary": "target/aes-native-mac-startup-20261111/target/aes-accelerated-startup/1.99.1-hosted-apple-native-56zg7gg7/direct-abort.macho",
+      "review": {
+        "binary_sha256": "81f92caf246a0ac658c09455ed69d8b624f9a4c059a59b390a325226f18f4c09",
+        "compiler": "1.99.1",
+        "panic": "abort",
+        "admission": "hosted",
+        "startup": {
+          "symbol": "__RNvCs9JsGcnlBpCB_30brynja_aes_accelerated_fixture7startup",
+          "address": "0x100001e84",
+          "file_offset": 7812,
+          "size": 944,
+          "instructions": 236,
+          "sha256": "143a2828f18344ad1b373b64902ec152f0dfd22b2c4c3dddfd93ffbba9c42e46"
+        },
+        "references": [
+          {
+            "role": "key16",
+            "offset": 228944,
+            "size": 16,
+            "address": "0x100037e50"
+          },
+          {
+            "role": "schedule128",
+            "offset": 232506,
+            "size": 176,
+            "address": "0x100038c3a"
+          },
+          {
+            "role": "tail8",
+            "offset": 229520,
+            "size": 8,
+            "address": "0x100038090"
+          },
+          {
+            "role": "schedule192",
+            "offset": 232682,
+            "size": 208,
+            "address": "0x100038cea"
+          },
+          {
+            "role": "tail16",
+            "offset": 228960,
+            "size": 16,
+            "address": "0x100037e60"
+          },
+          {
+            "role": "schedule256",
+            "offset": 232890,
+            "size": 240,
+            "address": "0x100038dba"
+          },
+          {
+            "role": "plain",
+            "offset": 229152,
+            "size": 16,
+            "address": "0x100037f20"
+          },
+          {
+            "role": "cipher128",
+            "offset": 229168,
+            "size": 16,
+            "address": "0x100037f30"
+          },
+          {
+            "role": "cipher192",
+            "offset": 229184,
+            "size": 16,
+            "address": "0x100037f40"
+          },
+          {
+            "role": "cipher256",
+            "offset": 229200,
+            "size": 16,
+            "address": "0x100037f50"
+          }
+        ],
+        "comparison_import": {
+          "symbol": "_memcmp",
+          "library": "/usr/lib/libSystem.B.dylib",
+          "stub_address": "0x100036b0c",
+          "stub_file_offset": 224012,
+          "pointer_address": "0x100048108",
+          "helper_address": "0x100036e48",
+          "lazy_record_offset": 737,
+          "scope": "Static import declaration/stub/pointer/per-symbol helper binding only; dyld common dispatcher, rebasing and the named system function are trusted, not qualified."
+        },
+        "kernels": {
+          "binary_sha256": "81f92caf246a0ac658c09455ed69d8b624f9a4c059a59b390a325226f18f4c09",
+          "bodies": [
+            {
+              "role": "transform",
+              "bits": 128,
+              "symbol": "__RINvNtNtCs5VKhERILVAn_17brynja_crypto_cpu3aes7aarch649transformKjb_EB6_",
+              "address": "0x100005164",
+              "file_offset": 20836,
+              "size": 152,
+              "instructions": 38,
+              "sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+            },
+            {
+              "role": "transform",
+              "bits": 192,
+              "symbol": "__RINvNtNtCs5VKhERILVAn_17brynja_crypto_cpu3aes7aarch649transformKjd_EB6_",
+              "address": "0x1000051fc",
+              "file_offset": 20988,
+              "size": 152,
+              "instructions": 38,
+              "sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+            },
+            {
+              "role": "transform",
+              "bits": 256,
+              "symbol": "__RINvNtNtCs5VKhERILVAn_17brynja_crypto_cpu3aes7aarch649transformKjf_EB6_",
+              "address": "0x100005294",
+              "file_offset": 21140,
+              "size": 152,
+              "instructions": 38,
+              "sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+            },
+            {
+              "role": "expand",
+              "bits": 128,
+              "symbol": "__RINvNtNtCs5VKhERILVAn_17brynja_crypto_cpu3aes14aarch64_expand6expandKj10_Kjb0_EB6_",
+              "address": "0x10000532c",
+              "file_offset": 21292,
+              "size": 196,
+              "instructions": 49,
+              "sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+            },
+            {
+              "role": "expand",
+              "bits": 192,
+              "symbol": "__RINvNtNtCs5VKhERILVAn_17brynja_crypto_cpu3aes14aarch64_expand6expandKj18_Kjd0_EB6_",
+              "address": "0x1000053f0",
+              "file_offset": 21488,
+              "size": 196,
+              "instructions": 49,
+              "sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+            },
+            {
+              "role": "expand",
+              "bits": 256,
+              "symbol": "__RINvNtNtCs5VKhERILVAn_17brynja_crypto_cpu3aes14aarch64_expand6expandKj20_Kjf0_EB6_",
+              "address": "0x1000054b4",
+              "file_offset": 21684,
+              "size": 196,
+              "instructions": 49,
+              "sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+            }
+          ],
+          "scope": "Six complete Mach-O function extents match reviewed ARM encodings; callers, admission, cleanup and unwind remain unreviewed."
+        },
+        "detector": {
+          "symbol": "__RNvNtNtCsf5MhpYzpGy8_10std_detect6detect5cache21detect_and_initialize",
+          "address": "0x100035d34",
+          "size": 3148,
+          "file_offset": 220468,
+          "sha256": "e47f2c64d4190fec85cade11c9fc753fdbffc80ea7cc675fd4923eb188ba7b44"
+        },
+        "cache": {
+          "symbol": "__RNvNtNtCsf5MhpYzpGy8_10std_detect6detect5cache5CACHE.0",
+          "address": "0x100048d20",
+          "size": 8,
+          "section": 16
+        },
+        "scope": "Apple hosted startup branches, KATs, kernels and declared memcmp/cache/detector bindings. std_detect and libc/dyld implementations, OS capabilities and lifetime guarantees remain trusted, not qualified here."
+      },
+      "rejected_mutations": {
+        "startup_code_byte_complements": 944,
+        "referenced_constant_bit0_flips": 728
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.99.1",
+        "route": "direct",
+        "panic": "unwind"
+      },
+      "binary": "target/aes-native-mac-startup-20261111/target/aes-accelerated-startup/1.99.1-hosted-apple-native-56zg7gg7/direct-unwind.macho",
+      "review": {
+        "binary_sha256": "c01b141631b8151c3c2be4d00bd33b737dece0aa3948560c3597c0e6dda5eac6",
+        "compiler": "1.99.1",
+        "panic": "unwind",
+        "admission": "hosted",
+        "startup": {
+          "symbol": "__RNvCs7Siq3CvTAAk_30brynja_aes_accelerated_fixture7startup",
+          "address": "0x1000020a4",
+          "file_offset": 8356,
+          "size": 944,
+          "instructions": 236,
+          "sha256": "90aea39b798d802032c804f8d8ffdf30dff6a828cbe5c13d122515a9ae8ac6e3"
+        },
+        "references": [
+          {
+            "role": "key16",
+            "offset": 230304,
+            "size": 16,
+            "address": "0x1000383a0"
+          },
+          {
+            "role": "schedule128",
+            "offset": 233866,
+            "size": 176,
+            "address": "0x10003918a"
+          },
+          {
+            "role": "tail8",
+            "offset": 230880,
+            "size": 8,
+            "address": "0x1000385e0"
+          },
+          {
+            "role": "schedule192",
+            "offset": 234042,
+            "size": 208,
+            "address": "0x10003923a"
+          },
+          {
+            "role": "tail16",
+            "offset": 230320,
+            "size": 16,
+            "address": "0x1000383b0"
+          },
+          {
+            "role": "schedule256",
+            "offset": 234250,
+            "size": 240,
+            "address": "0x10003930a"
+          },
+          {
+            "role": "plain",
+            "offset": 230512,
+            "size": 16,
+            "address": "0x100038470"
+          },
+          {
+            "role": "cipher128",
+            "offset": 230528,
+            "size": 16,
+            "address": "0x100038480"
+          },
+          {
+            "role": "cipher192",
+            "offset": 230544,
+            "size": 16,
+            "address": "0x100038490"
+          },
+          {
+            "role": "cipher256",
+            "offset": 230560,
+            "size": 16,
+            "address": "0x1000384a0"
+          }
+        ],
+        "comparison_import": {
+          "symbol": "_memcmp",
+          "library": "/usr/lib/libSystem.B.dylib",
+          "stub_address": "0x100036f64",
+          "stub_file_offset": 225124,
+          "pointer_address": "0x100048118",
+          "helper_address": "0x1000372b8",
+          "lazy_record_offset": 800,
+          "scope": "Static import declaration/stub/pointer/per-symbol helper binding only; dyld common dispatcher, rebasing and the named system function are trusted, not qualified."
+        },
+        "kernels": {
+          "binary_sha256": "c01b141631b8151c3c2be4d00bd33b737dece0aa3948560c3597c0e6dda5eac6",
+          "bodies": [
+            {
+              "role": "transform",
+              "bits": 128,
+              "symbol": "__RINvNtNtCs2IkQHhlsfjd_17brynja_crypto_cpu3aes7aarch649transformKjb_EB6_",
+              "address": "0x1000053e4",
+              "file_offset": 21476,
+              "size": 152,
+              "instructions": 38,
+              "sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+            },
+            {
+              "role": "transform",
+              "bits": 192,
+              "symbol": "__RINvNtNtCs2IkQHhlsfjd_17brynja_crypto_cpu3aes7aarch649transformKjd_EB6_",
+              "address": "0x10000547c",
+              "file_offset": 21628,
+              "size": 152,
+              "instructions": 38,
+              "sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+            },
+            {
+              "role": "transform",
+              "bits": 256,
+              "symbol": "__RINvNtNtCs2IkQHhlsfjd_17brynja_crypto_cpu3aes7aarch649transformKjf_EB6_",
+              "address": "0x100005514",
+              "file_offset": 21780,
+              "size": 152,
+              "instructions": 38,
+              "sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+            },
+            {
+              "role": "expand",
+              "bits": 128,
+              "symbol": "__RINvNtNtCs2IkQHhlsfjd_17brynja_crypto_cpu3aes14aarch64_expand6expandKj10_Kjb0_EB6_",
+              "address": "0x1000055ac",
+              "file_offset": 21932,
+              "size": 196,
+              "instructions": 49,
+              "sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+            },
+            {
+              "role": "expand",
+              "bits": 192,
+              "symbol": "__RINvNtNtCs2IkQHhlsfjd_17brynja_crypto_cpu3aes14aarch64_expand6expandKj18_Kjd0_EB6_",
+              "address": "0x100005670",
+              "file_offset": 22128,
+              "size": 196,
+              "instructions": 49,
+              "sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+            },
+            {
+              "role": "expand",
+              "bits": 256,
+              "symbol": "__RINvNtNtCs2IkQHhlsfjd_17brynja_crypto_cpu3aes14aarch64_expand6expandKj20_Kjf0_EB6_",
+              "address": "0x100005734",
+              "file_offset": 22324,
+              "size": 196,
+              "instructions": 49,
+              "sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+            }
+          ],
+          "scope": "Six complete Mach-O function extents match reviewed ARM encodings; callers, admission, cleanup and unwind remain unreviewed."
+        },
+        "detector": {
+          "symbol": "__RNvNtNtCsf5MhpYzpGy8_10std_detect6detect5cache21detect_and_initialize",
+          "address": "0x100036174",
+          "size": 3148,
+          "file_offset": 221556,
+          "sha256": "726f83b724b9a632e2e4f665d0dbb558cfbbcd2254dc3ba2a39be3a3be6367ca"
+        },
+        "cache": {
+          "symbol": "__RNvNtNtCsf5MhpYzpGy8_10std_detect6detect5cache5CACHE.0",
+          "address": "0x100048d30",
+          "size": 8,
+          "section": 16
+        },
+        "scope": "Apple hosted startup branches, KATs, kernels and declared memcmp/cache/detector bindings. std_detect and libc/dyld implementations, OS capabilities and lifetime guarantees remain trusted, not qualified here."
+      },
+      "rejected_mutations": {
+        "startup_code_byte_complements": 944,
+        "referenced_constant_bit0_flips": 728
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.99.1",
+        "route": "facade",
+        "panic": "abort"
+      },
+      "binary": "target/aes-native-mac-startup-20261111/target/aes-accelerated-startup/1.99.1-hosted-apple-native-56zg7gg7/facade-abort.macho",
+      "review": {
+        "binary_sha256": "8b45581d47fab1b7c77358ec4b12f40f9f08250eba1e8f2f5c6f50fa7b3d70e8",
+        "compiler": "1.99.1",
+        "panic": "abort",
+        "admission": "hosted",
+        "startup": {
+          "symbol": "__RNvCsdYSJzCPKASM_30brynja_aes_accelerated_fixture7startup",
+          "address": "0x100001e84",
+          "file_offset": 7812,
+          "size": 944,
+          "instructions": 236,
+          "sha256": "2b136af9b92d7870b870ca051d8cffbcd96d84b6321b1a26e1ccd93b25e504ee"
+        },
+        "references": [
+          {
+            "role": "key16",
+            "offset": 228880,
+            "size": 16,
+            "address": "0x100037e10"
+          },
+          {
+            "role": "schedule128",
+            "offset": 232442,
+            "size": 176,
+            "address": "0x100038bfa"
+          },
+          {
+            "role": "tail8",
+            "offset": 229456,
+            "size": 8,
+            "address": "0x100038050"
+          },
+          {
+            "role": "schedule192",
+            "offset": 232618,
+            "size": 208,
+            "address": "0x100038caa"
+          },
+          {
+            "role": "tail16",
+            "offset": 228896,
+            "size": 16,
+            "address": "0x100037e20"
+          },
+          {
+            "role": "schedule256",
+            "offset": 232826,
+            "size": 240,
+            "address": "0x100038d7a"
+          },
+          {
+            "role": "plain",
+            "offset": 229088,
+            "size": 16,
+            "address": "0x100037ee0"
+          },
+          {
+            "role": "cipher128",
+            "offset": 229104,
+            "size": 16,
+            "address": "0x100037ef0"
+          },
+          {
+            "role": "cipher192",
+            "offset": 229120,
+            "size": 16,
+            "address": "0x100037f00"
+          },
+          {
+            "role": "cipher256",
+            "offset": 229136,
+            "size": 16,
+            "address": "0x100037f10"
+          }
+        ],
+        "comparison_import": {
+          "symbol": "_memcmp",
+          "library": "/usr/lib/libSystem.B.dylib",
+          "stub_address": "0x100036acc",
+          "stub_file_offset": 223948,
+          "pointer_address": "0x100048108",
+          "helper_address": "0x100036e08",
+          "lazy_record_offset": 737,
+          "scope": "Static import declaration/stub/pointer/per-symbol helper binding only; dyld common dispatcher, rebasing and the named system function are trusted, not qualified."
+        },
+        "kernels": {
+          "binary_sha256": "8b45581d47fab1b7c77358ec4b12f40f9f08250eba1e8f2f5c6f50fa7b3d70e8",
+          "bodies": [
+            {
+              "role": "transform",
+              "bits": 128,
+              "symbol": "__RINvNtNtCs5VKhERILVAn_17brynja_crypto_cpu3aes7aarch649transformKjb_EB6_",
+              "address": "0x100005164",
+              "file_offset": 20836,
+              "size": 152,
+              "instructions": 38,
+              "sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+            },
+            {
+              "role": "transform",
+              "bits": 192,
+              "symbol": "__RINvNtNtCs5VKhERILVAn_17brynja_crypto_cpu3aes7aarch649transformKjd_EB6_",
+              "address": "0x1000051fc",
+              "file_offset": 20988,
+              "size": 152,
+              "instructions": 38,
+              "sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+            },
+            {
+              "role": "transform",
+              "bits": 256,
+              "symbol": "__RINvNtNtCs5VKhERILVAn_17brynja_crypto_cpu3aes7aarch649transformKjf_EB6_",
+              "address": "0x100005294",
+              "file_offset": 21140,
+              "size": 152,
+              "instructions": 38,
+              "sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+            },
+            {
+              "role": "expand",
+              "bits": 128,
+              "symbol": "__RINvNtNtCs5VKhERILVAn_17brynja_crypto_cpu3aes14aarch64_expand6expandKj10_Kjb0_EB6_",
+              "address": "0x10000532c",
+              "file_offset": 21292,
+              "size": 196,
+              "instructions": 49,
+              "sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+            },
+            {
+              "role": "expand",
+              "bits": 192,
+              "symbol": "__RINvNtNtCs5VKhERILVAn_17brynja_crypto_cpu3aes14aarch64_expand6expandKj18_Kjd0_EB6_",
+              "address": "0x1000053f0",
+              "file_offset": 21488,
+              "size": 196,
+              "instructions": 49,
+              "sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+            },
+            {
+              "role": "expand",
+              "bits": 256,
+              "symbol": "__RINvNtNtCs5VKhERILVAn_17brynja_crypto_cpu3aes14aarch64_expand6expandKj20_Kjf0_EB6_",
+              "address": "0x1000054b4",
+              "file_offset": 21684,
+              "size": 196,
+              "instructions": 49,
+              "sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+            }
+          ],
+          "scope": "Six complete Mach-O function extents match reviewed ARM encodings; callers, admission, cleanup and unwind remain unreviewed."
+        },
+        "detector": {
+          "symbol": "__RNvNtNtCsf5MhpYzpGy8_10std_detect6detect5cache21detect_and_initialize",
+          "address": "0x100035cf4",
+          "size": 3148,
+          "file_offset": 220404,
+          "sha256": "6c357e989977b8f1a2d1c02ff4d12a405dce6dad9e634a9b481312b0a53f2c85"
+        },
+        "cache": {
+          "symbol": "__RNvNtNtCsf5MhpYzpGy8_10std_detect6detect5cache5CACHE.0",
+          "address": "0x100048d20",
+          "size": 8,
+          "section": 16
+        },
+        "scope": "Apple hosted startup branches, KATs, kernels and declared memcmp/cache/detector bindings. std_detect and libc/dyld implementations, OS capabilities and lifetime guarantees remain trusted, not qualified here."
+      },
+      "rejected_mutations": {
+        "startup_code_byte_complements": 944,
+        "referenced_constant_bit0_flips": 728
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.99.1",
+        "route": "facade",
+        "panic": "unwind"
+      },
+      "binary": "target/aes-native-mac-startup-20261111/target/aes-accelerated-startup/1.99.1-hosted-apple-native-56zg7gg7/facade-unwind.macho",
+      "review": {
+        "binary_sha256": "0e591223efa02e066e3a0996347f7e33b0febae5a9b45fca2da0ed959ecc3acc",
+        "compiler": "1.99.1",
+        "panic": "unwind",
+        "admission": "hosted",
+        "startup": {
+          "symbol": "__RNvCs9xJdxupSVyn_30brynja_aes_accelerated_fixture7startup",
+          "address": "0x1000020a4",
+          "file_offset": 8356,
+          "size": 944,
+          "instructions": 236,
+          "sha256": "90aea39b798d802032c804f8d8ffdf30dff6a828cbe5c13d122515a9ae8ac6e3"
+        },
+        "references": [
+          {
+            "role": "key16",
+            "offset": 230304,
+            "size": 16,
+            "address": "0x1000383a0"
+          },
+          {
+            "role": "schedule128",
+            "offset": 233866,
+            "size": 176,
+            "address": "0x10003918a"
+          },
+          {
+            "role": "tail8",
+            "offset": 230880,
+            "size": 8,
+            "address": "0x1000385e0"
+          },
+          {
+            "role": "schedule192",
+            "offset": 234042,
+            "size": 208,
+            "address": "0x10003923a"
+          },
+          {
+            "role": "tail16",
+            "offset": 230320,
+            "size": 16,
+            "address": "0x1000383b0"
+          },
+          {
+            "role": "schedule256",
+            "offset": 234250,
+            "size": 240,
+            "address": "0x10003930a"
+          },
+          {
+            "role": "plain",
+            "offset": 230512,
+            "size": 16,
+            "address": "0x100038470"
+          },
+          {
+            "role": "cipher128",
+            "offset": 230528,
+            "size": 16,
+            "address": "0x100038480"
+          },
+          {
+            "role": "cipher192",
+            "offset": 230544,
+            "size": 16,
+            "address": "0x100038490"
+          },
+          {
+            "role": "cipher256",
+            "offset": 230560,
+            "size": 16,
+            "address": "0x1000384a0"
+          }
+        ],
+        "comparison_import": {
+          "symbol": "_memcmp",
+          "library": "/usr/lib/libSystem.B.dylib",
+          "stub_address": "0x100036f64",
+          "stub_file_offset": 225124,
+          "pointer_address": "0x100048118",
+          "helper_address": "0x1000372b8",
+          "lazy_record_offset": 800,
+          "scope": "Static import declaration/stub/pointer/per-symbol helper binding only; dyld common dispatcher, rebasing and the named system function are trusted, not qualified."
+        },
+        "kernels": {
+          "binary_sha256": "0e591223efa02e066e3a0996347f7e33b0febae5a9b45fca2da0ed959ecc3acc",
+          "bodies": [
+            {
+              "role": "transform",
+              "bits": 128,
+              "symbol": "__RINvNtNtCs2IkQHhlsfjd_17brynja_crypto_cpu3aes7aarch649transformKjb_EB6_",
+              "address": "0x1000053e4",
+              "file_offset": 21476,
+              "size": 152,
+              "instructions": 38,
+              "sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+            },
+            {
+              "role": "transform",
+              "bits": 192,
+              "symbol": "__RINvNtNtCs2IkQHhlsfjd_17brynja_crypto_cpu3aes7aarch649transformKjd_EB6_",
+              "address": "0x10000547c",
+              "file_offset": 21628,
+              "size": 152,
+              "instructions": 38,
+              "sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+            },
+            {
+              "role": "transform",
+              "bits": 256,
+              "symbol": "__RINvNtNtCs2IkQHhlsfjd_17brynja_crypto_cpu3aes7aarch649transformKjf_EB6_",
+              "address": "0x100005514",
+              "file_offset": 21780,
+              "size": 152,
+              "instructions": 38,
+              "sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+            },
+            {
+              "role": "expand",
+              "bits": 128,
+              "symbol": "__RINvNtNtCs2IkQHhlsfjd_17brynja_crypto_cpu3aes14aarch64_expand6expandKj10_Kjb0_EB6_",
+              "address": "0x1000055ac",
+              "file_offset": 21932,
+              "size": 196,
+              "instructions": 49,
+              "sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+            },
+            {
+              "role": "expand",
+              "bits": 192,
+              "symbol": "__RINvNtNtCs2IkQHhlsfjd_17brynja_crypto_cpu3aes14aarch64_expand6expandKj18_Kjd0_EB6_",
+              "address": "0x100005670",
+              "file_offset": 22128,
+              "size": 196,
+              "instructions": 49,
+              "sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+            },
+            {
+              "role": "expand",
+              "bits": 256,
+              "symbol": "__RINvNtNtCs2IkQHhlsfjd_17brynja_crypto_cpu3aes14aarch64_expand6expandKj20_Kjf0_EB6_",
+              "address": "0x100005734",
+              "file_offset": 22324,
+              "size": 196,
+              "instructions": 49,
+              "sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+            }
+          ],
+          "scope": "Six complete Mach-O function extents match reviewed ARM encodings; callers, admission, cleanup and unwind remain unreviewed."
+        },
+        "detector": {
+          "symbol": "__RNvNtNtCsf5MhpYzpGy8_10std_detect6detect5cache21detect_and_initialize",
+          "address": "0x100036174",
+          "size": 3148,
+          "file_offset": 221556,
+          "sha256": "726f83b724b9a632e2e4f665d0dbb558cfbbcd2254dc3ba2a39be3a3be6367ca"
+        },
+        "cache": {
+          "symbol": "__RNvNtNtCsf5MhpYzpGy8_10std_detect6detect5cache5CACHE.0",
+          "address": "0x100048d30",
+          "size": 8,
+          "section": 16
+        },
+        "scope": "Apple hosted startup branches, KATs, kernels and declared memcmp/cache/detector bindings. std_detect and libc/dyld implementations, OS capabilities and lifetime guarantees remain trusted, not qualified here."
+      },
+      "rejected_mutations": {
+        "startup_code_byte_complements": 944,
+        "referenced_constant_bit0_flips": 728
+      }
+    }
+  ],
+  "totals": {
+    "binaries": 8,
+    "startup_bodies": 8,
+    "AES_bodies_rechecked": 48,
+    "comparison_import_bindings": 8,
+    "detector_and_cache_bindings": 8,
+    "startup_code_byte_complements_rejected": 7552,
+    "referenced_constant_bit0_flips_rejected": 5824
+  },
+  "limits": [
+    "Offline review only; no modified Apple hosted executable was run.",
+    "std_detect implementation, system capability reporting, memcmp and dyld are trusted dependencies.",
+    "Native hosted corrupted-answer/missing-feature controls and platform lifetime admission remain unfinished.",
+    "Existing timing alarms remain; no physical-protection or spill-erasure claim."
+  ]
+}

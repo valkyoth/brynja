@@ -1,0 +1,130 @@
+{
+  "1.90.0/hosted/abort/decrypt": {
+    "branches": 5,
+    "calls": 1,
+    "constants": 0,
+    "encoding_sha256": "c39a64a617e115b4971eab549481d663cadf8956c29750313b8d962c3d070eeb",
+    "instructions": 32,
+    "text_sha256": "33fee0e600c04a97a44b0936d302677b127623f7995dea8fc301b702295711f0"
+  },
+  "1.90.0/hosted/abort/encrypt": {
+    "branches": 5,
+    "calls": 1,
+    "constants": 0,
+    "encoding_sha256": "1456ddfe972d1843a75d73a9bc346e16ecd49be8cb1dbf3b881f5f9fa2b9734b",
+    "instructions": 32,
+    "text_sha256": "0f6bcb365133c397c340fad2d2eef3b3fc1e5d92fbc1be945989d72d45800139"
+  },
+  "1.90.0/hosted/unwind/decrypt": {
+    "branches": 6,
+    "calls": 2,
+    "constants": 0,
+    "encoding_sha256": "30705c47fcca3061fabed7fe309595818b9270663b354ba8cf2b624d7594f490",
+    "instructions": 52,
+    "text_sha256": "42d4011608eb149963a448995c853330ef47e03c258e37fb8b74b3699dbcb96a"
+  },
+  "1.90.0/hosted/unwind/encrypt": {
+    "branches": 6,
+    "calls": 2,
+    "constants": 0,
+    "encoding_sha256": "3851001417d2813e99498a5d79856afe456a504aa96cd53348f700d64c45d23d",
+    "instructions": 52,
+    "text_sha256": "08c2f1550b64a319923e2528556df180e11159d0d79692070604d1c65c141e43"
+  },
+  "1.90.0/static/abort/decrypt": {
+    "branches": 4,
+    "calls": 1,
+    "constants": 0,
+    "encoding_sha256": "32b12ce8bbad379e94b70a7ca86a6f576869054c5e334a026159dd81f59335af",
+    "instructions": 27,
+    "text_sha256": "6d5d6df35692678d035194affeca143dc434d212f3969f221542ed2fc987c46f"
+  },
+  "1.90.0/static/abort/encrypt": {
+    "branches": 4,
+    "calls": 1,
+    "constants": 0,
+    "encoding_sha256": "04c0a61d44037f0a92787049ab524e452bad93ea213906cee38b2c985583eb65",
+    "instructions": 27,
+    "text_sha256": "aab01975040e2a6f04b9f607bba4f10949e60834f6ffac5fee4d474ce9e80760"
+  },
+  "1.90.0/static/unwind/decrypt": {
+    "branches": 5,
+    "calls": 2,
+    "constants": 0,
+    "encoding_sha256": "6b6c826fd8dcc67a297a2c0b401c0a99661338754725052fd3815a7f0537a16a",
+    "instructions": 45,
+    "text_sha256": "aaf9e3550bdcb49f1faaf32e3b26441e2147778046f2a970dfed529d2824f338"
+  },
+  "1.90.0/static/unwind/encrypt": {
+    "branches": 5,
+    "calls": 2,
+    "constants": 0,
+    "encoding_sha256": "465213f413f5a5d64b477cb016fa787e4955ebc410d1a27ce95da7b58a5e4b9a",
+    "instructions": 45,
+    "text_sha256": "0d5a16d68c87e9a85f327df4c2df534a9cfe523890e659ee636c363edd237975"
+  },
+  "1.99.1/hosted/abort/decrypt": {
+    "branches": 5,
+    "calls": 1,
+    "constants": 0,
+    "encoding_sha256": "bca65bba8eafac9ccf62c901d75ffc4c083747e5be226103a833c1f2c7c9e153",
+    "instructions": 30,
+    "text_sha256": "07f8e379b835ef9b24d88572303e04ef56cf673257622ea16f523c0a5f2b5d49"
+  },
+  "1.99.1/hosted/abort/encrypt": {
+    "branches": 5,
+    "calls": 1,
+    "constants": 0,
+    "encoding_sha256": "a9ffd23b5e0ed37720445eace1a0e6a35850d3862ec83a187619e5190f2f827e",
+    "instructions": 30,
+    "text_sha256": "4c98898258acaf5ef222d8b1145d4ba22d409ebfc0ac6d420ee0552a44d23ea3"
+  },
+  "1.99.1/hosted/unwind/decrypt": {
+    "branches": 5,
+    "calls": 1,
+    "constants": 0,
+    "encoding_sha256": "bca65bba8eafac9ccf62c901d75ffc4c083747e5be226103a833c1f2c7c9e153",
+    "instructions": 30,
+    "text_sha256": "07f8e379b835ef9b24d88572303e04ef56cf673257622ea16f523c0a5f2b5d49"
+  },
+  "1.99.1/hosted/unwind/encrypt": {
+    "branches": 5,
+    "calls": 1,
+    "constants": 0,
+    "encoding_sha256": "a9ffd23b5e0ed37720445eace1a0e6a35850d3862ec83a187619e5190f2f827e",
+    "instructions": 30,
+    "text_sha256": "4c98898258acaf5ef222d8b1145d4ba22d409ebfc0ac6d420ee0552a44d23ea3"
+  },
+  "1.99.1/static/abort/decrypt": {
+    "branches": 4,
+    "calls": 1,
+    "constants": 0,
+    "encoding_sha256": "0e2e740ecc39b0a2e20c8e6982cf7e0f7291b40189ea02a8aa4771b5bded40c2",
+    "instructions": 26,
+    "text_sha256": "510f713e295d57fbaf35f7a93ed787ae5011709fe921a409554ac603a20cbd86"
+  },
+  "1.99.1/static/abort/encrypt": {
+    "branches": 4,
+    "calls": 1,
+    "constants": 0,
+    "encoding_sha256": "4fb15fdd904b08670af4305624f6967bd664ab8fe4101b78a52a530673582631",
+    "instructions": 26,
+    "text_sha256": "c79924ec8e56618c75ea53f48b449e1532df60b85ca6ba2ad92db5b51c964d16"
+  },
+  "1.99.1/static/unwind/decrypt": {
+    "branches": 4,
+    "calls": 1,
+    "constants": 0,
+    "encoding_sha256": "0e2e740ecc39b0a2e20c8e6982cf7e0f7291b40189ea02a8aa4771b5bded40c2",
+    "instructions": 26,
+    "text_sha256": "510f713e295d57fbaf35f7a93ed787ae5011709fe921a409554ac603a20cbd86"
+  },
+  "1.99.1/static/unwind/encrypt": {
+    "branches": 4,
+    "calls": 1,
+    "constants": 0,
+    "encoding_sha256": "4fb15fdd904b08670af4305624f6967bd664ab8fe4101b78a52a530673582631",
+    "instructions": 26,
+    "text_sha256": "c79924ec8e56618c75ea53f48b449e1532df60b85ca6ba2ad92db5b51c964d16"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "kind": "unauthenticated-development-observation",
+  "date": "2026-11-09",
+  "scope": "Explicit static AES admission, all-width block correctness and clearing-owner lifecycle; not final qualification",
+  "source": {
+    "base_commit": "56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e",
+    "working_tree": "uncommitted development changes",
+    "archive": "target/aes-static-mac-20261109.tar.gz",
+    "archive_sha256": "9a6541d25621d8742538fb9393f2a8d45d0651c3237298820faa30f91b5e5dfb",
+    "contents": ["Cargo.toml", "Cargo.lock", "rust-toolchain.toml", "crates", "assurance/aes-kernel-candidate", "scripts/aes/check-aes-static.py", "scripts/aes/check-aes-kernel-candidate.py"]
+  },
+  "host": {
+    "cpu": "Apple M2 Pro",
+    "os": "macOS 27.0.1",
+    "target": "aarch64-apple-darwin",
+    "baseline_probe": "AES_STATIC_HOST_BUNDLE_PASS",
+    "target_features": "+aes,+neon"
+  },
+  "runs": [
+    {
+      "command": "python3 scripts/aes/check-aes-static.py --toolchain 1.90.0 --mode native",
+      "result": "passed",
+      "authority_tests": 8,
+      "owner_tests": 13,
+      "expansion_error_unwind_tests": 2,
+      "completion": "AES_STATIC_PASS: native 1.90.0"
+    },
+    {
+      "command": "python3 scripts/aes/check-aes-static.py --toolchain 1.99.1 --mode native",
+      "result": "passed",
+      "authority_tests": 8,
+      "owner_tests": 13,
+      "expansion_error_unwind_tests": 2,
+      "completion": "AES_STATIC_PASS: native 1.99.1"
+    }
+  ],
+  "kat_records_per_owner_form": {"aes128": 568, "aes192": 700, "aes256": 810},
+  "retained_artifacts": {
+    "remote_directory": "/tmp/brynja-aes-static.Xbde6R",
+    "archive": "target/aes-static-mac-observations-20261109.tar.gz",
+    "archive_sha256": "a2684a58f965c9ad0b6c7769f85c6e8e2918ff0237ff425a4b5709e17a6a706d",
+    "combined_log": "target/aes-kernel-candidate/static-mac-native.log",
+    "combined_log_sha256": "e4beba34b4b2a1c2c39eaa0d88f05b9050d6191f077d8c74672b20d4bdb8bbb3",
+    "availability": "Local and remote development artifacts, not committed archives or signed receipts"
+  },
+  "not_established": [
+    "Clean committed release-candidate source binding",
+    "Hosted runtime selection",
+    "Native AWS Arm or Intel execution",
+    "Forced-backend MCT/MMT and complete independent differential campaign",
+    "Final-linked/LTO emitted-code review",
+    "Timing or performance qualification",
+    "Register/spill erasure or physical side-channel/fault resistance"
+  ]
+}

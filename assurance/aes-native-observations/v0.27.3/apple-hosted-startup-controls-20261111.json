@@ -1,0 +1,283 @@
+{
+  "kind": "unauthenticated-native-Apple-hosted-startup-controls",
+  "date": "2026-11-11",
+  "native_host": {
+    "cpu": "Apple M2 Pro",
+    "os": "macOS 27.2.1",
+    "build": "26B131"
+  },
+  "hosted_review": "assurance/aes-native-observations/v0.27.3/apple-hosted-startup-review-20261111.json",
+  "hosted_review_sha256": "02f7cb14dc6f69cf1fba8fe01f3236b77753cc2f61a563cdfeac331a226590b1",
+  "source": {
+    "base_commit": "56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e",
+    "working_tree": "uncommitted development changes",
+    "archive": "target/aes-accelerated-timing-source-20261110.tar.gz",
+    "archive_sha256": "7a90292b5bf4aa89bb133090a2f4175ec9f707d7c6f574f09882d674955fc6b8",
+    "fixture_overlay": "target/aes-mac-integrated-fixtures-20261111.tar.gz",
+    "fixture_overlay_sha256": "ab9d0f4db95a3f4be3b576f6ff30059f803edd3050dfc166b81f451e9b9af707",
+    "package_archive_sha256": {
+      "brynja": "1eac3382d1ef632b9f46670adf65cec1131bf40d6b317a5f605f74be4b53baab",
+      "brynja-core": "3ac8894a7a05e5ae25c164091998ca081933bb960769bc3238ec5972d1c61679",
+      "brynja-crypto": "8f90c00bf91f026fecc24af312b793b0865e914c796d329fa297abe8cdf5523a",
+      "brynja-crypto-cpu": "97a9bc44256395a983e11c185320904728d3ac4ae9138deebc0a907d15c87ad9",
+      "brynja-crypto-cpu-std": "137e62d9576b2ec32669528b2449877ed0efc77cf2a6f72348290ba192918261",
+      "brynja-dtls": "3894782c6e1a295a1aabe2560a959be3ae1476cf67fb9cd9a543fcb2a1c9f421",
+      "brynja-hash-core": "13b6fe81e8b96028ebe481d543193a1e5d34a78a7ac048b7ef0fa5c66d3dcbf2",
+      "brynja-hash-parallel": "ca4050cfdb521d4279c31283906d284862405e9c83212fbbedb97b7dfbf4e932",
+      "brynja-hash-sha2": "1c0fbdbab191c7e11fd1ed9d1f967c5dffa7932aa75579987f9211fb69a26fb8",
+      "brynja-hash-sha3": "5040888f602843134d1110a8021ac2d7a6ae9b782709a986dbb3a341425c08c7",
+      "brynja-hash-tuple": "85b186bf25fb9c65b2c2df31f626cd8f92455f2e3f774d987bba2b3d2e13ce03",
+      "brynja-mac-hmac": "8b8742a1177059b66e981b1ac1f94c563ae0394332e12a4406d023ea4dade196",
+      "brynja-mac-kmac": "15c0164e3bfc496355c22c95d3623c384c7a4114e282230f0741a62e6ee84df0",
+      "brynja-pki": "42936cff98f924f34831f8aa4cba616faf011fdd8a1826d57879a39084650f48",
+      "brynja-platform": "02fdab9954540d215e81000427628ca8e6018f3b3db843e5e34d0ed0b2d4f3bf",
+      "brynja-protocol": "79ba3a20529393efd8770690bd93626841224f9375e8cd5363178c757a0abfb3",
+      "brynja-quic-tls": "52ce4fb7f875a51d03f70088a0ca883f38a827a3b330a2d7b462d88c90ade04c",
+      "brynja-tls": "cb6e0aa7d5e815847108dd37e1b6e142b139fb03a9e95c4519130d73e55ce399",
+      "brynja-tls12": "0561887cf6d7f46dae18d6c50a85e2cf83108af957e503456ea52c4754a26698",
+      "brynja-tls13": "edd0f449e0a21c1b20d5d0e57ab9236596aee93b71e3a342404ef48940290ccc",
+      "brynja-tls13-handshake": "62e80577689a7b87a3839d7a5cfeee5a2bf39cbc4ddd6d77ce62f2cb8ee6a2cb"
+    }
+  },
+  "retained_bundle": {
+    "path": "target/aes-native-mac-hosted-controls-20261111/observations.tar.gz",
+    "sha256": "aab99409c3dc6570e541c0d18d4c776144d4deed663fb5d2a33a74158afaabaf",
+    "remote": "/Users/builduser/brynja-aes-hosted-controls-0273.McdRej/observations.tar.gz"
+  },
+  "runner_sha256": {
+    "check-aes-apple-startup-controls.py": "55576f076a81dfd9c7e58659e8c9b4a80bb5cc2695cbad2ea7590537fa9a8121",
+    "test-aes-apple-startup-controls.py": "c80fb78b4d5cfa9fb65668d0c1ddc5e0473f60439b3caf52456d0eb369e7bb27",
+    "aes_apple_startup_hosted.py": "47b6bea46feacaf3ba2e9049dafe11d3aace76ca829bad219d6a4d0b8789b2bb",
+    "test-aes-apple-startup-hosted.py": "f8e9909a40b039d482931547b0ff6b7cf4b58207d58da6b6fb0803fb956df0aa",
+    "aes_apple_startup_static.py": "d12882a1773d3528cc62b7d2443686c2bd489edf7d54b4721b3ac4e868214b9e",
+    "aes_apple_unwind_import.py": "7551a714b3e6efc77a5ac173b5ae4d6f442279ad4247aa3f14795612dbb06dab",
+    "aes_apple_linked_kernels.py": "6708734682945721f3261bbf9cddf5f8c813a78978daf6a7acb4c000fc6f95c9"
+  },
+  "signing_tool": {
+    "path": "/usr/bin/codesign",
+    "sha256": "f9e0b219e5f934869f9647a2203bfd6bd00a819ad1bf9e617e9e6c14a4bef983"
+  },
+  "signing_policy": "same signature offset; only terminal signature payload and its two file-size fields may change",
+  "records": [
+    {
+      "configuration": {
+        "compiler": "1.90.0",
+        "route": "direct",
+        "panic": "abort"
+      },
+      "binary_sha256": "ecddaf64e2ad1737e9787e2ea93e300834c4bba15b840d06f3298545508fdef3",
+      "artifact_directory": "target/aes-apple-startup-controls/1.90.0-hosted-abort-1t2mjtmw",
+      "report_sha256": "8ee6cec9d9df6bd210f8ce260d9c36b87b18d252ef1dc6099c9e7480364ec2e5",
+      "case_log_sha256": "65b47ee16e636fab4300013466d082f5d93cab78bffa96eb9b1f1c072cb3be01",
+      "admission_log_sha256": "f393431b41a9bee9d7678c37b031a22709b527be02471849921b03bf6b03d28e",
+      "healthy_original": true,
+      "healthy_resigned_positive": true,
+      "quarantined_answers": 628,
+      "missing_feature_controls": [
+        "warm-aes-absent",
+        "cold-aes-absent"
+      ],
+      "positive_copy_sha256": "d62a2cf27a5db81fdec356942f39a4b502131887fc3aaa630f517d139b68e842",
+      "host": {
+        "system": "Darwin",
+        "machine": "arm64",
+        "release": "27.2.0"
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.90.0",
+        "route": "facade",
+        "panic": "abort"
+      },
+      "binary_sha256": "5283a9ac4273a6c80069607bfb385cafa86275df5ce4c699d7acd87c3edd01b7",
+      "artifact_directory": "target/aes-apple-startup-controls/1.90.0-hosted-abort-3rluwusq",
+      "report_sha256": "7e8abfc80118efb97d39756154b0331ad63078cdab669231a9a37d23a6a208ef",
+      "case_log_sha256": "e36d871ac7ea22c3bca6b6a606e3d16cf3f06726817cc29c3b55db92052f38ec",
+      "admission_log_sha256": "467557d80b297f28ea5660da0b7f991f61ed680d4200b13ab56ca157337ed43f",
+      "healthy_original": true,
+      "healthy_resigned_positive": true,
+      "quarantined_answers": 628,
+      "missing_feature_controls": [
+        "warm-aes-absent",
+        "cold-aes-absent"
+      ],
+      "positive_copy_sha256": "f1b33f7619a15e02b72ec733a490ed024417c3c8b5ff437684c9f76faa290923",
+      "host": {
+        "system": "Darwin",
+        "machine": "arm64",
+        "release": "27.2.0"
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.90.0",
+        "route": "facade",
+        "panic": "unwind"
+      },
+      "binary_sha256": "ca05a5d8c1ed8489317008db11f5d22f6be43964ec977dc38baf322baa0a9715",
+      "artifact_directory": "target/aes-apple-startup-controls/1.90.0-hosted-unwind-cd1_2cev",
+      "report_sha256": "73634cb9a4c9689f30e635a8bf0ed9c246e527dbdb39fb561db4fc3fc3b26efb",
+      "case_log_sha256": "1118643513c82394b9778512a0159a1c580a6ae97f5505d0c615e125171fda45",
+      "admission_log_sha256": "d7d5171ebd05c5a18c1a40bbb51b3e74c9ddec83c6ba1eea6c92ff5bb4a0de4d",
+      "healthy_original": true,
+      "healthy_resigned_positive": true,
+      "quarantined_answers": 628,
+      "missing_feature_controls": [
+        "warm-aes-absent",
+        "cold-aes-absent"
+      ],
+      "positive_copy_sha256": "0120bc3f95443581c021f530bf98c083aeb32bb3a542728bd7823e62d39c7f13",
+      "host": {
+        "system": "Darwin",
+        "machine": "arm64",
+        "release": "27.2.0"
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.90.0",
+        "route": "direct",
+        "panic": "unwind"
+      },
+      "binary_sha256": "72a815a7722a9180fee7a7a2ac97de8ea4fce4c6934fc43b0256b84a6d71ba75",
+      "artifact_directory": "target/aes-apple-startup-controls/1.90.0-hosted-unwind-mdp4v2uu",
+      "report_sha256": "998405cbf34750a1c83386b384cd053178db3d1034bc6583c52c6ebf7f5182dd",
+      "case_log_sha256": "3e3cf5bc1aa366f040fa9a92cdc2d42334866f06930ec740a65fe490579867a7",
+      "admission_log_sha256": "d36786dada27d8dcf4f9b215c8e29cad308f03e766a49fd66e87da23622df86c",
+      "healthy_original": true,
+      "healthy_resigned_positive": true,
+      "quarantined_answers": 628,
+      "missing_feature_controls": [
+        "warm-aes-absent",
+        "cold-aes-absent"
+      ],
+      "positive_copy_sha256": "bfe4751470761bf77fd99587474825727221b5682bac7c1f5ab9d9d1b7205af2",
+      "host": {
+        "system": "Darwin",
+        "machine": "arm64",
+        "release": "27.2.0"
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.99.1",
+        "route": "facade",
+        "panic": "abort"
+      },
+      "binary_sha256": "8b45581d47fab1b7c77358ec4b12f40f9f08250eba1e8f2f5c6f50fa7b3d70e8",
+      "artifact_directory": "target/aes-apple-startup-controls/1.99.1-hosted-abort-cgwhuin7",
+      "report_sha256": "34804c00df0439c614cb582527a74ddebdfc3cf213095804f2e08f6d39b6db7f",
+      "case_log_sha256": "6ca40cdac9372646a2c207cd0620d3454f41b01df62b945e4e528fb9d13d8a3d",
+      "admission_log_sha256": "819c7eb1bdf99e1836510df8dbb78749b706957058c1f4e49ce171de9facf9be",
+      "healthy_original": true,
+      "healthy_resigned_positive": true,
+      "quarantined_answers": 628,
+      "missing_feature_controls": [
+        "warm-aes-absent",
+        "cold-aes-absent"
+      ],
+      "positive_copy_sha256": "16ddb25d72d316e9bd5709f5d0f6d706f1821f48d64d8419afab3cc33b7e469f",
+      "host": {
+        "system": "Darwin",
+        "machine": "arm64",
+        "release": "27.2.0"
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.99.1",
+        "route": "direct",
+        "panic": "abort"
+      },
+      "binary_sha256": "81f92caf246a0ac658c09455ed69d8b624f9a4c059a59b390a325226f18f4c09",
+      "artifact_directory": "target/aes-apple-startup-controls/1.99.1-hosted-abort-fb1seq9m",
+      "report_sha256": "f15d0e3519fdd6da47dbdb4512ac2778422f72fe42275521d6868c812c5f57c1",
+      "case_log_sha256": "1655294cc7a0c936e80a222637da5b7ea968cd5746b74b3be7a22a7b8cbbb044",
+      "admission_log_sha256": "1e431cede3dbf31a3842bdda7c5aba808fca46b002c39f9d0998507043a04964",
+      "healthy_original": true,
+      "healthy_resigned_positive": true,
+      "quarantined_answers": 628,
+      "missing_feature_controls": [
+        "warm-aes-absent",
+        "cold-aes-absent"
+      ],
+      "positive_copy_sha256": "905c1b4e7caadbe9c9abc27e118f65c9312bf538857c1b01eb14971a99064bce",
+      "host": {
+        "system": "Darwin",
+        "machine": "arm64",
+        "release": "27.2.0"
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.99.1",
+        "route": "facade",
+        "panic": "unwind"
+      },
+      "binary_sha256": "0e591223efa02e066e3a0996347f7e33b0febae5a9b45fca2da0ed959ecc3acc",
+      "artifact_directory": "target/aes-apple-startup-controls/1.99.1-hosted-unwind-vgbz7qvs",
+      "report_sha256": "208c8c631489ff48cb0916184650ddc36f082052ddefa1723a3f790019a3d7b0",
+      "case_log_sha256": "a83ea64c244058387cd23bf8ab308ec8c540eea6ce5f40efd375ae7a60051545",
+      "admission_log_sha256": "bb9594f9a1d13946c3c6e4f816ee0c2d6702645bc544a14fedde1a4323c8c59c",
+      "healthy_original": true,
+      "healthy_resigned_positive": true,
+      "quarantined_answers": 628,
+      "missing_feature_controls": [
+        "warm-aes-absent",
+        "cold-aes-absent"
+      ],
+      "positive_copy_sha256": "42f01e05c936b7b464f43750265a5f37914fe90171cd4c8c404c44f2e165466a",
+      "host": {
+        "system": "Darwin",
+        "machine": "arm64",
+        "release": "27.2.0"
+      }
+    },
+    {
+      "configuration": {
+        "compiler": "1.99.1",
+        "route": "direct",
+        "panic": "unwind"
+      },
+      "binary_sha256": "c01b141631b8151c3c2be4d00bd33b737dece0aa3948560c3597c0e6dda5eac6",
+      "artifact_directory": "target/aes-apple-startup-controls/1.99.1-hosted-unwind-zjlcsyrz",
+      "report_sha256": "0d7711244eab7c3e28f32dbb1b14977161e95d27dafb4cb10bce5560f66e3850",
+      "case_log_sha256": "a9c97932684a16bacc752ea240a16eb138f1966ff928f011c04079f935312e40",
+      "admission_log_sha256": "a151cac0bfd02acfd9d900a86ba890c9c2fb56e6d7e6d61ccaf148dd79c09e5a",
+      "healthy_original": true,
+      "healthy_resigned_positive": true,
+      "quarantined_answers": 628,
+      "missing_feature_controls": [
+        "warm-aes-absent",
+        "cold-aes-absent"
+      ],
+      "positive_copy_sha256": "b30ed5669d16f438353655662bb95eef3ad11c8d9276aae364ceab2a2cde1a3d",
+      "host": {
+        "system": "Darwin",
+        "machine": "arm64",
+        "release": "27.2.0"
+      }
+    }
+  ],
+  "totals": {
+    "configurations": 8,
+    "original_healthy_runs": 8,
+    "resigned_positive_runs": 8,
+    "corrupted_answers_quarantined": 5024,
+    "missing_feature_control_executions": 16
+  },
+  "validation": {
+    "native_control_runner_tests": 9,
+    "hosted_reviewer_tests": 8,
+    "integrated_tooling_tests": 923,
+    "replay": "Original hashes, complete reviews, 5024 constant mutations, 16 detector observation substitutions, case logs and exact markers replayed locally."
+  },
+  "limits": [
+    "Unauthenticated observations, not certification evidence or a verifier current pass.",
+    "Public KAT data mutations and software substitutions for detector observations; not physical fault testing or hardware lacking AES.",
+    "Both Require and Prefer are asserted by each negative-control fixture.",
+    "System std_detect/libc/dyld and OS capabilities remain trusted; platform lifetime admission remains a separate obligation.",
+    "Original binaries, production Rust, timing experiments and publication gates unchanged."
+  ]
+}

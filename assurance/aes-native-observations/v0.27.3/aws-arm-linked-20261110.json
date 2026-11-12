@@ -1,0 +1,371 @@
+{
+  "kind": "unauthenticated-development-observation",
+  "date": "2026-11-10",
+  "scope": "Native execution plus unchanged exact final-linked review policies for the named Linux AArch64 musl consumers only.",
+  "source": {
+    "base_commit": "56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e",
+    "working_tree": "Uncommitted v0.27.3 development snapshot, not a clean tagged checkout.",
+    "ordered_bundles": [
+      {
+        "path": "target/aes-aws-arm-linked-20261110.tar.gz",
+        "sha256": "e10a682f792174fbbf9f17b4312152b4961c8a59fa7a1cff0bb48256fae89509"
+      },
+      {
+        "path": "target/aes-aws-arm-startup-native-20261110.tar.gz",
+        "sha256": "7c6cf5afb98c24d0f534e60f814c7e71e2e10d0bb27e03916ebd852c2972c3e2"
+      }
+    ],
+    "checked_source_files": 1530
+  },
+  "host": {
+    "cpu": "ARM Neoverse-V2 r0p1",
+    "target": "aarch64-unknown-linux-musl",
+    "kernel": "7.0.0-1014-aws",
+    "context": "logs/host.txt",
+    "context_sha256": "1b9c12f10cefbf184ac167a03f383d38d27498860d19aa2e0a92ad0fbefac7f9"
+  },
+  "evidence": {
+    "local_directory": "target/aes-native-aws-arm-linked-20261110",
+    "remote_directory": "/home/ubuntu/brynja-aes-linked-0273-J6srUUeV",
+    "archive": "observations.tar.gz",
+    "archive_sha256": "e7f56db8495b05e5d115730751c2a9d42f1496c97489838affcc918f6046ef92",
+    "completed_utc": "Tue Nov 10 17:24:36 UTC 2026"
+  },
+  "totals": {
+    "linked_consumers": 16,
+    "startup_consumers": 16,
+    "native_quarantine_executions": 10048,
+    "native_simulated_aes_absent_controls": 16,
+    "replayed_mutation_rejections": 269030
+  },
+  "runs": [
+    {
+      "kind": "linked",
+      "compiler": "1.90.0",
+      "admission": "static",
+      "completion": "AES_ACCELERATED_ARM_EPHEMERAL_LINKED_PASS: 1.90.0 static; four native AArch64 musl consumers; per-operation public/secret callers and replayed cached closure",
+      "result": "passed",
+      "log": "logs/1.90.0-static.log",
+      "log_sha256": "94e29df05c8d03606cb2ca5e07fb108cb90031e5a8d7b3baa92df425172ff785",
+      "artifacts": "target/aes-accelerated-linked/1.90.0-arm-native-static-25kiauu6",
+      "consumers": [
+        {
+          "route": "direct",
+          "panic": "abort",
+          "binary_sha256": "c2dbfe2462042e9fdff52caf4d71c66935d27f1b8c5a17c7fe4065602d700e0b",
+          "report_sha256": "16395124e30c318c04ad9d300cdf43dd51a899bac6e1c31f5f2eb3477652134e",
+          "replayed_mutation_rejections": 12320
+        },
+        {
+          "route": "direct",
+          "panic": "unwind",
+          "binary_sha256": "f09f1baa4323e6492505acd983390c9e8729380633b240cf8b73b86c1aced983",
+          "report_sha256": "4ba048c4941721ebecbc9087ff747145fec29558b21d0101a32f029dbca0abdf",
+          "replayed_mutation_rejections": 16073
+        },
+        {
+          "route": "facade",
+          "panic": "abort",
+          "binary_sha256": "edda16de553347766390bb7114cc2b646c246b9de7680003ceb204c6487941a4",
+          "report_sha256": "cac48667747d0d81e4bede3c872e8ea6f7c71c3a9cd808674af189c5f2088435",
+          "replayed_mutation_rejections": 12320
+        },
+        {
+          "route": "facade",
+          "panic": "unwind",
+          "binary_sha256": "7f45e06bffd74a74bd05a58e1eadb64b2dd057c54e20a43ba8ba84d0c3d6b9f8",
+          "report_sha256": "0c60a82eaa9c55a45f8790667fcaba79105a7b63f83f33729aaf9c23277b45e8",
+          "replayed_mutation_rejections": 16073
+        }
+      ]
+    },
+    {
+      "kind": "linked",
+      "compiler": "1.90.0",
+      "admission": "hosted",
+      "completion": "AES_ACCELERATED_ARM_EPHEMERAL_LINKED_PASS: 1.90.0 hosted; four native AArch64 musl consumers; per-operation public/secret callers and replayed cached closure",
+      "result": "passed",
+      "log": "logs/1.90.0-hosted.log",
+      "log_sha256": "a87d97dfac703f0349f2be67cd5fc66fc880abc5dcd769b77d21a33174181c21",
+      "artifacts": "target/aes-accelerated-linked/1.90.0-arm-native-hosted-qskxx6sc",
+      "consumers": [
+        {
+          "route": "direct",
+          "panic": "abort",
+          "binary_sha256": "58a15eb862900998893a2ec3358b801a33bbc89a36b440532f9c88f1556702ba",
+          "report_sha256": "5a1b89399089819141f09f9c5977320b359edcd89565bcb6df5f4a5afd289613",
+          "replayed_mutation_rejections": 13215
+        },
+        {
+          "route": "direct",
+          "panic": "unwind",
+          "binary_sha256": "c60b41f374f81ccf7bb5eecd769163a19c4997220b5863a0e112f2a6c3100c83",
+          "report_sha256": "2145a6aa082527e3f612e56c54f1d5978f793a762c8d0d45294f42e84fc6a741",
+          "replayed_mutation_rejections": 17073
+        },
+        {
+          "route": "facade",
+          "panic": "abort",
+          "binary_sha256": "c1aeab77ca3988b4d0c58ab4d2cd427239e884ab6ac0ab445e57a8bcaf57d0df",
+          "report_sha256": "3ea55f80812458048bc74d45d1c1c37c1c942db0ac52634d6b992b4887f39a26",
+          "replayed_mutation_rejections": 13215
+        },
+        {
+          "route": "facade",
+          "panic": "unwind",
+          "binary_sha256": "23403a36f7285f112d7ff716501d200cea5d96995771e6ab1fa26f2251c79692",
+          "report_sha256": "8c1492276a616afc50f33c7a05a4f7d58c6755c58cfece1c22ce5ab3838aa171",
+          "replayed_mutation_rejections": 17073
+        }
+      ]
+    },
+    {
+      "kind": "linked",
+      "compiler": "1.99.1",
+      "admission": "static",
+      "completion": "AES_ACCELERATED_ARM_EPHEMERAL_LINKED_PASS: 1.99.1 static; four native AArch64 musl consumers; per-operation public/secret callers and replayed cached closure",
+      "result": "passed",
+      "log": "logs/1.99.1-static.log",
+      "log_sha256": "f6ea863c084f4d0b2921426114320f52d1323b94dceb4621c940572ae8bbd215",
+      "artifacts": "target/aes-accelerated-linked/1.99.1-arm-native-static-7m5kqeul",
+      "consumers": [
+        {
+          "route": "direct",
+          "panic": "abort",
+          "binary_sha256": "143524d7b63c16d50c03708b7d4a666445a2bac54433ac93c076d92b366a8d9d",
+          "report_sha256": "4ba592f39142b8bb713297b3d443986b1e1645cfa939802bfeb6ad1554564c43",
+          "replayed_mutation_rejections": 12380
+        },
+        {
+          "route": "direct",
+          "panic": "unwind",
+          "binary_sha256": "12fc4b702b95a24918f820af7964ba65a1d8d61e6f408ebda6ee2a1c21e312ca",
+          "report_sha256": "3133ee1438504e0528e1427215734417d1840e13e1953659fe457ddee4a20984",
+          "replayed_mutation_rejections": 12220
+        },
+        {
+          "route": "facade",
+          "panic": "abort",
+          "binary_sha256": "5cab20b4bd07fbfe2ff3cfea0f7c3cc61027ef7cefe63fca2399e5888f0d4aee",
+          "report_sha256": "42ad48a75c77e9c871167869c42abca1faa0516e37a6e982ad454e9dc1ea11eb",
+          "replayed_mutation_rejections": 12380
+        },
+        {
+          "route": "facade",
+          "panic": "unwind",
+          "binary_sha256": "c4be03f5331f97f5bfaad767f453292394a5aa3feae8e76b9d88fe4cf7df3b37",
+          "report_sha256": "af668c72eb53359d253bc5bd6e2602569660ea0c0fb77627a9ec16f5bf84c966",
+          "replayed_mutation_rejections": 12220
+        }
+      ]
+    },
+    {
+      "kind": "linked",
+      "compiler": "1.99.1",
+      "admission": "hosted",
+      "completion": "AES_ACCELERATED_ARM_EPHEMERAL_LINKED_PASS: 1.99.1 hosted; four native AArch64 musl consumers; per-operation public/secret callers and replayed cached closure",
+      "result": "passed",
+      "log": "logs/1.99.1-hosted.log",
+      "log_sha256": "c3b44b8b0075628566de0d044bf39a93aeea7e368b4618825fa695cd4c4ebee6",
+      "artifacts": "target/aes-accelerated-linked/1.99.1-arm-native-hosted-ca9s06kx",
+      "consumers": [
+        {
+          "route": "direct",
+          "panic": "abort",
+          "binary_sha256": "4be4fe2b73f8e090d65ebc4a45650233e8b77c15b48a956891d9efa28bba0560",
+          "report_sha256": "55d6e51d33bac7f290f9c4e40a0f51dbbd5dbc56b71493cbb06df2cd8031f261",
+          "replayed_mutation_rejections": 12930
+        },
+        {
+          "route": "direct",
+          "panic": "unwind",
+          "binary_sha256": "b4da294d5d68d2caf4a9ea59b9cb6c37aeb192882175aefa63eea09ff3cfb5df",
+          "report_sha256": "b03e2f6b676068fe3af4d229e05a10c6fa2fb2972e1e43a0871c008b6f374d9f",
+          "replayed_mutation_rejections": 12800
+        },
+        {
+          "route": "facade",
+          "panic": "abort",
+          "binary_sha256": "22f1f4b2b1bf92973c0c0a6206db4d4da3f04af36e140c0899620f08ea1293e0",
+          "report_sha256": "60134bc7e4487b56c2c6875d447308d9364d97e611ba64443af6312ba4c66195",
+          "replayed_mutation_rejections": 12930
+        },
+        {
+          "route": "facade",
+          "panic": "unwind",
+          "binary_sha256": "4bf8319769402201e3ab564699abbbdacd263765ed251ed306cb223e8aa2786c",
+          "report_sha256": "1dcb9d54962b81cd8065dd98b0a13078499a0fa2674c03a5bc4a2efcf68d437d",
+          "replayed_mutation_rejections": 12800
+        }
+      ]
+    },
+    {
+      "kind": "startup",
+      "compiler": "1.90.0",
+      "admission": "static",
+      "completion": "AES_ARM_STARTUP_LINKED_PASS: 1.90.0; four static native AArch64 musl consumers",
+      "result": "passed",
+      "log": "logs-startup/1.90.0-static.log",
+      "log_sha256": "8ff0d5a4337c2efcbca427568dad543dcf6c6ad898c433710bbc9dff925d645d",
+      "artifacts": "target/aes-accelerated-startup/1.90.0-static-arm-native-8i_fbdes",
+      "consumers": [
+        {
+          "route": "direct",
+          "panic": "abort",
+          "binary_sha256": "5e91b24735f8b54d8fdb49dd01ea86e8d8f4b65f7edfc56bbbf099ec84048677",
+          "report_sha256": "577812c07ab2942cfa8c3d55cb1200b434c09ab907f8b3799d8a3cde16e61e60",
+          "replayed_mutation_rejections": 3088
+        },
+        {
+          "route": "direct",
+          "panic": "unwind",
+          "binary_sha256": "81a80032fad3ee3245379ea942c43bdcfc9075bf5d5fbe9792f8581cc6af6052",
+          "report_sha256": "eec0b2072a643eaf513585aad3857982d7592910804fc7ee7701edbf9329c6fa",
+          "replayed_mutation_rejections": 3088
+        },
+        {
+          "route": "facade",
+          "panic": "abort",
+          "binary_sha256": "e3178315dc6f3e72391d2cc729cf7be6169aa36b68b462e0462eabca6400e7f2",
+          "report_sha256": "26b595a480d0a30428fa71afe37ba279399dbd040fafb4ac15022a6b1cffd4a8",
+          "replayed_mutation_rejections": 3088
+        },
+        {
+          "route": "facade",
+          "panic": "unwind",
+          "binary_sha256": "2ba963564c721430d679701b086da675328a0c1917d21ecaf911e89bed3abd31",
+          "report_sha256": "ac0796fec5c8a04df6db2ceb723557c583f3cd4a4ba1e910dd324e3d0d2c0fcb",
+          "replayed_mutation_rejections": 3088
+        }
+      ]
+    },
+    {
+      "kind": "startup",
+      "compiler": "1.90.0",
+      "admission": "hosted",
+      "completion": "AES_ARM_HOSTED_STARTUP_LINKED_PASS: 1.90.0; four hosted native AArch64 musl consumers",
+      "result": "passed",
+      "log": "logs-startup/1.90.0-hosted.log",
+      "log_sha256": "088b15cce27ed256991d0af02e424ca231be53b7f51e43adac6afa40826775eb",
+      "artifacts": "target/aes-accelerated-startup/1.90.0-hosted-arm-native-41t8wlne",
+      "consumers": [
+        {
+          "route": "direct",
+          "panic": "abort",
+          "binary_sha256": "068f94200c08014b6e46344a2989e4749650904281d71bd126e7d5ed459cb5c7",
+          "report_sha256": "c3f7e61a5bdb490d52d3a10dcf3867e2e6975ef97119c5d16ff0590250f44224",
+          "replayed_mutation_rejections": 3303
+        },
+        {
+          "route": "direct",
+          "panic": "unwind",
+          "binary_sha256": "39e988eff5cd8d616af7ef8e64f762bd39f7c72f26e0314aae3c662397d6e836",
+          "report_sha256": "cd4f165fc72dcb35e7c46c0a60dd376bb1b92480df211bba58821633bcb19b9d",
+          "replayed_mutation_rejections": 3303
+        },
+        {
+          "route": "facade",
+          "panic": "abort",
+          "binary_sha256": "778ae0c44ab290a3b498070f91a2ef27cc3f0913ed63a95df7f1a2ce433a3377",
+          "report_sha256": "6abfcb5a93196d75041a347738007484ffae654c9836a4f1ecbef176c6fcadc3",
+          "replayed_mutation_rejections": 3303
+        },
+        {
+          "route": "facade",
+          "panic": "unwind",
+          "binary_sha256": "c2f4b36f8484a8dc565ef7d166223dc5a77741df2a458165971fb9675f02c072",
+          "report_sha256": "f920cd5e9ad9e2256d4f763d66d765d6fa68f19c15e911d6bab68fcead27044b",
+          "replayed_mutation_rejections": 3303
+        }
+      ]
+    },
+    {
+      "kind": "startup",
+      "compiler": "1.99.1",
+      "admission": "static",
+      "completion": "AES_ARM_STARTUP_LINKED_PASS: 1.99.1; four static native AArch64 musl consumers",
+      "result": "passed",
+      "log": "logs-startup/1.99.1-static.log",
+      "log_sha256": "64722d7dccbf77f4ee20c600eebd3d4e0f7ac3283cd96cdc510a51135df9bfc5",
+      "artifacts": "target/aes-accelerated-startup/1.99.1-static-arm-native-vzgdd4_c",
+      "consumers": [
+        {
+          "route": "direct",
+          "panic": "abort",
+          "binary_sha256": "22006c202c423b22564da7ef89548169a9f16d2a2ebe09c8df173cb1c52d0c31",
+          "report_sha256": "01d01e762c99afd8cfd1e44b019c0a74d771fe911444005cc87e3ba458b89c19",
+          "replayed_mutation_rejections": 3068
+        },
+        {
+          "route": "direct",
+          "panic": "unwind",
+          "binary_sha256": "529f58bdf84864661cde90415d4a032ce566c98d92d0502bef61ad567688f985",
+          "report_sha256": "5fd3c5b9c5421ef1c2dd5fbb6bd04f0b627baedcde210d57c6fc24cb15bd1cd5",
+          "replayed_mutation_rejections": 3068
+        },
+        {
+          "route": "facade",
+          "panic": "abort",
+          "binary_sha256": "d0eac7758d0a033c7da64c7f68d92aaa7f5962fbc86e0b257ad7bc9d0c4ee01a",
+          "report_sha256": "efe838a5be84799e1aa2a7975dd4b2ed97d4ae152975b3111063a4689d7e36ae",
+          "replayed_mutation_rejections": 3068
+        },
+        {
+          "route": "facade",
+          "panic": "unwind",
+          "binary_sha256": "7f45f586447d9606fd2737653db47bfe5d21d5d39858aa3c97cdff9fcf6baced",
+          "report_sha256": "7a16c32b9facd9adfa891e2a96236da4020fdd5212ab9cfbc291ad4f2fdfe60f",
+          "replayed_mutation_rejections": 3068
+        }
+      ]
+    },
+    {
+      "kind": "startup",
+      "compiler": "1.99.1",
+      "admission": "hosted",
+      "completion": "AES_ARM_HOSTED_STARTUP_LINKED_PASS: 1.99.1; four hosted native AArch64 musl consumers",
+      "result": "passed",
+      "log": "logs-startup/1.99.1-hosted.log",
+      "log_sha256": "4ba18c721a8d9cad165c9e8518e37e2e5eb49b0e8e29ec5eca25008640423d3a",
+      "artifacts": "target/aes-accelerated-startup/1.99.1-hosted-arm-native-pwrba8ld",
+      "consumers": [
+        {
+          "route": "direct",
+          "panic": "abort",
+          "binary_sha256": "a5d01e340164b8f8a33da312eab7a2fd832fae1e042692d658befd391191ce31",
+          "report_sha256": "c724b20d3aa0edb511dac5b415b27ca12eb73ce95e56e145d8fb1ba18fec2aa8",
+          "replayed_mutation_rejections": 3293
+        },
+        {
+          "route": "direct",
+          "panic": "unwind",
+          "binary_sha256": "021a7b52cacea97ae53e92f52022e51bae9a017bbd22df994e942a88f7c7695c",
+          "report_sha256": "169b01d36c89d367e2dfb4c0518eda58625fbf1d79c625acea0a38f563c7bee0",
+          "replayed_mutation_rejections": 3293
+        },
+        {
+          "route": "facade",
+          "panic": "abort",
+          "binary_sha256": "d8314fd9d3521b3c3a3bdf819a1b8b29bc147379419833dd8868be34f475c6b0",
+          "report_sha256": "dd06f03cce739ba059323ece38342f2f1865148a5681329b5c93be1337dec4da",
+          "replayed_mutation_rejections": 3293
+        },
+        {
+          "route": "facade",
+          "panic": "unwind",
+          "binary_sha256": "22cdd8abaa64f8561739f9f715b953b9e532114a20a0cb9fa81e134f09817b5c",
+          "report_sha256": "114dc10bb59aae751cda3efd078841d7be7c62597ff734b4e5a51f8ab5545a48",
+          "replayed_mutation_rejections": 3293
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Pure reviewers were independently replayed against retrieved bytes; mutation totals include repeated dependency reviews, not distinct vulnerabilities.",
+    "Only named retained bodies and call boundaries; not arbitrary downstream inlining or every call site.",
+    "Not exception-table dispatch, unwinder/OS qualification, complete register/spill erasure, power/EM or physical fault protection.",
+    "No timing measurements; correctness work could overlap.",
+    "Does not qualify GNU/Linux linked binaries or Apple Mach-O binaries.",
+    "Working-tree development evidence is unauthenticated and not imported as a current-pass release receipt."
+  ]
+}

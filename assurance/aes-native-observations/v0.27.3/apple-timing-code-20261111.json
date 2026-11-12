@@ -1,0 +1,178 @@
+{
+  "kind": "bounded-offline-kernel-review-and-timer-capture",
+  "scope": "Six exact ARM round and expansion bodies per binary; timer excerpts require manual review. Not whole-program qualification.",
+  "records": [
+    {
+      "compiler": "rustc 1.90.0 (1159e78c4 2025-09-14)\nbinary: rustc\ncommit-hash: 1159e78c4747b02ef996e55082b704c09b970588\ncommit-date: 2025-09-14\nhost: aarch64-apple-darwin\nrelease: 1.90.0\nLLVM version: 20.1.8\n",
+      "binary_sha256": "c8634c3b27f8a554c89c4315e64e5c47a1b4af3162c48cf0724ca9fae5979acb",
+      "review": {
+        "binary_sha256": "c8634c3b27f8a554c89c4315e64e5c47a1b4af3162c48cf0724ca9fae5979acb",
+        "bodies": [
+          {
+            "role": "expand",
+            "bits": 128,
+            "symbol": "__ZN17brynja_crypto_cpu3aes14aarch64_expand6expand17h5531c5310c0077f3E",
+            "address": "0x10000e91c",
+            "file_offset": 59676,
+            "size": 196,
+            "instructions": 49,
+            "sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+          },
+          {
+            "role": "expand",
+            "bits": 192,
+            "symbol": "__ZN17brynja_crypto_cpu3aes14aarch64_expand6expand17h2db2c1255371b57fE",
+            "address": "0x10000e9e0",
+            "file_offset": 59872,
+            "size": 196,
+            "instructions": 49,
+            "sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+          },
+          {
+            "role": "expand",
+            "bits": 256,
+            "symbol": "__ZN17brynja_crypto_cpu3aes14aarch64_expand6expand17h1ba7157e27226662E",
+            "address": "0x10000eaa4",
+            "file_offset": 60068,
+            "size": 196,
+            "instructions": 49,
+            "sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+          },
+          {
+            "role": "transform",
+            "bits": 128,
+            "symbol": "__ZN17brynja_crypto_cpu3aes7aarch649transform17hda59287d6f4df4c3E",
+            "address": "0x10000eb68",
+            "file_offset": 60264,
+            "size": 152,
+            "instructions": 38,
+            "sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+          },
+          {
+            "role": "transform",
+            "bits": 192,
+            "symbol": "__ZN17brynja_crypto_cpu3aes7aarch649transform17he5407107cdfff3c3E",
+            "address": "0x10000ec00",
+            "file_offset": 60416,
+            "size": 152,
+            "instructions": 38,
+            "sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+          },
+          {
+            "role": "transform",
+            "bits": 256,
+            "symbol": "__ZN17brynja_crypto_cpu3aes7aarch649transform17h53c57a5fbf7331ebE",
+            "address": "0x10000ec98",
+            "file_offset": 60568,
+            "size": 152,
+            "instructions": 38,
+            "sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+          }
+        ],
+        "scope": "Six complete Mach-O function extents match reviewed ARM encodings; callers, admission, cleanup and unwind remain unreviewed."
+      },
+      "timer_excerpts_for_manual_review": [
+        {
+          "symbol": "__ZN12fixed_random14isolated_timer17h1bfab83716077ceaE",
+          "address": "0x100001774",
+          "size": 1308,
+          "path": "target/aes-apple-measurements-20261111/msrv-aes256-public-timer-100001774.asm",
+          "sha256": "4a5c94d46ca5b931009573dbfa9f5bff4cdfc84f784571aa50a5ed3683a237dd"
+        },
+        {
+          "symbol": "__ZN12fixed_random14isolated_timer17h59333c29cad46a31E",
+          "address": "0x100003260",
+          "size": 368,
+          "path": "target/aes-apple-measurements-20261111/msrv-aes256-public-timer-100003260.asm",
+          "sha256": "9b98f359bb24ae8c6bcd4ac99f130a9ea74a282dc4cc0944c32c038b0ce5fc8b"
+        }
+      ]
+    },
+    {
+      "compiler": "rustc 1.99.1 (58cf8f9c3 2026-10-13)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: aarch64-apple-darwin\nrelease: 1.99.1\nLLVM version: 23.1.1\n",
+      "binary_sha256": "6436bd31c1c366cd9c64fb1eea7e806e0686e6a6e2e191fc4fae925c59ed942a",
+      "review": {
+        "binary_sha256": "6436bd31c1c366cd9c64fb1eea7e806e0686e6a6e2e191fc4fae925c59ed942a",
+        "bodies": [
+          {
+            "role": "transform",
+            "bits": 128,
+            "symbol": "__RINvNtNtCsc08719sx4hp_17brynja_crypto_cpu3aes7aarch649transformKjb_EB6_",
+            "address": "0x10000d9e8",
+            "file_offset": 55784,
+            "size": 152,
+            "instructions": 38,
+            "sha256": "cfa820a96b087f9681ec486d9240b5aa74d15545904f28fed5c04e74a98aa042"
+          },
+          {
+            "role": "transform",
+            "bits": 192,
+            "symbol": "__RINvNtNtCsc08719sx4hp_17brynja_crypto_cpu3aes7aarch649transformKjd_EB6_",
+            "address": "0x10000dae8",
+            "file_offset": 56040,
+            "size": 152,
+            "instructions": 38,
+            "sha256": "a3cf827d4c1141ba7c27c8039477ae9e1a831324a1ce5ff01a62d2b90944442d"
+          },
+          {
+            "role": "transform",
+            "bits": 256,
+            "symbol": "__RINvNtNtCsc08719sx4hp_17brynja_crypto_cpu3aes7aarch649transformKjf_EB6_",
+            "address": "0x10000dbe8",
+            "file_offset": 56296,
+            "size": 152,
+            "instructions": 38,
+            "sha256": "db3b40cdaab2c164d012d8748add9f5210606a5f4ffe0f0b8d06bb7d2b29a924"
+          },
+          {
+            "role": "expand",
+            "bits": 128,
+            "symbol": "__RINvNtNtCsc08719sx4hp_17brynja_crypto_cpu3aes14aarch64_expand6expandKj10_Kjb0_EB6_",
+            "address": "0x10000ddb8",
+            "file_offset": 56760,
+            "size": 196,
+            "instructions": 49,
+            "sha256": "31292b6fccd19d451dc8b96100f34c57c13ea64c51d4fc64106e23a65ffbdaa4"
+          },
+          {
+            "role": "expand",
+            "bits": 192,
+            "symbol": "__RINvNtNtCsc08719sx4hp_17brynja_crypto_cpu3aes14aarch64_expand6expandKj18_Kjd0_EB6_",
+            "address": "0x10000de7c",
+            "file_offset": 56956,
+            "size": 196,
+            "instructions": 49,
+            "sha256": "5d246e137cc4851c6b071781bd40a51f5b678cac23d6a52fd16c058332a39fea"
+          },
+          {
+            "role": "expand",
+            "bits": 256,
+            "symbol": "__RINvNtNtCsc08719sx4hp_17brynja_crypto_cpu3aes14aarch64_expand6expandKj20_Kjf0_EB6_",
+            "address": "0x10000df40",
+            "file_offset": 57152,
+            "size": 196,
+            "instructions": 49,
+            "sha256": "268f900ff22222d966a77c304e6d8b649e0778f42b7d92cb55cb4bbdba9f2d79"
+          }
+        ],
+        "scope": "Six complete Mach-O function extents match reviewed ARM encodings; callers, admission, cleanup and unwind remain unreviewed."
+      },
+      "timer_excerpts_for_manual_review": [
+        {
+          "symbol": "__RINvCs82Pb9oyjWU0_12fixed_random14isolated_timerKb0_NCINvNvB2_6aes2568selectedKBL_Es7_0EB2_",
+          "address": "0x1000039cc",
+          "size": 1092,
+          "path": "target/aes-apple-measurements-20261111/current-aes256-public-timer-1000039cc.asm",
+          "sha256": "5c73716077c7920490aa9510476dd123e6b20cd1b0e5ee1b65f4bbfc71c0b984"
+        },
+        {
+          "symbol": "__RINvCs82Pb9oyjWU0_12fixed_random14isolated_timerKb1_NCINvNvB2_6aes2568selectedKBL_Es7_0EB2_",
+          "address": "0x100005cd4",
+          "size": 356,
+          "path": "target/aes-apple-measurements-20261111/current-aes256-public-timer-100005cd4.asm",
+          "sha256": "0b16ed73e4b284ed7d6d461751717a839ee708d9f7cb287382822f7ffc599a0b"
+        }
+      ]
+    }
+  ]
+}

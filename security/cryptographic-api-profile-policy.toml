@@ -1,6 +1,6 @@
 [[reviewed-source]]
 path = "crates/brynja-crypto/src/aes.rs"
-sha256 = "7d81055ba30d3252424dad97dc46a0a0c00870b02cea440ec395df3d2c984492"
+sha256 = "26e10da146d06b542b7be82e37eb174a67d8e37c0065ee662f095fec5eb27b18"
 
 [[reviewed-source]]
 path = "crates/brynja-crypto/src/aes/portable.rs"
@@ -16,7 +16,7 @@ sha256 = "a53cba70bcd963a9eae7766f6ad92630bb2310946cae72ec4d65b7319499d029"
 
 [[reviewed-source]]
 path = "crates/brynja-crypto/src/aes/tests.rs"
-sha256 = "92852eeee3d886a0c55a75379e56e8087d9eada421826e379ae3192433ed5553"
+sha256 = "c6a840b9c8087acb702424fc65d75dbee894d5697a3de440bf13f18f273e6082"
 
 [[reviewed-source]]
 path = "crates/brynja-crypto/tests/aes128.rs"

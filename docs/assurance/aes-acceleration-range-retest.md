@@ -158,3 +158,14 @@ are an owner-authorized finalization delta, not a claim that the independent
 reviewers examined changes made after `2bb2177e`. No production Rust logic,
 dependency selection or timing evidence changes in that delta. Exact-candidate
 final checks and GitHub remain separate from scoped review and tag approval.
+
+The finite gate also found two stale API-profile source fingerprints, last
+recorded before acceleration. Inspection against that recorded source shows
+that `aes.rs` only adds the gated execution module and updates its scope docs;
+`aes/tests.rs` adds the gated execution test module and its test-only revocation
+checkpoint. The portable owners/arithmetic in those files are unchanged.
+The two fingerprints and generated profile register are reconciled to these
+already-retested sources, retaining the development-only AES disposition and
+all validation rules. This is not a new accelerated-owner qualification claim
+or a refresh of historical verification results. The existing profile mutation
+tests and owner-contract checks validate the reconciled metadata.

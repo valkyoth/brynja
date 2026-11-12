@@ -83,7 +83,8 @@ pub struct Authority {
 
 impl Authority {
     /// Runs startup KATs only after the private platform boundary admits the
-    /// complete bundle. Failed startup retains a quarantined accelerated owner.
+    /// complete bundle. Failed startup returns a kernel error, never an
+    /// accelerated selection or a portable fallback.
     pub fn new(kernel: Kernel, mode: Mode) -> Result<Self, Error> {
         Self::select(kernel, mode, || platform::construct(kernel))
     }
@@ -121,7 +122,13 @@ impl Authority {
             });
         }
         let (route, owner) = match construct() {
-            Ok(owner) => (Route::Accelerated, Some(owner)),
+            Ok(owner) => {
+                // Low-level construction retains failed owners for diagnostics.
+                // A successful hosted selection must also admit a live session.
+                // Failure here is operational: Prefer must not fall back.
+                owner.session().map_err(Error::Kernel)?;
+                (Route::Accelerated, Some(owner))
+            }
             Err(Error::Unavailable(reason)) if mode == Mode::Prefer => {
                 (Route::PortableFallback(reason), None)
             }
@@ -375,13 +382,14 @@ mod tests {
     }
 
     #[test]
-    fn selected_errors_never_fall_back() {
+    fn selected_errors_never_fall_back() -> Result<(), Error> {
         for mode in [Mode::Require, Mode::Prefer] {
             for error in [
                 KernelError::Quarantined,
                 KernelError::InternalDomain,
                 KernelError::StaleGeneration,
                 KernelError::NotReady,
+                KernelError::DitUnavailable,
             ] {
                 assert_eq!(
                     Authority::select(Kernel::ArmAes, mode, || Err(Error::Kernel(error))).err(),
@@ -394,7 +402,37 @@ mod tests {
                 }))
                 .is_err()
             );
+            for kernel in [Kernel::X86AesNi, Kernel::ArmAes] {
+                // Exercise the Ok(quarantined-owner) path, not only an injected
+                // Err. Baseline ARM uses real hosted admission; native static
+                // builds exercise this without widening hosted x86 admission.
+                let construct = || {
+                    if kernel.check_compiled_target().is_ok() {
+                        KernelAuthority::new(kernel).map_err(Error::Kernel)
+                    } else {
+                        platform::construct(kernel)
+                    }
+                };
+                let raw = match construct() {
+                    Ok(raw) => raw,
+                    Err(Error::Unavailable(_)) => continue,
+                    Err(error) => return Err(error),
+                };
+                assert_eq!(raw.report().health, Health::Healthy);
+                let selected = Authority::select(kernel, mode, || Ok(raw))?;
+                assert!(selected.kernel_authority()?.is_some());
+                for policy in [DitPolicy::IfAvailable, DitPolicy::Require] {
+                    let raw = construct()?;
+                    raw.quarantine();
+                    assert_eq!(raw.report().health, Health::Quarantined);
+                    assert_eq!(
+                        Authority::select(kernel, dit_mode(mode, policy)?, || Ok(raw)).err(),
+                        Some(Error::Kernel(KernelError::Quarantined))
+                    );
+                }
+            }
         }
+        Ok(())
     }
 
     #[test]

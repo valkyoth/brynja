@@ -6357,6 +6357,18 @@ Remaining measured-code review and explicit disposition of retained timing
 alarms/noise keep acceptance open. See
 [`aes-acceleration-development.md`](assurance/aes-acceleration-development.md).
 
+Latest disposition, 2026-11-12: the bounded DIT-path review and finite
+shared-address collection are complete; both host screens remain inconclusive.
+Candidate `fd651e90` contains the implementation, tests, observations and
+pentest follow-up. The owner explicitly accepted the documented timing
+limitation for moving v0.27.3 forward and deferred further timing experiments.
+This closes the pending owner-disposition item, not timing qualification:
+no historical verdict, threshold or verifier pass changes, and no whole-API
+constant-time or physical-security claim follows. The scoped retest, candidate
+metadata, existing final checks and GitHub/tag workflow remain. See the
+[owner disposition](assurance/aes-acceleration-acceptance.md#owner-disposition--2026-11-12)
+and [sensitivity limits](assurance/aes-dit-sensitivity-review.md).
+
 Plan scope: Add isolated AES-128, AES-192, and AES-256 encrypt and decrypt backends for exact x86_64 AES-NI or VAES bundles and exact AArch64 AES bundles, with AMD, observed-feature AWS Intel, Apple M2, and AWS Arm native evidence; retain identical KAT, quarantine, no_std static selection, opt-in std selection, side-channel, and destruction semantics. Extend the portable emitted-code, fixed-versus-random timing and AESAVS acceptance to every admitted backend and named native configuration.
 
 Goal: close the **Complete AES x86_64 And AArch64 Acceleration** review unit as a complete named capability

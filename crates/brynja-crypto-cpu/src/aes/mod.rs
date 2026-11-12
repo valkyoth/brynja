@@ -10,6 +10,11 @@
 //! Arm DIT scopes cover raw kernels, not the surrounding owner operations.
 //! The x86 path does not configure a comparable processor timing mode; AES-NI
 //! selection is not a whole-wrapper timing or physical-side-channel guarantee.
+//! In particular, it does not detect or configure Intel DOITM. Deployments
+//! relying on Intel's DOIT guarantees must establish the applicable CPU,
+//! microcode and OS-managed mode on every eligible logical processor.
+//! Arm DIT availability alone does not establish data-prefetcher mitigation
+//! (notably on Apple M1/M2), including for work outside the raw kernel scopes.
 //! Development scope: native/platform and emitted-code qualification is pending.
 
 use core::{cell::Cell, marker::PhantomData};
@@ -291,6 +296,12 @@ impl Authority {
 /// Borrowed non-cloneable permit. Raw state and schedules remain caller-owned.
 /// These synchronous calls do not allocate or invoke callbacks. A copied report
 /// cannot renew a permit; quarantine applies to all permits from this owner.
+///
+/// # Secret handling
+/// This is an opt-in low-level interface, not a clearing key owner. Forward
+/// schedules are key-equivalent material; caller buffers are not cleared on
+/// success, error, quarantine or drop. Prefer `brynja_crypto::aes::execution`
+/// unless the integration explicitly owns their complete clearing lifecycle.
 pub struct Session<'a> {
     owner: &'a Authority,
     generation: u64,
@@ -347,14 +358,12 @@ impl Session<'_> {
         schedule: &mut [u8; S],
     ) -> Result<(), Error> {
         self.check()?;
-        let mut guard = Operation {
+        let guard = Operation {
             session: self,
             completed: false,
         };
         dispatch_expansion(self.owner, key, schedule)?;
-        self.check()?;
-        guard.completed = true;
-        Ok(())
+        guard.complete()
     }
 
     fn transform<const S: usize, const N: usize>(
@@ -364,7 +373,7 @@ impl Session<'_> {
         inverse: bool,
     ) -> Result<(), Error> {
         self.check()?;
-        let mut guard = Operation {
+        let guard = Operation {
             session: self,
             completed: false,
         };
@@ -374,14 +383,22 @@ impl Session<'_> {
             .try_into()
             .map_err(|_| Error::InternalDomain)?;
         dispatch::<N>(self.owner, state, keys, inverse)?;
-        guard.completed = true;
-        Ok(())
+        guard.complete()
     }
 }
 
 struct Operation<'a, 'owner> {
     session: &'a Session<'owner>,
     completed: bool,
+}
+impl Operation<'_, '_> {
+    fn complete(mut self) -> Result<(), Error> {
+        // Expansion and transforms share the same post-execution invariant.
+        // A failed recheck leaves Drop responsible for terminal quarantine.
+        self.session.check()?;
+        self.completed = true;
+        Ok(())
+    }
 }
 impl Drop for Operation<'_, '_> {
     fn drop(&mut self) {

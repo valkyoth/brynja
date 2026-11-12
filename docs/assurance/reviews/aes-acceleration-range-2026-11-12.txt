@@ -1,0 +1,188 @@
+CODEX DAYBREAK:
+## Audit verdict
+
+I reviewed the complete v0.27.2..HEAD range (e09f7fac → fd651e90). I found one serious security gap under the requested military/physical-adversary threat model. I found no Critical memory-safety, concurrency, arithmetic, dependency, or AES correctness defect.
+
+### Finding 1 — No operational fault detection
+
+- Severity: High for military/physical-access deployments
+- Location: aes/mod.rs:376 (crates/brynja-crypto-cpu/src/aes/mod.rs:376), aes/mod.rs:408 (crates/brynja-crypto-cpu/src/aes/mod.rs:408), execution.rs:203 (crates/brynja-crypto/src/aes/execution.rs:203)
+- Vulnerability Type: Cryptographic fault injection / differential fault analysis
+- Status: Acknowledged by the repository, but still open.
+
+Description
+
+Startup known-answer tests validate the implementation only when an authority is constructed. Every later assembly invocation is assumed to have produced the correct result: after the AES instruction returns, dispatch returns Ok(()), and public encryption immediately releases the result.
+
+A voltage, clock, EM, laser, Rowhammer, DMA, or hardware fault affecting a round, key schedule, or stored expanded key can therefore produce attacker-visible faulty ciphertext without quarantining the authority. Repeated correct/faulty ciphertext pairs can support differential fault analysis and eventual AES-key recovery.
+
+The existing error guards only handle software Result failures and unwinding. They cannot observe a silently corrupted hardware result. Encrypt-then-decrypt with the same schedule is insufficient because a corrupted schedule or common-mode fault can make both operations agree.
+
+Remediation
+
+Do not approve this AES profile for hostile physical environments until it has independent redundancy, protected duplicate key material, constant-time comparison, withheld output, and terminal quarantine:
+
+#[non_exhaustive]
+pub enum Error {
+    SecretMemory,
+    Execution(brynja_crypto_cpu::aes::Error),
+    FaultDetected,
+}
+
+// `IndependentAes` must be sealed and must use independently protected key
+// material and an independently structured implementation.
+fn verified_public_encrypt(
+    &self,
+    input: &[u8; 16],
+    output: &mut [u8; 16],
+    verifier: &IndependentAes,
+) -> Result<(), Error> {
+    let mut primary = Scratch::<16>::new();
+    let mut redundant = Scratch::<16>::new();
+
+    primary.0.copy_from_slice(input);
+    self.with_schedule(|schedule| {
+        self.session.encrypt128(&mut primary.0, schedule)?;
+        Ok(())
+    })?;
+
+    verifier.encrypt(input, &mut redundant.0)?;
+
+    let mut difference = Scratch::<1>::new();
+    for (left, right) in primary.0.iter().zip(&redundant.0) {
+        brynja_core::accumulate_secret_byte_difference(
+            &mut difference.0[0],
+            left,
+            right,
+        );
+    }
+
+    if !brynja_core::secret_difference_is_zero(&difference.0[0]).expose_public() {
+        self.session.quarantine();
+        return Err(Error::FaultDetected);
+    }
+
+    // Output remains withheld until both implementations agree.
+    output.copy_from_slice(&primary.0);
+    Ok(())
+}
+
+The verifier must not reuse the same cached schedule or simply perform a round trip through the same hardware kernel. The fault model should also address skipped comparisons and common-mode faults.
+
+CLAUDE:
+I found no Critical or High issues. Range covered: v0.27.2..HEAD, which is one commit (fd651e90, the AES acceleration and optional Arm DIT work); your uncommitted changes are docs only. The AES asm kernels compute AES correctly and their memory access stays in bounds. The open findings are about side channels and fault attacks under a very strong attacker model, plus some API edge cases.
+
+What I checked and found correct
+
+- Encrypt/decrypt kernels (x86.rs, aarch64.rs): I traced the round loops for 11, 13 and 15 round keys. x86 uses AESENC×(N−2) then AESENCLAST. Decrypt follows the equivalent inverse cipher (AESIMC on the middle keys, AESDECLAST with key 0). Arm's AESE/AESD key-first ordering, including the last-round XOR, is correct.
+- Key expansion (x86_expand.rs, aarch64_expand.rs):
+  - The word rotation and SubWord (one byte lookup per byte of the word) tricks are correct in little-endian. On x86 it is AESKEYGENASSIST on a word copied into all four lanes, then ROR 8. On Arm it is AESE with a zero key, where copying the word into every column makes ShiftRows do nothing.
+  - The round constant runs 0x01…0x80, 0x1b, 0x36 on both architectures, and AES-256 applies SubWord-only at word 4.
+- Register constraints: the explicit out registers can't alias the in(reg) pointers, all accesses are typed fixed-size arrays, no stack is used, and scratch registers are cleared before return.
+- Built-in self-test values: the startup checks use the FIPS-197 Appendix C ciphertexts and schedules for all three key sizes, and they match the standard.
+- Arm DIT: the register (S3_3_C4_C2_5, bit 24) is correct. The previous state is restored on drop, on error and during unwinding, and a failed readback fails closed.
+- Ownership and threading: Authority, Session and the key owners are !Send/!Sync. A dropped operation guard quarantines the authority, and storage is cleared on every error path I traced.
+- Panics and dependencies: there is no unwrap, expect or panic! in production paths, and no new third-party dependencies.
+- Tests: I ran them with +aes,+sse2 on this x86 machine and all 69 passed (33 + 13 + 23), including the NIST known-answer files run through both key-owner types. I did not run anything on Arm.
+
+Findings
+
+M-1 · Medium · Apple data prefetcher (GoFetch) not covered; DIT only wraps the raw kernels
+
+- Location: crates/brynja-crypto-cpu/src/aes/mod.rs:414,446; crates/brynja-crypto/src/aes/execution.rs:88-90, 178-191, 203-208
+- Type: microarchitectural side channel
+- Description: DIT is switched on only inside the asm. Several secret loads happen outside it:
+  - copying the schedule from Scratch into storage;
+  - state.0.copy_from_slice(input);
+  - destination.write(&state.0);
+  - re-expanding the key on every call for the non-cached Key owners.
+
+  Apple's data memory-dependent prefetcher (the GoFetch attack) can leak key material that looks like a pointer whenever it is loaded with DIT off. On M3 and later, DIT disables the prefetcher, but only while it is set. On M1/M2, DIT does not disable it at all. No document in the repo mentions this prefetcher or DOITM.
+- Remediation: keep DIT on for the whole owner operation, and document the M1/M2 limit.
+// brynja-crypto-cpu/src/aes/mod.rs
+impl Session<'_> {
+    /// Runs `f` with this owner's DIT policy held for the entire closure.
+    pub fn with_timing_scope<T, E: From<Error>>(
+        &self, f: impl FnOnce(&Self) -> Result<T, E>,
+    ) -> Result<T, E> {
+        self.check()?;
+        #[cfg(all(target_arch = "aarch64", target_endian = "little"))]
+        #[allow(unsafe_code)]
+        let _dit = unsafe { dit::enter(self.owner.dit) }?;
+        f(self)
+    }
+}
+// execution.rs::with_schedule / new: wrap the whole body
+self.session.with_timing_scope(|s| { /* expose, copy, kernel, write */ })
+  The nested kernel-level scope restores to "on", so it composes safely; your existing nested-scope test already covers that.
+
+M-2 · Medium · x86: AES-NI timing is not guaranteed without Intel's DOITM
+
+- Location: crates/brynja-crypto-cpu/src/aes/mod.rs:11-12; x86.rs; x86_expand.rs
+- Type: timing side channel and deployment gap
+- Description: On Intel CPUs that report DOITM (Ice Lake and later), Intel promises data-independent timing for these instructions (AESENC, PXOR, MOVDQU and the rest) only while IA32_UARCH_MISC_CTL[DOITM] is set. Linux does not set it by default. The module doc says the x86 path has no timing mode, but deployment guidance never names DOITM. That makes "static AES-NI" read stronger than it is.
+- Remediation: make DOITM a named deployment requirement for static x86 builds, so a qualified deployment has to prove the kernel enabled it. Examples are an MSR-tools check at provisioning or a kernel patch or boot parameter. Add it to the # Safety and deployment docs:
+/// On Intel CPUs enumerating DOITM (ARCH_CAPABILITIES bit 12), the platform
+/// must set IA32_UARCH_MISC_CTL.DOITM for every CPU eligible to run this
+/// thread; otherwise no data-independent-timing claim applies to AES-NI.
+
+M-3 · Medium (for your military threat model) · No fault-injection check on block outputs
+
+- Location: crates/brynja-crypto/src/aes/execution.rs:172-210
+- Type: fault attack (DFA) / key recovery
+- Description: Faults can be induced from software, for example Plundervolt-style undervolting against AES-NI or Rowhammer against a cached schedule. Differential fault analysis can recover an AES key from one or a few faulty ciphertexts. The startup self-tests catch a broken implementation but not a fault during an operation, and a cached schedule sits in memory for its whole lifetime. The docs say physical-fault resistance is out of scope, but there is no opt-in check either.
+- Remediation: add an opt-in check that inverts every block and compares the result before releasing it.
+// inside with_schedule closure, after the forward op:
+let mut check = Scratch::<16>::new();
+check.0.copy_from_slice(&state.0);
+if inverse { self.session.$encrypt(&mut check.0, schedule)?; }
+else       { self.session.$decrypt(&mut check.0, schedule)?; }
+// constant-time compare; any mismatch => quarantine, clear, no output
+let diff = check.0.iter().zip(input).fold(0u8, |a, (x, y)| a | (x ^ y));
+if core::hint::black_box(diff) != 0 {
+    self.session.quarantine();
+    return Err(Error::Execution(brynja_crypto_cpu::aes::Error::InternalDomain));
+}
+  For cached schedules, also consider storing a checksum (e.g. a MAC over the schedule) and checking it before each use.
+
+L-1 · Low · Hosted constructor returns Ok for an authority that is already unusable
+
+- Location: crates/brynja-crypto-cpu-std/src/aes.rs:123-129, 251
+- Type: fail-open API semantics; still fails closed in the end
+- Description: If the startup self-test fails, or DitPolicy::Require hits a DIT enable/readback failure, from_platform_with_dit returns Ok(owner) with the owner already quarantined. Authority::new(.., Mode::Require) then returns Ok with Route::Accelerated. A caller that checks only is_ok() or route believes it has a working accelerated path, possibly with required DIT, and only fails later. A DIT failure is reported as Quarantined rather tha
+- Remediation:
+let (route, owner) = match construct() {
+    Ok(owner) if owner.report().health != Health::Healthy =>
+        return Err(Error::Kernel(KernelError::Quarantined)),
+    Ok(owner) => (Route::Accelerated, Some(owner)),
+    ...
+  If keeping the failed owner observable is a requirement, return it inside the error instead.
+
+L-2 · Low · Raw low-level API hands out key schedules without clearing them
+
+- Location: crates/brynja-crypto-cpu/src/aes/mod.rs:296-322 (the operations! macows from crates/brynja-crypto-cpu/src/lib.rs and the aes-static-execution feature
+- Type: secrets left in memory (API footgun)
+- Description: Session::expand*, encrypt* and decrypt* are public. Any crate than on brynja-crypto-cpu can write schedules into ordinary [u8; N] buffers that are never cleared, and can decrypt raw blocks. The docs say so, but the rest of the crate family makes you opt in explicitly to hazmat APIs.
+- Remediation: put the raw Session operations behind a separate hazmat-raw-aes fbles internally, or mark them #[doc(hidden)] with a hazmat_ prefix. KeepAuthority, Report and check public.
+
+I-1 · Info · Session::transform skips the re-check that expand does
+
+- Location: crates/brynja-crypto-cpu/src/aes/mod.rs:360-379 vs 344-358
+- Description: expand calls self.check() again after the kernel; transform does  today. It is an invariant asymmetry that a future concurrent revocation pathcould trip over. Add the same self.check()?; before guard.completed = true.
+
+I-2 · Info · Missing pieces vs. a full implementation
+
+- Single-block API only. There is no multi-block pipelined path (AES-NI and Arm AES are 4–8× faster interleaved) and no VAES. That's fine for a block primitive, but the modes built on it
+  will be serial.
+- Decrypt re-runs AESIMC on every middle round key for every block, rather than caching an inverse schedule. This costs performance only, not security.
+- On x86, the hosted adapter always reports MissingMigrationGuarantee, so hostedo portable AES. The only x86 acceleration route is the static build, and that is
+  also where M-2 applies.
+- Any storage-layer error inside an owner operation quarantines the authority shs:83-96, 132-149). With fixed-size arrays that looks unreachable today, but itties the availability of every key to one error path.
+
+Priority
+
+1. M-1: keeping DIT on for the whole owner operation is a small change and also closes the copies left outside the kernels.
+2. M-2: document DOITM as a deployment requirement.
+3. M-3: offer an opt-in check that inverts each block before release, for the high-assurance profile.
+4. L-1: return an error from the hosted constructor when startup fails.
+5. L-2: gate the raw low-level API behind its own hazmat feature.

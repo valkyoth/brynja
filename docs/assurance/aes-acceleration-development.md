@@ -1685,17 +1685,18 @@ The [acceptance inventory](aes-acceleration-acceptance.md) replaces the older
 blanket caller/lifecycle/native TODOs with the completed scoped evidence and
 its actual limits. It does not turn historical results into current passes.
 
-1. Obtain an explicit disposition of the completed but inconclusive timing
-   screen. The bounded measured-path review is recorded, not a whole-program
-   claim. Later successful controls cannot clear earlier signals. Any required
-   scope/risk decision belongs to the owner, not a silently relaxed threshold;
-   stronger claims need a separately designed prospective study, not retries.
+1. Preserve the [2026-11-12 owner disposition](aes-acceleration-acceptance.md#owner-disposition--2026-11-12):
+   timing qualification remains inconclusive, but its documented limitation is
+   accepted for progressing v0.27.3. Additional timing work is deferred; no
+   threshold, sample or historical verdict changes. Stronger claims need a
+   separately designed prospective study, not retries.
 2. Preserve the reviewed hosted OS/hypervisor contract, portable defaults,
    clearing/error/unwind semantics and stated target limits. Generic hosted x86,
    ARM sanitizer qualification and unsupported bare-metal x86 are not added by
    the current observations; physical protection is not claimed.
-3. Prepare candidate versions/metadata, owner-requested pentest, finite final
-   checks and GitHub handoff only after the named capability is complete.
+3. Candidate `fd651e90` is committed. Complete the scoped retest, candidate
+   versions/metadata, existing finite final checks and GitHub handoff, retaining
+   the accepted timing limitation rather than claiming complete qualification.
 
 Single-block AES-NI is distinct from later multi-block SIMD work; this slice
 does not claim VAES batching. No HSM requirement, military-profile restriction,

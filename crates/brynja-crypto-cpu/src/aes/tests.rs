@@ -151,6 +151,28 @@ fn revocation_is_shared_permanent_and_idempotent() {
 
 #[test]
 fn incomplete_operation_and_unwind_revoke_owner() {
+    for (health, generation, expected) in [
+        (Health::Testing, 2, Error::NotReady),
+        (Health::Quarantined, 3, Error::Quarantined),
+        (Health::Healthy, 3, Error::StaleGeneration),
+    ] {
+        let owner = model(Health::Healthy, 2);
+        let session = Session {
+            owner: &owner,
+            generation: 2,
+        };
+        let operation = Operation {
+            session: &session,
+            completed: false,
+        };
+        // Simulate a lifecycle change after entry but before successful return.
+        // This calls the production completion path shared by both operations.
+        owner.health.set(health);
+        owner.generation.set(generation);
+        assert_eq!(operation.complete(), Err(expected));
+        assert_eq!(owner.report().health, Health::Quarantined);
+        rejected(&session, Error::Quarantined);
+    }
     let owner = model(Health::Healthy, 2);
     let session = Session {
         owner: &owner,

@@ -5,6 +5,33 @@ work is not an instruction to repeat whole campaigns. Historical observations
 retain their source identities; this index does not import them as current
 `brynja-verify` passes or approve the release.
 
+## Owner disposition — 2026-11-12
+
+After committing candidate `fd651e9067ff88032eb549833dba0303d56a6305` and
+discussing the inconclusive timing evidence and its sensitivity limits, the
+owner stated: “I think we can leave it for now very good documented for the
+sake of moving the project forward, we can always revisit this later on.”
+
+This accepts the documented timing-qualification limitation for progressing
+v0.27.3 through the normal release workflow. Additional timing experiments are
+deferred, not required merely to obtain a clean screen. It is **not a timing
+pass**, proof of constant time, physical-security qualification or approval of
+an arbitrary high-assurance deployment. Both finite screens remain inconclusive;
+all alarms, noise, sensitivity limits and original source/binary identities
+remain intact. No verifier result, frozen threshold or declaration changes.
+
+The scoped pentest retest, candidate metadata, existing final checks, GitHub/
+CodeQL checks and explicit tag authorization remain separate. This decision
+does not waive a newly demonstrated defect or authorize tagging/publication.
+Future stronger timing claims require a separately designed prospective study
+with declared sensitivity and noise treatment, not retries of the current
+experiment. No follow-up release version is promised by this deferral.
+
+The subsequent [range retest dispositions](aes-acceleration-range-retest.md)
+record two bounded lifecycle/API hardenings and accepted repeat limitations.
+[Platform guidance](aes-platform-side-channels.md) names Apple DMP and Intel
+DOITM explicitly; optional raw-kernel DIT does not claim whole-owner protection.
+
 | Area | Recorded coverage | Remaining boundary |
 | --- | --- | --- |
 | Portable compatibility | [Unchanged archive consumer replay](aes-acceleration-development.md#unchanged-portable-package-replay), both compiler endpoints, direct/facade, debug/release | No new portable implementation in this milestone. |
@@ -15,9 +42,9 @@ retain their source identities; this index does not import them as current
 | no_std and feature isolation | [48 builds and 212 paired probes](aes-accelerated-no-std.md), direct/facade, both endpoints | Bare-metal x86 compiler failure is retained; it is not an admitted target. |
 | Sanitizer lifecycle | [Native x86 ASan/LSan](aes-accelerated-sanitizers.md), positive lifecycle cases and deliberately failing controls | Not ARM sanitizer qualification or a claim to instrument installed std. |
 | Performance | Native AMD, AWS ARM, Intel and [Apple diagnostics](aes-apple-measurement-results.md) retained | Speed has no acceptance threshold; Apple placement is explicitly unpinned. |
-| Fixed/random timing | Original results preserved; [64-launch DIT/shared-address screen](aes-dit-finite-results.md) collected and strictly analyzed | Zero shared-input alarms, but 37 shared-control noise flags: inconclusive, not a pass. Owner disposition or a separately designed experiment remains necessary. |
+| Fixed/random timing | Original results preserved; [64-launch DIT/shared-address screen](aes-dit-finite-results.md) collected and strictly analyzed | Zero shared-input alarms, but 37 shared-control noise flags: inconclusive, not a pass. Owner accepted this documented limitation for v0.27.3; stronger qualification deferred. |
 | Optional DIT | [Explicit optional/required API, native restoration tests and bounded changed-path review](aes-dit.md) on both ARM hosts/compilers | Selected caller review is not whole-program qualification. New timing screen is inconclusive; no physical-security claim. |
-| Release handoff | Existing finite gate and owner/GitHub workflow unchanged | Candidate metadata, bounded final checks and handoff wait for the named capability's acceptance disposition. |
+| Release handoff | Candidate committed; timing-limitation disposition recorded above; existing finite gate and owner/GitHub workflow unchanged | Scoped retest, candidate metadata, bounded final checks, GitHub and tag authorization remain. |
 
 ## Hosted platform boundary: contract, not a pending physical experiment
 
@@ -46,6 +73,9 @@ behavior. Additional operating systems, hostile/defective kernels and arbitrary
 hypervisor configurations are not admitted by these records.
 
 ## Timing investigation chronology
+
+Historical pending-disposition statements below describe their checkpoints;
+the owner decision above supersedes that pending item without changing results.
 
 The paragraphs below record the investigation before the independent identical-
 input review. The [2026-11-12 exact-binary follow-up](aes-fourth-alarm-results.md)

@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.27.3 accelerated AES candidate (unreleased)
+
+- Add opt-in AES-128/192/256 accelerated block operations, ephemeral and cached
+  clearing owners, explicit static execution and supported hosted AArch64
+  admission. Raw block APIs remain opt-in; modes and authentication are separate.
+- Add optional scoped ARM DIT policies, restoring caller state and allowing
+  callers to require DIT explicitly without excluding older CPUs by default.
+- Add native/compiled functional, corruption, API and emitted-code coverage.
+  Retain the original timing alarms and exploratory controls; timing acceptance
+  remains inconclusive and is deferred by the owner, not promoted to a pass.
+- Reject quarantined hosted startup owners and recheck authority state after
+  block operations. Focused retests confirm both fixes. Document raw schedule
+  cleanup obligations, DMP/DOITM boundaries and unresolved physical-fault risks.
+- Prepare internal facade 0.27.3, matching consumer pins and the existing finite
+  final checklist. No supporting-crate publication, mandatory HSM, military
+  profile, new timing campaign or release tag is selected by this finalization.
+
 ## 0.27.2 acceptance candidate (unreleased)
 
 - Add archive-only portable AES-128/192/256 consumers, paired API/feature

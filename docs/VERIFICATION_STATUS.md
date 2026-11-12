@@ -1,5 +1,24 @@
 # Component Verification Status
 
+## Accelerated AES-family candidate (v0.27.3)
+
+Opt-in accelerated AES-128/192/256, clearing owners, supported hosted admission
+and optional scoped DIT are implemented. The
+[acceptance record](assurance/aes-acceleration-acceptance.md) retains exact
+functional/compiler/native observation boundaries and the owner's decision to
+defer inconclusive timing acceptance. No original alarm is discarded or changed
+into a current pass. DIT is not whole-owner DMP mitigation, and the crate does
+not configure privileged Intel DOITM state or claim physical-fault resistance.
+
+The owner-supplied [focused retests](assurance/aes-acceleration-range-retest.md#owner-supplied-focused-retests-and-finalization)
+confirm the lifecycle fixes with no new serious coding flaw. Physical/fault and
+high-assurance platform restrictions remain explicitly unresolved. Candidate
+versions, consumer pins and metadata are prepared for the existing finite final
+gate and exact-commit GitHub checks; tag authorization remains separate.
+
+The sections below are historical milestone snapshots, not live candidate
+approval or a claim that their pending activities remain release blockers.
+
 ## Portable AES-family acceptance (v0.27.2 candidate, in progress)
 
 The [acceptance record](assurance/aes-portable-acceptance.md) now covers

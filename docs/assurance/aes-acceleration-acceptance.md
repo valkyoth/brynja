@@ -44,7 +44,7 @@ DOITM explicitly; optional raw-kernel DIT does not claim whole-owner protection.
 | Performance | Native AMD, AWS ARM, Intel and [Apple diagnostics](aes-apple-measurement-results.md) retained | Speed has no acceptance threshold; Apple placement is explicitly unpinned. |
 | Fixed/random timing | Original results preserved; [64-launch DIT/shared-address screen](aes-dit-finite-results.md) collected and strictly analyzed | Zero shared-input alarms, but 37 shared-control noise flags: inconclusive, not a pass. Owner accepted this documented limitation for v0.27.3; stronger qualification deferred. |
 | Optional DIT | [Explicit optional/required API, native restoration tests and bounded changed-path review](aes-dit.md) on both ARM hosts/compilers | Selected caller review is not whole-program qualification. New timing screen is inconclusive; no physical-security claim. |
-| Release handoff | Candidate committed; timing-limitation disposition recorded above; existing finite gate and owner/GitHub workflow unchanged | Scoped retest, candidate metadata, bounded final checks, GitHub and tag authorization remain. |
+| Release handoff | Lifecycle follow-up through `2bb2177e` received two owner-supplied focused retests; [dispositions and metadata-only finalization](aes-acceleration-range-retest.md#owner-supplied-focused-retests-and-finalization) recorded | Existing bounded final checks, exact-commit GitHub and separate tag authorization remain; no deployment qualification inferred. |
 
 ## Hosted platform boundary: contract, not a pending physical experiment
 

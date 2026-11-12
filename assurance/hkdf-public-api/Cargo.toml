@@ -8,4 +8,4 @@ rust-version = "1.90"
 publish = false
 
 [dependencies]
-brynja = { path = "../../crates/brynja", version = "=0.27.2", default-features = false }
+brynja = { path = "../../crates/brynja", version = "=0.27.3", default-features = false }

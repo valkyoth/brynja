@@ -1694,9 +1694,12 @@ its actual limits. It does not turn historical results into current passes.
    clearing/error/unwind semantics and stated target limits. Generic hosted x86,
    ARM sanitizer qualification and unsupported bare-metal x86 are not added by
    the current observations; physical protection is not claimed.
-3. Candidate `fd651e90` is committed. Complete the scoped retest, candidate
-   versions/metadata, existing finite final checks and GitHub handoff, retaining
-   the accepted timing limitation rather than claiming complete qualification.
+3. Candidate `fd651e90` and lifecycle follow-up through `2bb2177e` received
+   [owner-supplied focused retests](aes-acceleration-range-retest.md#owner-supplied-focused-retests-and-finalization).
+   The internal v0.27.3 metadata is prepared. Complete the existing finite
+   final checks and exact-commit GitHub handoff, retaining the accepted timing
+   limitation rather than claiming complete qualification. Tag authorization
+   remains separate.
 
 Single-block AES-NI is distinct from later multi-block SIMD work; this slice
 does not claim VAES batching. No HSM requirement, military-profile restriction,

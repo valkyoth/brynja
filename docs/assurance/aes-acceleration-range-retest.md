@@ -54,7 +54,9 @@ quarantine still invalidates previously returned selections.
 
 The existing selection regression now supplies **Ok(quarantined owner)**,
 not merely an injected constructor Err, and asserts rejection under both
-selection modes and effective DIT policy modes. It also checks healthy-owner
+selection modes after `dit_mode()` mapping. These raw owners are constructed
+with `IfAvailable` and then quarantined; this is not an end-to-end injection
+of a `Require` startup DIT readback failure. It also checks healthy-owner
 acceptance. The constructed-owner branches run with native static AES flags
 or real hosted ARM admission; baseline x86 still reports unavailability.
 Explicit `DitUnavailable` errors are also checked for no fallback.
@@ -125,3 +127,34 @@ to a current pass. The existing scoped final-check, GitHub and explicit
 tag-authorization workflow is unchanged. This follow-up changes lifecycle/API
 code and should receive a bounded delta retest, not a repeat of the accepted
 physical/timing findings or of unrelated hours-long hash campaigns.
+
+## Owner-supplied focused retests and finalization
+
+On 2026-11-12 the owner supplied two focused retests covering the follow-up
+commits `fa1f56f5` and `2bb2177e`. Both confirm the hosted startup rejection and
+post-operation authority checks and report no new serious coding flaw. The
+first explicitly accepts the documented/deferred dispositions. The second
+retains a High physical-fault risk under a military/physical threat model and
+a Medium platform-side-channel qualification restriction for high-assurance
+multi-tenant deployment. These are not newly fixed or reclassified findings:
+the crate still does not claim those deployment guarantees. The owner asked
+to proceed with final checks, commit and GitHub handoff on that basis.
+
+The first retest reports native x86 AES tests and baseline hosted tests, with
+no ARM hardware available. The second reports x86 tests, 2,078 NIST cases,
+624 startup schedule-corruption cases, ARM Linux/macOS compile checks,
+995 registry tests, 42 scoped-release tests, formatting, diff checks and a
+cached advisory scan. These are reviewer-reported results, not new native ARM
+observations collected during this finalization.
+
+The small coverage-description overstatement above is corrected. A separate
+strict Clippy invocation on the CPU crate exposes older hash style lints;
+the unchanged finite gate's crypto-lint check targets the composition and
+legacy HKDF crates with `--no-deps`, not that CPU feature configuration. No
+lint suppression or gate change is introduced by this finalization.
+
+The v0.27.3 candidate metadata, consumer pins, generated SBOM and this record
+are an owner-authorized finalization delta, not a claim that the independent
+reviewers examined changes made after `2bb2177e`. No production Rust logic,
+dependency selection or timing evidence changes in that delta. Exact-candidate
+final checks and GitHub remain separate from scoped review and tag approval.

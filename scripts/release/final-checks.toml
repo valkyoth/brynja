@@ -58,7 +58,9 @@ timeout_seconds = 300
 [[checks]]
 id = "registry-tests"
 command = ["python3","scripts/release/test-verification-registry.py"]
-timeout_seconds = 60
+# The expanded registry/tooling suite takes over 60s even on a warm local run.
+# Retain a finite limit with headroom for shared CI runners; no checks are skipped.
+timeout_seconds = 300
 
 [[checks]]
 id = "release-regressions"

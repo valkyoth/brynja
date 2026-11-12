@@ -67,6 +67,10 @@ class ScopedRelease(unittest.TestCase):
              'brynja-legacy-hkdf', '--no-default-features', '--features', 'brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider'])
         self.assertEqual(commands['aes-provider-api'],
                          ['python3', 'scripts/aes/check-aes-provider-api.py', '1.99.1'])
+        registry = next(check for check in plan['checks'] if check['id'] == 'registry-tests')
+        self.assertEqual(registry['command'],
+                         ['python3', 'scripts/release/test-verification-registry.py'])
+        self.assertEqual(registry['timeout_seconds'], 300)
         self.assertEqual(commands['facade-integration'],
             ['cargo', 'check', '--locked', '-p', 'brynja', '--no-default-features'])
         self.assertEqual(set(plan['ci_checks']), set(commands) -

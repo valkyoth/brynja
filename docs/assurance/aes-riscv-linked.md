@@ -29,6 +29,15 @@ its SHA-256, compiler/QEMU identity, commands, flags, metadata, execution log,
 symbols, disassembly and JSON analysis. Inspection-tool and binary hashes are
 rechecked after analysis. These are local observations, not signed receipts.
 
+The JSON `secret` section names the reviewed secret-output **code paths**, not
+captured secret values. It contains public symbol names, code addresses, sizes,
+call targets, body hashes and import bindings; it does not capture runtime keys,
+expanded schedules or plaintext. CodeQL alert #14 mistook the former local
+variable name `secrets` for sensitive data. The runner now calls this result
+`output_boundary_review`, and a regression checks its static-metadata schema
+and body hashes on both compiler endpoints and panic profiles. The report
+format and security scanning rules are unchanged.
+
 ## What the checker establishes
 
 `aes_riscv_machine.py` reads six complete leaf bodies directly from uniquely

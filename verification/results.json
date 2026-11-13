@@ -21817,6 +21817,28 @@
         "after": "c4e6f82fa40b30dbd27c481e391aa724c8ae4555cf406122cd6ecc530f16d53e",
         "log": "verification/.runner/logs/2-1794567395583135723.log",
         "log_sha256": "0a014e29c1c5a4f35e3c135f5178daa70a2fcfe2c516bb6878f6754dc1d670a6"
+      },
+      {
+        "id": "2-1794570038952338127",
+        "source": "working tree based on 41f1c30d060c5f33fb6f85e5472203c585d08876; scoped fingerprint b9ff9521d1374e870d9ecf2e601a17ee4cc1f6599a46e108507701f977ad6245",
+        "started": "2026-11-13T11:40:38.952336424Z",
+        "ended": "2026-11-13T11:40:50.467804525Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-riscv-linked.py",
+          "--toolchain",
+          "1.99.1"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "d7a4f66396e92f6df0504cfa42e17a10a3e3d2e0a91bc8d411e8367e673bd1cc",
+        "after": "d7a4f66396e92f6df0504cfa42e17a10a3e3d2e0a91bc8d411e8367e673bd1cc",
+        "log": "verification/.runner/logs/2-1794570038952338127.log",
+        "log_sha256": "97298f0fee17233138337492c212ee32e69c2d8e9c3e9481fbe572c23a9ef8b8"
       }
     ],
     "aes/riscv-linked-msrv": [
@@ -22061,6 +22083,28 @@
         "after": "1d30d7f7da3168aa5a7cd2e60110ae698b26d0f078f642f12b79b769dd1a8fef",
         "log": "verification/.runner/logs/2-1794567382104757593.log",
         "log_sha256": "ca778b03681e680dad7ab6740b851fcd4a4e024eb333b525bf295ddbff84445b"
+      },
+      {
+        "id": "2-1794570025215014278",
+        "source": "working tree based on 41f1c30d060c5f33fb6f85e5472203c585d08876; scoped fingerprint 9d9b042d8e342cfdfaa6d73f784ca3511ffe8ba795f18b8392bab7ff6e03455b",
+        "started": "2026-11-13T11:40:25.215012945Z",
+        "ended": "2026-11-13T11:40:37.909395645Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-riscv-linked.py",
+          "--toolchain",
+          "1.90.0"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "60204fd1fece4d57f7d1d94d851ab451f6f7d97371f11abfcde52fe86f9b44d5",
+        "after": "60204fd1fece4d57f7d1d94d851ab451f6f7d97371f11abfcde52fe86f9b44d5",
+        "log": "verification/.runner/logs/2-1794570025215014278.log",
+        "log_sha256": "6214154482a766da4f24f22f40192a94d3d557e1f76ee08fdecf866cc305c09e"
       }
     ],
     "aes/riscv-no-std-current-direct": [
@@ -36120,22 +36164,22 @@
       "last_success": "2026-11-13T08:39:27.222532065Z"
     },
     "aes/riscv-linked-current": {
-      "checked_at": "2026-11-13T10:56:47.153585976Z",
-      "fingerprint": "7bd5c0ab2aab4c987b45511898029206395378cdf1c7e733c08fdce79ee902ef",
+      "checked_at": "2026-11-13T11:40:50.910111751Z",
+      "fingerprint": "b9ff9521d1374e870d9ecf2e601a17ee4cc1f6599a46e108507701f977ad6245",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on c07c5358bc4ceddc595def5f28ead8b1767c3ab2; scoped fingerprint 7bd5c0ab2aab4c987b45511898029206395378cdf1c7e733c08fdce79ee902ef",
-      "performed_at": "2026-11-13T10:56:46.768352329Z",
-      "last_success": "2026-11-13T10:56:46.768352329Z"
+      "source": "working tree based on 41f1c30d060c5f33fb6f85e5472203c585d08876; scoped fingerprint b9ff9521d1374e870d9ecf2e601a17ee4cc1f6599a46e108507701f977ad6245",
+      "performed_at": "2026-11-13T11:40:50.467804525Z",
+      "last_success": "2026-11-13T11:40:50.467804525Z"
     },
     "aes/riscv-linked-msrv": {
-      "checked_at": "2026-11-13T10:56:34.986440658Z",
-      "fingerprint": "f19d13f7321c61001f0de5b37b1f27d4b5a5fa0faec618dbb7c92495bf32723b",
+      "checked_at": "2026-11-13T11:40:38.323992336Z",
+      "fingerprint": "9d9b042d8e342cfdfaa6d73f784ca3511ffe8ba795f18b8392bab7ff6e03455b",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on c07c5358bc4ceddc595def5f28ead8b1767c3ab2; scoped fingerprint f19d13f7321c61001f0de5b37b1f27d4b5a5fa0faec618dbb7c92495bf32723b",
-      "performed_at": "2026-11-13T10:56:34.600637288Z",
-      "last_success": "2026-11-13T10:56:34.600637288Z"
+      "source": "working tree based on 41f1c30d060c5f33fb6f85e5472203c585d08876; scoped fingerprint 9d9b042d8e342cfdfaa6d73f784ca3511ffe8ba795f18b8392bab7ff6e03455b",
+      "performed_at": "2026-11-13T11:40:37.909395645Z",
+      "last_success": "2026-11-13T11:40:37.909395645Z"
     },
     "aes/riscv-no-std-current-direct": {
       "checked_at": "2026-11-13T10:57:13.744363709Z",

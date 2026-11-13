@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Actual-byte negative controls for the bounded RV64 leaf review."""
 import importlib.util
+import hashlib
 import json
 from pathlib import Path
 import struct
@@ -216,6 +217,37 @@ def startup_fixture(compiler, panic):
 
 
 class RiscVLinkedTests(unittest.TestCase):
+    def test_output_boundary_report_contains_only_static_code_metadata(self):
+        for compiler in ('1.90.0', '1.99.1'):
+            for panic in ('abort', 'unwind'):
+                nm, image = secret_fixture(compiler, panic)
+                report = runner.secret.inspect(nm, image, compiler, panic)
+                self.assertEqual(set(report), {'secret', 'imports', 'scope'})
+                self.assertEqual(json.loads(json.dumps(report)), report)
+                self.assertIsInstance(report['scope'], str)
+                rows = runner.secret.select(nm)
+                for row in report['secret']:
+                    self.assertEqual(set(row), {'kind', 'bits', 'symbol', 'address',
+                                                'size', 'targets', 'body_sha256'})
+                    symbol, address, size = rows[row['kind'], row['bits']]
+                    self.assertEqual((row['symbol'], row['address'], row['size']),
+                                     (symbol, address, size))
+                    pos = m.mapped(image, address, size)
+                    self.assertEqual(row['body_sha256'],
+                                     hashlib.sha256(image[pos:pos + size]).hexdigest())
+                    policy = runner.secret.policy(compiler, panic, row['kind'], row['bits'])
+                    self.assertEqual(set(row['targets']), {c['role'] for c in policy['calls']})
+                    for address in row['targets'].values():
+                        self.assertIsInstance(address, int)
+                        m.mapped(image, address, 1)
+                for name, row in report['imports'].items():
+                    self.assertEqual(set(row), {'name', 'address', 'slot', 'size', 'scope'})
+                    self.assertIsInstance(row['scope'], str)
+                    self.assertEqual(row['name'], name)
+                    self.assertEqual(row['size'], 16)
+                    self.assertIsInstance(row['address'], int)
+                    self.assertIsInstance(row['slot'], int)
+
     def test_secret_all_profiles_widths_owners_and_manglings(self):
         c = runner.secret
         self.assertEqual(len(c.POLICY['bodies']), 24)

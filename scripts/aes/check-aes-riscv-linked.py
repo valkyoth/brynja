@@ -97,7 +97,9 @@ def check(compiler):
                 permits = sessions.inspect(nm.stdout, binary.read_bytes(), compiler, panic)
                 owners = constructors.inspect(nm.stdout, binary.read_bytes(), compiler, panic)
                 outputs = public.inspect(nm.stdout, binary.read_bytes(), compiler, panic)
-                secrets = secret.inspect(nm.stdout, binary.read_bytes(), compiler, panic)
+                # Public static-code metadata (symbols, addresses and body hashes),
+                # not runtime keys, schedules or plaintext from the reviewed paths.
+                output_boundary_review = secret.inspect(nm.stdout, binary.read_bytes(), compiler, panic)
                 require(linked.digest(binary) == digest and [linked.digest(p) for p in tools] == hashes,
                         'binary or inspection tool changed')
                 report = {'compiler': compiler, 'target': riscv.TARGET, 'route': route,
@@ -105,7 +107,7 @@ def check(compiler):
                           'execution': execution, 'build': command, 'rustflags': build_env['RUSTFLAGS'],
                           'tools': [{'path': str(p), 'sha256': h} for p, h in zip(tools, hashes)],
                           'review': analysis, 'cleanup': clearing, 'sessions': permits,
-                          'constructors': owners, 'public': outputs, 'secret': secrets,
+                          'constructors': owners, 'public': outputs, 'secret': output_boundary_review,
                           'native_qualification': False}
                 (retained / f'{label}.json').write_text(json.dumps(report, indent=2) + '\n')
                 print(f'AES_RISCV_LINKED_CONSUMER_PASS: {compiler} {label}; six leaf bodies; nine public paths', flush=True)

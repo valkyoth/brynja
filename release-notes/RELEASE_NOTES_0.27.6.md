@@ -29,15 +29,16 @@ proposal is superseded, not falsely marked implemented or assigned a new date.
 
 ## Verification scope
 
-- Sixteen lifecycle/fault tests for each width cover known answers in both
+- Seventeen lifecycle/fault tests for each width cover known answers in both
   directions, permissions, partial output, invalid lengths, errors/unwinds,
   quarantine, clearing, destruction and thread transfer.
-- Both compiler endpoints exercise 168 paired API probes across direct/facade
+- Both compiler endpoints exercise 180 paired API probes across direct/facade
   consumers, including all ordered cross-width rejection cases and feature,
-  ownership and thread-trait constraints.
+  ownership and thread-trait constraints. Multi-trait owner-type separation is
+  compiler-contract coverage, not actual device key-width assurance.
 - Native/MSRV, Miri, ASan, doctest and Cortex-M checks remain registered in
   `brynja-verify`. They do not require an external service.
-- The new archive-only provider consumer performs 384 lifecycle test executions
+- The new archive-only provider consumer performs 408 lifecycle test executions
   across eight debug/release, direct/facade, MSRV/current configurations and
   four Cortex-M compile checks. Exact dependency graphs and test populations
   reject missing/ignored tests or checkout-source substitution.
@@ -66,7 +67,7 @@ versions. Consumer pins/lockfiles and the SBOM follow the facade. The existing
 30 finite final checks and timeouts are unchanged. Earlier verification records
 retain their true snapshots; version changes are not fresh executions.
 
-## Working-tree preflight — 2026-11-13
+## Initial candidate working-tree preflight — 2026-11-13
 
 All 30 finite checklist commands passed, with targeted corrections rather than
 a repeat of the entire list. The first API-profile checks detected the stale
@@ -80,6 +81,25 @@ Rerunning the same command with cache access fetched the RustSec database and
 passed. No advisory was waived. The refreshed archive-only provider check also
 passed on facade 0.27.6: all 384 lifecycle executions and four Cortex-M builds.
 
-This is working-tree preflight, not clean-commit release approval. Commit the
-candidate before the owner pentest; a genuine scoped review disposition and the
-existing commit-bound final gate/GitHub handoff remain outstanding.
+This was working-tree preflight, not clean-commit release approval. The initial
+candidate was committed as `14627a63` for the owner pentest.
+
+## Pentest remediation and accepted retest
+
+Commit `f5797b5b` makes permission decisions exhaustive, gives quarantine
+precedence over permission errors, and corrects per-width documentation. The
+retest confirms those fixes and reports no new security issue. The remaining
+key-width finding is an accepted trusted-adapter limitation, not a technical
+fix: one backend may implement several traits, and constructors do not verify
+the actual device key width. Applications must validate and preserve the bound
+key's properties. No new metadata-reporting API or hardware guarantee is added.
+
+All nine registered provider checks passed after remediation, including Miri,
+ASan/LSan, both 180-probe compiler endpoints, 408 archive lifecycle executions
+and four Cortex-M compile checks. The 1,087 registry regressions passed. A fresh
+target-directory retest also passed all 51 lifecycle tests, plus nine API-runner
+and six package-runner regressions. See the permanent
+[review disposition](../docs/assurance/aes-provider-pentest-remediation.md).
+
+The usual clean-commit final gate and exact-commit GitHub/CodeQL handoff remain
+required. Accepted retest is not tag or publication authorization.

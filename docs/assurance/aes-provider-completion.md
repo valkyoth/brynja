@@ -1,6 +1,7 @@
 # External-key provider API completion — v0.27.6
 
-Status: in progress. On 2026-11-13 the owner chose dependency-free API completion
+Status: implementation and scoped retest complete; final gate and GitHub pending.
+On 2026-11-13 the owner chose dependency-free API completion
 for all three AES widths, replacing the proposed concrete PKCS#11 adapter.
 Applications choose and supply their own adapters. No HSM is required; no
 device client, native FFI or OpenBao integration is included in this project
@@ -13,6 +14,9 @@ and 1,087 registry regressions passing.
 The owner retained the trusted-adapter contract with explicit limits instead of
 the breaking width-admission redesign. Added multi-trait owner-separation controls
 bring compiler coverage to 180 paired probes per endpoint. This is not release approval.
+The [follow-up retest](aes-provider-pentest-remediation.md#retest-of-14627a63f5797b5b)
+confirms those fixes with no new security issue; the width concern remains an
+accepted trusted-adapter limitation, not device-level enforcement.
 Counts below describe the initial candidate slice before that follow-up.
 
 ## Implemented provider contracts

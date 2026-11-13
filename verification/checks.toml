@@ -2651,8 +2651,8 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok."]
-minimum_tests = 48
-exact_tests = 48
+minimum_tests = 51
+exact_tests = 51
 
 [[checks]]
 component = "aes"
@@ -2669,8 +2669,8 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok."]
-minimum_tests = 48
-exact_tests = 48
+minimum_tests = 51
+exact_tests = 51
 
 [[checks]]
 component = "aes"
@@ -2687,8 +2687,8 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok."]
-minimum_tests = 48
-exact_tests = 48
+minimum_tests = 51
+exact_tests = 51
 
 [[checks]]
 component = "aes"
@@ -2705,8 +2705,8 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok."]
-minimum_tests = 48
-exact_tests = 48
+minimum_tests = 51
+exact_tests = 51
 
 [[checks]]
 component = "aes"
@@ -2723,7 +2723,7 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["AES_PROVIDER_API_PASS:"]
-unique_lines = ["AES_PROVIDER_API_PASS: 1.99.1 168 paired probes; direct and facade; independent opt-ins"]
+unique_lines = ["AES_PROVIDER_API_PASS: 1.99.1 180 paired probes; direct and facade; independent opt-ins"]
 
 [[checks]]
 component = "aes"
@@ -2740,7 +2740,7 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["AES_PROVIDER_API_PASS:"]
-unique_lines = ["AES_PROVIDER_API_PASS: 1.90.0 168 paired probes; direct and facade; independent opt-ins"]
+unique_lines = ["AES_PROVIDER_API_PASS: 1.90.0 180 paired probes; direct and facade; independent opt-ins"]
 
 [[checks]]
 component = "aes"
@@ -2970,7 +2970,7 @@ component = "aes"
 id = "provider-packaged"
 category = "provider"
 name = "Packaged AES-128/192/256 provider contracts (MSRV/current, direct/facade)"
-establishes = "Byte-checked Cargo archives, exact dependency and feature graphs, 48 mock lifecycle tests per configuration across direct/facade, MSRV/current and debug/release, plus four no_std Cortex-M compile checks. No device client, hardware custody, attestation, timing or physical qualification."
+establishes = "Byte-checked Cargo archives, exact dependency and feature graphs, 51 mock lifecycle tests per configuration across direct/facade, MSRV/current and debug/release, plus four no_std Cortex-M compile checks. No device client, hardware custody, attestation, timing or physical qualification."
 command = ["python3", "scripts/aes/check-aes-provider-packaged.py"]
 cwd = "."
 inputs = ["aes-build", "aes-provider-packaged", "aes-provider", "aes-packaged", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
@@ -2979,7 +2979,7 @@ reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODE
 timeout_seconds = 900
 [checks.success]
 contains = ["AES provider packaged: PASS;"]
-unique_lines = ["AES provider packaged: PASS; 8 host configurations; 384 lifecycle tests; 4 Cortex-M compile checks; mocks only; no upload"]
+unique_lines = ["AES provider packaged: PASS; 8 host configurations; 408 lifecycle tests; 4 Cortex-M compile checks; mocks only; no upload"]
 
 # v0.27.2 portable package acceptance: no release-gate coupling.
 [groups.aes-packaged]

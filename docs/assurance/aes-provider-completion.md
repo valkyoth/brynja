@@ -6,6 +6,15 @@ Applications choose and supply their own adapters. No HSM is required; no
 device client, native FFI or OpenBao integration is included in this project
 scope. This does not claim hardware support or hardware custody.
 
+The [candidate pentest follow-up](aes-provider-pentest-remediation.md) fixes
+permission exhaustiveness, stale/per-width docs and quarantine error precedence.
+Its refreshed suite has 17 tests per width (51 total), 408 archive executions
+and 1,087 registry regressions passing.
+The owner retained the trusted-adapter contract with explicit limits instead of
+the breaking width-admission redesign. Added multi-trait owner-separation controls
+bring compiler coverage to 180 paired probes per endpoint. This is not release approval.
+Counts below describe the initial candidate slice before that follow-up.
+
 ## Implemented provider contracts
 
 The existing default-off provider feature now exposes distinct `Aes128Backend`,

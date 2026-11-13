@@ -25,7 +25,8 @@
 //!
 //! AES-192/AES-256 use distinct key owners and 208/240-byte cached schedules.
 //! Their qualification is in progress; AES-128 observations do not qualify the
-//! new key schedules or round counts. The external provider API remains AES-128.
+//! new key schedules or round counts. The optional external provider API covers
+//! AES-128, AES-192 and AES-256 through trusted application-supplied adapters.
 
 #![forbid(unsafe_code)]
 

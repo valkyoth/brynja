@@ -19,7 +19,7 @@ pub use brynja_core::ProviderFailureKind;
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[non_exhaustive]
 pub enum Error {
-    /// The exact operation is not admitted. The adapter was not called.
+    /// A healthy binding does not admit this operation. The adapter was not called.
     NotPermitted,
     /// A prior adapter failure or unwind made this binding terminal.
     Quarantined,
@@ -75,6 +75,17 @@ impl<B> ExternalKey<B> {
         }
     }
 
+    // Algorithm wrappers check terminal state before operation permissions.
+    // This is local lifecycle state, not a fresh device/session health probe.
+    #[cfg(feature = "hazmat-aes-block")]
+    pub(crate) fn check(&self) -> Result<(), Error> {
+        if self.healthy {
+            Ok(())
+        } else {
+            Err(Error::Quarantined)
+        }
+    }
+
     // Operation interfaces, not callers, get access to the adapter. Set terminal
     // before calling it so both errors and unwinds prevent subsequent dispatch.
     #[cfg(feature = "hazmat-aes-block")]
@@ -82,9 +93,7 @@ impl<B> ExternalKey<B> {
         &mut self,
         operation: impl FnOnce(&mut B) -> Result<T, Error>,
     ) -> Result<T, Error> {
-        if !self.healthy {
-            return Err(Error::Quarantined);
-        }
+        self.check()?;
         self.healthy = false;
         let result = operation(&mut self.backend)?;
         self.healthy = true;

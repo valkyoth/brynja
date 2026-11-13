@@ -24563,7 +24563,7 @@
       ]
     }
   ],
-  "policy_sha256": "c31a8e08ad8596802e1804081f3d09f2ff23ac5d3608a3610b20f644e99e5168",
+  "policy_sha256": "79ef4acbde1d6bc9d9cd32511dc52296c1f60616a529dba31b4112878d656b8a",
   "registered_secret_owners": [
     {
       "capability": "algorithm.hkdf",

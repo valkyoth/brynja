@@ -271,6 +271,57 @@ fn exercise_failure(behavior: Behavior, expected: Error) {
 }
 
 #[test]
+fn quarantine_precedes_permissions_after_error_or_unwind() {
+    for permissions in [Permissions::Encrypt, Permissions::Decrypt] {
+        for behavior in [
+            Behavior::Fail(ProviderFailureKind::Rejected),
+            Behavior::Length(15),
+            Behavior::Panic,
+        ] {
+            let (backend, state) = Mock::new(permissions);
+            state.borrow_mut().behavior = behavior;
+            let mut key = ProviderKey::new(backend);
+            let mut output = [0xa5; 16];
+            let attempt = catch_unwind(AssertUnwindSafe(|| {
+                if permissions == Permissions::Encrypt {
+                    key.encrypt_block_public(&INPUT, &mut output, PublicCiphertext::acknowledge())
+                } else {
+                    key.decrypt_block(&CIPHER, &mut output)
+                        .map(|block| block.clear())
+                }
+            }));
+            if matches!(behavior, Behavior::Panic) {
+                assert!(attempt.is_err());
+            } else {
+                assert!(must(attempt).is_err());
+            }
+            // Recovery at the backend never restores this binding. Both the
+            // allowed and disallowed directions must report the terminal state.
+            state.borrow_mut().behavior = Behavior::Good;
+            for inverse in [false, true] {
+                output.fill(0xa5);
+                let result = if inverse {
+                    key.decrypt_block(&CIPHER, &mut output)
+                } else {
+                    key.encrypt_block(&INPUT, &mut output)
+                };
+                assert!(matches!(result, Err(Error::Quarantined)));
+                drop(result);
+                assert_eq!(output, [0; 16]);
+            }
+            output.fill(0xa5);
+            assert_eq!(
+                key.encrypt_block_public(&INPUT, &mut output, PublicCiphertext::acknowledge()),
+                Err(Error::Quarantined)
+            );
+            assert_eq!(output, [0xa5; 16]);
+            assert_eq!(state.borrow().calls.len(), 1);
+            assert_eq!(key.permissions(), permissions);
+        }
+    }
+}
+
+#[test]
 fn every_adapter_failure_clears_or_preserves_output_and_is_terminal() {
     for error in [
         ProviderFailureKind::Unavailable,

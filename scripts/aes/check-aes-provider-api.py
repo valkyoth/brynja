@@ -89,7 +89,17 @@ def probes():
                         'fn main(){bind(Backend);}')
             negative, positive = binding(other), binding(bits)
             cases.append((f'{bits}/reject-{other}-binding', negative, positive, 'E0277'))
-    if len(cases) != 81 or len({case[0] for case in cases}) != 81:
+            # Traits are not exclusive: a trusted backend may implement all three.
+            # Even then, the resulting owner types are not interchangeable.
+            implementation = PREFIX[PREFIX.index('impl Aes128Backend'):]
+            multi = ('use brynja_crypto::aes::provider::*;\n'
+                     'use brynja_crypto::provider::ProviderFailureKind;\nstruct Backend;\n'
+                     + ''.join(implementation.replace('Aes128', f'Aes{width}')
+                               for width in (128, 192, 256)))
+            positive = multi + f'fn main(){{let _:Aes{bits}ProviderKey<Backend>=Aes{bits}ProviderKey::new(Backend);}}'
+            negative = positive.replace(f'let _:Aes{bits}ProviderKey', f'let _:Aes{other}ProviderKey')
+            cases.append((f'{bits}/multi-trait-reject-{other}-owner', negative, positive, 'E0308'))
+    if len(cases) != 87 or len({case[0] for case in cases}) != 87:
         raise ValueError('provider family API probe population drift')
     return cases
 
@@ -124,7 +134,7 @@ def run(toolchain):
                 env.update(RUSTUP_AUTO_INSTALL='0', CARGO_NET_OFFLINE='true')
                 api.run_probes(toolchain, directory, env, cases=rewritten, features=features,
                                package=package, label=f'AES_PROVIDER_{route}_{group}')
-    print(f'AES_PROVIDER_API_PASS: {toolchain} 168 paired probes; direct and facade; independent opt-ins', flush=True)
+    print(f'AES_PROVIDER_API_PASS: {toolchain} 180 paired probes; direct and facade; independent opt-ins', flush=True)
 
 
 if __name__ == '__main__':

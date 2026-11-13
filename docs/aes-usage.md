@@ -71,6 +71,11 @@ follows that adapter's session restrictions; secret-output owners remain
 thread-local. Implementing a backend is trusted code: the application must
 validate actual device key identity, width, permissions and mechanism. A Rust
 trait does not prove device properties or ciphertext correctness.
+The width traits are not exclusive: a backend may implement several. The three
+provider-key types remain non-interchangeable, but `new` does not query key-width
+metadata. For stronger accidental-mixing protection, applications should expose
+width-specific adapter types with fallible constructors that validate the chosen
+device key. No wrapper type constitutes hardware attestation.
 
 Keep a provider binding for repeated operations. Backend errors or unwinds
 permanently quarantine it; do not automatically retry or fall back. Permission

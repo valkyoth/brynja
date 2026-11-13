@@ -68,12 +68,12 @@ class ProviderPackagedTests(unittest.TestCase):
     def test_exact_test_names_statuses_and_summary_are_required(self):
         names = sorted('contracts::' + name for name in runner.TESTS)
         rows = [f'test {name} ... ok' for name in names]
-        summary = 'test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0s'
+        summary = 'test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0s'
         valid = '\n'.join(rows + [summary])
         runner.check_tests(valid)
         for text in (valid.replace(rows[0], ''), valid + '\n' + rows[0],
                      valid.replace(rows[0], rows[1]), valid.replace('... ok', '... ignored', 1),
-                     valid.replace('16 passed', '0 passed'), valid + '\n' + summary):
+                     valid.replace('17 passed', '0 passed'), valid + '\n' + summary):
             with self.subTest(text=text), self.assertRaises(ValueError):
                 runner.check_tests(text)
 

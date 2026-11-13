@@ -6,6 +6,12 @@
 //! It must verify the exact AES key-width identity and actual device permissions.
 //! Each trait is a trusted boundary, not hardware attestation or a sandbox.
 //! Public implementations may be software mocks, remote services or devices.
+//! The width traits are distinct, not exclusive: one backend type can implement
+//! several. Provider-key types are non-interchangeable, but their constructors
+//! do not verify device metadata. A wrong-width binding violates the trusted
+//! adapter contract; the type name alone does not certify the actual key width.
+//! Prefer width-specific adapter types with fallible device-validation constructors
+//! when accidental cross-width admission must be prevented by the application.
 //!
 //! Adapters own authentication, handle generation/liveness checks, timeouts,
 //! resource limits and native error sanitization. Completion must be synchronous:
@@ -53,8 +59,9 @@ pub enum Permissions {
 // The public traits are distinct: no blanket conversion between key widths.
 // Share mechanics so output ownership and terminal failures cannot drift.
 macro_rules! provider_key {
-    ($backend:ident, $key:ident) => {
-        /// Trusted adapter bound to exactly one key of the named AES width and its provider/session.
+    ($backend:ident, $key:ident, $bits:literal, $bytes:literal) => {
+        #[doc = concat!("Trusted adapter bound to exactly one AES-", $bits,
+                                " (", $bytes, "-byte) key and its provider/session.")]
         ///
         /// Construction and key lookup/generation belong to the adapter. Before giving
         /// an instance to the matching provider-key constructor, validate key type, exact size,
@@ -93,7 +100,8 @@ macro_rules! provider_key {
             ) -> Result<usize, ProviderFailureKind>;
         }
 
-        /// Provider-bound AES key with clearing outputs and fail-closed operations.
+        #[doc = concat!("Provider-bound AES-", $bits, " (", $bytes,
+                                "-byte key) with clearing outputs and fail-closed operations.")]
         ///
         /// Owns the adapter (which may itself borrow a session). No key bytes, adapter
         /// extraction, raw handle substitution, Copy, Clone or Debug API. Send/Sync
@@ -110,6 +118,8 @@ macro_rules! provider_key {
 
         impl<B: $backend> $key<B> {
             /// Admits a trusted, already validated key/session binding. No device probing.
+            /// This checks no key-width metadata. Backend traits are not exclusive;
+            /// an adapter implementing several must uphold each admitted contract.
             /// The backend cannot subsequently be replaced or extracted through this API.
             pub fn new(backend: B) -> Self {
                 let permissions = backend.permissions();
@@ -183,10 +193,15 @@ macro_rules! provider_key {
                 output: &mut [u8; BLOCK_BYTES],
                 inverse: bool,
             ) -> Result<(), Error> {
-                if matches!(
-                    (self.permissions, inverse),
-                    (Permissions::Encrypt, true) | (Permissions::Decrypt, false)
-                ) {
+                self.binding.check()?;
+                // Exhaustive by design: a new permission requires a decision
+                // here instead of silently permitting both directions.
+                let allowed = match (self.permissions, inverse) {
+                    (Permissions::Encrypt, false) | (Permissions::Decrypt, true) => true,
+                    (Permissions::EncryptAndDecrypt, _) => true,
+                    (Permissions::Encrypt, true) | (Permissions::Decrypt, false) => false,
+                };
+                if !allowed {
                     return Err(Error::NotPermitted);
                 }
                 self.binding.execute(|backend| {
@@ -216,6 +231,6 @@ macro_rules! provider_key {
     };
 }
 
-provider_key!(Aes128Backend, Aes128ProviderKey);
-provider_key!(Aes192Backend, Aes192ProviderKey);
-provider_key!(Aes256Backend, Aes256ProviderKey);
+provider_key!(Aes128Backend, Aes128ProviderKey, "128", "16");
+provider_key!(Aes192Backend, Aes192ProviderKey, "192", "24");
+provider_key!(Aes256Backend, Aes256ProviderKey, "256", "32");

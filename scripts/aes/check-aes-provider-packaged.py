@@ -27,6 +27,7 @@ TESTS = {
     'dropping_borrowed_or_owned_binding_does_not_destroy_device_key',
     'owned_destruction_is_explicit_fallible_and_never_retried',
     'quarantined_owned_binding_can_still_explicitly_destroy',
+    'quarantine_precedes_permissions_after_error_or_unwind',
     'output_owner_can_outlive_provider_binding',
     'neutral_lifecycle_does_not_require_an_aes_backend',
     'regressions::equal_input_output_is_accepted_without_quarantine_in_every_direction',
@@ -34,7 +35,7 @@ TESTS = {
     'regressions::equal_decryption_result_preserves_binding_for_later_encryption',
     'regressions::send_backend_binding_moves_to_worker_and_returns_for_destruction',
 }
-MARKER = 'AES provider packaged: PASS; 8 host configurations; 384 lifecycle tests; 4 Cortex-M compile checks; mocks only; no upload'
+MARKER = 'AES provider packaged: PASS; 8 host configurations; 408 lifecycle tests; 4 Cortex-M compile checks; mocks only; no upload'
 
 
 def require(condition, message):
@@ -68,11 +69,11 @@ def prepare(directory, versions, route):
 
 def check_tests(output):
     rows = re.findall(r'^test (\S+) \.\.\. (\S+)\s*$', output, re.M)
-    require(len(rows) == 16 and {name for name, _ in rows} == {'contracts::' + name for name in TESTS}
+    require(len(rows) == 17 and {name for name, _ in rows} == {'contracts::' + name for name in TESTS}
             and all(status == 'ok' for _, status in rows), 'missing, duplicate, ignored or failed lifecycle test')
     summaries = re.findall(r'^test result: .*$', output, re.M)
     require(len(summaries) == 1 and summaries[0].startswith(
-        'test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;'),
+        'test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;'),
         'incorrect lifecycle test summary')
 
 
@@ -91,7 +92,7 @@ def configuration(directory, root, versions, compiler, route, env):
             if profile == 'release':
                 command.append('--release')
             check_tests(packaged.archives.run(command, directory, env).stdout)
-        print(f'AES_PROVIDER_PACKAGED_HOST: {compiler} {route} {profile} 48 exact tests', flush=True)
+        print(f'AES_PROVIDER_PACKAGED_HOST: {compiler} {route} {profile} 51 exact tests', flush=True)
     packaged.archives.run(cargo + ['check', *selection, '--lib', '--target', packaged.TARGET], directory, env)
     print(f'AES_PROVIDER_PACKAGED_TARGET: {compiler} {route} {packaged.TARGET} compile-only', flush=True)
 

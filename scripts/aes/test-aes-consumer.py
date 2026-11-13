@@ -17,7 +17,7 @@ spec.loader.exec_module(consumer)
 
 def success():
     return '\n'.join('test ' + name + ' ... ok' for name in sorted(consumer.TESTS)) + (
-        '\ntest result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n')
+        '\ntest result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n')
 
 
 class ConsumerTests(unittest.TestCase):
@@ -100,14 +100,15 @@ class ConsumerTests(unittest.TestCase):
                  'explicit_clear_and_reuse', 'output_outlives_key',
                  'public_ciphertext_persists_after_key_clear', 'consumer_unwind_clears_key_and_output'}
         self.assertEqual(consumer.TESTS, names | {f'wide::aes{bits}::{name}'
-                                               for bits in (192, 256) for name in names})
+                                               for bits in (192, 256) for name in names}
+                         | {f'roundtrip::aes{bits}' for bits in (128, 192, 256)})
         self.assertEqual(consumer.OWNERS, tuple(f'Aes{bits}{kind}' for bits in (128, 192, 256)
                                               for kind in ('Key', 'ExpandedKey')))
         for name in consumer.TESTS:
             with self.subTest(name=name), self.assertRaises(ValueError):
                 consumer.check_tests(success().replace(f'test {name} ... ok', f'test {name} ... ignored'))
         with self.assertRaises(ValueError):
-            consumer.check_tests(success().replace('18 passed', '6 passed'))
+            consumer.check_tests(success().replace('21 passed', '6 passed'))
 
     def test_fixture_policy(self):
         original = tomllib.loads((consumer.FIXTURE / 'Cargo.toml').read_text())

@@ -1,8 +1,8 @@
 # Finite AES-family acceptance-candidate gate. Verification campaigns stay separate.
 # No crates.io publication is selected for this internal milestone.
 schema = 1
-version = "0.27.4"
-scope = "Evidence-only RISC-V AES candidate: QEMU functional observations, bounded linked-code reviews and unadmitted ordinary routes. Retain portable and admitted accelerated AES/provider contracts, downstream consumers and modern/legacy HKDF compatibility. Native RISC-V timing and physical qualification remain unavailable. Scoped pentest/retest required before release authorization; no historical evidence-freshness gate or implicit dynamic/proof/timing/compiler-matrix campaign."
+version = "0.27.5"
+scope = "AES public API usability acceptance: packaged composition, width/ownership contracts and documentation; no production algorithm or admission changes. Retain portable and accelerated AES/provider contracts and modern/legacy HKDF compatibility. Owner-accepted accelerated timing remains unresolved; RISC-V remains evidence-only and unadmitted. No scheduled pentest or publication for this internal milestone; exceptional findings still require review. No historical evidence-freshness gate or implicit dynamic/proof/timing/compiler-matrix campaign."
 ci_checks = ["crypto-tests","crypto-lint","crypto-format","facade-integration","hkdf-owner-contract","aes-owner-contract","aes-wide-owner-contract","aes-wide-api","aes-dataflow-regressions","aes-provider-api","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
 
 [[checks]]

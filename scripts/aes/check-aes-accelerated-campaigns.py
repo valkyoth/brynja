@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import platform
+import re
 import shlex
 import shutil
 import subprocess
@@ -118,8 +119,38 @@ def marker(compiler, route, admission, mode, suite):
     return f'AES_ACCELERATED_CAMPAIGN_PASS: {compiler} {route} {admission} {mode} {suite}'
 
 
+def prepare_roundtrip(directory):
+    """Reuse the portable composition assertions; change only authority admission."""
+    source = ROOT / 'assurance/aes-public-api/tests/roundtrip.rs'
+    packaged.require(source.is_file() and not any(p.is_symlink() for p in (source, *source.parents)),
+                     'missing/symlinked round-trip consumer')
+    text = replace_exact(source.read_text(), 'use brynja_aes_public_api_fixture::aes;',
+                         'use brynja_aes_accelerated_fixture::{aes, forced_authority};', 1)
+    text = replace_exact(text, 'fn $name() {',
+                         'fn $name() {\n            let authority = forced_authority().unwrap();', 1)
+    for owner in ('$key', '$cached'):
+        text = replace_exact(text, 'aes::' + owner + '::new(',
+                             'aes::' + owner + '::new(authority.get().unwrap(), ', 2)
+    (directory / 'tests').mkdir(exist_ok=True)
+    (directory / 'tests/roundtrip.rs').write_text(text)
+
+
+def validate_roundtrip(output):
+    rows = re.findall(r'^test (\S+) \.\.\. (\S+)\s*$', output, re.M)
+    packaged.require(len(rows) == 3 and {name for name, _ in rows} == {'aes128', 'aes192', 'aes256'}
+                     and all(status == 'ok' for _, status in rows), 'wrong round-trip test population')
+    summaries = re.findall(r'^test result: .*$', output, re.M)
+    packaged.require(len(summaries) == 1 and summaries[0].startswith(
+        'test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;'),
+        'wrong round-trip test summary')
+
+
 def validate(output, suite, arm, rv64=False):
-    (avs if suite == 'avs' else corpus if suite == 'oracle' else diff).check_output(output)
+    packaged.require(suite in ('avs', 'differential', 'oracle', 'roundtrip'), 'unknown campaign output')
+    if suite == 'roundtrip':
+        validate_roundtrip(output)
+    else:
+        (avs if suite == 'avs' else corpus if suite == 'oracle' else diff).check_output(output)
     expected = 'AES_FORCED_AUTHORITY: ' + ('RiscVScalarAes' if rv64 else 'ArmAes' if arm else 'X86AesNi')
     rows = [line for line in output.splitlines() if line.startswith('AES_FORCED_AUTHORITY:')]
     packaged.require(rows == [expected] * (6 if suite == 'avs' else 3),
@@ -152,7 +183,7 @@ def test_executable(output, suite, package_id, target_directory):
 def check(compiler, route, admission, mode, suite):
     packaged.require(compiler in packaged.consumer.TOOLCHAINS and route in ('direct', 'facade')
                      and admission in ('static', 'hosted') and mode in ('native', 'arm-qemu', 'riscv-qemu')
-                     and suite in ('avs', 'differential', 'oracle'), 'unsupported campaign configuration')
+                     and suite in ('avs', 'differential', 'oracle', 'roundtrip'), 'unsupported campaign configuration')
     packaged.require(suite != 'oracle' or mode == 'riscv-qemu',
                      'host-generated oracle replay is scoped to RV64 QEMU')
     packaged.require(not (mode != 'native' and suite == 'differential'),
@@ -180,11 +211,14 @@ def check(compiler, route, admission, mode, suite):
                          'missing/symlinked accelerated adapter')
         shutil.copyfile(fixture, directory / 'src/lib.rs')
         (directory / 'Cargo.toml').write_text(manifest(versions, route, admission))
-        harness = avs if suite == 'avs' else corpus if suite == 'oracle' else diff
-        harness.prepare(directory)
-        source = directory / f'tests/{suite}.rs'
-        if suite != 'oracle':
-            source.write_text(adapt(source.read_text(), suite))
+        if suite == 'roundtrip':
+            prepare_roundtrip(directory)
+        else:
+            harness = avs if suite == 'avs' else corpus if suite == 'oracle' else diff
+            harness.prepare(directory)
+            source = directory / f'tests/{suite}.rs'
+            if suite != 'oracle':
+                source.write_text(adapt(source.read_text(), suite))
         cargo = ['cargo', '+' + compiler]
         selection = ['--locked', '--offline', '--no-default-features', '--features',
                      route + (',hosted' if admission == 'hosted' else '')]
@@ -286,7 +320,7 @@ if __name__ == '__main__':
     parser.add_argument('--route', choices=('direct', 'facade'), required=True)
     parser.add_argument('--admission', choices=('static', 'hosted'), required=True)
     parser.add_argument('--mode', choices=('native', 'arm-qemu', 'riscv-qemu'), default='native')
-    parser.add_argument('--suite', choices=('avs', 'differential', 'oracle'), required=True)
+    parser.add_argument('--suite', choices=('avs', 'differential', 'oracle', 'roundtrip'), required=True)
     args = parser.parse_args()
     try:
         check(args.toolchain, args.route, args.admission, args.mode, args.suite)

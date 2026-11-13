@@ -255,7 +255,7 @@ class PackagedTests(unittest.TestCase):
         directory, unpacked, versions, metadata = self.metadata('direct')
         with patch.object(packaged.archives, 'run', side_effect=[
                 SimpleNamespace(stdout=json.dumps(metadata)), SimpleNamespace(stdout=json.dumps(metadata)),
-                SimpleNamespace(stdout=consumer_tests.success().replace('18 passed', '0 passed'))]), \
+                SimpleNamespace(stdout=consumer_tests.success().replace('21 passed', '0 passed'))]), \
              patch('builtins.print') as emit, self.assertRaises(ValueError):
             packaged.configuration(directory, unpacked.parent, versions, '1.90.0', 'direct', {})
         emit.assert_not_called()

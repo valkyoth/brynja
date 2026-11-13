@@ -503,6 +503,237 @@ timeout_seconds = 1800
 contains = ["AES_ACCELERATED_EPHEMERAL_LINKED_PASS:"]
 unique_lines = ["AES_ACCELERATED_EPHEMERAL_LINKED_PASS: 1.99.1; four consumers; x86 cached and ephemeral secret wrappers, expansion closure, kernels, copy and volatile clear"]
 
+[groups.aes-accelerated-roundtrip]
+paths = ["assurance/aes-public-api/tests/roundtrip.rs", "docs/assurance/aes-usability-acceptance.md"]
+
+[[checks]]
+component = "aes"
+id = "roundtrip-native-static-msrv-direct"
+category = "aes-roundtrip"
+name = "Packaged AES cross-owner round trips, 1.90.0 direct static native"
+establishes = "All three widths, six deterministic public key/block pairs and four cached/operation-local owner combinations; cleared encrypting owners, borrowed secret output, canaries and input preservation. Debug/release against byte-checked archives with a forced backend and no fallback. Supplements existing KAT/AVS; not a new oracle, timing, physical protection or native ARM qualification."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.90.0","--route","direct","--admission","static","--mode","native","--suite","roundtrip"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-accelerated-roundtrip","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 6
+exact_tests = 6
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 direct static native roundtrip"]
+
+[[checks]]
+component = "aes"
+id = "roundtrip-arm-qemu-static-msrv-direct"
+category = "aes-roundtrip"
+name = "Packaged AES cross-owner round trips, 1.90.0 direct static arm-qemu"
+establishes = "All three widths, six deterministic public key/block pairs and four cached/operation-local owner combinations; cleared encrypting owners, borrowed secret output, canaries and input preservation. Debug/release against byte-checked archives with a forced backend and no fallback. Supplements existing KAT/AVS; not a new oracle, timing, physical protection or native ARM qualification."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.90.0","--route","direct","--admission","static","--mode","arm-qemu","--suite","roundtrip"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-accelerated-roundtrip","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 6
+exact_tests = 6
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 direct static arm-qemu roundtrip"]
+
+[[checks]]
+component = "aes"
+id = "roundtrip-arm-qemu-hosted-msrv-direct"
+category = "aes-roundtrip"
+name = "Packaged AES cross-owner round trips, 1.90.0 direct hosted arm-qemu"
+establishes = "All three widths, six deterministic public key/block pairs and four cached/operation-local owner combinations; cleared encrypting owners, borrowed secret output, canaries and input preservation. Debug/release against byte-checked archives with a forced backend and no fallback. Supplements existing KAT/AVS; not a new oracle, timing, physical protection or native ARM qualification."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.90.0","--route","direct","--admission","hosted","--mode","arm-qemu","--suite","roundtrip"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-accelerated-roundtrip","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-kernel-qemu","hosted-cpu-source"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 6
+exact_tests = 6
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 direct hosted arm-qemu roundtrip"]
+
+[[checks]]
+component = "aes"
+id = "roundtrip-native-static-msrv-facade"
+category = "aes-roundtrip"
+name = "Packaged AES cross-owner round trips, 1.90.0 facade static native"
+establishes = "All three widths, six deterministic public key/block pairs and four cached/operation-local owner combinations; cleared encrypting owners, borrowed secret output, canaries and input preservation. Debug/release against byte-checked archives with a forced backend and no fallback. Supplements existing KAT/AVS; not a new oracle, timing, physical protection or native ARM qualification."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.90.0","--route","facade","--admission","static","--mode","native","--suite","roundtrip"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-accelerated-roundtrip","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 6
+exact_tests = 6
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 facade static native roundtrip"]
+
+[[checks]]
+component = "aes"
+id = "roundtrip-arm-qemu-static-msrv-facade"
+category = "aes-roundtrip"
+name = "Packaged AES cross-owner round trips, 1.90.0 facade static arm-qemu"
+establishes = "All three widths, six deterministic public key/block pairs and four cached/operation-local owner combinations; cleared encrypting owners, borrowed secret output, canaries and input preservation. Debug/release against byte-checked archives with a forced backend and no fallback. Supplements existing KAT/AVS; not a new oracle, timing, physical protection or native ARM qualification."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.90.0","--route","facade","--admission","static","--mode","arm-qemu","--suite","roundtrip"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-accelerated-roundtrip","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 6
+exact_tests = 6
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 facade static arm-qemu roundtrip"]
+
+[[checks]]
+component = "aes"
+id = "roundtrip-arm-qemu-hosted-msrv-facade"
+category = "aes-roundtrip"
+name = "Packaged AES cross-owner round trips, 1.90.0 facade hosted arm-qemu"
+establishes = "All three widths, six deterministic public key/block pairs and four cached/operation-local owner combinations; cleared encrypting owners, borrowed secret output, canaries and input preservation. Debug/release against byte-checked archives with a forced backend and no fallback. Supplements existing KAT/AVS; not a new oracle, timing, physical protection or native ARM qualification."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.90.0","--route","facade","--admission","hosted","--mode","arm-qemu","--suite","roundtrip"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-accelerated-roundtrip","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-kernel-qemu","hosted-cpu-source"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 6
+exact_tests = 6
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 facade hosted arm-qemu roundtrip"]
+
+[[checks]]
+component = "aes"
+id = "roundtrip-native-static-current-direct"
+category = "aes-roundtrip"
+name = "Packaged AES cross-owner round trips, 1.99.1 direct static native"
+establishes = "All three widths, six deterministic public key/block pairs and four cached/operation-local owner combinations; cleared encrypting owners, borrowed secret output, canaries and input preservation. Debug/release against byte-checked archives with a forced backend and no fallback. Supplements existing KAT/AVS; not a new oracle, timing, physical protection or native ARM qualification."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.99.1","--route","direct","--admission","static","--mode","native","--suite","roundtrip"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-accelerated-roundtrip","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 6
+exact_tests = 6
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 direct static native roundtrip"]
+
+[[checks]]
+component = "aes"
+id = "roundtrip-arm-qemu-static-current-direct"
+category = "aes-roundtrip"
+name = "Packaged AES cross-owner round trips, 1.99.1 direct static arm-qemu"
+establishes = "All three widths, six deterministic public key/block pairs and four cached/operation-local owner combinations; cleared encrypting owners, borrowed secret output, canaries and input preservation. Debug/release against byte-checked archives with a forced backend and no fallback. Supplements existing KAT/AVS; not a new oracle, timing, physical protection or native ARM qualification."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.99.1","--route","direct","--admission","static","--mode","arm-qemu","--suite","roundtrip"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-accelerated-roundtrip","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 6
+exact_tests = 6
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 direct static arm-qemu roundtrip"]
+
+[[checks]]
+component = "aes"
+id = "roundtrip-arm-qemu-hosted-current-direct"
+category = "aes-roundtrip"
+name = "Packaged AES cross-owner round trips, 1.99.1 direct hosted arm-qemu"
+establishes = "All three widths, six deterministic public key/block pairs and four cached/operation-local owner combinations; cleared encrypting owners, borrowed secret output, canaries and input preservation. Debug/release against byte-checked archives with a forced backend and no fallback. Supplements existing KAT/AVS; not a new oracle, timing, physical protection or native ARM qualification."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.99.1","--route","direct","--admission","hosted","--mode","arm-qemu","--suite","roundtrip"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-accelerated-roundtrip","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-kernel-qemu","hosted-cpu-source"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 6
+exact_tests = 6
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 direct hosted arm-qemu roundtrip"]
+
+[[checks]]
+component = "aes"
+id = "roundtrip-native-static-current-facade"
+category = "aes-roundtrip"
+name = "Packaged AES cross-owner round trips, 1.99.1 facade static native"
+establishes = "All three widths, six deterministic public key/block pairs and four cached/operation-local owner combinations; cleared encrypting owners, borrowed secret output, canaries and input preservation. Debug/release against byte-checked archives with a forced backend and no fallback. Supplements existing KAT/AVS; not a new oracle, timing, physical protection or native ARM qualification."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.99.1","--route","facade","--admission","static","--mode","native","--suite","roundtrip"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-accelerated-roundtrip","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 6
+exact_tests = 6
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 facade static native roundtrip"]
+
+[[checks]]
+component = "aes"
+id = "roundtrip-arm-qemu-static-current-facade"
+category = "aes-roundtrip"
+name = "Packaged AES cross-owner round trips, 1.99.1 facade static arm-qemu"
+establishes = "All three widths, six deterministic public key/block pairs and four cached/operation-local owner combinations; cleared encrypting owners, borrowed secret output, canaries and input preservation. Debug/release against byte-checked archives with a forced backend and no fallback. Supplements existing KAT/AVS; not a new oracle, timing, physical protection or native ARM qualification."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.99.1","--route","facade","--admission","static","--mode","arm-qemu","--suite","roundtrip"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-accelerated-roundtrip","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-kernel-qemu"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 6
+exact_tests = 6
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 facade static arm-qemu roundtrip"]
+
+[[checks]]
+component = "aes"
+id = "roundtrip-arm-qemu-hosted-current-facade"
+category = "aes-roundtrip"
+name = "Packaged AES cross-owner round trips, 1.99.1 facade hosted arm-qemu"
+establishes = "All three widths, six deterministic public key/block pairs and four cached/operation-local owner combinations; cleared encrypting owners, borrowed secret output, canaries and input preservation. Debug/release against byte-checked archives with a forced backend and no fallback. Supplements existing KAT/AVS; not a new oracle, timing, physical protection or native ARM qualification."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.99.1","--route","facade","--admission","hosted","--mode","arm-qemu","--suite","roundtrip"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-accelerated-roundtrip","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-kernel-qemu","hosted-cpu-source"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 6
+exact_tests = 6
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 facade hosted arm-qemu roundtrip"]
+
 [groups.aes-accelerated-campaigns]
 paths = ["assurance/aes-accelerated-campaigns/lib.rs", "assurance/aes-kernel-candidate/probe.rs", "scripts/aes/check-aes-accelerated-campaigns.py", "scripts/aes/test-aes-accelerated-campaigns.py", "scripts/aes/check-aes-riscv.py", "scripts/aes/check-aes-static.py", "scripts/aes/aes_riscv_oracle.py", "scripts/aes/test-aes-riscv-oracle.py", "assurance/aes-riscv-oracle"]
 
@@ -982,7 +1213,7 @@ component = "aes"
 id = "accelerated-no-std-direct-msrv"
 category = "aes-accelerated-no-std"
 name = "Packaged accelerated AES no_std and API isolation, direct, Rust 1.90.0"
-establishes = "Archive-only no_std libraries: static/runtime feature modes, Cortex-M, Linux x86 AES-NI and AArch64 musl AES/NEON, debug/release. Requires 12 library builds and 62 paired feature/ownership/admission diagnostics on Cortex-M. Exact archive dependency graphs exclude hosted adapters. Compile only: not target execution, unsupported bare-metal x86 SIMD ABI, native qualification, timing, physical faults or spill erasure."
+establishes = "Archive-only no_std libraries: static/runtime feature modes, Cortex-M, Linux x86 AES-NI and AArch64 musl AES/NEON, debug/release. Requires 12 library builds and 110 paired feature/ownership/admission diagnostics on Cortex-M. Exact archive dependency graphs exclude hosted adapters. Compile only: not target execution, unsupported bare-metal x86 SIMD ABI, native qualification, timing, physical faults or spill erasure."
 command = ["python3", "scripts/aes/check-aes-accelerated-no-std.py", "--toolchain", "1.90.0", "--route", "direct"]
 cwd = "."
 inputs = ["aes-accelerated-no-std", "aes-execution-api", "aes-runner", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
@@ -992,14 +1223,14 @@ platform = "linux-x86_64"
 timeout_seconds = 1800
 [checks.success]
 contains = ["AES_ACCELERATED_NO_STD_PASS:"]
-unique_lines = ["AES_ACCELERATED_NO_STD_PASS: 1.90.0 direct; 12 library builds; 62 paired probes; compile only","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-thumbv7em-none-eabi-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-thumbv7em-none-eabi-release","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-x86_64-unknown-linux-gnu-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-x86_64-unknown-linux-gnu-release","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-aarch64-unknown-linux-musl-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-aarch64-unknown-linux-musl-release","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-thumbv7em-none-eabi-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-thumbv7em-none-eabi-release","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-x86_64-unknown-linux-gnu-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-x86_64-unknown-linux-gnu-release","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-aarch64-unknown-linux-musl-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-aarch64-unknown-linux-musl-release"]
+unique_lines = ["AES_ACCELERATED_NO_STD_PASS: 1.90.0 direct; 12 library builds; 110 paired probes; compile only","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-thumbv7em-none-eabi-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-thumbv7em-none-eabi-release","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-x86_64-unknown-linux-gnu-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-x86_64-unknown-linux-gnu-release","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-aarch64-unknown-linux-musl-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-aarch64-unknown-linux-musl-release","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-thumbv7em-none-eabi-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-thumbv7em-none-eabi-release","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-x86_64-unknown-linux-gnu-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-x86_64-unknown-linux-gnu-release","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-aarch64-unknown-linux-musl-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-aarch64-unknown-linux-musl-release"]
 
 [[checks]]
 component = "aes"
 id = "accelerated-no-std-facade-msrv"
 category = "aes-accelerated-no-std"
 name = "Packaged accelerated AES no_std and API isolation, facade, Rust 1.90.0"
-establishes = "Archive-only no_std libraries: static/runtime feature modes, Cortex-M, Linux x86 AES-NI and AArch64 musl AES/NEON, debug/release. Requires 12 library builds and 62 paired feature/ownership/admission diagnostics on Cortex-M. Exact archive dependency graphs exclude hosted adapters. Compile only: not target execution, unsupported bare-metal x86 SIMD ABI, native qualification, timing, physical faults or spill erasure."
+establishes = "Archive-only no_std libraries: static/runtime feature modes, Cortex-M, Linux x86 AES-NI and AArch64 musl AES/NEON, debug/release. Requires 12 library builds and 110 paired feature/ownership/admission diagnostics on Cortex-M. Exact archive dependency graphs exclude hosted adapters. Compile only: not target execution, unsupported bare-metal x86 SIMD ABI, native qualification, timing, physical faults or spill erasure."
 command = ["python3", "scripts/aes/check-aes-accelerated-no-std.py", "--toolchain", "1.90.0", "--route", "facade"]
 cwd = "."
 inputs = ["aes-accelerated-no-std", "aes-execution-api", "aes-runner", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
@@ -1009,14 +1240,14 @@ platform = "linux-x86_64"
 timeout_seconds = 1800
 [checks.success]
 contains = ["AES_ACCELERATED_NO_STD_PASS:"]
-unique_lines = ["AES_ACCELERATED_NO_STD_PASS: 1.90.0 facade; 12 library builds; 62 paired probes; compile only","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-thumbv7em-none-eabi-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-thumbv7em-none-eabi-release","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-x86_64-unknown-linux-gnu-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-x86_64-unknown-linux-gnu-release","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-aarch64-unknown-linux-musl-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-aarch64-unknown-linux-musl-release","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-thumbv7em-none-eabi-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-thumbv7em-none-eabi-release","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-x86_64-unknown-linux-gnu-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-x86_64-unknown-linux-gnu-release","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-aarch64-unknown-linux-musl-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-aarch64-unknown-linux-musl-release"]
+unique_lines = ["AES_ACCELERATED_NO_STD_PASS: 1.90.0 facade; 12 library builds; 110 paired probes; compile only","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-thumbv7em-none-eabi-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-thumbv7em-none-eabi-release","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-x86_64-unknown-linux-gnu-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-x86_64-unknown-linux-gnu-release","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-aarch64-unknown-linux-musl-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-aarch64-unknown-linux-musl-release","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-thumbv7em-none-eabi-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-thumbv7em-none-eabi-release","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-x86_64-unknown-linux-gnu-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-x86_64-unknown-linux-gnu-release","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-aarch64-unknown-linux-musl-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-aarch64-unknown-linux-musl-release"]
 
 [[checks]]
 component = "aes"
 id = "accelerated-no-std-direct-current"
 category = "aes-accelerated-no-std"
 name = "Packaged accelerated AES no_std and API isolation, direct, Rust 1.99.1"
-establishes = "Archive-only no_std libraries: static/runtime feature modes, Cortex-M, Linux x86 AES-NI and AArch64 musl AES/NEON, debug/release. Requires 12 library builds and 62 paired feature/ownership/admission diagnostics on Cortex-M. Exact archive dependency graphs exclude hosted adapters. Compile only: not target execution, unsupported bare-metal x86 SIMD ABI, native qualification, timing, physical faults or spill erasure."
+establishes = "Archive-only no_std libraries: static/runtime feature modes, Cortex-M, Linux x86 AES-NI and AArch64 musl AES/NEON, debug/release. Requires 12 library builds and 110 paired feature/ownership/admission diagnostics on Cortex-M. Exact archive dependency graphs exclude hosted adapters. Compile only: not target execution, unsupported bare-metal x86 SIMD ABI, native qualification, timing, physical faults or spill erasure."
 command = ["python3", "scripts/aes/check-aes-accelerated-no-std.py", "--toolchain", "1.99.1", "--route", "direct"]
 cwd = "."
 inputs = ["aes-accelerated-no-std", "aes-execution-api", "aes-runner", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
@@ -1026,14 +1257,14 @@ platform = "linux-x86_64"
 timeout_seconds = 1800
 [checks.success]
 contains = ["AES_ACCELERATED_NO_STD_PASS:"]
-unique_lines = ["AES_ACCELERATED_NO_STD_PASS: 1.99.1 direct; 12 library builds; 62 paired probes; compile only","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-thumbv7em-none-eabi-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-thumbv7em-none-eabi-release","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-x86_64-unknown-linux-gnu-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-x86_64-unknown-linux-gnu-release","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-aarch64-unknown-linux-musl-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-aarch64-unknown-linux-musl-release","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-thumbv7em-none-eabi-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-thumbv7em-none-eabi-release","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-x86_64-unknown-linux-gnu-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-x86_64-unknown-linux-gnu-release","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-aarch64-unknown-linux-musl-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-aarch64-unknown-linux-musl-release"]
+unique_lines = ["AES_ACCELERATED_NO_STD_PASS: 1.99.1 direct; 12 library builds; 110 paired probes; compile only","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-thumbv7em-none-eabi-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-thumbv7em-none-eabi-release","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-x86_64-unknown-linux-gnu-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-x86_64-unknown-linux-gnu-release","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-aarch64-unknown-linux-musl-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-aarch64-unknown-linux-musl-release","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-thumbv7em-none-eabi-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-thumbv7em-none-eabi-release","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-x86_64-unknown-linux-gnu-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-x86_64-unknown-linux-gnu-release","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-aarch64-unknown-linux-musl-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-aarch64-unknown-linux-musl-release"]
 
 [[checks]]
 component = "aes"
 id = "accelerated-no-std-facade-current"
 category = "aes-accelerated-no-std"
 name = "Packaged accelerated AES no_std and API isolation, facade, Rust 1.99.1"
-establishes = "Archive-only no_std libraries: static/runtime feature modes, Cortex-M, Linux x86 AES-NI and AArch64 musl AES/NEON, debug/release. Requires 12 library builds and 62 paired feature/ownership/admission diagnostics on Cortex-M. Exact archive dependency graphs exclude hosted adapters. Compile only: not target execution, unsupported bare-metal x86 SIMD ABI, native qualification, timing, physical faults or spill erasure."
+establishes = "Archive-only no_std libraries: static/runtime feature modes, Cortex-M, Linux x86 AES-NI and AArch64 musl AES/NEON, debug/release. Requires 12 library builds and 110 paired feature/ownership/admission diagnostics on Cortex-M. Exact archive dependency graphs exclude hosted adapters. Compile only: not target execution, unsupported bare-metal x86 SIMD ABI, native qualification, timing, physical faults or spill erasure."
 command = ["python3", "scripts/aes/check-aes-accelerated-no-std.py", "--toolchain", "1.99.1", "--route", "facade"]
 cwd = "."
 inputs = ["aes-accelerated-no-std", "aes-execution-api", "aes-runner", "aes-build", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
@@ -1043,7 +1274,7 @@ platform = "linux-x86_64"
 timeout_seconds = 1800
 [checks.success]
 contains = ["AES_ACCELERATED_NO_STD_PASS:"]
-unique_lines = ["AES_ACCELERATED_NO_STD_PASS: 1.99.1 facade; 12 library builds; 62 paired probes; compile only","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-thumbv7em-none-eabi-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-thumbv7em-none-eabi-release","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-x86_64-unknown-linux-gnu-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-x86_64-unknown-linux-gnu-release","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-aarch64-unknown-linux-musl-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-aarch64-unknown-linux-musl-release","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-thumbv7em-none-eabi-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-thumbv7em-none-eabi-release","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-x86_64-unknown-linux-gnu-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-x86_64-unknown-linux-gnu-release","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-aarch64-unknown-linux-musl-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-aarch64-unknown-linux-musl-release"]
+unique_lines = ["AES_ACCELERATED_NO_STD_PASS: 1.99.1 facade; 12 library builds; 110 paired probes; compile only","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-thumbv7em-none-eabi-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-thumbv7em-none-eabi-release","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-x86_64-unknown-linux-gnu-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-x86_64-unknown-linux-gnu-release","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-aarch64-unknown-linux-musl-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-aarch64-unknown-linux-musl-release","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-thumbv7em-none-eabi-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-thumbv7em-none-eabi-release","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-x86_64-unknown-linux-gnu-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-x86_64-unknown-linux-gnu-release","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-aarch64-unknown-linux-musl-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-aarch64-unknown-linux-musl-release"]
 
 [groups.aes-accelerated-sanitizers]
 paths = ["scripts/aes/check-aes-accelerated-sanitizers.py", "scripts/aes/test-aes-accelerated-sanitizers.py", "assurance/aes-accelerated-campaigns/sanitizer-control.rs", "assurance/aes-kernel-candidate/probe.rs", "crates/brynja-crypto/tests/aes_execution.rs", "docs/assurance/aes-accelerated-sanitizers.md"]
@@ -1753,7 +1984,7 @@ component = "aes"
 id = "execution-api-msrv"
 category = "compile-fail"
 name = "AES static/hosted exact ownership and admission diagnostics on Rust 1.90.0"
-establishes = "127 paired probes: six clearing owners and authority lifetimes, nontransfer/nonclone bounds, unsafe platform obligations, no report forgery, static/runtime feature isolation and hosted owner encapsulation. Exact diagnostic counts/codes and primary probe source required. Checkout-built direct/facade/hosted APIs, not packaged or runtime cleanup qualification."
+establishes = "223 paired probes: six clearing owners and authority lifetimes, nontransfer/nonclone bounds, unsafe platform obligations, no report forgery, static/runtime feature isolation and hosted owner encapsulation. Exact diagnostic counts/codes and primary probe source required. Checkout-built direct/facade/hosted APIs, not packaged or runtime cleanup qualification."
 command = ["python3", "scripts/aes/check-aes-execution-api.py", "1.90.0"]
 cwd = "."
 inputs = ["aes-execution-api", "aes-runner", "aes-build", "aes-feature-integration", "cpu-source", "hosted-cpu-source", "hkdf-msrv"]
@@ -1763,14 +1994,14 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["AES_EXECUTION_API_0_PASS:", "AES_EXECUTION_API_6_PASS:"]
-unique_lines = ["AES_EXECUTION_API_PASS: 1.90.0 127 paired probes"]
+unique_lines = ["AES_EXECUTION_API_PASS: 1.90.0 223 paired probes"]
 
 [[checks]]
 component = "aes"
 id = "execution-api-current"
 category = "compile-fail"
 name = "AES static/hosted exact ownership and admission diagnostics on Rust 1.99.1"
-establishes = "127 paired probes: six clearing owners and authority lifetimes, nontransfer/nonclone bounds, unsafe platform obligations, no report forgery, static/runtime feature isolation and hosted owner encapsulation. Exact diagnostic counts/codes and primary probe source required. Checkout-built direct/facade/hosted APIs, not packaged or runtime cleanup qualification."
+establishes = "223 paired probes: six clearing owners and authority lifetimes, nontransfer/nonclone bounds, unsafe platform obligations, no report forgery, static/runtime feature isolation and hosted owner encapsulation. Exact diagnostic counts/codes and primary probe source required. Checkout-built direct/facade/hosted APIs, not packaged or runtime cleanup qualification."
 command = ["python3", "scripts/aes/check-aes-execution-api.py", "1.99.1"]
 cwd = "."
 inputs = ["aes-execution-api", "aes-runner", "aes-build", "aes-feature-integration", "cpu-source", "hosted-cpu-source", "compiler"]
@@ -1780,7 +2011,7 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["AES_EXECUTION_API_0_PASS:", "AES_EXECUTION_API_6_PASS:"]
-unique_lines = ["AES_EXECUTION_API_PASS: 1.99.1 127 paired probes"]
+unique_lines = ["AES_EXECUTION_API_PASS: 1.99.1 223 paired probes"]
 
 [groups.aes-dit]
 paths = ["scripts/aes/check-aes-dit.py", "scripts/aes/test-aes-dit.py", "scripts/aes/check-aes-static.py", "docs/assurance/aes-dit.md"]
@@ -2088,7 +2319,7 @@ component = "aes"
 id = "riscv-no-std-msrv-direct"
 category = "aes-riscv-no-std"
 name = "Packaged RV64 bare-metal no_std and API contracts on Rust 1.90.0, direct"
-establishes = "riscv64imac-unknown-none-elf: 8 archive-only library builds in ordinary/evidence configurations, static/runtime features and debug/release; 62 paired exact feature and ownership diagnostics. No std or hosted adapter graph. Compile-only, not AES execution or native admission."
+establishes = "riscv64imac-unknown-none-elf: 8 archive-only library builds in ordinary/evidence configurations, static/runtime features and debug/release; 110 paired exact feature and ownership diagnostics. No std or hosted adapter graph. Compile-only, not AES execution or native admission."
 command = ["python3","scripts/aes/check-aes-accelerated-no-std.py","--toolchain","1.90.0","--route","direct","--riscv"]
 cwd = "."
 inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-accelerated-no-std","aes-execution-api","aes-runner"]
@@ -2098,7 +2329,7 @@ platform = "linux-x86_64"
 timeout_seconds = 1800
 [checks.success]
 contains = ["AES_RISCV_NO_STD_PASS:"]
-unique_lines = ["AES_RISCV_NO_STD_PASS: 1.90.0 direct; 8 bare-metal library builds; 62 paired probes; compile only","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-rv64-ordinary-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-rv64-ordinary-release","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-rv64-evidence-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-rv64-evidence-release","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-rv64-ordinary-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-rv64-ordinary-release","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-rv64-evidence-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-rv64-evidence-release"]
+unique_lines = ["AES_RISCV_NO_STD_PASS: 1.90.0 direct; 8 bare-metal library builds; 110 paired probes; compile only","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-rv64-ordinary-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-rv64-ordinary-release","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-rv64-evidence-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-rv64-evidence-release","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-rv64-ordinary-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-rv64-ordinary-release","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-rv64-evidence-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-rv64-evidence-release"]
 
 [[checks]]
 component = "aes"
@@ -2124,7 +2355,7 @@ component = "aes"
 id = "riscv-no-std-msrv-facade"
 category = "aes-riscv-no-std"
 name = "Packaged RV64 bare-metal no_std and API contracts on Rust 1.90.0, facade"
-establishes = "riscv64imac-unknown-none-elf: 8 archive-only library builds in ordinary/evidence configurations, static/runtime features and debug/release; 62 paired exact feature and ownership diagnostics. No std or hosted adapter graph. Compile-only, not AES execution or native admission."
+establishes = "riscv64imac-unknown-none-elf: 8 archive-only library builds in ordinary/evidence configurations, static/runtime features and debug/release; 110 paired exact feature and ownership diagnostics. No std or hosted adapter graph. Compile-only, not AES execution or native admission."
 command = ["python3","scripts/aes/check-aes-accelerated-no-std.py","--toolchain","1.90.0","--route","facade","--riscv"]
 cwd = "."
 inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-accelerated-no-std","aes-execution-api","aes-runner"]
@@ -2134,7 +2365,7 @@ platform = "linux-x86_64"
 timeout_seconds = 1800
 [checks.success]
 contains = ["AES_RISCV_NO_STD_PASS:"]
-unique_lines = ["AES_RISCV_NO_STD_PASS: 1.90.0 facade; 8 bare-metal library builds; 62 paired probes; compile only","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-rv64-ordinary-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-rv64-ordinary-release","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-rv64-evidence-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-rv64-evidence-release","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-rv64-ordinary-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-rv64-ordinary-release","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-rv64-evidence-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-rv64-evidence-release"]
+unique_lines = ["AES_RISCV_NO_STD_PASS: 1.90.0 facade; 8 bare-metal library builds; 110 paired probes; compile only","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-rv64-ordinary-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-rv64-ordinary-release","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-rv64-evidence-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-rv64-evidence-release","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-rv64-ordinary-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-rv64-ordinary-release","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-rv64-evidence-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-rv64-evidence-release"]
 
 [[checks]]
 component = "aes"
@@ -2160,7 +2391,7 @@ component = "aes"
 id = "riscv-no-std-current-direct"
 category = "aes-riscv-no-std"
 name = "Packaged RV64 bare-metal no_std and API contracts on Rust 1.99.1, direct"
-establishes = "riscv64imac-unknown-none-elf: 8 archive-only library builds in ordinary/evidence configurations, static/runtime features and debug/release; 62 paired exact feature and ownership diagnostics. No std or hosted adapter graph. Compile-only, not AES execution or native admission."
+establishes = "riscv64imac-unknown-none-elf: 8 archive-only library builds in ordinary/evidence configurations, static/runtime features and debug/release; 110 paired exact feature and ownership diagnostics. No std or hosted adapter graph. Compile-only, not AES execution or native admission."
 command = ["python3","scripts/aes/check-aes-accelerated-no-std.py","--toolchain","1.99.1","--route","direct","--riscv"]
 cwd = "."
 inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-accelerated-no-std","aes-execution-api","aes-runner"]
@@ -2170,7 +2401,7 @@ platform = "linux-x86_64"
 timeout_seconds = 1800
 [checks.success]
 contains = ["AES_RISCV_NO_STD_PASS:"]
-unique_lines = ["AES_RISCV_NO_STD_PASS: 1.99.1 direct; 8 bare-metal library builds; 62 paired probes; compile only","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-rv64-ordinary-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-rv64-ordinary-release","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-rv64-evidence-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-rv64-evidence-release","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-rv64-ordinary-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-rv64-ordinary-release","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-rv64-evidence-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-rv64-evidence-release"]
+unique_lines = ["AES_RISCV_NO_STD_PASS: 1.99.1 direct; 8 bare-metal library builds; 110 paired probes; compile only","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-rv64-ordinary-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-rv64-ordinary-release","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-rv64-evidence-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-rv64-evidence-release","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-rv64-ordinary-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-rv64-ordinary-release","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-rv64-evidence-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-rv64-evidence-release"]
 
 [[checks]]
 component = "aes"
@@ -2196,7 +2427,7 @@ component = "aes"
 id = "riscv-no-std-current-facade"
 category = "aes-riscv-no-std"
 name = "Packaged RV64 bare-metal no_std and API contracts on Rust 1.99.1, facade"
-establishes = "riscv64imac-unknown-none-elf: 8 archive-only library builds in ordinary/evidence configurations, static/runtime features and debug/release; 62 paired exact feature and ownership diagnostics. No std or hosted adapter graph. Compile-only, not AES execution or native admission."
+establishes = "riscv64imac-unknown-none-elf: 8 archive-only library builds in ordinary/evidence configurations, static/runtime features and debug/release; 110 paired exact feature and ownership diagnostics. No std or hosted adapter graph. Compile-only, not AES execution or native admission."
 command = ["python3","scripts/aes/check-aes-accelerated-no-std.py","--toolchain","1.99.1","--route","facade","--riscv"]
 cwd = "."
 inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-accelerated-no-std","aes-execution-api","aes-runner"]
@@ -2206,7 +2437,7 @@ platform = "linux-x86_64"
 timeout_seconds = 1800
 [checks.success]
 contains = ["AES_RISCV_NO_STD_PASS:"]
-unique_lines = ["AES_RISCV_NO_STD_PASS: 1.99.1 facade; 8 bare-metal library builds; 62 paired probes; compile only","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-rv64-ordinary-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-rv64-ordinary-release","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-rv64-evidence-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-rv64-evidence-release","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-rv64-ordinary-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-rv64-ordinary-release","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-rv64-evidence-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-rv64-evidence-release"]
+unique_lines = ["AES_RISCV_NO_STD_PASS: 1.99.1 facade; 8 bare-metal library builds; 110 paired probes; compile only","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-rv64-ordinary-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-rv64-ordinary-release","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-rv64-evidence-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-rv64-evidence-release","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-rv64-ordinary-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-rv64-ordinary-release","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-rv64-evidence-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-rv64-evidence-release"]
 
 
 [groups.aes-riscv-linked]
@@ -2733,7 +2964,7 @@ contains = ["Generated"]
 
 # v0.27.2 portable package acceptance: no release-gate coupling.
 [groups.aes-packaged]
-paths = ["Cargo.toml", "Cargo.lock", "assurance/aes-public-api/Cargo.toml", "assurance/aes-public-api/Cargo.lock", "assurance/aes-public-api/src/lib.rs", "assurance/aes-public-api/src/wide.rs", "assurance/aes-public-api/tests/consumer.rs", "assurance/aes-public-api/tests/wide/mod.rs", "scripts/aes/check-aes-packaged.py", "scripts/aes/test-aes-packaged.py", "scripts/aes/check-aes-consumer.py", "scripts/aes/check-aes-api.py", "scripts/aes/check-aes-wide-api.py", "scripts/hkdf/check-hkdf-public-api.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py"]
+paths = ["Cargo.toml", "Cargo.lock", "assurance/aes-public-api/Cargo.toml", "assurance/aes-public-api/Cargo.lock", "assurance/aes-public-api/src/lib.rs", "assurance/aes-public-api/src/wide.rs", "assurance/aes-public-api/tests/consumer.rs", "assurance/aes-public-api/tests/wide/mod.rs", "assurance/aes-public-api/tests/roundtrip.rs", "scripts/aes/check-aes-packaged.py", "scripts/aes/test-aes-packaged.py", "scripts/aes/check-aes-consumer.py", "scripts/aes/check-aes-api.py", "scripts/aes/check-aes-wide-api.py", "scripts/hkdf/check-hkdf-public-api.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py"]
 optional_paths = [".cargo/config", ".cargo/config.toml"]
 [[groups.aes-packaged.tools]]
 program = "python3"
@@ -2743,7 +2974,7 @@ component = "aes"
 id = "packaged-portable"
 category = "package"
 name = "Packaged portable AES-128/192/256 public API (MSRV/current endpoints)"
-establishes = "Byte-checked Cargo archives only; exact portable dependency graphs; 18 public consumer tests per configuration across two routes, two compilers and debug/release; 536 paired diagnostic probes, four archived README executions, default-off feature controls and four no_std Cortex-M compile checks. No acceleration, target execution, side-channel qualification, MCT/MMT or whole-v0.27.2 completion is claimed."
+establishes = "Byte-checked Cargo archives only; exact portable dependency graphs; 21 public consumer tests per configuration across two routes, two compilers and debug/release; 536 paired diagnostic probes, four archived README executions, default-off feature controls and four no_std Cortex-M compile checks. No acceleration, target execution, side-channel qualification, MCT/MMT or whole-v0.27.2 completion is claimed."
 command = ["python3", "scripts/aes/check-aes-packaged.py"]
 cwd = "."
 inputs = ["aes-packaged", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
@@ -3122,7 +3353,7 @@ exact_tests = 8
 unique_lines = ["AES differential executable identity: unchanged; shared libraries not measured","AES packaged differential: PASS; 1.99.1 facade; debug/release; all three widths; no upload","AES_PACKAGED_DIFFERENTIAL_PROFILE: 1.99.1 facade debug; 12288 cases; both owners; public encryption checked","AES_PACKAGED_DIFFERENTIAL_PROFILE: 1.99.1 facade release; 12288 cases; both owners; public encryption checked"]
 
 [groups.aes-consumer]
-paths = ["assurance/aes-public-api/Cargo.toml", "assurance/aes-public-api/Cargo.lock", "assurance/aes-public-api/src/lib.rs", "assurance/aes-public-api/tests/consumer.rs", "assurance/aes-public-api/tests/wide/mod.rs", "assurance/aes-public-api/src/wide.rs", "scripts/aes/check-aes-consumer.py", "scripts/aes/test-aes-consumer.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py", "crates/brynja", "crates/brynja-core", "crates/brynja-crypto", "crates/brynja-hash-core", "crates/brynja-hash-parallel", "crates/brynja-hash-sha2", "crates/brynja-hash-sha3", "crates/brynja-hash-tuple", "crates/brynja-mac-hmac", "crates/brynja-mac-kmac", "crates/brynja-pki", "crates/brynja-protocol", "crates/brynja-tls", "crates/brynja-tls12", "crates/brynja-tls13", "crates/brynja-tls13-handshake"]
+paths = ["assurance/aes-public-api/Cargo.toml", "assurance/aes-public-api/Cargo.lock", "assurance/aes-public-api/src/lib.rs", "assurance/aes-public-api/tests/consumer.rs", "assurance/aes-public-api/tests/wide/mod.rs", "assurance/aes-public-api/tests/roundtrip.rs", "assurance/aes-public-api/src/wide.rs", "scripts/aes/check-aes-consumer.py", "scripts/aes/test-aes-consumer.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py", "crates/brynja", "crates/brynja-core", "crates/brynja-crypto", "crates/brynja-hash-core", "crates/brynja-hash-parallel", "crates/brynja-hash-sha2", "crates/brynja-hash-sha3", "crates/brynja-hash-tuple", "crates/brynja-mac-hmac", "crates/brynja-mac-kmac", "crates/brynja-pki", "crates/brynja-protocol", "crates/brynja-tls", "crates/brynja-tls12", "crates/brynja-tls13", "crates/brynja-tls13-handshake"]
 [[groups.aes-consumer.tools]]
 program = "python3"
 
@@ -3131,7 +3362,7 @@ component = "aes"
 id = "downstream"
 category = "consumer"
 name = "AES-128/192/256 isolated direct and facade public consumers"
-establishes = "Eighteen exact public consumer tests across all three AES widths in eight host configurations: both public routes, Rust 1.90.0/1.99.1, debug/release; four no_std Cortex-M compile-only checks. Pins active dependency sources/features and observes caller unwind/Drop/explicit clearing. Checkout sources, not packaged acceptance, full compiler matrix, target execution or side-channel qualification."
+establishes = "Twenty-one exact public consumer tests across all three AES widths in eight host configurations: both public routes, Rust 1.90.0/1.99.1, debug/release; four no_std Cortex-M compile-only checks. Pins active dependency sources/features and observes caller unwind/Drop/explicit clearing. Checkout sources, not packaged acceptance, full compiler matrix, target execution or side-channel qualification."
 command = ["python3", "scripts/aes/check-aes-consumer.py"]
 cwd = "."
 inputs = ["aes-build", "aes-consumer", "compiler", "hkdf-msrv"]
@@ -3140,14 +3371,14 @@ reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODE
 timeout_seconds = 600
 [checks.success]
 contains = ["AES downstream: PASS;"]
-unique_lines = ["AES downstream: PASS; 8 host configurations; 4 Cortex-M compile checks; checkout sources only", "AES_DOWNSTREAM_HOST: 1.90.0 direct debug 18 exact tests", "AES_DOWNSTREAM_HOST: 1.90.0 direct release 18 exact tests", "AES_DOWNSTREAM_HOST: 1.90.0 facade debug 18 exact tests", "AES_DOWNSTREAM_HOST: 1.90.0 facade release 18 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 direct debug 18 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 direct release 18 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 facade debug 18 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 facade release 18 exact tests", "AES_DOWNSTREAM_TARGET: 1.90.0 direct thumbv7em-none-eabi compile-only", "AES_DOWNSTREAM_TARGET: 1.90.0 facade thumbv7em-none-eabi compile-only", "AES_DOWNSTREAM_TARGET: 1.99.1 direct thumbv7em-none-eabi compile-only", "AES_DOWNSTREAM_TARGET: 1.99.1 facade thumbv7em-none-eabi compile-only", "AES_FEATURE_GATE: 1.90.0 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.90.0 facade absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.99.1 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.99.1 facade absent with defaults on/off; explicit opt-in works"]
+unique_lines = ["AES downstream: PASS; 8 host configurations; 4 Cortex-M compile checks; checkout sources only", "AES_DOWNSTREAM_HOST: 1.90.0 direct debug 21 exact tests", "AES_DOWNSTREAM_HOST: 1.90.0 direct release 21 exact tests", "AES_DOWNSTREAM_HOST: 1.90.0 facade debug 21 exact tests", "AES_DOWNSTREAM_HOST: 1.90.0 facade release 21 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 direct debug 21 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 direct release 21 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 facade debug 21 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 facade release 21 exact tests", "AES_DOWNSTREAM_TARGET: 1.90.0 direct thumbv7em-none-eabi compile-only", "AES_DOWNSTREAM_TARGET: 1.90.0 facade thumbv7em-none-eabi compile-only", "AES_DOWNSTREAM_TARGET: 1.99.1 direct thumbv7em-none-eabi compile-only", "AES_DOWNSTREAM_TARGET: 1.99.1 facade thumbv7em-none-eabi compile-only", "AES_FEATURE_GATE: 1.90.0 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.90.0 facade absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.99.1 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.99.1 facade absent with defaults on/off; explicit opt-in works"]
 
 [[checks]]
 component = "aes"
 id = "downstream-matrix"
 category = "matrix"
 name = "AES-128/192/256 isolated public consumers across 14 Rust compilers"
-establishes = "Eighteen exact tests across all three AES widths for both public routes in debug/release on 14 pinned compilers (56 host configurations); four endpoint-only Cortex-M compile checks. Checkout consumers, not package archives, target execution or timing qualification."
+establishes = "Twenty-one exact tests across all three AES widths for both public routes in debug/release on 14 pinned compilers (56 host configurations); four endpoint-only Cortex-M compile checks. Checkout consumers, not package archives, target execution or timing qualification."
 command = ["python3", "scripts/aes/check-aes-consumer.py", "--matrix"]
 cwd = "."
 inputs = ["aes-build", "aes-consumer", "hkdf-public-api-matrix"]
@@ -3156,7 +3387,7 @@ reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODE
 timeout_seconds = 1800
 [checks.success]
 contains = ["AES downstream matrix: PASS;"]
-unique_lines = ["AES downstream matrix: PASS; 14 compilers; 56 host configurations; 4 Cortex-M compile checks; checkout sources only","AES_DOWNSTREAM_HOST: 1.90.0 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.90.0 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.90.0 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.90.0 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 facade release 18 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 direct debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 direct release 18 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 facade debug 18 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 facade release 18 exact tests","AES_DOWNSTREAM_TARGET: 1.90.0 direct thumbv7em-none-eabi compile-only","AES_DOWNSTREAM_TARGET: 1.90.0 facade thumbv7em-none-eabi compile-only","AES_DOWNSTREAM_TARGET: 1.99.1 direct thumbv7em-none-eabi compile-only","AES_DOWNSTREAM_TARGET: 1.99.1 facade thumbv7em-none-eabi compile-only", "AES_FEATURE_GATE: 1.90.0 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.90.0 facade absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.99.1 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.99.1 facade absent with defaults on/off; explicit opt-in works"]
+unique_lines = ["AES downstream matrix: PASS; 14 compilers; 56 host configurations; 4 Cortex-M compile checks; checkout sources only","AES_DOWNSTREAM_HOST: 1.90.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.90.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.90.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.90.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 facade release 21 exact tests","AES_DOWNSTREAM_TARGET: 1.90.0 direct thumbv7em-none-eabi compile-only","AES_DOWNSTREAM_TARGET: 1.90.0 facade thumbv7em-none-eabi compile-only","AES_DOWNSTREAM_TARGET: 1.99.1 direct thumbv7em-none-eabi compile-only","AES_DOWNSTREAM_TARGET: 1.99.1 facade thumbv7em-none-eabi compile-only", "AES_FEATURE_GATE: 1.90.0 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.90.0 facade absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.99.1 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.99.1 facade absent with defaults on/off; explicit opt-in works"]
 
 [groups.aes-timing]
 paths = ["assurance/aes-timing/Cargo.toml", "assurance/aes-timing/Cargo.lock", "assurance/aes-timing/src", "scripts/aes/check-aes-timing.py", "scripts/aes/test-aes-timing.py", "scripts/hmac/hmac_timing.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py"]

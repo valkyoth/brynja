@@ -34,13 +34,30 @@ class ExecutionApiTests(unittest.TestCase):
 
     def test_all_owners_and_authority_probes_present(self):
         cases = API.probes()
-        self.assertEqual(len(cases), 58)
-        self.assertEqual(len({name for name, *_ in cases}), 58)
+        self.assertEqual(len(cases), 106)
+        self.assertEqual(len({name for name, *_ in cases}), 106)
         for bits in (128, 192, 256):
             self.assertEqual({name for name, *_ in cases if name.startswith(f'expansion-{bits}-')},
                              {f'expansion-{bits}-{kind}' for kind in ('key-width', 'schedule-width', 'alias')})
             for suffix in ('Key', 'ExpandedKey'):
-                self.assertEqual(sum(name.startswith(f'Aes{bits}{suffix}-') for name, *_ in cases), 7)
+                self.assertEqual(sum(name.startswith(f'Aes{bits}{suffix}-') for name, *_ in cases), 15)
+
+    def test_width_probes_are_paired_for_every_owner_and_operation(self):
+        cases = {name: (negative, positive, code) for name, negative, positive, code in API.probes()}
+        for bits, key_bytes, schedule_bytes in ((128, 16, 176), (192, 24, 208), (256, 32, 240)):
+            for suffix, storage in (('Key', key_bytes), ('ExpandedKey', schedule_bytes)):
+                owner = f'Aes{bits}{suffix}'
+                mutations = [('key-width', f'&[0;{key_bytes}]', f'&[0;{key_bytes-1}]'),
+                             ('storage-width', f'mut s=[0;{storage}]', f'mut s=[0;{storage+1}]')]
+                for method in ('encrypt_block', 'decrypt_block', 'encrypt_block_public'):
+                    mutations.extend([(method + '-input-width', f'.{method}(&[0;16]', f'.{method}(&[0;15]'),
+                                      (method + '-output-width', '&mut[0;16]', '&mut[0;17]')])
+                for name, valid, invalid in mutations:
+                    negative, positive, code = cases[owner + '-' + name]
+                    self.assertEqual(code, 'E0308')
+                    self.assertNotEqual(positive, negative)
+                    self.assertEqual(negative, positive.replace(valid, invalid))
+                    self.assertIn(owner + '::new(', positive)
 
 
 if __name__ == '__main__':

@@ -1,5 +1,31 @@
 # Component Verification Status
 
+## AES usability acceptance candidate (v0.27.5)
+
+The [acceptance record](assurance/aes-usability-acceptance.md) and
+[usage guide](aes-usage.md) cover portable and forced-accelerated public
+composition, caller-buffer cleanup, exact width/ownership diagnostics and
+no_std archive isolation. Both Rust endpoints passed the new scoped checks
+before candidate version preparation. The final checklist is unchanged;
+version/pin changes do not convert earlier snapshots into new executions.
+
+No production arithmetic, dispatch, provider API or dependency changes are
+introduced. On 2026-11-13 the owner explicitly carried the accelerated timing
+deferral into this milestone: usability acceptance, not full timing
+qualification. RISC-V remains evidence-only and unadmitted. No native
+refresh, physical protection or universal erasure is claimed. Candidate final
+checks and exact-commit GitHub/CodeQL remain pending; no scheduled pentest or
+crates.io publication is selected under the internal-milestone policy.
+
+All 30 checklist commands passed as working-tree preflight on 2026-11-13.
+This is not a clean-commit gate result. The existing final gate's review guard
+is unchanged; candidate commit and owner retest remain the current handoff
+before commit-bound approval. See the acceptance record for the two corrected
+preflight setup/metadata failures and retained earlier source snapshots.
+
+Older sections below preserve their milestone snapshots, including historical
+pending statements; they do not describe the current candidate's approval.
+
 ## RV64 scalar AES candidate (v0.27.4, in progress)
 
 The [scoped review follow-up](assurance/aes-riscv-pentest-remediation.md)

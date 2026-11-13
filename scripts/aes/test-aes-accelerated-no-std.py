@@ -89,7 +89,7 @@ class AcceleratedNoStdTests(unittest.TestCase):
             self.assertEqual([p[0] for p in probes], ['none-defaults-off', 'none-defaults-on', 'portable-only', 'static-no-platform'])
             self.assertEqual([p[-1] for p in probes], ['E0433', 'E0433', 'E0432', 'E0599'])
             self.assertTrue(all(p[3] != p[4] for p in probes))
-        self.assertEqual(len(r.api.probes()), 58)
+        self.assertEqual(len(r.api.probes()), 106)
 
     def test_pair_stops_after_failed_positive_or_wrong_negative(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -175,7 +175,7 @@ class AcceleratedNoStdTests(unittest.TestCase):
             configurations.add((compiler, route))
             self.assertEqual(c['command'], ['python3', 'scripts/aes/check-aes-accelerated-no-std.py',
                 '--toolchain', compiler, '--route', route, '--riscv'])
-            expected = {f'AES_RISCV_NO_STD_PASS: {compiler} {route}; 8 bare-metal library builds; 62 paired probes; compile only'}
+            expected = {f'AES_RISCV_NO_STD_PASS: {compiler} {route}; 8 bare-metal library builds; 110 paired probes; compile only'}
             expected.update(f'AES_NO_STD_BUILD_PASS: {compiler} {route} {mode}-{name}-{profile}'
                 for mode in ('static', 'runtime') for name, _, _ in r.RISCV_BUILDS for profile in ('debug', 'release'))
             self.assertEqual(set(c['success']['unique_lines']), expected)
@@ -196,7 +196,7 @@ class AcceleratedNoStdTests(unittest.TestCase):
             self.assertIn(route, ('direct', 'facade'))
             self.assertTrue(set(r.REJECT) <= set(c['reject_environment']))
             self.assertTrue({'aes-build', 'aes-accelerated-no-std', 'aes-execution-api', 'aes-runner', 'aes-packaged', 'compiler', 'hkdf-msrv'} <= set(c['inputs']))
-            expected = {f'AES_ACCELERATED_NO_STD_PASS: {compiler} {route}; 12 library builds; 62 paired probes; compile only'}
+            expected = {f'AES_ACCELERATED_NO_STD_PASS: {compiler} {route}; 12 library builds; 110 paired probes; compile only'}
             expected.update(f'AES_NO_STD_BUILD_PASS: {compiler} {route} {mode}-{target}-{profile}'
                             for mode in ('static', 'runtime') for target in r.TARGETS for profile in ('debug', 'release'))
             self.assertEqual(set(c['success']['unique_lines']), expected)

@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.27.5 AES usability acceptance candidate (unreleased)
+
+- Add packaged direct/facade round trips for all AES widths and combinations
+  of operation-local/cached owners, with explicit clearing and buffer canaries.
+- Extend paired accelerated API diagnostics to reject wrong key, storage and
+  input/output block widths; cover archive-only no_std consumers as well.
+- Add an AES usage guide and map historical correctness, machine-code and
+  platform observations without promoting them to current qualification.
+- Retain the owner's explicit accelerated-timing deferral and RISC-V's
+  evidence-only, unadmitted status. No production AES, provider, dependency
+  or hardware-admission change; no new timing experiment or release gate.
+- Prepare internal facade 0.27.5 and matching consumer pins. No crates.io
+  publication or scheduled pentest is selected; final checks, exact-commit
+  GitHub/CodeQL and separate tag authorization remain pending.
+
 ## 0.27.4 RISC-V AES candidate (unreleased)
 
 - Add evidence-only RV64 Zkne/Zknd AES-128/192/256 expansion, encryption and

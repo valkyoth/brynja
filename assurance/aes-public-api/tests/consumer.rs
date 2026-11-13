@@ -1,5 +1,6 @@
 //! Downstream observations using public types only; no production source includes.
 #![forbid(unsafe_code)]
+mod roundtrip;
 mod wide;
 use brynja_aes_public_api_fixture::{
     aes::{Aes128ExpandedKey, Aes128Key},

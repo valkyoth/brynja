@@ -293,6 +293,10 @@ The project targets Linux, Windows, BSD, macOS, Android, iOS and bare-metal
 native execution and ISA qualification are separate evidence levels.
 RISC-V instruction results based on QEMU are not native hardware qualification.
 
+The [AES usage guide](docs/aes-usage.md) explains the current development
+checkout's portable, static and hosted APIs, caller-owned storage, tested
+examples and explicit qualification limits.
+
 The v0.27.4 [RISC-V AES candidate](docs/assurance/aes-riscv-development.md)
 implements RV64 scalar Zkne/Zknd only behind the explicit evidence build cfg.
 Ordinary static and hosted AES dispatch remain unadmitted on RISC-V, even when

@@ -1,21 +1,21 @@
 [release]
-version = "0.27.4"
-milestone = "0.27.4"
+version = "0.27.5"
+milestone = "0.27.5"
 baseline = "0.25.3"
-cumulative_milestones = ["0.26.0", "0.26.1", "0.27.0", "0.27.1", "0.27.2", "0.27.3", "0.27.4"]
+cumulative_milestones = ["0.26.0", "0.26.1", "0.27.0", "0.27.1", "0.27.2", "0.27.3", "0.27.4", "0.27.5"]
 policy = "independent"
 stage = "internal"
 # Legacy explicit runner default only; routine gates use final-checks.toml, not this selector.
 verification = "affected"
-exceptional = true
-exception_reason = "Evidence-only RISC-V AES candidate with QEMU functional evidence, not native qualification; owner-supplied scoped pentest/retests before the unchanged finite final gate. Ordinary RISC-V AES routes remain unadmitted."
+exceptional = false
+exception_reason = ""
 
 [crates."brynja"]
-previous_version = "0.27.3"
-version = "0.27.4"
+previous_version = "0.27.4"
+version = "0.27.5"
 change = "metadata"
 publish = false
-reason = "RISC-V AES evidence-only internal candidate; scoped pentest and green CI required before a signed tag. No native admission or crates.io publication selected."
+reason = "AES usability acceptance: public-consumer tests, tooling and documentation only; no production algorithm or admission change. Retain the owner-accepted timing limitation and evidence-only RISC-V boundary. Existing checks and green CI precede a separately authorized signed tag; no crates.io publication selected."
 
 [crates."brynja-legacy-hmac"]
 previous_version = "0.1.0"

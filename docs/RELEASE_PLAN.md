@@ -6472,9 +6472,17 @@ Exit criteria:
 
 ### v0.27.5 - AES Public API Usability Acceptance
 
-Status: planned
+Status: in progress
 
-Plan scope: Close the AES primitive chain with a packaged public consumer that performs forward and inverse known-answer operations for all three key widths through scalar and every admitted backend, verifies round trips and schedule cleanup, rejects wrong key sizes and unavailable forced paths, and preserves no_std, package, and architecture isolation. Close the compiler/target/profile qualification matrix and AESAVS campaigns for every admitted implementation, with explicit physical-protection residuals and no mandatory HSM.
+The initial slice strengthens packaged public-consumer composition checks for
+all three widths and both owner forms. It changes no cipher implementation or
+backend admission. See the [acceptance worklist](assurance/aes-usability-acceptance.md).
+On 2026-11-13 the owner explicitly carried forward the documented accelerated
+timing deferral into this milestone. Usability acceptance does not claim timing
+acceptance; the original observations and inconclusive verdicts stay unchanged.
+RISC-V remains an evidence-only QEMU candidate, not an admitted native backend.
+
+Plan scope: Close AES primitive usability with a packaged public consumer that performs forward and inverse known-answer operations for all three key widths through scalar and every admitted backend, verifies round trips and schedule cleanup, rejects wrong key sizes and unavailable forced paths, and preserves no_std, package, and architecture isolation. Reconcile the compiler/target/profile qualification matrix and AESAVS campaigns for every admitted implementation, retaining unresolved accelerated timing as an owner-accepted limitation rather than completed qualification, with explicit physical-protection residuals and no mandatory HSM.
 
 Goal: close the **AES Public API Usability Acceptance** review unit as a complete named capability
 without silently admitting adjacent algorithms, acceleration, or consumer scope.
@@ -6492,10 +6500,16 @@ Deliverables:
 
 Verification:
 
-- Close the qualification matrix from v0.27.2 through v0.27.4: require recorded
-  emitted-code and fixed-versus-random timing acceptance for each admitted
+- Reconcile the qualification matrix from v0.27.2 through v0.27.4: map recorded
+  emitted-code and fixed-versus-random timing observations to each named
   compiler/target/profile and backend, cached and operation-local schedules,
   with representative final-linked/LTO consumers and no retries-to-pass.
+  Retain inconclusive accelerated timing as unresolved, not a pass. The owner
+  accepted deferral on 2026-11-13; no new timing experiment is required to close
+  usability acceptance. Stronger timing claims require a separately declared
+  future study. Preserve original source identities, alarms and noise flags;
+  historical records are not current-build qualification. RISC-V remains
+  evidence-only and unadmitted. This is no waiver for a newly demonstrated defect.
 - Require AESAVS Monte Carlo and multiblock campaigns for all three key widths
   and both directions through packaged portable and forced-backend operations.
   Preserve scoped reuse of unchanged evidence; do not rerun whole campaigns

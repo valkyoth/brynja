@@ -1,7 +1,7 @@
 # Crate Version Matrix
 
-Current development candidate: v0.27.4, with zero crates selected for publication.
-The facade advances to 0.27.4; existing supporting-crate versions remain at
+Current development candidate: v0.27.5, with zero crates selected for publication.
+The facade advances to 0.27.5; existing supporting-crate versions remain at
 their 0.25.3 checkpoint values. AES/HKDF development code remains in
 `brynja-crypto 0.2.0`; CPU crates remain at 0.2.0 and
 `brynja-legacy-hkdf 0.1.0` is held for a later checkpoint. The RISC-V AES
@@ -11,7 +11,10 @@ The
 authoritative package names, versions and dependency order are in
 [`release-crates.toml`](../release-crates.toml), inspectable with
 `python3 scripts/release/release_crates.py --check`. Selection is not publication
-or release approval. Scoped 0.27.4 review and the final gate remain pending.
+or release approval. The existing final checks and exact-commit GitHub/CodeQL
+handoff remain pending. This usability-only internal milestone adds no scheduled
+pentest; exceptional findings still require review. Accelerated timing remains
+an explicitly accepted limitation, not completed qualification.
 
 ## Historical matrix (v0.24.x planning snapshot)
 

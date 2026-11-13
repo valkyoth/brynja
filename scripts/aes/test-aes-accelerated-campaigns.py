@@ -15,6 +15,88 @@ SPEC.loader.exec_module(runner)
 
 
 class AcceleratedCampaignTests(unittest.TestCase):
+    def test_roundtrip_adaptation_preserves_all_portable_assertions(self):
+        original = (runner.ROOT / 'assurance/aes-public-api/tests/roundtrip.rs').read_text()
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            runner.prepare_roundtrip(directory)
+            adapted = (directory / 'tests/roundtrip.rs').read_text()
+        restored = adapted.replace('use brynja_aes_accelerated_fixture::{aes, forced_authority};',
+                                   'use brynja_aes_public_api_fixture::aes;')
+        restored = restored.replace('\n            let authority = forced_authority().unwrap();', '')
+        for owner in ('$key', '$cached'):
+            restored = restored.replace('aes::' + owner + '::new(authority.get().unwrap(), ',
+                                        'aes::' + owner + '::new(')
+        self.assertEqual(restored, original)
+        self.assertEqual(adapted.count('authority.get().unwrap()'), 4)
+
+    def test_roundtrip_source_missing_symlink_or_anchor_change_rejected(self):
+        original = (runner.ROOT / 'assurance/aes-public-api/tests/roundtrip.rs').read_text()
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / 'assurance/aes-public-api/tests/roundtrip.rs'
+            source.parent.mkdir(parents=True)
+            with patch.object(runner, 'ROOT', root):
+                with self.assertRaises(ValueError):
+                    runner.prepare_roundtrip(root)
+                source.symlink_to(runner.HERE / 'test-aes-accelerated-campaigns.py')
+                with self.assertRaises(ValueError):
+                    runner.prepare_roundtrip(root)
+                source.unlink()
+                for old in ('use brynja_aes_public_api_fixture::aes;', 'fn $name() {',
+                            'aes::$key::new(', 'aes::$cached::new('):
+                    source.write_text(original.replace(old, 'changed', 1))
+                    with self.assertRaises(ValueError):
+                        runner.prepare_roundtrip(root)
+
+    def test_roundtrip_population_and_backend_fail_closed(self):
+        for arm, rv64, backend in ((False, False, 'X86AesNi'), (True, False, 'ArmAes'),
+                                   (False, True, 'RiscVScalarAes')):
+            rows = [f'test aes{bits} ... ok' for bits in (128, 192, 256)]
+            summary = 'test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;'
+            output = '\n'.join([*rows, summary, *([f'AES_FORCED_AUTHORITY: {backend}'] * 3)])
+            runner.validate(output, 'roundtrip', arm, rv64)
+            mutations = ['', output * 2, output.replace('3 passed', '0 passed'),
+                         output.replace('0 filtered out', '1 filtered out'),
+                         output.replace(backend, 'Portable'), output.replace('aes256', 'unrelated'),
+                         output.replace(f'AES_FORCED_AUTHORITY: {backend}', '', 1)]
+            for row in rows:
+                mutations += [output.replace(row, ''), output + '\n' + row,
+                              output.replace(row, row.replace('ok', 'ignored'))]
+            for changed in mutations:
+                with self.assertRaises(ValueError):
+                    runner.validate(changed, 'roundtrip', arm, rv64)
+            with self.assertRaises(ValueError):
+                runner.validate(output, 'unknown', arm, rv64)
+
+    def test_roundtrip_registry_binds_routes_profiles_and_population(self):
+        registry = tomllib.loads((runner.ROOT / 'verification/checks.toml').read_text())
+        rows = [row for row in registry['checks'] if row.get('category') == 'aes-roundtrip']
+        expected = {(compiler, route, admission, mode) for compiler in ('1.90.0', '1.99.1')
+                    for route in ('direct', 'facade')
+                    for admission, mode in (('static', 'native'), ('static', 'arm-qemu'), ('hosted', 'arm-qemu'))}
+        self.assertEqual(len(rows), len(expected))
+        actual = set()
+        for row in rows:
+            command = row['command']
+            compiler, route, admission, mode = command[3:10:2]
+            actual.add((compiler, route, admission, mode))
+            self.assertEqual(command, ['python3', 'scripts/aes/check-aes-accelerated-campaigns.py',
+                '--toolchain', compiler, '--route', route, '--admission', admission,
+                '--mode', mode, '--suite', 'roundtrip'])
+            self.assertEqual(row['success']['exact_tests'], 6)
+            self.assertEqual(row['success']['minimum_tests'], 6)
+            self.assertEqual(row['success']['unique_lines'], [runner.marker(compiler, route, admission, mode, 'roundtrip')])
+            self.assertTrue({'aes-build', 'aes-accelerated-campaigns', 'aes-accelerated-roundtrip',
+                             'aes-packaged', 'hkdf-public-api-modern', 'compiler', 'hkdf-msrv'} <= set(row['inputs']))
+            if mode == 'arm-qemu':
+                self.assertIn('aes-kernel-qemu', row['inputs'])
+            if admission == 'hosted':
+                self.assertIn('hosted-cpu-source', row['inputs'])
+        self.assertEqual(actual, expected)
+        self.assertIn('assurance/aes-public-api/tests/roundtrip.rs',
+                      registry['groups']['aes-accelerated-roundtrip']['paths'])
+
     def test_build_artifact_selection_rejects_wrong_or_ambiguous_tests(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary).resolve()

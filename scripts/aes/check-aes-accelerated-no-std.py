@@ -205,12 +205,12 @@ def check(compiler, route, riscv=False):
                 negative, positive = (s.replace('brynja_crypto', 'brynja::crypto') for s in (negative, positive))
             pair(command, directory, env, artifacts, name, negative, positive, code)
             count += 1
-        require(len(builds) == (8 if riscv else 12) and count == 62, 'no_std campaign population changed')
+        require(len(builds) == (8 if riscv else 12) and count == 110, 'no_std campaign population changed')
         (artifacts / 'builds.json').write_text(json.dumps(builds, indent=2) + '\n')
     if riscv:
-        print(f'AES_RISCV_NO_STD_PASS: {compiler} {route}; 8 bare-metal library builds; 62 paired probes; compile only', flush=True)
+        print(f'AES_RISCV_NO_STD_PASS: {compiler} {route}; 8 bare-metal library builds; 110 paired probes; compile only', flush=True)
     else:
-        print(f'AES_ACCELERATED_NO_STD_PASS: {compiler} {route}; 12 library builds; 62 paired probes; compile only', flush=True)
+        print(f'AES_ACCELERATED_NO_STD_PASS: {compiler} {route}; 12 library builds; 110 paired probes; compile only', flush=True)
 
 
 if __name__ == '__main__':

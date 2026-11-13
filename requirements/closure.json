@@ -1558,7 +1558,7 @@
         "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
       },
       "requirement_ids": [],
-      "scope": "Close the AES primitive chain with a packaged public consumer that performs forward and inverse known-answer operations for all three key widths through scalar and every admitted backend, verifies round trips and schedule cleanup, rejects wrong key sizes and unavailable forced paths, and preserves no_std, package, and architecture isolation. Close the compiler/target/profile qualification matrix and AESAVS campaigns for every admitted implementation, with explicit physical-protection residuals and no mandatory HSM.",
+      "scope": "Close AES primitive usability with a packaged public consumer that performs forward and inverse known-answer operations for all three key widths through scalar and every admitted backend, verifies round trips and schedule cleanup, rejects wrong key sizes and unavailable forced paths, and preserves no_std, package, and architecture isolation. Reconcile the compiler/target/profile qualification matrix and AESAVS campaigns for every admitted implementation, retaining unresolved accelerated timing as an owner-accepted limitation rather than completed qualification, with explicit physical-protection residuals and no mandatory HSM.",
       "source_ids": [],
       "title": "AES Public API Usability Acceptance",
       "version": "0.27.5"

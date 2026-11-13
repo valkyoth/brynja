@@ -194,7 +194,7 @@ def configuration(directory, root, versions, compiler, route, env):
         if profile == 'release':
             command.append('--release')
         consumer.check_tests(archives.run(command, directory, env).stdout)
-        print(f'AES_PACKAGED_HOST: {compiler} {route} {profile} 18 exact tests', flush=True)
+        print(f'AES_PACKAGED_HOST: {compiler} {route} {profile} 21 exact tests', flush=True)
     public_negatives(directory, cargo, selection, env, route)
     print(f'AES_PACKAGED_API: {compiler} {route} 134 paired probes', flush=True)
     readme_example(directory, root, versions, cargo, selection, env, route)

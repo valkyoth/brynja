@@ -513,6 +513,8 @@ class RegistryTests(unittest.TestCase):
             expected[f'riscv-linked-{endpoint}'] = 0
             expected[f'riscv-startup-{endpoint}'] = 0
             for route in ('direct', 'facade'):
+                for mode, admission in (('native', 'static'), ('arm-qemu', 'static'), ('arm-qemu', 'hosted')):
+                    expected[f'roundtrip-{mode}-{admission}-{endpoint}-{route}'] = 6
                 expected[f'riscv-avs-{endpoint}-{route}'] = 12
                 expected[f'riscv-oracle-{endpoint}-{route}'] = 8
                 expected[f'riscv-no-std-{endpoint}-{route}'] = 0
@@ -661,7 +663,7 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(check['command'], ['python3', 'scripts/aes/check-aes-consumer.py'])
         self.assertEqual(check['success']['contains'], ['AES downstream: PASS;'])
         self.assertEqual(check['success']['unique_lines'], [consumer.MARKER] + [
-            f'AES_DOWNSTREAM_HOST: {compiler} {route} {profile} 18 exact tests'
+            f'AES_DOWNSTREAM_HOST: {compiler} {route} {profile} 21 exact tests'
             for compiler in consumer.TOOLCHAINS for route in consumer.ROUTES for profile in ('debug', 'release')
         ] + [f'AES_DOWNSTREAM_TARGET: {compiler} {route} thumbv7em-none-eabi compile-only'
              for compiler in consumer.TOOLCHAINS for route in consumer.ROUTES] + consumer.FEATURE_MARKERS)
@@ -684,7 +686,7 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual({(t['program'], t['toolchain']) for t in tools},
                          {(program, compiler) for compiler in consumer.MATRIX for program in ('cargo', 'rustc')})
         self.assertEqual(check['success']['unique_lines'], [consumer.MATRIX_MARKER] + [
-            f'AES_DOWNSTREAM_HOST: {compiler} {route} {profile} 18 exact tests'
+            f'AES_DOWNSTREAM_HOST: {compiler} {route} {profile} 21 exact tests'
             for compiler in consumer.MATRIX for route in consumer.ROUTES for profile in ('debug', 'release')
         ] + [f'AES_DOWNSTREAM_TARGET: {compiler} {route} thumbv7em-none-eabi compile-only'
              for compiler in consumer.TOOLCHAINS for route in consumer.ROUTES] + consumer.FEATURE_MARKERS)

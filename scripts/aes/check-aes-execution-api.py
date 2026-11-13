@@ -49,6 +49,19 @@ def probes():
                           start + 'k.clear(); s.fill(1);}', 'E0499'))
             negative = prefix + f'fn main(){{let mut s=[0;{storage}]; let k; {{let a=Authority::new(Kernel::X86AesNi).unwrap(); k={owner}::new(&a,&[0;{size}],&mut s).unwrap();}} let _=k.report();}}'
             cases.append((owner + '-authority-lifetime', negative, start + 'let _=k.report();}', 'E0597'))
+            constructor = prefix + f'fn main(){{let a=Authority::new(Kernel::X86AesNi).unwrap(); let mut s=[0;{storage}]; let _={owner}::new(&a,&[0;{size}],&mut s);}}'
+            cases.append((owner + '-key-width', constructor.replace(f'&[0;{size}]', f'&[0;{size-1}]'),
+                          constructor, 'E0308'))
+            cases.append((owner + '-storage-width', constructor.replace(f'mut s=[0;{storage}]', f'mut s=[0;{storage+1}]'),
+                          constructor, 'E0308'))
+            for method in ('encrypt_block', 'decrypt_block', 'encrypt_block_public'):
+                acknowledgement = (',brynja_crypto::aes::PublicCiphertext::acknowledge()'
+                                   if method == 'encrypt_block_public' else '')
+                good = start + f'let _=k.{method}(&[0;16],&mut[0;16]{acknowledgement});}}'
+                cases.append((owner + '-' + method + '-input-width',
+                              good.replace(f'.{method}(&[0;16]', f'.{method}(&[0;15]'), good, 'E0308'))
+                cases.append((owner + '-' + method + '-output-width',
+                              good.replace('&mut[0;16]', '&mut[0;17]'), good, 'E0308'))
     for bound in ('Send', 'Sync', 'Copy', 'Clone', 'core::fmt::Debug'):
         negative = prefix + f'fn need<T:{bound}>(){{}} fn main(){{need::<Authority>();}}'
         cases.append(('authority-' + bound, negative, negative.replace('T:' + bound, 'T'),
@@ -69,7 +82,7 @@ def probes():
         negative = borrowed + f'let key=(&b[..{size}]).try_into().unwrap(); let out=(&mut b[..{expanded}]).try_into().unwrap(); let _=s.expand{bits}(key,out);' + end
         positive = borrowed + f'let (key,out)=b.split_at_mut({size}); let _=s.expand{bits}((&*key).try_into().unwrap(),out.try_into().unwrap());' + end
         cases.append((f'expansion-{bits}-alias', negative, positive, 'E0502'))
-    assert len(cases) == 58
+    assert len(cases) == 106
     return cases
 
 
@@ -106,8 +119,8 @@ def run(tc):
             API.run_probes(tc, directory, env, cases=cases, features=feature, package=package,
                            label=f'AES_EXECUTION_API_{index}')
             total += len(cases)
-    assert total == 127
-    print(f'AES_EXECUTION_API_PASS: {tc} 127 paired probes', flush=True)
+    assert total == 223
+    print(f'AES_EXECUTION_API_PASS: {tc} 223 paired probes', flush=True)
 
 
 if __name__ == '__main__':

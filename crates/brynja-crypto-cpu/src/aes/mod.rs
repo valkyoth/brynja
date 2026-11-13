@@ -137,6 +137,28 @@ pub struct Report {
     pub generation: u64,
 }
 
+impl Report {
+    /// Whether this AES kernel is restricted to explicit evidence builds.
+    /// This is independent of health: a healthy candidate is still unqualified.
+    /// False does not certify any other kernel, CPU or surrounding application.
+    /// Like the public fields, this observation cannot authorize execution or
+    /// authenticate build provenance; callers can construct reports themselves.
+    ///
+    /// ```
+    /// use brynja_crypto_cpu::aes::{Health, Kernel, Report};
+    /// const REPORT: Report = Report {
+    ///     kernel: Kernel::RiscVScalarAes,
+    ///     health: Health::Healthy,
+    ///     generation: 2,
+    /// };
+    /// const EVIDENCE_ONLY: bool = REPORT.evidence_only();
+    /// assert!(EVIDENCE_ONLY);
+    /// ```
+    pub const fn evidence_only(&self) -> bool {
+        matches!(self.kernel, Kernel::RiscVScalarAes)
+    }
+}
+
 /// Sealed, thread-bound static or platform execution authority. No Clone or reset.
 /// Startup failure returns a quarantined owner so the failure is observable.
 ///

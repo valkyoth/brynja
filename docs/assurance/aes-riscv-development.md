@@ -44,6 +44,24 @@ its lifetime-long complete-ISA obligation. The custom cfg is a deliberate
 developer evidence opt-in, not authentication or a hostile-builder boundary.
 Ordinary `--all-features` does not enable it.
 
+`Authority::report().evidence_only()` explicitly identifies the RV64 AES
+candidate even when its startup health is `Healthy`, and remains true on
+quarantine. It classifies the kernel, not the entire binary or build flags.
+False for another kernel is not certification. The report is copyable public
+data, not an authenticated receipt or an execution permit. Builders must audit
+effective Cargo configuration and compiler flags; another feature switch under
+the same builder's control would not authenticate an evidence build.
+
+The ratified instruction descriptions require data-independent latency for
+the AES64 operations themselves, independently of Zkt. Zkt additionally covers
+supporting instructions; it is not a runtime DIT enable bit. Future native
+admission must assess Zkt or equivalent documented timing guarantees for the
+actual supporting instruction stream on every eligible hart, plus platform
+memory behavior and native evidence. Neither the instruction contract nor a
+Zkt feature flag establishes whole-program constant time. The current candidate
+still makes no native timing claim. See the
+[review dispositions](aes-riscv-pentest-remediation.md) for the source and scope.
+
 Startup compares complete schedules and both block directions for all widths.
 Existing authority generation, health rechecks, error/unwind quarantine and
 guarded output handling remain shared rather than copied into a new lifecycle.

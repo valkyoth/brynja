@@ -2,6 +2,14 @@
 
 ## RV64 scalar AES candidate (v0.27.4, in progress)
 
+The [scoped review follow-up](assurance/aes-riscv-pentest-remediation.md)
+preserves both owner-supplied reports, corrects the AES/Zkt premise and retains
+the accepted fault/residue limitations. It adds a tested evidence-only report
+query and a 72-mutant store-width regression, without changing AES instructions
+or admission. Follow-up tests passed: 1,070 registry tests, 42 release-workflow
+tests, both core QEMU campaigns and eight packaged linked consumers. These
+engineering dispositions are not a new independent review or release approval.
+
 The [development record](assurance/aes-riscv-development.md) describes the
 evidence-only Zkne/Zknd AES-128/192/256 implementation and its QEMU runner.
 Ordinary static and hosted routes remain unadmitted. The offered cloud host

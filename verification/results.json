@@ -21795,6 +21795,28 @@
         "after": "1762705b8a2a3ea2bcfbb9ce8093228d35be81d9f7a2a987859223890b3de226",
         "log": "verification/.runner/logs/2-1794565877743466378.log",
         "log_sha256": "455be98e0d5d7cd3b5b1f02a4bc7648bd572351d506364e35f3737bdf3ac57ab"
+      },
+      {
+        "id": "2-1794567395583135723",
+        "source": "working tree based on c07c5358bc4ceddc595def5f28ead8b1767c3ab2; scoped fingerprint 7bd5c0ab2aab4c987b45511898029206395378cdf1c7e733c08fdce79ee902ef",
+        "started": "2026-11-13T10:56:35.58313396Z",
+        "ended": "2026-11-13T10:56:46.768352329Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-riscv-linked.py",
+          "--toolchain",
+          "1.99.1"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "c4e6f82fa40b30dbd27c481e391aa724c8ae4555cf406122cd6ecc530f16d53e",
+        "after": "c4e6f82fa40b30dbd27c481e391aa724c8ae4555cf406122cd6ecc530f16d53e",
+        "log": "verification/.runner/logs/2-1794567395583135723.log",
+        "log_sha256": "0a014e29c1c5a4f35e3c135f5178daa70a2fcfe2c516bb6878f6754dc1d670a6"
       }
     ],
     "aes/riscv-linked-msrv": [
@@ -22017,6 +22039,28 @@
         "after": "1827b0ed60085032dacd0498ffea84cbcbfa9df6bbca1653cfafbdfd8ebc65f8",
         "log": "verification/.runner/logs/2-1794565865001376812.log",
         "log_sha256": "a8f811e91bfdc00e624b7aa3772936e7b32e33cb5d0ba6a73a2f83201699b0c5"
+      },
+      {
+        "id": "2-1794567382104757593",
+        "source": "working tree based on c07c5358bc4ceddc595def5f28ead8b1767c3ab2; scoped fingerprint f19d13f7321c61001f0de5b37b1f27d4b5a5fa0faec618dbb7c92495bf32723b",
+        "started": "2026-11-13T10:56:22.104755949Z",
+        "ended": "2026-11-13T10:56:34.600637288Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-riscv-linked.py",
+          "--toolchain",
+          "1.90.0"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "1d30d7f7da3168aa5a7cd2e60110ae698b26d0f078f642f12b79b769dd1a8fef",
+        "after": "1d30d7f7da3168aa5a7cd2e60110ae698b26d0f078f642f12b79b769dd1a8fef",
+        "log": "verification/.runner/logs/2-1794567382104757593.log",
+        "log_sha256": "ca778b03681e680dad7ab6740b851fcd4a4e024eb333b525bf295ddbff84445b"
       }
     ],
     "aes/riscv-no-std-current-direct": [
@@ -22729,6 +22773,28 @@
         "after": "a78dd3a6eea7e60cc41fa66b4062c7bf1d7340d89d1e7f97c051c26ffcee4c73",
         "log": "verification/.runner/logs/2-1794565769885572348.log",
         "log_sha256": "51a0ea106493c7b3ff06023e62336f336c4b502749df82e104118b8855d25dcf"
+      },
+      {
+        "id": "2-1794567308971141762",
+        "source": "working tree based on c07c5358bc4ceddc595def5f28ead8b1767c3ab2; scoped fingerprint a01f238eb9224c9d2b54dfcb6438c5b66cb2b6acc25738e96af61c1d6bb1253a",
+        "started": "2026-11-13T10:55:08.971139888Z",
+        "ended": "2026-11-13T10:56:11.6279472Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-riscv.py",
+          "--toolchain",
+          "1.99.1"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "2d83407cd746aae758b109be0f986e1ef5b4ed8c8b54f22245877e3f0a34b7a2",
+        "after": "2d83407cd746aae758b109be0f986e1ef5b4ed8c8b54f22245877e3f0a34b7a2",
+        "log": "verification/.runner/logs/2-1794567308971141762.log",
+        "log_sha256": "44388cae19b3f1045c3a16ccb64e1021ebd1c81efaef5624896035427860510d"
       }
     ],
     "aes/riscv-qemu-msrv": [
@@ -22885,6 +22951,28 @@
         "after": "92a2e533e25920c570e516a19a5d9a1043f54b51b5495c0e761cc23975ec12e9",
         "log": "verification/.runner/logs/2-1794565753630846626.log",
         "log_sha256": "8dd93fdedb6acf18efa734cdeb0c606f942e170ed5b385c5283e285877cb7884"
+      },
+      {
+        "id": "2-1794567241018085458",
+        "source": "working tree based on c07c5358bc4ceddc595def5f28ead8b1767c3ab2; scoped fingerprint 90aa021c17467eef33f267366a6acc279abe4da19fcc08a3b2b7e1c07ff06ca0",
+        "started": "2026-11-13T10:54:01.018083604Z",
+        "ended": "2026-11-13T10:55:08.080150069Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-riscv.py",
+          "--toolchain",
+          "1.90.0"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "4bdb59a6663fbcd4510484f7bdeb16a1ca2c0ec7c8920c05a509d10bc460e765",
+        "after": "4bdb59a6663fbcd4510484f7bdeb16a1ca2c0ec7c8920c05a509d10bc460e765",
+        "log": "verification/.runner/logs/2-1794567241018085458.log",
+        "log_sha256": "5d74534d3ca6caa654a482a6d68ddee831346fc32fa4cacd836e5c001ea79964"
       }
     ],
     "aes/riscv-startup-current": [
@@ -34727,8 +34815,8 @@
       "last_success": "2026-11-08T09:48:10.729067635Z"
     },
     "aes/aarch64-linked-helpers-review": {
-      "checked_at": "2026-11-13T10:32:02.034989645Z",
-      "fingerprint": "a5ad7359993ca68aa921008bd99c888365c72cfd3d5bd95b19b54383b5723d80",
+      "checked_at": "2026-11-13T10:57:13.827295519Z",
+      "fingerprint": "fb169e12669bb0c8e720a611855f81e9710a791a5b15ff1fe677a78b971d1d0c",
       "result": "passed",
       "freshness": "Outdated: aes-arm-linked-review: scripts/aes/aes_aarch64_linked.py changed; aes-arm-linked-review: scripts/aes/test-aes-aarch64-linked.py changed; aes-build: crates/brynja-crypto/Cargo.toml [features] changed",
       "source": "working tree based on d3d78b5f463d7157d8bf18bb691ef7597e82be89; scoped fingerprint c301d38acc4ed47b46f42bc7845fe1bcc21d56439ec8cb7dc317480f2ebd4442",
@@ -34736,8 +34824,8 @@
       "last_success": "2026-11-08T10:06:21.545141671Z"
     },
     "aes/accelerated-arm-cached-hosted-current": {
-      "checked_at": "2026-11-13T10:32:01.910799796Z",
-      "fingerprint": "912e80da80b1dffccb74daed51de6c120e1c39d0adda87c0d3be7bb435c181f7",
+      "checked_at": "2026-11-13T10:57:13.706671673Z",
+      "fingerprint": "cb1257d97da5b5fd4930da13b69b9759c30ac98c264420d07f781d10a26672b6",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-arm-constructors: scripts/aes/aes_aarch64_linked.py changed; aes-accelerated-arm-constructors: scripts/aes/test-aes-aarch64-linked.py changed; aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 420eb296dab85a1041805759fe463171d3e9db25790aaec31dbc224798a1fa11",
@@ -34745,8 +34833,8 @@
       "last_success": "2026-11-10T15:49:16.725722783Z"
     },
     "aes/accelerated-arm-cached-hosted-msrv": {
-      "checked_at": "2026-11-13T10:32:01.91013774Z",
-      "fingerprint": "285b117fb6b6430fe1171de2619250cc393055249e6115f2c22eadfa2a1ede50",
+      "checked_at": "2026-11-13T10:57:13.705985882Z",
+      "fingerprint": "e08c4a1acefa5566fa70d6f89b24bc3f878ff265613761bddee022dee069ef32",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-arm-constructors: scripts/aes/aes_aarch64_linked.py changed; aes-accelerated-arm-constructors: scripts/aes/test-aes-aarch64-linked.py changed; aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint ad358861de86d178090a075c414901246f103e4e674365d3e7de9ef215d9aaa3",
@@ -34754,8 +34842,8 @@
       "last_success": "2026-11-10T15:48:40.639642914Z"
     },
     "aes/accelerated-arm-cached-static-current": {
-      "checked_at": "2026-11-13T10:32:01.910467721Z",
-      "fingerprint": "87a0ce15642520ee7464cba0c5de34d7b43017501a0fe994a48ee1368990b72f",
+      "checked_at": "2026-11-13T10:57:13.706325251Z",
+      "fingerprint": "91349e6dc720b43eb600e95b48babdffed56bdf0d24333332c3513edd98f0690",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-arm-constructors: scripts/aes/aes_aarch64_linked.py changed; aes-accelerated-arm-constructors: scripts/aes/test-aes-aarch64-linked.py changed; aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 73474d30f0f58c5f2745268f6e7fa0dde81a670bf414cdd02f7551eb699d3893",
@@ -34763,8 +34851,8 @@
       "last_success": "2026-11-10T15:48:58.260694707Z"
     },
     "aes/accelerated-arm-cached-static-msrv": {
-      "checked_at": "2026-11-13T10:32:01.909795636Z",
-      "fingerprint": "615a49d1add885bb3ecb320042119c7090d0758381b736076323ad5f4c91cfff",
+      "checked_at": "2026-11-13T10:57:13.705645641Z",
+      "fingerprint": "c82b3ce18fea583b0c26c75d194ac2ef702c463169e2aa0ed62f186aeacd57d4",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-arm-constructors: scripts/aes/aes_aarch64_linked.py changed; aes-accelerated-arm-constructors: scripts/aes/test-aes-aarch64-linked.py changed; aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 8f7acd2ae89363227df91b31ef9cf54fde5f3963d40e5ae9e473857f65a46a57",
@@ -34772,8 +34860,8 @@
       "last_success": "2026-11-10T15:48:20.190486351Z"
     },
     "aes/accelerated-arm-cleanup-hosted-current": {
-      "checked_at": "2026-11-13T10:32:01.913416312Z",
-      "fingerprint": "c94c78034e9ec41339b19376ac8c6e69b258f99596bc39f6d79432fd17cf8e62",
+      "checked_at": "2026-11-13T10:57:13.709369602Z",
+      "fingerprint": "7e099b03f40832031ee79f4dddbbfb45ed74f8a499e1c21a89f51e9a626e0b39",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint d5da2f5a4f9ffd353498893f10a663324cb1e685ed5b5552f1a9bc27e58e5ab7",
@@ -34781,8 +34869,8 @@
       "last_success": "2026-11-09T18:14:12.639685374Z"
     },
     "aes/accelerated-arm-cleanup-hosted-msrv": {
-      "checked_at": "2026-11-13T10:32:01.912771158Z",
-      "fingerprint": "da5478a410ee3683d6e3586daaac2639b89630e69768d29c79424d97cd13ec48",
+      "checked_at": "2026-11-13T10:57:13.708700071Z",
+      "fingerprint": "0fd0dc645ec9e287fcf689f6635bd2b722c24fe378a8a0a0d56108c7c86e473d",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint ea90a75ef76d5ed72abcd2a2a6602c38de5885d19b0418b9ee3c4acd65bd22e8",
@@ -34790,8 +34878,8 @@
       "last_success": "2026-11-09T18:13:48.133374271Z"
     },
     "aes/accelerated-arm-cleanup-static-current": {
-      "checked_at": "2026-11-13T10:32:01.913095709Z",
-      "fingerprint": "8b46d5c71a9539fbbd046aaaa8f362ed097c8bb1a3ea03e32e3fa827a7fc42f3",
+      "checked_at": "2026-11-13T10:57:13.709035443Z",
+      "fingerprint": "2f31c8b22551579b9cef34cc5b697cf3a8417fb47b724308a2b3fd16095cdf95",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint d5403574a1adc37f7e5d4e2dd573ddf80afcd62a4a89980f38a86737783b27a5",
@@ -34799,8 +34887,8 @@
       "last_success": "2026-11-09T18:14:00.275065473Z"
     },
     "aes/accelerated-arm-cleanup-static-msrv": {
-      "checked_at": "2026-11-13T10:32:01.912441788Z",
-      "fingerprint": "bc5c73dac671aa55e1f577460189d637d9a5b428b657660984990ac0b8cfcd06",
+      "checked_at": "2026-11-13T10:57:13.708359831Z",
+      "fingerprint": "d5eb92034f072e10240bbc27fa2c1e89ce357477a508c5391a75fa4f78b997d1",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 74a426a9e3352f6e9d18c5289effc555b09a71f86d4718e287df6d03fe440c6f",
@@ -34808,8 +34896,8 @@
       "last_success": "2026-11-09T18:13:35.076475829Z"
     },
     "aes/accelerated-arm-constructors-hosted-current": {
-      "checked_at": "2026-11-13T10:32:01.912115283Z",
-      "fingerprint": "fa0c78547e2107bb54e92a6e6fa76c8d954e6f42ee073138a761c0f4cbfb2b93",
+      "checked_at": "2026-11-13T10:57:13.708023798Z",
+      "fingerprint": "65a1a274b3c20ac1c91dfcd25dafacae547ef74d44e81e22d85b29ddd8172c39",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-arm-constructors: scripts/aes/aes_aarch64_linked.py changed; aes-accelerated-arm-constructors: scripts/aes/test-aes-aarch64-linked.py changed; aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint b6ad5502a510507d98af849d4d0ee0f5410087f528ec75794818110927d06407",
@@ -34817,8 +34905,8 @@
       "last_success": "2026-11-10T15:47:48.911960188Z"
     },
     "aes/accelerated-arm-constructors-hosted-msrv": {
-      "checked_at": "2026-11-13T10:32:01.911460651Z",
-      "fingerprint": "50d649c32ae79521f2d5e8eae0327fde3c1f883994c42197f1bae200c0e46cc0",
+      "checked_at": "2026-11-13T10:57:13.707350431Z",
+      "fingerprint": "61feb9ce5e6a18c23d87a69f85766f9865ece01153b93b31ca261b4ed268b44d",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-arm-constructors: scripts/aes/aes_aarch64_linked.py changed; aes-accelerated-arm-constructors: scripts/aes/test-aes-aarch64-linked.py changed; aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 27c4f37f64ae285d606a1f94a40acbf636a57729fb9c2d27115d9c64a822290a",
@@ -34826,8 +34914,8 @@
       "last_success": "2026-11-10T15:47:16.925111891Z"
     },
     "aes/accelerated-arm-constructors-static-current": {
-      "checked_at": "2026-11-13T10:32:01.911789359Z",
-      "fingerprint": "66d140492547196cf68122fe6666d5fcbc7175571d94210d065871fe01b59e0f",
+      "checked_at": "2026-11-13T10:57:13.707688707Z",
+      "fingerprint": "add4c93f2d714b18c4a2dc87b89476d5bbbace8174df4eee4809a0ff1c3092a8",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-arm-constructors: scripts/aes/aes_aarch64_linked.py changed; aes-accelerated-arm-constructors: scripts/aes/test-aes-aarch64-linked.py changed; aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint a4dbbd716a5ffc60ec83daba552fa04bf1ef50cfc61780b20bbb27cef7f77b9c",
@@ -34835,8 +34923,8 @@
       "last_success": "2026-11-10T15:47:32.802503479Z"
     },
     "aes/accelerated-arm-constructors-static-msrv": {
-      "checked_at": "2026-11-13T10:32:01.91113101Z",
-      "fingerprint": "117112f82b610b479652d7a2917a3ff235ad0e43101b239d659fc98f308ff440",
+      "checked_at": "2026-11-13T10:57:13.707011893Z",
+      "fingerprint": "08231a013c1e13e244300b699a17632579b787a896adeffbdf44a1a8edbf187a",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-arm-constructors: scripts/aes/aes_aarch64_linked.py changed; aes-accelerated-arm-constructors: scripts/aes/test-aes-aarch64-linked.py changed; aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint fc6faa762dd55b39260a54c0cbe6b3ed29dcf787f7d0617cd671ef40a759301e",
@@ -34844,8 +34932,8 @@
       "last_success": "2026-11-10T15:46:59.482174086Z"
     },
     "aes/accelerated-arm-ephemeral-hosted-current": {
-      "checked_at": "2026-11-13T10:32:01.90945768Z",
-      "fingerprint": "efbc7d596d822940a8d7e18b8cd0e11dd6241d87e94641fdb2f0d0c0da521bb6",
+      "checked_at": "2026-11-13T10:57:13.705300421Z",
+      "fingerprint": "a021c61ac5adf991a38ac6691dd50dcf44c7f33abd1dc56e270454d752735592",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-arm-constructors: scripts/aes/aes_aarch64_linked.py changed; aes-accelerated-arm-constructors: scripts/aes/test-aes-aarch64-linked.py changed; aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint a2974bd49630a9a750015028ae0f9d88651bd2923fe8cec0ec7f2037b6730675",
@@ -34853,8 +34941,8 @@
       "last_success": "2026-11-10T17:22:50.536561121Z"
     },
     "aes/accelerated-arm-ephemeral-hosted-msrv": {
-      "checked_at": "2026-11-13T10:32:01.908785795Z",
-      "fingerprint": "7b02847b4132c4477fac5aa736840c5d099955c3659941cfd4828385328086a4",
+      "checked_at": "2026-11-13T10:57:13.704608409Z",
+      "fingerprint": "310c869fc9987a233d24a29bc5faa26194fb98ab8e25031e0d61d147ed2fb644",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-arm-constructors: scripts/aes/aes_aarch64_linked.py changed; aes-accelerated-arm-constructors: scripts/aes/test-aes-aarch64-linked.py changed; aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 755016570b70ba8f9d7275196977d0d6bfee2889a5e7f1181daa87487a00e4b2",
@@ -34862,8 +34950,8 @@
       "last_success": "2026-11-10T17:22:02.515170186Z"
     },
     "aes/accelerated-arm-ephemeral-static-current": {
-      "checked_at": "2026-11-13T10:32:01.909123541Z",
-      "fingerprint": "d5af793bd68a4f695a69efd7cbed7f0e66a0c769e35ba261770fc0e71c123462",
+      "checked_at": "2026-11-13T10:57:13.704956865Z",
+      "fingerprint": "98e782de31a598c17fbdf3ee1b99e0d9476927f6bc67b9b177d1a3405edb1ccb",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-arm-constructors: scripts/aes/aes_aarch64_linked.py changed; aes-accelerated-arm-constructors: scripts/aes/test-aes-aarch64-linked.py changed; aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 83932327208dce50b14f16e6e1092195378180553e0551a0a0271206125d4cb0",
@@ -34871,8 +34959,8 @@
       "last_success": "2026-11-10T17:22:26.200125379Z"
     },
     "aes/accelerated-arm-ephemeral-static-msrv": {
-      "checked_at": "2026-11-13T10:32:01.908435525Z",
-      "fingerprint": "2167f22fc6d31250132e05c13d3bc07911d235d31d6ffa073c689d024547fe9c",
+      "checked_at": "2026-11-13T10:57:13.704251016Z",
+      "fingerprint": "6cc273aec2963f5cfa98c2d6ee2c99ea62a012b8768f5f4a35eca9a2e7195118",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-arm-constructors: scripts/aes/aes_aarch64_linked.py changed; aes-accelerated-arm-constructors: scripts/aes/test-aes-aarch64-linked.py changed; aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 07aae67f4a9a9fb9614bde6db92ad5c4c9dfdfd5d17524ce7a1b7169ce68aa27",
@@ -34880,8 +34968,8 @@
       "last_success": "2026-11-10T17:21:34.724762718Z"
     },
     "aes/accelerated-arm-hosted-startup-current": {
-      "checked_at": "2026-11-13T10:32:01.865137012Z",
-      "fingerprint": "05dde5eb46cb16a7dd661f27f645bdb86fc231810425931d326a6b620a41b6ec",
+      "checked_at": "2026-11-13T10:57:13.666393128Z",
+      "fingerprint": "6b4e1c47ffd008cd1fb71332ed39c24160322a84152ad9ed4ebb689de142af42",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-arm-constructors: scripts/aes/aes_aarch64_linked.py changed; aes-accelerated-arm-constructors: scripts/aes/test-aes-aarch64-linked.py changed; aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint cb3f400cc3cb6ced9974f48ebd831990244e322fa86ac5ee9a089e056fc451a7",
@@ -34889,8 +34977,8 @@
       "last_success": "2026-11-10T17:24:48.578742696Z"
     },
     "aes/accelerated-arm-hosted-startup-msrv": {
-      "checked_at": "2026-11-13T10:32:01.864703566Z",
-      "fingerprint": "f381c3a6136ec608eced2308ac616e4ad337816581a67df5e388e67e4d802fdf",
+      "checked_at": "2026-11-13T10:57:13.665964221Z",
+      "fingerprint": "f900a225bbbc68a921e1aa55ef6baa0d3feb396f128a3addd65365298391f335",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-arm-constructors: scripts/aes/aes_aarch64_linked.py changed; aes-accelerated-arm-constructors: scripts/aes/test-aes-aarch64-linked.py changed; aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 7b94ba2f04a273d84fb8a20786d94ccb08c0984e609dffaf42c14670a85cdc96",
@@ -34898,8 +34986,8 @@
       "last_success": "2026-11-10T17:24:18.012615492Z"
     },
     "aes/accelerated-arm-startup-current": {
-      "checked_at": "2026-11-13T10:32:01.861673031Z",
-      "fingerprint": "291d4a39c8d9206893ed65fc05482be34a76d8bcede116c47c9fc36ae526f3c8",
+      "checked_at": "2026-11-13T10:57:13.663081494Z",
+      "fingerprint": "9756818c1ccb1ad08d5b6a166bb54df48cc239d8b6c2dcfa9f51e6aa3926e2d8",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-arm-constructors: scripts/aes/aes_aarch64_linked.py changed; aes-accelerated-arm-constructors: scripts/aes/test-aes-aarch64-linked.py changed; aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint bf26067744824ee09f9ac08c5ee0484bb2c389d3415bc8641ad5dc29eb2cb6d3",
@@ -34907,8 +34995,8 @@
       "last_success": "2026-11-10T17:23:46.252804633Z"
     },
     "aes/accelerated-arm-startup-msrv": {
-      "checked_at": "2026-11-13T10:32:01.861326929Z",
-      "fingerprint": "4a784def79dea66d83d28e9e8fc5462ce57c6fbae2973a587243a05b1e32f95a",
+      "checked_at": "2026-11-13T10:57:13.662745371Z",
+      "fingerprint": "8b58f212157d2d6034f41ea5e59be62c9bf9dd9355b0167893c118dbfae403fe",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-arm-constructors: scripts/aes/aes_aarch64_linked.py changed; aes-accelerated-arm-constructors: scripts/aes/test-aes-aarch64-linked.py changed; aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 8dc684e87584e25b68f2025010e03aa20e77fbdc262286a50cf5be04b0cb1a4a",
@@ -34916,8 +35004,8 @@
       "last_success": "2026-11-10T17:23:19.006044859Z"
     },
     "aes/accelerated-avs-hosted-arm-qemu-current-direct": {
-      "checked_at": "2026-11-13T10:32:01.919615273Z",
-      "fingerprint": "843e409b5cd8807a993daf66411ee95dcdfb4ea03df3ba6382718a59b1054af9",
+      "checked_at": "2026-11-13T10:57:13.715083548Z",
+      "fingerprint": "31f961e9309a552887b61ab494bb243cc635e4b34fe3ceac7078acd0be2f5436",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 529d8d6f17f3ac37828021cb04122301567a1e906dd0c870054221aeea067a84",
@@ -34925,8 +35013,8 @@
       "last_success": "2026-11-10T17:14:06.565433318Z"
     },
     "aes/accelerated-avs-hosted-arm-qemu-current-facade": {
-      "checked_at": "2026-11-13T10:32:01.920908066Z",
-      "fingerprint": "f428733b01dfa81452aa44ffa778203487da73697460cb5b92a0c214bf7aa5ca",
+      "checked_at": "2026-11-13T10:57:13.716440583Z",
+      "fingerprint": "16b08f4ae56cd668f2e694f2a07f9de28866af55cd35e6d5dd85ab7a8f7a4fa1",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint ccc33f08f20815c497eef95c6a3b7f6749b27b5da797ab515d9e9e7862dd7f90",
@@ -34934,8 +35022,8 @@
       "last_success": "2026-11-10T17:14:26.146216274Z"
     },
     "aes/accelerated-avs-hosted-arm-qemu-msrv-direct": {
-      "checked_at": "2026-11-13T10:32:01.916409938Z",
-      "fingerprint": "79fb859261b0522b1475e3d1f17d1dbafb54084cb8e506c724f3e2bc7ea4b4ec",
+      "checked_at": "2026-11-13T10:57:13.712229726Z",
+      "fingerprint": "0bf4afbb07938a9277f430b10e1f51924dc7a5d637d62a099f0f59cdf222c2be",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 3a379da581332d11a21bb2fc51b8aee1d9a63cdd35e570c352c509f5eea0a7d7",
@@ -34943,8 +35031,8 @@
       "last_success": "2026-11-10T17:13:27.090472113Z"
     },
     "aes/accelerated-avs-hosted-arm-qemu-msrv-facade": {
-      "checked_at": "2026-11-13T10:32:01.917840651Z",
-      "fingerprint": "09679530a6fae72a6b9021a982b9d1fcf35ce5f0a8d55c232191ffb891e3b618",
+      "checked_at": "2026-11-13T10:57:13.713574057Z",
+      "fingerprint": "09ec10f544bf21bd4aeff64012cde332ca4758ca9e704237b0582cb39a7b0f50",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint f4e7f57f51e4bbe288f1c25ac7ae66266bef079dd2f961bd29ceb5cbd9b0c240",
@@ -34952,8 +35040,8 @@
       "last_success": "2026-11-10T17:13:46.950029705Z"
     },
     "aes/accelerated-avs-static-arm-qemu-current-direct": {
-      "checked_at": "2026-11-13T10:32:01.919279651Z",
-      "fingerprint": "f57d4d0fd5387890a9d0c3006c6ecf3a4841a4b69952a1c26abe4b65c8b01d3e",
+      "checked_at": "2026-11-13T10:57:13.714573037Z",
+      "fingerprint": "63cda054339aee8f09bdefef8105cba730b432b98efe7cb9090e29341691fb66",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 18d850dfa142f2989f1977c82730b91f4c571117c0ed84e33485cb961463c41d",
@@ -34961,8 +35049,8 @@
       "last_success": "2026-11-10T17:14:00.922123928Z"
     },
     "aes/accelerated-avs-static-arm-qemu-current-facade": {
-      "checked_at": "2026-11-13T10:32:01.920587212Z",
-      "fingerprint": "c183eb1e9c9466dcf0ab1ac2a9d76731ec76638e7e2fe0fd3d5e5323345d7841",
+      "checked_at": "2026-11-13T10:57:13.716111293Z",
+      "fingerprint": "ba02d16499e4cbb0454b14ca8b121d39b81898a3bc7693c073720d951127edb8",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 5b4f2171bcdbd16d8f9e41a9077989831aa12c2b50e77d9dab8a47c20575b8e5",
@@ -34970,8 +35058,8 @@
       "last_success": "2026-11-10T17:14:20.521005286Z"
     },
     "aes/accelerated-avs-static-arm-qemu-msrv-direct": {
-      "checked_at": "2026-11-13T10:32:01.916082171Z",
-      "fingerprint": "4dcae1a026780e094eb1a49e32cc617f9709a19692edcbd87787fdd4de9a1c5f",
+      "checked_at": "2026-11-13T10:57:13.711892491Z",
+      "fingerprint": "ce644a03e0ecd9711566b4724578cc6b104ca30e7b59f13e77b28a52ae5f2429",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 3d20bfca223374e91c6baa8882878a0a43645dc91f028a13ac80ae634d0a0eb8",
@@ -34979,8 +35067,8 @@
       "last_success": "2026-11-10T17:13:21.44220027Z"
     },
     "aes/accelerated-avs-static-arm-qemu-msrv-facade": {
-      "checked_at": "2026-11-13T10:32:01.917382639Z",
-      "fingerprint": "9af196675503da151fb8d607bdf9e306a649a8e55797d269afdbc3ee116d9b2b",
+      "checked_at": "2026-11-13T10:57:13.713238946Z",
+      "fingerprint": "86289e794d9d64ec306774bf060109dcdf5ba8595aa3858995fcbde52babd0ed",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint ebd09769eece63bb7353b8bdffe35644b9f2543e883776c9776b2efac2b8b78a",
@@ -34988,8 +35076,8 @@
       "last_success": "2026-11-10T17:13:41.234224974Z"
     },
     "aes/accelerated-avs-static-native-current-direct": {
-      "checked_at": "2026-11-13T10:32:01.9185358Z",
-      "fingerprint": "5e4e46626c6100c1f39e838b9eb2b583ca75bbe60ac97bbda791bb046d4d7e67",
+      "checked_at": "2026-11-13T10:57:13.713907895Z",
+      "fingerprint": "4436932e4962ed8f17e27f89e02e8ac46322ce5945e7c5168430173c2fc29507",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 835faef6a9a64446a648d077a765b7023131186c8e847b70a04f1ab1ec3a3d09",
@@ -34997,8 +35085,8 @@
       "last_success": "2026-11-10T17:13:50.325319684Z"
     },
     "aes/accelerated-avs-static-native-current-facade": {
-      "checked_at": "2026-11-13T10:32:01.919943Z",
-      "fingerprint": "ad0aa97dd35a739c57171d07a804ba65c8e3a9aff6cd11703beeb92f56fe1559",
+      "checked_at": "2026-11-13T10:57:13.715427967Z",
+      "fingerprint": "fbf19774da1d5f8939399112a70741c4ede68c6c79b2960034cd3cafe0b4944f",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint bc510c0635291863ab8972a08613a06dbff234275591c4bb20920033e7937939",
@@ -35006,8 +35094,8 @@
       "last_success": "2026-11-10T17:14:09.921102208Z"
     },
     "aes/accelerated-avs-static-native-msrv-direct": {
-      "checked_at": "2026-11-13T10:32:01.915422279Z",
-      "fingerprint": "deba6f5f16d0ecd876a9bb3e2f329c438a44c13b2e99bfb1209db0d913098c8a",
+      "checked_at": "2026-11-13T10:57:13.711214184Z",
+      "fingerprint": "d7da5a394d66b9190c126d418088f90db8b73a6b3f0765a35550eb3568832e29",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint f8af07c8b0351f8451e30f25b80f5194aacba667c83ad5a431a85c9f1cb0a562",
@@ -35015,8 +35103,8 @@
       "last_success": "2026-11-10T17:13:10.479482321Z"
     },
     "aes/accelerated-avs-static-native-msrv-facade": {
-      "checked_at": "2026-11-13T10:32:01.916737404Z",
-      "fingerprint": "e58afed51e7dc1ace1e5e0da46217e2609e0a6d7c7db0a122a54dd9667209945",
+      "checked_at": "2026-11-13T10:57:13.712565829Z",
+      "fingerprint": "ce5eafdb8614804a8aef4178bc76d6149817f400fc6492d4fd9fd447667066e1",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint d79eeaeabab907b76ae138d4213588ae677ce9473c67df263c06388a09960d90",
@@ -35024,8 +35112,8 @@
       "last_success": "2026-11-10T17:13:30.353209027Z"
     },
     "aes/accelerated-differential-static-native-current-direct": {
-      "checked_at": "2026-11-13T10:32:01.91894489Z",
-      "fingerprint": "acf0bcc5a763bd637666adc849fd789457edbe5d777ab2942799200657600ed4",
+      "checked_at": "2026-11-13T10:57:13.714240652Z",
+      "fingerprint": "d9ea275737a2f6e112e896d4c7fb4194419f17a0f58ea89ff662c9e8ab040162",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint c3411f5b2bd75dd253a7186df83b8c1b9eaba7560985ea68112c83725d28b910",
@@ -35033,8 +35121,8 @@
       "last_success": "2026-11-10T17:13:55.257256592Z"
     },
     "aes/accelerated-differential-static-native-current-facade": {
-      "checked_at": "2026-11-13T10:32:01.920265497Z",
-      "fingerprint": "21ab04d86206c6a554215c716fc19684301072081f37fa2e616ebf806cbb2190",
+      "checked_at": "2026-11-13T10:57:13.71577481Z",
+      "fingerprint": "49239627c9f1458b416e312ef80c1d9f09a60d9406e3d2025ea8637781c5886e",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 6601e9cb60a4ba5dd1b0154e8c7d61457f5ebe1022543208f8864e9f48b00b02",
@@ -35042,8 +35130,8 @@
       "last_success": "2026-11-10T17:14:14.922524681Z"
     },
     "aes/accelerated-differential-static-native-msrv-direct": {
-      "checked_at": "2026-11-13T10:32:01.915756448Z",
-      "fingerprint": "934482007548ffe95180d2fcb2bb57e441b7786ed768a6973ad2f7ab742b5aaa",
+      "checked_at": "2026-11-13T10:57:13.711554345Z",
+      "fingerprint": "27c4639c736d8ddf8f7a31d440183fad2d158f5a9c93cf85f647dca7dae5b808",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 5f2d779b53fc2ac32301ee0c0b1f64bd17870d79e7b7906b565f9de0cffc3958",
@@ -35051,8 +35139,8 @@
       "last_success": "2026-11-10T17:13:15.415519669Z"
     },
     "aes/accelerated-differential-static-native-msrv-facade": {
-      "checked_at": "2026-11-13T10:32:01.917062757Z",
-      "fingerprint": "47d7d2db0e04dd9caf29bd00fb7406be70ea029d354de0f6edf61cb2ef45f1bd",
+      "checked_at": "2026-11-13T10:57:13.712906179Z",
+      "fingerprint": "df8e31045de4bdd67fd3377cf1d178383a60a95f89b16ced1d479187a04fc564",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 9a5ab14b83d6047bfd30742f4670e58a1763b0c1b683f138333ac5c8ee8143bf",
@@ -35060,8 +35148,8 @@
       "last_success": "2026-11-10T17:13:35.370383115Z"
     },
     "aes/accelerated-ephemeral-linked-current": {
-      "checked_at": "2026-11-13T10:32:01.871524437Z",
-      "fingerprint": "639327021eb4f2818061071a32baf117740a5f87735ec08b42c59454de0f019d",
+      "checked_at": "2026-11-13T10:57:13.671968063Z",
+      "fingerprint": "848b3a6753bc99273a7e92c6c27807cd788a5eb950e1c0eda36aac0b78511081",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 1420b6158a96d7d2b0d3e724d45f5d98f1d1dfa2d6fcfb56e0129dea3ac8b47a",
@@ -35069,8 +35157,8 @@
       "last_success": "2026-11-10T15:26:55.6427943Z"
     },
     "aes/accelerated-ephemeral-linked-msrv": {
-      "checked_at": "2026-11-13T10:32:01.871178676Z",
-      "fingerprint": "ad8124fe84242f1f3d803879900667dd7186cba10300176ac66f49e9f290cd0d",
+      "checked_at": "2026-11-13T10:57:13.671625708Z",
+      "fingerprint": "d6097cc71f18f068653db4d79b564656f1c88f6472d4148b5841d6bfb08cdf56",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 32e420a25215ba4701250cad3aec6585c244995f2f89d25f57dae6207f7a7c63",
@@ -35078,8 +35166,8 @@
       "last_success": "2026-11-10T15:26:39.412776634Z"
     },
     "aes/accelerated-ephemeral-public-linked-current": {
-      "checked_at": "2026-11-13T10:32:01.915088751Z",
-      "fingerprint": "8d4c666f9db234d9af4212fe26505d745de3eec6da265b3b8738bfdfe1ff3e4a",
+      "checked_at": "2026-11-13T10:57:13.710868594Z",
+      "fingerprint": "cb05fa4e88ef9fabde7c8efb316def8849ea64b6d7490c74a60021d7e4bdd75e",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 7c20cfb4c74454893124c4666aa780bc5ed51f4cfc0b2d076ace74d73e2f5f45",
@@ -35087,8 +35175,8 @@
       "last_success": "2026-11-10T15:31:52.527552081Z"
     },
     "aes/accelerated-ephemeral-public-linked-msrv": {
-      "checked_at": "2026-11-13T10:32:01.914745515Z",
-      "fingerprint": "f6f231f05b8a426204928d4c045fdfeb9f783bec45863847a5edf1f9dbd83c9d",
+      "checked_at": "2026-11-13T10:57:13.710511792Z",
+      "fingerprint": "5cec5ebb7defd8543a9af3adb2faf868440e6cd1c3c24c6092e20b5d7119be69",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 4aad00b965d53eb2432878e716a80e9177f3fb876bd33cdf3f2be35c17614557",
@@ -35096,8 +35184,8 @@
       "last_success": "2026-11-10T15:31:34.386453057Z"
     },
     "aes/accelerated-lifecycle-linked-current": {
-      "checked_at": "2026-11-13T10:32:01.914395185Z",
-      "fingerprint": "5dde8caf82e6d7b055fc893b074860e946175bf6bde4a6e5c9e5d46133789b4e",
+      "checked_at": "2026-11-13T10:57:13.710158777Z",
+      "fingerprint": "09ed7dabc98dc1e9cc39a347bcb474074ddc5914ba5bb6004f59c1754aef2eee",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 5fc54a90436471b95de6610ca6efd9e992f4fae48fd758bad3915fd12db27084",
@@ -35105,8 +35193,8 @@
       "last_success": "2026-11-10T15:32:42.871440343Z"
     },
     "aes/accelerated-lifecycle-linked-msrv": {
-      "checked_at": "2026-11-13T10:32:01.914038924Z",
-      "fingerprint": "13f0b1cd4d047fea3d480c66ee9ada4b123421e67d46e086c6cf0a912d77d757",
+      "checked_at": "2026-11-13T10:57:13.709800363Z",
+      "fingerprint": "7a259d7d9eddf8b82ea1e20bb5f489e78b7b629fb99cb797a642b951ea6e6ab8",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 827d2ec8d0f969f845461df9b03dd683db5e20d52ca05694f06fa82932886181",
@@ -35114,8 +35202,8 @@
       "last_success": "2026-11-10T15:32:23.20168806Z"
     },
     "aes/accelerated-linked-arm-qemu-hosted-current": {
-      "checked_at": "2026-11-13T10:32:01.867939468Z",
-      "fingerprint": "36798af0157df15d63c3b3eac2c545d1b7f9e63f12648ade0e786a294cb9e6a0",
+      "checked_at": "2026-11-13T10:57:13.669058736Z",
+      "fingerprint": "842fcac57d6fb7f8df4f71d865f1f3bec5b54892ecba094bb32f8e97bf48cc73",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 992ad4466dfc441cb97808bd5c39f9f57b896300eec994fea076a958052cca60",
@@ -35123,8 +35211,8 @@
       "last_success": "2026-11-11T08:13:12.894155079Z"
     },
     "aes/accelerated-linked-arm-qemu-hosted-msrv": {
-      "checked_at": "2026-11-13T10:32:01.866983739Z",
-      "fingerprint": "9c877d2555562ffe17a19f016e8c54fbdb460ab514967ddaec92bfeb95f5eec3",
+      "checked_at": "2026-11-13T10:57:13.668108006Z",
+      "fingerprint": "aa472ca7559634f01dfb8d9fc2abb8b5436b85fadcd199c77fcbda2f2c8b5928",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 900af7d83bc34188efbd2c2ead3bd75e313466fe86f77b5172a578eb3ccb5681",
@@ -35132,8 +35220,8 @@
       "last_success": "2026-11-11T08:12:35.573124518Z"
     },
     "aes/accelerated-linked-arm-qemu-static-current": {
-      "checked_at": "2026-11-13T10:32:01.867624445Z",
-      "fingerprint": "6a39f307e1c76dedd8ce1c60c2f2e108295e11a5ffa378cf7656fd2aa9db974a",
+      "checked_at": "2026-11-13T10:57:13.668742891Z",
+      "fingerprint": "7119ed0bb2bec55091dfe88734577949896bdda2761c24aa1de6efb02f2241f8",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 081737c711acd02fce8ad4de1e86fb60611afa96061f4368cda0e51cdb90e224",
@@ -35141,8 +35229,8 @@
       "last_success": "2026-11-11T08:13:00.442775422Z"
     },
     "aes/accelerated-linked-arm-qemu-static-msrv": {
-      "checked_at": "2026-11-13T10:32:01.866662544Z",
-      "fingerprint": "b580b1f13e8a571f63721daa11917ce4a63f27fd2ae8df3e5e6b52bb62094a91",
+      "checked_at": "2026-11-13T10:57:13.667787994Z",
+      "fingerprint": "128b2a1da0ddd7017790745bd55a746f5e8fd1c0076cdfe50a8ae25248bd0cc4",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint d44231ccaba49fb12a4f430745c890a0f0171e23d38b8e7b96283f7de2d1e9e7",
@@ -35150,8 +35238,8 @@
       "last_success": "2026-11-11T08:12:22.220876696Z"
     },
     "aes/accelerated-linked-native-static-current": {
-      "checked_at": "2026-11-13T10:32:01.867302589Z",
-      "fingerprint": "f8c02ed359dacba6b3bc5f89edd50c15cd321de0de63f76ac55a7cddf0112adb",
+      "checked_at": "2026-11-13T10:57:13.66842335Z",
+      "fingerprint": "3ee9acc79c08ab17075b35dbe797b00e62d6cdf2223ca3cf4103a8db8e46e71e",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 49f1f56283311978fb3be631c4d4e6a625953947e08ba1eb9e33d9205b61b1e7",
@@ -35159,8 +35247,8 @@
       "last_success": "2026-11-11T08:12:47.973006174Z"
     },
     "aes/accelerated-linked-native-static-msrv": {
-      "checked_at": "2026-11-13T10:32:01.866335468Z",
-      "fingerprint": "17792078e6124d926a77569692ecf8659c39185164c19f76b00f7a5f34b6719c",
+      "checked_at": "2026-11-13T10:57:13.667463383Z",
+      "fingerprint": "85fb8a50ee14c56b004971fbf57b9df6c375fcafbdc46621999f7578c64badfb",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 758cf1959cd7b6558b413d37b33b525c55eb05cc922b7fb0b2c499eae6193e0c",
@@ -35168,8 +35256,8 @@
       "last_success": "2026-11-11T08:12:08.71509354Z"
     },
     "aes/accelerated-no-std-direct-current": {
-      "checked_at": "2026-11-13T10:32:01.88171409Z",
-      "fingerprint": "801b6e721bef19ddbe0cc0452de0c7d15b3831219a1a00abb32adf455c46e93f",
+      "checked_at": "2026-11-13T10:57:13.681555601Z",
+      "fingerprint": "19a39251145f3148254e5849c82304d343e7a4bb4a36ee5f8d7d2a34eb7b2633",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 56b4f93ba3a96849d3ef35fd221e40405a63ed5d40be2a201ac9b265d87f66e7",
@@ -35177,8 +35265,8 @@
       "last_success": "2026-11-09T20:27:26.735817547Z"
     },
     "aes/accelerated-no-std-direct-msrv": {
-      "checked_at": "2026-11-13T10:32:01.881054498Z",
-      "fingerprint": "26e8c1b9bd442d90853f3db2d2e7b848f4bc98df7cbd4b13ec79233abf959f40",
+      "checked_at": "2026-11-13T10:57:13.680899596Z",
+      "fingerprint": "66b801574e6815bfe475300001fece69e51fab1e52784faf1c3d7831639cca3e",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint d8e8728c16c9008fa4ff87f22e875f116e9604422e52fb2c4f94dcc3d3670dd6",
@@ -35186,8 +35274,8 @@
       "last_success": "2026-11-09T20:27:00.907937332Z"
     },
     "aes/accelerated-no-std-facade-current": {
-      "checked_at": "2026-11-13T10:32:01.882037499Z",
-      "fingerprint": "f4dd3b860daea5f313ce3c2b3da4b08fd695bd59b2f1a229eecabd859ea7fcb7",
+      "checked_at": "2026-11-13T10:57:13.681879852Z",
+      "fingerprint": "6fd3605b5258ebfb8c583000038756e0b89aa990623428f7bb686f14dd157b95",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 0e95e472aaf0b4825b31e2a9c0391acd99d083060ffe3232cf45ec3ed99d00d8",
@@ -35195,8 +35283,8 @@
       "last_success": "2026-11-09T20:27:39.624389576Z"
     },
     "aes/accelerated-no-std-facade-msrv": {
-      "checked_at": "2026-11-13T10:32:01.881385712Z",
-      "fingerprint": "716ffc711b7d76017a4711e377d7096efb37fe4e74ae8d3447628129c2ba5eb6",
+      "checked_at": "2026-11-13T10:57:13.681230209Z",
+      "fingerprint": "af59bc10ddd55157c075ae4bfd4becd29505168a5c720ea475d1f18751cf1e88",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 02944cfc4a9c2bb39008bbaf77695b95ae0c6493548fe6e336159ed29f547055",
@@ -35204,8 +35292,8 @@
       "last_success": "2026-11-09T20:27:14.353921437Z"
     },
     "aes/accelerated-public-linked-current": {
-      "checked_at": "2026-11-13T10:32:01.868744013Z",
-      "fingerprint": "6b2ca675516321cc745b960929d7ed3cdb4e2042825d93f34b516033470d07d2",
+      "checked_at": "2026-11-13T10:57:13.66976736Z",
+      "fingerprint": "9bb34b7cbf4cc5cc0090fc6483c14c0cc465aa18c23e616a0b07265f754c2083",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 147b48a1e1a98642c7655e61e0deca15ad76b905311c9677d026c02484f7b6e6",
@@ -35213,8 +35301,8 @@
       "last_success": "2026-11-09T20:39:12.293518207Z"
     },
     "aes/accelerated-public-linked-msrv": {
-      "checked_at": "2026-11-13T10:32:01.868417839Z",
-      "fingerprint": "830888ca5f46308dd61b06d1ac1c28bd33442a519edce512ca03259b85f07a07",
+      "checked_at": "2026-11-13T10:57:13.669446225Z",
+      "fingerprint": "b3ef1a71073a7d60fcfc054eca5eba88404b1a3d159436a75715312965de2bf8",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 9eefad9e84c772bb6695aee56456e736cd5b4b23b026f899a266bfbf2ebc0564",
@@ -35222,8 +35310,8 @@
       "last_success": "2026-11-09T20:38:59.459171014Z"
     },
     "aes/accelerated-sanitizers-direct": {
-      "checked_at": "2026-11-13T10:32:01.907415114Z",
-      "fingerprint": "f06dced46ddbd93e8e9876547c0cc197c1b0f651823972a4920952329de7e64a",
+      "checked_at": "2026-11-13T10:57:13.703361551Z",
+      "fingerprint": "04851068720615b0e121e4c906ddeae7fa2590ce6dd013193e70c31c792fb8b8",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint dd6de1644ae65f08075e0a321a7c8c71c70545b4d8397b324a4bf96d0a20bc99",
@@ -35231,8 +35319,8 @@
       "last_success": "2026-11-09T20:29:06.332561433Z"
     },
     "aes/accelerated-sanitizers-facade": {
-      "checked_at": "2026-11-13T10:32:01.907783598Z",
-      "fingerprint": "f69bc87339064e6210a20e3bb9d2f7cbdae1a867c48a8de9d03ee53466fe219a",
+      "checked_at": "2026-11-13T10:57:13.703776392Z",
+      "fingerprint": "30ab59a1005ae6e59f920cdfa76ff223b3323abddb65ac7efaf642ab7ca0a189",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 663132912bd7ebed22ec6192dc61d3d3bfd5a5e198a5f7c585895cfcd1c3a40d",
@@ -35240,8 +35328,8 @@
       "last_success": "2026-11-09T20:29:11.033948378Z"
     },
     "aes/accelerated-secret-linked-current": {
-      "checked_at": "2026-11-13T10:32:01.869570949Z",
-      "fingerprint": "f78c33b134aa48ffda5f1ec07933560d32ddfb606da4fa622ea01857b7beece6",
+      "checked_at": "2026-11-13T10:57:13.670476986Z",
+      "fingerprint": "d3d73f6db12a669b376fa8e9bc7dd992a65423267f66b599dbecddb043116c12",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 132c99da4302cfde17adbd526b905f0cb0c52661f12fcbe20feea7e5eeec85be",
@@ -35249,8 +35337,8 @@
       "last_success": "2026-11-09T20:39:40.4832158Z"
     },
     "aes/accelerated-secret-linked-msrv": {
-      "checked_at": "2026-11-13T10:32:01.869249955Z",
-      "fingerprint": "3a4c911834ff2e4116c7c1fba3768a28c9b8a1821b66852e3c0ed881814d8b60",
+      "checked_at": "2026-11-13T10:57:13.670158126Z",
+      "fingerprint": "009b3e86f19aaebfe9ccb08d5c595d3e2a2ef8efab499a68c69ca25a9d87eb87",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 07298a5965a4e4ab99222e25f3800da161bec990c4952e04f202e2d5b17d4e41",
@@ -35258,8 +35346,8 @@
       "last_success": "2026-11-09T20:39:27.38188591Z"
     },
     "aes/accelerated-timing-fixture-direct-current": {
-      "checked_at": "2026-11-13T10:32:01.878956729Z",
-      "fingerprint": "2314aa5407d7a1b9547aabd92363a4051363f2e7d6f5507f9884c34a39967709",
+      "checked_at": "2026-11-13T10:57:13.678850399Z",
+      "fingerprint": "e84c3f4642b9417ae86217a9ca932dc13ba90afd1af7931b6df711f35a9838ee",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint e313f0ac11b9ced1506c3cb7a912f8a2f117851f3c987668a917870bb136f5a9",
@@ -35267,8 +35355,8 @@
       "last_success": "2026-11-11T07:38:41.0887994Z"
     },
     "aes/accelerated-timing-fixture-direct-msrv": {
-      "checked_at": "2026-11-13T10:32:01.878312566Z",
-      "fingerprint": "b859aedb5894e141e1c691f2ede63ef900e43e948202f93ddf020b5e4e34f299",
+      "checked_at": "2026-11-13T10:57:13.678213249Z",
+      "fingerprint": "b18fc8cef82cdbf041e390692dc6116cd0d03aecc57b4efb4051d96a953bae76",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 09dcf30a64c5fc8327f2ae028cde792ce1e405d8ae0794a634076c36e66fae01",
@@ -35276,8 +35364,8 @@
       "last_success": "2026-11-11T07:38:21.41362401Z"
     },
     "aes/accelerated-timing-fixture-facade-current": {
-      "checked_at": "2026-11-13T10:32:01.879277823Z",
-      "fingerprint": "ef2866bada8c16efbf05150d431d0ebd03df2f35d321b4bdeb46d63c87f7e009",
+      "checked_at": "2026-11-13T10:57:13.679168407Z",
+      "fingerprint": "d6189e628d61ed2a16f8cf6a77b3be23c68353a4bf1763156de2ddbc7ea8f513",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint b9e08a0fd2fa9feef5823f7bf0e3336c091ec383ec8f5c23e67c2af5d99241ec",
@@ -35285,8 +35373,8 @@
       "last_success": "2026-11-11T07:38:50.518851276Z"
     },
     "aes/accelerated-timing-fixture-facade-msrv": {
-      "checked_at": "2026-11-13T10:32:01.878635534Z",
-      "fingerprint": "0452ce7c657e6760ba2bf65fb0d5a34083831e70624428efe54e6c5b316e2250",
+      "checked_at": "2026-11-13T10:57:13.678530627Z",
+      "fingerprint": "90549b888cbd3420f4e4ab4f2f644158439521d53d04afe781ebe82417d70637",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 841104a324879af17be4bc0e49f3ae9da14f0039992be8dbd457eaa10a52f103",
@@ -35294,8 +35382,8 @@
       "last_success": "2026-11-11T07:38:31.588891177Z"
     },
     "aes/accelerated-x86-startup-current": {
-      "checked_at": "2026-11-13T10:32:01.86600705Z",
-      "fingerprint": "ddb50bb2011b03de92ab9624517d8fb67f4535d908db148db2cdc04676ff9278",
+      "checked_at": "2026-11-13T10:57:13.667140755Z",
+      "fingerprint": "b85a2981ba39719a560ae75b1eb353ae483fdf05762575ce8ba5649096ff2a9b",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint da94bae046a444a7fd40a80a9c71c31419a669029ae7c1d7fb03426536714080",
@@ -35303,8 +35391,8 @@
       "last_success": "2026-11-10T17:03:52.562100976Z"
     },
     "aes/accelerated-x86-startup-msrv": {
-      "checked_at": "2026-11-13T10:32:01.865674313Z",
-      "fingerprint": "bb0b771f8c764fac0d63e65f0d4158ddf8f9fc8366d76d377639441bf94cec64",
+      "checked_at": "2026-11-13T10:57:13.666811626Z",
+      "fingerprint": "cc7ee7054651e9b43e0b73c86b2a312a553014b026e75ee16e277d2d88b4a6ea",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint c80566fdceaef192ab65f6dfc00d1243bfa6bb5a4b6ccde20875842d966ce39f",
@@ -35348,8 +35436,8 @@
       "last_success": "2026-11-08T09:47:04.952085345Z"
     },
     "aes/avs-current-direct": {
-      "checked_at": "2026-11-13T10:32:02.03331373Z",
-      "fingerprint": "448e22b53c426df721292a124edc4d4f8fc36d847ef1d2853b60538457999a58",
+      "checked_at": "2026-11-13T10:57:13.825788351Z",
+      "fingerprint": "3c38f47d9477e9c9a445dfabcb691227b105156051ce1bcc7ffb08933cdc2310",
       "result": "passed",
       "freshness": "Outdated: aes-packaged: Cargo.lock changed; aes-packaged: assurance/aes-public-api/Cargo.lock changed; hkdf-public-api-modern: assurance/hkdf-public-api/Cargo.lock changed",
       "source": "working tree based on a4b3c8923aa5ec040192cb34cd7d12f84e218057; scoped fingerprint fe0bc5517f66d8500f14c3ae2f403799f30509e9d20e152eb221ff0a867e066e",
@@ -35357,8 +35445,8 @@
       "last_success": "2026-11-08T10:55:22.183714613Z"
     },
     "aes/avs-current-facade": {
-      "checked_at": "2026-11-13T10:32:02.03362666Z",
-      "fingerprint": "dda3550fa54a2ae7c3a096c0bacf66c228756e1d8027903aa91bf0df1d514b0f",
+      "checked_at": "2026-11-13T10:57:13.826088326Z",
+      "fingerprint": "4ab34380b317a43bcc1aa00746e6e6798272838c91bfc8dd84555226b68b6419",
       "result": "passed",
       "freshness": "Outdated: aes-packaged: Cargo.lock changed; aes-packaged: assurance/aes-public-api/Cargo.lock changed; hkdf-public-api-modern: assurance/hkdf-public-api/Cargo.lock changed",
       "source": "working tree based on a4b3c8923aa5ec040192cb34cd7d12f84e218057; scoped fingerprint 6d5ac9f9971a29394f633fe525108c25062c4aca70129bbea204995f3f83cae7",
@@ -35366,8 +35454,8 @@
       "last_success": "2026-11-08T10:55:35.852532032Z"
     },
     "aes/avs-msrv-direct": {
-      "checked_at": "2026-11-13T10:32:02.032667183Z",
-      "fingerprint": "acadd30ee5e41eb828c680d936d805c2834ca0c1fbabf8360334918bf4a82c6d",
+      "checked_at": "2026-11-13T10:57:13.825179175Z",
+      "fingerprint": "466fbc9f60a632b721db73aa1f2ea06ad5229497609b4dae7abcea63c7a33c5a",
       "result": "passed",
       "freshness": "Outdated: aes-packaged: Cargo.lock changed; aes-packaged: assurance/aes-public-api/Cargo.lock changed; hkdf-public-api-modern: assurance/hkdf-public-api/Cargo.lock changed",
       "source": "working tree based on a4b3c8923aa5ec040192cb34cd7d12f84e218057; scoped fingerprint f7dacf6ed9bd03d94bb98c383a3f11a6e7c49dab387b110a06f6e16b1ddc52be",
@@ -35375,8 +35463,8 @@
       "last_success": "2026-11-08T10:54:55.698260742Z"
     },
     "aes/avs-msrv-facade": {
-      "checked_at": "2026-11-13T10:32:02.033002264Z",
-      "fingerprint": "fd69860bf92d6fb7889a570e197c8efc829c44f5d8749a05e19b30ca53dc5e1d",
+      "checked_at": "2026-11-13T10:57:13.82548494Z",
+      "fingerprint": "595c1699b145bfc645d81a40955627d8bde6c00c6d557675f8c4b94399855d06",
       "result": "passed",
       "freshness": "Outdated: aes-packaged: Cargo.lock changed; aes-packaged: assurance/aes-public-api/Cargo.lock changed; hkdf-public-api-modern: assurance/hkdf-public-api/Cargo.lock changed",
       "source": "working tree based on a4b3c8923aa5ec040192cb34cd7d12f84e218057; scoped fingerprint c7272e0509b8bc6b2a62ac9f56708d8937298f9bb8f28a626afb3d3d221d85a2",
@@ -35402,8 +35490,8 @@
       "last_success": "2026-11-08T10:06:41.090749883Z"
     },
     "aes/dit-arm-qemu-current": {
-      "checked_at": "2026-11-13T10:32:01.943426249Z",
-      "fingerprint": "974b5c39724c6316f61fe8eaf30104224c4f5a0fdaaec1d350d6795fdbd69e2d",
+      "checked_at": "2026-11-13T10:57:13.73427697Z",
+      "fingerprint": "6c28938165719ef0b65936587d95fab4a3c2832cd585c3fce7eb79f89a5a8f06",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed; aes-build: crates/brynja-crypto/src/aes/tests/execution.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 586af32f4473fa64c5feda4e2be8495446fe6b1eabf0f4f2b1aae92898e4ff87",
@@ -35411,8 +35499,8 @@
       "last_success": "2026-11-12T17:16:10.139167748Z"
     },
     "aes/dit-arm-qemu-msrv": {
-      "checked_at": "2026-11-13T10:32:01.943222666Z",
-      "fingerprint": "6f6271010777a57a1b9cd8cb13659fbfcfff17eec1d8bea18a366a635665c2d7",
+      "checked_at": "2026-11-13T10:57:13.734073577Z",
+      "fingerprint": "5317aa179031f8c3fb73beadc0f93061749ceedb4845a2402239b74bcd122703",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed; aes-build: crates/brynja-crypto/src/aes/tests/execution.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 19b25ca9f7fc035bdfba3f703b3f1d0e9cb948a86085db23e734f91fee4799c2",
@@ -35420,8 +35508,8 @@
       "last_success": "2026-11-12T17:16:08.668980232Z"
     },
     "aes/dit-native-current": {
-      "checked_at": "2026-11-13T10:32:01.94301224Z",
-      "fingerprint": "a87b448199dc7e2e3b59f16ff311abd48b4f9d25043772ee48bb5b419f884b10",
+      "checked_at": "2026-11-13T10:57:13.733864604Z",
+      "fingerprint": "e8d8d9e93640aae935fdbaa250767a15fc3040725e23da3558e66ddefb755385",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed; aes-build: crates/brynja-crypto/src/aes/tests/execution.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint a480189a257e84894f9a7173cff54f96c8d37e10c0fd79ba29a5176cb74c146d",
@@ -35429,8 +35517,8 @@
       "last_success": "2026-11-12T17:16:07.191993675Z"
     },
     "aes/dit-native-msrv": {
-      "checked_at": "2026-11-13T10:32:01.942790031Z",
-      "fingerprint": "4ccefea68d4734fad76970b49c3644e8402f7ad5de92d6bad59c50e119f81531",
+      "checked_at": "2026-11-13T10:57:13.733642756Z",
+      "fingerprint": "d11fa8391910b4ff6a70ff76b11628e38b12838e577ea551c2ef24d6084f3a32",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed; aes-build: crates/brynja-crypto/src/aes/tests/execution.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint a51e87ea20c6c323ec419135f60d9383054fbecda32649640c8b7c1bc8e59d85",
@@ -35456,8 +35544,8 @@
       "last_success": "2026-11-08T10:08:01.51652516Z"
     },
     "aes/execution-api-current": {
-      "checked_at": "2026-11-13T10:32:01.94102583Z",
-      "fingerprint": "d7592b0cd7b8a203b842a6dc59aa86874fdd4b3226caa2da5298131d08c41ccc",
+      "checked_at": "2026-11-13T10:57:13.731898122Z",
+      "fingerprint": "8848a9b3c0ba9b68e03d46bfef7f8f7ec98deaeff000f08ecb60af365f1bb481",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/execution.rs changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint aca31be36fa8208154aabf987c6c60ae9b953d0c2d91f95f9db58d1f5d1af5cb",
@@ -35465,8 +35553,8 @@
       "last_success": "2026-11-09T20:26:47.191638565Z"
     },
     "aes/execution-api-msrv": {
-      "checked_at": "2026-11-13T10:32:01.940389091Z",
-      "fingerprint": "2efc33909d12b95a1da17a9567b9c769535681e072f51adaa0e4bd81d6bf61a5",
+      "checked_at": "2026-11-13T10:57:13.731319433Z",
+      "fingerprint": "14dfd2054499c15c8605a5a4ad041cfd4421b3091949d13cf1b162c9935fe342",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/execution.rs changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint c032ef278b330268a8925d0685beb8a6b108c4e01056627663ee4fcbc8f2a159",
@@ -35474,8 +35562,8 @@
       "last_success": "2026-11-09T20:26:36.774865825Z"
     },
     "aes/expansion-arm-qemu-current": {
-      "checked_at": "2026-11-13T10:32:01.859641576Z",
-      "fingerprint": "9febb9be0e768ced04e38085f45bd3689f874eab8aa06e064bf9a7d94a96d928",
+      "checked_at": "2026-11-13T10:57:13.661359392Z",
+      "fingerprint": "599644af3d8fb51105cfb5597379b796aba93949bb2814493a5d9236eb1915e6",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/execution.rs changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 692431a7265bb3d7a169d55fab7795ac9b3df6845056578349c1289a5e7feb7d",
@@ -35483,8 +35571,8 @@
       "last_success": "2026-11-09T20:26:26.036431127Z"
     },
     "aes/expansion-arm-qemu-msrv": {
-      "checked_at": "2026-11-13T10:32:01.859304051Z",
-      "fingerprint": "cef8496da5fc45734f3bec05eebfdf3c15972e8bd6bb20b8371954f6b5ca3577",
+      "checked_at": "2026-11-13T10:57:13.661031204Z",
+      "fingerprint": "8969e214064897a3d93f8af7542e554a5e16d0e2a22cb9e2426bd9657471b4e7",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/execution.rs changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 3cf609c5749d38974bcc7cab79d3233cda2b96504e71c1de8526ab3cc02c13cb",
@@ -35492,8 +35580,8 @@
       "last_success": "2026-11-09T20:26:24.10670932Z"
     },
     "aes/expansion-x86-current": {
-      "checked_at": "2026-11-13T10:32:01.858965273Z",
-      "fingerprint": "10af00e7988a88b23e83cabe08d12e3ad11000ed4cc0d3b20f008cebc50aef1c",
+      "checked_at": "2026-11-13T10:57:13.660694851Z",
+      "fingerprint": "47868b9f1a571e3998d22fa1e4670ef6f1ebe9de64817c54f8db0d7197ba553f",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/execution.rs changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 3b7bbfe91c75b39ab8cf253b84af6c40ac75fbc3f6894705b00f2da041b8526d",
@@ -35501,8 +35589,8 @@
       "last_success": "2026-11-09T20:26:22.135979341Z"
     },
     "aes/expansion-x86-msrv": {
-      "checked_at": "2026-11-13T10:32:01.858606588Z",
-      "fingerprint": "018a68381b55c1789691b44c4275328d32fa8a0182add44090a4015147ab88c4",
+      "checked_at": "2026-11-13T10:57:13.660334072Z",
+      "fingerprint": "9b952fe658c2491e041b00ab899e2ef9196465d8e80df4cb3edfbcc745eff0a0",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/execution.rs changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 4749357b37a03de62fa6cb9a088b40471aafc2f36d9288f75f0687fbd03c2676",
@@ -35510,8 +35598,8 @@
       "last_success": "2026-11-09T20:26:20.306785306Z"
     },
     "aes/feature-current-all-doc": {
-      "checked_at": "2026-11-13T10:32:02.031995689Z",
-      "fingerprint": "3ec4bd3ef7edb4107798baa3631b077bfce36cb88898fe68d3970d2251a80eb5",
+      "checked_at": "2026-11-13T10:57:13.824530303Z",
+      "fingerprint": "4b2a7fe5a83f402244591b41a09c3489b718b8fa0e500159ead9c3412c6f6ecb",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/execution.rs changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 9de04c1939ed58462d996c379c8d08b3562b293a91f758afa4324e5cc139ee18",
@@ -35519,8 +35607,8 @@
       "last_success": "2026-11-09T15:35:16.980695592Z"
     },
     "aes/feature-current-all-test": {
-      "checked_at": "2026-11-13T10:32:02.031563636Z",
-      "fingerprint": "0024d36a6ed28522cf7b7b195d321281ec28110bda66fe3ff3b5c181348f0284",
+      "checked_at": "2026-11-13T10:57:13.824112727Z",
+      "fingerprint": "70af06f53011a59d1758a7b823b0937665fbbadcbcdf8ce6d43a7dd8e7ddeeef",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/execution.rs changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint de5b84824d1d7c906074a13cb0bc941e369571482bb7cdf4e501f4c21b7a2665",
@@ -35528,8 +35616,8 @@
       "last_success": "2026-11-09T15:35:14.513198731Z"
     },
     "aes/feature-current-minimal-doc": {
-      "checked_at": "2026-11-13T10:32:02.031138024Z",
-      "fingerprint": "f7137581ce3208e138d8e496d706ba02eb1b73223a1c3217dc2edb3b53838eed",
+      "checked_at": "2026-11-13T10:57:13.823691845Z",
+      "fingerprint": "626099ff06d50b7dd68c06134d9dca39e7de43bc1d9bd39c9c755a7976b563a8",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/execution.rs changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 3f08d85a2e1ed3eb54ff570c9c07befe0252f181dbbe4de647fd26ff04bbad38",
@@ -35537,8 +35625,8 @@
       "last_success": "2026-11-09T15:35:11.185030515Z"
     },
     "aes/feature-current-minimal-test": {
-      "checked_at": "2026-11-13T10:32:02.03071077Z",
-      "fingerprint": "2963bd2b578462a8a983190bef7567b5e1257c2dd4b1b44a9e1213b9191beee7",
+      "checked_at": "2026-11-13T10:57:13.823268367Z",
+      "fingerprint": "520b8dff0cb4f642d1232e098dc5dca396c03ecee14e0bbf49de24cbafed7019",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/execution.rs changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 6e00ef2211891aa6179be585669eac95969558b4bcf3eadc5951cf3f071f1622",
@@ -35546,8 +35634,8 @@
       "last_success": "2026-11-09T15:35:09.098008472Z"
     },
     "aes/feature-msrv-all-doc": {
-      "checked_at": "2026-11-13T10:32:02.030273016Z",
-      "fingerprint": "7aed7e06edce3e8594749ac4dfb2113b206798a29f7f685c97f486053e7cbab7",
+      "checked_at": "2026-11-13T10:57:13.822848026Z",
+      "fingerprint": "baf0f87eb5afec67fe42e9fcf61eabe13c4e118bbb15623650e75ef2201fa3ae",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/execution.rs changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 5e938ed91546e67433af02f121d0e1aa70822e6874d70092697a769fd86f6a2d",
@@ -35555,8 +35643,8 @@
       "last_success": "2026-11-09T15:35:06.861228511Z"
     },
     "aes/feature-msrv-all-test": {
-      "checked_at": "2026-11-13T10:32:02.029815755Z",
-      "fingerprint": "2409ff204c0390ea72e07409982b5ee194e3e22ce6457f3264af928f2ed4f939",
+      "checked_at": "2026-11-13T10:57:13.822423156Z",
+      "fingerprint": "a178a7ab9a0e2ffff643fdeebca71a56176a7b909a940ff9073c4a23c4a7bf90",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/execution.rs changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint f9f5d17b858ddb328597b8d1b653a05553892055c37a57fe1d9d931fd2b11824",
@@ -35564,8 +35652,8 @@
       "last_success": "2026-11-09T15:35:04.31023329Z"
     },
     "aes/feature-msrv-minimal-doc": {
-      "checked_at": "2026-11-13T10:32:02.02936677Z",
-      "fingerprint": "c783f714cc040bfc1d2fade84255a9ec88df1bc526da76b77049594a1bfd6e3c",
+      "checked_at": "2026-11-13T10:57:13.821998377Z",
+      "fingerprint": "8f07b6f2740c5f6c39acfbf5425900f2838a7a5fc8aebeee5528d8cdd77bbb06",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/execution.rs changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 08415bb9a47a4401dc4ba664258ec3175434b017d971cf8ca5f192135b845b4e",
@@ -35573,8 +35661,8 @@
       "last_success": "2026-11-09T15:35:00.836369973Z"
     },
     "aes/feature-msrv-minimal-test": {
-      "checked_at": "2026-11-13T10:32:02.028927914Z",
-      "fingerprint": "23de563a166440a034e92025915b1b4fcd6939a18454eb158a59d89136ca69e8",
+      "checked_at": "2026-11-13T10:57:13.821552838Z",
+      "fingerprint": "ea72fa92bee09e1c355514b2faab6509c5c2dd9693441979a7d05c2ac82242da",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/execution.rs changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 1cd653c54d7adcc6f35c893c0f09497412f15275b7c8b2f2e7b445ce3fc5b98b",
@@ -35591,8 +35679,8 @@
       "last_success": "2026-11-08T09:47:57.410587028Z"
     },
     "aes/hosted-arm-qemu-current": {
-      "checked_at": "2026-11-13T10:32:01.946937108Z",
-      "fingerprint": "7ea1920349399ec4350bdd5deb9df3a3f74fdc10c84fe7b02694b37f72baf7c3",
+      "checked_at": "2026-11-13T10:57:13.737816744Z",
+      "fingerprint": "4238fc55284e11d754e3a4c106bf957e78a3ef213e47c2ccdc90f2f4f191ef2d",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed; aes-build: crates/brynja-crypto/src/aes/tests/execution.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint fb0ddd6a86de6134d8f7516c451df0fdaaf383cd26d569890cf2eaa9aea9ba8d",
@@ -35600,8 +35688,8 @@
       "last_success": "2026-11-12T16:52:35.20334165Z"
     },
     "aes/hosted-arm-qemu-msrv": {
-      "checked_at": "2026-11-13T10:32:01.946642754Z",
-      "fingerprint": "a5f4d95135debe47bea3810263fa9316fe182438150c59d2df7af26dcb074f3a",
+      "checked_at": "2026-11-13T10:57:13.737514104Z",
+      "fingerprint": "44dd7b4d96cd3fa149ca301440155a918c46dfc7a985b17d7648aa1d739d771e",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed; aes-build: crates/brynja-crypto/src/aes/tests/execution.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 7332d9335c7d7a08255b2f052e431933fb288788c117622f3ba017e4e4270f27",
@@ -35609,8 +35697,8 @@
       "last_success": "2026-11-12T16:52:33.191890211Z"
     },
     "aes/hosted-native-current": {
-      "checked_at": "2026-11-13T10:32:01.946336808Z",
-      "fingerprint": "3dd50f845ca4a49c29c10953a8cb6e7a37517b79620a6b07e2818d2217b009f6",
+      "checked_at": "2026-11-13T10:57:13.737207637Z",
+      "fingerprint": "2b30e307f7c6e0b3caf9949984b7e1c0e27969eaa8cb8b7a09e89a12aa511ce9",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed; aes-build: crates/brynja-crypto/src/aes/tests/execution.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 59e5fb20078248c52a5a38e1b39f8aab8f99292c00c1c0f8b9648ca3568875fd",
@@ -35618,8 +35706,8 @@
       "last_success": "2026-11-12T16:52:31.090722091Z"
     },
     "aes/hosted-native-msrv": {
-      "checked_at": "2026-11-13T10:32:01.946023328Z",
-      "fingerprint": "9b40c93b9e61343d58f5aa6517fcf0cbbd8676b454dbeb67a52df548232d9a06",
+      "checked_at": "2026-11-13T10:57:13.736894959Z",
+      "fingerprint": "b2d3418ca69fd4fb3f682beb5bddcab0473c31392ec4d8ddde66a69410fc41ae",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed; aes-build: crates/brynja-crypto/src/aes/tests/execution.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint d1f06a154c4cf9b73c6604234e29b7f9e732d8f8b2c7483b7fa46ac396e6e22d",
@@ -35627,8 +35715,8 @@
       "last_success": "2026-11-12T16:52:29.383601118Z"
     },
     "aes/kernel-arm-qemu-current": {
-      "checked_at": "2026-11-13T10:32:01.845039667Z",
-      "fingerprint": "5961e7cf8fd127c67fa4c816d96357d799d3035328f01396eead4fca4d755db6",
+      "checked_at": "2026-11-13T10:57:13.649004444Z",
+      "fingerprint": "768bccbf427ff780398cfdedba6a53248f035a6edede5b5059e2a2b885156f4d",
       "result": "passed",
       "freshness": "Outdated: aes-kernel-candidate: assurance/aes-kernel-candidate/probe.rs changed; aes-kernel-candidate: crates/brynja-crypto-cpu/src/aes/aarch64_expand.rs changed; aes-kernel-candidate: crates/brynja-crypto-cpu/src/aes/dit.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint b6fc9f9d39b9c12795389112db7a91848144797663042662c18efdbd52af529e",
@@ -35636,8 +35724,8 @@
       "last_success": "2026-11-09T20:14:23.001229475Z"
     },
     "aes/kernel-arm-qemu-msrv": {
-      "checked_at": "2026-11-13T10:32:01.844994362Z",
-      "fingerprint": "f6935a0b6e79c2a19fda26d9e02619dbc2449a1c4c718d7b1ac36673d3bb2537",
+      "checked_at": "2026-11-13T10:57:13.648953137Z",
+      "fingerprint": "3bfef21d6767b6d4bddf9731a47acf346799e91bac0aa0dee269d88c099183d2",
       "result": "passed",
       "freshness": "Outdated: aes-kernel-candidate: assurance/aes-kernel-candidate/probe.rs changed; aes-kernel-candidate: crates/brynja-crypto-cpu/src/aes/aarch64_expand.rs changed; aes-kernel-candidate: crates/brynja-crypto-cpu/src/aes/dit.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint a1b22bf2cf6e6aa4640bb445f87f1429fa9e5994af00a0d4a52134a0d2375cbc",
@@ -35645,8 +35733,8 @@
       "last_success": "2026-11-09T20:14:21.378776709Z"
     },
     "aes/kernel-x86-current": {
-      "checked_at": "2026-11-13T10:32:01.841630659Z",
-      "fingerprint": "063c0e67c5b25baf17e71263a7dfa9a9f58aa53a60756c996a5fafb71186cef5",
+      "checked_at": "2026-11-13T10:57:13.645437729Z",
+      "fingerprint": "7896a308459a51b6b5b6e2a96a790215cdb116e97c4210417e6680e9458f4735",
       "result": "passed",
       "freshness": "Outdated: aes-kernel-candidate: assurance/aes-kernel-candidate/probe.rs changed; aes-kernel-candidate: crates/brynja-crypto-cpu/src/aes/aarch64_expand.rs changed; aes-kernel-candidate: crates/brynja-crypto-cpu/src/aes/dit.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 75708f60342916f789931693c07d9026dd3bdfbdf5a797e8ec5b8ec01b9f0c4d",
@@ -35654,8 +35742,8 @@
       "last_success": "2026-11-09T20:14:19.732786553Z"
     },
     "aes/kernel-x86-msrv": {
-      "checked_at": "2026-11-13T10:32:01.821078217Z",
-      "fingerprint": "7cbe01ab78297bcfff3a628c918c89fbaf304e868340639755800a80992a3b1c",
+      "checked_at": "2026-11-13T10:57:13.624179881Z",
+      "fingerprint": "5d3fe0c1f8d3fb2ed76308dc2ee01263e7f7087ede97b112a00c2877d649e273",
       "result": "passed",
       "freshness": "Outdated: aes-kernel-candidate: assurance/aes-kernel-candidate/probe.rs changed; aes-kernel-candidate: crates/brynja-crypto-cpu/src/aes/aarch64_expand.rs changed; aes-kernel-candidate: crates/brynja-crypto-cpu/src/aes/dit.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 0a92d015f8a9c76d0a014de346c332250b6f7f87aeb711c025be08091e9e508d",
@@ -35771,8 +35859,8 @@
       "last_success": null
     },
     "aes/packaged-diff-current-direct": {
-      "checked_at": "2026-11-13T10:32:02.03719121Z",
-      "fingerprint": "388abca927bce099ea9e83e1e0c0e414bbdc2f4674432b75474f5dcee5cebfe5",
+      "checked_at": "2026-11-13T10:57:13.829466967Z",
+      "fingerprint": "716d22efe77b760929f7c187c7cdf3fe73732c447badb898660c3295012473dd",
       "result": "passed",
       "freshness": "Outdated: aes-packaged: Cargo.lock changed; aes-packaged: assurance/aes-public-api/Cargo.lock changed; hkdf-public-api-modern: assurance/hkdf-public-api/Cargo.lock changed",
       "source": "working tree based on d3d78b5f463d7157d8bf18bb691ef7597e82be89; scoped fingerprint 1fd32b1afbc8f91ebaf12526feee35d90cb8965de095cd54c78c4c6cd13b4b7a",
@@ -35780,8 +35868,8 @@
       "last_success": "2026-11-08T10:03:25.187809718Z"
     },
     "aes/packaged-diff-current-facade": {
-      "checked_at": "2026-11-13T10:32:02.037491806Z",
-      "fingerprint": "3f4e524cb1f8bf07490b1d05051ccba839cf9e6b3f81e9ddd53e92d914f9dc4b",
+      "checked_at": "2026-11-13T10:57:13.829768043Z",
+      "fingerprint": "b310a12ac455c2669b990beb9a52520d8b2c3f8b1fcca7f0d9688ac069a3bcac",
       "result": "passed",
       "freshness": "Outdated: aes-packaged: Cargo.lock changed; aes-packaged: assurance/aes-public-api/Cargo.lock changed; hkdf-public-api-modern: assurance/hkdf-public-api/Cargo.lock changed",
       "source": "working tree based on d3d78b5f463d7157d8bf18bb691ef7597e82be89; scoped fingerprint 01247105196655bd386c143f899e41ade95ef5b8218c8dc4c46d44bbb55b7485",
@@ -35789,8 +35877,8 @@
       "last_success": "2026-11-08T10:03:35.176313448Z"
     },
     "aes/packaged-diff-msrv-direct": {
-      "checked_at": "2026-11-13T10:32:02.036580671Z",
-      "fingerprint": "ffed696614bb1f69e2a56efa002b72e78c177c3ccda69084666f7284e5f330b0",
+      "checked_at": "2026-11-13T10:57:13.828861497Z",
+      "fingerprint": "16319684ec4afc5faf12c0f22ab0e8b43be314c0555a4f72b9b87695f740d89f",
       "result": "passed",
       "freshness": "Outdated: aes-packaged: Cargo.lock changed; aes-packaged: assurance/aes-public-api/Cargo.lock changed; hkdf-public-api-modern: assurance/hkdf-public-api/Cargo.lock changed",
       "source": "working tree based on d3d78b5f463d7157d8bf18bb691ef7597e82be89; scoped fingerprint 548dc6db4040182f6a2c05210af5cd6d42d9e73a1a510db4d46ba3dfa6643c56",
@@ -35798,8 +35886,8 @@
       "last_success": "2026-11-08T10:03:05.033580842Z"
     },
     "aes/packaged-diff-msrv-facade": {
-      "checked_at": "2026-11-13T10:32:02.036886827Z",
-      "fingerprint": "746de3543e8bb2872142d600eb8ada1645ba704fe5138cef761bf328851c582b",
+      "checked_at": "2026-11-13T10:57:13.82916598Z",
+      "fingerprint": "532539ea0ee40877edb603d758dfdcd4796055436d9a801572e5acb4a80dc8f6",
       "result": "passed",
       "freshness": "Outdated: aes-packaged: Cargo.lock changed; aes-packaged: assurance/aes-public-api/Cargo.lock changed; hkdf-public-api-modern: assurance/hkdf-public-api/Cargo.lock changed",
       "source": "working tree based on d3d78b5f463d7157d8bf18bb691ef7597e82be89; scoped fingerprint ae5b5309dbbd1c19940a3a99f7e76cff00d26c84cd5befc4d28908743520171c",
@@ -35825,8 +35913,8 @@
       "last_success": null
     },
     "aes/packaged-fixed-random-current": {
-      "checked_at": "2026-11-13T10:32:02.034246857Z",
-      "fingerprint": "ac0a89d2c68474d383c6515b9a4d19e6c6b5a142f958803805fa5eb2f0a23be9",
+      "checked_at": "2026-11-13T10:57:13.826713503Z",
+      "fingerprint": "655710f384badae2ffcd4b35d39068c9b9b7c516f7dd39c54e17898fbd231c73",
       "result": "passed",
       "freshness": "Outdated: aes-packaged: Cargo.lock changed; aes-packaged: assurance/aes-public-api/Cargo.lock changed; hkdf-public-api-modern: assurance/hkdf-public-api/Cargo.lock changed",
       "source": "working tree based on d3d78b5f463d7157d8bf18bb691ef7597e82be89; scoped fingerprint 31153e0b84558c3de7f33be4c81c59a88c8a89e2550b24723adc217e42517844",
@@ -35834,8 +35922,8 @@
       "last_success": "2026-11-08T10:10:14.980948288Z"
     },
     "aes/packaged-fixed-random-msrv": {
-      "checked_at": "2026-11-13T10:32:02.033941492Z",
-      "fingerprint": "0279b22d995a620d2aae3289b16b00f64bc4a809844d3ad60da145a355cf5338",
+      "checked_at": "2026-11-13T10:57:13.826400814Z",
+      "fingerprint": "87d1109684d967c8f98d2182f7d507abc3fa57c2fb6cfe0fb348420a09a67500",
       "result": "passed",
       "freshness": "Outdated: aes-packaged: Cargo.lock changed; aes-packaged: assurance/aes-public-api/Cargo.lock changed; hkdf-public-api-modern: assurance/hkdf-public-api/Cargo.lock changed",
       "source": "working tree based on d3d78b5f463d7157d8bf18bb691ef7597e82be89; scoped fingerprint 403ba7911bb4e4bd6f1813fe55247f1ecd5c0cdfd29af16375a7b77f1515872e",
@@ -35843,8 +35931,8 @@
       "last_success": "2026-11-08T10:09:47.063413377Z"
     },
     "aes/packaged-lifecycle-current": {
-      "checked_at": "2026-11-13T10:32:02.035646011Z",
-      "fingerprint": "cab3aad8f5a1b1c30187d3238023ef63b7cd7d402fce439c01b5e91fc9e18d82",
+      "checked_at": "2026-11-13T10:57:13.827931917Z",
+      "fingerprint": "d8dd99be7e2bdcc8db0d7d63c678550976ec8cebbd038358ea7ac8aeb04cb197",
       "result": "passed",
       "freshness": "Outdated: aes-linked: scripts/aes/aes_linked_mix.py changed; aes-linked: scripts/aes/test-aes-linked-mix.py changed; aes-packaged: Cargo.lock changed",
       "source": "working tree based on d3d78b5f463d7157d8bf18bb691ef7597e82be89; scoped fingerprint d40d5a8335c09b50b31af9bafc142e6bccf4877345b7e13c713924de68f503f4",
@@ -35852,8 +35940,8 @@
       "last_success": "2026-11-08T10:01:52.919872489Z"
     },
     "aes/packaged-lifecycle-msrv": {
-      "checked_at": "2026-11-13T10:32:02.035327832Z",
-      "fingerprint": "58264b803e719d1ba79d267a0bf490bf03d3b9d18a30d5e41b1b69b26a531720",
+      "checked_at": "2026-11-13T10:57:13.827622464Z",
+      "fingerprint": "09532ab2cc21d70d359fdfe927f5ed3633b3789bdf1aa90a57f384930b0636a8",
       "result": "passed",
       "freshness": "Outdated: aes-linked: scripts/aes/aes_linked_mix.py changed; aes-linked: scripts/aes/test-aes-linked-mix.py changed; aes-packaged: Cargo.lock changed",
       "source": "working tree based on d3d78b5f463d7157d8bf18bb691ef7597e82be89; scoped fingerprint 57787630dff4f55d16d8e4b9b25c7ed31a45cdd298342d94855101adcea0f8c2",
@@ -35861,8 +35949,8 @@
       "last_success": "2026-11-08T10:01:40.40562971Z"
     },
     "aes/packaged-linked-current": {
-      "checked_at": "2026-11-13T10:32:02.036265617Z",
-      "fingerprint": "855d01afe84406258c6b8dd51d5bf3a278d0ee8f6978faad770fe5d9a6469e15",
+      "checked_at": "2026-11-13T10:57:13.828548477Z",
+      "fingerprint": "d6c88d0d4a0223a62d0f3118b4364c2ff5f52d76e0d185ce1c8fdeb1265ab25d",
       "result": "passed",
       "freshness": "Outdated: aes-linked: scripts/aes/aes_linked_mix.py changed; aes-linked: scripts/aes/test-aes-linked-mix.py changed; aes-packaged: Cargo.lock changed",
       "source": "working tree based on d3d78b5f463d7157d8bf18bb691ef7597e82be89; scoped fingerprint fa3afe001f8fb1d1b00d416fd0b57642556ca9fac70df0336f8479d905855921",
@@ -35870,8 +35958,8 @@
       "last_success": "2026-11-08T10:01:26.657676984Z"
     },
     "aes/packaged-linked-msrv": {
-      "checked_at": "2026-11-13T10:32:02.03595872Z",
-      "fingerprint": "8be869550caabb6702e05d23c415f3d91c0561bc79c3f0f918905275074d7477",
+      "checked_at": "2026-11-13T10:57:13.828242992Z",
+      "fingerprint": "812c1e3e86611ac220df8f494d2e91b41ead3d625db5d1a86c3ceefe4a86ba1e",
       "result": "passed",
       "freshness": "Outdated: aes-linked: scripts/aes/aes_linked_mix.py changed; aes-linked: scripts/aes/test-aes-linked-mix.py changed; aes-packaged: Cargo.lock changed",
       "source": "working tree based on d3d78b5f463d7157d8bf18bb691ef7597e82be89; scoped fingerprint 62b3549ec234095caad12ae839c53d3a9151f9d94b727bb52be664928e663152",
@@ -35879,8 +35967,8 @@
       "last_success": "2026-11-08T10:01:14.395437964Z"
     },
     "aes/packaged-portable": {
-      "checked_at": "2026-11-13T10:32:02.032328656Z",
-      "fingerprint": "4f38a9d45129b72c0a5dbf0eb7dd1705031dd2c32230b99d8c9cae730b97649c",
+      "checked_at": "2026-11-13T10:57:13.824866837Z",
+      "fingerprint": "532ccb1c7be1e525f5e4b9a0c06f95ac414d79879919d8c57b62049178c13eed",
       "result": "passed",
       "freshness": "Outdated: aes-packaged: Cargo.lock changed; aes-packaged: assurance/aes-public-api/Cargo.lock changed; hkdf-public-api-modern: assurance/hkdf-public-api/Cargo.lock changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint c36dc3c20f3c221d2e76c7f8b97416963c83fc3629914b0af1f9ecd16c5c8e0b",
@@ -35888,8 +35976,8 @@
       "last_success": "2026-11-09T16:54:46.88876608Z"
     },
     "aes/performance-fixture-direct-current": {
-      "checked_at": "2026-11-13T10:32:01.880260283Z",
-      "fingerprint": "0c0910e0ad9ec52b27bbaeae17ae53eaff4c96b24e82bb91427d4db2a8148ae8",
+      "checked_at": "2026-11-13T10:57:13.680135017Z",
+      "fingerprint": "e9f27f49d307d26673a1791ce9c1908f853887babf2cbed4f4b7f9f0e5a3ce6a",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint a98d2851c26217c088a37f629f9745aa7d9fb93c521674985ce84810e26bebec",
@@ -35897,8 +35985,8 @@
       "last_success": "2026-11-10T17:30:24.270767211Z"
     },
     "aes/performance-fixture-direct-msrv": {
-      "checked_at": "2026-11-13T10:32:01.879612523Z",
-      "fingerprint": "1111078cd21326d70774450d6d261c231a9133a374fb9698a67973f1eda24e63",
+      "checked_at": "2026-11-13T10:57:13.679493139Z",
+      "fingerprint": "f0f847dfd26d48a3f8a11bae12e62a1ee30cba7018e76209abb6306b9eb54f36",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 746cceca784950353184ae90a1d7282afce7a4d679f343fd7bf415328ff46fd4",
@@ -35906,8 +35994,8 @@
       "last_success": "2026-11-10T17:30:06.577050611Z"
     },
     "aes/performance-fixture-facade-current": {
-      "checked_at": "2026-11-13T10:32:01.880582189Z",
-      "fingerprint": "f7b20ae03316bc3270c9f2c14d84494586a781549e8afefb56c590ec712163e1",
+      "checked_at": "2026-11-13T10:57:13.680450541Z",
+      "fingerprint": "ef5d8ed011e47c7a7210a4728b057e5b394d032901e90809dea9389b21348ff7",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 321c5270c8862a48150a91b85a0f65bbdb70c09ca14b53dc3a82493e4e8b63a1",
@@ -35915,8 +36003,8 @@
       "last_success": "2026-11-10T17:30:32.5085152Z"
     },
     "aes/performance-fixture-facade-msrv": {
-      "checked_at": "2026-11-13T10:32:01.879936884Z",
-      "fingerprint": "db75b5d3c5518ad443d216e6f42940f8efbac6e16555e64aa27b7d275f1f3bf4",
+      "checked_at": "2026-11-13T10:57:13.67981765Z",
+      "fingerprint": "910ddb97a55d624e7f6599634f49594db6c7753d63687b955e561476759d09b2",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 3ebeac3a2ca16b78bdbd3ca06cee3149003b96feea07a9885946c8ec4b1eaba3",
@@ -35996,8 +36084,8 @@
       "last_success": "2026-11-08T10:08:14.527033298Z"
     },
     "aes/riscv-avs-current-direct": {
-      "checked_at": "2026-11-13T10:32:01.950674635Z",
-      "fingerprint": "d9a135703078f9a0cdf8ab7b9037b2b18ebe2c9068219ecf12cc646eb26d21ef",
+      "checked_at": "2026-11-13T10:57:13.741732756Z",
+      "fingerprint": "e3e27edfbe6dc469ab921ad4ec5dc662a8a57aaabf6a960304b046b0b8ee46c2",
       "result": "passed",
       "freshness": "Outdated: aes-build: scripts/release/test-verification-registry.py changed; aes-packaged: Cargo.lock changed; aes-packaged: assurance/aes-public-api/Cargo.lock changed",
       "source": "working tree based on be77309a33af22621a366a94da1ba15ad1495309; scoped fingerprint 612d0ed85b318aab197adf838cdf4e0d70eb6985ce4b7f0a573838f004670fcc",
@@ -36005,8 +36093,8 @@
       "last_success": "2026-11-13T08:39:40.16041934Z"
     },
     "aes/riscv-avs-current-facade": {
-      "checked_at": "2026-11-13T10:32:01.951007652Z",
-      "fingerprint": "ed1e1b2edb0d36e9cef2945b5c1a816b39dd4d537fe3586dcf3622136c014f38",
+      "checked_at": "2026-11-13T10:57:13.742074299Z",
+      "fingerprint": "1d3fae14a3d6eeb7f498ea4d26e1c38ff1d79ff16016245a0ded6f8d7ea7b2e9",
       "result": "passed",
       "freshness": "Outdated: aes-build: scripts/release/test-verification-registry.py changed; aes-packaged: Cargo.lock changed; aes-packaged: assurance/aes-public-api/Cargo.lock changed",
       "source": "working tree based on be77309a33af22621a366a94da1ba15ad1495309; scoped fingerprint 34bddca63b27ebc2ea5df6c3661f9c8bf655ce373d97be39ff810b285ab2f9dc",
@@ -36014,8 +36102,8 @@
       "last_success": "2026-11-13T08:39:53.244086482Z"
     },
     "aes/riscv-avs-msrv-direct": {
-      "checked_at": "2026-11-13T10:32:01.949992981Z",
-      "fingerprint": "7897f83e6638ce998ec5709975bf3384c372461626429db7369aeda9d86f8681",
+      "checked_at": "2026-11-13T10:57:13.741035062Z",
+      "fingerprint": "905c5794fcfdaaf2bc6738f1a8d372adc44c0b45256857145d0467647598c0e3",
       "result": "passed",
       "freshness": "Outdated: aes-build: scripts/release/test-verification-registry.py changed; aes-packaged: Cargo.lock changed; aes-packaged: assurance/aes-public-api/Cargo.lock changed",
       "source": "working tree based on be77309a33af22621a366a94da1ba15ad1495309; scoped fingerprint 4d9f60f3c46bf508b754e279924da50b2c7ee3691c1ef35eadaf8928967cfd66",
@@ -36023,8 +36111,8 @@
       "last_success": "2026-11-13T08:39:13.756364574Z"
     },
     "aes/riscv-avs-msrv-facade": {
-      "checked_at": "2026-11-13T10:32:01.950334394Z",
-      "fingerprint": "251f4162860b3865d3b04b696059dbfd34e021a1c805d0af0b121053cfc48598",
+      "checked_at": "2026-11-13T10:57:13.741384139Z",
+      "fingerprint": "f0a166f4c2cc5ebced8204b1ef26e3467ecaea4f8ccd5fa814f4dc9379b39563",
       "result": "passed",
       "freshness": "Outdated: aes-build: scripts/release/test-verification-registry.py changed; aes-packaged: Cargo.lock changed; aes-packaged: assurance/aes-public-api/Cargo.lock changed",
       "source": "working tree based on be77309a33af22621a366a94da1ba15ad1495309; scoped fingerprint 0e418a63c0b69e270e9cd76a7eb7f1579d600822c48c252e16a01b8191360300",
@@ -36032,62 +36120,62 @@
       "last_success": "2026-11-13T08:39:27.222532065Z"
     },
     "aes/riscv-linked-current": {
-      "checked_at": "2026-11-13T10:31:28.346597745Z",
-      "fingerprint": "51d7fc8cd6ef45a2c2b89f71c4ffda7ae26b1312fbb8472d916a2be9c3e9b42d",
+      "checked_at": "2026-11-13T10:56:47.153585976Z",
+      "fingerprint": "7bd5c0ab2aab4c987b45511898029206395378cdf1c7e733c08fdce79ee902ef",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on be77309a33af22621a366a94da1ba15ad1495309; scoped fingerprint 51d7fc8cd6ef45a2c2b89f71c4ffda7ae26b1312fbb8472d916a2be9c3e9b42d",
-      "performed_at": "2026-11-13T10:31:27.958899286Z",
-      "last_success": "2026-11-13T10:31:27.958899286Z"
+      "source": "working tree based on c07c5358bc4ceddc595def5f28ead8b1767c3ab2; scoped fingerprint 7bd5c0ab2aab4c987b45511898029206395378cdf1c7e733c08fdce79ee902ef",
+      "performed_at": "2026-11-13T10:56:46.768352329Z",
+      "last_success": "2026-11-13T10:56:46.768352329Z"
     },
     "aes/riscv-linked-msrv": {
-      "checked_at": "2026-11-13T10:31:17.155373498Z",
-      "fingerprint": "5bfaab6a49f090c641aeff2585a8c47edfcd00492c56f2cee76cce0f659d124f",
+      "checked_at": "2026-11-13T10:56:34.986440658Z",
+      "fingerprint": "f19d13f7321c61001f0de5b37b1f27d4b5a5fa0faec618dbb7c92495bf32723b",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on be77309a33af22621a366a94da1ba15ad1495309; scoped fingerprint 5bfaab6a49f090c641aeff2585a8c47edfcd00492c56f2cee76cce0f659d124f",
-      "performed_at": "2026-11-13T10:31:16.772961782Z",
-      "last_success": "2026-11-13T10:31:16.772961782Z"
+      "source": "working tree based on c07c5358bc4ceddc595def5f28ead8b1767c3ab2; scoped fingerprint f19d13f7321c61001f0de5b37b1f27d4b5a5fa0faec618dbb7c92495bf32723b",
+      "performed_at": "2026-11-13T10:56:34.600637288Z",
+      "last_success": "2026-11-13T10:56:34.600637288Z"
     },
     "aes/riscv-no-std-current-direct": {
-      "checked_at": "2026-11-13T10:30:39.624377405Z",
-      "fingerprint": "afa3066a45913883a6d91d8e52cc414e24e9a587254d4ee2253416770e3baa3b",
+      "checked_at": "2026-11-13T10:57:13.744363709Z",
+      "fingerprint": "0a7a6cf9d2306155645dd013262724eddea810be9bef9130bf4d87e3b5d0b6ad",
       "result": "passed",
-      "freshness": "Up to date",
+      "freshness": "Outdated: hkdf-public-api-modern: crates/brynja-crypto-cpu/src/aes/mod.rs changed; hkdf-public-api-modern: crates/brynja-crypto-cpu/src/aes/riscv64.rs changed; hkdf-public-api-modern: crates/brynja-crypto-cpu/src/aes/tests.rs changed",
       "source": "working tree based on be77309a33af22621a366a94da1ba15ad1495309; scoped fingerprint afa3066a45913883a6d91d8e52cc414e24e9a587254d4ee2253416770e3baa3b",
       "performed_at": "2026-11-13T10:30:39.234820067Z",
       "last_success": "2026-11-13T10:30:39.234820067Z"
     },
     "aes/riscv-no-std-current-facade": {
-      "checked_at": "2026-11-13T10:30:49.709012845Z",
-      "fingerprint": "58e538fae21e4dbaf7f56daee58e4451a8eed0a35bd59a7542dc35602578bfe1",
+      "checked_at": "2026-11-13T10:57:13.745087932Z",
+      "fingerprint": "6deabf37fa59dfede873e3521187b7df31035e2dc937bd6f583d4af22f4a472d",
       "result": "passed",
-      "freshness": "Up to date",
+      "freshness": "Outdated: hkdf-public-api-modern: crates/brynja-crypto-cpu/src/aes/mod.rs changed; hkdf-public-api-modern: crates/brynja-crypto-cpu/src/aes/riscv64.rs changed; hkdf-public-api-modern: crates/brynja-crypto-cpu/src/aes/tests.rs changed",
       "source": "working tree based on be77309a33af22621a366a94da1ba15ad1495309; scoped fingerprint 58e538fae21e4dbaf7f56daee58e4451a8eed0a35bd59a7542dc35602578bfe1",
       "performed_at": "2026-11-13T10:30:49.323586574Z",
       "last_success": "2026-11-13T10:30:49.323586574Z"
     },
     "aes/riscv-no-std-msrv-direct": {
-      "checked_at": "2026-11-13T10:30:19.269920906Z",
-      "fingerprint": "724530a3b457dc976a7d11a9a3496d8843b8ef01909ed64c0d4d4f6344ca58b1",
+      "checked_at": "2026-11-13T10:57:13.742874565Z",
+      "fingerprint": "4e8101f48c6ae3fc9dc79f1a5a825157fc55600c994d7a2d3aff24c73b53e7a1",
       "result": "passed",
-      "freshness": "Up to date",
+      "freshness": "Outdated: hkdf-public-api-modern: crates/brynja-crypto-cpu/src/aes/mod.rs changed; hkdf-public-api-modern: crates/brynja-crypto-cpu/src/aes/riscv64.rs changed; hkdf-public-api-modern: crates/brynja-crypto-cpu/src/aes/tests.rs changed",
       "source": "working tree based on be77309a33af22621a366a94da1ba15ad1495309; scoped fingerprint 724530a3b457dc976a7d11a9a3496d8843b8ef01909ed64c0d4d4f6344ca58b1",
       "performed_at": "2026-11-13T10:30:18.88293039Z",
       "last_success": "2026-11-13T10:30:18.88293039Z"
     },
     "aes/riscv-no-std-msrv-facade": {
-      "checked_at": "2026-11-13T10:30:29.874275777Z",
-      "fingerprint": "d5834f432d16571a19b1b7aba633ed60f8a71d11c808d1e9cff2c3e8a7c5a9a6",
+      "checked_at": "2026-11-13T10:57:13.743633534Z",
+      "fingerprint": "dc08c01cd081ce5e761877736a01fded27d3c72b129f15e08ebe818ee5651bf1",
       "result": "passed",
-      "freshness": "Up to date",
+      "freshness": "Outdated: hkdf-public-api-modern: crates/brynja-crypto-cpu/src/aes/mod.rs changed; hkdf-public-api-modern: crates/brynja-crypto-cpu/src/aes/riscv64.rs changed; hkdf-public-api-modern: crates/brynja-crypto-cpu/src/aes/tests.rs changed",
       "source": "working tree based on be77309a33af22621a366a94da1ba15ad1495309; scoped fingerprint d5834f432d16571a19b1b7aba633ed60f8a71d11c808d1e9cff2c3e8a7c5a9a6",
       "performed_at": "2026-11-13T10:30:29.482872293Z",
       "last_success": "2026-11-13T10:30:29.482872293Z"
     },
     "aes/riscv-oracle-current-direct": {
-      "checked_at": "2026-11-13T10:32:01.952624455Z",
-      "fingerprint": "07af30535185ef639d0e7e645cca0a2cee136d210b50ed3f6b8f9daafa25b2ee",
+      "checked_at": "2026-11-13T10:57:13.743975337Z",
+      "fingerprint": "342d74de3d68030ab8241babe338260acc7c1e464af47aacc646713f2cc6f22b",
       "result": "passed",
       "freshness": "Outdated: aes-build: scripts/release/test-verification-registry.py changed; aes-packaged: Cargo.lock changed; aes-packaged: assurance/aes-public-api/Cargo.lock changed",
       "source": "working tree based on be77309a33af22621a366a94da1ba15ad1495309; scoped fingerprint 4ec5c327c11a116c8cbcb118b781afa74d9d4c140982e28a65e43812f5e0a61a",
@@ -36095,8 +36183,8 @@
       "last_success": "2026-11-13T08:40:18.443842644Z"
     },
     "aes/riscv-oracle-current-facade": {
-      "checked_at": "2026-11-13T10:32:01.953299666Z",
-      "fingerprint": "ded9d83b1553755647adc9ee1e71717bbfb5544fd9dbf283cf7da53d9b8da49d",
+      "checked_at": "2026-11-13T10:57:13.744705833Z",
+      "fingerprint": "5a5bb421f030cab03f5246b8ae6668528d0e7ca59440794f132ccf860f7c5165",
       "result": "passed",
       "freshness": "Outdated: aes-build: scripts/release/test-verification-registry.py changed; aes-packaged: Cargo.lock changed; aes-packaged: assurance/aes-public-api/Cargo.lock changed",
       "source": "working tree based on be77309a33af22621a366a94da1ba15ad1495309; scoped fingerprint 1246dcd7783b636c7dd2efcf348f26276c1af0640a00d6301f897bf77740e994",
@@ -36104,8 +36192,8 @@
       "last_success": "2026-11-13T08:40:26.261752279Z"
     },
     "aes/riscv-oracle-msrv-direct": {
-      "checked_at": "2026-11-13T10:32:01.951349024Z",
-      "fingerprint": "3b9508a74be6781cad254e311f826ab5eeb1b6813660c6d9793f8d2b2d9c067b",
+      "checked_at": "2026-11-13T10:57:13.74242573Z",
+      "fingerprint": "3bfbdc39d85eaec2a2463071f7625ce2c3a8b21c861b34b81613738f3d406da4",
       "result": "passed",
       "freshness": "Outdated: aes-build: scripts/release/test-verification-registry.py changed; aes-packaged: Cargo.lock changed; aes-packaged: assurance/aes-public-api/Cargo.lock changed",
       "source": "working tree based on be77309a33af22621a366a94da1ba15ad1495309; scoped fingerprint ce76cb2676db655ee0f92980cdf0c9e8ee42ae5a19a62fb389eb342bfa698f52",
@@ -36113,8 +36201,8 @@
       "last_success": "2026-11-13T08:40:02.260710931Z"
     },
     "aes/riscv-oracle-msrv-facade": {
-      "checked_at": "2026-11-13T10:32:01.951991884Z",
-      "fingerprint": "c8564913499961ab030130bd5e3db1a4e7953f25415f5731307cf8bea0f53b64",
+      "checked_at": "2026-11-13T10:57:13.743235084Z",
+      "fingerprint": "4ac4ffdc9ef7ac034ab49aa90cf37abf8d3b8e5d80f2764ed1b53363276b35de",
       "result": "passed",
       "freshness": "Outdated: aes-build: scripts/release/test-verification-registry.py changed; aes-packaged: Cargo.lock changed; aes-packaged: assurance/aes-public-api/Cargo.lock changed",
       "source": "working tree based on be77309a33af22621a366a94da1ba15ad1495309; scoped fingerprint f111dca61455aadaf29486637b57a3eada9ae0590352d82e1cb895d6a685e54c",
@@ -36122,37 +36210,37 @@
       "last_success": "2026-11-13T08:40:10.672854123Z"
     },
     "aes/riscv-qemu-current": {
-      "checked_at": "2026-11-13T10:29:45.448510446Z",
-      "fingerprint": "1dd043f3b2f92a3992615e017d93352ffa18a3c85e8bfcebeba1a0b9c20f83f8",
+      "checked_at": "2026-11-13T10:56:11.996630841Z",
+      "fingerprint": "a01f238eb9224c9d2b54dfcb6438c5b66cb2b6acc25738e96af61c1d6bb1253a",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on be77309a33af22621a366a94da1ba15ad1495309; scoped fingerprint 1dd043f3b2f92a3992615e017d93352ffa18a3c85e8bfcebeba1a0b9c20f83f8",
-      "performed_at": "2026-11-13T10:29:45.041198824Z",
-      "last_success": "2026-11-13T10:29:45.041198824Z"
+      "source": "working tree based on c07c5358bc4ceddc595def5f28ead8b1767c3ab2; scoped fingerprint a01f238eb9224c9d2b54dfcb6438c5b66cb2b6acc25738e96af61c1d6bb1253a",
+      "performed_at": "2026-11-13T10:56:11.6279472Z",
+      "last_success": "2026-11-13T10:56:11.6279472Z"
     },
     "aes/riscv-qemu-msrv": {
-      "checked_at": "2026-11-13T10:29:29.34605713Z",
-      "fingerprint": "a7d428ddd36606b30359247d8eecdfdcb594abaf6c1a2dd4af1a322a1f27a583",
+      "checked_at": "2026-11-13T10:55:08.451328748Z",
+      "fingerprint": "90aa021c17467eef33f267366a6acc279abe4da19fcc08a3b2b7e1c07ff06ca0",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on be77309a33af22621a366a94da1ba15ad1495309; scoped fingerprint a7d428ddd36606b30359247d8eecdfdcb594abaf6c1a2dd4af1a322a1f27a583",
-      "performed_at": "2026-11-13T10:29:28.983252577Z",
-      "last_success": "2026-11-13T10:29:28.983252577Z"
+      "source": "working tree based on c07c5358bc4ceddc595def5f28ead8b1767c3ab2; scoped fingerprint 90aa021c17467eef33f267366a6acc279abe4da19fcc08a3b2b7e1c07ff06ca0",
+      "performed_at": "2026-11-13T10:55:08.080150069Z",
+      "last_success": "2026-11-13T10:55:08.080150069Z"
     },
     "aes/riscv-startup-current": {
-      "checked_at": "2026-11-13T10:32:01.955211005Z",
-      "fingerprint": "7918fe0ea2e2462cd9c3c50ee660c39b6829af90efaf94f497e0897f33a85f42",
+      "checked_at": "2026-11-13T10:57:13.74665919Z",
+      "fingerprint": "49c1bd7bf81594c1974f3500e6af11aa1d7a1db2eec12e7ca600eae780e7c35a",
       "result": "passed",
-      "freshness": "Outdated: aes-packaged: Cargo.lock changed; aes-packaged: assurance/aes-public-api/Cargo.lock changed; hkdf-public-api-modern: assurance/hkdf-public-api/Cargo.lock changed",
+      "freshness": "Outdated: aes-packaged: Cargo.lock changed; aes-packaged: assurance/aes-public-api/Cargo.lock changed; aes-riscv-linked: scripts/aes/test-aes-riscv-linked.py changed",
       "source": "working tree based on be77309a33af22621a366a94da1ba15ad1495309; scoped fingerprint 24970f333bdadcc68bcc7f7a1348b9d709ffb8965ba4b44d9e293865b479dfdb",
       "performed_at": "2026-11-13T10:12:59.519128677Z",
       "last_success": "2026-11-13T10:12:59.519128677Z"
     },
     "aes/riscv-startup-msrv": {
-      "checked_at": "2026-11-13T10:32:01.954862528Z",
-      "fingerprint": "d08a3c05dad13a55de3f9b046d4477ec9aa9f44f1da1689e5251e02a3cf78da0",
+      "checked_at": "2026-11-13T10:57:13.746302478Z",
+      "fingerprint": "c8f43fbacd5a274c7795d7b40146dd28234e902c6575b04ad66b7914559d2ec7",
       "result": "passed",
-      "freshness": "Outdated: aes-packaged: Cargo.lock changed; aes-packaged: assurance/aes-public-api/Cargo.lock changed; hkdf-public-api-modern: assurance/hkdf-public-api/Cargo.lock changed",
+      "freshness": "Outdated: aes-packaged: Cargo.lock changed; aes-packaged: assurance/aes-public-api/Cargo.lock changed; aes-riscv-linked: scripts/aes/test-aes-riscv-linked.py changed",
       "source": "working tree based on be77309a33af22621a366a94da1ba15ad1495309; scoped fingerprint 13fe5e303a357a3327cc8683560527997d52febe8f90808b78c6bf25900c5af4",
       "performed_at": "2026-11-13T10:12:15.587811256Z",
       "last_success": "2026-11-13T10:12:15.587811256Z"
@@ -36167,8 +36255,8 @@
       "last_success": "2026-11-08T10:06:46.491952919Z"
     },
     "aes/static-arm-qemu-current": {
-      "checked_at": "2026-11-13T10:32:01.956491024Z",
-      "fingerprint": "3b9e6f32236df5551c68492dc5129b743f75db9864b54ada610c77c33cb6d299",
+      "checked_at": "2026-11-13T10:57:13.747893293Z",
+      "fingerprint": "71694dee86afdea1e5f0a26af4e9aba78b5a750d3d5dbb64608c3acc3fee8e77",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/execution.rs changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 8d31bccca020e7b3f40d081638da34d23219da6a8a4fc28a5ac3d985465e6f46",
@@ -36176,8 +36264,8 @@
       "last_success": "2026-11-09T20:25:51.208133729Z"
     },
     "aes/static-arm-qemu-msrv": {
-      "checked_at": "2026-11-13T10:32:01.956294675Z",
-      "fingerprint": "e7d1c76617ad5bb93ef9648709ef7e3c444ae66d1a3ccdfddf13dacc708018e5",
+      "checked_at": "2026-11-13T10:57:13.747697645Z",
+      "fingerprint": "63f94f2d297d3320c163cf4d8a81b15ee7a5493795d5ed2467adeb7dd0916121",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/execution.rs changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 83e33be19d851680ad530c850a44e72c154e18527c5e15ee03aec8390480bbe0",
@@ -36185,8 +36273,8 @@
       "last_success": "2026-11-09T20:25:49.078524931Z"
     },
     "aes/static-baseline-current": {
-      "checked_at": "2026-11-13T10:32:01.956095299Z",
-      "fingerprint": "41616581846ff01eb409e140684863fa89f815f4329604219fec436e36c5df86",
+      "checked_at": "2026-11-13T10:57:13.74749856Z",
+      "fingerprint": "643091a5a7790281a271c318853ca5e4720c2af7cf7f774ddb0d507c87a769b8",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/execution.rs changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 797b5fdc69ef9132158b66da791456a1b62d6186ffcb5dba236903d035724c36",
@@ -36194,8 +36282,8 @@
       "last_success": "2026-11-09T20:25:47.048477294Z"
     },
     "aes/static-baseline-msrv": {
-      "checked_at": "2026-11-13T10:32:01.9558936Z",
-      "fingerprint": "3ece0e63b0ed6af241ad2a4de869c62fdbf4c0377757de9ffdaec5b9ac39fe8f",
+      "checked_at": "2026-11-13T10:57:13.747300527Z",
+      "fingerprint": "c3d6a72f9911672a47fe66715b13b7cb41a0a21d09fb8a727dd245461d3322c0",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/execution.rs changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 11eeb6a4f8de416e7e5f91ed6c232a4f0afd8d89ac550f05a334a0db2787494a",
@@ -36203,8 +36291,8 @@
       "last_success": "2026-11-09T20:25:45.700970266Z"
     },
     "aes/static-native-current": {
-      "checked_at": "2026-11-13T10:32:01.955663707Z",
-      "fingerprint": "34aa91f476ea0fb311b2ec8c15c22df618669183b32a2f5a95d2f73cec5a46e6",
+      "checked_at": "2026-11-13T10:57:13.747098898Z",
+      "fingerprint": "de42de2382dd0a05a63a92ac1bbaf654f6c4b54b32d9eb27a7eaa1c2aebf955a",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/execution.rs changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 184a69eb504dd233bb2057b481d65d1e767bd2fe5e47fe237fdb26153a98ff46",
@@ -36212,8 +36300,8 @@
       "last_success": "2026-11-09T20:25:44.267430956Z"
     },
     "aes/static-native-msrv": {
-      "checked_at": "2026-11-13T10:32:01.95544221Z",
-      "fingerprint": "77094e5eea8f217662e80312e21ea588997139e6f9b11bccb2790dc9715f8106",
+      "checked_at": "2026-11-13T10:57:13.746888832Z",
+      "fingerprint": "c2150ef13f03363a22cc18dfc110bdadbdb67314bee85df71b9cc5b1ede99b08",
       "result": "passed",
       "freshness": "Outdated: aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes/execution.rs changed; aes-build: crates/brynja-crypto/src/aes/tests.rs changed",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 2f3b6329682e1d971cf51fd7971d0f63909d2e6be33b1d4d17a03e16ecba6377",
@@ -36221,8 +36309,8 @@
       "last_success": "2026-11-09T20:25:42.638250922Z"
     },
     "aes/timing-batch-fixture-direct-current": {
-      "checked_at": "2026-11-13T10:32:01.875087174Z",
-      "fingerprint": "8dfaacdbeaf7f217c360f3eb63afbcc6407ea4aa45fcd2a2aeed25ed2376ef78",
+      "checked_at": "2026-11-13T10:57:13.675012895Z",
+      "fingerprint": "8f44f2f59d2921da04a97ccc455dadeb94021e0fffdf1b6e22d456b1c2305710",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 020073477d70aada94f40e5e0d22c3a87e3d4a551f3df464282e921deb75aecb",
@@ -36230,8 +36318,8 @@
       "last_success": "2026-11-11T07:37:10.520601573Z"
     },
     "aes/timing-batch-fixture-direct-msrv": {
-      "checked_at": "2026-11-13T10:32:01.874432852Z",
-      "fingerprint": "f8ed932de002c3b1b91ea3131c1f7cebd0c5a55b20f60b34eb8d910144514e14",
+      "checked_at": "2026-11-13T10:57:13.674358773Z",
+      "fingerprint": "d8925c8ffa9aada874135a537b927ad3b5baa83d3630cd841aed067114907210",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint e41e15960d22a0c0a09aab1cc98b8fee4a56d6cde9696cec3128b7be1da7f97c",
@@ -36239,8 +36327,8 @@
       "last_success": "2026-11-11T07:36:42.770926442Z"
     },
     "aes/timing-batch-fixture-facade-current": {
-      "checked_at": "2026-11-13T10:32:01.875412817Z",
-      "fingerprint": "e5a821fe05c332a7f4c29405c38e0455c5756a2548c7e5ef17cbba7926ab6f79",
+      "checked_at": "2026-11-13T10:57:13.675332737Z",
+      "fingerprint": "8bb3323f8e337c8be0b21c3f2beeccfead20dbdfb5034c5e392c868074ecf45a",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint e31339a606caf26d03173be8fd06b8c084864249ab5b20c240ad66e7db3a32a6",
@@ -36248,8 +36336,8 @@
       "last_success": "2026-11-11T07:37:23.839372791Z"
     },
     "aes/timing-batch-fixture-facade-msrv": {
-      "checked_at": "2026-11-13T10:32:01.874761882Z",
-      "fingerprint": "d746b345beba0a2e2401e6f6c50e8aaf251b3c962e631e96d40eabe3fd8239be",
+      "checked_at": "2026-11-13T10:57:13.674692902Z",
+      "fingerprint": "c5cd652c73849323df71185f69faf892fce73bb22d42e6998c612e43d1eddffe",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 1fc0ee86e19bf7c59c473b4233085da590da19da913a87b8e7566dee4ec16e16",
@@ -36257,8 +36345,8 @@
       "last_success": "2026-11-11T07:36:57.046685418Z"
     },
     "aes/timing-controls-fixture-direct-current": {
-      "checked_at": "2026-11-13T10:32:01.877670628Z",
-      "fingerprint": "79d8c0b3a909bf3af44455218fcd487b09b4e035f4bc647e4e3cafe36c517bb0",
+      "checked_at": "2026-11-13T10:57:13.677567905Z",
+      "fingerprint": "a5cae5e1eea21506c1f44f7995d051fdd876c7804cf0a18e5c7931ba59cc2705",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added; aes-accelerated-campaigns: scripts/aes/aes_riscv_oracle.py added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint febc56a77bb947c812d6c25bdfc0dd0afb03ccd4882270346b3acbeda12a9667",
@@ -36266,8 +36354,8 @@
       "last_success": "2026-11-12T17:14:54.389210129Z"
     },
     "aes/timing-controls-fixture-direct-msrv": {
-      "checked_at": "2026-11-13T10:32:01.877025754Z",
-      "fingerprint": "aa1b07cd61456d81d164f6b0ffc4aeca9abaf1ec644c0557e8111f3422a2671e",
+      "checked_at": "2026-11-13T10:57:13.676929613Z",
+      "fingerprint": "c18b39015523f092527176fd3f826ae4456be388105eedad30c39682b8497a60",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added; aes-accelerated-campaigns: scripts/aes/aes_riscv_oracle.py added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 3f5ae861cfd572cf9c0728de3cb702e8563b4c74e9a8e98c04b57cfa4364c579",
@@ -36275,8 +36363,8 @@
       "last_success": "2026-11-12T17:14:24.837247361Z"
     },
     "aes/timing-controls-fixture-facade-current": {
-      "checked_at": "2026-11-13T10:32:01.877991522Z",
-      "fingerprint": "4cb7213a347b5c04a6b0931049baa7dfc7c2c3ff731386bb96e22825a17d39c3",
+      "checked_at": "2026-11-13T10:57:13.67789495Z",
+      "fingerprint": "9c8355d6a78f3bc0c99ae156e8443029478061fd046d09adacf8d7c1dae71e06",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added; aes-accelerated-campaigns: scripts/aes/aes_riscv_oracle.py added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 69f2ed8ccd9ce045a98fd51790d9994ea51f03b9d7b72d352528f3bc7141d612",
@@ -36284,8 +36372,8 @@
       "last_success": "2026-11-12T17:15:09.000974499Z"
     },
     "aes/timing-controls-fixture-facade-msrv": {
-      "checked_at": "2026-11-13T10:32:01.877345606Z",
-      "fingerprint": "587abb7d175bcca9dcf1a675ddb1ff4d0ebcc48ed91164f3b364ef93bdb53570",
+      "checked_at": "2026-11-13T10:57:13.677248864Z",
+      "fingerprint": "01aa420f54c412179376a1482fdc8f4f95552204dbdb6257411cd2126192afa6",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added; aes-accelerated-campaigns: scripts/aes/aes_riscv_oracle.py added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 9750f43995939c2aebd7ba64577645d4a6aa27fce177738d09f900cab4bb85e7",
@@ -36293,8 +36381,8 @@
       "last_success": "2026-11-12T17:14:39.980688179Z"
     },
     "aes/timing-crossover-fixture-direct-current": {
-      "checked_at": "2026-11-13T10:32:01.873772188Z",
-      "fingerprint": "7fb13e754f5b913cef325ed7faff856cbe96aa5c6b2f2ee15227c7a489c9f9a6",
+      "checked_at": "2026-11-13T10:57:13.673713379Z",
+      "fingerprint": "d218affb8f02a3f23e791420921fcc16b3a83d245e85202c98e6e852ca846947",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added; aes-accelerated-campaigns: scripts/aes/aes_riscv_oracle.py added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 4db47b83958a2beab37154435aad8f47d7e1c2d1257885277191cfbdeabe39cd",
@@ -36302,8 +36390,8 @@
       "last_success": "2026-11-11T21:08:45.975907729Z"
     },
     "aes/timing-crossover-fixture-direct-msrv": {
-      "checked_at": "2026-11-13T10:32:01.873103269Z",
-      "fingerprint": "a84843045813eb6fb868e4cf880e29cb8a0c42d95c74b91a1f8d2c5d5373f959",
+      "checked_at": "2026-11-13T10:57:13.673057885Z",
+      "fingerprint": "cb4b8fee35b6f940e65d7e8cbd28a5d485a685fc5e2c55180b080858e5b02e18",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added; aes-accelerated-campaigns: scripts/aes/aes_riscv_oracle.py added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint cc5c2d3f7554ad705d2aab6aaea22ebdc8957aeae6ba708c88db18fd419f86de",
@@ -36311,8 +36399,8 @@
       "last_success": "2026-11-11T21:08:26.213980828Z"
     },
     "aes/timing-crossover-fixture-facade-current": {
-      "checked_at": "2026-11-13T10:32:01.874100346Z",
-      "fingerprint": "6b9f9b6b019da007aaad4099ccb8221051e43d91eb93f6a13234797b05ff9a86",
+      "checked_at": "2026-11-13T10:57:13.674032429Z",
+      "fingerprint": "c0c2e6138a4caec3676ed481bb1e84fdbd97d2a79e4d44791e269052b2620365",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added; aes-accelerated-campaigns: scripts/aes/aes_riscv_oracle.py added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 2e302a60232c309167c23dfc1c36a4157debebc02cdb007019fc1dd423d60be0",
@@ -36320,8 +36408,8 @@
       "last_success": "2026-11-11T21:08:55.171601508Z"
     },
     "aes/timing-crossover-fixture-facade-msrv": {
-      "checked_at": "2026-11-13T10:32:01.873440384Z",
-      "fingerprint": "06c80286af9c166d7245454548d547e92e46005a4360ccdf87931f8e666054a8",
+      "checked_at": "2026-11-13T10:57:13.673386724Z",
+      "fingerprint": "73291b28fc7e76f74bf54c44bb1634f0bfd955fb2acd59f4737ec6c8488ec4ed",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added; aes-accelerated-campaigns: scripts/aes/aes_riscv_oracle.py added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 4e9b6cd9d859b2dcbb1ce77df606778c2be2216d5a1b5745b3eaa54bc7f9d30a",
@@ -36329,8 +36417,8 @@
       "last_success": "2026-11-11T21:08:36.254448405Z"
     },
     "aes/timing-dispatch-fixture-direct-current": {
-      "checked_at": "2026-11-13T10:32:01.876382743Z",
-      "fingerprint": "82bcca15998a6d2fd9e6de334cafc9c6780fce2498887e8cc238981fac41033b",
+      "checked_at": "2026-11-13T10:57:13.676289218Z",
+      "fingerprint": "192f36cf6cd4a234dbb18fc08f9bd4ab0216d8b187daf5f187738e40ed4249ae",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint ae3e5bf9f383b960a6a67b2814216559968dd5d03899c86019c8a90198c39e5f",
@@ -36338,8 +36426,8 @@
       "last_success": "2026-11-11T07:40:29.099452822Z"
     },
     "aes/timing-dispatch-fixture-direct-msrv": {
-      "checked_at": "2026-11-13T10:32:01.875739482Z",
-      "fingerprint": "47ca494641651f50b2d200b50bf4c0979185ad3f3f67cb606fa066577012085a",
+      "checked_at": "2026-11-13T10:57:13.675653601Z",
+      "fingerprint": "9d9ed090fb0b2bb175798fbdc51edd29049ade646848751699b940bf0f239e7b",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 835cfd8f7e4e4692d2b4a58e49ce902acf66a2271fec4d6ad083c516d23b454a",
@@ -36347,8 +36435,8 @@
       "last_success": "2026-11-11T07:40:00.234675408Z"
     },
     "aes/timing-dispatch-fixture-facade-current": {
-      "checked_at": "2026-11-13T10:32:01.876704248Z",
-      "fingerprint": "3531f26332fceafe99a1369df85e512d110277e50aabb11f558baa0a3a90dba0",
+      "checked_at": "2026-11-13T10:57:13.676610563Z",
+      "fingerprint": "0131b86f8303105f96051f05c32bc016db1d9a30e46d0babf65f475ec9793aec",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint f9323339a9f094e8d4232d4edc172cbfe4df191765e6b574cf95b7f6bd161f05",
@@ -36356,8 +36444,8 @@
       "last_success": "2026-11-11T07:40:42.687509422Z"
     },
     "aes/timing-dispatch-fixture-facade-msrv": {
-      "checked_at": "2026-11-13T10:32:01.876060707Z",
-      "fingerprint": "2e9b3bd46dca863adec2669a6a0d8aece55d296c11592095f44eb2bcd2d01932",
+      "checked_at": "2026-11-13T10:57:13.675972702Z",
+      "fingerprint": "eb3346c0ce5a2ce6fc403ec290a3918938aa29aea94c4371032969ee4d56d4f9",
       "result": "passed",
       "freshness": "Outdated: aes-accelerated-campaigns: assurance/aes-accelerated-campaigns/lib.rs changed; aes-accelerated-campaigns: assurance/aes-kernel-candidate/probe.rs changed; aes-accelerated-campaigns: assurance/aes-riscv-oracle/oracle.rs added",
       "source": "working tree based on 56a1b7805c9517fbdb5e3c28b137ea8c9108cf7e; scoped fingerprint 0399472198bf0bc7cdfe92c6f5228cbbf42ad02d8c4e0432ecef0ae965aa4f3c",

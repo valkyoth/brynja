@@ -36,3 +36,13 @@ unchanged under the internal train policy. No dependency is added. The same
 separately selected, not implicit publication requirements. Version-only edits
 can invalidate scoped fingerprints: previous runs retain their actual snapshots
 and must not be relabelled as new executions.
+
+## Scoped review follow-up
+
+The [review dispositions](../docs/assurance/aes-riscv-pentest-remediation.md)
+retain both owner-supplied reports and correct the AES/Zkt premise against the
+ratified instruction contract. Evidence-only AES reports now expose that status
+directly; regression tests cover lifecycle states and widened schedule stores.
+Physical-fault and residual-secret limitations remain accepted repeats, not
+fixed guarantees. The finite release process is unchanged; this follow-up is
+not itself release approval.

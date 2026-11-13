@@ -34,6 +34,20 @@ fn rejected(session: &Session<'_>, error: Error) {
 #[test]
 fn exact_static_bundle_checked_before_startup() {
     for kernel in [Kernel::X86AesNi, Kernel::ArmAes, Kernel::RiscVScalarAes] {
+        // Evidence classification is not inferred from successful self-tests or
+        // lost on failure. Exercise real reports in every lifecycle state.
+        let mut observed = model(Health::Testing, 1);
+        observed.kernel = kernel;
+        let evidence_only = kernel == Kernel::RiscVScalarAes;
+        assert_eq!(observed.report().evidence_only(), evidence_only);
+        observed.complete_startup(true);
+        assert_eq!(observed.report().evidence_only(), evidence_only);
+        observed.quarantine();
+        assert_eq!(observed.report().evidence_only(), evidence_only);
+        let mut failed = model(Health::Testing, 1);
+        failed.kernel = kernel;
+        failed.complete_startup(false);
+        assert_eq!(failed.report().evidence_only(), evidence_only);
         let (arch, features) = match kernel {
             Kernel::X86AesNi => (
                 cfg!(target_arch = "x86_64"),
@@ -109,6 +123,10 @@ fn static_dit_policy_is_the_admitted_owner_setting() -> Result<(), Error> {
                     let owner = Authority::new_with_dit(kernel, policy)?;
                     assert_eq!(owner.dit_enabled(), enabled);
                     assert_eq!(owner.report().health, Health::Healthy);
+                    assert_eq!(
+                        owner.report().evidence_only(),
+                        kernel == Kernel::RiscVScalarAes
+                    );
                 }
                 Err(error) => {
                     assert_eq!(Authority::new_with_dit(kernel, policy).err(), Some(error));

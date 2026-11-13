@@ -361,6 +361,9 @@ pub(super) unsafe fn expand<const K: usize, const S: usize>(key: &[u8; K], sched
                 "srli t2, t2, 32",
                 "bnez t4, 6f",
                 "srli t3, t2, 8",
+                // RotWord needs only the low 32 bits. The four byte stores
+                // below discard upper bits before reuse; do not widen them or
+                // use this temporary as a 64-bit word without a fresh review.
                 "slli t2, t2, 24",
                 "or t2, t2, t3",
                 "xor t2, t2, t1",

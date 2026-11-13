@@ -970,6 +970,20 @@ class RiscVLinkedTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'read before schedule initialization'):
             m.execute(m.decode(replace(raw, at, word, 4)), 'expand', 128)
 
+    def test_expansion_rejects_widened_word_stores(self):
+        for bits in (128, 192, 256):
+            raw = body('expand', bits)
+            stores = [(pc, n) for pc, (n, ins) in m.decode(raw).items()
+                      if ins[0] == 'sb' and ins[1] == 7]  # t2, initial/expanded words
+            self.assertEqual(len(stores), 8)
+            for at, n in stores:
+                self.assertEqual(n, 4)
+                word = int.from_bytes(raw[at:at + n], 'little')
+                for width in (1, 2, 3):  # sh/sw/sd, never admitted as sb
+                    changed = replace(raw, at, word | (width << 12), n)
+                    with self.subTest(bits=bits, offset=at, width=width), self.assertRaises(ValueError):
+                        m.decode(changed)
+
     def test_both_return_paths_and_all_scratch_clears_checked(self):
         for kind in ('expand', 'transform'):
             raw = body(kind)

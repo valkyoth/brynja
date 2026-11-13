@@ -1,6 +1,6 @@
 [[reviewed-source]]
 path = "crates/brynja-crypto/src/aes.rs"
-sha256 = "26e10da146d06b542b7be82e37eb174a67d8e37c0065ee662f095fec5eb27b18"
+sha256 = "46b829b76f32df6c7988546b0d2ec7300ef819767708687ad6ed325904af3170"
 
 [[reviewed-source]]
 path = "crates/brynja-crypto/src/aes/portable.rs"

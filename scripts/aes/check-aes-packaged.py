@@ -61,7 +61,7 @@ def prepare(directory, versions):
     (directory / 'Cargo.toml').write_text(manifest)
 
 
-def graph(metadata, route, directory, unpacked, versions):
+def graph(metadata, route, directory, unpacked, versions, *, provider=False):
     require(route in consumer.ROUTES, 'unknown route')
     packages = {row['id']: row for row in metadata['packages']}
     nodes = metadata['resolve']['nodes']
@@ -90,6 +90,8 @@ def graph(metadata, route, directory, unpacked, versions):
             features = set()
         if name in ('brynja', 'brynja-crypto'):
             features.add('hazmat-aes-block')
+            if provider:
+                features.add('external-key-provider')
         if name == 'brynja-hash-sha2':
             features.add('general-sha512-t')
         require(set(node['features']) == features, 'unexpected features: ' + name)

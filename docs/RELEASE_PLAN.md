@@ -5829,8 +5829,10 @@ qualification remains separate and is not inferred from this milestone.
 The owner-authorized follow-up adds an optional caller-owned clearing cached
 schedule and independently opted-in external-key provider contracts. The latter
 separate reusable lifecycle/destruction from AES-specific operations and are
-tested with reference/mock adapters, not a hardware driver. A concrete optional
-PKCS#11 adapter is planned at v0.27.6 and does not block this candidate.
+tested with reference/mock adapters, not a hardware driver. At this milestone a
+concrete optional PKCS#11 adapter was planned at v0.27.6 and did not block the
+candidate. The owner subsequently narrowed v0.27.6 to dependency-free provider
+API completion; see that milestone for the current scope.
 No AES-192/256, accelerated backend, executable device adapter, mode or TLS work
 is admitted here.
 
@@ -6472,7 +6474,12 @@ Exit criteria:
 
 ### v0.27.5 - AES Public API Usability Acceptance
 
-Status: in progress
+Status: released
+
+Signed tag `v0.27.5` identifies `5e325ae7e6b957338e8cc72769dc0f8009b0a60c`.
+The scoped review was accepted, all 30 finite final checks passed, and exact
+candidate GitHub CI and all four CodeQL analyses were green before tagging.
+No crates.io publication or timing-qualification claim was made.
 
 The initial slice strengthens packaged public-consumer composition checks for
 all three widths and both owner forms. It changes no cipher implementation or
@@ -6534,66 +6541,63 @@ Exit criteria:
   implementation work;
 - `v0.27.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.27.6 - Optional PKCS11 External-Key Adapter
+### v0.27.6 - External-Key Provider API Completion
 
-Status: planned
+Status: in progress
 
-Plan scope: After v0.27.5, implement an optional separately packaged PKCS#11 external-device adapter over the reusable external-key provider contracts, initially limited to explicit AES-128 block operations with opaque non-exportable key bindings, session/login management, exact mechanism and usage admission, fallible owned-key destruction and no software fallback; keep vendor dependencies and FFI outside the core workspace and require explicit dependency/FFI review plus software-token integration and named-device acceptance before hardware support claims.
+On 2026-11-13 the owner approved all three AES key widths, then narrowed this
+milestone to dependency-free provider API completion. Applications select and
+implement their own HSM/module adapters; no HSM is mandatory. The earlier
+concrete PKCS#11 adapter proposal is superseded, not completed or silently moved
+to another milestone. OpenBao integration is outside this project. See the
+[provider completion worklist](assurance/aes-provider-completion.md).
 
-Goal: provide ready-to-configure optional external-device integration without
-making an HSM mandatory or changing ordinary software cryptographic APIs.
+Plan scope: After v0.27.5, complete the optional dependency-free external-key provider API for AES-128, AES-192 and AES-256 with distinct typed bindings, opaque key ownership, permission checks, guarded outputs, terminal failure, explicit fallible destruction and no software fallback; preserve no_std and independent feature gates. Application-owned adapters remain responsible for device identity, exact key-width validation, mechanisms and session policy. Add no device client, native FFI or OpenBao integration, and make no hardware support claim.
+
+Goal: provide tested, reusable external-key contracts without selecting a device,
+adding a device-client dependency, or changing ordinary software APIs.
 
 Deliverables:
 
-- ship a separately packaged/locked downstream adapter (proposed
-  `brynja-provider-pkcs11`), never a default or transitive core, facade,
-  bare-metal, legacy or FIPS-module dependency; obtain explicit dependency/FFI
-  policy approval before admitting a device-client library, and do not replace
-  first-party software primitives with foreign or delegated software crypto;
-- reuse algorithm-neutral key lifecycle and failure contracts; bind one
-  provider/session and opaque key together, distinguish borrowed persistent
-  keys from owned generated keys, and validate AES-128 identity, permitted
-  directions, mechanism, sensitivity and non-exportability; selection, login,
-  key lookup and permitted device-side generation must be explicit;
-- define session ownership, concurrency, authentication-secret cleanup, device
-  removal, stale/reused handles, partial output and timeout/uncertain completion
-  behavior; keep destruction explicit and fallible, never infer it from Drop,
-  and prohibit silent fallback, key export and automatic uncertain retries;
-- assess a distinct rejected-before-execution outcome before freezing the
-  adapter API. An error name such as busy/rejected is not proof that work never
-  started; require a reviewed adapter contract and evidence that no operation,
-  output or device state change occurred and the binding remains valid. Preserve
-  quarantine for uncertain outcomes, malformed output and panics. Retry, if
-  admitted, must be explicit and bounded, never automatic after uncertainty;
-- keep initial operations limited to the existing AES-128 contract; later MAC,
-  signing, agreement, derive-to-handle and whole-operation AEAD interfaces need
-  separate algorithm-specific milestones rather than blanket capability grants.
+- expose distinct AES-128/192/256 backend traits and provider-key bindings through
+  the direct crate and facade; retain existing AES-128 source compatibility,
+  algorithm-neutral lifecycle contracts, no_std and independent opt-ins;
+- enforce captured permissions, output lengths, guarded secret/public output,
+  terminal quarantine and explicit fallible destruction. Distinguish borrowed
+  and owned keys; Drop does not imply external key destruction;
+- document the adapter trust boundary: actual key identity, width, mechanism,
+  sensitivity, non-exportability, session/login policy and handle validity are
+  adapter obligations, not properties proved by implementing a Rust trait;
+- retain conservative terminal errors. A rejected-before-execution outcome is
+  not admitted merely because an error is named busy or rejected. Preserve
+  quarantine for uncertain outcomes, malformed output and panics. Any future
+  retry contract must be explicit and bounded, never automatic after uncertainty;
+- keep raw AES block operations separate from modes/AEAD, signing, MAC and
+  derive-to-handle interfaces. Add no client library, vendor driver, native FFI,
+  software-token fixture or OpenBao integration in this milestone.
 
 Verification:
 
-- add scoped `brynja-verify` registrations for mock fault injection and
-  software-token integration, including wrong keys/mechanisms/usage, login
-  failure, session loss, handle substitution, partial output, cleanup and
-  uncertain destruction; software tokens are test fixtures, not hardware
-  custody evidence or production software fallbacks;
-- exercise package-external consumer examples, compile-time ownership,
-  default-feature isolation, supported host compilers, adapter native/FFI
-  boundaries and dependency policy; retain core no_std build checks;
-- test rejected-before-execution versus uncertain completion, stale sessions,
-  conflicting concurrent users and errors after partial execution; preserve the
-  conservative terminal behavior until a tested replacement contract exists.
-  Thread traits must reflect backend/session restrictions, including transfer
-  to a worker and non-transferable adapters, not merely device locking flags;
-- qualify at least one explicitly named device/module/firmware/client
-  configuration before claiming supported hardware; record unavailable hardware
-  coverage as unfinished, and do not infer physical protection, FIPS validation
-  or universal HSM compatibility from a passing adapter test.
+- run the same lifecycle and fault suite for all three widths with independent
+  known answers, both directions, permissions, partial output, bad lengths,
+  adapter errors, panics, clearing and explicit destruction;
+- use paired compile probes for direct and facade consumers, each ordered
+  cross-width rejection, ownership and feature isolation. Type-level separation
+  does not validate the actual key stored by an external device;
+- exercise current and minimum supported compilers, Miri, ASan, doctests and
+  the no_std Cortex-M compile path through scoped brynja-verify registrations;
+- Thread traits must reflect backend/session restrictions: test movable
+  backends on a worker and reject transfer or sharing of restricted backends;
+- document mocks as contract tests, not device qualification. No hardware
+  support, physical protection, attestation or FIPS validation is claimed.
 
 Exit criteria:
 
-- publish exact supported mechanisms, devices, ownership and operational limits;
-  require a scoped pentest/retest of this new native/device trust boundary and
-  keep all ordinary software builds independent of the adapter;
+- reconcile public API documentation, examples and scoped results for all
+  three widths; retain ordinary software builds independent of providers and
+  the existing timing/physical-protection limitations;
+- follow the existing review and finite release-gate policy; this scope change
+  adds no release gate or mandatory external service;
 - `v0.27.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
 ### v0.27.7 - Optional Fault-Detecting AES Profile

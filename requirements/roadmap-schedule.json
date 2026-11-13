@@ -856,11 +856,11 @@
     {
       "id": "0.27.6",
       "version": "0.27.6",
-      "title": "Optional PKCS11 External-Key Adapter",
+      "title": "External-Key Provider API Completion",
       "requires": [
         "0.27.5"
       ],
-      "scope_sha256": "12f3e450a386fd39de0c7307edd70093582ebce68fa4ca8816944b71b4c6065e"
+      "scope_sha256": "08584e1ac82efe18904984571f9ef71652b5785bbe326fe7e8ac06400de2a75b"
     },
     {
       "id": "0.27.7",

@@ -26,7 +26,7 @@ START = PREFIX + 'fn main(){ let mut key=Aes128ProviderKey::new(Backend); '
 CALL = 'let _=key.encrypt_block(&[0;16],&mut[0;16]); '
 
 
-def probes():
+def aes128_probes():
     cases = []
     for owner in ('Aes128ProviderKey<Backend>', 'ExternalKey<Backend>'):
         for bound in ('Copy', 'Clone', 'core::fmt::Debug'):
@@ -71,6 +71,29 @@ def probes():
     return cases
 
 
+def probes():
+    cases = []
+    for bits in (128, 192, 256):
+        def width(source):
+            return source.replace('Aes128', f'Aes{bits}')
+        cases.extend((f'{bits}/{width(name)}', width(negative), width(positive), code)
+                     for name, negative, positive, code in aes128_probes())
+        for other in (128, 192, 256):
+            if other == bits:
+                continue
+            prefix = width(PREFIX)
+            # One call-site error, rather than duplicate constructor/type errors.
+            def binding(width):
+                return (prefix + f'fn bind<B:brynja_crypto::aes::provider::Aes{width}Backend>(b:B){{'
+                        f'let _=brynja_crypto::aes::provider::Aes{width}ProviderKey::new(b);}}'
+                        'fn main(){bind(Backend);}')
+            negative, positive = binding(other), binding(bits)
+            cases.append((f'{bits}/reject-{other}-binding', negative, positive, 'E0277'))
+    if len(cases) != 81 or len({case[0] for case in cases}) != 81:
+        raise ValueError('provider family API probe population drift')
+    return cases
+
+
 def run(toolchain):
     for package, path in (('brynja-crypto', 'brynja_crypto'), ('brynja', 'brynja::crypto')):
         route = 'direct' if package == 'brynja-crypto' else 'facade'
@@ -101,7 +124,7 @@ def run(toolchain):
                 env.update(RUSTUP_AUTO_INSTALL='0', CARGO_NET_OFFLINE='true')
                 api.run_probes(toolchain, directory, env, cases=rewritten, features=features,
                                package=package, label=f'AES_PROVIDER_{route}_{group}')
-    print(f'AES_PROVIDER_API_PASS: {toolchain} 56 paired probes; direct and facade; independent opt-ins', flush=True)
+    print(f'AES_PROVIDER_API_PASS: {toolchain} 168 paired probes; direct and facade; independent opt-ins', flush=True)
 
 
 if __name__ == '__main__':

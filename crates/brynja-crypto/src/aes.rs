@@ -40,7 +40,7 @@ pub use wide::{Aes192ExpandedKey, Aes192Key, Aes256ExpandedKey, Aes256Key};
 #[cfg(feature = "aes-static-execution")]
 pub mod execution;
 
-/// Explicit, optional external AES-128 key providers; no device driver is bundled.
+/// Explicit, optional external AES-128/192/256 key providers; no device driver is bundled.
 #[cfg(feature = "external-key-provider")]
 pub mod provider;
 

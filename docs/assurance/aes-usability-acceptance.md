@@ -148,7 +148,10 @@ in debug/release. These are functional results, not timing experiments.
   QEMU does not establish native timing, power/EM or physical-fault resistance.
 - Prepare candidate metadata, public documentation and scoped review after
   the bounded acceptance work. Retain the existing finite release workflow;
-  optional PKCS#11 and fault-detecting profiles remain separate milestones.
+  provider completion and the optional fault-detecting profile remain separate
+  milestones. The owner subsequently narrowed v0.27.6 to
+  [dependency-free provider API completion](aes-provider-completion.md), without
+  a concrete PKCS#11 client or OpenBao integration.
 
 ## Candidate working-tree preflight — 2026-11-13
 

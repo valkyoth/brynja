@@ -1,5 +1,39 @@
 # Component Verification Status
 
+## External-key provider API candidate (v0.27.6)
+
+The [provider completion record](assurance/aes-provider-completion.md) covers
+the optional AES-128/192/256 typed backend and key-owner contracts. AES-128
+source compatibility is retained; permission, output, quarantine and destruction
+mechanics are shared. No production AES arithmetic, CPU admission or dependency
+changes are introduced, but the public provider API is extended.
+
+Scoped checks before version preparation passed 48 lifecycle tests per run
+under native/MSRV, ASan and Miri, 168 paired API probes per compiler endpoint,
+no_std compilation and the provider doctest. Archive-only consumers passed
+384 lifecycle test executions across eight configurations, plus four Cortex-M
+compile checks. The expanded registry regression suite passed 1,085 tests.
+Version changes do not relabel those earlier snapshots as current executions.
+
+These tests use mocks, not a hardware module. Applications retain responsibility
+for actual device key identity, width, permissions, mechanism and session policy.
+There is no device client, native FFI, OpenBao integration or mandatory HSM.
+Timing qualification remains unresolved, RISC-V remains evidence-only, and no
+physical-fault or whole-program erasure claim is added.
+
+Candidate commit, owner pentest/retest, the unchanged finite final gate and
+exact-commit GitHub/CodeQL remain pending. No approval record or release tag is
+created by this preparation; no crates.io publication is selected.
+
+All 30 working-tree preflight checks passed on 2026-11-13, after correcting the
+documentation-only AES source-review hash and rerunning the advisory check with
+cache access. The package consumer was also refreshed on facade 0.27.6.
+See the [candidate notes](../release-notes/RELEASE_NOTES_0.27.6.md) for the initial
+failures and bounded reruns. This is not a commit-bound final-gate result.
+
+The following sections retain historical milestone snapshots, not current
+candidate approval.
+
 ## AES usability acceptance candidate (v0.27.5)
 
 The [acceptance record](assurance/aes-usability-acceptance.md) and

@@ -83,3 +83,11 @@ required-features = ["hazmat-aes-block"]
 [[test]]
 name = "aes128_provider"
 required-features = ["hazmat-aes-block", "external-key-provider"]
+
+[[test]]
+name = "aes192_provider"
+required-features = ["hazmat-aes-block", "external-key-provider"]
+
+[[test]]
+name = "aes256_provider"
+required-features = ["hazmat-aes-block", "external-key-provider"]

@@ -3,9 +3,9 @@ milestone = "0.3.5"
 reviewed_at = "2026-07-30"
 
 [[plan_boundary]]
-class = "planned-authority-admission"
+class = "internal-security-design"
 versions = ["0.27.6"]
-rationale = "The optional separately packaged PKCS#11 adapter must admit an exact PKCS#11 revision, mechanism and key-attribute requirements, dependency/FFI policy and device/session lifecycle contracts before implementation. The existing neutral provider API is not device support, attestation or qualification evidence."
+rationale = "The owner narrowed v0.27.6 to dependency-free provider API completion for the three already admitted AES key widths. Local ownership, permissions, failure and output contracts add no new protocol authority. Device clients, native FFI and OpenBao integration are outside this scope; neutral provider contracts are not device support, attestation or qualification evidence."
 
 [[plan_boundary]]
 class = "internal-security-design"

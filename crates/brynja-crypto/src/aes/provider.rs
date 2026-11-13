@@ -1,10 +1,10 @@
-//! Synchronous, explicitly selected AES-128 external-key integration.
+//! Synchronous, explicitly selected AES-128/192/256 external-key integration.
 //!
 //! Requires both `hazmat-aes-block` and `external-key-provider`. No allocation,
 //! device library, login, key import/export, fallback or hardware requirement.
 //! An adapter binds one session and opaque key together before admission here.
-//! It must verify AES-128 identity and actual device permissions; this trait is
-//! a trusted cryptographic boundary, not hardware attestation or a sandbox.
+//! It must verify the exact AES key-width identity and actual device permissions.
+//! Each trait is a trusted boundary, not hardware attestation or a sandbox.
 //! Public implementations may be software mocks, remote services or devices.
 //!
 //! Adapters own authentication, handle generation/liveness checks, timeouts,
@@ -17,6 +17,19 @@
 //! Raw blocks are not authenticated message encryption. Future modes should
 //! expose native whole-operation providers rather than one device call per block.
 //! No PKCS#11 driver, supported hardware list or qualification is claimed here.
+//!
+//! The application obtains a validated adapter from its chosen device library;
+//! this helper accepts that binding without importing any key bytes:
+//!
+//! ```
+//! use brynja_crypto::aes::{PublicCiphertext, provider::{Aes128Backend, Aes128ProviderKey, Error}};
+//! fn encrypt_with_selected_provider<B: Aes128Backend>(
+//!     backend: B, input: &[u8; 16], output: &mut [u8; 16],
+//! ) -> Result<(), Error> {
+//!     let mut key = Aes128ProviderKey::new(backend);
+//!     key.encrypt_block_public(input, output, PublicCiphertext::acknowledge())
+//! }
+//! ```
 
 #![forbid(unsafe_code)]
 
@@ -26,7 +39,7 @@ use crate::provider::{ExternalKey, OwnedKeyBackend};
 use brynja_core::{ProviderFailureKind, SecretRegionInitialization};
 use core::marker::PhantomData;
 
-/// Exact permitted directions for a previously validated AES-128 key.
+/// Exact permitted directions for a previously validated AES key.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Permissions {
     /// Encryption only; does not authorize decryption.
@@ -37,174 +50,172 @@ pub enum Permissions {
     EncryptAndDecrypt,
 }
 
-/// Trusted adapter bound to exactly one AES-128 key and its provider/session.
-///
-/// Construction and key lookup/generation belong to the adapter. Before giving
-/// an instance to [`Aes128ProviderKey::new`], validate key type, 128-bit size,
-/// usage permissions and, when promised by that adapter, non-exportability.
-/// Never substitute another key, provider, mechanism, or software fallback.
-/// Revalidate revocable permissions/session identity at each operation. Do not
-/// implement this trait for a free raw identifier detached from its provider.
-///
-/// On success, write exactly one complete block and report `BLOCK_BYTES`.
-/// The wrapper checks the reported length, not the truth of an adapter's claims
-/// or mathematical correctness. All complete block values are accepted,
-/// including ciphertext equal to plaintext: AES does not exclude fixed points.
-/// Correct AES computation and prevention of plaintext bypass/leakage remain
-/// the admitted adapter's responsibility, not a heuristic output-value filter.
-/// Partial writes on error are permitted: output
-/// scratch is guarded and never released. Adapters must clear their own copies
-/// and must not expose keys/plaintext in error text, logs or Debug output.
-/// Adapter Drop releases local resources, never implicitly destroys a persistent
-/// device key. Hardware key destruction is a separate explicit operation.
-pub trait Aes128Backend {
-    /// Validated maximum permissions, captured at wrapper construction.
-    fn permissions(&self) -> Permissions;
+// The public traits are distinct: no blanket conversion between key widths.
+// Share mechanics so output ownership and terminal failures cannot drift.
+macro_rules! provider_key {
+    ($backend:ident, $key:ident) => {
+        /// Trusted adapter bound to exactly one key of the named AES width and its provider/session.
+        ///
+        /// Construction and key lookup/generation belong to the adapter. Before giving
+        /// an instance to the matching provider-key constructor, validate key type, exact size,
+        /// usage permissions and, when promised by that adapter, non-exportability.
+        /// Never substitute another key, provider, mechanism, or software fallback.
+        /// Revalidate revocable permissions/session identity at each operation. Do not
+        /// implement this trait for a free raw identifier detached from its provider.
+        ///
+        /// On success, write exactly one complete block and report `BLOCK_BYTES`.
+        /// The wrapper checks the reported length, not the truth of an adapter's claims
+        /// or mathematical correctness. All complete block values are accepted,
+        /// including ciphertext equal to plaintext: AES does not exclude fixed points.
+        /// Correct AES computation and prevention of plaintext bypass/leakage remain
+        /// the admitted adapter's responsibility, not a heuristic output-value filter.
+        /// Partial writes on error are permitted: output
+        /// scratch is guarded and never released. Adapters must clear their own copies
+        /// and must not expose keys/plaintext in error text, logs or Debug output.
+        /// Adapter Drop releases local resources, never implicitly destroys a persistent
+        /// device key. Hardware key destruction is a separate explicit operation.
+        pub trait $backend {
+            /// Validated maximum permissions, captured at wrapper construction.
+            fn permissions(&self) -> Permissions;
 
-    /// Encrypt one block with the bound AES-128 key, without padding or a mode.
-    fn encrypt_block(
-        &mut self,
-        input: &[u8; BLOCK_BYTES],
-        output: &mut [u8; BLOCK_BYTES],
-    ) -> Result<usize, ProviderFailureKind>;
+            /// Encrypt one block with the bound AES key, without padding or a mode.
+            fn encrypt_block(
+                &mut self,
+                input: &[u8; BLOCK_BYTES],
+                output: &mut [u8; BLOCK_BYTES],
+            ) -> Result<usize, ProviderFailureKind>;
 
-    /// Decrypt one block with the bound AES-128 key. No authentication implied.
-    fn decrypt_block(
-        &mut self,
-        input: &[u8; BLOCK_BYTES],
-        output: &mut [u8; BLOCK_BYTES],
-    ) -> Result<usize, ProviderFailureKind>;
-}
-
-/// Provider-bound AES-128 key with clearing outputs and fail-closed operations.
-///
-/// Owns the adapter (which may itself borrow a session). No key bytes, adapter
-/// extraction, raw handle substitution, Copy, Clone or Debug API. Send/Sync
-/// follow the backend; software key and secret-output owners remain thread-local.
-/// Drop only drops the adapter. It does NOT destroy the external key. An owned
-/// key requires explicit [`Self::destroy`]; a borrowed backend cannot call it.
-/// Output ownership is independent of the key's lifetime.
-///
-/// The application obtains a validated adapter from its chosen device library;
-/// this helper accepts that binding without importing any key bytes:
-///
-/// ```
-/// use brynja_crypto::aes::{PublicCiphertext, provider::{Aes128Backend, Aes128ProviderKey, Error}};
-/// fn encrypt_with_selected_provider<B: Aes128Backend>(
-///     backend: B, input: &[u8; 16], output: &mut [u8; 16],
-/// ) -> Result<(), Error> {
-///     let mut key = Aes128ProviderKey::new(backend);
-///     key.encrypt_block_public(input, output, PublicCiphertext::acknowledge())
-/// }
-/// ```
-#[must_use = "retain this provider binding while using its external key"]
-pub struct Aes128ProviderKey<B: Aes128Backend> {
-    binding: ExternalKey<B>,
-    permissions: Permissions,
-}
-
-impl<B: Aes128Backend> Aes128ProviderKey<B> {
-    /// Admits a trusted, already validated key/session binding. No device probing.
-    /// The backend cannot subsequently be replaced or extracted through this API.
-    pub fn new(backend: B) -> Self {
-        let permissions = backend.permissions();
-        Self {
-            binding: ExternalKey::new(backend),
-            permissions,
+            /// Decrypt one block with the bound AES key. No authentication implied.
+            fn decrypt_block(
+                &mut self,
+                input: &[u8; BLOCK_BYTES],
+                output: &mut [u8; BLOCK_BYTES],
+            ) -> Result<usize, ProviderFailureKind>;
         }
-    }
 
-    /// Returns the admitted maximum permissions, not a current device health test.
-    pub const fn permissions(&self) -> Permissions {
-        self.permissions
-    }
-
-    /// Encrypt into clearing caller storage; no mode or authentication.
-    /// Every error/unwind clears the admitted destination, including rejection.
-    /// A complete successful result is not filtered by its value; equality with
-    /// the input does not invalidate the result or quarantine the binding.
-    pub fn encrypt_block<'out>(
-        &mut self,
-        input: &[u8; BLOCK_BYTES],
-        output: &'out mut [u8; BLOCK_BYTES],
-    ) -> Result<SecretBlock<'out>, Error> {
-        self.transform(input, output, false)
-    }
-
-    /// Decrypt into clearing caller storage. No public-decryption API exists.
-    /// Every error/unwind clears the admitted destination, including rejection.
-    pub fn decrypt_block<'out>(
-        &mut self,
-        input: &[u8; BLOCK_BYTES],
-        output: &'out mut [u8; BLOCK_BYTES],
-    ) -> Result<SecretBlock<'out>, Error> {
-        self.transform(input, output, true)
-    }
-
-    /// Explicitly release ciphertext. Public output is unchanged on error/unwind.
-    /// Correct ciphertext is the trusted adapter's responsibility. No heuristic
-    /// output-value filter or independent verification of AES is performed.
-    pub fn encrypt_block_public(
-        &mut self,
-        input: &[u8; BLOCK_BYTES],
-        output: &mut [u8; BLOCK_BYTES],
-        _authority: PublicCiphertext,
-    ) -> Result<(), Error> {
-        let mut scratch = Scratch::<BLOCK_BYTES>::new();
-        self.execute(input, &mut scratch.0, false)?;
-        output.copy_from_slice(&scratch.0);
-        Ok(())
-    }
-
-    fn transform<'out>(
-        &mut self,
-        input: &[u8; BLOCK_BYTES],
-        output: &'out mut [u8; BLOCK_BYTES],
-        inverse: bool,
-    ) -> Result<SecretBlock<'out>, Error> {
-        let mut destination = SecretRegionInitialization::begin(output)?;
-        let mut scratch = Scratch::<BLOCK_BYTES>::new();
-        self.execute(input, &mut scratch.0, inverse)?;
-        destination.write(&scratch.0)?;
-        Ok(SecretBlock {
-            region: destination.finish()?,
-            local: PhantomData,
-        })
-    }
-
-    fn execute(
-        &mut self,
-        input: &[u8; BLOCK_BYTES],
-        output: &mut [u8; BLOCK_BYTES],
-        inverse: bool,
-    ) -> Result<(), Error> {
-        if matches!(
-            (self.permissions, inverse),
-            (Permissions::Encrypt, true) | (Permissions::Decrypt, false)
-        ) {
-            return Err(Error::NotPermitted);
+        /// Provider-bound AES key with clearing outputs and fail-closed operations.
+        ///
+        /// Owns the adapter (which may itself borrow a session). No key bytes, adapter
+        /// extraction, raw handle substitution, Copy, Clone or Debug API. Send/Sync
+        /// follow the backend; software key and secret-output owners remain thread-local.
+        /// Drop only drops the adapter. It does NOT destroy the external key. An owned
+        /// key requires explicit [`Self::destroy`]; a borrowed backend cannot call it.
+        /// Output ownership is independent of the key's lifetime.
+        ///
+        #[must_use = "retain this provider binding while using its external key"]
+        pub struct $key<B: $backend> {
+            binding: ExternalKey<B>,
+            permissions: Permissions,
         }
-        self.binding.execute(|backend| {
-            let written = if inverse {
-                backend.decrypt_block(input, output)
-            } else {
-                backend.encrypt_block(input, output)
+
+        impl<B: $backend> $key<B> {
+            /// Admits a trusted, already validated key/session binding. No device probing.
+            /// The backend cannot subsequently be replaced or extracted through this API.
+            pub fn new(backend: B) -> Self {
+                let permissions = backend.permissions();
+                Self {
+                    binding: ExternalKey::new(backend),
+                    permissions,
+                }
             }
-            .map_err(Error::Provider)?;
-            if written != BLOCK_BYTES {
-                return Err(Error::Provider(ProviderFailureKind::InvalidOutput));
+
+            /// Returns the admitted maximum permissions, not a current device health test.
+            pub const fn permissions(&self) -> Permissions {
+                self.permissions
             }
-            // Output correctness is the admitted backend's responsibility.
-            // Do not exclude values from AES's complete block output domain.
-            Ok(())
-        })
-    }
+
+            /// Encrypt into clearing caller storage; no mode or authentication.
+            /// Every error/unwind clears the admitted destination, including rejection.
+            /// A complete successful result is not filtered by its value; equality with
+            /// the input does not invalidate the result or quarantine the binding.
+            pub fn encrypt_block<'out>(
+                &mut self,
+                input: &[u8; BLOCK_BYTES],
+                output: &'out mut [u8; BLOCK_BYTES],
+            ) -> Result<SecretBlock<'out>, Error> {
+                self.transform(input, output, false)
+            }
+
+            /// Decrypt into clearing caller storage. No public-decryption API exists.
+            /// Every error/unwind clears the admitted destination, including rejection.
+            pub fn decrypt_block<'out>(
+                &mut self,
+                input: &[u8; BLOCK_BYTES],
+                output: &'out mut [u8; BLOCK_BYTES],
+            ) -> Result<SecretBlock<'out>, Error> {
+                self.transform(input, output, true)
+            }
+
+            /// Explicitly release ciphertext. Public output is unchanged on error/unwind.
+            /// Correct ciphertext is the trusted adapter's responsibility. No heuristic
+            /// output-value filter or independent verification of AES is performed.
+            pub fn encrypt_block_public(
+                &mut self,
+                input: &[u8; BLOCK_BYTES],
+                output: &mut [u8; BLOCK_BYTES],
+                _authority: PublicCiphertext,
+            ) -> Result<(), Error> {
+                let mut scratch = Scratch::<BLOCK_BYTES>::new();
+                self.execute(input, &mut scratch.0, false)?;
+                output.copy_from_slice(&scratch.0);
+                Ok(())
+            }
+
+            fn transform<'out>(
+                &mut self,
+                input: &[u8; BLOCK_BYTES],
+                output: &'out mut [u8; BLOCK_BYTES],
+                inverse: bool,
+            ) -> Result<SecretBlock<'out>, Error> {
+                let mut destination = SecretRegionInitialization::begin(output)?;
+                let mut scratch = Scratch::<BLOCK_BYTES>::new();
+                self.execute(input, &mut scratch.0, inverse)?;
+                destination.write(&scratch.0)?;
+                Ok(SecretBlock {
+                    region: destination.finish()?,
+                    local: PhantomData,
+                })
+            }
+
+            fn execute(
+                &mut self,
+                input: &[u8; BLOCK_BYTES],
+                output: &mut [u8; BLOCK_BYTES],
+                inverse: bool,
+            ) -> Result<(), Error> {
+                if matches!(
+                    (self.permissions, inverse),
+                    (Permissions::Encrypt, true) | (Permissions::Decrypt, false)
+                ) {
+                    return Err(Error::NotPermitted);
+                }
+                self.binding.execute(|backend| {
+                    let written = if inverse {
+                        backend.decrypt_block(input, output)
+                    } else {
+                        backend.encrypt_block(input, output)
+                    }
+                    .map_err(Error::Provider)?;
+                    if written != BLOCK_BYTES {
+                        return Err(Error::Provider(ProviderFailureKind::InvalidOutput));
+                    }
+                    // Output correctness is the admitted backend's responsibility.
+                    // Do not exclude values from AES's complete block output domain.
+                    Ok(())
+                })
+            }
+        }
+
+        impl<B: $backend + OwnedKeyBackend> $key<B> {
+            /// Explicitly destroy an owned external key, consuming even a quarantined
+            /// binding. Failure never restores use or automatically retries destruction.
+            pub fn destroy(self) -> Result<(), Error> {
+                self.binding.destroy()
+            }
+        }
+    };
 }
 
-impl<B: Aes128Backend + OwnedKeyBackend> Aes128ProviderKey<B> {
-    /// Explicitly destroy an owned external key, consuming even a quarantined
-    /// binding. Failure never restores use or automatically retries destruction.
-    pub fn destroy(self) -> Result<(), Error> {
-        self.binding.destroy()
-    }
-}
+provider_key!(Aes128Backend, Aes128ProviderKey);
+provider_key!(Aes192Backend, Aes192ProviderKey);
+provider_key!(Aes256Backend, Aes256ProviderKey);

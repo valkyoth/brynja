@@ -294,8 +294,13 @@ native execution and ISA qualification are separate evidence levels.
 RISC-V instruction results based on QEMU are not native hardware qualification.
 
 The [AES usage guide](docs/aes-usage.md) explains the current development
-checkout's portable, static and hosted APIs, caller-owned storage, tested
+checkout's portable, static, hosted and external-key APIs, caller-owned storage, tested
 examples and explicit qualification limits.
+
+The v0.27.6 [provider API candidate](docs/assurance/aes-provider-completion.md)
+adds distinct AES-128/192/256 external-key bindings. Applications supply their
+own trusted adapters; Brynja adds no device client or OpenBao integration and
+requires no HSM. Mock and package tests are not hardware qualification.
 
 The v0.27.4 [RISC-V AES candidate](docs/assurance/aes-riscv-development.md)
 implements RV64 scalar Zkne/Zknd only behind the explicit evidence build cfg.

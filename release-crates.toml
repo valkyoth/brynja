@@ -1,8 +1,8 @@
 [release]
-version = "0.27.5"
-milestone = "0.27.5"
+version = "0.27.6"
+milestone = "0.27.6"
 baseline = "0.25.3"
-cumulative_milestones = ["0.26.0", "0.26.1", "0.27.0", "0.27.1", "0.27.2", "0.27.3", "0.27.4", "0.27.5"]
+cumulative_milestones = ["0.26.0", "0.26.1", "0.27.0", "0.27.1", "0.27.2", "0.27.3", "0.27.4", "0.27.5", "0.27.6"]
 policy = "independent"
 stage = "internal"
 # Legacy explicit runner default only; routine gates use final-checks.toml, not this selector.
@@ -11,11 +11,11 @@ exceptional = false
 exception_reason = ""
 
 [crates."brynja"]
-previous_version = "0.27.4"
-version = "0.27.5"
+previous_version = "0.27.5"
+version = "0.27.6"
 change = "metadata"
 publish = false
-reason = "AES usability acceptance: public-consumer tests, tooling and documentation only; no production algorithm or admission change. Retain the owner-accepted timing limitation and evidence-only RISC-V boundary. Existing checks and green CI precede a separately authorized signed tag; no crates.io publication selected."
+reason = "Expose and document the dependency-free AES-128/192/256 provider contracts through the existing facade feature; no device client or OpenBao integration. Retain timing and physical-protection limitations. Scoped review, existing checks and green CI precede a separately authorized signed tag; no crates.io publication selected."
 
 [crates."brynja-legacy-hmac"]
 previous_version = "0.1.0"
@@ -64,7 +64,7 @@ previous_version = "0.2.0"
 version = "0.2.0"
 change = "code"
 publish = false
-reason = "Modern HKDF/TLS labels and portable/opt-in accelerated AES-128/192/256 clearing owners, with RISC-V candidate boundary tests; retain supporting-crate version during the internal development train."
+reason = "Modern HKDF/TLS labels, portable/opt-in accelerated AES and dependency-free AES-128/192/256 external-key provider bindings; retain supporting-crate version during the internal development train. No device implementation or new dependency."
 
 [crates."brynja-hash-core"]
 previous_version = "0.1.0"

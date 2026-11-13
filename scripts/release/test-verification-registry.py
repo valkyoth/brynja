@@ -406,6 +406,11 @@ provider_tests = importlib.util.module_from_spec(provider_spec)
 provider_spec.loader.exec_module(provider_tests)
 AesProviderRunnerTests = provider_tests.ProviderRunnerTests
 
+provider_packaged_spec = importlib.util.spec_from_file_location('aes_provider_packaged_tests', ROOT / 'scripts/aes/test-aes-provider-packaged.py')
+provider_packaged_tests = importlib.util.module_from_spec(provider_packaged_spec)
+provider_packaged_spec.loader.exec_module(provider_packaged_tests)
+AesProviderPackagedTests = provider_packaged_tests.ProviderPackagedTests
+
 # Reviewed, explicit build closures for these portable harness commands only.
 # This is not automatic feature/dependency analysis or a release-family planner.
 CLOSURES = {
@@ -490,9 +495,9 @@ class RegistryTests(unittest.TestCase):
                     'api-msrv': 0, 'api-current': 0, 'mutation-controls': 0,
                     'owner-dispatch': 0, 'operation-cleanup': 0, 'owner-contract': 0,
                     'downstream': 0, 'downstream-matrix': 0, 'timing-screen': 0,
-                    'dataflow-review': 0, 'aarch64-dataflow-review': 0, 'aarch64-linked-helpers-review': 0, 'provider-native': 16, 'provider-msrv': 16,
-                    'provider-asan': 16, 'provider-miri': 16, 'provider-api-current': 0,
-                    'provider-api-msrv': 0, 'provider-no-std': 0, 'provider-docs': 1,
+                    'dataflow-review': 0, 'aarch64-dataflow-review': 0, 'aarch64-linked-helpers-review': 0, 'provider-native': 48, 'provider-msrv': 48,
+                    'provider-asan': 48, 'provider-miri': 48, 'provider-api-current': 0,
+                    'provider-api-msrv': 0, 'provider-no-std': 0, 'provider-docs': 1, 'provider-packaged': 0,
                     'wide-vectors': 8, 'wide-msrv-vectors': 8, 'wide-optimized-vectors': 8,
                     'wide-asan-vectors': 8, 'wide-miri-ownership': 2,
                     'wide-api-msrv': 0, 'wide-api-current': 0,

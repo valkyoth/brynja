@@ -1565,13 +1565,13 @@
     },
     {
       "boundary": {
-        "class": "planned-authority-admission",
-        "rationale": "The optional separately packaged PKCS#11 adapter must admit an exact PKCS#11 revision, mechanism and key-attribute requirements, dependency/FFI policy and device/session lifecycle contracts before implementation. The existing neutral provider API is not device support, attestation or qualification evidence."
+        "class": "internal-security-design",
+        "rationale": "The owner narrowed v0.27.6 to dependency-free provider API completion for the three already admitted AES key widths. Local ownership, permissions, failure and output contracts add no new protocol authority. Device clients, native FFI and OpenBao integration are outside this scope; neutral provider contracts are not device support, attestation or qualification evidence."
       },
       "requirement_ids": [],
-      "scope": "After v0.27.5, implement an optional separately packaged PKCS#11 external-device adapter over the reusable external-key provider contracts, initially limited to explicit AES-128 block operations with opaque non-exportable key bindings, session/login management, exact mechanism and usage admission, fallible owned-key destruction and no software fallback; keep vendor dependencies and FFI outside the core workspace and require explicit dependency/FFI review plus software-token integration and named-device acceptance before hardware support claims.",
+      "scope": "After v0.27.5, complete the optional dependency-free external-key provider API for AES-128, AES-192 and AES-256 with distinct typed bindings, opaque key ownership, permission checks, guarded outputs, terminal failure, explicit fallible destruction and no software fallback; preserve no_std and independent feature gates. Application-owned adapters remain responsible for device identity, exact key-width validation, mechanisms and session policy. Add no device client, native FFI or OpenBao integration, and make no hardware support claim.",
       "source_ids": [],
-      "title": "Optional PKCS11 External-Key Adapter",
+      "title": "External-Key Provider API Completion",
       "version": "0.27.6"
     },
     {

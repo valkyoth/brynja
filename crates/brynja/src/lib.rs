@@ -39,7 +39,7 @@
 //! `general-sha512-t` extension, and the development-only AES-128 block API
 //! under `crypto::aes`, available only with explicit `hazmat-aes-block` opt-in.
 //! A separate `external-key-provider` opt-in exposes reusable lifecycle contracts;
-//! enabling both features adds AES-128 external-key operations, not an HSM driver.
+//! enabling both features adds AES-128/192/256 external-key operations, not an HSM driver.
 //! AES-128 uses caller-backed clearing key/output owners;
 //! it is not a mode, authenticated encryption or TLS integration, and its
 //! compiler/side-channel qualification and independent review remain pending.

@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.27.6 provider API completion candidate (unreleased)
+
+- Extend the optional external-key API to distinct AES-128, AES-192 and
+  AES-256 backend traits and provider-key bindings, preserving the AES-128 API.
+- Share permission, guarded-output, terminal-failure and explicit-destruction
+  mechanics; retain adapter-dependent thread traits and no software fallback.
+- Cover all widths with lifecycle/fault tests, paired compiler diagnostics,
+  Miri/ASan and archive-only direct/facade consumers on both compiler endpoints.
+- Keep device identity, actual key width, mechanism and session admission with
+  application-supplied adapters. No device client, native FFI, OpenBao integration,
+  new dependency or hardware-support claim is introduced.
+- Prepare internal facade 0.27.6 and matching consumer pins. Owner pentest,
+  commit-bound final checks and exact-commit GitHub/CodeQL remain pending.
+  No crates.io publication, timing rerun or additional release gate is selected.
+
 ## 0.27.5 AES usability acceptance candidate (unreleased)
 
 - Add packaged direct/facade round trips for all AES widths and combinations

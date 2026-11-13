@@ -4,6 +4,7 @@ from contextlib import redirect_stdout
 import importlib.util
 import io
 from pathlib import Path
+import tomllib
 import unittest
 from unittest.mock import patch
 
@@ -15,8 +16,8 @@ spec.loader.exec_module(runner)
 class ProviderRunnerTests(unittest.TestCase):
     def test_exact_probe_population_and_distinct_controls(self):
         cases = runner.probes()
-        self.assertEqual(len(cases), 25)
-        self.assertEqual(len({row[0] for row in cases}), 25)
+        self.assertEqual(len(cases), 81)
+        self.assertEqual(len({row[0] for row in cases}), 81)
         for name, negative, positive, code in cases:
             self.assertNotEqual(negative, positive, name)
             self.assertRegex(code, '^E[0-9]{4}$')
@@ -25,7 +26,7 @@ class ProviderRunnerTests(unittest.TestCase):
         with patch.object(runner.api, 'run_probes') as run, redirect_stdout(io.StringIO()) as output:
             runner.run('1.90.0')
         self.assertEqual(run.call_count, 8)
-        self.assertEqual(sum(len(call.kwargs['cases']) for call in run.call_args_list), 56)
+        self.assertEqual(sum(len(call.kwargs['cases']) for call in run.call_args_list), 168)
         for call in run.call_args_list:
             self.assertEqual(call.args[0], '1.90.0')
             self.assertEqual(call.args[2]['CARGO_NET_OFFLINE'], 'true')
@@ -37,7 +38,7 @@ class ProviderRunnerTests(unittest.TestCase):
         self.assertEqual({call.kwargs['features'] for call in run.call_args_list},
                          {'', 'external-key-provider', 'hazmat-aes-block',
                           'hazmat-aes-block,external-key-provider'})
-        self.assertIn('56 paired probes; direct and facade; independent opt-ins', output.getvalue())
+        self.assertIn('168 paired probes; direct and facade; independent opt-ins', output.getvalue())
 
     def test_any_probe_failure_prevents_completion_marker(self):
         with patch.object(runner.api, 'run_probes', side_effect=ValueError('wrong diagnostic')), \
@@ -47,7 +48,7 @@ class ProviderRunnerTests(unittest.TestCase):
         self.assertNotIn('AES_PROVIDER_API_PASS', output.getvalue())
 
     def test_thread_traits_follow_backend_not_unconditional_rejection(self):
-        cases = {name: (negative, positive) for name, negative, positive, _ in runner.probes()}
+        cases = {name: (negative, positive) for name, negative, positive, _ in runner.aes128_probes()}
         for owner in ('Aes128ProviderKey<Backend>', 'ExternalKey<Backend>'):
             negative, positive = cases[owner + '-Send']
             self.assertIn('std::rc::Rc<()>', negative)
@@ -57,6 +58,45 @@ class ProviderRunnerTests(unittest.TestCase):
             self.assertIn('std::cell::Cell<u8>', negative)
             self.assertIn('struct Backend;', positive)
             self.assertIn('T:Sync', positive)
+
+    def test_all_width_pairs_reject_cross_binding_with_positive_control(self):
+        cases = {name: (negative, positive, code) for name, negative, positive, code in runner.probes()}
+        for bits in (128, 192, 256):
+            for other in (128, 192, 256):
+                if bits == other:
+                    continue
+                negative, positive, code = cases[f'{bits}/reject-{other}-binding']
+                self.assertIn(f'impl Aes{bits}Backend for Backend', negative)
+                self.assertNotIn(f'impl Aes{other}Backend', negative)
+                self.assertIn(f'Aes{other}ProviderKey::new', negative)
+                self.assertIn(f'Aes{bits}ProviderKey::new', positive)
+                self.assertEqual(code, 'E0277')
+
+    def test_width_rewrite_preserves_128_probe_semantics(self):
+        base = runner.aes128_probes()
+        for bits in (128, 192, 256):
+            cases = [row for row in runner.probes() if row[0].startswith(f'{bits}/')][:25]
+            restored = [(name.split('/', 1)[1].replace(f'Aes{bits}', 'Aes128'), negative.replace(f'Aes{bits}', 'Aes128'),
+                         positive.replace(f'Aes{bits}', 'Aes128'), code)
+                        for name, negative, positive, code in cases]
+            self.assertEqual(restored, base)
+
+    def test_registry_covers_every_width_and_shared_fixture(self):
+        root = Path(__file__).resolve().parents[2]
+        registry = tomllib.loads((root / 'verification/checks.toml').read_text())
+        checks = {c['id']: c for c in registry['checks'] if c['component'] == 'aes'}
+        paths = registry['groups']['aes-provider']['paths']
+        self.assertIn('crates/brynja-crypto/tests/aes_provider_common', paths)
+        for bits in (128, 192, 256):
+            self.assertIn(f'crates/brynja-crypto/tests/aes{bits}_provider.rs', paths)
+        for name in ('provider-native', 'provider-msrv', 'provider-asan', 'provider-miri'):
+            check = checks[name]
+            targets = [check['command'][i + 1] for i, arg in enumerate(check['command']) if arg == '--test']
+            self.assertEqual(targets, ['aes128_provider', 'aes192_provider', 'aes256_provider'])
+            self.assertEqual(check['success']['exact_tests'], 48)
+        for endpoint, name in (('1.90.0', 'provider-api-msrv'), ('1.99.1', 'provider-api-current')):
+            self.assertEqual(checks[name]['success']['unique_lines'],
+                             [f'AES_PROVIDER_API_PASS: {endpoint} 168 paired probes; direct and facade; independent opt-ins'])
 
 
 if __name__ == '__main__':

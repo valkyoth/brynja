@@ -13,6 +13,7 @@ repeatedly calling these block operations. No HSM is required.
 | Portable software | `hazmat-aes-block` | `brynja_crypto::aes` | No CPU authority; never silently switches to an accelerated owner |
 | Static acceleration | `aes-static-execution` | `brynja_crypto::aes::execution` | Borrow a healthy `execution::Authority`; compile for the complete ISA bundle and deploy only on compatible CPUs |
 | Hosted acceleration | `aes-runtime-execution`, also explicitly on `brynja-crypto-cpu-std` | `brynja_crypto::aes::execution` | Borrow the kernel authority from `brynja_crypto_cpu_std::aes::Authority`; reviewed little-endian AArch64 Linux/macOS routes only |
+| Application-supplied external key | Both `hazmat-aes-block` and `external-key-provider` | `brynja_crypto::aes::provider` | Supply a trusted, already validated backend; no device client, key export or software fallback |
 
 For the facade, enable the same feature on `brynja` and replace
 `brynja_crypto` with `brynja::crypto`. The hosted adapter remains a separate
@@ -60,8 +61,24 @@ storage choices apply to both portable and accelerated owners.
 Declare storage before constructing the owner. For acceleration, declare the
 authority before the key owners. Key owners cannot outlive their storage or
 authority, and cannot be copied, cloned or sent to another thread. Input keys
-are borrowed during construction; the caller remains responsible for their
+are borrowed during software-key construction; the caller remains responsible for their
 original storage and any copies.
+
+External keys instead use `Aes128ProviderKey`, `Aes192ProviderKey` or
+`Aes256ProviderKey`, paired with the matching backend trait. They hold an adapter,
+not caller-owned key bytes or a software schedule. Their Send/Sync behavior
+follows that adapter's session restrictions; secret-output owners remain
+thread-local. Implementing a backend is trusted code: the application must
+validate actual device key identity, width, permissions and mechanism. A Rust
+trait does not prove device properties or ciphertext correctness.
+
+Keep a provider binding for repeated operations. Backend errors or unwinds
+permanently quarantine it; do not automatically retry or fall back. Permission
+rejection before dispatch does not quarantine an otherwise healthy binding.
+Drop releases the adapter but does not destroy an external key. Only adapters
+implementing `OwnedKeyBackend` support explicit consuming `destroy()`, which can
+fail even on a quarantined binding and is never automatically retried. Devices,
+login, handle reconciliation and deployment policy stay with the application.
 
 `encrypt_block` and `decrypt_block` return a clearing `SecretBlock` borrowing
 the output buffer. Borrow its `expose()` result only while that owner is live;
@@ -87,11 +104,13 @@ the guide does not introduce a second, untested copy of their Rust code.
 - [Packaged authority adapter](../assurance/aes-accelerated-campaigns/lib.rs): shows static construction and hosted `Mode::Require`, checks live health, and keeps the owning authority alive behind the returned borrow. `ForcedAuthority` is a test helper, not an exported Brynja API.
 - [Round-trip example](../assurance/aes-public-api/tests/roundtrip.rs): borrow the actual encrypted result, clear the encrypting key, decrypt through either owner form, then clear both result buffers and verify canaries. The accelerated runner changes only the import and authority arguments, preserving the assertions.
 - [Hosted selection consumer](../assurance/aes-hosted/src/main.rs): handles unavailable required acceleration, exercises both owner forms against known answers, and demonstrates terminal quarantine without fallback. Its `expect`/assertions belong to a test executable; applications should propagate errors and supply their own key lifecycle.
+- [Provider application helpers](../assurance/aes-provider-public-api.rs): all three typed bindings, explicit public encryption and clearing secret decryption. Compiled from both archive routes for host and Cortex-M; the separate archive lifecycle tests execute mock adapters, not real devices.
 
 From a checkout with the named Rust toolchains, targets and QEMU provisioned:
 
 ```sh
 brynja-verify run aes packaged-portable
+brynja-verify run aes provider-packaged
 brynja-verify run aes --needed --category aes-roundtrip
 brynja-verify run aes --needed --category aes-accelerated-no-std
 brynja-verify run aes --needed --category aes-hosted

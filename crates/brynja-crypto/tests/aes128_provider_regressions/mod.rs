@@ -7,7 +7,7 @@ fn equal_input_output_is_accepted_without_quarantine_in_every_direction() {
     for input in [[0; 16], [0xff; 16], INPUT] {
         let (backend, state) = Mock::new(Permissions::EncryptAndDecrypt);
         state.borrow_mut().behavior = Behavior::Echo;
-        let mut key = Aes128ProviderKey::new(Owned(backend));
+        let mut key = ProviderKey::new(Owned(backend));
         for _ in 0..2 {
             let mut output = [0xa5; 16];
             let block = must(key.encrypt_block(&input, &mut output));
@@ -34,7 +34,7 @@ fn successful_block_values_are_not_heuristically_validated() {
     // Single-bit differences are neither evidence of encryption nor invalid
     // block values that the wrapper can reject independently of the key.
     let (backend, state) = Mock::new(Permissions::Encrypt);
-    let mut key = Aes128ProviderKey::new(backend);
+    let mut key = ProviderKey::new(backend);
     for position in 0..16 {
         for bit in 0..8 {
             let mask = 1 << bit;
@@ -61,7 +61,7 @@ fn successful_block_values_are_not_heuristically_validated() {
 fn equal_decryption_result_preserves_binding_for_later_encryption() {
     let (backend, state) = Mock::new(Permissions::EncryptAndDecrypt);
     state.borrow_mut().behavior = Behavior::Echo;
-    let mut key = Aes128ProviderKey::new(backend);
+    let mut key = ProviderKey::new(backend);
     let mut output = [0xa5; 16];
     let block = must(key.decrypt_block(&INPUT, &mut output));
     assert_eq!(block.expose(), INPUT);
@@ -74,7 +74,7 @@ fn equal_decryption_result_preserves_binding_for_later_encryption() {
 
 // Send but not Sync: a binding may move to a worker without sharing its session.
 struct WorkerBackend(std::cell::Cell<usize>);
-impl Aes128Backend for WorkerBackend {
+impl AesBackend for WorkerBackend {
     fn permissions(&self) -> Permissions {
         Permissions::EncryptAndDecrypt
     }
@@ -108,7 +108,7 @@ impl OwnedKeyBackend for WorkerBackend {
 
 #[test]
 fn send_backend_binding_moves_to_worker_and_returns_for_destruction() {
-    let key = Aes128ProviderKey::new(WorkerBackend(std::cell::Cell::new(0)));
+    let key = ProviderKey::new(WorkerBackend(std::cell::Cell::new(0)));
     let key = must(
         std::thread::spawn(move || {
             let mut key = key;

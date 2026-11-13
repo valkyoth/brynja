@@ -2632,7 +2632,7 @@ unique_lines = ["AES_STATIC_PASS: arm-qemu 1.99.1","AES_EXECUTION_KAT_PASS: 128:
 
 # Optional external-key contracts. Mock adapters are not hardware qualification.
 [groups.aes-provider]
-paths = ["crates/brynja-crypto/src/provider.rs", "crates/brynja-crypto/src/aes/provider.rs", "crates/brynja-crypto/tests/aes128_provider.rs", "crates/brynja-crypto/tests/aes128_provider_regressions", "scripts/aes/check-aes-provider-api.py", "scripts/aes/test-aes-provider-runner.py", "scripts/aes/check-aes-api.py", "scripts/aes/test-aes-runners.py", "scripts/repository/facade_workspace_policy.py"]
+paths = ["crates/brynja-crypto/src/provider.rs", "crates/brynja-crypto/src/aes/provider.rs", "crates/brynja-crypto/tests/aes128_provider.rs", "crates/brynja-crypto/tests/aes192_provider.rs", "crates/brynja-crypto/tests/aes256_provider.rs", "crates/brynja-crypto/tests/aes_provider_common", "crates/brynja-crypto/tests/aes128_provider_regressions", "scripts/aes/check-aes-provider-api.py", "scripts/aes/test-aes-provider-runner.py", "scripts/aes/check-aes-api.py", "scripts/aes/test-aes-runners.py", "scripts/repository/facade_workspace_policy.py"]
 [[groups.aes-provider.tools]]
 program = "python3"
 
@@ -2640,9 +2640,9 @@ program = "python3"
 component = "aes"
 id = "provider-native"
 category = "provider"
-name = "AES-128 provider mock lifecycle and fault contracts"
+name = "AES-128/192/256 provider mock lifecycle and fault contracts"
 establishes = "Optional trusted adapter API only: exact directions, opaque binding, explicit ownership and destruction, terminal errors/unwind and clearing or transactional output. Test/reference adapters only; no real HSM, PKCS#11, physical protection, timing or device destruction qualification. Cortex-M is compile-only."
-command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block,external-key-provider","--test","aes128_provider"]
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block,external-key-provider","--test","aes128_provider","--test","aes192_provider","--test","aes256_provider"]
 cwd = "."
 inputs = ["aes-build", "aes-provider", "aes-consumer", "compiler"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -2651,16 +2651,16 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok."]
-minimum_tests = 16
-exact_tests = 16
+minimum_tests = 48
+exact_tests = 48
 
 [[checks]]
 component = "aes"
 id = "provider-msrv"
 category = "provider"
-name = "AES-128 provider mock contracts on Rust 1.90.0"
+name = "AES-128/192/256 provider mock contracts on Rust 1.90.0"
 establishes = "Optional trusted adapter API only: exact directions, opaque binding, explicit ownership and destruction, terminal errors/unwind and clearing or transactional output. Test/reference adapters only; no real HSM, PKCS#11, physical protection, timing or device destruction qualification. Cortex-M is compile-only."
-command = ["cargo","+1.90.0","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block,external-key-provider","--test","aes128_provider"]
+command = ["cargo","+1.90.0","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block,external-key-provider","--test","aes128_provider","--test","aes192_provider","--test","aes256_provider"]
 cwd = "."
 inputs = ["aes-build", "aes-provider", "aes-consumer", "hkdf-msrv"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -2669,16 +2669,16 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok."]
-minimum_tests = 16
-exact_tests = 16
+minimum_tests = 48
+exact_tests = 48
 
 [[checks]]
 component = "aes"
 id = "provider-asan"
 category = "provider"
-name = "AES-128 provider mock contracts under ASan/LSan"
+name = "AES-128/192/256 provider mock contracts under ASan/LSan"
 establishes = "Optional trusted adapter API only: exact directions, opaque binding, explicit ownership and destruction, terminal errors/unwind and clearing or transactional output. Test/reference adapters only; no real HSM, PKCS#11, physical protection, timing or device destruction qualification. Cortex-M is compile-only."
-command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block,external-key-provider","--test","aes128_provider","--target","x86_64-unknown-linux-gnu"]
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block,external-key-provider","--test","aes128_provider","--test","aes192_provider","--test","aes256_provider","--target","x86_64-unknown-linux-gnu"]
 cwd = "."
 inputs = ["aes-build", "aes-provider", "aes-consumer", "asan-tools"]
 environment = { RUSTUP_AUTO_INSTALL = "0", RUSTFLAGS = "-Zsanitizer=address", CARGO_ENCODED_RUSTFLAGS = "", ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1", LSAN_OPTIONS = "exitcode=23", CARGO_TARGET_DIR = "target/aes-provider-asan" }
@@ -2687,16 +2687,16 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok."]
-minimum_tests = 16
-exact_tests = 16
+minimum_tests = 48
+exact_tests = 48
 
 [[checks]]
 component = "aes"
 id = "provider-miri"
 category = "provider"
-name = "AES-128 provider mock contracts under Miri"
+name = "AES-128/192/256 provider mock contracts under Miri"
 establishes = "Optional trusted adapter API only: exact directions, opaque binding, explicit ownership and destruction, terminal errors/unwind and clearing or transactional output. Test/reference adapters only; no real HSM, PKCS#11, physical protection, timing or device destruction qualification. Cortex-M is compile-only."
-command = ["cargo","+nightly-2026-09-11","miri","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block,external-key-provider","--test","aes128_provider","--target","x86_64-unknown-linux-gnu"]
+command = ["cargo","+nightly-2026-09-11","miri","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block,external-key-provider","--test","aes128_provider","--test","aes192_provider","--test","aes256_provider","--target","x86_64-unknown-linux-gnu"]
 cwd = "."
 inputs = ["aes-build", "aes-provider", "aes-consumer", "miri-tools"]
 environment = { RUSTUP_AUTO_INSTALL = "0", MIRIFLAGS = "-Zmiri-report-progress=10000000", CARGO_TARGET_DIR = "target/aes-provider-miri" }
@@ -2705,8 +2705,8 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok."]
-minimum_tests = 16
-exact_tests = 16
+minimum_tests = 48
+exact_tests = 48
 
 [[checks]]
 component = "aes"
@@ -2723,7 +2723,7 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["AES_PROVIDER_API_PASS:"]
-unique_lines = ["AES_PROVIDER_API_PASS: 1.99.1 56 paired probes; direct and facade; independent opt-ins"]
+unique_lines = ["AES_PROVIDER_API_PASS: 1.99.1 168 paired probes; direct and facade; independent opt-ins"]
 
 [[checks]]
 component = "aes"
@@ -2740,7 +2740,7 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["AES_PROVIDER_API_PASS:"]
-unique_lines = ["AES_PROVIDER_API_PASS: 1.90.0 56 paired probes; direct and facade; independent opt-ins"]
+unique_lines = ["AES_PROVIDER_API_PASS: 1.90.0 168 paired probes; direct and facade; independent opt-ins"]
 
 [[checks]]
 component = "aes"
@@ -2961,6 +2961,25 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["Generated"]
+
+[groups.aes-provider-packaged]
+paths = ["assurance/aes-provider-public-api.rs", "scripts/aes/check-aes-provider-packaged.py", "scripts/aes/test-aes-provider-packaged.py"]
+
+[[checks]]
+component = "aes"
+id = "provider-packaged"
+category = "provider"
+name = "Packaged AES-128/192/256 provider contracts (MSRV/current, direct/facade)"
+establishes = "Byte-checked Cargo archives, exact dependency and feature graphs, 48 mock lifecycle tests per configuration across direct/facade, MSRV/current and debug/release, plus four no_std Cortex-M compile checks. No device client, hardware custody, attestation, timing or physical qualification."
+command = ["python3", "scripts/aes/check-aes-provider-packaged.py"]
+cwd = "."
+inputs = ["aes-build", "aes-provider-packaged", "aes-provider", "aes-packaged", "hkdf-public-api-modern", "compiler", "hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
+timeout_seconds = 900
+[checks.success]
+contains = ["AES provider packaged: PASS;"]
+unique_lines = ["AES provider packaged: PASS; 8 host configurations; 384 lifecycle tests; 4 Cortex-M compile checks; mocks only; no upload"]
 
 # v0.27.2 portable package acceptance: no release-gate coupling.
 [groups.aes-packaged]

@@ -67,7 +67,8 @@ or dependency of this modern crate and is tracked under `legacy_hkdf`.
 The independent, default-off `external-key-provider` feature exposes
 algorithm-neutral `provider::{ExternalKey, OwnedKeyBackend}` lifecycle contracts.
 It does not enable AES. Enable it together with `hazmat-aes-block` to use
-`aes::provider::{Aes128Backend, Aes128ProviderKey, Permissions}` with a trusted
+`aes::provider::{Aes128Backend, Aes128ProviderKey, Permissions}` (and distinct
+`Aes192Backend`/`Aes192ProviderKey`, `Aes256Backend`/`Aes256ProviderKey`) with a trusted
 application/device adapter. Both features forward explicitly through `brynja`.
 No hardware driver, PKCS#11 integration, automatic fallback or HSM requirement
 is bundled. Software keys remain unchanged; provider keys use opaque bindings,
@@ -95,7 +96,10 @@ secret `encrypt_block`/`decrypt_block` output and explicitly acknowledged
 Input key copies remain the caller's responsibility. Cached schedules increase
 the lifetime and footprint of key-equivalent material. See
 `docs/assurance/aes-wide-development.md` for their separate evidence and limits.
-The optional external-key provider interface remains AES-128 only.
+The optional external-key provider interface covers AES-128, AES-192 and
+AES-256 through separate typed bindings. The adapter must validate the actual
+device key width; the trait name alone is not hardware attestation. No PKCS#11
+client or hardware support is bundled in this crate.
 
 The ordinary AES-192/256 key forms rebuild their full schedule on every block.
 For repeated blocks in a separately reviewed construction, prefer the matching

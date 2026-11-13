@@ -396,7 +396,7 @@ def test_orphan_plan_fails() -> None:
 def test_optional_provider_and_fault_plans_have_explicit_boundaries() -> None:
     claims = closure.read_claims()
     for version, classification in (
-        ("0.27.6", "planned-authority-admission"),
+        ("0.27.6", "internal-security-design"),
         ("0.27.7", "internal-security-design"),
     ):
         matches = [

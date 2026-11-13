@@ -4,6 +4,8 @@ use crate::aes::execution::{self as accelerated, Authority, Health, Kernel};
 fn authority() -> Result<Authority, accelerated::Error> {
     Ok(Authority::new(if cfg!(target_arch = "x86_64") {
         Kernel::X86AesNi
+    } else if cfg!(target_arch = "riscv64") {
+        Kernel::RiscVScalarAes
     } else {
         Kernel::ArmAes
     })?)

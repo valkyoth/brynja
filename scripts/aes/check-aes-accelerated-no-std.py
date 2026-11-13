@@ -18,9 +18,16 @@ api = packaged.module('no_std_api', HERE / 'check-aes-execution-api.py')
 require = packaged.require
 TARGETS = {'thumbv7em-none-eabi': '', 'x86_64-unknown-linux-gnu': '-Ctarget-feature=+aes,+sse2',
            'aarch64-unknown-linux-musl': '-Ctarget-feature=+aes,+neon'}
+RISCV_TARGET = 'riscv64imac-unknown-none-elf'
+RISCV_BUILDS = [('rv64-ordinary', RISCV_TARGET, ''),
+                ('rv64-evidence', RISCV_TARGET, '--cfg brynja_cpu_evidence -Ctarget-feature=+zkne,+zknd')]
 FEATURES = {'none': [], 'portable': ['hazmat-aes-block'],
             'static': ['aes-static-execution'], 'runtime': ['aes-runtime-execution']}
 REJECT = (*packaged.archives.REJECT_ENV, 'PYTHONOPTIMIZE', 'PYTHONPATH')
+RISCV_REJECT = (*REJECT, 'CARGO_BUILD_RUSTFLAGS',
+                'CARGO_TARGET_RISCV64IMAC_UNKNOWN_NONE_ELF_RUSTFLAGS',
+                'CARGO_TARGET_RISCV64IMAC_UNKNOWN_NONE_ELF_LINKER',
+                'CARGO_TARGET_RISCV64IMAC_UNKNOWN_NONE_ELF_RUNNER')
 
 
 def manifest(versions, route, mode, defaults=False):
@@ -139,9 +146,10 @@ def artifact(result, root_id, target_dir):
     return {'path': str(paths[0]), 'sha256': hashlib.sha256(paths[0].read_bytes()).hexdigest()}
 
 
-def check(compiler, route):
-    require(compiler in ('1.90.0', '1.99.1') and route in ('direct', 'facade'), 'unreviewed no_std configuration')
-    for name in REJECT:
+def check(compiler, route, riscv=False):
+    require(compiler in ('1.90.0', '1.99.1') and route in ('direct', 'facade')
+            and type(riscv) is bool, 'unreviewed no_std configuration')
+    for name in RISCV_REJECT if riscv else REJECT:
         require(name not in os.environ, 'remove ambient ' + name)
     base = ROOT / 'target/aes-accelerated-no-std'
     base.mkdir(parents=True, exist_ok=True)
@@ -159,7 +167,8 @@ def check(compiler, route):
         require(fixture.is_file() and not any(p.is_symlink() for p in (fixture, *fixture.parents)), 'missing/symlinked no_std fixture')
         original = fixture.read_text()
 
-        def configure(mode, defaults=False, target='thumbv7em-none-eabi'):
+        probe_target = RISCV_TARGET if riscv else 'thumbv7em-none-eabi'
+        def configure(mode, defaults=False, target=probe_target):
             (directory / 'Cargo.toml').write_text(manifest(versions, route, mode, defaults))
             packaged.archives.run(cargo + ['generate-lockfile', '--offline'], directory, env)
             metadata = packaged.archives.run(cargo + ['metadata', '--format-version=1', '--filter-platform', target, *selection], directory, env)
@@ -169,20 +178,22 @@ def check(compiler, route):
 
         source.write_text(original)
         builds = []
+        targets = RISCV_BUILDS if riscv else [(target, target, flags) for target, flags in TARGETS.items()]
         for mode in ('static', 'runtime'):
-            for target, flags in TARGETS.items():
+            for name, target, flags in targets:
                 env['RUSTFLAGS'] = flags
                 root_id = configure(mode, target=target)
                 for profile in ('debug', 'release'):
-                    label = f'{mode}-{target}-{profile}'
+                    label = f'{mode}-{name}-{profile}'
                     command = cargo + ['build', *selection, '--lib', '--target', target, '--message-format=json']
                     if profile == 'release':
                         command += ['--release']
                     result = execute(command, directory, env, artifacts, label)
-                    builds.append({'mode': mode, 'target': target, 'profile': profile, **artifact(result, root_id, root / 'target')})
+                    builds.append({'mode': mode, 'target': target, 'profile': profile, 'rustflags': flags,
+                                   **artifact(result, root_id, root / 'target')})
                     print(f'AES_NO_STD_BUILD_PASS: {compiler} {route} {label}', flush=True)
         env['RUSTFLAGS'] = ''
-        command = cargo + ['check', *selection, '--lib', '--target', 'thumbv7em-none-eabi', '--message-format=json']
+        command = cargo + ['check', *selection, '--lib', '--target', probe_target, '--message-format=json']
         count = 0
         for name, mode, defaults, negative, positive, code in feature_probes(route):
             configure(mode, defaults)
@@ -194,18 +205,22 @@ def check(compiler, route):
                 negative, positive = (s.replace('brynja_crypto', 'brynja::crypto') for s in (negative, positive))
             pair(command, directory, env, artifacts, name, negative, positive, code)
             count += 1
-        require(len(builds) == 12 and count == 62, 'no_std campaign population changed')
+        require(len(builds) == (8 if riscv else 12) and count == 62, 'no_std campaign population changed')
         (artifacts / 'builds.json').write_text(json.dumps(builds, indent=2) + '\n')
-    print(f'AES_ACCELERATED_NO_STD_PASS: {compiler} {route}; 12 library builds; 62 paired probes; compile only', flush=True)
+    if riscv:
+        print(f'AES_RISCV_NO_STD_PASS: {compiler} {route}; 8 bare-metal library builds; 62 paired probes; compile only', flush=True)
+    else:
+        print(f'AES_ACCELERATED_NO_STD_PASS: {compiler} {route}; 12 library builds; 62 paired probes; compile only', flush=True)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--toolchain', choices=('1.90.0', '1.99.1'), required=True)
     parser.add_argument('--route', choices=('direct', 'facade'), required=True)
+    parser.add_argument('--riscv', action='store_true', help='RV64 bare-metal ordinary/evidence builds and API probes')
     args = parser.parse_args()
     try:
-        check(args.toolchain, args.route)
+        check(args.toolchain, args.route, args.riscv)
     except (OSError, ValueError, subprocess.SubprocessError) as error:
         print(f'AES accelerated no_std FAIL: {error}')
         raise SystemExit(2) from error

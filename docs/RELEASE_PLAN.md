@@ -6414,7 +6414,18 @@ Exit criteria:
 
 ### v0.27.4 - Complete AES RISC-V Acceleration Candidate
 
-Status: planned
+Status: in progress
+
+Candidate implementation, bounded QEMU/linked reviews and 0.27.4 metadata are
+prepared. Owner pentest/retest and the existing final release workflow remain
+pending; this status does not admit ordinary RISC-V AES or claim native timing.
+
+Owner-directed evidence boundary (2026-11-13): develop and test the candidate
+under QEMU now, documenting emulation explicitly. Reinspection of the available
+cloud host finds no Zkne/Zknd/Zvkned on any hart. Native AES execution is not
+attempted there; this absence does not block the candidate milestone. Ordinary
+dispatch remains unadmitted, and QEMU is not a native timing/performance or
+physical-side-channel proof. See the [candidate record](assurance/aes-riscv-development.md).
 
 Plan scope: Add RISC-V AES-128, AES-192, and AES-256 encrypt and decrypt backends for exact ratified scalar-crypto or vector-crypto bundles only when the compiler and observed deployment ISA can express them safely; require official vectors, scalar differentials, forced dispatch, generated-code review, and qualifying native evidence before admission. Extend the portable emitted-code, fixed-versus-random timing and AESAVS acceptance to every admitted bundle; compile-only or emulated results are not native qualification.
 

@@ -88,7 +88,7 @@ mapping_rationale = "The HKDF semantic surface and registry-backed KDF entries c
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0005"
-revision = 3
+revision = 4
 owner = "0.27.0"
 lifecycle = "planned"
 decision_ids = ["algorithm.aes"]
@@ -99,8 +99,8 @@ target = "crates/brynja-crypto/src/aes.rs#Aes128Key"
 positive_test = "crates/brynja-crypto/tests/aes128.rs#nist_aesavs_all_four_aes128_ecb_kat_files"
 negative_test = "scripts/aes/check-aes-api.py#main"
 work_bound = "Every block uses a fixed round count determined only by the public key size and accepts only complete fixed-size blocks."
-evidence_gap = "Development checks now cover all three widths: single-block NIST KATs, independent differential comparisons, fault/lifecycle tests, paired API diagnostics, bounded production field/index proofs, host owner/scratch clearing dispatch, fourteen-compiler checkout consumers, endpoint Cortex-M compilation, eleven-helper LLVM/assembly review and bounded synthetic host timing screens. The exact FIPS and ownership mapping is in docs/security-controls.md. No full-cipher proof, whole-program constant-time, physical erasure or independent qualification is established. Packaged acceptance, AESAVS MCT/MMT, broader target/final-linked review and stronger fixed-versus-random timing remain v0.27.2 work; see docs/assurance/aes-wide-development.md."
-residual = "Architecture-specific acceleration requires separate dispatch and side-channel review and cannot silently replace the portable path."
+evidence_gap = "Portable development and acceptance records cover all widths, packaged consumers, AESAVS KAT/MCT/MMT, independent comparisons, bounded arithmetic/index proofs, lifecycle and API tests, emitted-code review and scoped native timing observations. Accelerated evidence has separate compiler/target boundaries and retained timing limitations. The v0.27.4 RV64 scalar candidate adds QEMU functional/misuse campaigns and bounded final-linked reviews only; no qualifying native AES host is available. See docs/assurance/aes-portable-acceptance.md, docs/assurance/aes-acceleration-acceptance.md and docs/assurance/aes-riscv-development.md. The controls mapping is in docs/security-controls.md. No full-cipher proof, whole-program constant time, physical erasure or independent family qualification is established."
+residual = "Architecture-specific acceleration requires separate dispatch and side-channel review and cannot silently replace the portable path. Ordinary RISC-V AES routes remain unadmitted; emulator observations do not establish native timing, physical-fault or power/EM resistance."
 mapping_rationale = "The AES semantic surface is directly and exclusively governed by the independently pinned updated FIPS 197 authority."
 
 [[requirement]]

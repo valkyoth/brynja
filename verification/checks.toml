@@ -504,7 +504,7 @@ contains = ["AES_ACCELERATED_EPHEMERAL_LINKED_PASS:"]
 unique_lines = ["AES_ACCELERATED_EPHEMERAL_LINKED_PASS: 1.99.1; four consumers; x86 cached and ephemeral secret wrappers, expansion closure, kernels, copy and volatile clear"]
 
 [groups.aes-accelerated-campaigns]
-paths = ["assurance/aes-accelerated-campaigns/lib.rs", "assurance/aes-kernel-candidate/probe.rs", "scripts/aes/check-aes-accelerated-campaigns.py", "scripts/aes/test-aes-accelerated-campaigns.py"]
+paths = ["assurance/aes-accelerated-campaigns/lib.rs", "assurance/aes-kernel-candidate/probe.rs", "scripts/aes/check-aes-accelerated-campaigns.py", "scripts/aes/test-aes-accelerated-campaigns.py", "scripts/aes/check-aes-riscv.py", "scripts/aes/check-aes-static.py", "scripts/aes/aes_riscv_oracle.py", "scripts/aes/test-aes-riscv-oracle.py", "assurance/aes-riscv-oracle"]
 
 [groups.aes-accelerated-ephemeral-public]
 paths = ["scripts/aes/aes_accelerated_linked_ephemeral_public.py", "scripts/aes/test-aes-accelerated-ephemeral-public.py", "docs/assurance/aes-accelerated-linked-ephemeral-public.md"]
@@ -1943,6 +1943,342 @@ contains = ["test result: ok. 6 passed; 0 failed; 0 ignored;"]
 minimum_tests = 6
 exact_tests = 6
 unique_lines = ["AES_HOSTED_PASS: arm-qemu 1.99.1"]
+
+[groups.aes-riscv]
+paths = ["scripts/aes/check-aes-riscv.py", "scripts/aes/test-aes-riscv.py", "crates/brynja-crypto/tests/aes_riscv.rs"]
+[[groups.aes-riscv.tools]]
+program = "qemu-riscv64"
+
+[[checks]]
+component = "aes"
+id = "riscv-qemu-msrv"
+category = "aes-riscv"
+name = "RV64 scalar AES candidate and non-admission under QEMU on Rust 1.90.0"
+establishes = "QEMU functional coverage, not native qualification: exact RV64 Zkne/Zknd candidate, all 2078 NIST KAT records through both clearing owner forms, 624 startup corruption cases, operation faults and lifecycle. Debug/release; ordinary admission blocked even with full ISA; each missing ISA half rejected; hosted candidate never admitted. No timing, performance, physical-fault or whole-program erasure claim."
+command = ["python3","scripts/aes/check-aes-riscv.py","--toolchain","1.90.0"]
+cwd = "."
+inputs = ["aes-riscv","aes-static-execution","cpu-source","hosted-cpu-source","aes-build","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTUP_TOOLCHAIN","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","CARGO_BUILD_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_RISCV_QEMU_PASS: 1.90.0; 148 tests; evidence-only candidate"]
+minimum_tests = 148
+exact_tests = 148
+unique_lines = ["AES_RISCV_PHASE_PASS: candidate debug","AES_RISCV_PHASE_PASS: candidate release","AES_RISCV_PHASE_PASS: unadmitted debug","AES_RISCV_PHASE_PASS: unadmitted release","AES_RISCV_PHASE_PASS: no-encrypt debug","AES_RISCV_PHASE_PASS: no-encrypt release","AES_RISCV_PHASE_PASS: no-decrypt debug","AES_RISCV_PHASE_PASS: no-decrypt release","AES_RISCV_QEMU_PASS: 1.90.0; 148 tests; evidence-only candidate"]
+
+[[checks]]
+component = "aes"
+id = "riscv-qemu-current"
+category = "aes-riscv"
+name = "RV64 scalar AES candidate and non-admission under QEMU on Rust 1.99.1"
+establishes = "QEMU functional coverage, not native qualification: exact RV64 Zkne/Zknd candidate, all 2078 NIST KAT records through both clearing owner forms, 624 startup corruption cases, operation faults and lifecycle. Debug/release; ordinary admission blocked even with full ISA; each missing ISA half rejected; hosted candidate never admitted. No timing, performance, physical-fault or whole-program erasure claim."
+command = ["python3","scripts/aes/check-aes-riscv.py","--toolchain","1.99.1"]
+cwd = "."
+inputs = ["aes-riscv","aes-static-execution","cpu-source","hosted-cpu-source","aes-build","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","compiler"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTUP_TOOLCHAIN","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","CARGO_BUILD_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_RISCV_QEMU_PASS: 1.99.1; 148 tests; evidence-only candidate"]
+minimum_tests = 148
+exact_tests = 148
+unique_lines = ["AES_RISCV_PHASE_PASS: candidate debug","AES_RISCV_PHASE_PASS: candidate release","AES_RISCV_PHASE_PASS: unadmitted debug","AES_RISCV_PHASE_PASS: unadmitted release","AES_RISCV_PHASE_PASS: no-encrypt debug","AES_RISCV_PHASE_PASS: no-encrypt release","AES_RISCV_PHASE_PASS: no-decrypt debug","AES_RISCV_PHASE_PASS: no-decrypt release","AES_RISCV_QEMU_PASS: 1.99.1; 148 tests; evidence-only candidate"]
+
+[[checks]]
+component = "aes"
+id = "riscv-avs-msrv-direct"
+category = "aes-riscv-avs"
+name = "Packaged RV64 AESAVS under QEMU on Rust 1.90.0, direct"
+establishes = "Byte-checked Cargo archives, forced evidence-only RV64 Zkne/Zknd owners; NIST AESAVS 600 MCT records (1.2 million block operations) and 60 MMT records, all widths and both owner forms. QEMU correctness only, not native qualification, timing, emitted-code or physical-fault proof. Ordinary and hosted admission remain blocked."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.90.0","--route","direct","--admission","static","--mode","riscv-qemu","--suite","avs"]
+cwd = "."
+inputs = ["aes-build","aes-riscv","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTUP_TOOLCHAIN","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","CARGO_BUILD_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 4000
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 12
+exact_tests = 12
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 direct static riscv-qemu avs"]
+
+[[checks]]
+component = "aes"
+id = "riscv-avs-msrv-facade"
+category = "aes-riscv-avs"
+name = "Packaged RV64 AESAVS under QEMU on Rust 1.90.0, facade"
+establishes = "Byte-checked Cargo archives, forced evidence-only RV64 Zkne/Zknd owners; NIST AESAVS 600 MCT records (1.2 million block operations) and 60 MMT records, all widths and both owner forms. QEMU correctness only, not native qualification, timing, emitted-code or physical-fault proof. Ordinary and hosted admission remain blocked."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.90.0","--route","facade","--admission","static","--mode","riscv-qemu","--suite","avs"]
+cwd = "."
+inputs = ["aes-build","aes-riscv","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTUP_TOOLCHAIN","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","CARGO_BUILD_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 4000
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 12
+exact_tests = 12
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 facade static riscv-qemu avs"]
+
+[[checks]]
+component = "aes"
+id = "riscv-avs-current-direct"
+category = "aes-riscv-avs"
+name = "Packaged RV64 AESAVS under QEMU on Rust 1.99.1, direct"
+establishes = "Byte-checked Cargo archives, forced evidence-only RV64 Zkne/Zknd owners; NIST AESAVS 600 MCT records (1.2 million block operations) and 60 MMT records, all widths and both owner forms. QEMU correctness only, not native qualification, timing, emitted-code or physical-fault proof. Ordinary and hosted admission remain blocked."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.99.1","--route","direct","--admission","static","--mode","riscv-qemu","--suite","avs"]
+cwd = "."
+inputs = ["aes-build","aes-riscv","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTUP_TOOLCHAIN","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","CARGO_BUILD_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 4000
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 12
+exact_tests = 12
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 direct static riscv-qemu avs"]
+
+[[checks]]
+component = "aes"
+id = "riscv-avs-current-facade"
+category = "aes-riscv-avs"
+name = "Packaged RV64 AESAVS under QEMU on Rust 1.99.1, facade"
+establishes = "Byte-checked Cargo archives, forced evidence-only RV64 Zkne/Zknd owners; NIST AESAVS 600 MCT records (1.2 million block operations) and 60 MMT records, all widths and both owner forms. QEMU correctness only, not native qualification, timing, emitted-code or physical-fault proof. Ordinary and hosted admission remain blocked."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.99.1","--route","facade","--admission","static","--mode","riscv-qemu","--suite","avs"]
+cwd = "."
+inputs = ["aes-build","aes-riscv","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTUP_TOOLCHAIN","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","CARGO_BUILD_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 4000
+[checks.success]
+contains = ["test result: ok."]
+minimum_tests = 12
+exact_tests = 12
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 facade static riscv-qemu avs"]
+
+
+[[checks]]
+component = "aes"
+id = "riscv-oracle-msrv-direct"
+category = "aes-riscv-oracle"
+name = "Packaged RV64 independent OpenSSL corpus on Rust 1.90.0, direct"
+establishes = "Live host OpenSSL answers for 2048 inputs per width, independent encrypt/decrypt; QEMU replay in debug/release through forced RV64 owners and public encryption. Exact Cargo archive graphs; oracle executable and embedded corpus hashes retained. Shared libraries and host trusted. Not native timing or deployment qualification."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.90.0","--route","direct","--admission","static","--mode","riscv-qemu","--suite","oracle"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-riscv","aes-oracle"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","PYTHONOPTIMIZE","PYTHONPATH","CARGO_BUILD_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUNNER","BRYNJA_OPENSSL","OPENSSL_CONF","OPENSSL_MODULES","OPENSSL_ENGINES","LD_PRELOAD","LD_LIBRARY_PATH","LD_AUDIT","OPENSSL_ia32cap"]
+platform = "linux-x86_64"
+timeout_seconds = 4000
+[checks.success]
+contains = ["AES differential executable identity: unchanged; shared libraries not measured"]
+minimum_tests = 8
+exact_tests = 8
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 direct static riscv-qemu oracle"]
+
+[[checks]]
+component = "aes"
+id = "riscv-no-std-msrv-direct"
+category = "aes-riscv-no-std"
+name = "Packaged RV64 bare-metal no_std and API contracts on Rust 1.90.0, direct"
+establishes = "riscv64imac-unknown-none-elf: 8 archive-only library builds in ordinary/evidence configurations, static/runtime features and debug/release; 62 paired exact feature and ownership diagnostics. No std or hosted adapter graph. Compile-only, not AES execution or native admission."
+command = ["python3","scripts/aes/check-aes-accelerated-no-std.py","--toolchain","1.90.0","--route","direct","--riscv"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-accelerated-no-std","aes-execution-api","aes-runner"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","PYTHONOPTIMIZE","PYTHONPATH","CARGO_BUILD_RUSTFLAGS","CARGO_TARGET_RISCV64IMAC_UNKNOWN_NONE_ELF_RUSTFLAGS","CARGO_TARGET_RISCV64IMAC_UNKNOWN_NONE_ELF_LINKER","CARGO_TARGET_RISCV64IMAC_UNKNOWN_NONE_ELF_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_RISCV_NO_STD_PASS:"]
+unique_lines = ["AES_RISCV_NO_STD_PASS: 1.90.0 direct; 8 bare-metal library builds; 62 paired probes; compile only","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-rv64-ordinary-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-rv64-ordinary-release","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-rv64-evidence-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct static-rv64-evidence-release","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-rv64-ordinary-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-rv64-ordinary-release","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-rv64-evidence-debug","AES_NO_STD_BUILD_PASS: 1.90.0 direct runtime-rv64-evidence-release"]
+
+[[checks]]
+component = "aes"
+id = "riscv-oracle-msrv-facade"
+category = "aes-riscv-oracle"
+name = "Packaged RV64 independent OpenSSL corpus on Rust 1.90.0, facade"
+establishes = "Live host OpenSSL answers for 2048 inputs per width, independent encrypt/decrypt; QEMU replay in debug/release through forced RV64 owners and public encryption. Exact Cargo archive graphs; oracle executable and embedded corpus hashes retained. Shared libraries and host trusted. Not native timing or deployment qualification."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.90.0","--route","facade","--admission","static","--mode","riscv-qemu","--suite","oracle"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-riscv","aes-oracle"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","PYTHONOPTIMIZE","PYTHONPATH","CARGO_BUILD_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUNNER","BRYNJA_OPENSSL","OPENSSL_CONF","OPENSSL_MODULES","OPENSSL_ENGINES","LD_PRELOAD","LD_LIBRARY_PATH","LD_AUDIT","OPENSSL_ia32cap"]
+platform = "linux-x86_64"
+timeout_seconds = 4000
+[checks.success]
+contains = ["AES differential executable identity: unchanged; shared libraries not measured"]
+minimum_tests = 8
+exact_tests = 8
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.90.0 facade static riscv-qemu oracle"]
+
+[[checks]]
+component = "aes"
+id = "riscv-no-std-msrv-facade"
+category = "aes-riscv-no-std"
+name = "Packaged RV64 bare-metal no_std and API contracts on Rust 1.90.0, facade"
+establishes = "riscv64imac-unknown-none-elf: 8 archive-only library builds in ordinary/evidence configurations, static/runtime features and debug/release; 62 paired exact feature and ownership diagnostics. No std or hosted adapter graph. Compile-only, not AES execution or native admission."
+command = ["python3","scripts/aes/check-aes-accelerated-no-std.py","--toolchain","1.90.0","--route","facade","--riscv"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-accelerated-no-std","aes-execution-api","aes-runner"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","PYTHONOPTIMIZE","PYTHONPATH","CARGO_BUILD_RUSTFLAGS","CARGO_TARGET_RISCV64IMAC_UNKNOWN_NONE_ELF_RUSTFLAGS","CARGO_TARGET_RISCV64IMAC_UNKNOWN_NONE_ELF_LINKER","CARGO_TARGET_RISCV64IMAC_UNKNOWN_NONE_ELF_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_RISCV_NO_STD_PASS:"]
+unique_lines = ["AES_RISCV_NO_STD_PASS: 1.90.0 facade; 8 bare-metal library builds; 62 paired probes; compile only","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-rv64-ordinary-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-rv64-ordinary-release","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-rv64-evidence-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade static-rv64-evidence-release","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-rv64-ordinary-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-rv64-ordinary-release","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-rv64-evidence-debug","AES_NO_STD_BUILD_PASS: 1.90.0 facade runtime-rv64-evidence-release"]
+
+[[checks]]
+component = "aes"
+id = "riscv-oracle-current-direct"
+category = "aes-riscv-oracle"
+name = "Packaged RV64 independent OpenSSL corpus on Rust 1.99.1, direct"
+establishes = "Live host OpenSSL answers for 2048 inputs per width, independent encrypt/decrypt; QEMU replay in debug/release through forced RV64 owners and public encryption. Exact Cargo archive graphs; oracle executable and embedded corpus hashes retained. Shared libraries and host trusted. Not native timing or deployment qualification."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.99.1","--route","direct","--admission","static","--mode","riscv-qemu","--suite","oracle"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-riscv","aes-oracle"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","PYTHONOPTIMIZE","PYTHONPATH","CARGO_BUILD_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUNNER","BRYNJA_OPENSSL","OPENSSL_CONF","OPENSSL_MODULES","OPENSSL_ENGINES","LD_PRELOAD","LD_LIBRARY_PATH","LD_AUDIT","OPENSSL_ia32cap"]
+platform = "linux-x86_64"
+timeout_seconds = 4000
+[checks.success]
+contains = ["AES differential executable identity: unchanged; shared libraries not measured"]
+minimum_tests = 8
+exact_tests = 8
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 direct static riscv-qemu oracle"]
+
+[[checks]]
+component = "aes"
+id = "riscv-no-std-current-direct"
+category = "aes-riscv-no-std"
+name = "Packaged RV64 bare-metal no_std and API contracts on Rust 1.99.1, direct"
+establishes = "riscv64imac-unknown-none-elf: 8 archive-only library builds in ordinary/evidence configurations, static/runtime features and debug/release; 62 paired exact feature and ownership diagnostics. No std or hosted adapter graph. Compile-only, not AES execution or native admission."
+command = ["python3","scripts/aes/check-aes-accelerated-no-std.py","--toolchain","1.99.1","--route","direct","--riscv"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-accelerated-no-std","aes-execution-api","aes-runner"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","PYTHONOPTIMIZE","PYTHONPATH","CARGO_BUILD_RUSTFLAGS","CARGO_TARGET_RISCV64IMAC_UNKNOWN_NONE_ELF_RUSTFLAGS","CARGO_TARGET_RISCV64IMAC_UNKNOWN_NONE_ELF_LINKER","CARGO_TARGET_RISCV64IMAC_UNKNOWN_NONE_ELF_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_RISCV_NO_STD_PASS:"]
+unique_lines = ["AES_RISCV_NO_STD_PASS: 1.99.1 direct; 8 bare-metal library builds; 62 paired probes; compile only","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-rv64-ordinary-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-rv64-ordinary-release","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-rv64-evidence-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct static-rv64-evidence-release","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-rv64-ordinary-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-rv64-ordinary-release","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-rv64-evidence-debug","AES_NO_STD_BUILD_PASS: 1.99.1 direct runtime-rv64-evidence-release"]
+
+[[checks]]
+component = "aes"
+id = "riscv-oracle-current-facade"
+category = "aes-riscv-oracle"
+name = "Packaged RV64 independent OpenSSL corpus on Rust 1.99.1, facade"
+establishes = "Live host OpenSSL answers for 2048 inputs per width, independent encrypt/decrypt; QEMU replay in debug/release through forced RV64 owners and public encryption. Exact Cargo archive graphs; oracle executable and embedded corpus hashes retained. Shared libraries and host trusted. Not native timing or deployment qualification."
+command = ["python3","scripts/aes/check-aes-accelerated-campaigns.py","--toolchain","1.99.1","--route","facade","--admission","static","--mode","riscv-qemu","--suite","oracle"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-riscv","aes-oracle"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","PYTHONOPTIMIZE","PYTHONPATH","CARGO_BUILD_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUNNER","BRYNJA_OPENSSL","OPENSSL_CONF","OPENSSL_MODULES","OPENSSL_ENGINES","LD_PRELOAD","LD_LIBRARY_PATH","LD_AUDIT","OPENSSL_ia32cap"]
+platform = "linux-x86_64"
+timeout_seconds = 4000
+[checks.success]
+contains = ["AES differential executable identity: unchanged; shared libraries not measured"]
+minimum_tests = 8
+exact_tests = 8
+unique_lines = ["AES_ACCELERATED_CAMPAIGN_PASS: 1.99.1 facade static riscv-qemu oracle"]
+
+[[checks]]
+component = "aes"
+id = "riscv-no-std-current-facade"
+category = "aes-riscv-no-std"
+name = "Packaged RV64 bare-metal no_std and API contracts on Rust 1.99.1, facade"
+establishes = "riscv64imac-unknown-none-elf: 8 archive-only library builds in ordinary/evidence configurations, static/runtime features and debug/release; 62 paired exact feature and ownership diagnostics. No std or hosted adapter graph. Compile-only, not AES execution or native admission."
+command = ["python3","scripts/aes/check-aes-accelerated-no-std.py","--toolchain","1.99.1","--route","facade","--riscv"]
+cwd = "."
+inputs = ["aes-build","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-accelerated-no-std","aes-execution-api","aes-runner"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","PYTHONOPTIMIZE","PYTHONPATH","CARGO_BUILD_RUSTFLAGS","CARGO_TARGET_RISCV64IMAC_UNKNOWN_NONE_ELF_RUSTFLAGS","CARGO_TARGET_RISCV64IMAC_UNKNOWN_NONE_ELF_LINKER","CARGO_TARGET_RISCV64IMAC_UNKNOWN_NONE_ELF_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_RISCV_NO_STD_PASS:"]
+unique_lines = ["AES_RISCV_NO_STD_PASS: 1.99.1 facade; 8 bare-metal library builds; 62 paired probes; compile only","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-rv64-ordinary-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-rv64-ordinary-release","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-rv64-evidence-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade static-rv64-evidence-release","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-rv64-ordinary-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-rv64-ordinary-release","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-rv64-evidence-debug","AES_NO_STD_BUILD_PASS: 1.99.1 facade runtime-rv64-evidence-release"]
+
+
+[groups.aes-riscv-linked]
+paths = ["scripts/aes/check-aes-riscv-linked.py", "scripts/aes/aes_riscv_machine.py", "scripts/aes/aes_riscv_cleanup.py", "scripts/aes/aes_riscv_sessions.py", "scripts/aes/aes_riscv_constructors.py", "scripts/aes/aes_riscv_public.py", "scripts/aes/aes_riscv_secret.py", "scripts/aes/riscv-secret-review.json", "scripts/aes/riscv-public-review.json", "scripts/aes/riscv-constructors-review.json", "scripts/aes/test-aes-riscv-linked.py", "scripts/aes/riscv-machine-fixtures.json", "docs/assurance/aes-riscv-linked.md", "scripts/aes/check-aes-riscv-startup.py", "scripts/aes/aes_riscv_startup.py", "scripts/aes/riscv-startup-review.json", "scripts/aes/startup-arm-reference.json", "assurance/aes-accelerated-campaigns/startup-riscv.rs"]
+
+[[checks]]
+component = "aes"
+id = "riscv-linked-msrv"
+category = "aes-riscv-linked"
+name = "Packaged RV64 LTO leaf bounds and cleanup on Rust 1.90.0"
+establishes = "Four archive-only direct/facade abort/unwind consumers execute under QEMU. Actual ELF-byte bounded analysis of all six expansion/round leaf bodies checks public branches and addresses, initialized in-bounds byte accesses, exact read/write/AES-operation populations and scratch register clearing on nine public paths. Exact ELF-byte templates additionally bind the volatile byte-clear loop and two retained destruction functions, including their clear-target transfers. Six complete block-session bodies bind entry/postchecks, terminal quarantine, direction and matched-width leaf calls; the retained MSRV unwind call is bound to the live resume import. Six key-owner constructors bind entry clearing, rejection, expansion postchecks, scratch cleanup and successful ownership transfer, with width-specific expansion and named copy/fill imports. Six public-encryption boundaries bind staged output publication after postchecks, scratch cleanup and unchanged caller output on rejection for cached and ephemeral owners. Six secret-output bodies cover both directions: entry destination clearing, staged transforms through bound leaf/session targets, result gating, error/scratch cleanup and successful clearing-owner transfer. AES arithmetic opaque; no arbitrary-caller, timing, compiler-spill, physical-fault or native-admission claim."
+command = ["python3","scripts/aes/check-aes-riscv-linked.py","--toolchain","1.90.0"]
+cwd = "."
+inputs = ["aes-build","aes-riscv-linked","aes-accelerated-linked","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-riscv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_BUILD_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_RISCV_LINKED_PASS:"]
+unique_lines = ["AES_RISCV_LINKED_PASS: 1.90.0; four QEMU consumers; bounded leaf and clearing review","AES_RISCV_LINKED_CONSUMER_PASS: 1.90.0 direct-abort; six leaf bodies; nine public paths","AES_RISCV_LINKED_CONSUMER_PASS: 1.90.0 direct-unwind; six leaf bodies; nine public paths","AES_RISCV_LINKED_CONSUMER_PASS: 1.90.0 facade-abort; six leaf bodies; nine public paths","AES_RISCV_LINKED_CONSUMER_PASS: 1.90.0 facade-unwind; six leaf bodies; nine public paths","AES_RISCV_LINKED_CLEANUP_PASS: 1.90.0 direct-abort; three exact bodies","AES_RISCV_LINKED_CLEANUP_PASS: 1.90.0 direct-unwind; three exact bodies","AES_RISCV_LINKED_CLEANUP_PASS: 1.90.0 facade-abort; three exact bodies","AES_RISCV_LINKED_CLEANUP_PASS: 1.90.0 facade-unwind; three exact bodies","AES_RISCV_LINKED_SESSION_PASS: 1.90.0 direct-abort; six bound block sessions","AES_RISCV_LINKED_SESSION_PASS: 1.90.0 direct-unwind; six bound block sessions","AES_RISCV_LINKED_SESSION_PASS: 1.90.0 facade-abort; six bound block sessions","AES_RISCV_LINKED_SESSION_PASS: 1.90.0 facade-unwind; six bound block sessions","AES_RISCV_LINKED_CONSTRUCTOR_PASS: 1.90.0 direct-abort; six bound key constructors","AES_RISCV_LINKED_CONSTRUCTOR_PASS: 1.90.0 direct-unwind; six bound key constructors","AES_RISCV_LINKED_CONSTRUCTOR_PASS: 1.90.0 facade-abort; six bound key constructors","AES_RISCV_LINKED_CONSTRUCTOR_PASS: 1.90.0 facade-unwind; six bound key constructors","AES_RISCV_LINKED_PUBLIC_PASS: 1.90.0 direct-abort; six bound public encryption paths","AES_RISCV_LINKED_PUBLIC_PASS: 1.90.0 direct-unwind; six bound public encryption paths","AES_RISCV_LINKED_PUBLIC_PASS: 1.90.0 facade-abort; six bound public encryption paths","AES_RISCV_LINKED_PUBLIC_PASS: 1.90.0 facade-unwind; six bound public encryption paths","AES_RISCV_LINKED_SECRET_PASS: 1.90.0 direct-abort; six bound secret output bodies; both directions","AES_RISCV_LINKED_SECRET_PASS: 1.90.0 direct-unwind; six bound secret output bodies; both directions","AES_RISCV_LINKED_SECRET_PASS: 1.90.0 facade-abort; six bound secret output bodies; both directions","AES_RISCV_LINKED_SECRET_PASS: 1.90.0 facade-unwind; six bound secret output bodies; both directions"]
+
+[[checks]]
+component = "aes"
+id = "riscv-linked-current"
+category = "aes-riscv-linked"
+name = "Packaged RV64 LTO leaf bounds and cleanup on Rust 1.99.1"
+establishes = "Four archive-only direct/facade abort/unwind consumers execute under QEMU. Actual ELF-byte bounded analysis of all six expansion/round leaf bodies checks public branches and addresses, initialized in-bounds byte accesses, exact read/write/AES-operation populations and scratch register clearing on nine public paths. Exact ELF-byte templates additionally bind the volatile byte-clear loop and two retained destruction functions, including their clear-target transfers. Six complete block-session bodies bind entry/postchecks, terminal quarantine, direction and matched-width leaf calls; the retained MSRV unwind call is bound to the live resume import. Six key-owner constructors bind entry clearing, rejection, expansion postchecks, scratch cleanup and successful ownership transfer, with width-specific expansion and named copy/fill imports. Six public-encryption boundaries bind staged output publication after postchecks, scratch cleanup and unchanged caller output on rejection for cached and ephemeral owners. Six secret-output bodies cover both directions: entry destination clearing, staged transforms through bound leaf/session targets, result gating, error/scratch cleanup and successful clearing-owner transfer. AES arithmetic opaque; no arbitrary-caller, timing, compiler-spill, physical-fault or native-admission claim."
+command = ["python3","scripts/aes/check-aes-riscv-linked.py","--toolchain","1.99.1"]
+cwd = "."
+inputs = ["aes-build","aes-riscv-linked","aes-accelerated-linked","aes-accelerated-campaigns","aes-packaged","aes-avs","aes-packaged-differential","aes-differential-runner","hkdf-public-api-modern","compiler","hkdf-msrv","aes-riscv"]
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_BUILD_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["AES_RISCV_LINKED_PASS:"]
+unique_lines = ["AES_RISCV_LINKED_PASS: 1.99.1; four QEMU consumers; bounded leaf and clearing review","AES_RISCV_LINKED_CONSUMER_PASS: 1.99.1 direct-abort; six leaf bodies; nine public paths","AES_RISCV_LINKED_CONSUMER_PASS: 1.99.1 direct-unwind; six leaf bodies; nine public paths","AES_RISCV_LINKED_CONSUMER_PASS: 1.99.1 facade-abort; six leaf bodies; nine public paths","AES_RISCV_LINKED_CONSUMER_PASS: 1.99.1 facade-unwind; six leaf bodies; nine public paths","AES_RISCV_LINKED_CLEANUP_PASS: 1.99.1 direct-abort; three exact bodies","AES_RISCV_LINKED_CLEANUP_PASS: 1.99.1 direct-unwind; three exact bodies","AES_RISCV_LINKED_CLEANUP_PASS: 1.99.1 facade-abort; three exact bodies","AES_RISCV_LINKED_CLEANUP_PASS: 1.99.1 facade-unwind; three exact bodies","AES_RISCV_LINKED_SESSION_PASS: 1.99.1 direct-abort; six bound block sessions","AES_RISCV_LINKED_SESSION_PASS: 1.99.1 direct-unwind; six bound block sessions","AES_RISCV_LINKED_SESSION_PASS: 1.99.1 facade-abort; six bound block sessions","AES_RISCV_LINKED_SESSION_PASS: 1.99.1 facade-unwind; six bound block sessions","AES_RISCV_LINKED_CONSTRUCTOR_PASS: 1.99.1 direct-abort; six bound key constructors","AES_RISCV_LINKED_CONSTRUCTOR_PASS: 1.99.1 direct-unwind; six bound key constructors","AES_RISCV_LINKED_CONSTRUCTOR_PASS: 1.99.1 facade-abort; six bound key constructors","AES_RISCV_LINKED_CONSTRUCTOR_PASS: 1.99.1 facade-unwind; six bound key constructors","AES_RISCV_LINKED_PUBLIC_PASS: 1.99.1 direct-abort; six bound public encryption paths","AES_RISCV_LINKED_PUBLIC_PASS: 1.99.1 direct-unwind; six bound public encryption paths","AES_RISCV_LINKED_PUBLIC_PASS: 1.99.1 facade-abort; six bound public encryption paths","AES_RISCV_LINKED_PUBLIC_PASS: 1.99.1 facade-unwind; six bound public encryption paths","AES_RISCV_LINKED_SECRET_PASS: 1.99.1 direct-abort; six bound secret output bodies; both directions","AES_RISCV_LINKED_SECRET_PASS: 1.99.1 direct-unwind; six bound secret output bodies; both directions","AES_RISCV_LINKED_SECRET_PASS: 1.99.1 facade-abort; six bound secret output bodies; both directions","AES_RISCV_LINKED_SECRET_PASS: 1.99.1 facade-unwind; six bound secret output bodies; both directions"]
+
+[[checks]]
+component = "aes"
+id = "riscv-startup-msrv"
+category = "aes-riscv-startup"
+name = "Packaged RV64 startup quarantine on Rust 1.90.0"
+establishes = "Four archive-only direct/facade abort/unwind consumers under QEMU. Exact linked startup bytes bind backend rejection, all three full public schedules, six independent block answers and terminal health. The six actual kernel bodies are independently rechecked; public constants are bound to read-only ELF mappings and bcmp/memset to named live imports. Every one of 688 public reference bytes is corrupted separately and must produce a quarantined owner with no session. No native, timing, general-caller or physical-fault qualification; libc and loader trusted."
+command = ["python3", "scripts/aes/check-aes-riscv-startup.py", "--toolchain", "1.90.0"]
+cwd = "."
+inputs = ["aes-build", "aes-riscv-linked", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv", "aes-riscv"]
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "CARGO_BUILD_RUSTFLAGS", "CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUSTFLAGS", "CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER", "CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+[checks.success]
+contains = ["AES_RISCV_STARTUP_LINKED_PASS:"]
+unique_lines = ["AES_RISCV_STARTUP_LINKED_PASS: 1.90.0; four evidence-only QEMU consumers", "AES_RISCV_STARTUP_CONSUMER_PASS: 1.90.0 direct-abort; 688 corrupted-answer executions quarantined", "AES_RISCV_STARTUP_CONSUMER_PASS: 1.90.0 direct-unwind; 688 corrupted-answer executions quarantined", "AES_RISCV_STARTUP_CONSUMER_PASS: 1.90.0 facade-abort; 688 corrupted-answer executions quarantined", "AES_RISCV_STARTUP_CONSUMER_PASS: 1.90.0 facade-unwind; 688 corrupted-answer executions quarantined"]
+
+[[checks]]
+component = "aes"
+id = "riscv-startup-current"
+category = "aes-riscv-startup"
+name = "Packaged RV64 startup quarantine on Rust 1.99.1"
+establishes = "Four archive-only direct/facade abort/unwind consumers under QEMU. Exact linked startup bytes bind backend rejection, all three full public schedules, six independent block answers and terminal health. The six actual kernel bodies are independently rechecked; public constants are bound to read-only ELF mappings and bcmp/memset to named live imports. Every one of 688 public reference bytes is corrupted separately and must produce a quarantined owner with no session. No native, timing, general-caller or physical-fault qualification; libc and loader trusted."
+command = ["python3", "scripts/aes/check-aes-riscv-startup.py", "--toolchain", "1.99.1"]
+cwd = "."
+inputs = ["aes-build", "aes-riscv-linked", "aes-accelerated-linked", "aes-accelerated-campaigns", "aes-packaged", "aes-avs", "aes-packaged-differential", "aes-differential-runner", "hkdf-public-api-modern", "compiler", "hkdf-msrv", "aes-riscv"]
+reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "CARGO_BUILD_RUSTFLAGS", "CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUSTFLAGS", "CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER", "CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUNNER"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+[checks.success]
+contains = ["AES_RISCV_STARTUP_LINKED_PASS:"]
+unique_lines = ["AES_RISCV_STARTUP_LINKED_PASS: 1.99.1; four evidence-only QEMU consumers", "AES_RISCV_STARTUP_CONSUMER_PASS: 1.99.1 direct-abort; 688 corrupted-answer executions quarantined", "AES_RISCV_STARTUP_CONSUMER_PASS: 1.99.1 direct-unwind; 688 corrupted-answer executions quarantined", "AES_RISCV_STARTUP_CONSUMER_PASS: 1.99.1 facade-abort; 688 corrupted-answer executions quarantined", "AES_RISCV_STARTUP_CONSUMER_PASS: 1.99.1 facade-unwind; 688 corrupted-answer executions quarantined"]
 
 [groups.aes-static-execution]
 paths = ["scripts/aes/check-aes-static.py", "scripts/aes/test-aes-static.py", "assurance/aes-kernel-candidate/probe.rs", "crates/brynja-crypto/tests/aes_execution.rs"]

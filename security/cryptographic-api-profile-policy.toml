@@ -16,7 +16,7 @@ sha256 = "a53cba70bcd963a9eae7766f6ad92630bb2310946cae72ec4d65b7319499d029"
 
 [[reviewed-source]]
 path = "crates/brynja-crypto/src/aes/tests.rs"
-sha256 = "c6a840b9c8087acb702424fc65d75dbee894d5697a3de440bf13f18f273e6082"
+sha256 = "94cc7526234e07a164a7a6cc84de65f950567e0a0e1d0d2e9830eff86cd0c7ad"
 
 [[reviewed-source]]
 path = "crates/brynja-crypto/tests/aes128.rs"

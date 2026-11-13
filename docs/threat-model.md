@@ -2,6 +2,25 @@
 
 Status: initial; expands with every milestone
 
+## RISC-V AES candidate boundary (v0.27.4)
+
+The evidence-only RV64 scalar backend must reject wrong architectures, missing
+Zkne/Zknd features, stale/revoked authority and failed startup before releasing
+output. Safe callers must not gain overlapping secret storage or retain admitted
+secret output after an operation error/unwind. Public output is staged until
+successful completion. The [control mapping](security-controls.md#risc-v-aes-candidate-controls-v0274)
+and [development record](assurance/aes-riscv-development.md) identify the tests
+and bounded final-linked reviews for these threats.
+
+The compiler, QEMU implementation, runtime and external unwinder remain trusted
+within their recorded scopes. Emulator success cannot establish that real
+hardware has the advertised ISA or data-independent timing. Register/spill
+residue, paging/dumps, power/EM observation and computational fault injection
+remain deployment limitations; startup corruption checks do not detect later
+faults in every operation. The offered host lacks the AES extensions. Ordinary
+static and hosted RISC-V AES admission therefore remains closed, without
+forcing an HSM on other users or adding a military build profile.
+
 ## Assets
 
 Traffic keys, private keys, PSKs, tickets, exporter secrets, transcript state,

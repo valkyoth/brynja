@@ -293,6 +293,12 @@ The project targets Linux, Windows, BSD, macOS, Android, iOS and bare-metal
 native execution and ISA qualification are separate evidence levels.
 RISC-V instruction results based on QEMU are not native hardware qualification.
 
+The v0.27.4 [RISC-V AES candidate](docs/assurance/aes-riscv-development.md)
+implements RV64 scalar Zkne/Zknd only behind the explicit evidence build cfg.
+Ordinary static and hosted AES dispatch remain unadmitted on RISC-V, even when
+the compiler enables these instructions. Its QEMU and linked-code checks are
+development evidence, not a new production acceleration or timing guarantee.
+
 Apple Silicon macOS has separate, default-off resident/clearing session APIs
 for modern hashes, KMAC, TupleHash, batching and ParallelHash, with separately
 scoped legacy adapters. They require locked guarded storage and joined workers,

@@ -46,6 +46,8 @@ pub fn forced_authority() -> Check<ForcedAuthority> {
     let kernel = Kernel::X86AesNi;
     #[cfg(target_arch = "aarch64")]
     let kernel = Kernel::ArmAes;
+    #[cfg(target_arch = "riscv64")]
+    let kernel = Kernel::RiscVScalarAes;
     #[cfg(not(feature = "hosted"))]
     let owner = Authority::new(kernel).map_err(|e| format!("{e:?}"))?;
     #[cfg(feature = "hosted")]

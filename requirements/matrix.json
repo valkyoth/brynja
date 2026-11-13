@@ -1,6 +1,6 @@
 {
   "closure_policy_sha256": "934069ce9123a9a97910a48110ad8692f9c34c12ea997ad15d059d2f72bf4d4f",
-  "domain_policy_sha256": "392190ff8a50eb98299395ff8de5a08ee651831ef2c89bd615a388c86c5df215",
+  "domain_policy_sha256": "1f5131e1fd9b16d990aa25868ad300c0a051806b1d2b15eedda301c3f0b5c8ff",
   "policy_sha256": "9ca99baa1a7db272f816b4e60e67e468c8d9021e14205282210e27a17c7a50e9",
   "requirements": [
     {
@@ -1203,7 +1203,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "Development checks now cover all three widths: single-block NIST KATs, independent differential comparisons, fault/lifecycle tests, paired API diagnostics, bounded production field/index proofs, host owner/scratch clearing dispatch, fourteen-compiler checkout consumers, endpoint Cortex-M compilation, eleven-helper LLVM/assembly review and bounded synthetic host timing screens. The exact FIPS and ownership mapping is in docs/security-controls.md. No full-cipher proof, whole-program constant-time, physical erasure or independent qualification is established. Packaged acceptance, AESAVS MCT/MMT, broader target/final-linked review and stronger fixed-versus-random timing remain v0.27.2 work; see docs/assurance/aes-wide-development.md.",
+      "evidence_gap": "Portable development and acceptance records cover all widths, packaged consumers, AESAVS KAT/MCT/MMT, independent comparisons, bounded arithmetic/index proofs, lifecycle and API tests, emitted-code review and scoped native timing observations. Accelerated evidence has separate compiler/target boundaries and retained timing limitations. The v0.27.4 RV64 scalar candidate adds QEMU functional/misuse campaigns and bounded final-linked reviews only; no qualifying native AES host is available. See docs/assurance/aes-portable-acceptance.md, docs/assurance/aes-acceleration-acceptance.md and docs/assurance/aes-riscv-development.md. The controls mapping is in docs/security-controls.md. No full-cipher proof, whole-program constant time, physical erasure or independent family qualification is established.",
       "id": "BRY-REQ-CRYPTO-0005",
       "invariants": [
         "constant-time",
@@ -1216,8 +1216,8 @@
       "mapping_scope": "reviewed-domain",
       "owner": "0.27.0",
       "profile": "crypto-encoding-pkix",
-      "residual": "Architecture-specific acceleration requires separate dispatch and side-channel review and cannot silently replace the portable path.",
-      "revision": 3,
+      "residual": "Architecture-specific acceleration requires separate dispatch and side-channel review and cannot silently replace the portable path. Ordinary RISC-V AES routes remain unadmitted; emulator observations do not establish native timing, physical-fault or power/EM resistance.",
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {

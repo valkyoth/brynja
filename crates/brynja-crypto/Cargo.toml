@@ -57,6 +57,10 @@ name = "aes_execution"
 required-features = ["aes-static-execution"]
 
 [[test]]
+name = "aes_riscv"
+required-features = ["aes-static-execution"]
+
+[[test]]
 name = "aes_wide"
 required-features = ["hazmat-aes-block"]
 

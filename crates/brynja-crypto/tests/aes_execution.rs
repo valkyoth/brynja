@@ -3,7 +3,7 @@ use brynja_crypto::aes::execution::{Authority, Kernel};
 
 #[test]
 fn unavailable_static_routes_reject_before_key_admission() {
-    for kernel in [Kernel::X86AesNi, Kernel::ArmAes] {
+    for kernel in [Kernel::X86AesNi, Kernel::ArmAes, Kernel::RiscVScalarAes] {
         if let Err(error) = kernel.check_compiled_target() {
             assert_eq!(Authority::new(kernel).err(), Some(error));
         }
@@ -11,6 +11,13 @@ fn unavailable_static_routes_reject_before_key_admission() {
 }
 
 #[cfg(any(
+    all(
+        brynja_cpu_evidence,
+        target_arch = "riscv64",
+        target_endian = "little",
+        target_feature = "zkne",
+        target_feature = "zknd"
+    ),
     all(
         target_arch = "x86_64",
         target_feature = "aes",
@@ -30,6 +37,8 @@ mod native {
     fn authority() -> Result<Authority, Error> {
         Ok(Authority::new(if cfg!(target_arch = "x86_64") {
             Kernel::X86AesNi
+        } else if cfg!(target_arch = "riscv64") {
+            Kernel::RiscVScalarAes
         } else {
             Kernel::ArmAes
         })?)

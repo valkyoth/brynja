@@ -88,6 +88,22 @@ scalar implementation remains authoritative.
 
 ## Ongoing Evidence Policy
 
+### AES candidate recheck — 2026-11-13
+
+The owner-provided SSH alias was reachable. `/proc/cpuinfo` again reports eight
+SpacemiT X60 harts on Linux 6.6.63, with the same absent AES ISA extensions:
+none reports `zkne`, `zknd` or `zvkned`. The presence of `zkt`, `zvkt` and `v`
+does not supply those AES operations. No AES instruction was executed remotely.
+This does not rule out a separate vendor device engine; it is not an ISA backend
+or a device adapter supported by this candidate.
+
+User-local rustup lists 1.90.0, 1.97.1 (default) and 1.99.0; the noninteractive
+PATH resolves the system rustc and no cargo. No toolchain was installed or
+changed. `/tmp` reported about 2.8 GiB free of a 7.8 GiB tmpfs, so broad builds
+should not be staged there. These observations are a capability inventory,
+not a native cryptographic pass. The [v0.27.4 record](assurance/aes-riscv-development.md)
+keeps the explicitly requested QEMU evidence separate.
+
 This host is not discarded merely because it lacks cryptographic SHA
 extensions. Brynja may use it for focused native work whose exact required
 features are present in the all-hart intersection above, including portable

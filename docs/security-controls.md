@@ -1,5 +1,28 @@
 # Security Controls
 
+## RISC-V AES candidate controls (v0.27.4)
+
+`BRY-REQ-CRYPTO-0005` remains **planned** at the family-qualification level.
+The source-bound API register retains the existing AES development owners;
+this candidate adds no qualified capability or new public owner. FIPS 197-upd1
+governs AES semantics; the exact scalar-instruction contract and pinned ISA
+references are recorded in the [development record](assurance/aes-riscv-development.md).
+The following are Brynja controls, not claims of FIPS validation.
+
+| Control | Enforcement and evidence boundary |
+| --- | --- |
+| Exact ISA admission | RV64 Zkne and Zknd are both required in evidence builds; ordinary static/hosted routes reject. Missing-feature and ordinary-route QEMU tests exercise rejection before mutation. No vector bundle is admitted. |
+| AES identity and bounded work | Separate 128/192/256-bit expansion and forward/inverse leaves; fixed block size and public round counts. Packaged NIST KAT/MCT/MMT and independent OpenSSL replay check outputs; linked leaf analysis checks bounded memory/control, treating AES instructions as opaque. |
+| Authority lifecycle | Startup, session entry and completion checks; stale generation, revocation and failed/incomplete operations quarantine. Existing authority misuse tests execute under QEMU; linked session/startup reviews bind those retained paths. |
+| Caller buffers and clearing | Guarded alignment-residue tests, injected errors/unwinds, constructor rejection and cached/ephemeral owner tests. Linked constructor/public/secret/clear reviews bind staging, publication, rejection and cleanup, not arbitrary unwinder behavior or spill erasure. |
+| API and dependency boundary | Paired compiler probes and no_std builds preserve ownership and exact feature contracts; archive-only direct/facade consumers avoid checkout-only success. |
+| Claim restraint | The cloud host lacks the required extensions. QEMU execution and bounded byte reviews do not qualify native timing, DIT, power/EM or operational fault resistance. Ordinary admission stays closed. |
+
+The [misuse coverage inventory](assurance/aes-riscv-development.md#misuse-and-bounded-work-disposition)
+maps existing regressions and explicitly identifies non-applicable stream/mode
+requirements. Verification is separately selected through `brynja-verify`;
+neither this mapping nor the release version makes old fingerprints current.
+
 ## AES-192/256 development contract (v0.27.1)
 
 The default-off `hazmat-aes-block` API extends the portable block implementation

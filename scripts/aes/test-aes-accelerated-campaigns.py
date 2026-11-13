@@ -77,10 +77,82 @@ class AcceleratedCampaignTests(unittest.TestCase):
         for args in (('stable', 'direct', 'static', 'native', 'avs'),
                      ('1.99.1', 'unknown', 'static', 'native', 'avs'),
                      ('1.99.1', 'direct', 'prefer', 'native', 'avs'),
+                     ('1.99.1', 'direct', 'hosted', 'riscv-qemu', 'avs'),
+                     ('1.99.1', 'direct', 'static', 'riscv-qemu', 'differential'),
+                     ('1.99.1', 'direct', 'static', 'native', 'oracle'),
+                     ('1.99.1', 'direct', 'hosted', 'riscv-qemu', 'oracle'),
                      ('1.99.1', 'direct', 'hosted', 'arm-qemu', 'differential')):
             with patch.object(runner.packaged, 'package_sources') as package, self.assertRaises(ValueError):
                 runner.check(*args)
             package.assert_not_called()
+
+    def test_riscv_population_requires_exact_candidate_not_arm_or_portable(self):
+        text = self.success('avs').replace('X86AesNi', 'RiscVScalarAes')
+        runner.validate(text, 'avs', False, True)
+        for wrong in ('X86AesNi', 'ArmAes', 'Portable'):
+            with self.assertRaises(ValueError):
+                runner.validate(text.replace('RiscVScalarAes', wrong), 'avs', False, True)
+        for mutated in (text.replace('... ok', '... ignored', 1),
+                        text.replace(runner.avs.MARKERS[0], ''),
+                        text + '\nAES_FORCED_AUTHORITY: RiscVScalarAes'):
+            with self.assertRaises(ValueError):
+                runner.validate(mutated, 'avs', False, True)
+
+    def test_riscv_oracle_requires_exact_forced_backend(self):
+        text = '\n'.join([*(f'test {name} ... ok' for name in sorted(runner.corpus.TESTS)),
+            'test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;',
+            *runner.corpus.MARKERS, *(['AES_FORCED_AUTHORITY: RiscVScalarAes'] * 3)])
+        runner.validate(text, 'oracle', False, True)
+        for wrong in ('ArmAes', 'Portable', 'X86AesNi'):
+            with self.assertRaises(ValueError):
+                runner.validate(text.replace('RiscVScalarAes', wrong), 'oracle', False, True)
+
+    def test_riscv_oracle_registry_pins_endpoints_routes_and_identity(self):
+        registry = tomllib.loads((runner.ROOT / 'verification/checks.toml').read_text())
+        rows = [row for row in registry['checks'] if row.get('category') == 'aes-riscv-oracle']
+        self.assertEqual(len(rows), 4)
+        configurations = set()
+        for row in rows:
+            command = row['command']
+            version, route = command[3], command[5]
+            configurations.add((version, route))
+            self.assertEqual(command, ['python3', 'scripts/aes/check-aes-accelerated-campaigns.py',
+                '--toolchain', version, '--route', route, '--admission', 'static', '--mode', 'riscv-qemu', '--suite', 'oracle'])
+            self.assertEqual(row['success']['minimum_tests'], 8)
+            self.assertEqual(row['success']['exact_tests'], 8)
+            self.assertEqual(row['success']['unique_lines'], [runner.marker(version, route, 'static', 'riscv-qemu', 'oracle')])
+            self.assertIn(runner.diff.oracle.SUCCESS, row['success']['contains'])
+            self.assertTrue(set(runner.diff.oracle.FORBIDDEN) <= set(row['reject_environment']))
+            self.assertTrue(set(runner.riscv.REJECT_ENV) <= set(row['reject_environment']))
+            self.assertTrue({'aes-riscv', 'aes-oracle', 'aes-build', 'aes-accelerated-campaigns', 'aes-packaged'} <= set(row['inputs']))
+        self.assertEqual(configurations, {(version, route) for version in ('1.90.0', '1.99.1') for route in ('direct', 'facade')})
+
+    def test_riscv_overrides_rejected_before_packaging(self):
+        for name in runner.riscv.REJECT_ENV:
+            with patch.dict(runner.os.environ, {name: 'untrusted'}), \
+                 patch.object(runner.packaged, 'package_sources') as package, self.assertRaises(ValueError):
+                runner.check('1.99.1', 'direct', 'static', 'riscv-qemu', 'avs')
+            package.assert_not_called()
+
+    def test_riscv_registry_covers_archive_routes_and_endpoint_populations(self):
+        registry = tomllib.loads((runner.ROOT / 'verification/checks.toml').read_text())
+        rows = [row for row in registry['checks'] if row.get('category') == 'aes-riscv-avs']
+        configurations = set()
+        for row in rows:
+            command = row['command']
+            version = command[command.index('--toolchain') + 1]
+            route = command[command.index('--route') + 1]
+            configurations.add((version, route))
+            self.assertEqual(command, ['python3', 'scripts/aes/check-aes-accelerated-campaigns.py',
+                '--toolchain', version, '--route', route, '--admission', 'static',
+                '--mode', 'riscv-qemu', '--suite', 'avs'])
+            self.assertEqual(row['success']['exact_tests'], 12)
+            self.assertEqual(row['success']['minimum_tests'], 12)
+            self.assertEqual(row['success']['unique_lines'], [runner.marker(version, route, 'static', 'riscv-qemu', 'avs')])
+            self.assertTrue({'aes-riscv', 'aes-build', 'aes-accelerated-campaigns', 'aes-packaged', 'aes-avs'} <= set(row['inputs']))
+            self.assertTrue(set(runner.riscv.REJECT_ENV) <= set(row['reject_environment']))
+        self.assertEqual(len(rows), 4)
+        self.assertEqual(configurations, {(version, route) for version in ('1.90.0', '1.99.1') for route in ('direct', 'facade')})
 
     def test_injected_environment_rejected_before_packaging(self):
         for name in (*runner.packaged.archives.REJECT_ENV, 'PYTHONOPTIMIZE', 'PYTHONPATH'):

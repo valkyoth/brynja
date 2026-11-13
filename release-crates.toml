@@ -1,21 +1,21 @@
 [release]
-version = "0.27.3"
-milestone = "0.27.3"
+version = "0.27.4"
+milestone = "0.27.4"
 baseline = "0.25.3"
-cumulative_milestones = ["0.26.0", "0.26.1", "0.27.0", "0.27.1", "0.27.2", "0.27.3"]
+cumulative_milestones = ["0.26.0", "0.26.1", "0.27.0", "0.27.1", "0.27.2", "0.27.3", "0.27.4"]
 policy = "independent"
 stage = "internal"
 # Legacy explicit runner default only; routine gates use final-checks.toml, not this selector.
 verification = "affected"
 exceptional = true
-exception_reason = "Opt-in accelerated AES-family APIs and optional scoped DIT; owner-supplied scoped pentest/retests and accepted qualification limitations before the unchanged finite final gate."
+exception_reason = "Evidence-only RISC-V AES candidate with QEMU functional evidence, not native qualification; owner-supplied scoped pentest/retests before the unchanged finite final gate. Ordinary RISC-V AES routes remain unadmitted."
 
 [crates."brynja"]
-previous_version = "0.27.2"
-version = "0.27.3"
+previous_version = "0.27.3"
+version = "0.27.4"
 change = "metadata"
 publish = false
-reason = "Accelerated AES-family internal milestone; scoped pentest and green CI required before a signed tag. No crates.io publication selected."
+reason = "RISC-V AES evidence-only internal candidate; scoped pentest and green CI required before a signed tag. No native admission or crates.io publication selected."
 
 [crates."brynja-legacy-hmac"]
 previous_version = "0.1.0"
@@ -64,7 +64,7 @@ previous_version = "0.2.0"
 version = "0.2.0"
 change = "code"
 publish = false
-reason = "Modern HKDF/TLS labels and portable/opt-in accelerated AES-128/192/256 clearing owners; retain supporting-crate version during the internal development train."
+reason = "Modern HKDF/TLS labels and portable/opt-in accelerated AES-128/192/256 clearing owners, with RISC-V candidate boundary tests; retain supporting-crate version during the internal development train."
 
 [crates."brynja-hash-core"]
 previous_version = "0.1.0"
@@ -120,14 +120,14 @@ previous_version = "0.2.0"
 version = "0.2.0"
 change = "code"
 publish = false
-reason = "AES-family kernels, authority lifecycle and optional scoped DIT; retain the internal checkpoint version with no publication selected."
+reason = "AES-family kernels, authority lifecycle, optional scoped DIT and evidence-only RV64 scalar AES; retain the internal checkpoint version with no publication selected."
 
 [crates."brynja-crypto-cpu-std"]
 previous_version = "0.2.0"
 version = "0.2.0"
 change = "code"
 publish = false
-reason = "Hosted AES selection and AArch64 admission with optional DIT; retain the internal checkpoint version with no publication selected."
+reason = "Hosted AES selection and AArch64 admission with optional DIT; RISC-V candidate rejection remains explicit. Retain the internal checkpoint version with no publication selected."
 
 [crates."brynja-strict"]
 previous_version = "0.1.0"

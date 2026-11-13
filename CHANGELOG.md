@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.27.4 RISC-V AES candidate (unreleased)
+
+- Add evidence-only RV64 Zkne/Zknd AES-128/192/256 expansion, encryption and
+  decryption. Ordinary static and hosted routes remain unadmitted; no vector
+  backend or native hardware qualification is claimed.
+- Add packaged QEMU vectors, AESAVS, independent OpenSSL differentials,
+  lifecycle/failure and buffer-boundary tests, no_std builds and API probes.
+- Bind selected final-linked instruction bodies, calls, memory bounds,
+  startup answers, output publication and clearing to bounded reviews on both
+  compiler endpoints. Preserve the distinction from whole-program timing,
+  physical-fault resistance and compiler-spill erasure.
+- Prepare internal 0.27.4 metadata and keep the existing finite release gate.
+  Owner pentest, final checks and exact-commit GitHub approval remain pending;
+  no crates.io publication or native RISC-V admission is selected.
+
 ## 0.27.3 accelerated AES candidate (unreleased)
 
 - Add opt-in AES-128/192/256 accelerated block operations, ephemeral and cached

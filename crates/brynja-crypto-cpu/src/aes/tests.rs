@@ -33,7 +33,7 @@ fn rejected(session: &Session<'_>, error: Error) {
 
 #[test]
 fn exact_static_bundle_checked_before_startup() {
-    for kernel in [Kernel::X86AesNi, Kernel::ArmAes] {
+    for kernel in [Kernel::X86AesNi, Kernel::ArmAes, Kernel::RiscVScalarAes] {
         let (arch, features) = match kernel {
             Kernel::X86AesNi => (
                 cfg!(target_arch = "x86_64"),
@@ -43,9 +43,15 @@ fn exact_static_bundle_checked_before_startup() {
                 cfg!(all(target_arch = "aarch64", target_endian = "little")),
                 cfg!(all(target_feature = "aes", target_feature = "neon")),
             ),
+            Kernel::RiscVScalarAes => (
+                cfg!(all(target_arch = "riscv64", target_endian = "little")),
+                cfg!(all(target_feature = "zkne", target_feature = "zknd")),
+            ),
         };
         let expected = if !arch {
             Err(Error::WrongArchitecture)
+        } else if kernel == Kernel::RiscVScalarAes && !cfg!(brynja_cpu_evidence) {
+            Err(Error::Unadmitted)
         } else if !features {
             Err(Error::MissingTargetFeatures)
         } else {
@@ -66,10 +72,33 @@ fn exact_static_bundle_checked_before_startup() {
         }
     }
     assert_eq!(static_dit_policy_is_the_admitted_owner_setting(), Ok(()));
+    #[cfg(all(
+        feature = "aes-runtime-execution",
+        target_arch = "riscv64",
+        target_endian = "little",
+        not(brynja_cpu_evidence)
+    ))]
+    {
+        // Even an unsafe platform attestation cannot bypass ordinary-build
+        // candidate exclusion. Rejection precedes any unsupported instruction.
+        #[allow(unsafe_code)]
+        unsafe {
+            assert_eq!(
+                Authority::from_platform(Kernel::RiscVScalarAes).err(),
+                Some(Error::Unadmitted)
+            );
+            for policy in [DitPolicy::IfAvailable, DitPolicy::Require] {
+                assert_eq!(
+                    Authority::from_platform_with_dit(Kernel::RiscVScalarAes, policy, true).err(),
+                    Some(Error::Unadmitted)
+                );
+            }
+        }
+    }
 }
 
 fn static_dit_policy_is_the_admitted_owner_setting() -> Result<(), Error> {
-    for kernel in [Kernel::X86AesNi, Kernel::ArmAes] {
+    for kernel in [Kernel::X86AesNi, Kernel::ArmAes, Kernel::RiscVScalarAes] {
         for policy in [DitPolicy::IfAvailable, DitPolicy::Require] {
             let available = kernel == Kernel::ArmAes && cfg!(target_feature = "dit");
             let expected = kernel
@@ -201,6 +230,13 @@ fn incomplete_operation_and_unwind_revoke_owner() {
 
 #[cfg(any(
     all(
+        brynja_cpu_evidence,
+        target_arch = "riscv64",
+        target_endian = "little",
+        target_feature = "zkne",
+        target_feature = "zknd"
+    ),
+    all(
         target_arch = "x86_64",
         target_feature = "aes",
         target_feature = "sse2"
@@ -217,6 +253,8 @@ mod native {
     fn kernel() -> Kernel {
         if cfg!(target_arch = "x86_64") {
             Kernel::X86AesNi
+        } else if cfg!(target_arch = "riscv64") {
+            Kernel::RiscVScalarAes
         } else {
             Kernel::ArmAes
         }

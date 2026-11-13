@@ -155,6 +155,36 @@ class AcceleratedNoStdTests(unittest.TestCase):
         self.assertIn('#![no_std]', source)
         self.assertIn('#![forbid(unsafe_code)]', source)
 
+    def test_riscv_is_bare_metal_and_separates_evidence_from_ordinary(self):
+        self.assertEqual(r.RISCV_BUILDS, [
+            ('rv64-ordinary', 'riscv64imac-unknown-none-elf', ''),
+            ('rv64-evidence', 'riscv64imac-unknown-none-elf', '--cfg brynja_cpu_evidence -Ctarget-feature=+zkne,+zknd')])
+        for name in r.RISCV_REJECT:
+            with patch.object(r.packaged, 'package_sources') as package, \
+                 patch.dict(r.os.environ, {name: 'injected'}), self.assertRaises(ValueError):
+                r.check('1.99.1', 'direct', True)
+            package.assert_not_called()
+
+    def test_riscv_registry_pins_every_build_and_probe_population(self):
+        registry = tomllib.loads((r.ROOT / 'verification/checks.toml').read_text())
+        checks = [c for c in registry['checks'] if c.get('category') == 'aes-riscv-no-std']
+        self.assertEqual(len(checks), 4)
+        configurations = set()
+        for c in checks:
+            compiler, route = c['command'][3], c['command'][5]
+            configurations.add((compiler, route))
+            self.assertEqual(c['command'], ['python3', 'scripts/aes/check-aes-accelerated-no-std.py',
+                '--toolchain', compiler, '--route', route, '--riscv'])
+            expected = {f'AES_RISCV_NO_STD_PASS: {compiler} {route}; 8 bare-metal library builds; 62 paired probes; compile only'}
+            expected.update(f'AES_NO_STD_BUILD_PASS: {compiler} {route} {mode}-{name}-{profile}'
+                for mode in ('static', 'runtime') for name, _, _ in r.RISCV_BUILDS for profile in ('debug', 'release'))
+            self.assertEqual(set(c['success']['unique_lines']), expected)
+            self.assertEqual(len(c['success']['unique_lines']), 9)
+            self.assertTrue(set(r.RISCV_REJECT) <= set(c['reject_environment']))
+            self.assertTrue({'aes-accelerated-no-std', 'aes-execution-api', 'aes-build', 'aes-accelerated-campaigns', 'aes-packaged'} <= set(c['inputs']))
+            self.assertNotIn('exact_tests', c['success'])
+        self.assertEqual(configurations, {(compiler, route) for compiler in ('1.90.0', '1.99.1') for route in ('direct', 'facade')})
+
     def test_registry_requires_all_builds_and_exact_final_population(self):
         registry = tomllib.loads((r.ROOT / 'verification/checks.toml').read_text())
         checks = [c for c in registry['checks'] if c.get('category') == 'aes-accelerated-no-std']

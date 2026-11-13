@@ -12,6 +12,13 @@ mod wide;
     feature = "aes-static-execution",
     any(
         all(
+            brynja_cpu_evidence,
+            target_arch = "riscv64",
+            target_endian = "little",
+            target_feature = "zkne",
+            target_feature = "zknd"
+        ),
+        all(
             target_arch = "x86_64",
             target_feature = "aes",
             target_feature = "sse2"

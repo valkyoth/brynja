@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import platform
+import shlex
 import shutil
 import subprocess
 import tempfile
@@ -17,6 +18,8 @@ avs = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(avs)
 packaged = avs.packaged
 diff = packaged.module('accelerated_diff', HERE / 'check-aes-packaged-differential.py')
+riscv = packaged.module('accelerated_riscv', HERE / 'check-aes-riscv.py')
+corpus = packaged.module('accelerated_riscv_oracle', HERE / 'aes_riscv_oracle.py')
 ROOT = packaged.ROOT
 NAME = 'brynja-aes-accelerated-fixture'
 
@@ -115,9 +118,9 @@ def marker(compiler, route, admission, mode, suite):
     return f'AES_ACCELERATED_CAMPAIGN_PASS: {compiler} {route} {admission} {mode} {suite}'
 
 
-def validate(output, suite, arm):
-    (avs if suite == 'avs' else diff).check_output(output)
-    expected = 'AES_FORCED_AUTHORITY: ' + ('ArmAes' if arm else 'X86AesNi')
+def validate(output, suite, arm, rv64=False):
+    (avs if suite == 'avs' else corpus if suite == 'oracle' else diff).check_output(output)
+    expected = 'AES_FORCED_AUTHORITY: ' + ('RiscVScalarAes' if rv64 else 'ArmAes' if arm else 'X86AesNi')
     rows = [line for line in output.splitlines() if line.startswith('AES_FORCED_AUTHORITY:')]
     packaged.require(rows == [expected] * (6 if suite == 'avs' else 3),
                      'wrong/missing accelerated authority population')
@@ -148,15 +151,19 @@ def test_executable(output, suite, package_id, target_directory):
 
 def check(compiler, route, admission, mode, suite):
     packaged.require(compiler in packaged.consumer.TOOLCHAINS and route in ('direct', 'facade')
-                     and admission in ('static', 'hosted') and mode in ('native', 'arm-qemu')
-                     and suite in ('avs', 'differential'), 'unsupported campaign configuration')
-    packaged.require(not (mode == 'arm-qemu' and suite == 'differential'),
+                     and admission in ('static', 'hosted') and mode in ('native', 'arm-qemu', 'riscv-qemu')
+                     and suite in ('avs', 'differential', 'oracle'), 'unsupported campaign configuration')
+    packaged.require(suite != 'oracle' or mode == 'riscv-qemu',
+                     'host-generated oracle replay is scoped to RV64 QEMU')
+    packaged.require(not (mode != 'native' and suite == 'differential'),
                      'OpenSSL subprocess comparison requires a native host')
-    for name in (*packaged.archives.REJECT_ENV, 'PYTHONOPTIMIZE', 'PYTHONPATH'):
+    packaged.require(mode != 'riscv-qemu' or admission == 'static',
+                     'RV64 candidate has no hosted admission')
+    for name in (*packaged.archives.REJECT_ENV, *riscv.REJECT_ENV):
         packaged.require(name not in os.environ, 'remove ambient ' + name)
     machine = platform.machine().lower()
     packaged.require(machine in ('x86_64', 'amd64', 'aarch64', 'arm64'), 'unsupported host')
-    oracle = diff.oracle.select(os.environ) if suite == 'differential' else None
+    oracle = diff.oracle.select(os.environ) if suite in ('differential', 'oracle') else None
     before = diff.oracle.digest(oracle) if oracle else None
     base = ROOT / 'target/aes-accelerated-campaigns'
     base.mkdir(parents=True, exist_ok=True)
@@ -173,10 +180,11 @@ def check(compiler, route, admission, mode, suite):
                          'missing/symlinked accelerated adapter')
         shutil.copyfile(fixture, directory / 'src/lib.rs')
         (directory / 'Cargo.toml').write_text(manifest(versions, route, admission))
-        harness = avs if suite == 'avs' else diff
+        harness = avs if suite == 'avs' else corpus if suite == 'oracle' else diff
         harness.prepare(directory)
         source = directory / f'tests/{suite}.rs'
-        source.write_text(adapt(source.read_text(), suite))
+        if suite != 'oracle':
+            source.write_text(adapt(source.read_text(), suite))
         cargo = ['cargo', '+' + compiler]
         selection = ['--locked', '--offline', '--no-default-features', '--features',
                      route + (',hosted' if admission == 'hosted' else '')]
@@ -185,10 +193,20 @@ def check(compiler, route, admission, mode, suite):
         graph(json.loads(metadata.stdout), versions, directory, route, admission)
         (artifacts / 'metadata.json').write_text(metadata.stdout)
         target = ['--target', 'aarch64-unknown-linux-musl'] if mode == 'arm-qemu' else []
+        execution_prefix = ['qemu-aarch64', '-cpu', 'max'] if target else []
         if target:
             env['CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER'] = 'rust-lld'
             env['CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER'] = 'qemu-aarch64 -cpu max'
-        if admission == 'static':
+        if mode == 'riscv-qemu':
+            qemu, linker, sysroot = riscv.platform_config()
+            target = ['--target', riscv.TARGET]
+            execution_prefix = riscv.execution(qemu, sysroot)
+            env['CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER'] = linker
+            env['CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUNNER'] = shlex.join(execution_prefix)
+            env['RUSTFLAGS'] = shlex.join(riscv.phase_config('candidate')[0])
+            (artifacts / 'qemu-version.txt').write_text(
+                packaged.archives.run([qemu, '--version'], directory, env).stdout)
+        elif admission == 'static':
             # Probe with a baseline binary BEFORE compiling globally specialized tests.
             probe = root / 'probe'
             packaged.archives.run(['rustc', '+' + compiler, '--edition=2024',
@@ -201,10 +219,18 @@ def check(compiler, route, admission, mode, suite):
                                 else '-Ctarget-feature=+aes,+sse2')
         else:
             env['RUSTFLAGS'] = '-Ctarget-feature=-aes'
+        corpus_hashes = {}
         if oracle:
             env.update(BRYNJA_OPENSSL=str(oracle), OPENSSL_CONF='/dev/null')
             diff.oracle.preflight(oracle, env)
             print(f'Independent oracle: {oracle}; executable SHA-256: {before}', flush=True)
+            if suite == 'oracle':
+                corpus_hashes = corpus.generate(directory, oracle, env)
+                for name, digest in corpus_hashes.items():
+                    data = directory / 'tests/fixtures' / name
+                    shutil.copyfile(data, artifacts / name)
+                    packaged.require(hashlib.sha256((artifacts / name).read_bytes()).hexdigest() == digest,
+                                     'retained oracle corpus changed')
         compiler_identity = packaged.archives.run(['rustc', '+' + compiler, '-vV'], directory, env).stdout
         observations = []
         for profile in (('release',) if suite == 'avs' else ('debug', 'release')):
@@ -223,7 +249,7 @@ def check(compiler, route, admission, mode, suite):
             digest = hashlib.sha256(retained.read_bytes()).hexdigest()
             packaged.require(hashlib.sha256(executable.read_bytes()).hexdigest() == digest,
                              'retained executable differs from build')
-            execution = [*(['qemu-aarch64', '-cpu', 'max'] if target else []),
+            execution = [*execution_prefix,
                          str(retained), '--include-ignored', '--show-output', '--test-threads=1']
             packaged.archives.cargo_environment.check(directory, env)
             result = subprocess.run(execution, cwd=directory, env=env, text=True,
@@ -231,7 +257,8 @@ def check(compiler, route, admission, mode, suite):
             (artifacts / f'{profile}.log').write_text(result.stdout)
             print(result.stdout, end='', flush=True)
             result.check_returncode()
-            validate(result.stdout, suite, bool(target) or machine in ('aarch64', 'arm64'))
+            validate(result.stdout, suite, mode == 'arm-qemu' or machine in ('aarch64', 'arm64'),
+                     mode == 'riscv-qemu')
             packaged.require(hashlib.sha256(retained.read_bytes()).hexdigest() == digest,
                              'retained executable changed during execution')
             observations.append({'profile': profile, 'build': command, 'execution': execution,
@@ -244,6 +271,9 @@ def check(compiler, route, admission, mode, suite):
             'toolchain': compiler_identity, 'host': platform.platform(), 'machine': machine,
             'mode': mode, 'admission': admission, 'route': route, 'suite': suite,
             'rustflags': env['RUSTFLAGS'], 'oracle_sha256': before, 'profiles': observations,
+            'oracle_corpora': corpus_hashes,
+            'target': target, 'execution_prefix': execution_prefix,
+            'riscv_linker': env.get('CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER'),
             'scope': 'Correctness only; no timing, emitted-code or physical qualification.'
         }, indent=2) + '\n')
     print(marker(compiler, route, admission, mode, suite), flush=True)
@@ -255,8 +285,8 @@ if __name__ == '__main__':
     parser.add_argument('--toolchain', choices=packaged.consumer.TOOLCHAINS, required=True)
     parser.add_argument('--route', choices=('direct', 'facade'), required=True)
     parser.add_argument('--admission', choices=('static', 'hosted'), required=True)
-    parser.add_argument('--mode', choices=('native', 'arm-qemu'), default='native')
-    parser.add_argument('--suite', choices=('avs', 'differential'), required=True)
+    parser.add_argument('--mode', choices=('native', 'arm-qemu', 'riscv-qemu'), default='native')
+    parser.add_argument('--suite', choices=('avs', 'differential', 'oracle'), required=True)
     args = parser.parse_args()
     try:
         check(args.toolchain, args.route, args.admission, args.mode, args.suite)

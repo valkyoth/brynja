@@ -83,6 +83,21 @@ aes_static_tests = importlib.util.module_from_spec(aes_static_spec)
 aes_static_spec.loader.exec_module(aes_static_tests)
 AesStaticTests = aes_static_tests.StaticTests
 
+aes_riscv_spec = importlib.util.spec_from_file_location('aes_riscv_tests', ROOT / 'scripts/aes/test-aes-riscv.py')
+aes_riscv_tests = importlib.util.module_from_spec(aes_riscv_spec)
+aes_riscv_spec.loader.exec_module(aes_riscv_tests)
+AesRiscVTests = aes_riscv_tests.RiscVTests
+
+aes_riscv_oracle_spec = importlib.util.spec_from_file_location('aes_riscv_oracle_tests', ROOT / 'scripts/aes/test-aes-riscv-oracle.py')
+aes_riscv_oracle_tests = importlib.util.module_from_spec(aes_riscv_oracle_spec)
+aes_riscv_oracle_spec.loader.exec_module(aes_riscv_oracle_tests)
+AesRiscVOracleTests = aes_riscv_oracle_tests.RiscVOracleTests
+
+aes_riscv_linked_spec = importlib.util.spec_from_file_location('aes_riscv_linked_tests', ROOT / 'scripts/aes/test-aes-riscv-linked.py')
+aes_riscv_linked_tests = importlib.util.module_from_spec(aes_riscv_linked_spec)
+aes_riscv_linked_spec.loader.exec_module(aes_riscv_linked_tests)
+AesRiscVLinkedTests = aes_riscv_linked_tests.RiscVLinkedTests
+
 aes_hosted_spec = importlib.util.spec_from_file_location('aes_hosted_tests', ROOT / 'scripts/aes/test-aes-hosted.py')
 aes_hosted_tests = importlib.util.module_from_spec(aes_hosted_spec)
 aes_hosted_spec.loader.exec_module(aes_hosted_tests)
@@ -494,6 +509,13 @@ class RegistryTests(unittest.TestCase):
                     'packaged-linked-msrv': 0, 'packaged-linked-current': 0,
                     'packaged-lifecycle-msrv': 0, 'packaged-lifecycle-current': 0}
         for endpoint in ('msrv', 'current'):
+            expected[f'riscv-qemu-{endpoint}'] = 148
+            expected[f'riscv-linked-{endpoint}'] = 0
+            expected[f'riscv-startup-{endpoint}'] = 0
+            for route in ('direct', 'facade'):
+                expected[f'riscv-avs-{endpoint}-{route}'] = 12
+                expected[f'riscv-oracle-{endpoint}-{route}'] = 8
+                expected[f'riscv-no-std-{endpoint}-{route}'] = 0
             expected[f'accelerated-arm-startup-{endpoint}'] = 0
             expected[f'accelerated-arm-hosted-startup-{endpoint}'] = 0
             expected[f'accelerated-x86-startup-{endpoint}'] = 0

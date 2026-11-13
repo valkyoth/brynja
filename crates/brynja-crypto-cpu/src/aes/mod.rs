@@ -25,6 +25,8 @@ mod aarch64;
 mod aarch64_expand;
 mod dit;
 mod kat;
+#[cfg(all(brynja_cpu_evidence, target_arch = "riscv64", target_endian = "little"))]
+mod riscv64;
 pub use dit::DitPolicy;
 #[cfg(target_arch = "x86_64")]
 mod x86;
@@ -39,6 +41,9 @@ pub enum Kernel {
     X86AesNi,
     /// Little-endian AArch64 NEON and AES.
     ArmAes,
+    /// Little-endian RV64 Zkne + Zknd candidate. Ordinary builds cannot admit
+    /// this backend; explicit evidence builds do not establish native support.
+    RiscVScalarAes,
 }
 
 impl Kernel {
@@ -46,6 +51,15 @@ impl Kernel {
         match self {
             Self::X86AesNi if cfg!(target_arch = "x86_64") => Ok(()),
             Self::ArmAes if cfg!(all(target_arch = "aarch64", target_endian = "little")) => Ok(()),
+            Self::RiscVScalarAes
+                if cfg!(all(target_arch = "riscv64", target_endian = "little")) =>
+            {
+                if cfg!(brynja_cpu_evidence) {
+                    Ok(())
+                } else {
+                    Err(Error::Unadmitted)
+                }
+            }
             _ => Err(Error::WrongArchitecture),
         }
     }
@@ -60,9 +74,16 @@ impl Kernel {
                 cfg!(all(target_arch = "aarch64", target_endian = "little")),
                 cfg!(all(target_feature = "aes", target_feature = "neon")),
             ),
+            Self::RiscVScalarAes => (
+                cfg!(all(target_arch = "riscv64", target_endian = "little")),
+                cfg!(all(target_feature = "zkne", target_feature = "zknd")),
+            ),
         };
         if !architecture {
             return Err(Error::WrongArchitecture);
+        }
+        if matches!(self, Self::RiscVScalarAes) && !cfg!(brynja_cpu_evidence) {
+            return Err(Error::Unadmitted);
         }
         if !bundle {
             return Err(Error::MissingTargetFeatures);
@@ -75,6 +96,8 @@ impl Kernel {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[non_exhaustive]
 pub enum Error {
+    /// Candidate lacks native admission; ordinary builds cannot execute it.
+    Unadmitted,
     /// The selected architecture or byte order does not match this build.
     WrongArchitecture,
     /// The compiler's complete target-feature bundle is absent.
@@ -178,6 +201,9 @@ impl Authority {
     /// state for this owner's entire lifetime, including hotplug and VM migration.
     /// Current-core CPUID, thread affinity observation, a KAT or a thread-bound
     /// owner alone cannot establish this guarantee. No reentrant signal use.
+    /// The RV64 candidate is rejected without the explicit evidence cfg; with
+    /// that cfg, this contract requires little-endian RV64 Zkne and Zknd on
+    /// every eligible CPU. It does not become a qualified hosted route.
     ///
     /// ```compile_fail
     /// use brynja_crypto_cpu::aes::{Authority, Kernel};
@@ -417,6 +443,13 @@ fn dispatch<const N: usize>(
 ) -> Result<(), Error> {
     owner.check_admission()?;
     let kernel = owner.kernel;
+    #[cfg(all(brynja_cpu_evidence, target_arch = "riscv64", target_endian = "little"))]
+    if kernel == Kernel::RiscVScalarAes {
+        // SAFETY: Explicit evidence build and sealed exact static/platform
+        // Zkne/Zknd admission. Disjoint typed buffers bound all byte accesses.
+        unsafe { riscv64::transform(state, schedule, inverse) };
+        return Ok(());
+    }
     #[cfg(target_arch = "x86_64")]
     if kernel == Kernel::X86AesNi {
         // SAFETY: Either the exact static bundle was checked, or this sealed
@@ -450,6 +483,13 @@ fn dispatch_expansion<const K: usize, const S: usize>(
     const { assert!(matches!((K, S), (16, 176) | (24, 208) | (32, 240))) };
     owner.check_admission()?;
     let kernel = owner.kernel;
+    #[cfg(all(brynja_cpu_evidence, target_arch = "riscv64", target_endian = "little"))]
+    if kernel == Kernel::RiscVScalarAes {
+        // SAFETY: Same exact, evidence-only admission and typed buffer contract
+        // as block dispatch. No portable implementation is substituted.
+        unsafe { riscv64::expand(key, schedule) };
+        return Ok(());
+    }
     #[cfg(target_arch = "x86_64")]
     if kernel == Kernel::X86AesNi {
         // SAFETY: Sealed static/platform admission above guarantees AES/SSE2

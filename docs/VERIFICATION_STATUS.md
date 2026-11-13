@@ -1,5 +1,46 @@
 # Component Verification Status
 
+## RV64 scalar AES candidate (v0.27.4, in progress)
+
+The [development record](assurance/aes-riscv-development.md) describes the
+evidence-only Zkne/Zknd AES-128/192/256 implementation and its QEMU runner.
+Ordinary static and hosted routes remain unadmitted. The offered cloud host
+does not report the required AES extensions; no native AES qualification is
+claimed. QEMU functional checks do not establish timing or physical resistance.
+The registered campaigns now include archive-only AESAVS for direct/facade
+routes, caller-buffer boundary comparisons with portable AES, independent host
+OpenSSL answers replayed under QEMU, and bare-metal RV64 no_std/API builds on
+both compiler endpoints. A bounded final-linked ELF-byte review now covers the
+six raw expansion/round bodies, their memory bounds and explicit scratch clears.
+Exact templates also bind the volatile byte-clear loop and two retained
+destruction bodies in every linked consumer, including their clearing targets.
+Six block-session bodies also bind entry/postchecks, terminal quarantine,
+direction and matched-width leaf calls, with the retained unwind edge bound
+to the live resume import. Six key-owner constructors additionally bind admission,
+exact storage lengths, matching expansion, scratch cleanup and ownership transfer.
+The separate startup review binds the evidence-only admission boundary, all
+three public schedules, six block answers and terminal health; its QEMU campaign
+requires quarantine for each of 688 individually corrupted reference bytes per
+consumer. Libc/loader behavior remains trusted, and startup self-tests are not
+physical-fault protection for later operations.
+Six public-encryption boundaries additionally bind staged publication after
+postchecks, scratch cleanup and unchanged output on rejection for cached and
+ephemeral owners, with matched leaf and named runtime-import targets.
+Six secret-output bodies also bind destination admission clearing, both
+directions, matched leaf/session calls, result gating, scratch/error cleanup
+and successful clearing-owner transfer. These are bounded retained-body checks,
+not qualification of arbitrary downstream callers or exception dispatch.
+Candidate metadata, the normative/control mapping and misuse inventory are
+reconciled for 0.27.4. After the version bump, both core QEMU checks (296 test
+executions), all 32 bare-metal builds/248 paired API probes and eight packaged
+linked consumers passed again. The 1,069 registry tests and 42 scoped-release
+tests passed, alongside requirement, API-profile, release-plan, workspace,
+SBOM, formatting and documentation checks. Broader earlier AVS, oracle and
+startup-corruption runs retain their own source snapshots; they were not
+relabelled or rerun as part of this metadata refresh. Owner pentest/retest,
+the existing final gate and exact-commit green GitHub remain pending. This is
+not release approval or native qualification.
+
 ## Accelerated AES-family candidate (v0.27.3)
 
 Opt-in accelerated AES-128/192/256, clearing owners, supported hosted admission

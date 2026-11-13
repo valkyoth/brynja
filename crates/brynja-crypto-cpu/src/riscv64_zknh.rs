@@ -15,7 +15,8 @@ pub(crate) fn compress(state: &mut [u32; 8], block: &[u8; 64]) {
 
 #[target_feature(enable = "zknh")]
 unsafe fn compress_zknh(state: &mut [u32; 8], block: &[u8; 64]) {
-    let schedule = expanded(block);
+    // SAFETY: This function carries the same Zknh target-feature contract.
+    let schedule = unsafe { expanded(block) };
     let [mut a, mut b, mut c, mut d, mut e, mut f, mut g, mut h] = *state;
     let saved = *state;
 
@@ -50,7 +51,11 @@ unsafe fn compress_zknh(state: &mut [u32; 8], block: &[u8; 64]) {
     ];
 }
 
-fn expanded(block: &[u8; 64]) -> [u32; 64] {
+// The schedule uses Zknh too. Keep its feature boundary explicit even when
+// debug builds do not inline it into compress_zknh; unrelated AES builds must
+// not need a global +zknh merely to assemble this dormant candidate.
+#[target_feature(enable = "zknh")]
+unsafe fn expanded(block: &[u8; 64]) -> [u32; 64] {
     let mut words = [0_u32; 64];
     for (word, bytes) in words.iter_mut().take(16).zip(block.chunks_exact(4)) {
         if let [first, second, third, fourth] = bytes {
@@ -58,10 +63,11 @@ fn expanded(block: &[u8; 64]) -> [u32; 64] {
         }
     }
     for index in 16_usize..64 {
-        let first = sig1(words.get(index - 2).copied().unwrap_or(0));
-        let second = words.get(index - 7).copied().unwrap_or(0);
-        let third = sig0(words.get(index - 15).copied().unwrap_or(0));
-        let fourth = words.get(index - 16).copied().unwrap_or(0);
+        // The public range starts at 16, so these subtractions cannot wrap.
+        let first = sig1(words.get(index.wrapping_sub(2)).copied().unwrap_or(0));
+        let second = words.get(index.wrapping_sub(7)).copied().unwrap_or(0);
+        let third = sig0(words.get(index.wrapping_sub(15)).copied().unwrap_or(0));
+        let fourth = words.get(index.wrapping_sub(16)).copied().unwrap_or(0);
         if let Some(target) = words.get_mut(index) {
             *target = first
                 .wrapping_add(second)
@@ -74,47 +80,47 @@ fn expanded(block: &[u8; 64]) -> [u32; 64] {
 
 #[inline(always)]
 fn sig0(value: u32) -> u32 {
-    let output: usize;
+    let output: u32;
     // SAFETY: `compress_zknh` establishes Zknh before this private helper can
     // execute. The instruction has register-only inputs and output.
     unsafe {
-        asm!("sha256sig0 {output}, {input}", input = in(reg) value as usize,
+        asm!("sha256sig0 {output}, {input}", input = in(reg) value,
             output = lateout(reg) output, options(pure, nomem, nostack));
     }
-    output as u32
+    output
 }
 
 #[inline(always)]
 fn sig1(value: u32) -> u32 {
-    let output: usize;
+    let output: u32;
     // SAFETY: The private caller has established the same Zknh precondition.
     unsafe {
-        asm!("sha256sig1 {output}, {input}", input = in(reg) value as usize,
+        asm!("sha256sig1 {output}, {input}", input = in(reg) value,
             output = lateout(reg) output, options(pure, nomem, nostack));
     }
-    output as u32
+    output
 }
 
 #[inline(always)]
 fn sum0(value: u32) -> u32 {
-    let output: usize;
+    let output: u32;
     // SAFETY: The private caller has established the same Zknh precondition.
     unsafe {
-        asm!("sha256sum0 {output}, {input}", input = in(reg) value as usize,
+        asm!("sha256sum0 {output}, {input}", input = in(reg) value,
             output = lateout(reg) output, options(pure, nomem, nostack));
     }
-    output as u32
+    output
 }
 
 #[inline(always)]
 fn sum1(value: u32) -> u32 {
-    let output: usize;
+    let output: u32;
     // SAFETY: The private caller has established the same Zknh precondition.
     unsafe {
-        asm!("sha256sum1 {output}, {input}", input = in(reg) value as usize,
+        asm!("sha256sum1 {output}, {input}", input = in(reg) value,
             output = lateout(reg) output, options(pure, nomem, nostack));
     }
-    output as u32
+    output
 }
 
 pub(crate) fn compress512(state: &mut [u64; 8], block: &[u8; 128]) {
@@ -163,24 +169,24 @@ unsafe fn compress_zknh512(state: &mut [u64; 8], block: &[u8; 128]) {
 
 #[inline(always)]
 fn sum0_512(value: u64) -> u64 {
-    let output: usize;
+    let output: u64;
     // SAFETY: The private caller has established Zknh. The instruction has
     // register-only inputs and output.
     unsafe {
-        asm!("sha512sum0 {output}, {input}", input = in(reg) value as usize,
+        asm!("sha512sum0 {output}, {input}", input = in(reg) value,
             output = lateout(reg) output, options(pure, nomem, nostack));
     }
-    output as u64
+    output
 }
 
 #[inline(always)]
 fn sum1_512(value: u64) -> u64 {
-    let output: usize;
+    let output: u64;
     // SAFETY: The private caller has established Zknh. The instruction has
     // register-only inputs and output.
     unsafe {
-        asm!("sha512sum1 {output}, {input}", input = in(reg) value as usize,
+        asm!("sha512sum1 {output}, {input}", input = in(reg) value,
             output = lateout(reg) output, options(pure, nomem, nostack));
     }
-    output as u64
+    output
 }

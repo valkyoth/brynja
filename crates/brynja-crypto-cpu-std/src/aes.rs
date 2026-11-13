@@ -24,6 +24,8 @@ pub enum Mode {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[non_exhaustive]
 pub enum Unavailable {
+    /// A known architecture candidate has no native deployment admission.
+    UnadmittedCandidate,
     /// Architecture or byte order differs from the requested backend.
     WrongArchitecture,
     /// Complete CPU and OS register-state bundle was not observed.
@@ -179,6 +181,11 @@ mod platform {
     #![allow(unsafe_code)]
     use super::*;
 
+    #[cfg(any(
+        test,
+        target_arch = "x86_64",
+        all(target_arch = "aarch64", target_endian = "little")
+    ))]
     pub(super) fn assess(
         architecture: bool,
         aes: bool,
@@ -211,6 +218,12 @@ mod platform {
     }
 
     pub(super) fn availability(kernel: Kernel) -> Result<(), Unavailable> {
+        if kernel == Kernel::RiscVScalarAes
+            && cfg!(all(target_arch = "riscv64", target_endian = "little"))
+        {
+            // QEMU/evidence builds cannot create a production hosted route.
+            return Err(Unavailable::UnadmittedCandidate);
+        }
         #[cfg(target_arch = "x86_64")]
         if kernel == Kernel::X86AesNi {
             return assess(
@@ -437,7 +450,7 @@ mod tests {
 
     #[test]
     fn actual_platform_boundary_and_quarantine() -> Result<(), Error> {
-        for kernel in [Kernel::X86AesNi, Kernel::ArmAes] {
+        for kernel in [Kernel::X86AesNi, Kernel::ArmAes, Kernel::RiscVScalarAes] {
             match platform::availability(kernel) {
                 Err(reason) => {
                     assert_eq!(

@@ -68,13 +68,15 @@ def test_generation_is_deterministic() -> None:
 def test_aes_wide_development_keeps_family_qualification_open() -> None:
     _scope, requirements, _digest = domain.load_policy()
     aes = next(item for item in requirements if item['id'] == 'BRY-REQ-CRYPTO-0005')
-    assert aes['revision'] == 3
+    assert aes['revision'] == 4
     assert aes['lifecycle'] == 'planned'
     assert aes['decision_ids'] == ['algorithm.aes']
     assert 'AES-192/256 ephemeral and cached owners' in aes['statement']
-    for limitation in ('No full-cipher proof', 'whole-program constant-time', 'physical erasure',
-                       'independent qualification', 'v0.27.2'):
+    for limitation in ('No full-cipher proof', 'whole-program constant time', 'physical erasure',
+                       'independent family qualification', 'v0.27.4',
+                       'no qualifying native AES host is available'):
         assert limitation in aes['evidence_gap']
+    assert 'Ordinary RISC-V AES routes remain unadmitted' in aes['residual']
     controls = (lib.ROOT / 'docs/security-controls.md').read_text()
     registry = tomllib.loads((lib.ROOT / 'verification/checks.toml').read_text())
     ids = {item['id'] for item in registry['checks'] if item['component'] == 'aes'}
@@ -83,6 +85,11 @@ def test_aes_wide_development_keeps_family_qualification_open() -> None:
                   'downstream-matrix', 'wide-timing-screen'):
         assert check in ids and f'`{check}`' in controls
     assert 'Cortex-M builds are compile-only' in controls
+    assert 'RISC-V AES candidate controls (v0.27.4)' in controls
+    assert 'QEMU execution and bounded byte reviews do not qualify native timing' in controls
+    for check in ('riscv-qemu-msrv', 'riscv-qemu-current', 'riscv-linked-msrv',
+                  'riscv-linked-current', 'riscv-startup-msrv', 'riscv-startup-current'):
+        assert check in ids
 
 
 def test_every_authority_is_covered_once_or_more() -> None:

@@ -288,7 +288,9 @@ def validate_manifest_text(contents: str, tools: list[dict], label: str) -> None
     if label == "Cargo.toml":
         admitted_cfg = (
             "unexpected_cfgs = { level = \"warn\", "
-            "check-cfg = ['cfg(kani)', 'cfg(brynja_cpu_evidence)', 'cfg(brynja_sha1_cpu_evidence)', 'cfg(brynja_md5_cpu_evidence)'] }"
+            "check-cfg = ['cfg(kani)', 'cfg(brynja_cpu_evidence)', 'cfg(brynja_fault_evidence)', "
+            "'cfg(brynja_fault_primitives)', 'cfg(brynja_fault_profile_build)', 'cfg(brynja_fault_profile_research)', "
+            "'cfg(brynja_sha1_cpu_evidence)', 'cfg(brynja_md5_cpu_evidence)'] }"
         )
         if lowered.count(admitted_cfg) != 1:
             fail("workspace assurance check-cfg admission drifted")

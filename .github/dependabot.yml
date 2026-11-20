@@ -2,7 +2,9 @@ version: 2
 
 updates:
   - package-ecosystem: cargo
-    directory: /
+    directories:
+      - /
+      - /tools/brynja-verify
     schedule:
       interval: weekly
       day: monday

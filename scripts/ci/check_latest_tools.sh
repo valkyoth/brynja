@@ -9,7 +9,13 @@ python3 scripts/repository/rust_freshness.py
 
 for tool in cargo-deny cargo-audit cargo-sbom; do
     pinned="$(sed -n "s/^${tool} \\([0-9][^ ]*\\) [0-9a-f]\\{64\\}$/\\1/p" "$tool_lock" | head -n 1)"
-    latest="$(cargo info "$tool" | sed -n 's/^version: //p' | head -n 1)"
+    # cargo info may prefer an older locally resolved or MSRV-compatible
+    # version and append "(latest ...)"; query the registry directly.
+    latest="$(python3 -c 'import json,sys,urllib.request as u
+request = u.Request("https://crates.io/api/v1/crates/" + sys.argv[1],
+                    headers={"User-Agent": "brynja-ci (https://github.com/valkyoth/brynja)"})
+with u.urlopen(request, timeout=30) as response:
+    print(json.load(response)["crate"]["max_stable_version"])' "$tool")"
     test -n "$pinned"
     test -n "$latest"
     if [ "$pinned" != "$latest" ]; then

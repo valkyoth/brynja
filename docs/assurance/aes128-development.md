@@ -298,7 +298,8 @@ missing/duplicate proof summaries. The normal registry suite includes them.
 tests and public vector harness into a private temporary fixture with the real
 core dependency. The repository's production files are never edited. Both the
 unaltered and restored copies must pass six AES-128 public tests, four wide-AES
-public tests, and 91 library tests (with two explicitly ignored tests).
+public tests, and 17 production library tests, with none ignored. Archived
+fault-integrity research is not part of this fixture or its test population.
 Each of eighteen deliberate defects must compile successfully, then fail its
 specific regression by assertion with exactly one failing test. Build errors,
 zero-test runs, a different failed test, process aborts and surviving defects

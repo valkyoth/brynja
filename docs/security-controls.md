@@ -1,5 +1,31 @@
 # Security Controls
 
+## Portable GHASH development contract (v0.28.0)
+
+For `BRY-REQ-CRYPTO-0006`, the portable implementation interprets the most
+significant wire bit as the coefficient of 1. Multiplication uses 128 fixed
+iterations per absorbed block and no secret-indexed tables. Only public byte
+counts and chunk positions control traversal. The [host screen](assurance/ghash-portable-screen.md)
+is evidence for two particular builds, not a constant-time guarantee for all
+compilers or targets.
+
+Both the direct crate and facade require explicit raw access via `hazmat-ghash`.
+Cargo features are additive within a dependency graph, not access controls.
+The caller supplies a 16-byte subkey, separate 16-byte workspace, and a byte
+budget. Set that budget at the application boundary: a very large budget
+still permits correspondingly large CPU work. An over-budget update consumes
+nothing; finishing on a partial block consumes the owner, clears workspace,
+and leaves output unchanged. Successful finish returns a clearing owner over
+the raw intermediate. Never expose it as a public authentication tag.
+The caller owns key erasure and any copies. Drop cannot clear forgotten
+owners, compiler spills, or registers.
+
+The [verification record](VERIFICATION_STATUS.md#portable-ghash-v0280-development)
+distinguishes field arithmetic and lifecycle tests from target-specific
+observations. This primitive neither derives keys nor chooses nonces, frames
+GCM inputs, masks tags or makes an authentication decision. It has no provider
+or hardware dispatch path to fail over to.
+
 ## RISC-V AES candidate controls (v0.27.4)
 
 `BRY-REQ-CRYPTO-0005` remains **planned** at the family-qualification level.

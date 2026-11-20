@@ -1,5 +1,18 @@
 # Sanitization Adapter Admission Review
 
+## Current admission: 2.2.0 (v0.28.0 preparation)
+
+The adapter now pins `=2.2.0` with defaults disabled. The independently
+downloaded crates.io archive SHA-256 is
+`943128f5d9f0bff679610a0026f198aff9f03db88fd6957975bc1d3ccb3c211c`.
+Comparing every published `src/` member to 2.1.1 found no additions,
+removals or byte changes. The selected graph still has no transitive
+dependencies. The [admission record](../security/dependency-admissions/sanitization-2.2.0.toml)
+identifies the release, review and evidence; historical evidence below
+applies to its named version, not automatically to this release.
+
+## Historical admission: 2.1.1
+
 Status: admitted only for conditional implementation of the separately selected
 `brynja-sanitization` package at v0.11.2; no Brynja production dependency graph
 edge outside that adapter is authorized. The exact dependency was re-reviewed

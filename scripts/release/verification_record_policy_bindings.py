@@ -13,14 +13,14 @@ def definitions():
     result = {}
     for mode in ('check', 'test'):
         path = f'scripts/sanitization/{mode}-sanitization-admission.py'
-        markers = (['sanitization 2.1.1 admission record, isolation: PASS'] if mode == 'check' else [
+        markers = (['sanitization 2.2.0 admission record, isolation: PASS'] if mode == 'check' else [
             'sanitization admission rejects seventeen identity, graph, error-boundary, release-history, feature, FIPS, and drift regressions',
             'Adapter release history: four accepted states and eighteen identity/publication/admission regressions passed'])
         result[('python3', path)] = dict(paths=[
             'scripts/sanitization/sanitization_admission.py', 'Cargo.toml', 'Cargo.lock', 'release-crates.toml',
             'assurance/sanitization-admission/Cargo.toml', 'assurance/sanitization-admission/Cargo.lock',
             'assurance/sanitization-admission/src/lib.rs', 'docs/sanitization-admission-review.md',
-            'security/dependency-admissions/sanitization-2.1.1.toml'],
+            'security/dependency-admissions/sanitization-2.2.0.toml'],
             patterns=['crates/*/Cargo.toml'], markers=markers)
     for stem, family in [('sha256', 'sha2'), ('sha512', 'sha2'), ('keccak', 'sha3')]:
         path = f'scripts/{family}/test-{stem}-batch' + ('-policy' if stem == 'keccak' else '') + '.py'

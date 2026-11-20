@@ -107,13 +107,21 @@ class ApiTests(unittest.TestCase):
                                              'code': None, 'spans': [], 'message': 'aborting due to 1 previous error'})
         self.assertTrue(api.diagnostic_matches(result, 'E0277', Path('probe.rs')))
 
-    def invoke(self, *, positive_fails=False, wrong_negative=False, missing_artifact=False):
+    def invoke(self, *, positive_fails=False, wrong_negative=False, missing_artifact=False,
+               split_layout=False, escaped=False):
         commands = []
         with tempfile.TemporaryDirectory() as temporary:
             directory = Path(temporary)
             deps = directory / 'target/debug/deps'
             deps.mkdir(parents=True)
             artifact = deps / 'libbrynja_crypto-test.rlib'
+            artifact.touch()
+            dep_dir = (directory / 'target/debug/build/core/123/out' if split_layout else deps)
+            if escaped:
+                dep_dir = directory / 'outside-target'
+            dep_dir.mkdir(parents=True, exist_ok=True)
+            dependency = dep_dir / 'libbrynja_core-test.rlib'
+            dependency.touch()
             cases = {negative: code for _, negative, _, code in api.probes()}
 
             def run(command, *_args):
@@ -121,8 +129,9 @@ class ApiTests(unittest.TestCase):
                 if command[0] == 'cargo':
                     if missing_artifact:
                         return ''
-                    return json.dumps({'reason': 'compiler-artifact', 'target': {'name': 'brynja_crypto'},
-                                       'filenames': [str(artifact)]})
+                    return '\n'.join(json.dumps({'reason': 'compiler-artifact', 'target': {'name': name},
+                                                 'filenames': [str(path)]}) for name, path in
+                                     [('brynja_core', dependency), ('brynja_crypto', artifact)])
                 if positive_fails:
                     raise RuntimeError('positive control failed')
                 return ''
@@ -150,6 +159,13 @@ class ApiTests(unittest.TestCase):
     def test_positive_failure_propagates(self):
         with self.assertRaises(RuntimeError):
             self.invoke(positive_fails=True)
+
+    def test_reported_dependency_layout_and_private_root(self):
+        commands, _ = self.invoke(split_layout=True)
+        self.assertTrue(any(arg.startswith('dependency=') and arg.endswith('/core/123/out')
+                            for arg in commands[1]))
+        with self.assertRaisesRegex(ValueError, 'non-private'):
+            self.invoke(escaped=True)
 
     def test_wrong_negative_error_fails(self):
         with self.assertRaises(ValueError):
@@ -220,16 +236,8 @@ class MutationTests(unittest.TestCase):
             for name, relative, old, new, _selection in mutation.MUTATIONS:
                 source = (directory / relative).read_text()
                 self.assertNotEqual(mutation.mutate(source, old, new), source, name)
-            copied = (directory / 'src/aes/fault_integrity/cipher_avs_tests.rs').read_text()
-            self.assertEqual(copied.count('../../../assurance/aes-avs/fixtures/'), 6)
-            self.assertNotIn('../../../../../assurance/aes-avs/fixtures/', copied)
-            for family in ('MMT', 'MCT'):
-                for bits in (128, 192, 256):
-                    name = f'ECB{family}{bits}.rsp'
-                    self.assertEqual(
-                        (directory / 'assurance/aes-avs/fixtures' / name).read_bytes(),
-                        (mutation.ROOT / 'assurance/aes-avs/fixtures' / name).read_bytes(),
-                    )
+            self.assertFalse((directory / 'src/aes/fault_integrity').exists())
+            self.assertFalse((directory / 'research').exists())
 
     def test_missing_duplicate_or_unchanged_anchor_fails(self):
         for source, old, new in [('abc', 'd', 'x'), ('aa', 'a', 'b'), ('abc', 'a', 'a')]:
@@ -260,9 +268,8 @@ class MutationTests(unittest.TestCase):
                     raise RuntimeError('mutant does not compile')
                 if 'generate-lockfile' in command:
                     return ''
-                count = 4 if 'aes_wide_kat' in command else (6 if '--test' in command else 91)
-                ignored = 2 if '--lib' in command else 0
-                return f'test result: ok. {count} passed; 0 failed; {ignored} ignored;'
+                count = 4 if 'aes_wide_kat' in command else (6 if '--test' in command else 17)
+                return f'test result: ok. {count} passed; 0 failed; 0 ignored;'
 
             with (patch.object(mutation.verifier, 'environment', return_value={}),
                   patch.object(mutation.verifier, 'run', side_effect=run),
@@ -280,9 +287,8 @@ class MutationTests(unittest.TestCase):
             def run(command, *_args):
                 if '--no-run' in command or 'generate-lockfile' in command:
                     return ''
-                count = 4 if 'aes_wide_kat' in command else (6 if '--test' in command else 91)
-                ignored = 2 if '--lib' in command else 0
-                return f'test result: ok. {count} passed; 0 failed; {ignored} ignored;'
+                count = 4 if 'aes_wide_kat' in command else (6 if '--test' in command else 17)
+                return f'test result: ok. {count} passed; 0 failed; 0 ignored;'
 
             with (patch.object(mutation.verifier, 'environment', return_value={}),
                   patch.object(mutation.verifier, 'run', side_effect=run),

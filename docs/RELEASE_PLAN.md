@@ -6793,12 +6793,27 @@ Future revival criteria only. This archived slot is not a release checkpoint:
 
 ### v0.28.0 - GHASH
 
-Status: planned
+Status: in progress
 
 Plan scope: Implement constant-time GHASH finite-field arithmetic and a bounded incremental interface.
 
 Goal: complete the **GHASH** implementation stop without admitting or
 claiming adjacent capability.
+
+First slice: private portable field multiplication, tested against the GHASH
+intermediate in [NIST's AES-GCM Example 2](https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/AES_GCM.pdf).
+The default-off `hazmat-ghash` feature exposes `brynja_crypto::ghash::Ghash`. It accepts byte chunks
+under a caller-set limit, requires a whole number of blocks at finalization,
+and returns a clearing secret output. The portable field suite also checks
+the published unmasked result at every byte split for all 15 distinct GHASH
+cases in the same NIST document (examples 5 and 6 share inputs and result
+for each AES width). A separate test oracle checks 256 field
+products by polynomial long division. The [first portable host screen](assurance/ghash-portable-screen.md)
+records baseline Linux x86-64 update assembly and bounded synthetic timing
+observations on the MSRV and current compiler. Other builds and targets are
+not qualified by that screen. The [caller-storage lifecycle checks](assurance/ghash-lifecycle.md)
+cover cancellation, errors, successful finish and caller unwind under Miri
+and ASan/LSan. Framing and tag masking belong to GCM.
 
 Deliverables:
 

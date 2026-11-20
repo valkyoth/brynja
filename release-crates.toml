@@ -1,8 +1,8 @@
 [release]
-version = "0.27.6"
-milestone = "0.27.6"
+version = "0.28.0"
+milestone = "0.28.0"
 baseline = "0.25.3"
-cumulative_milestones = ["0.26.0", "0.26.1", "0.27.0", "0.27.1", "0.27.2", "0.27.3", "0.27.4", "0.27.5", "0.27.6"]
+cumulative_milestones = ["0.26.0", "0.26.1", "0.27.0", "0.27.1", "0.27.2", "0.27.3", "0.27.4", "0.27.5", "0.27.6", "0.28.0"]
 policy = "independent"
 stage = "internal"
 # Legacy explicit runner default only; routine gates use final-checks.toml, not this selector.
@@ -11,11 +11,11 @@ exceptional = false
 exception_reason = ""
 
 [crates."brynja"]
-previous_version = "0.27.5"
-version = "0.27.6"
-change = "metadata"
+previous_version = "0.27.6"
+version = "0.28.0"
+change = "code"
 publish = false
-reason = "Expose and document the dependency-free AES-128/192/256 provider contracts through the existing facade feature; no device client or OpenBao integration. Retain timing and physical-protection limitations. Scoped review, existing checks and green CI precede a separately authorized signed tag; no crates.io publication selected."
+reason = "Explicitly forward the default-off hazmat-ghash feature through the crypto facade; internal milestone, no crates.io publication."
 
 [crates."brynja-legacy-hmac"]
 previous_version = "0.1.0"
@@ -55,16 +55,16 @@ reason = "Retain the 0.25.3 checkpoint version; no component change or publicati
 [crates."brynja-core"]
 previous_version = "0.10.0"
 version = "0.10.0"
-change = "unchanged"
+change = "code"
 publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+reason = "Research-only cfg bridge for the archived AES prototype; no new public feature or publication."
 
 [crates."brynja-crypto"]
 previous_version = "0.2.0"
 version = "0.2.0"
 change = "code"
 publish = false
-reason = "Modern HKDF/TLS labels, portable/opt-in accelerated AES and dependency-free AES-128/192/256 external-key provider bindings; retain supporting-crate version during the internal development train. No device implementation or new dependency."
+reason = "Add bounded portable GHASH to the existing HKDF/AES development interfaces. No GCM composition, acceleration, new GHASH dependency or supporting-crate publication."
 
 [crates."brynja-hash-core"]
 previous_version = "0.1.0"
@@ -188,9 +188,9 @@ reason = "Explicit package include list for HKDF downstream archive parity; reta
 [crates."brynja-sanitization"]
 previous_version = "0.1.2"
 version = "0.1.2"
-change = "unchanged"
+change = "dependency"
 publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+reason = "Refresh the adapter-only exact sanitization dependency to 2.2.0; hold for a future public checkpoint."
 
 [crates."brynja-dtls"]
 previous_version = "0.1.9"

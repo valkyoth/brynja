@@ -5,6 +5,138 @@ execution_semantics = 1
 catalog = "verification/catalog.json"
 includes = ["verification/miri-checks.json", "verification/kani-checks.json", "verification/matrix-checks.json", "verification/extra-checks.json"]
 
+[groups.ghash-portable-field]
+paths = ["Cargo.toml","Cargo.lock","crates/brynja-crypto/Cargo.toml","crates/brynja-crypto/src","crates/brynja-crypto/tests/ghash_field.rs","crates/brynja-crypto/tests/ghash_vectors"]
+[[groups.ghash-portable-field.tools]]
+program = "rustc"
+toolchain = "1.100.0"
+[[groups.ghash-portable-field.tools]]
+program = "cargo"
+toolchain = "1.100.0"
+
+[[checks]]
+component = "ghash"
+id = "portable-field"
+category = "portable"
+name = "GHASH portable multiplication and bounded incremental interface"
+establishes = "Bit order and reduction, 256 products against polynomial long division, and all 15 distinct GHASH cases in the NIST GCM worked examples across byte splits; caller budget, partial-input rejection and cleanup. Not timing or GCM qualification."
+command = ["cargo", "+1.100.0", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--features", "hazmat-ghash", "--test", "ghash_field"]
+cwd = "."
+inputs = ["ghash-portable-field", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 600
+[checks.success]
+contains = ["test result: ok. 10 passed; 0 failed; 0 ignored;"]
+minimum_tests = 10
+exact_tests = 10
+
+[groups.ghash-host-codegen]
+paths = ["scripts/ghash/check-portable-host.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py"]
+[[groups.ghash-host-codegen.tools]]
+program = "python3"
+
+[groups.ghash-feature-gate]
+paths = ["scripts/ghash/check-feature-gate.py","scripts/hmac/hmac_verifiers.py","scripts/repository/facade_cargo_environment.py","crates/brynja","crates/brynja-pki","crates/brynja-protocol","crates/brynja-tls","crates/brynja-tls12","crates/brynja-tls13","crates/brynja-tls13-handshake"]
+[[groups.ghash-feature-gate.tools]]
+program = "python3"
+
+[[checks]]
+component = "ghash"
+id = "raw-feature-gate"
+category = "compile-fail"
+name = "Raw GHASH requires explicit admission (direct and facade)"
+establishes = "Isolated downstream builds at both compiler endpoints reject the GHASH import with E0432 under default, no-default and AES-only settings; the same consumer compiles with explicit admission. Not archive acceptance."
+command = ["python3","scripts/ghash/check-feature-gate.py"]
+cwd = "."
+inputs = ["ghash-feature-gate","ghash-portable-field","hkdf-msrv","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
+timeout_seconds = 300
+[checks.success]
+contains = ["GHASH_FEATURE_GATE_COMPLETE: 16 direct/facade compiler checks"]
+
+[groups.ghash-lifecycle]
+paths = ["Cargo.toml","Cargo.lock","crates/brynja-crypto/Cargo.toml","crates/brynja-crypto/src","crates/brynja-crypto/tests/ghash_lifecycle.rs"]
+
+[[checks]]
+component = "ghash"
+id = "miri-lifecycle"
+category = "miri"
+name = "GHASH caller storage and ownership under Miri"
+establishes = "Four public-API tests inspect live adjacent caller regions after cancellation, partial finish, output release and two deliberate unwinds. Not proof of native erasure, panic-abort cleanup or absence of all UB."
+command = ["cargo","+nightly-2026-09-11","miri","test","--locked","--offline","--target","x86_64-unknown-linux-gnu","-p","brynja-crypto","--no-default-features","--features", "hazmat-ghash", "--test","ghash_lifecycle"]
+cwd = "."
+inputs = ["ghash-lifecycle","miri-tools","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
+environment = { MIRIFLAGS = "-Zmiri-report-progress=10000000", CARGO_TARGET_DIR = "target/ghash-miri", RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["MIRIFLAGS","MIRI_SYSROOT","MIRI_BE_RUSTC","MIRI_REPLACE_LIBRS_IF_NOT_TEST","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["test result: ok. 4 passed; 0 failed; 0 ignored;"]
+minimum_tests = 4
+exact_tests = 4
+
+[[checks]]
+component = "ghash"
+id = "asan-lifecycle"
+category = "asan"
+name = "GHASH caller storage and ownership under ASan/LSan"
+establishes = "The four GHASH lifecycle tests instrumented for address errors and leaks on Linux x86-64. No claim about registers, compiler spills, abort or physical memory."
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","--target","x86_64-unknown-linux-gnu","-p","brynja-crypto","--no-default-features","--features", "hazmat-ghash", "--test","ghash_lifecycle"]
+cwd = "."
+inputs = ["ghash-lifecycle","asan-tools","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
+environment = { RUSTFLAGS = "-Zsanitizer=address", ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1", LSAN_OPTIONS = "exitcode=23", CARGO_TARGET_DIR = "target/ghash-asan", RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","CARGO_BUILD_TARGET","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","ASAN_OPTIONS","LSAN_OPTIONS","RUSTC_BOOTSTRAP"]
+platform = "linux-x86_64"
+timeout_seconds = 1800
+[checks.success]
+contains = ["test result: ok. 4 passed; 0 failed; 0 ignored;"]
+minimum_tests = 4
+exact_tests = 4
+
+[[checks]]
+component = "ghash"
+id = "x86-update-codegen"
+category = "codegen"
+name = "Portable GHASH update assembly on baseline Linux x86-64"
+establishes = "Rebuilds the library at both Rust endpoints and compares the complete update assembly body to manually reviewed bodies. Not final-linked or cross-target qualification."
+command = ["python3", "scripts/ghash/check-portable-host.py", "codegen"]
+cwd = "."
+inputs = ["ghash-host-codegen", "ghash-portable-field", "hkdf-msrv", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+platform = "linux-x86_64"
+timeout_seconds = 360
+[checks.success]
+contains = ["GHASH_HOST_CODEGEN_COMPLETE"]
+
+[[checks]]
+component = "ghash"
+id = "cross-update-codegen"
+category = "codegen"
+name = "Portable GHASH update assembly on three cross targets"
+establishes = "Compile-only Rust 1.100.0 Cortex-M, RV32 and Android AArch64 update-body comparisons; no native timing or spill erasure claim."
+command = ["python3", "scripts/ghash/check-portable-host.py", "cross-codegen"]
+cwd = "."
+inputs = ["ghash-host-codegen", "ghash-portable-field", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+platform = "linux-x86_64"
+timeout_seconds = 360
+[checks.success]
+contains = ["GHASH_HOST_CROSS-CODEGEN_COMPLETE"]
+
+[groups.ghash-observation-replay]
+paths = ["scripts/ghash/test-portable-host.py", "scripts/ghash/check-portable-host.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py", "assurance/ghash-observations/first-x86_64"]
+[[groups.ghash-observation-replay.tools]]
+program = "python3"
+[[checks]]
+component = "ghash"
+id = "first-host-observation-replay"
+category = "record"
+name = "Replay first GHASH x86 timing observations (no measurement)"
+establishes = "Authenticates against checked-in digests and recomputes the two historical sample populations; tests alarm handling and assembly parser controls. This does not time today's checkout."
+command = ["python3", "scripts/ghash/test-portable-host.py"]
+cwd = "."
+inputs = ["ghash-observation-replay"]
+timeout_seconds = 60
+[checks.success]
+contains = ["Ran 3 tests", "OK"]
+
 
 
 # Development-only raw round kernels: no public dispatch or qualification.

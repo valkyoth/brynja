@@ -10,6 +10,8 @@
 //! Portable modern HKDF is under development; it is not release-qualified.
 //! Optional external-key lifecycle contracts and AES-128 adapter operations
 //! are available; no hardware driver or HSM qualification is bundled.
+//! Raw GHASH over pre-framed blocks requires the explicit `hazmat-ghash`
+//! feature. Its secret intermediate is not an authentication tag.
 
 #![no_std]
 
@@ -27,6 +29,9 @@ pub mod provider;
 /// its existing deployment, target-feature, health and classification contract.
 #[cfg(feature = "cpu")]
 pub use brynja_crypto_cpu as cpu;
+/// Portable bounded GHASH over already-framed blocks; not a MAC or AEAD.
+#[cfg(feature = "hazmat-ghash")]
+pub mod ghash;
 /// Portable modern HKDF and TLS 1.3 label framing; qualification is pending.
 pub mod hkdf;
 /// Modern sealed HMAC construction; development implementation, qualification pending.

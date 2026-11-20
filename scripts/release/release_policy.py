@@ -143,12 +143,18 @@ def milestone_class(raw: str) -> str:
     return "public" if is_checkpoint(raw) else "internal"
 
 
-def roadmap_range(baseline: str, milestone: str) -> list[str]:
-    """Return the exact ordered roadmap delta after a public baseline."""
-
+def tagged_roadmap_versions() -> list[str]:
+    """Research-only slots remain in the design roadmap, never the tag train."""
     versions = VERSION_ROW.findall(
         (ROOT / "docs" / "VERSION_PLAN.md").read_text(encoding="utf-8")
     )
+    return [version for version in versions if version != "0.27.7"]
+
+
+def roadmap_range(baseline: str, milestone: str) -> list[str]:
+    """Return the exact ordered tag delta after a public baseline."""
+
+    versions = tagged_roadmap_versions()
     try:
         start = versions.index(baseline) + 1
         end = versions.index(milestone) + 1
@@ -162,9 +168,7 @@ def roadmap_range(baseline: str, milestone: str) -> list[str]:
 def roadmap_predecessor(milestone: str) -> str:
     """Return the immediately preceding roadmap tag version."""
 
-    versions = VERSION_ROW.findall(
-        (ROOT / "docs" / "VERSION_PLAN.md").read_text(encoding="utf-8")
-    )
+    versions = tagged_roadmap_versions()
     try:
         index = versions.index(milestone)
     except ValueError as error:

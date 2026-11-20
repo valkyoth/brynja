@@ -37,9 +37,9 @@ if len(external) != 1:
 package = external[0]
 expected = {
     "name": "sanitization",
-    "version": "2.1.1",
+    "version": "2.2.0",
     "source": "registry+https://github.com/rust-lang/crates.io-index",
-    "checksum": "0f6ebfd4675a15689bc97e4aa870d96c6aba71508b8b2b810e25d228eba04d8f",
+    "checksum": "943128f5d9f0bff679610a0026f198aff9f03db88fd6957975bc1d3ccb3c211c",
 }
 if any(package.get(key) != value for key, value in expected.items()):
     raise SystemExit(f"Cargo.lock admitted package identity drifted: {package}")

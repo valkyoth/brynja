@@ -31,7 +31,13 @@ fn rotation_is_explicit_lossless_bounded_and_does_not_reuse_archived_passes() {
     );
     let id = live["archives"][0].as_str().unwrap();
     let bytes = fs::read(f.root().join(format!("verification/archives/{id}.json"))).unwrap();
-    assert_eq!(format!("{:x}", Sha256::digest(&bytes)), id);
+    assert_eq!(
+        Sha256::digest(&bytes)
+            .iter()
+            .map(|b| format!("{b:02x}"))
+            .collect::<String>(),
+        id
+    );
     assert_eq!(
         serde_json::from_slice::<serde_json::Value>(&bytes).unwrap(),
         old

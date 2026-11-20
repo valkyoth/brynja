@@ -453,6 +453,7 @@ def run_tests() -> None:
     tests = (
         checkpoint_tests.run_tests,
         test_current_repository_plan,
+        train_tests.test_research_slot_is_not_a_tag,
         test_hmac_follows_hash_owners_before_consumers,
         test_facade_always_publishes_at_release_version,
         train_tests.test_internal_facade_advances_without_publication,

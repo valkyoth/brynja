@@ -1,8 +1,8 @@
 # Crate Version Matrix
 
-Current development candidate: v0.27.6, with zero crates selected for publication.
-The facade advances to 0.27.6; existing supporting-crate versions remain at
-their 0.25.3 checkpoint values. AES/HKDF development code remains in
+Current development candidate: v0.28.0, with zero crates selected for publication.
+The facade advances from 0.27.6 to 0.28.0; 0.27.7 was archived research, not a tag.
+Supporting crates keep their internal-train versions. Portable GHASH joins AES/HKDF in
 `brynja-crypto 0.2.0`; CPU crates remain at 0.2.0 and
 `brynja-legacy-hkdf 0.1.0` is held for a later checkpoint. The RISC-V AES
 candidate is evidence-only and does not enable ordinary hardware admission.
@@ -12,8 +12,8 @@ authoritative package names, versions and dependency order are in
 [`release-crates.toml`](../release-crates.toml), inspectable with
 `python3 scripts/release/release_crates.py --check`. Selection is not publication
 or release approval. The existing final checks and exact-commit GitHub/CodeQL
-handoff remain pending. This provider-API milestone retains the owner pentest
-handoff; exceptional findings still require review. Accelerated timing remains
+handoff remain pending. Although not a scheduled public pentest checkpoint,
+the scoped final gate requires a committed review disposition. Accelerated AES timing remains
 an explicitly accepted limitation, not completed qualification.
 
 ## Historical matrix (v0.24.x planning snapshot)

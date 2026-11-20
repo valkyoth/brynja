@@ -138,7 +138,7 @@ class InactiveHmacTests(unittest.TestCase):
         self.data[self.head][name] = original
         for name in ('Cargo.toml', 'Cargo.lock'):
             original = self.data[self.head][name]
-            self.data[self.head][name] = original.replace(b'2.1.1', b'2.1.2')
+            self.data[self.head][name] = original.replace(b'2.2.0', b'2.1.2')
             self.assertNotEqual(original, self.data[self.head][name])
             with self.subTest(name=name), self.assertRaises(ValueError):
                 self.validate()

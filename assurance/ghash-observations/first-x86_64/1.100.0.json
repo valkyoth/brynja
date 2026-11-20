@@ -1,0 +1,24 @@
+{
+  "compiler": "rustc 1.100.0 (0ef1bc386 2026-11-09)\nbinary: rustc\ncommit-hash: 0ef1bc386059596dada8fb65b50425aab2ea637a\ncommit-date: 2026-11-09\nhost: x86_64-unknown-linux-gnu\nrelease: 1.100.0\nLLVM version: 23.1.5\n",
+  "host": "Linux-7.3.4-1-default-x86_64-with-glibc2.44",
+  "cpu": 0,
+  "binary_sha256": "8cb9a434ad5562dc61d0625268e512060e53aa89f84b434087f6495ebce03c3b",
+  "raw_sha256": "6480d752754a427560069066c9219f6864dd628f967f5c3c3fb7f5f36b4bae8e",
+  "results": {
+    "identical": {
+      "mean_difference_ns": -79.31201171875,
+      "paired_t": -1.4026567983437972,
+      "alarm": false
+    },
+    "subkey": {
+      "mean_difference_ns": 13.77490234375,
+      "paired_t": 0.7682986300734644,
+      "alarm": false
+    },
+    "block": {
+      "mean_difference_ns": -3.30810546875,
+      "paired_t": -0.6988428232848154,
+      "alarm": false
+    }
+  }
+}

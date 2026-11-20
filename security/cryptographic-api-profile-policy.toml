@@ -1,14 +1,14 @@
 [[reviewed-source]]
 path = "crates/brynja-crypto/src/aes.rs"
-sha256 = "5bd73248fdb63d57b88301e326fdd3133db8de329908c7fcef45e928dd006698"
+sha256 = "3f75456cb8f1e00719155ebb83a811828bd810da179ac8fedb4c93299314b4b3"
 
 [[reviewed-source]]
 path = "crates/brynja-crypto/src/aes/portable.rs"
-sha256 = "a4a9c907c0034fdd12d593f2ecc5a23169b07042f11567d0f29a388935c21150"
+sha256 = "73f6f151f65076050700329d0dc7d488e115f8006bf9885a85f7efff6f36f133"
 
 [[reviewed-source]]
 path = "crates/brynja-crypto/src/aes/portable/field.rs"
-sha256 = "e9b724c09bdb4a7266e35cdc34077f6434cae1db978636ebe169b922ce2a8dec"
+sha256 = "8a40c7441f346476bedfbf4e7735ed9ddc818a4300ae6c99eb1d447184ba54ee"
 
 [[reviewed-source]]
 path = "crates/brynja-crypto/src/aes/portable/layout.rs"
@@ -16,7 +16,7 @@ sha256 = "a53cba70bcd963a9eae7766f6ad92630bb2310946cae72ec4d65b7319499d029"
 
 [[reviewed-source]]
 path = "crates/brynja-crypto/src/aes/tests.rs"
-sha256 = "94cc7526234e07a164a7a6cc84de65f950567e0a0e1d0d2e9830eff86cd0c7ad"
+sha256 = "6cef53078af246082a982a2c02e0f7fec467f9c48f3b492bcc3404fe4803f145"
 
 [[reviewed-source]]
 path = "crates/brynja-crypto/tests/aes128.rs"
@@ -32,7 +32,7 @@ sha256 = "592b6267a758712719f51a951300c08e790ac7c998d6fb5c1b98804bb121cf0f"
 
 [[reviewed-source]]
 path = "scripts/aes/check-aes-api.py"
-sha256 = "215b904a9c51fcf4df95bfc2fba771a381d607676ca39ec77e5d1999383f6e90"
+sha256 = "82ef2ae1bd1e40400fe981931648163e2aaa041a66f529fcfbba84977227d93b"
 
 [[reviewed-source]]
 path = "scripts/aes/check-aes-owner-cleanup.py"
@@ -44,7 +44,7 @@ sha256 = "012c7a6e107c3796d936bac6259089f539c15dffdc8c4253b51e33b1ec775991"
 
 [[reviewed-source]]
 path = "scripts/aes/test-aes-runners.py"
-sha256 = "0a020d61b7f8f737a77e61b900f3735cbc8bff0799a9d92ac835888e68ebf3c6"
+sha256 = "7b3c71b0c85052688647270496771a4ff7c29d7cd49b38ca090dccd49b607912"
 
 [[reviewed-source]]
 path = "assurance/aes-owner-cleanup/Cargo.toml"

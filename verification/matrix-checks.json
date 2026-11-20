@@ -1172,8 +1172,7 @@
         "crates/brynja/src"
       ],
       "optional_paths": [
-        "crates/brynja/build.rs",
-        "crates/brynja/README.md"
+        "crates/brynja/build.rs"
       ],
       "normalize_local_versions": true,
       "toml": {
@@ -2538,8 +2537,7 @@
         "crates/brynja/src"
       ],
       "optional_paths": [
-        "crates/brynja/build.rs",
-        "crates/brynja/README.md"
+        "crates/brynja/build.rs"
       ],
       "normalize_local_versions": true,
       "toml": {
@@ -4499,8 +4497,7 @@
         "crates/brynja/src"
       ],
       "optional_paths": [
-        "crates/brynja/build.rs",
-        "crates/brynja/README.md"
+        "crates/brynja/build.rs"
       ],
       "normalize_local_versions": true,
       "toml": {
@@ -5214,8 +5211,7 @@
         "crates/brynja/src"
       ],
       "optional_paths": [
-        "crates/brynja/build.rs",
-        "crates/brynja/README.md"
+        "crates/brynja/build.rs"
       ],
       "normalize_local_versions": true,
       "toml": {
@@ -6576,8 +6572,7 @@
         "crates/brynja/src"
       ],
       "optional_paths": [
-        "crates/brynja/build.rs",
-        "crates/brynja/README.md"
+        "crates/brynja/build.rs"
       ],
       "normalize_local_versions": true,
       "toml": {
@@ -8278,8 +8273,7 @@
         "crates/brynja/src"
       ],
       "optional_paths": [
-        "crates/brynja/build.rs",
-        "crates/brynja/README.md"
+        "crates/brynja/build.rs"
       ],
       "normalize_local_versions": true,
       "toml": {

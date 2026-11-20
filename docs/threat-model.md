@@ -2,6 +2,15 @@
 
 Status: initial; expands with every milestone
 
+## Portable GHASH (v0.28.0)
+
+Treat the subkey and raw intermediate as secrets. A caller that publishes
+the intermediate as a tag or omits the higher-level construction's framing
+does not obtain authentication. Public input controls work up to the caller's
+byte budget; choose that budget before accepting untrusted input.
+The [development contract](security-controls.md#portable-ghash-development-contract-v0280)
+describes cleanup and the limits of the host-specific side-channel evidence.
+
 ## RISC-V AES candidate boundary (v0.27.4)
 
 The evidence-only RV64 scalar backend must reject wrong architectures, missing

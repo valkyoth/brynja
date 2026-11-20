@@ -1,6 +1,11 @@
 # Current Status
 
-Current development (2026-11-01): v0.26.0 HKDF is a local candidate based on
+Current development (2026-11-20): v0.28.0 adds portable GHASH over
+caller-framed blocks. See the [current verification scope](VERIFICATION_STATUS.md#portable-ghash-v0280-development)
+and [remaining milestone criteria](RELEASE_PLAN.md#v0280---ghash).
+This is not a GCM implementation or a release approval.
+
+Historical development snapshot (2026-11-01): v0.26.0 HKDF was a local candidate based on
 tagged `v0.25.3`, pending scoped pentest and final gate. Portable modern SHA-2
 Extract/Expand/TLS labels and isolated legacy SHA-1 HKDF are implemented.
 The [HKDF contract](security-controls.md#hkdf-development-contract-v0260)
@@ -1507,7 +1512,7 @@ carry machine-checked blocked lifecycles and exact blocker targets until source
 provenance and rights are authenticated. FIPS validation
 milestones remain blocked on a dated rights-reviewed mutable guidance baseline.
 
-`brynja-sanitization` now uses exact `sanitization 2.1.1` only under the frozen
+`brynja-sanitization` now uses exact `sanitization 2.2.0` only under the frozen
 adapter boundary. Any source, package, feature, dependency, unsafe, advisory,
 target, guarantee, ownership, engine, facade, or FIPS-boundary drift forces
 re-review and fail-closed withholding or removal.

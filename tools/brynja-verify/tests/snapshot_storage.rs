@@ -249,7 +249,10 @@ fn show_bounds_expanded_output_without_building_a_deep_json_value() {
         serde_json::json!({"fingerprint":"large", "inputs":{"large":"x".repeat(1024 * 1024)}});
     let bytes = serde_json::to_vec(&snapshot).unwrap();
     use sha2::{Digest, Sha256};
-    let id = format!("{:x}", Sha256::digest(&bytes));
+    let id: String = Sha256::digest(&bytes)
+        .iter()
+        .map(|b| format!("{b:02x}"))
+        .collect();
     fs::write(
         f.root().join(format!("verification/snapshots/{id}.json")),
         bytes,

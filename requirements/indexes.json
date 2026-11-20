@@ -529,8 +529,8 @@
         "planned-symbol:crates/brynja-crypto/src/ghash.rs#Ghash"
       ],
       "tests": [
-        "planned:positive:tests/requirements/crypto_ghash.rs#nist_vectors",
-        "planned:negative:tests/requirements/crypto_ghash.rs#length_and_counter_bounds"
+        "planned:positive:crates/brynja-crypto/tests/ghash_vectors/nist.rs#aes128_published_ghash_intermediates",
+        "planned:negative:crates/brynja-crypto/tests/ghash_field.rs#budget_failure_is_atomic_and_empty_is_zero"
       ]
     },
     "BRY-REQ-CRYPTO-0007": {
@@ -11711,6 +11711,9 @@
       "planned:negative:crates/brynja-core/tests/entropy.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-ENTROPY-0014"
       ],
+      "planned:negative:crates/brynja-crypto/tests/ghash_field.rs#budget_failure_is_atomic_and_empty_is_zero": [
+        "BRY-REQ-CRYPTO-0006"
+      ],
       "planned:negative:crates/brynja-crypto/tests/hkdf_derivation.rs#public_rejections_leave_buffers_unchanged": [
         "BRY-REQ-CRYPTO-0004"
       ],
@@ -11796,9 +11799,6 @@
       ],
       "planned:negative:tests/requirements/crypto_ed25519.rs#noncanonical_and_small_order_inputs": [
         "BRY-REQ-CRYPTO-0012"
-      ],
-      "planned:negative:tests/requirements/crypto_ghash.rs#length_and_counter_bounds": [
-        "BRY-REQ-CRYPTO-0006"
       ],
       "planned:negative:tests/requirements/crypto_rsa.rs#ambiguous_parameters_and_padding": [
         "BRY-REQ-CRYPTO-0011"
@@ -12138,6 +12138,9 @@
       "planned:positive:crates/brynja-crypto/tests/aes128.rs#nist_aesavs_all_four_aes128_ecb_kat_files": [
         "BRY-REQ-CRYPTO-0005"
       ],
+      "planned:positive:crates/brynja-crypto/tests/ghash_vectors/nist.rs#aes128_published_ghash_intermediates": [
+        "BRY-REQ-CRYPTO-0006"
+      ],
       "planned:positive:crates/brynja-crypto/tests/hkdf_derivation.rs#rfc5869_sha256_cases_one_through_three": [
         "BRY-REQ-CRYPTO-0004"
       ],
@@ -12222,9 +12225,6 @@
       ],
       "planned:positive:tests/requirements/crypto_ed25519.rs#rfc8032_vectors": [
         "BRY-REQ-CRYPTO-0012"
-      ],
-      "planned:positive:tests/requirements/crypto_ghash.rs#nist_vectors": [
-        "BRY-REQ-CRYPTO-0006"
       ],
       "planned:positive:tests/requirements/crypto_rsa.rs#pss_and_pkcs1_vectors": [
         "BRY-REQ-CRYPTO-0011"

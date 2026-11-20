@@ -1,6 +1,6 @@
 {
   "closure_policy_sha256": "d30b73ba07df3787297f3591bd467426c44983da5969e32b2dc7539508e5793e",
-  "domain_policy_sha256": "1f5131e1fd9b16d990aa25868ad300c0a051806b1d2b15eedda301c3f0b5c8ff",
+  "domain_policy_sha256": "f3aa37fe866477084a776505a2be4f5e312edd5ff8ac3e7c1ef2d814b08b1b3d",
   "policy_sha256": "9ca99baa1a7db272f816b4e60e67e468c8d9021e14205282210e27a17c7a50e9",
   "requirements": [
     {
@@ -1274,7 +1274,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "Full-width arithmetic proofs, known-answer tests, differential evidence, and per-target side-channel review remain unresolved until v0.28.0.",
+      "evidence_gap": "Portable development evidence covers NIST GHASH intermediates at every byte split, polynomial long-division comparisons, budget and lifecycle regressions, and a bounded x86-64 host screen. See docs/security-controls.md and docs/VERIFICATION_STATUS.md. These are not full-width arithmetic proofs, independent qualification or side-channel evidence for other targets. Packaged downstream acceptance belongs to v0.28.1.",
       "id": "BRY-REQ-CRYPTO-0006",
       "invariants": [
         "constant-time",
@@ -1288,7 +1288,7 @@
       "owner": "0.28.0",
       "profile": "crypto-encoding-pkix",
       "residual": "NIST has announced a future revision of SP 800-38D, so changed limits or constructions require explicit re-admission.",
-      "revision": 1,
+      "revision": 2,
       "scope": "protocol",
       "sources": [
         {
@@ -1326,12 +1326,12 @@
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "tests/requirements/crypto_ghash.rs#nist_vectors"
+          "target": "crates/brynja-crypto/tests/ghash_vectors/nist.rs#aes128_published_ghash_intermediates"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "tests/requirements/crypto_ghash.rs#length_and_counter_bounds"
+          "target": "crates/brynja-crypto/tests/ghash_field.rs#budget_failure_is_atomic_and_empty_is_zero"
         }
       ],
       "work_bound": "Incremental GHASH work is linear in authenticated blocks with checked length accounting and no attacker-selected limb count."

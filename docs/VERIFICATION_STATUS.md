@@ -1,5 +1,21 @@
 # Component Verification Status
 
+## Portable GHASH (v0.28.0 development)
+
+The default-off `hazmat-ghash` interface operates on pre-framed blocks and returns a
+secret intermediate, not a GCM tag. The portable field check covers all 15
+distinct GHASH cases in the [NIST GCM worked examples](https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/AES_GCM.pdf)
+at every byte split, plus polynomial long-division comparisons. The examples
+include AAD only, ciphertext only, both, neither, and separately padded inputs.
+Tests supply the framing; GHASH itself does not add padding or encode lengths.
+The [caller-storage lifecycle checks](assurance/ghash-lifecycle.md) cover
+clearing of live caller buffers; the [x86-64 host screen](assurance/ghash-portable-screen.md)
+records a separate, bounded timing and assembly observation. Compile-only screens
+also check the inlined update body on Cortex-M, RV32 and Android AArch64 using
+Rust 1.100.0. No native timing or spill erasure is inferred from those builds. Use
+`brynja-verify ghash` for the current checkout's status. None of this admits a
+hardware backend or qualifies other targets, all downstream builds or GCM.
+
 ## External-key provider API candidate (v0.27.6)
 
 The [provider completion record](assurance/aes-provider-completion.md) covers

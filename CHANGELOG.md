@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.28.0 portable GHASH (in development)
+
+- Add a default-off (`hazmat-ghash`), bounded, allocation-free GHASH interface for pre-framed blocks in
+  `brynja-crypto`. It returns a secret intermediate, not a tag. No GCM
+  construction or accelerated backend is included.
+- Check published GHASH intermediates from all three AES widths, an
+  independent polynomial oracle, and cleanup under Miri and ASan/LSan.
+  See the [verification scope](docs/VERIFICATION_STATUS.md#portable-ghash-v0280-development)
+  for the limits of the portable x86-64 code and timing observations.
+
 ## 0.27.6 provider API completion candidate (unreleased)
 
 - Extend the optional external-key API to distinct AES-128, AES-192 and

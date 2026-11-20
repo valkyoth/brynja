@@ -445,7 +445,8 @@ def validate(registry):
         assert key not in seen, 'duplicate check'
         seen.add(key)
         argv = check['command']
-        assert argv[:3] == ['cargo', '+1.99.1', 'test'], 'unexpected executable'
+        ghash = key == ('ghash', 'portable-field')
+        assert argv[:3] == ['cargo', '+1.100.0' if ghash else '+1.99.1', 'test'], 'unexpected executable'
         assert all(flag in argv for flag in ('--offline', '--locked', '--no-default-features'))
         assert '--workspace' not in argv and '--all-features' not in argv
         package = argv[argv.index('-p') + 1]
@@ -464,8 +465,9 @@ def validate(registry):
         locks = {name for group in groups for lock in group.get('locks', []) for name in lock['packages']}
         for name in CLOSURES[package] | {package}:
             assert f'crates/{name}/src' in paths, f'missing source: {name}'
-            assert f'crates/{name}/Cargo.toml' in manifests, f'missing manifest: {name}'
-            assert name in locks, f'missing lock row: {name}'
+            manifest = f'crates/{name}/Cargo.toml'
+            assert manifest in manifests or (ghash and manifest in paths), f'missing manifest: {name}'
+            assert name in locks or (ghash and 'Cargo.lock' in paths), f'missing lock row: {name}'
         assert test in paths, 'missing harness input'
         source = (ROOT / test).read_text()
         assert check['success']['minimum_tests'] >= 1
@@ -485,6 +487,39 @@ class RegistryTests(unittest.TestCase):
 
     def test_registered_harnesses_and_explicit_closures(self):
         validate(self.registry)
+
+    def test_ghash_field_and_lifecycle_contracts(self):
+        checks = {c['id']: c for c in self.registry['checks'] if c['component'] == 'ghash'}
+        groups = dict(self.registry['groups'])
+        for include in self.registry['includes']:
+            groups.update(json.loads((ROOT / include).read_text())['groups'])
+        self.assertEqual(set(checks), {'portable-field', 'miri-lifecycle', 'asan-lifecycle',
+                                      'x86-update-codegen', 'cross-update-codegen', 'raw-feature-gate',
+                                      'first-host-observation-replay'})
+        for name, count in [('portable-field', 10), ('miri-lifecycle', 4), ('asan-lifecycle', 4)]:
+            row = checks[name]
+            self.assertEqual(row['success'], {'minimum_tests': count, 'exact_tests': count,
+                             'contains': [f'test result: ok. {count} passed; 0 failed; 0 ignored;']})
+            paths = {p for group in row['inputs'] for p in groups[group].get('paths', [])}
+            self.assertTrue({'Cargo.lock', 'Cargo.toml', 'crates/brynja-crypto/src',
+                             'crates/brynja-crypto/Cargo.toml'} <= paths)
+            if name == 'portable-field':
+                self.assertIn('crates/brynja-crypto/tests/ghash_vectors', paths)
+                self.assertEqual(row['command'][-2:], ['--test', 'ghash_field'])
+                continue
+            tool = name.split('-')[0]
+            self.assertIn('crates/brynja-crypto/tests/ghash_lifecycle.rs', paths)
+            self.assertIn(tool + '-tools', row['inputs'])
+            self.assertEqual(row['platform'], 'linux-x86_64')
+            self.assertEqual(row['command'], ['cargo', '+nightly-2026-09-11'] +
+                             (['miri'] if tool == 'miri' else []) +
+                             ['test', '--locked', '--offline', '--target', 'x86_64-unknown-linux-gnu',
+                              '-p', 'brynja-crypto', '--no-default-features', '--features', 'hazmat-ghash', '--test', 'ghash_lifecycle'])
+        asan = checks['asan-lifecycle']
+        self.assertEqual(asan['environment']['RUSTFLAGS'], '-Zsanitizer=address')
+        self.assertEqual(asan['environment']['ASAN_OPTIONS'], 'detect_leaks=1:halt_on_error=1:exitcode=1')
+        self.assertEqual(asan['environment']['LSAN_OPTIONS'], 'exitcode=23')
+        self.assertIn('CARGO_ENCODED_RUSTFLAGS', asan['reject_environment'])
 
     def test_aes_initial_checks_pin_harnesses_and_counts(self):
         checks = {c['id']: c for c in self.registry['checks'] if c['component'] == 'aes'}

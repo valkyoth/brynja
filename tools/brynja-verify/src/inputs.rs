@@ -8,7 +8,12 @@ use std::{
 };
 
 pub fn hash(bytes: &[u8]) -> String {
-    format!("{:x}", Sha256::digest(bytes))
+    let mut text = String::with_capacity(64);
+    for byte in Sha256::digest(bytes) {
+        use std::fmt::Write;
+        write!(text, "{byte:02x}").expect("writing to a String cannot fail");
+    }
+    text
 }
 
 pub fn git(root: &Path, args: &[&str]) -> Result<Vec<u8>> {

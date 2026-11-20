@@ -48,6 +48,8 @@
 //! [`crypto::kmac`], [`crypto::tuplehash`] and [`crypto::parallelhash`]. They do
 //! not enable hosted detection or change portable defaults. Cargo features do
 //! not establish CPU support, secret provenance or independent verification.
+//! Raw GHASH requires the explicit `hazmat-ghash` feature. It returns a secret
+//! intermediate, not a public authentication tag.
 
 #![no_std]
 

@@ -68,11 +68,11 @@ def test() -> None:
         require_rejection(root, "compiler matrix")
         copy_fixture(root)
 
-        replace(workflow, ", 1.99.1]", "]")
+        replace(workflow, ", 1.100.0]", "]")
         require_rejection(root, "compiler matrix")
         copy_fixture(root)
 
-        replace(matrix, '  "1.99.1",\n', "")
+        replace(matrix, '  "1.100.0",\n', "")
         require_rejection(root, "compiler or target coverage")
         copy_fixture(root)
 
@@ -107,7 +107,7 @@ def test() -> None:
 
         replace(
             checks,
-            "scripts/zeroization/check-zeroization-codegen.sh 1.99.1 x86_64-unknown-linux-gnu",
+            "scripts/zeroization/check-zeroization-codegen.sh 1.100.0 x86_64-unknown-linux-gnu",
             "true",
         )
         require_rejection(root, "ordinary repository checks")

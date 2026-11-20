@@ -57,14 +57,14 @@ class ScopedRelease(unittest.TestCase):
         with self.assertRaises(ValueError):
             scoped.enabled('garbage')
 
-    def test_aes_candidate_gate_is_finite_and_does_not_publish(self):
-        plan = scoped.load('0.27.6')
+    def test_ghash_candidate_gate_is_finite_and_does_not_publish(self):
+        plan = scoped.load('0.28.0')
         commands = {check['id']: check['command'] for check in plan['checks']}
         self.assertEqual(len(commands), 30)
         self.assertEqual(commands['release-plan'], ['scripts/release/test-release-plan.sh'])
         self.assertEqual(commands['crypto-tests'],
             ['cargo', 'test', '--locked', '-p', 'brynja-crypto', '-p',
-             'brynja-legacy-hkdf', '--no-default-features', '--features', 'brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider'])
+             'brynja-legacy-hkdf', '--no-default-features', '--features', 'brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider,brynja-crypto/hazmat-ghash'])
         self.assertEqual(commands['aes-provider-api'],
                          ['python3', 'scripts/aes/check-aes-provider-api.py', '1.100.0'])
         registry = next(check for check in plan['checks'] if check['id'] == 'registry-tests')
@@ -120,7 +120,10 @@ class ScopedRelease(unittest.TestCase):
                                  or 'check-aes-kani.py' in arg
                                  or 'check-aes-dataflow.py' in arg for arg in command))
         release = tomllib.loads((scoped.ROOT / 'release-crates.toml').read_text())
-        self.assertEqual(release['release']['version'], '0.27.6')
+        self.assertEqual(release['release']['version'], '0.28.0')
+        self.assertEqual(release['crates']['brynja']['previous_version'], '0.27.6')
+        self.assertNotIn('0.27.7', release['release']['cumulative_milestones'])
+        self.assertIn('Portable GHASH', plan['scope'])
         self.assertEqual(release['release']['stage'], 'internal')
         self.assertFalse(release['release']['exceptional'])
         self.assertEqual(release['release']['exception_reason'], '')
@@ -128,6 +131,11 @@ class ScopedRelease(unittest.TestCase):
         self.assertIn('RISC-V remains evidence-only and unadmitted', plan['scope'])
         self.assertIn('exceptional findings still require review', plan['scope'])
         self.assertFalse(any(row['publish'] for row in release['crates'].values()))
+        for name in ('brynja-core', 'brynja-crypto'):
+            with self.subTest(name=name):
+                entry = release['crates'][name]
+                self.assertEqual(entry['change'], 'code')
+                self.assertEqual(entry['version'], entry['previous_version'])
         self.assertIn('brynja-legacy-hkdf', release['crates'])
         order = publisher.PUBLISH_ORDER
         self.assertLess(order.index('brynja-legacy-hmac'), order.index('brynja-legacy-hkdf'))

@@ -10,7 +10,8 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'hmac'))
 import hmac_verifiers as verifier
 
-TOOLCHAINS = ('1.90.0', '1.99.1')
+# Keep the prior endpoint selectable for explicitly registered historical checks.
+TOOLCHAINS = ('1.90.0', '1.99.1', '1.100.0')
 PREFIX = 'use brynja_crypto::aes::{Aes128Key,SecretBlock,PublicCiphertext};\n'
 START = PREFIX + 'fn main() { let mut s=[0;16]; let key=Aes128Key::new(&[0;16],&mut s).unwrap(); '
 BLOCK = 'let mut out=[0;16]; let block=key.encrypt_block(&[0;16],&mut out).unwrap(); '
@@ -102,21 +103,32 @@ def run_probes(toolchain, directory, env, *, cases=None, features='hazmat-aes-bl
     build = verifier.run(['cargo', '+' + toolchain, 'build', '--locked', '--offline',
                           '-p', package, '--no-default-features', '--features', features, '--message-format=json'], env)
     artifacts = []
+    dependencies = set()
+    target = (directory / 'target').resolve()
     for line in build.splitlines():
         if not line.startswith('{'):
             continue
         row = json.loads(line)
-        if row.get('reason') == 'compiler-artifact' and row.get('target', {}).get('name') == library:
-            artifacts.extend(Path(p) for p in row['filenames'] if p.endswith('.rlib'))
-    if len(artifacts) != 1 or not artifacts[0].resolve().is_relative_to(directory.resolve()):
+        if row.get('reason') != 'compiler-artifact':
+            continue
+        for filename in row['filenames']:
+            if not filename.endswith('.rlib'):
+                continue
+            artifact = Path(filename).resolve()
+            if not artifact.is_relative_to(target) or not artifact.is_file():
+                raise ValueError('missing or non-private AES build artifact')
+            if row.get('target', {}).get('name') == library:
+                artifacts.append(artifact)
+            else:
+                dependencies.add(artifact.parent)
+    if len(artifacts) != 1:
         raise ValueError('missing/ambiguous/private-target AES library artifact')
-    dependencies = directory / 'target/debug/deps'
-    if not dependencies.is_dir():
+    if not dependencies:
         raise ValueError('missing native dependency artifacts')
     source = directory / 'probe.rs'
     command = ['rustc', '+' + toolchain, '--edition=2024', '--crate-name', 'aes_probe',
                '--emit=metadata', '--error-format=json', '-o', str(directory / 'probe.rmeta'),
-               '-L', 'dependency=' + str(dependencies),
+               *(arg for path in sorted(dependencies) for arg in ('-L', 'dependency=' + str(path))),
                '--extern', library + '=' + str(artifacts[0]), str(source)]
     for name, negative, positive, code in cases:
         source.write_text(positive)

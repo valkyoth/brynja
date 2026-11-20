@@ -233,7 +233,7 @@ TLS engines or X.509 validation. Brynja must not yet secure network traffic.
 - Modern, legacy and research packages remain isolated. Legacy algorithms do
   not become safe merely because their implementation is complete.
 - No unreviewed third-party dependency enters the core. The optional
-  `brynja-sanitization` adapter uses exact-pinned `sanitization 2.1.1`,
+  `brynja-sanitization` adapter uses exact-pinned `sanitization 2.2.0`,
   with default features disabled. Planned `base64-ng` admission is
   encoding-only; future rustls/Tokio adapters remain separately selected.
 - Source files stay below 500 lines. Hostile inputs, work limits, output
@@ -297,6 +297,10 @@ The [AES usage guide](docs/aes-usage.md) explains the current development
 checkout's portable, static, hosted and external-key APIs, caller-owned storage, tested
 examples and explicit qualification limits.
 
+The v0.28.0 [portable GHASH development interface](docs/security-controls.md#portable-ghash-development-contract-v0280)
+requires `hazmat-ghash`, accepts pre-framed blocks and returns a secret intermediate, not a GCM tag.
+No GHASH hardware backend or GCM implementation is admitted.
+
 The v0.27.6 [provider API candidate](docs/assurance/aes-provider-completion.md)
 adds distinct AES-128/192/256 external-key bindings. Applications supply their
 own trusted adapters; Brynja adds no device client or OpenBao integration and
@@ -333,7 +337,7 @@ or make a policy check a proof. See [Kani evidence](docs/KANI.md).
 
 | Rust toolchain | Required evidence |
 | --- | --- |
-| `1.90.0`–`1.99.1` | Workspace all-feature compatibility, public API acceptance, and x86-64 clearing/constant-time codegen checks |
+| `1.90.0`–`1.100.0` (listed versions) | Workspace all-feature compatibility, public API acceptance, and x86-64 clearing/constant-time codegen checks |
 | `1.100.0` | Full format, lint, test, platform, policy, docs, package, and security gate |
 
 The exact tested compiler versions, including selected patch releases, remain

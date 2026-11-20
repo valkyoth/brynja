@@ -211,8 +211,8 @@ class Md5DependencyProfileTests(unittest.TestCase):
     def unrelated_pin(self):
         for name in ('Cargo.toml', 'Cargo.lock'):
             text = io.read(self.root, name).decode()
-            self.assertIn('2.1.1', text)
-            fixtures.write(self.root, name, text.replace('2.1.1', '2.1.2'))
+            self.assertIn('2.2.0', text)
+            fixtures.write(self.root, name, text.replace('2.2.0', '2.1.2'))
 
     def test_bounded_profile_reuses_unused_pin_change_but_default_stays_conservative(self):
         self.unrelated_pin()

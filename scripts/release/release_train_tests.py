@@ -24,6 +24,13 @@ def selections(*selected: str) -> dict[str, dict[str, bool]]:
     }
 
 
+def test_research_slot_is_not_a_tag() -> None:
+    assert policy.roadmap_predecessor("0.28.0") == "0.27.6"
+    assert policy.roadmap_range("0.27.5", "0.28.0") == ["0.27.6", "0.28.0"]
+    assert_fails("roadmap row", policy.roadmap_range, "0.27.6", "0.27.7")
+    assert_fails("roadmap row", policy.roadmap_range, "0.27.7", "0.28.0")
+
+
 def entry(previous: str, version: str, change: str, publish: bool) -> dict:
     return {
         "previous_version": previous,

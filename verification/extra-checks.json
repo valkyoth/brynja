@@ -49873,7 +49873,7 @@
         "assurance/sanitization-admission/Cargo.lock",
         "assurance/sanitization-admission/src/lib.rs",
         "docs/sanitization-admission-review.md",
-        "security/dependency-admissions/sanitization-2.1.1.toml"
+        "security/dependency-admissions/sanitization-2.2.0.toml"
       ],
       "patterns": [
         "crates/*/Cargo.toml"
@@ -50030,7 +50030,7 @@
         "assurance/sanitization-admission/Cargo.lock",
         "assurance/sanitization-admission/src/lib.rs",
         "docs/sanitization-admission-review.md",
-        "security/dependency-admissions/sanitization-2.1.1.toml"
+        "security/dependency-admissions/sanitization-2.2.0.toml"
       ],
       "patterns": [
         "crates/*/Cargo.toml"
@@ -63083,19 +63083,19 @@
       "tools": [
         {
           "program": "cargo",
-          "toolchain": "1.99.1"
+          "toolchain": "1.100.0"
         },
         {
           "program": "rustc",
-          "toolchain": "1.99.1"
+          "toolchain": "1.100.0"
         },
         {
           "program": "rustdoc",
-          "toolchain": "1.99.1"
+          "toolchain": "1.100.0"
         },
         {
           "program": "clippy-driver",
-          "toolchain": "1.99.1"
+          "toolchain": "1.100.0"
         }
       ],
       "toml": {
@@ -64644,19 +64644,19 @@
       "tools": [
         {
           "program": "cargo",
-          "toolchain": "1.99.1"
+          "toolchain": "1.100.0"
         },
         {
           "program": "rustc",
-          "toolchain": "1.99.1"
+          "toolchain": "1.100.0"
         },
         {
           "program": "rustdoc",
-          "toolchain": "1.99.1"
+          "toolchain": "1.100.0"
         },
         {
           "program": "clippy-driver",
-          "toolchain": "1.99.1"
+          "toolchain": "1.100.0"
         }
       ],
       "toml": {
@@ -92272,10 +92272,10 @@
       "log_bytes": 16777216,
       "success": {
         "contains": [
-          "sanitization 2.1.1 admission record, isolation: PASS"
+          "sanitization 2.2.0 admission record, isolation: PASS"
         ],
         "unique_lines": [
-          "sanitization 2.1.1 admission record, isolation: PASS"
+          "sanitization 2.2.0 admission record, isolation: PASS"
         ]
       },
       "establishes": "Existing offline record/source-policy or checker mutations only. Sanitizer commands in the SHA-2 batch regression suites are mocked. No compiler, crypto, native, sanitizer or proof execution. Raw lock/manifest and historical gate/review inputs affect only this policy row, not previous implementation results."
@@ -93922,7 +93922,7 @@
         "PYTHONDONTWRITEBYTECODE": "1",
         "RUSTUP_AUTO_INSTALL": "0",
         "CARGO_NET_OFFLINE": "true",
-        "RUSTUP_TOOLCHAIN": "1.99.1"
+        "RUSTUP_TOOLCHAIN": "1.100.0"
       },
       "reject_environment": [
         "MIRIFLAGS",
@@ -94111,7 +94111,7 @@
         "PYTHONDONTWRITEBYTECODE": "1",
         "RUSTUP_AUTO_INSTALL": "0",
         "CARGO_NET_OFFLINE": "true",
-        "RUSTUP_TOOLCHAIN": "1.99.1"
+        "RUSTUP_TOOLCHAIN": "1.100.0"
       },
       "reject_environment": [
         "MIRIFLAGS",

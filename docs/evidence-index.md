@@ -1,5 +1,14 @@
 # Permanent Evidence Index
 
+## Portable GHASH development (v0.28.0)
+
+- [Published GHASH intermediates and split tests](../crates/brynja-crypto/tests/ghash_vectors/nist.rs)
+  and [field arithmetic and budget regressions](../crates/brynja-crypto/tests/ghash_field.rs).
+- [Caller storage under Miri and ASan/LSan](assurance/ghash-lifecycle.md) and
+  [first x86-64 host screen](assurance/ghash-portable-screen.md).
+- [Scoped tracker entries](VERIFICATION_RESULTS.md#ghash) distinguish current
+  executions from replay of historical timing data. No GCM or hardware qualification.
+
 ## HKDF development evidence (v0.26.0)
 
 The live, scoped observations are in [verification results](VERIFICATION_RESULTS.md)

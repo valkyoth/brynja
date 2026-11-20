@@ -13,14 +13,14 @@ from pathlib import Path, PurePosixPath
 from urllib.parse import urlparse
 
 
-RECORD = Path("security/dependency-admissions/sanitization-2.1.1.toml")
+RECORD = Path("security/dependency-admissions/sanitization-2.2.0.toml")
 DOCUMENT = Path("docs/sanitization-admission-review.md")
 CANDIDATE = Path("assurance/sanitization-admission")
 PACKAGE = "sanitization"
-VERSION = "2.1.1"
-SOURCE_COMMIT = "69af1ce12ad03ca70b25e70d0173c9cdf7119ec6"
-REVIEWED_COMMIT = "60e1e97c362006ea64c8eec9b11015d5dfa63df9"
-PACKAGE_SHA256 = "0f6ebfd4675a15689bc97e4aa870d96c6aba71508b8b2b810e25d228eba04d8f"
+VERSION = "2.2.0"
+SOURCE_COMMIT = "3c0d984f4f8f8bf34a12a8b26238be6f0f4e1f08"
+REVIEWED_COMMIT = "61b9162596083f0abde5b00f142690d411cda078"
+PACKAGE_SHA256 = "943128f5d9f0bff679610a0026f198aff9f03db88fd6957975bc1d3ccb3c211c"
 SELECTED_TCB_SHA256 = [
     "src/owned.rs:a159daa45728fa63e6a42a16bfb8bb5d099f7e6fd05338b7393f3f105fbf2491",
     "src/wipe_backend.rs:f4389de86ad4a1c72961cc1141cdc9f2f55f564bf54b419a30a0138868e5289a",
@@ -45,6 +45,7 @@ COMPILERS = [
     "1.98.1",
     "1.99.0",
     "1.99.1",
+    "1.100.0",
 ]
 TARGETS = [
     "x86_64-unknown-linux-gnu",
@@ -98,12 +99,12 @@ def validate_record(root: Path) -> dict:
     rereview = table(data, "rereview")
     residual = table(data, "residual_risk")
 
-    require(schema == {"version": 1, "milestone": "0.24.52", "reviewed_on": "2026-10-17"},
+    require(schema == {"version": 1, "milestone": "0.28.0", "reviewed_on": "2026-11-20"},
             "admission schema or review date drift")
     require(decision.get("status") == "admitted-for-v0.11.2-adapter-only",
             "admission must be adapter-only")
     require(decision.get("production_graph_changed") is True,
-            "v0.24.52 must record the exact dependency update")
+            "v0.28.0 must record the exact dependency update")
     require(decision.get("adapter") == "brynja-sanitization",
             "protocol-neutral adapter name drift")
     require(decision.get("legacy_adapter") == "rejected",
@@ -145,10 +146,10 @@ def validate_record(root: Path) -> dict:
             {"src/wipe_backend.rs", "src/owned.rs"}, "selected unsafe inventory drift")
     require(unsafe.get("selected_feature_tcb_sha256") == SELECTED_TCB_SHA256,
             "selected TCB hash inventory drift")
-    require(unsafe.get("previous_selected_feature_tcb_version") == "2.1.0",
+    require(unsafe.get("previous_selected_feature_tcb_version") == "2.1.1",
             "selected TCB comparison baseline drift")
     require(unsafe.get("previous_selected_feature_tcb_sha256") == PREVIOUS_SELECTED_TCB_SHA256,
-            "previous selected TCB baseline changed from the 2.1.0 admission")
+            "previous selected TCB baseline changed from the 2.1.1 admission")
     require(unsafe.get("local_unsafe_authorized") is False,
             "dependency admission cannot authorize local unsafe")
     require(verification.get("compilers") == COMPILERS, "compiler evidence matrix drift")
@@ -309,7 +310,7 @@ def validate_release_state(root: Path) -> None:
         require(milestones[:3] == ["0.11.0", "0.11.1", "0.11.2"],
                 "cumulative milestone history lost the v0.11.2 adapter boundary")
     else:
-        require(baseline == "0.20.0",
+        require(baseline in {"0.20.0", "0.25.3"},
                 "post-publication cumulative baseline drift")
         crates = table(release, "crates")
         adapter = table(crates, "brynja-sanitization")
@@ -323,8 +324,13 @@ def validate_release_state(root: Path) -> None:
                               adapter.get("change") == "dependency" and
                               adapter.get("publish") is True and
                               metadata.get("stage") == "public")
-        require(adapter.get("previous_version") == "0.1.1" and
-                (unchanged or dependency_release),
+        current_internal = (baseline == "0.25.3" and
+                            adapter.get("previous_version") == adapter.get("version") == "0.1.2" and
+                            adapter.get("change") in {"unchanged", "dependency"} and
+                            adapter.get("publish") is False and metadata.get("stage") == "internal")
+        historical = (baseline == "0.20.0" and adapter.get("previous_version") == "0.1.1"
+                      and (unchanged or dependency_release))
+        require(current_internal or historical,
                 "published adapter release history drift")
         package = table(read_toml(root / "crates/brynja-sanitization/Cargo.toml"), "package")
         require(package.get("name") == "brynja-sanitization" and

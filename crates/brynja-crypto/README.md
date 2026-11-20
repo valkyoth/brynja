@@ -42,6 +42,7 @@ not independent cryptographic certification or coverage of every deployment.
 | cSHAKE, KMAC/KMACXOF, TupleHash and ParallelHash families | ✅ Fully implemented, reexported | ❌ No |
 | Modern HMAC over SHA-2/SHA-3 | ✅ Fully implemented portable API; explicit execution qualification separate | ❌ No |
 | HKDF and TLS Expand-Label over six standard SHA-2 identities | Development implementation; qualification unfinished | ❌ No |
+| Raw portable GHASH | Development interface; requires `hazmat-ghash`. Secret output, not a MAC or GCM tag. | ❌ No |
 | AEAD, other KDFs, RSA, ECC and executable provider effects | ❌ Not implemented | ❌ No |
 
 Named hashes and SP 800-185 constructions are usable; the broader planned

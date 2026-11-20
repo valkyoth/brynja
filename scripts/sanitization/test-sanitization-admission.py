@@ -24,7 +24,7 @@ def copy_fixture(destination: Path) -> None:
         Path("assurance/sanitization-admission/Cargo.lock"),
         Path("assurance/sanitization-admission/src/lib.rs"),
         Path("docs/sanitization-admission-review.md"),
-        Path("security/dependency-admissions/sanitization-2.1.1.toml"),
+        Path("security/dependency-admissions/sanitization-2.2.0.toml"),
     ):
         target = destination / relative
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -58,12 +58,12 @@ def test() -> None:
         copy_fixture(root)
         sanitization_admission.validate(root)
 
-        record = root / "security/dependency-admissions/sanitization-2.1.1.toml"
-        replace(record, 'version = "2.1.1"', 'version = "2.1.2"')
+        record = root / "security/dependency-admissions/sanitization-2.2.0.toml"
+        replace(record, 'version = "2.2.0"', 'version = "2.1.2"')
         require_rejection(root, "package identity")
         copy_fixture(root)
 
-        record = root / "security/dependency-admissions/sanitization-2.1.1.toml"
+        record = root / "security/dependency-admissions/sanitization-2.2.0.toml"
         replace(
             record,
             "a159daa45728fa63e6a42a16bfb8bb5d099f7e6fd05338b7393f3f105fbf2491",
@@ -72,8 +72,8 @@ def test() -> None:
         require_rejection(root, "selected TCB hash inventory drift")
         copy_fixture(root)
 
-        record = root / "security/dependency-admissions/sanitization-2.1.1.toml"
-        replace(record, "previous_selected_feature_tcb_version = \"2.1.0\"",
+        record = root / "security/dependency-admissions/sanitization-2.2.0.toml"
+        replace(record, "previous_selected_feature_tcb_version = \"2.1.1\"",
                 "previous_selected_feature_tcb_version = \"2.0.4\"")
         require_rejection(root, "comparison baseline drift")
         copy_fixture(root)
@@ -95,18 +95,18 @@ def test() -> None:
         require_rejection(root, "lock identity drift")
         copy_fixture(root)
 
-        record = root / "security/dependency-admissions/sanitization-2.1.1.toml"
+        record = root / "security/dependency-admissions/sanitization-2.2.0.toml"
         replace(record, "default_features = false", "default_features = true")
         require_rejection(root, "default features")
         copy_fixture(root)
 
-        record = root / "security/dependency-admissions/sanitization-2.1.1.toml"
+        record = root / "security/dependency-admissions/sanitization-2.2.0.toml"
         replace(record, 'fips_boundary = "excluded"', 'fips_boundary = "included"')
         require_rejection(root, "outside FIPS")
         copy_fixture(root)
 
         manifest = root / "crates/brynja/Cargo.toml"
-        replace(manifest, "[dependencies]", "[dependencies]\nsanitization = \"=2.1.1\"")
+        replace(manifest, "[dependencies]", "[dependencies]\nsanitization = \"=2.2.0\"")
         require_rejection(root, "escaped adapter")
         copy_fixture(root)
 
@@ -168,7 +168,9 @@ def test_adapter_release_history() -> None:
                    f'previous_version = "{previous}"\nversion = "{version}"\n'
                    f'change = "{change}"\npublish = {str(publish).lower()}\n')
             text = original[:start] + row + original[end:]
-            text = text.replace('stage = "public"', f'stage = "{stage}"', 1)
+            release_data = tomllib.loads(original)["release"]
+            text = text.replace(f'stage = "{release_data["stage"]}"', f'stage = "{stage}"', 1)
+            text = text.replace(f'baseline = "{release_data["baseline"]}"', 'baseline = "0.20.0"', 1)
             (root / "release-crates.toml").write_text(text)
             manifest.write_text(original_manifest.replace(
                 f'version = "{manifest_version}"', f'version = "{actual or version}"', 1
@@ -200,7 +202,7 @@ def test_adapter_release_history() -> None:
         # New adapter publication must not admit a new third-party identity,
         # checksum, feature set or FIPS claim. Exercise the full validator.
         for path, before, after, diagnostic in (
-            ("Cargo.toml", 'version = "=2.1.1", default-features = false',
+            ("Cargo.toml", 'version = "=2.2.0", default-features = false',
              'version = "=2.1.2", default-features = false', "workspace sanitization"),
             ("Cargo.lock", sanitization_admission.PACKAGE_SHA256, "0" * 64, "lock identity"),
             (str(sanitization_admission.RECORD), "default_features = false",

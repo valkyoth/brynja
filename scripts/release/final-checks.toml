@@ -1,18 +1,18 @@
-# Finite AES-family acceptance-candidate gate. Verification campaigns stay separate.
+# Finite portable GHASH candidate gate. Verification campaigns stay separate.
 # No crates.io publication is selected for this internal milestone.
 schema = 1
-version = "0.27.6"
-scope = "Dependency-free AES-128/192/256 external-key provider API completion: distinct typed bindings, lifecycle/failure regression coverage and archive-only direct/facade consumers. No device client, native FFI, OpenBao integration, new dependency or mandatory HSM. Retain portable and accelerated AES and modern/legacy HKDF compatibility. Owner-accepted accelerated timing remains unresolved; RISC-V remains evidence-only and unadmitted. Scoped owner pentest/retest and exact-commit GitHub approval remain separate; exceptional findings still require review. No publication, historical evidence-freshness gate or implicit dynamic/proof/timing/compiler-matrix campaign."
+version = "0.28.0"
+scope = "Portable GHASH arithmetic, bounded incremental input, caller-storage lifecycle and ordinary crypto regression tests. No GCM, GHASH acceleration or AES fault-integrity API. Also covers the dependency/tooling refresh and retains existing AES/HKDF compatibility checks. AES accelerated timing remains unresolved; RISC-V remains evidence-only and unadmitted. This internal milestone selects no publication; exceptional findings still require review. No historical evidence-freshness gate or implicit dynamic/proof/timing/compiler-matrix campaign."
 ci_checks = ["crypto-tests","crypto-lint","crypto-format","facade-integration","hkdf-owner-contract","aes-owner-contract","aes-wide-owner-contract","aes-wide-api","aes-dataflow-regressions","aes-provider-api","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
 
 [[checks]]
 id = "crypto-tests"
-command = ["cargo","test","--locked","-p","brynja-crypto","-p","brynja-legacy-hkdf","--no-default-features","--features","brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider"]
+command = ["cargo","test","--locked","-p","brynja-crypto","-p","brynja-legacy-hkdf","--no-default-features","--features","brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider,brynja-crypto/hazmat-ghash"]
 timeout_seconds = 300
 
 [[checks]]
 id = "crypto-lint"
-command = ["cargo","clippy","--locked","-p","brynja-crypto","-p","brynja-legacy-hkdf","--no-default-features","--features","brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider","--all-targets","--no-deps","--","-D","warnings"]
+command = ["cargo","clippy","--locked","-p","brynja-crypto","-p","brynja-legacy-hkdf","--no-default-features","--features","brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider,brynja-crypto/hazmat-ghash","--all-targets","--no-deps","--","-D","warnings"]
 timeout_seconds = 300
 
 [[checks]]

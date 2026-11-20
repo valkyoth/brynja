@@ -114,21 +114,6 @@ def prepare(directory):
     # the actual core dependency. No changes are made to the source checkout.
     shutil.copy2(ROOT / 'crates/brynja-crypto/src/aes.rs', directory / 'src/aes.rs')
     shutil.copytree(ROOT / 'crates/brynja-crypto/src/aes', directory / 'src/aes')
-    # The private fault-engine tests include repository-relative AVS files.
-    # Preserve their bytes in this isolated fixture while adjusting only the
-    # path literal for its shallower directory layout.
-    avs = directory / 'assurance/aes-avs/fixtures'
-    avs.mkdir(parents=True)
-    for family in ('MMT', 'MCT'):
-        for bits in (128, 192, 256):
-            name = f'ECB{family}{bits}.rsp'
-            shutil.copy2(ROOT / 'assurance/aes-avs/fixtures' / name, avs / name)
-    copied = directory / 'src/aes/fault_integrity/cipher_avs_tests.rs'
-    source = copied.read_text()
-    old_path = '../../../../../assurance/aes-avs/fixtures/'
-    if source.count(old_path) != 6:
-        raise ValueError('fault-engine AVS fixture path changed')
-    copied.write_text(source.replace(old_path, '../../../assurance/aes-avs/fixtures/'))
     (directory / 'src/lib.rs').write_text('#![no_std]\n#![forbid(unsafe_code)]\npub mod aes;\n')
     (directory / 'tests').mkdir()
     shutil.copy2(ROOT / 'crates/brynja-crypto/tests/aes128.rs', directory / 'tests/aes128.rs')
@@ -155,7 +140,7 @@ def campaign(directory, compiler):
     test = [*cargo, 'test', '--locked', '--offline']
     for selection, count, ignored in ((['--test', 'aes128'], 6, 0),
                                       (['--test', 'aes_wide_kat'], 4, 0),
-                                      (['--lib', 'aes::'], 91, 2)):
+                                      (['--lib', 'aes::'], 17, 0)):
         output = verifier.run([*test, *selection], env, directory)
         if f'test result: ok. {count} passed; 0 failed; {ignored} ignored;' not in output:
             raise ValueError('unaltered AES baseline population failed')
@@ -177,7 +162,7 @@ def campaign(directory, compiler):
     # Confirm restoration and unchanged baseline after the last defect.
     for selection, count, ignored in ((['--test', 'aes128'], 6, 0),
                                       (['--test', 'aes_wide_kat'], 4, 0),
-                                      (['--lib', 'aes::'], 91, 2)):
+                                      (['--lib', 'aes::'], 17, 0)):
         output = verifier.run([*test, *selection], env, directory)
         if f'test result: ok. {count} passed; 0 failed; {ignored} ignored;' not in output:
             raise ValueError('restored AES baseline failed')

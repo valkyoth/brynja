@@ -245,14 +245,16 @@ def main():
         dump = subprocess.run([args.objdump,'-d','--demangle','--no-show-raw-insn',str(binary)],
                               capture_output=True,text=True,check=True,timeout=30).stdout
         guard_symbol, guard_offsets = GUARD.inspect(dump)
-        secret = args.path == 'secret'
-        root, check = body(dump,SECRET_ROOT if secret else ROOT),body(dump,CHECK)
+        if args.path == 'public':
+            cases, command_builder, root_name, test_name = CASES, commands, ROOT, TEST
+        else:
+            cases, command_builder, root_name, test_name = SECRET_CASES, secret_commands, SECRET_ROOT, SECRET_TEST
+        root, check = body(dump,root_name),body(dump,CHECK)
         observations = []
-        for case in (SECRET_CASES if secret else CASES):
+        for case in cases:
             argv = [args.gdb,'-q','-nx','-batch']
-            command_builder = secret_commands if secret else commands
             for command in command_builder(case,root,check,guard_symbol,guard_offsets): argv += ['-ex',command]
-            argv += ['--args',str(binary),'--exact',SECRET_TEST if secret else TEST,'--nocapture']
+            argv += ['--args',str(binary),'--exact',test_name,'--nocapture']
             run = subprocess.run(argv,capture_output=True,text=True,check=True,timeout=60)
             transcript = run.stdout+run.stderr
             try:
@@ -262,7 +264,8 @@ def main():
             observations.append(dict(case=case,transcript_sha256=hashlib.sha256(transcript.encode()).hexdigest()))
         if binary.read_bytes() != original: raise ValueError('artifact changed during experiment')
         if args.details:
-            print(json.dumps(dict(path=args.path,observed_combined_bypass_rejected=secret,
+            print(json.dumps(dict(path=args.path,observed_combined_bypass_rejected=any(
+                              item['case'] == 'combined-decision-bypass' for item in observations),
                               binary_sha256=hashlib.sha256(original).hexdigest(),root=root,check=check,
                               guard_symbol=guard_symbol,guard_offsets=guard_offsets,observations=observations),sort_keys=True))
         print(f'{args.path}: {len(observations)} declared experiment outcomes reproduced')

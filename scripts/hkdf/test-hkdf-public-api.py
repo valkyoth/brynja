@@ -394,7 +394,7 @@ class PublicApiTests(unittest.TestCase):
                 dest = private / path
                 dest.parent.mkdir(parents=True, exist_ok=True)
                 dest.write_bytes((source / path).read_bytes())
-            cargo = ['cargo', '+1.99.1']
+            cargo = ['cargo', '+' + api.MATRIX[-1]]
             sets = []
             for name, crate in (('git', source), ('private', private)):
                 selected_env = {**env, 'CARGO_TARGET_DIR': str(base / ('target-' + name))}
@@ -424,7 +424,7 @@ class PublicApiTests(unittest.TestCase):
         with patch.object(api, 'unpack', side_effect=poisoned), \
                 patch.object(api, 'packaged_graph') as graph:
             with self.assertRaisesRegex(ValueError, 'archive file selection'):
-                api.check_family('legacy', ['1.99.1'], 'thumbv7em-none-eabi')
+                api.check_family('legacy', [api.MATRIX[-1]], 'thumbv7em-none-eabi')
             graph.assert_not_called()
 
     def test_failed_positive_stops_and_cleans_up(self):

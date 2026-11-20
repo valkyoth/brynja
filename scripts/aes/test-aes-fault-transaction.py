@@ -3,6 +3,7 @@
 from contextlib import redirect_stdout, redirect_stderr
 import importlib.util
 import io
+import json
 from pathlib import Path
 import subprocess
 import unittest
@@ -194,24 +195,29 @@ class TransactionRunner(unittest.TestCase):
                 self.assertEqual(TX.main(),2)
             self.assertNotIn('DEVELOPMENT_TRANSACTION_OBSERVED',output.getvalue())
 
-    def test_completed_secret_experiment_reports_combined_bypass_rejected(self):
+    def test_details_report_completed_case_metadata_not_debugger_output(self):
         elf = bytearray(32)
         elf[:6] = b'\x7fELF\x02\x01'
         elf[18:20] = b'\x3e\x00'
-        runs = [subprocess.CompletedProcess(['objdump'],0,'dump','')]
-        runs += [subprocess.CompletedProcess(['gdb'],0,transcript(case,'secret'),'') for case in TX.SECRET_CASES]
-        metadata = dict(symbol=TX.SECRET_ROOT,ret=100,combined_decision=80,combined_kind='legacy-or')
-        output = io.StringIO()
-        with patch('sys.argv',['probe','--binary','fixture','--path','secret','--details']), \
-             patch.object(Path,'resolve',return_value=Path('/fixture')), \
-             patch.object(Path,'read_bytes',return_value=elf), \
-             patch.object(TX.subprocess,'run',side_effect=runs), \
-             patch.object(TX.GUARD,'inspect',return_value=(TX.GUARD.SYMBOL,list(range(31)))), \
-             patch.object(TX,'body',return_value=metadata),redirect_stdout(output):
-            self.assertEqual(TX.main(),0)
-        self.assertIn('"observed_combined_bypass_rejected": true',output.getvalue())
-        self.assertNotIn('KNOWN_IN_MODEL_ESCAPE',output.getvalue())
-        self.assertIn('NOT complete C1/DC1/L1 or release qualification',output.getvalue())
+        for path, cases in [('public', TX.CASES), ('secret', TX.SECRET_CASES)]:
+            runs = [subprocess.CompletedProcess(['objdump'],0,'dump','')]
+            runs += [subprocess.CompletedProcess(['gdb'],0,transcript(case,path),'PRIVATE_TEST_CANARY')
+                     for case in cases]
+            metadata = dict(symbol='fixture',ret=100,combined_decision=80,combined_kind='legacy-or')
+            output, errors = io.StringIO(), io.StringIO()
+            with self.subTest(path=path), patch('sys.argv',['probe','--binary','fixture','--path',path,'--details']), \
+                 patch.object(Path,'resolve',return_value=Path('/fixture')), \
+                 patch.object(Path,'read_bytes',return_value=elf), \
+                 patch.object(TX.subprocess,'run',side_effect=runs), \
+                 patch.object(TX.GUARD,'inspect',return_value=(TX.GUARD.SYMBOL,list(range(31)))), \
+                 patch.object(TX,'body',return_value=metadata),redirect_stdout(output),redirect_stderr(errors):
+                self.assertEqual(TX.main(),0)
+                report = json.loads(output.getvalue().splitlines()[0])
+                self.assertEqual(report['observed_combined_bypass_rejected'], path == 'secret')
+                self.assertEqual([item['case'] for item in report['observations']], list(cases))
+                self.assertNotIn('PRIVATE_TEST_CANARY', output.getvalue() + errors.getvalue())
+                self.assertNotIn('KNOWN_IN_MODEL_ESCAPE',output.getvalue())
+                self.assertIn('NOT complete C1/DC1/L1 or release qualification',output.getvalue())
 
 
 if __name__ == '__main__':

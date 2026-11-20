@@ -24,14 +24,14 @@ jobs:
       - name: Install consumer endpoints and bare-metal target
         run: |
           rustup toolchain install 1.90.0 --profile minimal --target thumbv7em-none-eabi
-          rustup toolchain install 1.99.1 --profile minimal --component rustfmt,clippy --target thumbv7em-none-eabi
+          rustup toolchain install 1.100.0 --profile minimal --component rustfmt,clippy --target thumbv7em-none-eabi
       - name: Fetch locked dependencies before offline consumers
-        run: cargo +1.99.1 fetch --locked
+        run: cargo +1.100.0 fetch --locked
       - name: Check consumer formatting and lint
         run: |
-          cargo +1.99.1 fmt --manifest-path assurance/aes-public-api/Cargo.toml --check
-          cargo +1.99.1 clippy --locked --offline --manifest-path assurance/aes-public-api/Cargo.toml --no-default-features --features direct --all-targets --no-deps -- -D warnings
-          cargo +1.99.1 clippy --locked --offline --manifest-path assurance/aes-public-api/Cargo.toml --no-default-features --features facade --all-targets --no-deps -- -D warnings
+          cargo +1.100.0 fmt --manifest-path assurance/aes-public-api/Cargo.toml --check
+          cargo +1.100.0 clippy --locked --offline --manifest-path assurance/aes-public-api/Cargo.toml --no-default-features --features direct --all-targets --no-deps -- -D warnings
+          cargo +1.100.0 clippy --locked --offline --manifest-path assurance/aes-public-api/Cargo.toml --no-default-features --features facade --all-targets --no-deps -- -D warnings
       - name: Test consumer rejection controls
         run: python3 scripts/aes/test-aes-consumer.py
       - name: Exercise checkout consumers at the endpoints only
@@ -47,17 +47,17 @@ jobs:
       - name: Install acceptance endpoints and bare-metal target
         run: |
           rustup toolchain install 1.90.0 --profile minimal --target thumbv7em-none-eabi
-          rustup toolchain install 1.99.1 --profile minimal --component rustfmt,clippy --target thumbv7em-none-eabi
+          rustup toolchain install 1.100.0 --profile minimal --component rustfmt,clippy --target thumbv7em-none-eabi
       - name: Fetch locked workspace dependencies before offline acceptance
-        run: cargo +1.99.1 fetch --locked
+        run: cargo +1.100.0 fetch --locked
       - name: Test runner rejection controls
         run: python3 scripts/hkdf/test-hkdf-public-api.py
       - name: Check consumer formatting and lint
         run: |
-          cargo +1.99.1 fmt --manifest-path assurance/hkdf-public-api/Cargo.toml --check
-          cargo +1.99.1 fmt --manifest-path assurance/legacy-hkdf-public-api/Cargo.toml --check
-          cargo +1.99.1 clippy --locked --offline --manifest-path assurance/hkdf-public-api/Cargo.toml --all-targets --no-deps -- -D warnings
-          cargo +1.99.1 clippy --locked --offline --manifest-path assurance/legacy-hkdf-public-api/Cargo.toml --all-targets --no-deps -- -D warnings
+          cargo +1.100.0 fmt --manifest-path assurance/hkdf-public-api/Cargo.toml --check
+          cargo +1.100.0 fmt --manifest-path assurance/legacy-hkdf-public-api/Cargo.toml --check
+          cargo +1.100.0 clippy --locked --offline --manifest-path assurance/hkdf-public-api/Cargo.toml --all-targets --no-deps -- -D warnings
+          cargo +1.100.0 clippy --locked --offline --manifest-path assurance/legacy-hkdf-public-api/Cargo.toml --all-targets --no-deps -- -D warnings
       - name: Exercise only packaged public HKDF consumers
         run: python3 scripts/hkdf/check-hkdf-public-api.py
 
@@ -76,6 +76,8 @@ jobs:
         run: python3 scripts/release/scoped_release.py --ci --list
       - name: Fetch locked workspace dependencies for offline metadata checks
         run: cargo fetch --locked
+      - name: Keep AES fault research out of published crates
+        run: python3 scripts/aes/test-aes-fault-archive.py
       - name: Run the agreed component and integration checks
         run: python3 scripts/release/scoped_release.py --ci
 

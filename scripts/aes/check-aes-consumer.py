@@ -16,8 +16,9 @@ ROOT = verifier.ROOT
 FIXTURE = ROOT / 'assurance/aes-public-api'
 NAME = 'brynja-aes-public-api-fixture'
 TOOLCHAINS = ('1.90.0', '1.99.1')
+CURRENT_TOOLCHAINS = ('1.90.0', '1.100.0')
 MATRIX = ('1.90.0', '1.91.0', '1.92.0', '1.93.0', '1.94.0', '1.95.0',
-          '1.96.0', '1.96.1', '1.97.0', '1.97.1', '1.98.0', '1.98.1', '1.99.0', '1.99.1')
+          '1.96.0', '1.96.1', '1.97.0', '1.97.1', '1.98.0', '1.98.1', '1.99.0', '1.99.1', '1.100.0')
 ROUTES = ('direct', 'facade')
 BASE_TESTS = {'known_answer_both_directions', 'drop_clears_only_owned_regions',
          'explicit_clear_and_reuse', 'output_outlives_key',
@@ -33,9 +34,9 @@ FACADE = DIRECT | {'brynja', 'brynja-pki', 'brynja-protocol', 'brynja-tls',
 FILES = ('Cargo.toml', 'Cargo.lock', 'src/lib.rs', 'src/wide.rs', 'tests/consumer.rs', 'tests/wide/mod.rs',
          'tests/roundtrip.rs')
 MARKER = 'AES downstream: PASS; 8 host configurations; 4 Cortex-M compile checks; checkout sources only'
-MATRIX_MARKER = 'AES downstream matrix: PASS; 14 compilers; 56 host configurations; 4 Cortex-M compile checks; checkout sources only'
+MATRIX_MARKER = 'AES downstream matrix: PASS; 15 compilers; 60 host configurations; 4 Cortex-M compile checks; checkout sources only'
 FEATURE_MARKERS = [f'AES_FEATURE_GATE: {compiler} {route} absent with defaults on/off; explicit opt-in works'
-                   for compiler in TOOLCHAINS for route in ROUTES]
+                   for compiler in CURRENT_TOOLCHAINS for route in ROUTES]
 
 
 def require(condition, message):
@@ -178,12 +179,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--matrix', action='store_true')
     args = parser.parse_args()
-    for compiler in MATRIX if args.matrix else TOOLCHAINS:
+    for compiler in MATRIX if args.matrix else CURRENT_TOOLCHAINS:
         for route in ROUTES:
             with verifier.cargo_environment.private_directory(ROOT) as temporary:
-                if compiler in TOOLCHAINS:
+                if compiler in CURRENT_TOOLCHAINS:
                     feature_probe(compiler, route, Path(temporary) / 'feature-probe')
-                configuration(compiler, route, Path(temporary), compiler in TOOLCHAINS)
+                configuration(compiler, route, Path(temporary), compiler in CURRENT_TOOLCHAINS)
     print(MATRIX_MARKER if args.matrix else MARKER)
 
 

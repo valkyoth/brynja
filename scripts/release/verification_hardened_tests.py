@@ -85,7 +85,9 @@ class HardenedBindingTests(unittest.TestCase):
         initial = assignment('scripts/sha1/test-sha1-hardened.py', 'cases')
         self.assertEqual(len(initial.elts) + len(sha1.BORROWED_ENGINE) + len(sha1.SCOPED) + 6
                          + sum(map(len, sha1.STRICT.values())) + 5 + 2, 85)
-        self.assertEqual(len(sha1.inventory(ROOT)), 168)
+        # The AES fault workbench is archived outside shared core.
+        inventory = set(sha1.inventory(ROOT))
+        self.assertEqual(len(inventory), 168)
 
     def test_acceptance_commands_keep_test_and_cross_target_steps(self):
         for family in ('sha2', 'sha3'):

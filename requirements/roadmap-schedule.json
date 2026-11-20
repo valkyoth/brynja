@@ -865,11 +865,11 @@
     {
       "id": "0.27.7",
       "version": "0.27.7",
-      "title": "Optional Fault-Detecting AES Profile",
+      "title": "AES Fault-Integrity Research Archive",
       "requires": [
         "0.27.5"
       ],
-      "scope_sha256": "9621382ac8e5301ea0f08b5f9528c5f1eb9c9acba04ea07fb470ad88cd7d0721"
+      "scope_sha256": "5707933a4cbc2f15fec943c3aa6244e38305a22681e1c20e3d91d150e9c35bf6"
     },
     {
       "id": "0.28.0",

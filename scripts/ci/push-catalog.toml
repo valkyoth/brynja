@@ -192,7 +192,7 @@ affected = [
 
 qualification = [
   "scripts/kmac/check-kmac-codegen.sh",
-  "scripts/constant-time/check-constant-time-codegen.sh 1.99.1 x86_64-unknown-linux-gnu",
+  "scripts/constant-time/check-constant-time-codegen.sh 1.100.0 x86_64-unknown-linux-gnu",
   "python3 scripts/cpu/check-static-execution.py",
   "python3 scripts/cpu/check-hosted-execution.py",
   "python3 scripts/cryptography/check-secret-owner-compiler.py",
@@ -289,8 +289,8 @@ qualification = [
   "scripts/sha2/check-sha256-cpu-codegen.sh",
   "scripts/cpu/check-cpu-admission-fixture.sh",
   "scripts/sanitization/check-sanitization-candidate.sh",
-  "scripts/zeroization/check-zeroization-codegen.sh 1.99.1 x86_64-unknown-linux-gnu",
-  "scripts/sanitization/check-sanitization-adapter-codegen.sh 1.99.1 x86_64-unknown-linux-gnu",
+  "scripts/zeroization/check-zeroization-codegen.sh 1.100.0 x86_64-unknown-linux-gnu",
+  "scripts/sanitization/check-sanitization-adapter-codegen.sh 1.100.0 x86_64-unknown-linux-gnu",
   "python3 scripts/repository/check-facade-package.py",
   "scripts/repository/check-packages.sh",
   "scripts/standards/verify-rfcs.sh",

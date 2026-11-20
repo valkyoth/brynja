@@ -297,8 +297,9 @@ missing/duplicate proof summaries. The normal registry suite includes them.
 `scripts/aes/check-aes-mutations.py` copies the production AES module, internal
 tests and public vector harness into a private temporary fixture with the real
 core dependency. The repository's production files are never edited. Both the
-unaltered and restored copies must pass all six public and seven internal tests.
-Each of twelve deliberate defects must compile successfully, then fail its
+unaltered and restored copies must pass six AES-128 public tests, four wide-AES
+public tests, and 91 library tests (with two explicitly ignored tests).
+Each of eighteen deliberate defects must compile successfully, then fail its
 specific regression by assertion with exactly one failing test. Build errors,
 zero-test runs, a different failed test, process aborts and surviving defects
 are rejected as evidence.
@@ -306,7 +307,8 @@ are rejected as evidence.
 The defects cover the field modulus, both affine constants, initial round
 constant, previous key-word offset, ShiftRows direction, skipped round, inverse
 MixColumns coefficient, final round key, omitted schedule clearing, forgotten
-explicit key clear, and a premature public-output write. This demonstrates
+explicit key clear, a premature public-output write, and six wide-AES schedule,
+round, and clearing defects. This demonstrates
 sensitivity of those selected tests; it is not exhaustive mutation coverage or
 a proof that all implementation defects are detectable. Runner regressions
 also check anchor uniqueness, source restoration, surviving mutants and compile

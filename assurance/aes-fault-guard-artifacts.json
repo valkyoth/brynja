@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "status": "core-guard-leaf-development-only",
+  "qualification": "none",
+  "runner": "scripts/aes/check-aes-fault-guard-artifacts.py",
+  "test": "fault_comparison_workbench::guarded_copy::tests::both_bad_receipts_leave_output_unchanged",
+  "artifacts": [
+    {"binary_sha256":"81e0e0314777d789bcf308b163ef99c2bc6ccf6d3f7b5049fb3bf46e6822bc05","leaf_cases_passed":7},
+    {"binary_sha256":"5d2319bf3bbfa95efec231e079669bb1dcb0bed8bb84e73c0fdf8e6c134cea34","leaf_cases_passed":7}
+  ],
+  "limits": [
+    "The two brynja-crypto test ELFs do not contain this brynja-core fixture test.",
+    "The guard leaf is tested in separate pinned core test ELFs; this does not qualify the AES caller or its final output release path.",
+    "The selected leaf cases do not enumerate all emitted C1 decisions or applicable DC1 pairings."
+  ]
+}

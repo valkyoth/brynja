@@ -66,7 +66,7 @@ class ScopedRelease(unittest.TestCase):
             ['cargo', 'test', '--locked', '-p', 'brynja-crypto', '-p',
              'brynja-legacy-hkdf', '--no-default-features', '--features', 'brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider'])
         self.assertEqual(commands['aes-provider-api'],
-                         ['python3', 'scripts/aes/check-aes-provider-api.py', '1.99.1'])
+                         ['python3', 'scripts/aes/check-aes-provider-api.py', '1.100.0'])
         registry = next(check for check in plan['checks'] if check['id'] == 'registry-tests')
         self.assertEqual(registry['command'],
                          ['python3', 'scripts/release/test-verification-registry.py'])
@@ -83,19 +83,19 @@ class ScopedRelease(unittest.TestCase):
         self.assertEqual(commands['aes-wide-owner-contract'],
                          ['python3', 'scripts/cryptography/test-aes-wide-owner-contract.py'])
         self.assertEqual(commands['aes-wide-api'],
-                         ['python3', 'scripts/aes/check-aes-wide-api.py', '1.99.1'])
+                         ['python3', 'scripts/aes/check-aes-wide-api.py', '1.100.0'])
         self.assertEqual(commands['aes-dataflow-regressions'],
                          ['python3', 'scripts/aes/test-aes-dataflow.py'])
         self.assertEqual(commands['aes-downstream-endpoints'],
                          ['python3', 'scripts/aes/check-aes-consumer.py'])
         consumer_manifest = 'assurance/aes-public-api/Cargo.toml'
         expected_consumer_checks = {
-            'aes-consumer-format': ['cargo', '+1.99.1', 'fmt', '--manifest-path',
+            'aes-consumer-format': ['cargo', '+1.100.0', 'fmt', '--manifest-path',
                                     consumer_manifest, '--check'],
         }
         for route in ('direct', 'facade'):
             expected_consumer_checks['aes-consumer-lint-' + route] = [
-                'cargo', '+1.99.1', 'clippy', '--locked', '--offline',
+                'cargo', '+1.100.0', 'clippy', '--locked', '--offline',
                 '--manifest-path', consumer_manifest, '--no-default-features',
                 '--features', route, '--all-targets', '--no-deps', '--', '-D', 'warnings']
         workflow = (scoped.ROOT / '.github/workflows/ci.yml').read_text()
@@ -137,14 +137,14 @@ class ScopedRelease(unittest.TestCase):
         job = workflow.split('\n  aes-public-api:\n', 1)[1].split('\n  hkdf-public-api:', 1)[0]
 
         def validate(text):
-            fetch = '        run: cargo +1.99.1 fetch --locked\n'
+            fetch = '        run: cargo +1.100.0 fetch --locked\n'
             consumer = '        run: python3 scripts/aes/check-aes-consumer.py\n'
             self.assertEqual(text.count(fetch), 1)
             self.assertEqual(text.count(consumer), 1)
-            self.assertLess(text.index(fetch), text.index('cargo +1.99.1 clippy'))
+            self.assertLess(text.index(fetch), text.index('cargo +1.100.0 clippy'))
             self.assertLess(text.index(fetch), text.index(consumer))
             self.assertIn('rustup toolchain install 1.90.0 --profile minimal --target thumbv7em-none-eabi', text)
-            self.assertIn('rustup toolchain install 1.99.1 --profile minimal --component rustfmt,clippy --target thumbv7em-none-eabi', text)
+            self.assertIn('rustup toolchain install 1.100.0 --profile minimal --component rustfmt,clippy --target thumbv7em-none-eabi', text)
             self.assertIn('run: python3 scripts/aes/test-aes-consumer.py', text)
             for route in ('direct', 'facade'):
                 self.assertIn(f'--no-default-features --features {route} --all-targets --no-deps -- -D warnings', text)
@@ -220,6 +220,12 @@ class ScopedRelease(unittest.TestCase):
                 return part.split(f'\n  {jobs[index + 1]}:', 1)[0] if index + 1 < len(jobs) else part
             original = body(before).strip()
             current = body(after).split('\n', 1)[1].strip()  # only new job-level if
+            if name == 'rust-version':
+                self.assertIn(', 1.100.0]', current)
+                current = current.replace(', 1.100.0]', ']')
+            elif name == 'target':
+                self.assertIn('1.100.0', current)
+                current = current.replace('1.100.0', '1.99.1')
             self.assertEqual(original, current, name)
         self.assertNotIn('\n  push:', after)
         self.assertNotIn('\n  pull_request:', after)

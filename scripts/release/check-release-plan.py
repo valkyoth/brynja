@@ -66,10 +66,10 @@ API_SCOPE_CONTRACTS = {
                "no software fallback", "no_std", "independent feature gates",
                "Application-owned adapters", "no device client, native FFI or OpenBao integration",
                "no hardware support claim"),
-    "v0.27.7": ("default-off", "all three key widths", "both block directions",
-               "bounded fault model", "independently structured redundant computation",
-               "key-schedule integrity checks", "withheld output", "terminal failure",
-               "no HSM or PKCS#11 adapter", "no physical fault-resistance claim"),
+    "v0.27.7": ("unfinished AES fault-integrity experiment",
+               "outside published crate source", "research-only tests",
+               "no public API", "no fault-resistance claim",
+               "not make completion of this research a prerequisite for GHASH"),
     "v0.34.0": ("brynja-encoding-der", "compatibility re-exports"),
     "v0.34.6": ("encode/decode", "independent encodings", "hardened"),
     "v0.49.5": ("signing and verification", "DER"),
@@ -118,6 +118,14 @@ AES_ACCEPTANCE_CONTRACTS = {
                "explicit and bounded, never automatic after uncertainty",
                "Thread traits must reflect backend/session restrictions"),
     "v0.27.7": ("Review the bounded fault model before implementation",
+               "Obtain explicit owner/reviewer acceptance before implementation",
+               "safe-error/SIFA outcome leakage, failure-stage timing and increased passive exposure",
+               "global key retirement and fresh-key rotation",
+               "Each of two independent destination readback paths must fully check both domain results",
+               "persistent domain-local constant sites",
+               "Domain-local constant faults use output integrity, not per-use constant attestation",
+               "persistent correct-output filtering remains an outcome-leakage residual",
+               "uniform peer-visible failure responses and no alarm retry",
                "unsupported configurations must fail admission",
                "Identical repeated encryption is not sufficient",
                "comparison bypass", "without secret-dependent timing",
@@ -178,6 +186,10 @@ SCOPED_INTERNAL_EXIT = (
     "GitHub and CodeQL, then create the signed tag. This development milestone "
     "is not a scheduled crates.io publication.`"
 )
+DEFERRED_RESEARCH_EXIT = (
+    "`v0.27.7 research archived unfinished. No tag or crates.io publication; "
+    "GHASH and later core work proceed independently.`"
+)
 
 
 def expected_versions() -> list[str]:
@@ -195,6 +207,8 @@ def expected_exit(version: str) -> str:
     # to future candidates when their detailed plans are prepared as well.
     if version == "v0.26.0":
         return SCOPED_INTERNAL_EXIT.format(version=version)
+    if version == "v0.27.7":
+        return DEFERRED_RESEARCH_EXIT
     if version.startswith("v1.") or version.removeprefix("v").split(".")[1] in {
         str(number) for number in range(1, 11)
     }:
@@ -284,7 +298,8 @@ def validate(release_path: Path, version_path: Path) -> None:
             "Status: awaiting pentest",
             "Status: awaiting green CI",
             "Status: released",
-        ):
+        ) and not (version == "v0.27.7" and status_lines[0] ==
+                   "Status: deferred research; no release or tag planned"):
             raise ValueError(f"{version} has an unsupported status")
 
         if not has_concrete_detail(section, "Deliverables:", "Verification:"):
@@ -312,7 +327,7 @@ def validate(release_path: Path, version_path: Path) -> None:
     print(
         f"release and version plans have {len(matches)} ordered, "
         f"scope-locked sections: {checkpoints} public checkpoints and "
-        f"{len(matches) - checkpoints} tagged development milestones"
+        f"{len(matches) - checkpoints} internal plan slots (including deferred research)"
     )
 
 

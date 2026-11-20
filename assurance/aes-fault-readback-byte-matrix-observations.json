@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "status": "development-guarded-readback-byte-grid-observed",
+  "qualification": "none",
+  "runner": "scripts/aes/check-aes-fault-readback-byte-matrix.py",
+  "source_stage": "tentative-write/guarded-readback-pair",
+  "mutation": "one checked destination byte XOR bit 0 before either guarded-write readback",
+  "scope": {
+    "widths": [128, 192, 256],
+    "owners": ["cached", "operation-local"],
+    "paths": ["encrypt-public", "encrypt-secret", "decrypt-secret"],
+    "readbacks": ["forward", "reverse"],
+    "byte_positions": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+    "expected_cases_per_artifact": 576
+  },
+  "artifacts": [
+    {"toolchain":"1.90.0","binary_sha256":"a11c368e8eccec0e497d336ebe6a9de6381a01dfd3716887c8d69b84efa69c26","confirmed":576,"unconfirmed":0},
+    {"toolchain":"1.100.0","binary_sha256":"bf61f409964ce7678b2a5694e63a5640d4b0a320c76d76866b25c9e95a307baf","confirmed":576,"unconfirmed":0}
+  ],
+  "preflight": "The byte-0 subset confirmed 36/36 cases for each readback before the full grid.",
+  "observed_outcome": "Each changed guarded-write destination was rejected; fixture checks confirmed public rollback or secret cleanup, terminal retirement and rejected reuse.",
+  "limits": [
+    "This covers both guarded-write readbacks of the tentative public destination or secret staging, not the later actual secret destination.",
+    "Only one XOR-1 byte mutation per readback was tested; other deltas, replacements, stuck bits and persistence remain open.",
+    "No instruction-skip, C1 bypass or DC1 data-plus-bypass pairing was exercised by this grid.",
+    "The ELFs are local test artifacts; this is not physical-fault or final-linked release qualification."
+  ]
+}

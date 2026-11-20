@@ -68,7 +68,7 @@ class PublicApiTests(unittest.TestCase):
                 self.assertTrue(set(api.REJECT_ENV) <= set(check['reject_environment']))
                 self.assertIn(f'HKDF packaged public API {family}: PASS; no upload', check['success']['contains'])
                 if matrix:
-                    self.assertIn(f'HKDF packaged public API {family}: MATRIX PASS; 14 host compilers', check['success']['contains'])
+                    self.assertIn(f'HKDF packaged public API {family}: MATRIX PASS; 15 host compilers', check['success']['contains'])
 
     def test_exact_diagnostic(self):
         self.assertTrue(api.diagnostic_matches(result(diagnostic()), 'E0308'))

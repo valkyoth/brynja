@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "status": "partial-named-body-boundaries",
+  "qualification": "none",
+  "source_inventory": "assurance/aes-fault-sites.json",
+  "runner": "scripts/aes/check-aes-fault-symbol-boundaries.py",
+  "artifacts": [
+    {
+      "toolchain": "1.90.0",
+      "binary_sha256": "a11c368e8eccec0e497d336ebe6a9de6381a01dfd3716887c8d69b84efa69c26",
+      "bodies": {
+        "secondary-expansion": [{"address":1093328,"size":1952}],
+        "secondary-rounds": [{"address":1095280,"size":1953}],
+        "import-checks": [{"address":1075552,"size":697}],
+        "use-checks": [{"address":1081280,"size":481}],
+        "receipt-observations": [{"address":1066992,"size":1017},{"address":1068016,"size":592}],
+        "tentative-write": [{"address":1097808,"size":927}],
+        "lifecycle-handoff": [{"address":1097600,"size":207}]
+      }
+    },
+    {
+      "toolchain": "1.100.0",
+      "binary_sha256": "bf61f409964ce7678b2a5694e63a5640d4b0a320c76d76866b25c9e95a307baf",
+      "bodies": {
+        "secondary-expansion": [{"address":792560,"size":2409}],
+        "secondary-rounds": [{"address":794976,"size":1549}],
+        "import-checks": [{"address":791504,"size":677}],
+        "use-checks": [{"address":802528,"size":362}],
+        "receipt-observations": [{"address":789056,"size":663},{"address":788544,"size":500}],
+        "tentative-write": [{"address":855424,"size":583}],
+        "lifecycle-handoff": [{"address":800704,"size":142}]
+      }
+    }
+  ],
+  "limits": [
+    "A named body span is a starting boundary only; optimized code can inline, duplicate or move source operations.",
+    "The record does not enumerate individual instructions, bytes, mutations or DC1 temporal pairings.",
+    "These are local test ELFs, not release-linked artifacts or physical fault observations."
+  ]
+}

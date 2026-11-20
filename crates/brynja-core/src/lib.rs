@@ -43,6 +43,13 @@ mod secret_memory_predicate;
 mod secret_memory_transfer;
 mod secret_memory_volatile;
 mod secret_memory_xor;
+// Repository-only research dependency, never enabled by an ordinary feature.
+// The implementation lives outside the published crate package.
+#[cfg(all(brynja_fault_primitives, brynja_fault_profile_research))]
+#[doc(hidden)]
+#[rustfmt::skip]
+#[path = "../../../research/aes-fault-integrity/core/fault_comparison_workbench/mod.rs"]
+pub mod fault_comparison_workbench;
 #[cfg(test)]
 mod secret_memory_xor_tests;
 pub mod secure_random;

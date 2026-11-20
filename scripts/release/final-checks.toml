@@ -47,12 +47,12 @@ timeout_seconds = 60
 
 [[checks]]
 id = "aes-wide-api"
-command = ["python3","scripts/aes/check-aes-wide-api.py","1.99.1"]
+command = ["python3","scripts/aes/check-aes-wide-api.py","1.100.0"]
 timeout_seconds = 300
 
 [[checks]]
 id = "aes-provider-api"
-command = ["python3","scripts/aes/check-aes-provider-api.py","1.99.1"]
+command = ["python3","scripts/aes/check-aes-provider-api.py","1.100.0"]
 timeout_seconds = 300
 
 [[checks]]
@@ -129,17 +129,17 @@ timeout_seconds = 300
 
 [[checks]]
 id = "aes-consumer-format"
-command = ["cargo","+1.99.1","fmt","--manifest-path","assurance/aes-public-api/Cargo.toml","--check"]
+command = ["cargo","+1.100.0","fmt","--manifest-path","assurance/aes-public-api/Cargo.toml","--check"]
 timeout_seconds = 60
 
 [[checks]]
 id = "aes-consumer-lint-direct"
-command = ["cargo","+1.99.1","clippy","--locked","--offline","--manifest-path","assurance/aes-public-api/Cargo.toml","--no-default-features","--features","direct","--all-targets","--no-deps","--","-D","warnings"]
+command = ["cargo","+1.100.0","clippy","--locked","--offline","--manifest-path","assurance/aes-public-api/Cargo.toml","--no-default-features","--features","direct","--all-targets","--no-deps","--","-D","warnings"]
 timeout_seconds = 300
 
 [[checks]]
 id = "aes-consumer-lint-facade"
-command = ["cargo","+1.99.1","clippy","--locked","--offline","--manifest-path","assurance/aes-public-api/Cargo.toml","--no-default-features","--features","facade","--all-targets","--no-deps","--","-D","warnings"]
+command = ["cargo","+1.100.0","clippy","--locked","--offline","--manifest-path","assurance/aes-public-api/Cargo.toml","--no-default-features","--features","facade","--all-targets","--no-deps","--","-D","warnings"]
 timeout_seconds = 300
 
 [[checks]]

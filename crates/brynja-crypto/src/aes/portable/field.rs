@@ -10,7 +10,10 @@ pub(super) fn multiply(mut a: u8, mut b: u8) -> u8 {
     result
 }
 pub(super) fn xtime(a: u8) -> u8 {
-    (a << 1) ^ (0x1b & 0u8.wrapping_sub(a >> 7))
+    let reduction = 0x1b;
+    #[cfg(all(test, brynja_fault_evidence, brynja_fault_profile_research))]
+    let reduction = super::field_fault_fixture::reduction(a, reduction);
+    (a << 1) ^ (reduction & 0u8.wrapping_sub(a >> 7))
 }
 
 pub(super) fn inverse(a: u8) -> u8 {
@@ -30,8 +33,16 @@ pub(super) fn inverse(a: u8) -> u8 {
 }
 pub(super) fn sbox(a: u8) -> u8 {
     let x = inverse(a);
-    x ^ x.rotate_left(1) ^ x.rotate_left(2) ^ x.rotate_left(3) ^ x.rotate_left(4) ^ 0x63
+    let affine = 0x63;
+    #[cfg(all(test, brynja_fault_evidence, brynja_fault_profile_research))]
+    let affine =
+        super::field_fault_fixture::affine(super::field_fault_fixture::Site::Forward, affine);
+    x ^ x.rotate_left(1) ^ x.rotate_left(2) ^ x.rotate_left(3) ^ x.rotate_left(4) ^ affine
 }
 pub(super) fn inv_sbox(a: u8) -> u8 {
-    inverse(a.rotate_left(1) ^ a.rotate_left(3) ^ a.rotate_left(6) ^ 0x05)
+    let affine = 0x05;
+    #[cfg(all(test, brynja_fault_evidence, brynja_fault_profile_research))]
+    let affine =
+        super::field_fault_fixture::affine(super::field_fault_fixture::Site::Inverse, affine);
+    inverse(a.rotate_left(1) ^ a.rotate_left(3) ^ a.rotate_left(6) ^ affine)
 }

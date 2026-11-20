@@ -1,0 +1,125 @@
+{
+  "schema": 1,
+  "status": "partial-development-site-map",
+  "qualification": "none",
+  "source_inventory": "assurance/aes-fault-sites.json",
+  "observation_record": "assurance/aes-fault-local-recapture-map-observations.json",
+  "observation_sha256": "f5dcdfbc0e91f654d466f5d4eed92608ab629b6facc6bae75cbc1ab3830a464b",
+  "capture_observation_record": "assurance/aes-fault-capture-current-observations.json",
+  "capture_observation_sha256": "61502ea379a99cdb01e83824acb6b7afa97883a08ae0f256eecc8454701714ed",
+  "retained_observation_record": "assurance/aes-fault-retained-validation-observations.json",
+  "retained_observation_sha256": "649cc8c065b99f618c00a87da3cc1f4aaf070e03ee91887e3757760c50272259",
+  "result_observation_record": "assurance/aes-fault-result-map-observations.json",
+  "result_observation_sha256": "aba10b3b17ff09e7e9571309341d77153a99117caf26fdcf2ceb48b3017fb30d",
+  "completion_observation_record": "assurance/aes-fault-completion-map-observations.json",
+  "completion_observation_sha256": "e9d82abb4b017f679cd1a729a7f6f427205dead9e7ae2b6bd628cb88928939ec",
+  "outer_completion_observation_record": "assurance/aes-fault-outer-completion-map-observations.json",
+  "outer_completion_observation_sha256": "16fd70aada2f46cac05b3ce45c9f09514e8cabffdfac60345d65352a369a3b46",
+  "permit_observation_record": "assurance/aes-fault-permit-map-observations.json",
+  "permit_observation_sha256": "5bc90f24879fd43af227d69fe3153d7412309484b072aa3c059f2b18527d3b54",
+  "readbacks_observation_record": "assurance/aes-fault-readbacks-map-observations.json",
+  "readbacks_observation_sha256": "8be56ec743eb6812f34e5cb3762b5d70662c603a8a82aa1b8c45f2611532d351",
+  "secret_destination_observation_record": "assurance/aes-fault-secret-destination-map-observations.json",
+  "secret_destination_observation_sha256": "5d2607f1856192aae89bf98971ce4b9dc62be6279d798cf0bc38c8c41613a67d",
+  "secret_result_observation_record": "assurance/aes-fault-secret-result-map-observations.json",
+  "secret_result_observation_sha256": "76770f3ebce2de59ac8184514815e532c04d3820c0e834920f7cb0ebf04ca58a",
+  "secret_caller_observation_record": "assurance/aes-fault-secret-caller-map-observations.json",
+  "secret_caller_observation_sha256": "1e381da64f7235059ad54ac4d2d8e238cf0248334d59065c858c5c2b9e2427de",
+  "family": "local-key-copy",
+  "class": "D3",
+  "owner": "operation-local",
+  "phase": "use",
+  "mutation_family": "transient-byte",
+  "expected_outcome": "reject-or-correct",
+  "fault_results": [],
+  "dc1_pairings": [],
+  "capture_families": [
+    {"family": "key-capture", "scope": "key", "class": "D3", "owner": ["cached", "operation-local"], "phase": "import", "mutation_family": "transient-byte", "expected_outcome": "reject-or-correct"},
+    {"family": "block-capture", "scope": "input", "class": "D3", "owner": ["cached", "operation-local"], "phase": "use", "mutation_family": "transient-byte", "expected_outcome": "reject-or-correct"}
+  ],
+  "capture_artifacts": [
+    {"binary_sha256": "a11c368e8eccec0e497d336ebe6a9de6381a01dfd3716887c8d69b84efa69c26", "status": "baseline-observed-not-faulted"},
+    {"binary_sha256": "bf61f409964ce7678b2a5694e63a5640d4b0a320c76d76866b25c9e95a307baf", "status": "baseline-observed-not-faulted"}
+  ],
+  "retained_family": {"family": "retained-key", "class": "D2", "owner": ["cached", "operation-local"], "phase": "lifetime", "mutation_family": "persistent-byte", "expected_outcome": "retained-mismatch"},
+  "retained_artifacts": [
+    {"binary_sha256": "a11c368e8eccec0e497d336ebe6a9de6381a01dfd3716887c8d69b84efa69c26", "status": "baseline-observed-not-faulted"},
+    {"binary_sha256": "bf61f409964ce7678b2a5694e63a5640d4b0a320c76d76866b25c9e95a307baf", "status": "baseline-observed-not-faulted"}
+  ],
+  "result_families": [
+    {"family": "primary-result", "class": "D1", "owner": ["cached", "operation-local"], "phase": "use", "mutation_family": "transient-byte", "expected_outcome": "reject-or-correct"},
+    {"family": "secondary-result", "class": "D1", "owner": ["cached", "operation-local"], "phase": "use", "mutation_family": "transient-byte", "expected_outcome": "reject-or-correct"}
+  ],
+  "result_artifacts": [
+    {"binary_sha256": "a11c368e8eccec0e497d336ebe6a9de6381a01dfd3716887c8d69b84efa69c26", "status": "baseline-observed-not-faulted"},
+    {"binary_sha256": "bf61f409964ce7678b2a5694e63a5640d4b0a320c76d76866b25c9e95a307baf", "status": "baseline-observed-not-faulted"}
+  ],
+  "completion_family": {"family": "completion", "classes": ["L1", "C1"], "owner": ["cached", "operation-local"], "phase": "use", "mutation_family": "codeword-or-bypass", "expected_outcome": "bypass-obligation"},
+  "completion_artifacts": [
+    {"binary_sha256": "a11c368e8eccec0e497d336ebe6a9de6381a01dfd3716887c8d69b84efa69c26", "status": "baseline-observed-not-faulted"},
+    {"binary_sha256": "bf61f409964ce7678b2a5694e63a5640d4b0a320c76d76866b25c9e95a307baf", "status": "baseline-observed-not-faulted"}
+  ],
+  "outer_completion_artifacts": [
+    {"binary_sha256": "a11c368e8eccec0e497d336ebe6a9de6381a01dfd3716887c8d69b84efa69c26", "status": "baseline-observed-not-faulted"},
+    {"binary_sha256": "bf61f409964ce7678b2a5694e63a5640d4b0a320c76d76866b25c9e95a307baf", "status": "baseline-observed-not-faulted"}
+  ],
+  "permit_family": {"family": "final-permit", "classes": ["L1", "C1"], "owner": ["cached", "operation-local"], "phase": "release", "mutation_family": "codeword-or-bypass", "expected_outcome": "bypass-obligation"},
+  "permit_artifacts": [
+    {"binary_sha256": "a11c368e8eccec0e497d336ebe6a9de6381a01dfd3716887c8d69b84efa69c26", "status": "baseline-observed-not-faulted"},
+    {"binary_sha256": "bf61f409964ce7678b2a5694e63a5640d4b0a320c76d76866b25c9e95a307baf", "status": "baseline-observed-not-faulted"}
+  ],
+  "readbacks_family": {"family": "readbacks", "classes": ["C1"], "owner": ["cached", "operation-local"], "phase": "release", "mutation_family": "single-bypass", "expected_outcome": "bypass-obligation"},
+  "readbacks_artifacts": [
+    {"binary_sha256": "a11c368e8eccec0e497d336ebe6a9de6381a01dfd3716887c8d69b84efa69c26", "status": "baseline-observed-not-faulted"},
+    {"binary_sha256": "bf61f409964ce7678b2a5694e63a5640d4b0a320c76d76866b25c9e95a307baf", "status": "baseline-observed-not-faulted"}
+  ],
+  "secret_destination_family": {"family": "secret-destination", "classes": ["D4", "C1"], "owner": ["cached", "operation-local"], "phase": "release", "mutation_family": "destination-or-bypass", "expected_outcome": "destination-obligation"},
+  "secret_destination_artifacts": [
+    {"binary_sha256": "a11c368e8eccec0e497d336ebe6a9de6381a01dfd3716887c8d69b84efa69c26", "status": "baseline-observed-not-faulted"},
+    {"binary_sha256": "bf61f409964ce7678b2a5694e63a5640d4b0a320c76d76866b25c9e95a307baf", "status": "baseline-observed-not-faulted"}
+  ],
+  "secret_result_artifacts": [
+    {"binary_sha256": "a11c368e8eccec0e497d336ebe6a9de6381a01dfd3716887c8d69b84efa69c26", "status": "baseline-observed-not-faulted"},
+    {"binary_sha256": "bf61f409964ce7678b2a5694e63a5640d4b0a320c76d76866b25c9e95a307baf", "status": "baseline-observed-not-faulted"}
+  ],
+  "secret_caller_artifacts": [
+    {"binary_sha256": "a11c368e8eccec0e497d336ebe6a9de6381a01dfd3716887c8d69b84efa69c26", "status": "baseline-observed-not-faulted"},
+    {"binary_sha256": "bf61f409964ce7678b2a5694e63a5640d4b0a320c76d76866b25c9e95a307baf", "status": "baseline-observed-not-faulted"}
+  ],
+  "artifacts": [
+    {
+      "status": "baseline-observed-not-faulted",
+      "binary_sha256": "a11c368e8eccec0e497d336ebe6a9de6381a01dfd3716887c8d69b84efa69c26",
+      "toolchain": "1.90.0",
+      "arch": "x86_64",
+      "caller_symbol": "brynja_crypto::aes::fault_integrity::retained::ephemeral::Ephemeral::compute",
+      "call_offsets": [653, 683],
+      "copy_leaf_symbol": "brynja_core::secret_memory_transfer::copy_bytes",
+      "word_load_offset": 14,
+      "word_store_offset": 18,
+      "width_bytes": [16, 24, 32],
+      "paths": ["public", "encrypt", "decrypt"],
+      "word_offsets_by_width": {"16": [0, 8], "24": [0, 8, 16], "32": [0, 8, 16, 24]}
+    },
+    {
+      "status": "baseline-observed-not-faulted",
+      "binary_sha256": "bf61f409964ce7678b2a5694e63a5640d4b0a320c76d76866b25c9e95a307baf",
+      "toolchain": "1.100.0",
+      "arch": "x86_64",
+      "caller_symbol": "<brynja_crypto::aes::fault_integrity::retained::ephemeral::Ephemeral>::compute",
+      "call_offsets": [436, 466],
+      "copy_leaf_symbol": "brynja_core::secret_memory_transfer::copy_bytes",
+      "word_load_offset": 14,
+      "word_store_offset": 18,
+      "width_bytes": [16, 24, 32],
+      "paths": ["public", "encrypt", "decrypt"],
+      "word_offsets_by_width": {"16": [0, 8], "24": [0, 8, 16], "32": [0, 8, 16, 24]}
+    }
+  ],
+  "limits": [
+    "Only operation-local key copy, key import capture, block input capture, retained pre/post validation calls, primary/secondary result boundaries, inner/outer completion stores, deny-first final-permit boundaries, guarded-write readbacks, actual secret-destination validation, secret-result construction and fixture-caller return are partially mapped; all source and bypass families remain open.",
+    "Labels identify observed call and word-step contexts, not fault-injection passes or unique machine addresses.",
+    "Byte-tail paths, other compiler/target configurations, native mutations and DC1 pairings are unmapped or untested.",
+    "No artifact is admitted and no public fault profile is enabled."
+  ]
+}

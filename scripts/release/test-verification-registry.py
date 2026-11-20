@@ -669,9 +669,9 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(check['success']['contains'], ['AES downstream: PASS;'])
         self.assertEqual(check['success']['unique_lines'], [consumer.MARKER] + [
             f'AES_DOWNSTREAM_HOST: {compiler} {route} {profile} 21 exact tests'
-            for compiler in consumer.TOOLCHAINS for route in consumer.ROUTES for profile in ('debug', 'release')
+            for compiler in consumer.CURRENT_TOOLCHAINS for route in consumer.ROUTES for profile in ('debug', 'release')
         ] + [f'AES_DOWNSTREAM_TARGET: {compiler} {route} thumbv7em-none-eabi compile-only'
-             for compiler in consumer.TOOLCHAINS for route in consumer.ROUTES] + consumer.FEATURE_MARKERS)
+             for compiler in consumer.CURRENT_TOOLCHAINS for route in consumer.ROUTES] + consumer.FEATURE_MARKERS)
         self.assertTrue({'aes-build', 'aes-consumer', 'compiler', 'hkdf-msrv'} <= set(check['inputs']))
         paths = self.registry['groups']['aes-consumer']['paths']
         for name in consumer.FACADE:
@@ -694,7 +694,7 @@ class RegistryTests(unittest.TestCase):
             f'AES_DOWNSTREAM_HOST: {compiler} {route} {profile} 21 exact tests'
             for compiler in consumer.MATRIX for route in consumer.ROUTES for profile in ('debug', 'release')
         ] + [f'AES_DOWNSTREAM_TARGET: {compiler} {route} thumbv7em-none-eabi compile-only'
-             for compiler in consumer.TOOLCHAINS for route in consumer.ROUTES] + consumer.FEATURE_MARKERS)
+             for compiler in consumer.CURRENT_TOOLCHAINS for route in consumer.ROUTES] + consumer.FEATURE_MARKERS)
 
     def test_aes_timing_scope_and_full_input_closure(self):
         check = next(c for c in self.registry['checks'] if c['component'] == 'aes' and c['id'] == 'timing-screen')
@@ -788,6 +788,7 @@ class RegistryTests(unittest.TestCase):
                          ['AES_MUTATION_REJECTED: ' + m[0] for m in aes_runner_tests.mutation.MUTATIONS] +
                          [aes_runner_tests.mutation.SCRATCH_MARKER])
         self.assertTrue({'aes-mutations', 'compiler', 'hash-core'} <= set(mutation['inputs']))
+        self.assertIn('assurance/aes-avs/fixtures', self.registry['groups']['aes-mutations']['paths'])
         owner = checks['owner-dispatch']
         self.assertEqual(owner['command'], ['python3', 'scripts/aes/check-aes-owner-cleanup.py'])
         self.assertEqual(owner['platform'], 'linux-x86_64')

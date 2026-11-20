@@ -1,0 +1,375 @@
+{
+  "schema": 1,
+  "status": "finite-native-key-import-store-observations",
+  "qualification": "none",
+  "recorded_at_utc": "2026-11-17T13:03:32.585473+00:00",
+  "working_tree_base": "c5b7f181be26a2441d965374dede49910d80fa2a",
+  "selected_source_snapshots": {
+    "scripts/aes/check-aes-fault-import-store.py": "17c99ef867e9b17602ae754e7dacfc87d0ba36cf41d6847435dbae5b88e986c4",
+    "scripts/aes/test-aes-fault-import-store.py": "01843cf43445594bc572a21fa0bd20a7a275febb39c20f847cdd00cdb8a94963",
+    "scripts/aes/check-aes-fault-copy-store.py": "ff7013df2935db4e9e06b7f1d377e6595595508ab76592ce1ba826305613366f",
+    "scripts/aes/aes_fault_capture_map.py": "d4ea580c1e1867e389e4613daec50e194de0e5e724758034a18993388b28772f",
+    "crates/brynja-crypto/src/aes/fault_integrity/capture.rs": "31372658d94b03a4ef053052b2abf18c99d60f01ec00c2c57f57c1a4fabacf58",
+    "crates/brynja-crypto/src/aes/fault_integrity/retained.rs": "56d02df70b8bec4e1da506df3b1b166e6820e0c710ef4bcf8d84504f56879e9d",
+    "crates/brynja-crypto/src/aes/fault_integrity/retained/ephemeral.rs": "6dcc85df82f027911156f9009ec0841a19056ea03cfbc7cec9c255a0efb208dc",
+    "crates/brynja-crypto/src/aes/fault_integrity/retained/probe_tests.rs": "738b21e445958db52be12037d984e7e34c7ba4fe6240d12079ba68b8d2a394af",
+    "crates/brynja-crypto/src/aes/fault_integrity/retained/probe_tests/import_tests.rs": "1ab3d968ca15d45113b66803a06ba0ed91dc52d4c90cf41826ccb0ddbda1b59a",
+    "crates/brynja-core/src/secret_memory_transfer.rs": "85f0cef7c2a8508c4d594ad7462bccb92fd8e5bea7897164d7df3ee655dcf3e0"
+  },
+  "clean_checkout": false,
+  "source_binding_limit": "Selected source snapshots are local working-tree context, not complete reproducible-build identity or signed execution receipts.",
+  "reproduction": {
+    "build": "RUSTFLAGS='--cfg brynja_fault_primitives' cargo +TOOLCHAIN test --locked --release -p brynja-crypto --lib --features hazmat-aes-block --no-run",
+    "run": "python3 scripts/aes/check-aes-fault-import-store.py --binary PATH_FROM_CARGO --json"
+  },
+  "attempts_not_counted": [],
+  "artifacts": [
+    {
+      "compiler_command": "cargo +1.99.1",
+      "observation": {
+        "binary_sha256": "5bc7c817b1b8f1087e61bdfefe8ddd97875cb827318050a5c007ffa9ca1ca278",
+        "capture_mapping": {
+          "capture": {
+            "elf_address": 859760,
+            "events": {
+              "after_first_call": 44,
+              "after_second_call": 65,
+              "entry": 0,
+              "first_call": 39,
+              "return": 83,
+              "second_call": 60
+            },
+            "normalized_sha256": "c78f74f87ec0c3b7d074c9dedfe6e088eba31f2ae46b742d07e04d87f629baee",
+            "shape": "source-r14-result-ff",
+            "symbol": "brynja_crypto::aes::fault_integrity::capture::pair"
+          },
+          "copy": {
+            "elf_address": 1156240,
+            "events": {
+              "after_word_store": 22,
+              "byte_load": 41,
+              "byte_store": 45,
+              "entry": 0,
+              "return": 62,
+              "word_load": 14,
+              "word_store": 18
+            },
+            "normalized_sha256": "28078bea4b9f47ef2520bf5c373a82b0c8794b1236202527c5a1d0cc5ee718c5",
+            "shape": "source-r14-result-ff",
+            "symbol": "brynja_core::secret_memory_transfer::copy_bytes"
+          },
+          "wrapper": {
+            "elf_address": 1156304,
+            "events": {
+              "after_copy_call": 22,
+              "copy_call": 17,
+              "entry": 0,
+              "return": 28
+            },
+            "normalized_sha256": "816d3351cdb05512ba78a533d5d336b6506449f96fb5dbbceb0cd1e4e97ceea4",
+            "shape": "source-r14-result-ff",
+            "symbol": "brynja_core::secret_memory::copy_secret_region"
+          }
+        },
+        "groups": [
+          {
+            "counts": {
+              "baseline": 1,
+              "data": 16
+            },
+            "owner": "cached",
+            "replica": "first",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "data": 16
+            },
+            "owner": "cached",
+            "replica": "second",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "replica": "first",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "replica": "second",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "data": 24
+            },
+            "owner": "cached",
+            "replica": "first",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "data": 24
+            },
+            "owner": "cached",
+            "replica": "second",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "data": 24
+            },
+            "owner": "ephemeral",
+            "replica": "first",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "data": 24
+            },
+            "owner": "ephemeral",
+            "replica": "second",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "data": 32
+            },
+            "owner": "cached",
+            "replica": "first",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "data": 32
+            },
+            "owner": "cached",
+            "replica": "second",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "data": 32
+            },
+            "owner": "ephemeral",
+            "replica": "first",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "data": 32
+            },
+            "owner": "ephemeral",
+            "replica": "second",
+            "width_bits": 256
+          }
+        ],
+        "limits": [
+          "No C1/DC1 bypass, arbitrary replacement values or faults after complement encoding.",
+          "No owner is returned on rejected import; rejection is not retirement of an existing owner.",
+          "Public fixtures and optimized test ELFs only; not production or physical-fault qualification."
+        ],
+        "qualification": "none",
+        "schema": 1,
+        "selection": "Both key replicas, each key byte: XOR 1 in its register lane before the word store. One unchanged baseline per width/owner/replica group.",
+        "status": "finite-native-key-import-store-observations"
+      }
+    },
+    {
+      "compiler_command": "cargo +1.90.0",
+      "observation": {
+        "binary_sha256": "04741099d71b29a7e908903160299d7cdacf8be631c5a67700499f58d47cc289",
+        "capture_mapping": {
+          "capture": {
+            "elf_address": 1062976,
+            "events": {
+              "after_first_call": 44,
+              "after_second_call": 65,
+              "entry": 0,
+              "first_call": 39,
+              "return": 83,
+              "second_call": 60
+            },
+            "normalized_sha256": "77810ecdc8d4295cdd108c3f3a2c23f43ef57e698e29c943372dc163d17051af",
+            "shape": "source-r15-result-04",
+            "symbol": "brynja_crypto::aes::fault_integrity::capture::pair"
+          },
+          "copy": {
+            "elf_address": 1204288,
+            "events": {
+              "after_word_store": 22,
+              "byte_load": 41,
+              "byte_store": 45,
+              "entry": 0,
+              "return": 62,
+              "word_load": 14,
+              "word_store": 18
+            },
+            "normalized_sha256": "28078bea4b9f47ef2520bf5c373a82b0c8794b1236202527c5a1d0cc5ee718c5",
+            "shape": "source-r15-result-04",
+            "symbol": "brynja_core::secret_memory_transfer::copy_bytes"
+          },
+          "wrapper": {
+            "elf_address": 1204256,
+            "events": {
+              "after_copy_call": 22,
+              "copy_call": 17,
+              "entry": 0,
+              "return": 28
+            },
+            "normalized_sha256": "4690875b460781ab51b01c17a4c5a53b9a8353ebd9e0030a2c11132b404693f6",
+            "shape": "source-r15-result-04",
+            "symbol": "brynja_core::secret_memory::copy_secret_region"
+          }
+        },
+        "groups": [
+          {
+            "counts": {
+              "baseline": 1,
+              "data": 16
+            },
+            "owner": "cached",
+            "replica": "first",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "data": 16
+            },
+            "owner": "cached",
+            "replica": "second",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "replica": "first",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "replica": "second",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "data": 24
+            },
+            "owner": "cached",
+            "replica": "first",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "data": 24
+            },
+            "owner": "cached",
+            "replica": "second",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "data": 24
+            },
+            "owner": "ephemeral",
+            "replica": "first",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "data": 24
+            },
+            "owner": "ephemeral",
+            "replica": "second",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "data": 32
+            },
+            "owner": "cached",
+            "replica": "first",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "data": 32
+            },
+            "owner": "cached",
+            "replica": "second",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "data": 32
+            },
+            "owner": "ephemeral",
+            "replica": "first",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "data": 32
+            },
+            "owner": "ephemeral",
+            "replica": "second",
+            "width_bits": 256
+          }
+        ],
+        "limits": [
+          "No C1/DC1 bypass, arbitrary replacement values or faults after complement encoding.",
+          "No owner is returned on rejected import; rejection is not retirement of an existing owner.",
+          "Public fixtures and optimized test ELFs only; not production or physical-fault qualification."
+        ],
+        "qualification": "none",
+        "schema": 1,
+        "selection": "Both key replicas, each key byte: XOR 1 in its register lane before the word store. One unchanged baseline per width/owner/replica group.",
+        "status": "finite-native-key-import-store-observations"
+      }
+    }
+  ],
+  "totals": {
+    "healthy_imports": 24,
+    "rejected_imports": 576,
+    "cases": 600
+  },
+  "limits": [
+    "Single XOR-1 key-copy store faults on both replicas and all key-byte positions, before complement encoding; no import-check bypass or full D3/DC1 coverage.",
+    "Rejected constructors return no owner: this is import rejection and cleanup, not retirement of an existing owner.",
+    "Source hooks disabled in the observed release-profile test ELFs. Native observations do not qualify production binaries or physical-fault resistance.",
+    "New fixtures change ELF hashes. Earlier observation records remain bound to their earlier artifacts and are not promoted to passes for these builds."
+  ]
+}

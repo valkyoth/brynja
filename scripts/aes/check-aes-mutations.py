@@ -15,9 +15,9 @@ KAT = ('--test', 'aes128', 'nist_aesavs_all_four_aes128_ecb_kat_files')
 SCHEDULE = ('--lib', 'aes::tests::fips197_appendix_a1_complete_schedule')
 PUBLIC_FAULT = ('--lib', 'aes::tests::public_encryption_failures_preserve_destination_and_clear_scratch')
 MUTATIONS = (
-    ('field-modulus', 'src/aes/portable/field.rs', '0x1b &', '0x1d &', KAT),
-    ('forward-affine', 'src/aes/portable/field.rs', '^ 0x63', '^ 0x62', KAT),
-    ('inverse-affine', 'src/aes/portable/field.rs', '^ 0x05', '^ 0x04', KAT),
+    ('field-modulus', 'src/aes/portable/field.rs', 'let reduction = 0x1b;', 'let reduction = 0x1d;', KAT),
+    ('forward-affine', 'src/aes/portable/field.rs', 'let affine = 0x63;', 'let affine = 0x62;', KAT),
+    ('inverse-affine', 'src/aes/portable/field.rs', 'let affine = 0x05;', 'let affine = 0x04;', KAT),
     ('round-constant', 'src/aes/portable.rs', 'let mut rcon = 1;', 'let mut rcon = 2;', KAT),
     ('prior-key-word', 'src/aes/portable.rs', 'offset.wrapping_sub(16).wrapping_add(i)',
      'offset.wrapping_sub(12).wrapping_add(i)', KAT),
@@ -114,6 +114,21 @@ def prepare(directory):
     # the actual core dependency. No changes are made to the source checkout.
     shutil.copy2(ROOT / 'crates/brynja-crypto/src/aes.rs', directory / 'src/aes.rs')
     shutil.copytree(ROOT / 'crates/brynja-crypto/src/aes', directory / 'src/aes')
+    # The private fault-engine tests include repository-relative AVS files.
+    # Preserve their bytes in this isolated fixture while adjusting only the
+    # path literal for its shallower directory layout.
+    avs = directory / 'assurance/aes-avs/fixtures'
+    avs.mkdir(parents=True)
+    for family in ('MMT', 'MCT'):
+        for bits in (128, 192, 256):
+            name = f'ECB{family}{bits}.rsp'
+            shutil.copy2(ROOT / 'assurance/aes-avs/fixtures' / name, avs / name)
+    copied = directory / 'src/aes/fault_integrity/cipher_avs_tests.rs'
+    source = copied.read_text()
+    old_path = '../../../../../assurance/aes-avs/fixtures/'
+    if source.count(old_path) != 6:
+        raise ValueError('fault-engine AVS fixture path changed')
+    copied.write_text(source.replace(old_path, '../../../assurance/aes-avs/fixtures/'))
     (directory / 'src/lib.rs').write_text('#![no_std]\n#![forbid(unsafe_code)]\npub mod aes;\n')
     (directory / 'tests').mkdir()
     shutil.copy2(ROOT / 'crates/brynja-crypto/tests/aes128.rs', directory / 'tests/aes128.rs')
@@ -138,9 +153,11 @@ def campaign(directory, compiler):
     cargo = ['cargo', '+' + compiler]
     verifier.run([*cargo, 'generate-lockfile', '--offline'], env, directory)
     test = [*cargo, 'test', '--locked', '--offline']
-    for selection, count in ((['--test', 'aes128'], 6), (['--test', 'aes_wide_kat'], 4), (['--lib', 'aes::'], 17)):
+    for selection, count, ignored in ((['--test', 'aes128'], 6, 0),
+                                      (['--test', 'aes_wide_kat'], 4, 0),
+                                      (['--lib', 'aes::'], 91, 2)):
         output = verifier.run([*test, *selection], env, directory)
-        if f'test result: ok. {count} passed; 0 failed; 0 ignored;' not in output:
+        if f'test result: ok. {count} passed; 0 failed; {ignored} ignored;' not in output:
             raise ValueError('unaltered AES baseline population failed')
     for name, relative, old, new, selection in MUTATIONS:
         path = directory / relative
@@ -158,9 +175,11 @@ def campaign(directory, compiler):
         finally:
             path.write_text(original)
     # Confirm restoration and unchanged baseline after the last defect.
-    for selection, count in ((['--test', 'aes128'], 6), (['--test', 'aes_wide_kat'], 4), (['--lib', 'aes::'], 17)):
+    for selection, count, ignored in ((['--test', 'aes128'], 6, 0),
+                                      (['--test', 'aes_wide_kat'], 4, 0),
+                                      (['--lib', 'aes::'], 91, 2)):
         output = verifier.run([*test, *selection], env, directory)
-        if f'test result: ok. {count} passed; 0 failed; 0 ignored;' not in output:
+        if f'test result: ok. {count} passed; 0 failed; {ignored} ignored;' not in output:
             raise ValueError('restored AES baseline failed')
     print(MARKER, flush=True)
 
@@ -171,8 +190,8 @@ def main():
     if len(MUTATIONS) != 18 or len({m[0] for m in MUTATIONS}) != 18:
         raise ValueError('mutation population drift')
     with verifier.cargo_environment.private_directory(ROOT) as temporary:
-        campaign(Path(temporary), '1.99.1')
-        scratch_contract(Path(temporary), '1.99.1')
+        campaign(Path(temporary), '1.100.0')
+        scratch_contract(Path(temporary), '1.100.0')
 
 
 if __name__ == '__main__':

@@ -220,6 +220,16 @@ class MutationTests(unittest.TestCase):
             for name, relative, old, new, _selection in mutation.MUTATIONS:
                 source = (directory / relative).read_text()
                 self.assertNotEqual(mutation.mutate(source, old, new), source, name)
+            copied = (directory / 'src/aes/fault_integrity/cipher_avs_tests.rs').read_text()
+            self.assertEqual(copied.count('../../../assurance/aes-avs/fixtures/'), 6)
+            self.assertNotIn('../../../../../assurance/aes-avs/fixtures/', copied)
+            for family in ('MMT', 'MCT'):
+                for bits in (128, 192, 256):
+                    name = f'ECB{family}{bits}.rsp'
+                    self.assertEqual(
+                        (directory / 'assurance/aes-avs/fixtures' / name).read_bytes(),
+                        (mutation.ROOT / 'assurance/aes-avs/fixtures' / name).read_bytes(),
+                    )
 
     def test_missing_duplicate_or_unchanged_anchor_fails(self):
         for source, old, new in [('abc', 'd', 'x'), ('aa', 'a', 'b'), ('abc', 'a', 'a')]:
@@ -250,8 +260,9 @@ class MutationTests(unittest.TestCase):
                     raise RuntimeError('mutant does not compile')
                 if 'generate-lockfile' in command:
                     return ''
-                count = 4 if 'aes_wide_kat' in command else (6 if '--test' in command else 17)
-                return f'test result: ok. {count} passed; 0 failed; 0 ignored;'
+                count = 4 if 'aes_wide_kat' in command else (6 if '--test' in command else 91)
+                ignored = 2 if '--lib' in command else 0
+                return f'test result: ok. {count} passed; 0 failed; {ignored} ignored;'
 
             with (patch.object(mutation.verifier, 'environment', return_value={}),
                   patch.object(mutation.verifier, 'run', side_effect=run),
@@ -269,8 +280,9 @@ class MutationTests(unittest.TestCase):
             def run(command, *_args):
                 if '--no-run' in command or 'generate-lockfile' in command:
                     return ''
-                count = 4 if 'aes_wide_kat' in command else (6 if '--test' in command else 17)
-                return f'test result: ok. {count} passed; 0 failed; 0 ignored;'
+                count = 4 if 'aes_wide_kat' in command else (6 if '--test' in command else 91)
+                ignored = 2 if '--lib' in command else 0
+                return f'test result: ok. {count} passed; 0 failed; {ignored} ignored;'
 
             with (patch.object(mutation.verifier, 'environment', return_value={}),
                   patch.object(mutation.verifier, 'run', side_effect=run),

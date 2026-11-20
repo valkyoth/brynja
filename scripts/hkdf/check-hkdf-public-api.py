@@ -15,7 +15,7 @@ sys.path.insert(0, str(ROOT / 'scripts/repository'))
 import facade_cargo_environment as cargo_environment
 
 MATRIX = ('1.90.0', '1.91.0', '1.92.0', '1.93.0', '1.94.0', '1.95.0',
-          '1.96.0', '1.96.1', '1.97.0', '1.97.1', '1.98.0', '1.98.1', '1.99.0', '1.99.1')
+          '1.96.0', '1.96.1', '1.97.0', '1.97.1', '1.98.0', '1.98.1', '1.99.0', '1.99.1', '1.100.0')
 MODERN = ('brynja', 'brynja-core', 'brynja-crypto', 'brynja-crypto-cpu',
           'brynja-crypto-cpu-std', 'brynja-dtls', 'brynja-hash-core',
           'brynja-hash-parallel', 'brynja-hash-sha2', 'brynja-hash-sha3',
@@ -315,8 +315,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--family', choices=('modern', 'legacy', 'all'), default='all')
     selection = parser.add_mutually_exclusive_group()
-    selection.add_argument('--toolchain', action='append', help='Installed compiler; repeat for a matrix (default: 1.90.0 and 1.99.1)')
-    selection.add_argument('--matrix', action='store_true', help='All 14 supported host compilers; bare-metal at 1.90.0 and 1.99.1')
+    selection.add_argument('--toolchain', action='append', help='Installed compiler; repeat for a matrix (default: 1.90.0 and 1.100.0)')
+    selection.add_argument('--matrix', action='store_true', help='All 15 supported host compilers; bare-metal at 1.90.0 and 1.100.0')
     parser.add_argument('--target', default='thumbv7em-none-eabi')
     args = parser.parse_args()
     for name in REJECT_ENV:

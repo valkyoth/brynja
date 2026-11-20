@@ -1,0 +1,573 @@
+{
+  "schema": 1,
+  "status": "finite-operation-local-import-use",
+  "qualification": "none",
+  "recorded_at_utc": "2026-11-17T18:53:47.016788+00:00",
+  "working_tree_base": "c5b7f181be26a2441d965374dede49910d80fa2a",
+  "selected_source_snapshots": {
+    "scripts/aes/check-aes-fault-import-use.py": "c45ef34e2e9df78763daf07ac3419fb372d5983d299a96bedfc9a295c92ee67b",
+    "scripts/aes/test-aes-fault-import-use.py": "b15c1281e81d7eaf5572890a5b5ca56564a03d469eb3992960a6b906b8104a76",
+    "scripts/aes/check-aes-fault-import-bypass.py": "cb573e54a0f8c355daca8998ec13bd1603bc08964ce55952a25099be12f1848d",
+    "scripts/aes/check-aes-fault-import-store.py": "17c99ef867e9b17602ae754e7dacfc87d0ba36cf41d6847435dbae5b88e986c4",
+    "scripts/aes/aes_fault_capture_map.py": "d4ea580c1e1867e389e4613daec50e194de0e5e724758034a18993388b28772f",
+    "crates/brynja-crypto/src/aes/fault_integrity/retained.rs": "56d02df70b8bec4e1da506df3b1b166e6820e0c710ef4bcf8d84504f56879e9d",
+    "crates/brynja-crypto/src/aes/fault_integrity/retained/ephemeral.rs": "6dcc85df82f027911156f9009ec0841a19056ea03cfbc7cec9c255a0efb208dc",
+    "crates/brynja-crypto/src/aes/fault_integrity/retained/probe_tests.rs": "62686607a80f4a62d9323c6a79bf4ff1efb99198f6c2ddf982e6a95b730efb03",
+    "crates/brynja-crypto/src/aes/fault_integrity/retained/probe_tests/import_use_tests.rs": "7159f6177feecc5a158a36a4d2bdf6f264d4c9d646df8c1048ff84560191d19c"
+  },
+  "clean_checkout": false,
+  "source_binding_limit": "Selected local working-tree snapshots are not complete reproducible-build identity or authenticated execution receipts.",
+  "reproduction": {
+    "build": "RUSTFLAGS='--cfg brynja_fault_primitives' cargo +TOOLCHAIN test --locked --release -p brynja-crypto --lib --features hazmat-aes-block --no-run",
+    "run": "python3 scripts/aes/check-aes-fault-import-use.py --binary PATH_FROM_CARGO --json"
+  },
+  "attempts_not_counted": [],
+  "artifacts": [
+    {
+      "compiler_command": "cargo +1.99.1",
+      "observation": {
+        "binary_sha256": "db78c8a265475b12a54c9025de69a202c71bf903e956866f11f7911c2e2f344a",
+        "capture_mapping": {
+          "capture": {
+            "elf_address": 863040,
+            "events": {
+              "after_first_call": 44,
+              "after_second_call": 65,
+              "entry": 0,
+              "first_call": 39,
+              "return": 83,
+              "second_call": 60
+            },
+            "normalized_sha256": "c78f74f87ec0c3b7d074c9dedfe6e088eba31f2ae46b742d07e04d87f629baee",
+            "shape": "source-r14-result-ff",
+            "symbol": "brynja_crypto::aes::fault_integrity::capture::pair"
+          },
+          "copy": {
+            "elf_address": 1163760,
+            "events": {
+              "after_word_store": 22,
+              "byte_load": 41,
+              "byte_store": 45,
+              "entry": 0,
+              "return": 62,
+              "word_load": 14,
+              "word_store": 18
+            },
+            "normalized_sha256": "28078bea4b9f47ef2520bf5c373a82b0c8794b1236202527c5a1d0cc5ee718c5",
+            "shape": "source-r14-result-ff",
+            "symbol": "brynja_core::secret_memory_transfer::copy_bytes"
+          },
+          "wrapper": {
+            "elf_address": 1163824,
+            "events": {
+              "after_copy_call": 22,
+              "copy_call": 17,
+              "entry": 0,
+              "return": 28
+            },
+            "normalized_sha256": "816d3351cdb05512ba78a533d5d336b6506449f96fb5dbbceb0cd1e4e97ceea4",
+            "shape": "source-r14-result-ff",
+            "symbol": "brynja_core::secret_memory::copy_secret_region"
+          }
+        },
+        "groups": [
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "path": "public",
+            "replica": "first",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "path": "public",
+            "replica": "second",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "path": "encrypt",
+            "replica": "first",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "path": "encrypt",
+            "replica": "second",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "path": "decrypt",
+            "replica": "first",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "path": "decrypt",
+            "replica": "second",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 24,
+              "data": 24
+            },
+            "path": "public",
+            "replica": "first",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 24,
+              "data": 24
+            },
+            "path": "public",
+            "replica": "second",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 24,
+              "data": 24
+            },
+            "path": "encrypt",
+            "replica": "first",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 24,
+              "data": 24
+            },
+            "path": "encrypt",
+            "replica": "second",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 24,
+              "data": 24
+            },
+            "path": "decrypt",
+            "replica": "first",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 24,
+              "data": 24
+            },
+            "path": "decrypt",
+            "replica": "second",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 32,
+              "data": 32
+            },
+            "path": "public",
+            "replica": "first",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 32,
+              "data": 32
+            },
+            "path": "public",
+            "replica": "second",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 32,
+              "data": 32
+            },
+            "path": "encrypt",
+            "replica": "first",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 32,
+              "data": 32
+            },
+            "path": "encrypt",
+            "replica": "second",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 32,
+              "data": 32
+            },
+            "path": "decrypt",
+            "replica": "first",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 32,
+              "data": 32
+            },
+            "path": "decrypt",
+            "replica": "second",
+            "width_bits": 256
+          }
+        ],
+        "limits": [
+          "One inlined import decision bypass and XOR-1 key-copy stores; no bypass of first-use validation.",
+          "Combined cases return an owner but its first operation rejects and retires. Not a guarantee that construction itself rejects every combined fault.",
+          "Retirement is per owner; storage clearing is checked after drop, not asserted immediate at retirement.",
+          "Public fixtures, optimized test ELFs, finite cases only; no production or physical-fault qualification."
+        ],
+        "qualification": "none",
+        "schema": 1,
+        "status": "finite-operation-local-import-use",
+        "validator": {
+          "decision": 561,
+          "decision_register": "bpl",
+          "elf_address": 792624,
+          "instructions_sha256": "b00e0727f5c3ee579b348246348afb62b61a6909d7c5a3a59e43d2e9514312d7",
+          "ret": 601,
+          "symbol": "<brynja_crypto::aes::fault_integrity::retained::Keys>::new_with_fixture_profile"
+        }
+      }
+    },
+    {
+      "compiler_command": "cargo +1.90.0",
+      "observation": {
+        "binary_sha256": "a11c368e8eccec0e497d336ebe6a9de6381a01dfd3716887c8d69b84efa69c26",
+        "capture_mapping": {
+          "capture": {
+            "elf_address": 1068608,
+            "events": {
+              "after_first_call": 44,
+              "after_second_call": 65,
+              "entry": 0,
+              "first_call": 39,
+              "return": 83,
+              "second_call": 60
+            },
+            "normalized_sha256": "77810ecdc8d4295cdd108c3f3a2c23f43ef57e698e29c943372dc163d17051af",
+            "shape": "source-r15-result-04",
+            "symbol": "brynja_crypto::aes::fault_integrity::capture::pair"
+          },
+          "copy": {
+            "elf_address": 1212816,
+            "events": {
+              "after_word_store": 22,
+              "byte_load": 41,
+              "byte_store": 45,
+              "entry": 0,
+              "return": 62,
+              "word_load": 14,
+              "word_store": 18
+            },
+            "normalized_sha256": "28078bea4b9f47ef2520bf5c373a82b0c8794b1236202527c5a1d0cc5ee718c5",
+            "shape": "source-r15-result-04",
+            "symbol": "brynja_core::secret_memory_transfer::copy_bytes"
+          },
+          "wrapper": {
+            "elf_address": 1212784,
+            "events": {
+              "after_copy_call": 22,
+              "copy_call": 17,
+              "entry": 0,
+              "return": 28
+            },
+            "normalized_sha256": "4690875b460781ab51b01c17a4c5a53b9a8353ebd9e0030a2c11132b404693f6",
+            "shape": "source-r15-result-04",
+            "symbol": "brynja_core::secret_memory::copy_secret_region"
+          }
+        },
+        "groups": [
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "path": "public",
+            "replica": "first",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "path": "public",
+            "replica": "second",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "path": "encrypt",
+            "replica": "first",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "path": "encrypt",
+            "replica": "second",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "path": "decrypt",
+            "replica": "first",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "path": "decrypt",
+            "replica": "second",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 24,
+              "data": 24
+            },
+            "path": "public",
+            "replica": "first",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 24,
+              "data": 24
+            },
+            "path": "public",
+            "replica": "second",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 24,
+              "data": 24
+            },
+            "path": "encrypt",
+            "replica": "first",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 24,
+              "data": 24
+            },
+            "path": "encrypt",
+            "replica": "second",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 24,
+              "data": 24
+            },
+            "path": "decrypt",
+            "replica": "first",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 24,
+              "data": 24
+            },
+            "path": "decrypt",
+            "replica": "second",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 32,
+              "data": 32
+            },
+            "path": "public",
+            "replica": "first",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 32,
+              "data": 32
+            },
+            "path": "public",
+            "replica": "second",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 32,
+              "data": 32
+            },
+            "path": "encrypt",
+            "replica": "first",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 32,
+              "data": 32
+            },
+            "path": "encrypt",
+            "replica": "second",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 32,
+              "data": 32
+            },
+            "path": "decrypt",
+            "replica": "first",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "bypass": 1,
+              "combined": 32,
+              "data": 32
+            },
+            "path": "decrypt",
+            "replica": "second",
+            "width_bits": 256
+          }
+        ],
+        "limits": [
+          "One inlined import decision bypass and XOR-1 key-copy stores; no bypass of first-use validation.",
+          "Combined cases return an owner but its first operation rejects and retires. Not a guarantee that construction itself rejects every combined fault.",
+          "Retirement is per owner; storage clearing is checked after drop, not asserted immediate at retirement.",
+          "Public fixtures, optimized test ELFs, finite cases only; no production or physical-fault qualification."
+        ],
+        "qualification": "none",
+        "schema": 1,
+        "status": "finite-operation-local-import-use",
+        "validator": {
+          "decision": 581,
+          "decision_register": "bpl",
+          "elf_address": 1075552,
+          "instructions_sha256": "3c44ce2b4909dc59ed7581c3fc806ec8d4d2c35fadbf949dd3610ab9e8e9af60",
+          "ret": 621,
+          "symbol": "brynja_crypto::aes::fault_integrity::retained::Keys::new_with_fixture_profile"
+        }
+      }
+    }
+  ],
+  "totals": {
+    "baseline": 36,
+    "bypass_healthy": 36,
+    "data": 864,
+    "combined": 864,
+    "cases": 1800
+  },
+  "limits": [
+    "Combined cases bypass one import decision only; first-use validation remains intact and rejects before output release.",
+    "Construction can return a corrupted operation-local owner under the selected combined fault. Tests require first-use rejection and subsequent AlreadyRetired behavior, not constructor rejection.",
+    "Key buffers clear on drop in these fixtures; no immediate key erasure at retirement is claimed.",
+    "New fixtures changed the optimized test ELF hashes. Previous records retain their original artifact bindings.",
+    "These finite public-fixture cases are not full model, final-linked production, physical-fault or confidentiality qualification."
+  ]
+}

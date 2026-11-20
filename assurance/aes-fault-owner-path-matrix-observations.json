@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "status": "incomplete-development-matrix",
+  "qualification": "none",
+  "runner": "scripts/aes/run-aes-fault-native-sweep.py",
+  "profile": "owner-path-matrix",
+  "scope": {
+    "owner_paths": ["cached/public", "cached/encrypt", "cached/decrypt", "operation-local/public", "operation-local/encrypt", "operation-local/decrypt"],
+    "script_families": ["cached", "retained", "completion", "round-skip", "primary-output"],
+    "primary_output_byte_positions": [0, 15],
+    "script_invocations_per_artifact": 36
+  },
+  "artifacts": [
+    {"toolchain":"1.90.0","binary_sha256":"a11c368e8eccec0e497d336ebe6a9de6381a01dfd3716887c8d69b84efa69c26","passed_invocations":36,"total_invocations":36},
+    {"toolchain":"1.100.0","binary_sha256":"bf61f409964ce7678b2a5694e63a5640d4b0a320c76d76866b25c9e95a307baf","passed_invocations":35,"total_invocations":36}
+  ],
+  "unconfirmed": [
+    "Rust 1.100.0 / cached / decrypt / completion: probe exited 2 in the AES-256 completion-bit case; native execution confirmation was missing.",
+    "A later single-case diagnostic observed all expected markers in 20/20 launches; the original failed run remains unconfirmed and is not converted into a pass.",
+    "Thirty isolated complete cached/decrypt probe runs confirmed 29 and failed native confirmation once.",
+    "Forty more isolated runs with bounded diagnostic booleans confirmed 39; the one failure had all expected breakpoint counts, fixture identity and normal exit, but not the exact fixture-pass summary marker. No raw debugger output was emitted."
+  ],
+  "limits": [
+    "The matrix replays selected existing native fixture probes on two local test ELFs, not final-linked release artifacts.",
+    "Primary-result byte positions 1 through 14 are outside this matrix, though other previously recorded selected probes exist.",
+    "No exhaustive instruction mutation, all-stage bypass, temporal DC1 pairing or physical fault campaign is established."
+  ]
+}

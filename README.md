@@ -319,8 +319,8 @@ See the [resident profile contract](docs/macos-resident-profile.md).
 
 ## Rust Version Support
 
-MSRV is Rust `1.90.0`; the default full-check compiler is Rust `1.99.1`.
-The Apple Silicon resident-profile development checks use `1.99.1` too.
+MSRV is Rust `1.90.0`; the default full-check compiler is Rust `1.100.0`.
+The Apple Silicon resident-profile development checks continue to use `1.99.1`.
 Historical qualification records retain their original compiler identities;
 updating the default does not relabel them or qualify new platform support.
 Release preflight requires the latest stable Rust in the executable compatibility
@@ -333,8 +333,8 @@ or make a policy check a proof. See [Kani evidence](docs/KANI.md).
 
 | Rust toolchain | Required evidence |
 | --- | --- |
-| `1.90.0`–`1.99.0` | Workspace all-feature compatibility, public API acceptance, and x86-64 clearing/constant-time codegen checks |
-| `1.99.1` | Full format, lint, test, platform, policy, docs, package, and security gate |
+| `1.90.0`–`1.99.1` | Workspace all-feature compatibility, public API acceptance, and x86-64 clearing/constant-time codegen checks |
+| `1.100.0` | Full format, lint, test, platform, policy, docs, package, and security gate |
 
 The exact tested compiler versions, including selected patch releases, remain
 listed in [the Rust matrix](scripts/ci/check-rust-version-matrix.sh).

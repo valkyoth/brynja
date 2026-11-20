@@ -11,6 +11,10 @@ fn write(bytes: &mut [u8], index: usize, value: u8) -> Result<(), Error> {
 }
 
 mod field;
+#[cfg(all(test, brynja_fault_evidence, brynja_fault_profile_research))]
+#[rustfmt::skip]
+#[path = "../../../../research/aes-fault-integrity/crypto/field_fault_fixture.rs"]
+pub(in crate::aes) mod field_fault_fixture;
 mod layout;
 pub(super) mod wide;
 use field::{inv_sbox, multiply, sbox, xtime};

@@ -6600,26 +6600,148 @@ Exit criteria:
   adds no release gate or mandatory external service;
 - `v0.27.6 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
 
-### v0.27.7 - Optional Fault-Detecting AES Profile
+### v0.27.7 - AES Fault-Integrity Research Archive
 
-Status: planned
+Status: deferred research; no release or tag planned
 
-Plan scope: After v0.27.5, implement a default-off fault-detecting AES profile for all three key widths and both block directions under an explicit bounded fault model, with independently structured redundant computation, key-schedule integrity checks, withheld output and terminal failure on detected faults; retain ordinary portable APIs, require no HSM or PKCS#11 adapter, and make no physical fault-resistance claim without named-hardware evidence.
+Plan scope: Archive the unfinished AES fault-integrity experiment outside published crate source; retain its reviewed model, scripts, observations and reproducible research-only tests, but expose no public API, make no fault-resistance claim, and do not make completion of this research a prerequisite for GHASH or later releases.
 
-Goal: provide an optional software defense against specified computational
-faults without making a hardware provider mandatory for ordinary users.
+Goal: preserve the work for study without presenting it as a completed Brynja
+security feature. Ordinary AES and the external-key provider remain unchanged.
+The prototype is not packaged, admitted, tagged or published as v0.27.7.
+
+The material below records the original research proposal and experiments.
+Its unfinished qualification obligations are **not** gates for v0.28.0 or
+later core releases. A future, separately approved project would need to
+redefine and satisfy its own release criteria before exposing any API.
+
+The first work item is the [bounded fault-model design for review](assurance/aes-fault-profile-design.md).
+Following the third review, the owner accepted the bounded scope on 2026-11-13
+and authorized implementation. The private secondary block engine now passes
+all 2,078 frozen AESAVS KAT records and complete Appendix A schedule answers;
+existing AES APIs are unchanged and no fault-resistance qualification is granted.
+Private cached and operation-local owners now exercise all three key widths and
+both directions, with functional lifecycle/clearing tests and finite native
+observations at the final permit boundary. Complete fault-model coverage,
+supported-build admission and the public opt-in API remain unfinished; these
+development observations are not release qualification.
+Further native observations now cover selected retained-key/schedule changes
+and separate input-copy completions, without changing that qualification status.
+A combined input-capture fault and forged computation success exposed a private
+prototype gap: equal uncomputed result buffers could pass. The transaction now
+requires a separate completion record marked by actual computation, including
+the nested operation-local path; finite native retests reject the case on both
+observed compilers. A later native record-bit mutation is also rejected through
+both owner lifetimes. This is not complete C1/DC1/L1 qualification.
+Source-only evidence also checks a late operation-local key fault followed by
+one forged outer success; the outer completion record prevents release. Native
+observations now reproduce that selected late boundary on both local x86-64
+compiler artifacts. Complete fault-model and supported-build qualification
+remain unfinished.
+An explicit source-only S1 campaign now skips one secondary substitution call
+at every round for each width, operation path and key lifetime; each case
+withholds output and retires. This changes source-evidence codegen and does
+not constitute native instruction-skip or physical-fault qualification.
+The corresponding secondary substitution call was also skipped at every
+round in the optimized local x86-64 test artifacts for both observed compilers,
+all widths, paths and key lifetimes. This selected call-site evidence does not
+qualify arbitrary instruction skips or a supported public profile.
+The private implementation also type-checks outside `cfg(test)` in `no_std`
+development builds, including Cortex-M, behind the non-public
+`brynja_fault_profile_build` compiler cfg. This is a build-shape check only:
+there is still no Cargo feature, public owner, supported-build admission or
+fault-resistance claim for this profile.
+Private owner construction now has an empty non-test admission set, rejecting
+before key capture. Unit fixtures alone exercise the unqualified workbench;
+exact artifact-bound admission and a distinct public unsupported-build error
+are still required.
+A source-only persistent secondary transform-constant model now exercises
+filtered correct outputs followed by detection and terminal retirement across
+all three widths, both directions and both key lifetimes. It is not emitted-
+immediate or physical-fault evidence and does not narrow the accepted SIFA
+residual.
+The separate secondary expansion-constant source model rejects cached import
+with cleared storage and retires operation-local owners on a later failed
+call. Neither model qualifies emitted constants or changes the empty release
+admission set.
+An equally test-only primary affine-constant model now covers cached import,
+operation-local first use and both block directions for each key width. It
+changes evidence-build codegen but not ordinary builds; primary/secondary
+source-hook symmetry is not emitted-immediate or physical-fault qualification.
+The primary reduction-constant source fixture also records a value-dependent
+ineffective call followed by an effective call. Correct output from the first
+call can be released, while the later mismatch retires the owner without
+releasing faulty output; this demonstrates the accepted outcome-leakage
+residual, not SIFA resistance or a native instruction-site guarantee.
+A separate source-level two-domain affine-constant negative control shows that
+matched wrong encryption outputs can pass both owner lifetimes, while changing
+only the secondary domain rejects and retires. This remains an explicit
+common-mode exclusion, not evidence that correlated faults are handled.
+Private transaction and owner methods now distinguish first rejection from
+later terminal use without changing ordinary AES errors. This is not yet a
+public error contract or a fault-protected diagnostic channel; applications
+must not expose such distinctions to peers.
+Private import paths also distinguish unsupported builds from malformed or
+faulted imports. No build is admitted, and these internal labels do not expose
+a usable profile or alter the ordinary AES API.
+The private x86-64 native transaction checker now strictly recognizes the
+recorded secret validation branch on both pinned compilers. Finite public and
+secret transaction and permit outcomes reproduced on recorded working-tree
+test artifacts; their hashes and limits are recorded in the assurance review.
+This does not close C1/DC1/L1 or admit a release build.
+The independent secondary engine also passes the frozen multi-block and
+explicit optimized Monte Carlo AESAVS campaigns for all key widths and both
+directions; the composite profile's release qualification remains outstanding.
+The [current closure checklist](assurance/aes-fault-profile-design.md#current-closure-checklist)
+separates functional results from the remaining qualification, admission,
+public API and scoped review work. The next qualification deliverable is the
+complete candidate fault-site inventory, not promotion of sampled injections
+to full-model coverage; unenumerated required sites remain open obligations.
+The frozen multi-block records now also pass through both private owner
+lifetimes, including secret-output clearing, explicit public encryption and
+caller-buffer guards. Explicit optimized composite Monte Carlo chains also
+pass through both owners on both pinned compilers, with secret-output clearing
+and key-storage guards. Finite transaction/permit observations were refreshed
+on those artifacts; full fault-model qualification remains unfinished.
+Selected native secondary substitution-call skips combined with forged
+guarded-write success also reproduced on those artifacts. The primary result
+remains correct in these cases; this is partial combination coverage, not
+complete DC1. Unconfirmed concurrent harness attempts remain recorded in the
+assurance review rather than counted as passes.
+Selected native primary-result byte mutations, alone and combined with forged
+guarded-write success, also reject across both owner lifetimes and compilers.
+These final-result XOR-1 observations cover faulty primary output but do not
+qualify every mutation family, intermediate site or bypass combination.
 
 Deliverables:
+
+Research-only checklist if the archived prototype is revived; not current
+release work:
 
 - Review the bounded fault model before implementation: specify corruption
   locations, timing, multiplicity, persistence, attacker capabilities and
   excluded common-mode or control-flow faults. Decide which portable/backend
   combinations can satisfy it; unsupported configurations must fail admission,
   not silently fall back to unchecked execution.
+- Obtain explicit owner/reviewer acceptance before implementation of unresolved
+  safe-error/SIFA outcome leakage, failure-stage timing and increased passive
+  exposure. Require global key retirement and fresh-key rotation after an alarm;
+  same-key owner recreation is not recovery. Document the specific faulty-block
+  DFA channel removed, not an unrestricted confidentiality guarantee. Every new
+  owner's opening rustdoc must state this boundary, require uniform peer-visible
+  failure responses and no alarm retry, and warn that terminal errors can expose
+  a prior alarm. These measures do not eliminate remote timing/outcome leakage.
 - Implement independently structured redundant computation and key-schedule
   integrity checks for cached and operation-local keys. Identical repeated
   encryption is not sufficient; address shared corrupted inputs/schedules and
   comparison bypass within the stated model, and document remaining limits.
+  Enumerate mutation families and persistent domain-local constant sites;
+  inventory shared constants as common-mode exclusions. Independently validate
+  retained keys and schedules before use and after use before commit.
+  Domain-local constant faults use output integrity, not per-use constant attestation;
+  persistent correct-output filtering remains an outcome-leakage residual.
+  Each of two independent destination readback paths must fully check both domain results;
+  DC1 is mandatory, including a propagated domain fault plus one bypass.
 - Compare results without secret-dependent timing, commit output only after
   successful checks, clear admitted secret destinations and temporary state on
   failure, preserve public destinations on failure, and permanently disable the
@@ -6630,11 +6752,16 @@ Deliverables:
 
 Verification:
 
+Future research requirements only; no current core release depends on them:
+
 - Add scoped `brynja-verify` campaigns injecting corruption into intermediate
   values, key schedules and check/control flow as specified by the model, for
   every supported key width, direction and schedule lifetime. Exercise
   persistent faults and modeled common-mode faults; returned errors and panics
   alone do not count as computational fault detection tests.
+  Report ineffective injections and filtered correct outputs separately, never
+  as detected faults or SIFA resistance. Include out-of-model common-mode
+  encryption/decryption input-echo controls without rejecting legitimate AES fixed points.
 - Assert every modeled fault is detected or cannot alter the correct result;
   faulty output must never be committed within the stated model. Verify secret
   cleanup and public failure atomicity hold, and later calls on the failed
@@ -6652,11 +6779,17 @@ Verification:
 
 Exit criteria:
 
+Future revival criteria only. This archived slot is not a release checkpoint:
+
 - The default-off profile meets its reviewed bounded fault model with recorded
   evidence and documented residuals; unsupported guarantees remain unclaimed.
+  Record explicit owner/reviewer acceptance of the confidentiality boundary;
+  design approval, toy tests and global retirement guidance are not proof of
+  SIFA resistance. Failure-stage timing and passive-exposure limitations must
+  remain visible in the shipped API documentation.
   If the model cannot be satisfied, retain this milestone as unfinished rather
   than relabeling ordinary error handling as fault detection.
-- `v0.27.7 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+- `v0.27.7 research archived unfinished. No tag or crates.io publication; GHASH and later core work proceed independently.`
 
 ### v0.28.0 - GHASH
 

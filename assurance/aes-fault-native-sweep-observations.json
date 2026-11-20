@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "status": "development-regression-inconsistent",
+  "qualification": "none",
+  "profile": "compact",
+  "secondary_profile": "complementary",
+  "runner": "scripts/aes/run-aes-fault-native-sweep.py",
+  "artifacts": [
+    {"toolchain":"1.90.0","architecture":"x86_64","binary_sha256":"a11c368e8eccec0e497d336ebe6a9de6381a01dfd3716887c8d69b84efa69c26","script_invocations_passed":8},
+    {"toolchain":"1.100.0","architecture":"x86_64","binary_sha256":"bf61f409964ce7678b2a5694e63a5640d4b0a320c76d76866b25c9e95a307baf","script_invocations_passed":8}
+  ],
+  "jobs_per_artifact": [
+    "completion/cached/encrypt",
+    "round-skip/operation-local/decrypt",
+    "primary-output/cached/public/byte-0",
+    "outer-completion/decrypt",
+    "transaction/public",
+    "transaction/secret",
+    "permit/public",
+    "permit/secret"
+  ],
+  "complementary_jobs_per_artifact": [
+    "cached/operation-local/public",
+    "retained/cached/decrypt",
+    "completion/operation-local/decrypt",
+    "round-skip/cached/public",
+    "primary-output/operation-local/encrypt/byte-15",
+    "outer-completion/public"
+  ],
+  "observed": [
+    "First compact sweep: 16/16 existing native probe invocations passed their own fixture validations.",
+    "Immediate repeat: 15/16 passed; Rust 1.100.0 cached/encrypt completion probe exited 2 and is an unconfirmed observation.",
+    "That isolated completion probe then passed three consecutive invocations, each validating 12 width/case outcomes.",
+    "Third compact sweep: 16/16 passed. The earlier unconfirmed observation remains recorded; it is not retried into qualification.",
+    "Initial complementary attempt: 11/14 passed. One operation-local/public probe was unconfirmed; the guard probe failed on both ELFs because its declared test is not present in either executable.",
+    "After removing the inapplicable guard probe, the complementary roster passed 12/12 on the two ELFs. The earlier unconfirmed operation-local/public result remains recorded."
+  ],
+  "limits": [
+    "This is a bounded replay of selected existing probes, not exhaustive per-instruction mutation.",
+    "Two probe invocations were intermittent; their exact cause is not established.",
+    "The guard leaf is linked into these artifacts, but its declared brynja-core test is not, so these ELFs cannot supply its fixture evidence.",
+    "No completed emitted-site inventory, all-mutation campaign or DC1 temporal pairing is established.",
+    "These are local test ELFs, not release-linked artifacts or physical fault observations."
+  ]
+}

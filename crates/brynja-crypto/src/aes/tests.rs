@@ -78,6 +78,11 @@ pub(super) fn observe_clear(bytes: &[u8]) {
             },
     );
 }
+// Test-only observation of explicit array clearing, never spill/register proof.
+#[cfg(brynja_fault_profile_research)]
+pub(super) fn take_cleared_regions() -> usize {
+    CLEARED.replace(0)
+}
 pub(super) fn checkpoint() -> Result<(), Error> {
     let point = POINT.get();
     POINT.set(point.wrapping_add(1));

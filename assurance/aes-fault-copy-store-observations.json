@@ -1,0 +1,961 @@
+{
+  "schema": 1,
+  "status": "finite-native-input-copy-observations",
+  "qualification": "none",
+  "recorded_at_utc": "2026-11-16T19:45:54.467707+00:00",
+  "working_tree_base": "c5b7f181be26a2441d965374dede49910d80fa2a",
+  "selected_source_snapshots": {
+    "scripts/aes/check-aes-fault-copy-store.py": "ff7013df2935db4e9e06b7f1d377e6595595508ab76592ce1ba826305613366f",
+    "scripts/aes/aes_fault_capture_map.py": "d4ea580c1e1867e389e4613daec50e194de0e5e724758034a18993388b28772f",
+    "scripts/aes/check-aes-fault-capture-map.py": "f373aa543770b8684c972794b3204a9935ba496b55a12b13baf27eef2b36c9b8",
+    "crates/brynja-crypto/src/aes/fault_integrity/capture.rs": "31372658d94b03a4ef053052b2abf18c99d60f01ec00c2c57f57c1a4fabacf58",
+    "crates/brynja-crypto/src/aes/fault_integrity/retained.rs": "56d02df70b8bec4e1da506df3b1b166e6820e0c710ef4bcf8d84504f56879e9d",
+    "crates/brynja-crypto/src/aes/fault_integrity/retained/ephemeral.rs": "6dcc85df82f027911156f9009ec0841a19056ea03cfbc7cec9c255a0efb208dc",
+    "crates/brynja-crypto/src/aes/fault_integrity/transaction.rs": "fdfacb67f634f0cbad6915aee532d132f5a560eec84da3c2c5ae48d76460f558",
+    "crates/brynja-crypto/src/aes/fault_integrity/retained/probe_tests.rs": "1671267c3379b16143b1aee4b7b122ecd081a339fbab6fdc26bb1ceeb7364d3c",
+    "crates/brynja-core/src/secret_memory_transfer.rs": "85f0cef7c2a8508c4d594ad7462bccb92fd8e5bea7897164d7df3ee655dcf3e0"
+  },
+  "clean_checkout": false,
+  "source_binding_limit": "Selected source snapshots are local working-tree context, not complete reproducible-build identity or signed execution receipts.",
+  "reproduction": {
+    "build": "RUSTFLAGS='--cfg brynja_fault_primitives' cargo +TOOLCHAIN test --locked --release -p brynja-crypto --lib --features hazmat-aes-block --no-run",
+    "run": "python3 scripts/aes/check-aes-fault-copy-store.py --binary PATH_FROM_CARGO --json"
+  },
+  "attempts_not_counted": [],
+  "artifacts": [
+    {
+      "compiler_command": "cargo +1.99.1",
+      "observation": {
+        "binary_sha256": "991a743625cad0395d4384a19d4bf6521091566eaf4b3029fba719ac3e630434",
+        "capture_mapping": {
+          "capture": {
+            "elf_address": 857088,
+            "events": {
+              "after_first_call": 44,
+              "after_second_call": 65,
+              "entry": 0,
+              "first_call": 39,
+              "return": 83,
+              "second_call": 60
+            },
+            "normalized_sha256": "c78f74f87ec0c3b7d074c9dedfe6e088eba31f2ae46b742d07e04d87f629baee",
+            "shape": "source-r14-result-ff",
+            "symbol": "brynja_crypto::aes::fault_integrity::capture::pair"
+          },
+          "copy": {
+            "elf_address": 1148528,
+            "events": {
+              "after_word_store": 22,
+              "byte_load": 41,
+              "byte_store": 45,
+              "entry": 0,
+              "return": 62,
+              "word_load": 14,
+              "word_store": 18
+            },
+            "normalized_sha256": "28078bea4b9f47ef2520bf5c373a82b0c8794b1236202527c5a1d0cc5ee718c5",
+            "shape": "source-r14-result-ff",
+            "symbol": "brynja_core::secret_memory_transfer::copy_bytes"
+          },
+          "wrapper": {
+            "elf_address": 1148592,
+            "events": {
+              "after_copy_call": 22,
+              "copy_call": 17,
+              "entry": 0,
+              "return": 28
+            },
+            "normalized_sha256": "816d3351cdb05512ba78a533d5d336b6506449f96fb5dbbceb0cd1e4e97ceea4",
+            "shape": "source-r14-result-ff",
+            "symbol": "brynja_core::secret_memory::copy_secret_region"
+          }
+        },
+        "compute": {
+          "instructions_sha256": "59fa9edc50b311613484b4792b82cd007a60b25ffb39d640e2544225736dc03f",
+          "ret": 322,
+          "symbol": "<brynja_crypto::aes::fault_integrity::retained::Retained>::compute"
+        },
+        "groups": [
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "public",
+            "replica": "first",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "public",
+            "replica": "second",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "encrypt",
+            "replica": "first",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "encrypt",
+            "replica": "second",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "decrypt",
+            "replica": "first",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "decrypt",
+            "replica": "second",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "public",
+            "replica": "first",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "public",
+            "replica": "second",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "encrypt",
+            "replica": "first",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "encrypt",
+            "replica": "second",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "decrypt",
+            "replica": "first",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "decrypt",
+            "replica": "second",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "public",
+            "replica": "first",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "public",
+            "replica": "second",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "encrypt",
+            "replica": "first",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "encrypt",
+            "replica": "second",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "decrypt",
+            "replica": "first",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "decrypt",
+            "replica": "second",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "public",
+            "replica": "first",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "public",
+            "replica": "second",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "encrypt",
+            "replica": "first",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "encrypt",
+            "replica": "second",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "decrypt",
+            "replica": "first",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "decrypt",
+            "replica": "second",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "public",
+            "replica": "first",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "public",
+            "replica": "second",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "encrypt",
+            "replica": "first",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "encrypt",
+            "replica": "second",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "decrypt",
+            "replica": "first",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "decrypt",
+            "replica": "second",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "public",
+            "replica": "first",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "public",
+            "replica": "second",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "encrypt",
+            "replica": "first",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "encrypt",
+            "replica": "second",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "decrypt",
+            "replica": "first",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "decrypt",
+            "replica": "second",
+            "width_bits": 256
+          }
+        ],
+        "limits": [
+          "No key-import stores, arbitrary values, other data sites or other bypasses.",
+          "The failed computation is rejected before producing AES results; completion stays unmarked.",
+          "Test ELFs and public fixtures only; not physical-fault, full D3/DC1 or production qualification."
+        ],
+        "qualification": "none",
+        "schema": 1,
+        "selection": "Each input replica, byte 0..15: XOR 1 in the selected RAX lane immediately before its word store; data-only and data plus forged Retained::compute success. One unchanged baseline per group.",
+        "status": "finite-native-input-store-observations"
+      }
+    },
+    {
+      "compiler_command": "cargo +1.90.0",
+      "observation": {
+        "binary_sha256": "b73c4ac98959f0e5bcc5b67e21bfc80e30766d891d93d7850876af036d887d4b",
+        "capture_mapping": {
+          "capture": {
+            "elf_address": 1058528,
+            "events": {
+              "after_first_call": 44,
+              "after_second_call": 65,
+              "entry": 0,
+              "first_call": 39,
+              "return": 83,
+              "second_call": 60
+            },
+            "normalized_sha256": "77810ecdc8d4295cdd108c3f3a2c23f43ef57e698e29c943372dc163d17051af",
+            "shape": "source-r15-result-04",
+            "symbol": "brynja_crypto::aes::fault_integrity::capture::pair"
+          },
+          "copy": {
+            "elf_address": 1195408,
+            "events": {
+              "after_word_store": 22,
+              "byte_load": 41,
+              "byte_store": 45,
+              "entry": 0,
+              "return": 62,
+              "word_load": 14,
+              "word_store": 18
+            },
+            "normalized_sha256": "28078bea4b9f47ef2520bf5c373a82b0c8794b1236202527c5a1d0cc5ee718c5",
+            "shape": "source-r15-result-04",
+            "symbol": "brynja_core::secret_memory_transfer::copy_bytes"
+          },
+          "wrapper": {
+            "elf_address": 1195376,
+            "events": {
+              "after_copy_call": 22,
+              "copy_call": 17,
+              "entry": 0,
+              "return": 28
+            },
+            "normalized_sha256": "4690875b460781ab51b01c17a4c5a53b9a8353ebd9e0030a2c11132b404693f6",
+            "shape": "source-r15-result-04",
+            "symbol": "brynja_core::secret_memory::copy_secret_region"
+          }
+        },
+        "compute": {
+          "instructions_sha256": "a1541c4b3fc6ce117b9942b8a5ef35c3e63c4aa4f4410bd0f45529350a87bd38",
+          "ret": 391,
+          "symbol": "brynja_crypto::aes::fault_integrity::retained::Retained::compute"
+        },
+        "groups": [
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "public",
+            "replica": "first",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "public",
+            "replica": "second",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "encrypt",
+            "replica": "first",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "encrypt",
+            "replica": "second",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "decrypt",
+            "replica": "first",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "decrypt",
+            "replica": "second",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "public",
+            "replica": "first",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "public",
+            "replica": "second",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "encrypt",
+            "replica": "first",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "encrypt",
+            "replica": "second",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "decrypt",
+            "replica": "first",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "decrypt",
+            "replica": "second",
+            "width_bits": 128
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "public",
+            "replica": "first",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "public",
+            "replica": "second",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "encrypt",
+            "replica": "first",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "encrypt",
+            "replica": "second",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "decrypt",
+            "replica": "first",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "decrypt",
+            "replica": "second",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "public",
+            "replica": "first",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "public",
+            "replica": "second",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "encrypt",
+            "replica": "first",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "encrypt",
+            "replica": "second",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "decrypt",
+            "replica": "first",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "decrypt",
+            "replica": "second",
+            "width_bits": 192
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "public",
+            "replica": "first",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "public",
+            "replica": "second",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "encrypt",
+            "replica": "first",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "encrypt",
+            "replica": "second",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "decrypt",
+            "replica": "first",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "cached",
+            "path": "decrypt",
+            "replica": "second",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "public",
+            "replica": "first",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "public",
+            "replica": "second",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "encrypt",
+            "replica": "first",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "encrypt",
+            "replica": "second",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "decrypt",
+            "replica": "first",
+            "width_bits": 256
+          },
+          {
+            "counts": {
+              "baseline": 1,
+              "combined": 16,
+              "data": 16
+            },
+            "owner": "ephemeral",
+            "path": "decrypt",
+            "replica": "second",
+            "width_bits": 256
+          }
+        ],
+        "limits": [
+          "No key-import stores, arbitrary values, other data sites or other bypasses.",
+          "The failed computation is rejected before producing AES results; completion stays unmarked.",
+          "Test ELFs and public fixtures only; not physical-fault, full D3/DC1 or production qualification."
+        ],
+        "qualification": "none",
+        "schema": 1,
+        "selection": "Each input replica, byte 0..15: XOR 1 in the selected RAX lane immediately before its word store; data-only and data plus forged Retained::compute success. One unchanged baseline per group.",
+        "status": "finite-native-input-store-observations"
+      }
+    }
+  ],
+  "totals": {
+    "baselines": 72,
+    "data_only": 1152,
+    "selected_combined": 1152
+  },
+  "limits": [
+    "All cases use public FIPS fixtures and optimized test ELFs with source fault hooks disabled.",
+    "The selected input mutation is XOR 1 only; no claim for all mutations, keys or inputs.",
+    "The second event is a forged failed Retained::compute result, not every C1 decision/branch bypass.",
+    "No AES result is produced after the capture mismatch; the observed completion record remains unmarked.",
+    "No import-store, local-key recapture, output-write or physical-fault qualification is implied."
+  ]
+}

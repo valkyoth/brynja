@@ -1,0 +1,614 @@
+{
+  "schema": 1,
+  "status": "open-source-candidate",
+  "qualification": "none",
+  "artifact_mappings": [],
+  "scope": {
+    "widths": [
+      128,
+      192,
+      256
+    ],
+    "paths": [
+      "encrypt-secret",
+      "decrypt-secret",
+      "encrypt-public"
+    ],
+    "owners": [
+      "cached",
+      "operation-local"
+    ]
+  },
+  "mutation_families": {
+    "transient-byte": "Enumerate XOR deltas 1..255, replacements 0..255, and named AND/OR/stuck-bit mutations; include ineffective outcomes, stage and persistence explicitly.",
+    "persistent-byte": "Same byte mutations, retained across uses; distinguish raw key/schedule mismatch from domain-local constant filtered-correct-output behavior.",
+    "transient-byte-or-local-skip": "Transient byte families plus each declared single-domain local call/instruction skip. Capture, latch and authorization skips are not silently classified as S1.",
+    "single-bypass": "One designated comparison, flag/register, branch or result-propagation bypass; exact emitted event and allowed values must be enumerated.",
+    "codeword-or-bypass": "Each single bit/byte lifecycle or receipt mutation (L1), separately from a designated decision bypass (C1). Whole-codeword overwrite is not L1.",
+    "destination-or-bypass": "Each destination-byte write mutation before final readback (D4), separately from a designated validation/status bypass (C1)."
+  },
+  "outcomes": {
+    "reject-or-correct": "No incorrect block may escape within the accepted model; effective faults must reject and retire. Ineffective correct-output cases remain outcome-leakage observations, not confidentiality passes.",
+    "retained-mismatch": "A mismatched retained key/schedule must be detected before release, with terminal retirement and cleanup; track the fault across subsequent uses.",
+    "constant-filtered": "Output comparison supplies integrity. Correct outputs under an ineffective domain-local constant fault may continue; persistent filtered-output leakage is accepted residual, not immediate-retirement evidence.",
+    "bypass-obligation": "Healthy data may remain correct after a lone bypass; all applicable DC1 pairings must still prevent faulty release. No single successful fixture qualifies this family.",
+    "destination-obligation": "Read back actual destination against both intact results before handoff. On failure retire; secret destination clears, public destination restores its old bytes."
+  },
+  "sites": [
+    {
+      "id": "key-capture",
+      "owners": ["cached","operation-local"],
+      "classes": [
+        "D3"
+      ],
+      "object": "primary and complemented key replicas",
+      "phase": "import",
+      "source": {
+        "path": "research/aes-fault-integrity/crypto/fault_integrity/capture.rs",
+        "anchor": "pub(super) fn pair("
+      },
+      "mutation": "transient-byte",
+      "outcome": "reject-or-correct",
+      "status": "open",
+      "evidence_runners": [
+        "scripts/aes/check-aes-fault-cached.py",
+        "scripts/aes/check-aes-fault-capture-map.py",
+        "scripts/aes/check-aes-fault-emitted-sites.py",
+        "scripts/aes/check-aes-fault-import-store.py",
+        "scripts/aes/check-aes-fault-import-bypass.py",
+        "scripts/aes/check-aes-fault-import-use.py"
+      ],
+      "remaining": "Selected XOR-1 key-import word stores are observed for each byte in both replicas. The current linked capture call/return boundaries have a partial baseline site map for both key replicas; no new fault pass is inferred. Source-only post-complement and operation-local recapture mutation tests exist. Emitted complement sites, other native mutations and applicable DC1 pairings remain open. Local recapture is tracked separately."
+    },
+    {
+      "id": "block-capture",
+      "owners": ["cached","operation-local"],
+      "classes": [
+        "D3"
+      ],
+      "object": "independent input replicas",
+      "phase": "use",
+      "source": {
+        "path": "research/aes-fault-integrity/crypto/fault_integrity/retained.rs",
+        "anchor": "super::capture::pair(input,"
+      },
+      "mutation": "transient-byte",
+      "outcome": "reject-or-correct",
+      "status": "open",
+      "evidence_runners": [
+        "scripts/aes/check-aes-fault-retained.py",
+        "scripts/aes/check-aes-fault-capture-map.py",
+        "scripts/aes/check-aes-fault-emitted-sites.py",
+        "scripts/aes/check-aes-fault-copy-store.py"
+      ],
+      "remaining": "The current linked capture call/return boundaries have a partial baseline site map for both input replicas. Actual word/byte load-store fault sites, their mutations, other builds and DC1 pairings remain open; common-source corruption is not D3."
+    },
+    {
+      "id": "local-key-copy",
+      "owners": ["operation-local"],
+      "classes": [
+        "D3"
+      ],
+      "object": "operation-local raw key replicas",
+      "phase": "use",
+      "source": {
+        "path": "research/aes-fault-integrity/crypto/fault_integrity/retained/ephemeral.rs",
+        "anchor": "copy_secret_region(primary, keys.primary)?;"
+      },
+      "mutation": "transient-byte",
+      "outcome": "reject-or-correct",
+      "status": "open",
+      "evidence_runners": [
+        "scripts/aes/check-aes-fault-outer-completion.py",
+        "scripts/aes/check-aes-fault-local-recapture-map.py",
+        "scripts/aes/check-aes-fault-emitted-sites.py"
+      ],
+      "remaining": "A partial development map labels both copy calls and every eight-byte word load/store context on two exact x86-64 test artifacts. No copy-site fault mutation or DC1 pairing has passed. Expand decoding before key expansion, byte-tail behavior where applicable, other builds and all mutation families; this family remains OPEN."
+    },
+    {
+      "id": "retained-key",
+      "owners": ["cached","operation-local"],
+      "classes": [
+        "D2"
+      ],
+      "object": "primary and complemented retained raw keys",
+      "phase": "lifetime",
+      "source": {
+        "path": "research/aes-fault-integrity/crypto/fault_integrity/retained.rs",
+        "anchor": "struct Keys<'a> {"
+      },
+      "mutation": "persistent-byte",
+      "outcome": "retained-mismatch",
+      "status": "open",
+      "evidence_runners": [
+        "scripts/aes/check-aes-fault-retained.py",
+        "scripts/aes/check-aes-fault-retained-validation-map.py",
+        "scripts/aes/check-aes-fault-emitted-sites.py"
+      ],
+      "remaining": "A partial baseline map locates the pre/post Retained::validate call boundaries on two exact test ELFs. It does not map individual key/schedule comparisons or their fault effects. Enumerate each replica and byte, before/after validation, later-use persistence, other builds and applicable bypass pairings; this D2 family remains OPEN."
+    },
+    {
+      "id": "primary-expansion",
+      "owners": ["cached","operation-local"],
+      "classes": [
+        "D1",
+        "S1"
+      ],
+      "object": "byte-domain expansion intermediates",
+      "phase": "import-and-use",
+      "source": {
+        "path": "research/aes-fault-integrity/crypto/fault_integrity/primary.rs",
+        "anchor": "pub(super) fn expand("
+      },
+      "mutation": "transient-byte-or-local-skip",
+      "outcome": "reject-or-correct",
+      "status": "open",
+      "evidence_runners": [
+        "scripts/aes/check-aes-fault-data.py"
+      ],
+      "remaining": "Expand into portable::expand and portable::wide::expand plus field arithmetic; this dispatch anchor is not the site list."
+    },
+    {
+      "id": "primary-rounds",
+      "owners": ["cached","operation-local"],
+      "classes": [
+        "D1",
+        "S1"
+      ],
+      "object": "byte-domain round intermediates",
+      "phase": "use",
+      "source": {
+        "path": "research/aes-fault-integrity/crypto/fault_integrity/primary.rs",
+        "anchor": "pub(super) fn transform("
+      },
+      "mutation": "transient-byte-or-local-skip",
+      "outcome": "reject-or-correct",
+      "status": "open",
+      "evidence_runners": [
+        "scripts/aes/check-aes-fault-data.py"
+      ],
+      "remaining": "Enumerate all declared local operations and both directions; suffix reasoning cannot cover arbitrary internal gates."
+    },
+    {
+      "id": "secondary-expansion",
+      "owners": ["cached","operation-local"],
+      "classes": [
+        "D1",
+        "S1"
+      ],
+      "object": "cyclic history, word scratch and independent substitution",
+      "phase": "import-and-use",
+      "source": {
+        "path": "research/aes-fault-integrity/crypto/fault_integrity/schedule.rs",
+        "anchor": "pub(super) fn expand("
+      },
+      "mutation": "transient-byte-or-local-skip",
+      "outcome": "reject-or-correct",
+      "status": "open",
+      "evidence_runners": [
+        "scripts/aes/check-aes-fault-data.py"
+      ],
+      "remaining": "Enumerate history slots, representation conversions, substitution intermediates and expansion calls."
+    },
+    {
+      "id": "secondary-rounds",
+      "owners": ["cached","operation-local"],
+      "classes": [
+        "D1",
+        "S1"
+      ],
+      "object": "bit-plane round intermediates",
+      "phase": "use",
+      "source": {
+        "path": "research/aes-fault-integrity/crypto/fault_integrity/schedule.rs",
+        "anchor": "pub(super) fn transform("
+      },
+      "mutation": "transient-byte-or-local-skip",
+      "outcome": "reject-or-correct",
+      "status": "open",
+      "evidence_runners": [
+        "scripts/aes/check-aes-fault-round-skip.py",
+        "scripts/aes/check-aes-fault-data.py"
+      ],
+      "remaining": "Selected substitution-call skips are not every instruction skip; include load/store and linear operations."
+    },
+    {
+      "id": "retained-schedules",
+      "owners": ["cached","operation-local"],
+      "classes": [
+        "D2"
+      ],
+      "object": "primary byte and secondary plane schedules",
+      "phase": "lifetime",
+      "source": {
+        "path": "research/aes-fault-integrity/crypto/fault_integrity/retained.rs",
+        "anchor": "struct Retained<'a> {"
+      },
+      "mutation": "persistent-byte",
+      "outcome": "retained-mismatch",
+      "status": "open",
+      "evidence_runners": [
+        "scripts/aes/check-aes-fault-retained.py"
+      ],
+      "remaining": "Enumerate schedule bytes, used/unused plane storage, metadata and pre/post-use validation windows."
+    },
+    {
+      "id": "primary-constants",
+      "owners": ["cached","operation-local"],
+      "classes": [
+        "D2"
+      ],
+      "object": "domain-local field constants and emitted immediates",
+      "phase": "lifetime",
+      "source": {
+        "path": "crates/brynja-crypto/src/aes/portable/field.rs",
+        "anchor": "pub(super) fn sbox("
+      },
+      "mutation": "persistent-byte",
+      "outcome": "constant-filtered",
+      "status": "open",
+      "evidence_runners": [
+        "scripts/aes/check-aes-fault-data.py"
+      ],
+      "remaining": "Enumerate local field/round constants in each linked artifact; no promise of checking immediates against themselves."
+    },
+    {
+      "id": "secondary-constants",
+      "owners": ["cached","operation-local"],
+      "classes": [
+        "D2"
+      ],
+      "object": "domain-local coefficients, round and conversion constants",
+      "phase": "lifetime",
+      "source": {
+        "path": "research/aes-fault-integrity/crypto/fault_integrity/schedule.rs",
+        "anchor": "const RCON:"
+      },
+      "mutation": "persistent-byte",
+      "outcome": "constant-filtered",
+      "status": "open",
+      "evidence_runners": [
+        "scripts/aes/check-aes-fault-data.py"
+      ],
+      "remaining": "Expand coefficient tables and representation masks; classify any emitted shared constant as common-mode."
+    },
+    {
+      "id": "primary-result",
+      "owners": ["cached","operation-local"],
+      "classes": [
+        "D1"
+      ],
+      "object": "final primary result scratch",
+      "phase": "use",
+      "source": {
+        "path": "research/aes-fault-integrity/crypto/fault_integrity/retained.rs",
+        "anchor": "self.primary.transform(p, inverse)?;"
+      },
+      "mutation": "transient-byte",
+      "outcome": "reject-or-correct",
+      "status": "open",
+      "evidence_runners": [
+        "scripts/aes/check-aes-fault-primary-output.py"
+      ],
+      "remaining": "Native observation covers XOR 1 at 16 final-result bytes only; all mutation families and later windows remain open."
+    },
+    {
+      "id": "secondary-result",
+      "owners": ["cached","operation-local"],
+      "classes": [
+        "D1"
+      ],
+      "object": "final secondary result scratch",
+      "phase": "use",
+      "source": {
+        "path": "research/aes-fault-integrity/crypto/fault_integrity/retained.rs",
+        "anchor": "self.secondary.transform(&second_input.0, s, inverse)?;"
+      },
+      "mutation": "transient-byte",
+      "outcome": "reject-or-correct",
+      "status": "open",
+      "evidence_runners": [
+        "scripts/aes/check-aes-fault-round-skip.py"
+      ],
+      "remaining": "Separate final-result corruption from upstream call skips and model the handoff into authorization."
+    },
+    {
+      "id": "import-checks",
+      "owners": ["cached","operation-local"],
+      "classes": [
+        "C1"
+      ],
+      "object": "key/schedule validation and import result propagation",
+      "phase": "import",
+      "source": {
+        "path": "research/aes-fault-integrity/crypto/fault_integrity/retained.rs",
+        "anchor": "fn from_captured("
+      },
+      "mutation": "single-bypass",
+      "outcome": "bypass-obligation",
+      "status": "open",
+      "evidence_runners": [
+        "scripts/aes/check-aes-fault-cached.py",
+        "scripts/aes/check-aes-fault-import-bypass.py",
+        "scripts/aes/check-aes-fault-import-use.py"
+      ],
+      "remaining": "A selected inlined import decision bypass plus XOR-1 key-copy faults is observed for both owners. In the operation-local owner, construction can return a corrupted owner but first use rejects and retires. Other decisions, normalization, propagation and remaining D1/D2/D3 pairings remain open."
+    },
+    {
+      "id": "use-checks",
+      "owners": ["cached","operation-local"],
+      "classes": [
+        "C1"
+      ],
+      "object": "pre/post-use key, schedule and capture checks",
+      "phase": "use",
+      "source": {
+        "path": "research/aes-fault-integrity/crypto/fault_integrity/retained.rs",
+        "anchor": "fn compute("
+      },
+      "mutation": "single-bypass",
+      "outcome": "bypass-obligation",
+      "status": "open",
+      "evidence_runners": [
+        "scripts/aes/check-aes-fault-retained.py",
+        "scripts/aes/check-aes-fault-import-use.py"
+      ],
+      "remaining": "Expand Keys::validate, Retained::validate and operation-local rechecks; shared predicates must not count as independent."
+    },
+    {
+      "id": "completion",
+      "owners": ["cached","operation-local"],
+      "classes": [
+        "L1",
+        "C1"
+      ],
+      "object": "inner and outer completion codewords and propagation",
+      "phase": "use",
+      "source": {
+        "path": "research/aes-fault-integrity/crypto/fault_integrity/transaction.rs",
+        "anchor": "pub(super) struct Completion {"
+      },
+      "mutation": "codeword-or-bypass",
+      "outcome": "bypass-obligation",
+      "status": "open",
+      "evidence_runners": [
+        "scripts/aes/check-aes-fault-completion.py",
+        "scripts/aes/check-aes-fault-outer-completion.py",
+        "scripts/aes/check-aes-fault-copy-store.py"
+      ],
+      "remaining": "Enumerate mark, read, comparison, error propagation and return handoff for both owners."
+    },
+    {
+      "id": "receipt-observations",
+      "owners": ["cached","operation-local"],
+      "classes": [
+        "L1",
+        "C1"
+      ],
+      "object": "fresh forward and reverse comparison receipts",
+      "phase": "release",
+      "source": {
+        "path": "research/aes-fault-integrity/crypto/fault_integrity/authorization_model.rs",
+        "anchor": "fn observe("
+      },
+      "mutation": "codeword-or-bypass",
+      "outcome": "bypass-obligation",
+      "status": "open",
+      "evidence_runners": [
+        "scripts/aes/check-aes-fault-comparison-codegen.py",
+        "scripts/aes/check-aes-fault-guard.py"
+      ],
+      "remaining": "Map each comparison/load/accumulator/encoding; leaf assembly shape alone does not establish caller independence."
+    },
+    {
+      "id": "tentative-write",
+      "owners": ["cached","operation-local"],
+      "classes": [
+        "D4",
+        "C1"
+      ],
+      "object": "guarded public destination or secret staging write",
+      "phase": "release",
+      "source": {
+        "path": "research/aes-fault-integrity/crypto/fault_integrity/transaction.rs",
+        "anchor": "fn guarded_write("
+      },
+      "mutation": "destination-or-bypass",
+      "outcome": "destination-obligation",
+      "status": "open",
+      "evidence_runners": [
+        "scripts/aes/check-aes-fault-transaction.py",
+        "scripts/aes/check-aes-fault-primary-output.py",
+        "scripts/aes/check-aes-fault-readback-byte-matrix.py"
+      ],
+      "remaining": "Both guarded-write readbacks have a 1152-case, XOR-1 destination-byte grid across two pinned test ELFs, with rejection and fixture rollback/cleanup observed. Map receipt guards, data store, diagnostic return, other mutations and downstream checks; staging is not the actual secret destination."
+    },
+    {
+      "id": "secret-destination",
+      "owners": ["cached","operation-local"],
+      "classes": [
+        "D4",
+        "C1"
+      ],
+      "object": "actual admitted secret destination and private finished region",
+      "phase": "release",
+      "source": {
+        "path": "research/aes-fault-integrity/crypto/fault_integrity/transaction.rs",
+        "anchor": "pub(super) fn secret_profile<'out>("
+      },
+      "mutation": "destination-or-bypass",
+      "outcome": "destination-obligation",
+      "status": "open",
+      "evidence_runners": [
+        "scripts/aes/check-aes-fault-transaction.py",
+        "scripts/aes/check-aes-fault-actual-secret-byte-matrix.py"
+      ],
+      "remaining": "Both actual secret-destination validator readbacks have a 768-case XOR-1 destination-byte grid across two pinned test ELFs, with fixture-confirmed clearing and retirement. Map initialization write, finish, other mutation families, permit and final SecretBlock handoff; C1/DC1 bypass pairings remain open."
+    },
+    {
+      "id": "readbacks",
+      "owners": ["cached","operation-local"],
+      "classes": [
+        "C1"
+      ],
+      "object": "fresh destination comparisons against both results",
+      "phase": "release",
+      "source": {
+        "path": "research/aes-fault-integrity/crypto/fault_integrity/transaction.rs",
+        "anchor": "fn check(\n"
+      },
+      "mutation": "single-bypass",
+      "outcome": "bypass-obligation",
+      "status": "open",
+      "evidence_runners": [
+        "scripts/aes/check-aes-fault-transaction.py",
+        "scripts/aes/check-aes-fault-readback-byte-matrix.py",
+        "scripts/aes/check-aes-fault-actual-secret-byte-matrix.py"
+      ],
+      "remaining": "The guarded-write pair and actual secret-destination pair rejected selected XOR-1 destination-byte faults, but neither matrix is a C1 bypass test. Enumerate all loads/decoding/status propagation and all bypass pairings; public rollback and secret clearing after individual check failure are fixture-observed only."
+    },
+    {
+      "id": "final-permit",
+      "owners": ["cached","operation-local"],
+      "classes": [
+        "L1",
+        "C1"
+      ],
+      "object": "fresh permission observation and lifecycle rewrite",
+      "phase": "release",
+      "source": {
+        "path": "research/aes-fault-integrity/crypto/fault_integrity/authorization_model.rs",
+        "anchor": "pub(super) fn permit_fresh("
+      },
+      "mutation": "codeword-or-bypass",
+      "outcome": "bypass-obligation",
+      "status": "open",
+      "evidence_runners": [
+        "scripts/aes/check-aes-fault-permit.py"
+      ],
+      "remaining": "Map denied-state write, fresh observations, guarded state rewrite and report propagation."
+    },
+    {
+      "id": "lifecycle-handoff",
+      "owners": ["cached","operation-local"],
+      "classes": [
+        "L1",
+        "C1"
+      ],
+      "object": "encoded lifecycle, terminal latch, rollback/clear and return",
+      "phase": "lifetime",
+      "source": {
+        "path": "research/aes-fault-integrity/crypto/fault_integrity/transaction.rs",
+        "anchor": "fn complete(mut self)"
+      },
+      "mutation": "codeword-or-bypass",
+      "outcome": "bypass-obligation",
+      "status": "open",
+      "evidence_runners": [
+        "scripts/aes/check-aes-fault-transaction.py",
+        "scripts/aes/check-aes-fault-completion.py",
+        "scripts/aes/check-aes-fault-lifecycle-complete.py"
+      ],
+      "remaining": "A single completion-state byte mutation was observed on pinned test ELFs. Expand begin, complete, Drop, public commit and returned owner/SecretBlock; enumerate metadata/flags and bypasses, not only codeword bytes."
+    }
+  ],
+  "byte_case_sets": [
+    {
+      "id": "capture-copy-bytes",
+      "sites": ["key-capture", "block-capture"],
+      "status": "source-only-emitted-open",
+      "width_bytes": [16, 24, 32],
+      "position_bound": "width",
+      "replicas": ["first", "second"],
+      "owners": ["capture-helper"],
+      "paths": ["copy"],
+      "fixture_byte": 66,
+      "mutations": [
+        {"op": "xor", "first": 1, "last": 255},
+        {"op": "replace", "first": 0, "last": 255},
+        {"op": "and", "first": 0, "last": 255},
+        {"op": "or", "first": 0, "last": 255}
+      ],
+      "rust_test": {
+        "path": "research/aes-fault-integrity/crypto/fault_integrity/capture/evidence_tests/matrix_tests.rs",
+        "anchor": "fn both_capture_boundaries_all_bytes_and_mutations()"
+      },
+      "expected_trials": 147312
+    },
+    {
+      "id": "capture-import-bytes",
+      "sites": ["key-capture"],
+      "status": "source-only-emitted-open",
+      "width_bytes": [16, 24, 32],
+      "position_bound": "width",
+      "replicas": ["first", "second"],
+      "owners": ["shared-import"],
+      "paths": ["import"],
+      "fixture_byte": 66,
+      "mutations": [
+        {"op": "xor", "first": 1, "last": 255},
+        {"op": "replace", "first": 0, "last": 255},
+        {"op": "and", "first": 0, "last": 255},
+        {"op": "or", "first": 0, "last": 255}
+      ],
+      "rust_test": {
+        "path": "research/aes-fault-integrity/crypto/fault_integrity/retained/evidence_tests/capture_matrix_tests.rs",
+        "anchor": "fn import_both_capture_replicas_all_byte_mutations()"
+      },
+      "expected_trials": 147312
+    },
+    {
+      "id": "capture-owner-paths",
+      "sites": ["block-capture"],
+      "status": "source-only-emitted-open",
+      "width_bytes": [16, 24, 32],
+      "position_bound": 16,
+      "replicas": ["first", "second"],
+      "owners": ["cached", "operation-local"],
+      "paths": ["encrypt-public", "encrypt-secret", "decrypt-secret"],
+      "fixture_byte": 36,
+      "mutations": [
+        {"op": "xor", "first": 1, "last": 1},
+        {"op": "replace", "first": 36, "last": 36}
+      ],
+      "rust_test": {
+        "path": "research/aes-fault-integrity/crypto/fault_integrity/retained/evidence_tests/capture_matrix_tests.rs",
+        "anchor": "fn input_capture_both_replicas_preserve_outputs_or_retire_every_owner_path()"
+      },
+      "expected_trials": 1152
+    }
+  ],
+  "dc1": {
+    "status": "open",
+    "data_classes": [
+      "D1",
+      "D2",
+      "D3",
+      "D4",
+      "S1"
+    ],
+    "bypass_sites": [
+      "import-checks",
+      "use-checks",
+      "completion",
+      "receipt-observations",
+      "tentative-write",
+      "secret-destination",
+      "readbacks",
+      "final-permit",
+      "lifecycle-handoff"
+    ],
+    "rule": "Enumerate every applicable data/skip site plus designated C1 event in temporal order, including import and later use. Record explicit compatibility reasoning; neither this candidate list nor a blind Cartesian product establishes completeness."
+  },
+  "negative_controls": [
+    "Correlated/shared source or constant corruption affecting both domains.",
+    "Correlated plaintext echo on encryption and ciphertext echo on decryption; equality remains valid AES output and is never rejected heuristically.",
+    "Mutation after the last check or failed trusted rollback/clearing; retain the documented final handoff window."
+  ],
+  "limitations": [
+    "Source anchors locate candidate regions, not individual machine instructions or a frozen complete site inventory.",
+    "No artifact mapping or configuration is qualified. Existing runner paths are discovery references, not evidence receipts or current passes.",
+    "Expand each family into per-byte/per-stage/per-instruction cases and bind them to exact artifacts before freezing the inventory.",
+    "Preserve failed/unconfirmed runs, simulator limitations and analytic assumptions; do not infer coverage from test totals."
+  ]
+}

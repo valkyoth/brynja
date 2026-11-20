@@ -3381,7 +3381,7 @@ component = "aes"
 id = "downstream"
 category = "consumer"
 name = "AES-128/192/256 isolated direct and facade public consumers"
-establishes = "Twenty-one exact public consumer tests across all three AES widths in eight host configurations: both public routes, Rust 1.90.0/1.99.1, debug/release; four no_std Cortex-M compile-only checks. Pins active dependency sources/features and observes caller unwind/Drop/explicit clearing. Checkout sources, not packaged acceptance, full compiler matrix, target execution or side-channel qualification."
+establishes = "Twenty-one exact public consumer tests across all three AES widths in eight host configurations: both public routes, Rust 1.90.0/1.100.0, debug/release; four no_std Cortex-M compile-only checks. Pins active dependency sources/features and observes caller unwind/Drop/explicit clearing. Checkout sources, not packaged acceptance, full compiler matrix, target execution or side-channel qualification."
 command = ["python3", "scripts/aes/check-aes-consumer.py"]
 cwd = "."
 inputs = ["aes-build", "aes-consumer", "compiler", "hkdf-msrv"]
@@ -3390,14 +3390,14 @@ reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODE
 timeout_seconds = 600
 [checks.success]
 contains = ["AES downstream: PASS;"]
-unique_lines = ["AES downstream: PASS; 8 host configurations; 4 Cortex-M compile checks; checkout sources only", "AES_DOWNSTREAM_HOST: 1.90.0 direct debug 21 exact tests", "AES_DOWNSTREAM_HOST: 1.90.0 direct release 21 exact tests", "AES_DOWNSTREAM_HOST: 1.90.0 facade debug 21 exact tests", "AES_DOWNSTREAM_HOST: 1.90.0 facade release 21 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 direct debug 21 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 direct release 21 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 facade debug 21 exact tests", "AES_DOWNSTREAM_HOST: 1.99.1 facade release 21 exact tests", "AES_DOWNSTREAM_TARGET: 1.90.0 direct thumbv7em-none-eabi compile-only", "AES_DOWNSTREAM_TARGET: 1.90.0 facade thumbv7em-none-eabi compile-only", "AES_DOWNSTREAM_TARGET: 1.99.1 direct thumbv7em-none-eabi compile-only", "AES_DOWNSTREAM_TARGET: 1.99.1 facade thumbv7em-none-eabi compile-only", "AES_FEATURE_GATE: 1.90.0 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.90.0 facade absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.99.1 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.99.1 facade absent with defaults on/off; explicit opt-in works"]
+unique_lines = ["AES downstream: PASS; 8 host configurations; 4 Cortex-M compile checks; checkout sources only", "AES_DOWNSTREAM_HOST: 1.90.0 direct debug 21 exact tests", "AES_DOWNSTREAM_HOST: 1.90.0 direct release 21 exact tests", "AES_DOWNSTREAM_HOST: 1.90.0 facade debug 21 exact tests", "AES_DOWNSTREAM_HOST: 1.90.0 facade release 21 exact tests", "AES_DOWNSTREAM_HOST: 1.100.0 direct debug 21 exact tests", "AES_DOWNSTREAM_HOST: 1.100.0 direct release 21 exact tests", "AES_DOWNSTREAM_HOST: 1.100.0 facade debug 21 exact tests", "AES_DOWNSTREAM_HOST: 1.100.0 facade release 21 exact tests", "AES_DOWNSTREAM_TARGET: 1.90.0 direct thumbv7em-none-eabi compile-only", "AES_DOWNSTREAM_TARGET: 1.90.0 facade thumbv7em-none-eabi compile-only", "AES_DOWNSTREAM_TARGET: 1.100.0 direct thumbv7em-none-eabi compile-only", "AES_DOWNSTREAM_TARGET: 1.100.0 facade thumbv7em-none-eabi compile-only", "AES_FEATURE_GATE: 1.90.0 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.90.0 facade absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.100.0 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.100.0 facade absent with defaults on/off; explicit opt-in works"]
 
 [[checks]]
 component = "aes"
 id = "downstream-matrix"
 category = "matrix"
-name = "AES-128/192/256 isolated public consumers across 14 Rust compilers"
-establishes = "Twenty-one exact tests across all three AES widths for both public routes in debug/release on 14 pinned compilers (56 host configurations); four endpoint-only Cortex-M compile checks. Checkout consumers, not package archives, target execution or timing qualification."
+name = "AES-128/192/256 isolated public consumers across 15 Rust compilers"
+establishes = "Twenty-one exact tests across all three AES widths for both public routes in debug/release on 15 pinned compilers (60 host configurations); four endpoint-only Cortex-M compile checks. Checkout consumers, not package archives, target execution or timing qualification."
 command = ["python3", "scripts/aes/check-aes-consumer.py", "--matrix"]
 cwd = "."
 inputs = ["aes-build", "aes-consumer", "hkdf-public-api-matrix"]
@@ -3406,7 +3406,7 @@ reject_environment = ["PYTHONOPTIMIZE", "PYTHONPATH", "RUSTFLAGS", "CARGO_ENCODE
 timeout_seconds = 1800
 [checks.success]
 contains = ["AES downstream matrix: PASS;"]
-unique_lines = ["AES downstream matrix: PASS; 14 compilers; 56 host configurations; 4 Cortex-M compile checks; checkout sources only","AES_DOWNSTREAM_HOST: 1.90.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.90.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.90.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.90.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 facade release 21 exact tests","AES_DOWNSTREAM_TARGET: 1.90.0 direct thumbv7em-none-eabi compile-only","AES_DOWNSTREAM_TARGET: 1.90.0 facade thumbv7em-none-eabi compile-only","AES_DOWNSTREAM_TARGET: 1.99.1 direct thumbv7em-none-eabi compile-only","AES_DOWNSTREAM_TARGET: 1.99.1 facade thumbv7em-none-eabi compile-only", "AES_FEATURE_GATE: 1.90.0 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.90.0 facade absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.99.1 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.99.1 facade absent with defaults on/off; explicit opt-in works"]
+unique_lines = ["AES downstream matrix: PASS; 15 compilers; 60 host configurations; 4 Cortex-M compile checks; checkout sources only","AES_DOWNSTREAM_HOST: 1.90.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.90.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.90.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.90.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.91.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.92.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.93.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.94.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.95.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.96.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.96.1 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.97.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.97.1 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.98.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.98.1 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.99.0 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.99.1 facade release 21 exact tests","AES_DOWNSTREAM_HOST: 1.100.0 direct debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.100.0 direct release 21 exact tests","AES_DOWNSTREAM_HOST: 1.100.0 facade debug 21 exact tests","AES_DOWNSTREAM_HOST: 1.100.0 facade release 21 exact tests","AES_DOWNSTREAM_TARGET: 1.90.0 direct thumbv7em-none-eabi compile-only","AES_DOWNSTREAM_TARGET: 1.90.0 facade thumbv7em-none-eabi compile-only","AES_DOWNSTREAM_TARGET: 1.100.0 direct thumbv7em-none-eabi compile-only","AES_DOWNSTREAM_TARGET: 1.100.0 facade thumbv7em-none-eabi compile-only", "AES_FEATURE_GATE: 1.90.0 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.90.0 facade absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.100.0 direct absent with defaults on/off; explicit opt-in works", "AES_FEATURE_GATE: 1.100.0 facade absent with defaults on/off; explicit opt-in works"]
 
 [groups.aes-timing]
 paths = ["assurance/aes-timing/Cargo.toml", "assurance/aes-timing/Cargo.lock", "assurance/aes-timing/src", "scripts/aes/check-aes-timing.py", "scripts/aes/test-aes-timing.py", "scripts/hmac/hmac_timing.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py"]
@@ -3923,7 +3923,7 @@ unique_lines = ["AES_API_PASS: 1.99.1 58 paired probes"]
 contains = ["AES_API_PASS: 1.99.1 58 paired probes"]
 
 [groups.aes-mutations]
-paths = ["scripts/aes/check-aes-mutations.py", "scripts/aes/test-aes-runners.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py"]
+paths = ["assurance/aes-avs/fixtures", "scripts/aes/check-aes-mutations.py", "scripts/aes/test-aes-runners.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py"]
 [[groups.aes-mutations.tools]]
 program = "python3"
 
@@ -4219,6 +4219,12 @@ toolchain = "1.99.1"
 [[groups.hkdf-public-api-matrix.tools]]
 program = "rustc"
 toolchain = "1.99.1"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "cargo"
+toolchain = "1.100.0"
+[[groups.hkdf-public-api-matrix.tools]]
+program = "rustc"
+toolchain = "1.100.0"
 
 [groups.hkdf-public-api-modern]
 paths = ["crates/brynja","crates/brynja-core","crates/brynja-crypto","crates/brynja-crypto-cpu","crates/brynja-crypto-cpu-std","crates/brynja-dtls","crates/brynja-hash-core","crates/brynja-hash-parallel","crates/brynja-hash-sha2","crates/brynja-hash-sha3","crates/brynja-hash-tuple","crates/brynja-mac-hmac","crates/brynja-mac-kmac","crates/brynja-pki","crates/brynja-platform","crates/brynja-protocol","crates/brynja-quic-tls","crates/brynja-tls","crates/brynja-tls12","crates/brynja-tls13","crates/brynja-tls13-handshake","assurance/hkdf-public-api/Cargo.toml","assurance/hkdf-public-api/Cargo.lock","assurance/hkdf-public-api/src"]
@@ -4228,7 +4234,7 @@ component = "hkdf"
 id = "packaged-public-api"
 category = "package"
 name = "Packaged modern HKDF public API (MSRV/current endpoints)"
-establishes = "Unpacked crate sources, public no_std consumer, debug/release vectors and bounds, ownership cleanup and diagnostic-checked negative controls. Cortex-M compile only at Rust 1.90.0 and 1.99.1; not target execution, constant-time or deployment qualification."
+establishes = "Unpacked crate sources, public no_std consumer, debug/release vectors and bounds, ownership cleanup and diagnostic-checked negative controls. Cortex-M compile only at Rust 1.90.0 and 1.100.0; not target execution, constant-time or deployment qualification."
 command = ["python3","scripts/hkdf/check-hkdf-public-api.py","--family","modern"]
 cwd = "."
 inputs = ["hkdf-public-api-runner","hkdf-public-api-modern","compiler","hkdf-msrv"]
@@ -4242,8 +4248,8 @@ contains = ["HKDF packaged public API modern: PASS; no upload"]
 component = "hkdf"
 id = "public-api-matrix"
 category = "matrix"
-name = "Packaged modern HKDF public API (14 host compilers)"
-establishes = "Unpacked crate sources, public no_std consumer, debug/release vectors and bounds, ownership cleanup and diagnostic-checked negative controls. Cortex-M compile only at Rust 1.90.0 and 1.99.1; not target execution, constant-time or deployment qualification."
+name = "Packaged modern HKDF public API (15 host compilers)"
+establishes = "Unpacked crate sources, public no_std consumer, debug/release vectors and bounds, ownership cleanup and diagnostic-checked negative controls. Cortex-M compile only at Rust 1.90.0 and 1.100.0; not target execution, constant-time or deployment qualification."
 command = ["python3","scripts/hkdf/check-hkdf-public-api.py","--family","modern","--matrix"]
 cwd = "."
 inputs = ["hkdf-public-api-runner","hkdf-public-api-modern","hkdf-public-api-matrix"]
@@ -4251,7 +4257,7 @@ environment = { RUSTUP_AUTO_INSTALL = "0" }
 reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
 timeout_seconds = 1800
 [checks.success]
-contains = ["HKDF packaged public API modern: PASS; no upload","HKDF packaged public API modern: MATRIX PASS; 14 host compilers"]
+contains = ["HKDF packaged public API modern: PASS; no upload","HKDF packaged public API modern: MATRIX PASS; 15 host compilers"]
 
 [groups.hkdf-public-api-legacy]
 paths = ["crates/brynja-core","crates/brynja-hash-core","crates/brynja-legacy-hkdf","crates/brynja-legacy-hmac","crates/brynja-legacy-md5","crates/brynja-legacy-sha1","assurance/legacy-hkdf-public-api/Cargo.toml","assurance/legacy-hkdf-public-api/Cargo.lock","assurance/legacy-hkdf-public-api/src"]
@@ -4261,7 +4267,7 @@ component = "legacy_hkdf"
 id = "packaged-public-api"
 category = "package"
 name = "Packaged legacy HKDF public API (MSRV/current endpoints)"
-establishes = "Unpacked crate sources, public no_std consumer, debug/release vectors and bounds, ownership cleanup and diagnostic-checked negative controls. Cortex-M compile only at Rust 1.90.0 and 1.99.1; not target execution, constant-time or deployment qualification."
+establishes = "Unpacked crate sources, public no_std consumer, debug/release vectors and bounds, ownership cleanup and diagnostic-checked negative controls. Cortex-M compile only at Rust 1.90.0 and 1.100.0; not target execution, constant-time or deployment qualification."
 command = ["python3","scripts/hkdf/check-hkdf-public-api.py","--family","legacy"]
 cwd = "."
 inputs = ["hkdf-public-api-runner","hkdf-public-api-legacy","compiler","hkdf-msrv"]
@@ -4275,8 +4281,8 @@ contains = ["HKDF packaged public API legacy: PASS; no upload"]
 component = "legacy_hkdf"
 id = "public-api-matrix"
 category = "matrix"
-name = "Packaged legacy HKDF public API (14 host compilers)"
-establishes = "Unpacked crate sources, public no_std consumer, debug/release vectors and bounds, ownership cleanup and diagnostic-checked negative controls. Cortex-M compile only at Rust 1.90.0 and 1.99.1; not target execution, constant-time or deployment qualification."
+name = "Packaged legacy HKDF public API (15 host compilers)"
+establishes = "Unpacked crate sources, public no_std consumer, debug/release vectors and bounds, ownership cleanup and diagnostic-checked negative controls. Cortex-M compile only at Rust 1.90.0 and 1.100.0; not target execution, constant-time or deployment qualification."
 command = ["python3","scripts/hkdf/check-hkdf-public-api.py","--family","legacy","--matrix"]
 cwd = "."
 inputs = ["hkdf-public-api-runner","hkdf-public-api-legacy","hkdf-public-api-matrix"]
@@ -4284,7 +4290,7 @@ environment = { RUSTUP_AUTO_INSTALL = "0" }
 reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN"]
 timeout_seconds = 1800
 [checks.success]
-contains = ["HKDF packaged public API legacy: PASS; no upload","HKDF packaged public API legacy: MATRIX PASS; 14 host compilers"]
+contains = ["HKDF packaged public API legacy: PASS; no upload","HKDF packaged public API legacy: MATRIX PASS; 15 host compilers"]
 
 [[checks]]
 component = "hkdf"
@@ -4906,6 +4912,12 @@ toolchain = "1.99.1"
 [[groups.compiler.tools]]
 program = "cargo"
 toolchain = "1.99.1"
+[[groups.compiler.tools]]
+program = "rustc"
+toolchain = "1.100.0"
+[[groups.compiler.tools]]
+program = "cargo"
+toolchain = "1.100.0"
 
 [groups.md5-api]
 paths = ["crates/brynja-legacy-md5/src", "crates/brynja-legacy-md5/tests/api.rs", "crates/brynja-legacy-md5/tests/vectors/rfc1321.txt"]

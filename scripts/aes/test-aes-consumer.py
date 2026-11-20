@@ -70,8 +70,8 @@ class ConsumerTests(unittest.TestCase):
 
     def test_matrix_and_endpoint_populations(self):
         self.assertEqual(consumer.MATRIX, ('1.90.0', '1.91.0', '1.92.0', '1.93.0', '1.94.0', '1.95.0',
-                                          '1.96.0', '1.96.1', '1.97.0', '1.97.1', '1.98.0', '1.98.1', '1.99.0', '1.99.1'))
-        self.assertEqual(consumer.TOOLCHAINS, (consumer.MATRIX[0], consumer.MATRIX[-1]))
+                                          '1.96.0', '1.96.1', '1.97.0', '1.97.1', '1.98.0', '1.98.1', '1.99.0', '1.99.1', '1.100.0'))
+        self.assertEqual(consumer.CURRENT_TOOLCHAINS, (consumer.MATRIX[0], consumer.MATRIX[-1]))
 
     def test_middle_compilers_do_not_claim_target_checks(self):
         directory, metadata = self.metadata('direct')

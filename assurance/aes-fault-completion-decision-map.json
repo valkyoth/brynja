@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "status": "candidate-stage-map",
+  "qualification": "none",
+  "source_stage": "lifecycle-handoff/completion-state-check",
+  "instruction_record": "assurance/aes-fault-instruction-candidates.json",
+  "artifacts": [
+    {
+      "binary_sha256": "a11c368e8eccec0e497d336ebe6a9de6381a01dfd3716887c8d69b84efa69c26",
+      "body_address": 1097600,
+      "body_decoded_sha256": "cfd387ae6286dc0f7851591ca980f13f08e1d790f1f47810efdf7a9369b6b396",
+      "completion_state_check": {
+        "combine-mismatch": 74,
+        "copy-call": 41,
+        "copy-status": 46,
+        "expected-codeword": 52,
+        "lower-half-xor": 70,
+        "mismatch-flag": 77,
+        "upper-half-xor": 67
+      },
+      "result_return": 162,
+      "shared_state_select_write": {
+        "state-select": 129,
+        "state-store": 147
+      },
+      "toolchain": "1.90.0"
+    },
+    {
+      "binary_sha256": "bf61f409964ce7678b2a5694e63a5640d4b0a320c76d76866b25c9e95a307baf",
+      "body_address": 800704,
+      "body_decoded_sha256": "69963cf80e59f7629caf77f3ef69c2951309fec0c136fca9797bb3b7ffbcb18d",
+      "completion_state_check": {
+        "combine-mismatch": 72,
+        "copy-call": 39,
+        "copy-status": 44,
+        "expected-codeword": 50,
+        "lower-half-xor": 68,
+        "mismatch-flag": 75,
+        "upper-half-xor": 65
+      },
+      "result_return": 123,
+      "shared_state_select_write": {
+        "state-select": 90,
+        "state-store": 108
+      },
+      "toolchain": "1.100.0"
+    }
+  ],
+  "limits": [
+    "The seven codeword check instructions are mapped to one source stage, but no instruction-skip or predicate-bypass result is claimed.",
+    "State selection and state store are shared healthy/terminal candidates; their exact decision semantics and skip effects remain unqualified.",
+    "This map covers one completion body in local test ELFs; other lifecycle and bypass stages and final-linked artifacts remain open."
+  ]
+}

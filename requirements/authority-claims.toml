@@ -10,7 +10,7 @@ rationale = "The owner narrowed v0.27.6 to dependency-free provider API completi
 [[plan_boundary]]
 class = "internal-security-design"
 versions = ["0.27.7"]
-rationale = "The optional fault-detecting AES profile requires a reviewed bounded fault model, independently structured redundancy, schedule and control-flow integrity, output withholding and permanent failure tests. Existing AES authority does not establish physical resistance; named deployment evidence remains required for physical claims."
+rationale = "The AES fault-integrity experiment is archived outside published crate source and has no public API or release authority. Its reviewed model, independent-computation prototype and finite observations do not qualify fault resistance. Safe-error/SIFA outcome leakage, failure-stage timing, passive exposure, incomplete control-flow coverage and target-specific physical behavior remain unresolved. Any future public profile requires a separately approved scope, qualification and review; ordinary AES and GHASH do not depend on this research."
 
 [[plan_boundary]]
 class = "repository-governance"

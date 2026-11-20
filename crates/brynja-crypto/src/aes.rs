@@ -35,6 +35,13 @@ use core::marker::PhantomData;
 
 mod portable;
 mod wide;
+// Repository-only research snapshot. This path is outside the published crate
+// and is never included by ordinary tests or a Cargo feature.
+#[cfg(all(brynja_fault_profile_research, any(test, brynja_fault_profile_build)))]
+#[cfg_attr(all(brynja_fault_profile_build, not(test)), allow(dead_code))]
+#[rustfmt::skip]
+#[path = "../../../research/aes-fault-integrity/crypto/fault_integrity/mod.rs"]
+mod fault_integrity;
 pub use wide::{Aes192ExpandedKey, Aes192Key, Aes256ExpandedKey, Aes256Key};
 
 /// Explicit clearing AES owners bound to a checked static hardware authority.

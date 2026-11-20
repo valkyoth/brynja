@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "status": "source-stage-expansion-only",
+  "qualification": "none",
+  "source_inventory": "assurance/aes-fault-sites.json",
+  "exact_emitted_sites": [],
+  "dc1_temporal_pairings": [],
+  "required_site_identity": ["artifact-sha256", "owner", "key-width", "direction", "source-family", "stage", "instruction-address", "fault-location", "mutation", "persistence"],
+  "families": [
+    {"id":"key-capture","stages":["source-admission","first-opaque-copy-load-store","second-opaque-copy-load-store","second-complement","pair-return"]},
+    {"id":"block-capture","stages":["source-admission","first-opaque-copy-load-store","second-opaque-copy-load-store","second-complement","pre-compute-pair-check"]},
+    {"id":"local-key-copy","stages":["first-copy-call-and-leaf","second-copy-call-and-leaf","complement-decode","expansion-handoff"]},
+    {"id":"retained-key","stages":["primary-retained-byte","complemented-retained-byte","pre-use-validation","post-use-validation","subsequent-use-validation"]},
+    {"id":"primary-expansion","stages":["initial-key-words","rotated-word","field-substitution","round-constant-application","expanded-word-store"]},
+    {"id":"primary-rounds","stages":["initial-round-key","forward-substitute-shift-mix","inverse-shift-substitute-mix","intermediate-round-key","final-round-key"]},
+    {"id":"secondary-expansion","stages":["cyclic-history-read-write","rotated-word","independent-substitution","round-constant-application","bit-plane-schedule-store"]},
+    {"id":"secondary-rounds","stages":["input-plane-encoding","initial-round-key","forward-substitute-shift-mix","inverse-shift-substitute-mix","intermediate-round-key","output-plane-decoding"]},
+    {"id":"retained-schedules","stages":["primary-schedule-byte","secondary-schedule-plane-byte","pre-use-schedule-validation","post-use-schedule-validation","subsequent-use-validation"]},
+    {"id":"primary-constants","stages":["field-multiply-and-reduction","inverse-field-powers","affine-substitution","round-constant"]},
+    {"id":"secondary-constants","stages":["round-constant","forward-coefficient-table","inverse-coefficient-table","plane-conversion-mask"]},
+    {"id":"primary-result","stages":["final-byte-domain-store","first-result-comparison","second-result-comparison","authorization-handoff"]},
+    {"id":"secondary-result","stages":["final-plane-decode-store","first-result-comparison","second-result-comparison","authorization-handoff"]},
+    {"id":"import-checks","stages":["capture-error-propagation","key-replica-validation","primary-expansion-return","secondary-expansion-return","schedule-validation","owner-construction-return"]},
+    {"id":"use-checks","stages":["pre-use-retained-validation","input-pair-validation","computation-return","post-use-retained-validation","result-agreement"]},
+    {"id":"completion","stages":["inner-completion-mark","inner-completion-observation","outer-completion-mark","outer-completion-observation","completion-error-propagation"]},
+    {"id":"receipt-observations","stages":["forward-fresh-observation","reverse-fresh-observation","receipt-encoding","forward-inspection","reverse-inspection","receipt-consumption"]},
+    {"id":"tentative-write","stages":["guarded-write-entry","pre-copy-receipt","destination-store","post-copy-status","rollback-on-rejection"]},
+    {"id":"secret-destination","stages":["destination-admission","private-staging-write","actual-destination-write","region-finish","actual-destination-readback","secret-block-handoff"]},
+    {"id":"readbacks","stages":["first-destination-observation","first-primary-and-secondary-compare","second-destination-observation","second-primary-and-secondary-compare","failure-propagation"]},
+    {"id":"final-permit","stages":["deny-first-state-write","fresh-forward-observation","fresh-reverse-observation","full-receipt-inspection","healthy-state-rewrite","permit-return"]},
+    {"id":"lifecycle-handoff","stages":["begin-state-check","in-progress-write","completion-state-check","healthy-rewrite","terminal-drop","public-commit","secret-block-return"]}
+  ],
+  "bypass_stage_inventory": [
+    {"family":"import-checks","stages":["capture-error-propagation","key-replica-validation","primary-expansion-return","secondary-expansion-return","schedule-validation","owner-construction-return"],"status":"emitted-decision-open"},
+    {"family":"use-checks","stages":["pre-use-retained-validation","input-pair-validation","computation-return","post-use-retained-validation","result-agreement"],"status":"emitted-decision-open"},
+    {"family":"completion","stages":["inner-completion-observation","outer-completion-observation","completion-error-propagation"],"status":"emitted-decision-open"},
+    {"family":"receipt-observations","stages":["forward-inspection","reverse-inspection","receipt-consumption"],"status":"emitted-decision-open"},
+    {"family":"tentative-write","stages":["pre-copy-receipt","post-copy-status","rollback-on-rejection"],"status":"emitted-decision-open"},
+    {"family":"secret-destination","stages":["destination-admission","region-finish","actual-destination-readback","secret-block-handoff"],"status":"emitted-decision-open"},
+    {"family":"readbacks","stages":["first-primary-and-secondary-compare","second-primary-and-secondary-compare","failure-propagation"],"status":"emitted-decision-open"},
+    {"family":"final-permit","stages":["deny-first-state-write","fresh-forward-observation","fresh-reverse-observation","full-receipt-inspection","healthy-state-rewrite","permit-return"],"status":"emitted-decision-open"},
+    {"family":"lifecycle-handoff","stages":["begin-state-check","completion-state-check","healthy-rewrite","terminal-drop","public-commit","secret-block-return"],"status":"emitted-decision-open"}
+  ],
+  "limits": [
+    "Stage labels are candidate source-level work units, not emitted instruction addresses or fault results.",
+    "A source stage can expand to many instruction, byte and temporal sites in each exact build.",
+    "All 22 source families and all 9 C1 bypass families remain open until exact emitted sites, mutations and applicable DC1 pairings are reviewed."
+  ]
+}

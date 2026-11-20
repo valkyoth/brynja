@@ -233,10 +233,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--binary',type=Path,required=True)
     parser.add_argument('--path',choices=('public','secret'),default='public')
-    parser.add_argument('--details',action='store_true',help='print synthetic artifact/site metadata; default prints status only')
+    parser.add_argument('--details',action='store_true',help='also print a JSON status and completed case count on success')
     parser.add_argument('--objdump',default='objdump')
     parser.add_argument('--gdb',default='gdb')
     args = parser.parse_args()
+    completed = 0
     try:
         binary = args.binary.resolve(strict=True)
         original = binary.read_bytes()
@@ -250,31 +251,23 @@ def main():
         else:
             cases, command_builder, root_name, test_name = SECRET_CASES, secret_commands, SECRET_ROOT, SECRET_TEST
         root, check = body(dump,root_name),body(dump,CHECK)
-        observations = []
         for case in cases:
             argv = [args.gdb,'-q','-nx','-batch']
             for command in command_builder(case,root,check,guard_symbol,guard_offsets): argv += ['-ex',command]
             argv += ['--args',str(binary),'--exact',test_name,'--nocapture']
             run = subprocess.run(argv,capture_output=True,text=True,check=True,timeout=60)
             transcript = run.stdout+run.stderr
-            try:
-                validate(transcript,case,args.path)
-            except ValueError as error:
-                raise ValueError(f'{args.path}/{case}: {error}') from error
-            observations.append(dict(case=case,transcript_sha256=hashlib.sha256(transcript.encode()).hexdigest()))
+            validate(transcript,case,args.path)
+            completed += 1
         if binary.read_bytes() != original: raise ValueError('artifact changed during experiment')
         if args.details:
-            print(json.dumps(dict(path=args.path,observed_combined_bypass_rejected=any(
-                              item['case'] == 'combined-decision-bypass' for item in observations),
-                              binary_sha256=hashlib.sha256(original).hexdigest(),root=root,check=check,
-                              guard_symbol=guard_symbol,guard_offsets=guard_offsets,observations=observations),sort_keys=True))
-        print(f'{args.path}: {len(observations)} declared experiment outcomes reproduced')
+            print(json.dumps({'status': 'pass', 'completed': completed},sort_keys=True))
+        print(f'{completed} declared experiment outcomes reproduced')
         print('DEVELOPMENT_TRANSACTION_OBSERVED; NOT complete C1/DC1/L1 or release qualification')
         return 0
-    except (OSError,ValueError,subprocess.SubprocessError) as error:
-        # Do not echo debugger command arrays or captured memory/register output.
-        detail = str(error) if isinstance(error,ValueError) else type(error).__name__
-        print('transaction experiment failed: '+detail,file=sys.stderr)
+    except (OSError,ValueError,subprocess.SubprocessError):
+        # Exception text can contain tool output; report only validated progress.
+        print(f'transaction experiment failed after {completed} completed cases',file=sys.stderr)
         return 2
 
 

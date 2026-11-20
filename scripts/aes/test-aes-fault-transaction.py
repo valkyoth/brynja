@@ -195,29 +195,42 @@ class TransactionRunner(unittest.TestCase):
                 self.assertEqual(TX.main(),2)
             self.assertNotIn('DEVELOPMENT_TRANSACTION_OBSERVED',output.getvalue())
 
-    def test_details_report_completed_case_metadata_not_debugger_output(self):
+    def run_reporting_fixture(self, path, cases, *, details, fail_last=False):
         elf = bytearray(32)
         elf[:6] = b'\x7fELF\x02\x01'
         elf[18:20] = b'\x3e\x00'
+        runs = [subprocess.CompletedProcess(['objdump'],0,'dump','')]
+        for i, case in enumerate(cases):
+            stdout = '' if fail_last and i == len(cases)-1 else transcript(case,path)
+            runs.append(subprocess.CompletedProcess(['gdb'],0,stdout+'\nOUT_CANARY','ERR_CANARY'))
+        metadata = dict(symbol='SYMBOL_CANARY',ret=100,combined_decision=80,combined_kind='legacy-or')
+        output, errors = io.StringIO(), io.StringIO()
+        argv = ['probe','--binary','fixture','--path',path] + (['--details'] if details else [])
+        with patch('sys.argv',argv), patch.object(Path,'resolve',return_value=Path('/fixture')), \
+             patch.object(Path,'read_bytes',return_value=elf), patch.object(TX.subprocess,'run',side_effect=runs), \
+             patch.object(TX.GUARD,'inspect',return_value=(TX.GUARD.SYMBOL,list(range(31)))), \
+             patch.object(TX,'body',return_value=metadata),redirect_stdout(output),redirect_stderr(errors):
+            status = TX.main()
+        return status, output.getvalue().splitlines(), errors.getvalue()
+
+    def test_success_outputs_only_aggregate_progress(self):
         for path, cases in [('public', TX.CASES), ('secret', TX.SECRET_CASES)]:
-            runs = [subprocess.CompletedProcess(['objdump'],0,'dump','')]
-            runs += [subprocess.CompletedProcess(['gdb'],0,transcript(case,path),'PRIVATE_TEST_CANARY')
-                     for case in cases]
-            metadata = dict(symbol='fixture',ret=100,combined_decision=80,combined_kind='legacy-or')
-            output, errors = io.StringIO(), io.StringIO()
-            with self.subTest(path=path), patch('sys.argv',['probe','--binary','fixture','--path',path,'--details']), \
-                 patch.object(Path,'resolve',return_value=Path('/fixture')), \
-                 patch.object(Path,'read_bytes',return_value=elf), \
-                 patch.object(TX.subprocess,'run',side_effect=runs), \
-                 patch.object(TX.GUARD,'inspect',return_value=(TX.GUARD.SYMBOL,list(range(31)))), \
-                 patch.object(TX,'body',return_value=metadata),redirect_stdout(output),redirect_stderr(errors):
-                self.assertEqual(TX.main(),0)
-                report = json.loads(output.getvalue().splitlines()[0])
-                self.assertEqual(report['observed_combined_bypass_rejected'], path == 'secret')
-                self.assertEqual([item['case'] for item in report['observations']], list(cases))
-                self.assertNotIn('PRIVATE_TEST_CANARY', output.getvalue() + errors.getvalue())
-                self.assertNotIn('KNOWN_IN_MODEL_ESCAPE',output.getvalue())
-                self.assertIn('NOT complete C1/DC1/L1 or release qualification',output.getvalue())
+            for details in (False, True):
+                with self.subTest(path=path, details=details):
+                    status, lines, errors = self.run_reporting_fixture(path, cases, details=details)
+                    self.assertEqual((status, errors), (0, ''))
+                    if details:
+                        self.assertEqual(json.loads(lines.pop(0)), {'status': 'pass', 'completed': len(cases)})
+                    self.assertEqual(lines, [
+                        f'{len(cases)} declared experiment outcomes reproduced',
+                        'DEVELOPMENT_TRANSACTION_OBSERVED; NOT complete C1/DC1/L1 or release qualification'])
+
+    def test_validation_failure_reports_only_previously_completed_count(self):
+        for path, cases in [('public', TX.CASES), ('secret', TX.SECRET_CASES)]:
+            for details in (False, True):
+                with self.subTest(path=path, details=details):
+                    self.assertEqual(self.run_reporting_fixture(path, cases, details=details, fail_last=True),
+                                     (2, [], f'transaction experiment failed after {len(cases)-1} completed cases\n'))
 
 
 if __name__ == '__main__':

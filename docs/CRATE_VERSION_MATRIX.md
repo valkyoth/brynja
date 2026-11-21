@@ -1,8 +1,8 @@
 # Crate Version Matrix
 
-Current development candidate: v0.28.0, with zero crates selected for publication.
-The facade advances from 0.27.6 to 0.28.0; 0.27.7 was archived research, not a tag.
-Supporting crates keep their internal-train versions. Portable GHASH joins AES/HKDF in
+Current development candidate: v0.28.1, with zero crates selected for publication.
+The facade advances from 0.28.0 to 0.28.1 for package-external acceptance.
+Supporting crates keep their internal-train versions. Portable GHASH remains alongside AES/HKDF in
 `brynja-crypto 0.2.0`; CPU crates remain at 0.2.0 and
 `brynja-legacy-hkdf 0.1.0` is held for a later checkpoint. The RISC-V AES
 candidate is evidence-only and does not enable ordinary hardware admission.

@@ -6793,7 +6793,9 @@ Future revival criteria only. This archived slot is not a release checkpoint:
 
 ### v0.28.0 - GHASH
 
-Status: in progress
+Status: released
+
+Internal tag v0.28.0; no crates.io publication.
 
 Plan scope: Implement constant-time GHASH finite-field arithmetic and a bounded incremental interface.
 
@@ -6837,7 +6839,11 @@ Exit criteria:
 
 ### v0.28.1 - GHASH Portable Public API Acceptance
 
-Status: planned
+Status: in progress
+
+The [archive consumer](../assurance/ghash-public-api/README.md)
+can be replayed through the direct crate and facade. See the
+[verification scope](VERIFICATION_STATUS.md#portable-ghash-package-acceptance-v0281).
 
 Plan scope: Before v0.28.2, freeze a package-external forced-portable fixture for the currently implemented GHASH profiles, exercising all supported parameters, real consumer operations, boundaries, typed secret outputs and cleanup; backend work may not begin until this exact portable acceptance passes.
 

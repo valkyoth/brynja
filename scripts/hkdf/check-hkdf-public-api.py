@@ -85,7 +85,7 @@ def unpack(archive, destination, prefix):
             target.write_bytes(stream.read())
 
 
-def diagnostic_matches(result, code):
+def diagnostic_matches(result, code, *, filename='src/bin/probe.rs'):
     errors = []
     for line in result.stdout.splitlines():
         record = json.loads(line)
@@ -97,7 +97,7 @@ def diagnostic_matches(result, code):
     codes = [code] if isinstance(code, str) else list(code)
     return (result.returncode != 0
             and [(error.get('code') or {}).get('code') for error in errors] == codes
-            and all(any(span.get('is_primary') and span.get('file_name') == 'src/bin/probe.rs'
+            and all(any(span.get('is_primary') and span.get('file_name') == filename
                         for span in error.get('spans', [])) for error in errors))
 
 
@@ -263,23 +263,29 @@ def check_packaged_inputs(crate, unpacked):
             raise ValueError('archive input differs from source: ' + str(relative))
 
 
-def check_family(family, toolchains, target, *, matrix=False):
-    fixture, packages, count = FAMILIES[family]
+def package_archives(root, packages, compiler, env):
     versions = {name: tomllib.loads((ROOT / 'crates' / name / 'Cargo.toml').read_text())['package']['version']
                 for name in packages}
+    workspace = package_workspace(root, packages)
+    cargo = ['cargo', '+' + compiler]
+    run(cargo + ['generate-lockfile', '--offline'], workspace, env)
+    command = cargo + ['package', '--locked', '--offline', '--allow-dirty', '--no-verify']
+    for package in packages:
+        command += ['-p', package]
+    run(command, workspace, env)
+    for package, version in versions.items():
+        prefix = f'{package}-{version}'
+        unpack(root / f'target/package/{prefix}.crate', root / 'unpacked', prefix)
+        check_packaged_inputs(ROOT / 'crates' / package, root / 'unpacked' / prefix)
+    return versions
+
+
+def check_family(family, toolchains, target, *, matrix=False):
+    fixture, packages, count = FAMILIES[family]
     with cargo_environment.private_directory(ROOT) as temporary:
         root = Path(temporary)
         env = isolated_env(root)
-        workspace = package_workspace(root, packages)
-        run(['cargo', '+' + toolchains[-1], 'generate-lockfile', '--offline'], workspace, env)
-        command = ['cargo', '+' + toolchains[-1], 'package', '--locked', '--offline', '--allow-dirty', '--no-verify']
-        for package in packages:
-            command += ['-p', package]
-        run(command, workspace, env)
-        for package, version in versions.items():
-            prefix = f'{package}-{version}'
-            unpack(root / f'target/package/{prefix}.crate', root / 'unpacked', prefix)
-            check_packaged_inputs(ROOT / 'crates' / package, root / 'unpacked' / prefix)
+        versions = package_archives(root, packages, toolchains[-1], env)
         consumer = root / 'consumers' / fixture
         shutil.copytree(ROOT / 'assurance' / fixture / 'src', consumer / 'src')
         shutil.copyfile(ROOT / 'assurance/hkdf-public-api-common.rs', root / 'consumers/hkdf-public-api-common.rs')

@@ -1,9 +1,19 @@
 # Finite portable GHASH candidate gate. Verification campaigns stay separate.
 # No crates.io publication is selected for this internal milestone.
 schema = 1
-version = "0.28.0"
-scope = "Portable GHASH arithmetic, bounded incremental input, caller-storage lifecycle and ordinary crypto regression tests. No GCM, GHASH acceleration or AES fault-integrity API. Also covers the dependency/tooling refresh and retains existing AES/HKDF compatibility checks. AES accelerated timing remains unresolved; RISC-V remains evidence-only and unadmitted. This internal milestone selects no publication; exceptional findings still require review. No historical evidence-freshness gate or implicit dynamic/proof/timing/compiler-matrix campaign."
+version = "0.28.1"
+scope = "Portable GHASH acceptance through archive-only direct and facade consumers. No GCM, GHASH acceleration or AES fault-integrity API. Retain ordinary AES/HKDF compatibility checks. AES accelerated timing remains unresolved; RISC-V remains evidence-only and unadmitted. This internal milestone selects no publication; exceptional findings still require review. No historical evidence-freshness gate or implicit dynamic/proof/timing/compiler-matrix campaign."
 ci_checks = ["crypto-tests","crypto-lint","crypto-format","facade-integration","hkdf-owner-contract","aes-owner-contract","aes-wide-owner-contract","aes-wide-api","aes-dataflow-regressions","aes-provider-api","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
+
+[[checks]]
+id = "ghash-package-controls"
+command = ["python3","scripts/ghash/test-packaged-api.py"]
+timeout_seconds = 60
+
+[[checks]]
+id = "ghash-packaged-endpoints"
+command = ["python3","scripts/ghash/check-packaged-api.py"]
+timeout_seconds = 600
 
 [[checks]]
 id = "crypto-tests"

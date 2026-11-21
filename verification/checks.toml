@@ -5,6 +5,26 @@ execution_semantics = 1
 catalog = "verification/catalog.json"
 includes = ["verification/miri-checks.json", "verification/kani-checks.json", "verification/matrix-checks.json", "verification/extra-checks.json"]
 
+[groups.ghash-packaged-api]
+paths = ["Cargo.toml", "Cargo.lock", "assurance/ghash-public-api", "scripts/ghash/check-packaged-api.py", "scripts/hkdf/check-hkdf-public-api.py", "scripts/repository/facade_cargo_environment.py", "crates/brynja","crates/brynja-core","crates/brynja-crypto","crates/brynja-crypto-cpu","crates/brynja-crypto-cpu-std","crates/brynja-dtls","crates/brynja-hash-core","crates/brynja-hash-parallel","crates/brynja-hash-sha2","crates/brynja-hash-sha3","crates/brynja-hash-tuple","crates/brynja-mac-hmac","crates/brynja-mac-kmac","crates/brynja-pki","crates/brynja-platform","crates/brynja-protocol","crates/brynja-quic-tls","crates/brynja-tls","crates/brynja-tls12","crates/brynja-tls13","crates/brynja-tls13-handshake"]
+optional_paths = [".cargo/config", ".cargo/config.toml"]
+[[groups.ghash-packaged-api.tools]]
+program = "python3"
+
+[[checks]]
+component = "ghash"
+id = "packaged-public-api"
+category = "package"
+name = "Portable GHASH archive consumers (direct and facade)"
+establishes = "Frozen public vectors, ownership and lifecycle checks on both compiler endpoints using unpacked archives. Cortex-M compile only; separate host all-feature compatibility. No GCM, native target or side-channel qualification."
+command = ["python3","scripts/ghash/check-packaged-api.py"]
+cwd = "."
+inputs = ["ghash-packaged-api","ghash-portable-field","hkdf-msrv"]
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+timeout_seconds = 600
+[checks.success]
+contains = ["GHASH_PACKAGED_PORTABLE_COMPLETE"]
+
 [groups.ghash-portable-field]
 paths = ["Cargo.toml","Cargo.lock","crates/brynja-crypto/Cargo.toml","crates/brynja-crypto/src","crates/brynja-crypto/tests/ghash_field.rs","crates/brynja-crypto/tests/ghash_vectors"]
 [[groups.ghash-portable-field.tools]]

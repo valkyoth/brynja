@@ -1,6 +1,13 @@
 # Changelog
 
-## 0.28.0 portable GHASH (in development)
+## 0.28.1 portable GHASH package acceptance (unreleased)
+
+- Exercise the explicitly enabled GHASH API through both packaged entry
+  points, including vectors, incremental failure atomicity, ownership,
+  caller-buffer cleanup and a compiled README example. No change to the
+  primitive, no acceleration and no crates.io publication.
+
+## 0.28.0 portable GHASH (internally tagged)
 
 - Add a default-off (`hazmat-ghash`), bounded, allocation-free GHASH interface for pre-framed blocks in
   `brynja-crypto`. It returns a secret intermediate, not a tag. No GCM

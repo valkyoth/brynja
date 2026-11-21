@@ -1,5 +1,12 @@
 # Permanent Evidence Index
 
+## Portable GHASH archive acceptance (v0.28.1)
+
+The [consumer and replay instructions](../assurance/ghash-public-api/README.md),
+[runner](../scripts/ghash/check-packaged-api.py), and
+[scoped results](VERIFICATION_RESULTS.md#ghash) bind package bytes, interfaces
+and compiler endpoints. See [coverage and limits](VERIFICATION_STATUS.md#portable-ghash-package-acceptance-v0281).
+
 ## Portable GHASH development (v0.28.0)
 
 - [Published GHASH intermediates and split tests](../crates/brynja-crypto/tests/ghash_vectors/nist.rs)

@@ -58,9 +58,9 @@ class ScopedRelease(unittest.TestCase):
             scoped.enabled('garbage')
 
     def test_ghash_candidate_gate_is_finite_and_does_not_publish(self):
-        plan = scoped.load('0.28.0')
+        plan = scoped.load('0.28.1')
         commands = {check['id']: check['command'] for check in plan['checks']}
-        self.assertEqual(len(commands), 30)
+        self.assertEqual(len(commands), 32)
         self.assertEqual(commands['release-plan'], ['scripts/release/test-release-plan.sh'])
         self.assertEqual(commands['crypto-tests'],
             ['cargo', 'test', '--locked', '-p', 'brynja-crypto', '-p',
@@ -74,7 +74,7 @@ class ScopedRelease(unittest.TestCase):
         self.assertEqual(commands['facade-integration'],
             ['cargo', 'check', '--locked', '-p', 'brynja', '--no-default-features'])
         self.assertEqual(set(plan['ci_checks']), set(commands) -
-                         {'sbom', 'dependency-policy', 'advisories',
+                         {'sbom', 'dependency-policy', 'advisories', 'ghash-package-controls', 'ghash-packaged-endpoints',
                           'hkdf-package-runner-tests', 'hkdf-packaged-endpoints',
                           'aes-downstream-endpoints', 'aes-consumer-format',
                           'aes-consumer-lint-direct', 'aes-consumer-lint-facade'})
@@ -99,6 +99,10 @@ class ScopedRelease(unittest.TestCase):
                 '--manifest-path', consumer_manifest, '--no-default-features',
                 '--features', route, '--all-targets', '--no-deps', '--', '-D', 'warnings']
         workflow = (scoped.ROOT / '.github/workflows/ci.yml').read_text()
+        for check, file in [('ghash-package-controls', 'test-packaged-api.py'),
+                            ('ghash-packaged-endpoints', 'check-packaged-api.py')]:
+            self.assertEqual(commands[check], ['python3', 'scripts/ghash/' + file])
+            self.assertIn(' '.join(commands[check]), workflow)
         for name, command in expected_consumer_checks.items():
             self.assertEqual(commands[name], command)
             self.assertIn(' '.join(command), workflow)
@@ -120,8 +124,8 @@ class ScopedRelease(unittest.TestCase):
                                  or 'check-aes-kani.py' in arg
                                  or 'check-aes-dataflow.py' in arg for arg in command))
         release = tomllib.loads((scoped.ROOT / 'release-crates.toml').read_text())
-        self.assertEqual(release['release']['version'], '0.28.0')
-        self.assertEqual(release['crates']['brynja']['previous_version'], '0.27.6')
+        self.assertEqual(release['release']['version'], '0.28.1')
+        self.assertEqual(release['crates']['brynja']['previous_version'], '0.28.0')
         self.assertNotIn('0.27.7', release['release']['cumulative_milestones'])
         self.assertIn('Portable GHASH', plan['scope'])
         self.assertEqual(release['release']['stage'], 'internal')

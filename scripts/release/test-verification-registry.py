@@ -495,7 +495,13 @@ class RegistryTests(unittest.TestCase):
             groups.update(json.loads((ROOT / include).read_text())['groups'])
         self.assertEqual(set(checks), {'portable-field', 'miri-lifecycle', 'asan-lifecycle',
                                       'x86-update-codegen', 'cross-update-codegen', 'raw-feature-gate',
-                                      'first-host-observation-replay'})
+                                      'first-host-observation-replay', 'packaged-public-api'})
+        packaged = checks['packaged-public-api']
+        self.assertEqual(packaged['command'], ['python3', 'scripts/ghash/check-packaged-api.py'])
+        self.assertEqual(packaged['success'], {'contains': ['GHASH_PACKAGED_PORTABLE_COMPLETE']})
+        inputs = {p for g in packaged['inputs'] for p in groups[g].get('paths', [])}
+        self.assertTrue({'assurance/ghash-public-api', 'scripts/hkdf/check-hkdf-public-api.py',
+                         'crates/brynja', 'crates/brynja-crypto', packaged['command'][1]} <= inputs)
         for name, count in [('portable-field', 10), ('miri-lifecycle', 4), ('asan-lifecycle', 4)]:
             row = checks[name]
             self.assertEqual(row['success'], {'minimum_tests': count, 'exact_tests': count,

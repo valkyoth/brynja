@@ -1,5 +1,33 @@
 # Component Verification Status
 
+## Portable GHASH package acceptance (v0.28.1)
+
+Run `brynja-verify run ghash packaged-public-api` or
+`python3 scripts/ghash/check-packaged-api.py`. Both build local Cargo
+archives and check selected files against the source before compiling any
+consumer. This is acceptance of the internal package set, not resolution
+against crates.io's published versions. The runner verifies both the
+dependency entry point and the absence of checkout fallbacks.
+
+On Rust 1.90.0 and 1.100.0, both direct and facade consumers exercise the
+15 published GHASH intermediates at every split, an independent multiblock
+polynomial oracle, budget rejection without partial consumption, and live
+caller-buffer clearing on success, error, cancellation and unwind.
+Each route also compiles and runs the README example and checks 11 paired
+positive/negative ownership programs. The package import must also fail
+specifically at the GHASH import without the opt-in, with dependency defaults,
+and with only the AES block opt-in. The archived NIST and lifecycle test
+sources are pinned by digest so future backends cannot silently replace them.
+The Cortex-M result is a compile check, not native execution. A separate
+host compatibility run enables all features of the dependency; it is not
+the forced-portable graph. There is one raw GHASH profile, no decrypt
+direction, GCM tag, or selectable accelerated GHASH backend.
+
+The [lifecycle](assurance/ghash-lifecycle.md) and
+[code-generation and timing](assurance/ghash-portable-screen.md) scopes
+remain distinct. This milestone changes no arithmetic or secret owner and
+adds no formal proof, spill-erasure guarantee or timing qualification.
+
 ## Portable GHASH (v0.28.0 development)
 
 The default-off `hazmat-ghash` interface operates on pre-framed blocks and returns a

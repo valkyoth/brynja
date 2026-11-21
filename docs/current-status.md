@@ -1,8 +1,9 @@
 # Current Status
 
-Current development (2026-11-20): v0.28.0 adds portable GHASH over
-caller-framed blocks. See the [current verification scope](VERIFICATION_STATUS.md#portable-ghash-v0280-development)
-and [remaining milestone criteria](RELEASE_PLAN.md#v0280---ghash).
+Current development (2026-11-21): v0.28.1 exercises the tagged v0.28.0
+portable GHASH API from unpacked Cargo archives. See the
+[verification scope](VERIFICATION_STATUS.md#portable-ghash-package-acceptance-v0281)
+and [milestone criteria](RELEASE_PLAN.md#v0281---ghash-portable-public-api-acceptance).
 This is not a GCM implementation or a release approval.
 
 Historical development snapshot (2026-11-01): v0.26.0 HKDF was a local candidate based on

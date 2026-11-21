@@ -300,6 +300,8 @@ examples and explicit qualification limits.
 The v0.28.0 [portable GHASH development interface](docs/security-controls.md#portable-ghash-development-contract-v0280)
 requires `hazmat-ghash`, accepts pre-framed blocks and returns a secret intermediate, not a GCM tag.
 No GHASH hardware backend or GCM implementation is admitted.
+The [v0.28.1 downstream example and replay command](assurance/ghash-public-api/README.md)
+exercise that same interface from unpacked Cargo archives on Rust 1.90.0 and 1.100.0.
 
 The v0.27.6 [provider API candidate](docs/assurance/aes-provider-completion.md)
 adds distinct AES-128/192/256 external-key bindings. Applications supply their

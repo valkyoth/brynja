@@ -60,6 +60,10 @@ jobs:
           cargo +1.100.0 clippy --locked --offline --manifest-path assurance/legacy-hkdf-public-api/Cargo.toml --all-targets --no-deps -- -D warnings
       - name: Exercise only packaged public HKDF consumers
         run: python3 scripts/hkdf/check-hkdf-public-api.py
+      - name: Exercise packaged portable GHASH consumers on both endpoints
+        run: |
+          python3 scripts/ghash/test-packaged-api.py
+          python3 scripts/ghash/check-packaged-api.py
 
   checks:
     name: Format lint test policy and audit

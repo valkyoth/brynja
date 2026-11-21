@@ -23,9 +23,12 @@ REVIEWED = {
     "1.100.0": "b51e22493ebab5833cb4d50197fdf8a28ffe38c7ef257e07ecb42ba6a0a8a31f",
 }
 CROSS_REVIEWED = {
-    "thumbv7em-none-eabi": "101776924585c8e10916757464e08fb599cc057dea086898ec6993b2bc15b337",
-    "riscv32imac-unknown-none-elf": "c7ca5500ab8fbadac28ffceba843ecd7e2e16c153906a527221a7585b1ce81fb",
-    "aarch64-linux-android": "b7c94c73fc848ecdefaee528b45117c51a556c55a811fb38d9c22b6eef94dd4d",
+    ("1.90.0", "thumbv7em-none-eabi"): "feaec1292ba86c0a4eff1396a7add8ac7c160fdbc81b8477453937b109356922",
+    ("1.90.0", "riscv32imac-unknown-none-elf"): "71abce59cb4d2c64b27168968db5cf79bdcf87f234b61a44d28485b762916ccd",
+    ("1.90.0", "aarch64-linux-android"): "7c137d9ff3254fb9df0d068e1897cc0da4050250f615ccb017830eb25b0c2d3c",
+    ("1.100.0", "thumbv7em-none-eabi"): "101776924585c8e10916757464e08fb599cc057dea086898ec6993b2bc15b337",
+    ("1.100.0", "riscv32imac-unknown-none-elf"): "c7ca5500ab8fbadac28ffceba843ecd7e2e16c153906a527221a7585b1ce81fb",
+    ("1.100.0", "aarch64-linux-android"): "b7c94c73fc848ecdefaee528b45117c51a556c55a811fb38d9c22b6eef94dd4d",
 }
 MODES = ("identical", "subkey", "block")
 N = 2048
@@ -88,7 +91,7 @@ def run(mode, output, compiler, tmp, cross_target=None):
             hashes[ext] = digest(data)
             if ext == "s":
                 hashes["update"] = digest(update_body(data.decode()))
-        expected = CROSS_REVIEWED[cross_target] if cross_target else REVIEWED[compiler]
+        expected = CROSS_REVIEWED[compiler, cross_target] if cross_target else REVIEWED[compiler]
         if hashes["update"] != expected:
             raise ValueError(f"{compiler}: assembly changed; new manual review required")
         print(compiler, cross_target or "host", json.dumps(hashes, sort_keys=True))
@@ -120,7 +123,7 @@ def main():
         args.output.mkdir(parents=True, exist_ok=False)
         os.sched_setaffinity(0, {min(os.sched_getaffinity(0))})
     alarms = []
-    builds = ([(COMPILERS[-1], t) for t in CROSS_REVIEWED] if args.mode == "cross-codegen"
+    builds = (CROSS_REVIEWED if args.mode == "cross-codegen"
               else [(compiler, None) for compiler in COMPILERS])
     for compiler, cross_target in builds:
         with tempfile.TemporaryDirectory() as tmp:

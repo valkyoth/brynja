@@ -13,6 +13,7 @@ import unittest
 from unittest.mock import patch
 
 import release_crates as publisher
+from sbom_reproducibility_tests import ReproducibleSbom
 import scoped_release as scoped
 
 

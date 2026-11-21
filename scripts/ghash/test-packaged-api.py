@@ -3,6 +3,8 @@ import importlib.util
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
 
 spec = importlib.util.spec_from_file_location('acceptance', Path(__file__).with_name('check-packaged-api.py'))
 api = importlib.util.module_from_spec(spec)
@@ -10,6 +12,34 @@ spec.loader.exec_module(api)
 
 
 class ArchiveControls(unittest.TestCase):
+    def test_exactly_one_unfiltered_suite_at_declared_count(self):
+        for n in (1, 3, 4):
+            line = f'test result: ok. {n} passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s'
+            self.assertTrue(api.exact_suite('other output\n' + line + '\n', n))
+            for bad in ('', 'extra ' + line, line + '\n' + line, line.replace(f'{n} passed', f'1{n} passed'),
+                        line.replace('0 filtered', '1 filtered'), line.replace('0 ignored', '1 ignored')):
+                self.assertFalse(api.exact_suite(bad, n))
+
+    def test_invalid_cargo_environment_blocks_expected_failure_probe(self):
+        # Run check() through both negative-probe paths. Stub only successful
+        # Cargo calls; deny the environment at the selected negative probe.
+        def positive(cmd, cwd, env):
+            count = 1 if '--doc' in cmd else 4 if 'ghash_lifecycle' in cmd else 3
+            summary = f'test result: ok. {count} passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.0s'
+            return SimpleNamespace(stdout='{}' if 'metadata' in cmd else summary)
+
+        (self.consumer / 'src').mkdir(parents=True)
+        for permitted in (0, 3):  # feature gate; first ownership probe
+            with self.subTest(permitted=permitted), patch.object(api.pkg, 'run', positive), \
+                 patch.object(api, 'check_graph'), patch.object(api.pkg, 'diagnostic_matches', return_value=True), \
+                 patch.object(api.pkg.cargo_environment, 'check',
+                              side_effect=[None] * permitted + [ValueError('unsafe config')]) as guard, \
+                 patch.object(api.pkg.subprocess, 'run') as launch:
+                with self.assertRaisesRegex(ValueError, 'unsafe config'):
+                    api.check(self.consumer, '1.90.0', 'brynja', self.versions, {})
+                guard.assert_called_with(self.consumer, {})
+                self.assertEqual(launch.call_count, permitted)
+
     def setUp(self):
         temp = tempfile.TemporaryDirectory()
         self.addCleanup(temp.cleanup)

@@ -58,20 +58,20 @@ application's final-linked code, establish spill erasure, or qualify CPUs.
 ## Reproduction
 
 The post-review cross-target check separately compiles the opt-in production
-library on Rust 1.100.0 and fingerprints the complete inlined `Ghash::update`
-body for each named target. Inside the multiply loop the only conditional jump
+library on Rust 1.90.0 and 1.100.0 and fingerprints the complete inlined
+`Ghash::update` body separately for each compiler and target. Inside the multiply loop the only conditional jump
 is the back edge on the public 128-round counter: Cortex-M decrements with
 `subs` and branches with `bne`; RV32 uses `addi` and `bnez`; Android AArch64
 uses `subs` and `b.ne`. Data selection uses masks, not indexed tables.
-Cortex-M also spills intermediate words to fixed stack offsets; the caller's
+Cortex-M and RV32 also spill intermediate words to fixed stack offsets; the caller's
 workspace cleanup does **not** erase those slots. No native measurements,
 final-linked review, or memory-disclosure resistance are claimed on these
 targets. The original x86 timing records were not recollected.
 
 - `python3 scripts/ghash/check-portable-host.py codegen`: rebuild both library artifacts.
 - `python3 scripts/ghash/check-portable-host.py cross-codegen`: compare the reviewed
-  Rust 1.100.0 bodies for `thumbv7em-none-eabi`, `riscv32imac-unknown-none-elf`
-  and `aarch64-linux-android` (install those targets before running).
+  six bodies for `thumbv7em-none-eabi`, `riscv32imac-unknown-none-elf`
+  and `aarch64-linux-android` (install all three targets on both toolchains).
 - `python3 scripts/ghash/test-portable-host.py`: verify and re-analyze the
   retained samples and exercise checker controls; does not remeasure.
 - `python3 scripts/ghash/check-portable-host.py timing --output NEW_DIRECTORY`:

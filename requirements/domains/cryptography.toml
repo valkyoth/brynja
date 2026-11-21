@@ -122,18 +122,18 @@ mapping_rationale = "The separate GHASH semantic surface is directly governed by
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0007"
-revision = 2
+revision = 3
 owner = "0.29.0"
 lifecycle = "planned"
 decision_ids = ["algorithm.aes-gcm"]
 sources = [{ id = "rfc:5116", authority_role = "current" }, { id = "nist:NIST.SP.800-38D.pdf", authority_role = "current" }]
-statement = "AES-GCM enforces the admitted AEAD interface, nonce and usage limits, authentication-before-release, and failure-atomic output behavior."
+statement = "AES-GCM enforces the admitted AEAD interface, nonce and usage limits, authentication-before-release, and failure-atomic output behavior. If AES fails to derive the GHASH subkey, propagate the failure before using GHASH or releasing output; never substitute a zero subkey."
 invariants = ["failure-atomicity", "resource-bound", "validation", "work-bound"]
 target = "crates/brynja-crypto/src/aes_gcm.rs#AesGcm"
 positive_test = "tests/requirements/crypto_aead.rs#aes_gcm_vectors"
 negative_test = "tests/requirements/crypto_aead.rs#aes_gcm_failure_atomicity"
 work_bound = "AEAD work is bounded by public plaintext and associated-data limits, checked block counters, and immutable per-key usage ceilings."
-evidence_gap = "AEAD vectors, overlap tests, failure-atomicity proofs, usage accounting, and side-channel evidence remain unresolved until v0.29.0."
+evidence_gap = "AEAD vectors, overlap tests, failure-atomicity proofs, usage accounting, and side-channel evidence remain unresolved until v0.29.0. The planned negative suite must inject an AES subkey-derivation failure and assert an error, no GHASH invocation and unchanged caller output. This is not a rejection of a successfully derived all-zero field element."
 residual = "Protocol milestones must impose stricter nonce construction and per-key limits where their security analysis requires them."
 mapping_rationale = "The AES-GCM semantic surface directly joins the generic RFC 5116 AEAD contract with the pinned SP 800-38D construction."
 

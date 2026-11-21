@@ -131,10 +131,10 @@ component = "ghash"
 id = "cross-update-codegen"
 category = "codegen"
 name = "Portable GHASH update assembly on three cross targets"
-establishes = "Compile-only Rust 1.100.0 Cortex-M, RV32 and Android AArch64 update-body comparisons; no native timing or spill erasure claim."
+establishes = "Compile-only Cortex-M, RV32 and Android AArch64 update-body comparisons on Rust 1.90.0 and 1.100.0; no native timing or spill erasure claim."
 command = ["python3", "scripts/ghash/check-portable-host.py", "cross-codegen"]
 cwd = "."
-inputs = ["ghash-host-codegen", "ghash-portable-field", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+inputs = ["ghash-host-codegen", "ghash-portable-field", "hkdf-msrv", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
 platform = "linux-x86_64"
 timeout_seconds = 360
 [checks.success]

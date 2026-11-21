@@ -56,10 +56,14 @@ def isolated_env(root):
     return env
 
 
-def run(command, cwd, env):
+def cargo_result(command, cwd, env, *, timeout):
     cargo_environment.check(cwd, env)
-    result = subprocess.run(command, cwd=cwd, env=env, text=True,
-                            capture_output=True, timeout=300)
+    return subprocess.run(command, cwd=cwd, env=env, text=True,
+                          capture_output=True, timeout=timeout)
+
+
+def run(command, cwd, env):
+    result = cargo_result(command, cwd, env, timeout=300)
     if result.returncode:
         raise ValueError(f'command failed: {command}\n{result.stdout[-4000:]}\n{result.stderr[-4000:]}')
     return result
@@ -165,9 +169,7 @@ def public_negatives(family, consumer, cargo, env):
             source.write_text(positive)
             run(command, consumer, env)
             source.write_text(negative)
-            cargo_environment.check(consumer, env)
-            result = subprocess.run(command, cwd=consumer, env=env, text=True,
-                                    capture_output=True, timeout=120)
+            result = cargo_result(command, consumer, env, timeout=120)
             if not diagnostic_matches(result, code):
                 raise ValueError(f'{family}/{name} did not fail exclusively with {code}:\n{result.stdout[-4000:]}\n{result.stderr[-2000:]}')
     finally:

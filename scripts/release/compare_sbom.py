@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import json
+import hashlib
+from datetime import datetime, timezone
 import sys
 from pathlib import Path
 
@@ -32,7 +34,25 @@ def normalized(path: Path) -> object:
     return canonicalize(document)
 
 
+def stable_document(path: Path, epoch: str) -> str:
+    """Use the same graph as --check; keep substantive checksums and edges."""
+    if not epoch.isascii() or not epoch.isdecimal():
+        raise ValueError("expected a nonnegative integer source timestamp")
+    doc = normalized(path)
+    doc["creationInfo"]["created"] = datetime.fromtimestamp(int(epoch), timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    for field in ("packages", "files"):
+        doc[field].sort(key=lambda item: item["SPDXID"])
+    doc["relationships"].sort(key=lambda edge: (edge["spdxElementId"], edge["relationshipType"], edge["relatedSpdxElement"]))
+    identity = hashlib.sha256(canonical_json(doc).encode()).hexdigest()
+    doc["documentNamespace"] = "https://spdx.org/spdxdocs/brynja-" + identity
+    return json.dumps(doc, indent=2, sort_keys=True) + "\n"
+
+
 def main() -> int:
+    if len(sys.argv) == 4 and sys.argv[1] == "--prepare":
+        path = Path(sys.argv[2])
+        path.write_text(stable_document(path, sys.argv[3]), encoding="utf-8")
+        return 0
     if len(sys.argv) != 3:
         print("usage: compare_sbom.py EXPECTED GENERATED", file=sys.stderr)
         return 2

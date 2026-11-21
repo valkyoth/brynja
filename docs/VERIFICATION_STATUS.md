@@ -23,6 +23,9 @@ host compatibility run enables all features of the dependency; it is not
 the forced-portable graph. There is one raw GHASH profile, no decrypt
 direction, GCM tag, or selectable accelerated GHASH backend.
 
+The [package review disposition](assurance/ghash-package-review.md) records the
+exact test-count checks, validation before negative compiler probes, and
+assembly review of all three cross targets on both compiler endpoints.
 The [lifecycle](assurance/ghash-lifecycle.md) and
 [code-generation and timing](assurance/ghash-portable-screen.md) scopes
 remain distinct. This milestone changes no arithmetic or secret owner and

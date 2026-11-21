@@ -1,6 +1,6 @@
 {
   "closure_policy_sha256": "d30b73ba07df3787297f3591bd467426c44983da5969e32b2dc7539508e5793e",
-  "domain_policy_sha256": "f3aa37fe866477084a776505a2be4f5e312edd5ff8ac3e7c1ef2d814b08b1b3d",
+  "domain_policy_sha256": "d7f1b3e947627ddb9f1573d8c6339c63e3599fd9a1b39a7820aa2729a5507027",
   "policy_sha256": "9ca99baa1a7db272f816b4e60e67e468c8d9021e14205282210e27a17c7a50e9",
   "requirements": [
     {
@@ -1345,7 +1345,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "AEAD vectors, overlap tests, failure-atomicity proofs, usage accounting, and side-channel evidence remain unresolved until v0.29.0.",
+      "evidence_gap": "AEAD vectors, overlap tests, failure-atomicity proofs, usage accounting, and side-channel evidence remain unresolved until v0.29.0. The planned negative suite must inject an AES subkey-derivation failure and assert an error, no GHASH invocation and unchanged caller output. This is not a rejection of a successfully derived all-zero field element.",
       "id": "BRY-REQ-CRYPTO-0007",
       "invariants": [
         "failure-atomicity",
@@ -1359,7 +1359,7 @@
       "owner": "0.29.0",
       "profile": "crypto-encoding-pkix",
       "residual": "Protocol milestones must impose stricter nonce construction and per-key limits where their security analysis requires them.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -1496,7 +1496,7 @@
           "sha256": "d99f3921ccebca049e7522426553aba071dae14ec3d5b6041e8c111a6cb57bba"
         }
       ],
-      "statement": "AES-GCM enforces the admitted AEAD interface, nonce and usage limits, authentication-before-release, and failure-atomic output behavior.",
+      "statement": "AES-GCM enforces the admitted AEAD interface, nonce and usage limits, authentication-before-release, and failure-atomic output behavior. If AES fails to derive the GHASH subkey, propagate the failure before using GHASH or releasing output; never substitute a zero subkey.",
       "strength": "INVARIANT",
       "targets": [
         {

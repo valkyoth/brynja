@@ -45,6 +45,11 @@ class HostChecks(unittest.TestCase):
                 parse(bad)
 
     def test_assembly_identity(self):
+        pins = MOD["CROSS_REVIEWED"]
+        self.assertEqual(set(pins), {(compiler, target) for compiler in ("1.90.0", "1.100.0")
+                                     for target in ("thumbv7em-none-eabi", "riscv32imac-unknown-none-elf",
+                                                    "aarch64-linux-android")})
+        self.assertNotEqual(pins["1.90.0", "thumbv7em-none-eabi"], pins["1.100.0", "thumbv7em-none-eabi"])
         body = MOD["update_body"]
         sample = "fakeGhash6update1:\n decl %ebp\n jne .LBB3_10\n .size fakeGhash6update1, 10"
         baseline = body(sample)

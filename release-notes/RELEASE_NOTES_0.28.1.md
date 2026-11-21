@@ -18,3 +18,7 @@ including the archive consumers, release/registry regressions, SBOM,
 dependency policy and advisory scan. All eight GHASH verifier entries
 were current on their scoped inputs. These are local results, not a
 commit-bound pentest, final gate or GitHub result.
+
+The [candidate pentest disposition](../docs/assurance/ghash-package-review.md)
+records the follow-up tooling fixes and remaining limits. No release gate or
+cryptographic API was added.

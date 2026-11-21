@@ -4,8 +4,8 @@ import importlib.util
 import json
 import os
 from pathlib import Path
+import re
 import shutil
-import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
 FIXTURE = ROOT / 'assurance/ghash-public-api'
@@ -81,6 +81,13 @@ def prepare(root, dependency, versions):
     return consumer
 
 
+def exact_suite(output, count):
+    summaries = [line for line in output.splitlines() if line.startswith('test result:')]
+    return len(summaries) == 1 and re.fullmatch(
+        rf'test result: ok\. {count} passed; 0 failed; 0 ignored; 0 measured; '
+        r'0 filtered out; finished in [0-9]+(?:\.[0-9]+)?s', summaries[0]) is not None
+
+
 def check(consumer, compiler, dependency, versions, env):
     cargo = ['cargo', '+' + compiler]
     def run(*args):
@@ -91,14 +98,14 @@ def check(consumer, compiler, dependency, versions, env):
     for profile in ([], ['--release']):
         for target, count in [('nist', 3), ('ghash_lifecycle', 4), ('consumer', 3)]:
             result = run('test', *flags, *profile, '--test', target)
-            if f'test result: ok. {count} passed; 0 failed; 0 ignored;' not in result:
+            if not exact_suite(result, count):
                 raise ValueError('incomplete packaged consumer suite: ' + target)
-    if '1 passed; 0 failed; 0 ignored;' not in run('test', *flags, '--doc'):
+    if not exact_suite(run('test', *flags, '--doc'), 1):
         raise ValueError('README example did not pass')
     run('check', *flags, '--lib', '--target', 'thumbv7em-none-eabi')
     for extra in ([], ['--features', 'subject/default'], ['--features', 'subject/hazmat-aes-block']):
         cmd = cargo + ['check', '--lib', '--locked', '--offline', '--message-format=json', *extra]
-        result = subprocess.run(cmd, cwd=consumer, env=env, capture_output=True, text=True, timeout=120)
+        result = pkg.cargo_result(cmd, consumer, env, timeout=120)
         if not pkg.diagnostic_matches(result, 'E0432', filename='src/route.rs'):
             raise ValueError('packaged GHASH not isolated behind its opt-in')
     # Pair the alias rejection with a successful compile of the same program
@@ -119,7 +126,7 @@ def check(consumer, compiler, dependency, versions, env):
             source.write_text(valid)
             run(*cmd)
             source.write_text(invalid)
-            result = subprocess.run(cargo + cmd, cwd=consumer, env=env, capture_output=True, text=True, timeout=120)
+            result = pkg.cargo_result(cargo + cmd, consumer, env, timeout=120)
             if not pkg.diagnostic_matches(result, code):
                 raise ValueError('unexpected ownership diagnostic: ' + code)
     finally:
@@ -128,7 +135,7 @@ def check(consumer, compiler, dependency, versions, env):
     # of the dependency (not just features of the empty consumer manifest).
     features = next(p['features'] for p in metadata['packages'] if p['name'] == dependency)
     enabled = ','.join('subject/' + feature for feature in sorted(features))
-    if '3 passed; 0 failed; 0 ignored;' not in run('test', *flags, '--features', enabled, '--test', 'consumer'):
+    if not exact_suite(run('test', *flags, '--features', enabled, '--test', 'consumer'), 3):
         raise ValueError('all-feature host compatibility failed')
     print(f'{compiler} {dependency}: archives, vectors, lifecycle, differential, README, ownership, Cortex-M compile and all-feature host compatibility passed', flush=True)
 

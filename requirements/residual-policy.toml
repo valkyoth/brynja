@@ -1,7 +1,7 @@
 schema = 1
 milestone = "0.3.5"
-source_ledger_sha256 = "167725f852db5fa023ad2e4710e98cd22c70be2d2960a72c6faa6c92d6af1e98"
-surface_register_sha256 = "d65df549f9169ac16e3b3b2c00145fa6422272b6d54fefb029ecd2b4857401e3"
+source_ledger_sha256 = "e9694bf49dd71addd529dee60d74c0115cbfba00015218b0c61d0cf6f3bd689f"
+surface_register_sha256 = "138a610e96e67cee4e6b825853ba8822464ff1a946f77fbee332909310466cd0"
 
 [[surface_group]]
 id = "BRY-REQ-APPLICATION-0130"
@@ -19,6 +19,7 @@ surface_ids = [
   "iana.tls-extensiontype-values.alpn-protocol-ids.0x4a-0x4a.1",
   "iana.tls-extensiontype-values.alpn-protocol-ids.0x5a-0x5a.1",
   "iana.tls-extensiontype-values.alpn-protocol-ids.0x61-0x63-0x6d-0x65-0x2d-0x74-0x6c-0x73-0x2f-0x31-acme-tls-1.1",
+  "iana.tls-extensiontype-values.alpn-protocol-ids.0x61-0x6d-0x62-0x65-0x73-0x61-0x73-0x71-0x6c-ambesasql.1",
   "iana.tls-extensiontype-values.alpn-protocol-ids.0x63-0x2d-0x77-0x65-0x62-0x72-0x74-0x63-c-webrtc.1",
   "iana.tls-extensiontype-values.alpn-protocol-ids.0x63-0x6f-0x61-0x70-coap.1",
   "iana.tls-extensiontype-values.alpn-protocol-ids.0x63-0x6f-co.1",
@@ -118,6 +119,7 @@ surface_ids = [
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.connection-id-deprecated.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.connection-id.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.cookie.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.dane-clientid.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.delegated-credential.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.dnssec-chain.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.early-data.1",
@@ -180,6 +182,7 @@ surface_ids = [
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.tls-lts.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.token-binding.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.transparency-info.1",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.trust-anchors-temporary-registered-2026-11-18-expires-2027-11-18.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.1",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.10",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.11",
@@ -192,6 +195,7 @@ surface_ids = [
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.18",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.19",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.2",
+  "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.20",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.3",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.4",
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.5",
@@ -208,7 +212,7 @@ id = "BRY-REQ-RFC6066X-0148"
 domain = "tls"
 owner = "0.108.0"
 disposition = "safely-ignored"
-revision = 6
+revision = 7
 sources = ["iana:tls-extensiontype-values"]
 surface_ids = [
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.client-certificate-url.1",
@@ -222,7 +226,7 @@ id = "BRY-REQ-RFC6066CFG-0148"
 domain = "tls"
 owner = "0.196.4"
 disposition = "future-work"
-revision = 6
+revision = 7
 sources = ["iana:tls-extensiontype-values"]
 surface_ids = [
   "facility.rfc6066-unsupported-configuration",
@@ -233,7 +237,7 @@ id = "BRY-REQ-COMPOSEX-0148"
 domain = "tls"
 owner = "0.196.2"
 disposition = "future-work"
-revision = 7
+revision = 8
 sources = ["iana:tls-extensiontype-values"]
 surface_ids = [
   "iana.tls-extensiontype-values.cachedinformationtype",
@@ -597,9 +601,11 @@ surface_ids = [
   "iana.dns-parameters.underscored-globally-scoped-dns-node-names",
   "iana.dns-parameters.underscored-globally-scoped-dns-node-names.acct.1",
   "iana.dns-parameters.underscored-globally-scoped-dns-node-names.acme-challenge.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.client.1",
   "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dane.1",
   "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dccp.1",
   "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dccp.2",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.device.1",
   "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dmarc.1",
   "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dns.1",
   "iana.dns-parameters.underscored-globally-scoped-dns-node-names.domainkey.1",
@@ -648,6 +654,7 @@ surface_ids = [
   "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tcp.3",
   "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tcp.4",
   "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tls.1",
+  "iana.dns-parameters.underscored-globally-scoped-dns-node-names.trooth-key.1",
   "iana.dns-parameters.underscored-globally-scoped-dns-node-names.turn.1",
   "iana.dns-parameters.underscored-globally-scoped-dns-node-names.turns.1",
   "iana.dns-parameters.underscored-globally-scoped-dns-node-names.udp.1",
@@ -1204,7 +1211,7 @@ domain = "dtls"
 owner = "0.155.1"
 disposition = "future-work"
 sources = ["iana:tls-extensiontype-values", "iana:tls-parameters"]
-revision = 10
+revision = 11
 surface_ids = [
   "iana.tls-extensiontype-values.tls-extensiontype-values-1.rrc.1",
   "iana.tls-parameters.tls-rrc-message-types",
@@ -1221,7 +1228,7 @@ domain = "dtls"
 owner = "0.155.1"
 disposition = "future-work"
 sources = ["iana:tls-parameters"]
-revision = 7
+revision = 8
 surface_ids = [
   "iana.tls-parameters.tls-parameters-5.return-routability-check.1",
 ]
@@ -1263,7 +1270,7 @@ surface_ids = [
 
 [[surface_group]]
 id = "BRY-REQ-LEGACYTLSFACREG-0148"
-revision = 6
+revision = 7
 domain = "tls"
 owner = "0.196.3"
 disposition = "future-work"
@@ -1295,7 +1302,7 @@ surface_ids = [
 
 [[registry_requirement]]
 id = "BRY-REQ-QUICREG-0094"
-revision = 3
+revision = 4
 source = "iana:quic"
 surface = "iana.quic.quic-transport"
 
@@ -1309,4 +1316,4 @@ surface = "iana.trans.trans-error-types"
 id = "BRY-REQ-PKIXREG-0053"
 source = "iana:smi-numbers"
 surface = "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7"
-revision = 7
+revision = 8

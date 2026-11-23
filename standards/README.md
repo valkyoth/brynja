@@ -167,6 +167,10 @@ is explicitly caller-owned rather than inherited future work.
 
 ## Reviewed Refresh
 
+The [2026-11-23 review](review-2026-11-23.md) records the six IANA and seven
+RFC errata changes reviewed during v0.28.2. The refresh updates requirements
+metadata without changing GHASH or enabling new protocols.
+
 The owner-authorized 2026-09-28 v0.24.49 refresh changes only TLS ML-DSA
 reference metadata and adds S/MIME module identifier 91. The three ML-DSA
 entries remain future work, and `id-mod-composite-mlkem-cms-2026` remains a

@@ -7949,10 +7949,10 @@
     "0.159.0",
     "0.160.0"
   ],
-  "policy_sha256": "afacca18f85ddf60c2db4e4c488d72ebc8e9927e051fe0b0c520c37b4d9e645b",
+  "policy_sha256": "0ba7dfa3feacf840270aea55fccacec3477b11b07530f4cc65669511d89bd798",
   "requirement_count": 71,
   "schema": 2,
-  "surface_count": 487,
+  "surface_count": 490,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -9160,6 +9160,15 @@
       "deferred_to": "0.3.5",
       "disposition": "future-work",
       "domain": "tls",
+      "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.dane-clientid.1",
+      "owner": "0.196.0",
+      "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
+    },
+    {
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
+      "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.delegated-credential.1",
       "owner": "0.196.0",
       "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
@@ -9768,6 +9777,15 @@
     {
       "coverage": "deferred",
       "deferred_to": "0.3.5",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.trust-anchors-temporary-registered-2026-11-18-expires-2027-11-18.1",
+      "owner": "0.196.0",
+      "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
+    },
+    {
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
       "disposition": "safely-ignored",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.trusted-ca-keys.1",
@@ -9879,6 +9897,15 @@
       "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.2",
+      "owner": "0.196.0",
+      "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
+    },
+    {
+      "coverage": "deferred",
+      "deferred_to": "0.3.5",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.20",
       "owner": "0.196.0",
       "rationale": "The optional HPKE-authenticated TLS facility and exclusions are normatively populated during the optional v0.3.5 closure."
     },

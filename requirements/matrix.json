@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "d30b73ba07df3787297f3591bd467426c44983da5969e32b2dc7539508e5793e",
-  "domain_policy_sha256": "dc66ccdd1ccb3082cc51140f35c16d30977208054dda08936b2abba5abbaed4d",
-  "policy_sha256": "9ca99baa1a7db272f816b4e60e67e468c8d9021e14205282210e27a17c7a50e9",
+  "domain_policy_sha256": "1f4854bbea3dcfe8fbea08fd4d934212e7a22ef7799ba62b8c5ed83b9458d1e3",
+  "policy_sha256": "a161fd8e0e1830e8f6ea10d2ea7bf184980608b666fc6f06e9b74726bf853e83",
   "requirements": [
     {
       "applicability": "delegate",
@@ -17,15 +17,15 @@
       "mapping_scope": "exact-source",
       "owner": "0.178.0",
       "residual": "Brynja owns bounded opaque transport and exact transcript binding but not the selected application's semantics.",
-      "revision": 6,
+      "revision": 7,
       "scope": "protocol",
       "source": {
         "collection": "tls-extensiontype-values",
         "disposition": "caller-owned",
         "kind": "iana",
-        "record_sha256": "4c342a7dd52dfec6c54eea279aafe32f7edca7c6a4dcedec024f3232e1b176b6",
+        "record_sha256": "4ef6a2a75dedd988a7ae7a3763a5bbd826d05f3fa0cd4f47ac6179f722c4de73",
         "registry": "alpn-protocol-ids",
-        "snapshot_sha256": "90df531dd7dc03dbff3490badde4b863f4bd927990dbb6062301e837df7a443d",
+        "snapshot_sha256": "4e56b6cca0af2c664c2879ae8b97987717b278183bd625dbdb7987680b3d975e",
         "surface_id": "iana.tls-extensiontype-values.alpn-protocol-ids"
       },
       "statement": "ALPN protocol identifiers are transported opaquely and their application behavior remains caller-owned.",
@@ -55,6 +55,7 @@
         "iana.tls-extensiontype-values.alpn-protocol-ids.0x4a-0x4a.1",
         "iana.tls-extensiontype-values.alpn-protocol-ids.0x5a-0x5a.1",
         "iana.tls-extensiontype-values.alpn-protocol-ids.0x61-0x63-0x6d-0x65-0x2d-0x74-0x6c-0x73-0x2f-0x31-acme-tls-1.1",
+        "iana.tls-extensiontype-values.alpn-protocol-ids.0x61-0x6d-0x62-0x65-0x73-0x61-0x73-0x71-0x6c-ambesasql.1",
         "iana.tls-extensiontype-values.alpn-protocol-ids.0x63-0x2d-0x77-0x65-0x62-0x72-0x74-0x63-c-webrtc.1",
         "iana.tls-extensiontype-values.alpn-protocol-ids.0x63-0x6f-0x61-0x70-coap.1",
         "iana.tls-extensiontype-values.alpn-protocol-ids.0x63-0x6f-co.1",
@@ -123,7 +124,7 @@
       "owner": "0.178.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 6,
+      "revision": 7,
       "scope": "protocol",
       "sources": [
         {
@@ -143,7 +144,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "90df531dd7dc03dbff3490badde4b863f4bd927990dbb6062301e837df7a443d"
+          "sha256": "4e56b6cca0af2c664c2879ae8b97987717b278183bd625dbdb7987680b3d975e"
         },
         {
           "authority_role": "current",
@@ -252,7 +253,7 @@
       "owner": "0.194.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 5,
+      "revision": 6,
       "scope": "protocol",
       "sources": [
         {
@@ -272,7 +273,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "90df531dd7dc03dbff3490badde4b863f4bd927990dbb6062301e837df7a443d"
+          "sha256": "4e56b6cca0af2c664c2879ae8b97987717b278183bd625dbdb7987680b3d975e"
         },
         {
           "authority_role": "current",
@@ -363,7 +364,7 @@
       "owner": "0.194.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 5,
+      "revision": 6,
       "scope": "protocol",
       "sources": [
         {
@@ -383,7 +384,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "90df531dd7dc03dbff3490badde4b863f4bd927990dbb6062301e837df7a443d"
+          "sha256": "4e56b6cca0af2c664c2879ae8b97987717b278183bd625dbdb7987680b3d975e"
         },
         {
           "authority_role": "current",
@@ -459,6 +460,7 @@
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.connection-id-deprecated.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.connection-id.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.cookie.1",
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.dane-clientid.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.delegated-credential.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.dnssec-chain.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.early-data.1",
@@ -521,6 +523,7 @@
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.tls-lts.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.token-binding.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.transparency-info.1",
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.trust-anchors-temporary-registered-2026-11-18-expires-2027-11-18.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.10",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.11",
@@ -533,6 +536,7 @@
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.18",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.19",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.2",
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.20",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.3",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.4",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.5",
@@ -560,7 +564,7 @@
       "owner": "0.196.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 9,
+      "revision": 10,
       "scope": "protocol",
       "sources": [
         {
@@ -580,7 +584,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "90df531dd7dc03dbff3490badde4b863f4bd927990dbb6062301e837df7a443d"
+          "sha256": "4e56b6cca0af2c664c2879ae8b97987717b278183bd625dbdb7987680b3d975e"
         },
         {
           "authority_role": "current",
@@ -712,7 +716,7 @@
       "owner": "0.196.2",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 7,
+      "revision": 8,
       "scope": "protocol",
       "sources": [
         {
@@ -732,7 +736,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "90df531dd7dc03dbff3490badde4b863f4bd927990dbb6062301e837df7a443d"
+          "sha256": "4e56b6cca0af2c664c2879ae8b97987717b278183bd625dbdb7987680b3d975e"
         }
       ],
       "statement": "Every authenticated Cached Information type receives complete bounded implementation and remains explicitly selected.",
@@ -4507,9 +4511,11 @@
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.acct.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.acme-challenge.1",
+        "iana.dns-parameters.underscored-globally-scoped-dns-node-names.client.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dane.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dccp.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dccp.2",
+        "iana.dns-parameters.underscored-globally-scoped-dns-node-names.device.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dmarc.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dns.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.domainkey.1",
@@ -4558,6 +4564,7 @@
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tcp.3",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tcp.4",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tls.1",
+        "iana.dns-parameters.underscored-globally-scoped-dns-node-names.trooth-key.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.turn.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.turns.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.udp.1",
@@ -4612,7 +4619,7 @@
       "owner": "0.188.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 10,
+      "revision": 11,
       "scope": "protocol",
       "sources": [
         {
@@ -4629,7 +4636,7 @@
             "0.3.5",
             "0.188.0"
           ],
-          "sha256": "8cf6389cfb7040b3a325f54975dcf7630bc5d749f251482056706520cd785093"
+          "sha256": "f2530eea90d06899aac2b79a76f4fd6b74e16fb34de2d0ef6c5cdc8e2953af25"
         },
         {
           "authority_role": "caller-owned",
@@ -9131,7 +9138,7 @@
       "owner": "0.188.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 5,
+      "revision": 6,
       "scope": "protocol",
       "sources": [
         {
@@ -9151,7 +9158,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "90df531dd7dc03dbff3490badde4b863f4bd927990dbb6062301e837df7a443d"
+          "sha256": "4e56b6cca0af2c664c2879ae8b97987717b278183bd625dbdb7987680b3d975e"
         },
         {
           "authority_role": "current",
@@ -9418,7 +9425,7 @@
       "owner": "0.21.0",
       "profile": "crypto-encoding-pkix",
       "residual": "RFC 5912 is downstream schema context only: its modules, open types, AlgorithmIdentifier rules, and certificate structures remain unimplemented; unsupported ASN.1 types cannot enter through generic open-type handling.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -9510,6 +9517,11 @@
               "disposition": "apply",
               "id": 6806,
               "status": "Verified"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9255,
+              "status": "Reported"
             }
           ],
           "id": "rfc:5912",
@@ -10281,7 +10293,7 @@
       "owner": "0.186.1",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -10299,7 +10311,7 @@
             "0.3.5",
             "0.186.1"
           ],
-          "sha256": "9d0848b4152439cfbc9a8fa8fb0cc36c1879844db7fd2e4f4c706b1c66d03002"
+          "sha256": "c266ccb736cb5bf87e1dab1236abf54943ee02d912daa19bdd5653ad119c7e43"
         },
         {
           "authority_role": "current",
@@ -10484,7 +10496,7 @@
       "owner": "0.187.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -10502,7 +10514,7 @@
             "0.3.5",
             "0.186.1"
           ],
-          "sha256": "9d0848b4152439cfbc9a8fa8fb0cc36c1879844db7fd2e4f4c706b1c66d03002"
+          "sha256": "c266ccb736cb5bf87e1dab1236abf54943ee02d912daa19bdd5653ad119c7e43"
         },
         {
           "authority_role": "current",
@@ -10637,7 +10649,7 @@
       "owner": "0.187.1",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -10655,7 +10667,7 @@
             "0.3.5",
             "0.186.1"
           ],
-          "sha256": "9d0848b4152439cfbc9a8fa8fb0cc36c1879844db7fd2e4f4c706b1c66d03002"
+          "sha256": "c266ccb736cb5bf87e1dab1236abf54943ee02d912daa19bdd5653ad119c7e43"
         },
         {
           "authority_role": "current",
@@ -10828,7 +10840,7 @@
       "owner": "0.186.1",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -10846,7 +10858,7 @@
             "0.3.5",
             "0.186.1"
           ],
-          "sha256": "9d0848b4152439cfbc9a8fa8fb0cc36c1879844db7fd2e4f4c706b1c66d03002"
+          "sha256": "c266ccb736cb5bf87e1dab1236abf54943ee02d912daa19bdd5653ad119c7e43"
         },
         {
           "authority_role": "current",
@@ -11243,15 +11255,15 @@
       "mapping_scope": "exact-source",
       "owner": "0.178.0",
       "residual": "Brynja still validates ALPN wire bounds and negotiation context while application protocol semantics stay external.",
-      "revision": 7,
+      "revision": 8,
       "scope": "protocol",
       "source": {
         "collection": "tls-extensiontype-values",
         "disposition": "caller-owned",
         "kind": "iana",
-        "record_sha256": "4c342a7dd52dfec6c54eea279aafe32f7edca7c6a4dcedec024f3232e1b176b6",
+        "record_sha256": "4ef6a2a75dedd988a7ae7a3763a5bbd826d05f3fa0cd4f47ac6179f722c4de73",
         "registry": "alpn-protocol-ids",
-        "snapshot_sha256": "90df531dd7dc03dbff3490badde4b863f4bd927990dbb6062301e837df7a443d",
+        "snapshot_sha256": "4e56b6cca0af2c664c2879ae8b97987717b278183bd625dbdb7987680b3d975e",
         "surface_id": "iana.tls-extensiontype-values.alpn-protocol-ids"
       },
       "statement": "Registered ALPN identifiers are transported opaquely while their application meaning remains outside Brynja's protocol ownership.",
@@ -11283,7 +11295,7 @@
       "mapping_scope": "exact-source",
       "owner": "0.196.0",
       "residual": "Private-use values never become interoperable defaults and must remain explicitly configured and collision-scoped.",
-      "revision": 7,
+      "revision": 8,
       "scope": "protocol",
       "source": {
         "collection": "tls-extensiontype-values",
@@ -11291,7 +11303,7 @@
         "kind": "iana",
         "record_sha256": "ab13d6b33840ce6c1644e009dc6f2e4aab234a42b6d996ce4ff2a70577e94c66",
         "registry": "tls-extensiontype-values-1",
-        "snapshot_sha256": "90df531dd7dc03dbff3490badde4b863f4bd927990dbb6062301e837df7a443d",
+        "snapshot_sha256": "4e56b6cca0af2c664c2879ae8b97987717b278183bd625dbdb7987680b3d975e",
         "surface_id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.reserved-for-private-use.1"
       },
       "statement": "Private-use registry values remain caller-owned and cannot satisfy public interoperability or standards admission.",
@@ -11341,7 +11353,7 @@
       "owner": "0.10.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 8,
+      "revision": 9,
       "scope": "protocol",
       "sources": [
         {
@@ -11362,7 +11374,7 @@
             "0.3.4",
             "0.164.0"
           ],
-          "sha256": "77b317e498599ab18e46fad031852fb4d96ee7e07d34b492b600730a6c25efc0"
+          "sha256": "aa977bbbf31983f5e91bf6f84d5d318d316382722ee362842cc6461b20969c3f"
         },
         {
           "authority_role": "exclusion",
@@ -12197,7 +12209,7 @@
       "owner": "0.240.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 11,
+      "revision": 12,
       "scope": "protocol",
       "sources": [
         {
@@ -12218,7 +12230,7 @@
             "0.3.4",
             "0.164.0"
           ],
-          "sha256": "77b317e498599ab18e46fad031852fb4d96ee7e07d34b492b600730a6c25efc0"
+          "sha256": "aa977bbbf31983f5e91bf6f84d5d318d316382722ee362842cc6461b20969c3f"
         },
         {
           "authority_role": "legacy",
@@ -12431,7 +12443,7 @@
       "owner": "0.196.3",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 6,
+      "revision": 7,
       "scope": "protocol",
       "sources": [
         {
@@ -12452,7 +12464,7 @@
             "0.3.4",
             "0.164.0"
           ],
-          "sha256": "77b317e498599ab18e46fad031852fb4d96ee7e07d34b492b600730a6c25efc0"
+          "sha256": "aa977bbbf31983f5e91bf6f84d5d318d316382722ee362842cc6461b20969c3f"
         }
       ],
       "statement": "Supplemental Data, User Mapping, and Authorization Data receive complete separately selected implementations before facade freeze.",
@@ -13500,7 +13512,7 @@
       "owner": "0.184.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 6,
+      "revision": 7,
       "scope": "protocol",
       "sources": [
         {
@@ -13520,7 +13532,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "90df531dd7dc03dbff3490badde4b863f4bd927990dbb6062301e837df7a443d"
+          "sha256": "4e56b6cca0af2c664c2879ae8b97987717b278183bd625dbdb7987680b3d975e"
         },
         {
           "authority_role": "current",
@@ -13805,7 +13817,7 @@
       "owner": "0.193.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 6,
+      "revision": 7,
       "scope": "protocol",
       "sources": [
         {
@@ -13825,7 +13837,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "90df531dd7dc03dbff3490badde4b863f4bd927990dbb6062301e837df7a443d"
+          "sha256": "4e56b6cca0af2c664c2879ae8b97987717b278183bd625dbdb7987680b3d975e"
         },
         {
           "authority_role": "current",
@@ -13915,7 +13927,7 @@
       "owner": "0.194.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 6,
+      "revision": 7,
       "scope": "protocol",
       "sources": [
         {
@@ -13935,7 +13947,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "90df531dd7dc03dbff3490badde4b863f4bd927990dbb6062301e837df7a443d"
+          "sha256": "4e56b6cca0af2c664c2879ae8b97987717b278183bd625dbdb7987680b3d975e"
         },
         {
           "authority_role": "current",
@@ -14025,7 +14037,7 @@
       "owner": "0.194.1",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 6,
+      "revision": 7,
       "scope": "protocol",
       "sources": [
         {
@@ -14045,7 +14057,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "90df531dd7dc03dbff3490badde4b863f4bd927990dbb6062301e837df7a443d"
+          "sha256": "4e56b6cca0af2c664c2879ae8b97987717b278183bd625dbdb7987680b3d975e"
         },
         {
           "authority_role": "current",
@@ -14141,7 +14153,7 @@
       "owner": "0.91.0",
       "profile": "crypto-encoding-pkix",
       "residual": "A syntactically valid certificate is not trusted; path, identity, policy, revocation, and algorithm-position validation remain separate stages.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -14264,6 +14276,11 @@
               "disposition": "track-not-applied",
               "id": 8561,
               "status": "Held for Document Update"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9259,
+              "status": "Reported"
             }
           ],
           "id": "rfc:5280",
@@ -14459,7 +14476,13 @@
           "domains": [
             "pkix"
           ],
-          "errata": [],
+          "errata": [
+            {
+              "disposition": "apply",
+              "id": 9264,
+              "status": "Verified"
+            }
+          ],
           "id": "rfc:6818",
           "kind": "rfc",
           "milestones": [
@@ -15143,7 +15166,7 @@
       "owner": "0.93.0",
       "profile": "crypto-encoding-pkix",
       "residual": "Caller pool quality and trust policy remain external, but neither can disable loop detection, deterministic ordering, or hard work ceilings.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -15266,6 +15289,11 @@
               "disposition": "track-not-applied",
               "id": 8561,
               "status": "Held for Document Update"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9259,
+              "status": "Reported"
             }
           ],
           "id": "rfc:5280",
@@ -15348,7 +15376,7 @@
       "owner": "0.94.0",
       "profile": "crypto-encoding-pkix",
       "residual": "The SMI registry remains caller-owned or future work per entry; registry presence never admits an algorithm without the frozen v1 decision gate.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -15599,6 +15627,11 @@
               "disposition": "track-not-applied",
               "id": 8561,
               "status": "Held for Document Update"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9259,
+              "status": "Reported"
             }
           ],
           "id": "rfc:5280",
@@ -15949,7 +15982,7 @@
       "owner": "0.95.0",
       "profile": "crypto-encoding-pkix",
       "residual": "Unsupported name forms and caller Unicode presentation cannot silently bypass a critical nameConstraints extension.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -16072,6 +16105,11 @@
               "disposition": "track-not-applied",
               "id": 8561,
               "status": "Held for Document Update"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9259,
+              "status": "Reported"
             }
           ],
           "id": "rfc:5280",
@@ -16231,7 +16269,7 @@
       "owner": "0.96.0",
       "profile": "crypto-encoding-pkix",
       "residual": "Application policy selection remains caller-owned but cannot weaken signature-first processing or structural and work bounds.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -16354,6 +16392,11 @@
               "disposition": "track-not-applied",
               "id": 8561,
               "status": "Held for Document Update"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9259,
+              "status": "Reported"
             }
           ],
           "id": "rfc:5280",
@@ -16439,7 +16482,13 @@
           "domains": [
             "pkix"
           ],
-          "errata": [],
+          "errata": [
+            {
+              "disposition": "track-not-applied",
+              "id": 9260,
+              "status": "Reported"
+            }
+          ],
           "id": "rfc:9618",
           "kind": "rfc",
           "milestones": [
@@ -16559,7 +16608,7 @@
       "owner": "0.97.0",
       "profile": "crypto-encoding-pkix",
       "residual": "Brynja does not ship or update a trust store and never converts certificate self-signature into trust without an explicit anchor.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -16682,6 +16731,11 @@
               "disposition": "track-not-applied",
               "id": 8561,
               "status": "Held for Document Update"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9259,
+              "status": "Reported"
             }
           ],
           "id": "rfc:5280",
@@ -16787,7 +16841,7 @@
       "owner": "0.98.0",
       "profile": "crypto-encoding-pkix",
       "residual": "Network retrieval and cache storage remain caller-owned effects and cannot make stale, unauthorized, or unverified CRL data authoritative.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -16910,6 +16964,11 @@
               "disposition": "track-not-applied",
               "id": 8561,
               "status": "Held for Document Update"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9259,
+              "status": "Reported"
             }
           ],
           "id": "rfc:5280",
@@ -17330,7 +17389,7 @@
       "owner": "0.94.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 7,
+      "revision": 8,
       "scope": "protocol",
       "sources": [
         {
@@ -17348,7 +17407,7 @@
             "0.3.3",
             "0.89.0"
           ],
-          "sha256": "c9b73b94dfb6449bb4c514d5aa6951907e588210f4245e7ebf3ccf82ca225bb0"
+          "sha256": "d44c6750d9b2ecf38d4248c00703692d33da15dd2eed7485247cfb489b41b4a4"
         }
       ],
       "statement": "Unselected SMI namespaces are preserved as caller-owned identifiers and do not gain implicit PKIX semantics.",
@@ -17629,7 +17688,7 @@
       "owner": "0.138.0",
       "profile": "tls-dtls-quic",
       "residual": "The caller must provide a correct and separately reviewed QUIC transport, loss-recovery, congestion-control, and path implementation.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -17681,6 +17740,41 @@
             {
               "disposition": "track-not-applied",
               "id": 9003,
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9271,
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "apply",
+              "id": 9273,
+              "status": "Verified"
+            },
+            {
+              "disposition": "apply",
+              "id": 9274,
+              "status": "Verified"
+            },
+            {
+              "disposition": "not-applicable",
+              "id": 9280,
+              "status": "Rejected"
+            },
+            {
+              "disposition": "apply",
+              "id": 9281,
+              "status": "Verified"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9282,
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9283,
               "status": "Held for Document Update"
             }
           ],
@@ -18477,7 +18571,7 @@
       "owner": "0.138.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -18529,6 +18623,41 @@
             {
               "disposition": "track-not-applied",
               "id": 9003,
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9271,
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "apply",
+              "id": 9273,
+              "status": "Verified"
+            },
+            {
+              "disposition": "apply",
+              "id": 9274,
+              "status": "Verified"
+            },
+            {
+              "disposition": "not-applicable",
+              "id": 9280,
+              "status": "Rejected"
+            },
+            {
+              "disposition": "apply",
+              "id": 9281,
+              "status": "Verified"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9282,
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9283,
               "status": "Held for Document Update"
             }
           ],
@@ -18603,7 +18732,12 @@
             {
               "disposition": "track-not-applied",
               "id": 9231,
-              "status": "Reported"
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "apply",
+              "id": 9272,
+              "status": "Verified"
             }
           ],
           "id": "rfc:9001",
@@ -18804,7 +18938,7 @@
       "owner": "0.139.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -18821,7 +18955,12 @@
             {
               "disposition": "track-not-applied",
               "id": 9231,
-              "status": "Reported"
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "apply",
+              "id": 9272,
+              "status": "Verified"
             }
           ],
           "id": "rfc:9001",
@@ -18928,7 +19067,7 @@
       "owner": "0.140.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -18945,7 +19084,12 @@
             {
               "disposition": "track-not-applied",
               "id": 9231,
-              "status": "Reported"
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "apply",
+              "id": 9272,
+              "status": "Verified"
             }
           ],
           "id": "rfc:9001",
@@ -19099,7 +19243,7 @@
       "owner": "0.141.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -19151,6 +19295,41 @@
             {
               "disposition": "track-not-applied",
               "id": 9003,
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9271,
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "apply",
+              "id": 9273,
+              "status": "Verified"
+            },
+            {
+              "disposition": "apply",
+              "id": 9274,
+              "status": "Verified"
+            },
+            {
+              "disposition": "not-applicable",
+              "id": 9280,
+              "status": "Rejected"
+            },
+            {
+              "disposition": "apply",
+              "id": 9281,
+              "status": "Verified"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9282,
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9283,
               "status": "Held for Document Update"
             }
           ],
@@ -19210,7 +19389,12 @@
             {
               "disposition": "track-not-applied",
               "id": 9231,
-              "status": "Reported"
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "apply",
+              "id": 9272,
+              "status": "Verified"
             }
           ],
           "id": "rfc:9001",
@@ -19281,7 +19465,7 @@
       "owner": "0.142.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -19298,7 +19482,12 @@
             {
               "disposition": "track-not-applied",
               "id": 9231,
-              "status": "Reported"
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "apply",
+              "id": 9272,
+              "status": "Verified"
             }
           ],
           "id": "rfc:9001",
@@ -19384,7 +19573,7 @@
       "owner": "0.143.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -19437,6 +19626,41 @@
               "disposition": "track-not-applied",
               "id": 9003,
               "status": "Held for Document Update"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9271,
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "apply",
+              "id": 9273,
+              "status": "Verified"
+            },
+            {
+              "disposition": "apply",
+              "id": 9274,
+              "status": "Verified"
+            },
+            {
+              "disposition": "not-applicable",
+              "id": 9280,
+              "status": "Rejected"
+            },
+            {
+              "disposition": "apply",
+              "id": 9281,
+              "status": "Verified"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9282,
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9283,
+              "status": "Held for Document Update"
             }
           ],
           "id": "rfc:9000",
@@ -19480,7 +19704,12 @@
             {
               "disposition": "track-not-applied",
               "id": 9231,
-              "status": "Reported"
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "apply",
+              "id": 9272,
+              "status": "Verified"
             }
           ],
           "id": "rfc:9001",
@@ -19576,7 +19805,7 @@
       "owner": "0.144.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -19629,6 +19858,41 @@
               "disposition": "track-not-applied",
               "id": 9003,
               "status": "Held for Document Update"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9271,
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "apply",
+              "id": 9273,
+              "status": "Verified"
+            },
+            {
+              "disposition": "apply",
+              "id": 9274,
+              "status": "Verified"
+            },
+            {
+              "disposition": "not-applicable",
+              "id": 9280,
+              "status": "Rejected"
+            },
+            {
+              "disposition": "apply",
+              "id": 9281,
+              "status": "Verified"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9282,
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9283,
+              "status": "Held for Document Update"
             }
           ],
           "id": "rfc:9000",
@@ -19677,7 +19941,12 @@
             {
               "disposition": "track-not-applied",
               "id": 9231,
-              "status": "Reported"
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "apply",
+              "id": 9272,
+              "status": "Verified"
             }
           ],
           "id": "rfc:9001",
@@ -19753,7 +20022,7 @@
       "owner": "0.145.0",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 5,
+      "revision": 6,
       "scope": "protocol",
       "sources": [
         {
@@ -19805,6 +20074,41 @@
             {
               "disposition": "track-not-applied",
               "id": 9003,
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9271,
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "apply",
+              "id": 9273,
+              "status": "Verified"
+            },
+            {
+              "disposition": "apply",
+              "id": 9274,
+              "status": "Verified"
+            },
+            {
+              "disposition": "not-applicable",
+              "id": 9280,
+              "status": "Rejected"
+            },
+            {
+              "disposition": "apply",
+              "id": 9281,
+              "status": "Verified"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9282,
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 9283,
               "status": "Held for Document Update"
             }
           ],
@@ -19889,7 +20193,12 @@
             {
               "disposition": "track-not-applied",
               "id": 9231,
-              "status": "Reported"
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "apply",
+              "id": 9272,
+              "status": "Verified"
             }
           ],
           "id": "rfc:9001",
@@ -19991,9 +20300,19 @@
               "status": "Verified"
             },
             {
-              "disposition": "track-not-applied",
+              "disposition": "apply",
               "id": 9169,
-              "status": "Reported"
+              "status": "Verified"
+            },
+            {
+              "disposition": "apply",
+              "id": 9270,
+              "status": "Verified"
+            },
+            {
+              "disposition": "not-applicable",
+              "id": 9279,
+              "status": "Rejected"
             }
           ],
           "id": "rfc:9002",
@@ -20212,7 +20531,7 @@
       "owner": "0.143.1",
       "profile": "tls-dtls-quic",
       "residual": "Implementation, executable verification, interoperability, and external review remain future work at the owning milestone.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -20229,7 +20548,12 @@
             {
               "disposition": "track-not-applied",
               "id": 9231,
-              "status": "Reported"
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "apply",
+              "id": 9272,
+              "status": "Verified"
             }
           ],
           "id": "rfc:9001",
@@ -20314,7 +20638,7 @@
       "owner": "0.138.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -20331,7 +20655,7 @@
             "0.3.4",
             "0.138.0"
           ],
-          "sha256": "eeed8e306919bd2bd87e7a8aea59a9724f66570cd33f2e4e4fccfb9a2c5a54e7"
+          "sha256": "04ac5756a4e1220c7c3be1941af3c7ba9e0e106f4b75afae2383532e00ae6443"
         }
       ],
       "statement": "The QUIC transport owns frames, parameters, errors, and version negotiation outside Brynja's TLS cryptographic adapter.",
@@ -20379,7 +20703,7 @@
       "owner": "0.196.4",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 6,
+      "revision": 7,
       "scope": "protocol",
       "sources": [
         {
@@ -20399,7 +20723,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "90df531dd7dc03dbff3490badde4b863f4bd927990dbb6062301e837df7a443d"
+          "sha256": "4e56b6cca0af2c664c2879ae8b97987717b278183bd625dbdb7987680b3d975e"
         }
       ],
       "statement": "The authenticated legacy RFC 6066 facilities receive complete explicit configuration and protocol implementations.",
@@ -20450,7 +20774,7 @@
       "owner": "0.108.0",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 6,
+      "revision": 7,
       "scope": "protocol",
       "sources": [
         {
@@ -20470,7 +20794,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "90df531dd7dc03dbff3490badde4b863f4bd927990dbb6062301e837df7a443d"
+          "sha256": "4e56b6cca0af2c664c2879ae8b97987717b278183bd625dbdb7987680b3d975e"
         }
       ],
       "statement": "A server bounds this known unsupported ClientHello extension by the outer vector and ignores its opaque body without parsing, allocation, echo, negotiation, fetching, cryptography, or state changes.",
@@ -20524,7 +20848,7 @@
       "owner": "0.155.1",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 10,
+      "revision": 11,
       "scope": "protocol",
       "sources": [
         {
@@ -20544,7 +20868,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "90df531dd7dc03dbff3490badde4b863f4bd927990dbb6062301e837df7a443d"
+          "sha256": "4e56b6cca0af2c664c2879ae8b97987717b278183bd625dbdb7987680b3d975e"
         },
         {
           "authority_role": "current",
@@ -20564,7 +20888,7 @@
             "0.3.4",
             "0.164.0"
           ],
-          "sha256": "77b317e498599ab18e46fad031852fb4d96ee7e07d34b492b600730a6c25efc0"
+          "sha256": "aa977bbbf31983f5e91bf6f84d5d318d316382722ee362842cc6461b20969c3f"
         }
       ],
       "statement": "The DTLS-only RRC extension is parsed and negotiated exclusively inside the DTLS return-routability engine.",
@@ -20612,7 +20936,7 @@
       "owner": "0.155.1",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 7,
+      "revision": 8,
       "scope": "protocol",
       "sources": [
         {
@@ -20633,7 +20957,7 @@
             "0.3.4",
             "0.164.0"
           ],
-          "sha256": "77b317e498599ab18e46fad031852fb4d96ee7e07d34b492b600730a6c25efc0"
+          "sha256": "aa977bbbf31983f5e91bf6f84d5d318d316382722ee362842cc6461b20969c3f"
         }
       ],
       "statement": "ContentType 27 is recognized and admitted only by the negotiated DTLS RRC facility; every stream-TLS context rejects it.",
@@ -21119,7 +21443,7 @@
       "mapping_scope": "exact-source",
       "owner": "0.111.0",
       "residual": "The registry assignment is necessary but does not replace cipher-suite, key-schedule, AEAD, transcript, or interoperability evidence.",
-      "revision": 8,
+      "revision": 9,
       "scope": "protocol",
       "source": {
         "collection": "tls-parameters",
@@ -21127,7 +21451,7 @@
         "kind": "iana",
         "record_sha256": "02ae68b04d095bc13817c02fc9f27d4d3e3f90b6dff7bd86b8544060b0e031b0",
         "registry": "tls-parameters-4",
-        "snapshot_sha256": "77b317e498599ab18e46fad031852fb4d96ee7e07d34b492b600730a6c25efc0",
+        "snapshot_sha256": "aa977bbbf31983f5e91bf6f84d5d318d316382722ee362842cc6461b20969c3f",
         "surface_id": "iana.tls-parameters.tls-parameters-4.tls-aes-128-gcm-sha256.1"
       },
       "statement": "TLS_AES_128_GCM_SHA256 remains an explicitly planned TLS 1.3 cipher suite with exact registry identity.",
@@ -21159,7 +21483,7 @@
       "mapping_scope": "exact-source",
       "owner": "0.196.1",
       "residual": "Heartbeat remains disabled by default and cannot be treated as implicit application liveness; malformed, unsolicited, excessive, or unnegotiated messages remain rejected.",
-      "revision": 8,
+      "revision": 9,
       "scope": "protocol",
       "source": {
         "collection": "tls-extensiontype-values",
@@ -21167,7 +21491,7 @@
         "kind": "iana",
         "record_sha256": "4bc716f3aebdf0c14656d60d125f46a303adf4634c57a7b8a45cf5d70ef1d754",
         "registry": "tls-extensiontype-values-1",
-        "snapshot_sha256": "90df531dd7dc03dbff3490badde4b863f4bd927990dbb6062301e837df7a443d",
+        "snapshot_sha256": "4e56b6cca0af2c664c2879ae8b97987717b278183bd625dbdb7987680b3d975e",
         "surface_id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.heartbeat.1"
       },
       "statement": "The registered Heartbeat extension is completely implemented for every applicable TLS and DTLS role through explicit bounded opt-in policy.",
@@ -25936,7 +26260,7 @@
       "owner": "0.196.2",
       "profile": "optional-legacy-residual",
       "residual": "No protocol implementation, interoperability, audit, source-rights, or production-readiness claim is made by this planning requirement.",
-      "revision": 6,
+      "revision": 7,
       "scope": "protocol",
       "sources": [
         {
@@ -25956,7 +26280,7 @@
             "0.3.4",
             "0.3.5"
           ],
-          "sha256": "90df531dd7dc03dbff3490badde4b863f4bd927990dbb6062301e837df7a443d"
+          "sha256": "4e56b6cca0af2c664c2879ae8b97987717b278183bd625dbdb7987680b3d975e"
         },
         {
           "authority_role": "compatibility",
@@ -30872,9 +31196,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "d788dd0a5c9b57ddab4d203c172b4b8e59781f821f7ac044ecf94fa7fabcab0f",
+  "residual_policy_sha256": "275734da4c2ef22ef9c242c322aabb8a08d99450c4f7cc5a625fb2e4b9237c23",
   "schema": 5,
-  "source_ledger_sha256": "167725f852db5fa023ad2e4710e98cd22c70be2d2960a72c6faa6c92d6af1e98",
-  "surface_register_sha256": "d65df549f9169ac16e3b3b2c00145fa6422272b6d54fefb029ecd2b4857401e3",
-  "transport_policy_sha256": "afacca18f85ddf60c2db4e4c488d72ebc8e9927e051fe0b0c520c37b4d9e645b"
+  "source_ledger_sha256": "e9694bf49dd71addd529dee60d74c0115cbfba00015218b0c61d0cf6f3bd689f",
+  "surface_register_sha256": "138a610e96e67cee4e6b825853ba8822464ff1a946f77fbee332909310466cd0",
+  "transport_policy_sha256": "0ba7dfa3feacf840270aea55fccacec3477b11b07530f4cc65669511d89bd798"
 }

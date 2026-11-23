@@ -17,7 +17,7 @@
       "requirement_ids": [
         "BRY-REQ-DNS-0140"
       ],
-      "sha256": "8cf6389cfb7040b3a325f54975dcf7630bc5d749f251482056706520cd785093"
+      "sha256": "f2530eea90d06899aac2b79a76f4fd6b74e16fb34de2d0ef6c5cdc8e2953af25"
     },
     {
       "authority_role": "current",
@@ -40,7 +40,7 @@
         "BRY-REQ-HPKE-1391",
         "BRY-REQ-HPKEREG-0138"
       ],
-      "sha256": "9d0848b4152439cfbc9a8fa8fb0cc36c1879844db7fd2e4f4c706b1c66d03002"
+      "sha256": "c266ccb736cb5bf87e1dab1236abf54943ee02d912daa19bdd5653ad119c7e43"
     },
     {
       "authority_role": "current",
@@ -59,7 +59,7 @@
       "requirement_ids": [
         "BRY-REQ-QUICREG-0094"
       ],
-      "sha256": "eeed8e306919bd2bd87e7a8aea59a9724f66570cd33f2e4e4fccfb9a2c5a54e7"
+      "sha256": "04ac5756a4e1220c7c3be1941af3c7ba9e0e106f4b75afae2383532e00ae6443"
     },
     {
       "authority_role": "current",
@@ -79,7 +79,7 @@
       "requirement_ids": [
         "BRY-REQ-PKIXREG-0053"
       ],
-      "sha256": "c9b73b94dfb6449bb4c514d5aa6951907e588210f4245e7ebf3ccf82ca225bb0"
+      "sha256": "d44c6750d9b2ecf38d4248c00703692d33da15dd2eed7485247cfb489b41b4a4"
     },
     {
       "authority_role": "current",
@@ -133,7 +133,7 @@
         "BRY-REQ-RRCREG-0148",
         "BRY-REQ-TLS12EXT-0058"
       ],
-      "sha256": "90df531dd7dc03dbff3490badde4b863f4bd927990dbb6062301e837df7a443d"
+      "sha256": "4e56b6cca0af2c664c2879ae8b97987717b278183bd625dbdb7987680b3d975e"
     },
     {
       "authority_role": "current",
@@ -160,7 +160,7 @@
         "BRY-REQ-RRCREG-0148",
         "BRY-REQ-RRCTYPE-0111"
       ],
-      "sha256": "77b317e498599ab18e46fad031852fb4d96ee7e07d34b492b600730a6c25efc0"
+      "sha256": "aa977bbbf31983f5e91bf6f84d5d318d316382722ee362842cc6461b20969c3f"
     },
     {
       "authority_role": "current",
@@ -2625,10 +2625,10 @@
   "authority_count": 33,
   "mapped_normative_section_count": 165,
   "normative_section_count": 182,
-  "policy_sha256": "d788dd0a5c9b57ddab4d203c172b4b8e59781f821f7ac044ecf94fa7fabcab0f",
+  "policy_sha256": "275734da4c2ef22ef9c242c322aabb8a08d99450c4f7cc5a625fb2e4b9237c23",
   "requirement_count": 51,
   "schema": 1,
-  "surface_count": 795,
+  "surface_count": 802,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -5522,6 +5522,14 @@
       "coverage": "requirement",
       "disposition": "caller-owned",
       "domain": "dns",
+      "id": "iana.dns-parameters.underscored-globally-scoped-dns-node-names.client.1",
+      "owner": "0.188.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
       "id": "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dane.1",
       "owner": "0.188.0",
       "requirement_id": "BRY-REQ-DNS-0140"
@@ -5539,6 +5547,14 @@
       "disposition": "caller-owned",
       "domain": "dns",
       "id": "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dccp.2",
+      "owner": "0.188.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.underscored-globally-scoped-dns-node-names.device.1",
       "owner": "0.188.0",
       "requirement_id": "BRY-REQ-DNS-0140"
     },
@@ -5923,6 +5939,14 @@
       "disposition": "caller-owned",
       "domain": "dns",
       "id": "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tls.1",
+      "owner": "0.188.0",
+      "requirement_id": "BRY-REQ-DNS-0140"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "dns",
+      "id": "iana.dns-parameters.underscored-globally-scoped-dns-node-names.trooth-key.1",
       "owner": "0.188.0",
       "requirement_id": "BRY-REQ-DNS-0140"
     },
@@ -6778,6 +6802,14 @@
       "coverage": "requirement",
       "disposition": "caller-owned",
       "domain": "application",
+      "id": "iana.tls-extensiontype-values.alpn-protocol-ids.0x61-0x6d-0x62-0x65-0x73-0x61-0x73-0x71-0x6c-ambesasql.1",
+      "owner": "0.178.0",
+      "requirement_id": "BRY-REQ-APPLICATION-0130"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "caller-owned",
+      "domain": "application",
       "id": "iana.tls-extensiontype-values.alpn-protocol-ids.0x63-0x2d-0x77-0x65-0x62-0x72-0x74-0x63-c-webrtc.1",
       "owner": "0.178.0",
       "requirement_id": "BRY-REQ-APPLICATION-0130"
@@ -7386,6 +7418,14 @@
       "coverage": "requirement",
       "disposition": "future-work",
       "domain": "tls",
+      "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.dane-clientid.1",
+      "owner": "0.196.0",
+      "requirement_id": "BRY-REQ-COMPOSE-0148"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.delegated-credential.1",
       "owner": "0.196.0",
       "requirement_id": "BRY-REQ-COMPOSE-0148"
@@ -7920,6 +7960,14 @@
     },
     {
       "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.trust-anchors-temporary-registered-2026-11-18-expires-2027-11-18.1",
+      "owner": "0.196.0",
+      "requirement_id": "BRY-REQ-COMPOSE-0148"
+    },
+    {
+      "coverage": "requirement",
       "disposition": "safely-ignored",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.trusted-ca-keys.1",
@@ -8019,6 +8067,14 @@
       "disposition": "future-work",
       "domain": "tls",
       "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.2",
+      "owner": "0.196.0",
+      "requirement_id": "BRY-REQ-COMPOSE-0148"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "future-work",
+      "domain": "tls",
+      "id": "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.20",
       "owner": "0.196.0",
       "requirement_id": "BRY-REQ-COMPOSE-0148"
     },

@@ -1,3 +1,5 @@
 * text=auto eol=lf
 rfc/rfc*.txt -text whitespace=-blank-at-eol,-blank-at-eof
+# Preserve the checksum-pinned IANA HPKE XML, including upstream line endings and spaces.
+standards/snapshots/iana/hpke.xml -text whitespace=-blank-at-eol
 vendor/** linguist-vendored

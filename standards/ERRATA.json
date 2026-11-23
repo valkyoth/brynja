@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-09-28",
+  "checked_at": "2026-11-23",
   "records": [
     {
       "date_reported": "2001-01-19",
@@ -1549,6 +1549,19 @@
       "url": "https://errata.rfc-editor.org/eid8561/"
     },
     {
+      "date_reported": "2026-11-01",
+      "disposition": "track-not-applied",
+      "id": 9259,
+      "implementation": "planned:v0.91.0",
+      "rationale": "Unverified or held erratum is tracked but cannot alter requirements.",
+      "rfc": 5280,
+      "section": "6.1.5",
+      "security": "Do not let this unverified technical report alter normative behavior; track it against planned:v0.91.0 and recheck official status before dependent implementation and release.",
+      "status": "Reported",
+      "type": "Technical",
+      "url": "https://errata.rfc-editor.org/eid9259/"
+    },
+    {
       "date_reported": "2016-05-14",
       "disposition": "apply",
       "id": 4694,
@@ -1965,6 +1978,19 @@
       "url": "https://errata.rfc-editor.org/eid6806/"
     },
     {
+      "date_reported": "2026-11-02",
+      "disposition": "track-not-applied",
+      "id": 9255,
+      "implementation": "planned:v0.20.0",
+      "rationale": "Unverified or held erratum is tracked but cannot alter requirements.",
+      "rfc": 5912,
+      "section": "7",
+      "security": "Do not let this unverified technical report alter normative behavior; track it against planned:v0.20.0 and recheck official status before dependent implementation and release.",
+      "status": "Reported",
+      "type": "Technical",
+      "url": "https://errata.rfc-editor.org/eid9255/"
+    },
+    {
       "date_reported": "2026-07-24",
       "disposition": "track-not-applied",
       "id": 9041,
@@ -2210,6 +2236,19 @@
       "status": "Verified",
       "type": "Editorial",
       "url": "https://errata.rfc-editor.org/eid6825/"
+    },
+    {
+      "date_reported": "2026-11-01",
+      "disposition": "apply",
+      "id": 9264,
+      "implementation": "planned:v0.91.0",
+      "rationale": "Verified erratum is normative input for implementation.",
+      "rfc": 6818,
+      "section": "6",
+      "security": "Apply the verified editorial correction when extracting requirements for planned:v0.91.0; its owning milestone must bind the decision to code or boundary and positive/negative tests.",
+      "status": "Verified",
+      "type": "Editorial",
+      "url": "https://errata.rfc-editor.org/eid9264/"
     },
     {
       "date_reported": "2019-05-22",
@@ -3460,6 +3499,97 @@
       "url": "https://errata.rfc-editor.org/eid9003/"
     },
     {
+      "date_reported": "2026-11-05",
+      "disposition": "track-not-applied",
+      "id": 9271,
+      "implementation": "boundary:v0.138.0",
+      "rationale": "Unverified or held erratum is tracked but cannot alter requirements.",
+      "rfc": 9000,
+      "section": "22.5",
+      "security": "Do not let this unverified editorial report alter normative behavior; track it against boundary:v0.138.0 and recheck official status before dependent implementation and release.",
+      "status": "Held for Document Update",
+      "type": "Editorial",
+      "url": "https://errata.rfc-editor.org/eid9271/"
+    },
+    {
+      "date_reported": "2026-11-05",
+      "disposition": "apply",
+      "id": 9273,
+      "implementation": "boundary:v0.138.0",
+      "rationale": "Verified erratum is normative input for implementation.",
+      "rfc": 9000,
+      "section": "21.1.3.3",
+      "security": "Apply the verified editorial correction when extracting requirements for boundary:v0.138.0; its owning milestone must bind the decision to code or boundary and positive/negative tests.",
+      "status": "Verified",
+      "type": "Editorial",
+      "url": "https://errata.rfc-editor.org/eid9273/"
+    },
+    {
+      "date_reported": "2026-11-05",
+      "disposition": "apply",
+      "id": 9274,
+      "implementation": "boundary:v0.138.0",
+      "rationale": "Verified erratum is normative input for implementation.",
+      "rfc": 9000,
+      "section": "22.5",
+      "security": "Apply the verified technical correction when extracting requirements for boundary:v0.138.0; its owning milestone must bind the decision to code or boundary and positive/negative tests.",
+      "status": "Verified",
+      "type": "Technical",
+      "url": "https://errata.rfc-editor.org/eid9274/"
+    },
+    {
+      "date_reported": "2026-11-05",
+      "disposition": "not-applicable",
+      "id": 9280,
+      "implementation": "not-applicable:rfc-editor-rejected",
+      "rationale": "Rejected erratum does not alter requirements.",
+      "rfc": 9000,
+      "section": "21.11",
+      "security": "Do not alter normative behavior for this rejected editorial report; retain it to prevent accidental admission.",
+      "status": "Rejected",
+      "type": "Editorial",
+      "url": "https://errata.rfc-editor.org/eid9280/"
+    },
+    {
+      "date_reported": "2026-11-05",
+      "disposition": "apply",
+      "id": 9281,
+      "implementation": "boundary:v0.138.0",
+      "rationale": "Verified erratum is normative input for implementation.",
+      "rfc": 9000,
+      "section": "A.2",
+      "security": "Apply the verified technical correction when extracting requirements for boundary:v0.138.0; its owning milestone must bind the decision to code or boundary and positive/negative tests.",
+      "status": "Verified",
+      "type": "Technical",
+      "url": "https://errata.rfc-editor.org/eid9281/"
+    },
+    {
+      "date_reported": "2026-11-05",
+      "disposition": "track-not-applied",
+      "id": 9282,
+      "implementation": "boundary:v0.138.0",
+      "rationale": "Unverified or held erratum is tracked but cannot alter requirements.",
+      "rfc": 9000,
+      "section": "14.1",
+      "security": "Do not let this unverified technical report alter normative behavior; track it against boundary:v0.138.0 and recheck official status before dependent implementation and release.",
+      "status": "Held for Document Update",
+      "type": "Technical",
+      "url": "https://errata.rfc-editor.org/eid9282/"
+    },
+    {
+      "date_reported": "2026-11-05",
+      "disposition": "track-not-applied",
+      "id": 9283,
+      "implementation": "boundary:v0.138.0",
+      "rationale": "Unverified or held erratum is tracked but cannot alter requirements.",
+      "rfc": 9000,
+      "section": "9.3",
+      "security": "Do not let this unverified editorial report alter normative behavior; track it against boundary:v0.138.0 and recheck official status before dependent implementation and release.",
+      "status": "Held for Document Update",
+      "type": "Editorial",
+      "url": "https://errata.rfc-editor.org/eid9283/"
+    },
+    {
       "date_reported": "2024-01-26",
       "disposition": "not-applicable",
       "id": 7785,
@@ -3481,9 +3611,22 @@
       "rfc": 9001,
       "section": "A.2.",
       "security": "Do not let this unverified technical report alter normative behavior; track it against planned:v0.138.0 and recheck official status before dependent implementation and release.",
-      "status": "Reported",
+      "status": "Held for Document Update",
       "type": "Technical",
       "url": "https://errata.rfc-editor.org/eid9231/"
+    },
+    {
+      "date_reported": "2026-11-05",
+      "disposition": "apply",
+      "id": 9272,
+      "implementation": "planned:v0.138.0",
+      "rationale": "Verified erratum is normative input for implementation.",
+      "rfc": 9001,
+      "section": "5.4.3",
+      "security": "Apply the verified technical correction when extracting requirements for planned:v0.138.0; its owning milestone must bind the decision to code or boundary and positive/negative tests.",
+      "status": "Verified",
+      "type": "Technical",
+      "url": "https://errata.rfc-editor.org/eid9272/"
     },
     {
       "date_reported": "2023-06-07",
@@ -3500,16 +3643,42 @@
     },
     {
       "date_reported": "2026-09-09",
-      "disposition": "track-not-applied",
+      "disposition": "apply",
       "id": 9169,
       "implementation": "boundary:v0.138.0",
-      "rationale": "Unverified or held erratum is tracked but cannot alter requirements.",
+      "rationale": "Verified erratum is normative input for implementation.",
       "rfc": 9002,
       "section": "Appendix A.8",
-      "security": "Do not let this unverified technical report alter normative behavior; track it against boundary:v0.138.0 and recheck official status before dependent implementation and release.",
-      "status": "Reported",
+      "security": "Apply the verified technical correction when extracting requirements for boundary:v0.138.0; its owning milestone must bind the decision to code or boundary and positive/negative tests.",
+      "status": "Verified",
       "type": "Technical",
       "url": "https://errata.rfc-editor.org/eid9169/"
+    },
+    {
+      "date_reported": "2026-11-05",
+      "disposition": "apply",
+      "id": 9270,
+      "implementation": "boundary:v0.138.0",
+      "rationale": "Verified erratum is normative input for implementation.",
+      "rfc": 9002,
+      "section": "B.1",
+      "security": "Apply the verified technical correction when extracting requirements for boundary:v0.138.0; its owning milestone must bind the decision to code or boundary and positive/negative tests.",
+      "status": "Verified",
+      "type": "Technical",
+      "url": "https://errata.rfc-editor.org/eid9270/"
+    },
+    {
+      "date_reported": "2026-11-05",
+      "disposition": "not-applicable",
+      "id": 9279,
+      "implementation": "not-applicable:rfc-editor-rejected",
+      "rationale": "Rejected erratum does not alter requirements.",
+      "rfc": 9002,
+      "section": "6.2.4",
+      "security": "Do not alter normative behavior for this rejected technical report; retain it to prevent accidental admission.",
+      "status": "Rejected",
+      "type": "Technical",
+      "url": "https://errata.rfc-editor.org/eid9279/"
     },
     {
       "date_reported": "2024-07-25",
@@ -3848,6 +4017,19 @@
       "status": "Held for Document Update",
       "type": "Editorial",
       "url": "https://errata.rfc-editor.org/eid8012/"
+    },
+    {
+      "date_reported": "2026-11-01",
+      "disposition": "track-not-applied",
+      "id": 9260,
+      "implementation": "planned:v0.91.0",
+      "rationale": "Unverified or held erratum is tracked but cannot alter requirements.",
+      "rfc": 9618,
+      "section": "3.1",
+      "security": "Do not let this unverified technical report alter normative behavior; track it against planned:v0.91.0 and recheck official status before dependent implementation and release.",
+      "status": "Reported",
+      "type": "Technical",
+      "url": "https://errata.rfc-editor.org/eid9260/"
     },
     {
       "date_reported": "2026-07-24",

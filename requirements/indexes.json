@@ -34,6 +34,7 @@
         "iana.tls-extensiontype-values.alpn-protocol-ids.0x4a-0x4a.1",
         "iana.tls-extensiontype-values.alpn-protocol-ids.0x5a-0x5a.1",
         "iana.tls-extensiontype-values.alpn-protocol-ids.0x61-0x63-0x6d-0x65-0x2d-0x74-0x6c-0x73-0x2f-0x31-acme-tls-1.1",
+        "iana.tls-extensiontype-values.alpn-protocol-ids.0x61-0x6d-0x62-0x65-0x73-0x61-0x73-0x71-0x6c-ambesasql.1",
         "iana.tls-extensiontype-values.alpn-protocol-ids.0x63-0x2d-0x77-0x65-0x62-0x72-0x74-0x63-c-webrtc.1",
         "iana.tls-extensiontype-values.alpn-protocol-ids.0x63-0x6f-0x61-0x70-coap.1",
         "iana.tls-extensiontype-values.alpn-protocol-ids.0x63-0x6f-co.1",
@@ -195,6 +196,7 @@
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.connection-id-deprecated.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.connection-id.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.cookie.1",
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.dane-clientid.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.delegated-credential.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.dnssec-chain.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.early-data.1",
@@ -257,6 +259,7 @@
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.tls-lts.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.token-binding.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.transparency-info.1",
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.trust-anchors-temporary-registered-2026-11-18-expires-2027-11-18.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.1",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.10",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.11",
@@ -269,6 +272,7 @@
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.18",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.19",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.2",
+        "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.20",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.3",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.4",
         "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.5",
@@ -1431,9 +1435,11 @@
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.acct.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.acme-challenge.1",
+        "iana.dns-parameters.underscored-globally-scoped-dns-node-names.client.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dane.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dccp.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dccp.2",
+        "iana.dns-parameters.underscored-globally-scoped-dns-node-names.device.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dmarc.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dns.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.domainkey.1",
@@ -1482,6 +1488,7 @@
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tcp.3",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tcp.4",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tls.1",
+        "iana.dns-parameters.underscored-globally-scoped-dns-node-names.trooth-key.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.turn.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.turns.1",
         "iana.dns-parameters.underscored-globally-scoped-dns-node-names.udp.1",
@@ -7657,6 +7664,9 @@
       "iana.dns-parameters.underscored-globally-scoped-dns-node-names.acme-challenge.1": [
         "BRY-REQ-DNS-0140"
       ],
+      "iana.dns-parameters.underscored-globally-scoped-dns-node-names.client.1": [
+        "BRY-REQ-DNS-0140"
+      ],
       "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dane.1": [
         "BRY-REQ-DNS-0140"
       ],
@@ -7664,6 +7674,9 @@
         "BRY-REQ-DNS-0140"
       ],
       "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dccp.2": [
+        "BRY-REQ-DNS-0140"
+      ],
+      "iana.dns-parameters.underscored-globally-scoped-dns-node-names.device.1": [
         "BRY-REQ-DNS-0140"
       ],
       "iana.dns-parameters.underscored-globally-scoped-dns-node-names.dmarc.1": [
@@ -7808,6 +7821,9 @@
         "BRY-REQ-DNS-0140"
       ],
       "iana.dns-parameters.underscored-globally-scoped-dns-node-names.tls.1": [
+        "BRY-REQ-DNS-0140"
+      ],
+      "iana.dns-parameters.underscored-globally-scoped-dns-node-names.trooth-key.1": [
         "BRY-REQ-DNS-0140"
       ],
       "iana.dns-parameters.underscored-globally-scoped-dns-node-names.turn.1": [
@@ -8147,6 +8163,9 @@
       "iana.tls-extensiontype-values.alpn-protocol-ids.0x61-0x63-0x6d-0x65-0x2d-0x74-0x6c-0x73-0x2f-0x31-acme-tls-1.1": [
         "BRY-REQ-APPLICATION-0130"
       ],
+      "iana.tls-extensiontype-values.alpn-protocol-ids.0x61-0x6d-0x62-0x65-0x73-0x61-0x73-0x71-0x6c-ambesasql.1": [
+        "BRY-REQ-APPLICATION-0130"
+      ],
       "iana.tls-extensiontype-values.alpn-protocol-ids.0x63-0x2d-0x77-0x65-0x62-0x72-0x74-0x63-c-webrtc.1": [
         "BRY-REQ-APPLICATION-0130"
       ],
@@ -8378,6 +8397,9 @@
       "iana.tls-extensiontype-values.tls-extensiontype-values-1.cookie.1": [
         "BRY-REQ-COMPOSE-0148"
       ],
+      "iana.tls-extensiontype-values.tls-extensiontype-values-1.dane-clientid.1": [
+        "BRY-REQ-COMPOSE-0148"
+      ],
       "iana.tls-extensiontype-values.tls-extensiontype-values-1.delegated-credential.1": [
         "BRY-REQ-COMPOSE-0148"
       ],
@@ -8585,6 +8607,9 @@
       "iana.tls-extensiontype-values.tls-extensiontype-values-1.truncated-hmac.1": [
         "BRY-REQ-RFC6066X-0148"
       ],
+      "iana.tls-extensiontype-values.tls-extensiontype-values-1.trust-anchors-temporary-registered-2026-11-18-expires-2027-11-18.1": [
+        "BRY-REQ-COMPOSE-0148"
+      ],
       "iana.tls-extensiontype-values.tls-extensiontype-values-1.trusted-ca-keys.1": [
         "BRY-REQ-RFC6066X-0148"
       ],
@@ -8622,6 +8647,9 @@
         "BRY-REQ-COMPOSE-0148"
       ],
       "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.2": [
+        "BRY-REQ-COMPOSE-0148"
+      ],
+      "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.20": [
         "BRY-REQ-COMPOSE-0148"
       ],
       "iana.tls-extensiontype-values.tls-extensiontype-values-1.unassigned.3": [

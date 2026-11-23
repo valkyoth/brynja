@@ -15,7 +15,7 @@
         "boundary:dns.0.188.0"
       ],
       "brynja_state": "current",
-      "content_sha256": "8cf6389cfb7040b3a325f54975dcf7630bc5d749f251482056706520cd785093",
+      "content_sha256": "f2530eea90d06899aac2b79a76f4fd6b74e16fb34de2d0ef6c5cdc8e2953af25",
       "content_url": "https://www.iana.org/assignments/dns-parameters/dns-parameters.xml",
       "edition": "Domain Name System (DNS) Parameters",
       "id": "iana:dns-parameters",
@@ -24,7 +24,7 @@
       "last_successful_observation": "2026-08-31",
       "metadata": {
         "created": "",
-        "updated": "2026-10-16"
+        "updated": "2026-11-18"
       },
       "planning_notices": [],
       "publisher": "IANA",
@@ -51,7 +51,7 @@
         "crates/brynja-crypto/src/hpke.rs"
       ],
       "brynja_state": "current",
-      "content_sha256": "9d0848b4152439cfbc9a8fa8fb0cc36c1879844db7fd2e4f4c706b1c66d03002",
+      "content_sha256": "c266ccb736cb5bf87e1dab1236abf54943ee02d912daa19bdd5653ad119c7e43",
       "content_url": "https://www.iana.org/assignments/hpke/hpke.xml",
       "edition": "Hybrid Public Key Encryption (HPKE)",
       "id": "iana:hpke",
@@ -60,7 +60,7 @@
       "last_successful_observation": "2026-08-31",
       "metadata": {
         "created": "2021-11-16",
-        "updated": "2026-04-16"
+        "updated": "2026-11-10"
       },
       "planning_notices": [],
       "publisher": "IANA",
@@ -84,7 +84,7 @@
         "boundary:quic.0.138.0"
       ],
       "brynja_state": "current",
-      "content_sha256": "eeed8e306919bd2bd87e7a8aea59a9724f66570cd33f2e4e4fccfb9a2c5a54e7",
+      "content_sha256": "04ac5756a4e1220c7c3be1941af3c7ba9e0e106f4b75afae2383532e00ae6443",
       "content_url": "https://www.iana.org/assignments/quic/quic.xml",
       "edition": "QUIC",
       "id": "iana:quic",
@@ -93,7 +93,7 @@
       "last_successful_observation": "2026-08-31",
       "metadata": {
         "created": "2021-02-11",
-        "updated": "2026-09-28"
+        "updated": "2026-11-10"
       },
       "planning_notices": [],
       "publisher": "IANA",
@@ -117,7 +117,7 @@
         "boundary:pkix.0.94.0"
       ],
       "brynja_state": "current",
-      "content_sha256": "c9b73b94dfb6449bb4c514d5aa6951907e588210f4245e7ebf3ccf82ca225bb0",
+      "content_sha256": "d44c6750d9b2ecf38d4248c00703692d33da15dd2eed7485247cfb489b41b4a4",
       "content_url": "https://www.iana.org/assignments/smi-numbers/smi-numbers.xml",
       "edition": "Structure of Management Information (SMI) Numbers (MIB Module Registrations)",
       "id": "iana:smi-numbers",
@@ -126,7 +126,7 @@
       "last_successful_observation": "2026-08-31",
       "metadata": {
         "created": "",
-        "updated": "2026-10-23"
+        "updated": "2026-11-16"
       },
       "planning_notices": [],
       "publisher": "IANA",
@@ -213,7 +213,7 @@
         "crates/brynja-tls13/src/ech.rs"
       ],
       "brynja_state": "current",
-      "content_sha256": "90df531dd7dc03dbff3490badde4b863f4bd927990dbb6062301e837df7a443d",
+      "content_sha256": "4e56b6cca0af2c664c2879ae8b97987717b278183bd625dbdb7987680b3d975e",
       "content_url": "https://www.iana.org/assignments/tls-extensiontype-values/tls-extensiontype-values.xml",
       "edition": "Transport Layer Security (TLS) Extensions",
       "id": "iana:tls-extensiontype-values",
@@ -222,7 +222,7 @@
       "last_successful_observation": "2026-08-31",
       "metadata": {
         "created": "2005-11-15",
-        "updated": "2026-10-08"
+        "updated": "2026-11-18"
       },
       "planning_notices": [],
       "publisher": "IANA",
@@ -256,7 +256,7 @@
         "crates/brynja-tls13/src/cipher_suite.rs#TLS_AES_128_GCM_SHA256"
       ],
       "brynja_state": "current",
-      "content_sha256": "77b317e498599ab18e46fad031852fb4d96ee7e07d34b492b600730a6c25efc0",
+      "content_sha256": "aa977bbbf31983f5e91bf6f84d5d318d316382722ee362842cc6461b20969c3f",
       "content_url": "https://www.iana.org/assignments/tls-parameters/tls-parameters.xml",
       "edition": "Transport Layer Security (TLS) Parameters",
       "id": "iana:tls-parameters",
@@ -265,7 +265,7 @@
       "last_successful_observation": "2026-08-31",
       "metadata": {
         "created": "2005-08-23",
-        "updated": "2026-10-21"
+        "updated": "2026-11-05"
       },
       "planning_notices": [],
       "publisher": "IANA",
@@ -489,7 +489,7 @@
         "BRY-REQ-CRYPTO-0005"
       ],
       "affected_symbols": [
-        "crates/brynja-crypto/src/aes.rs#Aes"
+        "crates/brynja-crypto/src/aes.rs#Aes128Key"
       ],
       "brynja_state": "current",
       "content_sha256": "62c86eb567f13edb8f71826e985da870b04ef6381634f303cdb16e84d47becd1",
@@ -2346,6 +2346,11 @@
             "disposition": "track-not-applied",
             "id": 8561,
             "status": "Held for Document Update"
+          },
+          {
+            "disposition": "track-not-applied",
+            "id": 9259,
+            "status": "Reported"
           }
         ],
         "updated_by": [
@@ -2804,7 +2809,7 @@
         "BRY-REQ-CRYPTO-0004"
       ],
       "affected_symbols": [
-        "crates/brynja-crypto/src/hkdf.rs#Hkdf"
+        "crates/brynja-crypto/src/hkdf/derive.rs#Prk"
       ],
       "brynja_state": "current",
       "content_sha256": "7a40eb3835b35fc947eb12a2ed614db079d43b26e50dbc537c31fba16397089c",
@@ -3074,6 +3079,11 @@
             "disposition": "apply",
             "id": 6806,
             "status": "Verified"
+          },
+          {
+            "disposition": "track-not-applied",
+            "id": 9255,
+            "status": "Reported"
           }
         ],
         "updated_by": [
@@ -3689,7 +3699,13 @@
       "last_successful_observation": "2026-08-31",
       "metadata": {
         "current_status": "PROPOSED STANDARD",
-        "errata": [],
+        "errata": [
+          {
+            "disposition": "apply",
+            "id": 9264,
+            "status": "Verified"
+          }
+        ],
         "updated_by": []
       },
       "planning_notices": [],
@@ -5645,6 +5661,41 @@
             "disposition": "track-not-applied",
             "id": 9003,
             "status": "Held for Document Update"
+          },
+          {
+            "disposition": "track-not-applied",
+            "id": 9271,
+            "status": "Held for Document Update"
+          },
+          {
+            "disposition": "apply",
+            "id": 9273,
+            "status": "Verified"
+          },
+          {
+            "disposition": "apply",
+            "id": 9274,
+            "status": "Verified"
+          },
+          {
+            "disposition": "not-applicable",
+            "id": 9280,
+            "status": "Rejected"
+          },
+          {
+            "disposition": "apply",
+            "id": 9281,
+            "status": "Verified"
+          },
+          {
+            "disposition": "track-not-applied",
+            "id": 9282,
+            "status": "Held for Document Update"
+          },
+          {
+            "disposition": "track-not-applied",
+            "id": 9283,
+            "status": "Held for Document Update"
           }
         ],
         "updated_by": []
@@ -5709,7 +5760,12 @@
           {
             "disposition": "track-not-applied",
             "id": 9231,
-            "status": "Reported"
+            "status": "Held for Document Update"
+          },
+          {
+            "disposition": "apply",
+            "id": 9272,
+            "status": "Verified"
           }
         ],
         "updated_by": []
@@ -5756,9 +5812,19 @@
             "status": "Verified"
           },
           {
-            "disposition": "track-not-applied",
+            "disposition": "apply",
             "id": 9169,
-            "status": "Reported"
+            "status": "Verified"
+          },
+          {
+            "disposition": "apply",
+            "id": 9270,
+            "status": "Verified"
+          },
+          {
+            "disposition": "not-applicable",
+            "id": 9279,
+            "status": "Rejected"
           }
         ],
         "updated_by": []
@@ -6719,7 +6785,13 @@
       "last_successful_observation": "2026-08-31",
       "metadata": {
         "current_status": "PROPOSED STANDARD",
-        "errata": [],
+        "errata": [
+          {
+            "disposition": "track-not-applied",
+            "id": 9260,
+            "status": "Reported"
+          }
+        ],
         "updated_by": []
       },
       "planning_notices": [],
@@ -7562,5 +7634,5 @@
   "policy_sha256": "40fbbf9915be2b5202f3c1a8311a76e7c389345164753d1ef3dc0d9eadd42d80",
   "reviews_sha256": "47e2327e56be73e37fcbd935c7b97082a035cfb24aad02ef9dd937ae7eda1434",
   "schema": 1,
-  "source_ledger_sha256": "167725f852db5fa023ad2e4710e98cd22c70be2d2960a72c6faa6c92d6af1e98"
+  "source_ledger_sha256": "e9694bf49dd71addd529dee60d74c0115cbfba00015218b0c61d0cf6f3bd689f"
 }

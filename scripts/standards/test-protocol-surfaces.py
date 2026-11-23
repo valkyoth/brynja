@@ -58,7 +58,7 @@ def bind(policy: dict, ledger: dict) -> None:
 def test_current_repository() -> None:
     register = checker.build_register()
     assert register["schema"] == 2
-    assert len(register["surfaces"]) == 4473
+    assert len(register["surfaces"]) == 4490
     implemented = {
         surface["id"]
         for surface in register["surfaces"]
@@ -223,7 +223,7 @@ def test_every_iana_record_is_projected() -> None:
         surface["kind"] in {"iana-entry", "iana-registry"}
         for surface in register["surfaces"]
     )
-    assert actual == expected == 4338
+    assert actual == expected == 4355
 
 
 def test_source_ledger_binding_drift_fails() -> None:

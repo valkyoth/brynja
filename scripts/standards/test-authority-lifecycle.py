@@ -125,10 +125,15 @@ def test_generated_mapping(register: dict) -> None:
                 patch.object(model, 'FRESHNESS', receipt), \
                 patch.object(sys, 'argv', ['check-authority-lifecycle.py']):
             assert checker.main() == 0
-            for identity in ('rfc:2104', 'rfc:4231'):
+            for identity, old_symbol in (
+                ('rfc:2104', 'crates/brynja-crypto/src/hmac.rs#Hmac'),
+                ('rfc:4231', 'crates/brynja-crypto/src/hmac.rs#Hmac'),
+                ('nist:NIST.FIPS.197-upd1.pdf', 'crates/brynja-crypto/src/aes.rs#Aes'),
+                ('rfc:5869', 'crates/brynja-crypto/src/hkdf.rs#Hkdf'),
+            ):
                 broken = copy.deepcopy(register)
                 row = next(row for row in broken['authorities'] if row['id'] == identity)
-                stale = ['crates/brynja-crypto/src/hmac.rs#Hmac']
+                stale = [old_symbol]
                 assert row['affected_symbols'] != stale
                 row['affected_symbols'] = stale
                 artifact.write_bytes(standards.json_bytes(broken))
@@ -138,7 +143,7 @@ def test_generated_mapping(register: dict) -> None:
             artifact.write_bytes(standards.json_bytes(register))
             receipt.write_bytes(standards.json_bytes(freshness))
             assert checker.main() == 0
-    print('Authority lifecycle rejects both stale HMAC links even with matching freshness hashes')
+    print('Authority lifecycle rejects stale HMAC, AES and HKDF links even with matching freshness hashes')
 
 
 def test() -> None:

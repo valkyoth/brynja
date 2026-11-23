@@ -116,7 +116,7 @@ def test_current_residual_repository() -> None:
     assert coverage["authority_count"] == 33
     assert coverage["normative_section_count"] == 182
     assert coverage["mapped_normative_section_count"] == 165
-    assert coverage["surface_count"] == 795
+    assert coverage["surface_count"] == 802
     requirement_map = {item["id"]: item for item in requirements}
     assert all(
         item["id"] in requirement_map[item["requirement_id"]]["decision_ids"]
@@ -147,13 +147,14 @@ def test_october_registry_refresh_does_not_admit_provisional_protocols() -> None
 
 def test_october_errata_statuses_keep_verified_held_and_rejected_distinct() -> None:
     rows = {row['id']: row for row in lib.read_json(standards.ERRATA)['records']}
-    assert len(rows) == 304
-    for identifier in (4395, 8753, 9040):
+    assert len(rows) == 318
+    for identifier in (4395, 8753, 9040, 9169, 9264, 9270, 9272, 9273, 9274, 9281):
         assert (rows[identifier]['status'], rows[identifier]['disposition']) == ('Verified', 'apply')
-    assert (rows[8738]['status'], rows[8738]['disposition']) == ('Held for Document Update', 'track-not-applied')
-    for identifier in (9020, 9021):
+    for identifier in (8738, 9231, 9271, 9282, 9283):
+        assert (rows[identifier]['status'], rows[identifier]['disposition']) == ('Held for Document Update', 'track-not-applied')
+    for identifier in (9020, 9021, 9279, 9280):
         assert (rows[identifier]['status'], rows[identifier]['disposition']) == ('Rejected', 'not-applicable')
-    for identifier, rfc in ((9230, 9549), (9231, 9001)):
+    for identifier, rfc in ((9230, 9549), (9255, 5912), (9259, 5280), (9260, 9618)):
         row = rows[identifier]
         assert row['rfc'] == rfc
         assert (row['status'], row['disposition']) == ('Reported', 'track-not-applied')
@@ -185,7 +186,7 @@ def test_current_bidirectional_closure() -> None:
     for minor in (*range(378, 392), 470):
         for patch in range(last_patches.get(minor, 7) + 1):
             assert plans[f"0.{minor}.{patch}"]["boundary"]["class"] == "planned-authority-admission"
-    assert len(artifact["surfaces"]) == 4473
+    assert len(artifact["surfaces"]) == 4490
     assert len(artifact["requirements"]) == 175
     assert len(artifact["local_rights"]) == 18
     assert len(artifact["mutable_authorities"]) == 15

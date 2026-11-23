@@ -5,7 +5,8 @@ version = 1
 v0251_smi_pin_provenance = "Owner-authorized author review on 2026-10-27 of the complete official IANA SMI Numbers XML diff. The 2026-10-23 update changes only the registry date, adds Interface Types (ifType) value 309 waysideOsc (Wayside Communication over Optical Supervisory Channel), and adds its contact entry. Every prior record is unchanged. The new interface identifier remains caller-owned under the existing unselected-SMI namespace policy; no PKIX semantics, HMAC behavior, cryptographic implementation, authority admission or release-gate rule changes. SHA-256 c9b73b94dfb6449bb4c514d5aa6951907e588210f4245e7ebf3ccf82ca225bb0 was reproduced from the official HTTPS XML. This is author source review, not independent cryptographic qualification."
 v0252_registry_pin_provenance = "Author review 2026-10-17: the official DNS Parameters XML advances its date to 2026-10-16, assigns temporary DELEGPARAM type 54 and temporary DELEG type 61440, and splits the surrounding unassigned range. Both expire 2027-10-16 and reference provisional draft-ietf-deleg-12. Existing caller-owned DNS boundary at v0.188.0 is unchanged; no draft authority, runtime implementation or cryptographic admission is added. The complete byte diff has no other semantic changes."
 v0250_registry_pin_provenance = "On 2026-10-15 the author reviewed current official IANA XML byte diffs for the v0.24.50 final gate. TLS Parameters and DNS Parameters change presentation, section-link encoding and whitespace only. TLS Extensions adds provisional n-pamp/3 and marks n-pamp/2 deprecated, referencing draft-bubblefish-npamp-02; application-protocol negotiation ownership remains caller-owned/future work. QUIC adds reset_stream_at transport parameter 0x1d and RESET_STREAM_AT frame 0x24 under the draft-typed RFC-ietf-quic-reliable-stream-reset-11 placeholder; QUIC transport ownership remains caller-owned. SMI adds id-pe-mtcCertificationAuthority-SHA256 (38), id-alg-mtcProof (67), and id-rdna-trustAnchorID (3) referencing draft-ietf-plants-merkle-tree-certs-06, alongside presentation/reference formatting changes; existing PKIX future-work ownership is retained. No provisional source is admitted as final normative authority and no runtime implementation, cryptographic admission or release-gate policy is changed. This is author review, not independent cryptographic qualification."
-checked_at = "2026-09-28"
+checked_at = "2026-11-23"
+v0282_pin_provenance = "See standards/review-2026-11-23.md for the two retrievals, six IANA byte changes, RFC Editor dispositions and scope. No new protocol admission."
 owner = "Brynja standards review"
 pin_provenance = "Signed v0.3.2 baseline 00b1180a9014b7e69986e8ddd29d46e85a20aa2f; independently reverified 2026-07-30 against official RFC Editor, IANA, NIST, and ITU sources. The v0.3.5 review separately pinned final FIPS 203, SP 800-227, SP 800-90B, and SP 800-90C from official NIST publication bytes. Five newly reported RFC errata (9040, 9041, 9042, 9043, 9045) were reviewed and remain track-not-applied. On 2026-08-01 the official IANA HTML and XML were independently compared for the 2026-07-31 DNS Parameters update: Structured DNS Error allocations and its three new subregistries remain caller-owned at v0.188.0, and their provisional draft references cannot admit Brynja code; pins remain separate from every later refresh. On 2026-08-09 the official IANA XML and its SHA-256 were independently retrieved and reviewed: the TLS ExtensionType registry update dated 2026-08-07 adds only the `snifq/1` SNIF over QUIC ALPN entry referencing provisional draft-zubov-snif-05; it remains caller-owned at v0.178.0 and does not admit draft authority or runtime code. The DNS Parameters update dated 2026-08-04 changes only three existing references from drafts to RFC 10029 and RFC 10023, adds no allocation, remains caller-owned at v0.188.0, and does not admit either RFC into Brynja protocol scope. On 2026-08-11 final Standards Track RFC 10024 and the official TLS Parameters XML were independently retrieved and reviewed: the registry changes only the three final ECDHE-ML-KEM group and two obsoleted Kyber draft references from draft metadata to RFC 10024. RFC 10024 has no reported errata and adding it changes no existing errata record. The former admission blocker is resolved for planned v0.164.0 implementation; no protocol code is admitted at this refresh. Later on 2026-08-11 the official DNS Parameters XML added only the `_x402` TXT underscored service name referencing provisional draft-hawkins-x402-dns-discovery-01; it remains caller-owned at v0.188.0, does not admit draft authority or runtime code, and is included only to preserve complete registry coverage. The later 2026-08-11 TLS ExtensionType update allocates certificate type value 4 to C509 Certificate under provisional draft-ietf-cose-cbor-encoded-cert-20 and moves the unassigned range start to 5; the allocation remains future work, the draft is not admitted as normative authority, and no runtime code is admitted by this refresh. On 2026-08-17 the official final SP 800-185 publication page and PDF were reviewed and the exact PDF was pinned for pre-1.0 cSHAKE, KMAC, TupleHash and ParallelHash planning; NIST's 2025 decision to revise the document remains an explicit lifecycle-monitor input and admits no unpublished revision text. Later on 2026-08-17 verified editorial RFC 9954 erratum 9136 was retrieved and reviewed: it corrects two TLS 1.3 section references from 4.2.8 to 4.3.8, changes no normative hybrid-key-exchange behavior, remains an explicit implementation input for planned v0.161.0, and admits no runtime code in this refresh."
 latest_pin_provenance = "On 2026-08-28 the official IANA SMI Numbers and DNS Parameters XML files plus the complete locked-RFC errata set were independently retrieved and reviewed. SMI advances two MAC-address references to RFC 10031 and adds provisional id-rdna-c509Name value 2; existing PKIX/OCSP ownership at v0.89.0 is unchanged. DNS adds provisional UNECE/ISO RR types, the RFC 8460 _tls underscored TXT name, a temporary provisional DELEG parameter, and schema-only NOTIFY mnemonic normalization; existing caller-owned v0.188.0 disposition is unchanged. Reported technical RFC 3986 erratum 9147 remains track-not-applied and cannot alter requirements. On 2026-08-31 the v0.24.5 lifecycle monitor detected newly reported editorial RFC 9846 erratum 9157. Official review confirms that it capitalizes two Appendix F.1 references to the defined Main Secret, remains unverified and track-not-applied, changes no TLS behavior or requirement, and is owned by the existing TLS 1.3 milestones. On 2026-09-03 the v0.24.11 release gate detected newly reported technical RFC 9846 erratum 9161. Official review confirms that it distinguishes the syntactically permitted empty CertificateRequest extension vector from the conforming sender requirement to include signature_algorithms, remains unverified and track-not-applied, changes no wire rule or sender requirement, and is owned by the existing TLS 1.3 milestones. No referenced draft, RFC, unverified erratum, authority state, or runtime code is admitted by these evidence refreshes. On 2026-09-06 RFC Editor and IETF plaintext RFC 1321 copies were cross-checked byte-for-byte for the explicit v0.24.19 legacy MD5 implementation. Only its index entry and seven historical errata were added; existing index entries were unchanged. Verified 551/585 correct round-index notation, 552 is wording, and 550/553 correct the unused C test driver. Held 6193 concerns its timing division and is tracked, not applied; rejected 7814 cannot alter authority. Brynja uses first-party fixed-width Rust, not that C reference. This local source review is not independent cryptographic verification; exceptional implementation pentest remains pending."
@@ -16,7 +17,7 @@ v0250_hmac_smi_pin_provenance = "Author review on 2026-10-22 of the complete off
 rfc_index = "https://www.rfc-editor.org/rfc-index.xml"
 rfc_index_sha256 = "1b4edc189d8c9685742472ec15d50e11dc54bf5241047daaf6a3289648b036aa"
 errata = "https://errata.rfc-editor.org/search/"
-errata_sha256 = "576737c406051e88e77995267b4a987b6a45c0804b19c9155ddc72c105aad462"
+errata_sha256 = "d84c6835bc5ad71da53fcbcb21aa30bbdd0ab7058b8b03a4050a311a046c40a1"
 v0250_hmac_errata_pin_provenance = "Author review on 2026-10-22 against the official individual RFC Editor pages and separately fetched complete 304-record canonical set using Google DNS-over-HTTPS/direct TLS. Only two records are added; the prior 302 records are unchanged. Reported technical RFC 9549 erratum 9230 proposes correcting the Unicode code point in a section 1 example; the editor also flags a possible encoding-example issue. Reported technical RFC 9001 erratum 9231 proposes revising the Appendix A.2 Initial packet example's packet-number width, source connection ID and resulting protected bytes. Neither report is verified; both remain track-not-applied under existing PKIX/QUIC ownership. No normative behavior, HMAC code, test vector or implemented protocol changes are authorized by this metadata refresh. This is author source review, not independent cryptographic qualification."
 v0250_errata_pin_provenance = "Author review on 2026-10-15 of all six status changes against the official individual RFC Editor pages, verified/held/rejected on 2026-10-12: verified 4395 clarifies RFC 5705 exporter output as the first length bytes, not one indexed byte; verified 8753 specifies RFC 8879 Certificate structure compression without the four-byte handshake header; verified 9040 removes obsolete below-TLS-1.2 fallback from RFC 9846 Appendix E.2 (absent supported_versions requires legacy_version TLS 1.2, otherwise protocol_version). These are implementation inputs for their owning future protocol work, not changes to the v0.24.50 Windows enclave cryptography. RFC 8879 transcript clarification 8738 is Held for Document Update and remains track-not-applied. RFC 9935 certificate/KEM strength proposals 9020 and 9021 are Rejected and must not change requirements. The other 296 records are unchanged; there are no added or removed records. Existing status-driven disposition and requirement bindings are regenerated, not waived."
 errata_pin_provenance = "On 2026-09-11 the v0.24.38 release gate detected newly reported technical RFC 9002 erratum 9169 (reported 2026-09-09). The official record proposes excluding zero loss_time entries when selecting a pending deadline in Appendix A.8 pseudocode. It remains Reported, unverified and track-not-applied under the existing caller-owned QUIC recovery boundary. The other 301 records are unchanged. This metadata refresh changes no KMAC implementation, protocol requirement, runtime code, CPU admission or cryptographic evidence."
@@ -31,14 +32,14 @@ evidence = [4231, 8448]
 [[registry]]
 id = "tls-parameters"
 url = "https://www.iana.org/assignments/tls-parameters/tls-parameters.xml"
-expected_sha256 = "77b317e498599ab18e46fad031852fb4d96ee7e07d34b492b600730a6c25efc0"
+expected_sha256 = "aa977bbbf31983f5e91bf6f84d5d318d316382722ee362842cc6461b20969c3f"
 domains = ["standards", "tls12", "tls13", "dtls", "hybrid"]
 milestones = ["0.3.0", "0.3.1", "0.3.4", "0.164.0"]
 
 [[registry]]
 id = "tls-extensiontype-values"
 url = "https://www.iana.org/assignments/tls-extensiontype-values/tls-extensiontype-values.xml"
-expected_sha256 = "90df531dd7dc03dbff3490badde4b863f4bd927990dbb6062301e837df7a443d"
+expected_sha256 = "4e56b6cca0af2c664c2879ae8b97987717b278183bd625dbdb7987680b3d975e"
 domains = ["tls12", "tls13", "dtls", "optional"]
 milestones = ["0.3.0", "0.3.1", "0.3.4", "0.3.5"]
 
@@ -52,14 +53,14 @@ milestones = ["0.3.0", "0.3.1", "0.3.5", "0.188.0"]
 [[registry]]
 id = "hpke"
 url = "https://www.iana.org/assignments/hpke/hpke.xml"
-expected_sha256 = "9d0848b4152439cfbc9a8fa8fb0cc36c1879844db7fd2e4f4c706b1c66d03002"
+expected_sha256 = "c266ccb736cb5bf87e1dab1236abf54943ee02d912daa19bdd5653ad119c7e43"
 domains = ["hpke", "ech"]
 milestones = ["0.3.0", "0.3.1", "0.3.5", "0.186.1"]
 
 [[registry]]
 id = "quic"
 url = "https://www.iana.org/assignments/quic/quic.xml"
-expected_sha256 = "eeed8e306919bd2bd87e7a8aea59a9724f66570cd33f2e4e4fccfb9a2c5a54e7"
+expected_sha256 = "04ac5756a4e1220c7c3be1941af3c7ba9e0e106f4b75afae2383532e00ae6443"
 domains = ["quic"]
 milestones = ["0.3.0", "0.3.1", "0.3.4", "0.138.0"]
 
@@ -73,14 +74,14 @@ milestones = ["0.3.0", "0.3.1", "0.3.3", "0.100.0"]
 [[registry]]
 id = "smi-numbers"
 url = "https://www.iana.org/assignments/smi-numbers/smi-numbers.xml"
-expected_sha256 = "c9b73b94dfb6449bb4c514d5aa6951907e588210f4245e7ebf3ccf82ca225bb0"
+expected_sha256 = "d44c6750d9b2ecf38d4248c00703692d33da15dd2eed7485247cfb489b41b4a4"
 domains = ["pkix", "ocsp"]
 milestones = ["0.3.0", "0.3.1", "0.3.3", "0.89.0"]
 
 [[registry]]
 id = "dns-parameters"
 url = "https://www.iana.org/assignments/dns-parameters/dns-parameters.xml"
-expected_sha256 = "8cf6389cfb7040b3a325f54975dcf7630bc5d749f251482056706520cd785093"
+expected_sha256 = "f2530eea90d06899aac2b79a76f4fd6b74e16fb34de2d0ef6c5cdc8e2953af25"
 domains = ["ech"]
 milestones = ["0.3.0", "0.3.1", "0.3.5", "0.188.0"]
 

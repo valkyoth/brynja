@@ -24,6 +24,23 @@ def test_current_security_boundaries() -> None:
     surface_security.validate(current_surfaces())
 
 
+def test_november_registry_allocations_do_not_enable_protocols() -> None:
+    rows = {item['id']: item for item in current_surfaces()}
+    expected = {
+        'iana.tls-parameters.tls-parameters-8.mlkem1024x448.1': ('future-work', '0.51.0'),
+        'iana.tls-parameters.tls-parameters-4.tls-belt-che256-belt-hash.1': ('future-work', '0.51.0'),
+        'iana.tls-extensiontype-values.tls-extensiontype-values-1.dane-clientid.1': ('future-work', '0.196.0'),
+        'iana.tls-extensiontype-values.tls-extensiontype-values-1.trust-anchors-temporary-registered-2026-11-18-expires-2027-11-18.1': ('future-work', '0.196.0'),
+        'iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.0.id-mod-tn-ocsp-module-2026.1': ('caller-owned', '0.94.0'),
+        'iana.dns-parameters.underscored-globally-scoped-dns-node-names.trooth-key.1': ('caller-owned', '0.188.0'),
+        'iana.tls-extensiontype-values.alpn-protocol-ids.0x61-0x6d-0x62-0x65-0x73-0x61-0x73-0x71-0x6c-ambesasql.1': ('caller-owned', '0.178.0'),
+    }
+    for identifier, boundary in expected.items():
+        row = rows[identifier]
+        assert (row['disposition'], row['owner']) == boundary
+        assert all(source.startswith(('rfc:', 'iana:')) for source in row['normative_sources'])
+
+
 def test_september_registry_refresh_does_not_admit_draft_authority() -> None:
     surfaces = {item["id"]: item for item in current_surfaces()}
     for name, value in (("mldsa44", "0x0904"), ("mldsa65", "0x0905"),

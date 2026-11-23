@@ -75,6 +75,7 @@ def collect(output):
                 env["RUSTUP_AUTO_INSTALL"] = "0"
                 if route == "candidate":
                     env["RUSTFLAGS"] = "--cfg brynja_ghash_pclmul_evidence"
+                    env["BRYNJA_GHASH_EVIDENCE"] = "1"
                 compiler = subprocess.check_output(["rustc", "+" + version, "-vV"], env=env, text=True)
                 if "host: x86_64-unknown-linux-gnu" not in compiler:
                     raise ValueError("wrong compiler host")

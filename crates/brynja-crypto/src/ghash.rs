@@ -8,7 +8,7 @@
 //! The caller supplies a byte budget, a borrowed subkey in NIST wire order,
 //! and distinct workspace and output storage. No allocation or AES backend
 //! is needed. Drop clears the borrowed workspace/output, not the caller's key,
-//! copies, registers or spills; abort and forgotten owners bypass Drop.
+//! copies, scalar/vector registers or stack spills; abort and forgotten owners bypass Drop.
 //! Development interface: no machine-code timing qualification is claimed.
 //! `Ghash::new` stays portable in ordinary Cargo builds. The default-off
 //! `ghash-runtime-execution` feature adds explicit hosted backend selection.
@@ -39,6 +39,18 @@
 //! ```
 
 #![forbid(unsafe_code)]
+
+// A stray RUSTFLAGS/config flag alone must not turn ordinary construction
+// into a forced-candidate experiment. No build script or production feature.
+#[cfg(any(
+    brynja_ghash_pclmul_evidence,
+    brynja_ghash_pmull_evidence,
+    brynja_ghash_rv64_evidence
+))]
+const _: () = assert!(
+    matches!(option_env!("BRYNJA_GHASH_EVIDENCE"), Some(s) if matches!(s.as_bytes(), b"1")),
+    "forced GHASH evidence requires BRYNJA_GHASH_EVIDENCE=1"
+);
 
 #[cfg(any(
     feature = "ghash-runtime-execution",
@@ -105,6 +117,7 @@ use core::marker::PhantomData;
 
 /// A public length or storage error; contains no secret bytes.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum Error {
     /// Required acceleration is not available for this target or CPU.
     #[cfg(feature = "ghash-runtime-execution")]
@@ -132,6 +145,8 @@ pub enum Error {
 pub struct Ghash<'a> {
     #[cfg(feature = "ghash-runtime-execution")]
     engine: runtime::Engine,
+    #[cfg(feature = "ghash-runtime-execution")]
+    terminal: bool,
     #[cfg(any(
         brynja_ghash_pclmul_evidence,
         brynja_ghash_pmull_evidence,
@@ -153,6 +168,8 @@ impl<'a> Ghash<'a> {
         Self {
             #[cfg(feature = "ghash-runtime-execution")]
             engine: runtime::Engine::Portable,
+            #[cfg(feature = "ghash-runtime-execution")]
+            terminal: false,
             #[cfg(any(
                 brynja_ghash_pclmul_evidence,
                 brynja_ghash_pmull_evidence,
@@ -184,7 +201,7 @@ impl<'a> Ghash<'a> {
     /// Appends a chunk. An over-budget chunk leaves the entire context unchanged.
     pub fn update(&mut self, bytes: &[u8]) -> Result<(), Error> {
         #[cfg(feature = "ghash-runtime-execution")]
-        self.engine.check()?;
+        self.check_health()?;
         #[cfg(any(
             brynja_ghash_pclmul_evidence,
             brynja_ghash_pmull_evidence,
@@ -196,15 +213,21 @@ impl<'a> Ghash<'a> {
             .remaining
             .checked_sub(len)
             .ok_or(Error::LimitExceeded)?;
+        #[cfg(feature = "ghash-runtime-execution")]
+        let pending = runtime::Pending::begin(self);
+        #[cfg(feature = "ghash-runtime-execution")]
+        let owner = &mut *pending.0;
+        #[cfg(not(feature = "ghash-runtime-execution"))]
+        let owner = self;
         let mut input = bytes.iter();
         while input.len() != 0 {
             // Between complete blocks the state holds the previous product
             // XOR the available prefix of the next block, in place.
-            for (dst, src) in self.state.iter_mut().skip(self.used).zip(&mut input) {
+            for (dst, src) in owner.state.iter_mut().skip(owner.used).zip(&mut input) {
                 *dst ^= src;
-                self.used = self.used.wrapping_add(1); // at most 16
+                owner.used = owner.used.wrapping_add(1); // at most 16
             }
-            if self.used == 16 {
+            if owner.used == 16 {
                 #[cfg(not(any(
                     feature = "ghash-runtime-execution",
                     brynja_ghash_pclmul_evidence,
@@ -212,34 +235,38 @@ impl<'a> Ghash<'a> {
                     brynja_ghash_rv64_evidence
                 )))]
                 let value = field::multiply(
-                    u128::from_be_bytes(*self.state),
-                    u128::from_be_bytes(*self.h),
+                    u128::from_be_bytes(*owner.state),
+                    u128::from_be_bytes(*owner.h),
                 );
                 #[cfg(feature = "ghash-runtime-execution")]
-                let value = self.engine.product(
-                    u128::from_be_bytes(*self.state),
-                    u128::from_be_bytes(*self.h),
+                let value = owner.engine.product(
+                    u128::from_be_bytes(*owner.state),
+                    u128::from_be_bytes(*owner.h),
                 )?;
                 #[cfg(any(
                     brynja_ghash_pclmul_evidence,
                     brynja_ghash_pmull_evidence,
                     brynja_ghash_rv64_evidence
                 ))]
-                let value = self
+                let value = owner
                     .native
                     .as_mut()
                     .and_then(|n| {
                         n.product(
-                            u128::from_be_bytes(*self.state),
-                            u128::from_be_bytes(*self.h),
+                            u128::from_be_bytes(*owner.state),
+                            u128::from_be_bytes(*owner.h),
                         )
                     })
                     .ok_or(Error::CandidateNotReady)?;
-                *self.state = value.to_be_bytes();
-                self.used = 0;
+                *owner.state = value.to_be_bytes();
+                owner.used = 0;
             }
         }
-        self.remaining = remaining;
+        owner.remaining = remaining;
+        #[cfg(feature = "ghash-runtime-execution")]
+        {
+            owner.terminal = false;
+        }
         Ok(())
     }
 
@@ -247,7 +274,7 @@ impl<'a> Ghash<'a> {
     /// Empty input yields zero. A partial final block leaves output unchanged.
     pub fn finish(self, output: &mut [u8; 16]) -> Result<SecretHash<'_>, Error> {
         #[cfg(feature = "ghash-runtime-execution")]
-        self.engine.check()?;
+        self.check_health()?;
         #[cfg(any(
             brynja_ghash_pclmul_evidence,
             brynja_ghash_pmull_evidence,

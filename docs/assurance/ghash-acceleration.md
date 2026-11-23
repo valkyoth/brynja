@@ -149,7 +149,7 @@ Repeat with `+1.100.0` and record the host CPU, OS, toolchain and source tree.
 
 ```sh
 cargo +1.90.0 test --locked --offline --release -p brynja-crypto-cpu --no-default-features --lib ghash_pmull:: -- --include-ignored
-RUSTFLAGS='--cfg brynja_ghash_pmull_evidence' cargo +1.90.0 test --locked --offline --release -p brynja-crypto --no-default-features --features hazmat-ghash,cpu,hazmat-aes-block --test ghash_field --test ghash_lifecycle
+BRYNJA_GHASH_EVIDENCE=1 RUSTFLAGS='--cfg brynja_ghash_pmull_evidence' cargo +1.90.0 test --locked --offline --release -p brynja-crypto --no-default-features --features hazmat-ghash,cpu,hazmat-aes-block --test ghash_field --test ghash_lifecycle
 ```
 
 ### Native AWS Arm correctness replay, 2026-11-22
@@ -281,7 +281,7 @@ For native correctness replay on a Linux RV64 host that reports Zbc or
 Zbkc, run this from the workspace without an emulation runner:
 
 ```sh
-RUSTFLAGS='--cfg brynja_ghash_rv64_evidence' cargo +1.90.0 test --locked --offline --release \
+BRYNJA_GHASH_EVIDENCE=1 RUSTFLAGS='--cfg brynja_ghash_rv64_evidence' cargo +1.90.0 test --locked --offline --release \
   -p brynja-crypto --no-default-features --features hazmat-ghash,cpu,hazmat-aes-block \
   --test ghash_field --test ghash_lifecycle
 ```
@@ -989,7 +989,7 @@ supporting Linux x86_64 host (repeat with `+1.100.0`):
 ```sh
 cargo +1.90.0 test --locked --offline --release -p brynja-crypto-cpu --no-default-features \
   --lib ghash_pclmul:: -- --include-ignored --test-threads=1
-RUSTFLAGS='--cfg brynja_ghash_pclmul_evidence' cargo +1.90.0 test --locked --offline \
+BRYNJA_GHASH_EVIDENCE=1 RUSTFLAGS='--cfg brynja_ghash_pclmul_evidence' cargo +1.90.0 test --locked --offline \
   --release -p brynja-crypto --no-default-features --features hazmat-ghash,cpu,hazmat-aes-block \
   --test ghash_field --test ghash_lifecycle -- --test-threads=1
 ```
@@ -1031,7 +1031,9 @@ product and live clearing were checked. The executed SHA-256 values were
 method called the same multiply function, which contained four PCLMUL
 instructions. This is a dispatch check, not a whole-binary side-channel review.
 
-This decision neither enables PMULL on Arm nor qualifies RISC-V vector GHASH.
+The x86 decision did not itself enable PMULL on Arm or qualify RISC-V vector
+GHASH. See the subsequent Arm decision below and the
+[v0.28.2 review disposition](ghash-acceleration-review.md) for deployment limits.
 
 ### Arm public PMULL route
 

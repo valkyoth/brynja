@@ -50,6 +50,7 @@ def main():
              "--target", RV.TARGET, "--no-default-features"]
     if options.incremental:
         env["RUSTFLAGS"] += " --cfg brynja_ghash_rv64_evidence"
+        env["BRYNJA_GHASH_EVIDENCE"] = "1"
     check = "ghash_rv64::check_emulated_extensions"
     for model, isa in (
         ("both", "zbc=true,zbkc=true,zkne=false,zknd=false"),

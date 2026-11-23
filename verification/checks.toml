@@ -27,6 +27,23 @@ contains = ["GHASH_PACKAGED_PORTABLE_COMPLETE"]
 
 [groups.ghash-runtime-consumer]
 paths = ["scripts/ghash/check-packaged-runtime.py", "assurance/ghash-runtime-consumer"]
+
+[[checks]]
+component = "ghash"
+id = "mid-update-retirement"
+category = "fault"
+name = "GHASH clears live partial state after an error or unwind"
+establishes = "A test-only engine interrupts the second product. The owner wipes workspace before drop, rejects subsequent updates and leaves finish output untouched. Not a hardware fault test."
+command = ["cargo","+1.100.0","test","--locked","--offline","--no-default-features","-p","brynja-crypto","--features","ghash-runtime-execution","--lib","--","--exact","ghash::runtime::failure_tests::mid_update_error_or_unwind_wipes_live_state_and_retires_owner"]
+cwd = "."
+inputs = ["ghash-portable-field","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+timeout_seconds = 120
+[checks.success]
+minimum_tests = 1
+exact_tests = 1
+contains = ["test ghash::runtime::failure_tests::mid_update_error_or_unwind_wipes_live_state_and_retires_owner ... ok"]
+
 [groups.ghash-runtime-x86]
 paths = []
 [[groups.ghash-runtime-x86.tools]]
@@ -322,7 +339,7 @@ command = ["cargo","+1.90.0","test","--locked","--offline","--release","-p","bry
 cwd = "."
 inputs = ["ghash-scalar-pair","ghash-owner-evidence","ghash-candidate-build","ghash-portable-field","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","hkdf-msrv"]
 platform = "linux-x86_64"
-environment = { RUSTFLAGS = "--cfg brynja_ghash_pclmul_evidence" }
+environment = { BRYNJA_GHASH_EVIDENCE = "1", RUSTFLAGS = "--cfg brynja_ghash_pclmul_evidence" }
 reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER","QEMU_CPU"]
 timeout_seconds = 180
 [checks.success]
@@ -340,7 +357,7 @@ command = ["cargo","+1.100.0","test","--locked","--offline","--release","-p","br
 cwd = "."
 inputs = ["ghash-scalar-pair","ghash-owner-evidence","ghash-candidate-build","ghash-portable-field","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
 platform = "linux-x86_64"
-environment = { RUSTFLAGS = "--cfg brynja_ghash_pclmul_evidence" }
+environment = { BRYNJA_GHASH_EVIDENCE = "1", RUSTFLAGS = "--cfg brynja_ghash_pclmul_evidence" }
 reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER","QEMU_CPU"]
 timeout_seconds = 180
 [checks.success]
@@ -358,7 +375,7 @@ command = ["cargo","+1.100.0","test","--locked","--offline","--release","-p","br
 cwd = "."
 inputs = ["ghash-scalar-pair","ghash-owner-evidence","ghash-candidate-build","ghash-portable-field","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","ghash-x86-qemu"]
 platform = "linux-x86_64"
-environment = { RUSTFLAGS = "--cfg brynja_ghash_pclmul_evidence --cfg brynja_cpu_evidence", CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER = "qemu-x86_64 -cpu max,+pclmulqdq,-aes,-vaes" }
+environment = { BRYNJA_GHASH_EVIDENCE = "1", RUSTFLAGS = "--cfg brynja_ghash_pclmul_evidence --cfg brynja_cpu_evidence", CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER = "qemu-x86_64 -cpu max,+pclmulqdq,-aes,-vaes" }
 reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER","QEMU_CPU"]
 timeout_seconds = 180
 [checks.success]
@@ -379,7 +396,7 @@ command = ["cargo","+1.90.0","test","--locked","--offline","--release","-p","bry
 cwd = "."
 inputs = ["ghash-owner-evidence","ghash-scalar-pair","ghash-candidate-build","ghash-portable-field","ghash-lifecycle","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","hkdf-msrv","aes-kernel-qemu"]
 platform = "linux-x86_64"
-environment = { RUSTFLAGS = "--cfg brynja_ghash_pmull_evidence", CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER = "rust-lld", CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER = "qemu-aarch64 -cpu max" }
+environment = { BRYNJA_GHASH_EVIDENCE = "1", RUSTFLAGS = "--cfg brynja_ghash_pmull_evidence", CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER = "rust-lld", CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER = "qemu-aarch64 -cpu max" }
 reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER","CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER","QEMU_CPU"]
 timeout_seconds = 180
 [checks.success]
@@ -397,7 +414,7 @@ command = ["cargo","+1.100.0","test","--locked","--offline","--release","-p","br
 cwd = "."
 inputs = ["ghash-owner-evidence","ghash-scalar-pair","ghash-candidate-build","ghash-portable-field","ghash-lifecycle","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","compiler","aes-kernel-qemu"]
 platform = "linux-x86_64"
-environment = { RUSTFLAGS = "--cfg brynja_ghash_pmull_evidence", CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER = "rust-lld", CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER = "qemu-aarch64 -cpu max" }
+environment = { BRYNJA_GHASH_EVIDENCE = "1", RUSTFLAGS = "--cfg brynja_ghash_pmull_evidence", CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER = "rust-lld", CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER = "qemu-aarch64 -cpu max" }
 reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER","CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER","QEMU_CPU"]
 timeout_seconds = 180
 [checks.success]
@@ -415,7 +432,7 @@ command = ["cargo","+1.100.0","test","--locked","--offline","--release","-p","br
 cwd = "."
 inputs = ["ghash-owner-evidence","ghash-candidate-build","ghash-portable-field","ghash-lifecycle","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","compiler","aes-kernel-qemu"]
 platform = "linux-x86_64"
-environment = { RUSTFLAGS = "--cfg brynja_ghash_pmull_evidence --cfg brynja_ghash_deny_pmull", CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER = "rust-lld", CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER = "qemu-aarch64 -cpu max" }
+environment = { BRYNJA_GHASH_EVIDENCE = "1", RUSTFLAGS = "--cfg brynja_ghash_pmull_evidence --cfg brynja_ghash_deny_pmull", CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER = "rust-lld", CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER = "qemu-aarch64 -cpu max" }
 reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER","CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER","QEMU_CPU"]
 timeout_seconds = 180
 [checks.success]
@@ -433,7 +450,7 @@ command = ["cargo","+1.90.0","test","--locked","--offline","--release","-p","bry
 cwd = "."
 inputs = ["ghash-owner-evidence","ghash-candidate-build","ghash-portable-field","ghash-lifecycle","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","hkdf-msrv"]
 platform = "linux-x86_64"
-environment = { RUSTFLAGS = "--cfg brynja_ghash_pclmul_evidence" }
+environment = { BRYNJA_GHASH_EVIDENCE = "1", RUSTFLAGS = "--cfg brynja_ghash_pclmul_evidence" }
 reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER","QEMU_CPU"]
 timeout_seconds = 180
 [checks.success]
@@ -451,7 +468,7 @@ command = ["cargo","+1.100.0","test","--locked","--offline","--release","-p","br
 cwd = "."
 inputs = ["ghash-owner-evidence","ghash-candidate-build","ghash-portable-field","ghash-lifecycle","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
 platform = "linux-x86_64"
-environment = { RUSTFLAGS = "--cfg brynja_ghash_pclmul_evidence" }
+environment = { BRYNJA_GHASH_EVIDENCE = "1", RUSTFLAGS = "--cfg brynja_ghash_pclmul_evidence" }
 reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER","QEMU_CPU"]
 timeout_seconds = 180
 [checks.success]
@@ -469,7 +486,7 @@ command = ["cargo","+1.100.0","test","--locked","--offline","--release","-p","br
 cwd = "."
 inputs = ["ghash-owner-evidence","ghash-candidate-build","ghash-portable-field","ghash-lifecycle","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","ghash-x86-qemu"]
 platform = "linux-x86_64"
-environment = { RUSTFLAGS = "--cfg brynja_ghash_pclmul_evidence --cfg brynja_cpu_evidence", CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER = "qemu-x86_64 -cpu max,+aes,-pclmulqdq" }
+environment = { BRYNJA_GHASH_EVIDENCE = "1", RUSTFLAGS = "--cfg brynja_ghash_pclmul_evidence --cfg brynja_cpu_evidence", CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER = "qemu-x86_64 -cpu max,+aes,-pclmulqdq" }
 reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER","QEMU_CPU"]
 timeout_seconds = 180
 [checks.success]

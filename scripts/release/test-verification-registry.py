@@ -493,7 +493,7 @@ class RegistryTests(unittest.TestCase):
         groups = dict(self.registry['groups'])
         for include in self.registry['includes']:
             groups.update(json.loads((ROOT / include).read_text())['groups'])
-        self.assertEqual(set(checks), {'portable-field', 'miri-lifecycle', 'asan-lifecycle',
+        self.assertEqual(set(checks), {'portable-field', 'miri-lifecycle', 'asan-lifecycle', 'mid-update-retirement',
                                       'x86-update-codegen', 'cross-update-codegen', 'raw-feature-gate',
                                       'first-host-observation-replay', 'packaged-public-api', 'packaged-candidates',
                                       'packaged-x86-runtime', 'packaged-rv64-runtime', 'packaged-pmull-runtime',
@@ -520,6 +520,10 @@ class RegistryTests(unittest.TestCase):
                                       'pmull-incremental-qemu-denied',
                                       'pclmul-scalar-aes-msrv', 'pclmul-scalar-aes-latest', 'pclmul-scalar-aes-qemu'})
         throughput = checks['amd-throughput-observation-replay']
+        retirement = checks['mid-update-retirement']
+        self.assertEqual(retirement['success']['exact_tests'], 1)
+        self.assertEqual(retirement['command'][-2], '--exact')
+        self.assertIn('test ' + retirement['command'][-1] + ' ... ok', retirement['success']['contains'])
         self.assertEqual(throughput['category'], 'record')
         self.assertEqual(throughput['command'], ['python3', 'scripts/ghash/test-throughput.py'])
         self.assertEqual(throughput['inputs'], ['ghash-throughput-replay'])
@@ -565,6 +569,7 @@ class RegistryTests(unittest.TestCase):
             self.assertIn('ghash-scalar-pair', row['inputs'])
         for endpoint in ('msrv', 'latest', 'qemu'):
             row = checks['pclmul-incremental-' + endpoint]
+            self.assertEqual(row['environment']['BRYNJA_GHASH_EVIDENCE'], '1')
             self.assertIn('--cfg brynja_ghash_pclmul_evidence', row['environment']['RUSTFLAGS'])
             self.assertIn('hazmat-ghash,cpu', row['command'])
             self.assertTrue({'ghash-owner-evidence', 'cpu-source', 'ghash-portable-field',
@@ -611,6 +616,7 @@ class RegistryTests(unittest.TestCase):
                  'admission::tests::wrong_kat_is_terminal_in_both_modes',
                  'admission::tests::unwind_latches_and_success_does_not_repeat_kat')})
             owner = checks['pmull-incremental-qemu-' + endpoint]
+            self.assertEqual(owner['environment']['BRYNJA_GHASH_EVIDENCE'], '1')
             self.assertEqual(owner['command'][1], '+' + version)
             self.assertEqual(owner['environment']['RUSTFLAGS'], '--cfg brynja_ghash_pmull_evidence')
             self.assertIn('hazmat-ghash,cpu,hazmat-aes-block', owner['command'])

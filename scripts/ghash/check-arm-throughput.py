@@ -68,6 +68,8 @@ def prepare(bundle, target=TARGET, source_base=None):
             for route in B.ROUTES:
                 env = environment(Path(tmp) / version / route)
                 env["RUSTUP_AUTO_INSTALL"] = "0"
+                if route == "candidate":
+                    env["BRYNJA_GHASH_EVIDENCE"] = "1"
                 if target == TARGET:
                     env["CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER"] = "rust-lld"
                 elif target == RV64:

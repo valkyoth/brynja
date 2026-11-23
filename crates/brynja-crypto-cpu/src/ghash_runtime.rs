@@ -1,6 +1,8 @@
 use super::admission::{Candidate, Error, Mode};
 
-/// Internal cross-crate bridge for the bounded GHASH owner.
+/// Public low-level cross-crate bridge, not exported by the curated facade.
+/// Direct users have the same stable-ISA requirement as the bounded owner.
+/// This handle does not pin a thread or protect raw operands or results.
 pub struct RuntimeProduct(Candidate);
 
 /// Terminal startup or operation failure, never a fallback signal.

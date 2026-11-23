@@ -1,4 +1,20 @@
 use super::{Error, Ghash, field};
+// The feature deliberately compiles on targets with no hosted detector.
+#[cfg(not(any(
+    all(
+        target_os = "linux",
+        any(target_arch = "x86_64", target_arch = "riscv64")
+    ),
+    all(
+        target_arch = "aarch64",
+        target_endian = "little",
+        any(target_os = "linux", target_os = "macos")
+    )
+)))]
+use brynja_crypto_cpu as _;
+#[cfg(test)]
+#[path = "failure_tests.rs"]
+mod failure_tests;
 #[cfg(all(target_os = "linux", target_arch = "x86_64"))]
 use brynja_crypto_cpu::RuntimePclmul as Native;
 #[cfg(all(target_os = "linux", target_arch = "riscv64"))]
@@ -36,6 +52,11 @@ pub enum Backend {
 
 pub(super) enum Engine {
     Portable,
+    #[cfg(test)]
+    FailAfterOne {
+        first: bool,
+        unwind: bool,
+    },
     #[cfg(any(
         all(
             target_os = "linux",
@@ -75,6 +96,8 @@ impl Engine {
     pub(super) fn check(&self) -> Result<(), Error> {
         match self {
             Self::Portable => Ok(()),
+            #[cfg(test)]
+            Self::FailAfterOne { .. } => Ok(()),
             #[cfg(any(
                 all(
                     target_os = "linux",
@@ -99,6 +122,16 @@ impl Engine {
     pub(super) fn product(&mut self, x: u128, h: u128) -> Result<u128, Error> {
         match self {
             Self::Portable => Ok(field::multiply(x, h)),
+            #[cfg(test)]
+            Self::FailAfterOne { first, unwind } => {
+                if core::mem::take(first) {
+                    Ok(field::multiply(x, h))
+                } else if *unwind {
+                    failure_tests::interrupt();
+                } else {
+                    Err(Error::Quarantined)
+                }
+            }
             #[cfg(any(
                 all(
                     target_os = "linux",
@@ -115,14 +148,46 @@ impl Engine {
     }
 }
 
+// Begin only after budget admission; leave terminal on error or unwind.
+pub(super) struct Pending<'b, 'a>(pub(super) &'b mut Ghash<'a>);
+
+impl<'b, 'a> Pending<'b, 'a> {
+    pub(super) fn begin(owner: &'b mut Ghash<'a>) -> Self {
+        owner.terminal = true;
+        Self(owner)
+    }
+}
+
+impl Drop for Pending<'_, '_> {
+    fn drop(&mut self) {
+        if self.0.terminal {
+            let _ = super::clear_owned_region(self.0.state);
+            self.0.used = 0;
+            self.0.remaining = 0;
+        }
+    }
+}
+
 impl<'a> Ghash<'a> {
+    pub(super) fn check_health(&self) -> Result<(), Error> {
+        if self.terminal {
+            Err(Error::Quarantined)
+        } else {
+            self.engine.check()
+        }
+    }
+
     /// Selects a backend before touching the caller's workspace. Hosted Linux
     /// x86_64 requires PCLMULQDQ and SSE2; Linux RV64 requires scalar Zbc.
     /// Little-endian AArch64 Linux and macOS require NEON, AES and PMULL.
     /// PMULL startup checks correctness, not timing: the AWS identical-input
     /// timing observation remains inconclusive. Zbkc alone is not admitted.
-    /// All routes require a passing per-owner
-    /// known-answer test. The thread must remain on CPUs supporting that bundle.
+    /// Native routes require a passing per-owner known-answer test and a stable
+    /// ISA across the CPUs the process can use. No affinity lease is acquired:
+    /// thread locality does not prevent scheduler migration. On a mixed or
+    /// changing ISA without a platform guarantee, use the portable constructor.
+    /// Neither mode sets Arm DIT, verifies RISC-V Zkt, or verifies Intel DOITM.
+    /// Do not select a route on the assumption it provides qualified timing.
     /// Other targets are unavailable. Neither mode falls back after failure.
     pub fn new_with_backend(
         h: &'a [u8; 16],
@@ -140,6 +205,8 @@ impl<'a> Ghash<'a> {
     pub fn backend(&self) -> Backend {
         match self.engine {
             Engine::Portable => Backend::Portable,
+            #[cfg(test)]
+            Engine::FailAfterOne { .. } => unreachable!("test-only engine has no public identity"),
             #[cfg(all(target_os = "linux", target_arch = "x86_64"))]
             Engine::Native(_) => Backend::Pclmul,
             #[cfg(all(target_os = "linux", target_arch = "riscv64"))]

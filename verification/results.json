@@ -30730,6 +30730,24 @@
         "after": "51a3408d431632ea059ab2370027a61e944cbd46f0585d6baf10a2387c414087",
         "log": "verification/.runner/logs/2-1795382839122522974.log",
         "log_sha256": "edb4e2159c923ea45a32656078835cdf531c3d7b414c670dd786978875cb0678"
+      },
+      {
+        "id": "3-1795451915108501089",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint de86c30f5cdac2d7aad87038ba27bf3bfb75c60fcf28a10d96727fb4a964a6d6",
+        "started": "2026-11-23T16:38:35.108498905Z",
+        "ended": "2026-11-23T16:38:35.711270597Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/test-amd-counters.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "c501e69d8602a490580e29af09c41d4784e88c13fab5507dbfa774984c6b73b9",
+        "after": "c501e69d8602a490580e29af09c41d4784e88c13fab5507dbfa774984c6b73b9",
+        "log": "verification/.runner/logs/3-1795451915108501089.log",
+        "log_sha256": "edb4e2159c923ea45a32656078835cdf531c3d7b414c670dd786978875cb0678"
       }
     ],
     "ghash/amd-throughput-observation-replay": [
@@ -30785,6 +30803,24 @@
         "before": "77501de50513b780193759ca6f3b26a9101ed56142eaf4377f1a2ae933b9d778",
         "after": "77501de50513b780193759ca6f3b26a9101ed56142eaf4377f1a2ae933b9d778",
         "log": "verification/.runner/logs/2-1795370300051518364.log",
+        "log_sha256": "2c37d50a88147ca2ebd5197d74ee37d462dab650d793512e849814c28d5a38f0"
+      },
+      {
+        "id": "3-1795451897300203068",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 7ff16a8577b88e8585460eac8f32d55819245a9afb545275f7a12b91e2eccc04",
+        "started": "2026-11-23T16:38:17.300200342Z",
+        "ended": "2026-11-23T16:38:17.947852901Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/test-throughput.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "af9d5b70a34a2ee6d3f229ee126b445dcf58b2257af8d292563ec4559f3d06ef",
+        "after": "af9d5b70a34a2ee6d3f229ee126b445dcf58b2257af8d292563ec4559f3d06ef",
+        "log": "verification/.runner/logs/3-1795451897300203068.log",
         "log_sha256": "2c37d50a88147ca2ebd5197d74ee37d462dab650d793512e849814c28d5a38f0"
       }
     ],
@@ -30880,6 +30916,24 @@
         "after": "9f85b080b07c370bb08caf5ffdfcb0c00bab25bbf40d24e993747705e63aeae1",
         "log": "verification/.runner/logs/2-1795371270656680062.log",
         "log_sha256": "5279d1fc9a1ced44f9c96da1414ef59e4676f963fbad52e7a1a2903538819b0d"
+      },
+      {
+        "id": "3-1795451900557042851",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint d1bfe5355c6c8f10e7dae1b8649f31d1c6a844ef0bb147df4cc92aaf5928fc73",
+        "started": "2026-11-23T16:38:20.557040758Z",
+        "ended": "2026-11-23T16:38:21.194975974Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/test-apple-throughput.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "5814e04a8596a11020b26d24037cdc713742691e960827a7b2178902d8ef1e39",
+        "after": "5814e04a8596a11020b26d24037cdc713742691e960827a7b2178902d8ef1e39",
+        "log": "verification/.runner/logs/3-1795451900557042851.log",
+        "log_sha256": "2c37d50a88147ca2ebd5197d74ee37d462dab650d793512e849814c28d5a38f0"
       }
     ],
     "ghash/asan-lifecycle": [
@@ -31308,6 +31362,42 @@
         "after": "052a2e07bbbc5c752caf79e7bd6821f4eab970e3276662eaa89c5b8d7a5657bf",
         "log": "verification/.runner/logs/3-1795447785817160514.log",
         "log_sha256": "dd54520423bfbc355a183b279383dceea134e5f7319c0a894d571a087728b841"
+      },
+      {
+        "id": "3-1795451883544638116",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 9010ef34e4877e4b3cee8f8764092d2aebcf9f442ed422fb6a1e9c4c6f1fc307",
+        "started": "2026-11-23T16:38:03.544636172Z",
+        "ended": "2026-11-23T16:38:04.64788424Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+nightly-2026-09-11",
+          "test",
+          "--locked",
+          "--offline",
+          "--target",
+          "x86_64-unknown-linux-gnu",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-ghash",
+          "--test",
+          "ghash_lifecycle"
+        ],
+        "cwd": ".",
+        "environment": {
+          "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1:exitcode=1",
+          "CARGO_TARGET_DIR": "target/ghash-asan",
+          "LSAN_OPTIONS": "exitcode=23",
+          "RUSTFLAGS": "-Zsanitizer=address",
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "a43f59e14852c354ca2c5a6b4b88754776f7887e422d4308903c902a686d05ee",
+        "after": "a43f59e14852c354ca2c5a6b4b88754776f7887e422d4308903c902a686d05ee",
+        "log": "verification/.runner/logs/3-1795451883544638116.log",
+        "log_sha256": "ba28e47a50fd3caec98d549858c2a8fb6fed2dbf3c1f8fe27f4a34a91cc6a112"
       }
     ],
     "ghash/aws-counter-observation-replay": [
@@ -31363,6 +31453,24 @@
         "before": "7e0000d44e25edf87cfbee47a2bd49fb560f65660acdd1166f19670f725c1f89",
         "after": "7e0000d44e25edf87cfbee47a2bd49fb560f65660acdd1166f19670f725c1f89",
         "log": "verification/.runner/logs/2-1795382837538452029.log",
+        "log_sha256": "27c4a39d34ece4cbc66cc59cb0870c7abe4cc0a5f009205bdd0ea06a93f8b3ac"
+      },
+      {
+        "id": "3-1795451913473719742",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 069ed0b75e57b00ee17138c8f481c4e02aa198f2bcedfccf1186f43d105b99c6",
+        "started": "2026-11-23T16:38:33.473717678Z",
+        "ended": "2026-11-23T16:38:34.139694552Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/test-aws-counters.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "3468e73cecebee54a5caaad08250ebde58a9046cba4b6b50ec078d4950c8a166",
+        "after": "3468e73cecebee54a5caaad08250ebde58a9046cba4b6b50ec078d4950c8a166",
+        "log": "verification/.runner/logs/3-1795451913473719742.log",
         "log_sha256": "27c4a39d34ece4cbc66cc59cb0870c7abe4cc0a5f009205bdd0ea06a93f8b3ac"
       }
     ],
@@ -31437,6 +31545,24 @@
         "before": "9b6a3dccd097e7b40dac6927a205bd5d72d3ee0746ea49dec4a05aee9b4f6b81",
         "after": "9b6a3dccd097e7b40dac6927a205bd5d72d3ee0746ea49dec4a05aee9b4f6b81",
         "log": "verification/.runner/logs/2-1795371269078309158.log",
+        "log_sha256": "5279d1fc9a1ced44f9c96da1414ef59e4676f963fbad52e7a1a2903538819b0d"
+      },
+      {
+        "id": "3-1795451898925745162",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint f9e0578363e0f5dd79229457465698ce470f9120936b71fcee86eee47c12d723",
+        "started": "2026-11-23T16:38:18.925740303Z",
+        "ended": "2026-11-23T16:38:19.57462432Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/test-arm-throughput.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "23e66b479fbe89c8263171984fcf416ea7bfa6cb839edc5d88e438118fde7114",
+        "after": "23e66b479fbe89c8263171984fcf416ea7bfa6cb839edc5d88e438118fde7114",
+        "log": "verification/.runner/logs/3-1795451898925745162.log",
         "log_sha256": "5279d1fc9a1ced44f9c96da1414ef59e4676f963fbad52e7a1a2903538819b0d"
       }
     ],
@@ -31687,6 +31813,25 @@
         "after": "dea14c57969a7592d5cdea3ced8a3a1d39a9b7470fe46274c9a04f00a84051ba",
         "log": "verification/.runner/logs/3-1795447791676446338.log",
         "log_sha256": "e45b144a0823aae17b7362f915dfbfa9dfe93e0611da489604429ab21797a806"
+      },
+      {
+        "id": "3-1795451889858921719",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 3f4fecc4e843136d3de34cc0f39d51806060c6e7438f7d640ec2f4609c562b22",
+        "started": "2026-11-23T16:38:09.858918743Z",
+        "ended": "2026-11-23T16:38:16.251464511Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/check-portable-host.py",
+          "cross-codegen"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "000e1bab6ff36264ebdc2b7808d125ea06a51576b2a8861487f82ee5b1f038ae",
+        "after": "000e1bab6ff36264ebdc2b7808d125ea06a51576b2a8861487f82ee5b1f038ae",
+        "log": "verification/.runner/logs/3-1795451889858921719.log",
+        "log_sha256": "63dbeabd24a196d27a75599b8138ec6548d93e0f44185f998f9745bd23cca559"
       }
     ],
     "ghash/first-host-observation-replay": [
@@ -31799,6 +31944,24 @@
         "after": "56c77940ce7fc87c64200ff77d399b1b3eb50d20043838cd3b5d98a3f02f197b",
         "log": "verification/.runner/logs/2-1795371273854371835.log",
         "log_sha256": "372ee57a30b8a8b17bb056a0814266786a922da7dcf4139f4f9a2457745d6424"
+      },
+      {
+        "id": "3-1795451903811258576",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint b8d5197f24b025ca7ff88a11cf58eefa2d12429500708100c0ec68b360b0f207",
+        "started": "2026-11-23T16:38:23.811256422Z",
+        "ended": "2026-11-23T16:38:24.434841454Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/test-intel-throughput.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "7e002c3b4c53a810ced98e1446e79697b98788b3864537504b2bf17f07bd178f",
+        "after": "7e002c3b4c53a810ced98e1446e79697b98788b3864537504b2bf17f07bd178f",
+        "log": "verification/.runner/logs/3-1795451903811258576.log",
+        "log_sha256": "7ba600c131d14938fa296eb6eb208c575bf239a15b65439f37d0578df0fff9bf"
       }
     ],
     "ghash/linked-timing-code-replay": [
@@ -31819,6 +31982,38 @@
         "after": "0ad8f0026afbef2a73acf69138c1f6b7f9ebd397027920323201f548a8a59db0",
         "log": "verification/.runner/logs/2-1795375025882843199.log",
         "log_sha256": "9d654695c0a90577e252109954dd749137ace81d33f39cf1a31990e7f48cf31d"
+      }
+    ],
+    "ghash/mid-update-retirement": [
+      {
+        "id": "3-1795451729889791941",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 26ca5c2ad5d9402d143789b9551c7df181755caa8ab8696118a0775f6dddd97c",
+        "started": "2026-11-23T16:35:29.889790008Z",
+        "ended": "2026-11-23T16:35:30.808640114Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.100.0",
+          "test",
+          "--locked",
+          "--offline",
+          "--no-default-features",
+          "-p",
+          "brynja-crypto",
+          "--features",
+          "ghash-runtime-execution",
+          "--lib",
+          "--",
+          "--exact",
+          "ghash::runtime::failure_tests::mid_update_error_or_unwind_wipes_live_state_and_retires_owner"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "01f5d5af24fe15e8a2240769d1d55124810dc3ac93f66250d0eabb343e65c15a",
+        "after": "01f5d5af24fe15e8a2240769d1d55124810dc3ac93f66250d0eabb343e65c15a",
+        "log": "verification/.runner/logs/3-1795451729889791941.log",
+        "log_sha256": "7af0b37bd37f24fba600140b8fd4a267a43de718993f726d7c4a48880cdec78b"
       }
     ],
     "ghash/miri-lifecycle": [
@@ -32270,6 +32465,41 @@
         "after": "500201d99b9dfafb208557e70a0449319eaddaa81950e8f7247d9119bf6aabb7",
         "log": "verification/.runner/logs/3-1795447781590879299.log",
         "log_sha256": "467f709136507eb1540d4c06910bf26d9d651cf6d41cf94772004d8e6096dac9"
+      },
+      {
+        "id": "3-1795451879864167284",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint d32cfee34805eb7bcb8126a20942b32a01eb4ebfbe74a7f4b4df95b65d403602",
+        "started": "2026-11-23T16:37:59.864165992Z",
+        "ended": "2026-11-23T16:38:01.985242309Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+nightly-2026-09-11",
+          "miri",
+          "test",
+          "--locked",
+          "--offline",
+          "--target",
+          "x86_64-unknown-linux-gnu",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-ghash",
+          "--test",
+          "ghash_lifecycle"
+        ],
+        "cwd": ".",
+        "environment": {
+          "CARGO_TARGET_DIR": "target/ghash-miri",
+          "MIRIFLAGS": "-Zmiri-report-progress=10000000",
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "603c5419328f5d7ad8fbb1aab6e8c4e6313b01b71e04c66e87b4f4acd46b44e5",
+        "after": "603c5419328f5d7ad8fbb1aab6e8c4e6313b01b71e04c66e87b4f4acd46b44e5",
+        "log": "verification/.runner/logs/3-1795451879864167284.log",
+        "log_sha256": "dd895e59b3fecd6ecd3c1af1ba3f013a3ff45b4c422dec743981077908cabac1"
       }
     ],
     "ghash/packaged-candidates": [
@@ -32362,6 +32592,42 @@
         "after": "fac004c85110bd772d0aee282192f9bd037f3d8d35e09e025b700a75f5cb077f",
         "log": "verification/.runner/logs/3-1795447711189289372.log",
         "log_sha256": "7a1c5377422b85f06bc1265407c3e8f139ab9a72aa0095ef249cd3cc02e06491"
+      },
+      {
+        "id": "3-1795451593205148930",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 4d846b2ea4869e1449e1fab3f1ca0ed91003bb2f210fc1a6491c9eca2f172618",
+        "started": "2026-11-23T16:33:13.205147147Z",
+        "ended": "2026-11-23T16:33:41.310692049Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/check-packaged-candidates.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "ec328eeb00b42c189340984bfe9ddd00ae98dc19c6925e29549858c178058032",
+        "after": "ec328eeb00b42c189340984bfe9ddd00ae98dc19c6925e29549858c178058032",
+        "log": "verification/.runner/logs/3-1795451593205148930.log",
+        "log_sha256": "7a1c5377422b85f06bc1265407c3e8f139ab9a72aa0095ef249cd3cc02e06491"
+      },
+      {
+        "id": "3-1795451777573150150",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint bfeb4cf31a31251736529d7c587d5a15df1a2ea394380ff6383b7d30f84f57ee",
+        "started": "2026-11-23T16:36:17.573147816Z",
+        "ended": "2026-11-23T16:36:43.907956986Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/check-packaged-candidates.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "830584564a0b1b2ca903276823af891d27a886f6b136326f60cc58fa8c618a36",
+        "after": "830584564a0b1b2ca903276823af891d27a886f6b136326f60cc58fa8c618a36",
+        "log": "verification/.runner/logs/3-1795451777573150150.log",
+        "log_sha256": "7a1c5377422b85f06bc1265407c3e8f139ab9a72aa0095ef249cd3cc02e06491"
       }
     ],
     "ghash/packaged-pmull-runtime": [
@@ -32403,6 +32669,46 @@
         "before": "24c33a7e23b66d6adaae8452fe718914c8735ee3f06ea2de5f80022be9ed8b70",
         "after": "24c33a7e23b66d6adaae8452fe718914c8735ee3f06ea2de5f80022be9ed8b70",
         "log": "verification/.runner/logs/3-1795447695521867875.log",
+        "log_sha256": "3e3fdcb26283df00fa827a3ef1afbc982bff573a9edfc408d398a87035602da6"
+      },
+      {
+        "id": "3-1795451570490259813",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 8dc83e9e36ce77ff8caf046e7ca475fb744fe5b155c35283d5b14784fdea90be",
+        "started": "2026-11-23T16:32:50.49025819Z",
+        "ended": "2026-11-23T16:33:11.77067592Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/check-packaged-runtime.py",
+          "--pmull",
+          "linux"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "e2c90625c547245cee1b257602ebfd0756a6205fdb2d2d7f66d3cfac1b52e3aa",
+        "after": "e2c90625c547245cee1b257602ebfd0756a6205fdb2d2d7f66d3cfac1b52e3aa",
+        "log": "verification/.runner/logs/3-1795451570490259813.log",
+        "log_sha256": "3e3fdcb26283df00fa827a3ef1afbc982bff573a9edfc408d398a87035602da6"
+      },
+      {
+        "id": "3-1795451763450610174",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint a09d400565881d8281387cb86e524f424c559d7439dbf48e964c07b627fb0bf0",
+        "started": "2026-11-23T16:36:03.450608481Z",
+        "ended": "2026-11-23T16:36:16.338552549Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/check-packaged-runtime.py",
+          "--pmull",
+          "linux"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "9bb93ead36d9ea6f23d9b36ab06f6fd11c00693e41905c038a2727b5a1869104",
+        "after": "9bb93ead36d9ea6f23d9b36ab06f6fd11c00693e41905c038a2727b5a1869104",
+        "log": "verification/.runner/logs/3-1795451763450610174.log",
         "log_sha256": "3e3fdcb26283df00fa827a3ef1afbc982bff573a9edfc408d398a87035602da6"
       }
     ],
@@ -32658,6 +32964,42 @@
         "after": "2366e4819a4f84c3cb2ea0bf4b80ddb6a07ba089f8fc092f23bb2b972daaaea6",
         "log": "verification/.runner/logs/3-1795447637854811927.log",
         "log_sha256": "94a5d02160f7930bf43cbf1b2b28afe2a66169a1e426ee0ec7ff12fed19297b8"
+      },
+      {
+        "id": "3-1795451513537045912",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 1380aab90c9467262dacd7052c4bb073eef2ed610c50683916f4dfbb9ba7a877",
+        "started": "2026-11-23T16:31:53.537043758Z",
+        "ended": "2026-11-23T16:32:15.826916198Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/check-packaged-api.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "a1378ec2cfee382d80e5a925093e0cc712f1217d03dd1a1eecb065a63ff227c0",
+        "after": "a1378ec2cfee382d80e5a925093e0cc712f1217d03dd1a1eecb065a63ff227c0",
+        "log": "verification/.runner/logs/3-1795451513537045912.log",
+        "log_sha256": "94a5d02160f7930bf43cbf1b2b28afe2a66169a1e426ee0ec7ff12fed19297b8"
+      },
+      {
+        "id": "3-1795451705098496550",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 2b28752e759f43a564b1470c8db01b8610a358d95ed34e54325ad3be6bde1225",
+        "started": "2026-11-23T16:35:05.098495197Z",
+        "ended": "2026-11-23T16:35:26.705546229Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/check-packaged-api.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "23c8ec9e272d0a0d1167c772d4a27c7244e579cdd30bcb8cd5ad8d2a52f18a55",
+        "after": "23c8ec9e272d0a0d1167c772d4a27c7244e579cdd30bcb8cd5ad8d2a52f18a55",
+        "log": "verification/.runner/logs/3-1795451705098496550.log",
+        "log_sha256": "94a5d02160f7930bf43cbf1b2b28afe2a66169a1e426ee0ec7ff12fed19297b8"
       }
     ],
     "ghash/packaged-rv64-runtime": [
@@ -32716,6 +33058,44 @@
         "before": "4eb2b9bd172adb233057b55a66868c2442dc6883a518c4b9eec125218e9b3096",
         "after": "4eb2b9bd172adb233057b55a66868c2442dc6883a518c4b9eec125218e9b3096",
         "log": "verification/.runner/logs/3-1795447680470089383.log",
+        "log_sha256": "1a4949d2d39d62a5ff4235edab9753b2b1cb74299c1f19ac43c282696597e590"
+      },
+      {
+        "id": "3-1795451553633341300",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 63d821c445e7123f2ffd1d4d6ed2df2a68852824a8dec242e3ee24c1b030ca24",
+        "started": "2026-11-23T16:32:33.633339186Z",
+        "ended": "2026-11-23T16:32:49.016054621Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/check-packaged-runtime.py",
+          "--rv64"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "528b675f28560d6e15667cbfe2bf78d0a530618645154ee38018312927cfe1b5",
+        "after": "528b675f28560d6e15667cbfe2bf78d0a530618645154ee38018312927cfe1b5",
+        "log": "verification/.runner/logs/3-1795451553633341300.log",
+        "log_sha256": "1a4949d2d39d62a5ff4235edab9753b2b1cb74299c1f19ac43c282696597e590"
+      },
+      {
+        "id": "3-1795451750151509356",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint b0fa0d2b18176e5fa91d492f6da1b48ee8cad5a728280ba13527d67b98f07a75",
+        "started": "2026-11-23T16:35:50.151507292Z",
+        "ended": "2026-11-23T16:36:02.256869535Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/check-packaged-runtime.py",
+          "--rv64"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "91de079d8a89f815033231d9931cbf67c5c29ec8170cf018a2b4022f83689332",
+        "after": "91de079d8a89f815033231d9931cbf67c5c29ec8170cf018a2b4022f83689332",
+        "log": "verification/.runner/logs/3-1795451750151509356.log",
         "log_sha256": "1a4949d2d39d62a5ff4235edab9753b2b1cb74299c1f19ac43c282696597e590"
       }
     ],
@@ -32808,6 +33188,42 @@
         "before": "34e4f562363e5965523a4ce9e19366505296c256a62a73a63a8370f746a12f69",
         "after": "34e4f562363e5965523a4ce9e19366505296c256a62a73a63a8370f746a12f69",
         "log": "verification/.runner/logs/3-1795447664969898139.log",
+        "log_sha256": "fd12ff07a0a7aa95632748aa3219d87e9cc92eb1eaf8c03f9960d10d693cf200"
+      },
+      {
+        "id": "3-1795451539186489243",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 9e8043036778e3206b26f0efbe6b984e2a38c719398fad70510a71317fe012a4",
+        "started": "2026-11-23T16:32:19.186486969Z",
+        "ended": "2026-11-23T16:32:32.23765672Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/check-packaged-runtime.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "421fdb2bbda8d3ca4089f7dce1df93aaed655c941eb7a944a2f9937019f7ac38",
+        "after": "421fdb2bbda8d3ca4089f7dce1df93aaed655c941eb7a944a2f9937019f7ac38",
+        "log": "verification/.runner/logs/3-1795451539186489243.log",
+        "log_sha256": "fd12ff07a0a7aa95632748aa3219d87e9cc92eb1eaf8c03f9960d10d693cf200"
+      },
+      {
+        "id": "3-1795451736291912932",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint e8eb5fc93800b639fecb85b36e167596a0c2ac2396f0f4995592c180a25cdca0",
+        "started": "2026-11-23T16:35:36.29191154Z",
+        "ended": "2026-11-23T16:35:48.914960031Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/check-packaged-runtime.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "d436fd5580e7d8e26e0def1134e976f9176e5ca283af53b93937ceb6bee03f70",
+        "after": "d436fd5580e7d8e26e0def1134e976f9176e5ca283af53b93937ceb6bee03f70",
+        "log": "verification/.runner/logs/3-1795451736291912932.log",
         "log_sha256": "fd12ff07a0a7aa95632748aa3219d87e9cc92eb1eaf8c03f9960d10d693cf200"
       }
     ],
@@ -33159,6 +33575,35 @@
         "after": "f5dbb18fdd1f7391d56f1da981a6d5ec4029ffd7ffe5cc813445fad7a165e418",
         "log": "verification/.runner/logs/3-1795447735011488975.log",
         "log_sha256": "fa253f1d68cdaf184abda71cf7cd67d7fedd2a66a405a3c2c3c2d3b5243deac4"
+      },
+      {
+        "id": "3-1795451630985823379",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint becc82fc87c7d5ca97afcc793a336136678b2f07446ab1d997d45844207ae6eb",
+        "started": "2026-11-23T16:33:50.985820824Z",
+        "ended": "2026-11-23T16:33:55.720024694Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.100.0",
+          "test",
+          "--locked",
+          "--offline",
+          "--release",
+          "--no-default-features",
+          "-p",
+          "brynja-crypto-cpu",
+          "--lib",
+          "ghash_pclmul::",
+          "--",
+          "--include-ignored"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "dc88864f68f224cb4f3256d763504132a94961ad8d23bff70778f6346062c1bc",
+        "after": "dc88864f68f224cb4f3256d763504132a94961ad8d23bff70778f6346062c1bc",
+        "log": "verification/.runner/logs/3-1795451630985823379.log",
+        "log_sha256": "f45108bc3013c2cca5de56f90af4df11c68b53af4a987df6b40101d85189c36e"
       }
     ],
     "ghash/pclmul-candidate-msrv": [
@@ -33509,6 +33954,35 @@
         "after": "657b8fc61b1bf812a5eabf58cd6a31f447e40520c3af3d626efc4098ff292854",
         "log": "verification/.runner/logs/3-1795447733227402005.log",
         "log_sha256": "d5e4150fc86214ad8fcf21a666aeaf367b951464821f1dfbdfd2eef870e6f199"
+      },
+      {
+        "id": "3-1795451624843047787",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint d65f3ddaa18d62067f49e33269bc9bef8b0bb88196f3e6ed8a082a0511884ec0",
+        "started": "2026-11-23T16:33:44.843045533Z",
+        "ended": "2026-11-23T16:33:49.801991082Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.90.0",
+          "test",
+          "--locked",
+          "--offline",
+          "--release",
+          "--no-default-features",
+          "-p",
+          "brynja-crypto-cpu",
+          "--lib",
+          "ghash_pclmul::",
+          "--",
+          "--include-ignored"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "a4af044abf78449863d02c111b170a16561f23a1eb2ac37e9e181aff3b10f3a7",
+        "after": "a4af044abf78449863d02c111b170a16561f23a1eb2ac37e9e181aff3b10f3a7",
+        "log": "verification/.runner/logs/3-1795451624843047787.log",
+        "log_sha256": "c51161c040950474a7e005a22fce1b7aa8c6150d0218d2c3d541c58fbe3fb9c4"
       }
     ],
     "ghash/pclmul-incremental-latest": [
@@ -33841,6 +34315,40 @@
         "after": "a5b350af611e82164eb38f5a5f6755765d8232e99320d371adb2a3c8407434b2",
         "log": "verification/.runner/logs/3-1795447770422368912.log",
         "log_sha256": "59294214896d0cf21615bb0882a2c4f837b02c3c7331ed682fd60896f834769c"
+      },
+      {
+        "id": "3-1795451855721067766",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 65fe0ff73460d756a8e93152d88f1bc7a2b3eb05cef49a24934c6921fb515fb6",
+        "started": "2026-11-23T16:37:35.721065311Z",
+        "ended": "2026-11-23T16:37:40.612312067Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.100.0",
+          "test",
+          "--locked",
+          "--offline",
+          "--release",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-ghash,cpu",
+          "--test",
+          "ghash_field",
+          "--test",
+          "ghash_lifecycle"
+        ],
+        "cwd": ".",
+        "environment": {
+          "BRYNJA_GHASH_EVIDENCE": "1",
+          "RUSTFLAGS": "--cfg brynja_ghash_pclmul_evidence"
+        },
+        "before": "8948405167fdbbe731c11b0bb15d1e18cd68bb9fac1bc24f534f6dd474309f91",
+        "after": "8948405167fdbbe731c11b0bb15d1e18cd68bb9fac1bc24f534f6dd474309f91",
+        "log": "verification/.runner/logs/3-1795451855721067766.log",
+        "log_sha256": "722486b6edb1b3248689b063bcabe8a972adb31fbd0f1b159a77b8c9cc142436"
       }
     ],
     "ghash/pclmul-incremental-msrv": [
@@ -34173,6 +34681,40 @@
         "after": "8d433d269faa5b48caa58a793ab420ffe73ffad06307d276d27335e0bac09238",
         "log": "verification/.runner/logs/3-1795447768644051835.log",
         "log_sha256": "9bca88375b164c1fbfca9a6a538a22282f6757fc52db22036522ae424590dad0"
+      },
+      {
+        "id": "3-1795451849406290884",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint f7b7aad9ead15750feeab04f389aacdec0a847a65249c937ad6c46cf57bc63d5",
+        "started": "2026-11-23T16:37:29.406288499Z",
+        "ended": "2026-11-23T16:37:34.597134909Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.90.0",
+          "test",
+          "--locked",
+          "--offline",
+          "--release",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-ghash,cpu",
+          "--test",
+          "ghash_field",
+          "--test",
+          "ghash_lifecycle"
+        ],
+        "cwd": ".",
+        "environment": {
+          "BRYNJA_GHASH_EVIDENCE": "1",
+          "RUSTFLAGS": "--cfg brynja_ghash_pclmul_evidence"
+        },
+        "before": "f9d431152c77a0738a3f0d2c82095f009e3df66f5b782b1c6e4236e7a30021ea",
+        "after": "f9d431152c77a0738a3f0d2c82095f009e3df66f5b782b1c6e4236e7a30021ea",
+        "log": "verification/.runner/logs/3-1795451849406290884.log",
+        "log_sha256": "eb6249d1d327ea8f8b110454c062af63cb5b7f1d3a28fc2929dee7ae6ee18e8a"
       }
     ],
     "ghash/pclmul-incremental-qemu": [
@@ -34545,6 +35087,44 @@
         "after": "5accc80010f30756bf15d9884a9b1657b56ab917af0d772c56d06554b7d6bba2",
         "log": "verification/.runner/logs/3-1795447772162558534.log",
         "log_sha256": "4b576f498b5ef42d8a55e8bdfb1e8f67fc9291dc41f5a6ea4f00646b956e92e4"
+      },
+      {
+        "id": "3-1795451861782950064",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 4baf6fbedaee701cee17e48a9799b7f07a6732f732d544d089c295d93200ded0",
+        "started": "2026-11-23T16:37:41.78294775Z",
+        "ended": "2026-11-23T16:37:46.564634183Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.100.0",
+          "test",
+          "--locked",
+          "--offline",
+          "--release",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-ghash,cpu",
+          "--target",
+          "x86_64-unknown-linux-gnu",
+          "--test",
+          "ghash_field",
+          "--",
+          "--exact",
+          "pclmul::missing_pclmul_fails_closed_even_on_empty_finish"
+        ],
+        "cwd": ".",
+        "environment": {
+          "BRYNJA_GHASH_EVIDENCE": "1",
+          "CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER": "qemu-x86_64 -cpu max,+aes,-pclmulqdq",
+          "RUSTFLAGS": "--cfg brynja_ghash_pclmul_evidence --cfg brynja_cpu_evidence"
+        },
+        "before": "9ca627a55e28fa9303d9e1c197b7280b3bef69104f497781aacc36515a22d06c",
+        "after": "9ca627a55e28fa9303d9e1c197b7280b3bef69104f497781aacc36515a22d06c",
+        "log": "verification/.runner/logs/3-1795451861782950064.log",
+        "log_sha256": "a20daf21524d1b1fc06421ff16ce8de288279fbd28275cf51fb918286e69d337"
       }
     ],
     "ghash/pclmul-scalar-aes-latest": [
@@ -34835,6 +35415,39 @@
         "after": "f4053d532b024bcbf0b97734059c95388acbd2c957ce52e850eec083cb5ca24c",
         "log": "verification/.runner/logs/3-1795447750255802774.log",
         "log_sha256": "dd0938876100c1a06767ba31a2a4136365ce9d2d0c83dd6a84e83d978458b24c"
+      },
+      {
+        "id": "3-1795451816419177572",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint d57a411a66c45c32b2b5a31744fe3f196217141f239be561ca64965bfaea13ec",
+        "started": "2026-11-23T16:36:56.419176149Z",
+        "ended": "2026-11-23T16:37:01.431509386Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.100.0",
+          "test",
+          "--locked",
+          "--offline",
+          "--release",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-ghash,cpu,hazmat-aes-block",
+          "--test",
+          "ghash_field",
+          "scalar_aes::"
+        ],
+        "cwd": ".",
+        "environment": {
+          "BRYNJA_GHASH_EVIDENCE": "1",
+          "RUSTFLAGS": "--cfg brynja_ghash_pclmul_evidence"
+        },
+        "before": "fe4b1a77e9c4721b1a7bc743ec5145e6a8bd0680636e7a12e008638cc1b1b28f",
+        "after": "fe4b1a77e9c4721b1a7bc743ec5145e6a8bd0680636e7a12e008638cc1b1b28f",
+        "log": "verification/.runner/logs/3-1795451816419177572.log",
+        "log_sha256": "9750e5b89fe4a96e6bed7117d70e6a22a4200af70ccb1ed659413f4952cfadb4"
       }
     ],
     "ghash/pclmul-scalar-aes-msrv": [
@@ -35125,6 +35738,39 @@
         "after": "e04842c305b00851cb6d7c773ce7c27be43127b95262f17aa4b7763e4dd1fd83",
         "log": "verification/.runner/logs/3-1795447748513287804.log",
         "log_sha256": "bd8be387150c27f3a3456c73872661fd6e4bdad0f3c7c07ced7874589c50c1b2"
+      },
+      {
+        "id": "3-1795451809848152855",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint ed39ac9e2f4f7b311c43a407d29db9619a3262102732df7b3ef1a013828b288c",
+        "started": "2026-11-23T16:36:49.848150801Z",
+        "ended": "2026-11-23T16:36:55.330138932Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.90.0",
+          "test",
+          "--locked",
+          "--offline",
+          "--release",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-ghash,cpu,hazmat-aes-block",
+          "--test",
+          "ghash_field",
+          "scalar_aes::"
+        ],
+        "cwd": ".",
+        "environment": {
+          "BRYNJA_GHASH_EVIDENCE": "1",
+          "RUSTFLAGS": "--cfg brynja_ghash_pclmul_evidence"
+        },
+        "before": "4126faae8ebb21b9d31562f4eb6f27404e977b68a929197c57e685ab915d16b8",
+        "after": "4126faae8ebb21b9d31562f4eb6f27404e977b68a929197c57e685ab915d16b8",
+        "log": "verification/.runner/logs/3-1795451809848152855.log",
+        "log_sha256": "bf202da91195f5d09dc5033ec061531da59aeee42c313aedc042cbe8f330c3ab"
       }
     ],
     "ghash/pclmul-scalar-aes-qemu": [
@@ -35442,6 +36088,42 @@
         "after": "66f31701973c8ab15c9bad47eae4b8e864936144948cf60214d0c39806417056",
         "log": "verification/.runner/logs/3-1795447759047697103.log",
         "log_sha256": "e931fa017c888e6d18df744fc3146626d57371808b5272c7ce682d68310025f6"
+      },
+      {
+        "id": "3-1795451822528122884",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 21984d7491b7c0b1cb53f7fa723f70edfd7d2bc6fcff95c65cbcfc83ce1158e7",
+        "started": "2026-11-23T16:37:02.52812087Z",
+        "ended": "2026-11-23T16:37:07.675051461Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.100.0",
+          "test",
+          "--locked",
+          "--offline",
+          "--release",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-ghash,cpu,hazmat-aes-block",
+          "--target",
+          "x86_64-unknown-linux-gnu",
+          "--test",
+          "ghash_field",
+          "scalar_aes::"
+        ],
+        "cwd": ".",
+        "environment": {
+          "BRYNJA_GHASH_EVIDENCE": "1",
+          "CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER": "qemu-x86_64 -cpu max,+pclmulqdq,-aes,-vaes",
+          "RUSTFLAGS": "--cfg brynja_ghash_pclmul_evidence --cfg brynja_cpu_evidence"
+        },
+        "before": "b98ee1ba56d6a4f3b0b0bfb856a30d1364952465917675e698c0fafe4331fc37",
+        "after": "b98ee1ba56d6a4f3b0b0bfb856a30d1364952465917675e698c0fafe4331fc37",
+        "log": "verification/.runner/logs/3-1795451822528122884.log",
+        "log_sha256": "810fd6ebed367757c5bb6c137d6c20d929a2f389a30e7e199c37674fb07d478c"
       }
     ],
     "ghash/pclmul-timing-observation-replay": [
@@ -35570,6 +36252,24 @@
         "after": "93c4646ff0c00321714ab3133148084d99f10ee0d5f210756d4ec4e8a397237a",
         "log": "verification/.runner/logs/2-1795382829264543303.log",
         "log_sha256": "67cf22d597855650ab27ed969e3f4815ffe0536dcf7e5d68bdfaf72f53839559"
+      },
+      {
+        "id": "3-1795451905385776479",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 4a9e849317705019598988abbad981d7e7d8d1b0b80ca894bf865481dc020bbe",
+        "started": "2026-11-23T16:38:25.385774325Z",
+        "ended": "2026-11-23T16:38:26.059127815Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/test-pclmul-screen.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "f28cce96ee26dc0e2bd954d9b053ec43353a702d0c83729cbe3f637f8e83f3f3",
+        "after": "f28cce96ee26dc0e2bd954d9b053ec43353a702d0c83729cbe3f637f8e83f3f3",
+        "log": "verification/.runner/logs/3-1795451905385776479.log",
+        "log_sha256": "beea0a065531a47eb23b13aebb2e8c9a9c32867fcfbc6a100d7f7bb6b56a08ee"
       }
     ],
     "ghash/pclmul-unavailable-qemu": [
@@ -35922,6 +36622,41 @@
         "after": "a1965a4c6481f08f30eb89c132e7f6e27c26aa00e9a81765f7187ea359adeb7f",
         "log": "verification/.runner/logs/3-1795447773945533690.log",
         "log_sha256": "9e875acc738638fe86002036f51d238bb7c8e085959f40eb2a5277450276036a"
+      },
+      {
+        "id": "3-1795451867737867796",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 8ca7759ed7876a8417ac29ec0f9192bea23703ec2c3c1dd484f05ca13773cc98",
+        "started": "2026-11-23T16:37:47.737865802Z",
+        "ended": "2026-11-23T16:37:52.13802149Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.100.0",
+          "test",
+          "--locked",
+          "--offline",
+          "--release",
+          "--no-default-features",
+          "-p",
+          "brynja-crypto-cpu",
+          "--target",
+          "x86_64-unknown-linux-gnu",
+          "--lib",
+          "--",
+          "--ignored",
+          "--exact",
+          "ghash_pclmul::admission::tests::aes_present_without_pclmul_is_not_ghash_authority"
+        ],
+        "cwd": ".",
+        "environment": {
+          "CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER": "qemu-x86_64 -cpu max,+aes,-pclmulqdq",
+          "RUSTFLAGS": "--cfg brynja_cpu_evidence"
+        },
+        "before": "1392eb102c2c40b76ac9e0e1c0550eeeabecbe666f445caee6763fd1ed509c16",
+        "after": "1392eb102c2c40b76ac9e0e1c0550eeeabecbe666f445caee6763fd1ed509c16",
+        "log": "verification/.runner/logs/3-1795451867737867796.log",
+        "log_sha256": "ff5084bcf34da502524d9b8b832022c51bc888967f040f46c8be6d67f3371e18"
       }
     ],
     "ghash/pmull-field-qemu-latest": [
@@ -36196,6 +36931,40 @@
         "after": "1e84aafa49f58b9843efdd52ee84432c65fd452b7945b9ffa3d8ac68fac6ae26",
         "log": "verification/.runner/logs/3-1795447738544866612.log",
         "log_sha256": "8b489ee86d2b5b2e9b242711f143f2d794e3e07b678b802023d9754d3fd8d07a"
+      },
+      {
+        "id": "3-1795451643755539637",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint c4c6c044b9ba651a124c438fef970f7df0c846c01b44ceb23e99467a38574e03",
+        "started": "2026-11-23T16:34:03.755536732Z",
+        "ended": "2026-11-23T16:34:08.216827591Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.100.0",
+          "test",
+          "--locked",
+          "--offline",
+          "--release",
+          "--no-default-features",
+          "-p",
+          "brynja-crypto-cpu",
+          "--target",
+          "aarch64-unknown-linux-musl",
+          "--lib",
+          "ghash_pmull::",
+          "--",
+          "--include-ignored"
+        ],
+        "cwd": ".",
+        "environment": {
+          "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER": "rust-lld",
+          "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER": "qemu-aarch64 -cpu max"
+        },
+        "before": "6260b4c97cc75953ab353151614d8510c4d05487dbc5087cee77174bfa3e8e8c",
+        "after": "6260b4c97cc75953ab353151614d8510c4d05487dbc5087cee77174bfa3e8e8c",
+        "log": "verification/.runner/logs/3-1795451643755539637.log",
+        "log_sha256": "13ecd37c10e6a70d2a802cb904d62c5e87efb864b24485347a513c8d4cbe9e55"
       }
     ],
     "ghash/pmull-field-qemu-msrv": [
@@ -36470,6 +37239,40 @@
         "after": "5994ee52189dc13663fb5babf7597c772ddf9a80d13f6dd8d35880cdfcf0f280",
         "log": "verification/.runner/logs/3-1795447736734323942.log",
         "log_sha256": "8d0d37303e2d74577d4fe6a2998772f1080e6bb3c217419953c4b9d0aee8497e"
+      },
+      {
+        "id": "3-1795451636872274658",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint f0cb3a5efe82d2ade820db717ee8ef68379b66dd6120650b22d36f45feb2b942",
+        "started": "2026-11-23T16:33:56.872272834Z",
+        "ended": "2026-11-23T16:34:01.895413619Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.90.0",
+          "test",
+          "--locked",
+          "--offline",
+          "--release",
+          "--no-default-features",
+          "-p",
+          "brynja-crypto-cpu",
+          "--target",
+          "aarch64-unknown-linux-musl",
+          "--lib",
+          "ghash_pmull::",
+          "--",
+          "--include-ignored"
+        ],
+        "cwd": ".",
+        "environment": {
+          "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER": "rust-lld",
+          "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER": "qemu-aarch64 -cpu max"
+        },
+        "before": "64d35a739c9d634041bc5c6c0671a45421db9d092134205fc42211826de88aa1",
+        "after": "64d35a739c9d634041bc5c6c0671a45421db9d092134205fc42211826de88aa1",
+        "log": "verification/.runner/logs/3-1795451636872274658.log",
+        "log_sha256": "030b9fefbd0af1ce41221b3cf0bc933eccca461ceaa2ae8dbae7e99361d3d8d6"
       }
     ],
     "ghash/pmull-incremental-qemu-denied": [
@@ -36738,6 +37541,45 @@
         "after": "58bef70a5da72083e2097751e76221fd7df8836608b39842044ebc546592e422",
         "log": "verification/.runner/logs/3-1795447766736286689.log",
         "log_sha256": "bf9277386dfb2ca8c9205d6c489bbf56cb8975ae03554c6aa27212a69a267fac"
+      },
+      {
+        "id": "3-1795451843354575565",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 1c32b217aabeab0a5a2d9229e7395481a1c7b5e5149f3c9674d5b9b479cfa4c6",
+        "started": "2026-11-23T16:37:23.354571527Z",
+        "ended": "2026-11-23T16:37:28.176442577Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.100.0",
+          "test",
+          "--locked",
+          "--offline",
+          "--release",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-ghash,cpu",
+          "--target",
+          "aarch64-unknown-linux-musl",
+          "--test",
+          "ghash_field",
+          "--",
+          "--exact",
+          "pmull::masked_pmull_fails_closed_even_on_empty_finish"
+        ],
+        "cwd": ".",
+        "environment": {
+          "BRYNJA_GHASH_EVIDENCE": "1",
+          "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER": "rust-lld",
+          "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER": "qemu-aarch64 -cpu max",
+          "RUSTFLAGS": "--cfg brynja_ghash_pmull_evidence --cfg brynja_ghash_deny_pmull"
+        },
+        "before": "f94857af3a92fa19905621df1a0f345f2042992aae8abb274e44ce379f6e7a33",
+        "after": "f94857af3a92fa19905621df1a0f345f2042992aae8abb274e44ce379f6e7a33",
+        "log": "verification/.runner/logs/3-1795451843354575565.log",
+        "log_sha256": "7660bbd5fd190076a83ea09b07e1db41047c0ce52facdd2b7cdd39c7756c1ab3"
       }
     ],
     "ghash/pmull-incremental-qemu-latest": [
@@ -36999,6 +37841,44 @@
         "after": "3ee67335835c800b246ccc5521aa2eb8e08d22c4aca0326d3aa2bae8f051a610",
         "log": "verification/.runner/logs/3-1795447764764113529.log",
         "log_sha256": "943d27157dabfca50ab8a73c2f6b7797d1649c3c5b1419dfe8da71a368e0f2bd"
+      },
+      {
+        "id": "3-1795451836520912972",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint a6b688e06032fcc89429ef95f623668234693ac68968eb08ef8e2c5add6de07f",
+        "started": "2026-11-23T16:37:16.520911059Z",
+        "ended": "2026-11-23T16:37:21.911016165Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.100.0",
+          "test",
+          "--locked",
+          "--offline",
+          "--release",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-ghash,cpu,hazmat-aes-block",
+          "--target",
+          "aarch64-unknown-linux-musl",
+          "--test",
+          "ghash_field",
+          "--test",
+          "ghash_lifecycle"
+        ],
+        "cwd": ".",
+        "environment": {
+          "BRYNJA_GHASH_EVIDENCE": "1",
+          "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER": "rust-lld",
+          "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER": "qemu-aarch64 -cpu max",
+          "RUSTFLAGS": "--cfg brynja_ghash_pmull_evidence"
+        },
+        "before": "ce1928d1c972f79664c94263e7b6fcda3fd9a6e04acb362cfd0ca900b2674866",
+        "after": "ce1928d1c972f79664c94263e7b6fcda3fd9a6e04acb362cfd0ca900b2674866",
+        "log": "verification/.runner/logs/3-1795451836520912972.log",
+        "log_sha256": "6973637ee79b5e7a527cc65d972b41754cb4801e3efb7493811ed7cd93aca9c5"
       }
     ],
     "ghash/pmull-incremental-qemu-msrv": [
@@ -37260,6 +38140,44 @@
         "after": "923a7e4bac52add87588f9bcf4fb7fb73b249a4129373a22249574217e78007b",
         "log": "verification/.runner/logs/3-1795447762764309056.log",
         "log_sha256": "8cb013c8c68f32123a4904d5ab7feb20d54165582748145263e7957ef8f722bf"
+      },
+      {
+        "id": "3-1795451829428101834",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 45f366624ec03de37c808215b525e852e945550fe756652355f6783241118488",
+        "started": "2026-11-23T16:37:09.428099951Z",
+        "ended": "2026-11-23T16:37:15.226531364Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.90.0",
+          "test",
+          "--locked",
+          "--offline",
+          "--release",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-ghash,cpu,hazmat-aes-block",
+          "--target",
+          "aarch64-unknown-linux-musl",
+          "--test",
+          "ghash_field",
+          "--test",
+          "ghash_lifecycle"
+        ],
+        "cwd": ".",
+        "environment": {
+          "BRYNJA_GHASH_EVIDENCE": "1",
+          "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER": "rust-lld",
+          "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER": "qemu-aarch64 -cpu max",
+          "RUSTFLAGS": "--cfg brynja_ghash_pmull_evidence"
+        },
+        "before": "6982343be584ba81550ec411648307e7d0245c4fcc3ef0a0f16d6f4a1b2a51bd",
+        "after": "6982343be584ba81550ec411648307e7d0245c4fcc3ef0a0f16d6f4a1b2a51bd",
+        "log": "verification/.runner/logs/3-1795451829428101834.log",
+        "log_sha256": "8291d6d0f2c8686acf2fa8f20ce7b36e7d34e86c05c8791a9d401f7338ccf377"
       }
     ],
     "ghash/pmull-timing-observation-replay": [
@@ -37388,6 +38306,24 @@
         "after": "a77ad561fc0c8f9ff906f17ba576da70d3fa75e5f66166c296a45248f0215e99",
         "log": "verification/.runner/logs/2-1795382831084247480.log",
         "log_sha256": "91e7b4890ab4a0498335c8aec919273178aae69a01085aca3337f4c4994afd12"
+      },
+      {
+        "id": "3-1795451907019461322",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 7adae87e494f61d2e8abc1772120ed22c115763922957ffce37302da1d856a7e",
+        "started": "2026-11-23T16:38:27.019459098Z",
+        "ended": "2026-11-23T16:38:27.740247993Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/test-pmull-screen.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "f8fca63636739c024d191323e967b6a9f3c0fa8f275f09a096b41e1a7f360b88",
+        "after": "f8fca63636739c024d191323e967b6a9f3c0fa8f275f09a096b41e1a7f360b88",
+        "log": "verification/.runner/logs/3-1795451907019461322.log",
+        "log_sha256": "6f8a987ff9d3dcb6541362dcfb63b18ec406e6a8b06eb1797ce44daef9fbd18f"
       }
     ],
     "ghash/portable-field": [
@@ -37802,6 +38738,62 @@
         "after": "7b65ba5d5e7cadfcaaa9fee5cb27006b031caf68ea45c9719cc5be57575e2835",
         "log": "verification/.runner/logs/3-1795447731163244450.log",
         "log_sha256": "cda1f464f74506e189387f51f2770630585525bcd6bd5e464aea2390b368b26a"
+      },
+      {
+        "id": "3-1795451622389473291",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 3123754c1c747b25ff018a2f80f056883eba3528a0b8fc175ace147256fe712c",
+        "started": "2026-11-23T16:33:42.389472048Z",
+        "ended": "2026-11-23T16:33:43.459171644Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.100.0",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-ghash",
+          "--test",
+          "ghash_field"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "ff88495ed8c6c5303e2cd45ff23b471054f5eeab659d967e3d49410ce15fd946",
+        "after": "ff88495ed8c6c5303e2cd45ff23b471054f5eeab659d967e3d49410ce15fd946",
+        "log": "verification/.runner/logs/3-1795451622389473291.log",
+        "log_sha256": "74a3fe3d3638f9d8a92aee2b76db336ce91a0c2f93b4bc0250b91e80ee73e928"
+      },
+      {
+        "id": "3-1795451805007396124",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 43a2affcabc7226e7ac36cf525d514c1e6c7bec3407e58ae066f1c17d0917422",
+        "started": "2026-11-23T16:36:45.007393699Z",
+        "ended": "2026-11-23T16:36:46.052574178Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.100.0",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-ghash",
+          "--test",
+          "ghash_field"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "bc2bf67066ff7ea8fccd75b0ec19da747be511512347cc0d96a67f2257a4240f",
+        "after": "bc2bf67066ff7ea8fccd75b0ec19da747be511512347cc0d96a67f2257a4240f",
+        "log": "verification/.runner/logs/3-1795451805007396124.log",
+        "log_sha256": "d8be2bf420aaa23a983617cb0d365c52e3260df805fe857a00b3034582b65706"
       }
     ],
     "ghash/raw-feature-gate": [
@@ -37984,6 +38976,24 @@
         "after": "d3956ad0b8a2a6e94af78f4f280909e7792c79b61287babea4f26a4a9d0d8040",
         "log": "verification/.runner/logs/3-1795447775780901590.log",
         "log_sha256": "cb7a4e446c11df28f5ff8ee21a510c507029badf4f36ba5c1f8ee932b71d7483"
+      },
+      {
+        "id": "3-1795451873298034506",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint e400d4060b5a8c565ae2607bcf80d5542d355af4842967e0f9ea83da3ae0e762",
+        "started": "2026-11-23T16:37:53.298032893Z",
+        "ended": "2026-11-23T16:37:58.688621018Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/check-feature-gate.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "dcd676361b7fde20bd9d4994080381d9ff6cfc83d572716f7133bfd8590e7956",
+        "after": "dcd676361b7fde20bd9d4994080381d9ff6cfc83d572716f7133bfd8590e7956",
+        "log": "verification/.runner/logs/3-1795451873298034506.log",
+        "log_sha256": "cb7a4e446c11df28f5ff8ee21a510c507029badf4f36ba5c1f8ee932b71d7483"
       }
     ],
     "ghash/rv64-branch-observation-replay": [
@@ -38076,6 +39086,24 @@
         "after": "0ef3a5df29280420436ddc14ea20ff897e332a597937c074a380707066c865c8",
         "log": "verification/.runner/logs/2-1795382834371359246.log",
         "log_sha256": "2c37d50a88147ca2ebd5197d74ee37d462dab650d793512e849814c28d5a38f0"
+      },
+      {
+        "id": "3-1795451910291306884",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 7dbd2a34a3af4227628297e67b82968a6cefd5a3d4a733d527107a3188aefa49",
+        "started": "2026-11-23T16:38:30.29130477Z",
+        "ended": "2026-11-23T16:38:30.933131301Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/test-rv64-branches.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "a84cd97ae3a95be77e163d672e6e3fc7378852121ddff8d260774adeb93312ae",
+        "after": "a84cd97ae3a95be77e163d672e6e3fc7378852121ddff8d260774adeb93312ae",
+        "log": "verification/.runner/logs/3-1795451910291306884.log",
+        "log_sha256": "2c37d50a88147ca2ebd5197d74ee37d462dab650d793512e849814c28d5a38f0"
       }
     ],
     "ghash/rv64-cache-observation-replay": [
@@ -38113,6 +39141,24 @@
         "before": "a5e83330797204a7db5656fd0e97ab0d1cdc7d18c97d310c94f0abe30c807746",
         "after": "a5e83330797204a7db5656fd0e97ab0d1cdc7d18c97d310c94f0abe30c807746",
         "log": "verification/.runner/logs/2-1795382835929896409.log",
+        "log_sha256": "2c37d50a88147ca2ebd5197d74ee37d462dab650d793512e849814c28d5a38f0"
+      },
+      {
+        "id": "3-1795451911877925546",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 100f5b438d7243c262bc39330bbca1fa856aeeb47eeae89c9fb8e39d995135f7",
+        "started": "2026-11-23T16:38:31.877922982Z",
+        "ended": "2026-11-23T16:38:32.522539766Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/test-rv64-cache.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "98c26de428291c0e845d8acaebc20d12d3d335914ef1858e312759cdb2250279",
+        "after": "98c26de428291c0e845d8acaebc20d12d3d335914ef1858e312759cdb2250279",
+        "log": "verification/.runner/logs/3-1795451911877925546.log",
         "log_sha256": "2c37d50a88147ca2ebd5197d74ee37d462dab650d793512e849814c28d5a38f0"
       }
     ],
@@ -38242,6 +39288,27 @@
         "after": "d7e58d1224847f7af6b23213c811e4359d65dbd3d07aa1e0a2b9eef7aaa95f14",
         "log": "verification/.runner/logs/3-1795447742276110823.log",
         "log_sha256": "7ff32a437a656e03f676df30794a5d5a9bda30ac4b3bde210e16dd39c1b01af2"
+      },
+      {
+        "id": "3-1795451655090651428",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 3ebb1f969cc5f033015d210f74e7a703a9030af965c4dfa03ee3fbc73303cc28",
+        "started": "2026-11-23T16:34:15.090649214Z",
+        "ended": "2026-11-23T16:34:19.175829166Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/check-rv64-field.py",
+          "1.100.0"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "f4b466cc8d92d539fdf2ce2a45adc56c933f94d3b1eac9881d0b2c2af98738cd",
+        "after": "f4b466cc8d92d539fdf2ce2a45adc56c933f94d3b1eac9881d0b2c2af98738cd",
+        "log": "verification/.runner/logs/3-1795451655090651428.log",
+        "log_sha256": "208b683ae8d9fc67d2770b0ca73a5fb346e36443c0577576e67bd448c5e8a017"
       }
     ],
     "ghash/rv64-field-qemu-msrv": [
@@ -38370,6 +39437,27 @@
         "after": "9ef82d55fe30cb4777c69c57f0ddd7e03e03ccf050026468285c15dbc4758a76",
         "log": "verification/.runner/logs/3-1795447740312707324.log",
         "log_sha256": "1f959063b4550cbc90e856a3a42c7232675e3a2fc727b9f943f42252b9e019f6"
+      },
+      {
+        "id": "3-1795451649339519433",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint eb536edf0b44acf88ca1c2bb69c06aa972dab679b14b011bf9275d0feaa19ddd",
+        "started": "2026-11-23T16:34:09.339517519Z",
+        "ended": "2026-11-23T16:34:13.849299572Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/check-rv64-field.py",
+          "1.90.0"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "dd6cb82d8dbd77d146059b1afad334578bb4265b4f5fa759401cc0ffd27b3b40",
+        "after": "dd6cb82d8dbd77d146059b1afad334578bb4265b4f5fa759401cc0ffd27b3b40",
+        "log": "verification/.runner/logs/3-1795451649339519433.log",
+        "log_sha256": "bd41f161fbdb1bd3028a85b4aaaafccd5ab1461787f4121c6c50637c4f22aed2"
       }
     ],
     "ghash/rv64-incremental-qemu-latest": [
@@ -38482,6 +39570,50 @@
         "after": "9057dc38830f4e70377ff2b51077f5202046d1f2ee624bf875871ae443d9992c",
         "log": "verification/.runner/logs/3-1795447746401505113.log",
         "log_sha256": "f1accc40ebf532fdfe56de981a58f58f8b4c7098fe10a0634f610eca0819dc55"
+      },
+      {
+        "id": "3-1795451670618406868",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 1a2a535b542834714cb2fffc2b3760431f87a8b563847cfaf7cad79a88985761",
+        "started": "2026-11-23T16:34:30.618403461Z",
+        "ended": "2026-11-23T16:34:38.748583078Z",
+        "outcome": "input_changed",
+        "explanation": "inputs became unresolved during execution: incomplete check registration: ghash/mid-update-retirement",
+        "command": [
+          "python3",
+          "scripts/ghash/check-rv64-field.py",
+          "1.100.0",
+          "--incremental"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "2a5e5c1ad1eb686262afc43e2537be3e4a72e09f8d838e9674d06b307276f1be",
+        "after": null,
+        "log": "verification/.runner/logs/3-1795451670618406868.log",
+        "log_sha256": "00654ab496c4c7074432f677f80ade1d8c543fe921b2afbacd490c131f45b93c"
+      },
+      {
+        "id": "3-1795451807363144411",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 1a2a535b542834714cb2fffc2b3760431f87a8b563847cfaf7cad79a88985761",
+        "started": "2026-11-23T16:36:47.363141475Z",
+        "ended": "2026-11-23T16:36:48.652763865Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/check-rv64-field.py",
+          "1.100.0",
+          "--incremental"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "2a5e5c1ad1eb686262afc43e2537be3e4a72e09f8d838e9674d06b307276f1be",
+        "after": "2a5e5c1ad1eb686262afc43e2537be3e4a72e09f8d838e9674d06b307276f1be",
+        "log": "verification/.runner/logs/3-1795451807363144411.log",
+        "log_sha256": "1bb1a7cf7fd7546b6ae9577db11bfe410222fce9ce3063763ae178cb605c04a5"
       }
     ],
     "ghash/rv64-incremental-qemu-msrv": [
@@ -38594,6 +39726,28 @@
         "after": "d65a4dd3576a19dac57383b8cd84526a194e07cefe636891d82500f1661d2dab",
         "log": "verification/.runner/logs/3-1795447744259199124.log",
         "log_sha256": "00a8ca029bd0c2edd7338fa1959abee70e9926086e88dd85598a57704701ba3c"
+      },
+      {
+        "id": "3-1795451660402627565",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 25fb6f37de081fe7644aaf51db824e25a018fa87ed499d71c59e4aba47425a84",
+        "started": "2026-11-23T16:34:20.402625441Z",
+        "ended": "2026-11-23T16:34:29.280176391Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/check-rv64-field.py",
+          "1.90.0",
+          "--incremental"
+        ],
+        "cwd": ".",
+        "environment": {
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "88e0303ebbe18013bdc209e599af7d6067ef4fbee0299032f374e6f4b577bda9",
+        "after": "88e0303ebbe18013bdc209e599af7d6067ef4fbee0299032f374e6f4b577bda9",
+        "log": "verification/.runner/logs/3-1795451660402627565.log",
+        "log_sha256": "e8b3e9ba3b1624808c10b39f800e55096b3cad5f4c4a45ce617bd94ff74d2ea9"
       }
     ],
     "ghash/rv64-throughput-observation-replay": [
@@ -38631,6 +39785,24 @@
         "before": "e56c1d53f8c4743d23b466dfa3cec26cd9b1d03b82c32e25d61c2e3db97a1232",
         "after": "e56c1d53f8c4743d23b466dfa3cec26cd9b1d03b82c32e25d61c2e3db97a1232",
         "log": "verification/.runner/logs/2-1795371272211976893.log",
+        "log_sha256": "372ee57a30b8a8b17bb056a0814266786a922da7dcf4139f4f9a2457745d6424"
+      },
+      {
+        "id": "3-1795451902166223085",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 2d574a348d4659dbe33586cd1177c531340a170ee36f15d8b61f5e0718b11ab7",
+        "started": "2026-11-23T16:38:22.166220681Z",
+        "ended": "2026-11-23T16:38:22.805138828Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/test-rv64-throughput.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "a7f09640dc6dc2ef3d9364a3b1233c221f4c3ba51e578c30dc56c2641be2840d",
+        "after": "a7f09640dc6dc2ef3d9364a3b1233c221f4c3ba51e578c30dc56c2641be2840d",
+        "log": "verification/.runner/logs/3-1795451902166223085.log",
         "log_sha256": "372ee57a30b8a8b17bb056a0814266786a922da7dcf4139f4f9a2457745d6424"
       }
     ],
@@ -38723,6 +39895,24 @@
         "before": "7b76cc86bf00e3e85873d37e7801cf3b5f9842a4aee0e5da219de7776d454f21",
         "after": "7b76cc86bf00e3e85873d37e7801cf3b5f9842a4aee0e5da219de7776d454f21",
         "log": "verification/.runner/logs/2-1795382832738286128.log",
+        "log_sha256": "b77b3eecbb8b58408bbf2c56825f5a7e1c3ea451dc9b20633ade6ed8a8a1e8e9"
+      },
+      {
+        "id": "3-1795451908692931028",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 054a97579d4bca942d1e8b829956fd1b54a919f75289757f1f258100854616e7",
+        "started": "2026-11-23T16:38:28.692929325Z",
+        "ended": "2026-11-23T16:38:29.340887209Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/test-rv64-screen.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "33f8ba770514ee4b71cda177c40ed115f5358cd429c99935c11f2fb780bbe273",
+        "after": "33f8ba770514ee4b71cda177c40ed115f5358cd429c99935c11f2fb780bbe273",
+        "log": "verification/.runner/logs/3-1795451908692931028.log",
         "log_sha256": "b77b3eecbb8b58408bbf2c56825f5a7e1c3ea451dc9b20633ade6ed8a8a1e8e9"
       }
     ],
@@ -39050,6 +40240,25 @@
         "after": "01e72db24b6c46dc9fee9fdff99afee7e2cff553b7cfea45003a613879393e9d",
         "log": "verification/.runner/logs/3-1795447787890631714.log",
         "log_sha256": "17d23176a290debdd4298384c8080d7d66d9bdecd5a07c5e33761bd3ae172815"
+      },
+      {
+        "id": "3-1795451885842140497",
+        "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint b090821b65acbcd552e39a36c65197381b5ae3921dcde635342f512aac9c2ab9",
+        "started": "2026-11-23T16:38:05.842138443Z",
+        "ended": "2026-11-23T16:38:08.687471253Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/check-portable-host.py",
+          "codegen"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "9fe09bb576e48be32014845fa34aa8394cce174518942ae2bde1de1db14ce83c",
+        "after": "9fe09bb576e48be32014845fa34aa8394cce174518942ae2bde1de1db14ce83c",
+        "log": "verification/.runner/logs/3-1795451885842140497.log",
+        "log_sha256": "8ab952d39828814d4164becd9d72ebc21eb515178a55a966a17658d8f6dbb8e5"
       }
     ],
     "hkdf/asan-derivation": [
@@ -47155,22 +48364,22 @@
       "last_success": "2026-11-08T10:08:10.481000104Z"
     },
     "ghash/amd-counter-observation-replay": {
-      "checked_at": "2026-11-22T21:27:20.166598902Z",
-      "fingerprint": "0a794ab9c1e2149a31d39d5bf37a8582177ff611afd85b559824a6afa8dad4cb",
+      "checked_at": "2026-11-23T16:38:36.139035807Z",
+      "fingerprint": "de86c30f5cdac2d7aad87038ba27bf3bfb75c60fcf28a10d96727fb4a964a6d6",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 0a794ab9c1e2149a31d39d5bf37a8582177ff611afd85b559824a6afa8dad4cb",
-      "performed_at": "2026-11-22T21:27:19.749217433Z",
-      "last_success": "2026-11-22T21:27:19.749217433Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint de86c30f5cdac2d7aad87038ba27bf3bfb75c60fcf28a10d96727fb4a964a6d6",
+      "performed_at": "2026-11-23T16:38:35.711270597Z",
+      "last_success": "2026-11-23T16:38:35.711270597Z"
     },
     "ghash/amd-throughput-observation-replay": {
-      "checked_at": "2026-11-22T17:58:21.064019255Z",
-      "fingerprint": "512a53658529392c8cf4c59ac5fb8eba536201595264eb86f96a84c66175d61b",
+      "checked_at": "2026-11-23T16:38:18.382116274Z",
+      "fingerprint": "7ff16a8577b88e8585460eac8f32d55819245a9afb545275f7a12b91e2eccc04",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 512a53658529392c8cf4c59ac5fb8eba536201595264eb86f96a84c66175d61b",
-      "performed_at": "2026-11-22T17:58:20.658632525Z",
-      "last_success": "2026-11-22T17:58:20.658632525Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 7ff16a8577b88e8585460eac8f32d55819245a9afb545275f7a12b91e2eccc04",
+      "performed_at": "2026-11-23T16:38:17.947852901Z",
+      "last_success": "2026-11-23T16:38:17.947852901Z"
     },
     "ghash/apple-counter-sample-replay": {
       "checked_at": "2026-11-22T20:49:09.802420561Z",
@@ -47182,49 +48391,49 @@
       "last_success": "2026-11-22T20:49:09.386988205Z"
     },
     "ghash/apple-throughput-observation-replay": {
-      "checked_at": "2026-11-22T18:14:31.694193253Z",
-      "fingerprint": "3f54f21256954abe8d634f1f0e6af43f6acbe14dfde972e2da7aaa818dd42f3e",
+      "checked_at": "2026-11-23T16:38:21.627972381Z",
+      "fingerprint": "d1bfe5355c6c8f10e7dae1b8649f31d1c6a844ef0bb147df4cc92aaf5928fc73",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 3f54f21256954abe8d634f1f0e6af43f6acbe14dfde972e2da7aaa818dd42f3e",
-      "performed_at": "2026-11-22T18:14:31.264140226Z",
-      "last_success": "2026-11-22T18:14:31.264140226Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint d1bfe5355c6c8f10e7dae1b8649f31d1c6a844ef0bb147df4cc92aaf5928fc73",
+      "performed_at": "2026-11-23T16:38:21.194975974Z",
+      "last_success": "2026-11-23T16:38:21.194975974Z"
     },
     "ghash/asan-lifecycle": {
-      "checked_at": "2026-11-23T15:29:47.197680876Z",
-      "fingerprint": "8b948b5e977ea8d4f199abc69f9e7438837f739d9758de64b01a6277d676500a",
+      "checked_at": "2026-11-23T16:38:05.124113111Z",
+      "fingerprint": "9010ef34e4877e4b3cee8f8764092d2aebcf9f442ed422fb6a1e9c4c6f1fc307",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 8b948b5e977ea8d4f199abc69f9e7438837f739d9758de64b01a6277d676500a",
-      "performed_at": "2026-11-23T15:29:46.749295807Z",
-      "last_success": "2026-11-23T15:29:46.749295807Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 9010ef34e4877e4b3cee8f8764092d2aebcf9f442ed422fb6a1e9c4c6f1fc307",
+      "performed_at": "2026-11-23T16:38:04.64788424Z",
+      "last_success": "2026-11-23T16:38:04.64788424Z"
     },
     "ghash/aws-counter-observation-replay": {
-      "checked_at": "2026-11-22T21:27:18.600415694Z",
-      "fingerprint": "6f0484cb8d658d9bd52253b29dd2780101873502588e0c4ea3c84c78c78d75a7",
+      "checked_at": "2026-11-23T16:38:34.575840007Z",
+      "fingerprint": "069ed0b75e57b00ee17138c8f481c4e02aa198f2bcedfccf1186f43d105b99c6",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 6f0484cb8d658d9bd52253b29dd2780101873502588e0c4ea3c84c78c78d75a7",
-      "performed_at": "2026-11-22T21:27:18.180064855Z",
-      "last_success": "2026-11-22T21:27:18.180064855Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 069ed0b75e57b00ee17138c8f481c4e02aa198f2bcedfccf1186f43d105b99c6",
+      "performed_at": "2026-11-23T16:38:34.139694552Z",
+      "last_success": "2026-11-23T16:38:34.139694552Z"
     },
     "ghash/aws-throughput-observation-replay": {
-      "checked_at": "2026-11-22T18:14:30.119249022Z",
-      "fingerprint": "0d36b22cb4317fa4835ab754ef1cfcd88c68535d4fc2242fda9c4f496fbc2f29",
+      "checked_at": "2026-11-23T16:38:20.015953654Z",
+      "fingerprint": "f9e0578363e0f5dd79229457465698ce470f9120936b71fcee86eee47c12d723",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 0d36b22cb4317fa4835ab754ef1cfcd88c68535d4fc2242fda9c4f496fbc2f29",
-      "performed_at": "2026-11-22T18:14:29.693139559Z",
-      "last_success": "2026-11-22T18:14:29.693139559Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint f9e0578363e0f5dd79229457465698ce470f9120936b71fcee86eee47c12d723",
+      "performed_at": "2026-11-23T16:38:19.57462432Z",
+      "last_success": "2026-11-23T16:38:19.57462432Z"
     },
     "ghash/cross-update-codegen": {
-      "checked_at": "2026-11-23T15:29:58.410343661Z",
-      "fingerprint": "21ac765c850e4635c5e84b0cc2f3429ae1a8374395470c846f9f8622cfa3a845",
+      "checked_at": "2026-11-23T16:38:16.744540526Z",
+      "fingerprint": "3f4fecc4e843136d3de34cc0f39d51806060c6e7438f7d640ec2f4609c562b22",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 21ac765c850e4635c5e84b0cc2f3429ae1a8374395470c846f9f8622cfa3a845",
-      "performed_at": "2026-11-23T15:29:57.950030164Z",
-      "last_success": "2026-11-23T15:29:57.950030164Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 3f4fecc4e843136d3de34cc0f39d51806060c6e7438f7d640ec2f4609c562b22",
+      "performed_at": "2026-11-23T16:38:16.251464511Z",
+      "last_success": "2026-11-23T16:38:16.251464511Z"
     },
     "ghash/first-host-observation-replay": {
       "checked_at": "2026-11-22T18:23:43.024789084Z",
@@ -47236,13 +48445,13 @@
       "last_success": "2026-11-22T18:23:42.537967598Z"
     },
     "ghash/intel-throughput-observation-replay": {
-      "checked_at": "2026-11-22T18:14:34.917426414Z",
-      "fingerprint": "e3104e0a639ec6ffa4f9db32ff106adcb1f4ab22fee63d5d6af1579091b2c9da",
+      "checked_at": "2026-11-23T16:38:24.853363885Z",
+      "fingerprint": "b8d5197f24b025ca7ff88a11cf58eefa2d12429500708100c0ec68b360b0f207",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint e3104e0a639ec6ffa4f9db32ff106adcb1f4ab22fee63d5d6af1579091b2c9da",
-      "performed_at": "2026-11-22T18:14:34.448782391Z",
-      "last_success": "2026-11-22T18:14:34.448782391Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint b8d5197f24b025ca7ff88a11cf58eefa2d12429500708100c0ec68b360b0f207",
+      "performed_at": "2026-11-23T16:38:24.434841454Z",
+      "last_success": "2026-11-23T16:38:24.434841454Z"
     },
     "ghash/linked-timing-code-replay": {
       "checked_at": "2026-11-22T19:17:06.959881264Z",
@@ -47253,293 +48462,302 @@
       "performed_at": "2026-11-22T19:17:06.514588882Z",
       "last_success": "2026-11-22T19:17:06.514588882Z"
     },
-    "ghash/miri-lifecycle": {
-      "checked_at": "2026-11-23T15:29:45.202052656Z",
-      "fingerprint": "f1fa3e5c6bf0dcabc164d5570af6b205ff505effd0e38f7427a6b0d9279b413f",
+    "ghash/mid-update-retirement": {
+      "checked_at": "2026-11-23T16:35:33.631543271Z",
+      "fingerprint": "26ca5c2ad5d9402d143789b9551c7df181755caa8ab8696118a0775f6dddd97c",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint f1fa3e5c6bf0dcabc164d5570af6b205ff505effd0e38f7427a6b0d9279b413f",
-      "performed_at": "2026-11-23T15:29:43.284836216Z",
-      "last_success": "2026-11-23T15:29:43.284836216Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 26ca5c2ad5d9402d143789b9551c7df181755caa8ab8696118a0775f6dddd97c",
+      "performed_at": "2026-11-23T16:35:30.808640114Z",
+      "last_success": "2026-11-23T16:35:30.808640114Z"
+    },
+    "ghash/miri-lifecycle": {
+      "checked_at": "2026-11-23T16:38:02.902013732Z",
+      "fingerprint": "d32cfee34805eb7bcb8126a20942b32a01eb4ebfbe74a7f4b4df95b65d403602",
+      "result": "passed",
+      "freshness": "Up to date",
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint d32cfee34805eb7bcb8126a20942b32a01eb4ebfbe74a7f4b4df95b65d403602",
+      "performed_at": "2026-11-23T16:38:01.985242309Z",
+      "last_success": "2026-11-23T16:38:01.985242309Z"
     },
     "ghash/packaged-candidates": {
-      "checked_at": "2026-11-23T15:28:50.535858696Z",
-      "fingerprint": "0a81b5b199fce822c7ef9faecc747e950dd9ae38d6409952d4a867fe54397854",
+      "checked_at": "2026-11-23T16:36:44.393038762Z",
+      "fingerprint": "bfeb4cf31a31251736529d7c587d5a15df1a2ea394380ff6383b7d30f84f57ee",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 0a81b5b199fce822c7ef9faecc747e950dd9ae38d6409952d4a867fe54397854",
-      "performed_at": "2026-11-23T15:28:50.029645991Z",
-      "last_success": "2026-11-23T15:28:50.029645991Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint bfeb4cf31a31251736529d7c587d5a15df1a2ea394380ff6383b7d30f84f57ee",
+      "performed_at": "2026-11-23T16:36:43.907956986Z",
+      "last_success": "2026-11-23T16:36:43.907956986Z"
     },
     "ghash/packaged-pmull-runtime": {
-      "checked_at": "2026-11-23T15:28:30.431538553Z",
-      "fingerprint": "1b50ef451f06cac8575a5d20052c08ae0f5de02ced081c5aeaef7a8255ec3761",
+      "checked_at": "2026-11-23T16:36:16.842894647Z",
+      "fingerprint": "a09d400565881d8281387cb86e524f424c559d7439dbf48e964c07b627fb0bf0",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 1b50ef451f06cac8575a5d20052c08ae0f5de02ced081c5aeaef7a8255ec3761",
-      "performed_at": "2026-11-23T15:28:29.939788628Z",
-      "last_success": "2026-11-23T15:28:29.939788628Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint a09d400565881d8281387cb86e524f424c559d7439dbf48e964c07b627fb0bf0",
+      "performed_at": "2026-11-23T16:36:16.338552549Z",
+      "last_success": "2026-11-23T16:36:16.338552549Z"
     },
     "ghash/packaged-public-api": {
-      "checked_at": "2026-11-23T15:27:44.176983594Z",
-      "fingerprint": "175e21faf1154b4f6ef9a8ba3d27ede12e3f1709740201374078407ca1ea159a",
+      "checked_at": "2026-11-23T16:35:29.266404204Z",
+      "fingerprint": "2b28752e759f43a564b1470c8db01b8610a358d95ed34e54325ad3be6bde1225",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 175e21faf1154b4f6ef9a8ba3d27ede12e3f1709740201374078407ca1ea159a",
-      "performed_at": "2026-11-23T15:27:43.653681855Z",
-      "last_success": "2026-11-23T15:27:43.653681855Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 2b28752e759f43a564b1470c8db01b8610a358d95ed34e54325ad3be6bde1225",
+      "performed_at": "2026-11-23T16:35:26.705546229Z",
+      "last_success": "2026-11-23T16:35:26.705546229Z"
     },
     "ghash/packaged-rv64-runtime": {
-      "checked_at": "2026-11-23T15:28:14.779458559Z",
-      "fingerprint": "4c5a9b6b60d691af1fd6c070d480eb15b4f429b08b5b32dc8dec2519d72f8e49",
+      "checked_at": "2026-11-23T16:36:02.747819512Z",
+      "fingerprint": "b0fa0d2b18176e5fa91d492f6da1b48ee8cad5a728280ba13527d67b98f07a75",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 4c5a9b6b60d691af1fd6c070d480eb15b4f429b08b5b32dc8dec2519d72f8e49",
-      "performed_at": "2026-11-23T15:28:14.283699656Z",
-      "last_success": "2026-11-23T15:28:14.283699656Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint b0fa0d2b18176e5fa91d492f6da1b48ee8cad5a728280ba13527d67b98f07a75",
+      "performed_at": "2026-11-23T16:36:02.256869535Z",
+      "last_success": "2026-11-23T16:36:02.256869535Z"
     },
     "ghash/packaged-x86-runtime": {
-      "checked_at": "2026-11-23T15:27:59.523595135Z",
-      "fingerprint": "2e20fe15ba6a4bacb3f81867d5d6a23be15cb818bffac0fb8abc87338370649c",
+      "checked_at": "2026-11-23T16:35:49.418955015Z",
+      "fingerprint": "e8eb5fc93800b639fecb85b36e167596a0c2ac2396f0f4995592c180a25cdca0",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 2e20fe15ba6a4bacb3f81867d5d6a23be15cb818bffac0fb8abc87338370649c",
-      "performed_at": "2026-11-23T15:27:58.991863615Z",
-      "last_success": "2026-11-23T15:27:58.991863615Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint e8eb5fc93800b639fecb85b36e167596a0c2ac2396f0f4995592c180a25cdca0",
+      "performed_at": "2026-11-23T16:35:48.914960031Z",
+      "last_success": "2026-11-23T16:35:48.914960031Z"
     },
     "ghash/pclmul-candidate-latest": {
-      "checked_at": "2026-11-23T15:28:56.117930444Z",
-      "fingerprint": "3ec2e32130feeeb4b6cde1590eaa473f401154f84b0df1e67b82d22d70931b38",
+      "checked_at": "2026-11-23T16:33:56.201385139Z",
+      "fingerprint": "becc82fc87c7d5ca97afcc793a336136678b2f07446ab1d997d45844207ae6eb",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 3ec2e32130feeeb4b6cde1590eaa473f401154f84b0df1e67b82d22d70931b38",
-      "performed_at": "2026-11-23T15:28:55.649858378Z",
-      "last_success": "2026-11-23T15:28:55.649858378Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint becc82fc87c7d5ca97afcc793a336136678b2f07446ab1d997d45844207ae6eb",
+      "performed_at": "2026-11-23T16:33:55.720024694Z",
+      "last_success": "2026-11-23T16:33:55.720024694Z"
     },
     "ghash/pclmul-candidate-msrv": {
-      "checked_at": "2026-11-23T15:28:54.334230012Z",
-      "fingerprint": "13c6a34aecc0fbf5e477ef7eea9e63442cc8f0d54e6bac490bac2a8b6a718f44",
+      "checked_at": "2026-11-23T16:33:50.297172515Z",
+      "fingerprint": "d65f3ddaa18d62067f49e33269bc9bef8b0bb88196f3e6ed8a082a0511884ec0",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 13c6a34aecc0fbf5e477ef7eea9e63442cc8f0d54e6bac490bac2a8b6a718f44",
-      "performed_at": "2026-11-23T15:28:53.865992855Z",
-      "last_success": "2026-11-23T15:28:53.865992855Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint d65f3ddaa18d62067f49e33269bc9bef8b0bb88196f3e6ed8a082a0511884ec0",
+      "performed_at": "2026-11-23T16:33:49.801991082Z",
+      "last_success": "2026-11-23T16:33:49.801991082Z"
     },
     "ghash/pclmul-incremental-latest": {
-      "checked_at": "2026-11-23T15:29:31.516685092Z",
-      "fingerprint": "93427a21ae87a7e95e5b7a72a5303db0744fc5bf2c85fbe145d4c40647a853bc",
+      "checked_at": "2026-11-23T16:37:41.077581307Z",
+      "fingerprint": "65fe0ff73460d756a8e93152d88f1bc7a2b3eb05cef49a24934c6921fb515fb6",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 93427a21ae87a7e95e5b7a72a5303db0744fc5bf2c85fbe145d4c40647a853bc",
-      "performed_at": "2026-11-23T15:29:31.045463106Z",
-      "last_success": "2026-11-23T15:29:31.045463106Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 65fe0ff73460d756a8e93152d88f1bc7a2b3eb05cef49a24934c6921fb515fb6",
+      "performed_at": "2026-11-23T16:37:40.612312067Z",
+      "last_success": "2026-11-23T16:37:40.612312067Z"
     },
     "ghash/pclmul-incremental-msrv": {
-      "checked_at": "2026-11-23T15:29:29.789223393Z",
-      "fingerprint": "a472818932a69d83ba7845a081de4645854eb45099b756726060b2309d0d4f01",
+      "checked_at": "2026-11-23T16:37:35.092767237Z",
+      "fingerprint": "f7b7aad9ead15750feeab04f389aacdec0a847a65249c937ad6c46cf57bc63d5",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint a472818932a69d83ba7845a081de4645854eb45099b756726060b2309d0d4f01",
-      "performed_at": "2026-11-23T15:29:29.300169234Z",
-      "last_success": "2026-11-23T15:29:29.300169234Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint f7b7aad9ead15750feeab04f389aacdec0a847a65249c937ad6c46cf57bc63d5",
+      "performed_at": "2026-11-23T16:37:34.597134909Z",
+      "last_success": "2026-11-23T16:37:34.597134909Z"
     },
     "ghash/pclmul-incremental-qemu": {
-      "checked_at": "2026-11-23T15:29:33.254167597Z",
-      "fingerprint": "4f9a8879f26e943721d2dd853895d76ba771734a469a8f21b7c21716a6df8bfa",
+      "checked_at": "2026-11-23T16:37:47.049523196Z",
+      "fingerprint": "4baf6fbedaee701cee17e48a9799b7f07a6732f732d544d089c295d93200ded0",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 4f9a8879f26e943721d2dd853895d76ba771734a469a8f21b7c21716a6df8bfa",
-      "performed_at": "2026-11-23T15:29:32.805663814Z",
-      "last_success": "2026-11-23T15:29:32.805663814Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 4baf6fbedaee701cee17e48a9799b7f07a6732f732d544d089c295d93200ded0",
+      "performed_at": "2026-11-23T16:37:46.564634183Z",
+      "last_success": "2026-11-23T16:37:46.564634183Z"
     },
     "ghash/pclmul-scalar-aes-latest": {
-      "checked_at": "2026-11-23T15:29:17.203910924Z",
-      "fingerprint": "ffb8abcf442565775155dcccb2714e547e2cfc3b4e5264afd3bab7594dbad46e",
+      "checked_at": "2026-11-23T16:37:01.902875513Z",
+      "fingerprint": "d57a411a66c45c32b2b5a31744fe3f196217141f239be561ca64965bfaea13ec",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint ffb8abcf442565775155dcccb2714e547e2cfc3b4e5264afd3bab7594dbad46e",
-      "performed_at": "2026-11-23T15:29:12.926564586Z",
-      "last_success": "2026-11-23T15:29:12.926564586Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint d57a411a66c45c32b2b5a31744fe3f196217141f239be561ca64965bfaea13ec",
+      "performed_at": "2026-11-23T16:37:01.431509386Z",
+      "last_success": "2026-11-23T16:37:01.431509386Z"
     },
     "ghash/pclmul-scalar-aes-msrv": {
-      "checked_at": "2026-11-23T15:29:09.630429168Z",
-      "fingerprint": "f82423b23d26a6261bb6b4800298aeee4f9c301c79fb492754ac06b3532010e0",
+      "checked_at": "2026-11-23T16:36:55.81298497Z",
+      "fingerprint": "ed39ac9e2f4f7b311c43a407d29db9619a3262102732df7b3ef1a013828b288c",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint f82423b23d26a6261bb6b4800298aeee4f9c301c79fb492754ac06b3532010e0",
-      "performed_at": "2026-11-23T15:29:09.147448023Z",
-      "last_success": "2026-11-23T15:29:09.147448023Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint ed39ac9e2f4f7b311c43a407d29db9619a3262102732df7b3ef1a013828b288c",
+      "performed_at": "2026-11-23T16:36:55.330138932Z",
+      "last_success": "2026-11-23T16:36:55.330138932Z"
     },
     "ghash/pclmul-scalar-aes-qemu": {
-      "checked_at": "2026-11-23T15:29:22.038653854Z",
-      "fingerprint": "48e8df15e3d4bd99676071ef691170a692aa2393505b07ee46fb0ac3f3e4a711",
+      "checked_at": "2026-11-23T16:37:08.148753475Z",
+      "fingerprint": "21984d7491b7c0b1cb53f7fa723f70edfd7d2bc6fcff95c65cbcfc83ce1158e7",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 48e8df15e3d4bd99676071ef691170a692aa2393505b07ee46fb0ac3f3e4a711",
-      "performed_at": "2026-11-23T15:29:20.863978838Z",
-      "last_success": "2026-11-23T15:29:20.863978838Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 21984d7491b7c0b1cb53f7fa723f70edfd7d2bc6fcff95c65cbcfc83ce1158e7",
+      "performed_at": "2026-11-23T16:37:07.675051461Z",
+      "last_success": "2026-11-23T16:37:07.675051461Z"
     },
     "ghash/pclmul-timing-observation-replay": {
-      "checked_at": "2026-11-22T21:27:10.558865996Z",
-      "fingerprint": "7627be4a340a2405754b52c83e81318572757a29b23b50c1061f15dd79c685ed",
+      "checked_at": "2026-11-23T16:38:26.482222964Z",
+      "fingerprint": "4a9e849317705019598988abbad981d7e7d8d1b0b80ca894bf865481dc020bbe",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 7627be4a340a2405754b52c83e81318572757a29b23b50c1061f15dd79c685ed",
-      "performed_at": "2026-11-22T21:27:09.936544559Z",
-      "last_success": "2026-11-22T21:27:09.936544559Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 4a9e849317705019598988abbad981d7e7d8d1b0b80ca894bf865481dc020bbe",
+      "performed_at": "2026-11-23T16:38:26.059127815Z",
+      "last_success": "2026-11-23T16:38:26.059127815Z"
     },
     "ghash/pclmul-unavailable-qemu": {
-      "checked_at": "2026-11-23T15:29:35.073875262Z",
-      "fingerprint": "d567151aa47a917ecb918638774e5ad7b2248c6a774ffcb98748d4e927460a75",
+      "checked_at": "2026-11-23T16:37:52.611815097Z",
+      "fingerprint": "8ca7759ed7876a8417ac29ec0f9192bea23703ec2c3c1dd484f05ca13773cc98",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint d567151aa47a917ecb918638774e5ad7b2248c6a774ffcb98748d4e927460a75",
-      "performed_at": "2026-11-23T15:29:34.594241288Z",
-      "last_success": "2026-11-23T15:29:34.594241288Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 8ca7759ed7876a8417ac29ec0f9192bea23703ec2c3c1dd484f05ca13773cc98",
+      "performed_at": "2026-11-23T16:37:52.13802149Z",
+      "last_success": "2026-11-23T16:37:52.13802149Z"
     },
     "ghash/pmull-field-qemu-latest": {
-      "checked_at": "2026-11-23T15:28:59.676492006Z",
-      "fingerprint": "97d94d4d6c32b4771334845b95785d116aa1897448f7d218d2bb7318b63954d1",
+      "checked_at": "2026-11-23T16:34:08.727178671Z",
+      "fingerprint": "c4c6c044b9ba651a124c438fef970f7df0c846c01b44ceb23e99467a38574e03",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 97d94d4d6c32b4771334845b95785d116aa1897448f7d218d2bb7318b63954d1",
-      "performed_at": "2026-11-23T15:28:59.200685098Z",
-      "last_success": "2026-11-23T15:28:59.200685098Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint c4c6c044b9ba651a124c438fef970f7df0c846c01b44ceb23e99467a38574e03",
+      "performed_at": "2026-11-23T16:34:08.216827591Z",
+      "last_success": "2026-11-23T16:34:08.216827591Z"
     },
     "ghash/pmull-field-qemu-msrv": {
-      "checked_at": "2026-11-23T15:28:57.869346012Z",
-      "fingerprint": "36093bef56d24e135d4db65350b33ffc48b50aa78f9c832d18f46802c8cc00bb",
+      "checked_at": "2026-11-23T16:34:03.023487893Z",
+      "fingerprint": "f0cb3a5efe82d2ade820db717ee8ef68379b66dd6120650b22d36f45feb2b942",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 36093bef56d24e135d4db65350b33ffc48b50aa78f9c832d18f46802c8cc00bb",
-      "performed_at": "2026-11-23T15:28:57.398124136Z",
-      "last_success": "2026-11-23T15:28:57.398124136Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint f0cb3a5efe82d2ade820db717ee8ef68379b66dd6120650b22d36f45feb2b942",
+      "performed_at": "2026-11-23T16:34:01.895413619Z",
+      "last_success": "2026-11-23T16:34:01.895413619Z"
     },
     "ghash/pmull-incremental-qemu-denied": {
-      "checked_at": "2026-11-23T15:29:27.926809062Z",
-      "fingerprint": "b1bc33fbe71c2a0cb252037c77b5cc40151225381dd7ab891bd0cfaaae861290",
+      "checked_at": "2026-11-23T16:37:28.696759782Z",
+      "fingerprint": "1c32b217aabeab0a5a2d9229e7395481a1c7b5e5149f3c9674d5b9b479cfa4c6",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint b1bc33fbe71c2a0cb252037c77b5cc40151225381dd7ab891bd0cfaaae861290",
-      "performed_at": "2026-11-23T15:29:27.411245462Z",
-      "last_success": "2026-11-23T15:29:27.411245462Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 1c32b217aabeab0a5a2d9229e7395481a1c7b5e5149f3c9674d5b9b479cfa4c6",
+      "performed_at": "2026-11-23T16:37:28.176442577Z",
+      "last_success": "2026-11-23T16:37:28.176442577Z"
     },
     "ghash/pmull-incremental-qemu-latest": {
-      "checked_at": "2026-11-23T15:29:25.963404581Z",
-      "fingerprint": "aecca037cf8797a873a4397af03f07dcfa0c5be12053580c0eb5e03a60e7fe59",
+      "checked_at": "2026-11-23T16:37:22.408321081Z",
+      "fingerprint": "a6b688e06032fcc89429ef95f623668234693ac68968eb08ef8e2c5add6de07f",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint aecca037cf8797a873a4397af03f07dcfa0c5be12053580c0eb5e03a60e7fe59",
-      "performed_at": "2026-11-23T15:29:25.467212182Z",
-      "last_success": "2026-11-23T15:29:25.467212182Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint a6b688e06032fcc89429ef95f623668234693ac68968eb08ef8e2c5add6de07f",
+      "performed_at": "2026-11-23T16:37:21.911016165Z",
+      "last_success": "2026-11-23T16:37:21.911016165Z"
     },
     "ghash/pmull-incremental-qemu-msrv": {
-      "checked_at": "2026-11-23T15:29:23.976362115Z",
-      "fingerprint": "78cd646d7d0317148417f1ad588b1b519a1e6b2be1754c2eb2724ca205527057",
+      "checked_at": "2026-11-23T16:37:15.755470449Z",
+      "fingerprint": "45f366624ec03de37c808215b525e852e945550fe756652355f6783241118488",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 78cd646d7d0317148417f1ad588b1b519a1e6b2be1754c2eb2724ca205527057",
-      "performed_at": "2026-11-23T15:29:23.480592312Z",
-      "last_success": "2026-11-23T15:29:23.480592312Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 45f366624ec03de37c808215b525e852e945550fe756652355f6783241118488",
+      "performed_at": "2026-11-23T16:37:15.226531364Z",
+      "last_success": "2026-11-23T16:37:15.226531364Z"
     },
     "ghash/pmull-timing-observation-replay": {
-      "checked_at": "2026-11-22T21:27:12.209958528Z",
-      "fingerprint": "e4dd67e600f81ec76e0a983512f34aafa84666efd0fa965c02a0506c62fb051c",
+      "checked_at": "2026-11-23T16:38:28.161659142Z",
+      "fingerprint": "7adae87e494f61d2e8abc1772120ed22c115763922957ffce37302da1d856a7e",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint e4dd67e600f81ec76e0a983512f34aafa84666efd0fa965c02a0506c62fb051c",
-      "performed_at": "2026-11-22T21:27:11.769724476Z",
-      "last_success": "2026-11-22T21:27:11.769724476Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 7adae87e494f61d2e8abc1772120ed22c115763922957ffce37302da1d856a7e",
+      "performed_at": "2026-11-23T16:38:27.740247993Z",
+      "last_success": "2026-11-23T16:38:27.740247993Z"
     },
     "ghash/portable-field": {
-      "checked_at": "2026-11-23T15:28:52.5934615Z",
-      "fingerprint": "4a6204b82fd4620d95805d1174f194a4ecb9a9d69636aa289c5f4b69ce9a0af6",
+      "checked_at": "2026-11-23T16:36:46.551898635Z",
+      "fingerprint": "43a2affcabc7226e7ac36cf525d514c1e6c7bec3407e58ae066f1c17d0917422",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 4a6204b82fd4620d95805d1174f194a4ecb9a9d69636aa289c5f4b69ce9a0af6",
-      "performed_at": "2026-11-23T15:28:52.120786538Z",
-      "last_success": "2026-11-23T15:28:52.120786538Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 43a2affcabc7226e7ac36cf525d514c1e6c7bec3407e58ae066f1c17d0917422",
+      "performed_at": "2026-11-23T16:36:46.052574178Z",
+      "last_success": "2026-11-23T16:36:46.052574178Z"
     },
     "ghash/raw-feature-gate": {
-      "checked_at": "2026-11-23T15:29:40.959678672Z",
-      "fingerprint": "0c48837647070f6ca7699098c2d4f7536c2d712c4b53d5c44ac0a5f5cbf424b7",
+      "checked_at": "2026-11-23T16:37:59.218726128Z",
+      "fingerprint": "e400d4060b5a8c565ae2607bcf80d5542d355af4842967e0f9ea83da3ae0e762",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 0c48837647070f6ca7699098c2d4f7536c2d712c4b53d5c44ac0a5f5cbf424b7",
-      "performed_at": "2026-11-23T15:29:40.484175907Z",
-      "last_success": "2026-11-23T15:29:40.484175907Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint e400d4060b5a8c565ae2607bcf80d5542d355af4842967e0f9ea83da3ae0e762",
+      "performed_at": "2026-11-23T16:37:58.688621018Z",
+      "last_success": "2026-11-23T16:37:58.688621018Z"
     },
     "ghash/rv64-branch-observation-replay": {
-      "checked_at": "2026-11-22T21:27:15.403845184Z",
-      "fingerprint": "924e021f66383194d33b037f8e797a852cf91363477d3be250fae15efcb99422",
+      "checked_at": "2026-11-23T16:38:31.355365459Z",
+      "fingerprint": "7dbd2a34a3af4227628297e67b82968a6cefd5a3d4a733d527107a3188aefa49",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 924e021f66383194d33b037f8e797a852cf91363477d3be250fae15efcb99422",
-      "performed_at": "2026-11-22T21:27:14.989030548Z",
-      "last_success": "2026-11-22T21:27:14.989030548Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 7dbd2a34a3af4227628297e67b82968a6cefd5a3d4a733d527107a3188aefa49",
+      "performed_at": "2026-11-23T16:38:30.933131301Z",
+      "last_success": "2026-11-23T16:38:30.933131301Z"
     },
     "ghash/rv64-cache-observation-replay": {
-      "checked_at": "2026-11-22T21:27:17.006765225Z",
-      "fingerprint": "daec1f5f58e7c8783fa9656b635a6dedc3f8ea64aac7b90d49e0feef609eae95",
+      "checked_at": "2026-11-23T16:38:32.947126923Z",
+      "fingerprint": "100f5b438d7243c262bc39330bbca1fa856aeeb47eeae89c9fb8e39d995135f7",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint daec1f5f58e7c8783fa9656b635a6dedc3f8ea64aac7b90d49e0feef609eae95",
-      "performed_at": "2026-11-22T21:27:16.54962271Z",
-      "last_success": "2026-11-22T21:27:16.54962271Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 100f5b438d7243c262bc39330bbca1fa856aeeb47eeae89c9fb8e39d995135f7",
+      "performed_at": "2026-11-23T16:38:32.522539766Z",
+      "last_success": "2026-11-23T16:38:32.522539766Z"
     },
     "ghash/rv64-field-qemu-latest": {
-      "checked_at": "2026-11-23T15:29:03.547938163Z",
-      "fingerprint": "920942ea06696b8d0aa895d2328defe8088e044895020a1d1bfa6edb5cc2a098",
+      "checked_at": "2026-11-23T16:34:19.634678566Z",
+      "fingerprint": "3ebb1f969cc5f033015d210f74e7a703a9030af965c4dfa03ee3fbc73303cc28",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 920942ea06696b8d0aa895d2328defe8088e044895020a1d1bfa6edb5cc2a098",
-      "performed_at": "2026-11-23T15:29:03.022086463Z",
-      "last_success": "2026-11-23T15:29:03.022086463Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 3ebb1f969cc5f033015d210f74e7a703a9030af965c4dfa03ee3fbc73303cc28",
+      "performed_at": "2026-11-23T16:34:19.175829166Z",
+      "last_success": "2026-11-23T16:34:19.175829166Z"
     },
     "ghash/rv64-field-qemu-msrv": {
-      "checked_at": "2026-11-23T15:29:01.58681646Z",
-      "fingerprint": "37a14edf858e55518b7345855748dc942746ca333808fd2c6028137bea2861e5",
+      "checked_at": "2026-11-23T16:34:14.295365076Z",
+      "fingerprint": "eb536edf0b44acf88ca1c2bb69c06aa972dab679b14b011bf9275d0feaa19ddd",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 37a14edf858e55518b7345855748dc942746ca333808fd2c6028137bea2861e5",
-      "performed_at": "2026-11-23T15:29:01.055840021Z",
-      "last_success": "2026-11-23T15:29:01.055840021Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint eb536edf0b44acf88ca1c2bb69c06aa972dab679b14b011bf9275d0feaa19ddd",
+      "performed_at": "2026-11-23T16:34:13.849299572Z",
+      "last_success": "2026-11-23T16:34:13.849299572Z"
     },
     "ghash/rv64-incremental-qemu-latest": {
-      "checked_at": "2026-11-23T15:29:07.802291021Z",
-      "fingerprint": "b11ec01da4996f8d15a35cdccb289790c591326ea6a2107e7fa8d326a293e206",
+      "checked_at": "2026-11-23T16:36:49.150994894Z",
+      "fingerprint": "1a2a535b542834714cb2fffc2b3760431f87a8b563847cfaf7cad79a88985761",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint b11ec01da4996f8d15a35cdccb289790c591326ea6a2107e7fa8d326a293e206",
-      "performed_at": "2026-11-23T15:29:07.267177793Z",
-      "last_success": "2026-11-23T15:29:07.267177793Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 1a2a535b542834714cb2fffc2b3760431f87a8b563847cfaf7cad79a88985761",
+      "performed_at": "2026-11-23T16:36:48.652763865Z",
+      "last_success": "2026-11-23T16:36:48.652763865Z"
     },
     "ghash/rv64-incremental-qemu-msrv": {
-      "checked_at": "2026-11-23T15:29:05.643046751Z",
-      "fingerprint": "1d7852450f21775adc66b017780c0ef4fb1cdb5084743ed8da23be8e9dcfc611",
+      "checked_at": "2026-11-23T16:34:29.78005115Z",
+      "fingerprint": "25fb6f37de081fe7644aaf51db824e25a018fa87ed499d71c59e4aba47425a84",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 1d7852450f21775adc66b017780c0ef4fb1cdb5084743ed8da23be8e9dcfc611",
-      "performed_at": "2026-11-23T15:29:05.117395669Z",
-      "last_success": "2026-11-23T15:29:05.117395669Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 25fb6f37de081fe7644aaf51db824e25a018fa87ed499d71c59e4aba47425a84",
+      "performed_at": "2026-11-23T16:34:29.280176391Z",
+      "last_success": "2026-11-23T16:34:29.280176391Z"
     },
     "ghash/rv64-throughput-observation-replay": {
-      "checked_at": "2026-11-22T18:14:33.306914819Z",
-      "fingerprint": "9c7cde16b377fa318f3139fe2a5ee9db1a6a4ae1ac4897399a84b1be567d3c31",
+      "checked_at": "2026-11-23T16:38:23.266005089Z",
+      "fingerprint": "2d574a348d4659dbe33586cd1177c531340a170ee36f15d8b61f5e0718b11ab7",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 9c7cde16b377fa318f3139fe2a5ee9db1a6a4ae1ac4897399a84b1be567d3c31",
-      "performed_at": "2026-11-22T18:14:32.811532094Z",
-      "last_success": "2026-11-22T18:14:32.811532094Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 2d574a348d4659dbe33586cd1177c531340a170ee36f15d8b61f5e0718b11ab7",
+      "performed_at": "2026-11-23T16:38:22.805138828Z",
+      "last_success": "2026-11-23T16:38:22.805138828Z"
     },
     "ghash/rv64-timing-observation-replay": {
-      "checked_at": "2026-11-22T21:27:13.84773506Z",
-      "fingerprint": "52a86f894015c162cd358a4160a7cb32263f65d20336d2c50646715db9a41766",
+      "checked_at": "2026-11-23T16:38:29.762088543Z",
+      "fingerprint": "054a97579d4bca942d1e8b829956fd1b54a919f75289757f1f258100854616e7",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint 52a86f894015c162cd358a4160a7cb32263f65d20336d2c50646715db9a41766",
-      "performed_at": "2026-11-22T21:27:13.368814786Z",
-      "last_success": "2026-11-22T21:27:13.368814786Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint 054a97579d4bca942d1e8b829956fd1b54a919f75289757f1f258100854616e7",
+      "performed_at": "2026-11-23T16:38:29.340887209Z",
+      "last_success": "2026-11-23T16:38:29.340887209Z"
     },
     "ghash/rv64-vector-capability-qemu": {
       "checked_at": "2026-11-22T19:10:33.387200383Z",
@@ -47551,13 +48769,13 @@
       "last_success": "2026-11-22T19:10:32.848133059Z"
     },
     "ghash/x86-update-codegen": {
-      "checked_at": "2026-11-23T15:29:50.982339374Z",
-      "fingerprint": "f4938754833b0dd93ac04b23c0e19926c5ba4dbf36369c1f15a559b61a77c9c5",
+      "checked_at": "2026-11-23T16:38:09.157770271Z",
+      "fingerprint": "b090821b65acbcd552e39a36c65197381b5ae3921dcde635342f512aac9c2ab9",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint f4938754833b0dd93ac04b23c0e19926c5ba4dbf36369c1f15a559b61a77c9c5",
-      "performed_at": "2026-11-23T15:29:50.517499083Z",
-      "last_success": "2026-11-23T15:29:50.517499083Z"
+      "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint b090821b65acbcd552e39a36c65197381b5ae3921dcde635342f512aac9c2ab9",
+      "performed_at": "2026-11-23T16:38:08.687471253Z",
+      "last_success": "2026-11-23T16:38:08.687471253Z"
     },
     "hkdf/asan-derivation": {
       "checked_at": "2026-11-03T14:14:59.745631804Z",

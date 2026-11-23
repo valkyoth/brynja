@@ -129,6 +129,10 @@ def check(consumer, compiler, dependency, versions, env):
     cmd = ['check', *flags, '--bin', 'probe', '--message-format=json']
     try:
         pairs = [(positive, positive.replace('finish(&mut o)', 'finish(&mut w)'), 'E0499')]
+        exhaustive = ('use brynja_crypto::ghash::Error; fn classify(e: Error) {match e {'
+                      'Error::Storage(_) | Error::LimitExceeded | Error::PartialBlock => (),'
+                      '}} fn main() {}')
+        pairs.append((exhaustive.replace('}}', '_ => (),}}'), exhaustive, 'E0004'))
         for owner in ('Ghash', 'SecretHash'):
             for bound in ('Send', 'Sync', 'Clone', 'Copy', 'core::fmt::Debug'):
                 negative = (f'use brynja_crypto::ghash::{owner}; fn require<T:{bound}>() {{}} '

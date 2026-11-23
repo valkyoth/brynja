@@ -12,7 +12,7 @@ TARGETS = {'pclmul': 'x86_64-unknown-linux-gnu', 'pmull': 'aarch64-unknown-linux
 
 
 def target_env(base, kernel, denied):
-    env = dict(base, RUSTFLAGS='--cfg brynja_ghash_' + kernel + '_evidence')
+    env = dict(base, RUSTFLAGS='--cfg brynja_ghash_' + kernel + '_evidence', BRYNJA_GHASH_EVIDENCE='1')
     prefix = 'CARGO_TARGET_' + TARGETS[kernel].upper().replace('-', '_')
     if kernel == 'pclmul' and denied:
         env[prefix + '_RUNNER'] = 'qemu-x86_64 -cpu max,+aes,-pclmulqdq'
@@ -44,6 +44,16 @@ def check_route(root, dependency, versions, base):
         graph = json.loads(run(version, base, 'metadata', *flags, '--format-version', '1'))
         A['check_graph'](graph, consumer, root / 'unpacked', versions, dependency, candidate=True)
         for kernel, target in TARGETS.items():
+            cmd = ['cargo', '+' + version, 'check', *flags, '--lib', '--target', target]
+            for value in (None, '0'):
+                env = target_env(base, kernel, False)
+                if value is None:
+                    del env['BRYNJA_GHASH_EVIDENCE']
+                else:
+                    env['BRYNJA_GHASH_EVIDENCE'] = value
+                result = pkg.cargo_result(cmd, consumer, env, timeout=120)
+                if result.returncode == 0 or 'forced GHASH evidence requires BRYNJA_GHASH_EVIDENCE=1' not in result.stderr:
+                    raise ValueError('unexpected diagnostic for unacknowledged forced GHASH build')
             for denied in (False, True):
                 env = target_env(base, kernel, denied)
                 suites = [('denied', 1)] if denied else [('active', 1), ('nist', 3), ('ghash_lifecycle', 4),

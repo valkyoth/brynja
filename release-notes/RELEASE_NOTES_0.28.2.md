@@ -16,6 +16,8 @@ native, emulated, and archive-consumer coverage and preserves the inconclusive
 AWS Arm timing control. This is not side-channel qualification. The Rust
 minimum remains 1.90.0 and the tested upper endpoint is 1.100.0.
 
-Internal milestone, zero packages selected for upload. Scoped pentest against
-the signed v0.28.1 tag, final checks, and exact-commit GitHub/CodeQL approval
-are pending. No new timing campaign is required by the release gate.
+Internal milestone, zero packages selected for upload. The initial [scoped
+pentest and dispositions](../docs/assurance/ghash-acceleration-review.md)
+cover v0.28.1 through `3373a671`. A retest of the fixes, final checks and
+exact-commit GitHub/CodeQL approval are pending. No new timing campaign is
+required by the release gate.

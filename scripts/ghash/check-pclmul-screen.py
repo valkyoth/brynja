@@ -73,7 +73,7 @@ def prepare(bundle, host="amd", source_base=None, binary="brynja-ghash-timing"):
     with tempfile.TemporaryDirectory() as tmp:
         for ver in VERSIONS:
             env = environment(Path(tmp) / ver)
-            env.update(RUSTUP_AUTO_INSTALL="0", RUSTFLAGS=flags)
+            env.update(RUSTUP_AUTO_INSTALL="0", RUSTFLAGS=flags, BRYNJA_GHASH_EVIDENCE="1")
             if host == "aws":
                 env["CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER"] = "rust-lld"
             elif host == "x60":

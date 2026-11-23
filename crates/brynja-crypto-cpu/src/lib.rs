@@ -4,8 +4,9 @@
 //! x86_64 AVX2 and AArch64 SHA3. Execution requires complete static
 //! target-feature proof or, where separately admitted, reviewed runtime
 //! attestation followed by a direct startup known-answer test. It performs no
-//! automatic dispatch, allocation, I/O, global registration, or protocol work.
-//! The opt-in hosted GHASH constructor probes x86 CPU features on Linux.
+//! implicit backend selection, allocation, global registration, or protocol work.
+//! Explicit hosted GHASH probing uses platform feature discovery on Linux
+//! x86_64/RV64 and little-endian Linux/macOS AArch64 (which may query the OS).
 
 #![no_std]
 

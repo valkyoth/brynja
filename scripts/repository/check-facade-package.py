@@ -117,7 +117,8 @@ def graph(document, features, *, hosted=False, threaded=False):
             'host or legacy package reachable')
     require(not any('conformance-testing' in values for values in active.values()),
             'evidence-only conformance feature reachable')
-    expected_cpu = any(f != 'general-sha512-t' for f in features)
+    cpu_free = {'general-sha512-t', 'hazmat-ghash', 'hazmat-aes-block', 'external-key-provider'}
+    expected_cpu = bool(set(features) - cpu_free)
     require(('brynja-crypto-cpu' in active) == expected_cpu, 'CPU opt-in/default isolation')
     for feature in features:
         if feature in policy.LEAVES:

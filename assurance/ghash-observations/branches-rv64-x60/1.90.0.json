@@ -1,0 +1,84 @@
+{
+  "target": "spacemit,x60",
+  "cpu": 0,
+  "host": "Linux-6.6.63-riscv64-with-glibc2.41",
+  "perf": "perf version 6.6.63.gd5b2ef2c6af4",
+  "utc": "2026-11-22T18:49:55.476130+00:00",
+  "raw_sha256": "c34cb1a84a1bffcf4486b64be812da461a6e6cba13558b90b402fc86d3519431",
+  "build_sha256": "75a341e296ca755b06caab198af66383bd35127017148cce410ab5a026455d78",
+  "binary_sha256": "989c29e5bdacab19fbf070fa076a4e656ddca87ee50f8d50dbed3d9296d6a13e",
+  "results": {
+    "empty": [
+      [
+        18,
+        10
+      ],
+      [
+        12,
+        7
+      ]
+    ],
+    "campaigns": {
+      "identical": {
+        "branches:u": {
+          "medians": [
+            167954.0,
+            167948.0
+          ],
+          "mean_difference": 2.25,
+          "paired_t": 1.6947980485980962,
+          "alarm": false
+        },
+        "branch-misses:u": {
+          "medians": [
+            19.0,
+            18.0
+          ],
+          "mean_difference": 1.1875,
+          "paired_t": 0.7841248767983253,
+          "alarm": false
+        }
+      },
+      "subkey": {
+        "branches:u": {
+          "medians": [
+            167948.0,
+            167950.5
+          ],
+          "mean_difference": -2.25,
+          "paired_t": -1.8500095165343353,
+          "alarm": false
+        },
+        "branch-misses:u": {
+          "medians": [
+            19.5,
+            20.5
+          ],
+          "mean_difference": 0.125,
+          "paired_t": 0.12775793215069314,
+          "alarm": false
+        }
+      },
+      "block": {
+        "branches:u": {
+          "medians": [
+            167948.0,
+            167948.0
+          ],
+          "mean_difference": -0.375,
+          "paired_t": -0.32387513781564786,
+          "alarm": false
+        },
+        "branch-misses:u": {
+          "medians": [
+            19.5,
+            19.5
+          ],
+          "mean_difference": 0.875,
+          "paired_t": 0.4650162046735604,
+          "alarm": false
+        }
+      }
+    }
+  }
+}

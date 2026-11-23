@@ -19,7 +19,7 @@ FROZEN = {
 }
 
 
-def check_graph(metadata, consumer, archives, versions, dependency):
+def check_graph(metadata, consumer, archives, versions, dependency, *, candidate=False, runtime=False):
     nodes = {n['id']: n for n in metadata['resolve']['nodes']}
     ids = {p['id']: p['name'] for p in metadata['packages']}
     edges = [(e['name'], ids[e['pkg']]) for e in nodes[metadata['resolve']['root']]['deps']]
@@ -37,21 +37,33 @@ def check_graph(metadata, consumer, archives, versions, dependency):
             raise ValueError('dependency outside reviewed archive graph')
         features = set(nodes[p['id']]['features'])
         expected = {'hazmat-ghash'}
+        if candidate or runtime:
+            expected.add('ghash-runtime-execution' if runtime else 'cpu')
+            if name == 'brynja-crypto' and not any(
+                    ids[e['pkg']] == 'brynja-crypto-cpu' for e in nodes[p['id']]['deps']):
+                raise ValueError('missing candidate CPU dependency edge')
         if dependency == 'brynja' and name == 'brynja-crypto':
             if p['features'].get('default') != []:
                 raise ValueError('facade inherited a nonempty crypto default')
             expected.add('default')
         if name in ('brynja', 'brynja-crypto') and features != expected:
-            raise ValueError('expected only the raw GHASH opt-in')
+            raise ValueError('unexpected GHASH opt-in feature set')
         if name not in ('brynja', 'brynja-crypto'):
             allowed = {'default', 'general-sha512-t'} if name == 'brynja-hash-sha2' else {'default'}
+            if runtime and name == 'brynja-crypto-cpu':
+                if 'ghash-runtime-execution' not in features:
+                    raise ValueError('missing runtime kernel opt-in')
+                allowed.add('ghash-runtime-execution')
             if features - allowed:
                 raise ValueError('unexpected transitive feature')
-        if name.endswith(('-cpu', '-std')) or name.startswith('brynja-legacy'):
+        if ((name.endswith('-cpu') and not ((candidate or runtime) and name == 'brynja-crypto-cpu'))
+                or name.endswith('-std') or name.startswith('brynja-legacy')):
             raise ValueError('unexpected portable dependency')
         names.add(name)
     if not {dependency, 'brynja-crypto', 'brynja-core'} <= names:
         raise ValueError('incomplete portable graph')
+    if (candidate or runtime) and 'brynja-crypto-cpu' not in names:
+        raise ValueError('missing candidate CPU dependency')
 
 
 def prepare(root, dependency, versions):

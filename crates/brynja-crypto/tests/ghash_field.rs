@@ -5,6 +5,25 @@
 mod field;
 #[path = "ghash_vectors/nist.rs"]
 mod nist;
+#[cfg(brynja_ghash_pclmul_evidence)]
+#[path = "ghash_field/accelerated.rs"]
+mod pclmul;
+#[cfg(brynja_ghash_pmull_evidence)]
+#[path = "ghash_field/accelerated.rs"]
+mod pmull;
+#[cfg(brynja_ghash_rv64_evidence)]
+#[path = "ghash_field/accelerated.rs"]
+mod rv64;
+#[cfg(all(
+    any(
+        brynja_ghash_pclmul_evidence,
+        brynja_ghash_pmull_evidence,
+        brynja_ghash_rv64_evidence
+    ),
+    feature = "hazmat-aes-block"
+))]
+#[path = "ghash_field/scalar_aes.rs"]
+mod scalar_aes;
 use brynja_crypto::ghash::{Error, Ghash};
 
 #[test]

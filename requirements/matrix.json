@@ -1,6 +1,6 @@
 {
   "closure_policy_sha256": "d30b73ba07df3787297f3591bd467426c44983da5969e32b2dc7539508e5793e",
-  "domain_policy_sha256": "d7f1b3e947627ddb9f1573d8c6339c63e3599fd9a1b39a7820aa2729a5507027",
+  "domain_policy_sha256": "dc66ccdd1ccb3082cc51140f35c16d30977208054dda08936b2abba5abbaed4d",
   "policy_sha256": "9ca99baa1a7db272f816b4e60e67e468c8d9021e14205282210e27a17c7a50e9",
   "requirements": [
     {
@@ -1274,7 +1274,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "Portable development evidence covers NIST GHASH intermediates at every byte split, polynomial long-division comparisons, budget and lifecycle regressions, and a bounded x86-64 host screen. See docs/security-controls.md and docs/VERIFICATION_STATUS.md. These are not full-width arithmetic proofs, independent qualification or side-channel evidence for other targets. Packaged downstream acceptance belongs to v0.28.1.",
+      "evidence_gap": "Portable and packaged tests cover NIST intermediates, splits, field differentials and lifecycle. The v0.28.2 explicit PCLMUL, PMULL and scalar Zbc routes have separate native functional, linked-code and bounded timing observations. The AWS Arm identical-input control remains inconclusive. See docs/assurance/ghash-acceleration.md and docs/VERIFICATION_STATUS.md. No full-width proof, independent qualification, vector RISC-V implementation or whole-target timing guarantee is claimed.",
       "id": "BRY-REQ-CRYPTO-0006",
       "invariants": [
         "constant-time",
@@ -1288,7 +1288,7 @@
       "owner": "0.28.0",
       "profile": "crypto-encoding-pkix",
       "residual": "NIST has announced a future revision of SP 800-38D, so changed limits or constructions require explicit re-admission.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {

@@ -1,0 +1,27 @@
+{
+  "host": "intel",
+  "model": "Intel(R) Xeon(R) 6975P-C",
+  "cpu": 0,
+  "os": "Linux-7.0.0-1018-aws-x86_64-with-glibc2.43",
+  "utc": "2026-11-22T18:22:38.439482+00:00",
+  "build_sha256": "92d42f8e7c1aa6047d9da8aad486ad2d75b8b5f6707a7a9a5cf652e38bb8cf0a",
+  "binary_sha256": "327c82a44159ab20274d3337e76490555b2ec8e637857c07af5900177b7dd4d9",
+  "raw_sha256": "ae72e080e8accd88bdbf1aebec7186a9f3cdfb129f32bb77b1419ae0a399bd1b",
+  "results": {
+    "identical": {
+      "mean_difference_ns": 4.47802734375,
+      "paired_t": 0.4214962708162739,
+      "alarm": false
+    },
+    "subkey": {
+      "mean_difference_ns": 1.69677734375,
+      "paired_t": 0.18128950014222922,
+      "alarm": false
+    },
+    "block": {
+      "mean_difference_ns": -8.927734375,
+      "paired_t": -1.4439063783165953,
+      "alarm": false
+    }
+  }
+}

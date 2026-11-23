@@ -1,0 +1,37 @@
+{
+  "compiler": "rustc 1.100.0 (0ef1bc386 2026-11-09)\nbinary: rustc\ncommit-hash: 0ef1bc386059596dada8fb65b50425aab2ea637a\ncommit-date: 2026-11-09\nhost: x86_64-unknown-linux-gnu\nrelease: 1.100.0\nLLVM version: 23.1.5\n",
+  "binary_sha256": {
+    "portable": "e154f47fb90f610241be6248f57e742425a792e7ac1eb24db6e00251de3a952d",
+    "candidate": "4f668dcf2a768c06f7915134b5472fe6d54aedad0684d016f5877d8d81ba6087"
+  },
+  "target": "aarch64-unknown-linux-musl",
+  "base_commit": "3d3b6cef92ecbc843eb4b72e67702c66a55104af",
+  "host": "Linux-7.0.0-1018-aws-aarch64-with-glibc2.43",
+  "model": "Neoverse-V2",
+  "cpu": 0,
+  "utc": "2026-11-22T17:52:50.365472+00:00",
+  "build_sha256": "95098343dc648e058fc4d8e548717436ee9c1dd3ddadca016487b4582ca77811",
+  "raw_sha256": "0346ce2e1cc34713b6320a6584e4e7eee223ce286e22679ea81283b9e18fac65",
+  "results": {
+    "16/16": {
+      "portable_ns": 197.1927490234375,
+      "candidate_ns": 48.69189453125,
+      "speedup": 4.049806460023466
+    },
+    "1024/1024": {
+      "portable_ns": 11138.45703125,
+      "candidate_ns": 1393.42578125,
+      "speedup": 7.9935775418609145
+    },
+    "16384/16384": {
+      "portable_ns": 175001.4375,
+      "candidate_ns": 21790.5625,
+      "speedup": 8.031065627608282
+    },
+    "16384/13": {
+      "portable_ns": 182496.0,
+      "candidate_ns": 22883.875,
+      "speedup": 7.9748731366519
+    }
+  }
+}

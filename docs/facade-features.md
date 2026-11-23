@@ -12,13 +12,15 @@ cargo add brynja --path /path/to/brynja/crates/brynja --no-default-features --fe
 
 ## Feature selection
 
-All features below are default-off. They expose existing implementations, not
-new kernels. Every execution/batch feature also exposes the `cpu` namespace
-for explicit no_std authority construction; `general-sha512-t` alone does not.
+All features below are default-off. Hash execution/batch features expose the
+`cpu` namespace for explicit no_std authority construction; GHASH runtime
+selection does not expose that namespace.
 
 | Feature(s) on either facade | Namespace/API | Profile |
 | --- | --- | --- |
 | `cpu` | `cpu` | Low-level no_std authority and candidate inventory; not host detection |
+| `hazmat-ghash` | `ghash::Ghash::new` | Portable GHASH, not an authentication tag |
+| `ghash-runtime-execution` | `ghash::Ghash::new_with_backend` | Explicit prefer/require selection; `Ghash::new` remains portable. See the [tested routes and timing limitation](assurance/ghash-acceleration.md). |
 | `general-sha512-t` | `sha2::Sha512T`, `sha2::sha512_t` | General-t extension, including existing hardened portable APIs |
 | `sha2-static-execution`, `sha2-runtime-execution` | `sha2::execution` | Ordinary public-data single-stream execution |
 | `sha2-hardened-execution` | `sha2::hardened_execution` | Explicit secret-bearing execution |
@@ -49,7 +51,7 @@ archive/feature/ownership checks run with
 instruction bundles. See the [strict API](../crates/brynja-strict/README.md#hmac).
 
 Byte/bit input, streaming, fixed/XOF output and general-t types retain the leaf
-API contracts. A runtime feature permits importing a runtime authority; it
+API contracts. A hash runtime feature permits importing a runtime authority; it
 does not install a detector or select a backend automatically. The portable
 flat functions remain portable even if another dependency enables execution.
 

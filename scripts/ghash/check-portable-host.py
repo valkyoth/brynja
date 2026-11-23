@@ -15,7 +15,6 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts/hmac"))
-from hmac_verifiers import environment
 
 COMPILERS = ("1.90.0", "1.100.0")
 REVIEWED = {
@@ -69,6 +68,7 @@ def summarize(raw):
 
 
 def run(mode, output, compiler, tmp, cross_target=None):
+    from hmac_verifiers import environment
     env = environment(tmp)
     env.update(CARGO_NET_OFFLINE="true", RUSTUP_AUTO_INSTALL="0")
     def command(*args):

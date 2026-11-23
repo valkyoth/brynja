@@ -1,0 +1,39 @@
+{
+  "compiler": "rustc 1.100.0 (0ef1bc386 2026-11-09)\nbinary: rustc\ncommit-hash: 0ef1bc386059596dada8fb65b50425aab2ea637a\ncommit-date: 2026-11-09\nhost: x86_64-unknown-linux-gnu\nrelease: 1.100.0\nLLVM version: 23.1.5\n",
+  "binary_sha256": {
+    "portable": "4613d5f7f5e60cde61866b884f8bad0545d798fd35c15b3c9206d104d9611178",
+    "candidate": "337ae919e31f9cb174412219ca2bfd0f8e300bcf3fc904247186effe45decded"
+  },
+  "target": "x86_64-unknown-linux-gnu",
+  "base_commit": "3d3b6cef92ecbc843eb4b72e67702c66a55104af",
+  "host": "Linux-7.0.0-1018-aws-x86_64-with-glibc2.43",
+  "model": "Intel(R) Xeon(R) 6975P-C",
+  "cpu": 0,
+  "utc": "2026-11-22T18:13:41.194414+00:00",
+  "build_sha256": "b077c10a87682d5eb7ef22746e696d8a7aac20b5990648645f13e34a5e5e2738",
+  "raw_sha256": "051765c8eb5184941fc6ced390e0f4815489a9a79a65af4ba3143c98b7fc9a55",
+  "results": {
+    "16/16": {
+      "portable_ns": 169.3170166015625,
+      "candidate_ns": 42.8291015625,
+      "speedup": 3.953317030348633
+    },
+    "1024/1024": {
+      "portable_ns": 10126.3671875,
+      "candidate_ns": 1776.08984375,
+      "speedup": 5.701494900798146
+    },
+    "16384/16384": {
+      "portable_ns": 160136.875,
+      "candidate_ns": 28386.0625,
+      "speedup": 5.64139091147284
+    },
+    "16384/13": {
+      "portable_ns": 164866.5,
+      "candidate_ns": 28071.1875,
+      "speedup": 5.8731573076486345
+    }
+  },
+  "vendor": "GenuineIntel",
+  "pclmulqdq": true
+}

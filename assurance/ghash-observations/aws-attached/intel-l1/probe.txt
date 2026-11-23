@@ -1,0 +1,7 @@
+Events disabled
+Events enabled
+Events disabled
+75281266;;branches:u;40203540;100.00;;
+1415;;branch-misses:u;40203540;100.00;;
+108067762;;L1-dcache-loads:u;40203540;100.00;;
+11991;;L1-dcache-load-misses:u;40203540;100.00;;

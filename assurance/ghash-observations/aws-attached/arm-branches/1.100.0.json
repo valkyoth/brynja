@@ -1,0 +1,94 @@
+{
+  "host": "aws",
+  "profile": "branches",
+  "model": "Neoverse-V2",
+  "cpu": 0,
+  "os": "Linux-7.0.0-1018-aws-aarch64-with-glibc2.43",
+  "uid": 1000,
+  "perf": "perf version 7.0.14",
+  "utc": "2026-11-22T19:23:31.446688+00:00",
+  "raw_sha256": "675221697657733382520a8be35b6f9a79ff2ec71835af62340593e24f3b243d",
+  "build_sha256": "2f09d20b87c0a84413a3823778bb1b60640fdc9855be5b37a6196f27d07cbe15",
+  "binary_sha256": "187aba5212f781ca853d90390d8622f6f402446f7e4039fe7761c2a19e94619c",
+  "probe_sha256": "b14b991384564b5ca59b5352cb071a3482650e64417aca038a94ae6cb01b114e",
+  "results": {
+    "empty": [
+      [
+        29,
+        7
+      ],
+      [
+        29,
+        9
+      ]
+    ],
+    "campaigns": {
+      "identical": {
+        "branches:u": {
+          "medians": [
+            196637.0,
+            196637.0
+          ],
+          "mean_difference": 0,
+          "paired_t": 0,
+          "alarm": false,
+          "all_active_above_empty": true
+        },
+        "branch-misses:u": {
+          "medians": [
+            25.5,
+            26.5
+          ],
+          "mean_difference": 1,
+          "paired_t": 0.5332543385416191,
+          "alarm": false,
+          "all_active_above_empty": true
+        }
+      },
+      "subkey": {
+        "branches:u": {
+          "medians": [
+            196637.0,
+            196637.0
+          ],
+          "mean_difference": 0,
+          "paired_t": 0,
+          "alarm": false,
+          "all_active_above_empty": true
+        },
+        "branch-misses:u": {
+          "medians": [
+            27.0,
+            27.0
+          ],
+          "mean_difference": 1.25,
+          "paired_t": 0.6825236327899351,
+          "alarm": false,
+          "all_active_above_empty": true
+        }
+      },
+      "block": {
+        "branches:u": {
+          "medians": [
+            196637.0,
+            196637.0
+          ],
+          "mean_difference": 0,
+          "paired_t": 0,
+          "alarm": false,
+          "all_active_above_empty": true
+        },
+        "branch-misses:u": {
+          "medians": [
+            25.0,
+            26.0
+          ],
+          "mean_difference": -1.25,
+          "paired_t": -0.6630421204255293,
+          "alarm": false,
+          "all_active_above_empty": true
+        }
+      }
+    }
+  }
+}

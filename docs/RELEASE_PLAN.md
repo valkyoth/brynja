@@ -6839,7 +6839,7 @@ Exit criteria:
 
 ### v0.28.1 - GHASH Portable Public API Acceptance
 
-Status: in progress
+Status: released
 
 The [archive consumer](../assurance/ghash-public-api/README.md)
 can be replayed through the direct crate and facade. See the
@@ -6868,7 +6868,59 @@ Exit criteria:
 
 ### v0.28.2 - GHASH CPU Acceleration
 
-Status: planned
+Status: awaiting pentest
+
+The initial x86_64 PCLMULQDQ field product is connected to the incremental
+owner in forced evidence builds only. The little-endian AArch64 PMULL candidate
+also runs through that owner under QEMU, including startup health checks and
+scalar AES pairing at all three key widths. The same correctness suites
+passed natively on AWS Neoverse-V2 and Apple M2 Pro with both supported
+compiler endpoints. End-to-end throughput comparisons against portable GHASH
+are recorded on both compilers for AMD Ryzen 9 9950X3D and AWS Intel Xeon
+6975P-C (PCLMUL), AWS Neoverse-V2 and Apple M2 Pro (PMULL), and SpacemiT
+X60 (scalar Zbc, not vector). This completes the named-host throughput
+comparisons. The first accelerated x86 timing screen on AMD and Intel
+raised no alarms on either compiler. The first PMULL screen raised no alarms
+on Apple M2 Pro or on AWS Neoverse-V2 with Rust 1.90.0; the AWS Rust
+1.100.0 identical-input control alarmed, so that launch remains inconclusive.
+The scalar RV64 timing screen on SpacemiT X60 raised no alarms on either
+compiler. All five named hosts have an initial timing record; the AWS
+control alarm remains open. Linked-code review matched the original timing
+executables across all five hosts and both compilers, and identified the
+expected field instructions on the measured update paths. It is not a
+whole-path constant-time qualification. The first native X60 aggregate branch and
+branch-miss screen raised no alarms on either compiler. The first Ryzen
+PCLMUL branch and generic cache-counter screen also raised no alarms;
+cache misses overlapped the empty controls. AWS Intel and Arm now have native
+branch and L1 observations on both endpoints, with no alarms in 48 paired
+comparisons. Intel L1 misses overlapped the empty controls. The native X60
+L1 load/miss screen raised no alarms in 12 paired comparisons on the two
+compilers; its miss counts likewise overlapped empty controls. Apple M2 Pro
+now has process-attributed retired-branch and L1 data-cache load-miss samples
+on both compilers. These sample the entire PMULL benchmark, not just the
+update window, and are not class comparisons. The AWS Arm timing-control
+alarm is unchanged. The x86 review supports moving PCLMUL into explicit opt-in
+integration: identical direct and owner binaries passed all 48 cases per host
+on AMD and Intel. A default-off public runtime constructor now distinguishes
+missing CPU support from a failed self-test. Both packaged entry points passed
+native, absence and wrong-answer startup controls. Ordinary construction stays portable. The direct
+RV64 scalar field candidate now replays the same
+field corpus under QEMU, with separate Zbkc-only and AES-without-CLMUL
+controls, and passed direct scalar correctness tests natively on Cloud-V's
+SpacemiT X60 on both compiler endpoints. The forced incremental RV64 build
+passed split, cleanup and scalar AES-128/192/256 fixtures on the X60 and under
+QEMU; the emulated negative control confirmed that AES capability alone
+cannot make an unavailable owner succeed. Both the direct and facade archive
+consumers now replay the frozen GHASH suites with each forced candidate on
+both Rust endpoints (native x86 positive; emulated Arm and RV64), including
+actual-block-count and unavailable-owner controls. The RISC-V vector assessment
+found no qualifying native host: Cloud-V exposes neither Zvkg nor Zvbc.
+Both Rust endpoints passed separate emulated vector capability and instruction
+examples; no vector backend is claimed or admitted. The public constructor now
+supports Linux x86_64 PCLMUL, Linux RV64 scalar Zbc, and little-endian Linux/macOS
+AArch64 PMULL. Zbkc alone remains candidate-only. Arm is a functional opt-in,
+not timing-qualified; the AWS identical-input alarm and separate follow-up are
+retained. See the [route admission and limitations](assurance/ghash-acceleration.md#arm-public-pmull-route).
 
 Plan scope: Add exact x86_64 carry-less multiplication, AArch64 PMULL, and qualifying RISC-V crypto/vector GHASH backends with identical field representation, reduction, incremental boundaries, and finalization; test every backend independently and paired with scalar AES, require native correctness, timing, and performance evidence, and keep feature detection, activation, KAT health, and FIPS identity explicit.
 

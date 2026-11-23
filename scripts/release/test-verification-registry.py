@@ -495,8 +495,147 @@ class RegistryTests(unittest.TestCase):
             groups.update(json.loads((ROOT / include).read_text())['groups'])
         self.assertEqual(set(checks), {'portable-field', 'miri-lifecycle', 'asan-lifecycle',
                                       'x86-update-codegen', 'cross-update-codegen', 'raw-feature-gate',
-                                      'first-host-observation-replay', 'packaged-public-api'})
+                                      'first-host-observation-replay', 'packaged-public-api', 'packaged-candidates',
+                                      'packaged-x86-runtime', 'packaged-rv64-runtime', 'packaged-pmull-runtime',
+                                      'amd-throughput-observation-replay', 'aws-throughput-observation-replay',
+                                      'apple-throughput-observation-replay', 'rv64-throughput-observation-replay',
+                                      'intel-throughput-observation-replay',
+                                      'pclmul-timing-observation-replay',
+                                      'pmull-timing-observation-replay',
+                                      'rv64-timing-observation-replay',
+                                      'rv64-branch-observation-replay',
+                                      'rv64-cache-observation-replay',
+                                      'apple-counter-sample-replay',
+                                      'amd-counter-observation-replay',
+                                      'aws-counter-observation-replay',
+                                      'linked-timing-code-replay',
+                                      'rv64-vector-capability-qemu',
+                                      'pclmul-candidate-msrv', 'pclmul-candidate-latest',
+                                      'pclmul-unavailable-qemu', 'pclmul-incremental-msrv',
+                                      'pclmul-incremental-latest', 'pclmul-incremental-qemu',
+                                      'pmull-field-qemu-msrv', 'pmull-field-qemu-latest',
+                                      'rv64-field-qemu-msrv', 'rv64-field-qemu-latest',
+                                      'rv64-incremental-qemu-msrv', 'rv64-incremental-qemu-latest',
+                                      'pmull-incremental-qemu-msrv', 'pmull-incremental-qemu-latest',
+                                      'pmull-incremental-qemu-denied',
+                                      'pclmul-scalar-aes-msrv', 'pclmul-scalar-aes-latest', 'pclmul-scalar-aes-qemu'})
+        throughput = checks['amd-throughput-observation-replay']
+        self.assertEqual(throughput['category'], 'record')
+        self.assertEqual(throughput['command'], ['python3', 'scripts/ghash/test-throughput.py'])
+        self.assertEqual(throughput['inputs'], ['ghash-throughput-replay'])
+        self.assertIn('assurance/ghash-observations/throughput-amd-9950x3d',
+                      groups['ghash-throughput-replay']['paths'])
+        arm = checks['aws-throughput-observation-replay']
+        self.assertEqual(arm['category'], 'record')
+        self.assertEqual(arm['command'], ['python3', 'scripts/ghash/test-arm-throughput.py'])
+        self.assertEqual(arm['inputs'], ['ghash-arm-throughput-replay'])
+        self.assertIn('assurance/ghash-observations/throughput-aws-neoverse-v2',
+                      groups['ghash-arm-throughput-replay']['paths'])
+        apple = checks['apple-throughput-observation-replay']
+        self.assertEqual(apple['category'], 'record')
+        self.assertEqual(apple['command'], ['python3', 'scripts/ghash/test-apple-throughput.py'])
+        self.assertEqual(apple['inputs'], ['ghash-apple-throughput-replay'])
+        self.assertIn('assurance/ghash-observations/throughput-apple-m2-pro',
+                      groups['ghash-apple-throughput-replay']['paths'])
+        rv = checks['rv64-throughput-observation-replay']
+        self.assertEqual(rv['category'], 'record')
+        self.assertEqual(rv['command'], ['python3', 'scripts/ghash/test-rv64-throughput.py'])
+        self.assertEqual(rv['inputs'], ['ghash-rv64-throughput-replay'])
+        self.assertIn('assurance/ghash-observations/throughput-spacemit-x60',
+                      groups['ghash-rv64-throughput-replay']['paths'])
+        intel = checks['intel-throughput-observation-replay']
+        self.assertEqual(intel['category'], 'record')
+        self.assertEqual(intel['command'], ['python3', 'scripts/ghash/test-intel-throughput.py'])
+        self.assertEqual(intel['inputs'], ['ghash-intel-throughput-replay'])
+        self.assertIn('assurance/ghash-observations/throughput-intel-6975p-c',
+                      groups['ghash-intel-throughput-replay']['paths'])
+        for endpoint in ('msrv', 'latest', 'qemu'):
+            row = checks['pclmul-scalar-aes-' + endpoint]
+            self.assertEqual(row['command'][row['command'].index('--features') + 1],
+                             'hazmat-ghash,cpu,hazmat-aes-block')
+            self.assertIn('--no-default-features', row['command'])
+            self.assertEqual(row['command'][-3:], ['--test', 'ghash_field', 'scalar_aes::'])
+            markers = {f'test scalar_aes::aes{width} ... ok' for width in (128, 192, 256)}
+            if endpoint == 'qemu':
+                markers.add('test scalar_aes::emulated_cpu_has_pclmul_but_no_aes ... ok')
+                self.assertEqual(row['environment']['CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER'],
+                                 'qemu-x86_64 -cpu max,+pclmulqdq,-aes,-vaes')
+            self.assertEqual(set(row['success']['contains']), markers)
+            self.assertEqual(row['success']['exact_tests'], len(markers))
+            self.assertIn('ghash-scalar-pair', row['inputs'])
+        for endpoint in ('msrv', 'latest', 'qemu'):
+            row = checks['pclmul-incremental-' + endpoint]
+            self.assertIn('--cfg brynja_ghash_pclmul_evidence', row['environment']['RUSTFLAGS'])
+            self.assertIn('hazmat-ghash,cpu', row['command'])
+            self.assertTrue({'ghash-owner-evidence', 'cpu-source', 'ghash-portable-field',
+                             'ghash-lifecycle'} <= set(row['inputs']))
+            self.assertEqual(row['success']['exact_tests'], 1 if endpoint == 'qemu' else 16)
+            if endpoint == 'qemu':
+                self.assertIn('-pclmulqdq', row['environment']['CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER'])
+                self.assertIn('--exact', row['command'])
+            else:
+                self.assertIn('ghash_lifecycle', row['command'])
+                self.assertIn('CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER', row['reject_environment'])
+        qemu = checks['pclmul-unavailable-qemu']
+        self.assertEqual(qemu['environment']['CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER'],
+                         'qemu-x86_64 -cpu max,+aes,-pclmulqdq')
+        self.assertEqual(qemu['success']['exact_tests'], 1)
+        self.assertIn('--exact', qemu['command'])
+        for endpoint, version in [('msrv', '1.90.0'), ('latest', '1.100.0')]:
+            arm = checks[f'pmull-field-qemu-{endpoint}']
+            rv = checks[f'rv64-field-qemu-{endpoint}']
+            self.assertEqual(rv['command'], ['python3','scripts/ghash/check-rv64-field.py',version])
+            self.assertEqual(rv['category'], 'emulated-control')
+            self.assertEqual(rv['success']['exact_tests'], 13)
+            self.assertEqual(rv['success']['unique_lines'],
+                [f'GHASH_RV64_FIELD_PASS: {version}; emulated both, Zbkc alone, AES without CLMUL'])
+            self.assertTrue({'ghash-rv64-qemu','cpu-source','ghash-candidate-build'} <= set(rv['inputs']))
+            rv_owner = checks[f'rv64-incremental-qemu-{endpoint}']
+            self.assertEqual(rv_owner['command'], [*rv['command'], '--incremental'])
+            self.assertEqual(rv_owner['success']['exact_tests'], 41)
+            self.assertEqual(rv_owner['success']['unique_lines'],
+                [f'GHASH_RV64_INCREMENTAL_PASS: {version}; emulated both, Zbkc alone, AES without CLMUL'])
+            self.assertTrue(set(rv['inputs']) | {'ghash-owner-evidence', 'ghash-scalar-pair',
+                'ghash-lifecycle', 'ghash-portable-field'} <= set(rv_owner['inputs']))
+            self.assertEqual(arm['command'], ['cargo', '+' + version, 'test', '--locked', '--offline',
+                '--release', '--no-default-features', '-p', 'brynja-crypto-cpu', '--target',
+                'aarch64-unknown-linux-musl', '--lib', 'ghash_pmull::', '--', '--include-ignored'])
+            self.assertEqual(arm['category'], 'emulated-control')
+            self.assertEqual(arm['environment']['CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER'],
+                             'qemu-aarch64 -cpu max')
+            self.assertTrue({'cpu-source', 'aes-kernel-qemu', 'ghash-candidate-build'} <= set(arm['inputs']))
+            self.assertEqual(arm['success']['exact_tests'], 5)
+            self.assertEqual(set(arm['success']['contains']), {f'test ghash_pmull::{name} ... ok' for name in
+                ('every_basis_pair_and_dense_inputs', 'nist_framed_recurrence',
+                 'admission::tests::missing_bundle_never_calls_the_kernel',
+                 'admission::tests::wrong_kat_is_terminal_in_both_modes',
+                 'admission::tests::unwind_latches_and_success_does_not_repeat_kat')})
+            owner = checks['pmull-incremental-qemu-' + endpoint]
+            self.assertEqual(owner['command'][1], '+' + version)
+            self.assertEqual(owner['environment']['RUSTFLAGS'], '--cfg brynja_ghash_pmull_evidence')
+            self.assertIn('hazmat-ghash,cpu,hazmat-aes-block', owner['command'])
+            self.assertEqual(owner['command'][-4:], ['--test','ghash_field','--test','ghash_lifecycle'])
+            self.assertTrue({'ghash-owner-evidence','ghash-scalar-pair','cpu-source','aes-kernel-qemu'} <= set(owner['inputs']))
+            self.assertEqual(owner['success']['exact_tests'], 19)
+            self.assertTrue({f'test scalar_aes::aes{width} ... ok' for width in (128,192,256)} <= set(owner['success']['contains']))
+            row = checks[f'pclmul-candidate-{endpoint}']
+            self.assertEqual(row['platform'], 'linux-x86_64')
+            self.assertEqual(row['command'], ['cargo', '+' + version, 'test', '--locked', '--offline',
+                '--release', '--no-default-features', '-p', 'brynja-crypto-cpu', '--lib',
+                'ghash_pclmul::', '--', '--include-ignored'])
+            self.assertIn('cpu-source', row['inputs'])
+            self.assertEqual(row['success']['exact_tests'], 5)
+            self.assertEqual(len(set(row['success']['contains'])), 5)
+        denied = checks['pmull-incremental-qemu-denied']
+        self.assertIn('--cfg brynja_ghash_deny_pmull', denied['environment']['RUSTFLAGS'])
+        self.assertEqual(denied['command'][-2:], ['--exact','pmull::masked_pmull_fails_closed_even_on_empty_finish'])
+        self.assertEqual(denied['success']['exact_tests'], 1)
         packaged = checks['packaged-public-api']
+        candidate = checks['packaged-candidates']
+        self.assertEqual(candidate['platform'], 'linux-x86_64')
+        self.assertTrue(set(packaged['inputs']) <= set(candidate['inputs']))
+        self.assertIn(candidate['command'][1], groups['ghash-candidate-consumer']['paths'])
+        self.assertEqual(candidate['success']['unique_lines'], ['GHASH_PACKAGED_CANDIDATES_COMPLETE'])
         self.assertEqual(packaged['command'], ['python3', 'scripts/ghash/check-packaged-api.py'])
         self.assertEqual(packaged['success'], {'contains': ['GHASH_PACKAGED_PORTABLE_COMPLETE']})
         inputs = {p for g in packaged['inputs'] for p in groups[g].get('paths', [])}

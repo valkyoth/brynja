@@ -1,5 +1,11 @@
 # Permanent Evidence Index
 
+## GHASH acceleration (v0.28.2)
+
+The [route decisions, native observations and replay commands](assurance/ghash-acceleration.md)
+distinguish functional admission from timing qualification. The [AWS follow-up protocol](assurance/ghash-pmull-order-control.md)
+and [Discussion #4](https://github.com/valkyoth/brynja/discussions/4) preserve the original identical-input alarm.
+
 ## Portable GHASH archive acceptance (v0.28.1)
 
 The [consumer and replay instructions](../assurance/ghash-public-api/README.md),

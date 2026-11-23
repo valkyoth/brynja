@@ -1,0 +1,16 @@
+{
+  "arch": "rv64",
+  "compiler": "1.100.0",
+  "decoder": "LLVM version 23.1.6",
+  "binary_sha256": "777cce68fdd0a69dd8878f9d8737089fe0050eca2bbed2e8cf827f80aad2a155",
+  "listing_sha256": "afd78104f5b1f0522664f37c8971c7342904305994c1870e44c9e0aece01524b",
+  "result": {
+    "route": "timed -> update",
+    "measured_call_sites": 16,
+    "field_instructions": {
+      "clmul": 3,
+      "clmulh": 3
+    },
+    "straight_line_scope": "first to last product instruction"
+  }
+}

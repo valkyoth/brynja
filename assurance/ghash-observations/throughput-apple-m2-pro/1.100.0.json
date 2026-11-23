@@ -1,0 +1,37 @@
+{
+  "compiler": "rustc 1.100.0 (0ef1bc386 2026-11-09)\nbinary: rustc\ncommit-hash: 0ef1bc386059596dada8fb65b50425aab2ea637a\ncommit-date: 2026-11-09\nhost: aarch64-apple-darwin\nrelease: 1.100.0\nLLVM version: 23.1.5\n",
+  "binary_sha256": {
+    "portable": "65e2451867e1868a7c24b8a788f87453184a013d82033cb02c4b2be8ca277885",
+    "candidate": "fc9ef67c2d97213459f152cf98a109f805a5b4cf8d7dd9d542ea6ed9f25fb5d2"
+  },
+  "target": "aarch64-apple-darwin",
+  "base_commit": "3d3b6cef92ecbc843eb4b72e67702c66a55104af",
+  "host": "macOS-27.2.1-arm64-arm-64bit-Mach-O",
+  "model": "Apple M2 Pro",
+  "cpu": null,
+  "utc": "2026-11-22T17:57:56.474902+00:00",
+  "build_sha256": "0447684582c093e8976b23094b16ef01175d37222ddb51fed9d5fd2ca9053ca8",
+  "raw_sha256": "73bfb55cd1124cbb16f05bdc96f474e226881db7c586263f3e5bd12cc8cb5a53",
+  "results": {
+    "16/16": {
+      "portable_ns": 170.3287353515625,
+      "candidate_ns": 41.8397216796875,
+      "speedup": 4.0709815580406765
+    },
+    "1024/1024": {
+      "portable_ns": 9017.25390625,
+      "candidate_ns": 1197.75,
+      "speedup": 7.528494181799207
+    },
+    "16384/16384": {
+      "portable_ns": 142606.75,
+      "candidate_ns": 18934.875,
+      "speedup": 7.531433400009242
+    },
+    "16384/13": {
+      "portable_ns": 147382.8125,
+      "candidate_ns": 20692.625,
+      "speedup": 7.122480231483439
+    }
+  }
+}

@@ -7,6 +7,32 @@ publish = false
 
 [workspace]
 
+[features]
+aws-counter-window = ["brynja-crypto/cpu"]
+pclmul-screen = ["brynja-crypto/cpu"]
+pmull-screen = ["brynja-crypto/cpu"]
+rv64-screen = ["brynja-crypto/cpu"]
+
+[[bin]]
+name = "amd-counters"
+path = "src/bin/amd-counters.rs"
+required-features = ["pclmul-screen"]
+
+[[bin]]
+name = "aws-counters"
+path = "src/bin/aws-counters.rs"
+required-features = ["aws-counter-window"]
+
+[[bin]]
+name = "pmull-order"
+path = "src/bin/pmull-order.rs"
+required-features = ["pmull-screen"]
+
+[[bin]]
+name = "rv64-branches"
+path = "src/bin/rv64-branches.rs"
+required-features = ["rv64-screen"]
+
 [dependencies]
 brynja-crypto = { path = "../../crates/brynja-crypto", default-features = false, features = ["hazmat-ghash"] }
 

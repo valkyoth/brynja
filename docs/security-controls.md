@@ -23,8 +23,17 @@ owners, compiler spills, or registers.
 The [verification record](VERIFICATION_STATUS.md#portable-ghash-v0280-development)
 distinguishes field arithmetic and lifecycle tests from target-specific
 observations. This primitive neither derives keys nor chooses nonces, frames
-GCM inputs, masks tags or makes an authentication decision. It has no provider
-or hardware dispatch path to fail over to.
+GCM inputs, masks tags or makes an authentication decision. Ordinary
+`Ghash::new` has no provider or hardware dispatch path to fail over to.
+From v0.28.2 the separate `ghash-runtime-execution` feature and
+`new_with_backend` constructor opt into Linux x86_64 PCLMUL, Linux RV64
+scalar Zbc, or AArch64 little-endian Linux/macOS PMULL. Arm checks NEON, AES
+and PMULL separately and runs a GHASH known-answer test; this is not a timing
+qualification ([original alarm and follow-up](assurance/ghash-acceleration.md#arm-public-pmull-route)).
+Neither AES instructions nor Zbkc alone admit the RV64 route.
+Prefer mode may fall back only for missing support. A failed startup test
+rejects the constructor without changing the workspace. This is per-owner
+quarantine, not process-wide hardware retirement or continuous fault detection.
 
 ## RISC-V AES candidate controls (v0.27.4)
 

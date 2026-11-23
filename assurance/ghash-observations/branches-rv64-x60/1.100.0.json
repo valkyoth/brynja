@@ -1,0 +1,84 @@
+{
+  "target": "spacemit,x60",
+  "cpu": 0,
+  "host": "Linux-6.6.63-riscv64-with-glibc2.41",
+  "perf": "perf version 6.6.63.gd5b2ef2c6af4",
+  "utc": "2026-11-22T18:50:01.001613+00:00",
+  "raw_sha256": "854779756b3d3edbed8542202eaf2f057989f497b31ea67a3e092a40f0b4210c",
+  "build_sha256": "75a341e296ca755b06caab198af66383bd35127017148cce410ab5a026455d78",
+  "binary_sha256": "f3018bd66a454b80ebd9341235372f1ba13806f794fe69505f98eaf80cda755d",
+  "results": {
+    "empty": [
+      [
+        18,
+        4
+      ],
+      [
+        12,
+        4
+      ]
+    ],
+    "campaigns": {
+      "identical": {
+        "branches:u": {
+          "medians": [
+            167948.0,
+            167948.0
+          ],
+          "mean_difference": 0,
+          "paired_t": 0.0,
+          "alarm": false
+        },
+        "branch-misses:u": {
+          "medians": [
+            14.0,
+            15.0
+          ],
+          "mean_difference": -1.3125,
+          "paired_t": -0.7677334140364527,
+          "alarm": false
+        }
+      },
+      "subkey": {
+        "branches:u": {
+          "medians": [
+            167948.0,
+            167950.0
+          ],
+          "mean_difference": -0.9375,
+          "paired_t": -0.9557177835177445,
+          "alarm": false
+        },
+        "branch-misses:u": {
+          "medians": [
+            14.0,
+            14.0
+          ],
+          "mean_difference": -2.5625,
+          "paired_t": -1.1122321229600227,
+          "alarm": false
+        }
+      },
+      "block": {
+        "branches:u": {
+          "medians": [
+            167948.0,
+            167948.0
+          ],
+          "mean_difference": -0.875,
+          "paired_t": -1.0724899728128172,
+          "alarm": false
+        },
+        "branch-misses:u": {
+          "medians": [
+            16.0,
+            16.5
+          ],
+          "mean_difference": 0.5,
+          "paired_t": 0.21223817998900446,
+          "alarm": false
+        }
+      }
+    }
+  }
+}

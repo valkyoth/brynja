@@ -1,0 +1,27 @@
+{
+  "host": "amd",
+  "model": "AMD Ryzen 9 9950X3D 16-Core Processor",
+  "cpu": 0,
+  "os": "Linux-7.3.4-1-default-x86_64-with-glibc2.44",
+  "utc": "2026-11-22T18:22:38.194757+00:00",
+  "build_sha256": "92d42f8e7c1aa6047d9da8aad486ad2d75b8b5f6707a7a9a5cf652e38bb8cf0a",
+  "binary_sha256": "327c82a44159ab20274d3337e76490555b2ec8e637857c07af5900177b7dd4d9",
+  "raw_sha256": "99ceaa85e4fd83816efd089458a4fa7f8568a8e1e7e2671bbd73c9fdf09c534a",
+  "results": {
+    "identical": {
+      "mean_difference_ns": -2.52099609375,
+      "paired_t": -0.8418255473878329,
+      "alarm": false
+    },
+    "subkey": {
+      "mean_difference_ns": -0.490234375,
+      "paired_t": -0.508559696898294,
+      "alarm": false
+    },
+    "block": {
+      "mean_difference_ns": 1.50927734375,
+      "paired_t": 1.2358298308479978,
+      "alarm": false
+    }
+  }
+}

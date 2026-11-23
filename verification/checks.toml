@@ -25,6 +25,86 @@ timeout_seconds = 600
 [checks.success]
 contains = ["GHASH_PACKAGED_PORTABLE_COMPLETE"]
 
+[groups.ghash-runtime-consumer]
+paths = ["scripts/ghash/check-packaged-runtime.py", "assurance/ghash-runtime-consumer"]
+[groups.ghash-runtime-x86]
+paths = []
+[[groups.ghash-runtime-x86.tools]]
+program = "qemu-x86_64"
+
+[[checks]]
+component = "ghash"
+id = "packaged-x86-runtime"
+category = "package"
+name = "Linux x86_64 GHASH runtime constructor: packaged direct and facade routes"
+establishes = "Tests native selection, portable default, fallback only on absence, fail-closed wrong KAT, workspace handling, facade isolation and no_std compilation on both compiler endpoints."
+command = ["python3", "scripts/ghash/check-packaged-runtime.py"]
+cwd = "."
+platform = "linux-x86_64"
+inputs = ["ghash-packaged-api", "ghash-runtime-consumer", "ghash-runtime-x86", "ghash-portable-field", "hkdf-msrv"]
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+timeout_seconds = 600
+[checks.success]
+unique_lines = ["GHASH_PACKAGED_RUNTIME_COMPLETE"]
+contains = ["GHASH_PACKAGED_RUNTIME_COMPLETE"]
+
+[[checks]]
+component = "ghash"
+id = "packaged-rv64-runtime"
+category = "package"
+name = "Linux RV64 scalar Zbc GHASH: packaged direct and facade dispatch under QEMU"
+establishes = "Both Rust endpoints: default portable, Zbc selection without AES, Zbkc-only and AES-only fallback/refusal, wrong KAT quarantine and workspace preservation. Emulation is not native or timing qualification."
+command = ["python3", "scripts/ghash/check-packaged-runtime.py", "--rv64"]
+cwd = "."
+platform = "linux-x86_64"
+inputs = ["ghash-packaged-api", "ghash-runtime-consumer", "ghash-rv64-qemu", "ghash-portable-field", "hkdf-msrv"]
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+timeout_seconds = 600
+[checks.success]
+contains = ["GHASH_PACKAGED_RV64_RUNTIME_COMPLETE"]
+unique_lines = ["GHASH_PACKAGED_RV64_RUNTIME_COMPLETE"]
+
+[[checks]]
+component = "ghash"
+id = "packaged-pmull-runtime"
+category = "package"
+name = "Linux AArch64 GHASH runtime: packaged direct and facade dispatch under QEMU"
+establishes = "Both compiler endpoints: portable default, opt-in PMULL, subtractively masked PMULL refusal/fallback, wrong startup answer quarantine, bounded updates and storage. Functional control, not timing qualification."
+command = ["python3", "scripts/ghash/check-packaged-runtime.py", "--pmull", "linux"]
+cwd = "."
+platform = "linux-x86_64"
+inputs = ["ghash-packaged-api", "ghash-runtime-consumer", "ghash-portable-field", "aes-kernel-qemu", "hkdf-msrv"]
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+timeout_seconds = 600
+[checks.success]
+contains = ["GHASH_PACKAGED_PMULL_LINUX_COMPLETE"]
+unique_lines = ["GHASH_PACKAGED_PMULL_LINUX_COMPLETE"]
+
+[groups.ghash-candidate-consumer]
+paths = ["scripts/ghash/check-packaged-candidates.py", "assurance/ghash-candidate-consumer"]
+[[groups.ghash-candidate-consumer.tools]]
+program = "qemu-x86_64"
+[[groups.ghash-candidate-consumer.tools]]
+program = "qemu-aarch64"
+[[groups.ghash-candidate-consumer.tools]]
+program = "qemu-riscv64"
+
+[[checks]]
+component = "ghash"
+id = "packaged-candidates"
+category = "package"
+name = "Archive-only GHASH candidates (direct and facade; native x86 and emulated Arm/RV64)"
+establishes = "Release builds of both compiler endpoints replay the frozen portable suites, prove actual accelerated block use, and reject unavailable candidates without releasing output. Not production dispatch, timing, or native Arm/RV64 evidence."
+command = ["python3", "scripts/ghash/check-packaged-candidates.py"]
+cwd = "."
+platform = "linux-x86_64"
+inputs = ["ghash-packaged-api", "ghash-candidate-consumer", "ghash-portable-field", "hkdf-msrv"]
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+timeout_seconds = 600
+[checks.success]
+contains = ["GHASH_PACKAGED_CANDIDATES_COMPLETE"]
+unique_lines = ["GHASH_PACKAGED_CANDIDATES_COMPLETE"]
+
 [groups.ghash-portable-field]
 paths = ["Cargo.toml","Cargo.lock","crates/brynja-crypto/Cargo.toml","crates/brynja-crypto/src","crates/brynja-crypto/tests/ghash_field.rs","crates/brynja-crypto/tests/ghash_vectors"]
 [[groups.ghash-portable-field.tools]]
@@ -49,6 +129,375 @@ timeout_seconds = 600
 contains = ["test result: ok. 10 passed; 0 failed; 0 ignored;"]
 minimum_tests = 10
 exact_tests = 10
+
+[groups.ghash-candidate-build]
+paths = ["Cargo.lock", "Cargo.toml", "crates/brynja-crypto-cpu/Cargo.toml"]
+optional_paths = [".cargo/config", ".cargo/config.toml"]
+
+[[checks]]
+component = "ghash"
+id = "pclmul-candidate-msrv"
+category = "native-candidate"
+name = "Direct x86 PCLMUL GHASH field product on Rust 1.90.0"
+establishes = "Direct field, known-answer, complete host feature bundle, startup failure, quarantine, unwind and pre-start fallback checks for the test-only x86 candidate. No application dispatch, native timing or release admission."
+command = ["cargo", "+1.90.0", "test", "--locked", "--offline", "--release", "--no-default-features", "-p", "brynja-crypto-cpu", "--lib", "ghash_pclmul::", "--", "--include-ignored"]
+cwd = "."
+inputs = ["ghash-candidate-build", "cpu-source", "hkdf-msrv"]
+platform = "linux-x86_64"
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER"]
+timeout_seconds = 180
+[checks.success]
+minimum_tests = 5
+exact_tests = 5
+contains = ["test ghash_pclmul::tests::every_basis_pair_and_dense_inputs ... ok", "test ghash_pclmul::tests::nist_framed_recurrence ... ok", "test ghash_pclmul::admission::tests::missing_bundle_never_calls_the_kernel ... ok", "test ghash_pclmul::admission::tests::wrong_kat_is_terminal_in_both_modes ... ok", "test ghash_pclmul::admission::tests::unwind_latches_and_success_does_not_repeat_kat ... ok"]
+
+[[checks]]
+component = "ghash"
+id = "pclmul-candidate-latest"
+category = "native-candidate"
+name = "Direct x86 PCLMUL GHASH field product on Rust 1.100.0"
+establishes = "Direct field, known-answer, complete host feature bundle, startup failure, quarantine, unwind and pre-start fallback checks for the test-only x86 candidate. No application dispatch, native timing or release admission."
+command = ["cargo", "+1.100.0", "test", "--locked", "--offline", "--release", "--no-default-features", "-p", "brynja-crypto-cpu", "--lib", "ghash_pclmul::", "--", "--include-ignored"]
+cwd = "."
+inputs = ["ghash-candidate-build", "cpu-source", "compiler"]
+platform = "linux-x86_64"
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER"]
+timeout_seconds = 180
+[checks.success]
+minimum_tests = 5
+exact_tests = 5
+contains = ["test ghash_pclmul::tests::every_basis_pair_and_dense_inputs ... ok", "test ghash_pclmul::tests::nist_framed_recurrence ... ok", "test ghash_pclmul::admission::tests::missing_bundle_never_calls_the_kernel ... ok", "test ghash_pclmul::admission::tests::wrong_kat_is_terminal_in_both_modes ... ok", "test ghash_pclmul::admission::tests::unwind_latches_and_success_does_not_repeat_kat ... ok"]
+
+[[checks]]
+component = "ghash"
+id = "pmull-field-qemu-msrv"
+category = "emulated-control"
+name = "Direct AArch64 PMULL GHASH field product under QEMU on Rust 1.90.0"
+establishes = "Emulated little-endian AArch64 field arithmetic against an independent serial oracle and a framed NIST recurrence; checks rejection of incomplete feature bundles. No production routing or native hardware evidence."
+command = ["cargo", "+1.90.0", "test", "--locked", "--offline", "--release", "--no-default-features", "-p", "brynja-crypto-cpu", "--target", "aarch64-unknown-linux-musl", "--lib", "ghash_pmull::", "--", "--include-ignored"]
+cwd = "."
+inputs = ["ghash-candidate-build", "cpu-source", "hkdf-msrv", "aes-kernel-qemu"]
+platform = "linux-x86_64"
+environment = { CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER = "rust-lld", CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER = "qemu-aarch64 -cpu max" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER","CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER","QEMU_CPU"]
+timeout_seconds = 180
+[checks.success]
+minimum_tests = 5
+exact_tests = 5
+contains = ["test ghash_pmull::every_basis_pair_and_dense_inputs ... ok","test ghash_pmull::nist_framed_recurrence ... ok","test ghash_pmull::admission::tests::missing_bundle_never_calls_the_kernel ... ok","test ghash_pmull::admission::tests::wrong_kat_is_terminal_in_both_modes ... ok","test ghash_pmull::admission::tests::unwind_latches_and_success_does_not_repeat_kat ... ok"]
+
+[[checks]]
+component = "ghash"
+id = "pmull-field-qemu-latest"
+category = "emulated-control"
+name = "Direct AArch64 PMULL GHASH field product under QEMU on Rust 1.100.0"
+establishes = "Emulated little-endian AArch64 field arithmetic against an independent serial oracle and a framed NIST recurrence; checks rejection of incomplete feature bundles. No production routing or native hardware evidence."
+command = ["cargo", "+1.100.0", "test", "--locked", "--offline", "--release", "--no-default-features", "-p", "brynja-crypto-cpu", "--target", "aarch64-unknown-linux-musl", "--lib", "ghash_pmull::", "--", "--include-ignored"]
+cwd = "."
+inputs = ["ghash-candidate-build", "cpu-source", "compiler", "aes-kernel-qemu"]
+platform = "linux-x86_64"
+environment = { CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER = "rust-lld", CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER = "qemu-aarch64 -cpu max" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER","CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER","QEMU_CPU"]
+timeout_seconds = 180
+[checks.success]
+minimum_tests = 5
+exact_tests = 5
+contains = ["test ghash_pmull::every_basis_pair_and_dense_inputs ... ok","test ghash_pmull::nist_framed_recurrence ... ok","test ghash_pmull::admission::tests::missing_bundle_never_calls_the_kernel ... ok","test ghash_pmull::admission::tests::wrong_kat_is_terminal_in_both_modes ... ok","test ghash_pmull::admission::tests::unwind_latches_and_success_does_not_repeat_kat ... ok"]
+
+[groups.ghash-rv64-vector-assessment]
+paths = ["assurance/ghash-rv64-vector-probe", "scripts/ghash/check-rv64-vector-probe.py"]
+[[groups.ghash-rv64-vector-assessment.tools]]
+program = "qemu-riscv64"
+[[groups.ghash-rv64-vector-assessment.tools]]
+program = "python3"
+
+[[checks]]
+component = "ghash"
+id = "rv64-vector-capability-qemu"
+category = "emulated-control"
+name = "RISC-V vector GHASH capability and instruction controls on both Rust endpoints"
+establishes = "The guest checks Linux extension bits and vector width; independent Zvkg and Zvbc instruction examples execute only on the matching QEMU models. No Brynja vector backend, native evidence, dispatch or timing claim."
+command = ["python3", "scripts/ghash/check-rv64-vector-probe.py"]
+cwd = "."
+platform = "linux-x86_64"
+inputs = ["ghash-rv64-vector-assessment", "compiler", "hkdf-msrv"]
+timeout_seconds = 300
+[checks.success]
+contains = ["1.90.0: nine emulated capability and instruction controls passed", "1.100.0: nine emulated capability and instruction controls passed"]
+unique_lines = ["GHASH_RV64_VECTOR_PROBE_COMPLETE"]
+
+[groups.ghash-rv64-qemu]
+paths = ["scripts/ghash/check-rv64-field.py","scripts/aes/check-aes-riscv.py","scripts/aes/check-aes-static.py"]
+[[groups.ghash-rv64-qemu.tools]]
+program = "python3"
+[[groups.ghash-rv64-qemu.tools]]
+program = "qemu-riscv64"
+
+[[checks]]
+component = "ghash"
+id = "rv64-field-qemu-msrv"
+category = "emulated-control"
+name = "RV64 scalar carry-less GHASH field and unavailable control on Rust 1.90.0"
+establishes = "Direct field, NIST recurrence, KAT health and quarantine with both scalar CLMUL extensions and with only Zbkc; AES without either cannot activate the kernel. QEMU functional evidence only."
+command = ["python3","scripts/ghash/check-rv64-field.py","1.90.0"]
+cwd = "."
+inputs = ["ghash-candidate-build","cpu-source","ghash-rv64-qemu","hkdf-msrv"]
+platform = "linux-x86_64"
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTUP_TOOLCHAIN","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","CARGO_BUILD_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUNNER","QEMU_CPU","BRYNJA_GHASH_RV64_MODEL"]
+timeout_seconds = 300
+[checks.success]
+minimum_tests = 13
+exact_tests = 13
+contains = ["test ghash_rv64::every_basis_pair_and_dense_inputs ... ok","test ghash_rv64::nist_framed_recurrence ... ok","test ghash_rv64::admission::tests::wrong_kat_is_terminal_in_both_modes ... ok"]
+unique_lines = ["GHASH_RV64_FIELD_PASS: 1.90.0; emulated both, Zbkc alone, AES without CLMUL"]
+
+[[checks]]
+component = "ghash"
+id = "rv64-field-qemu-latest"
+category = "emulated-control"
+name = "RV64 scalar carry-less GHASH field and unavailable control on Rust 1.100.0"
+establishes = "Direct field, NIST recurrence, KAT health and quarantine with both scalar CLMUL extensions and with only Zbkc; AES without either cannot activate the kernel. QEMU functional evidence only."
+command = ["python3","scripts/ghash/check-rv64-field.py","1.100.0"]
+cwd = "."
+inputs = ["ghash-candidate-build","cpu-source","ghash-rv64-qemu","compiler"]
+platform = "linux-x86_64"
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTUP_TOOLCHAIN","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","CARGO_BUILD_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUNNER","QEMU_CPU","BRYNJA_GHASH_RV64_MODEL"]
+timeout_seconds = 300
+[checks.success]
+minimum_tests = 13
+exact_tests = 13
+contains = ["test ghash_rv64::every_basis_pair_and_dense_inputs ... ok","test ghash_rv64::nist_framed_recurrence ... ok","test ghash_rv64::admission::tests::wrong_kat_is_terminal_in_both_modes ... ok"]
+unique_lines = ["GHASH_RV64_FIELD_PASS: 1.100.0; emulated both, Zbkc alone, AES without CLMUL"]
+
+[[checks]]
+component = "ghash"
+id = "rv64-incremental-qemu-msrv"
+category = "emulated-control"
+name = "RV64 incremental GHASH, scalar AES pairing and unavailable control on Rust 1.90.0"
+establishes = "Forced scalar CLMUL through the incremental owner on two emulated positive models, including lifecycle and all three scalar AES widths. Without either CLMUL extension even empty finish fails. Not timing or native hardware evidence."
+command = ["python3","scripts/ghash/check-rv64-field.py","1.90.0","--incremental"]
+cwd = "."
+inputs = ["ghash-candidate-build","cpu-source","ghash-owner-evidence","ghash-scalar-pair","ghash-portable-field","ghash-lifecycle","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","ghash-rv64-qemu","hkdf-msrv"]
+platform = "linux-x86_64"
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTUP_TOOLCHAIN","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","CARGO_BUILD_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUNNER","QEMU_CPU","BRYNJA_GHASH_RV64_MODEL"]
+timeout_seconds = 300
+[checks.success]
+minimum_tests = 41
+exact_tests = 41
+contains = ["test rv64::native_blocks_match_wire_oracle_at_every_split ... ok","test rv64::partial_block_never_executes_a_product_or_releases_output ... ok","test rv64::emulated_owner_respects_reported_features ... ok","test scalar_aes::aes128 ... ok","test scalar_aes::aes192 ... ok","test scalar_aes::aes256 ... ok"]
+unique_lines = ["GHASH_RV64_INCREMENTAL_PASS: 1.90.0; emulated both, Zbkc alone, AES without CLMUL"]
+
+[[checks]]
+component = "ghash"
+id = "rv64-incremental-qemu-latest"
+category = "emulated-control"
+name = "RV64 incremental GHASH, scalar AES pairing and unavailable control on Rust 1.100.0"
+establishes = "Forced scalar CLMUL through the incremental owner on two emulated positive models, including lifecycle and all three scalar AES widths. Without either CLMUL extension even empty finish fails. Not timing or native hardware evidence."
+command = ["python3","scripts/ghash/check-rv64-field.py","1.100.0","--incremental"]
+cwd = "."
+inputs = ["ghash-candidate-build","cpu-source","ghash-owner-evidence","ghash-scalar-pair","ghash-portable-field","ghash-lifecycle","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","ghash-rv64-qemu","compiler"]
+platform = "linux-x86_64"
+environment = { RUSTUP_AUTO_INSTALL = "0" }
+reject_environment = ["PYTHONOPTIMIZE","PYTHONPATH","RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTUP_TOOLCHAIN","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","CARGO_BUILD_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUSTFLAGS","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER","CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUNNER","QEMU_CPU","BRYNJA_GHASH_RV64_MODEL"]
+timeout_seconds = 300
+[checks.success]
+minimum_tests = 41
+exact_tests = 41
+contains = ["test rv64::native_blocks_match_wire_oracle_at_every_split ... ok","test rv64::partial_block_never_executes_a_product_or_releases_output ... ok","test rv64::emulated_owner_respects_reported_features ... ok","test scalar_aes::aes128 ... ok","test scalar_aes::aes192 ... ok","test scalar_aes::aes256 ... ok"]
+unique_lines = ["GHASH_RV64_INCREMENTAL_PASS: 1.100.0; emulated both, Zbkc alone, AES without CLMUL"]
+
+[groups.ghash-scalar-pair]
+paths = ["crates/brynja-crypto/tests/ghash_field/scalar_aes.rs"]
+
+[[checks]]
+component = "ghash"
+id = "pclmul-scalar-aes-msrv"
+category = "native-candidate"
+name = "Scalar AES-128/192/256 paired with PCLMUL on Rust 1.90.0"
+establishes = "NIST AAD-only example 3 across all three widths, temporary/cached scalar AES schedules, derived H and mask, five PCLMUL products, GHASH intermediate and masked result. No GCM service, timing or admission."
+command = ["cargo","+1.90.0","test","--locked","--offline","--release","-p","brynja-crypto","--no-default-features","--features","hazmat-ghash,cpu,hazmat-aes-block","--test","ghash_field","scalar_aes::"]
+cwd = "."
+inputs = ["ghash-scalar-pair","ghash-owner-evidence","ghash-candidate-build","ghash-portable-field","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","hkdf-msrv"]
+platform = "linux-x86_64"
+environment = { RUSTFLAGS = "--cfg brynja_ghash_pclmul_evidence" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER","QEMU_CPU"]
+timeout_seconds = 180
+[checks.success]
+minimum_tests = 3
+exact_tests = 3
+contains = ["test scalar_aes::aes128 ... ok","test scalar_aes::aes192 ... ok","test scalar_aes::aes256 ... ok"]
+
+[[checks]]
+component = "ghash"
+id = "pclmul-scalar-aes-latest"
+category = "native-candidate"
+name = "Scalar AES-128/192/256 paired with PCLMUL on Rust 1.100.0"
+establishes = "NIST AAD-only example 3 across all three widths, temporary/cached scalar AES schedules, derived H and mask, five PCLMUL products, GHASH intermediate and masked result. No GCM service, timing or admission."
+command = ["cargo","+1.100.0","test","--locked","--offline","--release","-p","brynja-crypto","--no-default-features","--features","hazmat-ghash,cpu,hazmat-aes-block","--test","ghash_field","scalar_aes::"]
+cwd = "."
+inputs = ["ghash-scalar-pair","ghash-owner-evidence","ghash-candidate-build","ghash-portable-field","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
+platform = "linux-x86_64"
+environment = { RUSTFLAGS = "--cfg brynja_ghash_pclmul_evidence" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER","QEMU_CPU"]
+timeout_seconds = 180
+[checks.success]
+minimum_tests = 3
+exact_tests = 3
+contains = ["test scalar_aes::aes128 ... ok","test scalar_aes::aes192 ... ok","test scalar_aes::aes256 ... ok"]
+
+[[checks]]
+component = "ghash"
+id = "pclmul-scalar-aes-qemu"
+category = "emulated-control"
+name = "Scalar AES paired with PCLMUL without AES-NI under QEMU"
+establishes = "Emulated AES-independent selection: AES and VAES disabled while the same scalar AES owners and forced GHASH product pass NIST example 3. Not native evidence."
+command = ["cargo","+1.100.0","test","--locked","--offline","--release","-p","brynja-crypto","--no-default-features","--features","hazmat-ghash,cpu,hazmat-aes-block","--target","x86_64-unknown-linux-gnu","--test","ghash_field","scalar_aes::"]
+cwd = "."
+inputs = ["ghash-scalar-pair","ghash-owner-evidence","ghash-candidate-build","ghash-portable-field","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","ghash-x86-qemu"]
+platform = "linux-x86_64"
+environment = { RUSTFLAGS = "--cfg brynja_ghash_pclmul_evidence --cfg brynja_cpu_evidence", CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER = "qemu-x86_64 -cpu max,+pclmulqdq,-aes,-vaes" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER","QEMU_CPU"]
+timeout_seconds = 180
+[checks.success]
+minimum_tests = 4
+exact_tests = 4
+contains = ["test scalar_aes::aes128 ... ok","test scalar_aes::aes192 ... ok","test scalar_aes::aes256 ... ok","test scalar_aes::emulated_cpu_has_pclmul_but_no_aes ... ok"]
+
+[groups.ghash-owner-evidence]
+paths = ["crates/brynja-crypto/tests/ghash_field/accelerated.rs"]
+
+[[checks]]
+component = "ghash"
+id = "pmull-incremental-qemu-msrv"
+category = "emulated-control"
+name = "Incremental PMULL and scalar AES-128/192/256 on Rust 1.90.0 under Arm QEMU"
+establishes = "Forced PMULL through the real incremental owner, native-product counts, lifecycle cleanup and scalar AES pairing at every width. No application dispatch, native performance or timing claim."
+command = ["cargo","+1.90.0","test","--locked","--offline","--release","-p","brynja-crypto","--no-default-features","--features","hazmat-ghash,cpu,hazmat-aes-block","--target","aarch64-unknown-linux-musl","--test","ghash_field","--test","ghash_lifecycle"]
+cwd = "."
+inputs = ["ghash-owner-evidence","ghash-scalar-pair","ghash-candidate-build","ghash-portable-field","ghash-lifecycle","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","hkdf-msrv","aes-kernel-qemu"]
+platform = "linux-x86_64"
+environment = { RUSTFLAGS = "--cfg brynja_ghash_pmull_evidence", CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER = "rust-lld", CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER = "qemu-aarch64 -cpu max" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER","CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER","QEMU_CPU"]
+timeout_seconds = 180
+[checks.success]
+minimum_tests = 19
+exact_tests = 19
+contains = ["test pmull::native_blocks_match_wire_oracle_at_every_split ... ok","test pmull::partial_block_never_executes_a_product_or_releases_output ... ok","test scalar_aes::aes128 ... ok","test scalar_aes::aes192 ... ok","test scalar_aes::aes256 ... ok","test result: ok. 15 passed; 0 failed; 0 ignored;","test result: ok. 4 passed; 0 failed; 0 ignored;"]
+
+[[checks]]
+component = "ghash"
+id = "pmull-incremental-qemu-latest"
+category = "emulated-control"
+name = "Incremental PMULL and scalar AES-128/192/256 on Rust 1.100.0 under Arm QEMU"
+establishes = "Forced PMULL through the real incremental owner, native-product counts, lifecycle cleanup and scalar AES pairing at every width. No application dispatch, native performance or timing claim."
+command = ["cargo","+1.100.0","test","--locked","--offline","--release","-p","brynja-crypto","--no-default-features","--features","hazmat-ghash,cpu,hazmat-aes-block","--target","aarch64-unknown-linux-musl","--test","ghash_field","--test","ghash_lifecycle"]
+cwd = "."
+inputs = ["ghash-owner-evidence","ghash-scalar-pair","ghash-candidate-build","ghash-portable-field","ghash-lifecycle","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","compiler","aes-kernel-qemu"]
+platform = "linux-x86_64"
+environment = { RUSTFLAGS = "--cfg brynja_ghash_pmull_evidence", CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER = "rust-lld", CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER = "qemu-aarch64 -cpu max" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER","CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER","QEMU_CPU"]
+timeout_seconds = 180
+[checks.success]
+minimum_tests = 19
+exact_tests = 19
+contains = ["test pmull::native_blocks_match_wire_oracle_at_every_split ... ok","test pmull::partial_block_never_executes_a_product_or_releases_output ... ok","test scalar_aes::aes128 ... ok","test scalar_aes::aes192 ... ok","test scalar_aes::aes256 ... ok","test result: ok. 15 passed; 0 failed; 0 ignored;","test result: ok. 4 passed; 0 failed; 0 ignored;"]
+
+[[checks]]
+component = "ghash"
+id = "pmull-incremental-qemu-denied"
+category = "emulated-control"
+name = "A denied PMULL candidate cannot finish incremental GHASH under Arm QEMU"
+establishes = "A deny-only evidence mask on a PMULL-capable emulated CPU rejects updates and empty finish with no output release. Not a physical absent-feature observation."
+command = ["cargo","+1.100.0","test","--locked","--offline","--release","-p","brynja-crypto","--no-default-features","--features","hazmat-ghash,cpu","--target","aarch64-unknown-linux-musl","--test","ghash_field","--","--exact","pmull::masked_pmull_fails_closed_even_on_empty_finish"]
+cwd = "."
+inputs = ["ghash-owner-evidence","ghash-candidate-build","ghash-portable-field","ghash-lifecycle","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","compiler","aes-kernel-qemu"]
+platform = "linux-x86_64"
+environment = { RUSTFLAGS = "--cfg brynja_ghash_pmull_evidence --cfg brynja_ghash_deny_pmull", CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER = "rust-lld", CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER = "qemu-aarch64 -cpu max" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER","CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUNNER","QEMU_CPU"]
+timeout_seconds = 180
+[checks.success]
+minimum_tests = 1
+exact_tests = 1
+contains = ["test pmull::masked_pmull_fails_closed_even_on_empty_finish ... ok"]
+
+[[checks]]
+component = "ghash"
+id = "pclmul-incremental-msrv"
+category = "native-candidate"
+name = "Forced PCLMUL through incremental GHASH on Rust 1.90.0"
+establishes = "Checkout-only forced native block products in the real owner, splits and bounds, live cleanup, NIST and differential checks. No public dispatch, timing or spill-erasure claim."
+command = ["cargo","+1.90.0","test","--locked","--offline","--release","-p","brynja-crypto","--no-default-features","--features","hazmat-ghash,cpu","--test","ghash_field","--test","ghash_lifecycle"]
+cwd = "."
+inputs = ["ghash-owner-evidence","ghash-candidate-build","ghash-portable-field","ghash-lifecycle","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","hkdf-msrv"]
+platform = "linux-x86_64"
+environment = { RUSTFLAGS = "--cfg brynja_ghash_pclmul_evidence" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER","QEMU_CPU"]
+timeout_seconds = 180
+[checks.success]
+minimum_tests = 16
+exact_tests = 16
+contains = ["test pclmul::native_blocks_match_wire_oracle_at_every_split ... ok","test pclmul::partial_block_never_executes_a_product_or_releases_output ... ok","test result: ok. 12 passed; 0 failed; 0 ignored;","test result: ok. 4 passed; 0 failed; 0 ignored;"]
+
+[[checks]]
+component = "ghash"
+id = "pclmul-incremental-latest"
+category = "native-candidate"
+name = "Forced PCLMUL through incremental GHASH on Rust 1.100.0"
+establishes = "Checkout-only forced native block products in the real owner, splits and bounds, live cleanup, NIST and differential checks. No public dispatch, timing or spill-erasure claim."
+command = ["cargo","+1.100.0","test","--locked","--offline","--release","-p","brynja-crypto","--no-default-features","--features","hazmat-ghash,cpu","--test","ghash_field","--test","ghash_lifecycle"]
+cwd = "."
+inputs = ["ghash-owner-evidence","ghash-candidate-build","ghash-portable-field","ghash-lifecycle","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
+platform = "linux-x86_64"
+environment = { RUSTFLAGS = "--cfg brynja_ghash_pclmul_evidence" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER","QEMU_CPU"]
+timeout_seconds = 180
+[checks.success]
+minimum_tests = 16
+exact_tests = 16
+contains = ["test pclmul::native_blocks_match_wire_oracle_at_every_split ... ok","test pclmul::partial_block_never_executes_a_product_or_releases_output ... ok","test result: ok. 12 passed; 0 failed; 0 ignored;","test result: ok. 4 passed; 0 failed; 0 ignored;"]
+
+[[checks]]
+component = "ghash"
+id = "pclmul-incremental-qemu"
+category = "emulated-control"
+name = "Unavailable PCLMUL cannot finish an incremental GHASH owner"
+establishes = "QEMU exposes AES without PCLMUL: even empty update and finish report unavailable, the workspace clears, and output is unchanged. Not native evidence."
+command = ["cargo","+1.100.0","test","--locked","--offline","--release","-p","brynja-crypto","--no-default-features","--features","hazmat-ghash,cpu","--target","x86_64-unknown-linux-gnu","--test","ghash_field","--","--exact","pclmul::missing_pclmul_fails_closed_even_on_empty_finish"]
+cwd = "."
+inputs = ["ghash-owner-evidence","ghash-candidate-build","ghash-portable-field","ghash-lifecycle","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source","ghash-x86-qemu"]
+platform = "linux-x86_64"
+environment = { RUSTFLAGS = "--cfg brynja_ghash_pclmul_evidence --cfg brynja_cpu_evidence", CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER = "qemu-x86_64 -cpu max,+aes,-pclmulqdq" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER","QEMU_CPU"]
+timeout_seconds = 180
+[checks.success]
+minimum_tests = 1
+exact_tests = 1
+contains = ["test pclmul::missing_pclmul_fails_closed_even_on_empty_finish ... ok"]
+
+[groups.ghash-x86-qemu]
+[[groups.ghash-x86-qemu.tools]]
+program = "qemu-x86_64"
+
+[[checks]]
+component = "ghash"
+id = "pclmul-unavailable-qemu"
+category = "emulated-control"
+name = "x86 AES without PCLMULQDQ cannot select native GHASH"
+establishes = "QEMU x86_64 CPU model exposes AES and SSE2 but not PCLMULQDQ; the hosted candidate selects portable in Prefer and rejects Require without executing a product. Not native hardware evidence."
+command = ["cargo", "+1.100.0", "test", "--locked", "--offline", "--release", "--no-default-features", "-p", "brynja-crypto-cpu", "--target", "x86_64-unknown-linux-gnu", "--lib", "--", "--ignored", "--exact", "ghash_pclmul::admission::tests::aes_present_without_pclmul_is_not_ghash_authority"]
+cwd = "."
+inputs = ["ghash-candidate-build", "cpu-source", "compiler", "ghash-x86-qemu"]
+platform = "linux-x86_64"
+environment = { RUSTFLAGS = "--cfg brynja_cpu_evidence", CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER = "qemu-x86_64 -cpu max,+aes,-pclmulqdq" }
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER","QEMU_CPU"]
+timeout_seconds = 180
+[checks.success]
+minimum_tests = 1
+exact_tests = 1
+contains = ["test ghash_pclmul::admission::tests::aes_present_without_pclmul_is_not_ghash_authority ... ok"]
 
 [groups.ghash-host-codegen]
 paths = ["scripts/ghash/check-portable-host.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py"]
@@ -139,6 +588,249 @@ platform = "linux-x86_64"
 timeout_seconds = 360
 [checks.success]
 contains = ["GHASH_HOST_CROSS-CODEGEN_COMPLETE"]
+
+[groups.ghash-throughput-replay]
+paths = ["scripts/ghash/check-throughput.py", "scripts/ghash/test-throughput.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py", "assurance/ghash-observations/throughput-amd-9950x3d"]
+[[groups.ghash-throughput-replay.tools]]
+program = "python3"
+
+[[checks]]
+component = "ghash"
+id = "amd-throughput-observation-replay"
+category = "record"
+name = "Replay retained AMD GHASH throughput observations (no measurement)"
+establishes = "Recomputes both compiler summaries, raw digests and sample layout; tests rejection of inconsistent records. Not a new performance run, timing-leakage check or backend admission."
+command = ["python3", "scripts/ghash/test-throughput.py"]
+cwd = "."
+inputs = ["ghash-throughput-replay"]
+timeout_seconds = 60
+[checks.success]
+contains = ["Ran 3 tests", "OK"]
+
+[groups.ghash-arm-throughput-replay]
+paths = ["scripts/ghash/check-arm-throughput.py", "scripts/ghash/check-throughput.py", "scripts/ghash/test-arm-throughput.py", "assurance/ghash-observations/throughput-aws-neoverse-v2"]
+[[groups.ghash-arm-throughput-replay.tools]]
+program = "python3"
+
+[[checks]]
+component = "ghash"
+id = "aws-throughput-observation-replay"
+category = "record"
+name = "Replay retained AWS Neoverse-V2 GHASH throughput observations (no measurement)"
+establishes = "Recomputes the portable and PMULL summaries on both compilers, checks build and raw digests, and rejects inconsistent records. Does not remeasure or admit a backend."
+command = ["python3", "scripts/ghash/test-arm-throughput.py"]
+cwd = "."
+inputs = ["ghash-arm-throughput-replay"]
+timeout_seconds = 60
+[checks.success]
+contains = ["Ran 3 tests", "OK"]
+
+[groups.ghash-apple-throughput-replay]
+paths = ["scripts/ghash/check-arm-throughput.py", "scripts/ghash/check-throughput.py", "scripts/ghash/test-apple-throughput.py", "assurance/ghash-observations/throughput-apple-m2-pro"]
+[[groups.ghash-apple-throughput-replay.tools]]
+program = "python3"
+
+[[checks]]
+component = "ghash"
+id = "apple-throughput-observation-replay"
+category = "record"
+name = "Replay retained M2 Pro GHASH throughput observations (no measurement)"
+establishes = "Recomputes both compiler summaries from the retained native batches and checks the target, compiler and unpinned CPU placement. No new timing measurement or backend admission."
+command = ["python3", "scripts/ghash/test-apple-throughput.py"]
+cwd = "."
+inputs = ["ghash-apple-throughput-replay"]
+timeout_seconds = 60
+[checks.success]
+contains = ["Ran 3 tests", "OK"]
+
+[groups.ghash-rv64-throughput-replay]
+paths = ["scripts/ghash/check-arm-throughput.py", "scripts/ghash/check-throughput.py", "scripts/ghash/test-rv64-throughput.py", "assurance/ghash-observations/throughput-spacemit-x60"]
+[[groups.ghash-rv64-throughput-replay.tools]]
+program = "python3"
+
+[[checks]]
+component = "ghash"
+id = "rv64-throughput-observation-replay"
+category = "record"
+name = "Replay retained SpacemiT X60 scalar GHASH throughput observations (no measurement)"
+establishes = "Checks pinned native scalar capability, matching build flags and raw batches for both compiler endpoints. No vector, leakage or backend admission claim."
+command = ["python3", "scripts/ghash/test-rv64-throughput.py"]
+cwd = "."
+inputs = ["ghash-rv64-throughput-replay"]
+timeout_seconds = 60
+[checks.success]
+contains = ["Ran 3 tests", "OK"]
+
+[groups.ghash-intel-throughput-replay]
+paths = ["scripts/ghash/check-arm-throughput.py", "scripts/ghash/check-throughput.py", "scripts/ghash/test-intel-throughput.py", "assurance/ghash-observations/throughput-intel-6975p-c"]
+[[groups.ghash-intel-throughput-replay.tools]]
+program = "python3"
+
+[[checks]]
+component = "ghash"
+id = "intel-throughput-observation-replay"
+category = "record"
+name = "Replay retained Xeon 6975P-C GHASH throughput observations (no measurement)"
+establishes = "Recomputes both compiler summaries and checks Intel CPU identity, PCLMUL capability and route flags. Not a new measurement, leakage check or production admission."
+command = ["python3", "scripts/ghash/test-intel-throughput.py"]
+cwd = "."
+inputs = ["ghash-intel-throughput-replay"]
+timeout_seconds = 60
+[checks.success]
+contains = ["Ran 3 tests", "OK"]
+
+[groups.ghash-pclmul-screen-replay]
+paths = ["scripts/ghash/check-pclmul-screen.py", "scripts/ghash/test-pclmul-screen.py", "scripts/ghash/check-portable-host.py", "assurance/ghash-observations/timing-pclmul-amd", "assurance/ghash-observations/timing-pclmul-intel"]
+[[groups.ghash-pclmul-screen-replay.tools]]
+program = "python3"
+[[checks]]
+component = "ghash"
+id = "pclmul-timing-observation-replay"
+category = "record"
+name = "Replay accelerated GHASH timing observations on AMD and Intel (no measurement)"
+establishes = "Checks pinned records and shared artifact identity, recomputes each paired statistic, and tests alarm retention. Not a fresh timing run or a constant-time guarantee."
+command = ["python3", "scripts/ghash/test-pclmul-screen.py"]
+cwd = "."
+inputs = ["ghash-pclmul-screen-replay"]
+timeout_seconds = 60
+[checks.success]
+contains = ["Ran 3 tests", "OK"]
+
+[groups.ghash-pmull-screen-replay]
+paths = ["scripts/ghash/check-pclmul-screen.py", "scripts/ghash/check-portable-host.py", "scripts/ghash/check-pmull-order.py", "scripts/ghash/test-pmull-screen.py", "assurance/ghash-observations/timing-pmull-aws", "assurance/ghash-observations/timing-pmull-apple", "assurance/ghash-observations/order-pmull-aws", "docs/assurance/ghash-pmull-order-control.md", "assurance/ghash-timing/src/bin/pmull-order.rs"]
+[[groups.ghash-pmull-screen-replay.tools]]
+program = "python3"
+[[checks]]
+component = "ghash"
+id = "pmull-timing-observation-replay"
+category = "record"
+name = "Replay PMULL timing records, including AWS identical-input alarm (no measurement)"
+establishes = "Recomputes original pinned AWS and Apple populations, retains the AWS alarm, and independently replays the Neoverse-V2 order controls. A replay pass validates records, not timing qualification."
+command = ["python3", "scripts/ghash/test-pmull-screen.py"]
+cwd = "."
+inputs = ["ghash-pmull-screen-replay"]
+timeout_seconds = 60
+[checks.success]
+contains = ["Ran 6 tests", "OK"]
+
+[groups.ghash-rv64-screen-replay]
+paths = ["scripts/ghash/check-pclmul-screen.py", "scripts/ghash/check-portable-host.py", "scripts/ghash/test-rv64-screen.py", "assurance/ghash-observations/timing-rv64-x60"]
+[[groups.ghash-rv64-screen-replay.tools]]
+program = "python3"
+[[checks]]
+component = "ghash"
+id = "rv64-timing-observation-replay"
+category = "record"
+name = "Replay native X60 scalar GHASH timing observations (no measurement)"
+establishes = "Checks pinned records, RV64 build and scalar CPU identity, and recomputes paired statistics and alarm dispositions. Not vector evidence or a constant-time guarantee."
+command = ["python3", "scripts/ghash/test-rv64-screen.py"]
+cwd = "."
+inputs = ["ghash-rv64-screen-replay"]
+timeout_seconds = 60
+[checks.success]
+contains = ["Ran 3 tests", "OK"]
+
+[groups.ghash-rv64-branch-replay]
+paths = ["scripts/ghash/check-rv64-branches.py", "scripts/ghash/test-rv64-branches.py", "scripts/ghash/check-pclmul-screen.py", "scripts/ghash/check-portable-host.py", "assurance/ghash-observations/branches-rv64-x60"]
+[[groups.ghash-rv64-branch-replay.tools]]
+program = "python3"
+[[checks]]
+component = "ghash"
+id = "rv64-branch-observation-replay"
+category = "record"
+name = "Replay X60 scalar GHASH branch-counter observations (no measurement)"
+establishes = "Recomputes both grouped event counts and paired summaries from the retained controls and reports. No cache, individual branch, or constant-time qualification."
+command = ["python3", "scripts/ghash/test-rv64-branches.py"]
+cwd = "."
+inputs = ["ghash-rv64-branch-replay"]
+timeout_seconds = 60
+[checks.success]
+contains = ["Ran 3 tests", "OK"]
+
+[groups.ghash-rv64-cache-replay]
+paths = ["scripts/ghash/check-rv64-branches.py", "scripts/ghash/test-rv64-cache.py", "scripts/ghash/check-pclmul-screen.py", "scripts/ghash/check-portable-host.py", "assurance/ghash-observations/cache-rv64-x60"]
+[[groups.ghash-rv64-cache-replay.tools]]
+program = "python3"
+[[checks]]
+component = "ghash"
+id = "rv64-cache-observation-replay"
+category = "record"
+name = "Replay X60 scalar GHASH L1 data-cache observations (offline)"
+establishes = "Checks the recorded privilege filters, grouped counters, empty controls and paired statistics including first-run alarms. No cache-address trace, timing qualification or new measurement."
+command = ["python3", "scripts/ghash/test-rv64-cache.py"]
+cwd = "."
+inputs = ["ghash-rv64-cache-replay"]
+timeout_seconds = 60
+[checks.success]
+contains = ["Ran 3 tests", "OK"]
+
+[groups.ghash-apple-sample-replay]
+paths = ["scripts/ghash/check-apple-samples.py", "scripts/ghash/test-apple-samples.py", "assurance/ghash-observations/throughput-apple-m2-pro/build.json", "assurance/ghash-observations/samples-apple-m2-pro"]
+[[groups.ghash-apple-sample-replay.tools]]
+program = "python3"
+[[checks]]
+component = "ghash"
+id = "apple-counter-sample-replay"
+category = "record"
+name = "Replay Apple M2 Pro GHASH process-level branch and L1D samples (offline)"
+establishes = "Validates sanitized first-run PMI samples and tests target filtering. Not exact counts, timed windows, a paired leakage screen, or timing qualification."
+command = ["python3", "scripts/ghash/test-apple-samples.py"]
+cwd = "."
+inputs = ["ghash-apple-sample-replay"]
+timeout_seconds = 60
+[checks.success]
+contains = ["Ran 3 tests", "OK"]
+
+[groups.ghash-aws-attached-replay]
+paths = ["scripts/ghash/check-aws-counters.py", "scripts/ghash/test-aws-counters.py", "scripts/ghash/check-rv64-branches.py", "scripts/ghash/check-pclmul-screen.py", "scripts/ghash/check-portable-host.py", "assurance/ghash-observations/aws-attached"]
+[[groups.ghash-aws-attached-replay.tools]]
+program = "python3"
+[[checks]]
+component = "ghash"
+id = "aws-counter-observation-replay"
+category = "record"
+name = "Replay Intel and Arm GHASH branch and L1 observations (offline)"
+establishes = "Validates both compiler endpoints, group selection, exact saved controls and paired statistics. Never launches perf or sudo, and does not establish constant-time behavior."
+command = ["python3", "scripts/ghash/test-aws-counters.py"]
+cwd = "."
+inputs = ["ghash-aws-attached-replay"]
+timeout_seconds = 60
+[checks.success]
+contains = ["Ran 3 tests", "OK"]
+
+[groups.ghash-linked-screen]
+paths = ["scripts/ghash/check-linked-screen.py", "scripts/ghash/test-linked-screen.py", "assurance/ghash-observations/linked-timing", "assurance/ghash-observations/timing-pclmul-amd", "assurance/ghash-observations/timing-pclmul-intel", "assurance/ghash-observations/timing-pmull-aws", "assurance/ghash-observations/timing-pmull-apple", "assurance/ghash-observations/timing-rv64-x60"]
+[[groups.ghash-linked-screen.tools]]
+program = "python3"
+[[checks]]
+component = "ghash"
+id = "linked-timing-code-replay"
+category = "record"
+name = "Replay linked GHASH timing-binary instruction review for five hosts"
+establishes = "Checks pinned listings and both compiler endpoints against the original native timing identities; checks update/product calls inside the timer window, product instruction mix and scoped branch exclusions. No retiming, hardware-counter substitution or whole-path constant-time claim."
+command = ["python3", "scripts/ghash/test-linked-screen.py"]
+cwd = "."
+inputs = ["ghash-linked-screen"]
+timeout_seconds = 60
+[checks.success]
+contains = ["Ran 4 tests", "OK"]
+
+[groups.ghash-amd-counter-replay]
+paths = ["scripts/ghash/check-amd-counters.py", "scripts/ghash/test-amd-counters.py", "scripts/ghash/check-rv64-branches.py", "scripts/ghash/check-pclmul-screen.py", "scripts/ghash/check-portable-host.py", "assurance/ghash-observations/counters-amd-9950x3d"]
+[[groups.ghash-amd-counter-replay.tools]]
+program = "python3"
+[[checks]]
+component = "ghash"
+id = "amd-counter-observation-replay"
+category = "record"
+name = "Replay Ryzen PCLMUL GHASH branch and cache counters (no measurement)"
+establishes = "Checks both saved builds, the positive and empty controls, paired summaries and their alarm dispositions. No cache-address or constant-time qualification."
+command = ["python3", "scripts/ghash/test-amd-counters.py"]
+cwd = "."
+inputs = ["ghash-amd-counter-replay"]
+timeout_seconds = 60
+[checks.success]
+contains = ["Ran 3 tests", "OK"]
 
 [groups.ghash-observation-replay]
 paths = ["scripts/ghash/test-portable-host.py", "scripts/ghash/check-portable-host.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py", "assurance/ghash-observations/first-x86_64"]

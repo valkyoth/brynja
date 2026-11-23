@@ -1,6 +1,14 @@
 # Changelog
 
-## 0.28.1 portable GHASH package acceptance (unreleased)
+## 0.28.2 opt-in GHASH acceleration (review candidate)
+
+- Add `ghash-runtime-execution` for callers that explicitly request Linux x86_64
+  PCLMUL, little-endian Linux/macOS AArch64 PMULL, or Linux RV64 scalar Zbc.
+  `Ghash::new` stays portable. A failed startup self-test never falls back.
+- Retain the [Arm timing limitation and native functional evidence](docs/assurance/ghash-acceleration.md#arm-public-pmull-route).
+  No GCM interface, RISC-V vector backend, or crates.io publication.
+
+## 0.28.1 portable GHASH package acceptance (internally tagged)
 
 - Exercise the explicitly enabled GHASH API through both packaged entry
   points, including vectors, incremental failure atomicity, ownership,

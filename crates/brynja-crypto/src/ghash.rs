@@ -10,6 +10,8 @@
 //! is needed. Drop clears the borrowed workspace/output, not the caller's key,
 //! copies, registers or spills; abort and forgotten owners bypass Drop.
 //! Development interface: no machine-code timing qualification is claimed.
+//! `Ghash::new` stays portable in ordinary Cargo builds. The default-off
+//! `ghash-runtime-execution` feature adds explicit hosted backend selection.
 //!
 //! ```
 //! use brynja_crypto::ghash::{Error, Ghash};
@@ -38,7 +40,63 @@
 
 #![forbid(unsafe_code)]
 
+#[cfg(any(
+    feature = "ghash-runtime-execution",
+    not(any(
+        brynja_ghash_pclmul_evidence,
+        brynja_ghash_pmull_evidence,
+        brynja_ghash_rv64_evidence
+    ))
+))]
 mod field;
+#[cfg(feature = "ghash-runtime-execution")]
+mod runtime;
+#[cfg(feature = "ghash-runtime-execution")]
+pub use runtime::{Backend, Mode};
+
+#[cfg(all(
+    feature = "ghash-runtime-execution",
+    any(
+        brynja_ghash_pclmul_evidence,
+        brynja_ghash_pmull_evidence,
+        brynja_ghash_rv64_evidence
+    )
+))]
+compile_error!("test forced GHASH candidates separately from the public runtime route");
+#[cfg(all(
+    brynja_ghash_pclmul_evidence,
+    not(all(target_arch = "x86_64", feature = "cpu"))
+))]
+compile_error!("forced GHASH PCLMUL evidence requires x86_64 and the cpu dependency");
+
+#[cfg(all(
+    brynja_ghash_pmull_evidence,
+    not(all(target_arch = "aarch64", target_endian = "little", feature = "cpu"))
+))]
+compile_error!("forced GHASH PMULL evidence requires little-endian AArch64 and the cpu dependency");
+
+#[cfg(all(brynja_ghash_pclmul_evidence, target_arch = "x86_64", feature = "cpu"))]
+use brynja_crypto_cpu::RequiredPclmul as RequiredProduct;
+#[cfg(all(
+    brynja_ghash_pmull_evidence,
+    target_arch = "aarch64",
+    target_endian = "little",
+    feature = "cpu"
+))]
+use brynja_crypto_cpu::RequiredPmull as RequiredProduct;
+
+#[cfg(all(
+    brynja_ghash_rv64_evidence,
+    not(all(target_arch = "riscv64", target_os = "linux", feature = "cpu"))
+))]
+compile_error!("forced GHASH RV64 evidence requires RV64 Linux and the cpu dependency");
+#[cfg(all(
+    brynja_ghash_rv64_evidence,
+    target_arch = "riscv64",
+    target_os = "linux",
+    feature = "cpu"
+))]
+use brynja_crypto_cpu::RequiredRv64 as RequiredProduct;
 
 use brynja_core::{
     OwnedSecretRegion, SecretMemoryError, SecretRegionInitialization, clear_owned_region,
@@ -48,6 +106,19 @@ use core::marker::PhantomData;
 /// A public length or storage error; contains no secret bytes.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Error {
+    /// Required acceleration is not available for this target or CPU.
+    #[cfg(feature = "ghash-runtime-execution")]
+    Unavailable,
+    /// The native backend failed its self-test or is no longer healthy.
+    #[cfg(feature = "ghash-runtime-execution")]
+    Quarantined,
+    /// Forced evidence backend is unavailable or no longer healthy.
+    #[cfg(any(
+        brynja_ghash_pclmul_evidence,
+        brynja_ghash_pmull_evidence,
+        brynja_ghash_rv64_evidence
+    ))]
+    CandidateNotReady,
     /// The entire update would exceed the caller's remaining byte budget.
     LimitExceeded,
     /// The input did not end on a block boundary.
@@ -59,6 +130,14 @@ pub enum Error {
 /// One local incremental computation; neither cloneable nor resettable.
 #[must_use]
 pub struct Ghash<'a> {
+    #[cfg(feature = "ghash-runtime-execution")]
+    engine: runtime::Engine,
+    #[cfg(any(
+        brynja_ghash_pclmul_evidence,
+        brynja_ghash_pmull_evidence,
+        brynja_ghash_rv64_evidence
+    ))]
+    native: Option<RequiredProduct>,
     h: &'a [u8; 16],
     state: &'a mut [u8; 16],
     used: usize,
@@ -72,6 +151,14 @@ impl<'a> Ghash<'a> {
     pub fn new(h: &'a [u8; 16], workspace: &'a mut [u8; 16], max_bytes: u64) -> Self {
         let _ = clear_owned_region(workspace);
         Self {
+            #[cfg(feature = "ghash-runtime-execution")]
+            engine: runtime::Engine::Portable,
+            #[cfg(any(
+                brynja_ghash_pclmul_evidence,
+                brynja_ghash_pmull_evidence,
+                brynja_ghash_rv64_evidence
+            ))]
+            native: RequiredProduct::detect(),
             h,
             state: workspace,
             used: 0,
@@ -80,8 +167,30 @@ impl<'a> Ghash<'a> {
         }
     }
 
+    /// Number of native block products, excluding the KAT. Evidence builds only.
+    #[cfg(any(
+        brynja_ghash_pclmul_evidence,
+        brynja_ghash_pmull_evidence,
+        brynja_ghash_rv64_evidence
+    ))]
+    #[doc(hidden)]
+    pub fn native_blocks(&self) -> Result<u64, Error> {
+        self.native
+            .as_ref()
+            .and_then(|n| n.completed())
+            .ok_or(Error::CandidateNotReady)
+    }
+
     /// Appends a chunk. An over-budget chunk leaves the entire context unchanged.
     pub fn update(&mut self, bytes: &[u8]) -> Result<(), Error> {
+        #[cfg(feature = "ghash-runtime-execution")]
+        self.engine.check()?;
+        #[cfg(any(
+            brynja_ghash_pclmul_evidence,
+            brynja_ghash_pmull_evidence,
+            brynja_ghash_rv64_evidence
+        ))]
+        self.native_blocks()?;
         let len = u64::try_from(bytes.len()).map_err(|_| Error::LimitExceeded)?;
         let remaining = self
             .remaining
@@ -96,11 +205,37 @@ impl<'a> Ghash<'a> {
                 self.used = self.used.wrapping_add(1); // at most 16
             }
             if self.used == 16 {
-                *self.state = field::multiply(
+                #[cfg(not(any(
+                    feature = "ghash-runtime-execution",
+                    brynja_ghash_pclmul_evidence,
+                    brynja_ghash_pmull_evidence,
+                    brynja_ghash_rv64_evidence
+                )))]
+                let value = field::multiply(
                     u128::from_be_bytes(*self.state),
                     u128::from_be_bytes(*self.h),
-                )
-                .to_be_bytes();
+                );
+                #[cfg(feature = "ghash-runtime-execution")]
+                let value = self.engine.product(
+                    u128::from_be_bytes(*self.state),
+                    u128::from_be_bytes(*self.h),
+                )?;
+                #[cfg(any(
+                    brynja_ghash_pclmul_evidence,
+                    brynja_ghash_pmull_evidence,
+                    brynja_ghash_rv64_evidence
+                ))]
+                let value = self
+                    .native
+                    .as_mut()
+                    .and_then(|n| {
+                        n.product(
+                            u128::from_be_bytes(*self.state),
+                            u128::from_be_bytes(*self.h),
+                        )
+                    })
+                    .ok_or(Error::CandidateNotReady)?;
+                *self.state = value.to_be_bytes();
                 self.used = 0;
             }
         }
@@ -111,6 +246,14 @@ impl<'a> Ghash<'a> {
     /// Consumes the context and returns the unmasked, secret GHASH result.
     /// Empty input yields zero. A partial final block leaves output unchanged.
     pub fn finish(self, output: &mut [u8; 16]) -> Result<SecretHash<'_>, Error> {
+        #[cfg(feature = "ghash-runtime-execution")]
+        self.engine.check()?;
+        #[cfg(any(
+            brynja_ghash_pclmul_evidence,
+            brynja_ghash_pmull_evidence,
+            brynja_ghash_rv64_evidence
+        ))]
+        self.native_blocks()?;
         if self.used != 0 {
             return Err(Error::PartialBlock);
         }

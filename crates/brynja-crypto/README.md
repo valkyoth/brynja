@@ -43,6 +43,7 @@ not independent cryptographic certification or coverage of every deployment.
 | Modern HMAC over SHA-2/SHA-3 | ✅ Fully implemented portable API; explicit execution qualification separate | ❌ No |
 | HKDF and TLS Expand-Label over six standard SHA-2 identities | Development implementation; qualification unfinished | ❌ No |
 | Raw portable GHASH | Development interface; requires `hazmat-ghash`. Secret output, not a MAC or GCM tag. | ❌ No |
+| Opt-in GHASH runtime selection | `ghash-runtime-execution`: `Ghash::new_with_backend` supports Linux x86_64 PCLMUL, Linux RV64 scalar Zbc, and little-endian AArch64 PMULL on Linux/macOS. Arm timing remains unqualified; Zbkc alone is not admitted. Only an unavailable backend permits fallback in `Mode::Prefer`. | ❌ No |
 | AEAD, other KDFs, RSA, ECC and executable provider effects | ❌ Not implemented | ❌ No |
 
 Named hashes and SP 800-185 constructions are usable; the broader planned

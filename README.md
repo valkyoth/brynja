@@ -299,7 +299,11 @@ examples and explicit qualification limits.
 
 The v0.28.0 [portable GHASH development interface](docs/security-controls.md#portable-ghash-development-contract-v0280)
 requires `hazmat-ghash`, accepts pre-framed blocks and returns a secret intermediate, not a GCM tag.
-No GHASH hardware backend or GCM implementation is admitted.
+In the v0.28.2 development tree, `ghash-runtime-execution` adds an explicit
+constructor for Linux x86_64 PCLMUL, Linux RV64 scalar Zbc, or little-endian
+AArch64 PMULL on Linux and macOS. `Ghash::new` stays portable.
+[Arm timing qualification remains open](docs/assurance/ghash-acceleration.md#arm-public-pmull-route). No GCM service
+or validated cryptographic module is implied.
 The [v0.28.1 downstream example and replay command](assurance/ghash-public-api/README.md)
 exercise that same interface from unpacked Cargo archives on Rust 1.90.0 and 1.100.0.
 

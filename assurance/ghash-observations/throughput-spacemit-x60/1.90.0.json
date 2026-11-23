@@ -1,0 +1,41 @@
+{
+  "compiler": "rustc 1.90.0 (1159e78c4 2025-09-14)\nbinary: rustc\ncommit-hash: 1159e78c4747b02ef996e55082b704c09b970588\ncommit-date: 2025-09-14\nhost: x86_64-unknown-linux-gnu\nrelease: 1.90.0\nLLVM version: 20.1.8\n",
+  "binary_sha256": {
+    "portable": "cbf5b5a1bad6457b249c0c747a05fb980e5344039ac219c39eaf86fb888479ee",
+    "candidate": "c3693c19d643da30bc32bb79cb48433f8f23861a5f55d06623560a8e8f897ee0"
+  },
+  "target": "riscv64gc-unknown-linux-gnu",
+  "base_commit": "3d3b6cef92ecbc843eb4b72e67702c66a55104af",
+  "host": "Linux-6.6.63-riscv64-with-glibc2.41",
+  "model": "spacemit,x60",
+  "cpu": 0,
+  "utc": "2026-11-22T18:03:54.421747+00:00",
+  "build_sha256": "2813447a6ab46b2c9453ea7b91e4571e72b3364f5d54436fe2600f8b31d7140e",
+  "raw_sha256": "95ce46310176e31a4c1a5179175d175f22017a312375287a7892347caca457c8",
+  "results": {
+    "16/16": {
+      "portable_ns": 1177.594482421875,
+      "candidate_ns": 494.14306640625,
+      "speedup": 2.3831043324884758
+    },
+    "1024/1024": {
+      "portable_ns": 61484.90234375,
+      "candidate_ns": 11840.63671875,
+      "speedup": 5.192702369323334
+    },
+    "16384/16384": {
+      "portable_ns": 977573.125,
+      "candidate_ns": 184759.8125,
+      "speedup": 5.291048479495507
+    },
+    "16384/13": {
+      "portable_ns": 1003265.0,
+      "candidate_ns": 237995.0,
+      "speedup": 4.215487720330259
+    }
+  },
+  "isa": "rv64imafdcv_zicbom_zicboz_zicntr_zicond_zicsr_zifencei_zihintpause_zihpm_zfh_zfhmin_zca_zcd_zba_zbb_zbc_zbs_zkt_zve32f_zve32x_zve64d_zve64f_zve64x_zvfh_zvfhmin_zvkt_sscofpmf_sstc_svinval_svnapot_svpbmt_ime",
+  "scalar_extensions": [
+    "zbc"
+  ]
+}

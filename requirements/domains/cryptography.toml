@@ -105,7 +105,7 @@ mapping_rationale = "The AES semantic surface is directly and exclusively govern
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0006"
-revision = 2
+revision = 3
 owner = "0.28.0"
 lifecycle = "planned"
 decision_ids = ["algorithm.ghash"]
@@ -116,7 +116,7 @@ target = "crates/brynja-crypto/src/ghash.rs#Ghash"
 positive_test = "crates/brynja-crypto/tests/ghash_vectors/nist.rs#aes128_published_ghash_intermediates"
 negative_test = "crates/brynja-crypto/tests/ghash_field.rs#budget_failure_is_atomic_and_empty_is_zero"
 work_bound = "Incremental GHASH work is linear in authenticated blocks with checked length accounting and no attacker-selected limb count."
-evidence_gap = "Portable development evidence covers NIST GHASH intermediates at every byte split, polynomial long-division comparisons, budget and lifecycle regressions, and a bounded x86-64 host screen. See docs/security-controls.md and docs/VERIFICATION_STATUS.md. These are not full-width arithmetic proofs, independent qualification or side-channel evidence for other targets. Packaged downstream acceptance belongs to v0.28.1."
+evidence_gap = "Portable and packaged tests cover NIST intermediates, splits, field differentials and lifecycle. The v0.28.2 explicit PCLMUL, PMULL and scalar Zbc routes have separate native functional, linked-code and bounded timing observations. The AWS Arm identical-input control remains inconclusive. See docs/assurance/ghash-acceleration.md and docs/VERIFICATION_STATUS.md. No full-width proof, independent qualification, vector RISC-V implementation or whole-target timing guarantee is claimed."
 residual = "NIST has announced a future revision of SP 800-38D, so changed limits or constructions require explicit re-admission."
 mapping_rationale = "The separate GHASH semantic surface is directly governed by the pinned SP 800-38D field and authentication authority."
 

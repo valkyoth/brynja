@@ -1,21 +1,21 @@
 [release]
-version = "0.28.1"
-milestone = "0.28.1"
+version = "0.28.2"
+milestone = "0.28.2"
 baseline = "0.25.3"
-cumulative_milestones = ["0.26.0", "0.26.1", "0.27.0", "0.27.1", "0.27.2", "0.27.3", "0.27.4", "0.27.5", "0.27.6", "0.28.0", "0.28.1"]
+cumulative_milestones = ["0.26.0", "0.26.1", "0.27.0", "0.27.1", "0.27.2", "0.27.3", "0.27.4", "0.27.5", "0.27.6", "0.28.0", "0.28.1", "0.28.2"]
 policy = "independent"
 stage = "internal"
 # Legacy explicit runner default only; routine gates use final-checks.toml, not this selector.
 verification = "affected"
-exceptional = false
-exception_reason = ""
+exceptional = true
+exception_reason = "New opt-in GHASH instruction kernels and runtime admission for secret field operands require scoped review; the inconclusive AWS Arm timing control is retained, not a qualification claim."
 
 [crates."brynja"]
-previous_version = "0.28.0"
-version = "0.28.1"
-change = "metadata"
+previous_version = "0.28.1"
+version = "0.28.2"
+change = "code"
 publish = false
-reason = "Portable GHASH downstream package acceptance; no production API or arithmetic change and no crates.io publication."
+reason = "Forward explicit GHASH runtime selection; the existing constructor remains portable. Internal milestone only."
 
 [crates."brynja-legacy-hmac"]
 previous_version = "0.1.0"
@@ -64,7 +64,7 @@ previous_version = "0.2.0"
 version = "0.2.0"
 change = "code"
 publish = false
-reason = "Add bounded portable GHASH to the existing HKDF/AES development interfaces. No GCM composition, acceleration, new GHASH dependency or supporting-crate publication."
+reason = "Add bounded GHASH and an explicit fallible runtime constructor backed by the existing optional CPU crate. No GCM composition or publication."
 
 [crates."brynja-hash-core"]
 previous_version = "0.1.0"
@@ -120,7 +120,7 @@ previous_version = "0.2.0"
 version = "0.2.0"
 change = "code"
 publish = false
-reason = "AES-family kernels, authority lifecycle, optional scoped DIT and evidence-only RV64 scalar AES; retain the internal checkpoint version with no publication selected."
+reason = "AES-family kernels plus independently admitted GHASH PCLMUL, PMULL and scalar RV64 Zbc kernels; RV64 scalar AES remains evidence-only. No publication selected."
 
 [crates."brynja-crypto-cpu-std"]
 previous_version = "0.2.0"

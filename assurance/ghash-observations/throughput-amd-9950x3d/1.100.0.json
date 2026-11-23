@@ -1,0 +1,46 @@
+{
+  "compiler": "rustc 1.100.0 (0ef1bc386 2026-11-09)\nbinary: rustc\ncommit-hash: 0ef1bc386059596dada8fb65b50425aab2ea637a\ncommit-date: 2026-11-09\nhost: x86_64-unknown-linux-gnu\nrelease: 1.100.0\nLLVM version: 23.1.5\n",
+  "host": "Linux-7.3.4-1-default-x86_64-with-glibc2.44",
+  "model": "AMD Ryzen 9 9950X3D 16-Core Processor",
+  "cpu": 0,
+  "utc": "2026-11-22T17:47:13.785510+00:00",
+  "base_commit": "3d3b6cef92ecbc843eb4b72e67702c66a55104af",
+  "source_sha256": {
+    "assurance/ghash-throughput/Cargo.toml": "ece936af481d2987908778159c3bcbfbadde7d11980c37be0c4ba45ae74710ba",
+    "assurance/ghash-throughput/Cargo.lock": "c18ac56f774f668a03666d482128492f135e6f987e67f5f4ed11e6fb7e5d2c31",
+    "assurance/ghash-throughput/src/main.rs": "d93ff7e06016bce483e57124cdc3bd7c06b45d421d3bee86788ca0f6ea38312a",
+    "Cargo.toml": "3f163d9e60c656a4b2811680187215642d947020daf50fdc9a710b353a643490",
+    "crates/brynja-crypto/src/ghash.rs": "a88b23a377f1b7bde32457c66b22b2c2207807636b0bfb46baf085220090becd",
+    "crates/brynja-crypto/src/ghash/field.rs": "9dac5151c83b3b858ec804c64e771dadfec33ba5470eaedb5f876e51c5864823",
+    "crates/brynja-crypto-cpu/src/ghash_pclmul.rs": "54996c88520663f33e28f9c01d957e020b3798d626acf8bdf9a363ede442caab",
+    "crates/brynja-crypto-cpu/src/ghash_admission.rs": "d29ef860634c074419b88de897a6a9af17dceb9255b7c90df713d8c53e88d9a5",
+    "scripts/ghash/check-throughput.py": "a59d1001e81f4bfb4800eee1796d2737afcff80f160e85228cf74885e6eee5c0"
+  },
+  "binary_sha256": {
+    "portable": "8fb555538628600fa62560d5be950f55aee490a72896d3c79e4a5e15e2148867",
+    "candidate": "0f4918bf721bae4d883e53c4941201ff3847367d874ed65d8408f088a6d2899e"
+  },
+  "raw_sha256": "0eb503b1eed95797fcfb27bb6acf3d77235e368a7d3048e038ee314239400208",
+  "results": {
+    "16/16": {
+      "portable_ns": 128.103759765625,
+      "candidate_ns": 30.328125,
+      "speedup": 4.223926133436373
+    },
+    "1024/1024": {
+      "portable_ns": 7724.8515625,
+      "candidate_ns": 976.83984375,
+      "speedup": 7.90800212739582
+    },
+    "16384/16384": {
+      "portable_ns": 122940.8125,
+      "candidate_ns": 15306.3125,
+      "speedup": 8.032033352252542
+    },
+    "16384/13": {
+      "portable_ns": 129128.0625,
+      "candidate_ns": 16213.625,
+      "speedup": 7.964169795465233
+    }
+  }
+}

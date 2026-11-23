@@ -32,10 +32,14 @@ CRYPTO.update({feature: ([] if feature == 'general-sha512-t' else ['cpu']) +
               [owner + '/' + leaf] for feature, (owner, leaf) in LEAVES.items()})
 CRYPTO['aes-static-execution'] = ['hazmat-aes-block', 'cpu', 'brynja-crypto-cpu/aes-static-execution']
 CRYPTO['aes-runtime-execution'] = ['aes-static-execution', 'brynja-crypto-cpu/aes-runtime-execution']
+CRYPTO['ghash-runtime-execution'] = ['hazmat-ghash', 'dep:brynja-crypto-cpu',
+                                     'brynja-crypto-cpu/ghash-runtime-execution']
 FEATURES = {
     'brynja-crypto': CRYPTO,
     'brynja': {feature: ['brynja-crypto/' + feature] for feature in CRYPTO},
 }
+FEATURES['brynja']['ghash-runtime-execution'] = ['hazmat-ghash',
+                                                'brynja-crypto/ghash-runtime-execution']
 
 
 def validate_isolation(modern, edges, names, packages, reachable):

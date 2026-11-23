@@ -1,0 +1,158 @@
+{
+  "host": "intel",
+  "profile": "intel-l1",
+  "model": "Intel(R) Xeon(R) 6975P-C",
+  "cpu": 0,
+  "os": "Linux-7.0.0-1018-aws-x86_64-with-glibc2.43",
+  "uid": 1000,
+  "perf": "perf version 7.0.14",
+  "utc": "2026-11-22T19:23:30.961177+00:00",
+  "raw_sha256": "ae81aacec004affcf59ce705fa28717901e99c7b605470611c0da6f7ff04bf10",
+  "build_sha256": "d09482757f8fd0139c8bc5aa6c2f82bae5212ff73d686dd42d2016aed0c6cd46",
+  "binary_sha256": "b870fca386fcc821696cf1315db90135546a92412929ff2e788fa70aaa656172",
+  "probe_sha256": "554682ecd14d7b9c6559b24d7490d3a57b9ca1a5478391e9024bf27828d3d84f",
+  "results": {
+    "empty": [
+      [
+        29,
+        10,
+        33,
+        25
+      ],
+      [
+        29,
+        10,
+        33,
+        30
+      ]
+    ],
+    "campaigns": {
+      "identical": {
+        "branches:u": {
+          "medians": [
+            127005.0,
+            127005.0
+          ],
+          "mean_difference": -0.5,
+          "paired_t": -1.118033988749895,
+          "alarm": false,
+          "all_active_above_empty": true
+        },
+        "branch-misses:u": {
+          "medians": [
+            20.5,
+            20.0
+          ],
+          "mean_difference": -0.9375,
+          "paired_t": -1.3098896440204217,
+          "alarm": false,
+          "all_active_above_empty": true
+        },
+        "L1-dcache-loads:u": {
+          "medians": [
+            200737.0,
+            200737.0
+          ],
+          "mean_difference": -0.4375,
+          "paired_t": -1.1306019943221475,
+          "alarm": false,
+          "all_active_above_empty": true
+        },
+        "L1-dcache-load-misses:u": {
+          "medians": [
+            33.5,
+            34.0
+          ],
+          "mean_difference": -1.6875,
+          "paired_t": -0.8016659116560058,
+          "alarm": false,
+          "all_active_above_empty": false
+        }
+      },
+      "subkey": {
+        "branches:u": {
+          "medians": [
+            127005.0,
+            127005.0
+          ],
+          "mean_difference": 0,
+          "paired_t": 0.0,
+          "alarm": false,
+          "all_active_above_empty": true
+        },
+        "branch-misses:u": {
+          "medians": [
+            20.5,
+            20.0
+          ],
+          "mean_difference": 0.875,
+          "paired_t": 1.0054870096363528,
+          "alarm": false,
+          "all_active_above_empty": true
+        },
+        "L1-dcache-loads:u": {
+          "medians": [
+            200737.0,
+            200737.0
+          ],
+          "mean_difference": 0,
+          "paired_t": 0.0,
+          "alarm": false,
+          "all_active_above_empty": true
+        },
+        "L1-dcache-load-misses:u": {
+          "medians": [
+            33.0,
+            34.0
+          ],
+          "mean_difference": 0.4375,
+          "paired_t": 0.14071666563945098,
+          "alarm": false,
+          "all_active_above_empty": false
+        }
+      },
+      "block": {
+        "branches:u": {
+          "medians": [
+            127005.0,
+            127005.0
+          ],
+          "mean_difference": -0.5,
+          "paired_t": -1.118033988749895,
+          "alarm": false,
+          "all_active_above_empty": true
+        },
+        "branch-misses:u": {
+          "medians": [
+            21.0,
+            21.0
+          ],
+          "mean_difference": -0.125,
+          "paired_t": -0.16744367165578428,
+          "alarm": false,
+          "all_active_above_empty": true
+        },
+        "L1-dcache-loads:u": {
+          "medians": [
+            200737.0,
+            200737.0
+          ],
+          "mean_difference": -0.5,
+          "paired_t": -1.1677484162422844,
+          "alarm": false,
+          "all_active_above_empty": true
+        },
+        "L1-dcache-load-misses:u": {
+          "medians": [
+            33.5,
+            35.0
+          ],
+          "mean_difference": -1.9375,
+          "paired_t": -0.6383503474407596,
+          "alarm": false,
+          "all_active_above_empty": false
+        }
+      }
+    }
+  }
+}

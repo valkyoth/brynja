@@ -1,0 +1,15 @@
+{
+  "arch": "arm-mac",
+  "compiler": "1.100.0",
+  "decoder": "LLVM version 23.1.6",
+  "binary_sha256": "45129f9e69b50a76f97ab501dbaa6b05f443b80731c9e474539d91350fa11d54",
+  "listing_sha256": "49e8ffbc5282c8b9bc61040253d4a5f706e97fe1ecc71bf6559b504ebe8c1d4f",
+  "result": {
+    "route": "timed -> update",
+    "measured_call_sites": 16,
+    "field_instructions": {
+      "pmull.1q": 3
+    },
+    "straight_line_scope": "first to last product instruction"
+  }
+}

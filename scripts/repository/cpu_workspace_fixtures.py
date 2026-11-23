@@ -16,6 +16,13 @@ def check(baseline, package, reject):
         reject(changed, "all-features", "feature policy differs",
                "implicit or unregistered CPU execution feature")
     for name, key, value, label in (
+        ("brynja-crypto-cpu", "default", ["ghash-runtime-execution"], "default-on GHASH CPU kernel"),
+        ("brynja-crypto-cpu", "ghash-runtime-execution", None, "missing GHASH CPU kernel feature"),
+        ("brynja-crypto", "ghash-runtime-execution",
+         ["hazmat-ghash", "cpu", "brynja-crypto-cpu/ghash-runtime-execution"],
+         "unrelated CPU API enabled by GHASH"),
+        ("brynja", "ghash-runtime-execution", ["brynja-crypto/ghash-runtime-execution"],
+         "missing facade GHASH opt-in"),
         ("brynja", "legacy-ssl2", ["dep:brynja-legacy-ssl2"], "legacy feature smuggling"),
         ("brynja", "default", ["dtls"], "non-empty default feature"),
         ("brynja-mac-kmac", "conformance-testing", None, "missing conformance gate"),

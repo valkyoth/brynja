@@ -34,6 +34,14 @@ fn main() {
     let one = (1u128 << 127).to_be_bytes();
     let mut g = Ghash::new(&one, &mut workspace, 16);
     g.update(&[0x69; 16]).unwrap();
+    // Only available with the evidence cfg; selecting this diagnostic must
+    // never silently benchmark the portable multiplication instead.
+    #[cfg(any(
+        feature = "pclmul-screen",
+        feature = "pmull-screen",
+        feature = "rv64-screen"
+    ))]
+    assert_eq!(g.native_blocks(), Ok(1));
     assert_eq!(g.finish(&mut output).unwrap().expose(), [0x69; 16]);
 
     let mut seed = 0xf71971c1a21f027bb72787d73928d81b;

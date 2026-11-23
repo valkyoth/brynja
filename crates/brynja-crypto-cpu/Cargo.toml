@@ -11,6 +11,7 @@ include = ["Cargo.toml","LICENSE-APACHE","LICENSE-MIT","README.md","src/**/*.rs"
 
 [features]
 default = []
+ghash-runtime-execution = []
 aes-static-execution = []
 aes-runtime-execution = ["aes-static-execution"]
 sha256-hardened-batch = ["dep:brynja-core"]

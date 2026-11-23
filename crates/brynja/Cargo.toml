@@ -1,6 +1,6 @@
 [package]
 name = "brynja"
-version = "0.28.1"
+version = "0.28.2"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
@@ -13,6 +13,7 @@ include = ["Cargo.toml","LICENSE-APACHE","LICENSE-MIT","README.md","src/**/*.rs"
 default = []
 hazmat-aes-block = ["brynja-crypto/hazmat-aes-block"]
 hazmat-ghash = ["brynja-crypto/hazmat-ghash"]
+ghash-runtime-execution = ["hazmat-ghash", "brynja-crypto/ghash-runtime-execution"]
 aes-static-execution = ["brynja-crypto/aes-static-execution"]
 aes-runtime-execution = ["brynja-crypto/aes-runtime-execution"]
 external-key-provider = ["brynja-crypto/external-key-provider"]

@@ -1,5 +1,18 @@
 # Component Verification Status
 
+## GHASH runtime selection (v0.28.2 development)
+
+`brynja-verify run ghash packaged-x86-runtime` checks the default-off
+`ghash-runtime-execution` interface through both public package entry points.
+`Ghash::new` remains portable. Only the explicit constructor can choose
+Linux x86_64 PCLMUL, Linux RV64 scalar Zbc or AArch64 Linux/macOS PMULL. See the [x86 review, controls and linked artifact
+identities](assurance/ghash-acceleration.md#x86-production-route-review-v0282).
+`brynja-verify run ghash packaged-rv64-runtime` exercises the [RV64 route](assurance/ghash-acceleration.md#rv64-public-scalar-route)
+under QEMU, including Zbkc-only fallback. `brynja-verify run ghash packaged-pmull-runtime`
+checks the Linux Arm public package route under QEMU; the [Arm admission record](assurance/ghash-acceleration.md#arm-public-pmull-route)
+separates native functional tests from the open timing limitation. RISC-V vector
+GHASH is not implemented. This is not a GCM or FIPS service.
+
 ## Portable GHASH package acceptance (v0.28.1)
 
 Run `brynja-verify run ghash packaged-public-api` or
@@ -20,7 +33,7 @@ and with only the AES block opt-in. The archived NIST and lifecycle test
 sources are pinned by digest so future backends cannot silently replace them.
 The Cortex-M result is a compile check, not native execution. A separate
 host compatibility run enables all features of the dependency; it is not
-the forced-portable graph. There is one raw GHASH profile, no decrypt
+the forced-portable graph. In v0.28.1 there was one raw GHASH profile, no decrypt
 direction, GCM tag, or selectable accelerated GHASH backend.
 
 The [package review disposition](assurance/ghash-package-review.md) records the

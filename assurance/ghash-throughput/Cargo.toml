@@ -1,0 +1,21 @@
+[package]
+name = "brynja-ghash-throughput"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[workspace]
+
+[dependencies]
+brynja-crypto = { path = "../../crates/brynja-crypto", default-features = false, features = ["hazmat-ghash", "cpu"] }
+
+[lints.rust]
+unexpected_cfgs = { level = "deny", check-cfg = ['cfg(brynja_ghash_pclmul_evidence)', 'cfg(brynja_ghash_pmull_evidence)', 'cfg(brynja_ghash_rv64_evidence)'] }
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+overflow-checks = true
+panic = "abort"

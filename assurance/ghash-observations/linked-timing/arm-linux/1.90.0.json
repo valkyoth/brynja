@@ -1,0 +1,15 @@
+{
+  "arch": "arm-linux",
+  "compiler": "1.90.0",
+  "decoder": "LLVM version 23.1.6",
+  "binary_sha256": "e82cf9d9195e2a52a93fa4110dabedd990e39192f824f9d24b3663850dd1ce7d",
+  "listing_sha256": "0a0d7d6d568dda27421bf0359fa8936b3b5f81bc0f71c2db32f2a1247f428b35",
+  "result": {
+    "route": "timed -> update -> multiply",
+    "measured_call_sites": 16,
+    "field_instructions": {
+      "pmull": 3
+    },
+    "straight_line_scope": "multiply body"
+  }
+}

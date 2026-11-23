@@ -225,6 +225,7 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
     if name == "brynja-crypto-cpu":
         expected["aes-static-execution"] = []
         expected["aes-runtime-execution"] = ["aes-static-execution"]
+        expected["ghash-runtime-execution"] = []
         expected["sha256-hardened-batch"] = ["dep:brynja-core"]
         expected["sha512-hardened-batch"] = ["dep:brynja-core"]
         expected["keccak-hardened-batch"] = ["dep:brynja-core"]

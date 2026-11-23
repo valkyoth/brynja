@@ -15,7 +15,7 @@ unsafe_code = "deny"
 unsafe_op_in_unsafe_fn = "forbid"
 unused_must_use = "deny"
 missing_docs = "deny"
-unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)', 'cfg(brynja_cpu_evidence)', 'cfg(brynja_fault_evidence)', 'cfg(brynja_fault_primitives)', 'cfg(brynja_fault_profile_build)', 'cfg(brynja_fault_profile_research)', 'cfg(brynja_sha1_cpu_evidence)', 'cfg(brynja_md5_cpu_evidence)'] }
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)', 'cfg(brynja_cpu_evidence)', 'cfg(brynja_ghash_pclmul_evidence)', 'cfg(brynja_ghash_pmull_evidence)', 'cfg(brynja_ghash_rv64_evidence)', 'cfg(brynja_ghash_deny_pmull)', 'cfg(brynja_fault_evidence)', 'cfg(brynja_fault_primitives)', 'cfg(brynja_fault_profile_build)', 'cfg(brynja_fault_profile_research)', 'cfg(brynja_sha1_cpu_evidence)', 'cfg(brynja_md5_cpu_evidence)'] }
 
 [workspace.lints.clippy]
 panic = "forbid"

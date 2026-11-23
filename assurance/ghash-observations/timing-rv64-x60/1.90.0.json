@@ -1,0 +1,28 @@
+{
+  "host": "x60",
+  "model": "spacemit,x60",
+  "cpu": 0,
+  "os": "Linux-6.6.63-riscv64-with-glibc2.41",
+  "utc": "2026-11-22T18:36:42.831941+00:00",
+  "build_sha256": "f3783d66062fa2a2b03b6143c54eb954f27141b85942109535c8c3ddc0bbd41b",
+  "binary_sha256": "0f60874b0e2fae77cc14d8c7c58ae772746056952c217077591a224ea805287c",
+  "raw_sha256": "da1340b9ca63b3b3237b70afd2cb8160c3d07d872e8b76741667815723386055",
+  "results": {
+    "identical": {
+      "mean_difference_ns": -5.38720703125,
+      "paired_t": -0.14379887959982043,
+      "alarm": false
+    },
+    "subkey": {
+      "mean_difference_ns": -4.3291015625,
+      "paired_t": -0.3364896011679177,
+      "alarm": false
+    },
+    "block": {
+      "mean_difference_ns": 5.33349609375,
+      "paired_t": 0.5483325411661631,
+      "alarm": false
+    }
+  },
+  "required_scalar_extension": "zbc"
+}

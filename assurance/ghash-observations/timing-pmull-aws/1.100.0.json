@@ -1,0 +1,27 @@
+{
+  "host": "aws",
+  "model": "Neoverse-V2",
+  "cpu": 0,
+  "os": "Linux-7.0.0-1018-aws-aarch64-with-glibc2.43",
+  "utc": "2026-11-22T18:32:06.765311+00:00",
+  "build_sha256": "6cf8032c69f0c4d9271a918ef07863d864bade882bbd9344c771abbd902b9ce4",
+  "binary_sha256": "e43ca3f2fd78bb15e0ebada736e2775745a13042d25e8d71dda9333df01b1874",
+  "raw_sha256": "b9fcf1b8384c420b493a1ca1260961fc3703b5e8ce3612c009722e1bd1e9b2cc",
+  "results": {
+    "identical": {
+      "mean_difference_ns": -25.95263671875,
+      "paired_t": -4.536983901868311,
+      "alarm": true
+    },
+    "subkey": {
+      "mean_difference_ns": 1.232421875,
+      "paired_t": 0.3647216217306062,
+      "alarm": false
+    },
+    "block": {
+      "mean_difference_ns": 1.90869140625,
+      "paired_t": 0.5256642385503848,
+      "alarm": false
+    }
+  }
+}

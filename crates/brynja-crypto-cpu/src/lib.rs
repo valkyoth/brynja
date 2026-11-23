@@ -4,7 +4,8 @@
 //! x86_64 AVX2 and AArch64 SHA3. Execution requires complete static
 //! target-feature proof or, where separately admitted, reviewed runtime
 //! attestation followed by a direct startup known-answer test. It performs no
-//! runtime CPU probing, allocation, I/O, global registration, or protocol work.
+//! automatic dispatch, allocation, I/O, global registration, or protocol work.
+//! The opt-in hosted GHASH constructor probes x86 CPU features on Linux.
 
 #![no_std]
 
@@ -112,8 +113,123 @@ pub const IMPLEMENTED_SHA512_BACKEND_COUNT: usize = 2;
 /// Number of accelerated backend identities admitted by current native evidence.
 pub const ADMITTED_BACKEND_COUNT: usize = 0;
 
-#[cfg(test)]
+#[cfg(any(
+    test,
+    all(
+        feature = "ghash-runtime-execution",
+        target_arch = "aarch64",
+        target_endian = "little",
+        any(target_os = "linux", target_os = "macos")
+    ),
+    all(
+        feature = "ghash-runtime-execution",
+        target_os = "linux",
+        any(target_arch = "x86_64", target_arch = "riscv64")
+    ),
+    all(brynja_ghash_pclmul_evidence, target_arch = "x86_64"),
+    all(
+        brynja_ghash_rv64_evidence,
+        target_arch = "riscv64",
+        target_os = "linux"
+    ),
+    all(
+        brynja_ghash_pmull_evidence,
+        target_arch = "aarch64",
+        target_endian = "little"
+    )
+))]
 extern crate std;
+
+#[cfg(all(
+    any(
+        test,
+        brynja_ghash_pclmul_evidence,
+        all(feature = "ghash-runtime-execution", target_os = "linux")
+    ),
+    target_arch = "x86_64"
+))]
+mod ghash_pclmul;
+
+#[cfg(all(
+    feature = "ghash-runtime-execution",
+    target_os = "linux",
+    target_arch = "x86_64"
+))]
+#[doc(hidden)]
+pub use ghash_pclmul::runtime::{
+    Quarantined as PclmulQuarantined, RuntimeProduct as RuntimePclmul,
+};
+
+#[doc(hidden)]
+pub mod facade_api;
+
+#[cfg(all(
+    any(
+        test,
+        brynja_ghash_pmull_evidence,
+        all(
+            feature = "ghash-runtime-execution",
+            any(target_os = "linux", target_os = "macos")
+        )
+    ),
+    target_arch = "aarch64",
+    target_endian = "little"
+))]
+mod ghash_pmull;
+
+#[cfg(all(
+    feature = "ghash-runtime-execution",
+    target_arch = "aarch64",
+    target_endian = "little",
+    any(target_os = "linux", target_os = "macos")
+))]
+#[doc(hidden)]
+pub use ghash_pmull::runtime::{Quarantined as PmullQuarantined, RuntimeProduct as RuntimePmull};
+
+#[cfg(all(
+    any(test, brynja_ghash_rv64_evidence, feature = "ghash-runtime-execution"),
+    target_arch = "riscv64",
+    target_os = "linux"
+))]
+mod ghash_rv64;
+
+#[cfg(all(
+    feature = "ghash-runtime-execution",
+    target_os = "linux",
+    target_arch = "riscv64"
+))]
+#[doc(hidden)]
+pub use ghash_rv64::runtime::{Quarantined as Rv64Quarantined, RuntimeProduct as RuntimeRv64};
+
+#[cfg(all(
+    brynja_ghash_rv64_evidence,
+    target_arch = "riscv64",
+    target_os = "linux"
+))]
+#[doc(hidden)]
+pub use ghash_rv64::RequiredRv64;
+
+#[cfg(all(
+    brynja_ghash_pmull_evidence,
+    target_arch = "aarch64",
+    target_endian = "little"
+))]
+#[doc(hidden)]
+pub use ghash_pmull::RequiredPmull;
+
+#[cfg(all(
+    test,
+    any(
+        target_arch = "x86_64",
+        all(target_arch = "riscv64", target_os = "linux"),
+        all(target_arch = "aarch64", target_endian = "little")
+    )
+))]
+mod ghash_field_cases;
+
+#[cfg(all(brynja_ghash_pclmul_evidence, target_arch = "x86_64"))]
+#[doc(hidden)]
+pub use ghash_pclmul::RequiredPclmul;
 
 #[cfg(test)]
 mod tests {

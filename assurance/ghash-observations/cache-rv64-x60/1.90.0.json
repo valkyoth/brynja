@@ -1,0 +1,93 @@
+{
+  "target": "spacemit,x60",
+  "cpu": 0,
+  "host": "Linux-6.6.63-riscv64-with-glibc2.41",
+  "perf": "perf version 6.6.63.gd5b2ef2c6af4",
+  "utc": "2026-11-22T19:49:51.160518+00:00",
+  "raw_sha256": "9145d50739a23e0ca508580985fe1f1328ed41b9fb5a1d9d962a58aa7d94a511",
+  "build_sha256": "75a341e296ca755b06caab198af66383bd35127017148cce410ab5a026455d78",
+  "binary_sha256": "989c29e5bdacab19fbf070fa076a4e656ddca87ee50f8d50dbed3d9296d6a13e",
+  "results": {
+    "empty": [
+      [
+        30,
+        3
+      ],
+      [
+        27,
+        4
+      ]
+    ],
+    "campaigns": {
+      "identical": {
+        "L1-dcache-loads": {
+          "medians": [
+            385058.0,
+            385059.0
+          ],
+          "mean_difference": 0.5,
+          "paired_t": 0.3788676152120412,
+          "alarm": false,
+          "all_active_above_empty": true
+        },
+        "L1-dcache-load-misses": {
+          "medians": [
+            6.5,
+            6.0
+          ],
+          "mean_difference": 0.5,
+          "paired_t": 0.9534625892455922,
+          "alarm": false,
+          "all_active_above_empty": false
+        }
+      },
+      "subkey": {
+        "L1-dcache-loads": {
+          "medians": [
+            385060.0,
+            385057.0
+          ],
+          "mean_difference": 2.875,
+          "paired_t": 2.3547979478634797,
+          "alarm": false,
+          "all_active_above_empty": true
+        },
+        "L1-dcache-load-misses": {
+          "medians": [
+            6.0,
+            5.0
+          ],
+          "mean_difference": 0.8125,
+          "paired_t": 1.568049069878877,
+          "alarm": false,
+          "all_active_above_empty": false
+        }
+      },
+      "block": {
+        "L1-dcache-loads": {
+          "medians": [
+            385059.0,
+            385057.5
+          ],
+          "mean_difference": -0.9375,
+          "paired_t": -0.8289950197813227,
+          "alarm": false,
+          "all_active_above_empty": true
+        },
+        "L1-dcache-load-misses": {
+          "medians": [
+            5.0,
+            6.0
+          ],
+          "mean_difference": -0.6875,
+          "paired_t": -1.3814909880841528,
+          "alarm": false,
+          "all_active_above_empty": false
+        }
+      }
+    }
+  },
+  "profile": "l1-data-loads",
+  "control_sha256": "69076aba296949b0ee2020fa6ac22b4e6c5fbd5370b71e3302934066957196e5",
+  "collector_sha256": "60d44d7ce94fc09ab530e7e85584b79ff799dde7663cf206b637b38af05b76eb"
+}

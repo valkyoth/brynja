@@ -1,0 +1,12 @@
+{
+  "cc": "cc (SUSE Linux) 16.2.1 20261106",
+  "flags": [
+    "-std=c11",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Werror"
+  ],
+  "source_sha256": "5301dfc2b229afd2fddedb0bdd7ddc2779597ed143725fa8708089fff4de2dab",
+  "binary_sha256": "cbe6c25beee41e44360d3759b5503508d188348fea327992453d7bdd50fb4c3b"
+}

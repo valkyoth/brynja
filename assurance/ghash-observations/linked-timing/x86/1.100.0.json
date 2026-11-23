@@ -1,0 +1,15 @@
+{
+  "arch": "x86",
+  "compiler": "1.100.0",
+  "decoder": "LLVM version 23.1.6",
+  "binary_sha256": "327c82a44159ab20274d3337e76490555b2ec8e637857c07af5900177b7dd4d9",
+  "listing_sha256": "bb788da84dc0dc4ad912db18c15b8830e98be90e8ede0d4d19eead2049bbb050",
+  "result": {
+    "route": "timed (inlined update) -> multiply",
+    "measured_call_sites": 16,
+    "field_instructions": {
+      "pclmulqdq": 4
+    },
+    "straight_line_scope": "multiply body"
+  }
+}

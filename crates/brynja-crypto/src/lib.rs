@@ -28,7 +28,7 @@ pub mod provider;
 /// Cargo features do not prove instruction support; each constructor retains
 /// its existing deployment, target-feature, health and classification contract.
 #[cfg(feature = "cpu")]
-pub use brynja_crypto_cpu as cpu;
+pub use brynja_crypto_cpu::facade_api as cpu;
 /// Portable bounded GHASH over already-framed blocks; not a MAC or AEAD.
 #[cfg(feature = "hazmat-ghash")]
 pub mod ghash;

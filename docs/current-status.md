@@ -1,10 +1,9 @@
 # Current Status
 
-Current development (2026-11-21): v0.28.1 exercises the tagged v0.28.0
-portable GHASH API from unpacked Cargo archives. See the
-[verification scope](VERIFICATION_STATUS.md#portable-ghash-package-acceptance-v0281)
-and [milestone criteria](RELEASE_PLAN.md#v0281---ghash-portable-public-api-acceptance).
-This is not a GCM implementation or a release approval.
+Current development: v0.28.2 adds opt-in GHASH acceleration to the signed v0.28.1
+portable package baseline. See the [route and timing limits](assurance/ghash-acceleration.md)
+and [milestone criteria](RELEASE_PLAN.md#v0282---ghash-cpu-acceleration).
+Scoped pentest and final release approval are pending. No GCM or publication is selected.
 
 Historical development snapshot (2026-11-01): v0.26.0 HKDF was a local candidate based on
 tagged `v0.25.3`, pending scoped pentest and final gate. Portable modern SHA-2

@@ -1,0 +1,42 @@
+{
+  "model": "Neoverse-V2",
+  "cpu": 0,
+  "os": "Linux-7.0.0-1018-aws-aarch64-with-glibc2.43",
+  "utc": "2026-11-22T21:25:57.349664+00:00",
+  "build_sha256": "aa913e9576820d4f03d82498c07b8f7ef3f3eaa82173801d02382026739da00d",
+  "raw_sha256": "561fcb2edf27c6d27019dcc7c7bd96a1e564a026f3e96f08c97accc7bb8d3db3",
+  "binary_sha256": "efac45384ea7459a018fa467d591dbb8aafa67ffae36ae288717fce146ea0147",
+  "analysis": {
+    "label": {
+      "identical": {
+        "mean_difference_ns": -4.166015625,
+        "paired_t": -0.6302217051392967,
+        "alarm": false
+      },
+      "subkey": {
+        "mean_difference_ns": 2.1396484375,
+        "paired_t": 0.5684912204168072,
+        "alarm": false
+      },
+      "block": {
+        "mean_difference_ns": 4.3427734375,
+        "paired_t": 1.7028581827191336,
+        "alarm": false
+      }
+    },
+    "first_minus_second_ns": {
+      "identical": [
+        7.0146484375,
+        2.6376953125
+      ],
+      "subkey": [
+        2.0439453125,
+        49.6865234375
+      ],
+      "block": [
+        -45.7880859375,
+        5.3759765625
+      ]
+    }
+  }
+}

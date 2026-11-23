@@ -1,0 +1,94 @@
+{
+  "host": "aws",
+  "profile": "arm-l1-only",
+  "model": "Neoverse-V2",
+  "cpu": 0,
+  "os": "Linux-7.0.0-1018-aws-aarch64-with-glibc2.43",
+  "uid": 1000,
+  "perf": "perf version 7.0.14",
+  "utc": "2026-11-22T19:23:41.567174+00:00",
+  "raw_sha256": "92f2d450608005437acf677f8948c92044ad4d89b5f1212d1bdc0930ef060abb",
+  "build_sha256": "2f09d20b87c0a84413a3823778bb1b60640fdc9855be5b37a6196f27d07cbe15",
+  "binary_sha256": "187aba5212f781ca853d90390d8622f6f402446f7e4039fe7761c2a19e94619c",
+  "probe_sha256": "078893002280fedcee10fe0afc8ce9914b7c772ccb5c26d52350d0168ebdf242",
+  "results": {
+    "empty": [
+      [
+        33,
+        1
+      ],
+      [
+        40,
+        4
+      ]
+    ],
+    "campaigns": {
+      "identical": {
+        "armv8_pmuv3_0/l1d_cache/u": {
+          "medians": [
+            372846.0,
+            372838.5
+          ],
+          "mean_difference": -13.8125,
+          "paired_t": -0.8066456318240696,
+          "alarm": false,
+          "all_active_above_empty": true
+        },
+        "armv8_pmuv3_0/l1d_cache_refill/u": {
+          "medians": [
+            7.0,
+            7.0
+          ],
+          "mean_difference": -0.875,
+          "paired_t": -1.9616746772253078,
+          "alarm": false,
+          "all_active_above_empty": true
+        }
+      },
+      "subkey": {
+        "armv8_pmuv3_0/l1d_cache/u": {
+          "medians": [
+            372847.5,
+            372849.0
+          ],
+          "mean_difference": 5.4375,
+          "paired_t": 0.5240944836205086,
+          "alarm": false,
+          "all_active_above_empty": true
+        },
+        "armv8_pmuv3_0/l1d_cache_refill/u": {
+          "medians": [
+            7.0,
+            7.0
+          ],
+          "mean_difference": 0.125,
+          "paired_t": 0.29277002188455997,
+          "alarm": false,
+          "all_active_above_empty": true
+        }
+      },
+      "block": {
+        "armv8_pmuv3_0/l1d_cache/u": {
+          "medians": [
+            372849.0,
+            372846.5
+          ],
+          "mean_difference": 12.125,
+          "paired_t": 1.1199251392736547,
+          "alarm": false,
+          "all_active_above_empty": true
+        },
+        "armv8_pmuv3_0/l1d_cache_refill/u": {
+          "medians": [
+            7.0,
+            7.5
+          ],
+          "mean_difference": -0.5,
+          "paired_t": -0.7989354619369612,
+          "alarm": false,
+          "all_active_above_empty": true
+        }
+      }
+    }
+  }
+}

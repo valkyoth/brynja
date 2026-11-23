@@ -11,6 +11,7 @@ name = "brynja-crypto"
 version = "0.2.0"
 dependencies = [
  "brynja-core",
+ "brynja-crypto-cpu",
  "brynja-hash-parallel",
  "brynja-hash-sha2",
  "brynja-hash-sha3",
@@ -18,6 +19,10 @@ dependencies = [
  "brynja-mac-hmac",
  "brynja-mac-kmac",
 ]
+
+[[package]]
+name = "brynja-crypto-cpu"
+version = "0.2.0"
 
 [[package]]
 name = "brynja-ghash-timing"

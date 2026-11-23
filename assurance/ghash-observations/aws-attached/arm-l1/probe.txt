@@ -1,0 +1,5 @@
+Events disabled
+Events enabled
+Events disabled
+143899793;;armv8_pmuv3_0/l1d_cache/u;32016722;100.00;;
+263609;;armv8_pmuv3_0/l1d_cache_refill/u;32016722;100.00;;

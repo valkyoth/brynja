@@ -57,9 +57,32 @@ class ArchiveControls(unittest.TestCase):
         self.nodes['brynja']['features'] = ['hazmat-ghash']
         self.nodes['brynja-crypto']['features'] = ['default', 'hazmat-ghash']
 
-    def graph(self):
+    def graph(self, candidate=False):
         api.check_graph({'packages': self.packages, 'resolve': {'nodes': list(self.nodes.values()),
-                         'root': 'consumer'}}, self.consumer, self.archives, self.versions, 'brynja')
+                         'root': 'consumer'}}, self.consumer, self.archives, self.versions, 'brynja',
+                        candidate=candidate)
+
+    def test_candidate_requires_cpu_edge_and_only_reviewed_archive_features(self):
+        cpu = 'brynja-crypto-cpu'
+        self.versions[cpu] = '1'
+        self.packages.append(dict(id=cpu, name=cpu, features={'default': []},
+                                  manifest_path=str(self.archives / (cpu + '-1') / 'Cargo.toml')))
+        self.nodes[cpu] = dict(id=cpu, features=[], deps=[])
+        for name in ('brynja', 'brynja-crypto'):
+            self.nodes[name]['features'].append('cpu')
+        with self.assertRaisesRegex(ValueError, 'dependency edge'):
+            self.graph(candidate=True)
+        self.nodes['brynja-crypto']['deps'].append(dict(name='brynja_crypto_cpu', pkg=cpu))
+        self.graph(candidate=True)
+        with self.assertRaisesRegex(ValueError, 'opt-in'):
+            self.graph()
+        self.nodes[cpu]['features'].append('aes-runtime-execution')
+        with self.assertRaisesRegex(ValueError, 'transitive'):
+            self.graph(candidate=True)
+        self.nodes[cpu]['features'].clear()
+        self.packages[-1]['manifest_path'] = str(api.ROOT / 'crates' / cpu / 'Cargo.toml')
+        with self.assertRaisesRegex(ValueError, 'outside'):
+            self.graph(candidate=True)
 
     def test_accepts_archive_graph_and_rejects_checkout_fallback(self):
         self.graph()

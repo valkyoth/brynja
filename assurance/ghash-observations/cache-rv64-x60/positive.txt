@@ -1,0 +1,24 @@
+perf_event_attr:
+  type                             3 (PERF_TYPE_HW_CACHE)
+  size                             136
+  config                           0 (PERF_COUNT_HW_CACHE_RESULT_ACCESS | PERF_COUNT_HW_CACHE_OP_READ | PERF_COUNT_HW_CACHE_L1D)
+  sample_type                      IDENTIFIER
+  read_format                      TOTAL_TIME_ENABLED|TOTAL_TIME_RUNNING|ID|GROUP
+  disabled                         1
+  exclude_kernel                   1
+  exclude_hv                       1
+  enable_on_exec                   1
+  exclude_guest                    1
+------------------------------------------------------------
+perf_event_attr:
+  type                             3 (PERF_TYPE_HW_CACHE)
+  size                             136
+  config                           0x10000 (PERF_COUNT_HW_CACHE_RESULT_MISS | PERF_COUNT_HW_CACHE_OP_READ | PERF_COUNT_HW_CACHE_L1D)
+  sample_type                      IDENTIFIER
+  read_format                      TOTAL_TIME_ENABLED|TOTAL_TIME_RUNNING|ID|GROUP
+  exclude_kernel                   1
+  exclude_hv                       1
+  exclude_guest                    1
+------------------------------------------------------------
+14317232;;L1-dcache-loads;110545875;100.00;;
+577247;;L1-dcache-load-misses;110545875;100.00;4.03;of all L1-dcache accesses

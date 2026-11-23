@@ -13,6 +13,7 @@ include = ["Cargo.toml","LICENSE-APACHE","LICENSE-MIT","README.md","src/**/*.rs"
 default = []
 hazmat-aes-block = []
 hazmat-ghash = []
+ghash-runtime-execution = ["hazmat-ghash", "dep:brynja-crypto-cpu", "brynja-crypto-cpu/ghash-runtime-execution"]
 aes-static-execution = ["hazmat-aes-block", "cpu", "brynja-crypto-cpu/aes-static-execution"]
 aes-runtime-execution = ["aes-static-execution", "brynja-crypto-cpu/aes-runtime-execution"]
 external-key-provider = []

@@ -54,7 +54,10 @@ def test_current_repository() -> None:
     assert coverage["mapped_normative_section_count"] == 352
     assert coverage["excluded_normative_section_count"] == 12
     assert coverage["normative_section_count"] == 364
-    assert coverage["surface_count"] == 3349
+    assert coverage["surface_count"] == 3350
+    binding = next(s for s in coverage["surfaces"] if s["id"] ==
+                   "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.document-binding-type.1")
+    assert (binding["requirement_id"], binding["disposition"]) == ("BRY-REQ-PKIX-0004", "caller-owned")
     assert standards.json_bytes(coverage) == lib.DOMAIN_COVERAGE.read_bytes()
 
 

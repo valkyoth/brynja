@@ -324,10 +324,10 @@ Local developer observations, not certification or a release gate. No unrun or o
 
 | Check | Source tested | Performed at | Result | Freshness | Status last changed (UTC) |
 | --- | --- | --- | --- | --- | --- |
-| boundary-differential — Portable GMAC against independent Go at IV and AAD boundaries | working tree based on a5e53ce4288c958bc79ae22b1be4207774a0b3da; scoped fingerprint 7769f579592674c6fd40afe00feebe21d685b066141f0413ef7ce872498e9ca5 | 2026-11-24T17:19:59.504117935Z | passed | Up to date | 2026-11-24T17:20:00.018991491Z |
-| nist-aad-only — NIST GMAC (AAD-only GCMVS) replay | working tree based on a5e53ce4288c958bc79ae22b1be4207774a0b3da; scoped fingerprint f9da7a07ce562b1521aad9eaac531d07671b099525b8ca0eeb51240b8e276273 | 2026-11-24T17:19:38.730533601Z | passed | Up to date | 2026-11-24T17:19:39.42316076Z |
-| portable-vectors — GMAC public vectors, rejection and schedule cleanup | working tree based on a5e53ce4288c958bc79ae22b1be4207774a0b3da; scoped fingerprint e8de787168c13c12ea801110aa4152f45655366c946adc5bc8a3a78cc10e2140 | 2026-11-24T15:39:43.488073963Z | passed | Up to date | 2026-11-24T15:39:44.091147563Z |
-| public-consumer — GMAC downstream import and misuse checks | working tree based on a5e53ce4288c958bc79ae22b1be4207774a0b3da; scoped fingerprint 4ea7b72a4fa091f00c1efd646253da828d223bfd4ffa0c6c3055c552f94d046a | 2026-11-24T16:24:32.663283214Z | passed | Up to date | 2026-11-24T16:24:33.297834477Z |
+| boundary-differential — Portable GMAC against independent Go at IV and AAD boundaries | working tree based on 13314c92f7cada7c35ae5fbdc2cf7e46749714c4; scoped fingerprint 0667ebf1d08fa5679353f5871cdfc0c56bab7b8e309dd97d4afed9aadddcbcb9 | 2026-11-24T19:57:25.989423957Z | passed | Up to date | 2026-11-24T19:57:26.489031622Z |
+| nist-aad-only — NIST GMAC (AAD-only GCMVS) replay | working tree based on 13314c92f7cada7c35ae5fbdc2cf7e46749714c4; scoped fingerprint 7504ea9dcc9a37925d71b35f840cdbe8fe36dc1ac433647ab454ba920134d7fa | 2026-11-24T19:57:07.26225749Z | passed | Up to date | 2026-11-24T19:57:09.716983649Z |
+| portable-vectors — GMAC public vectors, rejection and schedule cleanup | working tree based on 13314c92f7cada7c35ae5fbdc2cf7e46749714c4; scoped fingerprint 8280e856e9fe5c7381df79f3ea91216639494dd75d123b8869a63dfaf5940bf3 | 2026-11-24T19:56:42.522128917Z | passed | Up to date | 2026-11-24T19:56:43.080087241Z |
+| public-consumer — GMAC downstream import and misuse checks | working tree based on 13314c92f7cada7c35ae5fbdc2cf7e46749714c4; scoped fingerprint 9485af91919c633dc4c55c6ebca9d80fd56846be5a47a3d86716b229bab3583d | 2026-11-24T19:56:52.66773152Z | passed | Up to date | 2026-11-24T19:56:53.189226593Z |
 
 ## hkdf
 

@@ -230,7 +230,7 @@ minimum_tests = 6
 exact_tests = 6
 
 [groups.gmac-vectors]
-paths = ["crates/brynja-crypto/tests/gmac.rs"]
+paths = ["crates/brynja-crypto/tests/gmac.rs", "crates/brynja-crypto/tests/fixtures/gmac_nist.rs"]
 optional_paths = [".cargo/config", ".cargo/config.toml"]
 
 [[checks]]

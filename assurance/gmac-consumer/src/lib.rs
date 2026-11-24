@@ -96,15 +96,17 @@ pub fn replay<const T: usize, const N: usize>(
     }
 }
 
+#[cfg(test)]
+#[path = "../../../crates/brynja-crypto/tests/fixtures/gmac_nist.rs"]
+mod nist;
+
 #[test]
 fn consumer_authenticates_without_a_ciphertext_buffer() -> Result<(), GmacError> {
-    // NIST GCMVS EncryptExtIV128 Count=0: IVlen=96, PTlen=0, AADlen=128, Taglen=128.
-    let key = 0x77be63708971c4e240d1cb79e8d77febu128.to_be_bytes();
-    let iv = [
-        0xe0, 0xe0, 0x0f, 0x19, 0xfe, 0xd7, 0xba, 0x01, 0x36, 0xa7, 0x97, 0xf3,
-    ];
-    let aad = 0x7a43ec1d9c0a5a78a0b16533a6213cabu128.to_be_bytes();
-    let tag = 0x209fcc8d3675ed938e9c7166709dd946u128.to_be_bytes();
+    let [key, iv, aad, tag] = nist::AES128;
+    let key = nist::bytes::<16>(key)?;
+    let iv = nist::bytes::<12>(iv)?;
+    let aad = nist::bytes::<16>(aad)?;
+    let tag = nist::bytes::<16>(tag)?;
     for operation in [Operation::Generate, Operation::Verify] {
         assert!(replay(operation, &key, &iv, &aad, &tag)?);
     }

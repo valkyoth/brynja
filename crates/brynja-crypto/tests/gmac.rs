@@ -3,26 +3,14 @@
 
 use brynja_crypto::gmac::{Aes128Gmac, Aes192Gmac, Aes256Gmac, GmacError, GmacTag};
 
-// Public fixtures: NIST GCMVS gcmEncryptExtIV{128,192,256}.rsp, Count=0,
-// PTlen=0, AADlen=128, IVlen=96, Taglen=128; the short-IV case below uses
-// IVlen=8, Taglen=96. Archive checksum is pinned in check-gcmvs.py.
-fn bytes<const N: usize>(s: &str) -> Result<[u8; N], GmacError> {
-    let (pairs, rest) = s.as_bytes().as_chunks::<2>();
-    assert!(rest.is_empty());
-    assert_eq!(pairs.len(), N);
-    let mut out = [0; N];
-    for (byte, pair) in out.iter_mut().zip(pairs) {
-        *byte = u8::from_str_radix(
-            std::str::from_utf8(pair).map_err(|_| GmacError::Length)?,
-            16,
-        )
-        .map_err(|_| GmacError::Length)?;
-    }
-    Ok(out)
-}
+#[path = "fixtures/gmac_nist.rs"]
+mod nist;
+use nist::bytes;
 
+// Public GCMVS Count=0 fixtures at each key width, same lengths as nist::AES128
+// except for nist_short_iv_and_tag (IVlen=8, Taglen=96).
 macro_rules! vector {
-    ($owner:ident, $size:literal, $key:literal, $iv:literal, $aad:literal, $tag:literal) => {{
+    ($owner:ident, $size:literal, $key:expr, $iv:expr, $aad:expr, $tag:expr) => {{
         let key = bytes($key)?;
         let iv = bytes::<12>($iv)?;
         let aad = bytes::<16>($aad)?;
@@ -76,14 +64,8 @@ macro_rules! vector {
 
 #[test]
 fn nist_aes128() -> Result<(), GmacError> {
-    vector!(
-        Aes128Gmac,
-        176,
-        "77be63708971c4e240d1cb79e8d77feb",
-        "e0e00f19fed7ba0136a797f3",
-        "7a43ec1d9c0a5a78a0b16533a6213cab",
-        "209fcc8d3675ed938e9c7166709dd946"
-    );
+    let [key, iv, aad, tag] = nist::AES128;
+    vector!(Aes128Gmac, 176, key, iv, aad, tag);
     Ok(())
 }
 

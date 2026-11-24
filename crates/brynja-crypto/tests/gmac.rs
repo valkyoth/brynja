@@ -125,10 +125,20 @@ fn rejects_invalid_policy_and_clears_on_failed_import() -> Result<(), GmacError>
         Aes128Gmac::<11>::for_verify(&key, &mut schedule),
         Err(GmacError::TagLength)
     ));
+    assert_eq!(schedule, [0; 176]);
+    schedule.fill(0xa5);
+    assert!(matches!(
+        Aes128Gmac::<17>::for_verify(&key, &mut schedule),
+        Err(GmacError::TagLength)
+    ));
+    assert_eq!(schedule, [0; 176]);
+    schedule.fill(0xa5);
     assert!(matches!(
         Aes128Gmac::<16, 0>::for_verify(&key, &mut schedule),
         Err(GmacError::Length)
     ));
+    assert_eq!(schedule, [0; 176]);
+    schedule.fill(0xa5);
     assert!(matches!(
         Aes128Gmac::<16, 1>::from_reserved_invocations(&key, &mut schedule, &[], 255, 2),
         Err(GmacError::Length)

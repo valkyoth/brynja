@@ -3,8 +3,17 @@
 //! GCM do not cryptographically separate their domains: distinct Rust types are not
 //! a substitute for separate keys. Never repeat a sending IV under the same key.
 //! Bound untrusted message lengths and failed verification attempts at the protocol boundary.
-//! If reservation history is lost, rotate the key. Dropping an owner clears the
-//! borrowed schedule, not caller keys, compiler spills, registers or crash dumps.
+//! Prefer the default 12-byte IV for new protocols. If reservation history is lost,
+//! rotate the key. A tag must match its owner's width at compile time; constructors
+//! reject unsupported tag widths and empty IVs at runtime.
+//!
+//! GMAC authenticates one byte string, not field boundaries. For a structured
+//! record, authenticate the protocol's canonical encoding (for example, each
+//! variable-length field preceded by its fixed-width length in bytes).
+//!
+//! Dropping an owner clears its borrowed schedule. Forgetting the owner or
+//! aborting the process can skip that clearing. Caller keys, compiler spills,
+//! registers and crash dumps are outside this guarantee.
 //!
 //! Generate a tag using an invocation number already reserved by the application:
 //! ```

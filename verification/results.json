@@ -41696,6 +41696,24 @@
         "after": "0322fd18694b502e617cf5e2fbff05a9b6cdc9e7b89624fe7f96ce2e9b8c84b1",
         "log": "verification/.runner/logs/2-1795550230430131195.log",
         "log_sha256": "68f543d94054c3e90e2cbc0a4688f2a29cffc6e91bd5c1d3224bf595f1f5a5e2"
+      },
+      {
+        "id": "2-1795551037830016499",
+        "source": "working tree based on 70f78f17b39ef9c85aed6c669e3fad5907c221a8; scoped fingerprint 5c0ff65d55fd3a0ace746ea36b6356e9f8ad77676cb71beaea0cb6cc159a0a53",
+        "started": "2026-11-24T20:10:37.830013824Z",
+        "ended": "2026-11-24T20:10:52.901506398Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/gmac/check-boundaries.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "8bd1a9c7be0a010ee7a6762982515b55707e8a24cb2042c1831df35db958f4f9",
+        "after": "8bd1a9c7be0a010ee7a6762982515b55707e8a24cb2042c1831df35db958f4f9",
+        "log": "verification/.runner/logs/2-1795551037830016499.log",
+        "log_sha256": "68f543d94054c3e90e2cbc0a4688f2a29cffc6e91bd5c1d3224bf595f1f5a5e2"
       }
     ],
     "gmac/nist-aad-only": [
@@ -41754,6 +41772,25 @@
         "before": "304c554ee6833dcd48721b75159377f4b2d43d7db7cbfaed7c0687a2544679ce",
         "after": "304c554ee6833dcd48721b75159377f4b2d43d7db7cbfaed7c0687a2544679ce",
         "log": "verification/.runner/logs/2-1795550213964710884.log",
+        "log_sha256": "c7d8ed22f061f593cd21c6401e217996fb2fdee4e81ee00701aaaa0edc7c9365"
+      },
+      {
+        "id": "2-1795551022425852621",
+        "source": "working tree based on 70f78f17b39ef9c85aed6c669e3fad5907c221a8; scoped fingerprint 1d62f8ae0497aad0d92c7ef04fdc0548587c4793146a251065e2f9d395334b43",
+        "started": "2026-11-24T20:10:22.425850457Z",
+        "ended": "2026-11-24T20:10:36.44593485Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/gmac/check-consumer.py",
+          "nist"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "3d2dd57097679128c26305857617625cd9920ca293bdc2b606271e9374ef3d76",
+        "after": "3d2dd57097679128c26305857617625cd9920ca293bdc2b606271e9374ef3d76",
+        "log": "verification/.runner/logs/2-1795551022425852621.log",
         "log_sha256": "c7d8ed22f061f593cd21c6401e217996fb2fdee4e81ee00701aaaa0edc7c9365"
       }
     ],
@@ -41844,6 +41881,35 @@
         "after": "a0e2226e2ad6395596a8978172142458eeda25dbba07b2eaf67e3c3687e12f05",
         "log": "verification/.runner/logs/2-1795550196797384631.log",
         "log_sha256": "9bb2f06fcef63dc82ff1c893e5a08f47ae76310e4d30e27a8a196dcdf96943a9"
+      },
+      {
+        "id": "2-1795550998244029377",
+        "source": "working tree based on 70f78f17b39ef9c85aed6c669e3fad5907c221a8; scoped fingerprint f1b55fc6dd0c99eea810a99f6f3701b64b7a33f86671a6d11a98d88e4be7bdd9",
+        "started": "2026-11-24T20:09:58.244027113Z",
+        "ended": "2026-11-24T20:10:11.046586668Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.100.0",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--release",
+          "--features",
+          "gmac",
+          "--test",
+          "gmac"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "15a82cce2f87299d675d0bd9371997ff4dc22f6196b07d951034534f2343d49c",
+        "after": "15a82cce2f87299d675d0bd9371997ff4dc22f6196b07d951034534f2343d49c",
+        "log": "verification/.runner/logs/2-1795550998244029377.log",
+        "log_sha256": "382ff5a9cf96dcd9b0e65f67db232c38087316d4e951d1c7b3a186db1a0643b2"
       }
     ],
     "gmac/public-consumer": [
@@ -41883,6 +41949,25 @@
         "before": "69e392785ba456b85acfdbb52bbab619765f43f52700a321b400f0d9792250f5",
         "after": "69e392785ba456b85acfdbb52bbab619765f43f52700a321b400f0d9792250f5",
         "log": "verification/.runner/logs/2-1795550203799078430.log",
+        "log_sha256": "8377eac06f9796d626e2486600fbf4d3aef81532554a15159e57d689d3333412"
+      },
+      {
+        "id": "2-1795551012247400708",
+        "source": "working tree based on 70f78f17b39ef9c85aed6c669e3fad5907c221a8; scoped fingerprint f9508e7c0baed08ee5b0d8b09bc97f4ff721f608a6ba1866be4078aec5097898",
+        "started": "2026-11-24T20:10:12.247398423Z",
+        "ended": "2026-11-24T20:10:20.948745081Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/gmac/check-consumer.py",
+          "public"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "b1d3edfcf2e7b4f30bef5e10cd3b776af02e7a12206d41754ef388ab1943df2f",
+        "after": "b1d3edfcf2e7b4f30bef5e10cd3b776af02e7a12206d41754ef388ab1943df2f",
+        "log": "verification/.runner/logs/2-1795551012247400708.log",
         "log_sha256": "8377eac06f9796d626e2486600fbf4d3aef81532554a15159e57d689d3333412"
       }
     ],
@@ -50475,40 +50560,40 @@
       "last_success": "2026-11-23T16:38:08.687471253Z"
     },
     "gmac/boundary-differential": {
-      "checked_at": "2026-11-24T19:57:26.489031622Z",
-      "fingerprint": "0667ebf1d08fa5679353f5871cdfc0c56bab7b8e309dd97d4afed9aadddcbcb9",
+      "checked_at": "2026-11-24T20:10:53.406675973Z",
+      "fingerprint": "5c0ff65d55fd3a0ace746ea36b6356e9f8ad77676cb71beaea0cb6cc159a0a53",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 13314c92f7cada7c35ae5fbdc2cf7e46749714c4; scoped fingerprint 0667ebf1d08fa5679353f5871cdfc0c56bab7b8e309dd97d4afed9aadddcbcb9",
-      "performed_at": "2026-11-24T19:57:25.989423957Z",
-      "last_success": "2026-11-24T19:57:25.989423957Z"
+      "source": "working tree based on 70f78f17b39ef9c85aed6c669e3fad5907c221a8; scoped fingerprint 5c0ff65d55fd3a0ace746ea36b6356e9f8ad77676cb71beaea0cb6cc159a0a53",
+      "performed_at": "2026-11-24T20:10:52.901506398Z",
+      "last_success": "2026-11-24T20:10:52.901506398Z"
     },
     "gmac/nist-aad-only": {
-      "checked_at": "2026-11-24T19:57:09.716983649Z",
-      "fingerprint": "7504ea9dcc9a37925d71b35f840cdbe8fe36dc1ac433647ab454ba920134d7fa",
+      "checked_at": "2026-11-24T20:10:37.113974737Z",
+      "fingerprint": "1d62f8ae0497aad0d92c7ef04fdc0548587c4793146a251065e2f9d395334b43",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 13314c92f7cada7c35ae5fbdc2cf7e46749714c4; scoped fingerprint 7504ea9dcc9a37925d71b35f840cdbe8fe36dc1ac433647ab454ba920134d7fa",
-      "performed_at": "2026-11-24T19:57:07.26225749Z",
-      "last_success": "2026-11-24T19:57:07.26225749Z"
+      "source": "working tree based on 70f78f17b39ef9c85aed6c669e3fad5907c221a8; scoped fingerprint 1d62f8ae0497aad0d92c7ef04fdc0548587c4793146a251065e2f9d395334b43",
+      "performed_at": "2026-11-24T20:10:36.44593485Z",
+      "last_success": "2026-11-24T20:10:36.44593485Z"
     },
     "gmac/portable-vectors": {
-      "checked_at": "2026-11-24T19:56:43.080087241Z",
-      "fingerprint": "8280e856e9fe5c7381df79f3ea91216639494dd75d123b8869a63dfaf5940bf3",
+      "checked_at": "2026-11-24T20:10:11.543478369Z",
+      "fingerprint": "f1b55fc6dd0c99eea810a99f6f3701b64b7a33f86671a6d11a98d88e4be7bdd9",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 13314c92f7cada7c35ae5fbdc2cf7e46749714c4; scoped fingerprint 8280e856e9fe5c7381df79f3ea91216639494dd75d123b8869a63dfaf5940bf3",
-      "performed_at": "2026-11-24T19:56:42.522128917Z",
-      "last_success": "2026-11-24T19:56:42.522128917Z"
+      "source": "working tree based on 70f78f17b39ef9c85aed6c669e3fad5907c221a8; scoped fingerprint f1b55fc6dd0c99eea810a99f6f3701b64b7a33f86671a6d11a98d88e4be7bdd9",
+      "performed_at": "2026-11-24T20:10:11.046586668Z",
+      "last_success": "2026-11-24T20:10:11.046586668Z"
     },
     "gmac/public-consumer": {
-      "checked_at": "2026-11-24T19:56:53.189226593Z",
-      "fingerprint": "9485af91919c633dc4c55c6ebca9d80fd56846be5a47a3d86716b229bab3583d",
+      "checked_at": "2026-11-24T20:10:21.454221464Z",
+      "fingerprint": "f9508e7c0baed08ee5b0d8b09bc97f4ff721f608a6ba1866be4078aec5097898",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 13314c92f7cada7c35ae5fbdc2cf7e46749714c4; scoped fingerprint 9485af91919c633dc4c55c6ebca9d80fd56846be5a47a3d86716b229bab3583d",
-      "performed_at": "2026-11-24T19:56:52.66773152Z",
-      "last_success": "2026-11-24T19:56:52.66773152Z"
+      "source": "working tree based on 70f78f17b39ef9c85aed6c669e3fad5907c221a8; scoped fingerprint f9508e7c0baed08ee5b0d8b09bc97f4ff721f608a6ba1866be4078aec5097898",
+      "performed_at": "2026-11-24T20:10:20.948745081Z",
+      "last_success": "2026-11-24T20:10:20.948745081Z"
     },
     "hkdf/asan-derivation": {
       "checked_at": "2026-11-03T14:14:59.745631804Z",

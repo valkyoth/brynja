@@ -113,6 +113,17 @@ fn key_wide_and_short_iv_limits_never_wrap() -> Result<(), Error> {
         Err(Error::Exhausted)
     );
     drop(short);
+    // A carry in a four-byte invocation must not change the caller's prefix.
+    let prefix = crate::aes_gcm::tests::sample_iv::<3>();
+    let first = 0x1234_ffff_u32;
+    let mut sender =
+        Key::<_, 16, 7>::from_reserved_invocations(aes(&mut storage)?, &prefix, first, 2)?;
+    for invocation in [first, 0x1235_0000] {
+        let (iv, _) = sender.seal_next(&[], Buffers::InPlace(&mut []), &mut [])?;
+        assert_eq!(&iv[..3], &prefix);
+        assert_eq!(&iv[3..], &invocation.to_be_bytes());
+    }
+    drop(sender);
     let mut mixed =
         Key::<_, 16, 12>::from_reserved_invocations(aes(&mut storage)?, b"test", u32::MAX, 1)?;
     assert_eq!(

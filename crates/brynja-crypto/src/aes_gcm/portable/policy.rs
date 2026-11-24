@@ -20,8 +20,12 @@ impl<const T: usize> TagPolicy<T> {
 pub(super) struct Key<K, const T: usize, const N: usize = 12> {
     cipher: K,
     tag: TagPolicy<T>,
-    template: [u8; N],
-    numbers: Option<core::ops::RangeInclusive<u64>>,
+    sending: Option<Reservation<N>>,
+}
+
+struct Reservation<const N: usize> {
+    first_iv: [u8; N],
+    numbers: core::ops::RangeInclusive<u64>,
 }
 
 impl<K: Forward, const T: usize> Key<K, T> {
@@ -44,8 +48,7 @@ impl<K: Forward, const T: usize, const N: usize> Key<K, T, N> {
         Ok(Self {
             cipher,
             tag: TagPolicy::new()?,
-            template: [0; N],
-            numbers: None,
+            sending: None,
         })
     }
     // The layout is fixed for each IV length, including when the two policies
@@ -79,20 +82,27 @@ impl<K: Forward, const T: usize, const N: usize> Key<K, T, N> {
         {
             return Err(Error::Length);
         }
-        let mut template = [0; N];
         let split = N.checked_sub(width).ok_or(Error::Invariant)?;
         if prefix.len() != split {
             return Err(Error::Length);
         }
-        template
-            .get_mut(..split)
-            .ok_or(Error::Invariant)?
-            .copy_from_slice(prefix);
+        // prefix || low 'width' bytes of the first reserved invocation.
+        // The validated prefix and all but the final counter byte supply
+        // exactly N-1 bytes; the final element is the counter's last byte.
+        let counter = first.to_be_bytes();
+        let (last_byte, leading_bytes) = counter
+            .get(skip..)
+            .and_then(<[u8]>::split_last)
+            .ok_or(Error::Invariant)?;
+        let mut leading = prefix.iter().chain(leading_bytes);
+        let first_iv = core::array::from_fn(|_| *leading.next().unwrap_or(last_byte));
         Ok(Self {
             cipher,
             tag,
-            template,
-            numbers: Some(first..=last),
+            sending: Some(Reservation {
+                first_iv,
+                numbers: first..=last,
+            }),
         })
     }
 
@@ -111,16 +121,20 @@ impl<K: Forward, const T: usize, const N: usize> Key<K, T, N> {
         io: Buffers<'_>,
         scratch: &mut [u8],
     ) -> Result<([u8; N], [u8; T]), Error> {
-        let numbers = self
-            .numbers
+        let reservation = self
+            .sending
             .as_mut()
-            .filter(|r| !r.is_empty())
+            .filter(|r| !r.numbers.is_empty())
             .ok_or(Error::Exhausted)?;
-        let mut iv = self.template;
+        let mut iv = reservation.first_iv;
         let frame = io.frame(&iv, aad, scratch)?;
         // Burn before the first keyed operation. An error or unwind cannot
         // make the same IV available again; pure admission failures consume none.
-        let counter = numbers.next().ok_or(Error::Invariant)?.to_be_bytes();
+        let counter = reservation
+            .numbers
+            .next()
+            .ok_or(Error::Invariant)?
+            .to_be_bytes();
         let width = Self::suffix_width();
         let split = N.checked_sub(width).ok_or(Error::Invariant)?;
         let skip = counter.len().checked_sub(width).ok_or(Error::Invariant)?;

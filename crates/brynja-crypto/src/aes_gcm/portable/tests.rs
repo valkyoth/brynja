@@ -1,5 +1,7 @@
 use super::*;
+use crate::aes_gcm::tests::sample_iv;
 use core::cell::Cell;
+extern crate std;
 
 // Exercise the underlying construction for externally specified vector IVs.
 // Production senders must not get this test-only nonce selection shortcut.
@@ -40,15 +42,17 @@ fn hex<const N: usize>(s: &str) -> Result<[u8; N], Error> {
     if pairs.len() != N || !tail.is_empty() {
         return Err(Error::Invariant);
     }
-    let mut bytes = [0; N];
-    for (dst, pair) in bytes.iter_mut().zip(pairs) {
-        *dst = u8::from_str_radix(
-            core::str::from_utf8(pair).map_err(|_| Error::Invariant)?,
-            16,
-        )
-        .map_err(|_| Error::Invariant)?;
-    }
-    Ok(bytes)
+    let bytes = pairs
+        .iter()
+        .map(|pair| {
+            u8::from_str_radix(
+                core::str::from_utf8(pair).map_err(|_| Error::Invariant)?,
+                16,
+            )
+            .map_err(|_| Error::Invariant)
+        })
+        .collect::<Result<std::vec::Vec<_>, _>>()?;
+    bytes.try_into().map_err(|_| Error::Invariant)
 }
 
 // NIST AES_GCM.pdf, Encrypt-Generate examples 1 and 5 at each width.
@@ -194,7 +198,7 @@ fn subkey_derivation_error_never_starts_ghash_or_commits_output() -> Result<(), 
     let key = Aes128ExpandedKey::new(&[3; 16], &mut schedule).map_err(Error::Aes)?;
     let plain = [0x17; 17];
     let (mut work, mut ct, mut dst) = ([0; 17], [0; 17], [0; 17]);
-    for (iv, expected_starts) in [(&[1; 12][..], 1), (&[2; 8][..], 2)] {
+    for (iv, expected_starts) in [(&sample_iv::<12>()[..], 1), (&sample_iv::<8>()[..], 2)] {
         // Positive controls: GHASH for the message, plus the general IV if used.
         TEST_STARTS.set(0);
         let tag = seal(&key, iv, b"aad", &plain, &mut work, &mut ct)?;
@@ -231,8 +235,8 @@ fn rejection_and_late_failure_never_publish_partial_ciphertext() -> Result<(), E
     let (mut work, mut dst) = ([0xcc; 17], [0x55; 17]);
     for (iv, text_len, work_len, dst_len) in [
         (&[][..], 17, 17, 17),
-        (&[1][..], 17, 16, 17),
-        (&[1][..], 17, 17, 16),
+        (&sample_iv::<1>()[..], 17, 16, 17),
+        (&sample_iv::<1>()[..], 17, 17, 16),
     ] {
         assert_eq!(
             seal(
@@ -256,7 +260,14 @@ fn rejection_and_late_failure_never_publish_partial_ciphertext() -> Result<(), E
         };
         work.fill(0xcc);
         assert_eq!(
-            seal(&faulty, &[1; 12], b"aad", &[1; 17], &mut work, &mut dst),
+            seal(
+                &faulty,
+                &sample_iv::<12>(),
+                b"aad",
+                &[1; 17],
+                &mut work,
+                &mut dst
+            ),
             Err(Error::Aes(aes::Error::SecretMemory))
         );
         assert_eq!(dst, [0x55; 17]);
@@ -301,7 +312,9 @@ fn invalid_tag_never_decrypts_and_late_errors_never_release_plaintext() -> Resul
         }
     }
     reject(&iv, b"headeR", &ciphertext, &tag)?;
-    reject(&[0; 8], b"header", &ciphertext, &tag)?;
+    let mut wrong_iv = iv;
+    wrong_iv[0] ^= 1;
+    reject(&wrong_iv, b"header", &ciphertext, &tag)?;
     reject(&iv, b"header", &[0; 17], &tag)?;
     let late = FailAt {
         key: &key,

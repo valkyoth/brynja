@@ -152,11 +152,11 @@ paths = ["crates/brynja-crypto/src/aes_gcm/tests.rs"]
 optional_paths = [".cargo/config", ".cargo/config.toml"]
 
 [groups.aes-gcm-composition]
-paths = ["crates/brynja-crypto/src/aes_gcm/portable/tests.rs"]
+paths = ["crates/brynja-crypto/src/aes_gcm/portable/tests.rs", "crates/brynja-crypto/src/aes_gcm/tests.rs"]
 optional_paths = [".cargo/config", ".cargo/config.toml"]
 
 [groups.aes-gcm-owner]
-paths = ["crates/brynja-crypto/src/aes_gcm/portable/policy/tests.rs"]
+paths = ["crates/brynja-crypto/src/aes_gcm/portable/policy/tests.rs", "crates/brynja-crypto/src/aes_gcm/tests.rs"]
 optional_paths = [".cargo/config", ".cargo/config.toml"]
 
 [groups.aes-gcm-transaction]

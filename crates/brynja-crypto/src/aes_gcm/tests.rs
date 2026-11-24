@@ -1,5 +1,11 @@
 use super::*;
 
+// Reproducible public input for framing and injected-error tests, not a
+// sender nonce allocator. Known-answer tests use the published IV instead.
+pub(super) fn sample_iv<const N: usize>() -> [u8; N] {
+    core::array::from_fn(|i| i.to_le_bytes()[0])
+}
+
 #[test]
 fn public_length_admission_without_large_allocations() -> Result<(), Error> {
     let max = u64::MAX / 8;
@@ -17,17 +23,17 @@ fn public_length_admission_without_large_allocations() -> Result<(), Error> {
 fn iv_fast_path_and_low_word_wrap() -> Result<(), Error> {
     let mut out = [0xa5; 16];
     assert!(initial_counter(&[0; 16], &[], &mut out).is_err());
-    let InitialCounter::FromPublicIv(mut j0) = initial_counter(&[0; 16], &[0xf1; 12], &mut out)?
-    else {
+    let iv = sample_iv::<12>();
+    let InitialCounter::FromPublicIv(mut j0) = initial_counter(&[0; 16], &iv, &mut out)? else {
         return Err(Error::LimitExceeded);
     };
-    assert_eq!(&j0[..12], &[0xf1; 12]);
+    assert_eq!(&j0[..12], &iv);
     assert_eq!(&j0[12..], &[0, 0, 0, 1]);
     inc32(&mut j0);
     assert_eq!(&j0[12..], &[0, 0, 0, 2]);
     j0[12..].fill(0xff);
     inc32(&mut j0);
-    assert_eq!(&j0[..12], &[0xf1; 12]);
+    assert_eq!(&j0[..12], &iv);
     assert_eq!(&j0[12..], &[0; 4]);
     assert_eq!(out, [0xa5; 16]);
     Ok(())
@@ -38,8 +44,9 @@ fn general_iv_and_split_fields_cover_every_padding_length() -> Result<(), Error>
     // GHASH's multiplicative identity makes the independent oracle a block XOR.
     let h = (1u128 << 127).to_be_bytes();
     let mut out = [0xa5; 16];
+    let sample = sample_iv::<33>();
     for n in (1..=33).filter(|&n| n != 12) {
-        let iv = [0x39; 33].get(..n).ok_or(Error::LimitExceeded)?;
+        let iv = sample.get(..n).ok_or(Error::LimitExceeded)?;
         let mut expected = (n as u128 * 8).to_be_bytes();
         for block in iv.chunks(16) {
             for (slot, b) in expected.iter_mut().zip(block) {

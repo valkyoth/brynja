@@ -1,6 +1,14 @@
 # Component Verification Status
 
-## GHASH runtime selection (v0.28.2 development)
+## GHASH public API usability (v0.28.3 candidate)
+
+The [runtime consumer](../assurance/ghash-runtime-consumer/README.md) reuses the
+hash-checked portable NIST corpus from the archive. Both compiler endpoints
+and both public crate routes exercise split updates, bounds and cleanup. The
+52 configurations include negative controls; they are not 52 hardware runs.
+Cortex-M evidence is compile-only. No timing or GCM claim follows.
+
+## GHASH runtime selection (v0.28.2)
 
 `brynja-verify run ghash packaged-x86-runtime` checks the default-off
 `ghash-runtime-execution` interface through both public package entry points.

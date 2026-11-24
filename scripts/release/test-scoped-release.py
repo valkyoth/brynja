@@ -59,7 +59,7 @@ class ScopedRelease(unittest.TestCase):
             scoped.enabled('garbage')
 
     def test_ghash_candidate_gate_is_finite_and_does_not_publish(self):
-        plan = scoped.load('0.28.2')
+        plan = scoped.load('0.28.3')
         commands = {check['id']: check['command'] for check in plan['checks']}
         self.assertEqual(len(commands), 32)
         self.assertEqual(commands['release-plan'], ['scripts/release/test-release-plan.sh'])
@@ -125,16 +125,18 @@ class ScopedRelease(unittest.TestCase):
                                  or 'check-aes-kani.py' in arg
                                  or 'check-aes-dataflow.py' in arg for arg in command))
         release = tomllib.loads((scoped.ROOT / 'release-crates.toml').read_text())
-        self.assertEqual(release['release']['version'], '0.28.2')
-        self.assertEqual(release['crates']['brynja']['previous_version'], '0.28.1')
+        self.assertEqual(release['release']['version'], '0.28.3')
+        self.assertEqual(release['crates']['brynja']['previous_version'], '0.28.2')
+        self.assertEqual(release['crates']['brynja']['change'], 'metadata')
+        self.assertEqual(release['release']['cumulative_milestones'][-2:], ['0.28.2', '0.28.3'])
         self.assertNotIn('0.27.7', release['release']['cumulative_milestones'])
         self.assertIn('Portable GHASH', plan['scope'])
         self.assertEqual(release['release']['stage'], 'internal')
-        self.assertTrue(release['release']['exceptional'])
-        self.assertIn('GHASH', release['release']['exception_reason'])
+        self.assertFalse(release['release']['exceptional'])
+        self.assertEqual(release['release']['exception_reason'], '')
         self.assertIn('timing remains unresolved', plan['scope'])
         self.assertIn('RISC-V AES remains evidence-only and unadmitted', plan['scope'])
-        self.assertIn('exceptional review', plan['scope'])
+        self.assertIn('no production kernel or API change', plan['scope'])
         self.assertFalse(any(row['publish'] for row in release['crates'].values()))
         for name in ('brynja-core', 'brynja-crypto'):
             with self.subTest(name=name):

@@ -1,5 +1,11 @@
 # Permanent Evidence Index
 
+## GHASH public API usability (v0.28.3 candidate)
+
+[Packaged fixture, replay commands and results](../assurance/ghash-runtime-consumer/README.md)
+for all 15 published GHASH cases, including the distinct native, emulated
+and compile-only scopes.
+
 ## GHASH acceleration (v0.28.2)
 
 The [route decisions, native observations and replay commands](assurance/ghash-acceleration.md)

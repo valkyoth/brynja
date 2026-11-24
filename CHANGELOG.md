@@ -1,6 +1,13 @@
 # Changelog
 
-## 0.28.2 opt-in GHASH acceleration (review candidate)
+## 0.28.3 GHASH public API usability (review candidate)
+
+- Replay all 15 distinct NIST GHASH intermediates through the packaged direct
+  and facade APIs, including split updates, rejected input and finalization.
+  See the [fixture and platform results](assurance/ghash-runtime-consumer/README.md).
+- No production API, kernel, timing claim or crates.io publication change.
+
+## 0.28.2 opt-in GHASH acceleration (internally tagged)
 
 - Add `ghash-runtime-execution` for callers that explicitly request Linux x86_64
   PCLMUL, little-endian Linux/macOS AArch64 PMULL, or Linux RV64 scalar Zbc.

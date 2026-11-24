@@ -1,8 +1,8 @@
 # Finite opt-in GHASH candidate gate. Verification campaigns stay separate.
 # No crates.io publication is selected for this internal milestone.
 schema = 1
-version = "0.28.2"
-scope = "Portable GHASH remains the default. Optional hardware GHASH on Linux x86_64, Linux RV64 Zbc and little-endian Linux/macOS AArch64 uses explicit admission and startup checks. Arm GHASH timing remains unresolved. RISC-V AES remains evidence-only and unadmitted. Internal only; exceptional review covers the new native kernels. No GCM, publication or implicit timing/proof/native campaign."
+version = "0.28.3"
+scope = "Packaged public GHASH API usability through the direct crate and facade. Portable GHASH remains the default. Arm GHASH timing remains unresolved. RISC-V AES remains evidence-only and unadmitted. Internal only; no production kernel or API change, GCM, publication or implicit timing/proof/native campaign."
 ci_checks = ["crypto-tests","crypto-lint","crypto-format","facade-integration","hkdf-owner-contract","aes-owner-contract","aes-wide-owner-contract","aes-wide-api","aes-dataflow-regressions","aes-provider-api","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
 
 [[checks]]

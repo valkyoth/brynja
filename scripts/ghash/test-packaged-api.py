@@ -1,5 +1,6 @@
 """Fail-closed controls for the portable GHASH archive consumer."""
 import importlib.util
+import runpy
 import tempfile
 import unittest
 from pathlib import Path
@@ -111,6 +112,21 @@ class ArchiveControls(unittest.TestCase):
         dest.write_text('// fixture replaced')
         with self.assertRaisesRegex(ValueError, 'frozen public test changed'):
             api.prepare(self.root, 'brynja', self.versions)
+
+    def test_runtime_reuses_all_frozen_families_in_order(self):
+        table = runpy.run_path(str(Path(__file__).with_name('check-packaged-runtime.py')))['published_table']
+        source = (api.ROOT / 'crates/brynja-crypto/tests/ghash_vectors/nist.rs').read_text()
+        parts = source.split('\n#[test]\n')
+        self.assertEqual(len(parts), 4)
+        output = table(source)
+        for family in parts[1:]:
+            literals = family.split('    check(', 1)[1].rstrip().removesuffix(')\n}')
+            self.assertEqual(output.count(literals), 1)
+        for broken in ('\n#[test]\n'.join(parts[:-1]), source + '\n#[test]\n' + parts[-1],
+                       source.replace('aes192_published', 'aes128_published'),
+                       source.replace('    check(', '    other(')):
+            with self.subTest(), self.assertRaises(ValueError):
+                table(broken)
 
 
 if __name__ == '__main__':

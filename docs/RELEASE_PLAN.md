@@ -6868,7 +6868,11 @@ Exit criteria:
 
 ### v0.28.2 - GHASH CPU Acceleration
 
-Status: awaiting pentest
+Status: released
+
+Internal signed tag v0.28.2; no crates.io publication. The
+[review disposition](../security/pentest/v0.28.2.md) retains the platform and
+timing restrictions.
 
 The initial x86_64 PCLMULQDQ field product is connected to the incremental
 owner in forced evidence builds only. The little-endian AArch64 PMULL candidate
@@ -6945,7 +6949,16 @@ Exit criteria:
 
 ### v0.28.3 - GHASH Public API Usability Acceptance
 
-Status: planned
+Status: awaiting pentest
+
+The [packaged runtime fixture](../assurance/ghash-runtime-consumer/README.md)
+now checks the public owner at every two-chunk split of all 15 distinct NIST
+GCM-derived GHASH cases, plus empty inputs and all partial tails. The full
+corpus replay passed on Linux x86-64 and native Apple Silicon, and under QEMU
+for Linux AArch64 and RV64. This is a correctness and
+usability milestone, not a new backend, GCM API, or timing qualification.
+The maintainer requested a scoped pentest before the final gate; this does
+not add a release-wide verification campaign or change the internal tag policy.
 
 Plan scope: Close the GHASH chain with a packaged downstream fixture covering empty, partial, multi-block, incremental, scalar, and every admitted accelerated path against authoritative field and GCM-derived vectors, while proving canonical field representation, length accounting, finalization, and no_std package usability.
 

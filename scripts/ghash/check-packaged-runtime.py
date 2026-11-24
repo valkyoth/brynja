@@ -12,6 +12,24 @@ A = runpy.run_path(str(Path(__file__).with_name('check-packaged-api.py')))
 pkg = A['pkg']
 
 
+def published_table(frozen):
+    """Reuse the three literal check(H, cases) calls; never derive an answer."""
+    # prepare() already verified this exact archive member against FROZEN.
+    sections = frozen.split('\n#[test]\n')[1:]
+    if len(sections) != 3:
+        raise ValueError('expected three frozen NIST vector families')
+    calls = []
+    for bits, section in zip((128, 192, 256), sections):
+        start = f'fn aes{bits}_published_ghash_intermediates() -> Result<(), Error> {{\n    check('
+        end = ')\n}'
+        section = section.rstrip()
+        if not section.startswith(start) or not section.endswith(end):
+            raise ValueError('unexpected frozen NIST vector wrapper')
+        calls.append('(' + section[len(start):-len(end)] + ')')
+    # Rust checks every entry's types and the exact number of cases per family.
+    return 'const PUBLISHED: [(u128, &[(&[u128], u128); 5]); 3] = [\n' + ',\n'.join(calls) + '\n];\n'
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     arch = parser.add_mutually_exclusive_group()
@@ -44,6 +62,7 @@ def main():
             c = A['prepare'](root, dependency, versions)
             consumers[dependency] = c
             shutil.copyfile(A['ROOT'] / 'assurance/ghash-runtime-consumer/route.rs', c / 'tests/runtime.rs')
+            (c / 'tests/vectors.inc').write_text(published_table((c / 'tests/nist.rs').read_text()))
             pkg.run(['cargo', '+' + A['ENDPOINTS'][0], 'generate-lockfile', '--offline'], c, env)
         flags = ['--locked', '--offline', '--features', 'subject/ghash-runtime-execution']
         cases = [('native', 'zbc'), ('absent', 'zbkc'), ('absent', 'aes'), ('quarantine', 'zbc')] if opts.rv64 else [

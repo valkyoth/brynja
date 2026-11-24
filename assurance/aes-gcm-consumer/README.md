@@ -2,8 +2,8 @@
 
 This `no_std` crate imports the public API as a downstream path dependency.
 It runs NIST's empty-message example for each key size and checks receipt,
-authentication failure, unchanged ciphertext and schedule clearing. Four
-compile-fail examples cover partial overlap, scratch aliasing and attempts
+authentication failure, unchanged ciphertext and schedule clearing. Six
+compile-fail examples cover partial overlap, scratch aliasing, wrong IV widths on both open APIs, and attempts
 to import the two raw primitive modules with only `aes-gcm` enabled.
 
 From the repository root:

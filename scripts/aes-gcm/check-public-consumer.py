@@ -25,7 +25,7 @@ def main():
                 check(compiler, route, "test", ["--release", "--lib"], target,
                       "2 passed; 0 failed; 0 ignored;")
                 check(compiler, route, "test", ["--doc"], target,
-                      "4 passed; 0 failed; 0 ignored;")
+                      "6 passed; 0 failed; 0 ignored;")
                 check(compiler, route, "check", ["--lib", "--target", "thumbv7em-none-eabi"], target)
                 print(f"{compiler} {route}: host + borrow/visibility checks; Cortex-M compile")
     print("AES_GCM_PUBLIC_CONSUMER_COMPLETE")

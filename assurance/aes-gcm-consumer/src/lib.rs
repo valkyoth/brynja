@@ -15,6 +15,20 @@
 //!     let _ = receiver.open_in_place(&[0; 12], &[], &[0; 16], buf, buf);
 //! }
 //! ```
+//! A default receiver cannot open a general-width IV, even with separate buffers:
+//! ```compile_fail,E0308
+//! use aes_gcm_consumer::crypto::aes_gcm::Aes128Gcm;
+//! fn bad(receiver: &Aes128Gcm<'_>, iv: &[u8; 16], tag: &[u8; 16]) {
+//!     let _ = receiver.open(iv, &[], tag, &[], &mut [], &mut []);
+//! }
+//! ```
+//! An explicitly general-width owner cannot open the default width in place:
+//! ```compile_fail,E0308
+//! use aes_gcm_consumer::crypto::aes_gcm::Aes256Gcm;
+//! fn bad(receiver: &Aes256Gcm<'_, 16, 60>, iv: &[u8; 12], tag: &[u8; 16]) {
+//!     let _ = receiver.open_in_place(iv, &[], tag, &mut [], &mut []);
+//! }
+//! ```
 //! Neither raw primitive becomes public just because GCM needs it:
 //! ```compile_fail,E0603
 //! use aes_gcm_consumer::crypto::aes::Aes128ExpandedKey;

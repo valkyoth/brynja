@@ -75,7 +75,7 @@ def check(compiler, route, dependency, consumer, versions, env):
 
     info = json.loads(run("metadata", "--format-version", "1", *flags))
     check_graph(info, consumer, versions, dependency)
-    for selection, count in [(["--lib"], 2), (["--test", "nist_worked"], 3), (["--doc"], 4)]:
+    for selection, count in [(["--lib"], 2), (["--test", "nist_worked"], 3), (["--doc"], 6)]:
         if not archives.exact_suite(run("test", "--release", *flags, *selection), count):
             raise ValueError("incomplete archive suite: " + str(selection))
     run("check", "--lib", "--target", "thumbv7em-none-eabi", *flags)

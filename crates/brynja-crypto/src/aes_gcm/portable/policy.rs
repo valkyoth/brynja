@@ -33,19 +33,21 @@ impl<K: Forward, const T: usize> Key<K, T> {
     ) -> Result<Self, Error> {
         Self::reserved(cipher, &prefix, first, count, u64::MAX)
     }
-
-    #[cfg(feature = "aes-gcm")]
-    pub(super) fn for_open(cipher: K) -> Result<Self, Error> {
-        Ok(Self {
-            cipher,
-            tag: TagPolicy::new()?,
-            template: [0; 12],
-            numbers: None,
-        })
-    }
 }
 
 impl<K: Forward, const T: usize, const N: usize> Key<K, T, N> {
+    #[cfg(feature = "aes-gcm")]
+    pub(super) fn for_open(cipher: K) -> Result<Self, Error> {
+        if N == 0 || u64::try_from(N).map_err(|_| Error::Length)? > u64::MAX / 8 {
+            return Err(Error::Length);
+        }
+        Ok(Self {
+            cipher,
+            tag: TagPolicy::new()?,
+            template: [0; N],
+            numbers: None,
+        })
+    }
     // The layout is fixed for each IV length, including when the two policies
     // both encode 96-bit IVs. Short IVs cannot silently truncate a counter.
     fn suffix_width() -> usize {
@@ -131,7 +133,7 @@ impl<K: Forward, const T: usize, const N: usize> Key<K, T, N> {
 
     pub(super) fn open(
         &self,
-        iv: &[u8],
+        iv: &[u8; N],
         aad: &[u8],
         tag: &[u8; T],
         io: Buffers<'_>,

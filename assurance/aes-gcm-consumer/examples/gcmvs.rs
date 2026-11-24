@@ -77,13 +77,14 @@ fn check<const T: usize, const N: usize>(kind: &str, c: &Case) -> bool {
                     matched && output == c.ct
                 }
                 "open" | "reject" | "open-disjoint" | "reject-disjoint" => {
-                    let receiver = $owner::<T>::for_open(key, &mut schedule).unwrap();
+                    let receiver = $owner::<T, N>::for_open(key, &mut schedule).unwrap();
+                    let iv: &[u8; N] = c.iv.as_slice().try_into().unwrap();
                     let disjoint = kind.ends_with("-disjoint");
                     let result = if disjoint {
-                        receiver.open(&c.iv, &c.aad, tag, &c.ct, &mut output, &mut work)
+                        receiver.open(iv, &c.aad, tag, &c.ct, &mut output, &mut work)
                     } else {
                         output.copy_from_slice(&c.ct);
-                        receiver.open_in_place(&c.iv, &c.aad, tag, &mut output, &mut work)
+                        receiver.open_in_place(iv, &c.aad, tag, &mut output, &mut work)
                     };
                     if kind.starts_with("reject") {
                         result == Err(GcmError::Authentication)

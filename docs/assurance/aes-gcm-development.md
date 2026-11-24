@@ -112,8 +112,36 @@ observes one start with a healthy 96-bit IV operation and two with a general
 IV (IV hashing and message authentication). Replay with
 `brynja-verify run aes_gcm portable-composition`.
 
+### Candidate pentest disposition
+
+The two reviews of `v0.28.3..58ccda55` reported no Critical or High
+findings. One identified a new receive-side profile mismatch: a default
+96-bit owner could authenticate a valid record from a different IV-width
+profile. This was an admission problem, not an authentication bypass.
+Both open methods now take `&[u8; IV_BYTES]`, on send-capable and receive-only
+owners alike. A receiver for a general IV must name that width; a zero-width
+receiver cannot be constructed. The [consumer regressions](../../assurance/aes-gcm-consumer/src/lib.rs)
+reject wrong-width calls at compile time; the positive fixtures and corpus
+replays still open valid general-IV records.
+
+The other findings do not call for a new release gate:
+
+- A shorter tag already requires an explicit type argument. Keep the 16-byte
+  default; provisioning must enforce one tag width across all imports of the
+  same key. A Cargo feature would not enforce that cross-owner invariant.
+- Portable timing is unqualified; Cortex-M evidence is compile-only. The AEAD
+  feature does not expose the raw primitives. Neither review reported a new
+  timing observation.
+- Bound attacker-controlled AAD and ciphertext before allocating or calling
+  the primitive. Choose a protocol IV width that fits the stack; a large
+  width reserves space in the owner. A universal 64-byte cap would exclude
+  the 128-byte IVs in the checked NIST corpus. One coordinated reservation
+  policy per raw key remains the application's responsibility.
+- The reported strict dependency Clippy warnings are in unchanged hash crates;
+  the changed crate is checked separately with warnings denied.
+
 The [candidate release notes](../../release-notes/RELEASE_NOTES_0.29.0.md)
-are ready for scoped pentest. The final gate and GitHub checks remain pending.
+reflect the change. Scoped retest, final gate and GitHub checks remain pending.
 
 ### What the application must preserve
 
@@ -140,8 +168,10 @@ length). For 12-byte IVs the layout stays 4+8; otherwise the trailing
 The caller supplies exactly the preceding fixed bytes, unique per sending
 context for that length and key. For IVs of four bytes or fewer there is no
 prefix: use a single context; the shorter field must fit the whole reservation.
-Neither profile accepts per-message arbitrary IVs. Open takes the received IV
-and does not provide replay protection. See [SP 800-38D §§8.2.1–8.3](https://doi.org/10.6028/NIST.SP.800-38D).
+Neither profile accepts per-message arbitrary IVs. Both open methods take a
+reference to an array of the owner's exact IV width. A wire decoder should
+convert a slice to that array reference before allocating message buffers.
+Opening does not provide replay protection. See [SP 800-38D §§8.2.1–8.3](https://doi.org/10.6028/NIST.SP.800-38D).
 Archive acceptance is separate from release approval. Nothing has been published.
 
 ## AArch64 timing stop rule

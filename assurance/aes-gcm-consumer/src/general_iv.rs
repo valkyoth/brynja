@@ -26,7 +26,11 @@ pub fn exercise_general_iv() -> Result<(), GcmError> {
             assert_eq!(tag, $expected[17..]);
             assert_eq!(scratch, [0; 17]);
             drop(sender);
-            let receiver = $owner::<16>::for_open(&[0; $width], &mut schedule)?;
+            assert!(matches!(
+                $owner::<16, 0>::for_open(&[0; $width], &mut schedule),
+                Err(GcmError::Length)
+            ));
+            let receiver = $owner::<16, $n>::for_open(&[0; $width], &mut schedule)?;
             receiver.open_in_place(&iv, b"header", &tag, &mut data, &mut scratch)?;
             assert_eq!(data, plain);
         }};

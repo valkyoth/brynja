@@ -55,8 +55,11 @@ macro_rules! owner {
                 let aes = $aes::new(key, schedule).map_err(|_| GcmError::Operation)?;
                 Ok(Self(Key::from_reserved_range(aes, prefix, first, count)?))
             }
+        }
 
-            /// Import a receiving key without allocating any sending IVs.
+        impl<'a, const T: usize, const N: usize> $name<'a, T, N> {
+            /// Import a receiving key for exactly `N`-byte IVs (default: 12).
+            /// Zero is not a valid IV width. No sending IVs are allocated.
             /// All attempts to seal with this owner return `Exhausted`.
             pub fn for_open(
                 key: &[u8; $width],
@@ -65,9 +68,6 @@ macro_rules! owner {
                 let aes = $aes::new(key, schedule).map_err(|_| GcmError::Operation)?;
                 Ok(Self(Key::for_open(aes)?))
             }
-        }
-
-        impl<'a, const T: usize, const N: usize> $name<'a, T, N> {
             /// Import a deterministic sender with `N`-byte IVs and a slice of
             /// a key-wide budget of at most 2^32 sealing invocations. Before
             /// import, durably reserve `count` contiguous numbers starting at
@@ -117,11 +117,12 @@ macro_rules! owner {
                 Ok(self.0.seal_next(aad, Buffers::InPlace(data), scratch)?)
             }
 
-            /// Authenticate before writing plaintext. Accepts nonempty IVs
-            /// including general-length IVs. Does not consume a sending IV.
+            /// Authenticate before writing plaintext. The IV must match the owner's
+            /// width. Bound untrusted AAD and ciphertext lengths before allocating
+            /// buffers or calling: portable work is linear. Does not consume a sending IV.
             pub fn open(
                 &self,
-                iv: &[u8],
+                iv: &[u8; N],
                 aad: &[u8],
                 tag: &[u8; T],
                 ciphertext: &[u8],
@@ -138,10 +139,11 @@ macro_rules! owner {
             }
 
             /// Authenticate and then decrypt in place. A rejected tag leaves
-            /// the original ciphertext untouched.
+            /// the original ciphertext untouched. The same IV width and application
+            /// limits on AAD and ciphertext apply as for `open`.
             pub fn open_in_place(
                 &self,
-                iv: &[u8],
+                iv: &[u8; N],
                 aad: &[u8],
                 tag: &[u8; T],
                 data: &mut [u8],

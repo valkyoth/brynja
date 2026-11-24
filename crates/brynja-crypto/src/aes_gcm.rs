@@ -9,8 +9,13 @@
 //! this profile with a fresh key. Neither constructor permits selecting the
 //! IV on individual seal calls.
 //! Persist the reservation before sealing; discard unused IVs after a crash.
-//! If reservation history is lost, rotate the key. Opening does not detect
-//! replay. Use one tag length per raw key (12–16 bytes; default 16).
+//! Coordinate every sender through one reservation policy per raw key. If
+//! reservation history is lost, rotate the key. Opening checks the owner's
+//! exact IV width (default 12 bytes); it does not detect replay. Use one tag
+//! length per raw key (12–16 bytes; default 16), including across reimports.
+//! Choose IV widths from a protocol profile, not packet lengths: each owner
+//! stores an IV-sized array. Bound untrusted AAD and payloads before allocating
+//! buffers or starting linear-time authentication.
 //!
 //! Each operation takes scratch exactly as long as the message. Once admitted,
 //! scratch is cleared on return or unwind. Failed operations leave the destination

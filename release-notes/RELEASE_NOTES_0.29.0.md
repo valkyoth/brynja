@@ -4,7 +4,9 @@ The default-off `aes-gcm` feature adds detached, allocation-free
 AES-128/192/256-GCM to `brynja_crypto::aes_gcm` and `brynja::crypto::aes_gcm`.
 Use `from_reserved_range` for a sending key dedicated to 96-bit IVs,
 `from_reserved_invocations` for general or mixed IV lengths, or `for_open`
-for a receive-only key. Fix the tag length per key at 12–16 bytes.
+for a receive-only key. Both open APIs accept only the owner's IV width
+(default 12 bytes); select general IVs explicitly, e.g. `Aes256Gcm::<16, 60>`
+for a 60-byte IV. Fix the tag length per key at 12–16 bytes (default 16).
 Neither raw AES/GHASH access nor a native backend is required.
 
 Seal and open accept exact in-place or disjoint buffers and require a

@@ -351,7 +351,7 @@ cleanup_bindings = ["crates/brynja-legacy-hmac-std/src/macos_resident/mod.rs#Buf
 [schema]
 version = 1
 milestone = "0.24.15"
-surface_register_sha256 = "b3ea576aceddc957c780a48667c5711df1704c0d7fdce9ac9dad67b9d465df71"
+surface_register_sha256 = "ae1ca74530007dd11c956dd2bb6a3ee45e55913328aa23d4db49b57ce55f9c1b"
 
 [api]
 dimensions = [
@@ -556,6 +556,32 @@ verification = "before-output-release"
 output_classification = "typed-secret-owned"
 partial_failure_policy = "clear-complete-secret-destination"
 verification = "not-applicable"
+
+[profile.gmac]
+kind = "construction"
+secret_template = "gmac-key"
+required = ["operation-direction", "byte-input", "one-shot", "fixed-output", "verification", "ownership", "no-std", "import"]
+forbidden = ["export", "reset", "clone", "snapshot"]
+caller_owned = ["buffers"]
+not_applicable = ["bit-input", "incremental-state", "extendable-output", "overlap", "provider", "backend", "hosted-adapter", "generation", "cancellation"]
+optional_isolated = []
+internal_only = []
+consumers = ["consumer:protocol"]
+
+[profile.gmac.operations.import-key]
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+verification = "not-applicable"
+
+[profile.gmac.operations.generate-authenticator]
+output_classification = "explicit-public-declassification"
+partial_failure_policy = "unchanged-destination"
+verification = "not-applicable"
+
+[profile.gmac.operations.verify-authenticator]
+output_classification = "no-output"
+partial_failure_policy = "not-applicable"
+verification = "before-output-release"
 
 [profile.symmetric-cipher]
 kind = "primitive"
@@ -847,6 +873,11 @@ fields = ["key", "inner-state", "outer-state", "partial-input", "phase"]
 temporaries = ["normalized-key", "derived-key", "message-schedule", "block-copy", "output-staging"]
 secret_output_classification = "typed-secret-owned"
 
+[secret-template.gmac-key]
+fields = ["expanded-key", "nonce-reservation"]
+temporaries = ["derived-hash-subkey", "authentication-state", "initial-counter", "tag-mask", "tag-staging"]
+secret_output_classification = "typed-secret-owned"
+
 [secret-template.symmetric-key]
 fields = ["key", "expanded-key", "counter-or-tweak", "phase"]
 temporaries = ["round-state", "keystream-block", "tail-block", "output-staging"]
@@ -892,6 +923,10 @@ ids = ["algorithm.parallelhash", "algorithm.sha3-shake", "algorithm.tuplehash"]
 [[assignment]]
 profile = "keyed-construction"
 ids = ["algorithm.ghash", "algorithm.hkdf", "algorithm.hmac", "algorithm.kmac", "algorithm.sp800-185"]
+
+[[assignment]]
+profile = "gmac"
+ids = ["algorithm.gmac"]
 
 [[assignment]]
 profile = "symmetric-cipher"
@@ -1389,11 +1424,11 @@ sha256 = "956941760ebfa65df5d9dddf84838c936a1dacaf3bd8424d55f4a0bd69b90af8"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_operations.py"
-sha256 = "7138ad8b49633b9aee89d4d722ff4402ec4562b719e2262361c20afcee15ef9b"
+sha256 = "d1ce795c964572147ad6375cb5ef2ffeb88136e9168c0b71d181bca0b9b80534"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"
-sha256 = "7a3aab99e23f67a86a4671a1505efa90e212e4046ef70255709c0a7d0b93ef95"
+sha256 = "808c7c2cfe9e4000e4f740a1c9a792f6d707008b55c3d45d0e50ae2c40a439f6"
 
 [[reviewed-source]]
 path = "scripts/cryptography/check-secret-owner-compiler.py"
@@ -1413,7 +1448,7 @@ sha256 = "107bfea74f0dacc422e930332485ac3279a70a087fc74a30d3628196c676779d"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-api-profiles.py"
-sha256 = "2111835669bb337c8e003edc206f41f2047ebb43caeb8bd9dadc65c019ef276f"
+sha256 = "fa84b980307b740d011d6138cda1dbfc94a6c536e19559099ce726295df29448"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-mir-cleanup-flow.py"
@@ -2733,7 +2768,7 @@ sha256 = "ac0a4d9f9d19b73b40a97a0052363418cbf81863f34f806b74a4aff82e8dddcd"
 
 [[reviewed-source]]
 path = "scripts/cryptography/legacy_hmac_owner_tests.py"
-sha256 = "fee5ae3715db6ac4257d4eb3728db65f5603a9ee085d6da862220ca13a23b6e5"
+sha256 = "df9c639967f9d6402911c375481f847985a77c878fd7db917296f496a31384f2"
 
 [[reviewed-source]]
 path = "scripts/legacy-hmac/check-legacy-hmac-cleanup.py"

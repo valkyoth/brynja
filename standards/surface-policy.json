@@ -1067,6 +1067,18 @@
     },
     {
       "decision": {
+        "code_target": "crates/brynja-crypto/src/aes_gcm/portable/gmac.rs#authenticate_next",
+        "disposition": "implemented",
+        "domain": "cryptography",
+        "owner": "0.29.1",
+        "rationale": "Default-off portable GMAC authenticates associated data without a payload at all three AES key widths. The public tag is distinct from raw GCM tag bytes. No replay, acceleration, independent qualification or target timing claim follows.",
+        "sources": ["nist:NIST.SP.800-38D.pdf"],
+        "test_target": "crates/brynja-crypto/tests/gmac.rs#nist_short_iv_and_tag"
+      },
+      "id": "algorithm.gmac"
+    },
+    {
+      "decision": {
         "code_target": "crates/brynja-crypto/src/chacha20.rs",
         "disposition": "future-work",
         "domain": "cryptography",

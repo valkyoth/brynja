@@ -6,7 +6,8 @@
 //! identities, all four TupleHash/TupleHashXOF identities, and all four
 //! ParallelHash/ParallelHashXOF identities are exposed from their small family
 //! crates. Portable AES-GCM is available with the default-off `aes-gcm`
-//! feature. Device adapters, other AEADs, other KDFs, public-key
+//! feature. The separate `gmac` feature exposes AAD-only authentication.
+//! Device adapters, other AEADs, other KDFs, public-key
 //! algorithms, and the complete planned composition layer remain unimplemented.
 //! Portable modern HKDF is under development; it is not release-qualified.
 //! Optional external-key lifecycle contracts and AES-128 adapter operations
@@ -16,16 +17,27 @@
 
 #![no_std]
 
-#[cfg(all(test, feature = "hazmat-ghash", not(feature = "aes-gcm")))]
+#[cfg(all(
+    not(feature = "aes-gcm"),
+    any(feature = "gmac", all(test, feature = "hazmat-ghash"))
+))]
 mod aes_gcm;
 #[cfg(feature = "aes-gcm")]
 pub mod aes_gcm;
+#[cfg(feature = "gmac")]
+pub use aes_gcm::portable::gmac;
 
 // Reuse the same primitives without granting access to their raw block APIs.
-#[cfg(all(feature = "aes-gcm", not(feature = "hazmat-aes-block")))]
+#[cfg(all(
+    any(feature = "aes-gcm", feature = "gmac"),
+    not(feature = "hazmat-aes-block")
+))]
 #[allow(dead_code, unused_imports)]
 mod aes;
-#[cfg(all(feature = "aes-gcm", not(feature = "hazmat-ghash")))]
+#[cfg(all(
+    any(feature = "aes-gcm", feature = "gmac"),
+    not(feature = "hazmat-ghash")
+))]
 #[allow(dead_code)]
 mod ghash;
 

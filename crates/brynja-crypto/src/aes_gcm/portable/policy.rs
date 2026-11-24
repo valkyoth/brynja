@@ -40,7 +40,7 @@ impl<K: Forward, const T: usize> Key<K, T> {
 }
 
 impl<K: Forward, const T: usize, const N: usize> Key<K, T, N> {
-    #[cfg(feature = "aes-gcm")]
+    #[cfg(any(feature = "aes-gcm", feature = "gmac"))]
     pub(super) fn for_open(cipher: K) -> Result<Self, Error> {
         if N == 0 || u64::try_from(N).map_err(|_| Error::Length)? > u64::MAX / 8 {
             return Err(Error::Length);

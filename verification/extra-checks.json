@@ -94283,10 +94283,10 @@
       ],
       "success": {
         "contains": [
-          "cryptographic API register covers 135 capabilities, 8 current and 10 registered capability owners, and 71 planned secret owners"
+          "cryptographic API register covers 136 capabilities, 8 current and 10 registered capability owners, and 72 planned secret owners"
         ],
         "unique_lines": [
-          "cryptographic API register covers 135 capabilities, 8 current and 10 registered capability owners, and 71 planned secret owners"
+          "cryptographic API register covers 136 capabilities, 8 current and 10 registered capability owners, and 72 planned secret owners"
         ]
       },
       "timeout_seconds": 300,
@@ -94333,11 +94333,11 @@
       "success": {
         "contains": [
           "Split operation contracts retain public exports and reject helper review drift",
-          "cryptographic API-profile policy rejects twenty-five structural regressions and twenty-three secret-output downgrades"
+          "cryptographic API-profile policy rejects twenty-five structural regressions and twenty-four secret-output downgrades"
         ],
         "unique_lines": [
           "Split operation contracts retain public exports and reject helper review drift",
-          "cryptographic API-profile policy rejects twenty-five structural regressions and twenty-three secret-output downgrades"
+          "cryptographic API-profile policy rejects twenty-five structural regressions and twenty-four secret-output downgrades"
         ]
       },
       "timeout_seconds": 300,

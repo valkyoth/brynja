@@ -1020,6 +1020,38 @@
         "planned:negative:scripts/sha2/test-general-sha512-t.py#main"
       ]
     },
+    "BRY-REQ-CRYPTO-0021": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "algorithm.gmac"
+      ],
+      "domains": [
+        "cryptography"
+      ],
+      "evidence": [],
+      "invariants": [
+        "constant-time",
+        "failure-atomicity",
+        "key-lifecycle",
+        "validation",
+        "work-bound"
+      ],
+      "owners": [
+        "0.29.1"
+      ],
+      "sources": [
+        "nist:NIST.SP.800-38D.pdf"
+      ],
+      "targets": [
+        "actual-symbol:crates/brynja-crypto/src/aes_gcm/portable/gmac.rs#authenticate_next"
+      ],
+      "tests": [
+        "planned:positive:crates/brynja-crypto/tests/gmac.rs#nist_short_iv_and_tag",
+        "planned:negative:crates/brynja-crypto/tests/gmac.rs#rejects_invalid_policy_and_clears_on_failed_import"
+      ]
+    },
     "BRY-REQ-CT-0001": {
       "authority_roles": [
         "compatibility",
@@ -6323,6 +6355,7 @@
         "BRY-REQ-CRYPTO-0017",
         "BRY-REQ-CRYPTO-0018",
         "BRY-REQ-CRYPTO-0020",
+        "BRY-REQ-CRYPTO-0021",
         "BRY-REQ-CT-0001",
         "BRY-REQ-CTREG-0059",
         "BRY-REQ-DNS-0140",
@@ -6491,6 +6524,9 @@
       ],
       "algorithm.ghash": [
         "BRY-REQ-CRYPTO-0006"
+      ],
+      "algorithm.gmac": [
+        "BRY-REQ-CRYPTO-0021"
       ],
       "algorithm.hkdf": [
         "BRY-REQ-CRYPTO-0004"
@@ -9251,6 +9287,7 @@
         "BRY-REQ-CRYPTO-0018",
         "BRY-REQ-CRYPTO-0019",
         "BRY-REQ-CRYPTO-0020",
+        "BRY-REQ-CRYPTO-0021",
         "BRY-REQ-PQ-0117"
       ],
       "ct": [
@@ -9499,7 +9536,8 @@
         "BRY-REQ-CRYPTO-0014",
         "BRY-REQ-CRYPTO-0015",
         "BRY-REQ-CRYPTO-0018",
-        "BRY-REQ-CRYPTO-0019"
+        "BRY-REQ-CRYPTO-0019",
+        "BRY-REQ-CRYPTO-0021"
       ],
       "failure-atomicity": [
         "BRY-REQ-CRYPTO-0002",
@@ -9509,6 +9547,7 @@
         "BRY-REQ-CRYPTO-0016",
         "BRY-REQ-CRYPTO-0017",
         "BRY-REQ-CRYPTO-0020",
+        "BRY-REQ-CRYPTO-0021",
         "BRY-REQ-TLS-0005"
       ],
       "key-lifecycle": [
@@ -9524,6 +9563,7 @@
         "BRY-REQ-CRYPTO-0018",
         "BRY-REQ-CRYPTO-0019",
         "BRY-REQ-CRYPTO-0020",
+        "BRY-REQ-CRYPTO-0021",
         "BRY-REQ-ENC-0004",
         "BRY-REQ-ENTROPY-0014",
         "BRY-REQ-ENTROPY-0124",
@@ -9755,6 +9795,7 @@
         "BRY-REQ-CRYPTO-0015",
         "BRY-REQ-CRYPTO-0016",
         "BRY-REQ-CRYPTO-0017",
+        "BRY-REQ-CRYPTO-0021",
         "BRY-REQ-CT-0001",
         "BRY-REQ-CTREG-0059",
         "BRY-REQ-DNS-0140",
@@ -10018,6 +10059,7 @@
         "BRY-REQ-CRYPTO-0018",
         "BRY-REQ-CRYPTO-0019",
         "BRY-REQ-CRYPTO-0020",
+        "BRY-REQ-CRYPTO-0021",
         "BRY-REQ-CT-0001",
         "BRY-REQ-CTREG-0059",
         "BRY-REQ-DNS-0140",
@@ -10542,6 +10584,9 @@
       "0.29.0": [
         "BRY-REQ-CRYPTO-0007"
       ],
+      "0.29.1": [
+        "BRY-REQ-CRYPTO-0021"
+      ],
       "0.3.2": [
         "BRY-REQ-IANA-0001",
         "BRY-REQ-STD-0001",
@@ -10723,7 +10768,8 @@
       ],
       "nist:NIST.SP.800-38D.pdf": [
         "BRY-REQ-CRYPTO-0006",
-        "BRY-REQ-CRYPTO-0007"
+        "BRY-REQ-CRYPTO-0007",
+        "BRY-REQ-CRYPTO-0021"
       ],
       "nist:NIST.SP.800-56Ar3.pdf": [
         "BRY-REQ-CRYPTO-0010"
@@ -11222,6 +11268,9 @@
       ],
       "actual-symbol:crates/brynja-crypto/src/aes_gcm/portable.rs#with_material": [
         "BRY-REQ-CRYPTO-0007"
+      ],
+      "actual-symbol:crates/brynja-crypto/src/aes_gcm/portable/gmac.rs#authenticate_next": [
+        "BRY-REQ-CRYPTO-0021"
       ],
       "actual-symbol:crates/brynja-crypto/src/hkdf/derive.rs#Prk": [
         "BRY-REQ-CRYPTO-0004"
@@ -11745,6 +11794,9 @@
       "planned:negative:crates/brynja-crypto/tests/ghash_field.rs#budget_failure_is_atomic_and_empty_is_zero": [
         "BRY-REQ-CRYPTO-0006"
       ],
+      "planned:negative:crates/brynja-crypto/tests/gmac.rs#rejects_invalid_policy_and_clears_on_failed_import": [
+        "BRY-REQ-CRYPTO-0021"
+      ],
       "planned:negative:crates/brynja-crypto/tests/hkdf_derivation.rs#public_rejections_leave_buffers_unchanged": [
         "BRY-REQ-CRYPTO-0004"
       ],
@@ -12171,6 +12223,9 @@
       ],
       "planned:positive:crates/brynja-crypto/tests/ghash_vectors/nist.rs#aes128_published_ghash_intermediates": [
         "BRY-REQ-CRYPTO-0006"
+      ],
+      "planned:positive:crates/brynja-crypto/tests/gmac.rs#nist_short_iv_and_tag": [
+        "BRY-REQ-CRYPTO-0021"
       ],
       "planned:positive:crates/brynja-crypto/tests/hkdf_derivation.rs#rfc5869_sha256_cases_one_through_three": [
         "BRY-REQ-CRYPTO-0004"

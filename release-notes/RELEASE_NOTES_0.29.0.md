@@ -1,4 +1,4 @@
-# v0.29.0 — Portable AES-GCM (candidate)
+# v0.29.0 — Portable AES-GCM
 
 The default-off `aes-gcm` feature adds detached, allocation-free
 AES-128/192/256-GCM to `brynja_crypto::aes_gcm` and `brynja::crypto::aes_gcm`.
@@ -24,5 +24,4 @@ functional checks, not CAVP validation or timing qualification. Cortex-M
 coverage is compile-only. Integrated hardware acceleration and a dedicated
 GMAC API are outside this milestone.
 
-Candidate for scoped review against v0.28.3; no final approval, signed tag
-or crates.io publication is claimed.
+Signed internal milestone `v0.29.0`; no crates.io publication.

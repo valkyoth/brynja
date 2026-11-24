@@ -1,14 +1,14 @@
 # Current Status
 
-Current development: [v0.29.0 portable AES-GCM](assurance/aes-gcm-development.md).
-The default-off `aes-gcm` API supports portable AES-128/192/256-GCM with
-exact in-place and disjoint buffers. The sender consumes its reserved nonce
-range; the application coordinates reservations across processes. The unpacked
-package consumers pass at both compiler endpoints. The broader release gate
-is not complete.
-The last signed internal tag is v0.28.3, the packaged GHASH acceptance milestone.
-Its [scoped retest](../security/pentest/v0.28.3.md) passed; no crates were
-published. The [Arm timing limits](assurance/ghash-acceleration.md) remain unchanged.
+Current development: v0.29.1 portable GMAC. The separate, default-off `gmac`
+feature authenticates associated data using AES-128/192/256. The public API
+returns an IV and a typed tag, never ciphertext. The application allocates
+disjoint sender reservations and handles replay. The [GMAC checks](assurance/gmac-development.md)
+cover the 6,750 applicable NIST cases and 2,730 independent boundary messages
+on separate direct/facade consumers on Rust 1.90.0 and 1.100.0. Release review remains open.
+
+The last signed internal tag is [v0.29.0, portable AES-GCM](../release-notes/RELEASE_NOTES_0.29.0.md).
+No crates were published. The [Arm timing limits](assurance/ghash-acceleration.md) remain unchanged.
 
 Historical development snapshot (2026-11-01): v0.26.0 HKDF was a local candidate based on
 tagged `v0.25.3`, pending scoped pentest and final gate. Portable modern SHA-2

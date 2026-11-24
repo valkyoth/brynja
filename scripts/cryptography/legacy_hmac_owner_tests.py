@@ -37,7 +37,7 @@ class LegacyOwnerTests(unittest.TestCase):
         owner = next(row for row in register['registered_secret_owners'] if row['id'] == self.owner['id'])
         self.assertEqual(owner['symbol'], 'crates/brynja-mac-hmac/src/engine.rs#Engine')
         self.assertEqual(owner['compatibility_profiles'], [contract.RECORD])
-        self.assertEqual(len(register['capabilities']), 135)
+        self.assertEqual(len(register['capabilities']), 136)
         self.assertEqual(len(register['registered_secret_owners']), 10)
         self.assertIn('registered.algorithm.hkdf',
                       {row['id'] for row in register['registered_secret_owners']})

@@ -787,10 +787,12 @@
       ],
       "affected_requirements": [
         "BRY-REQ-CRYPTO-0006",
-        "BRY-REQ-CRYPTO-0007"
+        "BRY-REQ-CRYPTO-0007",
+        "BRY-REQ-CRYPTO-0021"
       ],
       "affected_symbols": [
         "crates/brynja-crypto/src/aes_gcm/portable.rs#with_material",
+        "crates/brynja-crypto/src/aes_gcm/portable/gmac.rs#authenticate_next",
         "crates/brynja-crypto/src/ghash.rs#Ghash"
       ],
       "brynja_state": "current",

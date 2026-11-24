@@ -1,7 +1,7 @@
 {
-  "closure_policy_sha256": "d30b73ba07df3787297f3591bd467426c44983da5969e32b2dc7539508e5793e",
-  "domain_policy_sha256": "6bc2f80a94d6bf6ee8bd19ec1e2758a7bc30fff16ed7a11ec1a18d5b9b75ed0d",
-  "policy_sha256": "07c815a70b44182b54e102142592b9ae6647c36a25bc442bf3503de19f091b23",
+  "closure_policy_sha256": "83ed939487e819c53d281439f3c456596d4ad499f1ea3a347a4bf6205abe5dd5",
+  "domain_policy_sha256": "f8b07d95d127e8e87e1ed8053ae3b943dee7ec93912a029b4e612b6141605e26",
+  "policy_sha256": "39cc0928fadb9b95f814ae873c98641edaf172c8d5be9fb322fcb652eff3a38d",
   "requirements": [
     {
       "applicability": "delegate",
@@ -3751,6 +3751,78 @@
         }
       ],
       "work_bound": "The frozen contract requires one IV block, linear caller-bounded input updates, one or two final blocks, fixed workspace and no hidden allocation."
+    },
+    {
+      "applicability": "apply",
+      "decision": "enforce",
+      "decision_ids": [
+        "algorithm.gmac"
+      ],
+      "deviation_rationale": null,
+      "domain": "cryptography",
+      "evidence": [],
+      "evidence_gap": "The public portable APIs have NIST AAD-only, independent boundary and ownership evidence; see docs/assurance/gmac-development.md. Cortex-M is compile-only. No independent qualification, hardware acceleration, machine-code timing guarantee or full-construction proof is established.",
+      "id": "BRY-REQ-CRYPTO-0021",
+      "invariants": [
+        "constant-time",
+        "failure-atomicity",
+        "key-lifecycle",
+        "validation",
+        "work-bound"
+      ],
+      "lifecycle": "implemented",
+      "mapping_rationale": "SP 800-38D section 5.2 identifies GMAC as GCM with no confidential data. Sections 6 and 7 specify the hashing, tag generation and verification, and section 8 specifies IV uniqueness. The restricted short-tag profiles are not admitted.",
+      "mapping_scope": "reviewed-domain",
+      "owner": "0.29.1",
+      "profile": "crypto-encoding-pkix",
+      "residual": "Use a dedicated key, one tag width per key and durable cross-import IV allocation; applications must also bound verification attempts, enforce replay policy and supply separate confidentiality when needed.",
+      "revision": 1,
+      "scope": "protocol",
+      "sources": [
+        {
+          "authority_role": "current",
+          "domains": [
+            "symmetric"
+          ],
+          "id": "nist:NIST.SP.800-38D.pdf",
+          "kind": "local",
+          "milestones": [
+            "0.22.0",
+            "0.23.0",
+            "0.24.0",
+            "0.25.0",
+            "0.26.0",
+            "0.27.0",
+            "0.28.0",
+            "0.29.0",
+            "0.30.0",
+            "0.31.0"
+          ],
+          "role": "gcm-ghash",
+          "sha256": "d99f3921ccebca049e7522426553aba071dae14ec3d5b6041e8c111a6cb57bba"
+        }
+      ],
+      "statement": "GMAC authenticates byte-oriented associated data with an empty payload under AES-128/192/256. Fix the IV and tag width per owner, reserve disjoint sending IVs, and compare the entire admitted tag before reporting verification success. Verification-only imports cannot generate tags.",
+      "strength": "INVARIANT",
+      "targets": [
+        {
+          "kind": "actual-symbol",
+          "target": "crates/brynja-crypto/src/aes_gcm/portable/gmac.rs#authenticate_next"
+        }
+      ],
+      "tests": [
+        {
+          "polarity": "positive",
+          "status": "planned",
+          "target": "crates/brynja-crypto/tests/gmac.rs#nist_short_iv_and_tag"
+        },
+        {
+          "polarity": "negative",
+          "status": "planned",
+          "target": "crates/brynja-crypto/tests/gmac.rs#rejects_invalid_policy_and_clears_on_failed_import"
+        }
+      ],
+      "work_bound": "Each operation uses fixed-size secret state and work linear in public IV and AAD length. IVs and AAD must fit the length encoding, verification traverses the full fixed tag, and each sending owner is bounded by its reservation."
     },
     {
       "applicability": "apply",
@@ -31196,9 +31268,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "db8081c7631eefc4760e58b97e8c16d9442bf26a3301f4cf5c3c8cbaf4f0c78f",
+  "residual_policy_sha256": "b8fbe2d9b8cd1bc5e5d7cb8e08dc11a1f3ac91073e5b052ae22bb0fcff3d6c45",
   "schema": 5,
   "source_ledger_sha256": "39e86f6144d5ee20aa8b114a5d2662bef933275477b00a2e002e3e63dce31e78",
-  "surface_register_sha256": "b3ea576aceddc957c780a48667c5711df1704c0d7fdce9ac9dad67b9d465df71",
-  "transport_policy_sha256": "03b2718e138ccc29dfb0928902b28e0fe28b9f83709104566a907dd06474397e"
+  "surface_register_sha256": "ae1ca74530007dd11c956dd2bb6a3ee45e55913328aa23d4db49b57ce55f9c1b",
+  "transport_policy_sha256": "8faefa6923e1c9bb8608bf1986a01e6ed1c0c17a3443067f4e4d0e446103e4a2"
 }

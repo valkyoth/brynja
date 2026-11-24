@@ -41660,6 +41660,147 @@
         "log_sha256": "8ab952d39828814d4164becd9d72ebc21eb515178a55a966a17658d8f6dbb8e5"
       }
     ],
+    "gmac/boundary-differential": [
+      {
+        "id": "2-1795540780364522767",
+        "source": "working tree based on a5e53ce4288c958bc79ae22b1be4207774a0b3da; scoped fingerprint 7769f579592674c6fd40afe00feebe21d685b066141f0413ef7ce872498e9ca5",
+        "started": "2026-11-24T17:19:40.364520853Z",
+        "ended": "2026-11-24T17:19:59.504117935Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/gmac/check-boundaries.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "6c4709d1f9197767050d5926c48694144dac518dfc0cde9c1f9fb26e72901fd5",
+        "after": "6c4709d1f9197767050d5926c48694144dac518dfc0cde9c1f9fb26e72901fd5",
+        "log": "verification/.runner/logs/2-1795540780364522767.log",
+        "log_sha256": "68f543d94054c3e90e2cbc0a4688f2a29cffc6e91bd5c1d3224bf595f1f5a5e2"
+      }
+    ],
+    "gmac/nist-aad-only": [
+      {
+        "id": "2-1795537474197627782",
+        "source": "working tree based on a5e53ce4288c958bc79ae22b1be4207774a0b3da; scoped fingerprint f2a94625cd07f0cb9167628b9bbdee7f74414905b7ee9741bcf5b2dfb0e2bfcc",
+        "started": "2026-11-24T16:24:34.197576164Z",
+        "ended": "2026-11-24T16:24:42.760857735Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/gmac/check-consumer.py",
+          "nist"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "b58543f303e68cae9ee58cf8b4cee936cf10a3820908797ed6fbd70d4b6b89f5",
+        "after": "b58543f303e68cae9ee58cf8b4cee936cf10a3820908797ed6fbd70d4b6b89f5",
+        "log": "verification/.runner/logs/2-1795537474197627782.log",
+        "log_sha256": "c7d8ed22f061f593cd21c6401e217996fb2fdee4e81ee00701aaaa0edc7c9365"
+      },
+      {
+        "id": "2-1795540761971345019",
+        "source": "working tree based on a5e53ce4288c958bc79ae22b1be4207774a0b3da; scoped fingerprint f9da7a07ce562b1521aad9eaac531d07671b099525b8ca0eeb51240b8e276273",
+        "started": "2026-11-24T17:19:21.971341893Z",
+        "ended": "2026-11-24T17:19:38.730533601Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/gmac/check-consumer.py",
+          "nist"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "2f574a1886c70f0cac10cd1e8535315bd460e5f3d50601fa7e6d6aa08e42f1e7",
+        "after": "2f574a1886c70f0cac10cd1e8535315bd460e5f3d50601fa7e6d6aa08e42f1e7",
+        "log": "verification/.runner/logs/2-1795540761971345019.log",
+        "log_sha256": "c7d8ed22f061f593cd21c6401e217996fb2fdee4e81ee00701aaaa0edc7c9365"
+      }
+    ],
+    "gmac/portable-vectors": [
+      {
+        "id": "2-1795534730391287762",
+        "source": "working tree based on a5e53ce4288c958bc79ae22b1be4207774a0b3da; scoped fingerprint 55edd28e308327fa1dac796e6747d81a7d822ab67d7073f60678272a6150107f",
+        "started": "2026-11-24T15:38:50.391285879Z",
+        "ended": "2026-11-24T15:38:54.917967239Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.100.0",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--release",
+          "--features",
+          "gmac",
+          "--test",
+          "gmac"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "e13ffb0386893eed5f9f473f5431b068e821a6178ce0666f2076808ec2e25d1a",
+        "after": "e13ffb0386893eed5f9f473f5431b068e821a6178ce0666f2076808ec2e25d1a",
+        "log": "verification/.runner/logs/2-1795534730391287762.log",
+        "log_sha256": "0c68df84fd53f1b174fd6b990f9418af35c982dfd119960711e4d598baf31b44"
+      },
+      {
+        "id": "2-1795534779397298401",
+        "source": "working tree based on a5e53ce4288c958bc79ae22b1be4207774a0b3da; scoped fingerprint e8de787168c13c12ea801110aa4152f45655366c946adc5bc8a3a78cc10e2140",
+        "started": "2026-11-24T15:39:39.397296458Z",
+        "ended": "2026-11-24T15:39:43.488073963Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.100.0",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--release",
+          "--features",
+          "gmac",
+          "--test",
+          "gmac"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "72df5b814355318872aceff1c6ac323f182254016f03ad5b24ea2400e66f080e",
+        "after": "72df5b814355318872aceff1c6ac323f182254016f03ad5b24ea2400e66f080e",
+        "log": "verification/.runner/logs/2-1795534779397298401.log",
+        "log_sha256": "23b23c41a32c16d131e44c49366f2a037d842e70f8029abd0df78472ab86481e"
+      }
+    ],
+    "gmac/public-consumer": [
+      {
+        "id": "2-1795537460059485659",
+        "source": "working tree based on a5e53ce4288c958bc79ae22b1be4207774a0b3da; scoped fingerprint 4ea7b72a4fa091f00c1efd646253da828d223bfd4ffa0c6c3055c552f94d046a",
+        "started": "2026-11-24T16:24:20.05948108Z",
+        "ended": "2026-11-24T16:24:32.663283214Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/gmac/check-consumer.py",
+          "public"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "616c33f677da5a1902aa84bf49287df25098aa54e33ec3ec267f29b083919d6e",
+        "after": "616c33f677da5a1902aa84bf49287df25098aa54e33ec3ec267f29b083919d6e",
+        "log": "verification/.runner/logs/2-1795537460059485659.log",
+        "log_sha256": "8377eac06f9796d626e2486600fbf4d3aef81532554a15159e57d689d3333412"
+      }
+    ],
     "hkdf/asan-derivation": [
       {
         "id": "2-1793559698072391091",
@@ -50247,6 +50388,42 @@
       "source": "working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint b090821b65acbcd552e39a36c65197381b5ae3921dcde635342f512aac9c2ab9",
       "performed_at": "2026-11-23T16:38:08.687471253Z",
       "last_success": "2026-11-23T16:38:08.687471253Z"
+    },
+    "gmac/boundary-differential": {
+      "checked_at": "2026-11-24T17:20:00.018991491Z",
+      "fingerprint": "7769f579592674c6fd40afe00feebe21d685b066141f0413ef7ce872498e9ca5",
+      "result": "passed",
+      "freshness": "Up to date",
+      "source": "working tree based on a5e53ce4288c958bc79ae22b1be4207774a0b3da; scoped fingerprint 7769f579592674c6fd40afe00feebe21d685b066141f0413ef7ce872498e9ca5",
+      "performed_at": "2026-11-24T17:19:59.504117935Z",
+      "last_success": "2026-11-24T17:19:59.504117935Z"
+    },
+    "gmac/nist-aad-only": {
+      "checked_at": "2026-11-24T17:19:39.42316076Z",
+      "fingerprint": "f9da7a07ce562b1521aad9eaac531d07671b099525b8ca0eeb51240b8e276273",
+      "result": "passed",
+      "freshness": "Up to date",
+      "source": "working tree based on a5e53ce4288c958bc79ae22b1be4207774a0b3da; scoped fingerprint f9da7a07ce562b1521aad9eaac531d07671b099525b8ca0eeb51240b8e276273",
+      "performed_at": "2026-11-24T17:19:38.730533601Z",
+      "last_success": "2026-11-24T17:19:38.730533601Z"
+    },
+    "gmac/portable-vectors": {
+      "checked_at": "2026-11-24T15:39:44.091147563Z",
+      "fingerprint": "e8de787168c13c12ea801110aa4152f45655366c946adc5bc8a3a78cc10e2140",
+      "result": "passed",
+      "freshness": "Up to date",
+      "source": "working tree based on a5e53ce4288c958bc79ae22b1be4207774a0b3da; scoped fingerprint e8de787168c13c12ea801110aa4152f45655366c946adc5bc8a3a78cc10e2140",
+      "performed_at": "2026-11-24T15:39:43.488073963Z",
+      "last_success": "2026-11-24T15:39:43.488073963Z"
+    },
+    "gmac/public-consumer": {
+      "checked_at": "2026-11-24T16:24:33.297834477Z",
+      "fingerprint": "4ea7b72a4fa091f00c1efd646253da828d223bfd4ffa0c6c3055c552f94d046a",
+      "result": "passed",
+      "freshness": "Up to date",
+      "source": "working tree based on a5e53ce4288c958bc79ae22b1be4207774a0b3da; scoped fingerprint 4ea7b72a4fa091f00c1efd646253da828d223bfd4ffa0c6c3055c552f94d046a",
+      "performed_at": "2026-11-24T16:24:32.663283214Z",
+      "last_success": "2026-11-24T16:24:32.663283214Z"
     },
     "hkdf/asan-derivation": {
       "checked_at": "2026-11-03T14:14:59.745631804Z",

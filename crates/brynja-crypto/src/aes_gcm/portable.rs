@@ -188,6 +188,9 @@ fn open_with<const T: usize>(
 
 mod policy;
 
+#[cfg(feature = "gmac")]
+pub mod gmac;
+
 #[cfg(feature = "aes-gcm")]
 pub(super) mod api;
 

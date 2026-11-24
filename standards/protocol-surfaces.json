@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "f2ff6c5452e865a69bd1123adc6274a4f1e409d393e0b9486692151d8d8aa652",
+  "policy_sha256": "12a08a9456b34f7cad70a56c243e707735823d9ca58435d7922c5afe4ef0a2d4",
   "schema": 2,
   "source_ledger_sha256": "39e86f6144d5ee20aa8b114a5d2662bef933275477b00a2e002e3e63dce31e78",
   "surfaces": [
@@ -112,6 +112,19 @@
       "owner": "0.28.0",
       "rationale": "GHASH finite-field arithmetic remains separate constant-time work with bounded incremental processing and full-width proof obligations.",
       "test_target": "tests/surface/primitives.rs#ghash"
+    },
+    {
+      "code_target": "crates/brynja-crypto/src/aes_gcm/portable/gmac.rs#authenticate_next",
+      "disposition": "implemented",
+      "domain": "cryptography",
+      "id": "algorithm.gmac",
+      "kind": "semantic",
+      "normative_sources": [
+        "nist:NIST.SP.800-38D.pdf"
+      ],
+      "owner": "0.29.1",
+      "rationale": "Default-off portable GMAC authenticates associated data without a payload at all three AES key widths. The public tag is distinct from raw GCM tag bytes. No replay, acceleration, independent qualification or target timing claim follows.",
+      "test_target": "crates/brynja-crypto/tests/gmac.rs#nist_short_iv_and_tag"
     },
     {
       "code_target": "crates/brynja-crypto/src/hkdf/derive.rs#Prk",

@@ -35,6 +35,11 @@ OPERATION_CONTRACTS = {
         "public-fixed-output": ("explicit-public-declassification", "unchanged-destination", "not-applicable"),
         "public-xof-output": ("explicit-public-declassification", "unchanged-destination", "not-applicable"),
     },
+    "gmac": {
+        "import-key": ("typed-secret-owned", "clear-complete-secret-destination", "not-applicable"),
+        "generate-authenticator": ("explicit-public-declassification", "unchanged-destination", "not-applicable"),
+        "verify-authenticator": ("no-output", "not-applicable", "before-output-release"),
+    },
     "keyed-construction": {
         "derive-secret": ("typed-secret-owned", "clear-complete-secret-destination", "not-applicable"),
         "generate-authenticator": ("explicit-public-declassification", "unchanged-destination", "not-applicable"),

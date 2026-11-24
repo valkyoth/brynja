@@ -6,6 +6,7 @@ import importlib.util
 import json
 from pathlib import Path
 import re
+import runpy
 import sys
 import tomllib
 import unittest
@@ -458,12 +459,17 @@ def validate(registry):
         gcm_framing = key == ('aes_gcm', 'framing')
         gcm_composition = key == ('aes_gcm', 'portable-composition')
         gcm_owner = key == ('aes_gcm', 'owner-policy')
-        field_inputs = gcm_framing or gcm_composition or gcm_owner or key == ('ghash', 'portable-field')
+        gmac = key == ('gmac', 'portable-vectors')
+        field_inputs = gcm_framing or gcm_composition or gcm_owner or gmac or key == ('ghash', 'portable-field')
         assert argv[:3] == ['cargo', '+1.100.0' if field_inputs else '+1.99.1', 'test'], 'unexpected executable'
         assert all(flag in argv for flag in ('--offline', '--locked', '--no-default-features'))
         assert '--workspace' not in argv and '--all-features' not in argv
         package = argv[argv.index('-p') + 1]
-        if gcm_framing:
+        if gmac:
+            assert argv[-5:] == ['--release', '--features', 'gmac', '--test', 'gmac']
+            assert check['success']['exact_tests'] == 5
+            test = 'crates/brynja-crypto/tests/gmac.rs'
+        elif gcm_framing:
             assert argv[-4:] == ['--features', 'hazmat-ghash', '--lib', 'aes_gcm::tests::']
             assert check['success']['exact_tests'] == 4
             test = 'crates/brynja-crypto/src/aes_gcm/tests.rs'
@@ -525,6 +531,38 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(check['success']['unique_lines'], ['separate_commit: verified',
                          'in_place_commit: verified', 'AES_GCM_TRANSACTION_PROOFS_COMPLETE'])
 
+    def test_gmac_selection_does_not_treat_failed_decrypt_with_text_as_gmac(self):
+        select = runpy.run_path(str(ROOT / 'scripts/gmac/check-consumer.py'))['select_gmac']
+        records = ['seal\tk\ti\t\t\t\tt', 'reject\tk\ti\ta\t01\t\tt',
+                   'open\tk\ti\ta\t01\t02\tt', 'reject\tk\ti\ta\t\t\tt']
+        self.assertEqual(list(select(records)), ['seal\tk\ti\t\tt', 'reject\tk\ti\ta\tt'])
+
+    def test_gmac_replay_binds_only_gmac_routes_and_all_observed_outputs(self):
+        groups = self.registry['groups']
+        fixture = 'assurance/gmac-consumer'
+        paths = set(groups['gmac-consumer']['paths'])
+        lock = tomllib.loads((ROOT / fixture / 'Cargo.lock').read_text())
+        self.assertTrue({f"crates/{p['name']}" for p in lock['package']
+                         if p['name'] != 'gmac-consumer'} <= paths)
+        self.assertTrue({fixture + '/' + file for file in ('src', 'Cargo.toml', 'Cargo.lock')} <= paths)
+        manifest = tomllib.loads((ROOT / fixture / 'Cargo.toml').read_text())
+        for route, dep in [('direct', 'brynja-crypto'), ('facade', 'brynja')]:
+            self.assertEqual(manifest['features'][route], ['dep:' + dep])
+            self.assertEqual(manifest['dependencies'][dep]['features'], ['gmac'])
+            self.assertIs(manifest['dependencies'][dep]['default-features'], False)
+        self.assertEqual(set(groups['gmac-gcmvs']['paths']),
+                         {'scripts/aes-gcm/check-gcmvs.py', fixture + '/examples/nist.rs'})
+        self.assertEqual(groups['gmac-gcmvs']['optional_paths'], ['references/local/gcmtestvectors.zip'])
+        for cid, mode, summary in [('public-consumer', 'public', 'public GMAC, feature isolation, typed tag, Cortex-M compile'),
+                                   ('nist-aad-only', 'nist', 'generate=3375 verify=1657 reject=1718')]:
+            check, = (c for c in self.registry['checks'] if (c['component'], c['id']) == ('gmac', cid))
+            self.assertEqual(check['command'], ['python3', 'scripts/gmac/check-consumer.py', mode])
+            self.assertIn(check['command'][1], paths)
+            self.assertEqual(check['inputs'], ['gmac-consumer', 'hkdf-msrv'] + (['gmac-gcmvs'] if mode == 'nist' else []))
+            self.assertEqual(check['success']['unique_lines'],
+                             [f'{v} {r}: {summary}' for v in ('1.90.0', '1.100.0') for r in ('direct', 'facade')]
+                             + [f'GMAC_{mode.upper()}_COMPLETE'])
+
     def test_gcm_public_consumer_tracks_both_routes_and_their_sources(self):
         check, = (c for c in self.registry['checks'] if
                   (c['component'], c['id']) == ('aes_gcm', 'public-consumer'))
@@ -537,6 +575,18 @@ class RegistryTests(unittest.TestCase):
         self.assertTrue(required | {check['command'][1], consumer + '/src', consumer + '/Cargo.toml',
                                     consumer + '/Cargo.lock'} <= set(group['paths']))
         self.assertEqual(check['success']['contains'], ['AES_GCM_PUBLIC_CONSUMER_COMPLETE'])
+
+    def test_gmac_differential_has_independent_oracle_and_exact_route_counts(self):
+        check, = (c for c in self.registry['checks'] if
+                  (c['component'], c['id']) == ('gmac', 'boundary-differential'))
+        self.assertEqual(check['inputs'], ['gmac-consumer', 'hkdf-msrv', 'gmac-boundaries'])
+        group = self.registry['groups']['gmac-boundaries']
+        self.assertEqual(group['tools'], [{'program': 'go'}])
+        self.assertEqual(set(group['paths']), {check['command'][1], 'assurance/gmac-oracle/boundaries.go',
+                                               'assurance/gmac-consumer/examples/nist.rs'})
+        self.assertEqual(check['success']['unique_lines'], [
+            f'{v} {r}: generate=2730 verify=2730 reject=2730'
+            for v in ('1.90.0', '1.100.0') for r in ('direct', 'facade')] + ['GMAC_BOUNDARY_COMPLETE'])
 
     def test_gcm_differential_binds_oracle_replay_and_both_compilers(self):
         check, = (c for c in self.registry['checks'] if

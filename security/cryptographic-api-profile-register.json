@@ -1336,6 +1336,146 @@
     {
       "api": {
         "backend": {
+          "disposition": "not-applicable",
+          "owner": "0.24.15"
+        },
+        "bit-input": {
+          "disposition": "not-applicable",
+          "owner": "0.24.15"
+        },
+        "buffers": {
+          "disposition": "caller-owned",
+          "owner": "0.24.15"
+        },
+        "byte-input": {
+          "disposition": "required",
+          "owner": "0.29.1"
+        },
+        "cancellation": {
+          "disposition": "not-applicable",
+          "owner": "0.24.15"
+        },
+        "clone": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "export": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "extendable-output": {
+          "disposition": "not-applicable",
+          "owner": "0.24.15"
+        },
+        "fixed-output": {
+          "disposition": "required",
+          "owner": "0.29.1"
+        },
+        "generation": {
+          "disposition": "not-applicable",
+          "owner": "0.24.15"
+        },
+        "hosted-adapter": {
+          "disposition": "not-applicable",
+          "owner": "0.24.15"
+        },
+        "import": {
+          "disposition": "required",
+          "owner": "0.29.1"
+        },
+        "incremental-state": {
+          "disposition": "not-applicable",
+          "owner": "0.24.15"
+        },
+        "no-std": {
+          "disposition": "required",
+          "owner": "0.29.1"
+        },
+        "one-shot": {
+          "disposition": "required",
+          "owner": "0.29.1"
+        },
+        "operation-direction": {
+          "disposition": "required",
+          "owner": "0.29.1"
+        },
+        "overlap": {
+          "disposition": "not-applicable",
+          "owner": "0.24.15"
+        },
+        "ownership": {
+          "disposition": "required",
+          "owner": "0.29.1"
+        },
+        "provider": {
+          "disposition": "not-applicable",
+          "owner": "0.24.15"
+        },
+        "reset": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "snapshot": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "verification": {
+          "disposition": "required",
+          "owner": "0.29.1"
+        }
+      },
+      "code_target": "crates/brynja-crypto/src/aes_gcm/portable/gmac.rs#authenticate_next",
+      "consumer_links": [
+        "consumer:protocol"
+      ],
+      "disposition": "implemented",
+      "domain": "cryptography",
+      "explicit_rejections": [
+        "copy-secret-state",
+        "clone-secret-state",
+        "format-secret-state",
+        "serialize-secret-state",
+        "raw-secret-state-access",
+        "snapshot-secret-state",
+        "reset-secret-into-ordinary-state",
+        "downstream-hardened-marker-implementation",
+        "downstream-hardened-marker-forgery",
+        "optional-only-core-cleanup",
+        "partial-secret-output-without-clearing",
+        "unreviewed-secret-accelerated-backend",
+        "implicit-secret-output-declassification",
+        "unsafe-convenience-api",
+        "nonstandard-convenience-api"
+      ],
+      "id": "algorithm.gmac",
+      "normative_sources": [
+        "nist:NIST.SP.800-38D.pdf"
+      ],
+      "operations": {
+        "generate-authenticator": {
+          "output_classification": "explicit-public-declassification",
+          "partial_failure_policy": "unchanged-destination",
+          "verification": "not-applicable"
+        },
+        "import-key": {
+          "output_classification": "typed-secret-owned",
+          "partial_failure_policy": "clear-complete-secret-destination",
+          "verification": "not-applicable"
+        },
+        "verify-authenticator": {
+          "output_classification": "no-output",
+          "partial_failure_policy": "not-applicable",
+          "verification": "before-output-release"
+        }
+      },
+      "ordinary_hardened_separation": "required",
+      "owner": "0.29.1",
+      "profile": "gmac",
+      "test_target": "crates/brynja-crypto/tests/gmac.rs#nist_short_iv_and_tag"
+    },
+    {
+      "api": {
+        "backend": {
           "disposition": "required",
           "owner": "0.26.0"
         },
@@ -20320,6 +20460,71 @@
       ]
     },
     {
+      "capability": "algorithm.gmac",
+      "evidence": [
+        "crates/brynja-crypto/tests/gmac.rs#nist_short_iv_and_tag",
+        "scripts/zeroization/check-zeroization-codegen.sh"
+      ],
+      "fields": [
+        "expanded-key",
+        "nonce-reservation"
+      ],
+      "id": "planned.algorithm.gmac",
+      "lifecycle_edges": [
+        "creation",
+        "success",
+        "error",
+        "cancellation",
+        "replacement",
+        "rekey",
+        "failed-construction",
+        "recoverable-unwind",
+        "drop"
+      ],
+      "operations": {
+        "generate-authenticator": {
+          "output_classification": "explicit-public-declassification",
+          "partial_failure_policy": "unchanged-destination",
+          "verification": "not-applicable"
+        },
+        "import-key": {
+          "output_classification": "typed-secret-owned",
+          "partial_failure_policy": "clear-complete-secret-destination",
+          "verification": "not-applicable"
+        },
+        "verify-authenticator": {
+          "output_classification": "no-output",
+          "partial_failure_policy": "not-applicable",
+          "verification": "before-output-release"
+        }
+      },
+      "owner": "0.29.1",
+      "planned_cleanup_contract": "mandatory-core-or-separately-reviewed-equivalent",
+      "planned_implementation_target": "crates/brynja-crypto/src/aes_gcm/portable/gmac.rs#authenticate_next",
+      "residual_risks": [
+        "mem-forget",
+        "process-abort",
+        "forced-termination",
+        "power-loss",
+        "register-copies",
+        "cpu-caches",
+        "compiler-created-copies",
+        "crash-dumps",
+        "suspend-images",
+        "os-swap-and-paging",
+        "dma-visible-copies",
+        "physical-memory-remanence"
+      ],
+      "state": "planned",
+      "temporaries": [
+        "derived-hash-subkey",
+        "authentication-state",
+        "initial-counter",
+        "tag-mask",
+        "tag-staging"
+      ]
+    },
+    {
       "capability": "algorithm.legacy-pkcs1-client-signature",
       "evidence": [
         "tests/surface/signatures.rs#legacy_client_pkcs1_rejected",
@@ -24563,7 +24768,7 @@
       ]
     }
   ],
-  "policy_sha256": "5f85ce4f510bd581949fce569163cbe312856cbec29bff4b575fa9fc826615fe",
+  "policy_sha256": "07561e0729dfebdcca746d9ae8c32eb17da721f23b1e5652ae6c2dc58a6665a7",
   "registered_secret_owners": [
     {
       "capability": "algorithm.hkdf",
@@ -25369,5 +25574,5 @@
     "physical-memory-remanence"
   ],
   "schema": 1,
-  "surface_register_sha256": "b3ea576aceddc957c780a48667c5711df1704c0d7fdce9ac9dad67b9d465df71"
+  "surface_register_sha256": "ae1ca74530007dd11c956dd2bb6a3ee45e55913328aa23d4db49b57ce55f9c1b"
 }

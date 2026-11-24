@@ -6984,7 +6984,7 @@ Exit criteria:
 
 ### v0.29.0 - Complete AES-GCM
 
-Status: in progress
+Status: released
 
 The [implementation checklist and AArch64 timing stop rule](assurance/aes-gcm-development.md)
 cover default-off portable seal/open at all three key sizes, fixed tag lengths,
@@ -6994,8 +6994,8 @@ key-wide reservation. Two bounded proofs cover the production seal/open
 commit for lengths 0–17. All 33,750 applicable NIST GCMVS cases passed on both
 compiler endpoints. An independent Go AES-GCM comparison covered 11,025
 generated messages in both buffer layouts on each endpoint. The subkey-failure
-regression and requirement mapping are in place; scoped review and the final
-gate remain open. See the [candidate release notes](../release-notes/RELEASE_NOTES_0.29.0.md).
+regression and requirement mapping are in place. The signed internal tag is
+`v0.29.0`; see the [release notes](../release-notes/RELEASE_NOTES_0.29.0.md).
 
 Plan scope: Implement complete NIST SP 800-38D AES-GCM seal and open over AES-128, AES-192, and AES-256, including 96-bit and general IV processing, supported tag lengths, nonce and invocation limits, checked length domains, official vectors, authenticate-before-release, exact in-place or disjoint buffers, partial-overlap rejection, unchanged failure destinations, and failure-atomicity proofs.
 
@@ -7034,7 +7034,14 @@ Exit criteria:
 
 ### v0.29.1 - Complete GMAC
 
-Status: planned
+Status: in progress
+
+The initial portable owners and typed tag are available behind `gmac`.
+The [GMAC replay and downstream checks](assurance/gmac-development.md)
+exercise the authentication-only interface on Rust 1.90.0 and 1.100.0.
+Both import routes passed all 6,750 applicable NIST cases and an independent
+2,730-message boundary comparison. Requirement `BRY-REQ-CRYPTO-0021` maps
+this portable behavior, not timing qualification or release approval.
 
 Plan scope: Implement the complete AAD-only GMAC surface over every admitted AES width with exact IV and tag policies, invocation and length limits, constant-time verification, official vectors, state cleanup, distinct MAC tag types, and public APIs that cannot be confused with AES-GCM ciphertext operations.
 

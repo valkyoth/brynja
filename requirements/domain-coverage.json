@@ -248,7 +248,8 @@
       ],
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0006",
-        "BRY-REQ-CRYPTO-0007"
+        "BRY-REQ-CRYPTO-0007",
+        "BRY-REQ-CRYPTO-0021"
       ],
       "role": "gcm-ghash",
       "sha256": "d99f3921ccebca049e7522426553aba071dae14ec3d5b6041e8c111a6cb57bba"
@@ -5656,10 +5657,10 @@
   "excluded_normative_section_count": 12,
   "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "6bc2f80a94d6bf6ee8bd19ec1e2758a7bc30fff16ed7a11ec1a18d5b9b75ed0d",
-  "requirement_count": 41,
+  "policy_sha256": "f8b07d95d127e8e87e1ed8053ae3b943dee7ec93912a029b4e612b6141605e26",
+  "requirement_count": 42,
   "schema": 1,
-  "surface_count": 3350,
+  "surface_count": 3351,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -5716,6 +5717,14 @@
       "id": "algorithm.ghash",
       "owner": "0.28.0",
       "requirement_id": "BRY-REQ-CRYPTO-0006"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "implemented",
+      "domain": "cryptography",
+      "id": "algorithm.gmac",
+      "owner": "0.29.1",
+      "requirement_id": "BRY-REQ-CRYPTO-0021"
     },
     {
       "coverage": "requirement",

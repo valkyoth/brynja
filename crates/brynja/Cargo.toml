@@ -12,6 +12,7 @@ include = ["Cargo.toml","LICENSE-APACHE","LICENSE-MIT","README.md","src/**/*.rs"
 [features]
 default = []
 aes-gcm = ["brynja-crypto/aes-gcm"]
+gmac = ["brynja-crypto/gmac"]
 hazmat-aes-block = ["brynja-crypto/hazmat-aes-block"]
 hazmat-ghash = ["brynja-crypto/hazmat-ghash"]
 ghash-runtime-execution = ["hazmat-ghash", "brynja-crypto/ghash-runtime-execution"]

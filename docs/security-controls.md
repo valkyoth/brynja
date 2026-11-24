@@ -1,5 +1,15 @@
 # Security Controls
 
+## Portable GMAC development contract (v0.29.1)
+
+For `BRY-REQ-CRYPTO-0021`, a sender authenticates AAD using its next reserved IV; there is no per-message
+IV override. A verification-only owner cannot generate tags. The owner fixes
+the tag and IV widths and reuses the portable GCM verification path that
+compares every admitted tag byte before deciding success. That source-level
+property is not target timing qualification. Keys, reservations across restarts,
+and replay limits remain the application's responsibility. See the
+[downstream and corpus checks](assurance/gmac-development.md).
+
 ## Portable AES-GCM development contract (v0.29.0)
 
 For `BRY-REQ-CRYPTO-0007`, deriving the GHASH subkey must succeed before

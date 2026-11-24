@@ -45,6 +45,7 @@ not independent cryptographic certification or coverage of every deployment.
 | Raw portable GHASH | Development interface; requires `hazmat-ghash`. Secret output, not a MAC or GCM tag. | ❌ No |
 | Opt-in GHASH runtime selection | `ghash-runtime-execution`: `Ghash::new_with_backend` supports Linux x86_64 PCLMUL, Linux RV64 scalar Zbc, and little-endian AArch64 PMULL on Linux/macOS. Arm timing remains unqualified; Zbkc alone is not admitted. Only an unavailable backend permits fallback in `Mode::Prefer`. | ❌ No |
 | Portable AES-128/192/256-GCM | Development interface; requires `aes-gcm`. Detached tags, in-place or disjoint buffers; applications reserve sender nonce ranges. | ❌ No |
+| Portable GMAC (all three AES widths) | Separate `gmac` feature. Authenticates data without encrypting; uses a dedicated key, reserved IVs and a typed detached tag. | ❌ No |
 | Other AEADs, other KDFs, RSA, ECC and executable provider effects | ❌ Not implemented | ❌ No |
 
 Named hashes and SP 800-185 constructions are usable; the broader planned

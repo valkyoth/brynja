@@ -36,7 +36,8 @@
 //! values without schema-driven ASN.1 or X.509 semantics. This crate does not
 //! provide a TLS connection API, device driver, or any cryptographic
 //! algorithm outside the hash/MAC/KDF surfaces described above, portable
-//! AES-GCM under `crypto::aes_gcm` with the default-off `aes-gcm` feature, the explicit
+//! AES-GCM under `crypto::aes_gcm` and GMAC under `crypto::gmac` with the
+//! respective default-off `aes-gcm` and `gmac` features, the explicit
 //! `general-sha512-t` extension, and the development-only AES-128 block API
 //! under `crypto::aes`, available only with explicit `hazmat-aes-block` opt-in.
 //! A separate `external-key-provider` opt-in exposes reusable lifecycle contracts;

@@ -1,5 +1,14 @@
 # Component Verification Status
 
+## Portable GMAC (v0.29.1 development)
+
+`brynja-verify gmac` reports the recorded results for public vectors and
+cleanup, downstream API isolation, and all 6,750 applicable NIST AAD-only
+cases. An independent Go comparison exercises 2,730 additional boundary messages.
+Both Rust endpoints exercised both direct and facade path dependencies;
+the Cortex-M check was compile-only. The [GMAC checklist](assurance/gmac-development.md)
+records how to replay them and what they do not establish.
+
 ## AES-GCM framing and portable composition (v0.29.0 development)
 
 `brynja-verify run aes_gcm framing` exercises private length, counter and

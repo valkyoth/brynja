@@ -2,6 +2,16 @@
 
 Status: initial; expands with every milestone
 
+## Portable GMAC (v0.29.1)
+
+GMAC authenticates cleartext; observers can read it, and receivers can accept
+the same valid record twice. The protocol must bind its context into the
+authenticated bytes and decide whether a record is fresh. Keep GMAC keys
+separate from GCM keys: a GCM record with an empty payload uses the same
+construction. A distinct Rust tag type prevents accidental API substitution,
+not cross-protocol reuse of the same key and bytes. Attackers can submit
+large records or many invalid tags; applications must cap both.
+
 ## Portable AES-GCM (v0.29.0)
 
 A peer controls the received IV, AAD, ciphertext and tag. Failed verification

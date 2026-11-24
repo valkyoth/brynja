@@ -320,6 +320,15 @@ Local developer observations, not certification or a release gate. No unrun or o
 | rv64-vector-capability-qemu — RISC-V vector GHASH capability and instruction controls on both Rust endpoints | working tree based on 3d3b6cef92ecbc843eb4b72e67702c66a55104af; scoped fingerprint e12f7af2ccd1a6a484f139904a86cf8acb36773d645e406c4b74f57fa22d3495 | 2026-11-22T19:10:32.848133059Z | passed | Up to date | 2026-11-22T19:10:33.387200383Z |
 | x86-update-codegen — Portable GHASH update assembly on baseline Linux x86-64 | working tree based on 3373a671ef36f8fa87cd703671fd63d23fa02cf9; scoped fingerprint b090821b65acbcd552e39a36c65197381b5ae3921dcde635342f512aac9c2ab9 | 2026-11-23T16:38:08.687471253Z | passed | Up to date | 2026-11-23T16:38:09.157770271Z |
 
+## gmac
+
+| Check | Source tested | Performed at | Result | Freshness | Status last changed (UTC) |
+| --- | --- | --- | --- | --- | --- |
+| boundary-differential — Portable GMAC against independent Go at IV and AAD boundaries | working tree based on a5e53ce4288c958bc79ae22b1be4207774a0b3da; scoped fingerprint 7769f579592674c6fd40afe00feebe21d685b066141f0413ef7ce872498e9ca5 | 2026-11-24T17:19:59.504117935Z | passed | Up to date | 2026-11-24T17:20:00.018991491Z |
+| nist-aad-only — NIST GMAC (AAD-only GCMVS) replay | working tree based on a5e53ce4288c958bc79ae22b1be4207774a0b3da; scoped fingerprint f9da7a07ce562b1521aad9eaac531d07671b099525b8ca0eeb51240b8e276273 | 2026-11-24T17:19:38.730533601Z | passed | Up to date | 2026-11-24T17:19:39.42316076Z |
+| portable-vectors — GMAC public vectors, rejection and schedule cleanup | working tree based on a5e53ce4288c958bc79ae22b1be4207774a0b3da; scoped fingerprint e8de787168c13c12ea801110aa4152f45655366c946adc5bc8a3a78cc10e2140 | 2026-11-24T15:39:43.488073963Z | passed | Up to date | 2026-11-24T15:39:44.091147563Z |
+| public-consumer — GMAC downstream import and misuse checks | working tree based on a5e53ce4288c958bc79ae22b1be4207774a0b3da; scoped fingerprint 4ea7b72a4fa091f00c1efd646253da828d223bfd4ffa0c6c3055c552f94d046a | 2026-11-24T16:24:32.663283214Z | passed | Up to date | 2026-11-24T16:24:33.297834477Z |
+
 ## hkdf
 
 | Check | Source tested | Performed at | Result | Freshness | Status last changed (UTC) |

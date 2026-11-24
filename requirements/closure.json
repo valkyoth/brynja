@@ -1661,11 +1661,10 @@
       "version": "0.29.0"
     },
     {
-      "boundary": {
-        "class": "planned-authority-admission",
-        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
-      },
-      "requirement_ids": [],
+      "boundary": null,
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0021"
+      ],
       "scope": "Implement the complete AAD-only GMAC surface over every admitted AES width with exact IV and tag policies, invocation and length limits, constant-time verification, official vectors, state cleanup, distinct MAC tag types, and public APIs that cannot be confused with AES-GCM ciphertext operations.",
       "source_ids": [],
       "title": "Complete GMAC",
@@ -26052,6 +26051,17 @@
     },
     {
       "decision_ids": [
+        "algorithm.gmac"
+      ],
+      "id": "BRY-REQ-CRYPTO-0021",
+      "lifecycle": "implemented",
+      "owner": "0.29.1",
+      "source_ids": [
+        "nist:NIST.SP.800-38D.pdf"
+      ]
+    },
+    {
+      "decision_ids": [
         "protocol.certificate-transparency"
       ],
       "id": "BRY-REQ-CT-0001",
@@ -28747,7 +28757,8 @@
       ],
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0006",
-        "BRY-REQ-CRYPTO-0007"
+        "BRY-REQ-CRYPTO-0007",
+        "BRY-REQ-CRYPTO-0021"
       ],
       "sha256": "d99f3921ccebca049e7522426553aba071dae14ec3d5b6041e8c111a6cb57bba"
     },
@@ -31342,6 +31353,12 @@
       "id": "algorithm.ghash",
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0006"
+      ]
+    },
+    {
+      "id": "algorithm.gmac",
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0021"
       ]
     },
     {

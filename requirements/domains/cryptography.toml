@@ -340,3 +340,20 @@ work_bound = "Linear input work; fixed 64-step compression and five fixed owned 
 evidence_gap = "Portable byte/bit/hardened vectors, differential, downstream and cleanup evidence are required now; frozen portable acceptance, SIMD disposition and final family acceptance remain v0.24.20 through v0.24.23. No independent review or FIPS validation."
 residual = "MD5 is collision- and chosen-prefix-broken. Memory cleanup does not admit security use. Registers, compiler copies, platform and caller copies remain outside the clearing claim; no CPU route is present."
 mapping_rationale = "RFC 1321 defines the historical function and RFC 6151 constrains its use; this isolated first-party leaf does not import the RFC C implementation or enable modern protocol defaults."
+
+[[requirement]]
+id = "BRY-REQ-CRYPTO-0021"
+revision = 1
+owner = "0.29.1"
+lifecycle = "implemented"
+decision_ids = ["algorithm.gmac"]
+sources = [{ id = "nist:NIST.SP.800-38D.pdf", authority_role = "current" }]
+statement = "GMAC authenticates byte-oriented associated data with an empty payload under AES-128/192/256. Fix the IV and tag width per owner, reserve disjoint sending IVs, and compare the entire admitted tag before reporting verification success. Verification-only imports cannot generate tags."
+invariants = ["constant-time", "failure-atomicity", "key-lifecycle", "validation", "work-bound"]
+target = "crates/brynja-crypto/src/aes_gcm/portable/gmac.rs#authenticate_next"
+positive_test = "crates/brynja-crypto/tests/gmac.rs#nist_short_iv_and_tag"
+negative_test = "crates/brynja-crypto/tests/gmac.rs#rejects_invalid_policy_and_clears_on_failed_import"
+work_bound = "Each operation uses fixed-size secret state and work linear in public IV and AAD length. IVs and AAD must fit the length encoding, verification traverses the full fixed tag, and each sending owner is bounded by its reservation."
+evidence_gap = "The public portable APIs have NIST AAD-only, independent boundary and ownership evidence; see docs/assurance/gmac-development.md. Cortex-M is compile-only. No independent qualification, hardware acceleration, machine-code timing guarantee or full-construction proof is established."
+residual = "Use a dedicated key, one tag width per key and durable cross-import IV allocation; applications must also bound verification attempts, enforce replay policy and supply separate confidentiality when needed."
+mapping_rationale = "SP 800-38D section 5.2 identifies GMAC as GCM with no confidential data. Sections 6 and 7 specify the hashing, tag generation and verification, and section 8 specifies IV uniqueness. The restricted short-tag profiles are not admitted."

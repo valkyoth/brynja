@@ -166,8 +166,8 @@ fn inc32(counter: &mut [u8; 16]) {
 #[cfg(test)]
 mod tests;
 
-#[cfg(any(feature = "aes-gcm", feature = "hazmat-aes-block"))]
-mod portable;
+#[cfg(any(feature = "aes-gcm", feature = "gmac", feature = "hazmat-aes-block"))]
+pub(crate) mod portable;
 
 #[cfg(feature = "aes-gcm")]
 pub use portable::api::{Aes128Gcm, Aes192Gcm, Aes256Gcm, GcmError};

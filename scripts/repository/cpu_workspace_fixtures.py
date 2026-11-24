@@ -16,6 +16,9 @@ def check(baseline, package, reject):
         reject(changed, "all-features", "feature policy differs",
                "implicit or unregistered CPU execution feature")
     for name, key, value, label in (
+        ("brynja", "aes-gcm", [], "missing portable GCM forwarding"),
+        ("brynja-crypto", "aes-gcm", ["hazmat-ghash"], "raw GHASH enabled by portable GCM"),
+        ("brynja-crypto", "aes-gcm", ["cpu"], "CPU support enabled by portable GCM"),
         ("brynja-crypto-cpu", "default", ["ghash-runtime-execution"], "default-on GHASH CPU kernel"),
         ("brynja-crypto-cpu", "ghash-runtime-execution", None, "missing GHASH CPU kernel feature"),
         ("brynja-crypto", "ghash-runtime-execution",

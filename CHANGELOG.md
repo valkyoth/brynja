@@ -1,6 +1,18 @@
 # Changelog
 
-## 0.28.3 GHASH public API usability (review candidate)
+## 0.29.0 AES-GCM (in development)
+
+- Exercise private portable IV and authentication framing, and full-tag
+  AES-128/192/256-GCM seal/open. No timing qualification yet.
+- Expose default-off portable `aes-gcm` through the crypto crate and facade.
+  The sender has a fixed tag length and a reserved nonce range.
+  General-length IV senders consume a reserved share of a 2^32 key-wide budget;
+  keys dedicated to deterministic 96-bit IVs keep the original 64-bit counter.
+  Its in-place open preserves ciphertext on authentication failure.
+- [Candidate release notes](release-notes/RELEASE_NOTES_0.29.0.md) cover the
+  application nonce contract, verification scope and remaining release gates.
+
+## 0.28.3 GHASH public API usability (internally tagged)
 
 - Replay all 15 distinct NIST GHASH intermediates through the packaged direct
   and facade APIs, including split updates, rejected input and finalization.

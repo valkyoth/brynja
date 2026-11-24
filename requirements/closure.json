@@ -25883,7 +25883,7 @@
         "algorithm.aes-gcm"
       ],
       "id": "BRY-REQ-CRYPTO-0007",
-      "lifecycle": "planned",
+      "lifecycle": "implemented",
       "owner": "0.29.0",
       "source_ids": [
         "nist:NIST.SP.800-38D.pdf",

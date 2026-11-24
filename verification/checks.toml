@@ -147,6 +147,170 @@ contains = ["test result: ok. 10 passed; 0 failed; 0 ignored;"]
 minimum_tests = 10
 exact_tests = 10
 
+[groups.aes-gcm-framing]
+paths = ["crates/brynja-crypto/src/aes_gcm/tests.rs"]
+optional_paths = [".cargo/config", ".cargo/config.toml"]
+
+[groups.aes-gcm-composition]
+paths = ["crates/brynja-crypto/src/aes_gcm/portable/tests.rs"]
+optional_paths = [".cargo/config", ".cargo/config.toml"]
+
+[groups.aes-gcm-owner]
+paths = ["crates/brynja-crypto/src/aes_gcm/portable/policy/tests.rs"]
+optional_paths = [".cargo/config", ".cargo/config.toml"]
+
+[groups.aes-gcm-transaction]
+paths = ["assurance/aes-gcm-transaction/Cargo.toml", "assurance/aes-gcm-transaction/Cargo.lock", "assurance/aes-gcm-transaction/src", "crates/brynja-crypto/src/aes_gcm/portable.rs", "crates/brynja-crypto/src/aes_gcm/portable/transaction.rs", "scripts/aes-gcm/check-transaction.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py", "assurance/policy.toml"]
+optional_paths = [".cargo/config", ".cargo/config.toml"]
+[[groups.aes-gcm-transaction.tools]]
+program = "python3"
+
+[[checks]]
+component = "aes_gcm"
+id = "transaction-proof"
+category = "kani"
+name = "AES-GCM unchanged destination on error (0–17 bytes)"
+establishes = "Two Kani harnesses compile the production commit boundary for disjoint and exact in-place buffers. Symbolic lengths, bytes and work outcomes; length rejection cannot call work and errors cannot commit. Not a proof of AES, tag correctness, unwinding or timing."
+command = ["python3", "scripts/aes-gcm/check-transaction.py"]
+cwd = "."
+inputs = ["kani-tools", "kani-setup", "aes-gcm-transaction"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+platform = "linux-x86_64"
+timeout_seconds = 600
+[checks.success]
+unique_lines = ["separate_commit: verified", "in_place_commit: verified", "AES_GCM_TRANSACTION_PROOFS_COMPLETE"]
+contains = ["AES_GCM_TRANSACTION_PROOFS_COMPLETE"]
+
+[[checks]]
+component = "aes_gcm"
+id = "framing"
+category = "portable"
+name = "AES-GCM message lengths, IV derivation and GHASH framing"
+establishes = "Private portable framing tests only: byte-length limits, inc32 wrap, fast and hashed IV paths, independent padding and NIST AES-128 Example 5 intermediate. No seal/open, nonce-policy or timing qualification."
+command = ["cargo", "+1.100.0", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--features", "hazmat-ghash", "--lib", "aes_gcm::tests::"]
+cwd = "."
+inputs = ["aes-gcm-framing", "ghash-portable-field", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 120
+[checks.success]
+contains = ["test result: ok. 4 passed; 0 failed; 0 ignored;"]
+minimum_tests = 4
+exact_tests = 4
+
+[[checks]]
+component = "aes_gcm"
+id = "portable-composition"
+category = "portable"
+name = "Portable AES-GCM seal/open with full tags (private composition)"
+establishes = "Published cases across all widths, a hashed-IV fixture, authentication before decryption and failure-atomic disjoint destinations. Injected AES subkey failure starts no GHASH for seal or open; healthy controls observe GHASH on both IV paths. Not a timing qualification."
+command = ["cargo", "+1.100.0", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--release", "--features", "hazmat-aes-block,hazmat-ghash", "--lib", "aes_gcm::portable::tests::"]
+cwd = "."
+inputs = ["aes-gcm-composition", "ghash-portable-field", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 120
+[checks.success]
+contains = ["test result: ok. 5 passed; 0 failed; 0 ignored;", "aes_gcm::portable::tests::subkey_derivation_error_never_starts_ghash_or_commits_output ... ok"]
+minimum_tests = 5
+exact_tests = 5
+
+[[checks]]
+component = "aes_gcm"
+id = "owner-policy"
+category = "portable"
+name = "AES-GCM fixed tag lengths, reserved nonces and in-place operations"
+establishes = "Fixed tag width, 96-bit-only and general-IV ranges, short-field overflow and key-wide invocation bounds. Keyed failures and unwinds spend the IV without committing output. Does not establish durable allocation, cross-owner uniqueness or timing."
+command = ["cargo", "+1.100.0", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--release", "--features", "hazmat-aes-block,hazmat-ghash", "--lib", "aes_gcm::portable::policy::tests::"]
+cwd = "."
+inputs = ["aes-gcm-owner", "ghash-portable-field", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 120
+[checks.success]
+contains = ["test result: ok. 6 passed; 0 failed; 0 ignored;"]
+minimum_tests = 6
+exact_tests = 6
+
+[groups.aes-gcm-consumer]
+paths = ["assurance/aes-gcm-consumer/Cargo.toml", "assurance/aes-gcm-consumer/Cargo.lock", "assurance/aes-gcm-consumer/src", "scripts/aes-gcm/check-public-consumer.py", "Cargo.toml", "crates/brynja", "crates/brynja-core", "crates/brynja-crypto", "crates/brynja-hash-core", "crates/brynja-hash-parallel", "crates/brynja-hash-sha2", "crates/brynja-hash-sha3", "crates/brynja-hash-tuple", "crates/brynja-mac-hmac", "crates/brynja-mac-kmac", "crates/brynja-pki", "crates/brynja-protocol", "crates/brynja-tls", "crates/brynja-tls12", "crates/brynja-tls13", "crates/brynja-tls13-handshake"]
+optional_paths = [".cargo/config", ".cargo/config.toml"]
+[[groups.aes-gcm-consumer.tools]]
+program = "python3"
+[[groups.aes-gcm-consumer.tools]]
+program = "cargo"
+toolchain = "1.100.0"
+[[groups.aes-gcm-consumer.tools]]
+program = "rustc"
+toolchain = "1.100.0"
+
+[[checks]]
+component = "aes_gcm"
+id = "public-consumer"
+category = "public-api"
+name = "Portable AES-GCM downstream direct and facade consumers"
+establishes = "Path dependencies on both Rust endpoints: published empty-message vectors and independent general-IV fixtures at every key width, receiving-only and buffer lifecycle, separate feature routes, overlap and raw API compile failures. Cortex-M compile only."
+command = ["python3", "scripts/aes-gcm/check-public-consumer.py"]
+cwd = "."
+inputs = ["aes-gcm-consumer", "hkdf-msrv"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 300
+[checks.success]
+contains = ["AES_GCM_PUBLIC_CONSUMER_COMPLETE"]
+
+[groups.aes-gcm-archive]
+paths = ["scripts/aes-gcm/check-packaged-api.py", "scripts/ghash/check-packaged-api.py", "scripts/hkdf/check-hkdf-public-api.py", "scripts/repository/facade_cargo_environment.py", "assurance/aes-gcm-consumer/tests", "crates/brynja-crypto-cpu", "crates/brynja-crypto-cpu-std", "crates/brynja-dtls", "crates/brynja-platform", "crates/brynja-quic-tls"]
+
+[groups.aes-gcm-gcmvs]
+paths = ["scripts/aes-gcm/check-gcmvs.py", "assurance/aes-gcm-consumer/examples/gcmvs.rs"]
+optional_paths = ["references/local/gcmtestvectors.zip"]
+
+[groups.aes-gcm-boundaries]
+paths = ["scripts/aes-gcm/check-boundaries.py", "assurance/aes-gcm-oracle/boundaries.go", "assurance/aes-gcm-consumer/examples/gcmvs.rs", "scripts/repository/facade_cargo_environment.py"]
+[[groups.aes-gcm-boundaries.tools]]
+program = "go"
+
+[[checks]]
+component = "aes_gcm"
+id = "boundary-differential"
+category = "differential"
+name = "AES-GCM generated boundaries against independent Go AES-GCM"
+establishes = "Three key widths, five tag widths, 13 IV lengths and independent AAD/text lengths. Compare both layouts, wrong tag/IV/AAD/ciphertext, preserved failure destinations and cleared scratch. Host functional comparison; not timing or a near-maximum allocation."
+command = ["python3", "scripts/aes-gcm/check-boundaries.py"]
+cwd = "."
+inputs = ["aes-gcm-boundaries", "aes-gcm-consumer", "hkdf-msrv"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 900
+[checks.success]
+unique_lines = ["1.90.0: seal=22050 open=22050 reject=22050; 11025 messages, both layouts", "1.100.0: seal=22050 open=22050 reject=22050; 11025 messages, both layouts", "AES_GCM_BOUNDARY_DIFFERENTIAL_COMPLETE"]
+contains = ["AES_GCM_BOUNDARY_DIFFERENTIAL_COMPLETE"]
+
+[[checks]]
+component = "aes_gcm"
+id = "nist-gcmvs"
+category = "vectors"
+name = "AES-GCM NIST response files (all supported profiles)"
+establishes = "All 33750 applicable GCMVS cases on the direct portable API at both compiler endpoints; includes 8504 expected authentication failures with ciphertext preserved. Requires pinned local NIST ZIP. Excludes 13500 unsupported short-tag cases. Not CAVP validation or a timing test."
+command = ["python3", "scripts/aes-gcm/check-gcmvs.py"]
+cwd = "."
+inputs = ["aes-gcm-gcmvs", "aes-gcm-consumer", "hkdf-msrv"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 600
+[checks.success]
+unique_lines = ["1.90.0: seal=16875 open=8371 reject=8504; excluded short tags=13500", "1.100.0: seal=16875 open=8371 reject=8504; excluded short tags=13500", "AES_GCM_GCMVS_COMPLETE"]
+contains = ["AES_GCM_GCMVS_COMPLETE"]
+
+[[checks]]
+component = "aes_gcm"
+id = "packaged-public-api"
+category = "package"
+name = "AES-GCM archive consumers and NIST worked examples"
+establishes = "Offline direct and facade archive consumers on both compiler endpoints. All 18 NIST worked examples and three independent general-IV vectors, ciphertext preserved on tag rejection, raw and AEAD opt-in boundaries, and no_std Cortex-M compile. Not CAVP validation or timing qualification."
+command = ["python3", "scripts/aes-gcm/check-packaged-api.py"]
+cwd = "."
+inputs = ["aes-gcm-archive", "aes-gcm-consumer", "hkdf-msrv"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 600
+[checks.success]
+contains = ["AES_GCM_ARCHIVE_COMPLETE"]
+
 [groups.ghash-candidate-build]
 paths = ["Cargo.lock", "Cargo.toml", "crates/brynja-crypto-cpu/Cargo.toml"]
 optional_paths = [".cargo/config", ".cargo/config.toml"]

@@ -5656,7 +5656,7 @@
   "excluded_normative_section_count": 12,
   "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "1f4854bbea3dcfe8fbea08fd4d934212e7a22ef7799ba62b8c5ed83b9458d1e3",
+  "policy_sha256": "607b13b183cb3955ab0fb67d40bd09b70a67d0fd82af3fd925313469651b4601",
   "requirement_count": 41,
   "schema": 1,
   "surface_count": 3349,
@@ -5671,7 +5671,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "cryptography",
       "id": "algorithm.aes-gcm",
       "owner": "0.29.0",

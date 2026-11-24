@@ -39,6 +39,16 @@ from verification_final_tests import FinalBindingTests
 ROOT = Path(__file__).resolve().parents[2]
 
 # Include fail-closed runner tests in the normal registry regression suite.
+gcm_archive_spec = importlib.util.spec_from_file_location('gcm_archive_tests', ROOT / 'scripts/aes-gcm/test-packaged-api.py')
+gcm_archive_tests = importlib.util.module_from_spec(gcm_archive_spec)
+gcm_archive_spec.loader.exec_module(gcm_archive_tests)
+GcmArchiveTests = gcm_archive_tests.ArchiveTests
+
+gcmvs_spec = importlib.util.spec_from_file_location('gcmvs_tests', ROOT / 'scripts/aes-gcm/test-gcmvs.py')
+gcmvs_tests = importlib.util.module_from_spec(gcmvs_spec)
+gcmvs_spec.loader.exec_module(gcmvs_tests)
+GcmvsTests = gcmvs_tests.GcmvsTests
+
 aes_spec = importlib.util.spec_from_file_location('aes_runner_tests', ROOT / 'scripts/aes/test-aes-runners.py')
 aes_runner_tests = importlib.util.module_from_spec(aes_spec)
 aes_spec.loader.exec_module(aes_runner_tests)
@@ -445,12 +455,25 @@ def validate(registry):
         assert key not in seen, 'duplicate check'
         seen.add(key)
         argv = check['command']
-        ghash = key == ('ghash', 'portable-field')
-        assert argv[:3] == ['cargo', '+1.100.0' if ghash else '+1.99.1', 'test'], 'unexpected executable'
+        gcm_framing = key == ('aes_gcm', 'framing')
+        gcm_composition = key == ('aes_gcm', 'portable-composition')
+        gcm_owner = key == ('aes_gcm', 'owner-policy')
+        field_inputs = gcm_framing or gcm_composition or gcm_owner or key == ('ghash', 'portable-field')
+        assert argv[:3] == ['cargo', '+1.100.0' if field_inputs else '+1.99.1', 'test'], 'unexpected executable'
         assert all(flag in argv for flag in ('--offline', '--locked', '--no-default-features'))
         assert '--workspace' not in argv and '--all-features' not in argv
         package = argv[argv.index('-p') + 1]
-        if '--lib' in argv:
+        if gcm_framing:
+            assert argv[-4:] == ['--features', 'hazmat-ghash', '--lib', 'aes_gcm::tests::']
+            assert check['success']['exact_tests'] == 4
+            test = 'crates/brynja-crypto/src/aes_gcm/tests.rs'
+        elif gcm_composition or gcm_owner:
+            module = 'policy::' if gcm_owner else ''
+            assert argv[-5:] == ['--release', '--features', 'hazmat-aes-block,hazmat-ghash',
+                                 '--lib', f'aes_gcm::portable::{module}tests::']
+            assert check['success']['exact_tests'] == (6 if gcm_owner else 5)
+            test = 'crates/brynja-crypto/src/aes_gcm/portable/' + ('policy/' if gcm_owner else '') + 'tests.rs'
+        elif '--lib' in argv:
             assert key == ('hkdf', 'parameters'), 'unexpected library test selection'
             assert argv[-2:] == ['--lib', 'hkdf::parameters::tests::']
             test = 'crates/brynja-crypto/src/hkdf/parameter_tests.rs'
@@ -466,8 +489,8 @@ def validate(registry):
         for name in CLOSURES[package] | {package}:
             assert f'crates/{name}/src' in paths, f'missing source: {name}'
             manifest = f'crates/{name}/Cargo.toml'
-            assert manifest in manifests or (ghash and manifest in paths), f'missing manifest: {name}'
-            assert name in locks or (ghash and 'Cargo.lock' in paths), f'missing lock row: {name}'
+            assert manifest in manifests or (field_inputs and manifest in paths), f'missing manifest: {name}'
+            assert name in locks or (field_inputs and 'Cargo.lock' in paths), f'missing lock row: {name}'
         assert test in paths, 'missing harness input'
         source = (ROOT / test).read_text()
         assert check['success']['minimum_tests'] >= 1
@@ -487,6 +510,46 @@ class RegistryTests(unittest.TestCase):
 
     def test_registered_harnesses_and_explicit_closures(self):
         validate(self.registry)
+
+    def test_gcm_transaction_proofs_track_the_production_boundary(self):
+        check, = (c for c in self.registry['checks'] if
+                  (c['component'], c['id']) == ('aes_gcm', 'transaction-proof'))
+        self.assertEqual(check['inputs'], ['kani-tools', 'kani-setup', 'aes-gcm-transaction'])
+        paths = set(self.registry['groups']['aes-gcm-transaction']['paths'])
+        production = 'crates/brynja-crypto/src/aes_gcm/portable/transaction.rs'
+        fixture = 'assurance/aes-gcm-transaction'
+        self.assertTrue({production, production.replace('/transaction.rs', '.rs'),
+                         fixture + '/src', fixture + '/Cargo.toml', fixture + '/Cargo.lock',
+                         check['command'][1]} <= paths)
+        self.assertIn(f'#[path = "../../../{production}"]', (ROOT / fixture / 'src/lib.rs').read_text())
+        self.assertEqual(check['success']['unique_lines'], ['separate_commit: verified',
+                         'in_place_commit: verified', 'AES_GCM_TRANSACTION_PROOFS_COMPLETE'])
+
+    def test_gcm_public_consumer_tracks_both_routes_and_their_sources(self):
+        check, = (c for c in self.registry['checks'] if
+                  (c['component'], c['id']) == ('aes_gcm', 'public-consumer'))
+        self.assertEqual(check['command'], ['python3', 'scripts/aes-gcm/check-public-consumer.py'])
+        self.assertIn('hkdf-msrv', check['inputs'])
+        group = self.registry['groups']['aes-gcm-consumer']
+        consumer = 'assurance/aes-gcm-consumer'
+        lock = tomllib.loads((ROOT / consumer / 'Cargo.lock').read_text())
+        required = {f"crates/{p['name']}" for p in lock['package'] if p['name'] != 'aes-gcm-consumer'}
+        self.assertTrue(required | {check['command'][1], consumer + '/src', consumer + '/Cargo.toml',
+                                    consumer + '/Cargo.lock'} <= set(group['paths']))
+        self.assertEqual(check['success']['contains'], ['AES_GCM_PUBLIC_CONSUMER_COMPLETE'])
+
+    def test_gcm_differential_binds_oracle_replay_and_both_compilers(self):
+        check, = (c for c in self.registry['checks'] if
+                  (c['component'], c['id']) == ('aes_gcm', 'boundary-differential'))
+        self.assertEqual(check['inputs'], ['aes-gcm-boundaries', 'aes-gcm-consumer', 'hkdf-msrv'])
+        group = self.registry['groups']['aes-gcm-boundaries']
+        self.assertEqual(group['tools'], [{'program': 'go'}])
+        self.assertTrue({check['command'][1], 'assurance/aes-gcm-oracle/boundaries.go',
+                         'assurance/aes-gcm-consumer/examples/gcmvs.rs',
+                         'scripts/repository/facade_cargo_environment.py'} <= set(group['paths']))
+        self.assertEqual(check['success']['unique_lines'], [
+            f'{v}: seal=22050 open=22050 reject=22050; 11025 messages, both layouts'
+            for v in ('1.90.0', '1.100.0')] + ['AES_GCM_BOUNDARY_DIFFERENTIAL_COMPLETE'])
 
     def test_ghash_field_and_lifecycle_contracts(self):
         checks = {c['id']: c for c in self.registry['checks'] if c['component'] == 'ghash'}

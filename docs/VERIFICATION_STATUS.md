@@ -1,6 +1,32 @@
 # Component Verification Status
 
-## GHASH public API usability (v0.28.3 candidate)
+## AES-GCM framing and portable composition (v0.29.0 development)
+
+`brynja-verify run aes_gcm framing` exercises private length, counter and
+authentication-framing logic only. See the [open implementation and
+verification steps](assurance/aes-gcm-development.md).
+`brynja-verify run aes_gcm portable-composition` separately exercises private
+portable seal/open at all key widths with 128-bit tags.
+`brynja-verify run aes_gcm owner-policy` checks private fixed tag lengths,
+nonce exhaustion and consumption on error or unwind, and unchanged in-place
+buffers on rejection. `brynja-verify run aes_gcm public-consumer` exercises
+both public path dependencies separately on the host and compiles them for
+Cortex-M. `brynja-verify run aes_gcm packaged-public-api` replays all 18 NIST
+worked examples and three independent general-IV fixtures through both
+unpacked public package routes at both compiler endpoints. The owner check
+also covers short IV overflow and the final invocation on error or unwind.
+`brynja-verify run aes_gcm transaction-proof` checks the shared caller-output
+commit for arbitrary bytes and lengths 0–17, in-place and disjoint: no write on
+error and only the staged bytes on success. This does not prove authentication,
+arbitrary-length behavior, cross-process nonce allocation or AArch64 timing.
+`brynja-verify run aes_gcm nist-gcmvs` replays the six NIST response files
+against the public direct API: 33,750 supported cases at each compiler endpoint;
+13,500 unsupported short-tag cases excluded. See the [replay instructions](assurance/aes-gcm-development.md).
+`brynja-verify run aes_gcm boundary-differential` compares both buffer
+layouts to Go's AES-GCM across generated lengths, including empty and
+partial blocks. All 66,150 operations matched on each Rust endpoint.
+
+## GHASH public API usability (v0.28.3 internal tag)
 
 The [runtime consumer](../assurance/ghash-runtime-consumer/README.md) reuses the
 hash-checked portable NIST corpus from the archive. Both compiler endpoints

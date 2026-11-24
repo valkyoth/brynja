@@ -14,7 +14,9 @@
 //! `ghash-runtime-execution` feature adds explicit hosted backend selection.
 //!
 //! ```
+//! # #[cfg(feature = "hazmat-ghash")]
 //! use brynja_crypto::ghash::{Error, Ghash};
+//! # #[cfg(feature = "hazmat-ghash")]
 //! # fn example() -> Result<(), Error> {
 //! // Example subkey and pre-framed block, not a GCM implementation.
 //! let h = [0x37; 16];
@@ -27,6 +29,7 @@
 //! intermediate.clear();
 //! assert_eq!(output, [0; 16]);
 //! # Ok(()) }
+//! # #[cfg(feature = "hazmat-ghash")]
 //! # example().unwrap();
 //! ```
 //!
@@ -160,10 +163,21 @@ pub struct Ghash<'a> {
     local: PhantomData<*mut ()>,
 }
 
+// Observe the primitive itself in unit tests, not a flag in the GCM caller.
+// Per-thread storage keeps independent tests from contributing calls.
+#[cfg(test)]
+extern crate std;
+#[cfg(test)]
+std::thread_local! {
+    pub(crate) static TEST_STARTS: core::cell::Cell<usize> = const { core::cell::Cell::new(0) };
+}
+
 impl<'a> Ghash<'a> {
     /// Starts from zero, clearing the workspace. The budget counts all bytes
     /// supplied, including any framing supplied by a higher-level protocol.
     pub fn new(h: &'a [u8; 16], workspace: &'a mut [u8; 16], max_bytes: u64) -> Self {
+        #[cfg(test)]
+        TEST_STARTS.set(TEST_STARTS.get().wrapping_add(1));
         let _ = clear_owned_region(workspace);
         Self {
             #[cfg(feature = "ghash-runtime-execution")]

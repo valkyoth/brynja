@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "d30b73ba07df3787297f3591bd467426c44983da5969e32b2dc7539508e5793e",
-  "domain_policy_sha256": "1f4854bbea3dcfe8fbea08fd4d934212e7a22ef7799ba62b8c5ed83b9458d1e3",
-  "policy_sha256": "a161fd8e0e1830e8f6ea10d2ea7bf184980608b666fc6f06e9b74726bf853e83",
+  "domain_policy_sha256": "607b13b183cb3955ab0fb67d40bd09b70a67d0fd82af3fd925313469651b4601",
+  "policy_sha256": "49f11d2cd13a5a4e51bbfd4063a76c2fb1ab8ebc4ce1bb37060c13f1f1168ec4",
   "requirements": [
     {
       "applicability": "delegate",
@@ -1349,7 +1349,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "AEAD vectors, overlap tests, failure-atomicity proofs, usage accounting, and side-channel evidence remain unresolved until v0.29.0. The planned negative suite must inject an AES subkey-derivation failure and assert an error, no GHASH invocation and unchanged caller output. This is not a rejection of a successfully derived all-zero field element.",
+      "evidence_gap": "See docs/assurance/aes-gcm-development.md for GCMVS and differential coverage, the bounded commit proof, overlap and nonce-policy checks. On injected AES subkey failure, both seal and open propagate the error with zero observed GHASH starts and unchanged output. This tests derivation failure, not rejection of a successfully derived all-zero field element. Independent release review and target-specific side-channel qualification are not established.",
       "id": "BRY-REQ-CRYPTO-0007",
       "invariants": [
         "failure-atomicity",
@@ -1357,13 +1357,13 @@
         "validation",
         "work-bound"
       ],
-      "lifecycle": "planned",
+      "lifecycle": "implemented",
       "mapping_rationale": "The AES-GCM semantic surface directly joins the generic RFC 5116 AEAD contract with the pinned SP 800-38D construction.",
       "mapping_scope": "reviewed-domain",
       "owner": "0.29.0",
       "profile": "crypto-encoding-pkix",
       "residual": "Protocol milestones must impose stricter nonce construction and per-key limits where their security analysis requires them.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -1504,23 +1504,23 @@
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "planned-symbol",
-          "target": "crates/brynja-crypto/src/aes_gcm.rs#AesGcm"
+          "kind": "actual-symbol",
+          "target": "crates/brynja-crypto/src/aes_gcm/portable.rs#with_material"
         }
       ],
       "tests": [
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "tests/requirements/crypto_aead.rs#aes_gcm_vectors"
+          "target": "crates/brynja-crypto/src/aes_gcm/portable/tests.rs#nist_seal_open_empty_and_partial_at_all_widths"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "tests/requirements/crypto_aead.rs#aes_gcm_failure_atomicity"
+          "target": "crates/brynja-crypto/src/aes_gcm/portable/tests.rs#subkey_derivation_error_never_starts_ghash_or_commits_output"
         }
       ],
-      "work_bound": "AEAD work is bounded by public plaintext and associated-data limits, checked block counters, and immutable per-key usage ceilings."
+      "work_bound": "IV, AAD and message lengths are checked before keyed work. Each sender is limited to its reservation; durable uniqueness and the combined invocation budget across imports of a key are application responsibilities."
     },
     {
       "applicability": "apply",
@@ -31196,9 +31196,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "275734da4c2ef22ef9c242c322aabb8a08d99450c4f7cc5a625fb2e4b9237c23",
+  "residual_policy_sha256": "de7bc83f4dfdc76e6c724b64e7382f322cbf7d37bb891d71581e6172c79f9014",
   "schema": 5,
   "source_ledger_sha256": "e9694bf49dd71addd529dee60d74c0115cbfba00015218b0c61d0cf6f3bd689f",
-  "surface_register_sha256": "138a610e96e67cee4e6b825853ba8822464ff1a946f77fbee332909310466cd0",
-  "transport_policy_sha256": "0ba7dfa3feacf840270aea55fccacec3477b11b07530f4cc65669511d89bd798"
+  "surface_register_sha256": "adf55a66cd8862cc70bbda2bfbc15fd08e410907acd3ff9e46cd9caf8e71ed04",
+  "transport_policy_sha256": "69a7943cbaca2f9a3899880067db3aa9c843bda090e7379abc8ce3c157a82cda"
 }

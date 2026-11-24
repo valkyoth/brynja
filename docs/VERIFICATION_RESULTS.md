@@ -229,6 +229,19 @@ Local developer observations, not certification or a release gate. No unrun or o
 | wide-timing-screen — AES-192/256 ephemeral, cached and import host timing observation | working tree based on 533872f86f9a8757e266da8f8e9f22bd57aecc13; scoped fingerprint 3a27a20f3f3aebc008106f268af21fa4e5f9d2bef88297f2aaa200fd196940c6 | 2026-11-05T16:11:22.038033941Z | passed | Outdated: aes-build: crates/brynja-crypto/Cargo.toml [features] changed; aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes.rs changed | 2026-11-13T10:32:02.396894856Z |
 | wide-vectors — AES-192/256 public vectors and clearing owners | working tree based on d3d78b5f463d7157d8bf18bb691ef7597e82be89; scoped fingerprint 0f34e25c42a4e61ef0d302a506d90a5d32343006d2cbbbb5c66f855897bcd1b7 | 2026-11-08T10:08:10.481000104Z | passed | Outdated: aes-build: crates/brynja-crypto/Cargo.toml [features] changed; aes-build: crates/brynja-crypto/Cargo.toml [test] changed; aes-build: crates/brynja-crypto/src/aes.rs changed | 2026-11-13T10:32:02.398177541Z |
 
+## aes_gcm
+
+| Check | Source tested | Performed at | Result | Freshness | Status last changed (UTC) |
+| --- | --- | --- | --- | --- | --- |
+| boundary-differential — AES-GCM generated boundaries against independent Go AES-GCM | working tree based on a674ead2615cfd478c62fd93519f729241ac7339; scoped fingerprint dcd8f8856a71e1815ae23c82c00e17ee1a440a1a10ec03c6f8d5c84e2be83300 | 2026-11-24T13:30:48.204303074Z | passed | Up to date | 2026-11-24T13:30:57.368076293Z |
+| framing — AES-GCM message lengths, IV derivation and GHASH framing | working tree based on a674ead2615cfd478c62fd93519f729241ac7339; scoped fingerprint 1176827c63e3722a49035e35d8af509bd0c1de7d2ca443dd3b9a4685735008f5 | 2026-11-24T13:28:25.319661297Z | passed | Up to date | 2026-11-24T13:28:37.062470957Z |
+| nist-gcmvs — AES-GCM NIST response files (all supported profiles) | working tree based on a674ead2615cfd478c62fd93519f729241ac7339; scoped fingerprint c5a28b23f9804a6b17ddfec7b902edca205cf717a8ab49b3e83c510d6ad20b41 | 2026-11-24T13:31:26.761767409Z | passed | Up to date | 2026-11-24T13:31:35.902358375Z |
+| owner-policy — AES-GCM fixed tag lengths, reserved nonces and in-place operations | working tree based on a674ead2615cfd478c62fd93519f729241ac7339; scoped fingerprint 65bf6c9d11dd92d1e03b70ed3c816f64e39c52d73825ca004e4d0777b16e80d7 | 2026-11-24T13:29:30.017695817Z | passed | Up to date | 2026-11-24T13:29:38.518857185Z |
+| packaged-public-api — AES-GCM archive consumers and NIST worked examples | working tree based on a674ead2615cfd478c62fd93519f729241ac7339; scoped fingerprint 1c64086ce868ccaab80ba5351403318e44a47dc8a1ae0f3f3518848a7e20e283 | 2026-11-24T13:32:07.714732117Z | passed | Up to date | 2026-11-24T13:32:16.657975413Z |
+| portable-composition — Portable AES-GCM seal/open with full tags (private composition) | working tree based on a674ead2615cfd478c62fd93519f729241ac7339; scoped fingerprint 405c0de6244351bb42f3fd60eeeb168ae329bdf47808009b75c94738f2e8cd36 | 2026-11-24T13:29:02.508274288Z | passed | Up to date | 2026-11-24T13:29:11.390174551Z |
+| public-consumer — Portable AES-GCM downstream direct and facade consumers | working tree based on a674ead2615cfd478c62fd93519f729241ac7339; scoped fingerprint 45d94a3776a6a81570227dd739b68f88f2cab5d62f8ebaac6cb9bb0d7df8fedf | 2026-11-24T13:30:05.884571004Z | passed | Up to date | 2026-11-24T13:30:14.761355122Z |
+| transaction-proof — AES-GCM unchanged destination on error (0–17 bytes) | working tree based on a674ead2615cfd478c62fd93519f729241ac7339; scoped fingerprint 0bcfb24c96bcc594a5163ae32e78fc0973dc1eb9288c242e873b02ab7e0d3e6d | 2026-11-24T12:53:58.058030845Z | passed | Up to date | 2026-11-24T12:54:11.720000921Z |
+
 ## core
 
 | Check | Source tested | Performed at | Result | Freshness | Status last changed (UTC) |

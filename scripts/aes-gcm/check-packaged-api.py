@@ -1,0 +1,106 @@
+"""Offline archive acceptance for the portable AES-GCM public API."""
+import hashlib
+import importlib.util
+import json
+import os
+from pathlib import Path
+import shutil
+import tomllib
+
+ROOT = Path(__file__).resolve().parents[2]
+FIXTURE = ROOT / "assurance/aes-gcm-consumer"
+spec = importlib.util.spec_from_file_location("archive_checks", ROOT / "scripts/ghash/check-packaged-api.py")
+archives = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(archives)
+pkg = archives.pkg
+VECTORS = "38b93d7c7b6cedee81dfecd0c99699ccc52783408aa8889f78608a9573cf8800"
+
+
+def prepare(root, dependency, versions):
+    consumer = root / ("consumer-" + dependency)
+    for relative in ("src/lib.rs", "src/general_iv.rs", "tests/nist_worked.rs", "tests/nist-worked.txt"):
+        out = consumer / relative
+        out.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(FIXTURE / relative, out)
+    if hashlib.sha256((consumer / "tests/nist-worked.txt").read_bytes()).hexdigest() != VECTORS:
+        raise ValueError("NIST fixture changed; verify against published examples")
+    patches = "".join(f'{name}={{path={json.dumps(str(root / "unpacked" / (name+"-"+v)))}}}\n'
+                      for name, v in versions.items())
+    (consumer / "Cargo.toml").write_text(
+        '[workspace]\n[package]\nname="aes-gcm-consumer"\nversion="0.0.0"\nedition="2024"\n'
+        'rust-version="1.90"\npublish=false\n[features]\ndirect=[]\nfacade=[]\n'
+        f'gcm=["{dependency}/aes-gcm"]\n[dependencies]\n'
+        f'{dependency}={{version="={versions[dependency]}",default-features=false}}\n'
+        '[patch.crates-io]\n' + patches)
+    return consumer
+
+
+def check_graph(metadata, consumer, versions, dependency):
+    """Match every resolved edge against the downstream lock, not just crate names."""
+    lock = tomllib.loads((FIXTURE / "Cargo.lock").read_text())
+    edges = {p["name"]: set(p.get("dependencies", [])) for p in lock["package"]}
+    nodes = {n["id"]: n for n in metadata["resolve"]["nodes"]}
+    packages = {p["id"]: p for p in metadata["packages"]}
+    for ident, node in nodes.items():
+        package = packages[ident]
+        name = package["name"]
+        deps = {packages[d["pkg"]]["name"] for d in node["deps"]}
+        path = Path(package["manifest_path"]).resolve()
+        if ident == metadata["resolve"]["root"]:
+            if path != consumer / "Cargo.toml" or deps != {dependency}:
+                raise ValueError("wrong archive consumer entry point")
+            continue
+        if name not in versions or path != consumer.parent / "unpacked" / f"{name}-{versions[name]}" / "Cargo.toml":
+            raise ValueError("dependency did not resolve to its archive")
+        if deps != edges.get(name) or name.startswith("brynja-legacy") or name.endswith(("-std", "-cpu")):
+            raise ValueError("unexpected portable dependency graph")
+        features = set(node["features"])
+        if name in ("brynja", "brynja-crypto"):
+            expected = {"aes-gcm"}
+            if dependency == "brynja" and name == "brynja-crypto":
+                expected.add("default")
+            if features != expected or package["features"].get("default") != []:
+                raise ValueError("unexpected GCM feature set")
+        elif features - ({"default", "general-sha512-t"} if name == "brynja-hash-sha2" else {"default"}):
+            raise ValueError("unexpected transitive feature")
+
+
+def check(compiler, route, dependency, consumer, versions, env):
+    cargo = ["cargo", "+" + compiler]
+    base = ["--locked", "--offline", "--no-default-features"]
+    flags = [*base, "--features", route + ",gcm"]
+
+    def run(*args):
+        return pkg.run(cargo + list(args), consumer, env).stdout
+
+    info = json.loads(run("metadata", "--format-version", "1", *flags))
+    check_graph(info, consumer, versions, dependency)
+    for selection, count in [(["--lib"], 2), (["--test", "nist_worked"], 3), (["--doc"], 4)]:
+        if not archives.exact_suite(run("test", "--release", *flags, *selection), count):
+            raise ValueError("incomplete archive suite: " + str(selection))
+    run("check", "--lib", "--target", "thumbv7em-none-eabi", *flags)
+    # Keep the dependency and consumer route; turn off ONLY the AEAD opt-in.
+    result = pkg.cargo_result(cargo + ["check", "--lib", "--message-format=json", *base,
+                                      "--features", route], consumer, env, timeout=120)
+    if not pkg.diagnostic_matches(result, "E0432", filename="src/lib.rs"):
+        raise ValueError("unexpected diagnostic without the GCM feature")
+    print(f"{compiler} {route}: archived sources, 18 NIST examples, API checks, Cortex-M compile", flush=True)
+
+
+def main():
+    if any(k in os.environ for k in pkg.REJECT_ENV):
+        raise ValueError("remove ambient toolchain, target or compiler overrides")
+    with pkg.cargo_environment.private_directory(ROOT) as temp:
+        root = Path(temp)
+        env = pkg.isolated_env(root)
+        versions = pkg.package_archives(root, pkg.MODERN, archives.ENDPOINTS[-1], env)
+        for route, dep in (("direct", "brynja-crypto"), ("facade", "brynja")):
+            consumer = prepare(root, dep, versions)
+            pkg.run(["cargo", "+" + archives.ENDPOINTS[0], "generate-lockfile", "--offline"], consumer, env)
+            for compiler in archives.ENDPOINTS:
+                check(compiler, route, dep, consumer, versions, env)
+    print("AES_GCM_ARCHIVE_COMPLETE")
+
+
+if __name__ == "__main__":
+    main()

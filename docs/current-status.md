@@ -1,10 +1,14 @@
 # Current Status
 
-Current candidate: v0.28.3 tests the packaged GHASH API against the signed
-v0.28.2 baseline. The [consumer replay](../assurance/ghash-runtime-consumer/README.md)
-distinguishes native execution, QEMU and compile-only checks. The
-[route and timing limits](assurance/ghash-acceleration.md) remain unchanged.
-Scoped review and release approval are pending. No GCM or publication is selected.
+Current development: [v0.29.0 portable AES-GCM](assurance/aes-gcm-development.md).
+The default-off `aes-gcm` API supports portable AES-128/192/256-GCM with
+exact in-place and disjoint buffers. The sender consumes its reserved nonce
+range; the application coordinates reservations across processes. The unpacked
+package consumers pass at both compiler endpoints. The broader release gate
+is not complete.
+The last signed internal tag is v0.28.3, the packaged GHASH acceptance milestone.
+Its [scoped retest](../security/pentest/v0.28.3.md) passed; no crates were
+published. The [Arm timing limits](assurance/ghash-acceleration.md) remain unchanged.
 
 Historical development snapshot (2026-11-01): v0.26.0 HKDF was a local candidate based on
 tagged `v0.25.3`, pending scoped pentest and final gate. Portable modern SHA-2

@@ -790,7 +790,7 @@
         "BRY-REQ-CRYPTO-0007"
       ],
       "affected_symbols": [
-        "crates/brynja-crypto/src/aes_gcm.rs#AesGcm",
+        "crates/brynja-crypto/src/aes_gcm/portable.rs#with_material",
         "crates/brynja-crypto/src/ghash.rs#Ghash"
       ],
       "brynja_state": "current",
@@ -1958,7 +1958,7 @@
         "BRY-REQ-CRYPTO-0007"
       ],
       "affected_symbols": [
-        "crates/brynja-crypto/src/aes_gcm.rs#AesGcm"
+        "crates/brynja-crypto/src/aes_gcm/portable.rs#with_material"
       ],
       "brynja_state": "current",
       "content_sha256": "8762fee7c85e682fce609c75e0f5040ee7efa8fca96969ffd85df37585e0eda1",

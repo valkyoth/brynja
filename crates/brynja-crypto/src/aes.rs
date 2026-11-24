@@ -49,7 +49,7 @@ pub use wide::{Aes192ExpandedKey, Aes192Key, Aes256ExpandedKey, Aes256Key};
 pub mod execution;
 
 /// Explicit, optional external AES-128/192/256 key providers; no device driver is bundled.
-#[cfg(feature = "external-key-provider")]
+#[cfg(all(feature = "external-key-provider", feature = "hazmat-aes-block"))]
 pub mod provider;
 
 /// AES block size, in bytes (all AES variants use this block size).
@@ -116,6 +116,8 @@ impl<const N: usize> Drop for Scratch<N> {
 /// `clear` consumes the key immediately; ordinary Drop also clears its storage.
 ///
 /// ```
+/// # #[cfg(feature = "hazmat-aes-block")]
+/// # fn raw_example() -> Result<(), brynja_crypto::aes::Error> {
 /// use brynja_crypto::aes::{Aes128Key, Error};
 /// let input_key = [0x42; 16]; // Example only: obtain real keys securely.
 /// let mut key_storage = [0; 16];
@@ -128,6 +130,9 @@ impl<const N: usize> Drop for Scratch<N> {
 /// key.clear();
 /// assert_eq!(key_storage, [0; 16]);
 /// # Ok::<(), Error>(())
+/// # }
+/// # #[cfg(feature = "hazmat-aes-block")]
+/// # raw_example().unwrap();
 /// ```
 ///
 /// ```compile_fail
@@ -265,6 +270,8 @@ impl<'a> Aes128Key<'a> {
 /// guarantee. This is still a raw block primitive, not a mode or rate limiter.
 ///
 /// ```
+/// # #[cfg(feature = "hazmat-aes-block")]
+/// # fn raw_example() -> Result<(), brynja_crypto::aes::Error> {
 /// use brynja_crypto::aes::{Aes128ExpandedKey, EXPANDED_KEY_BYTES, Error};
 /// let mut storage = [0; EXPANDED_KEY_BYTES];
 /// let key = Aes128ExpandedKey::new(&[0; 16], &mut storage)?;
@@ -275,6 +282,9 @@ impl<'a> Aes128Key<'a> {
 /// key.clear();
 /// assert_eq!(storage, [0; EXPANDED_KEY_BYTES]);
 /// # Ok::<(), Error>(())
+/// # }
+/// # #[cfg(feature = "hazmat-aes-block")]
+/// # raw_example().unwrap();
 /// ```
 #[must_use = "keep the expanded-key owner live until use is complete"]
 pub struct Aes128ExpandedKey<'a> {

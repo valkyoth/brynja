@@ -262,12 +262,12 @@
           "owner": "0.29.0"
         }
       },
-      "code_target": "crates/brynja-crypto/src/aes_gcm.rs",
+      "code_target": "crates/brynja-crypto/src/aes_gcm/portable.rs#with_material",
       "consumer_links": [
         "consumer:protocol",
         "consumer:provider"
       ],
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "cryptography",
       "explicit_rejections": [
         "copy-secret-state",
@@ -316,7 +316,7 @@
       "ordinary_hardened_separation": "required",
       "owner": "0.29.0",
       "profile": "aead",
-      "test_target": "tests/surface/primitives.rs#aes_gcm"
+      "test_target": "crates/brynja-crypto/src/aes_gcm/portable/tests.rs#subkey_derivation_error_never_starts_ghash_or_commits_output"
     },
     {
       "api": {
@@ -19686,7 +19686,7 @@
     {
       "capability": "algorithm.aes-gcm",
       "evidence": [
-        "tests/surface/primitives.rs#aes_gcm",
+        "crates/brynja-crypto/src/aes_gcm/portable/tests.rs#subkey_derivation_error_never_starts_ghash_or_commits_output",
         "scripts/zeroization/check-zeroization-codegen.sh"
       ],
       "fields": [
@@ -19732,7 +19732,7 @@
       },
       "owner": "0.29.0",
       "planned_cleanup_contract": "mandatory-core-or-separately-reviewed-equivalent",
-      "planned_implementation_target": "crates/brynja-crypto/src/aes_gcm.rs",
+      "planned_implementation_target": "crates/brynja-crypto/src/aes_gcm/portable.rs#with_material",
       "residual_risks": [
         "mem-forget",
         "process-abort",
@@ -24563,7 +24563,7 @@
       ]
     }
   ],
-  "policy_sha256": "9b42bbec680c6411e90fafb4af076c8d5392c85307918991a2758fa0d76ad4c5",
+  "policy_sha256": "6da7bdf3b4e6efb8e9a2d542ef28514f46324bbb81ba76804cb5da3cbcea1bfa",
   "registered_secret_owners": [
     {
       "capability": "algorithm.hkdf",
@@ -25369,5 +25369,5 @@
     "physical-memory-remanence"
   ],
   "schema": 1,
-  "surface_register_sha256": "138a610e96e67cee4e6b825853ba8822464ff1a946f77fbee332909310466cd0"
+  "surface_register_sha256": "adf55a66cd8862cc70bbda2bfbc15fd08e410907acd3ff9e46cd9caf8e71ed04"
 }

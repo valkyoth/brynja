@@ -2,6 +2,17 @@
 
 Status: initial; expands with every milestone
 
+## Portable AES-GCM (v0.29.0)
+
+A peer controls the received IV, AAD, ciphertext and tag. Failed verification
+must not release plaintext. A valid tag does not establish freshness: a receiver
+will accept a replay unless its protocol tracks and rejects it. Reusing a
+sending key/IV pair breaks GCM's security even if both calls succeed. A Rust
+owner cannot detect a second import after a fork, restart or storage rollback.
+Applications must enforce durable reservations and bound untrusted message
+sizes and failed verification attempts. The [crate controls](security-controls.md#portable-aes-gcm-development-contract-v0290)
+do not promise physical fault resistance or whole-target constant-time behavior.
+
 ## Portable GHASH (v0.28.0)
 
 Treat the subkey and raw intermediate as secrets. A caller that publishes

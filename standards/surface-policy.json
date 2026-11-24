@@ -1055,13 +1055,13 @@
     },
     {
       "decision": {
-        "code_target": "crates/brynja-crypto/src/aes_gcm.rs",
-        "disposition": "future-work",
+        "code_target": "crates/brynja-crypto/src/aes_gcm/portable.rs#with_material",
+        "disposition": "implemented",
         "domain": "cryptography",
         "owner": "0.29.0",
-        "rationale": "GHASH and AES-GCM remain future bounded AEAD work with nonce and counter exhaustion enforcement.",
+        "rationale": "Default-off portable AES-128/192/256-GCM provides detached authenticated seal and open with checked length limits, reserved sending IVs and caller-owned scratch. A failed subkey derivation precedes all GHASH work. This describes implemented behavior, not independent release approval, accelerated GCM or target timing qualification.",
         "sources": ["nist:NIST.SP.800-38D.pdf", "rfc:5116"],
-        "test_target": "tests/surface/primitives.rs#aes_gcm"
+        "test_target": "crates/brynja-crypto/src/aes_gcm/portable/tests.rs#subkey_derivation_error_never_starts_ghash_or_commits_output"
       },
       "id": "algorithm.aes-gcm"
     },

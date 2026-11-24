@@ -5,7 +5,8 @@
 //! SP 800-185 encodings, cSHAKE128/cSHAKE256, all four KMAC/KMACXOF
 //! identities, all four TupleHash/TupleHashXOF identities, and all four
 //! ParallelHash/ParallelHashXOF identities are exposed from their small family
-//! crates. Device adapters, AEADs, other KDFs, public-key
+//! crates. Portable AES-GCM is available with the default-off `aes-gcm`
+//! feature. Device adapters, other AEADs, other KDFs, public-key
 //! algorithms, and the complete planned composition layer remain unimplemented.
 //! Portable modern HKDF is under development; it is not release-qualified.
 //! Optional external-key lifecycle contracts and AES-128 adapter operations
@@ -14,6 +15,19 @@
 //! feature. Its secret intermediate is not an authentication tag.
 
 #![no_std]
+
+#[cfg(all(test, feature = "hazmat-ghash", not(feature = "aes-gcm")))]
+mod aes_gcm;
+#[cfg(feature = "aes-gcm")]
+pub mod aes_gcm;
+
+// Reuse the same primitives without granting access to their raw block APIs.
+#[cfg(all(feature = "aes-gcm", not(feature = "hazmat-aes-block")))]
+#[allow(dead_code, unused_imports)]
+mod aes;
+#[cfg(all(feature = "aes-gcm", not(feature = "hazmat-ghash")))]
+#[allow(dead_code)]
+mod ghash;
 
 /// Opt-in raw AES-128 blocks, not authenticated message encryption.
 /// Requires `hazmat-aes-block`; deployment qualification remains separate.

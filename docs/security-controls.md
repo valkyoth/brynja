@@ -1,5 +1,20 @@
 # Security Controls
 
+## Portable AES-GCM development contract (v0.29.0)
+
+For `BRY-REQ-CRYPTO-0007`, deriving the GHASH subkey must succeed before
+processing either the IV or authenticated data. The receiver authenticates
+before decrypting. Seal and open stage their results in caller-supplied
+scratch and only copy to the destination on success. A failed open preserves
+the ciphertext in place or the previous bytes of a separate destination.
+This is not a crash-atomic write or a guarantee about registers and spills.
+
+The sender spends its IV once keyed work begins, including on error or unwind.
+The application must coordinate and persist disjoint reservations across all
+imports of a key, keep a single tag policy per key, and enforce its protocol's
+own message, verification-attempt and lifetime limits. See the
+[reservation rules and verification scope](assurance/aes-gcm-development.md).
+
 ## Portable GHASH development contract (v0.28.0)
 
 For `BRY-REQ-CRYPTO-0006`, the portable implementation interprets the most

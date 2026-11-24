@@ -1,7 +1,8 @@
 # Crate Version Matrix
 
-Current development candidate: v0.28.3, with zero crates selected for publication.
-The facade advances from 0.28.2 to 0.28.3 for downstream GHASH acceptance only.
+Latest signed milestone: v0.28.3, with zero crates selected for publication.
+The facade advanced from 0.28.2 to 0.28.3 for downstream GHASH acceptance only.
+v0.29.0 development has started; no new package version is selected yet.
 Supporting crates keep their internal-train versions. Portable GHASH remains the default constructor in
 `brynja-crypto 0.2.0`; CPU crates remain at 0.2.0 and
 `brynja-legacy-hkdf 0.1.0` is held for a later checkpoint. The RISC-V AES

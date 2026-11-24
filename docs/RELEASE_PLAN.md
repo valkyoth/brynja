@@ -6949,7 +6949,7 @@ Exit criteria:
 
 ### v0.28.3 - GHASH Public API Usability Acceptance
 
-Status: awaiting pentest
+Status: released
 
 The [packaged runtime fixture](../assurance/ghash-runtime-consumer/README.md)
 now checks the public owner at every two-chunk split of all 15 distinct NIST
@@ -6957,9 +6957,9 @@ GCM-derived GHASH cases, plus empty inputs and all partial tails. The full
 corpus replay passed on Linux x86-64 and native Apple Silicon, and under QEMU
 for Linux AArch64 and RV64. This is a correctness and
 usability milestone, not a new backend, GCM API, or timing qualification.
-The [initial review](assurance/ghash-runtime-package-review.md) found two
-tooling issues. Their fixes await a scoped retest before the final gate;
-this does not add a release-wide campaign or change the internal tag policy.
+The [scoped retest](../security/pentest/v0.28.3.md) cleared both tooling
+findings. The final gate, Rust CI and CodeQL passed on the signed internal
+tag `v0.28.3`; no crates were published.
 
 Plan scope: Close the GHASH chain with a packaged downstream fixture covering empty, partial, multi-block, incremental, scalar, and every admitted accelerated path against authoritative field and GCM-derived vectors, while proving canonical field representation, length accounting, finalization, and no_std package usability.
 
@@ -6984,7 +6984,18 @@ Exit criteria:
 
 ### v0.29.0 - Complete AES-GCM
 
-Status: planned
+Status: in progress
+
+The [implementation checklist and AArch64 timing stop rule](assurance/aes-gcm-development.md)
+cover default-off portable seal/open at all three key sizes, fixed tag lengths,
+reserved sender nonce ranges and direct/facade consumers of unpacked archives.
+The 18 NIST worked examples passed. General-IV senders require a bounded
+key-wide reservation. Two bounded proofs cover the production seal/open
+commit for lengths 0–17. All 33,750 applicable NIST GCMVS cases passed on both
+compiler endpoints. An independent Go AES-GCM comparison covered 11,025
+generated messages in both buffer layouts on each endpoint. The subkey-failure
+regression and requirement mapping are in place; scoped review and the final
+gate remain open. See the [candidate release notes](../release-notes/RELEASE_NOTES_0.29.0.md).
 
 Plan scope: Implement complete NIST SP 800-38D AES-GCM seal and open over AES-128, AES-192, and AES-256, including 96-bit and general IV processing, supported tag lengths, nonce and invocation limits, checked length domains, official vectors, authenticate-before-release, exact in-place or disjoint buffers, partial-overlap rejection, unchanged failure destinations, and failure-atomicity proofs.
 

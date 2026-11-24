@@ -1,4 +1,4 @@
-# v0.28.3 candidate — GHASH public API usability
+# v0.28.3 — GHASH public API usability (internally tagged)
 
 This internal milestone changes the downstream tests, not the GHASH
 implementation. Consumers still opt in to `hazmat-ghash` or
@@ -23,7 +23,10 @@ the [first full-corpus replay against v0.28.2 sources](../assurance/ghash-runtim
 the facade version changed between replays, not the GHASH implementation.
 
 The [pentest disposition](../docs/assurance/ghash-runtime-package-review.md)
-describes the archive-harness and release-check fixes awaiting scoped retest.
+describes the archive-harness and release-check fixes. The
+[scoped retest](../security/pentest/v0.28.3.md) cleared both.
 
 No new production code, dependencies, GCM service or crates.io upload.
-Candidate review, final checks and exact-commit GitHub approval precede tagging.
+The signed tag points at `a674ead2`, which passed the final checks,
+[Rust CI](https://github.com/valkyoth/brynja/actions/runs/45374224967) and
+[CodeQL](https://github.com/valkyoth/brynja/actions/runs/45374225002).

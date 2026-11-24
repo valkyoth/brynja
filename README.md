@@ -309,6 +309,11 @@ exercise the portable interface from unpacked Cargo archives on Rust 1.90.0 and 
 For runtime selection and the native versus emulated results, see the
 [v0.28.3 public API acceptance fixture](assurance/ghash-runtime-consumer/README.md).
 
+The v0.29.0 development checkout adds [portable AES-GCM](docs/assurance/aes-gcm-development.md)
+at all three AES key sizes under the default-off `aes-gcm` feature. Enable it
+on `brynja` or `brynja-crypto`; neither public raw primitive feature is required.
+Senders use nonce ranges reserved by the application. This is not yet a tagged release.
+
 The v0.27.6 [provider API candidate](docs/assurance/aes-provider-completion.md)
 adds distinct AES-128/192/256 external-key bindings. Applications supply their
 own trusted adapters; Brynja adds no device client or OpenBao integration and

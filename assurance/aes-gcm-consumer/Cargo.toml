@@ -1,0 +1,16 @@
+[package]
+name = "aes-gcm-consumer"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[workspace]
+
+[features]
+direct = ["dep:brynja-crypto"]
+facade = ["dep:brynja"]
+
+[dependencies]
+brynja-crypto = { path = "../../crates/brynja-crypto", default-features = false, features = ["aes-gcm"], optional = true }
+brynja = { path = "../../crates/brynja", default-features = false, features = ["aes-gcm"], optional = true }

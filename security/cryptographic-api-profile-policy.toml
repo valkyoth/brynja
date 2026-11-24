@@ -1,6 +1,6 @@
 [[reviewed-source]]
 path = "crates/brynja-crypto/src/aes.rs"
-sha256 = "3f75456cb8f1e00719155ebb83a811828bd810da179ac8fedb4c93299314b4b3"
+sha256 = "39bd0e909a2e22cf0a418b3cba8e61d2e91df6963db8c1fbbd59186ffe9df0f4"
 
 [[reviewed-source]]
 path = "crates/brynja-crypto/src/aes/portable.rs"
@@ -351,7 +351,7 @@ cleanup_bindings = ["crates/brynja-legacy-hmac-std/src/macos_resident/mod.rs#Buf
 [schema]
 version = 1
 milestone = "0.24.15"
-surface_register_sha256 = "138a610e96e67cee4e6b825853ba8822464ff1a946f77fbee332909310466cd0"
+surface_register_sha256 = "adf55a66cd8862cc70bbda2bfbc15fd08e410907acd3ff9e46cd9caf8e71ed04"
 
 [api]
 dimensions = [

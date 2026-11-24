@@ -35,7 +35,8 @@
 //! selection. A bounded borrowed DER reader exposes canonical framing and
 //! values without schema-driven ASN.1 or X.509 semantics. This crate does not
 //! provide a TLS connection API, device driver, or any cryptographic
-//! algorithm outside the hash/MAC/KDF surfaces described above, the explicit
+//! algorithm outside the hash/MAC/KDF surfaces described above, portable
+//! AES-GCM under `crypto::aes_gcm` with the default-off `aes-gcm` feature, the explicit
 //! `general-sha512-t` extension, and the development-only AES-128 block API
 //! under `crypto::aes`, available only with explicit `hazmat-aes-block` opt-in.
 //! A separate `external-key-provider` opt-in exposes reusable lifecycle contracts;

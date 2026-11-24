@@ -15,6 +15,7 @@ inspected local bytes are pinned by `LOCAL_SHA256SUMS`.
 | NIST FIPS 202 | SHA-3 and SHAKE | downloaded local-only; the 2015 final remains current while NIST's announced update is unresolved |
 | NIST FIPS 197-upd1 | AES | local-only PDF; track derived test vectors with provenance only |
 | NIST SP 800-38D | GCM/GHASH | downloaded local-only; NIST has announced a future revision |
+| NIST CAVP GCM test vectors (CAVS 14.0) | AES-GCM seal and open, including authentication failures | original ZIP local-only; [hash, replay and exclusions](../docs/assurance/aes-gcm-development.md) |
 | NIST FIPS 186-5 and SP 800-186 | ECDSA/RSA and curve parameters | downloaded local-only; errata must be checked before use |
 | NIST SP 800-56A Rev. 3 | ECC key establishment | downloaded local-only |
 | NIST SP 800-90A Rev. 1 | entropy-provider/DRBG review | downloaded local-only; platform RNG remains caller-provided |

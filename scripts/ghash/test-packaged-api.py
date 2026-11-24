@@ -128,6 +128,30 @@ class ArchiveControls(unittest.TestCase):
             with self.subTest(), self.assertRaises(ValueError):
                 table(broken)
 
+    def test_bad_answer_restores_archive_before_next_scenario(self):
+        wrong = runpy.run_path(str(Path(__file__).with_name('check-packaged-runtime.py')))['wrong_startup_answer']
+        src = self.root / 'admission.rs'
+        original = b'prefix\r\n0x5e2ec746917062882c85b0685353deb7\r\n'
+        src.write_bytes(original)
+        for fail in (False, True):
+            with self.subTest(fail=fail):
+                def exercise():
+                    with wrong(src):
+                        self.assertEqual(src.read_bytes(), original.replace(b'deb7', b'deb6'))
+                        if fail:
+                            raise RuntimeError('consumer failed')
+                if fail:
+                    with self.assertRaisesRegex(RuntimeError, 'consumer failed'):
+                        exercise()
+                else:
+                    exercise()
+                self.assertEqual(src.read_bytes(), original)
+        for invalid in (b'no answer here', original * 2):
+            src.write_bytes(invalid)
+            with self.assertRaisesRegex(ValueError, 'ambiguous KAT control'), wrong(src):
+                self.fail('invalid archive admitted')
+            self.assertEqual(src.read_bytes(), invalid)
+
 
 if __name__ == '__main__':
     unittest.main()

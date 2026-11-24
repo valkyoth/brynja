@@ -32730,6 +32730,26 @@
         "after": "d29fd9ca5581fe6674c543be4c97ab28ae2a08b26f21fe2127c4342abab1bf17",
         "log": "verification/.runner/logs/12596-1795509952171577958.log",
         "log_sha256": "3e3fdcb26283df00fa827a3ef1afbc982bff573a9edfc408d398a87035602da6"
+      },
+      {
+        "id": "3513-1795514731088295906",
+        "source": "working tree based on 23505c33045e68c8e51105d7b6d10764bead28bb; scoped fingerprint 2ef3860cc84f19aa7ab2e930c975ef916b1be61d61ec3babe193360678e09ba7",
+        "started": "2026-11-24T10:05:31.088275027Z",
+        "ended": "2026-11-24T10:06:02.03671488Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/check-packaged-runtime.py",
+          "--pmull",
+          "linux"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "302cd224c575a8c62210fabb0eb14410bb7a6e0948ac2b03659bb81b66336395",
+        "after": "302cd224c575a8c62210fabb0eb14410bb7a6e0948ac2b03659bb81b66336395",
+        "log": "verification/.runner/logs/3513-1795514731088295906.log",
+        "log_sha256": "3e3fdcb26283df00fa827a3ef1afbc982bff573a9edfc408d398a87035602da6"
       }
     ],
     "ghash/packaged-public-api": [
@@ -33154,6 +33174,25 @@
         "after": "8987d33faf877550bf67504c5b232f177038627c64d54f737d780931370506e3",
         "log": "verification/.runner/logs/16685-1795510017293668820.log",
         "log_sha256": "1a4949d2d39d62a5ff4235edab9753b2b1cb74299c1f19ac43c282696597e590"
+      },
+      {
+        "id": "7603-1795514798419063808",
+        "source": "working tree based on 23505c33045e68c8e51105d7b6d10764bead28bb; scoped fingerprint 45e6ff525f853531f4922318df80e0d991177fc2107f4380eb82330b6a7ad40f",
+        "started": "2026-11-24T10:06:38.419033381Z",
+        "ended": "2026-11-24T10:07:06.275082497Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/check-packaged-runtime.py",
+          "--rv64"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "4476bec5fcc038f0496fce93148282558f835951f288354302320b37897a49ba",
+        "after": "4476bec5fcc038f0496fce93148282558f835951f288354302320b37897a49ba",
+        "log": "verification/.runner/logs/7603-1795514798419063808.log",
+        "log_sha256": "1a4949d2d39d62a5ff4235edab9753b2b1cb74299c1f19ac43c282696597e590"
       }
     ],
     "ghash/packaged-x86-runtime": [
@@ -33299,6 +33338,24 @@
         "before": "47d9d99f5db7f0f79bab3ee8fad23ced49ea9f2a95e0f37022952424fd9df293",
         "after": "47d9d99f5db7f0f79bab3ee8fad23ced49ea9f2a95e0f37022952424fd9df293",
         "log": "verification/.runner/logs/9087-1795509899571450322.log",
+        "log_sha256": "fd12ff07a0a7aa95632748aa3219d87e9cc92eb1eaf8c03f9960d10d693cf200"
+      },
+      {
+        "id": "3-1795514673562324338",
+        "source": "working tree based on 23505c33045e68c8e51105d7b6d10764bead28bb; scoped fingerprint a25c2be18bf39cf3af0456d82f6483c95cf0b8c470d9dd9d58439fd716ea57d8",
+        "started": "2026-11-24T10:04:33.562300483Z",
+        "ended": "2026-11-24T10:04:58.400837007Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/ghash/check-packaged-runtime.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "7b78f4f3ef41610fe13060134a47e2c809b918af8a32eb185db84881cd952bd3",
+        "after": "7b78f4f3ef41610fe13060134a47e2c809b918af8a32eb185db84881cd952bd3",
+        "log": "verification/.runner/logs/3-1795514673562324338.log",
         "log_sha256": "fd12ff07a0a7aa95632748aa3219d87e9cc92eb1eaf8c03f9960d10d693cf200"
       }
     ],
@@ -48565,13 +48622,13 @@
       "last_success": "2026-11-23T16:36:43.907956986Z"
     },
     "ghash/packaged-pmull-runtime": {
-      "checked_at": "2026-11-24T08:46:24.221527701Z",
-      "fingerprint": "3c97b49bd357e9bae15f2efd2898ced26c5efbaa33e543e2419a9c2cf2135ace",
+      "checked_at": "2026-11-24T10:06:14.807136724Z",
+      "fingerprint": "2ef3860cc84f19aa7ab2e930c975ef916b1be61d61ec3babe193360678e09ba7",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on e3ab4911c3ef8daf43549224b67c92ae21566380; scoped fingerprint 3c97b49bd357e9bae15f2efd2898ced26c5efbaa33e543e2419a9c2cf2135ace",
-      "performed_at": "2026-11-24T08:46:15.569046057Z",
-      "last_success": "2026-11-24T08:46:15.569046057Z"
+      "source": "working tree based on 23505c33045e68c8e51105d7b6d10764bead28bb; scoped fingerprint 2ef3860cc84f19aa7ab2e930c975ef916b1be61d61ec3babe193360678e09ba7",
+      "performed_at": "2026-11-24T10:06:02.03671488Z",
+      "last_success": "2026-11-24T10:06:02.03671488Z"
     },
     "ghash/packaged-public-api": {
       "checked_at": "2026-11-24T08:44:36.73279088Z",
@@ -48583,22 +48640,22 @@
       "last_success": "2026-11-24T08:44:27.92620707Z"
     },
     "ghash/packaged-rv64-runtime": {
-      "checked_at": "2026-11-24T08:47:29.490094983Z",
-      "fingerprint": "c4a59ea337b6d2a6fc39230ef0119ac6520ffc38f28fecc273c8a8741fbdcb4d",
+      "checked_at": "2026-11-24T10:07:15.85342142Z",
+      "fingerprint": "45e6ff525f853531f4922318df80e0d991177fc2107f4380eb82330b6a7ad40f",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on e3ab4911c3ef8daf43549224b67c92ae21566380; scoped fingerprint c4a59ea337b6d2a6fc39230ef0119ac6520ffc38f28fecc273c8a8741fbdcb4d",
-      "performed_at": "2026-11-24T08:47:20.694697406Z",
-      "last_success": "2026-11-24T08:47:20.694697406Z"
+      "source": "working tree based on 23505c33045e68c8e51105d7b6d10764bead28bb; scoped fingerprint 45e6ff525f853531f4922318df80e0d991177fc2107f4380eb82330b6a7ad40f",
+      "performed_at": "2026-11-24T10:07:06.275082497Z",
+      "last_success": "2026-11-24T10:07:06.275082497Z"
     },
     "ghash/packaged-x86-runtime": {
-      "checked_at": "2026-11-24T08:45:29.679885857Z",
-      "fingerprint": "5c236127b5e371c46a6f006aa13ed9e467f9ff00be30d1e6364f18be210516c7",
+      "checked_at": "2026-11-24T10:05:07.478015312Z",
+      "fingerprint": "a25c2be18bf39cf3af0456d82f6483c95cf0b8c470d9dd9d58439fd716ea57d8",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on e3ab4911c3ef8daf43549224b67c92ae21566380; scoped fingerprint 5c236127b5e371c46a6f006aa13ed9e467f9ff00be30d1e6364f18be210516c7",
-      "performed_at": "2026-11-24T08:45:21.053407821Z",
-      "last_success": "2026-11-24T08:45:21.053407821Z"
+      "source": "working tree based on 23505c33045e68c8e51105d7b6d10764bead28bb; scoped fingerprint a25c2be18bf39cf3af0456d82f6483c95cf0b8c470d9dd9d58439fd716ea57d8",
+      "performed_at": "2026-11-24T10:04:58.400837007Z",
+      "last_success": "2026-11-24T10:04:58.400837007Z"
     },
     "ghash/pclmul-candidate-latest": {
       "checked_at": "2026-11-23T16:33:56.201385139Z",

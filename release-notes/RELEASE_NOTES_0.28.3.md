@@ -18,7 +18,12 @@ check and all 52 runtime configurations: 12 Linux x86-64, 12 Linux AArch64
 under QEMU, 16 Linux RV64 under QEMU, and 12 native Apple Silicon. Counts
 include expected rejection and quarantine, not just successful constructors.
 The four Linux-hosted checks have local `brynja-verify` records; the Mac
-runner was executed separately.
+runner was executed separately. These are the versioned candidate runs, after
+the [first full-corpus replay against v0.28.2 sources](../assurance/ghash-runtime-consumer/README.md#full-published-corpus-replay-2026-11-24);
+the facade version changed between replays, not the GHASH implementation.
+
+The [pentest disposition](../docs/assurance/ghash-runtime-package-review.md)
+describes the archive-harness and release-check fixes awaiting scoped retest.
 
 No new production code, dependencies, GCM service or crates.io upload.
 Candidate review, final checks and exact-commit GitHub approval precede tagging.

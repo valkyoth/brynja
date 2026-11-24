@@ -16,6 +16,11 @@ command = ["python3","scripts/ghash/check-packaged-api.py"]
 timeout_seconds = 600
 
 [[checks]]
+id = "ghash-packaged-runtime-x86"
+command = ["python3","scripts/ghash/check-packaged-runtime.py"]
+timeout_seconds = 600
+
+[[checks]]
 id = "crypto-tests"
 command = ["cargo","test","--locked","-p","brynja-crypto","-p","brynja-legacy-hkdf","--no-default-features","--features","brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider,brynja-crypto/ghash-runtime-execution"]
 timeout_seconds = 300

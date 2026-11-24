@@ -6957,8 +6957,9 @@ GCM-derived GHASH cases, plus empty inputs and all partial tails. The full
 corpus replay passed on Linux x86-64 and native Apple Silicon, and under QEMU
 for Linux AArch64 and RV64. This is a correctness and
 usability milestone, not a new backend, GCM API, or timing qualification.
-The maintainer requested a scoped pentest before the final gate; this does
-not add a release-wide verification campaign or change the internal tag policy.
+The [initial review](assurance/ghash-runtime-package-review.md) found two
+tooling issues. Their fixes await a scoped retest before the final gate;
+this does not add a release-wide campaign or change the internal tag policy.
 
 Plan scope: Close the GHASH chain with a packaged downstream fixture covering empty, partial, multi-block, incremental, scalar, and every admitted accelerated path against authoritative field and GCM-derived vectors, while proving canonical field representation, length accounting, finalization, and no_std package usability.
 

@@ -1,5 +1,6 @@
 """Test public hosted runtime dispatch from archives, without forced-candidate cfgs."""
 import argparse
+from contextlib import contextmanager, nullcontext
 import json
 import os
 from pathlib import Path
@@ -28,6 +29,20 @@ def published_table(frozen):
         calls.append('(' + section[len(start):-len(end)] + ')')
     # Rust checks every entry's types and the exact number of cases per family.
     return 'const PUBLISHED: [(u128, &[(&[u128], u128); 5]); 3] = [\n' + ',\n'.join(calls) + '\n];\n'
+
+
+@contextmanager
+def wrong_startup_answer(src):
+    """Change only the private archive, for the duration of the negative control."""
+    original = src.read_bytes()
+    kat = b'0x5e2ec746917062882c85b0685353deb7'
+    if original.count(kat) != 1:
+        raise ValueError('ambiguous KAT control')
+    try:
+        src.write_bytes(original.replace(kat, kat[:-1] + b'6'))
+        yield
+    finally:
+        src.write_bytes(original)
 
 
 def main():
@@ -89,49 +104,45 @@ def main():
                     control[prefix + '_RUSTFLAGS'] = '--cfg brynja_ghash_deny_pmull'
             elif scenario == 'absent':
                 control['CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER'] = 'qemu-x86_64 -cpu max,+aes,-pclmulqdq'
+            archive_control = nullcontext()
             if scenario == 'quarantine':
-                # Only the private unpacked test copy is changed, after testing the
-                # pristine archives. Wrong KAT expected value, same product kernel.
                 src = root / 'unpacked' / ('brynja-crypto-cpu-' + versions['brynja-crypto-cpu']) / 'src/ghash_admission.rs'
-                original = src.read_text()
-                kat = '0x5e2ec746917062882c85b0685353deb7'
-                if original.count(kat) != 1:
-                    raise ValueError('ambiguous KAT control')
-                src.write_text(original.replace(kat, kat[:-1] + '6'))
+                archive_control = wrong_startup_answer(src)
                 control['CARGO_TARGET_DIR'] = str(root / 'bad-kat-build')
-            for dep, c in consumers.items():
-                for v in A['ENDPOINTS']:
-                    cargo = ['cargo', '+' + v]
-                    if scenario == 'native':
-                        graph = pkg.run(cargo + ['metadata', *flags, '--format-version', '1'], c, env)
-                        A['check_graph'](json.loads(graph.stdout), c, root / 'unpacked', versions, dep, runtime=True)
-                        if opts.pmull != 'macos':  # already covered by the Linux cross-build
-                            pkg.run(cargo + ['check', *flags, '--target', 'thumbv7em-none-eabi', '--lib'], c, env)
-                        # Even the legacy broad CPU opt-in must not expose this bridge.
-                        probe = c / 'src/bin/probe.rs'
-                        probe.parent.mkdir(exist_ok=True)
-                        prefix = 'subject::' + ('crypto::' if dep == 'brynja' else '') + 'cpu::'
-                        cmd = cargo + ['check', *flags, '--target', target, '--features', 'subject/cpu', '--bin', 'probe', '--message-format=json']
-                        probe.write_text('use ' + prefix + 'Sha256Backend; fn main() {}')
-                        pkg.run(cmd, c, control)
-                        handle = 'RuntimePmull' if opts.pmull else 'RuntimeRv64' if opts.rv64 else 'RuntimePclmul'
-                        probe.write_text('use ' + prefix + handle + '; fn main() {}')
-                        result = pkg.cargo_result(cmd, c, control, timeout=120)
-                        if not pkg.diagnostic_matches(result, 'E0432', filename='src/bin/probe.rs'):
-                            raise ValueError('raw GHASH handle not isolated')
-                        probe.unlink()
-                    cmd = cargo + ['test', *flags, '--release', '--target', target, '--test', 'runtime']
-                    result = pkg.run(cmd, c, control)
-                    if not A['exact_suite'](result.stdout, 1):
-                        raise ValueError('incomplete runtime test')
-                    if opts.save_facade and dep == 'brynja' and (opts.pmull or scenario != 'absent'):
-                        artifacts = pkg.run(cmd + ['--no-run', '--message-format=json'], c, control)
-                        files = [a['executable'] for a in map(json.loads, artifacts.stdout.splitlines())
-                                 if a.get('executable') and a['target']['name'] == 'runtime']
-                        if len(files) != 1:
-                            raise ValueError('expected exactly one runtime executable')
-                        shutil.copy2(files[0], opts.save_facade / (scenario + '-' + v))
-                    print(v, dep, scenario, model, 'passed', flush=True)
+            with archive_control:
+                for dep, c in consumers.items():
+                    for v in A['ENDPOINTS']:
+                        cargo = ['cargo', '+' + v]
+                        if scenario == 'native':
+                            graph = pkg.run(cargo + ['metadata', *flags, '--format-version', '1'], c, env)
+                            A['check_graph'](json.loads(graph.stdout), c, root / 'unpacked', versions, dep, runtime=True)
+                            if opts.pmull != 'macos':  # already covered by the Linux cross-build
+                                pkg.run(cargo + ['check', *flags, '--target', 'thumbv7em-none-eabi', '--lib'], c, env)
+                            # Even the legacy broad CPU opt-in must not expose this bridge.
+                            probe = c / 'src/bin/probe.rs'
+                            probe.parent.mkdir(exist_ok=True)
+                            prefix = 'subject::' + ('crypto::' if dep == 'brynja' else '') + 'cpu::'
+                            cmd = cargo + ['check', *flags, '--target', target, '--features', 'subject/cpu', '--bin', 'probe', '--message-format=json']
+                            probe.write_text('use ' + prefix + 'Sha256Backend; fn main() {}')
+                            pkg.run(cmd, c, control)
+                            handle = 'RuntimePmull' if opts.pmull else 'RuntimeRv64' if opts.rv64 else 'RuntimePclmul'
+                            probe.write_text('use ' + prefix + handle + '; fn main() {}')
+                            result = pkg.cargo_result(cmd, c, control, timeout=120)
+                            if not pkg.diagnostic_matches(result, 'E0432', filename='src/bin/probe.rs'):
+                                raise ValueError('raw GHASH handle not isolated')
+                            probe.unlink()
+                        cmd = cargo + ['test', *flags, '--release', '--target', target, '--test', 'runtime']
+                        result = pkg.run(cmd, c, control)
+                        if not A['exact_suite'](result.stdout, 1):
+                            raise ValueError('incomplete runtime test')
+                        if opts.save_facade and dep == 'brynja' and (opts.pmull or scenario != 'absent'):
+                            artifacts = pkg.run(cmd + ['--no-run', '--message-format=json'], c, control)
+                            files = [a['executable'] for a in map(json.loads, artifacts.stdout.splitlines())
+                                     if a.get('executable') and a['target']['name'] == 'runtime']
+                            if len(files) != 1:
+                                raise ValueError('expected exactly one runtime executable')
+                            shutil.copy2(files[0], opts.save_facade / (scenario + '-' + v))
+                        print(v, dep, scenario, model, 'passed', flush=True)
     if opts.pmull:
         print('GHASH_PACKAGED_PMULL_' + opts.pmull.upper() + '_COMPLETE')
     else:

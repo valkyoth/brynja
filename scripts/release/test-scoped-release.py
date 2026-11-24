@@ -61,7 +61,7 @@ class ScopedRelease(unittest.TestCase):
     def test_ghash_candidate_gate_is_finite_and_does_not_publish(self):
         plan = scoped.load('0.28.3')
         commands = {check['id']: check['command'] for check in plan['checks']}
-        self.assertEqual(len(commands), 32)
+        self.assertEqual(len(commands), 33)
         self.assertEqual(commands['release-plan'], ['scripts/release/test-release-plan.sh'])
         self.assertEqual(commands['crypto-tests'],
             ['cargo', 'test', '--locked', '-p', 'brynja-crypto', '-p',
@@ -76,7 +76,7 @@ class ScopedRelease(unittest.TestCase):
             ['cargo', 'check', '--locked', '-p', 'brynja', '--no-default-features'])
         self.assertEqual(set(plan['ci_checks']), set(commands) -
                          {'sbom', 'dependency-policy', 'advisories', 'ghash-package-controls', 'ghash-packaged-endpoints',
-                          'hkdf-package-runner-tests', 'hkdf-packaged-endpoints',
+                          'ghash-packaged-runtime-x86', 'hkdf-package-runner-tests', 'hkdf-packaged-endpoints',
                           'aes-downstream-endpoints', 'aes-consumer-format',
                           'aes-consumer-lint-direct', 'aes-consumer-lint-facade'})
         self.assertEqual(commands['aes-owner-contract'],
@@ -100,10 +100,19 @@ class ScopedRelease(unittest.TestCase):
                 '--manifest-path', consumer_manifest, '--no-default-features',
                 '--features', route, '--all-targets', '--no-deps', '--', '-D', 'warnings']
         workflow = (scoped.ROOT / '.github/workflows/ci.yml').read_text()
+        # The dedicated push/PR job runs these once, outside the generic CI subset.
+        job = workflow.split('\n  ghash-public-api:\n', 1)[1].split('\n  checks:', 1)[0]
+        steps = [line.strip() for line in job.splitlines()]
         for check, file in [('ghash-package-controls', 'test-packaged-api.py'),
-                            ('ghash-packaged-endpoints', 'check-packaged-api.py')]:
+                            ('ghash-packaged-endpoints', 'check-packaged-api.py'),
+                            ('ghash-packaged-runtime-x86', 'check-packaged-runtime.py')]:
             self.assertEqual(commands[check], ['python3', 'scripts/ghash/' + file])
-            self.assertIn(' '.join(commands[check]), workflow)
+            run_at = steps.index(' '.join(commands[check]))
+            for prerequisite in ('cargo +1.100.0 fetch --locked',
+                                 'sudo apt-get install -y --no-install-recommends qemu-user',
+                                 *(f'rustup toolchain install {v} --profile minimal --target thumbv7em-none-eabi'
+                                   for v in ('1.90.0', '1.100.0'))):
+                self.assertLess(steps.index(prerequisite), run_at)
         for name, command in expected_consumer_checks.items():
             self.assertEqual(commands[name], command)
             self.assertIn(' '.join(command), workflow)

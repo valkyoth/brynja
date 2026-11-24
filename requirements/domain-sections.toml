@@ -1,6 +1,6 @@
 schema = 1
 milestone = "0.3.3"
-source_ledger_sha256 = "e9694bf49dd71addd529dee60d74c0115cbfba00015218b0c61d0cf6f3bd689f"
+source_ledger_sha256 = "39e86f6144d5ee20aa8b114a5d2662bef933275477b00a2e002e3e63dce31e78"
 
 [revisions]
 "BRY-REQ-CRYPTO-0003" = 3

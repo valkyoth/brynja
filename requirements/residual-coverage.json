@@ -79,7 +79,7 @@
       "requirement_ids": [
         "BRY-REQ-PKIXREG-0053"
       ],
-      "sha256": "d44c6750d9b2ecf38d4248c00703692d33da15dd2eed7485247cfb489b41b4a4"
+      "sha256": "9cedb6b025adb7fe96bafe952cce445c5cc437aa000ca4cd56de9d8ff149dda7"
     },
     {
       "authority_role": "current",
@@ -2625,7 +2625,7 @@
   "authority_count": 33,
   "mapped_normative_section_count": 165,
   "normative_section_count": 182,
-  "policy_sha256": "de7bc83f4dfdc76e6c724b64e7382f322cbf7d37bb891d71581e6172c79f9014",
+  "policy_sha256": "db8081c7631eefc4760e58b97e8c16d9442bf26a3301f4cf5c3c8cbaf4f0c78f",
   "requirement_count": 51,
   "schema": 1,
   "surface_count": 802,

@@ -58,19 +58,22 @@ def bind(policy: dict, ledger: dict) -> None:
 def test_current_repository() -> None:
     register = checker.build_register()
     assert register["schema"] == 2
-    assert len(register["surfaces"]) == 4490
+    assert len(register["surfaces"]) == 4491
+    entry = next(s for s in register["surfaces"] if s["id"] == "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.document-binding-type.1")
+    assert entry["disposition"] == "caller-owned" and entry["record"]["fields"]["value"] == "26"
     implemented = {
         surface["id"]
         for surface in register["surfaces"]
         if surface["disposition"] == "implemented"
     }
-    assert len(implemented) == 77
+    assert len(implemented) == 78 and "algorithm.aes-gcm" in implemented
     assert "algorithm.aes" not in implemented
     assert all(
         surface_id.startswith("iana.tls-parameters.tls-parameters-5")
         or surface_id.startswith("iana.tls-parameters.tls-parameters-6")
         or surface_id
         in {
+            "algorithm.aes-gcm",
             "algorithm.hkdf", "algorithm.hmac", "algorithm.kmac", "algorithm.md5", "algorithm.parallelhash", "algorithm.sha1", "algorithm.sha2", "algorithm.sha3-shake", "algorithm.sha512-t", "algorithm.tuplehash",
             "facility.sslkeylogfile.test-support",
             "facility.entropy.secure-random-contract",
@@ -223,7 +226,7 @@ def test_every_iana_record_is_projected() -> None:
         surface["kind"] in {"iana-entry", "iana-registry"}
         for surface in register["surfaces"]
     )
-    assert actual == expected == 4355
+    assert actual == expected == 4356
 
 
 def test_source_ledger_binding_drift_fails() -> None:

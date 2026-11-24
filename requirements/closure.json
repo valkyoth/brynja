@@ -28443,7 +28443,7 @@
       "requirement_ids": [
         "BRY-REQ-PKIXREG-0053"
       ],
-      "sha256": "d44c6750d9b2ecf38d4248c00703692d33da15dd2eed7485247cfb489b41b4a4"
+      "sha256": "9cedb6b025adb7fe96bafe952cce445c5cc437aa000ca4cd56de9d8ff149dda7"
     },
     {
       "id": "iana:tls-ech-configuration-extensions",
@@ -40706,6 +40706,12 @@
     },
     {
       "id": "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.crmf-registration.1",
+      "requirement_ids": [
+        "BRY-REQ-PKIX-0004"
+      ]
+    },
+    {
+      "id": "iana.smi-numbers.smi-numbers-1.3.6.1.5.5.7.document-binding-type.1",
       "requirement_ids": [
         "BRY-REQ-PKIX-0004"
       ]

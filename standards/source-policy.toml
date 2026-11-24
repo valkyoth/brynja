@@ -74,7 +74,7 @@ milestones = ["0.3.0", "0.3.1", "0.3.3", "0.100.0"]
 [[registry]]
 id = "smi-numbers"
 url = "https://www.iana.org/assignments/smi-numbers/smi-numbers.xml"
-expected_sha256 = "d44c6750d9b2ecf38d4248c00703692d33da15dd2eed7485247cfb489b41b4a4"
+expected_sha256 = "9cedb6b025adb7fe96bafe952cce445c5cc437aa000ca4cd56de9d8ff149dda7"
 domains = ["pkix", "ocsp"]
 milestones = ["0.3.0", "0.3.1", "0.3.3", "0.89.0"]
 

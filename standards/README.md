@@ -167,6 +167,13 @@ is explicitly caller-owned rather than inherited future work.
 
 ## Reviewed Refresh
 
+On 2026-11-24 the v0.29.0 review accepted one new IANA SMI Numbers record:
+value 26, Document Binding Type, referencing draft-ietf-lamps-one-signature-certs-04.
+The only other XML change was the collection date. The official HTTPS download
+and a Google DNS-over-HTTPS cross-check matched SHA-256
+`9cedb6b025adb7fe96bafe952cce445c5cc437aa000ca4cd56de9d8ff149dda7`.
+This records PKIX namespace metadata; it does not admit the draft or change AES-GCM.
+
 The [2026-11-23 review](review-2026-11-23.md) records the six IANA and seven
 RFC errata changes reviewed during v0.28.2. The refresh updates requirements
 metadata without changing GHASH or enabling new protocols.

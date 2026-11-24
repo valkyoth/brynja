@@ -58,14 +58,16 @@ class ScopedRelease(unittest.TestCase):
         with self.assertRaises(ValueError):
             scoped.enabled('garbage')
 
-    def test_ghash_candidate_gate_is_finite_and_does_not_publish(self):
-        plan = scoped.load('0.28.3')
+    def test_aes_gcm_candidate_gate_is_finite_and_does_not_publish(self):
+        plan = scoped.load('0.29.0')
         commands = {check['id']: check['command'] for check in plan['checks']}
-        self.assertEqual(len(commands), 33)
+        self.assertEqual(len(commands), 35)
+        self.assertEqual(commands['aes-gcm-package-controls'], ['python3', 'scripts/aes-gcm/test-packaged-api.py'])
+        self.assertEqual(commands['aes-gcm-packaged-endpoints'], ['python3', 'scripts/aes-gcm/check-packaged-api.py'])
         self.assertEqual(commands['release-plan'], ['scripts/release/test-release-plan.sh'])
         self.assertEqual(commands['crypto-tests'],
             ['cargo', 'test', '--locked', '-p', 'brynja-crypto', '-p',
-             'brynja-legacy-hkdf', '--no-default-features', '--features', 'brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider,brynja-crypto/ghash-runtime-execution'])
+             'brynja-legacy-hkdf', '--no-default-features', '--features', 'brynja-crypto/aes-gcm,brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider,brynja-crypto/ghash-runtime-execution'])
         self.assertEqual(commands['aes-provider-api'],
                          ['python3', 'scripts/aes/check-aes-provider-api.py', '1.100.0'])
         registry = next(check for check in plan['checks'] if check['id'] == 'registry-tests')
@@ -75,7 +77,7 @@ class ScopedRelease(unittest.TestCase):
         self.assertEqual(commands['facade-integration'],
             ['cargo', 'check', '--locked', '-p', 'brynja', '--no-default-features'])
         self.assertEqual(set(plan['ci_checks']), set(commands) -
-                         {'sbom', 'dependency-policy', 'advisories', 'ghash-package-controls', 'ghash-packaged-endpoints',
+                         {'sbom', 'dependency-policy', 'advisories', 'aes-gcm-packaged-endpoints', 'ghash-package-controls', 'ghash-packaged-endpoints',
                           'ghash-packaged-runtime-x86', 'hkdf-package-runner-tests', 'hkdf-packaged-endpoints',
                           'aes-downstream-endpoints', 'aes-consumer-format',
                           'aes-consumer-lint-direct', 'aes-consumer-lint-facade'})
@@ -100,6 +102,7 @@ class ScopedRelease(unittest.TestCase):
                 '--manifest-path', consumer_manifest, '--no-default-features',
                 '--features', route, '--all-targets', '--no-deps', '--', '-D', 'warnings']
         workflow = (scoped.ROOT / '.github/workflows/ci.yml').read_text()
+        self.assertIn('run: ' + ' '.join(commands['aes-gcm-packaged-endpoints']), workflow)
         # The dedicated push/PR job runs these once, outside the generic CI subset.
         job = workflow.split('\n  ghash-public-api:\n', 1)[1].split('\n  checks:', 1)[0]
         steps = [line.strip() for line in job.splitlines()]
@@ -134,10 +137,10 @@ class ScopedRelease(unittest.TestCase):
                                  or 'check-aes-kani.py' in arg
                                  or 'check-aes-dataflow.py' in arg for arg in command))
         release = tomllib.loads((scoped.ROOT / 'release-crates.toml').read_text())
-        self.assertEqual(release['release']['version'], '0.28.3')
-        self.assertEqual(release['crates']['brynja']['previous_version'], '0.28.2')
-        self.assertEqual(release['crates']['brynja']['change'], 'metadata')
-        self.assertEqual(release['release']['cumulative_milestones'][-2:], ['0.28.2', '0.28.3'])
+        self.assertEqual(release['release']['version'], '0.29.0')
+        self.assertEqual(release['crates']['brynja']['previous_version'], '0.28.3')
+        self.assertEqual(release['crates']['brynja']['change'], 'code')
+        self.assertEqual(release['release']['cumulative_milestones'][-2:], ['0.28.3', '0.29.0'])
         self.assertNotIn('0.27.7', release['release']['cumulative_milestones'])
         self.assertIn('Portable GHASH', plan['scope'])
         self.assertEqual(release['release']['stage'], 'internal')
@@ -145,7 +148,7 @@ class ScopedRelease(unittest.TestCase):
         self.assertEqual(release['release']['exception_reason'], '')
         self.assertIn('timing remains unresolved', plan['scope'])
         self.assertIn('RISC-V AES remains evidence-only and unadmitted', plan['scope'])
-        self.assertIn('no production kernel or API change', plan['scope'])
+        self.assertIn('Portable AES-GCM', plan['scope'])
         self.assertFalse(any(row['publish'] for row in release['crates'].values()))
         for name in ('brynja-core', 'brynja-crypto'):
             with self.subTest(name=name):

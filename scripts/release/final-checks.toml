@@ -1,9 +1,19 @@
-# Finite opt-in GHASH candidate gate. Verification campaigns stay separate.
+# Finite portable AES-GCM candidate gate. Verification campaigns stay separate.
 # No crates.io publication is selected for this internal milestone.
 schema = 1
-version = "0.28.3"
-scope = "Packaged public GHASH API usability through the direct crate and facade. Portable GHASH remains the default. Arm GHASH timing remains unresolved. RISC-V AES remains evidence-only and unadmitted. Internal only; no production kernel or API change, GCM, publication or implicit timing/proof/native campaign."
-ci_checks = ["crypto-tests","crypto-lint","crypto-format","facade-integration","hkdf-owner-contract","aes-owner-contract","aes-wide-owner-contract","aes-wide-api","aes-dataflow-regressions","aes-provider-api","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
+version = "0.29.0"
+scope = "Portable AES-GCM through direct and facade APIs; Portable GHASH remains the default. Arm GHASH timing remains unresolved. RISC-V AES remains evidence-only and unadmitted. Internal only; no publication or implicit timing/proof/native campaign."
+ci_checks = ["aes-gcm-package-controls","crypto-tests","crypto-lint","crypto-format","facade-integration","hkdf-owner-contract","aes-owner-contract","aes-wide-owner-contract","aes-wide-api","aes-dataflow-regressions","aes-provider-api","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
+
+[[checks]]
+id = "aes-gcm-package-controls"
+command = ["python3","scripts/aes-gcm/test-packaged-api.py"]
+timeout_seconds = 60
+
+[[checks]]
+id = "aes-gcm-packaged-endpoints"
+command = ["python3","scripts/aes-gcm/check-packaged-api.py"]
+timeout_seconds = 600
 
 [[checks]]
 id = "ghash-package-controls"
@@ -22,12 +32,12 @@ timeout_seconds = 600
 
 [[checks]]
 id = "crypto-tests"
-command = ["cargo","test","--locked","-p","brynja-crypto","-p","brynja-legacy-hkdf","--no-default-features","--features","brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider,brynja-crypto/ghash-runtime-execution"]
+command = ["cargo","test","--locked","-p","brynja-crypto","-p","brynja-legacy-hkdf","--no-default-features","--features","brynja-crypto/aes-gcm,brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider,brynja-crypto/ghash-runtime-execution"]
 timeout_seconds = 300
 
 [[checks]]
 id = "crypto-lint"
-command = ["cargo","clippy","--locked","-p","brynja-crypto","-p","brynja-legacy-hkdf","--no-default-features","--features","brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider,brynja-crypto/ghash-runtime-execution","--all-targets","--no-deps","--","-D","warnings"]
+command = ["cargo","clippy","--locked","-p","brynja-crypto","-p","brynja-legacy-hkdf","--no-default-features","--features","brynja-crypto/aes-gcm,brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider,brynja-crypto/ghash-runtime-execution","--all-targets","--no-deps","--","-D","warnings"]
 timeout_seconds = 300
 
 [[checks]]

@@ -1,8 +1,8 @@
 [release]
-version = "0.28.3"
-milestone = "0.28.3"
+version = "0.29.0"
+milestone = "0.29.0"
 baseline = "0.25.3"
-cumulative_milestones = ["0.26.0", "0.26.1", "0.27.0", "0.27.1", "0.27.2", "0.27.3", "0.27.4", "0.27.5", "0.27.6", "0.28.0", "0.28.1", "0.28.2", "0.28.3"]
+cumulative_milestones = ["0.26.0", "0.26.1", "0.27.0", "0.27.1", "0.27.2", "0.27.3", "0.27.4", "0.27.5", "0.27.6", "0.28.0", "0.28.1", "0.28.2", "0.28.3", "0.29.0"]
 policy = "independent"
 stage = "internal"
 # Legacy explicit runner default only; routine gates use final-checks.toml, not this selector.
@@ -11,11 +11,11 @@ exceptional = false
 exception_reason = ""
 
 [crates."brynja"]
-previous_version = "0.28.2"
-version = "0.28.3"
-change = "metadata"
+previous_version = "0.28.3"
+version = "0.29.0"
+change = "code"
 publish = false
-reason = "Package-external GHASH public API acceptance; no production API or kernel change, and no crates.io publication."
+reason = "Expose the default-off portable AES-GCM API through the facade; no publication selected."
 
 [crates."brynja-legacy-hmac"]
 previous_version = "0.1.0"
@@ -64,7 +64,7 @@ previous_version = "0.2.0"
 version = "0.2.0"
 change = "code"
 publish = false
-reason = "Add bounded GHASH and an explicit fallible runtime constructor backed by the existing optional CPU crate. No GCM composition or publication."
+reason = "Provide portable AES-128/192/256-GCM on top of AES and GHASH. Retain the internal train version; no publication selected."
 
 [crates."brynja-hash-core"]
 previous_version = "0.1.0"

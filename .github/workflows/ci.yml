@@ -82,6 +82,8 @@ jobs:
           python3 scripts/ghash/test-packaged-api.py
           python3 scripts/ghash/check-packaged-api.py
           python3 scripts/ghash/check-packaged-runtime.py
+      - name: Verify GMAC-only path consumers on both endpoints
+        run: python3 scripts/gmac/check-consumer.py public
 
   checks:
     name: Format lint test policy and audit

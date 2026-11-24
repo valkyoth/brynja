@@ -12,4 +12,8 @@ The [verification and review checklist](../docs/assurance/gmac-development.md)
 records the portable public API, selected cleanup checks, 6,750 applicable
 NIST records and 2,730 independently generated boundary messages. These are
 host functional results; Cortex-M was compiled, not executed. No timing or
-certification claim. Scoped review and the final gate remain pending.
+certification claim. The [candidate pentest disposition](../docs/assurance/gmac-development.md#candidate-pentest-disposition)
+records the reviews of `70f78f17`. The follow-up clarified the public contract
+and strengthened rejection tests; the GMAC implementation did not change.
+The final gate requires a scoped sign-off on the prepared release tree.
+No crates.io publication is selected.

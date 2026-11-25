@@ -23,3 +23,17 @@ Cortex-M is compile-only. This is portable functional evidence, not timing
 qualification, physical erasure or certification. Accelerated integration is
 a separate milestone. The signed tag and review disposition are separate
 release steps.
+
+### Scoped pentest disposition
+
+Both supplied reviews of `v0.29.1..8085fb71` reported no Critical, High or
+Medium finding. The follow-up adds controls that deliberately mislabel valid
+and invalid opens, in both GCM buffer layouts and in GMAC. The executable
+example now takes separate reservations as well as separate keys. Neither
+change affects the library. The original review applies to `8085fb71`; it
+does not attest to later edits. Source report SHA-256:
+`00b14921a2074c0da376f32ce1d675924fe7b9041212f72a544e022adaec9868`.
+
+The full differential run stays separate from the release gate. Protocol
+nonce constructions such as TLS 1.3's are outside this portable-acceptance
+milestone; no caller-chosen IV API was added.

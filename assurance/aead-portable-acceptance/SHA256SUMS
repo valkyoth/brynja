@@ -1,4 +1,4 @@
-e6c6f0559c3489ca7e0b8c9afa4fe8d2c3d36da1cd7ccb64b9344c8c4f68fb2d  assurance/aead-portable-acceptance/README.md
+6dfc20b39ccbbb43626412b59b07616d4c7b22f7a8f3ffc392eed0473305e306  assurance/aead-portable-acceptance/README.md
 451059abfd31373d6fee111bf8e8af6111432bfd132ce945fb93dfa123a17332  assurance/aead-portable-acceptance/lifecycle.rs
 c651a17c05f0716b18c878e6ca900bdc884bc3055913a4a0ed153426a45688e9  assurance/aes-gcm-consumer/examples/gcmvs.rs
 8dbfa610816df553598f44dacb2c553bb36c644795d460124b3044e4e837177c  assurance/aes-gcm-consumer/src/general_iv.rs

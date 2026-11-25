@@ -42,7 +42,7 @@ def readme_test():
     blocks = re.findall(r"^```rust\n(.*?)^```$", (FIXTURE / "README.md").read_text(), re.M | re.S)
     if len(blocks) != 1:
         raise ValueError("expected one executable README example")
-    return blocks[0] + "\n#[test] fn example() { round_trip(&[1;16], &[2;16], *b\"test\", 1); }\n"
+    return blocks[0] + '\n#[test] fn example() { round_trip(&[1;16], &[2;16], (*b"gcm!", 1), (*b"mac!", 1)); }\n'
 
 
 def prepare_mac(root, dep, versions):
@@ -89,6 +89,26 @@ def transcript(root, family):
     return path, spec["EXPECTED"]
 
 
+def wrong_expectations(rows, example):
+    # Change only the expected tag or operation, not the actual crypto inputs.
+    swaps = {"seal": "seal", "open": "reject", "reject": "open"}
+    if example == "gcmvs":
+        swaps.update({"seal-in-place": "seal-in-place", "open-disjoint": "reject-disjoint",
+                      "reject-disjoint": "open-disjoint"})
+    for row in rows:
+        fields = row.rstrip("\n").split("\t")
+        kind = fields[0]
+        if kind not in swaps:
+            continue
+        fields[0] = swaps.pop(kind)
+        if kind.startswith("seal"):
+            fields[-1] = ("0" if fields[-1][0] != "0" else "1") + fields[-1][1:]
+        yield kind, "\t".join(fields) + "\n"
+        if not swaps:
+            return
+    raise ValueError("missing differential controls: " + ", ".join(sorted(swaps)))
+
+
 def replay(cargo, consumer, env, flags, example, data, expected):
     command = [*cargo, "run", "--release", *flags, "--example", example]
     pkg.cargo_environment.check(consumer, env)
@@ -97,14 +117,14 @@ def replay(cargo, consumer, env, flags, example, data, expected):
                                 text=True, timeout=300)
     if result.returncode or result.stdout.strip() != expected:
         raise ValueError(f"{example} archived differential failed: {result.stderr[-2000:]}")
-    with data.open() as rows:
-        fields = rows.readline().rstrip("\n").split("\t")
-    fields[-1] = ("0" if fields[-1][0] != "0" else "1") + fields[-1][1:]
-    bad = subprocess.run(command, cwd=consumer, env=env, input="\t".join(fields)+"\n",
-                         capture_output=True, text=True, timeout=60)
     marker = "GMAC case 1 failed" if example == "nist" else "case 1: wrong result"
-    if not bad.returncode or bad.stdout or marker not in bad.stderr:
-        raise ValueError("wrong expected tag did not fail replay: " + example)
+    with data.open() as rows:
+        for kind, wrong in wrong_expectations(rows, example):
+            pkg.cargo_environment.check(consumer, env)
+            bad = subprocess.run(command, cwd=consumer, env=env, input=wrong,
+                                 capture_output=True, text=True, timeout=60)
+            if not bad.returncode or bad.stdout or marker not in bad.stderr:
+                raise ValueError(f"{example}: wrong {kind} expectation did not fail replay")
 
 
 def check_mac(root, consumer, dep, versions, compiler, route, env):

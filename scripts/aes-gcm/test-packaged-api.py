@@ -3,6 +3,7 @@ import importlib.util
 import hashlib
 from pathlib import Path
 import shutil
+from subprocess import CompletedProcess
 import tempfile
 import tomllib
 import unittest
@@ -17,6 +18,38 @@ spec.loader.exec_module(combined)
 
 
 class ArchiveTests(unittest.TestCase):
+    def test_replay_rejects_a_consumer_that_ignores_the_verify_outcome(self):
+        with tempfile.TemporaryDirectory() as directory:
+            data = Path(directory) / "rows"
+            data.write_text("seal\t00\nopen\t00\nreject\t01\n")
+            for missed in ("open", "reject"):
+                with self.subTest(missed=missed):
+                    def consumer(cmd, *, input=None, **kwargs):
+                        if input is None:
+                            return CompletedProcess(cmd, 0, "generate=1 verify=1 reject=1", "")
+                        ignored = {"open": "reject\t00\n", "reject": "open\t01\n"}[missed]
+                        if input == ignored:
+                            return CompletedProcess(cmd, 0, "", "")
+                        return CompletedProcess(cmd, 1, "", "GMAC case 1 failed")
+                    with patch.object(combined.pkg.cargo_environment, "check") as guard, \
+                         patch.object(combined.subprocess, "run", side_effect=consumer) as runs, \
+                         self.assertRaisesRegex(ValueError, f"wrong {missed} expectation"):
+                        combined.replay(["cargo"], data.parent, {}, [], "nist", data,
+                                        "generate=1 verify=1 reject=1")
+                    self.assertEqual(guard.call_count, runs.call_count)
+
+    def test_wrong_expectations_preserve_inputs_and_layout(self):
+        plain = {"reject": "open", "seal": "seal", "open": "reject"}
+        extra = {"open-disjoint": "reject-disjoint", "seal-in-place": "seal-in-place",
+                 "reject-disjoint": "open-disjoint"}
+        for example, labels in (("nist", plain), ("gcmvs", plain | extra)):
+            rows = [kind + "\t1234\t\t0a\n" for kind in labels]
+            got = dict(combined.wrong_expectations([rows[0], *rows], example))
+            self.assertEqual(got, {kind: new + "\t1234\t\t" + ("1a" if kind.startswith("seal") else "0a") + "\n"
+                                   for kind, new in labels.items()})
+            with self.assertRaisesRegex(ValueError, "missing differential controls"):
+                list(combined.wrong_expectations(rows[:-1], example))
+
     def test_empty_graph_is_not_portable_evidence(self):
         with self.assertRaisesRegex(ValueError, "missing archive"):
             runner.check_graph({"resolve": {"root": None, "nodes": []}, "packages": []},

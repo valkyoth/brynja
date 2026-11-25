@@ -64,6 +64,12 @@ const _: () = assert!(
     ))
 ))]
 mod field;
+#[cfg(any(
+    feature = "ghash-runtime-execution",
+    feature = "aes-gcm-execution",
+    feature = "gmac-execution"
+))]
+mod pending;
 #[cfg(feature = "ghash-runtime-execution")]
 mod runtime;
 #[cfg(feature = "ghash-runtime-execution")]
@@ -185,7 +191,11 @@ pub struct Ghash<'a> {
     pair: Option<core::cell::RefMut<'a, PairMultiplier>>,
     #[cfg(feature = "ghash-runtime-execution")]
     engine: runtime::Engine,
-    #[cfg(feature = "ghash-runtime-execution")]
+    #[cfg(any(
+        feature = "ghash-runtime-execution",
+        feature = "aes-gcm-execution",
+        feature = "gmac-execution"
+    ))]
     terminal: bool,
     #[cfg(any(
         brynja_ghash_pclmul_evidence,
@@ -234,7 +244,11 @@ impl<'a> Ghash<'a> {
             pair: None,
             #[cfg(feature = "ghash-runtime-execution")]
             engine: runtime::Engine::Portable,
-            #[cfg(feature = "ghash-runtime-execution")]
+            #[cfg(any(
+                feature = "ghash-runtime-execution",
+                feature = "aes-gcm-execution",
+                feature = "gmac-execution"
+            ))]
             terminal: false,
             #[cfg(any(
                 brynja_ghash_pclmul_evidence,
@@ -299,7 +313,11 @@ impl<'a> Ghash<'a> {
 
     /// Appends a chunk. An over-budget chunk leaves the entire context unchanged.
     pub fn update(&mut self, bytes: &[u8]) -> Result<(), Error> {
-        #[cfg(feature = "ghash-runtime-execution")]
+        #[cfg(any(
+            feature = "ghash-runtime-execution",
+            feature = "aes-gcm-execution",
+            feature = "gmac-execution"
+        ))]
         self.check_health()?;
         #[cfg(any(
             brynja_ghash_pclmul_evidence,
@@ -312,11 +330,23 @@ impl<'a> Ghash<'a> {
             .remaining
             .checked_sub(len)
             .ok_or(Error::LimitExceeded)?;
-        #[cfg(feature = "ghash-runtime-execution")]
-        let pending = runtime::Pending::begin(self);
-        #[cfg(feature = "ghash-runtime-execution")]
+        #[cfg(any(
+            feature = "ghash-runtime-execution",
+            feature = "aes-gcm-execution",
+            feature = "gmac-execution"
+        ))]
+        let pending = pending::Pending::begin(self);
+        #[cfg(any(
+            feature = "ghash-runtime-execution",
+            feature = "aes-gcm-execution",
+            feature = "gmac-execution"
+        ))]
         let owner = &mut *pending.0;
-        #[cfg(not(feature = "ghash-runtime-execution"))]
+        #[cfg(not(any(
+            feature = "ghash-runtime-execution",
+            feature = "aes-gcm-execution",
+            feature = "gmac-execution"
+        )))]
         let owner = self;
         let mut input = bytes.iter();
         while input.len() != 0 {
@@ -389,7 +419,11 @@ impl<'a> Ghash<'a> {
             }
         }
         owner.remaining = remaining;
-        #[cfg(feature = "ghash-runtime-execution")]
+        #[cfg(any(
+            feature = "ghash-runtime-execution",
+            feature = "aes-gcm-execution",
+            feature = "gmac-execution"
+        ))]
         {
             owner.terminal = false;
         }
@@ -399,7 +433,11 @@ impl<'a> Ghash<'a> {
     /// Consumes the context and returns the unmasked, secret GHASH result.
     /// Empty input yields zero. A partial final block leaves output unchanged.
     pub fn finish(self, output: &mut [u8; 16]) -> Result<SecretHash<'_>, Error> {
-        #[cfg(feature = "ghash-runtime-execution")]
+        #[cfg(any(
+            feature = "ghash-runtime-execution",
+            feature = "aes-gcm-execution",
+            feature = "gmac-execution"
+        ))]
         self.check_health()?;
         #[cfg(any(
             brynja_ghash_pclmul_evidence,
@@ -423,6 +461,55 @@ impl Drop for Ghash<'_> {
     fn drop(&mut self) {
         let _ = clear_owned_region(self.state);
     }
+}
+
+#[cfg(all(
+    test,
+    feature = "aes-gcm-execution",
+    feature = "gmac-execution",
+    target_feature = "aes",
+    any(
+        all(
+            target_arch = "x86_64",
+            target_feature = "sse2",
+            any(target_os = "linux", target_os = "windows")
+        ),
+        all(
+            target_arch = "aarch64",
+            target_endian = "little",
+            target_feature = "neon",
+            any(target_os = "linux", target_os = "macos")
+        )
+    )
+))]
+#[test]
+fn interrupted_pair_update_clears_live_frame() -> Result<(), Error> {
+    use crate::aes_gcm::interruptions::{Step, tests::interrupt};
+    let key = (1_u128 << 127).to_be_bytes();
+    for unwind in [false, true] {
+        let kernel = core::cell::RefCell::new(
+            PairMultiplier::probe()
+                .map_err(|_| Error::Quarantined)?
+                .ok_or(Error::Quarantined)?,
+        );
+        let (mut state, mut output) = ([0; 16], [0xa5; 16]);
+        let mut frame = Ghash::from_pair(&kernel, &key, &mut state, 32)?;
+        frame.update(&[0x35; 7])?;
+        assert_eq!(frame.update(&[0; 26]), Err(Error::LimitExceeded));
+        assert_eq!((frame.used, frame.remaining), (7, 25));
+        interrupt(
+            &[Step::Product, Step::Product],
+            unwind,
+            Error::Quarantined,
+            || frame.update(&[0x73; 25]),
+        );
+        assert_eq!(*frame.state, [0; 16]); // immediately, not only on Drop
+        assert_eq!((frame.used, frame.remaining), (0, 0));
+        assert_eq!(frame.update(&[]), Err(Error::Quarantined));
+        assert!(matches!(frame.finish(&mut output), Err(Error::Quarantined)));
+        assert_eq!(output, [0xa5; 16]);
+    }
+    Ok(())
 }
 
 /// A secret intermediate for a construction such as GCM; never a public tag.

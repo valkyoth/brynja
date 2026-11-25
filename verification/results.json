@@ -32071,6 +32071,24 @@
         "after": "6682f159bbf724d9b8e03a5b43452f6720102ea294592cc775e4c47584a42826",
         "log": "verification/.runner/logs/2-1795618558677187511.log",
         "log_sha256": "9343a3512a72e7b0fba22d98a879cf6028c41a386ebdf90466d1fe5e0e8fc640"
+      },
+      {
+        "id": "2-1795627901468128342",
+        "source": "working tree based on 0af6e30be87eecfc1899c27984421ec8df4143d1; scoped fingerprint 43d501a0c42da494545206540a373557ab277ab93938815a62cec66b34632fee",
+        "started": "2026-11-25T17:31:41.468125727Z",
+        "ended": "2026-11-25T17:32:16.524833064Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes-gcm/check-paired-archives.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "b0f20a58ccf27816259334ab9aad1a4bd86878c694ceaf2965f2cb1b0d8959b0",
+        "after": "b0f20a58ccf27816259334ab9aad1a4bd86878c694ceaf2965f2cb1b0d8959b0",
+        "log": "verification/.runner/logs/2-1795627901468128342.log",
+        "log_sha256": "6ee3d8e6bc8653627f0bc7f4654a38a20fbc005817b85f51eabf34b29e6164e6"
       }
     ],
     "aes_gcm/x86-pair-development": [
@@ -32235,6 +32253,24 @@
         "after": "f4b83a3c215710a8afb10caeaa2f39cdd81ce801aa29bcbb600a144f701df4c2",
         "log": "verification/.runner/logs/3-1795618504518477155.log",
         "log_sha256": "a7cfc532bb86854c90604196a10ba149aeb1bfa8e02f724df94524f9ab8b7ade"
+      },
+      {
+        "id": "22-1795627838838423364",
+        "source": "working tree based on 0af6e30be87eecfc1899c27984421ec8df4143d1; scoped fingerprint bbff59c8429d5647f75eb9af11aef3e7901240d3f4adbf0d5a53f15a0ffb9563",
+        "started": "2026-11-25T17:30:38.838420609Z",
+        "ended": "2026-11-25T17:31:38.76760497Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes-gcm/check-x86-pair.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "a2e06e4ba5e13f0d62dec00a6dd0b65aefcdaf6a336286a91815cc45719f4b14",
+        "after": "a2e06e4ba5e13f0d62dec00a6dd0b65aefcdaf6a336286a91815cc45719f4b14",
+        "log": "verification/.runner/logs/22-1795627838838423364.log",
+        "log_sha256": "7e8961e08a848cb7450e2162135e8707f042968d9500098c1f1db647d18de10c"
       }
     ],
     "aes_gcm/x86-pair-timing-record": [
@@ -50651,22 +50687,22 @@
       "last_success": "2026-11-24T12:53:58.058030845Z"
     },
     "aes_gcm/x86-packaged-pair": {
-      "checked_at": "2026-11-25T14:56:32.15602874Z",
-      "fingerprint": "cd85c91d7dd20743e93c6c1d71d72af2dac538c5dca9fd9430a44acfede0c9aa",
+      "checked_at": "2026-11-25T17:32:17.065119274Z",
+      "fingerprint": "43d501a0c42da494545206540a373557ab277ab93938815a62cec66b34632fee",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 59316d731f2a3ea41ea613586f248351542ae6f0; scoped fingerprint cd85c91d7dd20743e93c6c1d71d72af2dac538c5dca9fd9430a44acfede0c9aa",
-      "performed_at": "2026-11-25T14:56:31.613042205Z",
-      "last_success": "2026-11-25T14:56:31.613042205Z"
+      "source": "working tree based on 0af6e30be87eecfc1899c27984421ec8df4143d1; scoped fingerprint 43d501a0c42da494545206540a373557ab277ab93938815a62cec66b34632fee",
+      "performed_at": "2026-11-25T17:32:16.524833064Z",
+      "last_success": "2026-11-25T17:32:16.524833064Z"
     },
     "aes_gcm/x86-pair-development": {
-      "checked_at": "2026-11-25T14:55:55.699457329Z",
-      "fingerprint": "ec514e0781341fb950a8629fe02443b2593b0b3a990ce3350bc0bcd15e7cad03",
+      "checked_at": "2026-11-25T17:31:39.374987675Z",
+      "fingerprint": "bbff59c8429d5647f75eb9af11aef3e7901240d3f4adbf0d5a53f15a0ffb9563",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 59316d731f2a3ea41ea613586f248351542ae6f0; scoped fingerprint ec514e0781341fb950a8629fe02443b2593b0b3a990ce3350bc0bcd15e7cad03",
-      "performed_at": "2026-11-25T14:55:55.195243138Z",
-      "last_success": "2026-11-25T14:55:55.195243138Z"
+      "source": "working tree based on 0af6e30be87eecfc1899c27984421ec8df4143d1; scoped fingerprint bbff59c8429d5647f75eb9af11aef3e7901240d3f4adbf0d5a53f15a0ffb9563",
+      "performed_at": "2026-11-25T17:31:38.76760497Z",
+      "last_success": "2026-11-25T17:31:38.76760497Z"
     },
     "aes_gcm/x86-pair-timing-record": {
       "checked_at": "2026-11-25T14:24:50.3585671Z",

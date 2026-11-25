@@ -161,6 +161,10 @@ their single reservation, and receives must not. Neither a partial result
 nor a tag may escape; admitted message scratch must clear and subsequent
 work must observe retirement. Another check revokes the pair before the
 actual final health check for both a successful computation and a rejected tag.
+The private frame-start boundary also rejects a retired pair before touching
+the workspace. A paired-only frame test interrupts the second product and
+checks that an error or unwind immediately wipes the live accumulator and
+prevents update or finish, even without the standalone GHASH runtime feature.
 
 These checkpoints exist only in Rust test builds and simulate recoverable
 errors or Rust stack unwinding. They do not establish process-abort cleanup,
@@ -174,6 +178,10 @@ To use it, call `aes_gcm::execution::AesPair::require()` and pass
 portable constructor **before** importing the key. `Failed` and errors
 after selection are not fallback signals. An invalid tag rejects only
 that message. Retiring the pair retires all owners borrowing it.
+A specialized binary requires compatible hardware before it starts; the
+constructor is not a baseline dispatcher. On `x86_64-unknown-none` use the
+portable `aes-gcm` and `gmac` features, not the hosted execution features:
+the static CPU dependency does not build for that soft-float target.
 
 On Rust 1.90.0 and 1.100.0 the check covers the three AES widths, NIST
 96-bit-IV empty-message tags, general-IV partial payload and AAD-only

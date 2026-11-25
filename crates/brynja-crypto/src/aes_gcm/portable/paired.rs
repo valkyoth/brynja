@@ -30,6 +30,9 @@ pub enum PairBackend {
 /// multiplier independently checks its required CPU bundle at
 /// startup. The deployment must keep the full ISA usable on every eligible
 /// CPU. No affinity change, timing qualification, or automatic fallback.
+/// The Arm AES kernel's optional DIT scope does not cover PMULL or the whole
+/// operation. The pair neither requires whole-operation DIT nor checks x86 DOITM.
+/// A specialized binary is not a runtime probe for an incompatible machine.
 /// Multiple keys can borrow this pair; an operational failure retires them
 /// all. An ordinary authentication rejection does not retire the pair.
 #[must_use]
@@ -172,6 +175,7 @@ impl HashRoute for AesPair {
             )
         ))]
         {
+            self.aes.session().map_err(|_| ghash::Error::Quarantined)?;
             ghash::Ghash::from_pair(&self.hash, h, state, budget)
         }
         #[cfg(not(any(
@@ -317,6 +321,13 @@ mod tests {
         ));
         drop(frame);
         assert!(pair.check().is_ok());
+        pair.retire();
+        let mut untouched = [0xa5; 16];
+        assert!(matches!(
+            pair.start(&[0; 16], &mut untouched, 16),
+            Err(ghash::Error::Quarantined)
+        ));
+        assert_eq!(untouched, [0xa5; 16]);
         Ok(())
     }
 }

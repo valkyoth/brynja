@@ -49,6 +49,8 @@ def main():
                 ("-Ctarget-feature=+aes,+sse2", ["--lib", lifetime],
                  [lifetime + name for name in ("postcheck_precedes_commit", "unwind_retires_pair",
                                                 "frames_use_the_admitted_multiplier")]),
+                ("-Ctarget-feature=+aes,+sse2", ["--lib", "ghash::interrupted_pair_update_clears_live_frame"],
+                 ["ghash::interrupted_pair_update_clears_live_frame"]),
                 ("-Ctarget-feature=+aes,+sse2", ["--lib", interrupted],
                  [interrupted + width + "::" + name for width in ("aes128", "aes192", "aes256")
                   for name in ("import", "messages", "authentication_only")]),

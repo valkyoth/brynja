@@ -53,7 +53,7 @@ mod native {
         format!("{error:?}")
     }
     macro_rules! width {
-        ($test:ident, $gcm:ident, $mac:ident, $k:literal, $s:literal) => {
+        ($test:ident, $gcm:ident, $mac:ident, $k:literal, $s:literal, $kat_key:expr, $tag:literal) => {
             #[test]
             fn $test() -> Result<(), String> {
                 let pair = gcm::execution::AesPair::require().map_err(detail)?;
@@ -62,6 +62,38 @@ mod native {
                 #[cfg(target_arch = "aarch64")]
                 assert_eq!(pair.backend(), gcm::execution::PairBackend::ArmAesPmull);
                 let (mut a, mut b, mut c, mut d) = ([0; $s], [0; $s], [0; $s], [0; $s]);
+                // NIST worked example 1 per width, also in the archive acceptance fixture.
+                // Use the public 96-bit-IV shortcut; do not derive expectations from portable AES.
+                {
+                    let mut kat = gcm::execution::$gcm::<16>::from_reserved_range(
+                        &pair,
+                        &$kat_key,
+                        &mut a,
+                        0xcafebabe_u32.to_be_bytes(),
+                        0xfacedbaddecaf888,
+                        1,
+                    )
+                    .map_err(detail)?;
+                    let (iv, tag) = kat
+                        .seal_next_in_place(&[], &mut [], &mut [])
+                        .map_err(detail)?;
+                    assert_eq!(
+                        iv,
+                        [
+                            0xca, 0xfe, 0xba, 0xbe, 0xfa, 0xce, 0xdb, 0xad, 0xde, 0xca, 0xf8, 0x88
+                        ]
+                    );
+                    let expected: u128 = $tag;
+                    assert_eq!(tag, expected.to_be_bytes());
+                    kat.open_in_place(&iv, &[], &tag, &mut [], &mut [])
+                        .map_err(detail)?;
+                    let verifier =
+                        gmac::execution::$mac::<16>::for_verify(&pair, &$kat_key, &mut c)
+                            .map_err(detail)?;
+                    verifier
+                        .verify(&iv, &[], &GmacTag::from_bytes(tag))
+                        .map_err(detail)?;
+                }
                 // Synthetic fixture: equivalent routes over the same inputs.
                 let key = [0x17; $k];
                 let mut sender = gcm::execution::$gcm::<13, 8>::from_reserved_invocations(
@@ -150,7 +182,39 @@ mod native {
             }
         };
     }
-    width!(aes128, Aes128Gcm, Aes128Gmac, 16, 176);
-    width!(aes192, Aes192Gcm, Aes192Gmac, 24, 208);
-    width!(aes256, Aes256Gcm, Aes256Gmac, 32, 240);
+    const KEY128: [u8; 16] = 0xfeffe9928665731c6d6a8f9467308308u128.to_be_bytes();
+    width!(
+        aes128,
+        Aes128Gcm,
+        Aes128Gmac,
+        16,
+        176,
+        KEY128,
+        0x3247184b3c4f69a44dbcd22887bbb418
+    );
+    width!(
+        aes192,
+        Aes192Gcm,
+        Aes192Gmac,
+        24,
+        208,
+        [
+            0xfe, 0xff, 0xe9, 0x92, 0x86, 0x65, 0x73, 0x1c, 0x6d, 0x6a, 0x8f, 0x94, 0x67, 0x30,
+            0x83, 0x08, 0xfe, 0xff, 0xe9, 0x92, 0x86, 0x65, 0x73, 0x1c
+        ],
+        0xc835aa88aebbc94f5a02e179fdcfc3e4
+    );
+    width!(
+        aes256,
+        Aes256Gcm,
+        Aes256Gmac,
+        32,
+        240,
+        [
+            0xfe, 0xff, 0xe9, 0x92, 0x86, 0x65, 0x73, 0x1c, 0x6d, 0x6a, 0x8f, 0x94, 0x67, 0x30,
+            0x83, 0x08, 0xfe, 0xff, 0xe9, 0x92, 0x86, 0x65, 0x73, 0x1c, 0x6d, 0x6a, 0x8f, 0x94,
+            0x67, 0x30, 0x83, 0x08
+        ],
+        0xfd2caa16a5832e76aa132c1453eeda7e
+    );
 }

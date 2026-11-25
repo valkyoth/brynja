@@ -87,7 +87,7 @@ impl Step {
     feature = "aes-gcm-execution",
     feature = "gmac-execution"
 ))]
-mod tests {
+pub(crate) mod tests {
     use super::{Interrupted, Step, TRAP, std};
     use crate::{
         aes_gcm::{self as gcm, GcmError, execution::AesPair},
@@ -108,7 +108,7 @@ mod tests {
 
     // Each scenario creates a new owner and pair. Require the entire named
     // prefix, the specific interruption outcome, and no later checkpoints.
-    fn interrupt<T, Err: Debug + PartialEq>(
+    pub(crate) fn interrupt<T, Err: Debug + PartialEq>(
         prefix: &[Step],
         unwind: bool,
         error: Err,

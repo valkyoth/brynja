@@ -166,35 +166,7 @@ impl Engine {
     }
 }
 
-// Begin only after budget admission; leave terminal on error or unwind.
-pub(super) struct Pending<'b, 'a>(pub(super) &'b mut Ghash<'a>);
-
-impl<'b, 'a> Pending<'b, 'a> {
-    pub(super) fn begin(owner: &'b mut Ghash<'a>) -> Self {
-        owner.terminal = true;
-        Self(owner)
-    }
-}
-
-impl Drop for Pending<'_, '_> {
-    fn drop(&mut self) {
-        if self.0.terminal {
-            let _ = super::clear_owned_region(self.0.state);
-            self.0.used = 0;
-            self.0.remaining = 0;
-        }
-    }
-}
-
 impl<'a> Ghash<'a> {
-    pub(super) fn check_health(&self) -> Result<(), Error> {
-        if self.terminal {
-            Err(Error::Quarantined)
-        } else {
-            self.engine.check()
-        }
-    }
-
     /// Selects a backend before touching the caller's workspace. Hosted Linux/Windows
     /// x86_64 requires PCLMULQDQ and SSE2; Linux RV64 requires scalar Zbc.
     /// Little-endian AArch64 Linux and macOS require NEON, AES and PMULL.

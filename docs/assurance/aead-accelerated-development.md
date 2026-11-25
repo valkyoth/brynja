@@ -43,18 +43,28 @@ and populations; it does not execute the binaries again. All 841 packaged
 Rust sources and original crate manifests matched the working tree when these
 records were collected. A subsequent Clippy fix removed redundant single-operand
 `all(...)` predicates from the downstream test selector; no test body or
-library code changed. To make a **fresh** observation:
+library code changed. These six records predate the native runner's exact-tree
+and Cargo-configuration checks. They are observations from those builders,
+not proof of hermetic builds. To make a **fresh** observation:
 
 1. On the packaging host, install the compiler endpoints and Go and supply
    the pinned NIST ZIP described below. Run
    `python3 scripts/aes-gcm/prepare-native-pairs.py native.tgz`.
 2. Transfer the bundle to a compatible host, compare its SHA-256 with the
-   producer's output and extract it into an empty directory. Install Python,
+   trusted producer's output **before extraction or executing the bundled
+   script**, and extract it into an empty directory. Install Python,
    both native Rust toolchains via rustup, and a native linker (on Windows,
    use an x64 Visual Studio developer prompt).
-3. In that directory run `python3 run.py linux-arm64 results`, substituting
+3. In that directory run
+   `python3 -I run.py linux-arm64 ../results --inputs-sha256 PRODUCER_MANIFEST_SHA256`
+   using the producer's **input manifest** digest (not the tarball digest), substituting
    `macos-arm64` or `windows-x64` as appropriate (use `python` on Windows).
-   The results directory must not already exist.
+   The results directory must not already exist. Keep the archive, toolchains,
+   temporary directory and logs outside the extracted bundle. The runner
+   rejects additional or linked entries and ambient Cargo config, and works
+   from a new private copy of the verified bytes. Use a trusted builder,
+   toolchain, SDK, PATH and temporary parent. This is not sandboxing against
+   a hostile process with the same account, or signed build attestation.
 
 These observations do **not** extend the Linux x86 linked-code inspection
 or timing screen to the other platforms. Arm GHASH timing remains unresolved;

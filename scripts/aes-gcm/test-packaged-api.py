@@ -3,6 +3,7 @@ import importlib.util
 import hashlib
 import json
 import copy
+import os
 from pathlib import Path
 import shutil
 from subprocess import CompletedProcess
@@ -20,6 +21,138 @@ spec.loader.exec_module(combined)
 spec = importlib.util.spec_from_file_location("paired", Path(__file__).with_name("check-paired-archives.py"))
 paired = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(paired)
+spec = importlib.util.spec_from_file_location("native_pairs", Path(__file__).with_name("run-native-pairs.py"))
+native = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(native)
+
+
+class NativeBundleTests(unittest.TestCase):
+    def setUp(self):
+        scratch = tempfile.TemporaryDirectory()
+        self.addCleanup(scratch.cleanup)
+        self.base = Path(scratch.name)
+        self.source = self.base / "incoming"
+        self.source.mkdir()
+        self.file = self.source / "case.txt"
+        self.file.write_bytes(b"public test data")
+        self.entries = {"case.txt": native.sha(self.file)}
+        self.dest = self.base / "private"
+        self.sign()
+
+    def sign(self, raw=None):
+        manifest = self.source / "inputs.json"
+        manifest.write_text(json.dumps(self.entries) if raw is None else raw)
+        self.pin = native.sha(manifest)
+
+    def rejected(self, reason=None):
+        # No tool invocation and not even an empty evidence directory on rejection.
+        with patch.object(native, "ROOT", self.source), patch.object(native.subprocess, "run") as execute, \
+                patch.object(native.platform, "system", return_value="Linux"), \
+                patch.object(native.platform, "machine", return_value="aarch64"):
+            failure = (self.assertRaisesRegex(ValueError, reason) if reason
+                       else self.assertRaises((ValueError, FileNotFoundError)))
+            with failure:
+                native.run("linux-arm64", self.base / "results", self.pin)
+            execute.assert_not_called()
+            self.assertFalse((self.base / "results").exists())
+
+    def test_copy_isolated_from_later_source_changes(self):
+        native.verified_copy(self.source, self.dest, self.pin)
+        self.file.write_bytes(b"changed after admission")
+        self.assertEqual((self.dest / "case.txt").read_bytes(), b"public test data")
+
+    def test_wrong_pin_modified_and_missing_files(self):
+        self.pin = "0"*64
+        self.rejected()
+        self.sign()
+        self.file.write_bytes(b"changed before admission")
+        self.rejected()
+        self.file.unlink()
+        self.rejected()
+
+    def test_unlisted_files_and_empty_directories(self):
+        extra = self.source / "extra"
+        extra.touch()
+        self.rejected()
+        extra.unlink()
+        extra.mkdir()
+        self.rejected()
+
+    def test_rejects_links_without_following_them(self):
+        self.file.rename(self.base / "other")
+        self.file.symlink_to(self.base / "other")
+        self.rejected()  # target hashes correctly
+        self.file.unlink()
+        self.file.symlink_to(self.base / "absent")
+        self.rejected()
+        self.file.unlink()
+        other = self.base / "directory"
+        other.mkdir()
+        (other / "case.txt").write_bytes(b"public test data")
+        self.file.symlink_to(other, target_is_directory=True)
+        self.entries = {"case.txt/case.txt": native.sha(other / "case.txt")}
+        self.sign()
+        self.rejected()
+
+    def test_nonregular_file(self):
+        if not hasattr(os, "mkfifo"):
+            self.skipTest("no filesystem FIFO on this platform")
+        self.file.unlink()
+        os.mkfifo(self.file)
+        self.rejected()
+
+    def test_unsafe_and_ambiguous_manifest_names(self):
+        for name in ("../outside", "/absolute", "C:/absolute", "C:relative", "dir\\file",
+                     "foo//bar", "foo/./bar", "trailing.", "NUL.txt", "alternate:stream",
+                     "INPUTS.JSON", "CASE.txt", "case.txt/nested", ".cargo/config",
+                     "child/.CaRgO/config.toml"):
+            with self.subTest(name=name):
+                self.entries = {"case.txt": native.sha(self.file), name: "0"*64}
+                self.sign()
+                self.rejected("unsafe manifest|ambiguous manifest|file used as directory")
+        self.sign('{"case.txt":"first","case.txt":"second"}')
+        self.rejected("duplicate manifest")
+
+    def test_manifest_itself_may_not_be_a_link(self):
+        path = self.source / "inputs.json"
+        path.rename(self.base / "external-manifest")
+        path.symlink_to(self.base / "external-manifest")
+        self.rejected("link or unexpected")
+
+    def test_configuration_rechecked_before_each_command(self):
+        (self.source / "cases.json").write_bytes(b"{}")
+        self.entries["cases.json"] = native.sha(self.source / "cases.json")
+        self.sign()
+        for inject_home in (False, True):
+            def first_command(args, *, cwd, env, **kwargs):
+                self.assertNotEqual(cwd, self.source)
+                config_root = Path(env["CARGO_HOME"]) if inject_home else cwd / ".cargo"
+                config_root.mkdir()
+                (config_root / "config.toml").touch()
+                return CompletedProcess(args, 0, stdout="host: aarch64-unknown-linux-gnu\n")
+            with patch.object(native, "ROOT", self.source), \
+                    patch.object(native.platform, "system", return_value="Linux"), \
+                    patch.object(native.platform, "machine", return_value="aarch64"), \
+                    patch.object(native.subprocess, "run", side_effect=first_command) as execute:
+                with self.assertRaisesRegex(ValueError, "ambient"):
+                    native.run("linux-arm64", self.base / f"out-{inject_home}", self.pin)
+                self.assertEqual(execute.call_count, 1)
+
+    def test_both_ambient_config_names_and_both_trees(self):
+        for parent in (self.source, self.base):
+            cargo = parent / ".cargo"
+            cargo.mkdir()
+            for name in ("config", "config.toml"):
+                config = cargo / name
+                config.touch()
+                self.rejected()
+                config.unlink()
+            cargo.rmdir()
+        self.dest.mkdir()
+        (self.dest / ".cargo").mkdir()
+        (self.dest / ".cargo/config").touch()
+        with self.assertRaisesRegex(ValueError, "ambient"):
+            native.verified_copy(self.source, self.dest / "bundle", self.pin)
 
 
 class ArchiveTests(unittest.TestCase):

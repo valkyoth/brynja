@@ -41794,6 +41794,26 @@
         "log_sha256": "c7d8ed22f061f593cd21c6401e217996fb2fdee4e81ee00701aaaa0edc7c9365"
       }
     ],
+    "gmac/packaged-portable-acceptance": [
+      {
+        "id": "2-1795598262435632769",
+        "source": "working tree based on 9219d9890f7ddb8d8905d5c0a3c0dd14542e9da3; scoped fingerprint c3eb0256e593cc2f86f609544ca1eed08d78f8fc2a1650dc41c9831c85674374",
+        "started": "2026-11-25T09:17:42.435630915Z",
+        "ended": "2026-11-25T09:18:34.374992047Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes-gcm/check-portable-acceptance.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "fb7e8a81e35d32f91d612d2a3ae36f8f2f5b0d2d22b91382ef6b0afd7735e466",
+        "after": "fb7e8a81e35d32f91d612d2a3ae36f8f2f5b0d2d22b91382ef6b0afd7735e466",
+        "log": "verification/.runner/logs/2-1795598262435632769.log",
+        "log_sha256": "b81d274c2762d92194252286ca2e0f6f144e2d531a3c27b00e25e161e9153616"
+      }
+    ],
     "gmac/portable-vectors": [
       {
         "id": "2-1795534730391287762",
@@ -50576,6 +50596,15 @@
       "source": "working tree based on 70f78f17b39ef9c85aed6c669e3fad5907c221a8; scoped fingerprint 1d62f8ae0497aad0d92c7ef04fdc0548587c4793146a251065e2f9d395334b43",
       "performed_at": "2026-11-24T20:10:36.44593485Z",
       "last_success": "2026-11-24T20:10:36.44593485Z"
+    },
+    "gmac/packaged-portable-acceptance": {
+      "checked_at": "2026-11-25T09:18:34.874902038Z",
+      "fingerprint": "c3eb0256e593cc2f86f609544ca1eed08d78f8fc2a1650dc41c9831c85674374",
+      "result": "passed",
+      "freshness": "Up to date",
+      "source": "working tree based on 9219d9890f7ddb8d8905d5c0a3c0dd14542e9da3; scoped fingerprint c3eb0256e593cc2f86f609544ca1eed08d78f8fc2a1650dc41c9831c85674374",
+      "performed_at": "2026-11-25T09:18:34.374992047Z",
+      "last_success": "2026-11-25T09:18:34.374992047Z"
     },
     "gmac/portable-vectors": {
       "checked_at": "2026-11-24T20:10:11.543478369Z",

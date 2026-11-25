@@ -1,6 +1,17 @@
 # Changelog
 
-## 0.29.0 AES-GCM (in development)
+## 0.29.2 portable AES-GCM and GMAC archive acceptance (candidate)
+
+- Run the [frozen public consumer](assurance/aead-portable-acceptance/README.md)
+  against unpacked direct and facade crates. No production API, cryptography,
+  dependency or publication change.
+
+## 0.29.1 portable GMAC (internally tagged)
+
+- Add opt-in AES-128/192/256-GMAC, with reserved sending IVs and a detached
+  tag type separate from AES-GCM. See the [release notes](release-notes/RELEASE_NOTES_0.29.1.md).
+
+## 0.29.0 AES-GCM (internally tagged)
 
 - Exercise private portable IV and authentication framing, and full-tag
   AES-128/192/256-GCM seal/open. No timing qualification yet.

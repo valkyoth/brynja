@@ -89,5 +89,6 @@ The release baseline is the commit tagged `v0.29.0` (`a5e53ce4`).
   formatting and reservation introspection are not required for this scope.
 
 No production behavior or public signature changed in this disposition.
-Packaged-consumer acceptance remains a v0.29.2 task; this review is not
-release or deployment certification.
+For the subsequent packaged-consumer acceptance, see the
+[v0.29.2 fixture](../../assurance/aead-portable-acceptance/README.md).
+This v0.29.1 review is not release or deployment certification.

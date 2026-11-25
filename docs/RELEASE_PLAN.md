@@ -7034,7 +7034,9 @@ Exit criteria:
 
 ### v0.29.1 - Complete GMAC
 
-Status: in progress
+Status: released
+
+Signed internal tag `v0.29.1` at `9219d989`. No registry publication.
 
 The initial portable owners and typed tag are available behind `gmac`.
 The [GMAC replay and downstream checks](assurance/gmac-development.md)
@@ -7080,7 +7082,12 @@ Exit criteria:
 
 ### v0.29.2 - AES-GCM And GMAC Portable Public API Acceptance
 
-Status: planned
+Status: in progress
+
+The [frozen downstream fixture](../assurance/aead-portable-acceptance/README.md)
+exercises the direct and facade APIs from Cargo archives. The full replay is
+`brynja-verify run gmac packaged-portable-acceptance`; the shorter CI smoke
+check does not stand in for the independent differential campaign.
 
 Plan scope: Before v0.29.3, freeze a package-external forced-portable fixture for the currently implemented AES-GCM And GMAC profiles, exercising all supported parameters, real consumer operations, boundaries, typed secret outputs and cleanup; backend work may not begin until this exact portable acceptance passes.
 

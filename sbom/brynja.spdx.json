@@ -1,20 +1,20 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "created": "2026-11-24T14:12:34Z",
+    "created": "2026-11-24T20:14:46Z",
     "creators": [
       "Tool: cargo-sbom-v0.10.0"
     ]
   },
   "dataLicense": "CC0-1.0",
-  "documentNamespace": "https://spdx.org/spdxdocs/brynja-832dfb08187a3746132ef644dbc0dfa2b524b82a790eff97de4118f5d8d34c5b",
+  "documentNamespace": "https://spdx.org/spdxdocs/brynja-841dc80eebbb2a2fd7e5c59158a80e370b042fd915ddea47e92d05a65f8f566f",
   "files": [
     {
       "SPDXID": "SPDXRef-File-brynja",
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -28,7 +28,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -42,7 +42,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -56,7 +56,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -70,7 +70,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -84,7 +84,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -98,7 +98,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -112,7 +112,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -126,7 +126,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -140,7 +140,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -154,7 +154,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -168,7 +168,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -182,7 +182,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -196,7 +196,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -210,7 +210,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -224,7 +224,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -238,7 +238,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -252,7 +252,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -266,7 +266,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -280,7 +280,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -294,7 +294,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -308,7 +308,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -322,7 +322,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -336,7 +336,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -350,7 +350,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -364,7 +364,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -378,7 +378,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -392,7 +392,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -406,7 +406,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -420,7 +420,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -434,7 +434,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -448,7 +448,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -462,7 +462,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -476,7 +476,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -490,7 +490,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -504,7 +504,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -518,7 +518,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -532,7 +532,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -546,7 +546,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -560,7 +560,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -574,7 +574,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -588,7 +588,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -602,7 +602,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -616,7 +616,7 @@
       "checksums": [
         {
           "algorithm": "SHA1",
-          "checksumValue": "4c4579ff26b1949aa2855257fd757058c3505f6a"
+          "checksumValue": "2847948d11b1ebf0026f73bac5fa0255a3c0a043"
         }
       ],
       "fileName": "./Cargo.lock",
@@ -629,13 +629,13 @@
   "name": "brynja",
   "packages": [
     {
-      "SPDXID": "SPDXRef-Package-brynja-0.29.1",
+      "SPDXID": "SPDXRef-Package-brynja-0.29.2",
       "description": "Security-first no_std cryptography and secure-protocol facade",
       "downloadLocation": "NONE",
       "licenseConcluded": "MIT OR Apache-2.0",
       "licenseDeclared": "MIT OR Apache-2.0",
       "name": "brynja",
-      "versionInfo": "0.29.1"
+      "versionInfo": "0.29.2"
     },
     {
       "SPDXID": "SPDXRef-Package-brynja-core-0.10.0",
@@ -1263,7 +1263,7 @@
       "spdxElementId": "SPDXRef-DOCUMENT"
     },
     {
-      "relatedSpdxElement": "SPDXRef-Package-brynja-0.29.1",
+      "relatedSpdxElement": "SPDXRef-Package-brynja-0.29.2",
       "relationshipType": "GENERATED_FROM",
       "spdxElementId": "SPDXRef-File-brynja"
     },
@@ -1485,42 +1485,42 @@
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.10.0",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-0.29.1"
+      "spdxElementId": "SPDXRef-Package-brynja-0.29.2"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-crypto-0.2.0",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-0.29.1"
+      "spdxElementId": "SPDXRef-Package-brynja-0.29.2"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-dtls-0.1.9",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-0.29.1"
+      "spdxElementId": "SPDXRef-Package-brynja-0.29.2"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-pki-0.3.0",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-0.29.1"
+      "spdxElementId": "SPDXRef-Package-brynja-0.29.2"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-platform-0.1.9",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-0.29.1"
+      "spdxElementId": "SPDXRef-Package-brynja-0.29.2"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-protocol-0.1.1",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-0.29.1"
+      "spdxElementId": "SPDXRef-Package-brynja-0.29.2"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-quic-tls-0.1.9",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-0.29.1"
+      "spdxElementId": "SPDXRef-Package-brynja-0.29.2"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-tls-0.1.9",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-brynja-0.29.1"
+      "spdxElementId": "SPDXRef-Package-brynja-0.29.2"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-brynja-core-0.10.0",

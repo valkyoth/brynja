@@ -35,12 +35,16 @@ def prepare(root, dependency, versions):
     return consumer
 
 
-def check_graph(metadata, consumer, versions, dependency):
+def check_graph(metadata, consumer, versions, dependency, *, features=("aes-gcm",), unpacked=None):
     """Match every resolved edge against the downstream lock, not just crate names."""
     lock = tomllib.loads((FIXTURE / "Cargo.lock").read_text())
     edges = {p["name"]: set(p.get("dependencies", [])) for p in lock["package"]}
     nodes = {n["id"]: n for n in metadata["resolve"]["nodes"]}
     packages = {p["id"]: p for p in metadata["packages"]}
+    if metadata["resolve"]["root"] not in nodes or not any(
+        packages[ident]["name"] == "brynja-crypto" for ident in nodes
+    ):
+        raise ValueError("missing archive consumer or crypto dependency")
     for ident, node in nodes.items():
         package = packages[ident]
         name = package["name"]
@@ -50,18 +54,19 @@ def check_graph(metadata, consumer, versions, dependency):
             if path != consumer / "Cargo.toml" or deps != {dependency}:
                 raise ValueError("wrong archive consumer entry point")
             continue
-        if name not in versions or path != consumer.parent / "unpacked" / f"{name}-{versions[name]}" / "Cargo.toml":
+        archives_dir = consumer.parent / "unpacked" if unpacked is None else unpacked
+        if name not in versions or path != archives_dir / f"{name}-{versions[name]}" / "Cargo.toml":
             raise ValueError("dependency did not resolve to its archive")
         if deps != edges.get(name) or name.startswith("brynja-legacy") or name.endswith(("-std", "-cpu")):
             raise ValueError("unexpected portable dependency graph")
-        features = set(node["features"])
+        active = set(node["features"])
         if name in ("brynja", "brynja-crypto"):
-            expected = {"aes-gcm"}
+            expected = set(features)
             if dependency == "brynja" and name == "brynja-crypto":
                 expected.add("default")
-            if features != expected or package["features"].get("default") != []:
-                raise ValueError("unexpected GCM feature set")
-        elif features - ({"default", "general-sha512-t"} if name == "brynja-hash-sha2" else {"default"}):
+            if active != expected or package["features"].get("default") != []:
+                raise ValueError("unexpected portable feature set")
+        elif active - ({"default", "general-sha512-t"} if name == "brynja-hash-sha2" else {"default"}):
             raise ValueError("unexpected transitive feature")
 
 

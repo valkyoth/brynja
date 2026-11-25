@@ -1,5 +1,6 @@
 """Negative controls for archive evidence (no Cargo processes needed)."""
 import importlib.util
+import hashlib
 from pathlib import Path
 import shutil
 import tempfile
@@ -10,9 +11,41 @@ from unittest.mock import patch
 spec = importlib.util.spec_from_file_location("gcm_archives", Path(__file__).with_name("check-packaged-api.py"))
 runner = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(runner)
+spec = importlib.util.spec_from_file_location("combined", Path(__file__).with_name("check-portable-acceptance.py"))
+combined = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(combined)
 
 
 class ArchiveTests(unittest.TestCase):
+    def test_empty_graph_is_not_portable_evidence(self):
+        with self.assertRaisesRegex(ValueError, "missing archive"):
+            runner.check_graph({"resolve": {"root": None, "nodes": []}, "packages": []},
+                               Path("/unused"), {}, "brynja")
+
+    def test_frozen_inventory_requires_each_exact_file_once(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "example").write_bytes(b"public fixture")
+            checksum = hashlib.sha256(b"public fixture").hexdigest()
+            line = checksum + "  example\n"
+            with patch.multiple(combined, ROOT=root, FIXTURE=root, INPUTS={"example"}):
+                for inventory in ("", line * 2, line.replace("example", "extra"), "0" * 64 + line[64:]):
+                    (root / "SHA256SUMS").write_text(inventory)
+                    with self.subTest(inventory=inventory), self.assertRaises(ValueError):
+                        combined.frozen()
+                (root / "SHA256SUMS").write_text(line)
+                combined.frozen()
+
+    def test_combined_registry_binds_frozen_inputs_and_requires_full_replay(self):
+        registry = tomllib.loads((runner.ROOT / "verification/checks.toml").read_text())
+        check, = (c for c in registry["checks"] if
+                  (c["component"], c["id"]) == ("gmac", "packaged-portable-acceptance"))
+        self.assertEqual(check["command"], ["python3", "scripts/aes-gcm/check-portable-acceptance.py"])
+        paths = {Path(p) for g in check["inputs"] for p in registry["groups"][g].get("paths", [])}
+        for name in combined.INPUTS | {check["command"][1], "assurance/aead-portable-acceptance/SHA256SUMS"}:
+            self.assertTrue(any(Path(name).is_relative_to(p) for p in paths), name)
+        self.assertEqual(check["success"]["contains"], ["PORTABLE_AEAD_ARCHIVES_COMPLETE"])
+
     def test_fixture_change_fails_even_if_the_number_of_examples_is_unchanged(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

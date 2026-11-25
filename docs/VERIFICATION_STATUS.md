@@ -1,5 +1,13 @@
 # Component Verification Status
 
+## Packaged portable AES-GCM and GMAC (v0.29.2)
+
+`brynja-verify run gmac packaged-portable-acceptance` runs both Go
+comparisons against unpacked crates through both public imports on Rust
+1.90.0 and 1.100.0. The [fixture](../assurance/aead-portable-acceptance/README.md)
+also tests tag-type separation and observable cleanup. It does not establish
+timing properties or execute on Cortex-M.
+
 ## Portable GMAC (v0.29.1 development)
 
 `brynja-verify gmac` reports the recorded results for public vectors and

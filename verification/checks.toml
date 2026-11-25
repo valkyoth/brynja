@@ -344,6 +344,24 @@ contains = ["AES_GCM_PUBLIC_CONSUMER_COMPLETE"]
 [groups.aes-gcm-archive]
 paths = ["scripts/aes-gcm/check-packaged-api.py", "scripts/ghash/check-packaged-api.py", "scripts/hkdf/check-hkdf-public-api.py", "scripts/repository/facade_cargo_environment.py", "assurance/aes-gcm-consumer/tests", "crates/brynja-crypto-cpu", "crates/brynja-crypto-cpu-std", "crates/brynja-dtls", "crates/brynja-platform", "crates/brynja-quic-tls"]
 
+[groups.aead-portable-acceptance]
+paths = ["scripts/aes-gcm/check-portable-acceptance.py", "assurance/aead-portable-acceptance"]
+
+[[checks]]
+component = "gmac"
+id = "packaged-portable-acceptance"
+category = "package"
+name = "Portable AES-GCM and GMAC through unpacked crates"
+establishes = "Frozen public examples, known answers, independent Go transcripts, rejection and cleanup on both import routes and compiler endpoints. Cortex-M compile only; no hardware or timing claim."
+command = ["python3", "scripts/aes-gcm/check-portable-acceptance.py"]
+cwd = "."
+inputs = ["aead-portable-acceptance", "aes-gcm-archive", "aes-gcm-consumer", "gmac-consumer", "aes-gcm-boundaries", "gmac-boundaries", "hkdf-msrv"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 900
+[checks.success]
+unique_lines = ["1.90.0 direct: portable archived GCM and GMAC acceptance passed", "1.100.0 direct: portable archived GCM and GMAC acceptance passed", "1.90.0 facade: portable archived GCM and GMAC acceptance passed", "1.100.0 facade: portable archived GCM and GMAC acceptance passed", "PORTABLE_AEAD_ARCHIVES_COMPLETE"]
+contains = ["PORTABLE_AEAD_ARCHIVES_COMPLETE"]
+
 [groups.aes-gcm-gcmvs]
 paths = ["scripts/aes-gcm/check-gcmvs.py", "assurance/aes-gcm-consumer/examples/gcmvs.rs"]
 optional_paths = ["references/local/gcmtestvectors.zip"]

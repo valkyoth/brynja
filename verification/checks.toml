@@ -152,7 +152,7 @@ paths = ["crates/brynja-crypto/src/aes_gcm/tests.rs"]
 optional_paths = [".cargo/config", ".cargo/config.toml"]
 
 [groups.aes-gcm-x86-pair]
-paths = ["scripts/aes-gcm/check-x86-pair.py", "scripts/aes/check-aes-static.py", "scripts/repository/facade_cargo_environment.py", "assurance/aes-kernel-candidate/probe.rs", "crates/brynja-crypto/tests/aead_pair.rs"]
+paths = ["scripts/aes-gcm/check-x86-pair.py", "scripts/aes/check-aes-static.py", "scripts/repository/facade_cargo_environment.py", "assurance/aes-kernel-candidate/probe.rs", "crates/brynja-crypto/tests/aead_pair.rs", "crates/brynja-crypto/tests/native/vectors.rs"]
 [[groups.aes-gcm-x86-pair.tools]]
 program = "python3"
 

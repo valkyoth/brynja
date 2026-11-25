@@ -45,6 +45,7 @@ fn unavailable_before_key_import() {
     )
 ))]
 mod native {
+    mod vectors;
     use brynja_crypto::{
         aes_gcm::{self as gcm, GcmError},
         gmac::{self, GmacError, GmacTag},
@@ -52,8 +53,18 @@ mod native {
     fn detail(error: impl core::fmt::Debug) -> String {
         format!("{error:?}")
     }
+    fn hex(s: &str) -> Result<Vec<u8>, String> {
+        let (pairs, tail) = s.as_bytes().as_chunks::<2>();
+        assert!(tail.is_empty());
+        pairs
+            .iter()
+            .map(|p| {
+                u8::from_str_radix(std::str::from_utf8(p).map_err(detail)?, 16).map_err(detail)
+            })
+            .collect()
+    }
     macro_rules! width {
-        ($test:ident, $gcm:ident, $mac:ident, $k:literal, $s:literal, $kat_key:expr, $tag:literal) => {
+        ($test:ident, $gcm:ident, $mac:ident, $k:literal, $s:literal, $kat_key:expr, $tag:literal, $cases:ident) => {
             #[test]
             fn $test() -> Result<(), String> {
                 let pair = gcm::execution::AesPair::require().map_err(detail)?;
@@ -62,6 +73,59 @@ mod native {
                 #[cfg(target_arch = "aarch64")]
                 assert_eq!(pair.backend(), gcm::execution::PairBackend::ArmAesPmull);
                 let (mut a, mut b, mut c, mut d) = ([0; $s], [0; $s], [0; $s], [0; $s]);
+                fn known_open<const N: usize>(
+                    pair: &gcm::execution::AesPair,
+                    key: &[u8; $k],
+                    iv: [u8; N],
+                    aad: &[u8],
+                    plaintext: &[u8],
+                    (ciphertext, tag): (&str, u128),
+                ) -> Result<(), String> {
+                    let mut schedule = [0; $s];
+                    let rx = gcm::execution::$gcm::<16, N>::for_open(pair, key, &mut schedule)
+                        .map_err(detail)?;
+                    let ciphertext = hex(ciphertext)?;
+                    let mut data = ciphertext.clone();
+                    let mut scratch = vec![0xa5; data.len()];
+                    // For the padded 96-bit-IV case the empty-message tag is
+                    // exactly the tag that a zero-returning GHASH would give
+                    // under this same key and IV. It must not authenticate.
+                    let wrong = if iv.as_slice() == vectors::IV12 {
+                        $tag
+                    } else {
+                        tag ^ 1
+                    };
+                    assert_eq!(
+                        rx.open_in_place(&iv, aad, &wrong.to_be_bytes(), &mut data, &mut scratch),
+                        Err(GcmError::Authentication)
+                    );
+                    assert_eq!(data, ciphertext);
+                    rx.open_in_place(&iv, aad, &tag.to_be_bytes(), &mut data, &mut scratch)
+                        .map_err(detail)?;
+                    assert_eq!(data, plaintext);
+                    Ok(())
+                }
+                let [one, padded, short_iv, long_iv] = vectors::$cases;
+                let aad = hex(vectors::AAD)?;
+                let pt = hex(vectors::PLAINTEXT)?;
+                known_open(&pair, &[0; $k], [0; 12], &[], &[0; 16], one)?;
+                known_open::<12>(&pair, &$kat_key, vectors::IV12, &aad, &pt, padded)?;
+                known_open::<8>(
+                    &pair,
+                    &$kat_key,
+                    hex(vectors::IV8)?.try_into().map_err(detail)?,
+                    &aad,
+                    &pt,
+                    short_iv,
+                )?;
+                known_open::<60>(
+                    &pair,
+                    &$kat_key,
+                    hex(vectors::IV60)?.try_into().map_err(detail)?,
+                    &aad,
+                    &pt,
+                    long_iv,
+                )?;
                 // NIST worked example 1 per width, also in the archive acceptance fixture.
                 // Use the public 96-bit-IV shortcut; do not derive expectations from portable AES.
                 {
@@ -190,7 +254,8 @@ mod native {
         16,
         176,
         KEY128,
-        0x3247184b3c4f69a44dbcd22887bbb418
+        0x3247184b3c4f69a44dbcd22887bbb418,
+        AES128
     );
     width!(
         aes192,
@@ -202,7 +267,8 @@ mod native {
             0xfe, 0xff, 0xe9, 0x92, 0x86, 0x65, 0x73, 0x1c, 0x6d, 0x6a, 0x8f, 0x94, 0x67, 0x30,
             0x83, 0x08, 0xfe, 0xff, 0xe9, 0x92, 0x86, 0x65, 0x73, 0x1c
         ],
-        0xc835aa88aebbc94f5a02e179fdcfc3e4
+        0xc835aa88aebbc94f5a02e179fdcfc3e4,
+        AES192
     );
     width!(
         aes256,
@@ -215,6 +281,7 @@ mod native {
             0x83, 0x08, 0xfe, 0xff, 0xe9, 0x92, 0x86, 0x65, 0x73, 0x1c, 0x6d, 0x6a, 0x8f, 0x94,
             0x67, 0x30, 0x83, 0x08
         ],
-        0xfd2caa16a5832e76aa132c1453eeda7e
+        0xfd2caa16a5832e76aa132c1453eeda7e,
+        AES256
     );
 }

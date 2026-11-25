@@ -183,8 +183,11 @@ constructor is not a baseline dispatcher. On `x86_64-unknown-none` use the
 portable `aes-gcm` and `gmac` features, not the hosted execution features:
 the static CPU dependency does not build for that soft-float target.
 
-On Rust 1.90.0 and 1.100.0 the check covers the three AES widths, NIST
-96-bit-IV empty-message tags, general-IV partial payload and AAD-only
+On Rust 1.90.0 and 1.100.0 the public native tests cover all three AES widths.
+The 96-bit-IV empty-message example tests the AES tag mask, not a nonzero
+GHASH product. Separate [Appendix B fixtures](../../crates/brynja-crypto/tests/native/vectors.rs)
+check nonempty published ciphertexts and tags, padded AAD/payload, and hashed
+8- and 60-byte IVs. The suite also covers general-IV partial payload and AAD-only
 comparisons against portable, invalid tags, and failure at IV or tag hashing
 after reserving a nonce. This is not a claim about a hosted x86 detector,
 Arm timing, RISC-V admission, hardware-fault resistance or a published API.

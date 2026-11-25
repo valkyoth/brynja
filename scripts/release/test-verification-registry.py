@@ -525,6 +525,7 @@ class RegistryTests(unittest.TestCase):
         self.assertTrue({check['command'][1], 'assurance/aes-kernel-candidate/probe.rs',
                          'scripts/aes/check-aes-static.py', 'crates/brynja-crypto/src',
                          'crates/brynja-crypto/tests/aead_pair.rs',
+                         'crates/brynja-crypto/tests/native/vectors.rs',
                          'crates/brynja-crypto-cpu/src', 'Cargo.lock'} <= paths)
         tools = {(t['program'], t.get('toolchain')) for group in groups for t in group.get('tools', [])}
         for version in ('1.90.0', '1.100.0'):

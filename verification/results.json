@@ -32271,6 +32271,24 @@
         "after": "a2e06e4ba5e13f0d62dec00a6dd0b65aefcdaf6a336286a91815cc45719f4b14",
         "log": "verification/.runner/logs/22-1795627838838423364.log",
         "log_sha256": "7e8961e08a848cb7450e2162135e8707f042968d9500098c1f1db647d18de10c"
+      },
+      {
+        "id": "2-1795630142270793010",
+        "source": "working tree based on 1c1d19ca69a5d5f30ea59af59fc52c8e29d38462; scoped fingerprint 5ce0e87139aaef6d7e6f17c8720260e03200c5cacb72dce4179cf09bac8724d7",
+        "started": "2026-11-25T18:09:02.270789033Z",
+        "ended": "2026-11-25T18:09:55.276074439Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes-gcm/check-x86-pair.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "b39b4c9184acb610d78b221e2dd515afbf754c4c4c06566258312823e6baf895",
+        "after": "b39b4c9184acb610d78b221e2dd515afbf754c4c4c06566258312823e6baf895",
+        "log": "verification/.runner/logs/2-1795630142270793010.log",
+        "log_sha256": "083cf92e32f306701a42d1fcb4b37e5e7777e5f5490f9eadd8bc73a602dc692e"
       }
     ],
     "aes_gcm/x86-pair-timing-record": [
@@ -50696,13 +50714,13 @@
       "last_success": "2026-11-25T17:32:16.524833064Z"
     },
     "aes_gcm/x86-pair-development": {
-      "checked_at": "2026-11-25T17:31:39.374987675Z",
-      "fingerprint": "bbff59c8429d5647f75eb9af11aef3e7901240d3f4adbf0d5a53f15a0ffb9563",
+      "checked_at": "2026-11-25T18:09:55.792512034Z",
+      "fingerprint": "5ce0e87139aaef6d7e6f17c8720260e03200c5cacb72dce4179cf09bac8724d7",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 0af6e30be87eecfc1899c27984421ec8df4143d1; scoped fingerprint bbff59c8429d5647f75eb9af11aef3e7901240d3f4adbf0d5a53f15a0ffb9563",
-      "performed_at": "2026-11-25T17:31:38.76760497Z",
-      "last_success": "2026-11-25T17:31:38.76760497Z"
+      "source": "working tree based on 1c1d19ca69a5d5f30ea59af59fc52c8e29d38462; scoped fingerprint 5ce0e87139aaef6d7e6f17c8720260e03200c5cacb72dce4179cf09bac8724d7",
+      "performed_at": "2026-11-25T18:09:55.276074439Z",
+      "last_success": "2026-11-25T18:09:55.276074439Z"
     },
     "aes_gcm/x86-pair-timing-record": {
       "checked_at": "2026-11-25T14:24:50.3585671Z",

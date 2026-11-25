@@ -2,6 +2,20 @@
 
 Status: initial; expands with every milestone
 
+## Paired native AES-GCM and GMAC (v0.29.3)
+
+An application choosing the accelerated API must deploy the ISA-specialized build
+only where those instructions are usable, and keep the admitted AES and
+field-multiply features usable across scheduling and VM migration. The pair does not
+pin application threads. Choose a baseline portable build when that platform
+contract cannot be met; a check inside an ISA-specialized executable cannot
+make the whole executable safe on an incompatible processor.
+
+The [one-host timing observation](assurance/aead-accelerated-development.md#scoped-x86-timing-result)
+does not rule out timing leakage on that host or others. Startup self-tests
+do not detect arbitrary faults during later computations. The portable
+nonce, key separation, replay and resource-limit obligations still apply.
+
 ## Portable GMAC (v0.29.1)
 
 GMAC authenticates cleartext; observers can read it, and receivers can accept

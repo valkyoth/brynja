@@ -309,10 +309,18 @@ exercise the portable interface from unpacked Cargo archives on Rust 1.90.0 and 
 For runtime selection and the native versus emulated results, see the
 [v0.28.3 public API acceptance fixture](assurance/ghash-runtime-consumer/README.md).
 
-The v0.29.0 development checkout adds [portable AES-GCM](docs/assurance/aes-gcm-development.md)
-at all three AES key sizes under the default-off `aes-gcm` feature. Enable it
-on `brynja` or `brynja-crypto`; neither public raw primitive feature is required.
-Senders use nonce ranges reserved by the application. This is not yet a tagged release.
+The checkout provides [portable AES-GCM](docs/assurance/aes-gcm-development.md)
+and [portable GMAC](docs/assurance/gmac-development.md) at all three AES key
+sizes. Enable `aes-gcm` or `gmac` on `brynja` or `brynja-crypto`; neither
+public raw primitive feature is required. Use separate keys for GCM and
+GMAC, and reserve sending nonce ranges in the application.
+
+The [v0.29.3 internal candidate](release-notes/RELEASE_NOTES_0.29.3.md)
+adds `aes-gcm-execution` and `gmac-execution`. Only the new owners under
+`execution` require a complete pair: AES-NI/PCLMUL on Linux or Windows x86-64,
+or AES/PMULL on Linux ARM64 or Apple Silicon. Enabling
+either feature leaves ordinary constructors portable. This is not a
+crates.io release or a general constant-time qualification.
 
 The v0.27.6 [provider API candidate](docs/assurance/aes-provider-completion.md)
 adds distinct AES-128/192/256 external-key bindings. Applications supply their

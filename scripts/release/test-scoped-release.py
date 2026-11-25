@@ -58,8 +58,8 @@ class ScopedRelease(unittest.TestCase):
         with self.assertRaises(ValueError):
             scoped.enabled('garbage')
 
-    def test_gmac_candidate_gate_is_finite_and_does_not_publish(self):
-        plan = scoped.load('0.29.2')
+    def test_paired_aead_candidate_gate_is_finite_and_does_not_publish(self):
+        plan = scoped.load('0.29.3')
         commands = {check['id']: check['command'] for check in plan['checks']}
         self.assertEqual(len(commands), 36)
         self.assertEqual(commands['gmac-public-consumer'], ['python3', 'scripts/gmac/check-consumer.py', 'public'])
@@ -68,7 +68,7 @@ class ScopedRelease(unittest.TestCase):
         self.assertEqual(commands['release-plan'], ['scripts/release/test-release-plan.sh'])
         self.assertEqual(commands['crypto-tests'],
             ['cargo', 'test', '--locked', '-p', 'brynja-crypto', '-p',
-             'brynja-legacy-hkdf', '--no-default-features', '--features', 'brynja-crypto/gmac,brynja-crypto/aes-gcm,brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider,brynja-crypto/ghash-runtime-execution'])
+             'brynja-legacy-hkdf', '--no-default-features', '--features', 'brynja-crypto/gmac-execution,brynja-crypto/aes-gcm-execution,brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider,brynja-crypto/ghash-runtime-execution'])
         lint = commands['crypto-lint']
         self.assertEqual(lint[lint.index('--features') + 1], commands['crypto-tests'][-1])
         self.assertEqual(commands['aes-provider-api'],
@@ -141,10 +141,10 @@ class ScopedRelease(unittest.TestCase):
                                  or 'check-aes-kani.py' in arg
                                  or 'check-aes-dataflow.py' in arg for arg in command))
         release = tomllib.loads((scoped.ROOT / 'release-crates.toml').read_text())
-        self.assertEqual(release['release']['version'], '0.29.2')
-        self.assertEqual(release['crates']['brynja']['previous_version'], '0.29.1')
-        self.assertEqual(release['crates']['brynja']['change'], 'metadata')
-        self.assertEqual(release['release']['cumulative_milestones'][-2:], ['0.29.1', '0.29.2'])
+        self.assertEqual(release['release']['version'], '0.29.3')
+        self.assertEqual(release['crates']['brynja']['previous_version'], '0.29.2')
+        self.assertEqual(release['crates']['brynja']['change'], 'code')
+        self.assertEqual(release['release']['cumulative_milestones'][-2:], ['0.29.2', '0.29.3'])
         self.assertNotIn('0.27.7', release['release']['cumulative_milestones'])
         self.assertIn('Portable GHASH', plan['scope'])
         self.assertEqual(release['release']['stage'], 'internal')
@@ -154,6 +154,11 @@ class ScopedRelease(unittest.TestCase):
         self.assertIn('RISC-V AES remains evidence-only and unadmitted', plan['scope'])
         self.assertIn('Portable AES-GCM', plan['scope'])
         self.assertIn('Portable GMAC', plan['scope'])
+        self.assertIn('AES-NI/PCLMUL', plan['scope'])
+        self.assertIn('Linux/Windows x86-64', plan['scope'])
+        self.assertIn('Linux/macOS ARM64 AES/PMULL', plan['scope'])
+        self.assertFalse(any('check-paired-timing.py' in arg or 'check-paired-archives.py' in arg
+                             for command in commands.values() for arg in command))
         self.assertFalse(any(row['publish'] for row in release['crates'].values()))
         for name in ('brynja-core', 'brynja-crypto'):
             with self.subTest(name=name):

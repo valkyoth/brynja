@@ -11,7 +11,10 @@ pub use admission::RequiredProduct as RequiredPclmul;
 
 const FEATURE_COUNT: usize = 2;
 
-#[cfg(all(feature = "ghash-runtime-execution", target_os = "linux"))]
+#[cfg(all(
+    feature = "ghash-runtime-execution",
+    any(target_os = "linux", target_os = "windows")
+))]
 #[path = "ghash_runtime.rs"]
 pub(super) mod runtime;
 fn host_features() -> [bool; FEATURE_COUNT] {

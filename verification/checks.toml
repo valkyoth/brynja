@@ -151,6 +151,27 @@ exact_tests = 10
 paths = ["crates/brynja-crypto/src/aes_gcm/tests.rs"]
 optional_paths = [".cargo/config", ".cargo/config.toml"]
 
+[groups.aes-gcm-x86-pair]
+paths = ["scripts/aes-gcm/check-x86-pair.py", "scripts/aes/check-aes-static.py", "scripts/repository/facade_cargo_environment.py", "assurance/aes-kernel-candidate/probe.rs", "crates/brynja-crypto/tests/aead_pair.rs"]
+[[groups.aes-gcm-x86-pair.tools]]
+program = "python3"
+
+[[checks]]
+component = "aes_gcm"
+id = "x86-pair-development"
+category = "native-candidate"
+name = "Required AES-NI and PCLMUL GCM/GMAC owners"
+establishes = "Private framing and public paired GCM/GMAC owners at all three widths, baseline unavailability and shared multiplier. Stage-by-stage errors and Rust unwinds cover key import, both GCM layouts, GMAC, output atomicity, pair retirement and nonce accounting. Specialized stable Linux x86-64 test builds only; not timing or physical fault qualification."
+command = ["python3", "scripts/aes-gcm/check-x86-pair.py"]
+cwd = "."
+inputs = ["aes-gcm-x86-pair", "ghash-candidate-build", "ghash-portable-field", "cpu-source", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source", "hkdf-msrv"]
+platform = "linux-x86_64"
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER","QEMU_CPU"]
+timeout_seconds = 900
+[checks.success]
+unique_lines = ["1.90.0: required AES-NI and PCLMUL composition passed", "1.100.0: required AES-NI and PCLMUL composition passed", "1.90.0: staged native error and unwind sweeps passed", "1.100.0: staged native error and unwind sweeps passed", "GCM_X86_PAIR_DEVELOPMENT_COMPLETE"]
+contains = ["GCM_X86_PAIR_DEVELOPMENT_COMPLETE"]
+
 [groups.aes-gcm-composition]
 paths = ["crates/brynja-crypto/src/aes_gcm/portable/tests.rs", "crates/brynja-crypto/src/aes_gcm/tests.rs"]
 optional_paths = [".cargo/config", ".cargo/config.toml"]
@@ -346,6 +367,65 @@ paths = ["scripts/aes-gcm/check-packaged-api.py", "scripts/ghash/check-packaged-
 
 [groups.aead-portable-acceptance]
 paths = ["scripts/aes-gcm/check-portable-acceptance.py", "assurance/aead-portable-acceptance"]
+
+[groups.aead-x86-archives]
+paths = ["scripts/aes-gcm/check-paired-archives.py", "scripts/aes-gcm/paired_linked.py", "assurance/aes-kernel-candidate/probe.rs"]
+[[groups.aead-x86-archives.tools]]
+program = "llvm-objdump"
+
+[[checks]]
+component = "aes_gcm"
+id = "x86-packaged-pair"
+category = "package"
+name = "Required AES-NI/PCLMUL GCM and GMAC archive replay and linked-code screen"
+establishes = "Go and NIST replay on eight inspected x86-64 Linux ELF consumers; bounded static edges from paired operations to AES rounds, field multiply and tag comparison, not all-path or timing qualification. No Arm or release approval."
+command = ["python3", "scripts/aes-gcm/check-paired-archives.py"]
+cwd = "."
+inputs = ["aead-x86-archives", "aead-portable-acceptance", "aes-gcm-archive", "aes-gcm-consumer", "gmac-consumer", "aes-gcm-boundaries", "gmac-boundaries", "aes-gcm-gcmvs", "hkdf-msrv"]
+platform = "linux-x86_64"
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER", "QEMU_CPU"]
+timeout_seconds = 1200
+[checks.success]
+unique_lines = ["1.90.0 direct aes-gcm: paired Go and NIST archives passed", "1.100.0 direct aes-gcm: paired Go and NIST archives passed", "1.90.0 direct gmac: paired Go and NIST archives passed", "1.100.0 direct gmac: paired Go and NIST archives passed", "1.90.0 facade aes-gcm: paired Go and NIST archives passed", "1.100.0 facade aes-gcm: paired Go and NIST archives passed", "1.90.0 facade gmac: paired Go and NIST archives passed", "1.100.0 facade gmac: paired Go and NIST archives passed", "X86_PAIRED_AEAD_ARCHIVES_COMPLETE"]
+contains = ["X86_PAIRED_AEAD_ARCHIVES_COMPLETE", "X86_PAIRED_AEAD_LINKED_COMPLETE"]
+
+[groups.aead-x86-timing-record]
+paths = ["scripts/aes-gcm/check-paired-timing.py", "scripts/aes-gcm/test-paired-timing.py", "assurance/aead-x86-timing", "assurance/aead-x86-observations/v0.29.3-amd", "docs/assurance/aead-x86-timing-protocol.md"]
+[[groups.aead-x86-timing-record.tools]]
+program = "python3"
+
+[groups.aead-native-pair-records]
+paths = ["scripts/aes-gcm/check-native-pair-records.py", "scripts/aes-gcm/test-native-pair-records.py", "scripts/aes-gcm/prepare-native-pairs.py", "scripts/aes-gcm/run-native-pairs.py", "assurance/aead-native-observations/v0.29.3"]
+[[groups.aead-native-pair-records.tools]]
+program = "python3"
+
+[[checks]]
+component = "aes_gcm"
+id = "native-pair-functional-records"
+category = "record"
+name = "Validate Linux ARM64, Apple Silicon and Windows x64 paired GCM/GMAC observations"
+establishes = "Retained two-endpoint native functional test populations and downstream replay executable identities. No fresh native execution, emitted-code or timing qualification."
+command = ["python3", "scripts/aes-gcm/check-native-pair-records.py"]
+cwd = "."
+inputs = ["aead-native-pair-records"]
+timeout_seconds = 60
+[checks.success]
+unique_lines = ["AEAD_NATIVE_PAIR_RECORDS_COMPLETE"]
+contains = ["AEAD_NATIVE_PAIR_RECORDS_COMPLETE"]
+
+[[checks]]
+component = "aes_gcm"
+id = "x86-pair-timing-record"
+category = "record"
+name = "Replay paired x86 GCM/GMAC timing observations (no measurement)"
+establishes = "Checks pinned Linux AMD 9950X3D records and recomputes 25 matched-input, value and sensitivity campaigns per compiler. No fresh measurement, constant-time proof, ARM coverage or general hardware qualification."
+command = ["python3", "scripts/aes-gcm/test-paired-timing.py"]
+cwd = "."
+inputs = ["aead-x86-timing-record", "aead-x86-archives", "aead-portable-acceptance", "aes-gcm-archive", "hkdf-msrv"]
+timeout_seconds = 60
+[checks.success]
+unique_lines = ["1.90.0: 25 campaigns; flagged: none", "1.100.0: 25 campaigns; flagged: none", "OK"]
+contains = ["Ran 3 tests"]
 
 [[checks]]
 component = "gmac"

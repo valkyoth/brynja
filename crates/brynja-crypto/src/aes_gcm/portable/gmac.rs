@@ -82,7 +82,7 @@ impl From<Error> for GmacError {
 }
 
 macro_rules! owner {
-    ($name:ident, $aes:ident, $width:literal, $size:literal) => {
+    ($name:ident, $aes:ident, $width:literal, $size:literal $(, $pair:ident)?) => {
         #[doc = concat!("AES-GMAC owner with a ", stringify!($width), "-byte key. The borrowed expanded schedule is cleared on drop; the original key stays caller-owned.")]
         #[must_use]
         pub struct $name<'a, const T: usize = 16, const N: usize = 12>(Key<$aes<'a>, T, N>);
@@ -91,11 +91,11 @@ macro_rules! owner {
             /// For a key dedicated to 96-bit IVs: allocate IVs as a four-byte
             /// prefix followed by a big-endian 64-bit counter. The caller must
             /// durably reserve this nonempty range across senders and restarts.
-            pub fn from_reserved_range(
+            pub fn from_reserved_range($( $pair: &'a AesPair, )?
                 key: &[u8; $width], schedule: &'a mut [u8; $size],
                 prefix: [u8; 4], first: u64, count: u64,
             ) -> Result<Self, GmacError> {
-                let aes = $aes::new(key, schedule).map_err(|_| GmacError::Operation)?;
+                let aes = $aes::new($($pair,)? key, schedule).map_err(|_| GmacError::Operation)?;
                 Ok(Self(Key::from_reserved_range(aes, prefix, first, count)?))
             }
         }
@@ -106,16 +106,16 @@ macro_rules! owner {
             /// and devices. The big-endian counter occupies the final min(N, 4)
             /// bytes (8 for 96-bit IVs); prefix fills the rest. For N <= 4 use a
             /// single sending context. Empty IVs and truncating ranges are rejected.
-            pub fn from_reserved_invocations(
+            pub fn from_reserved_invocations($( $pair: &'a AesPair, )?
                 key: &[u8; $width], schedule: &'a mut [u8; $size],
                 prefix: &[u8], first: u32, count: u64,
             ) -> Result<Self, GmacError> {
-                let aes = $aes::new(key, schedule).map_err(|_| GmacError::Operation)?;
+                let aes = $aes::new($($pair,)? key, schedule).map_err(|_| GmacError::Operation)?;
                 Ok(Self(Key::from_reserved_invocations(aes, prefix, first, count)?))
             }
             /// Construct a receiver for exactly N-byte IVs, without a sending allocation.
-            pub fn for_verify(key: &[u8; $width], schedule: &'a mut [u8; $size]) -> Result<Self, GmacError> {
-                let aes = $aes::new(key, schedule).map_err(|_| GmacError::Operation)?;
+            pub fn for_verify($( $pair: &'a AesPair, )?key: &[u8; $width], schedule: &'a mut [u8; $size]) -> Result<Self, GmacError> {
+                let aes = $aes::new($($pair,)? key, schedule).map_err(|_| GmacError::Operation)?;
                 Ok(Self(Key::for_open(aes)?))
             }
             /// Return the next reserved IV and a detached tag over the associated
@@ -136,3 +136,19 @@ macro_rules! owner {
 owner!(Aes128Gmac, Aes128ExpandedKey, 16, 176);
 owner!(Aes192Gmac, Aes192ExpandedKey, 24, 208);
 owner!(Aes256Gmac, Aes256ExpandedKey, 32, 240);
+
+/// Required native owners. Admission takes place before key import; these
+/// owners never switch to portable execution. Nonce and buffer contracts
+/// are identical to the portable owners.
+#[cfg(feature = "gmac-execution")]
+pub mod execution {
+    use super::super::paired::{Aes128ExpandedKey, Aes192ExpandedKey, Aes256ExpandedKey};
+    pub use super::super::paired::{AesPair, PairBackend, PairError};
+    use super::{Buffers, GmacError, GmacTag, Key};
+    /// Architecture-specific spelling for the x86 native pair.
+    #[cfg(target_arch = "x86_64")]
+    pub use AesPair as X86AesPair;
+    owner!(Aes128Gmac, Aes128ExpandedKey, 16, 176, pair);
+    owner!(Aes192Gmac, Aes192ExpandedKey, 24, 208, pair);
+    owner!(Aes256Gmac, Aes256ExpandedKey, 32, 240, pair);
+}

@@ -1,0 +1,45 @@
+{
+  "cpu": 0,
+  "model": "AMD Ryzen 9 9950X3D 16-Core Processor",
+  "microcode": "0xb404035",
+  "kernel": "7.3.5-1-default",
+  "started": "2026-11-25T13:52:53.290601+00:00",
+  "target": "x86_64-unknown-linux-gnu",
+  "flags": "-Ctarget-feature=+aes,+sse2",
+  "protocol": "7696e2f1949bff9aa1c369f9419b54a9ffe6a764ebe6380656bb25bce0eafb98",
+  "fixture": "fa840bf61d024c036e3967d1995127cecf6c0649d691c8e92a7eaacbe517186c",
+  "builds": {
+    "1.90.0": {
+      "compiler": "rustc 1.90.0 (1159e78c4 2025-09-14)\nbinary: rustc\ncommit-hash: 1159e78c4747b02ef996e55082b704c09b970588\ncommit-date: 2025-09-14\nhost: x86_64-unknown-linux-gnu\nrelease: 1.90.0\nLLVM version: 20.1.8\n",
+      "elf_sha256": "cf5e9846cba544e2ea5f449fa59c51c55d87b6859fd2f02bc9e551b2e43a3704"
+    },
+    "1.100.0": {
+      "compiler": "rustc 1.100.0 (0ef1bc386 2026-11-09)\nbinary: rustc\ncommit-hash: 0ef1bc386059596dada8fb65b50425aab2ea637a\ncommit-date: 2026-11-09\nhost: x86_64-unknown-linux-gnu\nrelease: 1.100.0\nLLVM version: 23.1.5\n",
+      "elf_sha256": "76f1c2164104b66c4072316065bd50685db2ea46ff8e239b7fb058a1bbf677c6"
+    }
+  },
+  "runner": "e7dadc0298ac699e3a32d39b6c6fe35c25f433f2967c693bf64fb4225e091946",
+  "packages": {
+    "brynja": "b4149d792ead268c701bf41f145d6e1376be2cacb0b5841e1527b3fcafd9bf5f",
+    "brynja-core": "5aeb40445435d07443e8c8102969f0d34771044c74c6020505c5f1709f9b774c",
+    "brynja-crypto": "28f7d69a50053efff9b7dda3297086e18a15f7d2459bd80d3270a968e3518a96",
+    "brynja-crypto-cpu": "cc39baf8f39ba3b9725f797e6586d073bd5cb1b15ede37941ddfc7467564324c",
+    "brynja-crypto-cpu-std": "1ed57c208533e9cf7093f5c48f8204f779b66b48bcc26453f75655395dd38b41",
+    "brynja-dtls": "eabaf34b0e7bafba5be09e2d06d2d313310f0561d722ca237a00f72f37427101",
+    "brynja-hash-core": "f6dd028bf9e0816b641686eefa9a0b13f51fe6b9e855bce7891b8542532e762c",
+    "brynja-hash-parallel": "e5f3bb4976a5a2c9b2bc783a346994903c266861c6c2b24e81963cff034d4df5",
+    "brynja-hash-sha2": "b431a5917a9256364caa5ca894b2ebd9230db2e981a28ccef9dbf54d3d78bea6",
+    "brynja-hash-sha3": "08eaea705c692f6e2d24ed21343ab0531ac127cf7cc8933f9557542bb881af86",
+    "brynja-hash-tuple": "a6cb4202977ec7ea41179045c6969d966cfdc35250d4256904ca2023cbd987f2",
+    "brynja-mac-hmac": "2f711772182b1b8bc679e8667a60ddb8901a11cdb53a99453dd6cb66950ee60f",
+    "brynja-mac-kmac": "abb75f2cc1d2b5b2ca1bf0445ddb800be2c3ac08d4d1aef6bd05366f11c7d21a",
+    "brynja-pki": "33d473180f99acd7a62ab7a46b2f582daa40a3cb932301085c676b0b25167425",
+    "brynja-platform": "85c9b8f45cdcd2aa62d9f81f63596c0518128436361978549203f49968f4ba2c",
+    "brynja-protocol": "2ef9660947e048e7a7e9e725fa7ef4bd360df7f2d0b7ae470a1133f188f01e8d",
+    "brynja-quic-tls": "47edb9596bcd2d34f4169d0b1003094113cc0d73aea39efbd78ba28ea961075a",
+    "brynja-tls": "3c84be0523d0ca7e239b0a8ca6edfa1f6e0dc17aad0e331ba5d37a24a98a941c",
+    "brynja-tls12": "0623e0f18f173143280e99acae2ea1505b8f7062bd6584b70d7904c0a7408b0f",
+    "brynja-tls13": "e153de70c112218cf5261546539635ec3e845f30c657f67d4ee00cf8380e2a50",
+    "brynja-tls13-handshake": "02148bff04f291186b729151e6fecc2733882b8f79795abd3277d2eb06f5d6d6"
+  }
+}

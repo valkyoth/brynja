@@ -22,9 +22,11 @@ fn public_length_admission_without_large_allocations() -> Result<(), Error> {
 #[test]
 fn iv_fast_path_and_low_word_wrap() -> Result<(), Error> {
     let mut out = [0xa5; 16];
-    assert!(initial_counter(&[0; 16], &[], &mut out).is_err());
+    assert!(initial_counter(&PortableHash, &[0; 16], &[], &mut out).is_err());
     let iv = sample_iv::<12>();
-    let InitialCounter::FromPublicIv(mut j0) = initial_counter(&[0; 16], &iv, &mut out)? else {
+    let InitialCounter::FromPublicIv(mut j0) =
+        initial_counter(&PortableHash, &[0; 16], &iv, &mut out)?
+    else {
         return Err(Error::LimitExceeded);
     };
     assert_eq!(&j0[..12], &iv);
@@ -53,7 +55,9 @@ fn general_iv_and_split_fields_cover_every_padding_length() -> Result<(), Error>
                 *slot ^= b;
             }
         }
-        let InitialCounter::FromSecretHash(hash) = initial_counter(&h, iv, &mut out)? else {
+        let InitialCounter::FromSecretHash(hash) =
+            initial_counter(&PortableHash, &h, iv, &mut out)?
+        else {
             return Err(Error::LimitExceeded);
         };
         assert_eq!(hash.expose(), expected);

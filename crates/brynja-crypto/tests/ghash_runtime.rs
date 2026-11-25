@@ -15,7 +15,10 @@ fn explicit_route_agrees_with_the_portable_default() -> Result<(), Error> {
 
     let mut preferred = Ghash::new_with_backend(&key, &mut work, 16, Mode::Prefer)?;
     let backend = preferred.backend();
-    #[cfg(all(target_os = "linux", target_arch = "x86_64"))]
+    #[cfg(all(
+        any(target_os = "linux", target_os = "windows"),
+        target_arch = "x86_64"
+    ))]
     assert_eq!(
         backend == Backend::Pclmul,
         std::is_x86_feature_detected!("sse2") && std::is_x86_feature_detected!("pclmulqdq")

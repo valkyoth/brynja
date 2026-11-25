@@ -35,10 +35,16 @@ def prepare(root, dependency, versions):
     return consumer
 
 
-def check_graph(metadata, consumer, versions, dependency, *, features=("aes-gcm",), unpacked=None):
+def check_graph(metadata, consumer, versions, dependency, *, features=("aes-gcm",), unpacked=None,
+                paired=False):
     """Match every resolved edge against the downstream lock, not just crate names."""
     lock = tomllib.loads((FIXTURE / "Cargo.lock").read_text())
     edges = {p["name"]: set(p.get("dependencies", [])) for p in lock["package"]}
+    if paired:
+        if tuple(features) not in (("aes-gcm-execution",), ("gmac-execution",)):
+            raise ValueError("paired archive must select exactly one composed API")
+        edges["brynja-crypto"].add("brynja-crypto-cpu")
+        edges["brynja-crypto-cpu"] = set()
     nodes = {n["id"]: n for n in metadata["resolve"]["nodes"]}
     packages = {p["id"]: p for p in metadata["packages"]}
     if metadata["resolve"]["root"] not in nodes or not any(
@@ -57,15 +63,21 @@ def check_graph(metadata, consumer, versions, dependency, *, features=("aes-gcm"
         archives_dir = consumer.parent / "unpacked" if unpacked is None else unpacked
         if name not in versions or path != archives_dir / f"{name}-{versions[name]}" / "Cargo.toml":
             raise ValueError("dependency did not resolve to its archive")
-        if deps != edges.get(name) or name.startswith("brynja-legacy") or name.endswith(("-std", "-cpu")):
-            raise ValueError("unexpected portable dependency graph")
+        forbidden_cpu = name.endswith("-cpu") and not (paired and name == "brynja-crypto-cpu")
+        if deps != edges.get(name) or name.startswith("brynja-legacy") or name.endswith("-std") or forbidden_cpu:
+            raise ValueError("unexpected archive dependency graph")
         active = set(node["features"])
         if name in ("brynja", "brynja-crypto"):
             expected = set(features)
+            if paired and name == "brynja-crypto":
+                expected.add(features[0].removesuffix("-execution"))
             if dependency == "brynja" and name == "brynja-crypto":
                 expected.add("default")
             if active != expected or package["features"].get("default") != []:
-                raise ValueError("unexpected portable feature set")
+                raise ValueError("unexpected archive feature set")
+        elif paired and name == "brynja-crypto-cpu":
+            if active != {"default", "aes-static-execution", "ghash-runtime-execution"} or package["features"].get("default") != []:
+                raise ValueError("unexpected paired CPU features")
         elif active - ({"default", "general-sha512-t"} if name == "brynja-hash-sha2" else {"default"}):
             raise ValueError("unexpected transitive feature")
 

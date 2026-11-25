@@ -1,0 +1,30 @@
+{
+  "compiler": "rustc 1.100.0 (0ef1bc386 2026-11-09)\nbinary: rustc\ncommit-hash: 0ef1bc386059596dada8fb65b50425aab2ea637a\ncommit-date: 2026-11-09\nhost: aarch64-apple-darwin\nrelease: 1.100.0\nLLVM version: 23.1.5\n",
+  "host": "macos-arm64",
+  "images": {
+    "direct/aes-gcm": "221258fbb3f2f781cd0651c8100fd342b7f43ce4764752eb662e9843c870a06f",
+    "direct/gmac": "a961c52b6a42c8752974940256cc1262ee0d0e6336762e43e7d27f73b8ad97ef",
+    "facade/aes-gcm": "9dc603980c0775cb65338efe115fdcbc7fd3082898770aca2e38df739fc3b96e",
+    "facade/gmac": "b6d32e35200b482af4e09c0851e9c5793bd8e77cfb4375b8e2d83d67781d11cd"
+  },
+  "inputs_sha256": "056ea67a077239f798bbbab35864177bb607e421f1cf260d163a72394b81bfff",
+  "os": "27.2.0",
+  "replay": {
+    "direct/aes-gcm-go.tsv": "seal=22050 open=22050 reject=22050",
+    "direct/aes-gcm-nist.tsv": "seal=16875 open=8371 reject=8504",
+    "direct/gmac-go.tsv": "generate=2730 verify=2730 reject=2730",
+    "direct/gmac-nist.tsv": "generate=3375 verify=1657 reject=1718",
+    "facade/aes-gcm-go.tsv": "seal=22050 open=22050 reject=22050",
+    "facade/aes-gcm-nist.tsv": "seal=16875 open=8371 reject=8504",
+    "facade/gmac-go.tsv": "generate=2730 verify=2730 reject=2730",
+    "facade/gmac-nist.tsv": "generate=3375 verify=1657 reject=1718"
+  },
+  "specialized": "+aes,+neon",
+  "tests": {
+    "absence": 1,
+    "field": 1,
+    "interruptions": 9,
+    "lifecycle": 3,
+    "required": 3
+  }
+}

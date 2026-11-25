@@ -13,6 +13,8 @@ include = ["Cargo.toml","LICENSE-APACHE","LICENSE-MIT","README.md","src/**/*.rs"
 default = []
 aes-gcm = []
 gmac = []
+aes-gcm-execution = ["aes-gcm", "dep:brynja-crypto-cpu", "brynja-crypto-cpu/aes-static-execution", "brynja-crypto-cpu/ghash-runtime-execution"]
+gmac-execution = ["gmac", "dep:brynja-crypto-cpu", "brynja-crypto-cpu/aes-static-execution", "brynja-crypto-cpu/ghash-runtime-execution"]
 hazmat-aes-block = []
 hazmat-ghash = []
 ghash-runtime-execution = ["hazmat-ghash", "dep:brynja-crypto-cpu", "brynja-crypto-cpu/ghash-runtime-execution"]
@@ -55,6 +57,10 @@ brynja-mac-hmac = { workspace = true }
 
 [lints]
 workspace = true
+
+[[test]]
+name = "aead_pair"
+required-features = ["aes-gcm-execution", "gmac-execution"]
 
 [[test]]
 name = "ghash_field"

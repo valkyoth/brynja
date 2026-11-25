@@ -1,9 +1,12 @@
 use super::{Error, Ghash, field};
 // The feature deliberately compiles on targets with no hosted detector.
 #[cfg(not(any(
-    all(
-        target_os = "linux",
-        any(target_arch = "x86_64", target_arch = "riscv64")
+    any(
+        all(
+            target_os = "linux",
+            any(target_arch = "x86_64", target_arch = "riscv64")
+        ),
+        all(target_os = "windows", target_arch = "x86_64")
     ),
     all(
         target_arch = "aarch64",
@@ -15,7 +18,10 @@ use brynja_crypto_cpu as _;
 #[cfg(test)]
 #[path = "failure_tests.rs"]
 mod failure_tests;
-#[cfg(all(target_os = "linux", target_arch = "x86_64"))]
+#[cfg(all(
+    any(target_os = "linux", target_os = "windows"),
+    target_arch = "x86_64"
+))]
 use brynja_crypto_cpu::RuntimePclmul as Native;
 #[cfg(all(target_os = "linux", target_arch = "riscv64"))]
 use brynja_crypto_cpu::RuntimeRv64 as Native;
@@ -42,7 +48,7 @@ pub enum Mode {
 pub enum Backend {
     /// Portable fixed-work multiplication.
     Portable,
-    /// Linux x86_64 PCLMULQDQ multiplication after startup validation.
+    /// Linux/Windows x86_64 PCLMULQDQ multiplication after startup validation.
     Pclmul,
     /// Linux RV64 scalar Zbc multiplication after startup validation (not vector GHASH).
     Rv64Zbc,
@@ -58,9 +64,12 @@ pub(super) enum Engine {
         unwind: bool,
     },
     #[cfg(any(
-        all(
-            target_os = "linux",
-            any(target_arch = "x86_64", target_arch = "riscv64")
+        any(
+            all(
+                target_os = "linux",
+                any(target_arch = "x86_64", target_arch = "riscv64")
+            ),
+            all(target_os = "windows", target_arch = "x86_64")
         ),
         all(
             target_arch = "aarch64",
@@ -74,9 +83,12 @@ pub(super) enum Engine {
 impl Engine {
     fn select(mode: Mode) -> Result<Self, Error> {
         #[cfg(any(
-            all(
-                target_os = "linux",
-                any(target_arch = "x86_64", target_arch = "riscv64")
+            any(
+                all(
+                    target_os = "linux",
+                    any(target_arch = "x86_64", target_arch = "riscv64")
+                ),
+                all(target_os = "windows", target_arch = "x86_64")
             ),
             all(
                 target_arch = "aarch64",
@@ -99,9 +111,12 @@ impl Engine {
             #[cfg(test)]
             Self::FailAfterOne { .. } => Ok(()),
             #[cfg(any(
-                all(
-                    target_os = "linux",
-                    any(target_arch = "x86_64", target_arch = "riscv64")
+                any(
+                    all(
+                        target_os = "linux",
+                        any(target_arch = "x86_64", target_arch = "riscv64")
+                    ),
+                    all(target_os = "windows", target_arch = "x86_64")
                 ),
                 all(
                     target_arch = "aarch64",
@@ -133,9 +148,12 @@ impl Engine {
                 }
             }
             #[cfg(any(
-                all(
-                    target_os = "linux",
-                    any(target_arch = "x86_64", target_arch = "riscv64")
+                any(
+                    all(
+                        target_os = "linux",
+                        any(target_arch = "x86_64", target_arch = "riscv64")
+                    ),
+                    all(target_os = "windows", target_arch = "x86_64")
                 ),
                 all(
                     target_arch = "aarch64",
@@ -177,7 +195,7 @@ impl<'a> Ghash<'a> {
         }
     }
 
-    /// Selects a backend before touching the caller's workspace. Hosted Linux
+    /// Selects a backend before touching the caller's workspace. Hosted Linux/Windows
     /// x86_64 requires PCLMULQDQ and SSE2; Linux RV64 requires scalar Zbc.
     /// Little-endian AArch64 Linux and macOS require NEON, AES and PMULL.
     /// PMULL startup checks correctness, not timing: the AWS identical-input
@@ -203,11 +221,34 @@ impl<'a> Ghash<'a> {
 
     /// Returns the implementation selected for this owner's entire lifetime.
     pub fn backend(&self) -> Backend {
+        #[cfg(all(
+            any(
+                all(
+                    target_arch = "x86_64",
+                    any(target_os = "linux", target_os = "windows")
+                ),
+                all(
+                    target_arch = "aarch64",
+                    target_endian = "little",
+                    any(target_os = "linux", target_os = "macos")
+                )
+            ),
+            any(feature = "aes-gcm-execution", feature = "gmac-execution")
+        ))]
+        if self.pair.is_some() {
+            #[cfg(target_arch = "x86_64")]
+            return Backend::Pclmul;
+            #[cfg(target_arch = "aarch64")]
+            return Backend::Pmull;
+        }
         match self.engine {
             Engine::Portable => Backend::Portable,
             #[cfg(test)]
             Engine::FailAfterOne { .. } => unreachable!("test-only engine has no public identity"),
-            #[cfg(all(target_os = "linux", target_arch = "x86_64"))]
+            #[cfg(all(
+                any(target_os = "linux", target_os = "windows"),
+                target_arch = "x86_64"
+            ))]
             Engine::Native(_) => Backend::Pclmul,
             #[cfg(all(target_os = "linux", target_arch = "riscv64"))]
             Engine::Native(_) => Backend::Rv64Zbc,

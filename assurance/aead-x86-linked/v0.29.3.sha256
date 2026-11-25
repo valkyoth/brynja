@@ -1,0 +1,12 @@
+# Observed Cargo release examples, x86_64-unknown-linux-gnu, Rust target features +aes,+sse2.
+# Verification attempt 2-1795610853674418781, scoped fingerprint
+# f4062d916ed13f95d29e51d209a31dca19bc72170c498f1866d39cde7309373f.
+# Labels identify temporary consumer builds, not expected hashes for future runs.
+b6e299324f71a11a441c9e479e5e430b647ac58603057298514a4c4e7f594890  1.90.0/direct/gcmvs
+190814bbb1b18a88e1d240f7f05fa259be48f72ac639e147e22b60be91b2512d  1.100.0/direct/gcmvs
+26d5fbc4788914555c5606341153b490c15fa9d5d3e11983431dddac6dedc404  1.90.0/direct/nist
+c4e0f360e70124ff745608d94c5c153c1e0875bf56a796b53bfeadeb47ef2bee  1.100.0/direct/nist
+58cc7faca303bb9e9134258fefafd1d86241ee919a0417994587150dfe47be38  1.90.0/facade/gcmvs
+d7fe18e4f51574bbf44b3437998d376d2546cd1c85e645e6ebd627833272a87f  1.100.0/facade/gcmvs
+448aeef5da743560b85af566357afbb6c5dcc75f45e5b22c9fe7c4573afe81c8  1.90.0/facade/nist
+4f98c641b6b4ec612c199371cc176ded487ba8219ab6bea289ea2508b9d1a5e1  1.100.0/facade/nist

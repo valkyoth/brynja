@@ -3,6 +3,17 @@ use crate::aes_gcm::tests::sample_iv;
 use core::cell::Cell;
 extern crate std;
 
+#[cfg(all(
+    feature = "aes-static-execution",
+    feature = "ghash-runtime-execution",
+    target_os = "linux",
+    target_arch = "x86_64",
+    target_feature = "aes",
+    target_feature = "sse2"
+))]
+#[path = "x86_pair_tests.rs"]
+mod x86_pair;
+
 // Exercise the underlying construction for externally specified vector IVs.
 // Production senders must not get this test-only nonce selection shortcut.
 fn seal(
@@ -164,16 +175,15 @@ struct FailAt<'a, K> {
     remaining: Cell<usize>,
 }
 impl<K: Forward> Forward for FailAt<'_, K> {
-    fn encrypt<'a>(
-        &self,
-        input: &Block,
-        out: &'a mut Block,
-    ) -> Result<SecretBlock<'a>, aes::Error> {
+    fn hash_route(&self) -> &impl HashRoute {
+        self.key.hash_route()
+    }
+    fn encrypt<'a>(&self, input: &Block, out: &'a mut Block) -> Result<SecretBlock<'a>, Error> {
         self.remaining.set(
             self.remaining
                 .get()
                 .checked_sub(1)
-                .ok_or(aes::Error::SecretMemory)?,
+                .ok_or(Error::Aes(aes::Error::SecretMemory))?,
         );
         self.key.encrypt(input, out)
     }
@@ -184,14 +194,13 @@ fn subkey_derivation_error_never_starts_ghash_or_commits_output() -> Result<(), 
     use crate::ghash::TEST_STARTS;
     struct RejectSubkey(Cell<usize>);
     impl Forward for RejectSubkey {
-        fn encrypt<'a>(
-            &self,
-            input: &Block,
-            _: &'a mut Block,
-        ) -> Result<SecretBlock<'a>, aes::Error> {
+        fn hash_route(&self) -> &impl HashRoute {
+            &PortableHash
+        }
+        fn encrypt<'a>(&self, input: &Block, _: &'a mut Block) -> Result<SecretBlock<'a>, Error> {
             assert_eq!(input, &[0; 16]); // AES_K(0), not a later mask or payload call
             self.0.set(self.0.get() + 1);
-            Err(aes::Error::SecretMemory)
+            Err(Error::Aes(aes::Error::SecretMemory))
         }
     }
     let mut schedule = [0; 176];

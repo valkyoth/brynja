@@ -24768,7 +24768,7 @@
       ]
     }
   ],
-  "policy_sha256": "07561e0729dfebdcca746d9ae8c32eb17da721f23b1e5652ae6c2dc58a6665a7",
+  "policy_sha256": "10d31740e38a11b54f8fcec7bef6bcb479dc1b69a4d831a5fe0669826fbeba9f",
   "registered_secret_owners": [
     {
       "capability": "algorithm.hkdf",

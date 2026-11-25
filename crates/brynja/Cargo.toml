@@ -1,6 +1,6 @@
 [package]
 name = "brynja"
-version = "0.29.2"
+version = "0.29.3"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
@@ -13,6 +13,8 @@ include = ["Cargo.toml","LICENSE-APACHE","LICENSE-MIT","README.md","src/**/*.rs"
 default = []
 aes-gcm = ["brynja-crypto/aes-gcm"]
 gmac = ["brynja-crypto/gmac"]
+aes-gcm-execution = ["brynja-crypto/aes-gcm-execution"]
+gmac-execution = ["brynja-crypto/gmac-execution"]
 hazmat-aes-block = ["brynja-crypto/hazmat-aes-block"]
 hazmat-ghash = ["brynja-crypto/hazmat-ghash"]
 ghash-runtime-execution = ["hazmat-ghash", "brynja-crypto/ghash-runtime-execution"]

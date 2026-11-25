@@ -7082,7 +7082,9 @@ Exit criteria:
 
 ### v0.29.2 - AES-GCM And GMAC Portable Public API Acceptance
 
-Status: in progress
+Status: released
+
+Signed internal tag `v0.29.2` at `59316d73`. No registry publication.
 
 The [frozen downstream fixture](../assurance/aead-portable-acceptance/README.md)
 exercises the direct and facade APIs from Cargo archives. The full replay is
@@ -7112,7 +7114,13 @@ Exit criteria:
 
 ### v0.29.3 - Integrated Accelerated AES-GCM And GMAC
 
-Status: planned
+Status: awaiting pentest
+
+The [integration checklist](assurance/aead-accelerated-development.md) tracks
+the specialized x86-64 AES-NI/PCLMUL pair on Linux and Windows and the
+little-endian AArch64 AES/PMULL pair on Linux and macOS. Native functional
+checks passed on all four OS/architecture combinations. Ordinary constructors remain portable. Arm GHASH
+timing remains unresolved; the evidence-only RV64 AES route is not admitted.
 
 Plan scope: Integrate only admitted AES and GHASH backend pairs into accelerated AES-GCM and GMAC providers with per-operation dispatch, preserving every nonce, limit, buffer, authentication, failure-atomicity, cancellation, equivalence, health, and scalar-fallback rule; prohibit mixed, unhealthy, or unvalidated pairings.
 

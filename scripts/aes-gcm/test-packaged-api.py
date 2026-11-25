@@ -1,6 +1,8 @@
 """Negative controls for archive evidence (no Cargo processes needed)."""
 import importlib.util
 import hashlib
+import json
+import copy
 from pathlib import Path
 import shutil
 from subprocess import CompletedProcess
@@ -15,9 +17,217 @@ spec.loader.exec_module(runner)
 spec = importlib.util.spec_from_file_location("combined", Path(__file__).with_name("check-portable-acceptance.py"))
 combined = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(combined)
+spec = importlib.util.spec_from_file_location("paired", Path(__file__).with_name("check-paired-archives.py"))
+paired = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(paired)
 
 
 class ArchiveTests(unittest.TestCase):
+    def test_cargo_artifact_is_exactly_the_non_test_consumer_example(self):
+        with tempfile.TemporaryDirectory() as directory:
+            expected = Path(directory) / "gcmvs"
+            expected.touch()
+            msg = dict(reason="compiler-artifact", package_id="consumer", executable=str(expected),
+                       target=dict(name="gcmvs", kind=["example"]), profile=dict(test=False))
+            def result(*messages):
+                return paired.executable("\n".join(map(json.dumps, messages)), "consumer", "gcmvs", expected)
+            self.assertEqual(result(msg), expected)
+            for edit in (dict(package_id="dependency"), dict(profile=dict(test=True)),
+                         dict(target=dict(name="gcmvs", kind=["bin"])), dict(executable=str(expected)+".old")):
+                with self.subTest(edit=edit), self.assertRaises(ValueError):
+                    result(msg | edit)
+            with self.assertRaises(ValueError):
+                result(msg, msg)
+            expected.unlink()
+            expected.symlink_to(Path(__file__).resolve())
+            with self.assertRaises(ValueError):
+                result(msg)
+
+    def test_linked_comparison_resolves_register_origin_not_comments(self):
+        check = paired.linked
+        def count(instructions, target):
+            assembly = "example:\tfile format elf64-x86-64\n10 <verify>:\n" + "\n".join(
+                f" {16+i:x}: {s}" for i, s in enumerate(instructions))
+            image = check["Image"](assembly, "100 R_X86_64_RELATIVE *ABS*+0x" + target)
+            return check["compare_sites"](image, 16, 0x30, 0x40)
+        load = "movq 0x80(%rip), %r15 # 0x100 <fake_label>"
+        call, decide = "callq *%r15", "callq 0x40 <decide>"
+        self.assertEqual(count([load, call, decide], "30"), 1)
+        self.assertEqual(count([load, call, decide], "31"), 0)
+        self.assertEqual(count([load, "xorl %r15d, %r15d", call, decide], "30"), 0)
+        self.assertEqual(count([decide, load, call], "30"), 0)
+        self.assertEqual(count(["callq 0x31 <accumulate_secret_byte_difference>", decide], "30"), 0)
+
+    def test_linked_frame_requires_connected_native_product(self):
+        check = paired.linked
+        names = ["frame", "AesPair as HashRoute::start", "brynja_crypto::ghash::Ghash::finish",
+                 check["UPDATE"], check["PRODUCT"], check["MULTIPLY"]]
+        ops = [["callq 0x20", "callq 0x30", "callq 0x40"], [], [],
+               ["callq 0x50"], ["jmpq *0x80(%rip) # 0x100"], ["pclmulqdq"]*4 + ["retq"]]
+        def screen(bodies, dest="60"):
+            assembly = ["example:\tfile format elf64-x86-64"]
+            for n, (name, body) in enumerate(zip(names, bodies), 1):
+                assembly.append(f"{16*n:x} <{name}>:")
+                assembly.extend(f" {16*n+i:x}: {s}" for i, s in enumerate(body))
+            image = check["Image"]("\n".join(assembly), "100 R_X86_64_RELATIVE *ABS*+0x" + dest)
+            check["field_route"](image, 16)
+        screen(ops)
+        with self.assertRaises(ValueError):
+            screen(ops, "30")  # multiply is present elsewhere but is no longer reached
+        for idx, replacement in ((0, ops[0][1:]), (3, []), (5, ops[5][1:]), (5, ["jne 0x62"] + ops[5])):
+            with self.subTest(idx=idx), self.assertRaises(ValueError):
+                screen(ops[:idx] + [replacement] + ops[idx+1:])
+
+    def test_linked_aes_requires_matching_width_and_forward_rounds(self):
+        c = paired.linked
+        def screen(width="128", final="aesenclast"):
+            text = ("example:\tfile format elf64-x86-64\n10 <material>:\n 10: callq 0x20\n"
+                    f"20 <{c['PORT']}paired::Aes128ExpandedKey as Forward::encrypt>:\n 20: callq 0x30\n"
+                    f"30 <brynja_crypto_cpu::aes::Session::encrypt{width}>:\n 30: callq 0x40\n"
+                    f"40 <{c['TRANSFORM']}>:\n 40: aesenc\n 45: {final}\n")
+            return c["aes_width"](c["Image"](text, ""), 16)
+        self.assertEqual(screen(), ("128", 64))
+        for args in (("256", "aesenclast"), ("128", "aesdeclast")):
+            with self.subTest(args=args), self.assertRaises(ValueError):
+                screen(*args)
+
+    def test_linked_leaf_rejects_substituted_operation_and_early_exit(self):
+        c = paired.linked
+        wanted = [("orb", "%al, (%rdi)"), ("retq", "")]
+        def screen(instructions):
+            text = "example:\tfile format elf64-x86-64\n10 <leaf>:\n" + "\n".join(
+                f" {16+i:x}: {s}" for i, s in enumerate(instructions))
+            c["check_leaf"](c["Image"](text, ""), "leaf", wanted)
+        screen(["orb %al, (%rdi)", "retq", "int3"])
+        for bad in (["xorb %al, (%rdi)", "retq"], ["jne 0x12", "orb %al, (%rdi)", "retq"]):
+            with self.assertRaises(ValueError):
+                screen(bad)
+
+    def test_archive_graph_allows_only_the_required_native_edge(self):
+        # Build the direct-consumer subgraph from the portable reference lock.
+        lock = tomllib.loads((runner.FIXTURE / "Cargo.lock").read_text())
+        packages = {p["name"]: p for p in lock["package"]}
+        cpu, crypto = "brynja-crypto-cpu", "brynja-crypto"
+        versions = {name: p["version"] for name, p in packages.items()}
+        versions[cpu] = "0.2.0"
+        root = Path("/archive-test")
+        graph = {"resolve": {"root": "consumer", "nodes": []}, "packages": []}
+        nodes = {}
+
+        def add(name, deps, features, path):
+            node = {"id": name, "deps": [{"pkg": d} for d in deps], "features": features}
+            nodes[name] = node
+            graph["resolve"]["nodes"].append(node)
+            graph["packages"].append({"id": name, "name": name, "manifest_path": str(path),
+                                      "features": {"default": []}})
+
+        def visit(name):
+            if name in nodes:
+                return
+            deps = list(packages.get(name, {}).get("dependencies", []))
+            flags = ["default"]
+            if name == crypto:
+                flags = ["gmac", "gmac-execution"]
+                deps.append(cpu)
+            elif name == cpu:
+                flags += ["aes-static-execution", "ghash-runtime-execution"]
+            add(name, deps, flags, root / "unpacked" / f"{name}-{versions[name]}" / "Cargo.toml")
+            for dep in deps:
+                visit(dep)
+
+        add("consumer", [crypto], ["native"], root / "consumer/Cargo.toml")
+        visit(crypto)
+
+        def validate(candidate):
+            runner.check_graph(candidate, root / "consumer", versions, crypto,
+                               paired=True, features=("gmac-execution",))
+
+        validate(graph)
+        for target, field, value in ((crypto, "features", ["gmac", "gmac-execution", "hazmat-aes-block"]),
+                                     (cpu, "features", ["default", "aes-static-execution"]),
+                                     (cpu, "deps", [{"pkg": "brynja-core"}]),
+                                     (crypto, "deps", [d for d in nodes[crypto]["deps"] if d["pkg"] != cpu])):
+            mutant = copy.deepcopy(graph)
+            next(n for n in mutant["resolve"]["nodes"] if n["id"] == target)[field] = value
+            with self.assertRaises(ValueError):
+                validate(mutant)
+        with self.assertRaises(ValueError):
+            runner.check_graph(graph, root / "consumer", versions, crypto, features=("gmac",))
+        # Even a changed reference lock cannot authorize a CPU crate for a
+        # portable consumer. Remove the native features to isolate that guard.
+        nodes[crypto]["features"] = ["gmac"]
+        nodes[cpu]["features"] = ["default"]
+        packages[crypto]["dependencies"].append(cpu)
+        lock["package"].append({"name": cpu, "version": versions[cpu]})
+        with patch.object(runner.tomllib, "loads", return_value=lock), self.assertRaisesRegex(
+            ValueError, "archive dependency graph"
+        ):
+            runner.check_graph(graph, root / "consumer", versions, crypto, features=("gmac",))
+
+    def test_paired_adapter_rejects_missing_or_ambiguous_constructor(self):
+        for family, source, constructor in (
+            ("aes-gcm", "aes-gcm-consumer/examples/gcmvs.rs", "::for_open("),
+            ("gmac", "gmac-consumer/src/lib.rs", "::for_verify("),
+        ):
+            original = (runner.ROOT / "assurance" / source).read_text()
+            native = paired.paired_source(original, family)
+            self.assertEqual(native.count("(&pair, "), 3)
+            self.assertEqual(native.count("AesPair::require()"), 1)
+            self.assertIn("execution::{AesPair", native)
+            for changed in (original.replace(constructor, "::other("), original + constructor):
+                with self.assertRaisesRegex(ValueError, "one expected call"):
+                    paired.paired_source(changed, family)
+
+    def test_paired_controls_use_data_and_change_only_the_intended_field(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "go.tsv"
+            for family, rest, kinds in (
+                ("aes-gcm", ["aa", "cc", "bb", "44"], ["seal", "seal-in-place", "open", "open-disjoint", "reject", "reject-disjoint"]),
+                ("gmac", ["aa", "44"], ["seal", "open", "reject"]),
+            ):
+                records = [[k, "11", "22", *rest] for k in kinds]
+                empty = [[*f[:3], *[""] * (len(rest) - 1), "44"] for f in records]
+                path.write_text("".join("\t".join(f) + "\n" for f in empty + records))
+                actual = [row.rstrip("\n").split("\t") for row in paired.controls(path, family)]
+                expected = []
+                for f in records:
+                    k = f[0]
+                    altered = f.copy()
+                    if k.startswith("seal"):
+                        altered[-1] = "04"
+                    else:
+                        altered[0] = k.replace("open", "reject") if k.startswith("open") else k.replace("reject", "open")
+                    expected.append(altered)
+                    if family == "aes-gcm" and not k.startswith("reject"):
+                        altered = f.copy()
+                        if k.startswith("seal"):
+                            altered[4] = "0c"
+                        else:
+                            altered[5] = "0b"
+                        expected.append(altered)
+                self.assertCountEqual(actual, expected)
+                path.write_text("".join("\t".join(f) + "\n" for f in empty + records[:-1]))
+                with self.assertRaisesRegex(ValueError, "incomplete nonempty"):
+                    list(paired.controls(path, family))
+
+    def test_native_registration_tracks_archive_and_all_eight_results(self):
+        registry = tomllib.loads((runner.ROOT / "verification/checks.toml").read_text())
+        check, = (c for c in registry["checks"] if c["id"] == "x86-packaged-pair")
+        groups = [registry["groups"][group] for group in check["inputs"]]
+        paths = {Path(p) for group in groups for p in group.get("paths", [])}
+        self.assertIn("references/local/gcmtestvectors.zip",
+                      {p for group in groups for p in group.get("optional_paths", [])})
+        for name in combined.INPUTS | {check["command"][1], "assurance/aead-portable-acceptance/SHA256SUMS",
+                                      "scripts/gmac/check-consumer.py", "scripts/aes-gcm/check-gcmvs.py",
+                                      "assurance/aes-kernel-candidate/probe.rs", "scripts/aes-gcm/paired_linked.py"}:
+            self.assertTrue(any(Path(name).is_relative_to(p) for p in paths), name)
+        markers = {f"{v} {r} {f}: paired Go and NIST archives passed"
+                   for v in ("1.90.0", "1.100.0") for r in ("direct", "facade") for f in ("aes-gcm", "gmac")}
+        self.assertEqual(set(check["success"]["unique_lines"]), markers | {"X86_PAIRED_AEAD_ARCHIVES_COMPLETE"})
+        self.assertEqual(check["platform"], "linux-x86_64")
+        self.assertIn("X86_PAIRED_AEAD_LINKED_COMPLETE", check["success"]["contains"])
+        self.assertIn("llvm-objdump", {t["program"] for g in groups for t in g.get("tools", [])})
+
     def test_replay_rejects_a_consumer_that_ignores_the_verify_outcome(self):
         with tempfile.TemporaryDirectory() as directory:
             data = Path(directory) / "rows"

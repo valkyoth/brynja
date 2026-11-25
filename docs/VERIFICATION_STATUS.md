@@ -1,5 +1,23 @@
 # Component Verification Status
 
+## Accelerated AES-GCM and GMAC (v0.29.3 development)
+
+`brynja-verify run aes_gcm x86-pair-development` exercises the private
+framing and opt-in public AES-NI/PCLMUL owners on a suitable Linux x86-64
+host. `brynja-verify run aes_gcm x86-packaged-pair` passed the Go and NIST
+functional replays and a bounded screen of the AES, GHASH and tag-comparison
+paths in the same eight linked executables on both compiler endpoints.
+Ordinary constructors remain portable. See the
+[integration checklist](assurance/aead-accelerated-development.md) for the
+admission contract, stage-by-stage x86 error/unwind coverage, and the
+limits of the linked-code check. Both compiler endpoints completed the scoped
+x86 timing screen on one AMD host without an alarm; the retained records can
+be replayed with `brynja-verify run aes_gcm x86-pair-timing-record`.
+The paired operations also passed native route, lifecycle and packaged corpus
+tests on Linux ARM64, Apple Silicon and Windows x86-64 (KVM guest) on both
+compiler endpoints. `brynja-verify run aes_gcm native-pair-functional-records`
+validates those retained records; it does not run new native or timing tests.
+
 ## Packaged portable AES-GCM and GMAC (v0.29.2)
 
 `brynja-verify run gmac packaged-portable-acceptance` runs both Go

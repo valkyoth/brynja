@@ -1,6 +1,6 @@
 {
-  "closure_policy_sha256": "83ed939487e819c53d281439f3c456596d4ad499f1ea3a347a4bf6205abe5dd5",
-  "domain_policy_sha256": "f8b07d95d127e8e87e1ed8053ae3b943dee7ec93912a029b4e612b6141605e26",
+  "closure_policy_sha256": "a424947feae228321c799a89067c763b1acc35ff71dd2c95dcad3d72a2ddad69",
+  "domain_policy_sha256": "5bda95e48cb43c462d564812a17005caef069d13f66a9c3964ffa13cb6b5b976",
   "policy_sha256": "39cc0928fadb9b95f814ae873c98641edaf172c8d5be9fb322fcb652eff3a38d",
   "requirements": [
     {
@@ -1362,8 +1362,8 @@
       "mapping_scope": "reviewed-domain",
       "owner": "0.29.0",
       "profile": "crypto-encoding-pkix",
-      "residual": "Protocol milestones must impose stricter nonce construction and per-key limits where their security analysis requires them.",
-      "revision": 4,
+      "residual": "Protocol milestones must impose stricter nonce construction and per-key limits where their security analysis requires them. The opt-in owner requires a healthy AES-NI/PCLMUL or Arm AES/PMULL pair and stable usable ISA; it must not retry with portable code after a failed check. See docs/assurance/aead-accelerated-development.md.",
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -3761,7 +3761,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "The public portable APIs have NIST AAD-only, independent boundary and ownership evidence; see docs/assurance/gmac-development.md. Cortex-M is compile-only. No independent qualification, hardware acceleration, machine-code timing guarantee or full-construction proof is established.",
+      "evidence_gap": "The portable API has NIST AAD-only, independent boundary and ownership evidence. The separate Linux x86-64 AES-NI/PCLMUL pair has packaged replay, bounded linked-code inspection and scoped timing observations on one AMD host; see docs/assurance/aead-accelerated-development.md. Cortex-M is compile-only. The Windows x86-64 and Linux/macOS ARM64 integrations have separate functional records; no timing qualification or full-construction proof is established.",
       "id": "BRY-REQ-CRYPTO-0021",
       "invariants": [
         "constant-time",
@@ -3776,7 +3776,7 @@
       "owner": "0.29.1",
       "profile": "crypto-encoding-pkix",
       "residual": "Use a dedicated key, one tag width per key and durable cross-import IV allocation; applications must also bound verification attempts, enforce replay policy and supply separate confidentiality when needed.",
-      "revision": 1,
+      "revision": 2,
       "scope": "protocol",
       "sources": [
         {

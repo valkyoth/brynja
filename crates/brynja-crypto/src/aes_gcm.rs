@@ -68,6 +68,30 @@ struct Frame {
     budget: u64,
 }
 
+// One selection supplies both IV hashing and message hashing. The caller
+// cannot inject an implementation through a public GCM or GMAC constructor.
+trait HashRoute {
+    fn start<'a>(
+        &'a self,
+        h: &'a [u8; 16],
+        workspace: &'a mut [u8; 16],
+        budget: u64,
+    ) -> Result<Ghash<'a>, Error>;
+}
+
+struct PortableHash;
+
+impl HashRoute for PortableHash {
+    fn start<'a>(
+        &self,
+        h: &'a [u8; 16],
+        workspace: &'a mut [u8; 16],
+        budget: u64,
+    ) -> Result<Ghash<'a>, Error> {
+        Ok(Ghash::new(h, workspace, budget))
+    }
+}
+
 fn pad(bytes: u64) -> u64 {
     bytes.wrapping_neg() & 15
 }
@@ -97,13 +121,14 @@ impl Frame {
 
     fn hash<'a>(
         self,
+        route: &impl HashRoute,
         h: &[u8; 16],
         left: &[u8],
         right: &[u8],
         out: &'a mut [u8; 16],
     ) -> Result<SecretHash<'a>, Error> {
         let mut workspace = [0; 16];
-        let mut hash = Ghash::new(h, &mut workspace, self.budget);
+        let mut hash = route.start(h, &mut workspace, self.budget)?;
         for bytes in [left, right] {
             hash.update(bytes)?;
             let padding = bytes.len().wrapping_neg() & 15;
@@ -126,7 +151,7 @@ fn auth_hash<'a>(
     ciphertext: &[u8],
     out: &'a mut [u8; 16],
 ) -> Result<SecretHash<'a>, Error> {
-    Frame::message(size(aad)?, size(ciphertext)?)?.hash(h, aad, ciphertext, out)
+    Frame::message(size(aad)?, size(ciphertext)?)?.hash(&PortableHash, h, aad, ciphertext, out)
 }
 
 enum InitialCounter<'a> {
@@ -135,6 +160,7 @@ enum InitialCounter<'a> {
 }
 
 fn initial_counter<'a>(
+    route: &impl HashRoute,
     h: &[u8; 16],
     iv: &[u8],
     out: &'a mut [u8; 16],
@@ -149,7 +175,7 @@ fn initial_counter<'a>(
         }
         _ => {
             // §7.1: IV || pad || 0^64 || [len(IV)]_64.
-            let hash = Frame::lengths(0, size(iv)?)?.hash(h, &[], iv, out)?;
+            let hash = Frame::lengths(0, size(iv)?)?.hash(route, h, &[], iv, out)?;
             Ok(InitialCounter::FromSecretHash(hash))
         }
     }
@@ -163,11 +189,15 @@ fn inc32(counter: &mut [u8; 16]) {
     [*a, *b, *c, *d] = word.wrapping_add(1).to_be_bytes();
 }
 
+#[cfg(all(test, any(feature = "aes-gcm-execution", feature = "gmac-execution")))]
+pub(crate) mod interruptions;
 #[cfg(test)]
 mod tests;
 
 #[cfg(any(feature = "aes-gcm", feature = "gmac", feature = "hazmat-aes-block"))]
 pub(crate) mod portable;
 
+#[cfg(feature = "aes-gcm-execution")]
+pub use portable::api::execution;
 #[cfg(feature = "aes-gcm")]
 pub use portable::api::{Aes128Gcm, Aes192Gcm, Aes256Gcm, GcmError};

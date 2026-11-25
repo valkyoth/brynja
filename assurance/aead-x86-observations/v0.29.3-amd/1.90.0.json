@@ -1,0 +1,155 @@
+{
+  "raw_sha256": "d67f988b3158ef6a82fb5200c7767289f7c14f69b69f09271325c1f4c92d50c2",
+  "results": {
+    "128-seal-identical": {
+      "delta_ns": -61.8828125,
+      "paired_t": -1.0597391406136443,
+      "welch_t": -1.0597585175924213,
+      "status": "within-protocol"
+    },
+    "128-seal-values": {
+      "delta_ns": 1.7578125,
+      "paired_t": 0.5183683568580046,
+      "welch_t": 0.5132518245073837,
+      "status": "within-protocol"
+    },
+    "128-open-reject-identical": {
+      "delta_ns": -9.4228515625,
+      "paired_t": -0.9814566676713741,
+      "welch_t": -0.9808600923623131,
+      "status": "within-protocol"
+    },
+    "128-open-reject-values": {
+      "delta_ns": -7.71875,
+      "paired_t": -1.6730808154771328,
+      "welch_t": -1.6734468958918216,
+      "status": "within-protocol"
+    },
+    "128-generate-identical": {
+      "delta_ns": -3.6630859375,
+      "paired_t": -0.7071576048050234,
+      "welch_t": -0.7038275738761757,
+      "status": "within-protocol"
+    },
+    "128-generate-values": {
+      "delta_ns": 3.53125,
+      "paired_t": 0.5912527647274388,
+      "welch_t": 0.5905791934704886,
+      "status": "within-protocol"
+    },
+    "128-verify-reject-identical": {
+      "delta_ns": 4.603515625,
+      "paired_t": 1.4521906631438914,
+      "welch_t": 1.4541837684782655,
+      "status": "within-protocol"
+    },
+    "128-verify-reject-values": {
+      "delta_ns": 0.916015625,
+      "paired_t": 0.27723547636714424,
+      "welch_t": 0.2764863147769686,
+      "status": "within-protocol"
+    },
+    "192-seal-identical": {
+      "delta_ns": -4.560546875,
+      "paired_t": -1.1310075177305727,
+      "welch_t": -1.130646691313134,
+      "status": "within-protocol"
+    },
+    "192-seal-values": {
+      "delta_ns": -2.96875,
+      "paired_t": -0.7321020255157327,
+      "welch_t": -0.7349235993898631,
+      "status": "within-protocol"
+    },
+    "192-open-reject-identical": {
+      "delta_ns": -6.525390625,
+      "paired_t": -1.3514796707992205,
+      "welch_t": -1.3449988299299038,
+      "status": "within-protocol"
+    },
+    "192-open-reject-values": {
+      "delta_ns": -12.4912109375,
+      "paired_t": -1.6246150255688372,
+      "welch_t": -1.6225040240580724,
+      "status": "within-protocol"
+    },
+    "192-generate-identical": {
+      "delta_ns": -12.0283203125,
+      "paired_t": -1.5653509492465794,
+      "welch_t": -1.5670775697613233,
+      "status": "within-protocol"
+    },
+    "192-generate-values": {
+      "delta_ns": -11.09765625,
+      "paired_t": -1.4092151684159315,
+      "welch_t": -1.40786853115644,
+      "status": "within-protocol"
+    },
+    "192-verify-reject-identical": {
+      "delta_ns": -5.9521484375,
+      "paired_t": -1.0431355009929286,
+      "welch_t": -1.0454398425775906,
+      "status": "within-protocol"
+    },
+    "192-verify-reject-values": {
+      "delta_ns": -4.32421875,
+      "paired_t": -0.7539849309145645,
+      "welch_t": -0.7544692686262777,
+      "status": "within-protocol"
+    },
+    "256-seal-identical": {
+      "delta_ns": 4.7802734375,
+      "paired_t": 0.5081475460490495,
+      "welch_t": 0.5083924272885232,
+      "status": "within-protocol"
+    },
+    "256-seal-values": {
+      "delta_ns": -6.9501953125,
+      "paired_t": -0.9700043566616818,
+      "welch_t": -0.9696579092050348,
+      "status": "within-protocol"
+    },
+    "256-open-reject-identical": {
+      "delta_ns": -0.443359375,
+      "paired_t": -0.12639313544013456,
+      "welch_t": -0.12648315096535337,
+      "status": "within-protocol"
+    },
+    "256-open-reject-values": {
+      "delta_ns": 1.9345703125,
+      "paired_t": 0.5384442282266045,
+      "welch_t": 0.5359887564564343,
+      "status": "within-protocol"
+    },
+    "256-generate-identical": {
+      "delta_ns": -0.673828125,
+      "paired_t": -0.21891618040108518,
+      "welch_t": -0.21617493400306362,
+      "status": "within-protocol"
+    },
+    "256-generate-values": {
+      "delta_ns": -6.3916015625,
+      "paired_t": -1.2778464686672284,
+      "welch_t": -1.2682295196994653,
+      "status": "within-protocol"
+    },
+    "256-verify-reject-identical": {
+      "delta_ns": 14.7548828125,
+      "paired_t": 1.101090689476693,
+      "welch_t": 1.099133906837041,
+      "status": "within-protocol"
+    },
+    "256-verify-reject-values": {
+      "delta_ns": -3.4599609375,
+      "paired_t": -0.4060346270784483,
+      "welch_t": -0.4067454119025164,
+      "status": "within-protocol"
+    },
+    "sensitivity": {
+      "delta_ns": -90.11328125,
+      "paired_t": -173.54467768040027,
+      "welch_t": -175.45965790886945,
+      "status": "within-protocol"
+    }
+  }
+}

@@ -517,6 +517,25 @@ class RegistryTests(unittest.TestCase):
     def test_registered_harnesses_and_explicit_closures(self):
         validate(self.registry)
 
+    def test_x86_gcm_pair_binds_baseline_probe_and_both_toolchains(self):
+        check, = (c for c in self.registry['checks'] if
+                  (c['component'], c['id']) == ('aes_gcm', 'x86-pair-development'))
+        groups = [self.registry['groups'][key] for key in check['inputs']]
+        paths = {path for group in groups for path in group.get('paths', [])}
+        self.assertTrue({check['command'][1], 'assurance/aes-kernel-candidate/probe.rs',
+                         'scripts/aes/check-aes-static.py', 'crates/brynja-crypto/src',
+                         'crates/brynja-crypto/tests/aead_pair.rs',
+                         'crates/brynja-crypto-cpu/src', 'Cargo.lock'} <= paths)
+        tools = {(t['program'], t.get('toolchain')) for group in groups for t in group.get('tools', [])}
+        for version in ('1.90.0', '1.100.0'):
+            self.assertTrue({('rustc', version), ('cargo', version)} <= tools)
+            self.assertIn(f'{version}: required AES-NI and PCLMUL composition passed',
+                          check['success']['unique_lines'])
+            self.assertIn(f'{version}: staged native error and unwind sweeps passed',
+                          check['success']['unique_lines'])
+        self.assertIn(('python3', None), tools)
+        self.assertEqual(check['platform'], 'linux-x86_64')
+
     def test_gcm_transaction_proofs_track_the_production_boundary(self):
         check, = (c for c in self.registry['checks'] if
                   (c['component'], c['id']) == ('aes_gcm', 'transaction-proof'))

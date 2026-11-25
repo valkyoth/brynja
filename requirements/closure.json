@@ -1684,7 +1684,7 @@
     {
       "boundary": {
         "class": "internal-security-design",
-        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+        "rationale": "Composition uses the existing GCM and GMAC algorithm requirements without a new wire format. The default-off pairs are AES-NI/PCLMUL on Linux/Windows x86-64 and AES/PMULL on Linux/macOS ARM64. Arm timing remains unresolved. Admission is before key import, failures do not fall back, and ordinary constructors remain portable. The one-host timing screen and bounded linked inspection are not target-wide qualification."
       },
       "requirement_ids": [],
       "scope": "Integrate only admitted AES and GHASH backend pairs into accelerated AES-GCM and GMAC providers with per-operation dispatch, preserving every nonce, limit, buffer, authentication, failure-atomicity, cancellation, equivalence, health, and scalar-fallback rule; prohibit mixed, unhealthy, or unvalidated pairings.",

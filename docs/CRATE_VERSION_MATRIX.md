@@ -1,8 +1,9 @@
 # Crate Version Matrix
 
-Latest signed milestone: v0.29.1, with zero crates selected for publication.
-The internal v0.29.2 candidate bumps the facade to 0.29.2 for packaged
-portable AES-GCM and GMAC acceptance. It does not change package selection.
+Latest signed milestone: v0.29.2, with zero crates selected for publication.
+The internal candidate advances only the facade to 0.29.3;
+ordinary AES-GCM and GMAC constructors remain portable. Separate default-off
+execution features add required x86-64 (Linux/Windows) and ARM64 (Linux/macOS) owners in the checkout.
 Supporting crates keep their internal-train versions. Portable GHASH remains the default constructor in
 `brynja-crypto 0.2.0`; CPU crates remain at 0.2.0 and
 `brynja-legacy-hkdf 0.1.0` is held for a later checkpoint. The RISC-V AES

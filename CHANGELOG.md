@@ -1,6 +1,12 @@
 # Changelog
 
-## 0.29.2 portable AES-GCM and GMAC archive acceptance (candidate)
+## 0.29.3 paired AES-GCM and GMAC (candidate)
+
+- Add default-off AES-NI/PCLMUL and Arm AES/PMULL composition for all three AES key widths.
+  Existing constructors stay portable. The [candidate notes](release-notes/RELEASE_NOTES_0.29.3.md)
+  describe platform requirements, fallback and the limits of the timing result.
+
+## 0.29.2 portable AES-GCM and GMAC archive acceptance (internally tagged)
 
 - Run the [frozen public consumer](assurance/aead-portable-acceptance/README.md)
   against unpacked direct and facade crates. No production API, cryptography,

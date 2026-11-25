@@ -112,7 +112,10 @@ impl Candidate {
         ),
         all(
             feature = "ghash-runtime-execution",
-            target_os = "linux",
+            any(
+                target_os = "linux",
+                all(target_os = "windows", target_arch = "x86_64")
+            ),
             any(target_arch = "x86_64", target_arch = "riscv64")
         ),
         brynja_ghash_pclmul_evidence,

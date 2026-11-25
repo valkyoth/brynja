@@ -4,6 +4,11 @@ reviewed_at = "2026-07-30"
 
 [[plan_boundary]]
 class = "internal-security-design"
+versions = ["0.29.3"]
+rationale = "Composition uses the existing GCM and GMAC algorithm requirements without a new wire format. The default-off pairs are AES-NI/PCLMUL on Linux/Windows x86-64 and AES/PMULL on Linux/macOS ARM64. Arm timing remains unresolved. Admission is before key import, failures do not fall back, and ordinary constructors remain portable. The one-host timing screen and bounded linked inspection are not target-wide qualification."
+
+[[plan_boundary]]
+class = "internal-security-design"
 versions = ["0.27.6"]
 rationale = "The owner narrowed v0.27.6 to dependency-free provider API completion for the three already admitted AES key widths. Local ownership, permissions, failure and output contracts add no new protocol authority. Device clients, native FFI and OpenBao integration are outside this scope; neutral provider contracts are not device support, attestation or qualification evidence."
 
@@ -26,7 +31,7 @@ versions = [
   "0.22.3", "0.23.1", "0.23.2", "0.23.3", "0.24.1", "0.24.3",
   "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11",
   "0.27.3", "0.27.4", "0.28.2",
-  "0.29.3", "0.30.1", "0.31.2", "0.32.1", "0.32.2",
+  "0.30.1", "0.31.2", "0.32.1", "0.32.2",
   "0.33.1", "0.33.2", "0.36.2", "0.39.2", "0.42.2",
   "0.46.2", "0.47.4", "0.48.5", "0.49.3", "0.51.1", "0.87.0",
   "0.87.1", "0.87.2", "0.88.0", "0.101.0", "0.102.0", "0.104.3",

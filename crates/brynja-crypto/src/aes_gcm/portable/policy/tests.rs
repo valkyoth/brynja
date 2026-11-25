@@ -185,18 +185,17 @@ struct Interrupt<K> {
     unwind: bool,
 }
 impl<K: Forward> Forward for Interrupt<K> {
-    fn encrypt<'a>(
-        &self,
-        input: &Block,
-        out: &'a mut Block,
-    ) -> Result<SecretBlock<'a>, aes::Error> {
+    fn hash_route(&self) -> &impl crate::aes_gcm::HashRoute {
+        self.inner.hash_route()
+    }
+    fn encrypt<'a>(&self, input: &Block, out: &'a mut Block) -> Result<SecretBlock<'a>, Error> {
         if let Some(left) = self.left.get() {
             self.left.set(left.checked_sub(1));
             if left == 0 {
                 if self.unwind {
                     std::panic::resume_unwind(std::boxed::Box::new(()));
                 }
-                return Err(aes::Error::SecretMemory);
+                return Err(Error::Aes(aes::Error::SecretMemory));
             }
         }
         self.inner.encrypt(input, out)

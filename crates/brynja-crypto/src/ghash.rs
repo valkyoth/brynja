@@ -70,7 +70,11 @@ mod runtime;
 pub use runtime::{Backend, Mode};
 
 #[cfg(all(
-    feature = "ghash-runtime-execution",
+    any(
+        feature = "ghash-runtime-execution",
+        feature = "aes-gcm-execution",
+        feature = "gmac-execution"
+    ),
     any(
         brynja_ghash_pclmul_evidence,
         brynja_ghash_pmull_evidence,
@@ -126,7 +130,11 @@ pub enum Error {
     #[cfg(feature = "ghash-runtime-execution")]
     Unavailable,
     /// The native backend failed its self-test or is no longer healthy.
-    #[cfg(feature = "ghash-runtime-execution")]
+    #[cfg(any(
+        feature = "ghash-runtime-execution",
+        feature = "aes-gcm-execution",
+        feature = "gmac-execution"
+    ))]
     Quarantined,
     /// Forced evidence backend is unavailable or no longer healthy.
     #[cfg(any(
@@ -143,9 +151,38 @@ pub enum Error {
     Storage(SecretMemoryError),
 }
 
+#[cfg(all(
+    target_arch = "x86_64",
+    any(target_os = "linux", target_os = "windows"),
+    any(feature = "aes-gcm-execution", feature = "gmac-execution")
+))]
+pub(crate) use brynja_crypto_cpu::RuntimePclmul as PairMultiplier;
+#[cfg(all(
+    target_arch = "aarch64",
+    target_endian = "little",
+    any(target_os = "linux", target_os = "macos"),
+    any(feature = "aes-gcm-execution", feature = "gmac-execution")
+))]
+pub(crate) use brynja_crypto_cpu::RuntimePmull as PairMultiplier;
+
 /// One local incremental computation; neither cloneable nor resettable.
 #[must_use]
 pub struct Ghash<'a> {
+    #[cfg(all(
+        any(
+            all(
+                target_arch = "x86_64",
+                any(target_os = "linux", target_os = "windows")
+            ),
+            all(
+                target_arch = "aarch64",
+                target_endian = "little",
+                any(target_os = "linux", target_os = "macos")
+            )
+        ),
+        any(feature = "aes-gcm-execution", feature = "gmac-execution")
+    ))]
+    pair: Option<core::cell::RefMut<'a, PairMultiplier>>,
     #[cfg(feature = "ghash-runtime-execution")]
     engine: runtime::Engine,
     #[cfg(feature = "ghash-runtime-execution")]
@@ -180,6 +217,21 @@ impl<'a> Ghash<'a> {
         TEST_STARTS.set(TEST_STARTS.get().wrapping_add(1));
         let _ = clear_owned_region(workspace);
         Self {
+            #[cfg(all(
+                any(
+                    all(
+                        target_arch = "x86_64",
+                        any(target_os = "linux", target_os = "windows")
+                    ),
+                    all(
+                        target_arch = "aarch64",
+                        target_endian = "little",
+                        any(target_os = "linux", target_os = "macos")
+                    )
+                ),
+                any(feature = "aes-gcm-execution", feature = "gmac-execution")
+            ))]
+            pair: None,
             #[cfg(feature = "ghash-runtime-execution")]
             engine: runtime::Engine::Portable,
             #[cfg(feature = "ghash-runtime-execution")]
@@ -212,6 +264,39 @@ impl<'a> Ghash<'a> {
             .ok_or(Error::CandidateNotReady)
     }
 
+    // Private frames borrow the same already-tested kernel for IV and message
+    // hashing. The enclosing operation owns the failure/unwind latch.
+    #[cfg(all(
+        any(
+            all(
+                target_arch = "x86_64",
+                any(target_os = "linux", target_os = "windows")
+            ),
+            all(
+                target_arch = "aarch64",
+                target_endian = "little",
+                any(target_os = "linux", target_os = "macos")
+            )
+        ),
+        any(feature = "aes-gcm-execution", feature = "gmac-execution")
+    ))]
+    pub(crate) fn from_pair(
+        kernel: &'a core::cell::RefCell<PairMultiplier>,
+        h: &'a [u8; 16],
+        workspace: &'a mut [u8; 16],
+        budget: u64,
+    ) -> Result<Self, Error> {
+        let kernel = kernel.try_borrow_mut().map_err(|_| Error::Quarantined)?;
+        if !kernel.ready() {
+            return Err(Error::Quarantined);
+        }
+        let mut frame = Self::new(h, workspace, budget);
+        frame.pair = Some(kernel);
+        #[cfg(test)]
+        crate::aes_gcm::interruptions::Step::HashStart.hit()?;
+        Ok(frame)
+    }
+
     /// Appends a chunk. An over-budget chunk leaves the entire context unchanged.
     pub fn update(&mut self, bytes: &[u8]) -> Result<(), Error> {
         #[cfg(feature = "ghash-runtime-execution")]
@@ -242,6 +327,33 @@ impl<'a> Ghash<'a> {
                 owner.used = owner.used.wrapping_add(1); // at most 16
             }
             if owner.used == 16 {
+                #[cfg(all(
+                    any(
+                        all(
+                            target_arch = "x86_64",
+                            any(target_os = "linux", target_os = "windows")
+                        ),
+                        all(
+                            target_arch = "aarch64",
+                            target_endian = "little",
+                            any(target_os = "linux", target_os = "macos")
+                        )
+                    ),
+                    any(feature = "aes-gcm-execution", feature = "gmac-execution")
+                ))]
+                if let Some(kernel) = &mut owner.pair {
+                    let value = kernel
+                        .product(
+                            u128::from_be_bytes(*owner.state),
+                            u128::from_be_bytes(*owner.h),
+                        )
+                        .map_err(|_| Error::Quarantined)?;
+                    *owner.state = value.to_be_bytes();
+                    owner.used = 0;
+                    #[cfg(test)]
+                    crate::aes_gcm::interruptions::Step::Product.hit()?;
+                    continue;
+                }
                 #[cfg(not(any(
                     feature = "ghash-runtime-execution",
                     brynja_ghash_pclmul_evidence,

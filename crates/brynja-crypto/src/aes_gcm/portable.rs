@@ -1,5 +1,5 @@
 //! Portable composition shared by the key owners and the vector tests.
-use super::{Frame, InitialCounter, inc32, initial_counter, size};
+use super::{Frame, HashRoute, InitialCounter, PortableHash, inc32, initial_counter, size};
 use crate::aes::{self, Aes128ExpandedKey, Aes192ExpandedKey, Aes256ExpandedKey, SecretBlock};
 use brynja_core::clear_owned_region;
 
@@ -10,27 +10,43 @@ enum Error {
     Length,
     Authentication,
     Aes(aes::Error),
+    #[cfg(feature = "aes-static-execution")]
+    AcceleratedAes(aes::execution::Error),
     Hash(crate::ghash::Error),
     Invariant,
     Exhausted,
     TagLength,
 }
 
+#[cfg(feature = "aes-static-execution")]
+impl From<aes::execution::Error> for Error {
+    fn from(error: aes::execution::Error) -> Self {
+        Self::AcceleratedAes(error)
+    }
+}
+
 // Private, not a downstream provider contract. GCM uses forward AES only.
 trait Forward {
-    fn encrypt<'a>(&self, input: &Block, out: &'a mut Block)
-    -> Result<SecretBlock<'a>, aes::Error>;
+    // Runs inside the staging transaction, after input/nonce admission.
+    fn operation<T>(&self, work: impl FnOnce() -> Result<T, Error>) -> Result<T, Error> {
+        work()
+    }
+    fn hash_route(&self) -> &impl HashRoute;
+    fn encrypt<'a>(&self, input: &Block, out: &'a mut Block) -> Result<SecretBlock<'a>, Error>;
 }
 
 macro_rules! forward {
     ($owner:ident) => {
         impl Forward for $owner<'_> {
+            fn hash_route(&self) -> &impl HashRoute {
+                &PortableHash
+            }
             fn encrypt<'a>(
                 &self,
                 input: &Block,
                 out: &'a mut Block,
-            ) -> Result<SecretBlock<'a>, aes::Error> {
-                self.encrypt_block(input, out)
+            ) -> Result<SecretBlock<'a>, Error> {
+                self.encrypt_block(input, out).map_err(Error::Aes)
             }
         }
     };
@@ -72,20 +88,21 @@ fn admit(iv: &[u8], aad: &[u8], input: &[u8]) -> Result<Frame, Error> {
 
 fn with_material<T>(
     key: &impl Forward,
+    route: &impl HashRoute,
     iv: &[u8],
     use_material: impl FnOnce(&Block, &Block, &Block) -> Result<T, Error>,
 ) -> Result<T, Error> {
     let mut h_storage = [0; 16];
-    let h = key.encrypt(&[0; 16], &mut h_storage).map_err(Error::Aes)?;
+    let h = key.encrypt(&[0; 16], &mut h_storage)?;
     let h = as_block(h.expose())?;
     let mut iv_storage = [0; 16];
-    let initial = initial_counter(h, iv, &mut iv_storage).map_err(Error::Hash)?;
+    let initial = initial_counter(route, h, iv, &mut iv_storage).map_err(Error::Hash)?;
     let j0 = match &initial {
         InitialCounter::FromPublicIv(block) => block,
         InitialCounter::FromSecretHash(secret) => as_block(secret.expose())?,
     };
     let mut mask_storage = [0; 16];
-    let mask = key.encrypt(j0, &mut mask_storage).map_err(Error::Aes)?;
+    let mask = key.encrypt(j0, &mut mask_storage)?;
     use_material(h, j0, as_block(mask.expose())?)
 }
 
@@ -95,9 +112,7 @@ fn gctr(key: &impl Forward, j0: &Block, input: &[u8], stage: &mut [u8]) -> Resul
     for (src, dst) in input.chunks(16).zip(stage.chunks_mut(16)) {
         inc32(&mut counter.0);
         let mut stream_storage = [0; 16];
-        let stream = key
-            .encrypt(&counter.0, &mut stream_storage)
-            .map_err(Error::Aes)?;
+        let stream = key.encrypt(&counter.0, &mut stream_storage)?;
         for ((out, p), k) in dst.iter_mut().zip(src).zip(as_block(stream.expose())?) {
             *out = p ^ k;
         }
@@ -106,6 +121,7 @@ fn gctr(key: &impl Forward, j0: &Block, input: &[u8], stage: &mut [u8]) -> Resul
 }
 
 fn masked_tag(
+    route: &impl HashRoute,
     frame: Frame,
     h: &Block,
     mask: &Block,
@@ -115,7 +131,7 @@ fn masked_tag(
 ) -> Result<(), Error> {
     let mut s_storage = [0; 16];
     let s = frame
-        .hash(h, aad, ciphertext, &mut s_storage)
+        .hash(route, h, aad, ciphertext, &mut s_storage)
         .map_err(Error::Hash)?;
     for ((out, m), hash) in tag.iter_mut().zip(mask).zip(as_block(s.expose())?) {
         *out = m ^ hash;
@@ -147,12 +163,15 @@ fn seal_admitted<const T: usize>(
 ) -> Result<[u8; T], Error> {
     let stage = Stage(scratch);
     io.transact(stage.0, Error::Length, |input, work| {
-        with_material(key, iv, |h, j0, mask| {
-            gctr(key, j0, input, work)?;
-            // For truncated tags, the undisclosed suffix must not be left behind.
-            let mut full = ClearingBlock([0; 16]);
-            masked_tag(frame, h, mask, aad, work, &mut full.0)?;
-            Ok(*policy.prefix(&full.0)?)
+        key.operation(|| {
+            let route = key.hash_route();
+            with_material(key, route, iv, |h, j0, mask| {
+                gctr(key, j0, input, work)?;
+                // For truncated tags, the undisclosed suffix must not be left behind.
+                let mut full = ClearingBlock([0; 16]);
+                masked_tag(route, frame, h, mask, aad, work, &mut full.0)?;
+                Ok(*policy.prefix(&full.0)?)
+            })
         })
     })
 }
@@ -169,24 +188,30 @@ fn open_with<const T: usize>(
     let frame = io.frame(iv, aad, scratch)?;
     let stage = Stage(scratch);
     io.transact(stage.0, Error::Length, |input, work| {
-        with_material(key, iv, |h, j0, mask| {
-            let mut expected = ClearingBlock([0; 16]);
-            masked_tag(frame, h, mask, aad, input, &mut expected.0)?;
-            let mut difference = 0u8;
-            for (a, b) in policy.prefix(&expected.0)?.iter().zip(tag) {
-                brynja_core::accumulate_secret_byte_difference(&mut difference, a, b);
-            }
-            let ok = brynja_core::secret_difference_is_zero(&difference).expose_public();
-            let _ = clear_owned_region(core::slice::from_mut(&mut difference));
-            if !ok {
-                return Err(Error::Authentication);
-            }
-            gctr(key, j0, input, work)
+        key.operation(|| {
+            let route = key.hash_route();
+            with_material(key, route, iv, |h, j0, mask| {
+                let mut expected = ClearingBlock([0; 16]);
+                masked_tag(route, frame, h, mask, aad, input, &mut expected.0)?;
+                let mut difference = 0u8;
+                for (a, b) in policy.prefix(&expected.0)?.iter().zip(tag) {
+                    brynja_core::accumulate_secret_byte_difference(&mut difference, a, b);
+                }
+                let ok = brynja_core::secret_difference_is_zero(&difference).expose_public();
+                let _ = clear_owned_region(core::slice::from_mut(&mut difference));
+                if !ok {
+                    return Err(Error::Authentication);
+                }
+                gctr(key, j0, input, work)
+            })
         })
     })
 }
 
 mod policy;
+
+#[cfg(any(feature = "aes-gcm-execution", feature = "gmac-execution"))]
+mod paired;
 
 #[cfg(feature = "gmac")]
 pub mod gmac;

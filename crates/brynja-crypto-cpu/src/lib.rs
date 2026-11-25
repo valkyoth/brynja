@@ -124,7 +124,10 @@ pub const ADMITTED_BACKEND_COUNT: usize = 0;
     ),
     all(
         feature = "ghash-runtime-execution",
-        target_os = "linux",
+        any(
+            target_os = "linux",
+            all(target_os = "windows", target_arch = "x86_64")
+        ),
         any(target_arch = "x86_64", target_arch = "riscv64")
     ),
     all(brynja_ghash_pclmul_evidence, target_arch = "x86_64"),
@@ -145,7 +148,10 @@ extern crate std;
     any(
         test,
         brynja_ghash_pclmul_evidence,
-        all(feature = "ghash-runtime-execution", target_os = "linux")
+        all(
+            feature = "ghash-runtime-execution",
+            any(target_os = "linux", target_os = "windows")
+        )
     ),
     target_arch = "x86_64"
 ))]
@@ -153,7 +159,7 @@ mod ghash_pclmul;
 
 #[cfg(all(
     feature = "ghash-runtime-execution",
-    target_os = "linux",
+    any(target_os = "linux", target_os = "windows"),
     target_arch = "x86_64"
 ))]
 #[doc(hidden)]

@@ -31,6 +31,9 @@ CRYPTO = {'cpu': ['dep:brynja-crypto-cpu'], 'aes-gcm': [], 'gmac': [], 'hazmat-a
 CRYPTO.update({feature: ([] if feature == 'general-sha512-t' else ['cpu']) +
               [owner + '/' + leaf] for feature, (owner, leaf) in LEAVES.items()})
 CRYPTO['aes-static-execution'] = ['hazmat-aes-block', 'cpu', 'brynja-crypto-cpu/aes-static-execution']
+for composition in ('aes-gcm', 'gmac'):
+    CRYPTO[composition + '-execution'] = [composition, 'dep:brynja-crypto-cpu',
+        'brynja-crypto-cpu/aes-static-execution', 'brynja-crypto-cpu/ghash-runtime-execution']
 CRYPTO['aes-runtime-execution'] = ['aes-static-execution', 'brynja-crypto-cpu/aes-runtime-execution']
 CRYPTO['ghash-runtime-execution'] = ['hazmat-ghash', 'dep:brynja-crypto-cpu',
                                      'brynja-crypto-cpu/ghash-runtime-execution']

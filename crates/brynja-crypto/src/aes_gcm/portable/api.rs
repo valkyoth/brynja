@@ -30,7 +30,7 @@ impl From<Error> for GcmError {
 }
 
 macro_rules! owner {
-    ($name:ident, $aes:ident, $width:literal, $size:literal, $description:literal) => {
+    ($name:ident, $aes:ident, $width:literal, $size:literal, $description:literal $(, $pair:ident)?) => {
         #[doc = $description]
         #[must_use]
         pub struct $name<'a, const TAG_BYTES: usize = 16, const IV_BYTES: usize = 12>(
@@ -45,14 +45,14 @@ macro_rules! owner {
             /// Use this unrestricted counter profile only with a key dedicated
             /// to deterministic 96-bit IVs. For mixed lengths, reserve from a
             /// single key-wide budget and use `from_reserved_invocations`.
-            pub fn from_reserved_range(
+            pub fn from_reserved_range($( $pair: &'a AesPair, )?
                 key: &[u8; $width],
                 schedule: &'a mut [u8; $size],
                 prefix: [u8; 4],
                 first: u64,
                 count: u64,
             ) -> Result<Self, GcmError> {
-                let aes = $aes::new(key, schedule).map_err(|_| GcmError::Operation)?;
+                let aes = $aes::new($($pair,)? key, schedule).map_err(|_| GcmError::Operation)?;
                 Ok(Self(Key::from_reserved_range(aes, prefix, first, count)?))
             }
         }
@@ -61,11 +61,11 @@ macro_rules! owner {
             /// Import a receiving key for exactly `N`-byte IVs (default: 12).
             /// Zero is not a valid IV width. No sending IVs are allocated.
             /// All attempts to seal with this owner return `Exhausted`.
-            pub fn for_open(
+            pub fn for_open($( $pair: &'a AesPair, )?
                 key: &[u8; $width],
                 schedule: &'a mut [u8; $size],
             ) -> Result<Self, GcmError> {
-                let aes = $aes::new(key, schedule).map_err(|_| GcmError::Operation)?;
+                let aes = $aes::new($($pair,)? key, schedule).map_err(|_| GcmError::Operation)?;
                 Ok(Self(Key::for_open(aes)?))
             }
             /// Import a deterministic sender with `N`-byte IVs and a slice of
@@ -80,14 +80,14 @@ macro_rules! owner {
             /// N <= 4 use a single sending context. Empty IVs/ranges and
             /// ranges exceeding the budget or suffix capacity are rejected.
             /// The owner enforces its range; it cannot check external reservations.
-            pub fn from_reserved_invocations(
+            pub fn from_reserved_invocations($( $pair: &'a AesPair, )?
                 key: &[u8; $width],
                 schedule: &'a mut [u8; $size],
                 prefix: &[u8],
                 first: u32,
                 count: u64,
             ) -> Result<Self, GcmError> {
-                let aes = $aes::new(key, schedule).map_err(|_| GcmError::Operation)?;
+                let aes = $aes::new($($pair,)? key, schedule).map_err(|_| GcmError::Operation)?;
                 Ok(Self(Key::from_reserved_invocations(
                     aes, prefix, first, count,
                 )?))
@@ -175,3 +175,40 @@ owner!(
     240,
     "Portable AES-256-GCM owner with a fixed tag width in bytes."
 );
+
+/// Required native owners. Admission takes place before key import; these
+/// owners never switch to portable execution. Nonce and buffer contracts
+/// are identical to the portable owners.
+#[cfg(feature = "aes-gcm-execution")]
+pub mod execution {
+    use super::super::paired::{Aes128ExpandedKey, Aes192ExpandedKey, Aes256ExpandedKey};
+    pub use super::super::paired::{AesPair, PairBackend, PairError};
+    use super::{Buffers, GcmError, Key};
+    /// Architecture-specific spelling for the x86 native pair.
+    #[cfg(target_arch = "x86_64")]
+    pub use AesPair as X86AesPair;
+    owner!(
+        Aes128Gcm,
+        Aes128ExpandedKey,
+        16,
+        176,
+        "AES-128-GCM with a required native AES/GHASH pair.",
+        pair
+    );
+    owner!(
+        Aes192Gcm,
+        Aes192ExpandedKey,
+        24,
+        208,
+        "AES-192-GCM with a required native AES/GHASH pair.",
+        pair
+    );
+    owner!(
+        Aes256Gcm,
+        Aes256ExpandedKey,
+        32,
+        240,
+        "AES-256-GCM with a required native AES/GHASH pair.",
+        pair
+    );
+}

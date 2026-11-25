@@ -1,5 +1,17 @@
 # Security Controls
 
+## Paired native AES-GCM and GMAC (v0.29.3)
+
+Only an explicitly requested, healthy AES-NI/PCLMUL or Arm AES/PMULL pair may process a message
+via the accelerated owners. Both startup checks precede key import. A
+pre-key `Unavailable` lets the application choose a portable owner on a
+compatible build. A failed check or operational error is not permission to
+retry with another backend; retirement covers all keys borrowing that pair.
+An ordinary tag mismatch rejects the message without retiring a healthy pair.
+The [interruption tests](assurance/aead-accelerated-development.md#focused-composition-and-lifecycle-checks)
+exercise the same nonce-spending, scratch-clearing and output-commit rules
+as the portable contract.
+
 ## Portable GMAC development contract (v0.29.1)
 
 For `BRY-REQ-CRYPTO-0021`, a sender authenticates AAD using its next reserved IV; there is no per-message

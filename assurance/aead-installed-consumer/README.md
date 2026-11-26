@@ -19,7 +19,7 @@ From the repository root, with Rust 1.90.0 and 1.100.0 installed:
 
 ```sh
 python3 scripts/aes-gcm/check-installed-consumer.py
-# Optional: Linux x86-64 with AES-NI, SSE2 and PCLMUL on all eligible CPUs.
+# Optional: Linux x86-64 with llvm-objdump, AES-NI, SSE2 and PCLMUL on all eligible CPUs.
 python3 scripts/aes-gcm/check-installed-consumer.py --native-x86
 ```
 
@@ -34,8 +34,9 @@ The same checks are registered under `aes_gcm` as
 
 | What is exercised | What the result means |
 | --- | --- |
-| Installed GCM consumer | At each key width, 26 known-answer/tag-length combinations from six NIST worked examples and their leftmost truncations. Each uses both buffer layouts: seal matches the expected IV, ciphertext and tag; a bad tag leaves the ciphertext or separate destination unchanged; valid open recovers the plaintext. The second send is rejected as exhausted. |
-| Installed GMAC consumer | At each key width, 10 combinations from the two empty-payload examples (empty and nonempty AAD), with 12–16 byte tags. Generate, exhaust the reservation, reject the altered tag, then verify the correct tag. |
+| Installed GCM consumer | At each key width, 26 known-answer/tag-length combinations from six NIST worked examples and their leftmost truncations. Both buffer layouts reject changes to each tag byte, AAD, IV and nonempty ciphertext separately, leaving the in-place input or separate destination untouched. Admitted seal and open clear scratch, including rejected opens. A second seal rejects the exhausted reservation before touching scratch. |
+| Installed GMAC consumer | At each key width, 10 combinations from the two empty-payload examples (empty and nonempty AAD), with 12–16 byte tags. Generate, exhaust the reservation, reject changes to each tag byte, AAD and IV separately, then verify the correct tag. |
+| Installed native code path | On both compiler endpoints, inspect the exact installed x86-64 ELF before running it; check the file digest again after the known answers pass. The bounded screen checks message-path edges to AES rounds, GHASH multiplication and tag comparison, not just startup instructions. It is not a dynamic trace or proof about every branch. |
 | General IVs and larger corpora | The install fixture uses 96-bit IVs. The existing [portable replay](../aead-portable-acceptance/README.md) and [paired replay](../../docs/assurance/aead-accelerated-development.md) cover general-IV hashing separately, including 13 representative IV widths in the Go corpus. This is not an exhaustive test of every possible IV length. |
 
 The tests reconstruct published key/IV pairs to compare implementations.

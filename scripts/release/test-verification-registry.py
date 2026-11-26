@@ -555,6 +555,8 @@ class RegistryTests(unittest.TestCase):
                 for version in ('1.90.0', '1.100.0') for route in ('direct', 'facade') for feature in features})
             if native:
                 self.assertEqual(check['platform'], 'linux-x86_64')
+                self.assertIn('scripts/aes-gcm/paired_linked.py', paths)
+                self.assertTrue(any(t['program'] == 'llvm-objdump' for group in groups for t in group.get('tools', [])))
 
     def test_gcm_transaction_proofs_track_the_production_boundary(self):
         check, = (c for c in self.registry['checks'] if

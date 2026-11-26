@@ -7166,6 +7166,15 @@ Status: awaiting pentest
 
 The [installed consumer](../assurance/aead-installed-consumer/README.md)
 adds downstream installation and known-answer checks without changing production cryptography.
+For the exit review, that fixture covers all three key widths, five tag
+widths, empty/AAD-only/partial/multi-block inputs, both GCM buffer layouts,
+tamper rejection and exhaustion at a 96-bit IV. General-IV hashing is covered
+separately by the [portable](../scripts/aes-gcm/check-portable-acceptance.py)
+and [paired x86](../scripts/aes-gcm/check-paired-archives.py) corpus replays
+(13 representative IV widths, not every possible length). The
+[v0.29.3 Windows and Arm records](assurance/aead-accelerated-development.md#native-observations-on-windows-linux-arm64-and-apple-silicon)
+cover those native routes, not a fresh install on those platforms. None of
+these results constitutes FIPS validation.
 
 Plan scope: Close the GCM chain with packaged public seal, open, and GMAC fixtures spanning all AES widths, admitted IV and tag sizes, AAD-only, empty, partial, multi-block, in-place, disjoint, scalar, and accelerated routes; verify authoritative results, tamper rejection with unchanged output, limit exhaustion, package installation, and precise FIPS-versus-unvalidated status.
 

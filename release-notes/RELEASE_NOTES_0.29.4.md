@@ -14,6 +14,11 @@ and the native AES-NI/PCLMUL Go/NIST replays and linked-code screen also
 passed on the candidate working tree. General-IV coverage comes from those
 replays, not the 96-bit-IV install fixture.
 
+The install check now screens the x86 message paths in the very executable
+it runs. On both portable and paired routes, it also checks changes to each
+tag byte, IV, AAD and (for GCM) nonempty ciphertext. Destination and scratch
+checks distinguish authentication failure from rejection before admission.
+
 The [v0.29.3 native records](../assurance/aead-native-observations/v0.29.3)
 were checked for integrity. Linux ARM64, Apple Silicon and Windows x86-64
 native functional results are from that milestone, not new v0.29.4 runs.

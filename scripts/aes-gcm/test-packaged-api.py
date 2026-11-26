@@ -10,7 +10,7 @@ from subprocess import CompletedProcess
 import tempfile
 import tomllib
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 spec = importlib.util.spec_from_file_location("gcm_archives", Path(__file__).with_name("check-packaged-api.py"))
 runner = importlib.util.module_from_spec(spec)
@@ -24,6 +24,34 @@ spec.loader.exec_module(paired)
 spec = importlib.util.spec_from_file_location("native_pairs", Path(__file__).with_name("run-native-pairs.py"))
 native = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(native)
+
+spec = importlib.util.spec_from_file_location("installed", Path(__file__).with_name("check-installed-consumer.py"))
+installed = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(installed)
+
+
+class InstalledEvidenceTests(unittest.TestCase):
+    def test_failed_linked_screen_never_runs_or_reports_success(self):
+        binary = Path("prefix/bin/consumer")
+        linked = {"digest": Mock(return_value="before"), "load": Mock(return_value="image"),
+                  "review": Mock(side_effect=ValueError("missing paired hash start"))}
+        with patch.object(installed.pkg, "run") as run, patch("builtins.print") as emit:
+            with self.assertRaisesRegex(ValueError, "missing paired"):
+                installed.run_installed(binary, Path("."), {}, "1.90.0", "direct", "gmac-execution", 10, linked)
+            linked["load"].assert_called_once_with(binary)
+            linked["review"].assert_called_once_with("image", "1.90.0")
+            run.assert_not_called()
+            emit.assert_not_called()
+
+    def test_changed_installed_binary_fails_even_after_matching_answers(self):
+        binary = Path("prefix/bin/consumer")
+        linked = {"digest": Mock(side_effect=["before", "after"]), "load": Mock(), "review": Mock(return_value=30)}
+        with patch.object(installed.pkg, "run", return_value=CompletedProcess([], 0, "INSTALLED_CONSUMER_PASS [10, 10, 10]\n")) as run, patch("builtins.print") as emit:
+            with self.assertRaisesRegex(ValueError, "changed during replay"):
+                installed.run_installed(binary, Path("."), {}, "1.90.0", "direct", "gmac-execution", 10, linked)
+            run.assert_called_once_with([str(binary)], Path("."), {})
+            self.assertEqual([args.args for args in linked["digest"].call_args_list], [(binary,), (binary,)])
+            emit.assert_not_called()
 
 
 class NativeBundleTests(unittest.TestCase):

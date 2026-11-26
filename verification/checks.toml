@@ -391,16 +391,16 @@ component = "aes_gcm"
 id = "installed-x86-consumer"
 category = "package"
 name = "Installed required native GCM and GMAC consumers on Linux x86-64"
-establishes = "Same installed public consumer checks under required AES-NI/PCLMUL; no fallback, timing measurement or ARM/Windows execution."
+establishes = "Installed public consumers exercise required AES-NI/PCLMUL with bounded linked message-path checks on those same binaries. Not dynamic instruction tracing, timing qualification or ARM/Windows execution."
 command = ["python3", "scripts/aes-gcm/check-installed-consumer.py", "--native-x86"]
 cwd = "."
-inputs = ["aead-installed-consumer", "aead-portable-acceptance", "aes-gcm-archive", "aes-gcm-consumer", "gmac-consumer", "aes-gcm-boundaries", "gmac-boundaries", "hkdf-msrv"]
+inputs = ["aead-installed-consumer", "aead-x86-archives", "aead-portable-acceptance", "aes-gcm-archive", "aes-gcm-consumer", "gmac-consumer", "aes-gcm-boundaries", "gmac-boundaries", "hkdf-msrv"]
 platform = "linux-x86_64"
 reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
 timeout_seconds = 600
 [checks.success]
 unique_lines = ["1.90.0 direct aes-gcm-execution: installed consumer passed", "1.90.0 direct gmac-execution: installed consumer passed", "1.100.0 direct aes-gcm-execution: installed consumer passed", "1.100.0 direct gmac-execution: installed consumer passed", "1.90.0 facade aes-gcm-execution: installed consumer passed", "1.90.0 facade gmac-execution: installed consumer passed", "1.100.0 facade aes-gcm-execution: installed consumer passed", "1.100.0 facade gmac-execution: installed consumer passed", "AEAD_INSTALLED_NATIVE_PASS"]
-contains = ["AEAD_INSTALLED_NATIVE_PASS"]
+contains = ["AEAD_INSTALLED_NATIVE_PASS", "reviewed bodies=30"]
 
 [groups.aead-x86-archives]
 paths = ["scripts/aes-gcm/check-paired-archives.py", "scripts/aes-gcm/paired_linked.py", "assurance/aes-kernel-candidate/probe.rs"]

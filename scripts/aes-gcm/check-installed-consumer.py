@@ -29,11 +29,26 @@ def prepare(root, dep, versions):
     return consumer
 
 
+def run_installed(binary, root, env, version, route, feature, count, linked):
+    if linked is not None:
+        sha = linked["digest"](binary)
+        bodies = linked["review"](linked["load"](binary), version)
+    if pkg.run([str(binary)], root, env).stdout.splitlines() != [
+            f"INSTALLED_CONSUMER_PASS [{count}, {count}, {count}]"]:
+        raise ValueError("incomplete installed consumer run")
+    if linked is not None:
+        if linked["digest"](binary) != sha:
+            raise ValueError("installed consumer changed during replay")
+        print(f"{version} {route} {feature}: installed ELF sha256={sha} reviewed bodies={bodies}", flush=True)
+    print(f"{version} {route} {feature}: installed consumer passed", flush=True)
+
+
 def run(native):
     if any(k in os.environ for k in pkg.REJECT_ENV):
         raise ValueError("remove compiler or target overrides before running")
     if native and (platform.system(), platform.machine()) != ("Linux", "x86_64"):
         raise ValueError("--native-x86 requires native Linux x86-64")
+    linked = runpy.run_path(str(HERE / "paired_linked.py")) if native else None
     portable["frozen"]()
     with pkg.cargo_environment.private_directory(ROOT) as tmp:
         root = Path(tmp)
@@ -65,10 +80,7 @@ def run(native):
                     pkg.run(cargo + ["install", "--path", ".", "--root", str(prefix), *flags], consumer, build)
                     binary = prefix / "bin" / (NAME + (".exe" if os.name == "nt" else ""))
                     count = 26 if family == "aes-gcm" else 10
-                    if pkg.run([str(binary)], root, env).stdout.splitlines() != [
-                            f"INSTALLED_CONSUMER_PASS [{count}, {count}, {count}]"]:
-                        raise ValueError("incomplete installed consumer run")
-                    print(f"{version} {route} {feature}: installed consumer passed", flush=True)
+                    run_installed(binary, root, env, version, route, feature, count, linked)
     print("AEAD_INSTALLED_NATIVE_PASS" if native else "AEAD_INSTALLED_PORTABLE_PASS")
 
 

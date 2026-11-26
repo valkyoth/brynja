@@ -67,37 +67,63 @@ fn exercise<const T: usize>(c: &Case) {
                 assert_eq!(issued, Ok((c.iv, expected)));
                 assert_eq!(out, c.ct);
                 assert!(work.iter().all(|b| *b == 0));
+                // Exhaustion is pre-admission: even scratch is untouched.
+                work.fill(0xa5);
                 assert_eq!(
                     owner.seal_next_in_place(&c.aad, &mut out, &mut work),
                     Err(GcmError::Exhausted)
                 );
                 assert_eq!(out, c.ct);
-                let mut bad = expected;
-                bad[T - 1] ^= 1;
+                assert!(work.iter().all(|b| *b == 0xa5));
+                let mut reject = |iv, aad: &[u8], ct: &[u8], tag| {
+                    work.fill(0xa5);
+                    if inplace {
+                        out.copy_from_slice(ct);
+                        assert_eq!(
+                            owner.open_in_place(&iv, aad, &tag, &mut out, &mut work),
+                            Err(GcmError::Authentication)
+                        );
+                        assert_eq!(out, ct);
+                    } else {
+                        out.fill(0x5a);
+                        assert_eq!(
+                            owner.open(&iv, aad, &tag, ct, &mut out, &mut work),
+                            Err(GcmError::Authentication)
+                        );
+                        assert!(out.iter().all(|b| *b == 0x5a));
+                    }
+                    assert!(work.iter().all(|b| *b == 0));
+                };
+                for i in 0..T {
+                    let mut bad = expected;
+                    bad[i] ^= 1;
+                    reject(c.iv, &c.aad, &c.ct, bad);
+                }
+                let mut aad = c.aad.clone();
+                aad.push(0);
+                reject(c.iv, &aad, &c.ct, expected);
+                let mut iv = c.iv;
+                iv[11] ^= 1;
+                reject(iv, &c.aad, &c.ct, expected);
+                let mut ct = c.ct.clone();
+                if let Some(first) = ct.first_mut() {
+                    *first ^= 1;
+                    reject(c.iv, &c.aad, &ct, expected);
+                }
                 work.fill(0xa5);
                 if inplace {
-                    assert_eq!(
-                        owner.open_in_place(&c.iv, &c.aad, &bad, &mut out, &mut work),
-                        Err(GcmError::Authentication)
-                    );
-                    assert_eq!(out, c.ct);
-                    assert!(work.iter().all(|b| *b == 0));
+                    out.copy_from_slice(&c.ct);
                     owner
                         .open_in_place(&c.iv, &c.aad, &expected, &mut out, &mut work)
                         .unwrap();
                 } else {
                     out.fill(0x5a);
-                    assert_eq!(
-                        owner.open(&c.iv, &c.aad, &bad, &c.ct, &mut out, &mut work),
-                        Err(GcmError::Authentication)
-                    );
-                    assert!(out.iter().all(|b| *b == 0x5a));
-                    assert!(work.iter().all(|b| *b == 0));
                     owner
                         .open(&c.iv, &c.aad, &expected, &c.ct, &mut out, &mut work)
                         .unwrap();
                 }
                 assert_eq!(out, c.pt);
+                assert!(work.iter().all(|b| *b == 0));
                 drop(owner);
                 assert_eq!(schedule, [0; $size]);
             }
@@ -139,10 +165,24 @@ fn exercise<const T: usize>(c: &Case) {
                 owner.authenticate_next(&c.aad),
                 Err(GmacError::Exhausted)
             ));
-            let mut bad = *tag.as_bytes();
-            bad[T - 1] ^= 1;
+            for i in 0..T {
+                let mut bad = *tag.as_bytes();
+                bad[i] ^= 1;
+                assert_eq!(
+                    owner.verify(&iv, &c.aad, &GmacTag::from_bytes(bad)),
+                    Err(GmacError::Authentication)
+                );
+            }
+            let mut aad = c.aad.clone();
+            aad.push(0);
             assert_eq!(
-                owner.verify(&iv, &c.aad, &GmacTag::from_bytes(bad)),
+                owner.verify(&iv, &aad, &tag),
+                Err(GmacError::Authentication)
+            );
+            let mut wrong_iv = iv;
+            wrong_iv[11] ^= 1;
+            assert_eq!(
+                owner.verify(&wrong_iv, &c.aad, &tag),
                 Err(GmacError::Authentication)
             );
             owner.verify(&iv, &c.aad, &tag).unwrap();

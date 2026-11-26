@@ -31060,6 +31060,24 @@
         "after": "e24fde9f39b497200c613a992780c5b06024c60c7ecb4fc1b3bf5f0c3eb25d13",
         "log": "verification/.runner/logs/3-1795712001571811519.log",
         "log_sha256": "1240355baafd0a865307c2454a235eea63a778877b6cb3c2ed25f7be3e3336c1"
+      },
+      {
+        "id": "3-1795713237134197180",
+        "source": "working tree based on f42a67ea382dc8e0f76a2365e76341378003b214; scoped fingerprint 2396d0f0b1fdda7962e6fa352b88e4efc108869a982ac723877b3d5808aa1d85",
+        "started": "2026-11-26T17:13:57.134195377Z",
+        "ended": "2026-11-26T17:14:14.013865495Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes-gcm/check-installed-consumer.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "1ed02f9675aca985598af0f82e9fbafcce84e526fdbc56f23847982855e75868",
+        "after": "1ed02f9675aca985598af0f82e9fbafcce84e526fdbc56f23847982855e75868",
+        "log": "verification/.runner/logs/3-1795713237134197180.log",
+        "log_sha256": "1240355baafd0a865307c2454a235eea63a778877b6cb3c2ed25f7be3e3336c1"
       }
     ],
     "aes_gcm/installed-x86-consumer": [
@@ -31081,6 +31099,25 @@
         "after": "22fcabe140192efa334b9114a1c7628cd512b19ccaf3270c4c60799db2ebfa0c",
         "log": "verification/.runner/logs/2-1795712013713815103.log",
         "log_sha256": "a4e4bb16011a4c40be77f54f83bd124ad9a9f3f0f81d878dbee7ad0e9ce79547"
+      },
+      {
+        "id": "2-1795713256493170075",
+        "source": "working tree based on f42a67ea382dc8e0f76a2365e76341378003b214; scoped fingerprint a7de973da7ed50fc95aa9d79360d780501bc4517e9e6d486c7160ffb090ff39c",
+        "started": "2026-11-26T17:14:16.493168462Z",
+        "ended": "2026-11-26T17:14:31.980791914Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes-gcm/check-installed-consumer.py",
+          "--native-x86"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "5414edf6e4fcb7103d634b76a5cb0a791170a78d3b26fc64e8150ec3c5e27567",
+        "after": "5414edf6e4fcb7103d634b76a5cb0a791170a78d3b26fc64e8150ec3c5e27567",
+        "log": "verification/.runner/logs/2-1795713256493170075.log",
+        "log_sha256": "5a65755af8e9e8a0b7ace1042699de3e53c3020860ec837acdacaf37af051037"
       }
     ],
     "aes_gcm/native-pair-functional-records": [
@@ -50719,22 +50756,22 @@
       "last_success": "2026-11-24T14:41:29.199570158Z"
     },
     "aes_gcm/installed-portable-consumer": {
-      "checked_at": "2026-11-26T16:53:31.800100788Z",
-      "fingerprint": "5dca0e25002bb90d52f8eb0e1b76a8067e683728ff5a20a65b0851d7550fe166",
+      "checked_at": "2026-11-26T17:14:14.556125235Z",
+      "fingerprint": "2396d0f0b1fdda7962e6fa352b88e4efc108869a982ac723877b3d5808aa1d85",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on c10cada0f8696d62c90f55e6a3125195b3d5bdcf; scoped fingerprint 5dca0e25002bb90d52f8eb0e1b76a8067e683728ff5a20a65b0851d7550fe166",
-      "performed_at": "2026-11-26T16:53:31.258034899Z",
-      "last_success": "2026-11-26T16:53:31.258034899Z"
+      "source": "working tree based on f42a67ea382dc8e0f76a2365e76341378003b214; scoped fingerprint 2396d0f0b1fdda7962e6fa352b88e4efc108869a982ac723877b3d5808aa1d85",
+      "performed_at": "2026-11-26T17:14:14.013865495Z",
+      "last_success": "2026-11-26T17:14:14.013865495Z"
     },
     "aes_gcm/installed-x86-consumer": {
-      "checked_at": "2026-11-26T16:53:52.010224399Z",
-      "fingerprint": "6414b9518a1e5865f391eccc8afb40696d7b9476f91c7c5595d4490d9148ba0a",
+      "checked_at": "2026-11-26T17:14:32.820628139Z",
+      "fingerprint": "a7de973da7ed50fc95aa9d79360d780501bc4517e9e6d486c7160ffb090ff39c",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on c10cada0f8696d62c90f55e6a3125195b3d5bdcf; scoped fingerprint 6414b9518a1e5865f391eccc8afb40696d7b9476f91c7c5595d4490d9148ba0a",
-      "performed_at": "2026-11-26T16:53:51.459983391Z",
-      "last_success": "2026-11-26T16:53:51.459983391Z"
+      "source": "working tree based on f42a67ea382dc8e0f76a2365e76341378003b214; scoped fingerprint a7de973da7ed50fc95aa9d79360d780501bc4517e9e6d486c7160ffb090ff39c",
+      "performed_at": "2026-11-26T17:14:31.980791914Z",
+      "last_success": "2026-11-26T17:14:31.980791914Z"
     },
     "aes_gcm/native-pair-functional-records": {
       "checked_at": "2026-11-25T14:54:00.544980032Z",

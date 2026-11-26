@@ -31042,6 +31042,47 @@
         "log_sha256": "0492c66bf2d9caa4589d4d04fbc030dc1d09562edad67719915fb63f27820654"
       }
     ],
+    "aes_gcm/installed-portable-consumer": [
+      {
+        "id": "3-1795712001571811519",
+        "source": "working tree based on c10cada0f8696d62c90f55e6a3125195b3d5bdcf; scoped fingerprint 5dca0e25002bb90d52f8eb0e1b76a8067e683728ff5a20a65b0851d7550fe166",
+        "started": "2026-11-26T16:53:21.571808083Z",
+        "ended": "2026-11-26T16:53:31.258034899Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes-gcm/check-installed-consumer.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "e24fde9f39b497200c613a992780c5b06024c60c7ecb4fc1b3bf5f0c3eb25d13",
+        "after": "e24fde9f39b497200c613a992780c5b06024c60c7ecb4fc1b3bf5f0c3eb25d13",
+        "log": "verification/.runner/logs/3-1795712001571811519.log",
+        "log_sha256": "1240355baafd0a865307c2454a235eea63a778877b6cb3c2ed25f7be3e3336c1"
+      }
+    ],
+    "aes_gcm/installed-x86-consumer": [
+      {
+        "id": "2-1795712013713815103",
+        "source": "working tree based on c10cada0f8696d62c90f55e6a3125195b3d5bdcf; scoped fingerprint 6414b9518a1e5865f391eccc8afb40696d7b9476f91c7c5595d4490d9148ba0a",
+        "started": "2026-11-26T16:53:33.713812739Z",
+        "ended": "2026-11-26T16:53:51.459983391Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes-gcm/check-installed-consumer.py",
+          "--native-x86"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "22fcabe140192efa334b9114a1c7628cd512b19ccaf3270c4c60799db2ebfa0c",
+        "after": "22fcabe140192efa334b9114a1c7628cd512b19ccaf3270c4c60799db2ebfa0c",
+        "log": "verification/.runner/logs/2-1795712013713815103.log",
+        "log_sha256": "a4e4bb16011a4c40be77f54f83bd124ad9a9f3f0f81d878dbee7ad0e9ce79547"
+      }
+    ],
     "aes_gcm/native-pair-functional-records": [
       {
         "id": "3-1795618439469792527",
@@ -32089,6 +32130,24 @@
         "after": "b0f20a58ccf27816259334ab9aad1a4bd86878c694ceaf2965f2cb1b0d8959b0",
         "log": "verification/.runner/logs/2-1795627901468128342.log",
         "log_sha256": "6ee3d8e6bc8653627f0bc7f4654a38a20fbc005817b85f51eabf34b29e6164e6"
+      },
+      {
+        "id": "3-1795712163956489331",
+        "source": "working tree based on c10cada0f8696d62c90f55e6a3125195b3d5bdcf; scoped fingerprint 0a7f680b4f9990befa7cdfa28ca7a5bc1e23997f8ec3f706df6e2003a709ae98",
+        "started": "2026-11-26T16:56:03.956486376Z",
+        "ended": "2026-11-26T16:56:36.037066557Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes-gcm/check-paired-archives.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "44847abbfcab8c54b02edeb924aa3a36922d86a2b9923b3e51a035c721e7a5b6",
+        "after": "44847abbfcab8c54b02edeb924aa3a36922d86a2b9923b3e51a035c721e7a5b6",
+        "log": "verification/.runner/logs/3-1795712163956489331.log",
+        "log_sha256": "713dbc632fae58405cad3e542617032e26b749f2975657a1407ca2cfdd5a57dd"
       }
     ],
     "aes_gcm/x86-pair-development": [
@@ -42342,6 +42401,24 @@
         "after": "479aae95f20bd43953ab553c6bdcbbe0209fe3ce2a026c2da6246766e4f1410a",
         "log": "verification/.runner/logs/2-1795609694837499634.log",
         "log_sha256": "b81d274c2762d92194252286ca2e0f6f144e2d531a3c27b00e25e161e9153616"
+      },
+      {
+        "id": "2-1795712199017505737",
+        "source": "working tree based on c10cada0f8696d62c90f55e6a3125195b3d5bdcf; scoped fingerprint e5547bf7a1e41c89c9b05729d4094a134607185ce962f7040c347d6f94a99eb4",
+        "started": "2026-11-26T16:56:39.017503372Z",
+        "ended": "2026-11-26T16:57:37.201599476Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes-gcm/check-portable-acceptance.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "49a271b2e6436bc2c3e1c7c24d970a6bd3a743bbbb09348b747ed0d4b89c18c1",
+        "after": "49a271b2e6436bc2c3e1c7c24d970a6bd3a743bbbb09348b747ed0d4b89c18c1",
+        "log": "verification/.runner/logs/2-1795712199017505737.log",
+        "log_sha256": "b81d274c2762d92194252286ca2e0f6f144e2d531a3c27b00e25e161e9153616"
       }
     ],
     "gmac/portable-vectors": [
@@ -50641,6 +50718,24 @@
       "performed_at": "2026-11-24T14:41:29.199570158Z",
       "last_success": "2026-11-24T14:41:29.199570158Z"
     },
+    "aes_gcm/installed-portable-consumer": {
+      "checked_at": "2026-11-26T16:53:31.800100788Z",
+      "fingerprint": "5dca0e25002bb90d52f8eb0e1b76a8067e683728ff5a20a65b0851d7550fe166",
+      "result": "passed",
+      "freshness": "Up to date",
+      "source": "working tree based on c10cada0f8696d62c90f55e6a3125195b3d5bdcf; scoped fingerprint 5dca0e25002bb90d52f8eb0e1b76a8067e683728ff5a20a65b0851d7550fe166",
+      "performed_at": "2026-11-26T16:53:31.258034899Z",
+      "last_success": "2026-11-26T16:53:31.258034899Z"
+    },
+    "aes_gcm/installed-x86-consumer": {
+      "checked_at": "2026-11-26T16:53:52.010224399Z",
+      "fingerprint": "6414b9518a1e5865f391eccc8afb40696d7b9476f91c7c5595d4490d9148ba0a",
+      "result": "passed",
+      "freshness": "Up to date",
+      "source": "working tree based on c10cada0f8696d62c90f55e6a3125195b3d5bdcf; scoped fingerprint 6414b9518a1e5865f391eccc8afb40696d7b9476f91c7c5595d4490d9148ba0a",
+      "performed_at": "2026-11-26T16:53:51.459983391Z",
+      "last_success": "2026-11-26T16:53:51.459983391Z"
+    },
     "aes_gcm/native-pair-functional-records": {
       "checked_at": "2026-11-25T14:54:00.544980032Z",
       "fingerprint": "0ac244764c71af96862eec3fe91f54c8b5d0433b9047c3b63c556c85bd968c7a",
@@ -50705,13 +50800,13 @@
       "last_success": "2026-11-24T12:53:58.058030845Z"
     },
     "aes_gcm/x86-packaged-pair": {
-      "checked_at": "2026-11-25T17:32:17.065119274Z",
-      "fingerprint": "43d501a0c42da494545206540a373557ab277ab93938815a62cec66b34632fee",
+      "checked_at": "2026-11-26T16:56:36.594048205Z",
+      "fingerprint": "0a7f680b4f9990befa7cdfa28ca7a5bc1e23997f8ec3f706df6e2003a709ae98",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 0af6e30be87eecfc1899c27984421ec8df4143d1; scoped fingerprint 43d501a0c42da494545206540a373557ab277ab93938815a62cec66b34632fee",
-      "performed_at": "2026-11-25T17:32:16.524833064Z",
-      "last_success": "2026-11-25T17:32:16.524833064Z"
+      "source": "working tree based on c10cada0f8696d62c90f55e6a3125195b3d5bdcf; scoped fingerprint 0a7f680b4f9990befa7cdfa28ca7a5bc1e23997f8ec3f706df6e2003a709ae98",
+      "performed_at": "2026-11-26T16:56:36.037066557Z",
+      "last_success": "2026-11-26T16:56:36.037066557Z"
     },
     "aes_gcm/x86-pair-development": {
       "checked_at": "2026-11-25T18:09:55.792512034Z",
@@ -51164,13 +51259,13 @@
       "last_success": "2026-11-24T20:10:36.44593485Z"
     },
     "gmac/packaged-portable-acceptance": {
-      "checked_at": "2026-11-25T12:29:09.928027609Z",
-      "fingerprint": "f08b01b68011b285074dcb764c75ac893d64e69e4899621ae90bfffde7a5ad82",
+      "checked_at": "2026-11-26T16:57:39.829656909Z",
+      "fingerprint": "e5547bf7a1e41c89c9b05729d4094a134607185ce962f7040c347d6f94a99eb4",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 59316d731f2a3ea41ea613586f248351542ae6f0; scoped fingerprint f08b01b68011b285074dcb764c75ac893d64e69e4899621ae90bfffde7a5ad82",
-      "performed_at": "2026-11-25T12:29:09.395346233Z",
-      "last_success": "2026-11-25T12:29:09.395346233Z"
+      "source": "working tree based on c10cada0f8696d62c90f55e6a3125195b3d5bdcf; scoped fingerprint e5547bf7a1e41c89c9b05729d4094a134607185ce962f7040c347d6f94a99eb4",
+      "performed_at": "2026-11-26T16:57:37.201599476Z",
+      "last_success": "2026-11-26T16:57:37.201599476Z"
     },
     "gmac/portable-vectors": {
       "checked_at": "2026-11-24T20:10:11.543478369Z",

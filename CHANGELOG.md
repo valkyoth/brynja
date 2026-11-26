@@ -1,6 +1,12 @@
 # Changelog
 
-## 0.29.3 paired AES-GCM and GMAC (candidate)
+## 0.29.4 AES-GCM and GMAC public API acceptance (candidate)
+
+- Install and run downstream consumers of local crate archives for all three AES
+  widths, both import paths and both compiler endpoints. No new runtime feature,
+  crypto implementation or publication. See the [release notes](release-notes/RELEASE_NOTES_0.29.4.md).
+
+## 0.29.3 paired AES-GCM and GMAC (internally tagged)
 
 - Add default-off AES-NI/PCLMUL and Arm AES/PMULL composition for all three AES key widths.
   Existing constructors stay portable. The [candidate notes](release-notes/RELEASE_NOTES_0.29.3.md)

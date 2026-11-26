@@ -1695,7 +1695,7 @@
     {
       "boundary": {
         "class": "internal-security-design",
-        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+        "rationale": "Installed downstream consumers test the existing AES-GCM and GMAC requirements (BRY-REQ-CRYPTO-0007 and BRY-REQ-CRYPTO-0021). No new wire format, backend or parameter is admitted. Agreement with published NIST examples and their tag truncations is not FIPS module validation or timing qualification."
       },
       "requirement_ids": [],
       "scope": "Close the GCM chain with packaged public seal, open, and GMAC fixtures spanning all AES widths, admitted IV and tag sizes, AAD-only, empty, partial, multi-block, in-place, disjoint, scalar, and accelerated routes; verify authoritative results, tamper rejection with unchanged output, limit exhaustion, package installation, and precise FIPS-versus-unvalidated status.",

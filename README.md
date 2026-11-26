@@ -315,12 +315,16 @@ sizes. Enable `aes-gcm` or `gmac` on `brynja` or `brynja-crypto`; neither
 public raw primitive feature is required. Use separate keys for GCM and
 GMAC, and reserve sending nonce ranges in the application.
 
-The [v0.29.3 internal candidate](release-notes/RELEASE_NOTES_0.29.3.md)
+The [v0.29.3 internal milestone](release-notes/RELEASE_NOTES_0.29.3.md)
 adds `aes-gcm-execution` and `gmac-execution`. Only the new owners under
 `execution` require a complete pair: AES-NI/PCLMUL on Linux or Windows x86-64,
 or AES/PMULL on Linux ARM64 or Apple Silicon. Enabling
 either feature leaves ordinary constructors portable. This is not a
 crates.io release or a general constant-time qualification.
+
+The [v0.29.4 consumer fixture](assurance/aead-installed-consumer/README.md)
+shows how to check the portable and paired APIs against known answers from
+installed downstream binaries. These checks do not confer FIPS validation.
 
 The v0.27.6 [provider API candidate](docs/assurance/aes-provider-completion.md)
 adds distinct AES-128/192/256 external-key bindings. Applications supply their

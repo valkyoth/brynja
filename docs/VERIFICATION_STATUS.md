@@ -1,5 +1,13 @@
 # Component Verification Status
 
+## AES-GCM and GMAC downstream acceptance (v0.29.4)
+
+The [installed-consumer checks](../assurance/aead-installed-consumer/README.md)
+passed on both compiler endpoints for portable and required Linux x86-64
+execution. They verify installed downstream binaries with locally packaged
+library dependencies, not registry publication. The release notes distinguish
+[fresh runs from retained platform evidence](../release-notes/RELEASE_NOTES_0.29.4.md).
+
 ## Accelerated AES-GCM and GMAC (v0.29.3 development)
 
 `brynja-verify run aes_gcm x86-pair-development` exercises the private

@@ -7114,7 +7114,10 @@ Exit criteria:
 
 ### v0.29.3 - Integrated Accelerated AES-GCM And GMAC
 
-Status: awaiting pentest
+Status: released
+
+Signed internal tag at `c10cada0`; no crates.io publication. The [scoped retest](../security/pentest/v0.29.3.md)
+passed before the final gate, Rust CI, CodeQL and signed tag.
 
 The [integration checklist](assurance/aead-accelerated-development.md) tracks
 the specialized x86-64 AES-NI/PCLMUL pair on Linux and Windows and the
@@ -7159,7 +7162,10 @@ Exit criteria:
 
 ### v0.29.4 - AES-GCM And GMAC Public API Usability Acceptance
 
-Status: planned
+Status: awaiting pentest
+
+The [installed consumer](../assurance/aead-installed-consumer/README.md)
+adds downstream installation and known-answer checks without changing production cryptography.
 
 Plan scope: Close the GCM chain with packaged public seal, open, and GMAC fixtures spanning all AES widths, admitted IV and tag sizes, AAD-only, empty, partial, multi-block, in-place, disjoint, scalar, and accelerated routes; verify authoritative results, tamper rejection with unchanged output, limit exhaustion, package installation, and precise FIPS-versus-unvalidated status.
 

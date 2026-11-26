@@ -537,6 +537,25 @@ class RegistryTests(unittest.TestCase):
         self.assertIn(('python3', None), tools)
         self.assertEqual(check['platform'], 'linux-x86_64')
 
+    def test_installed_aead_consumers_bind_route_specific_evidence(self):
+        for native in (False, True):
+            ident = 'installed-x86-consumer' if native else 'installed-portable-consumer'
+            check, = (c for c in self.registry['checks'] if (c['component'], c['id']) == ('aes_gcm', ident))
+            self.assertEqual(check['command'], ['python3', 'scripts/aes-gcm/check-installed-consumer.py']
+                             + (['--native-x86'] if native else []))
+            groups = [self.registry['groups'][key] for key in check['inputs']]
+            paths = {path for group in groups for path in group.get('paths', [])}
+            self.assertTrue({check['command'][1], 'assurance/aead-installed-consumer/main.rs',
+                             'assurance/aes-gcm-consumer/tests', 'crates/brynja-crypto-cpu',
+                             'scripts/aes-gcm/check-packaged-api.py', 'assurance/aes-kernel-candidate/probe.rs'} <= paths)
+            features = ('aes-gcm-execution', 'gmac-execution') if native else ('aes-gcm', 'gmac')
+            marker = 'AEAD_INSTALLED_NATIVE_PASS' if native else 'AEAD_INSTALLED_PORTABLE_PASS'
+            self.assertEqual(set(check['success']['unique_lines']), {marker} | {
+                f'{version} {route} {feature}: installed consumer passed'
+                for version in ('1.90.0', '1.100.0') for route in ('direct', 'facade') for feature in features})
+            if native:
+                self.assertEqual(check['platform'], 'linux-x86_64')
+
     def test_gcm_transaction_proofs_track_the_production_boundary(self):
         check, = (c for c in self.registry['checks'] if
                   (c['component'], c['id']) == ('aes_gcm', 'transaction-proof'))

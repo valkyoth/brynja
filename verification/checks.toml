@@ -368,6 +368,40 @@ paths = ["scripts/aes-gcm/check-packaged-api.py", "scripts/ghash/check-packaged-
 [groups.aead-portable-acceptance]
 paths = ["scripts/aes-gcm/check-portable-acceptance.py", "assurance/aead-portable-acceptance"]
 
+[groups.aead-installed-consumer]
+paths = ["scripts/aes-gcm/check-installed-consumer.py", "assurance/aead-installed-consumer/main.rs", "assurance/aes-kernel-candidate/probe.rs"]
+
+[[checks]]
+component = "aes_gcm"
+id = "installed-portable-consumer"
+category = "package"
+name = "Installed portable GCM and GMAC consumers"
+establishes = "Installed executables verify published 96-bit-IV answers and truncations, exhausted reservations and rejection under both imports and compiler endpoints. Not registry publication or module validation."
+command = ["python3", "scripts/aes-gcm/check-installed-consumer.py"]
+cwd = "."
+inputs = ["aead-installed-consumer", "aead-portable-acceptance", "aes-gcm-archive", "aes-gcm-consumer", "gmac-consumer", "aes-gcm-boundaries", "gmac-boundaries", "hkdf-msrv"]
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 600
+[checks.success]
+unique_lines = ["1.90.0 direct aes-gcm: installed consumer passed", "1.90.0 direct gmac: installed consumer passed", "1.100.0 direct aes-gcm: installed consumer passed", "1.100.0 direct gmac: installed consumer passed", "1.90.0 facade aes-gcm: installed consumer passed", "1.90.0 facade gmac: installed consumer passed", "1.100.0 facade aes-gcm: installed consumer passed", "1.100.0 facade gmac: installed consumer passed", "AEAD_INSTALLED_PORTABLE_PASS"]
+contains = ["AEAD_INSTALLED_PORTABLE_PASS"]
+
+[[checks]]
+component = "aes_gcm"
+id = "installed-x86-consumer"
+category = "package"
+name = "Installed required native GCM and GMAC consumers on Linux x86-64"
+establishes = "Same installed public consumer checks under required AES-NI/PCLMUL; no fallback, timing measurement or ARM/Windows execution."
+command = ["python3", "scripts/aes-gcm/check-installed-consumer.py", "--native-x86"]
+cwd = "."
+inputs = ["aead-installed-consumer", "aead-portable-acceptance", "aes-gcm-archive", "aes-gcm-consumer", "gmac-consumer", "aes-gcm-boundaries", "gmac-boundaries", "hkdf-msrv"]
+platform = "linux-x86_64"
+reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
+timeout_seconds = 600
+[checks.success]
+unique_lines = ["1.90.0 direct aes-gcm-execution: installed consumer passed", "1.90.0 direct gmac-execution: installed consumer passed", "1.100.0 direct aes-gcm-execution: installed consumer passed", "1.100.0 direct gmac-execution: installed consumer passed", "1.90.0 facade aes-gcm-execution: installed consumer passed", "1.90.0 facade gmac-execution: installed consumer passed", "1.100.0 facade aes-gcm-execution: installed consumer passed", "1.100.0 facade gmac-execution: installed consumer passed", "AEAD_INSTALLED_NATIVE_PASS"]
+contains = ["AEAD_INSTALLED_NATIVE_PASS"]
+
 [groups.aead-x86-archives]
 paths = ["scripts/aes-gcm/check-paired-archives.py", "scripts/aes-gcm/paired_linked.py", "assurance/aes-kernel-candidate/probe.rs"]
 [[groups.aead-x86-archives.tools]]

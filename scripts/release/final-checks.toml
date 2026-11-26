@@ -1,8 +1,8 @@
-# Finite integrated AES-GCM and GMAC gate. Verification campaigns stay separate.
+# Finite AES-GCM and GMAC usability gate. Installed-consumer campaigns stay separate.
 # No crates.io publication is selected for this internal milestone.
 schema = 1
-version = "0.29.3"
-scope = "Explicit paired Linux/Windows x86-64 AES-NI/PCLMUL and Linux/macOS ARM64 AES/PMULL owners through direct and facade imports; Portable GMAC and Portable AES-GCM remain available; Portable GHASH remains the default. Arm GHASH timing remains unresolved. RISC-V AES remains evidence-only and unadmitted. Internal only; no publication or implicit timing/proof/native campaign."
+version = "0.29.4"
+scope = "Packaged public API acceptance for Portable GMAC and Portable AES-GCM, plus explicit Linux/Windows x86-64 AES-NI/PCLMUL and Linux/macOS ARM64 AES/PMULL owners. Portable GHASH remains the default. Arm GHASH timing remains unresolved. RISC-V AES remains evidence-only and unadmitted. Internal only; no publication or implicit timing/proof/native campaign."
 ci_checks = ["aes-gcm-package-controls","crypto-tests","crypto-lint","crypto-format","facade-integration","hkdf-owner-contract","aes-owner-contract","aes-wide-owner-contract","aes-wide-api","aes-dataflow-regressions","aes-provider-api","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
 
 [[checks]]

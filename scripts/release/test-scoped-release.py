@@ -59,7 +59,7 @@ class ScopedRelease(unittest.TestCase):
             scoped.enabled('garbage')
 
     def test_paired_aead_candidate_gate_is_finite_and_does_not_publish(self):
-        plan = scoped.load('0.29.3')
+        plan = scoped.load('0.29.4')
         commands = {check['id']: check['command'] for check in plan['checks']}
         self.assertEqual(len(commands), 36)
         self.assertEqual(commands['gmac-public-consumer'], ['python3', 'scripts/gmac/check-consumer.py', 'public'])
@@ -141,10 +141,10 @@ class ScopedRelease(unittest.TestCase):
                                  or 'check-aes-kani.py' in arg
                                  or 'check-aes-dataflow.py' in arg for arg in command))
         release = tomllib.loads((scoped.ROOT / 'release-crates.toml').read_text())
-        self.assertEqual(release['release']['version'], '0.29.3')
-        self.assertEqual(release['crates']['brynja']['previous_version'], '0.29.2')
-        self.assertEqual(release['crates']['brynja']['change'], 'code')
-        self.assertEqual(release['release']['cumulative_milestones'][-2:], ['0.29.2', '0.29.3'])
+        self.assertEqual(release['release']['version'], '0.29.4')
+        self.assertEqual(release['crates']['brynja']['previous_version'], '0.29.3')
+        self.assertEqual(release['crates']['brynja']['change'], 'metadata')
+        self.assertEqual(release['release']['cumulative_milestones'][-2:], ['0.29.3', '0.29.4'])
         self.assertNotIn('0.27.7', release['release']['cumulative_milestones'])
         self.assertIn('Portable GHASH', plan['scope'])
         self.assertEqual(release['release']['stage'], 'internal')

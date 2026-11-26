@@ -1,5 +1,10 @@
 # Security Controls
 
+The [v0.29.4 installed-consumer check](../assurance/aead-installed-consumer/README.md)
+exercises send exhaustion and rejection without releasing unauthenticated
+plaintext through both public import paths. The fixture reconstructs public
+test vectors, not application-safe IV allocations.
+
 ## Paired native AES-GCM and GMAC (v0.29.3)
 
 Only an explicitly requested, healthy AES-NI/PCLMUL or Arm AES/PMULL pair may process a message

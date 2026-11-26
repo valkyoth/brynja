@@ -2,6 +2,11 @@
 
 Status: initial; expands with every milestone
 
+The [installed AEAD consumer](../assurance/aead-installed-consumer/README.md)
+checks behavior at an application boundary; it does not supply a durable
+nonce allocator, anti-replay state, platform qualification or a validated
+module. Those deployment assumptions are unchanged in v0.29.4.
+
 ## Paired native AES-GCM and GMAC (v0.29.3)
 
 An application choosing the accelerated API must deploy the ISA-specialized build

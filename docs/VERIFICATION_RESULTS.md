@@ -252,10 +252,10 @@ Local developer observations, not certification or a release gate. No unrun or o
 
 | Check | Source tested | Performed at | Result | Freshness | Status last changed (UTC) |
 | --- | --- | --- | --- | --- | --- |
-| ietf-counter-proof — RFC 8439 byte budget and first/last block counters | working tree based on 9eceb63b68708c53c4d703762e5badf8db741719; scoped fingerprint da1e70a5ab917be55475c99be2b516f51c10ebfd844158bd78902c88edbfbea9 | 2026-11-26T18:11:36.747309166Z | passed | Up to date | 2026-11-26T18:11:37.518580218Z |
-| ietf-host-asan — IETF ChaCha20 public vectors and boundaries under ASan/LSan | working tree based on 9eceb63b68708c53c4d703762e5badf8db741719; scoped fingerprint 53b9d882c17e200655ace349923f78d4a269da97d039a2c8f050d4907ff2675a | 2026-11-26T18:13:33.801014084Z | passed | Up to date | 2026-11-26T18:13:34.276711778Z |
-| ietf-portable-archive — RFC 8439 stream and admission through the archived direct API | working tree based on 9eceb63b68708c53c4d703762e5badf8db741719; scoped fingerprint a506ea855e98f12ca29499e305cb39a7e6b0808742cbdb9ee8e8b066a10124e1 | 2026-11-26T18:11:27.775283257Z | passed | Up to date | 2026-11-26T18:11:28.315508692Z |
-| ietf-stream-differential — Archived scalar ChaCha20 against the OpenSSL raw-stream oracle | working tree based on 9eceb63b68708c53c4d703762e5badf8db741719; scoped fingerprint 1e8ba1f1779ddbc713e1167d3db3bb290dca7aa33a72d4798bea2310433e481f | 2026-11-26T18:11:33.240040166Z | passed | Up to date | 2026-11-26T18:11:33.744751133Z |
+| ietf-counter-proof — RFC 8439 byte budget and first/last block counters | working tree based on 24d1d612db58d53dbc4fc4d8e10f4bf2f7654b41; scoped fingerprint 2f5d9f822fce4929744e2d6a235a8d8a2fa18de993d111446aba58bf973f41e8 | 2026-11-26T18:31:37.772487419Z | passed | Up to date | 2026-11-26T18:31:38.574350276Z |
+| ietf-host-asan — IETF ChaCha20 public vectors and boundaries under ASan/LSan | working tree based on 24d1d612db58d53dbc4fc4d8e10f4bf2f7654b41; scoped fingerprint 6d7c000fd96c1f6452adc870de0c266271f7dbb1d9569c6853eef32c4ee3db8f | 2026-11-26T18:31:32.247398666Z | passed | Up to date | 2026-11-26T18:31:32.753991103Z |
+| ietf-portable-archive — RFC 8439 stream and admission through the archived direct API | working tree based on 24d1d612db58d53dbc4fc4d8e10f4bf2f7654b41; scoped fingerprint c336409525ebcdc0ebe702547c8fcadbd5abfed1577cbf96ee8cea5b25657832 | 2026-11-26T18:31:23.51185519Z | passed | Up to date | 2026-11-26T18:31:24.029337237Z |
+| ietf-stream-differential — Archived scalar ChaCha20 against the OpenSSL raw-stream oracle | working tree based on 24d1d612db58d53dbc4fc4d8e10f4bf2f7654b41; scoped fingerprint 7b9a722a3eefd9899bab65a4039f08e77e484868da8c3fba3b10e435ef655347 | 2026-11-26T18:31:29.472933849Z | passed | Up to date | 2026-11-26T18:31:30.013494833Z |
 
 ## core
 

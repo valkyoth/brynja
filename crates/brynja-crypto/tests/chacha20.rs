@@ -77,6 +77,35 @@ fn rfc8439_vectors() -> Result<(), Error> {
 }
 
 #[test]
+fn offset_reservation_crosses_into_final_block_once() -> Result<(), Error> {
+    // Independent OpenSSL public fixture: counter feffffff (little-endian)
+    // followed by NONCE. Exercise the skip, both endpoints, and the last byte.
+    let mut owner = ChaCha20::new(&KEY, NONCE, u32::MAX - 1);
+    owner.apply_keystream_in_place(&mut [0; 63])?;
+    let mut rejected = [0xa5; 66];
+    assert_eq!(
+        owner.apply_keystream_in_place(&mut rejected),
+        Err(Error::Exhausted)
+    );
+    assert_eq!(rejected, [0xa5; 66]);
+    assert_eq!(owner.remaining_bytes(), 65);
+    let mut across = [0xa5; 3];
+    owner.apply_keystream(&[0; 3], &mut across)?;
+    assert_eq!(across, [0xd9, 0x6d, 0x29]);
+    assert_eq!(owner.remaining_bytes(), 62);
+    let mut rest = [0; 62];
+    owner.apply_keystream_in_place(&mut rest)?;
+    assert_eq!(rest.last(), Some(&0x75));
+    assert_eq!(owner.remaining_bytes(), 0);
+    assert_eq!(
+        owner.apply_keystream(&[0; 3], &mut across),
+        Err(Error::Exhausted)
+    );
+    assert_eq!(across, [0xd9, 0x6d, 0x29]);
+    Ok(())
+}
+
+#[test]
 fn counter_exhaustion() -> Result<(), Error> {
     let mut last = ChaCha20::new(&KEY, NONCE, u32::MAX);
     let mut expected = [0; 64];

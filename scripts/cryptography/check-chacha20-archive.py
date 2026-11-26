@@ -94,7 +94,7 @@ def main():
                 print(f"{compiler}: 302 OpenSSL comparisons and altered-answer control passed",
                       flush=True)
                 continue
-            for selection, count in [(["--test", "vectors"], 4), (["--lib"], 1)]:
+            for selection, count in [(["--test", "vectors"], 5), (["--lib"], 1)]:
                 result = pkg.run(cargo + ["test", "--release", *selection, *flags], consumer, env)
                 if not archive.archives.exact_suite(result.stdout, count):
                     raise ValueError(f"incomplete archive suite: {selection}")

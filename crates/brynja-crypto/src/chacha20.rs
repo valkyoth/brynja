@@ -6,9 +6,17 @@
 #![forbid(unsafe_code)]
 
 mod block;
+use core::{num::NonZeroUsize, ops::RangeInclusive};
 
 // 2^32 blocks of 64 bytes, with a representable one-past-the-end position.
 const END: u64 = 1 << 38;
+
+// Only constructed after reserving the exact length of this buffer.
+struct Admitted<'a> {
+    data: &'a mut [u8],
+    counters: RangeInclusive<u32>,
+    skip: usize,
+}
 
 /// Failure before changing the destination or consuming stream bytes.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -23,6 +31,8 @@ pub enum Error {
 /// There is no reset, seek, or clone. A fragmented call continues at the next
 /// byte, even in the middle of a block. No keystream is retained between calls.
 /// The key is borrowed, not cleared on drop; callers own its storage.
+/// Clearing named working arrays does not erase compiler spills or registers.
+/// Do not rely on this API to keep a raw key out of a stack dump.
 pub struct ChaCha20<'key> {
     key: &'key [u8; 32],
     nonce: [u8; 12],
@@ -49,9 +59,8 @@ impl<'key> ChaCha20<'key> {
 
     /// XOR data in place. An empty request succeeds even after exhaustion.
     pub fn apply_keystream_in_place(&mut self, data: &mut [u8]) -> Result<(), Error> {
-        if !data.is_empty() {
-            let (counter, skip) = self.reserve(data.len())?;
-            block::xor(self.key, &self.nonce, counter, skip, data);
+        if let Some(admitted) = self.admit(data)? {
+            admitted.xor(self.key, &self.nonce);
         }
         Ok(())
     }
@@ -62,43 +71,69 @@ impl<'key> ChaCha20<'key> {
         if input.len() != output.len() {
             return Err(Error::LengthMismatch);
         }
-        if !input.is_empty() {
-            let (counter, skip) = self.reserve(input.len())?;
-            output.copy_from_slice(input);
-            block::xor(self.key, &self.nonce, counter, skip, output);
+        if let Some(admitted) = self.admit(output)? {
+            admitted.data.copy_from_slice(input);
+            admitted.xor(self.key, &self.nonce);
         }
         Ok(())
     }
 
-    fn reserve(&mut self, len: usize) -> Result<(u32, usize), Error> {
-        let start = self.position;
-        let end = end_position(start, u64::try_from(len).map_err(|_| Error::Exhausted)?)
-            .ok_or(Error::Exhausted)?;
-        let counter = u32::try_from(start >> 6).map_err(|_| Error::Exhausted)?;
-        self.position = end;
-        Ok((counter, usize::from(start.to_le_bytes()[0] & 63)))
+    fn admit<'a>(&mut self, data: &'a mut [u8]) -> Result<Option<Admitted<'a>>, Error> {
+        let Some(len) = NonZeroUsize::new(data.len()) else {
+            return Ok(None);
+        };
+        let (counters, skip) = self.reserve(len)?;
+        Ok(Some(Admitted {
+            data,
+            counters,
+            skip,
+        }))
     }
-}
 
-fn end_position(start: u64, bytes: u64) -> Option<u64> {
-    start.checked_add(bytes).filter(|end| *end <= END)
+    fn reserve(&mut self, len: NonZeroUsize) -> Result<(RangeInclusive<u32>, usize), Error> {
+        let start = self.position;
+        let end = start
+            .checked_add(u64::try_from(len.get()).map_err(|_| Error::Exhausted)?)
+            .filter(|end| *end <= END)
+            .ok_or(Error::Exhausted)?;
+        let first = u32::try_from(start >> 6).map_err(|_| Error::Exhausted)?;
+        let last_byte = end.checked_sub(1).ok_or(Error::Exhausted)?;
+        let last = u32::try_from(last_byte >> 6).map_err(|_| Error::Exhausted)?;
+        self.position = end;
+        Ok((first..=last, usize::from(start.to_le_bytes()[0] & 63)))
+    }
 }
 
 #[cfg(kani)]
 #[kani::proof]
 fn admitted_requests_cannot_wrap_the_counter() {
     let start: u64 = kani::any();
-    let size: u64 = kani::any();
-    let exact = u128::from(start) + u128::from(size);
-    match end_position(start, size) {
-        Some(end) => {
-            assert_eq!(u128::from(end), exact);
-            assert!(end <= END);
-            if size != 0 {
-                assert!(u32::try_from(start / 64).is_ok());
-                assert!(u32::try_from((end - 1) / 64).is_ok());
-            }
+    kani::assume(start <= END);
+    let Some(size) = NonZeroUsize::new(kani::any()) else {
+        return;
+    };
+    let mut owner = ChaCha20 {
+        key: &[0; 32],
+        nonce: [0; 12],
+        position: start,
+    };
+    let bytes = size.get() as u128;
+    let exact = u128::from(start) + bytes;
+    match owner.reserve(size) {
+        Ok((counters, skip)) => {
+            assert!(exact <= u128::from(END));
+            assert_eq!(u128::from(owner.position), exact);
+            assert_eq!(skip as u64, start % 64);
+            let first = u128::from(*counters.start());
+            let last = u128::from(*counters.end());
+            assert_eq!(first, u128::from(start / 64));
+            assert_eq!(last, (exact - 1) / 64);
+            assert_eq!(last - first + 1, (skip as u128 + bytes).div_ceil(64));
         }
-        None => assert!(exact > u128::from(END)),
+        Err(Error::Exhausted) => {
+            assert!(exact > u128::from(END));
+            assert_eq!(owner.position, start);
+        }
+        Err(Error::LengthMismatch) => unreachable!(),
     }
 }

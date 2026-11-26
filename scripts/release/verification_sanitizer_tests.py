@@ -7,6 +7,34 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 BASE = {'brynja-core', 'brynja-hash-core'}
+CHACHA = ('chacha20', 'ietf-host-asan')
+
+
+def historical(check):
+    return (check.get('category') == 'asan'
+            and check['component'] not in ('hkdf', 'legacy_hkdf', 'aes', 'ghash')
+            and (check['component'], check['id']) != CHACHA)
+
+
+def validate_chacha(registry):
+    matches = [c for c in registry['checks'] if (c['component'], c['id']) == CHACHA]
+    assert len(matches) == 1
+    check = matches[0]
+    assert check['category'] == 'asan' and check['platform'] == 'linux-x86_64'
+    assert check['command'] == ['cargo', '+nightly-2026-11-20', 'test', '--locked', '--offline',
+        '-p', 'brynja-crypto', '--target', 'x86_64-unknown-linux-gnu', '--no-default-features',
+        '--features', 'hazmat-chacha20', '--test', 'chacha20']
+    assert check['environment'] == {
+        'ASAN_OPTIONS': 'detect_leaks=1:halt_on_error=1:exitcode=1',
+        'LSAN_OPTIONS': 'exitcode=23', 'RUSTUP_AUTO_INSTALL': '0',
+        'CARGO_ENCODED_RUSTFLAGS': '-Zsanitizer=address'}
+    assert set(check['inputs']) == {'chacha20-sanitizer', 'ghash-packaged-api'}
+    assert registry['groups']['chacha20-sanitizer']['tools'] == [
+        {'program': p, 'toolchain': 'nightly-2026-11-20'} for p in ('cargo', 'rustc')]
+    assert 'crates/brynja-crypto' in registry['groups']['ghash-packaged-api']['paths']
+    assert check['success']['minimum_tests'] == 5
+    assert 'test result: ok. 5 passed; 0 failed; 0 ignored;' in check['success']['contains']
+    assert 'test offset_reservation_crosses_into_final_block_once ... ok' in check['success']['contains']
 
 
 def validate(registry):
@@ -14,8 +42,7 @@ def validate(registry):
     rows = {r['id']: r for r in catalog['entries'] if r['phase'] == 'asan'}
     # This validator owns the historical catalog bindings. New HKDF/AES/GHASH runs have
     # separate exact-command/population regressions in RegistryTests.
-    checks = [c for c in registry['checks'] if c.get('category') == 'asan'
-              and c['component'] not in ('hkdf', 'legacy_hkdf', 'aes', 'ghash')]
+    checks = [c for c in registry['checks'] if historical(c)]
     assert len(checks) == 32
     assert len({c['id'] for c in checks}) == 32
     for check in checks:
@@ -83,9 +110,19 @@ class SanitizerRegistryTests(unittest.TestCase):
     def test_explicit_commands_and_closures(self):
         validate(self.registry)
 
+    def test_chacha_sanitizer_executes_the_complete_instrumented_boundary_suite(self):
+        validate_chacha(self.registry)
+        check = next(c for c in self.registry['checks'] if (c['component'], c['id']) == CHACHA)
+        for section, field, wrong in [('success', 'minimum_tests', 4),
+                                      ('environment', 'CARGO_ENCODED_RUSTFLAGS', '')]:
+            previous = check[section][field]
+            check[section][field] = wrong
+            with self.assertRaises(AssertionError):
+                validate_chacha(self.registry)
+            check[section][field] = previous
+
     def test_weakened_flags_population_or_input_scope_are_rejected(self):
-        first = next(c for c in self.registry['checks'] if c.get('category') == 'asan'
-                     and c['component'] not in ('hkdf', 'legacy_hkdf', 'aes', 'ghash'))
+        first = next(c for c in self.registry['checks'] if historical(c))
         for path, value in [('platform', 'macos-aarch64'), ('inputs', ['asan-tools'])]:
             changed = copy.deepcopy(self.registry)
             next(c for c in changed['checks'] if c['id'] == first['id'])[path] = value

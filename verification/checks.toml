@@ -63,7 +63,7 @@ id = "ietf-host-asan"
 category = "asan"
 platform = "linux-x86_64"
 name = "IETF ChaCha20 public vectors and boundaries under ASan/LSan"
-establishes = "The four public stream tests execute on Linux x86-64 with address and leak sanitizers. Not a timing or key erasure test."
+establishes = "The five public stream tests execute on Linux x86-64 with address and leak sanitizers. Not a timing or key erasure test."
 command = ["cargo", "+nightly-2026-11-20", "test", "--locked", "--offline", "-p", "brynja-crypto", "--target", "x86_64-unknown-linux-gnu", "--no-default-features", "--features", "hazmat-chacha20", "--test", "chacha20"]
 cwd = "."
 inputs = ["chacha20-sanitizer", "ghash-packaged-api"]
@@ -75,15 +75,15 @@ LSAN_OPTIONS = "exitcode=23"
 RUSTUP_AUTO_INSTALL = "0"
 CARGO_ENCODED_RUSTFLAGS = "-Zsanitizer=address"
 [checks.success]
-contains = ["test result: ok. 4 passed; 0 failed; 0 ignored;"]
-minimum_tests = 4
+contains = ["test result: ok. 5 passed; 0 failed; 0 ignored;", "test offset_reservation_crosses_into_final_block_once ... ok"]
+minimum_tests = 5
 
 [[checks]]
 component = "chacha20"
 id = "ietf-counter-proof"
 category = "kani"
 name = "RFC 8439 byte budget and first/last block counters"
-establishes = "Kani checks the production admission predicate for arbitrary 64-bit starts and request lengths. Not a proof of cipher arithmetic or timing."
+establishes = "Kani checks production reserve on all valid starting positions and nonempty usize lengths on the proof target: exact inclusive range, skip, block count, position advance and unchanged state on exhaustion. Not a proof of cipher arithmetic or timing."
 command = ["cargo", "+1.90.0", "kani", "-p", "brynja-crypto", "--no-default-features", "--features", "hazmat-chacha20", "--harness", "chacha20::admitted_requests_cannot_wrap_the_counter", "--exact"]
 cwd = "."
 inputs = ["kani-tools", "ghash-packaged-api"]

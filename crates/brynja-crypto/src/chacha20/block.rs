@@ -64,24 +64,19 @@ fn generate(key: &[u8; 32], nonce: &[u8; 12], counter: u32, work: &mut State) {
     }
 }
 
-// Caller admits the entire nonempty request before mutation. The final block
-// is never followed by another chunk; the increment cannot wrap into block 0.
-pub(super) fn xor(
-    key: &[u8; 32],
-    nonce: &[u8; 12],
-    mut counter: u32,
-    skip: usize,
-    data: &mut [u8],
-) {
-    let mut work = State([[0; 4]; 16]);
-    let mut bytes = data.iter_mut();
-    let mut offset = skip;
-    while !bytes.as_slice().is_empty() {
-        generate(key, nonce, counter, &mut work);
-        for (stream, out) in work.0.as_flattened().iter().skip(offset).zip(&mut bytes) {
-            *out ^= *stream;
+impl super::Admitted<'_> {
+    // Generate each admitted block exactly once, even when the last is u32::MAX.
+    pub(super) fn xor(self, key: &[u8; 32], nonce: &[u8; 12]) {
+        let mut work = State([[0; 4]; 16]);
+        let mut bytes = self.data.iter_mut();
+        let mut offset = self.skip;
+        for counter in self.counters {
+            generate(key, nonce, counter, &mut work);
+            for (stream, out) in work.0.as_flattened().iter().skip(offset).zip(&mut bytes) {
+                *out ^= *stream;
+            }
+            offset = 0;
         }
-        offset = 0;
-        counter = counter.saturating_add(1);
+        debug_assert!(bytes.as_slice().is_empty());
     }
 }

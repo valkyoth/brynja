@@ -32512,6 +32512,35 @@
         "after": "9175965c73cbf50ba9a1d2fdfc3320e331241fb0e81b574547a4f33906737cf3",
         "log": "verification/.runner/logs/2-1795716695249786611.log",
         "log_sha256": "70052d350439597bc47eafe4ce63481e433b4918a69d0124c932ce84a48e508c"
+      },
+      {
+        "id": "2-1795717894313617380",
+        "source": "working tree based on 24d1d612db58d53dbc4fc4d8e10f4bf2f7654b41; scoped fingerprint 2f5d9f822fce4929744e2d6a235a8d8a2fa18de993d111446aba58bf973f41e8",
+        "started": "2026-11-26T18:31:34.313615417Z",
+        "ended": "2026-11-26T18:31:37.772487419Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+1.90.0",
+          "kani",
+          "-p",
+          "brynja-crypto",
+          "--no-default-features",
+          "--features",
+          "hazmat-chacha20",
+          "--harness",
+          "chacha20::admitted_requests_cannot_wrap_the_counter",
+          "--exact"
+        ],
+        "cwd": ".",
+        "environment": {
+          "CARGO_NET_OFFLINE": "true"
+        },
+        "before": "3e9f4a0f40d85bc165a73e8cc28f973de713e0a3a85e802912afe8ee91bd138f",
+        "after": "3e9f4a0f40d85bc165a73e8cc28f973de713e0a3a85e802912afe8ee91bd138f",
+        "log": "verification/.runner/logs/2-1795717894313617380.log",
+        "log_sha256": "3b48848beb7b6b7236e1ef84bcf65e9bb821363496620a757a826f7512ff4259"
       }
     ],
     "chacha20/ietf-host-asan": [
@@ -32549,6 +32578,41 @@
         "after": "d0650bfffb3cd28e468e13b0427a489c93a483f75e78279dddf12dbaf23b81aa",
         "log": "verification/.runner/logs/2-1795716813169039674.log",
         "log_sha256": "c5149d72b76ca2cec36ddce55a72bd65b7cd7f0f6aec89f18767a87f3d6378d4"
+      },
+      {
+        "id": "2-1795717890685467400",
+        "source": "working tree based on 24d1d612db58d53dbc4fc4d8e10f4bf2f7654b41; scoped fingerprint 6d7c000fd96c1f6452adc870de0c266271f7dbb1d9569c6853eef32c4ee3db8f",
+        "started": "2026-11-26T18:31:30.685465677Z",
+        "ended": "2026-11-26T18:31:32.247398666Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "cargo",
+          "+nightly-2026-11-20",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "brynja-crypto",
+          "--target",
+          "x86_64-unknown-linux-gnu",
+          "--no-default-features",
+          "--features",
+          "hazmat-chacha20",
+          "--test",
+          "chacha20"
+        ],
+        "cwd": ".",
+        "environment": {
+          "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1:exitcode=1",
+          "CARGO_ENCODED_RUSTFLAGS": "-Zsanitizer=address",
+          "LSAN_OPTIONS": "exitcode=23",
+          "RUSTUP_AUTO_INSTALL": "0"
+        },
+        "before": "aad7417ee5de8732ac2d2e2362c876cd64ec6387bacd344bdf9bb1e907289ec4",
+        "after": "aad7417ee5de8732ac2d2e2362c876cd64ec6387bacd344bdf9bb1e907289ec4",
+        "log": "verification/.runner/logs/2-1795717890685467400.log",
+        "log_sha256": "d83c524424ebdfd67bf7dec6da06c4495b89ed32764235cdf8c1adc5f43a66bd"
       }
     ],
     "chacha20/ietf-portable-archive": [
@@ -32623,6 +32687,24 @@
         "after": "055eac62fa28c2f6597296cdfd05085bb5a27fc38c9f02f21f2d62455bd554a1",
         "log": "verification/.runner/logs/2-1795716680371778189.log",
         "log_sha256": "32538a7055e55d8f6f94239a611e340679419f23e1335d62aa04bb39a689dd96"
+      },
+      {
+        "id": "2-1795717876281528394",
+        "source": "working tree based on 24d1d612db58d53dbc4fc4d8e10f4bf2f7654b41; scoped fingerprint c336409525ebcdc0ebe702547c8fcadbd5abfed1577cbf96ee8cea5b25657832",
+        "started": "2026-11-26T18:31:16.281526891Z",
+        "ended": "2026-11-26T18:31:23.51185519Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/cryptography/check-chacha20-archive.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "11e61ebc621e5b3a407ad8ff34f3af244cc9b8a3dffb28a37789dc7ea18e5fe2",
+        "after": "11e61ebc621e5b3a407ad8ff34f3af244cc9b8a3dffb28a37789dc7ea18e5fe2",
+        "log": "verification/.runner/logs/2-1795717876281528394.log",
+        "log_sha256": "32538a7055e55d8f6f94239a611e340679419f23e1335d62aa04bb39a689dd96"
       }
     ],
     "chacha20/ietf-stream-differential": [
@@ -32643,6 +32725,25 @@
         "before": "af44681f2c65bace6c876e2dac2b3850652ea27958efae0c7695106f2a4e90a7",
         "after": "af44681f2c65bace6c876e2dac2b3850652ea27958efae0c7695106f2a4e90a7",
         "log": "verification/.runner/logs/2-1795716689065266345.log",
+        "log_sha256": "bc46128f18a473e3c0c94481bb6d7f44e78bf0a8ce8a23b76475a5c7fcbc9fdb"
+      },
+      {
+        "id": "2-1795717884782901852",
+        "source": "working tree based on 24d1d612db58d53dbc4fc4d8e10f4bf2f7654b41; scoped fingerprint 7b9a722a3eefd9899bab65a4039f08e77e484868da8c3fba3b10e435ef655347",
+        "started": "2026-11-26T18:31:24.782899778Z",
+        "ended": "2026-11-26T18:31:29.472933849Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/cryptography/check-chacha20-archive.py",
+          "--differential"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "d4977a19ade50d1b9c909de17ba847bcf1971154a9e9b7e1a9fccf105b12300d",
+        "after": "d4977a19ade50d1b9c909de17ba847bcf1971154a9e9b7e1a9fccf105b12300d",
+        "log": "verification/.runner/logs/2-1795717884782901852.log",
         "log_sha256": "bc46128f18a473e3c0c94481bb6d7f44e78bf0a8ce8a23b76475a5c7fcbc9fdb"
       }
     ],
@@ -51085,40 +51186,40 @@
       "last_success": "2026-11-25T14:24:49.871734105Z"
     },
     "chacha20/ietf-counter-proof": {
-      "checked_at": "2026-11-26T18:11:37.518580218Z",
-      "fingerprint": "da1e70a5ab917be55475c99be2b516f51c10ebfd844158bd78902c88edbfbea9",
+      "checked_at": "2026-11-26T18:31:38.574350276Z",
+      "fingerprint": "2f5d9f822fce4929744e2d6a235a8d8a2fa18de993d111446aba58bf973f41e8",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 9eceb63b68708c53c4d703762e5badf8db741719; scoped fingerprint da1e70a5ab917be55475c99be2b516f51c10ebfd844158bd78902c88edbfbea9",
-      "performed_at": "2026-11-26T18:11:36.747309166Z",
-      "last_success": "2026-11-26T18:11:36.747309166Z"
+      "source": "working tree based on 24d1d612db58d53dbc4fc4d8e10f4bf2f7654b41; scoped fingerprint 2f5d9f822fce4929744e2d6a235a8d8a2fa18de993d111446aba58bf973f41e8",
+      "performed_at": "2026-11-26T18:31:37.772487419Z",
+      "last_success": "2026-11-26T18:31:37.772487419Z"
     },
     "chacha20/ietf-host-asan": {
-      "checked_at": "2026-11-26T18:13:34.276711778Z",
-      "fingerprint": "53b9d882c17e200655ace349923f78d4a269da97d039a2c8f050d4907ff2675a",
+      "checked_at": "2026-11-26T18:31:32.753991103Z",
+      "fingerprint": "6d7c000fd96c1f6452adc870de0c266271f7dbb1d9569c6853eef32c4ee3db8f",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 9eceb63b68708c53c4d703762e5badf8db741719; scoped fingerprint 53b9d882c17e200655ace349923f78d4a269da97d039a2c8f050d4907ff2675a",
-      "performed_at": "2026-11-26T18:13:33.801014084Z",
-      "last_success": "2026-11-26T18:13:33.801014084Z"
+      "source": "working tree based on 24d1d612db58d53dbc4fc4d8e10f4bf2f7654b41; scoped fingerprint 6d7c000fd96c1f6452adc870de0c266271f7dbb1d9569c6853eef32c4ee3db8f",
+      "performed_at": "2026-11-26T18:31:32.247398666Z",
+      "last_success": "2026-11-26T18:31:32.247398666Z"
     },
     "chacha20/ietf-portable-archive": {
-      "checked_at": "2026-11-26T18:11:28.315508692Z",
-      "fingerprint": "a506ea855e98f12ca29499e305cb39a7e6b0808742cbdb9ee8e8b066a10124e1",
+      "checked_at": "2026-11-26T18:31:24.029337237Z",
+      "fingerprint": "c336409525ebcdc0ebe702547c8fcadbd5abfed1577cbf96ee8cea5b25657832",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 9eceb63b68708c53c4d703762e5badf8db741719; scoped fingerprint a506ea855e98f12ca29499e305cb39a7e6b0808742cbdb9ee8e8b066a10124e1",
-      "performed_at": "2026-11-26T18:11:27.775283257Z",
-      "last_success": "2026-11-26T18:11:27.775283257Z"
+      "source": "working tree based on 24d1d612db58d53dbc4fc4d8e10f4bf2f7654b41; scoped fingerprint c336409525ebcdc0ebe702547c8fcadbd5abfed1577cbf96ee8cea5b25657832",
+      "performed_at": "2026-11-26T18:31:23.51185519Z",
+      "last_success": "2026-11-26T18:31:23.51185519Z"
     },
     "chacha20/ietf-stream-differential": {
-      "checked_at": "2026-11-26T18:11:33.744751133Z",
-      "fingerprint": "1e8ba1f1779ddbc713e1167d3db3bb290dca7aa33a72d4798bea2310433e481f",
+      "checked_at": "2026-11-26T18:31:30.013494833Z",
+      "fingerprint": "7b9a722a3eefd9899bab65a4039f08e77e484868da8c3fba3b10e435ef655347",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on 9eceb63b68708c53c4d703762e5badf8db741719; scoped fingerprint 1e8ba1f1779ddbc713e1167d3db3bb290dca7aa33a72d4798bea2310433e481f",
-      "performed_at": "2026-11-26T18:11:33.240040166Z",
-      "last_success": "2026-11-26T18:11:33.240040166Z"
+      "source": "working tree based on 24d1d612db58d53dbc4fc4d8e10f4bf2f7654b41; scoped fingerprint 7b9a722a3eefd9899bab65a4039f08e77e484868da8c3fba3b10e435ef655347",
+      "performed_at": "2026-11-26T18:31:29.472933849Z",
+      "last_success": "2026-11-26T18:31:29.472933849Z"
     },
     "ghash/amd-counter-observation-replay": {
       "checked_at": "2026-11-23T16:38:36.139035807Z",

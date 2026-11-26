@@ -17,6 +17,12 @@ Each block uses ten column/diagonal double rounds. A fragmented call can
 regenerate its first block, skipping only the bytes already consumed. No
 keystream cache persists in the owner. Named working arrays are cleared on
 drop, not the caller's key, plaintext, output or possible compiler copies.
+In the reviewed x86-64 build of `24d1d612`, the reviewer observed a complete
+raw-key stack copy outside those arrays on Rust 1.100 and key-derived spills
+on Rust 1.90. This API is unsuitable if a deployment requires register or
+spill erasure. Processing 64 bytes one byte at a time generates 64 blocks
+of keystream rather than one for an aligned 64-byte update. Batch small
+updates when the protocol permits.
 The caller must not reuse overlapping portions of a stream under the same
 key and nonce, including across process restarts. Never act on unauthenticated
 plaintext. There is no original 64-bit nonce variant, XChaCha20, Poly1305,
@@ -38,9 +44,11 @@ access or keys from an application are needed.
   archived library encrypts into a separate buffer and decrypts the oracle
   output in-place across partitions. A corrupted expected answer must fail.
   OpenSSL is not linked, and its behavior on overflow is not the oracle.
-- **Kani:** checks that admission accepts exactly representable ranges through
-  the end of the stream, and that the first and last block of every admitted
-  nonempty range fit in 32 bits. This is not a proof of the round function.
-- **Sanitizers:** executes the four public vector and boundary tests under
+- **Kani:** calls the production reservation method with a symbolic position
+  and nonempty length. It checks both counter endpoints, the first-byte offset,
+  the exact number of blocks, the position advance, and nonmutation on rejection.
+  XOR consumes that inclusive range; Kani does not execute the cipher loop or
+  prove the round function.
+- **Sanitizers:** executes the five public vector and boundary tests under
   ASan/LSan on Linux x86-64. This is host memory-safety evidence, not a
   measurement of key erasure, physical leakage or compiler timing.

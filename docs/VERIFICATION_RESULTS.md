@@ -248,6 +248,15 @@ Local developer observations, not certification or a release gate. No unrun or o
 | x86-pair-development — Required AES-NI and PCLMUL GCM/GMAC owners | working tree based on 1c1d19ca69a5d5f30ea59af59fc52c8e29d38462; scoped fingerprint 5ce0e87139aaef6d7e6f17c8720260e03200c5cacb72dce4179cf09bac8724d7 | 2026-11-25T18:09:55.276074439Z | passed | Up to date | 2026-11-25T18:09:55.792512034Z |
 | x86-pair-timing-record — Replay paired x86 GCM/GMAC timing observations (no measurement) | working tree based on 59316d731f2a3ea41ea613586f248351542ae6f0; scoped fingerprint ac176681006286123481f5725df3df0d9b1ede9f9da3101605f92582891c3ff9 | 2026-11-25T14:24:49.871734105Z | passed | Up to date | 2026-11-25T14:24:50.3585671Z |
 
+## chacha20
+
+| Check | Source tested | Performed at | Result | Freshness | Status last changed (UTC) |
+| --- | --- | --- | --- | --- | --- |
+| ietf-counter-proof — RFC 8439 byte budget and first/last block counters | working tree based on 9eceb63b68708c53c4d703762e5badf8db741719; scoped fingerprint da1e70a5ab917be55475c99be2b516f51c10ebfd844158bd78902c88edbfbea9 | 2026-11-26T18:11:36.747309166Z | passed | Up to date | 2026-11-26T18:11:37.518580218Z |
+| ietf-host-asan — IETF ChaCha20 public vectors and boundaries under ASan/LSan | working tree based on 9eceb63b68708c53c4d703762e5badf8db741719; scoped fingerprint 53b9d882c17e200655ace349923f78d4a269da97d039a2c8f050d4907ff2675a | 2026-11-26T18:13:33.801014084Z | passed | Up to date | 2026-11-26T18:13:34.276711778Z |
+| ietf-portable-archive — RFC 8439 stream and admission through the archived direct API | working tree based on 9eceb63b68708c53c4d703762e5badf8db741719; scoped fingerprint a506ea855e98f12ca29499e305cb39a7e6b0808742cbdb9ee8e8b066a10124e1 | 2026-11-26T18:11:27.775283257Z | passed | Up to date | 2026-11-26T18:11:28.315508692Z |
+| ietf-stream-differential — Archived scalar ChaCha20 against the OpenSSL raw-stream oracle | working tree based on 9eceb63b68708c53c4d703762e5badf8db741719; scoped fingerprint 1e8ba1f1779ddbc713e1167d3db3bb290dca7aa33a72d4798bea2310433e481f | 2026-11-26T18:11:33.240040166Z | passed | Up to date | 2026-11-26T18:11:33.744751133Z |
+
 ## core
 
 | Check | Source tested | Performed at | Result | Freshness | Status last changed (UTC) |

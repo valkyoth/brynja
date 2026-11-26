@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.30.0 portable ChaCha20 (candidate)
+
+- Add the direct, default-off RFC 8439 scalar stream, checked byte budget and
+  packaged consumer. ChaCha20-Poly1305 and acceleration remain separate milestones.
+
 ## 0.29.4 AES-GCM and GMAC public API acceptance (candidate)
 
 - Install and run downstream consumers of local crate archives for all three AES

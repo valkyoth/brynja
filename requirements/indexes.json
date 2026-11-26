@@ -593,11 +593,11 @@
         "rfc:8439"
       ],
       "targets": [
-        "planned-symbol:crates/brynja-crypto/src/chacha20.rs#ChaCha20"
+        "actual-symbol:crates/brynja-crypto/src/chacha20.rs#ChaCha20"
       ],
       "tests": [
-        "planned:positive:tests/requirements/crypto_chacha.rs#rfc8439_vectors",
-        "planned:negative:tests/requirements/crypto_chacha.rs#counter_exhaustion"
+        "planned:positive:crates/brynja-crypto/tests/chacha20.rs#rfc8439_vectors",
+        "planned:negative:crates/brynja-crypto/tests/chacha20.rs#counter_exhaustion"
       ]
     },
     "BRY-REQ-CRYPTO-0009": {
@@ -11272,6 +11272,9 @@
       "actual-symbol:crates/brynja-crypto/src/aes_gcm/portable/gmac.rs#authenticate_next": [
         "BRY-REQ-CRYPTO-0021"
       ],
+      "actual-symbol:crates/brynja-crypto/src/chacha20.rs#ChaCha20": [
+        "BRY-REQ-CRYPTO-0008"
+      ],
       "actual-symbol:crates/brynja-crypto/src/hkdf/derive.rs#Prk": [
         "BRY-REQ-CRYPTO-0004"
       ],
@@ -11378,9 +11381,6 @@
       ],
       "planned-symbol:crates/brynja-crypto/src/algorithm.rs#AlgorithmPolicy": [
         "BRY-REQ-CRYPTO-0013"
-      ],
-      "planned-symbol:crates/brynja-crypto/src/chacha20.rs#ChaCha20": [
-        "BRY-REQ-CRYPTO-0008"
       ],
       "planned-symbol:crates/brynja-crypto/src/chacha20_poly1305.rs#ChaCha20Poly1305": [
         "BRY-REQ-CRYPTO-0009"
@@ -11791,6 +11791,9 @@
       "planned:negative:crates/brynja-crypto/src/aes_gcm/portable/tests.rs#subkey_derivation_error_never_starts_ghash_or_commits_output": [
         "BRY-REQ-CRYPTO-0007"
       ],
+      "planned:negative:crates/brynja-crypto/tests/chacha20.rs#counter_exhaustion": [
+        "BRY-REQ-CRYPTO-0008"
+      ],
       "planned:negative:crates/brynja-crypto/tests/ghash_field.rs#budget_failure_is_atomic_and_empty_is_zero": [
         "BRY-REQ-CRYPTO-0006"
       ],
@@ -11870,9 +11873,6 @@
       ],
       "planned:negative:tests/requirements/crypto_aead.rs#chacha20_poly1305_failure_atomicity": [
         "BRY-REQ-CRYPTO-0009"
-      ],
-      "planned:negative:tests/requirements/crypto_chacha.rs#counter_exhaustion": [
-        "BRY-REQ-CRYPTO-0008"
       ],
       "planned:negative:tests/requirements/crypto_ecc.rs#invalid_points_scalars_and_shared_secrets": [
         "BRY-REQ-CRYPTO-0010"
@@ -12221,6 +12221,9 @@
       "planned:positive:crates/brynja-crypto/tests/aes128.rs#nist_aesavs_all_four_aes128_ecb_kat_files": [
         "BRY-REQ-CRYPTO-0005"
       ],
+      "planned:positive:crates/brynja-crypto/tests/chacha20.rs#rfc8439_vectors": [
+        "BRY-REQ-CRYPTO-0008"
+      ],
       "planned:positive:crates/brynja-crypto/tests/ghash_vectors/nist.rs#aes128_published_ghash_intermediates": [
         "BRY-REQ-CRYPTO-0006"
       ],
@@ -12299,9 +12302,6 @@
       ],
       "planned:positive:tests/requirements/crypto_aead.rs#chacha20_poly1305_vectors": [
         "BRY-REQ-CRYPTO-0009"
-      ],
-      "planned:positive:tests/requirements/crypto_chacha.rs#rfc8439_vectors": [
-        "BRY-REQ-CRYPTO-0008"
       ],
       "planned:positive:tests/requirements/crypto_ecc.rs#official_group_and_signature_vectors": [
         "BRY-REQ-CRYPTO-0010"

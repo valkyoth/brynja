@@ -409,13 +409,13 @@
           "owner": "0.24.15"
         }
       },
-      "code_target": "crates/brynja-crypto/src/chacha20.rs",
+      "code_target": "crates/brynja-crypto/src/chacha20.rs#ChaCha20",
       "consumer_links": [
         "consumer:construction",
         "consumer:protocol",
         "consumer:provider"
       ],
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "cryptography",
       "explicit_rejections": [
         "copy-secret-state",
@@ -463,7 +463,7 @@
       "ordinary_hardened_separation": "required",
       "owner": "0.30.0",
       "profile": "symmetric-cipher",
-      "test_target": "tests/surface/primitives.rs#chacha20"
+      "test_target": "crates/brynja-crypto/tests/chacha20.rs#rfc8439_vectors"
     },
     {
       "api": {
@@ -19899,7 +19899,7 @@
     {
       "capability": "algorithm.chacha20",
       "evidence": [
-        "tests/surface/primitives.rs#chacha20",
+        "crates/brynja-crypto/tests/chacha20.rs#rfc8439_vectors",
         "scripts/zeroization/check-zeroization-codegen.sh"
       ],
       "fields": [
@@ -19944,7 +19944,7 @@
       },
       "owner": "0.30.0",
       "planned_cleanup_contract": "mandatory-core-or-separately-reviewed-equivalent",
-      "planned_implementation_target": "crates/brynja-crypto/src/chacha20.rs",
+      "planned_implementation_target": "crates/brynja-crypto/src/chacha20.rs#ChaCha20",
       "residual_risks": [
         "mem-forget",
         "process-abort",
@@ -24768,7 +24768,7 @@
       ]
     }
   ],
-  "policy_sha256": "10d31740e38a11b54f8fcec7bef6bcb479dc1b69a4d831a5fe0669826fbeba9f",
+  "policy_sha256": "9106fc99046f74233417829ed921847180851d307d1907e87ad6cba2d221a96a",
   "registered_secret_owners": [
     {
       "capability": "algorithm.hkdf",
@@ -25574,5 +25574,5 @@
     "physical-memory-remanence"
   ],
   "schema": 1,
-  "surface_register_sha256": "ae1ca74530007dd11c956dd2bb6a3ee45e55913328aa23d4db49b57ce55f9c1b"
+  "surface_register_sha256": "4ed7e6644410802ce9137362e67c2195d701667209f9902833a78855923e3a80"
 }

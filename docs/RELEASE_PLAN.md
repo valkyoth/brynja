@@ -7162,7 +7162,7 @@ Exit criteria:
 
 ### v0.29.4 - AES-GCM And GMAC Public API Usability Acceptance
 
-Status: awaiting pentest
+Status: released
 
 The [installed consumer](../assurance/aead-installed-consumer/README.md)
 adds downstream installation and known-answer checks without changing production cryptography.
@@ -7213,7 +7213,20 @@ Exit criteria:
 
 ### v0.30.0 - Complete Portable ChaCha20 And Public Acceptance
 
-Status: planned
+Status: awaiting pentest
+
+The first consumer is the RFC 8439 ChaCha20-Poly1305 milestone. It needs
+the IETF 96-bit nonce / 32-bit counter layout. No reviewed consumer here
+requires the original 64-bit nonce layout; do not silently select it or
+XChaCha20 from nonce length. The scalar primitive is an explicit opt-in on
+`brynja-crypto`, not authenticated encryption or a default façade service.
+v0.30.0 is internal; the scheduled registry checkpoint is v0.30.2.
+
+Run `brynja-verify run chacha20 --needed` for the archived public consumer,
+independent comparison, Linux sanitizer run and counter-admission proof. The consumer exercises RFC 8439 §§2.3.2,
+2.4.2 and Appendices A.1–A.2, fragmentation, rejection without mutation,
+and an independent final-counter answer. The proof concerns bounds, not
+cipher correctness or target-specific constant-time behavior.
 
 Plan scope: Implement complete ChaCha20 with original and IETF nonce/counter profiles only where authenticated consumers require them, checked counters, deterministic exhaustion, exact block and tail behavior, overlap rules, official vectors, proofs, and a packaged public consumer so the scheduled checkpoint publishes a directly usable scalar implementation.
 

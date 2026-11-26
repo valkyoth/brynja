@@ -1,5 +1,9 @@
 # Security Controls
 
+The [portable ChaCha20 owner](assurance/chacha20-development.md) rejects a
+whole request before mutation if its counter range is too short. It cannot
+prevent a second owner from reusing that range and provides no integrity tag.
+
 The [v0.29.4 installed-consumer check](../assurance/aead-installed-consumer/README.md)
 exercises send exhaustion and rejection without releasing unauthenticated
 plaintext through both public import paths. The fixture reconstructs public

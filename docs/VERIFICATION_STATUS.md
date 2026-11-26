@@ -1,5 +1,11 @@
 # Component Verification Status
 
+## Portable ChaCha20 (v0.30.0 development)
+
+The [scalar acceptance record](assurance/chacha20-development.md) separates
+RFC examples, independent differential testing, and a proof of counter bounds.
+It does not qualify timing on any target or authenticate messages.
+
 ## AES-GCM and GMAC downstream acceptance (v0.29.4)
 
 The [installed-consumer checks](../assurance/aead-installed-consumer/README.md)

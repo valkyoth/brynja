@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "12a08a9456b34f7cad70a56c243e707735823d9ca58435d7922c5afe4ef0a2d4",
+  "policy_sha256": "2c89d201f7f10957f22836d6650bdfaef990d500529f5470c5862f3aa529f7b1",
   "schema": 2,
   "source_ledger_sha256": "39e86f6144d5ee20aa8b114a5d2662bef933275477b00a2e002e3e63dce31e78",
   "surfaces": [
@@ -31,8 +31,8 @@
       "test_target": "crates/brynja-crypto/src/aes_gcm/portable/tests.rs#subkey_derivation_error_never_starts_ghash_or_commits_output"
     },
     {
-      "code_target": "crates/brynja-crypto/src/chacha20.rs",
-      "disposition": "future-work",
+      "code_target": "crates/brynja-crypto/src/chacha20.rs#ChaCha20",
+      "disposition": "implemented",
       "domain": "cryptography",
       "id": "algorithm.chacha20",
       "kind": "semantic",
@@ -40,8 +40,8 @@
         "rfc:8439"
       ],
       "owner": "0.30.0",
-      "rationale": "ChaCha20 remains separate first-party work with checked block counters and deterministic exhaustion closure.",
-      "test_target": "tests/surface/primitives.rs#chacha20"
+      "rationale": "The default-off direct primitive implements only the RFC 8439 IETF stream with checked counter exhaustion. No authenticated encryption, original nonce layout, accelerator or target-specific timing claim is admitted.",
+      "test_target": "crates/brynja-crypto/tests/chacha20.rs#rfc8439_vectors"
     },
     {
       "code_target": "crates/brynja-crypto/src/chacha20_poly1305.rs",

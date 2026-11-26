@@ -1,8 +1,8 @@
 [release]
-version = "0.29.4"
-milestone = "0.29.4"
+version = "0.30.0"
+milestone = "0.30.0"
 baseline = "0.25.3"
-cumulative_milestones = ["0.26.0", "0.26.1", "0.27.0", "0.27.1", "0.27.2", "0.27.3", "0.27.4", "0.27.5", "0.27.6", "0.28.0", "0.28.1", "0.28.2", "0.28.3", "0.29.0", "0.29.1", "0.29.2", "0.29.3", "0.29.4"]
+cumulative_milestones = ["0.26.0", "0.26.1", "0.27.0", "0.27.1", "0.27.2", "0.27.3", "0.27.4", "0.27.5", "0.27.6", "0.28.0", "0.28.1", "0.28.2", "0.28.3", "0.29.0", "0.29.1", "0.29.2", "0.29.3", "0.29.4", "0.30.0"]
 policy = "independent"
 stage = "internal"
 # Legacy explicit runner default only; routine gates use final-checks.toml, not this selector.
@@ -11,11 +11,11 @@ exceptional = false
 exception_reason = ""
 
 [crates."brynja"]
-previous_version = "0.29.3"
-version = "0.29.4"
+previous_version = "0.29.4"
+version = "0.30.0"
 change = "metadata"
 publish = false
-reason = "Internal packaged AES-GCM and GMAC consumer acceptance; no production API change or publication."
+reason = "Advance facade metadata only; no raw ChaCha20 feature forwarding or publication."
 
 [crates."brynja-legacy-hmac"]
 previous_version = "0.1.0"
@@ -64,7 +64,7 @@ previous_version = "0.2.0"
 version = "0.2.0"
 change = "code"
 publish = false
-reason = "Add separate default-off x86-64 (Linux/Windows) and ARM64 (Linux/macOS) paired AES-GCM and GMAC owners; ordinary constructors remain portable. Retain the internal train version; no publication selected."
+reason = "Add the direct default-off portable RFC 8439 ChaCha20 stream. Keep this internal version unpublished; a fresh component version is required for the registry checkpoint."
 
 [crates."brynja-hash-core"]
 previous_version = "0.1.0"

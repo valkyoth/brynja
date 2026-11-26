@@ -1,7 +1,8 @@
 # Crate Version Matrix
 
-Latest signed milestone: v0.29.3, with zero crates selected for publication.
-The internal installed-consumer candidate advances only the facade to 0.29.4;
+Latest signed milestone: v0.29.4, with zero crates selected for publication.
+The internal portable ChaCha20 candidate advances only the facade version to 0.30.0.
+The direct raw stream is default-off in the unpublished development tree;
 ordinary AES-GCM and GMAC constructors remain portable. Separate default-off
 execution features add required x86-64 (Linux/Windows) and ARM64 (Linux/macOS) owners in the checkout.
 Supporting crates keep their internal-train versions. Portable GHASH remains the default constructor in

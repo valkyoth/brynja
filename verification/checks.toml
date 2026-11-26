@@ -5,6 +5,97 @@ execution_semantics = 1
 catalog = "verification/catalog.json"
 includes = ["verification/miri-checks.json", "verification/kani-checks.json", "verification/matrix-checks.json", "verification/extra-checks.json"]
 
+[groups.chacha20-archive]
+paths = ["scripts/cryptography/check-chacha20-archive.py", "scripts/aes-gcm/check-packaged-api.py", "assurance/aes-gcm-consumer/Cargo.lock", "assurance/chacha20-consumer/lib.rs"]
+[[groups.chacha20-archive.tools]]
+program = "cargo"
+toolchain = "1.100.0"
+[[groups.chacha20-archive.tools]]
+program = "rustc"
+toolchain = "1.100.0"
+
+[[checks]]
+component = "chacha20"
+id = "ietf-portable-archive"
+category = "package"
+name = "RFC 8439 stream and admission through the archived direct API"
+establishes = "RFC block and cipher examples, partitions, rejection without mutation and feature isolation on both compiler endpoints; Cortex-M compile only."
+command = ["python3", "scripts/cryptography/check-chacha20-archive.py"]
+cwd = "."
+inputs = ["chacha20-archive", "ghash-packaged-api", "hkdf-msrv"]
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+timeout_seconds = 600
+[checks.success]
+unique_lines = ["1.90.0: RFC and stream boundaries, Cortex-M compile, default-off import passed", "1.100.0: RFC and stream boundaries, Cortex-M compile, default-off import passed"]
+contains = ["CHACHA20_ARCHIVE_COMPLETE"]
+
+[groups.chacha20-oracle]
+paths = ["assurance/chacha20-consumer/differential.rs"]
+[[groups.chacha20-oracle.tools]]
+program = "openssl"
+
+[[checks]]
+component = "chacha20"
+id = "ietf-stream-differential"
+category = "differential"
+name = "Archived scalar ChaCha20 against the OpenSSL raw-stream oracle"
+establishes = "302 deterministic public inputs per compiler, disjoint encryption and partitioned in-place decryption including the final legal block. Does not infer wrap policy from the oracle or establish timing."
+command = ["python3", "scripts/cryptography/check-chacha20-archive.py", "--differential"]
+cwd = "."
+inputs = ["chacha20-oracle", "chacha20-archive", "ghash-packaged-api", "hkdf-msrv"]
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+timeout_seconds = 600
+[checks.success]
+unique_lines = ["1.90.0: 302 OpenSSL comparisons and altered-answer control passed", "1.100.0: 302 OpenSSL comparisons and altered-answer control passed"]
+contains = ["CHACHA20_DIFFERENTIAL_COMPLETE"]
+
+[groups.chacha20-sanitizer]
+[[groups.chacha20-sanitizer.tools]]
+program = "cargo"
+toolchain = "nightly-2026-11-20"
+[[groups.chacha20-sanitizer.tools]]
+program = "rustc"
+toolchain = "nightly-2026-11-20"
+
+[[checks]]
+component = "chacha20"
+id = "ietf-host-asan"
+category = "asan"
+platform = "linux-x86_64"
+name = "IETF ChaCha20 public vectors and boundaries under ASan/LSan"
+establishes = "The four public stream tests execute on Linux x86-64 with address and leak sanitizers. Not a timing or key erasure test."
+command = ["cargo", "+nightly-2026-11-20", "test", "--locked", "--offline", "-p", "brynja-crypto", "--target", "x86_64-unknown-linux-gnu", "--no-default-features", "--features", "hazmat-chacha20", "--test", "chacha20"]
+cwd = "."
+inputs = ["chacha20-sanitizer", "ghash-packaged-api"]
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+timeout_seconds = 600
+[checks.environment]
+ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1"
+LSAN_OPTIONS = "exitcode=23"
+RUSTUP_AUTO_INSTALL = "0"
+CARGO_ENCODED_RUSTFLAGS = "-Zsanitizer=address"
+[checks.success]
+contains = ["test result: ok. 4 passed; 0 failed; 0 ignored;"]
+minimum_tests = 4
+
+[[checks]]
+component = "chacha20"
+id = "ietf-counter-proof"
+category = "kani"
+name = "RFC 8439 byte budget and first/last block counters"
+establishes = "Kani checks the production admission predicate for arbitrary 64-bit starts and request lengths. Not a proof of cipher arithmetic or timing."
+command = ["cargo", "+1.90.0", "kani", "-p", "brynja-crypto", "--no-default-features", "--features", "hazmat-chacha20", "--harness", "chacha20::admitted_requests_cannot_wrap_the_counter", "--exact"]
+cwd = "."
+inputs = ["kani-tools", "ghash-packaged-api"]
+platform = "linux-x86_64"
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","KANIFLAGS"]
+timeout_seconds = 600
+[checks.environment]
+CARGO_NET_OFFLINE = "true"
+[checks.success]
+unique_lines = ["Complete - 1 successfully verified harnesses, 0 failures, 1 total."]
+contains = ["VERIFICATION:- SUCCESSFUL"]
+
 [groups.ghash-packaged-api]
 paths = ["Cargo.toml", "Cargo.lock", "assurance/ghash-public-api", "scripts/ghash/check-packaged-api.py", "scripts/hkdf/check-hkdf-public-api.py", "scripts/repository/facade_cargo_environment.py", "crates/brynja","crates/brynja-core","crates/brynja-crypto","crates/brynja-crypto-cpu","crates/brynja-crypto-cpu-std","crates/brynja-dtls","crates/brynja-hash-core","crates/brynja-hash-parallel","crates/brynja-hash-sha2","crates/brynja-hash-sha3","crates/brynja-hash-tuple","crates/brynja-mac-hmac","crates/brynja-mac-kmac","crates/brynja-pki","crates/brynja-platform","crates/brynja-protocol","crates/brynja-quic-tls","crates/brynja-tls","crates/brynja-tls12","crates/brynja-tls13","crates/brynja-tls13-handshake"]
 optional_paths = [".cargo/config", ".cargo/config.toml"]

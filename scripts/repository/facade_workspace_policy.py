@@ -38,7 +38,8 @@ CRYPTO['aes-runtime-execution'] = ['aes-static-execution', 'brynja-crypto-cpu/ae
 CRYPTO['ghash-runtime-execution'] = ['hazmat-ghash', 'dep:brynja-crypto-cpu',
                                      'brynja-crypto-cpu/ghash-runtime-execution']
 FEATURES = {
-    'brynja-crypto': CRYPTO,
+    # Only a direct dependency can select the extra raw stream feature.
+    'brynja-crypto': {**CRYPTO, 'hazmat-chacha20': []},
     'brynja': {feature: ['brynja-crypto/' + feature] for feature in CRYPTO},
 }
 FEATURES['brynja']['ghash-runtime-execution'] = ['hazmat-ghash',

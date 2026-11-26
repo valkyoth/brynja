@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "55cde96d150d9423ff9e4ac585b5809afede564e737aa72e2c3b32c8fa5040f8",
-  "domain_policy_sha256": "5bda95e48cb43c462d564812a17005caef069d13f66a9c3964ffa13cb6b5b976",
-  "policy_sha256": "39cc0928fadb9b95f814ae873c98641edaf172c8d5be9fb322fcb652eff3a38d",
+  "domain_policy_sha256": "cb85b010eae5d5cbac49ecd6202c3f7c68677d38d61b8d336a0de71e8eab08b4",
+  "policy_sha256": "22fe5e02c3e69a41b868bf61bd7dce17d0330182fb2589ce4c4bcc9c1e37dab5",
   "requirements": [
     {
       "applicability": "delegate",
@@ -1531,7 +1531,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "Vectors, counter-bound proofs, differential campaigns, and target side-channel evidence remain unresolved until v0.30.0.",
+      "evidence_gap": "Archived RFC examples, an independent scalar differential campaign and a Kani proof of the byte-budget predicate are scoped in docs/assurance/chacha20-development.md. These do not establish target-specific timing, physical erasure or authenticated encryption.",
       "id": "BRY-REQ-CRYPTO-0008",
       "invariants": [
         "constant-time",
@@ -1539,13 +1539,13 @@
         "side-channel",
         "work-bound"
       ],
-      "lifecycle": "planned",
+      "lifecycle": "implemented",
       "mapping_rationale": "The separate ChaCha20 semantic surface directly records the stream construction and exhaustion rules sourced from RFC 8439.",
       "mapping_scope": "reviewed-domain",
       "owner": "0.30.0",
       "profile": "crypto-encoding-pkix",
       "residual": "The raw stream cipher is never exposed as a facade security service and is admitted only for reviewed compositions.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -1649,7 +1649,7 @@
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "planned-symbol",
+          "kind": "actual-symbol",
           "target": "crates/brynja-crypto/src/chacha20.rs#ChaCha20"
         }
       ],
@@ -1657,12 +1657,12 @@
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "tests/requirements/crypto_chacha.rs#rfc8439_vectors"
+          "target": "crates/brynja-crypto/tests/chacha20.rs#rfc8439_vectors"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "tests/requirements/crypto_chacha.rs#counter_exhaustion"
+          "target": "crates/brynja-crypto/tests/chacha20.rs#counter_exhaustion"
         }
       ],
       "work_bound": "Each block has a fixed twenty-round schedule and stream generation rejects requests that would wrap the 32-bit block counter."
@@ -31268,9 +31268,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "b8fbe2d9b8cd1bc5e5d7cb8e08dc11a1f3ac91073e5b052ae22bb0fcff3d6c45",
+  "residual_policy_sha256": "b9674cce1ad2286000adae728b4cb8eaa6d3a2bfd178e444a9137c98ca63bf57",
   "schema": 5,
   "source_ledger_sha256": "39e86f6144d5ee20aa8b114a5d2662bef933275477b00a2e002e3e63dce31e78",
-  "surface_register_sha256": "ae1ca74530007dd11c956dd2bb6a3ee45e55913328aa23d4db49b57ce55f9c1b",
-  "transport_policy_sha256": "8faefa6923e1c9bb8608bf1986a01e6ed1c0c17a3443067f4e4d0e446103e4a2"
+  "surface_register_sha256": "4ed7e6644410802ce9137362e67c2195d701667209f9902833a78855923e3a80",
+  "transport_policy_sha256": "093e182491f3406711ecb489bff822990d644013f60a96a5bd9917cd18756bb1"
 }

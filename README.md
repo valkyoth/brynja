@@ -326,6 +326,10 @@ The [v0.29.4 consumer fixture](assurance/aead-installed-consumer/README.md)
 shows how to check the portable and paired APIs against known answers from
 installed downstream binaries. These checks do not confer FIPS validation.
 
+The [v0.30.0 development candidate](docs/assurance/chacha20-development.md)
+adds the portable RFC 8439 stream to `brynja-crypto` under `hazmat-chacha20`.
+It is not ChaCha20-Poly1305: raw ciphertext has no integrity protection.
+
 The v0.27.6 [provider API candidate](docs/assurance/aes-provider-completion.md)
 adds distinct AES-128/192/256 external-key bindings. Applications supply their
 own trusted adapters; Brynja adds no device client or OpenBao integration and

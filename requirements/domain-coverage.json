@@ -5657,7 +5657,7 @@
   "excluded_normative_section_count": 12,
   "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "5bda95e48cb43c462d564812a17005caef069d13f66a9c3964ffa13cb6b5b976",
+  "policy_sha256": "cb85b010eae5d5cbac49ecd6202c3f7c68677d38d61b8d336a0de71e8eab08b4",
   "requirement_count": 42,
   "schema": 1,
   "surface_count": 3351,
@@ -5680,7 +5680,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "cryptography",
       "id": "algorithm.chacha20",
       "owner": "0.30.0",

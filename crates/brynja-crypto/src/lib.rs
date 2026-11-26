@@ -17,6 +17,9 @@
 
 #![no_std]
 
+#[cfg(feature = "hazmat-chacha20")]
+pub mod chacha20;
+
 #[cfg(all(
     not(feature = "aes-gcm"),
     any(feature = "gmac", all(test, feature = "hazmat-ghash"))

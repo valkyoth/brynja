@@ -25,6 +25,12 @@
 
 # brynja-crypto
 
+The development tree includes portable RFC 8439 ChaCha20 behind the
+default-off `hazmat-chacha20` feature. Its forward-only stream accepts
+a 32-byte key, 12-byte nonce and explicit starting block counter. Use it
+only in a reviewed construction: it does not authenticate ciphertext or
+manage nonce allocation. This is not ChaCha20-Poly1305.
+
 Brynja's `no_std`, protocol-facing cryptographic composition and policy
 boundary. Reusable leaf crates implement algorithms; this crate reexports
 their APIs without making each leaf depend on the entire crypto or TLS graph.

@@ -1079,13 +1079,13 @@
     },
     {
       "decision": {
-        "code_target": "crates/brynja-crypto/src/chacha20.rs",
-        "disposition": "future-work",
+        "code_target": "crates/brynja-crypto/src/chacha20.rs#ChaCha20",
+        "disposition": "implemented",
         "domain": "cryptography",
         "owner": "0.30.0",
-        "rationale": "ChaCha20 remains separate first-party work with checked block counters and deterministic exhaustion closure.",
+        "rationale": "The default-off direct primitive implements only the RFC 8439 IETF stream with checked counter exhaustion. No authenticated encryption, original nonce layout, accelerator or target-specific timing claim is admitted.",
         "sources": ["rfc:8439"],
-        "test_target": "tests/surface/primitives.rs#chacha20"
+        "test_target": "crates/brynja-crypto/tests/chacha20.rs#rfc8439_vectors"
       },
       "id": "algorithm.chacha20"
     },

@@ -2,6 +2,12 @@
 
 Status: initial; expands with every milestone
 
+Raw ChaCha20 is malleable: a changed ciphertext bit changes the corresponding
+plaintext bit without a failure signal. Reusing a key/nonce range also reuses
+keystream. Neither is prevented by the per-owner counter check. Protocols
+must supply authentication and unique nonce allocation; see the
+[v0.30.0 scope](assurance/chacha20-development.md).
+
 The [installed AEAD consumer](../assurance/aead-installed-consumer/README.md)
 checks behavior at an application boundary; it does not supply a durable
 nonce allocator, anti-replay state, platform qualification or a validated

@@ -16,6 +16,7 @@ gmac = []
 aes-gcm-execution = ["aes-gcm", "dep:brynja-crypto-cpu", "brynja-crypto-cpu/aes-static-execution", "brynja-crypto-cpu/ghash-runtime-execution"]
 gmac-execution = ["gmac", "dep:brynja-crypto-cpu", "brynja-crypto-cpu/aes-static-execution", "brynja-crypto-cpu/ghash-runtime-execution"]
 hazmat-aes-block = []
+hazmat-chacha20 = []
 hazmat-ghash = []
 ghash-runtime-execution = ["hazmat-ghash", "dep:brynja-crypto-cpu", "brynja-crypto-cpu/ghash-runtime-execution"]
 aes-static-execution = ["hazmat-aes-block", "cpu", "brynja-crypto-cpu/aes-static-execution"]
@@ -57,6 +58,10 @@ brynja-mac-hmac = { workspace = true }
 
 [lints]
 workspace = true
+
+[[test]]
+name = "chacha20"
+required-features = ["hazmat-chacha20"]
 
 [[test]]
 name = "aead_pair"

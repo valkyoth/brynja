@@ -4,6 +4,17 @@ import re
 from pathlib import Path
 from darwin_resident_abi import UNSAFE_MODULES as DARWIN_RESIDENT_MODULES
 
+# Imported by brynja-core only in the archived, dual-cfg experiment. Include
+# ordinary submodules and cfg(test) descendants, not just the #[path] entry.
+CORE_RESEARCH_DIR = Path("research/aes-fault-integrity/core/fault_comparison_workbench")
+CORE_RESEARCH_HASHES = {
+    "mod.rs": "256c72006a5de917f5e4496b81729763257c095d52e69d249c4ac39fb54ff1d6",
+    "guarded_copy.rs": "6f3a1a6fea33867e429f4df3f9225b93e370f70b9638962372362c55dfefa59a",
+    "opaque.rs": "ac916c6a2417d93e712418531122246004b54a0dc3af4d92057a279e523092c1",
+    "tests.rs": "c521577ec7cff174a2c2ba81ab39bdf26a06e3606c33d58e1e787ee65fc0214e",
+    "guarded_copy/tests.rs": "3df80e1c96dd536349ea6be8d4af8df2540bec2589d1b2b41814692b14afb066",
+}
+
 # Complete importer pins bind the cfg, module visibility and destination together.
 # These are not unsafe allowances. The resolved targets are checked separately.
 SOURCE_IMPORTERS = {

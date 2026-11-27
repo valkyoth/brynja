@@ -14,7 +14,9 @@ is selected; the planned publication checkpoint remains v0.30.6.
 The scoped gate checks the static CPU source hashes and the portable SHA-256
 package and source policy without rebuilding hardware campaigns. The CPU
 crate matches signed v0.30.1. The script inventory also verifies the digest
-of its one permitted GHASH C diagnostic. The separate historical
-`validate-release-metadata.sh` passes the CPU and SHA-256 checks, then stops
-on the legacy-hash evidence pin for `crates/brynja-core/src/lib.rs`. This
-milestone does not refresh or qualify that historical evidence.
+of its one permitted GHASH C diagnostic. The unsafe policy now pins all five
+source files of the archived core research module; this does not enable it.
+Both legacy SHA-1/MD5 source inventories pass without changing their native
+captures. The separate manual `validate-release-metadata.sh` still expects
+the pre-v0.25.3 legacy fixture in push CI and fails there. Push CI remains
+scoped; no SHA-1/MD5 native requalification is claimed.

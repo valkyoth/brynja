@@ -6,7 +6,7 @@ from __future__ import annotations
 import hashlib
 import re
 from pathlib import Path
-from unsafe_inventory import ALLOWED, PATH_ATTRIBUTE, SOURCE_IMPORTERS
+from unsafe_inventory import ALLOWED, CORE_RESEARCH_DIR, CORE_RESEARCH_HASHES, PATH_ATTRIBUTE, SOURCE_IMPORTERS
 
 UNSAFE_BLOCK = re.compile(r"\bunsafe\s*\{")
 UNSAFE_ITEM = re.compile(r'\bunsafe\s+(?:extern\s+"[^"]+"\s+)?(?:fn|impl|trait)\b')
@@ -65,6 +65,22 @@ def check_import_targets(root: Path, relative: Path, text: str) -> None:
         if not any(resolved.is_relative_to(root.resolve() / tree) for tree in
                    ("crates", "research/aes-fault-integrity")):
             fail(f"reviewed module target outside source trees: {relative}: {name}")
+        if resolved == root.resolve() / CORE_RESEARCH_DIR / "mod.rs":
+            directory = resolved.parent
+            files = {}
+            for child in directory.rglob("*"):
+                if child.is_symlink():
+                    fail(f"symlink in core research module: {child}")
+                if child.is_dir():
+                    continue
+                if not child.is_file():
+                    fail(f"non-regular core research module input: {child}")
+                files[child.relative_to(directory).as_posix()] = child
+            if files.keys() != CORE_RESEARCH_HASHES.keys():
+                fail("core research module inventory changed; reopen security review")
+            for entry, child in files.items():
+                if hashlib.sha256(child.read_bytes()).hexdigest() != CORE_RESEARCH_HASHES[entry]:
+                    fail(f"core research module changed; reopen security review: {entry}")
 
 
 def validate(root: Path) -> None:

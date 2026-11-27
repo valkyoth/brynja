@@ -36,6 +36,8 @@ def copy_import_targets(root: Path, relative: Path) -> None:
         target = root / real.relative_to(ROOT)
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(real, target)
+        if real == ROOT / unsafe_policy.CORE_RESEARCH_DIR / 'mod.rs':
+            shutil.copytree(real.parent, target.parent, dirs_exist_ok=True)
 
 
 def reconciled_inventory():
@@ -47,6 +49,25 @@ def reconciled_inventory():
             path.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / relative, path)
             copy_import_targets(root, relative)
+        unsafe_policy.validate(root)
+        workbench = root / unsafe_policy.CORE_RESEARCH_DIR
+        for name in unsafe_policy.CORE_RESEARCH_HASHES:
+            source = workbench / name
+            content = source.read_bytes()
+            source.write_bytes(content + b'\n')
+            require_rejection(root, 'core research module changed')
+            source.write_bytes(content)
+        child = workbench / 'guarded_copy/tests.rs'
+        child.unlink()
+        require_rejection(root, 'core research module inventory changed')
+        child.symlink_to(ROOT / unsafe_policy.CORE_RESEARCH_DIR / 'guarded_copy/tests.rs')
+        require_rejection(root, 'symlink in core research module')
+        child.unlink()
+        shutil.copyfile(ROOT / unsafe_policy.CORE_RESEARCH_DIR / 'guarded_copy/tests.rs', child)
+        extra_module = workbench / 'additional.rs'
+        extra_module.write_text('// not in the reviewed population\n')
+        require_rejection(root, 'core research module inventory changed')
+        extra_module.unlink()
         unsafe_policy.validate(root)
         importer = root / 'crates/brynja-crypto/src/aes.rs'
         original = importer.read_text()

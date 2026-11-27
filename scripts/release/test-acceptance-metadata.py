@@ -115,6 +115,31 @@ def public_acceptance_package_closure():
     print('Three public package inventories retain optional HMAC and reject its omission')
 
 
+def legacy_shared_source_deltas():
+    """Both families bind the reviewed shared inputs, not new native evidence."""
+    policy = metadata.legacy_final_acceptance
+    root, read = metadata.ROOT, policy.read
+    review = tomllib.loads(read(root, policy.HASHES))['files']
+    policy.validate_native(root)
+    for delta in (policy.SHA1_DELTA, policy.MD5_DELTA):
+        record = read(root, delta)
+        assert policy.sha(record) == review[delta]
+        for source in ('crates/brynja-core/src/lib.rs', 'crates/brynja-hash-core/Cargo.toml'):
+            digest = policy.sha(read(root, source))
+            assert tomllib.loads(record)['files'][source] == review[source] == digest
+            stale = record.replace(f'"{source}" = "{digest}"', f'"{source}" = "stale"')
+            assert stale != record
+            with patch.object(policy, 'read', side_effect=lambda base, path:
+                              stale if path == delta else read(base, path)):
+                try:
+                    policy.validate_native(root)
+                except ValueError as error:
+                    assert str(error) == 'historical source closure changed; reopen evidence: ' + source
+                else:
+                    raise AssertionError(f'stale {delta} accepted for {source}')
+    print('Legacy SHA-1/MD5 source checks pass and reject four stale shared-input pins')
+
+
 def legacy_metadata_regressions():
     """The real cheap preflight must catch deltas and enclosing-review drift."""
     policy = metadata.legacy_final_acceptance
@@ -201,6 +226,7 @@ def static_metadata_regressions():
 
 
 def main():
+    legacy_shared_source_deltas()
     package_optional_closure()
     sha2_package_optional_closure()
     public_acceptance_package_closure()

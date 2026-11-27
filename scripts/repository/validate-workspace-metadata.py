@@ -69,8 +69,7 @@ def load_policy() -> dict[str, dict]:
             raise ValueError(f"{name} has malformed dependency policy")
         if "default" in features or set(features).intersection(optional):
             raise ValueError(f"{name} has ambiguous standalone feature policy")
-        optional_names = (execution_policy.unique_chacha_cpu_dependency(entry) if name == "brynja-cipher-chacha"
-                          else execution_policy.optional_names(entry))
+        optional_names = execution_policy.reviewed_optional_names(name, entry)
         dependencies = required + optional_names + execution_policy.dev_names(name, entry)
         if len(dependencies) != len(set(dependencies)):
             raise ValueError(f"{name} repeats a dependency")

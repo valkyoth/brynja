@@ -92,7 +92,7 @@ previous_version = "0.2.0"
 version = "0.2.0"
 change = "code"
 publish = false
-reason = "Preserve the ChaCha20, AES and GHASH imports via standalone owners; AES-GCM and GMAC compose the extracted primitives. A fresh component version is required before publication."
+reason = "Preserve the ChaCha20, AES and GHASH imports; re-export AES-GCM and GMAC from brynja-aead-gcm. A fresh component version is required before publication."
 
 [crates."brynja-hash-core"]
 previous_version = "0.1.0"

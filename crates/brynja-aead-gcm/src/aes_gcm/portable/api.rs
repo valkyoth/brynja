@@ -45,6 +45,9 @@ macro_rules! owner {
             /// Use this unrestricted counter profile only with a key dedicated
             /// to deterministic 96-bit IVs. For mixed lengths, reserve from a
             /// single key-wide budget and use `from_reserved_invocations`.
+            /// The counter capacity is not a safe traffic allowance. Apply
+            /// your protocol's per-key record, byte and failed-open limits
+            /// across all owners, and rekey before reaching those limits.
             pub fn from_reserved_range($( $pair: &'a AesPair, )?
                 key: &[u8; $width],
                 schedule: &'a mut [u8; $size],

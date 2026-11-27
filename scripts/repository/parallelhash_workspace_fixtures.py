@@ -56,6 +56,25 @@ def check(no_default, all_features, package, node, dependency, reject):
         raise AssertionError("malformed optional dependency group accepted")
     assert policy.feature_dependencies("cpu") == ["cpu"]
     assert policy.feature_dependencies(["cpu", "host"]) == ["cpu", "host"]
+    primitives = ["brynja-core", "brynja-cipher-aes", "brynja-universal-hash-ghash"]
+    for owner, pairs in (
+        ("brynja-aead-gcm", [("aes-gcm", "gmac", primitives),
+                             ("aes-gcm-execution", "gmac-execution", "brynja-crypto-cpu")]),
+        ("brynja-crypto", [("aes-gcm", "gmac", "brynja-aead-gcm")]),
+    ):
+        edges = {feature: deps for first, second, deps in pairs for feature in (first, second)}
+        expected = [name for _, _, deps in pairs for name in policy.feature_dependencies(deps)]
+        assert policy.reviewed_optional_names(owner, {"optional": edges}) == expected
+        for feature in edges:
+            for bad in ({k: v for k, v in edges.items() if k != feature}, {**edges, feature: "other"}):
+                try:
+                    policy.reviewed_optional_names(owner, {"optional": bad})
+                except ValueError:
+                    continue
+                raise AssertionError(f"{owner} accepted missing or redirected {feature}")
+        # Unreviewed aliases must still reach the duplicate check in load_policy.
+        extra = policy.reviewed_optional_names(owner, {"optional": {**edges, "other": expected[0]}})
+        assert extra.count(expected[0]) == 2
     mapping = dict.fromkeys(("chacha20-sse2", "chacha20-neon"), "brynja-crypto-cpu")
     assert policy.unique_chacha_cpu_dependency({"optional": mapping}) == ["brynja-crypto-cpu"]
     for feature in mapping:

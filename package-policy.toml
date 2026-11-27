@@ -55,14 +55,17 @@ optional = { strict-execution = "brynja-crypto-cpu-std" }
 class = "modern-shared"
 publish = "crates-io"
 required = ["brynja-core", "brynja-hash-parallel", "brynja-hash-sha2", "brynja-hash-sha3", "brynja-hash-tuple", "brynja-mac-kmac", "brynja-mac-hmac"]
-optional = { cpu = "brynja-crypto-cpu", hazmat-chacha20 = "brynja-cipher-chacha", hazmat-aes-block = "brynja-cipher-aes", hazmat-ghash = "brynja-universal-hash-ghash", aes-gcm = "brynja-aead-gcm" }
+optional = { cpu = "brynja-crypto-cpu", hazmat-chacha20 = "brynja-cipher-chacha", hazmat-aes-block = "brynja-cipher-aes", hazmat-ghash = "brynja-universal-hash-ghash", aes-gcm = "brynja-aead-gcm", gmac = "brynja-aead-gcm" }
 
 [packages.brynja-aead-gcm]
 class = "modern-shared"
 publish = "crates-io"
 required = []
-optional = { aes-gcm = ["brynja-core", "brynja-cipher-aes", "brynja-universal-hash-ghash"], aes-gcm-execution = "brynja-crypto-cpu" }
-features = ["gmac", "gmac-execution"]
+[packages.brynja-aead-gcm.optional]
+aes-gcm = ["brynja-core", "brynja-cipher-aes", "brynja-universal-hash-ghash"]
+gmac = ["brynja-core", "brynja-cipher-aes", "brynja-universal-hash-ghash"]
+aes-gcm-execution = "brynja-crypto-cpu"
+gmac-execution = "brynja-crypto-cpu"
 
 [packages.brynja-universal-hash-ghash]
 class = "modern-shared"

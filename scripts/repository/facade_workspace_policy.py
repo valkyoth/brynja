@@ -44,7 +44,9 @@ CRYPTO['ghash-runtime-execution'] = ['hazmat-ghash', 'brynja-universal-hash-ghas
                                      'brynja-crypto-cpu/ghash-runtime-execution']
 MODE = ['dep:brynja-core', 'dep:brynja-cipher-aes', 'brynja-cipher-aes/__mode',
         'dep:brynja-universal-hash-ghash', 'brynja-universal-hash-ghash/__mode']
-PAIRED = ['dep:brynja-crypto-cpu', 'brynja-cipher-aes/__mode-execution', 'brynja-universal-hash-ghash/__mode-execution']
+PAIRED = ['dep:brynja-crypto-cpu', 'brynja-crypto-cpu/aes-static-execution',
+          'brynja-crypto-cpu/ghash-runtime-execution', 'brynja-cipher-aes/__mode-execution',
+          'brynja-universal-hash-ghash/__mode-execution']
 FEATURES = {
     'brynja-aead-gcm': {'aes-gcm': MODE, 'gmac': MODE, 'aes-gcm-execution': ['aes-gcm', *PAIRED],
                         'gmac-execution': ['gmac', *PAIRED]},
@@ -100,6 +102,12 @@ def validate_isolation(modern, edges, names, packages, reachable):
 
 def regressions(baseline, package, reject):
     count = 0
+    for mode in ('aes-gcm-execution', 'gmac-execution'):
+        for capability in ('aes-static-execution', 'ghash-runtime-execution'):
+            changed = copy.deepcopy(baseline)
+            package(changed, 'brynja-aead-gcm')['features'][mode].remove('brynja-crypto-cpu/' + capability)
+            reject(changed, 'all-features', 'feature policy differs', 'reliance on transitive CPU features')
+            count += 1
     for name, features in FEATURES.items():
         for feature in features:
             for replacement in ([], ['brynja-mac-kmac/conformance-testing']):

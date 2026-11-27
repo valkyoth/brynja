@@ -22,6 +22,22 @@ def unique_chacha_cpu_dependency(entry):
     return ["brynja-crypto-cpu"]
 
 
+def reviewed_optional_names(owner, entry):
+    """Count a shared dependency once, but only for reviewed feature pairs."""
+    if owner == "brynja-cipher-chacha":
+        return unique_chacha_cpu_dependency(entry)
+    groups = dict(entry["optional"])
+    if owner in {"brynja-crypto", "brynja-aead-gcm"}:
+        primitives = ["brynja-core", "brynja-cipher-aes", "brynja-universal-hash-ghash"]
+        pairs = [("aes-gcm", "gmac", "brynja-aead-gcm" if owner == "brynja-crypto" else primitives)]
+        if owner == "brynja-aead-gcm":
+            pairs.append(("aes-gcm-execution", "gmac-execution", "brynja-crypto-cpu"))
+        for first, second, expected in pairs:
+            if groups.get(first) != expected or groups.pop(second, None) != expected:
+                raise ValueError(f"{owner} requires matching {first} and {second} dependency policies")
+    return optional_names({"optional": groups})
+
+
 def dev_names(name, entry):
     expected = (["brynja-crypto-cpu", "brynja-crypto-cpu-std"]
                 if name == "brynja-hash-parallel" else [])

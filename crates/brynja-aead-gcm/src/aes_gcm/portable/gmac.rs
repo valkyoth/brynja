@@ -37,6 +37,9 @@
 
 use super::{Aes128ExpandedKey, Aes192ExpandedKey, Aes256ExpandedKey, Buffers, Error, policy::Key};
 
+#[cfg(test)]
+mod known_answers;
+
 /// Detached public GMAC tag. Importing wire bytes does not authenticate them:
 /// use the owner's `verify` method, which compares all admitted tag bytes.
 #[derive(Clone, Copy, Debug)]
@@ -91,6 +94,8 @@ macro_rules! owner {
             /// For a key dedicated to 96-bit IVs: allocate IVs as a four-byte
             /// prefix followed by a big-endian 64-bit counter. The caller must
             /// durably reserve this nonempty range across senders and restarts.
+            /// The range is not a per-key limit on total authenticated data or
+            /// failed verifications; enforce those limits across all owners.
             pub fn from_reserved_range($( $pair: &'a AesPair, )?
                 key: &[u8; $width], schedule: &'a mut [u8; $size],
                 prefix: [u8; 4], first: u64, count: u64,

@@ -1,6 +1,7 @@
 [layout]
 root_files = ["README.md", "checks.sh", "inventory.toml", "tag_gate.sh"]
 entrypoints = ["checks.sh", "tag_gate.sh"]
+ghash_counter_probe_sha256 = "5301dfc2b229afd2fddedb0bdd7ddc2779597ed143725fa8708089fff4de2dab"
 
 # Historical fully qualified entrypoints; no other directory may reuse these names.
 [layout.shared_basenames]

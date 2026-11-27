@@ -114,10 +114,15 @@ def main() -> int:
     reject("bit sanitizer coverage", lambda root: replace(root, policy.SANITIZER_SCRIPT, "--test bit_inputs", "--test missing_bit_inputs"))
     reject("core dependency", lambda root: replace(root, policy.CORE_MANIFEST, "[lints]", "[dependencies]\nbrynja-core = { workspace = true }\n\n[lints]"))
     reject("SHA dependency", lambda root: replace(root, policy.MANIFEST, "brynja-hash-core = { workspace = true }", "brynja-hash-core = { workspace = true }\nbrynja-unexpected = { workspace = true }"))
-    reject("crypto ownership", lambda root: replace(root, policy.CRYPTO_MANIFEST, "brynja-hash-sha2 = { workspace = true }", "brynja-core = { workspace = true }"))
+    reject("crypto ownership", lambda root: replace(root, policy.CRYPTO_MANIFEST, "brynja-hash-sha2 = { workspace = true }", ""))
     for label, before, after in (
         ("missing CPU", 'brynja-crypto-cpu = { workspace = true, optional = true }', ''),
-        ("required CPU", 'workspace = true, optional = true', 'workspace = true'),
+        ("required CPU", 'brynja-crypto-cpu = { workspace = true, optional = true }', 'brynja-crypto-cpu = { workspace = true }'),
+        ("missing core", 'brynja-core = { workspace = true }', ''),
+        ("redirected core", 'brynja-core = { workspace = true }', 'brynja-core = "1"'),
+        ("missing ChaCha", 'brynja-cipher-chacha = { workspace = true, optional = true }', ''),
+        ("required ChaCha", 'brynja-cipher-chacha = { workspace = true, optional = true }', 'brynja-cipher-chacha = { workspace = true }'),
+        ("ChaCha opt-in", 'hazmat-chacha20 = ["dep:brynja-cipher-chacha", "brynja-cipher-chacha/hazmat-chacha20"]', 'hazmat-chacha20 = []'),
         ("CPU defaults", 'default = []', 'default = ["cpu"]'),
         ("CPU opt-in", 'cpu = ["dep:brynja-crypto-cpu"]', 'cpu = []'),
         ("missing HMAC", 'brynja-mac-hmac = { workspace = true }\n', ''),

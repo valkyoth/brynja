@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import stat
 import tomllib
 from pathlib import Path
@@ -43,8 +44,8 @@ def validate(root: Path) -> int:
     policy = read_policy(root)
     layout = policy["layout"]
     categories = policy["category"]
-    if set(layout) != {"entrypoints", "root_files", "shared_basenames"}:
-        fail("layout must define root files, entrypoints and reviewed shared basenames")
+    if set(layout) != {"entrypoints", "root_files", "shared_basenames", "ghash_counter_probe_sha256"}:
+        fail("layout must define root files, entrypoints, shared basenames and the GHASH probe digest")
     if not categories:
         fail("script inventory must classify at least one category")
 
@@ -53,6 +54,10 @@ def validate(root: Path) -> int:
     if not entrypoints or not entrypoints <= root_files:
         fail("every script entry point must be an allowed root file")
 
+    probe = scripts / "ghash/ghash-user-counters.c"
+    if (probe.parent.is_symlink() or probe.is_symlink() or not probe.is_file()
+            or hashlib.sha256(probe.read_bytes()).hexdigest() != layout["ghash_counter_probe_sha256"]):
+        fail("missing or changed GHASH C diagnostic; review before updating its digest")
     actual_root_files: set[str] = set()
     actual_categories: dict[str, int] = {name: 0 for name in categories}
     basenames: dict[str, set[str]] = {}
@@ -71,7 +76,7 @@ def validate(root: Path) -> int:
             fail(f"category {category} must define extensions and purpose")
         if not str(definition["purpose"]).strip():
             fail(f"category {category} has no documented purpose")
-        if path.suffix not in set(definition["extensions"]) and relative.as_posix() != "ghash/ghash-user-counters.c":
+        if path.suffix not in set(definition["extensions"]) and path != probe:
             fail(f"unsupported file type in {category}: {name}")
         basenames.setdefault(name, set()).add(category)
         actual_categories[category] += 1

@@ -11,8 +11,10 @@ AArch64 NEON. RISC-V still uses the portable public API. These results are not
 new performance, timing or register-erasure evidence. No crates.io publication
 is selected; the planned publication checkpoint remains v0.30.6.
 
-The scoped gate checks the static CPU source hashes without rebuilding the
-hardware campaigns. The package matches signed v0.30.1. The script layout
-inventory also passes. The separate historical `validate-release-metadata.sh`
-now passes its static CPU check but still stops on the older SHA-256 façade
-ownership policy. This is not a pass of that historical gate.
+The scoped gate checks the static CPU source hashes and the portable SHA-256
+package and source policy without rebuilding hardware campaigns. The CPU
+crate matches signed v0.30.1. The script inventory also verifies the digest
+of its one permitted GHASH C diagnostic. The separate historical
+`validate-release-metadata.sh` passes the CPU and SHA-256 checks, then stops
+on the legacy-hash evidence pin for `crates/brynja-core/src/lib.rs`. This
+milestone does not refresh or qualify that historical evidence.

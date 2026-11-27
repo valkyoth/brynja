@@ -33,6 +33,9 @@ def fixture() -> Path:
     write(scripts / "checks.sh", "#!/usr/bin/env sh\n", executable=True)
     write(scripts / "tag_gate.sh", "#!/usr/bin/env sh\n", executable=True)
     policy = layout.read_policy(root)
+    probe = Path("ghash/ghash-user-counters.c")
+    (scripts / probe.parent).mkdir()
+    shutil.copyfile(SCRIPT.parents[1] / probe, scripts / probe)
     for name, categories in policy["layout"]["shared_basenames"].items():
         for category in categories:
             write(scripts / category / name, "public fixture\n")
@@ -58,10 +61,23 @@ def main() -> int:
         write(valid / 'assurance' / 'windows-enclave-probe' / 'native_teardown.rs',
               '// Rust fixtures belong outside the script tree.\n')
         layout.validate(valid)
-        write(valid / "scripts/ghash/ghash-user-counters.c", "/* test probe */\n")
-        layout.validate(valid)
         write(valid / "scripts/ghash/other.c", "/* unreviewed */\n")
         must_fail(valid, "accepted an unreviewed C source")
+
+        for how in ("edited", "missing", "symlink"):
+            changed = fixture()
+            roots.append(changed)
+            probe = changed / "scripts/ghash/ghash-user-counters.c"
+            if how == "edited":
+                with probe.open("ab") as out:
+                    out.write(b"\n")
+            elif how == "missing":
+                probe.unlink()
+            else:
+                dest = changed / "same-bytes.c"
+                probe.rename(dest)
+                probe.symlink_to(dest)
+            must_fail(changed, f"accepted {how} GHASH C probe")
 
         third = fixture()
         roots.append(third)
@@ -97,7 +113,7 @@ def main() -> int:
     finally:
         for root in roots:
             shutil.rmtree(root)
-    print("script inventory rejects seven classification regressions")
+    print("script inventory rejects ten classification and integrity regressions")
     return 0
 
 

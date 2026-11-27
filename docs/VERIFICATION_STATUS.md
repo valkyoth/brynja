@@ -1,6 +1,6 @@
 # Component Verification Status
 
-## Standalone AES-GCM and GMAC (v0.30.5, in development)
+## Standalone AES-GCM and GMAC (v0.30.5, internally tagged)
 
 On Linux x86-64 the [installed consumer](../scripts/aes-gcm/check-installed-consumer.py)
 passed for all three import routes, both families and both compiler endpoints

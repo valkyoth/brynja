@@ -4,7 +4,7 @@ SHARED_HMAC_CONSUMERS = ("brynja-legacy-hkdf", "brynja-legacy-hmac-std")
 
 
 def validate_shared_hmac_pin(workspace, consumers):
-    expected = {"path": "crates/brynja-legacy-hmac", "version": "=0.1.0",
+    expected = {"path": "crates/brynja-legacy-hmac", "version": "=0.1.1",
                 "default-features": False}
     if workspace.get("workspace", {}).get("dependencies", {}).get("brynja-legacy-hmac") != expected:
         raise ValueError("legacy HMAC requires one exact no-default workspace pin")

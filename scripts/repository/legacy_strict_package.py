@@ -40,8 +40,8 @@ def install(consumer, roots, family, resident=False):
     feature = 'macos-resident-acceleration' if resident else 'strict-acceleration'
     manifest = ('[workspace]\n[package]\nname="facade-consumer"\nversion="0.0.0"\nedition="2024"\n'
                 '[features]\nnative=[]\n[dependencies]\n'
-                f'{leaf}={{version="=0.1.0",default-features=false}}\n'
-                f'{leaf}-std={{version="=0.1.0",default-features=false,features=["{feature}"]}}\n'
+                f'{leaf}={{version="=0.1.1",default-features=false}}\n'
+                f'{leaf}-std={{version="=0.1.1",default-features=false,features=["{feature}"]}}\n'
                 '[patch.crates-io]\n')
     manifest += ''.join(f'{name}={{path={json.dumps(str(path))}}}\n' for name, path in roots.items())
     (consumer / 'Cargo.toml').write_text(manifest)

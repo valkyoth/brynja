@@ -4,9 +4,9 @@
 </p>
 
 <div align="center">
-  <a href="https://github.com/valkyoth/brynja/tree/main/crates/brynja-legacy-hkdf">Source (unpublished)</a>
+  <a href="https://crates.io/crates/brynja-legacy-hkdf">Crates.io</a>
   |
-  <a href="https://github.com/valkyoth/brynja/blob/main/crates/brynja-legacy-hkdf/src/lib.rs">API source</a>
+  <a href="https://docs.rs/brynja-legacy-hkdf">Docs.rs</a>
   |
   <a href="https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md">Release Plan</a>
   |

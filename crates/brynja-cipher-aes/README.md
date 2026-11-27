@@ -4,9 +4,9 @@
 </p>
 
 <div align="center">
-  <a href="https://github.com/valkyoth/brynja/tree/main/crates/brynja-cipher-aes">Source (unpublished)</a>
+  <a href="https://crates.io/crates/brynja-cipher-aes">Crates.io</a>
   |
-  <a href="https://github.com/valkyoth/brynja/blob/main/crates/brynja-cipher-aes/src/lib.rs">API source</a>
+  <a href="https://docs.rs/brynja-cipher-aes">Docs.rs</a>
   |
   <a href="https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md">Release Plan</a>
   |

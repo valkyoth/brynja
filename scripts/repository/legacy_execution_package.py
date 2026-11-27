@@ -10,7 +10,7 @@ import legacy_execution_cases as cases
 from facade_tuplehash_probes import diagnostic
 
 ROOT = Path(__file__).resolve().parents[2]
-ARCHIVES = tuple((f'brynja-legacy-{family}{suffix}', '0.1.0', ('src/lib.rs',))
+ARCHIVES = tuple((f'brynja-legacy-{family}{suffix}', '0.1.1', ('src/lib.rs',))
                  for family in ('sha1', 'md5') for suffix in ('', '-std'))
 SUPPORT = {'brynja-core', 'brynja-hash-core', 'brynja-crypto-cpu', 'brynja-crypto-cpu-std',
            'brynja-hash-sha2', 'brynja-hash-sha3', 'brynja-mac-kmac', 'brynja-hash-tuple',
@@ -64,8 +64,8 @@ def install(consumer, roots, family):
     (consumer / 'tests/vectors').mkdir(parents=True)
     manifest = ('[workspace]\n[package]\nname="facade-consumer"\nversion="0.0.0"\nedition="2024"\n'
                 '[features]\nexecution=[]\nruntime-execution=[]\n[dependencies]\n'
-                f'{leaf}={{version="=0.1.0", default-features=false, features=["execution"]}}\n'
-                f'{leaf}-std={{version="=0.1.0", default-features=false, features=["runtime-execution"]}}\n'
+                f'{leaf}={{version="=0.1.1", default-features=false, features=["execution"]}}\n'
+                f'{leaf}-std={{version="=0.1.1", default-features=false, features=["runtime-execution"]}}\n'
                 '[patch.crates-io]\n')
     manifest += ''.join(f'{name}={{path={json.dumps(str(path))}}}\n' for name, path in roots.items())
     (consumer / 'Cargo.toml').write_text(manifest)

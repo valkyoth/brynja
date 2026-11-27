@@ -10,7 +10,7 @@ import legacy_strict_package
 import strict_consumer_sources as cases
 from facade_tuplehash_probes import diagnostic
 
-EXTRA = tuple((name, '0.1.0', ('src/lib.rs',)) for name in
+EXTRA = tuple((name, '0.1.1', ('src/lib.rs',)) for name in
               ('brynja-hash-parallel-std', 'brynja-strict'))
 MARKERS = ('STRICT_FAMILY_ORACLE: 662 passed', 'STRICT_KEYED_ORACLE: 512 passed; scalar',
            'STRICT_SHA2_BIT_ORACLE: 240 named; 4590 general-t; four input/output paths each')
@@ -54,7 +54,7 @@ def install(consumer, roots):
     (consumer / 'src').mkdir(parents=True)
     (consumer / 'tests').mkdir()
     manifest = ('[workspace]\n[package]\nname="facade-consumer"\nversion="0.0.0"\nedition="2024"\n'
-                '[dependencies]\nbrynja-strict={version="=0.1.0",default-features=false}\n[patch.crates-io]\n')
+                '[dependencies]\nbrynja-strict={version="=0.1.1",default-features=false}\n[patch.crates-io]\n')
     manifest += ''.join(f'{name}={{path={json.dumps(str(path))}}}\n' for name, path in roots.items())
     (consumer / 'Cargo.toml').write_text(manifest)
     (consumer / 'src/lib.rs').write_text('#![forbid(unsafe_code)]\n')

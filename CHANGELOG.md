@@ -1,6 +1,12 @@
 # Changelog
 
-## 0.30.5 standalone AES-GCM and GMAC (in development)
+## 0.30.6 standalone cipher package publication acceptance (candidate)
+
+- Freeze the cumulative package selection and rehearse the public imports against
+  staged registry archives. No change to cryptographic implementations or timing
+  claims. [Selection and checks](release-notes/RELEASE_NOTES_0.30.6.md).
+
+## 0.30.5 standalone AES-GCM and GMAC (internally tagged)
 
 - Move the existing composition and its tests to `brynja-aead-gcm`; retain both compatibility imports. [Release notes](release-notes/RELEASE_NOTES_0.30.5.md).
 

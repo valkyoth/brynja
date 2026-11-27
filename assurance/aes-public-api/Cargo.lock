@@ -4,7 +4,7 @@ version = 4
 
 [[package]]
 name = "brynja"
-version = "0.30.5"
+version = "0.30.6"
 dependencies = [
  "brynja-core",
  "brynja-crypto",
@@ -30,11 +30,11 @@ dependencies = [
 
 [[package]]
 name = "brynja-core"
-version = "0.10.0"
+version = "0.11.0"
 
 [[package]]
 name = "brynja-crypto"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "brynja-cipher-aes",
  "brynja-core",
@@ -48,11 +48,11 @@ dependencies = [
 
 [[package]]
 name = "brynja-hash-core"
-version = "0.1.0"
+version = "0.1.1"
 
 [[package]]
 name = "brynja-hash-parallel"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "brynja-core",
  "brynja-hash-sha3",
@@ -60,7 +60,7 @@ dependencies = [
 
 [[package]]
 name = "brynja-hash-sha2"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "brynja-core",
  "brynja-hash-core",
@@ -68,7 +68,7 @@ dependencies = [
 
 [[package]]
 name = "brynja-hash-sha3"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "brynja-core",
  "brynja-hash-core",
@@ -76,7 +76,7 @@ dependencies = [
 
 [[package]]
 name = "brynja-hash-tuple"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "brynja-core",
  "brynja-hash-sha3",
@@ -84,7 +84,7 @@ dependencies = [
 
 [[package]]
 name = "brynja-mac-hmac"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "brynja-core",
  "brynja-hash-sha2",
@@ -93,7 +93,7 @@ dependencies = [
 
 [[package]]
 name = "brynja-mac-kmac"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "brynja-core",
  "brynja-hash-sha3",
@@ -101,21 +101,21 @@ dependencies = [
 
 [[package]]
 name = "brynja-pki"
-version = "0.3.0"
+version = "0.3.1"
 dependencies = [
  "brynja-core",
 ]
 
 [[package]]
 name = "brynja-protocol"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "brynja-core",
 ]
 
 [[package]]
 name = "brynja-tls"
-version = "0.1.9"
+version = "0.1.10"
 dependencies = [
  "brynja-core",
  "brynja-tls12",
@@ -124,7 +124,7 @@ dependencies = [
 
 [[package]]
 name = "brynja-tls12"
-version = "0.1.9"
+version = "0.1.10"
 dependencies = [
  "brynja-core",
  "brynja-crypto",
@@ -134,7 +134,7 @@ dependencies = [
 
 [[package]]
 name = "brynja-tls13"
-version = "0.1.9"
+version = "0.1.10"
 dependencies = [
  "brynja-core",
  "brynja-crypto",
@@ -144,7 +144,7 @@ dependencies = [
 
 [[package]]
 name = "brynja-tls13-handshake"
-version = "0.1.9"
+version = "0.1.10"
 dependencies = [
  "brynja-core",
  "brynja-crypto",

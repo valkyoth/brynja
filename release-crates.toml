@@ -1,238 +1,238 @@
 [release]
-version = "0.30.5"
-milestone = "0.30.5"
+version = "0.30.6"
+milestone = "0.30.6"
 baseline = "0.25.3"
-cumulative_milestones = ["0.26.0", "0.26.1", "0.27.0", "0.27.1", "0.27.2", "0.27.3", "0.27.4", "0.27.5", "0.27.6", "0.28.0", "0.28.1", "0.28.2", "0.28.3", "0.29.0", "0.29.1", "0.29.2", "0.29.3", "0.29.4", "0.30.0", "0.30.1", "0.30.2", "0.30.3", "0.30.4", "0.30.5"]
+cumulative_milestones = ["0.26.0", "0.26.1", "0.27.0", "0.27.1", "0.27.2", "0.27.3", "0.27.4", "0.27.5", "0.27.6", "0.28.0", "0.28.1", "0.28.2", "0.28.3", "0.29.0", "0.29.1", "0.29.2", "0.29.3", "0.29.4", "0.30.0", "0.30.1", "0.30.2", "0.30.3", "0.30.4", "0.30.5", "0.30.6"]
 policy = "independent"
-stage = "internal"
+stage = "public"
 # Legacy explicit runner default only; routine gates use final-checks.toml, not this selector.
 verification = "affected"
 exceptional = false
 exception_reason = ""
 
 [crates."brynja"]
-previous_version = "0.30.4"
-version = "0.30.5"
-change = "metadata"
-publish = false
-reason = "Advance facade metadata only; no raw ChaCha20 feature forwarding or publication."
+previous_version = "0.30.5"
+version = "0.30.6"
+change = "code"
+publish = true
+reason = "Cumulative public facade checkpoint; publish last."
 
 [crates."brynja-cipher-chacha"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "code"
-publish = false
-reason = "Standalone portable ChaCha20 owner and optional four-block SSE2 and NEON owners. No publication selected."
+change = "initial"
+publish = true
+reason = "Initial standalone package at the cumulative public checkpoint."
 
 [crates."brynja-cipher-aes"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "code"
-publish = false
-reason = "Standalone AES-128/192/256 block owners and opt-in external providers, re-exported by brynja-crypto; internal only."
+change = "initial"
+publish = true
+reason = "Initial standalone package at the cumulative public checkpoint."
 
 [crates."brynja-aead-gcm"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "code"
-publish = false
-reason = "Standalone detached AES-GCM and GMAC over extracted primitives; compatibility imports retained, internal only."
+change = "initial"
+publish = true
+reason = "Initial standalone package at the cumulative public checkpoint."
 
 [crates."brynja-universal-hash-ghash"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "code"
-publish = false
-reason = "Standalone framed GHASH, with explicit native execution and unchanged compatibility imports; internal only."
+change = "initial"
+publish = true
+reason = "Initial standalone package at the cumulative public checkpoint."
 
 [crates."brynja-legacy-hmac"]
 previous_version = "0.1.0"
-version = "0.1.0"
-change = "unchanged"
-publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+version = "0.1.1"
+change = "dependency"
+publish = true
+reason = "Update exact dependency pins: brynja-core, brynja-legacy-md5, brynja-legacy-sha1."
 
 [crates."brynja-legacy-hmac-std"]
 previous_version = "0.1.0"
-version = "0.1.0"
+version = "0.1.1"
 change = "metadata"
-publish = false
-reason = "Inherit the exact shared legacy HMAC workspace dependency; retain the internal checkpoint version with no publication selected."
+publish = true
+reason = "Refresh packaging metadata and exact dependency pins."
 
 [crates."brynja-mac-hmac"]
 previous_version = "0.1.0"
-version = "0.1.0"
-change = "unchanged"
-publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+version = "0.1.1"
+change = "dependency"
+publish = true
+reason = "Update exact dependency pins: brynja-core, brynja-crypto-cpu, brynja-hash-sha2, brynja-hash-sha3."
 
 [crates."brynja-legacy-md5"]
 previous_version = "0.1.0"
-version = "0.1.0"
-change = "unchanged"
-publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+version = "0.1.1"
+change = "dependency"
+publish = true
+reason = "Update exact dependency pins: brynja-core, brynja-hash-core."
 
 [crates."brynja-legacy-sha1"]
 previous_version = "0.1.0"
-version = "0.1.0"
-change = "unchanged"
-publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+version = "0.1.1"
+change = "dependency"
+publish = true
+reason = "Update exact dependency pins: brynja-core, brynja-hash-core."
 
 [crates."brynja-core"]
 previous_version = "0.10.0"
-version = "0.10.0"
+version = "0.11.0"
 change = "code"
-publish = false
-reason = "Research-only cfg bridge for the archived AES prototype; no new public feature or publication."
+publish = true
+reason = "Core source change for the separately cfg-gated research bridge; ordinary builds do not enable it."
 
 [crates."brynja-crypto"]
 previous_version = "0.2.0"
-version = "0.2.0"
+version = "0.3.0"
 change = "code"
-publish = false
-reason = "Preserve the ChaCha20, AES and GHASH imports; re-export AES-GCM and GMAC from brynja-aead-gcm. A fresh component version is required before publication."
+publish = true
+reason = "Modern HKDF and compatibility imports for the extracted cipher, GHASH and AEAD owners."
 
 [crates."brynja-hash-core"]
 previous_version = "0.1.0"
-version = "0.1.0"
+version = "0.1.1"
 change = "metadata"
-publish = false
-reason = "Explicit package include list for HKDF downstream archive parity; retain the internal checkpoint version with no publication selected."
+publish = true
+reason = "Refresh packaging metadata and exact dependency pins."
 
 [crates."brynja-hash-sha2"]
 previous_version = "0.1.0"
-version = "0.1.0"
-change = "unchanged"
-publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+version = "0.1.1"
+change = "dependency"
+publish = true
+reason = "Update exact dependency pins: brynja-core, brynja-crypto-cpu, brynja-hash-core."
 
 [crates."brynja-hash-sha3"]
 previous_version = "0.1.0"
-version = "0.1.0"
-change = "unchanged"
-publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+version = "0.1.1"
+change = "dependency"
+publish = true
+reason = "Update exact dependency pins: brynja-core, brynja-crypto-cpu, brynja-hash-core."
 
 [crates."brynja-mac-kmac"]
 previous_version = "0.1.0"
-version = "0.1.0"
-change = "unchanged"
-publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+version = "0.1.1"
+change = "dependency"
+publish = true
+reason = "Update exact dependency pins: brynja-core, brynja-hash-sha3."
 
 [crates."brynja-hash-tuple"]
 previous_version = "0.1.0"
-version = "0.1.0"
-change = "unchanged"
-publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+version = "0.1.1"
+change = "dependency"
+publish = true
+reason = "Update exact dependency pins: brynja-core, brynja-hash-sha3."
 
 [crates."brynja-hash-parallel"]
 previous_version = "0.1.0"
-version = "0.1.0"
-change = "unchanged"
-publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+version = "0.1.1"
+change = "dependency"
+publish = true
+reason = "Update exact dependency pins: brynja-core, brynja-hash-sha3, brynja-crypto-cpu, brynja-crypto-cpu-std."
 
 [crates."brynja-hash-parallel-std"]
 previous_version = "0.1.0"
-version = "0.1.0"
-change = "unchanged"
-publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+version = "0.1.1"
+change = "dependency"
+publish = true
+reason = "Update exact dependency pins: brynja-core, brynja-crypto-cpu, brynja-crypto-cpu-std, brynja-hash-parallel."
 
 [crates."brynja-crypto-cpu"]
 previous_version = "0.2.0"
-version = "0.2.0"
+version = "0.3.0"
 change = "code"
-publish = false
-reason = "Add opt-in SSE2 and NEON ChaCha20 kernels alongside the existing AES and GHASH boundaries. No ChaCha20 RVV admission or publication selected."
+publish = true
+reason = "Opt-in AES, GHASH and ChaCha20 execution boundaries."
 
 [crates."brynja-crypto-cpu-std"]
 previous_version = "0.2.0"
-version = "0.2.0"
+version = "0.3.0"
 change = "code"
-publish = false
-reason = "Hosted AES selection and AArch64 admission with optional DIT; RISC-V candidate rejection remains explicit. Retain the internal checkpoint version with no publication selected."
+publish = true
+reason = "Hosted AES admission and AArch64 DIT policy."
 
 [crates."brynja-strict"]
 previous_version = "0.1.0"
-version = "0.1.0"
-change = "unchanged"
-publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+version = "0.1.1"
+change = "dependency"
+publish = true
+reason = "Update exact dependency pins: brynja-crypto-cpu-std, brynja-hash-parallel-std."
 
 [crates."brynja-pki"]
 previous_version = "0.3.0"
-version = "0.3.0"
-change = "unchanged"
-publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+version = "0.3.1"
+change = "dependency"
+publish = true
+reason = "Update exact dependency pins: brynja-core."
 
 [crates."brynja-protocol"]
 previous_version = "0.1.1"
-version = "0.1.1"
-change = "unchanged"
-publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+version = "0.1.2"
+change = "dependency"
+publish = true
+reason = "Update exact dependency pins: brynja-core."
 
 [crates."brynja-tls"]
 previous_version = "0.1.9"
-version = "0.1.9"
+version = "0.1.10"
 change = "metadata"
-publish = false
-reason = "Explicit package include list for HKDF downstream archive parity; retain the internal checkpoint version with no publication selected."
+publish = true
+reason = "Refresh packaging metadata and exact dependency pins."
 
 [crates."brynja-tls12"]
 previous_version = "0.1.9"
-version = "0.1.9"
+version = "0.1.10"
 change = "metadata"
-publish = false
-reason = "Explicit package include list for HKDF downstream archive parity; retain the internal checkpoint version with no publication selected."
+publish = true
+reason = "Refresh packaging metadata and exact dependency pins."
 
 [crates."brynja-tls13"]
 previous_version = "0.1.9"
-version = "0.1.9"
+version = "0.1.10"
 change = "metadata"
-publish = false
-reason = "Explicit package include list for HKDF downstream archive parity; retain the internal checkpoint version with no publication selected."
+publish = true
+reason = "Refresh packaging metadata and exact dependency pins."
 
 [crates."brynja-tls13-handshake"]
 previous_version = "0.1.9"
-version = "0.1.9"
+version = "0.1.10"
 change = "metadata"
-publish = false
-reason = "Explicit package include list for HKDF downstream archive parity; retain the internal checkpoint version with no publication selected."
+publish = true
+reason = "Refresh packaging metadata and exact dependency pins."
 
 [crates."brynja-quic-tls"]
 previous_version = "0.1.9"
-version = "0.1.9"
+version = "0.1.10"
 change = "metadata"
-publish = false
-reason = "Explicit package include list for HKDF downstream archive parity; retain the internal checkpoint version with no publication selected."
+publish = true
+reason = "Refresh packaging metadata and exact dependency pins."
 
 [crates."brynja-sanitization"]
 previous_version = "0.1.2"
-version = "0.1.2"
+version = "0.1.3"
 change = "dependency"
-publish = false
-reason = "Refresh the adapter-only exact sanitization dependency to 2.2.0; hold for a future public checkpoint."
+publish = true
+reason = "Updated exact core and external sanitization dependency pins."
 
 [crates."brynja-dtls"]
 previous_version = "0.1.9"
-version = "0.1.9"
+version = "0.1.10"
 change = "metadata"
-publish = false
-reason = "Explicit package include list for HKDF downstream archive parity; retain the internal checkpoint version with no publication selected."
+publish = true
+reason = "Refresh packaging metadata and exact dependency pins."
 
 [crates."brynja-platform"]
 previous_version = "0.1.9"
-version = "0.1.9"
+version = "0.1.10"
 change = "metadata"
-publish = false
-reason = "Explicit package include list for HKDF downstream archive parity; retain the internal checkpoint version with no publication selected."
+publish = true
+reason = "Refresh packaging metadata and exact dependency pins."
 
 [crates."brynja-legacy"]
 previous_version = "unpublished"
@@ -327,21 +327,21 @@ reason = "Repository-only proof harnesses; they are never a crates.io product."
 
 [crates."brynja-legacy-sha1-std"]
 previous_version = "0.1.0"
-version = "0.1.0"
-change = "unchanged"
-publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+version = "0.1.1"
+change = "dependency"
+publish = true
+reason = "Update exact dependency pins: brynja-core, brynja-crypto-cpu-std, brynja-legacy-sha1."
 
 [crates."brynja-legacy-md5-std"]
 previous_version = "0.1.0"
-version = "0.1.0"
-change = "unchanged"
-publish = false
-reason = "Retain the 0.25.3 checkpoint version; no component change or publication selected."
+version = "0.1.1"
+change = "dependency"
+publish = true
+reason = "Update exact dependency pins: brynja-core, brynja-crypto-cpu-std, brynja-legacy-md5."
 
 [crates."brynja-legacy-hkdf"]
 previous_version = "unpublished"
 version = "0.1.0"
-change = "code"
-publish = false
-reason = "New isolated HKDF-SHA-1 compatibility leaf; development only, no crates.io publication selected."
+change = "initial"
+publish = true
+reason = "Initial standalone package at the cumulative public checkpoint."

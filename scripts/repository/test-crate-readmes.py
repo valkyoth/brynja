@@ -55,12 +55,14 @@ def main():
             except ValueError:
                 continue
         raise AssertionError('shared broken image accepted')
-    # Both private tools and publishable-but-unreleased crates need source links.
+    # Private tools need source links; selected public archives use their own registry page.
     for name in ('brynja-xtask', 'brynja-aead-gcm'):
         path = readmes.ROOT / 'crates' / name / 'README.md'
         before = path.read_text()
-        changed = before.replace(f'https://github.com/valkyoth/brynja/tree/main/crates/{name}',
-                                 f'https://crates.io/crates/{name}')
+        source = f'https://github.com/valkyoth/brynja/tree/main/crates/{name}'
+        registry = f'https://crates.io/crates/{name}'
+        changed = (before.replace(source, registry) if name == 'brynja-xtask'
+                   else before.replace(registry, source))
         assert changed != before
         with patch.object(Path, 'read_text', lambda subject, *a, **kw:
                           changed if subject == path else method(subject, *a, **kw)):
@@ -69,7 +71,7 @@ def main():
             except ValueError as exc:
                 assert 'shared header/title' in str(exc)
             else:
-                raise AssertionError('unpublished registry claim accepted')
+                raise AssertionError('wrong package navigation accepted')
     # Placeholder crates retain an honest, crate-specific build example.
     boundary = readmes.ROOT / 'crates/brynja-tls13/README.md'
     before = boundary.read_text()

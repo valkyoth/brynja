@@ -19,18 +19,18 @@ dependencies = [
 
 [[package]]
 name = "brynja-core"
-version = "0.10.0"
+version = "0.11.0"
 
 [[package]]
 name = "brynja-crypto-cpu"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "brynja-core",
 ]
 
 [[package]]
 name = "brynja-crypto-cpu-std"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "brynja-crypto-cpu",
  "brynja-hash-sha2",
@@ -39,11 +39,11 @@ dependencies = [
 
 [[package]]
 name = "brynja-hash-core"
-version = "0.1.0"
+version = "0.1.1"
 
 [[package]]
 name = "brynja-hash-parallel"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "brynja-core",
  "brynja-hash-sha3",
@@ -51,7 +51,7 @@ dependencies = [
 
 [[package]]
 name = "brynja-hash-parallel-std"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "brynja-core",
  "brynja-crypto-cpu",
@@ -61,7 +61,7 @@ dependencies = [
 
 [[package]]
 name = "brynja-hash-sha2"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "brynja-core",
  "brynja-crypto-cpu",
@@ -70,7 +70,7 @@ dependencies = [
 
 [[package]]
 name = "brynja-hash-sha3"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "brynja-core",
  "brynja-crypto-cpu",
@@ -79,7 +79,7 @@ dependencies = [
 
 [[package]]
 name = "brynja-hash-tuple"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "brynja-core",
  "brynja-hash-sha3",
@@ -87,7 +87,7 @@ dependencies = [
 
 [[package]]
 name = "brynja-legacy-md5"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "brynja-core",
  "brynja-hash-core",
@@ -95,7 +95,7 @@ dependencies = [
 
 [[package]]
 name = "brynja-legacy-sha1"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "brynja-core",
  "brynja-hash-core",
@@ -103,7 +103,7 @@ dependencies = [
 
 [[package]]
 name = "brynja-mac-kmac"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "brynja-core",
  "brynja-hash-sha3",

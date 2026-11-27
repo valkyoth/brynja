@@ -4,9 +4,9 @@
 </p>
 
 <div align="center">
-  <a href="https://github.com/valkyoth/brynja/tree/main/crates/brynja-cipher-chacha">Source (unpublished)</a>
+  <a href="https://crates.io/crates/brynja-cipher-chacha">Crates.io</a>
   |
-  <a href="https://github.com/valkyoth/brynja/blob/main/crates/brynja-cipher-chacha/src/lib.rs">API source</a>
+  <a href="https://docs.rs/brynja-cipher-chacha">Docs.rs</a>
   |
   <a href="https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md">Release Plan</a>
   |

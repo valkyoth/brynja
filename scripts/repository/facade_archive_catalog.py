@@ -3,7 +3,7 @@ from pathlib import Path
 import tomllib
 
 ROOT = Path(__file__).resolve().parents[2]
-HMAC = ("brynja-mac-hmac", "0.1.0", ("src/lib.rs",))
+HMAC = ("brynja-mac-hmac", "0.1.1", ("src/lib.rs",))
 
 
 def specifications(packaging):

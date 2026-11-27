@@ -124,7 +124,7 @@ def main() -> int:
         ("required ChaCha", 'brynja-cipher-chacha = { workspace = true, optional = true }', 'brynja-cipher-chacha = { workspace = true }'),
         ("ChaCha opt-in", 'hazmat-chacha20 = ["dep:brynja-cipher-chacha", "brynja-cipher-chacha/hazmat-chacha20"]', 'hazmat-chacha20 = []'),
         ("CPU defaults", 'default = []', 'default = ["cpu"]'),
-        ("CPU opt-in", 'cpu = ["dep:brynja-crypto-cpu"]', 'cpu = []'),
+        ("CPU opt-in", 'cpu = ["dep:brynja-crypto-cpu", "brynja-universal-hash-ghash?/cpu"]', 'cpu = []'),
         ("missing HMAC", 'brynja-mac-hmac = { workspace = true }\n', ''),
         ("foreign owner", '[dependencies]', '[dependencies]\nforeign = "1"'),
     ):

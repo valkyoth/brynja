@@ -35,7 +35,7 @@ def graph_checks(api, document):
         adapter = root / 'adapter'
         good = document({'facade-consumer': [], acceptance.ARCHIVE[0]: []})
         good['resolve']['root'] = 'facade-consumer'
-        for package, version, path in zip(good['packages'], ('0.0.0', '0.1.0'), (consumer, adapter)):
+        for package, version, path in zip(good['packages'], ('0.0.0', acceptance.ARCHIVE[1]), (consumer, adapter)):
             package.update(version=version, manifest_path=str(path / 'Cargo.toml'),
                            targets=[{'kind': ['lib'], 'src_path': str(path / 'src/lib.rs')}])
         roots = {acceptance.ARCHIVE[0]: adapter}

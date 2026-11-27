@@ -6,8 +6,8 @@ rust-version = "1.90"
 publish = false
 
 [dependencies]
-brynja-legacy-md5 = { path = "../../crates/brynja-legacy-md5", version = "=0.1.0", default-features = false, features = ["execution"] }
-brynja-legacy-md5-std = { path = "../../crates/brynja-legacy-md5-std", version = "=0.1.0", default-features = false, features = ["runtime-execution"] }
+brynja-legacy-md5 = { path = "../../crates/brynja-legacy-md5", version = "=0.1.1", default-features = false, features = ["execution"] }
+brynja-legacy-md5-std = { path = "../../crates/brynja-legacy-md5-std", version = "=0.1.1", default-features = false, features = ["runtime-execution"] }
 
 [workspace]
 

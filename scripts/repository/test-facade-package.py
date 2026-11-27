@@ -49,10 +49,10 @@ def rejects(doc, features, expected):
 
 def archive_regressions():
     consumer = Path('/tmp/facade-archive-test/consumer')
-    roots = {'brynja-crypto': Path('/tmp/facade-archive-test/unpacked/brynja-crypto-0.2.0')}
+    roots = {'brynja-crypto': Path('/tmp/facade-archive-test/unpacked/brynja-crypto-0.3.0')}
     baseline = document({'facade-consumer': [], 'brynja-crypto': []})
     baseline['resolve']['root'] = 'facade-consumer'
-    for package, version, root in zip(baseline['packages'], ('0.0.0', '0.2.0'),
+    for package, version, root in zip(baseline['packages'], ('0.0.0', '0.3.0'),
                                       (consumer, roots['brynja-crypto'])):
         package.update(version=version, manifest_path=str(root / 'Cargo.toml'),
                        targets=[{'kind': ['lib'], 'src_path': str(root / 'src/lib.rs')}])

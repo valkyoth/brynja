@@ -16,15 +16,29 @@ the README and both licenses, byte-identical to their source files. This used
 the current development versions and Cargo's package staging area, not the
 live registry. The staging closure is **not** the list of packages to upload.
 
-Before publication:
+## Frozen selection and registry rehearsal
 
-- Freeze fresh versions for changed published packages and resolve the exact
-  dependency pins in dependency-first order. The current development versions
-  of `brynja-crypto` and the CPU crates must not be republished unchanged.
-- Run clean registry-style consumer acceptance against the frozen archives
-  without workspace path overrides: direct leaf and supported facade imports,
-  type identity, feature isolation, exact resolved versions and `no_std` on
-  Rust 1.90.0 and 1.100.0.
-- Confirm the new package names and owners on crates.io, and the exact indexed
-  versions before uploading dependents. Use the existing pentest, final gate,
-  and green GitHub/CodeQL handoff. No upload or tag is authorized by this preview.
+The [public plan](../release-crates.toml) selects **35 packages**, in dependency
+order, starting with `brynja-core 0.11.0` and ending with `brynja 0.30.6`.
+Five are first publications; the other thirty get fresh versions. Dependency-
+only patches are necessary because workspace packages use exact pins, including
+for optional backends. No cryptographic Rust source was changed for this freeze.
+
+Run `python3 scripts/release/check-registry-consumer.py` from a clean candidate.
+It packages the selected crates locally, checks the README and both licenses
+inside each archive, and tests consumers of Cargo's staged registry. There are
+no workspace paths or patch overrides in the consumer manifest. Resolved
+versions and archive checksums must agree with the selection. Both Rust 1.90.0
+and 1.100.0 run the packaged examples via the direct and supported compatibility
+routes, reject raw imports without opt-in, type-check the shared owners and
+compile for Cortex-M. These are package checks, not new platform qualification.
+
+The preparation-time registry lookup found the thirty existing names had the
+same owner set as `brynja`, their baseline versions were available and their
+selected new versions were unused. The five initial names were absent (not
+reserved). The publisher rechecks each first-publication name before uploading
+and confirms its indexed version and owner set before publishing dependents.
+Resuming with `--start-at` also checks the skipped first publications. A dry
+run does not exercise those live post-upload conditions.
+The scoped pentest, final gate and exact-commit GitHub/CodeQL handoff are still
+required; nothing has been uploaded.

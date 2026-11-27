@@ -11,6 +11,7 @@ import sys
 import time
 from pathlib import Path
 import scoped_release
+import registry_ownership
 
 from release_policy import (
     DEFAULT_PLAN,
@@ -353,7 +354,10 @@ def main() -> int:
             release_tag_at_head=tag_at_head,
             evidence_environment=environment,
         )
+        initial, owners = ({}, set()) if args.dry_run else registry_ownership.first_publications(plan, steps)
         for index, package in enumerate(steps):
+            if package in initial:
+                registry_ownership.available(package)
             publish(package, dry_run=args.dry_run,
                     checked_candidate=scoped_release.enabled(version))
             if index != len(steps) - 1:
@@ -362,6 +366,8 @@ def main() -> int:
                     plan["crates"][package]["version"],
                     dry_run=args.dry_run,
                 )
+            if package in initial:
+                registry_ownership.indexed(package, initial[package], owners)
         print("Dry-run publication plan completed; nothing uploaded." if args.dry_run
               else "Release publish sequence completed.")
         print(f"Recommended follow-up: cargo info {FACADE}@{version}")

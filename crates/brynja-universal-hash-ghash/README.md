@@ -4,9 +4,9 @@
 </p>
 
 <div align="center">
-  <a href="https://github.com/valkyoth/brynja/tree/main/crates/brynja-universal-hash-ghash">Source (unpublished)</a>
+  <a href="https://crates.io/crates/brynja-universal-hash-ghash">Crates.io</a>
   |
-  <a href="https://github.com/valkyoth/brynja/blob/main/crates/brynja-universal-hash-ghash/src/lib.rs">API source</a>
+  <a href="https://docs.rs/brynja-universal-hash-ghash">Docs.rs</a>
   |
   <a href="https://github.com/valkyoth/brynja/blob/main/docs/RELEASE_PLAN.md">Release Plan</a>
   |

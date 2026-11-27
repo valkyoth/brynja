@@ -1,26 +1,22 @@
 # Crate Version Matrix
 
-Latest signed milestone: v0.30.2, with zero crates selected for publication.
-The v0.30.3 candidate advances the `brynja` façade metadata to 0.30.3 and
-extracts `brynja-cipher-aes 0.1.0` behind an optional compatibility edge
-from `brynja-crypto`. Both cipher leaves are unpublished. The public checkpoint is
-planned at v0.30.6; extraction does not select a crate for publication.
-The direct raw stream is default-off in the unpublished development tree;
-ordinary AES-GCM and GMAC constructors remain portable. Separate default-off
-execution features add required x86-64 (Linux/Windows) and ARM64 (Linux/macOS) owners in the checkout.
-Supporting crates keep their internal-train versions. Portable GHASH remains the default constructor in
-`brynja-crypto 0.2.0`; CPU crates remain at 0.2.0 and
-`brynja-legacy-hkdf 0.1.0` is held for a later checkpoint. The RISC-V AES
-candidate is evidence-only and does not enable ordinary hardware admission.
-These working-tree APIs are not a claim about registry artifacts.
-The
-authoritative package names, versions and dependency order are in
-[`release-crates.toml`](../release-crates.toml), inspectable with
-`python3 scripts/release/release_crates.py --check`. Selection is not publication
-or release approval. The existing final checks and exact-commit GitHub/CodeQL
-handoff remain pending. Although not a scheduled public pentest checkpoint,
-the scoped final gate requires a committed review disposition. Accelerated AES timing remains
-an explicitly accepted limitation, not completed qualification.
+Latest signed milestone: **v0.30.5** (internal). **v0.30.6 is a public
+checkpoint candidate, not a completed registry release.** [The selection](../release-crates.toml)
+covers 35 uploads, with exact dependency pins and the facade last. Run
+`python3 scripts/release/release_crates.py --check` to validate the selection;
+`--version 0.30.6 --dry-run --yes` prints the order without uploading.
+
+| Package group | Candidate version | Change |
+| --- | --- | --- |
+| `brynja-cipher-chacha`, `brynja-cipher-aes`, `brynja-universal-hash-ghash`, `brynja-aead-gcm`, `brynja-legacy-hkdf` | 0.1.0 | First publication selected |
+| `brynja-core` | 0.11.0 | Source delta from the previous public checkpoint |
+| `brynja-crypto`, `brynja-crypto-cpu`, `brynja-crypto-cpu-std` | 0.3.0 | New public functionality |
+| Other selected support crates | Individual patch versions; see selection | Updated exact dependency pins and/or packaging metadata |
+| `brynja` | 0.30.6 | Modern facade, published last |
+
+See the [candidate notes](../release-notes/RELEASE_NOTES_0.30.6.md) for the
+registry-consumer rehearsal and remaining release steps. The package split
+does not qualify Arm timing or admit the research-only RISC-V AES path.
 
 ## Historical matrix (v0.24.x planning snapshot)
 

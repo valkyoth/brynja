@@ -1,9 +1,13 @@
-# Finite standalone AES and compatibility gate. Independent campaigns stay outside release.
-# No crates.io publication is selected for this internal milestone.
+# Finite public checkpoint; historical algorithm campaigns remain separate.
 schema = 1
-version = "0.30.5"
-scope = "Standalone AES-GCM and GMAC with retained compatibility imports. Standalone GHASH with three packaged import routes; standalone AES-128/192/256 and compatibility import identity, including packaged no_std consumers. Portable RFC 8439 ChaCha20: installed standalone and compatibility consumer acceptance; standalone default-off raw stream and unchanged portable compatibility import. Explicit four-block SSE2 and NEON owners; RV64 stays scalar. No AEAD or automatic dispatch. Retained acceptance for Portable GMAC and Portable AES-GCM, plus explicit Linux/Windows x86-64 AES-NI/PCLMUL and Linux/macOS ARM64 AES/PMULL owners. Portable GHASH remains the default. Arm GHASH timing remains unresolved. RISC-V AES remains evidence-only and unadmitted. Internal only; no publication or implicit timing/proof/native campaign."
+version = "0.30.6"
+scope = "Cumulative standalone cipher publication acceptance since v0.25.3: selected archives, registry-only imports, negative feature controls, type identity and bare-metal builds on both supported compilers. Portable-by-default and existing platform constraints remain unchanged. Arm GHASH timing is not qualified. No new algorithm, native capture or certification. Portable RFC 8439 ChaCha20: RV64 stays scalar. Portable GHASH, Portable AES-GCM and Portable GMAC remain available. AES-NI/PCLMUL on Linux/Windows x86-64 and Linux/macOS ARM64 AES/PMULL remain explicit. Arm GHASH timing remains unresolved. RISC-V AES remains evidence-only and unadmitted."
 ci_checks = ["sha256-policy","static-cpu-source-policy","chacha20-installed-controls","chacha20-parallel-owner","unsafe-policy","unsafe-regressions","aes-gcm-package-controls","crypto-tests","crypto-lint","crypto-format","facade-integration","hkdf-owner-contract","aes-owner-contract","aes-wide-owner-contract","aes-wide-api","aes-dataflow-regressions","aes-provider-api","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
+
+[[checks]]
+id = "registry-consumer"
+command = ["python3","scripts/release/check-registry-consumer.py"]
+timeout_seconds = 300
 
 [[checks]]
 id = "aes-leaf-identity"

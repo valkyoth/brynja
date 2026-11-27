@@ -491,7 +491,7 @@ def test_shared_legacy_hmac_pin() -> None:
         changed["workspace"]["dependencies"]["brynja-legacy-hmac"][field] = value
         rejected(changed, consumers)
     for name in consumers:
-        for value in ({"path": "../brynja-legacy-hmac", "version": "=0.1.0", "default-features": False},
+        for value in ({"path": "../brynja-legacy-hmac", "version": "=0.1.1", "default-features": False},
                       {"workspace": True, "features": ["sha1-execution"]},
                       {"workspace": True, "default-features": True}, {}):
             changed = copy.deepcopy(consumers)

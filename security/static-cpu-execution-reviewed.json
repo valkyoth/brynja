@@ -1,10 +1,10 @@
 {
   "milestone": "0.30.2",
   "sha256": {
-    "assurance/static-cpu-execution/Cargo.lock": "c17768895cf933a18873b0e87c0a01ac0cefedfcfa62b8878af62ec2bc0b6e89",
-    "assurance/static-cpu-execution/Cargo.toml": "55b979e33ca23778c5a0c5806db04246e1323347a56bbf126cffbf1945258610",
+    "assurance/static-cpu-execution/Cargo.lock": "8707160d21803a148cb52c5cc8b9cac533608d6692dcbd80dd46714d02baa407",
+    "assurance/static-cpu-execution/Cargo.toml": "b2d19732b276723a96fdc84a658806f03cc4cc731a9a7b96d87f1e831f839874",
     "assurance/static-cpu-execution/src/lib.rs": "0682f23b803098d0d458c22247ba37067f563c41b47567bd7ab9b3db1bc8515e",
-    "crates/brynja-crypto-cpu/Cargo.toml": "c32aa02b4d3f577e1d28242ed491b6332e042080273af032b05358fbd6e62fb2",
+    "crates/brynja-crypto-cpu/Cargo.toml": "a0ac686a36463db6d88bd6e8b929a0b5b2700f2074b0693c9aaa87641be0eed1",
     "crates/brynja-crypto-cpu/src/aarch64_sha2.rs": "e9869ccd9e6bb2795a1ee753be0d1b6833009e507d84d904494f591964c3dc2f",
     "crates/brynja-crypto-cpu/src/aarch64_sha2/secret256.rs": "2ee599b4176cd3c278335dddc2292a8b65eb5094ca5c80a7993d3d9c0c038c9f",
     "crates/brynja-crypto-cpu/src/aarch64_sha2/secret512.rs": "8febc7fc79bb5813590293d8b17bc5d9f1bcb56f17dba55c844f28dd89bcf96e",

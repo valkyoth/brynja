@@ -13,8 +13,68 @@ import unittest
 from unittest.mock import patch
 
 import release_crates as publisher
+import registry_ownership as ownership
 from sbom_reproducibility_tests import ReproducibleSbom
 import scoped_release as scoped
+
+
+class RegistryOwnership(unittest.TestCase):
+    def test_first_upload_rejects_existing_names_and_resume_requires_indexed_owner(self):
+        rows = {'crates': {'leaf': {'change': 'initial', 'publish': True, 'version': '0.1.0'}}}
+        users = {'users': [{'kind': 'user', 'id': 17}]}
+        entry = {'crate': 'leaf', 'num': '0.1.0', 'yanked': False}
+        api = {'brynja/owners': users, 'leaf/owners': users}
+        with patch.object(ownership, 'lookup', side_effect=api.get):
+            new, trusted = ownership.first_publications(rows, ['leaf'])
+            self.assertEqual(new, {'leaf': '0.1.0'})
+            self.assertEqual(trusted, {('user', 17)})
+            api['leaf'] = {}  # Any existing name is a collision, even without this version.
+            with self.assertRaises(ValueError):
+                ownership.first_publications(rows, ['leaf'])
+            with self.assertRaises(ValueError):
+                ownership.first_publications(rows, ['dependent'])
+            api['leaf/0.1.0'] = {'version': entry}
+            self.assertEqual(ownership.first_publications(rows, ['dependent']), (new, trusted))
+            for key, value in [('crate', 'other'), ('num', '0.2.0'), ('yanked', True)]:
+                with patch.dict(entry, {key: value}), self.assertRaises(ValueError):
+                    ownership.indexed('leaf', '0.1.0', trusted)
+            for bad in (None, {'users': []}, {'users': [{'kind': 'user', 'id': 18}]},
+                        {'users': [{'kind': 'team', 'id': 17}]}, {'users': [{'id': 17}]}):
+                with patch.dict(api, {'leaf/owners': bad}), self.assertRaises(ValueError):
+                    ownership.first_publications(rows, ['dependent'])
+
+    def test_network_failure_is_not_an_available_name(self):
+        from urllib.error import HTTPError
+        for code in (403, 429, 503):
+            with patch.object(ownership, 'urlopen', side_effect=HTTPError('url', code, '', {}, None)):
+                with self.assertRaises(HTTPError):
+                    ownership.available('leaf')
+        for body in (b'null', b'[]', b'invalid'):
+            with patch.object(ownership, 'urlopen', return_value=io.BytesIO(body)):
+                with self.assertRaises(ValueError):
+                    ownership.available('leaf')
+
+    def test_owner_change_after_first_upload_stops_before_dependent(self):
+        plan = {'stage': 'public', 'version': '0.30.6', 'crates': {
+            'leaf': {'publish': True, 'change': 'initial', 'version': '0.1.0'},
+            'brynja': {'publish': True, 'change': 'minor', 'version': '0.30.6'}}}
+        api = {'brynja/owners': {'users': [{'kind': 'user', 'id': 17}]},
+               'leaf/owners': {'users': [{'kind': 'user', 'id': 18}]},
+               'leaf/0.1.0': {'version': {'crate': 'leaf', 'num': '0.1.0', 'yanked': False}}}
+        with contextlib.ExitStack() as ctx:
+            ctx.enter_context(patch('sys.argv', ['release_crates.py', '--yes']))
+            ctx.enter_context(patch.object(publisher, 'validate_repository', return_value=plan))
+            ctx.enter_context(patch.object(publisher, 'publish_plan', return_value=('leaf', 'brynja')))
+            for name in ('require_clean_tree', 'check_release_tag', 'run_preflight', 'wait_for_index'):
+                ctx.enter_context(patch.object(publisher, name))
+            publish = ctx.enter_context(patch.object(publisher, 'publish'))
+            lookup = ctx.enter_context(patch.object(ownership, 'lookup', side_effect=api.get))
+            ctx.enter_context(contextlib.redirect_stdout(io.StringIO()))
+            stderr = ctx.enter_context(contextlib.redirect_stderr(io.StringIO()))
+            self.assertEqual(publisher.main(), 1)
+            self.assertIn('cannot confirm project ownership', stderr.getvalue())
+            publish.assert_called_once_with('leaf', dry_run=False, checked_candidate=True)
+            self.assertEqual([c.args[0] for c in lookup.call_args_list].count('leaf'), 2)
 
 
 class ScopedRelease(unittest.TestCase):
@@ -58,10 +118,11 @@ class ScopedRelease(unittest.TestCase):
         with self.assertRaises(ValueError):
             scoped.enabled('garbage')
 
-    def test_standalone_aes_candidate_gate_is_finite_and_does_not_publish(self):
-        plan = scoped.load('0.30.5')
+    def test_public_cipher_checkpoint_is_dependency_ordered_and_gate_does_not_publish(self):
+        plan = scoped.load('0.30.6')
         commands = {check['id']: check['command'] for check in plan['checks']}
-        self.assertEqual(len(commands), 43)
+        self.assertEqual(len(commands), 44)
+        self.assertEqual(commands['registry-consumer'], ['python3', 'scripts/release/check-registry-consumer.py'])
         self.assertEqual(commands['aes-leaf-identity'], ['python3', 'scripts/aes/check-aes-leaf-identity.py'])
         self.assertEqual(commands['sha256-policy'], ['python3', 'scripts/sha2/check-sha256.py'])
         self.assertEqual(commands['static-cpu-source-policy'],
@@ -93,7 +154,7 @@ class ScopedRelease(unittest.TestCase):
         self.assertEqual(commands['facade-integration'],
             ['cargo', 'check', '--locked', '-p', 'brynja', '--no-default-features'])
         self.assertEqual(set(plan['ci_checks']), set(commands) -
-                         {'aes-leaf-identity', 'sbom', 'dependency-policy', 'advisories', 'gmac-public-consumer', 'aead-packaged-endpoints', 'ghash-package-controls', 'ghash-packaged-endpoints',
+                         {'registry-consumer', 'aes-leaf-identity', 'sbom', 'dependency-policy', 'advisories', 'gmac-public-consumer', 'aead-packaged-endpoints', 'ghash-package-controls', 'ghash-packaged-endpoints',
                           'ghash-packaged-runtime-x86', 'hkdf-package-runner-tests', 'hkdf-packaged-endpoints',
                           'aes-downstream-endpoints', 'aes-consumer-format',
                           'aes-consumer-lint-direct', 'aes-consumer-lint-facade'})
@@ -154,19 +215,19 @@ class ScopedRelease(unittest.TestCase):
                                  or 'check-aes-kani.py' in arg
                                  or 'check-aes-dataflow.py' in arg for arg in command))
         release = tomllib.loads((scoped.ROOT / 'release-crates.toml').read_text())
-        self.assertEqual(release['release']['version'], '0.30.5')
-        self.assertEqual(release['crates']['brynja']['previous_version'], '0.30.4')
-        self.assertEqual(release['crates']['brynja']['change'], 'metadata')
-        self.assertEqual(release['release']['cumulative_milestones'][-2:], ['0.30.4', '0.30.5'])
+        self.assertEqual(release['release']['version'], '0.30.6')
+        self.assertEqual(release['crates']['brynja']['previous_version'], '0.30.5')
+        self.assertEqual(release['crates']['brynja']['change'], 'code')
+        self.assertEqual(release['release']['cumulative_milestones'][-2:], ['0.30.5', '0.30.6'])
         self.assertEqual(release['crates']['brynja-cipher-chacha']['previous_version'], 'unpublished')
         self.assertEqual(release['crates']['brynja-cipher-aes']['previous_version'], 'unpublished')
-        self.assertFalse(release['crates']['brynja-universal-hash-ghash']['publish'])
-        self.assertFalse(release['crates']['brynja-aead-gcm']['publish'])
+        self.assertTrue(release['crates']['brynja-universal-hash-ghash']['publish'])
+        self.assertTrue(release['crates']['brynja-aead-gcm']['publish'])
         for name in ('brynja-cipher-aes', 'brynja-universal-hash-ghash'):
             self.assertLess(publisher.PUBLISH_ORDER.index(name), publisher.PUBLISH_ORDER.index('brynja-aead-gcm'))
         self.assertLess(publisher.PUBLISH_ORDER.index('brynja-aead-gcm'), publisher.PUBLISH_ORDER.index('brynja-crypto'))
         self.assertLess(publisher.PUBLISH_ORDER.index('brynja-universal-hash-ghash'), publisher.PUBLISH_ORDER.index('brynja-crypto'))
-        self.assertFalse(release['crates']['brynja-cipher-aes']['publish'])
+        self.assertTrue(release['crates']['brynja-cipher-aes']['publish'])
         self.assertLess(publisher.PUBLISH_ORDER.index('brynja-cipher-aes'),
                         publisher.PUBLISH_ORDER.index('brynja-crypto'))
         self.assertIn('RV64 stays scalar', plan['scope'])
@@ -174,7 +235,7 @@ class ScopedRelease(unittest.TestCase):
         self.assertIn('Portable GHASH', plan['scope'])
         self.assertIn('Portable RFC 8439 ChaCha20', plan['scope'])
         self.assertFalse(any('--differential' in cmd for cmd in commands.values()))
-        self.assertEqual(release['release']['stage'], 'internal')
+        self.assertEqual(release['release']['stage'], 'public')
         self.assertFalse(release['release']['exceptional'])
         self.assertEqual(release['release']['exception_reason'], '')
         self.assertIn('timing remains unresolved', plan['scope'])
@@ -186,12 +247,12 @@ class ScopedRelease(unittest.TestCase):
         self.assertIn('Linux/macOS ARM64 AES/PMULL', plan['scope'])
         self.assertFalse(any('check-paired-timing.py' in arg or 'check-paired-archives.py' in arg
                              for command in commands.values() for arg in command))
-        self.assertFalse(any(row['publish'] for row in release['crates'].values()))
+        self.assertEqual(sum(row['publish'] for row in release['crates'].values()), 35)
         for name in ('brynja-core', 'brynja-crypto'):
             with self.subTest(name=name):
                 entry = release['crates'][name]
                 self.assertEqual(entry['change'], 'code')
-                self.assertEqual(entry['version'], entry['previous_version'])
+                self.assertNotEqual(entry['version'], entry['previous_version'])
         self.assertIn('brynja-legacy-hkdf', release['crates'])
         order = publisher.PUBLISH_ORDER
         self.assertLess(order.index('brynja-legacy-hmac'), order.index('brynja-legacy-hkdf'))

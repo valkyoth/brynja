@@ -52,7 +52,7 @@ sha256 = "d8cc9d813ee10f191bac86b17c3804e1c10ff37380a6aa5e2edb7d315a51f4ce"
 
 [[reviewed-source]]
 path = "assurance/aes-owner-cleanup/Cargo.lock"
-sha256 = "ff0446e3a0d34e8fd4b7a3d9e060d878e6ce2734237b0e3610f4e2193eaa790f"
+sha256 = "ae673bcf23a49a051013708bf63ae48bcebdae53397f5e631626a5bc36d0af1d"
 
 [[reviewed-source]]
 path = "assurance/aes-owner-cleanup/src/lib.rs"
@@ -1148,7 +1148,7 @@ sha256 = "9904c058662c5d9950ba5aac675cf87e2cb2884d1648bc2efcb21472bd628a9e"
 
 [[reviewed-source]]
 path = "assurance/register-cleanup/secret-predicate/Cargo.lock"
-sha256 = "f1ed01a7888144ec20c64876c0b79f79e8e5670916ccdf84a990ae844ac5aebe"
+sha256 = "0b22977ef8c3e3c17750558c408e6332c2be9f007ea9a70009517d245b351ffb"
 
 [[reviewed-source]]
 path = "assurance/register-cleanup/secret-predicate/src/lib.rs"
@@ -1208,7 +1208,7 @@ sha256 = "3a69b487cdcb33eeddc2706f823f9346ef76f1a415d871872fdca24925a62f73"
 
 [[reviewed-source]]
 path = "assurance/register-cleanup/secret-xor/Cargo.lock"
-sha256 = "6ebb36c60ab0a6d98a6083aa6155b49307767b854a165bfd151686931514e5b1"
+sha256 = "48b3f7fcae22f4f95f7d55039ed4433b99ae28985617c6567ec08ad9a6314be2"
 
 [[reviewed-source]]
 path = "assurance/register-cleanup/secret-xor/src/lib.rs"
@@ -1232,7 +1232,7 @@ sha256 = "aff4c8e11245748de48dae442e296ec3ee3b482d9ae89e61553925313cb6a07e"
 
 [[reviewed-source]]
 path = "assurance/register-cleanup/secret-mask/Cargo.lock"
-sha256 = "c0008ed105bb8cb11945b32934fc8d2f546cabefcd8567addcd1b803a6e01f82"
+sha256 = "1825696386f798e5eee5d681cdbe061ad3107957a7b782a6354a64a310781887"
 
 [[reviewed-source]]
 path = "assurance/register-cleanup/secret-mask/src/lib.rs"
@@ -1252,7 +1252,7 @@ sha256 = "174b25794af12d229bf98ab6b0834e0c7f106c9dc51618868cc48df25fccf549"
 
 [[reviewed-source]]
 path = "assurance/register-cleanup/secret-copy/Cargo.lock"
-sha256 = "79f564acd8b96a92fa946a715f2af0f76620885312556c47e2dfd42a9f50b847"
+sha256 = "d42f6381e70e0a9633761de38149391595e17c7848a79ef0923a53f2ecb4b648"
 
 [[reviewed-source]]
 path = "assurance/register-cleanup/secret-copy/src/lib.rs"
@@ -1508,11 +1508,11 @@ sha256 = "cf2cc557c24e895058d1dbfd2a43d2170ce188f75df8246d1cf5315c862a0e81"
 
 [[reviewed-source]]
 path = "assurance/sha2-hardened-api/Cargo.lock"
-sha256 = "e6ef6d276b4be57d6b6bebc1c86d16c648ae467b94d5ffafa45121b181849c2e"
+sha256 = "1e41f7723b061778267a34afc470da5423d5ab3334ce4a49fa00eee81c9de9b2"
 
 [[reviewed-source]]
 path = "assurance/sha2-hardened-api/Cargo.toml"
-sha256 = "13c4f02b5b7bda263cd3e454516077c9669c5fa3e5dfd3ae5a654bac951f108c"
+sha256 = "82cbc8a1a162fd228ba34eb5245da25272aa71086b1d4a0bff699c62fb84e037"
 
 [[reviewed-source]]
 path = "assurance/sha2-hardened-api/src/lib.rs"
@@ -1520,11 +1520,11 @@ sha256 = "26e3e9d90295152b610684797e26d2f93fc029d30ead379b802c25222b5a532a"
 
 [[reviewed-source]]
 path = "assurance/sha3-hardened-api/Cargo.lock"
-sha256 = "c9d8465a89f6e48f29e410f011f541442a26011780da56364ba21eadaf96f72c"
+sha256 = "5f660525e30ff600c12dbf8debc54ba7d075a82da9038f9ecd5257041b61cd6f"
 
 [[reviewed-source]]
 path = "assurance/sha3-hardened-api/Cargo.toml"
-sha256 = "44255bba25980e343acf58bdbda02176e9b63440c3813822bba12a8021c33adb"
+sha256 = "c12bba1e860dc3ccb2e47e1da2765fdc73c5d6a2d34ab4d34004fe52ee04d910"
 
 [[reviewed-source]]
 path = "assurance/sha3-hardened-api/src/lib.rs"
@@ -1736,7 +1736,7 @@ sha256 = "2753458ba00729f09991515926061de544a4ab3b21c0f03bf3c9d0f412c18bc5"
 
 [[reviewed-source]]
 path = "assurance/hmac-cleanup/Cargo.lock"
-sha256 = "0c27bcd5b54b1a73dc47cc56631de2488a28e92e1cc88aa01767a40ee1d5b2d2"
+sha256 = "6b6e3b425cb92a303e0d04d391c72e1d8512ada9902d95ebd351b6e19bef31da"
 
 [[reviewed-source]]
 path = "assurance/hmac-cleanup/Cargo.toml"
@@ -1748,7 +1748,7 @@ sha256 = "abf2fc321571098f5489ddf45c9c71ac887b16022001472da41e010a0f544648"
 
 [[reviewed-source]]
 path = "assurance/hmac-engine-cleanup/Cargo.lock"
-sha256 = "8e38067666ed1871dd2ee941b47d2b8f110962635db8dde8e26ad464edfb2b52"
+sha256 = "2721de499e8045621ac16d2df7e206051115e68fa463c016b0c027db08906afb"
 
 [[reviewed-source]]
 path = "assurance/hmac-engine-cleanup/Cargo.toml"
@@ -1760,7 +1760,7 @@ sha256 = "4a81e2afa4369f21bcb98f3c51953ddabd3e53bdb07f7aec301d6fce260c3342"
 
 [[reviewed-source]]
 path = "assurance/hmac-execution-cleanup/Cargo.lock"
-sha256 = "f78cba3196c4270ffea2958696eb1c84f052b1ba6e8e244b1ebbe7cff59e2630"
+sha256 = "255df0317a463e3db0de348afaead23dc30aee42386bbc1eb3e5bffab42c4e8f"
 
 [[reviewed-source]]
 path = "assurance/hmac-execution-cleanup/Cargo.toml"
@@ -1772,7 +1772,7 @@ sha256 = "305893a6a95e23e3e70380ef2b1bfdcf8bc30b39f2db07a54510501b52ad673b"
 
 [[reviewed-source]]
 path = "assurance/hmac-hosted-cleanup/Cargo.lock"
-sha256 = "7c4568d6c898a296f1e385b5752d7da192436e79469773b61a4e15788e328e49"
+sha256 = "15fabe8fdfd2646ae0a287b949bd95924fa5fe3ffa31dac42d22b70a7a893a03"
 
 [[reviewed-source]]
 path = "assurance/hmac-hosted-cleanup/Cargo.toml"
@@ -1860,7 +1860,7 @@ sha256 = "44d2023a51e0fe7b473ef5b3e6af424dfe759e03e0f4b576568c4771be26d9a2"
 
 [[reviewed-source]]
 path = "crates/brynja-mac-hmac/Cargo.toml"
-sha256 = "defb9bf067534ce290a776929ecbaeef6fb3c9e46e38aaef001fbccfd4f27a5c"
+sha256 = "7d1d409e0c1c5999db9a74c7fd865767f4d7682ab2c92307e158cfaaa8144d0f"
 
 [[reviewed-source]]
 path = "crates/brynja-mac-hmac/src/algorithms.rs"
@@ -1956,7 +1956,7 @@ sha256 = "96147048320d9968b6c810a15719be735df39a85a314060d22e5de6dd7d668e2"
 
 [[reviewed-source]]
 path = "scripts/hmac/check-hmac-facade.py"
-sha256 = "90c29b6198fad76e65f7fbf10c0f6eef4d0b5d79bc1208be372fc5d05b026a0a"
+sha256 = "88ae7c5cc07b1f624198615353891caf4404ea7506393f87e0a0115df6eea74f"
 
 [[reviewed-source]]
 path = "scripts/hmac/check-hmac-general-differential.py"
@@ -1992,7 +1992,7 @@ sha256 = "54a891ee4f71a1c7f33d59611b4c99aa7d982efe2556b64970284c5f93f0b918"
 
 [[reviewed-source]]
 path = "scripts/hmac/check-hmac-strict.py"
-sha256 = "8d31fc2680163c5c2274943c4d3e622e7ec5daa299b53132d13c72e7cb5b9e28"
+sha256 = "2a48545ccabf143d58906fb065febc2dde287b8260287f4b31752cd99dccb384"
 
 [[reviewed-source]]
 path = "scripts/hmac/check-hmac-timing.py"
@@ -2440,7 +2440,7 @@ sha256 = "2955dc7106473ac7d2bb1fb71b3d3c2aeaefd218be8c95cfadacdd5347caf65f"
 
 [[reviewed-source]]
 path = "assurance/legacy-hmac-cleanup/Cargo.lock"
-sha256 = "c5c5d0ac358f959c0473edf1c268988e3b97a2b139ff2089cd0a3e8c0af94755"
+sha256 = "2abaa913b902993ea2fd5871ed081a06a283bb12e78e7d6387213414a2053574"
 
 [[reviewed-source]]
 path = "assurance/legacy-hmac-cleanup/Cargo.toml"
@@ -2452,7 +2452,7 @@ sha256 = "7926a05d01795419cca0e5fb67fd2b2e25b770109d8a337bc4523719dc500b0f"
 
 [[reviewed-source]]
 path = "assurance/legacy-hmac-engine-cleanup/Cargo.lock"
-sha256 = "9942b720d15470d45fafceaee8e4a290523a1b86c811cb4a0661b96822f208f8"
+sha256 = "777c93dc4dbe481a48113301052a8d1f57d8362be39785d1c4fe7d999f466975"
 
 [[reviewed-source]]
 path = "assurance/legacy-hmac-engine-cleanup/Cargo.toml"
@@ -2464,7 +2464,7 @@ sha256 = "b65402d756ba2d9ce54940061376d607e5652cfffc0c4f42c8d06654af0afb7d"
 
 [[reviewed-source]]
 path = "assurance/legacy-hmac-execution-cleanup/Cargo.lock"
-sha256 = "426dc67402e3c12510e8b6420d1f9f42a95d955993ae41882b370efe2b35849a"
+sha256 = "20faf8f04a1f1a9582fe1a21e24649741901c18ee8cfeb923aba56bd026a77c9"
 
 [[reviewed-source]]
 path = "assurance/legacy-hmac-execution-cleanup/Cargo.toml"
@@ -2476,7 +2476,7 @@ sha256 = "230cd6da455e622c4f3b77b1487e3aba5da23a906f644af37252a8cff9d0981f"
 
 [[reviewed-source]]
 path = "assurance/legacy-hmac-hosted-cleanup/Cargo.lock"
-sha256 = "218c694905d9f51688f77178c926e7f1a98624f554f052d46047e8edd1a45d72"
+sha256 = "6b8099eca10b2c6fe6a7c1979bfde99f25668ccc2700bdaf4da6b28d75698d90"
 
 [[reviewed-source]]
 path = "assurance/legacy-hmac-hosted-cleanup/Cargo.toml"
@@ -2528,7 +2528,7 @@ sha256 = "6964bc3ed26fdd3adbb12756d6c010196dcacb189b2f526dbc86bdfd33cb1b2c"
 
 [[reviewed-source]]
 path = "assurance/legacy-hmac-md5-cleanup/Cargo.lock"
-sha256 = "da25291421c9fb1ae8557af22da2e61a756173ea5031a552bea258421287050f"
+sha256 = "ce78368a18b9bc115a147fd27e4fc29f3e8cdc58e91ba76a5de639691f28bdba"
 
 [[reviewed-source]]
 path = "assurance/legacy-hmac-md5-cleanup/Cargo.toml"
@@ -2540,7 +2540,7 @@ sha256 = "6d1681c069c832a607275d564413a3f4a5d096cc2d9735cd6fd00046424a4bc1"
 
 [[reviewed-source]]
 path = "assurance/legacy-hmac-timing/Cargo.lock"
-sha256 = "3c9df7166f4aa0ce576b35e65265010e931225a52af53b70b9cc43e31a4204a9"
+sha256 = "69b58682b044beb0f48e66158dac623a0faa2dd455ebbfabeea31a9b320b5faf"
 
 [[reviewed-source]]
 path = "assurance/legacy-hmac-timing/Cargo.toml"
@@ -2560,7 +2560,7 @@ sha256 = "254d1afb4f0ec0b7610395eb275af24db4e259826d40173f64fb8824b17eae3e"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/Cargo.toml"
-sha256 = "99aeeb5fc8e3956ef379b3f07b4e7507f9eee49a357ccc15f0e0247fde9b6d19"
+sha256 = "9df5bfafd39343a8898049de0c468974eb3e67d957419434e35be4b3b401eb4f"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac-std/src/lib.rs"
@@ -2680,7 +2680,7 @@ sha256 = "2ea3fc2d690c4e7bfea37f27583968fe410af5059d37db826b97a1acd8ab5f73"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac/Cargo.toml"
-sha256 = "694834edb6f73e5c76afcae3a109e8c71f62c9a071894ab7ab804aef6e075b57"
+sha256 = "5f4313dd7cc07f831cdae09a5e2c3fae2ef56c5ff894c519bae1a31eff1f10d3"
 
 [[reviewed-source]]
 path = "crates/brynja-legacy-hmac/src/algorithms.rs"
@@ -3524,11 +3524,11 @@ sha256 = "21e30ed9fdc40b3721c19330d26732cd3911d6a3947e0401d43ee7bd7a0765d4"
 
 [[reviewed-source]]
 path = "assurance/legacy-hmac-policy/Cargo.lock"
-sha256 = "3dd93783a93ea1768c1b99f64019ebb401e671c58dab3dd97fbd15ce5d118fc0"
+sha256 = "3724cd94984659f514f1db1327d8350aa7e75792f7cce71e34989fa852d63cf6"
 
 [[reviewed-source]]
 path = "assurance/legacy-hmac-policy/Cargo.toml"
-sha256 = "75012711e90d3f2b4185a7b80e7e35310219ea3521a0d5e55b0e696d93713477"
+sha256 = "951740dc3a0fdbd41b17923bd343e7c022611a9be4315f194e01746c9d957aa7"
 
 [[reviewed-source]]
 path = "assurance/legacy-hmac-policy/src/lib.rs"
@@ -3600,7 +3600,7 @@ sha256 = "2be82e73a4ae5e7f58356f7bf04d448b2fe380039847f3392b5e18b50b49aff9"
 
 [[reviewed-source]]
 path = "assurance/hkdf-owner-cleanup/Cargo.lock"
-sha256 = "20d683469e7918216252b704fb610ca186469f6700a3a5db1b760a2d37792ae8"
+sha256 = "b04cce6993ec5b9c219047bfc089dedc65b62aa1aef6805f56981452dc9d4f46"
 
 [[reviewed-source]]
 path = "assurance/hkdf-owner-cleanup/Cargo.toml"
@@ -3636,7 +3636,7 @@ sha256 = "ab151a32ba6bdb75280896ba66fea36956e019d2e890433195fa63dfb80eb2dc"
 
 [[reviewed-source]]
 path = "assurance/hkdf-operation-cleanup/Cargo.lock"
-sha256 = "bc08bce208700e4213f4e271cc6beddad55257f3067ff2e6849b743514895a6c"
+sha256 = "31222c7a0af3d7aea516cfb2fb0bb8c7e5ef6c2427943b81388a1b5bd6e5ea66"
 
 [[reviewed-source]]
 path = "assurance/hkdf-operation-cleanup/Cargo.toml"

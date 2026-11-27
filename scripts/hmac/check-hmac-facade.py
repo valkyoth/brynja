@@ -105,7 +105,7 @@ def execute(root, toolchain, bare_target):
             api.run(cargo + ["build", "--offline"], consumer, env)
             check_graph(cargo, consumer, env, roots, [feature])
         # Activating the leaf elsewhere must not publish this facade's execution namespace.
-        extra = ('leaf={package="brynja-mac-hmac", version="=0.1.0", '
+        extra = ('leaf={package="brynja-mac-hmac", version="=0.1.1", '
                  'default-features=false, features=["runtime-execution"]}\n')
         api.manifest(consumer, roots, package, [], extra=extra)
         api.source(consumer, package, "pub use leaf::execution;\n")

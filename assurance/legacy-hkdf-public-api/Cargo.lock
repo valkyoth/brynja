@@ -4,11 +4,11 @@ version = 4
 
 [[package]]
 name = "brynja-core"
-version = "0.10.0"
+version = "0.11.0"
 
 [[package]]
 name = "brynja-hash-core"
-version = "0.1.0"
+version = "0.1.1"
 
 [[package]]
 name = "brynja-legacy-hkdf"
@@ -27,7 +27,7 @@ dependencies = [
 
 [[package]]
 name = "brynja-legacy-hmac"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "brynja-core",
  "brynja-legacy-md5",
@@ -36,7 +36,7 @@ dependencies = [
 
 [[package]]
 name = "brynja-legacy-md5"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "brynja-core",
  "brynja-hash-core",
@@ -44,7 +44,7 @@ dependencies = [
 
 [[package]]
 name = "brynja-legacy-sha1"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "brynja-core",
  "brynja-hash-core",

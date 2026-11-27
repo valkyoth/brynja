@@ -13,7 +13,7 @@ name = "general-sha512-t-profile"
 path = "profile.rs"
 
 [dependencies]
-brynja-hash-sha2 = { path = "../../crates/brynja-hash-sha2", version = "=0.1.0", default-features = false, features = ["general-sha512-t"] }
+brynja-hash-sha2 = { path = "../../crates/brynja-hash-sha2", version = "=0.1.1", default-features = false, features = ["general-sha512-t"] }
 
 [lints.rust]
 unsafe_code = "forbid"

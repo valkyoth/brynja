@@ -122,16 +122,16 @@ mapping_rationale = "The separate GHASH semantic surface is directly governed by
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0007"
-revision = 5
+revision = 6
 owner = "0.29.0"
 lifecycle = "implemented"
 decision_ids = ["algorithm.aes-gcm"]
 sources = [{ id = "rfc:5116", authority_role = "current" }, { id = "nist:NIST.SP.800-38D.pdf", authority_role = "current" }]
 statement = "AES-GCM enforces the admitted AEAD interface, nonce and usage limits, authentication-before-release, and failure-atomic output behavior. If AES fails to derive the GHASH subkey, propagate the failure before using GHASH or releasing output; never substitute a zero subkey."
 invariants = ["failure-atomicity", "resource-bound", "validation", "work-bound"]
-target = "crates/brynja-crypto/src/aes_gcm/portable.rs#with_material"
-positive_test = "crates/brynja-crypto/src/aes_gcm/portable/tests.rs#nist_seal_open_empty_and_partial_at_all_widths"
-negative_test = "crates/brynja-crypto/src/aes_gcm/portable/tests.rs#subkey_derivation_error_never_starts_ghash_or_commits_output"
+target = "crates/brynja-aead-gcm/src/aes_gcm/portable.rs#with_material"
+positive_test = "crates/brynja-aead-gcm/src/aes_gcm/portable/tests.rs#nist_seal_open_empty_and_partial_at_all_widths"
+negative_test = "crates/brynja-aead-gcm/src/aes_gcm/portable/tests.rs#subkey_derivation_error_never_starts_ghash_or_commits_output"
 work_bound = "IV, AAD and message lengths are checked before keyed work. Each sender is limited to its reservation; durable uniqueness and the combined invocation budget across imports of a key are application responsibilities."
 evidence_gap = "See docs/assurance/aes-gcm-development.md for GCMVS and differential coverage, the bounded commit proof, overlap and nonce-policy checks. On injected AES subkey failure, both seal and open propagate the error with zero observed GHASH starts and unchanged output. This tests derivation failure, not rejection of a successfully derived all-zero field element. Independent release review and target-specific side-channel qualification are not established."
 residual = "Protocol milestones must impose stricter nonce construction and per-key limits where their security analysis requires them. The opt-in owner requires a healthy AES-NI/PCLMUL or Arm AES/PMULL pair and stable usable ISA; it must not retry with portable code after a failed check. See docs/assurance/aead-accelerated-development.md."
@@ -343,14 +343,14 @@ mapping_rationale = "RFC 1321 defines the historical function and RFC 6151 const
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0021"
-revision = 2
+revision = 3
 owner = "0.29.1"
 lifecycle = "implemented"
 decision_ids = ["algorithm.gmac"]
 sources = [{ id = "nist:NIST.SP.800-38D.pdf", authority_role = "current" }]
 statement = "GMAC authenticates byte-oriented associated data with an empty payload under AES-128/192/256. Fix the IV and tag width per owner, reserve disjoint sending IVs, and compare the entire admitted tag before reporting verification success. Verification-only imports cannot generate tags."
 invariants = ["constant-time", "failure-atomicity", "key-lifecycle", "validation", "work-bound"]
-target = "crates/brynja-crypto/src/aes_gcm/portable/gmac.rs#authenticate_next"
+target = "crates/brynja-aead-gcm/src/aes_gcm/portable/gmac.rs#authenticate_next"
 positive_test = "crates/brynja-crypto/tests/gmac.rs#nist_short_iv_and_tag"
 negative_test = "crates/brynja-crypto/tests/gmac.rs#rejects_invalid_policy_and_clears_on_failed_import"
 work_bound = "Each operation uses fixed-size secret state and work linear in public IV and AAD length. IVs and AAD must fit the length encoding, verification traverses the full fixed tag, and each sending owner is bounded by its reservation."

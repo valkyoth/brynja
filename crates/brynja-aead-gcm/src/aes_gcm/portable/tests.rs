@@ -4,8 +4,8 @@ use core::cell::Cell;
 extern crate std;
 
 #[cfg(all(
-    feature = "aes-static-execution",
-    feature = "ghash-runtime-execution",
+    feature = "aes-gcm-execution",
+    feature = "gmac-execution",
     target_os = "linux",
     target_arch = "x86_64",
     target_feature = "aes",

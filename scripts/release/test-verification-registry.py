@@ -425,6 +425,7 @@ AesProviderPackagedTests = provider_packaged_tests.ProviderPackagedTests
 # Reviewed, explicit build closures for these portable harness commands only.
 # This is not automatic feature/dependency analysis or a release-family planner.
 CLOSURES = {
+    'brynja-aead-gcm': {'brynja-core', 'brynja-cipher-aes', 'brynja-universal-hash-ghash'},
     'brynja-legacy-hkdf': {'brynja-core', 'brynja-hash-core', 'brynja-legacy-hmac',
                           'brynja-legacy-sha1', 'brynja-legacy-md5'},
     # HKDF metadata is tested through the composition crate, so its default
@@ -470,15 +471,15 @@ def validate(registry):
             assert check['success']['exact_tests'] == 5
             test = 'crates/brynja-crypto/tests/gmac.rs'
         elif gcm_framing:
-            assert argv[-4:] == ['--features', 'hazmat-ghash', '--lib', 'aes_gcm::tests::']
+            assert argv[-4:] == ['--features', 'aes-gcm', '--lib', 'aes_gcm::tests::']
             assert check['success']['exact_tests'] == 5
-            test = 'crates/brynja-crypto/src/aes_gcm/tests.rs'
+            test = 'crates/brynja-aead-gcm/src/aes_gcm/tests.rs'
         elif gcm_composition or gcm_owner:
             module = 'policy::' if gcm_owner else ''
-            assert argv[-5:] == ['--release', '--features', 'hazmat-aes-block,hazmat-ghash',
+            assert argv[-5:] == ['--release', '--features', 'aes-gcm',
                                  '--lib', f'aes_gcm::portable::{module}tests::']
             assert check['success']['exact_tests'] == (6 if gcm_owner else 5)
-            test = 'crates/brynja-crypto/src/aes_gcm/portable/' + ('policy/' if gcm_owner else '') + 'tests.rs'
+            test = 'crates/brynja-aead-gcm/src/aes_gcm/portable/' + ('policy/' if gcm_owner else '') + 'tests.rs'
         elif '--lib' in argv:
             assert key == ('hkdf', 'parameters'), 'unexpected library test selection'
             assert argv[-2:] == ['--lib', 'hkdf::parameters::tests::']
@@ -555,7 +556,7 @@ class RegistryTests(unittest.TestCase):
             marker = 'AEAD_INSTALLED_NATIVE_PASS' if native else 'AEAD_INSTALLED_PORTABLE_PASS'
             self.assertEqual(set(check['success']['unique_lines']), {marker} | {
                 f'{version} {route} {feature}: installed consumer passed'
-                for version in ('1.90.0', '1.100.0') for route in ('direct', 'facade') for feature in features})
+                for version in ('1.90.0', '1.100.0') for route in ('standalone', 'direct', 'facade') for feature in features})
             if native:
                 self.assertEqual(check['platform'], 'linux-x86_64')
                 self.assertIn('scripts/aes-gcm/paired_linked.py', paths)
@@ -566,7 +567,7 @@ class RegistryTests(unittest.TestCase):
                   (c['component'], c['id']) == ('aes_gcm', 'transaction-proof'))
         self.assertEqual(check['inputs'], ['kani-tools', 'kani-setup', 'aes-gcm-transaction'])
         paths = set(self.registry['groups']['aes-gcm-transaction']['paths'])
-        production = 'crates/brynja-crypto/src/aes_gcm/portable/transaction.rs'
+        production = 'crates/brynja-aead-gcm/src/aes_gcm/portable/transaction.rs'
         fixture = 'assurance/aes-gcm-transaction'
         self.assertTrue({production, production.replace('/transaction.rs', '.rs'),
                          fixture + '/src', fixture + '/Cargo.toml', fixture + '/Cargo.lock',
@@ -926,7 +927,7 @@ class RegistryTests(unittest.TestCase):
                     version = '1.90.0' if endpoint == 'msrv' else '1.99.1'
                     flag = '--no-default-features' if profile == 'minimal' else '--all-features'
                     self.assertEqual(command, ['cargo', '+'+version, action, '--locked', '--offline',
-                                             '-p', 'brynja-cipher-aes', '-p', 'brynja-universal-hash-ghash',
+                                             '-p', 'brynja-cipher-aes', '-p', 'brynja-universal-hash-ghash', '-p', 'brynja-aead-gcm',
                                              '-p', 'brynja-crypto', '-p', 'brynja', flag]
                                      + (['--no-deps'] if action == 'doc' else []))
                     self.assertIn('aes-feature-integration', check['inputs'])

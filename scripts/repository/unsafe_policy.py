@@ -25,7 +25,7 @@ _DIFFERENTIAL_LINES = frozenset({
 BENIGN_LINES = {
     Path('crates/brynja-crypto/tests/aes128_differential.rs'): _DIFFERENTIAL_LINES,
     Path('crates/brynja-crypto/tests/aes_wide_differential.rs'): _DIFFERENTIAL_LINES,
-    Path('crates/brynja-crypto/src/aes_gcm/interruptions.rs'): {
+    Path('crates/brynja-aead-gcm/src/aes_gcm/interruptions.rs'): {
         'path: &[Step],', 'for n in 1..=path.len() {',
         'let prefix = path.get(..n).ok_or("invalid test prefix")?;',
         'for (seal, candidate, path) in [', 'sweep(path, |prefix, unwind| {',
@@ -33,7 +33,7 @@ BENIGN_LINES = {
     Path('crates/brynja-cipher-aes/src/aes.rs'): {
         '// Repository-only research snapshot. This path is outside the published crate',
     },
-    Path('crates/brynja-crypto/src/aes_gcm/portable/x86_pair_tests.rs'): {
+    Path('crates/brynja-aead-gcm/src/aes_gcm/portable/x86_pair_tests.rs'): {
         '// Published empty-message answer: the 96-bit fast path hashes only the message.',
     },
     Path('crates/brynja-crypto/src/chacha20.rs'): {

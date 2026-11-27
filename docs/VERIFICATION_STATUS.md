@@ -1,6 +1,18 @@
 # Component Verification Status
 
-## Standalone GHASH (v0.30.4, in development)
+## Standalone AES-GCM and GMAC (v0.30.5, in development)
+
+On Linux x86-64 the [installed consumer](../scripts/aes-gcm/check-installed-consumer.py)
+passed for all three import routes, both families and both compiler endpoints
+(Rust 1.90.0 and 1.100.0), with portable and explicitly required AES-NI/PCLMUL
+owners. The latter also passed the linked-code screen. The same three routes
+passed the portable Go differential campaign and the required x86-64 paired
+Go/NIST archive replay for all three AES widths. On both compilers the Linux
+AArch64 pair passed its unit and public vector tests under QEMU; Linux ARM,
+macOS ARM and Windows MSVC also compiled. These are not fresh native Windows
+or ARM observations, or a new timing qualification.
+
+## Standalone GHASH (v0.30.4, internally tagged)
 
 The portable [archive consumer](../scripts/ghash/check-packaged-api.py) passed on
 Rust 1.90.0 and 1.100.0 through the standalone, composition and façade routes.

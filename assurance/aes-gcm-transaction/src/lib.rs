@@ -1,7 +1,7 @@
 #![forbid(unsafe_code)]
 
 #[cfg(kani)]
-#[path = "../../../crates/brynja-crypto/src/aes_gcm/portable/transaction.rs"]
+#[path = "../../../crates/brynja-aead-gcm/src/aes_gcm/portable/transaction.rs"]
 mod transaction;
 
 #[cfg(kani)]

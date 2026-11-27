@@ -99,6 +99,8 @@ class NativeLeafGuardTests(unittest.TestCase):
                             versions.append(argv[1])
                             text = f"test {self.case} ... ok\n{self.summary}\n" + ("" if skip else self.marker)
                         else:
+                            owner = "brynja-aead-gcm" if "--lib" in argv else "brynja-crypto"
+                            self.assertEqual(argv[argv.index("-p") + 1], owner)
                             count = {"aead_pair": 1 if env["RUSTFLAGS"].endswith("-aes") else 3,
                                      "ghash_runtime": 1, "aes_gcm::portable::paired::tests::": 3,
                                      "aes_gcm::interruptions::tests::": 9}[argv[-1]]
@@ -370,6 +372,8 @@ class ArchiveTests(unittest.TestCase):
             flags = ["default"]
             if name == crypto:
                 flags = ["gmac", "gmac-execution"]
+            elif name == runner.LEAF:
+                flags += ["gmac", "gmac-execution"]
                 deps.append(cpu)
             elif name == cpu:
                 flags += ["aes-static-execution", "ghash-runtime-execution"]
@@ -388,6 +392,23 @@ class ArchiveTests(unittest.TestCase):
                                paired=True, features=("gmac-execution",))
 
         validate(graph)
+        # The exact same native owners must also resolve without either facade.
+        standalone = copy.deepcopy(graph)
+        allowed = {"consumer", runner.LEAF, "brynja-core", cpu, "brynja-cipher-aes",
+                   "brynja-universal-hash-ghash"}
+        standalone["packages"] = [p for p in standalone["packages"] if p["id"] in allowed]
+        standalone["resolve"]["nodes"] = selected = [
+            n for n in standalone["resolve"]["nodes"] if n["id"] in allowed]
+        selected[0]["deps"] = [{"pkg": runner.LEAF}]
+        next(n for n in selected if n["id"] == runner.LEAF)["features"].remove("default")
+        def check_standalone():
+            runner.check_graph(standalone, root / "consumer", versions, runner.LEAF,
+                               paired=True, features=("gmac-execution",))
+        check_standalone()
+        selected.append(nodes[crypto])
+        standalone["packages"].append(next(p for p in graph["packages"] if p["id"] == crypto))
+        with self.assertRaisesRegex(ValueError, "standalone composition"):
+            check_standalone()
         for target, field, value in ((crypto, "features", ["gmac", "gmac-execution", "hazmat-aes-block"]),
                                      ("brynja-cipher-aes", "features", ["default", "hazmat-aes-block"]),
                                      ("brynja-cipher-aes", "features", ["default", "__mode", "__mode-execution", "hazmat-aes-block"]),
@@ -395,7 +416,7 @@ class ArchiveTests(unittest.TestCase):
                                      ("brynja-universal-hash-ghash", "features", ["default", "__mode", "__mode-execution", "hazmat-ghash"]),
                                      (cpu, "features", ["default", "aes-static-execution"]),
                                      (cpu, "deps", [{"pkg": "brynja-core"}]),
-                                     (crypto, "deps", [d for d in nodes[crypto]["deps"] if d["pkg"] != cpu])):
+                                     (runner.LEAF, "deps", [d for d in nodes[runner.LEAF]["deps"] if d["pkg"] != cpu])):
             mutant = copy.deepcopy(graph)
             next(n for n in mutant["resolve"]["nodes"] if n["id"] == target)[field] = value
             with self.assertRaises(ValueError):
@@ -410,7 +431,8 @@ class ArchiveTests(unittest.TestCase):
         nodes["brynja-universal-hash-ghash"]["features"] = ["default", "__mode"]
         nodes["brynja-universal-hash-ghash"]["deps"] = [{"pkg": "brynja-core"}]
         nodes[cpu]["features"] = ["default"]
-        packages[crypto]["dependencies"].append(cpu)
+        nodes[runner.LEAF]["features"] = ["default", "gmac"]
+        packages[runner.LEAF]["dependencies"].append(cpu)
         lock["package"].append({"name": cpu, "version": versions[cpu]})
         with patch.object(runner.tomllib, "loads", return_value=lock), self.assertRaisesRegex(
             ValueError, "archive dependency graph"
@@ -463,7 +485,7 @@ class ArchiveTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "incomplete nonempty"):
                     list(paired.controls(path, family))
 
-    def test_native_registration_tracks_archive_and_all_eight_results(self):
+    def test_native_registration_tracks_archive_and_all_twelve_results(self):
         registry = tomllib.loads((runner.ROOT / "verification/checks.toml").read_text())
         check, = (c for c in registry["checks"] if c["id"] == "x86-packaged-pair")
         groups = [registry["groups"][group] for group in check["inputs"]]
@@ -475,7 +497,7 @@ class ArchiveTests(unittest.TestCase):
                                       "assurance/aes-kernel-candidate/probe.rs", "scripts/aes-gcm/paired_linked.py"}:
             self.assertTrue(any(Path(name).is_relative_to(p) for p in paths), name)
         markers = {f"{v} {r} {f}: paired Go and NIST archives passed"
-                   for v in ("1.90.0", "1.100.0") for r in ("direct", "facade") for f in ("aes-gcm", "gmac")}
+                   for v in ("1.90.0", "1.100.0") for r in ("standalone", "direct", "facade") for f in ("aes-gcm", "gmac")}
         self.assertEqual(set(check["success"]["unique_lines"]), markers | {"X86_PAIRED_AEAD_ARCHIVES_COMPLETE"})
         self.assertEqual(check["platform"], "linux-x86_64")
         self.assertIn("X86_PAIRED_AEAD_LINKED_COMPLETE", check["success"]["contains"])

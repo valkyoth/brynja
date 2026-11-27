@@ -88,7 +88,7 @@ def reconciled_inventory():
         target.unlink()
         copy_import_targets(root, importer.relative_to(root))
 
-        extra = root / 'crates/brynja-crypto/src/aes_gcm/interruptions.rs'
+        extra = root / 'crates/brynja-aead-gcm/src/aes_gcm/interruptions.rs'
         extra.parent.mkdir(parents=True, exist_ok=True)
         extra.write_text('        path: &[Step],\n#[path="unreviewed.rs"] mod other;\n')
         require_rejection(root, 'code-inclusion')

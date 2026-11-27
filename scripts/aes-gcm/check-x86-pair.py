@@ -34,8 +34,8 @@ def main():
             # runtime PCLMUL admission and a passing KAT, with no fallback.
             cmd = ["cargo", "+" + version, "test", "--locked", "--offline", "--release",
                    "--target", "x86_64-unknown-linux-gnu", "--target-dir", str(Path(temp) / "target"),
-                   "-p", "brynja-crypto", "--no-default-features", "--features",
-                   "aes-gcm,gmac,aes-static-execution,ghash-runtime-execution", "--lib", PREFIX]
+                   "-p", "brynja-aead-gcm", "--no-default-features", "--features",
+                   "aes-gcm-execution,gmac-execution", "--lib", PREFIX]
             output = subprocess.check_output(cmd, cwd=ROOT, env=dict(env, RUSTFLAGS="-Ctarget-feature=+aes,+sse2"),
                                              text=True, timeout=300)
             validate(output, len(CASES), ["test " + PREFIX + name + " ... ok" for name in CASES])
@@ -53,7 +53,8 @@ def main():
                  [interrupted + width + "::" + name for width in ("aes128", "aes192", "aes256")
                   for name in ("import", "messages", "authentication_only")]),
             ):
-                output = subprocess.check_output(public + args, cwd=ROOT, env=dict(env, RUSTFLAGS=flags),
+                test = [("brynja-crypto" if arg == "brynja-aead-gcm" else arg) for arg in public] if "--test" in args else public
+                output = subprocess.check_output(test + args, cwd=ROOT, env=dict(env, RUSTFLAGS=flags),
                                                  text=True, timeout=300)
                 validate(output, len(names), ["test " + name + " ... ok" for name in names])
             # This test moved out of the composition crate. Run the generic

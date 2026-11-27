@@ -10,19 +10,10 @@ enum Error {
     Length,
     Authentication,
     Aes(aes::Error),
-    #[cfg(feature = "aes-static-execution")]
-    AcceleratedAes(aes::execution::Error),
     Hash(crate::ghash::Error),
     Invariant,
     Exhausted,
     TagLength,
-}
-
-#[cfg(feature = "aes-static-execution")]
-impl From<aes::execution::Error> for Error {
-    fn from(error: aes::execution::Error) -> Self {
-        Self::AcceleratedAes(error)
-    }
 }
 
 // Private, not a downstream provider contract. GCM uses forward AES only.

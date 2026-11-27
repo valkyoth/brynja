@@ -66,11 +66,12 @@ def prepare_mac(root, dep, versions):
     shutil.copyfile(FIXTURE / "lifecycle.rs", consumer / "tests/lifecycle.rs")
     patches = "".join(f'{n}={{path={json.dumps(str(root / "unpacked" / (n+"-"+v)))}}}\n'
                       for n, v in versions.items())
+    alias = "brynja-crypto" if dep == gcm["LEAF"] else dep
     (consumer / "Cargo.toml").write_text(
         '[workspace]\n[package]\nname="gmac-consumer"\nversion="0.0.0"\nedition="2024"\n'
         'rust-version="1.90"\npublish=false\n[features]\ndirect=[]\nfacade=[]\n'
-        f'gmac=["{dep}/gmac"]\ngcm=["{dep}/aes-gcm"]\n[dependencies]\n'
-        f'{dep}={{version="={versions[dep]}",default-features=false}}\n[patch.crates-io]\n' + patches)
+        f'gmac=["{alias}/gmac"]\ngcm=["{alias}/aes-gcm"]\n[dependencies]\n'
+        f'{alias}={{package="{dep}",version="={versions[dep]}",default-features=false}}\n[patch.crates-io]\n' + patches)
     return consumer
 
 
@@ -176,7 +177,7 @@ def main():
         env = pkg.isolated_env(root)
         versions = pkg.package_archives(root, pkg.MODERN, archives.ENDPOINTS[-1], env)
         streams = {} if smoke else {family: transcript(root, family) for family in ("aes-gcm", "gmac")}
-        for route, dep in (("direct", "brynja-crypto"), ("facade", "brynja")):
+        for route, dep in (("direct", gcm["LEAF"]), ("direct", "brynja-crypto"), ("facade", "brynja")):
             aead = gcm["prepare"](root, dep, versions)
             (aead / "examples").mkdir()
             shutil.copyfile(gcm["FIXTURE"] / "examples/gcmvs.rs", aead / "examples/gcmvs.rs")
@@ -191,7 +192,8 @@ def main():
                     if family in streams:
                         replay(["cargo", "+"+compiler], consumer, env, [*BASE, "--features", route+","+feature],
                                example, *streams[family])
-                print(f"{compiler} {route}: portable archived GCM and GMAC acceptance passed", flush=True)
+                label = "standalone" if dep == gcm["LEAF"] else route
+                print(f"{compiler} {label}: portable archived GCM and GMAC acceptance passed", flush=True)
     print("PORTABLE_AEAD_ARCHIVES_SMOKE_COMPLETE" if smoke else "PORTABLE_AEAD_ARCHIVES_COMPLETE")
 
 

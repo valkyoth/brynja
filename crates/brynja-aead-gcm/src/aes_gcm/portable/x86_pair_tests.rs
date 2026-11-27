@@ -4,16 +4,31 @@ use crate::{
     aes::execution,
     ghash::{self, Ghash},
 };
+use brynja_crypto_cpu::aes::{Authority, Kernel};
+use core::cell::RefCell;
 
-#[derive(Default)]
 struct RequiredHash {
+    multiplier: RefCell<ghash::PairMultiplier>,
     starts: Cell<usize>,
     reject_at: Option<usize>,
 }
 
+impl RequiredHash {
+    fn new(reject_at: Option<usize>) -> Result<Self, Error> {
+        let kernel = ghash::PairMultiplier::probe()
+            .map_err(|_| Error::Invariant)?
+            .ok_or(Error::Invariant)?;
+        Ok(Self {
+            multiplier: RefCell::new(kernel),
+            starts: Cell::new(0),
+            reject_at,
+        })
+    }
+}
+
 impl HashRoute for RequiredHash {
     fn start<'a>(
-        &self,
+        &'a self,
         h: &'a Block,
         state: &'a mut Block,
         budget: u64,
@@ -27,9 +42,7 @@ impl HashRoute for RequiredHash {
         if self.reject_at == Some(n) {
             return Err(ghash::Error::Quarantined);
         }
-        let hash = Ghash::new_with_backend(h, state, budget, ghash::Mode::Require)?;
-        assert_eq!(hash.backend(), ghash::Backend::Pclmul);
-        Ok(hash)
+        ghash::from_pair(&self.multiplier, h, state, budget)
     }
 }
 
@@ -46,20 +59,22 @@ macro_rules! width {
                 input: &Block,
                 out: &'a mut Block,
             ) -> Result<SecretBlock<'a>, Error> {
-                Ok(self.0.encrypt_block(input, out)?)
+                self.0
+                    .encrypt_block(input, out)
+                    .map_err(|_| Error::Invariant)
             }
         }
 
         #[test]
         fn $test() -> Result<(), Error> {
-            let authority = execution::Authority::new(execution::Kernel::X86AesNi)
-                .map_err(execution::Error::from)?;
+            let authority = Authority::new(Kernel::X86AesNi).map_err(|_| Error::Invariant)?;
             let (mut storage, mut scalar_storage) = ([0; $bytes], [0; $bytes]);
             let raw = hex($key)?;
             let scalar = $name::new(&raw, &mut scalar_storage).map_err(Error::Aes)?;
             let native = Pair(
-                execution::$name::new(&authority, &raw, &mut storage)?,
-                RequiredHash::default(),
+                execution::$name::new(&authority, &raw, &mut storage)
+                    .map_err(|_| Error::Invariant)?,
+                RequiredHash::new(None)?,
             );
             // Published empty-message answer: the 96-bit fast path hashes only the message.
             let iv = hex::<12>("cafebabefacedbaddecaf888")?;
@@ -123,16 +138,13 @@ width!(
 
 #[test]
 fn hash_failure_at_either_stage_burns_nonce_without_commit() -> Result<(), Error> {
-    let authority =
-        execution::Authority::new(execution::Kernel::X86AesNi).map_err(execution::Error::from)?;
+    let authority = Authority::new(Kernel::X86AesNi).map_err(|_| Error::Invariant)?;
     for stage in [1, 2] {
         let mut storage = [0; 176];
         let native = Pair(
-            execution::Aes128ExpandedKey::new(&authority, &[7; 16], &mut storage)?,
-            RequiredHash {
-                starts: Cell::new(0),
-                reject_at: Some(stage),
-            },
+            execution::Aes128ExpandedKey::new(&authority, &[7; 16], &mut storage)
+                .map_err(|_| Error::Invariant)?,
+            RequiredHash::new(Some(stage))?,
         );
         let mut key = policy::Key::<_, 16, 8>::from_reserved_invocations(native, b"test", 0, 1)?;
         let (mut data, mut scratch) = ([0x39; 17], [0xff; 17]);

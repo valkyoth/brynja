@@ -30,21 +30,24 @@ LEAVES = {
 CRYPTO = {'cpu': ['dep:brynja-crypto-cpu'], 'aes-gcm': [], 'gmac': [], 'hazmat-aes-block': [], 'hazmat-ghash': [], 'external-key-provider': []}
 CRYPTO.update({feature: ([] if feature == 'general-sha512-t' else ['cpu']) +
               [owner + '/' + leaf] for feature, (owner, leaf) in LEAVES.items()})
-for feature in ('aes-gcm', 'gmac', 'hazmat-aes-block', 'external-key-provider'):
-    child = '__mode' if feature in ('aes-gcm', 'gmac') else feature
-    CRYPTO[feature] = ['dep:brynja-cipher-aes', 'brynja-cipher-aes/' + child]
+for feature in ('hazmat-aes-block', 'external-key-provider'):
+    CRYPTO[feature] = ['dep:brynja-cipher-aes', 'brynja-cipher-aes/' + feature]
 CRYPTO['cpu'].append('brynja-universal-hash-ghash?/cpu')
 CRYPTO['hazmat-ghash'] = ['dep:brynja-universal-hash-ghash', 'brynja-universal-hash-ghash/hazmat-ghash']
 for feature in ('aes-gcm', 'gmac'):
-    CRYPTO[feature] += ['dep:brynja-universal-hash-ghash', 'brynja-universal-hash-ghash/__mode']
+    CRYPTO[feature] = ['dep:brynja-aead-gcm', 'brynja-aead-gcm/' + feature]
 CRYPTO['aes-static-execution'] = ['hazmat-aes-block', 'cpu', 'brynja-cipher-aes/aes-static-execution']
 for composition in ('aes-gcm', 'gmac'):
-    CRYPTO[composition + '-execution'] = [composition, 'dep:brynja-crypto-cpu',
-        'brynja-cipher-aes/__mode-execution', 'brynja-universal-hash-ghash/__mode-execution', 'brynja-crypto-cpu/ghash-runtime-execution']
+    CRYPTO[composition + '-execution'] = [composition, 'brynja-aead-gcm/' + composition + '-execution']
 CRYPTO['aes-runtime-execution'] = ['aes-static-execution', 'brynja-cipher-aes/aes-runtime-execution']
 CRYPTO['ghash-runtime-execution'] = ['hazmat-ghash', 'brynja-universal-hash-ghash/ghash-runtime-execution', 'dep:brynja-crypto-cpu',
                                      'brynja-crypto-cpu/ghash-runtime-execution']
+MODE = ['dep:brynja-core', 'dep:brynja-cipher-aes', 'brynja-cipher-aes/__mode',
+        'dep:brynja-universal-hash-ghash', 'brynja-universal-hash-ghash/__mode']
+PAIRED = ['dep:brynja-crypto-cpu', 'brynja-cipher-aes/__mode-execution', 'brynja-universal-hash-ghash/__mode-execution']
 FEATURES = {
+    'brynja-aead-gcm': {'aes-gcm': MODE, 'gmac': MODE, 'aes-gcm-execution': ['aes-gcm', *PAIRED],
+                        'gmac-execution': ['gmac', *PAIRED]},
     'brynja-universal-hash-ghash': {
         '__mode': ['dep:brynja-core'],
         '__mode-execution': ['__mode', 'dep:brynja-crypto-cpu', 'brynja-crypto-cpu/ghash-runtime-execution'],
@@ -86,6 +89,7 @@ def validate_isolation(modern, edges, names, packages, reachable):
     # The standalone stream's SSE2 feature is not forwarded by the facade.
     protocol_edges[names['brynja-cipher-chacha']].discard(names['brynja-crypto-cpu'])
     protocol_edges[names['brynja-cipher-aes']].discard(names['brynja-crypto-cpu'])
+    protocol_edges[names['brynja-aead-gcm']].discard(names['brynja-crypto-cpu'])
     protocol_edges[names['brynja-universal-hash-ghash']].discard(names['brynja-crypto-cpu'])
     for engine in ('brynja-tls', 'brynja-tls12', 'brynja-tls13',
                    'brynja-tls13-handshake', 'brynja-dtls', 'brynja-quic-tls'):

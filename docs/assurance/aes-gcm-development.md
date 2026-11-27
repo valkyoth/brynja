@@ -48,7 +48,7 @@ development API, not release qualification.
    use 96-bit IVs. Three additional independent fixtures exercise public
    sealing and opening with 8-, 16- and 60-byte IVs.
 6. **Failure atomicity (bounded proof).** Both seal and open use the same
-   [caller-output write](../../crates/brynja-crypto/src/aes_gcm/portable/transaction.rs).
+   [caller-output write](../../crates/brynja-aead-gcm/src/aes_gcm/portable/transaction.rs).
    The computation gets read-only input and separate writable scratch. A length
    mismatch rejects before it runs; an error discards its result without writing
    the destination. Only success copies the staged bytes. This is a contract
@@ -104,7 +104,7 @@ development API, not release qualification.
 
 [`BRY-REQ-CRYPTO-0007`](../../requirements/domains/cryptography.toml) maps to
 the shared subkey derivation and to the [positive and negative composition
-tests](../../crates/brynja-crypto/src/aes_gcm/portable/tests.rs). The negative
+tests](../../crates/brynja-aead-gcm/src/aes_gcm/portable/tests.rs). The negative
 test injects an error on the first AES call (encrypting the zero input).
 For seal and open it requires the AES error, zero GHASH starts, cleared scratch
 and an unchanged destination. A test-only counter in the real GHASH constructor

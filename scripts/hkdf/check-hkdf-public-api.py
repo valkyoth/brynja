@@ -16,7 +16,7 @@ import facade_cargo_environment as cargo_environment
 
 MATRIX = ('1.90.0', '1.91.0', '1.92.0', '1.93.0', '1.94.0', '1.95.0',
           '1.96.0', '1.96.1', '1.97.0', '1.97.1', '1.98.0', '1.98.1', '1.99.0', '1.99.1', '1.100.0')
-MODERN = ('brynja', 'brynja-cipher-aes', 'brynja-universal-hash-ghash', 'brynja-cipher-chacha', 'brynja-core', 'brynja-crypto', 'brynja-crypto-cpu',
+MODERN = ('brynja', 'brynja-cipher-aes', 'brynja-universal-hash-ghash', 'brynja-aead-gcm', 'brynja-cipher-chacha', 'brynja-core', 'brynja-crypto', 'brynja-crypto-cpu',
           'brynja-crypto-cpu-std', 'brynja-dtls', 'brynja-hash-core',
           'brynja-hash-parallel', 'brynja-hash-sha2', 'brynja-hash-sha3',
           'brynja-hash-tuple', 'brynja-mac-hmac', 'brynja-mac-kmac', 'brynja-pki',

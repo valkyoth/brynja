@@ -1055,19 +1055,19 @@
     },
     {
       "decision": {
-        "code_target": "crates/brynja-crypto/src/aes_gcm/portable.rs#with_material",
+        "code_target": "crates/brynja-aead-gcm/src/aes_gcm/portable.rs#with_material",
         "disposition": "implemented",
         "domain": "cryptography",
         "owner": "0.29.0",
         "rationale": "Default-off portable AES-128/192/256-GCM provides detached authenticated seal and open with checked length limits, reserved sending IVs and caller-owned scratch. A failed subkey derivation precedes all GHASH work. This describes implemented behavior, not independent release approval, accelerated GCM or target timing qualification.",
         "sources": ["nist:NIST.SP.800-38D.pdf", "rfc:5116"],
-        "test_target": "crates/brynja-crypto/src/aes_gcm/portable/tests.rs#subkey_derivation_error_never_starts_ghash_or_commits_output"
+        "test_target": "crates/brynja-aead-gcm/src/aes_gcm/portable/tests.rs#subkey_derivation_error_never_starts_ghash_or_commits_output"
       },
       "id": "algorithm.aes-gcm"
     },
     {
       "decision": {
-        "code_target": "crates/brynja-crypto/src/aes_gcm/portable/gmac.rs#authenticate_next",
+        "code_target": "crates/brynja-aead-gcm/src/aes_gcm/portable/gmac.rs#authenticate_next",
         "disposition": "implemented",
         "domain": "cryptography",
         "owner": "0.29.1",

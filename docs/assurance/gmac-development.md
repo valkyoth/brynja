@@ -47,7 +47,7 @@ the shared GCM framing and reservation checks cover arithmetic limits.
 
 [`BRY-REQ-CRYPTO-0021`](../../requirements/domains/cryptography.toml) and
 `algorithm.gmac` map the AAD-only specialization to the pinned SP 800-38D.
-Review [the GMAC wrapper](../../crates/brynja-crypto/src/aes_gcm/portable/gmac.rs)
+Review [the GMAC wrapper](../../crates/brynja-aead-gcm/src/aes_gcm/portable/gmac.rs)
 and the feature gates against `v0.29.0`. The existing GCM engine is reused
 with no payload. Check that only reserved IVs can sign, receivers cannot sign,
 verification consumes no reservation, and no raw block, hash or ciphertext

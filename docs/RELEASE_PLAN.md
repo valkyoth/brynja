@@ -7387,7 +7387,7 @@ Exit criteria:
 
 ### v0.30.4 - Standalone GHASH Universal Hash
 
-Status: in progress
+Status: released
 
 Plan scope: Extract the existing framed-block GHASH into `brynja-universal-hash-ghash`, preserving its secret output, borrowed workspace and explicitly selected multiplication backends; do not expose a MAC or add POLYVAL.
 
@@ -7409,7 +7409,7 @@ Exit criteria:
 
 ### v0.30.5 - Standalone AES-GCM And GMAC Composition
 
-Status: planned
+Status: in progress
 
 Plan scope: Move AES-GCM and GMAC into `brynja-aead-gcm` over the extracted AES and GHASH crates, preserving separate public operations, existing import paths and nonce reservation semantics.
 

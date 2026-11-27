@@ -40,7 +40,7 @@ PUBLISH_ORDER = (
     "brynja-legacy-hkdf",
     "brynja-crypto-cpu",
     "brynja-cipher-chacha",
-    "brynja-cipher-aes", "brynja-universal-hash-ghash",
+    "brynja-cipher-aes", "brynja-universal-hash-ghash", "brynja-aead-gcm",
     "brynja-hash-sha2",
     "brynja-hash-sha3",
     "brynja-mac-kmac",

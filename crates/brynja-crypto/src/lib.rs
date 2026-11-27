@@ -20,29 +20,12 @@
 #[cfg(feature = "hazmat-chacha20")]
 pub mod chacha20;
 
-#[cfg(all(
-    not(feature = "aes-gcm"),
-    any(feature = "gmac", all(test, feature = "hazmat-ghash"))
-))]
-mod aes_gcm;
+/// Compatibility imports for detached authenticated encryption.
 #[cfg(feature = "aes-gcm")]
 pub mod aes_gcm;
+/// Compatibility imports for AAD-only authentication.
 #[cfg(feature = "gmac")]
-pub use aes_gcm::portable::gmac;
-
-// Reuse the same primitives without granting access to their raw block APIs.
-#[cfg(all(
-    any(feature = "aes-gcm", feature = "gmac"),
-    not(feature = "hazmat-aes-block")
-))]
-#[allow(dead_code, unused_imports)]
-mod aes;
-#[cfg(all(
-    any(feature = "aes-gcm", feature = "gmac"),
-    not(feature = "hazmat-ghash")
-))]
-#[allow(dead_code)]
-mod ghash;
+pub mod gmac;
 
 /// Opt-in raw AES-128/192/256 blocks, not authenticated message encryption.
 /// Requires `hazmat-aes-block`; deployment qualification remains separate.

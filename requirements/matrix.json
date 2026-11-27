@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "56163ce06f4bda14181ee734a37ad308446c856a98988f707c9baae9aad3848a",
-  "domain_policy_sha256": "d2ec10aed210aa3af3ccdc6f160a15abf993636db9c28a37a340551a8366cc93",
-  "policy_sha256": "d6de8900db2d96d32c04a6e95e04c671c0d38fc6f38075b802ad5caa8dd28911",
+  "domain_policy_sha256": "07509ec9b7db3f7bd05c812fd1c04d47565d19a28a2a3189535e2e2b0dff7758",
+  "policy_sha256": "1e241b189e0e10cad63832ee8cd05d308e6be3e96a6e7b4243e6c2d00a468cbe",
   "requirements": [
     {
       "applicability": "delegate",
@@ -1363,7 +1363,7 @@
       "owner": "0.29.0",
       "profile": "crypto-encoding-pkix",
       "residual": "Protocol milestones must impose stricter nonce construction and per-key limits where their security analysis requires them. The opt-in owner requires a healthy AES-NI/PCLMUL or Arm AES/PMULL pair and stable usable ISA; it must not retry with portable code after a failed check. See docs/assurance/aead-accelerated-development.md.",
-      "revision": 5,
+      "revision": 6,
       "scope": "protocol",
       "sources": [
         {
@@ -1505,19 +1505,19 @@
       "targets": [
         {
           "kind": "actual-symbol",
-          "target": "crates/brynja-crypto/src/aes_gcm/portable.rs#with_material"
+          "target": "crates/brynja-aead-gcm/src/aes_gcm/portable.rs#with_material"
         }
       ],
       "tests": [
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "crates/brynja-crypto/src/aes_gcm/portable/tests.rs#nist_seal_open_empty_and_partial_at_all_widths"
+          "target": "crates/brynja-aead-gcm/src/aes_gcm/portable/tests.rs#nist_seal_open_empty_and_partial_at_all_widths"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "crates/brynja-crypto/src/aes_gcm/portable/tests.rs#subkey_derivation_error_never_starts_ghash_or_commits_output"
+          "target": "crates/brynja-aead-gcm/src/aes_gcm/portable/tests.rs#subkey_derivation_error_never_starts_ghash_or_commits_output"
         }
       ],
       "work_bound": "IV, AAD and message lengths are checked before keyed work. Each sender is limited to its reservation; durable uniqueness and the combined invocation budget across imports of a key are application responsibilities."
@@ -3776,7 +3776,7 @@
       "owner": "0.29.1",
       "profile": "crypto-encoding-pkix",
       "residual": "Use a dedicated key, one tag width per key and durable cross-import IV allocation; applications must also bound verification attempts, enforce replay policy and supply separate confidentiality when needed.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -3807,7 +3807,7 @@
       "targets": [
         {
           "kind": "actual-symbol",
-          "target": "crates/brynja-crypto/src/aes_gcm/portable/gmac.rs#authenticate_next"
+          "target": "crates/brynja-aead-gcm/src/aes_gcm/portable/gmac.rs#authenticate_next"
         }
       ],
       "tests": [
@@ -31268,9 +31268,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "f520849ac08eef9b832f4e34527bacbd2f8c8c858929e121f25d683b9838b4a1",
+  "residual_policy_sha256": "4c526a345f6ce6b2bde3ab7ee288d0a449abb7092b1c710127510f0fe3724955",
   "schema": 5,
   "source_ledger_sha256": "39e86f6144d5ee20aa8b114a5d2662bef933275477b00a2e002e3e63dce31e78",
-  "surface_register_sha256": "8d5c9c1f3e85850c94d17fe8c8eac0ab0125389da1462f2e8f098bcbbafe3cb3",
-  "transport_policy_sha256": "39c7c6821267d2bb2c63d12bf3e3a69a36b3822f3f7641a5e60312a242732c4a"
+  "surface_register_sha256": "d89492694a69934df197e896b2cdb333223c0565565c61d68c82b71b60543cf7",
+  "transport_policy_sha256": "f4193f2d355dc75abdbc9e4464d7a28eec12774bd9265637a16e84f471a1558d"
 }

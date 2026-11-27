@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "3d7e89897f1e845f1a16e2f4eddc6b2b0d305ca837b3ce3a501512ea3058e714",
+  "policy_sha256": "0d54243586d804a85baeda1f8f448c526295a47cafaf23e66600db78951eaae0",
   "schema": 2,
   "source_ledger_sha256": "39e86f6144d5ee20aa8b114a5d2662bef933275477b00a2e002e3e63dce31e78",
   "surfaces": [
@@ -17,7 +17,7 @@
       "test_target": "tests/surface/primitives.rs#aes"
     },
     {
-      "code_target": "crates/brynja-crypto/src/aes_gcm/portable.rs#with_material",
+      "code_target": "crates/brynja-aead-gcm/src/aes_gcm/portable.rs#with_material",
       "disposition": "implemented",
       "domain": "cryptography",
       "id": "algorithm.aes-gcm",
@@ -28,7 +28,7 @@
       ],
       "owner": "0.29.0",
       "rationale": "Default-off portable AES-128/192/256-GCM provides detached authenticated seal and open with checked length limits, reserved sending IVs and caller-owned scratch. A failed subkey derivation precedes all GHASH work. This describes implemented behavior, not independent release approval, accelerated GCM or target timing qualification.",
-      "test_target": "crates/brynja-crypto/src/aes_gcm/portable/tests.rs#subkey_derivation_error_never_starts_ghash_or_commits_output"
+      "test_target": "crates/brynja-aead-gcm/src/aes_gcm/portable/tests.rs#subkey_derivation_error_never_starts_ghash_or_commits_output"
     },
     {
       "code_target": "crates/brynja-cipher-chacha/src/chacha20.rs#ChaCha20",
@@ -114,7 +114,7 @@
       "test_target": "tests/surface/primitives.rs#ghash"
     },
     {
-      "code_target": "crates/brynja-crypto/src/aes_gcm/portable/gmac.rs#authenticate_next",
+      "code_target": "crates/brynja-aead-gcm/src/aes_gcm/portable/gmac.rs#authenticate_next",
       "disposition": "implemented",
       "domain": "cryptography",
       "id": "algorithm.gmac",

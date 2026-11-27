@@ -55,10 +55,11 @@ def prepare(root, family, dep, versions):
         shutil.copyfile(fixture / "examples/nist.rs", consumer / "examples/nist.rs")
     patches = "".join(f'{n}={{path={json.dumps(str(root / "unpacked" / (n+"-"+v)))}}}\n'
                       for n, v in versions.items())
+    alias = "brynja-crypto" if dep == gcm["LEAF"] else dep
     (consumer / "Cargo.toml").write_text(
         f'[workspace]\n[package]\nname="{name}"\nversion="0.0.0"\nedition="2024"\npublish=false\n'
-        f'[features]\ndirect=[]\nfacade=[]\nnative=["{dep}/{family}-execution"]\n'
-        f'[dependencies]\n{dep}={{version="={versions[dep]}",default-features=false}}\n'
+        f'[features]\ndirect=[]\nfacade=[]\nnative=["{alias}/{family}-execution"]\n'
+        f'[dependencies]\n{alias}={{package="{dep}",version="={versions[dep]}",default-features=false}}\n'
         '[patch.crates-io]\n' + patches)
     return consumer
 
@@ -160,7 +161,7 @@ def main():
             if pkg.run([str(probe)], root, env).stdout.splitlines() != ["AES_STATIC_HOST_BUNDLE_PASS"]:
                 raise ValueError("missing baseline ISA preflight")
         native = dict(env, RUSTFLAGS="-Ctarget-feature=+aes,+sse2")
-        for route, dep in (("direct", "brynja-crypto"), ("facade", "brynja")):
+        for route, dep in (("direct", gcm["LEAF"]), ("direct", "brynja-crypto"), ("facade", "brynja")):
             for family, (go, nist) in streams.items():
                 consumer = prepare(root, family, dep, versions)
                 pkg.run(["cargo", "+" + archives.ENDPOINTS[0], "generate-lockfile", "--offline"], consumer, env)
@@ -182,8 +183,9 @@ def main():
                     replay(consumer, native, command, *nist, family)
                     if linked["digest"](image) != sha:
                         raise ValueError("linked image changed during replay")
-                    print(f"{version} {route} {family}: linked bodies={bodies} ELF sha256={sha}", flush=True)
-                    print(f"{version} {route} {family}: paired Go and NIST archives passed", flush=True)
+                    label = "standalone" if dep == gcm["LEAF"] else route
+                    print(f"{version} {label} {family}: linked bodies={bodies} ELF sha256={sha}", flush=True)
+                    print(f"{version} {label} {family}: paired Go and NIST archives passed", flush=True)
     print("X86_PAIRED_AEAD_LINKED_COMPLETE")
     print("X86_PAIRED_AEAD_ARCHIVES_COMPLETE")
 

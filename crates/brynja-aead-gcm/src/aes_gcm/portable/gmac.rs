@@ -17,7 +17,7 @@
 //!
 //! Generate a tag using an invocation number already reserved by the application:
 //! ```
-//! use brynja_crypto::gmac::{Aes256Gmac, GmacError, GmacTag};
+//! use brynja_aead_gcm::gmac::{Aes256Gmac, GmacError, GmacTag};
 //! fn authenticate(key: &[u8; 32], prefix: [u8; 4], reserved: u64, record: &[u8])
 //!     -> Result<([u8; 12], GmacTag), GmacError>
 //! {
@@ -29,7 +29,7 @@
 //! ```
 //! A raw GCM tag cannot be passed to GMAC verification without an explicit import:
 //! ```compile_fail,E0308
-//! use brynja_crypto::gmac::Aes256Gmac;
+//! use brynja_aead_gcm::gmac::Aes256Gmac;
 //! fn wrong(owner: &Aes256Gmac<'_>, iv: &[u8; 12], record: &[u8], raw: &[u8; 16]) {
 //!     let _ = owner.verify(iv, record, raw);
 //! }

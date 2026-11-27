@@ -334,6 +334,8 @@ It is not ChaCha20-Poly1305: raw ciphertext has no integrity protection.
 The [installed consumer](assurance/chacha20-consumer/README.md) shows how to
 test both portable imports and the explicit SSE2 and NEON owners.
 
+For authenticated encryption, use `brynja_aead_gcm::aes_gcm` with the `aes-gcm` feature. For AAD-only authentication, enable `gmac` and use `brynja_aead_gcm::gmac`. Both [standalone APIs](crates/brynja-aead-gcm/README.md) retain their existing compatibility imports.
+
 For framed GHASH blocks, enable `hazmat-ghash` in the [standalone GHASH crate](crates/brynja-universal-hash-ghash/README.md), or keep the existing `brynja_crypto::ghash` and `brynja::crypto::ghash` imports. The result is secret; it is not a MAC or a GCM tag.
 
 For raw AES blocks the development tree provides `brynja-cipher-aes` with

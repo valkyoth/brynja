@@ -232,7 +232,7 @@ unique_lines = ["Complete - 1 successfully verified harnesses, 0 failures, 1 tot
 contains = ["VERIFICATION:- SUCCESSFUL"]
 
 [groups.ghash-packaged-api]
-paths = ["Cargo.toml", "Cargo.lock", "assurance/ghash-public-api", "scripts/ghash/check-packaged-api.py", "scripts/hkdf/check-hkdf-public-api.py", "scripts/repository/facade_cargo_environment.py", "crates/brynja","crates/brynja-cipher-chacha","crates/brynja-core","crates/brynja-cipher-aes", "crates/brynja-universal-hash-ghash", "crates/brynja-crypto","crates/brynja-crypto-cpu","crates/brynja-crypto-cpu-std","crates/brynja-dtls","crates/brynja-hash-core","crates/brynja-hash-parallel","crates/brynja-hash-sha2","crates/brynja-hash-sha3","crates/brynja-hash-tuple","crates/brynja-mac-hmac","crates/brynja-mac-kmac","crates/brynja-pki","crates/brynja-platform","crates/brynja-protocol","crates/brynja-quic-tls","crates/brynja-tls","crates/brynja-tls12","crates/brynja-tls13","crates/brynja-tls13-handshake"]
+paths = ["Cargo.toml", "Cargo.lock", "assurance/ghash-public-api", "scripts/ghash/check-packaged-api.py", "scripts/hkdf/check-hkdf-public-api.py", "scripts/repository/facade_cargo_environment.py", "crates/brynja","crates/brynja-cipher-chacha","crates/brynja-core","crates/brynja-cipher-aes", "crates/brynja-universal-hash-ghash", "crates/brynja-aead-gcm", "crates/brynja-crypto","crates/brynja-crypto-cpu","crates/brynja-crypto-cpu-std","crates/brynja-dtls","crates/brynja-hash-core","crates/brynja-hash-parallel","crates/brynja-hash-sha2","crates/brynja-hash-sha3","crates/brynja-hash-tuple","crates/brynja-mac-hmac","crates/brynja-mac-kmac","crates/brynja-pki","crates/brynja-platform","crates/brynja-protocol","crates/brynja-quic-tls","crates/brynja-tls","crates/brynja-tls12","crates/brynja-tls13","crates/brynja-tls13-handshake"]
 optional_paths = [".cargo/config", ".cargo/config.toml"]
 [[groups.ghash-packaged-api.tools]]
 program = "python3"
@@ -260,7 +260,7 @@ id = "mid-update-retirement"
 category = "fault"
 name = "GHASH clears live partial state after an error or unwind"
 establishes = "A test-only engine interrupts the second product. The owner wipes workspace before drop, rejects subsequent updates and leaves finish output untouched. Not a hardware fault test."
-command = ["cargo","+1.100.0","test","--locked","--offline","--no-default-features","-p","brynja-universal-hash-ghash","--features","ghash-runtime-execution","--lib","--","--exact","ghash::runtime::failure_tests::mid_update_error_or_unwind_wipes_live_state_and_retires_owner"]
+command = ["cargo","+1.100.0","test","--locked","--offline","--no-default-features","-p","brynja-universal-hash-ghash","-p","brynja-aead-gcm","--features","ghash-runtime-execution","--lib","--","--exact","ghash::runtime::failure_tests::mid_update_error_or_unwind_wipes_live_state_and_retires_owner"]
 cwd = "."
 inputs = ["ghash-portable-field","cpu-source","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
 reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
@@ -349,7 +349,7 @@ contains = ["GHASH_PACKAGED_CANDIDATES_COMPLETE"]
 unique_lines = ["GHASH_PACKAGED_CANDIDATES_COMPLETE"]
 
 [groups.ghash-portable-field]
-paths = ["Cargo.toml","Cargo.lock","crates/brynja-crypto/Cargo.toml","crates/brynja-cipher-aes", "crates/brynja-universal-hash-ghash", "crates/brynja-crypto/src","crates/brynja-crypto/tests/ghash_field.rs","crates/brynja-crypto/tests/ghash_vectors"]
+paths = ["Cargo.toml","Cargo.lock","crates/brynja-crypto/Cargo.toml","crates/brynja-cipher-aes", "crates/brynja-universal-hash-ghash", "crates/brynja-aead-gcm", "crates/brynja-crypto/src","crates/brynja-crypto/tests/ghash_field.rs","crates/brynja-crypto/tests/ghash_vectors"]
 [[groups.ghash-portable-field.tools]]
 program = "rustc"
 toolchain = "1.100.0"
@@ -374,8 +374,11 @@ minimum_tests = 10
 exact_tests = 10
 
 [groups.aes-gcm-framing]
-paths = ["crates/brynja-crypto/src/aes_gcm/tests.rs"]
+paths = ["crates/brynja-aead-gcm/src/aes_gcm/tests.rs"]
 optional_paths = [".cargo/config", ".cargo/config.toml"]
+
+[groups.aead-composition-source]
+paths = ["Cargo.toml", "Cargo.lock", "crates/brynja-aead-gcm/Cargo.toml", "crates/brynja-aead-gcm/src", "crates/brynja-core/src", "crates/brynja-core/Cargo.toml", "crates/brynja-cipher-aes/Cargo.toml", "crates/brynja-cipher-aes/src", "crates/brynja-universal-hash-ghash/Cargo.toml", "crates/brynja-universal-hash-ghash/src"]
 
 [groups.aes-gcm-x86-pair]
 paths = ["scripts/aes-gcm/check-x86-pair.py", "scripts/aes/check-aes-static.py", "scripts/repository/facade_cargo_environment.py", "assurance/aes-kernel-candidate/probe.rs", "crates/brynja-crypto/tests/aead_pair.rs", "crates/brynja-crypto/tests/native/vectors.rs"]
@@ -399,15 +402,15 @@ unique_lines = ["1.90.0: required AES-NI and PCLMUL composition passed", "1.100.
 contains = ["GCM_X86_PAIR_DEVELOPMENT_COMPLETE"]
 
 [groups.aes-gcm-composition]
-paths = ["crates/brynja-crypto/src/aes_gcm/portable/tests.rs", "crates/brynja-crypto/src/aes_gcm/tests.rs"]
+paths = ["crates/brynja-aead-gcm/src/aes_gcm/portable/tests.rs", "crates/brynja-aead-gcm/src/aes_gcm/tests.rs"]
 optional_paths = [".cargo/config", ".cargo/config.toml"]
 
 [groups.aes-gcm-owner]
-paths = ["crates/brynja-crypto/src/aes_gcm/portable/policy/tests.rs", "crates/brynja-crypto/src/aes_gcm/tests.rs"]
+paths = ["crates/brynja-aead-gcm/src/aes_gcm/portable/policy/tests.rs", "crates/brynja-aead-gcm/src/aes_gcm/tests.rs"]
 optional_paths = [".cargo/config", ".cargo/config.toml"]
 
 [groups.aes-gcm-transaction]
-paths = ["assurance/aes-gcm-transaction/Cargo.toml", "assurance/aes-gcm-transaction/Cargo.lock", "assurance/aes-gcm-transaction/src", "crates/brynja-crypto/src/aes_gcm/portable.rs", "crates/brynja-crypto/src/aes_gcm/portable/transaction.rs", "scripts/aes-gcm/check-transaction.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py", "assurance/policy.toml"]
+paths = ["assurance/aes-gcm-transaction/Cargo.toml", "assurance/aes-gcm-transaction/Cargo.lock", "assurance/aes-gcm-transaction/src", "crates/brynja-aead-gcm/src/aes_gcm/portable.rs", "crates/brynja-aead-gcm/src/aes_gcm/portable/transaction.rs", "scripts/aes-gcm/check-transaction.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py", "assurance/policy.toml"]
 optional_paths = [".cargo/config", ".cargo/config.toml"]
 [[groups.aes-gcm-transaction.tools]]
 program = "python3"
@@ -434,9 +437,9 @@ id = "framing"
 category = "portable"
 name = "AES-GCM message lengths, IV derivation and GHASH framing"
 establishes = "Private portable framing tests only: byte-length limits, inc32 wrap, fast and hashed IV paths, independent padding and NIST AES-128 Example 5 intermediate. No seal/open, nonce-policy or timing qualification."
-command = ["cargo", "+1.100.0", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--features", "hazmat-ghash", "--lib", "aes_gcm::tests::"]
+command = ["cargo", "+1.100.0", "test", "--locked", "--offline", "-p", "brynja-aead-gcm", "--no-default-features", "--features", "aes-gcm", "--lib", "aes_gcm::tests::"]
 cwd = "."
-inputs = ["aes-gcm-framing", "ghash-portable-field", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+inputs = ["aead-composition-source", "aes-gcm-framing", "ghash-portable-field", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
 reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
 timeout_seconds = 120
 [checks.success]
@@ -450,9 +453,9 @@ id = "portable-composition"
 category = "portable"
 name = "Portable AES-GCM seal/open with full tags (private composition)"
 establishes = "Published cases across all widths, a hashed-IV fixture, authentication before decryption and failure-atomic disjoint destinations. Injected AES subkey failure starts no GHASH for seal or open; healthy controls observe GHASH on both IV paths. Not a timing qualification."
-command = ["cargo", "+1.100.0", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--release", "--features", "hazmat-aes-block,hazmat-ghash", "--lib", "aes_gcm::portable::tests::"]
+command = ["cargo", "+1.100.0", "test", "--locked", "--offline", "-p", "brynja-aead-gcm", "--no-default-features", "--release", "--features", "aes-gcm", "--lib", "aes_gcm::portable::tests::"]
 cwd = "."
-inputs = ["aes-gcm-composition", "ghash-portable-field", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+inputs = ["aead-composition-source", "aes-gcm-composition", "ghash-portable-field", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
 reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
 timeout_seconds = 120
 [checks.success]
@@ -466,9 +469,9 @@ id = "owner-policy"
 category = "portable"
 name = "AES-GCM fixed tag lengths, reserved nonces and in-place operations"
 establishes = "Fixed tag width, 96-bit-only and general-IV ranges, short-field overflow and key-wide invocation bounds. Keyed failures and unwinds spend the IV without committing output. Does not establish durable allocation, cross-owner uniqueness or timing."
-command = ["cargo", "+1.100.0", "test", "--locked", "--offline", "-p", "brynja-crypto", "--no-default-features", "--release", "--features", "hazmat-aes-block,hazmat-ghash", "--lib", "aes_gcm::portable::policy::tests::"]
+command = ["cargo", "+1.100.0", "test", "--locked", "--offline", "-p", "brynja-aead-gcm", "--no-default-features", "--release", "--features", "aes-gcm", "--lib", "aes_gcm::portable::policy::tests::"]
 cwd = "."
-inputs = ["aes-gcm-owner", "ghash-portable-field", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
+inputs = ["aead-composition-source", "aes-gcm-owner", "ghash-portable-field", "hash-core", "sha2-source", "sha3-source", "hmac-source", "kmac-source", "tuplehash-source", "parallelhash-source"]
 reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
 timeout_seconds = 120
 [checks.success]
@@ -497,7 +500,7 @@ minimum_tests = 5
 exact_tests = 5
 
 [groups.gmac-consumer]
-paths = ["assurance/gmac-consumer/Cargo.toml", "assurance/gmac-consumer/Cargo.lock", "assurance/gmac-consumer/src", "scripts/gmac/check-consumer.py", "Cargo.toml", "crates/brynja", "crates/brynja-cipher-chacha","crates/brynja-core", "crates/brynja-cipher-aes", "crates/brynja-universal-hash-ghash", "crates/brynja-crypto", "crates/brynja-hash-core", "crates/brynja-hash-parallel", "crates/brynja-hash-sha2", "crates/brynja-hash-sha3", "crates/brynja-hash-tuple", "crates/brynja-mac-hmac", "crates/brynja-mac-kmac", "crates/brynja-pki", "crates/brynja-protocol", "crates/brynja-tls", "crates/brynja-tls12", "crates/brynja-tls13", "crates/brynja-tls13-handshake"]
+paths = ["assurance/gmac-consumer/Cargo.toml", "assurance/gmac-consumer/Cargo.lock", "assurance/gmac-consumer/src", "scripts/gmac/check-consumer.py", "Cargo.toml", "crates/brynja", "crates/brynja-cipher-chacha","crates/brynja-core", "crates/brynja-cipher-aes", "crates/brynja-universal-hash-ghash", "crates/brynja-aead-gcm", "crates/brynja-crypto", "crates/brynja-hash-core", "crates/brynja-hash-parallel", "crates/brynja-hash-sha2", "crates/brynja-hash-sha3", "crates/brynja-hash-tuple", "crates/brynja-mac-hmac", "crates/brynja-mac-kmac", "crates/brynja-pki", "crates/brynja-protocol", "crates/brynja-tls", "crates/brynja-tls12", "crates/brynja-tls13", "crates/brynja-tls13-handshake"]
 optional_paths = [".cargo/config", ".cargo/config.toml"]
 [[groups.gmac-consumer.tools]]
 program = "python3"
@@ -563,7 +566,7 @@ unique_lines = ["1.90.0 direct: generate=2730 verify=2730 reject=2730","1.90.0 f
 contains = ["GMAC_BOUNDARY_COMPLETE"]
 
 [groups.aes-gcm-consumer]
-paths = ["assurance/aes-gcm-consumer/Cargo.toml", "assurance/aes-gcm-consumer/Cargo.lock", "assurance/aes-gcm-consumer/src", "scripts/aes-gcm/check-public-consumer.py", "Cargo.toml", "crates/brynja", "crates/brynja-cipher-chacha","crates/brynja-core", "crates/brynja-cipher-aes", "crates/brynja-universal-hash-ghash", "crates/brynja-crypto", "crates/brynja-hash-core", "crates/brynja-hash-parallel", "crates/brynja-hash-sha2", "crates/brynja-hash-sha3", "crates/brynja-hash-tuple", "crates/brynja-mac-hmac", "crates/brynja-mac-kmac", "crates/brynja-pki", "crates/brynja-protocol", "crates/brynja-tls", "crates/brynja-tls12", "crates/brynja-tls13", "crates/brynja-tls13-handshake"]
+paths = ["assurance/aes-gcm-consumer/Cargo.toml", "assurance/aes-gcm-consumer/Cargo.lock", "assurance/aes-gcm-consumer/src", "scripts/aes-gcm/check-public-consumer.py", "Cargo.toml", "crates/brynja", "crates/brynja-cipher-chacha","crates/brynja-core", "crates/brynja-cipher-aes", "crates/brynja-universal-hash-ghash", "crates/brynja-aead-gcm", "crates/brynja-crypto", "crates/brynja-hash-core", "crates/brynja-hash-parallel", "crates/brynja-hash-sha2", "crates/brynja-hash-sha3", "crates/brynja-hash-tuple", "crates/brynja-mac-hmac", "crates/brynja-mac-kmac", "crates/brynja-pki", "crates/brynja-protocol", "crates/brynja-tls", "crates/brynja-tls12", "crates/brynja-tls13", "crates/brynja-tls13-handshake"]
 optional_paths = [".cargo/config", ".cargo/config.toml"]
 [[groups.aes-gcm-consumer.tools]]
 program = "python3"
@@ -609,7 +612,7 @@ inputs = ["aead-installed-consumer", "aead-portable-acceptance", "aes-gcm-archiv
 reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
 timeout_seconds = 600
 [checks.success]
-unique_lines = ["1.90.0 direct aes-gcm: installed consumer passed", "1.90.0 direct gmac: installed consumer passed", "1.100.0 direct aes-gcm: installed consumer passed", "1.100.0 direct gmac: installed consumer passed", "1.90.0 facade aes-gcm: installed consumer passed", "1.90.0 facade gmac: installed consumer passed", "1.100.0 facade aes-gcm: installed consumer passed", "1.100.0 facade gmac: installed consumer passed", "AEAD_INSTALLED_PORTABLE_PASS"]
+unique_lines = ["1.90.0 standalone aes-gcm: installed consumer passed", "1.90.0 direct aes-gcm: installed consumer passed", "1.90.0 standalone gmac: installed consumer passed", "1.90.0 direct gmac: installed consumer passed", "1.100.0 standalone aes-gcm: installed consumer passed", "1.100.0 direct aes-gcm: installed consumer passed", "1.100.0 standalone gmac: installed consumer passed", "1.100.0 direct gmac: installed consumer passed", "1.90.0 facade aes-gcm: installed consumer passed", "1.90.0 facade gmac: installed consumer passed", "1.100.0 facade aes-gcm: installed consumer passed", "1.100.0 facade gmac: installed consumer passed", "AEAD_INSTALLED_PORTABLE_PASS"]
 contains = ["AEAD_INSTALLED_PORTABLE_PASS"]
 
 [[checks]]
@@ -625,7 +628,7 @@ platform = "linux-x86_64"
 reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
 timeout_seconds = 600
 [checks.success]
-unique_lines = ["1.90.0 direct aes-gcm-execution: installed consumer passed", "1.90.0 direct gmac-execution: installed consumer passed", "1.100.0 direct aes-gcm-execution: installed consumer passed", "1.100.0 direct gmac-execution: installed consumer passed", "1.90.0 facade aes-gcm-execution: installed consumer passed", "1.90.0 facade gmac-execution: installed consumer passed", "1.100.0 facade aes-gcm-execution: installed consumer passed", "1.100.0 facade gmac-execution: installed consumer passed", "AEAD_INSTALLED_NATIVE_PASS"]
+unique_lines = ["1.90.0 standalone aes-gcm-execution: installed consumer passed", "1.90.0 direct aes-gcm-execution: installed consumer passed", "1.90.0 standalone gmac-execution: installed consumer passed", "1.90.0 direct gmac-execution: installed consumer passed", "1.100.0 standalone aes-gcm-execution: installed consumer passed", "1.100.0 direct aes-gcm-execution: installed consumer passed", "1.100.0 standalone gmac-execution: installed consumer passed", "1.100.0 direct gmac-execution: installed consumer passed", "1.90.0 facade aes-gcm-execution: installed consumer passed", "1.90.0 facade gmac-execution: installed consumer passed", "1.100.0 facade aes-gcm-execution: installed consumer passed", "1.100.0 facade gmac-execution: installed consumer passed", "AEAD_INSTALLED_NATIVE_PASS"]
 contains = ["AEAD_INSTALLED_NATIVE_PASS", "reviewed bodies=30"]
 
 [groups.aead-x86-archives]
@@ -646,7 +649,7 @@ platform = "linux-x86_64"
 reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER", "QEMU_CPU"]
 timeout_seconds = 1200
 [checks.success]
-unique_lines = ["1.90.0 direct aes-gcm: paired Go and NIST archives passed", "1.100.0 direct aes-gcm: paired Go and NIST archives passed", "1.90.0 direct gmac: paired Go and NIST archives passed", "1.100.0 direct gmac: paired Go and NIST archives passed", "1.90.0 facade aes-gcm: paired Go and NIST archives passed", "1.100.0 facade aes-gcm: paired Go and NIST archives passed", "1.90.0 facade gmac: paired Go and NIST archives passed", "1.100.0 facade gmac: paired Go and NIST archives passed", "X86_PAIRED_AEAD_ARCHIVES_COMPLETE"]
+unique_lines = ["1.90.0 standalone aes-gcm: paired Go and NIST archives passed", "1.90.0 direct aes-gcm: paired Go and NIST archives passed", "1.100.0 standalone aes-gcm: paired Go and NIST archives passed", "1.100.0 direct aes-gcm: paired Go and NIST archives passed", "1.90.0 standalone gmac: paired Go and NIST archives passed", "1.90.0 direct gmac: paired Go and NIST archives passed", "1.100.0 standalone gmac: paired Go and NIST archives passed", "1.100.0 direct gmac: paired Go and NIST archives passed", "1.90.0 facade aes-gcm: paired Go and NIST archives passed", "1.100.0 facade aes-gcm: paired Go and NIST archives passed", "1.90.0 facade gmac: paired Go and NIST archives passed", "1.100.0 facade gmac: paired Go and NIST archives passed", "X86_PAIRED_AEAD_ARCHIVES_COMPLETE"]
 contains = ["X86_PAIRED_AEAD_ARCHIVES_COMPLETE", "X86_PAIRED_AEAD_LINKED_COMPLETE"]
 
 [groups.aead-x86-timing-record]
@@ -699,7 +702,7 @@ inputs = ["aead-portable-acceptance", "aes-gcm-archive", "aes-gcm-consumer", "gm
 reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
 timeout_seconds = 900
 [checks.success]
-unique_lines = ["1.90.0 direct: portable archived GCM and GMAC acceptance passed", "1.100.0 direct: portable archived GCM and GMAC acceptance passed", "1.90.0 facade: portable archived GCM and GMAC acceptance passed", "1.100.0 facade: portable archived GCM and GMAC acceptance passed", "PORTABLE_AEAD_ARCHIVES_COMPLETE"]
+unique_lines = ["1.90.0 standalone: portable archived GCM and GMAC acceptance passed", "1.90.0 direct: portable archived GCM and GMAC acceptance passed", "1.100.0 standalone: portable archived GCM and GMAC acceptance passed", "1.100.0 direct: portable archived GCM and GMAC acceptance passed", "1.90.0 facade: portable archived GCM and GMAC acceptance passed", "1.100.0 facade: portable archived GCM and GMAC acceptance passed", "PORTABLE_AEAD_ARCHIVES_COMPLETE"]
 contains = ["PORTABLE_AEAD_ARCHIVES_COMPLETE"]
 
 [groups.aes-gcm-gcmvs]
@@ -1148,7 +1151,7 @@ timeout_seconds = 300
 contains = ["GHASH_FEATURE_GATE_COMPLETE: 16 direct/facade compiler checks"]
 
 [groups.ghash-lifecycle]
-paths = ["Cargo.toml","Cargo.lock","crates/brynja-crypto/Cargo.toml","crates/brynja-cipher-aes", "crates/brynja-universal-hash-ghash", "crates/brynja-crypto/src","crates/brynja-crypto/tests/ghash_lifecycle.rs"]
+paths = ["Cargo.toml","Cargo.lock","crates/brynja-crypto/Cargo.toml","crates/brynja-cipher-aes", "crates/brynja-universal-hash-ghash", "crates/brynja-aead-gcm", "crates/brynja-crypto/src","crates/brynja-crypto/tests/ghash_lifecycle.rs"]
 
 [[checks]]
 component = "ghash"
@@ -4299,7 +4302,7 @@ id = "feature-msrv-minimal-test"
 category = "integration"
 name = "AES opt-in feature composition: 1.90.0, minimal, test"
 establishes = "No-default-feature standalone/direct/facade integration and doctests: 32 passing tests. AES absence/explicit admission are separately checked by packaged paired probes."
-command = ["cargo","+1.90.0","test","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-universal-hash-ghash","-p","brynja-crypto","-p","brynja","--no-default-features"]
+command = ["cargo","+1.90.0","test","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-universal-hash-ghash","-p","brynja-aead-gcm","-p","brynja-crypto","-p","brynja","--no-default-features"]
 cwd = "."
 inputs = ["aes-build", "aes-feature-integration", "hkdf-msrv"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -4317,7 +4320,7 @@ id = "feature-msrv-minimal-doc"
 category = "integration"
 name = "AES opt-in feature composition: 1.90.0, minimal, doc"
 establishes = "Builds direct and facade documentation; no runtime or timing claim."
-command = ["cargo","+1.90.0","doc","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-universal-hash-ghash","-p","brynja-crypto","-p","brynja","--no-default-features","--no-deps"]
+command = ["cargo","+1.90.0","doc","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-universal-hash-ghash","-p","brynja-aead-gcm","-p","brynja-crypto","-p","brynja","--no-default-features","--no-deps"]
 cwd = "."
 inputs = ["aes-build", "aes-feature-integration", "hkdf-msrv"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -4333,7 +4336,7 @@ id = "feature-msrv-all-test"
 category = "integration"
 name = "AES opt-in feature composition: 1.90.0, all, test"
 establishes = "All-feature standalone/direct/facade integration and doctests: 186 passing tests, including the baseline static-AES rejection control, plus the paired GHASH cleanup test when its native multiplier is available. Three opt-in OpenSSL corpus tests remain ignored here and are covered by separate differential registrations. Not packaged or side-channel qualification."
-command = ["cargo","+1.90.0","test","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-universal-hash-ghash","-p","brynja-crypto","-p","brynja","--all-features"]
+command = ["cargo","+1.90.0","test","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-universal-hash-ghash","-p","brynja-aead-gcm","-p","brynja-crypto","-p","brynja","--all-features"]
 cwd = "."
 inputs = ["aes-build", "aes-feature-integration", "hkdf-msrv"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -4352,7 +4355,7 @@ id = "feature-msrv-all-doc"
 category = "integration"
 name = "AES opt-in feature composition: 1.90.0, all, doc"
 establishes = "Builds direct and facade documentation; no runtime or timing claim."
-command = ["cargo","+1.90.0","doc","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-universal-hash-ghash","-p","brynja-crypto","-p","brynja","--all-features","--no-deps"]
+command = ["cargo","+1.90.0","doc","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-universal-hash-ghash","-p","brynja-aead-gcm","-p","brynja-crypto","-p","brynja","--all-features","--no-deps"]
 cwd = "."
 inputs = ["aes-build", "aes-feature-integration", "hkdf-msrv"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -4368,7 +4371,7 @@ id = "feature-current-minimal-test"
 category = "integration"
 name = "AES opt-in feature composition: 1.99.1, minimal, test"
 establishes = "No-default-feature standalone/direct/facade integration and doctests: 32 passing tests. AES absence/explicit admission are separately checked by packaged paired probes."
-command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-universal-hash-ghash","-p","brynja-crypto","-p","brynja","--no-default-features"]
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-universal-hash-ghash","-p","brynja-aead-gcm","-p","brynja-crypto","-p","brynja","--no-default-features"]
 cwd = "."
 inputs = ["aes-build", "aes-feature-integration", "compiler"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -4386,7 +4389,7 @@ id = "feature-current-minimal-doc"
 category = "integration"
 name = "AES opt-in feature composition: 1.99.1, minimal, doc"
 establishes = "Builds direct and facade documentation; no runtime or timing claim."
-command = ["cargo","+1.99.1","doc","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-universal-hash-ghash","-p","brynja-crypto","-p","brynja","--no-default-features","--no-deps"]
+command = ["cargo","+1.99.1","doc","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-universal-hash-ghash","-p","brynja-aead-gcm","-p","brynja-crypto","-p","brynja","--no-default-features","--no-deps"]
 cwd = "."
 inputs = ["aes-build", "aes-feature-integration", "compiler"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -4402,7 +4405,7 @@ id = "feature-current-all-test"
 category = "integration"
 name = "AES opt-in feature composition: 1.99.1, all, test"
 establishes = "All-feature standalone/direct/facade integration and doctests: 186 passing tests, including the baseline static-AES rejection control, plus the paired GHASH cleanup test when its native multiplier is available. Three opt-in OpenSSL corpus tests remain ignored here and are covered by separate differential registrations. Not packaged or side-channel qualification."
-command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-universal-hash-ghash","-p","brynja-crypto","-p","brynja","--all-features"]
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-universal-hash-ghash","-p","brynja-aead-gcm","-p","brynja-crypto","-p","brynja","--all-features"]
 cwd = "."
 inputs = ["aes-build", "aes-feature-integration", "compiler"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -4421,7 +4424,7 @@ id = "feature-current-all-doc"
 category = "integration"
 name = "AES opt-in feature composition: 1.99.1, all, doc"
 establishes = "Builds direct and facade documentation; no runtime or timing claim."
-command = ["cargo","+1.99.1","doc","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-universal-hash-ghash","-p","brynja-crypto","-p","brynja","--all-features","--no-deps"]
+command = ["cargo","+1.99.1","doc","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-universal-hash-ghash","-p","brynja-aead-gcm","-p","brynja-crypto","-p","brynja","--all-features","--no-deps"]
 cwd = "."
 inputs = ["aes-build", "aes-feature-integration", "compiler"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -4841,7 +4844,7 @@ exact_tests = 8
 unique_lines = ["AES differential executable identity: unchanged; shared libraries not measured","AES packaged differential: PASS; 1.99.1 facade; debug/release; all three widths; no upload","AES_PACKAGED_DIFFERENTIAL_PROFILE: 1.99.1 facade debug; 12288 cases; both owners; public encryption checked","AES_PACKAGED_DIFFERENTIAL_PROFILE: 1.99.1 facade release; 12288 cases; both owners; public encryption checked"]
 
 [groups.aes-consumer]
-paths = ["assurance/aes-public-api/Cargo.toml", "assurance/aes-public-api/Cargo.lock", "assurance/aes-public-api/src/lib.rs", "assurance/aes-public-api/tests/consumer.rs", "assurance/aes-public-api/tests/wide/mod.rs", "assurance/aes-public-api/tests/roundtrip.rs", "assurance/aes-public-api/src/wide.rs", "scripts/aes/check-aes-consumer.py", "scripts/aes/test-aes-consumer.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py", "crates/brynja", "crates/brynja-cipher-chacha","crates/brynja-core", "crates/brynja-cipher-aes", "crates/brynja-universal-hash-ghash", "crates/brynja-crypto", "crates/brynja-hash-core", "crates/brynja-hash-parallel", "crates/brynja-hash-sha2", "crates/brynja-hash-sha3", "crates/brynja-hash-tuple", "crates/brynja-mac-hmac", "crates/brynja-mac-kmac", "crates/brynja-pki", "crates/brynja-protocol", "crates/brynja-tls", "crates/brynja-tls12", "crates/brynja-tls13", "crates/brynja-tls13-handshake"]
+paths = ["assurance/aes-public-api/Cargo.toml", "assurance/aes-public-api/Cargo.lock", "assurance/aes-public-api/src/lib.rs", "assurance/aes-public-api/tests/consumer.rs", "assurance/aes-public-api/tests/wide/mod.rs", "assurance/aes-public-api/tests/roundtrip.rs", "assurance/aes-public-api/src/wide.rs", "scripts/aes/check-aes-consumer.py", "scripts/aes/test-aes-consumer.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py", "crates/brynja", "crates/brynja-cipher-chacha","crates/brynja-core", "crates/brynja-cipher-aes", "crates/brynja-universal-hash-ghash", "crates/brynja-aead-gcm", "crates/brynja-crypto", "crates/brynja-hash-core", "crates/brynja-hash-parallel", "crates/brynja-hash-sha2", "crates/brynja-hash-sha3", "crates/brynja-hash-tuple", "crates/brynja-mac-hmac", "crates/brynja-mac-kmac", "crates/brynja-pki", "crates/brynja-protocol", "crates/brynja-tls", "crates/brynja-tls12", "crates/brynja-tls13", "crates/brynja-tls13-handshake"]
 [[groups.aes-consumer.tools]]
 program = "python3"
 
@@ -5152,7 +5155,7 @@ minimum_tests = 2
 exact_tests = 2
 
 [groups.aes-build]
-paths = ["crates/brynja-cipher-aes", "crates/brynja-universal-hash-ghash", "crates/brynja-crypto/src", "crates/brynja-crypto/tests/aes128.rs", "crates/brynja-crypto/tests/aes_wide.rs", "crates/brynja-crypto/tests/aes_wide_kat.rs", "crates/brynja-crypto/tests/aes_wide_differential.rs", "crates/brynja-crypto/tests/fixtures/aes192", "crates/brynja-crypto/tests/fixtures/aes256", "crates/brynja-crypto/tests/aes128_differential.rs", "crates/brynja-crypto/tests/fixtures/aes128", "scripts/release/test-verification-registry.py"]
+paths = ["crates/brynja-cipher-aes", "crates/brynja-universal-hash-ghash", "crates/brynja-aead-gcm", "crates/brynja-crypto/src", "crates/brynja-crypto/tests/aes128.rs", "crates/brynja-crypto/tests/aes_wide.rs", "crates/brynja-crypto/tests/aes_wide_kat.rs", "crates/brynja-crypto/tests/aes_wide_differential.rs", "crates/brynja-crypto/tests/fixtures/aes192", "crates/brynja-crypto/tests/fixtures/aes256", "crates/brynja-crypto/tests/aes128_differential.rs", "crates/brynja-crypto/tests/fixtures/aes128", "scripts/release/test-verification-registry.py"]
 optional_paths = ["crates/brynja-crypto/build.rs", ".cargo/config", ".cargo/config.toml"]
 [groups.aes-build.toml]
 "Cargo.toml" = ["workspace.resolver", "workspace.package.edition", "workspace.package.rust-version", "workspace.lints", "workspace.dependencies", "profile.dev", "profile.test", "profile.release"]
@@ -5696,7 +5699,7 @@ program = "rustc"
 toolchain = "1.100.0"
 
 [groups.hkdf-public-api-modern]
-paths = ["crates/brynja","crates/brynja-cipher-chacha","crates/brynja-core","crates/brynja-cipher-aes", "crates/brynja-universal-hash-ghash", "crates/brynja-crypto","crates/brynja-crypto-cpu","crates/brynja-crypto-cpu-std","crates/brynja-dtls","crates/brynja-hash-core","crates/brynja-hash-parallel","crates/brynja-hash-sha2","crates/brynja-hash-sha3","crates/brynja-hash-tuple","crates/brynja-mac-hmac","crates/brynja-mac-kmac","crates/brynja-pki","crates/brynja-platform","crates/brynja-protocol","crates/brynja-quic-tls","crates/brynja-tls","crates/brynja-tls12","crates/brynja-tls13","crates/brynja-tls13-handshake","assurance/hkdf-public-api/Cargo.toml","assurance/hkdf-public-api/Cargo.lock","assurance/hkdf-public-api/src"]
+paths = ["crates/brynja","crates/brynja-cipher-chacha","crates/brynja-core","crates/brynja-cipher-aes", "crates/brynja-universal-hash-ghash", "crates/brynja-aead-gcm", "crates/brynja-crypto","crates/brynja-crypto-cpu","crates/brynja-crypto-cpu-std","crates/brynja-dtls","crates/brynja-hash-core","crates/brynja-hash-parallel","crates/brynja-hash-sha2","crates/brynja-hash-sha3","crates/brynja-hash-tuple","crates/brynja-mac-hmac","crates/brynja-mac-kmac","crates/brynja-pki","crates/brynja-platform","crates/brynja-protocol","crates/brynja-quic-tls","crates/brynja-tls","crates/brynja-tls12","crates/brynja-tls13","crates/brynja-tls13-handshake","assurance/hkdf-public-api/Cargo.toml","assurance/hkdf-public-api/Cargo.lock","assurance/hkdf-public-api/src"]
 
 [[checks]]
 component = "hkdf"
@@ -6256,7 +6259,7 @@ exact_tests = 6
 # Cargo compiles the composition crate's default dependency closure; these
 # inputs affect HKDF checks without adding any reverse dependency to old checks.
 [groups.hkdf-composition]
-paths = ["crates/brynja-cipher-aes", "crates/brynja-universal-hash-ghash", "crates/brynja-crypto/src"]
+paths = ["crates/brynja-cipher-aes", "crates/brynja-universal-hash-ghash", "crates/brynja-aead-gcm", "crates/brynja-crypto/src"]
 optional_paths = ["crates/brynja-crypto/build.rs"]
 [groups.hkdf-composition.toml]
 "Cargo.toml" = ["workspace.resolver", "workspace.package.edition", "workspace.package.rust-version", "workspace.lints", "profile.dev", "profile.test"]

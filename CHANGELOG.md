@@ -1,6 +1,10 @@
 # Changelog
 
-## 0.30.4 standalone GHASH universal hash (in development)
+## 0.30.5 standalone AES-GCM and GMAC (in development)
+
+- Move the existing composition and its tests to `brynja-aead-gcm`; retain both compatibility imports. [Release notes](release-notes/RELEASE_NOTES_0.30.5.md).
+
+## 0.30.4 standalone GHASH universal hash (internally tagged)
 
 - Raw GHASH is now available from `brynja-universal-hash-ghash`; existing
   imports use the same owners. [Release notes](release-notes/RELEASE_NOTES_0.30.4.md).

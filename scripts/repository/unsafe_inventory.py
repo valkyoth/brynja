@@ -21,7 +21,7 @@ SOURCE_IMPORTERS = {
     Path("crates/brynja-core/src/lib.rs"): "c440adb0802eb6c99017abf8e031f4d565f782bdffefa4bb9dd4875ff4072fb8",
     Path("crates/brynja-cipher-aes/src/aes/portable.rs"): "73f6f151f65076050700329d0dc7d488e115f8006bf9885a85f7efff6f36f133",
     Path("crates/brynja-cipher-aes/src/aes.rs"): "f7f7a749d3f89803196691949ea8ad3c49ddecd6b4ba571b41528c39970d0b11",
-    Path("crates/brynja-crypto/src/aes_gcm/portable/tests.rs"): "7d296f3664265821ace4147c71256f4572c3ccab502422e6788e4421867ecc6f",
+    Path("crates/brynja-aead-gcm/src/aes_gcm/portable/tests.rs"): "66248684c33c2ae0b749cb8ca1e90ccadae216da8577df22fb9dc06493f801e5",
     Path("crates/brynja-universal-hash-ghash/src/ghash/runtime.rs"): "808c57058a7788cda8a80ba34650c71d7c0985aae949fb8b7d755a0806db13fa",
     Path("crates/brynja-crypto/src/hkdf/derive.rs"): "fe56007ccb5c962208c135f6790c5ecf6881fbb9aaa8201e1ab4e7f3fcfb4d17",
     Path("crates/brynja-crypto/src/hkdf/parameters.rs"): "d9ece8ba8aaab548e38de6cdacc42c175cba648ebc41acc7d70e250792659b69",

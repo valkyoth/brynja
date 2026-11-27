@@ -12,7 +12,7 @@ REQUIRED = {"Cargo.toml", "LICENSE-APACHE", "LICENSE-MIT", "README.md", "src/lib
 METADATA = (REQUIRED - {"src/lib.rs"}) | {"Cargo.lock", "Cargo.toml.orig", ".cargo_vcs_info.json"}
 SOURCE_INCLUDE = ["Cargo.toml", "LICENSE-APACHE", "LICENSE-MIT", "README.md", "src/**/*.rs"]
 MIGRATED = {
-    "brynja-cipher-chacha", "brynja-cipher-aes", "brynja-universal-hash-ghash",
+    "brynja-cipher-chacha", "brynja-cipher-aes", "brynja-universal-hash-ghash", "brynja-aead-gcm",
     "brynja-core", "brynja-crypto-cpu-std", "brynja-pki", "brynja-protocol",
     "brynja-sanitization", "brynja-hash-sha2", "brynja-hash-sha3",
     "brynja-mac-kmac", "brynja-mac-hmac", "brynja-hash-tuple",

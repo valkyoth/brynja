@@ -57,8 +57,8 @@ class Image:
         return {a for a in self.calls(addr) if self.base(a) == name}
 
 
-PORT = "brynja_crypto::aes_gcm::portable::"
-FRAME = "brynja_crypto::aes_gcm::Frame::hash"
+PORT = "brynja_aead_gcm::aes_gcm::portable::"
+FRAME = "brynja_aead_gcm::aes_gcm::Frame::hash"
 UPDATE = "brynja_universal_hash_ghash::ghash::Ghash::update"
 PRODUCT = "brynja_crypto_cpu::ghash_pclmul::runtime::RuntimeProduct::product"
 MULTIPLY = "brynja_crypto_cpu::ghash_pclmul::multiply"

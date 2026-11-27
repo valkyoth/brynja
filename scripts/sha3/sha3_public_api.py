@@ -113,6 +113,7 @@ PACKAGES = (
 PACKAGING_PACKAGES = (*PACKAGES, ("brynja-crypto-cpu-std", "0.2.0", ("src/lib.rs",)),
                       ("brynja-cipher-aes", "0.1.0", ("src/lib.rs",)),
                       ("brynja-universal-hash-ghash", "0.1.0", ("src/lib.rs",)),
+                      ("brynja-aead-gcm", "0.1.0", ("src/lib.rs",)),
                       ("brynja-cipher-chacha", "0.1.0", ("src/lib.rs",)))
 
 

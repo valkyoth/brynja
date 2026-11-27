@@ -54,7 +54,7 @@ def run(native):
         root = Path(tmp)
         env = pkg.isolated_env(root)
         versions = pkg.package_archives(root, pkg.MODERN, archives.ENDPOINTS[-1], env)
-        for dep, route in (("brynja-crypto", "direct"), ("brynja", "facade")):
+        for dep, route in (("brynja-aead-gcm", "direct"), ("brynja-crypto", "direct"), ("brynja", "facade")):
             consumer = prepare(root, dep, versions)
             pkg.run(["cargo", "+" + archives.ENDPOINTS[0], "generate-lockfile", "--offline"], consumer, env)
             for version in archives.ENDPOINTS:
@@ -76,11 +76,11 @@ def run(native):
                     info = pkg.run(cargo + ["metadata", "--format-version", "1", *flags], consumer, build)
                     gcm["check_graph"](json.loads(info.stdout), consumer, versions, dep,
                                        features=(feature,), paired=native)
-                    prefix = root / "installed" / route / version / family
+                    prefix = root / "installed" / dep / version / family
                     pkg.run(cargo + ["install", "--path", ".", "--root", str(prefix), *flags], consumer, build)
                     binary = prefix / "bin" / (NAME + (".exe" if os.name == "nt" else ""))
                     count = 26 if family == "aes-gcm" else 10
-                    run_installed(binary, root, env, version, route, feature, count, linked)
+                    run_installed(binary, root, env, version, "standalone" if dep == gcm["LEAF"] else route, feature, count, linked)
     print("AEAD_INSTALLED_NATIVE_PASS" if native else "AEAD_INSTALLED_PORTABLE_PASS")
 
 

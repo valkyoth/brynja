@@ -1,0 +1,26 @@
+[package]
+name = "brynja-aead-gcm"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Opt-in no_std AES-GCM authenticated encryption and GMAC authentication"
+publish = ["crates-io"]
+include = ["Cargo.toml", "LICENSE-APACHE", "LICENSE-MIT", "README.md", "src/**/*.rs"]
+
+[features]
+default = []
+aes-gcm = ["dep:brynja-core", "dep:brynja-cipher-aes", "brynja-cipher-aes/__mode", "dep:brynja-universal-hash-ghash", "brynja-universal-hash-ghash/__mode"]
+aes-gcm-execution = ["aes-gcm", "dep:brynja-crypto-cpu", "brynja-cipher-aes/__mode-execution", "brynja-universal-hash-ghash/__mode-execution"]
+gmac = ["dep:brynja-core", "dep:brynja-cipher-aes", "brynja-cipher-aes/__mode", "dep:brynja-universal-hash-ghash", "brynja-universal-hash-ghash/__mode"]
+gmac-execution = ["gmac", "dep:brynja-crypto-cpu", "brynja-cipher-aes/__mode-execution", "brynja-universal-hash-ghash/__mode-execution"]
+
+[dependencies]
+brynja-core = { workspace = true, optional = true }
+brynja-cipher-aes = { workspace = true, optional = true }
+brynja-universal-hash-ghash = { workspace = true, optional = true }
+brynja-crypto-cpu = { workspace = true, optional = true }
+
+[lints]
+workspace = true

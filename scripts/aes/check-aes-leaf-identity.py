@@ -35,7 +35,7 @@ def mode_visibility(cargo, fixture, env, versions):
     probe = fixture / 'src/bin/probe.rs'
     probe.parent.mkdir(parents=True, exist_ok=True)
     manifest = '[workspace]\n[package]\nname="mode-probe"\nversion="0.0.0"\nedition="2024"\n[dependencies]\n'
-    for route in (*ROUTES, 'brynja-universal-hash-ghash'):
+    for route in (*ROUTES, 'brynja-universal-hash-ghash', 'brynja-aead-gcm'):
         manifest += f'{route}={{version="={versions[route]}",default-features=false}}\n'
     manifest += '[patch.crates-io]\n' + ''.join(
         f'{name}={{path="../unpacked/{name}-{version}"}}\n' for name, version in versions.items())
@@ -53,6 +53,18 @@ def mode_visibility(cargo, fixture, env, versions):
             raise ValueError(f'unexpected mode opt-in result: {features} {source}')
 
     for route, prefix in [('brynja-crypto', 'brynja_crypto'), ('brynja', 'brynja::crypto')]:
+        # Unrelated dependents may enable both native leaf modules. This must
+        # not broaden the compatibility route's own mode or execution opt-ins.
+        for family, module, other in [('aes-gcm', 'aes_gcm', 'gmac'), ('gmac', 'gmac', 'aes_gcm')]:
+            flags = [route + '/' + family, 'brynja-aead-gcm/aes-gcm-execution', 'brynja-aead-gcm/gmac-execution']
+            compile(f'use {prefix}::{other} as _; fn main() {{}}', flags, 'E0432')
+            compile(f'use {prefix}::{module}::execution as _; fn main() {{}}', flags, 'E0432')
+            compile(f'use {prefix}::{module}::execution as _; fn main() {{}}', flags + [route + '/' + family + '-execution'])
+        for width in ('128', '192', '256'):
+            for family, module, kind in [('aes-gcm', 'aes_gcm', 'Gcm'), ('gmac', 'gmac', 'Gmac')]:
+                owner = f'{module}::Aes{width}{kind}'
+                compile(f"fn exchange(x: brynja_aead_gcm::{owner}<'_>) -> {prefix}::{owner}<'_> {{ x }} fn main() {{}}",
+                        [route + '/' + family, 'brynja-aead-gcm/' + family])
         for mode, api in [('aes-gcm', 'aes_gcm::Aes128Gcm'), ('gmac', 'gmac::Aes128Gmac')]:
             for native in (False, True):
                 flags = [route + '/' + mode + ('-execution' if native else '')]

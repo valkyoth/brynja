@@ -262,7 +262,7 @@
           "owner": "0.29.0"
         }
       },
-      "code_target": "crates/brynja-crypto/src/aes_gcm/portable.rs#with_material",
+      "code_target": "crates/brynja-aead-gcm/src/aes_gcm/portable.rs#with_material",
       "consumer_links": [
         "consumer:protocol",
         "consumer:provider"
@@ -316,7 +316,7 @@
       "ordinary_hardened_separation": "required",
       "owner": "0.29.0",
       "profile": "aead",
-      "test_target": "crates/brynja-crypto/src/aes_gcm/portable/tests.rs#subkey_derivation_error_never_starts_ghash_or_commits_output"
+      "test_target": "crates/brynja-aead-gcm/src/aes_gcm/portable/tests.rs#subkey_derivation_error_never_starts_ghash_or_commits_output"
     },
     {
       "api": {
@@ -1424,7 +1424,7 @@
           "owner": "0.29.1"
         }
       },
-      "code_target": "crates/brynja-crypto/src/aes_gcm/portable/gmac.rs#authenticate_next",
+      "code_target": "crates/brynja-aead-gcm/src/aes_gcm/portable/gmac.rs#authenticate_next",
       "consumer_links": [
         "consumer:protocol"
       ],
@@ -19826,7 +19826,7 @@
     {
       "capability": "algorithm.aes-gcm",
       "evidence": [
-        "crates/brynja-crypto/src/aes_gcm/portable/tests.rs#subkey_derivation_error_never_starts_ghash_or_commits_output",
+        "crates/brynja-aead-gcm/src/aes_gcm/portable/tests.rs#subkey_derivation_error_never_starts_ghash_or_commits_output",
         "scripts/zeroization/check-zeroization-codegen.sh"
       ],
       "fields": [
@@ -19872,7 +19872,7 @@
       },
       "owner": "0.29.0",
       "planned_cleanup_contract": "mandatory-core-or-separately-reviewed-equivalent",
-      "planned_implementation_target": "crates/brynja-crypto/src/aes_gcm/portable.rs#with_material",
+      "planned_implementation_target": "crates/brynja-aead-gcm/src/aes_gcm/portable.rs#with_material",
       "residual_risks": [
         "mem-forget",
         "process-abort",
@@ -20500,7 +20500,7 @@
       },
       "owner": "0.29.1",
       "planned_cleanup_contract": "mandatory-core-or-separately-reviewed-equivalent",
-      "planned_implementation_target": "crates/brynja-crypto/src/aes_gcm/portable/gmac.rs#authenticate_next",
+      "planned_implementation_target": "crates/brynja-aead-gcm/src/aes_gcm/portable/gmac.rs#authenticate_next",
       "residual_risks": [
         "mem-forget",
         "process-abort",
@@ -24768,7 +24768,7 @@
       ]
     }
   ],
-  "policy_sha256": "ddcfb7766d80746ed42d09f4a793dbf5f9166f78a9092a823463423946745d46",
+  "policy_sha256": "390c302d25231e41e2b86207a01d8a0d21ca69633386aebed5bad609a9359fc5",
   "registered_secret_owners": [
     {
       "capability": "algorithm.hkdf",
@@ -25574,5 +25574,5 @@
     "physical-memory-remanence"
   ],
   "schema": 1,
-  "surface_register_sha256": "8d5c9c1f3e85850c94d17fe8c8eac0ab0125389da1462f2e8f098bcbbafe3cb3"
+  "surface_register_sha256": "d89492694a69934df197e896b2cdb333223c0565565c61d68c82b71b60543cf7"
 }

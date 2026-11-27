@@ -351,7 +351,7 @@ cleanup_bindings = ["crates/brynja-legacy-hmac-std/src/macos_resident/mod.rs#Buf
 [schema]
 version = 1
 milestone = "0.24.15"
-surface_register_sha256 = "8d5c9c1f3e85850c94d17fe8c8eac0ab0125389da1462f2e8f098bcbbafe3cb3"
+surface_register_sha256 = "d89492694a69934df197e896b2cdb333223c0565565c61d68c82b71b60543cf7"
 
 [api]
 dimensions = [

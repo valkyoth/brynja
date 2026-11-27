@@ -562,11 +562,11 @@
         "nist:NIST.SP.800-38D.pdf"
       ],
       "targets": [
-        "actual-symbol:crates/brynja-crypto/src/aes_gcm/portable.rs#with_material"
+        "actual-symbol:crates/brynja-aead-gcm/src/aes_gcm/portable.rs#with_material"
       ],
       "tests": [
-        "planned:positive:crates/brynja-crypto/src/aes_gcm/portable/tests.rs#nist_seal_open_empty_and_partial_at_all_widths",
-        "planned:negative:crates/brynja-crypto/src/aes_gcm/portable/tests.rs#subkey_derivation_error_never_starts_ghash_or_commits_output"
+        "planned:positive:crates/brynja-aead-gcm/src/aes_gcm/portable/tests.rs#nist_seal_open_empty_and_partial_at_all_widths",
+        "planned:negative:crates/brynja-aead-gcm/src/aes_gcm/portable/tests.rs#subkey_derivation_error_never_starts_ghash_or_commits_output"
       ]
     },
     "BRY-REQ-CRYPTO-0008": {
@@ -1045,7 +1045,7 @@
         "nist:NIST.SP.800-38D.pdf"
       ],
       "targets": [
-        "actual-symbol:crates/brynja-crypto/src/aes_gcm/portable/gmac.rs#authenticate_next"
+        "actual-symbol:crates/brynja-aead-gcm/src/aes_gcm/portable/gmac.rs#authenticate_next"
       ],
       "tests": [
         "planned:positive:crates/brynja-crypto/tests/gmac.rs#nist_short_iv_and_tag",
@@ -11257,6 +11257,12 @@
       ]
     },
     "targets": {
+      "actual-symbol:crates/brynja-aead-gcm/src/aes_gcm/portable.rs#with_material": [
+        "BRY-REQ-CRYPTO-0007"
+      ],
+      "actual-symbol:crates/brynja-aead-gcm/src/aes_gcm/portable/gmac.rs#authenticate_next": [
+        "BRY-REQ-CRYPTO-0021"
+      ],
       "actual-symbol:crates/brynja-cipher-chacha/src/chacha20.rs#ChaCha20": [
         "BRY-REQ-CRYPTO-0008"
       ],
@@ -11268,12 +11274,6 @@
       ],
       "actual-symbol:crates/brynja-core/src/secret.rs#SecretState": [
         "BRY-REQ-TLS-0010"
-      ],
-      "actual-symbol:crates/brynja-crypto/src/aes_gcm/portable.rs#with_material": [
-        "BRY-REQ-CRYPTO-0007"
-      ],
-      "actual-symbol:crates/brynja-crypto/src/aes_gcm/portable/gmac.rs#authenticate_next": [
-        "BRY-REQ-CRYPTO-0021"
       ],
       "actual-symbol:crates/brynja-crypto/src/hkdf/derive.rs#Prk": [
         "BRY-REQ-CRYPTO-0004"
@@ -11785,11 +11785,11 @@
       "planned:crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile": [
         "BRY-REQ-TLS-0002"
       ],
+      "planned:negative:crates/brynja-aead-gcm/src/aes_gcm/portable/tests.rs#subkey_derivation_error_never_starts_ghash_or_commits_output": [
+        "BRY-REQ-CRYPTO-0007"
+      ],
       "planned:negative:crates/brynja-core/tests/entropy.rs#reject_invalid_and_exhausted": [
         "BRY-REQ-ENTROPY-0014"
-      ],
-      "planned:negative:crates/brynja-crypto/src/aes_gcm/portable/tests.rs#subkey_derivation_error_never_starts_ghash_or_commits_output": [
-        "BRY-REQ-CRYPTO-0007"
       ],
       "planned:negative:crates/brynja-crypto/tests/chacha20.rs#counter_exhaustion": [
         "BRY-REQ-CRYPTO-0008"
@@ -12212,11 +12212,11 @@
         "BRY-REQ-TLS12EXT-0058",
         "BRY-REQ-TLS12X-0058"
       ],
+      "planned:positive:crates/brynja-aead-gcm/src/aes_gcm/portable/tests.rs#nist_seal_open_empty_and_partial_at_all_widths": [
+        "BRY-REQ-CRYPTO-0007"
+      ],
       "planned:positive:crates/brynja-core/tests/entropy.rs#contract": [
         "BRY-REQ-ENTROPY-0014"
-      ],
-      "planned:positive:crates/brynja-crypto/src/aes_gcm/portable/tests.rs#nist_seal_open_empty_and_partial_at_all_widths": [
-        "BRY-REQ-CRYPTO-0007"
       ],
       "planned:positive:crates/brynja-crypto/tests/aes128.rs#nist_aesavs_all_four_aes128_ecb_kat_files": [
         "BRY-REQ-CRYPTO-0005"

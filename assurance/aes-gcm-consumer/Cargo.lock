@@ -12,13 +12,22 @@ dependencies = [
 
 [[package]]
 name = "brynja"
-version = "0.30.4"
+version = "0.30.5"
 dependencies = [
  "brynja-core",
  "brynja-crypto",
  "brynja-pki",
  "brynja-protocol",
  "brynja-tls",
+]
+
+[[package]]
+name = "brynja-aead-gcm"
+version = "0.1.0"
+dependencies = [
+ "brynja-cipher-aes",
+ "brynja-core",
+ "brynja-universal-hash-ghash",
 ]
 
 [[package]]
@@ -36,7 +45,7 @@ version = "0.10.0"
 name = "brynja-crypto"
 version = "0.2.0"
 dependencies = [
- "brynja-cipher-aes",
+ "brynja-aead-gcm",
  "brynja-core",
  "brynja-hash-parallel",
  "brynja-hash-sha2",
@@ -44,7 +53,6 @@ dependencies = [
  "brynja-hash-tuple",
  "brynja-mac-hmac",
  "brynja-mac-kmac",
- "brynja-universal-hash-ghash",
 ]
 
 [[package]]

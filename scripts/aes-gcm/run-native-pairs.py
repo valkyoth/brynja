@@ -165,7 +165,9 @@ def run(host, out, pin):
                 ("field", features, ["--test","ghash_runtime"], 1),
                 ("lifecycle", features, ["--lib","aes_gcm::portable::paired::tests::"], 3),
                 ("interruptions", features, ["--lib","aes_gcm::interruptions::tests::"], 9)):
-                text = cmd(test + args, flags=isa)
+                owner = cargo + ["test", *flags, "-p", "brynja-aead-gcm", "--features",
+                                 "aes-gcm-execution,gmac-execution"] if "--lib" in args else test
+                text = cmd(owner + args, flags=isa)
                 if f"test result: ok. {count} passed; 0 failed; 0 ignored;" not in text:
                     raise ValueError("missing native test population: " + label + "\n" + text[-400:])
                 result["tests"][label] = count

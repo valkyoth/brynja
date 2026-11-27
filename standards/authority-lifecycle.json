@@ -489,7 +489,7 @@
         "BRY-REQ-CRYPTO-0005"
       ],
       "affected_symbols": [
-        "crates/brynja-crypto/src/aes.rs#Aes128Key"
+        "crates/brynja-cipher-aes/src/aes.rs#Aes128Key"
       ],
       "brynja_state": "current",
       "content_sha256": "62c86eb567f13edb8f71826e985da870b04ef6381634f303cdb16e84d47becd1",
@@ -791,9 +791,9 @@
         "BRY-REQ-CRYPTO-0021"
       ],
       "affected_symbols": [
-        "crates/brynja-crypto/src/aes_gcm/portable.rs#with_material",
-        "crates/brynja-crypto/src/aes_gcm/portable/gmac.rs#authenticate_next",
-        "crates/brynja-crypto/src/ghash.rs#Ghash"
+        "crates/brynja-aead-gcm/src/aes_gcm/portable.rs#with_material",
+        "crates/brynja-aead-gcm/src/aes_gcm/portable/gmac.rs#authenticate_next",
+        "crates/brynja-universal-hash-ghash/src/ghash.rs#Ghash"
       ],
       "brynja_state": "current",
       "content_sha256": "d99f3921ccebca049e7522426553aba071dae14ec3d5b6041e8c111a6cb57bba",
@@ -1960,7 +1960,7 @@
         "BRY-REQ-CRYPTO-0007"
       ],
       "affected_symbols": [
-        "crates/brynja-crypto/src/aes_gcm/portable.rs#with_material"
+        "crates/brynja-aead-gcm/src/aes_gcm/portable.rs#with_material"
       ],
       "brynja_state": "current",
       "content_sha256": "8762fee7c85e682fce609c75e0f5040ee7efa8fca96969ffd85df37585e0eda1",
@@ -5084,7 +5084,7 @@
         "BRY-REQ-CRYPTO-0009"
       ],
       "affected_symbols": [
-        "crates/brynja-crypto/src/chacha20.rs#ChaCha20",
+        "crates/brynja-cipher-chacha/src/chacha20.rs#ChaCha20",
         "crates/brynja-crypto/src/chacha20_poly1305.rs#ChaCha20Poly1305"
       ],
       "brynja_state": "current",

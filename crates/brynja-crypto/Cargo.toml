@@ -11,10 +11,10 @@ include = ["Cargo.toml","LICENSE-APACHE","LICENSE-MIT","README.md","src/**/*.rs"
 
 [features]
 default = []
-aes-gcm = ["dep:brynja-cipher-aes", "brynja-cipher-aes/__mode", "dep:brynja-universal-hash-ghash", "brynja-universal-hash-ghash/__mode"]
-gmac = ["dep:brynja-cipher-aes", "brynja-cipher-aes/__mode", "dep:brynja-universal-hash-ghash", "brynja-universal-hash-ghash/__mode"]
-aes-gcm-execution = ["aes-gcm", "dep:brynja-crypto-cpu", "brynja-cipher-aes/__mode-execution", "brynja-universal-hash-ghash/__mode-execution", "brynja-crypto-cpu/ghash-runtime-execution"]
-gmac-execution = ["gmac", "dep:brynja-crypto-cpu", "brynja-cipher-aes/__mode-execution", "brynja-universal-hash-ghash/__mode-execution", "brynja-crypto-cpu/ghash-runtime-execution"]
+aes-gcm = ["dep:brynja-aead-gcm", "brynja-aead-gcm/aes-gcm"]
+aes-gcm-execution = ["aes-gcm", "brynja-aead-gcm/aes-gcm-execution"]
+gmac = ["dep:brynja-aead-gcm", "brynja-aead-gcm/gmac"]
+gmac-execution = ["gmac", "brynja-aead-gcm/gmac-execution"]
 hazmat-aes-block = ["dep:brynja-cipher-aes", "brynja-cipher-aes/hazmat-aes-block"]
 hazmat-chacha20 = ["dep:brynja-cipher-chacha", "brynja-cipher-chacha/hazmat-chacha20"]
 hazmat-ghash = ["dep:brynja-universal-hash-ghash", "brynja-universal-hash-ghash/hazmat-ghash"]
@@ -47,6 +47,7 @@ parallelhash-runtime-execution = ["cpu", "brynja-hash-parallel/runtime-execution
 parallelhash-hardened-batch = ["cpu", "brynja-hash-parallel/hardened-batch-execution"]
 
 [dependencies]
+brynja-aead-gcm = { workspace = true, optional = true }
 brynja-universal-hash-ghash = { workspace = true, optional = true }
 brynja-cipher-aes = { workspace = true, optional = true }
 brynja-cipher-chacha = { workspace = true, optional = true }

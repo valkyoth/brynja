@@ -41,11 +41,19 @@ def phase_config(name):
     return flags + ["-C", "target-feature=" + features], cpu
 
 
+def phase_environment(name):
+    flags, _ = phase_config(name)
+    changes = {"RUSTFLAGS": shlex.join(flags)}
+    if PHASES[name][0]:
+        changes["BRYNJA_CPU_EVIDENCE"] = "1"
+    return changes
+
+
 def run(command, env, artifacts, name):
     # Keep reproducible argv/cwd and only non-secret build settings, never a
     # dump of the caller's environment. STATIC.run enforces exit status/timeout.
     settings = {key: env[key] for key in (
-        "RUSTFLAGS", "CARGO_TARGET_DIR", "RUSTUP_AUTO_INSTALL",
+        "RUSTFLAGS", "BRYNJA_CPU_EVIDENCE", "CARGO_TARGET_DIR", "RUSTUP_AUTO_INSTALL",
         "CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER",
         "CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUNNER") if key in env}
     (artifacts / (name + "-command.json")).write_text(json.dumps(
@@ -89,8 +97,9 @@ def main():
     run([qemu, "--version"], env, artifacts, "qemu-version")
     run(["rustc", "+" + args.toolchain, "-vV"], env, artifacts, "compiler-version")
     for phase in PHASES:
-        flags, cpu = phase_config(phase)
-        env["RUSTFLAGS"] = shlex.join(flags)
+        _, cpu = phase_config(phase)
+        env.pop("BRYNJA_CPU_EVIDENCE", None)
+        env.update(phase_environment(phase))
         env["CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER"] = linker
         env["CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUNNER"] = shlex.join(execution(qemu, sysroot, cpu))
         env["CARGO_TARGET_DIR"] = str(base / f"build-{args.toolchain}-{phase}")
@@ -113,7 +122,7 @@ def main():
             STATIC.validate_tests(output, 13 if phase == "candidate" else 1,
                                   STATIC.KAT_MARKERS if phase == "candidate" else ())
             if phase == "candidate":
-                output = run([*cargo, "-p", "brynja-crypto", "--no-default-features",
+                output = run([*cargo, "-p", "brynja-cipher-aes", "--no-default-features",
                                      "--features", "aes-static-execution", "--lib",
                                      "aes::tests::execution::", *harness], env, artifacts, prefix + "-faults")
                 STATIC.validate_tests(output, 4, STATIC.FAULT_MARKERS)

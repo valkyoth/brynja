@@ -42,7 +42,7 @@ ALLOWED = {
     Path("crates/brynja-crypto-cpu/src/aes/aarch64.rs"): ("ad92752d1f2697b12e0371ebe37baf976a39b4f74a3deb73a6971575fbc41a0a", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/aes/aarch64_expand.rs"): ("62a49742b01e06def854c7dfee991216606a2f4d3f87852f6ae1765c82af7d79", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/aes/dit.rs"): ("b110af1634f836710fac5de2fdc90052b45dca3d1d6af6a0f64c9c9a996e5ec2", 3, 1, 3),
-    Path("crates/brynja-crypto-cpu/src/aes/mod.rs"): ("e5c48c7ad7792ba181663f75977ca882282ff99ca270a04ff182b50a488f2c11", 8, 2, 8),
+    Path("crates/brynja-crypto-cpu/src/aes/mod.rs"): ("3fe6bfc4211f25337de0f2a901d08956408e07bde9cf46e0f2267db01ec718cf", 8, 2, 8),
     Path("crates/brynja-crypto-cpu/src/aes/riscv64.rs"): ("575778469d2dd88bbd4e075b7096a49abed825bc8c47a7615333e3f6bf76dbbc", 2, 2, 2),
     Path("crates/brynja-crypto-cpu/src/aes/tests.rs"): ("8d3cd58d73d421df1d4e7532cf5e66c26441617fcc75a42a22fe0f8656c6b446", 1, 0, 0),
     Path("crates/brynja-crypto-cpu/src/aes/x86.rs"): ("278a011ccd4681a6830bcce7bf2c540731c700c6bdbb759b58e14c1d838c0154", 1, 1, 1),

@@ -54,6 +54,20 @@ class RegistryOwnership(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     ownership.available('leaf')
 
+    def test_only_a_just_uploaded_name_can_bootstrap_with_one_trusted_uploader(self):
+        trusted = {('user', 11), ('user', 12), ('team', 13)}
+        version = {'version': {'crate': 'leaf', 'num': '0.1.0', 'yanked': False}}
+        with patch.object(ownership, 'lookup', return_value=version):
+            for current in (trusted, {('user', 11)}, {('team', 13)}, {('user', 12), ('user', 11)},
+                            {('user', 11), ('user', 14)}, {('user', 14)}, set()):
+                for fresh in (False, True):
+                    with self.subTest(current=current, fresh=fresh), patch.object(ownership, 'owners', return_value=current):
+                        if current == trusted or (fresh and current == {('user', 11)}):
+                            ownership.indexed('leaf', '0.1.0', trusted, just_uploaded=fresh)
+                        else:
+                            with self.assertRaises(ValueError):
+                                ownership.indexed('leaf', '0.1.0', trusted, just_uploaded=fresh)
+
     def test_owner_change_after_first_upload_stops_before_dependent(self):
         plan = {'stage': 'public', 'version': '0.30.6', 'crates': {
             'leaf': {'publish': True, 'change': 'initial', 'version': '0.1.0'},
@@ -75,6 +89,20 @@ class RegistryOwnership(unittest.TestCase):
             self.assertIn('cannot confirm project ownership', stderr.getvalue())
             publish.assert_called_once_with('leaf', dry_run=False, checked_candidate=True)
             self.assertEqual([c.args[0] for c in lookup.call_args_list].count('leaf'), 2)
+            # A confirmed first upload with only the trusted individual must not
+            # strand the dependent when the project also has a team owner.
+            api['brynja/owners']['users'].append({'kind': 'team', 'id': 19})
+            api['leaf/owners'] = {'users': [{'kind': 'user', 'id': 17}]}
+            publish.reset_mock()
+            self.assertEqual(publisher.main(), 0)
+            self.assertEqual([c.args[0] for c in publish.call_args_list], ['leaf', 'brynja'])
+            with patch('sys.argv', ['release_crates.py', '--yes', '--start-at', 'brynja']):
+                publish.reset_mock()
+                self.assertEqual(publisher.main(), 1)
+                publish.assert_not_called()
+                api['leaf/owners'] = api['brynja/owners']
+                self.assertEqual(publisher.main(), 0)
+                publish.assert_called_once_with('brynja', dry_run=False, checked_candidate=True)
 
 
 class ScopedRelease(unittest.TestCase):

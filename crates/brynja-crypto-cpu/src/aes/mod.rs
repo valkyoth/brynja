@@ -25,6 +25,12 @@ mod aarch64;
 mod aarch64_expand;
 mod dit;
 mod kat;
+// A workspace-wide evidence cfg alone must not enable unqualified RV64 AES.
+#[cfg(all(brynja_cpu_evidence, target_arch = "riscv64", target_endian = "little"))]
+const _: () = assert!(
+    matches!(option_env!("BRYNJA_CPU_EVIDENCE"), Some(s) if matches!(s.as_bytes(), b"1")),
+    "RV64 AES evidence requires BRYNJA_CPU_EVIDENCE=1"
+);
 #[cfg(all(brynja_cpu_evidence, target_arch = "riscv64", target_endian = "little"))]
 mod riscv64;
 pub use dit::DitPolicy;

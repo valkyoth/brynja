@@ -5,7 +5,6 @@ import importlib.util
 import json
 import os
 from pathlib import Path
-import shlex
 import shutil
 import tempfile
 
@@ -67,7 +66,7 @@ def check(compiler):
             (retained / f'{route}-metadata.json').write_text(metadata.stdout)
             build_env = dict(env)
             build_env['CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER'] = linker
-            build_env['RUSTFLAGS'] = shlex.join(riscv.phase_config('candidate')[0])
+            build_env.update(riscv.phase_environment('candidate'))
             for panic in ('abort', 'unwind'):
                 label = f'{route}-{panic}'
                 build_env['CARGO_PROFILE_RELEASE_PANIC'] = panic

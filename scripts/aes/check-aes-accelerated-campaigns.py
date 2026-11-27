@@ -66,7 +66,7 @@ def graph(metadata, versions, directory, route, admission):
     packages = {p['id']: p for p in metadata['packages']}
     nodes = metadata['resolve']['nodes']
     expected = (packaged.consumer.DIRECT if route == 'direct' else packaged.consumer.FACADE) | {
-        NAME, 'brynja-crypto-cpu'}
+        NAME, 'brynja-crypto-cpu', 'brynja-universal-hash-ghash'}
     if admission == 'hosted':
         expected |= {'brynja-crypto-cpu-std'}
     packaged.require(len(packages) == len(metadata['packages']) and len(nodes) == len(expected)
@@ -99,6 +99,12 @@ def graph(metadata, versions, directory, route, admission):
             features.add('cpu')
             if route == 'facade':
                 features.add('default')
+            if admission == 'hosted':
+                features.add('aes-runtime-execution')
+        elif name == 'brynja-universal-hash-ghash':
+            features.add('cpu')
+        elif name == 'brynja-cipher-aes':
+            features |= {'hazmat-aes-block', 'aes-static-execution'}
             if admission == 'hosted':
                 features.add('aes-runtime-execution')
         elif name == 'brynja-crypto-cpu':
@@ -237,7 +243,7 @@ def check(compiler, route, admission, mode, suite):
             execution_prefix = riscv.execution(qemu, sysroot)
             env['CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER'] = linker
             env['CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_RUNNER'] = shlex.join(execution_prefix)
-            env['RUSTFLAGS'] = shlex.join(riscv.phase_config('candidate')[0])
+            env.update(riscv.phase_environment('candidate'))
             (artifacts / 'qemu-version.txt').write_text(
                 packaged.archives.run([qemu, '--version'], directory, env).stdout)
         elif admission == 'static':

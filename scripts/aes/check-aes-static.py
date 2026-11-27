@@ -86,7 +86,7 @@ def main():
     validate_tests(owners, 1 if args.mode == "baseline" else 13,
                    () if args.mode == "baseline" else KAT_MARKERS)
     if args.mode != "baseline":
-        faults = run([*cargo, "-p", "brynja-crypto", "--no-default-features", "--features", "aes-static-execution",
+        faults = run([*cargo, "-p", "brynja-cipher-aes", "--no-default-features", "--features", "aes-static-execution",
                       "--lib", "aes::tests::execution::", *test_output], env, artifacts, "faults")
         validate_tests(faults, 4, FAULT_MARKERS)
     print(f"AES_STATIC_PASS: {args.mode} {args.toolchain}")

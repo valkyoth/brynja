@@ -53,11 +53,12 @@ def policy(compiler, panic, kind, bits):
 
 def select(nm):
     owner = r'(9Aes(?:128|192|256)Key|17Aes(?:128|192|256)ExpandedKey)6secret'
-    legacy = r'_ZN13brynja_crypto3aes9execution' + owner + r'17h[0-9a-f]{16}E'
-    current = r'_RNvM\w+_NtNtC\w+_13brynja_crypto3aes9executionNtB\w+_' + owner
+    legacy = r'_ZN17brynja_cipher_aes3aes9execution' + owner + r'17h[0-9a-f]{16}E'
+    current = r'_RNvM\w+_NtNtC\w+_17brynja_cipher_aes3aes9executionNtB\w+_' + owner
     rows = {}
     for line in nm.splitlines():
-        if not ('brynja_crypto3aes9execution' in line and '6secret' in line):
+        if not ('6secret' in line and ('brynja_cipher_aes3aes9execution' in line
+                                       or 'brynja_crypto3aes9execution' in line)):
             continue
         row = re.fullmatch(r'([0-9a-f]+) ([0-9a-f]+) [tT] (\S+)', line)
         require(row is not None, 'malformed secret symbol row')

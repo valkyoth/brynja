@@ -49,17 +49,18 @@ def policy(compiler, panic, kind, bits):
 
 def select(nm):
     ephemeral = r'30brynja_aes_accelerated_fixture9public(128|192|256)'
-    cached = r'13brynja_crypto3aes9execution17Aes(128|192|256)ExpandedKey20encrypt_block_public'
+    cached = r'17brynja_cipher_aes3aes9execution17Aes(128|192|256)ExpandedKey20encrypt_block_public'
     patterns = (
         ('ephemeral', r'_ZN' + ephemeral + r'17h[0-9a-f]{16}E'),
         ('ephemeral', r'_RNvC\w+_' + ephemeral),
         ('cached', r'_ZN' + cached + r'17h[0-9a-f]{16}E'),
-        ('cached', r'_RNvM\w+_NtNtC\w+_13brynja_crypto3aes9executionNtB\w+_17Aes(128|192|256)ExpandedKey20encrypt_block_public'),
+        ('cached', r'_RNvM\w+_NtNtC\w+_17brynja_cipher_aes3aes9executionNtB\w+_17Aes(128|192|256)ExpandedKey20encrypt_block_public'),
     )
     rows = {}
     for line in nm.splitlines():
         if not (('brynja_aes_accelerated_fixture9public' in line)
-                or ('brynja_crypto' in line and 'ExpandedKey20encrypt_block_public' in line)):
+                or ('ExpandedKey20encrypt_block_public' in line and
+                    ('brynja_cipher_aes' in line or 'brynja_crypto' in line))):
             continue
         row = re.fullmatch(r'([0-9a-f]+) ([0-9a-f]+) [tT] (\S+)', line)
         require(row is not None, 'malformed public symbol row')

@@ -30,6 +30,12 @@ single-block owners under `brynja_cipher_aes::aes`. They borrow caller
 storage; ephemeral keys expand per operation and expanded keys cache their
 schedule until clear or drop. Raw blocks do not authenticate messages.
 
+The hidden `__mode` feature exposes a forward-only block-encryption bridge
+for AES-GCM and GMAC. A direct dependent can call that bridge if it enables
+the feature or another dependency enables it through Cargo feature unification.
+It does not expose the normal `aes` module, decryption, or public-output
+operations on its own. Cargo features are not an access-control boundary.
+
 ## Cryptography Verification Status
 
 | Capability | Implemented | Independently verified |

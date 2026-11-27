@@ -45,6 +45,12 @@ class RiscVTests(unittest.TestCase):
         self.assertNotIn("brynja_cpu_evidence", flags)
         self.assertIn("target-feature=+zkne,+zknd", flags)
 
+    def test_acknowledgement_is_local_to_evidence_phases(self):
+        for phase in RUNNER.PHASES:
+            env = RUNNER.phase_environment(phase)
+            self.assertEqual(env.get('BRYNJA_CPU_EVIDENCE'), None if phase == 'unadmitted' else '1')
+            self.assertEqual('brynja_cpu_evidence' in env['RUSTFLAGS'], phase != 'unadmitted')
+
     def test_each_missing_half_is_disabled_in_compiler_and_emulator(self):
         for phase, missing in (("no-encrypt", "zkne"), ("no-decrypt", "zknd")):
             flags, cpu = RUNNER.phase_config(phase)

@@ -84,6 +84,7 @@ def mode_visibility(cargo, fixture, env, versions):
                 compile(owner, explicit, 'E0603' if native else 'E0432')
                 compile(owner, flags + ['brynja-cipher-aes/aes-static-execution'])
                 bridge = 'brynja_cipher_aes::__mode::' + ('execution::' if native else '') + 'Aes128ExpandedKey'
+                compile(f'fn main() {{ let _ = {bridge}::encrypt_block; }}', flags)
                 for method in ('decrypt_block', 'encrypt_block_public'):
                     compile(f'fn main() {{ let _ = {bridge}::{method}; }}', flags, 'E0599')
 

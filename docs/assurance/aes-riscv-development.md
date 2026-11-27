@@ -37,7 +37,10 @@ platform constructors cannot bypass that exclusion. The hosted adapter reports
 this backend based on current-hart detection. Preferred mode may select portable
 only before execution, as with other unavailable routes.
 
-Only an explicit `--cfg brynja_cpu_evidence` build includes the raw kernels.
+Building the raw RV64 kernels requires both `--cfg brynja_cpu_evidence` and
+an invocation-local `BRYNJA_CPU_EVIDENCE=1`. The cfg alone fails to compile;
+the environment variable alone does not enable anything. Do not set either
+in a global Cargo configuration or shell profile.
 Static evidence still requires both target features; missing either is rejected
 before startup or secret storage mutation. The unsafe platform boundary retains
 its lifetime-long complete-ISA obligation. The custom cfg is a deliberate

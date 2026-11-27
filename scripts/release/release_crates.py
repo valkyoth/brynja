@@ -367,7 +367,7 @@ def main() -> int:
                     dry_run=args.dry_run,
                 )
             if package in initial:
-                registry_ownership.indexed(package, initial[package], owners)
+                registry_ownership.indexed(package, initial[package], owners, just_uploaded=True)
         print("Dry-run publication plan completed; nothing uploaded." if args.dry_run
               else "Release publish sequence completed.")
         print(f"Recommended follow-up: cargo info {FACADE}@{version}")

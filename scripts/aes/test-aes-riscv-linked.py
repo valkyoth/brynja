@@ -147,7 +147,7 @@ def public_fixture(compiler, panic):
         raw = runner.public.template(compiler, panic, kind, bits, address, targets)
         image[address-0x1000:address-0x1000+len(raw)] = raw
         name = (f'30brynja_aes_accelerated_fixture9public{bits}' if kind == 'ephemeral'
-                else f'13brynja_crypto3aes9execution17Aes{bits}ExpandedKey20encrypt_block_public')
+                else f'17brynja_cipher_aes3aes9execution17Aes{bits}ExpandedKey20encrypt_block_public')
         nm += f'\n{address:x} {len(raw):x} t _ZN{name}17h0123456789abcdefE'
     return nm, bytes(image)
 
@@ -178,7 +178,7 @@ def secret_fixture(compiler, panic):
         raw = runner.secret.template(compiler, panic, kind, bits, address, targets)
         image[address-0x1000:address-0x1000+len(raw)] = raw
         name = f'17Aes{bits}ExpandedKey' if kind == 'cached' else f'9Aes{bits}Key'
-        nm += f'\n{address:x} {len(raw):x} t _ZN13brynja_crypto3aes9execution{name}6secret17h0123456789abcdefE'
+        nm += f'\n{address:x} {len(raw):x} t _ZN17brynja_cipher_aes3aes9execution{name}6secret17h0123456789abcdefE'
     return nm, bytes(image)
 
 
@@ -217,6 +217,14 @@ def startup_fixture(compiler, panic):
 
 
 class RiscVLinkedTests(unittest.TestCase):
+    def test_wrong_crate_cannot_stand_in_for_extracted_key_owners(self):
+        for inspect, fixture in ((runner.public, public_fixture), (runner.secret, secret_fixture)):
+            nm, _ = fixture('1.90.0', 'abort')
+            old = nm.replace('17brynja_cipher_aes3aes9execution', '13brynja_crypto3aes9execution')
+            self.assertNotEqual(nm, old)
+            with self.assertRaises(ValueError):
+                inspect.select(old)
+
     def test_output_boundary_report_contains_only_static_code_metadata(self):
         for compiler in ('1.90.0', '1.99.1'):
             for panic in ('abort', 'unwind'):
@@ -262,8 +270,8 @@ class RiscVLinkedTests(unittest.TestCase):
                 current = nm
                 for bits in (128, 192, 256):
                     for name in (f'9Aes{bits}Key', f'17Aes{bits}ExpandedKey'):
-                        current = current.replace(f'_ZN13brynja_crypto3aes9execution{name}6secret17h0123456789abcdefE',
-                                                  f'_RNvMsa_NtNtCstest_13brynja_crypto3aes9executionNtB5_{name}6secret')
+                        current = current.replace(f'_ZN17brynja_cipher_aes3aes9execution{name}6secret17h0123456789abcdefE',
+                                                  f'_RNvMsa_NtNtCstest_17brynja_cipher_aes3aes9executionNtB5_{name}6secret')
                 self.assertEqual(len(c.inspect(current, image, compiler, panic)['secret']), 6)
 
     def test_secret_every_body_bit_including_destination_result_and_direction(self):
@@ -351,7 +359,7 @@ class RiscVLinkedTests(unittest.TestCase):
         nm, image = secret_fixture('1.99.1', 'abort')
         for bad in ('\n'.join(nm.splitlines()[:-1]), nm+'\n'+nm.splitlines()[-1],
                     nm.replace('9Aes256Key6secret', '9Aes512Key6secret'),
-                    nm.replace(' t _ZN13brynja_crypto3aes9execution', ' D _ZN13brynja_crypto3aes9execution'),
+                    nm.replace(' t _ZN17brynja_cipher_aes3aes9execution', ' D _ZN17brynja_cipher_aes3aes9execution'),
                     nm.replace('3000 208', '3001 208'), nm.replace('3000 208', '3000 0'),
                     nm.replace('3000 208', '3000 20a'), nm.replace('3300 208', '3000 208')):
             self.assertNotEqual(bad, nm)
@@ -407,8 +415,8 @@ class RiscVLinkedTests(unittest.TestCase):
                 for bits in (128, 192, 256):
                     current = current.replace(f'_ZN30brynja_aes_accelerated_fixture9public{bits}17h0123456789abcdefE',
                                               f'_RNvCstest_30brynja_aes_accelerated_fixture9public{bits}')
-                    current = current.replace(f'_ZN13brynja_crypto3aes9execution17Aes{bits}ExpandedKey20encrypt_block_public17h0123456789abcdefE',
-                                              f'_RNvMsa_NtNtCstest_13brynja_crypto3aes9executionNtB5_17Aes{bits}ExpandedKey20encrypt_block_public')
+                    current = current.replace(f'_ZN17brynja_cipher_aes3aes9execution17Aes{bits}ExpandedKey20encrypt_block_public17h0123456789abcdefE',
+                                              f'_RNvMsa_NtNtCstest_17brynja_cipher_aes3aes9executionNtB5_17Aes{bits}ExpandedKey20encrypt_block_public')
                 self.assertEqual(len(c.inspect(current, image, compiler, panic)['public']), 6)
 
     def test_public_every_body_bit_including_guards_counts_and_calls_is_bound(self):

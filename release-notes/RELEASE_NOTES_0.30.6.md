@@ -37,8 +37,13 @@ The preparation-time registry lookup found the thirty existing names had the
 same owner set as `brynja`, their baseline versions were available and their
 selected new versions were unused. The five initial names were absent (not
 reserved). The publisher rechecks each first-publication name before uploading
-and confirms its indexed version and owner set before publishing dependents.
-Resuming with `--start-at` also checks the skipped first publications. A dry
+and confirms its active indexed version before publishing dependents. Only
+immediately after a successful first upload may the sole owner be the trusted
+individual uploader rather than the full project owner set. In that case,
+add the remaining project owners explicitly and verify the full list before
+closing the release. The publisher never changes owners. Resuming with
+`--start-at` requires the full owner set on skipped first publications. A dry
 run does not exercise those live post-upload conditions.
-The scoped pentest, final gate and exact-commit GitHub/CodeQL handoff are still
-required; nothing has been uploaded.
+The [packaging-delta review](../security/pentest/v0.30.6-delta.md) is distinct
+from the required cumulative review. That review, the final gate and the
+exact-commit GitHub/CodeQL handoff are still pending; nothing has been uploaded.

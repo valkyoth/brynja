@@ -46,17 +46,25 @@ def expected_graph(route, mode, defaults):
     require(route in ('direct', 'facade') and mode in FEATURES and type(defaults) is bool,
             'unknown no_std graph configuration')
     names = (packaged.consumer.DIRECT if route == 'direct' else packaged.consumer.FACADE) | {NAME}
+    if mode == 'none':
+        names.discard('brynja-cipher-aes')
     if mode in ('static', 'runtime'):
-        names |= {'brynja-crypto-cpu'}
+        names |= {'brynja-crypto-cpu', 'brynja-universal-hash-ghash'}
     features = {name: {'default'} for name in names}
     features[NAME] = {route}
     features['brynja-crypto'] = {'default'} if route == 'facade' or defaults else set()
     if route == 'facade':
         features['brynja'] = set(FEATURES[mode]) | ({'default'} if defaults else set())
     features['brynja-crypto'].update(FEATURES[mode])
+    if mode != 'none':
+        features['brynja-cipher-aes'].add('hazmat-aes-block')
     if mode in ('static', 'runtime'):
         features['brynja-crypto'].update({'cpu', 'hazmat-aes-block', 'aes-static-execution'})
         features['brynja-crypto-cpu'].add('aes-static-execution')
+        # cargo metadata also resolves the weak GHASH cpu forwarding edge;
+        # neither hazmat-ghash nor its runtime execution is selected.
+        features['brynja-universal-hash-ghash'].add('cpu')
+        features['brynja-cipher-aes'].update({'aes-static-execution', *FEATURES[mode]})
         if mode == 'runtime':
             features['brynja-crypto-cpu'].add('aes-runtime-execution')
     features['brynja-hash-sha2'].add('general-sha512-t')
@@ -71,7 +79,8 @@ def graph(metadata, versions, directory, route, mode, defaults=False):
             and len({n['id'] for n in nodes}) == len(nodes)
             and all(n['id'] in packages for n in nodes)
             and {packages[n['id']]['name'] for n in nodes} == set(expected),
-            'unexpected no_std dependency population')
+            f'unexpected no_std dependency population ({mode}): expected {sorted(expected)}, '
+            f'got {sorted(packages[n["id"]]["name"] for n in nodes if n["id"] in packages)}')
     root_id = metadata['resolve']['root']
     require(root_id in packages and packages[root_id]['name'] == NAME
             and metadata['workspace_members'] == [root_id]
@@ -182,6 +191,9 @@ def check(compiler, route, riscv=False):
         for mode in ('static', 'runtime'):
             for name, target, flags in targets:
                 env['RUSTFLAGS'] = flags
+                env.pop('BRYNJA_CPU_EVIDENCE', None)
+                if name == 'rv64-evidence':
+                    env['BRYNJA_CPU_EVIDENCE'] = '1'
                 root_id = configure(mode, target=target)
                 for profile in ('debug', 'release'):
                     label = f'{mode}-{name}-{profile}'
@@ -192,7 +204,25 @@ def check(compiler, route, riscv=False):
                     builds.append({'mode': mode, 'target': target, 'profile': profile, 'rustflags': flags,
                                    **artifact(result, root_id, root / 'target')})
                     print(f'AES_NO_STD_BUILD_PASS: {compiler} {route} {label}', flush=True)
+                if name == 'rv64-evidence':
+                    # Reuse the exact successful release command and target dir:
+                    # removing/changing the acknowledgement must invalidate Cargo's cache.
+                    for value in (None, '0', '01'):
+                        negative = env.copy()
+                        if value is None:
+                            del negative['BRYNJA_CPU_EVIDENCE']
+                        else:
+                            negative['BRYNJA_CPU_EVIDENCE'] = value
+                        result = execute(command, directory, negative, artifacts, f'{label}-ack-{value}')
+                        require(result.returncode == 101 and any(
+                            (row := json.loads(line)).get('reason') == 'compiler-message'
+                            and row['target']['name'] == 'brynja_crypto_cpu'
+                            and (row['message'].get('code') or {}).get('code') == 'E0080'
+                            and 'RV64 AES evidence requires BRYNJA_CPU_EVIDENCE=1' in row['message']['message']
+                            for line in result.stdout.splitlines()),
+                                'RV64 AES evidence did not fail for the missing/incorrect acknowledgement')
         env['RUSTFLAGS'] = ''
+        env.pop('BRYNJA_CPU_EVIDENCE', None)
         command = cargo + ['check', *selection, '--lib', '--target', probe_target, '--message-format=json']
         count = 0
         for name, mode, defaults, negative, positive, code in feature_probes(route):

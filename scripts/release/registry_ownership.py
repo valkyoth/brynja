@@ -32,12 +32,21 @@ def available(name):
         raise ValueError(f'first-publication name already exists: {name}; stop and reconcile')
 
 
-def indexed(name, version, trusted):
+def indexed(name, version, trusted, *, just_uploaded=False):
     row = (lookup(f'{name}/{version}') or {}).get('version') or {}
     if (not isinstance(row, dict) or row.get('crate') != name
-            or row.get('num') != version or row.get('yanked') is not False
-            or owners(name) != trusted):
+            or row.get('num') != version or row.get('yanked') is not False):
         raise ValueError(f'cannot confirm project ownership and active {name} {version}; stop')
+    current = owners(name)
+    if current == trusted:
+        return
+    # A new name initially belongs to its uploader. Allow this bootstrap only
+    # following this process's successful upload, never for a name we skipped.
+    if just_uploaded and len(current) == 1 and current < trusted and next(iter(current))[0] == 'user':
+        print(f'{name}: verified trusted uploader; reconcile the remaining project owners '
+              'and verify the full owner set before resuming or closing the release.')
+        return
+    raise ValueError(f'cannot confirm project ownership and active {name} {version}; stop')
 
 
 def first_publications(plan, steps):

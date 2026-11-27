@@ -265,7 +265,7 @@ class AcceleratedCampaignTests(unittest.TestCase):
 
     def metadata(self, route, admission, directory, versions):
         names = (runner.packaged.consumer.DIRECT if route == 'direct' else runner.packaged.consumer.FACADE) | {
-            runner.NAME, 'brynja-crypto-cpu'}
+            runner.NAME, 'brynja-crypto-cpu', 'brynja-universal-hash-ghash'}
         if admission == 'hosted':
             names |= {'brynja-crypto-cpu-std'}
         packages, nodes = [], []
@@ -282,6 +282,12 @@ class AcceleratedCampaignTests(unittest.TestCase):
                 features.add('cpu')
                 if route == 'facade':
                     features.add('default')
+                if admission == 'hosted':
+                    features.add('aes-runtime-execution')
+            elif name == 'brynja-universal-hash-ghash':
+                features.add('cpu')
+            elif name == 'brynja-cipher-aes':
+                features |= {'hazmat-aes-block', 'aes-static-execution'}
                 if admission == 'hosted':
                     features.add('aes-runtime-execution')
             elif name == 'brynja-crypto-cpu':

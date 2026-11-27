@@ -41,7 +41,7 @@ std::thread_local! {
     static EXPANSION_FAIL: Cell<Option<(usize,bool)>> = const { Cell::new(None) };
     static EXECUTION_REVOKE: Cell<bool> = const { Cell::new(false) };
 }
-#[cfg(feature = "aes-static-execution")]
+#[cfg(any(feature = "aes-static-execution", feature = "__mode-execution"))]
 pub(super) fn execution_expansion_checkpoint(
     session: &brynja_crypto_cpu::aes::Session<'_>,
 ) -> Result<(), Error> {

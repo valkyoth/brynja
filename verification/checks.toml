@@ -28,14 +28,14 @@ component = "aes"
 id = "standalone-archive-identity"
 category = "package"
 name = "Standalone AES-128/192/256 packaged type identity"
-establishes = "All three public routes interchange portable key, schedule and output types. Host known answers, caller-memory cleanup and Cortex-M compile on both endpoints. Not native qualification."
+establishes = "All three public routes interchange portable key, schedule and output types. Host known answers, caller-memory cleanup, Cortex-M compile, and Cargo-unified mode-only raw/static import rejection on both endpoints. Not native qualification."
 command = ["python3", "scripts/aes/check-aes-leaf-identity.py"]
 cwd = "."
 inputs = ["aes-leaf-identity", "ghash-packaged-api", "hkdf-msrv"]
 reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
 timeout_seconds = 300
 [checks.success]
-unique_lines = ["1.90.0: three packaged widths and import routes; Cortex-M compile passed", "1.100.0: three packaged widths and import routes; Cortex-M compile passed", "1.90.0: all provider widths quarantined short writes; unavailable kernel rejected", "1.100.0: all provider widths quarantined short writes; unavailable kernel rejected"]
+unique_lines = ["1.90.0: three packaged widths and import routes; Cortex-M compile passed", "1.100.0: three packaged widths and import routes; Cortex-M compile passed", "1.90.0: all provider widths quarantined short writes; unavailable kernel rejected", "1.100.0: all provider widths quarantined short writes; unavailable kernel rejected", "1.90.0: GCM and GMAC do not opt a featureless leaf into raw or static AES", "1.100.0: GCM and GMAC do not opt a featureless leaf into raw or static AES"]
 contains = ["three packaged widths and import routes; Cortex-M compile passed"]
 
 [[checks]]

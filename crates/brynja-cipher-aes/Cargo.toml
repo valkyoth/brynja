@@ -11,6 +11,8 @@ include = ["Cargo.toml", "LICENSE-APACHE", "LICENSE-MIT", "README.md", "src/**/*
 
 [features]
 default = []
+__mode = ["dep:brynja-core"]
+__mode-execution = ["__mode", "dep:brynja-crypto-cpu", "brynja-crypto-cpu/aes-static-execution"]
 hazmat-aes-block = ["dep:brynja-core"]
 external-key-provider = ["dep:brynja-core"]
 aes-static-execution = ["hazmat-aes-block", "dep:brynja-crypto-cpu", "brynja-crypto-cpu/aes-static-execution"]

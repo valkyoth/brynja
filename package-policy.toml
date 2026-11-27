@@ -62,7 +62,7 @@ class = "modern-shared"
 publish = "crates-io"
 required = []
 optional = { hazmat-aes-block = "brynja-core", aes-static-execution = "brynja-crypto-cpu" }
-features = ["external-key-provider", "aes-runtime-execution"]
+features = ["external-key-provider", "aes-runtime-execution", "__mode", "__mode-execution"]
 
 [packages.brynja-cipher-chacha]
 class = "modern-shared"

@@ -91,9 +91,9 @@ def check_graph(metadata, consumer, versions, dependency, *, features=("aes-gcm"
             if active != {"default", "aes-static-execution", "ghash-runtime-execution"} or package["features"].get("default") != []:
                 raise ValueError("unexpected paired CPU features")
         elif name == "brynja-cipher-aes":
-            expected = {"default", "hazmat-aes-block"}
+            expected = {"default", "__mode"}
             if paired:
-                expected.add("aes-static-execution")
+                expected.add("__mode-execution")
             if stream or active != expected or package["features"].get("default") != []:
                 raise ValueError("unexpected AES leaf features")
         elif active - ({"default", "general-sha512-t"} if name == "brynja-hash-sha2" else {"default"}):

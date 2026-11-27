@@ -47,6 +47,9 @@ pub use wide::{Aes192ExpandedKey, Aes192Key, Aes256ExpandedKey, Aes256Key};
 /// Explicit clearing AES owners bound to a checked static hardware authority.
 #[cfg(feature = "aes-static-execution")]
 pub mod execution;
+#[cfg(all(feature = "__mode-execution", not(feature = "aes-static-execution")))]
+#[allow(dead_code, unused_imports)]
+pub(crate) mod execution;
 
 /// Explicit, optional external AES-128/192/256 key providers; no device driver is bundled.
 #[cfg(all(feature = "external-key-provider", feature = "hazmat-aes-block"))]

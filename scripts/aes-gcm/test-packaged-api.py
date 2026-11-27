@@ -306,7 +306,7 @@ class ArchiveTests(unittest.TestCase):
             elif name == cpu:
                 flags += ["aes-static-execution", "ghash-runtime-execution"]
             elif name == "brynja-cipher-aes":
-                flags += ["hazmat-aes-block", "aes-static-execution"]
+                flags += ["__mode", "__mode-execution"]
                 deps.append(cpu)
             add(name, deps, flags, root / "unpacked" / f"{name}-{versions[name]}" / "Cargo.toml")
             for dep in deps:
@@ -322,6 +322,8 @@ class ArchiveTests(unittest.TestCase):
         validate(graph)
         for target, field, value in ((crypto, "features", ["gmac", "gmac-execution", "hazmat-aes-block"]),
                                      ("brynja-cipher-aes", "features", ["default", "hazmat-aes-block"]),
+                                     ("brynja-cipher-aes", "features", ["default", "__mode", "__mode-execution", "hazmat-aes-block"]),
+                                     ("brynja-cipher-aes", "features", ["default", "__mode", "__mode-execution", "aes-static-execution"]),
                                      (cpu, "features", ["default", "aes-static-execution"]),
                                      (cpu, "deps", [{"pkg": "brynja-core"}]),
                                      (crypto, "deps", [d for d in nodes[crypto]["deps"] if d["pkg"] != cpu])):
@@ -334,7 +336,7 @@ class ArchiveTests(unittest.TestCase):
         # Even a changed reference lock cannot authorize a CPU crate for a
         # portable consumer. Remove the native features to isolate that guard.
         nodes[crypto]["features"] = ["gmac"]
-        nodes["brynja-cipher-aes"]["features"] = ["default", "hazmat-aes-block"]
+        nodes["brynja-cipher-aes"]["features"] = ["default", "__mode"]
         nodes["brynja-cipher-aes"]["deps"] = [{"pkg": "brynja-core"}]
         nodes[cpu]["features"] = ["default"]
         packages[crypto]["dependencies"].append(cpu)

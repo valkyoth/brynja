@@ -159,6 +159,10 @@ class ScopedRelease(unittest.TestCase):
         self.assertEqual(release['crates']['brynja']['change'], 'metadata')
         self.assertEqual(release['release']['cumulative_milestones'][-2:], ['0.30.2', '0.30.3'])
         self.assertEqual(release['crates']['brynja-cipher-chacha']['previous_version'], 'unpublished')
+        self.assertEqual(release['crates']['brynja-cipher-aes']['previous_version'], 'unpublished')
+        self.assertFalse(release['crates']['brynja-cipher-aes']['publish'])
+        self.assertLess(publisher.PUBLISH_ORDER.index('brynja-cipher-aes'),
+                        publisher.PUBLISH_ORDER.index('brynja-crypto'))
         self.assertIn('RV64 stays scalar', plan['scope'])
         self.assertNotIn('0.27.7', release['release']['cumulative_milestones'])
         self.assertIn('Portable GHASH', plan['scope'])

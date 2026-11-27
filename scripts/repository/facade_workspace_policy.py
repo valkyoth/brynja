@@ -31,17 +31,19 @@ CRYPTO = {'cpu': ['dep:brynja-crypto-cpu'], 'aes-gcm': [], 'gmac': [], 'hazmat-a
 CRYPTO.update({feature: ([] if feature == 'general-sha512-t' else ['cpu']) +
               [owner + '/' + leaf] for feature, (owner, leaf) in LEAVES.items()})
 for feature in ('aes-gcm', 'gmac', 'hazmat-aes-block', 'external-key-provider'):
-    child = 'external-key-provider' if feature == 'external-key-provider' else 'hazmat-aes-block'
+    child = '__mode' if feature in ('aes-gcm', 'gmac') else feature
     CRYPTO[feature] = ['dep:brynja-cipher-aes', 'brynja-cipher-aes/' + child]
 CRYPTO['aes-static-execution'] = ['hazmat-aes-block', 'cpu', 'brynja-cipher-aes/aes-static-execution']
 for composition in ('aes-gcm', 'gmac'):
     CRYPTO[composition + '-execution'] = [composition, 'dep:brynja-crypto-cpu',
-        'brynja-cipher-aes/aes-static-execution', 'brynja-crypto-cpu/ghash-runtime-execution']
+        'brynja-cipher-aes/__mode-execution', 'brynja-crypto-cpu/ghash-runtime-execution']
 CRYPTO['aes-runtime-execution'] = ['aes-static-execution', 'brynja-cipher-aes/aes-runtime-execution']
 CRYPTO['ghash-runtime-execution'] = ['hazmat-ghash', 'dep:brynja-crypto-cpu',
                                      'brynja-crypto-cpu/ghash-runtime-execution']
 FEATURES = {
     'brynja-cipher-aes': {
+        '__mode': ['dep:brynja-core'],
+        '__mode-execution': ['__mode', 'dep:brynja-crypto-cpu', 'brynja-crypto-cpu/aes-static-execution'],
         'hazmat-aes-block': ['dep:brynja-core'],
         'external-key-provider': ['dep:brynja-core'],
         'aes-static-execution': ['hazmat-aes-block', 'dep:brynja-crypto-cpu', 'brynja-crypto-cpu/aes-static-execution'],

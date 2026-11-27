@@ -7440,6 +7440,7 @@ Goal: Standalone Cipher Package Publication Acceptance without changing algorith
 Deliverables:
 
 - Freeze the package/version selection and release order: dependencies before dependents, including changed façades; use fresh SemVer versions for changed published crates.
+- Before publishing dependents, confirm each new leaf name and exact version belong to the project on crates.io. Stop on a collision or unexpected owner; an exact version pin is not proof of ownership.
 - Document how to choose a leaf or a façade, which features enable raw operations, and which target, timing and qualification limitations still apply. Do not make v0.31 algorithms prerequisites.
 
 Verification:

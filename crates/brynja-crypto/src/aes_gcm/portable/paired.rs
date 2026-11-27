@@ -3,6 +3,7 @@ use super::{Block, Error, Forward, HashRoute, SecretBlock};
 #[cfg(test)]
 use crate::aes_gcm::interruptions::Step;
 use crate::{aes::execution, ghash};
+use brynja_crypto_cpu::aes::Authority;
 
 /// Pre-key selection outcome. Only `Unavailable` permits an application
 /// that explicitly allows it to choose a portable constructor instead.
@@ -38,7 +39,7 @@ pub enum PairBackend {
 #[must_use]
 pub struct AesPair {
     backend: PairBackend,
-    aes: execution::Authority,
+    aes: Authority,
     #[cfg(any(
         all(
             target_arch = "x86_64",
@@ -70,10 +71,16 @@ impl AesPair {
         ))]
         {
             #[cfg(target_arch = "x86_64")]
-            let (kernel, backend) = (execution::Kernel::X86AesNi, PairBackend::AesNiPclmul);
+            let (kernel, backend) = (
+                brynja_crypto_cpu::aes::Kernel::X86AesNi,
+                PairBackend::AesNiPclmul,
+            );
             #[cfg(target_arch = "aarch64")]
-            let (kernel, backend) = (execution::Kernel::ArmAes, PairBackend::ArmAesPmull);
-            let aes = execution::Authority::new(kernel).map_err(|e| match e {
+            let (kernel, backend) = (
+                brynja_crypto_cpu::aes::Kernel::ArmAes,
+                PairBackend::ArmAesPmull,
+            );
+            let aes = Authority::new(kernel).map_err(|e| match e {
                 brynja_crypto_cpu::aes::Error::MissingTargetFeatures => PairError::Unavailable,
                 _ => PairError::Failed,
             })?;

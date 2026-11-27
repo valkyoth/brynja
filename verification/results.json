@@ -25794,6 +25794,24 @@
         "after": "7f7be90c279d53e4fc000b8ae95c99b9f1ae8aa57b450cbdc1eec8f8c20017a8",
         "log": "verification/.runner/logs/2-1795793874639204098.log",
         "log_sha256": "234f0dd70d3bd98332cdf246aeed73d65477dcfe0b0f84d82a197f7b1e9c72d1"
+      },
+      {
+        "id": "2-1795795704285633170",
+        "source": "working tree based on 0544ebb43f48c4394b7f6db2ace55da91d894441; scoped fingerprint 8dcdb2b2be9a90da9e3e5a447441df269bb96454a1a35708c18590d69b58ee75",
+        "started": "2026-11-27T16:08:24.2856276Z",
+        "ended": "2026-11-27T16:08:46.567110721Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-leaf-identity.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "3bd521c3084f720141b37be898f26b1a20aa0693637c2e1d1a089d6d14531086",
+        "after": "3bd521c3084f720141b37be898f26b1a20aa0693637c2e1d1a089d6d14531086",
+        "log": "verification/.runner/logs/2-1795795704285633170.log",
+        "log_sha256": "1330b1824f23cf6079d8f573bb60658f10c9ef106fbdc9aafcf2c3559dbff4db"
       }
     ],
     "aes/static-arm-qemu-current": [
@@ -52029,13 +52047,13 @@
       "last_success": "2026-11-13T13:46:47.08354601Z"
     },
     "aes/standalone-archive-identity": {
-      "checked_at": "2026-11-27T15:38:03.548382136Z",
-      "fingerprint": "03b8b79073c888f8f3320aa105c70a5cebcdb15df7bef0e3e8da61bbb0f51808",
+      "checked_at": "2026-11-27T16:08:47.210159925Z",
+      "fingerprint": "8dcdb2b2be9a90da9e3e5a447441df269bb96454a1a35708c18590d69b58ee75",
       "result": "passed",
       "freshness": "Up to date",
-      "source": "working tree based on dc1ddd40f5aafdd85c8e5b951ddaa72f35934c57; scoped fingerprint 03b8b79073c888f8f3320aa105c70a5cebcdb15df7bef0e3e8da61bbb0f51808",
-      "performed_at": "2026-11-27T15:38:02.601017787Z",
-      "last_success": "2026-11-27T15:38:02.601017787Z"
+      "source": "working tree based on 0544ebb43f48c4394b7f6db2ace55da91d894441; scoped fingerprint 8dcdb2b2be9a90da9e3e5a447441df269bb96454a1a35708c18590d69b58ee75",
+      "performed_at": "2026-11-27T16:08:46.567110721Z",
+      "last_success": "2026-11-27T16:08:46.567110721Z"
     },
     "aes/static-arm-qemu-current": {
       "checked_at": "2026-11-13T10:57:13.747893293Z",

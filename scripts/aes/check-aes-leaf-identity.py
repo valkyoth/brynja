@@ -29,6 +29,46 @@ def visibility(cargo, fixture, env, flags):
             pkg.run(cmd + ['--features', 'optional'], fixture, env)
 
 
+def mode_visibility(cargo, fixture, env, versions):
+    """Separate resolver: no dependency in this graph requests raw AES by default."""
+    fixture.mkdir(exist_ok=True)
+    probe = fixture / 'src/bin/probe.rs'
+    probe.parent.mkdir(parents=True, exist_ok=True)
+    manifest = '[workspace]\n[package]\nname="mode-probe"\nversion="0.0.0"\nedition="2024"\n[dependencies]\n'
+    for route in ROUTES:
+        manifest += f'{route}={{version="={versions[route]}",default-features=false}}\n'
+    manifest += '[patch.crates-io]\n' + ''.join(
+        f'{name}={{path="../unpacked/{name}-{version}"}}\n' for name, version in versions.items())
+    (fixture / 'Cargo.toml').write_text(manifest)
+    probe.write_text('fn main() {}')
+    pkg.run(cargo + ['generate-lockfile', '--offline'], fixture, env)
+
+    def compile(source, features, code=None):
+        probe.write_text(source)
+        cmd = cargo + ['check', '--bin', 'probe', '--locked', '--offline', '--message-format=json',
+                       '--features', ','.join(features)]
+        if code is None:
+            pkg.run(cmd, fixture, env)
+        elif not pkg.diagnostic_matches(pkg.cargo_result(cmd, fixture, env, timeout=120), code):
+            raise ValueError(f'unexpected mode opt-in result: {features} {source}')
+
+    for route, prefix in [('brynja-crypto', 'brynja_crypto'), ('brynja', 'brynja::crypto')]:
+        for mode, api in [('aes-gcm', 'aes_gcm::Aes128Gcm'), ('gmac', 'gmac::Aes128Gmac')]:
+            for native in (False, True):
+                flags = [route + '/' + mode + ('-execution' if native else '')]
+                compile(f'use {prefix}::{api} as _; fn main() {{}}', flags)
+                raw = 'use brynja_cipher_aes::aes::Aes128Key as _; fn main() {}'
+                compile(raw, flags, 'E0603')
+                explicit = flags + ['brynja-cipher-aes/hazmat-aes-block']
+                compile(raw, explicit)
+                owner = 'use brynja_cipher_aes::aes::execution::Aes128Key as _; fn main() {}'
+                compile(owner, explicit, 'E0603' if native else 'E0432')
+                compile(owner, flags + ['brynja-cipher-aes/aes-static-execution'])
+                bridge = 'brynja_cipher_aes::__mode::' + ('execution::' if native else '') + 'Aes128ExpandedKey'
+                for method in ('decrypt_block', 'encrypt_block_public'):
+                    compile(f'fn main() {{ let _ = {bridge}::{method}; }}', flags, 'E0599')
+
+
 def check():
     if any(key in os.environ for key in pkg.REJECT_ENV):
         raise ValueError('remove ambient compiler overrides')
@@ -82,6 +122,8 @@ def check():
             if optional.stdout.splitlines() != ['AES_IDENTITY_OK']:
                 raise ValueError('missing provider and unavailable-backend checks')
             visibility(cargo, fixture, env, flags)
+            mode_visibility(cargo, root / 'mode-probe', env, versions)
+            print(endpoint + ': GCM and GMAC do not opt a featureless leaf into raw or static AES', flush=True)
             print(endpoint + ': three packaged widths and import routes; Cortex-M compile passed', flush=True)
             print(endpoint + ': all provider widths quarantined short writes; unavailable kernel rejected', flush=True)
 

@@ -1,0 +1,23 @@
+[package]
+name = "brynja-chacha20-parallel-probe"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[workspace]
+
+[target.'cfg(target_arch = "x86_64")'.dependencies]
+brynja-cipher-chacha = { path = "../../crates/brynja-cipher-chacha", default-features = false, features = ["chacha20-sse2"] }
+
+[target.'cfg(target_arch = "aarch64")'.dependencies]
+brynja-cipher-chacha = { path = "../../crates/brynja-cipher-chacha", default-features = false, features = ["chacha20-neon"] }
+
+[target.'cfg(target_arch = "riscv64")'.dependencies]
+brynja-cipher-chacha = { path = "../../crates/brynja-cipher-chacha", default-features = false, features = ["hazmat-chacha20"] }
+brynja-core = { path = "../../crates/brynja-core" }
+
+[profile.release]
+lto = "fat"
+codegen-units = 1
+overflow-checks = true

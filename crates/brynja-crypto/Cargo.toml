@@ -16,7 +16,7 @@ gmac = []
 aes-gcm-execution = ["aes-gcm", "dep:brynja-crypto-cpu", "brynja-crypto-cpu/aes-static-execution", "brynja-crypto-cpu/ghash-runtime-execution"]
 gmac-execution = ["gmac", "dep:brynja-crypto-cpu", "brynja-crypto-cpu/aes-static-execution", "brynja-crypto-cpu/ghash-runtime-execution"]
 hazmat-aes-block = []
-hazmat-chacha20 = []
+hazmat-chacha20 = ["dep:brynja-cipher-chacha", "brynja-cipher-chacha/hazmat-chacha20"]
 hazmat-ghash = []
 ghash-runtime-execution = ["hazmat-ghash", "dep:brynja-crypto-cpu", "brynja-crypto-cpu/ghash-runtime-execution"]
 aes-static-execution = ["hazmat-aes-block", "cpu", "brynja-crypto-cpu/aes-static-execution"]
@@ -47,6 +47,7 @@ parallelhash-runtime-execution = ["cpu", "brynja-hash-parallel/runtime-execution
 parallelhash-hardened-batch = ["cpu", "brynja-hash-parallel/hardened-batch-execution"]
 
 [dependencies]
+brynja-cipher-chacha = { workspace = true, optional = true }
 brynja-core = { workspace = true }
 brynja-crypto-cpu = { workspace = true, optional = true }
 brynja-hash-sha2 = { workspace = true }

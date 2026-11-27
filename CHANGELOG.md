@@ -1,6 +1,12 @@
 # Changelog
 
-## 0.30.0 portable ChaCha20 (candidate)
+## 0.30.1 standalone ChaCha20 and opt-in SIMD (internal candidate)
+
+- Use portable ChaCha20 directly from `brynja-cipher-chacha` or keep the existing
+  `brynja_crypto::chacha20` import. The leaf adds explicit SSE2 and NEON owners;
+  ordinary constructors stay portable. [Release notes](release-notes/RELEASE_NOTES_0.30.1.md).
+
+## 0.30.0 portable ChaCha20 (internally tagged)
 
 - Add the direct, default-off RFC 8439 scalar stream, checked byte budget and
   packaged consumer. ChaCha20-Poly1305 and acceleration remain separate milestones.

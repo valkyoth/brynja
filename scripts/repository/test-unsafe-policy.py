@@ -3,44 +3,14 @@
 
 from __future__ import annotations
 
-import shutil
 import tempfile
 from pathlib import Path
 
 import unsafe_policy
+from unsafe_policy_fixtures import fixture, reconciled_inventory, require_rejection
 
 
 ROOT = Path(__file__).resolve().parents[2]
-
-
-def fixture(root: Path) -> None:
-    source = root / "crates/brynja-core/src"
-    source.mkdir(parents=True, exist_ok=True)
-    (root / "Cargo.toml").write_text(
-        '[workspace.lints.rust]\nunsafe_code = "deny"\n', encoding="utf-8"
-    )
-    (source / "lib.rs").write_text(
-        "use std::path::Path;\nmod secret_memory_difference;\nmod secret_memory_volatile;\nmod secret_memory_transfer;\nmod secret_memory_mask;\nmod secret_memory_xor;\nmod secret_memory_predicate;\npub mod safe {}\n", encoding="utf-8"
-    )
-    shutil.copyfile(ROOT / 'crates/brynja-core/src/secret_memory.rs', source / 'secret_memory.rs')
-    hash_root = root / 'crates/brynja-hash-core/src'
-    hash_root.mkdir(parents=True, exist_ok=True)
-    for name in ('lib.rs', 'bit_string.rs'):
-        shutil.copyfile(ROOT / 'crates/brynja-hash-core/src' / name, hash_root / name)
-    for relative in unsafe_policy.ALLOWED:
-        target = root / relative
-        target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(ROOT / relative, target)
-
-
-def require_rejection(root: Path, expected: str) -> None:
-    try:
-        unsafe_policy.validate(root)
-    except unsafe_policy.UnsafePolicyError as error:
-        if expected not in str(error):
-            raise AssertionError(f"expected {expected!r}, received {error!s}") from error
-    else:
-        raise AssertionError(f"unsafe policy accepted {expected}")
 
 
 def test() -> None:
@@ -56,6 +26,10 @@ def test() -> None:
         fixture(root)
 
         extra = root / "crates/brynja-core/src/extra.rs"
+        extra.write_text("#![forbid(unsafe_code)]\npub fn safe() {}\n", encoding="utf-8")
+        unsafe_policy.validate(root)
+        extra.write_text("#![forbid(unsafe_code)]\n#[path=\"other.rs\"] mod redirected;\n", encoding="utf-8")
+        require_rejection(root, 'code-inclusion')
         extra.write_text('use std::path::Path;\n#[path="other.rs"] mod redirected;\n', encoding='utf-8')
         require_rejection(root, 'code-inclusion')
         extra.write_text(
@@ -478,6 +452,7 @@ def secret_predicate_boundary(crate='brynja-core'):
 
 
 if __name__ == "__main__":
+    reconciled_inventory()
     test()
     register_boundaries()
     transfer_boundaries('sha256', 8)

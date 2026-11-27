@@ -16,9 +16,9 @@ class Checkpoints(unittest.TestCase):
         self.document = {'schema': 1, 'checkpoints': {'25': '0.25.2', '30': '0.30.2'}}
 
     def test_explicit_closure_and_historical_boundaries(self):
-        for version in ('0.10.0', '0.15.0', '0.20.0', '0.25.3', '0.30.2', '1.0.0-rc.1', '1.0.0'):
+        for version in ('0.10.0', '0.15.0', '0.20.0', '0.25.3', '0.30.6', '1.0.0-rc.1', '1.0.0'):
             self.assertEqual(policy.milestone_class(version), 'public')
-        for version in ('0.24.23', '0.25.0', '0.25.1', '0.25.2', '0.30.0', '0.30.1', '0.30.3'):
+        for version in ('0.24.23', '0.25.0', '0.25.1', '0.25.2', *(f'0.30.{i}' for i in range(6)), '0.30.7'):
             self.assertEqual(policy.milestone_class(version), 'internal')
 
     def test_later_patch_does_not_implicitly_move_checkpoint(self):
@@ -78,13 +78,26 @@ class Checkpoints(unittest.TestCase):
     def test_cumulative_range_includes_the_closing_patches(self):
         first = policy.roadmap_range('0.20.0', '0.25.3')
         self.assertEqual(first[-4:], ['0.25.0', '0.25.1', '0.25.2', '0.25.3'])
-        second = policy.roadmap_range('0.25.3', '0.30.2')
+        second = policy.roadmap_range('0.25.3', '0.30.6')
         self.assertNotIn('0.25.3', second)
-        self.assertEqual(second[-3:], ['0.30.0', '0.30.1', '0.30.2'])
+        self.assertEqual(second[-7:], [f'0.30.{i}' for i in range(7)])
         incomplete = self.context('0.25.3', 'public')
         incomplete['cumulative_milestones'].pop()
         with self.assertRaisesRegex(RuntimeError, 'exact roadmap delta'):
             policy.validate_release_context(incomplete, {})
+
+    def test_cipher_split_cannot_publish_before_package_acceptance(self):
+        selection = {'brynja': {'publish': True}}
+        for patch_level in range(7):
+            version = f'0.30.{patch_level}'
+            context = self.context(version, 'public')
+            context.update(baseline='0.25.3', cumulative_milestones=policy.roadmap_range('0.25.3', version))
+            with self.subTest(version=version):
+                if patch_level < 6:
+                    with self.assertRaisesRegex(RuntimeError, 'exceptional=true'):
+                        policy.validate_release_context(context, selection)
+                else:
+                    policy.validate_release_context(context, selection)
 
     def test_patch_checkpoint_uses_full_tag_gate(self):
         with patch.object(publisher, 'run') as run:

@@ -326,8 +326,10 @@ The [v0.29.4 consumer fixture](assurance/aead-installed-consumer/README.md)
 shows how to check the portable and paired APIs against known answers from
 installed downstream binaries. These checks do not confer FIPS validation.
 
-The [v0.30.0 development candidate](docs/assurance/chacha20-development.md)
-adds the portable RFC 8439 stream to `brynja-crypto` under `hazmat-chacha20`.
+The [portable RFC 8439 stream](docs/assurance/chacha20-development.md) is
+available in the development tree from `brynja-cipher-chacha` or through
+the existing `brynja_crypto::chacha20` path. Enable `hazmat-chacha20` on
+the chosen dependency. The new standalone crate has not been published.
 It is not ChaCha20-Poly1305: raw ciphertext has no integrity protection.
 
 The v0.27.6 [provider API candidate](docs/assurance/aes-provider-completion.md)

@@ -33,6 +33,10 @@ def direct_features(owner, dependency):
     return None
 
 
+def cpu_target(owner, dependency):
+    return 'cfg(any(target_arch = "x86_64", target_arch = "aarch64"))' if (owner, dependency) == ("brynja-cipher-chacha", "brynja-crypto-cpu") else None
+
+
 def production_edges(document, packages, names, policy):
     """Validate Cargo's edge kinds before excluding test-only edges from reachability."""
     nodes = {node["id"]: node for node in document["resolve"]["nodes"]}
@@ -42,7 +46,8 @@ def production_edges(document, packages, names, policy):
         expected = {names[name]: "dev" for name in dev_names(owner, policy[owner])}
         for dep in nodes[package["id"]]["deps"]:
             kind = expected.get(dep["pkg"])
-            if dep.get("dep_kinds") != [{"kind": kind, "target": None}]:
+            target = cpu_target(owner, "brynja-crypto-cpu" if dep["pkg"] == names.get("brynja-crypto-cpu") else None)
+            if dep.get("dep_kinds") != [{"kind": kind, "target": target}]:
                 raise ValueError(f"{owner} resolved dependency kind/target drifted")
             if kind == "dev":
                 result[package["id"]].remove(dep["pkg"])

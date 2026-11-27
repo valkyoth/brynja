@@ -139,18 +139,18 @@ mapping_rationale = "The AES-GCM semantic surface directly joins the generic RFC
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0008"
-revision = 3
+revision = 4
 owner = "0.30.0"
 lifecycle = "implemented"
 decision_ids = ["algorithm.chacha20"]
 sources = [{ id = "rfc:8439", authority_role = "current" }]
 statement = "ChaCha20 preserves the RFC 8439 state layout and round function and closes deterministically before its block counter wraps."
 invariants = ["constant-time", "resource-bound", "side-channel", "work-bound"]
-target = "crates/brynja-crypto/src/chacha20.rs#ChaCha20"
+target = "crates/brynja-cipher-chacha/src/chacha20.rs#ChaCha20"
 positive_test = "crates/brynja-crypto/tests/chacha20.rs#rfc8439_vectors"
 negative_test = "crates/brynja-crypto/tests/chacha20.rs#counter_exhaustion"
 work_bound = "Each block has a fixed twenty-round schedule and stream generation rejects requests that would wrap the 32-bit block counter."
-evidence_gap = "Archived RFC examples, an independent scalar differential campaign and a Kani proof of the byte-budget predicate are scoped in docs/assurance/chacha20-development.md. These do not establish target-specific timing, physical erasure or authenticated encryption."
+evidence_gap = "Archived portable, SSE2 and NEON stream comparisons and the counter-reservation proof are scoped in docs/assurance/chacha20-development.md. SIMD correctness does not establish target-specific timing, physical erasure or authenticated encryption. RV64 remains portable."
 residual = "The raw stream cipher is never exposed as a facade security service and is admitted only for reviewed compositions."
 mapping_rationale = "The separate ChaCha20 semantic surface directly records the stream construction and exhaustion rules sourced from RFC 8439."
 

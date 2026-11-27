@@ -15,7 +15,7 @@ splits and the [schedule register](../requirements/roadmap-schedule.json) for
 old-to-new identities and prerequisite edges. Released milestones through
 v0.24.55 are preserved. The final backfill stop v0.24.55 is tagged, with the
 availability audit and consolidated verification completed. Modern HMAC starts
-at v0.25.0; the v0.25.2 publication checkpoint also audits source-only crate
+at v0.25.0; the v0.25.3 publication checkpoint also audits source-only crate
 archives, retaining assurance evidence in GitHub rather than crates.io.
 RISC-V operational acceleration is postponed until qualifying native hardware
 is available; portable support and existing candidate tests remain unchanged.
@@ -42,6 +42,10 @@ decision does not change automated gate code or silently waive new failures.
 The [five-part expansion review](ROADMAP_EXPANSION_AUDIT.md) and [scope register](ROADMAP_EXPANSION_REGISTER.json) assign the additional family/API and late-protocol work. Earlier implemented APIs retain their existing claims; backfills are new future work.
 
 ## Admission Rules For Every Version
+
+For all future cryptography milestones, apply the
+[family crate ownership rule](CRYPTO_REUSE_PLAN.md#family-crate-ownership-rule)
+at admission, including rows that name an algorithm but not a package.
 
 The [operation-direction audit](ROADMAP_API_COMPLETENESS_AUDIT.md) records
 the explicit standalone DER completion at v0.34.6 and the format, key-role and
@@ -332,11 +336,11 @@ automated gate and green GitHub and CodeQL. Scheduled public pentest and
 crates.io checkpoints occur every fifth minor series. Historical `v0.15.0` and
 `v0.20.0` stay fixed; future checkpoints use the explicitly planned closing
 patch in [checkpoints.toml](../scripts/release/checkpoints.toml), beginning
-`v0.25.2` and `v0.30.2`. Other patch rows remain tagged development milestones.
+`v0.25.3` and `v0.30.6`. Other patch rows remain tagged development milestones.
 A later added patch does not silently move a registered checkpoint. Each
 checkpoint pentests backwards over all changes after the
 previous public tag through the new candidate: v0.10.0 to v0.15.0, then
-v0.15.0 to v0.20.0, then v0.20.0 to v0.25.2 and v0.25.2 to v0.30.2.
+v0.15.0 to v0.20.0, then v0.20.0 to v0.25.3 and v0.25.3 to v0.30.6.
 Exceptional pentest and early-release
 triggers, `v1.0.0-rc.1`, and `v1.0.0` are defined by
 [RELEASE_PLAN.md](RELEASE_PLAN.md). Supporting crates retain independent SemVer.
@@ -464,10 +468,14 @@ triggers, `v1.0.0-rc.1`, and `v1.0.0` are defined by
 | `0.29.3` | Integrated Accelerated AES-GCM And GMAC | Integrate only admitted AES and GHASH backend pairs into accelerated AES-GCM and GMAC providers with per-operation dispatch, preserving every nonce, limit, buffer, authentication, failure-atomicity, cancellation, equivalence, health, and scalar-fallback rule; prohibit mixed, unhealthy, or unvalidated pairings. |
 | `0.29.4` | AES-GCM And GMAC Public API Usability Acceptance | Close the GCM chain with packaged public seal, open, and GMAC fixtures spanning all AES widths, admitted IV and tag sizes, AAD-only, empty, partial, multi-block, in-place, disjoint, scalar, and accelerated routes; verify authoritative results, tamper rejection with unchanged output, limit exhaustion, package installation, and precise FIPS-versus-unvalidated status. |
 | `0.30.0` | Complete Portable ChaCha20 And Public Acceptance | Implement complete ChaCha20 with original and IETF nonce/counter profiles only where authenticated consumers require them, checked counters, deterministic exhaustion, exact block and tail behavior, overlap rules, official vectors, proofs, and a packaged public consumer so the scheduled checkpoint publishes a directly usable scalar implementation. |
-| `0.30.1` | ChaCha20 CPU Acceleration | Add benchmark-admitted x86_64, AArch64, and qualifying RISC-V ChaCha20 backends for parallel blocks while preserving the scalar quarter-round, counter, nonce, tail, overlap, and deterministic exhaustion contract; force each width and tail path, compare every output with scalar, and reject wider paths that regress representative TLS record sizes. |
-| `0.30.2` | ChaCha20 Accelerated Public API Usability Acceptance | Re-run the packaged ChaCha20 consumer through every admitted accelerated backend and scalar fallback, covering original and IETF profiles, counters, block and tail lengths, overlap, exhaustion, unavailable required paths, package installation, backend reporting, and exact output equivalence. |
-| `0.31.0` | Complete Poly1305 | Implement complete Poly1305 key clamping, block and partial-block processing, canonical reduction, one-time-key ownership, constant-time verification, checked lengths, cleanup, official vectors, proofs, and distinct public MAC APIs without yet composing an AEAD. |
-| `0.31.1` | Complete ChaCha20-Poly1305 | Compose the exact admitted ChaCha20 and Poly1305 owners into complete RFC 8439 AEAD seal and open with AAD, nonce and length limits, one-time-key derivation, authenticate-before-release, exact in-place or disjoint buffers, partial-overlap rejection, unchanged failure destinations, cleanup, official vectors, and failure-atomicity proofs. |
+| `0.30.1` | ChaCha20 CPU Acceleration | First extract the scalar implementation into `brynja-cipher-chacha` in a separate change before adding acceleration; preserve `brynja_crypto::chacha20`, its default-off hazmat gate and no_std behavior. Add benchmark-admitted x86_64, AArch64, and qualifying RISC-V ChaCha20 backends for parallel blocks while preserving the scalar quarter-round, counter, nonce, tail, overlap, and deterministic exhaustion contract; force each width and tail path, compare every output with scalar, and reject wider paths that regress representative TLS record sizes. |
+| `0.30.2` | ChaCha20 Accelerated Public API Usability Acceptance | Test the standalone crate and the existing public import route. Re-run the packaged ChaCha20 consumer through every admitted accelerated backend and scalar fallback, covering admitted IETF parameters and rejection of unadmitted nonce layouts, counters, block and tail lengths, overlap, exhaustion, unavailable required paths, package installation, backend reporting, and exact output equivalence. |
+| `0.30.3` | Standalone AES Block Cipher | Extract the existing AES-128, AES-192 and AES-256 owners into `brynja-cipher-aes`, keeping existing feature gates, provider contracts and re-exported type identity without adding block modes. |
+| `0.30.4` | Standalone GHASH Universal Hash | Extract the existing framed-block GHASH into `brynja-universal-hash-ghash`, preserving its secret output, borrowed workspace and explicitly selected multiplication backends; do not expose a MAC or add POLYVAL. |
+| `0.30.5` | Standalone AES-GCM And GMAC Composition | Move AES-GCM and GMAC into `brynja-aead-gcm` over the extracted AES and GHASH crates, preserving separate public operations, existing import paths and nonce reservation semantics. |
+| `0.30.6` | Standalone Cipher Package Publication Acceptance | Close the split with independently installable ChaCha20, AES, GHASH and AES-GCM/GMAC crates, compatible façade re-exports and a dependency-ordered crates.io dry run from the previous public checkpoint. |
+| `0.31.0` | Complete Poly1305 | Implement this one-time authenticator in `brynja-mac-poly1305`. Implement complete Poly1305 key clamping, block and partial-block processing, canonical reduction, one-time-key ownership, constant-time verification, checked lengths, cleanup, official vectors, proofs, and distinct public MAC APIs without yet composing an AEAD. |
+| `0.31.1` | Complete ChaCha20-Poly1305 | Build `brynja-aead-chacha20poly1305` over the ChaCha20 and Poly1305 crates. Compose the exact admitted ChaCha20 and Poly1305 owners into complete RFC 8439 AEAD seal and open with AAD, nonce and length limits, one-time-key derivation, authenticate-before-release, exact in-place or disjoint buffers, partial-overlap rejection, unchanged failure destinations, cleanup, official vectors, and failure-atomicity proofs. |
 | `0.31.2` | Poly1305 And ChaCha20-Poly1305 CPU Acceleration | Add benchmark-admitted x86_64, AArch64, and qualifying RISC-V Poly1305 backends and integrate them only with compatible admitted ChaCha20 paths; preserve one-time-key, reduction, verification, aliasing, plaintext-release, failure-atomicity, health, and scalar-equivalence rules. |
 | `0.31.3` | ChaCha20 Poly1305 And AEAD Public API Usability Acceptance | Close the RFC 8439 chain with packaged downstream ChaCha20, Poly1305, and ChaCha20-Poly1305 operations using only public APIs, covering block and tail counters, one-time keys, AAD, in-place and disjoint buffers, tamper and exhaustion failures, official vectors, scalar and every admitted backend, and no plaintext release before authentication. |
 | `0.32.0` | Fixed-Limb Integer Foundation | Implement fixed-limb unsigned representation, canonical conversion, comparison, addition, subtraction, shifts, carry, borrow, normalization, and RSA-size policies without attacker-selected allocation, schedule, or limb count; introduce full-width or limb-generic harnesses and a directly testable internal arithmetic API. |

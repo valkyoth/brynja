@@ -119,6 +119,8 @@ test -x scripts/release/test-release-readiness.sh
 test -x scripts/repository/check-unsafe-policy.py
 test -x scripts/repository/test-unsafe-policy.py
 test -f scripts/repository/unsafe_policy.py
+test -f scripts/repository/unsafe_inventory.py
+test -f scripts/repository/unsafe_policy_fixtures.py
 test -x scripts/repository/check-first-party-rust-crypto.py
 test -x scripts/repository/test-first-party-rust-crypto.py
 test -f scripts/repository/first_party_rust_crypto.py

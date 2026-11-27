@@ -1,5 +1,14 @@
 # Component Verification Status
 
+## ChaCha20 acceleration (v0.30.1 development)
+
+The x86-64 SSE2 and little-endian AArch64 NEON owners are explicit opt-ins.
+The [four-block comparisons](../assurance/chacha20-parallel/README.md) separate
+native Ryzen and Apple M2 Pro throughput from Linux QEMU correctness.
+The RV64 V research candidate passed correctness but lost to scalar on the
+native X60; it is not in a production crate. None of these measurements
+qualifies timing or side-channel resistance.
+
 ## Portable ChaCha20 (v0.30.0 development)
 
 The [scalar acceptance record](assurance/chacha20-development.md) separates

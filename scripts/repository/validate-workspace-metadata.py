@@ -176,7 +176,8 @@ def validate_dependencies(
         elif dependency.get("source") is not None or dependency.get("path") is None:
             raise ValueError(f"external dependency: {name} -> {dependency_name}")
         kind = "dev" if dependency_name in development else None
-        if dependency.get("kind") != kind or dependency.get("target") is not None:
+        target = execution_policy.cpu_target(name, dependency_name)
+        if dependency.get("kind") != kind or dependency.get("target") != target:
             raise ValueError(f"{name} dependency kind/target drifted")
         if dependency.get("optional") != (dependency_name in optional):
             raise ValueError(f"{name} optionality drifted for {dependency_name}")
@@ -217,6 +218,9 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
     expected.update({feature: [] for feature in entry.get("features", [])})
     if name == "brynja-strict":
         expected = strict_policy.FEATURES
+    if name == "brynja-cipher-chacha":
+        for feature in ("chacha20-sse2", "chacha20-neon"):
+            expected[feature] = ["hazmat-chacha20", "dep:brynja-crypto-cpu", "brynja-crypto-cpu/" + feature]
     if name in legacy_hmac_policy.FEATURE_SETS:
         expected = legacy_hmac_policy.FEATURE_SETS[name]
     if name == "brynja-mac-hmac":

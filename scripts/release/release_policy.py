@@ -39,6 +39,7 @@ PUBLISH_ORDER = (
     "brynja-legacy-hmac",
     "brynja-legacy-hkdf",
     "brynja-crypto-cpu",
+    "brynja-cipher-chacha",
     "brynja-hash-sha2",
     "brynja-hash-sha3",
     "brynja-mac-kmac",

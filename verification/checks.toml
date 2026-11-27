@@ -26,7 +26,7 @@ inputs = ["chacha20-archive", "ghash-packaged-api", "hkdf-msrv"]
 reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
 timeout_seconds = 600
 [checks.success]
-unique_lines = ["1.90.0: RFC and stream boundaries, Cortex-M compile, default-off import passed", "1.100.0: RFC and stream boundaries, Cortex-M compile, default-off import passed"]
+unique_lines = ["1.90.0: leaf and compatibility routes: RFC and stream boundaries, Cortex-M compile, default-off import passed", "1.100.0: leaf and compatibility routes: RFC and stream boundaries, Cortex-M compile, default-off import passed"]
 contains = ["CHACHA20_ARCHIVE_COMPLETE"]
 
 [groups.chacha20-oracle]
@@ -46,8 +46,80 @@ inputs = ["chacha20-oracle", "chacha20-archive", "ghash-packaged-api", "hkdf-msr
 reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
 timeout_seconds = 600
 [checks.success]
-unique_lines = ["1.90.0: 302 OpenSSL comparisons and altered-answer control passed", "1.100.0: 302 OpenSSL comparisons and altered-answer control passed"]
+unique_lines = ["1.90.0: leaf and compatibility routes: 302 OpenSSL comparisons and altered-answer control passed", "1.100.0: leaf and compatibility routes: 302 OpenSSL comparisons and altered-answer control passed"]
 contains = ["CHACHA20_DIFFERENTIAL_COMPLETE"]
+
+[[checks]]
+component = "chacha20"
+id = "ietf-sse2-archive-oracle"
+category = "differential"
+platform = "linux-x86_64"
+name = "Archived explicit four-block SSE2 ChaCha20 against OpenSSL"
+establishes = "302 deterministic cases per compiler, disjoint encryption, fragmented decryption, corrupted-answer control, feature and target isolation; not timing qualification."
+command = ["python3", "scripts/cryptography/check-chacha20-archive.py", "--sse2-differential"]
+cwd = "."
+inputs = ["chacha20-oracle", "chacha20-archive", "ghash-packaged-api", "hkdf-msrv"]
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+timeout_seconds = 600
+[checks.success]
+unique_lines = ["1.90.0: archived SSE2 owner: oracle and feature controls passed", "1.100.0: archived SSE2 owner: oracle and feature controls passed"]
+contains = ["CHACHA20_SSE2_DIFFERENTIAL_COMPLETE"]
+
+[groups.chacha20-arm-qemu]
+[[groups.chacha20-arm-qemu.tools]]
+program = "qemu-aarch64"
+
+[[checks]]
+component = "chacha20"
+id = "ietf-neon-qemu-archive-oracle"
+category = "differential"
+platform = "linux-x86_64"
+name = "Archived explicit four-block AArch64 NEON ChaCha20 under Linux QEMU against OpenSSL"
+establishes = "302 deterministic cases per compiler for archived AArch64 musl consumers under QEMU Cortex-A53, with feature/target isolation and corrupted-answer control. Not native Linux throughput or timing assurance."
+command = ["python3", "scripts/cryptography/check-chacha20-archive.py", "--neon-qemu-differential"]
+cwd = "."
+inputs = ["chacha20-arm-qemu", "chacha20-oracle", "chacha20-archive", "ghash-packaged-api", "hkdf-msrv"]
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+timeout_seconds = 600
+[checks.success]
+unique_lines = ["1.90.0: archived NEON (Linux QEMU) owner: oracle and feature controls passed", "1.100.0: archived NEON (Linux QEMU) owner: oracle and feature controls passed"]
+contains = ["CHACHA20_NEON_QEMU_DIFFERENTIAL_COMPLETE"]
+
+[groups.chacha20-rvv-probe]
+paths = ["Cargo.toml", "assurance/chacha20-parallel/Cargo.toml", "assurance/chacha20-parallel/Cargo.lock", "assurance/chacha20-parallel/src", "assurance/chacha20-parallel/tests", "assurance/chacha20-parallel/check-rvv.py", "crates/brynja-core", "crates/brynja-cipher-chacha", "crates/brynja-crypto-cpu/Cargo.toml", "crates/brynja-crypto/tests/chacha20/appendix.rs"]
+[[groups.chacha20-rvv-probe.tools]]
+program = "python3"
+[[groups.chacha20-rvv-probe.tools]]
+program = "qemu-riscv64"
+[[groups.chacha20-rvv-probe.tools]]
+program = "llvm-objdump"
+[[groups.chacha20-rvv-probe.tools]]
+program = "riscv64-linux-gnu-gcc"
+optional = true
+[[groups.chacha20-rvv-probe.tools]]
+program = "riscv64-suse-linux-gcc"
+optional = true
+[[groups.chacha20-rvv-probe.tools]]
+program = "cargo"
+toolchain = "1.100.0"
+[[groups.chacha20-rvv-probe.tools]]
+program = "rustc"
+toolchain = "1.100.0"
+
+[[checks]]
+component = "chacha20"
+id = "ietf-rvv-candidate-qemu"
+category = "emulated-control"
+platform = "linux-x86_64"
+name = "Research-only four-lane RVV: two vector lengths and no-V control"
+establishes = "Rebuilds the unpublished candidate on both Rust endpoints, checks linked vector rounds and emulated aligned-record correctness, counter refusal and no-V behavior. Not native throughput or admission of a public backend."
+command = ["python3", "assurance/chacha20-parallel/check-rvv.py"]
+cwd = "."
+inputs = ["chacha20-rvv-probe", "hkdf-msrv"]
+timeout_seconds = 600
+[checks.success]
+contains = ["CHACHA20_RVV_QEMU_COMPLETE"]
+unique_lines = ["1.90.0: RVV VLEN 128/256, no-V refusal and linked rounds passed", "1.100.0: RVV VLEN 128/256, no-V refusal and linked rounds passed"]
 
 [groups.chacha20-sanitizer]
 [[groups.chacha20-sanitizer.tools]]
@@ -84,7 +156,7 @@ id = "ietf-counter-proof"
 category = "kani"
 name = "RFC 8439 byte budget and first/last block counters"
 establishes = "Kani checks production reserve on all valid starting positions and nonempty usize lengths on the proof target: exact inclusive range, skip, block count, position advance and unchanged state on exhaustion. Not a proof of cipher arithmetic or timing."
-command = ["cargo", "+1.90.0", "kani", "-p", "brynja-crypto", "--no-default-features", "--features", "hazmat-chacha20", "--harness", "chacha20::admitted_requests_cannot_wrap_the_counter", "--exact"]
+command = ["cargo", "+1.90.0", "kani", "-p", "brynja-cipher-chacha", "--no-default-features", "--features", "hazmat-chacha20", "--harness", "chacha20::admitted_requests_cannot_wrap_the_counter", "--exact"]
 cwd = "."
 inputs = ["kani-tools", "ghash-packaged-api"]
 platform = "linux-x86_64"
@@ -97,7 +169,7 @@ unique_lines = ["Complete - 1 successfully verified harnesses, 0 failures, 1 tot
 contains = ["VERIFICATION:- SUCCESSFUL"]
 
 [groups.ghash-packaged-api]
-paths = ["Cargo.toml", "Cargo.lock", "assurance/ghash-public-api", "scripts/ghash/check-packaged-api.py", "scripts/hkdf/check-hkdf-public-api.py", "scripts/repository/facade_cargo_environment.py", "crates/brynja","crates/brynja-core","crates/brynja-crypto","crates/brynja-crypto-cpu","crates/brynja-crypto-cpu-std","crates/brynja-dtls","crates/brynja-hash-core","crates/brynja-hash-parallel","crates/brynja-hash-sha2","crates/brynja-hash-sha3","crates/brynja-hash-tuple","crates/brynja-mac-hmac","crates/brynja-mac-kmac","crates/brynja-pki","crates/brynja-platform","crates/brynja-protocol","crates/brynja-quic-tls","crates/brynja-tls","crates/brynja-tls12","crates/brynja-tls13","crates/brynja-tls13-handshake"]
+paths = ["Cargo.toml", "Cargo.lock", "assurance/ghash-public-api", "scripts/ghash/check-packaged-api.py", "scripts/hkdf/check-hkdf-public-api.py", "scripts/repository/facade_cargo_environment.py", "crates/brynja","crates/brynja-cipher-chacha","crates/brynja-core","crates/brynja-crypto","crates/brynja-crypto-cpu","crates/brynja-crypto-cpu-std","crates/brynja-dtls","crates/brynja-hash-core","crates/brynja-hash-parallel","crates/brynja-hash-sha2","crates/brynja-hash-sha3","crates/brynja-hash-tuple","crates/brynja-mac-hmac","crates/brynja-mac-kmac","crates/brynja-pki","crates/brynja-platform","crates/brynja-protocol","crates/brynja-quic-tls","crates/brynja-tls","crates/brynja-tls12","crates/brynja-tls13","crates/brynja-tls13-handshake"]
 optional_paths = [".cargo/config", ".cargo/config.toml"]
 [[groups.ghash-packaged-api.tools]]
 program = "python3"
@@ -362,7 +434,7 @@ minimum_tests = 5
 exact_tests = 5
 
 [groups.gmac-consumer]
-paths = ["assurance/gmac-consumer/Cargo.toml", "assurance/gmac-consumer/Cargo.lock", "assurance/gmac-consumer/src", "scripts/gmac/check-consumer.py", "Cargo.toml", "crates/brynja", "crates/brynja-core", "crates/brynja-crypto", "crates/brynja-hash-core", "crates/brynja-hash-parallel", "crates/brynja-hash-sha2", "crates/brynja-hash-sha3", "crates/brynja-hash-tuple", "crates/brynja-mac-hmac", "crates/brynja-mac-kmac", "crates/brynja-pki", "crates/brynja-protocol", "crates/brynja-tls", "crates/brynja-tls12", "crates/brynja-tls13", "crates/brynja-tls13-handshake"]
+paths = ["assurance/gmac-consumer/Cargo.toml", "assurance/gmac-consumer/Cargo.lock", "assurance/gmac-consumer/src", "scripts/gmac/check-consumer.py", "Cargo.toml", "crates/brynja", "crates/brynja-cipher-chacha","crates/brynja-core", "crates/brynja-crypto", "crates/brynja-hash-core", "crates/brynja-hash-parallel", "crates/brynja-hash-sha2", "crates/brynja-hash-sha3", "crates/brynja-hash-tuple", "crates/brynja-mac-hmac", "crates/brynja-mac-kmac", "crates/brynja-pki", "crates/brynja-protocol", "crates/brynja-tls", "crates/brynja-tls12", "crates/brynja-tls13", "crates/brynja-tls13-handshake"]
 optional_paths = [".cargo/config", ".cargo/config.toml"]
 [[groups.gmac-consumer.tools]]
 program = "python3"
@@ -428,7 +500,7 @@ unique_lines = ["1.90.0 direct: generate=2730 verify=2730 reject=2730","1.90.0 f
 contains = ["GMAC_BOUNDARY_COMPLETE"]
 
 [groups.aes-gcm-consumer]
-paths = ["assurance/aes-gcm-consumer/Cargo.toml", "assurance/aes-gcm-consumer/Cargo.lock", "assurance/aes-gcm-consumer/src", "scripts/aes-gcm/check-public-consumer.py", "Cargo.toml", "crates/brynja", "crates/brynja-core", "crates/brynja-crypto", "crates/brynja-hash-core", "crates/brynja-hash-parallel", "crates/brynja-hash-sha2", "crates/brynja-hash-sha3", "crates/brynja-hash-tuple", "crates/brynja-mac-hmac", "crates/brynja-mac-kmac", "crates/brynja-pki", "crates/brynja-protocol", "crates/brynja-tls", "crates/brynja-tls12", "crates/brynja-tls13", "crates/brynja-tls13-handshake"]
+paths = ["assurance/aes-gcm-consumer/Cargo.toml", "assurance/aes-gcm-consumer/Cargo.lock", "assurance/aes-gcm-consumer/src", "scripts/aes-gcm/check-public-consumer.py", "Cargo.toml", "crates/brynja", "crates/brynja-cipher-chacha","crates/brynja-core", "crates/brynja-crypto", "crates/brynja-hash-core", "crates/brynja-hash-parallel", "crates/brynja-hash-sha2", "crates/brynja-hash-sha3", "crates/brynja-hash-tuple", "crates/brynja-mac-hmac", "crates/brynja-mac-kmac", "crates/brynja-pki", "crates/brynja-protocol", "crates/brynja-tls", "crates/brynja-tls12", "crates/brynja-tls13", "crates/brynja-tls13-handshake"]
 optional_paths = [".cargo/config", ".cargo/config.toml"]
 [[groups.aes-gcm-consumer.tools]]
 program = "python3"
@@ -4706,7 +4778,7 @@ exact_tests = 8
 unique_lines = ["AES differential executable identity: unchanged; shared libraries not measured","AES packaged differential: PASS; 1.99.1 facade; debug/release; all three widths; no upload","AES_PACKAGED_DIFFERENTIAL_PROFILE: 1.99.1 facade debug; 12288 cases; both owners; public encryption checked","AES_PACKAGED_DIFFERENTIAL_PROFILE: 1.99.1 facade release; 12288 cases; both owners; public encryption checked"]
 
 [groups.aes-consumer]
-paths = ["assurance/aes-public-api/Cargo.toml", "assurance/aes-public-api/Cargo.lock", "assurance/aes-public-api/src/lib.rs", "assurance/aes-public-api/tests/consumer.rs", "assurance/aes-public-api/tests/wide/mod.rs", "assurance/aes-public-api/tests/roundtrip.rs", "assurance/aes-public-api/src/wide.rs", "scripts/aes/check-aes-consumer.py", "scripts/aes/test-aes-consumer.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py", "crates/brynja", "crates/brynja-core", "crates/brynja-crypto", "crates/brynja-hash-core", "crates/brynja-hash-parallel", "crates/brynja-hash-sha2", "crates/brynja-hash-sha3", "crates/brynja-hash-tuple", "crates/brynja-mac-hmac", "crates/brynja-mac-kmac", "crates/brynja-pki", "crates/brynja-protocol", "crates/brynja-tls", "crates/brynja-tls12", "crates/brynja-tls13", "crates/brynja-tls13-handshake"]
+paths = ["assurance/aes-public-api/Cargo.toml", "assurance/aes-public-api/Cargo.lock", "assurance/aes-public-api/src/lib.rs", "assurance/aes-public-api/tests/consumer.rs", "assurance/aes-public-api/tests/wide/mod.rs", "assurance/aes-public-api/tests/roundtrip.rs", "assurance/aes-public-api/src/wide.rs", "scripts/aes/check-aes-consumer.py", "scripts/aes/test-aes-consumer.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py", "crates/brynja", "crates/brynja-cipher-chacha","crates/brynja-core", "crates/brynja-crypto", "crates/brynja-hash-core", "crates/brynja-hash-parallel", "crates/brynja-hash-sha2", "crates/brynja-hash-sha3", "crates/brynja-hash-tuple", "crates/brynja-mac-hmac", "crates/brynja-mac-kmac", "crates/brynja-pki", "crates/brynja-protocol", "crates/brynja-tls", "crates/brynja-tls12", "crates/brynja-tls13", "crates/brynja-tls13-handshake"]
 [[groups.aes-consumer.tools]]
 program = "python3"
 
@@ -5561,7 +5633,7 @@ program = "rustc"
 toolchain = "1.100.0"
 
 [groups.hkdf-public-api-modern]
-paths = ["crates/brynja","crates/brynja-core","crates/brynja-crypto","crates/brynja-crypto-cpu","crates/brynja-crypto-cpu-std","crates/brynja-dtls","crates/brynja-hash-core","crates/brynja-hash-parallel","crates/brynja-hash-sha2","crates/brynja-hash-sha3","crates/brynja-hash-tuple","crates/brynja-mac-hmac","crates/brynja-mac-kmac","crates/brynja-pki","crates/brynja-platform","crates/brynja-protocol","crates/brynja-quic-tls","crates/brynja-tls","crates/brynja-tls12","crates/brynja-tls13","crates/brynja-tls13-handshake","assurance/hkdf-public-api/Cargo.toml","assurance/hkdf-public-api/Cargo.lock","assurance/hkdf-public-api/src"]
+paths = ["crates/brynja","crates/brynja-cipher-chacha","crates/brynja-core","crates/brynja-crypto","crates/brynja-crypto-cpu","crates/brynja-crypto-cpu-std","crates/brynja-dtls","crates/brynja-hash-core","crates/brynja-hash-parallel","crates/brynja-hash-sha2","crates/brynja-hash-sha3","crates/brynja-hash-tuple","crates/brynja-mac-hmac","crates/brynja-mac-kmac","crates/brynja-pki","crates/brynja-platform","crates/brynja-protocol","crates/brynja-quic-tls","crates/brynja-tls","crates/brynja-tls12","crates/brynja-tls13","crates/brynja-tls13-handshake","assurance/hkdf-public-api/Cargo.toml","assurance/hkdf-public-api/Cargo.lock","assurance/hkdf-public-api/src"]
 
 [[checks]]
 component = "hkdf"

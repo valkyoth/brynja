@@ -11,6 +11,8 @@ include = ["Cargo.toml","LICENSE-APACHE","LICENSE-MIT","README.md","src/**/*.rs"
 
 [features]
 default = []
+chacha20-sse2 = []
+chacha20-neon = []
 ghash-runtime-execution = []
 aes-static-execution = []
 aes-runtime-execution = ["aes-static-execution"]

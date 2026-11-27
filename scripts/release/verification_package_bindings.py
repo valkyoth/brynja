@@ -113,7 +113,7 @@ def definitions():
             helpers += ['scripts/sha2/check-sha2-bit-differential.py']
             fixtures += ['sha2-bit-differential']
         for mode in ('check', 'test'):
-            selected = (PACKAGES | {'brynja-crypto', 'brynja-hash-parallel'} if stem == 'sha256'
+            selected = (PACKAGES | {'brynja-crypto', 'brynja-hash-parallel', 'brynja-cipher-chacha'} if stem == 'sha256'
                         else set(FACADE_PACKAGES))
             extra = []
             markers = [f'{title} package-content acceptance: PASS'] if mode == 'check' else [regression]

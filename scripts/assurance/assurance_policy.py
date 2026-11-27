@@ -404,7 +404,8 @@ def build_evidence(policy: dict | None = None) -> dict:
         ROOT / "security/release-signers",
         ROOT / "docs/focused-assurance.md",
         *(ROOT / "scripts/repository" / name for name in (
-            "unsafe_policy.py", "check-unsafe-policy.py", "test-unsafe-policy.py")),
+            "unsafe_inventory.py", "unsafe_policy_fixtures.py", "unsafe_policy.py",
+            "check-unsafe-policy.py", "test-unsafe-policy.py")),
         *(ROOT / "scripts/zeroization" / name for name in (
             "zeroization_evidence.py", "check-zeroization-codegen.sh",
             "check-zeroization-evidence.py", "test-zeroization-evidence.py")),

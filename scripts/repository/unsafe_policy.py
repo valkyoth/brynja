@@ -6,122 +6,8 @@ from __future__ import annotations
 import hashlib
 import re
 from pathlib import Path
-from darwin_resident_abi import UNSAFE_MODULES as DARWIN_RESIDENT_MODULES
-ALLOWED = {
-    **DARWIN_RESIDENT_MODULES,
-    Path("crates/brynja-crypto-cpu-std/src/windows_enclave/native/namespace.rs"): ("2d0bcf8f51513bfbe8a0878fd3462acf08fce0f92f1dbdbfdddf5df4c5aa8e51", 2, 0, 2),
-    Path("crates/brynja-crypto-cpu-std/src/windows_enclave/native/sys.rs"): ("e7602798e350bc00512dd7aa921319e2f43ddffd7dff66b9f49db0f48df5aff0", 18, 0, 18),
-    Path("crates/brynja-crypto-cpu-std/src/windows_enclave/native/parallel_concurrent/callbacks.rs"): ("dfb7e29e4b5ad92bf9eb165e1e883ff1ed1e282d97fe33cbc29bc760594ea894", 0, 0, 0),
-    Path("crates/brynja-crypto-cpu-std/src/windows_enclave/native/callback.rs"): ("89db81947dc7619675feec15fddb6e53d17cb9d8a131263730d64552d0e5564d", 0, 0, 0),
-    Path("crates/brynja-crypto-cpu-std/src/protected_memory/platform.rs"): ("35e77466f3e2400ae70de5aed806d14ea4c5d8ea6f59bf8e89099313fcd3bf7e", 4, 0, 4),
-    Path("crates/brynja-crypto-cpu-std/src/protected_memory/platform/thread.rs"): ("ad5929a5b0f283aa57ef2b7c5801fb86e5ede6bbdee48f3d1b72cb8549797ed9", 8, 0, 8),
-    Path("crates/brynja-crypto-cpu-std/src/protected_memory/platform/sys.rs"): ("04b2b6cae7d7c069329fcf6036dae1a6a3b8b09555c26aa4965c168f8036b3dd", 6, 0, 6),
-    Path("crates/brynja-core/src/secret_memory_difference.rs"): ("6eb3156c9092a90050efe81c8aa5e136a5c6dbc06e59fd296c6a1e46c1148093", 3, 1, 3),
-    Path("crates/brynja-hash-core/src/secret_memory_predicate.rs"): ("d5f7b5de2140ce78d09563a2664c10bdaddfc81e9b218dfc56e4fdc4e89ed04c", 3, 1, 3),
-    Path("crates/brynja-core/src/secret_memory_predicate.rs"): ("d5f7b5de2140ce78d09563a2664c10bdaddfc81e9b218dfc56e4fdc4e89ed04c", 3, 1, 3),
-    Path("crates/brynja-core/src/secret_memory_xor.rs"): ("fc6c8a3caccc38c9b45795805b266bec60d2fcd10f1414f654d2e407af9bec7d", 3, 1, 3),
-    Path("crates/brynja-core/src/secret_memory_mask.rs"): ("a81ce3a6608d5baddf00190bb5e276db7d56aec5be320962eafcf89e70f05ac9", 3, 1, 3),
-    Path("crates/brynja-core/src/secret_memory_transfer.rs"): ("85f0cef7c2a8508c4d594ad7462bccb92fd8e5bea7897164d7df3ee655dcf3e0", 3, 1, 3),
-    Path("crates/brynja-hash-sha3/src/hardened/permutation/native.rs"): ("2c1ec8a76fd6bb28be65fc8bf53bcdbec3d0c7ddb86584f005563ffc6debd640", 3, 1, 3),
-    Path("crates/brynja-hash-sha2/src/hardened/compress64/native.rs"): ("df5e947205c991a83c410371811de6e44f00b38c8c9ce3141970d4585c8f1bc5", 3, 1, 3),
-    Path("crates/brynja-hash-sha2/src/hardened/compress32/native.rs"): ("08ea056cb766efe8c246f7772ca780ad6586baa82301fa5c40997737f06e2e32", 3, 1, 3),
-    Path("crates/brynja-legacy-sha1/src/compress/native.rs"): ("f785162fdf3c5ada9847cc5796db0b7a870d289707587c9d698d78a6d6355ad3", 3, 1, 3),
-    Path("crates/brynja-legacy-md5/src/compress/native.rs"): ("33adb9934e5b3c42ba112263a963266b8391d3b4e58fc7b94b27341df66ce33d", 3, 1, 3),
-    Path("crates/brynja-legacy-md5/src/cpu/transfer.rs"): ("086352bda68dd5908f397079dcaf8b30f75501510a993d00143d473db4c8d481", 6, 1, 6),
-    Path("crates/brynja-crypto-cpu/src/keccak_hardened_batch/transfer.rs"): ("b1293ffcbfe51b26b49bc17dfd861e917f151c8d73356e7902e3277efeec42d4", 6, 1, 6),
-    Path("crates/brynja-crypto-cpu/src/sha512_hardened_batch/transfer.rs"): ("1b87c3f35bde0f59fe65f54b2c14a1d93369d9c03fe6f20a7e336f7d7992ac1f", 6, 1, 6),
-    Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/transfer.rs"): ("d8e07cce1e24149d37874f3dd9828e587fbdf8ae61dd91bcf9b602ecbf914d5d", 6, 1, 6),
-    Path("crates/brynja-legacy-md5/src/cpu/x86_secret/kernel.rs"): ("3efe9dce167d2b1e8728adc81a8d7033657afdc9d21180a9c2b42e1223856aa9", 1, 1, 1),
-    Path("crates/brynja-legacy-md5/src/cpu/arm_secret/kernel.rs"): ("3134097267beea2f7d2c97abaf8d3fb721a870b38581a4e8dbc0245c4194515c", 1, 1, 1),
-    Path("crates/brynja-legacy-sha1/src/cpu/x86_sha1/secret.rs"): ("b7625787a8d512fc0f4129c002997e32b088e3dff52cc84c6c57a0decb75eab0", 1, 1, 1),
-    Path("crates/brynja-legacy-sha1/src/cpu/aarch64_sha1/secret.rs"): ("663c0964503b0063e0a4031133e4c633e33ca386d04eb19199840410aae2799e", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/keccak_hardened_batch/x86/secret.rs"): ("b853abff14b17c5cdc48be23e1e0ce8f6f4ec7653757231a7ab08cbd2d081a5f", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/keccak_hardened_batch/arm/secret.rs"): ("db9a59d97c9ffbf81b0572a8e9cce770dbc89a409c22db4c6d85fb65f3f92ba8", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/sha512_hardened_batch/x86/secret.rs"): ("31658d70a760e4d2688a93f307f90a6d509fd5cd2f84cbf0296ab57225ddcb4e", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/sha512_hardened_batch/arm/secret.rs"): ("807a94ee4f3f8d73c1c945e8899121f6f3635a9ef438f2eb309477f4d5b550c5", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/x86/secret.rs"): ("59631be40d1d8ab35eb055f62a427c6b44901c4998927a077e7a26219f64e56f", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/arm/secret.rs"): ("f29271f331283b937532ab931894679d4ee6a1a4049dfbff687c389ff5dfb946", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/x86_avx2_keccak/secret.rs"): ("02ff4ce6f630d0da916cbb212e77d2bf04e834b7c15ee7eda8b53f221b48d5e6", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/aarch64_sha3_keccak/secret.rs"): ("5e01c5624d8783c742f8d5e04cd6f276bbb158d80fe10160c1d17b715aa36949", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/x86_sha/secret.rs"): ("f8afc16ed5a53259391a9a32a87b3127a9d0556ce634a3cb2ac415a87d7f5adb", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/aarch64_sha2/secret256.rs"): ("2ee599b4176cd3c278335dddc2292a8b65eb5094ca5c80a7993d3d9c0c038c9f", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/x86_sha512/secret.rs"): ("333d5588c1e3ff4f9a0ea5ab9584fa9f1342452ebb4b01ad17d9982df8c6c2a7", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/aarch64_sha2/secret512.rs"): ("8febc7fc79bb5813590293d8b17bc5d9f1bcb56f17dba55c844f28dd89bcf96e", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/x86_sha512.rs"): ("9530acc46f67ba8f50f009bb2e837c2732b3f88cb80ba7847acf7229fce5d12c", 5, 1, 5),
-    Path("crates/brynja-crypto-cpu-std/src/sha256_hardened_batch/platform.rs"): ("6784643cde62181da1f6133b9fb629087963fe0785e2020996d2f0ac665e4afb", 1, 0, 1),
-    Path("crates/brynja-crypto-cpu-std/src/sha512_hardened_batch/platform.rs"): ("6784643cde62181da1f6133b9fb629087963fe0785e2020996d2f0ac665e4afb", 1, 0, 1),
-    Path("crates/brynja-crypto-cpu-std/src/keccak_hardened_batch/platform.rs"): ("6784643cde62181da1f6133b9fb629087963fe0785e2020996d2f0ac665e4afb", 1, 0, 1),
-    Path("crates/brynja-crypto-cpu/src/keccak_hardened_batch/platform.rs"): ("aaceb66eb54d19f782b876ae626a39f134e67da6f3515e37f90ada2fb95cc0c9", 2, 1, 2),
-    Path("crates/brynja-crypto-cpu/src/keccak_hardened_batch/x86.rs"): ("c86f9e8e991b198c5771f92d96fc994a74cfcd1ad3499ddc2c524e90a9c36c1d", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/keccak_hardened_batch/arm.rs"): ("bea57ebfa2d29bc3ecea4c466314c4d020a12e7ed56d5512b9050396947deb08", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/sha512_hardened_batch/platform.rs"): ("24dea1b5fd00a72b980ea8d0b89851b0654823a4009722e0995096e3beb5700c", 2, 1, 2),
-    Path("crates/brynja-crypto-cpu/src/sha512_hardened_batch/x86.rs"): ("29925113a8a38b4ece7b722ad6fa9de3b893a43a4cddf59e28ddd2985a6e4213", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/sha512_hardened_batch/arm.rs"): ("be48362dfd6aef45fc4b4cb7fbeb953cf739126b89c8926c0e8f2cfd34c6f8bf", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/platform.rs"): ("24dea1b5fd00a72b980ea8d0b89851b0654823a4009722e0995096e3beb5700c", 2, 1, 2),
-    Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/x86.rs"): ("37f291ed1e6527f61f12000837d606cd3d814b9325d79594ee6f73b138806110", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/sha256_hardened_batch/arm.rs"): ("77a97032b2bb929533dc6ba098c94a120ad0e5b770a2c25f0868547f196dd8de", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/keccak_batch/platform.rs"): ("e77387ad44d2470852b11262fc11784809fc9b8e09ac1a0bfe2751f5157ff7e9", 2, 1, 2),
-    Path("crates/brynja-crypto-cpu/src/keccak_batch/x86.rs"): ("cef6c1433caf37131fc0afb6844985c2e9ee73ed375e31eab23ad1402148edba", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/keccak_batch/arm.rs"): ("55e21fafdd904842332b46b65e0199469d36ed9376d5c6c93b13fac77a2f7223", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu-std/src/keccak_batch/platform.rs"): ("8865e11ca3156c3bd8ec918aa144f7eb27d9046a7b9fd5c0e71553e95bc5a2b9", 1, 0, 1),
-    Path("crates/brynja-crypto-cpu/src/sha512_batch/platform.rs"): ("0fddd6e9a4f0856e5515eee16b9a7e1b1a11f1be3431fc89848b338adb6255c6", 2, 1, 2),
-    Path("crates/brynja-crypto-cpu/src/sha512_batch/x86.rs"): ("ca1e537b146856aff863eb9ee00c248c550af3b29c9cae3eb8fecb75646e3803", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/sha512_batch/arm.rs"): ("dcd014bf4be3708a283bda015516fde1b685cf1046b28686f11c498ed151754c", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu-std/src/sha512_batch/platform.rs"): ("8865e11ca3156c3bd8ec918aa144f7eb27d9046a7b9fd5c0e71553e95bc5a2b9", 1, 0, 1),
-    Path("crates/brynja-crypto-cpu/src/sha256_batch/platform.rs"): ("8b41c22d5d2ec836f68e599c8966d15ae583b783469004621339f4960c6ab415", 2, 1, 2),
-    Path("crates/brynja-crypto-cpu/src/sha256_batch/x86.rs"): ("d286878c8180cac08828556ff1ba3e1da4d33527d9a09364ebd3125296c0d3c0", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu/src/sha256_batch/arm.rs"): ("42cce4243621807a453db7fb48876487ea39ee2c1749f2f8e54dba7d0e63ec51", 1, 1, 1),
-    Path("crates/brynja-crypto-cpu-std/src/sha256_batch/platform.rs"): ("8865e11ca3156c3bd8ec918aa144f7eb27d9046a7b9fd5c0e71553e95bc5a2b9", 1, 0, 1),
-    Path("crates/brynja-legacy-md5/src/cpu/secret.rs"): ("1fd19b0d4167991ae1cb93ec209807350e334a3a85b3204124f013f05afbddb8", 2, 1, 2),
-    Path("crates/brynja-legacy-md5/src/cpu/x86_secret.rs"): ("03ba73e4d293fb3b8d3095f68220927dd48a4dd2102858791e1c74885e8346f3", 1, 1, 1),
-    Path("crates/brynja-legacy-md5/src/cpu/arm_secret.rs"): ("6e6d7883d222b9ec2b4211b5c2a4d5a0902ec33d8c4348c97d714a4c4ea33a71", 1, 1, 1),
-    Path("crates/brynja-legacy-md5-std/src/hardened_execution/platform.rs"): ("552ae73fb7389f0450e637f6c3e7d3b6b57b904694084eeb71e7fa860df34832", 1, 0, 1),
-    Path("crates/brynja-legacy-sha1/src/cpu/secret.rs"): ("135ab0dae0b9fbaf8dc147bf55ccf7e167c667ee675b980679ced331a3d6464e", 2, 1, 2),
-    Path("crates/brynja-crypto-cpu/src/runtime_execution/mod.rs"): (
-        "19939961ef4e56f06df2154c7a5bde59f5e2d8289a044a858032ea1ab3e6d8d0", 0, 1, 0,
-    ),
-    Path("crates/brynja-crypto-cpu-std/src/execution/platform.rs"): (
-        "777c14162432b633fc9ce13e4bd8ef397eb6258c9abf2d38a9cf0a04e44e2b19", 1, 0, 1,
-    ),
-    Path("crates/brynja-legacy-md5/src/cpu/session.rs"): ("96c89bc6bf0cb9a2f0fb7b3be0c6a608a30eba9627a13233ca90f3f8548f3c5f", 4, 2, 4),
-    Path("crates/brynja-legacy-md5-std/src/execution/platform.rs"): ("351571ad239d08b806f9e966aac9633cdc785407526afe66433d08bb1e327b55", 1, 0, 1),
-    Path("crates/brynja-legacy-md5/src/cpu/x86_avx2_md5.rs"): ("ed6bc494e363fc24256b835b5d4ee52b0785f4d46028a5bdb7ca8446d597ea8e", 1, 1, 1),
-    Path("crates/brynja-legacy-md5/src/cpu/aarch64_neon_md5.rs"): ("95266c29fe1ce486477bf32d5276dc8f241cb3d57c1ce2dedfe8d8f335199651", 1, 1, 1),
-    Path("crates/brynja-legacy-sha1/src/cpu/session.rs"): ("543c1ee7cec6d33c86c67b3dd06011e60417fbbc0cc6e1664fbc6cad39fbad77", 3, 2, 3),
-    Path("crates/brynja-legacy-sha1-std/src/execution/platform.rs"): ("229f0b76150b65dffcea7e51f4e98d085622ee8356f8cd79d54ca51e18c2eea3", 2, 0, 2),
-    Path("crates/brynja-legacy-sha1/src/cpu/x86_sha1.rs"): ("885555cbbddbfa704599e2d3c30493e2a39496cee6032d9262891e0a212c8d07", 2, 2, 2),
-    Path("crates/brynja-legacy-sha1/src/cpu/aarch64_sha1.rs"): ("89e4b91af4adf587828396a612e8d3c1f14a8160176edbb58a5f1d49ae882f4e", 4, 2, 4),
-    Path("crates/brynja-core/src/secret_memory_volatile.rs"): (
-        "44ee344e643429e45061dc8f3aacaf985789058c594ca7d54198077eaa8f756c",
-        1,
-        0,
-        1,
-    ),
-    Path("crates/brynja-crypto-cpu/src/sha256.rs"): (
-        "31e899058bbb2b2c5d5e43908fcf5a5e61862fa2f3f5a5df73eb1e6f1c63dd44", 0, 2, 0,
-    ),
-    Path("crates/brynja-crypto-cpu/src/x86_sha.rs"): (
-        "4d5f8e820fb177f43b79de2ba887e2c8d43f555263782d759a129c81e47c655a", 3, 1, 3,
-    ),
-    Path("crates/brynja-crypto-cpu/src/aarch64_sha2.rs"): (
-        "e9869ccd9e6bb2795a1ee753be0d1b6833009e507d84d904494f591964c3dc2f", 10, 2, 10,
-    ),
-    Path("crates/brynja-crypto-cpu/src/riscv64_zknh.rs"): (
-        "4666c10486046cdd5a7caf8c99dc1c87b41c4f4ae4aa697a966067b89b38c619", 8, 2, 8,
-    ),
-    Path("crates/brynja-crypto-cpu/src/keccak.rs"): (
-        "57f019950ad5b38da3da620be36b3026e91d7aeee262bd1b5861ba7fe48c804a", 0, 1, 0,
-    ),
-    Path("crates/brynja-crypto-cpu/src/x86_avx2_keccak.rs"): (
-        "25820050594a2f20027667c4f5ed53b8194d516d94e8c80b19a7f72516d5b1bf", 4, 1, 4,
-    ),
-    Path("crates/brynja-crypto-cpu/src/aarch64_sha3_keccak.rs"): (
-        "c4ac153bcf66d98f015e796151aa4ea68d6abe2330f418fef84d2b1dc63ea56f", 4, 1, 4,
-    ),
-    Path("crates/brynja-crypto-cpu-std/src/runtime_detection.rs"): (
-        "f80399ec92f54a4a7deaf5588e729908a1f730549f30de5bdfdc826c6cb31de5", 1, 0, 1,
-    ),
-}
+from unsafe_inventory import ALLOWED, PATH_ATTRIBUTE, SOURCE_IMPORTERS
+
 UNSAFE_BLOCK = re.compile(r"\bunsafe\s*\{")
 UNSAFE_ITEM = re.compile(r'\bunsafe\s+(?:extern\s+"[^"]+"\s+)?(?:fn|impl|trait)\b')
 UNSAFE_ALLOW = "allow(unsafe_code)"
@@ -129,12 +15,56 @@ FORBIDDEN_IDENTIFIER = re.compile(
     r"\b(?:unsafe|unsafe_code|asm|global_asm|llvm_asm|naked_asm|include|path)\b"
 )
 FOREIGN_ABI = re.compile(r'\bextern\s*(?:/\*.*?\*/\s*)?"', re.DOTALL)
+
+# The scanner is deliberately conservative; do not ignore all comments, or
+# all occurrences of "path" (attributes can be split across lines).
+_DIFFERENTIAL_LINES = frozenset({
+    'path::{Path, PathBuf},', 'let path =',
+    'if !path.is_absolute() || !path.is_file() {', 'Ok(path.canonicalize()?)',
+})
+BENIGN_LINES = {
+    Path('crates/brynja-crypto/tests/aes128_differential.rs'): _DIFFERENTIAL_LINES,
+    Path('crates/brynja-crypto/tests/aes_wide_differential.rs'): _DIFFERENTIAL_LINES,
+    Path('crates/brynja-crypto/src/aes_gcm/interruptions.rs'): {
+        'path: &[Step],', 'for n in 1..=path.len() {',
+        'let prefix = path.get(..n).ok_or("invalid test prefix")?;',
+        'for (seal, candidate, path) in [', 'sweep(path, |prefix, unwind| {',
+    },
+    Path('crates/brynja-crypto/src/aes.rs'): {
+        '// Repository-only research snapshot. This path is outside the published crate',
+    },
+    Path('crates/brynja-crypto/src/aes_gcm/portable/x86_pair_tests.rs'): {
+        '// Published empty-message answer: the 96-bit fast path hashes only the message.',
+    },
+    Path('crates/brynja-crypto/src/chacha20.rs'): {
+        '//! Raw RFC 8439 stream cipher. This compatibility path re-exports the standalone',
+    },
+    Path('crates/brynja-crypto/src/hkdf/derive.rs'): {
+        '// Keep the bounded Miri-selected fault test on the multipart path too.',
+    },
+    Path('crates/brynja-crypto/src/hkdf/parameters.rs'): {
+        '/// slices of one allocation are allowed. No unsafe aliasing workaround exists.',
+    },
+}
+
 class UnsafePolicyError(RuntimeError):
     """The unsafe inventory differs from the approved reviewed exceptions."""
 
 
 def fail(message: str) -> None:
     raise UnsafePolicyError(message)
+
+
+def check_import_targets(root: Path, relative: Path, text: str) -> None:
+    for name in PATH_ATTRIBUTE.findall(text):
+        target = root / relative.parent / name
+        if (not target.is_file() or target.is_symlink() or
+                any(parent.is_symlink() for parent in target.parents if parent.is_relative_to(root))):
+            fail(f"missing or symlinked reviewed module target: {relative}: {name}")
+        resolved = target.resolve()
+        if not any(resolved.is_relative_to(root.resolve() / tree) for tree in
+                   ("crates", "research/aes-fault-integrity")):
+            fail(f"reviewed module target outside source trees: {relative}: {name}")
 
 
 def validate(root: Path) -> None:
@@ -159,17 +89,26 @@ def validate(root: Path) -> None:
             parent_is_symlink = parent_is_symlink or current.is_symlink()
         if not path.is_file() or path.is_symlink() or parent_is_symlink:
             fail(f"Rust source must be a regular non-symlink file: {path}")
-        text = path.read_text(encoding="utf-8")
+        data = path.read_bytes()
+        text = data.decode("utf-8")
         relative = path.relative_to(root)
         if path in allowed_paths:
-            relative = path.relative_to(root)
             expected_hash, blocks, items, proofs = ALLOWED[relative]
-            digest = hashlib.sha256(path.read_bytes()).hexdigest()
+            digest = hashlib.sha256(data).hexdigest()
             if digest != expected_hash:
-                fail("approved unsafe module changed; reopen security review")
+                fail(f"approved unsafe module changed; reopen security review: {relative}")
             validate_allowed(relative, text, blocks, items, proofs)
-        # Permit only the standard filesystem namespace, never module attributes.
-        elif FORBIDDEN_IDENTIFIER.search(text.replace('std::path::', '')) is not None or FOREIGN_ABI.search(text) is not None:
+            check_import_targets(root, relative, text)
+            continue
+        if relative in SOURCE_IMPORTERS and PATH_ATTRIBUTE.search(text):
+            if hashlib.sha256(data).hexdigest() != SOURCE_IMPORTERS[relative]:
+                fail(f"reviewed source-import context changed: {relative}")
+            check_import_targets(root, relative, text)
+            text = PATH_ATTRIBUTE.sub('', text)
+        benign = BENIGN_LINES.get(relative, ())
+        scanned = '\n'.join(line for line in text.split('\n') if line.strip() not in benign)
+        scanned = re.sub(r'(?m)^#!\[forbid\(unsafe_code\)\]$', '', scanned.replace('std::path::', ''))
+        if FORBIDDEN_IDENTIFIER.search(scanned) or FOREIGN_ABI.search(text):
             fail(f"unapproved low-level or code-inclusion token: {relative}")
 
     library = (root / "crates/brynja-core/src/lib.rs").read_text(encoding="utf-8")
@@ -215,8 +154,13 @@ def validate_allowed(
     expected_items: int,
     expected_proofs: int,
 ) -> None:
-    if text.count(UNSAFE_ALLOW) != 1:
-        fail("approved module must contain one exact unsafe-code allowance")
+    allowances = {
+        Path('crates/brynja-crypto-cpu/src/aes/mod.rs'): 4,
+        Path('crates/brynja-crypto-cpu/src/aes/dit.rs'): 3,
+        Path('crates/brynja-crypto-cpu/src/ghash_admission.rs'): 0,
+    }.get(relative, 1)
+    if text.count(UNSAFE_ALLOW) != allowances:
+        fail(f"approved module unsafe-code allowance count changed: {relative}")
     if len(UNSAFE_BLOCK.findall(text)) != expected_blocks:
         fail(f"approved unsafe-block inventory changed: {relative}")
     if len(UNSAFE_ITEM.findall(text)) != expected_items:
@@ -479,13 +423,20 @@ def validate_allowed(
             fail("register boundary weakened clobbers or memory effects")
     elif relative.name in {
         "x86_sha.rs", "x86_sha512.rs", "aarch64_sha2.rs", "riscv64_zknh.rs", "x86_sha1.rs", "aarch64_sha1.rs",
-        "x86_avx2_keccak.rs", "aarch64_sha3_keccak.rs", "x86_avx2_md5.rs", "aarch64_neon_md5.rs",
+        "x86_avx2_keccak.rs", "aarch64_sha3_keccak.rs", "x86_avx2_md5.rs", "aarch64_neon_md5.rs", "chacha20_sse2.rs", "chacha20_neon.rs",
     }:
         if "#[target_feature" not in text or "core::arch" not in text:
             fail(f"CPU kernel lost its intrinsic boundary: {relative}")
         if relative.name == "riscv64_zknh.rs":
             if text.count("asm!(") != 6 or "global_asm!(" in text:
                 fail("RISC-V kernel inline-assembly inventory drifted")
+            for boundary in ('compress_zknh(', 'expanded(', 'compress_zknh512('):
+                if text.count('#[target_feature(enable = "zknh")]\nunsafe fn ' + boundary) != 1:
+                    fail("RISC-V kernel lost a Zknh feature boundary")
+            if ('let schedule = unsafe { expanded(block) };' not in text or
+                    any(text.count(f'asm!("{op} {{output}}, {{input}}"') != 1 for op in
+                        ('sha256sig0', 'sha256sig1', 'sha256sum0', 'sha256sum1', 'sha512sum0', 'sha512sum1'))):
+                fail("RISC-V kernel schedule or instruction inventory drifted")
         elif re.search(r'extern\s+"C"|\basm\s*!|\bglobal_asm\s*!', text):
             fail(f"CPU kernel introduced native linkage or assembly: {relative}")
     elif relative.name == "runtime_detection.rs":

@@ -55,7 +55,14 @@ optional = { strict-execution = "brynja-crypto-cpu-std" }
 class = "modern-shared"
 publish = "crates-io"
 required = ["brynja-core", "brynja-hash-parallel", "brynja-hash-sha2", "brynja-hash-sha3", "brynja-hash-tuple", "brynja-mac-kmac", "brynja-mac-hmac"]
-optional = { cpu = "brynja-crypto-cpu" }
+optional = { cpu = "brynja-crypto-cpu", hazmat-chacha20 = "brynja-cipher-chacha" }
+
+[packages.brynja-cipher-chacha]
+class = "modern-shared"
+publish = "crates-io"
+required = ["brynja-core"]
+optional = { chacha20-sse2 = "brynja-crypto-cpu" }
+features = ["hazmat-chacha20", "chacha20-neon"]
 
 [packages.brynja-hash-core]
 class = "modern-shared"
@@ -117,7 +124,7 @@ class = "cpu-backend"
 publish = "crates-io"
 required = []
 optional = { hardened-execution = "brynja-core" }
-features = ["static-execution", "runtime-execution", "sha256-batch"]
+features = ["static-execution", "runtime-execution", "sha256-batch", "chacha20-sse2", "chacha20-neon"]
 
 [packages.brynja-crypto-cpu-std]
 class = "host-adapter"

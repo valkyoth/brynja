@@ -39,7 +39,7 @@ CRYPTO['ghash-runtime-execution'] = ['hazmat-ghash', 'dep:brynja-crypto-cpu',
                                      'brynja-crypto-cpu/ghash-runtime-execution']
 FEATURES = {
     # Only a direct dependency can select the extra raw stream feature.
-    'brynja-crypto': {**CRYPTO, 'hazmat-chacha20': []},
+    'brynja-crypto': {**CRYPTO, 'hazmat-chacha20': ['dep:brynja-cipher-chacha', 'brynja-cipher-chacha/hazmat-chacha20']},
     'brynja': {feature: ['brynja-crypto/' + feature] for feature in CRYPTO},
 }
 FEATURES['brynja']['ghash-runtime-execution'] = ['hazmat-ghash',
@@ -61,6 +61,8 @@ def validate_isolation(modern, edges, names, packages, reachable):
     # HMAC owns an additional direct, default-off CPU edge. The independent
     # extracted protocol consumer checks below never remove either edge.
     protocol_edges[names['brynja-mac-hmac']].discard(names['brynja-crypto-cpu'])
+    # The standalone stream's SSE2 feature is not forwarded by the facade.
+    protocol_edges[names['brynja-cipher-chacha']].discard(names['brynja-crypto-cpu'])
     for engine in ('brynja-tls', 'brynja-tls12', 'brynja-tls13',
                    'brynja-tls13-handshake', 'brynja-dtls', 'brynja-quic-tls'):
         reached = reachable(engine, names, packages, protocol_edges)

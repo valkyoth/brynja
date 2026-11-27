@@ -1,10 +1,30 @@
 # Portable IETF ChaCha20 (v0.30.0)
 
 This is the raw RFC 8439 stream needed by the planned authenticated construction,
-not a secure messaging API. It is available only when the direct
-`brynja-crypto/hazmat-chacha20` feature is enabled. Cargo feature unification
+not a secure messaging API. Since the v0.30.1 extraction the implementation is in
+`brynja-cipher-chacha`; use its default-off `hazmat-chacha20` feature to
+import `brynja_cipher_chacha::ChaCha20`. The existing
+`brynja-crypto/hazmat-chacha20` re-exports the same owner and error. Cargo feature unification
 can make the module visible through the facade's existing crate re-export;
 the facade provides no feature that selects it.
+
+The registered public symbol remains the compatibility re-export. The
+[production counter reservation](../../crates/brynja-cipher-chacha/src/chacha20.rs)
+and [scalar rounds](../../crates/brynja-cipher-chacha/src/chacha20/block.rs)
+now live only in the leaf; the Kani harness runs there.
+
+In the v0.30.1 development tree the standalone crate also offers an explicit
+`ChaCha20Sse2` owner on x86-64 SSE2 targets under `chacha20-sse2`, and
+`ChaCha20Neon` on little-endian AArch64 NEON targets under `chacha20-neon`. The leaf
+owns reservation, head/tail handling and feedforward; only the packed permutation
+lives in `brynja-crypto-cpu`. Neither the scalar constructor nor its compatibility
+import dispatches implicitly. The [public-owner tests and throughput samples](../../assurance/chacha20-parallel/README.md)
+are distinct from side-channel qualification. The Linux x86-64 runner exercises
+the archived SSE2 owner natively and the archived NEON owner under Linux QEMU.
+Native NEON performance was measured on Apple M2 Pro only. On Linux RV64 the
+research-only V candidate passed native correctness on SpacemiT X60 and QEMU
+controls, but missed the predeclared throughput criterion at every vectorized
+size on both compiler endpoints. The RV64 public API remains scalar.
 
 The owner borrows a 256-bit key and takes a 96-bit nonce and explicit 32-bit
 starting counter. A successful call consumes exactly the requested bytes.
@@ -33,7 +53,7 @@ AEAD, hardware dispatch, or target timing qualification in this milestone.
 Run `brynja-verify run chacha20 --needed` from the repository. No network
 access or keys from an application are needed.
 
-- **Archive:** builds a direct consumer from local Cargo archives on Rust
+- **Archive:** builds separate standalone and compatibility consumers from local Cargo archives on Rust
   1.90.0 and 1.100.0. It checks the RFC block and cipher examples and all eight
   Appendix A.1/A.2 vectors, partitions, final-counter behavior, and import and
   overlap restrictions. Cortex-M is a compile check, not device execution.

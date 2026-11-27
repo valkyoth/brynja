@@ -1,7 +1,7 @@
 {
-  "closure_policy_sha256": "55cde96d150d9423ff9e4ac585b5809afede564e737aa72e2c3b32c8fa5040f8",
-  "domain_policy_sha256": "cb85b010eae5d5cbac49ecd6202c3f7c68677d38d61b8d336a0de71e8eab08b4",
-  "policy_sha256": "22fe5e02c3e69a41b868bf61bd7dce17d0330182fb2589ce4c4bcc9c1e37dab5",
+  "closure_policy_sha256": "56163ce06f4bda14181ee734a37ad308446c856a98988f707c9baae9aad3848a",
+  "domain_policy_sha256": "414f03b04d39c1df349c4cdfc018903dab17af089a3936c8379dad68d454b179",
+  "policy_sha256": "d6de8900db2d96d32c04a6e95e04c671c0d38fc6f38075b802ad5caa8dd28911",
   "requirements": [
     {
       "applicability": "delegate",
@@ -1531,7 +1531,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "Archived RFC examples, an independent scalar differential campaign and a Kani proof of the byte-budget predicate are scoped in docs/assurance/chacha20-development.md. These do not establish target-specific timing, physical erasure or authenticated encryption.",
+      "evidence_gap": "Archived portable, SSE2 and NEON stream comparisons and the counter-reservation proof are scoped in docs/assurance/chacha20-development.md. SIMD correctness does not establish target-specific timing, physical erasure or authenticated encryption. RV64 remains portable.",
       "id": "BRY-REQ-CRYPTO-0008",
       "invariants": [
         "constant-time",
@@ -1545,7 +1545,7 @@
       "owner": "0.30.0",
       "profile": "crypto-encoding-pkix",
       "residual": "The raw stream cipher is never exposed as a facade security service and is admitted only for reviewed compositions.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -1650,7 +1650,7 @@
       "targets": [
         {
           "kind": "actual-symbol",
-          "target": "crates/brynja-crypto/src/chacha20.rs#ChaCha20"
+          "target": "crates/brynja-cipher-chacha/src/chacha20.rs#ChaCha20"
         }
       ],
       "tests": [
@@ -31268,9 +31268,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "b9674cce1ad2286000adae728b4cb8eaa6d3a2bfd178e444a9137c98ca63bf57",
+  "residual_policy_sha256": "f520849ac08eef9b832f4e34527bacbd2f8c8c858929e121f25d683b9838b4a1",
   "schema": 5,
   "source_ledger_sha256": "39e86f6144d5ee20aa8b114a5d2662bef933275477b00a2e002e3e63dce31e78",
-  "surface_register_sha256": "4ed7e6644410802ce9137362e67c2195d701667209f9902833a78855923e3a80",
-  "transport_policy_sha256": "093e182491f3406711ecb489bff822990d644013f60a96a5bd9917cd18756bb1"
+  "surface_register_sha256": "8d5c9c1f3e85850c94d17fe8c8eac0ab0125389da1462f2e8f098bcbbafe3cb3",
+  "transport_policy_sha256": "39c7c6821267d2bb2c63d12bf3e3a69a36b3822f3f7641a5e60312a242732c4a"
 }

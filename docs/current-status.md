@@ -1,13 +1,23 @@
 # Current Status
 
-Current development: v0.29.1 portable GMAC. The separate, default-off `gmac`
+Latest signed internal milestone: [v0.30.0, portable ChaCha20](../release-notes/RELEASE_NOTES_0.30.0.md).
+In the [v0.30.1 internal candidate](../release-notes/RELEASE_NOTES_0.30.1.md),
+portable ChaCha20 is available from the standalone crate and its existing
+compatibility import. The standalone crate also has explicit four-block SSE2
+(x86-64) and NEON (little-endian AArch64) owners. NEON has
+native Apple M2 Pro and emulated Linux correctness coverage. Ordinary callers
+remain on the portable path. RISC-V also stays portable: the four-lane RVV
+candidate was correct but slower on the [native SpacemiT X60 comparison](../assurance/chacha20-parallel/README.md#rv64-v-candidate-admission-experiment).
+The next scheduled crates.io checkpoint is v0.30.6, after package acceptance.
+
+Historical snapshot (v0.29.1 portable GMAC): the separate, default-off `gmac`
 feature authenticates associated data using AES-128/192/256. The public API
 returns an IV and a typed tag, never ciphertext. The application allocates
 disjoint sender reservations and handles replay. The [GMAC checks](assurance/gmac-development.md)
 cover the 6,750 applicable NIST cases and 2,730 independent boundary messages
 on separate direct/facade consumers on Rust 1.90.0 and 1.100.0. Release review remains open.
 
-The last signed internal tag is [v0.29.0, portable AES-GCM](../release-notes/RELEASE_NOTES_0.29.0.md).
+The preceding signed internal tag was [v0.29.0, portable AES-GCM](../release-notes/RELEASE_NOTES_0.29.0.md).
 No crates were published. The [Arm timing limits](assurance/ghash-acceleration.md) remain unchanged.
 
 Historical development snapshot (2026-11-01): v0.26.0 HKDF was a local candidate based on
@@ -127,7 +137,7 @@ v0.24.23 closed ordinary/hardened SHA-1/MD5 byte/bit
 and batch public acceptance using the frozen v0.24.20 contract. See
 [final legacy acceptance](legacy-hash-final-acceptance.md). All instruction
 candidates for those original legacy APIs remain unadmitted. The original hardened owners remain portable; separate opt-in SHA-1 ordinary and hardened operational authorities do not change those candidate gates.
-Public checkpoints now use explicit closing patches: v0.25.2, v0.30.2 and the
+Public checkpoints use explicit closing patches: v0.25.3, planned v0.30.6 and the
 [registered successors](../scripts/release/checkpoints.toml). Earlier milestone
 narratives below describe their status at the time, not today's status tables.
 

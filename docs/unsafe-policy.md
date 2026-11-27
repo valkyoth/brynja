@@ -1,9 +1,9 @@
 # Unsafe Rust Policy
 
-Status: one hundred exact source-hash-bound exceptions inventoried, including three Linux OS-resource modules, four Windows enclave boundary modules and thirteen private Darwin resident-resource modules; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: 115 exact source-hash-bound exceptions inventoried, including three Linux OS-resource modules, four Windows enclave boundary modules and thirteen private Darwin resident-resource modules; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only one hundred exact modules: the private core volatile clearer and
+Rust in only 115 exact modules: the private core volatile clearer and
 checked secret-initialization transfer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V
@@ -28,9 +28,28 @@ complete source is pinned by SHA-256 with exact unsafe-block, unsafe-item,
 local safety-proof, target-feature, intrinsic, assembly, and detector
 invariants. Any byte change reopens review before semantic checks run. Every
 other Rust source rejects unsafe, local unsafe allowances, assembly, FFI, and
-code inclusion. Foreign source, native objects, build scripts, unapproved native links,
+unreviewed code inclusion. Foreign source, native objects, build scripts, unapproved native links,
 and external C cryptographic modules remain forbidden repository-wide. Rust
 sources must be regular files beneath non-symlink package directories.
+
+The v0.30.1 inventory includes two default-off ChaCha20 execution kernels
+(SSE2 and NEON). It also reconciles thirteen AES and GHASH source files already
+present, byte-for-byte, in v0.30.0. These are the AES authority, platform bridge,
+DIT scope, architecture kernels and authority test, and the GHASH admission and
+three architecture modules. See the [AES](assurance/aes-acceleration-development.md),
+[RISC-V AES](assurance/aes-riscv-development.md) and
+[GHASH](assurance/ghash-acceleration.md) records for their original scope.
+Updating this inventory does not enable a backend or extend its qualification.
+The RISC-V SHA schedule helper is pinned with its own Zknh feature boundary,
+in addition to the SHA-256 and SHA-512 compression boundaries.
+
+Existing test fixtures and archived AES research modules use explicit Rust
+module paths. These are **not** unsafe exceptions: the checker binds the
+importer's source (including its configuration guards), checks that its target
+is a regular file reached without symlinks, and still scans crate sources for
+unapproved unsafe code. The three research imports do not enable a production
+feature. Run `python3 scripts/repository/check-unsafe-policy.py` for the actual
+checkout and `python3 scripts/repository/test-unsafe-policy.py` for rejection tests.
 
 A future exception requires a versioned milestone, written necessity analysis,
 safe alternative analysis, isolated module or crate, documented invariants,

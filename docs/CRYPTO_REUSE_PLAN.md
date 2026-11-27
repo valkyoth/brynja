@@ -33,6 +33,49 @@ monolithic package, no non-crypto dependencies, or removal of independent
 test-only oracles. The existing sanitization admission boundary remains valid.
 No new third-party runtime dependency is authorized by this roadmap.
 
+## Family crate ownership rule
+
+This applies to every future crypto milestone, even when the numbered row names
+an operation but not its Cargo package. At design time, name the crate that owns
+the implementation, its first public consumer, and the dependencies between them.
+Prefer an existing family crate for a new width, backend or closely related API.
+Create a separate crate when the capability is independently useful, has a distinct
+misuse or legacy boundary, or must be shared without depending on a façade.
+Private helpers are fine; a crate per function or speculative shared trait is not required.
+
+| Roadmap example | Who owns what |
+| --- | --- |
+| ChaCha20 and RFC 8439 AEAD (0.30.x–0.31.x) | The stream cipher and one-time MAC each have a standalone crate. The AEAD depends on both; neither depends on the AEAD. |
+| AES, GHASH, GCM and GMAC (0.30.x) | One AES family crate covers all three key widths. Raw GHASH is a universal hash, not a MAC. GCM and GMAC share one construction crate but expose distinct operations. This split does not add modes, POLYVAL or new backend claims. |
+| DER, elliptic curves and PKI (0.34.x onward) | Reuse the DER leaf for signature encodings and key formats; group arithmetic belongs to its family, not to PKI, TLS or a separate crate for every operation. |
+| BLAKE2b and Argon2; AES and CMAC (0.216.x onward) | The construction depends on the primitive and owns its own framing and key policy, never a private copy of the underlying algorithm. |
+| TLS, QUIC, legacy protocols and later catalogue entries | Respect the named package or provider port. Prefer the authenticated construction for records; use a narrow primitive where the protocol specifically needs one, such as header protection. Keep legacy dependencies out of modern graphs. |
+
+Façades may re-export the owning types under their existing names and gates;
+leaves must not import a façade. An AEAD feature must not accidentally expose
+raw cipher APIs there, even when Cargo unifies features. Keep the portable
+path `no_std`; optional CPU kernels and hosted discovery remain separate.
+Use existing clearing and ownership contracts. Introduce a shared interface
+only when concrete consumers need it, not to impose a generic nonce, tag or
+key type across algorithms with different rules.
+
+At ordinary family acceptance, test a packaged direct consumer and, where
+offered, its compatibility import and feature isolation. Record why any
+exception needs a different boundary. This uses the existing milestone
+checks; it does not add an independent publication gate or reopen signed tags.
+Previously shipped modules outside the 0.30.x split (for example modern HKDF)
+retain their public paths; assess their ownership before adding a new consumer
+that would otherwise need to depend on the whole façade.
+
+Cross-check of the future registers: the [catalogue](CATALOGUE_SCOPE_REGISTER.json)
+assigns packages to all 93 families. Of the 141 [expansion families](ROADMAP_EXPANSION_REGISTER.json),
+two intentionally name a façade: 0.367.x adds detached/scatter-gather **adapters**
+in `brynja-crypto`, and 0.470.x tests the aggregate public API through `brynja`.
+Neither owns new primitive arithmetic. Before the catalogue starts, some rows
+name a capability rather than a crate (for example P-256 group operations,
+agreement and signatures at 0.37.x–0.39.x). Apply the same rule there: name the
+actual family owner at admission and build the consumers over it.
+
 ## Numbered implementation chains
 
 | Versions | Complete reusable capability |

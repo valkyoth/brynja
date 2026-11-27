@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "2c89d201f7f10957f22836d6650bdfaef990d500529f5470c5862f3aa529f7b1",
+  "policy_sha256": "3d7e89897f1e845f1a16e2f4eddc6b2b0d305ca837b3ce3a501512ea3058e714",
   "schema": 2,
   "source_ledger_sha256": "39e86f6144d5ee20aa8b114a5d2662bef933275477b00a2e002e3e63dce31e78",
   "surfaces": [
@@ -31,7 +31,7 @@
       "test_target": "crates/brynja-crypto/src/aes_gcm/portable/tests.rs#subkey_derivation_error_never_starts_ghash_or_commits_output"
     },
     {
-      "code_target": "crates/brynja-crypto/src/chacha20.rs#ChaCha20",
+      "code_target": "crates/brynja-cipher-chacha/src/chacha20.rs#ChaCha20",
       "disposition": "implemented",
       "domain": "cryptography",
       "id": "algorithm.chacha20",
@@ -40,7 +40,7 @@
         "rfc:8439"
       ],
       "owner": "0.30.0",
-      "rationale": "The default-off direct primitive implements only the RFC 8439 IETF stream with checked counter exhaustion. No authenticated encryption, original nonce layout, accelerator or target-specific timing claim is admitted.",
+      "rationale": "The standalone default-off RFC 8439 stream preserves the portable compatibility import and checked exhaustion. Explicit SSE2 and little-endian AArch64 NEON owners process full groups on the calling thread. No automatic dispatch, RVV backend, authenticated encryption or target-specific timing claim is admitted.",
       "test_target": "crates/brynja-crypto/tests/chacha20.rs#rfc8439_vectors"
     },
     {

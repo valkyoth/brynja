@@ -593,7 +593,7 @@
         "rfc:8439"
       ],
       "targets": [
-        "actual-symbol:crates/brynja-crypto/src/chacha20.rs#ChaCha20"
+        "actual-symbol:crates/brynja-cipher-chacha/src/chacha20.rs#ChaCha20"
       ],
       "tests": [
         "planned:positive:crates/brynja-crypto/tests/chacha20.rs#rfc8439_vectors",
@@ -11257,6 +11257,9 @@
       ]
     },
     "targets": {
+      "actual-symbol:crates/brynja-cipher-chacha/src/chacha20.rs#ChaCha20": [
+        "BRY-REQ-CRYPTO-0008"
+      ],
       "actual-symbol:crates/brynja-core/src/entropy.rs": [
         "BRY-REQ-ENTROPY-0014"
       ],
@@ -11271,9 +11274,6 @@
       ],
       "actual-symbol:crates/brynja-crypto/src/aes_gcm/portable/gmac.rs#authenticate_next": [
         "BRY-REQ-CRYPTO-0021"
-      ],
-      "actual-symbol:crates/brynja-crypto/src/chacha20.rs#ChaCha20": [
-        "BRY-REQ-CRYPTO-0008"
       ],
       "actual-symbol:crates/brynja-crypto/src/hkdf/derive.rs#Prk": [
         "BRY-REQ-CRYPTO-0004"

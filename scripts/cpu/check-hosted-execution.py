@@ -68,6 +68,7 @@ def validate(write=False):
     inputs = [Path(__file__), ROOT / 'scripts/checks.sh',
               ROOT / 'docs/hosted-cpu-execution.md', ROOT / 'scripts/repository/unsafe_policy.py',
               ROOT / 'scripts/repository/darwin_resident_abi.py',
+              ROOT / 'scripts/repository/unsafe_inventory.py',
               ROOT / 'scripts/cryptography/check-macos-resident-package.py',
               ROOT / 'scripts/cryptography/macos_resident_oracle.py',
               ROOT / 'scripts/cryptography/macos_resident_keyed_oracle.py',

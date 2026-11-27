@@ -40,6 +40,11 @@ def check_graph(metadata, consumer, versions, dependency, *, features=("aes-gcm"
     """Match every resolved edge against the downstream lock, not just crate names."""
     lock = tomllib.loads((FIXTURE / "Cargo.lock").read_text())
     edges = {p["name"]: set(p.get("dependencies", [])) for p in lock["package"]}
+    stream = tuple(features) == ("hazmat-chacha20",)
+    leaf = "brynja-cipher-chacha"
+    if stream:
+        edges[leaf] = {"brynja-core"}
+        edges["brynja-crypto"].add(leaf)
     if paired:
         if tuple(features) not in (("aes-gcm-execution",), ("gmac-execution",)):
             raise ValueError("paired archive must select exactly one composed API")
@@ -48,7 +53,8 @@ def check_graph(metadata, consumer, versions, dependency, *, features=("aes-gcm"
     nodes = {n["id"]: n for n in metadata["resolve"]["nodes"]}
     packages = {p["id"]: p for p in metadata["packages"]}
     if metadata["resolve"]["root"] not in nodes or not any(
-        packages[ident]["name"] == "brynja-crypto" for ident in nodes
+        packages[ident]["name"] == (leaf if stream and dependency == leaf else "brynja-crypto")
+        for ident in nodes
     ):
         raise ValueError("missing archive consumer or crypto dependency")
     for ident, node in nodes.items():
@@ -67,7 +73,11 @@ def check_graph(metadata, consumer, versions, dependency, *, features=("aes-gcm"
         if deps != edges.get(name) or name.startswith("brynja-legacy") or name.endswith("-std") or forbidden_cpu:
             raise ValueError("unexpected archive dependency graph")
         active = set(node["features"])
-        if name in ("brynja", "brynja-crypto"):
+        if stream and name == leaf:
+            expected = {"hazmat-chacha20"} if dependency == leaf else {"hazmat-chacha20", "default"}
+            if active != expected or package["features"].get("default") != []:
+                raise ValueError("unexpected raw-stream archive feature set")
+        elif name in ("brynja", "brynja-crypto"):
             expected = set(features)
             if paired and name == "brynja-crypto":
                 expected.add(features[0].removesuffix("-execution"))

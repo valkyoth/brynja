@@ -6,7 +6,10 @@ Raw ChaCha20 is malleable: a changed ciphertext bit changes the corresponding
 plaintext bit without a failure signal. Reusing a key/nonce range also reuses
 keystream. Neither is prevented by the per-owner counter check. Protocols
 must supply authentication and unique nonce allocation; see the
-[v0.30.0 scope](assurance/chacha20-development.md).
+[ChaCha20 verification scope](assurance/chacha20-development.md). The explicit
+SIMD owners share those limits. Compile for the instruction set usable across
+the deployment; these owners do not probe the current CPU or pin a thread.
+Clearing owned scratch does not guarantee erasure of spills or SIMD registers.
 
 The [installed AEAD consumer](../assurance/aead-installed-consumer/README.md)
 checks behavior at an application boundary; it does not supply a durable

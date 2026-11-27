@@ -35,6 +35,7 @@ FACADE_HELPERS = ['scripts/repository/' + name + '.py' for name in (
     'legacy_hardened_cases', 'legacy_hardened_package')]
 FACADE_HELPERS += ['scripts/sha2/sha2_public_api.py']
 FACADE_PACKAGES = (
+    'brynja-cipher-chacha',
     'brynja-core', 'brynja-mac-hmac', 'brynja-crypto-cpu', 'brynja-hash-core',
     'brynja-hash-sha2', 'brynja-hash-sha3', 'brynja-mac-kmac', 'brynja-hash-tuple',
     'brynja-hash-parallel', 'brynja-crypto', 'brynja-pki', 'brynja-protocol',

@@ -1730,7 +1730,7 @@
         "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
       },
       "requirement_ids": [],
-      "scope": "Add benchmark-admitted x86_64, AArch64, and qualifying RISC-V ChaCha20 backends for parallel blocks while preserving the scalar quarter-round, counter, nonce, tail, overlap, and deterministic exhaustion contract; force each width and tail path, compare every output with scalar, and reject wider paths that regress representative TLS record sizes.",
+      "scope": "First extract the scalar implementation into `brynja-cipher-chacha` in a separate change before adding acceleration; preserve `brynja_crypto::chacha20`, its default-off hazmat gate and no_std behavior. Add benchmark-admitted x86_64, AArch64, and qualifying RISC-V ChaCha20 backends for parallel blocks while preserving the scalar quarter-round, counter, nonce, tail, overlap, and deterministic exhaustion contract; force each width and tail path, compare every output with scalar, and reject wider paths that regress representative TLS record sizes.",
       "source_ids": [],
       "title": "ChaCha20 CPU Acceleration",
       "version": "0.30.1"
@@ -1741,17 +1741,61 @@
         "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
       },
       "requirement_ids": [],
-      "scope": "Re-run the packaged ChaCha20 consumer through every admitted accelerated backend and scalar fallback, covering original and IETF profiles, counters, block and tail lengths, overlap, exhaustion, unavailable required paths, package installation, backend reporting, and exact output equivalence.",
+      "scope": "Test the standalone crate and the existing public import route. Re-run the packaged ChaCha20 consumer through every admitted accelerated backend and scalar fallback, covering admitted IETF parameters and rejection of unadmitted nonce layouts, counters, block and tail lengths, overlap, exhaustion, unavailable required paths, package installation, backend reporting, and exact output equivalence.",
       "source_ids": [],
       "title": "ChaCha20 Accelerated Public API Usability Acceptance",
       "version": "0.30.2"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Extract the existing AES-128, AES-192 and AES-256 owners into `brynja-cipher-aes`, keeping existing feature gates, provider contracts and re-exported type identity without adding block modes.",
+      "source_ids": [],
+      "title": "Standalone AES Block Cipher",
+      "version": "0.30.3"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Extract the existing framed-block GHASH into `brynja-universal-hash-ghash`, preserving its secret output, borrowed workspace and explicitly selected multiplication backends; do not expose a MAC or add POLYVAL.",
+      "source_ids": [],
+      "title": "Standalone GHASH Universal Hash",
+      "version": "0.30.4"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Move AES-GCM and GMAC into `brynja-aead-gcm` over the extracted AES and GHASH crates, preserving separate public operations, existing import paths and nonce reservation semantics.",
+      "source_ids": [],
+      "title": "Standalone AES-GCM And GMAC Composition",
+      "version": "0.30.5"
+    },
+    {
+      "boundary": {
+        "class": "internal-security-design",
+        "rationale": "These newly explicit usability, packaging, acceleration, and composition closures exercise algorithms whose normative authorities are owned by their implementation milestones; they add executable evidence and local isolation policy but no independent standards surface."
+      },
+      "requirement_ids": [],
+      "scope": "Close the split with independently installable ChaCha20, AES, GHASH and AES-GCM/GMAC crates, compatible fa\u00e7ade re-exports and a dependency-ordered crates.io dry run from the previous public checkpoint.",
+      "source_ids": [],
+      "title": "Standalone Cipher Package Publication Acceptance",
+      "version": "0.30.6"
     },
     {
       "boundary": null,
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0009"
       ],
-      "scope": "Implement complete Poly1305 key clamping, block and partial-block processing, canonical reduction, one-time-key ownership, constant-time verification, checked lengths, cleanup, official vectors, proofs, and distinct public MAC APIs without yet composing an AEAD.",
+      "scope": "Implement this one-time authenticator in `brynja-mac-poly1305`. Implement complete Poly1305 key clamping, block and partial-block processing, canonical reduction, one-time-key ownership, constant-time verification, checked lengths, cleanup, official vectors, proofs, and distinct public MAC APIs without yet composing an AEAD.",
       "source_ids": [
         "nist:NIST.FIPS.180-4.pdf",
         "nist:NIST.FIPS.197-upd1.pdf",
@@ -1773,7 +1817,7 @@
         "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
       },
       "requirement_ids": [],
-      "scope": "Compose the exact admitted ChaCha20 and Poly1305 owners into complete RFC 8439 AEAD seal and open with AAD, nonce and length limits, one-time-key derivation, authenticate-before-release, exact in-place or disjoint buffers, partial-overlap rejection, unchanged failure destinations, cleanup, official vectors, and failure-atomicity proofs.",
+      "scope": "Build `brynja-aead-chacha20poly1305` over the ChaCha20 and Poly1305 crates. Compose the exact admitted ChaCha20 and Poly1305 owners into complete RFC 8439 AEAD seal and open with AAD, nonce and length limits, one-time-key derivation, authenticate-before-release, exact in-place or disjoint buffers, partial-overlap rejection, unchanged failure destinations, cleanup, official vectors, and failure-atomicity proofs.",
       "source_ids": [],
       "title": "Complete ChaCha20-Poly1305",
       "version": "0.31.1"

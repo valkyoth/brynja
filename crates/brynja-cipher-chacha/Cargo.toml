@@ -1,0 +1,25 @@
+[package]
+name = "brynja-cipher-chacha"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Portable no_std RFC 8439 ChaCha20 stream cipher for Brynja"
+publish = ["crates-io"]
+include = ["Cargo.toml", "LICENSE-APACHE", "LICENSE-MIT", "README.md", "src/**/*.rs"]
+
+[features]
+default = []
+hazmat-chacha20 = []
+chacha20-sse2 = ["hazmat-chacha20", "dep:brynja-crypto-cpu", "brynja-crypto-cpu/chacha20-sse2"]
+chacha20-neon = ["hazmat-chacha20", "dep:brynja-crypto-cpu", "brynja-crypto-cpu/chacha20-neon"]
+
+[dependencies]
+brynja-core = { workspace = true }
+
+[target.'cfg(any(target_arch = "x86_64", target_arch = "aarch64"))'.dependencies]
+brynja-crypto-cpu = { workspace = true, optional = true }
+
+[lints]
+workspace = true

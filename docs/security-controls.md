@@ -3,6 +3,8 @@
 The [portable ChaCha20 owner](assurance/chacha20-development.md) rejects a
 whole request before mutation if its counter range is too short. It cannot
 prevent a second owner from reusing that range and provides no integrity tag.
+The opt-in SSE2 and NEON owners use the same reservation before touching output.
+They do not change which implementation the portable constructor uses.
 
 The [v0.29.4 installed-consumer check](../assurance/aead-installed-consumer/README.md)
 exercises send exhaustion and rejection without releasing unauthenticated
@@ -352,7 +354,7 @@ Status: v0.20.0 published; milestones through v0.24.33 signed. v0.24.34 is in pr
 | Dependency surface | Exactly one external package is admitted: exact first-party `sanitization 2.1.1`, reachable only through separately selected `brynja-sanitization`, with package/source hashes, no default or selected feature, no transitive package, inherited unsafe inventory, online freshness, and broken-fixture enforcement; every other external package is rejected |
 | First-party Rust cryptography | The permanent golden rule requires every Brynja primitive, construction, key operation, protocol cryptographic operation, CPU backend and FIPS service to be implemented from first-party Rust source; policy rejects foreign/native source and binary artifacts, build scripts, build dependencies, Cargo native-link metadata, foreign ABIs, native link attributes and included native binaries, with nine broken fixtures; separately gated Rust intrinsics or inline assembly remain Brynja-owned symbols, never external modules |
 | CI tool provenance | Exact versions and independently pinned `.crate` SHA-256 hashes are verified before installing security and SBOM tools |
-| Unsafe Rust | Workspace lints deny it by default; the source-hash-bound module inventory in [unsafe policy](../scripts/repository/unsafe_policy.py) is authoritative, including modern and isolated legacy boundaries with exact block/item/proof/intrinsic/assembly counts. Every unregistered unsafe site is rejected; the documentation checker compares the stated unsafe-policy count with that inventory |
+| Unsafe Rust | Workspace lints deny it by default; the [source-hash-bound module inventory](../scripts/repository/unsafe_inventory.py) is authoritative. The [checker](../scripts/repository/unsafe_policy.py) enforces the modern and isolated legacy boundaries. Every unregistered unsafe site is rejected; the documentation checker compares the stated unsafe-policy count with that inventory |
 | `no_std` | Portable production leaves remain `no_std`; separately selected hosted adapters use `std` outside default and bare-metal graphs |
 | Package classification | Committed package policy inventories exact direct, optional, external, feature, target, source and publication boundaries for every workspace package |
 | Modern/legacy isolation | No-default and all-feature graph validators reject either facade reaching the other package class, research, or repository tooling |

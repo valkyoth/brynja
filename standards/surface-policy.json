@@ -1079,11 +1079,11 @@
     },
     {
       "decision": {
-        "code_target": "crates/brynja-crypto/src/chacha20.rs#ChaCha20",
+        "code_target": "crates/brynja-cipher-chacha/src/chacha20.rs#ChaCha20",
         "disposition": "implemented",
         "domain": "cryptography",
         "owner": "0.30.0",
-        "rationale": "The default-off direct primitive implements only the RFC 8439 IETF stream with checked counter exhaustion. No authenticated encryption, original nonce layout, accelerator or target-specific timing claim is admitted.",
+        "rationale": "The standalone default-off RFC 8439 stream preserves the portable compatibility import and checked exhaustion. Explicit SSE2 and little-endian AArch64 NEON owners process full groups on the calling thread. No automatic dispatch, RVV backend, authenticated encryption or target-specific timing claim is admitted.",
         "sources": ["rfc:8439"],
         "test_target": "crates/brynja-crypto/tests/chacha20.rs#rfc8439_vectors"
       },

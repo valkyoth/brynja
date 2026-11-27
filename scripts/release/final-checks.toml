@@ -1,9 +1,24 @@
-# Finite scalar ChaCha20 gate. Independent campaigns stay outside release.
+# Finite ChaCha20 owner gate. Independent campaigns stay outside release.
 # No crates.io publication is selected for this internal milestone.
 schema = 1
-version = "0.30.0"
-scope = "Portable RFC 8439 ChaCha20: direct default-off scalar stream; no AEAD or CPU backend added. Retained acceptance for Portable GMAC and Portable AES-GCM, plus explicit Linux/Windows x86-64 AES-NI/PCLMUL and Linux/macOS ARM64 AES/PMULL owners. Portable GHASH remains the default. Arm GHASH timing remains unresolved. RISC-V AES remains evidence-only and unadmitted. Internal only; no publication or implicit timing/proof/native campaign."
-ci_checks = ["aes-gcm-package-controls","crypto-tests","crypto-lint","crypto-format","facade-integration","hkdf-owner-contract","aes-owner-contract","aes-wide-owner-contract","aes-wide-api","aes-dataflow-regressions","aes-provider-api","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
+version = "0.30.1"
+scope = "Portable RFC 8439 ChaCha20: standalone default-off raw stream and unchanged portable compatibility import. Explicit four-block SSE2 and NEON owners; RV64 stays scalar. No AEAD or automatic dispatch. Retained acceptance for Portable GMAC and Portable AES-GCM, plus explicit Linux/Windows x86-64 AES-NI/PCLMUL and Linux/macOS ARM64 AES/PMULL owners. Portable GHASH remains the default. Arm GHASH timing remains unresolved. RISC-V AES remains evidence-only and unadmitted. Internal only; no publication or implicit timing/proof/native campaign."
+ci_checks = ["chacha20-parallel-owner","unsafe-policy","unsafe-regressions","aes-gcm-package-controls","crypto-tests","crypto-lint","crypto-format","facade-integration","hkdf-owner-contract","aes-owner-contract","aes-wide-owner-contract","aes-wide-api","aes-dataflow-regressions","aes-provider-api","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
+
+[[checks]]
+id = "chacha20-parallel-owner"
+command = ["cargo","test","--locked","--offline","--release","--manifest-path","assurance/chacha20-parallel/Cargo.toml","--test","parallel"]
+timeout_seconds = 120
+
+[[checks]]
+id = "unsafe-policy"
+command = ["python3","scripts/repository/check-unsafe-policy.py"]
+timeout_seconds = 60
+
+[[checks]]
+id = "unsafe-regressions"
+command = ["python3","scripts/repository/test-unsafe-policy.py"]
+timeout_seconds = 60
 
 [[checks]]
 id = "gmac-public-consumer"
@@ -42,12 +57,12 @@ timeout_seconds = 300
 
 [[checks]]
 id = "crypto-lint"
-command = ["cargo","clippy","--locked","-p","brynja-crypto","-p","brynja-legacy-hkdf","--no-default-features","--features","brynja-crypto/hazmat-chacha20,brynja-crypto/gmac-execution,brynja-crypto/aes-gcm-execution,brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider,brynja-crypto/ghash-runtime-execution","--all-targets","--no-deps","--","-D","warnings"]
+command = ["cargo","clippy","--locked","-p","brynja-crypto","-p","brynja-legacy-hkdf","-p","brynja-cipher-chacha","--no-default-features","--features","brynja-crypto/hazmat-chacha20,brynja-crypto/gmac-execution,brynja-crypto/aes-gcm-execution,brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider,brynja-crypto/ghash-runtime-execution,brynja-cipher-chacha/chacha20-sse2,brynja-cipher-chacha/chacha20-neon","--all-targets","--no-deps","--","-D","warnings"]
 timeout_seconds = 300
 
 [[checks]]
 id = "crypto-format"
-command = ["cargo","fmt","--package","brynja","--package","brynja-crypto","--package","brynja-legacy-hkdf","--check"]
+command = ["cargo","fmt","--package","brynja","--package","brynja-crypto","--package","brynja-legacy-hkdf","--package","brynja-cipher-chacha","--package","brynja-crypto-cpu","--check"]
 timeout_seconds = 60
 
 [[checks]]

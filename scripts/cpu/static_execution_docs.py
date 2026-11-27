@@ -13,9 +13,9 @@ from darwin_resident_abi import UNSAFE_MODULES as DARWIN_RESIDENT_MODULES
 DOCS = ('docs/unsafe-policy.md', 'docs/threat-model.md', 'docs/security-controls.md')
 MANIFEST = 'crates/brynja-crypto-cpu/Cargo.toml'
 LIBRARY = 'crates/brynja-crypto-cpu/src/lib.rs'
-INVENTORY = 'scripts/repository/unsafe_policy.py'
+INVENTORY = 'scripts/repository/unsafe_inventory.py'
 DARWIN = 'scripts/repository/darwin_resident_abi.py'
-FILES = (*DOCS, MANIFEST, LIBRARY, INVENTORY, DARWIN)
+FILES = (*DOCS, MANIFEST, LIBRARY, INVENTORY, DARWIN, 'scripts/repository/unsafe_policy.py')
 CLAIMS = (
     'default-off `static-execution` feature exposes six ordinary raw kernels:',
     'x86 SHA-256, x86 SHA-512, x86 AVX2 Keccak, Arm SHA-256, Arm SHA-512 and Arm SHA3 Keccak.',
@@ -28,7 +28,10 @@ CLAIMS = (
 def validate(root):
     texts = {name: (root / name).read_text(encoding='utf-8') for name in FILES}
     features = tomllib.loads(texts[MANIFEST]).get('features')
-    if features != {'default': [], 'sha256-hardened-batch': ['dep:brynja-core'], 'sha512-hardened-batch': ['dep:brynja-core'], 'keccak-hardened-batch': ['dep:brynja-core'], 'keccak-batch': ['static-execution'], 'static-execution': [], 'runtime-execution': ['static-execution'],
+    if features != {'default': [], 'chacha20-sse2': [], 'chacha20-neon': [],
+                    'ghash-runtime-execution': [], 'aes-static-execution': [],
+                    'aes-runtime-execution': ['aes-static-execution'],
+                    'sha256-hardened-batch': ['dep:brynja-core'], 'sha512-hardened-batch': ['dep:brynja-core'], 'keccak-hardened-batch': ['dep:brynja-core'], 'keccak-batch': ['static-execution'], 'static-execution': [], 'runtime-execution': ['static-execution'],
                     'hardened-execution': ['static-execution', 'dep:brynja-core'], 'sha256-batch': ['static-execution'], 'sha512-batch': ['static-execution']}:
         raise ValueError('documented static feature no longer matches the manifest')
     if '#[cfg(feature = "static-execution")]\npub mod static_execution;' not in texts[LIBRARY]:
@@ -48,23 +51,6 @@ def validate(root):
                      isinstance(target, ast.Name) and target.id == 'ALLOWED' for target in node.targets)]
     if len(inventory) != 1 or not isinstance(inventory[0], ast.Dict):
         raise ValueError('unsafe inventory is not an explicit dictionary')
-    words = 'zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty'.split()
-    words += ['twenty-one', 'twenty-two', 'twenty-three', 'twenty-four']
-    words += ['twenty-five', 'twenty-six', 'twenty-seven', 'twenty-eight']
-    words += ['twenty-nine', 'thirty', 'thirty-one', 'thirty-two']
-    words += ['thirty-three', 'thirty-four', 'thirty-five', 'thirty-six']
-    words += ['thirty-seven', 'thirty-eight', 'thirty-nine']
-    words += ['forty', 'forty-one', 'forty-two', 'forty-three', 'forty-four', 'forty-five']
-    words += ['forty-six', 'forty-seven', 'forty-eight', 'forty-nine']
-    words += ['fifty', 'fifty-one', 'fifty-two', 'fifty-three', 'fifty-four', 'fifty-five']
-    words += ['fifty-six', 'fifty-seven']
-    words += ['fifty-eight', 'fifty-nine', 'sixty', 'sixty-one', 'sixty-two', 'sixty-three', 'sixty-four', 'sixty-five', 'sixty-six', 'sixty-seven', 'sixty-eight', 'sixty-nine']
-    words += ['seventy', 'seventy-one', 'seventy-two', 'seventy-three', 'seventy-four', 'seventy-five']
-    words += ['seventy-six', 'seventy-seven', 'seventy-eight', 'seventy-nine', 'eighty']
-    words += ['eighty-one', 'eighty-two', 'eighty-three', 'eighty-four', 'eighty-five', 'eighty-six', 'eighty-seven']
-    words += ['eighty-eight', 'eighty-nine', 'ninety', 'ninety-one', 'ninety-two',
-              'ninety-three', 'ninety-four', 'ninety-five', 'ninety-six',
-              'ninety-seven', 'ninety-eight', 'ninety-nine', 'one hundred']
     # Dict unpacking is one AST entry, not one reviewed source module. Resolve
     # only this exact trusted inventory; never execute a fixture's Python.
     if texts[DARWIN] != (ROOT / DARWIN).read_text(encoding='utf-8'):
@@ -74,11 +60,9 @@ def validate(root):
     if len(unpacked) != 1 or not isinstance(unpacked[0], ast.Name) or unpacked[0].id != 'DARWIN_RESIDENT_MODULES':
         raise ValueError('unrecognized documentation inventory unpacking')
     count = sum(key is not None for key in inventory[0].keys) + len(DARWIN_RESIDENT_MODULES)
-    if count >= len(words):
-        raise ValueError('extend the reviewed documentation count vocabulary')
     unsafe = ' '.join(texts[DOCS[0]].split())
-    for claim in (f'Status: {words[count]} exact source-hash-bound exceptions',
-                  f'Rust in only {words[count]} exact modules:'):
+    for claim in (f'Status: {count} exact source-hash-bound exceptions',
+                  f'Rust in only {count} exact modules:'):
         if claim not in unsafe:
             raise ValueError('unsafe-policy displayed count differs from ALLOWED')
     if 'source-hash-bound module inventory' not in texts[DOCS[2]]:
@@ -90,8 +74,9 @@ def regressions(root):
     # Replace normalized text in disposable copies; source hashes are not used
     # here, so each test must fail for a semantic contract discrepancy.
     cases += [
-        (DOCS[0], 'Status: one hundred exact', 'Status: nine exact'),
-        (DOCS[0], 'Rust in only one hundred exact', 'Rust in only nine exact'),
+        (DOCS[0], 'Status: ', 'Incorrect count: 0; '),
+        (DOCS[0], 'Rust in only ', 'Rust in only 0, not '),
+        (MANIFEST, 'chacha20-neon = []', 'chacha20-neon = ["static-execution"]'),
         (DOCS[2], 'source-hash-bound module inventory', 'exactly nine modules'),
         (MANIFEST, 'default = []', 'default = ["static-execution"]'),
         (LIBRARY, 'pub mod static_execution;', 'mod static_execution;'),

@@ -1,0 +1,240 @@
+# 2026-11-27 UTC, Apple M2 Pro, native macOS arm64, stock targets, unpinned.
+# Explicit ChaCha20Neon versus portable ChaCha20::new, nanoseconds per group of repeats.
+# Source: v0.30.1 working tree based on a9e06a3e; hashes identify the inspected and timed Mach-O binaries.
+rust=1.90.0 binary_sha256=ef109d7d28c53b3d93ff251bca031ec1fc12451a884944dd6e77c62524f2d58c
+pair=0 bytes=64 repeats=4096 scalar_ns=1351125 candidate_ns=1673291
+pair=1 bytes=64 repeats=4096 scalar_ns=1417416 candidate_ns=1424416
+pair=2 bytes=64 repeats=4096 scalar_ns=1404083 candidate_ns=1505250
+pair=3 bytes=64 repeats=4096 scalar_ns=1379125 candidate_ns=1443708
+pair=4 bytes=64 repeats=4096 scalar_ns=1358791 candidate_ns=1369625
+pair=5 bytes=64 repeats=4096 scalar_ns=1387584 candidate_ns=1369458
+pair=6 bytes=64 repeats=4096 scalar_ns=1937667 candidate_ns=1446125
+pair=7 bytes=64 repeats=4096 scalar_ns=2021708 candidate_ns=2047459
+pair=8 bytes=64 repeats=4096 scalar_ns=2130709 candidate_ns=1999250
+pair=9 bytes=64 repeats=4096 scalar_ns=1635459 candidate_ns=1732417
+pair=10 bytes=64 repeats=4096 scalar_ns=1637417 candidate_ns=1652375
+pair=11 bytes=64 repeats=4096 scalar_ns=1526167 candidate_ns=1619209
+bytes=64 groups=0 median_speedup=0.989
+pair=0 bytes=255 repeats=1028 scalar_ns=1232125 candidate_ns=1116458
+pair=1 bytes=255 repeats=1028 scalar_ns=1118000 candidate_ns=1098042
+pair=2 bytes=255 repeats=1028 scalar_ns=1205084 candidate_ns=1112750
+pair=3 bytes=255 repeats=1028 scalar_ns=1099375 candidate_ns=1096500
+pair=4 bytes=255 repeats=1028 scalar_ns=987708 candidate_ns=980375
+pair=5 bytes=255 repeats=1028 scalar_ns=995042 candidate_ns=977750
+pair=6 bytes=255 repeats=1028 scalar_ns=986458 candidate_ns=995458
+pair=7 bytes=255 repeats=1028 scalar_ns=991958 candidate_ns=996958
+pair=8 bytes=255 repeats=1028 scalar_ns=919125 candidate_ns=908250
+pair=9 bytes=255 repeats=1028 scalar_ns=906417 candidate_ns=913334
+pair=10 bytes=255 repeats=1028 scalar_ns=893292 candidate_ns=905500
+pair=11 bytes=255 repeats=1028 scalar_ns=931875 candidate_ns=902833
+bytes=255 groups=0 median_speedup=1.010
+pair=0 bytes=256 repeats=1024 scalar_ns=825208 candidate_ns=562916
+pair=1 bytes=256 repeats=1024 scalar_ns=829500 candidate_ns=558250
+pair=2 bytes=256 repeats=1024 scalar_ns=841625 candidate_ns=580458
+pair=3 bytes=256 repeats=1024 scalar_ns=852958 candidate_ns=681459
+pair=4 bytes=256 repeats=1024 scalar_ns=806542 candidate_ns=622959
+pair=5 bytes=256 repeats=1024 scalar_ns=784625 candidate_ns=547166
+pair=6 bytes=256 repeats=1024 scalar_ns=744333 candidate_ns=497292
+pair=7 bytes=256 repeats=1024 scalar_ns=738875 candidate_ns=493250
+pair=8 bytes=256 repeats=1024 scalar_ns=745584 candidate_ns=493250
+pair=9 bytes=256 repeats=1024 scalar_ns=719042 candidate_ns=492792
+pair=10 bytes=256 repeats=1024 scalar_ns=708125 candidate_ns=484958
+pair=11 bytes=256 repeats=1024 scalar_ns=733458 candidate_ns=483042
+bytes=256 groups=1 median_speedup=1.463
+pair=0 bytes=257 repeats=1020 scalar_ns=815917 candidate_ns=639041
+pair=1 bytes=257 repeats=1020 scalar_ns=814042 candidate_ns=624333
+pair=2 bytes=257 repeats=1020 scalar_ns=837750 candidate_ns=660583
+pair=3 bytes=257 repeats=1020 scalar_ns=795583 candidate_ns=597292
+pair=4 bytes=257 repeats=1020 scalar_ns=847000 candidate_ns=581500
+pair=5 bytes=257 repeats=1020 scalar_ns=742750 candidate_ns=594667
+pair=6 bytes=257 repeats=1020 scalar_ns=770667 candidate_ns=550750
+pair=7 bytes=257 repeats=1020 scalar_ns=749667 candidate_ns=582667
+pair=8 bytes=257 repeats=1020 scalar_ns=737708 candidate_ns=579208
+pair=9 bytes=257 repeats=1020 scalar_ns=751875 candidate_ns=570958
+pair=10 bytes=257 repeats=1020 scalar_ns=746500 candidate_ns=568500
+pair=11 bytes=257 repeats=1020 scalar_ns=741917 candidate_ns=588083
+bytes=257 groups=1 median_speedup=1.295
+pair=0 bytes=512 repeats=512 scalar_ns=607750 candidate_ns=407834
+pair=1 bytes=512 repeats=512 scalar_ns=599209 candidate_ns=414417
+pair=2 bytes=512 repeats=512 scalar_ns=645667 candidate_ns=474416
+pair=3 bytes=512 repeats=512 scalar_ns=612583 candidate_ns=447250
+pair=4 bytes=512 repeats=512 scalar_ns=626833 candidate_ns=437583
+pair=5 bytes=512 repeats=512 scalar_ns=627167 candidate_ns=431833
+pair=6 bytes=512 repeats=512 scalar_ns=609208 candidate_ns=417166
+pair=7 bytes=512 repeats=512 scalar_ns=598875 candidate_ns=425250
+pair=8 bytes=512 repeats=512 scalar_ns=625792 candidate_ns=426458
+pair=9 bytes=512 repeats=512 scalar_ns=618958 candidate_ns=425917
+pair=10 bytes=512 repeats=512 scalar_ns=610292 candidate_ns=432709
+pair=11 bytes=512 repeats=512 scalar_ns=606875 candidate_ns=428375
+bytes=512 groups=2 median_speedup=1.439
+pair=0 bytes=1024 repeats=256 scalar_ns=605417 candidate_ns=426417
+pair=1 bytes=1024 repeats=256 scalar_ns=584709 candidate_ns=415167
+pair=2 bytes=1024 repeats=256 scalar_ns=589959 candidate_ns=413459
+pair=3 bytes=1024 repeats=256 scalar_ns=584667 candidate_ns=423000
+pair=4 bytes=1024 repeats=256 scalar_ns=612125 candidate_ns=430250
+pair=5 bytes=1024 repeats=256 scalar_ns=607041 candidate_ns=437292
+pair=6 bytes=1024 repeats=256 scalar_ns=599209 candidate_ns=407917
+pair=7 bytes=1024 repeats=256 scalar_ns=583375 candidate_ns=417708
+pair=8 bytes=1024 repeats=256 scalar_ns=599750 candidate_ns=416875
+pair=9 bytes=1024 repeats=256 scalar_ns=591666 candidate_ns=411167
+pair=10 bytes=1024 repeats=256 scalar_ns=595125 candidate_ns=405875
+pair=11 bytes=1024 repeats=256 scalar_ns=606708 candidate_ns=410708
+bytes=1024 groups=4 median_speedup=1.425
+pair=0 bytes=1500 repeats=174 scalar_ns=598167 candidate_ns=445750
+pair=1 bytes=1500 repeats=174 scalar_ns=604417 candidate_ns=457750
+pair=2 bytes=1500 repeats=174 scalar_ns=612875 candidate_ns=460666
+pair=3 bytes=1500 repeats=174 scalar_ns=602042 candidate_ns=455000
+pair=4 bytes=1500 repeats=174 scalar_ns=602917 candidate_ns=448584
+pair=5 bytes=1500 repeats=174 scalar_ns=610000 candidate_ns=452583
+pair=6 bytes=1500 repeats=174 scalar_ns=603000 candidate_ns=460959
+pair=7 bytes=1500 repeats=174 scalar_ns=597250 candidate_ns=469083
+pair=8 bytes=1500 repeats=174 scalar_ns=748834 candidate_ns=511584
+pair=9 bytes=1500 repeats=174 scalar_ns=618792 candidate_ns=476666
+pair=10 bytes=1500 repeats=174 scalar_ns=632958 candidate_ns=510917
+pair=11 bytes=1500 repeats=174 scalar_ns=603042 candidate_ns=461625
+bytes=1500 groups=5 median_speedup=1.322
+pair=0 bytes=4096 repeats=64 scalar_ns=578375 candidate_ns=405458
+pair=1 bytes=4096 repeats=64 scalar_ns=578333 candidate_ns=412667
+pair=2 bytes=4096 repeats=64 scalar_ns=591958 candidate_ns=401041
+pair=3 bytes=4096 repeats=64 scalar_ns=583125 candidate_ns=408917
+pair=4 bytes=4096 repeats=64 scalar_ns=583583 candidate_ns=406417
+pair=5 bytes=4096 repeats=64 scalar_ns=585542 candidate_ns=412792
+pair=6 bytes=4096 repeats=64 scalar_ns=622792 candidate_ns=423750
+pair=7 bytes=4096 repeats=64 scalar_ns=673291 candidate_ns=504125
+pair=8 bytes=4096 repeats=64 scalar_ns=620500 candidate_ns=402375
+pair=9 bytes=4096 repeats=64 scalar_ns=589292 candidate_ns=414458
+pair=10 bytes=4096 repeats=64 scalar_ns=598916 candidate_ns=448333
+pair=11 bytes=4096 repeats=64 scalar_ns=663166 candidate_ns=433042
+bytes=4096 groups=16 median_speedup=1.426
+pair=0 bytes=16384 repeats=16 scalar_ns=621000 candidate_ns=427125
+pair=1 bytes=16384 repeats=16 scalar_ns=577791 candidate_ns=411875
+pair=2 bytes=16384 repeats=16 scalar_ns=591333 candidate_ns=404667
+pair=3 bytes=16384 repeats=16 scalar_ns=594208 candidate_ns=417083
+pair=4 bytes=16384 repeats=16 scalar_ns=610500 candidate_ns=429625
+pair=5 bytes=16384 repeats=16 scalar_ns=655334 candidate_ns=425125
+pair=6 bytes=16384 repeats=16 scalar_ns=646542 candidate_ns=425542
+pair=7 bytes=16384 repeats=16 scalar_ns=591625 candidate_ns=414834
+pair=8 bytes=16384 repeats=16 scalar_ns=587083 candidate_ns=407958
+pair=9 bytes=16384 repeats=16 scalar_ns=583792 candidate_ns=406792
+pair=10 bytes=16384 repeats=16 scalar_ns=584041 candidate_ns=405042
+pair=11 bytes=16384 repeats=16 scalar_ns=582167 candidate_ns=409500
+bytes=16384 groups=64 median_speedup=1.437
+
+rust=1.100.0 binary_sha256=6c77d61d15c302e6ca6e30824d3dc82670aca642d0bb9c93ba907cc161ab65df
+pair=0 bytes=64 repeats=4096 scalar_ns=1485709 candidate_ns=1473000
+pair=1 bytes=64 repeats=4096 scalar_ns=1612833 candidate_ns=1892041
+pair=2 bytes=64 repeats=4096 scalar_ns=1488542 candidate_ns=1480084
+pair=3 bytes=64 repeats=4096 scalar_ns=1490625 candidate_ns=1487167
+pair=4 bytes=64 repeats=4096 scalar_ns=1478208 candidate_ns=1484958
+pair=5 bytes=64 repeats=4096 scalar_ns=1353666 candidate_ns=1474625
+pair=6 bytes=64 repeats=4096 scalar_ns=1370792 candidate_ns=1324917
+pair=7 bytes=64 repeats=4096 scalar_ns=1261166 candidate_ns=1320666
+pair=8 bytes=64 repeats=4096 scalar_ns=1853625 candidate_ns=1546875
+pair=9 bytes=64 repeats=4096 scalar_ns=1468375 candidate_ns=1450375
+pair=10 bytes=64 repeats=4096 scalar_ns=1479750 candidate_ns=1447000
+pair=11 bytes=64 repeats=4096 scalar_ns=1305916 candidate_ns=1461750
+bytes=64 groups=0 median_speedup=1.004
+pair=0 bytes=255 repeats=1028 scalar_ns=1133792 candidate_ns=1118416
+pair=1 bytes=255 repeats=1028 scalar_ns=1107500 candidate_ns=1106625
+pair=2 bytes=255 repeats=1028 scalar_ns=1000542 candidate_ns=958791
+pair=3 bytes=255 repeats=1028 scalar_ns=971958 candidate_ns=959250
+pair=4 bytes=255 repeats=1028 scalar_ns=1011167 candidate_ns=1107625
+pair=5 bytes=255 repeats=1028 scalar_ns=982417 candidate_ns=976416
+pair=6 bytes=255 repeats=1028 scalar_ns=921708 candidate_ns=874208
+pair=7 bytes=255 repeats=1028 scalar_ns=878584 candidate_ns=857792
+pair=8 bytes=255 repeats=1028 scalar_ns=866291 candidate_ns=858125
+pair=9 bytes=255 repeats=1028 scalar_ns=885125 candidate_ns=864459
+pair=10 bytes=255 repeats=1028 scalar_ns=870125 candidate_ns=877875
+pair=11 bytes=255 repeats=1028 scalar_ns=823000 candidate_ns=826958
+bytes=255 groups=0 median_speedup=1.011
+pair=0 bytes=256 repeats=1024 scalar_ns=802125 candidate_ns=609625
+pair=1 bytes=256 repeats=1024 scalar_ns=730083 candidate_ns=574416
+pair=2 bytes=256 repeats=1024 scalar_ns=732167 candidate_ns=552333
+pair=3 bytes=256 repeats=1024 scalar_ns=745458 candidate_ns=552125
+pair=4 bytes=256 repeats=1024 scalar_ns=720500 candidate_ns=520750
+pair=5 bytes=256 repeats=1024 scalar_ns=695833 candidate_ns=522041
+pair=6 bytes=256 repeats=1024 scalar_ns=691500 candidate_ns=520542
+pair=7 bytes=256 repeats=1024 scalar_ns=688208 candidate_ns=521083
+pair=8 bytes=256 repeats=1024 scalar_ns=671375 candidate_ns=493292
+pair=9 bytes=256 repeats=1024 scalar_ns=664667 candidate_ns=498500
+pair=10 bytes=256 repeats=1024 scalar_ns=666458 candidate_ns=494333
+pair=11 bytes=256 repeats=1024 scalar_ns=639750 candidate_ns=503292
+bytes=256 groups=1 median_speedup=1.331
+pair=0 bytes=257 repeats=1020 scalar_ns=762541 candidate_ns=629792
+pair=1 bytes=257 repeats=1020 scalar_ns=728250 candidate_ns=626667
+pair=2 bytes=257 repeats=1020 scalar_ns=728166 candidate_ns=605042
+pair=3 bytes=257 repeats=1020 scalar_ns=713667 candidate_ns=608875
+pair=4 bytes=257 repeats=1020 scalar_ns=747500 candidate_ns=621334
+pair=5 bytes=257 repeats=1020 scalar_ns=697583 candidate_ns=579625
+pair=6 bytes=257 repeats=1020 scalar_ns=694333 candidate_ns=604083
+pair=7 bytes=257 repeats=1020 scalar_ns=727125 candidate_ns=578583
+pair=8 bytes=257 repeats=1020 scalar_ns=668500 candidate_ns=561166
+pair=9 bytes=257 repeats=1020 scalar_ns=655917 candidate_ns=556208
+pair=10 bytes=257 repeats=1020 scalar_ns=753959 candidate_ns=580834
+pair=11 bytes=257 repeats=1020 scalar_ns=637667 candidate_ns=558625
+bytes=257 groups=1 median_speedup=1.197
+pair=0 bytes=512 repeats=512 scalar_ns=524000 candidate_ns=419417
+pair=1 bytes=512 repeats=512 scalar_ns=520416 candidate_ns=408667
+pair=2 bytes=512 repeats=512 scalar_ns=525583 candidate_ns=403375
+pair=3 bytes=512 repeats=512 scalar_ns=529958 candidate_ns=412083
+pair=4 bytes=512 repeats=512 scalar_ns=538292 candidate_ns=403625
+pair=5 bytes=512 repeats=512 scalar_ns=520375 candidate_ns=411167
+pair=6 bytes=512 repeats=512 scalar_ns=525625 candidate_ns=408167
+pair=7 bytes=512 repeats=512 scalar_ns=546083 candidate_ns=408458
+pair=8 bytes=512 repeats=512 scalar_ns=543458 candidate_ns=403375
+pair=9 bytes=512 repeats=512 scalar_ns=520625 candidate_ns=450625
+pair=10 bytes=512 repeats=512 scalar_ns=525708 candidate_ns=407125
+pair=11 bytes=512 repeats=512 scalar_ns=520375 candidate_ns=410375
+bytes=512 groups=2 median_speedup=1.287
+pair=0 bytes=1024 repeats=256 scalar_ns=512583 candidate_ns=411292
+pair=1 bytes=1024 repeats=256 scalar_ns=514584 candidate_ns=417209
+pair=2 bytes=1024 repeats=256 scalar_ns=518667 candidate_ns=403917
+pair=3 bytes=1024 repeats=256 scalar_ns=555833 candidate_ns=418458
+pair=4 bytes=1024 repeats=256 scalar_ns=601250 candidate_ns=440833
+pair=5 bytes=1024 repeats=256 scalar_ns=525875 candidate_ns=427583
+pair=6 bytes=1024 repeats=256 scalar_ns=521709 candidate_ns=409209
+pair=7 bytes=1024 repeats=256 scalar_ns=512917 candidate_ns=414791
+pair=8 bytes=1024 repeats=256 scalar_ns=530958 candidate_ns=404000
+pair=9 bytes=1024 repeats=256 scalar_ns=524209 candidate_ns=413209
+pair=10 bytes=1024 repeats=256 scalar_ns=518333 candidate_ns=404292
+pair=11 bytes=1024 repeats=256 scalar_ns=513041 candidate_ns=409667
+bytes=1024 groups=4 median_speedup=1.272
+pair=0 bytes=1500 repeats=174 scalar_ns=518708 candidate_ns=440542
+pair=1 bytes=1500 repeats=174 scalar_ns=580208 candidate_ns=441000
+pair=2 bytes=1500 repeats=174 scalar_ns=541125 candidate_ns=479083
+pair=3 bytes=1500 repeats=174 scalar_ns=540542 candidate_ns=442292
+pair=4 bytes=1500 repeats=174 scalar_ns=545917 candidate_ns=446667
+pair=5 bytes=1500 repeats=174 scalar_ns=612750 candidate_ns=449542
+pair=6 bytes=1500 repeats=174 scalar_ns=523917 candidate_ns=438917
+pair=7 bytes=1500 repeats=174 scalar_ns=531583 candidate_ns=438417
+pair=8 bytes=1500 repeats=174 scalar_ns=543667 candidate_ns=448166
+pair=9 bytes=1500 repeats=174 scalar_ns=518667 candidate_ns=444292
+pair=10 bytes=1500 repeats=174 scalar_ns=524042 candidate_ns=437916
+pair=11 bytes=1500 repeats=174 scalar_ns=539958 candidate_ns=443000
+bytes=1500 groups=5 median_speedup=1.213
+pair=0 bytes=4096 repeats=64 scalar_ns=518083 candidate_ns=402959
+pair=1 bytes=4096 repeats=64 scalar_ns=507500 candidate_ns=408500
+pair=2 bytes=4096 repeats=64 scalar_ns=512833 candidate_ns=403167
+pair=3 bytes=4096 repeats=64 scalar_ns=516416 candidate_ns=410000
+pair=4 bytes=4096 repeats=64 scalar_ns=537042 candidate_ns=417209
+pair=5 bytes=4096 repeats=64 scalar_ns=526416 candidate_ns=421917
+pair=6 bytes=4096 repeats=64 scalar_ns=561417 candidate_ns=416333
+pair=7 bytes=4096 repeats=64 scalar_ns=517250 candidate_ns=429125
+pair=8 bytes=4096 repeats=64 scalar_ns=525292 candidate_ns=403625
+pair=9 bytes=4096 repeats=64 scalar_ns=547833 candidate_ns=419958
+pair=10 bytes=4096 repeats=64 scalar_ns=593834 candidate_ns=414709
+pair=11 bytes=4096 repeats=64 scalar_ns=507958 candidate_ns=422250
+bytes=4096 groups=16 median_speedup=1.279
+pair=0 bytes=16384 repeats=16 scalar_ns=511792 candidate_ns=406500
+pair=1 bytes=16384 repeats=16 scalar_ns=514334 candidate_ns=411334
+pair=2 bytes=16384 repeats=16 scalar_ns=511583 candidate_ns=408583
+pair=3 bytes=16384 repeats=16 scalar_ns=516334 candidate_ns=409166
+pair=4 bytes=16384 repeats=16 scalar_ns=522292 candidate_ns=413292
+pair=5 bytes=16384 repeats=16 scalar_ns=515334 candidate_ns=411250
+pair=6 bytes=16384 repeats=16 scalar_ns=528666 candidate_ns=420667
+pair=7 bytes=16384 repeats=16 scalar_ns=505792 candidate_ns=424958
+pair=8 bytes=16384 repeats=16 scalar_ns=515375 candidate_ns=411875
+pair=9 bytes=16384 repeats=16 scalar_ns=517667 candidate_ns=411125
+pair=10 bytes=16384 repeats=16 scalar_ns=514875 candidate_ns=414917
+pair=11 bytes=16384 repeats=16 scalar_ns=512125 candidate_ns=421666
+bytes=16384 groups=64 median_speedup=1.253

@@ -449,12 +449,19 @@ def test_hmac_follows_hash_owners_before_consumers() -> None:
         assert position < order.index(consumer)
 
 
+def test_chacha_leaf_follows_optional_target_dependency_before_compatibility_import() -> None:
+    order = policy.PUBLISH_ORDER
+    assert order.index('brynja-core') < order.index('brynja-cipher-chacha')
+    assert order.index('brynja-crypto-cpu') < order.index('brynja-cipher-chacha') < order.index('brynja-crypto')
+
+
 def run_tests() -> None:
     tests = (
         checkpoint_tests.run_tests,
         test_current_repository_plan,
         train_tests.test_research_slot_is_not_a_tag,
         test_hmac_follows_hash_owners_before_consumers,
+        test_chacha_leaf_follows_optional_target_dependency_before_compatibility_import,
         test_facade_always_publishes_at_release_version,
         train_tests.test_internal_facade_advances_without_publication,
         train_tests.test_new_publishable_adapter_can_be_held_for_checkpoint,

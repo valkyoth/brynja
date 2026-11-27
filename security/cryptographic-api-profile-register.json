@@ -409,7 +409,7 @@
           "owner": "0.24.15"
         }
       },
-      "code_target": "crates/brynja-crypto/src/chacha20.rs#ChaCha20",
+      "code_target": "crates/brynja-cipher-chacha/src/chacha20.rs#ChaCha20",
       "consumer_links": [
         "consumer:construction",
         "consumer:protocol",
@@ -19944,7 +19944,7 @@
       },
       "owner": "0.30.0",
       "planned_cleanup_contract": "mandatory-core-or-separately-reviewed-equivalent",
-      "planned_implementation_target": "crates/brynja-crypto/src/chacha20.rs#ChaCha20",
+      "planned_implementation_target": "crates/brynja-cipher-chacha/src/chacha20.rs#ChaCha20",
       "residual_risks": [
         "mem-forget",
         "process-abort",
@@ -24768,7 +24768,7 @@
       ]
     }
   ],
-  "policy_sha256": "9106fc99046f74233417829ed921847180851d307d1907e87ad6cba2d221a96a",
+  "policy_sha256": "527c2680660b9c9bee3f0b981c654cbbae256fb9649ade49e97caf0eb14cfc79",
   "registered_secret_owners": [
     {
       "capability": "algorithm.hkdf",
@@ -25574,5 +25574,5 @@
     "physical-memory-remanence"
   ],
   "schema": 1,
-  "surface_register_sha256": "4ed7e6644410802ce9137362e67c2195d701667209f9902833a78855923e3a80"
+  "surface_register_sha256": "8d5c9c1f3e85850c94d17fe8c8eac0ab0125389da1462f2e8f098bcbbafe3cb3"
 }

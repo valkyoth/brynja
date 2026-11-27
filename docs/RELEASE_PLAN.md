@@ -20,6 +20,10 @@ The [five-part expansion review](ROADMAP_EXPANSION_AUDIT.md) and [scope register
 
 ## Release Principles
 
+Apply the [family crate ownership rule](CRYPTO_REUSE_PLAN.md#family-crate-ownership-rule)
+before implementing a new reusable capability. Record its owning package, public
+consumer and dependency direction as part of the existing milestone design.
+
 Every tag requires generated normative traceability,
 explicit resource, secret, storage, effect, dependency and failure boundaries,
 adversarial tests, documented limitations, no unreviewed external crate in the
@@ -274,8 +278,8 @@ Milestone classification is mechanical and fail-closed:
   retain the original per-milestone release process;
 - published `v0.15.0` and `v0.20.0` retain their original immutable boundaries;
 - from the `v0.25.x` series onward, each minor divisible by five publishes at
-  its explicitly registered planned closing patch: first `v0.25.2`, then
-  `v0.30.2`, and the entries through `v0.495.0` in
+  its explicitly registered planned closing patch: first `v0.25.3`, then
+  `v0.30.6`, and the entries through `v0.495.0` in
   [checkpoints.toml](../scripts/release/checkpoints.toml);
 - every other `v0` milestone after `v0.10.0`, including patch-numbered roadmap
   rows other than the registered checkpoint, is a tagged development milestone; and
@@ -300,11 +304,10 @@ changes after `v0.15.0` through
 from `0.10.0` to `0.15.0`; intervening tags identify tested source milestones,
 not crates.io releases.
 
-The next cumulative ranges are `(v0.20.0, v0.25.2]` and
-`(v0.25.2, v0.30.2]`: include all changes after the previous public tag through
+The corresponding cumulative ranges are `(v0.20.0, v0.25.3]` and
+`(v0.25.3, v0.30.6]`: include all changes after the previous public tag through
 the named closing patch. The register is explicit, not a dynamic maximum-patch
-calculation. Adding `v0.25.3` later does not move `v0.25.2`; that new stop belongs
-to the following range unless a reviewed exceptional release is approved.
+calculation. An added patch does not become public just because it sorts last.
 Changing a planned checkpoint requires an explicit policy and roadmap review;
 never rewrite published tags. Completion of one minor series does not imply
 that every wider family or protocol is complete; the status tables remain authoritative.
@@ -7213,14 +7216,14 @@ Exit criteria:
 
 ### v0.30.0 - Complete Portable ChaCha20 And Public Acceptance
 
-Status: awaiting pentest
+Status: released
 
 The first consumer is the RFC 8439 ChaCha20-Poly1305 milestone. It needs
 the IETF 96-bit nonce / 32-bit counter layout. No reviewed consumer here
 requires the original 64-bit nonce layout; do not silently select it or
 XChaCha20 from nonce length. The scalar primitive is an explicit opt-in on
 `brynja-crypto`, not authenticated encryption or a default façade service.
-v0.30.0 is internal; the scheduled registry checkpoint is v0.30.2.
+v0.30.0 is a signed internal tag; the scheduled registry checkpoint is v0.30.6.
 
 Run `brynja-verify run chacha20 --needed` for the archived public consumer,
 independent comparison, Linux sanitizer run and counter-admission proof. The consumer exercises RFC 8439 §§2.3.2,
@@ -7265,15 +7268,26 @@ Exit criteria:
 
 ### v0.30.1 - ChaCha20 CPU Acceleration
 
-Status: planned
+Status: in progress
 
-Plan scope: Add benchmark-admitted x86_64, AArch64, and qualifying RISC-V ChaCha20 backends for parallel blocks while preserving the scalar quarter-round, counter, nonce, tail, overlap, and deterministic exhaustion contract; force each width and tail path, compare every output with scalar, and reject wider paths that regress representative TLS record sizes.
+The internal candidate is prepared; scoped review and final checks are pending.
+
+RV64 disposition: retain the scalar public API. The four-lane V candidate
+passed native and emulated correctness, but regressed the representative record
+sizes on the SpacemiT X60; see the [experiment and both complete native series](../assurance/chacha20-parallel/README.md#rv64-v-candidate-admission-experiment).
+This is the benchmark rejection required by the scope below, not a claim of RVV support.
+
+Plan scope: First extract the scalar implementation into `brynja-cipher-chacha` in a separate change before adding acceleration; preserve `brynja_crypto::chacha20`, its default-off hazmat gate and no_std behavior. Add benchmark-admitted x86_64, AArch64, and qualifying RISC-V ChaCha20 backends for parallel blocks while preserving the scalar quarter-round, counter, nonce, tail, overlap, and deterministic exhaustion contract; force each width and tail path, compare every output with scalar, and reject wider paths that regress representative TLS record sizes.
 
 Goal: close the **ChaCha20 CPU Acceleration** review unit as a complete named capability
 without silently admitting adjacent algorithms, acceleration, or consumer scope.
 
 Deliverables:
 
+- First move the portable owner without changing the cipher. Run the frozen
+  RFC vectors and counter/exhaustion fixture against the packaged leaf and
+  the existing `brynja_crypto::chacha20` import before changing a backend.
+  Keep `hazmat-chacha20` default-off and do not add a raw top-level façade export.
 - implement the exact Plan scope through the named first-party Rust and no_std
   package boundaries, with explicit types, ownership, resource, failure, and
   lifecycle rules;
@@ -7306,10 +7320,14 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Re-run the packaged ChaCha20 consumer through every admitted accelerated backend and scalar fallback, covering original and IETF profiles, counters, block and tail lengths, overlap, exhaustion, unavailable required paths, package installation, backend reporting, and exact output equivalence.
+Plan scope: Test the standalone crate and the existing public import route. Re-run the packaged ChaCha20 consumer through every admitted accelerated backend and scalar fallback, covering admitted IETF parameters and rejection of unadmitted nonce layouts, counters, block and tail lengths, overlap, exhaustion, unavailable required paths, package installation, backend reporting, and exact output equivalence.
 
 Goal: close the **ChaCha20 Accelerated Public API Usability Acceptance** review unit as a complete named capability
 without silently admitting adjacent algorithms, acceleration, or consumer scope.
+
+The positive nonce/counter grid contains only profiles admitted by the portable
+milestone (IETF today). Check that the original layout cannot be selected
+implicitly; this acceptance row does not authorize a new nonce layout.
 
 Deliverables:
 
@@ -7339,13 +7357,101 @@ Exit criteria:
 - the named capability is complete and usable at its declared boundary, its
   residual gaps are explicit, and the next row does not inherit hidden
   implementation work;
-- `v0.30.2 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
+- `v0.30.2 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.30.3 - Standalone AES Block Cipher
+
+Status: planned
+
+Plan scope: Extract the existing AES-128, AES-192 and AES-256 owners into `brynja-cipher-aes`, keeping existing feature gates, provider contracts and re-exported type identity without adding block modes.
+
+Goal: Standalone AES Block Cipher without changing algorithm behavior or broadening assurance claims.
+
+Deliverables:
+
+- Move one implementation, including ephemeral and cached schedules. Keep generic provider contracts below their consumers without a dependency back to either façade.
+- Retain portable no_std operation, default-off raw APIs and explicit acceleration. Keep hosted discovery optional and the fault research prototype outside production.
+
+Verification:
+
+- Compile standalone and compatibility-path consumers together; exchange owners across those paths. Check known answers for all widths, cleanup, provider errors and required-backend rejection.
+
+Exit criteria:
+
+- A packaged standalone AES consumer and the existing consumer use the same types and pass the relevant AES checks.
+- `v0.30.3 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.30.4 - Standalone GHASH Universal Hash
+
+Status: planned
+
+Plan scope: Extract the existing framed-block GHASH into `brynja-universal-hash-ghash`, preserving its secret output, borrowed workspace and explicitly selected multiplication backends; do not expose a MAC or add POLYVAL.
+
+Goal: Standalone GHASH Universal Hash without changing algorithm behavior or broadening assurance claims.
+
+Deliverables:
+
+- Move the field representation, framing boundary and multiplication ownership without changing the meaning of a block or final output.
+- Preserve portable no_std defaults and existing raw opt-in paths; keep the native health and retirement rules and their documented timing limits.
+
+Verification:
+
+- Run direct-package and compatibility consumers against field known answers, multi-block recurrence and error/unwind cleanup. Check that portable builds do not pull in hosted CPU detection.
+
+Exit criteria:
+
+- Packaged GHASH passes its direct and compatibility fixtures without gaining an authentication-tag API.
+- `v0.30.4 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.30.5 - Standalone AES-GCM And GMAC Composition
+
+Status: planned
+
+Plan scope: Move AES-GCM and GMAC into `brynja-aead-gcm` over the extracted AES and GHASH crates, preserving separate public operations, existing import paths and nonce reservation semantics.
+
+Goal: Standalone AES-GCM And GMAC Composition without changing algorithm behavior or broadening assurance claims.
+
+Deliverables:
+
+- Share the leaf implementations rather than copying private arithmetic. Keep the interfaces needed for composition narrow; enabling GCM or GMAC must not re-export raw primitives through the façades.
+- Preserve authenticated opening, distinct tag types, paired-backend admission, and caller-owned storage. GMAC-only consumers must not gain a ciphertext API.
+
+Verification:
+
+- Run packaged direct and compatibility fixtures for all key widths, including known answers with nonempty data, IV hashing, tamper rejection, exhausted reservations and unchanged failure output. Exercise admitted backend pairs, not just portable dispatch.
+
+Exit criteria:
+
+- The existing portable and accelerated composition contracts hold from the extracted crate without a dependency back to either façade.
+- `v0.30.5 development milestone reached. Commit the verified scope, obtain green GitHub and CodeQL, then create the signed tag without a scheduled pentest or crates.io publication unless an exceptional trigger applies.`
+
+### v0.30.6 - Standalone Cipher Package Publication Acceptance
+
+Status: planned
+
+Plan scope: Close the split with independently installable ChaCha20, AES, GHASH and AES-GCM/GMAC crates, compatible façade re-exports and a dependency-ordered crates.io dry run from the previous public checkpoint.
+
+Goal: Standalone Cipher Package Publication Acceptance without changing algorithm behavior or broadening assurance claims.
+
+Deliverables:
+
+- Freeze the package/version selection and release order: dependencies before dependents, including changed façades; use fresh SemVer versions for changed published crates.
+- Document how to choose a leaf or a façade, which features enable raw operations, and which target, timing and qualification limitations still apply. Do not make v0.31 algorithms prerequisites.
+
+Verification:
+
+- Install packaged archives in a clean consumer without workspace path overrides, via leaf and supported façade paths on MSRV and the current supported Rust endpoint. Check no_std, negative feature isolation, type identity, license/README contents and resolved dependency versions.
+
+Exit criteria:
+
+- Only the reviewed cumulative selection may publish. Use the existing scoped pentest and finite release gate; packaging changes do not turn historical algorithm campaigns into publication gates.
+- `v0.30.6 scheduled release checkpoint reached. Pentest the changed component and necessary integrations, commit the scoped PASS disposition, complete the finite final checks, obtain green GitHub and CodeQL, then tag and publish the same candidate without rerunning verification.`
 
 ### v0.31.0 - Complete Poly1305
 
 Status: planned
 
-Plan scope: Implement complete Poly1305 key clamping, block and partial-block processing, canonical reduction, one-time-key ownership, constant-time verification, checked lengths, cleanup, official vectors, proofs, and distinct public MAC APIs without yet composing an AEAD.
+Plan scope: Implement this one-time authenticator in `brynja-mac-poly1305`. Implement complete Poly1305 key clamping, block and partial-block processing, canonical reduction, one-time-key ownership, constant-time verification, checked lengths, cleanup, official vectors, proofs, and distinct public MAC APIs without yet composing an AEAD.
 
 Goal: close the **Complete Poly1305** review unit as a complete named capability
 without silently admitting adjacent algorithms, acceleration, or consumer scope.
@@ -7384,7 +7490,7 @@ Exit criteria:
 
 Status: planned
 
-Plan scope: Compose the exact admitted ChaCha20 and Poly1305 owners into complete RFC 8439 AEAD seal and open with AAD, nonce and length limits, one-time-key derivation, authenticate-before-release, exact in-place or disjoint buffers, partial-overlap rejection, unchanged failure destinations, cleanup, official vectors, and failure-atomicity proofs.
+Plan scope: Build `brynja-aead-chacha20poly1305` over the ChaCha20 and Poly1305 crates. Compose the exact admitted ChaCha20 and Poly1305 owners into complete RFC 8439 AEAD seal and open with AAD, nonce and length limits, one-time-key derivation, authenticate-before-release, exact in-place or disjoint buffers, partial-overlap rejection, unchanged failure destinations, cleanup, official vectors, and failure-atomicity proofs.
 
 Goal: close the **Complete ChaCha20-Poly1305** review unit as a complete named capability
 without silently admitting adjacent algorithms, acceleration, or consumer scope.

@@ -11,6 +11,15 @@ from pathlib import Path
 HEADING = "## Cryptography Verification Status"
 ROOT_READMES = (Path("README.md"), Path("crates/brynja/README.md"))
 ROOT_ROWS = (
+    "| cSHAKE128 and cSHAKE256 | ✅ Implemented | `brynja-hash-sha3` | ❌ Not independently verified |",
+    "| Raw AES-128/192/256 single blocks | ✅ Implemented | `brynja-cipher-aes` | ❌ Not independently verified |",
+    "| AES external-key adapter contracts (no device driver) | ✅ Implemented | `brynja-cipher-aes` | ❌ Not independently verified |",
+    "| Raw IETF ChaCha20 (RFC 8439) | ✅ Implemented | `brynja-cipher-chacha` | ❌ Not independently verified |",
+    "| GHASH over pre-framed blocks (not a MAC) | ✅ Implemented | `brynja-universal-hash-ghash` | ❌ Not independently verified |",
+    "| Detached AES-GCM (AES-128/192/256) | ✅ Implemented | `brynja-aead-gcm` | ❌ Not independently verified |",
+    "| GMAC authentication (AES-128/192/256) | ✅ Implemented | `brynja-aead-gcm` | ❌ Not independently verified |",
+    "| HKDF over six SHA-2 identities, including TLS 1.3 label framing | ✅ Implemented | `brynja-crypto` | ❌ Not independently verified |",
+    "| Legacy HKDF-SHA-1 (explicit acknowledgement) | ✅ Implemented | `brynja-legacy-hkdf` | ❌ Not independently verified |",
     "| HMAC over modern SHA-2/SHA-3 | ✅ Fully implemented | `brynja-mac-hmac` | ❌ Not independently verified |",
     "| HMAC over legacy MD5/SHA-1 | ✅ Fully implemented | `brynja-legacy-hmac` | ❌ Not independently verified |",
     "| Hosted legacy HMAC | ✅ Implemented | `brynja-legacy-hmac-std` | ❌ Not independently verified |",

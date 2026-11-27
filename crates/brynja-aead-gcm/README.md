@@ -27,10 +27,12 @@
 
 Enable `aes-gcm` for detached authenticated encryption or `gmac` for AAD-only authentication. No features are enabled by default. Each API supports AES-128, AES-192 and AES-256 without allocation. For example, import `brynja_aead_gcm::aes_gcm::Aes256Gcm` or `brynja_aead_gcm::gmac::Aes256Gmac`. The existing `brynja_crypto` and `brynja::crypto` imports refer to the same owners.
 
+## Cryptography Verification Status
+
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| Detached AES-GCM, portable `no_std` | Yes; encrypts the message and authenticates its associated data | No independent certification |
-| Standalone GMAC, portable `no_std` | Yes; authenticates associated data without encrypting it | No independent certification |
+| Detached AES-GCM (encrypts the message; authenticates ciphertext and associated data) | ✅ Implemented | ❌ Not independently verified |
+| Standalone GMAC (authenticates associated data without encrypting it) | ✅ Implemented | ❌ Not independently verified |
 
 ## Open an authenticated record
 

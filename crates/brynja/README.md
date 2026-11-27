@@ -28,8 +28,9 @@
 `brynja` is the small modern facade for the Brynja cryptography and secure-protocol workspace. It is allocation-independent `no_std` Rust without a C cryptographic library. Select the separate [brynja-strict facade](https://github.com/valkyoth/brynja/blob/main/crates/brynja-strict/README.md) for protected-memory/worker-stack APIs: upgrading `brynja` does not enable them. Strict constructors reject unsupported platforms or unavailable resources; their platform and cleanup limits remain explicit.
 
 > **Development status:** Brynja is pre-1.0, incomplete, and must not yet secure application traffic. It provides all six SHA-2 and FIPS 202 functions,
-> complete cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF, and ParallelHash/ParallelHashXOF families, modern SHA-2/SHA-3 HMAC, plus security and bounded framing foundations,
-> but no TLS connection, certificate validator, or working protocol engine.
+> complete cSHAKE, KMAC/KMACXOF, TupleHash/TupleHashXOF, and ParallelHash/ParallelHashXOF families, modern HMAC and HKDF.
+> AES, GHASH, AES-GCM and GMAC are opt-in. These primitives and the bounded framing APIs
+> do not provide a TLS connection, certificate validator, or working protocol engine.
 
 ## Cryptography Verification Status
 
@@ -48,6 +49,7 @@ SHA-2 covers SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256; S
 | SHA-2 | ✅ Fully implemented | `brynja-hash-sha2` | ❌ Not independently verified |
 | General SHA-512/t extension (portable) | ✅ Fully implemented | `brynja-hash-sha2` (opt-in) | ❌ Not independently verified |
 | SHA-3/SHAKE | ✅ Fully implemented | `brynja-hash-sha3` | ❌ Not independently verified |
+| cSHAKE128 and cSHAKE256 | ✅ Implemented | `brynja-hash-sha3` | ❌ Not independently verified |
 | TupleHash/TupleHashXOF | ✅ Fully implemented | `brynja-hash-tuple` | ❌ Not independently verified |
 | ParallelHash/ParallelHashXOF | ✅ Fully implemented | `brynja-hash-parallel` | ❌ Not independently verified |
 | SP 800-185 family | ✅ Fully implemented | `brynja-hash-sha3`, `brynja-mac-kmac`, `brynja-hash-tuple`, `brynja-hash-parallel` | ❌ Not independently verified |
@@ -64,6 +66,20 @@ long keys, byte/bit messages, preselected byte truncation, mismatch rejection
 and typed public/secret tags. General SHA-512/t retains the modern 128-bit
 minimum. Platform-specific acceleration and protected/resident qualification
 remain separate; there is no SIMD-batched or Windows enclave HMAC API.
+
+### Ciphers, Authenticated Encryption And Key Derivation
+
+| Capability | Implementation status | Owning crate | Independent verification |
+| --- | --- | --- | --- |
+| Raw AES-128/192/256 single blocks | ✅ Implemented | `brynja-cipher-aes` | ❌ Not independently verified |
+| AES external-key adapter contracts (no device driver) | ✅ Implemented | `brynja-cipher-aes` | ❌ Not independently verified |
+| Raw IETF ChaCha20 (RFC 8439) | ✅ Implemented | `brynja-cipher-chacha` | ❌ Not independently verified |
+| GHASH over pre-framed blocks (not a MAC) | ✅ Implemented | `brynja-universal-hash-ghash` | ❌ Not independently verified |
+| Detached AES-GCM (AES-128/192/256) | ✅ Implemented | `brynja-aead-gcm` | ❌ Not independently verified |
+| GMAC authentication (AES-128/192/256) | ✅ Implemented | `brynja-aead-gcm` | ❌ Not independently verified |
+| HKDF over six SHA-2 identities, including TLS 1.3 label framing | ✅ Implemented | `brynja-crypto` | ❌ Not independently verified |
+
+Choose `brynja::crypto::aes_gcm` (feature `aes-gcm`) for detached encryption or `brynja::crypto::gmac` (`gmac`) for authentication alone. Raw AES and GHASH require `hazmat-aes-block` and `hazmat-ghash`; modern `crypto::hkdf` needs no feature. The `brynja` manifest does not forward `hazmat-chacha20`: select it on `brynja-cipher-chacha` or `brynja-crypto` directly. The SIMD ChaCha20 owners are leaf-only.
 
 ### Legacy Hash Functions
 
@@ -84,6 +100,7 @@ cryptographic certification.
 | --- | --- | --- | --- |
 | HMAC over legacy MD5/SHA-1 | ✅ Fully implemented | `brynja-legacy-hmac` | ❌ Not independently verified |
 | Hosted legacy HMAC | ✅ Implemented | `brynja-legacy-hmac-std` | ❌ Not independently verified |
+| Legacy HKDF-SHA-1 (explicit acknowledgement) | ✅ Implemented | `brynja-legacy-hkdf` | ❌ Not independently verified |
 
 ### Protocol And PKI Building Blocks
 
@@ -140,6 +157,11 @@ Host detection stays in separate companion crates. Legacy algorithms remain
 separate; existing unadmitted CPU candidates are not made operational by a
 facade feature. ParallelHash accelerated scheduling retains its qualification
 limits; portable family completion does not close that work.
+
+For AES-GCM and GMAC, the explicit `aes-gcm-execution` and `gmac-execution`
+owners pair AES-NI/PCLMUL on Linux or Windows x86-64, or AES/PMULL on Linux
+or macOS ARM64. The ordinary constructors stay portable. Arm PMULL timing
+remains unqualified; see the [paired execution record](https://github.com/valkyoth/brynja/blob/main/docs/assurance/aead-accelerated-development.md).
 
 ## Examples
 
@@ -267,7 +289,10 @@ Callers must enforce their protocol's maximum candidate-tag length before KMAC v
 | `brynja-core` | Bounded state, constant-time, secret-memory, provider, entropy, time, and security-outcome foundations |
 | `brynja-hash-*`, `brynja-mac-kmac` | Algorithm leaves with ordinary/hardened ownership and opt-in execution; see capability tables above |
 | `brynja-mac-hmac` | Modern SHA-2/SHA-3 HMAC; typed tags and success-only verification |
-| `brynja-crypto` | Cryptographic policy, composition, and protocol-facing provider boundary |
+| `brynja-cipher-aes`, `brynja-cipher-chacha` | Raw AES blocks and ChaCha20 streams; neither provides authentication |
+| `brynja-universal-hash-ghash`, `brynja-aead-gcm` | Raw GHASH and the composed AES-GCM/GMAC APIs |
+| `brynja-legacy-hkdf` | Explicit HKDF-SHA-1 compatibility; never selected by the modern facade |
+| `brynja-crypto` | Cryptographic policy, composition, modern HKDF, and compatibility imports |
 | `brynja-pki` | Implemented DER/ASN.1 foundations; X.509, path validation and revocation planned |
 | `brynja-protocol` | Shared allocation-free TLS and DTLS record envelopes |
 | `brynja-tls12`, `brynja-tls13`, `brynja-dtls`, `brynja-quic-tls` | Planned modern protocol engines, not yet implemented |

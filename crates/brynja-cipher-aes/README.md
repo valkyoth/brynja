@@ -30,10 +30,12 @@ single-block owners under `brynja_cipher_aes::aes`. They borrow caller
 storage; ephemeral keys expand per operation and expanded keys cache their
 schedule until clear or drop. Raw blocks do not authenticate messages.
 
+## Cryptography Verification Status
+
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| Portable, allocation-free `no_std` AES: one 16-byte block per call | Yes, all three key sizes | No independent certification |
-| Accelerated or external-key execution | Explicit opt-in | No blanket hardware qualification |
+| Portable, allocation-free `no_std` AES-128/192/256 (one 16-byte block per call) | ✅ Implemented | ❌ Not independently verified |
+| Accelerated or external-key execution (explicit opt-in) | ✅ Implemented | ❌ Not independently verified |
 
 ## Use one block
 

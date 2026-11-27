@@ -36,10 +36,12 @@ Callers must encode unambiguous protocol context themselves. Expansion is
 limited to 255 SHA-1 blocks (5100 bytes). There is no MD5 HKDF, TLS key schedule,
 TLS label helper or modern algorithm fallback.
 
+## Cryptography Verification Status
+
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| Portable HKDF-SHA-1 Extract and Expand | Yes, with explicit legacy acknowledgement | No independent certification |
-| Multipart info without allocation | Yes | No independent certification |
+| Portable HKDF-SHA-1 Extract and Expand with explicit legacy acknowledgement | ✅ Implemented | ❌ Not independently verified |
+| Multipart info without allocation | ✅ Implemented | ❌ Not independently verified |
 
 ## Derive a legacy protocol key
 

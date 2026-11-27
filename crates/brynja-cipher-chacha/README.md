@@ -30,10 +30,12 @@ stream cipher. Enable `hazmat-chacha20` to import `brynja_cipher_chacha::ChaCha2
 The same type is available as `brynja_crypto::chacha20::ChaCha20` under the
 matching feature. No CPU backend, allocator or hosted runtime is required.
 
+## Cryptography Verification Status
+
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| Portable IETF ChaCha20, including fragmented input | Yes | No independent certification |
-| Four-block SIMD on supported targets | Explicit opt-in | No blanket hardware qualification |
+| Portable IETF ChaCha20, including fragmented input | ✅ Implemented | ❌ Not independently verified |
+| Four-block SIMD on supported targets (explicit opt-in) | ✅ Implemented | ❌ Not independently verified |
 
 ## Use a stream
 

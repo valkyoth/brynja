@@ -47,19 +47,22 @@ not independent cryptographic certification or coverage of every deployment.
 | All six named SHA-2 and all six SHA-3/SHAKE functions | ✅ Fully implemented, reexported | ❌ No |
 | cSHAKE, KMAC/KMACXOF, TupleHash and ParallelHash families | ✅ Fully implemented, reexported | ❌ No |
 | Modern HMAC over SHA-2/SHA-3 | ✅ Fully implemented portable API; explicit execution qualification separate | ❌ No |
-| HKDF and TLS Expand-Label over six standard SHA-2 identities | Development implementation; qualification unfinished | ❌ No |
-| Raw portable GHASH | Development interface; requires `hazmat-ghash`. Secret output, not a MAC or GCM tag. | ❌ No |
-| Opt-in GHASH runtime selection | `ghash-runtime-execution`: `Ghash::new_with_backend` supports Linux/Windows x86_64 PCLMUL, Linux RV64 scalar Zbc, and little-endian AArch64 PMULL on Linux/macOS. Arm timing remains unqualified; Zbkc alone is not admitted. Only an unavailable backend permits fallback in `Mode::Prefer`. | ❌ No |
-| Portable AES-128/192/256-GCM | Development interface; requires `aes-gcm`. Detached tags, in-place or disjoint buffers; applications reserve sender nonce ranges. | ❌ No |
-| Portable GMAC (all three AES widths) | Separate `gmac` feature. Authenticates data without encrypting; uses a dedicated key, reserved IVs and a typed detached tag. | ❌ No |
-| Paired native GCM / GMAC (all three AES widths) | Development API. Opt in with `aes-gcm-execution` or `gmac-execution`; import the paired owners under the corresponding `execution` module. Requires AES-NI/PCLMUL on Linux/Windows x86-64 or AES/PMULL on Linux/macOS ARM64, a compatible ISA-specialized build and a stable eligible CPU set. No automatic fallback or timing qualification. | ❌ No |
+| Raw AES-128/192/256 blocks | ✅ Implemented; opt-in `hazmat-aes-block` | ❌ No |
+| IETF ChaCha20 stream | ✅ Implemented; opt-in `hazmat-chacha20`, not an AEAD | ❌ No |
+| External-key adapter lifecycle | ✅ Implemented; explicit opt-in, no device driver | ❌ No |
+| HKDF and TLS Expand-Label over six standard SHA-2 identities | ✅ Implemented; portable Extract, Expand and multipart info; qualification unfinished | ❌ No |
+| Raw portable GHASH | ✅ Implemented; requires `hazmat-ghash`. Secret output, not a MAC or GCM tag. | ❌ No |
+| Opt-in GHASH runtime selection | ✅ Implemented; `ghash-runtime-execution`: `Ghash::new_with_backend` supports Linux/Windows x86_64 PCLMUL, Linux RV64 scalar Zbc, and little-endian AArch64 PMULL on Linux/macOS. Arm timing remains unqualified; Zbkc alone is not admitted. Only an unavailable backend permits fallback in `Mode::Prefer`. | ❌ No |
+| Portable AES-128/192/256-GCM | ✅ Implemented; requires `aes-gcm`. Detached tags, in-place or disjoint buffers; applications reserve sender nonce ranges. | ❌ No |
+| Portable GMAC (all three AES widths) | ✅ Implemented; separate `gmac` feature. Authenticates data without encrypting; uses a dedicated key, reserved IVs and a typed detached tag. | ❌ No |
+| Paired native GCM / GMAC (all three AES widths) | ✅ Implemented; opt in with `aes-gcm-execution` or `gmac-execution`; import the paired owners under the corresponding `execution` module. Requires AES-NI/PCLMUL on Linux/Windows x86-64 or AES/PMULL on Linux/macOS ARM64, a compatible ISA-specialized build and a stable eligible CPU set. No automatic fallback or timing qualification. | ❌ No |
 | Other AEADs, other KDFs, RSA, ECC and executable provider effects | ❌ Not implemented | ❌ No |
 
 Named hashes and SP 800-185 constructions are usable; the broader planned
 cryptographic composition layer is not complete. No independent cryptographic
 review or FIPS 140-3 validation is claimed.
 
-The `hkdf` module is new, unpublished 0.26.0 development work. It uses explicit
+The portable `hkdf` module uses explicit
 SHA-2 identities, caller-backed `Prk`/`DerivedKey` clearing owners and no
 allocation or implicit backend selection. Import requires an already
 pseudorandom key; it does not replace Extract for raw input key material.

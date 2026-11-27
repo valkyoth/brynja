@@ -31,10 +31,14 @@ subkey, a 16-byte workspace, a byte budget and separate output storage.
 `SecretHash` is an intermediate, not a tag: GHASH alone does not authenticate
 messages. Use AES-GCM or GMAC for those constructions. This is not POLYVAL.
 
+## Cryptography Verification Status
+
 | Capability | Implemented | Independently verified |
 | --- | --- | --- |
-| Portable `no_std` GHASH over complete 16-byte blocks | Yes | No independent certification |
-| Explicit native multiplication | On supported targets | Arm PMULL timing is not qualified |
+| Portable `no_std` GHASH over complete 16-byte blocks | ✅ Implemented | ❌ Not independently verified |
+| Explicit native multiplication on supported targets | ✅ Implemented | ❌ Not independently verified |
+
+Arm PMULL timing remains unqualified; see the [timing observations](https://github.com/valkyoth/brynja/blob/main/docs/assurance/ghash-pmull-order-control.md).
 
 ## Use framed input
 

@@ -339,8 +339,9 @@ def current_readme_milestones() -> None:
                       'qualification-pending', 'await qualification',
                       'not yet release-qualified', 'pending cumulative retest'):
             assert stale not in prose, (path, stale)
-    assert len(paths) == 44
-    print('44 current READMEs retain no stale blanket qualification milestones')
+    assert set(paths) == {root / 'README.md', *(m.with_name('README.md') for m in
+                                                (root / 'crates').glob('*/Cargo.toml'))}
+    print(f'{len(paths)} current READMEs retain no stale blanket qualification milestones')
 
 
 def main() -> int:

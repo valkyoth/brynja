@@ -97,6 +97,7 @@ SHA-3/SHAKE covers SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, and SHAKE25
 | SHA-2 | ✅ Fully implemented | `brynja-hash-sha2` | ❌ Not independently verified |
 | General SHA-512/t extension (portable) | ✅ Fully implemented | `brynja-hash-sha2` (opt-in) | ❌ Not independently verified |
 | SHA-3/SHAKE | ✅ Fully implemented | `brynja-hash-sha3` | ❌ Not independently verified |
+| cSHAKE128 and cSHAKE256 | ✅ Implemented | `brynja-hash-sha3` | ❌ Not independently verified |
 | TupleHash/TupleHashXOF | ✅ Fully implemented | `brynja-hash-tuple` | ❌ Not independently verified |
 | ParallelHash/ParallelHashXOF | ✅ Fully implemented | `brynja-hash-parallel` | ❌ Not independently verified |
 | SP 800-185 family | ✅ Fully implemented | `brynja-hash-sha3`, `brynja-mac-kmac`, `brynja-hash-tuple`, `brynja-hash-parallel` | ❌ Not independently verified |
@@ -120,6 +121,20 @@ SIMD HMAC batching and Windows enclave HMAC are not implemented.
 The [v0.25.2 record](security/pentest/v0.25.2.md#author-operated-checkpoint-completion-2026-10-31)
 records the supplied remediation retest and completed project checkpoint;
 green implementation rows do not authorize publication.
+
+### Ciphers, Authenticated Encryption And Key Derivation
+
+| Capability | Implementation status | Owning crate | Independent verification |
+| --- | --- | --- | --- |
+| Raw AES-128/192/256 single blocks | ✅ Implemented | `brynja-cipher-aes` | ❌ Not independently verified |
+| AES external-key adapter contracts (no device driver) | ✅ Implemented | `brynja-cipher-aes` | ❌ Not independently verified |
+| Raw IETF ChaCha20 (RFC 8439) | ✅ Implemented | `brynja-cipher-chacha` | ❌ Not independently verified |
+| GHASH over pre-framed blocks (not a MAC) | ✅ Implemented | `brynja-universal-hash-ghash` | ❌ Not independently verified |
+| Detached AES-GCM (AES-128/192/256) | ✅ Implemented | `brynja-aead-gcm` | ❌ Not independently verified |
+| GMAC authentication (AES-128/192/256) | ✅ Implemented | `brynja-aead-gcm` | ❌ Not independently verified |
+| HKDF over six SHA-2 identities, including TLS 1.3 label framing | ✅ Implemented | `brynja-crypto` | ❌ Not independently verified |
+
+Use AES-GCM for authenticated encryption, GMAC for authentication without encryption, and raw AES, ChaCha20 or GHASH only inside a construction that specifies them. ChaCha20 here is a stream cipher, not ChaCha20-Poly1305 or XChaCha20. HKDF label framing is not a TLS key schedule.
 
 ### Legacy Hash Functions
 
@@ -145,6 +160,7 @@ authorization to publish.
 | --- | --- | --- | --- |
 | HMAC over legacy MD5/SHA-1 | ✅ Fully implemented | `brynja-legacy-hmac` | ❌ Not independently verified |
 | Hosted legacy HMAC | ✅ Implemented | `brynja-legacy-hmac-std` | ❌ Not independently verified |
+| Legacy HKDF-SHA-1 (explicit acknowledgement) | ✅ Implemented | `brynja-legacy-hkdf` | ❌ Not independently verified |
 
 ### Protocol And PKI Building Blocks
 
@@ -202,6 +218,12 @@ crate's README provide usage examples and exact feature requirements.
 - [SHA-3, SHAKE and cSHAKE](crates/brynja-hash-sha3/README.md): fixed and extendable output.
 - [KMAC](crates/brynja-mac-kmac/README.md), [TupleHash](crates/brynja-hash-tuple/README.md),
   [ParallelHash](crates/brynja-hash-parallel/README.md): SP 800-185 constructions.
+- [HMAC](crates/brynja-mac-hmac/README.md) authenticates messages. [Modern HKDF](docs/assurance/hkdf-public-api.md)
+  derives keys; [legacy HKDF-SHA-1](crates/brynja-legacy-hkdf/README.md) is a separate compatibility crate.
+- [AES](crates/brynja-cipher-aes/README.md) and [ChaCha20](crates/brynja-cipher-chacha/README.md):
+  single-block and stream primitives, respectively. Neither authenticates messages.
+- [AES-GCM and GMAC](crates/brynja-aead-gcm/README.md): choose the `aes-gcm` or `gmac` feature.
+  [GHASH](crates/brynja-universal-hash-ghash/README.md) is their universal-hash building block, not a standalone tag.
 - [Legacy SHA-1](crates/brynja-legacy-sha1/README.md) and
   [legacy MD5](crates/brynja-legacy-md5/README.md): isolated compatibility only.
 
@@ -275,6 +297,8 @@ Detailed release-by-release history belongs in those reports and
 | `brynja-strict` | Separate strict-only protected modern sessions; explicit platform limits |
 | `brynja-core`, `brynja-hash-core` | Bounded ownership, constant-time and hash interfaces |
 | `brynja-hash-*`, `brynja-mac-*` | Reusable algorithm and construction families |
+| `brynja-cipher-aes`, `brynja-cipher-chacha` | Opt-in raw block and stream ciphers |
+| `brynja-universal-hash-ghash`, `brynja-aead-gcm` | Framed GHASH; authenticated AES-GCM and GMAC |
 | `brynja-crypto` | Cryptographic composition, provider contracts and policy |
 | `brynja-crypto-cpu`, optional `-std` adapters | Explicit CPU/SIMD execution boundaries |
 | `brynja-protocol`, `brynja-pki` | Record framing and ASN.1/DER building blocks |
@@ -300,7 +324,7 @@ examples and explicit qualification limits.
 The v0.28.0 [portable GHASH development interface](docs/security-controls.md#portable-ghash-development-contract-v0280)
 requires `hazmat-ghash`, accepts pre-framed blocks and returns a secret intermediate, not a GCM tag.
 Since v0.28.2, `ghash-runtime-execution` adds an explicit
-constructor for Linux x86_64 PCLMUL, Linux RV64 scalar Zbc, or little-endian
+constructor for Linux/Windows x86_64 PCLMUL, Linux RV64 scalar Zbc, or little-endian
 AArch64 PMULL on Linux and macOS. `Ghash::new` stays portable.
 [Arm timing qualification remains open](docs/assurance/ghash-acceleration.md#arm-public-pmull-route). No GCM service
 or validated cryptographic module is implied.

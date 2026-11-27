@@ -1,0 +1,24 @@
+[package]
+name = "brynja-cipher-aes"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Opt-in no_std AES block cipher and explicit execution owners for Brynja"
+publish = ["crates-io"]
+include = ["Cargo.toml", "LICENSE-APACHE", "LICENSE-MIT", "README.md", "src/**/*.rs"]
+
+[features]
+default = []
+hazmat-aes-block = ["dep:brynja-core"]
+external-key-provider = ["dep:brynja-core"]
+aes-static-execution = ["hazmat-aes-block", "dep:brynja-crypto-cpu", "brynja-crypto-cpu/aes-static-execution"]
+aes-runtime-execution = ["aes-static-execution", "brynja-crypto-cpu/aes-runtime-execution"]
+
+[dependencies]
+brynja-core = { workspace = true, optional = true }
+brynja-crypto-cpu = { workspace = true, optional = true }
+
+[lints]
+workspace = true

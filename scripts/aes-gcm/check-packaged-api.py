@@ -43,12 +43,14 @@ def check_graph(metadata, consumer, versions, dependency, *, features=("aes-gcm"
     stream = tuple(features) == ("hazmat-chacha20",)
     leaf = "brynja-cipher-chacha"
     if stream:
+        edges["brynja-crypto"].discard("brynja-cipher-aes")
         edges[leaf] = {"brynja-core"}
         edges["brynja-crypto"].add(leaf)
     if paired:
         if tuple(features) not in (("aes-gcm-execution",), ("gmac-execution",)):
             raise ValueError("paired archive must select exactly one composed API")
         edges["brynja-crypto"].add("brynja-crypto-cpu")
+        edges["brynja-cipher-aes"].add("brynja-crypto-cpu")
         edges["brynja-crypto-cpu"] = set()
     nodes = {n["id"]: n for n in metadata["resolve"]["nodes"]}
     packages = {p["id"]: p for p in metadata["packages"]}
@@ -88,6 +90,12 @@ def check_graph(metadata, consumer, versions, dependency, *, features=("aes-gcm"
         elif paired and name == "brynja-crypto-cpu":
             if active != {"default", "aes-static-execution", "ghash-runtime-execution"} or package["features"].get("default") != []:
                 raise ValueError("unexpected paired CPU features")
+        elif name == "brynja-cipher-aes":
+            expected = {"default", "hazmat-aes-block"}
+            if paired:
+                expected.add("aes-static-execution")
+            if stream or active != expected or package["features"].get("default") != []:
+                raise ValueError("unexpected AES leaf features")
         elif active - ({"default", "general-sha512-t"} if name == "brynja-hash-sha2" else {"default"}):
             raise ValueError("unexpected transitive feature")
 

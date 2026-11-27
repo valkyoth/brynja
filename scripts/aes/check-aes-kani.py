@@ -34,7 +34,7 @@ def policy():
     if tuple(names) != HARNESSES or source.count('#[kani::proof]') != 5:
         raise ValueError('AES proof population drift')
     for name in ('field', 'layout'):
-        if f'#[path = "../../../crates/brynja-crypto/src/aes/portable/{name}.rs"]\nmod {name};' not in source:
+        if f'#[path = "../../../crates/brynja-cipher-aes/src/aes/portable/{name}.rs"]\nmod {name};' not in source:
             raise ValueError('AES proofs must compile the production source')
 
 

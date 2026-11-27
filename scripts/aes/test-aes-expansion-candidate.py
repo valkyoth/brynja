@@ -102,7 +102,7 @@ class ExpansionCandidateTests(unittest.TestCase):
         self.assertIn('mod x86_expand;', source)
         self.assertIn('mod aarch64_expand;', source)
         self.assertIn('dispatch_expansion(self.owner, key, schedule)?;', source)
-        owner = (r.ROOT / 'crates/brynja-crypto/src/aes/execution.rs').read_text()
+        owner = (r.ROOT / 'crates/brynja-cipher-aes/src/aes/execution.rs').read_text()
         self.assertNotIn('portable::', owner)
         self.assertIn('session.$expand(key, output)?;', owner)
         self.assertIn('session.check()?;', owner)

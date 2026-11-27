@@ -46460,6 +46460,10 @@
         "crates/brynja-strict/README.md"
       ],
       "toml": {
+        "crates/brynja-cipher-aes/Cargo.toml": [
+          "package.name",
+          "package.version"
+        ],
         "crates/brynja-cipher-chacha/Cargo.toml": [
           "package.name",
           "package.version"
@@ -46853,6 +46857,10 @@
         "scripts/hmac/hmac_combined_acceptance.py"
       ],
       "toml": {
+        "crates/brynja-cipher-aes/Cargo.toml": [
+          "package.name",
+          "package.version"
+        ],
         "crates/brynja-cipher-chacha/Cargo.toml": [
           "package.name",
           "package.version"
@@ -50056,6 +50064,7 @@
         ".github/workflows/ci.yml",
         "assurance/sha3-public-api",
         "crates/brynja",
+        "crates/brynja-cipher-aes",
         "crates/brynja-cipher-chacha",
         "crates/brynja-core",
         "crates/brynja-crypto",
@@ -50147,6 +50156,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja"
+          ]
+        }
+      ]
+    },
+    "package-repository-17a45d54f013fcc0-dependencies-cipher-aes": {
+      "paths": [
+        "crates/brynja-cipher-aes/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-cipher-aes/build.rs",
+        "crates/brynja-cipher-aes/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-cipher-aes/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-cipher-aes"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-cipher-aes"
           ]
         }
       ]
@@ -51383,6 +51431,7 @@
         "assurance/sha2-bit-differential",
         "assurance/sha2-public-api",
         "crates/brynja",
+        "crates/brynja-cipher-aes",
         "crates/brynja-cipher-chacha",
         "crates/brynja-core",
         "crates/brynja-crypto",
@@ -51475,6 +51524,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja"
+          ]
+        }
+      ]
+    },
+    "package-repository-26a0b0fc61844f33-dependencies-cipher-aes": {
+      "paths": [
+        "crates/brynja-cipher-aes/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-cipher-aes/build.rs",
+        "crates/brynja-cipher-aes/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-cipher-aes/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-cipher-aes"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-cipher-aes"
           ]
         }
       ]
@@ -53743,6 +53831,7 @@
         ".github/workflows/ci.yml",
         "assurance/sha256-public-api",
         "crates/brynja",
+        "crates/brynja-cipher-aes",
         "crates/brynja-cipher-chacha",
         "crates/brynja-core",
         "crates/brynja-crypto",
@@ -53836,6 +53925,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja"
+          ]
+        }
+      ]
+    },
+    "package-repository-7965ceea8904c78e-dependencies-cipher-aes": {
+      "paths": [
+        "crates/brynja-cipher-aes/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-cipher-aes/build.rs",
+        "crates/brynja-cipher-aes/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-cipher-aes/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-cipher-aes"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-cipher-aes"
           ]
         }
       ]
@@ -54665,6 +54793,7 @@
         "assurance/sha2-bit-differential",
         "assurance/sha2-public-api",
         "crates/brynja",
+        "crates/brynja-cipher-aes",
         "crates/brynja-cipher-chacha",
         "crates/brynja-core",
         "crates/brynja-crypto",
@@ -54757,6 +54886,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja"
+          ]
+        }
+      ]
+    },
+    "package-repository-88caf3aa426de5bc-dependencies-cipher-aes": {
+      "paths": [
+        "crates/brynja-cipher-aes/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-cipher-aes/build.rs",
+        "crates/brynja-cipher-aes/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-cipher-aes/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-cipher-aes"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-cipher-aes"
           ]
         }
       ]
@@ -55982,6 +56150,7 @@
       "paths": [
         ".github/workflows/ci.yml",
         "assurance/sha256-public-api",
+        "crates/brynja-cipher-aes",
         "crates/brynja-cipher-chacha",
         "crates/brynja-core",
         "crates/brynja-crypto",
@@ -56029,6 +56198,45 @@
           "replace"
         ]
       }
+    },
+    "package-repository-a6db8e2c6fa70def-dependencies-cipher-aes": {
+      "paths": [
+        "crates/brynja-cipher-aes/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-cipher-aes/build.rs",
+        "crates/brynja-cipher-aes/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-cipher-aes/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-cipher-aes"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-cipher-aes"
+          ]
+        }
+      ]
     },
     "package-repository-a6db8e2c6fa70def-dependencies-cipher-chacha": {
       "paths": [
@@ -56930,6 +57138,7 @@
         ".github/workflows/ci.yml",
         "assurance/sha3-public-api",
         "crates/brynja",
+        "crates/brynja-cipher-aes",
         "crates/brynja-cipher-chacha",
         "crates/brynja-core",
         "crates/brynja-crypto",
@@ -57021,6 +57230,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja"
+          ]
+        }
+      ]
+    },
+    "package-repository-ce2b1f0c9c412fcb-dependencies-cipher-aes": {
+      "paths": [
+        "crates/brynja-cipher-aes/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-cipher-aes/build.rs",
+        "crates/brynja-cipher-aes/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-cipher-aes/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-cipher-aes"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-cipher-aes"
           ]
         }
       ]
@@ -63322,7 +63570,6 @@
         "scripts/cryptography/macos_resident_oracle.py",
         "scripts/cryptography/test-macos-resident-batch-package.py",
         "scripts/repository/darwin_resident_abi.py",
-        "scripts/repository/unsafe_inventory.py",
         "scripts/repository/unsafe_policy.py",
         "scripts/zeroization/check-zeroization-miri.sh",
         "scripts/zeroization/check-zeroization-sanitizer.sh",
@@ -64799,6 +65046,24 @@
         "crates/brynja-crypto-cpu/src/aarch64_sha2/secret512.rs",
         "crates/brynja-crypto-cpu/src/aarch64_sha3_keccak.rs",
         "crates/brynja-crypto-cpu/src/aarch64_sha3_keccak/secret.rs",
+        "crates/brynja-crypto-cpu/src/aes/aarch64.rs",
+        "crates/brynja-crypto-cpu/src/aes/aarch64_expand.rs",
+        "crates/brynja-crypto-cpu/src/aes/dit.rs",
+        "crates/brynja-crypto-cpu/src/aes/kat.rs",
+        "crates/brynja-crypto-cpu/src/aes/mod.rs",
+        "crates/brynja-crypto-cpu/src/aes/riscv64.rs",
+        "crates/brynja-crypto-cpu/src/aes/tests.rs",
+        "crates/brynja-crypto-cpu/src/aes/x86.rs",
+        "crates/brynja-crypto-cpu/src/aes/x86_expand.rs",
+        "crates/brynja-crypto-cpu/src/chacha20_neon.rs",
+        "crates/brynja-crypto-cpu/src/chacha20_sse2.rs",
+        "crates/brynja-crypto-cpu/src/facade_api.rs",
+        "crates/brynja-crypto-cpu/src/ghash_admission.rs",
+        "crates/brynja-crypto-cpu/src/ghash_field_cases.rs",
+        "crates/brynja-crypto-cpu/src/ghash_pclmul.rs",
+        "crates/brynja-crypto-cpu/src/ghash_pmull.rs",
+        "crates/brynja-crypto-cpu/src/ghash_runtime.rs",
+        "crates/brynja-crypto-cpu/src/ghash_rv64.rs",
         "crates/brynja-crypto-cpu/src/hardened_execution/keccak.rs",
         "crates/brynja-crypto-cpu/src/hardened_execution/keccak/tests.rs",
         "crates/brynja-crypto-cpu/src/hardened_execution/keccak_scratch.rs",
@@ -64867,6 +65132,7 @@
         "crates/brynja-crypto-cpu/src/static_execution/public_data.rs",
         "crates/brynja-crypto-cpu/src/static_execution/tests.rs",
         "crates/brynja-crypto-cpu/src/static_execution/x86_sha512_tests.rs",
+        "crates/brynja-crypto-cpu/src/tests.rs",
         "crates/brynja-crypto-cpu/src/x86_avx2_keccak.rs",
         "crates/brynja-crypto-cpu/src/x86_avx2_keccak/secret.rs",
         "crates/brynja-crypto-cpu/src/x86_sha.rs",
@@ -65211,6 +65477,14 @@
         "assurance/sha3-hardened-api/Cargo.toml",
         "assurance/sha3-hardened-api/src/lib.rs",
         "assurance/tuplehash-public-api/src/lib.rs",
+        "crates/brynja-cipher-aes/src/aes.rs",
+        "crates/brynja-cipher-aes/src/aes/portable.rs",
+        "crates/brynja-cipher-aes/src/aes/portable/field.rs",
+        "crates/brynja-cipher-aes/src/aes/portable/layout.rs",
+        "crates/brynja-cipher-aes/src/aes/portable/wide.rs",
+        "crates/brynja-cipher-aes/src/aes/tests.rs",
+        "crates/brynja-cipher-aes/src/aes/tests/wide.rs",
+        "crates/brynja-cipher-aes/src/aes/wide.rs",
         "crates/brynja-core/src/entropy.rs",
         "crates/brynja-core/src/entropy/assurance_contract.rs",
         "crates/brynja-core/src/secret.rs",
@@ -65253,14 +65527,6 @@
         "crates/brynja-crypto-cpu-std/src/strict_hmac/tests/native.rs",
         "crates/brynja-crypto-cpu-std/src/strict_hmac/types.rs",
         "crates/brynja-crypto-cpu-std/src/strict_hmac/worker.rs",
-        "crates/brynja-crypto/src/aes.rs",
-        "crates/brynja-crypto/src/aes/portable.rs",
-        "crates/brynja-crypto/src/aes/portable/field.rs",
-        "crates/brynja-crypto/src/aes/portable/layout.rs",
-        "crates/brynja-crypto/src/aes/portable/wide.rs",
-        "crates/brynja-crypto/src/aes/tests.rs",
-        "crates/brynja-crypto/src/aes/tests/wide.rs",
-        "crates/brynja-crypto/src/aes/wide.rs",
         "crates/brynja-crypto/src/hkdf/derive.rs",
         "crates/brynja-crypto/tests/aes128.rs",
         "crates/brynja-crypto/tests/aes_wide.rs",
@@ -65924,6 +66190,14 @@
         "assurance/sha3-hardened-api/Cargo.toml",
         "assurance/sha3-hardened-api/src/lib.rs",
         "assurance/tuplehash-public-api/src/lib.rs",
+        "crates/brynja-cipher-aes/src/aes.rs",
+        "crates/brynja-cipher-aes/src/aes/portable.rs",
+        "crates/brynja-cipher-aes/src/aes/portable/field.rs",
+        "crates/brynja-cipher-aes/src/aes/portable/layout.rs",
+        "crates/brynja-cipher-aes/src/aes/portable/wide.rs",
+        "crates/brynja-cipher-aes/src/aes/tests.rs",
+        "crates/brynja-cipher-aes/src/aes/tests/wide.rs",
+        "crates/brynja-cipher-aes/src/aes/wide.rs",
         "crates/brynja-core/src/entropy.rs",
         "crates/brynja-core/src/entropy/assurance_contract.rs",
         "crates/brynja-core/src/secret.rs",
@@ -65966,14 +66240,6 @@
         "crates/brynja-crypto-cpu-std/src/strict_hmac/tests/native.rs",
         "crates/brynja-crypto-cpu-std/src/strict_hmac/types.rs",
         "crates/brynja-crypto-cpu-std/src/strict_hmac/worker.rs",
-        "crates/brynja-crypto/src/aes.rs",
-        "crates/brynja-crypto/src/aes/portable.rs",
-        "crates/brynja-crypto/src/aes/portable/field.rs",
-        "crates/brynja-crypto/src/aes/portable/layout.rs",
-        "crates/brynja-crypto/src/aes/portable/wide.rs",
-        "crates/brynja-crypto/src/aes/tests.rs",
-        "crates/brynja-crypto/src/aes/tests/wide.rs",
-        "crates/brynja-crypto/src/aes/wide.rs",
         "crates/brynja-crypto/src/hkdf/derive.rs",
         "crates/brynja-crypto/tests/aes128.rs",
         "crates/brynja-crypto/tests/aes_wide.rs",
@@ -66634,6 +66900,14 @@
         "assurance/sha3-hardened-api/Cargo.toml",
         "assurance/sha3-hardened-api/src/lib.rs",
         "assurance/tuplehash-public-api/src/lib.rs",
+        "crates/brynja-cipher-aes/src/aes.rs",
+        "crates/brynja-cipher-aes/src/aes/portable.rs",
+        "crates/brynja-cipher-aes/src/aes/portable/field.rs",
+        "crates/brynja-cipher-aes/src/aes/portable/layout.rs",
+        "crates/brynja-cipher-aes/src/aes/portable/wide.rs",
+        "crates/brynja-cipher-aes/src/aes/tests.rs",
+        "crates/brynja-cipher-aes/src/aes/tests/wide.rs",
+        "crates/brynja-cipher-aes/src/aes/wide.rs",
         "crates/brynja-core/src/entropy.rs",
         "crates/brynja-core/src/entropy/assurance_contract.rs",
         "crates/brynja-core/src/secret.rs",
@@ -66676,14 +66950,6 @@
         "crates/brynja-crypto-cpu-std/src/strict_hmac/tests/native.rs",
         "crates/brynja-crypto-cpu-std/src/strict_hmac/types.rs",
         "crates/brynja-crypto-cpu-std/src/strict_hmac/worker.rs",
-        "crates/brynja-crypto/src/aes.rs",
-        "crates/brynja-crypto/src/aes/portable.rs",
-        "crates/brynja-crypto/src/aes/portable/field.rs",
-        "crates/brynja-crypto/src/aes/portable/layout.rs",
-        "crates/brynja-crypto/src/aes/portable/wide.rs",
-        "crates/brynja-crypto/src/aes/tests.rs",
-        "crates/brynja-crypto/src/aes/tests/wide.rs",
-        "crates/brynja-crypto/src/aes/wide.rs",
         "crates/brynja-crypto/src/hkdf/derive.rs",
         "crates/brynja-crypto/tests/aes128.rs",
         "crates/brynja-crypto/tests/aes_wide.rs",
@@ -70972,6 +71238,7 @@
       "paths": [
         "assurance/hmac-facade",
         "crates/brynja",
+        "crates/brynja-cipher-aes",
         "crates/brynja-cipher-chacha",
         "crates/brynja-core",
         "crates/brynja-crypto",
@@ -71110,6 +71377,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja"
+          ]
+        }
+      ]
+    },
+    "final-component-repository-3f060a5f15bf3310-dependencies-cipher-aes": {
+      "paths": [
+        "crates/brynja-cipher-aes/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-cipher-aes/build.rs",
+        "crates/brynja-cipher-aes/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-cipher-aes/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-cipher-aes"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-cipher-aes"
           ]
         }
       ]
@@ -73250,6 +73556,7 @@
         "assurance/general-sha512-t/src/resources.rs",
         "assurance/general-sha512-t/work_probe.rs",
         "crates/brynja",
+        "crates/brynja-cipher-aes",
         "crates/brynja-cipher-chacha",
         "crates/brynja-core",
         "crates/brynja-crypto",
@@ -73411,6 +73718,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja"
+          ]
+        }
+      ]
+    },
+    "final-component-repository-c601c3e7699bcd87-dependencies-cipher-aes": {
+      "paths": [
+        "crates/brynja-cipher-aes/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-cipher-aes/build.rs",
+        "crates/brynja-cipher-aes/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-cipher-aes/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-cipher-aes"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-cipher-aes"
           ]
         }
       ]
@@ -74413,6 +74759,7 @@
         "assurance/general-sha512-t/src/resources.rs",
         "assurance/general-sha512-t/work_probe.rs",
         "crates/brynja",
+        "crates/brynja-cipher-aes",
         "crates/brynja-cipher-chacha",
         "crates/brynja-core",
         "crates/brynja-crypto",
@@ -74550,6 +74897,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja"
+          ]
+        }
+      ]
+    },
+    "final-component-repository-dfe1132d65f1e9aa-dependencies-cipher-aes": {
+      "paths": [
+        "crates/brynja-cipher-aes/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-cipher-aes/build.rs",
+        "crates/brynja-cipher-aes/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-cipher-aes/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-cipher-aes"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-cipher-aes"
           ]
         }
       ]
@@ -92664,6 +93050,7 @@
         "package-python",
         "package-repository-17a45d54f013fcc0",
         "package-repository-17a45d54f013fcc0-dependencies-brynja",
+        "package-repository-17a45d54f013fcc0-dependencies-cipher-aes",
         "package-repository-17a45d54f013fcc0-dependencies-cipher-chacha",
         "package-repository-17a45d54f013fcc0-dependencies-core",
         "package-repository-17a45d54f013fcc0-dependencies-crypto",
@@ -92813,6 +93200,7 @@
         "package-python",
         "package-repository-26a0b0fc61844f33",
         "package-repository-26a0b0fc61844f33-dependencies-brynja",
+        "package-repository-26a0b0fc61844f33-dependencies-cipher-aes",
         "package-repository-26a0b0fc61844f33-dependencies-cipher-chacha",
         "package-repository-26a0b0fc61844f33-dependencies-core",
         "package-repository-26a0b0fc61844f33-dependencies-crypto",
@@ -93194,6 +93582,7 @@
         "package-python",
         "package-repository-7965ceea8904c78e",
         "package-repository-7965ceea8904c78e-dependencies-brynja",
+        "package-repository-7965ceea8904c78e-dependencies-cipher-aes",
         "package-repository-7965ceea8904c78e-dependencies-cipher-chacha",
         "package-repository-7965ceea8904c78e-dependencies-core",
         "package-repository-7965ceea8904c78e-dependencies-crypto",
@@ -93270,6 +93659,7 @@
         "package-python",
         "package-repository-88caf3aa426de5bc",
         "package-repository-88caf3aa426de5bc-dependencies-brynja",
+        "package-repository-88caf3aa426de5bc-dependencies-cipher-aes",
         "package-repository-88caf3aa426de5bc-dependencies-cipher-chacha",
         "package-repository-88caf3aa426de5bc-dependencies-core",
         "package-repository-88caf3aa426de5bc-dependencies-crypto",
@@ -93414,6 +93804,7 @@
       "inputs": [
         "package-python",
         "package-repository-a6db8e2c6fa70def",
+        "package-repository-a6db8e2c6fa70def-dependencies-cipher-aes",
         "package-repository-a6db8e2c6fa70def-dependencies-cipher-chacha",
         "package-repository-a6db8e2c6fa70def-dependencies-core",
         "package-repository-a6db8e2c6fa70def-dependencies-crypto",
@@ -93543,6 +93934,7 @@
         "package-python",
         "package-repository-ce2b1f0c9c412fcb",
         "package-repository-ce2b1f0c9c412fcb-dependencies-brynja",
+        "package-repository-ce2b1f0c9c412fcb-dependencies-cipher-aes",
         "package-repository-ce2b1f0c9c412fcb-dependencies-cipher-chacha",
         "package-repository-ce2b1f0c9c412fcb-dependencies-core",
         "package-repository-ce2b1f0c9c412fcb-dependencies-crypto",
@@ -95266,6 +95658,7 @@
         "final-component-python",
         "final-component-repository-3f060a5f15bf3310",
         "final-component-repository-3f060a5f15bf3310-dependencies-brynja",
+        "final-component-repository-3f060a5f15bf3310-dependencies-cipher-aes",
         "final-component-repository-3f060a5f15bf3310-dependencies-cipher-chacha",
         "final-component-repository-3f060a5f15bf3310-dependencies-core",
         "final-component-repository-3f060a5f15bf3310-dependencies-crypto",
@@ -95500,6 +95893,7 @@
         "final-component-python",
         "final-component-repository-c601c3e7699bcd87",
         "final-component-repository-c601c3e7699bcd87-dependencies-brynja",
+        "final-component-repository-c601c3e7699bcd87-dependencies-cipher-aes",
         "final-component-repository-c601c3e7699bcd87-dependencies-cipher-chacha",
         "final-component-repository-c601c3e7699bcd87-dependencies-core",
         "final-component-repository-c601c3e7699bcd87-dependencies-crypto",
@@ -95597,6 +95991,7 @@
         "final-component-python",
         "final-component-repository-dfe1132d65f1e9aa",
         "final-component-repository-dfe1132d65f1e9aa-dependencies-brynja",
+        "final-component-repository-dfe1132d65f1e9aa-dependencies-cipher-aes",
         "final-component-repository-dfe1132d65f1e9aa-dependencies-cipher-chacha",
         "final-component-repository-dfe1132d65f1e9aa-dependencies-core",
         "final-component-repository-dfe1132d65f1e9aa-dependencies-crypto",

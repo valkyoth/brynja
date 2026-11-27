@@ -1,6 +1,11 @@
 # Changelog
 
-## 0.30.2 installed ChaCha20 public API acceptance (internal candidate)
+## 0.30.3 standalone AES block cipher (in development)
+
+- Raw AES-128/192/256 owners now live in `brynja-cipher-aes`. Existing
+  imports use the same types. [Release notes](release-notes/RELEASE_NOTES_0.30.3.md).
+
+## 0.30.2 installed ChaCha20 public API acceptance (internally tagged)
 
 - Test two portable imports, SSE2 and NEON from installed downstream binaries.
   No new cipher, feature or dependency. [Release notes](release-notes/RELEASE_NOTES_0.30.2.md).

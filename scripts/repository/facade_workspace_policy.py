@@ -30,14 +30,23 @@ LEAVES = {
 CRYPTO = {'cpu': ['dep:brynja-crypto-cpu'], 'aes-gcm': [], 'gmac': [], 'hazmat-aes-block': [], 'hazmat-ghash': [], 'external-key-provider': []}
 CRYPTO.update({feature: ([] if feature == 'general-sha512-t' else ['cpu']) +
               [owner + '/' + leaf] for feature, (owner, leaf) in LEAVES.items()})
-CRYPTO['aes-static-execution'] = ['hazmat-aes-block', 'cpu', 'brynja-crypto-cpu/aes-static-execution']
+for feature in ('aes-gcm', 'gmac', 'hazmat-aes-block', 'external-key-provider'):
+    child = 'external-key-provider' if feature == 'external-key-provider' else 'hazmat-aes-block'
+    CRYPTO[feature] = ['dep:brynja-cipher-aes', 'brynja-cipher-aes/' + child]
+CRYPTO['aes-static-execution'] = ['hazmat-aes-block', 'cpu', 'brynja-cipher-aes/aes-static-execution']
 for composition in ('aes-gcm', 'gmac'):
     CRYPTO[composition + '-execution'] = [composition, 'dep:brynja-crypto-cpu',
-        'brynja-crypto-cpu/aes-static-execution', 'brynja-crypto-cpu/ghash-runtime-execution']
-CRYPTO['aes-runtime-execution'] = ['aes-static-execution', 'brynja-crypto-cpu/aes-runtime-execution']
+        'brynja-cipher-aes/aes-static-execution', 'brynja-crypto-cpu/ghash-runtime-execution']
+CRYPTO['aes-runtime-execution'] = ['aes-static-execution', 'brynja-cipher-aes/aes-runtime-execution']
 CRYPTO['ghash-runtime-execution'] = ['hazmat-ghash', 'dep:brynja-crypto-cpu',
                                      'brynja-crypto-cpu/ghash-runtime-execution']
 FEATURES = {
+    'brynja-cipher-aes': {
+        'hazmat-aes-block': ['dep:brynja-core'],
+        'external-key-provider': ['dep:brynja-core'],
+        'aes-static-execution': ['hazmat-aes-block', 'dep:brynja-crypto-cpu', 'brynja-crypto-cpu/aes-static-execution'],
+        'aes-runtime-execution': ['aes-static-execution', 'brynja-crypto-cpu/aes-runtime-execution'],
+    },
     # Only a direct dependency can select the extra raw stream feature.
     'brynja-crypto': {**CRYPTO, 'hazmat-chacha20': ['dep:brynja-cipher-chacha', 'brynja-cipher-chacha/hazmat-chacha20']},
     'brynja': {feature: ['brynja-crypto/' + feature] for feature in CRYPTO},
@@ -63,6 +72,7 @@ def validate_isolation(modern, edges, names, packages, reachable):
     protocol_edges[names['brynja-mac-hmac']].discard(names['brynja-crypto-cpu'])
     # The standalone stream's SSE2 feature is not forwarded by the facade.
     protocol_edges[names['brynja-cipher-chacha']].discard(names['brynja-crypto-cpu'])
+    protocol_edges[names['brynja-cipher-aes']].discard(names['brynja-crypto-cpu'])
     for engine in ('brynja-tls', 'brynja-tls12', 'brynja-tls13',
                    'brynja-tls13-handshake', 'brynja-dtls', 'brynja-quic-tls'):
         reached = reachable(engine, names, packages, protocol_edges)

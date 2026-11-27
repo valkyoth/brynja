@@ -13,25 +13,25 @@ class FaultArchiveBoundaryTests(unittest.TestCase):
     def test_sources_live_outside_published_crate_roots(self):
         self.assertTrue((RESEARCH / "crypto/fault_integrity/mod.rs").is_file())
         self.assertTrue((RESEARCH / "core/fault_comparison_workbench/mod.rs").is_file())
-        self.assertFalse((ROOT / "crates/brynja-crypto/src/aes/fault_integrity.rs").exists())
-        self.assertFalse((ROOT / "crates/brynja-crypto/src/aes/fault_integrity").exists())
+        self.assertFalse((ROOT / "crates/brynja-cipher-aes/src/aes/fault_integrity.rs").exists())
+        self.assertFalse((ROOT / "crates/brynja-cipher-aes/src/aes/fault_integrity").exists())
         self.assertFalse((ROOT / "crates/brynja-core/src/fault_comparison_workbench.rs").exists())
         self.assertFalse((ROOT / "crates/brynja-core/src/fault_comparison_workbench").exists())
 
     def test_research_bridge_requires_explicit_non_feature_cfg(self):
-        crypto = (ROOT / "crates/brynja-crypto/src/aes.rs").read_text(encoding="utf-8")
+        crypto = (ROOT / "crates/brynja-cipher-aes/src/aes.rs").read_text(encoding="utf-8")
         core = (ROOT / "crates/brynja-core/src/lib.rs").read_text(encoding="utf-8")
-        portable = (ROOT / "crates/brynja-crypto/src/aes/portable.rs").read_text(
+        portable = (ROOT / "crates/brynja-cipher-aes/src/aes/portable.rs").read_text(
             encoding="utf-8")
         self.assertIn("#[cfg(all(brynja_fault_profile_research, any(test, brynja_fault_profile_build)))]", crypto)
         self.assertIn("#[cfg(all(brynja_fault_primitives, brynja_fault_profile_research))]", core)
         self.assertIn("#[cfg(all(test, brynja_fault_evidence, brynja_fault_profile_research))]", portable)
-        for manifest in ("crates/brynja-crypto/Cargo.toml", "crates/brynja-core/Cargo.toml"):
+        for manifest in ("crates/brynja-cipher-aes/Cargo.toml", "crates/brynja-crypto/Cargo.toml", "crates/brynja-core/Cargo.toml"):
             self.assertNotIn("brynja_fault_profile_research", (ROOT / manifest).read_text(
                 encoding="utf-8"))
 
     def test_actual_package_lists_exclude_prototype(self):
-        for crate in ("brynja-core", "brynja-crypto"):
+        for crate in ("brynja-core", "brynja-cipher-aes", "brynja-crypto"):
             package = subprocess.run(
                 ["cargo", "package", "--list", "--allow-dirty", "--locked",
                  "--offline", "-p", crate], cwd=ROOT, capture_output=True,

@@ -113,8 +113,8 @@
     "scripts/cpu/check-static-execution.py": "c800acf8189b6a65799d926174d22d630a86a2c495ef20e91bdad7d755282d1f",
     "scripts/cpu/static_execution_docs.py": "fe6024364e0e96e01955d768a18aeba3a8a3df78cb251cecb1cdd813f2e4662b",
     "scripts/repository/darwin_resident_abi.py": "b6ec7a57b01f4d01d2cd62e8b3dde75eaf6c152b087554d6ada0b41db5475af4",
-    "scripts/repository/unsafe_inventory.py": "349c6d6d1f514735dc0437d4a0fb0f564652fa004b6f9c04276796af82232f2c",
-    "scripts/repository/unsafe_policy.py": "2785086b3158cd5d52c266332acbd4e525809ecbbea32e97bc7183689e8fcf2f",
+    "scripts/repository/unsafe_inventory.py": "52790c0d4fd15a203f0439ce497f5afb6d47425a99d0ca7f91084928d5baa5ec",
+    "scripts/repository/unsafe_policy.py": "b97b9caddc910c94c0d0a9bd97941e4165eca40d267129ed887b7eb281293c3e",
     "scripts/zeroization/check-zeroization-miri.sh": "901cc7414edd800a0d107fb54bc04296fb8834cc8b7a6a3d457b161ad0ae69c6",
     "scripts/zeroization/check-zeroization-sanitizer.sh": "c4c007e150a53307366be333ba1c6f059b3c0a60cec51e322733230731daf801"
   }

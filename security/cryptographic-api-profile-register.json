@@ -19297,10 +19297,10 @@
       "block_bytes": 16,
       "capability": "algorithm.aes",
       "cleanup_bindings": [
-        "crates/brynja-crypto/src/aes.rs#Aes128Key::clear",
-        "crates/brynja-crypto/src/aes.rs#SecretBlock::clear",
-        "crates/brynja-crypto/src/aes.rs#Scratch::drop",
-        "crates/brynja-crypto/src/aes.rs#Aes128ExpandedKey::clear"
+        "crates/brynja-cipher-aes/src/aes.rs#Aes128Key::clear",
+        "crates/brynja-cipher-aes/src/aes.rs#SecretBlock::clear",
+        "crates/brynja-cipher-aes/src/aes.rs#Scratch::drop",
+        "crates/brynja-cipher-aes/src/aes.rs#Aes128ExpandedKey::clear"
       ],
       "cleanup_model": "delegated-owner-drop-and-explicit-clear-with-operation-local-guards",
       "compiler_checks": [
@@ -19314,7 +19314,7 @@
       ],
       "evidence": [
         "crates/brynja-crypto/tests/aes128.rs",
-        "crates/brynja-crypto/src/aes/tests.rs",
+        "crates/brynja-cipher-aes/src/aes/tests.rs",
         "scripts/aes/check-aes-api.py",
         "scripts/aes/check-aes-owner-cleanup.py",
         "scripts/aes/check-aes-operation-cleanup.py",
@@ -19333,7 +19333,7 @@
         "backend-selection",
         "TLS"
       ],
-      "expanded_key_symbol": "crates/brynja-crypto/src/aes.rs#Aes128ExpandedKey",
+      "expanded_key_symbol": "crates/brynja-cipher-aes/src/aes.rs#Aes128ExpandedKey",
       "fields": [
         "region:caller-backed-owned-secret-region",
         "local:thread-local-marker"
@@ -19412,7 +19412,7 @@
           "output": "none"
         }
       ],
-      "output_symbol": "crates/brynja-crypto/src/aes.rs#SecretBlock",
+      "output_symbol": "crates/brynja-cipher-aes/src/aes.rs#SecretBlock",
       "qualification": "development-only-family-incomplete-side-channel-and-independent-review-pending",
       "residual_risks": [
         "mem-forget",
@@ -19431,7 +19431,7 @@
       "rounds": 10,
       "state": "development",
       "storage": "caller-backed-key-and-output-with-fixed-operation-scratch",
-      "symbol": "crates/brynja-crypto/src/aes.rs#Aes128Key",
+      "symbol": "crates/brynja-cipher-aes/src/aes.rs#Aes128Key",
       "temporaries": [
         "schedule:Scratch<176>",
         "state:Scratch<16>",
@@ -19445,9 +19445,9 @@
       "block_bytes": 16,
       "capability": "algorithm.aes",
       "cleanup_bindings": [
-        "crates/brynja-crypto/src/aes/wide.rs#clear",
-        "crates/brynja-crypto/src/aes.rs#SecretBlock::clear",
-        "crates/brynja-crypto/src/aes.rs#Scratch::drop"
+        "crates/brynja-cipher-aes/src/aes/wide.rs#clear",
+        "crates/brynja-cipher-aes/src/aes.rs#SecretBlock::clear",
+        "crates/brynja-cipher-aes/src/aes.rs#Scratch::drop"
       ],
       "cleanup_model": "delegated-owner-drop-and-explicit-clear-with-operation-local-guards",
       "compiler_checks": [
@@ -19461,7 +19461,7 @@
       ],
       "evidence": [
         "crates/brynja-crypto/tests/aes_wide.rs",
-        "crates/brynja-crypto/src/aes/tests/wide.rs",
+        "crates/brynja-cipher-aes/src/aes/tests/wide.rs",
         "crates/brynja-crypto/tests/aes_wide_kat.rs",
         "crates/brynja-crypto/tests/aes_wide_differential.rs",
         "scripts/aes/check-aes-wide-api.py",
@@ -19479,7 +19479,7 @@
         "backend-selection",
         "TLS"
       ],
-      "expanded_key_symbol": "crates/brynja-crypto/src/aes/wide.rs#Aes192ExpandedKey",
+      "expanded_key_symbol": "crates/brynja-cipher-aes/src/aes/wide.rs#Aes192ExpandedKey",
       "fields": [
         "region:caller-backed-owned-secret-region",
         "local:thread-local-marker"
@@ -19558,7 +19558,7 @@
           "output": "none"
         }
       ],
-      "output_symbol": "crates/brynja-crypto/src/aes.rs#SecretBlock",
+      "output_symbol": "crates/brynja-cipher-aes/src/aes.rs#SecretBlock",
       "qualification": "development-only-v0.27.1-in-progress-independent-review-pending",
       "residual_risks": [
         "mem-forget",
@@ -19577,7 +19577,7 @@
       "rounds": 12,
       "state": "development",
       "storage": "caller-backed-key-and-output-with-fixed-operation-scratch",
-      "symbol": "crates/brynja-crypto/src/aes/wide.rs#Aes192Key",
+      "symbol": "crates/brynja-cipher-aes/src/aes/wide.rs#Aes192Key",
       "temporaries": [
         "schedule:Scratch<208>",
         "state:Scratch<16>",
@@ -19591,9 +19591,9 @@
       "block_bytes": 16,
       "capability": "algorithm.aes",
       "cleanup_bindings": [
-        "crates/brynja-crypto/src/aes/wide.rs#clear",
-        "crates/brynja-crypto/src/aes.rs#SecretBlock::clear",
-        "crates/brynja-crypto/src/aes.rs#Scratch::drop"
+        "crates/brynja-cipher-aes/src/aes/wide.rs#clear",
+        "crates/brynja-cipher-aes/src/aes.rs#SecretBlock::clear",
+        "crates/brynja-cipher-aes/src/aes.rs#Scratch::drop"
       ],
       "cleanup_model": "delegated-owner-drop-and-explicit-clear-with-operation-local-guards",
       "compiler_checks": [
@@ -19607,7 +19607,7 @@
       ],
       "evidence": [
         "crates/brynja-crypto/tests/aes_wide.rs",
-        "crates/brynja-crypto/src/aes/tests/wide.rs",
+        "crates/brynja-cipher-aes/src/aes/tests/wide.rs",
         "crates/brynja-crypto/tests/aes_wide_kat.rs",
         "crates/brynja-crypto/tests/aes_wide_differential.rs",
         "scripts/aes/check-aes-wide-api.py",
@@ -19625,7 +19625,7 @@
         "backend-selection",
         "TLS"
       ],
-      "expanded_key_symbol": "crates/brynja-crypto/src/aes/wide.rs#Aes256ExpandedKey",
+      "expanded_key_symbol": "crates/brynja-cipher-aes/src/aes/wide.rs#Aes256ExpandedKey",
       "fields": [
         "region:caller-backed-owned-secret-region",
         "local:thread-local-marker"
@@ -19704,7 +19704,7 @@
           "output": "none"
         }
       ],
-      "output_symbol": "crates/brynja-crypto/src/aes.rs#SecretBlock",
+      "output_symbol": "crates/brynja-cipher-aes/src/aes.rs#SecretBlock",
       "qualification": "development-only-v0.27.1-in-progress-independent-review-pending",
       "residual_risks": [
         "mem-forget",
@@ -19723,7 +19723,7 @@
       "rounds": 14,
       "state": "development",
       "storage": "caller-backed-key-and-output-with-fixed-operation-scratch",
-      "symbol": "crates/brynja-crypto/src/aes/wide.rs#Aes256Key",
+      "symbol": "crates/brynja-cipher-aes/src/aes/wide.rs#Aes256Key",
       "temporaries": [
         "schedule:Scratch<240>",
         "state:Scratch<16>",
@@ -24768,7 +24768,7 @@
       ]
     }
   ],
-  "policy_sha256": "527c2680660b9c9bee3f0b981c654cbbae256fb9649ade49e97caf0eb14cfc79",
+  "policy_sha256": "3629f53143b2e39f1b491ddcc89e71b6a4e493ea2d48896af7ce49f08812ffef",
   "registered_secret_owners": [
     {
       "capability": "algorithm.hkdf",

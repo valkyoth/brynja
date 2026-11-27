@@ -69,7 +69,7 @@ def reconciled_inventory():
         require_rejection(root, 'core research module inventory changed')
         extra_module.unlink()
         unsafe_policy.validate(root)
-        importer = root / 'crates/brynja-crypto/src/aes.rs'
+        importer = root / 'crates/brynja-cipher-aes/src/aes.rs'
         original = importer.read_text()
         for changed in (
             original.replace('brynja_fault_profile_research', 'not(kani)'),

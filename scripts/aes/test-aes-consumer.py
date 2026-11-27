@@ -48,16 +48,17 @@ class ConsumerTests(unittest.TestCase):
                  patch('builtins.print') as emit:
                 consumer.feature_probe('1.90.0', route, Path(temporary) / 'probe')
             self.assertEqual(negative.call_count, 2)
-            self.assertEqual(len(seen), 6)
-            for offset, defaults in ((0, 'true'), (3, 'false')):
+            self.assertEqual(len(seen), 8)
+            for offset, defaults in ((0, 'true'), (4, 'false')):
                 self.assertIn('default-features=' + defaults, seen[offset][1])
                 self.assertIn('features=[]', seen[offset][1])
                 self.assertIn('::hkdf;', seen[offset + 1][2])
                 self.assertIn('features=["hazmat-aes-block"]', seen[offset + 2][1])
-                self.assertIn('::aes::{', seen[offset + 2][2])
+                self.assertIn('generate-lockfile', seen[offset + 2][0])
+                self.assertIn('::aes::{', seen[offset + 3][2])
                 for owner in consumer.OWNERS:
                     self.assertIn(owner, seen[offset][2])
-                    self.assertIn(owner, seen[offset + 2][2])
+                    self.assertIn(owner, seen[offset + 3][2])
             emit.assert_called_once()
 
     def test_feature_probe_failure_never_prints_success(self):
@@ -137,7 +138,7 @@ class ConsumerTests(unittest.TestCase):
             features = [route] if name == consumer.NAME else ['default']
             if name == 'brynja' or (name == 'brynja-crypto' and route == 'direct'):
                 features = []
-            if name in ('brynja', 'brynja-crypto'):
+            if name in ('brynja', 'brynja-crypto', 'brynja-cipher-aes'):
                 features.append('hazmat-aes-block')
             if name == 'brynja-hash-sha2':
                 features.append('general-sha512-t')

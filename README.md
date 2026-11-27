@@ -334,6 +334,11 @@ It is not ChaCha20-Poly1305: raw ciphertext has no integrity protection.
 The [installed consumer](assurance/chacha20-consumer/README.md) shows how to
 test both portable imports and the explicit SSE2 and NEON owners.
 
+For raw AES blocks the development tree provides `brynja-cipher-aes` with
+the default-off `hazmat-aes-block` feature. The [standalone crate](crates/brynja-cipher-aes/README.md)
+and the existing `brynja_crypto::aes` and `brynja::crypto::aes` imports
+share the same AES-128/192/256 owners. This is not a message encryption mode.
+
 The v0.27.6 [provider API candidate](docs/assurance/aes-provider-completion.md)
 adds distinct AES-128/192/256 external-key bindings. Applications supply their
 own trusted adapters; Brynja adds no device client or OpenBao integration and

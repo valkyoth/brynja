@@ -15,7 +15,7 @@ env:
 
 jobs:
   aes-public-api:
-    name: AES-128 public consumers (compiler endpoints)
+    name: AES public consumers (all key widths, compiler endpoints)
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -36,6 +36,8 @@ jobs:
         run: python3 scripts/aes/test-aes-consumer.py
       - name: Exercise checkout consumers at the endpoints only
         run: python3 scripts/aes/check-aes-consumer.py
+      - name: Exchange all AES key widths across packaged standalone and compatibility imports
+        run: python3 scripts/aes/check-aes-leaf-identity.py
       - name: Check packaged portable AES-GCM and GMAC on both endpoints
         run: python3 scripts/aes-gcm/check-portable-acceptance.py --smoke
 

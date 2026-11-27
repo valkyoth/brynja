@@ -7365,7 +7365,7 @@ Exit criteria:
 
 ### v0.30.3 - Standalone AES Block Cipher
 
-Status: planned
+Status: in progress
 
 Plan scope: Extract the existing AES-128, AES-192 and AES-256 owners into `brynja-cipher-aes`, keeping existing feature gates, provider contracts and re-exported type identity without adding block modes.
 

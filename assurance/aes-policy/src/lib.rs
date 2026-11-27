@@ -4,9 +4,9 @@
 #![allow(dead_code)]
 
 // Direct production source, not a copied or stubbed implementation.
-#[path = "../../../crates/brynja-crypto/src/aes/portable/field.rs"]
+#[path = "../../../crates/brynja-cipher-aes/src/aes/portable/field.rs"]
 mod field;
-#[path = "../../../crates/brynja-crypto/src/aes/portable/layout.rs"]
+#[path = "../../../crates/brynja-cipher-aes/src/aes/portable/layout.rs"]
 mod layout;
 
 #[cfg(kani)]

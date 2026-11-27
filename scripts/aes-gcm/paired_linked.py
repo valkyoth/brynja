@@ -109,8 +109,21 @@ def aes_width(image, material):
     forward, = candidates
     width = require(re.search(r"paired::Aes(128|192|256)ExpandedKey", image.names[forward]),
                     "unknown paired width")[1]
-    owner = "brynja_crypto::aes::execution::Aes" + width + "ExpandedKey::encrypt_block"
-    wrappers = {forward} | image.children(forward, owner)
+    owner = "brynja_cipher_aes::aes::execution::Aes" + width + "ExpandedKey"
+    public = image.children(forward, owner + "::encrypt_block")
+    wrappers = {forward} | public
+    for wrapper in public:
+        secret = image.children(wrapper, owner + "::secret")
+        if secret:
+            # In the non-inlined SysV wrapper the fifth argument is inverse.
+            # Only accept the observed straight-line thunk setting it to false.
+            code = [(op, arg) for op, arg in image.bodies[wrapper] if op != "int3"]
+            require(len(secret) == 1 and len(code) == 7
+                    and code[:3] == [("pushq", "%rbx"), ("movq", "%rdi, %rbx"), ("xorl", "%r8d, %r8d")]
+                    and code[3][0] == "callq"
+                    and code[4:] == [("movq", "%rbx, %rax"), ("popq", "%rbx"), ("retq", "")],
+                    "unrecognized encrypt direction thunk for " + width)
+            wrappers.update(secret)
     sessions = {s for w in wrappers for s in image.children(w, "brynja_crypto_cpu::aes::Session::encrypt" + width)}
     leaves = {t for s in sessions for t in image.children(s, TRANSFORM)}
     require(len(leaves) == 1, "missing AES forward session/round path for " + width)

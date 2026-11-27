@@ -73,7 +73,7 @@ def test_generation_is_deterministic() -> None:
 def test_aes_wide_development_keeps_family_qualification_open() -> None:
     _scope, requirements, _digest = domain.load_policy()
     aes = next(item for item in requirements if item['id'] == 'BRY-REQ-CRYPTO-0005')
-    assert aes['revision'] == 4
+    assert aes['revision'] == 5
     assert aes['lifecycle'] == 'planned'
     assert aes['decision_ids'] == ['algorithm.aes']
     assert 'AES-192/256 ephemeral and cached owners' in aes['statement']

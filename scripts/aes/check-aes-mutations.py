@@ -112,8 +112,8 @@ def prepare(directory):
     (directory / 'src').mkdir()
     # This isolated fixture exports only copied AES production code and uses
     # the actual core dependency. No changes are made to the source checkout.
-    shutil.copy2(ROOT / 'crates/brynja-crypto/src/aes.rs', directory / 'src/aes.rs')
-    shutil.copytree(ROOT / 'crates/brynja-crypto/src/aes', directory / 'src/aes')
+    shutil.copy2(ROOT / 'crates/brynja-cipher-aes/src/aes.rs', directory / 'src/aes.rs')
+    shutil.copytree(ROOT / 'crates/brynja-cipher-aes/src/aes', directory / 'src/aes')
     (directory / 'src/lib.rs').write_text('#![no_std]\n#![forbid(unsafe_code)]\npub mod aes;\n')
     (directory / 'tests').mkdir()
     shutil.copy2(ROOT / 'crates/brynja-crypto/tests/aes128.rs', directory / 'tests/aes128.rs')

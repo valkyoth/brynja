@@ -252,6 +252,19 @@ class ArchiveTests(unittest.TestCase):
             with self.subTest(args=args), self.assertRaises(ValueError):
                 screen(*args)
 
+        def thunk(inverse):
+            name = "brynja_cipher_aes::aes::execution::Aes192ExpandedKey"
+            text = ("example:\tfile format elf64-x86-64\n10 <material>:\n 10: callq 0x20\n"
+                    f"20 <{c['PORT']}paired::Aes192ExpandedKey as Forward::encrypt>:\n 20: callq 0x30\n"
+                    f"30 <{name}::encrypt_block>:\n 30: pushq %rbx\n 31: movq %rdi, %rbx\n"
+                    f" 32: {inverse}\n 33: callq 0x40\n 34: movq %rbx, %rax\n 35: popq %rbx\n 36: retq\n"
+                    f"40 <{name}::secret>:\n 40: callq 0x50\n50 <brynja_crypto_cpu::aes::Session::encrypt192>:\n"
+                    f" 50: callq 0x60\n60 <{c['TRANSFORM']}>:\n 60: aesenc\n 61: aesenclast\n")
+            return c["aes_width"](c["Image"](text, ""), 16)
+        self.assertEqual(thunk("xorl %r8d, %r8d"), ("192", 96))
+        with self.assertRaisesRegex(ValueError, "direction thunk"):
+            thunk("movl $1, %r8d")
+
     def test_linked_leaf_rejects_substituted_operation_and_early_exit(self):
         c = paired.linked
         wanted = [("orb", "%al, (%rdi)"), ("retq", "")]
@@ -292,6 +305,9 @@ class ArchiveTests(unittest.TestCase):
                 deps.append(cpu)
             elif name == cpu:
                 flags += ["aes-static-execution", "ghash-runtime-execution"]
+            elif name == "brynja-cipher-aes":
+                flags += ["hazmat-aes-block", "aes-static-execution"]
+                deps.append(cpu)
             add(name, deps, flags, root / "unpacked" / f"{name}-{versions[name]}" / "Cargo.toml")
             for dep in deps:
                 visit(dep)
@@ -305,6 +321,7 @@ class ArchiveTests(unittest.TestCase):
 
         validate(graph)
         for target, field, value in ((crypto, "features", ["gmac", "gmac-execution", "hazmat-aes-block"]),
+                                     ("brynja-cipher-aes", "features", ["default", "hazmat-aes-block"]),
                                      (cpu, "features", ["default", "aes-static-execution"]),
                                      (cpu, "deps", [{"pkg": "brynja-core"}]),
                                      (crypto, "deps", [d for d in nodes[crypto]["deps"] if d["pkg"] != cpu])):
@@ -317,6 +334,8 @@ class ArchiveTests(unittest.TestCase):
         # Even a changed reference lock cannot authorize a CPU crate for a
         # portable consumer. Remove the native features to isolate that guard.
         nodes[crypto]["features"] = ["gmac"]
+        nodes["brynja-cipher-aes"]["features"] = ["default", "hazmat-aes-block"]
+        nodes["brynja-cipher-aes"]["deps"] = [{"pkg": "brynja-core"}]
         nodes[cpu]["features"] = ["default"]
         packages[crypto]["dependencies"].append(cpu)
         lock["package"].append({"name": cpu, "version": versions[cpu]})

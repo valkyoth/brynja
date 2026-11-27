@@ -136,6 +136,7 @@ PACKAGES = (
 # Cargo must resolve development dependencies while packaging even though the
 # public consumer never enables this std adapter. Keep its runtime lock separate.
 PACKAGING_PACKAGES = (*PACKAGES, ("brynja-crypto-cpu-std", "0.2.0", ("src/lib.rs",)),
+                      ("brynja-cipher-aes", "0.1.0", ("src/lib.rs",)),
                       ("brynja-cipher-chacha", "0.1.0", ("src/lib.rs",)))
 
 

@@ -55,7 +55,14 @@ optional = { strict-execution = "brynja-crypto-cpu-std" }
 class = "modern-shared"
 publish = "crates-io"
 required = ["brynja-core", "brynja-hash-parallel", "brynja-hash-sha2", "brynja-hash-sha3", "brynja-hash-tuple", "brynja-mac-kmac", "brynja-mac-hmac"]
-optional = { cpu = "brynja-crypto-cpu", hazmat-chacha20 = "brynja-cipher-chacha" }
+optional = { cpu = "brynja-crypto-cpu", hazmat-chacha20 = "brynja-cipher-chacha", hazmat-aes-block = "brynja-cipher-aes" }
+
+[packages.brynja-cipher-aes]
+class = "modern-shared"
+publish = "crates-io"
+required = []
+optional = { hazmat-aes-block = "brynja-core", aes-static-execution = "brynja-crypto-cpu" }
+features = ["external-key-provider", "aes-runtime-execution"]
 
 [packages.brynja-cipher-chacha]
 class = "modern-shared"

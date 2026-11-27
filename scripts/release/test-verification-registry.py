@@ -828,7 +828,7 @@ class RegistryTests(unittest.TestCase):
 
     def test_aes_initial_checks_pin_harnesses_and_counts(self):
         checks = {c['id']: c for c in self.registry['checks'] if c['component'] == 'aes'}
-        expected = {'vectors': 6, 'rounds-and-faults': 17, 'msrv-vectors': 6,
+        expected = {'standalone-archive-identity': 0, 'vectors': 6, 'rounds-and-faults': 17, 'msrv-vectors': 6,
                     'ownership': 11, 'optimized-vectors': 6, 'no-std-thumb': 0,
                     'asan-vectors': 6, 'miri-ownership': 1, 'asan-faults': 17,
                     'miri-public': 1, 'differential': 1, 'field-layout-proof': 0,
@@ -893,7 +893,7 @@ class RegistryTests(unittest.TestCase):
             for arch in ('x86', 'arm-qemu'):
                 expected[f'kernel-{arch}-{endpoint}'] = 5
                 expected[f'expansion-{arch}-{endpoint}'] = 10
-            for profile, count in (('minimal', 32), ('all', 98)):
+            for profile, count in (('minimal', 32), ('all', 182)):
                 expected[f'feature-{endpoint}-{profile}-test'] = count
                 expected[f'feature-{endpoint}-{profile}-doc'] = 0
         for route in ('direct', 'facade'):
@@ -911,7 +911,8 @@ class RegistryTests(unittest.TestCase):
             check = checks[name]
             for field in ('component', 'id', 'category'):
                 self.assertRegex(check[field], r'^[a-z0-9_-]+$')
-            input_group = ('aes-kernel-candidate' if name.startswith('kernel-') else
+            input_group = ('aes-leaf-identity' if name == 'standalone-archive-identity' else
+                           'aes-kernel-candidate' if name.startswith('kernel-') else
                            'aes-packaged' if name.startswith(('packaged-', 'avs-')) else 'aes-build')
             self.assertIn(input_group, check['inputs'])
             self.assertNotIn('--workspace', check['command'])
@@ -922,7 +923,7 @@ class RegistryTests(unittest.TestCase):
                     version = '1.90.0' if endpoint == 'msrv' else '1.99.1'
                     flag = '--no-default-features' if profile == 'minimal' else '--all-features'
                     self.assertEqual(command, ['cargo', '+'+version, action, '--locked', '--offline',
-                                             '-p', 'brynja-crypto', '-p', 'brynja', flag]
+                                             '-p', 'brynja-cipher-aes', '-p', 'brynja-crypto', '-p', 'brynja', flag]
                                      + (['--no-deps'] if action == 'doc' else []))
                     self.assertIn('aes-feature-integration', check['inputs'])
                     self.assertEqual(self.registry['groups']['aes-feature-integration']['paths'],

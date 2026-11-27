@@ -88,7 +88,7 @@ def graph(metadata, route, directory, unpacked, versions, *, provider=False):
         features = {route} if name == consumer.NAME else {'default'}
         if name == 'brynja' or (name == 'brynja-crypto' and route == 'direct'):
             features = set()
-        if name in ('brynja', 'brynja-crypto'):
+        if name in ('brynja', 'brynja-crypto', 'brynja-cipher-aes'):
             features.add('hazmat-aes-block')
             if provider:
                 features.add('external-key-provider')

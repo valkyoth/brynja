@@ -261,7 +261,7 @@ class MutationTests(unittest.TestCase):
     def test_compile_failure_aborts_campaign_before_any_kill(self):
         with tempfile.TemporaryDirectory() as temporary:
             directory = Path(temporary)
-            source_before = (mutation.ROOT / 'crates/brynja-crypto/src/aes/portable/field.rs').read_text()
+            source_before = (mutation.ROOT / 'crates/brynja-cipher-aes/src/aes/portable/field.rs').read_text()
 
             def run(command, *_args):
                 if '--no-run' in command:
@@ -282,7 +282,7 @@ class MutationTests(unittest.TestCase):
     def test_surviving_mutant_aborts_and_restores_source(self):
         with tempfile.TemporaryDirectory() as temporary:
             directory = Path(temporary)
-            source_before = (mutation.ROOT / 'crates/brynja-crypto/src/aes/portable/field.rs').read_text()
+            source_before = (mutation.ROOT / 'crates/brynja-cipher-aes/src/aes/portable/field.rs').read_text()
 
             def run(command, *_args):
                 if '--no-run' in command or 'generate-lockfile' in command:

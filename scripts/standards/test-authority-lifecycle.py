@@ -128,7 +128,7 @@ def test_generated_mapping(register: dict) -> None:
             for identity, old_symbol in (
                 ('rfc:2104', 'crates/brynja-crypto/src/hmac.rs#Hmac'),
                 ('rfc:4231', 'crates/brynja-crypto/src/hmac.rs#Hmac'),
-                ('nist:NIST.FIPS.197-upd1.pdf', 'crates/brynja-crypto/src/aes.rs#Aes'),
+                ('nist:NIST.FIPS.197-upd1.pdf', 'crates/brynja-cipher-aes/src/aes.rs#Aes'),
                 ('rfc:5869', 'crates/brynja-crypto/src/hkdf.rs#Hkdf'),
             ):
                 broken = copy.deepcopy(register)

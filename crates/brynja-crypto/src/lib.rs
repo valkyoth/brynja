@@ -10,7 +10,7 @@
 //! Device adapters, other AEADs, other KDFs, public-key
 //! algorithms, and the complete planned composition layer remain unimplemented.
 //! Portable modern HKDF is under development; it is not release-qualified.
-//! Optional external-key lifecycle contracts and AES-128 adapter operations
+//! Optional external-key lifecycle contracts and AES-128/192/256 adapter operations
 //! are available; no hardware driver or HSM qualification is bundled.
 //! Raw GHASH over pre-framed blocks requires the explicit `hazmat-ghash`
 //! feature. Its secret intermediate is not an authentication tag.
@@ -44,14 +44,14 @@ mod aes;
 #[allow(dead_code)]
 mod ghash;
 
-/// Opt-in raw AES-128 blocks, not authenticated message encryption.
+/// Opt-in raw AES-128/192/256 blocks, not authenticated message encryption.
 /// Requires `hazmat-aes-block`; deployment qualification remains separate.
 #[cfg(feature = "hazmat-aes-block")]
 pub mod aes;
 
 /// Optional algorithm-neutral external-key lifecycle contracts, not a device driver.
 #[cfg(feature = "external-key-provider")]
-pub mod provider;
+pub use brynja_cipher_aes::provider;
 
 /// Explicit CPU authority and batch owners, not automatic detection or dispatch.
 /// Cargo features do not prove instruction support; each constructor retains

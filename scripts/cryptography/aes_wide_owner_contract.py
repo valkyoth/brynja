@@ -5,10 +5,10 @@ import tomllib
 import aes_owner_contract as aes
 import rust_source_contract as rust
 
-SOURCE = 'crates/brynja-crypto/src/aes/wide.rs'
-PORTABLE = 'crates/brynja-crypto/src/aes/portable/wide.rs'
-LAYOUT = 'crates/brynja-crypto/src/aes/portable/layout.rs'
-REVIEWED_PATHS = {SOURCE, PORTABLE, 'crates/brynja-crypto/src/aes/tests/wide.rs',
+SOURCE = 'crates/brynja-cipher-aes/src/aes/wide.rs'
+PORTABLE = 'crates/brynja-cipher-aes/src/aes/portable/wide.rs'
+LAYOUT = 'crates/brynja-cipher-aes/src/aes/portable/layout.rs'
+REVIEWED_PATHS = {SOURCE, PORTABLE, 'crates/brynja-cipher-aes/src/aes/tests/wide.rs',
                   'crates/brynja-crypto/tests/aes_wide.rs',
                   'crates/brynja-crypto/tests/aes_wide_kat.rs',
                   'crates/brynja-crypto/tests/aes_wide_differential.rs',
@@ -30,7 +30,7 @@ def record(bits, key, size, rounds):
                temporaries=[f'schedule:Scratch<{size}>', *row['temporaries'][1:]],
                cleanup_bindings=[SOURCE + '#clear', aes.SOURCE + '#SecretBlock::clear', aes.SOURCE + '#Scratch::drop'],
                excluded_scope=['other-AES-key-widths', *row['excluded_scope'][2:]],
-               evidence=['crates/brynja-crypto/tests/aes_wide.rs', 'crates/brynja-crypto/src/aes/tests/wide.rs',
+               evidence=['crates/brynja-crypto/tests/aes_wide.rs', 'crates/brynja-cipher-aes/src/aes/tests/wide.rs',
                          'crates/brynja-crypto/tests/aes_wide_kat.rs', 'crates/brynja-crypto/tests/aes_wide_differential.rs',
                          'scripts/aes/check-aes-wide-api.py', 'scripts/cryptography/test-aes-wide-owner-contract.py',
                          'docs/assurance/aes-wide-development.md'])

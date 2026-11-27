@@ -1,5 +1,21 @@
 # Component Verification Status
 
+## Standalone AES (v0.30.3)
+
+On Rust 1.90.0 and 1.100.0, the [archive consumer](../assurance/aes-leaf-identity/lib.rs)
+exchanged all three widths of key owners across the standalone, composition and
+façade imports, checked known ciphertexts, and compiled for bare-metal Cortex-M.
+Feature isolation, provider short-write quarantine and rejection of an unavailable
+required backend were tested separately. Eight installed x86-64 AES-GCM/GMAC
+consumers passed their linked AES-NI/PCLMUL screens (30 message bodies each).
+These are compatibility and correctness checks, not new timing or physical
+fault-resistance qualifications.
+
+Older AES disassembly screens name symbols under the pre-extraction
+`brynja_crypto` crate. Use their recorded revision to reproduce those
+observations. They are not evidence for a newly linked `brynja_cipher_aes`
+artifact; extending a target-specific claim requires reviewing that artifact.
+
 ## ChaCha20 installed public API (v0.30.2)
 
 The [installed campaign](../assurance/chacha20-consumer/README.md) passed all

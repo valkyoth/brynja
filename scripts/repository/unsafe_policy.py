@@ -30,7 +30,7 @@ BENIGN_LINES = {
         'let prefix = path.get(..n).ok_or("invalid test prefix")?;',
         'for (seal, candidate, path) in [', 'sweep(path, |prefix, unwind| {',
     },
-    Path('crates/brynja-crypto/src/aes.rs'): {
+    Path('crates/brynja-cipher-aes/src/aes.rs'): {
         '// Repository-only research snapshot. This path is outside the published crate',
     },
     Path('crates/brynja-crypto/src/aes_gcm/portable/x86_pair_tests.rs'): {

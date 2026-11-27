@@ -1,9 +1,9 @@
 # Crate Version Matrix
 
-Latest signed milestone: v0.30.1, with zero crates selected for publication.
-The v0.30.2 candidate advances the `brynja` façade metadata to 0.30.2. It
-tests the unchanged, unpublished `brynja-cipher-chacha 0.1.0` leaf and its
-optional dependency edge from `brynja-crypto`. The public checkpoint is
+Latest signed milestone: v0.30.2, with zero crates selected for publication.
+The v0.30.3 candidate advances the `brynja` façade metadata to 0.30.3 and
+extracts `brynja-cipher-aes 0.1.0` behind an optional compatibility edge
+from `brynja-crypto`. Both cipher leaves are unpublished. The public checkpoint is
 planned at v0.30.6; extraction does not select a crate for publication.
 The direct raw stream is default-off in the unpublished development tree;
 ordinary AES-GCM and GMAC constructors remain portable. Separate default-off

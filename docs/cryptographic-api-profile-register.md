@@ -72,6 +72,6 @@ cancellation, modes and backends are not inferred from a family profile.
 
 | Variant | Family | Owner | Scope | Qualification |
 | --- | --- | --- | --- | --- |
-| AES-128 | `algorithm.aes` | `crates/brynja-crypto/src/aes.rs#Aes128Key` | bounded-dispatch-x86_64-rust-1.90.0-and-1.99.1-abort-and-unwind | development-only-family-incomplete-side-channel-and-independent-review-pending |
-| AES-192 | `algorithm.aes` | `crates/brynja-crypto/src/aes/wide.rs#Aes192Key` | bounded-owner-and-operation-scratch-dispatch-x86_64-rust-1.90.0-and-1.99.1-abort-and-unwind-not-whole-frame-or-timing | development-only-v0.27.1-in-progress-independent-review-pending |
-| AES-256 | `algorithm.aes` | `crates/brynja-crypto/src/aes/wide.rs#Aes256Key` | bounded-owner-and-operation-scratch-dispatch-x86_64-rust-1.90.0-and-1.99.1-abort-and-unwind-not-whole-frame-or-timing | development-only-v0.27.1-in-progress-independent-review-pending |
+| AES-128 | `algorithm.aes` | `crates/brynja-cipher-aes/src/aes.rs#Aes128Key` | bounded-dispatch-x86_64-rust-1.90.0-and-1.99.1-abort-and-unwind | development-only-family-incomplete-side-channel-and-independent-review-pending |
+| AES-192 | `algorithm.aes` | `crates/brynja-cipher-aes/src/aes/wide.rs#Aes192Key` | bounded-owner-and-operation-scratch-dispatch-x86_64-rust-1.90.0-and-1.99.1-abort-and-unwind-not-whole-frame-or-timing | development-only-v0.27.1-in-progress-independent-review-pending |
+| AES-256 | `algorithm.aes` | `crates/brynja-cipher-aes/src/aes/wide.rs#Aes256Key` | bounded-owner-and-operation-scratch-dispatch-x86_64-rust-1.90.0-and-1.99.1-abort-and-unwind-not-whole-frame-or-timing | development-only-v0.27.1-in-progress-independent-review-pending |

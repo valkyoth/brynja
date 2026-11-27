@@ -25722,6 +25722,80 @@
         "log_sha256": "c05d4355ae8b813e90a728c4fac3bb81bbbbcc54ae52445d12857d0b636837d9"
       }
     ],
+    "aes/standalone-archive-identity": [
+      {
+        "id": "2-1795793241311485137",
+        "source": "working tree based on dc1ddd40f5aafdd85c8e5b951ddaa72f35934c57; scoped fingerprint c88481993f47175c2d903878da42583ccae6fa0b2e68ce53cd592182b3f54cfc",
+        "started": "2026-11-27T15:27:21.311483273Z",
+        "ended": "2026-11-27T15:27:26.347773425Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-leaf-identity.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "4f8725255fa66e33ae2997b6072517820ce297b855d19a333d7aa80fdb607ff2",
+        "after": "4f8725255fa66e33ae2997b6072517820ce297b855d19a333d7aa80fdb607ff2",
+        "log": "verification/.runner/logs/2-1795793241311485137.log",
+        "log_sha256": "66b2d69e95742ad354bcd5062430e9160aadda20829d3be420d3014f9158c0dc"
+      },
+      {
+        "id": "2-1795793350885124412",
+        "source": "working tree based on dc1ddd40f5aafdd85c8e5b951ddaa72f35934c57; scoped fingerprint 6af864b14d8cec0b4c154664d6790e5e9cd348993a72d6fc226383cbbb755aa1",
+        "started": "2026-11-27T15:29:10.885122819Z",
+        "ended": "2026-11-27T15:29:16.557382911Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-leaf-identity.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "10e4911e43b64589a902e4b4d6bfb254a6e83161dcb69abba7d1aebccf273b06",
+        "after": "10e4911e43b64589a902e4b4d6bfb254a6e83161dcb69abba7d1aebccf273b06",
+        "log": "verification/.runner/logs/2-1795793350885124412.log",
+        "log_sha256": "234f0dd70d3bd98332cdf246aeed73d65477dcfe0b0f84d82a197f7b1e9c72d1"
+      },
+      {
+        "id": "2-1795793669193030557",
+        "source": "working tree based on dc1ddd40f5aafdd85c8e5b951ddaa72f35934c57; scoped fingerprint b8658c38c9f7e43ce642b0dda386cdd5834e522fc01a7eac5072a37933e28d72",
+        "started": "2026-11-27T15:34:29.193028453Z",
+        "ended": "2026-11-27T15:34:36.852259961Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-leaf-identity.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "6f1529a2934dadeaf671acfc0c1b87e5858df2f07ea460fcd93ae218bfa34a8a",
+        "after": "6f1529a2934dadeaf671acfc0c1b87e5858df2f07ea460fcd93ae218bfa34a8a",
+        "log": "verification/.runner/logs/2-1795793669193030557.log",
+        "log_sha256": "234f0dd70d3bd98332cdf246aeed73d65477dcfe0b0f84d82a197f7b1e9c72d1"
+      },
+      {
+        "id": "2-1795793874639204098",
+        "source": "working tree based on dc1ddd40f5aafdd85c8e5b951ddaa72f35934c57; scoped fingerprint 03b8b79073c888f8f3320aa105c70a5cebcdb15df7bef0e3e8da61bbb0f51808",
+        "started": "2026-11-27T15:37:54.639200431Z",
+        "ended": "2026-11-27T15:38:02.601017787Z",
+        "outcome": "passed",
+        "explanation": "completed with registered success signals",
+        "command": [
+          "python3",
+          "scripts/aes/check-aes-leaf-identity.py"
+        ],
+        "cwd": ".",
+        "environment": {},
+        "before": "7f7be90c279d53e4fc000b8ae95c99b9f1ae8aa57b450cbdc1eec8f8c20017a8",
+        "after": "7f7be90c279d53e4fc000b8ae95c99b9f1ae8aa57b450cbdc1eec8f8c20017a8",
+        "log": "verification/.runner/logs/2-1795793874639204098.log",
+        "log_sha256": "234f0dd70d3bd98332cdf246aeed73d65477dcfe0b0f84d82a197f7b1e9c72d1"
+      }
+    ],
     "aes/static-arm-qemu-current": [
       {
         "id": "2-1794237397749503420",
@@ -51953,6 +52027,15 @@
       "source": "working tree based on 851b76a6cd9a32bd24ed077d9cf26539421d8ffa; scoped fingerprint 1372f46cf1f9b9cacae0bc75febc3474b97055aea53a282f01cf597b1d043562",
       "performed_at": "2026-11-13T13:46:47.08354601Z",
       "last_success": "2026-11-13T13:46:47.08354601Z"
+    },
+    "aes/standalone-archive-identity": {
+      "checked_at": "2026-11-27T15:38:03.548382136Z",
+      "fingerprint": "03b8b79073c888f8f3320aa105c70a5cebcdb15df7bef0e3e8da61bbb0f51808",
+      "result": "passed",
+      "freshness": "Up to date",
+      "source": "working tree based on dc1ddd40f5aafdd85c8e5b951ddaa72f35934c57; scoped fingerprint 03b8b79073c888f8f3320aa105c70a5cebcdb15df7bef0e3e8da61bbb0f51808",
+      "performed_at": "2026-11-27T15:38:02.601017787Z",
+      "last_success": "2026-11-27T15:38:02.601017787Z"
     },
     "aes/static-arm-qemu-current": {
       "checked_at": "2026-11-13T10:57:13.747893293Z",

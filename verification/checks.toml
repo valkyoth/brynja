@@ -14,6 +14,30 @@ toolchain = "1.100.0"
 program = "rustc"
 toolchain = "1.100.0"
 
+[groups.aes-leaf-identity]
+paths = ["scripts/aes/check-aes-leaf-identity.py", "assurance/aes-leaf-identity"]
+[[groups.aes-leaf-identity.tools]]
+program = "cargo"
+toolchain = "1.100.0"
+[[groups.aes-leaf-identity.tools]]
+program = "rustc"
+toolchain = "1.100.0"
+
+[[checks]]
+component = "aes"
+id = "standalone-archive-identity"
+category = "package"
+name = "Standalone AES-128/192/256 packaged type identity"
+establishes = "All three public routes interchange portable key, schedule and output types. Host known answers, caller-memory cleanup and Cortex-M compile on both endpoints. Not native qualification."
+command = ["python3", "scripts/aes/check-aes-leaf-identity.py"]
+cwd = "."
+inputs = ["aes-leaf-identity", "ghash-packaged-api", "hkdf-msrv"]
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+timeout_seconds = 300
+[checks.success]
+unique_lines = ["1.90.0: three packaged widths and import routes; Cortex-M compile passed", "1.100.0: three packaged widths and import routes; Cortex-M compile passed", "1.90.0: all provider widths quarantined short writes; unavailable kernel rejected", "1.100.0: all provider widths quarantined short writes; unavailable kernel rejected"]
+contains = ["three packaged widths and import routes; Cortex-M compile passed"]
+
 [[checks]]
 component = "chacha20"
 id = "ietf-portable-archive"
@@ -208,7 +232,7 @@ unique_lines = ["Complete - 1 successfully verified harnesses, 0 failures, 1 tot
 contains = ["VERIFICATION:- SUCCESSFUL"]
 
 [groups.ghash-packaged-api]
-paths = ["Cargo.toml", "Cargo.lock", "assurance/ghash-public-api", "scripts/ghash/check-packaged-api.py", "scripts/hkdf/check-hkdf-public-api.py", "scripts/repository/facade_cargo_environment.py", "crates/brynja","crates/brynja-cipher-chacha","crates/brynja-core","crates/brynja-crypto","crates/brynja-crypto-cpu","crates/brynja-crypto-cpu-std","crates/brynja-dtls","crates/brynja-hash-core","crates/brynja-hash-parallel","crates/brynja-hash-sha2","crates/brynja-hash-sha3","crates/brynja-hash-tuple","crates/brynja-mac-hmac","crates/brynja-mac-kmac","crates/brynja-pki","crates/brynja-platform","crates/brynja-protocol","crates/brynja-quic-tls","crates/brynja-tls","crates/brynja-tls12","crates/brynja-tls13","crates/brynja-tls13-handshake"]
+paths = ["Cargo.toml", "Cargo.lock", "assurance/ghash-public-api", "scripts/ghash/check-packaged-api.py", "scripts/hkdf/check-hkdf-public-api.py", "scripts/repository/facade_cargo_environment.py", "crates/brynja","crates/brynja-cipher-chacha","crates/brynja-core","crates/brynja-cipher-aes", "crates/brynja-crypto","crates/brynja-crypto-cpu","crates/brynja-crypto-cpu-std","crates/brynja-dtls","crates/brynja-hash-core","crates/brynja-hash-parallel","crates/brynja-hash-sha2","crates/brynja-hash-sha3","crates/brynja-hash-tuple","crates/brynja-mac-hmac","crates/brynja-mac-kmac","crates/brynja-pki","crates/brynja-platform","crates/brynja-protocol","crates/brynja-quic-tls","crates/brynja-tls","crates/brynja-tls12","crates/brynja-tls13","crates/brynja-tls13-handshake"]
 optional_paths = [".cargo/config", ".cargo/config.toml"]
 [[groups.ghash-packaged-api.tools]]
 program = "python3"
@@ -325,7 +349,7 @@ contains = ["GHASH_PACKAGED_CANDIDATES_COMPLETE"]
 unique_lines = ["GHASH_PACKAGED_CANDIDATES_COMPLETE"]
 
 [groups.ghash-portable-field]
-paths = ["Cargo.toml","Cargo.lock","crates/brynja-crypto/Cargo.toml","crates/brynja-crypto/src","crates/brynja-crypto/tests/ghash_field.rs","crates/brynja-crypto/tests/ghash_vectors"]
+paths = ["Cargo.toml","Cargo.lock","crates/brynja-crypto/Cargo.toml","crates/brynja-cipher-aes", "crates/brynja-crypto/src","crates/brynja-crypto/tests/ghash_field.rs","crates/brynja-crypto/tests/ghash_vectors"]
 [[groups.ghash-portable-field.tools]]
 program = "rustc"
 toolchain = "1.100.0"
@@ -473,7 +497,7 @@ minimum_tests = 5
 exact_tests = 5
 
 [groups.gmac-consumer]
-paths = ["assurance/gmac-consumer/Cargo.toml", "assurance/gmac-consumer/Cargo.lock", "assurance/gmac-consumer/src", "scripts/gmac/check-consumer.py", "Cargo.toml", "crates/brynja", "crates/brynja-cipher-chacha","crates/brynja-core", "crates/brynja-crypto", "crates/brynja-hash-core", "crates/brynja-hash-parallel", "crates/brynja-hash-sha2", "crates/brynja-hash-sha3", "crates/brynja-hash-tuple", "crates/brynja-mac-hmac", "crates/brynja-mac-kmac", "crates/brynja-pki", "crates/brynja-protocol", "crates/brynja-tls", "crates/brynja-tls12", "crates/brynja-tls13", "crates/brynja-tls13-handshake"]
+paths = ["assurance/gmac-consumer/Cargo.toml", "assurance/gmac-consumer/Cargo.lock", "assurance/gmac-consumer/src", "scripts/gmac/check-consumer.py", "Cargo.toml", "crates/brynja", "crates/brynja-cipher-chacha","crates/brynja-core", "crates/brynja-cipher-aes", "crates/brynja-crypto", "crates/brynja-hash-core", "crates/brynja-hash-parallel", "crates/brynja-hash-sha2", "crates/brynja-hash-sha3", "crates/brynja-hash-tuple", "crates/brynja-mac-hmac", "crates/brynja-mac-kmac", "crates/brynja-pki", "crates/brynja-protocol", "crates/brynja-tls", "crates/brynja-tls12", "crates/brynja-tls13", "crates/brynja-tls13-handshake"]
 optional_paths = [".cargo/config", ".cargo/config.toml"]
 [[groups.gmac-consumer.tools]]
 program = "python3"
@@ -539,7 +563,7 @@ unique_lines = ["1.90.0 direct: generate=2730 verify=2730 reject=2730","1.90.0 f
 contains = ["GMAC_BOUNDARY_COMPLETE"]
 
 [groups.aes-gcm-consumer]
-paths = ["assurance/aes-gcm-consumer/Cargo.toml", "assurance/aes-gcm-consumer/Cargo.lock", "assurance/aes-gcm-consumer/src", "scripts/aes-gcm/check-public-consumer.py", "Cargo.toml", "crates/brynja", "crates/brynja-cipher-chacha","crates/brynja-core", "crates/brynja-crypto", "crates/brynja-hash-core", "crates/brynja-hash-parallel", "crates/brynja-hash-sha2", "crates/brynja-hash-sha3", "crates/brynja-hash-tuple", "crates/brynja-mac-hmac", "crates/brynja-mac-kmac", "crates/brynja-pki", "crates/brynja-protocol", "crates/brynja-tls", "crates/brynja-tls12", "crates/brynja-tls13", "crates/brynja-tls13-handshake"]
+paths = ["assurance/aes-gcm-consumer/Cargo.toml", "assurance/aes-gcm-consumer/Cargo.lock", "assurance/aes-gcm-consumer/src", "scripts/aes-gcm/check-public-consumer.py", "Cargo.toml", "crates/brynja", "crates/brynja-cipher-chacha","crates/brynja-core", "crates/brynja-cipher-aes", "crates/brynja-crypto", "crates/brynja-hash-core", "crates/brynja-hash-parallel", "crates/brynja-hash-sha2", "crates/brynja-hash-sha3", "crates/brynja-hash-tuple", "crates/brynja-mac-hmac", "crates/brynja-mac-kmac", "crates/brynja-pki", "crates/brynja-protocol", "crates/brynja-tls", "crates/brynja-tls12", "crates/brynja-tls13", "crates/brynja-tls13-handshake"]
 optional_paths = [".cargo/config", ".cargo/config.toml"]
 [[groups.aes-gcm-consumer.tools]]
 program = "python3"
@@ -1124,7 +1148,7 @@ timeout_seconds = 300
 contains = ["GHASH_FEATURE_GATE_COMPLETE: 16 direct/facade compiler checks"]
 
 [groups.ghash-lifecycle]
-paths = ["Cargo.toml","Cargo.lock","crates/brynja-crypto/Cargo.toml","crates/brynja-crypto/src","crates/brynja-crypto/tests/ghash_lifecycle.rs"]
+paths = ["Cargo.toml","Cargo.lock","crates/brynja-crypto/Cargo.toml","crates/brynja-cipher-aes", "crates/brynja-crypto/src","crates/brynja-crypto/tests/ghash_lifecycle.rs"]
 
 [[checks]]
 component = "ghash"
@@ -4077,7 +4101,7 @@ unique_lines = ["AES_STATIC_PASS: arm-qemu 1.99.1","AES_EXECUTION_KAT_PASS: 128:
 
 # Optional external-key contracts. Mock adapters are not hardware qualification.
 [groups.aes-provider]
-paths = ["crates/brynja-crypto/src/provider.rs", "crates/brynja-crypto/src/aes/provider.rs", "crates/brynja-crypto/tests/aes128_provider.rs", "crates/brynja-crypto/tests/aes192_provider.rs", "crates/brynja-crypto/tests/aes256_provider.rs", "crates/brynja-crypto/tests/aes_provider_common", "crates/brynja-crypto/tests/aes128_provider_regressions", "scripts/aes/check-aes-provider-api.py", "scripts/aes/test-aes-provider-runner.py", "scripts/aes/check-aes-api.py", "scripts/aes/test-aes-runners.py", "scripts/repository/facade_workspace_policy.py"]
+paths = ["crates/brynja-cipher-aes/src/provider.rs", "crates/brynja-cipher-aes/src/aes/provider.rs", "crates/brynja-crypto/tests/aes128_provider.rs", "crates/brynja-crypto/tests/aes192_provider.rs", "crates/brynja-crypto/tests/aes256_provider.rs", "crates/brynja-crypto/tests/aes_provider_common", "crates/brynja-crypto/tests/aes128_provider_regressions", "scripts/aes/check-aes-provider-api.py", "scripts/aes/test-aes-provider-runner.py", "scripts/aes/check-aes-api.py", "scripts/aes/test-aes-runners.py", "scripts/repository/facade_workspace_policy.py"]
 [[groups.aes-provider.tools]]
 program = "python3"
 
@@ -4209,7 +4233,7 @@ id = "provider-docs"
 category = "provider"
 name = "External-key provider adapter usage example"
 establishes = "Optional trusted adapter API only: exact directions, opaque binding, explicit ownership and destruction, terminal errors/unwind and clearing or transactional output. Test/reference adapters only; no real HSM, PKCS#11, physical protection, timing or device destruction qualification. Cortex-M is compile-only."
-command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block,external-key-provider","--doc","aes::provider"]
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-cipher-aes","--no-default-features","--features","hazmat-aes-block,external-key-provider","--doc","aes::provider"]
 cwd = "."
 inputs = ["aes-build", "aes-provider", "aes-consumer", "compiler"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -4274,8 +4298,8 @@ component = "aes"
 id = "feature-msrv-minimal-test"
 category = "integration"
 name = "AES opt-in feature composition: 1.90.0, minimal, test"
-establishes = "No-default-feature direct/facade integration and doctests: 32 passing tests. AES absence/explicit admission are separately checked by packaged paired probes."
-command = ["cargo","+1.90.0","test","--locked","--offline","-p","brynja-crypto","-p","brynja","--no-default-features"]
+establishes = "No-default-feature standalone/direct/facade integration and doctests: 32 passing tests. AES absence/explicit admission are separately checked by packaged paired probes."
+command = ["cargo","+1.90.0","test","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-crypto","-p","brynja","--no-default-features"]
 cwd = "."
 inputs = ["aes-build", "aes-feature-integration", "hkdf-msrv"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -4293,7 +4317,7 @@ id = "feature-msrv-minimal-doc"
 category = "integration"
 name = "AES opt-in feature composition: 1.90.0, minimal, doc"
 establishes = "Builds direct and facade documentation; no runtime or timing claim."
-command = ["cargo","+1.90.0","doc","--locked","--offline","-p","brynja-crypto","-p","brynja","--no-default-features","--no-deps"]
+command = ["cargo","+1.90.0","doc","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-crypto","-p","brynja","--no-default-features","--no-deps"]
 cwd = "."
 inputs = ["aes-build", "aes-feature-integration", "hkdf-msrv"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -4308,8 +4332,8 @@ component = "aes"
 id = "feature-msrv-all-test"
 category = "integration"
 name = "AES opt-in feature composition: 1.90.0, all, test"
-establishes = "All-feature direct/facade integration and doctests: 98 passing tests, including the baseline static-AES rejection control, not hardware execution. Three opt-in OpenSSL corpus tests remain ignored here and are covered by separate differential registrations. Not packaged or side-channel qualification."
-command = ["cargo","+1.90.0","test","--locked","--offline","-p","brynja-crypto","-p","brynja","--all-features"]
+establishes = "All-feature standalone/direct/facade integration and doctests: 182 passing tests, including the baseline static-AES rejection control, not hardware execution. Three opt-in OpenSSL corpus tests remain ignored here and are covered by separate differential registrations. Not packaged or side-channel qualification."
+command = ["cargo","+1.90.0","test","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-crypto","-p","brynja","--all-features"]
 cwd = "."
 inputs = ["aes-build", "aes-feature-integration", "hkdf-msrv"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -4318,8 +4342,8 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok."]
-minimum_tests = 98
-exact_tests = 98
+minimum_tests = 182
+exact_tests = 182
 allow_ignored = true
 
 [[checks]]
@@ -4328,7 +4352,7 @@ id = "feature-msrv-all-doc"
 category = "integration"
 name = "AES opt-in feature composition: 1.90.0, all, doc"
 establishes = "Builds direct and facade documentation; no runtime or timing claim."
-command = ["cargo","+1.90.0","doc","--locked","--offline","-p","brynja-crypto","-p","brynja","--all-features","--no-deps"]
+command = ["cargo","+1.90.0","doc","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-crypto","-p","brynja","--all-features","--no-deps"]
 cwd = "."
 inputs = ["aes-build", "aes-feature-integration", "hkdf-msrv"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -4343,8 +4367,8 @@ component = "aes"
 id = "feature-current-minimal-test"
 category = "integration"
 name = "AES opt-in feature composition: 1.99.1, minimal, test"
-establishes = "No-default-feature direct/facade integration and doctests: 32 passing tests. AES absence/explicit admission are separately checked by packaged paired probes."
-command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","-p","brynja","--no-default-features"]
+establishes = "No-default-feature standalone/direct/facade integration and doctests: 32 passing tests. AES absence/explicit admission are separately checked by packaged paired probes."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-crypto","-p","brynja","--no-default-features"]
 cwd = "."
 inputs = ["aes-build", "aes-feature-integration", "compiler"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -4362,7 +4386,7 @@ id = "feature-current-minimal-doc"
 category = "integration"
 name = "AES opt-in feature composition: 1.99.1, minimal, doc"
 establishes = "Builds direct and facade documentation; no runtime or timing claim."
-command = ["cargo","+1.99.1","doc","--locked","--offline","-p","brynja-crypto","-p","brynja","--no-default-features","--no-deps"]
+command = ["cargo","+1.99.1","doc","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-crypto","-p","brynja","--no-default-features","--no-deps"]
 cwd = "."
 inputs = ["aes-build", "aes-feature-integration", "compiler"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -4377,8 +4401,8 @@ component = "aes"
 id = "feature-current-all-test"
 category = "integration"
 name = "AES opt-in feature composition: 1.99.1, all, test"
-establishes = "All-feature direct/facade integration and doctests: 98 passing tests, including the baseline static-AES rejection control, not hardware execution. Three opt-in OpenSSL corpus tests remain ignored here and are covered by separate differential registrations. Not packaged or side-channel qualification."
-command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","-p","brynja","--all-features"]
+establishes = "All-feature standalone/direct/facade integration and doctests: 182 passing tests, including the baseline static-AES rejection control, not hardware execution. Three opt-in OpenSSL corpus tests remain ignored here and are covered by separate differential registrations. Not packaged or side-channel qualification."
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-crypto","-p","brynja","--all-features"]
 cwd = "."
 inputs = ["aes-build", "aes-feature-integration", "compiler"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -4387,8 +4411,8 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok."]
-minimum_tests = 98
-exact_tests = 98
+minimum_tests = 182
+exact_tests = 182
 allow_ignored = true
 
 [[checks]]
@@ -4397,7 +4421,7 @@ id = "feature-current-all-doc"
 category = "integration"
 name = "AES opt-in feature composition: 1.99.1, all, doc"
 establishes = "Builds direct and facade documentation; no runtime or timing claim."
-command = ["cargo","+1.99.1","doc","--locked","--offline","-p","brynja-crypto","-p","brynja","--all-features","--no-deps"]
+command = ["cargo","+1.99.1","doc","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-crypto","-p","brynja","--all-features","--no-deps"]
 cwd = "."
 inputs = ["aes-build", "aes-feature-integration", "compiler"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -4817,7 +4841,7 @@ exact_tests = 8
 unique_lines = ["AES differential executable identity: unchanged; shared libraries not measured","AES packaged differential: PASS; 1.99.1 facade; debug/release; all three widths; no upload","AES_PACKAGED_DIFFERENTIAL_PROFILE: 1.99.1 facade debug; 12288 cases; both owners; public encryption checked","AES_PACKAGED_DIFFERENTIAL_PROFILE: 1.99.1 facade release; 12288 cases; both owners; public encryption checked"]
 
 [groups.aes-consumer]
-paths = ["assurance/aes-public-api/Cargo.toml", "assurance/aes-public-api/Cargo.lock", "assurance/aes-public-api/src/lib.rs", "assurance/aes-public-api/tests/consumer.rs", "assurance/aes-public-api/tests/wide/mod.rs", "assurance/aes-public-api/tests/roundtrip.rs", "assurance/aes-public-api/src/wide.rs", "scripts/aes/check-aes-consumer.py", "scripts/aes/test-aes-consumer.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py", "crates/brynja", "crates/brynja-cipher-chacha","crates/brynja-core", "crates/brynja-crypto", "crates/brynja-hash-core", "crates/brynja-hash-parallel", "crates/brynja-hash-sha2", "crates/brynja-hash-sha3", "crates/brynja-hash-tuple", "crates/brynja-mac-hmac", "crates/brynja-mac-kmac", "crates/brynja-pki", "crates/brynja-protocol", "crates/brynja-tls", "crates/brynja-tls12", "crates/brynja-tls13", "crates/brynja-tls13-handshake"]
+paths = ["assurance/aes-public-api/Cargo.toml", "assurance/aes-public-api/Cargo.lock", "assurance/aes-public-api/src/lib.rs", "assurance/aes-public-api/tests/consumer.rs", "assurance/aes-public-api/tests/wide/mod.rs", "assurance/aes-public-api/tests/roundtrip.rs", "assurance/aes-public-api/src/wide.rs", "scripts/aes/check-aes-consumer.py", "scripts/aes/test-aes-consumer.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py", "crates/brynja", "crates/brynja-cipher-chacha","crates/brynja-core", "crates/brynja-cipher-aes", "crates/brynja-crypto", "crates/brynja-hash-core", "crates/brynja-hash-parallel", "crates/brynja-hash-sha2", "crates/brynja-hash-sha3", "crates/brynja-hash-tuple", "crates/brynja-mac-hmac", "crates/brynja-mac-kmac", "crates/brynja-pki", "crates/brynja-protocol", "crates/brynja-tls", "crates/brynja-tls12", "crates/brynja-tls13", "crates/brynja-tls13-handshake"]
 [[groups.aes-consumer.tools]]
 program = "python3"
 
@@ -5128,7 +5152,7 @@ minimum_tests = 2
 exact_tests = 2
 
 [groups.aes-build]
-paths = ["crates/brynja-crypto/src", "crates/brynja-crypto/tests/aes128.rs", "crates/brynja-crypto/tests/aes_wide.rs", "crates/brynja-crypto/tests/aes_wide_kat.rs", "crates/brynja-crypto/tests/aes_wide_differential.rs", "crates/brynja-crypto/tests/fixtures/aes192", "crates/brynja-crypto/tests/fixtures/aes256", "crates/brynja-crypto/tests/aes128_differential.rs", "crates/brynja-crypto/tests/fixtures/aes128", "scripts/release/test-verification-registry.py"]
+paths = ["crates/brynja-cipher-aes", "crates/brynja-crypto/src", "crates/brynja-crypto/tests/aes128.rs", "crates/brynja-crypto/tests/aes_wide.rs", "crates/brynja-crypto/tests/aes_wide_kat.rs", "crates/brynja-crypto/tests/aes_wide_differential.rs", "crates/brynja-crypto/tests/fixtures/aes192", "crates/brynja-crypto/tests/fixtures/aes256", "crates/brynja-crypto/tests/aes128_differential.rs", "crates/brynja-crypto/tests/fixtures/aes128", "scripts/release/test-verification-registry.py"]
 optional_paths = ["crates/brynja-crypto/build.rs", ".cargo/config", ".cargo/config.toml"]
 [groups.aes-build.toml]
 "Cargo.toml" = ["workspace.resolver", "workspace.package.edition", "workspace.package.rust-version", "workspace.lints", "workspace.dependencies", "profile.dev", "profile.test", "profile.release"]
@@ -5160,7 +5184,7 @@ id = "rounds-and-faults"
 category = "fault"
 name = "AES-128/192/256 schedule, field and round-boundary fault cleanup"
 establishes = "Seventeen unit tests: FIPS schedule, field/inverse and linear transforms, secret-output errors/unwinds at all 11 round boundaries, cached import errors/unwinds and reuse without re-expansion, plus failure-atomic public ciphertext. Live scratch clearing observations, not physical fault resistance or register erasure."
-command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block","--lib","aes::"]
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-cipher-aes","--no-default-features","--features","hazmat-aes-block","--lib","aes::"]
 cwd = "."
 inputs = ["compiler","aes-build","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -5194,7 +5218,7 @@ id = "ownership"
 category = "compile-fail"
 name = "AES-128 typed ownership examples"
 establishes = "Two positive examples and nine compile-fail examples. Rustdoc accepts any compiler error; diagnostic-specific acceptance for both key owners is provided by separate api-current/api-msrv registrations."
-command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block","--doc","aes::"]
+command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-cipher-aes","--no-default-features","--features","hazmat-aes-block","--doc","aes::"]
 cwd = "."
 inputs = ["compiler","hkdf-rustdoc","aes-build","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
 environment = { RUSTUP_AUTO_INSTALL = "0" }
@@ -5279,7 +5303,7 @@ id = "asan-faults"
 category = "asan-fault"
 name = "AES-128/192/256 round faults and scratch cleanup under ASan/LSan"
 establishes = "Seventeen internal tests including cached import failures, every round-key error/unwind, reuse without re-expansion and failure-atomic public ciphertext. No timing or complete memory-safety proof."
-command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-crypto","--no-default-features","--features","hazmat-aes-block","--lib","--target","x86_64-unknown-linux-gnu","aes::"]
+command = ["cargo","+nightly-2026-09-11","test","--locked","--offline","-p","brynja-cipher-aes","--no-default-features","--features","hazmat-aes-block","--lib","--target","x86_64-unknown-linux-gnu","aes::"]
 cwd = "."
 inputs = ["asan-tools","aes-build","hash-core","sha2-source","sha3-source","hmac-source","kmac-source","tuplehash-source","parallelhash-source"]
 environment = { RUSTFLAGS = "-Zsanitizer=address", CARGO_ENCODED_RUSTFLAGS = "", ASAN_OPTIONS = "detect_leaks=1:halt_on_error=1:exitcode=1", LSAN_OPTIONS = "exitcode=23", CARGO_TARGET_DIR = "target/aes-asan", RUSTUP_AUTO_INSTALL = "0" }
@@ -5317,7 +5341,7 @@ paths = ["scripts/aes/check-aes-wide-api.py", "scripts/aes/check-aes-api.py", "s
 program = "python3"
 
 [groups.aes-proof]
-paths = ["assurance/aes-policy/Cargo.toml", "assurance/aes-policy/Cargo.lock", "assurance/aes-policy/src", "crates/brynja-crypto/src/aes/portable.rs", "crates/brynja-crypto/src/aes/portable", "scripts/aes/check-aes-kani.py", "scripts/aes/test-aes-runners.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py", "assurance/policy.toml"]
+paths = ["assurance/aes-policy/Cargo.toml", "assurance/aes-policy/Cargo.lock", "assurance/aes-policy/src", "crates/brynja-cipher-aes/src/aes/portable.rs", "crates/brynja-cipher-aes/src/aes/portable", "scripts/aes/check-aes-kani.py", "scripts/aes/test-aes-runners.py", "scripts/hmac/hmac_verifiers.py", "scripts/repository/facade_cargo_environment.py", "assurance/policy.toml"]
 [[groups.aes-proof.tools]]
 program = "python3"
 
@@ -5672,7 +5696,7 @@ program = "rustc"
 toolchain = "1.100.0"
 
 [groups.hkdf-public-api-modern]
-paths = ["crates/brynja","crates/brynja-cipher-chacha","crates/brynja-core","crates/brynja-crypto","crates/brynja-crypto-cpu","crates/brynja-crypto-cpu-std","crates/brynja-dtls","crates/brynja-hash-core","crates/brynja-hash-parallel","crates/brynja-hash-sha2","crates/brynja-hash-sha3","crates/brynja-hash-tuple","crates/brynja-mac-hmac","crates/brynja-mac-kmac","crates/brynja-pki","crates/brynja-platform","crates/brynja-protocol","crates/brynja-quic-tls","crates/brynja-tls","crates/brynja-tls12","crates/brynja-tls13","crates/brynja-tls13-handshake","assurance/hkdf-public-api/Cargo.toml","assurance/hkdf-public-api/Cargo.lock","assurance/hkdf-public-api/src"]
+paths = ["crates/brynja","crates/brynja-cipher-chacha","crates/brynja-core","crates/brynja-cipher-aes", "crates/brynja-crypto","crates/brynja-crypto-cpu","crates/brynja-crypto-cpu-std","crates/brynja-dtls","crates/brynja-hash-core","crates/brynja-hash-parallel","crates/brynja-hash-sha2","crates/brynja-hash-sha3","crates/brynja-hash-tuple","crates/brynja-mac-hmac","crates/brynja-mac-kmac","crates/brynja-pki","crates/brynja-platform","crates/brynja-protocol","crates/brynja-quic-tls","crates/brynja-tls","crates/brynja-tls12","crates/brynja-tls13","crates/brynja-tls13-handshake","assurance/hkdf-public-api/Cargo.toml","assurance/hkdf-public-api/Cargo.lock","assurance/hkdf-public-api/src"]
 
 [[checks]]
 component = "hkdf"
@@ -6232,7 +6256,7 @@ exact_tests = 6
 # Cargo compiles the composition crate's default dependency closure; these
 # inputs affect HKDF checks without adding any reverse dependency to old checks.
 [groups.hkdf-composition]
-paths = ["crates/brynja-crypto/src"]
+paths = ["crates/brynja-cipher-aes", "crates/brynja-crypto/src"]
 optional_paths = ["crates/brynja-crypto/build.rs"]
 [groups.hkdf-composition.toml]
 "Cargo.toml" = ["workspace.resolver", "workspace.package.edition", "workspace.package.rust-version", "workspace.lints", "profile.dev", "profile.test"]

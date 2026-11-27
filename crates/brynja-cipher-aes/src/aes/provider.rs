@@ -28,7 +28,7 @@
 //! this helper accepts that binding without importing any key bytes:
 //!
 //! ```
-//! use brynja_crypto::aes::{PublicCiphertext, provider::{Aes128Backend, Aes128ProviderKey, Error}};
+//! use brynja_cipher_aes::aes::{PublicCiphertext, provider::{Aes128Backend, Aes128ProviderKey, Error}};
 //! fn encrypt_with_selected_provider<B: Aes128Backend>(
 //!     backend: B, input: &[u8; 16], output: &mut [u8; 16],
 //! ) -> Result<(), Error> {

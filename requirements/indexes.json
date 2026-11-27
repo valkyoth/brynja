@@ -499,7 +499,7 @@
         "nist:NIST.FIPS.197-upd1.pdf"
       ],
       "targets": [
-        "planned-symbol:crates/brynja-crypto/src/aes.rs#Aes128Key"
+        "planned-symbol:crates/brynja-cipher-aes/src/aes.rs#Aes128Key"
       ],
       "tests": [
         "planned:positive:crates/brynja-crypto/tests/aes128.rs#nist_aesavs_all_four_aes128_ecb_kat_files",
@@ -11376,7 +11376,7 @@
       "legacy-boundary:crates/brynja-legacy/src/lib.rs": [
         "BRY-REQ-LEGACY-0800"
       ],
-      "planned-symbol:crates/brynja-crypto/src/aes.rs#Aes128Key": [
+      "planned-symbol:crates/brynja-cipher-aes/src/aes.rs#Aes128Key": [
         "BRY-REQ-CRYPTO-0005"
       ],
       "planned-symbol:crates/brynja-crypto/src/algorithm.rs#AlgorithmPolicy": [

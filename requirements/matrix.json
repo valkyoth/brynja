@@ -1,6 +1,6 @@
 {
   "closure_policy_sha256": "56163ce06f4bda14181ee734a37ad308446c856a98988f707c9baae9aad3848a",
-  "domain_policy_sha256": "7cfb4943d6e4676febce3ae42843e3b5cf049010ecbfadba246b9f1625dcbcc8",
+  "domain_policy_sha256": "f68334500cc56bfd5e8de766e544614e19df7f38ba3779eee58cf7c21c98d4c5",
   "policy_sha256": "d6de8900db2d96d32c04a6e95e04c671c0d38fc6f38075b802ad5caa8dd28911",
   "requirements": [
     {
@@ -1221,7 +1221,7 @@
       "owner": "0.27.0",
       "profile": "crypto-encoding-pkix",
       "residual": "Architecture-specific acceleration requires separate dispatch and side-channel review and cannot silently replace the portable path. Ordinary RISC-V AES routes remain unadmitted; emulator observations do not establish native timing, physical-fault or power/EM resistance.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -1252,7 +1252,7 @@
       "targets": [
         {
           "kind": "planned-symbol",
-          "target": "crates/brynja-crypto/src/aes.rs#Aes128Key"
+          "target": "crates/brynja-cipher-aes/src/aes.rs#Aes128Key"
         }
       ],
       "tests": [

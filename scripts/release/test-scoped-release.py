@@ -58,10 +58,11 @@ class ScopedRelease(unittest.TestCase):
         with self.assertRaises(ValueError):
             scoped.enabled('garbage')
 
-    def test_parallel_chacha20_candidate_gate_is_finite_and_does_not_publish(self):
-        plan = scoped.load('0.30.2')
+    def test_standalone_aes_candidate_gate_is_finite_and_does_not_publish(self):
+        plan = scoped.load('0.30.3')
         commands = {check['id']: check['command'] for check in plan['checks']}
-        self.assertEqual(len(commands), 42)
+        self.assertEqual(len(commands), 43)
+        self.assertEqual(commands['aes-leaf-identity'], ['python3', 'scripts/aes/check-aes-leaf-identity.py'])
         self.assertEqual(commands['sha256-policy'], ['python3', 'scripts/sha2/check-sha256.py'])
         self.assertEqual(commands['static-cpu-source-policy'],
                          ['python3', 'scripts/cpu/check-static-execution.py', '--policy-only'])
@@ -77,7 +78,7 @@ class ScopedRelease(unittest.TestCase):
         self.assertEqual(commands['aead-packaged-endpoints'], ['python3', 'scripts/aes-gcm/check-portable-acceptance.py', '--smoke'])
         self.assertEqual(commands['release-plan'], ['scripts/release/test-release-plan.sh'])
         self.assertEqual(commands['crypto-tests'],
-            ['cargo', 'test', '--locked', '-p', 'brynja-crypto', '-p',
+            ['cargo', 'test', '--locked', '-p', 'brynja-cipher-aes', '-p', 'brynja-crypto', '-p',
              'brynja-legacy-hkdf', '--no-default-features', '--features', 'brynja-crypto/hazmat-chacha20,brynja-crypto/gmac-execution,brynja-crypto/aes-gcm-execution,brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider,brynja-crypto/ghash-runtime-execution'])
         lint = commands['crypto-lint']
         self.assertIn('brynja-cipher-chacha', lint)
@@ -92,7 +93,7 @@ class ScopedRelease(unittest.TestCase):
         self.assertEqual(commands['facade-integration'],
             ['cargo', 'check', '--locked', '-p', 'brynja', '--no-default-features'])
         self.assertEqual(set(plan['ci_checks']), set(commands) -
-                         {'sbom', 'dependency-policy', 'advisories', 'gmac-public-consumer', 'aead-packaged-endpoints', 'ghash-package-controls', 'ghash-packaged-endpoints',
+                         {'aes-leaf-identity', 'sbom', 'dependency-policy', 'advisories', 'gmac-public-consumer', 'aead-packaged-endpoints', 'ghash-package-controls', 'ghash-packaged-endpoints',
                           'ghash-packaged-runtime-x86', 'hkdf-package-runner-tests', 'hkdf-packaged-endpoints',
                           'aes-downstream-endpoints', 'aes-consumer-format',
                           'aes-consumer-lint-direct', 'aes-consumer-lint-facade'})
@@ -153,10 +154,10 @@ class ScopedRelease(unittest.TestCase):
                                  or 'check-aes-kani.py' in arg
                                  or 'check-aes-dataflow.py' in arg for arg in command))
         release = tomllib.loads((scoped.ROOT / 'release-crates.toml').read_text())
-        self.assertEqual(release['release']['version'], '0.30.2')
-        self.assertEqual(release['crates']['brynja']['previous_version'], '0.30.1')
+        self.assertEqual(release['release']['version'], '0.30.3')
+        self.assertEqual(release['crates']['brynja']['previous_version'], '0.30.2')
         self.assertEqual(release['crates']['brynja']['change'], 'metadata')
-        self.assertEqual(release['release']['cumulative_milestones'][-2:], ['0.30.1', '0.30.2'])
+        self.assertEqual(release['release']['cumulative_milestones'][-2:], ['0.30.2', '0.30.3'])
         self.assertEqual(release['crates']['brynja-cipher-chacha']['previous_version'], 'unpublished')
         self.assertIn('RV64 stays scalar', plan['scope'])
         self.assertNotIn('0.27.7', release['release']['cumulative_milestones'])
@@ -192,10 +193,13 @@ class ScopedRelease(unittest.TestCase):
         def validate(text):
             fetch = '        run: cargo +1.100.0 fetch --locked\n'
             consumer = '        run: python3 scripts/aes/check-aes-consumer.py\n'
+            identity = '        run: python3 scripts/aes/check-aes-leaf-identity.py\n'
             self.assertEqual(text.count(fetch), 1)
             self.assertEqual(text.count(consumer), 1)
+            self.assertEqual(text.count(identity), 1)
             self.assertLess(text.index(fetch), text.index('cargo +1.100.0 clippy'))
             self.assertLess(text.index(fetch), text.index(consumer))
+            self.assertLess(text.index(fetch), text.index(identity))
             self.assertIn('rustup toolchain install 1.90.0 --profile minimal --target thumbv7em-none-eabi', text)
             self.assertIn('rustup toolchain install 1.100.0 --profile minimal --component rustfmt,clippy --target thumbv7em-none-eabi', text)
             self.assertIn('run: python3 scripts/aes/test-aes-consumer.py', text)
@@ -207,6 +211,7 @@ class ScopedRelease(unittest.TestCase):
 
         validate(job)
         for before, after in [('fetch --locked', 'fetch --locked --offline'),
+                              ('check-aes-leaf-identity.py', 'unrelated.py'),
                               ('check-aes-consumer.py\n', 'check-aes-consumer.py --matrix\n'),
                               ('--features facade', '--features direct'),
                               ('--target thumbv7em-none-eabi', '')]:

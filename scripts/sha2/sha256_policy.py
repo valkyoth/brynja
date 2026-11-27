@@ -416,6 +416,7 @@ def validate_packages(root: Path) -> None:
     if set(crypto.get("dependencies", {})) != {
         "brynja-core",
         "brynja-cipher-chacha",
+        "brynja-cipher-aes",
         "brynja-crypto-cpu",
         "brynja-hash-sha2",
         "brynja-hash-sha3",
@@ -425,6 +426,8 @@ def validate_packages(root: Path) -> None:
         "brynja-mac-hmac",
     }:
         fail("brynja-crypto SHA-256 ownership changed")
+    if crypto["dependencies"]["brynja-cipher-aes"] != {"workspace": True, "optional": True}:
+        fail("brynja-crypto AES dependency must remain optional and workspace-owned")
     if (crypto["dependencies"]["brynja-core"] != {"workspace": True}
             or crypto["dependencies"]["brynja-cipher-chacha"] != {"workspace": True, "optional": True}
             or crypto.get("features", {}).get("hazmat-chacha20") != [

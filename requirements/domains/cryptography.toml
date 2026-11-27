@@ -88,14 +88,14 @@ mapping_rationale = "The HKDF semantic surface and registry-backed KDF entries c
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0005"
-revision = 4
+revision = 5
 owner = "0.27.0"
 lifecycle = "planned"
 decision_ids = ["algorithm.aes"]
 sources = [{ id = "nist:NIST.FIPS.197-upd1.pdf", authority_role = "current" }]
 statement = "The AES family must implement the pinned updated FIPS 197 transformations for each admitted key size without secret-indexed lookup tables. AES-128 is the v0.27.0 development slice; v0.27.1 adds distinct AES-192/256 ephemeral and cached owners. These development slices do not themselves close portable acceptance or compiler/target qualification."
 invariants = ["constant-time", "resource-bound", "side-channel", "work-bound"]
-target = "crates/brynja-crypto/src/aes.rs#Aes128Key"
+target = "crates/brynja-cipher-aes/src/aes.rs#Aes128Key"
 positive_test = "crates/brynja-crypto/tests/aes128.rs#nist_aesavs_all_four_aes128_ecb_kat_files"
 negative_test = "scripts/aes/check-aes-api.py#main"
 work_bound = "Every block uses a fixed round count determined only by the public key size and accepts only complete fixed-size blocks."

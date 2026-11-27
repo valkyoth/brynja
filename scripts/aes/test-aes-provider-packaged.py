@@ -54,7 +54,7 @@ class ProviderPackagedTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 runner.packaged.graph(original, route, directory, unpacked, versions, provider=True)
             for node in original['resolve']['nodes']:
-                if by_id[node['id']] in ('brynja', 'brynja-crypto'):
+                if by_id[node['id']] in ('brynja', 'brynja-crypto', 'brynja-cipher-aes'):
                     node['features'].append('external-key-provider')
             runner.packaged.graph(original, route, directory, unpacked, versions, provider=True)
             with self.assertRaises(ValueError):

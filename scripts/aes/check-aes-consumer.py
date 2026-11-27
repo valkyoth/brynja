@@ -26,7 +26,7 @@ BASE_TESTS = {'known_answer_both_directions', 'drop_clears_only_owned_regions',
 TESTS = (BASE_TESTS | {f'wide::aes{bits}::{name}' for bits in (192, 256) for name in BASE_TESTS}
          | {f'roundtrip::aes{bits}' for bits in (128, 192, 256)})
 OWNERS = ('Aes128Key', 'Aes128ExpandedKey', 'Aes192Key', 'Aes192ExpandedKey', 'Aes256Key', 'Aes256ExpandedKey')
-DIRECT = {'brynja-core', 'brynja-crypto', 'brynja-hash-core', 'brynja-hash-parallel',
+DIRECT = {'brynja-cipher-aes', 'brynja-core', 'brynja-crypto', 'brynja-hash-core', 'brynja-hash-parallel',
           'brynja-hash-sha2', 'brynja-hash-sha3', 'brynja-hash-tuple',
           'brynja-mac-hmac', 'brynja-mac-kmac'}
 FACADE = DIRECT | {'brynja', 'brynja-pki', 'brynja-protocol', 'brynja-tls',
@@ -96,7 +96,7 @@ def graph(metadata, route, directory):
         features = {route} if name == NAME else {'default'}
         if name == 'brynja' or (name == 'brynja-crypto' and route == 'direct'):
             features = set()
-        if name in ('brynja', 'brynja-crypto'):
+        if name in ('brynja', 'brynja-crypto', 'brynja-cipher-aes'):
             features.add('hazmat-aes-block')
         if name == 'brynja-hash-sha2':
             features.add('general-sha512-t')  # Existing composition dependency, not AES acceleration.
@@ -170,6 +170,8 @@ def feature_probe(compiler, route, directory):
         source.write_text(f'#![no_std]\npub use {module}::hkdf;\n')
         verifier.run(command, env, directory)
         manifest.write_text(text.replace('features=[]', 'features=["hazmat-aes-block"]'))
+        # The explicit opt-in resolves the standalone AES package.
+        verifier.run(cargo + ['generate-lockfile', '--offline'], env, directory)
         source.write_text(aes_import)
         verifier.run(command, env, directory)
     print(f'AES_FEATURE_GATE: {compiler} {route} absent with defaults on/off; explicit opt-in works', flush=True)

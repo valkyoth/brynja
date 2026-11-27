@@ -114,7 +114,7 @@ class ProviderRunnerTests(unittest.TestCase):
 
     def test_new_permission_variant_requires_an_explicit_authorization_decision(self):
         root = Path(__file__).resolve().parents[2]
-        text = (root / 'crates/brynja-crypto/src/aes/provider.rs').read_text()
+        text = (root / 'crates/brynja-cipher-aes/src/aes/provider.rs').read_text()
         enum = 'pub enum Permissions {' + text.split('pub enum Permissions {', 1)[1].split('\n}', 1)[0] + '\n}'
         body = text.split('let allowed = match (self.permissions, inverse) {', 1)[1].split('\n                };', 1)[0]
         function = 'fn allowed(p: Permissions, inverse: bool) -> bool { match (p, inverse) {' + body + '\n} }'

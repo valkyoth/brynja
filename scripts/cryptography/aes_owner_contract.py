@@ -5,8 +5,8 @@ import tomllib
 import rust_source_contract as rust
 
 ID = 'development.algorithm.aes128'
-SOURCE = 'crates/brynja-crypto/src/aes.rs'
-PORTABLE = 'crates/brynja-crypto/src/aes/portable.rs'
+SOURCE = 'crates/brynja-cipher-aes/src/aes.rs'
+PORTABLE = 'crates/brynja-cipher-aes/src/aes/portable.rs'
 RECORD = {
     'capability': 'algorithm.aes',
     'variant': 'AES-128',
@@ -46,14 +46,14 @@ RECORD = {
     'lifecycle_scope': ['import', 'success', 'error', 'failed-construction', 'recoverable-unwind', 'explicit-clear', 'drop'],
     'excluded_scope': ['AES-192', 'AES-256', 'key-generation', 'streaming-modes', 'authentication',
                        'cancellation-api', 'rekey-api', 'key-export', 'backend-selection', 'TLS'],
-    'evidence': ['crates/brynja-crypto/tests/aes128.rs', 'crates/brynja-crypto/src/aes/tests.rs',
+    'evidence': ['crates/brynja-crypto/tests/aes128.rs', 'crates/brynja-cipher-aes/src/aes/tests.rs',
                  'scripts/aes/check-aes-api.py', 'scripts/aes/check-aes-owner-cleanup.py',
                  'scripts/aes/check-aes-operation-cleanup.py', 'scripts/cryptography/test-aes-owner-contract.py',
                  'docs/assurance/aes128-development.md'],
 }
 REVIEWED_PATHS = {
-    SOURCE, PORTABLE, 'crates/brynja-crypto/src/aes/portable/field.rs',
-    'crates/brynja-crypto/src/aes/portable/layout.rs', 'crates/brynja-crypto/src/aes/tests.rs',
+    SOURCE, PORTABLE, 'crates/brynja-cipher-aes/src/aes/portable/field.rs',
+    'crates/brynja-cipher-aes/src/aes/portable/layout.rs', 'crates/brynja-cipher-aes/src/aes/tests.rs',
     'crates/brynja-crypto/tests/aes128.rs', 'scripts/cryptography/aes_owner_contract.py',
     'scripts/cryptography/test-aes-owner-contract.py', 'scripts/aes/check-aes-api.py',
     'scripts/aes/check-aes-owner-cleanup.py', 'scripts/aes/check-aes-operation-cleanup.py',

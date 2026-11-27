@@ -178,8 +178,8 @@ impl HashRoute for AesPair {
             )
         )
     ))]
-    fn after_product(&self) -> Result<(), ghash::Error> {
-        crate::aes_gcm::interruptions::Step::Product.hit()
+    fn after_update(&self) -> Result<(), ghash::Error> {
+        crate::aes_gcm::interruptions::Step::HashUpdate.hit()
     }
 
     fn start<'a>(

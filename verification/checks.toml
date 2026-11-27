@@ -440,9 +440,9 @@ inputs = ["aes-gcm-framing", "ghash-portable-field", "hash-core", "sha2-source",
 reject_environment = ["RUSTFLAGS", "CARGO_ENCODED_RUSTFLAGS", "RUSTDOCFLAGS", "CARGO_BUILD_TARGET", "RUSTUP_TOOLCHAIN", "RUSTC", "RUSTDOC", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER"]
 timeout_seconds = 120
 [checks.success]
-contains = ["test result: ok. 4 passed; 0 failed; 0 ignored;"]
-minimum_tests = 4
-exact_tests = 4
+contains = ["test aes_gcm::tests::frame_admits_whole_updates_before_notifying_any_route ... ok", "test result: ok. 5 passed; 0 failed; 0 ignored;"]
+minimum_tests = 5
+exact_tests = 5
 
 [[checks]]
 component = "aes_gcm"
@@ -4332,7 +4332,7 @@ component = "aes"
 id = "feature-msrv-all-test"
 category = "integration"
 name = "AES opt-in feature composition: 1.90.0, all, test"
-establishes = "All-feature standalone/direct/facade integration and doctests: 182 passing tests, including the baseline static-AES rejection control, not hardware execution. Three opt-in OpenSSL corpus tests remain ignored here and are covered by separate differential registrations. Not packaged or side-channel qualification."
+establishes = "All-feature standalone/direct/facade integration and doctests: 186 passing tests, including the baseline static-AES rejection control, plus the paired GHASH cleanup test when its native multiplier is available. Three opt-in OpenSSL corpus tests remain ignored here and are covered by separate differential registrations. Not packaged or side-channel qualification."
 command = ["cargo","+1.90.0","test","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-universal-hash-ghash","-p","brynja-crypto","-p","brynja","--all-features"]
 cwd = "."
 inputs = ["aes-build", "aes-feature-integration", "hkdf-msrv"]
@@ -4342,8 +4342,8 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok."]
-minimum_tests = 182
-exact_tests = 182
+minimum_tests = 186
+exact_tests = 186
 allow_ignored = true
 
 [[checks]]
@@ -4401,7 +4401,7 @@ component = "aes"
 id = "feature-current-all-test"
 category = "integration"
 name = "AES opt-in feature composition: 1.99.1, all, test"
-establishes = "All-feature standalone/direct/facade integration and doctests: 182 passing tests, including the baseline static-AES rejection control, not hardware execution. Three opt-in OpenSSL corpus tests remain ignored here and are covered by separate differential registrations. Not packaged or side-channel qualification."
+establishes = "All-feature standalone/direct/facade integration and doctests: 186 passing tests, including the baseline static-AES rejection control, plus the paired GHASH cleanup test when its native multiplier is available. Three opt-in OpenSSL corpus tests remain ignored here and are covered by separate differential registrations. Not packaged or side-channel qualification."
 command = ["cargo","+1.99.1","test","--locked","--offline","-p","brynja-cipher-aes","-p","brynja-universal-hash-ghash","-p","brynja-crypto","-p","brynja","--all-features"]
 cwd = "."
 inputs = ["aes-build", "aes-feature-integration", "compiler"]
@@ -4411,8 +4411,8 @@ platform = "linux-x86_64"
 timeout_seconds = 600
 [checks.success]
 contains = ["test result: ok."]
-minimum_tests = 182
-exact_tests = 182
+minimum_tests = 186
+exact_tests = 186
 allow_ignored = true
 
 [[checks]]

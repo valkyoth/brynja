@@ -72,7 +72,7 @@ struct Frame {
 // cannot inject an implementation through a public GCM or GMAC constructor.
 trait HashRoute {
     #[cfg(test)]
-    fn after_product(&self) -> Result<(), Error> {
+    fn after_update(&self) -> Result<(), Error> {
         Ok(())
     }
 
@@ -97,10 +97,7 @@ impl HashRoute for PortableHash {
         workspace: &'a mut [u8; 16],
         budget: u64,
     ) -> Result<Ghash<'a>, Error> {
-        let frame = Ghash::new(h, workspace, budget);
-        #[cfg(test)]
-        TEST_STARTS.set(TEST_STARTS.get().saturating_add(1));
-        Ok(frame)
+        Ok(Ghash::new(h, workspace, budget))
     }
 }
 
@@ -140,25 +137,14 @@ impl Frame {
         out: &'a mut [u8; 16],
     ) -> Result<SecretHash<'a>, Error> {
         let mut workspace = [0; 16];
+        #[cfg(test)]
+        TEST_STARTS.set(TEST_STARTS.get().saturating_add(1));
         let mut hash = route.start(h, &mut workspace, self.budget)?;
-        #[cfg(not(test))]
-        let mut update = |bytes: &[u8]| hash.update(bytes);
-        // In composition tests, stop immediately after a completed product.
-        // The primitive independently tests interruptions inside its update guard.
-        #[cfg(test)]
-        let mut used = 0usize;
-        #[cfg(test)]
-        let mut update = |mut bytes: &[u8]| -> Result<(), Error> {
-            while !bytes.is_empty() {
-                let room = 16usize.checked_sub(used).ok_or(Error::LimitExceeded)?;
-                let (part, rest) = bytes.split_at(bytes.len().min(room));
-                hash.update(part)?;
-                used = used.checked_add(part.len()).ok_or(Error::LimitExceeded)?;
-                if used == 16 {
-                    used = 0;
-                    route.after_product()?;
-                }
-                bytes = rest;
+        let mut update = |bytes: &[u8]| -> Result<(), Error> {
+            hash.update(bytes)?;
+            #[cfg(test)]
+            if !bytes.is_empty() {
+                route.after_update()?;
             }
             Ok(())
         };

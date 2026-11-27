@@ -7,6 +7,41 @@ pub(super) fn sample_iv<const N: usize>() -> [u8; N] {
 }
 
 #[test]
+fn frame_admits_whole_updates_before_notifying_any_route() -> Result<(), Error> {
+    struct Count(core::cell::Cell<u8>);
+    impl HashRoute for Count {
+        fn start<'a>(
+            &self,
+            h: &'a [u8; 16],
+            state: &'a mut [u8; 16],
+            budget: u64,
+        ) -> Result<Ghash<'a>, Error> {
+            Ok(Ghash::new(h, state, budget))
+        }
+        fn after_update(&self) -> Result<(), Error> {
+            self.0.set(self.0.get().saturating_add(1));
+            Ok(())
+        }
+    }
+    let route = Count(core::cell::Cell::new(0));
+    let mut out = [0xa5; 16];
+    let mut frame = Frame::lengths(17, 0)?;
+    frame.budget = 16;
+    TEST_STARTS.set(0);
+    assert!(matches!(
+        frame.hash(&route, &[0; 16], &[1; 17], &[], &mut out),
+        Err(Error::LimitExceeded)
+    ));
+    assert_eq!((TEST_STARTS.get(), route.0.get(), out), (1, 0, [0xa5; 16]));
+    Frame::lengths(17, 0)?
+        .hash(&route, &[0; 16], &[1; 17], &[], &mut out)?
+        .clear();
+    // One whole field, its padding, and the two encoded lengths.
+    assert_eq!((TEST_STARTS.get(), route.0.get()), (2, 4));
+    Ok(())
+}
+
+#[test]
 fn public_length_admission_without_large_allocations() -> Result<(), Error> {
     let max = u64::MAX / 8;
     let frame = Frame::message(max, MAX_TEXT_BYTES)?;

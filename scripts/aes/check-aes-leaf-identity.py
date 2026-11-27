@@ -59,6 +59,10 @@ def mode_visibility(cargo, fixture, env, versions):
                 compile(f'use {prefix}::{api} as _; fn main() {{}}', flags)
                 raw_hash = 'use brynja_universal_hash_ghash::ghash::Ghash as _; fn main() {}'
                 compile(raw_hash, flags, 'E0603')
+                # Cargo unifies the mode feature. The normal raw import stays
+                # private, but Rust does not hide a public composition bridge.
+                compile('use brynja_universal_hash_ghash::__mode::Ghash; '
+                        'fn main() { let _ = Ghash::new; }', flags)
                 compile(raw_hash, flags + ['brynja-universal-hash-ghash/hazmat-ghash'])
                 raw = 'use brynja_cipher_aes::aes::Aes128Key as _; fn main() {}'
                 compile(raw, flags, 'E0603')

@@ -49,8 +49,6 @@ def main():
                 ("-Ctarget-feature=+aes,+sse2", ["--lib", lifetime],
                  [lifetime + name for name in ("postcheck_precedes_commit", "unwind_retires_pair",
                                                 "frames_use_the_admitted_multiplier")]),
-                ("-Ctarget-feature=+aes,+sse2", ["--lib", "ghash::interrupted_pair_update_clears_live_frame"],
-                 ["ghash::interrupted_pair_update_clears_live_frame"]),
                 ("-Ctarget-feature=+aes,+sse2", ["--lib", interrupted],
                  [interrupted + width + "::" + name for width in ("aes128", "aes192", "aes256")
                   for name in ("import", "messages", "authentication_only")]),
@@ -58,6 +56,14 @@ def main():
                 output = subprocess.check_output(public + args, cwd=ROOT, env=dict(env, RUSTFLAGS=flags),
                                                  text=True, timeout=300)
                 validate(output, len(names), ["test " + name + " ... ok" for name in names])
+            # This test moved out of the composition crate. Run the generic
+            # leaf on the host; an absent multiplier must not count as evidence.
+            case = "ghash::interrupted_pair_update_clears_live_frame"
+            leaf = cmd[:cmd.index("-p")] + ["-p", "brynja-universal-hash-ghash",
+                    "--no-default-features", "--features", "__mode-execution",
+                    "--lib", "--", "--exact", case, "--nocapture"]
+            output = subprocess.check_output(leaf, cwd=ROOT, env=env, text=True, timeout=300)
+            validate(output, 1, ["test " + case + " ... ok", "GHASH_PAIRED_LIVE_CLEANUP_COMPLETE"])
             print(f"{version}: staged native error and unwind sweeps passed", flush=True)
             print(f"{version}: required AES-NI and PCLMUL composition passed", flush=True)
     print("GCM_X86_PAIR_DEVELOPMENT_COMPLETE")

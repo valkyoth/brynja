@@ -33,7 +33,7 @@ pub(crate) enum Step {
             any(target_os = "linux", target_os = "macos")
         )
     ))]
-    Product,
+    HashUpdate,
     Complete,
 }
 
@@ -94,7 +94,7 @@ pub(crate) mod tests {
         gmac::{self, GmacError},
     };
     use Step::{
-        AesBlock as A, Complete as C, Entry as E, Expanded as X, HashStart as H, Product as P,
+        AesBlock as A, Complete as C, Entry as E, Expanded as X, HashStart as H, HashUpdate as U,
     };
     use std::{
         fmt::Debug,
@@ -149,13 +149,13 @@ pub(crate) mod tests {
         Ok(())
     }
 
-    // Eight-byte IV: two products for J0. Seventeen bytes each of AAD
-    // and text: five products for the tag. Two CTR blocks, one partial.
-    const SEAL: &[Step] = &[E, A, H, P, P, A, A, A, H, P, P, P, P, P, C];
-    const OPEN: &[Step] = &[E, A, H, P, P, A, H, P, P, P, P, P, A, A, C];
-    const REJECT: &[Step] = &[E, A, H, P, P, A, H, P, P, P, P, P, C];
+    // Nonempty updates, not individual products. J0: IV, pad, two lengths.
+    // Message: AAD, pad, text, pad, two lengths. Two CTR blocks, one partial.
+    const SEAL: &[Step] = &[E, A, H, U, U, U, U, A, A, A, H, U, U, U, U, U, U, C];
+    const OPEN: &[Step] = &[E, A, H, U, U, U, U, A, H, U, U, U, U, U, U, A, A, C];
+    const REJECT: &[Step] = &[E, A, H, U, U, U, U, A, H, U, U, U, U, U, U, C];
     // 96-bit IV shortcut and 17 bytes of GMAC AAD: no IV hash or CTR.
-    const MAC: &[Step] = &[E, A, A, H, P, P, P, C];
+    const MAC: &[Step] = &[E, A, A, H, U, U, U, U, C];
     const AAD: &[u8] = &[0x27; 17];
     const PLAIN: [u8; 17] = [0x43; 17];
 

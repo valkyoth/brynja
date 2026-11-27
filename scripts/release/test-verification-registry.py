@@ -471,7 +471,7 @@ def validate(registry):
             test = 'crates/brynja-crypto/tests/gmac.rs'
         elif gcm_framing:
             assert argv[-4:] == ['--features', 'hazmat-ghash', '--lib', 'aes_gcm::tests::']
-            assert check['success']['exact_tests'] == 4
+            assert check['success']['exact_tests'] == 5
             test = 'crates/brynja-crypto/src/aes_gcm/tests.rs'
         elif gcm_composition or gcm_owner:
             module = 'policy::' if gcm_owner else ''
@@ -503,6 +503,9 @@ def validate(registry):
         for marker in check['success']['contains']:
             if marker.startswith('test ') and marker.endswith(' ... ok'):
                 name = marker.removeprefix('test ').removesuffix(' ... ok')
+                if gcm_framing:
+                    assert name.startswith('aes_gcm::tests::'), marker
+                    name = name.removeprefix('aes_gcm::tests::')
                 assert re.search(r'#\[test\]\s*fn ' + re.escape(name) + r'\(', source), marker
         for path in paths:
             assert (ROOT / path).exists(), f'missing input: {path}'
@@ -893,7 +896,7 @@ class RegistryTests(unittest.TestCase):
             for arch in ('x86', 'arm-qemu'):
                 expected[f'kernel-{arch}-{endpoint}'] = 5
                 expected[f'expansion-{arch}-{endpoint}'] = 10
-            for profile, count in (('minimal', 32), ('all', 182)):
+            for profile, count in (('minimal', 32), ('all', 186)):
                 expected[f'feature-{endpoint}-{profile}-test'] = count
                 expected[f'feature-{endpoint}-{profile}-doc'] = 0
         for route in ('direct', 'facade'):

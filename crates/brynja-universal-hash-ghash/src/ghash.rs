@@ -56,6 +56,7 @@ const _: () = assert!(
 );
 
 #[cfg(any(
+    test,
     feature = "ghash-runtime-execution",
     not(any(
         brynja_ghash_pclmul_evidence,
@@ -426,17 +427,14 @@ impl Drop for Ghash<'_> {
 #[cfg(all(
     test,
     feature = "__mode-execution",
-    target_feature = "aes",
     any(
         all(
             target_arch = "x86_64",
-            target_feature = "sse2",
             any(target_os = "linux", target_os = "windows")
         ),
         all(
             target_arch = "aarch64",
             target_endian = "little",
-            target_feature = "neon",
             any(target_os = "linux", target_os = "macos")
         )
     )
@@ -445,12 +443,13 @@ impl Drop for Ghash<'_> {
 fn interrupted_pair_update_clears_live_frame() -> Result<(), Error> {
     use std::panic::{AssertUnwindSafe, catch_unwind};
     let key = (1_u128 << 127).to_be_bytes();
+    let Some(kernel) = PairMultiplier::probe().map_err(|_| Error::Quarantined)? else {
+        // A generic build also runs on hosts without this multiplier. The
+        // native evidence runner requires the completion marker below.
+        return Ok(());
+    };
+    let kernel = core::cell::RefCell::new(kernel);
     for unwind in [false, true] {
-        let kernel = core::cell::RefCell::new(
-            PairMultiplier::probe()
-                .map_err(|_| Error::Quarantined)?
-                .ok_or(Error::Quarantined)?,
-        );
         let (mut state, mut output) = ([0; 16], [0xa5; 16]);
         let mut frame = Ghash::from_pair(&kernel, &key, &mut state, 32)?;
         frame.update(&[0x35; 7])?;
@@ -470,6 +469,7 @@ fn interrupted_pair_update_clears_live_frame() -> Result<(), Error> {
         assert!(matches!(frame.finish(&mut output), Err(Error::Quarantined)));
         assert_eq!(output, [0xa5; 16]);
     }
+    std::println!("GHASH_PAIRED_LIVE_CLEANUP_COMPLETE");
     Ok(())
 }
 

@@ -149,13 +149,15 @@ instead borrow the same admitted multiplier for every frame.
 The interruption sweep calls the native public owners and, for each case,
 requires the expected sequence of stages before returning an error or unwinding.
 It covers guard entry, completed key expansion, each completed AES block,
-each GHASH frame start and completed product, and the final guarded check.
+each GHASH frame start and successful nonempty update, and the final guarded check.
+Update slices are identical in test and production builds. The leaf test
+separately interrupts a real product *inside* an update, before its guard commits.
 A 17-byte GCM message needs two counter blocks, so interruption at the second
 also exercises cleanup after the first has already written to scratch.
 
-Per compiler endpoint there are **678 interrupted calls**: 18 during key
-import, 516 during GCM seal/open (including invalid tags and both buffer
-layouts), and 144 during GMAC generation/verification. GCM uses a hashed
+Per compiler endpoint there are **804 interrupted calls**: 18 during key
+import, 624 during GCM seal/open (including invalid tags and both buffer
+layouts), and 162 during GMAC generation/verification. GCM uses a hashed
 eight-byte IV here; GMAC exercises the 96-bit shortcut. Sends must spend
 their single reservation, and receives must not. Neither a partial result
 nor a tag may escape; admitted message scratch must clear and subsequent

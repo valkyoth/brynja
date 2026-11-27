@@ -1,6 +1,6 @@
 {
   "closure_policy_sha256": "56163ce06f4bda14181ee734a37ad308446c856a98988f707c9baae9aad3848a",
-  "domain_policy_sha256": "414f03b04d39c1df349c4cdfc018903dab17af089a3936c8379dad68d454b179",
+  "domain_policy_sha256": "7cfb4943d6e4676febce3ae42843e3b5cf049010ecbfadba246b9f1625dcbcc8",
   "policy_sha256": "d6de8900db2d96d32c04a6e95e04c671c0d38fc6f38075b802ad5caa8dd28911",
   "requirements": [
     {
@@ -1531,7 +1531,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "Archived portable, SSE2 and NEON stream comparisons and the counter-reservation proof are scoped in docs/assurance/chacha20-development.md. SIMD correctness does not establish target-specific timing, physical erasure or authenticated encryption. RV64 remains portable.",
+      "evidence_gap": "Archived comparisons and counter proofs are scoped in docs/assurance/chacha20-development.md. The installed public consumers replay the IETF profile and reject unsupported nonce and counter widths as described in assurance/chacha20-consumer/README.md. This does not establish target timing, erasure or authenticated encryption. RV64 remains portable.",
       "id": "BRY-REQ-CRYPTO-0008",
       "invariants": [
         "constant-time",
@@ -1545,7 +1545,7 @@
       "owner": "0.30.0",
       "profile": "crypto-encoding-pkix",
       "residual": "The raw stream cipher is never exposed as a facade security service and is admitted only for reviewed compositions.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {

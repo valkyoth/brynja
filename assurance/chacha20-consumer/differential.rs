@@ -5,7 +5,7 @@ fn take<'a>(input: &mut &'a [u8], size: usize) -> &'a [u8] {
     input.split_off(..size).expect("truncated oracle record")
 }
 
-fn replay(mut corpus: &[u8]) -> Result<usize, &'static str> {
+pub fn replay(mut corpus: &[u8]) -> Result<usize, &'static str> {
     let mut count = 0;
     while !corpus.is_empty() {
         let counter = u32::from_le_bytes(take(&mut corpus, 4).try_into().unwrap());
@@ -37,6 +37,7 @@ fn replay(mut corpus: &[u8]) -> Result<usize, &'static str> {
     Ok(count)
 }
 
+#[cfg(test)]
 const CORPUS: &[u8] = include_bytes!("public-corpus.bin");
 
 #[test]

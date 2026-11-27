@@ -1,9 +1,14 @@
 # Finite ChaCha20 owner gate. Independent campaigns stay outside release.
 # No crates.io publication is selected for this internal milestone.
 schema = 1
-version = "0.30.1"
-scope = "Portable RFC 8439 ChaCha20: standalone default-off raw stream and unchanged portable compatibility import. Explicit four-block SSE2 and NEON owners; RV64 stays scalar. No AEAD or automatic dispatch. Retained acceptance for Portable GMAC and Portable AES-GCM, plus explicit Linux/Windows x86-64 AES-NI/PCLMUL and Linux/macOS ARM64 AES/PMULL owners. Portable GHASH remains the default. Arm GHASH timing remains unresolved. RISC-V AES remains evidence-only and unadmitted. Internal only; no publication or implicit timing/proof/native campaign."
-ci_checks = ["chacha20-parallel-owner","unsafe-policy","unsafe-regressions","aes-gcm-package-controls","crypto-tests","crypto-lint","crypto-format","facade-integration","hkdf-owner-contract","aes-owner-contract","aes-wide-owner-contract","aes-wide-api","aes-dataflow-regressions","aes-provider-api","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
+version = "0.30.2"
+scope = "Portable RFC 8439 ChaCha20: installed standalone and compatibility consumer acceptance; standalone default-off raw stream and unchanged portable compatibility import. Explicit four-block SSE2 and NEON owners; RV64 stays scalar. No AEAD or automatic dispatch. Retained acceptance for Portable GMAC and Portable AES-GCM, plus explicit Linux/Windows x86-64 AES-NI/PCLMUL and Linux/macOS ARM64 AES/PMULL owners. Portable GHASH remains the default. Arm GHASH timing remains unresolved. RISC-V AES remains evidence-only and unadmitted. Internal only; no publication or implicit timing/proof/native campaign."
+ci_checks = ["chacha20-installed-controls","chacha20-parallel-owner","unsafe-policy","unsafe-regressions","aes-gcm-package-controls","crypto-tests","crypto-lint","crypto-format","facade-integration","hkdf-owner-contract","aes-owner-contract","aes-wide-owner-contract","aes-wide-api","aes-dataflow-regressions","aes-provider-api","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
+
+[[checks]]
+id = "chacha20-installed-controls"
+command = ["python3","scripts/cryptography/test-chacha20-installed.py"]
+timeout_seconds = 60
 
 [[checks]]
 id = "chacha20-parallel-owner"

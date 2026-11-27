@@ -1,6 +1,11 @@
 # Changelog
 
-## 0.30.1 standalone ChaCha20 and opt-in SIMD (internal candidate)
+## 0.30.2 installed ChaCha20 public API acceptance (internal candidate)
+
+- Test two portable imports, SSE2 and NEON from installed downstream binaries.
+  No new cipher, feature or dependency. [Release notes](release-notes/RELEASE_NOTES_0.30.2.md).
+
+## 0.30.1 standalone ChaCha20 and opt-in SIMD (internally tagged)
 
 - Use portable ChaCha20 directly from `brynja-cipher-chacha` or keep the existing
   `brynja_crypto::chacha20` import. The leaf adds explicit SSE2 and NEON owners;

@@ -69,6 +69,27 @@ contains = ["CHACHA20_SSE2_DIFFERENTIAL_COMPLETE"]
 [[groups.chacha20-arm-qemu.tools]]
 program = "qemu-aarch64"
 
+[groups.chacha20-installed]
+paths = ["assurance/chacha20-consumer/installed.rs", "scripts/cryptography/chacha20_installed.py"]
+[[groups.chacha20-installed.tools]]
+program = "llvm-nm"
+
+[[checks]]
+component = "chacha20"
+id = "ietf-installed-consumer"
+category = "package"
+platform = "linux-x86_64"
+name = "Installed IETF ChaCha20 consumer: compatibility, leaf, SSE2 and QEMU NEON"
+establishes = "Both compiler endpoints install isolated archived consumers, check owner and linked kernel, oracle bytes and altered-answer rejection, RFC vectors, last counter and compile-fail contracts. Not runtime CPU detection or native ARM timing."
+command = ["python3", "scripts/cryptography/check-chacha20-archive.py", "--installed"]
+cwd = "."
+inputs = ["chacha20-installed", "chacha20-arm-qemu", "chacha20-oracle", "chacha20-archive", "ghash-packaged-api", "hkdf-msrv"]
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTDOCFLAGS","RUSTC","RUSTDOC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN"]
+timeout_seconds = 600
+[checks.success]
+unique_lines = ["1.90.0: installed brynja-crypto scalar: PASS", "1.90.0: installed brynja-cipher-chacha scalar: PASS", "1.90.0: installed brynja-cipher-chacha sse2: PASS", "1.90.0: installed brynja-cipher-chacha neon: PASS", "1.100.0: installed brynja-crypto scalar: PASS", "1.100.0: installed brynja-cipher-chacha scalar: PASS", "1.100.0: installed brynja-cipher-chacha sse2: PASS", "1.100.0: installed brynja-cipher-chacha neon: PASS"]
+contains = ["CHACHA20_INSTALLED_COMPLETE"]
+
 [[checks]]
 component = "chacha20"
 id = "ietf-neon-qemu-archive-oracle"

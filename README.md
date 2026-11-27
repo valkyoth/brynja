@@ -331,6 +331,8 @@ available in the development tree from `brynja-cipher-chacha` or through
 the existing `brynja_crypto::chacha20` path. Enable `hazmat-chacha20` on
 the chosen dependency. The new standalone crate has not been published.
 It is not ChaCha20-Poly1305: raw ciphertext has no integrity protection.
+The [installed consumer](assurance/chacha20-consumer/README.md) shows how to
+test both portable imports and the explicit SSE2 and NEON owners.
 
 The v0.27.6 [provider API candidate](docs/assurance/aes-provider-completion.md)
 adds distinct AES-128/192/256 external-key bindings. Applications supply their

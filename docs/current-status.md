@@ -1,7 +1,8 @@
 # Current Status
 
-Latest signed internal milestone: [v0.30.0, portable ChaCha20](../release-notes/RELEASE_NOTES_0.30.0.md).
-In the [v0.30.1 internal candidate](../release-notes/RELEASE_NOTES_0.30.1.md),
+Latest signed internal milestone: [v0.30.1, standalone ChaCha20 and SIMD](../release-notes/RELEASE_NOTES_0.30.1.md).
+The [v0.30.2 internal candidate](../release-notes/RELEASE_NOTES_0.30.2.md)
+tests these APIs from installed downstream consumers. In v0.30.1,
 portable ChaCha20 is available from the standalone crate and its existing
 compatibility import. The standalone crate also has explicit four-block SSE2
 (x86-64) and NEON (little-endian AArch64) owners. NEON has

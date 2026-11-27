@@ -59,9 +59,11 @@ class ScopedRelease(unittest.TestCase):
             scoped.enabled('garbage')
 
     def test_parallel_chacha20_candidate_gate_is_finite_and_does_not_publish(self):
-        plan = scoped.load('0.30.1')
+        plan = scoped.load('0.30.2')
         commands = {check['id']: check['command'] for check in plan['checks']}
-        self.assertEqual(len(commands), 39)
+        self.assertEqual(len(commands), 40)
+        self.assertEqual(commands['chacha20-installed-controls'],
+                         ['python3', 'scripts/cryptography/test-chacha20-installed.py'])
         self.assertEqual(commands['chacha20-parallel-owner'],
                          ['cargo', 'test', '--locked', '--offline', '--release', '--manifest-path',
                           'assurance/chacha20-parallel/Cargo.toml', '--test', 'parallel'])
@@ -148,10 +150,10 @@ class ScopedRelease(unittest.TestCase):
                                  or 'check-aes-kani.py' in arg
                                  or 'check-aes-dataflow.py' in arg for arg in command))
         release = tomllib.loads((scoped.ROOT / 'release-crates.toml').read_text())
-        self.assertEqual(release['release']['version'], '0.30.1')
-        self.assertEqual(release['crates']['brynja']['previous_version'], '0.30.0')
+        self.assertEqual(release['release']['version'], '0.30.2')
+        self.assertEqual(release['crates']['brynja']['previous_version'], '0.30.1')
         self.assertEqual(release['crates']['brynja']['change'], 'metadata')
-        self.assertEqual(release['release']['cumulative_milestones'][-2:], ['0.30.0', '0.30.1'])
+        self.assertEqual(release['release']['cumulative_milestones'][-2:], ['0.30.1', '0.30.2'])
         self.assertEqual(release['crates']['brynja-cipher-chacha']['previous_version'], 'unpublished')
         self.assertIn('RV64 stays scalar', plan['scope'])
         self.assertNotIn('0.27.7', release['release']['cumulative_milestones'])

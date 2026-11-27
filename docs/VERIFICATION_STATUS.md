@@ -1,5 +1,11 @@
 # Component Verification Status
 
+## ChaCha20 installed public API (v0.30.2)
+
+The [installed campaign](../assurance/chacha20-consumer/README.md) passed all
+eight route/compiler combinations. NEON execution here is under QEMU, not
+native ARM qualification. The scalar, SSE2 and NEON implementations are unchanged.
+
 ## ChaCha20 acceleration (v0.30.1 development)
 
 The x86-64 SSE2 and little-endian AArch64 NEON owners are explicit opt-ins.

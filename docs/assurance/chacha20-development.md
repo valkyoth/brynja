@@ -54,6 +54,8 @@ AEAD, hardware dispatch, or target timing qualification in this milestone.
 
 ## Reproduce the independent checks
 
+For v0.30.2, see the [installed-consumer acceptance and reproduction instructions](../../assurance/chacha20-consumer/README.md).
+
 Run `brynja-verify run chacha20 --needed` from the repository. No network
 access or keys from an application are needed.
 

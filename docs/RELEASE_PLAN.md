@@ -7268,9 +7268,9 @@ Exit criteria:
 
 ### v0.30.1 - ChaCha20 CPU Acceleration
 
-Status: in progress
+Status: released
 
-The internal candidate is prepared; scoped review and final checks are pending.
+Signed internal tag v0.30.1. No crates were published.
 
 RV64 disposition: retain the scalar public API. The four-lane V candidate
 passed native and emulated correctness, but regressed the representative record
@@ -7318,7 +7318,11 @@ Exit criteria:
 
 ### v0.30.2 - ChaCha20 Accelerated Public API Usability Acceptance
 
-Status: planned
+Status: awaiting pentest
+
+The [installed consumer](../assurance/chacha20-consumer/README.md) exercises
+the two scalar imports and both explicitly selected SIMD owners. Its report
+identifies the compiled owner; it is not an OS capability probe.
 
 Plan scope: Test the standalone crate and the existing public import route. Re-run the packaged ChaCha20 consumer through every admitted accelerated backend and scalar fallback, covering admitted IETF parameters and rejection of unadmitted nonce layouts, counters, block and tail lengths, overlap, exhaustion, unavailable required paths, package installation, backend reporting, and exact output equivalence.
 

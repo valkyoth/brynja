@@ -10,6 +10,9 @@ must supply authentication and unique nonce allocation; see the
 SIMD owners share those limits. Compile for the instruction set usable across
 the deployment; these owners do not probe the current CPU or pin a thread.
 Clearing owned scratch does not guarantee erasure of spills or SIMD registers.
+The v0.30.2 consumer reports the statically selected type and checks the
+installed binary for its kernel symbol. Neither check establishes host ISA
+stability, constant-time execution or authentication.
 
 The [installed AEAD consumer](../assurance/aead-installed-consumer/README.md)
 checks behavior at an application boundary; it does not supply a durable

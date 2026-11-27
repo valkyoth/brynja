@@ -5,6 +5,9 @@ whole request before mutation if its counter range is too short. It cannot
 prevent a second owner from reusing that range and provides no integrity tag.
 The opt-in SSE2 and NEON owners use the same reservation before touching output.
 They do not change which implementation the portable constructor uses.
+The [installed-consumer check](../assurance/chacha20-consumer/README.md)
+checks that a required SIMD import fails when unavailable and that an invalid
+nonce width, wide counter or aliased input/output is rejected by the compiler.
 
 The [v0.29.4 installed-consumer check](../assurance/aead-installed-consumer/README.md)
 exercises send exhaustion and rejection without releasing unauthenticated

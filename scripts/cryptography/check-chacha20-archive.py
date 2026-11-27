@@ -50,7 +50,7 @@ def oracle_corpus(env):
     return rows
 
 
-def replay(root, env, versions, compiler, dependency, differential, *, simd=None):
+def replay(root, env, versions, compiler, dependency, differential, *, simd=None, install=False):
     leaf = dependency == "brynja-cipher-chacha"
     namespace = "brynja_cipher_chacha" if leaf else "brynja_crypto::chacha20"
     consumer = root / (dependency + "-" + compiler + ("-" + simd if simd else ""))
@@ -129,6 +129,26 @@ def replay(root, env, versions, compiler, dependency, differential, *, simd=None
                 raise ValueError(f"{simd} owner was not excluded as expected")
     else:
         archive.check_graph(meta, consumer, versions, dependency, features=("hazmat-chacha20",))
+    if install:
+        import chacha20_installed
+        for selection, count in [(["--test", "vectors"], 5), (["--lib"], 1)]:
+            result = pkg.run(cargo + ["test", "--release", *selection, *cross, *flags], consumer, env)
+            if not archive.archives.exact_suite(result.stdout, count):
+                raise ValueError(f"incomplete installed-route boundary suite: {selection}")
+        name = {None: "ChaCha20", "sse2": "ChaCha20Sse2", "neon": "ChaCha20Neon"}[simd]
+        chacha20_installed.signatures(pkg, cargo, consumer, env, flags, cross, namespace + "::" + name)
+        fixture(ROOT / "assurance/chacha20-consumer/installed.rs", "src/main.rs")
+        fixture(ROOT / "assurance/chacha20-consumer/differential.rs", "src/differential.rs")
+        # Report the imported owner's type, not the requested command-line mode.
+        impls = [(namespace + "::ChaCha20", "scalar")]
+        if simd:
+            impls.append((namespace + "::" + name, simd))
+        (consumer / "src/backend.rs").write_text("pub trait Backend { const NAME: &'static str; }\n"
+            + "".join(f"impl Backend for {owner}<'_> {{ const NAME: &'static str = {json.dumps(label)}; }}\n"
+                      for owner, label in impls))
+        chacha20_installed.installed(pkg, cargo, consumer, env, flags, cross, simd, differential)
+        print(f"{compiler}: installed {dependency} {simd or 'scalar'}: PASS", flush=True)
+        return
     if differential is not None:
         fixture(ROOT / "assurance/chacha20-consumer/differential.rs", "tests/differential.rs")
         (consumer / "tests/public-corpus.bin").write_bytes(differential)
@@ -160,6 +180,7 @@ def replay(root, env, versions, compiler, dependency, differential, *, simd=None
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     routes = parser.add_mutually_exclusive_group()
+    routes.add_argument("--installed", action="store_true", help="exercise installed binaries for all four public routes")
     routes.add_argument("--differential", action="store_true",
                         help="compare against OpenSSL instead of running the package smoke suite")
     routes.add_argument("--sse2-differential", action="store_true",
@@ -176,8 +197,13 @@ def main():
         env = pkg.isolated_env(root)
         endpoints = archive.archives.ENDPOINTS
         versions = pkg.package_archives(root, pkg.MODERN, endpoints[-1], env)
-        corpus = oracle_corpus(env) if differential else None
+        corpus = oracle_corpus(env) if differential or args.installed else None
         for compiler in endpoints:
+            if args.installed:
+                for dep, backend in (("brynja-crypto", None), ("brynja-cipher-chacha", None),
+                                     ("brynja-cipher-chacha", "sse2"), ("brynja-cipher-chacha", "neon")):
+                    replay(root, env, versions, compiler, dep, corpus, simd=backend, install=True)
+                continue
             if simd:
                 replay(root, env, versions, compiler, "brynja-cipher-chacha", corpus, simd=simd)
                 route = "NEON (Linux QEMU)" if simd == "neon" else "SSE2"
@@ -188,7 +214,8 @@ def main():
             summary = ("302 OpenSSL comparisons and altered-answer control" if differential else
                        "RFC and stream boundaries, Cortex-M compile, default-off import")
             print(f"{compiler}: leaf and compatibility routes: {summary} passed", flush=True)
-    print("CHACHA20_NEON_QEMU_DIFFERENTIAL_COMPLETE" if args.neon_qemu_differential else
+    print("CHACHA20_INSTALLED_COMPLETE" if args.installed else
+          "CHACHA20_NEON_QEMU_DIFFERENTIAL_COMPLETE" if args.neon_qemu_differential else
           "CHACHA20_SSE2_DIFFERENTIAL_COMPLETE" if args.sse2_differential else
           "CHACHA20_DIFFERENTIAL_COMPLETE" if differential else "CHACHA20_ARCHIVE_COMPLETE")
 

@@ -46,6 +46,20 @@ def unique(pairs):
     return result
 
 
+def leaf_guard(cmd, cargo, flags):
+    case = "ghash::interrupted_pair_update_clears_live_frame"
+    # Use baseline compiler flags: the leaf admits PCLMUL/PMULL at runtime.
+    output = cmd(cargo + ["test", *flags, "-p", "brynja-universal-hash-ghash",
+                          "--features", "__mode-execution", "--lib", "--", "--exact",
+                          case, "--nocapture"])
+    lines = output.splitlines()
+    summaries = [line for line in lines if line.startswith("test result:")]
+    if (len(summaries) != 1 or not summaries[0].startswith("test result: ok. 1 passed; 0 failed; 0 ignored;")
+            or lines.count(f"test {case} ... ok") != 1
+            or lines.count("GHASH_PAIRED_LIVE_CLEANUP_COMPLETE") != 1):
+        raise ValueError("missing or ambiguous native leaf guard evidence")
+
+
 def verified_copy(source, dest, pin):
     """Import only hashed ordinary files into a new private execution tree."""
     ordinary(source, stat.S_ISDIR)
@@ -155,6 +169,8 @@ def run(host, out, pin):
                 if f"test result: ok. {count} passed; 0 failed; 0 ignored;" not in text:
                     raise ValueError("missing native test population: " + label + "\n" + text[-400:])
                 result["tests"][label] = count
+            leaf_guard(cmd, cargo, flags)
+            result["tests"]["leaf-guard"] = 1
             for family, datasets in cases.items():
                 example = "gcmvs" if family == "aes-gcm" else "nist"
                 for route, dep in (("direct","brynja-crypto"), ("facade","brynja")):
@@ -171,7 +187,7 @@ def run(host, out, pin):
                         raise ValueError("replay image changed")
                     result["images"][route+"/"+family] = image
             (out / (v+".json")).write_text(json.dumps(result, sort_keys=True, indent=2)+"\n")
-            print(f"{host} {v}: 17 lifecycle/route tests, four downstream executables, eight corpus replays passed", flush=True)
+            print(f"{host} {v}: {sum(result['tests'].values())} lifecycle/route tests, four downstream executables, eight corpus replays passed", flush=True)
 
 
 if __name__ == "__main__":

@@ -54,6 +54,74 @@ class InstalledEvidenceTests(unittest.TestCase):
             emit.assert_not_called()
 
 
+class NativeLeafGuardTests(unittest.TestCase):
+    case = "ghash::interrupted_pair_update_clears_live_frame"
+    marker = "GHASH_PAIRED_LIVE_CLEANUP_COMPLETE"
+    summary = "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.01s"
+
+    def test_requires_one_executed_named_test_and_one_completion_marker(self):
+        passed = f"test {self.case} ... ok"
+        for lines in ([passed, self.summary], [self.marker, self.summary],
+                      [passed, self.marker], [passed, self.marker + "_SKIPPED", self.summary],
+                      [passed, self.marker, self.marker, self.summary],
+                      [passed, passed, self.marker, self.summary],
+                      [passed, self.marker, self.summary, self.summary],
+                      [passed, self.marker, self.summary.replace("0 ignored", "1 ignored")],
+                      [passed, self.marker, self.summary.replace("1 passed", "0 passed")]):
+            with self.subTest(lines=lines), self.assertRaisesRegex(ValueError, "leaf guard"):
+                native.leaf_guard(Mock(return_value="\n".join(lines)), ["cargo"], [])
+        native.leaf_guard(Mock(return_value="\r\n".join([self.marker, passed, self.summary])), ["cargo"], [])
+
+    def test_each_host_and_compiler_requires_generic_leaf_run_before_recording(self):
+        # Only exercise orchestration here; simulated output is not ISA evidence.
+        for host, (system, machine, target, _) in native.TARGETS.items():
+            for skip in (False, True):
+                with self.subTest(host=host, skip=skip), tempfile.TemporaryDirectory() as tmp:
+                    out = Path(tmp) / "results"
+                    versions = []
+
+                    def copy(_src, dst, _pin):
+                        dst.mkdir()
+                        (dst / "cases.json").write_text("{}")
+
+                    def launch(argv, *, env, **_kwargs):
+                        if argv[-1] == "-vV":
+                            text = "host: " + target
+                        elif len(argv) == 1:
+                            text = "AES_STATIC_HOST_BUNDLE_PASS"
+                        elif "test" not in argv:
+                            text = ""
+                        elif "brynja-universal-hash-ghash" in argv:
+                            self.assertEqual(argv[2:], ["test", "--locked", "--offline", "--release",
+                                "--target", target, "--no-default-features", "-p", "brynja-universal-hash-ghash",
+                                "--features", "__mode-execution", "--lib", "--", "--exact", self.case, "--nocapture"])
+                            self.assertNotIn("RUSTFLAGS", env)
+                            versions.append(argv[1])
+                            text = f"test {self.case} ... ok\n{self.summary}\n" + ("" if skip else self.marker)
+                        else:
+                            count = {"aead_pair": 1 if env["RUSTFLAGS"].endswith("-aes") else 3,
+                                     "ghash_runtime": 1, "aes_gcm::portable::paired::tests::": 3,
+                                     "aes_gcm::interruptions::tests::": 9}[argv[-1]]
+                            text = f"test result: ok. {count} passed; 0 failed; 0 ignored;"
+                        return CompletedProcess(argv, 0, stdout=text)
+
+                    with patch.object(native, "verified_copy", copy), patch.object(native, "no_cargo_config"), \
+                         patch.object(native.platform, "system", return_value=system), \
+                         patch.object(native.platform, "machine", return_value=machine), \
+                         patch.object(native.subprocess, "run", side_effect=launch), patch("builtins.print"):
+                        if skip:
+                            with self.assertRaisesRegex(ValueError, "leaf guard"):
+                                native.run(host, out, "pin")
+                            self.assertEqual(list(out.iterdir()), [])
+                            self.assertEqual(versions, ["+1.90.0"])
+                        else:
+                            native.run(host, out, "pin")
+                            self.assertEqual(versions, ["+1.90.0", "+1.100.0"])
+                            for v in versions:
+                                tests = json.loads((out / (v[1:] + ".json")).read_text())["tests"]
+                                self.assertEqual((tests["leaf-guard"], sum(tests.values())), (1, 18))
+
+
 class NativeBundleTests(unittest.TestCase):
     def setUp(self):
         scratch = tempfile.TemporaryDirectory()

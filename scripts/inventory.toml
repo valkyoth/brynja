@@ -2,6 +2,33 @@
 root_files = ["README.md", "checks.sh", "inventory.toml", "tag_gate.sh"]
 entrypoints = ["checks.sh", "tag_gate.sh"]
 
+# Historical fully qualified entrypoints; no other directory may reuse these names.
+[layout.shared_basenames]
+"check-boundaries.py" = ["aes-gcm", "gmac"]
+"check-packaged-api.py" = ["aes-gcm", "ghash"]
+"check-portable-acceptance.py" = ["aes-gcm", "sp800185"]
+"test-packaged-api.py" = ["aes-gcm", "ghash"]
+
+[category.aes]
+extensions = [".py", ".json"]
+purpose = "AES functional, artifact and architecture assurance"
+
+[category.aes-gcm]
+extensions = [".py"]
+purpose = "AES-GCM and paired AEAD acceptance checks"
+
+[category.gmac]
+extensions = [".py"]
+purpose = "GMAC consumer and boundary checks"
+
+[category.ghash]
+extensions = [".py"]
+purpose = "GHASH functionality and native performance diagnostics"
+
+[category.hkdf]
+extensions = [".py"]
+purpose = "Packaged HKDF public API acceptance"
+
 [category.assurance]
 extensions = [".py", ".sh"]
 purpose = "Shared bounded assurance runners, bare-metal gates, and proof orchestration"
@@ -59,7 +86,7 @@ extensions = [".py"]
 purpose = "Protocol framing and state-machine policy and tests"
 
 [category.release]
-extensions = [".py", ".sh", ".toml"]
+extensions = [".py", ".sh", ".toml", ".json"]
 purpose = "Release, pentest, publication, SBOM, and GitHub-control tooling"
 
 [category.repository]

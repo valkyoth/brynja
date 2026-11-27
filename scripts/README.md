@@ -38,7 +38,8 @@ home; ordinary CI runs only the cheap ordering/lock regression tests.
 
 `inventory.toml` is the machine-readable directory register.
 `repository/check-script-layout.py` rejects unknown root files, unknown or
-nested categories, duplicate basenames, missing categories, and unsupported
+nested categories, duplicate basenames outside the exact reviewed directory
+pairs, missing categories, and unsupported
 file types. `repository/check-tracked-build-artifacts.py` rejects every tracked
 file beneath a Cargo `target/` directory, regardless of workspace depth.
 

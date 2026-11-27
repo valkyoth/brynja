@@ -33,6 +33,9 @@ def fixture() -> Path:
     write(scripts / "checks.sh", "#!/usr/bin/env sh\n", executable=True)
     write(scripts / "tag_gate.sh", "#!/usr/bin/env sh\n", executable=True)
     policy = layout.read_policy(root)
+    for name, categories in policy["layout"]["shared_basenames"].items():
+        for category in categories:
+            write(scripts / category / name, "public fixture\n")
     for index, (category, definition) in enumerate(policy["category"].items()):
         extension = definition["extensions"][0]
         write(scripts / category / f"fixture-{index}{extension}", "fixture\n")
@@ -55,6 +58,15 @@ def main() -> int:
         write(valid / 'assurance' / 'windows-enclave-probe' / 'native_teardown.rs',
               '// Rust fixtures belong outside the script tree.\n')
         layout.validate(valid)
+        write(valid / "scripts/ghash/ghash-user-counters.c", "/* test probe */\n")
+        layout.validate(valid)
+        write(valid / "scripts/ghash/other.c", "/* unreviewed */\n")
+        must_fail(valid, "accepted an unreviewed C source")
+
+        third = fixture()
+        roots.append(third)
+        write(third / "scripts/hkdf/check-boundaries.py", "fixture\n")
+        must_fail(third, "accepted a third user of a shared basename")
 
         unknown_root = fixture()
         roots.append(unknown_root)
@@ -85,7 +97,7 @@ def main() -> int:
     finally:
         for root in roots:
             shutil.rmtree(root)
-    print("script inventory rejects five classification regressions")
+    print("script inventory rejects seven classification regressions")
     return 0
 
 

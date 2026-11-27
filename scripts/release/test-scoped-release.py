@@ -61,7 +61,9 @@ class ScopedRelease(unittest.TestCase):
     def test_parallel_chacha20_candidate_gate_is_finite_and_does_not_publish(self):
         plan = scoped.load('0.30.2')
         commands = {check['id']: check['command'] for check in plan['checks']}
-        self.assertEqual(len(commands), 40)
+        self.assertEqual(len(commands), 41)
+        self.assertEqual(commands['static-cpu-source-policy'],
+                         ['python3', 'scripts/cpu/check-static-execution.py', '--policy-only'])
         self.assertEqual(commands['chacha20-installed-controls'],
                          ['python3', 'scripts/cryptography/test-chacha20-installed.py'])
         self.assertEqual(commands['chacha20-parallel-owner'],

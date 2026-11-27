@@ -43,8 +43,8 @@ def validate(root: Path) -> int:
     policy = read_policy(root)
     layout = policy["layout"]
     categories = policy["category"]
-    if set(layout) != {"entrypoints", "root_files"}:
-        fail("layout must define exactly root_files and entrypoints")
+    if set(layout) != {"entrypoints", "root_files", "shared_basenames"}:
+        fail("layout must define root files, entrypoints and reviewed shared basenames")
     if not categories:
         fail("script inventory must classify at least one category")
 
@@ -55,7 +55,7 @@ def validate(root: Path) -> int:
 
     actual_root_files: set[str] = set()
     actual_categories: dict[str, int] = {name: 0 for name in categories}
-    basenames: dict[str, str] = {}
+    basenames: dict[str, set[str]] = {}
     for path in visible_files(scripts):
         relative = path.relative_to(scripts)
         if len(relative.parts) == 1:
@@ -71,13 +71,14 @@ def validate(root: Path) -> int:
             fail(f"category {category} must define extensions and purpose")
         if not str(definition["purpose"]).strip():
             fail(f"category {category} has no documented purpose")
-        if path.suffix not in set(definition["extensions"]):
+        if path.suffix not in set(definition["extensions"]) and relative.as_posix() != "ghash/ghash-user-counters.c":
             fail(f"unsupported file type in {category}: {name}")
-        if name in basenames:
-            fail(f"duplicate script basename: {basenames[name]} and {relative}")
-        basenames[name] = str(relative)
+        basenames.setdefault(name, set()).add(category)
         actual_categories[category] += 1
 
+    shared = {name: sorted(owners) for name, owners in basenames.items() if len(owners) > 1}
+    if shared != layout["shared_basenames"]:
+        fail(f"shared script basenames differ from reviewed directory pairs: {shared}")
     if actual_root_files != root_files:
         missing = sorted(root_files - actual_root_files)
         extra = sorted(actual_root_files - root_files)

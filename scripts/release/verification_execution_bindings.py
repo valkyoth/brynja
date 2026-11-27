@@ -104,7 +104,7 @@ def definitions():
         markers = (['Ten packaged raw-state/block classification bypasses rejected',
             'Packaged hosted HMAC: debug/release selection passed; owner escape, policy forgery/substitution and feature absence rejected',
             'Hosted authority rejects 14 compiled lifecycle/selection regressions'] if kind == 'hosted' else [
-            'Static reachability documentation rejects 28 semantic regressions',
+            'Static reachability documentation rejects 29 semantic regressions',
             'Static authority package, public vectors, quarantine and 7 compiled regressions: PASS'])
         result[('python3', f'scripts/cpu/check-{kind}-execution.py')] = dict(
             paths=[review, *json.loads((ROOT / review).read_text())['sha256']], patterns=[],

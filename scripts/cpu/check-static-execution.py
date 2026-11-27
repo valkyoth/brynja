@@ -23,8 +23,9 @@ REVIEW = ROOT / 'security/static-cpu-execution-reviewed.json'
 def validate(write=False):
     static_execution_docs.validate(ROOT)
     manifest = tomllib.loads((CPU / 'Cargo.toml').read_text())
-    if manifest.get('features') != {'default': [], 'sha256-hardened-batch': ['dep:brynja-core'], 'sha512-hardened-batch': ['dep:brynja-core'], 'keccak-hardened-batch': ['dep:brynja-core'], 'keccak-batch': ['static-execution'], 'static-execution': [], 'runtime-execution': ['static-execution'],
-            'hardened-execution': ['static-execution', 'dep:brynja-core'], 'sha256-batch': ['static-execution'], 'sha512-batch': ['static-execution']} or manifest.get('dependencies') != {
+    # static_execution_docs.validate above checks the entire feature map,
+    # including the default-off AES, GHASH and ChaCha20 entries.
+    if manifest.get('dependencies') != {
                 'brynja-core': {'workspace': True, 'optional': True}}:
         raise RuntimeError('static CPU boundary permits only the opt-in first-party clearing owner')
     library = (CPU / 'src/lib.rs').read_text()
@@ -44,7 +45,7 @@ def validate(write=False):
               Path(__file__), ROOT / 'scripts/checks.sh', ROOT / 'docs/static-cpu-execution.md',
               *memory_scripts, *(ROOT / name for name in static_execution_docs.FILES),
               ROOT / 'scripts/cpu/static_execution_docs.py']
-    expected = {'milestone': '0.24.31', 'sha256': {str(p.relative_to(ROOT)):
+    expected = {'milestone': '0.30.2', 'sha256': {str(p.relative_to(ROOT)):
         hashlib.sha256(p.read_bytes().replace(b'\r\n', b'\n')).hexdigest() for p in inputs}}
     if write:
         REVIEW.write_text(json.dumps(expected, sort_keys=True, indent=2) + '\n')

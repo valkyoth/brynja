@@ -186,6 +186,20 @@ class ExecutionBindingTests(unittest.TestCase):
             self.assertEqual(check.call_args.kwargs, {})  # No specialized ISA or QEMU.
             self.assertIn(output.getvalue().strip(), bindings.definitions()[
                 ('python3', 'scripts/cpu/check-static-execution.py')]['markers'])
-            count = len(module.static_execution_docs.DOCS) * len(module.static_execution_docs.CLAIMS) + 10 + 3
-            self.assertIn(f'Static reachability documentation rejects {count} semantic regressions',
+            with contextlib.redirect_stdout(io.StringIO()) as docs:
+                module.static_execution_docs.regressions(ROOT)
+            self.assertIn(docs.getvalue().strip(),
                 bindings.definitions()[('python3', 'scripts/cpu/check-static-execution.py')]['markers'])
+
+    def test_static_policy_rejects_kernel_drift_before_compilation(self):
+        with patch.object(sys, 'path', [str(ROOT / 'scripts/cpu'), *sys.path]), \
+                patch('subprocess.Popen', side_effect=AssertionError('no compiler')):
+            module = policy('static_source_binding', 'scripts/cpu/check-static-execution.py')
+            module.validate()
+            original = Path.read_bytes
+            for source in ('chacha20_sse2.rs', 'chacha20_neon.rs', 'ghash_pmull.rs', 'aes/x86.rs'):
+                target = module.CPU / 'src' / source
+                with self.subTest(source=source), patch.object(Path, 'read_bytes',
+                        lambda p: original(p) + (b'\n' if p == target else b'')):
+                    with self.assertRaisesRegex(RuntimeError, 'static execution source changed'):
+                        module.validate()

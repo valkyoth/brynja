@@ -11,8 +11,8 @@ AArch64 NEON. RISC-V still uses the portable public API. These results are not
 new performance, timing or register-erasure evidence. No crates.io publication
 is selected; the planned publication checkpoint remains v0.30.6.
 
-Two checks outside the scoped gate still fail on pre-existing inventory drift:
-`validate-release-metadata.sh` invokes a historical static-CPU feature allowlist
-that predates AES/GHASH/ChaCha20, and `check-script-layout.py` rejects the
-existing `scripts/aes` directory as unclassified. Neither checker nor its
-offending input changed in this milestone. No historical review pin was refreshed.
+The scoped gate checks the static CPU source hashes without rebuilding the
+hardware campaigns. The package matches signed v0.30.1. The script layout
+inventory also passes. The separate historical `validate-release-metadata.sh`
+now passes its static CPU check but still stops on the older SHA-256 façade
+ownership policy. This is not a pass of that historical gate.

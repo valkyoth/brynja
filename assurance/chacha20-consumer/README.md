@@ -15,13 +15,17 @@ are used; nothing is downloaded or installed into the user's bin directory.
 | `brynja_cipher_chacha::ChaCha20Sse2` | `chacha20-sse2` | Linux x86-64 SSE2 |
 | `brynja_cipher_chacha::ChaCha20Neon` | `chacha20-neon` | Linux AArch64 NEON under QEMU |
 
-Each installed binary reports its imported owner, replays 302 public oracle
+Each installed binary reports a fixture-defined label for its imported type
+(the SIMD fixture will not compile if its owner aliases the scalar type), replays 302 public oracle
 records in disjoint and fragmented in-place layouts, checks its remaining byte
-budget and must reject a changed expected ciphertext. The runner checks for
-the selected packed kernel symbol in the installed binary (neither symbol on
-scalar routes). It also runs archived RFC and exhaustion tests and checks
+budget and must independently reject changed expected bytes from a full
+four-block group and from the last legal scalar block. The runner checks for
+the exact selected packed text symbol in the unstripped installed binary
+(neither symbol on scalar routes). Symbol presence is not an execution trace.
+It also runs archived RFC and exhaustion tests and checks
 compiler rejection of 8- and 24-byte nonces, a 64-bit counter, and overlapping
-safe borrows against a positive control. Required SIMD owners cannot silently
+safe borrows against a positive control; the latter checks Rust's borrowing
+rules at the public signature. Required SIMD owners cannot silently
 fall back when their feature or target is absent. Choose the portable owner
 for a portable build; there is no runtime dispatch or hardware attestation.
 

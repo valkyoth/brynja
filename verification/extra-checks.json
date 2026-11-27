@@ -94510,11 +94510,11 @@
       "log_bytes": 16777216,
       "success": {
         "contains": [
-          "Static reachability documentation rejects 28 semantic regressions",
+          "Static reachability documentation rejects 29 semantic regressions",
           "Static authority package, public vectors, quarantine and 7 compiled regressions: PASS"
         ],
         "unique_lines": [
-          "Static reachability documentation rejects 28 semantic regressions",
+          "Static reachability documentation rejects 29 semantic regressions",
           "Static authority package, public vectors, quarantine and 7 compiled regressions: PASS"
         ]
       },

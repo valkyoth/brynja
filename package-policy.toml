@@ -61,8 +61,8 @@ optional = { cpu = "brynja-crypto-cpu", hazmat-chacha20 = "brynja-cipher-chacha"
 class = "modern-shared"
 publish = "crates-io"
 required = ["brynja-core"]
-optional = { chacha20-sse2 = "brynja-crypto-cpu" }
-features = ["hazmat-chacha20", "chacha20-neon"]
+optional = { chacha20-sse2 = "brynja-crypto-cpu", chacha20-neon = "brynja-crypto-cpu" }
+features = ["hazmat-chacha20"]
 
 [packages.brynja-hash-core]
 class = "modern-shared"

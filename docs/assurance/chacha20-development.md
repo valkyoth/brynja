@@ -25,6 +25,10 @@ Native NEON performance was measured on Apple M2 Pro only. On Linux RV64 the
 research-only V candidate passed native correctness on SpacemiT X60 and QEMU
 controls, but missed the predeclared throughput criterion at every vectorized
 size on both compiler endpoints. The RV64 public API remains scalar.
+Cargo features do not override the compilation target: an unavailable SIMD
+owner cannot be imported, but enabling its feature does not disable the
+portable owner. The native throughput samples predate the counter-layout
+hardening; they are not new measurements of the revised implementation.
 
 The owner borrows a 256-bit key and takes a 96-bit nonce and explicit 32-bit
 starting counter. A successful call consumes exactly the requested bytes.
@@ -56,7 +60,9 @@ access or keys from an application are needed.
 - **Archive:** builds separate standalone and compatibility consumers from local Cargo archives on Rust
   1.90.0 and 1.100.0. It checks the RFC block and cipher examples and all eight
   Appendix A.1/A.2 vectors, partitions, final-counter behavior, and import and
-  overlap restrictions. Cortex-M is a compile check, not device execution.
+  overlap restrictions. The standalone archive also contains its own Appendix
+  tests, run for portable, SSE2 and NEON owners where applicable. Cortex-M
+  is a compile check, not device execution.
 - **Differential:** the optional OpenSSL CLI encrypts 302 deterministic public
   fixtures (eight start counters, lengths from zero to 16 KiB, two seeds).
   The four state words are encoded as little-endian counter followed by the
@@ -67,8 +73,10 @@ access or keys from an application are needed.
 - **Kani:** calls the production reservation method with a symbolic position
   and nonempty length. It checks both counter endpoints, the first-byte offset,
   the exact number of blocks, the position advance, and nonmutation on rejection.
-  XOR consumes that inclusive range; Kani does not execute the cipher loop or
-  prove the round function.
+  A second harness passes that reservation to the production four-lane layout
+  and checks the partial head, each arbitrary group's four counter positions,
+  and the tail against byte offsets for an admitted request. Neither proof
+  executes the SIMD instructions or proves the round function.
 - **Sanitizers:** executes the five public vector and boundary tests under
   ASan/LSan on Linux x86-64. This is host memory-safety evidence, not a
   measurement of key erasure, physical leakage or compiler timing.

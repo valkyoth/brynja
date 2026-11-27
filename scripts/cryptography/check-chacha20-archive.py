@@ -82,6 +82,23 @@ def replay(root, env, versions, compiler, dependency, differential, *, simd=None
         f'{dependency}={{version="={versions[dependency]}",default-features=false}}\n[patch.crates-io]\n'
         + "".join(f'{p}={{path="../unpacked/{p}-{v}"}}\n' for p, v in versions.items()))
     cargo = ["cargo", "+" + compiler]
+    if leaf and (simd or differential is None):
+        # Exercise the tests shipped *inside* the extracted leaf, not a copy of
+        # the facade tests in a separately generated consumer.
+        unpacked = root / "unpacked" / (dependency + "-" + versions[dependency])
+        if (unpacked / "src/tests/appendix.rs").read_bytes() != (source / "tests/chacha20/appendix.rs").read_bytes():
+            raise ValueError("leaf and compatibility RFC fixtures diverged")
+        (unpacked.parent / "Cargo.toml").write_text(
+            '[workspace]\nresolver="3"\nmembers=[' + json.dumps(unpacked.name) + ']\n[patch.crates-io]\n'
+            + "".join(f'{p}={{path="{p}-{versions[p]}"}}\n' for p in ("brynja-core", "brynja-crypto-cpu")))
+        pkg.run(cargo + ["generate-lockfile", "--offline"], unpacked, env)
+        result = pkg.run(cargo + ["test", "--release", "--lib", "--locked", "--offline", *cross,
+                                  *(["--features", feature] if simd else [])], unpacked, env)
+        names = ["portable_rfc8439", *([simd + "_rfc8439"] if simd else [])]
+        if (not archive.archives.exact_suite(result.stdout, len(names) + int(bool(simd))) or
+                (simd and "incomplete_counter_group_is_not_admitted - should panic ... ok" not in result.stdout) or
+                any(f"test tests::{name} ... ok" not in result.stdout for name in names)):
+            raise ValueError("incomplete packaged leaf known-answer tests")
     pkg.run(cargo + ["generate-lockfile", "--offline"], consumer, env)
     flags = ["--locked", "--offline", "--features", "stream"]
     platform = ["--filter-platform", cross[1]] if cross else []

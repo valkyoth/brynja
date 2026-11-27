@@ -3,8 +3,10 @@
 #![no_std]
 #![forbid(unsafe_code)]
 
-#[cfg(feature = "hazmat-chacha20")]
+#[cfg(any(test, feature = "hazmat-chacha20"))]
 mod chacha20;
+#[cfg(test)]
+mod tests;
 #[cfg(feature = "hazmat-chacha20")]
 pub use chacha20::{ChaCha20, Error};
 

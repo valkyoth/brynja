@@ -56,4 +56,13 @@ def check(no_default, all_features, package, node, dependency, reject):
         raise AssertionError("malformed optional dependency group accepted")
     assert policy.feature_dependencies("cpu") == ["cpu"]
     assert policy.feature_dependencies(["cpu", "host"]) == ["cpu", "host"]
+    mapping = dict.fromkeys(("chacha20-sse2", "chacha20-neon"), "brynja-crypto-cpu")
+    assert policy.unique_chacha_cpu_dependency({"optional": mapping}) == ["brynja-crypto-cpu"]
+    for feature in mapping:
+        for bad in ({k: v for k, v in mapping.items() if k != feature}, {**mapping, feature: "brynja-core"}):
+            try:
+                policy.unique_chacha_cpu_dependency({"optional": bad})
+            except ValueError:
+                continue
+            raise AssertionError("missing or redirected ChaCha20 CPU edge accepted")
     print(f"ParallelHash workspace policy rejects {count} dependency/feature/edge and six malformed-group regressions")

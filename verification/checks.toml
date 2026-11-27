@@ -168,6 +168,24 @@ CARGO_NET_OFFLINE = "true"
 unique_lines = ["Complete - 1 successfully verified harnesses, 0 failures, 1 total."]
 contains = ["VERIFICATION:- SUCCESSFUL"]
 
+[[checks]]
+component = "chacha20"
+id = "ietf-four-lane-layout-proof"
+category = "kani"
+name = "Four-lane partition and counter mapping for admitted requests"
+establishes = "Kani checks the production layout on the 64-bit proof target: scalar head, exact group count, all four counters of an arbitrary group, and the remaining tail. Does not prove cipher arithmetic or machine code."
+command = ["cargo", "+1.90.0", "kani", "-p", "brynja-cipher-chacha", "--no-default-features", "--features", "chacha20-sse2", "--harness", "chacha20::execution::layout::admitted_partition_maps_each_byte_once", "--exact", "--unwind", "8"]
+cwd = "."
+inputs = ["kani-tools", "ghash-packaged-api"]
+platform = "linux-x86_64"
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","KANIFLAGS"]
+timeout_seconds = 600
+[checks.environment]
+CARGO_NET_OFFLINE = "true"
+[checks.success]
+unique_lines = ["Complete - 1 successfully verified harnesses, 0 failures, 1 total."]
+contains = ["VERIFICATION:- SUCCESSFUL"]
+
 [groups.ghash-packaged-api]
 paths = ["Cargo.toml", "Cargo.lock", "assurance/ghash-public-api", "scripts/ghash/check-packaged-api.py", "scripts/hkdf/check-hkdf-public-api.py", "scripts/repository/facade_cargo_environment.py", "crates/brynja","crates/brynja-cipher-chacha","crates/brynja-core","crates/brynja-crypto","crates/brynja-crypto-cpu","crates/brynja-crypto-cpu-std","crates/brynja-dtls","crates/brynja-hash-core","crates/brynja-hash-parallel","crates/brynja-hash-sha2","crates/brynja-hash-sha3","crates/brynja-hash-tuple","crates/brynja-mac-hmac","crates/brynja-mac-kmac","crates/brynja-pki","crates/brynja-platform","crates/brynja-protocol","crates/brynja-quic-tls","crates/brynja-tls","crates/brynja-tls12","crates/brynja-tls13","crates/brynja-tls13-handshake"]
 optional_paths = [".cargo/config", ".cargo/config.toml"]

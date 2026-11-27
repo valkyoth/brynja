@@ -42,10 +42,10 @@ ALLOWED = {
     Path("crates/brynja-crypto-cpu/src/ghash_rv64.rs"): ("9c14346a5ae11d3e68e0aeaff35504c9fc26f8fa81131bb03943598108939cdb", 1, 1, 1),
     Path("crates/brynja-crypto-cpu-std/src/aes.rs"): ("77e7ec4b24ec98dfbe0c0e6b2f88a57a2b5ecb21ff9b863a7c4b51050762a651", 1, 0, 1),
     Path("crates/brynja-crypto-cpu/src/chacha20_neon.rs"): (
-        "fdd0a49d39cf490be090faa7ddbadc1d53bd531dab3540685d7b496a9e777a78", 3, 0, 3,
+        "145b484fd7e7ad16d4bcd578ea755d7ce2cc8bb896dec3e0a75b14e65b8d4177", 3, 0, 3,
     ),
     Path("crates/brynja-crypto-cpu/src/chacha20_sse2.rs"): (
-        "932b1036ab8c26ca62d6603e728b73b677ce0cce81e08c52827b9faff3edd11b", 3, 0, 3,
+        "c0648e5b5c9f82886228573c791e28698c2c29b3d6d3995ae10cd99e5edd2494", 3, 0, 3,
     ),
     Path("crates/brynja-crypto-cpu-std/src/windows_enclave/native/namespace.rs"): ("2d0bcf8f51513bfbe8a0878fd3462acf08fce0f92f1dbdbfdddf5df4c5aa8e51", 2, 0, 2),
     Path("crates/brynja-crypto-cpu-std/src/windows_enclave/native/sys.rs"): ("e7602798e350bc00512dd7aa921319e2f43ddffd7dff66b9f49db0f48df5aff0", 18, 0, 18),

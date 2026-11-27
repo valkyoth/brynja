@@ -50,7 +50,7 @@ mod native {
     }
 }
 
-fn xor4(v: &Vector, key: &[u8; 32], nonce: &[u8; 12], first: u32, bytes: &mut [u8; 256]) {
+fn xor4(v: &Vector, key: &[u8; 32], nonce: &[u8; 12], lanes: [u32; 4], bytes: &mut [u8; 256]) {
     let mut initial = State([[[0; 4]; 4]; 16]);
     for (col, word) in initial.0.iter_mut().zip(
         b"expand 32-byte k"
@@ -61,9 +61,7 @@ fn xor4(v: &Vector, key: &[u8; 32], nonce: &[u8; 12], first: u32, bytes: &mut [u
     ) {
         *col = [*word; 4];
     }
-    for (lane, i) in initial.0[12].iter_mut().zip(first..=u32::MAX) {
-        *lane = i.to_le_bytes();
-    }
+    initial.0[12] = lanes.map(u32::to_le_bytes);
     for (col, word) in initial.0[13..].iter_mut().zip(nonce.as_chunks::<4>().0) {
         *col = [*word; 4];
     }
@@ -93,13 +91,10 @@ pub fn try_record(
     let (groups, tail) = data.as_chunks_mut::<256>();
     let mut starts = (first..=u32::MAX).step_by(4);
     for group in groups {
-        xor4(
-            &v,
-            key,
-            &nonce,
-            starts.next().expect("preflight covers group"),
-            group,
-        );
+        let Some(end) = starts.next().and_then(|n| n.checked_add(3)) else {
+            return Some(Err(Error::Exhausted));
+        };
+        xor4(&v, key, &nonce, [end - 3, end - 2, end - 1, end], group);
     }
     if !tail.is_empty() {
         let start = starts.next().expect("preflight covers tail");

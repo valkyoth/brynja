@@ -1,9 +1,10 @@
 //! Shared framing for statically selected four-lane stream kernels.
 use super::{Admitted, ChaCha20, Error};
+mod layout;
 #[cfg(target_arch = "aarch64")]
-use brynja_crypto_cpu::chacha20_neon::rounds;
+use brynja_crypto_cpu::chacha20_neon::four_lane_rounds_without_feedforward as rounds;
 #[cfg(target_arch = "x86_64")]
-use brynja_crypto_cpu::chacha20_sse2::rounds;
+use brynja_crypto_cpu::chacha20_sse2::four_lane_rounds_without_feedforward as rounds;
 
 /// Raw IETF ChaCha20 with four-block SIMD batches. This owner is available only
 /// with the corresponding feature on an x86-64 SSE2 or little-endian AArch64 NEON target; no runtime probing or
@@ -38,37 +39,32 @@ impl<'key> ParallelChaCha20<'key> {
 impl Admitted<'_> {
     fn xor_four(self, key: &[u8; 32], nonce: &[u8; 12]) {
         let Self {
-            mut data,
-            mut counters,
+            data,
+            counters,
             skip,
         } = self;
-        if skip != 0 {
-            let (head, rest) = data.split_at_mut(data.len().min(64usize.saturating_sub(skip)));
-            if let Some(first) = counters.next() {
-                Admitted {
-                    data: head,
-                    counters: first..=first,
-                    skip,
-                }
-                .xor(key, nonce);
+        let first = *counters.start();
+        let plan = layout::Layout::new(first, *counters.end(), skip, data.len());
+        let (head, rest) = data.split_at_mut(plan.head);
+        if !head.is_empty() {
+            Admitted {
+                data: head,
+                counters: first..=first,
+                skip,
             }
-            data = rest;
+            .xor(key, nonce);
         }
-        let last = *counters.end();
-        let (groups, tail) = data.as_chunks_mut::<256>();
-        let mut groups = groups.iter_mut();
-        for first in counters.step_by(4) {
-            if let Some(group) = groups.next() {
-                xor4(key, nonce, first, group);
-            } else {
-                Admitted {
-                    data: tail,
-                    counters: first..=last,
-                    skip: 0,
-                }
-                .xor(key, nonce);
-                break;
+        let (groups, tail) = rest.as_chunks_mut::<256>();
+        for (group, lanes) in groups.iter_mut().zip(plan.groups()) {
+            xor4(key, nonce, lanes, group);
+        }
+        if let Some(counters) = plan.tail {
+            Admitted {
+                data: tail,
+                counters,
+                skip: 0,
             }
+            .xor(key, nonce);
         }
     }
 }
@@ -85,7 +81,7 @@ impl Drop for State {
 
 // Called only for a complete four-block group in an already admitted range.
 #[inline(never)]
-fn xor4(key: &[u8; 32], nonce: &[u8; 12], first: u32, data: &mut [u8; 256]) {
+fn xor4(key: &[u8; 32], nonce: &[u8; 12], lanes: [u32; 4], data: &mut [u8; 256]) {
     let mut initial = State([[[0; 4]; 4]; 16]);
     let constants = b"expand 32-byte k".as_chunks::<4>().0;
     for (column, word) in initial.0[..12]
@@ -94,9 +90,7 @@ fn xor4(key: &[u8; 32], nonce: &[u8; 12], first: u32, data: &mut [u8; 256]) {
     {
         *column = [*word; 4];
     }
-    for (lane, value) in initial.0[12].iter_mut().zip(first..=u32::MAX) {
-        *lane = value.to_le_bytes();
-    }
+    initial.0[12] = lanes.map(u32::to_le_bytes);
     for (column, word) in initial.0[13..].iter_mut().zip(nonce.as_chunks::<4>().0) {
         *column = [*word; 4];
     }

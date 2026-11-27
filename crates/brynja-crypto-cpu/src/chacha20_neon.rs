@@ -17,7 +17,8 @@ fn column(v: uint32x4_t) -> Column {
 /// Apply ten ChaCha column/diagonal double rounds in place, without feedforward.
 /// Each of the four little-endian lanes is a separate state. This low-level
 /// permutation does not reserve counters or provide a complete stream cipher.
-pub fn rounds(state: &mut [[[u8; 4]; 4]; 16]) {
+#[doc(hidden)]
+pub fn four_lane_rounds_without_feedforward(state: &mut [[[u8; 4]; 4]; 16]) {
     // SAFETY: the module is compiled only for little-endian AArch64 targets with NEON enabled.
     unsafe { packed_rounds(state) }
 }

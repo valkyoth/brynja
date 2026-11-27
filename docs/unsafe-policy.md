@@ -40,6 +40,9 @@ three architecture modules. See the [AES](assurance/aes-acceleration-development
 [RISC-V AES](assurance/aes-riscv-development.md) and
 [GHASH](assurance/ghash-acceleration.md) records for their original scope.
 Updating this inventory does not enable a backend or extend its qualification.
+The ChaCha20 owners clear named working buffers. Neither SSE2 nor NEON promises
+erasure of vector registers or compiler spills. The research RVV kernel clears
+its explicitly named vector registers; that is not a whole-program erasure guarantee.
 The RISC-V SHA schedule helper is pinned with its own Zknh feature boundary,
 in addition to the SHA-256 and SHA-512 compression boundaries.
 

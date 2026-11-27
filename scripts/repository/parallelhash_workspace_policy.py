@@ -16,6 +16,12 @@ def optional_names(entry):
             for name in feature_dependencies(value)]
 
 
+def unique_chacha_cpu_dependency(entry):
+    if entry["optional"] != {feature: "brynja-crypto-cpu" for feature in ("chacha20-sse2", "chacha20-neon")}:
+        raise ValueError("both ChaCha20 SIMD features must select the CPU crate")
+    return ["brynja-crypto-cpu"]
+
+
 def dev_names(name, entry):
     expected = (["brynja-crypto-cpu", "brynja-crypto-cpu-std"]
                 if name == "brynja-hash-parallel" else [])

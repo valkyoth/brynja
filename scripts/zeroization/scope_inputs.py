@@ -189,7 +189,12 @@ def readme_fixture(manifest, lock, source, workspace_lock):
     if len(rows) != len(workspace['package']):
         raise ValueError('ambiguous README workspace dependencies')
     names = sorted(name for name, row in rows.items() if 'source' not in row)
-    features = {'brynja-hash-parallel': ['runtime-execution'],
+    features = {'brynja-aead-gcm': ['aes-gcm', 'gmac'],
+                'brynja-cipher-aes': ['hazmat-aes-block'],
+                'brynja-cipher-chacha': ['hazmat-chacha20'],
+                'brynja-crypto': ['hazmat-aes-block'],
+                'brynja-universal-hash-ghash': ['hazmat-ghash'],
+                'brynja-hash-parallel': ['runtime-execution'],
                 'brynja-hash-parallel-std': ['runtime-execution'],
                 'brynja-crypto-cpu': ['static-execution', 'sha256-batch', 'sha512-batch'],
                 'brynja-crypto-cpu-std': ['runtime-execution', 'sha256-batch', 'sha512-batch'],

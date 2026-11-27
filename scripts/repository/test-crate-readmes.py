@@ -55,19 +55,21 @@ def main():
             except ValueError:
                 continue
         raise AssertionError('shared broken image accepted')
-    # Unpublished tools must link to their own source, not a nonexistent registry page.
-    tool = readmes.ROOT / 'crates/brynja-xtask/README.md'
-    before = tool.read_text()
-    changed = before.replace('https://github.com/valkyoth/brynja/tree/main/crates/brynja-xtask',
-                             'https://crates.io/crates/brynja-xtask')
-    with patch.object(Path, 'read_text', lambda subject, *a, **kw:
-                      changed if subject == tool else method(subject, *a, **kw)):
-        try:
-            readmes.validate()
-        except ValueError:
-            pass
-        else:
-            raise AssertionError('unpublished registry claim accepted')
+    # Both private tools and publishable-but-unreleased crates need source links.
+    for name in ('brynja-xtask', 'brynja-aead-gcm'):
+        path = readmes.ROOT / 'crates' / name / 'README.md'
+        before = path.read_text()
+        changed = before.replace(f'https://github.com/valkyoth/brynja/tree/main/crates/{name}',
+                                 f'https://crates.io/crates/{name}')
+        assert changed != before
+        with patch.object(Path, 'read_text', lambda subject, *a, **kw:
+                          changed if subject == path else method(subject, *a, **kw)):
+            try:
+                readmes.validate()
+            except ValueError as exc:
+                assert 'shared header/title' in str(exc)
+            else:
+                raise AssertionError('unpublished registry claim accepted')
     # Placeholder crates retain an honest, crate-specific build example.
     boundary = readmes.ROOT / 'crates/brynja-tls13/README.md'
     before = boundary.read_text()
@@ -89,7 +91,7 @@ def main():
         assert commands.count(command) == 1
     package_checks = (readmes.ROOT / 'scripts/repository/check-packages.sh').read_text().splitlines()
     assert package_checks.count('python3 scripts/repository/check-crate-readmes.py') == 1
-    print('Crate README policy rejects 21 header/image/navigation/status/example/link regressions')
+    print('Crate README policy rejects 22 header/image/navigation/status/example/link regressions')
 
 
 if __name__ == '__main__':

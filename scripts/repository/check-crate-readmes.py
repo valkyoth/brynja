@@ -35,13 +35,18 @@ def validate(root=ROOT):
     image = (root / '.github/images/brynja.webp').read_bytes()
     if not (image[:4] == b'RIFF' and image[8:12] == b'WEBP'):
         raise ValueError('shared README image is missing or not WebP')
+    release_crates = tomllib.loads((root / 'release-crates.toml').read_text())['crates']
     for path in paths:
         text = path.read_text()
         manifest = tomllib.loads(path.with_name('Cargo.toml').read_text())
         if manifest['package']['name'] != path.parent.name or manifest['package'].get('readme', 'README.md') != 'README.md':
             raise ValueError('crate README must match package metadata: ' + str(path))
         title = '# ' + path.parent.name + '\n'
-        expected_header = header(reference, path.parent.name, manifest['package'].get('publish') is not False)
+        # Registry permission alone does not mean a crate has been published.
+        row = release_crates[path.parent.name]
+        registry_links = (manifest['package'].get('publish') is not False
+                          and (row['previous_version'] != 'unpublished' or row['publish']))
+        expected_header = header(reference, path.parent.name, registry_links)
         if text.count(title) != 1 or text.split(title, 1)[0] != expected_header:
             raise ValueError('crate README shared header/title changed: ' + str(path))
         body = text.split(title, 1)[1]

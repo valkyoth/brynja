@@ -86,7 +86,7 @@ is bundled. Software keys remain unchanged; provider keys use opaque bindings,
 not imported key bytes. Drop releases the adapter, not the device key; explicit
 destruction requires an owning adapter. Adapter/device qualification is separate.
 
-The internal v0.27.2 acceptance candidate retains raw software AES-128/192/256 blocks under
+The crate exposes raw software AES-128/192/256 blocks under
 the **default-off** `hazmat-aes-block` feature. Enable that feature explicitly
 on either `brynja-crypto` or `brynja` when using the matching checkout. No HSM
 is required. This is not message encryption or an AEAD: no authentication,

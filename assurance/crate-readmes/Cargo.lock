@@ -14,6 +14,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "brynja-aead-gcm"
+version = "0.1.0"
+dependencies = [
+ "brynja-cipher-aes",
+ "brynja-core",
+ "brynja-universal-hash-ghash",
+]
+
+[[package]]
+name = "brynja-cipher-aes"
+version = "0.1.0"
+dependencies = [
+ "brynja-core",
+]
+
+[[package]]
+name = "brynja-cipher-chacha"
+version = "0.1.0"
+dependencies = [
+ "brynja-core",
+]
+
+[[package]]
 name = "brynja-core"
 version = "0.10.0"
 
@@ -22,6 +45,9 @@ name = "brynja-crate-readme-fixture"
 version = "0.0.0"
 dependencies = [
  "brynja",
+ "brynja-aead-gcm",
+ "brynja-cipher-aes",
+ "brynja-cipher-chacha",
  "brynja-core",
  "brynja-crypto",
  "brynja-crypto-cpu",
@@ -35,6 +61,7 @@ dependencies = [
  "brynja-hash-tuple",
  "brynja-interop",
  "brynja-legacy",
+ "brynja-legacy-hkdf",
  "brynja-legacy-hmac",
  "brynja-legacy-hmac-std",
  "brynja-legacy-md5",
@@ -63,6 +90,7 @@ dependencies = [
  "brynja-tls12",
  "brynja-tls13",
  "brynja-tls13-handshake",
+ "brynja-universal-hash-ghash",
  "brynja-xtask",
 ]
 
@@ -70,6 +98,7 @@ dependencies = [
 name = "brynja-crypto"
 version = "0.2.0"
 dependencies = [
+ "brynja-cipher-aes",
  "brynja-core",
  "brynja-hash-parallel",
  "brynja-hash-sha2",
@@ -164,6 +193,14 @@ version = "0.1.0"
 [[package]]
 name = "brynja-legacy"
 version = "0.1.0"
+
+[[package]]
+name = "brynja-legacy-hkdf"
+version = "0.1.0"
+dependencies = [
+ "brynja-core",
+ "brynja-legacy-hmac",
+]
 
 [[package]]
 name = "brynja-legacy-hmac"
@@ -353,6 +390,13 @@ dependencies = [
  "brynja-core",
  "brynja-crypto",
  "brynja-pki",
+]
+
+[[package]]
+name = "brynja-universal-hash-ghash"
+version = "0.1.0"
+dependencies = [
+ "brynja-core",
 ]
 
 [[package]]

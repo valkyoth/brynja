@@ -1,6 +1,15 @@
 //! Executable examples from every crate README; repository-only documentation tests.
 #![forbid(unsafe_code)]
 
+#[doc = include_str!("../../../crates/brynja-aead-gcm/README.md")]
+pub struct BrynjaAeadGcm;
+
+#[doc = include_str!("../../../crates/brynja-cipher-aes/README.md")]
+pub struct BrynjaCipherAes;
+
+#[doc = include_str!("../../../crates/brynja-cipher-chacha/README.md")]
+pub struct BrynjaCipherChacha;
+
 #[doc = include_str!("../../../crates/brynja-core/README.md")]
 pub struct BrynjaCore;
 
@@ -36,6 +45,9 @@ pub struct BrynjaHashTuple;
 
 #[doc = include_str!("../../../crates/brynja-interop/README.md")]
 pub struct BrynjaInterop;
+
+#[doc = include_str!("../../../crates/brynja-legacy-hkdf/README.md")]
+pub struct BrynjaLegacyHkdf;
 
 #[doc = include_str!("../../../crates/brynja-legacy-hmac-std/README.md")]
 pub struct BrynjaLegacyHmacStd;
@@ -123,6 +135,9 @@ pub struct BrynjaTls13Handshake;
 
 #[doc = include_str!("../../../crates/brynja-tls13/README.md")]
 pub struct BrynjaTls13;
+
+#[doc = include_str!("../../../crates/brynja-universal-hash-ghash/README.md")]
+pub struct BrynjaUniversalHashGhash;
 
 #[doc = include_str!("../../../crates/brynja-xtask/README.md")]
 pub struct BrynjaXtask;

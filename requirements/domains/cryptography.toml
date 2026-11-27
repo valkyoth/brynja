@@ -105,14 +105,14 @@ mapping_rationale = "The AES semantic surface is directly and exclusively govern
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0006"
-revision = 3
+revision = 4
 owner = "0.28.0"
 lifecycle = "planned"
 decision_ids = ["algorithm.ghash"]
 sources = [{ id = "nist:NIST.SP.800-38D.pdf", authority_role = "current" }]
 statement = "GHASH uses the specified binary-field representation and multiplication while keeping authentication subkeys secret-independent in control flow."
 invariants = ["constant-time", "resource-bound", "side-channel", "work-bound"]
-target = "crates/brynja-crypto/src/ghash.rs#Ghash"
+target = "crates/brynja-universal-hash-ghash/src/ghash.rs#Ghash"
 positive_test = "crates/brynja-crypto/tests/ghash_vectors/nist.rs#aes128_published_ghash_intermediates"
 negative_test = "crates/brynja-crypto/tests/ghash_field.rs#budget_failure_is_atomic_and_empty_is_zero"
 work_bound = "Incremental GHASH work is linear in authenticated blocks with checked length accounting and no attacker-selected limb count."

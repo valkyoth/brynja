@@ -417,6 +417,7 @@ def validate_packages(root: Path) -> None:
         "brynja-core",
         "brynja-cipher-chacha",
         "brynja-cipher-aes",
+        "brynja-universal-hash-ghash",
         "brynja-crypto-cpu",
         "brynja-hash-sha2",
         "brynja-hash-sha3",
@@ -426,6 +427,8 @@ def validate_packages(root: Path) -> None:
         "brynja-mac-hmac",
     }:
         fail("brynja-crypto SHA-256 ownership changed")
+    if crypto["dependencies"]["brynja-universal-hash-ghash"] != {"workspace": True, "optional": True}:
+        fail("brynja-crypto GHASH dependency must remain optional and workspace-owned")
     if crypto["dependencies"]["brynja-cipher-aes"] != {"workspace": True, "optional": True}:
         fail("brynja-crypto AES dependency must remain optional and workspace-owned")
     if (crypto["dependencies"]["brynja-core"] != {"workspace": True}
@@ -434,7 +437,7 @@ def validate_packages(root: Path) -> None:
                 "dep:brynja-cipher-chacha", "brynja-cipher-chacha/hazmat-chacha20"]):
         fail("brynja-crypto core or opt-in ChaCha20 edge changed")
     if (crypto["dependencies"]["brynja-crypto-cpu"] != {"workspace": True, "optional": True}
-            or crypto.get("features", {}).get("cpu") != ["dep:brynja-crypto-cpu"]
+            or crypto.get("features", {}).get("cpu") != ["dep:brynja-crypto-cpu", "brynja-universal-hash-ghash?/cpu"]
             or crypto.get("features", {}).get("default") != []):
         fail("brynja-crypto CPU authority must remain explicit and default-off")
     if core.get("features") != {"default": []}:

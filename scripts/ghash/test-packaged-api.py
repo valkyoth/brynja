@@ -47,7 +47,7 @@ class ArchiveControls(unittest.TestCase):
         self.root = Path(temp.name)
         self.archives = self.root / 'unpacked'
         self.consumer = self.root / 'consumer'
-        self.versions = {name: '1' for name in ('brynja', 'brynja-core', 'brynja-crypto')}
+        self.versions = {name: '1' for name in ('brynja', 'brynja-core', 'brynja-crypto', api.LEAF)}
         self.packages = [{'id': name, 'name': name, 'features': {'default': []},
                           'manifest_path': str(self.archives / (name + '-1') / 'Cargo.toml')}
                          for name in self.versions]
@@ -57,6 +57,7 @@ class ArchiveControls(unittest.TestCase):
         self.nodes['consumer']['deps'] = [dict(name='subject', pkg='brynja')]
         self.nodes['brynja']['features'] = ['hazmat-ghash']
         self.nodes['brynja-crypto']['features'] = ['default', 'hazmat-ghash']
+        self.nodes[api.LEAF]['features'] = ['default', 'hazmat-ghash']
 
     def graph(self, candidate=False):
         api.check_graph({'packages': self.packages, 'resolve': {'nodes': list(self.nodes.values()),
@@ -69,7 +70,7 @@ class ArchiveControls(unittest.TestCase):
         self.packages.append(dict(id=cpu, name=cpu, features={'default': []},
                                   manifest_path=str(self.archives / (cpu + '-1') / 'Cargo.toml')))
         self.nodes[cpu] = dict(id=cpu, features=[], deps=[])
-        for name in ('brynja', 'brynja-crypto'):
+        for name in ('brynja', 'brynja-crypto', api.LEAF):
             self.nodes[name]['features'].append('cpu')
         with self.assertRaisesRegex(ValueError, 'dependency edge'):
             self.graph(candidate=True)

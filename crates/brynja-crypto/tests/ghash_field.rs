@@ -1,8 +1,17 @@
 //! Direct arithmetic and public incremental GHASH regressions.
 #![forbid(unsafe_code)]
 
-#[path = "../src/ghash/field.rs"]
-mod field;
+// Exercise the shipped owner, including its wire encoding and selected route.
+fn multiply(a: u128, b: u128) -> Result<u128, Error> {
+    let key = b.to_be_bytes();
+    let (mut state, mut out) = ([0; 16], [0; 16]);
+    let mut hash = Ghash::new(&key, &mut state, 16);
+    hash.update(&a.to_be_bytes())?;
+    let result = hash.finish(&mut out)?;
+    let mut bytes = [0; 16];
+    bytes.copy_from_slice(result.expose());
+    Ok(u128::from_be_bytes(bytes))
+}
 #[path = "ghash_vectors/nist.rs"]
 mod nist;
 #[cfg(brynja_ghash_pclmul_evidence)]
@@ -27,15 +36,16 @@ mod scalar_aes;
 use brynja_crypto::ghash::{Error, Ghash};
 
 #[test]
-fn wire_order_and_reduction_boundary() {
+fn wire_order_and_reduction_boundary() -> Result<(), Error> {
     let one = 1u128 << 127;
     for i in 0..128 {
         let basis = 1 << i;
-        assert_eq!(field::multiply(one, basis), basis);
-        assert_eq!(field::multiply(basis, one), basis);
-        assert_eq!(field::multiply(basis, 0), 0);
+        assert_eq!(multiply(one, basis)?, basis);
+        assert_eq!(multiply(basis, one)?, basis);
+        assert_eq!(multiply(basis, 0)?, 0);
     }
-    assert_eq!(field::multiply(1, one >> 1), 0xe1 << 120);
+    assert_eq!(multiply(1, one >> 1)?, 0xe1 << 120);
+    Ok(())
 }
 
 #[test]
@@ -49,7 +59,7 @@ fn zero_subkey_preserves_exact_field_semantics() -> Result<(), Error> {
 }
 
 #[test]
-fn nist_gcm_aes128_example_2_ghash_before_tag_mask() {
+fn nist_gcm_aes128_example_2_ghash_before_tag_mask() -> Result<(), Error> {
     // NIST AES_GCM.pdf, AES-128 Example #2: four ciphertext blocks, no AAD.
     // The final block encodes the two bit lengths; it is supplied by GCM,
     // not added implicitly by the GHASH primitive.
@@ -61,8 +71,9 @@ fn nist_gcm_aes128_example_2_ghash_before_tag_mask() {
         0x1ba30b396a0aac973d58e091473f5985,
         512,
     ];
-    let s = blocks.into_iter().fold(0, |y, x| field::multiply(y ^ x, h));
+    let s = blocks.into_iter().try_fold(0, |y, x| multiply(y ^ x, h))?;
     assert_eq!(s, 0x7f1b32b81b820d02614f8895ac1d4eac);
+    Ok(())
 }
 
 #[test]
@@ -161,7 +172,7 @@ fn polynomial_product(a: u128, b: u128) -> u128 {
 }
 
 #[test]
-fn differential_against_polynomial_long_division() {
+fn differential_against_polynomial_long_division() -> Result<(), Error> {
     let mut seed = 0xe1b42f191607dd32aac46e751e47bc87u128;
     let mut sample = || {
         seed ^= seed << 23;
@@ -171,6 +182,7 @@ fn differential_against_polynomial_long_division() {
     };
     for _ in 0..256 {
         let (a, b) = (sample(), sample());
-        assert_eq!(field::multiply(a, b), polynomial_product(a, b));
+        assert_eq!(multiply(a, b)?, polynomial_product(a, b));
     }
+    Ok(())
 }

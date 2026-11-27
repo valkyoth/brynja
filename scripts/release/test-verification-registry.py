@@ -923,7 +923,8 @@ class RegistryTests(unittest.TestCase):
                     version = '1.90.0' if endpoint == 'msrv' else '1.99.1'
                     flag = '--no-default-features' if profile == 'minimal' else '--all-features'
                     self.assertEqual(command, ['cargo', '+'+version, action, '--locked', '--offline',
-                                             '-p', 'brynja-cipher-aes', '-p', 'brynja-crypto', '-p', 'brynja', flag]
+                                             '-p', 'brynja-cipher-aes', '-p', 'brynja-universal-hash-ghash',
+                                             '-p', 'brynja-crypto', '-p', 'brynja', flag]
                                      + (['--no-deps'] if action == 'doc' else []))
                     self.assertIn('aes-feature-integration', check['inputs'])
                     self.assertEqual(self.registry['groups']['aes-feature-integration']['paths'],

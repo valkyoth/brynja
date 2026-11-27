@@ -13,6 +13,7 @@ spec = importlib.util.spec_from_file_location('packaging', ROOT / 'scripts/hkdf/
 pkg = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(pkg)
 ENDPOINTS = (pkg.MATRIX[0], pkg.MATRIX[-1])
+LEAF = 'brynja-universal-hash-ghash'
 FROZEN = {
     'tests/ghash_vectors/nist.rs': '4b6122bdce41b2eb0fdf36c9d070ec26a8db69e6dce64719b044e5676087274c',
     'tests/ghash_lifecycle.rs': '4f5e3b6a04937d3be4e718ccdd442f2f38a1cf25716cdad750f2c61540882625',
@@ -46,9 +47,11 @@ def check_graph(metadata, consumer, archives, versions, dependency, *, candidate
             if p['features'].get('default') != []:
                 raise ValueError('facade inherited a nonempty crypto default')
             expected.add('default')
-        if name in ('brynja', 'brynja-crypto') and features != expected:
+        if name == LEAF and dependency != LEAF:
+            expected.add('default')
+        if name in ('brynja', 'brynja-crypto', LEAF) and features != expected:
             raise ValueError('unexpected GHASH opt-in feature set')
-        if name not in ('brynja', 'brynja-crypto'):
+        if name not in ('brynja', 'brynja-crypto', LEAF):
             allowed = {'default', 'general-sha512-t'} if name == 'brynja-hash-sha2' else {'default'}
             if runtime and name == 'brynja-crypto-cpu':
                 if 'ghash-runtime-execution' not in features:
@@ -60,7 +63,11 @@ def check_graph(metadata, consumer, archives, versions, dependency, *, candidate
                 or name.endswith('-std') or name.startswith('brynja-legacy')):
             raise ValueError('unexpected portable dependency')
         names.add(name)
-    if not {dependency, 'brynja-crypto', 'brynja-core'} <= names:
+    if dependency == LEAF:
+        allowed = {LEAF, 'brynja-core'} | ({'brynja-crypto-cpu'} if candidate or runtime else set())
+        if names != allowed:
+            raise ValueError('standalone GHASH dependency graph changed')
+    elif not {dependency, LEAF, 'brynja-crypto', 'brynja-core'} <= names:
         raise ValueError('incomplete portable graph')
     if (candidate or runtime) and 'brynja-crypto-cpu' not in names:
         raise ValueError('missing candidate CPU dependency')
@@ -115,10 +122,16 @@ def check(consumer, compiler, dependency, versions, env):
     if not exact_suite(run('test', *flags, '--doc'), 1):
         raise ValueError('README example did not pass')
     run('check', *flags, '--lib', '--target', 'thumbv7em-none-eabi')
-    for extra in ([], ['--features', 'subject/default'], ['--features', 'subject/hazmat-aes-block']):
+    negatives = [[], ['--features', 'subject/default']]
+    if dependency == LEAF:
+        negatives += [['--features', 'subject/__mode'], ['--features', 'subject/__mode-execution']]
+    else:
+        negatives += [['--features', 'subject/hazmat-aes-block']]
+    for extra in negatives:
         cmd = cargo + ['check', '--lib', '--locked', '--offline', '--message-format=json', *extra]
         result = pkg.cargo_result(cmd, consumer, env, timeout=120)
-        if not pkg.diagnostic_matches(result, 'E0432', filename='src/route.rs'):
+        private_mode = dependency == LEAF and extra and extra[-1].startswith('subject/__mode')
+        if not pkg.diagnostic_matches(result, 'E0603' if private_mode else 'E0432', filename='src/route.rs'):
             raise ValueError('packaged GHASH not isolated behind its opt-in')
     # Pair the alias rejection with a successful compile of the same program
     # using disjoint storage. A packaging or compiler setup failure cannot pass.
@@ -163,7 +176,7 @@ def main():
         root = Path(temporary)
         env = pkg.isolated_env(root)
         versions = pkg.package_archives(root, pkg.MODERN, ENDPOINTS[-1], env)
-        for dependency in ('brynja-crypto', 'brynja'):
+        for dependency in (LEAF, 'brynja-crypto', 'brynja'):
             consumer = prepare(root, dependency, versions)
             pkg.run(['cargo', '+' + ENDPOINTS[0], 'generate-lockfile', '--offline'], consumer, env)
             for compiler in ENDPOINTS:

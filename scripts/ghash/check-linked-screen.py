@@ -17,7 +17,7 @@ CONFIG = {
     "rv64": (("rv64-x60",), "elf64-littleriscv", ["--mattr=+zbc"]),
 }
 TIME = "brynja_ghash_timing::timed"
-OWNER = "brynja_crypto::ghash::Ghash"
+OWNER = "brynja_universal_hash_ghash::ghash::Ghash"
 UPDATE, FINISH = OWNER + "::update", OWNER + "::finish"
 NOW = "std::sys::pal::unix::time::Timespec::now"
 CLEAR = "brynja_core::secret_memory_volatile::zeroize_region_volatile"

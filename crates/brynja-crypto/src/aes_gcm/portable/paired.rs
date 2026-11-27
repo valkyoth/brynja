@@ -164,6 +164,24 @@ impl AesPair {
 }
 
 impl HashRoute for AesPair {
+    #[cfg(all(
+        test,
+        any(
+            all(
+                target_arch = "x86_64",
+                any(target_os = "linux", target_os = "windows")
+            ),
+            all(
+                target_arch = "aarch64",
+                target_endian = "little",
+                any(target_os = "linux", target_os = "macos")
+            )
+        )
+    ))]
+    fn after_product(&self) -> Result<(), ghash::Error> {
+        crate::aes_gcm::interruptions::Step::Product.hit()
+    }
+
     fn start<'a>(
         &'a self,
         h: &'a Block,
@@ -183,7 +201,10 @@ impl HashRoute for AesPair {
         ))]
         {
             self.aes.session().map_err(|_| ghash::Error::Quarantined)?;
-            ghash::Ghash::from_pair(&self.hash, h, state, budget)
+            let frame = ghash::from_pair(&self.hash, h, state, budget)?;
+            #[cfg(test)]
+            crate::aes_gcm::interruptions::Step::HashStart.hit()?;
+            Ok(frame)
         }
         #[cfg(not(any(
             all(

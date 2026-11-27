@@ -71,6 +71,11 @@ struct Frame {
 // One selection supplies both IV hashing and message hashing. The caller
 // cannot inject an implementation through a public GCM or GMAC constructor.
 trait HashRoute {
+    #[cfg(test)]
+    fn after_product(&self) -> Result<(), Error> {
+        Ok(())
+    }
+
     fn start<'a>(
         &'a self,
         h: &'a [u8; 16],
@@ -79,6 +84,10 @@ trait HashRoute {
     ) -> Result<Ghash<'a>, Error>;
 }
 
+#[cfg(test)]
+extern crate std;
+#[cfg(test)]
+std::thread_local! { static TEST_STARTS: core::cell::Cell<usize> = const {core::cell::Cell::new(0)}; }
 struct PortableHash;
 
 impl HashRoute for PortableHash {
@@ -88,7 +97,10 @@ impl HashRoute for PortableHash {
         workspace: &'a mut [u8; 16],
         budget: u64,
     ) -> Result<Ghash<'a>, Error> {
-        Ok(Ghash::new(h, workspace, budget))
+        let frame = Ghash::new(h, workspace, budget);
+        #[cfg(test)]
+        TEST_STARTS.set(TEST_STARTS.get().saturating_add(1));
+        Ok(frame)
     }
 }
 
@@ -129,13 +141,34 @@ impl Frame {
     ) -> Result<SecretHash<'a>, Error> {
         let mut workspace = [0; 16];
         let mut hash = route.start(h, &mut workspace, self.budget)?;
+        #[cfg(not(test))]
+        let mut update = |bytes: &[u8]| hash.update(bytes);
+        // In composition tests, stop immediately after a completed product.
+        // The primitive independently tests interruptions inside its update guard.
+        #[cfg(test)]
+        let mut used = 0usize;
+        #[cfg(test)]
+        let mut update = |mut bytes: &[u8]| -> Result<(), Error> {
+            while !bytes.is_empty() {
+                let room = 16usize.checked_sub(used).ok_or(Error::LimitExceeded)?;
+                let (part, rest) = bytes.split_at(bytes.len().min(room));
+                hash.update(part)?;
+                used = used.checked_add(part.len()).ok_or(Error::LimitExceeded)?;
+                if used == 16 {
+                    used = 0;
+                    route.after_product()?;
+                }
+                bytes = rest;
+            }
+            Ok(())
+        };
         for bytes in [left, right] {
-            hash.update(bytes)?;
+            update(bytes)?;
             let padding = bytes.len().wrapping_neg() & 15;
-            hash.update([0; 16].get(..padding).ok_or(Error::LimitExceeded)?)?;
+            update([0; 16].get(..padding).ok_or(Error::LimitExceeded)?)?;
         }
-        hash.update(&self.left_bits.to_be_bytes())?;
-        hash.update(&self.right_bits.to_be_bytes())?;
+        update(&self.left_bits.to_be_bytes())?;
+        update(&self.right_bits.to_be_bytes())?;
         hash.finish(out)
     }
 }

@@ -35,7 +35,7 @@ def mode_visibility(cargo, fixture, env, versions):
     probe = fixture / 'src/bin/probe.rs'
     probe.parent.mkdir(parents=True, exist_ok=True)
     manifest = '[workspace]\n[package]\nname="mode-probe"\nversion="0.0.0"\nedition="2024"\n[dependencies]\n'
-    for route in ROUTES:
+    for route in (*ROUTES, 'brynja-universal-hash-ghash'):
         manifest += f'{route}={{version="={versions[route]}",default-features=false}}\n'
     manifest += '[patch.crates-io]\n' + ''.join(
         f'{name}={{path="../unpacked/{name}-{version}"}}\n' for name, version in versions.items())
@@ -57,6 +57,9 @@ def mode_visibility(cargo, fixture, env, versions):
             for native in (False, True):
                 flags = [route + '/' + mode + ('-execution' if native else '')]
                 compile(f'use {prefix}::{api} as _; fn main() {{}}', flags)
+                raw_hash = 'use brynja_universal_hash_ghash::ghash::Ghash as _; fn main() {}'
+                compile(raw_hash, flags, 'E0603')
+                compile(raw_hash, flags + ['brynja-universal-hash-ghash/hazmat-ghash'])
                 raw = 'use brynja_cipher_aes::aes::Aes128Key as _; fn main() {}'
                 compile(raw, flags, 'E0603')
                 explicit = flags + ['brynja-cipher-aes/hazmat-aes-block']
@@ -67,6 +70,13 @@ def mode_visibility(cargo, fixture, env, versions):
                 bridge = 'brynja_cipher_aes::__mode::' + ('execution::' if native else '') + 'Aes128ExpandedKey'
                 for method in ('decrypt_block', 'encrypt_block_public'):
                     compile(f'fn main() {{ let _ = {bridge}::{method}; }}', flags, 'E0599')
+
+    compile(
+        "use brynja_universal_hash_ghash::ghash as leaf; "
+        "fn owner(x: leaf::Ghash<'_>) -> brynja_crypto::ghash::Ghash<'_> { x } "
+        "fn output(x: brynja_crypto::ghash::SecretHash<'_>) -> brynja::crypto::ghash::SecretHash<'_> { x } "
+        "fn error(x: brynja::crypto::ghash::Error) -> leaf::Error { x } fn main() {}",
+        [route + '/hazmat-ghash' for route in ('brynja-universal-hash-ghash', 'brynja-crypto', 'brynja')])
 
 
 def check():

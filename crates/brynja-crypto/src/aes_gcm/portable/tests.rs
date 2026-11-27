@@ -191,7 +191,7 @@ impl<K: Forward> Forward for FailAt<'_, K> {
 
 #[test]
 fn subkey_derivation_error_never_starts_ghash_or_commits_output() -> Result<(), Error> {
-    use crate::ghash::TEST_STARTS;
+    use crate::aes_gcm::TEST_STARTS;
     struct RejectSubkey(Cell<usize>);
     impl Forward for RejectSubkey {
         fn hash_route(&self) -> &impl HashRoute {

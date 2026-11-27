@@ -37,6 +37,7 @@ codegen-units = 1
 lto = "fat"
 
 [workspace.dependencies]
+brynja-universal-hash-ghash = { path = "crates/brynja-universal-hash-ghash", version = "=0.1.0" }
 brynja-cipher-aes = { path = "crates/brynja-cipher-aes", version = "=0.1.0" }
 brynja-cipher-chacha = { path = "crates/brynja-cipher-chacha", version = "=0.1.0" }
 brynja-core = { path = "crates/brynja-core", version = "=0.10.0" }

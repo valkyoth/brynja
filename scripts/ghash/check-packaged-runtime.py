@@ -73,7 +73,7 @@ def main():
         env = pkg.isolated_env(root)
         versions = pkg.package_archives(root, pkg.MODERN, A['ENDPOINTS'][-1], env)
         consumers = {}
-        for dependency in ('brynja-crypto', 'brynja'):
+        for dependency in (A['LEAF'], 'brynja-crypto', 'brynja'):
             c = A['prepare'](root, dependency, versions)
             consumers[dependency] = c
             shutil.copyfile(A['ROOT'] / 'assurance/ghash-runtime-consumer/route.rs', c / 'tests/runtime.rs')
@@ -123,7 +123,10 @@ def main():
                             probe.parent.mkdir(exist_ok=True)
                             prefix = 'subject::' + ('crypto::' if dep == 'brynja' else '') + 'cpu::'
                             cmd = cargo + ['check', *flags, '--target', target, '--features', 'subject/cpu', '--bin', 'probe', '--message-format=json']
-                            probe.write_text('use ' + prefix + 'Sha256Backend; fn main() {}')
+                            if dep == A['LEAF']:
+                                prefix = 'subject::ghash::'
+                            control_type = 'Backend' if dep == A['LEAF'] else 'Sha256Backend'
+                            probe.write_text('use ' + prefix + control_type + '; fn main() {}')
                             pkg.run(cmd, c, control)
                             handle = 'RuntimePmull' if opts.pmull else 'RuntimeRv64' if opts.rv64 else 'RuntimePclmul'
                             probe.write_text('use ' + prefix + handle + '; fn main() {}')

@@ -63,7 +63,7 @@ def collect(output):
     model = re.search(r"^model name\s*:\s*(.+)$", block, re.M)[1]
     sources = [FIXTURE / p for p in ("Cargo.toml", "Cargo.lock", "src/main.rs")]
     sources += [ROOT / p for p in ("Cargo.toml", "crates/brynja-crypto/src/ghash.rs",
-                "crates/brynja-crypto/src/ghash/field.rs", "crates/brynja-crypto-cpu/src/ghash_pclmul.rs",
+                "crates/brynja-universal-hash-ghash/src/ghash.rs", "crates/brynja-universal-hash-ghash/src/ghash/field.rs", "crates/brynja-crypto-cpu/src/ghash_pclmul.rs",
                 "crates/brynja-crypto-cpu/src/ghash_admission.rs", "scripts/ghash/check-throughput.py")]
     inputs = {str(p.relative_to(ROOT)): digest(p.read_bytes()) for p in sources}
     head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()

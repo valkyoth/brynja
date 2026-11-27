@@ -205,7 +205,7 @@ impl<'a> Ghash<'a> {
                     any(target_os = "linux", target_os = "macos")
                 )
             ),
-            any(feature = "aes-gcm-execution", feature = "gmac-execution")
+            feature = "__mode-execution"
         ))]
         if self.pair.is_some() {
             #[cfg(target_arch = "x86_64")]

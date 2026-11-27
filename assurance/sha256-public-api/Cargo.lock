@@ -10,6 +10,7 @@ version = "0.10.0"
 name = "brynja-crypto"
 version = "0.2.0"
 dependencies = [
+ "brynja-core",
  "brynja-hash-parallel",
  "brynja-hash-sha2",
  "brynja-hash-sha3",

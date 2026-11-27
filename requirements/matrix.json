@@ -1,6 +1,6 @@
 {
   "closure_policy_sha256": "56163ce06f4bda14181ee734a37ad308446c856a98988f707c9baae9aad3848a",
-  "domain_policy_sha256": "f68334500cc56bfd5e8de766e544614e19df7f38ba3779eee58cf7c21c98d4c5",
+  "domain_policy_sha256": "d2ec10aed210aa3af3ccdc6f160a15abf993636db9c28a37a340551a8366cc93",
   "policy_sha256": "d6de8900db2d96d32c04a6e95e04c671c0d38fc6f38075b802ad5caa8dd28911",
   "requirements": [
     {
@@ -1292,7 +1292,7 @@
       "owner": "0.28.0",
       "profile": "crypto-encoding-pkix",
       "residual": "NIST has announced a future revision of SP 800-38D, so changed limits or constructions require explicit re-admission.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -1323,7 +1323,7 @@
       "targets": [
         {
           "kind": "planned-symbol",
-          "target": "crates/brynja-crypto/src/ghash.rs#Ghash"
+          "target": "crates/brynja-universal-hash-ghash/src/ghash.rs#Ghash"
         }
       ],
       "tests": [

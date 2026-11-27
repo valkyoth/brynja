@@ -46464,6 +46464,10 @@
           "package.name",
           "package.version"
         ],
+        "crates/brynja-universal-hash-ghash/Cargo.toml": [
+          "package.name",
+          "package.version"
+        ],
         "crates/brynja-cipher-chacha/Cargo.toml": [
           "package.name",
           "package.version"
@@ -46858,6 +46862,10 @@
       ],
       "toml": {
         "crates/brynja-cipher-aes/Cargo.toml": [
+          "package.name",
+          "package.version"
+        ],
+        "crates/brynja-universal-hash-ghash/Cargo.toml": [
           "package.name",
           "package.version"
         ],
@@ -50086,6 +50094,7 @@
         "crates/brynja-tls12",
         "crates/brynja-tls13",
         "crates/brynja-tls13-handshake",
+        "crates/brynja-universal-hash-ghash",
         "rust-toolchain.toml",
         "scripts/assurance/check-bare-metal.sh",
         "scripts/checks.sh",
@@ -51018,6 +51027,45 @@
         }
       ]
     },
+    "package-repository-17a45d54f013fcc0-dependencies-universal-hash-ghash": {
+      "paths": [
+        "crates/brynja-universal-hash-ghash/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-universal-hash-ghash/build.rs",
+        "crates/brynja-universal-hash-ghash/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-universal-hash-ghash/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-universal-hash-ghash"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-universal-hash-ghash"
+          ]
+        }
+      ]
+    },
     "package-repository-192affc2575f3c7a": {
       "paths": [
         "assurance/kmac-conformance-rejected",
@@ -51453,6 +51501,7 @@
         "crates/brynja-tls12",
         "crates/brynja-tls13",
         "crates/brynja-tls13-handshake",
+        "crates/brynja-universal-hash-ghash",
         "rust-toolchain.toml",
         "scripts/assurance/check-bare-metal.sh",
         "scripts/checks.sh",
@@ -52382,6 +52431,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja-tls13-handshake"
+          ]
+        }
+      ]
+    },
+    "package-repository-26a0b0fc61844f33-dependencies-universal-hash-ghash": {
+      "paths": [
+        "crates/brynja-universal-hash-ghash/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-universal-hash-ghash/build.rs",
+        "crates/brynja-universal-hash-ghash/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-universal-hash-ghash/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-universal-hash-ghash"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-universal-hash-ghash"
           ]
         }
       ]
@@ -53853,6 +53941,7 @@
         "crates/brynja-tls12",
         "crates/brynja-tls13",
         "crates/brynja-tls13-handshake",
+        "crates/brynja-universal-hash-ghash",
         "rust-toolchain.toml",
         "scripts/assurance/check-bare-metal.sh",
         "scripts/checks.sh",
@@ -54787,6 +54876,45 @@
         }
       ]
     },
+    "package-repository-7965ceea8904c78e-dependencies-universal-hash-ghash": {
+      "paths": [
+        "crates/brynja-universal-hash-ghash/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-universal-hash-ghash/build.rs",
+        "crates/brynja-universal-hash-ghash/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-universal-hash-ghash/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-universal-hash-ghash"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-universal-hash-ghash"
+          ]
+        }
+      ]
+    },
     "package-repository-88caf3aa426de5bc": {
       "paths": [
         ".github/workflows/ci.yml",
@@ -54815,6 +54943,7 @@
         "crates/brynja-tls12",
         "crates/brynja-tls13",
         "crates/brynja-tls13-handshake",
+        "crates/brynja-universal-hash-ghash",
         "rust-toolchain.toml",
         "scripts/assurance/check-bare-metal.sh",
         "scripts/checks.sh",
@@ -55748,6 +55877,45 @@
         }
       ]
     },
+    "package-repository-88caf3aa426de5bc-dependencies-universal-hash-ghash": {
+      "paths": [
+        "crates/brynja-universal-hash-ghash/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-universal-hash-ghash/build.rs",
+        "crates/brynja-universal-hash-ghash/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-universal-hash-ghash/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-universal-hash-ghash"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-universal-hash-ghash"
+          ]
+        }
+      ]
+    },
     "package-repository-8cc3ff8e8550755d": {
       "paths": [
         "assurance/sha3-execution",
@@ -56163,6 +56331,7 @@
         "crates/brynja-hash-tuple",
         "crates/brynja-mac-hmac",
         "crates/brynja-mac-kmac",
+        "crates/brynja-universal-hash-ghash",
         "rust-toolchain.toml",
         "scripts/assurance/check-bare-metal.sh",
         "scripts/checks.sh",
@@ -56706,6 +56875,45 @@
         }
       ]
     },
+    "package-repository-a6db8e2c6fa70def-dependencies-universal-hash-ghash": {
+      "paths": [
+        "crates/brynja-universal-hash-ghash/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-universal-hash-ghash/build.rs",
+        "crates/brynja-universal-hash-ghash/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-universal-hash-ghash/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-universal-hash-ghash"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-universal-hash-ghash"
+          ]
+        }
+      ]
+    },
     "package-repository-a9764d934891597c": {
       "paths": [
         "Cargo.lock",
@@ -57160,6 +57368,7 @@
         "crates/brynja-tls12",
         "crates/brynja-tls13",
         "crates/brynja-tls13-handshake",
+        "crates/brynja-universal-hash-ghash",
         "rust-toolchain.toml",
         "scripts/assurance/check-bare-metal.sh",
         "scripts/checks.sh",
@@ -58088,6 +58297,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja-tls13-handshake"
+          ]
+        }
+      ]
+    },
+    "package-repository-ce2b1f0c9c412fcb-dependencies-universal-hash-ghash": {
+      "paths": [
+        "crates/brynja-universal-hash-ghash/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-universal-hash-ghash/build.rs",
+        "crates/brynja-universal-hash-ghash/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-universal-hash-ghash/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-universal-hash-ghash"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-universal-hash-ghash"
           ]
         }
       ]
@@ -71264,6 +71512,7 @@
         "crates/brynja-tls12",
         "crates/brynja-tls13",
         "crates/brynja-tls13-handshake",
+        "crates/brynja-universal-hash-ghash",
         "rust-toolchain.toml",
         "scripts/hmac/check-hmac-facade.py",
         "scripts/hmac/hmac_acceptance.py",
@@ -72391,6 +72640,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja-tls13-handshake"
+          ]
+        }
+      ]
+    },
+    "final-component-repository-3f060a5f15bf3310-dependencies-universal-hash-ghash": {
+      "paths": [
+        "crates/brynja-universal-hash-ghash/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-universal-hash-ghash/build.rs",
+        "crates/brynja-universal-hash-ghash/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-universal-hash-ghash/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-universal-hash-ghash"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-universal-hash-ghash"
           ]
         }
       ]
@@ -73600,6 +73888,7 @@
         "crates/brynja-tls12",
         "crates/brynja-tls13",
         "crates/brynja-tls13-handshake",
+        "crates/brynja-universal-hash-ghash",
         "docs/sha512-t-cpu-evidence.md",
         "docs/sha512-t-final-evidence.md",
         "docs/sha512-t-lifecycle.md",
@@ -74580,6 +74869,45 @@
         }
       ]
     },
+    "final-component-repository-c601c3e7699bcd87-dependencies-universal-hash-ghash": {
+      "paths": [
+        "crates/brynja-universal-hash-ghash/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-universal-hash-ghash/build.rs",
+        "crates/brynja-universal-hash-ghash/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-universal-hash-ghash/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-universal-hash-ghash"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-universal-hash-ghash"
+          ]
+        }
+      ]
+    },
     "final-component-repository-c601c3e7699bcd87-fixture-core": {
       "paths": [
         "crates/brynja-core/src"
@@ -74803,6 +75131,7 @@
         "crates/brynja-tls12",
         "crates/brynja-tls13",
         "crates/brynja-tls13-handshake",
+        "crates/brynja-universal-hash-ghash",
         "docs/sha512-t-cpu-evidence.md",
         "docs/sha512-t-final-evidence.md",
         "docs/sha512-t-lifecycle.md",
@@ -75755,6 +76084,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja-tls13-handshake"
+          ]
+        }
+      ]
+    },
+    "final-component-repository-dfe1132d65f1e9aa-dependencies-universal-hash-ghash": {
+      "paths": [
+        "crates/brynja-universal-hash-ghash/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-universal-hash-ghash/build.rs",
+        "crates/brynja-universal-hash-ghash/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-universal-hash-ghash/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-universal-hash-ghash"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-universal-hash-ghash"
           ]
         }
       ]
@@ -93071,7 +93439,8 @@
         "package-repository-17a45d54f013fcc0-dependencies-tls",
         "package-repository-17a45d54f013fcc0-dependencies-tls12",
         "package-repository-17a45d54f013fcc0-dependencies-tls13",
-        "package-repository-17a45d54f013fcc0-dependencies-tls13-handshake"
+        "package-repository-17a45d54f013fcc0-dependencies-tls13-handshake",
+        "package-repository-17a45d54f013fcc0-dependencies-universal-hash-ghash"
       ],
       "environment": {
         "PYTHONOPTIMIZE": "0",
@@ -93221,7 +93590,8 @@
         "package-repository-26a0b0fc61844f33-dependencies-tls",
         "package-repository-26a0b0fc61844f33-dependencies-tls12",
         "package-repository-26a0b0fc61844f33-dependencies-tls13",
-        "package-repository-26a0b0fc61844f33-dependencies-tls13-handshake"
+        "package-repository-26a0b0fc61844f33-dependencies-tls13-handshake",
+        "package-repository-26a0b0fc61844f33-dependencies-universal-hash-ghash"
       ],
       "environment": {
         "PYTHONOPTIMIZE": "0",
@@ -93603,7 +93973,8 @@
         "package-repository-7965ceea8904c78e-dependencies-tls",
         "package-repository-7965ceea8904c78e-dependencies-tls12",
         "package-repository-7965ceea8904c78e-dependencies-tls13",
-        "package-repository-7965ceea8904c78e-dependencies-tls13-handshake"
+        "package-repository-7965ceea8904c78e-dependencies-tls13-handshake",
+        "package-repository-7965ceea8904c78e-dependencies-universal-hash-ghash"
       ],
       "environment": {
         "PYTHONOPTIMIZE": "0",
@@ -93680,7 +94051,8 @@
         "package-repository-88caf3aa426de5bc-dependencies-tls",
         "package-repository-88caf3aa426de5bc-dependencies-tls12",
         "package-repository-88caf3aa426de5bc-dependencies-tls13",
-        "package-repository-88caf3aa426de5bc-dependencies-tls13-handshake"
+        "package-repository-88caf3aa426de5bc-dependencies-tls13-handshake",
+        "package-repository-88caf3aa426de5bc-dependencies-universal-hash-ghash"
       ],
       "environment": {
         "PYTHONOPTIMIZE": "0",
@@ -93816,7 +94188,8 @@
         "package-repository-a6db8e2c6fa70def-dependencies-hash-sha3",
         "package-repository-a6db8e2c6fa70def-dependencies-hash-tuple",
         "package-repository-a6db8e2c6fa70def-dependencies-mac-hmac",
-        "package-repository-a6db8e2c6fa70def-dependencies-mac-kmac"
+        "package-repository-a6db8e2c6fa70def-dependencies-mac-kmac",
+        "package-repository-a6db8e2c6fa70def-dependencies-universal-hash-ghash"
       ],
       "environment": {
         "PYTHONOPTIMIZE": "0",
@@ -93955,7 +94328,8 @@
         "package-repository-ce2b1f0c9c412fcb-dependencies-tls",
         "package-repository-ce2b1f0c9c412fcb-dependencies-tls12",
         "package-repository-ce2b1f0c9c412fcb-dependencies-tls13",
-        "package-repository-ce2b1f0c9c412fcb-dependencies-tls13-handshake"
+        "package-repository-ce2b1f0c9c412fcb-dependencies-tls13-handshake",
+        "package-repository-ce2b1f0c9c412fcb-dependencies-universal-hash-ghash"
       ],
       "environment": {
         "PYTHONOPTIMIZE": "0",
@@ -95683,7 +96057,8 @@
         "final-component-repository-3f060a5f15bf3310-dependencies-tls",
         "final-component-repository-3f060a5f15bf3310-dependencies-tls12",
         "final-component-repository-3f060a5f15bf3310-dependencies-tls13",
-        "final-component-repository-3f060a5f15bf3310-dependencies-tls13-handshake"
+        "final-component-repository-3f060a5f15bf3310-dependencies-tls13-handshake",
+        "final-component-repository-3f060a5f15bf3310-dependencies-universal-hash-ghash"
       ],
       "environment": {
         "PYTHONOPTIMIZE": "0",
@@ -95915,6 +96290,7 @@
         "final-component-repository-c601c3e7699bcd87-dependencies-tls12",
         "final-component-repository-c601c3e7699bcd87-dependencies-tls13",
         "final-component-repository-c601c3e7699bcd87-dependencies-tls13-handshake",
+        "final-component-repository-c601c3e7699bcd87-dependencies-universal-hash-ghash",
         "final-component-repository-c601c3e7699bcd87-fixture-core",
         "final-component-repository-c601c3e7699bcd87-fixture-hash-core",
         "final-component-repository-c601c3e7699bcd87-fixture-hash-sha2",
@@ -96013,6 +96389,7 @@
         "final-component-repository-dfe1132d65f1e9aa-dependencies-tls12",
         "final-component-repository-dfe1132d65f1e9aa-dependencies-tls13",
         "final-component-repository-dfe1132d65f1e9aa-dependencies-tls13-handshake",
+        "final-component-repository-dfe1132d65f1e9aa-dependencies-universal-hash-ghash",
         "final-component-repository-dfe1132d65f1e9aa-fixture-core",
         "final-component-repository-dfe1132d65f1e9aa-fixture-hash-core",
         "final-component-repository-dfe1132d65f1e9aa-fixture-hash-sha2",

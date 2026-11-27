@@ -1,6 +1,11 @@
 # Changelog
 
-## 0.30.3 standalone AES block cipher (in development)
+## 0.30.4 standalone GHASH universal hash (in development)
+
+- Raw GHASH is now available from `brynja-universal-hash-ghash`; existing
+  imports use the same owners. [Release notes](release-notes/RELEASE_NOTES_0.30.4.md).
+
+## 0.30.3 standalone AES block cipher (internally tagged)
 
 - Raw AES-128/192/256 owners now live in `brynja-cipher-aes`. Existing
   imports use the same types. [Release notes](release-notes/RELEASE_NOTES_0.30.3.md).

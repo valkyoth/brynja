@@ -10,6 +10,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "brynja-cipher-aes"
+version = "0.1.0"
+dependencies = [
+ "brynja-core",
+]
+
+[[package]]
 name = "brynja-core"
 version = "0.10.0"
 
@@ -17,6 +24,7 @@ version = "0.10.0"
 name = "brynja-crypto"
 version = "0.2.0"
 dependencies = [
+ "brynja-cipher-aes",
  "brynja-core",
  "brynja-hash-parallel",
  "brynja-hash-sha2",

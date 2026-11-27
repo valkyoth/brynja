@@ -7365,7 +7365,7 @@ Exit criteria:
 
 ### v0.30.3 - Standalone AES Block Cipher
 
-Status: in progress
+Status: released
 
 Plan scope: Extract the existing AES-128, AES-192 and AES-256 owners into `brynja-cipher-aes`, keeping existing feature gates, provider contracts and re-exported type identity without adding block modes.
 
@@ -7387,7 +7387,7 @@ Exit criteria:
 
 ### v0.30.4 - Standalone GHASH Universal Hash
 
-Status: planned
+Status: in progress
 
 Plan scope: Extract the existing framed-block GHASH into `brynja-universal-hash-ghash`, preserving its secret output, borrowed workspace and explicitly selected multiplication backends; do not expose a MAC or add POLYVAL.
 

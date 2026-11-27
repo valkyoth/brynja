@@ -1,5 +1,17 @@
 # Component Verification Status
 
+## Standalone GHASH (v0.30.4, in development)
+
+The portable [archive consumer](../scripts/ghash/check-packaged-api.py) passed on
+Rust 1.90.0 and 1.100.0 through the standalone, composition and façade routes.
+It checks NIST intermediates, split updates, ownership and bare-metal Cortex-M
+compilation. On Linux x86-64, the three archive routes also passed native
+PCLMUL, masked-feature fallback/rejection and bad-startup-answer quarantine
+controls on both compilers. Eight installed AES-GCM/GMAC consumers passed the
+linked AES-NI/PCLMUL screen (30 message bodies per binary). Earlier hardware
+timing observations belong to their recorded
+builds; this extraction does not resolve the Arm timing control.
+
 ## Standalone AES (v0.30.3)
 
 On Rust 1.90.0 and 1.100.0, the [archive consumer](../assurance/aes-leaf-identity/lib.rs)

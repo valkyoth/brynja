@@ -530,7 +530,7 @@
         "nist:NIST.SP.800-38D.pdf"
       ],
       "targets": [
-        "planned-symbol:crates/brynja-crypto/src/ghash.rs#Ghash"
+        "planned-symbol:crates/brynja-universal-hash-ghash/src/ghash.rs#Ghash"
       ],
       "tests": [
         "planned:positive:crates/brynja-crypto/tests/ghash_vectors/nist.rs#aes128_published_ghash_intermediates",
@@ -11391,9 +11391,6 @@
       "planned-symbol:crates/brynja-crypto/src/ed25519.rs#Ed25519": [
         "BRY-REQ-CRYPTO-0012"
       ],
-      "planned-symbol:crates/brynja-crypto/src/ghash.rs#Ghash": [
-        "BRY-REQ-CRYPTO-0006"
-      ],
       "planned-symbol:crates/brynja-crypto/src/hpke.rs": [
         "BRY-REQ-HPKE-0138",
         "BRY-REQ-HPKE-0139",
@@ -11721,6 +11718,9 @@
       ],
       "planned-symbol:crates/brynja-tls13/src/suite.rs#SuiteProfile": [
         "BRY-REQ-TLS13-0080"
+      ],
+      "planned-symbol:crates/brynja-universal-hash-ghash/src/ghash.rs#Ghash": [
+        "BRY-REQ-CRYPTO-0006"
       ],
       "planned-symbol:scripts/standards/check-requirements.py#validate_normative_usage": [
         "BRY-REQ-STD-0004"

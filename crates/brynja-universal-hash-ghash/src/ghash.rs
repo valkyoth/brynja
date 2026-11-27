@@ -1,0 +1,493 @@
+//! Incremental GHASH (NIST SP 800-38D §6.4) over an already-framed sequence
+//! of 16-byte blocks. Updates may split blocks at any byte. There is **no**
+//! implicit padding, length encoding, tag mask, or authentication decision.
+//! Never publish the raw result as a tag: it can reveal the hash subkey.
+//! All 128-bit field elements are accepted: a zero subkey produces zero for
+//! every input. Do not substitute a zero buffer for failed key derivation.
+//!
+//! The caller supplies a byte budget, a borrowed subkey in NIST wire order,
+//! and distinct workspace and output storage. No allocation or AES backend
+//! is needed. Drop clears the borrowed workspace/output, not the caller's key,
+//! copies, scalar/vector registers or stack spills; abort and forgotten owners bypass Drop.
+//! Development interface: no machine-code timing qualification is claimed.
+//! `Ghash::new` stays portable in ordinary Cargo builds. The default-off
+//! `ghash-runtime-execution` feature adds explicit hosted backend selection.
+//!
+//! ```
+//! # #[cfg(feature = "hazmat-ghash")]
+//! use brynja_universal_hash_ghash::ghash::{Error, Ghash};
+//! # #[cfg(feature = "hazmat-ghash")]
+//! # fn example() -> Result<(), Error> {
+//! // Example subkey and pre-framed block, not a GCM implementation.
+//! let h = [0x37; 16];
+//! let (mut workspace, mut output) = ([0; 16], [0; 16]);
+//! let mut hash = Ghash::new(&h, &mut workspace, 16);
+//! hash.update(&[0x11; 5])?;
+//! hash.update(&[0x22; 11])?;
+//! let intermediate = hash.finish(&mut output)?;
+//! // Use intermediate.expose() only inside the higher-level construction.
+//! intermediate.clear();
+//! assert_eq!(output, [0; 16]);
+//! # Ok(()) }
+//! # #[cfg(feature = "hazmat-ghash")]
+//! # example().unwrap();
+//! ```
+//!
+//! The output cannot alias the live workspace:
+//! ```compile_fail,E0499
+//! use brynja_universal_hash_ghash::ghash::Ghash;
+//! let mut workspace = [0; 16];
+//! let hash = Ghash::new(&[0; 16], &mut workspace, 0);
+//! let intermediate = hash.finish(&mut workspace);
+//! ```
+
+#![forbid(unsafe_code)]
+
+// A stray RUSTFLAGS/config flag alone must not turn ordinary construction
+// into a forced-candidate experiment. No build script or production feature.
+#[cfg(any(
+    brynja_ghash_pclmul_evidence,
+    brynja_ghash_pmull_evidence,
+    brynja_ghash_rv64_evidence
+))]
+const _: () = assert!(
+    matches!(option_env!("BRYNJA_GHASH_EVIDENCE"), Some(s) if matches!(s.as_bytes(), b"1")),
+    "forced GHASH evidence requires BRYNJA_GHASH_EVIDENCE=1"
+);
+
+#[cfg(any(
+    feature = "ghash-runtime-execution",
+    not(any(
+        brynja_ghash_pclmul_evidence,
+        brynja_ghash_pmull_evidence,
+        brynja_ghash_rv64_evidence
+    ))
+))]
+mod field;
+#[cfg(any(feature = "ghash-runtime-execution", feature = "__mode-execution"))]
+mod pending;
+#[cfg(feature = "ghash-runtime-execution")]
+mod runtime;
+#[cfg(feature = "ghash-runtime-execution")]
+pub use runtime::{Backend, Mode};
+
+#[cfg(all(
+    any(feature = "ghash-runtime-execution", feature = "__mode-execution"),
+    any(
+        brynja_ghash_pclmul_evidence,
+        brynja_ghash_pmull_evidence,
+        brynja_ghash_rv64_evidence
+    )
+))]
+compile_error!("test forced GHASH candidates separately from the public runtime route");
+#[cfg(all(
+    brynja_ghash_pclmul_evidence,
+    not(all(target_arch = "x86_64", feature = "cpu"))
+))]
+compile_error!("forced GHASH PCLMUL evidence requires x86_64 and the cpu dependency");
+
+#[cfg(all(
+    brynja_ghash_pmull_evidence,
+    not(all(target_arch = "aarch64", target_endian = "little", feature = "cpu"))
+))]
+compile_error!("forced GHASH PMULL evidence requires little-endian AArch64 and the cpu dependency");
+
+#[cfg(all(brynja_ghash_pclmul_evidence, target_arch = "x86_64", feature = "cpu"))]
+use brynja_crypto_cpu::RequiredPclmul as RequiredProduct;
+#[cfg(all(
+    brynja_ghash_pmull_evidence,
+    target_arch = "aarch64",
+    target_endian = "little",
+    feature = "cpu"
+))]
+use brynja_crypto_cpu::RequiredPmull as RequiredProduct;
+
+#[cfg(all(
+    brynja_ghash_rv64_evidence,
+    not(all(target_arch = "riscv64", target_os = "linux", feature = "cpu"))
+))]
+compile_error!("forced GHASH RV64 evidence requires RV64 Linux and the cpu dependency");
+#[cfg(all(
+    brynja_ghash_rv64_evidence,
+    target_arch = "riscv64",
+    target_os = "linux",
+    feature = "cpu"
+))]
+use brynja_crypto_cpu::RequiredRv64 as RequiredProduct;
+
+use brynja_core::{
+    OwnedSecretRegion, SecretMemoryError, SecretRegionInitialization, clear_owned_region,
+};
+use core::marker::PhantomData;
+
+/// A public length or storage error; contains no secret bytes.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[non_exhaustive]
+pub enum Error {
+    /// Required acceleration is not available for this target or CPU.
+    #[cfg(feature = "ghash-runtime-execution")]
+    Unavailable,
+    /// The native backend failed its self-test or is no longer healthy.
+    #[cfg(any(feature = "ghash-runtime-execution", feature = "__mode-execution"))]
+    Quarantined,
+    /// Forced evidence backend is unavailable or no longer healthy.
+    #[cfg(any(
+        brynja_ghash_pclmul_evidence,
+        brynja_ghash_pmull_evidence,
+        brynja_ghash_rv64_evidence
+    ))]
+    CandidateNotReady,
+    /// The entire update would exceed the caller's remaining byte budget.
+    LimitExceeded,
+    /// The input did not end on a block boundary.
+    PartialBlock,
+    /// The output region could not be fully initialized.
+    Storage(SecretMemoryError),
+}
+
+#[cfg(all(
+    target_arch = "x86_64",
+    any(target_os = "linux", target_os = "windows"),
+    feature = "__mode-execution"
+))]
+pub(crate) use brynja_crypto_cpu::RuntimePclmul as PairMultiplier;
+#[cfg(all(
+    target_arch = "aarch64",
+    target_endian = "little",
+    any(target_os = "linux", target_os = "macos"),
+    feature = "__mode-execution"
+))]
+pub(crate) use brynja_crypto_cpu::RuntimePmull as PairMultiplier;
+
+/// One local incremental computation; neither cloneable nor resettable.
+#[must_use]
+pub struct Ghash<'a> {
+    #[cfg(all(
+        any(
+            all(
+                target_arch = "x86_64",
+                any(target_os = "linux", target_os = "windows")
+            ),
+            all(
+                target_arch = "aarch64",
+                target_endian = "little",
+                any(target_os = "linux", target_os = "macos")
+            )
+        ),
+        feature = "__mode-execution"
+    ))]
+    pair: Option<core::cell::RefMut<'a, PairMultiplier>>,
+    #[cfg(feature = "ghash-runtime-execution")]
+    engine: runtime::Engine,
+    #[cfg(any(feature = "ghash-runtime-execution", feature = "__mode-execution"))]
+    terminal: bool,
+    #[cfg(any(
+        brynja_ghash_pclmul_evidence,
+        brynja_ghash_pmull_evidence,
+        brynja_ghash_rv64_evidence
+    ))]
+    native: Option<RequiredProduct>,
+    h: &'a [u8; 16],
+    state: &'a mut [u8; 16],
+    used: usize,
+    remaining: u64,
+    local: PhantomData<*mut ()>,
+}
+
+#[cfg(test)]
+extern crate std;
+
+// Unit-test-only interruption inside the real native update guard.
+#[cfg(all(test, feature = "__mode-execution"))]
+std::thread_local! {
+    static INTERRUPT: core::cell::Cell<Option<(usize, bool)>> = const { core::cell::Cell::new(None) };
+}
+
+impl<'a> Ghash<'a> {
+    /// Starts from zero, clearing the workspace. The budget counts all bytes
+    /// supplied, including any framing supplied by a higher-level protocol.
+    pub fn new(h: &'a [u8; 16], workspace: &'a mut [u8; 16], max_bytes: u64) -> Self {
+        let _ = clear_owned_region(workspace);
+        Self {
+            #[cfg(all(
+                any(
+                    all(
+                        target_arch = "x86_64",
+                        any(target_os = "linux", target_os = "windows")
+                    ),
+                    all(
+                        target_arch = "aarch64",
+                        target_endian = "little",
+                        any(target_os = "linux", target_os = "macos")
+                    )
+                ),
+                feature = "__mode-execution"
+            ))]
+            pair: None,
+            #[cfg(feature = "ghash-runtime-execution")]
+            engine: runtime::Engine::Portable,
+            #[cfg(any(feature = "ghash-runtime-execution", feature = "__mode-execution"))]
+            terminal: false,
+            #[cfg(any(
+                brynja_ghash_pclmul_evidence,
+                brynja_ghash_pmull_evidence,
+                brynja_ghash_rv64_evidence
+            ))]
+            native: RequiredProduct::detect(),
+            h,
+            state: workspace,
+            used: 0,
+            remaining: max_bytes,
+            local: PhantomData,
+        }
+    }
+
+    /// Number of native block products, excluding the KAT. Evidence builds only.
+    #[cfg(any(
+        brynja_ghash_pclmul_evidence,
+        brynja_ghash_pmull_evidence,
+        brynja_ghash_rv64_evidence
+    ))]
+    #[doc(hidden)]
+    pub fn native_blocks(&self) -> Result<u64, Error> {
+        self.native
+            .as_ref()
+            .and_then(|n| n.completed())
+            .ok_or(Error::CandidateNotReady)
+    }
+
+    // Private frames borrow the same already-tested kernel for IV and message
+    // hashing. The enclosing operation owns the failure/unwind latch.
+    #[cfg(all(
+        any(
+            all(
+                target_arch = "x86_64",
+                any(target_os = "linux", target_os = "windows")
+            ),
+            all(
+                target_arch = "aarch64",
+                target_endian = "little",
+                any(target_os = "linux", target_os = "macos")
+            )
+        ),
+        feature = "__mode-execution"
+    ))]
+    pub(crate) fn from_pair(
+        kernel: &'a core::cell::RefCell<PairMultiplier>,
+        h: &'a [u8; 16],
+        workspace: &'a mut [u8; 16],
+        budget: u64,
+    ) -> Result<Self, Error> {
+        let kernel = kernel.try_borrow_mut().map_err(|_| Error::Quarantined)?;
+        if !kernel.ready() {
+            return Err(Error::Quarantined);
+        }
+        let mut frame = Self::new(h, workspace, budget);
+        frame.pair = Some(kernel);
+        Ok(frame)
+    }
+
+    /// Appends a chunk. An over-budget chunk leaves the entire context unchanged.
+    pub fn update(&mut self, bytes: &[u8]) -> Result<(), Error> {
+        #[cfg(any(feature = "ghash-runtime-execution", feature = "__mode-execution"))]
+        self.check_health()?;
+        #[cfg(any(
+            brynja_ghash_pclmul_evidence,
+            brynja_ghash_pmull_evidence,
+            brynja_ghash_rv64_evidence
+        ))]
+        self.native_blocks()?;
+        let len = u64::try_from(bytes.len()).map_err(|_| Error::LimitExceeded)?;
+        let remaining = self
+            .remaining
+            .checked_sub(len)
+            .ok_or(Error::LimitExceeded)?;
+        #[cfg(any(feature = "ghash-runtime-execution", feature = "__mode-execution"))]
+        let pending = pending::Pending::begin(self);
+        #[cfg(any(feature = "ghash-runtime-execution", feature = "__mode-execution"))]
+        let owner = &mut *pending.0;
+        #[cfg(not(any(feature = "ghash-runtime-execution", feature = "__mode-execution")))]
+        let owner = self;
+        let mut input = bytes.iter();
+        while input.len() != 0 {
+            // Between complete blocks the state holds the previous product
+            // XOR the available prefix of the next block, in place.
+            for (dst, src) in owner.state.iter_mut().skip(owner.used).zip(&mut input) {
+                *dst ^= src;
+                owner.used = owner.used.wrapping_add(1); // at most 16
+            }
+            if owner.used == 16 {
+                #[cfg(all(
+                    any(
+                        all(
+                            target_arch = "x86_64",
+                            any(target_os = "linux", target_os = "windows")
+                        ),
+                        all(
+                            target_arch = "aarch64",
+                            target_endian = "little",
+                            any(target_os = "linux", target_os = "macos")
+                        )
+                    ),
+                    feature = "__mode-execution"
+                ))]
+                if let Some(kernel) = &mut owner.pair {
+                    let value = kernel
+                        .product(
+                            u128::from_be_bytes(*owner.state),
+                            u128::from_be_bytes(*owner.h),
+                        )
+                        .map_err(|_| Error::Quarantined)?;
+                    *owner.state = value.to_be_bytes();
+                    owner.used = 0;
+                    #[cfg(test)]
+                    if let Some((n, unwind)) = INTERRUPT.get() {
+                        INTERRUPT.set(n.checked_sub(1).map(|left| (left, unwind)));
+                        if n == 0 {
+                            if unwind {
+                                std::panic::resume_unwind(std::boxed::Box::new(()));
+                            }
+                            return Err(Error::Quarantined);
+                        }
+                    }
+                    continue;
+                }
+                #[cfg(not(any(
+                    feature = "ghash-runtime-execution",
+                    brynja_ghash_pclmul_evidence,
+                    brynja_ghash_pmull_evidence,
+                    brynja_ghash_rv64_evidence
+                )))]
+                let value = field::multiply(
+                    u128::from_be_bytes(*owner.state),
+                    u128::from_be_bytes(*owner.h),
+                );
+                #[cfg(feature = "ghash-runtime-execution")]
+                let value = owner.engine.product(
+                    u128::from_be_bytes(*owner.state),
+                    u128::from_be_bytes(*owner.h),
+                )?;
+                #[cfg(any(
+                    brynja_ghash_pclmul_evidence,
+                    brynja_ghash_pmull_evidence,
+                    brynja_ghash_rv64_evidence
+                ))]
+                let value = owner
+                    .native
+                    .as_mut()
+                    .and_then(|n| {
+                        n.product(
+                            u128::from_be_bytes(*owner.state),
+                            u128::from_be_bytes(*owner.h),
+                        )
+                    })
+                    .ok_or(Error::CandidateNotReady)?;
+                *owner.state = value.to_be_bytes();
+                owner.used = 0;
+            }
+        }
+        owner.remaining = remaining;
+        #[cfg(any(feature = "ghash-runtime-execution", feature = "__mode-execution"))]
+        {
+            owner.terminal = false;
+        }
+        Ok(())
+    }
+
+    /// Consumes the context and returns the unmasked, secret GHASH result.
+    /// Empty input yields zero. A partial final block leaves output unchanged.
+    pub fn finish(self, output: &mut [u8; 16]) -> Result<SecretHash<'_>, Error> {
+        #[cfg(any(feature = "ghash-runtime-execution", feature = "__mode-execution"))]
+        self.check_health()?;
+        #[cfg(any(
+            brynja_ghash_pclmul_evidence,
+            brynja_ghash_pmull_evidence,
+            brynja_ghash_rv64_evidence
+        ))]
+        self.native_blocks()?;
+        if self.used != 0 {
+            return Err(Error::PartialBlock);
+        }
+        let mut init = SecretRegionInitialization::begin(output).map_err(Error::Storage)?;
+        init.write(self.state).map_err(Error::Storage)?;
+        Ok(SecretHash {
+            region: init.finish().map_err(Error::Storage)?,
+            local: PhantomData,
+        })
+    }
+}
+
+impl Drop for Ghash<'_> {
+    fn drop(&mut self) {
+        let _ = clear_owned_region(self.state);
+    }
+}
+
+#[cfg(all(
+    test,
+    feature = "__mode-execution",
+    target_feature = "aes",
+    any(
+        all(
+            target_arch = "x86_64",
+            target_feature = "sse2",
+            any(target_os = "linux", target_os = "windows")
+        ),
+        all(
+            target_arch = "aarch64",
+            target_endian = "little",
+            target_feature = "neon",
+            any(target_os = "linux", target_os = "macos")
+        )
+    )
+))]
+#[test]
+fn interrupted_pair_update_clears_live_frame() -> Result<(), Error> {
+    use std::panic::{AssertUnwindSafe, catch_unwind};
+    let key = (1_u128 << 127).to_be_bytes();
+    for unwind in [false, true] {
+        let kernel = core::cell::RefCell::new(
+            PairMultiplier::probe()
+                .map_err(|_| Error::Quarantined)?
+                .ok_or(Error::Quarantined)?,
+        );
+        let (mut state, mut output) = ([0; 16], [0xa5; 16]);
+        let mut frame = Ghash::from_pair(&kernel, &key, &mut state, 32)?;
+        frame.update(&[0x35; 7])?;
+        assert_eq!(frame.update(&[0; 26]), Err(Error::LimitExceeded));
+        assert_eq!((frame.used, frame.remaining), (7, 25));
+        INTERRUPT.set(Some((1, unwind)));
+        let outcome = catch_unwind(AssertUnwindSafe(|| frame.update(&[0x73; 25])));
+        assert!(INTERRUPT.get().is_none()); // second real product was reached
+        if unwind {
+            assert!(outcome.is_err());
+        } else {
+            assert!(matches!(outcome, Ok(Err(Error::Quarantined))));
+        }
+        assert_eq!(*frame.state, [0; 16]); // immediately, not only on Drop
+        assert_eq!((frame.used, frame.remaining), (0, 0));
+        assert_eq!(frame.update(&[]), Err(Error::Quarantined));
+        assert!(matches!(frame.finish(&mut output), Err(Error::Quarantined)));
+        assert_eq!(output, [0xa5; 16]);
+    }
+    Ok(())
+}
+
+/// A secret intermediate for a construction such as GCM; never a public tag.
+#[must_use]
+pub struct SecretHash<'a> {
+    region: OwnedSecretRegion<'a>,
+    local: PhantomData<*mut ()>,
+}
+
+impl SecretHash<'_> {
+    /// Explicitly borrows the unmasked bytes. The caller must protect any copies.
+    pub fn expose(&self) -> &[u8] {
+        self.region.expose()
+    }
+
+    /// Consumes the result and clears the caller's output immediately.
+    pub fn clear(self) {
+        let _ = self.region.clear();
+    }
+}

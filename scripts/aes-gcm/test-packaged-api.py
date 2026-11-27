@@ -221,7 +221,7 @@ class ArchiveTests(unittest.TestCase):
 
     def test_linked_frame_requires_connected_native_product(self):
         check = paired.linked
-        names = ["frame", "AesPair as HashRoute::start", "brynja_crypto::ghash::Ghash::finish",
+        names = ["frame", "AesPair as HashRoute::start", "brynja_universal_hash_ghash::ghash::Ghash::finish",
                  check["UPDATE"], check["PRODUCT"], check["MULTIPLY"]]
         ops = [["callq 0x20", "callq 0x30", "callq 0x40"], [], [],
                ["callq 0x50"], ["jmpq *0x80(%rip) # 0x100"], ["pclmulqdq"]*4 + ["retq"]]
@@ -305,7 +305,7 @@ class ArchiveTests(unittest.TestCase):
                 deps.append(cpu)
             elif name == cpu:
                 flags += ["aes-static-execution", "ghash-runtime-execution"]
-            elif name == "brynja-cipher-aes":
+            elif name in ("brynja-cipher-aes", "brynja-universal-hash-ghash"):
                 flags += ["__mode", "__mode-execution"]
                 deps.append(cpu)
             add(name, deps, flags, root / "unpacked" / f"{name}-{versions[name]}" / "Cargo.toml")
@@ -324,6 +324,7 @@ class ArchiveTests(unittest.TestCase):
                                      ("brynja-cipher-aes", "features", ["default", "hazmat-aes-block"]),
                                      ("brynja-cipher-aes", "features", ["default", "__mode", "__mode-execution", "hazmat-aes-block"]),
                                      ("brynja-cipher-aes", "features", ["default", "__mode", "__mode-execution", "aes-static-execution"]),
+                                     ("brynja-universal-hash-ghash", "features", ["default", "__mode", "__mode-execution", "hazmat-ghash"]),
                                      (cpu, "features", ["default", "aes-static-execution"]),
                                      (cpu, "deps", [{"pkg": "brynja-core"}]),
                                      (crypto, "deps", [d for d in nodes[crypto]["deps"] if d["pkg"] != cpu])):
@@ -338,6 +339,8 @@ class ArchiveTests(unittest.TestCase):
         nodes[crypto]["features"] = ["gmac"]
         nodes["brynja-cipher-aes"]["features"] = ["default", "__mode"]
         nodes["brynja-cipher-aes"]["deps"] = [{"pkg": "brynja-core"}]
+        nodes["brynja-universal-hash-ghash"]["features"] = ["default", "__mode"]
+        nodes["brynja-universal-hash-ghash"]["deps"] = [{"pkg": "brynja-core"}]
         nodes[cpu]["features"] = ["default"]
         packages[crypto]["dependencies"].append(cpu)
         lock["package"].append({"name": cpu, "version": versions[cpu]})

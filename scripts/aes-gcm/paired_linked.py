@@ -59,7 +59,7 @@ class Image:
 
 PORT = "brynja_crypto::aes_gcm::portable::"
 FRAME = "brynja_crypto::aes_gcm::Frame::hash"
-UPDATE = "brynja_crypto::ghash::Ghash::update"
+UPDATE = "brynja_universal_hash_ghash::ghash::Ghash::update"
 PRODUCT = "brynja_crypto_cpu::ghash_pclmul::runtime::RuntimeProduct::product"
 MULTIPLY = "brynja_crypto_cpu::ghash_pclmul::multiply"
 TRANSFORM = "brynja_crypto_cpu::aes::x86::transform"
@@ -90,7 +90,7 @@ def check_leaf(image, name, instructions):
 def field_route(image, frame):
     require(any("AesPair" in image.names[a] and image.base(a).endswith("HashRoute::start")
                 for a in image.calls(frame)), "missing paired hash start")
-    require(image.children(frame, "brynja_crypto::ghash::Ghash::finish"), "missing hash finish")
+    require(image.children(frame, "brynja_universal_hash_ghash::ghash::Ghash::finish"), "missing hash finish")
     path = {frame}
     for stage in (UPDATE, PRODUCT, MULTIPLY):
         path = {target for a in path for target in image.children(a, stage)}

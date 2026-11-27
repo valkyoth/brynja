@@ -135,6 +135,7 @@ PACKAGES = (
 # public consumer never enables this std adapter. Keep its runtime lock separate.
 PACKAGING_PACKAGES = (*PACKAGES, ("brynja-crypto-cpu-std", "0.2.0", ("src/lib.rs",)),
                       ("brynja-cipher-aes", "0.1.0", ("src/lib.rs",)),
+                      ("brynja-universal-hash-ghash", "0.1.0", ("src/lib.rs",)),
                       ("brynja-cipher-chacha", "0.1.0", ("src/lib.rs",)))
 
 
@@ -355,6 +356,7 @@ too_many_arguments = "forbid"
 
 [workspace.dependencies]
 brynja-cipher-aes = { path = "crates/brynja-cipher-aes", version = "=0.1.0" }
+brynja-universal-hash-ghash = { path = "crates/brynja-universal-hash-ghash", version = "=0.1.0" }
 brynja-cipher-chacha = { path = "crates/brynja-cipher-chacha", version = "=0.1.0" }
 brynja-core = { path = "crates/brynja-core", version = "=0.10.0" }
 brynja-crypto = { path = "crates/brynja-crypto", version = "=0.2.0" }

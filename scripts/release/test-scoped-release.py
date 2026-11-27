@@ -59,7 +59,7 @@ class ScopedRelease(unittest.TestCase):
             scoped.enabled('garbage')
 
     def test_standalone_aes_candidate_gate_is_finite_and_does_not_publish(self):
-        plan = scoped.load('0.30.3')
+        plan = scoped.load('0.30.4')
         commands = {check['id']: check['command'] for check in plan['checks']}
         self.assertEqual(len(commands), 43)
         self.assertEqual(commands['aes-leaf-identity'], ['python3', 'scripts/aes/check-aes-leaf-identity.py'])
@@ -78,7 +78,7 @@ class ScopedRelease(unittest.TestCase):
         self.assertEqual(commands['aead-packaged-endpoints'], ['python3', 'scripts/aes-gcm/check-portable-acceptance.py', '--smoke'])
         self.assertEqual(commands['release-plan'], ['scripts/release/test-release-plan.sh'])
         self.assertEqual(commands['crypto-tests'],
-            ['cargo', 'test', '--locked', '-p', 'brynja-cipher-aes', '-p', 'brynja-crypto', '-p',
+            ['cargo', 'test', '--locked', '-p', 'brynja-cipher-aes', '-p', 'brynja-universal-hash-ghash', '-p', 'brynja-crypto', '-p',
              'brynja-legacy-hkdf', '--no-default-features', '--features', 'brynja-crypto/hazmat-chacha20,brynja-crypto/gmac-execution,brynja-crypto/aes-gcm-execution,brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider,brynja-crypto/ghash-runtime-execution'])
         lint = commands['crypto-lint']
         self.assertIn('brynja-cipher-chacha', lint)
@@ -154,12 +154,14 @@ class ScopedRelease(unittest.TestCase):
                                  or 'check-aes-kani.py' in arg
                                  or 'check-aes-dataflow.py' in arg for arg in command))
         release = tomllib.loads((scoped.ROOT / 'release-crates.toml').read_text())
-        self.assertEqual(release['release']['version'], '0.30.3')
-        self.assertEqual(release['crates']['brynja']['previous_version'], '0.30.2')
+        self.assertEqual(release['release']['version'], '0.30.4')
+        self.assertEqual(release['crates']['brynja']['previous_version'], '0.30.3')
         self.assertEqual(release['crates']['brynja']['change'], 'metadata')
-        self.assertEqual(release['release']['cumulative_milestones'][-2:], ['0.30.2', '0.30.3'])
+        self.assertEqual(release['release']['cumulative_milestones'][-2:], ['0.30.3', '0.30.4'])
         self.assertEqual(release['crates']['brynja-cipher-chacha']['previous_version'], 'unpublished')
         self.assertEqual(release['crates']['brynja-cipher-aes']['previous_version'], 'unpublished')
+        self.assertFalse(release['crates']['brynja-universal-hash-ghash']['publish'])
+        self.assertLess(publisher.PUBLISH_ORDER.index('brynja-universal-hash-ghash'), publisher.PUBLISH_ORDER.index('brynja-crypto'))
         self.assertFalse(release['crates']['brynja-cipher-aes']['publish'])
         self.assertLess(publisher.PUBLISH_ORDER.index('brynja-cipher-aes'),
                         publisher.PUBLISH_ORDER.index('brynja-crypto'))

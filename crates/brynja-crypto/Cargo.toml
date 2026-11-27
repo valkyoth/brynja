@@ -11,20 +11,20 @@ include = ["Cargo.toml","LICENSE-APACHE","LICENSE-MIT","README.md","src/**/*.rs"
 
 [features]
 default = []
-aes-gcm = ["dep:brynja-cipher-aes", "brynja-cipher-aes/__mode"]
-gmac = ["dep:brynja-cipher-aes", "brynja-cipher-aes/__mode"]
-aes-gcm-execution = ["aes-gcm", "dep:brynja-crypto-cpu", "brynja-cipher-aes/__mode-execution", "brynja-crypto-cpu/ghash-runtime-execution"]
-gmac-execution = ["gmac", "dep:brynja-crypto-cpu", "brynja-cipher-aes/__mode-execution", "brynja-crypto-cpu/ghash-runtime-execution"]
+aes-gcm = ["dep:brynja-cipher-aes", "brynja-cipher-aes/__mode", "dep:brynja-universal-hash-ghash", "brynja-universal-hash-ghash/__mode"]
+gmac = ["dep:brynja-cipher-aes", "brynja-cipher-aes/__mode", "dep:brynja-universal-hash-ghash", "brynja-universal-hash-ghash/__mode"]
+aes-gcm-execution = ["aes-gcm", "dep:brynja-crypto-cpu", "brynja-cipher-aes/__mode-execution", "brynja-universal-hash-ghash/__mode-execution", "brynja-crypto-cpu/ghash-runtime-execution"]
+gmac-execution = ["gmac", "dep:brynja-crypto-cpu", "brynja-cipher-aes/__mode-execution", "brynja-universal-hash-ghash/__mode-execution", "brynja-crypto-cpu/ghash-runtime-execution"]
 hazmat-aes-block = ["dep:brynja-cipher-aes", "brynja-cipher-aes/hazmat-aes-block"]
 hazmat-chacha20 = ["dep:brynja-cipher-chacha", "brynja-cipher-chacha/hazmat-chacha20"]
-hazmat-ghash = []
-ghash-runtime-execution = ["hazmat-ghash", "dep:brynja-crypto-cpu", "brynja-crypto-cpu/ghash-runtime-execution"]
+hazmat-ghash = ["dep:brynja-universal-hash-ghash", "brynja-universal-hash-ghash/hazmat-ghash"]
+ghash-runtime-execution = ["hazmat-ghash", "brynja-universal-hash-ghash/ghash-runtime-execution", "dep:brynja-crypto-cpu", "brynja-crypto-cpu/ghash-runtime-execution"]
 aes-static-execution = ["hazmat-aes-block", "cpu", "brynja-cipher-aes/aes-static-execution"]
 aes-runtime-execution = ["aes-static-execution", "brynja-cipher-aes/aes-runtime-execution"]
 external-key-provider = ["dep:brynja-cipher-aes", "brynja-cipher-aes/external-key-provider"]
 hmac-hardened-execution = ["cpu", "brynja-mac-hmac/hardened-execution"]
 hmac-runtime-execution = ["cpu", "brynja-mac-hmac/runtime-execution"]
-cpu = ["dep:brynja-crypto-cpu"]
+cpu = ["dep:brynja-crypto-cpu", "brynja-universal-hash-ghash?/cpu"]
 general-sha512-t = ["brynja-hash-sha2/general-sha512-t"]
 sha2-static-execution = ["cpu", "brynja-hash-sha2/static-execution"]
 sha2-runtime-execution = ["cpu", "brynja-hash-sha2/runtime-execution"]
@@ -47,6 +47,7 @@ parallelhash-runtime-execution = ["cpu", "brynja-hash-parallel/runtime-execution
 parallelhash-hardened-batch = ["cpu", "brynja-hash-parallel/hardened-batch-execution"]
 
 [dependencies]
+brynja-universal-hash-ghash = { workspace = true, optional = true }
 brynja-cipher-aes = { workspace = true, optional = true }
 brynja-cipher-chacha = { workspace = true, optional = true }
 brynja-core = { workspace = true }

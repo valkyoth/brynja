@@ -59,6 +59,21 @@ class ContentsTests(unittest.TestCase):
     def test_unpublished_fixture_support_is_not_trimmed(self):
         contents.validate({"name": "brynja-test-support", "publish": False}, [*self.members, "tests/helper.rs"])
 
+    def test_missing_promised_integration_test_is_not_a_lean_package_notice(self):
+        manifest = Path(__file__).resolve().parents[2] / "crates/brynja-legacy-hkdf/Cargo.toml"
+        with self.assertRaisesRegex(ValueError, "differs from reviewed standalone tests"):
+            contents.check(manifest, self.members)
+
+    def test_reviewed_test_payloads_do_not_grant_other_exceptions(self):
+        for crate, allowed, rejected in (
+            ("brynja-legacy-hkdf", ["tests/derivation.rs"], "tests/other.rs"),
+            ("brynja-crypto", ["tests/aead_pair.rs", *contents.AES_VECTOR_FILES],
+             "tests/fixtures/aes128/unreviewed.rsp"),
+        ):
+            contents.validate({"name": crate}, [*self.members, *allowed])
+            with self.assertRaisesRegex(ValueError, "standalone tests"):
+                contents.validate({"name": crate}, [*self.members, rejected])
+
     def test_new_publishable_packages_cannot_restore_test_payloads(self):
         for declaration in ({}, {"publish": ["crates-io"]}):
             with self.subTest(declaration=declaration), self.assertRaisesRegex(ValueError, "standalone tests"):

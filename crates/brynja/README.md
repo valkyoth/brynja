@@ -79,7 +79,7 @@ remain separate; there is no SIMD-batched or Windows enclave HMAC API.
 | GMAC authentication (AES-128/192/256) | ✅ Implemented | `brynja-aead-gcm` | ❌ Not independently verified |
 | HKDF over six SHA-2 identities, including TLS 1.3 label framing | ✅ Implemented | `brynja-crypto` | ❌ Not independently verified |
 
-Choose `brynja::crypto::aes_gcm` (feature `aes-gcm`) for detached encryption or `brynja::crypto::gmac` (`gmac`) for authentication alone. Raw AES and GHASH require `hazmat-aes-block` and `hazmat-ghash`; modern `crypto::hkdf` needs no feature. The `brynja` manifest does not forward `hazmat-chacha20`: select it on `brynja-cipher-chacha` or `brynja-crypto` directly. The SIMD ChaCha20 owners are leaf-only.
+Choose `brynja::crypto::aes_gcm` (feature `aes-gcm`) for detached encryption or `brynja::crypto::gmac` (`gmac`) for authentication alone. Raw AES and GHASH require `hazmat-aes-block` and `hazmat-ghash`; modern `crypto::hkdf` needs no feature. On the development branch, `hazmat-chacha20` exposes the portable stream at `brynja::crypto::chacha20`. For published `brynja 0.30.6`, enable it on `brynja-cipher-chacha` or `brynja-crypto` directly instead. The SIMD ChaCha20 owners are leaf-only.
 
 ### Legacy Hash Functions
 

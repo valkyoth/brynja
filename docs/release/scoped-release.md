@@ -135,6 +135,17 @@ It stops on ambiguous Cargo failures or a wait over one hour; rerun later.
 The Cargo sparse index is checked automatically; no Enter prompts between
 packages. `--dry-run` prints the plan without querying crates.io or waiting.
 
+Cargo's `ignoring test … is not included in the published package` notice
+is expected **for standalone integration tests under `tests/` in lean packages**. Those archives
+deliberately include the library sources (including in-source unit tests),
+licenses and README, not the repository's integration suites or test vectors.
+Use the matching Git tag to rerun those suites. Do not disable test discovery
+in the workspace or suppress Cargo diagnostics to silence this notice.
+A missing library source, build input or required metadata is a different
+issue: the package-content checks must still pass.
+The `brynja-crypto` and `brynja-legacy-hkdf` archives deliberately retain
+their specified tests; that exception does not apply to other published crates.
+
 Old evidence options/validators remain available for explicitly inspecting
 historical records; they do not become .3 publication prerequisites. Missing or
 outdated optional tracker rows do not block unrelated releases. Evidence remains

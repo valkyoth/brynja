@@ -108,7 +108,6 @@ dependencies = [
 name = "brynja-tls"
 version = "0.1.10"
 dependencies = [
- "brynja-core",
  "brynja-tls12",
  "brynja-tls13",
 ]
@@ -116,28 +115,14 @@ dependencies = [
 [[package]]
 name = "brynja-tls12"
 version = "0.1.10"
-dependencies = [
- "brynja-core",
- "brynja-crypto",
- "brynja-pki",
- "brynja-protocol",
-]
 
 [[package]]
 name = "brynja-tls13"
 version = "0.1.10"
 dependencies = [
- "brynja-core",
- "brynja-crypto",
- "brynja-protocol",
  "brynja-tls13-handshake",
 ]
 
 [[package]]
 name = "brynja-tls13-handshake"
 version = "0.1.10"
-dependencies = [
- "brynja-core",
- "brynja-crypto",
- "brynja-pki",
-]

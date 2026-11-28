@@ -172,43 +172,43 @@ optional = {}
 [packages.brynja-platform]
 class = "platform-adapter"
 publish = "crates-io"
-required = ["brynja-core"]
+required = []
 optional = {}
 
 [packages.brynja-tls13-handshake]
 class = "modern-shared"
 publish = "crates-io"
-required = ["brynja-core", "brynja-crypto", "brynja-pki"]
+required = []
 optional = {}
 
 [packages.brynja-tls12]
 class = "modern-engine"
 publish = "crates-io"
-required = ["brynja-core", "brynja-crypto", "brynja-pki", "brynja-protocol"]
+required = []
 optional = {}
 
 [packages.brynja-tls13]
 class = "modern-engine"
 publish = "crates-io"
-required = ["brynja-core", "brynja-crypto", "brynja-protocol", "brynja-tls13-handshake"]
+required = ["brynja-tls13-handshake"]
 optional = {}
 
 [packages.brynja-tls]
 class = "modern-router"
 publish = "crates-io"
-required = ["brynja-core", "brynja-tls12", "brynja-tls13"]
+required = ["brynja-tls12", "brynja-tls13"]
 optional = {}
 
 [packages.brynja-dtls]
 class = "modern-engine"
 publish = "crates-io"
-required = ["brynja-core", "brynja-crypto", "brynja-pki", "brynja-protocol"]
+required = []
 optional = {}
 
 [packages.brynja-quic-tls]
 class = "protocol-adapter"
 publish = "crates-io"
-required = ["brynja-core", "brynja-tls13-handshake"]
+required = ["brynja-tls13-handshake"]
 optional = {}
 
 [packages.brynja-sanitization]

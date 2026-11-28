@@ -11,6 +11,12 @@ import tomllib
 REQUIRED = {"Cargo.toml", "LICENSE-APACHE", "LICENSE-MIT", "README.md", "src/lib.rs"}
 METADATA = (REQUIRED - {"src/lib.rs"}) | {"Cargo.lock", "Cargo.toml.orig", ".cargo_vcs_info.json"}
 SOURCE_INCLUDE = ["Cargo.toml", "LICENSE-APACHE", "LICENSE-MIT", "README.md", "src/**/*.rs"]
+AES_VECTOR_FILES = {
+    f"tests/fixtures/aes{bits}/{filename}"
+    for bits in (128, 192, 256)
+    for filename in ("README.md", *(f"ECB{kind}{bits}.rsp" for kind in
+                                   ("GFSbox", "KeySbox", "VarKey", "VarTxt")))
+}
 MIGRATED = {
     "brynja-cipher-chacha", "brynja-cipher-aes", "brynja-universal-hash-ghash", "brynja-aead-gcm",
     "brynja-core", "brynja-crypto-cpu-std", "brynja-pki", "brynja-protocol",
@@ -34,7 +40,12 @@ def validate(package, members, sources=()):
     require(len(members) == len(set(members)), "duplicate archive member")
     require(REQUIRED <= set(members), "required metadata or library missing")
     if package.get("publish") is not False:
-        require(not any(name.startswith("tests/") for name in members),
+        tests = {name for name in members if name.startswith("tests/")}
+        if package["name"] == "brynja-legacy-hkdf":
+            tests -= {"tests/derivation.rs"}
+        elif package["name"] == "brynja-crypto":
+            tests = {name for name in tests - AES_VECTOR_FILES if not name.endswith(".rs")}
+        require(not tests,
                 "standalone tests belong in the repository, not published archives")
     for name in members:
         path = PurePosixPath(name)
@@ -55,6 +66,12 @@ def check(manifest, members):
     sources = [path.relative_to(manifest.parent).as_posix()
                for path in (manifest.parent / "src").rglob("*.rs")]
     validate(package, members, sources)
+    if package["name"] in {"brynja-crypto", "brynja-legacy-hkdf"}:
+        expected = ({"tests/derivation.rs"} if package["name"] == "brynja-legacy-hkdf" else
+                    AES_VECTOR_FILES | {p.relative_to(manifest.parent).as_posix()
+                                        for p in (manifest.parent / "tests").rglob("*.rs")})
+        require(expected == {p for p in members if p.startswith("tests/")},
+                "archive differs from reviewed standalone tests and fixtures")
 
 
 if __name__ == "__main__":

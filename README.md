@@ -351,9 +351,10 @@ shows how to check the portable and paired APIs against known answers from
 installed downstream binaries. These checks do not confer FIPS validation.
 
 The [portable RFC 8439 stream](docs/assurance/chacha20-development.md) is
-available in the development tree from `brynja-cipher-chacha` or through
-the existing `brynja_crypto::chacha20` path. Enable `hazmat-chacha20` on
-the chosen dependency. The new standalone crate has not been published.
+available from `brynja-cipher-chacha` or through `brynja_crypto::chacha20`.
+Enable `hazmat-chacha20` on the chosen dependency. The development branch
+also forwards that flag on `brynja`, at `brynja::crypto::chacha20`;
+the published `brynja 0.30.6` façade does not. SIMD owners remain leaf-only.
 It is not ChaCha20-Poly1305: raw ciphertext has no integrity protection.
 The [installed consumer](assurance/chacha20-consumer/README.md) shows how to
 test both portable imports and the explicit SSE2 and NEON owners.

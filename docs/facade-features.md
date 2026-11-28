@@ -3,8 +3,9 @@
 `brynja` and `brynja-crypto` forward the same algorithm features. The examples
 below use `brynja::crypto`; users of `brynja-crypto` replace that prefix with
 `brynja_crypto`. Existing flat portable functions and types are unchanged.
-These APIs require the current unpublished checkout until the planned
-publication checkpoint. No crate version is implied by these examples.
+This table describes the development checkout. In published `brynja 0.30.6`,
+select portable ChaCha20 on `brynja-crypto` or `brynja-cipher-chacha`
+directly; forwarding that feature on `brynja` is new since the tag.
 
 ```sh
 cargo add brynja --path /path/to/brynja/crates/brynja --no-default-features --features sha2-hardened-execution
@@ -19,6 +20,12 @@ selection does not expose that namespace.
 | Feature(s) on either facade | Namespace/API | Profile |
 | --- | --- | --- |
 | `cpu` | `cpu` | Low-level no_std authority and candidate inventory; not host detection |
+| `hazmat-chacha20` | `chacha20::ChaCha20` | Portable IETF stream cipher; no authentication. SSE2/NEON owners are separate leaf opt-ins. |
+| `hazmat-aes-block` | `aes` | Raw AES-128/192/256 blocks, not an authenticated mode |
+| `aes-static-execution`, `aes-runtime-execution` | `aes::execution` | Explicit accelerated block owners and admission |
+| `external-key-provider` | `provider` | External-key lifecycle; combine with raw AES for block operations. No device driver. |
+| `aes-gcm`, `aes-gcm-execution` | `aes_gcm` | Authenticated encryption; optional paired execution |
+| `gmac`, `gmac-execution` | `gmac` | Authentication without encryption; optional paired execution |
 | `hazmat-ghash` | `ghash::Ghash::new` | Portable GHASH, not an authentication tag |
 | `ghash-runtime-execution` | `ghash::Ghash::new_with_backend` | Explicit prefer/require selection; `Ghash::new` remains portable. See the [tested routes and timing limitation](assurance/ghash-acceleration.md). |
 | `general-sha512-t` | `sha2::Sha512T`, `sha2::sha512_t` | General-t extension, including existing hardened portable APIs |
@@ -34,6 +41,11 @@ selection does not expose that namespace.
 | `tuplehash-hardened-execution`, `tuplehash-runtime-execution` | `tuplehash::execution` | Hardened TupleHash/TupleHashXOF |
 | `parallelhash-hardened-execution`, `parallelhash-runtime-execution` | `parallelhash::execution` | Hardened serial/caller-scheduled ParallelHash/ParallelHashXOF |
 | `parallelhash-hardened-batch` | `parallelhash::execution::batch` | Hardened grouped leaves; threading remains a hosted concern |
+
+Only the top-level `brynja` crate has the separate `dtls`, `quic` and
+`platform` flags, for `brynja::dtls`, `brynja::quic_tls` and
+`brynja::platform` respectively. These are package boundaries, not working
+protocol engines. Legacy algorithms remain separate crates by design.
 
 Portable `hmac::Hmac<A>` and its sealed modern SHA-2/SHA-3 adapter identities are
 available without features. These are not ordinary hash types, legacy HMAC, or

@@ -14,7 +14,6 @@ default = []
 
 
 [dependencies]
-brynja-core = { workspace = true }
 brynja-tls12 = { workspace = true }
 brynja-tls13 = { workspace = true }
 

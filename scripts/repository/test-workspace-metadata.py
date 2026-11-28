@@ -9,6 +9,7 @@ import md5_workspace_fixtures
 import parallelhash_workspace_fixtures
 import strict_workspace_policy
 import json
+import re
 import subprocess
 import sys
 import tempfile
@@ -500,10 +501,22 @@ def test_shared_legacy_hmac_pin() -> None:
     print("Shared legacy HMAC pin rejects 12 inheritance/version/feature regressions")
 
 
+def test_facade_feature_guide(document: dict) -> None:
+    guide = (VALIDATOR.resolve().parents[2] / "docs/facade-features.md").read_text()
+    table = guide.split("| Feature(s) on either facade |", 1)[1].split("\n\n", 1)[0]
+    shared = {name for line in table.splitlines() if line.startswith("| `")
+              for name in re.findall(r"`([a-z0-9-]+)`", line.split("|")[1])}
+    for crate, extra in (("brynja-crypto", set()), ("brynja", {"dtls", "quic", "platform"})):
+        declared = set(package(document, crate)["features"]) - {"default"}
+        if declared != shared | extra:
+            raise AssertionError(f"{crate}: manifest and feature guide disagree: {declared ^ (shared | extra)}")
+
+
 def main() -> int:
     test_shared_legacy_hmac_pin()
     no_default = metadata("--no-default-features")
     all_features = metadata("--all-features")
+    test_facade_feature_guide(all_features)
     test_baselines(no_default, all_features)
     parallelhash_workspace_fixtures.check(no_default, all_features, package, node, dependency, require_rejection)
     test_inventory_and_names(all_features)

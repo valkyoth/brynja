@@ -393,6 +393,12 @@ crates before the next public plan. Removing an edge is a package change once;
 it prevents later bumps caused solely by that edge. Do not simply omit a
 dependent whose published dependency requirement must change.
 
+After v0.30.6 the TLS, DTLS, QUIC and platform placeholders dropped unused
+implementation dependencies. The TLS router still owns its TLS 1.2/1.3
+boundaries, and TLS 1.3 and QUIC still share the recordless handshake boundary.
+Once these manifest changes ship, a subsequent ChaCha-only bump reaches
+`brynja-cipher-chacha`, `brynja-crypto` and `brynja`, not these placeholders.
+
 `brynja-interop`, `brynja-proofs`, `brynja-research-ssl1`,
 `brynja-test-support`, and `brynja-xtask` are mechanically prohibited from
 publication. Legacy packages may publish only through their separately

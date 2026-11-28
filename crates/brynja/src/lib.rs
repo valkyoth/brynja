@@ -38,8 +38,9 @@
 //! algorithm outside the hash/MAC/KDF surfaces described above, portable
 //! AES-GCM under `crypto::aes_gcm` and GMAC under `crypto::gmac` with the
 //! respective default-off `aes-gcm` and `gmac` features, the explicit
-//! `general-sha512-t` extension, and the development-only AES-128 block API
-//! under `crypto::aes`, available only with explicit `hazmat-aes-block` opt-in.
+//! `general-sha512-t` extension, raw AES blocks under `crypto::aes`
+//! (`hazmat-aes-block`), and the raw IETF ChaCha20 stream under
+//! `crypto::chacha20` (`hazmat-chacha20`). Neither raw cipher authenticates data.
 //! A separate `external-key-provider` opt-in exposes reusable lifecycle contracts;
 //! enabling both features adds AES-128/192/256 external-key operations, not an HSM driver.
 //! AES-128 uses caller-backed clearing key/output owners;
@@ -76,6 +77,17 @@ pub use brynja_quic_tls as quic_tls;
 
 #[cfg(test)]
 mod tests {
+    #[cfg(feature = "hazmat-chacha20")]
+    #[test]
+    fn portable_chacha20_through_facade() -> Result<(), super::crypto::chacha20::Error> {
+        // RFC 8439 Appendix A.1, test vector #1 (public inputs).
+        let mut prefix = [0; 4];
+        super::crypto::chacha20::ChaCha20::new(&[0; 32], [0; 12], 0)
+            .apply_keystream_in_place(&mut prefix)?;
+        assert_eq!(prefix, [0x76, 0xb8, 0xe0, 0xad]);
+        Ok(())
+    }
+
     #[test]
     fn facade_claims_only_completed_foundation_domains() {
         assert!(!::core::hint::black_box(super::IMPLEMENTED));

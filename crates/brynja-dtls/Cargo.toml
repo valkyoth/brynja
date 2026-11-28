@@ -12,12 +12,5 @@ include = ["Cargo.toml","LICENSE-APACHE","LICENSE-MIT","README.md","src/**/*.rs"
 [features]
 default = []
 
-
-[dependencies]
-brynja-core = { workspace = true }
-brynja-crypto = { workspace = true }
-brynja-pki = { workspace = true }
-brynja-protocol = { workspace = true }
-
 [lints]
 workspace = true

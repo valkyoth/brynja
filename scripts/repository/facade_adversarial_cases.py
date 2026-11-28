@@ -1,5 +1,6 @@
 """Real downstream conformance-unification and protocol-isolation regressions."""
 import json
+import tomllib
 import facade_conformance_cases
 import facade_cshake_cases
 
@@ -119,10 +120,11 @@ def protocols(api, consumer, roots, cargo, env, bare_target):
         manifest = roots[owner] / 'Cargo.toml'
         original = manifest.read_text()
         marker = '[dependencies.brynja-crypto]\n'
-        api.require(original.count(marker) == 1, 'protocol crypto edge missing: ' + package)
+        api.require(marker not in original, 'unexpected protocol crypto edge: ' + package)
+        version = tomllib.loads((roots['brynja-crypto'] / 'Cargo.toml').read_text())['package']['version']
         try:
-            manifest.write_text(original.replace(marker, marker +
-                                'features = ["cpu", "sha2-runtime-execution"]\n'))
+            manifest.write_text(original + '\n' + marker + f'version = "={version}"\n'
+                                'default-features = false\nfeatures = ["cpu", "sha2-runtime-execution"]\n')
             metadata = api.resolved_metadata(cargo, consumer, env, roots)
             try:
                 protocol_graph(json.loads(metadata.stdout))

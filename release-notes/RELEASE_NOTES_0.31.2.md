@@ -1,8 +1,9 @@
 # v0.31.2 — Poly1305 and ChaCha20-Poly1305 CPU acceleration (in development)
 
 This internal milestone follows the signed v0.31.1 tag. No crates are
-selected for publication. Both public Poly1305 and AEAD owners remain
-portable. No accelerated backend is admitted by this first experiment.
+selected for publication. Ordinary Poly1305 and AEAD construction remains
+portable. The standalone Poly1305 crate now has an explicit Linux x86-64
+AVX2 owner; the other architectures and accelerated AEAD pairing remain open.
 
 ## First experiment: native x86-64 AVX2 arithmetic
 
@@ -225,3 +226,49 @@ falling back. Measured Linux x86-64 ELF SHA-256:
 `a31bbee2b03ac3a6f44523ff8faa3dcf40a34b029d63a2e7dc79495137814074`
 (1.90.0), `bb3343227007c922fb35c3230a076d195ae775d34a6d5abe23b1c882ca1198eb`
 (1.100.0). This is an internal result, not x86 or AEAD backend admission.
+
+### Integrated 25-weight comparison
+
+Keep the preceding owner, checked import, CPU probe and benchmark driver
+unchanged. Replace only the kernel's nine-row representation with the original
+layout of 25 prepacked vector weights, cleared at the end of each long update.
+Apply the same four-cell pass rule to the two compilers on CPU 0, with one
+campaign per compiler and all 312 paired samples retained. A result below
+the threshold stays recorded; it does not trigger another run.
+
+**Decision: retain the 25-weight kernel in the standalone crate behind
+`poly1305-avx2`, off by default and currently Linux x86-64 only.** All four
+required medians exceeded one. The 1500-byte result on Rust 1.90.0 was
+essentially a tie, not a meaningful speed claim. Chunk boundaries matter:
+the Rust 1.90.0 candidate lost at 1024 bytes (0.946×), and 17-byte updates
+were slower on both compilers. Leave ordinary `start()` portable.
+
+| Message / update bytes | Rust 1.90.0 | Rust 1.100.0 |
+| --- | ---: | ---: |
+| 1500 / 1500 | 1.001 | 1.254 |
+| 4096 / 4096 | 1.117 | 1.498 |
+| 16384 / 16384 | 1.173 | 1.629 |
+| 16384 / 1500 | 1.017 | 1.292 |
+| 16384 / 17 | 0.920 | 0.927 |
+
+[All 312 paired samples](../assurance/poly1305/avx2-integrated-25-ryzen.csv)
+measure stock optimized builds of the downstream `integrated_owner --bench`
+fixture on the Ryzen 9 9950X3D. Measured ELF SHA-256:
+`1bbf3ececad783e3078aba7bf6ab57ee71f7e29e734be6585b9cb9d62a42a690`
+(1.90.0), `2855c224bf830d2d41c28a0c0d70bebf0b812eee2e4671212215e0dc4a7831a3`
+(1.100.0). These are throughput observations, not timing-leakage evidence.
+
+To replay the correctness and linked-instruction checks without benchmarking:
+
+```sh
+python3 scripts/cryptography/check-poly1305-avx2-admission.py
+```
+
+The final owner passed the 12 RFC cases, 65 generated boundary/long records,
+split and bad-tag checks on both endpoints, and the integrated suite under
+x86-64 AddressSanitizer. The screens follow startup and public updates to
+the same kernel and require AVX2 wide multiplies. Positive and AVX2-masked
+QEMU executions distinguish availability, not throughput. Separately, a
+one-limb mismatch in the expected startup answer in a disposable build
+returned `Quarantined` on both compilers. The unchanged portable verifier
+instruction pins still pass without the feature.

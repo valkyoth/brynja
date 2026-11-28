@@ -43,6 +43,33 @@ def replay(cmd, env, cwd, expected):
         raise ValueError(f'unexpected replay: {p.returncode}, {p.stdout!r}, {p.stderr!r}')
 
 
+def owner_screen(image, version):
+    cpu = 'brynja_crypto_cpu::poly1305_avx2::'
+    group = elf.unique(image, cpu + 'kernel::group')
+    absorb = elf.unique(image, cpu + 'kernel::absorb')
+    update = elf.unique(image, 'brynja_mac_poly1305::execution::Poly1305Avx2::update')
+    dispatch = elf.unique(image, cpu + 'Avx2::absorb_groups')
+    probe = elf.unique(image, cpu + 'Avx2::probe')
+    for caller, callee in [(update, dispatch), (dispatch, absorb), (probe, absorb), (absorb, group)]:
+        if callee not in image.calls(caller):
+            raise ValueError('missing integrated call edge from ' + image.names[caller])
+    calls = list(image.calls(group))
+    if version == '1.90.0':
+        leaves = {a for a in calls if image.names[a] == cpu + 'kernel::group::_$u7b$$u7b$closure$u7d$$u7d$'
+                  and calls.count(a) == 5}
+        if len(leaves) != 1:
+            raise ValueError('missing five integrated column calls')
+        leaf, = leaves
+        expected = 5
+    elif version == '1.100.0':
+        leaf, expected = group, 25
+    else:
+        raise ValueError('unknown compiler')
+    if sum(op == 'vpmuludq' and '%ymm' in args for op, args in image.bodies[leaf]) != expected:
+        raise ValueError('missing integrated four-lane unsigned multiply')
+    return leaf
+
+
 def check(version):
     with cargo.private_directory(ROOT) as tmp:
         root = Path(tmp)
@@ -76,6 +103,32 @@ def check(version):
         if elf.digest(exe) != digest:
             raise ValueError('executable changed during replay')
         print(f'Rust {version}: native corpus, linked kernel and QEMU ISA controls passed; ELF {digest}')
+        args = ['cargo', '+' + version, '--offline', '--locked', '--release',
+                '--target', target, '--features', 'native-owner',
+                '--manifest-path', str(ROOT / 'assurance/poly1305/Cargo.toml')]
+        for subcmd, selector, name in [('test', '--test', 'integrated_vectors'),
+                                       ('build', '--example', 'integrated_owner')]:
+            subprocess.run([*args[:2], subcmd, *args[2:], selector, name],
+                           cwd=root, env=env, check=True, timeout=180)
+        exe = exe.with_name('integrated_owner')
+        digest = elf.digest(exe)
+        image = elf.load(exe)
+        leaf = owner_screen(image, version)
+        image.bodies[leaf] = [(op, arg) for op, arg in image.bodies[leaf] if op != 'vpmuludq']
+        try:
+            owner_screen(image, version)
+        except ValueError as failure:
+            if str(failure) != 'missing integrated four-lane unsigned multiply':
+                raise
+        else:
+            raise ValueError('integrated screen accepted missing vector multiplication')
+        replay([exe], env, root, (0, '', ''))
+        replay(['qemu-x86_64', '-cpu', 'max', exe], env, root, (0, '', ''))
+        replay(['qemu-x86_64', '-cpu', 'max,-avx2', exe], env, root,
+               (2, '', 'required AVX2: Unavailable\n'))
+        if elf.digest(exe) != digest:
+            raise ValueError('integrated executable changed during replay')
+        print(f'Rust {version}: integrated owner, vectors and ISA controls passed; ELF {digest}')
 
 
 if __name__ == '__main__':

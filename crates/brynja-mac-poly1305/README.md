@@ -31,6 +31,7 @@
 | Capability | Implemented | Independent verification |
 | --- | --- | --- |
 | Portable streaming Poly1305, full 16-byte tags | ✅ Implemented | ❌ Not independently verified |
+| Explicit Linux x86-64 AVX2 message owner (development checkout) | ✅ Implemented | ❌ Not independently verified |
 | ChaCha20-Poly1305 or key derivation | Not provided | Not applicable |
 
 Use a fresh, unpredictable 32-byte one-time key for **every** message. Never
@@ -64,7 +65,15 @@ fn verify_record(key: &mut [u8; 32], record: &[u8], tag: &[u8; 16]) -> Result<()
 
 ## Hardware and SIMD
 
-Portable scalar Rust only. No CPU dispatch or target timing qualification.
+Ordinary `start()` is portable, even when the standalone crate's default-off
+`poly1305-avx2` feature is enabled. On Linux x86-64, probe once with
+`execution::Avx2::probe()`, then use `OneTimeKey::new(key)?.start_avx2(&mut cpu)?`
+for each fresh key. Only a missing ISA is `AdmissionError::Unavailable`; a
+failed startup test or interrupted native computation is not a fallback signal.
+The host must maintain AVX2 support for the lifetime of the handle. Updates
+with fewer than 1024 contiguous bytes after completing any buffered block use
+scalar arithmetic. For many tiny updates prefer the portable owner. This does
+not accelerate AEAD or establish target timing qualification.
 In particular, a 32-bit target can lower wide products to instructions or
 runtime helpers with operand-dependent latency. A Cortex-M compile check
 does not qualify its multiplier. Use `verify` for received tags, not `==`

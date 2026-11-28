@@ -11,9 +11,13 @@ include = ["Cargo.toml", "LICENSE-APACHE", "LICENSE-MIT", "README.md", "src/**/*
 
 [features]
 default = []
+poly1305-avx2 = ["dep:brynja-crypto-cpu", "brynja-crypto-cpu/poly1305-avx2"]
 
 [dependencies]
 brynja-core = { workspace = true }
+
+[target.'cfg(all(target_arch = "x86_64", target_os = "linux"))'.dependencies]
+brynja-crypto-cpu = { workspace = true, optional = true }
 
 [lints]
 workspace = true

@@ -7,7 +7,8 @@ registry links and the [feature guide](facade-features.md) for what to select.
 Publication is not independent verification or authorization to use an unfinished protocol.
 
 Development has started on [v0.31.2: Poly1305 and AEAD acceleration](../release-notes/RELEASE_NOTES_0.31.2.md).
-The public owners still use the portable implementation.
+The standalone Poly1305 crate now has an explicit, default-off Linux x86-64
+AVX2 owner. Ordinary MAC construction and ChaCha20-Poly1305 remain portable.
 
 [v0.31.1: portable ChaCha20-Poly1305](../release-notes/RELEASE_NOTES_0.31.1.md) is internally tagged.
 The [unpublished leaf](../crates/brynja-aead-chacha20poly1305/README.md)

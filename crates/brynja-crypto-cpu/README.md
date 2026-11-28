@@ -143,6 +143,12 @@ the process can run on.
 
 ## Hardware and SIMD selection
 
+In the v0.31.2 development checkout, `poly1305-avx2` adds a default-off
+Linux x86-64 capability. Probe once per handle; the two-group startup test
+must pass. Applications should use the one-time-key owner in
+`brynja-mac-poly1305`, not the low-level accumulator interface. This feature
+does not select a backend for AEAD or pin threads to CPUs.
+
 - `static-execution`: explicit ordinary raw sessions for x86-64 SHA and
   AVX2 Keccak, or AArch64 SHA2/SHA-512/SHA3 with required NEON support.
 - `runtime-execution`: low-level platform-proof boundary. Hosted applications

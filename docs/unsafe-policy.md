@@ -1,9 +1,11 @@
 # Unsafe Rust Policy
 
-Status: 115 exact source-hash-bound exceptions inventoried, including three Linux OS-resource modules, four Windows enclave boundary modules and thirteen private Darwin resident-resource modules; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: 117 exact source-hash-bound exceptions inventoried, including three Linux OS-resource modules, four Windows enclave boundary modules and thirteen private Darwin resident-resource modules; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only 115 exact modules: the private core volatile clearer and
+Rust in only 117 exact modules: the opt-in Linux x86-64 Poly1305 AVX2 capability
+and its kernel (one feature-checked call, one exclusive 800-byte table wipe);
+the private core volatile clearer and
 checked secret-initialization transfer; the
 SHA-256 and Keccak session-attestation boundaries; the x86_64 SHA and AVX2
 Keccak kernels; the AArch64 SHA2/SHA-512 and SHA3 Keccak kernels; the RISC-V

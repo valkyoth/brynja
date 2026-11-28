@@ -58,6 +58,8 @@ def direct_features(owner, dependency):
 
 
 def cpu_target(owner, dependency):
+    if (owner, dependency) == ("brynja-mac-poly1305", "brynja-crypto-cpu"):
+        return 'cfg(all(target_arch = "x86_64", target_os = "linux"))'
     return 'cfg(any(target_arch = "x86_64", target_arch = "aarch64"))' if (owner, dependency) == ("brynja-cipher-chacha", "brynja-crypto-cpu") else None
 
 

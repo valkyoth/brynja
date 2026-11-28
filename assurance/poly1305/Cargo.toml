@@ -7,6 +7,17 @@ publish = false
 
 [workspace]
 
+[features]
+native-owner = ["brynja-mac-poly1305/poly1305-avx2"]
+
+[[example]]
+name = "integrated_owner"
+required-features = ["native-owner"]
+
+[[test]]
+name = "integrated_vectors"
+required-features = ["native-owner"]
+
 [dependencies]
 brynja-mac-poly1305 = { path = "../../crates/brynja-mac-poly1305" }
 

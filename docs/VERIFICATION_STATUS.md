@@ -4,6 +4,14 @@ For package availability, see the [official crate directory](../README.md#worksp
 The evidence below describes specific builds and milestones; publishing their
 crates at the v0.30.6 checkpoint did not expand any verification claim.
 
+## Opt-in Linux x86-64 Poly1305 (v0.31.2, in development)
+
+The [25-weight AVX2 results](../release-notes/RELEASE_NOTES_0.31.2.md#integrated-25-weight-comparison)
+cover the standalone owner on two named compilers, not AEAD or other targets.
+Native known answers, streaming, tag rejection, key cleanup and ISA-masked
+controls passed. Short updates can be slower than portable. No independent
+review or target-wide constant-time qualification is claimed.
+
 ## Portable ChaCha20-Poly1305 (v0.31.1, internally tagged)
 
 Both compiler endpoints passed the RFC vectors and 813 independently

@@ -5,6 +5,9 @@
 
 mod field;
 
+#[cfg(all(feature = "poly1305-avx2", target_arch = "x86_64", target_os = "linux"))]
+pub mod execution;
+
 use brynja_core::{
     accumulate_secret_byte_difference, clear_owned_region, secret_difference_is_zero,
 };
@@ -84,6 +87,9 @@ pub enum Error {
     Authentication,
     /// The imported key's clamped multiplier was zero.
     DegenerateKey,
+    /// The requested accelerated operation was interrupted or its handle retired.
+    #[cfg(all(feature = "poly1305-avx2", target_arch = "x86_64", target_os = "linux"))]
+    Quarantined,
 }
 
 /// The state of one message. No reset, clone, heap allocation or tag truncation.

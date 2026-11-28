@@ -222,12 +222,15 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
     if name == "brynja-cipher-chacha":
         for feature in ("chacha20-sse2", "chacha20-neon"):
             expected[feature] = ["hazmat-chacha20", "dep:brynja-crypto-cpu", "brynja-crypto-cpu/" + feature]
+    if name == "brynja-mac-poly1305":
+        expected["poly1305-avx2"] = ["dep:brynja-crypto-cpu", "brynja-crypto-cpu/poly1305-avx2"]
     if name in legacy_hmac_policy.FEATURE_SETS:
         expected = legacy_hmac_policy.FEATURE_SETS[name]
     if name == "brynja-mac-hmac":
         expected["hardened-execution"] = ["dep:brynja-crypto-cpu", "brynja-crypto-cpu/hardened-execution", "brynja-hash-sha2/hardened-execution", "brynja-hash-sha3/hardened-execution"]
         expected["runtime-execution"] = ["hardened-execution", "brynja-crypto-cpu/runtime-execution", "brynja-hash-sha2/runtime-execution", "brynja-hash-sha3/runtime-execution"]
     if name == "brynja-crypto-cpu":
+        expected["poly1305-avx2"] = ["dep:brynja-core"]
         expected["aes-static-execution"] = []
         expected["aes-runtime-execution"] = ["aes-static-execution"]
         expected["ghash-runtime-execution"] = []

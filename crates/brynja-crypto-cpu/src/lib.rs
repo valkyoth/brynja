@@ -10,6 +10,9 @@
 
 #![no_std]
 
+#[cfg(all(feature = "poly1305-avx2", target_arch = "x86_64", target_os = "linux"))]
+pub mod poly1305_avx2;
+
 #[cfg(all(
     feature = "chacha20-sse2",
     target_arch = "x86_64",
@@ -131,6 +134,7 @@ pub const ADMITTED_BACKEND_COUNT: usize = 0;
 
 #[cfg(any(
     test,
+    all(feature = "poly1305-avx2", target_arch = "x86_64", target_os = "linux"),
     all(
         feature = "ghash-runtime-execution",
         target_arch = "aarch64",

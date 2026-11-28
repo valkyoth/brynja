@@ -96553,10 +96553,10 @@
       ],
       "success": {
         "contains": [
-          "cryptographic API register covers 137 capabilities, 8 current and 10 registered capability owners, and 72 planned secret owners"
+          "cryptographic API register covers 137 capabilities, 8 current and 10 registered capability owners, and 73 planned secret owners"
         ],
         "unique_lines": [
-          "cryptographic API register covers 137 capabilities, 8 current and 10 registered capability owners, and 72 planned secret owners"
+          "cryptographic API register covers 137 capabilities, 8 current and 10 registered capability owners, and 73 planned secret owners"
         ]
       },
       "timeout_seconds": 300,

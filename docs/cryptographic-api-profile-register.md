@@ -7,7 +7,7 @@ Generated from the reviewed policy and semantic standards surfaces. Do not edit 
 - Current secret owners: **8**
 - Registered capability owners: **10**
 - Development-only variant owners: **3**
-- Planned secret owners: **72**
+- Planned secret owners: **73**
 
 ## Profile Coverage
 

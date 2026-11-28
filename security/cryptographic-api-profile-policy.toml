@@ -643,7 +643,7 @@ verification = "not-applicable"
 
 [profile.aead-detached-borrowed]
 kind = "construction"
-secret_template = "none"
+secret_template = "borrowed-aead-key"
 required = ["operation-direction", "byte-input", "one-shot", "verification", "buffers", "overlap", "ownership", "backend", "no-std"]
 forbidden = ["bit-input", "fixed-output", "extendable-output", "export", "reset", "clone", "snapshot"]
 caller_owned = ["generation", "import"]
@@ -935,6 +935,11 @@ secret_output_classification = "typed-secret-owned"
 fields = ["key", "expanded-key", "counter-or-tweak", "phase"]
 temporaries = ["round-state", "keystream-block", "tail-block", "output-staging"]
 secret_output_classification = "typed-secret-owned"
+
+[secret-template.borrowed-aead-key]
+fields = ["sender/receiver:borrowed-caller-key", "sender:public-nonce-prefix", "sender:public-counter-reservation"]
+temporaries = ["derived-poly1305-key:guarded-operation-storage", "authentication-state:delegated-poly1305-owner", "keystream:delegated-chacha20-owner", "plaintext-or-ciphertext:guarded-caller-scratch"]
+secret_output_classification = "caller-owned-secret"
 
 [secret-template.aead-key]
 fields = ["key", "nonce-state", "authentication-state", "counter", "phase"]
@@ -1489,7 +1494,7 @@ sha256 = "6d8dabab3361a71acacda4bc364380bf9c10e6a005984b1ba774f4f1a6a287a3"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"
-sha256 = "5bce2111b16e68a4c9fd4770c213c106e3bf19e162b0036cdaff5850eb0d3a71"
+sha256 = "1288a1ea0f445f206af5aa075f036d2ece0f5acc33b0e264fed2ac96eccb1a13"
 
 [[reviewed-source]]
 path = "scripts/cryptography/check-secret-owner-compiler.py"
@@ -1509,7 +1514,7 @@ sha256 = "107bfea74f0dacc422e930332485ac3279a70a087fc74a30d3628196c676779d"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-api-profiles.py"
-sha256 = "7896091cc5028db581c6dc061bc2467470f2e4ecf32ea6a9344d899809794480"
+sha256 = "d13772b1d29e9f9eb6254a0750add07daeceebde06c8c9d90b065e8b59ac9cac"
 
 [[reviewed-source]]
 path = "crates/brynja-aead-chacha20poly1305/src/lib.rs"

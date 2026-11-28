@@ -305,8 +305,22 @@ def main() -> int:
     assert len(first["api_dimensions"]) == 22
     assert len(first["current_secret_owners"]) == 8
     assert len(first["registered_secret_owners"]) == 10
-    assert len(first["planned_secret_owners"]) == 72
-    assert all(row["capability"] != aead["id"] for row in first["planned_secret_owners"])
+    assert len(first["planned_secret_owners"]) == 73
+    borrowed, = (r for r in first["planned_secret_owners"] if r["capability"] == aead["id"])
+    assert borrowed["state"] == "planned" and aead["ordinary_hardened_separation"] == "required"
+    assert set(borrowed["fields"]) == {"sender/receiver:borrowed-caller-key",
+        "sender:public-nonce-prefix", "sender:public-counter-reservation"}
+    assert set(borrowed["temporaries"]) == {"derived-poly1305-key:guarded-operation-storage",
+        "authentication-state:delegated-poly1305-owner", "keystream:delegated-chacha20-owner",
+        "plaintext-or-ciphertext:guarded-caller-scratch"}
+    assert borrowed["operations"]["open"] == {"output_classification": "caller-owned-secret",
+        "partial_failure_policy": "unchanged-destination", "verification": "before-output-release"}
+    def erase_secret_inventory(policy, _surfaces):
+        policy["profile"][detached]["secret_template"] = "none"
+    rejects(erase_secret_inventory, "detached AEAD borrowed-key")
+    def claim_owned_plaintext(policy, _surfaces):
+        policy["secret-template"]["borrowed-aead-key"]["secret_output_classification"] = "typed-secret-owned"
+    rejects(claim_owned_plaintext, "differs from secret template")
     assert len(first['development_secret_owners']) == 3
     development = first['development_secret_owners'][0]
     assert development['id'] == 'development.algorithm.aes128'

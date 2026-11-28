@@ -172,7 +172,7 @@ def validate_profile(name: str, profile: dict, dimensions: set[str], policy: dic
     operations = profile["operations"]
     if expected_operations is None or set(operations) != set(expected_operations):
         fail(f"profile {name} operation inventory drifted")
-    secret_outputs = 0
+    secret_outputs = set()
     for operation, output in operations.items():
         exact_keys(output, OPERATION_KEYS, f"profile {name} operation {operation}")
         actual = (
@@ -188,12 +188,16 @@ def validate_profile(name: str, profile: dict, dimensions: set[str], policy: dic
         if output["verification"] not in policy["output"]["verification_policies"]:
             fail(f"profile {name} operation {operation} has unknown verification policy")
         if output["output_classification"] == "typed-secret-owned":
-            secret_outputs += 1
+            secret_outputs.add("typed-secret-owned")
             if output["partial_failure_policy"] != "clear-complete-secret-destination":
                 fail(f"profile {name} operation {operation} leaves secret output uncleared")
+        elif output["output_classification"] == "caller-owned-secret":
+            secret_outputs.add("caller-owned-secret")
     if secret_template != "none":
         template = policy["secret-template"][secret_template]
-        if template["secret_output_classification"] != "typed-secret-owned" or not secret_outputs:
+        classification = ("caller-owned-secret" if name == "aead-detached-borrowed"
+                          else "typed-secret-owned")
+        if template["secret_output_classification"] != classification or classification not in secret_outputs:
             fail(f"profile {name} differs from secret template {secret_template}")
     consumers = profile["consumers"]
     if not consumers or len(consumers) != len(set(consumers)) or not all(
@@ -309,7 +313,7 @@ def validate_policy(policy: dict, surfaces: dict, root: Path = ROOT) -> dict[str
     if {k for k, v in assignments.items() if v == detached} != {"algorithm.chacha20-poly1305"}:
         fail("detached AEAD capability assignment drifted")
     profile = policy["profile"][detached]
-    if (profile["secret_template"] != "none" or set(profile["caller_owned"]) != {"generation", "import"}
+    if (profile["secret_template"] != "borrowed-aead-key" or set(profile["caller_owned"]) != {"generation", "import"}
             or set(profile["not_applicable"]) != {"incremental-state", "provider", "hosted-adapter", "cancellation"}
             or set(profile["required"]) != {"operation-direction", "byte-input", "one-shot", "verification",
                                              "buffers", "overlap", "ownership", "backend", "no-std"}):
@@ -336,7 +340,8 @@ def validate_secret_policy(
         exact_keys(template, {"fields", "temporaries", "secret_output_classification"}, f"secret template {name}")
         if not template["fields"] or not template["temporaries"]:
             fail(f"secret template {name} lacks fields or temporaries")
-        if template["secret_output_classification"] != "typed-secret-owned":
+        expected = "caller-owned-secret" if name == "borrowed-aead-key" else "typed-secret-owned"
+        if template["secret_output_classification"] != expected:
             fail(f"secret template {name} has invalid output classification")
     owners = policy["current-secret-owner"]
     ids = [owner.get("id") for owner in owners]

@@ -3,6 +3,16 @@
 This is functional evidence for the portable AEAD leaf. It does not establish
 machine-code timing, physical fault resistance, or independent verification.
 
+## Protocol sender integration (deferred)
+
+Do not use this sender for TLS, DTLS or QUIC record/packet protection: its
+prefix and big-endian counter are not a static IV XOR padded sequence number.
+Before any such integration (including the [TLS 1.3 record-protection milestone](../RELEASE_PLAN.md#v01070---tls-13-record-protection)),
+review the protocol's sequence and key-update rules and test the exact nonce
+bytes, exhaustion and failure behavior. Do not create a new single-message
+sender per record to bypass this boundary. The portable opener does not
+enforce protocol replay or usage limits.
+
 ## Independent answers
 
 Run `python3 scripts/cryptography/check-chacha20poly1305-vectors.py --rust 1.90.0 --oracle --differential`

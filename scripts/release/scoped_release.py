@@ -7,6 +7,7 @@ identity and status only; it never reruns the gate or deep verification.
 from __future__ import annotations
 
 import argparse
+import contextlib
 import datetime
 import json
 import re
@@ -14,6 +15,7 @@ import signal
 import os
 import subprocess
 import sys
+import tempfile
 import time
 import tomllib
 from pathlib import Path
@@ -40,7 +42,8 @@ def load(version: str, root: Path = ROOT) -> dict:
         raise ValueError('review the finite final-checks.toml list for this version first')
     seen = set()
     for check in plan['checks']:
-        if (set(check) != {'id', 'command', 'timeout_seconds'}
+        if (set(check) - {'fresh_cargo_target'} != {'id', 'command', 'timeout_seconds'}
+                or type(check.get('fresh_cargo_target', False)) is not bool
                 or not re.fullmatch(r'[a-z0-9-]+', check['id'])
                 or check['id'] in seen or not check['command']
                 or not all(isinstance(x, str) and x for x in check['command'])
@@ -120,13 +123,22 @@ def candidate(version: str, root: Path = ROOT) -> None:
 def execute(check: dict, root: Path = ROOT) -> None:
     print(f"RUN {check['id']}: {check['command']}", flush=True)
     started = time.monotonic()
-    with subprocess.Popen(check['command'], cwd=root, start_new_session=True) as child:
-        try:
-            status = child.wait(timeout=check['timeout_seconds'])
-        except (subprocess.TimeoutExpired, KeyboardInterrupt):
-            os.killpg(child.pid, signal.SIGKILL)
-            child.wait()
-            raise
+    fresh = check['command'][0] == 'cargo' or check.get('fresh_cargo_target', False)
+    with (tempfile.TemporaryDirectory(prefix='brynja-gate-') if fresh
+          else contextlib.nullcontext()) as scratch:
+        env = None
+        if scratch:
+            target = str(Path(scratch) / 'target')
+            build = str(Path(scratch) / 'build')
+            env = dict(os.environ, CARGO_TARGET_DIR=target, CARGO_BUILD_TARGET_DIR=target,
+                       CARGO_BUILD_BUILD_DIR=build, CARGO_BUILD_DIR=build)
+        with subprocess.Popen(check['command'], cwd=root, env=env, start_new_session=True) as child:
+            try:
+                status = child.wait(timeout=check['timeout_seconds'])
+            except (subprocess.TimeoutExpired, KeyboardInterrupt):
+                os.killpg(child.pid, signal.SIGKILL)
+                child.wait()
+                raise
     if status:
         raise RuntimeError(f"{check['id']} failed ({status}); completed checks need not be repeated")
     print(f"PASS {check['id']} ({time.monotonic() - started:.1f}s)", flush=True)

@@ -609,6 +609,37 @@ class ScopedRelease(unittest.TestCase):
             with self.assertRaises((RuntimeError, subprocess.TimeoutExpired)):
                 scoped.execute(dict(id='fixture', command=command, timeout_seconds=1), self.root)
 
+    def test_stale_cargo_artifacts_never_reach_direct_or_vector_checks(self):
+        stale = self.root / 'stale-target'
+        stale.mkdir()
+        (stale / 'old-test-binary').touch()
+        keys = ('CARGO_TARGET_DIR', 'CARGO_BUILD_TARGET_DIR', 'CARGO_BUILD_DIR', 'CARGO_BUILD_BUILD_DIR')
+        probe = ('from pathlib import Path\nimport os,sys\n'
+                 f'paths = [Path(os.environ[k]) for k in {keys!r}]\n'
+                 'assert paths[0] == paths[1] and paths[2] == paths[3]\n'
+                 'assert not any(p.exists() for p in paths)\n'
+                 'paths[0].mkdir(); (paths[0]/"binary").touch()\n'
+                 'Path("observed").write_text(str(paths[0].parent))\n'
+                 'sys.exit(int(sys.argv[1]))\n')
+        cargo = self.root / 'cargo'
+        cargo.write_text('#!/usr/bin/env python3\n' + probe)
+        cargo.chmod(0o700)
+        with patch.dict(os.environ, {**dict.fromkeys(keys, str(stale)),
+                                     'PATH': str(self.root) + os.pathsep + os.environ['PATH']}):
+            scoped.execute(dict(id='direct', command=['cargo', '0'], timeout_seconds=10), self.root)
+            first = Path((self.root / 'observed').read_text())
+            self.assertFalse(first.exists())
+            with self.assertRaises(RuntimeError):
+                scoped.execute(dict(id='vector', command=['python3', '-c', probe, '1'],
+                                    fresh_cargo_target=True, timeout_seconds=10), self.root)
+            second = Path((self.root / 'observed').read_text())
+            self.assertNotEqual(first, second)
+            self.assertFalse(second.exists())
+        self.assertTrue((stale / 'old-test-binary').is_file())
+        plan = scoped.load('0.31.1')
+        for name in ('chacha20poly1305-vectors', 'poly1305-vectors'):
+            self.assertTrue(next(c for c in plan['checks'] if c['id'] == name)['fresh_cargo_target'])
+
 
 class ReviewBindingTests(unittest.TestCase):
     write = ScopedRelease.write

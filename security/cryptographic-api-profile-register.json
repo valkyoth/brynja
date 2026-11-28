@@ -595,7 +595,7 @@
           "verification": "not-applicable"
         }
       },
-      "ordinary_hardened_separation": "not-applicable",
+      "ordinary_hardened_separation": "required",
       "owner": "0.31.1",
       "profile": "aead-detached-borrowed",
       "test_target": "crates/brynja-aead-chacha20poly1305/src/interruptions.rs#public_operations_burn_once_and_commit_only_on_success"
@@ -20097,6 +20097,66 @@
       ]
     },
     {
+      "capability": "algorithm.chacha20-poly1305",
+      "evidence": [
+        "crates/brynja-aead-chacha20poly1305/src/interruptions.rs#public_operations_burn_once_and_commit_only_on_success",
+        "scripts/zeroization/check-zeroization-codegen.sh"
+      ],
+      "fields": [
+        "sender/receiver:borrowed-caller-key",
+        "sender:public-nonce-prefix",
+        "sender:public-counter-reservation"
+      ],
+      "id": "planned.algorithm.chacha20-poly1305",
+      "lifecycle_edges": [
+        "creation",
+        "success",
+        "error",
+        "cancellation",
+        "replacement",
+        "rekey",
+        "failed-construction",
+        "recoverable-unwind",
+        "drop"
+      ],
+      "operations": {
+        "open": {
+          "output_classification": "caller-owned-secret",
+          "partial_failure_policy": "unchanged-destination",
+          "verification": "before-output-release"
+        },
+        "seal": {
+          "output_classification": "explicit-public-declassification",
+          "partial_failure_policy": "unchanged-destination",
+          "verification": "not-applicable"
+        }
+      },
+      "owner": "0.31.1",
+      "planned_cleanup_contract": "mandatory-core-or-separately-reviewed-equivalent",
+      "planned_implementation_target": "crates/brynja-aead-chacha20poly1305/src/lib.rs",
+      "residual_risks": [
+        "mem-forget",
+        "process-abort",
+        "forced-termination",
+        "power-loss",
+        "register-copies",
+        "cpu-caches",
+        "compiler-created-copies",
+        "crash-dumps",
+        "suspend-images",
+        "os-swap-and-paging",
+        "dma-visible-copies",
+        "physical-memory-remanence"
+      ],
+      "state": "planned",
+      "temporaries": [
+        "derived-poly1305-key:guarded-operation-storage",
+        "authentication-state:delegated-poly1305-owner",
+        "keystream:delegated-chacha20-owner",
+        "plaintext-or-ciphertext:guarded-caller-scratch"
+      ]
+    },
+    {
       "capability": "algorithm.ecdhe-ml-kem",
       "evidence": [
         "tests/surface/hybrid.rs#standard_groups",
@@ -24889,7 +24949,7 @@
       ]
     }
   ],
-  "policy_sha256": "2bda458a4c1dc848cbb5d29fa5c540280b2f45ecd9de52e35b70a15d7180ff4e",
+  "policy_sha256": "a16500d73d1656bac7014ceb26530b71ae4e58e4f2857cbe0fdb9771a732c270",
   "registered_secret_owners": [
     {
       "capability": "algorithm.hkdf",

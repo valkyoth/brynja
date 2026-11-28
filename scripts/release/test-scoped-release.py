@@ -157,7 +157,7 @@ class ScopedRelease(unittest.TestCase):
             scoped.enabled('garbage')
 
     def test_chacha20poly1305_internal_milestone_is_scoped_and_does_not_publish(self):
-        plan = scoped.load('0.31.1')
+        plan = scoped.load('0.31.2')
         commands = {check['id']: check['command'] for check in plan['checks']}
         self.assertEqual(len(commands), 46)
         self.assertEqual(commands['chacha20poly1305-packaged-endpoints'],
@@ -257,11 +257,11 @@ class ScopedRelease(unittest.TestCase):
                                  or 'check-aes-kani.py' in arg
                                  or 'check-aes-dataflow.py' in arg for arg in command))
         release = tomllib.loads((scoped.ROOT / 'release-crates.toml').read_text())
-        self.assertEqual(release['release']['version'], '0.31.1')
+        self.assertEqual(release['release']['version'], '0.31.2')
         self.assertEqual(release['release']['baseline'], '0.30.6')
-        self.assertEqual(release['crates']['brynja']['previous_version'], '0.31.0')
+        self.assertEqual(release['crates']['brynja']['previous_version'], '0.31.1')
         self.assertEqual(release['crates']['brynja']['change'], 'code')
-        self.assertEqual(release['release']['cumulative_milestones'], ['0.31.0', '0.31.1'])
+        self.assertEqual(release['release']['cumulative_milestones'], ['0.31.0', '0.31.1', '0.31.2'])
         self.assertIn('standalone portable Poly1305', plan['scope'])
         for name in ('brynja-cipher-aes', 'brynja-universal-hash-ghash'):
             self.assertLess(publisher.PUBLISH_ORDER.index(name), publisher.PUBLISH_ORDER.index('brynja-aead-gcm'))
@@ -636,7 +636,7 @@ class ScopedRelease(unittest.TestCase):
             self.assertNotEqual(first, second)
             self.assertFalse(second.exists())
         self.assertTrue((stale / 'old-test-binary').is_file())
-        plan = scoped.load('0.31.1')
+        plan = scoped.load('0.31.2')
         for name in ('chacha20poly1305-vectors', 'poly1305-vectors'):
             self.assertTrue(next(c for c in plan['checks'] if c['id'] == name)['fresh_cargo_target'])
 

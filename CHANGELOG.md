@@ -1,6 +1,11 @@
 # Changelog
 
-## 0.31.1 portable ChaCha20-Poly1305 (in development)
+## 0.31.2 Poly1305 and AEAD acceleration (in development)
+
+- Start an unpublished four-block Poly1305 candidate; no backend admission or
+  change to portable dispatch. [Scope](release-notes/RELEASE_NOTES_0.31.2.md).
+
+## 0.31.1 portable ChaCha20-Poly1305 (internally tagged)
 
 - Add an unpublished portable ChaCha20-Poly1305 leaf. Its in-place and
   disjoint seal/open APIs are tested against both RFC 8439 AEAD examples.

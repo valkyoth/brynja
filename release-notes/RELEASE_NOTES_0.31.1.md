@@ -1,4 +1,4 @@
-# v0.31.1 — Portable ChaCha20-Poly1305 (in development)
+# v0.31.1 — Portable ChaCha20-Poly1305 (internally tagged)
 
 This internal milestone follows v0.31.0. No crate is selected for publication.
 The [development leaf](../crates/brynja-aead-chacha20poly1305/README.md) exposes
@@ -40,5 +40,5 @@ Remaining work is tracked in the [release plan](../docs/RELEASE_PLAN.md#v0311---
   owned secret output. The API borrows the key, preserves the destination on
   failure and does not generate keys. The two official RFC answers also ship
   as leaf unit tests.
-- Scoped pentest/retest disposition, final gate, green GitHub and tag remain
-  release steps. Acceleration belongs to v0.31.2.
+- The [scoped retest](../security/pentest/v0.31.1.md) and final checks passed;
+  v0.31.1 is internally tagged. Acceleration belongs to v0.31.2.

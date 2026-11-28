@@ -7493,7 +7493,7 @@ Exit criteria:
 
 ### v0.31.1 - Complete ChaCha20-Poly1305
 
-Status: in progress
+Status: released
 
 Plan scope: Build `brynja-aead-chacha20poly1305` over the ChaCha20 and Poly1305 crates. Compose the exact admitted ChaCha20 and Poly1305 owners into complete RFC 8439 AEAD seal and open with AAD, nonce and length limits, one-time-key derivation, authenticate-before-release, exact in-place or disjoint buffers, partial-overlap rejection, unchanged failure destinations, cleanup, official vectors, and failure-atomicity proofs.
 
@@ -7532,7 +7532,7 @@ Exit criteria:
 
 ### v0.31.2 - Poly1305 And ChaCha20-Poly1305 CPU Acceleration
 
-Status: planned
+Status: in progress
 
 Plan scope: Add benchmark-admitted x86_64, AArch64, and qualifying RISC-V Poly1305 backends and integrate them only with compatible admitted ChaCha20 paths; preserve one-time-key, reduction, verification, aliasing, plaintext-release, failure-atomicity, health, and scalar-equivalence rules.
 

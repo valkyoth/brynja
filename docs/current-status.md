@@ -6,7 +6,10 @@ owners and legacy HKDF. See the [official directory](../README.md#workspace) for
 registry links and the [feature guide](facade-features.md) for what to select.
 Publication is not independent verification or authorization to use an unfinished protocol.
 
-Development has started on [v0.31.1: portable ChaCha20-Poly1305](../release-notes/RELEASE_NOTES_0.31.1.md).
+Development has started on [v0.31.2: Poly1305 and AEAD acceleration](../release-notes/RELEASE_NOTES_0.31.2.md).
+The public owners still use the portable implementation.
+
+[v0.31.1: portable ChaCha20-Poly1305](../release-notes/RELEASE_NOTES_0.31.1.md) is internally tagged.
 The [unpublished leaf](../crates/brynja-aead-chacha20poly1305/README.md)
 implements portable seal/open. Both development façades forward the
 default-off `chacha20poly1305` feature. The direct and façade routes pass

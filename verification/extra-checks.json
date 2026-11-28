@@ -46476,6 +46476,10 @@
           "package.name",
           "package.version"
         ],
+        "crates/brynja-aead-chacha20poly1305/Cargo.toml": [
+          "package.name",
+          "package.version"
+        ],
         "crates/brynja-mac-poly1305/Cargo.toml": [
           "package.name",
           "package.version"
@@ -46882,6 +46886,10 @@
           "package.version"
         ],
         "crates/brynja-cipher-chacha/Cargo.toml": [
+          "package.name",
+          "package.version"
+        ],
+        "crates/brynja-aead-chacha20poly1305/Cargo.toml": [
           "package.name",
           "package.version"
         ],
@@ -50088,6 +50096,7 @@
         ".github/workflows/ci.yml",
         "assurance/sha3-public-api",
         "crates/brynja",
+        "crates/brynja-aead-chacha20poly1305",
         "crates/brynja-aead-gcm",
         "crates/brynja-cipher-aes",
         "crates/brynja-cipher-chacha",
@@ -50183,6 +50192,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja"
+          ]
+        }
+      ]
+    },
+    "package-repository-17a45d54f013fcc0-dependencies-aead-chacha20poly1305": {
+      "paths": [
+        "crates/brynja-aead-chacha20poly1305/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-aead-chacha20poly1305/build.rs",
+        "crates/brynja-aead-chacha20poly1305/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-aead-chacha20poly1305/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-aead-chacha20poly1305"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-aead-chacha20poly1305"
           ]
         }
       ]
@@ -51575,6 +51623,7 @@
         "assurance/sha2-bit-differential",
         "assurance/sha2-public-api",
         "crates/brynja",
+        "crates/brynja-aead-chacha20poly1305",
         "crates/brynja-aead-gcm",
         "crates/brynja-cipher-aes",
         "crates/brynja-cipher-chacha",
@@ -51671,6 +51720,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja"
+          ]
+        }
+      ]
+    },
+    "package-repository-26a0b0fc61844f33-dependencies-aead-chacha20poly1305": {
+      "paths": [
+        "crates/brynja-aead-chacha20poly1305/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-aead-chacha20poly1305/build.rs",
+        "crates/brynja-aead-chacha20poly1305/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-aead-chacha20poly1305/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-aead-chacha20poly1305"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-aead-chacha20poly1305"
           ]
         }
       ]
@@ -54095,6 +54183,7 @@
         ".github/workflows/ci.yml",
         "assurance/sha256-public-api",
         "crates/brynja",
+        "crates/brynja-aead-chacha20poly1305",
         "crates/brynja-aead-gcm",
         "crates/brynja-cipher-aes",
         "crates/brynja-cipher-chacha",
@@ -54192,6 +54281,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja"
+          ]
+        }
+      ]
+    },
+    "package-repository-7965ceea8904c78e-dependencies-aead-chacha20poly1305": {
+      "paths": [
+        "crates/brynja-aead-chacha20poly1305/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-aead-chacha20poly1305/build.rs",
+        "crates/brynja-aead-chacha20poly1305/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-aead-chacha20poly1305/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-aead-chacha20poly1305"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-aead-chacha20poly1305"
           ]
         }
       ]
@@ -55177,6 +55305,7 @@
         "assurance/sha2-bit-differential",
         "assurance/sha2-public-api",
         "crates/brynja",
+        "crates/brynja-aead-chacha20poly1305",
         "crates/brynja-aead-gcm",
         "crates/brynja-cipher-aes",
         "crates/brynja-cipher-chacha",
@@ -55273,6 +55402,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja"
+          ]
+        }
+      ]
+    },
+    "package-repository-88caf3aa426de5bc-dependencies-aead-chacha20poly1305": {
+      "paths": [
+        "crates/brynja-aead-chacha20poly1305/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-aead-chacha20poly1305/build.rs",
+        "crates/brynja-aead-chacha20poly1305/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-aead-chacha20poly1305/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-aead-chacha20poly1305"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-aead-chacha20poly1305"
           ]
         }
       ]
@@ -56654,6 +56822,7 @@
       "paths": [
         ".github/workflows/ci.yml",
         "assurance/sha256-public-api",
+        "crates/brynja-aead-chacha20poly1305",
         "crates/brynja-aead-gcm",
         "crates/brynja-cipher-aes",
         "crates/brynja-cipher-chacha",
@@ -56705,6 +56874,45 @@
           "replace"
         ]
       }
+    },
+    "package-repository-a6db8e2c6fa70def-dependencies-aead-chacha20poly1305": {
+      "paths": [
+        "crates/brynja-aead-chacha20poly1305/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-aead-chacha20poly1305/build.rs",
+        "crates/brynja-aead-chacha20poly1305/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-aead-chacha20poly1305/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-aead-chacha20poly1305"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-aead-chacha20poly1305"
+          ]
+        }
+      ]
     },
     "package-repository-a6db8e2c6fa70def-dependencies-aead-gcm": {
       "paths": [
@@ -57762,6 +57970,7 @@
         ".github/workflows/ci.yml",
         "assurance/sha3-public-api",
         "crates/brynja",
+        "crates/brynja-aead-chacha20poly1305",
         "crates/brynja-aead-gcm",
         "crates/brynja-cipher-aes",
         "crates/brynja-cipher-chacha",
@@ -57857,6 +58066,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja"
+          ]
+        }
+      ]
+    },
+    "package-repository-ce2b1f0c9c412fcb-dependencies-aead-chacha20poly1305": {
+      "paths": [
+        "crates/brynja-aead-chacha20poly1305/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-aead-chacha20poly1305/build.rs",
+        "crates/brynja-aead-chacha20poly1305/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-aead-chacha20poly1305/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-aead-chacha20poly1305"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-aead-chacha20poly1305"
           ]
         }
       ]
@@ -71982,6 +72230,7 @@
       "paths": [
         "assurance/hmac-facade",
         "crates/brynja",
+        "crates/brynja-aead-chacha20poly1305",
         "crates/brynja-aead-gcm",
         "crates/brynja-cipher-aes",
         "crates/brynja-cipher-chacha",
@@ -72124,6 +72373,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja"
+          ]
+        }
+      ]
+    },
+    "final-component-repository-3f060a5f15bf3310-dependencies-aead-chacha20poly1305": {
+      "paths": [
+        "crates/brynja-aead-chacha20poly1305/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-aead-chacha20poly1305/build.rs",
+        "crates/brynja-aead-chacha20poly1305/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-aead-chacha20poly1305/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-aead-chacha20poly1305"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-aead-chacha20poly1305"
           ]
         }
       ]
@@ -74420,6 +74708,7 @@
         "assurance/general-sha512-t/src/resources.rs",
         "assurance/general-sha512-t/work_probe.rs",
         "crates/brynja",
+        "crates/brynja-aead-chacha20poly1305",
         "crates/brynja-aead-gcm",
         "crates/brynja-cipher-aes",
         "crates/brynja-cipher-chacha",
@@ -74585,6 +74874,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja"
+          ]
+        }
+      ]
+    },
+    "final-component-repository-c601c3e7699bcd87-dependencies-aead-chacha20poly1305": {
+      "paths": [
+        "crates/brynja-aead-chacha20poly1305/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-aead-chacha20poly1305/build.rs",
+        "crates/brynja-aead-chacha20poly1305/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-aead-chacha20poly1305/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-aead-chacha20poly1305"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-aead-chacha20poly1305"
           ]
         }
       ]
@@ -75743,6 +76071,7 @@
         "assurance/general-sha512-t/src/resources.rs",
         "assurance/general-sha512-t/work_probe.rs",
         "crates/brynja",
+        "crates/brynja-aead-chacha20poly1305",
         "crates/brynja-aead-gcm",
         "crates/brynja-cipher-aes",
         "crates/brynja-cipher-chacha",
@@ -75884,6 +76213,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja"
+          ]
+        }
+      ]
+    },
+    "final-component-repository-dfe1132d65f1e9aa-dependencies-aead-chacha20poly1305": {
+      "paths": [
+        "crates/brynja-aead-chacha20poly1305/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-aead-chacha20poly1305/build.rs",
+        "crates/brynja-aead-chacha20poly1305/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-aead-chacha20poly1305/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-aead-chacha20poly1305"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-aead-chacha20poly1305"
           ]
         }
       ]
@@ -94154,6 +94522,7 @@
         "package-python",
         "package-repository-17a45d54f013fcc0",
         "package-repository-17a45d54f013fcc0-dependencies-brynja",
+        "package-repository-17a45d54f013fcc0-dependencies-aead-chacha20poly1305",
         "package-repository-17a45d54f013fcc0-dependencies-aead-gcm",
         "package-repository-17a45d54f013fcc0-dependencies-cipher-aes",
         "package-repository-17a45d54f013fcc0-dependencies-cipher-chacha",
@@ -94307,6 +94676,7 @@
         "package-python",
         "package-repository-26a0b0fc61844f33",
         "package-repository-26a0b0fc61844f33-dependencies-brynja",
+        "package-repository-26a0b0fc61844f33-dependencies-aead-chacha20poly1305",
         "package-repository-26a0b0fc61844f33-dependencies-aead-gcm",
         "package-repository-26a0b0fc61844f33-dependencies-cipher-aes",
         "package-repository-26a0b0fc61844f33-dependencies-cipher-chacha",
@@ -94692,6 +95062,7 @@
         "package-python",
         "package-repository-7965ceea8904c78e",
         "package-repository-7965ceea8904c78e-dependencies-brynja",
+        "package-repository-7965ceea8904c78e-dependencies-aead-chacha20poly1305",
         "package-repository-7965ceea8904c78e-dependencies-aead-gcm",
         "package-repository-7965ceea8904c78e-dependencies-cipher-aes",
         "package-repository-7965ceea8904c78e-dependencies-cipher-chacha",
@@ -94772,6 +95143,7 @@
         "package-python",
         "package-repository-88caf3aa426de5bc",
         "package-repository-88caf3aa426de5bc-dependencies-brynja",
+        "package-repository-88caf3aa426de5bc-dependencies-aead-chacha20poly1305",
         "package-repository-88caf3aa426de5bc-dependencies-aead-gcm",
         "package-repository-88caf3aa426de5bc-dependencies-cipher-aes",
         "package-repository-88caf3aa426de5bc-dependencies-cipher-chacha",
@@ -94920,6 +95292,7 @@
       "inputs": [
         "package-python",
         "package-repository-a6db8e2c6fa70def",
+        "package-repository-a6db8e2c6fa70def-dependencies-aead-chacha20poly1305",
         "package-repository-a6db8e2c6fa70def-dependencies-aead-gcm",
         "package-repository-a6db8e2c6fa70def-dependencies-cipher-aes",
         "package-repository-a6db8e2c6fa70def-dependencies-cipher-chacha",
@@ -95053,6 +95426,7 @@
         "package-python",
         "package-repository-ce2b1f0c9c412fcb",
         "package-repository-ce2b1f0c9c412fcb-dependencies-brynja",
+        "package-repository-ce2b1f0c9c412fcb-dependencies-aead-chacha20poly1305",
         "package-repository-ce2b1f0c9c412fcb-dependencies-aead-gcm",
         "package-repository-ce2b1f0c9c412fcb-dependencies-cipher-aes",
         "package-repository-ce2b1f0c9c412fcb-dependencies-cipher-chacha",
@@ -96780,6 +97154,7 @@
         "final-component-python",
         "final-component-repository-3f060a5f15bf3310",
         "final-component-repository-3f060a5f15bf3310-dependencies-brynja",
+        "final-component-repository-3f060a5f15bf3310-dependencies-aead-chacha20poly1305",
         "final-component-repository-3f060a5f15bf3310-dependencies-aead-gcm",
         "final-component-repository-3f060a5f15bf3310-dependencies-cipher-aes",
         "final-component-repository-3f060a5f15bf3310-dependencies-cipher-chacha",
@@ -97018,6 +97393,7 @@
         "final-component-python",
         "final-component-repository-c601c3e7699bcd87",
         "final-component-repository-c601c3e7699bcd87-dependencies-brynja",
+        "final-component-repository-c601c3e7699bcd87-dependencies-aead-chacha20poly1305",
         "final-component-repository-c601c3e7699bcd87-dependencies-aead-gcm",
         "final-component-repository-c601c3e7699bcd87-dependencies-cipher-aes",
         "final-component-repository-c601c3e7699bcd87-dependencies-cipher-chacha",
@@ -97119,6 +97495,7 @@
         "final-component-python",
         "final-component-repository-dfe1132d65f1e9aa",
         "final-component-repository-dfe1132d65f1e9aa-dependencies-brynja",
+        "final-component-repository-dfe1132d65f1e9aa-dependencies-aead-chacha20poly1305",
         "final-component-repository-dfe1132d65f1e9aa-dependencies-aead-gcm",
         "final-component-repository-dfe1132d65f1e9aa-dependencies-cipher-aes",
         "final-component-repository-dfe1132d65f1e9aa-dependencies-cipher-chacha",

@@ -422,6 +422,11 @@ The [v0.29.4 consumer fixture](assurance/aead-installed-consumer/README.md)
 shows how to check the portable and paired APIs against known answers from
 installed downstream binaries. These checks do not confer FIPS validation.
 
+For portable RFC 8439 authenticated encryption in the development checkout,
+enable `chacha20poly1305` on `brynja` and use
+`brynja::crypto::chacha20poly1305::{Sealer, Opener}`. The published façade
+does not yet offer this feature.
+
 The [portable RFC 8439 stream](docs/assurance/chacha20-development.md) is
 available from `brynja-cipher-chacha` or through `brynja_crypto::chacha20`.
 Enable `hazmat-chacha20` on the chosen dependency. The development branch

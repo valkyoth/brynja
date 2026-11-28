@@ -9,7 +9,7 @@ below use `brynja::crypto`; users of `brynja-crypto` replace that prefix with
 This table describes the development checkout. In published `brynja 0.30.6`,
 select portable ChaCha20 on `brynja-crypto` or `brynja-cipher-chacha`
 directly; forwarding that feature on `brynja` is new since the tag.
-Standalone Poly1305 is also available only in the development checkout.
+Standalone Poly1305 and ChaCha20-Poly1305 are also only in the development checkout.
 
 ```sh
 cargo add brynja --path /path/to/brynja/crates/brynja --no-default-features --features sha2-hardened-execution
@@ -23,6 +23,7 @@ selection does not expose that namespace.
 
 | Feature(s) on either facade | Namespace/API | Profile |
 | --- | --- | --- |
+| `chacha20poly1305` | `chacha20poly1305::{Sealer, Opener}` | Portable RFC 8439 authenticated encryption, with application-reserved sending nonces and full detached tags. Does not expose either raw primitive through the façade. |
 | `poly1305` | `poly1305::OneTimeKey` | Authenticate or verify one message with a fresh 32-byte key. Full tag only; no encryption, key derivation or ChaCha20 dependency. |
 | `cpu` | `cpu` | Low-level no_std authority and candidate inventory; not host detection |
 | `hazmat-chacha20` | `chacha20::ChaCha20` | Portable IETF stream cipher; no authentication. SSE2/NEON owners are separate leaf opt-ins. |

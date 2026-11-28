@@ -8,8 +8,9 @@ Publication is not independent verification or authorization to use an unfinishe
 
 Development has started on [v0.31.1: portable ChaCha20-Poly1305](../release-notes/RELEASE_NOTES_0.31.1.md).
 The [unpublished leaf](../crates/brynja-aead-chacha20poly1305/README.md)
-implements portable seal/open. Use it directly from the checkout for now;
-package and façade acceptance and failure-atomicity proofs are outstanding.
+implements portable seal/open. Both development façades forward the
+default-off `chacha20poly1305` feature. The direct and façade routes pass
+offline archive-consumer checks; failure-atomicity proofs remain outstanding.
 
 The [v0.31.0 standalone Poly1305 milestone](../release-notes/RELEASE_NOTES_0.31.0.md) is internally tagged.
 The unpublished workspace leaf now authenticates and verifies messages. Enable

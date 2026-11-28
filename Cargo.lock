@@ -59,6 +59,7 @@ version = "0.11.0"
 name = "brynja-crypto"
 version = "0.3.0"
 dependencies = [
+ "brynja-aead-chacha20poly1305",
  "brynja-aead-gcm",
  "brynja-cipher-aes",
  "brynja-cipher-chacha",

@@ -4,7 +4,7 @@
 
 - Add an unpublished portable ChaCha20-Poly1305 leaf. Its in-place and
   disjoint seal/open APIs are tested against both RFC 8439 AEAD examples.
-  No façade feature or acceleration yet.
+  Enable `chacha20poly1305` on either development façade; no acceleration yet.
   [Scope and remaining work](release-notes/RELEASE_NOTES_0.31.1.md).
 
 ## 0.31.0 standalone Poly1305 (internally tagged)

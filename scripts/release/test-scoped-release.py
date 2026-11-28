@@ -159,7 +159,9 @@ class ScopedRelease(unittest.TestCase):
     def test_chacha20poly1305_internal_milestone_is_scoped_and_does_not_publish(self):
         plan = scoped.load('0.31.1')
         commands = {check['id']: check['command'] for check in plan['checks']}
-        self.assertEqual(len(commands), 45)
+        self.assertEqual(len(commands), 46)
+        self.assertEqual(commands['chacha20poly1305-packaged-endpoints'],
+                         ['python3', 'scripts/cryptography/check-poly1305-packages.py', '--aead'])
         self.assertEqual(commands['chacha20poly1305-vectors'],
                          ['python3', 'scripts/cryptography/check-chacha20poly1305-vectors.py'])
         self.assertEqual(commands['poly1305-vectors'], ['python3', 'scripts/cryptography/test-poly1305-vectors.py'])
@@ -194,7 +196,7 @@ class ScopedRelease(unittest.TestCase):
         self.assertEqual(commands['facade-integration'],
             ['cargo', 'check', '--locked', '-p', 'brynja', '--no-default-features'])
         self.assertEqual(set(plan['ci_checks']), set(commands) -
-                         {'aes-leaf-identity', 'sbom', 'dependency-policy', 'advisories', 'gmac-public-consumer', 'aead-packaged-endpoints', 'ghash-package-controls', 'ghash-packaged-endpoints',
+                         {'chacha20poly1305-packaged-endpoints', 'aes-leaf-identity', 'sbom', 'dependency-policy', 'advisories', 'gmac-public-consumer', 'aead-packaged-endpoints', 'ghash-package-controls', 'ghash-packaged-endpoints',
                           'ghash-packaged-runtime-x86', 'hkdf-package-runner-tests', 'hkdf-packaged-endpoints',
                           'aes-downstream-endpoints', 'aes-consumer-format',
                           'aes-consumer-lint-direct', 'aes-consumer-lint-facade'})

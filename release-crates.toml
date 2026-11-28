@@ -15,7 +15,7 @@ previous_version = "0.31.0"
 version = "0.31.1"
 change = "code"
 publish = false
-reason = "Advance the internal facade version for the RFC 8439 AEAD milestone; no registry publication."
+reason = "Forward the default-off portable ChaCha20-Poly1305 feature; no registry publication."
 
 [crates."brynja-aead-chacha20poly1305"]
 previous_version = "unpublished"
@@ -106,7 +106,7 @@ previous_version = "0.3.0"
 version = "0.3.0"
 change = "code"
 publish = false
-reason = "Re-export the standalone Poly1305 leaf behind an explicit feature; internal only."
+reason = "Re-export portable ChaCha20-Poly1305 and standalone Poly1305 behind separate explicit features; internal only."
 
 [crates."brynja-hash-core"]
 previous_version = "0.1.1"

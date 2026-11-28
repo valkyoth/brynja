@@ -11,6 +11,7 @@ include = ["Cargo.toml","LICENSE-APACHE","LICENSE-MIT","README.md","src/**/*.rs"
 
 [features]
 default = []
+chacha20poly1305 = ["brynja-crypto/chacha20poly1305"]
 poly1305 = ["brynja-crypto/poly1305"]
 aes-gcm = ["brynja-crypto/aes-gcm"]
 gmac = ["brynja-crypto/gmac"]

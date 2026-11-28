@@ -77,11 +77,15 @@ remain separate; there is no SIMD-batched or Windows enclave HMAC API.
 | Raw AES-128/192/256 single blocks | ✅ Implemented | `brynja-cipher-aes` | ❌ Not independently verified |
 | AES external-key adapter contracts (no device driver) | ✅ Implemented | `brynja-cipher-aes` | ❌ Not independently verified |
 | Raw IETF ChaCha20 (RFC 8439) | ✅ Implemented | `brynja-cipher-chacha` | ❌ Not independently verified |
+| Detached ChaCha20-Poly1305 (RFC 8439) | ✅ Implemented in the development checkout | `brynja-aead-chacha20poly1305` | ❌ Not independently verified |
 | One-time Poly1305 (RFC 8439) | ✅ Implemented in the development checkout | `brynja-mac-poly1305` | ❌ Not independently verified |
 | GHASH over pre-framed blocks (not a MAC) | ✅ Implemented | `brynja-universal-hash-ghash` | ❌ Not independently verified |
 | Detached AES-GCM (AES-128/192/256) | ✅ Implemented | `brynja-aead-gcm` | ❌ Not independently verified |
 | GMAC authentication (AES-128/192/256) | ✅ Implemented | `brynja-aead-gcm` | ❌ Not independently verified |
 | HKDF over six SHA-2 identities, including TLS 1.3 label framing | ✅ Implemented | `brynja-crypto` | ❌ Not independently verified |
+
+For authenticated encryption in the checkout, enable `chacha20poly1305` and
+import `brynja::crypto::chacha20poly1305::{Sealer, Opener}`. No raw cipher or MAC feature is needed.
 
 The development feature `poly1305` exposes `brynja::crypto::poly1305::OneTimeKey`.
 It authenticates one message per fresh key; it does not encrypt or derive keys.

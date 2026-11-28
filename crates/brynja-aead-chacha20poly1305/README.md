@@ -26,7 +26,7 @@
 # brynja-aead-chacha20poly1305
 
 > [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
-> Use this leaf directly from the development checkout. It is not published or forwarded by the published façade.
+> In the development checkout enable `chacha20poly1305` on `brynja` for `brynja::crypto::chacha20poly1305`, or use this leaf directly. Neither the leaf nor the façade feature is published yet.
 
 | Capability | Implemented | Independent verification |
 | --- | --- | --- |

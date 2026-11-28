@@ -7,6 +7,7 @@
 //! ParallelHash/ParallelHashXOF identities are exposed from their small family
 //! crates. Portable AES-GCM is available with the default-off `aes-gcm`
 //! feature. The separate `gmac` feature exposes AAD-only authentication.
+//! Enable `chacha20poly1305` for portable RFC 8439 authenticated encryption.
 //! Device adapters, other AEADs, other KDFs, public-key
 //! algorithms, and the complete planned composition layer remain unimplemented.
 //! Portable modern HKDF is under development; it is not release-qualified.
@@ -19,6 +20,10 @@
 
 #[cfg(feature = "hazmat-chacha20")]
 pub mod chacha20;
+
+/// Portable RFC 8439 detached sealing and opening, not the raw primitives.
+#[cfg(feature = "chacha20poly1305")]
+pub use brynja_aead_chacha20poly1305 as chacha20poly1305;
 
 /// Standalone RFC 8439 authenticator. A fresh one-time key is required for every message.
 /// Does not encrypt, derive keys, or enable ChaCha20.

@@ -5,6 +5,11 @@ scope = "Replay the RFC 8439 ChaCha20-Poly1305 composition over portable primiti
 ci_checks = ["chacha20poly1305-vectors","poly1305-vectors","sha256-policy","static-cpu-source-policy","chacha20-installed-controls","chacha20-parallel-owner","unsafe-policy","unsafe-regressions","aes-gcm-package-controls","crypto-tests","crypto-lint","crypto-format","facade-integration","hkdf-owner-contract","aes-owner-contract","aes-wide-owner-contract","aes-wide-api","aes-dataflow-regressions","aes-provider-api","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
 
 [[checks]]
+id = "chacha20poly1305-packaged-endpoints"
+command = ["python3","scripts/cryptography/check-poly1305-packages.py","--aead"]
+timeout_seconds = 300
+
+[[checks]]
 id = "chacha20poly1305-vectors"
 command = ["python3","scripts/cryptography/check-chacha20poly1305-vectors.py"]
 timeout_seconds = 180

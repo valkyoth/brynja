@@ -23,9 +23,15 @@ or select `1.100.0`. Add `--oracle` to cross-check both messages against the
 locally installed Python `cryptography` AEAD. The normal check needs no Python
 cryptography package, and the library gains no external dependency.
 
+Enable `chacha20poly1305` on either development façade, or import the leaf
+directly. Run `python3 scripts/cryptography/check-poly1305-packages.py --aead`
+to test all three routes from locally staged registry archives, with both
+Rust endpoints and a Cortex-M compile check. Without opt-in neither façade
+resolves the AEAD or either of its primitive crates. Nothing is uploaded.
+
 Remaining work is tracked in the [release plan](../docs/RELEASE_PLAN.md#v0311---complete-chacha20-poly1305):
 
 - Expand differential, boundary and failure-injection coverage beyond the RFC
   examples and the focused length, reservation, tamper and transaction tests.
-- Verify the no_std and façade imports, package contents, and bounds and
-  comparison evidence before the final gate. Acceleration belongs to v0.31.2.
+- Complete the bounds, failure-atomicity and comparison evidence before the
+  final gate. Acceleration belongs to v0.31.2.

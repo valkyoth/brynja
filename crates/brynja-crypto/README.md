@@ -52,6 +52,7 @@ not independent cryptographic certification or coverage of every deployment.
 | Modern HMAC over SHA-2/SHA-3 | ✅ Fully implemented portable API; explicit execution qualification separate | ❌ No |
 | Raw AES-128/192/256 blocks | ✅ Implemented; opt-in `hazmat-aes-block` | ❌ No |
 | IETF ChaCha20 stream | ✅ Implemented; opt-in `hazmat-chacha20`, not an AEAD | ❌ No |
+| Portable ChaCha20-Poly1305 | ✅ Implemented in the development checkout; opt-in `chacha20poly1305`, detached full tags | ❌ Not independently verified |
 | Standalone Poly1305 | ✅ Implemented in the development checkout; opt-in `poly1305` | ❌ No |
 | External-key adapter lifecycle | ✅ Implemented; explicit opt-in, no device driver | ❌ No |
 | HKDF and TLS Expand-Label over six standard SHA-2 identities | ✅ Implemented; portable Extract, Expand and multipart info; qualification unfinished | ❌ No |

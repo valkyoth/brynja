@@ -43,6 +43,8 @@
 //! `crypto::chacha20` (`hazmat-chacha20`). Neither raw cipher authenticates data.
 //! Enable `poly1305` for the standalone one-time authenticator under
 //! `crypto::poly1305`. This does not enable ChaCha20-Poly1305.
+//! For authenticated encryption enable `chacha20poly1305` and use the sending
+//! and receiving owners in `crypto::chacha20poly1305`.
 //! A separate `external-key-provider` opt-in exposes reusable lifecycle contracts;
 //! enabling both features adds AES-128/192/256 external-key operations, not an HSM driver.
 //! AES-128 uses caller-backed clearing key/output owners;

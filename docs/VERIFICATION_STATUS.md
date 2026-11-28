@@ -9,8 +9,10 @@ crates at the v0.30.6 checkpoint did not expand any verification claim.
 The [standalone RVV arithmetic probe](../release-notes/RELEASE_NOTES_0.31.2.md#rv64-linux-standalone-poly1305-admission-experiment)
 passed correctness checks under QEMU and on a SpacemiT X60. On that CPU it
 beat the portable reference at all three required long-message sizes on both
-compiler endpoints. This qualifies it for a streaming-owner experiment only;
-RV64 users still get portable Poly1305 and ChaCha20-Poly1305.
+compiler endpoints. The subsequent [streaming-owner comparison](../release-notes/RELEASE_NOTES_0.31.2.md#integrated-rv64-linux-streaming-owner-experiment)
+also passed on the X60 with key clearing included. Small fragmented updates
+were slower than portable. Both results are research evidence: RV64 users
+still get portable Poly1305 and ChaCha20-Poly1305.
 
 ## Opt-in AArch64 Poly1305 and ChaCha20-Poly1305 (v0.31.2, in development)
 

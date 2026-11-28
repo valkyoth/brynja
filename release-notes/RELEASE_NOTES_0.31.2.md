@@ -569,3 +569,84 @@ the binaries measured on the X60, checked before and after execution, were:
 
 - Rust 1.90.0: `165c66a8cca9c0910608c6b8b160ed7bf65787344ebc80cc34100e867f44f786`.
 - Rust 1.100.0: `986251007e7f869cc014dd3e1cfb57b0e44207806cea55031c4c787e0dc1d3c5`.
+
+### Integrated RV64 Linux streaming owner experiment
+
+Measure the four-block layout only when a contiguous update has at least
+1024 bytes after completing a buffered block. The candidate uses the same
+portable prefix, tail, length checks, one-time key and finalization as the
+portable owner. Include key admission and cleanup, packed weights and powers,
+and message creation in each record; reuse only the CPU handle. Before
+measurement require the 12 RFC records, 65 generated streaming cases with
+all 16 tag-byte rejections and caller-key clearing, on the X60 and under
+QEMU on both compilers. Check refusal without V separately.
+
+Use the same Linux X60, CPU 0, stock RV64GC static release builds (Rust
+1.90.0 and 1.100.0). Run once per compiler; warm both routes, alternate
+order over 12 pairs, and use floor(524288/size) records per batch. Measure
+16/63/64/65/256/1023/1024/1025/1500/4096/16384 bytes in one update, plus
+16384 bytes in 1500- and 17-byte updates. Keep all samples. Require a
+median paired portable/owner time ratio above one for *each* of 1500, 4096
+and 16384 bytes in one update on *both* compilers. Do not rerun to pass.
+Passing permits a standalone backend review, not an automatic public API,
+a paired AEAD, or a timing-leakage claim.
+
+**Result: the clearing streaming owner passed all six long-record
+comparisons.** The table reports medians of the 12 paired portable/native
+elapsed-time ratios; [all 312 sample pairs](../assurance/poly1305/rvv-integrated-x60.csv)
+are retained, including the slower cases.
+
+| Message bytes / update bytes | X60, Rust 1.90.0 | X60, Rust 1.100.0 |
+| ---: | ---: | ---: |
+| 16 / 16 | 0.819 | 0.819 |
+| 63 / 63 | 0.899 | 0.891 |
+| 64 / 64 | 0.897 | 0.892 |
+| 65 / 65 | 0.911 | 0.901 |
+| 256 / 256 | 0.962 | 0.958 |
+| 1023 / 1023 | 0.989 | 0.987 |
+| 1024 / 1024 | 2.670 | 2.290 |
+| 1025 / 1025 | 2.599 | 2.241 |
+| 1500 / 1500 | 2.786 | 2.418 |
+| 4096 / 4096 | 3.341 | 2.886 |
+| 16384 / 16384 | 3.578 | 3.099 |
+| 16384 / 1500 | 2.926 | 2.530 |
+| 16384 / 17 | 0.927 | 0.924 |
+
+Below the 1024-byte threshold no vector groups execute. In particular, a
+16 KiB message delivered in 17-byte updates was slower than portable; the
+same message delivered in 1500-byte updates was faster on both compilers.
+
+Before timing, both native builds passed the RFC and streaming suite; the
+same tests passed under QEMU at VLEN 128 and 256. An emulated CPU without
+V refused the required route (`Unavailable`). Separate tested builds
+with a corrupted startup answer returned `Quarantined` even with V.
+Unit tests exercised length overflow, message retirement on interruption,
+and clearing the packed weights on return and unwind. Both measured
+ELFs contain the five widening multiplies and twenty widening
+multiply-accumulates in the RVV column kernel. The native executable
+SHA-256 digests, checked before and after timing, are:
+
+- Rust 1.90.0: `122237f6cd62b88225d46d8d0775c5271045ce666c5cd54e3ca689ac9cd69e4a`
+- Rust 1.100.0: `a5871b2934bf0211d2112015b10fe31f3173e641ada9ab1299af8ad4f8f5c81f`
+
+The [candidate patch](../assurance/poly1305/rvv-integrated-candidate.patch)
+is not in any shipped crate. To replay the correctness suite on a native
+RV64 Linux system with usable V, from the repository root:
+
+```sh
+patchfile="$PWD/assurance/poly1305/rvv-integrated-candidate.patch"
+replay=$(mktemp -d)
+git archive 83642108 Cargo.toml Cargo.lock crates assurance/poly1305 | tar -x -C "$replay"
+(
+  cd "$replay" || exit 1
+  git apply --unidiff-zero "$patchfile" || exit 1
+  for v in 1.90.0 1.100.0; do
+    cargo +"$v" test --locked --offline --release --manifest-path assurance/poly1305/Cargo.toml \
+      --features rvv-owner --test rvv_vectors || exit 1
+  done
+)
+```
+
+Before exposing an opt-in standalone owner, review Linux vector-state
+admission for the calling thread, package inclusion of the assembly, and
+the CPU safety boundary. This benchmark did not test a paired AEAD.

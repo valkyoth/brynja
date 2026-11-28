@@ -1,0 +1,660 @@
+diff --git a/assurance/poly1305/Cargo.toml b/assurance/poly1305/Cargo.toml
+index bc637b2..0cdac70 100644
+--- a/assurance/poly1305/Cargo.toml
++++ b/assurance/poly1305/Cargo.toml
+@@ -10,0 +11 @@ publish = false
++rvv-owner = ["brynja-mac-poly1305/poly1305-rvv"]
+@@ -29,0 +31,8 @@ required-features = ["native-owner"]
++[[example]]
++name = "rvv_owner"
++required-features = ["rvv-owner"]
++
++[[test]]
++name = "rvv_vectors"
++required-features = ["rvv-owner"]
++
+diff --git a/assurance/poly1305/examples/rvv_owner.rs b/assurance/poly1305/examples/rvv_owner.rs
+new file mode 100644
+index 0000000..c09653b
+--- /dev/null
++++ b/assurance/poly1305/examples/rvv_owner.rs
+@@ -0,0 +1,81 @@
++//! Public fixture data; this compares complete checked-key messages, not startup.
++#[cfg(all(target_arch = "riscv64", target_os = "linux"))]
++use brynja_mac_poly1305::{OneTimeKey, rvv::Rvv};
++#[cfg(all(target_arch = "riscv64", target_os = "linux"))]
++use std::{hint::black_box, time::Instant};
++
++#[cfg(all(target_arch = "riscv64", target_os = "linux"))]
++fn record(cpu: Option<&mut Rvv>, key: &[u8; 32], msg: &[u8], chunk: usize) -> [u8; 16] {
++    let mut storage = *key;
++    let one = OneTimeKey::new(&mut storage).unwrap();
++    if let Some(cpu) = cpu {
++        let mut mac = one.start_rvv(cpu).unwrap();
++        for part in msg.chunks(chunk) {
++            mac.update(part).unwrap();
++        }
++        mac.finalize().unwrap()
++    } else {
++        let mut mac = one.start();
++        for part in msg.chunks(chunk) {
++            mac.update(part).unwrap();
++        }
++        mac.finalize()
++    }
++}
++
++#[cfg(not(all(target_arch = "riscv64", target_os = "linux")))]
++fn main() {
++    eprintln!("required RVV: unsupported target");
++    std::process::exit(2);
++}
++
++#[cfg(all(target_arch = "riscv64", target_os = "linux"))]
++fn main() {
++    let mut cpu = Rvv::probe().unwrap_or_else(|why| {
++        eprintln!("required RVV: {why:?}");
++        std::process::exit(2)
++    });
++    let bench = std::env::args().nth(1).as_deref() == Some("--bench");
++    let key = std::array::from_fn(|i| (i as u8).wrapping_mul(31));
++    if bench {
++        println!("bytes,chunk,pair,records,portable_ns,owner_ns");
++    }
++    for (size, chunk) in [16, 63, 64, 65, 256, 1023, 1024, 1025, 1500, 4096, 16384]
++        .map(|n| (n, n))
++        .into_iter()
++        .chain([(16384, 1500), (16384, 17)])
++    {
++        let msg: Vec<_> = (0..size).map(|i| (i as u8).wrapping_mul(117)).collect();
++        assert_eq!(
++            record(Some(&mut cpu), &key, &msg, chunk),
++            record(None, &key, &msg, chunk)
++        );
++        if !bench {
++            continue;
++        }
++        let reps = 524288 / size;
++        let mut batch = |native: bool| {
++            let now = Instant::now();
++            for _ in 0..reps {
++                black_box(record(
++                    if native { Some(&mut cpu) } else { None },
++                    black_box(&key),
++                    black_box(&msg),
++                    black_box(chunk),
++                ));
++            }
++            now.elapsed().as_nanos()
++        };
++        batch(false);
++        batch(true);
++        for pair in 0..12 {
++            let (p, v) = if pair % 2 == 0 {
++                (batch(false), batch(true))
++            } else {
++                let v = batch(true);
++                (batch(false), v)
++            };
++            println!("{size},{chunk},{pair},{reps},{p},{v}");
++        }
++    }
++}
+diff --git a/assurance/poly1305/tests/rvv_vectors.rs b/assurance/poly1305/tests/rvv_vectors.rs
+new file mode 100644
+index 0000000..71624e2
+--- /dev/null
++++ b/assurance/poly1305/tests/rvv_vectors.rs
+@@ -0,0 +1,83 @@
++#![cfg(all(target_arch = "riscv64", target_os = "linux"))]
++
++use brynja_mac_poly1305::{Error, OneTimeKey, rvv::Rvv};
++
++fn decode(s: &str) -> Vec<u8> {
++    let (pairs, rest) = s.as_bytes().as_chunks::<2>();
++    assert!(rest.is_empty());
++    pairs
++        .iter()
++        .map(|p| u8::from_str_radix(std::str::from_utf8(p).unwrap(), 16).unwrap())
++        .collect()
++}
++
++fn check(cpu: &mut Rvv, key: [u8; 32], msg: &[u8], tag: [u8; 16], chunks: &[usize]) {
++    for &chunk in chunks {
++        let mut storage = key;
++        let mut mac = OneTimeKey::from_rfc8439_key(&mut storage)
++            .start_rvv(cpu)
++            .unwrap();
++        for bytes in msg.chunks(chunk) {
++            mac.update(bytes).unwrap();
++        }
++        assert_eq!(mac.finalize().unwrap(), tag);
++        assert_eq!(storage, [0; 32]);
++    }
++    for i in 0..=16 {
++        let mut storage = key;
++        let mut mac = OneTimeKey::from_rfc8439_key(&mut storage)
++            .start_rvv(cpu)
++            .unwrap();
++        mac.update(msg).unwrap();
++        let mut t = tag;
++        if let Some(b) = t.get_mut(i) {
++            *b ^= 1;
++        }
++        assert_eq!(
++            mac.verify(&t),
++            if i == 16 {
++                Ok(())
++            } else {
++                Err(Error::Authentication)
++            }
++        );
++        assert_eq!(storage, [0; 32]);
++    }
++}
++
++#[test]
++fn rfc_and_partitioned_long_updates() {
++    let mut cpu = Rvv::probe().unwrap();
++    let records = include_str!("../../../crates/brynja-mac-poly1305/tests/data/rfc8439.tsv");
++    assert_eq!(records.lines().count(), 12);
++    for row in records.lines() {
++        let f: Vec<_> = row.split('\t').collect();
++        check(
++            &mut cpu,
++            decode(f[1]).try_into().unwrap(),
++            &decode(f[2]),
++            decode(f[3]).try_into().unwrap(),
++            &[1, 16, 17, 1024, 1500],
++        );
++    }
++    for seed in [0u8, 1, 31, 127, 255] {
++        let key = std::array::from_fn(|i| seed.wrapping_add(i as u8).wrapping_mul(19));
++        for size in [
++            63, 64, 65, 1023, 1024, 1025, 1039, 1040, 1500, 2049, 3000, 4096, 16384,
++        ] {
++            let msg: Vec<_> = (0..size)
++                .map(|i| seed.wrapping_add(i as u8) ^ ((i >> 8) as u8))
++                .collect();
++            let mut storage = key;
++            let mut mac = OneTimeKey::new(&mut storage).unwrap().start();
++            mac.update(&msg).unwrap();
++            check(
++                &mut cpu,
++                key,
++                &msg,
++                mac.finalize(),
++                &[1, 17, 63, 1023, 1024, 1025, 1500, size],
++            );
++        }
++    }
++}
+diff --git a/crates/brynja-crypto-cpu/Cargo.toml b/crates/brynja-crypto-cpu/Cargo.toml
+index 8f7e59c..dd22499 100644
+--- a/crates/brynja-crypto-cpu/Cargo.toml
++++ b/crates/brynja-crypto-cpu/Cargo.toml
+@@ -14,0 +15 @@ poly1305-avx2 = ["dep:brynja-core"]
++poly1305-rvv = ["dep:brynja-core"]
+diff --git a/crates/brynja-crypto-cpu/src/lib.rs b/crates/brynja-crypto-cpu/src/lib.rs
+index 52596a8..f9b9c17 100644
+--- a/crates/brynja-crypto-cpu/src/lib.rs
++++ b/crates/brynja-crypto-cpu/src/lib.rs
+@@ -12,0 +13,3 @@
++#[cfg(all(feature = "poly1305-rvv", target_arch = "riscv64", target_os = "linux"))]
++pub mod poly1305_rvv;
++
+diff --git a/crates/brynja-crypto-cpu/src/poly1305_rvv.rs b/crates/brynja-crypto-cpu/src/poly1305_rvv.rs
+new file mode 100644
+index 0000000..a3e44e5
+--- /dev/null
++++ b/crates/brynja-crypto-cpu/src/poly1305_rvv.rs
+@@ -0,0 +1,83 @@
++//! Explicit Linux RV64 Poly1305 execution; no automatic portable fallback.
++#![allow(unsafe_code)]
++
++use core::{hint::black_box, marker::PhantomData};
++mod kernel;
++
++/// Host lacks usable RVV, or this handle failed startup or was interrupted.
++#[derive(Debug, PartialEq, Eq, Clone, Copy)]
++pub enum Error {
++    /// No RVV support advertised by the process environment.
++    Unavailable,
++    /// Terminal for this handle.
++    Quarantined,
++}
++
++/// Thread-local required-native capability. The OS must keep the advertised
++/// ISA usable on every CPU where this thread runs. This does not pin a CPU.
++pub struct Rvv {
++    ready: bool,
++    local: PhantomData<*mut ()>,
++}
++
++impl Rvv {
++    /// Detect RVV and check two consecutive four-block groups against a
++    /// fixed, independently computed answer before admitting caller data.
++    pub fn probe() -> Result<Self, Error> {
++        unsafe extern "C" {
++            fn getauxval(kind: core::ffi::c_ulong) -> core::ffi::c_ulong;
++        }
++        // SAFETY: numeric AT_HWCAP query. A missing value denies V.
++        if unsafe { getauxval(16) } & (1 << (b'V' - b'A')) == 0 {
++            return Err(Error::Unavailable);
++        }
++        let mut owner = Self {
++            ready: true,
++            local: PhantomData,
++        };
++        let r = 0x0f0e_0d0c_0b0a_0908_0706_0504_0302_0100_u128.to_le_bytes();
++        let mut h = [7_u64, 0, 0, 0, 0].map(u64::to_le_bytes);
++        let mut next = 0_u8;
++        let blocks = [[(); 64]; 2].map(|row| {
++            row.map(|()| {
++                let byte = next;
++                next = next.wrapping_add(1);
++                byte
++            })
++        });
++        owner.absorb_groups(black_box(&mut h), black_box(&r), black_box(&blocks))?;
++        if h.map(u64::from_le_bytes) != [62060317, 5262367, 22716242, 12841259, 60432388] {
++            return Err(Error::Quarantined);
++        }
++        Ok(owner)
++    }
++
++    /// Whether this handle permits a new message, update, or finish.
++    pub fn check(&self) -> Result<(), Error> {
++        if self.ready {
++            Ok(())
++        } else {
++            Err(Error::Quarantined)
++        }
++    }
++
++    /// Low-level full groups only, without finalization. Each accumulator
++    /// slot is a little-endian radix-2^26 limb; unused high bits are ignored.
++    /// The raw multiplier is clamped here, never its powers. The caller owns
++    /// its buffers. Prefer the one-time-key API in the MAC crate.
++    #[doc(hidden)]
++    pub fn absorb_groups(
++        &mut self,
++        acc: &mut [[u8; 8]; 5],
++        r: &[u8; 16],
++        blocks: &[[u8; 64]],
++    ) -> Result<(), Error> {
++        self.check()?;
++        self.ready = false;
++        // SAFETY: probe is the sole constructor and checked host RVV before
++        // running even the startup test. No raw pointers cross the boundary.
++        *acc = unsafe { kernel::absorb(acc, r, blocks) };
++        self.ready = true;
++        Ok(())
++    }
++}
+diff --git a/crates/brynja-crypto-cpu/src/poly1305_rvv/columns.S b/crates/brynja-crypto-cpu/src/poly1305_rvv/columns.S
+new file mode 100644
+index 0000000..5c4d6eb
+--- /dev/null
++++ b/crates/brynja-crypto-cpu/src/poly1305_rvv/columns.S
+@@ -0,0 +1,44 @@
++// Streaming owner candidate; standard scalar ABI, Linux RV64 with full V.
++// a0 = 5 x 4 u32 message limbs; a1 = 9 x 4 u32 weights; a2 = 5 u64 sums.
++.text
++.option push
++.option arch, +v
++.p2align 2
++.global brynja_owner_poly1305_rvv_columns
++.hidden brynja_owner_poly1305_rvv_columns
++.type brynja_owner_poly1305_rvv_columns,@function
++brynja_owner_poly1305_rvv_columns:
++    vsetivli zero, 4, e32, m1, ta, ma
++    .irp r,0,1,2,3,4
++        vle32.v v\r, (a0)
++        addi a0, a0, 16
++    .endr
++    .irp r,5,6,7,8,9,10,11,12,13
++        vle32.v v\r, (a1)
++        addi a1, a1, 16
++    .endr
++    .macro column dest,a,b,c,d,e
++        vwmulu.vv \dest,v0,\a
++        vwmaccu.vv \dest,v1,\b
++        vwmaccu.vv \dest,v2,\c
++        vwmaccu.vv \dest,v3,\d
++        vwmaccu.vv \dest,v4,\e
++    .endm
++    // v5..9 contain r,s,t,u,v; v10..13 contain 5s,5t,5u,5v.
++    column v16,v5,v13,v12,v11,v10
++    column v18,v6,v5,v13,v12,v11
++    column v20,v7,v6,v5,v13,v12
++    column v22,v8,v7,v6,v5,v13
++    column v24,v9,v8,v7,v6,v5
++    .purgem column
++    vsetivli zero, 4, e64, m2, ta, ma
++    vmv.s.x v28, zero
++    .irp r,16,18,20,22,24
++        vredsum.vs v30, v\r, v28
++        vmv.x.s t0, v30
++        sd t0, 0(a2)
++        addi a2, a2, 8
++    .endr
++    ret
++.size brynja_owner_poly1305_rvv_columns, .-brynja_owner_poly1305_rvv_columns
++.option pop
+diff --git a/crates/brynja-crypto-cpu/src/poly1305_rvv/kernel.rs b/crates/brynja-crypto-cpu/src/poly1305_rvv/kernel.rs
+new file mode 100644
+index 0000000..599d462
+--- /dev/null
++++ b/crates/brynja-crypto-cpu/src/poly1305_rvv/kernel.rs
+@@ -0,0 +1,142 @@
++//! Four consecutive full blocks, in radix 2^26 modulo 2^130-5.
++use brynja_core::clear_owned_region;
++core::arch::global_asm!(include_str!("columns.S"), options(raw));
++
++type F = [u64; 5];
++const MASK: u64 = (1 << 26) - 1;
++
++fn limbs(mut n: u128) -> F {
++    core::array::from_fn(|_| {
++        let [a, b, c, d, ..] = n.to_le_bytes();
++        n >>= 26;
++        u64::from(u32::from_le_bytes([a, b, c, d])) & MASK
++    })
++}
++
++fn reduce(mut x: F) -> F {
++    // Each column (even after summing four lanes) is below 200 * 2^52.
++    // Fold at bit 130; after the first fold only limb 0 can exceed MASK.
++    for _ in 0..3 {
++        let mut carry = 0;
++        for word in &mut x {
++            let n = word.wrapping_add(carry);
++            *word = n & MASK;
++            carry = n >> 26;
++        }
++        x[0] = x[0].wrapping_add(carry.wrapping_mul(5));
++    }
++    x
++}
++
++fn product(a: F, [r, s, t, u, v]: F) -> F {
++    let [s5, t5, u5, v5] = [s, t, u, v].map(|x| x.wrapping_mul(5));
++    reduce(
++        [
++            [r, v5, u5, t5, s5],
++            [s, r, v5, u5, t5],
++            [t, s, r, v5, u5],
++            [u, t, s, r, v5],
++            [v, u, t, s, r],
++        ]
++        .map(|col| {
++            a.into_iter()
++                .zip(col)
++                .fold(0u64, |n, (x, y)| n.wrapping_add(x.wrapping_mul(y)))
++        }),
++    )
++}
++
++struct Scratch<const N: usize, const M: usize>([[[u8; 8]; M]; N]);
++impl<const N: usize, const M: usize> Drop for Scratch<N, M> {
++    fn drop(&mut self) {
++        let _ = clear_owned_region(self.0.as_flattened_mut().as_flattened_mut());
++    }
++}
++
++type Weights = [[u32; 4]; 9];
++
++struct Table<'a>(&'a mut Weights);
++impl Drop for Table<'_> {
++    fn drop(&mut self) {
++        // SAFETY: a contiguous initialized u32 array, exclusively borrowed;
++        // clearing every byte leaves a valid value.
++        let bytes = unsafe {
++            core::slice::from_raw_parts_mut(
++                core::ptr::from_mut(self.0).cast::<u8>(),
++                core::mem::size_of::<Weights>(),
++            )
++        };
++        let _ = clear_owned_region(bytes);
++    }
++}
++
++// SAFETY: caller admits Linux HWCAP V and maintains usable ISA through use.
++pub(super) unsafe fn absorb(
++    acc: &[[u8; 8]; 5],
++    raw: &[u8; 16],
++    blocks: &[[u8; 64]],
++) -> [[u8; 8]; 5] {
++    let mut h = acc.map(|v| u64::from_le_bytes(v) & MASK);
++    let r = limbs(u128::from_le_bytes(*raw) & 0x0fff_fffc_0fff_fffc_0fff_fffc_0fff_ffff);
++    let mut powers = Scratch([[[0; 8]; 5]; 4]);
++    let [r4, r3, r2, r1] = &mut powers.0;
++    *r1 = r.map(u64::to_le_bytes);
++    *r2 = product(r, r).map(u64::to_le_bytes);
++    *r3 = product(r2.map(u64::from_le_bytes), r).map(u64::to_le_bytes);
++    *r4 = product(r2.map(u64::from_le_bytes), r2.map(u64::from_le_bytes)).map(u64::to_le_bytes);
++    let mut storage = [[0; 4]; 9];
++    let table = Table(&mut storage);
++    for (i, row) in table.0.iter_mut().enumerate() {
++        for (out, p) in row.iter_mut().zip(&powers.0) {
++            let v = u64::from_le_bytes(p[if i < 5 { i } else { i - 4 }]);
++            *out = (if i < 5 { v } else { v * 5 }) as u32; // <5*2^26
++        }
++    }
++    drop(powers);
++    for block in blocks {
++        let [a, b, c, d] = block.as_chunks::<16>().0 else {
++            unreachable!("four full blocks")
++        };
++        let mut msg = [a, b, c, d].map(|b| {
++            let mut m = limbs(u128::from_le_bytes(*b));
++            m[4] |= 1 << 24;
++            m
++        });
++        for (v, x) in msg[0].iter_mut().zip(h) {
++            *v += x;
++        }
++        let words: [[u32; 4]; 5] = core::array::from_fn(|i| msg.each_ref().map(|m| m[i] as u32));
++        let mut sum = [0u64; 5];
++        unsafe extern "C" {
++            fn brynja_owner_poly1305_rvv_columns(
++                words: *const [[u32; 4]; 5],
++                weights: *const Weights,
++                sum: *mut [u64; 5],
++            );
++        }
++        // SAFETY: see admission above. Full V supports VL=4 at e32/m1 and
++        // e64/m2. All input rows are aligned and initialized. The five u64
++        // stores stay within the separate, exclusive sum; columns <200*2^52.
++        unsafe {
++            brynja_owner_poly1305_rvv_columns(&words, table.0, &mut sum);
++        }
++        h = reduce(sum);
++    }
++    h.map(u64::to_le_bytes)
++}
++
++#[cfg(test)]
++#[test]
++fn weights_cleared_on_return_and_unwind() {
++    for stop in [false, true] {
++        let mut weights = [[u32::MAX; 4]; 9];
++        let outcome = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
++            let _table = Table(&mut weights);
++            if stop {
++                std::panic::resume_unwind(std::boxed::Box::new(()));
++            }
++        }));
++        assert_eq!(outcome.is_err(), stop);
++        assert_eq!(weights, [[0; 4]; 9]);
++    }
++}
+diff --git a/crates/brynja-mac-poly1305/Cargo.toml b/crates/brynja-mac-poly1305/Cargo.toml
+index 6db3542..6dd2be8 100644
+--- a/crates/brynja-mac-poly1305/Cargo.toml
++++ b/crates/brynja-mac-poly1305/Cargo.toml
+@@ -14,0 +15 @@ poly1305-avx2 = ["dep:brynja-crypto-cpu", "brynja-crypto-cpu/poly1305-avx2"]
++poly1305-rvv = ["dep:brynja-crypto-cpu", "brynja-crypto-cpu/poly1305-rvv"]
+@@ -20 +21 @@ brynja-core = { workspace = true }
+-[target.'cfg(any(all(target_arch = "x86_64", target_os = "linux"), all(target_arch = "aarch64", any(target_os = "linux", target_os = "macos"))))'.dependencies]
++[target.'cfg(any(all(target_arch = "riscv64", target_os = "linux"), all(target_arch = "x86_64", target_os = "linux"), all(target_arch = "aarch64", any(target_os = "linux", target_os = "macos"))))'.dependencies]
+diff --git a/crates/brynja-mac-poly1305/src/lib.rs b/crates/brynja-mac-poly1305/src/lib.rs
+index b0e852e..7555bb9 100644
+--- a/crates/brynja-mac-poly1305/src/lib.rs
++++ b/crates/brynja-mac-poly1305/src/lib.rs
+@@ -7,0 +8,3 @@ mod field;
++#[cfg(all(feature = "poly1305-rvv", target_arch = "riscv64", target_os = "linux"))]
++pub mod rvv;
++
+@@ -102,0 +106 @@ pub enum Error {
++        all(feature = "poly1305-rvv", target_arch = "riscv64", target_os = "linux"),
+diff --git a/crates/brynja-mac-poly1305/src/rvv.rs b/crates/brynja-mac-poly1305/src/rvv.rs
+new file mode 100644
+index 0000000..7c56291
+--- /dev/null
++++ b/crates/brynja-mac-poly1305/src/rvv.rs
+@@ -0,0 +1,143 @@
++//! Explicit RVV Poly1305 for Linux RV64. Ordinary `OneTimeKey::start`
++//! remains portable, even with this feature enabled. Throughput depends on
++//! contiguous update size; short updates use the ordinary scalar arithmetic.
++
++use crate::{Error, OneTimeKey, Poly1305};
++pub use brynja_crypto_cpu::poly1305_rvv::{Error as AdmissionError, Rvv};
++
++/// A single message borrowing a previously tested, thread-local CPU handle.
++#[must_use = "finish or verify the message; dropping clears the key"]
++pub struct Poly1305Rvv<'key, 'cpu> {
++    message: Option<Poly1305<'key>>,
++    cpu: &'cpu mut Rvv,
++}
++
++impl<'key> OneTimeKey<'key> {
++    /// Consume a fresh one-time key. Reuse the CPU handle, never the key.
++    /// A retired handle is rejected and the consumed key storage is cleared.
++    pub fn start_rvv(self, cpu: &mut Rvv) -> Result<Poly1305Rvv<'key, '_>, Error> {
++        cpu.check().map_err(|_| Error::Quarantined)?;
++        Ok(Poly1305Rvv {
++            message: Some(self.start()),
++            cpu,
++        })
++    }
++}
++
++struct Pending<'a, 'key> {
++    slot: &'a mut Option<Poly1305<'key>>,
++    committed: bool,
++}
++impl Drop for Pending<'_, '_> {
++    fn drop(&mut self) {
++        if !self.committed {
++            drop(self.slot.take());
++        }
++    }
++}
++
++impl Poly1305Rvv<'_, '_> {
++    /// Reject overflow before mutation. Any interruption after admission drops
++    /// the message and clears its key, partial block and accumulator.
++    pub fn update(&mut self, mut input: &[u8]) -> Result<(), Error> {
++        self.cpu.check().map_err(|_| Error::Quarantined)?;
++        let m = self.message.as_ref().ok_or(Error::Quarantined)?;
++        let total = m
++            .length
++            .checked_add(u64::try_from(input.len()).map_err(|_| Error::TooLong)?)
++            .ok_or(Error::TooLong)?;
++        let mut pending = Pending {
++            slot: &mut self.message,
++            committed: false,
++        };
++        let m = pending.slot.as_mut().ok_or(Error::Quarantined)?;
++        let prefix = if m.used == 0 {
++            0
++        } else {
++            16usize.saturating_sub(m.used)
++        };
++        if input.len().saturating_sub(prefix) >= 1024 {
++            let (head, body) = input.split_at(prefix);
++            if !head.is_empty() {
++                m.update(head)?;
++            }
++            let (groups, tail) = body.as_chunks::<64>();
++            let raw_r = m.key.0.first_chunk::<16>().ok_or(Error::Quarantined)?;
++            self.cpu
++                .absorb_groups(&mut m.acc, raw_r, groups)
++                .map_err(|_| Error::Quarantined)?;
++            // The portable tail accounts for itself. Both lengths were
++            // included in the preflight above, including a buffered prefix.
++            m.length = total
++                .checked_sub(u64::try_from(tail.len()).map_err(|_| Error::TooLong)?)
++                .ok_or(Error::TooLong)?;
++            input = tail;
++        }
++        m.update(input)?;
++        pending.committed = true;
++        Ok(())
++    }
++
++    /// Finish the full tag only while both the message and CPU are healthy.
++    pub fn finalize(mut self) -> Result<[u8; 16], Error> {
++        self.cpu.check().map_err(|_| Error::Quarantined)?;
++        Ok(self.message.take().ok_or(Error::Quarantined)?.finalize())
++    }
++
++    /// Verify all 16 bytes using the portable owner's existing verifier.
++    pub fn verify(mut self, tag: &[u8; 16]) -> Result<(), Error> {
++        self.cpu.check().map_err(|_| Error::Quarantined)?;
++        self.message.take().ok_or(Error::Quarantined)?.verify(tag)
++    }
++}
++
++#[cfg(test)]
++mod tests {
++    extern crate std;
++    use super::*;
++
++    #[test]
++    fn rejected_length_preserves_buffered_state_and_key() -> Result<(), Error> {
++        let mut cpu = match Rvv::probe() {
++            Ok(cpu) => cpu,
++            Err(AdmissionError::Unavailable) => return Ok(()),
++            Err(_) => return Err(Error::Quarantined),
++        };
++        let mut key = [0x67; 32];
++        let mut native = OneTimeKey::new(&mut key)?.start_rvv(&mut cpu)?;
++        native.update(&[0x39; 1031])?;
++        let m = native.message.as_mut().ok_or(Error::Quarantined)?;
++        m.length = u64::MAX - 1;
++        let before = (m.acc, m.tail, m.used, m.length);
++        assert_eq!(native.update(&[0; 1024]), Err(Error::TooLong));
++        let m = native.message.as_ref().ok_or(Error::Quarantined)?;
++        assert_eq!((m.acc, m.tail, m.used, m.length), before);
++        native.update(&[1])?;
++        native.update(&[])?;
++        assert_eq!(native.update(&[1]), Err(Error::TooLong));
++        let _ = native.finalize()?;
++        assert_eq!(key, [0; 32]);
++        Ok(())
++    }
++
++    #[test]
++    fn interrupted_pending_update_retires_the_message_and_clears_key() -> Result<(), Error> {
++        let mut key = [0x35; 32];
++        let mut slot = Some(OneTimeKey::new(&mut key)?.start());
++        let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
++            let guard = Pending {
++                slot: &mut slot,
++                committed: false,
++            };
++            if let Some(m) = guard.slot.as_mut() {
++                assert_eq!(m.update(&[0x59; 37]), Ok(()));
++            }
++            std::panic::resume_unwind(std::boxed::Box::new(()));
++        }));
++        assert!(result.is_err());
++        assert!(slot.is_none());
++        drop(slot);
++        assert_eq!(key, [0; 32]);
++        Ok(())
++    }
++}

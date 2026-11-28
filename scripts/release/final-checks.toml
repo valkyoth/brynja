@@ -2,7 +2,12 @@
 schema = 1
 version = "0.31.2"
 scope = "Admit opt-in standalone Poly1305 AVX2 on Linux x86-64, NEON on little-endian Linux/macOS AArch64, and RVV on RV64 Linux. Test paired SSE2/AVX2 and NEON ChaCha20-Poly1305 where supported; retain standalone portable Poly1305 and portable AEAD defaults. Portable RFC 8439 ChaCha20: RV64 stays scalar; no RVV AEAD pair. Native benchmarks and platform controls remain separate evidence, not timing qualification. Portable GHASH, Portable AES-GCM and Portable GMAC remain available. AES-NI/PCLMUL on Linux/Windows x86-64 and Linux/macOS ARM64 AES/PMULL remain explicit. Arm GHASH timing remains unresolved. RISC-V AES remains evidence-only and unadmitted. No registry publication."
-ci_checks = ["chacha20poly1305-vectors","poly1305-vectors","sha256-policy","static-cpu-source-policy","chacha20-installed-controls","chacha20-parallel-owner","unsafe-policy","unsafe-regressions","aes-gcm-package-controls","crypto-tests","crypto-lint","crypto-format","facade-integration","hkdf-owner-contract","aes-owner-contract","aes-wide-owner-contract","aes-wide-api","aes-dataflow-regressions","aes-provider-api","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
+ci_checks = ["poly1305-native-record","chacha20poly1305-vectors","poly1305-vectors","sha256-policy","static-cpu-source-policy","chacha20-installed-controls","chacha20-parallel-owner","unsafe-policy","unsafe-regressions","aes-gcm-package-controls","crypto-tests","crypto-lint","crypto-format","facade-integration","hkdf-owner-contract","aes-owner-contract","aes-wide-owner-contract","aes-wide-api","aes-dataflow-regressions","aes-provider-api","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
+
+[[checks]]
+id = "poly1305-native-record"
+command = ["python3","scripts/cryptography/check-poly1305-native-record.py"]
+timeout_seconds = 60
 
 [[checks]]
 id = "chacha20poly1305-packaged-endpoints"

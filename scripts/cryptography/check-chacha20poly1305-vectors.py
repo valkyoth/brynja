@@ -45,7 +45,7 @@ def records():
     ]
 
 
-def differential(replay, paired=False):
+def differential_rows(paired=False):
     from cryptography.hazmat.primitives.ciphers.aead import ChaCha20Poly1305
     # The lengths vary independently. Cover every 16-byte padding residue,
     # and cross payload block boundaries with nonzero, deterministic data.
@@ -62,6 +62,11 @@ def differential(replay, paired=False):
         key, nonce, aad, plain = data(b'key', 32), data(b'nonce', 12), data(b'aad', a), data(b'plain', p)
         encrypted = ChaCha20Poly1305(key).encrypt(nonce, plain, aad)
         rows.append([key, nonce, aad, plain, encrypted[:-16], encrypted[-16:]])
+    return rows
+
+
+def differential(replay, paired=False):
+    rows = differential_rows(paired)
     result = replay(rows, ('--differential',))
     if result.returncode or result.stdout.strip() != f'matched {len(rows)} differential AEAD records':
         raise ValueError('differential replay failed: ' + result.stderr)

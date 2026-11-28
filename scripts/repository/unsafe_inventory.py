@@ -38,12 +38,12 @@ PATH_ATTRIBUTE = re.compile(r'^#\[path = "([^"\n]+)"\]$', re.MULTILINE)
 
 ALLOWED = {
     **DARWIN_RESIDENT_MODULES,
-    Path("crates/brynja-crypto-cpu/src/poly1305_avx2.rs"): ("0bfc42d01585460c650929e7b72a0fd7256aa3ad893f2f7365a3ddbc4ae50327", 1, 0, 1),
-    Path("crates/brynja-crypto-cpu/src/poly1305_avx2/kernel.rs"): ("beb775b9a92da8eea9f1fdf0f0330895f83be51b621dca17af4c7c7e159fc031", 2, 0, 2),
-    Path("crates/brynja-crypto-cpu/src/poly1305_neon.rs"): ("2f41dd866218f36e9ed0f0bf745fd075bf7a96ef99d003a9cebee9aa3c93b6e1", 1, 0, 1),
-    Path("crates/brynja-crypto-cpu/src/poly1305_neon/kernel.rs"): ("8e6541e47b39d066338b3f70d761571dfcbc0a8474aef159e5b79a5b7f566f1d", 2, 0, 2),
-    Path("crates/brynja-crypto-cpu/src/poly1305_rvv.rs"): ("d0774c57a5d84afa0706d3108387fbb65128083612886bc434125e73fb7a0154", 3, 0, 3),
-    Path("crates/brynja-crypto-cpu/src/poly1305_rvv/kernel.rs"): ("e9a89d3f5b4b1330757cae0b8bc4cd01ae18992565ae6291578910d6ce521ec8", 2, 2, 3),
+    Path("crates/brynja-crypto-cpu/src/poly1305_avx2.rs"): ("2e7375cf1ac525858158f8bc41bc842b39bc61e9358ed6fa7848dd96ff34eadf", 1, 0, 1),
+    Path("crates/brynja-crypto-cpu/src/poly1305_avx2/kernel.rs"): ("cb091a679cd3dadfdf01e9e9152f51bc9f51183d165b690680204397d2ea6190", 2, 0, 2),
+    Path("crates/brynja-crypto-cpu/src/poly1305_neon.rs"): ("65aead31cdcaa79c0d04aa538fb09fbb90ddbce70eecd0d1cebac5ce5b44c830", 1, 0, 1),
+    Path("crates/brynja-crypto-cpu/src/poly1305_neon/kernel.rs"): ("5bdc8a170767f7c2d6ae41d98e5b83661d9bed76542d96102ad49e853bc675cf", 2, 0, 2),
+    Path("crates/brynja-crypto-cpu/src/poly1305_rvv.rs"): ("445f5d57f0371b25f91ea938352c0278e07f7f930c3ea817f35600d1886bac92", 3, 0, 3),
+    Path("crates/brynja-crypto-cpu/src/poly1305_rvv/kernel.rs"): ("2a1a81b52d856c57edeb3b888074ce4fd31b18e30e4b2029a21d276c9969c6f3", 2, 2, 3),
     # Existing AES and GHASH boundaries, byte-identical to v0.30.0.
     Path("crates/brynja-crypto-cpu/src/aes/aarch64.rs"): ("ad92752d1f2697b12e0371ebe37baf976a39b4f74a3deb73a6971575fbc41a0a", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/aes/aarch64_expand.rs"): ("62a49742b01e06def854c7dfee991216606a2f4d3f87852f6ae1765c82af7d79", 1, 1, 1),

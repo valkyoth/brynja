@@ -6,7 +6,9 @@ import io
 import json
 import os
 from pathlib import Path
+import runpy
 import subprocess
+import sys
 import tempfile
 import tomllib
 import unittest
@@ -116,6 +118,27 @@ class RegistryOwnership(unittest.TestCase):
 
 
 class ScopedRelease(unittest.TestCase):
+    def test_poly1305_native_records_require_each_artifact_and_current_inputs(self):
+        scripts = scoped.ROOT / 'scripts/cryptography'
+        with patch.object(sys, 'path', [str(scripts), *sys.path]):
+            gate = runpy.run_path(str(scripts / 'check-poly1305-native-record.py'))
+        record = gate['RECORD'].read_text()
+        source = gate['source_digest'](scoped.ROOT)
+        validate = gate['validate']
+        validate(record, source)
+        lines = record.splitlines()
+        for row in lines[1:]:
+            for bad in ('\n'.join(line for line in lines if line != row), record + row,
+                        record.replace(row.split()[2], 'invalid'),
+                        record.replace(row.split()[2], row.split()[3])):
+                with self.assertRaises(ValueError):
+                    validate(bad, source)
+        real_read = Path.read_bytes
+        for name in ('poly1305_field.rs', 'poly1305_rvv/kernel.rs', 'paired_api.rs', 'neon_vectors.rs'):
+            with patch.object(Path, 'read_bytes', lambda p: real_read(p) + (b'!' if p.as_posix().endswith(name) else b'')):
+                with self.assertRaisesRegex(ValueError, 'inputs changed'):
+                    validate(record, gate['source_digest'](scoped.ROOT))
+
     def setUp(self):
         self.directory = tempfile.TemporaryDirectory(prefix='brynja-scoped-release-')
         self.addCleanup(self.directory.cleanup)
@@ -159,7 +182,9 @@ class ScopedRelease(unittest.TestCase):
     def test_chacha20poly1305_internal_milestone_is_scoped_and_does_not_publish(self):
         plan = scoped.load('0.31.2')
         commands = {check['id']: check['command'] for check in plan['checks']}
-        self.assertEqual(len(commands), 46)
+        self.assertEqual(len(commands), 47)
+        self.assertEqual(commands['poly1305-native-record'],
+                         ['python3', 'scripts/cryptography/check-poly1305-native-record.py'])
         self.assertEqual(commands['chacha20poly1305-packaged-endpoints'],
                          ['python3', 'scripts/cryptography/check-poly1305-packages.py', '--aead'])
         self.assertEqual(commands['chacha20poly1305-vectors'],

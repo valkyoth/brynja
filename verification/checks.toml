@@ -48,6 +48,27 @@ contains = ["1.90.0: AEAD open/cleanup screen and replay passed", "1.100.0: AEAD
 [groups.poly1305-field]
 paths = ["Cargo.toml", "Cargo.lock", "crates/brynja-mac-poly1305/Cargo.toml", "crates/brynja-mac-poly1305/src", "crates/brynja-core/src", "crates/brynja-core/Cargo.toml"]
 
+[groups.poly1305-simd-field]
+paths = ["Cargo.toml","Cargo.lock","crates/brynja-crypto-cpu/Cargo.toml","crates/brynja-crypto-cpu/src","crates/brynja-core/Cargo.toml","crates/brynja-core/src"]
+
+[[checks]]
+component = "poly1305"
+id = "simd-column-bounds"
+category = "kani"
+name = "SIMD Poly1305 scalar packing bounds and shared three-pass reduction"
+establishes = "32-bit operand headroom and bounded output limbs for all column sums below 2^60; not an instruction or lane-wiring proof."
+command = ["cargo", "+1.90.0", "kani", "-p", "brynja-crypto-cpu", "--features", "poly1305-avx2", "--harness", "simd_packing_and_column_bounds", "--output-format", "terse"]
+cwd = "."
+platform = "linux-x86_64"
+inputs = ["kani-tools","poly1305-simd-field"]
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","KANIFLAGS"]
+timeout_seconds = 300
+[checks.environment]
+CARGO_NET_OFFLINE = "true"
+[checks.success]
+unique_lines = ["Complete - 1 successfully verified harnesses, 0 failures, 1 total."]
+contains = ["VERIFICATION:- SUCCESSFUL"]
+
 [groups.poly1305-linked]
 paths = ["assurance/poly1305/Cargo.toml", "assurance/poly1305/Cargo.lock", "assurance/poly1305/src", "crates/brynja-mac-poly1305/tests/data/rfc8439.tsv", "scripts/cryptography/check-poly1305-linked.py", "scripts/cryptography/test-poly1305-vectors.py", "scripts/aes-gcm/paired_linked.py", "scripts/repository/facade_cargo_environment.py"]
 tools = [{program="cargo",toolchain="1.90.0"},{program="rustc",toolchain="1.90.0"},{program="cargo",toolchain="1.100.0"},{program="rustc",toolchain="1.100.0"},{program="python3"},{program="llvm-objdump"}]

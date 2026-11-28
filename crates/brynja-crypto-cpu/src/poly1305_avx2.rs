@@ -45,6 +45,16 @@ impl Avx2 {
         if h.map(u64::from_le_bytes) != [62060317, 5262367, 22716242, 12841259, 60432388] {
             return Err(Error::Quarantined);
         }
+        // Twelve maximal full blocks, with maximal clamped r and initial limbs.
+        let mut h = [((1_u64 << 26) - 1).to_le_bytes(); 5];
+        owner.absorb_groups(
+            black_box(&mut h),
+            black_box(&[0xff; 16]),
+            black_box(&[[0xff; 64]; 3]),
+        )?;
+        if h.map(u64::from_le_bytes) != [6376392, 44811416, 8450298, 23877029, 21726864] {
+            return Err(Error::Quarantined);
+        }
         Ok(owner)
     }
 
@@ -58,7 +68,8 @@ impl Avx2 {
     }
 
     /// Low-level full groups only, without finalization. Each accumulator
-    /// slot is a little-endian radix-2^26 limb; unused high bits are ignored.
+    /// slot is a little-endian radix-2^26 coefficient; excess bits are
+    /// carried modulo 2^130-5. Returned limbs fit in 26 bits.
     /// The raw multiplier is clamped here, never its powers. The caller owns
     /// its buffers. Prefer the one-time-key API in the MAC crate.
     #[doc(hidden)]

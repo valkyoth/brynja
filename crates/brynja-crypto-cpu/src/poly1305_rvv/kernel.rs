@@ -52,59 +52,10 @@ unsafe extern "C" fn columns(
     );
 }
 
-type F = [u64; 5];
-const MASK: u64 = (1 << 26) - 1;
+use crate::poly1305_field::{F, Scratch, accumulator, limbs, product, reduce};
 
 fn low_word([a, b, c, d, ..]: [u8; 8]) -> u32 {
     u32::from_le_bytes([a, b, c, d])
-}
-
-fn limbs(mut n: u128) -> F {
-    core::array::from_fn(|_| {
-        let [a, b, c, d, ..] = n.to_le_bytes();
-        n >>= 26;
-        u64::from(u32::from_le_bytes([a, b, c, d])) & MASK
-    })
-}
-
-fn reduce(mut x: F) -> F {
-    // Each column (even after summing four lanes) is below 200 * 2^52.
-    // Fold at bit 130; after the first fold only limb 0 can exceed MASK.
-    for _ in 0..3 {
-        let mut carry = 0;
-        for word in &mut x {
-            let n = word.wrapping_add(carry);
-            *word = n & MASK;
-            carry = n >> 26;
-        }
-        x[0] = x[0].wrapping_add(carry.wrapping_mul(5));
-    }
-    x
-}
-
-fn product(a: F, [r, s, t, u, v]: F) -> F {
-    let [s5, t5, u5, v5] = [s, t, u, v].map(|x| x.wrapping_mul(5));
-    reduce(
-        [
-            [r, v5, u5, t5, s5],
-            [s, r, v5, u5, t5],
-            [t, s, r, v5, u5],
-            [u, t, s, r, v5],
-            [v, u, t, s, r],
-        ]
-        .map(|col| {
-            a.into_iter()
-                .zip(col)
-                .fold(0u64, |n, (x, y)| n.wrapping_add(x.wrapping_mul(y)))
-        }),
-    )
-}
-
-struct Scratch<const N: usize, const M: usize>([[[u8; 8]; M]; N]);
-impl<const N: usize, const M: usize> Drop for Scratch<N, M> {
-    fn drop(&mut self) {
-        let _ = clear_owned_region(self.0.as_flattened_mut().as_flattened_mut());
-    }
 }
 
 type Weights = [[u32; 4]; 9];
@@ -130,13 +81,13 @@ pub(super) unsafe fn absorb(
     raw: &[u8; 16],
     blocks: &[[u8; 64]],
 ) -> [[u8; 8]; 5] {
-    let mut h = acc.map(|v| u64::from_le_bytes(v) & MASK);
-    let r = limbs(u128::from_le_bytes(*raw) & 0x0fff_fffc_0fff_fffc_0fff_fffc_0fff_ffff);
+    let mut h = accumulator(acc);
     let mut powers = Scratch([[[0; 8]; 5]; 4]);
     let [r4, r3, r2, r1] = &mut powers.0;
-    *r1 = r.map(u64::to_le_bytes);
-    *r2 = product(r, r).map(u64::to_le_bytes);
-    *r3 = product(r2.map(u64::from_le_bytes), r).map(u64::to_le_bytes);
+    *r1 = limbs(u128::from_le_bytes(*raw) & 0x0fff_fffc_0fff_fffc_0fff_fffc_0fff_ffff)
+        .map(u64::to_le_bytes);
+    *r2 = product(r1.map(u64::from_le_bytes), r1.map(u64::from_le_bytes)).map(u64::to_le_bytes);
+    *r3 = product(r2.map(u64::from_le_bytes), r1.map(u64::from_le_bytes)).map(u64::to_le_bytes);
     *r4 = product(r2.map(u64::from_le_bytes), r2.map(u64::from_le_bytes)).map(u64::to_le_bytes);
     let mut storage = [[0; 4]; 9];
     let table = Table(&mut storage);

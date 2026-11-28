@@ -696,3 +696,38 @@ To reproduce, run `python3 scripts/cryptography/check-poly1305-packages.py
 usable V and run `python3 native_rvv_policy.py NEW_DIRECTORY`. The denial
 control changes only a fresh child's next-exec setting. No root privileges,
 sysctl changes, native timing reruns or registry publication are required.
+## Production native replay after security review
+
+The [observations](../assurance/poly1305/v0.31.2-native.tsv) identify the
+optimized executables that actually ran. Each row gives target, compiler,
+MAC vector-test SHA-256 and paired AEAD SHA-256 (on RV64, the second hash
+is the standalone owner exercised with V enabled and disabled). No Windows
+backend or RVV AEAD pair is counted. Earlier timings in these notes identify
+earlier binaries; the corrective runs did **not** remeasure throughput.
+
+To repeat on Linux x86-64, use a fresh directory. The oracle is only needed
+to generate the public transcripts; copy those same files to other hosts.
+
+```sh
+d=$(mktemp -d)
+driver=scripts/cryptography/poly1305_native_replay.py
+python3 "$driver" corpus x86_64-unknown-linux-gnu "$d"
+python3 "$driver" build x86_64-unknown-linux-gnu "$d"
+python3 "$driver" replay x86_64-unknown-linux-gnu "$d"
+```
+
+Use `aarch64-apple-darwin` for Apple Silicon. For Linux ARM64 use
+`aarch64-unknown-linux-musl` (cross-build with
+`CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER=rust-lld` if needed) and
+replay on ARM hardware. The driver requires both compiler endpoints and the
+named target; it checks for one actual standalone test, the pinned RFC and
+independent paired corpora, wrong-tag controls and stable executable hashes.
+For RV64 use `check-poly1305-packages.py --rvv-export NEW_DIRECTORY`, then
+run `assurance/poly1305/tests/native_rvv_policy.py DIRECTORY` on RV64 Linux.
+
+The offline release gate compares tracked observations to the candidate’s
+scoped source/fixture digest. It does not contact the builders, sign the
+observations or claim that CI independently repeated hardware testing.
+When inputs change, rerun the affected tests and review the evidence; do
+not simply replace the source hash. To rerun the arithmetic proof:
+`cargo +1.90.0 kani -p brynja-crypto-cpu --features poly1305-avx2 --harness simd_packing_and_column_bounds`.

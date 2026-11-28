@@ -169,6 +169,11 @@ def test_initial_publication_is_explicit() -> None:
 def test_support_code_uses_independent_minor() -> None:
     changed = entry("0.7.2", "0.8.0", "code", True)
     policy.validate_support_entry("brynja-core", changed)
+    for name in ("brynja-crypto", "brynja-crypto-cpu"):
+        old = entry("0.3.0", "0.3.0", "code", True)
+        assert_fails("internal stage must have an empty publication selection",
+                     policy.validate_internal_entry, name, old)
+        assert_fails("code version must be 0.4.0", policy.validate_support_entry, name, old)
     assert_fails(
         "code version must be 0.8.0",
         policy.validate_support_entry,

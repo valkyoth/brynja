@@ -10,6 +10,19 @@
 
 #![no_std]
 
+#[cfg(any(
+    all(feature = "poly1305-rvv", target_arch = "riscv64", target_os = "linux"),
+    all(feature = "poly1305-avx2", target_arch = "x86_64", target_os = "linux"),
+    all(
+        feature = "poly1305-neon",
+        target_arch = "aarch64",
+        target_endian = "little",
+        target_feature = "neon",
+        any(target_os = "linux", target_os = "macos")
+    )
+))]
+mod poly1305_field;
+
 #[cfg(all(feature = "poly1305-rvv", target_arch = "riscv64", target_os = "linux"))]
 pub mod poly1305_rvv;
 

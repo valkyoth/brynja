@@ -14,6 +14,9 @@ from unittest.mock import patch
 
 import release_crates as publisher
 import registry_ownership as ownership
+import registry_sequence as sequence
+import registry_transport as transport
+from registry_publisher_tests import RegistryPublisher
 from sbom_reproducibility_tests import ReproducibleSbom
 import scoped_release as scoped
 
@@ -25,32 +28,32 @@ class RegistryOwnership(unittest.TestCase):
         entry = {'crate': 'leaf', 'num': '0.1.0', 'yanked': False}
         api = {'brynja/owners': users, 'leaf/owners': users}
         with patch.object(ownership, 'lookup', side_effect=api.get):
-            new, trusted = ownership.first_publications(rows, ['leaf'])
-            self.assertEqual(new, {'leaf': '0.1.0'})
+            trusted, active = sequence.reconcile(rows, ['leaf'], ['leaf'])
+            self.assertFalse(active)
             self.assertEqual(trusted, {('user', 17)})
             api['leaf'] = {}  # Any existing name is a collision, even without this version.
             with self.assertRaises(ValueError):
-                ownership.first_publications(rows, ['leaf'])
+                sequence.reconcile(rows, ['leaf'], ['leaf'])
             with self.assertRaises(ValueError):
-                ownership.first_publications(rows, ['dependent'])
+                sequence.reconcile(rows, ['leaf'], [])
             api['leaf/0.1.0'] = {'version': entry}
-            self.assertEqual(ownership.first_publications(rows, ['dependent']), (new, trusted))
+            self.assertEqual(sequence.reconcile(rows, ['leaf'], []), (trusted, {'leaf': entry}))
             for key, value in [('crate', 'other'), ('num', '0.2.0'), ('yanked', True)]:
                 with patch.dict(entry, {key: value}), self.assertRaises(ValueError):
                     ownership.indexed('leaf', '0.1.0', trusted)
             for bad in (None, {'users': []}, {'users': [{'kind': 'user', 'id': 18}]},
                         {'users': [{'kind': 'team', 'id': 17}]}, {'users': [{'id': 17}]}):
                 with patch.dict(api, {'leaf/owners': bad}), self.assertRaises(ValueError):
-                    ownership.first_publications(rows, ['dependent'])
+                    sequence.reconcile(rows, ['leaf'], [])
 
     def test_network_failure_is_not_an_available_name(self):
         from urllib.error import HTTPError
         for code in (403, 429, 503):
-            with patch.object(ownership, 'urlopen', side_effect=HTTPError('url', code, '', {}, None)):
+            with patch.object(transport, 'delay'), patch.object(transport, 'urlopen', side_effect=HTTPError('url', code, '', {}, None)):
                 with self.assertRaises(HTTPError):
                     ownership.available('leaf')
         for body in (b'null', b'[]', b'invalid'):
-            with patch.object(ownership, 'urlopen', return_value=io.BytesIO(body)):
+            with patch.object(transport, 'urlopen', return_value=io.BytesIO(body)):
                 with self.assertRaises(ValueError):
                     ownership.available('leaf')
 
@@ -73,15 +76,20 @@ class RegistryOwnership(unittest.TestCase):
             'leaf': {'publish': True, 'change': 'initial', 'version': '0.1.0'},
             'brynja': {'publish': True, 'change': 'minor', 'version': '0.30.6'}}}
         api = {'brynja/owners': {'users': [{'kind': 'user', 'id': 17}]},
-               'leaf/owners': {'users': [{'kind': 'user', 'id': 18}]},
-               'leaf/0.1.0': {'version': {'crate': 'leaf', 'num': '0.1.0', 'yanked': False}}}
+               'leaf/owners': {'users': [{'kind': 'user', 'id': 18}]}}
+        def uploaded(name, **kwargs):
+            if name == 'leaf':
+                api['leaf/0.1.0'] = {'version': {'crate': 'leaf', 'num': '0.1.0', 'yanked': False,
+                                                  'created_at': '2026-01-01T00:00:00Z'}}
         with contextlib.ExitStack() as ctx:
             ctx.enter_context(patch('sys.argv', ['release_crates.py', '--yes']))
             ctx.enter_context(patch.object(publisher, 'validate_repository', return_value=plan))
             ctx.enter_context(patch.object(publisher, 'publish_plan', return_value=('leaf', 'brynja')))
-            for name in ('require_clean_tree', 'check_release_tag', 'run_preflight', 'wait_for_index'):
+            for name in ('require_clean_tree', 'check_release_tag', 'run_preflight'):
                 ctx.enter_context(patch.object(publisher, name))
-            publish = ctx.enter_context(patch.object(publisher, 'publish'))
+            ctx.enter_context(patch.object(transport, 'wait_index'))
+            ctx.enter_context(patch.object(transport, 'delay'))
+            publish = ctx.enter_context(patch.object(publisher, 'publish', side_effect=uploaded))
             lookup = ctx.enter_context(patch.object(ownership, 'lookup', side_effect=api.get))
             ctx.enter_context(contextlib.redirect_stdout(io.StringIO()))
             stderr = ctx.enter_context(contextlib.redirect_stderr(io.StringIO()))
@@ -93,6 +101,7 @@ class RegistryOwnership(unittest.TestCase):
             # strand the dependent when the project also has a team owner.
             api['brynja/owners']['users'].append({'kind': 'team', 'id': 19})
             api['leaf/owners'] = {'users': [{'kind': 'user', 'id': 17}]}
+            del api['leaf/0.1.0']
             publish.reset_mock()
             self.assertEqual(publisher.main(), 0)
             self.assertEqual([c.args[0] for c in publish.call_args_list], ['leaf', 'brynja'])
@@ -486,7 +495,7 @@ class ScopedRelease(unittest.TestCase):
             handoff.assert_called_once_with('0.25.3', dry_run=False, root=publisher.ROOT)
             run.assert_not_called()
             publisher.publish('brynja', dry_run=True, checked_candidate=True)
-            run.assert_called_once_with(['cargo', 'publish', '--no-verify', '--locked', '-p', 'brynja'], dry_run=True)
+            run.assert_called_once_with(['cargo', 'publish', '--registry', 'crates-io', '--no-verify', '--locked', '-p', 'brynja'], dry_run=True)
 
     def test_publication_cli_ignores_legacy_evidence_and_never_runs_checks(self):
         plan = dict(version='0.25.3', stage='public',
@@ -504,13 +513,15 @@ class ScopedRelease(unittest.TestCase):
              patch.object(publisher, 'gate_path', side_effect=forbidden), \
              patch.object(scoped, 'gate', side_effect=forbidden), \
              patch.object(scoped, 'publication') as handoff, \
-             patch.object(publisher, 'run') as run:
+             patch.object(ownership, 'owners', return_value={('user', 1)}), \
+             patch.object(ownership, 'inspect', return_value=None), \
+             patch.object(transport, 'wait_index'), patch.object(transport, 'upload') as run:
             self.assertEqual(publisher.main(), 0)
             clean.assert_called_once_with(dry_run=False)
             tag.assert_called_once_with('0.25.3', dry_run=False)
             handoff.assert_called_once_with('0.25.3', dry_run=False, root=publisher.ROOT)
             run.assert_called_once_with(
-                ['cargo', 'publish', '--no-verify', '--locked', '-p', 'brynja'], dry_run=False)
+                ['cargo', 'publish', '--registry', 'crates-io', '--no-verify', '--locked', '-p', 'brynja'], publisher.ROOT)
 
     def test_publication_guards_read_identity_and_ci_not_evidence(self):
         self.write('verification/results.json', '{"status":"unmapped, outdated"}')
@@ -548,13 +559,13 @@ class ScopedRelease(unittest.TestCase):
             self.assertEqual(publisher.main(), 1)
             run.assert_not_called()
 
-    def test_dry_run_wait_never_claims_upload_or_prompts(self):
+    def test_dry_run_never_claims_upload_or_prompts(self):
         output = io.StringIO()
         with contextlib.redirect_stdout(output), \
              patch('builtins.input', side_effect=AssertionError('no prompt')), \
-             patch.object(publisher.time, 'sleep', side_effect=AssertionError('no wait')):
-            publisher.wait_for_index('brynja-core', '0.10.0', dry_run=True)
-        self.assertIn('nothing uploaded', output.getvalue())
+             patch.object(transport, 'upload', side_effect=AssertionError('no upload')):
+            publisher.publish('brynja-core', dry_run=True)
+        self.assertIn('cargo publish', output.getvalue())
         self.assertNotIn('Published ', output.getvalue())
 
     def test_github_requires_success_for_the_exact_commit(self):

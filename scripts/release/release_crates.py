@@ -8,10 +8,10 @@ import os
 import re
 import subprocess
 import sys
-import time
 from pathlib import Path
 import scoped_release
-import registry_ownership
+import registry_sequence
+import registry_transport
 
 from release_policy import (
     DEFAULT_PLAN,
@@ -20,6 +20,7 @@ from release_policy import (
     ROOT,
     cargo_metadata,
     parse_version,
+    package_is_publishable,
     publish_plan,
     validate_repository,
     workspace_packages,
@@ -169,19 +170,28 @@ def require_public_stage(stage: str) -> None:
         )
 
 
-def wait_for_index(package: str, version: str, *, dry_run: bool) -> None:
-    if dry_run:
-        print(f"[dry-run] would wait for {package} {version} to be indexed; nothing uploaded")
-        return
-    print(f"Published {package} {version}.")
-    print(f"Confirm https://crates.io/crates/{package}/{version} before continuing.")
-    input("Press Enter after crates.io indexes this version: ")
-    time.sleep(5)
-
-
 def publish(package: str, *, dry_run: bool, checked_candidate: bool = False) -> None:
     flags = ["--no-verify", "--locked"] if checked_candidate else []
-    run(["cargo", "publish", *flags, "-p", package], dry_run=dry_run)
+    command = ["cargo", "publish", "--registry", "crates-io", *flags, "-p", package]
+    if dry_run:
+        run(command, dry_run=True)
+    else:
+        registry_transport.upload(command, ROOT)
+
+
+def pin_impact(packages, seeds):
+    """Preview reverse exact-pin edges before editing versions or the plan."""
+    affected = {}
+    for name in PUBLISH_ORDER:
+        if not package_is_publishable(packages[name]):
+            if name in seeds:
+                raise ValueError(f'{name} is not currently publishable')
+            continue
+        edges = sorted({d['name'] for d in packages[name]['dependencies'] if d['name'] in affected})
+        if name in seeds or edges or name == FACADE:
+            affected[name] = ('requested bump' if name in seeds else
+                              ', '.join(edges) if edges else 'public checkpoint facade')
+    return affected
 
 
 def package_archive(package: str) -> None:
@@ -252,6 +262,10 @@ def main() -> int:
         help="Resume at a selected package after earlier publications succeeded.",
     )
     mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--status", action="store_true",
+                      help="Read-only: show exact planned versions already on crates.io and those pending.")
+    mode.add_argument("--impact", choices=PUBLISH_ORDER, nargs="+", metavar="CRATE",
+                      help="Offline: preview the published dependents affected by proposed crate bumps.")
     mode.add_argument(
         "--check",
         action="store_true",
@@ -292,20 +306,36 @@ def main() -> int:
     args = parser.parse_args()
 
     try:
+        if args.impact:
+            affected = pin_impact(workspace_packages(cargo_metadata()), args.impact)
+            for name, reason in affected.items():
+                print(f'{name}: {reason}')
+            print(f'{len(affected)} crate(s) including the public facade; preview only.')
+            return 0
         plan = validate_repository(plan_path(args.plan))
         version = args.version or plan["version"]
         if version != plan["version"]:
             raise RuntimeError(
                 f"--version {version} does not match release plan {plan['version']}"
             )
-        steps = selected_steps(args.start_at, publish_plan(plan))
+        all_steps = publish_plan(plan)
+        steps = selected_steps(args.start_at, all_steps)
         if plan["stage"] == "public" and (not steps or steps[-1] != FACADE):
             raise RuntimeError(f"{FACADE} must be the final published crate")
         if args.check:
+            for name in steps:
+                entry = plan["crates"][name]
+                print(f"{name} {entry['version']} ({entry['change']}): {entry['reason']}")
             print(
                 f"release plan {version} is valid for stage={plan['stage']} "
                 f"with {len(steps)} selected crate(s)"
             )
+            return 0
+        if args.status:
+            if all_steps:
+                registry_sequence.sequence(plan, all_steps, steps, None, status=True)
+            else:
+                print('No crates selected for publication.')
             return 0
         if args.evidence_check:
             environment = evidence_environment(args.detached_receipts, args.native_review_sha256)
@@ -343,7 +373,7 @@ def main() -> int:
         for package in steps:
             entry = plan["crates"][package]
             print(f"  - {package} {entry['version']} ({entry['change']})")
-        if not args.yes:
+        if not args.yes and not args.dry_run:
             answer = input("Type the release version to start publishing: ").strip()
             if answer != version:
                 raise RuntimeError("version confirmation did not match")
@@ -354,26 +384,26 @@ def main() -> int:
             release_tag_at_head=tag_at_head,
             evidence_environment=environment,
         )
-        initial, owners = ({}, set()) if args.dry_run else registry_ownership.first_publications(plan, steps)
-        for index, package in enumerate(steps):
-            if package in initial:
-                registry_ownership.available(package)
-            publish(package, dry_run=args.dry_run,
-                    checked_candidate=scoped_release.enabled(version))
-            if index != len(steps) - 1:
-                wait_for_index(
-                    package,
-                    plan["crates"][package]["version"],
-                    dry_run=args.dry_run,
-                )
-            if package in initial:
-                registry_ownership.indexed(package, initial[package], owners, just_uploaded=True)
+        def send(package):
+            publish(package, dry_run=args.dry_run, checked_candidate=scoped_release.enabled(version))
+        if args.dry_run:
+            for package in steps:
+                send(package)
+        else:
+            registry_sequence.sequence(plan, all_steps, steps, send)
         print("Dry-run publication plan completed; nothing uploaded." if args.dry_run
               else "Release publish sequence completed.")
         print(f"Recommended follow-up: cargo info {FACADE}@{version}")
         return 0
+    except KeyboardInterrupt:
+        print("Interrupted. Rerun the same command; registry state determines what remains.", file=sys.stderr)
+        return 130
     except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as error:
         print(error, file=sys.stderr)
+        if not any((args.status, args.impact, args.check, args.dry_run,
+                    args.evidence_check, args.package_check)):
+            print("After resolving the error, rerun the same command. Use --status to see what remains.",
+                  file=sys.stderr)
         return 1
 
 

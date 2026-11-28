@@ -106,8 +106,34 @@ Miri, Kani, sanitizers, compiler matrices or evidence refreshes.
 
 Cargo publishes with `--no-verify --locked` after this handoff: no redundant
 package compilation at upload time. Packaging, registry communication and
-dependency indexing are still necessary upload operations. `--start-at NAME`
-retains the existing interrupted-publication resume behavior.
+dependency indexing are still necessary upload operations.
+
+**Interrupted upload? Rerun the same publisher command from the same signed
+release checkout.** No local progress file or `--start-at` is needed. For a
+read-only inventory first, run:
+
+```sh
+python3 scripts/release/release_crates.py --status
+```
+
+Before sending anything, the publisher checks the exact planned versions on
+crates.io. It skips active versions with the project's full owner set; a
+yanked version, unexpected owner, occupied first-publication name or failed
+lookup is not permission to upload. If a newly created crate still has only
+its uploader as owner, reconcile its project owners before resuming. Manual
+`--start-at NAME` still works but refuses to jump over a missing prerequisite.
+This checks registry identity and version, not byte-for-byte archive provenance.
+
+Uploads stay in dependency order, façade last. The publisher waits two minutes
+between uploads, and at least eleven minutes between two first publications,
+even if updates occur in between. Recent registry timestamps count on restart.
+This deliberately doesn't spend the account's advertised burst allowance.
+See [crates.io's rate limits](https://crates.io/docs/rate-limits). For an
+explicit upload HTTP 429 it waits at least the registry's reported retry time
+and checks the version again before resubmitting (at most three retries).
+It stops on ambiguous Cargo failures or a wait over one hour; rerun later.
+The Cargo sparse index is checked automatically; no Enter prompts between
+packages. `--dry-run` prints the plan without querying crates.io or waiting.
 
 Old evidence options/validators remain available for explicitly inspecting
 historical records; they do not become .3 publication prerequisites. Missing or

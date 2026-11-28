@@ -376,6 +376,23 @@ dependent crate is published. Unchanged supporting crates retain their
 existing versions and are not republished. Internal published dependencies
 remain exact-pinned; a required pin change is a package change.
 
+Before editing manifests, preview the reverse dependency chain for the
+packages you actually intend to change, for example
+`python3 scripts/release/release_crates.py --impact brynja-cipher-chacha`.
+This local planning command includes optional pins and the public façade;
+it does not select packages, edit versions or contact crates.io. Once the
+plan is prepared, `--check` lists the reason for every selected upload.
+
+Do not bump a support package merely to match a project tag. At v0.30.6 the
+baseline was the previous **public** tag, v0.25.3, not the last development
+tag: 5 initial, 5 code (including the façade), 16 dependency and 9 metadata
+entries. For example TLS 1.2 gained a package include list and its inherited
+exact pins moved; legacy MD5 needed new exact pins, not new MD5 code. To
+reduce recurring uploads, review unused dependency edges in placeholder
+crates before the next public plan. Removing an edge is a package change once;
+it prevents later bumps caused solely by that edge. Do not simply omit a
+dependent whose published dependency requirement must change.
+
 `brynja-interop`, `brynja-proofs`, `brynja-research-ssl1`,
 `brynja-test-support`, and `brynja-xtask` are mechanically prohibited from
 publication. Legacy packages may publish only through their separately

@@ -10,6 +10,13 @@ verifies all 16 tag bytes before returning a decision. It clears the caller's
 borrowed key storage on normal return or unwinding drop. See the
 [field proofs and linked cleanup review](assurance/poly1305-portable.md).
 
+The default constructors stay portable. An explicit SIMD handle must pass its
+startup known-answer test before it accepts caller data; a failed self-test is
+not permission to retry on another backend. The paired AEAD keeps the same
+nonce consumption, authenticate-before-decrypt and staged output rules. RV64
+has a standalone MAC only. [Platform checks and negative controls](../release-notes/RELEASE_NOTES_0.31.2.md)
+cover the named builds, not every compiler, ISA or libc.
+
 The [portable ChaCha20 owner](assurance/chacha20-development.md) rejects a
 whole request before mutation if its counter range is too short. It cannot
 prevent a second owner from reusing that range and provides no integrity tag.

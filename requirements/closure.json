@@ -1824,7 +1824,7 @@
     {
       "boundary": {
         "class": "internal-security-design",
-        "rationale": "These effects, memory, provider, integration, rotation, API, portability, proof, audit, and release milestones derive local invariants from already mapped protocol requirements and intentionally have no standalone normative source."
+        "rationale": "The opt-in Poly1305 owners and compatible x86 and AArch64 AEAD pairs preserve the existing RFC 8439 contracts BRY-REQ-CRYPTO-0022 and BRY-REQ-CRYPTO-0009. RV64 Linux admits only the standalone vector MAC. Native correctness and throughput observations are not target-wide timing, erasure, or independent qualification."
       },
       "requirement_ids": [],
       "scope": "Add benchmark-admitted x86_64, AArch64, and qualifying RISC-V Poly1305 backends and integrate them only with compatible admitted ChaCha20 paths; preserve one-time-key, reduction, verification, aliasing, plaintext-release, failure-atomicity, health, and scalar-equivalence rules.",

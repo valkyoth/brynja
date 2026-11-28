@@ -182,7 +182,7 @@ class ScopedRelease(unittest.TestCase):
         self.assertEqual(commands['release-plan'], ['scripts/release/test-release-plan.sh'])
         self.assertEqual(commands['crypto-tests'],
             ['cargo', 'test', '--locked', '-p', 'brynja-aead-chacha20poly1305', '-p', 'brynja-mac-poly1305', '-p', 'brynja-cipher-aes', '-p', 'brynja-universal-hash-ghash', '-p', 'brynja-aead-gcm', '-p', 'brynja-crypto', '-p',
-             'brynja-legacy-hkdf', '--no-default-features', '--features', 'brynja-crypto/hazmat-chacha20,brynja-crypto/gmac-execution,brynja-crypto/aes-gcm-execution,brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider,brynja-crypto/ghash-runtime-execution'])
+             'brynja-legacy-hkdf', '--no-default-features', '--features', 'brynja-crypto/chacha20poly1305-x86,brynja-crypto/chacha20poly1305-neon,brynja-mac-poly1305/poly1305-rvv,brynja-crypto/hazmat-chacha20,brynja-crypto/gmac-execution,brynja-crypto/aes-gcm-execution,brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider,brynja-crypto/ghash-runtime-execution'])
         lint = commands['crypto-lint']
         self.assertIn('brynja-cipher-chacha', lint)
         self.assertEqual(lint[lint.index('--features') + 1], commands['crypto-tests'][-1]
@@ -275,8 +275,11 @@ class ScopedRelease(unittest.TestCase):
         self.assertIn('Portable RFC 8439 ChaCha20', plan['scope'])
         self.assertFalse(any('--differential' in cmd for cmd in commands.values()))
         self.assertEqual(release['release']['stage'], 'internal')
-        self.assertFalse(release['release']['exceptional'])
-        self.assertEqual(release['release']['exception_reason'], '')
+        self.assertTrue(release['release']['exceptional'])
+        self.assertIn('unsafe SIMD kernels', release['release']['exception_reason'])
+        self.assertEqual(release['crates']['brynja-crypto-cpu']['change'], 'code')
+        for backend in ('AVX2', 'NEON', 'RVV', 'no RVV AEAD pair'):
+            self.assertIn(backend, plan['scope'])
         self.assertIn('timing remains unresolved', plan['scope'])
         self.assertIn('RISC-V AES remains evidence-only and unadmitted', plan['scope'])
         self.assertIn('Portable AES-GCM', plan['scope'])

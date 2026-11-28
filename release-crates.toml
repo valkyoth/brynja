@@ -7,29 +7,29 @@ policy = "independent"
 stage = "internal"
 # Legacy explicit runner default only; routine gates use final-checks.toml, not this selector.
 verification = "affected"
-exceptional = false
-exception_reason = ""
+exceptional = true
+exception_reason = "New unsafe SIMD kernels process one-time Poly1305 keys; native execution and authentication boundaries require a scoped owner pentest before tagging."
 
 [crates."brynja"]
 previous_version = "0.31.1"
 version = "0.31.2"
 change = "code"
 publish = false
-reason = "Internal acceleration development milestone; no new public backend or registry publication."
+reason = "Forward opt-in ChaCha20-Poly1305 pairs; internal milestone, no registry publication."
 
 [crates."brynja-aead-chacha20poly1305"]
 previous_version = "unpublished"
 version = "0.1.0"
 change = "code"
 publish = false
-reason = "New portable RFC 8439 AEAD leaf; no registry upload selected."
+reason = "Portable RFC 8439 AEAD leaf with explicit x86 and AArch64 pairs; no registry upload selected."
 
 [crates."brynja-mac-poly1305"]
 previous_version = "unpublished"
 version = "0.1.0"
 change = "code"
 publish = false
-reason = "New internal portable one-time authenticator; no registry upload selected."
+reason = "Standalone one-time authenticator with portable, AVX2, NEON and RVV owners; no registry upload selected."
 
 [crates."brynja-cipher-chacha"]
 previous_version = "0.1.0"
@@ -106,7 +106,7 @@ previous_version = "0.3.0"
 version = "0.3.0"
 change = "code"
 publish = false
-reason = "Re-export portable ChaCha20-Poly1305 and standalone Poly1305 behind separate explicit features; internal only."
+reason = "Re-export portable ChaCha20-Poly1305 and standalone Poly1305; forward the two opt-in AEAD pairs. Internal only."
 
 [crates."brynja-hash-core"]
 previous_version = "0.1.1"
@@ -160,9 +160,9 @@ reason = "Retain the v0.30.6 checkpoint version; no new upload selected."
 [crates."brynja-crypto-cpu"]
 previous_version = "0.3.0"
 version = "0.3.0"
-change = "unchanged"
+change = "code"
 publish = false
-reason = "Retain the v0.30.6 checkpoint version; no new upload selected."
+reason = "Add default-off AVX2, NEON and RVV Poly1305 kernels. A fresh version is required before publishing the changed crate."
 
 [crates."brynja-crypto-cpu-std"]
 previous_version = "0.3.0"

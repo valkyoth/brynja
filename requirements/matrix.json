@@ -1,6 +1,6 @@
 {
-  "closure_policy_sha256": "cc5a8b35a7403dfb820d0a56dc874233f6504ae635afab124f7b5524ed8b761b",
-  "domain_policy_sha256": "5646b5024fc6a5112fa4fc1bf96a4239aab0188d1f8221a98e9375c00ad658a4",
+  "closure_policy_sha256": "1244e222bc8dc2489b66c8bcca147136a973c12c97e8efa29c687a72ada22f5c",
+  "domain_policy_sha256": "2e66e83be31f655a5ddf7118835636a609e76e63e622dac4c544d77028ba8619",
   "policy_sha256": "fab6df2ca04df3720c529fb1fa89325828d97cdd18302d3bd3f64b52780dbef0",
   "requirements": [
     {
@@ -1666,7 +1666,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "RFC answers, independent differential tests, interruption tests, bounded transaction and admission proofs, and two linked x86-64 open-path observations are described in docs/assurance/chacha20poly1305-portable.md. No full-cipher proof, universal constant-time claim, physical erasure or independent qualification.",
+      "evidence_gap": "Portable RFC answers, independent comparisons, interruption tests, bounded proofs and linked open-path observations: docs/assurance/chacha20poly1305-portable.md. Opt-in x86 and AArch64 paired seal/open evidence: release-notes/RELEASE_NOTES_0.31.2.md. No RV64 AEAD pair, full-cipher proof, universal constant-time claim, physical erasure or independent qualification.",
       "id": "BRY-REQ-CRYPTO-0009",
       "invariants": [
         "constant-time",
@@ -1681,7 +1681,7 @@
       "owner": "0.31.1",
       "profile": "crypto-encoding-pkix",
       "residual": "Protocol nonce construction and usage ceilings remain separate downstream obligations and cannot be inferred from primitive correctness.",
-      "revision": 4,
+      "revision": 5,
       "scope": "protocol",
       "sources": [
         {
@@ -3833,7 +3833,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "RFC vectors, differential and packaged replay, five bounded field proofs, lifecycle tests and two x86-64 verifier builds are recorded in docs/assurance/poly1305-portable.md. These do not establish whole-MAC timing, physical erasure or independent verification.",
+      "evidence_gap": "Portable RFC, differential, package, lifecycle, five bounded field proofs and linked verifier observations: docs/assurance/poly1305-portable.md. Opt-in AVX2, NEON and RVV native streaming records and availability limits: release-notes/RELEASE_NOTES_0.31.2.md. Portable proofs do not prove SIMD kernels; throughput does not establish whole-MAC timing, physical erasure or independent verification.",
       "id": "BRY-REQ-CRYPTO-0022",
       "invariants": [
         "constant-time",
@@ -3843,12 +3843,12 @@
         "work-bound"
       ],
       "lifecycle": "implemented",
-      "mapping_rationale": "RFC 8439 section 2.5 defines the raw one-time MAC; section 4 explains key reuse and tag comparison. The worked example and Appendix A.3 check it independently of sections 2.6 and 2.8, which belong to the future AEAD.",
+      "mapping_rationale": "RFC 8439 section 2.5 defines the raw one-time MAC; section 4 explains key reuse and tag comparison. The worked example and Appendix A.3 check it independently of sections 2.6 and 2.8, which belong to the AEAD.",
       "mapping_scope": "reviewed-domain",
       "owner": "0.31.0",
       "profile": "crypto-encoding-pkix",
       "residual": "The caller supplies a fresh unpredictable key and prevents reuse across copies, processes and restarts. Clearing borrowed key storage does not erase prior stack copies, compiler spills or registers. No key generation, encryption or replay protection.",
-      "revision": 1,
+      "revision": 2,
       "scope": "protocol",
       "sources": [
         {

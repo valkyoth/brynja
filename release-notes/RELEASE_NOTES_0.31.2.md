@@ -7,6 +7,14 @@ AVX2 owner and the AEAD crate has an explicit Linux x86-64 SSE2/AVX2 pair.
 The Linux/macOS AArch64 NEON routes and standalone RV64 Linux RVV MAC
 described below are also opt-in. There is no RISC-V AEAD pair.
 
+**Review handoff.** Review the changes since the signed `v0.31.1` tag from
+the crate consumer's perspective: key and accumulator lifetimes, SIMD
+arithmetic, CPU admission and retirement, and authenticated output on both
+buffer layouts. These are new unsafe and authentication boundaries; the
+internal milestone requires a scoped pentest before its final gate. Named
+hardware observations below need not be recollected to start that review.
+No publication, broader platform qualification or release approval is implied.
+
 ## First experiment: native x86-64 AVX2 arithmetic
 
 The [unpublished probe](../assurance/poly1305/examples/four_block_probe.rs)

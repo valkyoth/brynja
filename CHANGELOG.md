@@ -2,8 +2,10 @@
 
 ## 0.31.2 Poly1305 and AEAD acceleration (in development)
 
-- Start an unpublished four-block Poly1305 candidate; no backend admission or
-  change to portable dispatch. [Scope](release-notes/RELEASE_NOTES_0.31.2.md).
+- Add opt-in standalone Poly1305 on Linux x86-64 (AVX2), Linux/macOS AArch64
+  (NEON), and RV64 Linux (V). ChaCha20-Poly1305 can use a compatible pair on
+  x86-64 and AArch64; it stays portable on RISC-V. Default constructors are
+  unchanged. [Native evidence and limits](release-notes/RELEASE_NOTES_0.31.2.md).
 
 ## 0.31.1 portable ChaCha20-Poly1305 (internally tagged)
 

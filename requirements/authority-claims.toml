@@ -4,6 +4,11 @@ reviewed_at = "2026-07-30"
 
 [[plan_boundary]]
 class = "internal-security-design"
+versions = ["0.31.2"]
+rationale = "The opt-in Poly1305 owners and compatible x86 and AArch64 AEAD pairs preserve the existing RFC 8439 contracts BRY-REQ-CRYPTO-0022 and BRY-REQ-CRYPTO-0009. RV64 Linux admits only the standalone vector MAC. Native correctness and throughput observations are not target-wide timing, erasure, or independent qualification."
+
+[[plan_boundary]]
+class = "internal-security-design"
 versions = ["0.29.4"]
 rationale = "Installed downstream consumers test the existing AES-GCM and GMAC requirements (BRY-REQ-CRYPTO-0007 and BRY-REQ-CRYPTO-0021). No new wire format, backend or parameter is admitted. Agreement with published NIST examples and their tag truncations is not FIPS module validation or timing qualification."
 
@@ -36,7 +41,7 @@ versions = [
   "0.22.3", "0.23.1", "0.23.2", "0.23.3", "0.24.1", "0.24.3",
   "0.24.6", "0.24.7", "0.24.8", "0.24.9", "0.24.10", "0.24.11",
   "0.27.3", "0.27.4", "0.28.2",
-  "0.30.1", "0.31.2", "0.32.1", "0.32.2",
+  "0.30.1", "0.32.1", "0.32.2",
   "0.33.1", "0.33.2", "0.36.2", "0.39.2", "0.42.2",
   "0.46.2", "0.47.4", "0.48.5", "0.49.3", "0.51.1", "0.87.0",
   "0.87.1", "0.87.2", "0.88.0", "0.101.0", "0.102.0", "0.104.3",

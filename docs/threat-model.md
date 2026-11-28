@@ -9,6 +9,13 @@ Opening authenticates the bytes supplied; it does not detect replay. Staged
 commit and named scratch clearing do not imply protection from physical faults,
 abort, dumps, register or compiler spill disclosure.
 
+An opt-in SIMD MAC or AEAD pair does not pin its thread or attest the host.
+The advertised instruction set must remain usable wherever that thread runs.
+The RV64 Linux MAC checks the calling thread's vector permission; that cannot
+protect an independently vectorized application or libc. Short fragmented
+updates can be slower than portable. The [native throughput measurements](../release-notes/RELEASE_NOTES_0.31.2.md)
+are not timing-leakage or physical-fault qualification.
+
 Poly1305 authenticates one message per independent one-time key. An owner
 cannot prevent reuse of copied key bytes or enforce uniqueness after restart.
 The caller owns key generation and replay policy. On both reviewed x86-64

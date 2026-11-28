@@ -7454,7 +7454,7 @@ Exit criteria:
 
 ### v0.31.0 - Complete Poly1305
 
-Status: in progress
+Status: released
 
 Plan scope: Implement this one-time authenticator in `brynja-mac-poly1305`. Implement complete Poly1305 key clamping, block and partial-block processing, canonical reduction, one-time-key ownership, constant-time verification, checked lengths, cleanup, official vectors, proofs, and distinct public MAC APIs without yet composing an AEAD.
 
@@ -7493,7 +7493,7 @@ Exit criteria:
 
 ### v0.31.1 - Complete ChaCha20-Poly1305
 
-Status: planned
+Status: in progress
 
 Plan scope: Build `brynja-aead-chacha20poly1305` over the ChaCha20 and Poly1305 crates. Compose the exact admitted ChaCha20 and Poly1305 owners into complete RFC 8439 AEAD seal and open with AAD, nonce and length limits, one-time-key derivation, authenticate-before-release, exact in-place or disjoint buffers, partial-overlap rejection, unchanged failure destinations, cleanup, official vectors, and failure-atomicity proofs.
 

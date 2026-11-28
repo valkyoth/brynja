@@ -6,7 +6,11 @@ owners and legacy HKDF. See the [official directory](../README.md#workspace) for
 registry links and the [feature guide](facade-features.md) for what to select.
 Publication is not independent verification or authorization to use an unfinished protocol.
 
-Development has started on [v0.31.0: standalone Poly1305](../release-notes/RELEASE_NOTES_0.31.0.md).
+Development has started on [v0.31.1: portable ChaCha20-Poly1305](../release-notes/RELEASE_NOTES_0.31.1.md).
+The first acceptance fixture checks both primitives against the RFC's AEAD examples;
+it does not expose or qualify a public AEAD implementation.
+
+The [v0.31.0 standalone Poly1305 milestone](../release-notes/RELEASE_NOTES_0.31.0.md) is internally tagged.
 The unpublished workspace leaf now authenticates and verifies messages. Enable
 `poly1305` on the development façade for `brynja::crypto::poly1305`. Neither
 the leaf nor the new feature is available in the published checkpoint.

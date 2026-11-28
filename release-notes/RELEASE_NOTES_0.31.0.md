@@ -1,4 +1,4 @@
-# v0.31.0 — Standalone Poly1305 (in development)
+# v0.31.0 — Standalone Poly1305 (internally tagged)
 
 This internal milestone starts from v0.30.6. It does not select any crates for
 publication. Its scope is the one-time authenticator, not key generation,

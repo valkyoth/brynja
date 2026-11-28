@@ -4,7 +4,7 @@ For package availability, see the [official crate directory](../README.md#worksp
 The evidence below describes specific builds and milestones; publishing their
 crates at the v0.30.6 checkpoint did not expand any verification claim.
 
-## Standalone Poly1305 (v0.31.0, in development)
+## Standalone Poly1305 (v0.31.0, internally tagged)
 
 Five field proofs passed. The Linux x86-64 verifier compared all 16 bytes and
 cleared the borrowed key on both Rust endpoints. The

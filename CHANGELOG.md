@@ -1,6 +1,12 @@
 # Changelog
 
-## 0.31.0 standalone Poly1305 (in development)
+## 0.31.1 portable ChaCha20-Poly1305 (in development)
+
+- Establish offline RFC 8439 AEAD acceptance cases over the released
+  primitives. No public seal/open API or acceleration yet.
+  [Scope and remaining work](release-notes/RELEASE_NOTES_0.31.1.md).
+
+## 0.31.0 standalone Poly1305 (internally tagged)
 
 - Implement the portable streaming one-time MAC in the unpublished
   `brynja-mac-poly1305` leaf, with RFC 8439 vectors and a test-only arithmetic

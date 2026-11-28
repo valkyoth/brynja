@@ -1,0 +1,12 @@
+[package]
+name = "chacha20poly1305-rfc-replay"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[workspace]
+
+[dependencies]
+brynja-cipher-chacha = { path = "../../crates/brynja-cipher-chacha", features = ["hazmat-chacha20"] }
+brynja-mac-poly1305 = { path = "../../crates/brynja-mac-poly1305" }

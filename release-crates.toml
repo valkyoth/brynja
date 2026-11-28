@@ -1,8 +1,8 @@
 [release]
-version = "0.31.0"
-milestone = "0.31.0"
+version = "0.31.1"
+milestone = "0.31.1"
 baseline = "0.30.6"
-cumulative_milestones = ["0.31.0"]
+cumulative_milestones = ["0.31.0", "0.31.1"]
 policy = "independent"
 stage = "internal"
 # Legacy explicit runner default only; routine gates use final-checks.toml, not this selector.
@@ -11,11 +11,11 @@ exceptional = false
 exception_reason = ""
 
 [crates."brynja"]
-previous_version = "0.30.6"
-version = "0.31.0"
+previous_version = "0.31.0"
+version = "0.31.1"
 change = "code"
 publish = false
-reason = "Advance the internal facade; forward portable ChaCha20 and opt-in Poly1305."
+reason = "Advance the internal facade version for the RFC 8439 AEAD milestone; no registry publication."
 
 [crates."brynja-mac-poly1305"]
 previous_version = "unpublished"

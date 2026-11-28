@@ -156,10 +156,12 @@ class ScopedRelease(unittest.TestCase):
         with self.assertRaises(ValueError):
             scoped.enabled('garbage')
 
-    def test_poly1305_internal_milestone_is_scoped_and_does_not_publish(self):
-        plan = scoped.load('0.31.0')
+    def test_chacha20poly1305_internal_milestone_is_scoped_and_does_not_publish(self):
+        plan = scoped.load('0.31.1')
         commands = {check['id']: check['command'] for check in plan['checks']}
-        self.assertEqual(len(commands), 44)
+        self.assertEqual(len(commands), 45)
+        self.assertEqual(commands['chacha20poly1305-vectors'],
+                         ['python3', 'scripts/cryptography/check-chacha20poly1305-vectors.py'])
         self.assertEqual(commands['poly1305-vectors'], ['python3', 'scripts/cryptography/test-poly1305-vectors.py'])
         self.assertEqual(commands['aes-leaf-identity'], ['python3', 'scripts/aes/check-aes-leaf-identity.py'])
         self.assertEqual(commands['sha256-policy'], ['python3', 'scripts/sha2/check-sha256.py'])
@@ -253,11 +255,11 @@ class ScopedRelease(unittest.TestCase):
                                  or 'check-aes-kani.py' in arg
                                  or 'check-aes-dataflow.py' in arg for arg in command))
         release = tomllib.loads((scoped.ROOT / 'release-crates.toml').read_text())
-        self.assertEqual(release['release']['version'], '0.31.0')
+        self.assertEqual(release['release']['version'], '0.31.1')
         self.assertEqual(release['release']['baseline'], '0.30.6')
-        self.assertEqual(release['crates']['brynja']['previous_version'], '0.30.6')
+        self.assertEqual(release['crates']['brynja']['previous_version'], '0.31.0')
         self.assertEqual(release['crates']['brynja']['change'], 'code')
-        self.assertEqual(release['release']['cumulative_milestones'], ['0.31.0'])
+        self.assertEqual(release['release']['cumulative_milestones'], ['0.31.0', '0.31.1'])
         self.assertIn('standalone portable Poly1305', plan['scope'])
         for name in ('brynja-cipher-aes', 'brynja-universal-hash-ghash'):
             self.assertLess(publisher.PUBLISH_ORDER.index(name), publisher.PUBLISH_ORDER.index('brynja-aead-gcm'))

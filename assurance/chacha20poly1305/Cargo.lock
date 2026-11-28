@@ -16,6 +16,7 @@ name = "brynja-cipher-chacha"
 version = "0.1.0"
 dependencies = [
  "brynja-core",
+ "brynja-crypto-cpu",
 ]
 
 [[package]]
@@ -23,10 +24,18 @@ name = "brynja-core"
 version = "0.11.0"
 
 [[package]]
+name = "brynja-crypto-cpu"
+version = "0.3.0"
+dependencies = [
+ "brynja-core",
+]
+
+[[package]]
 name = "brynja-mac-poly1305"
 version = "0.1.0"
 dependencies = [
  "brynja-core",
+ "brynja-crypto-cpu",
 ]
 
 [[package]]

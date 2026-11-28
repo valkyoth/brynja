@@ -31,6 +31,7 @@
 | Capability | Implemented | Independent verification |
 | --- | --- | --- |
 | RFC 8439 detached seal/open, 96-bit nonces and full tags | ✅ Implemented | ❌ Not independently verified |
+| Explicit Linux x86-64 SSE2 ChaCha20 + AVX2 Poly1305 | ✅ Implemented in checkout | ❌ Not independently verified |
 
 Borrow a 32-byte key with `Sealer::from_reserved_range` for sending or
 `Opener::new` for receiving. Allocate nonoverlapping ranges durably per key:
@@ -72,5 +73,16 @@ fn round_trip(key: &[u8; 32], prefix: [u8; 4], counter: u64) -> Result<(), Error
 
 ## Hardware and SIMD
 
-This leaf uses only the portable ChaCha20 and Poly1305 owners. There is no
-runtime dispatch or target-specific timing or fault-resistance claim.
+Ordinary `seal` and `open` remain portable. In the checkout, enable
+`chacha20poly1305-x86` on the leaf or either façade for the Linux x86-64
+pair. Call `execution::X86Pair::probe()` once and use
+`sender.with_pair(&mut pair)?` or `opener.with_pair(&mut pair)?` before
+calling the same seal/open methods. Binding borrows the sender's existing
+reservation; it does not allocate more nonces. There is no implicit fallback.
+
+An unsupported CPU returns `AdmissionError::Unavailable`. A failed startup
+test returns `Quarantined`; an internal failure or unwind during keyed work
+retires that pair. A peer's bad tag returns `Error::Authentication` and does
+not retire it. The host must maintain the advertised ISA wherever the thread
+may run. Short inputs can be slower; block-zero derivation stays scalar.
+There is no target-specific timing or fault-resistance claim.

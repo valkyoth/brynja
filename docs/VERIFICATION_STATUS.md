@@ -6,6 +6,10 @@ crates at the v0.30.6 checkpoint did not expand any verification claim.
 
 ## Opt-in Linux x86-64 Poly1305 (v0.31.2, in development)
 
+The [paired AEAD campaign](../release-notes/RELEASE_NOTES_0.31.2.md#linux-x86-64-paired-aead)
+separately covers Linux x86-64 SSE2/AVX2 seal/open, rejection before decryption,
+nonce consumption and output staging. It is not evidence for another CPU family.
+
 The [25-weight AVX2 results](../release-notes/RELEASE_NOTES_0.31.2.md#integrated-25-weight-comparison)
 cover the standalone owner on two named compilers, not AEAD or other targets.
 Native known answers, streaming, tag rejection, key cleanup and ISA-masked

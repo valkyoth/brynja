@@ -3,7 +3,8 @@
 This internal milestone follows the signed v0.31.1 tag. No crates are
 selected for publication. Ordinary Poly1305 and AEAD construction remains
 portable. The standalone Poly1305 crate now has an explicit Linux x86-64
-AVX2 owner; the other architectures and accelerated AEAD pairing remain open.
+AVX2 owner and the AEAD crate has an explicit Linux x86-64 SSE2/AVX2 pair.
+Other architectures remain open; neither route is enabled by default.
 
 ## First experiment: native x86-64 AVX2 arithmetic
 
@@ -272,3 +273,47 @@ QEMU executions distinguish availability, not throughput. Separately, a
 one-limb mismatch in the expected startup answer in a disposable build
 returned `Quarantined` on both compilers. The unchanged portable verifier
 instruction pins still pass without the feature.
+
+## Linux x86-64 paired AEAD
+
+Measure complete disjoint seal and valid open using the same checked pair and
+the same portable owners as the public API. On the same Ryzen and CPU 0,
+compare stock release builds at Rust 1.90.0 and 1.100.0. Use 20 bytes of AAD
+and payloads of 64, 256, 1024, 1500, 4096 and 16384 bytes. Allocate scratch
+and construct owners before timing; include derivation, full-tag computation
+or verification, scratch cleanup and destination commit. Warm both routes,
+alternate their order over 12 pairs, and process floor(524288/size) records
+per batch. Report all observations; require a median portable/native ratio
+above one at 1500, 4096 and 16384 for both operations and both compilers for
+a long-record throughput claim. Do not rerun to pass.
+
+Median portable time divided by paired time on this Ryzen 9 9950X3D:
+
+| Payload bytes | Rust 1.90.0 seal / open | Rust 1.100.0 seal / open |
+| ---: | ---: | ---: |
+| 64 | 0.922 / 0.943 | 0.924 / 0.936 |
+| 256 | 1.148 / 1.145 | 1.079 / 1.077 |
+| 1024 | 1.193 / 1.183 | 1.176 / 1.190 |
+| 1500 | 1.183 / 1.171 | 1.186 / 1.189 |
+| 4096 | 1.292 / 1.283 | 1.292 / 1.292 |
+| 16384 | 1.326 / 1.319 | 1.329 / 1.332 |
+
+[All 288 samples](../assurance/chacha20poly1305/paired-x86-ryzen.csv) are retained.
+The long-record criterion passed on both compilers, but portable was faster
+at 64 bytes. These measurements concern throughput, not side-channel leakage.
+Measured example ELF SHA-256: `b978e03c527ccf892505699dab735e6db08be4f658d9610761cb6597a6dfa753`
+(1.90.0), `dc7a27dc0ba01a2147272de17679b130daf3c1a492a264d614c85241a64a07ea`
+(1.100.0). With no arguments both binaries admitted the pair under QEMU
+`-cpu max` and reported `Unavailable` with `-cpu max,-avx2`.
+
+On a Linux x86-64 AVX2 host, replay the public paired API checks with:
+
+```sh
+python3 scripts/cryptography/check-chacha20poly1305-vectors.py --paired-x86 --rust 1.90.0 --oracle --differential
+python3 scripts/cryptography/check-chacha20poly1305-vectors.py --paired-x86 --rust 1.100.0 --oracle --differential
+```
+
+Each compiler passed two RFC records and 848 independently generated records.
+The interruption tests exercise both buffer layouts and enforce two separate
+outcomes: an incorrect tag never starts decryption, whereas an internal
+failure clears scratch, leaves the destination unchanged and retires the pair.

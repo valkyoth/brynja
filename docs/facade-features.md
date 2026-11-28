@@ -24,6 +24,7 @@ selection does not expose that namespace.
 | Feature(s) on either facade | Namespace/API | Profile |
 | --- | --- | --- |
 | `chacha20poly1305` | `chacha20poly1305::{Sealer, Opener}` | Portable RFC 8439 authenticated encryption, with application-reserved sending nonces and full detached tags. Does not expose either raw primitive through the façade. |
+| `chacha20poly1305-x86` | `chacha20poly1305::execution::X86Pair` | Explicit Linux x86-64 SSE2/AVX2 execution. Bind an existing sender or opener with `with_pair`. Ordinary operations stay portable. |
 | `poly1305` | `poly1305::OneTimeKey` | Authenticate or verify one message with a fresh 32-byte key. Full tag only; no encryption, key derivation or ChaCha20 dependency. |
 | `cpu` | `cpu` | Low-level no_std authority and candidate inventory; not host detection |
 | `hazmat-chacha20` | `chacha20::ChaCha20` | Portable IETF stream cipher; no authentication. SSE2/NEON owners are separate leaf opt-ins. |

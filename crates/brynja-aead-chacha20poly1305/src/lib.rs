@@ -18,6 +18,14 @@
 #![no_std]
 #![forbid(unsafe_code)]
 
+#[cfg(all(
+    feature = "chacha20poly1305-x86",
+    target_arch = "x86_64",
+    target_os = "linux",
+    target_feature = "sse2"
+))]
+pub mod execution;
+
 #[cfg(test)]
 mod interruptions;
 mod message;

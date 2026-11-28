@@ -66,6 +66,38 @@ pub(super) fn crypt(
     Ok(())
 }
 
+// Expand the same RFC transcript in both owners. In particular, keep the
+// portable verifier and its cleanup in their already reviewed lexical scope.
+macro_rules! authenticate {
+    ($frame:expr, $key:expr, $nonce:expr, $aad:expr, $cipher:expr, $finish:expr, $start:ident) => {{
+        let mut storage = [0; 32];
+        // The guard also covers interruptions during derivation, before the
+        // Poly1305 owner takes responsibility for the same storage.
+        let guarded = Clear(&mut storage);
+        ChaCha20::new($key, $nonce, 0)
+            .apply_keystream_in_place(guarded.0)
+            .map_err(|_| Error::Invariant)?;
+        let exact = guarded.0.first_chunk_mut::<32>().ok_or(Error::Invariant)?;
+        #[cfg(test)]
+        crate::interruptions::Stage::AfterDerivation.check()?;
+        let mut mac = $start!(OneTimeKey::from_rfc8439_key(exact));
+        for data in [$aad, $cipher] {
+            let padding = data.len().wrapping_neg() & 15;
+            let zeros = [0; 16];
+            mac.update(data).map_err(|_| Error::Invariant)?;
+            mac.update(zeros.get(..padding).ok_or(Error::Invariant)?)
+                .map_err(|_| Error::Invariant)?;
+        }
+        for length in [$frame.aad, $frame.payload] {
+            mac.update(&length.to_le_bytes())
+                .map_err(|_| Error::Invariant)?;
+        }
+        #[cfg(test)]
+        crate::interruptions::Stage::AfterFraming.check()?;
+        $finish(mac)
+    }};
+}
+
 pub(super) struct Frame {
     aad: u64,
     payload: u64,
@@ -92,31 +124,35 @@ impl Frame {
         cipher: &[u8],
         finish: impl FnOnce(Poly1305<'_>) -> Result<T, Error>,
     ) -> Result<T, Error> {
-        let mut storage = [0; 32];
-        // The guard also covers interruptions during derivation, before the
-        // Poly1305 owner takes responsibility for the same storage.
-        let guarded = Clear(&mut storage);
-        ChaCha20::new(key, nonce, 0)
-            .apply_keystream_in_place(guarded.0)
-            .map_err(|_| Error::Invariant)?;
-        let exact = guarded.0.first_chunk_mut::<32>().ok_or(Error::Invariant)?;
-        #[cfg(test)]
-        crate::interruptions::Stage::AfterDerivation.check()?;
-        let mut mac = OneTimeKey::from_rfc8439_key(exact).start();
-        for data in [aad, cipher] {
-            let padding = data.len().wrapping_neg() & 15;
-            let zeros = [0; 16];
-            mac.update(data).map_err(|_| Error::Invariant)?;
-            mac.update(zeros.get(..padding).ok_or(Error::Invariant)?)
-                .map_err(|_| Error::Invariant)?;
+        macro_rules! start {
+            ($one:expr) => {
+                $one.start()
+            };
         }
-        for length in [self.aad, self.payload] {
-            mac.update(&length.to_le_bytes())
-                .map_err(|_| Error::Invariant)?;
+        authenticate!(self, key, nonce, aad, cipher, finish, start)
+    }
+
+    #[cfg(all(
+        feature = "chacha20poly1305-x86",
+        target_arch = "x86_64",
+        target_os = "linux",
+        target_feature = "sse2"
+    ))]
+    pub(super) fn with_paired_mac<T>(
+        &self,
+        key: &[u8; 32],
+        nonce: [u8; 12],
+        aad: &[u8],
+        cipher: &[u8],
+        cpu: &mut brynja_mac_poly1305::execution::Avx2,
+        finish: impl FnOnce(brynja_mac_poly1305::execution::Poly1305Avx2<'_, '_>) -> Result<T, Error>,
+    ) -> Result<T, Error> {
+        macro_rules! start {
+            ($one:expr) => {
+                $one.start_avx2(cpu).map_err(|_| Error::Invariant)?
+            };
         }
-        #[cfg(test)]
-        crate::interruptions::Stage::AfterFraming.check()?;
-        finish(mac)
+        authenticate!(self, key, nonce, aad, cipher, finish, start)
     }
 }
 

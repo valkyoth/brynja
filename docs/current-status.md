@@ -8,7 +8,9 @@ Publication is not independent verification or authorization to use an unfinishe
 
 Development has started on [v0.31.2: Poly1305 and AEAD acceleration](../release-notes/RELEASE_NOTES_0.31.2.md).
 The standalone Poly1305 crate now has an explicit, default-off Linux x86-64
-AVX2 owner. Ordinary MAC construction and ChaCha20-Poly1305 remain portable.
+AVX2 owner. The default-off `chacha20poly1305-x86` feature also pairs it with
+SSE2 ChaCha20 for authenticated seal/open. Ordinary MAC and AEAD operations
+remain portable; neither feature is published yet.
 
 [v0.31.1: portable ChaCha20-Poly1305](../release-notes/RELEASE_NOTES_0.31.1.md) is internally tagged.
 The [unpublished leaf](../crates/brynja-aead-chacha20poly1305/README.md)

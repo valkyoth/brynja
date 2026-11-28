@@ -2,6 +2,14 @@
 //! dependency in the shipped library. These simulate software failures.
 extern crate std;
 
+#[cfg(all(
+    feature = "chacha20poly1305-x86",
+    target_arch = "x86_64",
+    target_os = "linux",
+    target_feature = "sse2"
+))]
+mod paired;
+
 use super::*;
 use core::cell::Cell;
 use std::panic::{AssertUnwindSafe, catch_unwind, resume_unwind};

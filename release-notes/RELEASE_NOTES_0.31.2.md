@@ -317,3 +317,43 @@ Each compiler passed two RFC records and 848 independently generated records.
 The interruption tests exercise both buffer layouts and enforce two separate
 outcomes: an incorrect tag never starts decryption, whereas an internal
 failure clears scratch, leaves the destination unchanged and retires the pair.
+
+## AArch64 NEON two-block probe (unpublished)
+
+The [ARM experiment](../assurance/poly1305/examples/neon_probe/mod.rs) computes
+two consecutive blocks of the same message as `(h + m0)r² + m1r` modulo
+2¹³⁰−5. Only the original key is clamped. Short messages and the final
+partial block use scalar arithmetic. This is a public-input experiment:
+it does **not** implement production key ownership, clearing or streaming.
+It is not reachable through any published crate or feature.
+
+Run `python3 scripts/cryptography/check-poly1305-neon-probe.py` to cross-build
+and replay. On Rust 1.90.0 and 1.100.0, each optimized Linux AArch64 musl ELF
+passed 12 RFC cases and 2,112 generated records against both the independent
+integer model (expected tags) and the portable owner. The runner rejected a
+wrong tag on a long record. The linked two-block body has five two-lane
+widening multiplies and twenty multiply-accumulates; removing the latter from
+the inspected listing makes the instruction check fail.
+
+| Rust | SHA-256 of ELF executed under QEMU |
+| --- | --- |
+| 1.90.0 | `60cd53d019b773c1510bf1b9aeeba558d537e338ea56f9627109e6cf16304c52` |
+| 1.100.0 | `99f023ee61b3262c00eeedad74ddde1ba60a78292794e55d2217cfe983cbe095` |
+
+Apple AArch64 compile checks passed on both compilers; neither that nor QEMU
+establishes native throughput. Before measuring on a named physical ARM
+host, use the following rule: stock optimized builds of both endpoints,
+16/31/32/33/256/1500/4096/16384-byte messages, warm both routes, alternate
+order over 12 pairs and retain every raw observation. Pin one eligible core
+where the OS permits; otherwise report the scheduling limitation. Run the
+following on that host for each endpoint (substitute `+1.100.0` for the second):
+
+```sh
+cargo +1.90.0 run --offline --locked --release --manifest-path assurance/poly1305/Cargo.toml --example neon_two_block -- --bench
+```
+
+Only proceed to a production-owner candidate on that host if the median of
+paired portable/probe times exceeds one for **each** of 1500, 4096 and 16384
+bytes on both compilers. A win for this raw probe does not admit a public
+backend: the actual owner and the paired AEAD would need separate tests and
+measurements. Do not benchmark QEMU or pool observations across platforms.

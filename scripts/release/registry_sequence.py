@@ -1,6 +1,25 @@
 """Reconcile the signed plan against registry state before attempting uploads."""
+import hashlib
+from pathlib import Path
+import subprocess
+import tempfile
+
 import registry_ownership as registry
 import registry_transport as transport
+
+
+def package_checksum(name, version, *, root=Path(__file__).resolve().parents[2]):
+    # Never trust a target/package archive left by an earlier checkout or build.
+    with tempfile.TemporaryDirectory(prefix='brynja-resume-') as target:
+        subprocess.run(['cargo', 'package', '--locked', '--no-verify', '--registry', 'crates-io',
+                        '--target-dir', target, '-p', name], cwd=root, check=True)
+        archive = Path(target) / 'package' / f'{name}-{version}.crate'
+        with archive.open('rb') as stream:
+            return hashlib.file_digest(stream, 'sha256').hexdigest()
+
+
+def verify_existing(name, version):
+    transport.wait_index(name, version, expected=package_checksum(name, version))
 
 
 def reconcile(plan, all_steps, steps):
@@ -25,6 +44,11 @@ def sequence(plan, all_steps, steps, publish, *, status=False):
             pace.recorded(entry['change'] == 'initial', timestamp(name, active[name]))
     if status:
         return
+    # Check every initially active archive before the first irreversible upload,
+    # including entries preceding --start-at and already-published later entries.
+    for name in all_steps:
+        if name in active:
+            verify_existing(name, plan['crates'][name]['version'])
     for name in all_steps:
         entry = plan['crates'][name]
         initial, version = entry['change'] == 'initial', entry['version']
@@ -36,6 +60,7 @@ def sequence(plan, all_steps, steps, publish, *, status=False):
                 # another operator may now be visible. Never retry it blindly.
                 row = registry.inspect(name, entry, trusted)
                 if row is not None:
+                    verify_existing(name, version)
                     pace.recorded(initial, timestamp(name, row))
                     break
                 try:
@@ -49,10 +74,10 @@ def sequence(plan, all_steps, steps, publish, *, status=False):
                 pace.recorded(initial)
                 uploaded = True
                 break
-        # A resumed prerequisite may be in the API before the sparse index.
-        transport.wait_index(name, version)
-        if initial and uploaded:
-            registry.indexed(name, version, trusted, just_uploaded=True)
+        if uploaded:
+            transport.wait_index(name, version)
+            if initial:
+                registry.indexed(name, version, trusted, just_uploaded=True)
 
 
 def timestamp(name, row):

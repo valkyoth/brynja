@@ -122,7 +122,14 @@ yanked version, unexpected owner, occupied first-publication name or failed
 lookup is not permission to upload. If a newly created crate still has only
 its uploader as owner, reconcile its project owners before resuming. Manual
 `--start-at NAME` still works but refuses to jump over a missing prerequisite.
-This checks registry identity and version, not byte-for-byte archive provenance.
+On resume the publisher also rebuilds each existing package archive from
+the clean signed checkout with locked Cargo in a fresh target directory and
+requires its SHA-256 to match the sparse index. All initially active entries
+are checked before the first upload. A version discovered during a rate-limit
+wait is checked before continuing. A mismatch stops publication; check the
+checkout, Cargo version and packaging inputs rather than overriding it.
+`--status` only reports registry presence/ownership; it does not build or
+approve the archive bytes.
 
 Uploads stay in dependency order, façade last. The publisher waits two minutes
 between uploads, and at least eleven minutes between two first publications,

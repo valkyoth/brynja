@@ -26,6 +26,11 @@ Rust consumer against all 56 public answers, with an altered-answer control.
 Both compiler endpoints also compile the leaf for Cortex-M
 (`thumbv7em-none-eabi`). These are functional and build checks.
 
+Use `OneTimeKey::new(key)?` for application key import. It clears and rejects
+a zero clamped multiplier; it cannot detect reuse of a valid nonzero key.
+The explicitly named `from_rfc8439_key` retains the exact RFC input domain.
+For received tags use the consuming `verify` operation, not byte-array equality.
+
 The development façades forward the default-off `poly1305` feature to the
 same leaf. Run `python3 scripts/cryptography/check-poly1305-packages.py` to
 exercise all three import routes against local Cargo registry archives on

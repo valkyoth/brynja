@@ -36,8 +36,12 @@
 Use a fresh, unpredictable 32-byte one-time key for **every** message. Never
 use a long-lived application key directly. `OneTimeKey::new` takes a mutable
 borrow of the key bytes; finishing, failing verification or dropping the owner
-clears that storage. A fresh owner over a caller-created copy bypasses the
-single-use restriction. The caller must prevent this, including after restart.
+clears that storage. Import rejects a zero clamped multiplier, including a
+buffer already cleared by an earlier owner, and clears rejected keys too.
+The explicitly named `from_rfc8439_key` accepts the entire RFC input domain,
+including test vectors with zero multiplier. A fresh owner over a caller-created
+copy bypasses the single-use restriction. The caller must prevent this,
+including after restart.
 
 Call `start`, feed zero or more chunks with `update`, then consume the state
 with either `finalize` (sign) or `verify` (check a full tag). Message boundaries
@@ -52,7 +56,7 @@ use brynja_mac_poly1305::{Error, OneTimeKey};
 
 // Supply a different one-time key for every call; this function clears it.
 fn verify_record(key: &mut [u8; 32], record: &[u8], tag: &[u8; 16]) -> Result<(), Error> {
-    let mut mac = OneTimeKey::new(key).start();
+    let mut mac = OneTimeKey::new(key)?.start();
     mac.update(record)?;
     mac.verify(tag)
 }
@@ -61,3 +65,7 @@ fn verify_record(key: &mut [u8; 32], record: &[u8], tag: &[u8; 16]) -> Result<()
 ## Hardware and SIMD
 
 Portable scalar Rust only. No CPU dispatch or target timing qualification.
+In particular, a 32-bit target can lower wide products to instructions or
+runtime helpers with operand-dependent latency. A Cortex-M compile check
+does not qualify its multiplier. Use `verify` for received tags, not `==`
+on the bytes returned by `finalize`.

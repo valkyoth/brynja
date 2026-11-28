@@ -99,7 +99,7 @@ def upload(command, root):
     raise subprocess.CalledProcessError(result.returncode, command)
 
 
-def wait_index(name, version):
+def wait_index(name, version, *, expected=None):
     # All Brynja package names have four or more characters.
     url = f'https://index.crates.io/{name[:2]}/{name[2:4]}/{name}'
     def active(stream):
@@ -110,6 +110,9 @@ def wait_index(name, version):
             if row['vers'] == version:
                 if row['yanked'] is not False:
                     raise ValueError(f'{name} {version} is yanked')
+                if expected is not None and row.get('cksum') != expected:
+                    raise ValueError(f'{name} {version}: registry checksum differs from freshly packaged '
+                                     'candidate or is missing; stop and reconcile the release')
                 return True
         return False
     for attempt in range(31):

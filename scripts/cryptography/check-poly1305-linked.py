@@ -23,8 +23,8 @@ WRAPPER = 'poly1305_consumer::verify_record'
 BODIES = (VERIFY, elf.ACC, elf.BYTE, elf.PRED, elf.MASK, elf.CORE + '::clear_owned_region',
           elf.CORE + '_volatile::zeroize_region_volatile')
 PINS = {
-    '1.90.0': '76ac8f35ec48b896d1766708aa341d005360bc2dd0b69cec5c3ba9a1dd09c92a',
-    '1.100.0': 'a43da920a1889de35e608af3dbf224d6c7d28d7505e8db25787674aa2005f204',
+    '1.90.0': '284ce073054f7843d3ce2aa773812466d0a693842e4f17d644f7d61d4ccde8a5',
+    '1.100.0': '35120eb0ca439702011dfc91f33f17aa3590217b5652ec383ad47a44059596de',
 }
 
 

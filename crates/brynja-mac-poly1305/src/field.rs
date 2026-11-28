@@ -1,5 +1,6 @@
 //! Radix B = 2^26, modulus B^5 - 5. All loops have public bounds.
 const MASK: u64 = (1 << 26) - 1;
+pub(super) const R_MASK: u128 = 0x0fff_fffc_0fff_fffc_0fff_fffc_0fff_ffff;
 
 pub(super) fn load(bytes: &[u8]) -> u128 {
     bytes.iter().rev().fold(0, |n, b| (n << 8) | u128::from(*b))
@@ -24,7 +25,7 @@ fn carry(words: &mut [u64; 5]) -> u64 {
 }
 
 fn clamped_limbs(raw_r: &[u8]) -> [u64; 5] {
-    limbs(load(raw_r) & 0x0fff_fffc_0fff_fffc_0fff_fffc_0fff_ffff)
+    limbs(load(raw_r) & R_MASK)
 }
 
 pub(super) fn absorb(h: &mut [[u8; 8]; 5], raw_r: &[u8], block: &[u8; 16], full: bool) {

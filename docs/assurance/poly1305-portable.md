@@ -44,8 +44,14 @@ after execution. A changed instruction fingerprint requires review.
 
 | Rust | Observed comparison | SHA-256 of replayed ELF |
 | --- | --- | --- |
-| 1.90.0 | Counted loop visits byte offsets 0 through 15 | `6a5084c9044b1cc5e5f959f4c69dfba130f12e432725c59c6c1e0508754badd7` |
-| 1.100.0 | Sixteen unrolled byte comparisons | `bee1a0af3f81348eadeac495777fdd06ad1d2fba4b667b978768b50289c7b12d` |
+| 1.90.0 | Counted loop visits byte offsets 0 through 15 | `3d9012f8a228dfb5c6fc2e4e44bdd55e6b24e97404cbf46cab1e0ac1226e7ad1` |
+| 1.100.0 | Sixteen unrolled byte comparisons | `793092c1639a9cf06561f8d80dc4820e191bb5cd279dedb1c43012d1c8fca8b2` |
+
+The replay deliberately uses the full-domain RFC constructor. Both constructors
+share the verifier. After adding the import error, the linked delta in the
+screened bodies was confined to encoding and returning the result; no tag
+load, comparison, cleanup call or helper body changed. This screen is not
+a machine-code review of checked key import.
 
 Both accumulate XOR differences with OR and decide equality only after the
 last byte. Normal return clears the difference byte, computed tag (16 bytes),

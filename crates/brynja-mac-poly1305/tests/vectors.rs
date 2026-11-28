@@ -19,7 +19,7 @@ fn decode(s: &str) -> Vec<u8> {
 }
 
 #[test]
-fn rfc_answers_all_splits_and_tag_positions() {
+fn rfc_answers_all_splits_and_tag_positions() -> Result<(), Error> {
     let mut cases = 0u32;
     for row in include_str!("data/rfc8439.tsv").lines() {
         let fields: Vec<_> = row.split('\t').collect();
@@ -33,9 +33,21 @@ fn rfc_answers_all_splits_and_tag_positions() {
         let Ok(tag) = <[u8; 16]>::try_from(decode(t)) else {
             unreachable!("fixture tag")
         };
+        let mut storage = key;
+        if matches!(*id, "A.3.1" | "A.3.2") {
+            assert!(matches!(
+                OneTimeKey::new(&mut storage),
+                Err(Error::DegenerateKey)
+            ));
+        } else {
+            let mut checked = OneTimeKey::new(&mut storage)?.start();
+            checked.update(&msg)?;
+            checked.verify(&tag)?;
+        }
+        assert_eq!(storage, [0; 32]);
         for split in 0..=msg.len() {
             let mut storage = key;
-            let mut mac = OneTimeKey::new(&mut storage).start();
+            let mut mac = OneTimeKey::from_rfc8439_key(&mut storage).start();
             let (prefix, suffix) = msg.split_at(split);
             assert_eq!(mac.update(prefix), Ok(()));
             assert_eq!(mac.update(&[]), Ok(()));
@@ -52,7 +64,7 @@ fn rfc_answers_all_splits_and_tag_positions() {
             } else {
                 Ok(())
             };
-            let mut mac = OneTimeKey::new(&mut storage).start();
+            let mut mac = OneTimeKey::from_rfc8439_key(&mut storage).start();
             for byte in msg.chunks(1) {
                 assert_eq!(mac.update(byte), Ok(()));
             }
@@ -62,22 +74,59 @@ fn rfc_answers_all_splits_and_tag_positions() {
         cases = cases.saturating_add(1);
     }
     assert_eq!(cases, 12);
+    Ok(())
 }
 
 #[test]
-fn empty_message_and_abandoned_keys() {
+fn empty_message_and_abandoned_keys() -> Result<(), Error> {
     let mut storage = [0xa5; 32]; // public test data
-    let state = OneTimeKey::new(&mut storage).start();
+    let state = OneTimeKey::new(&mut storage)?.start();
     assert_eq!(state.finalize(), [0xa5; 16]);
     assert_eq!(storage, [0; 32]);
     storage.fill(0x35);
-    drop(OneTimeKey::new(&mut storage));
+    drop(OneTimeKey::new(&mut storage)?);
     assert_eq!(storage, [0; 32]);
     storage.fill(0x62);
-    let mut state = OneTimeKey::new(&mut storage).start();
+    let mut state = OneTimeKey::new(&mut storage)?.start();
     assert_eq!(state.update(&[1; 19]), Ok(()));
     drop(state);
     assert_eq!(storage, [0; 32]);
+    assert!(matches!(
+        OneTimeKey::new(&mut storage),
+        Err(Error::DegenerateKey)
+    ));
+    Ok(())
+}
+
+#[test]
+fn checked_import_tests_only_effective_multiplier_bits() -> Result<(), Error> {
+    // RFC 8439 byte rules, independent of the production word mask.
+    for offset in 0..16 {
+        for bit in 0..8 {
+            let mut storage = core::array::from_fn(|i| match i {
+                i if i == offset => 1 << bit,
+                16.. => 0x69,
+                _ => 0,
+            });
+            let masked = (matches!(offset, 3 | 7 | 11 | 15) && bit >= 4)
+                || (matches!(offset, 4 | 8 | 12) && bit < 2);
+            let mut reference = storage;
+            if masked {
+                assert!(matches!(
+                    OneTimeKey::new(&mut storage),
+                    Err(Error::DegenerateKey)
+                ));
+            } else {
+                let mut exact = OneTimeKey::from_rfc8439_key(&mut reference).start();
+                exact.update(b"one record")?;
+                let mut checked = OneTimeKey::new(&mut storage)?.start();
+                checked.update(b"one record")?;
+                checked.verify(&exact.finalize())?;
+            }
+            assert_eq!(storage, [0; 32]);
+        }
+    }
+    Ok(())
 }
 
 #[test]
@@ -87,7 +136,7 @@ fn key_storage_after_verify_and_unwind() {
     for mismatch in [false, true] {
         let mut storage = [0x69; 32];
         storage.split_at_mut(16).0.fill(0);
-        let mut mac = OneTimeKey::new(&mut storage).start();
+        let mut mac = OneTimeKey::from_rfc8439_key(&mut storage).start();
         assert_eq!(mac.update(&[5; 19]), Ok(()));
         let mut tag = [0x69; 16];
         tag[0] ^= u8::from(mismatch);
@@ -106,7 +155,7 @@ fn key_storage_after_verify_and_unwind() {
     {
         let mut storage = [0xa7; 32];
         let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let mut mac = OneTimeKey::new(&mut storage).start();
+            let mut mac = OneTimeKey::from_rfc8439_key(&mut storage).start();
             assert_eq!(mac.update(&[7; 17]), Ok(()));
             std::panic::resume_unwind(Box::new(()));
         }));

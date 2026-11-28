@@ -88,6 +88,7 @@ class RegistryOwnership(unittest.TestCase):
             for name in ('require_clean_tree', 'check_release_tag', 'run_preflight'):
                 ctx.enter_context(patch.object(publisher, name))
             ctx.enter_context(patch.object(transport, 'wait_index'))
+            ctx.enter_context(patch.object(sequence, 'package_checksum', return_value='a' * 64))
             ctx.enter_context(patch.object(transport, 'delay'))
             publish = ctx.enter_context(patch.object(publisher, 'publish', side_effect=uploaded))
             lookup = ctx.enter_context(patch.object(ownership, 'lookup', side_effect=api.get))

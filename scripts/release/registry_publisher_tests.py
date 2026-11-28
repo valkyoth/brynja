@@ -1,6 +1,9 @@
 """Offline registry, clock and subprocess controls for publication."""
 import io
+import os
+from pathlib import Path
 import subprocess
+import tempfile
 import unittest
 from datetime import datetime, timezone
 from email.utils import format_datetime
@@ -27,6 +30,7 @@ class RegistryPublisher(unittest.TestCase):
         self.start(registry, 'inspect', side_effect=lambda n, *_: self.active.get(n))
         self.start(registry, 'indexed')
         self.index = self.start(tx, 'wait_index')
+        self.checksum = self.start(seq, 'package_checksum', return_value='a' * 64)
         self.calls = []
 
     def start(self, obj, name, **options):
@@ -72,6 +76,7 @@ class RegistryPublisher(unittest.TestCase):
     def test_status_and_manual_skip_cannot_upload_or_ignore_gaps(self):
         self.run_plan(Mock(side_effect=AssertionError('read-only')), status=True)
         self.index.assert_not_called()
+        self.checksum.assert_not_called()
         with self.assertRaisesRegex(ValueError, 'skip missing'):
             seq.sequence(self.plan, self.names, self.names[1:], self.sent)
         self.assertFalse(self.calls or self.waits)
@@ -97,6 +102,47 @@ class RegistryPublisher(unittest.TestCase):
         self.run_plan(limited)
         self.assertEqual([n for n, _ in self.calls], list(self.names))
         self.assertEqual(self.index.call_count, 4)
+        self.index.assert_any_call('first', '1.0.0', expected='a' * 64)
+
+    def test_later_active_archive_mismatch_blocks_even_the_first_upload(self):
+        self.sent('last')
+        self.calls.clear()
+        self.index.side_effect = ValueError('checksum mismatch')
+        with self.assertRaisesRegex(ValueError, 'checksum mismatch'):
+            self.run_plan()
+        self.checksum.assert_called_once_with('last', '1.0.0')
+        self.index.assert_called_once_with('last', '1.0.0', expected='a' * 64)
+        self.assertEqual(self.calls, [])
+
+    def test_version_appearing_during_backoff_with_wrong_bytes_stops(self):
+        def limited(name):
+            self.sent(name)
+            raise tx.UploadLimited(None)
+        self.index.side_effect = ValueError('checksum mismatch')
+        with self.assertRaisesRegex(ValueError, 'checksum mismatch'):
+            self.run_plan(limited)
+        self.index.assert_called_once_with('first', '1.0.0', expected='a' * 64)
+        self.assertEqual([name for name, _ in self.calls], ['first'])
+
+    def test_checksum_compares_real_archives_not_stale_target(self):
+        # Two freshly packaged copies of identical inputs match. The identity
+        # and version stay the same when a source edit changes the checksum.
+        with tempfile.TemporaryDirectory() as td, patch.dict(os.environ, CARGO_NET_OFFLINE='true'):
+            root = Path(td)
+            (root / 'src').mkdir()
+            (root / 'Cargo.toml').write_text('[package]\nname="fixture"\nversion="1.0.0"\nedition="2021"\n')
+            code = root / 'src/lib.rs'
+            code.write_text('pub const VALUE: u32 = 1;\n')
+            subprocess.run(['cargo', 'generate-lockfile', '--offline'], cwd=root, check=True)
+            stale = root / 'target/package/fixture-1.0.0.crate'
+            stale.parent.mkdir(parents=True)
+            stale.write_bytes(b'stale')
+            self.checksum.side_effect = real_checksum
+            initial = seq.package_checksum('fixture', '1.0.0', root=root)
+            self.assertEqual(initial, seq.package_checksum('fixture', '1.0.0', root=root))
+            code.write_text('pub const VALUE: u32 = 2;\n')
+            self.assertNotEqual(initial, seq.package_checksum('fixture', '1.0.0', root=root))
+            self.assertEqual(stale.read_bytes(), b'stale')
 
     def test_ambiguous_failure_not_retried_and_rate_limit_is_bounded(self):
         ambiguous = Mock(side_effect=subprocess.CalledProcessError(1, ['cargo']))
@@ -146,6 +192,18 @@ class RegistryPublisher(unittest.TestCase):
                 else:
                     real_index('leaf', '1.0.0')
 
+    def test_sparse_index_requires_matching_checksum_on_resume(self):
+        digest = 'a' * 64
+        for actual in (None, 'b' * 64, digest):
+            row = b'{"name":"leaf","vers":"1.0.0","yanked":false' + (
+                b'' if actual is None else b',"cksum":"' + actual.encode() + b'"') + b'}\n'
+            with patch.object(tx, 'read', side_effect=lambda _, decode: decode(io.BytesIO(row))):
+                if actual == digest:
+                    real_index('leaf', '1.0.0', expected=digest)
+                else:
+                    with self.assertRaisesRegex(ValueError, 'checksum'):
+                        real_index('leaf', '1.0.0', expected=digest)
+
     def test_impact_excludes_unrelated_crates_and_follows_transitive_pins(self):
         names = ('root', 'unrelated', 'middle', 'end', 'brynja')
         packages = {n: {'dependencies': []} for n in names}
@@ -156,3 +214,4 @@ class RegistryPublisher(unittest.TestCase):
 
 
 real_index = tx.wait_index
+real_checksum = seq.package_checksum

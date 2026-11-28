@@ -64,7 +64,7 @@ def check_route(root, registry, versions, hashes, name, env):
         if LEAF not in names or (name == LEAF and names != {LEAF, 'brynja-core'}):
             raise ValueError(f'{name}: wrong Poly1305 graph')
         test = pkg.run(cargo + ['test', '--test', 'vectors', '--release', *base, *flags], consumer, env)
-        if 'test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;' not in test.stdout:
+        if 'test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;' not in test.stdout:
             raise ValueError(f'{name}: packaged RFC/lifecycle tests did not run')
         pkg.run(cargo + ['check', '--lib', '--target', 'thumbv7em-none-eabi', *base, *flags], consumer, env)
         print(f'{compiler} {name}: registry archives, opt-in graph, host tests and Cortex-M build passed',

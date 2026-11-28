@@ -26,7 +26,7 @@ fn replay(line: &str) -> Option<()> {
     // both outcomes, and caller-visible key clearing in this linked executable.
     let mut valid_key = key;
     let mut invalid_key = key;
-    let mut mac = OneTimeKey::new(&mut key).start();
+    let mut mac = OneTimeKey::from_rfc8439_key(&mut key).start();
     for chunk in msg.chunks(31) {
         mac.update(chunk).ok()?;
     }
@@ -50,7 +50,7 @@ fn verify_record(
     msg: &[u8],
     tag: &[u8; 16],
 ) -> Result<(), brynja_mac_poly1305::Error> {
-    let mut mac = OneTimeKey::new(key).start();
+    let mut mac = OneTimeKey::from_rfc8439_key(key).start();
     mac.update(msg)?;
     mac.verify(tag)
 }

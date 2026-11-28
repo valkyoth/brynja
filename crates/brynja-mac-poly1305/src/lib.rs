@@ -23,8 +23,29 @@ use brynja_core::{
 pub struct OneTimeKey<'a>(&'a mut [u8; 32]);
 
 impl<'a> OneTimeKey<'a> {
-    /// Take responsibility for clearing the supplied one-time key storage.
-    pub fn new(storage: &'a mut [u8; 32]) -> Self {
+    /// Import a one-time key. Reject a zero clamped multiplier (including an
+    /// accidentally reused cleared buffer) and clear all 32 bytes on rejection.
+    /// Acceptance does not establish freshness or entropy.
+    pub fn new(storage: &'a mut [u8; 32]) -> Result<Self, Error> {
+        let owner = Self(storage);
+        let mut difference = 0;
+        for (byte, mask) in owner.0.iter().zip(field::R_MASK.to_le_bytes()) {
+            accumulate_secret_byte_difference(&mut difference, &(byte & mask), &0);
+        }
+        let zero = secret_difference_is_zero(&difference).expose_public();
+        let _ = clear_owned_region(core::slice::from_mut(&mut difference));
+        if zero {
+            Err(Error::DegenerateKey)
+        } else {
+            Ok(owner)
+        }
+    }
+
+    /// Import the exact RFC 8439 input domain, including degenerate keys.
+    /// Prefer [`Self::new`] for applications. When the clamped multiplier is
+    /// zero the tag is the key's pad for *every message*. This constructor
+    /// deliberately does not detect an accidentally reused cleared buffer.
+    pub fn from_rfc8439_key(storage: &'a mut [u8; 32]) -> Self {
         Self(storage)
     }
 
@@ -47,12 +68,22 @@ impl Drop for OneTimeKey<'_> {
 }
 
 /// Failure returned by the authenticator.
+///
+/// ```compile_fail,E0004
+/// use brynja_mac_poly1305::Error;
+/// fn classify(e: Error) {
+///     match e { Error::Authentication | Error::TooLong | Error::DegenerateKey => () }
+/// }
+/// ```
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[non_exhaustive]
 pub enum Error {
     /// The cumulative message length would exceed u64::MAX bytes.
     TooLong,
     /// The full 16-byte tag did not match.
     Authentication,
+    /// The imported key's clamped multiplier was zero.
+    DegenerateKey,
 }
 
 /// The state of one message. No reset, clone, heap allocation or tag truncation.
@@ -113,6 +144,8 @@ impl Poly1305<'_> {
     }
 
     /// Finish authentication and return the complete 16-byte tag.
+    /// Use the returned bytes for transmission. To authenticate a received tag,
+    /// use [`Self::verify`], not `==` on the output of this method.
     #[must_use]
     pub fn finalize(mut self) -> [u8; 16] {
         self.tag()
@@ -148,9 +181,9 @@ mod tests {
     use super::*;
 
     #[test]
-    fn exhausted_budget_is_nonmutating() {
+    fn exhausted_budget_is_nonmutating() -> Result<(), Error> {
         let mut key = [0x53; 32];
-        let mut mac = OneTimeKey::new(&mut key).start();
+        let mut mac = OneTimeKey::new(&mut key)?.start();
         assert_eq!(mac.update(&[7; 31]), Ok(()));
         mac.length = u64::MAX - 1;
         let before = (mac.acc, mac.tail, mac.used, mac.length);
@@ -159,5 +192,6 @@ mod tests {
         assert_eq!(mac.update(&[9]), Ok(()));
         assert_eq!(mac.update(&[]), Ok(()));
         assert_eq!(mac.update(&[1]), Err(Error::TooLong));
+        Ok(())
     }
 }

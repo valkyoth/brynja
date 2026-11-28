@@ -79,3 +79,38 @@ fn empty_message_and_abandoned_keys() {
     drop(state);
     assert_eq!(storage, [0; 32]);
 }
+
+#[test]
+fn key_storage_after_verify_and_unwind() {
+    // Public degenerate r=0 fixture: the answer is the pad for every message.
+    // Exercise both block paths without deriving the expected tag from this crate.
+    for mismatch in [false, true] {
+        let mut storage = [0x69; 32];
+        storage.split_at_mut(16).0.fill(0);
+        let mut mac = OneTimeKey::new(&mut storage).start();
+        assert_eq!(mac.update(&[5; 19]), Ok(()));
+        let mut tag = [0x69; 16];
+        tag[0] ^= u8::from(mismatch);
+        let result = mac.verify(&tag);
+        assert_eq!(
+            result,
+            if mismatch {
+                Err(Error::Authentication)
+            } else {
+                Ok(())
+            }
+        );
+        assert_eq!(storage, [0; 32]);
+    }
+    #[cfg(panic = "unwind")]
+    {
+        let mut storage = [0xa7; 32];
+        let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let mut mac = OneTimeKey::new(&mut storage).start();
+            assert_eq!(mac.update(&[7; 17]), Ok(()));
+            std::panic::resume_unwind(Box::new(()));
+        }));
+        assert!(result.is_err());
+        assert_eq!(storage, [0; 32]);
+    }
+}

@@ -83,6 +83,10 @@ def compare_rust(toolchain):
     manifest = ROOT / 'assurance/poly1305/Cargo.toml'
     command = ['cargo', '+' + toolchain, 'run', '--quiet', '--locked', '--offline',
                '--release', '--manifest-path', str(manifest)]
+    replay(toolchain, command)
+
+
+def replay(toolchain, command):
     records = comparison_records()
     def encode(rows):
         return ''.join(f'{k.hex()}\t{m.hex()}\t{t.hex()}\n' for _, k, m, t in rows)

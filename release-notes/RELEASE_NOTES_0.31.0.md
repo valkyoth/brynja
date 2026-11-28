@@ -33,7 +33,9 @@ both compilers. The check replays the packaged RFC and lifecycle tests, builds
 for Cortex-M, and checks that the two façades omit the leaf and reject its
 import without opt-in. It never publishes or requires a native device.
 
-## Remaining before acceptance
-
-- Run the roadmap's arithmetic proofs, emitted-code and cleanup checks.
-  The implementation is not independently verified or timing-qualified.
+The [portable assurance record](../docs/assurance/poly1305-portable.md) gives
+the five passing Kani field proofs, Linux x86-64 linked tag-comparison and
+clearing review at both Rust endpoints, and Miri and sanitizer scope. Both
+compilers copied the owner on move; clearing the consumed owner is not a
+promise to erase earlier stack copies. Independent verification and target
+timing qualification are not claimed. This is not final release approval.

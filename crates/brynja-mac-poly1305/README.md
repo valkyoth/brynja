@@ -43,7 +43,9 @@ Call `start`, feed zero or more chunks with `update`, then consume the state
 with either `finalize` (sign) or `verify` (check a full tag). Message boundaries
 matter, update boundaries do not. There is no nonce parameter, replay
 protection, encryption or message framing. Clearing does not cover registers,
-spills, forgotten owners, aborts or caller-created copies.
+spills, forgotten owners, aborts or caller-created copies. The two reviewed
+Linux x86-64 builds also copied the owner state when moving it into verification;
+do not assume earlier stack copies were erased.
 
 ```rust
 use brynja_mac_poly1305::{Error, OneTimeKey};

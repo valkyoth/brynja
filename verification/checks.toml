@@ -5,6 +5,46 @@ execution_semantics = 1
 catalog = "verification/catalog.json"
 includes = ["verification/miri-checks.json", "verification/kani-checks.json", "verification/matrix-checks.json", "verification/extra-checks.json"]
 
+[groups.poly1305-field]
+paths = ["Cargo.toml", "Cargo.lock", "crates/brynja-mac-poly1305/Cargo.toml", "crates/brynja-mac-poly1305/src", "crates/brynja-core/src", "crates/brynja-core/Cargo.toml"]
+
+[groups.poly1305-linked]
+paths = ["assurance/poly1305/Cargo.toml", "assurance/poly1305/Cargo.lock", "assurance/poly1305/src", "crates/brynja-mac-poly1305/tests/data/rfc8439.tsv", "scripts/cryptography/check-poly1305-linked.py", "scripts/cryptography/test-poly1305-vectors.py", "scripts/aes-gcm/paired_linked.py", "scripts/repository/facade_cargo_environment.py"]
+tools = [{program="cargo",toolchain="1.90.0"},{program="rustc",toolchain="1.90.0"},{program="cargo",toolchain="1.100.0"},{program="rustc",toolchain="1.100.0"},{program="python3"},{program="llvm-objdump"}]
+
+[[checks]]
+component = "poly1305"
+id = "portable-field-proofs"
+category = "kani"
+name = "Poly1305 clamp, multiplication bounds and wiring, reduction and pad addition"
+establishes = "Five production-routine arithmetic harnesses under Kani; not a proof of streaming, emitted code or erasure."
+command = ["cargo", "+1.90.0", "kani", "-p", "brynja-mac-poly1305", "--output-format", "terse", "--jobs", "2"]
+cwd = "."
+platform = "linux-x86_64"
+inputs = ["kani-tools", "poly1305-field"]
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","KANIFLAGS"]
+timeout_seconds = 300
+[checks.environment]
+CARGO_NET_OFFLINE = "true"
+[checks.success]
+unique_lines = ["Complete - 5 successfully verified harnesses, 0 failures, 5 total."]
+contains = ["VERIFICATION:- SUCCESSFUL"]
+
+[[checks]]
+component = "poly1305"
+id = "linked-tag-and-clearing"
+category = "codegen"
+name = "Poly1305 linked tag comparison and named-region clearing on Linux x86-64"
+establishes = "Exact normalized normal-return verifier and six helper bodies in the replayed release ELFs. Not whole-MAC timing, compiler-copy erasure or qualification of another target."
+command = ["python3", "scripts/cryptography/check-poly1305-linked.py"]
+cwd = "."
+platform = "linux-x86_64"
+inputs = ["poly1305-field", "poly1305-linked"]
+timeout_seconds = 300
+[checks.success]
+unique_lines = ["Poly1305 linked verifier: both x86-64 endpoints passed"]
+contains = ["Rust 1.90.0 matched all 56 public cases and rejected the control.", "Rust 1.100.0 matched all 56 public cases and rejected the control."]
+
 [groups.chacha20-archive]
 paths = ["scripts/cryptography/check-chacha20-archive.py", "scripts/aes-gcm/check-packaged-api.py", "assurance/aes-gcm-consumer/Cargo.lock", "assurance/chacha20-consumer/lib.rs"]
 [[groups.chacha20-archive.tools]]

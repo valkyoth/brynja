@@ -1,5 +1,10 @@
 # Security Controls
 
+The standalone Poly1305 owner consumes its one-time key for one message and
+verifies all 16 tag bytes before returning a decision. It clears the caller's
+borrowed key storage on normal return or unwinding drop. See the
+[field proofs and linked cleanup review](assurance/poly1305-portable.md).
+
 The [portable ChaCha20 owner](assurance/chacha20-development.md) rejects a
 whole request before mutation if its counter range is too short. It cannot
 prevent a second owner from reusing that range and provides no integrity tag.

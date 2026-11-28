@@ -4,6 +4,14 @@ For package availability, see the [official crate directory](../README.md#worksp
 The evidence below describes specific builds and milestones; publishing their
 crates at the v0.30.6 checkpoint did not expand any verification claim.
 
+## Standalone Poly1305 (v0.31.0, in development)
+
+Five field proofs passed. The Linux x86-64 verifier compared all 16 bytes and
+cleared the borrowed key on both Rust endpoints. The
+[assurance record](assurance/poly1305-portable.md) identifies the exact builds,
+scope of Miri and sanitizer testing, and the stack-copy limitation. No timing
+qualification, independent verification or AEAD support is implied.
+
 ## Standalone AES-GCM and GMAC (v0.30.5, internally tagged)
 
 On Linux x86-64 the [installed consumer](../scripts/aes-gcm/check-installed-consumer.py)

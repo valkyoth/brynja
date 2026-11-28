@@ -2,6 +2,12 @@
 
 Status: initial; expands with every milestone
 
+Poly1305 authenticates one message per independent one-time key. An owner
+cannot prevent reuse of copied key bytes or enforce uniqueness after restart.
+The caller owns key generation and replay policy. On both reviewed x86-64
+builds a move copied accumulator state on the stack; [the clearing guarantee](assurance/poly1305-portable.md)
+does not extend to earlier copies, aborts or forgotten owners.
+
 Raw ChaCha20 is malleable: a changed ciphertext bit changes the corresponding
 plaintext bit without a failure signal. Reusing a key/nonce range also reuses
 keystream. Neither is prevented by the per-owner counter check. Protocols

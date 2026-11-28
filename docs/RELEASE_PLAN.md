@@ -18,6 +18,46 @@ old identities and reviewed prerequisites; v0.24.x remains unchanged.
 
 The [five-part expansion review](ROADMAP_EXPANSION_AUDIT.md) and [scope register](ROADMAP_EXPANSION_REGISTER.json) assign the additional family/API and late-protocol work. Earlier implemented APIs retain their existing claims; backfills are new future work.
 
+## Hosted platform test matrix
+
+For every new or changed shipped capability, plan the following five rows at
+design time and record their results in the milestone's existing verification
+notes before closing it. This is the routine hosted matrix, not a retrospective
+claim about old tags or a replacement for separately promised targets or
+`no_std` checks.
+
+| Operating system | Architecture | Usual execution environment |
+| --- | --- | --- |
+| Linux | x86-64 | Linux x86-64 host |
+| Linux | AArch64 | Linux ARM64 host or guest on ARM64 hardware |
+| Linux | RISC-V 64 (RV64) | RV64 hardware when available; label QEMU-only results explicitly |
+| macOS | AArch64 (Apple Silicon) | Native Apple Silicon builder |
+| Windows | x86-64 (MSVC) | Windows x64 machine or Windows VM using the host CPU |
+
+- **Portable functionality:** run a public consumer inside each applicable
+  OS, at the minimum and current pinned Rust versions. Check the advertised
+  operations against known answers or an independent reference, including
+  applicable rejection cases. A composed operation does not cover primitive
+  operations it never calls (for example, GCM open does not test AES block
+  decryption).
+- **Optional acceleration:** consider every row separately. Run the same
+  correctness checks through each claimed backend, require that it was
+  actually selected, and test clean non-admission where the ISA or OS policy
+  is unavailable. Linux x86-64 is not Windows x86-64 evidence; Linux AArch64
+  is not macOS evidence. A portable-only result is valid when documented; it
+  is not an accelerated pass.
+- **What to record:** for each row name the target, compiler, tested route
+  and evidence. Distinguish native execution (identify any host-CPU VM),
+  CPU emulation, compile-only, and not run. Cross-compilation is not execution;
+  emulation can check correctness but cannot establish native performance or
+  timing. If a claimed route lacks the required run, keep that claim open.
+  For genuinely platform-specific APIs, mark other rows not applicable and
+  say why; do not silently omit them.
+
+Use the existing release checklist and evidence-reuse rules. Documentation-only
+changes do not require five fresh runs, and this matrix does not require
+repeating unrelated benchmarks or timing campaigns.
+
 ## Release Principles
 
 Apply the [family crate ownership rule](CRYPTO_REUSE_PLAN.md#family-crate-ownership-rule)

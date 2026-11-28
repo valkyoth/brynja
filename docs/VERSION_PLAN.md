@@ -10,6 +10,11 @@ Split growing work; never merge unrelated scope to preserve numbering.
 Verification, and Exit criteria. It repeats every exact title and scope; the
 validator rejects numbering, ordering, title, or scope drift.
 
+For each implementation or acceleration milestone, apply the
+[hosted platform test matrix](RELEASE_PLAN.md#hosted-platform-test-matrix):
+Linux x86-64, AArch64 and RV64; macOS Apple Silicon; and Windows x86-64
+MSVC. Record portable and accelerated coverage separately for each.
+
 See the [ordering review](ROADMAP_ORDERING_AUDIT.md) for the future family
 splits and the [schedule register](../requirements/roadmap-schedule.json) for
 old-to-new identities and prerequisite edges. Released milestones through

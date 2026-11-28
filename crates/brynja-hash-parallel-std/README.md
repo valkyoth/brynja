@@ -25,6 +25,9 @@
 
 # brynja-hash-parallel-std
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Use `brynja::crypto::parallelhash` for the portable algorithm. Depend on this hosted adapter directly when you need bounded OS-thread scheduling.
+
 Optional bounded OS-thread scheduling for all four Brynja ParallelHash
 identities. All cryptography stays in the first-party leaf crates; this
 package owns scheduling, resource admission and local worker selection.
@@ -111,7 +114,7 @@ and [strict-profile limitations](https://github.com/valkyoth/brynja/blob/main/do
 
 Select this optional companion separately; it is not a default dependency.
 
-After this source version is published, install from the registry:
+To use the published crate:
 
 ```sh
 cargo add brynja-hash-parallel-std --no-default-features

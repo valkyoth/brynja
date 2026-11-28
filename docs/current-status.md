@@ -1,15 +1,18 @@
 # Current Status
 
-Latest signed internal milestone: [v0.30.2, installed ChaCha20 acceptance](../release-notes/RELEASE_NOTES_0.30.2.md).
-Work on [v0.30.3, standalone raw AES](RELEASE_PLAN.md#v0303---standalone-aes-block-cipher),
-is in progress; it does not add block modes or select publication. In v0.30.1,
+The signed [v0.30.6 public checkpoint](../release-notes/RELEASE_NOTES_0.30.6.md)
+published 35 crates, including the standalone AES, ChaCha20, GHASH and AES-GCM/GMAC
+owners and legacy HKDF. See the [official directory](../README.md#workspace) for
+registry links and the [feature guide](facade-features.md) for what to select.
+Publication is not independent verification or authorization to use an unfinished protocol.
+
+Earlier ChaCha20 milestones: in v0.30.1,
 portable ChaCha20 is available from the standalone crate and its existing
 compatibility import. The standalone crate also has explicit four-block SSE2
 (x86-64) and NEON (little-endian AArch64) owners. NEON has
 native Apple M2 Pro and emulated Linux correctness coverage. Ordinary callers
 remain on the portable path. RISC-V also stays portable: the four-lane RVV
 candidate was correct but slower on the [native SpacemiT X60 comparison](../assurance/chacha20-parallel/README.md#rv64-v-candidate-admission-experiment).
-The next scheduled crates.io checkpoint is v0.30.6, after package acceptance.
 
 Historical snapshot (v0.29.1 portable GMAC): the separate, default-off `gmac`
 feature authenticates associated data using AES-128/192/256. The public API
@@ -138,7 +141,7 @@ v0.24.23 closed ordinary/hardened SHA-1/MD5 byte/bit
 and batch public acceptance using the frozen v0.24.20 contract. See
 [final legacy acceptance](legacy-hash-final-acceptance.md). All instruction
 candidates for those original legacy APIs remain unadmitted. The original hardened owners remain portable; separate opt-in SHA-1 ordinary and hardened operational authorities do not change those candidate gates.
-Public checkpoints use explicit closing patches: v0.25.3, planned v0.30.6 and the
+Public checkpoints use explicit closing patches: v0.25.3, v0.30.6 and the
 [registered successors](../scripts/release/checkpoints.toml). Earlier milestone
 narratives below describe their status at the time, not today's status tables.
 

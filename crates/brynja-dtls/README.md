@@ -25,6 +25,9 @@
 
 # brynja-dtls
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> The façade feature `dtls` exposes `brynja::dtls`. This is a planned engine boundary; enabling it does not provide a working DTLS endpoint.
+
 DTLS 1.2/1.3 engines. This package currently establishes a compile-time workspace
 boundary only; it does not provide the planned implementation.
 

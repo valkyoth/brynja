@@ -25,6 +25,9 @@
 
 # brynja-aead-gcm
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Enable `aes-gcm` on the façade for `brynja::crypto::aes_gcm`, or `gmac` for `brynja::crypto::gmac`. Select the same feature on this leaf when you need only the construction.
+
 Enable `aes-gcm` for detached authenticated encryption or `gmac` for AAD-only authentication. No features are enabled by default. Each API supports AES-128, AES-192 and AES-256 without allocation. For example, import `brynja_aead_gcm::aes_gcm::Aes256Gcm` or `brynja_aead_gcm::gmac::Aes256Gmac`. The existing `brynja_crypto` and `brynja::crypto` imports refer to the same owners.
 
 ## Cryptography Verification Status
@@ -35,6 +38,12 @@ Enable `aes-gcm` for detached authenticated encryption or `gmac` for AAD-only au
 | Standalone GMAC (authenticates associated data without encrypting it) | ✅ Implemented | ❌ Not independently verified |
 
 ## Open an authenticated record
+
+To use the standalone crate for this example:
+
+```sh
+cargo add brynja-aead-gcm --no-default-features --features aes-gcm
+```
 
 With `aes-gcm` enabled, a receiver needs the key, IV, associated data, and
 detached tag. It does **not** need a sending reservation. In this public

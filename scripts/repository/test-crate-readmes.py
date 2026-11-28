@@ -16,6 +16,8 @@ def main():
     first_table = original.index('## Cryptography Verification Status')
     status = original[first_table:before_use]
     mutants = [
+        original.replace(readmes.DIRECTORY, '[Official](https://example.invalid)'),
+        original.replace('\n> Use `brynja::crypto::sha2`', '\nUse `brynja::crypto::sha2`'),
         original.replace('# brynja-hash-sha2\n', '# wrong-crate\n'),
         original.replace('Security-first, first-party Rust', 'Incorrect shared header'),
         original.replace('Independently verified', 'Review omitted'),
@@ -35,6 +37,17 @@ def main():
         original + '\n[Repository-only relative link](../../docs/RELEASE_PLAN.md)\n',
     ]
     method = Path.read_text
+    directory = (readmes.ROOT / 'README.md').read_text()
+    names = {p.parent.name for p in (readmes.ROOT / 'crates').glob('*/Cargo.toml')}
+    row = next(line for line in directory.splitlines() if line.startswith('| [`brynja-core`]'))
+    for changed in (directory.replace(row, ''), directory.replace(row, row + '\n' + row),
+                    directory.replace(row, row.replace('crates/brynja-core/README', 'crates/brynja/README')),
+                    directory.replace(row, row.replace('crates.io/crates/brynja-core', 'crates.io/crates/brynja-cores'))):
+        try:
+            readmes.listed_packages(changed, names)
+        except ValueError:
+            continue
+        raise AssertionError('invalid directory accepted')
     for changed in mutants:
         def text(subject, *args, **kwargs):
             return changed if subject == path else method(subject, *args, **kwargs)
@@ -93,7 +106,7 @@ def main():
         assert commands.count(command) == 1
     package_checks = (readmes.ROOT / 'scripts/repository/check-packages.sh').read_text().splitlines()
     assert package_checks.count('python3 scripts/repository/check-crate-readmes.py') == 1
-    print('Crate README policy rejects 22 header/image/navigation/status/example/link regressions')
+    print('Crate README checks reject directory, routing, header, status, example and link regressions')
 
 
 if __name__ == '__main__':

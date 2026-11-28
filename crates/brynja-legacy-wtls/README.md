@@ -25,6 +25,9 @@
 
 # brynja-legacy-wtls
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> This unpublished boundary is for historical WTLS interoperability work only. It has no operational protocol API, and no feature on the modern façade selects it.
+
 WTLS controlled interoperability. This package currently establishes a compile-time workspace
 boundary only; it does not provide the planned implementation.
 

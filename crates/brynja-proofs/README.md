@@ -25,6 +25,9 @@
 
 # brynja-proofs
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Repository-only proof infrastructure, not a library dependency or a façade feature. A passing boundary test does not constitute a proof of an algorithm.
+
 Repository proof-harness package. This package currently establishes a compile-time workspace
 boundary only; it does not provide the planned implementation.
 

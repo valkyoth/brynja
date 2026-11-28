@@ -25,6 +25,9 @@
 
 # brynja-xtask
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Repository-only tooling, not an application dependency. Use the documented repository scripts for current release and verification commands; there is no façade feature for this package.
+
 Repository task-helper package. This package currently establishes a compile-time workspace
 boundary only; it does not provide the planned implementation.
 

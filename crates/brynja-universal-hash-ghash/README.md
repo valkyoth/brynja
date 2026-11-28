@@ -25,6 +25,9 @@
 
 # brynja-universal-hash-ghash
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Enable `hazmat-ghash` on the façade for `brynja::crypto::ghash`, or select this leaf directly for the raw primitive. Use `aes-gcm` or `gmac` if you need an authentication tag.
+
 Enable `hazmat-ghash` for allocation-free, incremental GHASH on pre-framed
 blocks. The default build exposes no primitive. The caller supplies the hash
 subkey, a 16-byte workspace, a byte budget and separate output storage.
@@ -41,6 +44,12 @@ messages. Use AES-GCM or GMAC for those constructions. This is not POLYVAL.
 Arm PMULL timing remains unqualified; see the [timing observations](https://github.com/valkyoth/brynja/blob/main/docs/assurance/ghash-pmull-order-control.md).
 
 ## Use framed input
+
+To use the standalone crate for this example:
+
+```sh
+cargo add brynja-universal-hash-ghash --no-default-features --features hazmat-ghash
+```
 
 Chunks need not end at a block boundary, but the complete input must.
 `finish` rejects a partial last block; it does not add message padding or

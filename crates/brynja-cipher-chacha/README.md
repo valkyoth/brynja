@@ -25,6 +25,9 @@
 
 # brynja-cipher-chacha
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> On the development façade, enable `hazmat-chacha20` for `brynja::crypto::chacha20`. With published `brynja 0.30.6`, enable that feature on this leaf or `brynja-crypto` instead. SIMD owners are leaf-only; raw ChaCha20 is not authenticated encryption.
+
 A standalone, portable `no_std` implementation of the RFC 8439 ChaCha20
 stream cipher. Enable `hazmat-chacha20` to import `brynja_cipher_chacha::ChaCha20`.
 The same type is available as `brynja_crypto::chacha20::ChaCha20` under the
@@ -38,6 +41,12 @@ matching feature. No CPU backend, allocator or hosted runtime is required.
 | Four-block SIMD on supported targets (explicit opt-in) | ✅ Implemented | ❌ Not independently verified |
 
 ## Use a stream
+
+To use the standalone crate for this example:
+
+```sh
+cargo add brynja-cipher-chacha --no-default-features --features hazmat-chacha20
+```
 
 Enable `hazmat-chacha20` (off by default). Keep the same owner when processing
 successive fragments: constructing another owner at the original counter

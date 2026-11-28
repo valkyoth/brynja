@@ -25,6 +25,9 @@
 
 # brynja-mac-kmac
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Use `brynja::crypto::kmac` without a feature for portable KMAC. Depend on this leaf directly when you only need the construction.
+
 First-party, allocation-free `no_std` KMAC128/256 and KMACXOF128/256 from
 NIST SP 800-185, built on Brynja's hardened cSHAKE owner.
 
@@ -44,7 +47,7 @@ independent cryptographic review; Brynja has no FIPS 140-3 validation.
 
 Use the leaf directly for KMAC/KMACXOF without the facade.
 
-After this source version is published, install from the registry:
+To use the published crate:
 
 ```sh
 cargo add brynja-mac-kmac --no-default-features

@@ -25,6 +25,9 @@
 
 # brynja-mac-hmac
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Use `brynja::crypto::hmac` without a feature for portable modern HMAC. Depend on this crate directly for the standalone API; legacy SHA-1/MD5 HMAC is separate.
+
 First-party, allocation-free `no_std` HMAC over sealed, secret-bearing SHA-2 and
 SHA-3 owners. **Portable APIs are implemented and acceptance-tested; this is
 not independent cryptographic certification.** The modern
@@ -144,7 +147,7 @@ protection claim is made.
 
 Use the leaf directly for typed modern HMAC.
 
-After this source version is published, install from the registry:
+To use the published crate:
 
 ```sh
 cargo add brynja-mac-hmac --no-default-features

@@ -25,6 +25,9 @@
 
 # brynja-legacy-sha1-std
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Select this adapter directly for hosted legacy SHA-1 execution. Use the standalone legacy leaf for portable compatibility; the modern façade never enables either.
+
 Optional hosted CPU detection for the isolated, collision-broken SHA-1 leaf.
 This crate is not a default or modern-facade dependency. The leaf stays `no_std`.
 
@@ -132,7 +135,7 @@ and [strict-profile limits](https://github.com/valkyoth/brynja/blob/main/docs/st
 
 Select this isolated legacy adapter explicitly.
 
-After this source version is published, install from the registry:
+To use the published crate:
 
 ```sh
 cargo add brynja-legacy-sha1-std

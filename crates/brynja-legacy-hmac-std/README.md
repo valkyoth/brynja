@@ -25,10 +25,13 @@
 
 # brynja-legacy-hmac-std
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Select this hosted adapter directly only for legacy HMAC deployments. It is separate from both the modern façade and the portable legacy HMAC crate.
+
 Explicit hosted legacy HMAC-SHA-1 and HMAC-MD5. Do not use these algorithms
 for new protocols. No modern facade, default negotiation or approved service
 selects this package. Install explicitly with `cargo add brynja-legacy-hmac-std`
-once published; until then use the reviewed workspace path.
+from crates.io, or use a matching workspace path for checkout changes.
 
 ## Cryptography Verification Status
 

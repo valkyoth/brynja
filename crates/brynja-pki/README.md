@@ -25,6 +25,9 @@
 
 # brynja-pki
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Use `brynja::pki` through the façade, or this crate directly for bounded ASN.1/DER operations. Parsing a value does not validate a certificate.
+
 Borrowed, allocation-free `no_std` DER traversal and canonical ASN.1 value
 decoding. This is a PKI foundation, not a certificate validator.
 
@@ -43,7 +46,7 @@ There is no named independent review or FIPS 140-3 validation.
 
 Use this bounded DER/ASN.1 foundation directly; it does not validate certificates.
 
-After this source version is published, install from the registry:
+To use the published crate:
 
 ```sh
 cargo add brynja-pki --no-default-features

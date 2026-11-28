@@ -10,6 +10,28 @@ sys.path.insert(0, str(ROOT / 'scripts/zeroization'))
 import scope_inputs
 
 IMAGE = 'https://raw.githubusercontent.com/valkyoth/brynja/main/.github/images/brynja.webp'
+DIRECTORY = ('> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · '
+             '[Modern façade on crates.io](https://crates.io/crates/brynja).')
+
+
+def listed_packages(readme, expected):
+    match = re.search(r'^## Workspace\n(.*?)(?=^## |\Z)', readme, re.M | re.S)
+    if not match or 'prefix alone does not establish project affiliation' not in match[1]:
+        raise ValueError('missing official directory and affiliation guidance')
+    rows = {}
+    for line in match[1].splitlines():
+        if not line.startswith('|') or line.startswith(('| Workspace crate |', '| --- |')):
+            continue
+        row = re.fullmatch(r'\| \[`([\w-]+)`\]\(crates/([\w-]+)/README\.md\) \| ([^|]+) \| (.+) \|', line)
+        if not row or row[1] != row[2] or row[1] in rows:
+            raise ValueError('invalid or duplicate official directory entry: ' + line)
+        name, status = row[1], row[4]
+        if not row[3].strip() or status not in ('Unpublished', f'[crates.io](https://crates.io/crates/{name})'):
+            raise ValueError('incorrect purpose or registry link for ' + name)
+        rows[name] = status != 'Unpublished'
+    if rows.keys() != expected:
+        raise ValueError('official directory must list precisely the workspace crate names')
+    return rows
 
 
 def header(reference, name, published):
@@ -28,7 +50,9 @@ def validate(root=ROOT):
     expected = {path.parent / 'README.md' for path in (root / 'crates').glob('*/Cargo.toml')}
     if set(paths) != expected:
         raise ValueError('every crate must have one README')
-    reference = (root / 'README.md').read_text().split('# brynja\n', 1)[0]
+    project = (root / 'README.md').read_text()
+    published = listed_packages(project, {p.parent.name for p in expected})
+    reference = project.split('# brynja\n', 1)[0]
     if (reference.count(f'src="{IMAGE}"') != 1 or '<img width="840"' not in reference
             or not re.search(r'<img [^>]*alt="[^"]+"', reference)):
         raise ValueError('shared README image must be the remotely rendered project image')
@@ -44,12 +68,17 @@ def validate(root=ROOT):
         title = '# ' + path.parent.name + '\n'
         # Registry permission alone does not mean a crate has been published.
         row = release_crates[path.parent.name]
-        registry_links = (manifest['package'].get('publish') is not False
-                          and (row['previous_version'] != 'unpublished' or row['publish']))
+        registry_links = published[path.parent.name]
+        if ((registry_links and manifest['package'].get('publish') is False)
+                or (not registry_links and row['previous_version'] != 'unpublished')):
+            raise ValueError('directory disagrees with package publication history: ' + str(path))
         expected_header = header(reference, path.parent.name, registry_links)
         if text.count(title) != 1 or text.split(title, 1)[0] != expected_header:
             raise ValueError('crate README shared header/title changed: ' + str(path))
         body = text.split(title, 1)[1]
+        if (not body.startswith('\n' + DIRECTORY + '\n> ') or body.count(DIRECTORY) != 1
+                or not body.splitlines()[2].removeprefix('> ').strip()):
+            raise ValueError('missing official directory or package-specific usage note: ' + str(path))
         if '```rust\n' not in body and not re.search(
                 r'```sh\n[^`]*\bcargo (?:test|check) --locked -p ' + re.escape(path.parent.name) + r'\b', body):
             raise ValueError('crate README needs an executable example or honest boundary check: ' + str(path))

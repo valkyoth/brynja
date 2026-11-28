@@ -1,21 +1,21 @@
 # Crate Version Matrix
 
-Latest signed milestone: **v0.30.5** (internal). **v0.30.6 is a public
-checkpoint candidate, not a completed registry release.** [The selection](../release-crates.toml)
-covers 35 uploads, with exact dependency pins and the facade last. Run
-`python3 scripts/release/release_crates.py --check` to validate the selection;
-`--version 0.30.6 --dry-run --yes` prints the order without uploading.
+**Public checkpoint: v0.30.6.** All 35 selected versions were published,
+with exact dependency pins and the façade last. See the [official crate
+directory](../README.md#workspace) for exact registry links and unpublished
+workspace members. The [tagged selection](https://github.com/valkyoth/brynja/blob/v0.30.6/release-crates.toml)
+records the versions; publication does not include later checkout changes.
 
-| Package group | Candidate version | Change |
+| Package group | Published version | Change |
 | --- | --- | --- |
-| `brynja-cipher-chacha`, `brynja-cipher-aes`, `brynja-universal-hash-ghash`, `brynja-aead-gcm`, `brynja-legacy-hkdf` | 0.1.0 | First publication selected |
+| `brynja-cipher-chacha`, `brynja-cipher-aes`, `brynja-universal-hash-ghash`, `brynja-aead-gcm`, `brynja-legacy-hkdf` | 0.1.0 | First publication |
 | `brynja-core` | 0.11.0 | Source delta from the previous public checkpoint |
 | `brynja-crypto`, `brynja-crypto-cpu`, `brynja-crypto-cpu-std` | 0.3.0 | New public functionality |
 | Other selected support crates | Individual patch versions; see selection | Updated exact dependency pins and/or packaging metadata |
 | `brynja` | 0.30.6 | Modern facade, published last |
 
-See the [candidate notes](../release-notes/RELEASE_NOTES_0.30.6.md) for the
-registry-consumer rehearsal and remaining release steps. The package split
+See the [release notes](../release-notes/RELEASE_NOTES_0.30.6.md) for the
+registry-consumer rehearsal and release scope. The package split
 does not qualify Arm timing or admit the research-only RISC-V AES path.
 
 ## Historical matrix (v0.24.x planning snapshot)

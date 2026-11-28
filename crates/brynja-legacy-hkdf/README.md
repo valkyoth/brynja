@@ -25,6 +25,9 @@
 
 # brynja-legacy-hkdf
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Use `brynja::crypto::hkdf` for modern protocols. Select this crate directly only when an existing protocol requires HKDF-SHA-1 and explicitly acknowledge legacy use.
+
 Explicit, allocation-free `no_std` RFC 5869 HKDF-SHA-1 compatibility for
 historical protocols. Do not use this crate for new protocols. It is separate
 from the modern Brynja facade and requires `LegacyUse::acknowledge()` when
@@ -44,6 +47,12 @@ TLS label helper or modern algorithm fallback.
 | Multipart info without allocation | ✅ Implemented | ❌ Not independently verified |
 
 ## Derive a legacy protocol key
+
+To use the standalone crate for this example:
+
+```sh
+cargo add brynja-legacy-hkdf --no-default-features
+```
 
 Depend directly on this crate; no feature flag is required. This example
 uses the public inputs and first eight expected output bytes from RFC 5869

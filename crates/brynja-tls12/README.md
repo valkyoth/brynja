@@ -25,6 +25,9 @@
 
 # brynja-tls12
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> The façade’s `brynja::tls` is the modern entry point. This separate TLS 1.2 engine boundary has no operational handshake API; publishing the crate does not implement TLS.
+
 TLS 1.2 engine. This package currently establishes a compile-time workspace
 boundary only; it does not provide the planned implementation.
 

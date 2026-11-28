@@ -25,6 +25,9 @@
 
 # brynja-tls13-handshake
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> This is the shared boundary for the planned TLS 1.3 and QUIC handshake engines, not a standalone working handshake. Use `brynja::protocol` for the implemented record-framing utilities.
+
 Shared TLS 1.3 handshake state machine. This package currently establishes a compile-time workspace
 boundary only; it does not provide the planned implementation.
 

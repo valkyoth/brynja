@@ -25,6 +25,9 @@
 
 # brynja-hash-core
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Use the façade’s hash families to compute a digest. Depend on this crate directly when implementing a shared hash interface; it does not compute digests.
+
 Small allocation-free `no_std` interfaces shared by fixed-output and
 extendable-output hash implementations. No hash algorithm, runtime dispatch,
 I/O or protocol is implemented in this crate.
@@ -44,7 +47,7 @@ Interface tests are not independent cryptographic verification or FIPS validatio
 Use this interface package directly only when composing or implementing
 compatible APIs.
 
-After this source version is published, install from the registry:
+To use the published crate:
 
 ```sh
 cargo add brynja-hash-core --no-default-features

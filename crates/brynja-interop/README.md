@@ -25,6 +25,9 @@
 
 # brynja-interop
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Repository-only interoperability work, not a published library or a façade feature. Use the per-family assurance fixtures to find implemented comparisons.
+
 Repository interoperability harness. This package currently establishes a compile-time workspace
 boundary only; it does not provide the planned implementation.
 

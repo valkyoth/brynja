@@ -1,5 +1,8 @@
 # Modern facade features
 
+Use the [official crate directory](../README.md#workspace) when choosing a
+standalone leaf or adapter. A similar name on crates.io does not establish affiliation.
+
 `brynja` and `brynja-crypto` forward the same algorithm features. The examples
 below use `brynja::crypto`; users of `brynja-crypto` replace that prefix with
 `brynja_crypto`. Existing flat portable functions and types are unchanged.

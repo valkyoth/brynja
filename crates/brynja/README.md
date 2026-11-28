@@ -25,6 +25,9 @@
 
 # brynja
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Start here for modern algorithms and shared protocol building blocks. Choose a documented feature for raw ciphers or AEAD; do not infer TLS support from the package name.
+
 `brynja` is the small modern facade for the Brynja cryptography and secure-protocol workspace. It is allocation-independent `no_std` Rust without a C cryptographic library. Select the separate [brynja-strict facade](https://github.com/valkyoth/brynja/blob/main/crates/brynja-strict/README.md) for protected-memory/worker-stack APIs: upgrading `brynja` does not enable them. Strict constructors reject unsupported platforms or unavailable resources; their platform and cleanup limits remain explicit.
 
 > **Development status:** Brynja is pre-1.0, incomplete, and must not yet secure application traffic. It provides all six SHA-2 and FIPS 202 functions,
@@ -131,7 +134,7 @@ Default hash APIs remain portable. Separate CPU packages expose default-off raw 
 Select a release containing the modern APIs described here. Older foundation-only
 packages do not expose the complete hash/MAC surface.
 
-After this source version is published, install from the registry:
+To use the published crate:
 
 ```sh
 cargo add brynja --no-default-features

@@ -25,6 +25,9 @@
 
 # brynja-tls
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> The modern façade exposes `brynja::tls` without a feature. This is the planned router boundary, not a TLS client, server or handshake API.
+
 Modern TLS facade. This package currently establishes a compile-time workspace
 boundary only; it does not provide the planned implementation.
 

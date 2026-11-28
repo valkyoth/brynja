@@ -25,6 +25,9 @@
 
 # brynja-legacy-md5
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Select this leaf directly only when an existing format requires MD5. The modern façade intentionally offers no MD5 flag.
+
 First-party, allocation-free `no_std` legacy MD5 for explicit compatibility.
 
 ## Cryptography Verification Status
@@ -62,8 +65,8 @@ admission. Future HKDF/OpenPGP integrations need their own legacy admission.
 
 ## Use
 
-The leaf is currently unpublished. Depend directly on this checkout path for
-explicit legacy compatibility testing.
+For an existing format that requires this algorithm, install the published leaf
+with `cargo add brynja-legacy-md5 --no-default-features`. To test checkout changes instead:
 
 ```toml
 [dependencies]

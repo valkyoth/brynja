@@ -25,6 +25,9 @@
 
 # brynja-test-support
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Repository-only fixtures for reproducible tests. Never use their predictable inputs as production secrets, clocks or entropy. No façade feature enables them.
+
 Permanently unpublished, repository-only `no_std` fixtures. These predictable
 helpers must never enter production dependency graphs.
 

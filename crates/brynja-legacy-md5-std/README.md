@@ -25,6 +25,9 @@
 
 # brynja-legacy-md5-std
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Select this hosted adapter directly only for legacy MD5 observation and execution policies. It is neither a modern façade feature nor a reason to choose MD5 for new designs.
+
 Optional host observation for collision-broken legacy MD5. The leaf remains
 allocation-free `no_std`; this adapter is never a modern-facade dependency.
 
@@ -167,7 +170,7 @@ rejects batches without a complete active vector group before work/output mutati
 
 Select this isolated legacy adapter explicitly.
 
-After this source version is published, install from the registry:
+To use the published crate:
 
 ```sh
 cargo add brynja-legacy-md5-std

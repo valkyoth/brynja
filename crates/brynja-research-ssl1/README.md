@@ -25,6 +25,9 @@
 
 # brynja-research-ssl1
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Repository-only research, not a registry dependency. There is no production SSL 1.0 API and no modern façade feature for it.
+
 SSL 1.0 provenance reconstruction. This package currently establishes a compile-time workspace
 boundary only; it does not provide the planned implementation.
 

@@ -25,6 +25,9 @@
 
 # brynja-crypto-cpu
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Prefer the façade’s algorithm-specific execution features. Depend on this crate directly only for its low-level CPU authority and kernel contracts; a Cargo feature does not establish hardware support.
+
 Optional, allocation-free `no_std` first-party CPU kernels and execution
 authority. Complete hash framing, padding and streaming belong to algorithm
 leaves; raw compression or permutation is not a complete hash API.
@@ -111,7 +114,7 @@ See the [batch API and deployment contract](https://github.com/valkyoth/brynja/b
 
 Select raw CPU authority only when implementing an explicitly admitted route.
 
-After this source version is published, install from the registry:
+To use the published crate:
 
 ```sh
 cargo add brynja-crypto-cpu --no-default-features --features static-execution

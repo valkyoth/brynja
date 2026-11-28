@@ -25,6 +25,9 @@
 
 # brynja-platform
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> The façade feature `platform` exposes `brynja::platform`. This is an integration boundary, not an implemented entropy source or platform driver.
+
 Platform entropy, clocks and deployment adapters. This package currently establishes a compile-time workspace
 boundary only; it does not provide the planned implementation.
 

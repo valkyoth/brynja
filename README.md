@@ -209,6 +209,9 @@ them. The modern facade does not expose an indiscriminate `all-hashes` feature.
 
 ## Usage And Availability
 
+Start with the [official crate directory](#workspace) to choose between the
+modern façade, a standalone leaf and a repository-only development package.
+
 The repository can contain capabilities not yet published on crates.io.
 Check the [crate version matrix](docs/CRATE_VERSION_MATRIX.md) before choosing a
 registry version. The [facade README](crates/brynja/README.md) and each leaf
@@ -291,24 +294,89 @@ Detailed release-by-release history belongs in those reports and
 
 ## Workspace
 
-| Package group | Responsibility |
-| --- | --- |
-| `brynja` | Curated modern facade |
-| `brynja-strict` | Separate strict-only protected modern sessions; explicit platform limits |
-| `brynja-core`, `brynja-hash-core` | Bounded ownership, constant-time and hash interfaces |
-| `brynja-hash-*`, `brynja-mac-*` | Reusable algorithm and construction families |
-| `brynja-cipher-aes`, `brynja-cipher-chacha` | Opt-in raw block and stream ciphers |
-| `brynja-universal-hash-ghash`, `brynja-aead-gcm` | Framed GHASH; authenticated AES-GCM and GMAC |
-| `brynja-crypto` | Cryptographic composition, provider contracts and policy |
-| `brynja-crypto-cpu`, optional `-std` adapters | Explicit CPU/SIMD execution boundaries |
-| `brynja-protocol`, `brynja-pki` | Record framing and ASN.1/DER building blocks |
-| `brynja-tls*`, `brynja-dtls`, `brynja-quic-tls` | Protocol engine boundaries; complete engines remain planned |
-| `brynja-legacy-*` | Explicit obsolete-algorithm and protocol compatibility |
-| `brynja-sanitization` | Separately selected first-party clearing adapter |
-| Future OpenPGP, FIPS and platform-security packages | Separately scoped protocol, validation and deployment work |
+This is the **official Brynja crate directory**. The `brynja-` prefix alone does not establish project affiliation. Start at the [`brynja` façade on crates.io](https://crates.io/crates/brynja) for modern APIs. If you need a standalone primitive, hosted adapter or legacy implementation, follow its exact registry link below rather than guessing the name.
 
-The [crate version matrix](docs/CRATE_VERSION_MATRIX.md) lists exact packages,
-versions and publication status. Each crate has its own README.
+Each package name links to its source README with features, examples and limitations. A registry link means the package has been published, **not** that a planned engine works or that it is independently verified. GitHub describes the development branch; use the matching tag or versioned docs.rs page for an installed release. The [feature guide](docs/facade-features.md) lists the façade flags; the [crate version matrix](docs/CRATE_VERSION_MATRIX.md) explains how versions are assigned.
+
+### Start here and shared foundations
+
+| Workspace crate | Purpose | Registry |
+| --- | --- | --- |
+| [`brynja`](crates/brynja/README.md) | Modern façade | [crates.io](https://crates.io/crates/brynja) |
+| [`brynja-core`](crates/brynja-core/README.md) | Bounded buffers, secrets and provider contracts | [crates.io](https://crates.io/crates/brynja-core) |
+| [`brynja-crypto`](crates/brynja-crypto/README.md) | Modern algorithm composition and compatibility imports | [crates.io](https://crates.io/crates/brynja-crypto) |
+| [`brynja-hash-core`](crates/brynja-hash-core/README.md) | Hash/XOF interfaces and canonical bit strings | [crates.io](https://crates.io/crates/brynja-hash-core) |
+| [`brynja-protocol`](crates/brynja-protocol/README.md) | TLS/DTLS record-envelope framing | [crates.io](https://crates.io/crates/brynja-protocol) |
+| [`brynja-pki`](crates/brynja-pki/README.md) | Borrowed ASN.1/DER building blocks | [crates.io](https://crates.io/crates/brynja-pki) |
+| [`brynja-sanitization`](crates/brynja-sanitization/README.md) | Optional secret-storage adapter | [crates.io](https://crates.io/crates/brynja-sanitization) |
+
+### Modern cryptography
+
+| Workspace crate | Purpose | Registry |
+| --- | --- | --- |
+| [`brynja-hash-sha2`](crates/brynja-hash-sha2/README.md) | SHA-2 | [crates.io](https://crates.io/crates/brynja-hash-sha2) |
+| [`brynja-hash-sha3`](crates/brynja-hash-sha3/README.md) | SHA-3, SHAKE and cSHAKE | [crates.io](https://crates.io/crates/brynja-hash-sha3) |
+| [`brynja-hash-tuple`](crates/brynja-hash-tuple/README.md) | TupleHash and TupleHashXOF | [crates.io](https://crates.io/crates/brynja-hash-tuple) |
+| [`brynja-hash-parallel`](crates/brynja-hash-parallel/README.md) | ParallelHash and ParallelHashXOF | [crates.io](https://crates.io/crates/brynja-hash-parallel) |
+| [`brynja-mac-hmac`](crates/brynja-mac-hmac/README.md) | Modern HMAC | [crates.io](https://crates.io/crates/brynja-mac-hmac) |
+| [`brynja-mac-kmac`](crates/brynja-mac-kmac/README.md) | KMAC and KMACXOF | [crates.io](https://crates.io/crates/brynja-mac-kmac) |
+| [`brynja-cipher-aes`](crates/brynja-cipher-aes/README.md) | Raw AES block operations | [crates.io](https://crates.io/crates/brynja-cipher-aes) |
+| [`brynja-cipher-chacha`](crates/brynja-cipher-chacha/README.md) | Raw IETF ChaCha20 | [crates.io](https://crates.io/crates/brynja-cipher-chacha) |
+| [`brynja-universal-hash-ghash`](crates/brynja-universal-hash-ghash/README.md) | GHASH universal hashing | [crates.io](https://crates.io/crates/brynja-universal-hash-ghash) |
+| [`brynja-aead-gcm`](crates/brynja-aead-gcm/README.md) | AES-GCM and GMAC | [crates.io](https://crates.io/crates/brynja-aead-gcm) |
+
+### Execution and hosted adapters
+
+| Workspace crate | Purpose | Registry |
+| --- | --- | --- |
+| [`brynja-crypto-cpu`](crates/brynja-crypto-cpu/README.md) | Low-level CPU kernels and authority | [crates.io](https://crates.io/crates/brynja-crypto-cpu) |
+| [`brynja-crypto-cpu-std`](crates/brynja-crypto-cpu-std/README.md) | Hosted CPU observation and admission | [crates.io](https://crates.io/crates/brynja-crypto-cpu-std) |
+| [`brynja-hash-parallel-std`](crates/brynja-hash-parallel-std/README.md) | Bounded OS-thread scheduling for ParallelHash | [crates.io](https://crates.io/crates/brynja-hash-parallel-std) |
+| [`brynja-strict`](crates/brynja-strict/README.md) | Platform-specific protected sessions | [crates.io](https://crates.io/crates/brynja-strict) |
+
+### Protocol and platform boundaries
+
+| Workspace crate | Purpose | Registry |
+| --- | --- | --- |
+| [`brynja-tls`](crates/brynja-tls/README.md) | Modern TLS router boundary | [crates.io](https://crates.io/crates/brynja-tls) |
+| [`brynja-tls12`](crates/brynja-tls12/README.md) | TLS 1.2 engine boundary | [crates.io](https://crates.io/crates/brynja-tls12) |
+| [`brynja-tls13`](crates/brynja-tls13/README.md) | TLS 1.3 stream engine boundary | [crates.io](https://crates.io/crates/brynja-tls13) |
+| [`brynja-tls13-handshake`](crates/brynja-tls13-handshake/README.md) | Record-independent TLS 1.3 handshake boundary | [crates.io](https://crates.io/crates/brynja-tls13-handshake) |
+| [`brynja-dtls`](crates/brynja-dtls/README.md) | DTLS engine boundary | [crates.io](https://crates.io/crates/brynja-dtls) |
+| [`brynja-quic-tls`](crates/brynja-quic-tls/README.md) | QUIC handshake boundary | [crates.io](https://crates.io/crates/brynja-quic-tls) |
+| [`brynja-platform`](crates/brynja-platform/README.md) | Platform integration boundary | [crates.io](https://crates.io/crates/brynja-platform) |
+
+### Legacy compatibility (never enabled by the modern façade)
+
+| Workspace crate | Purpose | Registry |
+| --- | --- | --- |
+| [`brynja-legacy-hkdf`](crates/brynja-legacy-hkdf/README.md) | HKDF-SHA-1 | [crates.io](https://crates.io/crates/brynja-legacy-hkdf) |
+| [`brynja-legacy-hmac`](crates/brynja-legacy-hmac/README.md) | HMAC-SHA-1 and HMAC-MD5 | [crates.io](https://crates.io/crates/brynja-legacy-hmac) |
+| [`brynja-legacy-hmac-std`](crates/brynja-legacy-hmac-std/README.md) | Hosted legacy HMAC | [crates.io](https://crates.io/crates/brynja-legacy-hmac-std) |
+| [`brynja-legacy-md5`](crates/brynja-legacy-md5/README.md) | MD5 | [crates.io](https://crates.io/crates/brynja-legacy-md5) |
+| [`brynja-legacy-md5-std`](crates/brynja-legacy-md5-std/README.md) | Hosted legacy MD5 | [crates.io](https://crates.io/crates/brynja-legacy-md5-std) |
+| [`brynja-legacy-sha1`](crates/brynja-legacy-sha1/README.md) | SHA-1 | [crates.io](https://crates.io/crates/brynja-legacy-sha1) |
+| [`brynja-legacy-sha1-std`](crates/brynja-legacy-sha1-std/README.md) | Hosted legacy SHA-1 | [crates.io](https://crates.io/crates/brynja-legacy-sha1-std) |
+
+### Unpublished workspace members
+
+| Workspace crate | Purpose | Registry |
+| --- | --- | --- |
+| [`brynja-legacy`](crates/brynja-legacy/README.md) | Legacy protocol façade boundary | Unpublished |
+| [`brynja-legacy-ssl2`](crates/brynja-legacy-ssl2/README.md) | SSL 2.0 compatibility boundary | Unpublished |
+| [`brynja-legacy-ssl3`](crates/brynja-legacy-ssl3/README.md) | SSL 3.0 compatibility boundary | Unpublished |
+| [`brynja-legacy-tls10`](crates/brynja-legacy-tls10/README.md) | TLS 1.0 compatibility boundary | Unpublished |
+| [`brynja-legacy-tls11`](crates/brynja-legacy-tls11/README.md) | TLS 1.1 compatibility boundary | Unpublished |
+| [`brynja-legacy-wtls`](crates/brynja-legacy-wtls/README.md) | WTLS compatibility boundary | Unpublished |
+| [`brynja-legacy-snp`](crates/brynja-legacy-snp/README.md) | SNP compatibility boundary | Unpublished |
+| [`brynja-legacy-pct`](crates/brynja-legacy-pct/README.md) | PCT compatibility boundary | Unpublished |
+| [`brynja-research-ssl1`](crates/brynja-research-ssl1/README.md) | SSL 1.0 historical research | Unpublished |
+| [`brynja-proofs`](crates/brynja-proofs/README.md) | Proof-harness boundary | Unpublished |
+| [`brynja-interop`](crates/brynja-interop/README.md) | Interoperability-harness boundary | Unpublished |
+| [`brynja-test-support`](crates/brynja-test-support/README.md) | Deterministic test fixtures | Unpublished |
+| [`brynja-xtask`](crates/brynja-xtask/README.md) | Repository maintenance-tool boundary | Unpublished |
+
+The [brynja-verify developer tool](tools/brynja-verify/README.md) lives outside the library workspace. Install it from the repository; it is not an application dependency. Assurance fixtures and archived research are not registry packages in this directory.
 
 ## Platform Policy
 

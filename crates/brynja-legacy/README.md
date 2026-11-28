@@ -25,6 +25,9 @@
 
 # brynja-legacy
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> This unpublished legacy façade groups planned compatibility engines. Its features select workspace boundaries, not usable clients or servers. It is separate from the modern façade.
+
 Opt-in legacy-protocol facade. This package currently establishes a compile-time workspace
 boundary only; it does not provide the planned implementation.
 

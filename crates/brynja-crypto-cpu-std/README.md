@@ -25,6 +25,9 @@
 
 # brynja-crypto-cpu-std
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Choose this hosted adapter directly if you need OS-backed CPU observation or runtime authority. The modern `no_std` façade does not enable it.
+
 Optional hosted feature observation and CPU authority for Brynja.
 This adapter uses `std`; portable algorithm leaves remain `no_std`.
 It is not automatically installed or added to facade/default graphs.
@@ -398,7 +401,7 @@ Neither the state nor vector scratch is zeroized. See the
 
 Opt in explicitly to hosted CPU execution.
 
-After this source version is published, install from the registry:
+To use the published crate:
 
 ```sh
 cargo add brynja-crypto-cpu-std --no-default-features --features runtime-execution

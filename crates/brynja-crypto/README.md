@@ -25,6 +25,9 @@
 
 # brynja-crypto
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Use `brynja::crypto` through the façade. Depend directly on `brynja-crypto` if you need the modern algorithm namespaces without the rest of the façade.
+
 The development tree includes portable RFC 8439 ChaCha20 behind the
 default-off `hazmat-chacha20` feature. Its forward-only stream accepts
 a 32-byte key, 12-byte nonce and explicit starting block counter. Use it
@@ -186,7 +189,7 @@ API/correctness evidence, not side-channel or physical-fault qualification.
 Use a release containing the hash/MAC APIs described here, not an older
 foundation-only package.
 
-After this source version is published, install from the registry:
+To use the published crate:
 
 ```sh
 cargo add brynja-crypto --no-default-features

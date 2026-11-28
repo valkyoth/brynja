@@ -1,5 +1,9 @@
 # brynja-verify
 
+Part of the [Brynja project](https://github.com/valkyoth/brynja#workspace).
+This unpublished tool is installed from the checkout, not selected by a feature
+on the application façade.
+
 Standalone local developer runner and evidence-status tracker. Not a production
 crate, crypto implementation, certification or release gate.
 

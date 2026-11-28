@@ -25,6 +25,9 @@
 
 # brynja-hash-sha2
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Use `brynja::crypto::sha2` without a feature for the standard portable hashes. Depend on this leaf directly for a narrower graph.
+
 First-party, allocation-free `no_std` SHA-2: SHA-224, SHA-256, SHA-384,
 SHA-512, SHA-512/224 and SHA-512/256, plus optional general SHA-512/t.
 
@@ -123,7 +126,7 @@ current-core CPUID alone does not prove safety across migration.
 
 Select this leaf for the SHA-2 APIs documented here.
 
-After this source version is published, install from the registry:
+To use the published crate:
 
 ```sh
 cargo add brynja-hash-sha2 --no-default-features

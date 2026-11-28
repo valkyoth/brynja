@@ -25,6 +25,9 @@
 
 # brynja-core
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Use `brynja::core` through the façade. Depend directly on this crate if you need the allocation-free foundations without the algorithm or protocol graph.
+
 Allocation-free `no_std` security foundations shared by Brynja's crypto and
 protocol crates. This crate owns bounded state and authority contracts, not a
 TLS engine or collection of hash/cipher implementations.

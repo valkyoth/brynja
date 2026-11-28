@@ -25,6 +25,9 @@
 
 # brynja-legacy-sha1
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Select this leaf directly only when an existing format requires SHA-1. The modern façade intentionally offers no SHA-1 flag.
+
 First-party, allocation-free `no_std` legacy SHA-1 for explicit compatibility.
 
 Default-off `execution` APIs add ordinary public-data SHA/SSE2 and NEON/SHA1
@@ -65,12 +68,13 @@ SHA-1 is not appropriate for new security designs, collision-resistant hashes,
 signatures, certificates or password hashing. A raw digest is not a MAC.
 Memory cleanup does not repair the algorithm. This crate is never enabled by
 the modern `brynja` facade, TLS, PKIX, FIPS, or a general-purpose hash default.
-Later HMAC/HKDF/OpenPGP integrations need separately typed legacy admission.
+Legacy HMAC and HKDF require separate admission in `brynja-legacy-hmac` and
+`brynja-legacy-hkdf`; this leaf does not implement either construction.
 
 ## Use
 
-The leaf is currently unpublished. Depend directly on this checkout path for
-explicit legacy compatibility testing.
+For an existing format that requires this algorithm, install the published leaf
+with `cargo add brynja-legacy-sha1 --no-default-features`. To test checkout changes instead:
 
 ```toml
 [dependencies]

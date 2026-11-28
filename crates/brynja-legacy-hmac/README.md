@@ -25,6 +25,9 @@
 
 # brynja-legacy-hmac
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Use `brynja::crypto::hmac` for modern protocols. Select this crate directly only for required legacy HMAC compatibility; there is no modern façade flag for it.
+
 Explicit, allocation-free `no_std` HMAC-SHA-1 and HMAC-MD5 compatibility.
 Do not use these algorithms for new protocols. This package is deliberately
 absent from modern facades, defaults, protocol negotiation and approved services.
@@ -83,8 +86,8 @@ No underlying hash qualification automatically qualifies either HMAC composition
 
 ## Use
 
-Install explicitly with `cargo add brynja-legacy-hmac` once published; until then,
-use the reviewed workspace path. Nothing is added to `brynja::crypto`.
+Install explicitly with `cargo add brynja-legacy-hmac`, or use the matching
+workspace path for checkout changes. Nothing is added to `brynja::crypto`.
 
 ```rust
 use brynja_legacy_hmac::{Hmac, LegacyUse, Sha1};

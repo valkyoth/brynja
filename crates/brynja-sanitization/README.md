@@ -25,6 +25,9 @@
 
 # brynja-sanitization
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Select this adapter directly for interoperability with `sanitization`. It is not a façade feature and is not required for the façade’s internal clearing.
+
 Optional `no_std` secret-storage adapter around the separately admitted
 `sanitization` package. Its exact dependency and disabled default features are
 recorded in Cargo metadata and the admission review, not a README version pin.

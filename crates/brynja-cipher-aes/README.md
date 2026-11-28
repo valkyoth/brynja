@@ -25,6 +25,9 @@
 
 # brynja-cipher-aes
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Start with the façade’s `aes-gcm` for authenticated encryption. For raw blocks, enable `hazmat-aes-block` and use `brynja::crypto::aes`, or use this leaf with the same opt-in.
+
 Enable `hazmat-aes-block` for the portable AES-128, AES-192 and AES-256
 single-block owners under `brynja_cipher_aes::aes`. They borrow caller
 storage; ephemeral keys expand per operation and expanded keys cache their
@@ -44,6 +47,12 @@ operations on its own. Cargo features are not an access-control boundary.
 | Accelerated or external-key execution (explicit opt-in) | ✅ Implemented | ❌ Not independently verified |
 
 ## Use one block
+
+To use the standalone crate for this example:
+
+```sh
+cargo add brynja-cipher-aes --no-default-features --features hazmat-aes-block
+```
 
 Enable `hazmat-aes-block` on the standalone dependency. This example uses
 the public all-zero AES-128 known answer, not an application key:

@@ -25,6 +25,9 @@
 
 # brynja-hash-tuple
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Use `brynja::crypto::tuplehash` without a feature for portable TupleHash. Select this leaf directly for a smaller dependency graph.
+
 First-party, allocation-free `no_std` TupleHash128/256 and
 TupleHashXOF128/256 from NIST SP 800-185. The implementation reuses Brynja's
 hardened cSHAKE owner, without duplicating Keccak. It has no third-party dependency.
@@ -47,7 +50,7 @@ cryptographic review or FIPS 140-3 validation is claimed.
 
 Use the leaf directly for structurally framed tuple hashing.
 
-After this source version is published, install from the registry:
+To use the published crate:
 
 ```sh
 cargo add brynja-hash-tuple --no-default-features

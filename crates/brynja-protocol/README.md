@@ -25,6 +25,9 @@
 
 # brynja-protocol
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Use `brynja::protocol` through the façade, or this crate directly for bounded record parsing and encoding. Framing is not a secure connection.
+
 Allocation-free `no_std` TLS and DTLS record-envelope parsing and encoding.
 An explicit typed wire policy selects the protocol; input bytes cannot choose
 a downgrade or fallback.

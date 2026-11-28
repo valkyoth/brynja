@@ -25,6 +25,9 @@
 
 # brynja-hash-parallel
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Use `brynja::crypto::parallelhash` without a feature for portable ParallelHash, or depend directly on this leaf. It does not start OS threads; the hosted scheduler is separate.
+
 Allocation-free, `no_std` ParallelHash128/256 and ParallelHashXOF128/256
 implementations from NIST SP 800-185. The leaf workspace length is the positive
 block-size parameter `B`. Cryptographic code is first-party Rust.
@@ -60,7 +63,7 @@ independent cryptographic review. See the
 
 Use the leaf directly for sequential or caller-scheduled ParallelHash.
 
-After this source version is published, install from the registry:
+To use the published crate:
 
 ```sh
 cargo add brynja-hash-parallel --no-default-features

@@ -25,6 +25,9 @@
 
 # brynja-hash-sha3
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Use `brynja::crypto::sha3` without a feature for the portable functions. Depend directly on this leaf when you only need the SHA-3 family.
+
 First-party, allocation-free `no_std` SHA-3, SHAKE and cSHAKE over Brynja's
 Keccak-f[1600] implementation. Ordinary and hardened owners are separate.
 
@@ -88,7 +91,7 @@ module example for secret output outliving a cSHAKE scope.
 
 Use the leaf directly for SHA-3, SHAKE and cSHAKE.
 
-After this source version is published, install from the registry:
+To use the published crate:
 
 ```sh
 cargo add brynja-hash-sha3 --no-default-features

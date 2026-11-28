@@ -25,6 +25,9 @@
 
 # brynja-quic-tls
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> The façade feature `quic` exposes `brynja::quic_tls`. It is a planned QUIC/TLS handshake boundary, not a QUIC transport implementation.
+
 TLS handshake integration for QUIC. This package currently establishes a compile-time workspace
 boundary only; it does not provide the planned implementation.
 

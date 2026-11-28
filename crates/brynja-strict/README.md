@@ -25,6 +25,9 @@
 
 # brynja-strict
 
+> [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
+> Depend on this strict-only façade directly if your deployment needs its protected sessions. It is not an automatic upgrade or fallback from the ordinary `brynja` façade.
+
 Strict-only entry point for modern protected cryptography. Existing `brynja`
 remains portable and unchanged; importing this crate is an explicit application
 choice, not certification or proof that all application code uses this profile.
@@ -139,7 +142,7 @@ are not established by development tests; see the [SHA-2 guide](https://github.c
 
 Select this protected-only facade explicitly; it does not replace the portable facade.
 
-After this source version is published, install from the registry:
+To use the published crate:
 
 ```sh
 cargo add brynja-strict --no-default-features

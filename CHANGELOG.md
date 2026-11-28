@@ -2,8 +2,9 @@
 
 ## 0.31.1 portable ChaCha20-Poly1305 (in development)
 
-- Establish offline RFC 8439 AEAD acceptance cases over the released
-  primitives. No public seal/open API or acceleration yet.
+- Add an unpublished portable ChaCha20-Poly1305 leaf. Its in-place and
+  disjoint seal/open APIs are tested against both RFC 8439 AEAD examples.
+  No façade feature or acceleration yet.
   [Scope and remaining work](release-notes/RELEASE_NOTES_0.31.1.md).
 
 ## 0.31.0 standalone Poly1305 (internally tagged)

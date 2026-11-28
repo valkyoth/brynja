@@ -179,7 +179,7 @@ class ScopedRelease(unittest.TestCase):
         self.assertEqual(commands['aead-packaged-endpoints'], ['python3', 'scripts/aes-gcm/check-portable-acceptance.py', '--smoke'])
         self.assertEqual(commands['release-plan'], ['scripts/release/test-release-plan.sh'])
         self.assertEqual(commands['crypto-tests'],
-            ['cargo', 'test', '--locked', '-p', 'brynja-mac-poly1305', '-p', 'brynja-cipher-aes', '-p', 'brynja-universal-hash-ghash', '-p', 'brynja-aead-gcm', '-p', 'brynja-crypto', '-p',
+            ['cargo', 'test', '--locked', '-p', 'brynja-aead-chacha20poly1305', '-p', 'brynja-mac-poly1305', '-p', 'brynja-cipher-aes', '-p', 'brynja-universal-hash-ghash', '-p', 'brynja-aead-gcm', '-p', 'brynja-crypto', '-p',
              'brynja-legacy-hkdf', '--no-default-features', '--features', 'brynja-crypto/hazmat-chacha20,brynja-crypto/gmac-execution,brynja-crypto/aes-gcm-execution,brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider,brynja-crypto/ghash-runtime-execution'])
         lint = commands['crypto-lint']
         self.assertIn('brynja-cipher-chacha', lint)

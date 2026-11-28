@@ -211,6 +211,11 @@ def test_manifest_classes(baseline: dict) -> None:
 
 
 def test_dependency_contracts(baseline: dict) -> None:
+    for flags in ([], ["chacha20-sse2"], ["hazmat-chacha20", "chacha20-neon"]):
+        wrong = copy.deepcopy(baseline)
+        dependency(wrong, "brynja-aead-chacha20poly1305", "brynja-cipher-chacha")["features"] = flags
+        require_rejection(wrong, "all-features", "directly enables features on brynja-cipher-chacha",
+                          "missing portable cipher or accidentally admitted acceleration")
     external = copy.deepcopy(baseline)
     dependency(external, "brynja-pki", "brynja-core")["source"] = (
         "registry+https://github.com/rust-lang/crates.io-index"

@@ -17,6 +17,13 @@ change = "code"
 publish = false
 reason = "Advance the internal facade version for the RFC 8439 AEAD milestone; no registry publication."
 
+[crates."brynja-aead-chacha20poly1305"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "code"
+publish = false
+reason = "New portable RFC 8439 AEAD leaf; no registry upload selected."
+
 [crates."brynja-mac-poly1305"]
 previous_version = "unpublished"
 version = "0.1.0"

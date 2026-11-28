@@ -386,6 +386,9 @@ def validate_resolved_mode(
         if mode == "no-default-features" and name == "brynja-crypto-cpu-std":
             expected_features.add("runtime-execution")
         if mode == "no-default-features":
+            if name == "brynja-cipher-chacha":
+                # Unified by the standalone portable AEAD workspace member.
+                expected_features.add("hazmat-chacha20")
             expected_features.update(strict_policy.UNIFIED.get(name, []))
             expected_dependencies.update(strict_policy.EDGES.get(name, []))
         package_id = names[name]

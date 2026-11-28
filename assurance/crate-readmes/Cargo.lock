@@ -14,6 +14,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "brynja-aead-chacha20poly1305"
+version = "0.1.0"
+dependencies = [
+ "brynja-cipher-chacha",
+ "brynja-core",
+ "brynja-mac-poly1305",
+]
+
+[[package]]
 name = "brynja-aead-gcm"
 version = "0.1.0"
 dependencies = [
@@ -45,6 +54,7 @@ name = "brynja-crate-readme-fixture"
 version = "0.0.0"
 dependencies = [
  "brynja",
+ "brynja-aead-chacha20poly1305",
  "brynja-aead-gcm",
  "brynja-cipher-aes",
  "brynja-cipher-chacha",

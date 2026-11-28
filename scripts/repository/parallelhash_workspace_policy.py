@@ -47,6 +47,8 @@ def dev_names(name, entry):
 
 
 def direct_features(owner, dependency):
+    if (owner, dependency) == ("brynja-aead-chacha20poly1305", "brynja-cipher-chacha"):
+        return ["hazmat-chacha20"]
     if owner in {"brynja-hash-parallel", "brynja-hash-parallel-std"}:
         if dependency == "brynja-crypto-cpu":
             return ["hardened-execution"]

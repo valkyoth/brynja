@@ -1,6 +1,9 @@
 //! Executable examples from every crate README; repository-only documentation tests.
 #![forbid(unsafe_code)]
 
+#[doc = include_str!("../../../crates/brynja-aead-chacha20poly1305/README.md")]
+pub struct BrynjaAeadChacha20poly1305;
+
 #[doc = include_str!("../../../crates/brynja-aead-gcm/README.md")]
 pub struct BrynjaAeadGcm;
 

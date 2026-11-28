@@ -130,6 +130,7 @@ green implementation rows do not authorize publication.
 | AES external-key adapter contracts (no device driver) | ✅ Implemented | `brynja-cipher-aes` | ❌ Not independently verified |
 | Raw IETF ChaCha20 (RFC 8439) | ✅ Implemented | `brynja-cipher-chacha` | ❌ Not independently verified |
 | One-time Poly1305 (RFC 8439) | ✅ Implemented in the development checkout | `brynja-mac-poly1305` | ❌ Not independently verified |
+| Detached ChaCha20-Poly1305 (RFC 8439) | ✅ Implemented in the development checkout | `brynja-aead-chacha20poly1305` | ❌ Not independently verified |
 | GHASH over pre-framed blocks (not a MAC) | ✅ Implemented | `brynja-universal-hash-ghash` | ❌ Not independently verified |
 | Detached AES-GCM (AES-128/192/256) | ✅ Implemented | `brynja-aead-gcm` | ❌ Not independently verified |
 | GMAC authentication (AES-128/192/256) | ✅ Implemented | `brynja-aead-gcm` | ❌ Not independently verified |
@@ -321,6 +322,7 @@ Each package name links to its source README with features, examples and limitat
 | [`brynja-hash-parallel`](crates/brynja-hash-parallel/README.md) | ParallelHash and ParallelHashXOF | [crates.io](https://crates.io/crates/brynja-hash-parallel) |
 | [`brynja-mac-hmac`](crates/brynja-mac-hmac/README.md) | Modern HMAC | [crates.io](https://crates.io/crates/brynja-mac-hmac) |
 | [`brynja-mac-kmac`](crates/brynja-mac-kmac/README.md) | KMAC and KMACXOF | [crates.io](https://crates.io/crates/brynja-mac-kmac) |
+| [`brynja-aead-chacha20poly1305`](crates/brynja-aead-chacha20poly1305/README.md) | Portable RFC 8439 authenticated encryption | Unpublished |
 | [`brynja-mac-poly1305`](crates/brynja-mac-poly1305/README.md) | Standalone Poly1305 one-time authenticator | Unpublished |
 | [`brynja-cipher-aes`](crates/brynja-cipher-aes/README.md) | Raw AES block operations | [crates.io](https://crates.io/crates/brynja-cipher-aes) |
 | [`brynja-cipher-chacha`](crates/brynja-cipher-chacha/README.md) | Raw IETF ChaCha20 | [crates.io](https://crates.io/crates/brynja-cipher-chacha) |

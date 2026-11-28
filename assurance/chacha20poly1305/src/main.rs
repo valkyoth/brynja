@@ -1,15 +1,15 @@
 //! Test-only: replay public RFC intermediate and final answers, not a library API.
 #![forbid(unsafe_code)]
 
-#[cfg(feature = "paired-x86")]
+#[cfg(feature = "paired")]
 mod paired_api;
-#[cfg(not(feature = "paired-x86"))]
+#[cfg(not(feature = "paired"))]
 mod public_api;
 use brynja_cipher_chacha::ChaCha20;
 use brynja_mac_poly1305::OneTimeKey;
-#[cfg(feature = "paired-x86")]
+#[cfg(feature = "paired")]
 use paired_api::paired_api as public_api;
-#[cfg(not(feature = "paired-x86"))]
+#[cfg(not(feature = "paired"))]
 use public_api::public_api;
 use std::io::{self, BufRead};
 

@@ -4,6 +4,13 @@ For package availability, see the [official crate directory](../README.md#worksp
 The evidence below describes specific builds and milestones; publishing their
 crates at the v0.30.6 checkpoint did not expand any verification claim.
 
+## Opt-in AArch64 Poly1305 and ChaCha20-Poly1305 (v0.31.2, in development)
+
+The [native paired results](../release-notes/RELEASE_NOTES_0.31.2.md#aarch64-paired-aead-campaign)
+cover Neoverse-V2 Linux and Apple M2 Pro macOS, not all AArch64 targets.
+Both compiler endpoints passed RFC and differential seal/open, both buffer
+layouts and interruption tests. Throughput does not qualify constant-time behavior.
+
 ## Opt-in Linux x86-64 Poly1305 (v0.31.2, in development)
 
 The [paired AEAD campaign](../release-notes/RELEASE_NOTES_0.31.2.md#linux-x86-64-paired-aead)

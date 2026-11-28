@@ -67,10 +67,11 @@ FEATURES = {
     },
     'brynja-crypto': {**CRYPTO, 'poly1305': ['dep:brynja-mac-poly1305'],
                      'chacha20poly1305-x86': ['chacha20poly1305', 'brynja-aead-chacha20poly1305/chacha20poly1305-x86'],
+                     'chacha20poly1305-neon': ['chacha20poly1305', 'brynja-aead-chacha20poly1305/chacha20poly1305-neon'],
                      'chacha20poly1305': ['dep:brynja-aead-chacha20poly1305'],
                      'hazmat-chacha20': ['dep:brynja-cipher-chacha', 'brynja-cipher-chacha/hazmat-chacha20']},
-    'brynja': {feature: ['brynja-crypto/' + feature] for feature in (*CRYPTO, 'hazmat-chacha20', 'poly1305', 'chacha20poly1305', 'chacha20poly1305-x86')},
-    'brynja-aead-chacha20poly1305': {'chacha20poly1305-x86': ['brynja-cipher-chacha/chacha20-sse2', 'brynja-mac-poly1305/poly1305-avx2']},
+    'brynja': {feature: ['brynja-crypto/' + feature] for feature in (*CRYPTO, 'hazmat-chacha20', 'poly1305', 'chacha20poly1305', 'chacha20poly1305-x86', 'chacha20poly1305-neon')},
+    'brynja-aead-chacha20poly1305': {'chacha20poly1305-neon': ['brynja-cipher-chacha/chacha20-neon', 'brynja-mac-poly1305/poly1305-neon'], 'chacha20poly1305-x86': ['brynja-cipher-chacha/chacha20-sse2', 'brynja-mac-poly1305/poly1305-avx2']},
 }
 FEATURES['brynja']['ghash-runtime-execution'] = ['hazmat-ghash',
                                                 'brynja-crypto/ghash-runtime-execution']

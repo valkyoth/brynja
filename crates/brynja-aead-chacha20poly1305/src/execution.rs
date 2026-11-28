@@ -1,19 +1,45 @@
-//! Explicit Linux x86-64 SSE2 ChaCha20 + AVX2 Poly1305. The host must keep
+//! Explicit architecture-specific ChaCha20 and Poly1305 execution. The host must keep
 //! the advertised ISA usable while the handle is live. No CPU pinning or
 //! automatic fallback. Short inputs may run entirely as scalar operations.
 use crate::{Buffers, Error, Opener, Sealer};
-use brynja_cipher_chacha::ChaCha20Sse2;
+#[cfg(target_arch = "aarch64")]
+use brynja_cipher_chacha::ChaCha20Neon as NativeStream;
+#[cfg(target_arch = "x86_64")]
+use brynja_cipher_chacha::ChaCha20Sse2 as NativeStream;
+#[cfg(target_arch = "x86_64")]
 pub use brynja_mac_poly1305::execution::AdmissionError;
-use brynja_mac_poly1305::execution::Avx2;
+#[cfg(target_arch = "x86_64")]
+pub(super) use brynja_mac_poly1305::execution::{Avx2 as MacCpu, Poly1305Avx2 as NativeMac};
+#[cfg(target_arch = "aarch64")]
+pub use brynja_mac_poly1305::neon::AdmissionError;
+#[cfg(target_arch = "aarch64")]
+pub(super) use brynja_mac_poly1305::neon::{Neon as MacCpu, Poly1305Neon as NativeMac};
 
-/// Required-native, thread-local capability. Contains no application key.
-pub struct X86Pair {
-    mac: Avx2,
-    healthy: bool,
+pub(super) fn start_mac<'k, 'p>(
+    one: brynja_mac_poly1305::OneTimeKey<'k>,
+    cpu: &'p mut MacCpu,
+) -> Result<NativeMac<'k, 'p>, Error> {
+    #[cfg(target_arch = "x86_64")]
+    let result = one.start_avx2(cpu);
+    #[cfg(target_arch = "aarch64")]
+    let result = one.start_neon(cpu);
+    result.map_err(|_| Error::Invariant)
 }
 
+/// Required-native, thread-local capability. Contains no application key.
+pub struct Pair {
+    mac: MacCpu,
+    healthy: bool,
+}
+/// Linux x86-64 SSE2/AVX2 pair.
+#[cfg(target_arch = "x86_64")]
+pub use Pair as X86Pair;
+/// Little-endian Linux or macOS AArch64 pair. The target must provide NEON.
+#[cfg(target_arch = "aarch64")]
+pub use Pair as ArmPair;
+
 // Public zero-key / zero-nonce keystream for counters 0..=3 in wire order.
-// The first group in the SSE2 owner runs all four lanes, unlike counter-zero
+// The first group in the native owner runs all four lanes, unlike counter-zero
 // one-time-key derivation, which needs only 32 bytes and stays scalar.
 const STREAM_KAT: [u64; 32] = [
     0x76b8e0ada0f13d90,
@@ -50,13 +76,13 @@ const STREAM_KAT: [u64; 32] = [
     0xe86a1e6c3167167e,
 ];
 
-impl X86Pair {
-    /// Require usable AVX2 and passing direct Poly1305 and four-block ChaCha20
-    /// startup tests. Only `Unavailable` indicates a missing capability.
+impl Pair {
+    /// Require passing Poly1305 and four-block ChaCha20 startup tests. On ARM,
+    /// NEON is a build-target requirement, not dynamically discovered.
     pub fn probe() -> Result<Self, AdmissionError> {
-        let mac = Avx2::probe()?;
+        let mac = MacCpu::probe()?;
         let mut bytes = [0; 256];
-        ChaCha20Sse2::new(core::hint::black_box(&[0; 32]), [0; 12], 0)
+        NativeStream::new(core::hint::black_box(&[0; 32]), [0; 12], 0)
             .apply_keystream_in_place(&mut bytes)
             .map_err(|_| AdmissionError::Quarantined)?;
         if !bytes
@@ -80,7 +106,7 @@ impl X86Pair {
 
     // Mark terminal before keyed work. A bad peer tag is expected input,
     // not a primitive failure. An unwind or internal error retires the pair.
-    fn run<T>(&mut self, work: impl FnOnce(&mut Avx2) -> Result<T, Error>) -> Result<T, Error> {
+    fn run<T>(&mut self, work: impl FnOnce(&mut MacCpu) -> Result<T, Error>) -> Result<T, Error> {
         self.check()?;
         self.healthy = false;
         let result = work(&mut self.mac);
@@ -92,16 +118,13 @@ impl X86Pair {
 /// Borrowed paired sender. It uses the original sender's nonce allocation,
 /// so switching between portable and paired calls cannot rewind the counter.
 pub struct PairedSealer<'p, 'k> {
-    pair: &'p mut X86Pair,
+    pair: &'p mut Pair,
     sender: &'p mut Sealer<'k>,
 }
 
 impl<'k> Sealer<'k> {
     /// Use an admitted pair with this sender's existing reservation.
-    pub fn with_pair<'p>(
-        &'p mut self,
-        pair: &'p mut X86Pair,
-    ) -> Result<PairedSealer<'p, 'k>, Error> {
+    pub fn with_pair<'p>(&'p mut self, pair: &'p mut Pair) -> Result<PairedSealer<'p, 'k>, Error> {
         pair.check()?;
         Ok(PairedSealer { pair, sender: self })
     }
@@ -151,13 +174,13 @@ impl PairedSealer<'_, '_> {
 
 /// Receive-only binding to a tested pair. Does not enforce replay policy.
 pub struct PairedOpener<'p, 'k> {
-    pair: &'p mut X86Pair,
+    pair: &'p mut Pair,
     key: &'k [u8; 32],
 }
 
 impl<'k> Opener<'k> {
     /// Authenticate and open with this key and the explicitly supplied pair.
-    pub fn with_pair<'p>(&self, pair: &'p mut X86Pair) -> Result<PairedOpener<'p, 'k>, Error> {
+    pub fn with_pair<'p>(&self, pair: &'p mut Pair) -> Result<PairedOpener<'p, 'k>, Error> {
         pair.check()?;
         Ok(PairedOpener { pair, key: self.0 })
     }
@@ -214,7 +237,7 @@ impl PairedOpener<'_, '_> {
 fn crypt(key: &[u8; 32], nonce: [u8; 12], input: &[u8], work: &mut [u8]) -> Result<(), Error> {
     #[cfg(test)]
     crate::interruptions::Stage::BeforePayload.check()?;
-    ChaCha20Sse2::new(key, nonce, 1)
+    NativeStream::new(key, nonce, 1)
         .apply_keystream(input, work)
         .map_err(|_| Error::Invariant)?;
     #[cfg(test)]

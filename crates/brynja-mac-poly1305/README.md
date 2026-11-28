@@ -32,6 +32,7 @@
 | --- | --- | --- |
 | Portable streaming Poly1305, full 16-byte tags | ✅ Implemented | ❌ Not independently verified |
 | Explicit Linux x86-64 AVX2 message owner (development checkout) | ✅ Implemented | ❌ Not independently verified |
+| Explicit AArch64 Linux/macOS NEON message owner (development checkout) | ✅ Implemented | ❌ Not independently verified |
 | ChaCha20-Poly1305 or key derivation | Not provided | Not applicable |
 
 Use a fresh, unpredictable 32-byte one-time key for **every** message. Never
@@ -78,3 +79,9 @@ In particular, a 32-bit target can lower wide products to instructions or
 runtime helpers with operand-dependent latency. A Cortex-M compile check
 does not qualify its multiplier. Use `verify` for received tags, not `==`
 on the bytes returned by `finalize`.
+
+On little-endian AArch64 Linux/macOS compiled for NEON, enable `poly1305-neon`,
+call `neon::Neon::probe()` once, and consume each fresh `OneTimeKey` using
+`start_neon(&mut cpu)`. Updates, full-tag verification, and key clearing
+follow the portable contract. Short updates stay scalar and can be slower.
+The startup test is not runtime ISA discovery.

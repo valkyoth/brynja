@@ -9,6 +9,15 @@ publish = false
 
 [features]
 native-owner = ["brynja-mac-poly1305/poly1305-avx2"]
+neon-owner = ["brynja-mac-poly1305/poly1305-neon"]
+
+[[example]]
+name = "neon_owner"
+required-features = ["neon-owner"]
+
+[[test]]
+name = "neon_vectors"
+required-features = ["neon-owner"]
 
 [[example]]
 name = "integrated_owner"

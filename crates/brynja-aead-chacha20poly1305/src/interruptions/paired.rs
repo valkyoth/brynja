@@ -1,9 +1,12 @@
 use super::*;
-use crate::execution::{AdmissionError, X86Pair};
+#[cfg(target_arch = "x86_64")]
+use crate::execution::AdmissionError;
+use crate::execution::Pair;
 
-fn probe() -> Result<Option<X86Pair>, Error> {
-    match X86Pair::probe() {
+fn probe() -> Result<Option<Pair>, Error> {
+    match Pair::probe() {
         Ok(cpu) => Ok(Some(cpu)),
+        #[cfg(target_arch = "x86_64")]
         Err(AdmissionError::Unavailable) => Ok(None),
         Err(_) => Err(Error::Invariant),
     }

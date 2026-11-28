@@ -10,7 +10,9 @@ Development has started on [v0.31.2: Poly1305 and AEAD acceleration](../release-
 The standalone Poly1305 crate now has an explicit, default-off Linux x86-64
 AVX2 owner. The default-off `chacha20poly1305-x86` feature also pairs it with
 SSE2 ChaCha20 for authenticated seal/open. Ordinary MAC and AEAD operations
-remain portable; neither feature is published yet.
+remain portable. On NEON-enabled little-endian Linux/macOS AArch64, the
+standalone `poly1305-neon` owner and paired `chacha20poly1305-neon` AEAD
+are also opt-in. None of these features is published yet.
 
 [v0.31.1: portable ChaCha20-Poly1305](../release-notes/RELEASE_NOTES_0.31.1.md) is internally tagged.
 The [unpublished leaf](../crates/brynja-aead-chacha20poly1305/README.md)

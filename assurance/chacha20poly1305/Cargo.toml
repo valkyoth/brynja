@@ -8,11 +8,13 @@ publish = false
 [workspace]
 
 [features]
-paired-x86 = ["brynja-aead-chacha20poly1305/chacha20poly1305-x86"]
+paired = []
+paired-neon = ["paired", "brynja-aead-chacha20poly1305/chacha20poly1305-neon"]
+paired-x86 = ["paired", "brynja-aead-chacha20poly1305/chacha20poly1305-x86"]
 
 [[example]]
 name = "paired_throughput"
-required-features = ["paired-x86"]
+required-features = ["paired"]
 
 [dependencies]
 brynja-aead-chacha20poly1305 = { path = "../../crates/brynja-aead-chacha20poly1305" }

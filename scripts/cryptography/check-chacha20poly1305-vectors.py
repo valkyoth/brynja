@@ -80,7 +80,9 @@ def differential(replay, paired=False):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--rust', choices=['1.90.0', '1.100.0'])
-    parser.add_argument('--paired-x86', action='store_true', help='require the Linux x86-64 SSE2/AVX2 AEAD owner')
+    routes = parser.add_mutually_exclusive_group()
+    routes.add_argument('--paired-neon', action='store_true', help='require the Linux or macOS AArch64 NEON AEAD owner')
+    routes.add_argument('--paired-x86', action='store_true', help='require the Linux x86-64 SSE2/AVX2 AEAD owner')
     parser.add_argument('--oracle', action='store_true', help='also check with Python cryptography (test only)')
     parser.add_argument('--differential', action='store_true',
                         help='also run deterministic boundary records from Python cryptography (test only)')
@@ -101,6 +103,8 @@ def main():
                 raise ValueError('independent oracle accepted altered AAD')
     cargo = ['cargo'] + (['+' + args.rust] if args.rust else [])
     command = cargo + ['run', '--locked', '--offline', '--quiet', '--release', '--manifest-path', str(MANIFEST)]
+    if args.paired_neon:
+        command += ['--features', 'paired-neon']
     if args.paired_x86:
         command += ['--features', 'paired-x86']
 
@@ -123,7 +127,7 @@ def main():
             raise ValueError(f'wrong result for altered RFC field {i}')
     print('RFC 8439 AEAD: 2 composition records and 8 altered-field controls passed')
     if args.differential:
-        differential(replay, args.paired_x86)
+        differential(replay, args.paired_x86 or args.paired_neon)
 
 
 if __name__ == '__main__':

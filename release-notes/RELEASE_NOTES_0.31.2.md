@@ -4,7 +4,7 @@ This internal milestone follows the signed v0.31.1 tag. No crates are
 selected for publication. Ordinary Poly1305 and AEAD construction remains
 portable. The standalone Poly1305 crate now has an explicit Linux x86-64
 AVX2 owner and the AEAD crate has an explicit Linux x86-64 SSE2/AVX2 pair.
-Other architectures remain open; neither route is enabled by default.
+The Linux/macOS AArch64 NEON routes described below are also opt-in. Qualifying RISC-V remains open.
 
 ## First experiment: native x86-64 AVX2 arithmetic
 
@@ -472,3 +472,45 @@ git archive cc004264d3fcee7f5f9fe961d5705813b2637f39 Cargo.toml Cargo.lock crate
   done
 )
 ```
+
+### AArch64 paired AEAD campaign
+
+On Apple M2 Pro and AWS Neoverse-V2, compare complete disjoint seal and valid
+open against portable, using the same fixture and criterion as the x86 AEAD
+campaign. Use Rust 1.90.0 and 1.100.0 at stock release settings, a checked pair
+reused across messages, 20 bytes AAD, six payload lengths (64 through 16384),
+12 alternating observation pairs and floor(524288/size) records per batch.
+Pin Linux to vCPU 0; leave macOS scheduling to the OS. Before measuring require
+both RFC records, the 848 independent records through both layouts, and the
+paired interruption tests. Keep all observations. Require a median
+portable/paired ratio above one separately for both operations at 1500, 4096
+and 16384 on both compilers on each named host. Do not rerun to pass.
+
+Both hosts passed the criterion. [All 576 samples](../assurance/chacha20poly1305/paired-neon-native.csv)
+are retained. Below are median portable/paired time ratios for seal / open.
+
+| Bytes | M2 Pro 1.90 | M2 Pro 1.100 | Neoverse-V2 1.90 | Neoverse-V2 1.100 |
+| ---: | ---: | ---: | ---: | ---: |
+| 64 | 0.956 / 0.956 | 0.943 / 0.984 | 0.929 / 0.930 | 0.923 / 0.932 |
+| 256 | 1.170 / 1.165 | 1.080 / 1.080 | 1.112 / 1.115 | 1.037 / 1.038 |
+| 1024 | 1.303 / 1.298 | 1.174 / 1.153 | 1.257 / 1.258 | 1.116 / 1.114 |
+| 1500 | 1.268 / 1.265 | 1.155 / 1.147 | 1.225 / 1.230 | 1.112 / 1.108 |
+| 4096 | 1.366 / 1.370 | 1.201 / 1.202 | 1.312 / 1.316 | 1.160 / 1.158 |
+| 16384 | 1.377 / 1.383 | 1.217 / 1.215 | 1.329 / 1.331 | 1.170 / 1.182 |
+
+Each compiler/host passed 11 unit tests, two RFC records, and 848 independent
+records through both buffer layouts before measurement. At 64 bytes portable
+was faster everywhere. No timing-leakage or physical qualification is implied.
+Measured binaries by Rust version (1.90.0, 1.100.0):
+
+- macOS arm64: `83db809bb79f2d452b6a805829af5190ee25ec2889e7daa12e31e5ab70e1e050`,
+  `b72b3630823e344c46d5011f3f9e6d4e9300a571b3c27bbe5519abd08f2a5f27`.
+- Linux arm64 musl: `80577cfedf02587a951e4316ead4a0a09f622ba68e41ebd65e356c2b175d8c92`,
+  `968d8d5192afbf3036586cbeb938d25e3cc1360c9ca4d7833af54e344c57e7fe`.
+
+To replay on a supported native host, run
+`python3 scripts/cryptography/check-chacha20poly1305-vectors.py --rust 1.90.0 --paired-neon --oracle --differential`
+and repeat for 1.100.0. In this development checkout the leaf or either
+façade can select `chacha20poly1305-neon`; callers explicitly supply
+`execution::ArmPair::probe()` via `with_pair`. The MAC leaf separately exposes
+`poly1305-neon`. Default constructors stay portable.

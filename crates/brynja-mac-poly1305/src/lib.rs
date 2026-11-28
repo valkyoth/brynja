@@ -8,6 +8,17 @@ mod field;
 #[cfg(all(feature = "poly1305-avx2", target_arch = "x86_64", target_os = "linux"))]
 pub mod execution;
 
+#[cfg(all(
+    feature = "poly1305-neon",
+    all(
+        target_arch = "aarch64",
+        target_endian = "little",
+        target_feature = "neon",
+        any(target_os = "linux", target_os = "macos")
+    )
+))]
+pub mod neon;
+
 use brynja_core::{
     accumulate_secret_byte_difference, clear_owned_region, secret_difference_is_zero,
 };
@@ -88,7 +99,18 @@ pub enum Error {
     /// The imported key's clamped multiplier was zero.
     DegenerateKey,
     /// The requested accelerated operation was interrupted or its handle retired.
-    #[cfg(all(feature = "poly1305-avx2", target_arch = "x86_64", target_os = "linux"))]
+    #[cfg(any(
+        all(feature = "poly1305-avx2", target_arch = "x86_64", target_os = "linux"),
+        all(
+            feature = "poly1305-neon",
+            all(
+                target_arch = "aarch64",
+                target_endian = "little",
+                target_feature = "neon",
+                any(target_os = "linux", target_os = "macos")
+            )
+        )
+    ))]
     Quarantined,
 }
 

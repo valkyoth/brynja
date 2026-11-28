@@ -175,6 +175,7 @@ def validate_allowed(
         Path('crates/brynja-crypto-cpu/src/aes/dit.rs'): 3,
         Path('crates/brynja-crypto-cpu/src/ghash_admission.rs'): 0,
         Path('crates/brynja-crypto-cpu/src/poly1305_avx2/kernel.rs'): 0,
+        Path('crates/brynja-crypto-cpu/src/poly1305_neon/kernel.rs'): 0,
     }.get(relative, 1)
     if text.count(UNSAFE_ALLOW) != allowances:
         fail(f"approved module unsafe-code allowance count changed: {relative}")

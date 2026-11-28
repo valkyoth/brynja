@@ -84,4 +84,14 @@ def check(no_default, all_features, package, node, dependency, reject):
             except ValueError:
                 continue
             raise AssertionError("missing or redirected ChaCha20 CPU edge accepted")
+    edges = dict.fromkeys(("poly1305-avx2", "poly1305-neon"), "brynja-crypto-cpu")
+    assert policy.reviewed_optional_names("brynja-mac-poly1305", {"optional": edges}) == ["brynja-crypto-cpu"]
+    for feature in edges:
+        for bad in ({k: v for k, v in edges.items() if k != feature},
+                    {**edges, feature: "brynja-core"}, {**edges, "extra": "brynja-crypto-cpu"}):
+            try:
+                policy.reviewed_optional_names("brynja-mac-poly1305", {"optional": bad})
+            except ValueError:
+                continue
+            raise AssertionError("unreviewed Poly1305 CPU edge accepted")
     print(f"ParallelHash workspace policy rejects {count} dependency/feature/edge and six malformed-group regressions")

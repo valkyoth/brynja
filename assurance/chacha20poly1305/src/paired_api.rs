@@ -1,5 +1,5 @@
 //! Public known-answer and independent-oracle records; no application keys.
-use brynja_aead_chacha20poly1305::{Error, Opener, Sealer, execution::X86Pair};
+use brynja_aead_chacha20poly1305::{Error, Opener, Sealer, execution::Pair};
 
 pub(crate) fn paired_api(
     key: &[u8; 32],
@@ -9,7 +9,7 @@ pub(crate) fn paired_api(
     ct: &[u8],
     tag: &[u8; 16],
 ) -> Option<()> {
-    let mut pair = X86Pair::probe().ok()?;
+    let mut pair = Pair::probe().ok()?;
     let (prefix, suffix) = nonce.split_at(4);
     for in_place in [false, true] {
         let mut sender = Sealer::from_reserved_range(

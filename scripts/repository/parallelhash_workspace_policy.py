@@ -26,6 +26,10 @@ def reviewed_optional_names(owner, entry):
     """Count a shared dependency once, but only for reviewed feature pairs."""
     if owner == "brynja-cipher-chacha":
         return unique_chacha_cpu_dependency(entry)
+    if owner == "brynja-mac-poly1305":
+        if entry["optional"] != dict.fromkeys(("poly1305-avx2", "poly1305-neon"), "brynja-crypto-cpu"):
+            raise ValueError("both Poly1305 SIMD features must select the CPU crate")
+        return ["brynja-crypto-cpu"]
     groups = dict(entry["optional"])
     if owner in {"brynja-crypto", "brynja-aead-gcm"}:
         primitives = ["brynja-core", "brynja-cipher-aes", "brynja-universal-hash-ghash"]
@@ -59,7 +63,7 @@ def direct_features(owner, dependency):
 
 def cpu_target(owner, dependency):
     if (owner, dependency) == ("brynja-mac-poly1305", "brynja-crypto-cpu"):
-        return 'cfg(all(target_arch = "x86_64", target_os = "linux"))'
+        return 'cfg(any(all(target_arch = "x86_64", target_os = "linux"), all(target_arch = "aarch64", any(target_os = "linux", target_os = "macos"))))'
     return 'cfg(any(target_arch = "x86_64", target_arch = "aarch64"))' if (owner, dependency) == ("brynja-cipher-chacha", "brynja-crypto-cpu") else None
 
 

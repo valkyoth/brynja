@@ -2,11 +2,20 @@
 //! dependency in the shipped library. These simulate software failures.
 extern crate std;
 
-#[cfg(all(
-    feature = "chacha20poly1305-x86",
-    target_arch = "x86_64",
-    target_os = "linux",
-    target_feature = "sse2"
+#[cfg(any(
+    all(
+        feature = "chacha20poly1305-x86",
+        target_arch = "x86_64",
+        target_os = "linux",
+        target_feature = "sse2"
+    ),
+    all(
+        feature = "chacha20poly1305-neon",
+        target_arch = "aarch64",
+        target_endian = "little",
+        target_feature = "neon",
+        any(target_os = "linux", target_os = "macos")
+    )
 ))]
 mod paired;
 

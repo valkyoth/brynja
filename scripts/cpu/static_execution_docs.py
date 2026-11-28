@@ -28,7 +28,7 @@ CLAIMS = (
 def validate(root):
     texts = {name: (root / name).read_text(encoding='utf-8') for name in FILES}
     features = tomllib.loads(texts[MANIFEST]).get('features')
-    if features != {'default': [], 'chacha20-sse2': [], 'chacha20-neon': [], 'poly1305-avx2': ['dep:brynja-core'],
+    if features != {'default': [], 'chacha20-sse2': [], 'chacha20-neon': [], 'poly1305-avx2': ['dep:brynja-core'], 'poly1305-neon': ['dep:brynja-core'],
                     'ghash-runtime-execution': [], 'aes-static-execution': [],
                     'aes-runtime-execution': ['aes-static-execution'],
                     'sha256-hardened-batch': ['dep:brynja-core'], 'sha512-hardened-batch': ['dep:brynja-core'], 'keccak-hardened-batch': ['dep:brynja-core'], 'keccak-batch': ['static-execution'], 'static-execution': [], 'runtime-execution': ['static-execution'],

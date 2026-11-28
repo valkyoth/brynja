@@ -1,9 +1,9 @@
-//! Native Linux x86-64 throughput fixture; all operands are public test data.
-use brynja_aead_chacha20poly1305::{Opener, Sealer, execution::X86Pair};
+//! Native paired throughput fixture; all operands are public test data.
+use brynja_aead_chacha20poly1305::{Opener, Sealer, execution::Pair};
 use std::{hint::black_box, time::Instant};
 
 fn main() {
-    let mut cpu = X86Pair::probe().unwrap_or_else(|e| {
+    let mut cpu = Pair::probe().unwrap_or_else(|e| {
         eprintln!("required pair: {e:?}");
         std::process::exit(2)
     });

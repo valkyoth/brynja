@@ -40,6 +40,8 @@ ALLOWED = {
     **DARWIN_RESIDENT_MODULES,
     Path("crates/brynja-crypto-cpu/src/poly1305_avx2.rs"): ("0bfc42d01585460c650929e7b72a0fd7256aa3ad893f2f7365a3ddbc4ae50327", 1, 0, 1),
     Path("crates/brynja-crypto-cpu/src/poly1305_avx2/kernel.rs"): ("beb775b9a92da8eea9f1fdf0f0330895f83be51b621dca17af4c7c7e159fc031", 2, 0, 2),
+    Path("crates/brynja-crypto-cpu/src/poly1305_neon.rs"): ("2f41dd866218f36e9ed0f0bf745fd075bf7a96ef99d003a9cebee9aa3c93b6e1", 1, 0, 1),
+    Path("crates/brynja-crypto-cpu/src/poly1305_neon/kernel.rs"): ("8e6541e47b39d066338b3f70d761571dfcbc0a8474aef159e5b79a5b7f566f1d", 2, 0, 2),
     # Existing AES and GHASH boundaries, byte-identical to v0.30.0.
     Path("crates/brynja-crypto-cpu/src/aes/aarch64.rs"): ("ad92752d1f2697b12e0371ebe37baf976a39b4f74a3deb73a6971575fbc41a0a", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/aes/aarch64_expand.rs"): ("62a49742b01e06def854c7dfee991216606a2f4d3f87852f6ae1765c82af7d79", 1, 1, 1),

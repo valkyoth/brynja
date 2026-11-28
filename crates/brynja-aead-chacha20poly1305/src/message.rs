@@ -132,11 +132,20 @@ impl Frame {
         authenticate!(self, key, nonce, aad, cipher, finish, start)
     }
 
-    #[cfg(all(
-        feature = "chacha20poly1305-x86",
-        target_arch = "x86_64",
-        target_os = "linux",
-        target_feature = "sse2"
+    #[cfg(any(
+        all(
+            feature = "chacha20poly1305-x86",
+            target_arch = "x86_64",
+            target_os = "linux",
+            target_feature = "sse2"
+        ),
+        all(
+            feature = "chacha20poly1305-neon",
+            target_arch = "aarch64",
+            target_endian = "little",
+            target_feature = "neon",
+            any(target_os = "linux", target_os = "macos")
+        )
     ))]
     pub(super) fn with_paired_mac<T>(
         &self,
@@ -144,12 +153,12 @@ impl Frame {
         nonce: [u8; 12],
         aad: &[u8],
         cipher: &[u8],
-        cpu: &mut brynja_mac_poly1305::execution::Avx2,
-        finish: impl FnOnce(brynja_mac_poly1305::execution::Poly1305Avx2<'_, '_>) -> Result<T, Error>,
+        cpu: &mut crate::execution::MacCpu,
+        finish: impl FnOnce(crate::execution::NativeMac<'_, '_>) -> Result<T, Error>,
     ) -> Result<T, Error> {
         macro_rules! start {
             ($one:expr) => {
-                $one.start_avx2(cpu).map_err(|_| Error::Invariant)?
+                crate::execution::start_mac($one, cpu)?
             };
         }
         authenticate!(self, key, nonce, aad, cipher, finish, start)

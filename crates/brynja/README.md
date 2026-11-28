@@ -86,6 +86,8 @@ remain separate; there is no SIMD-batched or Windows enclave HMAC API.
 
 For authenticated encryption in the checkout, enable `chacha20poly1305` and
 import `brynja::crypto::chacha20poly1305::{Sealer, Opener}`. No raw cipher or MAC feature is needed.
+On little-endian AArch64 Linux/macOS, enable `chacha20poly1305-neon` and bind
+`chacha20poly1305::execution::ArmPair::probe()` with `with_pair` for seal/open.
 For explicit Linux x86-64 acceleration use `chacha20poly1305-x86`, probe
 `crypto::chacha20poly1305::execution::X86Pair`, and bind it with `with_pair`.
 

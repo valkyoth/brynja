@@ -357,3 +357,40 @@ paired portable/probe times exceeds one for **each** of 1500, 4096 and 16384
 bytes on both compilers. A win for this raw probe does not admit a public
 backend: the actual owner and the paired AEAD would need separate tests and
 measurements. Do not benchmark QEMU or pool observations across platforms.
+
+### Native ARM results: proceed to the owner experiment
+
+The probe from commit `e0198e04` met the long-record criterion on both named
+hosts. [All 384 paired observations](../assurance/poly1305/neon-two-block-native.csv)
+are retained, including the 33-byte Linux case that was slower on Rust 1.90.
+Values below are medians of the twelve portable-time / probe-time ratios;
+greater than one favors the probe.
+
+| Bytes | Apple M2 Pro 1.90 | Apple M2 Pro 1.100 | Neoverse-V2 1.90 | Neoverse-V2 1.100 |
+| ---: | ---: | ---: | ---: | ---: |
+| 16 | 2.078 | 2.633 | 1.572 | 2.535 |
+| 31 | 1.352 | 1.586 | 1.378 | 1.558 |
+| 32 | 1.335 | 1.447 | 1.262 | 1.199 |
+| 33 | 1.177 | 1.563 | 0.962 | 1.045 |
+| 256 | 1.309 | 1.457 | 1.159 | 1.187 |
+| 1500 | 1.269 | 1.293 | 1.163 | 1.168 |
+| 4096 | 1.263 | 1.266 | 1.183 | 1.185 |
+| 16384 | 1.250 | 1.268 | 1.190 | 1.186 |
+
+Each of the four binaries first replayed all 2,124 known-answer and generated
+records on its native host, then ran the declared benchmark once. Hashes
+matched before and after. The Linux runs used the same static musl ELFs
+listed above, pinned to vCPU 0 on an AWS Neoverse-V2 guest
+(`7.0.0-1018-aws`). The Apple runs used stock native Darwin release builds
+on macOS 27.2.1 (26B131), with scheduling left to macOS; core type was not
+controlled. Measured Mach-O SHA-256:
+`3c84ab2d6c4372ee936acb953ae53f8091e9a9945a535f97f08714969b3ab028`
+(1.90.0) and
+`8d79dc575cc6b0423eb651c4da00c45b4186861b7ca1ce81f105f544d3ab1075`
+(1.100.0).
+
+These are whole-message probe results, **not** speedups of a clearing
+Poly1305 owner or of ChaCha20-Poly1305. At 16 and 31 bytes the probe does
+not execute its NEON two-block kernel at all. The next comparison must
+include equivalent one-time-key handling, streaming and cleanup before
+deciding whether to expose an ARM backend.

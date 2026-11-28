@@ -1,6 +1,8 @@
 //! Unpublished arithmetic and streaming experiments. Public fixtures only.
 #[cfg(target_arch = "x86_64")]
 mod avx2 {
+    mod admission;
+    pub(super) use admission::Required;
     pub(super) mod stream;
     use std::arch::x86_64::*;
     type F = [u64; 5];
@@ -166,6 +168,21 @@ fn throughput() {
 
 #[cfg(target_arch = "x86_64")]
 fn main() {
+    if std::env::args().nth(1).as_deref() == Some("--check-admission") {
+        let mut cpu = avx2::Required::probe().unwrap_or_else(|why| {
+            eprintln!("required AVX2: {why}");
+            std::process::exit(2)
+        });
+        let key = [0xab; 32];
+        let message = [0x47; 4097];
+        assert_eq!(
+            avx2::stream::candidate(&mut cpu, &key, &message, 1500),
+            portable(&key, &message)
+        );
+        println!("required AVX2: KAT and long-update comparison passed");
+        return;
+    }
+    let mut cpu = avx2::Required::probe().expect("required AVX2 startup");
     // Public generated inputs, including every partial-block and group boundary.
     let decode = |field: &str| {
         let (pairs, rest) = field.as_bytes().as_chunks::<2>();
@@ -187,7 +204,7 @@ fn main() {
             fields[0]
         );
         assert_eq!(
-            avx2::stream::candidate(&key, &decode(fields[2]), 17).as_slice(),
+            avx2::stream::candidate(&mut cpu, &key, &decode(fields[2]), 17).as_slice(),
             decode(fields[3]),
             "streaming {}",
             fields[0]
@@ -217,7 +234,7 @@ fn main() {
             case_count += 1;
             for chunk in [17, 1024, 1500, 16384] {
                 assert_eq!(
-                    avx2::stream::candidate(&key, &msg, chunk),
+                    avx2::stream::candidate(&mut cpu, &key, &msg, chunk),
                     portable(&key, &msg),
                     "streaming seed {seed}, length {len}, chunk {chunk}"
                 );

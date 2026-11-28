@@ -8,6 +8,7 @@ fn check_clear(key: &[u8; 32], ws: &Workspace) {
 
 #[test]
 fn every_split_scalar_vector_and_tail_boundaries() {
+    let mut cpu = Required::probe().unwrap();
     for n in [
         0, 1, 15, 16, 17, 63, 64, 65, 1023, 1024, 1025, 1087, 1088, 1089, 1500, 2050,
     ] {
@@ -22,11 +23,15 @@ fn every_split_scalar_vector_and_tail_boundaries() {
                 acc: [[0xff; 8]; 5],
                 tail: [0xff; 16],
             };
-            let mut owner = Owner::start(&mut storage, &mut ws);
+            let mut owner = Owner::start(&mut cpu, &mut storage, &mut ws).unwrap();
             owner.update(&msg[..split]).unwrap();
             owner.update(&[]).unwrap();
             owner.update(&msg[split..]).unwrap();
-            assert_eq!(owner.finalize(), expected, "len={n}, split={split}");
+            assert_eq!(
+                owner.finalize().unwrap(),
+                expected,
+                "len={n}, split={split}"
+            );
             check_clear(&storage, &ws);
         }
     }
@@ -34,6 +39,7 @@ fn every_split_scalar_vector_and_tail_boundaries() {
 
 #[test]
 fn full_tag_and_abandoned_message_cleanup() {
+    let mut cpu = Required::probe().unwrap();
     let key = [0x73; 32];
     let msg = [0xa7; 1519];
     let tag = crate::portable(&key, &msg);
@@ -44,16 +50,16 @@ fn full_tag_and_abandoned_message_cleanup() {
         }
         let mut storage = key;
         let mut ws = Workspace::default();
-        let mut m = Owner::start(&mut storage, &mut ws);
+        let mut m = Owner::start(&mut cpu, &mut storage, &mut ws).unwrap();
         m.update(&msg).unwrap();
-        assert_eq!(m.verify(&expected), changed == 16);
+        assert_eq!(m.verify(&expected).unwrap(), changed == 16);
         check_clear(&storage, &ws);
     }
     for unwind in [false, true] {
         let mut storage = key;
         let mut ws = Workspace::default();
         let res = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let mut m = Owner::start(&mut storage, &mut ws);
+            let mut m = Owner::start(&mut cpu, &mut storage, &mut ws).unwrap();
             m.update(&msg).unwrap();
             if unwind {
                 panic!("public fixture interruption");
@@ -66,9 +72,10 @@ fn full_tag_and_abandoned_message_cleanup() {
 
 #[test]
 fn length_rejection_does_not_change_state() {
+    let mut cpu = Required::probe().unwrap();
     let mut key = [0xb5; 32];
     let mut ws = Workspace::default();
-    let mut m = Owner::start(&mut key, &mut ws);
+    let mut m = Owner::start(&mut cpu, &mut key, &mut ws).unwrap();
     m.update(&[0xcc; 1031]).unwrap();
     m.len = u64::MAX - 1;
     let before = (m.ws.acc, m.ws.tail, m.used, m.len);
@@ -77,6 +84,38 @@ fn length_rejection_does_not_change_state() {
     m.update(&[1]).unwrap();
     m.update(&[]).unwrap();
     assert_eq!(m.update(&[1]), Err("length"));
+}
+
+#[test]
+fn retired_authority_cannot_finish_or_start_another_message() {
+    for verify in [false, true] {
+        let mut cpu = Required::probe().unwrap();
+        let mut key = [0xab; 32];
+        let mut ws = Workspace::default();
+        let mut m = Owner::start(&mut cpu, &mut key, &mut ws).unwrap();
+        m.update(&[0x48; 1101]).unwrap();
+        assert!(
+            std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                m.cpu.interrupt_for_test()
+            }))
+            .is_err()
+        );
+        assert_eq!(m.update(&[]), Err("quarantined"));
+        if verify {
+            assert_eq!(m.verify(&[0; 16]), Err("quarantined"));
+        } else {
+            assert_eq!(m.finalize(), Err("quarantined"));
+        }
+        check_clear(&key, &ws);
+        key.fill(0x47);
+        ws.tail.fill(0x57);
+        assert!(matches!(
+            Owner::start(&mut cpu, &mut key, &mut ws),
+            Err("quarantined")
+        ));
+        assert_eq!(key, [0x47; 32]);
+        assert_eq!(ws.tail, [0x57; 16]);
+    }
 }
 
 #[test]

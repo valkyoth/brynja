@@ -33,7 +33,7 @@ impl Drop for TableGuard<'_> {
 
 // Do not retain either powers or the expanded table between updates.
 #[target_feature(enable = "avx2")]
-fn groups(mut h: F, blocks: &[[u8; 64]], r: F) -> F {
+pub(super) fn groups(mut h: F, blocks: &[[u8; 64]], r: F) -> F {
     let mut storage = [[[0; 8]; 5]; 4];
     let powers = Powers(&mut storage);
     powers.0[3] = r.map(u64::to_le_bytes);
@@ -67,6 +67,7 @@ struct Workspace {
 }
 
 struct Owner<'a> {
+    cpu: &'a mut Required,
     key: &'a mut [u8; 32],
     ws: &'a mut Workspace,
     used: usize,
@@ -75,17 +76,22 @@ struct Owner<'a> {
 
 impl<'a> Owner<'a> {
     // Exact RFC import only. Callers in this fixture provide a clean workspace.
-    fn start(key: &'a mut [u8; 32], ws: &'a mut Workspace) -> Self {
-        assert!(std::is_x86_feature_detected!("avx2"), "AVX2 required");
+    fn start(
+        cpu: &'a mut Required,
+        key: &'a mut [u8; 32],
+        ws: &'a mut Workspace,
+    ) -> Result<Self, &'static str> {
+        cpu.ready()?;
         // Initialize explicitly: a forgotten prior owner cannot inject a stale accumulator.
         ws.acc = [[0; 8]; 5];
         ws.tail = [0; 16];
-        Self {
+        Ok(Self {
+            cpu,
             key,
             ws,
             used: 0,
             len: 0,
-        }
+        })
     }
 
     fn r(&self) -> F {
@@ -93,6 +99,7 @@ impl<'a> Owner<'a> {
     }
 
     fn update(&mut self, mut input: &[u8]) -> Result<(), &'static str> {
+        self.cpu.ready()?;
         self.len = self
             .len
             .checked_add(u64::try_from(input.len()).map_err(|_| "length")?)
@@ -117,8 +124,7 @@ impl<'a> Owner<'a> {
         let r = self.r();
         if input.len() >= LONG {
             let (whole, rest) = input.as_chunks::<64>();
-            // SAFETY: start checked AVX2 and there is no unchecked constructor.
-            h = unsafe { groups(h, whole, r) };
+            h = self.cpu.groups(h, whole, r)?;
             input = rest;
         }
         let (whole, rest) = input.as_chunks::<16>();
@@ -146,12 +152,14 @@ impl<'a> Owner<'a> {
             .to_le_bytes()
     }
 
-    fn finalize(self) -> [u8; 16] {
-        self.tag()
+    fn finalize(self) -> Result<[u8; 16], &'static str> {
+        self.cpu.ready()?;
+        Ok(self.tag())
     }
 
     #[cfg(test)]
-    fn verify(self, expected: &[u8; 16]) -> bool {
+    fn verify(self, expected: &[u8; 16]) -> Result<bool, &'static str> {
+        self.cpu.ready()?;
         let mut computed = self.tag();
         let mut diff = 0;
         for (a, b) in computed.iter().zip(expected) {
@@ -160,7 +168,7 @@ impl<'a> Owner<'a> {
         let valid = secret_difference_is_zero(&diff).expose_public();
         let _ = clear_owned_region(std::slice::from_mut(&mut diff));
         let _ = clear_owned_region(&mut computed);
-        valid
+        Ok(valid)
     }
 }
 
@@ -172,14 +180,14 @@ impl Drop for Owner<'_> {
     }
 }
 
-pub(crate) fn candidate(key: &[u8; 32], msg: &[u8], chunk: usize) -> [u8; 16] {
+pub(crate) fn candidate(cpu: &mut Required, key: &[u8; 32], msg: &[u8], chunk: usize) -> [u8; 16] {
     let mut key = *key;
     let mut ws = Workspace::default();
-    let mut mac = Owner::start(&mut key, &mut ws);
+    let mut mac = Owner::start(cpu, &mut key, &mut ws).unwrap();
     for part in msg.chunks(chunk) {
         mac.update(part).unwrap();
     }
-    mac.finalize()
+    mac.finalize().unwrap()
 }
 
 fn baseline(key: &[u8; 32], msg: &[u8], chunk: usize) -> [u8; 16] {
@@ -197,6 +205,7 @@ mod tests;
 pub(crate) fn throughput() {
     use std::{hint::black_box, time::Instant};
     let key = std::array::from_fn(|i| (i as u8).wrapping_mul(31));
+    let mut cpu = Required::probe().unwrap();
     println!("bytes,chunk,pair,records,portable_ns,owner_ns");
     for (size, chunk) in [16, 63, 64, 65, 256, 1023, 1024, 1025, 1500, 4096, 16384]
         .map(|n| (n, n))
@@ -204,23 +213,31 @@ pub(crate) fn throughput() {
         .chain([(16384, 1500), (16384, 17)])
     {
         let msg: Vec<_> = (0..size).map(|i| (i as u8).wrapping_mul(117)).collect();
-        assert_eq!(candidate(&key, &msg, chunk), baseline(&key, &msg, chunk));
+        assert_eq!(
+            candidate(&mut cpu, &key, &msg, chunk),
+            baseline(&key, &msg, chunk)
+        );
         let reps = 524288 / size;
-        let batch = |tag: fn(&[u8; 32], &[u8], usize) -> [u8; 16]| {
+        let mut batch = |native: bool| {
             let start = Instant::now();
             for _ in 0..reps {
-                black_box(tag(black_box(&key), black_box(&msg), black_box(chunk)));
+                let (k, m, c) = (black_box(&key), black_box(msg.as_slice()), black_box(chunk));
+                black_box(if native {
+                    candidate(&mut cpu, k, m, c)
+                } else {
+                    baseline(k, m, c)
+                });
             }
             start.elapsed().as_nanos()
         };
-        batch(baseline);
-        batch(candidate);
+        batch(false);
+        batch(true);
         for pair in 0..12 {
             let (p, v) = if pair % 2 == 0 {
-                (batch(baseline), batch(candidate))
+                (batch(false), batch(true))
             } else {
-                let v = batch(candidate);
-                (batch(baseline), v)
+                let v = batch(true);
+                (batch(false), v)
             };
             println!("{size},{chunk},{pair},{reps},{p},{v}");
         }

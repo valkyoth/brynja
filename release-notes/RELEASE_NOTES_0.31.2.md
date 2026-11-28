@@ -135,3 +135,33 @@ group or its outlined closure. Measured executable SHA-256:
 `408101f1a5bc66a15d87ccc09601def9235e8f660ebd7a60550b145a3f7c5f15`
 (1.90.0), `c69ffdf82a487fea0e92810d1cf01057982c9b13ee156263d23f54b587ffe016`
 (1.100.0).
+
+## Hosted AVX2 admission and linked replay (checkout only)
+
+The streaming example now admits a reusable, thread-local execution handle
+before borrowing a one-time key or changing the caller's workspace. It checks
+host AVX2 support, then runs a fixed known-answer test through the actual
+four-block kernel. The test starts with a nonzero accumulator, processes two
+groups with distinct lane inputs and compares all five result limbs. A wrong
+answer or unwinding out of startup or a native update retires that handle.
+It cannot start, update, finalize or verify another message; the required
+route does not fall back. There is no thread pinning: as with the hosted GHASH
+route, the advertised ISA must stay usable wherever the thread may run.
+
+Run `python3 scripts/cryptography/check-poly1305-avx2-admission.py` on AVX2
+Linux x86-64 with both compilers, LLVM objdump and QEMU user mode installed.
+For each stock release ELF, the checker follows the startup and message paths
+to the same vector group, checks for four-lane unsigned multiplication, and
+rejects a parsed listing with those instructions removed. It then runs the
+native corpus and runs the same binary under QEMU with AVX2 present and
+masked. Only the latter must exit with “unavailable”. QEMU is a feature
+selection check, not a throughput measurement.
+
+Both endpoints passed (1.90.0 ELF SHA-256
+`f6082549a0c750ca9d5726465c2e690d9b912445311bf10e3326ed85854384a4`;
+1.100.0 `229b4ab23f0446f8f551b0421ff65823e55f11513c6c1c7d6715ca1f6cc2898b`).
+The seven admission, streaming and cleanup tests also passed on both compilers
+and under x86-64 AddressSanitizer. The earlier throughput numbers describe the
+pre-admission build at `527daa33`, not these ELFs. No public CPU or AEAD route
+is enabled. The next integration step is the opt-in CPU-crate kernel and its
+one-time-key owner, followed by measurement of that shipped layout.

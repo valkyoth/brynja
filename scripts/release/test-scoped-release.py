@@ -155,11 +155,11 @@ class ScopedRelease(unittest.TestCase):
         with self.assertRaises(ValueError):
             scoped.enabled('garbage')
 
-    def test_public_cipher_checkpoint_is_dependency_ordered_and_gate_does_not_publish(self):
-        plan = scoped.load('0.30.6')
+    def test_poly1305_internal_milestone_is_scoped_and_does_not_publish(self):
+        plan = scoped.load('0.31.0')
         commands = {check['id']: check['command'] for check in plan['checks']}
         self.assertEqual(len(commands), 44)
-        self.assertEqual(commands['registry-consumer'], ['python3', 'scripts/release/check-registry-consumer.py'])
+        self.assertEqual(commands['poly1305-vectors'], ['python3', 'scripts/cryptography/test-poly1305-vectors.py'])
         self.assertEqual(commands['aes-leaf-identity'], ['python3', 'scripts/aes/check-aes-leaf-identity.py'])
         self.assertEqual(commands['sha256-policy'], ['python3', 'scripts/sha2/check-sha256.py'])
         self.assertEqual(commands['static-cpu-source-policy'],
@@ -191,7 +191,7 @@ class ScopedRelease(unittest.TestCase):
         self.assertEqual(commands['facade-integration'],
             ['cargo', 'check', '--locked', '-p', 'brynja', '--no-default-features'])
         self.assertEqual(set(plan['ci_checks']), set(commands) -
-                         {'registry-consumer', 'aes-leaf-identity', 'sbom', 'dependency-policy', 'advisories', 'gmac-public-consumer', 'aead-packaged-endpoints', 'ghash-package-controls', 'ghash-packaged-endpoints',
+                         {'aes-leaf-identity', 'sbom', 'dependency-policy', 'advisories', 'gmac-public-consumer', 'aead-packaged-endpoints', 'ghash-package-controls', 'ghash-packaged-endpoints',
                           'ghash-packaged-runtime-x86', 'hkdf-package-runner-tests', 'hkdf-packaged-endpoints',
                           'aes-downstream-endpoints', 'aes-consumer-format',
                           'aes-consumer-lint-direct', 'aes-consumer-lint-facade'})
@@ -252,19 +252,16 @@ class ScopedRelease(unittest.TestCase):
                                  or 'check-aes-kani.py' in arg
                                  or 'check-aes-dataflow.py' in arg for arg in command))
         release = tomllib.loads((scoped.ROOT / 'release-crates.toml').read_text())
-        self.assertEqual(release['release']['version'], '0.30.6')
-        self.assertEqual(release['crates']['brynja']['previous_version'], '0.30.5')
+        self.assertEqual(release['release']['version'], '0.31.0')
+        self.assertEqual(release['release']['baseline'], '0.30.6')
+        self.assertEqual(release['crates']['brynja']['previous_version'], '0.30.6')
         self.assertEqual(release['crates']['brynja']['change'], 'code')
-        self.assertEqual(release['release']['cumulative_milestones'][-2:], ['0.30.5', '0.30.6'])
-        self.assertEqual(release['crates']['brynja-cipher-chacha']['previous_version'], 'unpublished')
-        self.assertEqual(release['crates']['brynja-cipher-aes']['previous_version'], 'unpublished')
-        self.assertTrue(release['crates']['brynja-universal-hash-ghash']['publish'])
-        self.assertTrue(release['crates']['brynja-aead-gcm']['publish'])
+        self.assertEqual(release['release']['cumulative_milestones'], ['0.31.0'])
+        self.assertIn('standalone portable Poly1305', plan['scope'])
         for name in ('brynja-cipher-aes', 'brynja-universal-hash-ghash'):
             self.assertLess(publisher.PUBLISH_ORDER.index(name), publisher.PUBLISH_ORDER.index('brynja-aead-gcm'))
         self.assertLess(publisher.PUBLISH_ORDER.index('brynja-aead-gcm'), publisher.PUBLISH_ORDER.index('brynja-crypto'))
         self.assertLess(publisher.PUBLISH_ORDER.index('brynja-universal-hash-ghash'), publisher.PUBLISH_ORDER.index('brynja-crypto'))
-        self.assertTrue(release['crates']['brynja-cipher-aes']['publish'])
         self.assertLess(publisher.PUBLISH_ORDER.index('brynja-cipher-aes'),
                         publisher.PUBLISH_ORDER.index('brynja-crypto'))
         self.assertIn('RV64 stays scalar', plan['scope'])
@@ -272,7 +269,7 @@ class ScopedRelease(unittest.TestCase):
         self.assertIn('Portable GHASH', plan['scope'])
         self.assertIn('Portable RFC 8439 ChaCha20', plan['scope'])
         self.assertFalse(any('--differential' in cmd for cmd in commands.values()))
-        self.assertEqual(release['release']['stage'], 'public')
+        self.assertEqual(release['release']['stage'], 'internal')
         self.assertFalse(release['release']['exceptional'])
         self.assertEqual(release['release']['exception_reason'], '')
         self.assertIn('timing remains unresolved', plan['scope'])
@@ -284,12 +281,12 @@ class ScopedRelease(unittest.TestCase):
         self.assertIn('Linux/macOS ARM64 AES/PMULL', plan['scope'])
         self.assertFalse(any('check-paired-timing.py' in arg or 'check-paired-archives.py' in arg
                              for command in commands.values() for arg in command))
-        self.assertEqual(sum(row['publish'] for row in release['crates'].values()), 35)
+        self.assertFalse(any(row['publish'] for row in release['crates'].values()))
         for name in ('brynja-core', 'brynja-crypto'):
             with self.subTest(name=name):
                 entry = release['crates'][name]
-                self.assertEqual(entry['change'], 'code')
-                self.assertNotEqual(entry['version'], entry['previous_version'])
+                self.assertEqual(entry['change'], 'unchanged')
+                self.assertEqual(entry['version'], entry['previous_version'])
         self.assertIn('brynja-legacy-hkdf', release['crates'])
         order = publisher.PUBLISH_ORDER
         self.assertLess(order.index('brynja-legacy-hmac'), order.index('brynja-legacy-hkdf'))

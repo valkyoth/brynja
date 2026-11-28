@@ -1,6 +1,11 @@
 # Changelog
 
-## 0.30.6 standalone cipher package publication acceptance (candidate)
+## 0.31.0 standalone Poly1305 (in development)
+
+- Add the RFC 8439 standalone MAC vectors and a test-only arithmetic reference
+  before implementing the Rust owner. [Scope and remaining work](release-notes/RELEASE_NOTES_0.31.0.md).
+
+## 0.30.6 standalone cipher package publication acceptance (released)
 
 - Freeze the cumulative package selection and rehearse the public imports against
   staged registry archives. No change to cryptographic implementations or timing

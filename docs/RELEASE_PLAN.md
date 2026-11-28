@@ -7454,7 +7454,7 @@ Exit criteria:
 
 ### v0.31.0 - Complete Poly1305
 
-Status: planned
+Status: in progress
 
 Plan scope: Implement this one-time authenticator in `brynja-mac-poly1305`. Implement complete Poly1305 key clamping, block and partial-block processing, canonical reduction, one-time-key ownership, constant-time verification, checked lengths, cleanup, official vectors, proofs, and distinct public MAC APIs without yet composing an AEAD.
 

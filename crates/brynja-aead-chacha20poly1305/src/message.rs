@@ -42,6 +42,8 @@ impl Buffers<'_> {
             Self::Separate(src, _) => src,
         };
         let result = compute(input, work.0)?;
+        #[cfg(test)]
+        crate::interruptions::Stage::BeforeCommit.check()?;
         let (Self::InPlace(out) | Self::Separate(_, out)) = self;
         out.copy_from_slice(work.0);
         Ok(result)
@@ -54,9 +56,14 @@ pub(super) fn crypt(
     input: &[u8],
     work: &mut [u8],
 ) -> Result<(), Error> {
+    #[cfg(test)]
+    crate::interruptions::Stage::BeforePayload.check()?;
     ChaCha20::new(key, nonce, 1)
         .apply_keystream(input, work)
-        .map_err(|_| Error::Invariant)
+        .map_err(|_| Error::Invariant)?;
+    #[cfg(test)]
+    crate::interruptions::Stage::AfterPayload.check()?;
+    Ok(())
 }
 
 pub(super) struct Frame {
@@ -93,6 +100,8 @@ impl Frame {
             .apply_keystream_in_place(guarded.0)
             .map_err(|_| Error::Invariant)?;
         let exact = guarded.0.first_chunk_mut::<32>().ok_or(Error::Invariant)?;
+        #[cfg(test)]
+        crate::interruptions::Stage::AfterDerivation.check()?;
         let mut mac = OneTimeKey::from_rfc8439_key(exact).start();
         for data in [aad, cipher] {
             let padding = data.len().wrapping_neg() & 15;
@@ -105,8 +114,22 @@ impl Frame {
             mac.update(&length.to_le_bytes())
                 .map_err(|_| Error::Invariant)?;
         }
+        #[cfg(test)]
+        crate::interruptions::Stage::AfterFraming.check()?;
         finish(mac)
     }
+}
+
+#[cfg(kani)]
+#[kani::proof]
+fn exact_frame_admission() {
+    let aad: u64 = kani::any();
+    let payload: u64 = kani::any();
+    // Independent, non-overflowing mathematical specification, in bytes.
+    let padded = |n: u64| u128::from(n).div_ceil(16) * 16;
+    let fits = u128::from(payload).div_ceil(64) <= u128::from(u32::MAX)
+        && padded(aad) + padded(payload) + 16 <= u128::from(u64::MAX);
+    assert_eq!(Frame::new(aad, payload).is_ok(), fits);
 }
 
 #[cfg(test)]

@@ -5,6 +5,27 @@ execution_semantics = 1
 catalog = "verification/catalog.json"
 includes = ["verification/miri-checks.json", "verification/kani-checks.json", "verification/matrix-checks.json", "verification/extra-checks.json"]
 
+[groups.chacha20poly1305-portable]
+paths = ["Cargo.toml", "Cargo.lock", "crates/brynja-aead-chacha20poly1305/Cargo.toml", "crates/brynja-aead-chacha20poly1305/src", "crates/brynja-cipher-chacha/Cargo.toml", "crates/brynja-cipher-chacha/src", "crates/brynja-mac-poly1305/Cargo.toml", "crates/brynja-mac-poly1305/src", "crates/brynja-core/Cargo.toml", "crates/brynja-core/src"]
+
+[[checks]]
+component = "chacha20poly1305"
+id = "portable-admission-and-commit"
+category = "kani"
+name = "ChaCha20-Poly1305 frame bounds, nonce reservation and output commit"
+establishes = "Full u64 frame and reservation arithmetic; staged destination and scratch behavior on returned success/error for both layouts up to four bytes. Not an AEAD or machine-code proof."
+command = ["cargo", "+1.90.0", "kani", "-p", "brynja-aead-chacha20poly1305", "--output-format", "terse", "--jobs", "2"]
+cwd = "."
+platform = "linux-x86_64"
+inputs = ["kani-tools", "chacha20poly1305-portable"]
+reject_environment = ["RUSTFLAGS","CARGO_ENCODED_RUSTFLAGS","RUSTC","RUSTC_WRAPPER","RUSTC_WORKSPACE_WRAPPER","CARGO_BUILD_TARGET","RUSTUP_TOOLCHAIN","KANIFLAGS"]
+timeout_seconds = 300
+[checks.environment]
+CARGO_NET_OFFLINE = "true"
+[checks.success]
+unique_lines = ["Complete - 3 successfully verified harnesses, 0 failures, 3 total."]
+contains = ["message::exact_frame_admission", "proofs::reservation_and_successor", "proofs::staged_commit_for_both_layouts", "VERIFICATION:- SUCCESSFUL"]
+
 [groups.poly1305-field]
 paths = ["Cargo.toml", "Cargo.lock", "crates/brynja-mac-poly1305/Cargo.toml", "crates/brynja-mac-poly1305/src", "crates/brynja-core/src", "crates/brynja-core/Cargo.toml"]
 

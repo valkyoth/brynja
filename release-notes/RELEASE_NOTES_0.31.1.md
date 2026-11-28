@@ -31,7 +31,9 @@ resolves the AEAD or either of its primitive crates. Nothing is uploaded.
 
 Remaining work is tracked in the [release plan](../docs/RELEASE_PLAN.md#v0311---complete-chacha20-poly1305):
 
-- Expand differential, boundary and failure-injection coverage beyond the RFC
-  examples and the focused length, reservation, tamper and transaction tests.
-- Complete the bounds, failure-atomicity and comparison evidence before the
-  final gate. Acceleration belongs to v0.31.2.
+- The [portable assurance record](../docs/assurance/chacha20poly1305-portable.md)
+  covers 813 differential records per compiler, 40 software interruptions and
+  three Kani proofs, with explicit limits.
+- Complete the AEAD linked tag-comparison and cleanup review, reconcile the
+  requirement and claim records, then run the final gate. Acceleration belongs
+  to v0.31.2.

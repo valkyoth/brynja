@@ -45,10 +45,42 @@ def records():
     ]
 
 
+def differential(replay):
+    from cryptography.hazmat.primitives.ciphers.aead import ChaCha20Poly1305
+    # The lengths vary independently. Cover every 16-byte padding residue,
+    # and cross payload block boundaries with nonzero, deterministic data.
+    aad_sizes = (*range(18), 31, 32, 33, 63, 64, 65, 127, 128, 129)
+    payload_sizes = (*range(18), 31, 32, 33, 63, 64, 65, 127, 128, 129, 255, 256, 257)
+    sizes = [(a, p) for a in aad_sizes for p in payload_sizes] + [(4097, 0), (0, 4097), (4097, 4097)]
+    rows = []
+    for index, (a, p) in enumerate(sizes):
+        seed = b'Brynja public AEAD differential v1/' + index.to_bytes(4, 'big')
+        def data(label, n):
+            return hashlib.shake_256(seed + label).digest(n)
+        key, nonce, aad, plain = data(b'key', 32), data(b'nonce', 12), data(b'aad', a), data(b'plain', p)
+        encrypted = ChaCha20Poly1305(key).encrypt(nonce, plain, aad)
+        rows.append([key, nonce, aad, plain, encrypted[:-16], encrypted[-16:]])
+    result = replay(rows, ('--differential',))
+    if result.returncode or result.stdout.strip() != f'matched {len(rows)} differential AEAD records':
+        raise ValueError('differential replay failed: ' + result.stderr)
+    # Corrupt one full-size row, preserving field widths and parseability.
+    for field in range(6):
+        wrong = rows[-1].copy()
+        changed = bytearray(wrong[field])
+        changed[-1] ^= 0x80
+        wrong[field] = bytes(changed)
+        bad = replay([wrong], ('--differential',))
+        if bad.returncode != 1 or bad.stderr.strip() != 'Error: "AEAD differential mismatch"' or bad.stdout:
+            raise ValueError(f'differential negative control failed for field {field}')
+    print(f'{len(rows)} independent AEAD records in both layouts; six altered-answer controls passed')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--rust', choices=['1.90.0', '1.100.0'])
     parser.add_argument('--oracle', action='store_true', help='also check with Python cryptography (test only)')
+    parser.add_argument('--differential', action='store_true',
+                        help='also run deterministic boundary records from Python cryptography (test only)')
     args = parser.parse_args()
     cases = records()
     if args.oracle:
@@ -67,9 +99,10 @@ def main():
     cargo = ['cargo'] + (['+' + args.rust] if args.rust else [])
     command = cargo + ['run', '--locked', '--offline', '--quiet', '--release', '--manifest-path', str(MANIFEST)]
 
-    def replay(rows):
+    def replay(rows, mode=()):
         data = ''.join('\t'.join(value.hex() for value in row) + '\n' for row in rows)
-        return subprocess.run(command, input=data, text=True, capture_output=True, timeout=120)
+        return subprocess.run(command + (['--', *mode] if mode else []), input=data, text=True,
+                              capture_output=True, timeout=120)
 
     result = replay(cases)
     if result.returncode or result.stdout.strip() != 'matched 2 RFC AEAD records':
@@ -84,6 +117,8 @@ def main():
         if result.returncode != 1 or result.stderr.strip() != 'Error: "RFC record mismatch"' or result.stdout:
             raise ValueError(f'wrong result for altered RFC field {i}')
     print('RFC 8439 AEAD: 2 composition records and 8 altered-field controls passed')
+    if args.differential:
+        differential(replay)
 
 
 if __name__ == '__main__':

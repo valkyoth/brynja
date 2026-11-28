@@ -1,5 +1,10 @@
 # Security Controls
 
+The portable ChaCha20-Poly1305 sender checks lengths before spending an
+invocation and spends it before keyed work. Both layouts stage output; the
+opener verifies the full received tag before decrypting. See the
+[interruption tests and bounded transaction proof](assurance/chacha20poly1305-portable.md).
+
 The standalone Poly1305 owner consumes its one-time key for one message and
 verifies all 16 tag bytes before returning a decision. It clears the caller's
 borrowed key storage on normal return or unwinding drop. See the

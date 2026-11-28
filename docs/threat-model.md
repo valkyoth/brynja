@@ -2,6 +2,13 @@
 
 Status: initial; expands with every milestone
 
+For ChaCha20-Poly1305 the sender assumes an application-reserved range that
+does not overlap any use of the same key, including after restart. Reusing
+a nonce repeats both the payload stream and the one-time authentication key.
+Opening authenticates the bytes supplied; it does not detect replay. Staged
+commit and named scratch clearing do not imply protection from physical faults,
+abort, dumps, register or compiler spill disclosure.
+
 Poly1305 authenticates one message per independent one-time key. An owner
 cannot prevent reuse of copied key bytes or enforce uniqueness after restart.
 The caller owns key generation and replay policy. On both reviewed x86-64

@@ -64,14 +64,41 @@ fn replay(line: &str) -> Option<()> {
 }
 
 fn main() -> Result<(), &'static str> {
+    let mut args = std::env::args().skip(1);
+    let differential = match (args.next().as_deref(), args.next()) {
+        (None, None) => false,
+        (Some("--differential"), None) => true,
+        _ => return Err("unknown replay mode"),
+    };
     let mut count = 0;
     for line in io::stdin().lock().lines() {
-        replay(&line.map_err(|_| "read error")?).ok_or("RFC record mismatch")?;
+        let line = line.map_err(|_| "read error")?;
+        if differential {
+            replay_public(&line).ok_or("AEAD differential mismatch")?;
+        } else {
+            replay(&line).ok_or("RFC record mismatch")?;
+        }
         count += 1;
     }
     if count == 0 {
         return Err("no RFC records");
     }
-    println!("matched {count} RFC AEAD records");
+    let suite = if differential { "differential" } else { "RFC" };
+    println!("matched {count} {suite} AEAD records");
     Ok(())
+}
+
+fn replay_public(line: &str) -> Option<()> {
+    let fields: Vec<_> = line.split('\t').map(decode).collect::<Option<_>>()?;
+    let [key, nonce, aad, pt, ct, tag] = fields.as_slice() else {
+        return None;
+    };
+    public_api(
+        key.as_slice().try_into().ok()?,
+        nonce.as_slice().try_into().ok()?,
+        aad,
+        pt,
+        ct,
+        tag.as_slice().try_into().ok()?,
+    )
 }

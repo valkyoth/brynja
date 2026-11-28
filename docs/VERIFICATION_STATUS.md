@@ -4,6 +4,13 @@ For package availability, see the [official crate directory](../README.md#worksp
 The evidence below describes specific builds and milestones; publishing their
 crates at the v0.30.6 checkpoint did not expand any verification claim.
 
+## Portable ChaCha20-Poly1305 (v0.31.1, in development)
+
+Both compiler endpoints passed the RFC vectors and 813 independently
+generated AEAD records. The [scope and reproduction instructions](assurance/chacha20poly1305-portable.md)
+separate the interruption tests and three Kani harnesses from target-specific
+comparison and erasure claims.
+
 ## Standalone Poly1305 (v0.31.0, internally tagged)
 
 Five field proofs passed. The Linux x86-64 verifier compared all 16 bytes and

@@ -14,7 +14,11 @@
 #![no_std]
 #![forbid(unsafe_code)]
 
+#[cfg(test)]
+mod interruptions;
 mod message;
+#[cfg(kani)]
+mod proofs;
 #[cfg(test)]
 mod tests;
 use message::Buffers;
@@ -89,16 +93,21 @@ impl<'k> Sealer<'k> {
         scratch: &mut [u8],
     ) -> Result<([u8; 12], [u8; 16]), Error> {
         let frame = io.admit(aad, scratch)?;
-        let counter = self.counters.next().ok_or(Error::Exhausted)?;
-        let mut nonce = [0; 12];
-        let (prefix, suffix) = nonce.split_at_mut(4);
-        prefix.copy_from_slice(&self.prefix);
-        suffix.copy_from_slice(&counter.to_be_bytes());
+        let nonce = self.take_nonce()?;
         io.transact(scratch, |input, work| {
             message::crypt(self.key, nonce, input, work)?;
             let tag = frame.with_mac(self.key, nonce, aad, work, |mac| Ok(mac.finalize()))?;
             Ok((nonce, tag))
         })
+    }
+
+    fn take_nonce(&mut self) -> Result<[u8; 12], Error> {
+        let counter = self.counters.next().ok_or(Error::Exhausted)?;
+        let mut nonce = [0; 12];
+        let (prefix, suffix) = nonce.split_at_mut(4);
+        prefix.copy_from_slice(&self.prefix);
+        suffix.copy_from_slice(&counter.to_be_bytes());
+        Ok(nonce)
     }
 }
 

@@ -60,5 +60,29 @@ The last proof is bounded; it is not a proof of all message lengths, crypto
 arithmetic, unwinding, or erasure of compiler copies. The nonce proof covers
 one owner, not durable allocation by an application. For the earlier
 primitive-level evidence see [ChaCha20](chacha20-development.md) and
-[Poly1305](poly1305-portable.md). A linked-code review of this AEAD's path to
-tag verification and cleanup remains separate.
+[Poly1305](poly1305-portable.md).
+
+## Linked authenticated open (Linux x86-64 only)
+
+Run `python3 scripts/cryptography/check-chacha20poly1305-linked.py`. The
+optimized downstream executable exercises both open layouts, not just a call
+to the raw MAC. In both reviewed builds the entry points reach the same
+`Opener::receive`. It calls the previously screened full-tag verifier, whose
+normal-return instructions and six comparison/clearing helpers match the
+standalone review. Rust 1.90.0 compares all 16 bytes in a loop; 1.100.0
+unrolls the comparisons.
+
+After verification, rejection skips the counter-one payload transform and
+destination copy. Both outcomes clear the 32-byte derived-key buffer and
+admitted scratch. On success the payload transform writes scratch before a
+length-checked copy to the caller. The screen pins both open wrappers and
+the reviewed receive instructions (209 on 1.90.0, 205 on 1.100.0), resolving
+call targets from ELF relocations rather than disassembler comments. It
+replays the RFC cases and tag-byte rejections on the same executable and
+checks its digest again. This does not qualify exception paths, the entire
+stream cipher or MAC, spills, other builds, or whole-message timing.
+
+Replayed executable SHA-256 digests for these observations:
+
+- Rust 1.90.0: `cb97706af57743c01ee4e2761e9f0cc36e57985a35becf26174cb8f07226b2bd`
+- Rust 1.100.0: `801c397637029f96c66893ee4967cb9bcc9e571d04aaa133aae12ddce225e1e9`

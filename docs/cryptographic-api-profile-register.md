@@ -34,8 +34,8 @@ Generated from the reviewed policy and semantic standards surfaces. Do not edit 
 
 | Disposition | Capabilities |
 | --- | ---: |
-| `future-work` | 113 |
-| `implemented` | 19 |
+| `future-work` | 112 |
+| `implemented` | 20 |
 | `intentionally-rejected` | 1 |
 | `legacy-only` | 3 |
 | `safely-ignored` | 1 |

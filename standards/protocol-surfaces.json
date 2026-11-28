@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "0e018cb416fb8fcc86501dc9c83910b8fd4a1d8dec65820176bae1002725d3be",
+  "policy_sha256": "953ae758e8cf65cb25a29ebb393448b87f2133f2b24cc49a5bb4deab308591b0",
   "schema": 2,
   "source_ledger_sha256": "39e86f6144d5ee20aa8b114a5d2662bef933275477b00a2e002e3e63dce31e78",
   "surfaces": [
@@ -45,7 +45,7 @@
     },
     {
       "code_target": "crates/brynja-aead-chacha20poly1305/src/lib.rs",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "cryptography",
       "id": "algorithm.chacha20-poly1305",
       "kind": "semantic",
@@ -53,8 +53,8 @@
         "rfc:8439"
       ],
       "owner": "0.31.1",
-      "rationale": "The standalone stream and MAC exist separately. Their RFC 8439 AEAD composition, including per-nonce key derivation, framing and authenticated open, remains future work.",
-      "test_target": "tests/surface/primitives.rs#chacha20_poly1305"
+      "rationale": "The portable leaf implements RFC 8439 detached seal/open with 96-bit nonces, full tags, deterministic sender reservations and authenticate-before-release. No protocol replay policy, acceleration or target-wide timing qualification is implied.",
+      "test_target": "crates/brynja-aead-chacha20poly1305/src/interruptions.rs#public_operations_burn_once_and_commit_only_on_success"
     },
     {
       "code_target": "crates/brynja-tls13/src/hybrid.rs",

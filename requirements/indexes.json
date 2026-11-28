@@ -625,11 +625,11 @@
         "rfc:8439"
       ],
       "targets": [
-        "planned-symbol:crates/brynja-aead-chacha20poly1305/src/lib.rs#ChaCha20Poly1305"
+        "actual-symbol:crates/brynja-aead-chacha20poly1305/src/lib.rs#Sealer"
       ],
       "tests": [
-        "planned:positive:tests/requirements/crypto_aead.rs#chacha20_poly1305_vectors",
-        "planned:negative:tests/requirements/crypto_aead.rs#chacha20_poly1305_failure_atomicity"
+        "planned:positive:crates/brynja-aead-chacha20poly1305/src/tests.rs#empty_payload_and_tampered_inputs",
+        "planned:negative:crates/brynja-aead-chacha20poly1305/src/interruptions.rs#public_operations_burn_once_and_commit_only_on_success"
       ]
     },
     "BRY-REQ-CRYPTO-0010": {
@@ -11303,6 +11303,9 @@
       ]
     },
     "targets": {
+      "actual-symbol:crates/brynja-aead-chacha20poly1305/src/lib.rs#Sealer": [
+        "BRY-REQ-CRYPTO-0009"
+      ],
       "actual-symbol:crates/brynja-aead-gcm/src/aes_gcm/portable.rs#with_material": [
         "BRY-REQ-CRYPTO-0007"
       ],
@@ -11424,9 +11427,6 @@
       ],
       "legacy-boundary:crates/brynja-legacy/src/lib.rs": [
         "BRY-REQ-LEGACY-0800"
-      ],
-      "planned-symbol:crates/brynja-aead-chacha20poly1305/src/lib.rs#ChaCha20Poly1305": [
-        "BRY-REQ-CRYPTO-0009"
       ],
       "planned-symbol:crates/brynja-cipher-aes/src/aes.rs#Aes128Key": [
         "BRY-REQ-CRYPTO-0005"
@@ -11834,6 +11834,9 @@
       "planned:crates/brynja-protocol/tests/wire_policy.rs#heartbeat_negotiation_is_rejected_by_every_modern_profile": [
         "BRY-REQ-TLS-0002"
       ],
+      "planned:negative:crates/brynja-aead-chacha20poly1305/src/interruptions.rs#public_operations_burn_once_and_commit_only_on_success": [
+        "BRY-REQ-CRYPTO-0009"
+      ],
       "planned:negative:crates/brynja-aead-gcm/src/aes_gcm/portable/tests.rs#subkey_derivation_error_never_starts_ghash_or_commits_output": [
         "BRY-REQ-CRYPTO-0007"
       ],
@@ -11922,9 +11925,6 @@
       ],
       "planned:negative:tests/requirements/crypto_admission.rs#unknown_and_excluded_algorithms": [
         "BRY-REQ-CRYPTO-0013"
-      ],
-      "planned:negative:tests/requirements/crypto_aead.rs#chacha20_poly1305_failure_atomicity": [
-        "BRY-REQ-CRYPTO-0009"
       ],
       "planned:negative:tests/requirements/crypto_ecc.rs#invalid_points_scalars_and_shared_secrets": [
         "BRY-REQ-CRYPTO-0010"
@@ -12264,6 +12264,9 @@
         "BRY-REQ-TLS12EXT-0058",
         "BRY-REQ-TLS12X-0058"
       ],
+      "planned:positive:crates/brynja-aead-chacha20poly1305/src/tests.rs#empty_payload_and_tampered_inputs": [
+        "BRY-REQ-CRYPTO-0009"
+      ],
       "planned:positive:crates/brynja-aead-gcm/src/aes_gcm/portable/tests.rs#nist_seal_open_empty_and_partial_at_all_widths": [
         "BRY-REQ-CRYPTO-0007"
       ],
@@ -12354,9 +12357,6 @@
       ],
       "planned:positive:tests/requirements/crypto_admission.rs#explicit_allowlist": [
         "BRY-REQ-CRYPTO-0013"
-      ],
-      "planned:positive:tests/requirements/crypto_aead.rs#chacha20_poly1305_vectors": [
-        "BRY-REQ-CRYPTO-0009"
       ],
       "planned:positive:tests/requirements/crypto_ecc.rs#official_group_and_signature_vectors": [
         "BRY-REQ-CRYPTO-0010"

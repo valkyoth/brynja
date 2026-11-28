@@ -1,7 +1,7 @@
 schema = 1
 milestone = "0.3.5"
 source_ledger_sha256 = "39e86f6144d5ee20aa8b114a5d2662bef933275477b00a2e002e3e63dce31e78"
-surface_register_sha256 = "1f12e06c25e74a8e7d245605391c3c6418f8f04a20d0f923ab02f30e45bc467f"
+surface_register_sha256 = "710716f332ad66065689b859f24afd1de77114bcafe6fe870d856edcd1a3a626"
 
 [[surface_group]]
 id = "BRY-REQ-APPLICATION-0130"

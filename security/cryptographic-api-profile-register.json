@@ -561,7 +561,7 @@
         "consumer:protocol",
         "consumer:provider"
       ],
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "cryptography",
       "explicit_rejections": [
         "copy-secret-state",
@@ -609,7 +609,7 @@
       "ordinary_hardened_separation": "required",
       "owner": "0.31.1",
       "profile": "aead",
-      "test_target": "tests/surface/primitives.rs#chacha20_poly1305"
+      "test_target": "crates/brynja-aead-chacha20poly1305/src/interruptions.rs#public_operations_burn_once_and_commit_only_on_success"
     },
     {
       "api": {
@@ -20110,7 +20110,7 @@
     {
       "capability": "algorithm.chacha20-poly1305",
       "evidence": [
-        "tests/surface/primitives.rs#chacha20_poly1305",
+        "crates/brynja-aead-chacha20poly1305/src/interruptions.rs#public_operations_burn_once_and_commit_only_on_success",
         "scripts/zeroization/check-zeroization-codegen.sh"
       ],
       "fields": [
@@ -24973,7 +24973,7 @@
       ]
     }
   ],
-  "policy_sha256": "15f20cc88fd2fc98f17b7638c1f58508d9d5c5dc877645796f9c34be69621259",
+  "policy_sha256": "5ff0312fb6503b25c44f7c69d261b14208560eba4201fa8e723f062581111803",
   "registered_secret_owners": [
     {
       "capability": "algorithm.hkdf",
@@ -25779,5 +25779,5 @@
     "physical-memory-remanence"
   ],
   "schema": 1,
-  "surface_register_sha256": "1f12e06c25e74a8e7d245605391c3c6418f8f04a20d0f923ab02f30e45bc467f"
+  "surface_register_sha256": "710716f332ad66065689b859f24afd1de77114bcafe6fe870d856edcd1a3a626"
 }

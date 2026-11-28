@@ -26,6 +26,25 @@ CARGO_NET_OFFLINE = "true"
 unique_lines = ["Complete - 3 successfully verified harnesses, 0 failures, 3 total."]
 contains = ["message::exact_frame_admission", "proofs::reservation_and_successor", "proofs::staged_commit_for_both_layouts", "VERIFICATION:- SUCCESSFUL"]
 
+[groups.chacha20poly1305-linked]
+paths = ["assurance/chacha20poly1305/Cargo.toml", "assurance/chacha20poly1305/Cargo.lock", "assurance/chacha20poly1305/src", "scripts/cryptography/check-chacha20poly1305-linked.py", "scripts/cryptography/check-chacha20poly1305-vectors.py", "scripts/cryptography/check-poly1305-linked.py", "scripts/cryptography/test-poly1305-vectors.py", "scripts/aes-gcm/paired_linked.py", "scripts/repository/facade_cargo_environment.py", "rfc/rfc8439.txt"]
+tools = [{program="cargo",toolchain="1.90.0"},{program="rustc",toolchain="1.90.0"},{program="cargo",toolchain="1.100.0"},{program="rustc",toolchain="1.100.0"},{program="python3"},{program="llvm-objdump"}]
+
+[[checks]]
+component = "chacha20poly1305"
+id = "linked-authenticated-open"
+category = "codegen"
+name = "Linked ChaCha20-Poly1305 authenticated open and cleanup on Linux x86-64"
+establishes = "Reviewed normal open paths in two release ELFs and RFC replay of both layouts in those binaries, not whole-implementation timing or physical erasure."
+command = ["python3", "scripts/cryptography/check-chacha20poly1305-linked.py"]
+cwd = "."
+platform = "linux-x86_64"
+inputs = ["chacha20poly1305-portable", "chacha20poly1305-linked"]
+timeout_seconds = 420
+[checks.success]
+unique_lines = ["ChaCha20-Poly1305 linked open: both x86-64 endpoints passed"]
+contains = ["1.90.0: AEAD open/cleanup screen and replay passed", "1.100.0: AEAD open/cleanup screen and replay passed"]
+
 [groups.poly1305-field]
 paths = ["Cargo.toml", "Cargo.lock", "crates/brynja-mac-poly1305/Cargo.toml", "crates/brynja-mac-poly1305/src", "crates/brynja-core/src", "crates/brynja-core/Cargo.toml"]
 

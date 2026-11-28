@@ -275,7 +275,7 @@ def main() -> int:
     assert poly["operations"]["verify-authenticator"]["output_classification"] == "no-output"
     assert poly["operations"]["generate-authenticator"]["output_classification"] == "explicit-public-declassification"
     aead = next(row for row in first["capabilities"] if row["id"] == "algorithm.chacha20-poly1305")
-    assert (aead["owner"], aead["profile"], aead["disposition"]) == ("0.31.1", "aead", "future-work")
+    assert (aead["owner"], aead["profile"], aead["disposition"]) == ("0.31.1", "aead", "implemented")
     gmac = next(row for row in first["capabilities"] if row["id"] == "algorithm.gmac")
     assert gmac["owner"] == "0.29.1" and gmac["profile"] == "gmac"
     assert set(gmac["operations"]) == {"import-key", "generate-authenticator", "verify-authenticator"}

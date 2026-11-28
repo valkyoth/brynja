@@ -25948,7 +25948,7 @@
         "algorithm.chacha20-poly1305"
       ],
       "id": "BRY-REQ-CRYPTO-0009",
-      "lifecycle": "planned",
+      "lifecycle": "implemented",
       "owner": "0.31.1",
       "source_ids": [
         "rfc:8439"

@@ -4099,6 +4099,7 @@
           },
           "requirement_ids": [
             "BRY-REQ-CRYPTO-0008",
+            "BRY-REQ-CRYPTO-0009",
             "BRY-REQ-CRYPTO-0022"
           ],
           "section": "4",
@@ -5659,7 +5660,7 @@
   "excluded_normative_section_count": 12,
   "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "4437ca090f4778a4173231205540cbe54537268061e0adc5d77c8ed20683dc79",
+  "policy_sha256": "5646b5024fc6a5112fa4fc1bf96a4239aab0188d1f8221a98e9375c00ad658a4",
   "requirement_count": 43,
   "schema": 1,
   "surface_count": 3352,
@@ -5690,7 +5691,7 @@
     },
     {
       "coverage": "requirement",
-      "disposition": "future-work",
+      "disposition": "implemented",
       "domain": "cryptography",
       "id": "algorithm.chacha20-poly1305",
       "owner": "0.31.1",

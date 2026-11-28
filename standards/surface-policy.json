@@ -1104,12 +1104,12 @@
     {
       "decision": {
         "code_target": "crates/brynja-aead-chacha20poly1305/src/lib.rs",
-        "disposition": "future-work",
+        "disposition": "implemented",
         "domain": "cryptography",
         "owner": "0.31.1",
-        "rationale": "The standalone stream and MAC exist separately. Their RFC 8439 AEAD composition, including per-nonce key derivation, framing and authenticated open, remains future work.",
+        "rationale": "The portable leaf implements RFC 8439 detached seal/open with 96-bit nonces, full tags, deterministic sender reservations and authenticate-before-release. No protocol replay policy, acceleration or target-wide timing qualification is implied.",
         "sources": ["rfc:8439"],
-        "test_target": "tests/surface/primitives.rs#chacha20_poly1305"
+        "test_target": "crates/brynja-aead-chacha20poly1305/src/interruptions.rs#public_operations_burn_once_and_commit_only_on_success"
       },
       "id": "algorithm.chacha20-poly1305"
     },

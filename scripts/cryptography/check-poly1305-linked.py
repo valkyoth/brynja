@@ -28,16 +28,22 @@ PINS = {
 }
 
 
-def instructions(image, name):
+def instructions(image, name, *, limit=None, external_slots=None):
     addr = elf.unique(image, name)
     result = []
-    for op, arg in image.bodies[addr]:
+    if limit is not None and len(image.bodies[addr]) < limit:
+        raise ValueError('truncated reviewed region in ' + name)
+    for op, arg in image.bodies[addr][:limit]:
         if '(%rip)' in arg:
             # Resolve the actual ELF relocation. Do not trust the nearest-symbol comment.
             match = re.fullmatch(r'(\*?)[-+0-9a-fx]+\(%rip\)([^#]*?)\s*# 0x([a-f0-9]+)(?: .*)?', arg)
-            if not match or (dest := image.slots.get(int(match[3], 16))) not in image.names:
+            if not match:
                 raise ValueError('unresolved RIP operand in ' + name)
-            arg = match[1] + 'GOT:' + image.names[dest] + match[2]
+            slot = int(match[3], 16)
+            target = image.names.get(image.slots.get(slot)) or (external_slots or {}).get(slot)
+            if target is None:
+                raise ValueError('unresolved RIP operand in ' + name)
+            arg = match[1] + 'GOT:' + target + match[2]
         elif (op.startswith('j') or op == 'callq') and (m := elf.DIRECT.match(arg)):
             dest = int(m[1], 16)
             arg = image.names.get(dest, f'offset:{dest - addr}')

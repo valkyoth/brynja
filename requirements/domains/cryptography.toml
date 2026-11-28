@@ -156,18 +156,18 @@ mapping_rationale = "The separate ChaCha20 semantic surface directly records the
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0009"
-revision = 3
+revision = 4
 owner = "0.31.1"
-lifecycle = "planned"
+lifecycle = "implemented"
 decision_ids = ["algorithm.chacha20-poly1305"]
 sources = [{ id = "rfc:8439", authority_role = "current" }]
 statement = "ChaCha20-Poly1305 uses one-time authenticator keys, constant-time tag checks, authenticate-before-release, and failure-atomic output."
 invariants = ["constant-time", "failure-atomicity", "key-lifecycle", "resource-bound", "work-bound"]
-target = "crates/brynja-aead-chacha20poly1305/src/lib.rs#ChaCha20Poly1305"
-positive_test = "tests/requirements/crypto_aead.rs#chacha20_poly1305_vectors"
-negative_test = "tests/requirements/crypto_aead.rs#chacha20_poly1305_failure_atomicity"
+target = "crates/brynja-aead-chacha20poly1305/src/lib.rs#Sealer"
+positive_test = "crates/brynja-aead-chacha20poly1305/src/tests.rs#empty_payload_and_tampered_inputs"
+negative_test = "crates/brynja-aead-chacha20poly1305/src/interruptions.rs#public_operations_burn_once_and_commit_only_on_success"
 work_bound = "Seal and open work is linear in bounded public input lengths and rejects every counter, padding, or encoded-length overflow."
-evidence_gap = "The standalone primitives are implemented. AEAD key derivation, seal/open framing, failure-atomicity and construction-level vectors belong to v0.31.1; standalone evidence does not establish them."
+evidence_gap = "RFC answers, independent differential tests, interruption tests, bounded transaction and admission proofs, and two linked x86-64 open-path observations are described in docs/assurance/chacha20poly1305-portable.md. No full-cipher proof, universal constant-time claim, physical erasure or independent qualification."
 residual = "Protocol nonce construction and usage ceilings remain separate downstream obligations and cannot be inferred from primitive correctness."
 mapping_rationale = "The combined ChaCha20-Poly1305 semantic surface directly records the RFC 8439 AEAD construction and its staged owner."
 

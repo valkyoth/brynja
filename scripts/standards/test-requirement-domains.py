@@ -58,7 +58,7 @@ def test_current_repository() -> None:
     poly = next(s for s in coverage["surfaces"] if s["id"] == "algorithm.poly1305")
     aead = next(s for s in coverage["surfaces"] if s["id"] == "algorithm.chacha20-poly1305")
     assert (poly["requirement_id"], poly["disposition"]) == ("BRY-REQ-CRYPTO-0022", "implemented")
-    assert (aead["requirement_id"], aead["disposition"]) == ("BRY-REQ-CRYPTO-0009", "future-work")
+    assert (aead["requirement_id"], aead["disposition"]) == ("BRY-REQ-CRYPTO-0009", "implemented")
     gmac = next(s for s in coverage["surfaces"] if s["id"] == "algorithm.gmac")
     assert (gmac["requirement_id"], gmac["disposition"]) == ("BRY-REQ-CRYPTO-0021", "implemented")
     binding = next(s for s in coverage["surfaces"] if s["id"] ==

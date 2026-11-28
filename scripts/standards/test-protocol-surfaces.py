@@ -66,15 +66,14 @@ def test_current_repository() -> None:
         for surface in register["surfaces"]
         if surface["disposition"] == "implemented"
     }
-    assert len(implemented) == 81 and {"algorithm.aes-gcm", "algorithm.gmac", "algorithm.chacha20", "algorithm.poly1305"} <= implemented
-    assert "algorithm.chacha20-poly1305" not in implemented
+    assert len(implemented) == 82 and {"algorithm.aes-gcm", "algorithm.gmac", "algorithm.chacha20", "algorithm.poly1305", "algorithm.chacha20-poly1305"} <= implemented
     assert "algorithm.aes" not in implemented
     assert all(
         surface_id.startswith("iana.tls-parameters.tls-parameters-5")
         or surface_id.startswith("iana.tls-parameters.tls-parameters-6")
         or surface_id
         in {
-            "algorithm.aes-gcm", "algorithm.gmac", "algorithm.chacha20", "algorithm.poly1305",
+            "algorithm.aes-gcm", "algorithm.gmac", "algorithm.chacha20", "algorithm.poly1305", "algorithm.chacha20-poly1305",
             "algorithm.hkdf", "algorithm.hmac", "algorithm.kmac", "algorithm.md5", "algorithm.parallelhash", "algorithm.sha1", "algorithm.sha2", "algorithm.sha3-shake", "algorithm.sha512-t", "algorithm.tuplehash",
             "facility.sslkeylogfile.test-support",
             "facility.entropy.secure-random-contract",

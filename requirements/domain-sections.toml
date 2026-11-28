@@ -7,7 +7,7 @@ source_ledger_sha256 = "39e86f6144d5ee20aa8b114a5d2662bef933275477b00a2e002e3e63
 "BRY-REQ-CRYPTO-0004" = 3
 "BRY-REQ-CRYPTO-0007" = 6
 "BRY-REQ-CRYPTO-0008" = 6
-"BRY-REQ-CRYPTO-0009" = 3
+"BRY-REQ-CRYPTO-0009" = 4
 "BRY-REQ-CRYPTO-0022" = 1
 "BRY-REQ-CRYPTO-0010" = 4
 "BRY-REQ-CRYPTO-0011" = 3
@@ -336,8 +336,8 @@ rationale = "These explicitly enumerated rfc:8439 sections contain obligations r
 [[binding]]
 source_id = "rfc:8439"
 requirement_id = "BRY-REQ-CRYPTO-0009"
-sections = ["1.1", "2.6"]
-rationale = "These explicitly enumerated rfc:8439 sections contain obligations reviewed as implementation input for BRY-REQ-CRYPTO-0009; the exact headings, anchors, and section hashes are resolved and drift-checked."
+sections = ["1.1", "2.6", "4"]
+rationale = "Bind the normative key derivation and security considerations. The RFC 8439 section 2.8 construction and section 2.8.2 and Appendix A.5 examples are exercised directly in the public AEAD replay; section 2.8 is not a separate normative ledger row."
 
 [[binding]]
 source_id = "rfc:8439"

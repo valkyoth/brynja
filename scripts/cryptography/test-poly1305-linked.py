@@ -37,6 +37,18 @@ class LinkedControls(unittest.TestCase):
             with self.subTest(change=change):
                 self.assertNotEqual(baseline, screen.fingerprint(fixture(**change)))
 
+    def test_external_copy_requires_its_exact_relocation_slot(self):
+        image = fixture(target=0xfff)
+        args = dict(limit=1, external_slots={0x900: 'extern:memcpy'})
+        self.assertEqual(screen.instructions(image, screen.VERIFY, **args),
+                         [('callq', '*GOT:extern:memcpy')])
+        with self.assertRaisesRegex(ValueError, 'unresolved RIP operand'):
+            screen.instructions(fixture(slot=0x901, target=0xfff), screen.VERIFY, **args)
+
+    def test_truncated_reviewed_prefix_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, 'truncated reviewed region'):
+            screen.instructions(fixture(), screen.VERIFY, limit=4)
+
     def test_wrapper_must_call_the_reviewed_verifier(self):
         with self.assertRaisesRegex(ValueError, 'does not call'):
             screen.fingerprint(fixture(wrapper=0x300))

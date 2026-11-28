@@ -1,7 +1,7 @@
 {
   "closure_policy_sha256": "cc5a8b35a7403dfb820d0a56dc874233f6504ae635afab124f7b5524ed8b761b",
-  "domain_policy_sha256": "4437ca090f4778a4173231205540cbe54537268061e0adc5d77c8ed20683dc79",
-  "policy_sha256": "83c5941fa0f8d975f0e92a0feceb3a860ebe6cad8bfdf07d30b8deaf87fb4a96",
+  "domain_policy_sha256": "5646b5024fc6a5112fa4fc1bf96a4239aab0188d1f8221a98e9375c00ad658a4",
+  "policy_sha256": "fab6df2ca04df3720c529fb1fa89325828d97cdd18302d3bd3f64b52780dbef0",
   "requirements": [
     {
       "applicability": "delegate",
@@ -1666,7 +1666,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "The standalone primitives are implemented. AEAD key derivation, seal/open framing, failure-atomicity and construction-level vectors belong to v0.31.1; standalone evidence does not establish them.",
+      "evidence_gap": "RFC answers, independent differential tests, interruption tests, bounded transaction and admission proofs, and two linked x86-64 open-path observations are described in docs/assurance/chacha20poly1305-portable.md. No full-cipher proof, universal constant-time claim, physical erasure or independent qualification.",
       "id": "BRY-REQ-CRYPTO-0009",
       "invariants": [
         "constant-time",
@@ -1675,13 +1675,13 @@
         "resource-bound",
         "work-bound"
       ],
-      "lifecycle": "planned",
+      "lifecycle": "implemented",
       "mapping_rationale": "The combined ChaCha20-Poly1305 semantic surface directly records the RFC 8439 AEAD construction and its staged owner.",
       "mapping_scope": "reviewed-domain",
       "owner": "0.31.1",
       "profile": "crypto-encoding-pkix",
       "residual": "Protocol nonce construction and usage ceilings remain separate downstream obligations and cannot be inferred from primitive correctness.",
-      "revision": 3,
+      "revision": 4,
       "scope": "protocol",
       "sources": [
         {
@@ -1755,6 +1755,11 @@
               "anchor": "2.6. Generating the Poly1305 Key Using ChaCha20 As said in Section 2.5, it is acceptable to generate the one-time Poly1305 key pseudorandomly. This section defi",
               "section": "2.6",
               "section_sha256": "0dd94828cbd94db33fa7e4ccd2c8b35d76d236c6536f495d264b5548c5f06591"
+            },
+            {
+              "anchor": "4. Security Considerations The ChaCha20 cipher is designed to provide 256-bit security. The Poly1305 authenticator is designed to ensure that forged messages ar",
+              "section": "4",
+              "section_sha256": "abd751f6438beee2360ae0bd4abb5f85d7dafcf257551be3db604ace5a103765"
             }
           ],
           "sha256": "25bef70fbf7a07ff45c2fe4cb7c6ce954eac687413d8610603268b4e4415324c",
@@ -1765,20 +1770,20 @@
       "strength": "INVARIANT",
       "targets": [
         {
-          "kind": "planned-symbol",
-          "target": "crates/brynja-aead-chacha20poly1305/src/lib.rs#ChaCha20Poly1305"
+          "kind": "actual-symbol",
+          "target": "crates/brynja-aead-chacha20poly1305/src/lib.rs#Sealer"
         }
       ],
       "tests": [
         {
           "polarity": "positive",
           "status": "planned",
-          "target": "tests/requirements/crypto_aead.rs#chacha20_poly1305_vectors"
+          "target": "crates/brynja-aead-chacha20poly1305/src/tests.rs#empty_payload_and_tampered_inputs"
         },
         {
           "polarity": "negative",
           "status": "planned",
-          "target": "tests/requirements/crypto_aead.rs#chacha20_poly1305_failure_atomicity"
+          "target": "crates/brynja-aead-chacha20poly1305/src/interruptions.rs#public_operations_burn_once_and_commit_only_on_success"
         }
       ],
       "work_bound": "Seal and open work is linear in bounded public input lengths and rejects every counter, padding, or encoded-length overflow."
@@ -31389,9 +31394,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "101ce07778944c6050b53574fe201d5c15d84edb844a5af17d235f89c0aed466",
+  "residual_policy_sha256": "8bfaf6275f54fa8f6d7568655644a17a4c5dbde962fd25fe338bc811457784b0",
   "schema": 5,
   "source_ledger_sha256": "39e86f6144d5ee20aa8b114a5d2662bef933275477b00a2e002e3e63dce31e78",
-  "surface_register_sha256": "1f12e06c25e74a8e7d245605391c3c6418f8f04a20d0f923ab02f30e45bc467f",
-  "transport_policy_sha256": "ba0eeb982dd5f332bd7a22ff2d9bef0aee3f47b52b526b771df7f095da3a7554"
+  "surface_register_sha256": "710716f332ad66065689b859f24afd1de77114bcafe6fe870d856edcd1a3a626",
+  "transport_policy_sha256": "30dd5f6ebb25de8fde736769e8076e1d303f90d33da9d09354bec1c841e35716"
 }

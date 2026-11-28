@@ -34,6 +34,10 @@ Remaining work is tracked in the [release plan](../docs/RELEASE_PLAN.md#v0311---
 - The [portable assurance record](../docs/assurance/chacha20poly1305-portable.md)
   covers 813 differential records per compiler, 40 software interruptions and
   three Kani proofs, with explicit limits.
-- Complete the AEAD linked tag-comparison and cleanup review, reconcile the
-  requirement and claim records, then run the final gate. Acceleration belongs
-  to v0.31.2.
+- The linked open-path review covers both Rust endpoints on Linux x86-64.
+  Requirement BRY-REQ-CRYPTO-0009 now records the portable implementation;
+  the generic AEAD API profile is a planning contract, not a claim of key
+  generation, owned plaintext output or hardware acceleration. The implemented
+  API borrows the key and preserves the caller's destination on failure.
+- Scoped pentest/retest disposition, final gate, green GitHub and tag remain
+  release steps. Acceleration belongs to v0.31.2.

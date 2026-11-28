@@ -469,7 +469,7 @@
       "api": {
         "backend": {
           "disposition": "required",
-          "owner": "0.31.0"
+          "owner": "0.31.1"
         },
         "bit-input": {
           "disposition": "forbidden",
@@ -477,15 +477,15 @@
         },
         "buffers": {
           "disposition": "required",
-          "owner": "0.31.0"
+          "owner": "0.31.1"
         },
         "byte-input": {
           "disposition": "required",
-          "owner": "0.31.0"
+          "owner": "0.31.1"
         },
         "cancellation": {
           "disposition": "required",
-          "owner": "0.31.0"
+          "owner": "0.31.1"
         },
         "clone": {
           "disposition": "forbidden",
@@ -505,7 +505,7 @@
         },
         "generation": {
           "disposition": "required",
-          "owner": "0.31.0"
+          "owner": "0.31.1"
         },
         "hosted-adapter": {
           "disposition": "optional-isolated",
@@ -513,35 +513,35 @@
         },
         "import": {
           "disposition": "required",
-          "owner": "0.31.0"
+          "owner": "0.31.1"
         },
         "incremental-state": {
           "disposition": "required",
-          "owner": "0.31.0"
+          "owner": "0.31.1"
         },
         "no-std": {
           "disposition": "required",
-          "owner": "0.31.0"
+          "owner": "0.31.1"
         },
         "one-shot": {
           "disposition": "required",
-          "owner": "0.31.0"
+          "owner": "0.31.1"
         },
         "operation-direction": {
           "disposition": "required",
-          "owner": "0.31.0"
+          "owner": "0.31.1"
         },
         "overlap": {
           "disposition": "required",
-          "owner": "0.31.0"
+          "owner": "0.31.1"
         },
         "ownership": {
           "disposition": "required",
-          "owner": "0.31.0"
+          "owner": "0.31.1"
         },
         "provider": {
           "disposition": "required",
-          "owner": "0.31.0"
+          "owner": "0.31.1"
         },
         "reset": {
           "disposition": "forbidden",
@@ -553,10 +553,10 @@
         },
         "verification": {
           "disposition": "required",
-          "owner": "0.31.0"
+          "owner": "0.31.1"
         }
       },
-      "code_target": "crates/brynja-crypto/src/chacha20_poly1305.rs",
+      "code_target": "crates/brynja-aead-chacha20poly1305/src/lib.rs",
       "consumer_links": [
         "consumer:protocol",
         "consumer:provider"
@@ -607,7 +607,7 @@
         }
       },
       "ordinary_hardened_separation": "required",
-      "owner": "0.31.0",
+      "owner": "0.31.1",
       "profile": "aead",
       "test_target": "tests/surface/primitives.rs#chacha20_poly1305"
     },
@@ -2564,6 +2564,146 @@
       "owner": "0.24.15",
       "profile": "hash-xof-family",
       "test_target": "scripts/parallelhash/check-parallelhash.py#main"
+    },
+    {
+      "api": {
+        "backend": {
+          "disposition": "not-applicable",
+          "owner": "0.24.15"
+        },
+        "bit-input": {
+          "disposition": "not-applicable",
+          "owner": "0.24.15"
+        },
+        "buffers": {
+          "disposition": "caller-owned",
+          "owner": "0.24.15"
+        },
+        "byte-input": {
+          "disposition": "required",
+          "owner": "0.31.0"
+        },
+        "cancellation": {
+          "disposition": "not-applicable",
+          "owner": "0.24.15"
+        },
+        "clone": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "export": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "extendable-output": {
+          "disposition": "not-applicable",
+          "owner": "0.24.15"
+        },
+        "fixed-output": {
+          "disposition": "required",
+          "owner": "0.31.0"
+        },
+        "generation": {
+          "disposition": "caller-owned",
+          "owner": "0.24.15"
+        },
+        "hosted-adapter": {
+          "disposition": "not-applicable",
+          "owner": "0.24.15"
+        },
+        "import": {
+          "disposition": "required",
+          "owner": "0.31.0"
+        },
+        "incremental-state": {
+          "disposition": "required",
+          "owner": "0.31.0"
+        },
+        "no-std": {
+          "disposition": "required",
+          "owner": "0.31.0"
+        },
+        "one-shot": {
+          "disposition": "not-applicable",
+          "owner": "0.24.15"
+        },
+        "operation-direction": {
+          "disposition": "required",
+          "owner": "0.31.0"
+        },
+        "overlap": {
+          "disposition": "not-applicable",
+          "owner": "0.24.15"
+        },
+        "ownership": {
+          "disposition": "required",
+          "owner": "0.31.0"
+        },
+        "provider": {
+          "disposition": "not-applicable",
+          "owner": "0.24.15"
+        },
+        "reset": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "snapshot": {
+          "disposition": "forbidden",
+          "owner": "0.24.15"
+        },
+        "verification": {
+          "disposition": "required",
+          "owner": "0.31.0"
+        }
+      },
+      "code_target": "crates/brynja-mac-poly1305/src/lib.rs#Poly1305",
+      "consumer_links": [
+        "consumer:protocol"
+      ],
+      "disposition": "implemented",
+      "domain": "cryptography",
+      "explicit_rejections": [
+        "copy-secret-state",
+        "clone-secret-state",
+        "format-secret-state",
+        "serialize-secret-state",
+        "raw-secret-state-access",
+        "snapshot-secret-state",
+        "reset-secret-into-ordinary-state",
+        "downstream-hardened-marker-implementation",
+        "downstream-hardened-marker-forgery",
+        "optional-only-core-cleanup",
+        "partial-secret-output-without-clearing",
+        "unreviewed-secret-accelerated-backend",
+        "implicit-secret-output-declassification",
+        "unsafe-convenience-api",
+        "nonstandard-convenience-api"
+      ],
+      "id": "algorithm.poly1305",
+      "normative_sources": [
+        "rfc:8439"
+      ],
+      "operations": {
+        "generate-authenticator": {
+          "output_classification": "explicit-public-declassification",
+          "partial_failure_policy": "not-applicable",
+          "verification": "not-applicable"
+        },
+        "import-key": {
+          "output_classification": "typed-secret-owned",
+          "partial_failure_policy": "clear-complete-secret-destination",
+          "verification": "not-applicable"
+        },
+        "verify-authenticator": {
+          "output_classification": "no-output",
+          "partial_failure_policy": "not-applicable",
+          "verification": "before-output-release"
+        }
+      },
+      "ordinary_hardened_separation": "required",
+      "owner": "0.31.0",
+      "profile": "poly1305",
+      "test_target": "crates/brynja-mac-poly1305/tests/vectors.rs#rfc_answers_all_splits_and_tag_positions"
     },
     {
       "api": {
@@ -20014,9 +20154,9 @@
           "verification": "not-applicable"
         }
       },
-      "owner": "0.31.0",
+      "owner": "0.31.1",
       "planned_cleanup_contract": "mandatory-core-or-separately-reviewed-equivalent",
-      "planned_implementation_target": "crates/brynja-crypto/src/chacha20_poly1305.rs",
+      "planned_implementation_target": "crates/brynja-aead-chacha20poly1305/src/lib.rs",
       "residual_risks": [
         "mem-forget",
         "process-abort",
@@ -20756,6 +20896,71 @@
         "shared-secret",
         "signature-staging",
         "output-staging"
+      ]
+    },
+    {
+      "capability": "algorithm.poly1305",
+      "evidence": [
+        "crates/brynja-mac-poly1305/tests/vectors.rs#rfc_answers_all_splits_and_tag_positions",
+        "scripts/zeroization/check-zeroization-codegen.sh"
+      ],
+      "fields": [
+        "borrowed-one-time-key",
+        "accumulator",
+        "partial-block"
+      ],
+      "id": "planned.algorithm.poly1305",
+      "lifecycle_edges": [
+        "creation",
+        "success",
+        "error",
+        "cancellation",
+        "replacement",
+        "rekey",
+        "failed-construction",
+        "recoverable-unwind",
+        "drop"
+      ],
+      "operations": {
+        "generate-authenticator": {
+          "output_classification": "explicit-public-declassification",
+          "partial_failure_policy": "not-applicable",
+          "verification": "not-applicable"
+        },
+        "import-key": {
+          "output_classification": "typed-secret-owned",
+          "partial_failure_policy": "clear-complete-secret-destination",
+          "verification": "not-applicable"
+        },
+        "verify-authenticator": {
+          "output_classification": "no-output",
+          "partial_failure_policy": "not-applicable",
+          "verification": "before-output-release"
+        }
+      },
+      "owner": "0.31.0",
+      "planned_cleanup_contract": "mandatory-core-or-separately-reviewed-equivalent",
+      "planned_implementation_target": "crates/brynja-mac-poly1305/src/lib.rs#Poly1305",
+      "residual_risks": [
+        "mem-forget",
+        "process-abort",
+        "forced-termination",
+        "power-loss",
+        "register-copies",
+        "cpu-caches",
+        "compiler-created-copies",
+        "crash-dumps",
+        "suspend-images",
+        "os-swap-and-paging",
+        "dma-visible-copies",
+        "physical-memory-remanence"
+      ],
+      "state": "planned",
+      "temporaries": [
+        "clamped-multiplier",
+        "product-columns",
+        "computed-tag",
+        "comparison-difference"
       ]
     },
     {
@@ -24768,7 +24973,7 @@
       ]
     }
   ],
-  "policy_sha256": "cd4e876ce41412bfc4af34aa904b6ead92696130dfe7a72d322dae432d719549",
+  "policy_sha256": "15f20cc88fd2fc98f17b7638c1f58508d9d5c5dc877645796f9c34be69621259",
   "registered_secret_owners": [
     {
       "capability": "algorithm.hkdf",
@@ -25574,5 +25779,5 @@
     "physical-memory-remanence"
   ],
   "schema": 1,
-  "surface_register_sha256": "d89492694a69934df197e896b2cdb333223c0565565c61d68c82b71b60543cf7"
+  "surface_register_sha256": "1f12e06c25e74a8e7d245605391c3c6418f8f04a20d0f923ab02f30e45bc467f"
 }

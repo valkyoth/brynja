@@ -1,5 +1,5 @@
 {
-  "policy_sha256": "0d54243586d804a85baeda1f8f448c526295a47cafaf23e66600db78951eaae0",
+  "policy_sha256": "0e018cb416fb8fcc86501dc9c83910b8fd4a1d8dec65820176bae1002725d3be",
   "schema": 2,
   "source_ledger_sha256": "39e86f6144d5ee20aa8b114a5d2662bef933275477b00a2e002e3e63dce31e78",
   "surfaces": [
@@ -44,7 +44,7 @@
       "test_target": "crates/brynja-crypto/tests/chacha20.rs#rfc8439_vectors"
     },
     {
-      "code_target": "crates/brynja-crypto/src/chacha20_poly1305.rs",
+      "code_target": "crates/brynja-aead-chacha20poly1305/src/lib.rs",
       "disposition": "future-work",
       "domain": "cryptography",
       "id": "algorithm.chacha20-poly1305",
@@ -52,8 +52,8 @@
       "normative_sources": [
         "rfc:8439"
       ],
-      "owner": "0.31.0",
-      "rationale": "ChaCha20, Poly1305, and their AEAD composition remain staged first-party future work.",
+      "owner": "0.31.1",
+      "rationale": "The standalone stream and MAC exist separately. Their RFC 8439 AEAD composition, including per-nonce key derivation, framing and authenticated open, remains future work.",
       "test_target": "tests/surface/primitives.rs#chacha20_poly1305"
     },
     {
@@ -222,6 +222,19 @@
       "owner": "0.24.15",
       "rationale": "All four SP 800-185 ParallelHash and ParallelHashXOF identities are implemented over the hardened cSHAKE owner with complete arbitrary-bit domains, deterministic allocation-free sequential execution, explicit caller-scheduled leaf ownership, ordered collection, and an isolated bounded std executor.",
       "test_target": "scripts/parallelhash/check-parallelhash.py#main"
+    },
+    {
+      "code_target": "crates/brynja-mac-poly1305/src/lib.rs#Poly1305",
+      "disposition": "implemented",
+      "domain": "cryptography",
+      "id": "algorithm.poly1305",
+      "kind": "semantic",
+      "normative_sources": [
+        "rfc:8439"
+      ],
+      "owner": "0.31.0",
+      "rationale": "The standalone portable MAC consumes a caller-supplied one-time key and generates or verifies a full tag. This does not implement key derivation or authenticated encryption, or qualify target timing.",
+      "test_target": "crates/brynja-mac-poly1305/tests/vectors.rs#rfc_answers_all_splits_and_tag_positions"
     },
     {
       "code_target": "crates/brynja-crypto/src/rsa.rs",

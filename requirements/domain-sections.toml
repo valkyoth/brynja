@@ -6,8 +6,9 @@ source_ledger_sha256 = "39e86f6144d5ee20aa8b114a5d2662bef933275477b00a2e002e3e63
 "BRY-REQ-CRYPTO-0003" = 3
 "BRY-REQ-CRYPTO-0004" = 3
 "BRY-REQ-CRYPTO-0007" = 6
-"BRY-REQ-CRYPTO-0008" = 5
-"BRY-REQ-CRYPTO-0009" = 2
+"BRY-REQ-CRYPTO-0008" = 6
+"BRY-REQ-CRYPTO-0009" = 3
+"BRY-REQ-CRYPTO-0022" = 1
 "BRY-REQ-CRYPTO-0010" = 4
 "BRY-REQ-CRYPTO-0011" = 3
 "BRY-REQ-CRYPTO-0012" = 5
@@ -329,14 +330,20 @@ rationale = "These explicitly enumerated rfc:8410 sections contain obligations r
 [[binding]]
 source_id = "rfc:8439"
 requirement_id = "BRY-REQ-CRYPTO-0008"
-sections = ["1.1", "2.3", "2.4", "2.5", "2.6", "4"]
+sections = ["1.1", "2.3", "2.4", "4"]
 rationale = "These explicitly enumerated rfc:8439 sections contain obligations reviewed as implementation input for BRY-REQ-CRYPTO-0008; the exact headings, anchors, and section hashes are resolved and drift-checked."
 
 [[binding]]
 source_id = "rfc:8439"
 requirement_id = "BRY-REQ-CRYPTO-0009"
-sections = ["1.1"]
+sections = ["1.1", "2.6"]
 rationale = "These explicitly enumerated rfc:8439 sections contain obligations reviewed as implementation input for BRY-REQ-CRYPTO-0009; the exact headings, anchors, and section hashes are resolved and drift-checked."
+
+[[binding]]
+source_id = "rfc:8439"
+requirement_id = "BRY-REQ-CRYPTO-0022"
+sections = ["2.5", "4"]
+rationale = "Bind the raw MAC and its one-time-key and comparison rules, without treating the separate ChaCha-based key derivation or AEAD framing as implemented."
 
 [[binding]]
 source_id = "rfc:8753"

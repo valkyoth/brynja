@@ -268,7 +268,14 @@ def main() -> int:
     first = model.build_register(policy, surfaces)
     second = model.build_register(policy, surfaces)
     assert model.json_bytes(first) == model.json_bytes(second)
-    assert len(first["capabilities"]) == 136
+    assert len(first["capabilities"]) == 137
+    poly = next(row for row in first["capabilities"] if row["id"] == "algorithm.poly1305")
+    assert (poly["owner"], poly["profile"], poly["disposition"]) == ("0.31.0", "poly1305", "implemented")
+    assert set(poly["operations"]) == {"import-key", "generate-authenticator", "verify-authenticator"}
+    assert poly["operations"]["verify-authenticator"]["output_classification"] == "no-output"
+    assert poly["operations"]["generate-authenticator"]["output_classification"] == "explicit-public-declassification"
+    aead = next(row for row in first["capabilities"] if row["id"] == "algorithm.chacha20-poly1305")
+    assert (aead["owner"], aead["profile"], aead["disposition"]) == ("0.31.1", "aead", "future-work")
     gmac = next(row for row in first["capabilities"] if row["id"] == "algorithm.gmac")
     assert gmac["owner"] == "0.29.1" and gmac["profile"] == "gmac"
     assert set(gmac["operations"]) == {"import-key", "generate-authenticator", "verify-authenticator"}
@@ -276,7 +283,7 @@ def main() -> int:
     assert len(first["api_dimensions"]) == 22
     assert len(first["current_secret_owners"]) == 8
     assert len(first["registered_secret_owners"]) == 10
-    assert len(first["planned_secret_owners"]) == 72
+    assert len(first["planned_secret_owners"]) == 73
     assert len(first['development_secret_owners']) == 3
     development = first['development_secret_owners'][0]
     assert development['id'] == 'development.algorithm.aes128'
@@ -367,10 +374,10 @@ def main() -> int:
                     f"operation {operation} information flow drifted",
                 )
                 downgraded += 1
-    assert downgraded == 24
+    assert downgraded == 25
     print(
         "cryptographic API-profile policy rejects twenty-five structural "
-        "regressions and twenty-four secret-output downgrades"
+        "regressions and twenty-five secret-output downgrades"
     )
     return 0
 

@@ -1091,11 +1091,23 @@
     },
     {
       "decision": {
-        "code_target": "crates/brynja-crypto/src/chacha20_poly1305.rs",
-        "disposition": "future-work",
+        "code_target": "crates/brynja-mac-poly1305/src/lib.rs#Poly1305",
+        "disposition": "implemented",
         "domain": "cryptography",
         "owner": "0.31.0",
-        "rationale": "ChaCha20, Poly1305, and their AEAD composition remain staged first-party future work.",
+        "rationale": "The standalone portable MAC consumes a caller-supplied one-time key and generates or verifies a full tag. This does not implement key derivation or authenticated encryption, or qualify target timing.",
+        "sources": ["rfc:8439"],
+        "test_target": "crates/brynja-mac-poly1305/tests/vectors.rs#rfc_answers_all_splits_and_tag_positions"
+      },
+      "id": "algorithm.poly1305"
+    },
+    {
+      "decision": {
+        "code_target": "crates/brynja-aead-chacha20poly1305/src/lib.rs",
+        "disposition": "future-work",
+        "domain": "cryptography",
+        "owner": "0.31.1",
+        "rationale": "The standalone stream and MAC exist separately. Their RFC 8439 AEAD composition, including per-nonce key derivation, framing and authenticated open, remains future work.",
         "sources": ["rfc:8439"],
         "test_target": "tests/surface/primitives.rs#chacha20_poly1305"
       },

@@ -351,7 +351,7 @@ cleanup_bindings = ["crates/brynja-legacy-hmac-std/src/macos_resident/mod.rs#Buf
 [schema]
 version = 1
 milestone = "0.24.15"
-surface_register_sha256 = "d89492694a69934df197e896b2cdb333223c0565565c61d68c82b71b60543cf7"
+surface_register_sha256 = "1f12e06c25e74a8e7d245605391c3c6418f8f04a20d0f923ab02f30e45bc467f"
 
 [api]
 dimensions = [
@@ -556,6 +556,32 @@ verification = "before-output-release"
 output_classification = "typed-secret-owned"
 partial_failure_policy = "clear-complete-secret-destination"
 verification = "not-applicable"
+
+[profile.poly1305]
+kind = "primitive"
+secret_template = "poly1305-key"
+required = ["operation-direction", "byte-input", "incremental-state", "fixed-output", "verification", "ownership", "no-std", "import"]
+forbidden = ["export", "reset", "clone", "snapshot"]
+caller_owned = ["buffers", "generation"]
+not_applicable = ["bit-input", "one-shot", "extendable-output", "overlap", "provider", "backend", "hosted-adapter", "cancellation"]
+optional_isolated = []
+internal_only = []
+consumers = ["consumer:protocol"]
+
+[profile.poly1305.operations.import-key]
+output_classification = "typed-secret-owned"
+partial_failure_policy = "clear-complete-secret-destination"
+verification = "not-applicable"
+
+[profile.poly1305.operations.generate-authenticator]
+output_classification = "explicit-public-declassification"
+partial_failure_policy = "not-applicable"
+verification = "not-applicable"
+
+[profile.poly1305.operations.verify-authenticator]
+output_classification = "no-output"
+partial_failure_policy = "not-applicable"
+verification = "before-output-release"
 
 [profile.gmac]
 kind = "construction"
@@ -878,6 +904,11 @@ fields = ["expanded-key", "nonce-reservation"]
 temporaries = ["derived-hash-subkey", "authentication-state", "initial-counter", "tag-mask", "tag-staging"]
 secret_output_classification = "typed-secret-owned"
 
+[secret-template.poly1305-key]
+fields = ["borrowed-one-time-key", "accumulator", "partial-block"]
+temporaries = ["clamped-multiplier", "product-columns", "computed-tag", "comparison-difference"]
+secret_output_classification = "typed-secret-owned"
+
 [secret-template.symmetric-key]
 fields = ["key", "expanded-key", "counter-or-tweak", "phase"]
 temporaries = ["round-state", "keystream-block", "tail-block", "output-staging"]
@@ -923,6 +954,10 @@ ids = ["algorithm.parallelhash", "algorithm.sha3-shake", "algorithm.tuplehash"]
 [[assignment]]
 profile = "keyed-construction"
 ids = ["algorithm.ghash", "algorithm.hkdf", "algorithm.hmac", "algorithm.kmac", "algorithm.sp800-185"]
+
+[[assignment]]
+profile = "poly1305"
+ids = ["algorithm.poly1305"]
 
 [[assignment]]
 profile = "gmac"
@@ -1424,11 +1459,11 @@ sha256 = "956941760ebfa65df5d9dddf84838c936a1dacaf3bd8424d55f4a0bd69b90af8"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_operations.py"
-sha256 = "d1ce795c964572147ad6375cb5ef2ffeb88136e9168c0b71d181bca0b9b80534"
+sha256 = "caccf175d6d23d7b71d7587deeb8e972f07785a4cc480678a3888c77258b2edd"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"
-sha256 = "808c7c2cfe9e4000e4f740a1c9a792f6d707008b55c3d45d0e50ae2c40a439f6"
+sha256 = "9d17a2707c479a14cf13be74da1480357ed2bd917e448bcbd9af52dee96a470f"
 
 [[reviewed-source]]
 path = "scripts/cryptography/check-secret-owner-compiler.py"
@@ -1448,7 +1483,7 @@ sha256 = "107bfea74f0dacc422e930332485ac3279a70a087fc74a30d3628196c676779d"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-api-profiles.py"
-sha256 = "fa84b980307b740d011d6138cda1dbfc94a6c536e19559099ce726295df29448"
+sha256 = "c424e18306eb03edfc4895f06e41f9d1b0f6378e68c66c2a08e7f9e48d552dc3"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-mir-cleanup-flow.py"

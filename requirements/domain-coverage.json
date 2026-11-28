@@ -4075,7 +4075,7 @@
             "MUST": 1
           },
           "requirement_ids": [
-            "BRY-REQ-CRYPTO-0008"
+            "BRY-REQ-CRYPTO-0022"
           ],
           "section": "2.5",
           "section_sha256": "0e3334a14d7ae0c3725768fbbd55687b6d7abb2d20439d05270f3e8fa4c09024"
@@ -4087,7 +4087,7 @@
             "SHOULD": 1
           },
           "requirement_ids": [
-            "BRY-REQ-CRYPTO-0008"
+            "BRY-REQ-CRYPTO-0009"
           ],
           "section": "2.6",
           "section_sha256": "0dd94828cbd94db33fa7e4ccd2c8b35d76d236c6536f495d264b5548c5f06591"
@@ -4098,7 +4098,8 @@
             "MUST NOT": 1
           },
           "requirement_ids": [
-            "BRY-REQ-CRYPTO-0008"
+            "BRY-REQ-CRYPTO-0008",
+            "BRY-REQ-CRYPTO-0022"
           ],
           "section": "4",
           "section_sha256": "abd751f6438beee2360ae0bd4abb5f85d7dafcf257551be3db604ace5a103765"
@@ -4106,7 +4107,8 @@
       ],
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0008",
-        "BRY-REQ-CRYPTO-0009"
+        "BRY-REQ-CRYPTO-0009",
+        "BRY-REQ-CRYPTO-0022"
       ],
       "sha256": "25bef70fbf7a07ff45c2fe4cb7c6ce954eac687413d8610603268b4e4415324c",
       "status": "INFORMATIONAL"
@@ -5657,10 +5659,10 @@
   "excluded_normative_section_count": 12,
   "mapped_normative_section_count": 352,
   "normative_section_count": 364,
-  "policy_sha256": "07509ec9b7db3f7bd05c812fd1c04d47565d19a28a2a3189535e2e2b0dff7758",
-  "requirement_count": 42,
+  "policy_sha256": "4437ca090f4778a4173231205540cbe54537268061e0adc5d77c8ed20683dc79",
+  "requirement_count": 43,
   "schema": 1,
-  "surface_count": 3351,
+  "surface_count": 3352,
   "surfaces": [
     {
       "coverage": "requirement",
@@ -5691,7 +5693,7 @@
       "disposition": "future-work",
       "domain": "cryptography",
       "id": "algorithm.chacha20-poly1305",
-      "owner": "0.31.0",
+      "owner": "0.31.1",
       "requirement_id": "BRY-REQ-CRYPTO-0009"
     },
     {
@@ -5774,6 +5776,14 @@
       "id": "algorithm.parallelhash",
       "owner": "0.24.15",
       "requirement_id": "BRY-REQ-CRYPTO-0017"
+    },
+    {
+      "coverage": "requirement",
+      "disposition": "implemented",
+      "domain": "cryptography",
+      "id": "algorithm.poly1305",
+      "owner": "0.31.0",
+      "requirement_id": "BRY-REQ-CRYPTO-0022"
     },
     {
       "coverage": "requirement",

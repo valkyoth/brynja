@@ -1,7 +1,7 @@
 {
-  "closure_policy_sha256": "56163ce06f4bda14181ee734a37ad308446c856a98988f707c9baae9aad3848a",
-  "domain_policy_sha256": "07509ec9b7db3f7bd05c812fd1c04d47565d19a28a2a3189535e2e2b0dff7758",
-  "policy_sha256": "1e241b189e0e10cad63832ee8cd05d308e6be3e96a6e7b4243e6c2d00a468cbe",
+  "closure_policy_sha256": "cc5a8b35a7403dfb820d0a56dc874233f6504ae635afab124f7b5524ed8b761b",
+  "domain_policy_sha256": "4437ca090f4778a4173231205540cbe54537268061e0adc5d77c8ed20683dc79",
+  "policy_sha256": "83c5941fa0f8d975f0e92a0feceb3a860ebe6cad8bfdf07d30b8deaf87fb4a96",
   "requirements": [
     {
       "applicability": "delegate",
@@ -1545,7 +1545,7 @@
       "owner": "0.30.0",
       "profile": "crypto-encoding-pkix",
       "residual": "The raw stream cipher is never exposed as a facade security service and is admitted only for reviewed compositions.",
-      "revision": 5,
+      "revision": 6,
       "scope": "protocol",
       "sources": [
         {
@@ -1626,16 +1626,6 @@
               "section_sha256": "c84ffb4192f4c9b4a864cbe40c9c7cee68d29bd192e10e5355a1e9366d5ce919"
             },
             {
-              "anchor": "2.5. The Poly1305 Algorithm Poly1305 is a one-time authenticator designed by D. J. Bernstein. Poly1305 takes a 32-byte one-time key and a message and produces a",
-              "section": "2.5",
-              "section_sha256": "0e3334a14d7ae0c3725768fbbd55687b6d7abb2d20439d05270f3e8fa4c09024"
-            },
-            {
-              "anchor": "2.6. Generating the Poly1305 Key Using ChaCha20 As said in Section 2.5, it is acceptable to generate the one-time Poly1305 key pseudorandomly. This section defi",
-              "section": "2.6",
-              "section_sha256": "0dd94828cbd94db33fa7e4ccd2c8b35d76d236c6536f495d264b5548c5f06591"
-            },
-            {
               "anchor": "4. Security Considerations The ChaCha20 cipher is designed to provide 256-bit security. The Poly1305 authenticator is designed to ensure that forged messages ar",
               "section": "4",
               "section_sha256": "abd751f6438beee2360ae0bd4abb5f85d7dafcf257551be3db604ace5a103765"
@@ -1676,7 +1666,7 @@
       "deviation_rationale": null,
       "domain": "cryptography",
       "evidence": [],
-      "evidence_gap": "Vectors, one-time-key lifecycle tests, overlap cases, failure proofs, and side-channel evidence remain unresolved until v0.31.0.",
+      "evidence_gap": "The standalone primitives are implemented. AEAD key derivation, seal/open framing, failure-atomicity and construction-level vectors belong to v0.31.1; standalone evidence does not establish them.",
       "id": "BRY-REQ-CRYPTO-0009",
       "invariants": [
         "constant-time",
@@ -1688,10 +1678,10 @@
       "lifecycle": "planned",
       "mapping_rationale": "The combined ChaCha20-Poly1305 semantic surface directly records the RFC 8439 AEAD construction and its staged owner.",
       "mapping_scope": "reviewed-domain",
-      "owner": "0.31.0",
+      "owner": "0.31.1",
       "profile": "crypto-encoding-pkix",
       "residual": "Protocol nonce construction and usage ceilings remain separate downstream obligations and cannot be inferred from primitive correctness.",
-      "revision": 2,
+      "revision": 3,
       "scope": "protocol",
       "sources": [
         {
@@ -1760,6 +1750,11 @@
               "anchor": "1.1. Conventions Used in This Document The key words \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"NOT RECOMMEND",
               "section": "1.1",
               "section_sha256": "793a06af55ea5ba1e3174801043408e6edd6c1b4bfb018c97029e4d13434dbb6"
+            },
+            {
+              "anchor": "2.6. Generating the Poly1305 Key Using ChaCha20 As said in Section 2.5, it is acceptable to generate the one-time Poly1305 key pseudorandomly. This section defi",
+              "section": "2.6",
+              "section_sha256": "0dd94828cbd94db33fa7e4ccd2c8b35d76d236c6536f495d264b5548c5f06591"
             }
           ],
           "sha256": "25bef70fbf7a07ff45c2fe4cb7c6ce954eac687413d8610603268b4e4415324c",
@@ -1771,7 +1766,7 @@
       "targets": [
         {
           "kind": "planned-symbol",
-          "target": "crates/brynja-crypto/src/chacha20_poly1305.rs#ChaCha20Poly1305"
+          "target": "crates/brynja-aead-chacha20poly1305/src/lib.rs#ChaCha20Poly1305"
         }
       ],
       "tests": [
@@ -3823,6 +3818,132 @@
         }
       ],
       "work_bound": "Each operation uses fixed-size secret state and work linear in public IV and AAD length. IVs and AAD must fit the length encoding, verification traverses the full fixed tag, and each sending owner is bounded by its reservation."
+    },
+    {
+      "applicability": "apply",
+      "decision": "enforce",
+      "decision_ids": [
+        "algorithm.poly1305"
+      ],
+      "deviation_rationale": null,
+      "domain": "cryptography",
+      "evidence": [],
+      "evidence_gap": "RFC vectors, differential and packaged replay, five bounded field proofs, lifecycle tests and two x86-64 verifier builds are recorded in docs/assurance/poly1305-portable.md. These do not establish whole-MAC timing, physical erasure or independent verification.",
+      "id": "BRY-REQ-CRYPTO-0022",
+      "invariants": [
+        "constant-time",
+        "failure-atomicity",
+        "key-lifecycle",
+        "resource-bound",
+        "work-bound"
+      ],
+      "lifecycle": "implemented",
+      "mapping_rationale": "RFC 8439 section 2.5 defines the raw one-time MAC; section 4 explains key reuse and tag comparison. The worked example and Appendix A.3 check it independently of sections 2.6 and 2.8, which belong to the future AEAD.",
+      "mapping_scope": "reviewed-domain",
+      "owner": "0.31.0",
+      "profile": "crypto-encoding-pkix",
+      "residual": "The caller supplies a fresh unpredictable key and prevents reuse across copies, processes and restarts. Clearing borrowed key storage does not erase prior stack copies, compiler spills or registers. No key generation, encryption or replay protection.",
+      "revision": 1,
+      "scope": "protocol",
+      "sources": [
+        {
+          "authority_role": "current",
+          "domains": [
+            "symmetric"
+          ],
+          "errata": [
+            {
+              "disposition": "not-applicable",
+              "id": 5675,
+              "status": "Rejected"
+            },
+            {
+              "disposition": "apply",
+              "id": 5689,
+              "status": "Verified"
+            },
+            {
+              "disposition": "apply",
+              "id": 5989,
+              "status": "Verified"
+            },
+            {
+              "disposition": "apply",
+              "id": 6025,
+              "status": "Verified"
+            },
+            {
+              "disposition": "apply",
+              "id": 6257,
+              "status": "Verified"
+            },
+            {
+              "disposition": "track-not-applied",
+              "id": 6569,
+              "status": "Held for Document Update"
+            },
+            {
+              "disposition": "not-applicable",
+              "id": 6989,
+              "status": "Rejected"
+            },
+            {
+              "disposition": "apply",
+              "id": 7880,
+              "status": "Verified"
+            }
+          ],
+          "id": "rfc:8439",
+          "kind": "rfc",
+          "milestones": [
+            "0.22.0",
+            "0.23.0",
+            "0.24.0",
+            "0.25.0",
+            "0.26.0",
+            "0.27.0",
+            "0.28.0",
+            "0.29.0",
+            "0.30.0",
+            "0.31.0"
+          ],
+          "sections": [
+            {
+              "anchor": "2.5. The Poly1305 Algorithm Poly1305 is a one-time authenticator designed by D. J. Bernstein. Poly1305 takes a 32-byte one-time key and a message and produces a",
+              "section": "2.5",
+              "section_sha256": "0e3334a14d7ae0c3725768fbbd55687b6d7abb2d20439d05270f3e8fa4c09024"
+            },
+            {
+              "anchor": "4. Security Considerations The ChaCha20 cipher is designed to provide 256-bit security. The Poly1305 authenticator is designed to ensure that forged messages ar",
+              "section": "4",
+              "section_sha256": "abd751f6438beee2360ae0bd4abb5f85d7dafcf257551be3db604ace5a103765"
+            }
+          ],
+          "sha256": "25bef70fbf7a07ff45c2fe4cb7c6ce954eac687413d8610603268b4e4415324c",
+          "status": "INFORMATIONAL"
+        }
+      ],
+      "statement": "Consume one 32-byte one-time key for a single byte stream. Clamp r, append a one bit to each full or partial block, accumulate modulo 2^130-5 and add s modulo 2^128. Generate a 16-byte little-endian tag or compare every tag byte before returning a verification decision.",
+      "strength": "INVARIANT",
+      "targets": [
+        {
+          "kind": "actual-symbol",
+          "target": "crates/brynja-mac-poly1305/src/lib.rs#Poly1305"
+        }
+      ],
+      "tests": [
+        {
+          "polarity": "positive",
+          "status": "planned",
+          "target": "crates/brynja-mac-poly1305/tests/vectors.rs#rfc_answers_all_splits_and_tag_positions"
+        },
+        {
+          "polarity": "negative",
+          "status": "planned",
+          "target": "crates/brynja-mac-poly1305/src/lib.rs#exhausted_budget_is_nonmutating"
+        }
+      ],
+      "work_bound": "Linear in public message length with fixed storage; reject cumulative byte counts above u64::MAX before mutating the owner. Verification compares a fixed 16 bytes."
     },
     {
       "applicability": "apply",
@@ -31268,9 +31389,9 @@
       "work_bound": "Binder, certificate, signature, Finished, PSK lookup and provisional state use existing bounded handshake and pending-operation ceilings."
     }
   ],
-  "residual_policy_sha256": "4c526a345f6ce6b2bde3ab7ee288d0a449abb7092b1c710127510f0fe3724955",
+  "residual_policy_sha256": "101ce07778944c6050b53574fe201d5c15d84edb844a5af17d235f89c0aed466",
   "schema": 5,
   "source_ledger_sha256": "39e86f6144d5ee20aa8b114a5d2662bef933275477b00a2e002e3e63dce31e78",
-  "surface_register_sha256": "d89492694a69934df197e896b2cdb333223c0565565c61d68c82b71b60543cf7",
-  "transport_policy_sha256": "f4193f2d355dc75abdbc9e4464d7a28eec12774bd9265637a16e84f471a1558d"
+  "surface_register_sha256": "1f12e06c25e74a8e7d245605391c3c6418f8f04a20d0f923ab02f30e45bc467f",
+  "transport_policy_sha256": "ba0eeb982dd5f332bd7a22ff2d9bef0aee3f47b52b526b771df7f095da3a7554"
 }

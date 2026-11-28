@@ -164,7 +164,7 @@ def test_october_errata_statuses_keep_verified_held_and_rejected_distinct() -> N
 def test_current_bidirectional_closure() -> None:
     artifact = closure_build()
     assert len(artifact["sources"]) == 131
-    assert len(artifact["plans"]) == 2161
+    assert len(artifact["plans"]) == 2165
     plans = {plan["version"]: plan for plan in artifact["plans"]}
     assert plans["0.26.1"]["title"] == "HKDF Public API Usability Acceptance"
     for patch in range(30, 56):
@@ -186,8 +186,10 @@ def test_current_bidirectional_closure() -> None:
     for minor in (*range(378, 392), 470):
         for patch in range(last_patches.get(minor, 7) + 1):
             assert plans[f"0.{minor}.{patch}"]["boundary"]["class"] == "planned-authority-admission"
-    assert len(artifact["surfaces"]) == 4492
-    assert len(artifact["requirements"]) == 176
+    assert len(artifact["surfaces"]) == 4493
+    assert len(artifact["requirements"]) == 177
+    assert plans["0.31.0"]["requirement_ids"] == ["BRY-REQ-CRYPTO-0022"]
+    assert plans["0.31.1"]["requirement_ids"] == ["BRY-REQ-CRYPTO-0009"]
     assert plans["0.29.1"]["requirement_ids"] == ["BRY-REQ-CRYPTO-0021"]
     assert len(artifact["local_rights"]) == 18
     assert len(artifact["mutable_authorities"]) == 15

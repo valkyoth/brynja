@@ -139,7 +139,7 @@ mapping_rationale = "The AES-GCM semantic surface directly joins the generic RFC
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0008"
-revision = 5
+revision = 6
 owner = "0.30.0"
 lifecycle = "implemented"
 decision_ids = ["algorithm.chacha20"]
@@ -156,20 +156,37 @@ mapping_rationale = "The separate ChaCha20 semantic surface directly records the
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0009"
-revision = 2
-owner = "0.31.0"
+revision = 3
+owner = "0.31.1"
 lifecycle = "planned"
 decision_ids = ["algorithm.chacha20-poly1305"]
 sources = [{ id = "rfc:8439", authority_role = "current" }]
 statement = "ChaCha20-Poly1305 uses one-time authenticator keys, constant-time tag checks, authenticate-before-release, and failure-atomic output."
 invariants = ["constant-time", "failure-atomicity", "key-lifecycle", "resource-bound", "work-bound"]
-target = "crates/brynja-crypto/src/chacha20_poly1305.rs#ChaCha20Poly1305"
+target = "crates/brynja-aead-chacha20poly1305/src/lib.rs#ChaCha20Poly1305"
 positive_test = "tests/requirements/crypto_aead.rs#chacha20_poly1305_vectors"
 negative_test = "tests/requirements/crypto_aead.rs#chacha20_poly1305_failure_atomicity"
 work_bound = "Seal and open work is linear in bounded public input lengths and rejects every counter, padding, or encoded-length overflow."
-evidence_gap = "Vectors, one-time-key lifecycle tests, overlap cases, failure proofs, and side-channel evidence remain unresolved until v0.31.0."
+evidence_gap = "The standalone primitives are implemented. AEAD key derivation, seal/open framing, failure-atomicity and construction-level vectors belong to v0.31.1; standalone evidence does not establish them."
 residual = "Protocol nonce construction and usage ceilings remain separate downstream obligations and cannot be inferred from primitive correctness."
 mapping_rationale = "The combined ChaCha20-Poly1305 semantic surface directly records the RFC 8439 AEAD construction and its staged owner."
+
+[[requirement]]
+id = "BRY-REQ-CRYPTO-0022"
+revision = 1
+owner = "0.31.0"
+lifecycle = "implemented"
+decision_ids = ["algorithm.poly1305"]
+sources = [{ id = "rfc:8439", authority_role = "current" }]
+statement = "Consume one 32-byte one-time key for a single byte stream. Clamp r, append a one bit to each full or partial block, accumulate modulo 2^130-5 and add s modulo 2^128. Generate a 16-byte little-endian tag or compare every tag byte before returning a verification decision."
+invariants = ["constant-time", "failure-atomicity", "key-lifecycle", "resource-bound", "work-bound"]
+target = "crates/brynja-mac-poly1305/src/lib.rs#Poly1305"
+positive_test = "crates/brynja-mac-poly1305/tests/vectors.rs#rfc_answers_all_splits_and_tag_positions"
+negative_test = "crates/brynja-mac-poly1305/src/lib.rs#exhausted_budget_is_nonmutating"
+work_bound = "Linear in public message length with fixed storage; reject cumulative byte counts above u64::MAX before mutating the owner. Verification compares a fixed 16 bytes."
+evidence_gap = "RFC vectors, differential and packaged replay, five bounded field proofs, lifecycle tests and two x86-64 verifier builds are recorded in docs/assurance/poly1305-portable.md. These do not establish whole-MAC timing, physical erasure or independent verification."
+residual = "The caller supplies a fresh unpredictable key and prevents reuse across copies, processes and restarts. Clearing borrowed key storage does not erase prior stack copies, compiler spills or registers. No key generation, encryption or replay protection."
+mapping_rationale = "RFC 8439 section 2.5 defines the raw one-time MAC; section 4 explains key reuse and tag comparison. The worked example and Appendix A.3 check it independently of sections 2.6 and 2.8, which belong to the future AEAD."
 
 [[requirement]]
 id = "BRY-REQ-CRYPTO-0010"

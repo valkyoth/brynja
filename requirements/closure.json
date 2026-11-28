@@ -1793,7 +1793,7 @@
     {
       "boundary": null,
       "requirement_ids": [
-        "BRY-REQ-CRYPTO-0009"
+        "BRY-REQ-CRYPTO-0022"
       ],
       "scope": "Implement this one-time authenticator in `brynja-mac-poly1305`. Implement complete Poly1305 key clamping, block and partial-block processing, canonical reduction, one-time-key ownership, constant-time verification, checked lengths, cleanup, official vectors, proofs, and distinct public MAC APIs without yet composing an AEAD.",
       "source_ids": [
@@ -1812,11 +1812,10 @@
       "version": "0.31.0"
     },
     {
-      "boundary": {
-        "class": "planned-authority-admission",
-        "rationale": "These newly admitted standardized algorithms, modes, and compatibility constructions require exact FIPS, RFC, original-standard, errata, vector, and security-status requirements to be populated before implementation; no neighboring family requirement or protocol profile may be inherited implicitly."
-      },
-      "requirement_ids": [],
+      "boundary": null,
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0009"
+      ],
       "scope": "Build `brynja-aead-chacha20poly1305` over the ChaCha20 and Poly1305 crates. Compose the exact admitted ChaCha20 and Poly1305 owners into complete RFC 8439 AEAD seal and open with AAD, nonce and length limits, one-time-key derivation, authenticate-before-release, exact in-place or disjoint buffers, partial-overlap rejection, unchanged failure destinations, cleanup, official vectors, and failure-atomicity proofs.",
       "source_ids": [],
       "title": "Complete ChaCha20-Poly1305",
@@ -25950,7 +25949,7 @@
       ],
       "id": "BRY-REQ-CRYPTO-0009",
       "lifecycle": "planned",
-      "owner": "0.31.0",
+      "owner": "0.31.1",
       "source_ids": [
         "rfc:8439"
       ]
@@ -26102,6 +26101,17 @@
       "owner": "0.29.1",
       "source_ids": [
         "nist:NIST.SP.800-38D.pdf"
+      ]
+    },
+    {
+      "decision_ids": [
+        "algorithm.poly1305"
+      ],
+      "id": "BRY-REQ-CRYPTO-0022",
+      "lifecycle": "implemented",
+      "owner": "0.31.0",
+      "source_ids": [
+        "rfc:8439"
       ]
     },
     {
@@ -30267,7 +30277,8 @@
       ],
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0008",
-        "BRY-REQ-CRYPTO-0009"
+        "BRY-REQ-CRYPTO-0009",
+        "BRY-REQ-CRYPTO-0022"
       ],
       "sha256": "25bef70fbf7a07ff45c2fe4cb7c6ce954eac687413d8610603268b4e4415324c"
     },
@@ -31445,6 +31456,12 @@
       "id": "algorithm.parallelhash",
       "requirement_ids": [
         "BRY-REQ-CRYPTO-0017"
+      ]
+    },
+    {
+      "id": "algorithm.poly1305",
+      "requirement_ids": [
+        "BRY-REQ-CRYPTO-0022"
       ]
     },
     {

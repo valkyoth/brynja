@@ -619,13 +619,13 @@
         "work-bound"
       ],
       "owners": [
-        "0.31.0"
+        "0.31.1"
       ],
       "sources": [
         "rfc:8439"
       ],
       "targets": [
-        "planned-symbol:crates/brynja-crypto/src/chacha20_poly1305.rs#ChaCha20Poly1305"
+        "planned-symbol:crates/brynja-aead-chacha20poly1305/src/lib.rs#ChaCha20Poly1305"
       ],
       "tests": [
         "planned:positive:tests/requirements/crypto_aead.rs#chacha20_poly1305_vectors",
@@ -1050,6 +1050,38 @@
       "tests": [
         "planned:positive:crates/brynja-crypto/tests/gmac.rs#nist_short_iv_and_tag",
         "planned:negative:crates/brynja-crypto/tests/gmac.rs#rejects_invalid_policy_and_clears_on_failed_import"
+      ]
+    },
+    "BRY-REQ-CRYPTO-0022": {
+      "authority_roles": [
+        "current"
+      ],
+      "decisions": [
+        "algorithm.poly1305"
+      ],
+      "domains": [
+        "cryptography"
+      ],
+      "evidence": [],
+      "invariants": [
+        "constant-time",
+        "failure-atomicity",
+        "key-lifecycle",
+        "resource-bound",
+        "work-bound"
+      ],
+      "owners": [
+        "0.31.0"
+      ],
+      "sources": [
+        "rfc:8439"
+      ],
+      "targets": [
+        "actual-symbol:crates/brynja-mac-poly1305/src/lib.rs#Poly1305"
+      ],
+      "tests": [
+        "planned:positive:crates/brynja-mac-poly1305/tests/vectors.rs#rfc_answers_all_splits_and_tag_positions",
+        "planned:negative:crates/brynja-mac-poly1305/src/lib.rs#exhausted_budget_is_nonmutating"
       ]
     },
     "BRY-REQ-CT-0001": {
@@ -6356,6 +6388,7 @@
         "BRY-REQ-CRYPTO-0018",
         "BRY-REQ-CRYPTO-0020",
         "BRY-REQ-CRYPTO-0021",
+        "BRY-REQ-CRYPTO-0022",
         "BRY-REQ-CT-0001",
         "BRY-REQ-CTREG-0059",
         "BRY-REQ-DNS-0140",
@@ -6548,6 +6581,9 @@
       ],
       "algorithm.parallelhash": [
         "BRY-REQ-CRYPTO-0017"
+      ],
+      "algorithm.poly1305": [
+        "BRY-REQ-CRYPTO-0022"
       ],
       "algorithm.rsa": [
         "BRY-REQ-CRYPTO-0011"
@@ -9288,6 +9324,7 @@
         "BRY-REQ-CRYPTO-0019",
         "BRY-REQ-CRYPTO-0020",
         "BRY-REQ-CRYPTO-0021",
+        "BRY-REQ-CRYPTO-0022",
         "BRY-REQ-PQ-0117"
       ],
       "ct": [
@@ -9537,7 +9574,8 @@
         "BRY-REQ-CRYPTO-0015",
         "BRY-REQ-CRYPTO-0018",
         "BRY-REQ-CRYPTO-0019",
-        "BRY-REQ-CRYPTO-0021"
+        "BRY-REQ-CRYPTO-0021",
+        "BRY-REQ-CRYPTO-0022"
       ],
       "failure-atomicity": [
         "BRY-REQ-CRYPTO-0002",
@@ -9548,6 +9586,7 @@
         "BRY-REQ-CRYPTO-0017",
         "BRY-REQ-CRYPTO-0020",
         "BRY-REQ-CRYPTO-0021",
+        "BRY-REQ-CRYPTO-0022",
         "BRY-REQ-TLS-0005"
       ],
       "key-lifecycle": [
@@ -9564,6 +9603,7 @@
         "BRY-REQ-CRYPTO-0019",
         "BRY-REQ-CRYPTO-0020",
         "BRY-REQ-CRYPTO-0021",
+        "BRY-REQ-CRYPTO-0022",
         "BRY-REQ-ENC-0004",
         "BRY-REQ-ENTROPY-0014",
         "BRY-REQ-ENTROPY-0124",
@@ -9613,6 +9653,7 @@
         "BRY-REQ-CRYPTO-0018",
         "BRY-REQ-CRYPTO-0019",
         "BRY-REQ-CRYPTO-0020",
+        "BRY-REQ-CRYPTO-0022",
         "BRY-REQ-CT-0001",
         "BRY-REQ-CTREG-0059",
         "BRY-REQ-DNS-0140",
@@ -10060,6 +10101,7 @@
         "BRY-REQ-CRYPTO-0019",
         "BRY-REQ-CRYPTO-0020",
         "BRY-REQ-CRYPTO-0021",
+        "BRY-REQ-CRYPTO-0022",
         "BRY-REQ-CT-0001",
         "BRY-REQ-CTREG-0059",
         "BRY-REQ-DNS-0140",
@@ -10600,6 +10642,9 @@
         "BRY-REQ-CRYPTO-0008"
       ],
       "0.31.0": [
+        "BRY-REQ-CRYPTO-0022"
+      ],
+      "0.31.1": [
         "BRY-REQ-CRYPTO-0009"
       ],
       "0.33.0": [
@@ -11017,7 +11062,8 @@
       ],
       "rfc:8439": [
         "BRY-REQ-CRYPTO-0008",
-        "BRY-REQ-CRYPTO-0009"
+        "BRY-REQ-CRYPTO-0009",
+        "BRY-REQ-CRYPTO-0022"
       ],
       "rfc:8447": [
         "BRY-REQ-COMPOSE-0148",
@@ -11305,6 +11351,9 @@
       "actual-symbol:crates/brynja-mac-kmac/src/lib.rs#KMAC_IMPLEMENTED": [
         "BRY-REQ-CRYPTO-0015"
       ],
+      "actual-symbol:crates/brynja-mac-poly1305/src/lib.rs#Poly1305": [
+        "BRY-REQ-CRYPTO-0022"
+      ],
       "actual-symbol:crates/brynja-pki/src/asn1.rs#CanonicalValue": [
         "BRY-REQ-ENC-0002"
       ],
@@ -11376,14 +11425,14 @@
       "legacy-boundary:crates/brynja-legacy/src/lib.rs": [
         "BRY-REQ-LEGACY-0800"
       ],
+      "planned-symbol:crates/brynja-aead-chacha20poly1305/src/lib.rs#ChaCha20Poly1305": [
+        "BRY-REQ-CRYPTO-0009"
+      ],
       "planned-symbol:crates/brynja-cipher-aes/src/aes.rs#Aes128Key": [
         "BRY-REQ-CRYPTO-0005"
       ],
       "planned-symbol:crates/brynja-crypto/src/algorithm.rs#AlgorithmPolicy": [
         "BRY-REQ-CRYPTO-0013"
-      ],
-      "planned-symbol:crates/brynja-crypto/src/chacha20_poly1305.rs#ChaCha20Poly1305": [
-        "BRY-REQ-CRYPTO-0009"
       ],
       "planned-symbol:crates/brynja-crypto/src/ecc.rs#FieldAndGroup": [
         "BRY-REQ-CRYPTO-0010"
@@ -11805,6 +11854,9 @@
       ],
       "planned:negative:crates/brynja-mac-hmac/tests/lifecycle.rs#exercise": [
         "BRY-REQ-CRYPTO-0003"
+      ],
+      "planned:negative:crates/brynja-mac-poly1305/src/lib.rs#exhausted_budget_is_nonmutating": [
+        "BRY-REQ-CRYPTO-0022"
       ],
       "planned:negative:crates/brynja-pki/tests/asn1.rs#exhaustive_boolean_bit_padding_and_two_octet_oid_corpora": [
         "BRY-REQ-ENC-0002"
@@ -12235,6 +12287,9 @@
       ],
       "planned:positive:crates/brynja-mac-hmac/tests/vectors.rs#rfc4231_case1": [
         "BRY-REQ-CRYPTO-0003"
+      ],
+      "planned:positive:crates/brynja-mac-poly1305/tests/vectors.rs#rfc_answers_all_splits_and_tag_positions": [
+        "BRY-REQ-CRYPTO-0022"
       ],
       "planned:positive:crates/brynja-pki/tests/asn1.rs#sequence_set_and_set_of_are_distinct_canonical_boundaries": [
         "BRY-REQ-ENC-0002"

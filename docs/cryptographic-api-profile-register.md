@@ -2,12 +2,12 @@
 
 Generated from the reviewed policy and semantic standards surfaces. Do not edit by hand.
 
-- Capabilities: **136**
+- Capabilities: **137**
 - API dimensions per capability: **22**
 - Current secret owners: **8**
 - Registered capability owners: **10**
 - Development-only variant owners: **3**
-- Planned secret owners: **72**
+- Planned secret owners: **73**
 
 ## Profile Coverage
 
@@ -20,6 +20,7 @@ Generated from the reviewed policy and semantic standards surfaces. Do not edit 
 | `gmac` | 1 |
 | `hash-xof-family` | 3 |
 | `keyed-construction` | 5 |
+| `poly1305` | 1 |
 | `protocol` | 23 |
 | `public-component` | 42 |
 | `public-format` | 8 |
@@ -34,7 +35,7 @@ Generated from the reviewed policy and semantic standards surfaces. Do not edit 
 | Disposition | Capabilities |
 | --- | ---: |
 | `future-work` | 113 |
-| `implemented` | 18 |
+| `implemented` | 19 |
 | `intentionally-rejected` | 1 |
 | `legacy-only` | 3 |
 | `safely-ignored` | 1 |

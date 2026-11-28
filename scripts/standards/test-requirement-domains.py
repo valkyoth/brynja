@@ -49,12 +49,16 @@ def validation_fixture() -> tuple[dict, dict, set[str], dict, dict, set[str]]:
 def test_current_repository() -> None:
     ledger, register, versions = inputs()
     requirements, coverage, _digest = domain.build(ledger, register, versions)
-    assert len(requirements) == 42
+    assert len(requirements) == 43
     assert coverage["authority_count"] == 58
     assert coverage["mapped_normative_section_count"] == 352
     assert coverage["excluded_normative_section_count"] == 12
     assert coverage["normative_section_count"] == 364
-    assert coverage["surface_count"] == 3351
+    assert coverage["surface_count"] == 3352
+    poly = next(s for s in coverage["surfaces"] if s["id"] == "algorithm.poly1305")
+    aead = next(s for s in coverage["surfaces"] if s["id"] == "algorithm.chacha20-poly1305")
+    assert (poly["requirement_id"], poly["disposition"]) == ("BRY-REQ-CRYPTO-0022", "implemented")
+    assert (aead["requirement_id"], aead["disposition"]) == ("BRY-REQ-CRYPTO-0009", "future-work")
     gmac = next(s for s in coverage["surfaces"] if s["id"] == "algorithm.gmac")
     assert (gmac["requirement_id"], gmac["disposition"]) == ("BRY-REQ-CRYPTO-0021", "implemented")
     binding = next(s for s in coverage["surfaces"] if s["id"] ==

@@ -5,6 +5,11 @@ backend, or an independently verified implementation. RFC answers and
 independent differential tests check complete messages. The proofs and
 linked inspection answer narrower questions.
 
+The implemented requirement `BRY-REQ-CRYPTO-0022` and surface
+`algorithm.poly1305` cover the primitive in RFC 8439 §2.5.
+The separate AEAD requirement `BRY-REQ-CRYPTO-0009` remains planned for
+v0.31.1; this milestone does not establish §2.6 key generation or §2.8 AEAD.
+
 ## Field arithmetic
 
 From the repository root, run:

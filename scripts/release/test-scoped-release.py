@@ -285,7 +285,7 @@ class ScopedRelease(unittest.TestCase):
         for name in ('brynja-core', 'brynja-crypto'):
             with self.subTest(name=name):
                 entry = release['crates'][name]
-                self.assertEqual(entry['change'], 'unchanged')
+                self.assertEqual(entry['change'], 'code' if name == 'brynja-crypto' else 'unchanged')
                 self.assertEqual(entry['version'], entry['previous_version'])
         self.assertIn('brynja-legacy-hkdf', release['crates'])
         order = publisher.PUBLISH_ORDER

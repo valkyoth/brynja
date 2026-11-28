@@ -79,6 +79,14 @@ class ContentsTests(unittest.TestCase):
             with self.subTest(declaration=declaration), self.assertRaisesRegex(ValueError, "standalone tests"):
                 contents.validate({"name": "future-crate", **declaration}, [*self.members, "tests/vector.txt"])
 
+    def test_poly1305_archive_requires_exact_regression_payload(self):
+        crate = {"name": "brynja-mac-poly1305"}
+        cases = ["tests/vectors.rs", "tests/data/rfc8439.tsv"]
+        contents.validate(crate, self.members + cases)
+        for wrong in ([], cases[:1], cases[1:], cases + ["tests/unreviewed.rs"]):
+            with self.subTest(wrong=wrong), self.assertRaisesRegex(ValueError, "Poly1305 archive"):
+                contents.validate(crate, self.members + wrong)
+
 
 if __name__ == "__main__":
     unittest.main()

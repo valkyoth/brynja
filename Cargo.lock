@@ -61,6 +61,7 @@ dependencies = [
  "brynja-hash-tuple",
  "brynja-mac-hmac",
  "brynja-mac-kmac",
+ "brynja-mac-poly1305",
  "brynja-universal-hash-ghash",
 ]
 

@@ -11,6 +11,7 @@ include = ["Cargo.toml","LICENSE-APACHE","LICENSE-MIT","README.md","src/**/*.rs"
 
 [features]
 default = []
+poly1305 = ["dep:brynja-mac-poly1305"]
 aes-gcm = ["dep:brynja-aead-gcm", "brynja-aead-gcm/aes-gcm"]
 aes-gcm-execution = ["aes-gcm", "brynja-aead-gcm/aes-gcm-execution"]
 gmac = ["dep:brynja-aead-gcm", "brynja-aead-gcm/gmac"]
@@ -47,6 +48,7 @@ parallelhash-runtime-execution = ["cpu", "brynja-hash-parallel/runtime-execution
 parallelhash-hardened-batch = ["cpu", "brynja-hash-parallel/hardened-batch-execution"]
 
 [dependencies]
+brynja-mac-poly1305 = { workspace = true, optional = true }
 brynja-aead-gcm = { workspace = true, optional = true }
 brynja-universal-hash-ghash = { workspace = true, optional = true }
 brynja-cipher-aes = { workspace = true, optional = true }

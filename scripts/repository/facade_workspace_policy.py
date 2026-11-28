@@ -65,8 +65,9 @@ FEATURES = {
         'aes-static-execution': ['hazmat-aes-block', 'dep:brynja-crypto-cpu', 'brynja-crypto-cpu/aes-static-execution'],
         'aes-runtime-execution': ['aes-static-execution', 'brynja-crypto-cpu/aes-runtime-execution'],
     },
-    'brynja-crypto': {**CRYPTO, 'hazmat-chacha20': ['dep:brynja-cipher-chacha', 'brynja-cipher-chacha/hazmat-chacha20']},
-    'brynja': {feature: ['brynja-crypto/' + feature] for feature in (*CRYPTO, 'hazmat-chacha20')},
+    'brynja-crypto': {**CRYPTO, 'poly1305': ['dep:brynja-mac-poly1305'],
+                     'hazmat-chacha20': ['dep:brynja-cipher-chacha', 'brynja-cipher-chacha/hazmat-chacha20']},
+    'brynja': {feature: ['brynja-crypto/' + feature] for feature in (*CRYPTO, 'hazmat-chacha20', 'poly1305')},
 }
 FEATURES['brynja']['ghash-runtime-execution'] = ['hazmat-ghash',
                                                 'brynja-crypto/ghash-runtime-execution']

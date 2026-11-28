@@ -43,6 +43,10 @@ def validate(package, members, sources=()):
         tests = {name for name in members if name.startswith("tests/")}
         if package["name"] == "brynja-legacy-hkdf":
             tests -= {"tests/derivation.rs"}
+        elif package["name"] == "brynja-mac-poly1305":
+            require(tests == {"tests/vectors.rs", "tests/data/rfc8439.tsv"},
+                    "Poly1305 archive must contain its reviewed vectors and regression tests")
+            tests = set()
         elif package["name"] == "brynja-crypto":
             tests = {name for name in tests - AES_VECTOR_FILES if not name.endswith(".rs")}
         require(not tests,

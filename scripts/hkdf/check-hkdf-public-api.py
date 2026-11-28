@@ -19,7 +19,7 @@ MATRIX = ('1.90.0', '1.91.0', '1.92.0', '1.93.0', '1.94.0', '1.95.0',
 MODERN = ('brynja', 'brynja-cipher-aes', 'brynja-universal-hash-ghash', 'brynja-aead-gcm', 'brynja-cipher-chacha', 'brynja-core', 'brynja-crypto', 'brynja-crypto-cpu',
           'brynja-crypto-cpu-std', 'brynja-dtls', 'brynja-hash-core',
           'brynja-hash-parallel', 'brynja-hash-sha2', 'brynja-hash-sha3',
-          'brynja-hash-tuple', 'brynja-mac-hmac', 'brynja-mac-kmac', 'brynja-pki',
+          'brynja-hash-tuple', 'brynja-mac-hmac', 'brynja-mac-kmac', 'brynja-mac-poly1305', 'brynja-pki',
           'brynja-platform', 'brynja-protocol', 'brynja-quic-tls', 'brynja-tls',
           'brynja-tls12', 'brynja-tls13', 'brynja-tls13-handshake')
 LEGACY = ('brynja-core', 'brynja-hash-core', 'brynja-legacy-hkdf',
@@ -202,6 +202,10 @@ def package_files(crate):
     package = tomllib.loads((crate / 'Cargo.toml').read_text())['package']
     includes = package.get('include')
     reviewed = [list(PACKAGE_INPUTS), [*PACKAGE_INPUTS, 'tests/**/*.rs']]
+    if package.get('name') == 'brynja-mac-poly1305':
+        reviewed = [[*PACKAGE_INPUTS, 'tests/vectors.rs', 'tests/data/rfc8439.tsv']]
+        if not all((crate / path).is_file() for path in reviewed[0][-2:]):
+            raise ValueError('missing packaged Poly1305 corpus or regression tests')
     if package.get('name') == 'brynja-crypto':
         reviewed.append([*PACKAGE_INPUTS, 'tests/**/*.rs', AES_FIXTURE_PATTERN])
         reviewed.append([*PACKAGE_INPUTS, 'tests/**/*.rs', *AES_FIXTURE_SETS])

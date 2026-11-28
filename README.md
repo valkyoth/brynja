@@ -129,6 +129,7 @@ green implementation rows do not authorize publication.
 | Raw AES-128/192/256 single blocks | ✅ Implemented | `brynja-cipher-aes` | ❌ Not independently verified |
 | AES external-key adapter contracts (no device driver) | ✅ Implemented | `brynja-cipher-aes` | ❌ Not independently verified |
 | Raw IETF ChaCha20 (RFC 8439) | ✅ Implemented | `brynja-cipher-chacha` | ❌ Not independently verified |
+| One-time Poly1305 (RFC 8439) | ✅ Implemented in the development checkout | `brynja-mac-poly1305` | ❌ Not independently verified |
 | GHASH over pre-framed blocks (not a MAC) | ✅ Implemented | `brynja-universal-hash-ghash` | ❌ Not independently verified |
 | Detached AES-GCM (AES-128/192/256) | ✅ Implemented | `brynja-aead-gcm` | ❌ Not independently verified |
 | GMAC authentication (AES-128/192/256) | ✅ Implemented | `brynja-aead-gcm` | ❌ Not independently verified |

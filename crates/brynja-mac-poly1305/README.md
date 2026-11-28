@@ -26,7 +26,7 @@
 # brynja-mac-poly1305
 
 > [Official Brynja crate directory](https://github.com/valkyoth/brynja#workspace) · [Modern façade on crates.io](https://crates.io/crates/brynja).
-> This unpublished workspace leaf provides standalone Poly1305. A façade feature is not available yet.
+> In the development checkout, enable `poly1305` on the façade for `brynja::crypto::poly1305`, or depend on this leaf directly. Neither the leaf nor the façade feature is published yet.
 
 | Capability | Implemented | Independent verification |
 | --- | --- | --- |

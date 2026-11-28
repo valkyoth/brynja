@@ -20,6 +20,11 @@
 #[cfg(feature = "hazmat-chacha20")]
 pub mod chacha20;
 
+/// Standalone RFC 8439 authenticator. A fresh one-time key is required for every message.
+/// Does not encrypt, derive keys, or enable ChaCha20.
+#[cfg(feature = "poly1305")]
+pub use brynja_mac_poly1305 as poly1305;
+
 /// Compatibility imports for detached authenticated encryption.
 #[cfg(feature = "aes-gcm")]
 pub mod aes_gcm;

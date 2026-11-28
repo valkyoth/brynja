@@ -7,7 +7,7 @@ license.workspace = true
 repository.workspace = true
 description = "Portable no_std RFC 8439 one-time Poly1305 authenticator for Brynja"
 publish = ["crates-io"]
-include = ["Cargo.toml", "LICENSE-APACHE", "LICENSE-MIT", "README.md", "src/**/*.rs", "tests/**"]
+include = ["Cargo.toml", "LICENSE-APACHE", "LICENSE-MIT", "README.md", "src/**/*.rs", "tests/vectors.rs", "tests/data/rfc8439.tsv"]
 
 [features]
 default = []

@@ -15,7 +15,7 @@ previous_version = "0.30.6"
 version = "0.31.0"
 change = "code"
 publish = false
-reason = "Advance the internal facade; includes post-checkpoint portable ChaCha20 forwarding."
+reason = "Advance the internal facade; forward portable ChaCha20 and opt-in Poly1305."
 
 [crates."brynja-mac-poly1305"]
 previous_version = "unpublished"
@@ -97,9 +97,9 @@ reason = "Retain the v0.30.6 checkpoint version; no new upload selected."
 [crates."brynja-crypto"]
 previous_version = "0.3.0"
 version = "0.3.0"
-change = "unchanged"
+change = "code"
 publish = false
-reason = "Retain the v0.30.6 checkpoint version; no new upload selected."
+reason = "Re-export the standalone Poly1305 leaf behind an explicit feature; internal only."
 
 [crates."brynja-hash-core"]
 previous_version = "0.1.1"

@@ -37,6 +37,7 @@ FACADE_HELPERS += ['scripts/sha2/sha2_public_api.py']
 FACADE_PACKAGES = (
     'brynja-cipher-aes', 'brynja-universal-hash-ghash', 'brynja-aead-gcm',
     'brynja-cipher-chacha',
+    'brynja-mac-poly1305',
     'brynja-core', 'brynja-mac-hmac', 'brynja-crypto-cpu', 'brynja-hash-core',
     'brynja-hash-sha2', 'brynja-hash-sha3', 'brynja-mac-kmac', 'brynja-hash-tuple',
     'brynja-hash-parallel', 'brynja-crypto', 'brynja-pki', 'brynja-protocol',

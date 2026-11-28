@@ -26,9 +26,14 @@ Rust consumer against all 56 public answers, with an altered-answer control.
 Both compiler endpoints also compile the leaf for Cortex-M
 (`thumbv7em-none-eabi`). These are functional and build checks.
 
+The development façades forward the default-off `poly1305` feature to the
+same leaf. Run `python3 scripts/cryptography/check-poly1305-packages.py` to
+exercise all three import routes against local Cargo registry archives on
+both compilers. The check replays the packaged RFC and lifecycle tests, builds
+for Cortex-M, and checks that the two façades omit the leaf and reject its
+import without opt-in. It never publishes or requires a native device.
+
 ## Remaining before acceptance
 
-- Wire the opt-in façade route and exercise installed consumers.
-- Run the roadmap's arithmetic proofs, emitted-code and cleanup checks, and test
-  direct and façade consumers on the supported compiler endpoints and bare metal.
+- Run the roadmap's arithmetic proofs, emitted-code and cleanup checks.
   The implementation is not independently verified or timing-qualified.

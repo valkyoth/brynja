@@ -46476,6 +46476,10 @@
           "package.name",
           "package.version"
         ],
+        "crates/brynja-mac-poly1305/Cargo.toml": [
+          "package.name",
+          "package.version"
+        ],
         "crates/brynja-core/Cargo.toml": [
           "package.name",
           "package.version"
@@ -46878,6 +46882,10 @@
           "package.version"
         ],
         "crates/brynja-cipher-chacha/Cargo.toml": [
+          "package.name",
+          "package.version"
+        ],
+        "crates/brynja-mac-poly1305/Cargo.toml": [
           "package.name",
           "package.version"
         ],
@@ -50095,6 +50103,7 @@
         "crates/brynja-hash-tuple",
         "crates/brynja-mac-hmac",
         "crates/brynja-mac-kmac",
+        "crates/brynja-mac-poly1305",
         "crates/brynja-pki",
         "crates/brynja-platform",
         "crates/brynja-protocol",
@@ -50759,6 +50768,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja-mac-kmac"
+          ]
+        }
+      ]
+    },
+    "package-repository-17a45d54f013fcc0-dependencies-mac-poly1305": {
+      "paths": [
+        "crates/brynja-mac-poly1305/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-mac-poly1305/build.rs",
+        "crates/brynja-mac-poly1305/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-mac-poly1305/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-mac-poly1305"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-mac-poly1305"
           ]
         }
       ]
@@ -51542,6 +51590,7 @@
         "crates/brynja-hash-tuple",
         "crates/brynja-mac-hmac",
         "crates/brynja-mac-kmac",
+        "crates/brynja-mac-poly1305",
         "crates/brynja-pki",
         "crates/brynja-platform",
         "crates/brynja-protocol",
@@ -52207,6 +52256,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja-mac-kmac"
+          ]
+        }
+      ]
+    },
+    "package-repository-26a0b0fc61844f33-dependencies-mac-poly1305": {
+      "paths": [
+        "crates/brynja-mac-poly1305/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-mac-poly1305/build.rs",
+        "crates/brynja-mac-poly1305/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-mac-poly1305/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-mac-poly1305"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-mac-poly1305"
           ]
         }
       ]
@@ -54022,6 +54110,7 @@
         "crates/brynja-hash-tuple",
         "crates/brynja-mac-hmac",
         "crates/brynja-mac-kmac",
+        "crates/brynja-mac-poly1305",
         "crates/brynja-pki",
         "crates/brynja-platform",
         "crates/brynja-protocol",
@@ -54692,6 +54781,45 @@
         }
       ]
     },
+    "package-repository-7965ceea8904c78e-dependencies-mac-poly1305": {
+      "paths": [
+        "crates/brynja-mac-poly1305/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-mac-poly1305/build.rs",
+        "crates/brynja-mac-poly1305/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-mac-poly1305/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-mac-poly1305"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-mac-poly1305"
+          ]
+        }
+      ]
+    },
     "package-repository-7965ceea8904c78e-dependencies-pki": {
       "paths": [
         "crates/brynja-pki/src"
@@ -55064,6 +55192,7 @@
         "crates/brynja-hash-tuple",
         "crates/brynja-mac-hmac",
         "crates/brynja-mac-kmac",
+        "crates/brynja-mac-poly1305",
         "crates/brynja-pki",
         "crates/brynja-platform",
         "crates/brynja-protocol",
@@ -55729,6 +55858,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja-mac-kmac"
+          ]
+        }
+      ]
+    },
+    "package-repository-88caf3aa426de5bc-dependencies-mac-poly1305": {
+      "paths": [
+        "crates/brynja-mac-poly1305/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-mac-poly1305/build.rs",
+        "crates/brynja-mac-poly1305/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-mac-poly1305/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-mac-poly1305"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-mac-poly1305"
           ]
         }
       ]
@@ -56500,6 +56668,7 @@
         "crates/brynja-hash-tuple",
         "crates/brynja-mac-hmac",
         "crates/brynja-mac-kmac",
+        "crates/brynja-mac-poly1305",
         "crates/brynja-universal-hash-ghash",
         "rust-toolchain.toml",
         "scripts/assurance/check-bare-metal.sh",
@@ -57083,6 +57252,45 @@
         }
       ]
     },
+    "package-repository-a6db8e2c6fa70def-dependencies-mac-poly1305": {
+      "paths": [
+        "crates/brynja-mac-poly1305/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-mac-poly1305/build.rs",
+        "crates/brynja-mac-poly1305/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-mac-poly1305/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-mac-poly1305"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-mac-poly1305"
+          ]
+        }
+      ]
+    },
     "package-repository-a6db8e2c6fa70def-dependencies-universal-hash-ghash": {
       "paths": [
         "crates/brynja-universal-hash-ghash/src"
@@ -57569,6 +57777,7 @@
         "crates/brynja-hash-tuple",
         "crates/brynja-mac-hmac",
         "crates/brynja-mac-kmac",
+        "crates/brynja-mac-poly1305",
         "crates/brynja-pki",
         "crates/brynja-platform",
         "crates/brynja-protocol",
@@ -58233,6 +58442,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja-mac-kmac"
+          ]
+        }
+      ]
+    },
+    "package-repository-ce2b1f0c9c412fcb-dependencies-mac-poly1305": {
+      "paths": [
+        "crates/brynja-mac-poly1305/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-mac-poly1305/build.rs",
+        "crates/brynja-mac-poly1305/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-mac-poly1305/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-mac-poly1305"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-mac-poly1305"
           ]
         }
       ]
@@ -71753,6 +72001,7 @@
         "crates/brynja-legacy-sha1",
         "crates/brynja-mac-hmac",
         "crates/brynja-mac-kmac",
+        "crates/brynja-mac-poly1305",
         "crates/brynja-pki",
         "crates/brynja-platform",
         "crates/brynja-protocol",
@@ -72616,6 +72865,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja-mac-kmac"
+          ]
+        }
+      ]
+    },
+    "final-component-repository-3f060a5f15bf3310-dependencies-mac-poly1305": {
+      "paths": [
+        "crates/brynja-mac-poly1305/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-mac-poly1305/build.rs",
+        "crates/brynja-mac-poly1305/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-mac-poly1305/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-mac-poly1305"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-mac-poly1305"
           ]
         }
       ]
@@ -74169,6 +74457,7 @@
         "crates/brynja-hash-tuple",
         "crates/brynja-mac-hmac",
         "crates/brynja-mac-kmac",
+        "crates/brynja-mac-poly1305",
         "crates/brynja-pki",
         "crates/brynja-platform",
         "crates/brynja-protocol",
@@ -74885,6 +75174,45 @@
         }
       ]
     },
+    "final-component-repository-c601c3e7699bcd87-dependencies-mac-poly1305": {
+      "paths": [
+        "crates/brynja-mac-poly1305/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-mac-poly1305/build.rs",
+        "crates/brynja-mac-poly1305/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-mac-poly1305/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-mac-poly1305"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-mac-poly1305"
+          ]
+        }
+      ]
+    },
     "final-component-repository-c601c3e7699bcd87-dependencies-pki": {
       "paths": [
         "crates/brynja-pki/src"
@@ -75452,6 +75780,7 @@
         "crates/brynja-hash-tuple",
         "crates/brynja-mac-hmac",
         "crates/brynja-mac-kmac",
+        "crates/brynja-mac-poly1305",
         "crates/brynja-pki",
         "crates/brynja-platform",
         "crates/brynja-protocol",
@@ -76140,6 +76469,45 @@
           "path": "Cargo.lock",
           "packages": [
             "brynja-mac-kmac"
+          ]
+        }
+      ]
+    },
+    "final-component-repository-dfe1132d65f1e9aa-dependencies-mac-poly1305": {
+      "paths": [
+        "crates/brynja-mac-poly1305/src"
+      ],
+      "optional_paths": [
+        "crates/brynja-mac-poly1305/build.rs",
+        "crates/brynja-mac-poly1305/README.md"
+      ],
+      "normalize_local_versions": true,
+      "toml": {
+        "crates/brynja-mac-poly1305/Cargo.toml": [
+          "package.name",
+          "package.edition",
+          "package.rust-version",
+          "package.build",
+          "package.links",
+          "package.autotests",
+          "lib",
+          "test",
+          "features",
+          "dependencies",
+          "dev-dependencies",
+          "build-dependencies",
+          "target",
+          "lints"
+        ],
+        "Cargo.toml": [
+          "workspace.dependencies.brynja-mac-poly1305"
+        ]
+      },
+      "locks": [
+        {
+          "path": "Cargo.lock",
+          "packages": [
+            "brynja-mac-poly1305"
           ]
         }
       ]
@@ -93801,6 +94169,7 @@
         "package-repository-17a45d54f013fcc0-dependencies-hash-tuple",
         "package-repository-17a45d54f013fcc0-dependencies-mac-hmac",
         "package-repository-17a45d54f013fcc0-dependencies-mac-kmac",
+        "package-repository-17a45d54f013fcc0-dependencies-mac-poly1305",
         "package-repository-17a45d54f013fcc0-dependencies-pki",
         "package-repository-17a45d54f013fcc0-dependencies-platform",
         "package-repository-17a45d54f013fcc0-dependencies-protocol",
@@ -93953,6 +94322,7 @@
         "package-repository-26a0b0fc61844f33-dependencies-hash-tuple",
         "package-repository-26a0b0fc61844f33-dependencies-mac-hmac",
         "package-repository-26a0b0fc61844f33-dependencies-mac-kmac",
+        "package-repository-26a0b0fc61844f33-dependencies-mac-poly1305",
         "package-repository-26a0b0fc61844f33-dependencies-pki",
         "package-repository-26a0b0fc61844f33-dependencies-platform",
         "package-repository-26a0b0fc61844f33-dependencies-protocol",
@@ -94337,6 +94707,7 @@
         "package-repository-7965ceea8904c78e-dependencies-hash-tuple",
         "package-repository-7965ceea8904c78e-dependencies-mac-hmac",
         "package-repository-7965ceea8904c78e-dependencies-mac-kmac",
+        "package-repository-7965ceea8904c78e-dependencies-mac-poly1305",
         "package-repository-7965ceea8904c78e-dependencies-pki",
         "package-repository-7965ceea8904c78e-dependencies-platform",
         "package-repository-7965ceea8904c78e-dependencies-protocol",
@@ -94416,6 +94787,7 @@
         "package-repository-88caf3aa426de5bc-dependencies-hash-tuple",
         "package-repository-88caf3aa426de5bc-dependencies-mac-hmac",
         "package-repository-88caf3aa426de5bc-dependencies-mac-kmac",
+        "package-repository-88caf3aa426de5bc-dependencies-mac-poly1305",
         "package-repository-88caf3aa426de5bc-dependencies-pki",
         "package-repository-88caf3aa426de5bc-dependencies-platform",
         "package-repository-88caf3aa426de5bc-dependencies-protocol",
@@ -94562,6 +94934,7 @@
         "package-repository-a6db8e2c6fa70def-dependencies-hash-tuple",
         "package-repository-a6db8e2c6fa70def-dependencies-mac-hmac",
         "package-repository-a6db8e2c6fa70def-dependencies-mac-kmac",
+        "package-repository-a6db8e2c6fa70def-dependencies-mac-poly1305",
         "package-repository-a6db8e2c6fa70def-dependencies-universal-hash-ghash"
       ],
       "environment": {
@@ -94695,6 +95068,7 @@
         "package-repository-ce2b1f0c9c412fcb-dependencies-hash-tuple",
         "package-repository-ce2b1f0c9c412fcb-dependencies-mac-hmac",
         "package-repository-ce2b1f0c9c412fcb-dependencies-mac-kmac",
+        "package-repository-ce2b1f0c9c412fcb-dependencies-mac-poly1305",
         "package-repository-ce2b1f0c9c412fcb-dependencies-pki",
         "package-repository-ce2b1f0c9c412fcb-dependencies-platform",
         "package-repository-ce2b1f0c9c412fcb-dependencies-protocol",
@@ -96425,6 +96799,7 @@
         "final-component-repository-3f060a5f15bf3310-dependencies-legacy-sha1",
         "final-component-repository-3f060a5f15bf3310-dependencies-mac-hmac",
         "final-component-repository-3f060a5f15bf3310-dependencies-mac-kmac",
+        "final-component-repository-3f060a5f15bf3310-dependencies-mac-poly1305",
         "final-component-repository-3f060a5f15bf3310-dependencies-pki",
         "final-component-repository-3f060a5f15bf3310-dependencies-platform",
         "final-component-repository-3f060a5f15bf3310-dependencies-protocol",
@@ -96658,6 +97033,7 @@
         "final-component-repository-c601c3e7699bcd87-dependencies-hash-tuple",
         "final-component-repository-c601c3e7699bcd87-dependencies-mac-hmac",
         "final-component-repository-c601c3e7699bcd87-dependencies-mac-kmac",
+        "final-component-repository-c601c3e7699bcd87-dependencies-mac-poly1305",
         "final-component-repository-c601c3e7699bcd87-dependencies-pki",
         "final-component-repository-c601c3e7699bcd87-dependencies-platform",
         "final-component-repository-c601c3e7699bcd87-dependencies-protocol",
@@ -96758,6 +97134,7 @@
         "final-component-repository-dfe1132d65f1e9aa-dependencies-hash-tuple",
         "final-component-repository-dfe1132d65f1e9aa-dependencies-mac-hmac",
         "final-component-repository-dfe1132d65f1e9aa-dependencies-mac-kmac",
+        "final-component-repository-dfe1132d65f1e9aa-dependencies-mac-poly1305",
         "final-component-repository-dfe1132d65f1e9aa-dependencies-pki",
         "final-component-repository-dfe1132d65f1e9aa-dependencies-platform",
         "final-component-repository-dfe1132d65f1e9aa-dependencies-protocol",

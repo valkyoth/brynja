@@ -137,6 +137,7 @@ PACKAGING_PACKAGES = (*PACKAGES, ("brynja-crypto-cpu-std", "0.2.0", ("src/lib.rs
                       ("brynja-cipher-aes", "0.1.0", ("src/lib.rs",)),
                       ("brynja-universal-hash-ghash", "0.1.0", ("src/lib.rs",)),
                       ("brynja-aead-gcm", "0.1.0", ("src/lib.rs",)),
+                      ("brynja-mac-poly1305", "0.1.0", ("src/lib.rs",)),
                       ("brynja-cipher-chacha", "0.1.0", ("src/lib.rs",)))
 
 
@@ -356,6 +357,7 @@ cast_sign_loss = "forbid"
 too_many_arguments = "forbid"
 
 [workspace.dependencies]
+brynja-mac-poly1305 = { path = "crates/brynja-mac-poly1305", version = "=0.1.0" }
 brynja-cipher-aes = { path = "crates/brynja-cipher-aes", version = "=0.1.0" }
 brynja-universal-hash-ghash = { path = "crates/brynja-universal-hash-ghash", version = "=0.1.0" }
 brynja-aead-gcm = { path = "crates/brynja-aead-gcm", version = "=0.1.0" }

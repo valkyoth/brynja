@@ -85,3 +85,15 @@ call `neon::Neon::probe()` once, and consume each fresh `OneTimeKey` using
 `start_neon(&mut cpu)`. Updates, full-tag verification, and key clearing
 follow the portable contract. Short updates stay scalar and can be slower.
 The startup test is not runtime ISA discovery.
+
+On RV64 Linux the standalone, default-off `poly1305-rvv` feature exposes
+`rvv::Rvv::probe()` and `OneTimeKey::start_rvv(&mut cpu)`. Probe on the
+thread that will use the handle. It requires the advertised V extension,
+current-thread permission and a passing arithmetic self-test. If either
+Linux query cannot confirm availability, use the portable owner instead;
+a self-test failure is not a reason to retry with a different backend.
+The crate does not enable vectors, set affinity or change your process
+policy. Use a baseline executable and runtime compatible with that policy:
+a separately vectorized libc or application may execute V outside Brynja.
+The 1024-byte update threshold also applies here. This feature does not
+accelerate RISC-V ChaCha20-Poly1305.

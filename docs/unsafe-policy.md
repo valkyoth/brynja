@@ -1,9 +1,12 @@
 # Unsafe Rust Policy
 
-Status: 119 exact source-hash-bound exceptions inventoried, including three Linux OS-resource modules, four Windows enclave boundary modules and thirteen private Darwin resident-resource modules; reachability follows the explicit API contracts below; every other unsafe site forbidden
+Status: 121 exact source-hash-bound exceptions inventoried, including three Linux OS-resource modules, four Windows enclave boundary modules and thirteen private Darwin resident-resource modules; reachability follows the explicit API contracts below; every other unsafe site forbidden
 
 Workspace lints deny unsafe code by default. Repository policy permits unsafe
-Rust in only 119 exact modules: the opt-in Linux x86-64 Poly1305 AVX2 capability
+Rust in only 121 exact modules: the opt-in Linux RV64 Poly1305 handle and its
+kernel (read-only HWCAP and current-thread vector policy, a private four-block
+scalar-ABI assembly function and exclusive 144-byte weight-table wipe);
+the opt-in Linux x86-64 Poly1305 AVX2 capability
 and its kernel (one feature-checked call, one exclusive 800-byte table wipe); the target-gated little-endian Linux/macOS AArch64
 Poly1305 NEON handle and its kernel (one target-feature call and an exclusive
 200-byte table wipe, with a test-only call to exercise normal and unwind cleanup);

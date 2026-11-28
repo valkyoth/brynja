@@ -146,7 +146,7 @@ features = ["conformance-testing", "hardened-execution", "runtime-execution"]
 class = "modern-shared"
 publish = "crates-io"
 required = ["brynja-core"]
-optional = { poly1305-avx2 = "brynja-crypto-cpu", poly1305-neon = "brynja-crypto-cpu" }
+optional = { poly1305-avx2 = "brynja-crypto-cpu", poly1305-neon = "brynja-crypto-cpu", poly1305-rvv = "brynja-crypto-cpu" }
 
 [packages.brynja-mac-hmac]
 class = "modern-shared"

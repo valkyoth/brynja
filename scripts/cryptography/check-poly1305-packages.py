@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import shutil
 import runpy
+import subprocess
 import tomllib
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -126,15 +127,84 @@ def check_route(root, registry, versions, hashes, name, env, leaf):
               flush=True)
 
 
+def packaged_rvv(root, registry, versions, env, export):
+    """Link just the staged crates on baseline RV64GC and export for native replay."""
+    target = 'riscv64gc-unknown-linux-gnu'
+    linker = shutil.which('riscv64-linux-gnu-gcc') or shutil.which('riscv64-suse-linux-gcc')
+    if not linker:
+        raise ValueError('RV64GC Linux cross-linker required')
+    # Test the host's libc on hardware: the cross toolchain's static glibc
+    # can enter its vector memcpy even when Linux disables V at exec.
+    env = dict(env, CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER=linker)
+    loader = 'ld-linux-riscv64-lp64d.so.1'
+    libc_root = Path(subprocess.check_output([linker, '-print-sysroot'], text=True).strip())
+    if not (libc_root / 'lib' / loader).is_file():
+        libc_root = Path(subprocess.check_output([linker, '-print-file-name=' + loader],
+                                                 text=True).strip()).parent.parent
+    if not (libc_root / 'lib' / loader).is_file():
+        raise ValueError('RV64 Linux GNU dynamic loader not found for QEMU')
+    fixture = ROOT / 'assurance/poly1305'
+    consumer = root / 'rvv-consumer'
+    (consumer / 'src').mkdir(parents=True)
+    (consumer / 'tests').mkdir()
+    (consumer / 'Cargo.toml').write_text(
+        '[workspace]\n[package]\nname="rvv-consumer"\nversion="0.0.0"\nedition="2024"\n'
+        '[features]\nrvv=["brynja-mac-poly1305/poly1305-rvv"]\n[dependencies]\n'
+        f'brynja-mac-poly1305={{version="={versions[POLY]}",default-features=false}}\n')
+    vector_path = '../../../crates/brynja-mac-poly1305/tests/data/rfc8439.tsv'
+    tests = (fixture / 'tests/rvv_vectors.rs').read_text()
+    if tests.count(vector_path) != 1:
+        raise ValueError('review the packaged vector input')
+    (consumer / 'tests/vectors.rs').write_text(tests.replace(vector_path, 'rfc8439.tsv'))
+    shutil.copyfile(root / 'unpacked' / f'{POLY}-{versions[POLY]}/tests/data/rfc8439.tsv',
+                    consumer / 'tests/rfc8439.tsv')
+    export.mkdir(exist_ok=False)
+    for v in (pkg.MATRIX[0], pkg.MATRIX[-1]):
+        cargo = ['cargo', '+' + v, '--config', 'source.crates-io.replace-with="staged"',
+                 '--config', 'source.staged.local-registry=' + json.dumps(str(registry))]
+        base = ['--release', '--locked', '--offline', '--target', target, '--message-format=json']
+        pkg.run(cargo + ['generate-lockfile', '--offline'], consumer, env)
+        (consumer / 'src/main.rs').write_text('pub use brynja_mac_poly1305::rvv::Rvv; fn main() {}\n')
+        disabled = pkg.cargo_result(cargo + ['check', '--bin', 'rvv-consumer', *base],
+                                    consumer, env, timeout=120)
+        if not pkg.diagnostic_matches(disabled, 'E0432', filename='src/main.rs'):
+            raise ValueError('default-off RVV import did not produce its expected diagnostic')
+        pkg.run(cargo + ['check', '--bin', 'rvv-consumer', *base, '--features', 'rvv'], consumer, env)
+        shutil.copyfile(fixture / 'examples/rvv_owner.rs', consumer / 'src/main.rs')
+        for label, command, name in (
+                ('owner', ['build', '--bin', 'rvv-consumer'], 'rvv-consumer'),
+                ('vectors', ['test', '--no-run', '--test', 'vectors'], 'vectors')):
+            result = pkg.run(cargo + command + [*base, '--features', 'rvv'], consumer, env)
+            records = [json.loads(line) for line in result.stdout.splitlines()]
+            exe, = [r['executable'] for r in records if r.get('reason') == 'compiler-artifact'
+                    and r['target']['name'] == name and r.get('executable')]
+            dst = export / f'{label}-{v}'
+            shutil.copy2(exe, dst)
+            if label == 'owner':
+                denied = subprocess.run(['qemu-riscv64', '-L', libc_root, '-E',
+                                         'LD_LIBRARY_PATH=/lib64:/lib64/lp64d:/lib', '-cpu', 'rv64,v=false', dst],
+                                        capture_output=True, timeout=30)
+                if (denied.returncode, denied.stdout, denied.stderr) != (2, b'', b'required RVV: Unavailable\n'):
+                    raise ValueError('no-V packaged owner did not refuse cleanly')
+            print(f'{dst.name}: {hashlib.sha256(dst.read_bytes()).hexdigest()}', flush=True)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--aead', action='store_true')
-    leaf = AEAD if parser.parse_args().aead else POLY
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('--aead', action='store_true')
+    group.add_argument('--rvv-export', type=Path, help='build packaged standalone RVV fixtures in a new directory')
+    args = parser.parse_args()
+    leaf = AEAD if args.aead else POLY
     with pkg.cargo_environment.private_directory(ROOT) as tmp:
         root = Path(tmp)
         env = pkg.isolated_env(root)
-        versions = pkg.package_archives(root, pkg.MODERN, pkg.MATRIX[-1], env)
+        packages = ('brynja-core', 'brynja-crypto-cpu', POLY) if args.rvv_export else pkg.MODERN
+        versions = pkg.package_archives(root, packages, pkg.MATRIX[-1], env)
         registry = root / 'target/package/tmp-registry'
+        if args.rvv_export:
+            packaged_rvv(root, registry, versions, env, args.rvv_export.absolute())
+            return
         hashes = {n: hashlib.sha256((root / 'target/package' / f'{n}-{v}.crate').read_bytes()).hexdigest()
                   for n, v in versions.items()}
         for name in (leaf, 'brynja-crypto', 'brynja'):

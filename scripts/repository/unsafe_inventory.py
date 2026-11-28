@@ -42,6 +42,8 @@ ALLOWED = {
     Path("crates/brynja-crypto-cpu/src/poly1305_avx2/kernel.rs"): ("beb775b9a92da8eea9f1fdf0f0330895f83be51b621dca17af4c7c7e159fc031", 2, 0, 2),
     Path("crates/brynja-crypto-cpu/src/poly1305_neon.rs"): ("2f41dd866218f36e9ed0f0bf745fd075bf7a96ef99d003a9cebee9aa3c93b6e1", 1, 0, 1),
     Path("crates/brynja-crypto-cpu/src/poly1305_neon/kernel.rs"): ("8e6541e47b39d066338b3f70d761571dfcbc0a8474aef159e5b79a5b7f566f1d", 2, 0, 2),
+    Path("crates/brynja-crypto-cpu/src/poly1305_rvv.rs"): ("d0774c57a5d84afa0706d3108387fbb65128083612886bc434125e73fb7a0154", 3, 0, 3),
+    Path("crates/brynja-crypto-cpu/src/poly1305_rvv/kernel.rs"): ("e9a89d3f5b4b1330757cae0b8bc4cd01ae18992565ae6291578910d6ce521ec8", 2, 2, 3),
     # Existing AES and GHASH boundaries, byte-identical to v0.30.0.
     Path("crates/brynja-crypto-cpu/src/aes/aarch64.rs"): ("ad92752d1f2697b12e0371ebe37baf976a39b4f74a3deb73a6971575fbc41a0a", 1, 1, 1),
     Path("crates/brynja-crypto-cpu/src/aes/aarch64_expand.rs"): ("62a49742b01e06def854c7dfee991216606a2f4d3f87852f6ae1765c82af7d79", 1, 1, 1),

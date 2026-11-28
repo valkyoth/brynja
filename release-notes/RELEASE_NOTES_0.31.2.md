@@ -4,7 +4,8 @@ This internal milestone follows the signed v0.31.1 tag. No crates are
 selected for publication. Ordinary Poly1305 and AEAD construction remains
 portable. The standalone Poly1305 crate now has an explicit Linux x86-64
 AVX2 owner and the AEAD crate has an explicit Linux x86-64 SSE2/AVX2 pair.
-The Linux/macOS AArch64 NEON routes described below are also opt-in. Qualifying RISC-V remains open.
+The Linux/macOS AArch64 NEON routes and standalone RV64 Linux RVV MAC
+described below are also opt-in. There is no RISC-V AEAD pair.
 
 ## First experiment: native x86-64 AVX2 arithmetic
 
@@ -650,3 +651,40 @@ git archive 83642108 Cargo.toml Cargo.lock crates assurance/poly1305 | tar -x -C
 Before exposing an opt-in standalone owner, review Linux vector-state
 admission for the calling thread, package inclusion of the assembly, and
 the CPU safety boundary. This benchmark did not test a paired AEAD.
+
+### RV64 Linux: packaged standalone owner
+
+Enable `poly1305-rvv` on `brynja-mac-poly1305`, then call
+`rvv::Rvv::probe()` before passing the thread-local handle to
+`OneTimeKey::start_rvv`. Admission requires both HWCAP V and an explicit
+current-thread ON result from Linux's read-only vector-control query. Next-exec
+settings do not grant permission now; unsupported or denied queries fail closed.
+The library does not change policy or affinity. Linux does not permit a thread
+with V enabled to turn it off before exec; ISA availability across scheduling
+remains a platform requirement. See the [Linux vector ABI](https://docs.kernel.org/arch/riscv/vector.html).
+
+On the Linux 6.6.63 X60, the final archive-built, dynamically linked executables
+passed the 12 RFC cases, 65 generated streaming records, tampered tags and
+caller-key clearing on both compiler endpoints. The same owner executables
+returned `Unavailable` in a child with V disabled for its exec and under QEMU
+with V absent. The default-feature import was rejected. The 77 instruction
+encodings of the private column function matched the measured candidate
+on both compilers. This is not a timing experiment on the final binaries.
+
+| Rust | Packaged owner SHA-256 | Packaged vector-test SHA-256 |
+| --- | --- | --- |
+| 1.90.0 | `115daa922c825e6bf81d26f94bbba0f852464e1855e3d7084706a26117df80e3` | `b3cd8a712c49092aa2a53c481bdef2aaa4954234a0457a8d35439cbb3d5351a4` |
+| 1.100.0 | `6bfdb974b6ffcc89758e4db353b0f27e3c0a6c70772ab84ecb2591f0eee5a874` | `cc588b188382f1f68dc830015d63dbdceb974b11242d4447acede5fe8ae43261` |
+
+An earlier static GNU libc test binary did **not** refuse cleanly under the
+native denied-exec control on Rust 1.90.0: the fault address was in glibc's
+`__memcpy_vector`, outside the crate. The application and its runtime must
+themselves be able to run under the configured ISA policy. The successful
+native denial tests used the system's dynamically linked libc 2.41.
+
+To reproduce, run `python3 scripts/cryptography/check-poly1305-packages.py
+--rvv-export NEW_DIRECTORY` on the build host. Copy that directory and
+`assurance/poly1305/tests/native_rvv_policy.py` to an RV64 Linux host with
+usable V and run `python3 native_rvv_policy.py NEW_DIRECTORY`. The denial
+control changes only a fresh child's next-exec setting. No root privileges,
+sysctl changes, native timing reruns or registry publication are required.

@@ -225,6 +225,7 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
     if name == "brynja-mac-poly1305":
         expected["poly1305-avx2"] = ["dep:brynja-crypto-cpu", "brynja-crypto-cpu/poly1305-avx2"]
         expected["poly1305-neon"] = ["dep:brynja-crypto-cpu", "brynja-crypto-cpu/poly1305-neon"]
+        expected["poly1305-rvv"] = ["dep:brynja-crypto-cpu", "brynja-crypto-cpu/poly1305-rvv"]
     if name in legacy_hmac_policy.FEATURE_SETS:
         expected = legacy_hmac_policy.FEATURE_SETS[name]
     if name == "brynja-mac-hmac":
@@ -233,6 +234,7 @@ def validate_features(name: str, package: dict, entry: dict) -> None:
     if name == "brynja-crypto-cpu":
         expected["poly1305-avx2"] = ["dep:brynja-core"]
         expected["poly1305-neon"] = ["dep:brynja-core"]
+        expected["poly1305-rvv"] = ["dep:brynja-core"]
         expected["aes-static-execution"] = []
         expected["aes-runtime-execution"] = ["aes-static-execution"]
         expected["ghash-runtime-execution"] = []

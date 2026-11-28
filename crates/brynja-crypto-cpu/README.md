@@ -149,6 +149,12 @@ must pass. Applications should use the one-time-key owner in
 `brynja-mac-poly1305`, not the low-level accumulator interface. This feature
 does not select a backend for AEAD or pin threads to CPUs.
 
+`poly1305-rvv` is a standalone RV64 Linux opt-in. Its thread-local handle
+checks HWCAP V and reads the current Linux vector state before its startup
+self-test. If either cannot confirm support, admission fails without executing
+the kernel. The crate never asks the OS to enable V. Most users should use
+the one-time-key API in `brynja-mac-poly1305`.
+
 `poly1305-neon` is the corresponding default-off static capability for
 little-endian AArch64 Linux/macOS NEON builds. Prefer the clearing one-time-key
 owner in `brynja-mac-poly1305`; a successful startup test does not establish

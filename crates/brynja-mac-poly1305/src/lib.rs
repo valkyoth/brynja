@@ -5,6 +5,9 @@
 
 mod field;
 
+#[cfg(all(feature = "poly1305-rvv", target_arch = "riscv64", target_os = "linux"))]
+pub mod rvv;
+
 #[cfg(all(feature = "poly1305-avx2", target_arch = "x86_64", target_os = "linux"))]
 pub mod execution;
 
@@ -100,6 +103,7 @@ pub enum Error {
     DegenerateKey,
     /// The requested accelerated operation was interrupted or its handle retired.
     #[cfg(any(
+        all(feature = "poly1305-rvv", target_arch = "riscv64", target_os = "linux"),
         all(feature = "poly1305-avx2", target_arch = "x86_64", target_os = "linux"),
         all(
             feature = "poly1305-neon",

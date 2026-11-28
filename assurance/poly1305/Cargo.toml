@@ -8,6 +8,7 @@ publish = false
 [workspace]
 
 [features]
+rvv-owner = ["brynja-mac-poly1305/poly1305-rvv"]
 native-owner = ["brynja-mac-poly1305/poly1305-avx2"]
 neon-owner = ["brynja-mac-poly1305/poly1305-neon"]
 
@@ -26,6 +27,14 @@ required-features = ["native-owner"]
 [[test]]
 name = "integrated_vectors"
 required-features = ["native-owner"]
+
+[[example]]
+name = "rvv_owner"
+required-features = ["rvv-owner"]
+
+[[test]]
+name = "rvv_vectors"
+required-features = ["rvv-owner"]
 
 [dependencies]
 brynja-mac-poly1305 = { path = "../../crates/brynja-mac-poly1305" }

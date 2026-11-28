@@ -10,6 +10,9 @@
 
 #![no_std]
 
+#[cfg(all(feature = "poly1305-rvv", target_arch = "riscv64", target_os = "linux"))]
+pub mod poly1305_rvv;
+
 #[cfg(all(feature = "poly1305-avx2", target_arch = "x86_64", target_os = "linux"))]
 pub mod poly1305_avx2;
 

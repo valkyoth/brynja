@@ -84,7 +84,7 @@ def check(no_default, all_features, package, node, dependency, reject):
             except ValueError:
                 continue
             raise AssertionError("missing or redirected ChaCha20 CPU edge accepted")
-    edges = dict.fromkeys(("poly1305-avx2", "poly1305-neon"), "brynja-crypto-cpu")
+    edges = dict.fromkeys(("poly1305-avx2", "poly1305-neon", "poly1305-rvv"), "brynja-crypto-cpu")
     assert policy.reviewed_optional_names("brynja-mac-poly1305", {"optional": edges}) == ["brynja-crypto-cpu"]
     for feature in edges:
         for bad in ({k: v for k, v in edges.items() if k != feature},

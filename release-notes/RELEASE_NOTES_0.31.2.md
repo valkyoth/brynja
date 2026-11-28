@@ -394,3 +394,81 @@ Poly1305 owner or of ChaCha20-Poly1305. At 16 and 31 bytes the probe does
 not execute its NEON two-block kernel at all. The next comparison must
 include equivalent one-time-key handling, streaming and cleanup before
 deciding whether to expose an ARM backend.
+
+### Integrated ARM owner experiment
+
+Adapt the existing checked one-time-key and streaming owner to use the
+two-block NEON kernel for aligned update bodies of at least 1024 bytes.
+Include key validation, clearing of the key, powers and packed weights,
+scalar prefix/tail, handle checks and finalization in the measured record;
+reuse the tested CPU handle. Before measuring, require the 12 RFC answers,
+65 generated records with streaming partitions, all tag-byte rejections,
+and caller-visible key clearing. On both native hosts, use stock optimized
+1.90.0 and 1.100.0 builds, the prior scheduling policy, twelve alternating
+pairs per configuration, and 524288 bytes divided by record length per batch
+(rounded down to whole records). Report 16, 31, 32, 33, 256, 1023, 1024,
+1025, 1500, 4096 and 16384 bytes in one update, plus 16384 bytes updated
+in 1500- and 17-byte chunks. Per host, require a median portable/owner ratio
+above one at each of 1500, 4096 and 16384 bytes in one update, on both
+compilers. Retain every sample; no reruns to obtain a pass. Passing permits
+further admission work, not automatic release or an AEAD performance claim.
+
+Both hosts passed. These are medians of paired elapsed-time ratios, not a
+comparison of the two machines. The Mac used normal macOS scheduling; Linux
+was pinned to vCPU 0 on the same Neoverse-V2 guest as the probe.
+
+| Bytes / update chunk | M2 Pro 1.90 | M2 Pro 1.100 | Neoverse-V2 1.90 | Neoverse-V2 1.100 |
+| ---: | ---: | ---: | ---: | ---: |
+| 16 / 16 | 0.896 | 0.897 | 0.847 | 0.889 |
+| 31 / 31 | 0.988 | 0.942 | 0.903 | 0.876 |
+| 32 / 32 | 0.936 | 0.916 | 0.917 | 0.867 |
+| 33 / 33 | 1.001 | 0.964 | 0.939 | 0.893 |
+| 256 / 256 | 0.982 | 0.979 | 0.968 | 0.964 |
+| 1023 / 1023 | 0.994 | 0.996 | 0.982 | 0.987 |
+| 1024 / 1024 | 1.277 | 1.254 | 1.247 | 1.164 |
+| 1025 / 1025 | 1.273 | 1.241 | 1.238 | 1.159 |
+| 1500 / 1500 | 1.335 | 1.293 | 1.280 | 1.200 |
+| 4096 / 4096 | 1.415 | 1.358 | 1.370 | 1.281 |
+| 16384 / 16384 | 1.447 | 1.403 | 1.423 | 1.306 |
+| 16384 / 1500 | 1.336 | 1.297 | 1.297 | 1.225 |
+| 16384 / 17 | 0.937 | 0.939 | 0.950 | 0.978 |
+
+[All 624 samples](../assurance/poly1305/neon-integrated-native.csv) include
+the short records and small updates: using this owner for a 16 KiB record
+in 17-byte chunks was slower on all four configurations. Callers should not
+infer a speedup from total message length alone.
+
+Native downstream tests on each host/compiler passed before timing. They
+exercised the actual MAC owner, not just the CPU entry point. Separate QEMU
+tests on both compilers checked overflow before mutation, clearing after
+interruption, and clearing the live weights on both return and unwind.
+A one-limb change to the expected startup result in a disposable build
+produced `Quarantined` rather than a working handle on both compilers. The
+measured Linux ELFs each contain a call to the kernel whose body has five
+NEON widening multiplies and twenty multiply-accumulates.
+
+| Measured executable (SHA-256) | Rust 1.90.0 | Rust 1.100.0 |
+| --- | --- | --- |
+| Apple arm64 Mach-O | `4b6f641d1437d8385a2cf52f148ecfbf7dc9735680227af14d83961e16f5ee7d` | `18290f7a55fcabd6d977e0f82ed8f69b327c36dbc91b4c1d0c8ede5674553021` |
+| Linux arm64 musl ELF | `40fee40fc528e4c35bc8457628de79fbfc21c1468f6b2b483e5beb06c5a48030` | `2e8f4643145ec4ce83057abf0ec7a9d9e5f23d114de3b4048398a586da2f2e7c` |
+
+The [measured candidate](../assurance/poly1305/neon-integrated-candidate.patch)
+is not a public feature. It assumes a little-endian AArch64 Linux or macOS
+target compiled for NEON; its startup test is **not** a runtime ISA probe.
+This evidence supports integrating an explicit owner for those targets. It
+does not establish whole-AEAD throughput or side-channel qualification.
+To replay the public test on a native builder without changing a live tree:
+
+```sh
+patchfile="$PWD/assurance/poly1305/neon-integrated-candidate.patch"
+replay=$(mktemp -d)
+git archive cc004264d3fcee7f5f9fe961d5705813b2637f39 Cargo.toml Cargo.lock crates assurance/poly1305 | tar -x -C "$replay"
+(
+  cd "$replay" || exit 1
+  git apply --unidiff-zero "$patchfile" || exit 1
+  for v in 1.90.0 1.100.0; do
+    cargo +"$v" test --locked --offline --release --manifest-path assurance/poly1305/Cargo.toml \
+      --features neon-owner --test neon_vectors || exit 1
+  done
+)
+```

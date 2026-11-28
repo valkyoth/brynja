@@ -7,7 +7,7 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[2]
-CORPUS = ROOT / 'assurance/poly1305/rfc8439.tsv'
+CORPUS = ROOT / 'crates/brynja-mac-poly1305/tests/data/rfc8439.tsv'
 LENGTHS = [34, 64, 375, 375, 127, 16, 16, 48, 48, 16, 64, 48]
 IDS = ['2.5.2'] + [f'A.3.{i}' for i in range(1, 12)]
 
@@ -61,9 +61,14 @@ class CorpusTests(unittest.TestCase):
         self.assertEqual(reference(key, b'clamping'), reference(masked, b'clamping'))
 
 
-def compare_openssl():
+def comparison_records():
     records = list(vectors())
     records.extend((label, k, m, reference(k, m)) for label, k, m in boundaries())
+    return records
+
+
+def compare_openssl():
+    records = comparison_records()
     for label, key, message, tag in records:
         # Public fixtures only; OpenSSL is a test executable, not a crate dependency.
         result = subprocess.run(['openssl', 'mac', '-binary', '-macopt',
@@ -74,11 +79,34 @@ def compare_openssl():
     print(f'OpenSSL matched all {len(records)} public cases.')
 
 
+def compare_rust(toolchain):
+    manifest = ROOT / 'assurance/poly1305/Cargo.toml'
+    command = ['cargo', '+' + toolchain, 'run', '--quiet', '--locked', '--offline',
+               '--release', '--manifest-path', str(manifest)]
+    records = comparison_records()
+    def encode(rows):
+        return ''.join(f'{k.hex()}\t{m.hex()}\t{t.hex()}\n' for _, k, m, t in rows)
+    result = subprocess.run(command, input=encode(records), text=True, capture_output=True,
+                            check=True, timeout=180)
+    if result.stdout.strip() != f'matched {len(records)} public vectors':
+        raise ValueError('Rust consumer did not replay the complete corpus')
+    label, key, message, tag = records[-1]
+    wrong = bytes([tag[0] ^ 1]) + tag[1:]
+    rejected = subprocess.run(command, input=encode([(label, key, message, wrong)]),
+                              text=True, capture_output=True, timeout=180)
+    if rejected.returncode == 0 or 'vector mismatch or bad input' not in rejected.stderr:
+        raise ValueError('Rust consumer did not reject a wrong known answer')
+    print(f'Rust {toolchain} matched all {len(records)} public cases and rejected the control.')
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--openssl', action='store_true', help='also compare with OpenSSL 3')
+    parser.add_argument('--rust', choices=('1.90.0', '1.100.0'), help='replay through the Rust leaf')
     args = parser.parse_args()
     if not unittest.main(argv=['vectors'], exit=False).result.wasSuccessful():
         raise SystemExit(1)
     if args.openssl:
         compare_openssl()
+    if args.rust:
+        compare_rust(args.rust)

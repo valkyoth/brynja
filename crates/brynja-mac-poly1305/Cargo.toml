@@ -1,0 +1,19 @@
+[package]
+name = "brynja-mac-poly1305"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Portable no_std RFC 8439 one-time Poly1305 authenticator for Brynja"
+publish = ["crates-io"]
+include = ["Cargo.toml", "LICENSE-APACHE", "LICENSE-MIT", "README.md", "src/**/*.rs", "tests/**"]
+
+[features]
+default = []
+
+[dependencies]
+brynja-core = { workspace = true }
+
+[lints]
+workspace = true

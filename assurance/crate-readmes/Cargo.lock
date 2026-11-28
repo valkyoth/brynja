@@ -77,6 +77,7 @@ dependencies = [
  "brynja-legacy-wtls",
  "brynja-mac-hmac",
  "brynja-mac-kmac",
+ "brynja-mac-poly1305",
  "brynja-pki",
  "brynja-platform",
  "brynja-proofs",
@@ -286,6 +287,13 @@ version = "0.1.1"
 dependencies = [
  "brynja-core",
  "brynja-hash-sha3",
+]
+
+[[package]]
+name = "brynja-mac-poly1305"
+version = "0.1.0"
+dependencies = [
+ "brynja-core",
 ]
 
 [[package]]

@@ -17,6 +17,13 @@ change = "code"
 publish = false
 reason = "Advance the internal facade; includes post-checkpoint portable ChaCha20 forwarding."
 
+[crates."brynja-mac-poly1305"]
+previous_version = "unpublished"
+version = "0.1.0"
+change = "code"
+publish = false
+reason = "New internal portable one-time authenticator; no registry upload selected."
+
 [crates."brynja-cipher-chacha"]
 previous_version = "0.1.0"
 version = "0.1.0"

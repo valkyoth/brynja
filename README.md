@@ -320,6 +320,7 @@ Each package name links to its source README with features, examples and limitat
 | [`brynja-hash-parallel`](crates/brynja-hash-parallel/README.md) | ParallelHash and ParallelHashXOF | [crates.io](https://crates.io/crates/brynja-hash-parallel) |
 | [`brynja-mac-hmac`](crates/brynja-mac-hmac/README.md) | Modern HMAC | [crates.io](https://crates.io/crates/brynja-mac-hmac) |
 | [`brynja-mac-kmac`](crates/brynja-mac-kmac/README.md) | KMAC and KMACXOF | [crates.io](https://crates.io/crates/brynja-mac-kmac) |
+| [`brynja-mac-poly1305`](crates/brynja-mac-poly1305/README.md) | Standalone Poly1305 one-time authenticator | Unpublished |
 | [`brynja-cipher-aes`](crates/brynja-cipher-aes/README.md) | Raw AES block operations | [crates.io](https://crates.io/crates/brynja-cipher-aes) |
 | [`brynja-cipher-chacha`](crates/brynja-cipher-chacha/README.md) | Raw IETF ChaCha20 | [crates.io](https://crates.io/crates/brynja-cipher-chacha) |
 | [`brynja-universal-hash-ghash`](crates/brynja-universal-hash-ghash/README.md) | GHASH universal hashing | [crates.io](https://crates.io/crates/brynja-universal-hash-ghash) |

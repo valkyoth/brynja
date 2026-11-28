@@ -97,6 +97,9 @@ pub struct BrynjaMacHmac;
 #[doc = include_str!("../../../crates/brynja-mac-kmac/README.md")]
 pub struct BrynjaMacKmac;
 
+#[doc = include_str!("../../../crates/brynja-mac-poly1305/README.md")]
+pub struct BrynjaMacPoly1305;
+
 #[doc = include_str!("../../../crates/brynja-pki/README.md")]
 pub struct BrynjaPki;
 

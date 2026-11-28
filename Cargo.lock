@@ -262,6 +262,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "brynja-mac-poly1305"
+version = "0.1.0"
+dependencies = [
+ "brynja-core",
+]
+
+[[package]]
 name = "brynja-pki"
 version = "0.3.1"
 dependencies = [

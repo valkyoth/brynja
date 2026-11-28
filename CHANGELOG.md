@@ -2,8 +2,9 @@
 
 ## 0.31.0 standalone Poly1305 (in development)
 
-- Add the RFC 8439 standalone MAC vectors and a test-only arithmetic reference
-  before implementing the Rust owner. [Scope and remaining work](release-notes/RELEASE_NOTES_0.31.0.md).
+- Implement the portable streaming one-time MAC in the unpublished
+  `brynja-mac-poly1305` leaf, with RFC 8439 vectors and a test-only arithmetic
+  reference. [Scope and remaining work](release-notes/RELEASE_NOTES_0.31.0.md).
 
 ## 0.30.6 standalone cipher package publication acceptance (released)
 

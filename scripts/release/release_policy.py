@@ -44,6 +44,7 @@ PUBLISH_ORDER = (
     "brynja-hash-sha2",
     "brynja-hash-sha3",
     "brynja-mac-kmac",
+    "brynja-mac-poly1305",
     "brynja-mac-hmac",
     "brynja-hash-tuple",
     "brynja-crypto-cpu-std",

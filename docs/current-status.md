@@ -7,7 +7,8 @@ registry links and the [feature guide](facade-features.md) for what to select.
 Publication is not independent verification or authorization to use an unfinished protocol.
 
 Development has started on [v0.31.0: standalone Poly1305](../release-notes/RELEASE_NOTES_0.31.0.md).
-The acceptance vectors are available; there is no released Brynja Poly1305 API yet.
+The unpublished workspace leaf now authenticates and verifies messages; no
+façade feature or released Brynja Poly1305 package is available yet.
 
 Earlier ChaCha20 milestones: in v0.30.1,
 portable ChaCha20 is available from the standalone crate and its existing

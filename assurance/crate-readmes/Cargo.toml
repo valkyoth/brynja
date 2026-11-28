@@ -12,6 +12,7 @@ default = ["batch"]
 batch = []
 
 [dependencies]
+brynja-mac-poly1305 = { path = "../../crates/brynja-mac-poly1305", default-features = false }
 brynja-aead-gcm = { path = "../../crates/brynja-aead-gcm", default-features = false, features = ["aes-gcm", "gmac"] }
 brynja-cipher-aes = { path = "../../crates/brynja-cipher-aes", default-features = false, features = ["hazmat-aes-block"] }
 brynja-cipher-chacha = { path = "../../crates/brynja-cipher-chacha", default-features = false, features = ["hazmat-chacha20"] }

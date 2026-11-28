@@ -1,0 +1,11 @@
+[package]
+name = "poly1305-consumer"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+
+[workspace]
+
+[dependencies]
+brynja-mac-poly1305 = { path = "../../crates/brynja-mac-poly1305" }

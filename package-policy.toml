@@ -136,6 +136,12 @@ required = ["brynja-core", "brynja-hash-sha3"]
 optional = {}
 features = ["conformance-testing", "hardened-execution", "runtime-execution"]
 
+[packages.brynja-mac-poly1305]
+class = "modern-shared"
+publish = "crates-io"
+required = ["brynja-core"]
+optional = {}
+
 [packages.brynja-mac-hmac]
 class = "modern-shared"
 publish = "crates-io"

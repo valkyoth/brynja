@@ -1,7 +1,7 @@
 # Internal milestone; publication rehearsal belongs to the public checkpoint.
 schema = 1
 version = "0.31.0"
-scope = "Start standalone portable Poly1305: check the RFC 8439 corpus and reference model. No AEAD, accelerated backend, production acceptance or registry publication is claimed by the vector check. Portable RFC 8439 ChaCha20: RV64 stays scalar. Portable GHASH, Portable AES-GCM and Portable GMAC remain available. AES-NI/PCLMUL on Linux/Windows x86-64 and Linux/macOS ARM64 AES/PMULL remain explicit. Arm GHASH timing remains unresolved. RISC-V AES remains evidence-only and unadmitted."
+scope = "Test standalone portable Poly1305: RFC vectors, streaming partitions, full-tag verification and owner lifecycle. No AEAD, acceleration, timing qualification or registry publication for Poly1305. Portable RFC 8439 ChaCha20: RV64 stays scalar. Portable GHASH, Portable AES-GCM and Portable GMAC remain available. AES-NI/PCLMUL on Linux/Windows x86-64 and Linux/macOS ARM64 AES/PMULL remain explicit. Arm GHASH timing remains unresolved. RISC-V AES remains evidence-only and unadmitted."
 ci_checks = ["poly1305-vectors","sha256-policy","static-cpu-source-policy","chacha20-installed-controls","chacha20-parallel-owner","unsafe-policy","unsafe-regressions","aes-gcm-package-controls","crypto-tests","crypto-lint","crypto-format","facade-integration","hkdf-owner-contract","aes-owner-contract","aes-wide-owner-contract","aes-wide-api","aes-dataflow-regressions","aes-provider-api","registry-tests","release-regressions","release-metadata","release-plan","workspace-metadata","api-profiles","api-profile-tests","requirements","requirement-domain-tests","protocol-surfaces","package-plan"]
 
 [[checks]]
@@ -76,17 +76,17 @@ timeout_seconds = 600
 
 [[checks]]
 id = "crypto-tests"
-command = ["cargo","test","--locked","-p","brynja-cipher-aes","-p","brynja-universal-hash-ghash","-p","brynja-aead-gcm","-p","brynja-crypto","-p","brynja-legacy-hkdf","--no-default-features","--features","brynja-crypto/hazmat-chacha20,brynja-crypto/gmac-execution,brynja-crypto/aes-gcm-execution,brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider,brynja-crypto/ghash-runtime-execution"]
+command = ["cargo","test","--locked","-p","brynja-mac-poly1305","-p","brynja-cipher-aes","-p","brynja-universal-hash-ghash","-p","brynja-aead-gcm","-p","brynja-crypto","-p","brynja-legacy-hkdf","--no-default-features","--features","brynja-crypto/hazmat-chacha20,brynja-crypto/gmac-execution,brynja-crypto/aes-gcm-execution,brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider,brynja-crypto/ghash-runtime-execution"]
 timeout_seconds = 300
 
 [[checks]]
 id = "crypto-lint"
-command = ["cargo","clippy","--locked","-p","brynja-cipher-aes","-p","brynja-universal-hash-ghash","-p","brynja-aead-gcm","-p","brynja-crypto","-p","brynja-legacy-hkdf","-p","brynja-cipher-chacha","--no-default-features","--features","brynja-crypto/hazmat-chacha20,brynja-crypto/gmac-execution,brynja-crypto/aes-gcm-execution,brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider,brynja-crypto/ghash-runtime-execution,brynja-cipher-chacha/chacha20-sse2,brynja-cipher-chacha/chacha20-neon","--all-targets","--no-deps","--","-D","warnings"]
+command = ["cargo","clippy","--locked","-p","brynja-mac-poly1305","-p","brynja-cipher-aes","-p","brynja-universal-hash-ghash","-p","brynja-aead-gcm","-p","brynja-crypto","-p","brynja-legacy-hkdf","-p","brynja-cipher-chacha","--no-default-features","--features","brynja-crypto/hazmat-chacha20,brynja-crypto/gmac-execution,brynja-crypto/aes-gcm-execution,brynja-crypto/hazmat-aes-block,brynja-crypto/external-key-provider,brynja-crypto/ghash-runtime-execution,brynja-cipher-chacha/chacha20-sse2,brynja-cipher-chacha/chacha20-neon","--all-targets","--no-deps","--","-D","warnings"]
 timeout_seconds = 300
 
 [[checks]]
 id = "crypto-format"
-command = ["cargo","fmt","--package","brynja","--package","brynja-cipher-aes","--package","brynja-universal-hash-ghash","--package","brynja-aead-gcm","--package","brynja-crypto","--package","brynja-legacy-hkdf","--package","brynja-cipher-chacha","--package","brynja-crypto-cpu","--check"]
+command = ["cargo","fmt","--package","brynja","--package","brynja-mac-poly1305","--package","brynja-cipher-aes","--package","brynja-universal-hash-ghash","--package","brynja-aead-gcm","--package","brynja-crypto","--package","brynja-legacy-hkdf","--package","brynja-cipher-chacha","--package","brynja-crypto-cpu","--check"]
 timeout_seconds = 60
 
 [[checks]]

@@ -514,3 +514,58 @@ and repeat for 1.100.0. In this development checkout the leaf or either
 façade can select `chacha20poly1305-neon`; callers explicitly supply
 `execution::ArmPair::probe()` via `with_pair`. The MAC leaf separately exposes
 `poly1305-neon`. Default constructors stay portable.
+
+### RV64 Linux: standalone Poly1305 admission experiment
+
+Evaluate one RVV 1.0 layout on SpacemiT X60: four adjacent full blocks in
+four e32 lanes, multiplied by r⁴, r³, r² and r. Clamp r, not its powers.
+Only the isolated arithmetic kernel may use V; both the probe and the
+portable reference otherwise use stock RV64GC. This is unpublished
+public-input research, not a clearing owner. No accelerated RVV ChaCha20
+owner was admitted in [the previous native campaign](../assurance/chacha20-parallel/README.md#rv64-v-candidate-admission-experiment).
+That precludes a native AEAD pair, but does not decide standalone Poly1305.
+
+Before timing, require 12 RFC cases and 2,112 independent boundary/long
+cases on Rust 1.90.0 and 1.100.0, VLEN 128 and 256 under QEMU, rejection of
+a corrupted answer and clean refusal with V disabled. Check widening
+multiplication in the linked kernel. Run the same static binaries natively
+on CPU 0, correctness before timing, one benchmark launch per compiler.
+Use 16/63/64/65/256/1500/4096/16384-byte messages, floor(524288/size) records
+per batch, warm both routes, alternate order over 12 pairs, and retain all
+samples. The required median portable/probe ratio is **above one at each of
+1500, 4096 and 16384 bytes on both compilers**. A pass permits an integrated
+owner experiment, not a public feature. A failure leaves RV64 portable;
+do not time QEMU or repeat native measurements to secure a pass.
+
+**Result: advance the standalone layout to a streaming-owner experiment.**
+Both exact binaries passed all 2,124 records on the native Linux X60 after
+passing at both emulated vector widths. With V disabled the probe refused
+to run. [All 192 native sample pairs](../assurance/poly1305/rvv-four-block-x60.csv)
+are retained. Each value below is the median of the 12 paired ratios of
+portable time to probe time; values above one favor the probe.
+
+| Bytes | Rust 1.90.0 | Rust 1.100.0 |
+| ---: | ---: | ---: |
+| 16 | 2.071 | 2.289 |
+| 63 | 1.533 | 1.719 |
+| 64 | 1.745 | 2.101 |
+| 65 | 1.650 | 1.974 |
+| 256 | 2.487 | 2.759 |
+| 1500 | 2.882 | 3.052 |
+| 4096 | 3.041 | 3.199 |
+| 16384 | 3.094 | 3.222 |
+
+The 16- and 63-byte cases never enter the vector kernel. These results
+compare complete probe calls on public messages, not equally hardened
+owners: they do not measure streaming, key clearing or side-channel
+resistance. No RVV feature or AEAD pair is enabled by this result.
+
+To reproduce the correctness checks and export the native inputs, run
+`python3 scripts/cryptography/check-poly1305-rvv-probe.py --export NEW_DIRECTORY`.
+On an RV64 Linux host with V, run `taskset -c 0 ./probe-1.90.0 < public.tsv`
+from the exported directory before `taskset -c 0 ./probe-1.90.0 --bench`;
+substitute `probe-1.100.0` for the other compiler. The SHA-256 digests of
+the binaries measured on the X60, checked before and after execution, were:
+
+- Rust 1.90.0: `165c66a8cca9c0910608c6b8b160ed7bf65787344ebc80cc34100e867f44f786`.
+- Rust 1.100.0: `986251007e7f869cc014dd3e1cfb57b0e44207806cea55031c4c787e0dc1d3c5`.

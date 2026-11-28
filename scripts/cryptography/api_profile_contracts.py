@@ -345,6 +345,8 @@ REGISTERED_SANITIZER_MIR_IDENTITIES = {
 }
 
 REVIEWED_SOURCE_PATHS = {
+    "crates/brynja-aead-chacha20poly1305/src/lib.rs",
+    "crates/brynja-aead-chacha20poly1305/src/message.rs",
     "crates/brynja-core/src/secret_memory_difference.rs",
     "crates/brynja-core/src/secret_memory_difference_tests.rs",
     "assurance/register-cleanup/check_secret_difference.py",

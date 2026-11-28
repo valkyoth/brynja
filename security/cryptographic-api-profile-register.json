@@ -484,8 +484,8 @@
           "owner": "0.31.1"
         },
         "cancellation": {
-          "disposition": "required",
-          "owner": "0.31.1"
+          "disposition": "not-applicable",
+          "owner": "0.24.15"
         },
         "clone": {
           "disposition": "forbidden",
@@ -504,20 +504,20 @@
           "owner": "0.24.15"
         },
         "generation": {
-          "disposition": "required",
-          "owner": "0.31.1"
+          "disposition": "caller-owned",
+          "owner": "0.24.15"
         },
         "hosted-adapter": {
-          "disposition": "optional-isolated",
+          "disposition": "not-applicable",
           "owner": "0.24.15"
         },
         "import": {
-          "disposition": "required",
-          "owner": "0.31.1"
+          "disposition": "caller-owned",
+          "owner": "0.24.15"
         },
         "incremental-state": {
-          "disposition": "required",
-          "owner": "0.31.1"
+          "disposition": "not-applicable",
+          "owner": "0.24.15"
         },
         "no-std": {
           "disposition": "required",
@@ -540,8 +540,8 @@
           "owner": "0.31.1"
         },
         "provider": {
-          "disposition": "required",
-          "owner": "0.31.1"
+          "disposition": "not-applicable",
+          "owner": "0.24.15"
         },
         "reset": {
           "disposition": "forbidden",
@@ -558,8 +558,7 @@
       },
       "code_target": "crates/brynja-aead-chacha20poly1305/src/lib.rs",
       "consumer_links": [
-        "consumer:protocol",
-        "consumer:provider"
+        "consumer:protocol"
       ],
       "disposition": "implemented",
       "domain": "cryptography",
@@ -585,19 +584,9 @@
         "rfc:8439"
       ],
       "operations": {
-        "generate-key": {
-          "output_classification": "typed-secret-owned",
-          "partial_failure_policy": "clear-complete-secret-destination",
-          "verification": "not-applicable"
-        },
-        "import-key": {
-          "output_classification": "typed-secret-owned",
-          "partial_failure_policy": "clear-complete-secret-destination",
-          "verification": "not-applicable"
-        },
         "open": {
-          "output_classification": "typed-secret-owned",
-          "partial_failure_policy": "clear-complete-secret-destination",
+          "output_classification": "caller-owned-secret",
+          "partial_failure_policy": "unchanged-destination",
           "verification": "before-output-release"
         },
         "seal": {
@@ -606,9 +595,9 @@
           "verification": "not-applicable"
         }
       },
-      "ordinary_hardened_separation": "required",
+      "ordinary_hardened_separation": "not-applicable",
       "owner": "0.31.1",
-      "profile": "aead",
+      "profile": "aead-detached-borrowed",
       "test_target": "crates/brynja-aead-chacha20poly1305/src/interruptions.rs#public_operations_burn_once_and_commit_only_on_success"
     },
     {
@@ -20108,79 +20097,6 @@
       ]
     },
     {
-      "capability": "algorithm.chacha20-poly1305",
-      "evidence": [
-        "crates/brynja-aead-chacha20poly1305/src/interruptions.rs#public_operations_burn_once_and_commit_only_on_success",
-        "scripts/zeroization/check-zeroization-codegen.sh"
-      ],
-      "fields": [
-        "key",
-        "nonce-state",
-        "authentication-state",
-        "counter",
-        "phase"
-      ],
-      "id": "planned.algorithm.chacha20-poly1305",
-      "lifecycle_edges": [
-        "creation",
-        "success",
-        "error",
-        "cancellation",
-        "replacement",
-        "rekey",
-        "failed-construction",
-        "recoverable-unwind",
-        "drop"
-      ],
-      "operations": {
-        "generate-key": {
-          "output_classification": "typed-secret-owned",
-          "partial_failure_policy": "clear-complete-secret-destination",
-          "verification": "not-applicable"
-        },
-        "import-key": {
-          "output_classification": "typed-secret-owned",
-          "partial_failure_policy": "clear-complete-secret-destination",
-          "verification": "not-applicable"
-        },
-        "open": {
-          "output_classification": "typed-secret-owned",
-          "partial_failure_policy": "clear-complete-secret-destination",
-          "verification": "before-output-release"
-        },
-        "seal": {
-          "output_classification": "explicit-public-declassification",
-          "partial_failure_policy": "unchanged-destination",
-          "verification": "not-applicable"
-        }
-      },
-      "owner": "0.31.1",
-      "planned_cleanup_contract": "mandatory-core-or-separately-reviewed-equivalent",
-      "planned_implementation_target": "crates/brynja-aead-chacha20poly1305/src/lib.rs",
-      "residual_risks": [
-        "mem-forget",
-        "process-abort",
-        "forced-termination",
-        "power-loss",
-        "register-copies",
-        "cpu-caches",
-        "compiler-created-copies",
-        "crash-dumps",
-        "suspend-images",
-        "os-swap-and-paging",
-        "dma-visible-copies",
-        "physical-memory-remanence"
-      ],
-      "state": "planned",
-      "temporaries": [
-        "derived-key",
-        "keystream-block",
-        "authentication-block",
-        "plaintext-staging",
-        "tag-staging"
-      ]
-    },
-    {
       "capability": "algorithm.ecdhe-ml-kem",
       "evidence": [
         "tests/surface/hybrid.rs#standard_groups",
@@ -24973,7 +24889,7 @@
       ]
     }
   ],
-  "policy_sha256": "5ff0312fb6503b25c44f7c69d261b14208560eba4201fa8e723f062581111803",
+  "policy_sha256": "2bda458a4c1dc848cbb5d29fa5c540280b2f45ecd9de52e35b70a15d7180ff4e",
   "registered_secret_owners": [
     {
       "capability": "algorithm.hkdf",

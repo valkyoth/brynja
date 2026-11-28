@@ -412,6 +412,7 @@ edges = [
 
 [output]
 classifications = [
+  "caller-owned-secret",
   "explicit-public-declassification",
   "public-non-secret",
   "typed-secret-owned",
@@ -639,6 +640,27 @@ verification = "not-applicable"
 output_classification = "typed-secret-owned"
 partial_failure_policy = "clear-complete-secret-destination"
 verification = "not-applicable"
+
+[profile.aead-detached-borrowed]
+kind = "construction"
+secret_template = "none"
+required = ["operation-direction", "byte-input", "one-shot", "verification", "buffers", "overlap", "ownership", "backend", "no-std"]
+forbidden = ["bit-input", "fixed-output", "extendable-output", "export", "reset", "clone", "snapshot"]
+caller_owned = ["generation", "import"]
+not_applicable = ["incremental-state", "provider", "hosted-adapter", "cancellation"]
+optional_isolated = []
+internal_only = []
+consumers = ["consumer:protocol"]
+
+[profile.aead-detached-borrowed.operations.seal]
+output_classification = "explicit-public-declassification"
+partial_failure_policy = "unchanged-destination"
+verification = "not-applicable"
+
+[profile.aead-detached-borrowed.operations.open]
+output_classification = "caller-owned-secret"
+partial_failure_policy = "unchanged-destination"
+verification = "before-output-release"
 
 [profile.aead]
 kind = "construction"
@@ -969,7 +991,11 @@ ids = ["algorithm.aes", "algorithm.chacha20"]
 
 [[assignment]]
 profile = "aead"
-ids = ["algorithm.aes-gcm", "algorithm.chacha20-poly1305"]
+ids = ["algorithm.aes-gcm"]
+
+[[assignment]]
+profile = "aead-detached-borrowed"
+ids = ["algorithm.chacha20-poly1305"]
 
 [[assignment]]
 profile = "asymmetric"
@@ -1455,15 +1481,15 @@ sha256 = "cce50eed655542f9e842ee9e0ec7e3255c779c94bedca591b22084f1c7c6b818"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_contracts.py"
-sha256 = "956941760ebfa65df5d9dddf84838c936a1dacaf3bd8424d55f4a0bd69b90af8"
+sha256 = "c93333fd8c504e201f905bd36ee71cb4b0a8f01e2252a4cd4c77d8705bcac5e5"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_operations.py"
-sha256 = "caccf175d6d23d7b71d7587deeb8e972f07785a4cc480678a3888c77258b2edd"
+sha256 = "6d8dabab3361a71acacda4bc364380bf9c10e6a005984b1ba774f4f1a6a287a3"
 
 [[reviewed-source]]
 path = "scripts/cryptography/api_profile_model.py"
-sha256 = "9d17a2707c479a14cf13be74da1480357ed2bd917e448bcbd9af52dee96a470f"
+sha256 = "5bce2111b16e68a4c9fd4770c213c106e3bf19e162b0036cdaff5850eb0d3a71"
 
 [[reviewed-source]]
 path = "scripts/cryptography/check-secret-owner-compiler.py"
@@ -1483,7 +1509,15 @@ sha256 = "107bfea74f0dacc422e930332485ac3279a70a087fc74a30d3628196c676779d"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-api-profiles.py"
-sha256 = "0636d84b55070cebeb0c6a4008a756c5edc460ad1a5f61b092927e8de8f8d7a4"
+sha256 = "7896091cc5028db581c6dc061bc2467470f2e4ecf32ea6a9344d899809794480"
+
+[[reviewed-source]]
+path = "crates/brynja-aead-chacha20poly1305/src/lib.rs"
+sha256 = "ccb2e81742621456d8804529163868d8eadec836cf66ae5d802b3e47cfe15094"
+
+[[reviewed-source]]
+path = "crates/brynja-aead-chacha20poly1305/src/message.rs"
+sha256 = "e71fa7e6d93431e5437159894ca618d5bf066eb733520a1a79ffeb90e501dc5c"
 
 [[reviewed-source]]
 path = "scripts/cryptography/test-mir-cleanup-flow.py"

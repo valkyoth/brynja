@@ -86,3 +86,8 @@ Replayed executable SHA-256 digests for these observations:
 
 - Rust 1.90.0: `cb97706af57743c01ee4e2761e9f0cc36e57985a35becf26174cb8f07226b2bd`
 - Rust 1.100.0: `801c397637029f96c66893ee4967cb9bcc9e571d04aaa133aae12ddce225e1e9`
+
+After the scoped pentest fixes the same instruction fingerprints and both
+RFC replays passed without repinning. The Rust 1.90.0 executable digest was
+`74409797165a1424b88caa544fc0d57f84a6faaf591bbb6d544bf9a229d4087f`;
+the 1.100.0 digest did not change.

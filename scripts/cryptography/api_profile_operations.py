@@ -1,6 +1,10 @@
 """Canonical operation classification contracts for the API-profile policy."""
 
 OPERATION_CONTRACTS = {
+    "aead-detached-borrowed": {
+        "open": ("caller-owned-secret", "unchanged-destination", "before-output-release"),
+        "seal": ("explicit-public-declassification", "unchanged-destination", "not-applicable"),
+    },
     "aead": {
         "generate-key": ("typed-secret-owned", "clear-complete-secret-destination", "not-applicable"),
         "import-key": ("typed-secret-owned", "clear-complete-secret-destination", "not-applicable"),

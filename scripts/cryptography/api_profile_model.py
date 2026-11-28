@@ -261,6 +261,16 @@ def validate_cleanup(policy: dict, root: Path, *, adapter_available: bool = True
         fail("recoverable unwind cleanup policy drifted")
 
 
+def validate_detached_api(source: str) -> None:
+    clean = rust_contract.scrub(source)
+    for owner, expected in (("Sealer", {"from_reserved_range", "seal", "seal_in_place"}),
+                            ("Opener", {"new", "open", "open_in_place"})):
+        names = [name for scope in rust_contract.scope_bodies(clean, owner)
+                 for name in re.findall(r"\bpub\s+fn\s+(\w+)", scope)]
+        if sorted(names) != sorted(expected):
+            fail(f"detached AEAD public surface drifted: {owner}")
+
+
 def validate_policy(policy: dict, surfaces: dict, root: Path = ROOT) -> dict[str, str]:
     expected_top = {
         "schema", "api", "cleanup", "lifecycle", "output", "residual",
@@ -295,6 +305,16 @@ def validate_policy(policy: dict, surfaces: dict, root: Path = ROOT) -> dict[str
     for name, profile in policy["profile"].items():
         validate_profile(name, profile, set(dimensions), policy)
     assignments = assignment_map(policy, set(semantic))
+    detached = "aead-detached-borrowed"
+    if {k for k, v in assignments.items() if v == detached} != {"algorithm.chacha20-poly1305"}:
+        fail("detached AEAD capability assignment drifted")
+    profile = policy["profile"][detached]
+    if (profile["secret_template"] != "none" or set(profile["caller_owned"]) != {"generation", "import"}
+            or set(profile["not_applicable"]) != {"incremental-state", "provider", "hosted-adapter", "cancellation"}
+            or set(profile["required"]) != {"operation-direction", "byte-input", "one-shot", "verification",
+                                             "buffers", "overlap", "ownership", "backend", "no-std"}):
+        fail("detached AEAD borrowed-key or one-shot contract drifted")
+    validate_detached_api((root / "crates/brynja-aead-chacha20poly1305/src/lib.rs").read_text())
     versions = roadmap_versions(root)
     for capability, overrides in policy["completion-overrides"].items():
         if capability not in semantic or not set(overrides) <= set(dimensions):

@@ -36,8 +36,9 @@ Remaining work is tracked in the [release plan](../docs/RELEASE_PLAN.md#v0311---
   three Kani proofs, with explicit limits.
 - The linked open-path review covers both Rust endpoints on Linux x86-64.
   Requirement BRY-REQ-CRYPTO-0009 now records the portable implementation;
-  the generic AEAD API profile is a planning contract, not a claim of key
-  generation, owned plaintext output or hardware acceleration. The implemented
-  API borrows the key and preserves the caller's destination on failure.
+  its detached AEAD register entry distinguishes caller-owned plaintext from
+  owned secret output. The API borrows the key, preserves the destination on
+  failure and does not generate keys. The two official RFC answers also ship
+  as leaf unit tests.
 - Scoped pentest/retest disposition, final gate, green GitHub and tag remain
   release steps. Acceleration belongs to v0.31.2.

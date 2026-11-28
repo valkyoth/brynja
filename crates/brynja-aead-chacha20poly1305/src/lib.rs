@@ -2,6 +2,10 @@
 //! Allocate a disjoint nonce range per sending key, including across restarts.
 //! Opening authenticates the supplied ciphertext before decrypting it; it cannot
 //! determine whether an authenticated message is fresh. Keys are caller-owned.
+//! Counter capacity is not a traffic allowance. Apply the protocol's record,
+//! byte and failed-authentication limits across its specified key/connection
+//! scope. Bound untrusted AAD and payload lengths before allocating scratch:
+//! processing takes work proportional to their combined length.
 //!
 //! Partially overlapping input/output is not representable by the safe API:
 //!
@@ -20,11 +24,23 @@ mod message;
 #[cfg(kani)]
 mod proofs;
 #[cfg(test)]
+mod rfc_vectors;
+#[cfg(test)]
 mod tests;
 use message::Buffers;
 
 /// A public, value-free admission or operation failure.
+/// Match with a wildcard so new failure categories can be added.
+///
+/// ```compile_fail,E0004
+/// use brynja_aead_chacha20poly1305::Error;
+/// fn label(e: Error) -> u8 {
+///     match e { Error::Length => 0, Error::Exhausted => 1,
+///               Error::Authentication => 2, Error::Invariant => 3 }
+/// }
+/// ```
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum Error {
     /// Invalid reservation, incompatible buffer sizes, or unrepresentable frame.
     Length,
@@ -38,6 +54,16 @@ pub enum Error {
 
 /// A forward-only sender borrowing the key. Cannot be cloned or rewound.
 /// Release of this owner does not release unused nonces for reuse.
+///
+/// ```compile_fail
+/// #![deny(unused_must_use)]
+/// use brynja_aead_chacha20poly1305::{Sealer, Error};
+/// fn discard(key: &[u8; 32]) -> Result<(), Error> {
+///     Sealer::from_reserved_range(key, [0; 4], 0, 1)?;
+///     Ok(())
+/// }
+/// ```
+#[must_use]
 pub struct Sealer<'k> {
     key: &'k [u8; 32],
     prefix: [u8; 4],
@@ -112,11 +138,17 @@ impl<'k> Sealer<'k> {
 }
 
 /// A receive-only owner. Does not reserve nonces or enforce replay policy.
+///
+/// ```compile_fail
+/// #![deny(unused_must_use)]
+/// use brynja_aead_chacha20poly1305::Opener;
+/// fn discard(key: &[u8; 32]) { Opener::new(key); }
+/// ```
+#[must_use]
 pub struct Opener<'k>(&'k [u8; 32]);
 
 impl<'k> Opener<'k> {
     /// Borrow the caller's key without copying or taking ownership of it.
-    #[must_use]
     pub fn new(key: &'k [u8; 32]) -> Self {
         Self(key)
     }

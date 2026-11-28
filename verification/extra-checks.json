@@ -66469,6 +66469,8 @@
         "assurance/sha3-hardened-api/Cargo.toml",
         "assurance/sha3-hardened-api/src/lib.rs",
         "assurance/tuplehash-public-api/src/lib.rs",
+        "crates/brynja-aead-chacha20poly1305/src/lib.rs",
+        "crates/brynja-aead-chacha20poly1305/src/message.rs",
         "crates/brynja-cipher-aes/src/aes.rs",
         "crates/brynja-cipher-aes/src/aes/portable.rs",
         "crates/brynja-cipher-aes/src/aes/portable/field.rs",
@@ -67182,6 +67184,8 @@
         "assurance/sha3-hardened-api/Cargo.toml",
         "assurance/sha3-hardened-api/src/lib.rs",
         "assurance/tuplehash-public-api/src/lib.rs",
+        "crates/brynja-aead-chacha20poly1305/src/lib.rs",
+        "crates/brynja-aead-chacha20poly1305/src/message.rs",
         "crates/brynja-cipher-aes/src/aes.rs",
         "crates/brynja-cipher-aes/src/aes/portable.rs",
         "crates/brynja-cipher-aes/src/aes/portable/field.rs",
@@ -67892,6 +67896,8 @@
         "assurance/sha3-hardened-api/Cargo.toml",
         "assurance/sha3-hardened-api/src/lib.rs",
         "assurance/tuplehash-public-api/src/lib.rs",
+        "crates/brynja-aead-chacha20poly1305/src/lib.rs",
+        "crates/brynja-aead-chacha20poly1305/src/message.rs",
         "crates/brynja-cipher-aes/src/aes.rs",
         "crates/brynja-cipher-aes/src/aes/portable.rs",
         "crates/brynja-cipher-aes/src/aes/portable/field.rs",
@@ -96547,10 +96553,10 @@
       ],
       "success": {
         "contains": [
-          "cryptographic API register covers 137 capabilities, 8 current and 10 registered capability owners, and 73 planned secret owners"
+          "cryptographic API register covers 137 capabilities, 8 current and 10 registered capability owners, and 72 planned secret owners"
         ],
         "unique_lines": [
-          "cryptographic API register covers 137 capabilities, 8 current and 10 registered capability owners, and 73 planned secret owners"
+          "cryptographic API register covers 137 capabilities, 8 current and 10 registered capability owners, and 72 planned secret owners"
         ]
       },
       "timeout_seconds": 300,

@@ -37,6 +37,14 @@ Borrow a 32-byte key with `Sealer::from_reserved_range` for sending or
 a nonce is four prefix bytes followed by an eight-byte big-endian counter.
 Never reuse a key/nonce pair, including after restart or across processes.
 The key stays yours to clear. Replay protection is a protocol responsibility.
+This sender does not implement a static-IV XOR sequence or a little-endian
+wire counter. Do not simulate those schemes by repeatedly constructing senders
+for individual messages; use a reviewed protocol-specific nonce allocator.
+
+Counter capacity is not a traffic allowance. Enforce the protocol's limits on
+records, bytes and failed authentications, and its rules for rekeying or closing
+the connection. Cap untrusted AAD and payload lengths before allocating scratch;
+authentication work grows with both, even for messages that fail verification.
 
 Use `seal` and `open` for separate input and output, or `seal_in_place` and
 `open_in_place` for exact overlap. Safe Rust excludes partial overlap.

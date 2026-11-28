@@ -7,13 +7,14 @@ Generated from the reviewed policy and semantic standards surfaces. Do not edit 
 - Current secret owners: **8**
 - Registered capability owners: **10**
 - Development-only variant owners: **3**
-- Planned secret owners: **73**
+- Planned secret owners: **72**
 
 ## Profile Coverage
 
 | Profile | Capabilities |
 | --- | ---: |
-| `aead` | 2 |
+| `aead` | 1 |
+| `aead-detached-borrowed` | 1 |
 | `asymmetric` | 6 |
 | `fixed-hash` | 3 |
 | `general-sha512-t` | 1 |

@@ -275,7 +275,29 @@ def main() -> int:
     assert poly["operations"]["verify-authenticator"]["output_classification"] == "no-output"
     assert poly["operations"]["generate-authenticator"]["output_classification"] == "explicit-public-declassification"
     aead = next(row for row in first["capabilities"] if row["id"] == "algorithm.chacha20-poly1305")
-    assert (aead["owner"], aead["profile"], aead["disposition"]) == ("0.31.1", "aead", "implemented")
+    detached = "aead-detached-borrowed"
+    assert (aead["owner"], aead["profile"], aead["disposition"]) == ("0.31.1", detached, "implemented")
+    assert set(aead["operations"]) == {"seal", "open"}
+    source = (model.ROOT / "crates/brynja-aead-chacha20poly1305/src/lib.rs").read_text()
+    for replacement in ("fn open(", "pub fn open(never: Never) {} pub fn generate_key("):
+        try:
+            model.validate_detached_api(source.replace("pub fn open(", replacement))
+        except model.ProfileError as error:
+            assert "surface drifted: Opener" in str(error)
+        else:
+            raise AssertionError("missing or extra public AEAD operation accepted")
+    def reassign(policy, _surfaces):
+        next(a for a in policy["assignment"] if a["profile"] == detached)["profile"] = "aead"
+    rejects(reassign, "detached AEAD capability assignment")
+    def claim_clear(policy, _surfaces):
+        policy["profile"][detached]["operations"]["open"]["partial_failure_policy"] = "clear-complete-secret-destination"
+    rejects(claim_clear, "operation open information flow drifted")
+    rejects(downgrade_operation(detached, "open"), "operation open information flow drifted")
+    def claim_provider(policy, _surfaces):
+        profile = policy["profile"][detached]
+        profile["not_applicable"].remove("provider")
+        profile["required"].append("provider")
+    rejects(claim_provider, "detached AEAD borrowed-key")
     gmac = next(row for row in first["capabilities"] if row["id"] == "algorithm.gmac")
     assert gmac["owner"] == "0.29.1" and gmac["profile"] == "gmac"
     assert set(gmac["operations"]) == {"import-key", "generate-authenticator", "verify-authenticator"}
@@ -283,7 +305,8 @@ def main() -> int:
     assert len(first["api_dimensions"]) == 22
     assert len(first["current_secret_owners"]) == 8
     assert len(first["registered_secret_owners"]) == 10
-    assert len(first["planned_secret_owners"]) == 73
+    assert len(first["planned_secret_owners"]) == 72
+    assert all(row["capability"] != aead["id"] for row in first["planned_secret_owners"])
     assert len(first['development_secret_owners']) == 3
     development = first['development_secret_owners'][0]
     assert development['id'] == 'development.algorithm.aes128'

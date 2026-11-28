@@ -8,6 +8,9 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
+# Only the package README transition in this reviewed directory refresh is
+# eligible to ride the next real release. Never ignore README.md generically.
+DIRECTORY_REFRESH = "8b89c300acc0a0d44321b5131b73970429d4d90a"
 REPOSITORY_ONLY = frozenset(
     {
         "brynja-interop",
@@ -38,7 +41,7 @@ def changed_packages(
         package_root = Path(package["manifest_path"]).resolve().parent
         relative = package_root.relative_to(ROOT)
         tracked = subprocess.check_output(
-            ["git", "diff", "--name-only", tag, "--", str(relative)],
+            ["git", "diff", "--no-renames", "--name-only", tag, "--", str(relative)],
             cwd=ROOT,
             text=True,
         ).strip()
@@ -54,9 +57,25 @@ def changed_packages(
             cwd=ROOT,
             text=True,
         ).strip()
+        readme = relative / "README.md"
+        if (not untracked and tracked == str(readme)
+                and reviewed_directory_refresh(tag, readme)):
+            continue
         if tracked or untracked:
             changed.add(name)
     return changed
+
+
+def reviewed_directory_refresh(baseline: str, path: Path) -> bool:
+    # Compare both endpoints (including file type/mode), not just the current
+    # blob. An older outstanding README correction must not disappear either.
+    # A shallow clone without the reviewed commit simply cannot defer the bump.
+    return all(subprocess.run(
+        ["git", "diff", "--no-ext-diff", "--no-textconv", "--quiet", *refs, "--", str(path)],
+        cwd=ROOT, stderr=subprocess.DEVNULL, check=False,
+    ).returncode == 0 for refs in (
+        (baseline, DIRECTORY_REFRESH + "^"), (DIRECTORY_REFRESH,),
+    ))
 
 
 def validate_cumulative_changes(plan: dict, changed: set[str]) -> None:

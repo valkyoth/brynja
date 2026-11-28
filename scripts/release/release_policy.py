@@ -446,6 +446,12 @@ def verify_repository(packages: dict[str, dict], plan: dict) -> None:
                 raise RuntimeError(
                     f"{name} must pin {dependency_name} to {expected_req}"
                 )
+            # An inherited pin moves in the root manifest even if this
+            # package's only local diff is a deferred README refresh.
+            if (plan["stage"] == "public" and entry["change"] == "unchanged"
+                    and dependency_entry["publish"]
+                    and dependency_entry["version"] != dependency_entry["previous_version"]):
+                raise RuntimeError(f"{name} cannot be unchanged: published pin to {dependency_name} moved")
             if entry["publish"]:
                 available = (
                     dependency_entry["publish"]

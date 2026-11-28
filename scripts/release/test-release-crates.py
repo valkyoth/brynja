@@ -4,12 +4,15 @@
 from __future__ import annotations
 
 import sys
+import subprocess
+import tempfile
 from pathlib import Path
 from unittest.mock import patch
 
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import release_policy as policy  # noqa: E402
+import release_change_policy as change_policy  # noqa: E402
 import release_crates as publisher  # noqa: E402
 import release_train_tests as train_tests  # noqa: E402
 import checkpoint_tests  # noqa: E402
@@ -266,6 +269,59 @@ def test_internal_dependency_pins_are_exact() -> None:
     )
 
 
+def test_unchanged_crate_cannot_skip_a_moved_inherited_pin() -> None:
+    plan, fixture = public_plan(), packages()
+    plan["crates"]["brynja-core"] = entry("0.3.0", "0.4.0", "code", True)
+    fixture["brynja-core"]["version"] = "0.4.0"
+    for crate in fixture.values():
+        for dep in crate["dependencies"]:
+            if dep["name"] == "brynja-core":
+                dep["req"] = "=0.4.0"
+    assert_fails("cannot be unchanged: published pin to brynja-core moved",
+                 policy.verify_repository, fixture, plan)
+
+
+def test_only_reviewed_readme_transition_can_be_deferred() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        def git(*args):
+            return subprocess.check_output(["git", "-c", "user.name=test", "-c", "user.email=test@invalid",
+                                            "-c", "commit.gpgsign=false", *args], cwd=root, text=True).strip()
+        git("init", "--quiet")
+        crate = root / "crates/leaf"
+        crate.mkdir(parents=True)
+        info = {"leaf": {"manifest_path": str(crate / "Cargo.toml")}}
+        readme = crate / "README.md"
+        source = crate / "lib.rs"
+        source.write_text("// library\n")
+        readme.write_text("old instructions\n")
+        git("add", ".")
+        git("commit", "-qm", "older release")
+        git("tag", "v1")
+        readme.write_text("necessary correction\n")
+        git("commit", "-qam", "other metadata change")
+        git("tag", "v2")
+        readme.write_text("reviewed directory note\n")
+        git("commit", "-qam", "directory refresh")
+        with patch.object(change_policy, "ROOT", root), patch.object(
+                change_policy, "DIRECTORY_REFRESH", git("rev-parse", "HEAD")):
+            def changed(tag="2"):
+                return change_policy.changed_packages(info, tag)
+            assert changed() == set()
+            assert changed("1") == {"leaf"}  # Prior outstanding correction.
+            readme.write_text("different advice\n")
+            assert changed() == {"leaf"}
+            readme.write_text("reviewed directory note\n")
+            source.write_text("// new implementation\n")
+            assert changed() == {"leaf"}
+            source.write_text("// library\n")
+            (crate / "untracked.rs").touch()
+            assert changed() == {"leaf"}
+            (crate / "untracked.rs").unlink()
+            with patch.object(change_policy, "DIRECTORY_REFRESH", "0" * 40):
+                assert changed() == {"leaf"}
+
+
 def test_publish_cannot_depend_on_unpublished_crate() -> None:
     plan = public_plan()
     plan["crates"]["brynja-tls"] = entry(
@@ -482,6 +538,8 @@ def run_tests() -> None:
         test_cumulative_package_delta_cannot_be_lost,
         test_manifest_version_must_match_plan,
         test_internal_dependency_pins_are_exact,
+        test_unchanged_crate_cannot_skip_a_moved_inherited_pin,
+        test_only_reviewed_readme_transition_can_be_deferred,
         test_publish_cannot_depend_on_unpublished_crate,
         test_repository_manifest_stays_unpublishable,
         test_product_manifest_must_allow_crates_io,

@@ -376,6 +376,13 @@ dependent crate is published. Unchanged supporting crates retain their
 existing versions and are not republished. Internal published dependencies
 remain exact-pinned; a required pin change is a package change.
 
+The [official directory README refresh](https://github.com/valkyoth/brynja/commit/8b89c300acc0a0d44321b5131b73970429d4d90a)
+can ship with each support crate's next otherwise-needed upload. Until then its
+existing crates.io page retains the README from its last published archive.
+This exception is limited to that exact before/after README change. Later edits,
+other package files and moved exact dependency pins still require review.
+It does not prevent explicitly selecting a metadata release when needed.
+
 Before editing manifests, preview the reverse dependency chain for the
 packages you actually intend to change, for example
 `python3 scripts/release/release_crates.py --impact brynja-cipher-chacha`.

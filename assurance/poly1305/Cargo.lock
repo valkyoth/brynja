@@ -17,5 +17,6 @@ dependencies = [
 name = "poly1305-consumer"
 version = "0.0.0"
 dependencies = [
+ "brynja-core",
  "brynja-mac-poly1305",
 ]

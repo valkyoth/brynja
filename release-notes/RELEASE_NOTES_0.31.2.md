@@ -65,3 +65,73 @@ These MAC-only ratios do not predict an AEAD or another CPU's speedup.
 Measured release executable SHA-256: `d73ae2b5b8903e3affd7f4fd47e4f5f1e0774565426eaf78ebc4938017ae9d69`
 (1.90.0), `226e1899b06846b2d9f0990ba38d3463886785aabd736aa660f956414db9b2a3`
 (1.100.0).
+
+## Streaming and cleanup experiment
+
+The [experimental owner](../assurance/poly1305/examples/avx2/stream.rs)
+borrows and clears a one-time key and workspace. It buffers at most 15 bytes
+between calls and rejects cumulative length overflow before touching state.
+After completing a buffered partial block, **at least 1024 remaining contiguous
+bytes** are required before computing a 160-byte power set and an 800-byte
+AVX2 multiplication table. Both live only for that update and are guarded for
+cleanup. Shorter updates use scalar arithmetic. This is an exact-RFC import
+fixture, not a checked public key constructor. Clearing named storage is not
+a claim about registers, spills, forgotten owners or process abort.
+
+Before benchmarking, check both compiler endpoints against the 12 RFC cases,
+the 2,112 generated records with four chunk sizes each, every two-way split
+at selected lengths, each incorrect tag byte, and live-storage cleanup on
+completion, rejection, abandonment and unwind. Check overflow without large
+allocations. Exercise both sides of the routing threshold.
+
+Use the first experiment's host, CPU pin, build flags, 12 alternating pairs
+and batch size. Run `cargo test --example four_block_probe` in the fixture,
+then its optimized example with `--stream-bench`. Both timed routes here take
+the same key copy, consume a message owner, include setup/finalization/
+destruction and split the same input at the same offsets. Record the original
+lengths plus 1023, 1024 and 1025, and a 16 KiB record split into 1500-byte
+and 17-byte updates. Keep all pairs. For the long-update design to proceed,
+require median portable/owner time above 1 at 1500, 4096 and 16384 bytes
+and for the 1500-byte split on **both** compilers. Report short-path costs
+separately; they are not evidence of a SIMD gain. Do not tune and rerun a
+losing configuration as part of this measurement.
+
+### Streaming result on the Ryzen 9 9950X3D
+
+All four predeclared long-update cases met the continuation criterion on both
+compilers. Below are the medians of the paired portable/owner elapsed times;
+above 1 means the experimental owner was faster. The [312 original pairs](../assurance/poly1305/avx2-stream-ryzen.csv)
+include every short-input and split-update run.
+
+| Message bytes | Update bytes | Rust 1.90.0 | Rust 1.100.0 |
+| ---: | ---: | ---: | ---: |
+| 16 | 16 | 0.974 | 1.084 |
+| 63 | 63 | 0.793 | 0.982 |
+| 64 | 64 | 0.754 | 1.038 |
+| 65 | 65 | 0.764 | 0.976 |
+| 256 | 256 | 0.653 | 1.002 |
+| 1023 | 1023 | 0.628 | 0.984 |
+| 1024 | 1024 | 1.001 | 1.114 |
+| 1025 | 1025 | 0.993 | 1.079 |
+| 1500 | 1500 | 1.066 | 1.168 |
+| 4096 | 4096 | 1.238 | 1.370 |
+| 16384 | 16384 | 1.315 | 1.463 |
+| 16384 | 1500 | 1.082 | 1.195 |
+| 16384 | 17 | 0.678 | 0.708 |
+
+Message size alone is not a dispatch rule. A 16 KiB message in 17-byte
+updates never takes the vector path and loses on both compilers. Near 1 KiB
+the margin is small or absent on Rust 1.90.0. Keep the portable owner as the
+public default. The next x86 step is to isolate the long-update kernel behind
+the project's CPU admission and cleanup boundaries and check the linked
+consumer; these measurements do not qualify a public backend, AEAD speed,
+timing leakage or other processors.
+
+Both optimized examples matched the RFC cases and the 8,448 split-message
+comparisons against the portable owner. The split, overflow, tag and cleanup
+unit tests passed on both endpoints and under x86-64 AddressSanitizer.
+Disassembly of each timed executable contained `vpmuludq` in the four-block
+group or its outlined closure. Measured executable SHA-256:
+`408101f1a5bc66a15d87ccc09601def9235e8f660ebd7a60550b145a3f7c5f15`
+(1.90.0), `c69ffdf82a487fea0e92810d1cf01057982c9b13ee156263d23f54b587ffe016`
+(1.100.0).

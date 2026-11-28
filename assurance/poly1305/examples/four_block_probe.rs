@@ -1,6 +1,7 @@
-//! Unpublished arithmetic experiment. Public fixtures only: no secret lifecycle.
+//! Unpublished arithmetic and streaming experiments. Public fixtures only.
 #[cfg(target_arch = "x86_64")]
 mod avx2 {
+    pub(super) mod stream;
     use std::arch::x86_64::*;
     type F = [u64; 5];
     const MASK: u64 = (1 << 26) - 1;
@@ -185,6 +186,12 @@ fn main() {
             "{}",
             fields[0]
         );
+        assert_eq!(
+            avx2::stream::candidate(&key, &decode(fields[2]), 17).as_slice(),
+            decode(fields[3]),
+            "streaming {}",
+            fields[0]
+        );
     }
     let mut case_count = 0;
     for seed in 0..8u8 {
@@ -208,13 +215,25 @@ fn main() {
                 "seed {seed}, length {len}"
             );
             case_count += 1;
+            for chunk in [17, 1024, 1500, 16384] {
+                assert_eq!(
+                    avx2::stream::candidate(&key, &msg, chunk),
+                    portable(&key, &msg),
+                    "streaming seed {seed}, length {len}, chunk {chunk}"
+                );
+            }
         }
     }
     println!("AVX2 four-block probe: 12 RFC vectors and {case_count} portable comparisons passed");
+    println!(
+        "Streaming probe: 12 RFC vectors and {} partitioned portable comparisons passed",
+        case_count * 4
+    );
     match std::env::args().skip(1).collect::<Vec<_>>().as_slice() {
         [] => (),
         [flag] if flag == "--bench" => throughput(),
-        _ => panic!("usage: four_block_probe [--bench]"),
+        [flag] if flag == "--stream-bench" => avx2::stream::throughput(),
+        _ => panic!("usage: four_block_probe [--bench|--stream-bench]"),
     }
 }
 

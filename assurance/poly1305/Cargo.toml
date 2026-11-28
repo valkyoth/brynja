@@ -9,3 +9,6 @@ publish = false
 
 [dependencies]
 brynja-mac-poly1305 = { path = "../../crates/brynja-mac-poly1305" }
+
+[dev-dependencies]
+brynja-core = { path = "../../crates/brynja-core" }

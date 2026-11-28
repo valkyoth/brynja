@@ -165,3 +165,63 @@ and under x86-64 AddressSanitizer. The earlier throughput numbers describe the
 pre-admission build at `527daa33`, not these ELFs. No public CPU or AEAD route
 is enabled. The next integration step is the opt-in CPU-crate kernel and its
 one-time-key owner, followed by measurement of that shipped layout.
+
+## Integrated x86 owner experiment
+
+Compare the real checked-key constructor, update, finalize and drop on both
+routes, with one reusable tested CPU handle outside the timer. Use the same
+Ryzen, CPU 0, compiler endpoints, 13 size/chunk cells, 12 alternating pairs,
+warmup and batch sizes as the streaming study. No global AVX2 flags. Require
+median portable/native above one in all four previously named long cells on
+both compilers before admitting this layout for throughput. Retain every
+pair including unfavorable results; do not adjust the threshold after the run.
+
+**Decision: do not ship this layout.** Both compiled owners returned correct
+tags, but the layout failed all four long cells on the minimum compiler.
+Median paired portable/native elapsed times on the Ryzen 9 9950X3D:
+
+| Message / update bytes | Rust 1.90.0 | Rust 1.100.0 |
+| --- | ---: | ---: |
+| 1500 / 1500 | 0.472 | 1.387 |
+| 4096 / 4096 | 0.473 | 1.576 |
+| 16384 / 16384 | 0.478 | 1.655 |
+| 16384 / 1500 | 0.468 | 1.413 |
+| 16384 / 17 (scalar updates) | 0.919 | 0.923 |
+
+[All 312 paired observations](../assurance/poly1305/avx2-integrated-ryzen.csv)
+are retained. Unlike the earlier prototype's 25 packed weights, this kernel
+used nine 32-byte rows, assembling the columns in the group routine. Rust
+1.100.0 emitted 25 wide multiplies with no calls in that group; 1.90.0
+outlined multiplies and called array-draining helpers. This is an observed
+code-generation difference, not a demonstrated cause or a timing-leakage
+assessment. No Rust version, target flag, default feature, or facade changed
+to turn the negative result into a pass.
+
+The [candidate patch](../assurance/poly1305/avx2-integrated-candidate.patch)
+preserves the actual CPU crate, one-time-key integration, downstream benchmark
+and replay tests without enabling any of them in released packages. To replay
+from the repository root, use a **fresh disposable checkout** at the exact
+base (the patch has zero context). No live checkout needs to be modified:
+
+```sh
+patchfile="$PWD/assurance/poly1305/avx2-integrated-candidate.patch"
+replay=$(mktemp -d)
+git archive 68ad7dda1b7fe77b159a82b90db06512ef093dc2 Cargo.toml Cargo.lock crates assurance/poly1305 | tar -x -C "$replay"
+(
+  cd "$replay" || exit 1
+  git apply --unidiff-zero "$patchfile" || exit 1
+  for v in 1.90.0 1.100.0; do
+    cargo +"$v" test --release --offline --locked --manifest-path assurance/poly1305/Cargo.toml \
+      --features native-owner --test integrated_vectors || exit 1
+  done
+)
+```
+
+The replay passed on both endpoints: all 12 RFC records, 65 generated
+boundary/long records, split updates, all wrong tag-byte positions, and
+post-consumption clearing of caller key storage. Both measured binaries also
+passed a QEMU native-capability control and rejected masked AVX2 without
+falling back. Measured Linux x86-64 ELF SHA-256:
+`a31bbee2b03ac3a6f44523ff8faa3dcf40a34b029d63a2e7dc79495137814074`
+(1.90.0), `bb3343227007c922fb35c3230a076d195ae775d34a6d5abe23b1c882ca1198eb`
+(1.100.0). This is an internal result, not x86 or AEAD backend admission.

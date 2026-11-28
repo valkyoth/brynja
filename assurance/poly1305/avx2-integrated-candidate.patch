@@ -1,0 +1,563 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index fc37c336..ba453d95 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -279,0 +280 @@ dependencies = [
++ "brynja-crypto-cpu",
+diff --git a/assurance/poly1305/Cargo.lock b/assurance/poly1305/Cargo.lock
+index c40f9d62..2ec1c2d4 100644
+--- a/assurance/poly1305/Cargo.lock
++++ b/assurance/poly1305/Cargo.lock
+@@ -8,0 +9,7 @@ version = "0.11.0"
++[[package]]
++name = "brynja-crypto-cpu"
++version = "0.3.0"
++dependencies = [
++ "brynja-core",
++]
++
+@@ -13,0 +21 @@ dependencies = [
++ "brynja-crypto-cpu",
+diff --git a/assurance/poly1305/Cargo.toml b/assurance/poly1305/Cargo.toml
+index 727ab645..3abb93b6 100644
+--- a/assurance/poly1305/Cargo.toml
++++ b/assurance/poly1305/Cargo.toml
+@@ -9,0 +10,11 @@ publish = false
++[features]
++native-owner = ["brynja-mac-poly1305/poly1305-avx2"]
++
++[[example]]
++name = "integrated_owner"
++required-features = ["native-owner"]
++
++[[test]]
++name = "integrated_vectors"
++required-features = ["native-owner"]
++
+diff --git a/crates/brynja-crypto-cpu/Cargo.toml b/crates/brynja-crypto-cpu/Cargo.toml
+index 0d464f9a..de65c53f 100644
+--- a/crates/brynja-crypto-cpu/Cargo.toml
++++ b/crates/brynja-crypto-cpu/Cargo.toml
+@@ -13,0 +14 @@ default = []
++poly1305-avx2 = ["dep:brynja-core"]
+diff --git a/crates/brynja-crypto-cpu/src/lib.rs b/crates/brynja-crypto-cpu/src/lib.rs
+index 130e1587..58c0bd52 100644
+--- a/crates/brynja-crypto-cpu/src/lib.rs
++++ b/crates/brynja-crypto-cpu/src/lib.rs
+@@ -12,0 +13,3 @@
++#[cfg(all(feature = "poly1305-avx2", target_arch = "x86_64", target_os = "linux"))]
++pub mod poly1305_avx2;
++
+@@ -133,0 +137 @@ pub const ADMITTED_BACKEND_COUNT: usize = 0;
++    all(feature = "poly1305-avx2", target_arch = "x86_64", target_os = "linux"),
+diff --git a/crates/brynja-mac-poly1305/Cargo.toml b/crates/brynja-mac-poly1305/Cargo.toml
+index 86169c82..f3e66d8d 100644
+--- a/crates/brynja-mac-poly1305/Cargo.toml
++++ b/crates/brynja-mac-poly1305/Cargo.toml
+@@ -13,0 +14 @@ default = []
++poly1305-avx2 = ["dep:brynja-crypto-cpu", "brynja-crypto-cpu/poly1305-avx2"]
+@@ -17,0 +19,3 @@ brynja-core = { workspace = true }
++[target.'cfg(all(target_arch = "x86_64", target_os = "linux"))'.dependencies]
++brynja-crypto-cpu = { workspace = true, optional = true }
++
+diff --git a/crates/brynja-mac-poly1305/src/lib.rs b/crates/brynja-mac-poly1305/src/lib.rs
+index 0f7c6de1..0e0eb636 100644
+--- a/crates/brynja-mac-poly1305/src/lib.rs
++++ b/crates/brynja-mac-poly1305/src/lib.rs
+@@ -7,0 +8,3 @@ mod field;
++#[cfg(all(feature = "poly1305-avx2", target_arch = "x86_64", target_os = "linux"))]
++pub mod execution;
++
+@@ -86,0 +90,2 @@ pub enum Error {
++    /// The requested accelerated operation was interrupted or its handle retired.
++    Quarantined,
+diff --git a/assurance/poly1305/examples/integrated_owner.rs b/assurance/poly1305/examples/integrated_owner.rs
+new file mode 100644
+index 00000000..8fe37032
+--- /dev/null
++++ b/assurance/poly1305/examples/integrated_owner.rs
+@@ -0,0 +1,71 @@
++//! Public fixture data; this compares complete checked-key messages, not startup.
++use brynja_mac_poly1305::{OneTimeKey, execution::Avx2};
++use std::{hint::black_box, time::Instant};
++
++fn record(cpu: Option<&mut Avx2>, key: &[u8; 32], msg: &[u8], chunk: usize) -> [u8; 16] {
++    let mut storage = *key;
++    let one = OneTimeKey::new(&mut storage).unwrap();
++    if let Some(cpu) = cpu {
++        let mut mac = one.start_avx2(cpu).unwrap();
++        for part in msg.chunks(chunk) {
++            mac.update(part).unwrap();
++        }
++        mac.finalize().unwrap()
++    } else {
++        let mut mac = one.start();
++        for part in msg.chunks(chunk) {
++            mac.update(part).unwrap();
++        }
++        mac.finalize()
++    }
++}
++
++fn main() {
++    let mut cpu = Avx2::probe().unwrap_or_else(|why| {
++        eprintln!("required AVX2: {why:?}");
++        std::process::exit(2)
++    });
++    let bench = std::env::args().nth(1).as_deref() == Some("--bench");
++    let key = std::array::from_fn(|i| (i as u8).wrapping_mul(31));
++    if bench {
++        println!("bytes,chunk,pair,records,portable_ns,owner_ns");
++    }
++    for (size, chunk) in [16, 63, 64, 65, 256, 1023, 1024, 1025, 1500, 4096, 16384]
++        .map(|n| (n, n))
++        .into_iter()
++        .chain([(16384, 1500), (16384, 17)])
++    {
++        let msg: Vec<_> = (0..size).map(|i| (i as u8).wrapping_mul(117)).collect();
++        assert_eq!(
++            record(Some(&mut cpu), &key, &msg, chunk),
++            record(None, &key, &msg, chunk)
++        );
++        if !bench {
++            continue;
++        }
++        let reps = 524288 / size;
++        let mut batch = |native: bool| {
++            let now = Instant::now();
++            for _ in 0..reps {
++                black_box(record(
++                    if native { Some(&mut cpu) } else { None },
++                    black_box(&key),
++                    black_box(&msg),
++                    black_box(chunk),
++                ));
++            }
++            now.elapsed().as_nanos()
++        };
++        batch(false);
++        batch(true);
++        for pair in 0..12 {
++            let (p, v) = if pair % 2 == 0 {
++                (batch(false), batch(true))
++            } else {
++                let v = batch(true);
++                (batch(false), v)
++            };
++            println!("{size},{chunk},{pair},{reps},{p},{v}");
++        }
++    }
++}
+diff --git a/assurance/poly1305/tests/integrated_vectors.rs b/assurance/poly1305/tests/integrated_vectors.rs
+new file mode 100644
+index 00000000..f158b094
+--- /dev/null
++++ b/assurance/poly1305/tests/integrated_vectors.rs
+@@ -0,0 +1,81 @@
++use brynja_mac_poly1305::{Error, OneTimeKey, execution::Avx2};
++
++fn decode(s: &str) -> Vec<u8> {
++    let (pairs, rest) = s.as_bytes().as_chunks::<2>();
++    assert!(rest.is_empty());
++    pairs
++        .iter()
++        .map(|p| u8::from_str_radix(std::str::from_utf8(p).unwrap(), 16).unwrap())
++        .collect()
++}
++
++fn check(cpu: &mut Avx2, key: [u8; 32], msg: &[u8], tag: [u8; 16], chunks: &[usize]) {
++    for &chunk in chunks {
++        let mut storage = key;
++        let mut mac = OneTimeKey::from_rfc8439_key(&mut storage)
++            .start_avx2(cpu)
++            .unwrap();
++        for bytes in msg.chunks(chunk) {
++            mac.update(bytes).unwrap();
++        }
++        assert_eq!(mac.finalize().unwrap(), tag);
++        assert_eq!(storage, [0; 32]);
++    }
++    for i in 0..=16 {
++        let mut storage = key;
++        let mut mac = OneTimeKey::from_rfc8439_key(&mut storage)
++            .start_avx2(cpu)
++            .unwrap();
++        mac.update(msg).unwrap();
++        let mut t = tag;
++        if let Some(b) = t.get_mut(i) {
++            *b ^= 1;
++        }
++        assert_eq!(
++            mac.verify(&t),
++            if i == 16 {
++                Ok(())
++            } else {
++                Err(Error::Authentication)
++            }
++        );
++        assert_eq!(storage, [0; 32]);
++    }
++}
++
++#[test]
++fn rfc_and_partitioned_long_updates() {
++    let mut cpu = Avx2::probe().unwrap();
++    let records = include_str!("../../../crates/brynja-mac-poly1305/tests/data/rfc8439.tsv");
++    assert_eq!(records.lines().count(), 12);
++    for row in records.lines() {
++        let f: Vec<_> = row.split('\t').collect();
++        check(
++            &mut cpu,
++            decode(f[1]).try_into().unwrap(),
++            &decode(f[2]),
++            decode(f[3]).try_into().unwrap(),
++            &[1, 16, 17, 1024, 1500],
++        );
++    }
++    for seed in [0u8, 1, 31, 127, 255] {
++        let key = std::array::from_fn(|i| seed.wrapping_add(i as u8).wrapping_mul(19));
++        for size in [
++            63, 64, 65, 1023, 1024, 1025, 1039, 1040, 1500, 2049, 3000, 4096, 16384,
++        ] {
++            let msg: Vec<_> = (0..size)
++                .map(|i| seed.wrapping_add(i as u8) ^ ((i >> 8) as u8))
++                .collect();
++            let mut storage = key;
++            let mut mac = OneTimeKey::new(&mut storage).unwrap().start();
++            mac.update(&msg).unwrap();
++            check(
++                &mut cpu,
++                key,
++                &msg,
++                mac.finalize(),
++                &[1, 17, 63, 1023, 1024, 1025, 1500, size],
++            );
++        }
++    }
++}
+diff --git a/crates/brynja-crypto-cpu/src/poly1305_avx2.rs b/crates/brynja-crypto-cpu/src/poly1305_avx2.rs
+new file mode 100644
+index 00000000..4920e3d1
+--- /dev/null
++++ b/crates/brynja-crypto-cpu/src/poly1305_avx2.rs
+@@ -0,0 +1,79 @@
++//! Explicit Linux x86-64 Poly1305 execution; no automatic portable fallback.
++#![allow(unsafe_code)]
++
++use core::{hint::black_box, marker::PhantomData};
++mod kernel;
++
++/// Host lacks usable AVX2, or this handle failed startup or was interrupted.
++#[derive(Debug, PartialEq, Eq, Clone, Copy)]
++pub enum Error {
++    /// No AVX2 support advertised by the process environment.
++    Unavailable,
++    /// Terminal for this handle.
++    Quarantined,
++}
++
++/// Thread-local required-native capability. The OS must keep the advertised
++/// ISA usable on every CPU where this thread runs. This does not pin a CPU.
++pub struct Avx2 {
++    ready: bool,
++    local: PhantomData<*mut ()>,
++}
++
++impl Avx2 {
++    /// Detect AVX2 and check two consecutive four-block groups against a
++    /// fixed, independently computed answer before admitting caller data.
++    pub fn probe() -> Result<Self, Error> {
++        if !std::is_x86_feature_detected!("avx2") {
++            return Err(Error::Unavailable);
++        }
++        let mut owner = Self {
++            ready: true,
++            local: PhantomData,
++        };
++        let r = 0x0f0e_0d0c_0b0a_0908_0706_0504_0302_0100_u128.to_le_bytes();
++        let mut h = [7_u64, 0, 0, 0, 0].map(u64::to_le_bytes);
++        let mut next = 0_u8;
++        let blocks = [[(); 64]; 2].map(|row| {
++            row.map(|()| {
++                let byte = next;
++                next = next.wrapping_add(1);
++                byte
++            })
++        });
++        owner.absorb_groups(black_box(&mut h), black_box(&r), black_box(&blocks))?;
++        if h.map(u64::from_le_bytes) != [62060317, 5262367, 22716242, 12841259, 60432388] {
++            return Err(Error::Quarantined);
++        }
++        Ok(owner)
++    }
++
++    /// Whether this handle permits a new message, update, or finish.
++    pub fn check(&self) -> Result<(), Error> {
++        if self.ready {
++            Ok(())
++        } else {
++            Err(Error::Quarantined)
++        }
++    }
++
++    /// Low-level full groups only, without finalization. Each accumulator
++    /// slot is a little-endian radix-2^26 limb; unused high bits are ignored.
++    /// The raw multiplier is clamped here, never its powers. The caller owns
++    /// its buffers. Prefer the one-time-key API in the MAC crate.
++    #[doc(hidden)]
++    pub fn absorb_groups(
++        &mut self,
++        acc: &mut [[u8; 8]; 5],
++        r: &[u8; 16],
++        blocks: &[[u8; 64]],
++    ) -> Result<(), Error> {
++        self.check()?;
++        self.ready = false;
++        // SAFETY: probe is the sole constructor and checked host AVX2 before
++        // running even the startup test. No raw pointers cross the boundary.
++        *acc = unsafe { kernel::absorb(acc, r, blocks) };
++        self.ready = true;
++        Ok(())
++    }
++}
+diff --git a/crates/brynja-crypto-cpu/src/poly1305_avx2/kernel.rs b/crates/brynja-crypto-cpu/src/poly1305_avx2/kernel.rs
+new file mode 100644
+index 00000000..ceacc5d1
+--- /dev/null
++++ b/crates/brynja-crypto-cpu/src/poly1305_avx2/kernel.rs
+@@ -0,0 +1,137 @@
++//! Four consecutive full blocks, in radix 2^26 modulo 2^130-5.
++use brynja_core::clear_owned_region;
++use core::arch::x86_64::*;
++
++type F = [u64; 5];
++const MASK: u64 = (1 << 26) - 1;
++
++fn limbs(mut n: u128) -> F {
++    core::array::from_fn(|_| {
++        let [a, b, c, d, ..] = n.to_le_bytes();
++        n >>= 26;
++        u64::from(u32::from_le_bytes([a, b, c, d])) & MASK
++    })
++}
++
++fn reduce(mut x: F) -> F {
++    // Each column (even after summing four lanes) is below 200 * 2^52.
++    // Fold at bit 130; after the first fold only limb 0 can exceed MASK.
++    for _ in 0..3 {
++        let mut carry = 0;
++        for word in &mut x {
++            let n = word.wrapping_add(carry);
++            *word = n & MASK;
++            carry = n >> 26;
++        }
++        x[0] = x[0].wrapping_add(carry.wrapping_mul(5));
++    }
++    x
++}
++
++fn product(a: F, [r, s, t, u, v]: F) -> F {
++    let [s5, t5, u5, v5] = [s, t, u, v].map(|x| x.wrapping_mul(5));
++    reduce(
++        [
++            [r, v5, u5, t5, s5],
++            [s, r, v5, u5, t5],
++            [t, s, r, v5, u5],
++            [u, t, s, r, v5],
++            [v, u, t, s, r],
++        ]
++        .map(|col| {
++            a.into_iter()
++                .zip(col)
++                .fold(0u64, |n, (x, y)| n.wrapping_add(x.wrapping_mul(y)))
++        }),
++    )
++}
++
++struct Scratch<const N: usize, const M: usize>([[[u8; 8]; M]; N]);
++impl<const N: usize, const M: usize> Drop for Scratch<N, M> {
++    fn drop(&mut self) {
++        let _ = clear_owned_region(self.0.as_flattened_mut().as_flattened_mut());
++    }
++}
++
++#[target_feature(enable = "avx2")]
++fn pack(bytes: [[u8; 8]; 4]) -> __m256i {
++    let [a, b, c, d] = bytes.map(i64::from_le_bytes);
++    _mm256_set_epi64x(d, c, b, a)
++}
++
++#[target_feature(enable = "avx2")]
++#[inline(never)]
++fn group(h: F, block: &[u8; 64], table: &Scratch<9, 4>) -> F {
++    let [a, b, c, d] = block.as_chunks::<16>().0 else {
++        unreachable!("64 bytes = four blocks")
++    };
++    let [mut first, b, c, d] = [a, b, c, d].map(|m| {
++        let mut words = limbs(u128::from_le_bytes(*m));
++        words[4] |= 1 << 24;
++        words
++    });
++    for (x, y) in first.iter_mut().zip(h) {
++        *x = x.wrapping_add(y);
++    }
++    let mut words = [_mm256_setzero_si256(); 5];
++    for ((((out, a), b), c), d) in words.iter_mut().zip(first).zip(b).zip(c).zip(d) {
++        *out = pack([a, b, c, d].map(u64::to_le_bytes));
++    }
++    let [r, s, t, u, v, s5, t5, u5, v5] = table.0.map(|w| pack(w));
++    reduce(
++        [
++            [r, v5, u5, t5, s5],
++            [s, r, v5, u5, t5],
++            [t, s, r, v5, u5],
++            [u, t, s, r, v5],
++            [v, u, t, s, r],
++        ]
++        .map(|col| {
++            let sum = words
++                .into_iter()
++                .zip(col)
++                .fold(_mm256_setzero_si256(), |acc, (x, y)| {
++                    _mm256_add_epi64(acc, _mm256_mul_epu32(x, y))
++                });
++            [
++                _mm256_extract_epi64::<0>(sum),
++                _mm256_extract_epi64::<1>(sum),
++                _mm256_extract_epi64::<2>(sum),
++                _mm256_extract_epi64::<3>(sum),
++            ]
++            .into_iter()
++            .fold(0u64, |n, x| n.wrapping_add(x.cast_unsigned()))
++        }),
++    )
++}
++
++#[target_feature(enable = "avx2")]
++pub(super) fn absorb(acc: &[[u8; 8]; 5], raw: &[u8; 16], blocks: &[[u8; 64]]) -> [[u8; 8]; 5] {
++    let mut h = acc.map(|v| u64::from_le_bytes(v) & MASK);
++    let r = limbs(u128::from_le_bytes(*raw) & 0x0fff_fffc_0fff_fffc_0fff_fffc_0fff_ffff);
++    let mut powers = Scratch([[[0; 8]; 5]; 4]);
++    let [r4, r3, r2, r1] = &mut powers.0;
++    *r1 = r.map(u64::to_le_bytes);
++    *r2 = product(r, r).map(u64::to_le_bytes);
++    *r3 = product(r2.map(u64::from_le_bytes), r).map(u64::to_le_bytes);
++    *r4 = product(r2.map(u64::from_le_bytes), r2.map(u64::from_le_bytes)).map(u64::to_le_bytes);
++    let mut table = Scratch([[[0; 8]; 4]; 9]);
++    let (base, fives) = table.0.split_at_mut(5);
++    for ((((slot, a), b), c), d) in base
++        .iter_mut()
++        .zip(r4.iter())
++        .zip(r3.iter())
++        .zip(r2.iter())
++        .zip(r1.iter())
++    {
++        *slot = [*a, *b, *c, *d];
++    }
++    for (dst, src) in fives.iter_mut().zip(base.iter().skip(1)) {
++        *dst = src.map(|x| u64::from_le_bytes(x).wrapping_mul(5).to_le_bytes());
++    }
++    drop(powers);
++    for block in blocks {
++        h = group(h, block, &table);
++    }
++    h.map(u64::to_le_bytes)
++}
+diff --git a/crates/brynja-mac-poly1305/src/execution.rs b/crates/brynja-mac-poly1305/src/execution.rs
+new file mode 100644
+index 00000000..2a06de14
+--- /dev/null
++++ b/crates/brynja-mac-poly1305/src/execution.rs
+@@ -0,0 +1,92 @@
++//! Explicit AVX2 Poly1305 for Linux x86-64. Ordinary `OneTimeKey::start`
++//! remains portable, even with this feature enabled. Throughput depends on
++//! contiguous update size; short updates use the ordinary scalar arithmetic.
++
++use crate::{Error, OneTimeKey, Poly1305};
++pub use brynja_crypto_cpu::poly1305_avx2::{Avx2, Error as AdmissionError};
++
++/// A single message borrowing a previously tested, thread-local CPU handle.
++#[must_use = "finish or verify the message; dropping clears the key"]
++pub struct Poly1305Avx2<'key, 'cpu> {
++    message: Option<Poly1305<'key>>,
++    cpu: &'cpu mut Avx2,
++}
++
++impl<'key> OneTimeKey<'key> {
++    /// Consume a fresh one-time key. Reuse the CPU handle, never the key.
++    /// A retired handle is rejected and the consumed key storage is cleared.
++    pub fn start_avx2(self, cpu: &mut Avx2) -> Result<Poly1305Avx2<'key, '_>, Error> {
++        cpu.check().map_err(|_| Error::Quarantined)?;
++        Ok(Poly1305Avx2 {
++            message: Some(self.start()),
++            cpu,
++        })
++    }
++}
++
++struct Pending<'a, 'key> {
++    slot: &'a mut Option<Poly1305<'key>>,
++    committed: bool,
++}
++impl Drop for Pending<'_, '_> {
++    fn drop(&mut self) {
++        if !self.committed {
++            drop(self.slot.take());
++        }
++    }
++}
++
++impl Poly1305Avx2<'_, '_> {
++    /// Reject overflow before mutation. Any interruption after admission drops
++    /// the message and clears its key, partial block and accumulator.
++    pub fn update(&mut self, mut input: &[u8]) -> Result<(), Error> {
++        self.cpu.check().map_err(|_| Error::Quarantined)?;
++        let m = self.message.as_ref().ok_or(Error::Quarantined)?;
++        let total = m
++            .length
++            .checked_add(u64::try_from(input.len()).map_err(|_| Error::TooLong)?)
++            .ok_or(Error::TooLong)?;
++        let mut pending = Pending {
++            slot: &mut self.message,
++            committed: false,
++        };
++        let m = pending.slot.as_mut().ok_or(Error::Quarantined)?;
++        let prefix = if m.used == 0 {
++            0
++        } else {
++            16usize.saturating_sub(m.used)
++        };
++        if input.len().saturating_sub(prefix) >= 1024 {
++            let (head, body) = input.split_at(prefix);
++            if !head.is_empty() {
++                m.update(head)?;
++            }
++            let (groups, tail) = body.as_chunks::<64>();
++            let raw_r = m.key.0.first_chunk::<16>().ok_or(Error::Quarantined)?;
++            self.cpu
++                .absorb_groups(&mut m.acc, raw_r, groups)
++                .map_err(|_| Error::Quarantined)?;
++            // The portable tail accounts for itself. Both lengths were
++            // included in the preflight above, including a buffered prefix.
++            m.length = total
++                .checked_sub(u64::try_from(tail.len()).map_err(|_| Error::TooLong)?)
++                .ok_or(Error::TooLong)?;
++            input = tail;
++        }
++        m.update(input)?;
++        pending.committed = true;
++        Ok(())
++    }
++
++    /// Finish the full tag only while both the message and CPU are healthy.
++    pub fn finalize(mut self) -> Result<[u8; 16], Error> {
++        self.cpu.check().map_err(|_| Error::Quarantined)?;
++        Ok(self.message.take().ok_or(Error::Quarantined)?.finalize())
++    }
++
++    /// Verify all 16 bytes using the portable owner's existing verifier.
++    pub fn verify(mut self, tag: &[u8; 16]) -> Result<(), Error> {
++        self.cpu.check().map_err(|_| Error::Quarantined)?;
++        self.message.take().ok_or(Error::Quarantined)?.verify(tag)
++    }
++}
